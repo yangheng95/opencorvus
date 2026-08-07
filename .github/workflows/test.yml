@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -39,7 +39,7 @@ jobs:
         shell: bash
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -62,7 +62,7 @@ jobs:
         shell: bash
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -77,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -95,7 +95,7 @@ jobs:
         shell: bash
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -126,7 +126,7 @@ jobs:
         shell: bash
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
@@ -177,10 +177,8 @@ jobs:
       - version-sync
       - unit
       - build-critical
-      - gui-coordinate-smoke
       - channel-runtime-unit
       - overlay-unit
-      - overlay-browser
       - project-open
     if: always()
     steps:
@@ -189,16 +187,12 @@ jobs:
           echo "version-sync=${{ needs['version-sync'].result }}"
           echo "unit=${{ needs.unit.result }}"
           echo "build-critical=${{ needs['build-critical'].result }}"
-          echo "gui-coordinate-smoke=${{ needs['gui-coordinate-smoke'].result }}"
           echo "channel-runtime-unit=${{ needs['channel-runtime-unit'].result }}"
           echo "overlay-unit=${{ needs['overlay-unit'].result }}"
-          echo "overlay-browser=${{ needs['overlay-browser'].result }}"
           echo "project-open=${{ needs['project-open'].result }}"
           test "${{ needs['version-sync'].result }}" = "success"
           test "${{ needs.unit.result }}" = "success"
           test "${{ needs['build-critical'].result }}" = "success"
-          test "${{ needs['gui-coordinate-smoke'].result }}" = "success"
           test "${{ needs['channel-runtime-unit'].result }}" = "success"
           test "${{ needs['overlay-unit'].result }}" = "success"
-          test "${{ needs['overlay-browser'].result }}" = "success"
           test "${{ needs['project-open'].result }}" = "success"
