@@ -3,6 +3,8 @@ import fs from "node:fs/promises"
 import path from "node:path"
 
 type WorkflowStep = {
+  name?: string
+  shell?: string
   uses?: string
   run?: string
   with?: Record<string, unknown>
@@ -64,6 +66,17 @@ describe("GitHub Actions workflow contract", () => {
       prepare_compile_runtimes: "true",
     })
     expect(jobs["package-cli"]?.steps?.map(({ run }) => run)).toContain("bun run package:binary-matrix")
+    for (const job of ["package-overlay", "package-cli"]) {
+      expect(jobs[job]?.steps?.find(({ name }) => name?.startsWith("Install Windows"))).toEqual({
+        name:
+          job === "package-overlay"
+            ? "Install Windows overlay runtime dependencies"
+            : "Install Windows CLI runtime dependencies",
+        if: "runner.os == 'Windows'",
+        shell: "pwsh",
+        run: "./script/install-windows-ripgrep.ps1",
+      })
+    }
     expect(jobs["package-cli"]?.steps?.find(({ uses }) => uses === "actions/upload-artifact@v7")?.with).toEqual({
       name: "cli-${{ matrix.platform }}",
       path: "packages/opencorvus/dist/opencorvus-${{ matrix.platform }}\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}.tar.gz\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline.tar.gz\n",

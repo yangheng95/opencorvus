@@ -114,9 +114,8 @@ jobs:
 
       - name: Install Windows overlay runtime dependencies
         if: runner.os == 'Windows'
-        run: |
-          choco install ripgrep --yes --no-progress
-          rg --version
+        shell: pwsh
+        run: ./script/install-windows-ripgrep.ps1
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
@@ -188,9 +187,8 @@ jobs:
 
       - name: Install Windows CLI runtime dependencies
         if: runner.os == 'Windows'
-        run: |
-          choco install ripgrep --yes --no-progress
-          rg --version
+        shell: pwsh
+        run: ./script/install-windows-ripgrep.ps1
 
       - name: Setup Rust for the Windows process supervisor
         if: runner.os == 'Windows'
