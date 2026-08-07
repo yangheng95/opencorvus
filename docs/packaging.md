@@ -51,30 +51,36 @@ It currently has these jobs:
 
 1. `prepare`: resolves version, syncs package metadata, and optionally creates the GitHub Release.
 2. `package-overlay`: runs the GUI installer matrix natively on Linux x64, Linux ARM64, macOS ARM64, macOS x64, and Windows x64.
-3. `publish-release-assets`: stages and uploads the validated GUI artifacts to the GitHub Release.
-4. `publish-release-branch`: assembles the same GUI platform directories and pushes the `release` branch.
+3. `package-cli`: runs the portable CLI matrix on the same five native hosts.
+4. `publish-release-assets`: stages and uploads the validated GUI installers and CLI archives to the GitHub Release.
+5. `publish-release`: publishes the draft only after all independent Release assets upload successfully.
 
-The canonical release publishes the Tauri GUI installers only:
+The canonical release publishes both portable CLI archives and Tauri GUI installers:
 
 - `package-overlay` invokes `package:gui-installer-matrix`, which owns SDK preparation, Vite and Overlay server compilation, native Tauri bundles, staging, naming, and validation.
 - `script/check-release-assets.ts overlay --require-bundle` verifies each staged executable and installer set before upload.
-- `package:binary-matrix` remains the explicit host-native portable CLI command; it is not a canonical release-workflow job or release asset source.
+- `package-cli` invokes `package:binary-matrix`, which owns native CLI compilation, complete runtime staging, smoke execution, archive creation, and archive verification.
 - `script/package-linux-binary.ts` remains the remote/container overlay-server bundle with embedded UI under `dist/binary/*`; it is not the public terminal CLI archive.
 - `build:overlay` remains the developer-facing bound Tauri build command. Release installers use `packages/overlay/script/build.ts` through the GUI matrix owner.
+- Generated binaries are not committed to a distribution branch: current
+  installers and portable runtimes exceed GitHub's 100 MB per-object Git limit.
+  GitHub Releases is the single binary distribution authority.
 
 ### CI transfer artifacts and public release assets
 
-Each `package-overlay` row uploads its whole validated staging directory as one
+Each `package-overlay` and `package-cli` row uploads its whole validated staging directory as one
 short-lived GitHub Actions artifact. Its displayed byte count is the aggregate
 of the executable and every installer format for that platform; it is not the
 size of one installer.
 
 `publish-release-assets` downloads those row artifacts, then
-`script/stage-release-upload-assets.ts` validates and flattens the installer
-files into a temporary directory. The workflow passes the resulting file list
-to `gh release upload`, so each installer is an independently downloadable
-asset on <https://github.com/yangheng95/opencorvus/releases>. The release upload
-does not publish the aggregate Actions artifact or the staged bare executable.
+`script/stage-release-upload-assets.ts` validates and flattens the installer and
+CLI archive files into a temporary directory. The workflow passes the resulting
+file list to `gh release upload`, so each installer or CLI archive is an
+independently downloadable asset on
+<https://github.com/yangheng95/opencorvus/releases>. The release upload does not
+publish the aggregate Actions artifact, an unpacked CLI directory, or a staged
+bare executable.
 
 ## Validation Commands
 

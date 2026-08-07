@@ -4,6 +4,8 @@ import path from "node:path"
 
 type WorkflowStep = {
   uses?: string
+  run?: string
+  with?: Record<string, unknown>
 }
 
 type WorkflowJob = {
@@ -44,23 +46,28 @@ describe("GitHub Actions workflow contract", () => {
     expect(checkoutReferences.map(({ uses }) => uses)).toEqual(checkoutReferences.map(() => "actions/checkout@v6"))
   })
 
-  test("packages all five native installer rows before publishing either distribution surface", async () => {
+  test("packages all five native GUI and CLI rows before publishing the release", async () => {
     const workflow = await readWorkflow("build.yml")
     const jobs = workflow.jobs ?? {}
 
-    expect(jobs["package-overlay"]?.strategy?.matrix?.include).toEqual([
+    const nativeMatrix = [
       { runner: "ubuntu-latest", platform: "linux-x64" },
       { runner: "ubuntu-24.04-arm", platform: "linux-arm64" },
       { runner: "macos-latest", platform: "darwin-arm64" },
       { runner: "macos-15-intel", platform: "darwin-x64" },
       { runner: "windows-latest", platform: "windows-x64" },
-    ])
-    expect(jobs["publish-release-assets"]?.needs).toEqual(["prepare", "package-overlay"])
-    expect(jobs["publish-release-branch"]?.needs).toEqual(["prepare", "package-overlay"])
-    expect(jobs["publish-release"]?.needs).toEqual([
-      "prepare",
-      "publish-release-assets",
-      "publish-release-branch",
-    ])
+    ]
+
+    expect(jobs["package-overlay"]?.strategy?.matrix?.include).toEqual(nativeMatrix)
+    expect(jobs["package-cli"]?.strategy?.matrix?.include).toEqual(nativeMatrix)
+    expect(jobs["package-cli"]?.steps?.map(({ run }) => run)).toContain("bun run package:binary-matrix")
+    expect(jobs["package-cli"]?.steps?.find(({ uses }) => uses === "actions/upload-artifact@v7")?.with).toEqual({
+      name: "cli-${{ matrix.platform }}",
+      path: "packages/opencorvus/dist/opencorvus-${{ matrix.platform }}\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}.tar.gz\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline.tar.gz\n",
+      "if-no-files-found": "error",
+      "retention-days": 7,
+    })
+    expect(jobs["publish-release-assets"]?.needs).toEqual(["prepare", "package-overlay", "package-cli"])
+    expect(jobs["publish-release"]?.needs).toEqual(["prepare", "publish-release-assets"])
   })
 })

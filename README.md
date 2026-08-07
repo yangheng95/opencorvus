@@ -152,6 +152,11 @@ as a separate download.
 | Linux x64           | `OpenCorvus_<version>_amd64.AppImage`   | `.deb` for Debian/Ubuntu or `.rpm` for Fedora/RHEL |
 | Linux ARM64         | `OpenCorvus_<version>_aarch64.AppImage` | `_arm64.deb` or `.aarch64.rpm`                     |
 
+For terminal or headless use, the same Release publishes a complete
+`opencorvus-<platform>.tar.gz` CLI runtime for every row. x64 platforms also
+publish a `-baseline.tar.gz` variant for processors without Advanced Vector
+Extensions 2 (AVX2).
+
 Replace `<version>` with the version shown on the release, for example
 `0.0.35-beta`. Download only the file you intend to install.
 

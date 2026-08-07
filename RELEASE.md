@@ -44,17 +44,21 @@ The workflow does all of the following in one pipeline:
 
 1. Sync and verify `opencorvus` + `overlay` versions
 2. Run the native GUI installer matrix on Linux / Linux ARM64 / macOS ARM64 / macOS x64 / Windows x64
-3. Validate and stage GUI assets with `LICENSE`, `THIRD_PARTY_NOTICES.md`, and `SHA256SUMS`
-4. Upload the verified files to a draft GitHub Release
-5. Publish the same GUI platform directories and legal notices on the `release` branch
-6. Publish the draft only after both the release assets and release branch succeed
+3. Run the native command-line interface (CLI) archive matrix on the same five hosts
+4. Validate and stage GUI installers and CLI archives with `LICENSE`, `THIRD_PARTY_NOTICES.md`, and `SHA256SUMS`
+5. Upload the verified files to a draft GitHub Release
+6. Publish the draft only after every independent Release asset uploads successfully
 
 `build-overlays.yml` is debug-only and is not the canonical release path.
 
-The portable CLI matrix and Linux remote-service bundles remain explicit
-operational commands. They are validated package surfaces, but they are not
-inputs to the canonical GUI-only GitHub release workflow. Their artifact shapes
-and commands are documented in [docs/packaging.md](/docs/packaging.md).
+Generated binaries are never committed to a distribution branch. GitHub rejects
+individual Git objects larger than 100 MB, while current native installers and
+portable runtimes exceed that boundary. GitHub Releases is the single binary
+distribution authority.
+
+The portable CLI matrix is a canonical release input. The Linux remote-service
+bundle remains an explicit operational command with a separate artifact shape;
+see [docs/packaging.md](/docs/packaging.md).
 
 ## Public Downloads
 
@@ -69,7 +73,7 @@ For a real release, `publish-release-assets` downloads those temporary
 artifacts, validates and flattens the installer files with
 `script/stage-release-upload-assets.ts`, adds the repository license and
 third-party notices, then generates `SHA256SUMS` over the complete upload set.
-It passes every file separately to `gh release upload`. The GitHub Release page therefore exposes MSI, Nullsoft
+It passes every file separately to `gh release upload`. The GitHub Release page therefore exposes portable CLI archives, MSI, Nullsoft
 Scriptable Install System (NSIS) setup, Disk Image (DMG), AppImage, Debian
 package (DEB), Red Hat Package Manager (RPM), and macOS application archives as
 independent downloads. The temporary row artifact is never the public download
@@ -82,6 +86,10 @@ contract.
 | macOS Intel         | `OpenCorvus_<version>_x64.dmg`                                                       |
 | Linux x64           | `OpenCorvus_<version>_amd64.AppImage`, `.deb`, or `.rpm` for the target distribution |
 | Linux ARM64         | `OpenCorvus_<version>_aarch64.AppImage`, `_arm64.deb`, or `.aarch64.rpm`             |
+
+Every platform row also publishes `opencorvus-<platform>.tar.gz`; x64 rows add
+`opencorvus-<platform>-baseline.tar.gz` for processors without Advanced Vector
+Extensions 2 (AVX2).
 
 ## Local Release Command
 
@@ -130,11 +138,13 @@ bun ./script/check-release-assets.ts overlay ... --require-bundle
 Successful release means:
 
 - GUI executable and installer bundles exist for every supported platform
+- CLI runtime archives exist for every supported platform, including baseline x64 variants
 - `SHA256SUMS`, `LICENSE`, and `THIRD_PARTY_NOTICES.md` are attached to the release
 - Overlay launches bundled `opencorvus`
 - Overlay reaches `online`
 - Overlay and opencorvus versions are aligned in repo metadata
 
-Portable CLI and Linux remote-service bundle acceptance is performed separately
-with `bun run package:binary-matrix` and `bun run package:linux-binary` on their
-supported native hosts.
+The canonical workflow performs portable CLI acceptance with
+`bun run package:binary-matrix` on each supported native host. Linux
+remote-service bundle acceptance remains separate under
+`bun run package:linux-binary`.

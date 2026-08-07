@@ -133,6 +133,11 @@ Agent 停止运行不等于 Task 完成。OpenCorvus 会保存 Typed、内容寻
 | Linux x64        | `OpenCorvus_<version>_amd64.AppImage`   | Debian/Ubuntu 使用 `.deb`，Fedora/RHEL 使用 `.rpm` |
 | Linux ARM64      | `OpenCorvus_<version>_aarch64.AppImage` | `_arm64.deb` 或 `.aarch64.rpm`                     |
 
+用于终端或无头运行时，同一个 Release 还会为每个平台提供完整的
+`opencorvus-<platform>.tar.gz` 命令行界面（Command-Line Interface，CLI）运行时；
+x64 平台同时提供适用于不支持高级矢量扩展 2（Advanced Vector Extensions 2，AVX2）
+处理器的 `-baseline.tar.gz` 版本。
+
 把 `<version>` 替换成 Release 页面显示的版本，例如 `0.0.35-beta`。只需下载实际要
 安装的那一个文件。
 

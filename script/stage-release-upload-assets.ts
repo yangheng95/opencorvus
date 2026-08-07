@@ -2,7 +2,7 @@
 
 import fs from "node:fs/promises"
 import path from "node:path"
-import { looksLikeOverlayBundle, overlayBundlePatterns } from "./release-asset-contract"
+import { cliArchiveNames, looksLikeOverlayBundle, overlayBundlePatterns } from "./release-asset-contract"
 
 function arg(name: string): string {
   const index = process.argv.indexOf(name)
@@ -44,13 +44,19 @@ function stagedName(file: string): string | undefined {
     }
     return undefined
   }
+  if (artifact.startsWith("cli-")) {
+    const platform = artifact.slice("cli-".length)
+    return cliArchiveNames(platform).includes(basename) ? basename : undefined
+  }
   throw new Error(`unexpected downloaded artifact directory for release upload: ${artifact}`)
 }
 
 await fs.mkdir(outRoot, { recursive: true })
 
 const staged: string[] = []
+const stagedByArtifact = new Map<string, string[]>()
 for await (const file of walk(sourceRoot)) {
+  const artifact = downloadedArtifactName(file)
   const asset = stagedName(file)
   if (!asset) continue
   const target = path.join(outRoot, asset)
@@ -62,7 +68,22 @@ for await (const file of walk(sourceRoot)) {
   }
   await fs.copyFile(file, target)
   staged.push(asset)
+  stagedByArtifact.set(artifact, [...(stagedByArtifact.get(artifact) ?? []), asset])
 }
 
 if (staged.length === 0) throw new Error(`No release upload assets staged from ${sourceRoot}`)
+for (const [artifact, assets] of stagedByArtifact) {
+  if (artifact.startsWith("overlay-")) {
+    const platform = artifact.slice("overlay-".length)
+    for (const { label, pattern } of overlayBundlePatterns(platform, releaseVersion)) {
+      if (!assets.some((asset) => pattern.test(asset))) {
+        throw new Error(`Missing ${label} in downloaded artifact ${artifact}`)
+      }
+    }
+    continue
+  }
+  const platform = artifact.slice("cli-".length)
+  const missing = cliArchiveNames(platform).filter((asset) => !assets.includes(asset))
+  if (missing.length > 0) throw new Error(`Missing CLI release archives in ${artifact}: ${missing.join(", ")}`)
+}
 for (const asset of staged.sort()) console.log(asset)

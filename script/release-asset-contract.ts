@@ -11,6 +11,22 @@ export type OverlayBundlePattern = {
   pattern: RegExp
 }
 
+/** CLI means command-line interface; these are the public archive names for one native row. */
+export function cliArchiveNames(platform: string): string[] {
+  if (platform === "linux-x64") {
+    return ["opencorvus-linux-x64.tar.gz", "opencorvus-linux-x64-baseline.tar.gz"]
+  }
+  if (platform === "linux-arm64") return ["opencorvus-linux-arm64.tar.gz"]
+  if (platform === "darwin-x64") {
+    return ["opencorvus-darwin-x64.tar.gz", "opencorvus-darwin-x64-baseline.tar.gz"]
+  }
+  if (platform === "darwin-arm64") return ["opencorvus-darwin-arm64.tar.gz"]
+  if (platform === "windows-x64") {
+    return ["opencorvus-windows-x64.tar.gz", "opencorvus-windows-x64-baseline.tar.gz"]
+  }
+  throw new Error(`Unsupported CLI archive platform: ${platform}`)
+}
+
 export function escapedVersionPattern(version: string): string {
   return version.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 }
