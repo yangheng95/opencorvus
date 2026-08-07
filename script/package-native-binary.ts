@@ -264,11 +264,19 @@ export async function archiveNativeBinaryArtifact(
   await fs.promises.rename(temporary, artifact.archive)
 }
 
+export function nativeBinaryArchiveListingCommand(archive: string): NativeBinaryBuildCommand {
+  return {
+    cwd: path.dirname(archive),
+    argv: ["tar", "-tvzf", path.basename(archive)],
+  }
+}
+
 export async function verifyNativeBinaryArchive(
   artifact: NativeBinaryArtifact,
   platform: NodeJS.Platform,
 ): Promise<void> {
-  const listing = (await $`tar -tvzf ${artifact.archive}`.text()).replaceAll("\\", "/")
+  const command = nativeBinaryArchiveListingCommand(artifact.archive)
+  const listing = (await $`${command.argv}`.cwd(command.cwd).text()).replaceAll("\\", "/")
   const executableClosure = await inspectArtifactExecutableClosure({ root: artifact.bundleDir, os: platform })
   for (const executable of executableClosure) {
     const normalized = path.relative(artifact.bundleDir, executable.path).replaceAll("\\", "/")
