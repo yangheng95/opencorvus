@@ -6,7 +6,6 @@ import { abortAfterAny } from "../util/abort"
 import { Truncate } from "./truncation"
 import { Config } from "../config/config"
 import { proxiedFetchInit, resolveNetworkProxy } from "../util/network-proxy"
-import { taskIDForSession } from "@/engine/task-session-lineage"
 import { assertTaskNetworkCapability } from "@/engine/task-execution-capsule-binding"
 
 const MAX_RESPONSE_SIZE = 5 * 1024 * 1024 // 5MB
@@ -34,9 +33,10 @@ export const WebFetchTool = Tool.define("webfetch", {
 })
 
 export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>, ctx: Tool.Context) {
-  const taskID = taskIDForSession(ctx.sessionID)
-  if (!taskID) throw new Error(`Web fetch Session ${ctx.sessionID} does not belong to a Task`)
-  assertTaskNetworkCapability({ taskID, capability: "webfetch" })
+  const executionAuthority = Tool.requireExecutionAuthority(ctx)
+  if (executionAuthority.kind === "task") {
+    assertTaskNetworkCapability({ taskID: executionAuthority.taskID, capability: "webfetch" })
+  }
   // Validate URL
   if (!params.url.startsWith("http://") && !params.url.startsWith("https://")) {
     throw new Error("URL must start with http:// or https://")

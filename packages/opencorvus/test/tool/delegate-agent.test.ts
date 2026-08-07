@@ -1,4 +1,6 @@
 import { afterEach, describe, expect, mock, spyOn, test } from "bun:test"
+import fs from "node:fs/promises"
+import path from "node:path"
 import { PermissionNext } from "../../src/permission/next"
 import { Instance } from "../../src/project/instance"
 import { Identifier } from "../../src/id/id"
@@ -7,6 +9,11 @@ import type { Message } from "../../src/session/message"
 import { SessionPrompt } from "../../src/session/prompt"
 import { SessionStatus } from "../../src/session/status"
 import { DelegateAgentTool } from "../../src/tool/delegate-agent"
+import { Tool } from "../../src/tool/tool"
+import { WriteTool } from "../../src/tool/write"
+import { ReadTool } from "../../src/tool/read"
+import { BashTool } from "../../src/tool/bash"
+import { resolveSessionExecutionAuthority } from "../../src/engine/task-session-lineage"
 import { tmpdir } from "../fixture/fixture"
 
 afterEach(async () => {
@@ -58,7 +65,6 @@ async function beginChildOccurrence(input: Parameters<typeof SessionPrompt.promp
 function context(input: {
   parentID: string
   agent?: "coding" | "chat" | "work" | "mission"
-  taskID?: string
   abort?: AbortSignal
 }) {
   return {
@@ -67,42 +73,81 @@ function context(input: {
     callID: "call_delegate",
     agent: input.agent ?? "coding",
     abort: input.abort ?? new AbortController().signal,
-    extra: { model: { providerID: "test", id: "exact-parent-model" }, taskID: input.taskID },
+    extra: { model: { providerID: "test", id: "exact-parent-model" } },
     messages: [],
+    executionAuthority: Object.freeze({
+      kind: "conversation" as const,
+      sessionID: input.parentID,
+      projectID: Instance.project.id,
+      rootDirectory: Instance.directory,
+    }),
+    executionSurface: Tool.executionSurface(["delegate_agent"], []),
     metadata: () => {},
     ask: async () => {},
   }
 }
 
 describe("delegate_agent", () => {
-  test("lets a Task-bound Work child review the same Task while reserving final delivery for the parent", async () => {
+  test("lets a standalone Work child execute conversation-owned file and process evidence", async () => {
     await using tmp = await tmpdir({ git: true })
     await Instance.provide({
       directory: tmp.path,
       fn: async () => {
         const parent = await Session.create({ kind: "assistant", title: "parent Work session" })
-        let captured: Parameters<typeof SessionPrompt.prompt>[0] | undefined
         spyOn(SessionPrompt, "prompt").mockImplementation(async (input, hooks) => {
-          captured = input
           await hooks?.beforeLoop?.()
           await beginChildOccurrence(input)
-          return childReply(input, "The rendered slides pass the independent review.")
+          const executionAuthority = await resolveSessionExecutionAuthority({
+            sessionID: input.sessionID,
+            projectID: Instance.project.id,
+            rootDirectory: Instance.directory,
+            expected: { kind: "conversation" },
+          })
+          const toolContext: Tool.Context = {
+            sessionID: input.sessionID,
+            messageID: "msg_child_execution",
+            callID: "call_child_execution",
+            agent: "work",
+            abort: new AbortController().signal,
+            messages: [],
+            executionAuthority,
+            executionSurface: Tool.executionSurface(["write", "read", "bash"], []),
+            metadata() {},
+            async ask() {},
+          }
+          const evidencePath = path.join(tmp.path, "delegated-work-evidence.txt")
+          await WriteTool.init().then((current) =>
+            current.execute({ filePath: evidencePath, content: "delegated-conversation-evidence\n" }, toolContext),
+          )
+          const read = await ReadTool.init().then((current) => current.execute({ filePath: evidencePath }, toolContext))
+          const bash = await BashTool.init().then((current) =>
+            current.execute(
+              { command: `${JSON.stringify(process.execPath)} --version`, description: "Report delegated runtime version" },
+              toolContext,
+            ),
+          )
+          return childReply(
+            input,
+            JSON.stringify({ persisted: read.output.includes("delegated-conversation-evidence"), exit: bash.metadata.exit }),
+          )
         })
 
         const tool = await DelegateAgentTool.init()
         await tool.execute(
           { instruction: "Independently validate the presentation and report visual findings." },
-          context({ parentID: parent.id, agent: "work", taskID: "task_report_review" }),
+          context({ parentID: parent.id, agent: "work" }),
         )
 
-        expect(captured?.agent).toBe("work")
-        expect(captured?.tools).toMatchObject({
-          office_artifact_deliver: false,
-        })
-        expect(captured?.extra).toEqual({ taskID: "task_report_review" })
-        expect((captured?.parts[0] as { text: string }).text).toContain("may inspect and validate office artifacts")
         const child = (await Session.children(parent.id))[0]!
-        expect(PermissionNext.evaluate("office_artifact_deliver", "*", child.permission).action).toBe("deny")
+        expect({
+          child: { kind: child.kind, parentID: child.parentID },
+          evidence: await fs.readFile(path.join(tmp.path, "delegated-work-evidence.txt"), "utf8"),
+          status: SessionStatus.get(child.id),
+        }).toEqual({
+          child: { kind: "assistant", parentID: parent.id },
+          evidence: "delegated-conversation-evidence\n",
+          status: { type: "terminal", reason: "completed" },
+        })
       },
     })
   })
@@ -152,23 +197,12 @@ describe("delegate_agent", () => {
           agent: "coding",
           author: "coding",
           model: { providerID: "test", modelID: "exact-parent-model" },
-          tools: {
-            delegate_agent: false,
-            batch: false,
-            panel: false,
-            schedule: false,
-            mission_state: false,
-            question: false,
-            memory: false,
-          },
         })
         expect(captured!.parts[0]).toMatchObject({ type: "text" })
         expect((captured!.parts[0] as { text: string }).text).toContain("This is not an engine task")
 
         const persistedChild = await Session.get(child.id)
         expect(PermissionNext.evaluate("bash", "*", persistedChild.permission).action).toBe("allow")
-        expect(PermissionNext.evaluate("delegate_agent", "*", persistedChild.permission).action).toBe("deny")
-        expect(PermissionNext.evaluate("batch", "*", persistedChild.permission).action).toBe("deny")
         expect(SessionStatus.get(child.id)).toEqual({ type: "terminal", reason: "completed" })
         expect(JSON.parse(result.output)).toEqual({
           kind: "terminal_success",

@@ -103,18 +103,17 @@ export function sessionBelongsToTask(sessionID: string, taskID: string): boolean
   return Database.runOutsideContext(() => taskIDForSession(sessionID) === taskID)
 }
 
-export type SessionProcessAuthority =
-  | Readonly<{ kind: "host"; sessionID: string; projectID: string; cwd: string }>
-  | Readonly<{ kind: "task"; sessionID: string; projectID: string; taskID: string; cwd: string }>
+export type SessionExecutionAuthority =
+  | Readonly<{ kind: "conversation"; sessionID: string; projectID: string; rootDirectory: string }>
+  | Readonly<{ kind: "task"; sessionID: string; projectID: string; taskID: string; rootDirectory: string }>
 
-/** Resolve a process owner from a complete durable Session lineage and an explicit runtime Task identity. */
-export async function resolveSessionProcessAuthority(input: {
+/** Resolve a model-effect owner from durable Session lineage and the explicit occurrence contract. */
+export async function resolveSessionExecutionAuthority(input: {
   sessionID: string
   projectID: string
   rootDirectory: string
-  cwd: string
-  runtimeTaskID?: string
-}): Promise<SessionProcessAuthority> {
+  expected: Readonly<{ kind: "conversation" }> | Readonly<{ kind: "task"; taskID: string }>
+}): Promise<SessionExecutionAuthority> {
   const visited = new Set<string>()
   const taskOwners = new Set<string>()
   let current: string | undefined = input.sessionID
@@ -146,29 +145,29 @@ export async function resolveSessionProcessAuthority(input: {
     current = row.parentID ?? undefined
   }
 
-  if (!input.runtimeTaskID) {
+  if (input.expected.kind === "conversation") {
     if (taskOwners.size > 0) {
       throw new Error(`Session ${input.sessionID} has durable Task ownership but no explicit runtime Task authority`)
     }
     return Object.freeze({
-      kind: "host",
+      kind: "conversation",
       sessionID: input.sessionID,
       projectID: input.projectID,
-      cwd: path.resolve(input.cwd),
+      rootDirectory: path.resolve(input.rootDirectory),
     })
   }
 
-  if (taskOwners.size !== 1 || !taskOwners.has(input.runtimeTaskID)) {
+  if (taskOwners.size !== 1 || !taskOwners.has(input.expected.taskID)) {
     throw new Error(
-      `Session ${input.sessionID} Task ownership does not equal explicit runtime Task ${input.runtimeTaskID}`,
+      `Session ${input.sessionID} Task ownership does not equal explicit runtime Task ${input.expected.taskID}`,
     )
   }
-  const execution = await resolveTaskProcessExecution({ taskID: input.runtimeTaskID, cwd: input.cwd })
+  const execution = await resolveTaskProcessExecution({ taskID: input.expected.taskID, cwd: input.rootDirectory })
   return Object.freeze({
     kind: "task",
     sessionID: input.sessionID,
     projectID: input.projectID,
-    taskID: input.runtimeTaskID,
-    cwd: execution.kind === "task_native" ? execution.cwd : execution.capsule.cwd,
+    taskID: input.expected.taskID,
+    rootDirectory: execution.kind === "task_native" ? execution.cwd : execution.capsule.cwd,
   })
 }

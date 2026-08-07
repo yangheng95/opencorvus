@@ -18,8 +18,13 @@ import { Session } from "../src/session"
 import { runFormatterProcess } from "../src/format/process"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { which } from "../src/util/which"
-import { resolveSessionProcessAuthority } from "../src/engine/task-session-lineage"
+import { resolveSessionExecutionAuthority } from "../src/engine/task-session-lineage"
 import { ProcessSupervisor } from "../src/shell/process-supervisor"
+import { Truncate } from "../src/tool/truncation"
+import { Tool } from "../src/tool/tool"
+import { ProjectRuntimePaths } from "../src/project/runtime-paths"
+import { SessionLoop } from "../src/session/loop"
+import { SessionStatus } from "../src/session/status"
 
 const packageRevision = {
   scope: "built_in" as const,
@@ -58,8 +63,8 @@ async function writeMcpFixture(file: string) {
   )
 }
 
-describe("explicit Host and Task process authority", () => {
-  test("runs Formatter, Browser, MCP, and Office through one durable Task lineage", async () => {
+describe("explicit conversation and Task execution authority", () => {
+  test("routes Formatter, Browser, MCP, and Office through their exact process owners", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -90,30 +95,80 @@ describe("explicit Host and Task process authority", () => {
         const hostSession = await Session.create({ kind: "assistant", title: "Host authority contract" })
         const hostDirectory = path.join(project.path, "host-control")
         await fs.mkdir(hostDirectory)
-        const taskAuthority = await resolveSessionProcessAuthority({
+        const taskAuthority = await resolveSessionExecutionAuthority({
           sessionID: session.id,
           projectID: Instance.project.id,
           rootDirectory: project.path,
-          cwd: project.path,
-          runtimeTaskID: taskID,
+          expected: { kind: "task", taskID },
         })
-        const hostAuthority = await resolveSessionProcessAuthority({
+        const conversationAuthority = await resolveSessionExecutionAuthority({
           sessionID: hostSession.id,
           projectID: Instance.project.id,
           rootDirectory: project.path,
-          cwd: hostDirectory,
+          expected: { kind: "conversation" },
         })
-        if (taskAuthority.kind !== "task" || hostAuthority.kind !== "host") {
+        if (taskAuthority.kind !== "task" || conversationAuthority.kind !== "conversation") {
           throw new Error("Session process authority contract resolved an unexpected owner")
         }
+        const terminalInput = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "orchestrator",
+          time: { created: Date.now() },
+          agent: "orchestrator",
+          model: { providerID: "test", modelID: "test-model" },
+        })
+        SessionStatus.beginExecutionOccurrence(session.id, terminalInput.id, new AbortController().signal)
+        await SessionStatus.set(session.id, { type: "terminal", reason: "completed" }, { publish: false })
+        const terminalFollowupAuthority = await SessionLoop.TestHooks.resolveToolExecutionAuthority({
+          sessionID: session.id,
+          projectID: Instance.project.id,
+          rootDirectory: project.path,
+          runtimeIdentity: { taskID },
+        })
+        expect({ status: SessionStatus.get(session.id), authority: terminalFollowupAuthority }).toEqual({
+          status: { type: "terminal", reason: "completed" },
+          authority: taskAuthority,
+        })
+        const largeOutput = "authority-output\n".repeat(4_000)
+        const recoverySurface = Tool.executionSurface(["read"], [])
+        const [taskTruncation, conversationTruncation] = await Promise.all([
+          Truncate.output(
+            largeOutput,
+            { sessionID: session.id, executionAuthority: taskAuthority },
+            recoverySurface,
+          ),
+          Truncate.output(
+            largeOutput,
+            { sessionID: hostSession.id, executionAuthority: conversationAuthority },
+            recoverySurface,
+          ),
+        ])
+        if (!taskTruncation.truncated || !conversationTruncation.truncated) {
+          throw new Error("Authority output fixture did not exercise persisted truncation")
+        }
+        expect({
+          taskOutputDirectory: path.dirname(taskTruncation.outputPath),
+          conversationOutputDirectory: path.dirname(conversationTruncation.outputPath),
+          taskOutput: await fs.readFile(taskTruncation.outputPath, "utf8"),
+          conversationOutput: await fs.readFile(conversationTruncation.outputPath, "utf8"),
+        }).toEqual({
+          taskOutputDirectory: ProjectRuntimePaths.toolOutputDir(project.path, taskID, session.id),
+          conversationOutputDirectory: ProjectRuntimePaths.rootSessionToolOutputDir(project.path, hostSession.id),
+          taskOutput: largeOutput,
+          conversationOutput: largeOutput,
+        })
+        const taskProcessAuthority = { kind: "task" as const, taskID, cwd: project.path }
+        const conversationProcessAuthority = { kind: "host" as const, cwd: hostDirectory }
 
         const formatterScript = "process.stdout.write(process.cwd())"
         const taskFormatter = await runFormatterProcess(
-          taskAuthority,
+          taskProcessAuthority,
           { command: [process.execPath, "-e", formatterScript], timeoutMs: 10_000, captureOutput: true },
         )
         const hostFormatter = await runFormatterProcess(
-          hostAuthority,
+          conversationProcessAuthority,
           { command: [process.execPath, "-e", formatterScript], timeoutMs: 10_000, captureOutput: true },
         )
         expect([taskFormatter, hostFormatter]).toEqual([
@@ -133,11 +188,11 @@ describe("explicit Host and Task process authority", () => {
           label: "process authority browser protocol",
         }
         const taskBrowser = await runTaskBrowserNodeSidecar<{ cwd: string; value: { authority: string } }>(
-          taskAuthority,
+          taskProcessAuthority,
           browserInput,
         )
         const hostBrowser = await runHostBrowserNodeSidecar<{ cwd: string; value: { authority: string } }>(
-          hostAuthority.cwd,
+          conversationProcessAuthority.cwd,
           browserInput,
         )
         expect([taskBrowser.result, hostBrowser.result]).toEqual([
@@ -156,7 +211,7 @@ describe("explicit Host and Task process authority", () => {
             cwd: project.path,
             connectionOwner: owner,
             connectionIdentity: "shared-logical-server",
-            processAuthority: MCP.taskProcessAuthority(taskAuthority.taskID, taskAuthority.cwd),
+            processAuthority: MCP.taskProcessAuthority(taskAuthority.taskID, taskAuthority.rootDirectory),
             toolName: "authority_echo",
             args: {},
           })
@@ -166,7 +221,7 @@ describe("explicit Host and Task process authority", () => {
             cwd: hostDirectory,
             connectionOwner: owner,
             connectionIdentity: "shared-logical-server",
-            processAuthority: MCP.hostProcessAuthority(hostAuthority.cwd),
+            processAuthority: MCP.hostProcessAuthority(conversationProcessAuthority.cwd),
             toolName: "authority_echo",
             args: {},
           })
@@ -178,7 +233,7 @@ describe("explicit Host and Task process authority", () => {
           await owner.close()
         }
 
-        const officeCalls: Array<{ taskID: string; cwd: string; operation: string }> = []
+        const officeCalls: Array<{ owner: string; cwd: string; operation: string }> = []
         const officeDependencies: OfficeArtifactDependencies = {
           async officeCliPath() {
             return process.execPath
@@ -187,7 +242,13 @@ describe("explicit Host and Task process authority", () => {
             throw new Error("Office runtime identity is not part of authoring")
           },
           async runOfficeCli(input) {
-            officeCalls.push({ taskID: input.taskID, cwd: input.cwd, operation: input.args[0]! })
+            officeCalls.push({
+              owner: input.executionAuthority.kind === "task"
+                ? `task:${input.executionAuthority.taskID}`
+                : `conversation:${input.executionAuthority.sessionID}`,
+              cwd: input.cwd,
+              operation: input.args[0]!,
+            })
             if (input.args[0] === "create") await fs.writeFile(input.args[1]!, await minimalPresentationBytes())
             return { code: 0, stdout: Buffer.from('{"success":true,"data":{}}'), stderr: Buffer.alloc(0) }
           },
@@ -200,21 +261,35 @@ describe("explicit Host and Task process authority", () => {
             aspect_ratio: "16:9",
             slides: [{ title: "Authority", background: "#FFFFFF", elements: [] }],
           },
-          taskID,
-          sessionID: session.id,
+          executionAuthority: taskAuthority,
+          abort: new AbortController().signal,
+          dependencies: officeDependencies,
+        })
+        const conversationOffice = await authorOfficeArtifact({
+          raw: {
+            format: "presentation",
+            filename: "conversation-authority.pptx",
+            locale: "en-US",
+            aspect_ratio: "16:9",
+            slides: [{ title: "Conversation Authority", background: "#FFFFFF", elements: [] }],
+          },
+          executionAuthority: conversationAuthority,
           abort: new AbortController().signal,
           dependencies: officeDependencies,
         })
         expect({
-          slideTitles: office.slideTitles,
+          slideTitles: [office.slideTitles, conversationOffice.slideTitles],
           operations: officeCalls.map((call) => call.operation),
-          taskIDs: officeCalls.map((call) => call.taskID),
-          workspaceParent: officeCalls.map((call) => path.dirname(call.cwd)),
+          owners: officeCalls.map((call) => call.owner),
         }).toEqual({
-          slideTitles: ["Authority"],
-          operations: ["create", "batch"],
-          taskIDs: [taskID, taskID],
-          workspaceParent: [path.dirname(officeCalls[0]!.cwd), path.dirname(officeCalls[0]!.cwd)],
+          slideTitles: [["Authority"], ["Conversation Authority"]],
+          operations: ["create", "batch", "create", "batch"],
+          owners: [
+            `task:${taskID}`,
+            `task:${taskID}`,
+            `conversation:${hostSession.id}`,
+            `conversation:${hostSession.id}`,
+          ],
         })
 
         const officeCliExecutable = path.join(project.path, "officecli-authority")
@@ -240,7 +315,7 @@ describe("explicit Host and Task process authority", () => {
         defaultOfficeArtifactDependencies.officeCliPath = async () => officeCliExecutable
         try {
           const defaultOfficeResult = await defaultOfficeArtifactDependencies.runOfficeCli({
-            taskID,
+            executionAuthority: taskAuthority,
             args: ["validate", "authority.pptx", "--json"],
             cwd: project.path,
             abort: new AbortController().signal,

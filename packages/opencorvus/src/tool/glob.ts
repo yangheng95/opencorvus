@@ -6,7 +6,6 @@ import DESCRIPTION from "./glob.txt"
 import { Ripgrep } from "../file/ripgrep"
 import { Instance } from "../project/instance"
 import { assertExternalDirectory } from "./external-directory"
-import { taskIDForSession } from "@/engine/task-session-lineage"
 
 export const GlobTool = Tool.define("glob", {
   description: DESCRIPTION,
@@ -43,16 +42,18 @@ export const GlobTool = Tool.define("glob", {
     await assertExternalDirectory(ctx, search, { kind: "directory" })
 
     const limit = 100
-    const taskID = taskIDForSession(ctx.sessionID)
-    if (!taskID) throw new Error(`Glob Session ${ctx.sessionID} does not belong to a Task`)
     const files: Array<{ path: string; mtime: number }> = []
     let truncated = false
-    for await (const file of Ripgrep.filesForTask({
-      cwd: search,
-      glob: [params.pattern],
-      signal: ctx.abort,
-      taskID,
-    })) {
+    const executionAuthority = Tool.requireExecutionAuthority(ctx)
+    const matches = executionAuthority.kind === "task"
+      ? Ripgrep.filesForTask({
+          cwd: search,
+          glob: [params.pattern],
+          signal: ctx.abort,
+          taskID: executionAuthority.taskID,
+        })
+      : Ripgrep.filesForHost({ cwd: search, glob: [params.pattern], signal: ctx.abort })
+    for await (const file of matches) {
       if (files.length >= limit) {
         truncated = true
         break

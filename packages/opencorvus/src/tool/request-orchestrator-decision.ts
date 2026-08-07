@@ -31,10 +31,11 @@ const RequestOrchestratorDecisionInput = z
 type RequestOrchestratorDecisionParams = z.infer<typeof RequestOrchestratorDecisionInput>
 export async function executeRequestOrchestratorDecision(params: RequestOrchestratorDecisionParams, ctx: Tool.Context) {
   params = RequestOrchestratorDecisionInput.parse(params)
-  const taskID = typeof ctx.extra?.taskID === "string" ? ctx.extra.taskID : undefined
-  if (!taskID) {
-    throw new Error("request_orchestrator_decision requires ctx.extra.taskID; this tool only works in task workers")
+  const executionAuthority = Tool.requireExecutionAuthority(ctx)
+  if (executionAuthority.kind !== "task") {
+    throw new Error("request_orchestrator_decision requires explicit Task execution authority")
   }
+  const taskID = executionAuthority.taskID
   if (!ctx.callID?.trim()) {
     throw new Error("request_orchestrator_decision requires the current tool-call identity")
   }

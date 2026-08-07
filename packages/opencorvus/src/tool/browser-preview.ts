@@ -18,6 +18,7 @@ import { Instance } from "@/project/instance"
 import { BashTool } from "./bash"
 import { BrowserPreviewToolID } from "./browser-preview-tool-ids"
 import { Tool } from "./tool"
+import { taskExecutionID } from "./execution-files"
 
 const DEFAULT_PREVIEW_SERVICE_DESCRIPTION = "Start browser preview service"
 const DEFAULT_PREVIEW_TARGET_STARTUP_WAIT_MS = 45_000
@@ -80,12 +81,7 @@ export const BrowserPreviewTool = Tool.define(BrowserPreviewToolID, async (initC
     description: BrowserPreviewToolStaticDefinition.description,
     parameters: BrowserPreviewToolStaticDefinition.parameters,
     async execute(params: BrowserPreviewToolParameters, ctx: Tool.Context) {
-      const taskID = typeof ctx.extra?.taskID === "string" ? ctx.extra.taskID.trim() : ""
-      if (!taskID) {
-        throw new Error(
-          "browser_preview requires a task context so it can persist a browser_preview_target EngineArtifact record.",
-        )
-      }
+      const taskID = taskExecutionID(ctx, "browser_preview")
       const processBinding = readTaskProcessBinding(taskID)
       const defaultWorkdir = processBinding.protocol === TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL
         ? processBinding.workspace.root

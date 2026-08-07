@@ -24,7 +24,7 @@ import { DEFAULT_WEBPAGE_EVIDENCE_VIEWPORT } from "@/browser/webpage/default-vie
 import { resolveWebpageEvidenceOutputDir } from "./output-dir"
 import { resolveFrontendDesignBrowserProxy } from "../browser-proxy"
 import { isHttpWebpageUrl } from "@/util/web-url"
-import { taskFiles, taskProcessIdentity } from "@/tool/task-files"
+import { executionFiles, taskExecutionProcessIdentity } from "@/tool/execution-files"
 
 const log = Log.create({ service: "webpage-evidence.tool.webpage_extract" })
 
@@ -61,7 +61,7 @@ Use this only when URL evidence is missing for the current task. Do not rerun it
       .optional(),
   }),
   async execute(params, ctx) {
-    const processIdentity = taskProcessIdentity(ctx, "Webpage extract")
+    const processIdentity = taskExecutionProcessIdentity(ctx, "Webpage extract")
     if (!isHttpWebpageUrl(params.url)) {
       throw new Error("url must start with http:// or https://")
     }
@@ -74,7 +74,7 @@ Use this only when URL evidence is missing for the current task. Do not rerun it
     })
 
     const evidenceDirectory = await resolveWebpageEvidenceOutputDir({ sessionID: ctx.sessionID })
-    const files = taskFiles(ctx)
+    const files = executionFiles(ctx)
     const outputDir = evidenceDirectory.absolutePath
 
     const viewport = {
@@ -161,7 +161,7 @@ async function writeReferencePng(input: {
   screenshotUrl: string
   outputDir: string
   referencePath: string
-  files: ReturnType<typeof taskFiles>
+  files: ReturnType<typeof executionFiles>
 }): Promise<void> {
   if (!input.screenshotUrl) {
     throw new Error(`Missing screenshot data for ${input.referencePath}`)

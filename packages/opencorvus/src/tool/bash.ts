@@ -30,7 +30,6 @@ import { LocalEnvironment } from "@/config/local-environment"
 import { forbiddenShellEnvironmentKeys, sanitizeShellEnvironment } from "@/shell/environment"
 import { redactInlinePayloads } from "@/util/inline-base64"
 import { activeTaskExecutionCapsule } from "@/engine/task-execution-capsule-binding"
-import { taskIDForSession } from "@/engine/task-session-lineage"
 
 const MAX_METADATA_LENGTH = 30_000
 export const DEFAULT_TIMEOUT = Flag.OPENCORVUS_EXPERIMENTAL_BASH_DEFAULT_TIMEOUT_MS || DEFAULT_BASH_TIMEOUT_MS
@@ -351,13 +350,11 @@ export const BashTool = Tool.define("bash", async () => {
         childEnv,
       })
       log.info("spawning shell", spawnDiagnostics)
-      const taskID = taskIDForSession(ctx.sessionID)
-      if (!taskID) throw new Error(`Bash Session ${ctx.sessionID} does not belong to a Task`)
-      const supervisor = await ProcessSupervisor.spawnTaskShell({ taskID, cwd }, {
-        command: localEnvironment.command,
-        shell,
-        env: childEnv,
-      }).catch((error) => {
+      const processOptions = { command: localEnvironment.command, shell, env: childEnv }
+      const executionAuthority = Tool.requireExecutionAuthority(ctx)
+      const supervisor = await (executionAuthority.kind === "task"
+        ? ProcessSupervisor.spawnTaskShell({ taskID: executionAuthority.taskID, cwd }, processOptions)
+        : ProcessSupervisor.spawnHostShell({ ...processOptions, cwd })).catch((error) => {
         log.error("spawn shell failed", { ...spawnDiagnostics, error })
         throw error
       })

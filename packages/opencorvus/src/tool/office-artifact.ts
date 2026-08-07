@@ -12,7 +12,6 @@ import {
   type OfficeArtifactDependencies,
 } from "@/office-artifact/presentation"
 import { Tool } from "./tool"
-import { taskProcessIdentity } from "./task-files"
 
 export function createOfficeArtifactTools(
   dependencies: OfficeArtifactDependencies = defaultOfficeArtifactDependencies,
@@ -47,11 +46,9 @@ export function createOfficeArtifactTools(
       "Author one Office artifact from a bounded format-discriminated plan. Phase one accepts format=presentation and creates a new PowerPoint PPTX from typed slides and canonical image attachments. It does not edit an existing file or accept arbitrary OfficeCLI commands, XML, shell text, source paths, or remote URLs. Inspect and validate the returned source URL before delivery.",
     parameters: AuthorOfficeArtifactInput,
     async execute(args, ctx) {
-      const processIdentity = taskProcessIdentity(ctx, "Office artifact author")
       const authored = await authorOfficeArtifact({
         raw: args,
-        taskID: processIdentity.taskID,
-        sessionID: ctx.sessionID,
+        executionAuthority: Tool.requireExecutionAuthority(ctx),
         abort: ctx.abort,
         extra: ctx.extra,
         dependencies,
@@ -79,11 +76,9 @@ export function createOfficeArtifactTools(
       "Independently inspect a canonical PPTX package, run OfficeCLI schema validation and issue inspection, and render every slide to a fresh PNG attachment. Inspect every returned image; command success alone is not visual acceptance. The result is validation evidence, not final delivery.",
     parameters: ValidateOfficeArtifactInput,
     async execute(args, ctx) {
-      const processIdentity = taskProcessIdentity(ctx, "Office artifact validator")
       const validated = await validateOfficeArtifact({
         raw: args,
-        taskID: processIdentity.taskID,
-        sessionID: ctx.sessionID,
+        executionAuthority: Tool.requireExecutionAuthority(ctx),
         abort: ctx.abort,
         extra: ctx.extra,
         dependencies,
@@ -122,11 +117,9 @@ export function createOfficeArtifactTools(
       "Revalidate the exact final PPTX, freshly render every slide, and publish those authoritative results on the current Work assistant message. The source digest and slide count must match the reviewed candidate. This parent-owned tool creates the presentation review Interactive Artifact and returns the downloadable PPTX attachment.",
     parameters: DeliverOfficeArtifactInput,
     async execute(args, ctx) {
-      const processIdentity = taskProcessIdentity(ctx, "Office artifact delivery")
       const checked = await prepareOfficeArtifactDeliverable({
         raw: args,
-        taskID: processIdentity.taskID,
-        sessionID: ctx.sessionID,
+        executionAuthority: Tool.requireExecutionAuthority(ctx),
         abort: ctx.abort,
         extra: ctx.extra,
         dependencies,

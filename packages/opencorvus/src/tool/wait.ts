@@ -85,7 +85,8 @@ export const WaitTool = Tool.define("wait", {
   description: WaitToolDescription,
   parameters: WaitToolParameters,
   async execute(params, ctx) {
-    const taskID = typeof ctx.extra?.taskID === "string" ? ctx.extra.taskID : undefined
+    const executionAuthority = Tool.requireExecutionAuthority(ctx)
+    const taskID = executionAuthority.kind === "task" ? executionAuthority.taskID : undefined
     const result = await executeWait({
       duration_ms: params.duration_ms,
       reason: params.reason,

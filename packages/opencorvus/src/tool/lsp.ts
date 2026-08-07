@@ -7,6 +7,7 @@ import { Instance } from "../project/instance"
 import { pathToFileURL } from "url"
 import { assertExternalDirectory } from "./external-directory"
 import { Filesystem } from "../util/filesystem"
+import { executionProcessAuthority } from "./execution-files"
 
 const operations = [
   "goToDefinition",
@@ -44,6 +45,7 @@ export const LspTool = Tool.define("lsp", {
       line: args.line - 1,
       character: args.character - 1,
     }
+    const processAuthority = executionProcessAuthority(ctx)
 
     const relPath = path.relative(Instance.worktree, file)
     const title = `${args.operation} ${relPath}:${args.line}:${args.character}`
@@ -53,33 +55,33 @@ export const LspTool = Tool.define("lsp", {
       throw new Error(`File not found: ${file}`)
     }
 
-    const available = await LSP.hasClients(file)
+    const available = await LSP.hasClients(file, processAuthority)
     if (!available) {
       throw new Error("No LSP server available for this file type.")
     }
 
-    await LSP.touchFile(file, true)
+    await LSP.touchFile(file, true, processAuthority)
 
     const result: unknown[] = await (async () => {
       switch (args.operation) {
         case "goToDefinition":
-          return LSP.definition(position)
+          return LSP.definition(position, processAuthority)
         case "findReferences":
-          return LSP.references(position)
+          return LSP.references(position, processAuthority)
         case "hover":
-          return LSP.hover(position)
+          return LSP.hover(position, processAuthority)
         case "documentSymbol":
-          return LSP.documentSymbol(uri)
+          return LSP.documentSymbol(uri, processAuthority)
         case "workspaceSymbol":
-          return LSP.workspaceSymbol("")
+          return LSP.workspaceSymbol("", processAuthority)
         case "goToImplementation":
-          return LSP.implementation(position)
+          return LSP.implementation(position, processAuthority)
         case "prepareCallHierarchy":
-          return LSP.prepareCallHierarchy(position)
+          return LSP.prepareCallHierarchy(position, processAuthority)
         case "incomingCalls":
-          return LSP.incomingCalls(position)
+          return LSP.incomingCalls(position, processAuthority)
         case "outgoingCalls":
-          return LSP.outgoingCalls(position)
+          return LSP.outgoingCalls(position, processAuthority)
       }
     })()
 

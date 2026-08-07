@@ -11,7 +11,7 @@ import { Filesystem } from "../util/filesystem"
 import { AttachmentStore } from "../storage/attachment-store"
 import { redactInlinePayloads } from "../util/inline-base64"
 import { DEFAULT_TEXT_FILE_LIMIT, isBinaryBytes, readTextFilePageContent, renderTextFilePage } from "./text-file"
-import { taskFiles } from "./task-files"
+import { executionFiles, executionProcessAuthority } from "./execution-files"
 
 const DEFAULT_READ_LIMIT = DEFAULT_TEXT_FILE_LIMIT
 
@@ -55,7 +55,7 @@ export const ReadTool = Tool.define("read", {
     }
     const title = path.relative(Instance.worktree, filepath)
 
-    const files = taskFiles(ctx)
+    const files = executionFiles(ctx)
     const stat = await taskFileStatOrMissing(() => files.stat(filepath))
 
     await assertExternalDirectory(ctx, filepath, {
@@ -183,7 +183,7 @@ export const ReadTool = Tool.define("read", {
     output += renderTextFilePage(page)
     output += "\n</content>"
 
-    LSP.warmFile(filepath)
+    LSP.warmFile(filepath, executionProcessAuthority(ctx))
     FileTime.read(ctx.sessionID, filepath)
 
     if (instructions.length > 0) {

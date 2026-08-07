@@ -32,7 +32,7 @@ export const ExternalCodeSearchTool = Tool.define("external_code_search", {
     })
 
     const text = await exaMcpCall({
-      sessionID: ctx.sessionID,
+      executionAuthority: Tool.requireExecutionAuthority(ctx),
       name: "get_code_context_exa",
       arguments: {
         query: params.query,

@@ -17,6 +17,7 @@ import { currentTaskToolInvocationSurface } from "@/tool/task-tool-invocation"
 import type { ToolExecutionSurface } from "@/tool/execution-surface"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { sameExpertSquadPackageRevision } from "@/expert-squad/package-revision"
+import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
 
 // SDK means Software Development Kit; SHA-256 means Secure Hash Algorithm 256-bit.
 export type ProjectedTaskToolRuntimeBinding = Readonly<{
@@ -70,6 +71,16 @@ export type TaskToolExecutionScope = Readonly<{
       }
   >
 }>
+
+export function executionAuthorityFromTaskToolScope(scope: TaskToolExecutionScope): SessionExecutionAuthority {
+  return Object.freeze({
+    kind: "task",
+    sessionID: scope.sessionID,
+    projectID: scope.projectID,
+    taskID: scope.taskID,
+    rootDirectory: scope.projectDirectory,
+  })
+}
 
 const projectedTaskToolRuntimeBinding = Symbol("opencorvus.projected-task-tool-runtime-binding")
 

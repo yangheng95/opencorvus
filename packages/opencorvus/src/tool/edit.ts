@@ -18,7 +18,7 @@ import { Instance } from "../project/instance"
 import { Snapshot } from "@/snapshot"
 import { assertBuildWriteDirectory, assertExternalDirectory } from "./external-directory"
 import { Patch } from "../patch"
-import { taskFiles, taskProcessIdentity } from "./task-files"
+import { executionFiles, executionProcessAuthority } from "./execution-files"
 
 const MAX_DIAGNOSTICS_PER_FILE = 20
 
@@ -44,7 +44,7 @@ export const EditTool = Tool.define("edit", {
     replaceAll: z.boolean().optional().describe("Replace all occurrences of oldString (default false)"),
   }),
   async execute(params, ctx) {
-    const processIdentity = taskProcessIdentity(ctx, "Edit tool")
+    const processAuthority = executionProcessAuthority(ctx)
     if (!params.filePath) {
       throw new Error("filePath is required")
     }
@@ -54,7 +54,7 @@ export const EditTool = Tool.define("edit", {
     }
 
     const filePath = path.isAbsolute(params.filePath) ? params.filePath : path.join(Instance.directory, params.filePath)
-    const files = taskFiles(ctx)
+    const files = executionFiles(ctx)
     await assertBuildWriteDirectory(ctx, filePath)
     await assertExternalDirectory(ctx, filePath)
 
@@ -83,7 +83,7 @@ export const EditTool = Tool.define("edit", {
         await files.writeFile(filePath, params.newString, { encoding: "utf-8", flag: "wx" })
         await Bus.publish(File.Event.Edited, {
           file: filePath,
-          processAuthority: { kind: "task", ...processIdentity },
+          processAuthority,
         })
         await Bus.publish(FileWatcher.Event.Updated, {
           file: filePath,
@@ -119,7 +119,7 @@ export const EditTool = Tool.define("edit", {
       await files.writeFile(filePath, contentNew)
       await Bus.publish(File.Event.Edited, {
         file: filePath,
-        processAuthority: { kind: "task", ...processIdentity },
+        processAuthority,
       })
       await Bus.publish(FileWatcher.Event.Updated, {
         file: filePath,
@@ -153,8 +153,8 @@ export const EditTool = Tool.define("edit", {
     })
 
     let output = "Edit applied successfully."
-    await LSP.touchFile(filePath, true)
-    const diagnostics = await LSP.diagnostics()
+    await LSP.touchFile(filePath, true, processAuthority)
+    const diagnostics = await LSP.diagnostics(processAuthority)
     const normalizedFilePath = Filesystem.normalizePath(filePath)
     const issues = diagnostics[normalizedFilePath] ?? []
     const errors = issues.filter((item) => item.severity === 1)

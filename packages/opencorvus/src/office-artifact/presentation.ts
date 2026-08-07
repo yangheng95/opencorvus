@@ -2,7 +2,8 @@ import { Instance } from "@/project/instance"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import { requireTask } from "@/engine/store"
-import { sessionBelongsToTask } from "@/engine/task-session-lineage"
+import { sessionBelongsToTask, type SessionExecutionAuthority } from "@/engine/task-session-lineage"
+import { Session } from "@/session"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { Process } from "@/util/process"
 import { requireRuntimePackage } from "@/runtime/package-require"
@@ -233,7 +234,7 @@ type OfficeCliCommand = {
 }
 
 export type OfficeCliRunner = (input: {
-  taskID: string
+  executionAuthority: SessionExecutionAuthority
   args: string[]
   cwd: string
   abort: AbortSignal
@@ -311,7 +312,8 @@ export const defaultOfficeArtifactDependencies: OfficeArtifactDependencies = {
       fs.mkdir(cache, { recursive: true }),
       fs.mkdir(temporary, { recursive: true }),
     ])
-    return Process.runTask({ taskID: input.taskID, cwd: input.cwd }, [executable, ...input.args], {
+    const command = [executable, ...input.args]
+    const options = {
       abort: input.abort,
       env: {
         OFFICECLI_NO_AUTO_RESIDENT: "1",
@@ -329,7 +331,10 @@ export const defaultOfficeArtifactDependencies: OfficeArtifactDependencies = {
       },
       inactivityTimeoutMs: OFFICECLI_INACTIVITY_TIMEOUT_MS,
       inactivityTimeoutMessage: `OfficeCLI was inactive for ${OFFICECLI_INACTIVITY_TIMEOUT_MS}ms`,
-    })
+    }
+    return input.executionAuthority.kind === "task"
+      ? Process.runTask({ taskID: input.executionAuthority.taskID, cwd: input.cwd }, command, options)
+      : Process.runHost(command, { ...options, cwd: input.cwd })
   },
 }
 
@@ -337,19 +342,28 @@ function projectID(ctxExtra?: Record<string, unknown>): string {
   return typeof ctxExtra?.projectID === "string" ? ctxExtra.projectID : Instance.project.id
 }
 
-async function withTaskWorkspace<T>(
-  input: { taskID: string; sessionID: string; projectID: string },
+async function withOfficeWorkspace<T>(
+  input: { executionAuthority: SessionExecutionAuthority; projectID: string },
   fn: (directory: string) => Promise<T>,
 ): Promise<T> {
-  const task = requireTask(input.taskID)
-  if (task.project_id !== input.projectID || task.project_id !== Instance.project.id) {
-    throw new Error(`Office Artifact Task ${input.taskID} project identity does not match ${input.projectID}`)
+  const authority = input.executionAuthority
+  if (authority.projectID !== input.projectID || authority.projectID !== Instance.project.id) {
+    throw new Error(`Office Artifact execution project identity does not match ${input.projectID}`)
   }
-  if (!sessionBelongsToTask(input.sessionID, input.taskID)) {
-    throw new Error(`Office Artifact Session ${input.sessionID} does not belong to Task ${input.taskID}`)
+  let projectRoot = Instance.project.worktree
+  if (authority.kind === "task") {
+    const task = requireTask(authority.taskID)
+    if (task.project_id !== input.projectID || !sessionBelongsToTask(authority.sessionID, authority.taskID)) {
+      throw new Error(`Office Artifact Task ${authority.taskID} execution identity is inconsistent`)
+    }
+    projectRoot = taskPrimaryProjectRoot(authority.taskID, { activeProjectID: input.projectID })
+  } else {
+    const session = await Session.get(authority.sessionID)
+    if (session.projectID !== input.projectID || path.resolve(session.directory) !== path.resolve(authority.rootDirectory)) {
+      throw new Error(`Office Artifact conversation ${authority.sessionID} execution identity is inconsistent`)
+    }
   }
-  const taskRoot = taskPrimaryProjectRoot(input.taskID, { activeProjectID: input.projectID })
-  const root = ProjectRuntimePaths.rootSessionToolOutputDir(taskRoot, input.sessionID)
+  const root = ProjectRuntimePaths.rootSessionToolOutputDir(projectRoot, authority.sessionID)
   await fs.mkdir(root, { recursive: true })
   const directory = await fs.mkdtemp(path.join(root, ".office-artifact-"))
   try {
@@ -537,8 +551,7 @@ function assertZeroOfficeCliIssueCount(result: Record<string, unknown>, label: s
 
 export async function authorOfficeArtifact(input: {
   raw: unknown
-  taskID: string
-  sessionID: string
+  executionAuthority: SessionExecutionAuthority
   abort: AbortSignal
   extra?: Record<string, unknown>
   dependencies?: OfficeArtifactDependencies
@@ -546,11 +559,11 @@ export async function authorOfficeArtifact(input: {
   const parsed = AuthorOfficeArtifactInput.parse(input.raw)
   const dependencies = input.dependencies ?? defaultOfficeArtifactDependencies
   const currentProjectID = projectID(input.extra)
-  return withTaskWorkspace({ taskID: input.taskID, sessionID: input.sessionID, projectID: currentProjectID }, async (directory) => {
+  return withOfficeWorkspace({ executionAuthority: input.executionAuthority, projectID: currentProjectID }, async (directory) => {
     await dependencies.officeCliPath()
     const outputPath = path.join(directory, parsed.filename)
     const created = await dependencies.runOfficeCli({
-      taskID: input.taskID,
+      executionAuthority: input.executionAuthority,
       args: ["create", outputPath, "--type", "pptx", "--locale", parsed.locale, "--json"],
       cwd: directory,
       abort: input.abort,
@@ -561,7 +574,7 @@ export async function authorOfficeArtifact(input: {
       flag: "wx",
     })
     const batched = await dependencies.runOfficeCli({
-      taskID: input.taskID,
+      executionAuthority: input.executionAuthority,
       args: ["batch", outputPath, "--input", batchPath, "--stop-on-error", "--json"],
       cwd: directory,
       abort: input.abort,
@@ -698,8 +711,7 @@ export async function inspectOfficeArtifact(input: {
 
 export async function validateOfficeArtifact(input: {
   raw: unknown
-  taskID: string
-  sessionID: string
+  executionAuthority: SessionExecutionAuthority
   abort: AbortSignal
   extra?: Record<string, unknown>
   dependencies?: OfficeArtifactDependencies
@@ -720,12 +732,12 @@ export async function validateOfficeArtifact(input: {
   })
   const sourceBytes = await attachmentBytes(source)
   const inspection = await inspectPptxPackage(sourceBytes)
-  return withTaskWorkspace({ taskID: input.taskID, sessionID: input.sessionID, projectID: currentProjectID }, async (directory) => {
+  return withOfficeWorkspace({ executionAuthority: input.executionAuthority, projectID: currentProjectID }, async (directory) => {
     await dependencies.officeCliPath()
     const sourcePath = path.join(directory, source.filename ?? "presentation.pptx")
     await fs.writeFile(sourcePath, sourceBytes, { flag: "wx" })
     const run = (args: string[]) =>
-      dependencies.runOfficeCli({ taskID: input.taskID, args, cwd: directory, abort: input.abort })
+      dependencies.runOfficeCli({ executionAuthority: input.executionAuthority, args, cwd: directory, abort: input.abort })
     const validation = parseJsonResult(await run(["validate", sourcePath, "--json"]), "OfficeCLI validate")
     assertZeroOfficeCliIssueCount(validation, "OfficeCLI validation")
     const issues = parseJsonResult(await run(["view", sourcePath, "issues", "--json"]), "OfficeCLI issues")
@@ -767,8 +779,7 @@ export async function validateOfficeArtifact(input: {
 
 export async function prepareOfficeArtifactDeliverable(input: {
   raw: unknown
-  taskID: string
-  sessionID: string
+  executionAuthority: SessionExecutionAuthority
   abort: AbortSignal
   extra?: Record<string, unknown>
   dependencies?: OfficeArtifactDependencies
@@ -797,8 +808,7 @@ export async function prepareOfficeArtifactDeliverable(input: {
   }
   const validated = await validateOfficeArtifact({
     raw: { format: "presentation", source_url: source.url },
-    taskID: input.taskID,
-    sessionID: input.sessionID,
+    executionAuthority: input.executionAuthority,
     abort: input.abort,
     extra: input.extra,
     dependencies: input.dependencies,

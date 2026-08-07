@@ -37,8 +37,11 @@ type SendMailboxMessageParams = z.infer<typeof SendMailboxMessageInput>
 
 export async function executeSendMailboxMessage(params: SendMailboxMessageParams, ctx: Tool.Context) {
   const input = SendMailboxMessageInput.parse(params)
-  const taskID = typeof ctx.extra?.taskID === "string" ? ctx.extra.taskID : undefined
-  if (!taskID) throw new Error("send_mailbox_message requires ctx.extra.taskID; this tool only works in task workers")
+  const executionAuthority = Tool.requireExecutionAuthority(ctx)
+  if (executionAuthority.kind !== "task") {
+    throw new Error("send_mailbox_message requires explicit Task execution authority")
+  }
+  const taskID = executionAuthority.taskID
   if (!ctx.callID) throw new Error("send_mailbox_message requires the current tool call id")
 
   const session = await Session.get(ctx.sessionID)

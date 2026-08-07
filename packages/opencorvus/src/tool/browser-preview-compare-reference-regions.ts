@@ -10,6 +10,7 @@ import { Instance } from "@/project/instance"
 import { buildMultimodalToolResult } from "./multimodal-result"
 import { BrowserPreviewCompareReferenceRegionsToolID } from "./browser-preview-tool-ids"
 import { Tool } from "./tool"
+import { taskExecutionID } from "./execution-files"
 
 export const BrowserPreviewCompareReferenceRegionsToolParameters = BrowserPreviewRegionComparisonRequest
 export type BrowserPreviewCompareReferenceRegionsToolParameters = z.infer<
@@ -21,8 +22,7 @@ export const BrowserPreviewCompareReferenceRegionsTool = Tool.define(BrowserPrev
     "Compare explicit source regions from immutable task artifact PNG refs with explicit implementation locators on one persisted browser preview target. The caller owns source-region selection; this tool performs no source-package discovery, path inference, candidate ranking, or fallback. Returns true-size side-by-side evidence for direct inspection.",
   parameters: BrowserPreviewCompareReferenceRegionsToolParameters,
   async execute(params: BrowserPreviewCompareReferenceRegionsToolParameters, ctx: Tool.Context) {
-    const taskID = typeof ctx.extra?.taskID === "string" ? ctx.extra.taskID.trim() : ""
-    if (!taskID) throw new Error("browser_preview_compare_reference_regions requires a task context.")
+    const taskID = taskExecutionID(ctx, "browser_preview_compare_reference_regions")
     const projectRoot = browserPreviewTaskEvidenceRoot(taskID)
     const result = await compareBrowserPreviewRegions({
       projectID: Instance.project.id,

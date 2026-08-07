@@ -10,6 +10,7 @@ import { executeWait } from "@/tool/wait"
 import { WAIT_MAX_MS, WAIT_MIN_MS, WaitToolDescription, WaitToolParameters } from "@/tool/wait-contract"
 import { TOOL_RESULT_PARK_METADATA_KEY } from "@/session/tool-result-control"
 import { Tool } from "@/tool/tool"
+import { resolveSessionExecutionAuthority } from "@/engine/task-session-lineage"
 
 export const ORCHESTRATOR_BASH_DEFAULT_TIMEOUT_MS = DEFAULT_BASH_TIMEOUT_MS
 export const ORCHESTRATOR_BASH_MAX_TIMEOUT_MS = 10 * 60 * 1000
@@ -44,6 +45,12 @@ export function createRuntimeRepairTools(input: {
         const initialized = await BrowserPreviewTool.init()
         const abort = (options as { abortSignal?: AbortSignal } | undefined)?.abortSignal ?? input.signal
         if (!abort) throw new Error("browser_preview requires an orchestrator abort signal")
+        const executionAuthority = await resolveSessionExecutionAuthority({
+          sessionID: meta.orchestratorSessionID,
+          projectID: Instance.project.id,
+          rootDirectory: Instance.directory,
+          expected: { kind: "task", taskID: input.taskID },
+        })
         const result = await initialized.execute(params, {
           sessionID: meta.orchestratorSessionID,
           messageID: meta.orchestratorMessageID,
@@ -51,6 +58,7 @@ export function createRuntimeRepairTools(input: {
           agent: "orchestrator",
           abort,
           messages: [],
+          executionAuthority,
           executionSurface: Tool.executionSurface(["browser_preview"], []),
           extra: { taskID: input.taskID },
           metadata: () => {},

@@ -19,7 +19,7 @@ import { SessionRuntimeContractStore, isProjectedWorkerRuntimeContract } from ".
 import { LocalEnvironment } from "@/config/local-environment"
 import { sanitizeShellEnvironment } from "@/shell/environment"
 import { createExecutionCancellationOrigin } from "./prompt/cancellation"
-import { resolveSessionProcessAuthority } from "@/engine/task-session-lineage"
+import { resolveSessionExecutionAuthority } from "@/engine/task-session-lineage"
 
 type SessionShellResume = (input: { sessionID: string; resume_existing: true }) => Promise<unknown>
 
@@ -229,19 +229,20 @@ export namespace SessionShell {
         ...guardEnv,
       }),
     }
-    const processAuthority = await resolveSessionProcessAuthority({
+    const executionAuthority = await resolveSessionExecutionAuthority({
       sessionID: input.sessionID,
       projectID: Instance.project.id,
       rootDirectory: Instance.directory,
-      cwd,
-      runtimeTaskID: identity.runtimeContract?.identity.taskID,
+      expected: identity.runtimeContract?.identity.taskID
+        ? { kind: "task", taskID: identity.runtimeContract.identity.taskID }
+        : { kind: "conversation" },
     })
-    const supervisor = processAuthority.kind === "task"
+    const supervisor = executionAuthority.kind === "task"
       ? await ProcessSupervisor.spawnTaskShell(
-          { taskID: processAuthority.taskID, cwd: processAuthority.cwd },
+          { taskID: executionAuthority.taskID, cwd },
           processOptions,
         )
-      : await ProcessSupervisor.spawnHostShell({ ...processOptions, cwd: processAuthority.cwd })
+      : await ProcessSupervisor.spawnHostShell({ ...processOptions, cwd })
 
     let output = ""
     supervisor.stdout?.on("data", (chunk) => {

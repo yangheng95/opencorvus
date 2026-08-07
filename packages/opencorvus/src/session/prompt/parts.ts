@@ -32,6 +32,7 @@ import { resolveSessionMessageIdentity } from "../message-identity"
 import type { SessionMessageIdentity } from "../message-identity"
 import type { SessionControl } from "../control"
 import { SessionRuntimeContractStore } from "../runtime-contract"
+import { resolveSessionExecutionAuthority } from "@/engine/task-session-lineage"
 
 const log = Log.create({ service: "session.prompt" })
 
@@ -356,6 +357,18 @@ export async function materializeUserMessage(
   const { config, identity } = prepared
   const { agentID, runtime: agent } = identity
   const { model, variant } = prepared
+  const runtimeContract = preparedRuntimeContracts.get(prepared)
+  const executionAuthority = await resolveSessionExecutionAuthority({
+    sessionID: input.sessionID,
+    projectID: Instance.project.id,
+    rootDirectory: Instance.directory,
+    expected: runtimeContract?.identity.taskID
+      ? { kind: "task", taskID: runtimeContract.identity.taskID }
+      : { kind: "conversation" },
+  })
+  const lspProcessAuthority = executionAuthority.kind === "task"
+    ? { kind: "task" as const, taskID: executionAuthority.taskID, cwd: executionAuthority.rootDirectory }
+    : { kind: "host" as const, cwd: executionAuthority.rootDirectory }
 
   const info: Message.Info = {
     id: input.messageID ?? Identifier.ascending("message"),
@@ -540,7 +553,7 @@ export async function materializeUserMessage(
                       throw new Error("file range end must be greater than or equal to start")
                     }
                     if (start === end) {
-                      const symbols = await LSP.documentSymbol(filePathURI)
+                      const symbols = await LSP.documentSymbol(filePathURI, lspProcessAuthority)
                       for (const symbol of symbols) {
                         let range: Range | undefined
                         if ("range" in symbol) {
@@ -580,6 +593,7 @@ export async function materializeUserMessage(
                     messageID: info.id,
                     extra: { bypassCwdCheck: true, model },
                     messages: [],
+                    executionAuthority,
                     executionSurface: Tool.executionSurface([], []),
                     metadata: async () => {},
                     ask: async () => {},
@@ -626,6 +640,7 @@ export async function materializeUserMessage(
                     messageID: info.id,
                     extra: { bypassCwdCheck: true },
                     messages: [],
+                    executionAuthority,
                     executionSurface: Tool.executionSurface([], []),
                     metadata: async () => {},
                     ask: async () => {},

@@ -12,7 +12,7 @@ import { Filesystem } from "../util/filesystem"
 import { Instance } from "../project/instance"
 import { trimDiff } from "./edit"
 import { assertBuildWriteDirectory, assertExternalDirectory } from "./external-directory"
-import { taskFiles, taskProcessIdentity } from "./task-files"
+import { executionFiles, executionProcessAuthority } from "./execution-files"
 
 const MAX_DIAGNOSTICS_PER_FILE = 20
 const MAX_PROJECT_DIAGNOSTICS_FILES = 5
@@ -24,12 +24,12 @@ export const WriteTool = Tool.define("write", {
     filePath: z.string().describe("The absolute path to the file to write (must be absolute, not relative)"),
   }),
   async execute(params, ctx) {
-    const processIdentity = taskProcessIdentity(ctx, "Write tool")
+    const processAuthority = executionProcessAuthority(ctx)
     const filepath = path.isAbsolute(params.filePath) ? params.filePath : path.join(Instance.directory, params.filePath)
     await assertBuildWriteDirectory(ctx, filepath)
     await assertExternalDirectory(ctx, filepath)
 
-    const files = taskFiles(ctx)
+    const files = executionFiles(ctx)
     const stat = await files.stat(filepath).catch(() => undefined)
     const exists = Boolean(stat)
     const contentOld = exists ? await files.readFile(filepath, "utf8") : ""
@@ -50,7 +50,7 @@ export const WriteTool = Tool.define("write", {
     await files.writeFile(filepath, params.content)
     await Bus.publish(File.Event.Edited, {
       file: filepath,
-      processAuthority: { kind: "task", ...processIdentity },
+      processAuthority,
     })
     await Bus.publish(FileWatcher.Event.Updated, {
       file: filepath,
@@ -59,8 +59,8 @@ export const WriteTool = Tool.define("write", {
     FileTime.read(ctx.sessionID, filepath)
 
     let output = "Wrote file successfully."
-    await LSP.touchFile(filepath, true)
-    const diagnostics = await LSP.diagnostics()
+    await LSP.touchFile(filepath, true, processAuthority)
+    const diagnostics = await LSP.diagnostics(processAuthority)
     const normalizedFilepath = Filesystem.normalizePath(filepath)
     let projectDiagnosticsCount = 0
     for (const [file, issues] of Object.entries(diagnostics)) {

@@ -63,7 +63,7 @@ import { clarificationTranscriptSection } from "@/engine/helpers"
 import { Event as EngineEvent } from "@/engine/model"
 import { EngineProtocol } from "@/engine/protocol"
 import { findGoal, findInteractionByExternal, listGoals, requireTask, type TaskRow } from "@/engine/store"
-import { sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
+import { resolveSessionExecutionAuthority, sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
 import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import {
   requireCurrentTerminalLifecycleReference,
@@ -1158,6 +1158,12 @@ export function createOrchestratorTools(input: {
         const abort = (options as { abortSignal?: AbortSignal } | undefined)?.abortSignal
         if (!abort) throw new Error("read: missing the current streamed tool-call abort signal")
         const initialized = await ReadTool.init()
+        const executionAuthority = await resolveSessionExecutionAuthority({
+          sessionID: execution.orchestratorSessionID,
+          projectID: Instance.project.id,
+          rootDirectory: Instance.directory,
+          expected: { kind: "task", taskID },
+        })
         return await initialized.execute(args, {
           sessionID: execution.orchestratorSessionID,
           messageID: execution.orchestratorMessageID,
@@ -1165,6 +1171,7 @@ export function createOrchestratorTools(input: {
           agent: "orchestrator",
           abort,
           messages: await Session.messages({ sessionID: execution.orchestratorSessionID }),
+          executionAuthority,
           executionSurface: Tool.executionSurface(["read"], []),
           extra: { taskID },
           metadata() {},

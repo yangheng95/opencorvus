@@ -1,6 +1,8 @@
 import { tool } from "ai"
 import type { Tool } from "./tool"
 import { currentTaskToolInvocationSurface } from "./task-tool-invocation"
+import { resolveSessionExecutionAuthority } from "@/engine/task-session-lineage"
+import { Instance } from "@/project/instance"
 
 type InitializedTool = Awaited<ReturnType<Tool.Info["init"]>>
 type ToolExecutionResult = Awaited<ReturnType<InitializedTool["execute"]>>
@@ -41,6 +43,13 @@ export async function createAiSdkToolFromInfo(input: ToolInfoAiSdkAdapterInput) 
         (options as AiSdkExecutionOptions | undefined)?.abortSignal ?? input.signal ?? new AbortController().signal
       await input.beforeExecute?.(args)
       try {
+        if (!input.taskID) throw new Error(`${input.info.id} requires explicit Task execution authority`)
+        const executionAuthority = await resolveSessionExecutionAuthority({
+          sessionID: execution.sessionID,
+          projectID: execution.projectID,
+          rootDirectory: Instance.directory,
+          expected: { kind: "task", taskID: input.taskID },
+        })
         const result = await initialized.execute(args as never, {
           sessionID: execution.sessionID,
           messageID: execution.messageID,
@@ -48,6 +57,7 @@ export async function createAiSdkToolFromInfo(input: ToolInfoAiSdkAdapterInput) 
           agent: input.agent,
           abort,
           messages: [],
+          executionAuthority,
           executionSurface: execution.executionSurface,
           extra: {
             taskID: input.taskID,

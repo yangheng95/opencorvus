@@ -38,7 +38,7 @@ export const WebSearchTool = Tool.define("websearch", async () => {
       })
 
       const text = await exaMcpCall({
-        sessionID: ctx.sessionID,
+        executionAuthority: Tool.requireExecutionAuthority(ctx),
         name: "web_search_exa",
         arguments: {
           query: params.query,

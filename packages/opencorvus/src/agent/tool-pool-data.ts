@@ -126,8 +126,6 @@ const primaryExecutionGlobal = [
   ...PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS,
   "question",
   "bash",
-  "browser_preview",
-  "browser_preview_capture",
   "publish_interactive_artifact",
   "read",
   "glob",
@@ -151,7 +149,12 @@ const primaryExecutionGlobal = [
 
 const codingGlobal = ["delegate_agent", ...primaryExecutionGlobal] as const
 
-const taskBuildGlobal = [...primaryExecutionGlobal, ...WORKER_COMMUNICATION_TOOL_IDS] as const
+const taskBuildGlobal = [
+  ...primaryExecutionGlobal,
+  "browser_preview",
+  "browser_preview_capture",
+  ...WORKER_COMMUNICATION_TOOL_IDS,
+] as const
 
 const delegatedWorkerGlobal = [
   ...PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS,

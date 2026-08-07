@@ -14,6 +14,7 @@ import { AttachmentStore } from "@/storage/attachment-store"
 import { BrowserPreviewCaptureInteractionStateToolID } from "./browser-preview-tool-ids"
 import { materializeBrowserPreviewCaptureResult } from "./browser-preview-capture"
 import { Tool } from "./tool"
+import { taskExecutionID } from "./execution-files"
 
 export const BrowserPreviewCaptureInteractionStateToolParameters = BrowserPreviewInteractionCaptureRequest
 
@@ -83,8 +84,7 @@ export const BrowserPreviewCaptureInteractionStateTool = Tool.define(
       "Promote one exact PNG produced by a completed Browser MCP screenshot or observe tool part in this Visual QA Session into task-scoped Browser Preview evidence for an explicit persisted viewport and interaction state. The source part, canonical Browser URL against the target origin/path boundary, AttachmentStore bytes, SHA-256, viewport dimensions, target, and state identity are strictly validated.",
     parameters: BrowserPreviewCaptureInteractionStateToolParameters,
     async execute(params, ctx: Tool.Context) {
-      const taskID = typeof ctx.extra?.taskID === "string" ? ctx.extra.taskID.trim() : ""
-      if (!taskID) throw new Error("browser_preview_capture_interaction_state requires a task context.")
+      const taskID = taskExecutionID(ctx, "browser_preview_capture_interaction_state")
       const target = findBrowserPreviewTargetByID({ taskID, targetID: params.targetID })
       if (!target) throw new Error(`Browser preview target not found: ${params.targetID}`)
       const source = resolveBrowserInteractionScreenshot({

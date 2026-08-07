@@ -5,7 +5,6 @@ import DESCRIPTION from "./ls.txt"
 import { Instance } from "../project/instance"
 import { Ripgrep } from "../file/ripgrep"
 import { assertExternalDirectory } from "./external-directory"
-import { taskIDForSession } from "@/engine/task-session-lineage"
 
 export const IGNORE_PATTERNS = [
   "node_modules/",
@@ -59,10 +58,17 @@ export const ListTool = Tool.define("list", {
     })
 
     const ignoreGlobs = IGNORE_PATTERNS.map((p) => `!${p}*`).concat(params.ignore?.map((p) => `!${p}`) || [])
-    const taskID = taskIDForSession(ctx.sessionID)
-    if (!taskID) throw new Error(`List Session ${ctx.sessionID} does not belong to a Task`)
     const files: string[] = []
-    for await (const file of Ripgrep.filesForTask({ cwd: searchPath, glob: ignoreGlobs, signal: ctx.abort, taskID })) {
+    const executionAuthority = Tool.requireExecutionAuthority(ctx)
+    const matches = executionAuthority.kind === "task"
+      ? Ripgrep.filesForTask({
+          cwd: searchPath,
+          glob: ignoreGlobs,
+          signal: ctx.abort,
+          taskID: executionAuthority.taskID,
+        })
+      : Ripgrep.filesForHost({ cwd: searchPath, glob: ignoreGlobs, signal: ctx.abort })
+    for await (const file of matches) {
       files.push(file)
       if (files.length >= LIMIT) break
     }

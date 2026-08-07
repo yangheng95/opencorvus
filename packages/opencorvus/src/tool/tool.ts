@@ -8,6 +8,7 @@ import { Truncate } from "./truncation"
 import { createToolExecutionSurface, type ToolExecutionSurface } from "./execution-surface"
 import { materializeToolResultInlineAttachments } from "./result-attachment-materialization"
 import { Instance } from "@/project/instance"
+import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
 
 /**
  * Coerce string values that LLMs sometimes produce for non-string fields.
@@ -51,10 +52,18 @@ export namespace Tool {
     callID?: string
     extra?: { [key: string]: any }
     messages: Message.WithParts[]
+    executionAuthority?: SessionExecutionAuthority
     executionSurface: ToolExecutionSurface
     prompt?(input: PromptInput): Promise<Message.WithParts>
     metadata(input: { title?: string; metadata?: M }): void
     ask(input: Omit<PermissionNext.Request, "id" | "sessionID" | "tool">): Promise<void>
+  }
+
+  export function requireExecutionAuthority(ctx: Pick<Context, "executionAuthority">): SessionExecutionAuthority {
+    if (!ctx.executionAuthority) {
+      throw new Error("This tool requires a Session-bound execution authority.")
+    }
+    return ctx.executionAuthority
   }
   export interface Info<Parameters extends z.ZodType = z.ZodType, M extends Metadata = Metadata> {
     id: string
@@ -122,14 +131,13 @@ export namespace Tool {
             if (e instanceof Error) throw e
             throw new Error(`Tool ${id} failed: ${asError(e).message}`)
           }
-          const taskID = typeof ctx.extra?.taskID === "string" ? ctx.extra.taskID : undefined
           // skip truncation for tools that handle it themselves
           if (result.metadata.truncated !== undefined) {
             return result
           }
           const truncated = await Truncate.output(
             result.output,
-            { sessionID: ctx.sessionID, taskID },
+            { sessionID: ctx.sessionID, executionAuthority: ctx.executionAuthority },
             ctx.executionSurface,
           )
           return {

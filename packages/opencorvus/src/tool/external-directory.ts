@@ -1,10 +1,9 @@
 import path from "path"
 import { realpath } from "node:fs/promises"
-import type { Tool } from "./tool"
+import { Tool } from "./tool"
 import { Instance } from "../project/instance"
 import { Session } from "../session"
 import { Filesystem } from "../util/filesystem"
-import { taskIDForSession } from "@/engine/task-session-lineage"
 import { readTaskExecutionCapsuleBinding } from "@/engine/task-execution-capsule-binding"
 import { ExecutionCapsuleRuntimeUnavailableError } from "@/execution-capsule/runtime"
 
@@ -62,7 +61,8 @@ export async function assertBuildWriteDirectory(ctx: Tool.Context, target?: stri
 export async function assertExternalDirectory(ctx: Tool.Context, target?: string, options?: Options) {
   if (!target) return
 
-  const taskID = taskIDForSession(ctx.sessionID)
+  const executionAuthority = Tool.requireExecutionAuthority(ctx)
+  const taskID = executionAuthority.kind === "task" ? executionAuthority.taskID : undefined
   const binding = taskID ? readTaskExecutionCapsuleBinding(taskID) : undefined
   if (binding) {
     const candidate = await resolveThroughExistingAncestor(target)

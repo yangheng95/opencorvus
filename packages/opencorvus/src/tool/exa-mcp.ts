@@ -1,7 +1,7 @@
 import { abortAfterAny } from "../util/abort"
 import { Config } from "../config/config"
 import { proxiedFetchInit, resolveNetworkProxy } from "../util/network-proxy"
-import { taskIDForSession } from "@/engine/task-session-lineage"
+import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
 import { assertTaskNetworkCapability } from "@/engine/task-execution-capsule-binding"
 
 const EXA_MCP_URL = "https://mcp.exa.ai/mcp"
@@ -37,11 +37,11 @@ export async function exaMcpCall(opts: {
   signal?: AbortSignal
   /** Human label for timeout / error messages, e.g. "Web search". */
   label: string
-  sessionID: string
+  executionAuthority: SessionExecutionAuthority
 }): Promise<string | null> {
-  const taskID = taskIDForSession(opts.sessionID)
-  if (!taskID) throw new Error(`${opts.label} Session ${opts.sessionID} does not belong to a Task`)
-  assertTaskNetworkCapability({ taskID, capability: opts.label })
+  if (opts.executionAuthority.kind === "task") {
+    assertTaskNetworkCapability({ taskID: opts.executionAuthority.taskID, capability: opts.label })
+  }
   const { signal, clearTimeout } = abortAfterAny(opts.timeoutMs, ...(opts.signal ? [opts.signal] : []))
   try {
     const headers: Record<string, string> = {

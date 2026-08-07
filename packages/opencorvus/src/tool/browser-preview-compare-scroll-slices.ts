@@ -11,6 +11,7 @@ import { Instance } from "@/project/instance"
 import { buildMultimodalToolResult } from "./multimodal-result"
 import { BrowserPreviewCompareScrollSlicesToolID } from "./browser-preview-tool-ids"
 import { Tool } from "./tool"
+import { taskExecutionID } from "./execution-files"
 
 export const BrowserPreviewCompareScrollSlicesToolParameters = BrowserPreviewScrollSliceComparisonRequest.extend({
   includeDiff: z.boolean().default(false).describe("Whether to also generate a diagnostic diff PNG."),
@@ -24,10 +25,7 @@ export const BrowserPreviewCompareScrollSlicesTool = Tool.define(BrowserPreviewC
     "Compare an implementation page slice against one explicit immutable task artifact PNG at the same absolute scrollY. Uses a persisted browser_preview target and an exact TaskArtifact ref; never accepts source URLs or inferred paths. Returns a side-by-side PNG attachment for direct inspection plus comparison_guidance: LEFT is the source/reference image, RIGHT is the rendered/local implementation, and the checklist names layout, icon/asset, color, spacing, typography, content, state, chart/table/map, and placeholder defects to inspect.",
   parameters: BrowserPreviewCompareScrollSlicesToolParameters,
   async execute(params: BrowserPreviewCompareScrollSlicesToolParameters, ctx: Tool.Context) {
-    const taskID = typeof ctx.extra?.taskID === "string" ? ctx.extra.taskID.trim() : ""
-    if (!taskID) {
-      throw new Error("browser_preview_compare_scroll_slices requires a task context.")
-    }
+    const taskID = taskExecutionID(ctx, "browser_preview_compare_scroll_slices")
     const projectRoot = browserPreviewTaskEvidenceRoot(taskID)
     const result = await compareBrowserPreviewScrollSlice({
       projectID: Instance.project.id,

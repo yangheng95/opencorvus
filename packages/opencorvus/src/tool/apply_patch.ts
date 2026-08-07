@@ -12,7 +12,7 @@ import { LSP } from "../lsp"
 import { Filesystem } from "../util/filesystem"
 import DESCRIPTION from "./apply_patch.txt"
 import { File } from "../file"
-import { taskFiles, taskProcessIdentity } from "./task-files"
+import { executionFiles, executionProcessAuthority } from "./execution-files"
 
 const PatchParams = z.object({
   patchText: z.string().describe("The full patch text that describes all changes to be made"),
@@ -22,7 +22,7 @@ export const ApplyPatchTool = Tool.define("apply_patch", {
   description: DESCRIPTION,
   parameters: PatchParams,
   async execute(params, ctx) {
-    const processIdentity = taskProcessIdentity(ctx, "Apply patch tool")
+    const processAuthority = executionProcessAuthority(ctx)
     if (!params.patchText) {
       throw new Error("patchText is required")
     }
@@ -57,7 +57,7 @@ export const ApplyPatchTool = Tool.define("apply_patch", {
     }> = []
 
     let totalDiff = ""
-    const taskFileHost = taskFiles(ctx)
+    const taskFileHost = executionFiles(ctx)
 
     for (const hunk of hunks) {
       const filePath = path.resolve(Instance.directory, hunk.path)
@@ -232,7 +232,7 @@ export const ApplyPatchTool = Tool.define("apply_patch", {
       if (edited) {
         await Bus.publish(File.Event.Edited, {
           file: edited,
-          processAuthority: { kind: "task", ...processIdentity },
+          processAuthority,
         })
       }
     }
@@ -246,9 +246,9 @@ export const ApplyPatchTool = Tool.define("apply_patch", {
     for (const change of fileChanges) {
       if (change.type === "delete") continue
       const target = change.movePath ?? change.filePath
-      await LSP.touchFile(target, true)
+      await LSP.touchFile(target, true, processAuthority)
     }
-    const diagnostics = await LSP.diagnostics()
+    const diagnostics = await LSP.diagnostics(processAuthority)
 
     // Generate output summary
     const summaryLines = fileChanges.map((change) => {

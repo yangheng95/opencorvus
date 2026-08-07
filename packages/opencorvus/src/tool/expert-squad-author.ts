@@ -15,6 +15,7 @@ import {
 import { tool as aiTool } from "ai"
 import z from "zod"
 import { Tool } from "./tool"
+import { taskExecutionID } from "./execution-files"
 import {
   expertSquadGenerationAuthority,
   type ExpertSquadGenerationTrace,
@@ -239,8 +240,7 @@ export const ExpertSquadAuthorTool = Tool.define("expert_squad_author", {
   description: DESCRIPTION,
   parameters: ExpertSquadAuthorParameters,
   async execute(args, ctx) {
-    const taskID = typeof ctx.extra?.taskID === "string" ? ctx.extra.taskID.trim() : ""
-    if (!taskID) throw new Error("expert_squad_author requires the current Task identity")
+    const taskID = taskExecutionID(ctx, "expert_squad_author")
     await ctx.ask({
       permission: "expert_squad_author",
       patterns: [`project:${Instance.project.id}`],

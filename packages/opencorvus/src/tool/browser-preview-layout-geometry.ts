@@ -6,6 +6,7 @@ import {
 import z from "zod"
 import { browserPreviewTaskEvidenceRoot } from "@/browser-preview/task-evidence-root"
 import { Tool } from "./tool"
+import { taskExecutionID } from "./execution-files"
 
 const BrowserPreviewLayoutGeometryToolID = "browser_preview_layout_geometry" as const
 
@@ -17,10 +18,7 @@ export const BrowserPreviewLayoutGeometryTool = Tool.define(BrowserPreviewLayout
     "Capture task-scoped layout geometry evidence for page edge alignment, margins, padding, gaps, overflow, and explicit desktop width scaling samples. Uses a persisted browser_preview target and implementation locators; never accepts raw URLs and never produces reference-comparison proof.",
   parameters: BrowserPreviewLayoutGeometryToolParameters,
   async execute(params: BrowserPreviewLayoutGeometryToolParameters, ctx: Tool.Context) {
-    const taskID = typeof ctx.extra?.taskID === "string" ? ctx.extra.taskID.trim() : ""
-    if (!taskID) {
-      throw new Error("browser_preview_layout_geometry requires a task context.")
-    }
+    const taskID = taskExecutionID(ctx, "browser_preview_layout_geometry")
     const result = await diagnoseBrowserPreviewLayoutGeometry({
       projectRoot: browserPreviewTaskEvidenceRoot(taskID),
       taskID,

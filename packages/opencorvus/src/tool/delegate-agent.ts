@@ -90,6 +90,10 @@ export const DelegateAgentTool = Tool.define(DELEGATE_AGENT_TOOL_ID, {
     "Delegate one bounded, self-contained piece of the current Coding, Chat, or Work request to a real session-local child agent. Use it for context isolation, independent investigation or review, and non-overlapping work. It is not Task Orchestrator dispatch: it creates no task, goal, expert-squad projection, worktree, or scheduler lifecycle. The parent remains responsible for synthesis, verification, and final Work deliverable publication.",
   parameters: DelegateAgentParameters,
   async execute(input, ctx) {
+    const executionAuthority = Tool.requireExecutionAuthority(ctx)
+    if (executionAuthority.kind !== "conversation") {
+      throw new Error("delegate_agent is only available to standalone conversation execution.")
+    }
     if (
       !PrimaryAssistantRegistry.isID(ctx.agent) ||
       (ctx.agent !== "coding" && ctx.agent !== "chat" && ctx.agent !== "work")
@@ -101,8 +105,6 @@ export const DelegateAgentTool = Tool.define(DELEGATE_AGENT_TOOL_ID, {
     }
     const parent = await Session.get(ctx.sessionID)
     const model = requireParentModel(ctx.extra?.model)
-    const parentTaskID =
-      typeof ctx.extra?.taskID === "string" && ctx.extra.taskID.trim() ? ctx.extra.taskID.trim() : undefined
     const deniedPermissions: PermissionNext.Ruleset = LOCAL_DELEGATE_DISABLED_TOOLS.map((permission) => ({
       permission,
       pattern: "*",
@@ -162,7 +164,6 @@ export const DelegateAgentTool = Tool.define(DELEGATE_AGENT_TOOL_ID, {
           model: { providerID: model.providerID, modelID: model.id },
           agent: ctx.agent,
           author: ctx.agent,
-          extra: parentTaskID ? { taskID: parentTaskID } : undefined,
           tools: Object.fromEntries(LOCAL_DELEGATE_DISABLED_TOOLS.map((toolID) => [toolID, false])),
           parts: [
             { type: "text", text: delegatedInstruction({ instruction: input.instruction, parentAgent: ctx.agent }) },

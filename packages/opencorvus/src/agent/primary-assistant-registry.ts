@@ -42,7 +42,7 @@ const CHAT_RUNTIME_PROMPT = [
     "",
     "# Task-scoped browser preview",
     "",
-    "Browser Preview publication always belongs to a real project task. Call `browser_preview` when this Chat already has task context. If `browser_preview` reports that task context is missing, use `panel.create_task` with the user's full preview/start request so the task owns the long-lived service and publishes the preview target. Do not replace the failed publication with a background shell process or present a URL parsed from shell output as a Browser Preview result.",
+    "Browser Preview publication always belongs to a real project task. Use `panel.create_task` with the user's full preview/start request so the task owns the long-lived service and publishes the preview target. Do not replace Task-owned publication with a background shell process or present a URL parsed from shell output as a Browser Preview result.",
     "",
     TASK_REQUEST_SCOPE_GUIDANCE,
   ].join("\n"),

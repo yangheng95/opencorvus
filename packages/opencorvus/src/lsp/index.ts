@@ -12,8 +12,6 @@ import { createInstanceState } from "../project/instance-state"
 import { Flag } from "@/flag/flag"
 import { entries, values as objectValues } from "@/util/object"
 import type { DocumentSymbol, Symbol } from "./schema"
-import { SessionContext } from "@/session/context"
-import { taskIDForSession } from "@/engine/task-session-lineage"
 import {
   readTaskProcessBinding,
   TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL,
@@ -61,18 +59,11 @@ export namespace LSP {
     spawning: Map<string, Promise<LSPClient.Info | undefined>>
     disposed: boolean
   }
-  type ProcessAuthority = { kind: "host" } | { kind: "task"; taskID: string }
+  export type ProcessAuthority = { kind: "host"; cwd?: string } | { kind: "task"; taskID: string; cwd?: string }
   const clientProcessAuthorities = new WeakMap<LSPClient.Info, string>()
 
   function processAuthorityKey(authority: ProcessAuthority) {
     return authority.kind === "host" ? "host" : `task:${authority.taskID}`
-  }
-
-  function taskProcessAuthority(): ProcessAuthority {
-    const session = SessionContext.use()
-    const taskID = taskIDForSession(session.id)
-    if (!taskID) throw new Error(`Language Server Protocol Session ${session.id} requires explicit Task authority`)
-    return { kind: "task", taskID }
   }
 
   const createState = (servers: Record<string, LSPServer.Info>, clients: LSPClient.Info[] = []): State => ({
@@ -410,10 +401,10 @@ export namespace LSP {
     return result
   }
 
-  export async function hasClients(file: string) {
+  export async function hasClients(file: string, authority: ProcessAuthority) {
     const s = await state()
     pruneBroken(s, Date.now())
-    const authorityKey = processAuthorityKey(taskProcessAuthority())
+    const authorityKey = processAuthorityKey(authority)
     const extension = path.parse(file).ext || file
     for (const server of objectValues(s.servers)) {
       if (server.extensions.length && !server.extensions.includes(extension)) continue
@@ -463,8 +454,8 @@ export namespace LSP {
     })
   }
 
-  export async function touchFile(input: string, waitForDiagnostics?: boolean) {
-    return touchFileWithAuthority(taskProcessAuthority(), input, waitForDiagnostics)
+  export async function touchFile(input: string, waitForDiagnostics: boolean | undefined, authority: ProcessAuthority) {
+    return touchFileWithAuthority(authority, input, waitForDiagnostics)
   }
 
   type WarmFileTouch = (input: string, waitForDiagnostics?: boolean) => Promise<void>
@@ -484,8 +475,10 @@ export namespace LSP {
    * broken language server records its own failure without holding the file
    * result or its tool lifecycle open.
    */
-  export function warmFile(input: string) {
-    const operation = (warmFileTouchForTest ?? touchFile)(input, false)
+  export function warmFile(input: string, authority: ProcessAuthority) {
+    const operation = warmFileTouchForTest
+      ? warmFileTouchForTest(input, false)
+      : touchFileWithAuthority(authority, input, false)
     void operation.catch((error) => {
       log.error("LSP file warm-up failed", { file: input, error: String(error) })
     })
@@ -503,12 +496,12 @@ export namespace LSP {
     return results
   }
 
-  export async function diagnostics() {
-    return diagnosticsWithAuthority(taskProcessAuthority())
+  export async function diagnostics(authority: ProcessAuthority) {
+    return diagnosticsWithAuthority(authority)
   }
 
-  export async function hover(input: { file: string; line: number; character: number }) {
-    return run(input.file, (client) => {
+  export async function hover(input: { file: string; line: number; character: number }, authority: ProcessAuthority) {
+    return runWithAuthority(authority, input.file, (client) => {
       return client.connection
         .sendRequest("textDocument/hover", {
           textDocument: {
@@ -575,8 +568,8 @@ export namespace LSP {
     ).then((result) => result.flat() as Symbol[])
   }
 
-  export async function workspaceSymbol(query: string) {
-    return workspaceSymbolWithAuthority(taskProcessAuthority(), query)
+  export async function workspaceSymbol(query: string, authority: ProcessAuthority) {
+    return workspaceSymbolWithAuthority(authority, query)
   }
 
   async function documentSymbolWithAuthority(authority: ProcessAuthority, uri: string) {
@@ -592,12 +585,12 @@ export namespace LSP {
       .then((result) => result.filter(Boolean))
   }
 
-  export async function documentSymbol(uri: string) {
-    return documentSymbolWithAuthority(taskProcessAuthority(), uri)
+  export async function documentSymbol(uri: string, authority: ProcessAuthority) {
+    return documentSymbolWithAuthority(authority, uri)
   }
 
-  export async function definition(input: { file: string; line: number; character: number }) {
-    return run(input.file, (client) =>
+  export async function definition(input: { file: string; line: number; character: number }, authority: ProcessAuthority) {
+    return runWithAuthority(authority, input.file, (client) =>
       client.connection
         .sendRequest("textDocument/definition", {
           textDocument: { uri: pathToFileURL(input.file).href },
@@ -607,8 +600,8 @@ export namespace LSP {
     ).then((result) => result.flat().filter(Boolean))
   }
 
-  export async function references(input: { file: string; line: number; character: number }) {
-    return run(input.file, (client) =>
+  export async function references(input: { file: string; line: number; character: number }, authority: ProcessAuthority) {
+    return runWithAuthority(authority, input.file, (client) =>
       client.connection
         .sendRequest("textDocument/references", {
           textDocument: { uri: pathToFileURL(input.file).href },
@@ -619,8 +612,8 @@ export namespace LSP {
     ).then((result) => result.flat().filter(Boolean))
   }
 
-  export async function implementation(input: { file: string; line: number; character: number }) {
-    return run(input.file, (client) =>
+  export async function implementation(input: { file: string; line: number; character: number }, authority: ProcessAuthority) {
+    return runWithAuthority(authority, input.file, (client) =>
       client.connection
         .sendRequest("textDocument/implementation", {
           textDocument: { uri: pathToFileURL(input.file).href },
@@ -630,8 +623,8 @@ export namespace LSP {
     ).then((result) => result.flat().filter(Boolean))
   }
 
-  export async function prepareCallHierarchy(input: { file: string; line: number; character: number }) {
-    return run(input.file, (client) =>
+  export async function prepareCallHierarchy(input: { file: string; line: number; character: number }, authority: ProcessAuthority) {
+    return runWithAuthority(authority, input.file, (client) =>
       client.connection
         .sendRequest("textDocument/prepareCallHierarchy", {
           textDocument: { uri: pathToFileURL(input.file).href },
@@ -641,8 +634,8 @@ export namespace LSP {
     ).then((result) => result.flat().filter(Boolean))
   }
 
-  export async function incomingCalls(input: { file: string; line: number; character: number }) {
-    return run(input.file, async (client) => {
+  export async function incomingCalls(input: { file: string; line: number; character: number }, authority: ProcessAuthority) {
+    return runWithAuthority(authority, input.file, async (client) => {
       const items = (await client.connection
         .sendRequest("textDocument/prepareCallHierarchy", {
           textDocument: { uri: pathToFileURL(input.file).href },
@@ -654,8 +647,8 @@ export namespace LSP {
     }).then((result) => result.flat().filter(Boolean))
   }
 
-  export async function outgoingCalls(input: { file: string; line: number; character: number }) {
-    return run(input.file, async (client) => {
+  export async function outgoingCalls(input: { file: string; line: number; character: number }, authority: ProcessAuthority) {
+    return runWithAuthority(authority, input.file, async (client) => {
       const items = (await client.connection
         .sendRequest("textDocument/prepareCallHierarchy", {
           textDocument: { uri: pathToFileURL(input.file).href },
@@ -679,10 +672,6 @@ export namespace LSP {
     return Promise.all(tasks)
   }
 
-  async function runAll<T>(input: (client: LSPClient.Info) => Promise<T>): Promise<T[]> {
-    return runAllWithAuthority(taskProcessAuthority(), input)
-  }
-
   async function runWithAuthority<T>(
     authority: ProcessAuthority,
     file: string,
@@ -691,10 +680,6 @@ export namespace LSP {
     const clients = await getClients(file, authority)
     const tasks = clients.map((x) => input(x))
     return Promise.all(tasks)
-  }
-
-  async function run<T>(file: string, input: (client: LSPClient.Info) => Promise<T>): Promise<T[]> {
-    return runWithAuthority(taskProcessAuthority(), file, input)
   }
 
   export namespace Host {

@@ -10,7 +10,6 @@ import { Instance } from "../project/instance"
 import path from "path"
 import { assertExternalDirectory } from "./external-directory"
 import { redactInlinePayloads } from "../util/inline-base64"
-import { taskIDForSession } from "@/engine/task-session-lineage"
 import { activeTaskExecutionCapsule } from "@/engine/task-execution-capsule-binding"
 import { activeExecutionCapsuleRuntimeFact } from "@/execution-capsule/runtime"
 
@@ -47,21 +46,23 @@ export const SearchCodeTool = Tool.define("search_code", {
     searchPath = path.isAbsolute(searchPath) ? searchPath : path.resolve(Instance.directory, searchPath)
     await assertExternalDirectory(ctx, searchPath, { kind: "directory" })
 
-    const taskID = taskIDForSession(ctx.sessionID)
-    if (!taskID) throw new Error(`Search Session ${ctx.sessionID} does not belong to a Task`)
-    const capsuleRuntime = await activeExecutionCapsuleRuntimeFact()
-    const rgPath = capsuleRuntime?.ripgrepPath ?? (await Ripgrep.filepath())
+    const executionAuthority = Tool.requireExecutionAuthority(ctx)
+    const rgPath = executionAuthority.kind === "task"
+      ? (await activeExecutionCapsuleRuntimeFact())?.ripgrepPath ?? (await Ripgrep.filepath())
+      : await Ripgrep.filepath()
     const args: string[] = ["-nH", "--hidden", "--no-messages", "--field-match-separator=|", "--regexp", params.pattern]
     if (params.include) {
       args.push("--glob", params.include)
     }
     args.push(searchPath)
 
-    const proc = await ProcessSupervisor.spawnTaskCommand({ taskID, cwd: searchPath }, {
-      executable: rgPath,
-      args,
-      owner: "search-code",
-    })
+    const processOptions = { executable: rgPath, args, owner: "search-code" }
+    const proc = executionAuthority.kind === "task"
+      ? await ProcessSupervisor.spawnTaskCommand(
+          { taskID: executionAuthority.taskID, cwd: searchPath },
+          processOptions,
+        )
+      : await ProcessSupervisor.spawnHostCommand({ ...processOptions, cwd: searchPath })
     const abort = () => void proc.terminate().catch(() => undefined)
     ctx.abort.addEventListener("abort", abort, { once: true })
 

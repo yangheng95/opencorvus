@@ -12,7 +12,7 @@ import { Tool } from "../../tool/tool"
 import { DEFAULT_WEBPAGE_EVIDENCE_VIEWPORT } from "@/browser/webpage/default-viewport"
 import { captureWebpageRuntimeStateEvidence } from "@/browser/webpage/runtime-state"
 import { resolveWebpageEvidenceOutputDir } from "./output-dir"
-import { taskProcessIdentity } from "@/tool/task-files"
+import { taskExecutionProcessIdentity } from "@/tool/execution-files"
 
 export const WebpageRuntimeStateTool = Tool.define("webpage_runtime_state", {
   description: `Capture factual browser runtime evidence for scroll-triggered and interactive webpage states.
@@ -41,7 +41,7 @@ Use this after URL evidence exists when a projected source-acquisition worker ne
       .optional(),
   }),
   async execute(params, ctx) {
-    const processIdentity = taskProcessIdentity(ctx, "Webpage runtime state")
+    const processIdentity = taskExecutionProcessIdentity(ctx, "Webpage runtime state")
     const evidenceDirectory = await resolveWebpageEvidenceOutputDir({ sessionID: ctx.sessionID })
     const outputDir = evidenceDirectory.absolutePath
     await ctx.ask({

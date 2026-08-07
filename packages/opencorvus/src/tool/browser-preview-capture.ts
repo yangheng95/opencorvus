@@ -11,6 +11,7 @@ import { AttachmentStore } from "@/storage/attachment-store"
 import type { TaskArtifactRef } from "@opencorvus-ai/plugin/task-artifact"
 import { BrowserPreviewCaptureToolID } from "./browser-preview-tool-ids"
 import { Tool } from "./tool"
+import { taskExecutionID } from "./execution-files"
 
 export const BrowserPreviewCaptureToolParameters = BrowserPreviewCaptureRequest
 
@@ -101,8 +102,7 @@ export const BrowserPreviewCaptureTool = Tool.define(BrowserPreviewCaptureToolID
     "Capture the selected viewports from one persisted task Browser Preview target through the canonical Playwright-backed producer. Returns exact Engine Artifact locators and the same persisted PNG bytes as multimodal attachments for direct inspection.",
   parameters: BrowserPreviewCaptureToolParameters,
   async execute(params, ctx: Tool.Context) {
-    const taskID = typeof ctx.extra?.taskID === "string" ? ctx.extra.taskID.trim() : ""
-    if (!taskID) throw new Error("browser_preview_capture requires a task context.")
+    const taskID = taskExecutionID(ctx, "browser_preview_capture")
     const verification = await capturePersistedBrowserPreviewTarget({
       taskID,
       targetID: params.targetID,

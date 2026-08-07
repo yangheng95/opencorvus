@@ -23,9 +23,8 @@ import { CompactionHandoff } from "./compaction-handoff"
 import { SessionControl } from "./control"
 import { controlPromptProjection, controlToolContext } from "@/control/prompt"
 import {
-  resolveSessionProcessAuthority,
+  resolveSessionExecutionAuthority,
   taskIDForSession,
-  type SessionProcessAuthority,
 } from "@/engine/task-session-lineage"
 import { findDispatchLineageByToolExecution } from "@/engine/dispatch-lineage"
 import { ContextBudget } from "./context-budget"
@@ -136,15 +135,29 @@ function visibleChatSkillNames(messages: readonly Message.WithParts[]): string[]
 }
 
 export namespace SessionLoop {
+  async function resolveToolExecutionAuthority(input: {
+    sessionID: string
+    projectID: string
+    rootDirectory: string
+    runtimeIdentity?: { taskID: string }
+  }) {
+    return resolveSessionExecutionAuthority({
+      sessionID: input.sessionID,
+      projectID: input.projectID,
+      rootDirectory: input.rootDirectory,
+      expected: input.runtimeIdentity
+        ? { kind: "task", taskID: input.runtimeIdentity.taskID }
+        : { kind: "conversation" },
+    })
+  }
+
   export function toolExecutionExtra(input: {
-    processAuthority: SessionProcessAuthority
     messageExtra?: Record<string, unknown>
     model: Provider.Model
   }) {
     const { taskID: _untrustedTaskID, ...messageExtra } = input.messageExtra ?? {}
     return {
       ...messageExtra,
-      ...(input.processAuthority.kind === "task" ? { taskID: input.processAuthority.taskID } : {}),
       model: input.model,
     }
   }
@@ -2280,12 +2293,11 @@ export namespace SessionLoop {
     const executionPermission = PermissionNext.merge(input.agent.permission, input.session.permission)
     const runtimeContract = getSessionRuntimeContract(input.session.id)
     assertSessionLoopRuntimeContract(runtimeContract, `SessionLoop tool resolver ${input.session.id}`)
-    const processAuthority = await resolveSessionProcessAuthority({
+    const executionAuthority = await resolveToolExecutionAuthority({
       sessionID: input.session.id,
       projectID: Instance.project.id,
       rootDirectory: Instance.directory,
-      cwd: Instance.directory,
-      runtimeTaskID: runtimeContract?.identity.taskID,
+      runtimeIdentity: runtimeContract?.identity,
     })
     let executionHarnessProjection: HarnessProjection | undefined
     const context = (
@@ -2325,7 +2337,6 @@ export namespace SessionLoop {
         callID: options.toolCallId,
         extra: {
           ...toolExecutionExtra({
-            processAuthority,
             messageExtra: input.extra,
             model: input.model,
           }),
@@ -2340,6 +2351,7 @@ export namespace SessionLoop {
         },
         agent: input.agentID,
         messages: input.messages,
+        executionAuthority,
         executionSurface:
           invocation?.executionSurface ??
           createToolExecutionSurface({
@@ -2554,9 +2566,9 @@ export namespace SessionLoop {
       ConversationCapability.isAgentID(input.agentID)
         ? await ConversationCapability.runtimeMcpTools(input.config, input.agentID, input.session.id)
         : undefined
-    const defaultMcpProcessAuthority = processAuthority.kind === "task"
-      ? MCP.taskProcessAuthority(processAuthority.taskID, processAuthority.cwd)
-      : MCP.hostProcessAuthority(processAuthority.cwd)
+    const defaultMcpProcessAuthority = executionAuthority.kind === "task"
+      ? MCP.taskProcessAuthority(executionAuthority.taskID, executionAuthority.rootDirectory)
+      : MCP.hostProcessAuthority(executionAuthority.rootDirectory)
     const resolvedMcpTools =
       exactRuntimeContractTools || !includeMcpTools
         ? {}
@@ -2649,7 +2661,7 @@ export namespace SessionLoop {
 
             const truncated = await Truncate.output(
               materialized.text,
-              { sessionID: ctx.sessionID },
+              { sessionID: ctx.sessionID, executionAuthority },
               ctx.executionSurface,
             )
             const metadata = {
@@ -3131,6 +3143,7 @@ export namespace SessionLoop {
     consumeCompletedCompactionControl,
     sessionStateContext,
     waitForUserMessage,
+    resolveToolExecutionAuthority,
   }
 }
 

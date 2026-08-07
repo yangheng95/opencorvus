@@ -7,7 +7,7 @@ import { ExtractedPageSchema } from "@/browser/webpage/extracted-page"
 import { resolveWebpageEvidenceOutputDir } from "./output-dir"
 import { compileArchivedWebpageHtml, writeCompiledWebpageEvidence } from "@/browser/webpage/compiled-html"
 import { mergeExtractedLayoutIntoCompiledWebpage } from "@/browser/webpage/compiled-layout"
-import { taskFiles, taskProcessIdentity } from "@/tool/task-files"
+import { executionFiles, taskExecutionProcessIdentity } from "@/tool/execution-files"
 import type { ToolFiles } from "@opencorvus-ai/plugin"
 
 export const WebpageCompileTool = Tool.define("webpage_compile", {
@@ -22,9 +22,9 @@ This tool is artifact-dependent: do NOT call it until \`extracted-page.json\` ex
 Use this only when the canonical structure IR or asset graph is missing. Do not rerun it once \`page.ir.json\` and \`assets/manifest.json\` exist for the current evidence package. Pure function, no network or browser.`,
   parameters: z.object({}),
   async execute(_params, ctx) {
-    const processIdentity = taskProcessIdentity(ctx, "Webpage compile")
+    const processIdentity = taskExecutionProcessIdentity(ctx, "Webpage compile")
     const evidenceDirectory = await resolveWebpageEvidenceOutputDir({ sessionID: ctx.sessionID })
-    const files = taskFiles(ctx)
+    const files = executionFiles(ctx)
     const outputDir = evidenceDirectory.absolutePath
     const extractedPath = path.join(outputDir, "extracted-page.json")
     const captureHtmlPath = path.join(outputDir, "capture.html")

@@ -82,7 +82,9 @@ describe("Language Server Protocol initialization lifecycle", () => {
           },
         })
         try {
-          await SessionContext.provide(session, () => LSP.touchFile(source, false))
+          await SessionContext.provide(session, () =>
+            LSP.touchFile(source, false, { kind: "task", taskID, cwd: project.path }),
+          )
           await LSP.Host.touchFile(source, false)
           expect({ processes: processes.length, lifecycle: await LSP.TestHooks.lifecycle() }).toEqual({
             processes: 2,

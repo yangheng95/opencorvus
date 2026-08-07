@@ -9,7 +9,7 @@ import { Instance } from "@/project/instance"
 import { Project } from "@/project/project"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
-import { taskIDForSession } from "@/engine/task-session-lineage"
+import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
 import type { ToolExecutionSurface } from "./execution-surface"
 
 export namespace Truncate {
@@ -25,7 +25,7 @@ export namespace Truncate {
     maxBytes?: number
     direction?: "head" | "tail"
     sessionID?: string
-    taskID?: string
+    executionAuthority?: SessionExecutionAuthority
   }
 
   export function init() {
@@ -157,10 +157,17 @@ export namespace Truncate {
 
     const id = Identifier.ascending("tool")
     const sessionID = options.sessionID
-    const taskID = options.taskID ?? (sessionID ? taskIDForSession(sessionID) : undefined)
     if (!sessionID) {
       throw new Error("Truncate.output: sessionID is required for runtime-scoped tool output")
     }
+    const executionAuthority = options.executionAuthority
+    if (!executionAuthority) {
+      throw new Error("Truncate.output: executionAuthority is required before persisted output can be selected")
+    }
+    if (executionAuthority.sessionID !== sessionID) {
+      throw new Error("Truncate.output: execution authority does not own the requested Session output")
+    }
+    const taskID = executionAuthority.kind === "task" ? executionAuthority.taskID : undefined
     const projectRoot = taskID
       ? taskPrimaryProjectRoot(taskID, { activeProjectID: Instance.project.id })
       : Instance.project.worktree
