@@ -1,6 +1,9 @@
 import { expect, test } from "bun:test"
 import path from "node:path"
 import { randomUUID } from "node:crypto"
+import { userSystemdRuntimeAvailable } from "./fixture/linux-runtime"
+
+const ociTest = userSystemdRuntimeAvailable(["/usr/local/bin/bun", "/usr/local/bin/node"]) ? test : test.skip
 
 async function runProbe(mode?: "terminal-evidence" | "terminal-evidence-recovery") {
   const controller = `opencorvus-controller-oci-${randomUUID()}.scope`
@@ -49,12 +52,12 @@ function systemdProperties(value: string) {
   }))
 }
 
-test("rootless OCI Task Containers isolate same-port loopback services", async () => {
+ociTest("rootless OCI Task Containers isolate same-port loopback services", async () => {
   const [exitCode, stdout, stderr] = await runProbe()
   expect({ exitCode, stderr, stdout }).toEqual({ exitCode: 0, stderr: "", stdout: "A\nB\n" })
 }, 30_000)
 
-test("rootless OCI Task Containers preserve one unexpected terminal occurrence", async () => {
+ociTest("rootless OCI Task Containers preserve one unexpected terminal occurrence", async () => {
   const [exitCode, stdout, stderr] = await runProbe("terminal-evidence")
   const evidence = JSON.parse(stdout) as {
     first: { code: string; message: string; unitProperties: { stdout: string } }
@@ -86,7 +89,7 @@ test("rootless OCI Task Containers preserve one unexpected terminal occurrence",
   })
 }, 30_000)
 
-test("rootless OCI Task Containers finish interrupted cleanup from immutable terminal evidence", async () => {
+ociTest("rootless OCI Task Containers finish interrupted cleanup from immutable terminal evidence", async () => {
   const [exitCode, stdout, stderr] = await runProbe("terminal-evidence-recovery")
   const evidence = JSON.parse(stdout) as {
     first: { code: string; message: string; unitProperties: { stdout: string } }

@@ -1,6 +1,6 @@
 import { readdirSync } from "node:fs"
 import path from "node:path"
-import { runCommandWithInactivity } from "../../opencorvus/src/shell/command-inactivity"
+import { runHostCommandWithInactivity } from "../../opencorvus/src/shell/command-inactivity"
 
 const OVERLAY_ROOT = path.resolve(import.meta.dir, "..")
 const UNIT_TEST_INACTIVITY_TIMEOUT_MILLISECONDS = 120_000
@@ -17,7 +17,7 @@ const files = unitTestFiles(process.argv.slice(2))
 if (files.length === 0) throw new Error("Overlay unit test runner requires at least one test file")
 
 for (const file of files) {
-  const result = await runCommandWithInactivity({
+  const result = await runHostCommandWithInactivity({
     executable: process.execPath,
     args: ["test", "--timeout=0", file],
     cwd: OVERLAY_ROOT,

@@ -40,6 +40,7 @@ async function createTask(directory: string, title: string): Promise<TaskFixture
             project_id: Instance.project.id,
             session_id: session.id,
             source: "test",
+            product_pillar: "code",
             title,
             request: title,
             priority: "normal",

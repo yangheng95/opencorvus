@@ -4,18 +4,17 @@
  * Full overlay build script — single command for the complete pipeline.
  *
  * Steps:
- *   1. check:i18n — verify locale files match panel revision
- *   2. build:vite — bundle main.tsx + CSS + HTML → dist-vite/
- *   3. Remove stale opencorvus binary — force rebuild on every overlay build
- *   4. Generate OpenCorvus build artifacts consumed while rebuilding the SDK
- *   5. Rebuild SDK — regenerate src/gen/ + src/defaults.ts from live opencorvus spec
- *   6. Build opencorvus + tauri build --no-bundle — compile Rust → overlay binary
- *   7. Copy binary to dist/<platform>/
+ *   1. build:vite — bundle main.tsx + CSS + HTML → dist-vite/
+ *   2. Remove stale opencorvus binary — force rebuild on every overlay build
+ *   3. Generate OpenCorvus build artifacts consumed while rebuilding the SDK
+ *   4. Rebuild SDK — regenerate src/gen/ + src/defaults.ts from live opencorvus spec
+ *   5. Build opencorvus + tauri build --no-bundle — compile Rust → overlay binary
+ *   6. Copy binary to dist/<platform>/
  *
  * Usage:
  *   bun run build:overlay                                # full pipeline (host triple)
  *   bun run build:overlay --target <triple>              # cross-compile to triple (e.g. aarch64-pc-windows-msvc)
- *   bun run build:overlay --skip-tauri                   # UI only (steps 1-2)
+ *   bun run build:overlay --skip-tauri                   # UI only (step 1)
  *
  * Note: the caller is responsible for stopping any running overlay process
  * before invoking this script. On Windows, Cargo's linker will fail with
@@ -136,11 +135,7 @@ function tauriArgs() {
   ]
 }
 
-// ── Step 1: check:i18n ──
-step("Check i18n")
-await $`bun run check:i18n`.cwd(dir)
-
-// ── Step 2: build:vite ──
+// ── Step 1: build:vite ──
 step("Build Vite → dist-vite/")
 await $`bun run build:vite`.cwd(dir)
 
@@ -149,7 +144,7 @@ if (skipTauri) {
   process.exit(0)
 }
 
-// ── Step 3: Remove stale opencorvus binary ──
+// ── Step 2: Remove stale opencorvus binary ──
 //
 // The overlay embeds the opencorvus sidecar payload at build time via OPENCORVUS_EMBED_PATH.
 // If we skip this step, a stale binary from a previous build is reused — the Tauri
@@ -160,7 +155,7 @@ const serverDistDir = path.join(opencorvus, "dist", serverDistName)
 await fs.rm(serverDistDir, { recursive: true, force: true })
 console.log(`removed ${serverDistDir}`)
 
-// ── Step 4: Generate OpenCorvus build artifacts ──
+// ── Step 3: Generate OpenCorvus build artifacts ──
 //
 // SDK generation imports the live OpenCorvus server to obtain its OpenAPI document.
 // Generated server modules therefore must already match repository package sources;
@@ -172,7 +167,7 @@ await generateOpencorvusGeneratedBuildArtifacts({
   log: console.log,
 })
 
-// ── Step 5: Rebuild SDK ──
+// ── Step 4: Rebuild SDK ──
 //
 // SDK regenerates src/gen/ from opencorvus's live OpenAPI spec and src/defaults.ts
 // from server-defaults.json. opencorvus imports @opencorvus-ai/sdk, so a stale gen/
@@ -181,7 +176,7 @@ await generateOpencorvusGeneratedBuildArtifacts({
 step("Rebuild SDK")
 await $`bun run build`.cwd(sdk)
 
-// ── Step 6: Tauri build ──
+// ── Step 5: Tauri build ──
 step("Tauri build → overlay binary")
 
 console.log("Building opencorvus overlay server first...")

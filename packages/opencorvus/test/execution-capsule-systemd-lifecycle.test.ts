@@ -1,4 +1,5 @@
 import { expect, test } from "bun:test"
+import { userSystemdRuntimeAvailable } from "./fixture/linux-runtime"
 
 const probe = String.raw`
 set -eu
@@ -28,7 +29,9 @@ systemctl --user show "$task" -p ActiveState -p SubState -p Result -p MainPID -p
 systemctl --user show "$controller" -p ActiveState -p SubState --no-pager | sort
 `
 
-test("controller scope termination settles its bound Task service", async () => {
+const systemdTest = userSystemdRuntimeAvailable() ? test : test.skip
+
+systemdTest("controller scope termination settles its bound Task service", async () => {
   const command =
     process.platform === "win32"
       ? ["wsl.exe", "-d", "Ubuntu-24.04", "--exec", "/bin/bash", "-lc", probe]

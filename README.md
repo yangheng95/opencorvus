@@ -144,13 +144,13 @@ The large per-platform artifacts shown on a GitHub Actions run are build
 containers that hold several formats; public Releases expose every installer
 as a separate download.
 
-| Operating system | Recommended asset | Alternatives |
-| ---------------- | ----------------- | ------------ |
-| Windows x64 | `OpenCorvus_<version>_x64-setup.exe` | `.msi` for managed installation |
-| macOS Apple silicon | `OpenCorvus_<version>_aarch64.dmg` | `.app.tar.gz` archive |
-| macOS Intel | `OpenCorvus_<version>_x64.dmg` | `.app.tar.gz` archive |
-| Linux x64 | `OpenCorvus_<version>_amd64.AppImage` | `.deb` for Debian/Ubuntu or `.rpm` for Fedora/RHEL |
-| Linux ARM64 | `OpenCorvus_<version>_aarch64.AppImage` | `_arm64.deb` or `.aarch64.rpm` |
+| Operating system    | Recommended asset                       | Alternatives                                       |
+| ------------------- | --------------------------------------- | -------------------------------------------------- |
+| Windows x64         | `OpenCorvus_<version>_x64-setup.exe`    | `.msi` for managed installation                    |
+| macOS Apple silicon | `OpenCorvus_<version>_aarch64.dmg`      | `.app.tar.gz` archive                              |
+| macOS Intel         | `OpenCorvus_<version>_x64.dmg`          | `.app.tar.gz` archive                              |
+| Linux x64           | `OpenCorvus_<version>_amd64.AppImage`   | `.deb` for Debian/Ubuntu or `.rpm` for Fedora/RHEL |
+| Linux ARM64         | `OpenCorvus_<version>_aarch64.AppImage` | `_arm64.deb` or `.aarch64.rpm`                     |
 
 Replace `<version>` with the version shown on the release, for example
 `0.0.35-beta`. Download only the file you intend to install.
@@ -368,6 +368,7 @@ planned integration.
 - Support: [`SUPPORT.md`](./SUPPORT.md)
 - Security: [`SECURITY.md`](./SECURITY.md)
 - Code of Conduct: [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md)
+- Third-party notices: [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)
 
 ## Open-source acknowledgements
 

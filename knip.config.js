@@ -62,7 +62,6 @@ export default {
         "script/build.ts",
         "script/build-overlay.ts",
         "script/build-docker.ts",
-        "script/check-panel-i18n.ts",
         // src/main.tsx is the Solid entry point — vite.config.ts roots
         // at `src/` and uses src/index.html as the HTML host that loads
         // /main.tsx via the standard <script type="module"> tag.

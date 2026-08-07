@@ -21,6 +21,7 @@ import { ExpertSquadRegistry } from "../src/expert-squad/registry"
 import { executionCapsuleTreeDigest } from "../src/execution-capsule/tree-digest"
 import { ExecutionCapsuleRuntimeDescriptorSchema } from "../src/execution-capsule/runtime"
 import { artifactRuntimeNodeModuleNames } from "../script/build-artifact"
+import { materializeMirrorPrismPackage } from "./fixture/expert-squad"
 
 const digest = "a".repeat(64)
 const resource = (name: string) => ({ path: path.resolve(import.meta.dir, name), sha256: digest })
@@ -55,21 +56,14 @@ describe("Expert Squad evolution launcher", () => {
     }
     const child = Bun.spawn(
       [
-        "wsl.exe",
-        "-d",
-        "Ubuntu-24.04",
-        "--exec",
-        "/usr/bin/env",
-        "-i",
-        ...Object.entries(serviceEnvironment).map(([name, value]) => `${name}=${value}`),
-        "/usr/local/bin/node",
+        process.execPath,
         "-e",
         CONTROLLER_ENVIRONMENT_WRAPPER_SOURCE,
-        "/usr/local/bin/node",
+        process.execPath,
         "-e",
         "process.stdout.write(JSON.stringify(process.env))",
       ],
-      { stdout: "pipe", stderr: "pipe" },
+      { env: serviceEnvironment, stdout: "pipe", stderr: "pipe" },
     )
     const [exitCode, stdout, stderr] = await Promise.all([
       child.exited,
@@ -77,11 +71,13 @@ describe("Expert Squad evolution launcher", () => {
       new Response(child.stderr).text(),
     ])
 
-    expect({ exitCode, stderr, environment: JSON.parse(stdout) }).toEqual({
-      exitCode: 0,
-      stderr: "",
-      environment: declared,
-    })
+    const environment = JSON.parse(stdout) as Record<string, string>
+    expect({
+      exitCode,
+      stderr,
+      declared: Object.fromEntries(Object.keys(declared).map((name) => [name, environment[name]])),
+      undeclared: environment.UNDECLARED_MANAGER_CREDENTIAL,
+    }).toEqual({ exitCode: 0, stderr: "", declared, undeclared: undefined })
   })
 
   test("forwards controller environment by systemd variable name without serializing values", () => {
@@ -286,7 +282,7 @@ describe("Expert Squad evolution launcher", () => {
         repositoryRoot,
         "packages/opencorvus/test/fixtures/expert-squad-evolution-benchmark/development-manifest.json",
       )
-      const targetSource = path.join(repositoryRoot, "expert-squads/mirror/prism")
+      const targetSource = await materializeMirrorPrismPackage(path.join(temporary, "mirror-prism"))
       const evolutionLabSource = path.join(repositoryRoot, "expert-squads/builtin/evolution-lab")
       const slots = ["case-03", "case-04", "case-10"].flatMap((caseID) =>
         ["baseline", "candidate"].flatMap((arm) =>

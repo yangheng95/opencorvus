@@ -255,22 +255,6 @@ describe("createTask + WorktreeNotGitError init-git retry", () => {
     expect(dialogCalls.length).toBe(0)
   })
 
-  test("task creation omits the retired route kind without opening a dialog", async () => {
-    let posted: any
-    __setHostTransportForTest(
-      fakeTransport((req) => {
-        posted = req.body?.kind === "json" ? req.body.value : JSON.parse(String(req.body))
-        return { status: 200, ok: true, headers: {}, body: accepted("tsk_default_route") }
-      }),
-    )
-
-    const created = await createTask({ text: "hello", queue: false })
-
-    expect(created.taskID).toBe("tsk_default_route")
-    expect(dialogCalls.some((item) => item.kind === "task-route-decision")).toBe(false)
-    expect(posted).not.toHaveProperty("kind")
-  })
-
   test("missing active project creates a fresh implicit project through the global route", async () => {
     configure({ directory: "" })
     setSettingsStore("directory", "")

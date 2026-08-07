@@ -55,22 +55,6 @@ jobs:
         shell: bash
         run: bun ./script/sync-version.ts "${{ steps.meta.outputs.version }}" --check
 
-      - name: Create GitHub Release
-        if: steps.meta.outputs.release == '1'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
-        run: |
-          VERSION="${{ steps.meta.outputs.version }}"
-          if gh release view "v${VERSION}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo "Release v${VERSION} already exists"
-          else
-            gh release create "v${VERSION}" \
-              --title "v${VERSION}" \
-              --generate-notes \
-              --repo "$GITHUB_REPOSITORY"
-          fi
-
   package-overlay:
     name: overlay (${{ matrix.platform }})
     needs: prepare
@@ -188,8 +172,20 @@ jobs:
           VERSION="${{ needs.prepare.outputs.version }}"
           UPLOAD_DIR="$(mktemp -d)"
           bun ./script/stage-release-upload-assets.ts --source /tmp/release-assets --out "$UPLOAD_DIR" --version "$VERSION"
+          cp LICENSE THIRD_PARTY_NOTICES.md "$UPLOAD_DIR/"
+          (
+            cd "$UPLOAD_DIR"
+            sha256sum -- * > SHA256SUMS
+          )
           mapfile -t FILES < <(find "$UPLOAD_DIR" -type f | sort)
           printf '%s\n' "${FILES[@]}"
+          if ! gh release view "v${VERSION}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release create "v${VERSION}" \
+              --draft \
+              --title "v${VERSION}" \
+              --generate-notes \
+              --repo "$GITHUB_REPOSITORY"
+          fi
           gh release upload "v${VERSION}" "${FILES[@]}" --clobber --repo "$GITHUB_REPOSITORY"
 
   publish-release-branch:
@@ -243,7 +239,7 @@ jobs:
           fi
           find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf -- {} +
 
-          for required_doc in README.md RELEASE.md; do
+          for required_doc in README.md RELEASE.md LICENSE THIRD_PARTY_NOTICES.md; do
             if [[ ! -f "$GITHUB_WORKSPACE/$required_doc" ]]; then
               echo "Missing release branch document: $required_doc" >&2
               exit 1
@@ -267,3 +263,20 @@ jobs:
             git commit -m "release: v${VERSION}"
           fi
           git push origin release:release --force-with-lease=refs/heads/release:"${RELEASE_LEASE}"
+
+  publish-release:
+    name: publish release
+    needs:
+      - prepare
+      - publish-release-assets
+      - publish-release-branch
+    if: needs.prepare.outputs.release == '1'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Publish verified draft
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: gh release edit "v${VERSION}" --draft=false --repo "$GITHUB_REPOSITORY"

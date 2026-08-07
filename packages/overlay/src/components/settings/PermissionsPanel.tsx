@@ -20,9 +20,8 @@ import { SegmentedControl, type SegmentedControlOption } from "../ui/SegmentedCo
 import { SettingsGroup, SettingsRow } from "./layout"
 
 // ── Permission key metadata ──
-// i18n convention: labels/descriptions are thunks that call `t()` with a
-// string literal, not stored-then-indirect-lookup. This keeps the static
-// analyzer in check-panel-i18n.ts able to recognise every referenced key.
+// i18n convention: labels/descriptions are thunks that call `t()` with an
+// explicit key at the point of use.
 
 interface PermDef {
   key: keyof ToolPermsObj

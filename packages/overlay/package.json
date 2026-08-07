@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check:i18n": "bun run script/check-panel-i18n.ts",
     "icons:generate": "bun run script/generate-app-icons.ts",
     "dev": "tauri dev",
     "dev:vite": "vite --config vite.config.ts",

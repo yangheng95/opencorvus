@@ -1,7 +1,10 @@
 import { expect, test } from "bun:test"
 import path from "node:path"
+import { userSystemdRuntimeAvailable } from "./fixture/linux-runtime"
 
-test("controller termination settles the bound OCI Task container and its child process", async () => {
+const controllerTest = userSystemdRuntimeAvailable(["/usr/local/bin/bun", "/usr/local/bin/node"]) ? test : test.skip
+
+controllerTest("controller termination settles the bound OCI Task container and its child process", async () => {
   const helper = path.resolve(import.meta.dir, "fixtures/execution-capsule-oci-controller-exit.ts")
   const command =
     process.platform === "win32"

@@ -23,7 +23,7 @@ function hasNativeBinaryMagic(header: Buffer): boolean {
 
 async function isNativeBinary(filename: string): Promise<boolean> {
   if (hasNativeBinaryExtension(filename)) return true
-  const handle = await fs.promises.open(filename, "r")
+  const handle = await fs.promises.open(path.toNamespacedPath(filename), "r")
   try {
     const header = Buffer.alloc(4)
     const { bytesRead } = await handle.read(header, 0, header.length, 0)
@@ -36,7 +36,7 @@ async function isNativeBinary(filename: string): Promise<boolean> {
 export async function discoverArtifactBinaryPaths(root: string): Promise<string[]> {
   const discovered = new Set<string>()
   const visit = async (directory: string): Promise<void> => {
-    const entries = await fs.promises.readdir(directory, { withFileTypes: true })
+    const entries = await fs.promises.readdir(path.toNamespacedPath(directory), { withFileTypes: true })
     for (const entry of entries) {
       const filename = path.join(directory, entry.name)
       if (entry.isDirectory()) {
@@ -62,10 +62,10 @@ export async function normalizeArtifactExecutablePermissions(input: { root: stri
     ]),
   ].sort((left, right) => left.localeCompare(right))
   for (const executable of executables) {
-    const info = await fs.promises.stat(executable)
+    const info = await fs.promises.stat(path.toNamespacedPath(executable))
     if (!info.isFile()) throw new Error(`Packaged executable is not a file: ${executable}`)
     if (input.os !== "win32" && !input.os.startsWith("windows")) {
-      await fs.promises.chmod(executable, ARTIFACT_EXECUTABLE_MODE)
+      await fs.promises.chmod(path.toNamespacedPath(executable), ARTIFACT_EXECUTABLE_MODE)
     }
   }
   return executables
@@ -83,7 +83,7 @@ export async function inspectArtifactExecutableClosure(input: {
   ].sort((left, right) => left.localeCompare(right))
   return Promise.all(
     executables.map(async (executable) => {
-      const info = await fs.promises.stat(executable)
+      const info = await fs.promises.stat(path.toNamespacedPath(executable))
       if (!info.isFile()) throw new Error(`Packaged executable is not a file: ${executable}`)
       return { path: executable, mode: info.mode & 0o777 }
     }),

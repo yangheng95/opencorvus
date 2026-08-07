@@ -30,6 +30,7 @@ import { ExpertSquadPackageManager } from "../src/expert-squad/manager"
 import { ExpertSquadRegistry } from "../src/expert-squad/registry"
 import { ExecutionCapsuleRuntimeUnavailableError } from "../src/execution-capsule/runtime"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
+import { materializeMirrorPrismPackage } from "./fixture/expert-squad"
 
 const packageRevision = {
   scope: "built_in" as const,
@@ -390,7 +391,7 @@ describe("Task package revision binding", () => {
       directory: project.path,
       fn: async () => {
         configureTaskLoopRunner(async () => {})
-        const sourcePackage = path.resolve(import.meta.dir, "../../../expert-squads/mirror/prism")
+        const sourcePackage = await materializeMirrorPrismPackage(path.join(project.path, "source-prism"))
         const baseline = await ExpertSquadPackageManager.importDirectory({
           projectDirectory: project.path,
           sourceDirectory: sourcePackage,

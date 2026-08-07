@@ -21,10 +21,16 @@ import { AppLog } from "../src/utils/log"
 import { setLocale } from "../src/utils/i18n"
 import { installRealOverlayI18n } from "./fixtures/i18n"
 import { setSettingsStore } from "../src/store/settings"
+import { setAppStore } from "../src/store/app"
 import { testTaskOrderKey } from "./fixtures/timeline-order"
 
 installRealOverlayI18n()
 await setLocale("en-US")
+
+globalThis.requestAnimationFrame = (callback) => {
+  callback(performance.now())
+  return 0
+}
 
 const SETTINGS_DIRECTORY = "D:/repo/from-settings"
 const TASK_DIRECTORY = "D:/repo/from-task-row"
@@ -64,6 +70,7 @@ afterEach(() => {
   setBoardStore("vcs", null)
   setTasksData([])
   setChatRequest(null)
+  setAppStore("connected", false)
 })
 
 function taskListItem(id: string, directory: string, updated = 1): unknown {
@@ -100,6 +107,7 @@ function conversationPayload(taskID: string, directory: string): unknown {
       snapshotVersion: `board:${taskID}`,
       task: {
         id: taskID,
+        sessionID: `ses_${taskID}`,
         orderKey: testTaskOrderKey(taskID, 1),
         title: taskID,
         directory,
@@ -110,8 +118,9 @@ function conversationPayload(taskID: string, directory: string): unknown {
     transcript: [],
     timeline: [],
     events: [],
+    turnArtifacts: [],
     view: {},
-    agentView: { topLevelSessionIDs: [], sessions: [], messages: [] },
+    agentView: { topLevelExecutionIDs: [], sessions: [], messages: [] },
     eventReplay: { cursor: 0, latestSequence: 0, complete: true, limit: 100, sinceTimestamp: null },
     history: { oldestTimestamp: null, oldestOrderKey: null, oldestMessageID: null, hasMore: false, limit: 100 },
     messageWatermark: 0,
@@ -192,6 +201,7 @@ test("selectTask refreshes same-directory explicit notification targets before o
   const captures: TransportRequest[] = []
   const streams: StreamOpenRequest[] = []
   configure({ directory: TASK_DIRECTORY })
+  setAppStore("connected", true)
   setSettingsStore("directory", TASK_DIRECTORY)
   setTasksData([taskListItem(taskID, SESSION_DIRECTORY)])
 
@@ -207,6 +217,7 @@ test("selectTask refreshes same-directory explicit notification targets before o
         expect(req.query?.directory).toBe(TASK_DIRECTORY)
         return ok(conversationPayload(taskID, TASK_DIRECTORY))
       }
+      if (req.path === `session/ses_${taskID}/config`) return ok({ config: { model: "" } })
       throw new Error(`unexpected request: ${req.path}`)
     },
     openStream(req) {
@@ -221,7 +232,11 @@ test("selectTask refreshes same-directory explicit notification targets before o
 
   await selectTask(taskID, { directory: TASK_DIRECTORY })
 
-  expect(captures.map((req) => req.path)).toEqual(["global/tasks", `task/${taskID}/conversation`])
+  expect(captures.map((req) => req.path)).toEqual([
+    "global/tasks",
+    `task/${taskID}/conversation`,
+    `session/ses_${taskID}/config`,
+  ])
   expect(streams[0]?.path).toBe(`task/${taskID}/events`)
   expect(streams[0]?.query?.directory).toBe(TASK_DIRECTORY)
   expect(taskOwningDirectory(taskID)).toBe(TASK_DIRECTORY)

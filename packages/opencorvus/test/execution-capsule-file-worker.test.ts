@@ -3,9 +3,29 @@ import os from "node:os"
 import path from "node:path"
 import { mkdir, mkdtemp, readFile, symlink, writeFile } from "node:fs/promises"
 import { EXECUTION_CAPSULE_FILE_WORKER_SOURCE } from "../src/execution-capsule/file-worker-source"
+import { WINDOWS_WSL_DISTRIBUTION, windowsWslExecutablesAvailable } from "./fixture/linux-runtime"
+
+const fileWorkerTest = windowsWslExecutablesAvailable(["/usr/local/bin/node"]) ? test : test.skip
+
+const linuxPath = (value: string) =>
+  value.replaceAll("\\", "/").replace(/^([A-Za-z]):/, (_match, drive) => `/mnt/${drive.toLowerCase()}`)
+
+async function createEscapingSymlink(target: string, link: string) {
+  if (process.platform !== "win32") return symlink(target, link)
+  const result = Bun.spawnSync([
+    "wsl.exe",
+    "-d",
+    WINDOWS_WSL_DISTRIBUTION,
+    "--exec",
+    "/bin/ln",
+    "-s",
+    linuxPath(target),
+    linuxPath(link),
+  ])
+  if (result.exitCode !== 0) throw new Error(result.stderr.toString().trim() || "WSL symlink creation failed")
+}
 
 async function invoke(root: string, operation: string, args: unknown[]) {
-  const linuxPath = (value: string) => value.replaceAll("\\", "/").replace(/^([A-Za-z]):/, (_match, drive) => `/mnt/${drive.toLowerCase()}`)
   const workerRoot = process.platform === "win32" ? linuxPath(root) : root
   const workerArgs = args.map((value) =>
     process.platform === "win32" && typeof value === "string" && path.isAbsolute(value) ? linuxPath(value) : value,
@@ -32,7 +52,7 @@ async function invoke(root: string, operation: string, args: unknown[]) {
 }
 
 describe("Task Execution Capsule file worker", () => {
-  test("reads and writes through the exact workspace root", async () => {
+  fileWorkerTest("reads and writes through the exact workspace root", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-capsule-files-"))
     const target = path.join(root, "result.txt")
     const sourceDirectory = path.join(root, "source")
@@ -58,13 +78,13 @@ describe("Task Execution Capsule file worker", () => {
     })
   })
 
-  test("returns the typed exact-root error for an outside path and an escaping symlink", async () => {
+  fileWorkerTest("returns the typed exact-root error for an outside path and an escaping symlink", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-capsule-root-"))
     const outside = await mkdtemp(path.join(os.tmpdir(), "opencorvus-capsule-outside-"))
     const outsideFile = path.join(outside, "secret.txt")
     await writeFile(outsideFile, "secret")
     const link = path.join(root, "outside-link")
-    await symlink(outsideFile, link)
+    await createEscapingSymlink(outsideFile, link)
     const direct = await invoke(root, "readFile", [outsideFile])
     const linked = await invoke(root, "readFile", [link])
     const expectedOutside = process.platform === "win32" ? outsideFile.replaceAll("\\", "/").replace(/^C:/i, "/mnt/c") : outsideFile

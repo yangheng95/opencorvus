@@ -14,6 +14,10 @@ describe("Server cross-origin response contract", () => {
     })
 
     expect(response.status).toBe(200)
-    expect(response.headers.get("Access-Control-Expose-Headers")).toBe("Content-Disposition")
+    expect(response.headers.get("Access-Control-Expose-Headers")?.split(",")).toEqual([
+      "Content-Disposition",
+      "Content-Range",
+      "ETag",
+    ])
   })
 })

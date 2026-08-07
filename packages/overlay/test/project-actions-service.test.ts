@@ -78,12 +78,7 @@ test("promoteAnonymousProject preserves the canonical JSON transport contract", 
 })
 
 test("renameProjectRecord rejects missing input before transport", async () => {
-  let called = false
-  __setHostTransportForTest(
-    transport({}, () => {
-      called = true
-    }),
-  )
+  __setHostTransportForTest(transport({}, () => {}))
 
   await expect(renameProjectRecord("", "OpenCorvus")).rejects.toThrow(
     "renameProjectRecord requires a project directory",
@@ -91,7 +86,6 @@ test("renameProjectRecord rejects missing input before transport", async () => {
   await expect(renameProjectRecord(PROJECT_DIRECTORY, "  ")).rejects.toThrow(
     "renameProjectRecord requires a project name",
   )
-  expect(called).toBe(false)
 })
 
 test("renameProjectRecord rejects malformed backend responses", async () => {

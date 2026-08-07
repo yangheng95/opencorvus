@@ -44,8 +44,10 @@ The workflow does all of the following in one pipeline:
 
 1. Sync and verify `opencorvus` + `overlay` versions
 2. Run the native GUI installer matrix on Linux / Linux ARM64 / macOS ARM64 / macOS x64 / Windows x64
-3. Validate and upload GUI assets into the GitHub Release
-4. Publish the same GUI platform directories on the `release` branch
+3. Validate and stage GUI assets with `LICENSE`, `THIRD_PARTY_NOTICES.md`, and `SHA256SUMS`
+4. Upload the verified files to a draft GitHub Release
+5. Publish the same GUI platform directories and legal notices on the `release` branch
+6. Publish the draft only after both the release assets and release branch succeed
 
 `build-overlays.yml` is debug-only and is not the canonical release path.
 
@@ -65,20 +67,21 @@ between jobs, so its displayed size is not one installer's size.
 
 For a real release, `publish-release-assets` downloads those temporary
 artifacts, validates and flattens the installer files with
-`script/stage-release-upload-assets.ts`, and passes every file separately to
-`gh release upload`. The GitHub Release page therefore exposes MSI, Nullsoft
+`script/stage-release-upload-assets.ts`, adds the repository license and
+third-party notices, then generates `SHA256SUMS` over the complete upload set.
+It passes every file separately to `gh release upload`. The GitHub Release page therefore exposes MSI, Nullsoft
 Scriptable Install System (NSIS) setup, Disk Image (DMG), AppImage, Debian
 package (DEB), Red Hat Package Manager (RPM), and macOS application archives as
 independent downloads. The temporary row artifact is never the public download
 contract.
 
-| Platform | Recommended download |
-| -------- | -------------------- |
-| Windows x64 | `OpenCorvus_<version>_x64-setup.exe`, or `.msi` for managed installation |
-| macOS Apple silicon | `OpenCorvus_<version>_aarch64.dmg` |
-| macOS Intel | `OpenCorvus_<version>_x64.dmg` |
-| Linux x64 | `OpenCorvus_<version>_amd64.AppImage`, `.deb`, or `.rpm` for the target distribution |
-| Linux ARM64 | `OpenCorvus_<version>_aarch64.AppImage`, `_arm64.deb`, or `.aarch64.rpm` |
+| Platform            | Recommended download                                                                 |
+| ------------------- | ------------------------------------------------------------------------------------ |
+| Windows x64         | `OpenCorvus_<version>_x64-setup.exe`, or `.msi` for managed installation             |
+| macOS Apple silicon | `OpenCorvus_<version>_aarch64.dmg`                                                   |
+| macOS Intel         | `OpenCorvus_<version>_x64.dmg`                                                       |
+| Linux x64           | `OpenCorvus_<version>_amd64.AppImage`, `.deb`, or `.rpm` for the target distribution |
+| Linux ARM64         | `OpenCorvus_<version>_aarch64.AppImage`, `_arm64.deb`, or `.aarch64.rpm`             |
 
 ## Local Release Command
 
@@ -127,6 +130,7 @@ bun ./script/check-release-assets.ts overlay ... --require-bundle
 Successful release means:
 
 - GUI executable and installer bundles exist for every supported platform
+- `SHA256SUMS`, `LICENSE`, and `THIRD_PARTY_NOTICES.md` are attached to the release
 - Overlay launches bundled `opencorvus`
 - Overlay reaches `online`
 - Overlay and opencorvus versions are aligned in repo metadata

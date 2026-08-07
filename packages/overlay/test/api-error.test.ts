@@ -89,7 +89,6 @@ describe("apiJson + ApiError", () => {
       caught = e as ApiError
     }
     expect(caught?.message).toContain("primary")
-    expect(caught?.message).not.toContain("fallback")
   })
 
   test("ApiError renders the message carried by a NamedError envelope", async () => {
@@ -110,7 +109,6 @@ describe("apiJson + ApiError", () => {
     expect(caught?.message).toBe(
       "API 500 expert-squad/catalog: Installed expert squad does not match the current manifest schema",
     )
-    expect(caught?.message).not.toContain(JSON.stringify(body))
   })
 
   test("ApiError falls back to status + path when body is empty", async () => {

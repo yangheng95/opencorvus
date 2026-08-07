@@ -123,8 +123,7 @@ export function DiffView(props: DiffViewProps) {
 
   // Differentiate the "no preview" cause so the operator knows whether
   // the file was deleted, intentionally empty, or just missing a server
-  // payload. Inlined t() calls (not via a memo-returned string) so the
-  // check-panel-i18n linter sees the literal keys at the call sites.
+  // payload. Keep the translation keys explicit at the decision points.
   const emptyMessage = createMemo(() => {
     const it = props.item
     if (it.isText === false) return t("diff.non_text")

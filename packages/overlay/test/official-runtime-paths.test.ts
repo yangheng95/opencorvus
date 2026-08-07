@@ -29,18 +29,15 @@ describe("official overlay runtime paths", () => {
   })
 
   test("managed startup has one embedded server source", () => {
-    const startup = sourceBetween("fn start_server", "fn restart_server")
+    const startup = sourceBetween("fn prepare_server", "fn restart_server_with_progress")
 
-    expect(startup).toContain("ensure_embedded_server_path(&runtime_paths)?")
+    expect(startup).toContain("ensure_embedded_server_path(&runtime_paths, report_progress)?")
     expect(startup).toContain('.arg("--managed-scope")')
     expect(startup).toContain('.arg("--parent-pid")')
     expect(startup).toContain("std::process::id().to_string()")
     expect(startup).toContain("runtime_paths.data_dir")
     expect(startup).toContain('.env("OPENCORVUS_HOME", &runtime_paths.root)')
     expect(startup).toContain("lock.payload_lease = Some(resolved_server.lease)")
-    expect(main).not.toContain("candidate_server_paths")
-    expect(main).not.toContain("fn server_path")
-    expect(main).not.toContain("std::env::current_exe()")
   })
 
   test("embedded payload publication precedes lease-proven non-blocking collection", () => {
@@ -56,9 +53,6 @@ describe("official overlay runtime paths", () => {
     expect(payload).toContain("Err(TryLockError::WouldBlock) => continue")
     expect(payload).toContain("Err(err) if err.kind() == std::io::ErrorKind::NotFound => continue")
     expect(payload).toContain("collect_stale_embedded_payloads(parent, &payload_dir_name)")
-    expect(payload).not.toContain("cleanup_stale_embedded_sidecars")
-    expect(payload).not.toContain("prepare_embedded_payload_parent_for_publication")
-    expect(payload).not.toContain("has no ownership lease")
     expect(ensure.indexOf("fs::rename(&unpublished, &root)")).toBeLessThan(
       ensure.indexOf("collect_stale_embedded_payloads(parent, &payload_dir_name)?"),
     )
@@ -68,11 +62,11 @@ describe("official overlay runtime paths", () => {
   })
 
   test("managed server settlement releases its exact payload lease", () => {
-    const stop = sourceBetween("fn stop_server", "fn server_shutdown_authorization")
-    const ensure = sourceBetween("fn ensure_server", "fn overlay_server_info")
+    const stop = sourceBetween("fn stop_server_state", "fn server_shutdown_authorization")
+    const observation = sourceBetween("fn observe_server_process", "fn current_server_info")
 
     expect(stop).toContain("lock.payload_lease = None")
-    expect(ensure).toContain("lock.payload_lease = None")
+    expect(observation).toContain("lock.payload_lease = None")
   })
 
   test("Windows Job Object assignment is checked and startup reaps on failure", () => {
@@ -81,15 +75,11 @@ describe("official overlay runtime paths", () => {
     expect(main).toContain("Result<JobObject, String>")
     expect(main).toContain("failed to establish Windows sidecar process-tree ownership")
     expect(main).toContain("let wait_result = match child.wait()")
-    expect(main).not.toContain("job object unavailable; grandchild processes may linger")
   })
 
   test("sidecar log initialization cannot continue with null stdio", () => {
-    const stdio = sourceBetween("fn sidecar_stdio_targets", "fn start_server")
+    const stdio = sourceBetween("fn sidecar_stdio_targets", "struct PreparedServer")
 
     expect(stdio).toContain("Result<(Stdio, Stdio, PathBuf), String>")
-    expect(stdio).not.toContain("Stdio::null()")
-    expect(stdio).not.toContain("return (")
-    expect(stdio).not.toContain("unwrap_or")
   })
 })

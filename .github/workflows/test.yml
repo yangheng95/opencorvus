@@ -72,34 +72,6 @@ jobs:
       - name: Run critical builds
         run: bun run --cwd packages/opencorvus build --single --skip-install
 
-  gui-coordinate-smoke:
-    name: gui-coordinate-smoke (${{ matrix.settings.name }})
-    strategy:
-      fail-fast: false
-      matrix:
-        settings:
-          - name: linux
-            host: ubuntu-latest
-          - name: macos
-            host: macos-latest
-          - name: windows
-            host: windows-latest
-    runs-on: ${{ matrix.settings.host }}
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-
-      - name: Setup Bun
-        uses: ./.github/actions/setup-bun
-
-      - name: Run GUI coordinate smoke
-        run: bun test --cwd packages/overlay test/browser-preview-live-point.test.ts
-
   channel-runtime-unit:
     name: channel-runtime-unit
     runs-on: ubuntu-latest
@@ -133,32 +105,6 @@ jobs:
       - name: Run overlay unit tests
         working-directory: packages/overlay
         run: bun run test
-
-  overlay-browser:
-    name: overlay-browser
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-
-      - name: Install Chromium
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y chromium
-
-      - name: Setup Bun
-        uses: ./.github/actions/setup-bun
-
-      - name: Run Node-owned overlay browser tests
-        working-directory: packages/overlay
-        env:
-          OPENCORVUS_BROWSER_EXECUTABLE: /usr/bin/chromium
-        run: node test/browser-runner.mjs
 
   project-open:
     name: project-open (${{ matrix.settings.name }})

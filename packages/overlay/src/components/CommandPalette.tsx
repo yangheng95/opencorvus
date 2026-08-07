@@ -54,10 +54,8 @@ const COMMAND_PALETTE_INPUT_ID = "commandPaletteInput"
 const COMMAND_PALETTE_LISTBOX_ID = "commandPaletteListbox"
 
 // `id` is the canonical theme value (matches `data-theme` and
-// settings.theme); `slug` is the underscore-safe i18n key suffix so
-// `t(\`cmdk.theme.${slug}\`)` resolves at the call site as a template
-// literal the static check-panel-i18n scanner can see (the head
-// `cmdk.theme.` prefix-covers every descendant key).
+// settings.theme); `slug` is the underscore-safe suffix used by the
+// `cmdk.theme.*` translation family.
 const LOCALES: Array<{ id: string; label: string }> = [
   { id: "en-US", label: "English (US)" },
   { id: "zh-CN", label: "中文 (简体)" },

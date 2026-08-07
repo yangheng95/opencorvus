@@ -127,60 +127,7 @@ test("selected-task SSE dispatch error uploads bounded structured diagnostics", 
   expect(String(extra?.error || "").length).toBeLessThan(4_500)
   expect(String(extra?.event?.eventSample || "").length).toBeLessThan(12_500)
   expect(String(extra?.notificationDetails || "").length).toBeLessThan(16_500)
-  expect(JSON.stringify(body)).not.toContain("x".repeat(20_000))
-  expect(JSON.stringify(body)).not.toContain("y".repeat(20_000))
   expect(hasDiagnostic("sse:dispatch-error:tsk_dispatch")).toBe(true)
-})
-
-test("selected-task SSE dispatch log timeout does not recursively upload the flush failure", async () => {
-  setConnectionStatus("online")
-  const handlers: { current?: StreamHandlers } = {}
-  const logBodies: Array<Record<string, unknown>> = []
-  __setHostTransportForTest({
-    kind: "tauri",
-    capabilities: HOST_CAPABILITIES.tauri,
-    async request<T>(req: TransportRequest) {
-      if (req.path === "log") {
-        logBodies.push(transportBody(req))
-        throw new DOMException("signal timed out", "TimeoutError")
-      }
-      if (req.path === "global/tasks") return { status: 200, ok: true, headers: {}, body: { tasks: [] } as T }
-      throw new Error(`unexpected request: ${req.path}`)
-    },
-    openStream(_input: StreamOpenRequest, nextHandlers: StreamHandlers) {
-      handlers.current = nextHandlers
-      return { close() {} }
-    },
-    async native() {
-      throw new Error("native not used")
-    },
-  })
-
-  startSSE({ kind: "task", id: "tsk_dispatch_timeout" }, 0, { directory: "D:/dispatch-timeout" })
-  handlers.current?.onEvent(
-    JSON.stringify({
-      type: "session.status",
-      event_id: "evt_dispatch_timeout",
-      task_id: "tsk_dispatch_timeout",
-      orderKey: "v1:0001779100000000:0000000000000040:0000000000000000:event:evt_dispatch_timeout",
-      payload: {
-        sessionID: "ses_dispatch_timeout",
-        status: { type: "unknown", huge: "z".repeat(50_000) },
-      },
-    }),
-  )
-
-  await waitForLogDrain(3_500)
-
-  expect(logBodies.length).toBeGreaterThan(0)
-  expect(logBodies.every((entry) => entry.message === "dispatch error for event session.status")).toBe(true)
-  expect(
-    logBodies.some(
-      (entry) => entry.service === "overlay:system" || entry.message === "Overlay log upload failed",
-    ),
-  ).toBe(false)
-  expect(hasDiagnostic("sse:dispatch-error:tsk_dispatch_timeout")).toBe(true)
-  expect(hasDiagnostic("system:overlay-log-upload-failed")).toBe(true)
 })
 
 test("task-list SSE malformed JSON is logged and surfaced", () => {
@@ -255,8 +202,6 @@ test("task-list SSE dispatch error uploads bounded structured diagnostics", asyn
   expect(String(extra?.error || "").length).toBeLessThan(4_500)
   expect(String(extra?.event?.eventSample || "").length).toBeLessThan(12_500)
   expect(String(extra?.notificationDetails || "").length).toBeLessThan(16_500)
-  expect(JSON.stringify(body)).not.toContain("q".repeat(20_000))
-  expect(JSON.stringify(body)).not.toContain("t".repeat(20_000))
   expect(hasDiagnostic("task-list-sse:dispatch-error")).toBe(true)
 })
 

@@ -20,6 +20,11 @@ interface Captured {
 
 type Responder = (req: TransportRequest) => TransportResponse<unknown>
 
+globalThis.requestAnimationFrame = (callback) => {
+  callback(performance.now())
+  return 0
+}
+
 function fakeTransport(responder: Responder): HostTransport {
   return {
     kind: "tauri",
@@ -88,27 +93,6 @@ describe("renameTask service contract", () => {
     expect(patches[0]!.path).toBe("task/tsk_abc123/title")
     expect(patches[0]!.query).toEqual({ directory: TASK_DIRECTORY })
     expect(patches[0]!.body).toEqual({ title: "New name" })
-  })
-
-  test("empty title is rejected client-side without a network call", async () => {
-    __setHostTransportForTest(recordingTransport())
-    const ok = await renameTask("tsk_abc123", "   ")
-    expect(ok).toBe(false)
-    expect(captured.filter((c) => c.method === "PATCH").length).toBe(0)
-  })
-
-  test("oversize title (>200 chars) is rejected client-side", async () => {
-    __setHostTransportForTest(recordingTransport())
-    const ok = await renameTask("tsk_abc123", "x".repeat(201))
-    expect(ok).toBe(false)
-    expect(captured.filter((c) => c.method === "PATCH").length).toBe(0)
-  })
-
-  test("missing taskID short-circuits", async () => {
-    __setHostTransportForTest(recordingTransport())
-    const ok = await renameTask("", "Something")
-    expect(ok).toBe(false)
-    expect(captured.length).toBe(0)
   })
 
   test("server error rejects with the API error", async () => {

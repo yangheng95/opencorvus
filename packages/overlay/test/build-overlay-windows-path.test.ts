@@ -16,16 +16,9 @@ describe("build-overlay", () => {
   test("passes the locked binary path as an argument and uses LiteralPath", () => {
     expect(source).toContain("Remove-Item -Force -LiteralPath $args[0] -ErrorAction SilentlyContinue")
     expect(source).toContain('" ${builtOverlay}`')
-    expect(source).not.toContain("-Path '${builtOverlay}'")
-    expect(source).not.toContain("Remove-Item -Force -Path")
   })
 
-  test("leaves embedded overlay UI source injection to the server build", () => {
-    expect(source).not.toContain("discoverOverlayUiSourceFiles")
-    expect(source).not.toContain("renderEmbeddedOverlayUiModule")
-    expect(source).not.toContain("resolveEmbeddedOverlayUiModulePath")
-    expect(source).not.toContain("overlay-ui-embedded.generated.ts")
-
+  test("builds Vite before the server and SDK artifacts", () => {
     const viteBuildIndex = source.indexOf("bun run build:vite")
     const artifactGenerationIndex = source.indexOf('step("Generate OpenCorvus build artifacts")')
     const sdkRebuildIndex = source.indexOf('step("Rebuild SDK")')

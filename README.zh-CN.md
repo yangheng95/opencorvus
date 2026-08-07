@@ -125,13 +125,13 @@ Agent 停止运行不等于 Task 完成。OpenCorvus 会保存 Typed、内容寻
 体积较大的平台 artifact 是同时容纳多种格式的构建中转容器；公开 Release 会把每个
 安装包作为独立文件提供下载。
 
-| 操作系统 | 推荐文件 | 其他格式 |
-| -------- | -------- | -------- |
-| Windows x64 | `OpenCorvus_<version>_x64-setup.exe` | 适合集中部署的 `.msi` |
-| macOS Apple 芯片 | `OpenCorvus_<version>_aarch64.dmg` | `.app.tar.gz` 压缩包 |
-| macOS Intel | `OpenCorvus_<version>_x64.dmg` | `.app.tar.gz` 压缩包 |
-| Linux x64 | `OpenCorvus_<version>_amd64.AppImage` | Debian/Ubuntu 使用 `.deb`，Fedora/RHEL 使用 `.rpm` |
-| Linux ARM64 | `OpenCorvus_<version>_aarch64.AppImage` | `_arm64.deb` 或 `.aarch64.rpm` |
+| 操作系统         | 推荐文件                                | 其他格式                                           |
+| ---------------- | --------------------------------------- | -------------------------------------------------- |
+| Windows x64      | `OpenCorvus_<version>_x64-setup.exe`    | 适合集中部署的 `.msi`                              |
+| macOS Apple 芯片 | `OpenCorvus_<version>_aarch64.dmg`      | `.app.tar.gz` 压缩包                               |
+| macOS Intel      | `OpenCorvus_<version>_x64.dmg`          | `.app.tar.gz` 压缩包                               |
+| Linux x64        | `OpenCorvus_<version>_amd64.AppImage`   | Debian/Ubuntu 使用 `.deb`，Fedora/RHEL 使用 `.rpm` |
+| Linux ARM64      | `OpenCorvus_<version>_aarch64.AppImage` | `_arm64.deb` 或 `.aarch64.rpm`                     |
 
 把 `<version>` 替换成 Release 页面显示的版本，例如 `0.0.35-beta`。只需下载实际要
 安装的那一个文件。
@@ -335,7 +335,7 @@ bun ./packages/sdk/js/script/build.ts
 - 使用支持：[`SUPPORT.md`](./SUPPORT.md)
 - 安全策略：[`SECURITY.md`](./SECURITY.md)
 - 社区行为准则：[`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md)
-- 贡献指南：[`CONTRIBUTING.md`](./CONTRIBUTING.md)
+- 第三方声明：[`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)
 
 ## 开源致谢
 

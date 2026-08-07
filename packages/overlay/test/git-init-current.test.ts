@@ -30,7 +30,7 @@ const { configure } = await import("../src/services/api")
 const { appStore, setAppStore } = await import("../src/store/app")
 const { boardStore, setBoardStore } = await import("../src/store/board")
 const { setSettingsStore } = await import("../src/store/settings")
-const { canInitGit, initGitCurrent, initializeActiveDirectoryGit } = await import("../src/utils/git")
+const { initGitCurrent, initializeActiveDirectoryGit } = await import("../src/utils/git")
 
 type Responder = (req: TransportRequest) => TransportResponse<unknown>
 
@@ -111,8 +111,6 @@ describe("Git initialization utilities", () => {
 
     expect(boardStore.vcs).toBe(null)
     expect(appStore.connected).toBe(true)
-    expect(canInitGit()).toBe(false)
-
     await expect(initGitCurrent({ notify: false })).resolves.toBe(true)
 
     expect(requests).toHaveLength(1)

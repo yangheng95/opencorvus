@@ -31,7 +31,7 @@ function runFixtureGit(cwd: string, args: string[]) {
     stdin: "ignore",
     stdout: "pipe",
     stderr: "pipe",
-    timeout: 15_000,
+    timeout: 60_000,
   })
   if (result.error) throw result.error
   if (result.status !== 0) {

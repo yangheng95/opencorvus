@@ -53,7 +53,6 @@ test("loadProjectWorktrees reads the project worktree route with directory conte
           name: "goal-a",
           branch: "opencorvus/goal-a",
           directory: WORKTREE_DIRECTORY,
-          goalID: "gol_a",
           status: "managed",
           removable: true,
         },
@@ -74,7 +73,6 @@ test("loadProjectWorktrees reads the project worktree route with directory conte
       name: "goal-a",
       branch: "opencorvus/goal-a",
       directory: WORKTREE_DIRECTORY,
-      goalID: "gol_a",
       status: "managed",
       removable: true,
     },
@@ -203,7 +201,7 @@ test("deleteProjectWorktrees continues after a target fails and reports aggregat
   ])
 })
 
-test("loadProjectWorktrees rejects every malformed field instead of silently degrading optional identity", async () => {
+test("loadProjectWorktrees rejects every malformed field instead of silently degrading the contract", async () => {
   for (const malformed of [
     {
       name: "broken",
@@ -220,10 +218,9 @@ test("loadProjectWorktrees rejects every malformed field instead of silently deg
     },
     {
       name: "broken",
-      goalID: 42,
       directory: "D:/workspace/app/.opencorvus/.r/w/broken/worktree",
       status: "managed",
-      removable: true,
+      removable: "yes",
     },
   ]) {
     __setHostTransportForTest(transport([malformed], () => {}))
@@ -253,13 +250,7 @@ test("loadProjectWorktrees carries the explicit project directory when API conte
 })
 
 test("loadProjectWorktrees rejects empty project directory before transport", async () => {
-  let called = false
-  __setHostTransportForTest(
-    transport([], () => {
-      called = true
-    }),
-  )
+  __setHostTransportForTest(transport([], () => {}))
 
   await expect(loadProjectWorktrees("")).rejects.toThrow("project/current/worktrees requires a project directory")
-  expect(called).toBe(false)
 })

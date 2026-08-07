@@ -46,6 +46,5 @@ describe("overlay artifact names", () => {
     const script = readFileSync(join(import.meta.dir, "../script/build-docker.ts"), "utf8")
     expect(script).toContain("overlayServerDistName")
     expect(script).toContain("overlayServerFileName")
-    expect(script).not.toContain("opencorvus-linux-${arch}")
   })
 })

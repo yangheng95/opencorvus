@@ -23,7 +23,6 @@
     "docs:api": "bun run ./packages/opencorvus/script/docs/render-api-md.ts",
     "docs:check": "bun run ./packages/opencorvus/script/docs/render-api-md.ts --check",
     "api:routes-check": "bun run ./packages/opencorvus/script/check/routes.ts",
-    "overlay:i18n-check": "bun run --cwd packages/overlay check:i18n",
     "version:bump": "bun ./script/sync-version.ts",
     "version:check": "bun ./script/sync-version.ts --check",
     "prepare": "husky",
