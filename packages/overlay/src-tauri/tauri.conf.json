@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/nicedoc/tauri/refs/heads/v2/crates/tauri-cli/schema.json",
   "productName": "OpenCorvus",
-  "version": "0.0.35-beta.1",
+  "version": "0.0.35-beta.2",
   "identifier": "ai.opencorvus.overlay",
   "build": {
     "frontendDist": "../dist-vite",
