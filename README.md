@@ -202,6 +202,59 @@ curl -N http://127.0.0.1:7878/task/<task_id>/events
 > If you expose `opencorvus serve` beyond localhost, set
 > `OPENCORVUS_SERVER_PASSWORD` first.
 
+## Control OpenCorvus from Hermes Agent or OpenClaw
+
+The repository includes a portable [`opencorvus` Agent Skill](./skills/opencorvus/SKILL.md).
+It teaches an Agent Skills-compatible assistant how to inspect, configure, run,
+and troubleshoot OpenCorvus; create and monitor Tasks; send follow-up input; and
+review delivery evidence. Installing the skill does **not** install the
+OpenCorvus runtime, so complete one of the installation paths above first and
+copy the complete skill directory, including its [`references/`](./skills/opencorvus/references/)
+files.
+
+### Hermes Agent
+
+From an OpenCorvus checkout:
+
+```bash
+mkdir -p ~/.hermes/skills/developer-tools
+cp -R ./skills/opencorvus ~/.hermes/skills/developer-tools/opencorvus
+hermes skills list
+```
+
+Start a new session or use `/reset`, then address the skill as a slash command:
+
+```text
+/opencorvus Check whether OpenCorvus is installed and healthy. Do not change anything.
+```
+
+### OpenClaw
+
+Install the same local package into the active workspace:
+
+```bash
+openclaw skills install ./skills/opencorvus --as opencorvus
+openclaw skills check
+```
+
+Start a new session, then invoke `$opencorvus` in the Control UI or
+`/opencorvus` in messaging channels:
+
+```text
+Use $opencorvus to start OpenCorvus for /absolute/path/to/project, create a Task for the requested outcome, and report the task ID and observable progress.
+```
+
+Once invoked, the assistant selects the relevant packaged reference and controls
+OpenCorvus through its current command-line interface (CLI) or HTTP API. You can
+ask it to inspect an installation without changing it, configure a provider,
+start a local or password-protected service, create or monitor a Task, send a
+follow-up message, retry or replan work, cancel with explicit authority, and
+inspect the board, events, Artifacts, and blockers before declaring completion.
+For host-specific installation details, PowerShell commands, safe credential
+handling, and complete operating examples, see the
+[`skill-installation`](./skills/opencorvus/references/skill-installation.md) and
+[`operations`](./skills/opencorvus/references/operations.md) references.
+
 ## Platform surfaces
 
 | Surface                | Status        | What it provides                                                                                                                |

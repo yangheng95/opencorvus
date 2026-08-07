@@ -181,6 +181,54 @@ curl -N http://127.0.0.1:7878/task/<task_id>/events
 > 如果要在本机之外暴露 `opencorvus serve`，请先设置
 > `OPENCORVUS_SERVER_PASSWORD`。
 
+## 让 Hermes Agent 或 OpenClaw 通过 Skill 控制 OpenCorvus
+
+仓库内置了可移植的 [`opencorvus` Agent Skill](./skills/opencorvus/SKILL.md)。它会教
+兼容 Agent Skills 的助理检查、配置、运行和排查 OpenCorvus，创建并跟进 Task，发送
+后续输入，以及审阅交付证据。安装 Skill **不会**安装 OpenCorvus 运行时，因此请先
+完成上面的任一安装流程，并复制包含 [`references/`](./skills/opencorvus/references/)
+在内的完整 Skill 目录。
+
+### Hermes Agent
+
+在 OpenCorvus checkout 中执行：
+
+```bash
+mkdir -p ~/.hermes/skills/developer-tools
+cp -R ./skills/opencorvus ~/.hermes/skills/developer-tools/opencorvus
+hermes skills list
+```
+
+启动新会话或执行 `/reset`，然后用斜杠命令点名 Skill：
+
+```text
+/opencorvus 检查 OpenCorvus 是否已经安装且健康。不要修改任何内容。
+```
+
+### OpenClaw
+
+把同一个本地包安装到当前 workspace：
+
+```bash
+openclaw skills install ./skills/opencorvus --as opencorvus
+openclaw skills check
+```
+
+启动新会话，然后在 Control 用户界面中使用 `$opencorvus`，或在消息频道中使用
+`/opencorvus`：
+
+```text
+使用 $opencorvus 为 /absolute/path/to/project 启动 OpenCorvus，针对我的目标创建一个 Task，并报告 task ID 和可观察进度。
+```
+
+Skill 被调用后，助理会选择包内对应 reference，并通过 OpenCorvus 当前的命令行界面
+（Command-Line Interface，CLI）或 HTTP API 完成操作。你可以让它只读检查安装，
+配置模型提供商，启动本地或密码保护的服务，创建或跟进 Task，发送后续消息，重试或
+重新规划工作，在得到明确授权后取消 Task，并在宣告完成前检查 board、events、
+Artifact 和真实阻塞。宿主专用安装细节、PowerShell 命令、安全凭据处理与完整操作
+示例见 [`skill-installation`](./skills/opencorvus/references/skill-installation.md) 和
+[`operations`](./skills/opencorvus/references/operations.md)。
+
 ## 平台入口
 
 | 入口          | 状态       | 提供的能力                                                                                                               |
