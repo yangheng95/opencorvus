@@ -733,6 +733,7 @@ export type Event =
   | EventSessionError
   | EventSessionUpdated
   | EventTaskPlanUpdated
+  | EventTaskQueueChanged
   | EventTaskQueueCompleted
   | EventTaskCancellationRequested
   | EventTaskCancelled
@@ -1420,6 +1421,16 @@ export type EventSessionUpdated = {
     info: Session
   }
   type: "session.updated"
+}
+
+export type EventTaskQueueChanged = {
+  properties: {
+    queueTaskID: string
+    sequence: number
+    sessionID: string
+    status: "queued" | "failed"
+  }
+  type: "task-queue.changed"
 }
 
 export type EventTaskQueueCompleted = {

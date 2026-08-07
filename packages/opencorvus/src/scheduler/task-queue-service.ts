@@ -27,6 +27,15 @@ import { SessionWake } from "@/session/wake"
 import { NamedError } from "@opencorvus-ai/util/error"
 
 export const TaskQueueEvent = {
+  Changed: BusEvent.define(
+    "task-queue.changed",
+    z.object({
+      queueTaskID: z.string(),
+      sessionID: z.string(),
+      status: z.enum(["queued", "failed"]),
+      sequence: z.number(),
+    }),
+  ),
   Completed: BusEvent.define(
     "task-queue.completed",
     z.object({
@@ -85,6 +94,17 @@ export namespace TaskQueueService {
 
   const CONCURRENCY_ENV = "OPENCORVUS_TASK_QUEUE_CONCURRENCY"
   const CONCURRENCY_LIMIT = 100
+
+  function publishQueueChanged(input: {
+    queueTaskID: string
+    sessionID: string
+    status: "queued" | "failed"
+    sequence: number
+  }) {
+    void Bus.publish(TaskQueueEvent.Changed, input).catch((error) => {
+      log.warn("task queue changed publish failed", { ...input, error: message(error) })
+    })
+  }
 
   export function deleteSettledForSessions(db: Database.TxOrDb, input: { sessionIDs: string[] }): void {
     if (input.sessionIDs.length === 0) return
@@ -286,6 +306,7 @@ export namespace TaskQueueService {
         .run(),
     )
     log.info("task queued", { id, sessionID: input.sessionID, source: input.source ?? "api" })
+    publishQueueChanged({ queueTaskID: id, sessionID: input.sessionID, status: "queued", sequence: now })
     requestDrain("enqueuePrompt")
     return id
   }
@@ -364,6 +385,7 @@ export namespace TaskQueueService {
       messageID: userMessage.info.id,
       source: input.source ?? "api",
     })
+    publishQueueChanged({ queueTaskID: id, sessionID: input.sessionID, status: "queued", sequence: now })
     requestDrain("enqueuePromptAfterPersistingUserMessage")
     return { taskID: id, userMessage }
   }
@@ -390,11 +412,14 @@ export namespace TaskQueueService {
           time_updated: now,
         })
         .where(and(...where))
-        .returning({ id: TaskQueueTable.id })
+        .returning({ id: TaskQueueTable.id, sessionID: TaskQueueTable.session_id })
         .all()
     })
     if (Instance.current()) {
       for (const row of cancelledRows) clearRecoveryTimer(row.id)
+    }
+    for (const row of cancelledRows) {
+      publishQueueChanged({ queueTaskID: row.id, sessionID: row.sessionID, status: "failed", sequence: now })
     }
     const inFlightCancellations = requestInFlightCancellation({
       sessionIDs,
@@ -403,6 +428,19 @@ export namespace TaskQueueService {
       origin: input.origin,
     })
     return cancelledRows.length + inFlightCancellations
+  }
+
+  /** Project whether an exact Session owns queued or running prompt work. */
+  export function sessionPromptsInterruptible(input: { sessionID: string; source?: string }): boolean {
+    const where: SQL[] = [
+      eq(TaskQueueTable.session_id, input.sessionID),
+      inArray(TaskQueueTable.status, ["queued", "running"]),
+    ]
+    if (input.source) where.push(eq(TaskQueueTable.source, input.source))
+    const row = Database.use((db) =>
+      db.select({ id: TaskQueueTable.id }).from(TaskQueueTable).where(and(...where)).limit(1).get(),
+    )
+    return row !== undefined
   }
 
   export function failQueuedOrRunning(input: { taskIDs: string[]; reason: string }): number {

@@ -375,14 +375,14 @@ function WorkLedgerRowView(props: {
   }
   const canStartNow = () => row().kind === "task" && (row() as WorkLedgerTaskRow).lifecycleStatus === "queued"
   const canDownload = () => row().kind !== "chat" && !!row().directory
-  const showStopAndDownloadActions = getHostTransport().kind !== "tauri"
+  const showDownloadActions = getHostTransport().kind !== "tauri"
   const hasActions = () => true
   const rowActions = useTaskRowActionsKeyboard(hasActions)
   const actionCount = () => {
     let count = 2
-    if (showStopAndDownloadActions && canStop()) count += 1
+    if (canStop()) count += 1
     if (canStartNow()) count += 1
-    if (showStopAndDownloadActions && canDownload()) count += 1
+    if (showDownloadActions && canDownload()) count += 1
     return count
   }
 
@@ -588,7 +588,7 @@ function WorkLedgerRowView(props: {
                 <Icon name="send" />
               </Button>
             </Show>
-            <Show when={showStopAndDownloadActions && canStop()}>
+            <Show when={canStop()}>
               <Button
                 type="button"
                 variant="ghost"
@@ -613,7 +613,7 @@ function WorkLedgerRowView(props: {
                 <Icon name="stop" />
               </Button>
             </Show>
-            <Show when={showStopAndDownloadActions && canDownload()}>
+            <Show when={showDownloadActions && canDownload()}>
               <Button
                 type="button"
                 variant="ghost"

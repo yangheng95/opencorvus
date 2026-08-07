@@ -1579,6 +1579,29 @@ export function ChatComposer(props: ChatComposerProps) {
           </div>
           <div class="chat-compose-meta-right">
             <ComposerModelSelector onModelAvailabilityChange={setModelAvailable} />
+            <Show when={props.busy && !stopMode()}>
+              <Button
+                id={props.stopID ?? "btnTaskInterrupt"}
+                variant="ghost"
+                size="icon"
+                tone="danger"
+                type="button"
+                data-ui="composer-active-stop"
+                data-busy="true"
+                disabled={stopping()}
+                title={t("chat.stop_title")}
+                aria-label={t("chat.stop_label")}
+                onClick={(event) => {
+                  event.preventDefault()
+                  props.onStop?.()
+                }}
+              >
+                <span class="chat-send-icon" aria-hidden="true">
+                  <Icon name="stop" size="medium" />
+                </span>
+                <span class="chat-send-label">{t("chat.stop_label")}</span>
+              </Button>
+            </Show>
             {/* Send / Stop button */}
             <Button
               id={stopMode() ? (props.stopID ?? "btnTaskInterrupt") : (props.sendID ?? "chatSend")}

@@ -22,6 +22,7 @@ import { SessionTable } from "@/session/session.sql"
 import { Database, eq, sql } from "@/storage/db"
 import { activityFromTaskLifecycle } from "@/status/task-status-snapshot"
 import { rightSidebarConversationExperience } from "@/chat/session"
+import { TaskQueueService } from "@/scheduler/task-queue-service"
 
 export {
   WorkLedgerArchiveList,
@@ -73,6 +74,7 @@ function searchPattern(search: string | undefined): string | undefined {
 }
 
 function chatStatus(sessionID: string): z.infer<typeof WorkLedgerChatStatus> {
+  if (TaskQueueService.sessionPromptsInterruptible({ sessionID, source: "session.prompt_async" })) return "active"
   return resolveSessionActivityStatus(sessionID)
 }
 

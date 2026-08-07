@@ -1976,6 +1976,9 @@
             "$ref": "#/components/schemas/Event.task_plan.updated"
           },
           {
+            "$ref": "#/components/schemas/Event.task-queue.changed"
+          },
+          {
             "$ref": "#/components/schemas/Event.task-queue.completed"
           },
           {
@@ -4535,6 +4538,46 @@
           },
           "type": {
             "const": "session.updated",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "properties"
+        ],
+        "type": "object"
+      },
+      "Event.task-queue.changed": {
+        "properties": {
+          "properties": {
+            "properties": {
+              "queueTaskID": {
+                "type": "string"
+              },
+              "sequence": {
+                "type": "number"
+              },
+              "sessionID": {
+                "type": "string"
+              },
+              "status": {
+                "enum": [
+                  "queued",
+                  "failed"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "queueTaskID",
+              "sessionID",
+              "status",
+              "sequence"
+            ],
+            "type": "object"
+          },
+          "type": {
+            "const": "task-queue.changed",
             "type": "string"
           }
         },
