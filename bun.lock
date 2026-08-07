@@ -66,7 +66,7 @@
         "node-darwin-x64": "22.23.1",
         "node-linux-arm64": "22.23.1",
         "node-linux-x64": "22.23.1",
-        "node-win-x64": "22.23.1",
+        "node-win-x64": "26.6.0",
       },
     },
     "packages/opencorvus": {
@@ -2984,7 +2984,7 @@
 
     "node-screenshots-win32-x64-msvc": ["node-screenshots-win32-x64-msvc@0.2.8", "", { "os": "win32", "cpu": "x64" }, "sha512-DdFORB74FghM1L6UtE1TltIR2H0CCCmfQEa8gp2CTSdtBr2b0TKL7ZlbEV6x/wVKRFT59w7Kd6BULdeMmp0X2w=="],
 
-    "node-win-x64": ["node-win-x64@22.23.1", "", { "os": "win32", "cpu": "x64", "bin": { "node": "bin/node.exe" } }, "sha512-bjZmNeCsAePhC515GTyU45qwl/Oau48jHoGy3dGhPVETQM8cgFMZ1SvnWaHqHW0621ncbGWud/wRRXlFgAjGYg=="],
+    "node-win-x64": ["node-win-x64@26.6.0", "", { "os": "win32", "cpu": "x64", "bin": { "node": "bin/node.exe" } }, "sha512-e0uxj2bf2GsT/bAzQUQ//dA8gN5AC/R0AIa4NeM7Sd9YmKJuSnzSJV0lqrMHu3/WUT99IpZo1sxNV7h8X6NbUw=="],
 
     "normalize-path": ["normalize-path@3.0.0", "", {}, "sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA=="],
 
