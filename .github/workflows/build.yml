@@ -167,6 +167,8 @@ jobs:
           persist-credentials: false
 
       - uses: ./.github/actions/setup-bun
+        with:
+          prepare_compile_runtimes: "true"
 
       - name: Sync repo versions
         run: bun ./script/sync-version.ts "${{ needs.prepare.outputs.version }}"

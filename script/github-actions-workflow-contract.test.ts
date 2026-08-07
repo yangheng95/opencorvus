@@ -60,6 +60,9 @@ describe("GitHub Actions workflow contract", () => {
 
     expect(jobs["package-overlay"]?.strategy?.matrix?.include).toEqual(nativeMatrix)
     expect(jobs["package-cli"]?.strategy?.matrix?.include).toEqual(nativeMatrix)
+    expect(jobs["package-cli"]?.steps?.find(({ uses }) => uses === "./.github/actions/setup-bun")?.with).toEqual({
+      prepare_compile_runtimes: "true",
+    })
     expect(jobs["package-cli"]?.steps?.map(({ run }) => run)).toContain("bun run package:binary-matrix")
     expect(jobs["package-cli"]?.steps?.find(({ uses }) => uses === "actions/upload-artifact@v7")?.with).toEqual({
       name: "cli-${{ matrix.platform }}",
