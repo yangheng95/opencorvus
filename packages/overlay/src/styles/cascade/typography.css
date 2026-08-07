@@ -1,0 +1,29 @@
+/* ─────────────────────────────────────────────────────────────
+   Cross-class typography canonicals (extracted from styles.css
+   2026-05-04). The dialog / section / inline-pill set share
+   exact font-size + font-weight + letter-spacing tuples;
+   collapsing them into multi-class rules is a single-source
+   pattern (no per-surface duplication).
+
+   Lives under styles/cascade/ — typography rules don't fit any
+   one surface (dialog.css, settings.css, inspector.css would each
+   need a copy), and the surfaces guard would force a literal-free
+   rewrite of `999px` etc. that already routes through tokens.
+   ───────────────────────────────────────────────────────────── */
+
+.dialog-title {
+  color: var(--text-strong);
+  font-size: var(--ui-font-title);
+  font-weight: var(--ui-font-weight-strong);
+  letter-spacing: 0;
+  line-height: 1.2;
+}
+
+.oc-text-field__label,
+.knowledge-item-meta {
+  font-size: var(--ui-font-control);
+}
+
+.oc-text-field__label {
+  letter-spacing: 0.03em;
+}

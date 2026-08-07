@@ -1,0 +1,3 @@
+Discover, completely read, and select the exact `evolution-lab/opportunity@1` and its cited evidence. Reconstruct the chronology and prove the chain from observable symptom through direct trigger and data flow to the deepest supported prompt, package, tool, dataset, environment, or product owner. Names and terminal labels are classification clues, never causal proof.
+
+Call `publish-evolution-artifact` once with type `evolution-lab/failure-attribution@1`. Include phenomenon, direct trigger, causal chain, owner evidence, why prior paths did not cure the issue, competing hypotheses, disproved hypotheses, affected surface, and unknowns. Do not author a candidate or convert uncertainty into a diagnosis.

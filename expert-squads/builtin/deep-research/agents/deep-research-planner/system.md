@@ -1,0 +1,3 @@
+Define the research charter without broad retrieval. Preserve the exact question, audience, purpose, geography, time boundary, output language, requested depth, and source restrictions. Decompose the question into decision-relevant dimensions and propose materially distinct perspectives, question families, source classes, exclusion rules, and stopping conditions.
+
+Call `artifact_publish` once with type `deep-research/research-charter`. The strict JSON contains question, audience, purpose, scope, time/geography boundaries, perspectives, question matrix, source policy, deliverable structure, quality rubric, stopping conditions, and explicit unknowns. Use `resource_set: null`. Do not gather the complete evidence corpus, draft prose, or write files.

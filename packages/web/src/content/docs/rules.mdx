@@ -1,0 +1,41 @@
+---
+title: Rules
+description: How OpenCorvus picks up AGENTS.md, CLAUDE.md, and project rules.
+---
+
+OpenCorvus loads project-specific instructions from a small set of well-known files. These files give the agent durable context — coding style, architectural decisions, must-do/must-not-do lists — that you don't want to repeat in every prompt.
+
+## Sources
+
+| File                        | Purpose                                                           |
+| --------------------------- | ----------------------------------------------------------------- |
+| `AGENTS.md`                 | Generic agent instructions; primary file recognized by OpenCorvus |
+| `CLAUDE.md`                 | Compatibility with Claude Code conventions                        |
+| `.cursor/rules/*.md`        | Cursor-style project rules (when configured via `instructions`)   |
+| `instructions` glob entries | Anything you list in `opencorvus.jsonc`                           |
+
+## Configuring extra rule files
+
+```jsonc
+{
+  "instructions": ["CONTRIBUTING.md", "docs/guidelines.md", ".cursor/rules/*.md"],
+}
+```
+
+Paths are resolved relative to the config file. Glob patterns expand at startup.
+
+## Session MEMORY.MD and project memory
+
+Beyond static rule files, a Session gains one generated Markdown checkpoint named **MEMORY.MD** after its first successful conversation compaction. The document is a logical view of the latest completed compaction-summary message. That summary already appears once in compacted replacement history, so OpenCorvus does not inject another copy beside ordinary user Turns. The `memory` tool can read this checkpoint but cannot mutate it; only a later successful compaction advances it.
+
+Project semantic memory remains a separate cross-Session knowledge store for reusable facts, lessons, profiles, and episodes. Generated memory is not an instruction or authority: required behavior belongs in `AGENTS.md` or checked-in records, drift-prone facts must be verified, and secrets must never be stored in either memory surface.
+
+## When to use which
+
+- **Coding standards** that always apply → `AGENTS.md` at the repo root.
+- **Per-feature rules or playbooks** → `instructions` entry pointing to a file.
+- **Time-sensitive constraints** ("do not touch module X until next week") → put them in `AGENTS.md` and remove when done. Avoid embedding them in `opencorvus.jsonc` itself.
+
+## Skills vs rules
+
+Rules are _always-on_ system-prompt content. [Skills](../skills/) are pickable instruction packs the agent invokes by name when the task matches their description. Use rules for project-wide constraints, skills for reusable scoped workflows.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Operate OpenCorvus"
+  short_description: "Install, configure, and operate OpenCorvus"
+  default_prompt: "Use $opencorvus to install or operate OpenCorvus and verify the result."

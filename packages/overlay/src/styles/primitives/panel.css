@@ -1,0 +1,65 @@
+/* ── panel.css ──
+ * Structural base for every header+body panel in the overlay.
+ *
+ * Contract:
+ *   .oc-panel                 → flex-column container
+ *   .oc-panel__header         → fixed-height row (flex, shrink 0)
+ *   .oc-panel__body           → scrollable content area (flex 1)
+ *   .oc-panel__footer         → fixed-height row (flex, shrink 0)
+ *
+ * Surface files override --oc-panel-* tokens for look-and-feel diffs
+ * (background, border, radius, header height). No colors or raw px values
+ * appear here — all sizing comes from cascade tokens.
+ *
+ * Typography, border colours, and accent bars are surface concerns;
+ * this file owns only the structural flex skeleton.
+ */
+
+.oc-panel {
+  --oc-panel-header-height: var(--oc-density-control-height);
+  --oc-panel-bg: transparent;
+  --oc-panel-border: none;
+  --oc-panel-pad-x: var(--ui-gap-md);
+
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--oc-panel-bg);
+  border: var(--oc-panel-border);
+  border-radius: var(--oc-radius-none);
+  position: relative;
+}
+
+.oc-panel__header {
+  display: flex;
+  align-items: center;
+  min-height: var(--oc-panel-header-height);
+  flex-shrink: 0;
+  gap: var(--ui-gap-sm);
+  padding: 0 var(--oc-panel-pad-x);
+}
+
+.oc-panel__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.oc-panel__footer {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: var(--ui-gap-sm);
+  padding: var(--ui-gap-sm) var(--oc-panel-pad-x);
+}
+
+/* Variant selectors let surface files adjust look via data attributes
+ * rather than modifier classes. Panel itself ships no defaults here —
+ * this block reserves the selector contract for surface overrides. */
+.oc-panel[data-variant] {
+}
+.oc-panel[data-size] {
+}
+.oc-panel[data-tone] {
+}

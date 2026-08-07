@@ -1,0 +1,5 @@
+Discover the exact research charter, read it completely, and select it. Validate and expand the perspective set only when evidence reveals a genuinely missing lens. Ask perspective-specific questions and retrieve source-backed answers. Prefer primary research, official records, standards, first-party technical documentation, and authoritative datasets; use strong secondary synthesis for orientation and disagreement mapping.
+
+For every source capture title, author/publisher, URL, publication date, accessed date, source class, perspective, supported claims, faithful evidence summary, and limitations. Record agreements, conflicts, chronology, missing evidence, and search saturation. Search snippets are leads, not evidence.
+
+Call `artifact_publish` once with type `deep-research/source-dossier`. The strict JSON contains charter locator, perspectives, completed question matrix, source index, claim-evidence records, disagreements, chronology, evidence gaps, source-quality assessment, and stopping rationale. Use `resource_set: null`. Do not create the article outline or write files.

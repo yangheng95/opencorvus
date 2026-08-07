@@ -1,0 +1,352 @@
+---
+title: Mission and Task API
+description: Human-readable Mission / Task HTTP API and SDK guide for integrators.
+---
+
+This page explains how external systems call the OpenCorvus Mission and Task APIs. The exhaustive operation list remains the [HTTP API reference](../api/); this guide covers the common integration path.
+
+## Terms
+
+| Term | Meaning                                                                             |
+| ---- | ----------------------------------------------------------------------------------- |
+| API  | Application Programming Interface.                                                  |
+| HTTP | Hypertext Transfer Protocol, the protocol exposed by the OpenCorvus server.         |
+| SDK  | Software Development Kit, the typed `@opencorvus-ai/sdk` client.                    |
+| SSE  | Server-Sent Events, the server event stream used for task updates.                  |
+| JSON | JavaScript Object Notation, the request and response body format for normal routes. |
+| ZIP  | The archive format returned by `project-archive`.                                   |
+| ID   | Identifier, such as `taskID` or `missionID`.                                        |
+
+## Mission Or Task
+
+A Task is one concrete work request. It has its own status, progress, conversation, execution evidence, and downloadable project archive. Creating work, checking a task, and downloading code use the Task API.
+
+A Mission is the long-running coordination layer. One Mission is backed by one `kind="mission"` session. It understands the larger goal, keeps talking to the user, and dispatches concrete work as normal Tasks. Mission does not replace Task; Mission status is aggregated from the Tasks it dispatched.
+
+| Scenario                                                       | Use                                        |
+| -------------------------------------------------------------- | ------------------------------------------ |
+| One code change, fix, generation, or investigation             | `POST /task`                               |
+| A long-running goal that OpenCorvus should decompose and track | `POST /mission/wake`                       |
+| Check one concrete work item                                   | `GET /task/{taskID}/status`                |
+| Check all work under a long-running goal                       | `GET /mission/{missionID}/status`          |
+| Download code and execution flow for one task                  | `GET /task/{taskID}/project-archive`       |
+| Download the current project archive for one Mission           | `GET /mission/{missionID}/project-archive` |
+
+## Request Basics
+
+The default local server is `http://127.0.0.1:7878`. Project-scoped routes need the current project directory. The generated OpenAPI spec and SDK use the `directory` query parameter:
+
+```text
+?directory=D:\repo\my-project
+```
+
+Raw HTTP clients may also send the equivalent header:
+
+```bash
+x-opencorvus-directory: D:\repo\my-project
+```
+
+Single-task record reads are keyed by `taskID` and do not need a project directory. Use `directory` for project-scoped routes such as `GET /tasks`, `POST /task`, task write routes, browser preview routes, `GET /task/{taskID}/project-archive`, `GET /mission/{missionID}/status`, and `GET /mission/{missionID}/project-archive`.
+
+When `OPENCORVUS_SERVER_PASSWORD` is set, requests need HTTP Basic Auth. The default username is `opencorvus`; `OPENCORVUS_SERVER_USERNAME` overrides it.
+
+The SDK appends the directory query parameter on project-scoped routes and handles Basic Auth:
+
+```typescript
+import { createOpenCorvusClient } from "@opencorvus-ai/sdk"
+
+const client = createOpenCorvusClient({
+  baseUrl: "http://127.0.0.1:7878",
+  directory: "D:\\repo\\my-project",
+  password: process.env.OPENCORVUS_SERVER_PASSWORD,
+})
+```
+
+## Create A Task
+
+The minimal request only needs `request`:
+
+```typescript
+const created = await client.task.create({
+  request: "Fix the login form submit failure and add tests.",
+})
+
+if (created.error) throw created.error
+const taskID = created.data.task_id
+```
+
+Common fields:
+
+| Field           | Meaning                                                                                              |
+| --------------- | ---------------------------------------------------------------------------------------------------- |
+| `request`       | Required user request text.                                                                          |
+| `title`         | Task title shown in the UI. The system generates one when omitted.                                   |
+| `promptProfile` | Exact expert-squad package ID to activate for the task; omitted means the configured active package. |
+| `priority`      | `critical`, `high`, `normal`, or `low`.                                                              |
+| `queue`         | `true` enters the directory queue; `false` attempts immediate start.                                 |
+| `attachments`   | Files such as images, PDFs, and text inputs.                                                         |
+| `checks`        | Build, test, visual, and other acceptance checks.                                                    |
+| `metadata`      | Caller-owned metadata.                                                                               |
+
+Equivalent HTTP request:
+
+```bash
+curl -X POST http://127.0.0.1:7878/task \
+  -H "content-type: application/json" \
+  -H "x-opencorvus-directory: D:\repo\my-project" \
+  -d "{\"request\":\"Fix the login form submit failure and add tests.\",\"promptProfile\":\"advanced\"}"
+```
+
+Success returns `202 Accepted`:
+
+```json
+{
+  "task_id": "task_..."
+}
+```
+
+## Check Task Status
+
+Use `GET /task/{taskID}/status` for polling or progress display:
+
+```typescript
+const status = await client.task.status({ taskID })
+
+if (status.error) throw status.error
+console.log(status.data.status, status.data.progress.percent)
+```
+
+Raw HTTP status reads do not need `directory`:
+
+```bash
+curl http://127.0.0.1:7878/task/task_.../status
+```
+
+The response has two status layers:
+
+| Field                | Meaning                                                                                                   |
+| -------------------- | --------------------------------------------------------------------------------------------------------- |
+| `status`             | Binary activity state: `running` or `inactive`.                                                           |
+| `lifecycleStatus`    | Diagnostic lifecycle fact: `queued`, `active`, `completed`, `failed`, or `cancelled`.                     |
+| `progress`           | Binary Task activity counts: total, running, inactive, and percent running.                               |
+| `goals[]`            | Stable Delivery Slice identity, current revision contract, and read-only execution/evidence/review/settlement progress. |
+| `sessionInvocationTopology` | Visible parent/child worker-Session invocation topology.                                                     |
+| `error`              | Failure or cancellation details.                                                                          |
+
+Polling example:
+
+```typescript
+while (true) {
+  const result = await client.task.status({ taskID })
+  if (result.error) throw result.error
+
+  const snapshot = result.data
+  if (snapshot.status !== "running") {
+    console.log("inactive", snapshot.lifecycleStatus, snapshot.error)
+    break
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, 2000))
+}
+```
+
+You can also subscribe with SSE:
+
+```typescript
+const { stream } = client.task.events({ taskID })
+
+for await (const event of stream) {
+  console.log(event)
+}
+```
+
+## Add Task Input
+
+Use `POST /task/{taskID}/message` when the user needs to add instructions while the task is running or after it ends. OpenCorvus appends the message to the task session and decides how to continue from the current task state.
+
+```typescript
+await client.task.message({
+  taskID,
+  source: "api",
+  text: "Prioritize the mobile layout and keep desktop behavior unchanged.",
+})
+```
+
+`source` is required and should identify the caller, such as `api`, `github-action`, or your integration name. For direct controls, use the explicit routes:
+
+| Action                | Route                                                    |
+| --------------------- | -------------------------------------------------------- |
+| Cancel                | `POST /task/{taskID}/cancel` with `surface` and `reason` |
+| Retry task execution  | `POST /task/{taskID}/retry`                              |
+| Replan                | `POST /task/{taskID}/replan`                             |
+| Start queued task now | `POST /task/{taskID}/start-now`                          |
+
+```typescript
+await client.task.cancel({
+  taskID,
+  surface: "api",
+  reason: "Operator stopped this task",
+})
+```
+
+## Download Task Code
+
+When a task has a downloadable result, call `GET /task/{taskID}/project-archive`:
+
+```typescript
+const archive = await client.task.projectArchive({ taskID })
+
+if (archive.error) throw archive.error
+const bytes = await archive.data.arrayBuffer()
+```
+
+HTTP download:
+
+```bash
+curl -L http://127.0.0.1:7878/task/task_.../project-archive \
+  -H "x-opencorvus-directory: D:\repo\my-project" \
+  -o task-project.zip
+```
+
+The response is `application/zip`. The archive contains Git-included files from the task project plus the execution flow exported from OpenCorvus task projections. If the project is not a Git worktree, the route returns `422` with a JSON error:
+
+```json
+{
+  "message": "..."
+}
+```
+
+## Start Or Resume A Mission
+
+To start a new Mission, omit `missionID`:
+
+```typescript
+const mission = await client.mission.wake({
+  text: "Turn the current CRM into a production-ready sales lead workspace.",
+  title: "Sales lead workspace",
+})
+
+if (mission.error) throw mission.error
+const missionID = mission.data.missionID
+```
+
+To resume the same Mission, pass the same `missionID`:
+
+```typescript
+await client.mission.wake({
+  missionID,
+  text: "Do list filters and the detail page first. Defer export to the next batch.",
+})
+```
+
+Response fields:
+
+| Field       | Meaning                                                                                |
+| ----------- | -------------------------------------------------------------------------------------- |
+| `missionID` | Mission identifier. The server generates it when omitted.                              |
+| `sessionID` | Session that carries the Mission agent conversation.                                   |
+| `created`   | `true` means a new Mission was created; `false` means an existing Mission was resumed. |
+
+Mission IDs may only use lowercase letters, digits, and hyphens, with length 1 to 64. The server guarantees that one `(project, missionID)` maps to exactly one Mission session.
+
+Equivalent HTTP request:
+
+```bash
+curl -X POST http://127.0.0.1:7878/mission/wake \
+  -H "content-type: application/json" \
+  -H "x-opencorvus-directory: D:\repo\my-project" \
+  -d "{\"text\":\"Turn the current CRM into a production-ready sales lead workspace.\",\"title\":\"Sales lead workspace\"}"
+```
+
+## Query Missions
+
+List Missions:
+
+```typescript
+const missions = await client.mission.list({
+  directory: "D:\\repo\\my-project",
+  limit: 50,
+})
+```
+
+Common query parameters:
+
+| Parameter                           | Meaning                                    |
+| ----------------------------------- | ------------------------------------------ |
+| `directory`                         | Filter to one project directory.           |
+| `search`                            | Search by title, Mission ID, or directory. |
+| `limit`                             | Result count, maximum 200.                 |
+| `archived`                          | Include archived Missions.                 |
+| `cursorUpdated` / `cursorSessionID` | Pagination cursor. Provide both together.  |
+
+Check Mission aggregate status:
+
+```typescript
+const snapshot = await client.mission.status({ missionID })
+
+if (snapshot.error) throw snapshot.error
+console.log(snapshot.data.status, snapshot.data.taskCounts)
+```
+
+`mission.status` returns the aggregate view of all Tasks under the Mission:
+
+| Field        | Meaning                                     |
+| ------------ | ------------------------------------------- |
+| `status`     | `running` or `inactive`.                    |
+| `taskCounts` | Total, running, and inactive counts.        |
+| `progress`   | Aggregate activity with the percent running. |
+| `tasks`      | One `TaskStatusDetail` per Task.            |
+
+## Download Mission Project
+
+Use `GET /mission/{missionID}/project-archive` when the integration needs one ZIP for the Mission's current project directory:
+
+```typescript
+const archive = await client.mission.projectArchive({ missionID })
+
+if (archive.error) throw archive.error
+const bytes = await archive.data.arrayBuffer()
+```
+
+HTTP download:
+
+```bash
+curl -L "http://127.0.0.1:7878/mission/mission-1/project-archive?directory=D%3A%5Crepo%5Cmy-project" \
+  -o mission-project.zip
+```
+
+The response is `application/zip`. The route is project-scoped and requires `directory`; it returns the Git-included project files plus OpenCorvus execution-flow exports for the Mission scope.
+
+## Manage Missions
+
+| Action | Route                              | Meaning                                                            |
+| ------ | ---------------------------------- | ------------------------------------------------------------------ |
+| Rename | `PATCH /mission/{missionID}/title` | Update the Mission session title.                                  |
+| Abort  | `POST /mission/{missionID}/abort`  | Cancel the active Mission agent loop; send `surface` and `reason`. |
+| Delete | `DELETE /mission/{missionID}`      | Delete the Mission session and conversation history.               |
+
+Deleting a Mission does not delete Tasks it already dispatched. Tasks are independent execution records and remain available through the Task API.
+
+## Common Flows
+
+One-off task:
+
+1. `POST /task` creates the task.
+2. `GET /task/{taskID}/status` polls, or `GET /task/{taskID}/events` subscribes.
+3. `POST /task/{taskID}/message` adds user input when needed.
+4. `GET /task/{taskID}/project-archive` downloads the code after completion.
+
+Long-running goal:
+
+1. `POST /mission/wake` creates or resumes the Mission.
+2. Mission reads the canonical Expert Squad recommendations for each domain phase. When the operator has authorized Expert Squad production, Mission creates a visible `squad-sdk` Task that authors and installs one lightweight project-scoped Squad through the canonical SDK, Registry, and Manager path. The generated package has only necessary domain Agents, at most three prompt-only package Skills, and no private tools, MCP runtime, executable, library, credentials, local process, or runtime asset dependency.
+3. Mission waits for that production Task to succeed, rereads the catalog, and reconciles the new manifest ID, version, and complete package digest before creating the separate fixed-profile domain Task. Automatic production never installs user-global content or overrides an explicit non-empty Squad selection.
+4. `GET /mission/{missionID}/status` shows aggregate progress across production and domain Tasks.
+5. `POST /mission/wake` gives the Mission more direction.
+6. Use `GET /mission/{missionID}/project-archive` for a Mission-scoped project ZIP, or each concrete Task's `project-archive` for one Task's execution flow.
+
+## Next
+
+- [HTTP API reference](../api/)
+- [JavaScript / TypeScript SDK reference](../sdk/)
+- [Task / Delivery Slice data model](../../concepts/delivery-slice-task/)

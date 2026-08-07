@@ -1,0 +1,568 @@
+---
+title: Mission 和 Task API
+description: 用中文说明如何发布任务、查询状态、下载代码，以及如何用 Mission 管理长期目标。
+---
+
+这页只讲外部系统最常用的接入方式：发任务、看进度、拿结果、管理长期目标。完整接口列表在 [HTTP API 参考](../api/)。
+
+## 先跑通一个 Task
+
+安装 SDK：
+
+```bash
+bun add @opencorvus-ai/sdk
+```
+
+保存下面脚本为 `run-task.ts`，把 `directory` 改成你的项目目录：
+
+```typescript
+import { writeFile } from "node:fs/promises"
+import { createOpenCorvusClient } from "@opencorvus-ai/sdk"
+
+const client = createOpenCorvusClient({
+  baseUrl: "http://127.0.0.1:7878",
+  directory: "D:\\repo\\my-project",
+  password: process.env.OPENCORVUS_SERVER_PASSWORD,
+})
+
+const created = await client.task.create({
+  title: "修复登录页提交失败",
+  request: "修复登录页表单提交失败的问题，并补充测试。",
+  promptProfile: "advanced",
+  priority: "normal",
+})
+
+if (created.error) throw created.error
+
+const taskID = created.data.task_id
+console.log("taskID:", taskID)
+
+while (true) {
+  const result = await client.task.status({ taskID })
+  if (result.error) throw result.error
+
+  const task = result.data
+  console.log(`${task.status} ${task.progress.percent}%`)
+
+  if (task.status !== "running") {
+    console.log("Task 已非进行中", task.lifecycleStatus, task.error)
+    break
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, 2000))
+}
+
+const archive = await client.task.projectArchive({ taskID })
+if (archive.error) throw archive.error
+
+const bytes = Buffer.from(await archive.data.arrayBuffer())
+await writeFile(`./${taskID}.zip`, bytes)
+console.log("已下载:", `${taskID}.zip`)
+```
+
+运行：
+
+```bash
+bun run run-task.ts
+```
+
+这段代码做了 3 件事：
+
+1. `client.task.create()` 发布任务。
+2. `client.task.status()` 每 2 秒查一次状态。
+3. `client.task.projectArchive()` 成功后下载代码归档。
+
+## Task 是什么
+
+Task 是一次具体工作。比如：
+
+- 修一个 bug。
+- 给某个页面补测试。
+- 实现一个接口。
+- 生成一个小功能。
+
+Task 有自己的 ID、状态、进度、对话、执行证据和最终代码归档。你要“发布任务、查询状态、下载代码”，就用 Task API。
+
+最常用的 Task 接口：
+
+| 目的     | SDK                                                                      | HTTP                                 |
+| -------- | ------------------------------------------------------------------------ | ------------------------------------ |
+| 发布任务 | `client.task.create()`                                                   | `POST /task`                         |
+| 查状态   | `client.task.status({ taskID })`                                         | `GET /task/{taskID}/status`          |
+| 追加说明 | `client.task.message({ taskID, source, text })`                          | `POST /task/{taskID}/message`        |
+| 下载代码 | `client.task.projectArchive({ taskID })`                                 | `GET /task/{taskID}/project-archive` |
+| 取消任务 | `client.task.cancel({ taskID, surface: "api", reason: "用户停止任务" })` | `POST /task/{taskID}/cancel`         |
+| 重试任务 | `client.task.retry({ taskID })`                                          | `POST /task/{taskID}/retry`          |
+| 重新规划 | `client.task.replan({ taskID })`                                         | `POST /task/{taskID}/replan`         |
+
+## 创建 Task
+
+最小请求只有 `request`：
+
+```typescript
+const result = await client.task.create({
+  request: "把用户列表改成分页加载。",
+})
+
+if (result.error) throw result.error
+console.log(result.data.task_id)
+```
+
+实际接入时通常这样写：
+
+```typescript
+const result = await client.task.create({
+  title: "用户列表分页",
+  request: [
+    "把用户列表改成分页加载。",
+    "要求：",
+    "1. 保留现有筛选条件。",
+    "2. 每页 50 条。",
+    "3. 补充接口和前端测试。",
+  ].join("\n"),
+  promptProfile: "advanced",
+  priority: "high",
+  queue: true,
+  metadata: {
+    externalTicket: "CRM-1234",
+  },
+})
+```
+
+常用字段：
+
+| 字段            | 是否必填 | 说明                                                                       |
+| --------------- | -------- | -------------------------------------------------------------------------- |
+| `request`       | 是       | 任务正文。这里要写清楚目标、限制、验收条件。                               |
+| `title`         | 否       | UI 里显示的标题。不传时系统会生成。                                        |
+| `promptProfile` | 否       | 本 Task 激活的精确专家团 package ID；不传则使用当前配置的 active package。 |
+| `priority`      | 否       | `critical`、`high`、`normal`、`low`。                                      |
+| `queue`         | 否       | `true` 表示进入项目队列；`false` 表示立即尝试启动。                        |
+| `attachments`   | 否       | 图片、PDF、文本等附件。                                                    |
+| `checks`        | 否       | 让任务完成前跑构建、测试、视觉检查等验收。                                 |
+| `metadata`      | 否       | 你的系统自己的业务字段。                                                   |
+
+上传附件示例：
+
+```typescript
+import { readFile } from "node:fs/promises"
+
+const image = await readFile("./bug.png")
+
+await client.task.create({
+  title: "修复截图里的按钮错位",
+  request: "按截图修复按钮和输入框的对齐问题。",
+  attachments: [
+    {
+      filename: "bug.png",
+      mime: "image/png",
+      data: image.toString("base64"),
+    },
+  ],
+})
+```
+
+## 用 curl 创建 Task
+
+不想用 SDK，也可以直接调 HTTP：
+
+```bash
+curl -X POST "http://127.0.0.1:7878/task" \
+  -H "content-type: application/json" \
+  -H "x-opencorvus-directory: D:\repo\my-project" \
+  -d "{\"title\":\"用户列表分页\",\"request\":\"把用户列表改成分页加载，并补测试。\",\"promptProfile\":\"advanced\"}"
+```
+
+成功返回：
+
+```json
+{
+  "task_id": "task_..."
+}
+```
+
+如果服务端设置了 `OPENCORVUS_SERVER_PASSWORD`，curl 要加 Basic Auth：
+
+```bash
+curl -u "opencorvus:$OPENCORVUS_SERVER_PASSWORD" \
+  -X POST "http://127.0.0.1:7878/task" \
+  -H "content-type: application/json" \
+  -H "x-opencorvus-directory: D:\repo\my-project" \
+  -d "{\"request\":\"修复登录页提交失败。\"}"
+```
+
+## 查询 Task 状态
+
+SDK：
+
+```typescript
+const result = await client.task.status({ taskID: "task_..." })
+
+if (result.error) throw result.error
+
+const task = result.data
+console.log(task.status)
+console.log(task.lifecycleStatus)
+console.log(task.progress.percent)
+```
+
+curl：
+
+```bash
+curl "http://127.0.0.1:7878/task/task_.../status"
+```
+
+你主要看这些字段：
+
+| 字段                 | 例子      | 说明                                                                                  |
+| -------------------- | --------- | ------------------------------------------------------------------------------------- |
+| `status`             | `running` | 二态活动状态：`running` 或 `inactive`。                                                |
+| `lifecycleStatus`    | `active`  | 诊断生命周期事实：`queued`、`active`、`completed`、`failed`、`cancelled`。            |
+| `progress.percent`   | `100`     | 当前 Task 的进行中比例；进行中为 100，非进行中为 0。                                  |
+| `goals`              | `[]`      | 稳定 Delivery Slice 身份、当前 revision 合同与只读 execution/evidence/review/settlement 进度。 |
+| `sessionInvocationTopology` | `{...}`   | 可见父子 worker Session 调用拓扑。                                             |
+| `error`              | `"..."`   | 失败原因。                                                                            |
+
+一个典型响应长这样：
+
+```json
+{
+  "taskID": "task_...",
+  "title": "用户列表分页",
+  "status": "running",
+  "lifecycleStatus": "active",
+  "progress": {
+    "total": 1,
+    "running": 1,
+    "inactive": 0,
+    "percent": 100
+  },
+  "goals": []
+}
+```
+
+## 等任务完成
+
+轮询版本：
+
+```typescript
+async function waitTask(taskID: string) {
+  while (true) {
+    const result = await client.task.status({ taskID })
+    if (result.error) throw result.error
+
+    const task = result.data
+    if (task.status === "inactive") return task
+
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+  }
+}
+```
+
+事件流版本：
+
+```typescript
+const { stream } = client.task.events({ taskID })
+
+for await (const event of stream) {
+  console.log(event)
+}
+```
+
+如果只是要做后端集成，轮询更简单。要做前端实时进度，再接事件流。
+
+## 给 Task 追加说明
+
+任务跑到一半，用户又补了一句要求：
+
+```typescript
+await client.task.message({
+  taskID,
+  source: "api",
+  text: "移动端优先，桌面端不要改布局。",
+})
+```
+
+`source` 是必填字段，用来标识调用方，例如 `api`、`github-action` 或你的系统名。
+
+curl：
+
+```bash
+curl -X POST "http://127.0.0.1:7878/task/task_.../message" \
+  -H "content-type: application/json" \
+  -H "x-opencorvus-directory: D:\repo\my-project" \
+  -d "{\"source\":\"api\",\"text\":\"移动端优先，桌面端不要改布局。\"}"
+```
+
+## 下载 Task 代码
+
+SDK：
+
+```typescript
+import { writeFile } from "node:fs/promises"
+
+const archive = await client.task.projectArchive({ taskID })
+if (archive.error) throw archive.error
+
+await writeFile("task-project.zip", Buffer.from(await archive.data.arrayBuffer()))
+```
+
+curl：
+
+```bash
+curl -L "http://127.0.0.1:7878/task/task_.../project-archive" \
+  -H "x-opencorvus-directory: D:\repo\my-project" \
+  -o task-project.zip
+```
+
+这个接口返回 `application/zip`。ZIP 里包含：
+
+- 项目中被 Git 纳入跟踪的文件。
+- OpenCorvus 从任务投影导出的执行流。
+
+如果项目不是 Git worktree，会返回 `422`：
+
+```json
+{
+  "message": "Task project is not a Git worktree"
+}
+```
+
+## Mission 是什么
+
+Mission 适合长期目标，不适合一次性小活。
+
+例子：
+
+- “把 CRM 改造成可上线的销售线索工作台。”
+- “持续推进这个仓库的前端体验改造。”
+- “把旧系统迁到新的任务编排模式。”
+
+Mission 自己不直接产出代码。它会持续和用户对话、拆计划，然后派发普通 Task。也就是说：
+
+```text
+Mission
+  -> 已安装专家团拥有该阶段：领域 Task
+  -> 没有合适专家团且已获生产授权：Squad SDK 生产 Task
+       -> 项目级安装新专家团
+  -> catalog 对账成功：新专家团领域 Task
+```
+
+Mission 会按独立领域阶段读取 canonical Expert Squad recommendation。健康的完整项目 catalog
+没有 specialized Squad 能完整拥有某个阶段时，Mission 先创建一个可见的 `advanced` Task，通过唯一
+`squad-sdk` 通过 SDK writer、Registry 和 Manager 链路生产轻量 project-scoped 专家团：除 Orchestrator 外只包含
+3–9 个必要领域 Agent，可有 0–3 个 prompt-only package Skill，并且不携带私有 tool、MCP runtime、
+executable、library、credential、local process 或运行时 asset 依赖。生产 Task terminal success 后，
+Mission 重新读取 catalog，以同一 manifest ID、version 和完整 package digest 对账，然后才创建
+固定使用新专家团的独立领域 Task。自动生产不会安装 user-global package，也不会扩展用户显式选择的
+非空专家团集合。
+
+Mission 也有项目归档接口：`GET /mission/{missionID}/project-archive`。它是 project-scoped route，必须带 `directory`，用于下载该 Mission 当前项目目录的 ZIP。单个 Task 的执行流归档仍然使用 `GET /task/{taskID}/project-archive`。
+
+SDK：
+
+```typescript
+const archive = await client.mission.projectArchive({ missionID })
+if (archive.error) throw archive.error
+```
+
+curl：
+
+```bash
+curl -L "http://127.0.0.1:7878/mission/mission-1/project-archive?directory=D%3A%5Crepo%5Cmy-project" \
+  -o mission-project.zip
+```
+
+## 启动 Mission
+
+不传 `missionID` 就是新建：
+
+```typescript
+const result = await client.mission.wake({
+  title: "销售线索工作台",
+  text: "把当前 CRM 系统改造成可上线的销售线索工作台。先梳理需求，再分批派发任务。",
+})
+
+if (result.error) throw result.error
+
+const missionID = result.data.missionID
+console.log(result.data)
+```
+
+返回：
+
+```json
+{
+  "missionID": "a1b2c3d4",
+  "sessionID": "session_...",
+  "created": true
+}
+```
+
+继续同一个 Mission：
+
+```typescript
+await client.mission.wake({
+  missionID,
+  text: "第一批只做线索列表、筛选和详情页，导出功能放到第二批。",
+})
+```
+
+curl：
+
+```bash
+curl -X POST "http://127.0.0.1:7878/mission/wake" \
+  -H "content-type: application/json" \
+  -H "x-opencorvus-directory: D:\repo\my-project" \
+  -d "{\"title\":\"销售线索工作台\",\"text\":\"把当前 CRM 系统改造成可上线的销售线索工作台。\"}"
+```
+
+`missionID` 只能包含小写字母、数字和连字符，长度 1 到 64。服务端保证同一个项目里的同一个 `missionID` 只对应一个 Mission。
+
+## 查询 Mission
+
+列出 Mission：
+
+```typescript
+const list = await client.mission.list({
+  directory: "D:\\repo\\my-project",
+  limit: 20,
+})
+
+if (list.error) throw list.error
+
+for (const mission of list.data) {
+  console.log(mission.missionID, mission.title, mission.taskStats)
+}
+```
+
+查某个 Mission 的聚合状态：
+
+```typescript
+const result = await client.mission.status({ missionID })
+if (result.error) throw result.error
+
+const mission = result.data
+console.log(mission.status)
+console.log(mission.taskCounts)
+
+for (const task of mission.tasks) {
+  console.log(task.taskID, task.title, task.status, task.progress.percent)
+}
+```
+
+curl：
+
+```bash
+curl "http://127.0.0.1:7878/mission/a1b2c3d4/status" \
+  -H "x-opencorvus-directory: D:\repo\my-project"
+```
+
+你主要看：
+
+| 字段               | 说明                                                 |
+| ------------------ | ---------------------------------------------------- |
+| `status`           | Mission 聚合活动状态：`running` 或 `inactive`。 |
+| `taskCounts`       | 这个 Mission 下 Task 的总数、进行中和非进行中数量。 |
+| `progress.percent` | 进行中 Task 占比。                             |
+| `tasks`            | Mission 派发出的每个 Task 的活动与诊断明细。   |
+
+## 管理 Mission
+
+改名：
+
+```typescript
+await client.mission.rename({
+  missionID,
+  title: "CRM 销售线索工作台",
+})
+```
+
+中止当前 Mission agent：
+
+```typescript
+await client.mission.abort({
+  missionID,
+  surface: "api",
+  reason: "用户停止 Mission",
+})
+```
+
+删除 Mission 会话：
+
+```typescript
+await client.mission.delete({
+  missionID,
+  surface: "api",
+  reason: "用户删除 Mission",
+})
+```
+
+删除 Mission 不会删除它已经派发出的 Task。Task 是独立执行记录，仍然用 Task API 查和管理。
+
+## 目录和认证
+
+项目作用域接口要带项目目录，例如 `GET /tasks`、`POST /task`、Task 写操作、browser preview 路由、`GET /task/{taskID}/project-archive`、`GET /mission/{missionID}/status` 和 `GET /mission/{missionID}/project-archive`。单个 Task 记录读取以 `taskID` 为主键，不需要目录，例如 `GET /task/{taskID}/status`、`GET /task/{taskID}/board`、`GET /task/{taskID}/events`。
+
+推荐在 SDK client 上统一传目录；SDK 只会给项目作用域请求追加 `directory` query：
+
+```typescript
+const client = createOpenCorvusClient({
+  baseUrl: "http://127.0.0.1:7878",
+  directory: "D:\\repo\\my-project",
+  password: process.env.OPENCORVUS_SERVER_PASSWORD,
+})
+```
+
+如果你不用 SDK，就每个请求都带 header：
+
+```bash
+-H "x-opencorvus-directory: D:\repo\my-project"
+```
+
+也可以用 query：
+
+```text
+http://127.0.0.1:7878/tasks?directory=D:\repo\my-project
+```
+
+`x-opencorvus-directory` 是裸 HTTP 调用时可用的等价方式。
+
+设置了 `OPENCORVUS_SERVER_PASSWORD` 时：
+
+- 用户名默认是 `opencorvus`。
+- 密码是 `OPENCORVUS_SERVER_PASSWORD`。
+- SDK 传 `password` 会自动加 Basic Auth。
+- curl 用 `-u "opencorvus:$OPENCORVUS_SERVER_PASSWORD"`。
+
+## 常见接入方式
+
+一次性任务：
+
+```text
+create task -> poll task status -> download task project archive
+```
+
+长期目标：
+
+```text
+wake mission -> mission dispatches tasks -> poll mission status -> download specific task archives
+```
+
+业务系统集成建议：
+
+| 你要做什么       | 用什么                         |
+| ---------------- | ------------------------------ |
+| 后端创建一次任务 | `client.task.create()`         |
+| 后端等任务完成   | `client.task.status()` 轮询    |
+| 前端展示实时进度 | `client.task.events()`         |
+| 用户追加要求     | `client.task.message()`        |
+| 下载代码         | `client.task.projectArchive()` |
+| 创建长期目标     | `client.mission.wake()`        |
+| 看长期目标进度   | `client.mission.status()`      |
+
+## 继续阅读
+
+- [HTTP API 参考](../api/)
+- [JavaScript / TypeScript SDK 参考](../sdk/)
+- [Task / Delivery Slice 数据模型](../../concepts/delivery-slice-task/)

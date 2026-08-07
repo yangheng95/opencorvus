@@ -1,0 +1,73 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.8/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "packages/opencorvus/src/**",
+      "packages/util/src/**",
+      "packages/plugin/src/**",
+      "packages/channel-config/src/**",
+      "packages/channel-runtime/src/**",
+      "packages/sdk/js/src/**",
+      "packages/script/src/**"
+    ]
+  },
+  "formatter": {
+    "enabled": false
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "a11y": {
+        "recommended": false
+      },
+      "complexity": {
+        "noForEach": "off",
+        "noUselessSwitchCase": "warn",
+        "noExcessiveCognitiveComplexity": "warn",
+        "useLiteralKeys": "off",
+        "useOptionalChain": "warn"
+      },
+      "correctness": {
+        "noUnusedVariables": "warn",
+        "noUnusedImports": "warn",
+        "noUnusedFunctionParameters": "warn",
+        "noSwitchDeclarations": "error",
+        "useExhaustiveDependencies": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noConsole": "off",
+        "noAssignInExpressions": "warn",
+        "noTsIgnore": "warn",
+        "noRedeclare": "error",
+        "noControlCharactersInRegex": "off"
+      },
+      "style": {
+        "noNonNullAssertion": "off",
+        "useConst": "warn",
+        "noParameterAssign": "warn",
+        "useTemplate": "off",
+        "useNodejsImportProtocol": "off",
+        "useImportType": "off"
+      },
+      "performance": {
+        "noAccumulatingSpread": "warn"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double"
+    }
+  },
+  "assist": {
+    "enabled": false
+  }
+}

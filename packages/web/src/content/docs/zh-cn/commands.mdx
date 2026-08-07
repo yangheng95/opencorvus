@@ -1,0 +1,52 @@
+---
+title: 命令
+description: 内置 slash 命令以及如何在 OpenCorvus 中定义自定义命令。
+---
+
+OpenCorvus 为 session prompt 提供 slash 命令系统，包括 ACP `session/prompt`，命令以 `/command` 前缀开头。
+
+## 内置 slash 命令
+
+| 命令     | 用途                                      |
+| -------- | ----------------------------------------- |
+| `/init`  | 从当前仓库初始化 `AGENTS.md`              |
+| `/share` | 为当前 session 生成分享链接               |
+| `/undo`  | 显式启用 snapshot 后回滚 agent 上一次修改 |
+| `/help`  | 列出所有命令                              |
+
+具体集合按版本不同；以 `/help` 为准。
+
+## 自定义命令
+
+在 [config](../config/) 的 `command` 中定义：
+
+```jsonc
+{
+  "command": {
+    "test": {
+      "template": "运行完整测试套件并打印失败用例。",
+      "description": "运行测试",
+      "agent": "build",
+      "model": "anthropic/claude-haiku-4-5",
+    },
+    "component": {
+      "template": "创建名为 $ARGUMENTS 的 TypeScript React 组件。",
+      "description": "创建组件",
+    },
+  },
+}
+```
+
+`$ARGUMENTS` 会被替换为用户在命令名后输入的内容。
+
+## Markdown 形式
+
+也可放在 `<runtime-root>/config/commands/<name>.md` 或 `.opencorvus/commands/<name>.md`。frontmatter 写元信息（description / agent / model），正文是 prompt 模板。runtime root 遵循[环境变量](../reference/env/)。
+
+## 命令中的权限
+
+自定义命令与直接 prompt 走同一权限系统。模板里若触发 `bash` 或 `write`，依然受 [Permissions](../permissions/) 约束。
+
+## Snapshot 与 `/undo`
+
+`/undo` 需要在 [config](../config/) 中显式设置 `snapshot: true`。Snapshot 默认关闭；没有该设置时，`/undo` 是 no-op。

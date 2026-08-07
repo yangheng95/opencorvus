@@ -1,0 +1,47 @@
+name: Documentation issue
+description: Report missing, incorrect, or unclear documentation
+title: "[Docs]: "
+labels: ["documentation"]
+body:
+  - type: input
+    id: location
+    attributes:
+      label: Documentation location
+      description: Provide a URL or repository path.
+      placeholder: packages/web/src/content/docs/...
+    validations:
+      required: true
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      options:
+        - English
+        - Simplified Chinese
+        - Both
+        - Not applicable
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Explain what is missing, incorrect, outdated, or unclear.
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: Suggested correction
+      description: Describe the desired wording, example, or structure if known.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmation
+      options:
+        - label: I searched existing documentation issues.
+          required: true
+        - label: I agree to follow the Code of Conduct.
+          required: true

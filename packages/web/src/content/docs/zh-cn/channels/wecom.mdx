@@ -1,0 +1,36 @@
+---
+title: 企业微信 (WeCom)
+description: 企业微信适配器走自建应用 + 接收消息 Webhook 模式。
+---
+
+## 前置
+
+1. 在 [企业微信管理后台](https://work.weixin.qq.com/) 创建自建应用。
+2. 获取：
+   - **企业 ID (CorpID)**
+   - **应用 Secret**
+   - **AgentID**
+3. 配置"接收消息"的 URL：`https://<公网>/wecom`，并设置 Token / EncodingAESKey。
+
+## 环境变量
+
+```bash
+export WECOM_CORP_ID=...
+export WECOM_SECRET=...
+export WECOM_AGENT_ID=...
+export WECOM_CALLBACK_TOKEN=...
+export WECOM_ENCODING_AES_KEY=...
+export WECOM_WEBHOOK_HOST=0.0.0.0
+export WECOM_WEBHOOK_PORT=16672
+export WECOM_WEBHOOK_PATH=/wecom
+```
+
+## Thread 语义
+
+企业微信没有显式 thread；thread key = `FromUserName + AgentID`。
+
+## 故障排查
+
+- **URL 验证失败**：企业微信要求公网可访问 + HTTPS，并且 Token / EncodingAESKey 必须与后台配置完全一致；本机调试可用 Cloudflare Tunnel。
+- **消息解密失败**：EncodingAESKey 与后台不一致。
+- **发送失败 errcode 40014**：access_token 过期（企业微信 2 小时），OpenCorvus 会自动刷新；若持续失败检查 secret。

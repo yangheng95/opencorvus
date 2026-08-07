@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "deep-research",
+  "name": "Deep Research",
+  "label": "Deep Research",
+  "description": "Multi-perspective source discovery, evidence curation, grounded outlining, cited drafting, independent citation review, and polished long-form reporting.",
+  "version": "2026.08.05.1",
+  "product_pillars": ["work"],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for a broad or contested research question that requires multiple perspectives, deep sourcing, citations, synthesis, and a polished report.",
+    "selection_guidance": "Select Deep Research when answering the question requires discovering viewpoints and subquestions before writing. Use direct writing for simple transformations and Equity Research for public-company valuation work.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator", "prompt": "agents/orchestrator/system.md", "inherit_base_tools": true, "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "default_skill_refs": [], "package_skill_refs": ["deep-research/shared/workflow", "deep-research/shared/method"], "default_tool_refs": [], "package_tool_refs": [], "default_mcp_server_refs": [], "package_mcp_server_refs": [], "default_mcp_tool_refs": [], "package_mcp_tool_refs": [], "default_mcp_prompt_refs": [], "package_mcp_prompt_refs": [], "default_mcp_resource_refs": [], "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "deep-research-planner": {
+        "label": "Deep Research Planner", "description": "Defines the research question, audience, perspective map, source policy, deliverable, and stopping conditions.",
+        "base_role": "delegated-worker", "prompt": "agents/deep-research-planner/system.md", "inherit_base_tools": true, "built_in_tool_ids": [],
+        "default_skill_refs": [], "package_skill_refs": ["deep-research/shared/workflow", "deep-research/shared/method"], "default_tool_refs": [], "package_tool_refs": [], "default_mcp_server_refs": [], "package_mcp_server_refs": [], "default_mcp_tool_refs": [], "package_mcp_tool_refs": [], "default_mcp_prompt_refs": [], "package_mcp_prompt_refs": [], "default_mcp_resource_refs": [], "package_mcp_resource_refs": []
+      },
+      "deep-research-knowledge-curator": {
+        "label": "Deep Research Knowledge Curator", "description": "Discovers distinct perspectives, asks perspective-specific questions, and builds a cited evidence dossier.",
+        "base_role": "deep-research", "prompt": "agents/deep-research-knowledge-curator/system.md", "inherit_base_tools": true, "built_in_tool_ids": [],
+        "default_skill_refs": [], "package_skill_refs": ["deep-research/shared/workflow", "deep-research/shared/method"], "default_tool_refs": [], "package_tool_refs": [], "default_mcp_server_refs": [], "package_mcp_server_refs": [], "default_mcp_tool_refs": [], "package_mcp_tool_refs": [], "default_mcp_prompt_refs": [], "package_mcp_prompt_refs": [], "default_mcp_resource_refs": [], "package_mcp_resource_refs": []
+      },
+      "deep-research-outline-editor": {
+        "label": "Deep Research Outline Editor", "description": "Transforms selected evidence into a coherent, non-redundant hierarchy with section-level evidence assignments.",
+        "base_role": "delegated-worker", "prompt": "agents/deep-research-outline-editor/system.md", "inherit_base_tools": true, "built_in_tool_ids": [],
+        "default_skill_refs": [], "package_skill_refs": ["deep-research/shared/workflow", "deep-research/shared/method"], "default_tool_refs": [], "package_tool_refs": [], "default_mcp_server_refs": [], "package_mcp_server_refs": [], "default_mcp_tool_refs": [], "package_mcp_tool_refs": [], "default_mcp_prompt_refs": [], "package_mcp_prompt_refs": [], "default_mcp_resource_refs": [], "package_mcp_resource_refs": []
+      },
+      "deep-research-draft-writer": {
+        "label": "Deep Research Draft Writer", "description": "Writes a complete, source-grounded draft whose inline citations map to the curated source index.",
+        "base_role": "delegated-worker", "prompt": "agents/deep-research-draft-writer/system.md", "inherit_base_tools": true, "built_in_tool_ids": [],
+        "default_skill_refs": [], "package_skill_refs": ["deep-research/shared/workflow", "deep-research/shared/method"], "default_tool_refs": [], "package_tool_refs": [], "default_mcp_server_refs": [], "package_mcp_server_refs": [], "default_mcp_tool_refs": [], "package_mcp_tool_refs": [], "default_mcp_prompt_refs": [], "package_mcp_prompt_refs": [], "default_mcp_resource_refs": [], "package_mcp_resource_refs": []
+      },
+      "deep-research-citation-reviewer": {
+        "label": "Deep Research Citation Reviewer", "description": "Independently audits citation entailment, source quality, coverage, placement, synthesis, and uncertainty.",
+        "base_role": "fact-check", "prompt": "agents/deep-research-citation-reviewer/system.md", "inherit_base_tools": true, "built_in_tool_ids": [],
+        "default_skill_refs": [], "package_skill_refs": ["deep-research/shared/workflow", "deep-research/shared/method"], "default_tool_refs": [], "package_tool_refs": [], "default_mcp_server_refs": [], "package_mcp_server_refs": [], "default_mcp_tool_refs": [], "package_mcp_tool_refs": [], "default_mcp_prompt_refs": [], "package_mcp_prompt_refs": [], "default_mcp_resource_refs": [], "package_mcp_resource_refs": []
+      },
+      "deep-research-report-writer": {
+        "label": "Deep Research Report Writer", "description": "Resolves the independent review and publishes canonical Markdown plus the visible final research report.",
+        "base_role": "build", "prompt": "agents/deep-research-report-writer/system.md", "inherit_base_tools": true, "built_in_tool_ids": [],
+        "default_skill_refs": [], "package_skill_refs": ["deep-research/shared/workflow", "deep-research/shared/method"], "default_tool_refs": [], "package_tool_refs": [], "default_mcp_server_refs": [], "package_mcp_server_refs": [], "default_mcp_tool_refs": [], "package_mcp_tool_refs": [], "default_mcp_prompt_refs": [], "package_mcp_prompt_refs": [], "default_mcp_resource_refs": [], "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "multi-perspective-report": {
+        "label": "Multi-perspective Deep Research Report",
+        "description": "Bound the question, curate perspective-led evidence, construct a grounded outline, draft with citations, audit citations, and publish a polished report.",
+        "nodes": {
+          "deep-research-planner": { "agent_id": "deep-research-planner", "description": "Publishes the bounded research charter and perspective plan.", "depends_on": [] },
+          "deep-research-knowledge-curator": { "agent_id": "deep-research-knowledge-curator", "description": "Publishes the multi-perspective evidence dossier.", "depends_on": ["deep-research-planner"] },
+          "deep-research-outline-editor": { "agent_id": "deep-research-outline-editor", "description": "Publishes the evidence-grounded article outline.", "depends_on": ["deep-research-knowledge-curator"] },
+          "deep-research-draft-writer": { "agent_id": "deep-research-draft-writer", "description": "Publishes the complete cited draft.", "depends_on": ["deep-research-outline-editor"] },
+          "deep-research-citation-reviewer": { "agent_id": "deep-research-citation-reviewer", "description": "Publishes the independent citation and synthesis review.", "depends_on": ["deep-research-draft-writer"] },
+          "deep-research-report-writer": { "agent_id": "deep-research-report-writer", "description": "Publishes canonical Markdown and the visible final report.", "depends_on": ["deep-research-citation-reviewer"] }
+        }
+      }
+    }
+  }
+}

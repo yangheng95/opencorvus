@@ -1,0 +1,44 @@
+---
+title: Telegram
+description: Telegram 适配器走 Bot API long polling，无需公网回调。
+---
+
+## 前置
+
+1. 找 [@BotFather](https://t.me/BotFather) 创建 Bot，得到 `TELEGRAM_BOT_TOKEN`。
+2. 在 BotFather 中打开 `/setprivacy` → Disable（否则 bot 收不到群消息）。
+3. 把 Bot 拉进目标群。
+
+## 环境变量
+
+```bash
+export TELEGRAM_BOT_TOKEN=123456:AAH...
+```
+
+## 启动
+
+```bash
+cd packages/channel-runtime
+bun run dev
+```
+
+检测到 `TELEGRAM_BOT_TOKEN` 即自动启动 Telegram 适配器。
+
+## Thread 语义
+
+Telegram 的 `message_thread_id`（群主题）作为 thread key 的一部分；私聊则以 `chat_id` 代替。同一 thread 内的消息共享 session。
+
+## 消息类型支持
+
+| 类型         | 支持情况                         |
+| ------------ | -------------------------------- |
+| 文本         | ✅                               |
+| 图片         | ✅ 作为截图/附件                 |
+| 语音 (voice) | ✅ 走 STT                        |
+| 视频 / 文件  | ⚠️ 仅接收，OpenCorvus 不主动处理 |
+
+## 故障排查
+
+- **收不到群消息**：检查 BotFather 的 privacy 设置。
+- **回复太慢**：long polling 默认 30s 超时，正常；如需更快可改代码（不建议）。
+- **图片上传失败**：Telegram Bot API 限制单文件 ≤ 50MB。

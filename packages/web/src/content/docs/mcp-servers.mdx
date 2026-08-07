@@ -1,0 +1,123 @@
+---
+title: MCP servers
+description: Connect OpenCorvus agents to local and remote MCP servers.
+---
+
+MCP is an open protocol led by Anthropic that defines a standard interface between LLM applications and external tool servers. Spec: [modelcontextprotocol.io](https://modelcontextprotocol.io).
+
+OpenCorvus is an **MCP Client**: it connects to external MCP servers and projects their tools, prompts, and resources into the active expert-squad runtime.
+
+Source: `packages/opencorvus/src/mcp/index.ts`
+
+## Consuming external MCP Servers
+
+At startup, OpenCorvus reads every `mcp` config entry and connects (`src/mcp/index.ts`):
+
+- `"local"` → `StdioClientTransport` (subprocess stdin/stdout)
+- `"remote"` → requires an explicit `transport`: `streamable-http` for standard remote MCP endpoints, or `sse` for SSE-only servers.
+
+After connecting, `client.listTools()` runs; tool names are sanitized and registered as `{clientName}_{toolName}` on the agent's tool set.
+
+## Configuration
+
+**Local (stdio):**
+
+```jsonc
+{
+  "mcp": {
+    "my-server": {
+      "type": "local",
+      "command": ["node", "/path/to/server/index.js"],
+      "environment": { "API_KEY": "sk-..." },
+      "enabled": true,
+      "timeout": 30000,
+    },
+  },
+}
+```
+
+Source: `src/config/config.ts`.
+
+**Remote OAuth server:**
+
+```jsonc
+{
+  "mcp": {
+    "my-remote-server": {
+      "type": "remote",
+      "transport": "streamable-http",
+      "url": "https://mcp.example.com/api",
+      "timeout": 30000,
+    },
+  },
+}
+```
+
+OAuth is enabled by default for remote servers. Use `oauth: { clientId, clientSecret, scope }` only when the provider requires a pre-registered client. Source: `src/config/config.ts`.
+
+## Capabilities
+
+| Capability                             | Status                            |
+| -------------------------------------- | --------------------------------- |
+| Tools (`listTools` + `callTool`)       | Full                              |
+| Prompts / Resources                    | Full                              |
+| `ToolListChanged` notifications        | Supported                         |
+| StreamableHTTP / SSE / stdio           | Supported through explicit config |
+| OAuth 2.0 + PKCE                       | Supported (remote, on by default) |
+| Dynamic client registration (RFC 7591) | Supported                         |
+
+## OAuth flow
+
+When a remote server returns `UnauthorizedError`, it's marked `needs_auth`. Run:
+
+```bash
+opencorvus mcp auth <server-name>
+```
+
+OpenCorvus starts a local callback server, opens the authorization URL, exchanges code for tokens, and persists them to `mcp-auth.json` in the resolved OpenCorvus data directory.
+
+Status: `opencorvus mcp list`. Remove credentials: `opencorvus mcp logout <server-name>`.
+
+## Examples
+
+**Local Filesystem:**
+
+```jsonc
+{
+  "mcp": {
+    "fs": { "type": "local", "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/home/user"] },
+  },
+}
+```
+
+**Remote OAuth server:**
+
+```jsonc
+{
+  "mcp": {
+    "remote-tools": {
+      "type": "remote",
+      "transport": "streamable-http",
+      "url": "https://mcp.example.com/rpc",
+    },
+  },
+}
+```
+
+**Disable a configured server:**
+
+```jsonc
+{ "mcp": { "github": { "type": "remote", "transport": "streamable-http", "url": "...", "enabled": false } } }
+```
+
+## Connection status
+
+| Status                      | Meaning                                     |
+| --------------------------- | ------------------------------------------- |
+| `connected`                 | Connected                                   |
+| `disabled`                  | `enabled: false` or manually disconnected   |
+| `failed`                    | Connection failed (see `error` field)       |
+| `needs_auth`                | OAuth required                              |
+| `needs_client_registration` | Server requires a pre-registered `clientId` |
+
+Default timeout: 30000 ms (`src/mcp/index.ts`); override via per-server `timeout` or global `experimental.mcp_timeout`.

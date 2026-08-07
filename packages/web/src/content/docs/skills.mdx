@@ -1,0 +1,102 @@
+---
+title: Skills
+description: SKILL.md-based extensions for OpenCorvus agents.
+---
+
+A Skill is OpenCorvus's lightest extension unit: a Markdown file with YAML frontmatter that tells agents _when_ and _how_ to behave for recurring task shapes. No TypeScript, no compilation — drop a `SKILL.md` into a directory or pull one from a URL.
+
+Source: `packages/opencorvus/src/skill/skill.ts`, `packages/opencorvus/src/skill/manager.ts`
+
+## Skill structure
+
+```
+my-skill/
+├── SKILL.md          # required — frontmatter + instruction body
+└── references/       # optional — reference documents
+```
+
+Frontmatter fields (`src/skill/skill.ts`):
+
+| Field                      | Type                              | Description                                                                                                           |
+| -------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `name`                     | string (required)                 | Global unique ID                                                                                                      |
+| `description`              | string (required)                 | One-line description used by the agent to decide when to activate                                                     |
+| `platforms`                | `("windows"\|"macos"\|"linux")[]` | Platform filter; empty = all                                                                                          |
+| `auto_detect.files`        | string[]                          | Discovery hint when these files exist                                                                                 |
+| `auto_detect.deps`         | string[]                          | Discovery hint when `package.json` lists these deps                                                                   |
+| `auto_detect.task_signals` | object                            | Discovery hint from task signals such as image attachment, non-Figma URL, Figma URL, package scripts, or request text |
+| `priority`                 | number                            | Sort order (higher first, default 0)                                                                                  |
+| `required_tools`           | string[]                          | Tool hints the skill expects the agent may need                                                                       |
+
+## Skill ↔ agent relationship
+
+Sessions receive a Skill Policy block that lists available skills. Agents should inspect that list, call the `skill` tool to search or load the exact skill, and then follow the loaded `SKILL.md` instructions. Loading a skill is a visible tool call in the session history.
+
+`auto_detect` remains metadata for discovery/ranking and future UI assistance. It does not inject hidden prompt content and it does not open tools. `required_tools` is descriptive metadata surfaced by skill search; the loaded skill instructions tell the agent what evidence to gather.
+
+## Built-in skills
+
+Shipped with the binary (`src/skill/skill.ts`), exactly one:
+
+| Name              | Purpose                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------ |
+| `research-report` | Produce a sourced Markdown research report using `websearch` and targeted `webfetch` |
+
+Other skills must be loaded through configured skill paths or URLs if you need them.
+
+Built-in skills get `allow` policy by default (`src/skill/manager.ts`).
+
+## Adding a local skill
+
+**A**: drop into `.opencorvus/skill/<name>/SKILL.md` (project or global).
+**B**: Claude Code layout — `.claude/skills/` or `.agents/skills/` also discovered (`src/skill/skill.ts`).
+**C**: declare paths in `opencorvus.jsonc`:
+
+```jsonc
+{ "skills": { "paths": ["./my-skills", "~/shared/skills"] } }
+```
+
+All `**/SKILL.md` under each path load (`src/skill/skill.ts`).
+
+## Loading from a remote URL
+
+```jsonc
+{ "skills": { "urls": ["https://skills.example.com/my-pack/"] } }
+```
+
+OpenCorvus fetches `{url}/index.json` (`{ skills: [{ name, description, files[] }] }`), downloads each file, caches under `<runtime-root>/cache/skills/`, loads `SKILL.md` (`src/skill/discovery.ts`).
+
+Built-in marketplace entries (`src/skill/manager.ts`): `openai-skills`, `anthropic-skills` (official); `skills-sh`, `skillstore` (curated); `skills-pub` (community).
+
+## Installing from Git
+
+```bash
+opencorvus skill install --git https://github.com/owner/repo.git
+# shorthand: opencorvus skill install owner/repo
+```
+
+Clones into `<runtime-root>/config/skills-market/<slug>/`, appends to `skills.paths`, writes `.opencorvus-skill-source.json` (`src/skill/manager.ts`). The runtime root follows [Environment variables](../reference/env/).
+
+## Permission config
+
+```jsonc
+{
+  "permission": {
+    "skill": {
+      "*": "ask",
+      "research-report": "allow",
+      "local-note": "deny",
+    },
+  },
+}
+```
+
+Built-in → `allow`; community/external → `ask`; skills with a `scripts/` directory → `ask` (high risk) (`src/skill/manager.ts`).
+
+## Disabling external discovery
+
+```bash
+OPENCORVUS_DISABLE_EXTERNAL_SKILLS=1
+```
+
+Skips `.claude/` and `.agents/` discovery. Does not affect `skills.paths` or `skills.urls` (`src/flag/flag.ts`).

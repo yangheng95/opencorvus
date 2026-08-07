@@ -1,0 +1,36 @@
+---
+title: Google Chat
+description: Google Chat 适配器走 Webhook / HTTP events 模式，需一个 Google Cloud Service Account。
+---
+
+## 前置
+
+1. [Google Cloud Console](https://console.cloud.google.com/) 创建项目 → 启用 Google Chat API。
+2. 创建 Service Account，下载 JSON key。
+3. 在 Google Chat 中发布 App（Chat API → Configuration）：
+   - App 类型：Bot
+   - Connection settings：HTTP endpoint
+   - URL：`https://<你的公网>/googlechat`
+   - 权限：`chat.messages`
+
+## 环境变量
+
+```bash
+export GOOGLECHAT_SERVICE_ACCOUNT_JSON='{"type":"service_account","project_id":"...","private_key":"..."}'
+export GOOGLECHAT_AUTH_AUDIENCE=https://<你的公网>/googlechat
+export GOOGLECHAT_WEBHOOK_HOST=0.0.0.0
+export GOOGLECHAT_WEBHOOK_PORT=16668
+export GOOGLECHAT_WEBHOOK_PATH=/googlechat
+```
+
+注意 JSON 是**一整行字符串**，不要换行（或用 `base64 -d` 包装）。
+
+## Thread 语义
+
+Google Chat 的 `thread.name` 直接作为 thread key。
+
+## 故障排查
+
+- **Webhook 返回 401**：`GOOGLECHAT_AUTH_AUDIENCE` 必须和 Google Chat HTTP endpoint 的 audience 完全一致。
+- **Bot 上线但消息无响应**：Chat API 默认仅对 Workspace 内用户生效；确认 Service Account 有域授权。
+- **JSON 解析失败**：私钥里的 `\n` 必须保留为字面量 `\n`，不能是实际换行。

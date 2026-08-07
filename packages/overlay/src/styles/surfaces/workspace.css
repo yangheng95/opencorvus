@@ -1,0 +1,779 @@
+/* ── Workspace Surface ──
+ * Owns: center workbench layout, diff-preview panel, code .file-link inline.
+ * Loaded in index.html before styles.css.
+ * Do not add solo rules for these classes anywhere else. */
+
+/* ── Diff Preview Panel ── */
+.diff-preview-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* diff-preview-head replaced by oc-panel__header override below */
+.diff-preview-panel > .oc-panel__header {
+  align-items: flex-start;
+  gap: calc(10px * var(--ui-scale));
+  padding: calc(8px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  border-bottom: var(--oc-border-width) solid var(--border);
+  background: var(--surface-strong);
+}
+
+.diff-preview-panel > .oc-panel__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.diff-preview-copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(2px * var(--ui-scale));
+}
+
+/* File-scope context label inside the diff preview header. */
+.diff-preview-scope {
+  font-size: var(--ui-font-control);
+  color: var(--text-soft);
+}
+
+.diff-preview-path {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: var(--ui-font-code);
+  color: var(--text-strong);
+}
+
+.diff-preview-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(6px * var(--ui-scale));
+  flex-shrink: 0;
+}
+
+.diff-preview-body {
+  /* flex:1 and overflow:auto removed — oc-panel__body handles those */
+  padding: calc(6px * var(--ui-scale));
+}
+
+.diff-preview-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(24px * var(--ui-scale));
+  background:
+    linear-gradient(180deg, var(--ui-highlight-tone), transparent 72%),
+    color-mix(in srgb, var(--surface-inset) 92%, transparent);
+}
+
+/* ── File Link (inline code → selected IDE opener) ── */
+code .file-link {
+  color: var(--accent);
+  text-decoration: none;
+  cursor: pointer;
+}
+code .file-link:hover,
+code .file-link:focus-visible {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+code .file-link:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(2px * var(--ui-scale));
+  border-radius: var(--oc-radius-soft);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Extracted from styles.css 2026-05-04: workspace shell flex
+   layout, pane resizer, body row/col resize cursor pinning.
+   ───────────────────────────────────────────────────────────── */
+
+.workspace-main {
+  --conversation-agent-rail-width: calc(24px * var(--ui-scale));
+
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  z-index: var(--ui-z-raised);
+  border-top: var(--ui-workspace-contour);
+  border-left: var(--ui-workspace-contour);
+  border-radius: var(--oc-radius-xl) 0 0 0;
+  background: var(--workspace-ambient-fill);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.conversation-workspace {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+.center-workbench {
+  flex: 1 1 0;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: transparent;
+}
+
+.center-workbench[hidden],
+.center-workbench[data-open="false"] {
+  display: none;
+}
+
+.center-workbench-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+.center-workbench-view {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+.center-workbench-view[data-open="false"] {
+  display: none;
+}
+
+.center-workbench-view[data-open="true"] {
+  min-width: 0;
+}
+
+.center-workbench-view[data-open="true"],
+.center-workbench-activity {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.center-workbench-activity {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+}
+
+.chat-conversation-activity {
+  container: chat-workbench / inline-size;
+  padding: 0;
+  background: var(--rail-surface);
+}
+
+.chat-conversation-activity .chat {
+  flex: 1 1 0;
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--chat-canvas);
+  box-shadow: none;
+}
+
+.chat-content-frame {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  overflow: hidden;
+  background: transparent;
+}
+
+.chat-message-pane {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chat-browser-preview-activity,
+.chat-file-editor-activity {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.file-editor-mount {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: none;
+  min-height: 0;
+  display: flex;
+  border-left: 0;
+  background: var(--surface);
+}
+
+.file-editor-mount > div {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+}
+
+.file-editor-pane {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.file-editor-header {
+  flex: 0 0 auto;
+  min-height: calc(36px * var(--ui-scale));
+  display: flex;
+  align-items: center;
+  gap: calc(6px * var(--ui-scale));
+  padding: 0 calc(6px * var(--ui-scale));
+  background: var(--surface-strong);
+}
+
+.file-editor-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(4px * var(--ui-scale));
+  font-family: var(--mono);
+  font-size: calc(12px * var(--ui-scale));
+  color: var(--text-strong);
+}
+
+.file-editor-title-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-editor-dirty {
+  color: var(--warn);
+  font-family: var(--font);
+}
+
+.file-editor-header .oc-button[data-ui="file-editor-save"] {
+  --oc-button-height: calc(24px * var(--ui-scale));
+  --oc-button-padding-x: calc(8px * var(--ui-scale));
+
+  font-size: var(--ui-font-control);
+}
+
+.file-editor-header .oc-button[data-ui="file-editor-save"]:not([data-dirty="true"]) {
+  --oc-button-color: var(--text-soft);
+}
+
+.file-editor-header .oc-button[data-ui="file-editor-close"] {
+  --oc-button-color: var(--text-muted);
+}
+
+.file-editor-header .oc-button[data-ui="file-editor-close"]:hover,
+.file-editor-header .oc-button[data-ui="file-editor-close"]:focus-visible {
+  --oc-button-bg: var(--subtle-2);
+  --oc-button-color: var(--text-strong);
+}
+
+.file-editor-body {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.file-editor-code {
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  background: var(--surface-inset);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: var(--ui-font-code);
+  line-height: 1.55;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.file-editor-code .cm-editor {
+  height: 100%;
+  min-height: 0;
+  background: var(--surface-inset);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: var(--ui-font-code);
+}
+
+.file-editor-code .cm-scroller {
+  font-family: var(--mono);
+  line-height: 1.55;
+}
+
+.file-editor-code .cm-content {
+  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  min-height: 100%;
+  caret-color: var(--accent);
+}
+
+.file-editor-code .cm-gutters {
+  background: var(--surface-inset);
+  color: var(--text-muted);
+  border-right: var(--oc-border-width) solid var(--border);
+}
+
+.file-editor-code .cm-activeLine,
+.file-editor-code .cm-activeLineGutter {
+  background: var(--ui-highlight-tone);
+}
+
+.file-editor-code .cm-focused {
+  outline: none;
+}
+
+.file-editor-code .cm-selectionBackground,
+.file-editor-code .cm-focused .cm-selectionBackground {
+  background: color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+.file-editor-empty {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: calc(8px * var(--ui-scale));
+  padding: calc(20px * var(--ui-scale));
+  color: var(--text-muted);
+  text-align: center;
+  background: var(--surface-inset);
+}
+
+.file-editor-empty > p {
+  max-width: 100%;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.file-editor-error {
+  flex: 0 0 auto;
+  padding: calc(6px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  background: var(--bad-dim);
+  color: var(--bad);
+  font-size: var(--ui-font-control);
+}
+
+.pane-resizer {
+  position: relative;
+  flex: 0 0 var(--ui-resizer-width);
+  min-width: var(--ui-resizer-width);
+  background: transparent;
+  cursor: col-resize;
+  touch-action: none;
+  user-select: none;
+  pointer-events: auto;
+  z-index: var(--ui-z-sticky);
+}
+
+.pane-resizer[hidden] {
+  display: none;
+}
+
+.pane-resizer[data-disabled="true"] {
+  cursor: default;
+  pointer-events: none;
+}
+
+.pane-resizer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(-5px * var(--ui-scale));
+  right: calc(-5px * var(--ui-scale));
+  cursor: col-resize;
+}
+
+.pane-resizer:focus-visible,
+.pane-resizer[data-active="true"] {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.pane-resizer:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(1px * var(--ui-scale));
+}
+
+.pane-resizer[data-disabled="true"]::after {
+  cursor: default;
+}
+
+body[data-resizing="true"] {
+  cursor: col-resize;
+  user-select: none;
+}
+
+body[data-resizing="true"] *,
+body[data-resizing="true"] .pane-resizer,
+body[data-resizing="true"] .pane-resizer::after {
+  cursor: col-resize;
+}
+
+.panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+  background: transparent;
+}
+
+.panel-body {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  min-height: 0;
+  overflow: hidden;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-top: 0;
+  border-radius: 0;
+  background-color: var(--panel-body-bg);
+  background-image: var(--rail-background-image);
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: var(--ui-overlay-shell-width) var(--ui-overlay-shell-height);
+  background-attachment: fixed;
+  backdrop-filter: var(--panel-body-blur);
+  box-shadow: none;
+  position: relative;
+}
+
+.sections,
+.task-scope-panel,
+.config-dialog-layout {
+  --section-stack-gap: calc(6px * var(--ui-scale));
+  --section-field-gap: calc(4px * var(--ui-scale));
+  --section-row-gap: calc(6px * var(--ui-scale));
+  --section-control-height: calc(34px * var(--ui-scale));
+  --section-badge-height: calc(20px * var(--ui-scale));
+  --section-head-padding-y: calc(6px * var(--ui-scale));
+  --section-head-padding-x: calc(12px * var(--ui-scale));
+  --section-body-padding-x: calc(12px * var(--ui-scale));
+  --section-body-padding-y: calc(10px * var(--ui-scale));
+  --section-input-padding-y: calc(7px * var(--ui-scale));
+  --section-input-padding-x: calc(11px * var(--ui-scale));
+}
+
+.right-dock {
+  --right-dock-width: calc(360px * var(--ui-scale));
+  flex: 0 0 var(--right-dock-width);
+  width: var(--right-dock-width);
+  max-width: min(var(--ui-right-dock-max-width), calc(100% - var(--ui-chat-min-width) - var(--oc-border-width)));
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* The dock remains a layout root while sharing the workspace material. */
+  border-left: 0;
+  background: transparent;
+  opacity: var(--ui-opacity-full);
+  transition:
+    flex-basis var(--ui-duration-slow) var(--ui-timing-standard),
+    width var(--ui-duration-slow) var(--ui-timing-standard),
+    max-width var(--ui-duration-slow) var(--ui-timing-standard),
+    opacity var(--ui-duration-base) var(--ui-timing-standard);
+}
+
+.right-dock[data-open="false"] {
+  flex-basis: 0;
+  width: 0;
+  max-width: 0;
+  opacity: var(--ui-opacity-hidden);
+  pointer-events: none;
+}
+
+.right-dock-resizer {
+  flex: 0 0 var(--oc-border-width);
+  width: var(--oc-border-width);
+  min-width: var(--oc-border-width);
+  align-self: stretch;
+  position: relative;
+  cursor: col-resize;
+  touch-action: none;
+  background: color-mix(in srgb, var(--divider-soft) 84%, transparent);
+  z-index: calc(var(--ui-z-raised) + 2);
+  opacity: var(--ui-opacity-full);
+  overflow: hidden;
+  transition:
+    flex-basis var(--ui-duration-slow) var(--ui-timing-standard),
+    width var(--ui-duration-slow) var(--ui-timing-standard),
+    min-width var(--ui-duration-slow) var(--ui-timing-standard),
+    opacity var(--ui-duration-base) var(--ui-timing-standard);
+}
+
+.right-dock-resizer[data-open="false"] {
+  flex-basis: 0;
+  width: 0;
+  min-width: 0;
+  opacity: var(--ui-opacity-hidden);
+  pointer-events: none;
+}
+
+.right-dock-resizer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: var(--oc-border-width);
+  transform: translateX(-50%);
+  background: currentColor;
+  color: transparent;
+}
+
+.right-dock-resizer::after {
+  content: "";
+  position: absolute;
+  inset: 0 calc(-5px * var(--ui-scale));
+  cursor: col-resize;
+}
+
+.right-dock-resizer:hover::before,
+.right-dock-resizer:focus-visible::before {
+  color: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+.right-dock-resizer:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(1px * var(--ui-scale));
+}
+
+/* Codex-style Dock tabs use a compact independent selected surface. */
+.right-dock-tabs-root {
+  display: contents;
+}
+
+.right-dock-tabs {
+  --right-dock-control-height: var(--ui-header-control-height);
+  --right-dock-tab-active-bg: color-mix(in srgb, var(--accent) 12%, var(--chat-canvas));
+  --right-dock-tab-radius: calc(12px * var(--ui-scale));
+
+  flex: 0 0 auto;
+  height: var(--ui-panel-header-height);
+  min-height: var(--ui-panel-header-height);
+  max-height: var(--ui-panel-header-height);
+  display: flex;
+  align-items: center;
+  gap: calc(2px * var(--ui-scale));
+  padding: calc(6px * var(--ui-scale)) calc(8px * var(--ui-scale));
+  border-bottom: var(--oc-border-width) solid var(--divider-soft);
+  background: var(--chat-canvas);
+}
+
+.right-dock-tab-strip.oc-tabs {
+  --oc-tabs-height: var(--right-dock-control-height);
+  --oc-tabs-gap: calc(6px * var(--ui-scale));
+  --oc-tabs-padding-x: 0;
+
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  align-self: center;
+  overflow: hidden;
+}
+
+.right-dock-tab-shell {
+  flex: 1 1 var(--ui-right-dock-tab-preferred-width);
+  position: relative;
+  display: inline-flex;
+  width: var(--ui-right-dock-tab-preferred-width);
+  min-width: var(--ui-right-dock-tab-min-width);
+  max-width: var(--ui-right-dock-tab-preferred-width);
+}
+
+.right-dock-tab-shell:has(.right-dock-tab[data-selected]) {
+  z-index: 1;
+}
+
+.right-dock-tab-shell[data-open="false"] {
+  display: none;
+}
+
+.right-dock-tab-shell[data-overflowed="true"] {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.right-dock-tab.oc-tab {
+  --oc-tabs-height: var(--right-dock-control-height);
+  --oc-tab-bg: transparent;
+  --oc-tab-active-bg: var(--right-dock-tab-active-bg);
+
+  position: relative;
+  justify-content: flex-start;
+  gap: var(--ui-gap-sm);
+  width: max-content;
+  min-width: 100%;
+  max-width: 100%;
+  padding: 0 calc(var(--right-dock-control-height) + var(--ui-gap-sm)) 0 calc(12px * var(--ui-scale));
+  border-radius: var(--right-dock-tab-radius);
+  background: transparent;
+  font: var(--ui-font-weight-body) var(--ui-font-small) var(--font);
+}
+
+.right-dock-tab.oc-tab[data-selected] {
+  --oc-tab-bg: var(--ui-list-selected-bg);
+  --oc-tab-color: var(--text-strong);
+
+  border-radius: var(--right-dock-tab-radius);
+  background: var(--ui-list-selected-bg);
+}
+
+.right-dock-tab.oc-tab[data-selected]:hover {
+  background: var(--ui-list-selected-hover-bg);
+}
+
+.right-dock-tab.oc-tab:not([data-selected]):is(:hover, :focus-visible) {
+  background: var(--ui-list-hover-bg);
+}
+
+.right-dock-tab__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.right-dock-tab__close.oc-button {
+  --oc-button-height: var(--right-dock-control-height);
+
+  width: var(--right-dock-control-height);
+  min-width: var(--right-dock-control-height);
+}
+
+.right-dock-more.oc-button,
+.right-dock-add.oc-button,
+.right-dock-close.oc-button {
+  --oc-button-height: var(--oc-density-icon-button);
+
+  width: var(--oc-density-icon-button);
+  min-width: var(--oc-density-icon-button);
+}
+
+.right-dock-tab__close.oc-button {
+  position: absolute;
+  top: 0;
+  right: calc(2px * var(--ui-scale));
+  display: inline-flex;
+}
+
+/* Overflow ··· menu */
+.right-dock-more-wrap {
+  position: relative;
+  flex: none;
+}
+
+.right-dock-more-wrap[data-show="false"] {
+  display: none;
+}
+
+/* + add-tab menu */
+.right-dock-add-wrap {
+  position: relative;
+  flex: none;
+}
+
+/* Body: holds the mounted tool views and the canonical empty tool launcher. */
+.right-dock-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.right-dock-empty {
+  display: none;
+  flex: 1 1 auto;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  padding: calc(24px * var(--ui-scale)) calc(16px * var(--ui-scale));
+  overflow: auto;
+}
+
+.right-dock-empty[data-active="true"] {
+  display: flex;
+}
+
+.right-dock-empty__list {
+  display: grid;
+  gap: calc(2px * var(--ui-scale));
+  width: max-content;
+  max-width: 100%;
+}
+
+.right-dock-empty__item {
+  width: 100%;
+  text-align: left;
+}
+
+.right-dock-empty__item.oc-button {
+  justify-content: start;
+  font-weight: var(--ui-font-weight-body);
+}
+
+.right-dock-empty__item > span {
+  text-align: left;
+}
+
+.right-dock-body .center-workbench-view {
+  flex: 1 1 auto;
+}
+
+.right-dock-body .center-workbench-view:not([data-selected]) {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .right-dock,
+  .right-dock-resizer {
+    transition-duration: var(--ui-duration-instant);
+  }
+}

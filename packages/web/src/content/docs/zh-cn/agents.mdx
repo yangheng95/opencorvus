@@ -1,0 +1,177 @@
+---
+title: Agent
+description: OpenCorvus 的 agent 身份、运行模板和专家团投影协议。
+---
+
+OpenCorvus 将**运行身份**与**运行模板**严格分离。调用方始终使用真实 agent 身份；模板只提供默认 prompt、model、tool、permission 和 session 行为。
+
+## Core 身份
+
+Core runtime 身份是平台拥有的封闭集合：
+
+- **Primary assistant** 是用户可选择的顶层 assistant，例如 `coding`、`chat`、`control` 和 `mission`。
+- **Host agent** 是固定的平台协调者；任务调度 host 是 `orchestrator`。
+- **Helper agent** 是 title、compaction 等平台私有服务，不能作为 dispatch target。
+
+未知 core 身份会立即失败。OpenCorvus 不扫描任意本地 agent markdown，也不允许通过内联 config 自由创建 agent。
+
+Goal 是 versioned Delivery Slice 的用户界面名称，只保存一个交付面及其验收合同；Task 是唯一 business lifecycle owner。
+
+## 投影 Agent
+
+Worker 身份来自 active 专家团项目 package：
+
+```text
+.opencorvus/expert-squads/<namespace>/<squad-id>/
+```
+
+Manifest 中 `capability_projection.agents.<agent-id>` 的 key 是 package worker 的精确身份。`dispatch_agent.dispatch.target`、持久化的 `WorkerTurnDescriptor`、消息、tool、skill、MCP（Model Context Protocol）provider、catalog row 和 skill mount 都保留同一个 ID。唯一的平台 worker 是 scheduler-only `universal-build`；它不进入 package agent、virtual workflow、catalog member 或公开 `projected_agent_ids`。
+
+每个投影 worker 必须声明 `base_role`。它只选择 core-owned ABI（Application Binary Interface，应用二进制接口）模板种子，为 prompt、model、tool、permission、session 和 adapter 提供默认契约。它不是运行身份或 alias；除非 package 显式声明了同名 agent ID，否则不能把 base role 当 dispatch target。
+
+Scheduler 和每个 worker 的 13 个 resource array 都是必填字段；没有授权时也必须明确写空数组。
+
+同一个 manifest v1 必须显式声明 `virtual_workflows` record；无需 binding graph 的直接调度使用 `{}`。每个已声明 node 在一个 Task 中只执行一次：
+
+```jsonc
+"capability_projection": {
+  "agents": {
+    "security-reviewer": {
+      "label": "Security reviewer",
+      "base_role": "integrity"
+    }
+  },
+  "virtual_workflows": {
+    "delivery-review": {
+      "label": "Delivery review",
+      "description": "Review completed delivery evidence.",
+      "nodes": {
+        "security-review": {
+          "agent_id": "security-reviewer",
+          "description": "Review the Task and cited Delivery Slice revisions.",
+          "depends_on": []
+        }
+      }
+    }
+  }
+}
+```
+
+该片段只展示身份与规划字段；完整严格 manifest 请从生成的 portable expert-squad template 开始。
+
+## 开发外置专家团
+
+无需 binding graph 时使用 `virtual_workflows: {}` 直接调度。Requirements、Architect、Integrity、review 与 Delivery Slice 输入都是 package 根据领域责任图作出的设计选择。Registry 与 SDK 只校验 manifest 形态、精确 Agent/依赖引用、canonical 依赖顺序和无环性，不强制一种通用角色拓扑。
+
+使用现有 SDK 的 Node-only authoring surface 将定义物化为新的 source directory。SDK 的 runtime manifest v1 schema 是 authoring 与 Registry 共用的 portable 单一来源。Writer 完成全部校验后写入同父目录 staging，通过一次 rename 原子发布，并拒绝已存在的目标目录。
+
+```ts
+import { createOpenCorvusClient } from "@opencorvus-ai/sdk"
+import {
+  validateExpertSquadPackageDefinition,
+  writeExpertSquadPackage,
+  type ExpertSquadPackageDefinition,
+} from "@opencorvus-ai/sdk/expert-squad-authoring"
+
+const definition: ExpertSquadPackageDefinition = { manifest, files }
+validateExpertSquadPackageDefinition(definition)
+await writeExpertSquadPackage({ directory: sourceDirectory, definition })
+
+const client = createOpenCorvusClient({ baseUrl, directory: projectDirectory })
+await client.expertSquad.validateFolder({ sourceDirectory }, { throwOnError: true })
+await client.expertSquad.importFolder(
+  { sourceDirectory, replace: false, installationScope: "project" },
+  { throwOnError: true },
+)
+```
+
+完整的具体定义见仓库中的 `templates/portable-expert-squad-template`。Validation 是只读操作并调用真实 Registry；import 是独立、显式的 Manager 操作，不会激活 package。Folder 和 ZIP import 必须声明 `installationScope: "project" | "global"`，两个 scope 共用同一个 Registry 和 manifest identity 规则。只有当项目需要使用它时，才通过唯一的 `prompt_profile.active` 选择已安装 manifest ID。
+
+Package resource ref 使用同一套语法。共享 Skill、tool 和 MCP（Model Context Protocol）server 使用 `<squad-id>/shared/<name>`；agent-local resource 使用 `<squad-id>/<agent-id>/<name>`，并且只能由该 agent 投影。Skill 是包含 `SKILL.md` 的目录；tool 位于 `tools/<name>.ts` 或对应 agent-local 路径；MCP server 位于 `mcp/<name>.jsonc` 或对应 agent-local 路径。选择单个 MCP capability 时使用 `<server-ref>/tool/<name>`、`<server-ref>/prompt/<name>` 或 `<server-ref>/resource/<name>`。`package_mcp_server_refs` 会挂载该 server 声明的全部 capability，因此不能再在 typed MCP ref array 中重复声明。默认 host resource 使用独立的 `default/...` namespace。
+
+Virtual workflow 声明精确的可执行协作变体，不要求覆盖每个投影 agent；但一个 workflow 被选中后，其中声明的每个 node 都是必需步骤。Scheduler 必须在首次 dispatch 前可见地指出与请求和证据匹配的精确 workflow，为每个 node 获得 terminal-success evidence，遵守全部 `depends_on`，并在无法满足时拒绝继续，而不是省略、跳步、替换或调整顺序。
+
+每个 node 在一个 Task 中只执行一次。首次 domain dispatch 前，Orchestrator 追加一次 immutable、visible workflow-selection decision，绑定 Task、workflow、精确 package revision/digest 与真实 scheduler message/tool identity。Dispatch lineage 绑定 node、Session、physical execution 与可选的精确 Slice revision subjects。Slice subject 不扩增 node，也不产生 scheduling ancestry。Graph 没有 dispatch scope、current-node pointer、step status、自动流转或 Host execution authority。
+
+条件分支必须声明为不同 workflow。
+
+### 组合独立专家团
+
+多专家团交付必须区分五类身份：
+
+- **Mission** 负责最终用户结果和依赖阶段 Task ledger；
+- **Task** 是一个固定 profile 的 squad 阶段及其可见 root session；
+- **Goal** 是该 Task 内 versioned Delivery Slice contract；
+- **Expert Squad** 是在 Task 全生命周期固定的自包含 capability package；
+- **Agent** 是 active squad 内部角色，不是隐含的跨 squad 阶段。
+
+多个 squad 合作时使用用户显式调用的 coordination Skill。Mission 只创建最早 ready 的阶段 Task，并显式传入 `promptProfile`、精确 workflow、前置 Task ID 和 terminal accepted evidence。Task 全生命周期保持同一 squad，只创建本地 Delivery Slice，并把每个 selected workflow node 执行一次。该 Task terminal acceptance 后，Mission 才创建下一个固定 profile Task。
+
+Dispatch lineage 与 execution attempt 是不可变 physical evidence identity，不是 business lifecycle。每次 Task 完成都追加一个 typed decision artifact，引用 accepted current Slice revisions、workflow selection、package revision 与精确 evidence。Goal 面板只从这些真实事实派生进度，不写 Goal status、retry、attempt、result 或 workspace state。
+
+Authoring SDK 可以用真实 manifest 静态校验组合契约：
+
+```ts
+import {
+  validateExpertSquadCollaboration,
+  type ExpertSquadCollaborationDefinition,
+} from "@opencorvus-ai/sdk/expert-squad-authoring"
+
+const collaboration: ExpertSquadCollaborationDefinition = {
+  schema_version: 1,
+  stage_execution: "mission_task",
+  id: "research-to-delivery",
+  label: "Research to delivery",
+  inputs: ["task-brief"],
+  outputs: ["accepted-delivery"],
+  stages: [researchStage, deliveryStage],
+}
+
+validateExpertSquadCollaboration({ definition: collaboration, manifests })
+```
+
+每个 stage 声明精确 `squad_id`、`workflow_id`、只能指向更早 stage 的 `depends_on`，以及可见 `consumes`/`produces` evidence key。`stage_execution: "mission_task"` 明确阶段所有权：fixed-profile Task 与完整 selected binding workflow 共同拥有 stage。阶段 workflow 只含 Task-level nodes，可以携带精确 Slice revision subjects。Validator 只做开发期完整性检查：不会选择 squad、创建 Mission Task/Slice、dispatch agent、持久化 stage state 或自动流转。运行时事实仍只来自 Mission-owned Tasks、Task-local Slice revisions、可见消息与 tool call、各 Task 的 `prompt_profile.active` 和 `PromptProfileResolver`。
+
+Global 安装会在写入前检查 OpenCorvus 已注册的所有项目目录中是否存在目标 manifest ID。从未注册的目录在首次打开时接受同一个严格 Registry 检查；OpenCorvus 不扫描无关用户目录，也不维护第二份 package identity 索引。
+
+通过 `prompt_profile.active` 选择唯一 active package。Resolver 将它一次性投影为 scheduler 和 worker capability。Inactive package 的 manifest 与 selector 元数据仍可在 catalog 中发现和选择，但不会贡献 active runtime 的 prompt、tool、skill、provider、mount 或 runtime hash。
+
+## Package tool 信任边界
+
+安装包含可执行 tool 的专家团 package 是一次显式信任决定。Package tool 与已安装 plugin 同属 trusted executable extension，会在 OpenCorvus host process 中执行，并获得 active projection 授予的真实 capability。
+
+OpenCorvus 会在加载 package tool 前校验精确编译字节、声明依赖 closure、package owner 边界和 SHA-256 digest。这些校验保证执行的确定性与可移植性，不是隔离恶意代码的 security sandbox。不要安装来源不可信的可执行 package。未来若支持 untrusted package code，必须设计独立 process boundary 和 capability protocol，不能再加一条 in-process loader。
+
+`tool({ args })` authoring API 会在 package bundle 自己的 Zod runtime 内构造唯一、完整的 object input schema。OpenCorvus 直接投影该 schema 进行本地校验和 provider 转换；package tool 不得再导出第二个 runtime schema authority。
+
+消费 compiled webpage evidence 的 package tool 必须从 `@opencorvus-ai/plugin` 导入 `CompiledWebpageStructureSchema` 和 `CompiledWebpageAssetGraphSchema`。它们是 compiled-webpage 的唯一 ABI；专家团不得复制 schema 形态形成冲突契约。
+
+## 内置 Base、Advanced 与 Research Studio
+
+`base` 是默认内置专家团 package，也是 Advanced 的便捷复合型版本。紧凑的 `composite-delivery` workflow 依次调度 Explore `base-researcher`、Delegated Worker `base-planner`、Build `base-developer` 与 Delegated Worker `base-tester`，使每个身份继承与职责一致的 runtime ownership。固定的 `integrity-verified-delivery` 变体在测试后追加 package-owned Integrity `base-integrity-reviewer`；固定的 `visual-verified-delivery` 变体在开发后并行运行 Tester 与 Visual Quality Assurance `base-visual-reviewer`，再由 Integrity Reviewer 汇合两支证据。Orchestrator 精确选择一张 graph，所选 graph 的每个节点都必须执行。四个核心身份依次发布并选择 canonical `base/research-report`、`base/implementation-plan`、`base/development-report` 与 `base/test-report` 交接 Artifact，两个复核身份使用 typed VisualReview 与 IntegrityReview 证据。Base 不创建或消费 RequirementSet、ContractGraph、Goal 或 Delivery Slice 计划事实。
+
+`advanced` 是可独立选择的完整内置软件开发团队，覆盖需求理解、需求工程、架构、工作量复核、源码与外部调查、界面调查与设计、实现、测试、视觉复核、系统完整性复核和事实核验。每张交付图都保留 Requirements → Architect 可追溯关系；独立调查从同一 frontier 启动，架构完成后工作量复核与交付并行，实作完成后测试与独立复核在 Artifact 输入允许时并行。这些都是 package 拥有的动态身份，不是 Core role。
+
+`research-studio` 是可独立选择的内置研究交付团队。Planner、Deep Researcher、Evidence Analyst、Fact Checker 与 Report Writer 按精确的 `direct-writing`、`evidence-synthesis` 或 `full-research` manifest workflow 交付持久化、可引用的研究报告。它直接内嵌，不通过 Market 或项目 payload provisioning 发布。
+
+`universal-build` 仍是没有更窄 package 实现合同之工作所使用的平台实现和 repository 修复身份。Advanced 交付图使用自己的 Build `implementation-engineer` 与 Delegated Worker `test-engineer`，但不移除 scheduler-only 的平台能力。
+
+选择其他 expert-squad package 会完整替换当前 package projection；各 package 不继承或组合 Base、Advanced、Research Studio 或 sibling package 的 Agent、prompt、skill、tool、mount、MCP resource 或 guidance 图。Resolver-owned `universal-build` 仍只对 scheduler 可用，并且只读取 runtime-template/顶层配置，不读取 package agent override。
+
+Expert Squad manifest 版本严格使用 `YYYY.MM.DD.N`，`N` 是该 Squad 当天的正整数修订序号。Registry 会拒绝任意 SemVer、裸日期、时间戳、无效日历日期以及零或带前导零的序号。
+
+当前身份与工具只能来自 active package 的精确声明，禁止 alias 解析。
+
+## 调度
+
+只有 Orchestrator 调度投影 worker。它用精确的 active agent ID 调用 `dispatch_agent`。Runner 解析该投影，通过 `base_role` 派生运行模板，创建 worker session，持久化不可变 `WorkerTurnDescriptor`，并为该 Turn 安装进程本地 runtime contract。进程本地 contract 只是执行机械结构：缺失它不能抹除 Session、持久事实或可见消息，也不能代表 Task liveness。
+
+`virtual_workflows` 是冻结且具有约束力的 scheduler contract，不是执行引擎或状态机。Orchestrator 通过可见判断选择匹配图后，必须遵守完整 node/dependency 顺序。图本身不能选择 active/default workflow、保存 step status、自动流转或 dispatch agent；真实调度和拒绝继续仍是可见的 Orchestrator 工具调用。
+
+## 事实、Turn 与验收
+
+投影工具写入持久领域事实，不是 terminal submit/finalizer call。模型正常 stream end 只是一项物理 Turn observation。可见 final assistant message 承担 worker 的叙事交接、限制、阻塞与稳定引用。Git 改动、命令/测试退出、进程事实和附件消费由 Host observation 独立记录。
+
+Dispatch lineage 与 execution attempt 是不可变 physical evidence identity，不是 business lifecycle。Orchestrator 直接综合持久 Session、真实 final message/error locator、领域 artifact、reviewer fact 与 Host observation。Task completion decision 引用 accepted current Slice revisions、workflow/package identity 与精确证据；Board 只读派生 Goal progress。
+
+专家团 package 边界见 [扩展](../extensions/)，active package 和 core runtime template 配置见 [配置](../config/)。

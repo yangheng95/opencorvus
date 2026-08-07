@@ -1,0 +1,130 @@
+.oc-checkbox,
+.oc-switch,
+.oc-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(6px * var(--ui-scale));
+  color: var(--text-soft);
+  cursor: pointer;
+}
+
+.oc-radio-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.oc-selection-input {
+  position: absolute;
+  width: calc(1px * var(--ui-scale));
+  height: calc(1px * var(--ui-scale));
+  margin: calc(-1px * var(--ui-scale));
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.oc-checkbox-control {
+  width: calc(16px * var(--ui-scale));
+  height: calc(16px * var(--ui-scale));
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-soft);
+  background: var(--surface-inset);
+  color: var(--text-on-accent);
+  transition:
+    background var(--ui-duration-fast),
+    border-color var(--ui-duration-fast),
+    box-shadow var(--ui-duration-fast);
+}
+
+.oc-checkbox-control[data-checked],
+.oc-checkbox-control[data-indeterminate] {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.oc-checkbox-indicator {
+  display: inline-flex;
+}
+
+.oc-radio-control {
+  width: calc(16px * var(--ui-scale));
+  height: calc(16px * var(--ui-scale));
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-pill);
+  background: var(--surface-inset);
+  transition:
+    background var(--ui-duration-fast),
+    border-color var(--ui-duration-fast),
+    box-shadow var(--ui-duration-fast);
+}
+
+.oc-radio-control[data-checked] {
+  border-color: var(--accent);
+}
+
+.oc-radio-indicator {
+  width: calc(8px * var(--ui-scale));
+  height: calc(8px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: var(--accent);
+  opacity: var(--ui-opacity-hidden);
+}
+
+.oc-radio-control[data-checked] .oc-radio-indicator {
+  opacity: var(--ui-opacity-full);
+}
+
+.oc-switch-control {
+  position: relative;
+  width: calc(40px * var(--ui-scale));
+  height: calc(24px * var(--ui-scale));
+  flex: 0 0 auto;
+  border: 0 solid transparent;
+  border-radius: var(--oc-radius-pill);
+  background: var(--surface-hover);
+  transition:
+    background var(--ui-duration-base) var(--ui-timing-standard),
+    border-color var(--ui-duration-base) var(--ui-timing-standard),
+    box-shadow var(--ui-duration-fast);
+}
+
+.oc-switch-control[data-checked] {
+  border-color: transparent;
+  background: var(--accent);
+}
+
+.oc-switch-thumb {
+  position: absolute;
+  top: calc(3px * var(--ui-scale));
+  left: calc(3px * var(--ui-scale));
+  width: calc(18px * var(--ui-scale));
+  height: calc(18px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: var(--surface);
+  box-shadow: 0 calc(1px * var(--ui-scale)) calc(2px * var(--ui-scale))
+    color-mix(in srgb, var(--ui-shadow-tone) 14%, transparent);
+  transition: transform var(--ui-duration-base) var(--ui-timing-standard);
+}
+
+.oc-switch-control[data-checked] .oc-switch-thumb {
+  transform: translateX(calc(16px * var(--ui-scale)));
+}
+
+:is(.oc-checkbox, .oc-switch, .oc-radio):focus-within :is(.oc-checkbox-control, .oc-switch-control, .oc-radio-control) {
+  box-shadow: 0 0 0 calc(2px * var(--ui-scale)) color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+:is(.oc-checkbox, .oc-switch, .oc-radio)[data-disabled] {
+  cursor: default;
+  opacity: var(--ui-opacity-disabled);
+}

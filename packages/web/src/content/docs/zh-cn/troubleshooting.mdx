@@ -1,0 +1,111 @@
+---
+title: 故障排查
+description: 按症状定位 OpenCorvus 问题——启动、Provider、orchestrator、channel 等。
+---
+
+按症状查。每条都给出**检查路径**而不是"试试重启"。
+
+## 启动类
+
+### `opencorvus serve` 起不来
+
+| 检查                         | 说明                                                                                         |
+| ---------------------------- | -------------------------------------------------------------------------------------------- |
+| `opencorvus doctor`          | 先跑一次全面诊断                                                                             |
+| 端口占用                     | 默认 7878，`netstat -ano \| findstr 7878`                                                    |
+| `OPENCORVUS_SERVER_PASSWORD` | 启用 HTTP Basic Auth；未设置时 `serve` 会打印 `server is unsecured` 并在无 Basic Auth 下启动 |
+| 权限：`ENOSPC`               | 解析后的 OpenCorvus data 或 config 目录磁盘满                                                |
+
+### Overlay 启动后连不上后端
+
+1. 托盘菜单 → Restart（会重启后端 + 刷新前端）
+2. 查看 `<runtime-root>/log` 下的 overlay startup log 和 sidecar log
+3. 手工探测 `GET http://127.0.0.1:<port>/global/health`
+4. 如果日志里的 PID 与托盘进程不一致，先停止旧后端进程，再重启 overlay
+
+## Provider / 模型类
+
+### Provider 返回空响应
+
+根因几乎都是**没设对应 provider 的 API Key**。`Env.state()` 在实例创建时快照 env，因此：
+
+1. `.env` 文件没加载到 → 改为显式注入：`DASHSCOPE_API_KEY=sk-... opencorvus serve`
+2. Key 设错 provider → `alibaba-cn` 用 `DASHSCOPE_API_KEY`，`anthropic` 用 `ANTHROPIC_API_KEY`
+3. Gateway 用错模型 → Gateway 不读 `OPENCORVUS_BENCHMARK_MODEL`，要写 [`cfg.model`](../config/)
+
+### Alibaba API 连接卡住 20+ 分钟
+
+`alibaba-coding-plan-cn` 已知在高峰期会 hang。**不要**增加 stall timeout 掩盖问题：
+
+- 对 `opencorvus run` 事件流 stall，设置 `OPENCORVUS_RUN_STALL_TIMEOUT_MS=30000`
+- 或切换到其他 [provider](../providers/)
+
+## Orchestrator 类
+
+### 任务卡在 projected worker 结果之前
+
+| 症状                               | 检查                                                                                                                                                                            |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 没有任何事件                       | LLM provider 连通性                                                                                                                                                             |
+| 有 reasoning tokens 但无 tool-call | 检查 `toolChoice`，reasoning 模型必须 `"auto"`                                                                                                                                  |
+| worker session 长时间无动静        | 查看持久化的 `dispatch_agent` 结果、子 session 终态，以及其精确 `dispatch.target` 是否仍在 active projection 中。只有确认 provider 连通后，才调整 decision inactivity timeout。 |
+
+### Task 出现意外的重复 dispatch
+
+应读取持久化的 Task、workflow binding 和 Delivery Slice 证据。检查：
+
+1. 读取当前 Goal/Delivery Slice revision、Board 派生进度、精确 reviewer artifact 与关联 execution evidence。
+2. 精确 workflow node 与 agent ID 是否仍存在于不可变 active package revision 中，以及 dispatch `work_scope` 是否为 `{ kind: "task" }`。
+3. 如果 Slice contract 有误，使用 `manage_task` action=`modify_goal`。已经执行过的 manifest node 不得重复；应暴露具体 blocker，或在 binding workflow 必须重新运行时创建范围正确的新 Task。
+
+### 权限审批无限等待
+
+| 检查                               | 说明                                                                                  |
+| ---------------------------------- | ------------------------------------------------------------------------------------- |
+| config 是否显式写了 `ask`          | 内置 agent 权限默认 `allow`；只有显式 `ask` 规则会等待操作员回复。                    |
+| `OPENCORVUS_PERMISSION_TIMEOUT_MS` | 未回复 ask 的拒绝超时，默认 `300000` ms（`src/permission/next.ts`）；最小值 `1000` ms |
+
+详见 [Permissions](../permissions/)。
+
+## 评估类
+
+### Benchmark 显示 "accepted" 但产物跑不起来
+
+典型症状是 review 证据不完整或本地验证被跳过。检查：
+
+1. 合并日志里是否有 `EEXIST` / conflict
+2. integrity evidence 是否在需要时包含 runtime readiness、build 与 startup checks
+3. benchmark report 是否包含 `localVerify.exitCode` 与 required check pass-rate evidence
+
+### TypeScript 编译错误未被检测
+
+确保 integrity 或 local verification 为 TypeScript 项目包含 lint/typecheck evidence。
+
+## Channel 类
+
+### Slack 消息被处理两次
+
+两个托管或独立 channel-runtime owner 使用了同一组 Slack app 凭据。**只保留一个运行时 owner。**
+
+### Webhook 校验失败（飞书/钉钉/企业微信/LINE）
+
+签名算法每家不同；核对 env 与后台值是否字面一致，注意**换行符**（特别是 Google Chat 的 service account JSON）。
+
+### 消息回帖到错误 thread
+
+`SessionCoordinator` 的 thread key = `platform:channel:thread_ts`。若回错，多半是某个 adapter 没把 thread_ts 透传出来。查对应 adapter 的 `onMessage` 里是否把 `thread_id` 写入 `IncomingMessage`。
+
+## 调试工具自身
+
+### git 命令异常
+
+:::tip
+按项目规则：**先修工具，再继续任务**。
+:::
+
+- `git worktree` 错：`git worktree prune`
+- Windows 上 `git` 换 `Git for Windows` 自带的 bash，不要用 MSYS2 的
+
+### `rg` / Grep 工具异常
+
+重装 ripgrep；Windows 上 Bun 可能连不到 PATH 里的 rg，需要绝对路径。

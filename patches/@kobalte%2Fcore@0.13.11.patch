@@ -1,0 +1,334 @@
+diff --git a/dist/index-29c57b8d.d.ts b/dist/index-29c57b8d.d.ts
+index 0d7846d..6370972 100644
+--- a/dist/index-29c57b8d.d.ts
++++ b/dist/index-29c57b8d.d.ts
+@@ -23,30 +23,30 @@ declare const Listbox: typeof ListboxRoot & {
+ 
+ declare const index_Listbox: typeof Listbox;
+ type index_ListboxContextValue = ListboxContextValue;
+-declare const index_ListboxItemCommonProps: typeof ListboxItemCommonProps;
+-declare const index_ListboxItemDescriptionCommonProps: typeof ListboxItemDescriptionCommonProps;
+-declare const index_ListboxItemDescriptionOptions: typeof ListboxItemDescriptionOptions;
+-declare const index_ListboxItemDescriptionProps: typeof ListboxItemDescriptionProps;
+-declare const index_ListboxItemDescriptionRenderProps: typeof ListboxItemDescriptionRenderProps;
+-declare const index_ListboxItemIndicatorCommonProps: typeof ListboxItemIndicatorCommonProps;
+-declare const index_ListboxItemIndicatorOptions: typeof ListboxItemIndicatorOptions;
+-declare const index_ListboxItemIndicatorProps: typeof ListboxItemIndicatorProps;
+-declare const index_ListboxItemIndicatorRenderProps: typeof ListboxItemIndicatorRenderProps;
+-declare const index_ListboxItemLabelCommonProps: typeof ListboxItemLabelCommonProps;
+-declare const index_ListboxItemLabelOptions: typeof ListboxItemLabelOptions;
+-declare const index_ListboxItemLabelProps: typeof ListboxItemLabelProps;
+-declare const index_ListboxItemLabelRenderProps: typeof ListboxItemLabelRenderProps;
+-declare const index_ListboxItemOptions: typeof ListboxItemOptions;
+-declare const index_ListboxItemProps: typeof ListboxItemProps;
+-declare const index_ListboxItemRenderProps: typeof ListboxItemRenderProps;
+-declare const index_ListboxRootCommonProps: typeof ListboxRootCommonProps;
+-declare const index_ListboxRootOptions: typeof ListboxRootOptions;
+-declare const index_ListboxRootProps: typeof ListboxRootProps;
+-declare const index_ListboxRootRenderProps: typeof ListboxRootRenderProps;
+-declare const index_ListboxSectionCommonProps: typeof ListboxSectionCommonProps;
+-declare const index_ListboxSectionOptions: typeof ListboxSectionOptions;
+-declare const index_ListboxSectionProps: typeof ListboxSectionProps;
+-declare const index_ListboxSectionRenderProps: typeof ListboxSectionRenderProps;
++type index_ListboxItemCommonProps = ListboxItemCommonProps;
++type index_ListboxItemDescriptionCommonProps = ListboxItemDescriptionCommonProps;
++type index_ListboxItemDescriptionOptions = ListboxItemDescriptionOptions;
++type index_ListboxItemDescriptionProps = ListboxItemDescriptionProps;
++type index_ListboxItemDescriptionRenderProps = ListboxItemDescriptionRenderProps;
++type index_ListboxItemIndicatorCommonProps = ListboxItemIndicatorCommonProps;
++type index_ListboxItemIndicatorOptions = ListboxItemIndicatorOptions;
++type index_ListboxItemIndicatorProps = ListboxItemIndicatorProps;
++type index_ListboxItemIndicatorRenderProps = ListboxItemIndicatorRenderProps;
++type index_ListboxItemLabelCommonProps = ListboxItemLabelCommonProps;
++type index_ListboxItemLabelOptions = ListboxItemLabelOptions;
++type index_ListboxItemLabelProps = ListboxItemLabelProps;
++type index_ListboxItemLabelRenderProps = ListboxItemLabelRenderProps;
++type index_ListboxItemOptions = ListboxItemOptions;
++type index_ListboxItemProps = ListboxItemProps;
++type index_ListboxItemRenderProps = ListboxItemRenderProps;
++type index_ListboxRootCommonProps = ListboxRootCommonProps;
++type index_ListboxRootOptions = ListboxRootOptions<any, any>;
++type index_ListboxRootProps = ListboxRootProps<any, any>;
++type index_ListboxRootRenderProps = ListboxRootRenderProps;
++type index_ListboxSectionCommonProps = ListboxSectionCommonProps;
++type index_ListboxSectionOptions = ListboxSectionOptions;
++type index_ListboxSectionProps = ListboxSectionProps;
++type index_ListboxSectionRenderProps = ListboxSectionRenderProps;
+ declare const index_useListboxContext: typeof useListboxContext;
+ declare namespace index {
+   export {
+diff --git a/dist/index-929e4c7c.d.ts b/dist/index-929e4c7c.d.ts
+index 5d7e53f..f3ace11 100644
+--- a/dist/index-929e4c7c.d.ts
++++ b/dist/index-929e4c7c.d.ts
+@@ -33,26 +33,26 @@ declare const Slider: typeof SliderRoot & {
+ declare const index_Slider: typeof Slider;
+-declare const index_SliderContextValue: typeof SliderContextValue;
++type index_SliderContextValue = SliderContextValue;
+ type index_SliderFillCommonProps<T extends HTMLElement = HTMLElement> = SliderFillCommonProps<T>;
+ type index_SliderFillOptions = SliderFillOptions;
+ type index_SliderFillProps<T extends ValidComponent | HTMLElement = HTMLElement> = SliderFillProps<T>;
+ type index_SliderFillRenderProps = SliderFillRenderProps;
+-declare const index_SliderInputProps: typeof SliderInputProps;
+-declare const index_SliderRootCommonProps: typeof SliderRootCommonProps;
+-declare const index_SliderRootOptions: typeof SliderRootOptions;
+-declare const index_SliderRootProps: typeof SliderRootProps;
+-declare const index_SliderRootRenderProps: typeof SliderRootRenderProps;
+-declare const index_SliderThumbCommonProps: typeof SliderThumbCommonProps;
+-declare const index_SliderThumbOptions: typeof SliderThumbOptions;
+-declare const index_SliderThumbProps: typeof SliderThumbProps;
+-declare const index_SliderThumbRenderProps: typeof SliderThumbRenderProps;
+-declare const index_SliderTrackCommonProps: typeof SliderTrackCommonProps;
+-declare const index_SliderTrackOptions: typeof SliderTrackOptions;
+-declare const index_SliderTrackProps: typeof SliderTrackProps;
+-declare const index_SliderTrackRenderProps: typeof SliderTrackRenderProps;
+-declare const index_SliderValueLabelCommonProps: typeof SliderValueLabelCommonProps;
+-declare const index_SliderValueLabelOptions: typeof SliderValueLabelOptions;
+-declare const index_SliderValueLabelProps: typeof SliderValueLabelProps;
+-declare const index_SliderValueLabelRenderProps: typeof SliderValueLabelRenderProps;
++type index_SliderInputProps = SliderInputProps;
++type index_SliderRootCommonProps = SliderRootCommonProps;
++type index_SliderRootOptions = SliderRootOptions;
++type index_SliderRootProps = SliderRootProps;
++type index_SliderRootRenderProps = SliderRootRenderProps;
++type index_SliderThumbCommonProps = SliderThumbCommonProps;
++type index_SliderThumbOptions = SliderThumbOptions;
++type index_SliderThumbProps = SliderThumbProps;
++type index_SliderThumbRenderProps = SliderThumbRenderProps;
++type index_SliderTrackCommonProps = SliderTrackCommonProps;
++type index_SliderTrackOptions = SliderTrackOptions;
++type index_SliderTrackProps = SliderTrackProps;
++type index_SliderTrackRenderProps = SliderTrackRenderProps;
++type index_SliderValueLabelCommonProps = SliderValueLabelCommonProps;
++type index_SliderValueLabelOptions = SliderValueLabelOptions;
++type index_SliderValueLabelProps = SliderValueLabelProps;
++type index_SliderValueLabelRenderProps = SliderValueLabelRenderProps;
+ declare const index_useSliderContext: typeof useSliderContext;
+ declare namespace index {
+   export {
+diff --git a/dist/index-42fe8e12.d.ts b/dist/index-42fe8e12.d.ts
+index 5d986b2..197580f 100644
+--- a/dist/index-42fe8e12.d.ts
++++ b/dist/index-42fe8e12.d.ts
+@@ -48,37 +48,37 @@ declare const Combobox: typeof ComboboxRoot & {
+ };
+ 
+ declare const index_Combobox: typeof Combobox;
+-declare const index_ComboboxContentCommonProps: typeof ComboboxContentCommonProps;
+-declare const index_ComboboxContentOptions: typeof ComboboxContentOptions;
+-declare const index_ComboboxContentProps: typeof ComboboxContentProps;
+-declare const index_ComboboxContentRenderProps: typeof ComboboxContentRenderProps;
+-declare const index_ComboboxContextValue: typeof ComboboxContextValue;
+-declare const index_ComboboxControlCommonProps: typeof ComboboxControlCommonProps;
+-declare const index_ComboboxControlOptions: typeof ComboboxControlOptions;
+-declare const index_ComboboxControlProps: typeof ComboboxControlProps;
+-declare const index_ComboboxControlRenderProps: typeof ComboboxControlRenderProps;
+-declare const index_ComboboxHiddenSelectProps: typeof ComboboxHiddenSelectProps;
+-declare const index_ComboboxIconProps: typeof ComboboxIconProps;
+-declare const index_ComboboxInputCommonProps: typeof ComboboxInputCommonProps;
+-declare const index_ComboboxInputOptions: typeof ComboboxInputOptions;
+-declare const index_ComboboxInputProps: typeof ComboboxInputProps;
+-declare const index_ComboboxInputRenderProps: typeof ComboboxInputRenderProps;
+-declare const index_ComboboxListboxCommonProps: typeof ComboboxListboxCommonProps;
+-declare const index_ComboboxListboxOptions: typeof ComboboxListboxOptions;
+-declare const index_ComboboxListboxProps: typeof ComboboxListboxProps;
+-declare const index_ComboboxListboxRenderProps: typeof ComboboxListboxRenderProps;
+-declare const index_ComboboxMultipleSelectionOptions: typeof ComboboxMultipleSelectionOptions;
+-declare const index_ComboboxPortalProps: typeof ComboboxPortalProps;
+-declare const index_ComboboxRootCommonProps: typeof ComboboxRootCommonProps;
+-declare const index_ComboboxRootOptions: typeof ComboboxRootOptions;
+-declare const index_ComboboxRootProps: typeof ComboboxRootProps;
+-declare const index_ComboboxRootRenderProps: typeof ComboboxRootRenderProps;
+-declare const index_ComboboxSingleSelectionOptions: typeof ComboboxSingleSelectionOptions;
++type index_ComboboxContentCommonProps = ComboboxContentCommonProps;
++type index_ComboboxContentOptions = ComboboxContentOptions;
++type index_ComboboxContentProps = ComboboxContentProps;
++type index_ComboboxContentRenderProps = ComboboxContentRenderProps;
++type index_ComboboxContextValue = ComboboxContextValue;
++type index_ComboboxControlCommonProps = ComboboxControlCommonProps;
++type index_ComboboxControlOptions = ComboboxControlOptions<any>;
++type index_ComboboxControlProps = ComboboxControlProps<any>;
++type index_ComboboxControlRenderProps = ComboboxControlRenderProps;
++type index_ComboboxHiddenSelectProps = ComboboxHiddenSelectProps;
++type index_ComboboxIconProps = ComboboxIconProps;
++type index_ComboboxInputCommonProps = ComboboxInputCommonProps;
++type index_ComboboxInputOptions = ComboboxInputOptions;
++type index_ComboboxInputProps = ComboboxInputProps;
++type index_ComboboxInputRenderProps = ComboboxInputRenderProps;
++type index_ComboboxListboxCommonProps = ComboboxListboxCommonProps;
++type index_ComboboxListboxOptions = ComboboxListboxOptions<any, any>;
++type index_ComboboxListboxProps = ComboboxListboxProps<any, any>;
++type index_ComboboxListboxRenderProps = ComboboxListboxRenderProps;
++type index_ComboboxMultipleSelectionOptions = ComboboxMultipleSelectionOptions<any>;
++type index_ComboboxPortalProps = ComboboxPortalProps;
++type index_ComboboxRootCommonProps = ComboboxRootCommonProps;
++type index_ComboboxRootOptions = ComboboxRootOptions<any, any>;
++type index_ComboboxRootProps = ComboboxRootProps<any, any>;
++type index_ComboboxRootRenderProps = ComboboxRootRenderProps;
++type index_ComboboxSingleSelectionOptions = ComboboxSingleSelectionOptions<any>;
+ type index_ComboboxTriggerCommonProps<T extends HTMLElement = HTMLElement> = ComboboxTriggerCommonProps<T>;
+-declare const index_ComboboxTriggerMode: typeof ComboboxTriggerMode;
++type index_ComboboxTriggerMode = ComboboxTriggerMode;
+ type index_ComboboxTriggerOptions = ComboboxTriggerOptions;
+ type index_ComboboxTriggerProps<T extends ValidComponent | HTMLElement = HTMLElement> = ComboboxTriggerProps<T>;
+ type index_ComboboxTriggerRenderProps = ComboboxTriggerRenderProps;
+ declare const index_useComboboxContext: typeof useComboboxContext;
+ declare namespace index {
+   export {
+diff --git a/dist/index-9e11b9e4.d.ts b/dist/index-9e11b9e4.d.ts
+index 9fab529..6fae062 100644
+--- a/dist/index-9e11b9e4.d.ts
++++ b/dist/index-9e11b9e4.d.ts
+@@ -35,13 +35,13 @@ declare const Menubar: typeof MenubarRoot & {
+ };
+ 
+ declare const index_Menubar: typeof Menubar;
+-declare const index_MenubarContextValue: typeof MenubarContextValue;
+-declare const index_MenubarMenuOptions: typeof MenubarMenuOptions;
+-declare const index_MenubarMenuProps: typeof MenubarMenuProps;
+-declare const index_MenubarRootCommonProps: typeof MenubarRootCommonProps;
+-declare const index_MenubarRootOptions: typeof MenubarRootOptions;
+-declare const index_MenubarRootProps: typeof MenubarRootProps;
+-declare const index_MenubarRootRenderProps: typeof MenubarRootRenderProps;
++type index_MenubarContextValue = MenubarContextValue;
++type index_MenubarMenuOptions = MenubarMenuOptions;
++type index_MenubarMenuProps = MenubarMenuProps;
++type index_MenubarRootCommonProps = MenubarRootCommonProps;
++type index_MenubarRootOptions = MenubarRootOptions;
++type index_MenubarRootProps = MenubarRootProps;
++type index_MenubarRootRenderProps = MenubarRootRenderProps;
+ declare const index_useMenubarContext: typeof useMenubarContext;
+ declare namespace index {
+   export {
+diff --git a/dist/index-df27bfc9.d.ts b/dist/index-df27bfc9.d.ts
+index 20bd113..b32c2c3 100644
+--- a/dist/index-df27bfc9.d.ts
++++ b/dist/index-df27bfc9.d.ts
+@@ -37,34 +37,34 @@ declare const Dialog: typeof DialogRoot & {
+ };
+ 
+ declare const index_Dialog: typeof Dialog;
+-declare const index_DialogCloseButtonCommonProps: typeof DialogCloseButtonCommonProps;
+-declare const index_DialogCloseButtonOptions: typeof DialogCloseButtonOptions;
+-declare const index_DialogCloseButtonProps: typeof DialogCloseButtonProps;
+-declare const index_DialogCloseButtonRenderProps: typeof DialogCloseButtonRenderProps;
+-declare const index_DialogContentCommonProps: typeof DialogContentCommonProps;
+-declare const index_DialogContentOptions: typeof DialogContentOptions;
+-declare const index_DialogContentProps: typeof DialogContentProps;
+-declare const index_DialogContentRenderProps: typeof DialogContentRenderProps;
++type index_DialogCloseButtonCommonProps = DialogCloseButtonCommonProps;
++type index_DialogCloseButtonOptions = DialogCloseButtonOptions;
++type index_DialogCloseButtonProps = DialogCloseButtonProps;
++type index_DialogCloseButtonRenderProps = DialogCloseButtonRenderProps;
++type index_DialogContentCommonProps = DialogContentCommonProps;
++type index_DialogContentOptions = DialogContentOptions;
++type index_DialogContentProps = DialogContentProps;
++type index_DialogContentRenderProps = DialogContentRenderProps;
+ type index_DialogContextValue = DialogContextValue;
+-declare const index_DialogDescriptionCommonProps: typeof DialogDescriptionCommonProps;
+-declare const index_DialogDescriptionOptions: typeof DialogDescriptionOptions;
+-declare const index_DialogDescriptionProps: typeof DialogDescriptionProps;
+-declare const index_DialogDescriptionRenderProps: typeof DialogDescriptionRenderProps;
+-declare const index_DialogOverlayCommonProps: typeof DialogOverlayCommonProps;
+-declare const index_DialogOverlayOptions: typeof DialogOverlayOptions;
+-declare const index_DialogOverlayProps: typeof DialogOverlayProps;
+-declare const index_DialogOverlayRenderProps: typeof DialogOverlayRenderProps;
+-declare const index_DialogPortalProps: typeof DialogPortalProps;
+-declare const index_DialogRootOptions: typeof DialogRootOptions;
+-declare const index_DialogRootProps: typeof DialogRootProps;
+-declare const index_DialogTitleCommonProps: typeof DialogTitleCommonProps;
+-declare const index_DialogTitleOptions: typeof DialogTitleOptions;
+-declare const index_DialogTitleProps: typeof DialogTitleProps;
+-declare const index_DialogTitleRenderProps: typeof DialogTitleRenderProps;
+-declare const index_DialogTriggerCommonProps: typeof DialogTriggerCommonProps;
+-declare const index_DialogTriggerOptions: typeof DialogTriggerOptions;
+-declare const index_DialogTriggerProps: typeof DialogTriggerProps;
+-declare const index_DialogTriggerRenderProps: typeof DialogTriggerRenderProps;
++type index_DialogDescriptionCommonProps = DialogDescriptionCommonProps;
++type index_DialogDescriptionOptions = DialogDescriptionOptions;
++type index_DialogDescriptionProps = DialogDescriptionProps;
++type index_DialogDescriptionRenderProps = DialogDescriptionRenderProps;
++type index_DialogOverlayCommonProps = DialogOverlayCommonProps;
++type index_DialogOverlayOptions = DialogOverlayOptions;
++type index_DialogOverlayProps = DialogOverlayProps;
++type index_DialogOverlayRenderProps = DialogOverlayRenderProps;
++type index_DialogPortalProps = DialogPortalProps;
++type index_DialogRootOptions = DialogRootOptions;
++type index_DialogRootProps = DialogRootProps;
++type index_DialogTitleCommonProps = DialogTitleCommonProps;
++type index_DialogTitleOptions = DialogTitleOptions;
++type index_DialogTitleProps = DialogTitleProps;
++type index_DialogTitleRenderProps = DialogTitleRenderProps;
++type index_DialogTriggerCommonProps = DialogTriggerCommonProps;
++type index_DialogTriggerOptions = DialogTriggerOptions;
++type index_DialogTriggerProps = DialogTriggerProps;
++type index_DialogTriggerRenderProps = DialogTriggerRenderProps;
+ declare const index_useDialogContext: typeof useDialogContext;
+ declare namespace index {
+   export {
+diff --git a/dist/chunk/3NI6FTA2.jsx b/dist/chunk/3NI6FTA2.jsx
+--- a/dist/chunk/3NI6FTA2.jsx
++++ b/dist/chunk/3NI6FTA2.jsx
+@@ -39,6 +39,6 @@ function assignPointerEventToLayers() {
+ function assignPointerEventToLayers() {
+   for (const { node } of layers) {
+-    node.style.pointerEvents = isBelowPointerBlockingLayer(node) ? "none" : "auto";
++    node.style.pointerEvents = isBelowPointerBlockingLayer(node) ? "none" : hasPointerBlockingLayer() ? "auto" : "";
+   }
+ }
+ function disableBodyPointerEvents(node) {
+diff --git a/src/popper/popper-root.tsx b/src/popper/popper-root.tsx
+--- a/src/popper/popper-root.tsx
++++ b/src/popper/popper-root.tsx
+@@ -103,0 +104,3 @@
++	/** Whether to update the popper position on every animation frame. */
++	autoUpdateAnimationFrame?: boolean;
++
+@@ -346,0 +350 @@
++				animationFrame: mergedProps.autoUpdateAnimationFrame,
+diff --git a/dist/popper-root-14a88a55.d.ts b/dist/popper-root-14a88a55.d.ts
+--- a/dist/popper-root-14a88a55.d.ts
++++ b/dist/popper-root-14a88a55.d.ts
+@@ -79,5 +79,7 @@ interface PopperRootOptions {
+     fitViewport?: boolean;
+     /** Whether to hide the popper when the anchor element becomes occluded. */
+     hideWhenDetached?: boolean;
++    /** Whether to update the popper position on every animation frame. */
++    autoUpdateAnimationFrame?: boolean;
+     /** The minimum padding in order to consider the anchor element occluded. */
+     detachedPadding?: number;
+diff --git a/dist/chunk/LMWVDFW6.js b/dist/chunk/LMWVDFW6.js
+--- a/dist/chunk/LMWVDFW6.js
++++ b/dist/chunk/LMWVDFW6.js
+@@ -303,6 +303,7 @@ function PopperRoot(props) {
+     }
+     const cleanupAutoUpdate = autoUpdate(referenceEl, floatingEl, updatePosition, {
+       // JSDOM doesn't support ResizeObserver
+-      elementResize: typeof ResizeObserver === "function"
++      elementResize: typeof ResizeObserver === "function",
++      animationFrame: mergedProps.autoUpdateAnimationFrame
+     });
+     onCleanup(cleanupAutoUpdate);
+diff --git a/dist/chunk/2CTBMVJ4.jsx b/dist/chunk/2CTBMVJ4.jsx
+--- a/dist/chunk/2CTBMVJ4.jsx
++++ b/dist/chunk/2CTBMVJ4.jsx
+@@ -365,5 +365,6 @@ function PopperRoot(props) {
+       {
+         // JSDOM doesn't support ResizeObserver
++        animationFrame: mergedProps.autoUpdateAnimationFrame,
+         elementResize: typeof ResizeObserver === "function"
+       }
+     );
+diff --git a/dist/chunk/ZKYDDHM6.js b/dist/chunk/ZKYDDHM6.js
+--- a/dist/chunk/ZKYDDHM6.js
++++ b/dist/chunk/ZKYDDHM6.js
+@@ -40,8 +40,8 @@ function assignPointerEventToLayers() {
+ function assignPointerEventToLayers() {
+   for (const {
+     node
+   } of layers) {
+-    node.style.pointerEvents = isBelowPointerBlockingLayer(node) ? "none" : "auto";
++    node.style.pointerEvents = isBelowPointerBlockingLayer(node) ? "none" : hasPointerBlockingLayer() ? "auto" : "";
+   }
+ }
+ function disableBodyPointerEvents(node) {

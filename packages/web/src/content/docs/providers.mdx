@@ -1,0 +1,108 @@
+---
+title: Providers
+description: OpenCorvus LLM provider configuration and model selection.
+---
+
+OpenCorvus's LLM layer sits on top of [Vercel AI SDK](https://sdk.vercel.ai/), using `@ai-sdk/*` packages for each provider.
+
+## Built-in providers
+
+From `packages/opencorvus/package.json`:
+
+| Provider                                                                                | Package                                                |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| Anthropic                                                                               | `@ai-sdk/anthropic`                                    |
+| OpenAI / compatible                                                                     | `@ai-sdk/openai` + `@ai-sdk/openai-compatible`         |
+| Google                                                                                  | `@ai-sdk/google` + `@ai-sdk/google-vertex`             |
+| Amazon Bedrock                                                                          | `@ai-sdk/amazon-bedrock`                               |
+| Azure OpenAI                                                                            | `@ai-sdk/azure`                                        |
+| Cerebras / Cohere / DeepInfra / Groq / Mistral / Perplexity / TogetherAI / Vercel / xAI | `@ai-sdk/*`                                            |
+| GitLab AI                                                                               | `@gitlab/gitlab-ai-provider`                           |
+| OpenRouter                                                                              | `@openrouter/ai-sdk-provider`                          |
+| Vercel Gateway                                                                          | `ai-gateway-provider`                                  |
+
+China-region aliases (declared in `channel-runtime/.env.example`):
+
+| Alias                    | Underlying            |
+| ------------------------ | --------------------- |
+| `alibaba-cn`             | DashScope             |
+| `alibaba-coding-plan-cn` | DashScope Coding Plan |
+| `moonshotai-cn`          | Moonshot              |
+| `deepseek`               | DeepSeek              |
+
+## Configuration
+
+### A. Environment variables
+
+Each provider's canonical key name works out of the box:
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+export OPENAI_API_KEY=sk-...
+export GOOGLE_GENERATIVE_AI_API_KEY=...
+export DEEPSEEK_API_KEY=...
+export OPENROUTER_API_KEY=...
+
+# Alibaba DashScope
+export DASHSCOPE_API_KEY=sk-...                 # alibaba-cn and shared DashScope key
+export ALIBABA_CODING_PLAN_API_KEY=sk-sp-...    # alibaba-coding-plan-cn
+```
+
+### B. Custom provider (OpenAI-compatible)
+
+In `opencorvus.jsonc`:
+
+```jsonc
+{
+  "provider": {
+    "myhub": {
+      "api": "https://your-gateway/v1",
+      "env": ["MYHUB_API_KEY"],
+      "models": {
+        "custom-1": { "name": "Custom 1", "tool_call": true },
+      },
+    },
+  },
+  "model": "myhub/custom-1",
+}
+```
+
+`env` declares required env names; missing keys fail loud — no fallback. Provider base URLs come from the model database; key prefixes do not override provider routing.
+
+## Model selection
+
+Model selection has explicit identity layers:
+
+| Scenario | Config |
+| --- | --- |
+| Project default | `model` |
+| Fixed Primary/Helper/Host identity | `agent.<fixed-id>.model` |
+| Worker template | `runtime_templates.<base-role>.model` |
+| Exact projected worker | `expert_squads.<squad-id>.agents.<agent-id>.runtime.model` |
+| Vision / screenshot understanding | `OPENCORVUS_VISION_MODEL` |
+
+Splitting planning from execution lets you **plan with a strong/slow model and execute with a fast/cheaper one**:
+
+```jsonc
+{
+  "model": "openai/gpt-5.5",
+  "agent": {
+    "coding": { "model": "anthropic/claude-sonnet-4-6" },
+  },
+  "runtime_templates": {
+    "architect": { "model": "anthropic/claude-sonnet-4-6" },
+  },
+}
+```
+
+## Reasoning-model constraints
+
+For Claude reasoning, qwq, o1, and similar:
+
+1. **Must use `streamText`** — `generateText` hangs while reasoning tokens stream.
+2. **Must use `toolChoice: "auto"`**, not `"required"`.
+3. **Prompt caching** matters (5-minute TTL for Anthropic reasoning models). Reuse system prompts across turns.
+
+## Excluding a provider
+
+To avoid using a provider, simply don't configure its env — OpenCorvus removes keyless providers from the available list. Do not rely on heuristic filtering.

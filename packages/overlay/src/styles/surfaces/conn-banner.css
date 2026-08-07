@@ -1,0 +1,59 @@
+/* ─────────────────────────────────────────────────────────────
+   Connection Banner (.conn-banner)
+   The fixed-position bottom banner that surfaces when the overlay
+   loses or regains connection to the engine. Two visual states:
+   data-status="connecting" (warn-toned) and the default error
+   (bad-toned). The pulsing dot uses currentColor so the keyframe
+   doesn't have to fork per-status.
+   Component: src/components/ConnectionBanner.tsx (or similar).
+   ───────────────────────────────────────────────────────────── */
+
+.conn-banner {
+  position: fixed;
+  bottom: calc(20px * var(--ui-scale));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--ui-z-titlebar);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-sm) var(--ui-gap-lg);
+  border-radius: var(--oc-radius-pill);
+  background: color-mix(in srgb, var(--bad) 18%, var(--surface-strong));
+  color: var(--text-strong);
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 56%, transparent);
+  box-shadow: 0 calc(18px * var(--ui-scale)) calc(40px * var(--ui-scale)) var(--ui-shadow-tone);
+  font-size: var(--ui-font-control);
+  pointer-events: auto;
+}
+
+.conn-banner[data-status="connecting"] {
+  background: color-mix(in srgb, var(--warn) 18%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--warn) 56%, transparent);
+}
+
+.conn-banner__dot {
+  width: calc(8px * var(--ui-scale));
+  height: calc(8px * var(--ui-scale));
+  border-radius: 50%;
+  background: var(--bad);
+  box-shadow: 0 0 0 calc(3px * var(--ui-scale)) color-mix(in srgb, var(--bad) 18%, transparent);
+}
+
+.conn-banner[data-status="connecting"] .conn-banner__dot {
+  background: var(--warn);
+  box-shadow: 0 0 0 calc(3px * var(--ui-scale)) color-mix(in srgb, var(--warn) 18%, transparent);
+}
+
+.conn-banner__text {
+  white-space: nowrap;
+  max-width: 60cqw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .conn-banner__dot {
+    animation: none;
+  }
+}

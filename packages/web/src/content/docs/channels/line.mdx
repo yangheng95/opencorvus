@@ -1,0 +1,29 @@
+---
+title: LINE
+description: LINE adapter using Messaging API Webhook.
+---
+
+## Prerequisites
+
+1. Create a Provider and Channel (Messaging API) at [LINE Developers](https://developers.line.biz/).
+2. Obtain **Channel Access Token** and **Channel Secret**.
+3. Webhook URL: `https://<your-public-host>/line`; set Use Webhook = Enabled.
+
+## Environment
+
+```bash
+export LINE_CHANNEL_ACCESS_TOKEN=...
+export LINE_CHANNEL_SECRET=...
+export LINE_WEBHOOK_HOST=0.0.0.0
+export LINE_WEBHOOK_PORT=16670
+export LINE_WEBHOOK_PATH=/line
+```
+
+## Thread semantics
+
+LINE is 1:1 or group; thread key = `userId` or `groupId`.
+
+## Troubleshooting
+
+- **Signature validation failed**: `LINE_CHANNEL_SECRET` wrong; signature algorithm is HMAC-SHA256.
+- **Reply token expired**: this adapter sends task responses with LINE push messages; reply tokens are only part of incoming webhook metadata.

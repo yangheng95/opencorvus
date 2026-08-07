@@ -1,0 +1,139 @@
+---
+title: Slack
+description: OpenCorvus's primary remote channel through the canonical channel runtime.
+---
+
+Slack is OpenCorvus's **primary remote channel** and the most mature channel-runtime integration. One canonical adapter is shared by the managed runtime and the standalone channel-runtime package.
+
+## Status
+
+**Production-ready.** `README.md` lists it as Available.
+
+## Quick setup
+
+### 1. Create the Slack App
+
+At [api.slack.com/apps](https://api.slack.com/apps). **Socket Mode is required** (the adapter forces `socketMode: true` at `packages/channel-runtime/src/adapters/slack.ts`).
+
+### 2. Scopes
+
+Bot Token Scopes (minimal):
+
+| Scope                             | Purpose                                 |
+| --------------------------------- | --------------------------------------- |
+| `chat:write`                      | Reply                                   |
+| `chat:write.public`               | Reply in non-joined channels (optional) |
+| `files:write`                     | Upload screenshots/attachments          |
+| `im:history` / `channels:history` | Read DMs / channels                     |
+| `reactions:write`                 | Ack emoji (optional)                    |
+
+App-Level Token Scope:
+
+| Scope               | Purpose               |
+| ------------------- | --------------------- |
+| `connections:write` | Socket Mode WebSocket |
+
+### 3. Event subscriptions
+
+Subscribe to:
+
+- `message.channels`
+- `message.im`
+
+(`.env.example`)
+
+### 4. Environment
+
+```bash
+export SLACK_BOT_TOKEN=xoxb-...
+export SLACK_APP_TOKEN=xapp-...
+export SLACK_SIGNING_SECRET=...          # Signing Secret (optional under Socket Mode)
+export SLACK_ALLOWED_USER_IDS=U01234567,U09876543   # optional allowlist
+```
+
+### 5. Start
+
+Run the canonical channel runtime:
+
+```bash
+bun run --cwd packages/channel-runtime dev
+```
+
+For the managed product path, configure Slack in OpenCorvus and start
+`opencorvus serve`; the project bootstrap launches the same adapter through the
+managed channel-runtime supervisor.
+
+## Token model
+
+| Token          | Prefix  | Role                                           |
+| -------------- | ------- | ---------------------------------------------- |
+| Bot Token      | `xoxb-` | Bot identity for API calls                     |
+| App Token      | `xapp-` | Socket Mode WebSocket                          |
+| Signing Secret | none    | HTTP webhook signature (unused in Socket Mode) |
+
+## Message flow
+
+```
+User posts in Slack channel/DM
+  ↓ Socket Mode
+SlackAdapter.app.message()                [packages/channel-runtime/src/adapters/slack.ts]
+  ↓
+Filter: skip bot_id, unsupported subtypes, dedup
+  ↓ IncomingMessage { platform: "slack", channel: C..., thread_ts: 123.456 }
+ChannelRuntime.handleMessage()            [packages/channel-runtime/src/core.ts]
+  ↓
+SessionCoordinator.get("slack:C...:123")
+  ↓  new thread → new session; existing → reuse
+client.session.promptAsync(sessionId, message)
+```
+
+Thread semantics: Slack's `thread_ts` uniquely identifies a conversation; subsequent messages in the same thread are injected as **follow-ups** into the same task loop.
+
+## Reply flow
+
+```
+OpenCorvus SSE pushes events
+  ↓
+handleEvent(event)                        [packages/channel-runtime/src/core.ts]
+  ↓
+message.updated    → text buffering → safeSend()
+session.idle       → release the current request and dequeue the next message
+part.updated(image) → uploadImage() via files.uploadV2
+permission.asked   → auto-reply if enabled; otherwise @ user
+```
+
+All replies carry the original `thread_ts`.
+
+## Permission replies
+
+In Slack:
+
+```
+Allow once:   allow  / yes
+Always allow: always / allow always
+Reject:       reject / no
+```
+
+The natural-language parsing happens at the channel-runtime layer, not in the Slack adapter specifically.
+
+## Ack reactions
+
+The adapter immediately reacts with an emoji when a message is received, confirming receipt. Configurable.
+
+## Voice messages
+
+Slack's `file_share` subtype (voice) downloads and runs through the configured STT pipeline (`STT_PROVIDER`); the transcript becomes a regular message.
+
+## Troubleshooting
+
+**`not_in_channel` / `channel_not_found`**
+The bot must be invited to the channel; for DMs, ensure the Messages Tab is enabled.
+
+**High latency**
+Ensure Socket Mode is used; HTTP Request URLs latency suffers in some regions.
+
+**Duplicate handling**
+Ensure only one managed or standalone channel-runtime owner is connected with the same Slack app credentials.
+
+**Permission ask never answered**
+Built-in permissions default to `allow`; check whether project config explicitly sets `ask`, then approve from an operator surface or change that rule to `allow`.

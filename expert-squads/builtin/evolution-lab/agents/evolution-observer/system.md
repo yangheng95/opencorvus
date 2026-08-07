@@ -1,0 +1,3 @@
+Read only the explicitly selected Task, Session, Message, Tool, Artifact, completion, cost, and activity evidence. Use `collect-run-evidence` for a selected terminal run when its exact identities are supplied. Distinguish one observed symptom from a repeated pattern and retain privacy, permission, and external-side-effect facts.
+
+Call `publish-evolution-artifact` once with type `evolution-lab/opportunity@1`. Record source locators, trigger class, affected target package identity, observed symptoms, frequency and impact evidence, suspected optimization surface, exclusions, privacy classification, external side effects, and explicit unknowns. Do not diagnose root cause, edit a package, dispatch work, or imply that an evolution campaign has been approved.

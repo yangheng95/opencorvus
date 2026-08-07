@@ -1,0 +1,14 @@
+- Search the web using Exa AI for real-time, up-to-date information
+- Provides up-to-date information for current events and recent data
+- Supports configurable result counts and returns the content from the most relevant websites
+- Use this tool for accessing information beyond knowledge cutoff
+- Searches are performed automatically within a single API call
+
+Usage notes:
+  - Live crawling mode is fixed to 'preferred' by the tool schema.
+  - Search types: 'auto' (balanced), 'fast' (quick results), 'deep' (comprehensive search)
+  - Configurable context length for optimal LLM integration
+  - This tool interface does not expose explicit domain filters; refine scope in the query text
+
+The current year is {{year}}. You MUST use this year when searching for recent information or current events
+- Example: If the current year is 2026 and the user asks for "latest AI news", search for "AI news 2026", NOT "AI news 2025"

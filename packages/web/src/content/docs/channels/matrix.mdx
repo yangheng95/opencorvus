@@ -1,0 +1,26 @@
+---
+title: Matrix
+description: Matrix adapter using Client-Server API long polling — no public callback required.
+---
+
+## Prerequisites
+
+1. Register a Bot account on your Homeserver (e.g., matrix.org or self-hosted Synapse).
+2. Obtain an Access Token (via login API or Element → Help & About → Advanced).
+
+## Environment
+
+```bash
+export MATRIX_HOMESERVER_URL=https://matrix.example.com
+export MATRIX_ACCESS_TOKEN=syt_...
+export MATRIX_SINCE_TOKEN=          # optional sync cursor for resumability
+```
+
+## Thread semantics
+
+Matrix `event_id` + `rel_type: m.thread` is thread key; plain messages use `room_id`.
+
+## Troubleshooting
+
+- **401 Unrecognised token**: token expired; re-login to obtain a new one.
+- **Missing messages**: `MATRIX_SINCE_TOKEN` not persisted; on restart the adapter syncs from the latest event, dropping messages in between.

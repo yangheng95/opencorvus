@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ARG=${1:-patch}
+
+if [[ "$ARG" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?$ ]]; then
+  VERSION="${ARG#v}"
+else
+  case "$ARG" in
+    patch|minor|major) ;;
+    *)
+      echo "Usage: ./script/release [patch|minor|major|x.y.z|vx.y.z]"
+      exit 1
+      ;;
+  esac
+
+  VERSION=$(bun -e 'const bump = process.argv[2] ?? "patch"
+const pkg = await Bun.file("packages/opencorvus/package.json").json()
+const latest = typeof pkg.version === "string" ? pkg.version.trim().replace(/^v(?=\d)/, "") : ""
+if (!latest) {
+  throw new Error("missing version in packages/opencorvus/package.json")
+}
+const base = latest.split(/[-+]/, 1)[0]
+const [major, minor, patch] = base.split(".").map((item) => Number(item) || 0)
+if (bump === "major") {
+  console.log(`${major + 1}.0.0`)
+  process.exit(0)
+}
+if (bump === "minor") {
+  console.log(`${major}.${minor + 1}.0`)
+  process.exit(0)
+}
+console.log(`${major}.${minor}.${patch + 1}`)' "$ARG")
+fi
+
+echo "Synchronizing versions to $VERSION"
+bun ./script/sync-version.ts "$VERSION"
+
+echo "Dispatching build.yml for v$VERSION"
+gh workflow run build.yml -f "version=$VERSION"

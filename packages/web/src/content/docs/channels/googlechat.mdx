@@ -1,0 +1,36 @@
+---
+title: Google Chat
+description: Google Chat adapter using Webhook / HTTP events backed by a Google Cloud Service Account.
+---
+
+## Prerequisites
+
+1. Create a project in [Google Cloud Console](https://console.cloud.google.com/) → enable Google Chat API.
+2. Create a Service Account → download JSON key.
+3. Publish an App via the Chat API → Configuration:
+   - App type: Bot
+   - Connection settings: HTTP endpoint
+   - URL: `https://<your-public-host>/googlechat`
+   - Scope: `chat.messages`
+
+## Environment
+
+```bash
+export GOOGLECHAT_SERVICE_ACCOUNT_JSON='{"type":"service_account","project_id":"...","private_key":"..."}'
+export GOOGLECHAT_AUTH_AUDIENCE=https://<your-public-host>/googlechat
+export GOOGLECHAT_WEBHOOK_HOST=0.0.0.0
+export GOOGLECHAT_WEBHOOK_PORT=16668
+export GOOGLECHAT_WEBHOOK_PATH=/googlechat
+```
+
+The JSON must be a **single line** (or base64-wrap and decode at startup).
+
+## Thread semantics
+
+Google Chat's `thread.name` is used directly as thread key.
+
+## Troubleshooting
+
+- **401 from webhook**: `GOOGLECHAT_AUTH_AUDIENCE` must exactly match the HTTP endpoint audience used by Google Chat.
+- **Unresponsive despite online**: Chat API defaults limit bots to Workspace users; confirm Service Account has domain authorization.
+- **JSON parse error**: preserve `\n` as literal `\n` in the private key (not a real newline).

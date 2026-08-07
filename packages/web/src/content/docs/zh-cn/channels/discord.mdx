@@ -1,0 +1,37 @@
+---
+title: Discord
+description: Discord 适配器通过 Gateway WebSocket + REST API 实时接收消息，无需公网回调。
+---
+
+## 前置
+
+1. 在 [Discord Developer Portal](https://discord.com/developers/applications) 创建 Application → 添加 Bot。
+2. **必须开启**以下 Privileged Gateway Intents：
+   - `MESSAGE CONTENT INTENT`
+   - `SERVER MEMBERS INTENT`
+3. OAuth2 → URL Generator，勾选 `bot`、`applications.commands`；Bot Permissions 至少勾 `Send Messages`、`Read Message History`、`Attach Files`。
+4. 用生成的链接把 Bot 邀请进服务器。
+
+## 环境变量
+
+```bash
+export DISCORD_BOT_TOKEN=...
+```
+
+## Thread 语义
+
+Discord 的 **Thread**（公开/私有分支）直接映射为 OpenCorvus 的 thread；若在普通 channel 里发消息，则以 `channel_id + user_id` 组合作为 thread key（私聊）。
+
+## 消息类型支持
+
+| 类型                  | 支持情况                |
+| --------------------- | ----------------------- |
+| 文本                  | ✅（Markdown 子集）     |
+| 图片 / 附件           | ✅                      |
+| 语音（voice message） | ✅ 走 STT               |
+| Slash command         | ⚠️ 暂不支持，走普通消息 |
+
+## 故障排查
+
+- **Bot 上线但不响应**：检查 MESSAGE CONTENT INTENT 是否开启（2022 年后 Discord 默认关闭）。
+- **附件上传失败**：免费账号单文件 ≤ 25MB，Nitro 100MB。

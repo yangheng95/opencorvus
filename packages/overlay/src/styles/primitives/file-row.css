@@ -1,0 +1,101 @@
+.oc-file-row {
+  --oc-file-row-depth: 0;
+  --oc-file-row-height: calc(32px * var(--ui-scale));
+  --oc-file-row-indent: calc(16px * var(--ui-scale));
+  --oc-file-row-padding-start: calc(8px * var(--ui-scale));
+  --oc-file-row-padding-end: calc(8px * var(--ui-scale));
+
+  appearance: none;
+  display: grid;
+  grid-template-columns:
+    calc(14px * var(--ui-scale)) calc(16px * var(--ui-scale)) minmax(0, 1fr)
+    max-content;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--oc-file-row-height);
+  align-items: center;
+  gap: calc(6px * var(--ui-scale));
+  padding: 0 var(--oc-file-row-padding-end) 0
+    calc(var(--oc-file-row-padding-start) + var(--oc-file-row-depth) * var(--oc-file-row-indent));
+  border: 0;
+  border-radius: var(--oc-radius-soft);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.oc-file-row:hover,
+.oc-file-row[data-highlighted] {
+  background: var(--hover-wash);
+  color: var(--text-strong);
+}
+
+.oc-file-row:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(-1px * var(--ui-scale));
+}
+
+.oc-file-row[data-selected="true"],
+.oc-file-row[data-active="true"],
+.oc-file-row[data-selected]:not([data-selected="false"]) {
+  background: var(--selected-wash);
+  color: var(--text-strong);
+}
+
+.oc-file-row__chevron {
+  display: inline-flex;
+  width: calc(14px * var(--ui-scale));
+  height: calc(14px * var(--ui-scale));
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: transform var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.oc-file-row__chevron[data-open="true"] {
+  transform: rotate(90deg);
+}
+
+.oc-file-row__icon {
+  width: calc(14px * var(--ui-scale));
+  height: calc(14px * var(--ui-scale));
+  color: var(--text-muted);
+}
+
+.oc-file-row__copy {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: calc(6px * var(--ui-scale));
+  overflow: hidden;
+}
+
+:is(.oc-file-row__name, .oc-file-row__detail, .oc-file-row__prefix) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oc-file-row__name {
+  min-width: 0;
+  color: currentColor;
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-body);
+}
+
+:is(.oc-file-row__detail, .oc-file-row__prefix) {
+  color: var(--text-soft);
+  font-size: var(--ui-font-meta);
+}
+
+.oc-file-row__trailing {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: calc(5px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+}

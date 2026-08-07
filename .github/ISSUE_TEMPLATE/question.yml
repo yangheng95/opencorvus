@@ -1,0 +1,44 @@
+name: Usage question
+description: Ask for help using or configuring OpenCorvus
+title: "[Question]: "
+labels: ["question"]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: OpenCorvus version
+      placeholder: v0.0.35beta
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: What are you trying to do?
+      description: Describe the intended outcome and relevant context.
+    validations:
+      required: true
+  - type: textarea
+    id: attempted
+    attributes:
+      label: What have you tried?
+      description: Include relevant configuration or commands with all secrets removed.
+    validations:
+      required: true
+  - type: textarea
+    id: blocker
+    attributes:
+      label: Where are you blocked?
+      description: Include the exact point of uncertainty or failure.
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmation
+      options:
+        - label: I checked the documentation and searched existing issues.
+          required: true
+        - label: I removed credentials and private data.
+          required: true
+        - label: I agree to follow the Code of Conduct.
+          required: true

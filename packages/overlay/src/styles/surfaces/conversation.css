@@ -1,0 +1,3364 @@
+/* Conversation surface — owns the chat scroll column's chrome.
+   The `.chat-empty--task` shell lives in composer.css because that file
+   already owns the task-aware composer/empty-state chrome. */
+
+/* Chat scroll: the message column flow. Conversation owns the inline
+   card contract so ordinary agent bubbles and structured execution
+   cards cannot drift into separate widths. */
+.chat-scroll {
+  --conversation-card-inline-size: 100%;
+  --conversation-user-card-inline-size: min(72%, calc(720px * var(--ui-scale)));
+  --conversation-system-card-inline-size: min(86%, calc(760px * var(--ui-scale)));
+  --conversation-composer-block-size: 0px;
+  --card-min-inline-size: min(100%, var(--conversation-card-inline-size));
+  grid-column: 1;
+  grid-row: 1;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  contain: layout;
+  overflow-y: scroll;
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: stable;
+  overflow-anchor: auto;
+  padding-block: calc(30px * var(--ui-scale)) var(--conversation-composer-block-size);
+  padding-inline: var(--conversation-message-start-inset) var(--conversation-message-end-inset);
+  display: flex;
+  flex-direction: column;
+  gap: calc(8px * var(--ui-scale));
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: default;
+  background: var(--chat-canvas);
+  transition: padding-inline var(--ui-duration-slow) var(--ui-timing-standard);
+}
+
+.chat-scroll[data-follow-lock="true"] {
+  overflow-anchor: none;
+}
+
+.conversation-body {
+  --conversation-environment-content-clearance: 0px;
+  --conversation-message-inline-inset: max(
+    var(--ui-chat-message-padding-x),
+    calc(
+      (
+          100% - var(--conversation-environment-content-clearance) - var(--conversation-message-content-width) -
+            var(--ui-chat-scrollbar-gutter-x)
+        ) /
+        2
+    )
+  );
+  --conversation-message-start-clearance: var(--ui-chat-message-padding-x);
+  --conversation-message-end-inset: calc(
+    var(--conversation-message-inline-inset) + var(--conversation-environment-content-clearance)
+  );
+  --conversation-message-start-inset: clamp(
+    var(--conversation-message-start-clearance),
+    calc(var(--conversation-message-end-inset) - var(--conversation-environment-content-clearance)),
+    100%
+  );
+
+  position: relative;
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  min-height: 0;
+  min-width: 0;
+  background: transparent;
+}
+
+.chat-home-composition {
+  display: contents;
+}
+
+/* The real Composer is a bottom layer beside the full-height transcript.
+   Its rendered block size becomes transcript clearance, while decorative paint
+   stays pointer-transparent so ordinary message-region input reaches the sole
+   scroll owner. The trailing grid column preserves the native scrollbar lane. */
+#solidChatComposer {
+  position: relative;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: end;
+  width: 100%;
+  z-index: var(--ui-z-sticky);
+  display: grid;
+  grid-template-columns:
+    var(--conversation-message-start-inset)
+    minmax(0, 1fr)
+    calc(var(--conversation-message-end-inset) + var(--ui-chat-scrollbar-gutter-x));
+  min-width: 0;
+  box-sizing: border-box;
+  pointer-events: none;
+  background: transparent;
+  transition: grid-template-columns var(--ui-duration-slow) var(--ui-timing-standard);
+}
+
+#solidChatComposer > .chat-composer-stack {
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+#solidChatComposer::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-inline-end: var(--ui-chat-scrollbar-gutter-x);
+  inset-block-end: 100%;
+  height: var(--conversation-edge-fade-size);
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0, var(--chat-canvas) 100%);
+}
+
+#solidChatComposer::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inset-inline-end: var(--ui-chat-scrollbar-gutter-x);
+  pointer-events: none;
+  background: var(--chat-canvas);
+}
+
+.task-queue-notice {
+  display: flex;
+  align-items: center;
+  gap: calc(8px * var(--ui-scale));
+  width: min(100%, var(--conversation-message-content-width));
+  max-width: 100%;
+  margin: calc(16px * var(--ui-scale)) auto 0;
+  padding: calc(8px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  box-sizing: border-box;
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
+  border-radius: var(--oc-radius-soft);
+  background: color-mix(in srgb, var(--surface-inset) 72%, transparent);
+  color: var(--text-soft);
+  font-size: var(--ui-font-meta);
+  line-height: var(--ui-line-height-normal);
+}
+
+.task-queue-notice + .chat-composer-stack {
+  margin-top: calc(6px * var(--ui-scale));
+}
+
+.chat[data-empty-chat-home="true"] .chat-home-composition {
+  --chat-home-wide-content-width: calc(900px * var(--ui-scale));
+  --chat-home-composition-width: min(100%, var(--chat-home-wide-content-width));
+  --chat-home-compact-width: 84%;
+
+  position: absolute;
+  inset: 0;
+  z-index: var(--ui-z-raised);
+  display: grid;
+  grid-template-rows: auto auto auto;
+  align-content: center;
+  justify-items: stretch;
+  row-gap: calc(12px * var(--ui-scale));
+  min-width: 0;
+  min-height: 0;
+  padding: clamp(
+      calc(48px * var(--ui-scale)),
+      calc(var(--ui-overlay-shell-height) * 0.08),
+      calc(96px * var(--ui-scale))
+    )
+    var(--conversation-environment-content-clearance) calc(20px * var(--ui-scale)) 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: padding-inline-end var(--ui-duration-slow) var(--ui-timing-standard);
+}
+
+.chat-home-prompt {
+  display: grid;
+  justify-items: center;
+  pointer-events: none;
+  color: var(--text-strong);
+}
+
+.chat-home-prompt__title {
+  width: var(--chat-home-composition-width);
+  max-width: 100%;
+  margin: 0;
+  text-align: center;
+  font-size: var(--ui-font-display);
+  line-height: 1.18;
+  font-weight: var(--ui-font-weight-body);
+  letter-spacing: var(--ui-letter-spacing-normal);
+}
+
+.chat-home-after {
+  width: var(--chat-home-composition-width);
+  max-width: 100%;
+  margin-inline: auto;
+  display: grid;
+  gap: calc(12px * var(--ui-scale));
+  color: var(--text-soft);
+}
+
+.chat-home-suggestions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: calc(8px * var(--ui-scale));
+}
+
+.chat-home-suggestion.oc-button {
+  --oc-button-height: calc(52px * var(--ui-scale));
+  --oc-button-padding-x: calc(14px * var(--ui-scale));
+  --oc-button-gap: calc(10px * var(--ui-scale));
+  --oc-button-bg: var(--surface-elevated);
+  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 78%, transparent);
+  --oc-button-color: var(--text-strong);
+  --oc-button-shadow: 0 calc(1px * var(--ui-scale)) calc(2px * var(--ui-scale))
+    color-mix(in srgb, var(--ui-shadow-tone) 8%, transparent);
+
+  display: flex;
+  align-items: center;
+  justify-items: start;
+  width: 100%;
+  min-width: 0;
+  padding-block: 0;
+  color: var(--text-strong);
+  font-size: var(--ui-font-body);
+  font-weight: var(--ui-font-weight-strong);
+  line-height: 1.3;
+  text-align: left;
+  white-space: normal;
+  transition:
+    background-color var(--ui-duration-base) var(--ui-timing-standard),
+    border-color var(--ui-duration-base) var(--ui-timing-standard),
+    color var(--ui-duration-base) var(--ui-timing-standard);
+}
+
+.chat-home-suggestion.oc-button > svg {
+  flex: 0 0 auto;
+}
+
+.chat-home-suggestion.oc-button[data-suggestion-tone="info"] > svg {
+  color: var(--info);
+}
+
+.chat-home-suggestion.oc-button[data-suggestion-tone="accent"] > svg {
+  color: color-mix(in srgb, var(--accent) 62%, var(--bad) 38%);
+}
+
+.chat-home-suggestion.oc-button[data-suggestion-tone="good"] > svg {
+  color: var(--good);
+}
+
+.chat-home-suggestion.oc-button:hover,
+.chat-home-suggestion.oc-button:focus-visible {
+  --oc-button-bg: var(--ui-list-hover-bg);
+  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--text-strong) 15%, var(--border));
+  --oc-button-color: var(--text-strong);
+  --oc-button-shadow: none;
+  transform: none;
+}
+
+.chat-home-notice {
+  display: grid;
+  grid-template-columns: calc(24px * var(--ui-scale)) minmax(0, 1fr);
+  align-items: center;
+  gap: calc(8px * var(--ui-scale));
+  min-height: calc(40px * var(--ui-scale));
+  padding: calc(4px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.chat-home-notice > svg {
+  color: var(--text-muted);
+}
+
+.chat-home-notice-copy {
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: calc(10px * var(--ui-scale));
+}
+
+.chat-home-notice-copy strong {
+  color: var(--text-strong);
+  font-size: var(--ui-font-title);
+  font-weight: var(--ui-font-weight-strong);
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.chat-home-notice-copy span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-muted);
+  font-size: var(--ui-font-body);
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.chat[data-empty-chat-home="true"] .chat-header.oc-surface-header {
+  display: none;
+}
+
+.chat[data-empty-chat-home="true"] #solidChatComposer {
+  position: relative;
+  inset: auto;
+  grid-column: auto;
+  grid-row: auto;
+  align-self: auto;
+  justify-self: auto;
+  width: 100%;
+  min-width: 0;
+  z-index: var(--ui-z-raised);
+  display: flex;
+  flex-direction: column;
+  grid-template-columns: none;
+  box-sizing: border-box;
+  padding-block-end: calc(3px * var(--ui-scale));
+  background: transparent;
+}
+
+.chat[data-empty-chat-home="true"] #solidChatComposer > .chat-composer-stack {
+  grid-column: auto;
+  grid-row: auto;
+}
+
+.chat[data-empty-chat-home="true"] #solidChatComposer::before,
+.chat[data-empty-chat-home="true"] #solidChatComposer::after {
+  display: none;
+}
+
+.chat[data-empty-chat-home="true"] #solidChatComposer .chat-composer-stack {
+  width: var(--chat-home-composition-width);
+  max-width: var(--chat-home-composition-width);
+  margin-block: 0;
+}
+
+@container chat-workbench (width < 1200px) {
+  /* breakpoint: --ui-breakpoint-xl */
+  .chat[data-empty-chat-home="true"] .chat-home-composition {
+    --chat-home-composition-width: min(var(--chat-home-compact-width), var(--chat-home-wide-content-width));
+  }
+}
+
+.workspace-main:has(.conversation-agent-rail-host:not(:empty)) .conversation-body {
+  --conversation-message-start-clearance: calc(var(--conversation-agent-rail-width) + var(--ui-chat-message-padding-x));
+}
+
+.conversation-agent-rail-host {
+  --conversation-agent-rail-marker-width: calc(20px * var(--ui-scale));
+  --conversation-agent-rail-marker-motion-duration: 160ms;
+  --conversation-agent-rail-marker-motion-easing: linear(
+    0,
+    0.398 10%,
+    0.682 20%,
+    0.843 30%,
+    0.925 40%,
+    0.972 50%,
+    1.004 60%,
+    1.008 70%,
+    1.003 80%,
+    1
+  );
+  --conversation-agent-rail-tick-height: calc(14px * var(--ui-scale));
+  --conversation-agent-rail-tick-gap: 0;
+
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  z-index: var(--ui-z-raised);
+  width: var(--conversation-agent-rail-width);
+  max-width: var(--conversation-agent-rail-width);
+  min-width: var(--conversation-agent-rail-width);
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  overflow: hidden;
+  border-right: 0 solid transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.conversation-agent-rail-host:empty {
+  display: none;
+}
+
+.conversation-scroll-shell {
+  --conversation-edge-fade-size: calc(16px * var(--ui-scale));
+  position: relative;
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  align-items: stretch;
+  overflow: clip;
+}
+
+.conversation-scroll-shell::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: var(--ui-z-sticky);
+  height: var(--conversation-edge-fade-size);
+  pointer-events: none;
+  background: linear-gradient(180deg, var(--chat-canvas) 0, transparent 100%);
+}
+
+.conversation-thinking {
+  width: var(--conversation-card-inline-size);
+  max-width: 100%;
+  min-height: calc(28px * var(--ui-scale));
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  margin: calc(16px * var(--ui-scale)) 0;
+  padding-inline: calc(16px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-title);
+  line-height: 1.6;
+}
+
+.conversation-thinking__text {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .conversation-thinking[data-status="running"] .conversation-thinking__text {
+    color: transparent;
+    background-image: linear-gradient(
+      90deg,
+      var(--text-muted) 0%,
+      var(--text-muted) 45.5%,
+      var(--text-soft) 47.5%,
+      var(--text) 49%,
+      var(--text-strong) 50%,
+      var(--text) 51%,
+      var(--text-soft) 52.5%,
+      var(--text-muted) 54.5%,
+      var(--text-muted) 100%
+    );
+    background-position: 130% 50%;
+    background-size: 360% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    will-change: background-position;
+    animation: conversation-thinking-color-wave var(--ui-duration-loop-tool-wave) linear infinite;
+  }
+}
+
+@keyframes conversation-thinking-color-wave {
+  from {
+    background-position: 130% 50%;
+  }
+  to {
+    background-position: -180% 50%;
+  }
+}
+
+.chat[data-empty-chat-home="true"] .conversation-scroll-shell::before {
+  display: none;
+}
+.conversation-scroll-bottom {
+  position: absolute;
+  inset-inline-start: calc(
+    var(--conversation-message-start-inset) +
+      (
+        100% - var(--conversation-message-start-inset) - var(--conversation-message-end-inset) -
+          var(--ui-chat-scrollbar-gutter-x)
+      ) /
+      2
+  );
+  inset-block-start: calc(-18px * var(--ui-scale));
+  z-index: var(--ui-z-sticky);
+  transform: translateX(-50%);
+}
+
+#solidChatComposer .oc-button.conversation-scroll-bottom[data-ui="conversation-scroll-bottom"] {
+  --oc-button-height: calc(32px * var(--ui-scale));
+  --oc-button-padding-x: 0;
+  --oc-button-bg: color-mix(in srgb, var(--text-strong) 14%, transparent);
+  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--text-strong) 18%, transparent);
+  --oc-button-color: var(--text-strong);
+  --oc-button-shadow:
+    0 calc(8px * var(--ui-scale)) calc(18px * var(--ui-scale))
+      color-mix(in srgb, var(--ui-shadow-tone) 24%, transparent),
+    inset 0 calc(1px * var(--ui-scale)) 0 color-mix(in srgb, var(--text-strong) 10%, transparent);
+
+  width: var(--oc-button-height);
+  min-width: var(--oc-button-height);
+  pointer-events: auto;
+  backdrop-filter: blur(calc(8px * var(--ui-scale)));
+}
+
+#solidChatComposer .oc-button.conversation-scroll-bottom[data-ui="conversation-scroll-bottom"]:hover,
+#solidChatComposer .oc-button.conversation-scroll-bottom[data-ui="conversation-scroll-bottom"]:focus-visible {
+  --oc-button-bg: color-mix(in srgb, var(--text-strong) 22%, transparent);
+  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--text-strong) 28%, transparent);
+  --oc-button-color: var(--text-strong);
+}
+
+.conversation-agent-rail {
+  flex: 1 1 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  min-width: 0;
+  padding: calc(10px * var(--ui-scale)) calc(1px * var(--ui-scale));
+  color: var(--text-soft);
+  background: transparent;
+  overflow: hidden;
+  transition:
+    padding var(--ui-duration-base) var(--ui-timing-standard),
+    background var(--ui-duration-base) var(--ui-timing-standard);
+}
+
+.conversation-agent-rail__lanes {
+  flex: 1 1 0;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: safe center;
+  row-gap: var(--conversation-agent-rail-tick-gap);
+  padding: calc(2px * var(--ui-scale)) 0;
+  scrollbar-width: none;
+  touch-action: pan-y;
+}
+
+.conversation-agent-rail__lanes::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.conversation-agent-rail__stack {
+  flex: 0 0 auto;
+  width: 100%;
+  display: grid;
+  grid-auto-rows: var(--conversation-agent-rail-tick-height);
+  gap: var(--conversation-agent-rail-tick-gap);
+  align-items: center;
+  justify-items: center;
+  min-width: 0;
+  padding: calc(1px * var(--ui-scale)) 0;
+}
+
+.conversation-agent-rail__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  justify-items: center;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--conversation-agent-rail-tick-height);
+  padding: 0;
+}
+
+.conversation-agent-rail .oc-button[data-ui="conversation-agent-rail-locate"] {
+  --oc-button-height: var(--conversation-agent-rail-tick-height);
+  --oc-button-padding-x: 0;
+  --oc-button-bg: transparent;
+  --oc-button-border: var(--oc-border-width) solid transparent;
+  --oc-button-color: var(--text-strong);
+  --oc-button-shadow: none;
+
+  width: 100%;
+  min-width: 100%;
+  justify-content: center;
+}
+
+.conversation-agent-rail .oc-button[data-ui="conversation-agent-rail-locate"]:hover,
+.conversation-agent-rail .oc-button[data-ui="conversation-agent-rail-locate"]:focus-visible {
+  --oc-button-bg: transparent;
+  --oc-button-border: var(--oc-border-width) solid transparent;
+  --oc-button-color: var(--text-strong);
+}
+
+.conversation-agent-rail__tick {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.conversation-agent-rail__tick-line {
+  --px-exact: 1;
+  --conversation-agent-rail-marker-progress: 0;
+
+  display: block;
+  width: var(--conversation-agent-rail-marker-width);
+  height: 2px;
+  border-radius: var(--oc-radius-pill);
+  background: color-mix(in srgb, var(--text-muted) 56%, transparent);
+  opacity: var(--ui-opacity-full);
+  transform: scaleX(calc(0.4 + 0.6 * var(--conversation-agent-rail-marker-progress)));
+  transform-origin: center;
+  transition:
+    transform var(--conversation-agent-rail-marker-motion-duration) var(--conversation-agent-rail-marker-motion-easing),
+    background var(--ui-duration-fast) var(--ui-timing-standard),
+    opacity var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.conversation-agent-rail__row[data-proximity="0"] .conversation-agent-rail__tick-line {
+  --conversation-agent-rail-marker-progress: 1;
+
+  opacity: var(--ui-opacity-full);
+}
+
+.conversation-agent-rail__row[data-proximity="1"] .conversation-agent-rail__tick-line {
+  --conversation-agent-rail-marker-progress: 0.7;
+}
+
+.conversation-agent-rail__row[data-proximity="2"] .conversation-agent-rail__tick-line {
+  --conversation-agent-rail-marker-progress: 0.4;
+}
+
+.conversation-agent-rail__row[data-proximity="3"] .conversation-agent-rail__tick-line {
+  --conversation-agent-rail-marker-progress: 0.2;
+}
+
+.conversation-agent-rail__row[data-status="running"] .conversation-agent-rail__tick-line {
+  background: color-mix(in srgb, var(--card-stage, var(--accent)) 76%, var(--text-muted));
+}
+
+.conversation-agent-rail__row[data-status="error"] .conversation-agent-rail__tick-line {
+  background: color-mix(in srgb, var(--bad) 80%, var(--text-muted));
+}
+
+.conversation-agent-rail__row[data-status="skipped"] .conversation-agent-rail__tick-line,
+.conversation-agent-rail__row[data-status="idle"] .conversation-agent-rail__tick-line {
+  opacity: var(--ui-opacity-dim);
+}
+
+.conversation-agent-rail__row[data-proximity="0"] .conversation-agent-rail__tick-line {
+  background: var(--text-strong);
+  opacity: var(--ui-opacity-full);
+}
+
+.conversation-agent-rail
+  .oc-button[data-ui="conversation-agent-rail-locate"]:focus-visible
+  .conversation-agent-rail__tick-line {
+  background: var(--text-strong);
+  opacity: var(--ui-opacity-full);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .conversation-agent-rail__tick-line {
+    transition-duration: var(--ui-duration-instant);
+  }
+
+  .conversation-agent-rail-tooltip[data-expanded],
+  .conversation-agent-rail-tooltip[data-closed] {
+    animation: none;
+  }
+}
+
+.conversation-agent-rail-tooltip {
+  width: min(calc(240px * var(--ui-scale)), calc(var(--ui-overlay-shell-width) - calc(32px * var(--ui-scale))));
+  display: grid;
+  gap: calc(8px * var(--ui-scale));
+  padding: calc(8px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  overflow: hidden;
+  box-shadow: none;
+  transform-origin: var(--kb-tooltip-content-transform-origin);
+}
+
+.conversation-agent-rail-tooltip[data-expanded] {
+  animation: conversation-agent-rail-tooltip-enter var(--ui-duration-slow)
+    var(--conversation-agent-rail-marker-motion-easing);
+}
+
+.conversation-agent-rail-tooltip[data-closed] {
+  animation: conversation-agent-rail-tooltip-exit var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+@keyframes conversation-agent-rail-tooltip-enter {
+  from {
+    opacity: var(--ui-opacity-hidden);
+    transform: translateX(calc(6px * var(--ui-scale))) scale(0.985);
+  }
+
+  to {
+    opacity: var(--ui-opacity-full);
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes conversation-agent-rail-tooltip-exit {
+  from {
+    opacity: var(--ui-opacity-full);
+    transform: translateX(0) scale(1);
+  }
+
+  to {
+    opacity: var(--ui-opacity-hidden);
+    transform: translateX(calc(3px * var(--ui-scale))) scale(0.99);
+  }
+}
+
+.conversation-agent-rail-tooltip__header {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.conversation-agent-rail-tooltip__header strong {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conversation-agent-rail-tooltip__section > span {
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+}
+
+.conversation-agent-rail-tooltip__section {
+  min-width: 0;
+  display: grid;
+  gap: calc(3px * var(--ui-scale));
+}
+
+.conversation-agent-rail-tooltip__section p {
+  margin: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  color: var(--text-strong);
+  font-size: var(--ui-font-small);
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.conversation-agent-target--pulse {
+  outline: calc(2px * var(--ui-scale)) solid color-mix(in srgb, var(--accent) 70%, transparent);
+  outline-offset: calc(2px * var(--ui-scale));
+}
+
+.conversation-virtual-window {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.conversation-virtual-item {
+  position: relative;
+  flex: 0 0 auto;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding-block-end: calc(8px * var(--ui-scale));
+}
+
+.conversation-virtual-item:has(.conversation-turn-control) {
+  padding-block-end: 0;
+}
+
+.conversation-virtual-item[data-agent-boundary="true"]::before {
+  content: "";
+  position: absolute;
+  inset-block-start: calc(5px * var(--ui-scale));
+  inset-inline-start: 0;
+  width: min(100%, var(--conversation-card-inline-size));
+  height: calc(1px * var(--ui-scale));
+  background: color-mix(in srgb, var(--divider-soft) 42%, transparent);
+  transform: scaleY(0.5);
+  transform-origin: top;
+  pointer-events: none;
+}
+
+.conversation-virtual-item[data-agent-boundary="true"] {
+  padding-block-start: calc(16px * var(--ui-scale));
+}
+
+.conversation-virtual-item .chat-bubble,
+.conversation-virtual-item .chat-avatar,
+.conversation-virtual-item .chat-bubble__body-inner {
+  animation: none;
+}
+
+.conversation-virtual-item > .card,
+.conversation-virtual-item > .interaction-card {
+  width: var(--conversation-card-inline-size);
+  max-width: 100%;
+  align-self: stretch;
+}
+
+.conversation-virtual-item > .card[data-kind="message"][data-role="user"] {
+  width: var(--conversation-user-card-inline-size);
+  align-self: flex-end;
+}
+
+.conversation-virtual-item > .card[data-kind="message"][data-role="system"] {
+  width: var(--conversation-system-card-inline-size);
+  align-self: center;
+}
+
+.conversation-artifact-summary {
+  width: var(--conversation-card-inline-size);
+  max-width: 100%;
+  margin-block: calc(6px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  border: var(--oc-border-width) solid var(--divider-soft);
+  border-radius: var(--oc-radius-large);
+  overflow: hidden;
+  box-sizing: border-box;
+  background: color-mix(in srgb, var(--surface) 84%, var(--chat-canvas));
+  box-shadow: var(--shadow-sm);
+}
+
+.conversation-artifact-summary__header {
+  min-height: calc(62px * var(--ui-scale));
+  display: flex;
+  align-items: center;
+  gap: calc(11px * var(--ui-scale));
+  padding: calc(11px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  box-sizing: border-box;
+  border-block-end: var(--oc-border-width) solid var(--divider-soft);
+}
+
+.conversation-artifact-summary__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: calc(36px * var(--ui-scale));
+  height: calc(36px * var(--ui-scale));
+  border-radius: var(--oc-radius-soft);
+  color: var(--text-muted);
+  background: var(--surface-inset);
+}
+
+.conversation-artifact-summary__identity {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: calc(9px * var(--ui-scale));
+  row-gap: calc(2px * var(--ui-scale));
+}
+
+.conversation-artifact-summary__eyebrow {
+  flex-basis: 100%;
+  color: var(--text-muted);
+  font-size: var(--ui-font-size-xs);
+  line-height: 1.2;
+}
+
+.conversation-artifact-summary__identity strong {
+  overflow: hidden;
+  color: var(--text-strong);
+  font-size: var(--ui-font-size-sm);
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-artifact-summary__file-total {
+  color: var(--text-muted);
+  font-size: var(--ui-font-size-sm);
+  line-height: 1.3;
+}
+
+.conversation-artifact-summary__totals,
+.conversation-artifact-summary__file-stats {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(6px * var(--ui-scale));
+  font-variant-numeric: tabular-nums;
+}
+
+.conversation-artifact-summary [data-tone="add"] {
+  color: var(--diff-add-fg);
+}
+
+.conversation-artifact-summary [data-tone="del"] {
+  color: var(--diff-del-fg);
+}
+
+.conversation-artifact-summary__section {
+  border-block-start: var(--oc-border-width) solid var(--divider-soft);
+}
+
+.conversation-artifact-summary__header + .conversation-artifact-summary__section {
+  border-block-start: 0;
+}
+
+.conversation-artifact-summary__outcome {
+  display: grid;
+  gap: calc(3px * var(--ui-scale));
+  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-size-xs);
+  line-height: 1.4;
+}
+
+.conversation-artifact-summary__outcome strong {
+  color: var(--text-strong);
+  font-size: var(--ui-font-size-sm);
+}
+
+.conversation-artifact-summary__outcome[data-status="failed"] {
+  color: var(--status-danger-text);
+  background: color-mix(in srgb, var(--bad) 8%, transparent);
+}
+
+.conversation-artifact-summary__outcome[data-status="failed"] strong {
+  color: var(--status-danger-text);
+}
+
+.conversation-artifact-summary__empty {
+  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-size-sm);
+  line-height: 1.4;
+}
+
+.conversation-artifact-summary__outcome + .conversation-artifact-summary__empty,
+.conversation-artifact-summary__outcome + .conversation-artifact-summary__section,
+.conversation-artifact-summary__empty + .conversation-artifact-summary__section {
+  border-block-start: var(--oc-border-width) solid var(--divider-soft);
+}
+
+.conversation-artifact-summary__section-label {
+  padding: calc(9px * var(--ui-scale)) calc(12px * var(--ui-scale)) calc(4px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-size-xs);
+  line-height: 1.2;
+}
+
+.conversation-artifact-summary__artifacts,
+.conversation-artifact-summary__files {
+  display: grid;
+  padding-block: calc(3px * var(--ui-scale)) calc(6px * var(--ui-scale));
+}
+
+.conversation-artifact-summary__artifact,
+.conversation-artifact-summary__file {
+  width: 100%;
+  min-height: calc(35px * var(--ui-scale));
+  display: flex;
+  align-items: center;
+  gap: calc(12px * var(--ui-scale));
+  padding-inline: calc(12px * var(--ui-scale));
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 0;
+  text-align: start;
+}
+
+.conversation-artifact-summary__artifact:hover,
+.conversation-artifact-summary__file:hover {
+  background: color-mix(in srgb, var(--surface-hover) 62%, transparent);
+}
+
+.conversation-artifact-summary__artifact[data-selected="true"] {
+  color: var(--text-strong);
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+}
+
+.conversation-artifact-summary__artifact-item {
+  min-width: 0;
+}
+
+.conversation-artifact-inspector {
+  min-width: 0;
+  padding: 0 calc(10px * var(--ui-scale)) calc(10px * var(--ui-scale));
+}
+
+.conversation-artifact-inspector > .msg-artifact,
+.conversation-artifact-inspector__snapshot > .msg-artifact {
+  margin: 0;
+  max-width: 100%;
+}
+
+.conversation-artifact-inspector__status {
+  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  border: var(--oc-border-width) solid var(--divider-soft);
+  border-radius: var(--oc-radius-md);
+  color: var(--text-muted);
+  background: var(--surface-inset);
+  font-size: var(--ui-font-size-xs);
+}
+
+.conversation-artifact-inspector__status[role="alert"] {
+  color: var(--status-danger-text);
+  border-color: color-mix(in srgb, var(--bad) 36%, var(--divider-soft));
+  background: color-mix(in srgb, var(--bad) 8%, var(--surface));
+}
+
+.conversation-artifact-inspector__snapshot {
+  display: grid;
+  gap: calc(8px * var(--ui-scale));
+}
+
+.conversation-artifact-inspector__content {
+  display: grid;
+  gap: calc(6px * var(--ui-scale));
+}
+
+.conversation-artifact-inspector__metadata {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: calc(5px * var(--ui-scale)) calc(9px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-size-xs);
+}
+
+.conversation-artifact-inspector__metadata code {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-artifact-inspector__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(10px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-size-xs);
+}
+
+.conversation-artifact-inspector__toolbar .oc-search-field {
+  flex: 1 1 auto;
+}
+
+.conversation-artifact-inspector__resources {
+  max-height: calc(220px * var(--ui-scale));
+  overflow: auto;
+  border: var(--oc-border-width) solid var(--divider-soft);
+  border-radius: var(--oc-radius-md);
+  background: var(--surface-inset);
+}
+
+.conversation-artifact-inspector__resource.oc-button {
+  width: 100%;
+  min-height: calc(40px * var(--ui-scale));
+  justify-content: flex-start;
+  gap: calc(8px * var(--ui-scale));
+  border-radius: 0;
+  padding-inline: calc(9px * var(--ui-scale));
+  text-align: start;
+}
+
+.conversation-artifact-inspector__resource + .conversation-artifact-inspector__resource {
+  border-block-start: var(--oc-border-width) solid var(--divider-soft);
+}
+
+.conversation-artifact-inspector__resource[data-selected="true"] {
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+}
+
+.conversation-artifact-inspector__resource-copy {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: grid;
+  gap: calc(1px * var(--ui-scale));
+}
+
+.conversation-artifact-inspector__resource-copy strong,
+.conversation-artifact-inspector__resource-copy span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-artifact-inspector__resource-copy span,
+.conversation-artifact-inspector__resource > span:last-child {
+  color: var(--text-muted);
+  font-size: var(--ui-font-size-xs);
+}
+
+.conversation-artifact-inspector__binary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: calc(8px * var(--ui-scale));
+  padding: calc(12px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-size-xs);
+}
+
+.conversation-artifact-inspector__binary .oc-button {
+  margin-inline-start: auto;
+}
+
+.conversation-artifact-summary__row-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--text-muted);
+}
+
+.conversation-artifact-summary__artifact-copy {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: grid;
+  gap: calc(1px * var(--ui-scale));
+}
+
+.conversation-artifact-summary__artifact-copy strong,
+.conversation-artifact-summary__artifact-copy span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-artifact-summary__artifact-copy strong {
+  color: var(--text);
+  font-size: var(--ui-font-size-sm);
+  font-weight: var(--ui-font-weight-semibold);
+  line-height: 1.3;
+}
+
+.conversation-artifact-summary__artifact-copy span,
+.conversation-artifact-summary__artifact-meta {
+  color: var(--text-muted);
+  font-size: var(--ui-font-size-xs);
+  line-height: 1.25;
+}
+
+.conversation-artifact-summary__artifact-meta {
+  flex: 0 0 auto;
+  max-width: 28%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-artifact-summary__path {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  color: var(--text);
+  font-size: var(--ui-font-size-sm);
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-artifact-summary__file-stats {
+  flex: 0 0 auto;
+  font-size: var(--ui-font-size-sm);
+}
+
+.conversation-artifact-summary__errors {
+  display: grid;
+  gap: calc(4px * var(--ui-scale));
+  padding: calc(9px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  border-block-start: var(--oc-border-width) solid var(--divider-soft);
+  color: var(--status-danger-text);
+  font-size: var(--ui-font-size-xs);
+  line-height: 1.35;
+}
+
+.conversation-artifact-summary__disclosure.oc-button {
+  width: 100%;
+  min-height: calc(34px * var(--ui-scale));
+  justify-content: flex-start;
+  gap: calc(6px * var(--ui-scale));
+  padding-inline: calc(12px * var(--ui-scale));
+  border-radius: 0;
+  color: var(--text);
+}
+
+@container chat-workbench (width < 900px) {
+  /* breakpoint: --ui-breakpoint-lg */
+  .conversation-virtual-item > .card,
+  .conversation-virtual-item > .interaction-card,
+  .conversation-virtual-item > .card[data-kind="message"][data-role="user"],
+  .conversation-virtual-item > .card[data-kind="message"][data-role="system"] {
+    width: 100%;
+    align-self: stretch;
+  }
+}
+
+/* Task-switch progress: a slim accent bar that absolutely-positions
+   over the chat header during task switches. Kept as `position:
+   absolute` (with `inset-block-start: 0`, `inset-inline: 0`) instead
+   of a flex item so the hidden state cannot reserve a 2px gap above
+   the header — `.chat` is `position: relative` to anchor it. */
+.task-switch-progress {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: var(--ui-z-raised);
+  height: calc(2px * var(--ui-scale));
+  overflow: hidden;
+  background: transparent;
+  opacity: var(--ui-opacity-hidden);
+  transition: opacity var(--ui-duration-base);
+  pointer-events: none;
+}
+
+.task-switch-progress[data-active="true"] {
+  opacity: var(--ui-opacity-full);
+}
+
+.task-switch-progress::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: var(--accent);
+  opacity: var(--ui-opacity-dim);
+}
+
+/* The header has two direct children: conversation identity/status and
+   task actions. Keep both inside the owning panel as flex siblings shrink. */
+.chat-header-main {
+  grid-column: 1;
+  justify-self: start;
+  width: 100%;
+  overflow: hidden;
+}
+
+.chat-title {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.chat-title-usage-trigger {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: copy;
+}
+
+.chat-title-usage-trigger[data-copy-feedback="copied"] {
+  color: var(--good);
+}
+
+.chat-title-usage-trigger[data-copy-feedback="failed"] {
+  color: var(--bad);
+}
+
+.chat-title-usage-trigger:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(2px * var(--ui-scale));
+  border-radius: var(--oc-radius-soft);
+}
+
+.chat-title-usage-tooltip {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: baseline;
+  gap: calc(8px * var(--ui-scale));
+}
+
+.chat-title-usage-tooltip__label {
+  color: var(--text-muted);
+}
+
+.chat-title-usage-tooltip__value {
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--ui-font-weight-strong);
+  white-space: nowrap;
+}
+
+.chat-header-status {
+  --px-exact: 1;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  min-width: 0;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.chat-header-meta {
+  grid-column: 2;
+  justify-self: end;
+  justify-content: flex-end;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.chat-header-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--oc-header-gap);
+  min-width: 0;
+  flex: none;
+}
+
+#solidChatHeaderEditorLaunchers,
+#solidChatHeaderRightDockToggle {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+#solidChatHeaderEditorLaunchers:empty,
+#solidChatHeaderRightDockToggle:empty {
+  display: none;
+}
+
+.chat-header-meta .workspace-editor-launchers {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  min-width: 0;
+  height: var(--ui-header-control-height);
+  border: 0 solid transparent;
+  border-radius: var(--oc-radius-large);
+  background: var(--surface-hover);
+  box-shadow: none;
+}
+
+.chat-header-meta .workspace-editor-launchers .oc-button[data-chrome^="workspace-split"] {
+  --oc-button-height: calc(28px * var(--ui-scale));
+  --oc-button-bg: transparent;
+  --oc-button-border: var(--oc-border-width) solid transparent;
+  --oc-button-color: var(--text);
+  --oc-button-shadow: none;
+  --oc-button-gap: calc(6px * var(--ui-scale));
+
+  height: calc(28px * var(--ui-scale));
+  box-shadow: none;
+}
+
+.chat-header-meta .workspace-editor-launchers .oc-button[data-chrome="workspace-split-primary"] {
+  width: auto;
+  min-width: calc(78px * var(--ui-scale));
+  max-width: calc(132px * var(--ui-scale));
+  padding-inline: calc(8px * var(--ui-scale));
+  justify-content: center;
+}
+
+.chat-header-meta .workspace-editor-launchers .oc-button[data-chrome="workspace-split-menu"] {
+  width: calc(26px * var(--ui-scale));
+  min-width: calc(26px * var(--ui-scale));
+  padding-inline: 0;
+}
+
+.chat-header-meta .workspace-editor-launchers .oc-button[data-chrome^="workspace-split"]:hover,
+.chat-header-meta .workspace-editor-launchers .oc-button[data-chrome^="workspace-split"]:focus-visible,
+.chat-header-meta .workspace-editor-launchers .oc-button[data-chrome="workspace-split-menu"][data-expanded] {
+  --oc-button-bg: var(--oc-control-bg-hover);
+  --oc-button-color: var(--text-strong);
+
+  outline: none;
+}
+
+.chat-header-meta .workspace-editor-primary-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: var(--ui-line-height-tight);
+}
+
+.chat-header-meta .oc-button[data-chrome="chat-header-toolbar-toggle"] {
+  --oc-button-height: var(--ui-header-control-height);
+  --oc-button-padding-x: 0;
+  --oc-button-bg: var(--surface-hover);
+  --oc-button-border: var(--oc-border-width) solid transparent;
+  --oc-button-color: var(--text-soft);
+  --oc-button-shadow: none;
+
+  width: var(--ui-header-control-height);
+  min-width: var(--ui-header-control-height);
+  height: var(--ui-header-control-height);
+  border-radius: var(--oc-radius-large);
+}
+
+.chat-header-meta .oc-button[data-chrome="chat-header-toolbar-toggle"]:hover,
+.chat-header-meta .oc-button[data-chrome="chat-header-toolbar-toggle"]:focus-visible,
+.chat-header-meta .oc-button[data-chrome="chat-header-toolbar-toggle"][aria-pressed="true"] {
+  --oc-button-bg: var(--surface-hover);
+  --oc-button-border: var(--oc-border-width) solid var(--border-hover);
+  --oc-button-color: var(--text-strong);
+
+  outline: none;
+}
+
+/* Selected lifecycle facts remain available to assistive technology without
+   occupying the visible Conversation title lane. */
+.chat-task-status {
+  display: contents;
+}
+
+.chat-task-status .status-copy {
+  display: inline;
+}
+
+.chat-task-status .status-label {
+  font-size: var(--ui-font-meta);
+  text-transform: none;
+  letter-spacing: var(--ui-letter-spacing-loose);
+  line-height: 1;
+}
+
+.chat-task-status .elapsed {
+  font-size: var(--ui-font-meta);
+  line-height: 1;
+}
+
+.chat-title-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--text-soft);
+}
+
+.chat-empty {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: calc(16px * var(--ui-scale));
+  align-items: center;
+  justify-content: center;
+  width: min(100%, calc(420px * var(--ui-scale)));
+  min-height: calc(200px * var(--ui-scale));
+  margin: auto;
+  padding: calc(24px * var(--ui-scale)) calc(16px * var(--ui-scale));
+  color: var(--text-soft);
+  text-align: center;
+  opacity: var(--ui-opacity-subtle);
+}
+
+.chat-empty-icon {
+  width: calc(44px * var(--ui-scale));
+  height: calc(44px * var(--ui-scale));
+  flex-shrink: 0;
+  color: var(--accent);
+  opacity: var(--ui-opacity-subtle);
+}
+
+/* Task-aware empty-state children. The shell `.chat-empty--task` itself
+   is owned by composer.css; these descendants belong to the conversation
+   content copy and icon. */
+
+.chat-empty-marker {
+  display: grid;
+  place-items: center;
+  width: calc(38px * var(--ui-scale));
+  height: calc(38px * var(--ui-scale));
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-soft);
+  color: var(--accent);
+  background: var(--surface);
+}
+
+.chat-empty-copy {
+  display: grid;
+  gap: calc(5px * var(--ui-scale));
+  min-width: 0;
+}
+
+.chat-empty-kicker {
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  line-height: 1.2;
+}
+
+.chat-empty-title {
+  color: var(--text-strong);
+  font-size: var(--ui-font-heading);
+  font-weight: var(--ui-font-weight-strong);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-empty-meta {
+  display: flex;
+  align-items: center;
+  gap: calc(8px * var(--ui-scale));
+  min-width: 0;
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+}
+
+.chat-empty-status {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(5px * var(--ui-scale));
+  white-space: nowrap;
+}
+
+.chat-empty-status .oc-status-indicator {
+  width: calc(14px * var(--ui-scale));
+  height: calc(14px * var(--ui-scale));
+}
+
+.chat-empty-path {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-empty--task-error .chat-empty-marker {
+  color: var(--bad);
+  border-color: color-mix(in srgb, var(--bad) 34%, var(--border));
+}
+
+.chat-empty--task-error {
+  margin: calc(12px * var(--ui-scale)) auto;
+}
+
+.chat-empty--task-error .chat-empty-copy {
+  gap: calc(7px * var(--ui-scale));
+}
+
+.chat-empty-error-details {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.chat-empty-actions {
+  display: flex;
+  align-items: center;
+  margin-top: calc(3px * var(--ui-scale));
+}
+
+/* Inside the task-aware variant the icon sits in `.chat-empty-marker`,
+   a 38px box, so the SVG shrinks one notch and uses a slightly muted
+   accent. */
+.chat-empty--task .chat-empty-marker .chat-empty-icon {
+  width: calc(30px * var(--ui-scale));
+  height: calc(30px * var(--ui-scale));
+  color: color-mix(in srgb, var(--accent) 72%, var(--text-soft));
+}
+
+/* ── TaskDirBar (chat header working-directory bar) ──────── */
+
+/* Layout containers — flex/grid only, no chrome. The single-row
+   layout pulled `space-between` into `.task-cwd` itself per
+   iter34 so the cwd dropdown stays left + workspace cluster
+   stays right. */
+.task-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(6px * var(--ui-scale));
+  width: 100%;
+  min-width: 0;
+  font-size: var(--ui-font-meta);
+}
+
+.task-cwd {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-gap-sm);
+  min-width: 0;
+  flex: 1;
+  min-height: calc(24px * var(--ui-scale));
+}
+
+.task-project-cluster {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-sm);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.task-dir {
+  min-width: 0;
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(2px * var(--ui-scale));
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+.workspace-editor-select-icon,
+.workspace-editor-select-caret,
+.workspace-editor-option-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.workspace-editor-select-icon {
+  width: calc(20px * var(--ui-scale));
+  height: calc(20px * var(--ui-scale));
+  color: var(--accent);
+}
+
+.workspace-editor-select-caret {
+  color: var(--text-muted);
+}
+
+.workspace-editor-menu {
+  position: fixed;
+  width: max-content;
+  min-width: calc(180px * var(--ui-scale));
+}
+
+.workspace-editor-menu[hidden] {
+  display: none;
+}
+
+.workspace-editor-option {
+  display: grid;
+  grid-template-columns: calc(22px * var(--ui-scale)) minmax(0, 1fr);
+  padding: calc(5px * var(--ui-scale)) calc(8px * var(--ui-scale));
+}
+
+.workspace-editor-option-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workspace-editor-option-icon {
+  width: calc(22px * var(--ui-scale));
+  height: calc(22px * var(--ui-scale));
+}
+
+.workspace-editor-option[data-editor="vscode"] .workspace-editor-option-icon {
+  color: var(--accent);
+}
+
+.workspace-editor-option[data-editor="pycharm"] .workspace-editor-option-icon {
+  color: var(--good);
+}
+
+.workspace-editor-option[data-editor="webstorm"] .workspace-editor-option-icon {
+  color: var(--accent-start);
+}
+
+.workspace-editor-option[data-editor="intellij"] .workspace-editor-option-icon {
+  color: var(--accent-end);
+}
+
+.workspace-editor-option[data-editor="cursor"] .workspace-editor-option-icon {
+  color: var(--text-strong);
+}
+
+.project-worktree-head-actions .oc-button[data-busy="true"] svg,
+.project-runtime-info-row .oc-button[data-ui="project-init-git"][data-busy="true"] svg,
+.project-worktree-row .oc-button[data-ui="project-worktree-remove"][data-busy="true"] svg {
+  animation: oc-spin var(--ui-duration-loop-spin) linear infinite;
+}
+
+.project-runtime-panel-shell {
+  --project-runtime-panel-head-row-height: calc(42px * var(--ui-scale));
+  --project-runtime-category-row-height: calc(32px * var(--ui-scale));
+  --project-runtime-category-inline-inset: calc(2px * var(--ui-scale));
+  --project-runtime-category-action-size: calc(26px * var(--ui-scale));
+  --project-runtime-category-action-gap: calc(8px * var(--ui-scale));
+  --project-runtime-text-axis: calc(32px * var(--ui-scale));
+  --project-runtime-leading-gap: calc(8px * var(--ui-scale));
+  --project-runtime-leading-icon-column: calc(var(--project-runtime-text-axis) - var(--project-runtime-leading-gap));
+  --project-runtime-info-inline-inset: calc(2px * var(--ui-scale));
+  --project-runtime-info-leading-gap: calc(
+    var(--project-runtime-text-axis) - var(--project-runtime-info-inline-inset) -
+      var(--project-runtime-leading-icon-column)
+  );
+  --project-runtime-menu-type-size: var(--ui-font-compact-row);
+  --project-runtime-icon-size: calc(16px * var(--ui-scale));
+  --project-runtime-trailing-control-size: calc(22px * var(--ui-scale));
+  --project-runtime-divider-color: color-mix(in srgb, var(--border) 70%, transparent);
+  min-width: 0;
+  box-sizing: border-box;
+  display: grid;
+  gap: 0;
+  padding: calc(10px * var(--ui-scale)) calc(14px * var(--ui-scale));
+  font-family: var(--font);
+}
+
+.project-runtime-panel-shell
+  :is(
+    .oc-section__title,
+    .project-runtime-category-link .project-runtime-panel-title,
+    .project-runtime-section-title,
+    .project-runtime-info-row,
+    .project-runtime-category-summary,
+    .task-progress__summary,
+    .task-progress__pill-id,
+    .task-progress__pill-title,
+    .project-worktree-name,
+    .project-runtime-tool-shortcut-summary,
+    .project-runtime-subagent-head,
+    .project-runtime-subagent-working,
+    .project-runtime-subagent-done,
+    .project-runtime-source-head,
+    .project-runtime-source-row
+  ) {
+  font-size: var(--project-runtime-menu-type-size);
+  font-weight: var(--ui-font-weight-body);
+  line-height: var(--ui-line-height-tight);
+}
+
+.project-runtime-panel-head .project-runtime-panel-title {
+  font-size: var(--project-runtime-menu-type-size);
+  font-weight: var(--ui-font-weight-body);
+  line-height: var(--ui-line-height-tight);
+}
+
+.project-runtime-panel-shell .oc-icon {
+  width: var(--project-runtime-icon-size);
+  height: var(--project-runtime-icon-size);
+}
+
+.project-runtime-panel-shell .project-runtime-bounded-list {
+  --project-runtime-list-visible-rows: 10;
+
+  max-height: calc(
+    (var(--project-runtime-list-row-height) * var(--project-runtime-list-visible-rows)) +
+      (var(--project-runtime-list-row-gap) * (var(--project-runtime-list-visible-rows) - 1))
+  );
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+}
+
+.project-runtime-resource-sections {
+  display: grid;
+  gap: 0;
+}
+
+.project-runtime-menu-region {
+  min-width: 0;
+}
+
+.project-runtime-menu-region + .project-runtime-menu-region {
+  margin-top: calc(6px * var(--ui-scale));
+  padding-top: calc(6px * var(--ui-scale));
+  border-top: var(--oc-border-width) solid var(--project-runtime-divider-color);
+}
+
+.project-runtime-environment-body {
+  display: grid;
+  gap: calc(2px * var(--ui-scale));
+}
+
+.project-runtime-subagent-section {
+  display: grid;
+  gap: calc(2px * var(--ui-scale));
+}
+
+.project-runtime-subagent-summary.oc-button {
+  --oc-button-height: calc(28px * var(--ui-scale));
+  --oc-button-padding-x: 0;
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-shadow: none;
+
+  display: grid;
+  grid-template-columns: var(--project-runtime-leading-icon-column) minmax(0, 1fr) auto;
+  gap: var(--project-runtime-leading-gap);
+  width: 100%;
+  justify-content: stretch;
+  text-align: left;
+}
+
+.project-runtime-subagent-summary.oc-button:is(:hover, :focus-visible) {
+  --oc-button-bg: transparent;
+  --oc-button-color: var(--text-strong);
+  --oc-button-shadow: none;
+
+  background: transparent;
+}
+
+.project-runtime-subagent-working {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-strong);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-runtime-subagent-done {
+  margin-left: auto;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.project-runtime-category.oc-section {
+  --oc-section-head-height: var(--project-runtime-category-row-height);
+  --oc-section-head-pad-x: var(--project-runtime-category-inline-inset);
+  --oc-section-head-gap: calc(6px * var(--ui-scale));
+
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.project-runtime-category.oc-section > .oc-section__head {
+  min-height: var(--project-runtime-category-row-height);
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+  color: var(--text-muted);
+}
+
+.project-runtime-category.oc-section[open] > .oc-section__head,
+.project-runtime-category.oc-section > .oc-section__head:hover,
+.project-runtime-category.oc-section > .oc-section__head:focus-visible {
+  --oc-button-bg: transparent;
+
+  background: transparent;
+  box-shadow: none;
+}
+
+.project-runtime-category.oc-section > .oc-section__head > .oc-section__title {
+  flex: 0 1 auto;
+  margin-inline-start: 0;
+  color: var(--text-muted);
+  font-size: var(--project-runtime-menu-type-size);
+  font-weight: var(--ui-font-weight-body);
+}
+
+.project-runtime-category-link.oc-button > .project-runtime-panel-title {
+  margin-inline-start: 0;
+}
+
+.project-runtime-panel-disclosure.oc-button > .project-runtime-panel-title-group > .oc-icon {
+  width: calc(16px * var(--ui-scale));
+  height: calc(16px * var(--ui-scale));
+  align-items: center;
+  justify-content: center;
+  opacity: var(--ui-opacity-hidden);
+  transform: translateX(calc(-3px * var(--ui-scale)));
+  transition:
+    opacity var(--ui-duration-fast) var(--ui-timing-standard),
+    transform var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.project-runtime-panel-disclosure.oc-button:is(:hover, :focus-visible) > .project-runtime-panel-title-group > .oc-icon {
+  opacity: var(--ui-opacity-full);
+  transform: translateX(0);
+}
+
+.project-runtime-category.oc-section > .oc-section__head > .oc-disclosure__indicator,
+.project-runtime-category-link.oc-button > .oc-icon {
+  width: calc(16px * var(--ui-scale));
+  height: calc(16px * var(--ui-scale));
+  margin-left: auto;
+  opacity: var(--ui-opacity-dim);
+  transform: none;
+  transition:
+    opacity var(--ui-duration-fast) var(--ui-timing-standard),
+    transform var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.project-runtime-category.oc-section[open] > .oc-section__head > .oc-disclosure__indicator {
+  transform: rotate(90deg);
+}
+
+.project-runtime-category.oc-section > .oc-section__head:is(:hover, :focus-visible) > .oc-disclosure__indicator,
+.project-runtime-category-link.oc-button:is(:hover, :focus-visible) > .oc-icon {
+  opacity: var(--ui-opacity-full);
+}
+
+.project-runtime-category.oc-section[open] > .oc-section__head:is(:hover, :focus-visible) > .oc-disclosure__indicator {
+  transform: rotate(90deg);
+}
+
+.project-runtime-category.oc-section > .oc-section__body {
+  display: grid;
+  gap: calc(2px * var(--ui-scale));
+  padding: 0 0 calc(4px * var(--ui-scale));
+}
+
+.project-runtime-category-link.oc-button {
+  --oc-button-height: var(--project-runtime-category-row-height);
+  --oc-button-padding-x: 0;
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-shadow: none;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto var(--project-runtime-icon-size);
+  gap: var(--project-runtime-leading-gap);
+  width: 100%;
+  justify-content: stretch;
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.project-runtime-category-link.oc-button:is(:hover, :focus-visible) {
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-color: var(--text-strong);
+  --oc-button-shadow: none;
+
+  background: transparent;
+  box-shadow: none;
+}
+
+.project-runtime-category-summary {
+  margin-left: auto;
+  color: var(--text-soft);
+  font-size: var(--project-runtime-menu-type-size);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.task-progress.project-runtime-goals-category .oc-button.task-progress__heading {
+  --oc-button-height: var(--project-runtime-category-row-height);
+
+  font-size: var(--project-runtime-menu-type-size);
+  font-weight: var(--ui-font-weight-body);
+}
+
+.project-worktree-section {
+  display: grid;
+  gap: calc(4px * var(--ui-scale));
+}
+
+.project-runtime-section-title-row {
+  min-width: 0;
+  min-height: calc(28px * var(--ui-scale));
+  display: grid;
+  grid-template-columns: var(--project-runtime-leading-icon-column) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--project-runtime-leading-gap);
+}
+
+.project-runtime-section-title {
+  color: var(--text-muted);
+  font-weight: var(--ui-font-weight-body);
+  line-height: var(--ui-line-height-tight);
+}
+
+.project-runtime-panel-shell
+  :is(
+    .project-runtime-section-title-row,
+    .project-runtime-tool-shortcut,
+    .project-runtime-subagent-summary,
+    .project-worktree-head
+  )
+  > .oc-icon {
+  color: var(--text-soft);
+}
+
+.project-worktree-head-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(4px * var(--ui-scale));
+  margin-left: auto;
+}
+
+.project-worktree-head-actions .oc-button {
+  --oc-button-height: calc(26px * var(--ui-scale));
+  --oc-button-padding-x: 0;
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-shadow: none;
+  width: var(--oc-button-height);
+  min-width: var(--oc-button-height);
+}
+
+.project-worktree-list {
+  --project-runtime-list-row-height: var(--oc-density-button-height);
+  --project-runtime-list-row-gap: calc(2px * var(--ui-scale));
+
+  display: grid;
+  gap: var(--project-runtime-list-row-gap);
+}
+
+.project-worktree-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) calc(28px * var(--ui-scale));
+  align-items: center;
+  gap: calc(2px * var(--ui-scale));
+  min-height: var(--project-runtime-list-row-height);
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.project-worktree-row:hover,
+.project-worktree-row:focus-within {
+  background: transparent;
+}
+
+.project-worktree-item {
+  --oc-button-height: var(--project-runtime-list-row-height);
+
+  appearance: none;
+  min-width: 0;
+  min-height: var(--project-runtime-list-row-height);
+  display: grid;
+  grid-template-columns: var(--project-runtime-leading-icon-column) minmax(0, 1fr);
+  align-items: center;
+  width: 100%;
+  gap: var(--project-runtime-leading-gap);
+  padding: 0;
+  border: 0;
+  border-radius: var(--oc-radius-soft);
+  background: transparent;
+  color: var(--text-soft);
+  font-family: var(--font);
+  text-align: left;
+  cursor: pointer;
+}
+
+.project-worktree-item:hover,
+.project-worktree-item[data-highlighted],
+.project-worktree-item:focus-visible {
+  background: transparent;
+  color: var(--text-strong);
+  outline: none;
+}
+
+.project-worktree-item > svg {
+  color: var(--text-muted);
+}
+
+.project-worktree-item[aria-busy="true"] {
+  opacity: var(--ui-opacity-dim);
+}
+
+.project-worktree-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-strong);
+  font-size: var(--project-runtime-menu-type-size);
+  font-weight: var(--ui-font-weight-body);
+  line-height: var(--ui-line-height-tight);
+}
+
+.project-worktree-row .oc-button[data-ui="project-worktree-remove"] {
+  --oc-button-height: calc(24px * var(--ui-scale));
+  --oc-button-shadow: none;
+
+  width: var(--oc-button-height);
+  min-width: var(--oc-button-height);
+}
+
+.project-worktree-row .oc-button[data-ui="project-worktree-remove"]:not(:hover):not(:focus-visible) {
+  --oc-button-color: var(--text-muted);
+  opacity: var(--ui-opacity-hidden);
+}
+
+.project-worktree-row:hover .oc-button[data-ui="project-worktree-remove"],
+.project-worktree-row:focus-within .oc-button[data-ui="project-worktree-remove"] {
+  opacity: var(--ui-opacity-full);
+}
+
+.project-worktree-row .oc-button[data-ui="project-worktree-remove"]:hover,
+.project-worktree-row .oc-button[data-ui="project-worktree-remove"]:focus-visible {
+  --oc-button-bg: var(--bad-dim);
+  --oc-button-color: var(--bad);
+  --oc-button-shadow: none;
+}
+
+.project-worktree-row
+  .oc-button[data-size="icon"][data-variant="ghost"][data-chrome="icon-action"][data-ui="project-worktree-remove"]:disabled {
+  --oc-button-bg: transparent;
+  --oc-button-color: var(--text-muted);
+  opacity: var(--ui-opacity-hidden);
+}
+
+.project-worktree-row:hover
+  .oc-button[data-size="icon"][data-variant="ghost"][data-chrome="icon-action"][data-ui="project-worktree-remove"]:disabled,
+.project-worktree-row:focus-within
+  .oc-button[data-size="icon"][data-variant="ghost"][data-chrome="icon-action"][data-ui="project-worktree-remove"]:disabled {
+  opacity: var(--ui-opacity-dim);
+}
+
+.project-runtime-operation-error {
+  display: grid;
+  grid-template-columns: var(--project-runtime-leading-icon-column) minmax(0, 1fr);
+  align-items: flex-start;
+  gap: var(--project-runtime-leading-gap);
+  margin: 0 0 calc(8px * var(--ui-scale));
+  padding: calc(8px * var(--ui-scale)) 0;
+  border: 1px solid color-mix(in srgb, var(--bad) 42%, transparent);
+  border-radius: var(--oc-radius-large);
+  color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 9%, transparent);
+  font-size: var(--project-runtime-menu-type-size);
+  font-weight: var(--ui-font-weight-body);
+  line-height: var(--ui-line-height-tight);
+}
+
+.project-runtime-operation-error span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.project-runtime-tool-shortcuts {
+  --project-runtime-list-row-height: calc(28px * var(--ui-scale));
+  --project-runtime-list-row-gap: calc(2px * var(--ui-scale));
+
+  display: grid;
+  gap: var(--project-runtime-list-row-gap);
+}
+
+.project-runtime-tool-shortcut.oc-button {
+  --oc-button-height: var(--project-runtime-list-row-height);
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-shadow: none;
+
+  display: grid;
+  grid-template-columns: var(--project-runtime-leading-icon-column) minmax(0, 1fr) auto;
+  gap: var(--project-runtime-leading-gap);
+  width: 100%;
+  min-height: var(--project-runtime-list-row-height);
+  justify-content: stretch;
+  padding-inline: 0;
+  text-align: left;
+}
+
+.project-runtime-tool-shortcut.oc-button:hover,
+.project-runtime-tool-shortcut.oc-button:focus-visible {
+  --oc-button-bg: var(--subtle-2);
+  --oc-button-shadow: none;
+}
+
+.project-runtime-tool-shortcut.oc-button[data-resource]:hover {
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-shadow: none;
+  background: transparent;
+}
+
+.project-runtime-tool-shortcut-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-runtime-tool-shortcut.oc-button .project-runtime-section-title {
+  font-weight: var(--ui-font-weight-body);
+}
+
+.project-runtime-tool-shortcut-summary {
+  color: var(--text-muted);
+  font-size: calc(11px * var(--ui-scale));
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+  text-align: right;
+}
+
+.project-runtime-goals-category .task-progress__summary {
+  text-align: right;
+}
+
+/* Breadcrumb path actions generated by pathBreadcrumb. */
+.task-dir-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(2px * var(--ui-scale));
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.task-dir-path {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  flex: 1;
+  overflow-x: auto;
+}
+
+.task-dir-tool,
+.task-dir-node,
+.task-dir-step,
+.task-dir-empty {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.task-dir-tool {
+  width: calc(24px * var(--ui-scale));
+  height: calc(24px * var(--ui-scale));
+  min-width: calc(24px * var(--ui-scale));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-soft);
+  transition:
+    background var(--ui-duration-fast),
+    color var(--ui-duration-fast);
+}
+
+.task-dir-tool:hover,
+.task-dir-tool:focus-visible {
+  background: var(--subtle-3);
+  color: var(--text-strong);
+}
+
+.task-dir-tool:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(1px * var(--ui-scale));
+}
+
+/* The "danger" affordance on the delete tool tints with --bad.
+   Raw light-red rgba (literal expansion of `--bad` at 12%)
+   routed through color-mix. */
+.task-dir-tool.danger:hover,
+.task-dir-tool.danger:focus-visible {
+  background: color-mix(in srgb, var(--bad) 12%, transparent);
+  color: var(--bad);
+}
+
+.task-dir-tool.danger:focus-visible {
+  outline-color: var(--bad);
+}
+
+.task-dir-node,
+.task-dir-empty {
+  min-height: calc(24px * var(--ui-scale));
+  padding: 0 calc(6px * var(--ui-scale));
+  color: var(--text-strong);
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-medium);
+  white-space: nowrap;
+  transition:
+    background var(--ui-duration-fast),
+    color var(--ui-duration-fast);
+}
+
+.task-dir-node {
+  flex-shrink: 0;
+}
+
+.task-dir-node:hover,
+.task-dir-node:focus-visible {
+  background: var(--subtle-3);
+}
+
+.task-dir-node:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(1px * var(--ui-scale));
+}
+
+.task-dir-node[data-current="true"] {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.task-dir-step {
+  min-width: calc(18px * var(--ui-scale));
+  height: calc(24px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  transition:
+    background var(--ui-duration-fast),
+    color var(--ui-duration-fast);
+}
+
+.task-dir-step:hover,
+.task-dir-step:focus-visible {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.task-dir-step:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(1px * var(--ui-scale));
+}
+
+.task-dir-empty {
+  min-width: 0;
+  flex: 1;
+  text-align: left;
+  color: var(--text-soft);
+  cursor: default;
+}
+
+.task-dir[data-empty="false"] .task-dir-empty {
+  display: none;
+}
+
+.task-dir[data-empty="true"] .task-dir-path {
+  display: none;
+}
+
+.task-dir-node,
+.task-dir-empty {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Task Bar (flat strip hosting the active task status and cwd) ──
+   Flat/calm design: bottom-border strip, no shadow, per-theme
+   glassmorphism only in light mode. The gradient-card original was
+   always overridden by the workbench compact pass; this is the
+   single-source flat canonical. */
+.task-bar {
+  display: flex;
+  flex-direction: column;
+  gap: calc(4px * var(--ui-scale));
+  padding: 0 calc(6px * var(--ui-scale));
+  margin: 0;
+  border: none;
+  border-bottom: var(--oc-border-width) solid var(--task-bar-border-color);
+  border-radius: 0;
+  background: var(--task-bar-bg);
+  backdrop-filter: var(--task-bar-backdrop-filter);
+  flex-shrink: 0;
+  box-shadow: none;
+  transition:
+    border-color var(--ui-duration-base),
+    background var(--ui-duration-base);
+}
+
+.task-bar:hover,
+.task-bar:focus-within {
+  border-color: var(--border-hover);
+}
+
+/* ── Task Status chip (inline status pill inside .task-bar) ── */
+.task-status {
+  display: flex;
+  align-items: center;
+  gap: calc(6px * var(--ui-scale));
+  flex-shrink: 0;
+  padding: calc(5px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  border-radius: var(--oc-radius-soft);
+  background: transparent;
+}
+
+.status-label {
+  font-size: var(--ui-font-small);
+  font-weight: var(--ui-font-weight-strong);
+  color: var(--text-strong);
+  text-transform: uppercase;
+  letter-spacing: var(--ui-letter-spacing-loose);
+}
+
+.elapsed {
+  font-size: var(--ui-font-small);
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Chat column shell + chat-scroll baseline (extracted 2026-05-04).
+   ───────────────────────────────────────────────────────────── */
+
+.chat {
+  --conversation-message-content-width: var(--ui-chat-message-content-width);
+
+  flex: 999 1 var(--ui-chat-priority-width);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: min(100%, var(--ui-chat-min-width));
+  border: var(--oc-border-width) solid var(--divider-soft);
+  border-radius: var(--oc-radius-xl) var(--oc-radius-xl) 0 0;
+  background: var(--chat-canvas);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: none;
+  overflow: hidden;
+}
+
+.oc-section__body > *,
+.config-section-body > *,
+.sidebar-body > *,
+.chat-scroll > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Chat responsive collapse (extracted 2026-05-04). At max-width
+   760px, the chat header collapses to two columns + status hides;
+   user / system message bubbles stretch full width.
+   ───────────────────────────────────────────────────────────── */
+
+@container chat-workbench (width < 760px) {
+  /* breakpoint: --ui-breakpoint-md */
+  .conversation-agent-rail {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    min-height: 0;
+    flex-direction: column;
+    padding: calc(8px * var(--ui-scale)) calc(4px * var(--ui-scale));
+  }
+
+  .conversation-agent-rail__lanes {
+    flex: 1 1 0;
+    width: 100%;
+    max-width: 100%;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .conversation-agent-rail__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chat-header {
+    --oc-header-gap: calc(6px * var(--ui-scale));
+
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .chat-header-meta .workspace-editor-launchers .oc-button[data-chrome="workspace-split-primary"] {
+    width: calc(28px * var(--ui-scale));
+    min-width: calc(28px * var(--ui-scale));
+    max-width: calc(28px * var(--ui-scale));
+    padding-inline: 0;
+  }
+
+  .chat-header-meta .workspace-editor-primary-label {
+    display: none;
+  }
+
+  .chat-title-icon {
+    display: none;
+  }
+
+  .conversation-virtual-item > .card,
+  .conversation-virtual-item > .interaction-card,
+  .conversation-virtual-item > .card[data-kind="message"][data-role="user"],
+  .conversation-virtual-item > .card[data-kind="message"][data-role="system"] {
+    width: 100%;
+    max-width: 100%;
+    align-self: stretch;
+  }
+}
+
+/* Codex-parity environment control: the chat header is the only runtime
+   chrome owner, while the existing DropdownMenu keeps focus and dismissal. */
+#solidChatHeaderRuntimeActions,
+#solidChatHeaderRuntimeActions .project-runtime-toolbar-actions {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.project-runtime-trigger-anchor {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oc-header-gap);
+}
+
+.project-runtime-status-panel {
+  width: min(var(--ui-runtime-environment-panel-width), calc(var(--ui-overlay-shell-width) - 16px * var(--ui-scale)));
+  max-width: calc(var(--ui-overlay-shell-width) - 16px * var(--ui-scale));
+  max-height: calc(var(--ui-overlay-shell-height) - 16px * var(--ui-scale));
+  box-sizing: border-box;
+  overflow: auto;
+  z-index: var(--ui-z-overlay);
+}
+
+.project-runtime-status-panel:not([data-closed]) {
+  animation: project-runtime-panel-enter var(--ui-duration-slow) var(--ui-timing-standard);
+}
+
+/* The single portaled Environment panel narrows only the readable content
+   lane. The full-width transcript scrollport and its native scrollbar stay
+   anchored to the conversation viewport. Compact Workbenches retain the
+   mature HoverCard overlay behavior. */
+@container chat-workbench (width >= 900px) {
+  /* breakpoint: --ui-breakpoint-lg */
+  body:has(.project-runtime-status-panel) #conversationBody {
+    --conversation-environment-content-clearance: var(--ui-runtime-environment-chat-clearance);
+  }
+}
+
+@keyframes project-runtime-panel-enter {
+  from {
+    clip-path: inset(0 0 0 100%);
+    opacity: var(--ui-opacity-hidden);
+  }
+
+  to {
+    clip-path: inset(0);
+    opacity: var(--ui-opacity-full);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-runtime-status-panel {
+    animation-duration: var(--ui-duration-instant);
+  }
+
+  .chat-scroll,
+  #solidChatComposer,
+  .chat-home-composition {
+    transition-duration: var(--ui-duration-instant);
+  }
+}
+
+.project-runtime-panel-head {
+  min-width: 0;
+  min-height: var(--project-runtime-panel-head-row-height);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) var(--project-runtime-trailing-control-size);
+  align-items: center;
+  gap: calc(8px * var(--ui-scale));
+  padding: 0;
+  color: var(--text-muted);
+}
+
+.oc-button.project-runtime-panel-trailing-control {
+  --oc-button-height: var(--project-runtime-trailing-control-size);
+
+  width: var(--project-runtime-trailing-control-size);
+  min-width: var(--project-runtime-trailing-control-size);
+  height: var(--project-runtime-trailing-control-size);
+  display: inline-flex;
+  grid-column: 3;
+  align-items: center;
+  justify-content: flex-end;
+  justify-self: end;
+}
+
+.project-runtime-panel-trailing-control.oc-button:is(:hover, :focus-visible) {
+  --oc-button-bg: var(--hover-wash);
+  --oc-button-border: 0 solid transparent;
+  --oc-button-shadow: none;
+}
+
+.task-progress.project-runtime-goals-category .oc-button[data-ui="task-progress-fold"] {
+  --oc-button-height: var(--project-runtime-category-row-height);
+
+  width: var(--project-runtime-trailing-control-size);
+  min-width: var(--project-runtime-trailing-control-size);
+  justify-content: flex-end;
+}
+
+.project-runtime-menu-region-head {
+  min-width: 0;
+  min-height: var(--project-runtime-category-row-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(8px * var(--ui-scale));
+  padding-inline-start: 0;
+  color: var(--text-muted);
+}
+
+.project-runtime-source-head {
+  padding-inline-start: 0;
+}
+
+.project-runtime-panel-disclosure.oc-button {
+  --oc-button-height: var(--project-runtime-panel-head-row-height);
+  --oc-button-padding-x: 0;
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-shadow: none;
+
+  min-width: 0;
+  width: auto;
+  max-width: 100%;
+  justify-content: flex-start;
+}
+
+.project-runtime-panel-title-group {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(6px * var(--ui-scale));
+  flex: 0 1 auto;
+  margin-inline-start: 0;
+}
+
+.project-runtime-panel-title-group > .project-runtime-panel-title {
+  flex: 0 1 auto;
+}
+
+.project-runtime-panel-title-group > .oc-icon {
+  width: calc(16px * var(--ui-scale));
+  height: calc(16px * var(--ui-scale));
+}
+
+.task-progress.project-runtime-goals-category {
+  --task-progress-leading-inset: 0px;
+
+  width: auto;
+  gap: calc(2px * var(--ui-scale));
+  padding: 0 0 calc(4px * var(--ui-scale));
+}
+
+.project-runtime-goals-category .task-progress__header {
+  min-height: var(--project-runtime-category-row-height);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto var(--project-runtime-trailing-control-size);
+  gap: var(--project-runtime-leading-gap);
+}
+
+.task-progress.project-runtime-goals-category .oc-button.task-progress__heading {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.project-runtime-goals-category .task-progress__pills {
+  --project-runtime-list-row-height: var(--oc-density-chip-height);
+  --project-runtime-list-row-gap: calc(1px * var(--ui-scale));
+
+  grid-template-columns: var(--project-runtime-leading-icon-column) max-content minmax(0, 1fr);
+  grid-auto-rows: minmax(var(--project-runtime-list-row-height), auto);
+  column-gap: var(--project-runtime-leading-gap);
+  row-gap: var(--project-runtime-list-row-gap);
+  margin-inline-start: var(--project-runtime-category-inline-inset);
+}
+
+.project-runtime-goals-category .oc-button[data-ui="task-progress-fold"] > .oc-icon {
+  width: var(--project-runtime-icon-size);
+  height: var(--project-runtime-icon-size);
+  opacity: var(--ui-opacity-dim);
+  transition: opacity var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.project-runtime-goals-category .oc-button[data-ui="task-progress-fold"]:is(:hover, :focus-visible) > .oc-icon {
+  opacity: var(--ui-opacity-full);
+}
+
+.project-runtime-panel-disclosure.oc-button:hover,
+.project-runtime-panel-disclosure.oc-button:focus-visible,
+.project-runtime-category.oc-section > .oc-section__head:hover,
+.project-runtime-category.oc-section > .oc-section__head:focus-visible {
+  --oc-button-bg: transparent;
+  --oc-button-color: var(--text-strong);
+
+  background: transparent;
+  box-shadow: none;
+}
+
+.project-runtime-panel-title {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-weight: var(--ui-font-weight-body);
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-runtime-expanded-body {
+  display: grid;
+  gap: 0;
+}
+
+.project-runtime-info-row {
+  min-width: 0;
+  min-height: calc(28px * var(--ui-scale));
+  display: grid;
+  grid-template-columns: var(--project-runtime-leading-icon-column) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--project-runtime-info-leading-gap);
+  padding: 0 var(--project-runtime-info-inline-inset);
+  color: var(--text-strong);
+  font-size: var(--project-runtime-menu-type-size);
+}
+
+.project-runtime-info-action.oc-button {
+  --oc-button-height: calc(28px * var(--ui-scale));
+  --oc-button-padding-x: var(--project-runtime-info-inline-inset);
+  --oc-button-gap: var(--project-runtime-info-leading-gap);
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-shadow: none;
+
+  width: 100%;
+  justify-content: stretch;
+  border-radius: var(--oc-radius-soft);
+  font-weight: var(--ui-font-weight-body);
+  text-align: left;
+}
+
+.project-runtime-info-action.oc-button[data-ui="project-runtime-changes"]:is(:hover, :focus-visible) {
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-shadow: none;
+}
+
+.project-runtime-control-trigger.oc-button:is(:hover, :focus-visible),
+.project-runtime-control-trigger.oc-button[data-expanded] {
+  --oc-button-bg: var(--hover-wash);
+}
+
+.project-runtime-info-caret {
+  transition: transform var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.project-runtime-control-trigger[data-expanded] .project-runtime-info-caret {
+  transform: rotate(180deg);
+}
+
+.project-runtime-info-row > svg {
+  color: var(--text-soft);
+}
+
+.project-runtime-info-value {
+  min-width: 0;
+  max-width: calc(250px * var(--ui-scale));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-soft);
+  text-align: right;
+}
+
+.project-runtime-branch-value {
+  grid-column: 2;
+  justify-self: start;
+  max-width: 100%;
+  color: var(--text-strong);
+  text-align: left;
+}
+
+.project-runtime-change-totals {
+  grid-column: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(6px * var(--ui-scale));
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.project-runtime-collapsed-totals {
+  grid-column: auto;
+}
+
+.project-runtime-change-totals [data-tone="good"] {
+  color: var(--good);
+}
+.project-runtime-change-totals [data-tone="bad"] {
+  color: var(--bad);
+}
+.project-runtime-github-row {
+  color: var(--text-muted);
+}
+
+.dialog-overlay.project-runtime-local-environment-dialog-overlay,
+.dialog-overlay.project-runtime-git-dialog-overlay {
+  background: color-mix(in srgb, var(--ui-scrim) 82%, transparent);
+}
+
+.dialog-form.project-runtime-local-environment-dialog-form {
+  --dialog-form-padding-block: 0px;
+  --dialog-form-padding-inline: 0px;
+
+  width: calc(100% - calc(32px * var(--ui-scale)));
+  max-width: calc(620px * var(--ui-scale));
+  overflow: hidden;
+  gap: 0;
+  padding: 0;
+  border-radius: var(--oc-radius-xl);
+}
+
+.project-runtime-local-environment-dialog {
+  display: grid;
+  gap: calc(16px * var(--ui-scale));
+  padding: calc(18px * var(--ui-scale));
+}
+
+.project-runtime-local-environment-description,
+.project-runtime-local-environment-empty {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--ui-font-body);
+  line-height: 1.5;
+}
+
+.project-runtime-local-environment-variable-section,
+.project-runtime-local-environment-variable-list {
+  display: grid;
+  gap: calc(10px * var(--ui-scale));
+}
+
+.project-runtime-local-environment-variable-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(12px * var(--ui-scale));
+}
+
+.project-runtime-local-environment-variable-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr) auto;
+  align-items: end;
+  gap: calc(8px * var(--ui-scale));
+}
+
+.project-runtime-local-environment-variable-row > .oc-button {
+  margin-bottom: calc(1px * var(--ui-scale));
+}
+
+.project-runtime-local-environment-actions {
+  margin-top: 0;
+}
+
+.dialog-form.project-runtime-git-dialog-form {
+  width: calc(100% - calc(32px * var(--ui-scale)));
+  max-width: calc(540px * var(--ui-scale));
+  overflow: hidden;
+  gap: 0;
+  padding: 0;
+  border-radius: var(--oc-radius-xl);
+}
+
+.dialog-form.project-runtime-git-dialog-form > .dialog-header {
+  margin: 0;
+  padding: calc(20px * var(--ui-scale)) calc(22px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.dialog-form.project-runtime-git-dialog-form .dialog-title {
+  min-width: 0;
+  font-size: calc(15px * var(--ui-scale));
+  font-weight: var(--ui-font-weight-body);
+  color: var(--text-muted);
+}
+
+.project-runtime-git-dialog-title {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(9px * var(--ui-scale));
+}
+
+.project-runtime-git-dialog-title > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-runtime-git-dialog-body {
+  display: grid;
+  gap: calc(10px * var(--ui-scale));
+  padding: 0 calc(10px * var(--ui-scale)) calc(14px * var(--ui-scale));
+}
+
+.project-runtime-commit-message {
+  width: 100%;
+  min-height: calc(118px * var(--ui-scale));
+  box-sizing: border-box;
+  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  resize: none;
+}
+
+.project-runtime-commit-message:hover,
+.project-runtime-commit-message:focus {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.project-runtime-git-dialog-actions {
+  display: grid;
+  gap: calc(2px * var(--ui-scale));
+  padding-top: calc(8px * var(--ui-scale));
+  border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
+}
+
+.dialog-form.project-runtime-git-dialog-form
+  .oc-button[data-ui="project-runtime-regenerate-commit-message"][data-busy="true"]
+  svg {
+  animation: oc-spin var(--ui-duration-loop-spin) linear infinite;
+}
+
+.project-runtime-git-dialog-action.oc-button {
+  --oc-button-height: calc(44px * var(--ui-scale));
+  --oc-button-padding-x: calc(12px * var(--ui-scale));
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-shadow: none;
+
+  width: 100%;
+  justify-content: flex-start;
+  border-radius: var(--oc-radius-large);
+}
+
+.project-runtime-git-dialog-action.oc-button > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-runtime-git-dialog-action kbd {
+  margin-left: auto;
+  padding: calc(2px * var(--ui-scale)) calc(7px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: var(--surface-inset);
+  color: var(--text-muted);
+  font: inherit;
+  white-space: nowrap;
+}
+
+.project-runtime-git-empty,
+.project-runtime-git-notice {
+  color: var(--text-muted);
+  font-size: var(--ui-font-control);
+  line-height: 1.5;
+  padding: calc(8px * var(--ui-scale)) calc(12px * var(--ui-scale));
+}
+
+.project-runtime-git-notice {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: calc(6px * var(--ui-scale));
+  color: var(--good);
+}
+
+.project-runtime-source-section {
+  display: grid;
+  gap: calc(2px * var(--ui-scale));
+}
+
+.project-runtime-source-list {
+  --project-runtime-list-row-height: calc(24px * var(--ui-scale));
+  --project-runtime-list-row-gap: calc(1px * var(--ui-scale));
+
+  display: grid;
+  gap: var(--project-runtime-list-row-gap);
+}
+
+.project-runtime-source-row {
+  min-width: 0;
+  min-height: var(--project-runtime-list-row-height);
+  display: grid;
+  grid-template-columns: var(--project-runtime-leading-icon-column) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--project-runtime-leading-gap);
+  color: var(--text-muted);
+  font-size: var(--project-runtime-menu-type-size);
+}
+
+.project-runtime-source-row > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-runtime-source-thumb {
+  width: calc(22px * var(--ui-scale));
+  height: calc(22px * var(--ui-scale));
+  overflow: hidden;
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-soft);
+  background: var(--surface-inset);
+}
+
+.project-runtime-source-thumb :is(.msg-img-wrap, .md-img, img) {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  object-fit: cover;
+}
+
+.project-runtime-source-thumb :is(.msg-file, .msg-file-link, .msg-file-fallback) {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Sub-agent calls stay compact in the primary transcript. Each card exposes
+   the canonical child-session activity stream and opens its full transcript
+   in the right dock. */
+.subagent-progress-grid {
+  --subagent-progress-card-block-size: calc(188px * var(--ui-scale));
+
+  width: var(--conversation-card-inline-size);
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(calc(248px * var(--ui-scale)), 100%), 1fr));
+  gap: calc(8px * var(--ui-scale));
+  padding-block: calc(2px * var(--ui-scale));
+}
+
+.subagent-progress-card {
+  position: relative;
+  min-width: 0;
+  block-size: var(--subagent-progress-card-block-size);
+  display: flex;
+  flex-direction: column;
+  gap: calc(8px * var(--ui-scale));
+  box-sizing: border-box;
+  padding: calc(11px * var(--ui-scale));
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--card-stage, var(--accent)) 18%, var(--border));
+  border-radius: var(--oc-radius-large);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--card-stage, var(--accent)) 5%, transparent), transparent 44%),
+    var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    border-color var(--ui-duration-fast) var(--ui-timing-standard),
+    background-color var(--ui-duration-fast) var(--ui-timing-standard),
+    box-shadow var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.subagent-progress-card:hover {
+  border-color: color-mix(in srgb, var(--card-stage, var(--accent)) 32%, var(--border));
+  background-color: var(--surface-hover);
+}
+
+.subagent-progress-card:has(.subagent-progress-card__activation:focus-visible) {
+  outline: calc(2px * var(--ui-scale)) solid color-mix(in srgb, var(--accent) 68%, transparent);
+  outline-offset: calc(2px * var(--ui-scale));
+}
+
+.subagent-progress-card[data-status="running"] {
+  border-color: color-mix(in srgb, var(--card-stage, var(--accent)) 34%, var(--border));
+  box-shadow: inset calc(2px * var(--ui-scale)) 0 0
+    color-mix(in srgb, var(--card-stage, var(--accent)) 70%, transparent);
+}
+
+.subagent-progress-card {
+  isolation: isolate;
+}
+
+.subagent-progress-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    color-mix(in srgb, var(--card-stage, var(--accent)) 4%, transparent) 38%,
+    color-mix(in srgb, var(--card-stage, var(--accent)) 14%, transparent) 50%,
+    color-mix(in srgb, var(--card-stage, var(--accent)) 4%, transparent) 62%,
+    transparent 80%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-100%);
+}
+
+.subagent-progress-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .panel[data-conversation-execution-status="active"] .subagent-progress-card[data-status="running"]::before {
+    opacity: 1;
+    animation: agent-running-surface-wave var(--ui-duration-loop-tool-wave) var(--ui-timing-standard) infinite;
+  }
+}
+
+@keyframes agent-running-surface-wave {
+  65%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.subagent-progress-card__header,
+.subagent-progress-card__identity {
+  display: flex;
+  align-items: center;
+}
+
+.subagent-progress-card__header {
+  min-width: 0;
+  justify-content: space-between;
+  gap: calc(8px * var(--ui-scale));
+}
+
+.subagent-progress-card__identity {
+  min-width: 0;
+  gap: calc(7px * var(--ui-scale));
+}
+
+.subagent-progress-card__identity strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-strong);
+  font-size: var(--ui-font-body);
+  font-weight: var(--ui-font-weight-strong);
+  white-space: nowrap;
+}
+
+.subagent-progress-card__events {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(2px * var(--ui-scale));
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-block: calc(2px * var(--ui-scale));
+  overscroll-behavior: contain;
+}
+
+.subagent-progress-event {
+  flex: 0 0 auto;
+  min-width: 0;
+  min-height: calc(24px * var(--ui-scale));
+  display: grid;
+  grid-template-columns: calc(16px * var(--ui-scale)) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: calc(6px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-small);
+}
+
+.subagent-progress-event > svg {
+  color: var(--text-subtle);
+}
+
+.subagent-progress-event[data-kind="error"],
+.subagent-progress-event[data-kind="error"] > svg {
+  color: var(--bad);
+}
+
+.subagent-progress-event__main {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subagent-progress-event__main:has(.subagent-progress-event__label) {
+  display: flex;
+  gap: calc(6px * var(--ui-scale));
+}
+
+.subagent-progress-event__label {
+  flex: 0 0 auto;
+  color: var(--text);
+}
+
+.subagent-progress-event__detail {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.subagent-progress-card__waiting {
+  margin: auto 0;
+  color: var(--text-subtle);
+  font-size: var(--ui-font-small);
+}
+
+.subagent-progress-card__activation.oc-button {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  min-width: 0;
+  height: auto;
+  min-height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  opacity: var(--ui-opacity-hidden);
+  pointer-events: none;
+}
+
+.subagent-progress-card__footer {
+  flex: 0 0 auto;
+  min-width: 0;
+  margin-top: auto;
+  padding: calc(1px * var(--ui-scale)) calc(1px * var(--ui-scale)) 0;
+}
+
+.todo-progress--subagent {
+  --todo-progress-accent: var(--card-stage, var(--accent));
+  min-width: 0;
+  display: grid;
+  gap: calc(5px * var(--ui-scale));
+  font-size: var(--ui-font-tiny);
+}
+
+.todo-progress--subagent .todo-progress__summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: calc(7px * var(--ui-scale));
+  line-height: 1.25;
+}
+
+.todo-progress--subagent .todo-progress__count {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-strong);
+}
+
+.todo-progress--subagent .todo-progress__current {
+  grid-column: 1;
+  grid-row: 1;
+  display: block;
+  color: var(--text-soft);
+  font-size: var(--ui-font-small);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+.todo-progress--subagent .todo-progress__current--tooltip {
+  border-radius: var(--oc-radius-small);
+  cursor: default;
+}
+
+.todo-progress--subagent .todo-progress__current--tooltip:focus-visible {
+  outline: calc(2px * var(--ui-scale)) solid color-mix(in srgb, var(--accent) 62%, transparent);
+  outline-offset: calc(2px * var(--ui-scale));
+}
+
+.todo-progress--subagent .todo-progress__track {
+  height: calc(3px * var(--ui-scale));
+  background: color-mix(in srgb, var(--text-muted) 16%, transparent);
+}
+
+.todo-progress--subagent .todo-progress__fill {
+  background: color-mix(in srgb, var(--todo-progress-accent) 74%, var(--text));
+}
+
+.computer-control-surface {
+  display: grid;
+  gap: calc(10px * var(--ui-scale));
+  padding: calc(12px * var(--ui-scale));
+  border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  border-radius: var(--oc-radius-medium);
+  background: color-mix(in srgb, var(--surface-elevated) 88%, transparent);
+}
+
+.computer-control-surface__identity {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: calc(8px * var(--ui-scale));
+}
+
+.computer-control-surface__identity > div {
+  display: grid;
+  gap: calc(3px * var(--ui-scale));
+  min-width: 0;
+}
+
+.computer-control-surface__identity span {
+  color: var(--text-muted);
+  font-size: var(--ui-font-small);
+}
+
+.computer-control-surface__identity strong {
+  overflow: hidden;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--ui-font-small);
+  font-weight: var(--ui-font-weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.computer-control-surface__status {
+  display: flex;
+  align-items: center;
+  gap: calc(7px * var(--ui-scale));
+  color: var(--text-soft);
+  font-size: var(--ui-font-small);
+}
+
+.computer-control-surface__status-dot {
+  width: calc(7px * var(--ui-scale));
+  height: calc(7px * var(--ui-scale));
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 calc(3px * var(--ui-scale)) color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.computer-control-surface__status[data-owner="human"] .computer-control-surface__status-dot {
+  background: var(--warn);
+  box-shadow: 0 0 0 calc(3px * var(--ui-scale)) color-mix(in srgb, var(--warn) 16%, transparent);
+}
+
+.computer-control-surface__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(8px * var(--ui-scale));
+}
+
+.computer-control-surface__error,
+.computer-control-surface__notice {
+  padding: calc(8px * var(--ui-scale));
+  border-radius: var(--oc-radius-small);
+  font-size: var(--ui-font-small);
+  line-height: 1.45;
+}
+
+.computer-control-surface__error {
+  color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 10%, transparent);
+}
+
+.computer-control-surface__notice {
+  color: var(--text-soft);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}

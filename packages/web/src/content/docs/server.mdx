@@ -1,0 +1,67 @@
+---
+title: Server
+description: The OpenCorvus HTTP server runtime, route modules, and integration surfaces.
+---
+
+`opencorvus serve` starts the OpenCorvus HTTP API server. It is the substrate behind the [SDK](../sdk/), the Overlay UI, the [ACP](../acp/) bridge, and external integrations (GitHub Action, channel runtime, etc.).
+
+Source: `packages/opencorvus/src/server/`.
+
+## Launch
+
+```bash
+opencorvus serve --hostname 127.0.0.1 --port 7878
+```
+
+See [CLI](../cli/) for all flags. Set `OPENCORVUS_SERVER_PASSWORD` when binding to a non-loopback hostname if the API must be protected.
+
+## Architecture
+
+- `server.ts` — HTTP entrypoint, mounts route modules.
+- `defaults.ts` — default port, hostname, and server URL rules.
+- `event.ts` — SSE event multiplexer.
+- `mdns.ts` — optional mDNS service discovery.
+- `overlay-ui.ts` — serves the static Overlay UI under `/ui/`.
+- `in-process-client.ts` — embedded SDK client used by `opencorvus acp`.
+- `shutdown.ts` — graceful shutdown hooks.
+
+## Route modules
+
+Most HTTP routes are split into focused modules under `packages/opencorvus/src/server/routes/`:
+
+| Module               | Module                    | Module                          |
+| -------------------- | ------------------------- | ------------------------------- |
+| `app.ts`             | `attachment.ts`           | `auth.ts`                       |
+| `browser-preview.ts` | `channel.ts`              | `coding.ts`                     |
+| `config.ts`          | `control.ts`              | `conversation-capability.ts`    |
+| `documentation.ts`   | `experimental.ts`         | `expert-squad.ts`               |
+| `export.ts`          | `file.ts`                 | `gateway.ts`                    |
+| `global.ts`          | `interactive-artifact.ts` | `mailbox.ts`                    |
+| `mcp.ts`             | `mission-skill.ts`        | `mission.ts`                    |
+| `orchestrator.ts`    | `panel.ts`                | `permission.ts`                 |
+| `plugin.ts`          | `project.ts`              | `provider.ts`                   |
+| `pty.ts`             | `question.ts`             | `right-sidebar-conversation.ts` |
+| `session.ts`         | `skill.ts`                | `terminal.ts`                   |
+| `work-ledger.ts`     |                           |                                 |
+
+Each module owns a related slice of the API (e.g. `permission.ts` exposes `/permission/*`, `mcp.ts` exposes `/mcp/*`).
+`QuickNoteRoutes` is the mounted feature route outside that folder: it lives in `packages/opencorvus/src/quicknote/routes.ts` and is mounted by `app.ts` under `/api/v1/notes`.
+
+## Streaming
+
+Long-running events stream over SSE on `/event`. The SDK exposes this as `client.event.subscribe()`. Reconnect logic with exponential backoff (max 60 s) lives client-side.
+
+## Authentication
+
+When `OPENCORVUS_SERVER_PASSWORD` is set, requests must use HTTP Basic Auth. The username is `OPENCORVUS_SERVER_USERNAME` or the default `opencorvus`; the password is `OPENCORVUS_SERVER_PASSWORD`. The SDK sets the `Authorization` header automatically when configured with `password`.
+
+## Embedding
+
+```ts
+import { createOpenCorvus } from "@opencorvus-ai/sdk"
+const { client, server } = await createOpenCorvus({ directory: "/path/to/repo" })
+```
+
+This boots a server in-process on a random port and returns a client connected to it. Use this when you don't want a separate `opencorvus serve` process.
+
+See [SDK](../sdk/) for the full client surface.

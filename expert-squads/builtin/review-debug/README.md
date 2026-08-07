@@ -1,0 +1,37 @@
+# Review & Debug
+
+Review & Debug owns evidence-backed review of existing product behavior, reproducible product-defect investigation, root-cause analysis, product-source repair, and independent repair verification.
+
+It does not own greenfield feature delivery or post-delivery audit reports. Independent audit work remains the independent test and audit producer: independent audit may author or repair test-owned artifacts, classify a reproducible failure as a product defect, and publish release judgment, but it stops before product root-cause debugging or product-source repair.
+
+SDK means Software Development Kit; SUT means System Under Test; UI means User Interface.
+
+## Fact and Turn Contract
+
+Every projected agent extends the platform Agent-fact and Turn protocol. Review and investigation tools record durable findings without becoming submit/finalizer calls; a normal stream end is only a physical Turn observation; and the visible final assistant message is natural narration of work, limitations, and blockers rather than durable evidence transport. Git changes, command/test exits, process facts, and screenshots remain Host observations rather than Agent self-reports.
+
+Execution attempts and dispatch lineage are immutable physical evidence identities. Exact Delivery Slice revision IDs are optional work and evidence subjects, never lifecycle or scheduling owners. The Orchestrator judges visible final messages, domain artifacts, tool traces, and Host observations and owns Task lifecycle decisions. Every completion appends one typed `task_completion_decision` artifact that names the exact Orchestrator message/tool part, typed EvidenceLocators, every intentionally delivered Artifact locator, every accepted current Delivery Slice revision ID, and the exact selected workflow ID (`null` only for a direct Task). The selected workflow is inseparably bound to the active package revision: scope, project identity, namespace, manifest ID, version, and package digest. Empty deliverable or accepted-revision lists are truthful only when that Task produced no Artifact deliverables or has no Delivery Slices. Reopen preserves earlier decisions, and the current Task projection joins only the artifact whose timestamp equals the terminal Task timestamp. The artifact does not copy the narrative summary or materialize an acceptance aggregate. This package does not infer an active/current Run or persist workflow step state.
+
+## Expert Contract
+
+1. Review-only evidence names the exact requirement, target revision or diff, affected call graph, and relevant checks. Debug evidence additionally names the exact command or user path, environment, observed result, and expected result.
+2. The Task enters this package only after a concrete repository and fixed
+   revision are available and an exact review target or reproducible defect
+   evidence contract exists. Open-ended project/issue selection and cloning belong to a
+   Advanced predecessor Task; an empty project is not a review target.
+3. Review findings name the file and smallest useful line range, severity, behavioral impact, and concrete evidence. A label, title, status word, or naming similarity is not causal evidence.
+4. Root-cause evidence presents the complete chain: observable symptom, direct trigger, data/control/rendering path, underlying design or implementation fault, and why earlier paths did not cure it. Unknown links remain explicit.
+5. Only the repair implementer edits product source. It acts after reproduction, code review, and root-cause evidence, removes the superseded path, and adds a regression test that fails for the original defect.
+6. Reviewers and investigators are read-only. The integrity reviewer reruns the original reproduction and focused regression checks against the final diff.
+7. Graphical repair requires a real task-scoped preview, pre-repair and fresh post-repair screenshots bound to affected states, exercised interactions and keyboard/focus paths, diagnostics, and personal visual inspection. DOM text or a clean build is not visual evidence.
+8. Product repair evidence may be handed to a later fixed-profile independent audit Task. This squad never claims an independent audit or release judgment itself.
+
+The three binding workflows preserve mandatory once-per-Task Agent order without manufacturing Delivery Slice, RequirementSet, or ContractGraph facts. Packages that use operator-visible Goals treat them as versioned Delivery Slice contracts and pass exact revision IDs only as work and evidence subjects.
+
+This package defines scheduler guidance only. It does not create a dispatcher, hidden messages, a workflow engine, persisted step state, or a host gate.
+
+## Artifact protocol
+
+The model-facing file protocol uses `artifact_snapshot` to publish current-Task project files and return one exact content-addressed `resource_set` locator. `artifact_publish` accepts the complete evidence value only as strict JSON text in `payload_json`; object keys must be unique, and `resource_set` is required (`null` when there are no files, otherwise the exact locator returned by `artifact_snapshot`). The Host verifies and expands the immutable manifest inside its trusted boundary, then publishes the structured value through the same canonical service used by typed and package tools.
+
+Task schedulers and projected workers inherit `artifact_search`, `artifact_read`, and `artifact_select` as platform tools. Projected workers additionally inherit `artifact_snapshot` and `artifact_publish`; schedulers do not. A worker without a typed domain-output producer uses `artifact_publish` for canonical JSON `expert_output` type `<active-squad-id>/...`; the publication declares publication-specific `source_artifact_locators` from complete reads earlier in the same physical Turn, and the Host derives Task, Session, Agent, active-Squad, projection, and complete-read observations. Typed domain-output tools remain their domain's sole publishers and are never duplicated. Every consumer completely reads each candidate it inspects, then calls `artifact_select` for every Artifact that semantically supports its typed output; complete but unselected reads remain observations and zero selections are valid. Reproduction, root-cause, repair, screenshot, and review evidence does not travel through Agent messages or adapter results: each consumer enumerates the same-Task catalog and reads the exact content-addressed locator. A user-pinned locator cannot be replaced by search. For Cross-Task evidence, Mission selects an exact `ArtifactReadLocator` (`engine_artifact`, `task_artifact_snapshot`, or `task_artifact_resource`) from the source Task catalog and creates the receiving Task with `{source_task_id, locator}`. The receiving catalog exposes a target-owned imported Engine Artifact that preserves the source type, schema, payload, copied resources, and original consumption provenance in immutable `import_lineage`; copied request prose and foreign reads are not evidence. Empty search/default fields are valid. Missing, foreign, corrupt, stale, unreadable, or path-invalid selected evidence is an explicit error.

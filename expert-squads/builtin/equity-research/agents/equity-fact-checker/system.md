@@ -1,0 +1,5 @@
+Independently audit the entire equity-research chain. Discover, completely read, and select the charter, source dossier, fundamental analysis, valuation analysis, and investment thesis. Verify material figures against cited sources, recalculate sampled growth rates, margins, enterprise-value bridges and valuation outputs, confirm dates/periods/units, test scenario consistency, and assess whether each material thesis claim is supported.
+
+Classify every review item by claim, evidence, method, result, severity, and required correction. Record explicit passing coverage as well as corrections and unresolved limitations. Do not rewrite analysis, silently repair values, or write project files.
+
+Call `artifact_publish` once with type `equity-research/audit`. The strict JSON contains selected source locators, audited claims, numerical checks, source-quality checks, valuation checks, scenario-consistency checks, required corrections, accepted limitations, coverage summary, and final publication guidance. Use `resource_set: null`.

@@ -1,0 +1,117 @@
+.oc-disclosure {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.oc-disclosure[data-animated="true"] {
+  interpolate-size: allow-keywords;
+}
+
+.oc-disclosure[data-animated="true"]::details-content {
+  block-size: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(calc(-3px * var(--ui-scale)));
+  transition:
+    block-size var(--ui-duration-slow) var(--ui-timing-standard),
+    opacity var(--ui-duration-base) var(--ui-timing-standard),
+    transform var(--ui-duration-slow) var(--ui-timing-standard),
+    content-visibility var(--ui-duration-slow) allow-discrete;
+}
+
+.oc-disclosure[data-animated="true"][open]::details-content {
+  block-size: auto;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.oc-disclosure[data-variant="surface"] {
+  overflow: hidden;
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-soft);
+  background: var(--surface-inset);
+}
+
+.oc-disclosure__trigger {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: var(--ui-gap-sm);
+  appearance: none;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: var(--text-soft);
+  font: inherit;
+  list-style: none;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background var(--ui-duration-fast) var(--ui-timing-standard),
+    color var(--ui-duration-fast) var(--ui-timing-standard),
+    box-shadow var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.oc-disclosure__trigger::-webkit-details-marker {
+  display: none;
+}
+
+.oc-disclosure__trigger::marker {
+  content: "";
+}
+
+.oc-disclosure[data-size="sm"] > .oc-disclosure__trigger {
+  min-height: var(--oc-density-chip-height);
+  padding: 0 var(--ui-gap-sm);
+  font-size: var(--ui-font-control);
+}
+
+.oc-disclosure[data-size="md"] > .oc-disclosure__trigger {
+  min-height: var(--oc-density-control-height);
+  padding: 0 var(--ui-gap-md);
+  font-size: var(--ui-font-body);
+}
+
+.oc-disclosure__trigger:hover,
+.oc-disclosure[open] > .oc-disclosure__trigger {
+  background: var(--surface-hover);
+  color: var(--text-strong);
+}
+
+.oc-disclosure__trigger:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 var(--oc-border-width) var(--accent);
+}
+
+.oc-disclosure__trigger:disabled {
+  cursor: default;
+  opacity: var(--ui-opacity-disabled);
+}
+
+.oc-disclosure__indicator {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: transform var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.oc-disclosure[open] > .oc-disclosure__trigger > .oc-disclosure__indicator {
+  transform: rotate(90deg);
+  color: currentColor;
+}
+
+.oc-disclosure__trigger[data-indicator-position="end"] > .oc-disclosure__indicator {
+  margin-left: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-disclosure[data-animated="true"]::details-content {
+    transform: none;
+    transition-duration: var(--ui-duration-instant);
+  }
+}

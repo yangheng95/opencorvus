@@ -1,0 +1,50 @@
+.oc-slider-track {
+  position: relative;
+  height: calc(18px * var(--ui-scale));
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+:is(.oc-slider-track::before, .oc-slider-fill) {
+  position: absolute;
+  inset-inline: 0;
+  height: calc(4px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+}
+
+.oc-slider-track::before {
+  content: "";
+  background: var(--surface-inset);
+  box-shadow: inset 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--border) 62%, transparent);
+}
+
+.oc-slider-fill {
+  inset-inline-end: auto;
+  background: var(--accent);
+  box-shadow: none;
+}
+
+.oc-slider-thumb {
+  width: calc(16px * var(--ui-scale));
+  height: calc(16px * var(--ui-scale));
+  border: calc(3px * var(--ui-scale)) solid var(--surface-elevated);
+  border-radius: var(--oc-radius-pill);
+  background: var(--accent);
+  box-shadow:
+    0 0 0 var(--oc-border-width) color-mix(in srgb, var(--accent) 34%, var(--border)),
+    0 calc(2px * var(--ui-scale)) calc(6px * var(--ui-scale)) color-mix(in srgb, var(--ui-shadow-tone) 18%, transparent);
+  cursor: grab;
+}
+
+.oc-slider-thumb:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 calc(3px * var(--ui-scale)) var(--accent-ring),
+    0 calc(2px * var(--ui-scale)) calc(6px * var(--ui-scale)) color-mix(in srgb, var(--ui-shadow-tone) 18%, transparent);
+}
+
+.oc-slider[data-disabled] :is(.oc-slider-track, .oc-slider-thumb) {
+  cursor: default;
+  opacity: var(--ui-opacity-disabled);
+}

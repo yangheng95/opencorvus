@@ -1,0 +1,19 @@
+Text-only retrieval boundary: dispatch `frontend_design` for webpage reference
+extraction and frontend template synthesis. `webfetch` returns flat
+text/markdown/html and does not preserve visual and structural signals such as
+DOM tree, per-element computed styles, reference screenshots, and asset
+manifests.
+
+Use `webfetch` only for pure-text content where no visual or structural
+analysis is needed: API documentation, README files, plain JSON / XML
+endpoints, or text scraping. If you find yourself about to `webfetch` a URL
+you then intend to clone, render, or style-match, stop and route the task
+through `frontend_design` instead.
+
+Usage notes:
+  - Visual reference extraction is owned by frontend-design. Do not use
+    `webfetch` to replace missing frontend-design evidence.
+  - The URL must be a fully-formed valid URL (http/https).
+  - Format options: "markdown" (default), "text", or "html".
+  - This tool is read-only and does not modify any files.
+  - Results may be summarized if the content is very large.

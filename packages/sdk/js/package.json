@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@opencorvus-ai/sdk",
+  "version": "0.0.35-beta",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "bun ../../opencorvus/script/run-with-inactivity.ts --inactivity-ms 120000 -- bun test --timeout=0 test",
+    "build": "bun ./script/build.ts",
+    "prepack": "bun run build",
+    "prepublishOnly": "bun run build"
+  },
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./client": {
+      "source": "./src/client.ts",
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.js",
+      "default": "./dist/client.js"
+    },
+    "./gen/client": {
+      "types": "./dist/gen/client/index.d.ts",
+      "default": "./dist/gen/client/index.js"
+    },
+    "./server": {
+      "source": "./src/server.ts",
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js",
+      "default": "./dist/server.js"
+    },
+    "./defaults": {
+      "source": "./src/defaults.ts",
+      "types": "./dist/defaults.d.ts",
+      "import": "./dist/defaults.js",
+      "default": "./dist/defaults.js"
+    },
+    "./expert-squad-authoring": {
+      "source": "./src/expert-squad-authoring.ts",
+      "types": "./dist/expert-squad-authoring.d.ts",
+      "import": "./dist/expert-squad-authoring.js",
+      "default": "./dist/expert-squad-authoring.js"
+    },
+    "./expert-squad-manifest-v1": {
+      "source": "./src/expert-squad-manifest-v1.ts",
+      "types": "./dist/expert-squad-manifest-v1.d.ts",
+      "import": "./dist/expert-squad-manifest-v1.js",
+      "default": "./dist/expert-squad-manifest-v1.js"
+    },
+    "./project-path": {
+      "source": "./src/project-path.ts",
+      "types": "./dist/project-path.d.ts",
+      "import": "./dist/project-path.js",
+      "default": "./dist/project-path.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@hey-api/openapi-ts": "0.90.10",
+    "@tsconfig/node22": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "@typescript/native-preview": "catalog:"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  }
+}

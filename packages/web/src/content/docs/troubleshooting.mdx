@@ -1,0 +1,111 @@
+---
+title: Troubleshooting
+description: Diagnose OpenCorvus issues by symptom — startup, providers, orchestrator, channels.
+---
+
+Diagnose by symptom. Each entry gives a **check path**, not "try restarting".
+
+## Startup
+
+### `opencorvus serve` fails to start
+
+| Check                        | Detail                                                                                               |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `opencorvus doctor`          | Run the full diagnostic first                                                                        |
+| Port in use                  | Default 7878; `netstat -ano \| findstr 7878` on Windows                                              |
+| `OPENCORVUS_SERVER_PASSWORD` | Enables HTTP Basic Auth. If unset, `serve` logs `server is unsecured` and starts without Basic Auth. |
+| `ENOSPC`                     | The resolved OpenCorvus data or config directory is full                                             |
+
+### Overlay launches but can't reach the backend
+
+1. Tray → Restart (restarts backend + reloads frontend)
+2. Inspect the overlay startup log and sidecar log under `<runtime-root>/log`
+3. Probe manually: `GET http://127.0.0.1:<port>/global/health`
+4. Stop the stale backend process if the logged PID no longer matches the tray process, then restart the overlay
+
+## Provider / model
+
+### Provider returns empty responses
+
+Root cause almost always: **missing provider API key**. Because `Env.state()` snapshots on instance creation:
+
+1. `.env` not loaded → inject explicitly: `DASHSCOPE_API_KEY=sk-... opencorvus serve`
+2. Wrong provider key — `alibaba-cn` uses `DASHSCOPE_API_KEY`; `anthropic` uses `ANTHROPIC_API_KEY`
+3. Gateway picks wrong model — Gateway does **not** read `OPENCORVUS_BENCHMARK_MODEL`; set `cfg.model` in [config](../config/)
+
+### Alibaba API hangs for 20+ minutes
+
+`alibaba-coding-plan-cn` is known to hang during peak hours. **Do not** mask by raising stall timeouts:
+
+- Set `OPENCORVUS_RUN_STALL_TIMEOUT_MS=30000` for `opencorvus run` event-stream stalls
+- Or switch [providers](../providers/)
+
+## Orchestrator
+
+### Stuck before a projected worker result
+
+| Symptom                           | Check                                                                                                                                                                                                                                       |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| No events at all                  | LLM provider connectivity                                                                                                                                                                                                                   |
+| Reasoning tokens but no tool-call | Reasoning models must use `toolChoice: "auto"`                                                                                                                                                                                              |
+| Worker session quiet for long     | Inspect the persisted `dispatch_agent` result, child-session terminal status, and whether its exact `dispatch.target` remains in the active projection. Tune the decision inactivity timeout only after provider connectivity is confirmed. |
+
+### Task shows an unexpected duplicate dispatch
+
+Use persisted Task, workflow binding, and Delivery Slice evidence. Check:
+
+1. Read the current Goal/Delivery Slice revision, derived Board progress, exact reviewer artifact, and linked execution evidence.
+2. The exact workflow node and agent ID still exist in the immutable active package revision, and the dispatch `work_scope` is `{ kind: "task" }`.
+3. If the Slice contract is wrong, use `manage_task` action=`modify_goal`. Do not repeat a manifest node that already ran; expose the concrete blocker or create a correctly scoped new Task when the binding workflow itself must run again.
+
+### Permission ask never resolves
+
+| Check                              | Detail                                                                                                                  |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Does config explicitly set `ask`   | Built-in agent permissions default to `allow`; only explicit `ask` rules wait for an operator reply.                    |
+| `OPENCORVUS_PERMISSION_TIMEOUT_MS` | Reject timeout for unanswered asks, default `300000` ms (`src/permission/next.ts`). Minimum honored value is `1000` ms. |
+
+See [Permissions](../permissions/).
+
+## Evaluation
+
+### Benchmark shows "accepted" but the artifact doesn't run
+
+Classic symptom: review evidence was incomplete or local verification was skipped. Check:
+
+1. Merge log for `EEXIST` / conflict
+2. Integrity evidence includes runtime readiness, build, and startup checks where relevant
+3. The benchmark report includes `localVerify.exitCode` and required check pass-rate evidence
+
+### TypeScript errors undetected
+
+Ensure integrity or local verification includes lint/typecheck evidence for TypeScript projects.
+
+## Channels
+
+### Slack message processed twice
+
+Two managed or standalone channel-runtime owners are using the same Slack app credentials. **Keep one runtime owner.**
+
+### Webhook validation fails (Feishu / DingTalk / WeCom / LINE)
+
+Signature algorithms differ per vendor. Double-check env matches the platform literally, including **newlines** (especially in Google Chat's service account JSON).
+
+### Reply lands in the wrong thread
+
+`SessionCoordinator` thread key = `platform:channel:thread_ts`. Wrong routing usually means an adapter dropped `thread_id`. Check the adapter's `onMessage` to ensure it propagates `thread_id` onto `IncomingMessage`.
+
+## Tool issues
+
+### git commands misbehave
+
+:::tip
+Per the project rules: **fix the tool first, then continue the task**.
+:::
+
+- `git worktree` errors: `git worktree prune`
+- On Windows, use Git for Windows' bash; avoid MSYS2's.
+
+### `rg` / Grep unavailable
+
+Reinstall ripgrep; on Windows, Bun may fail to discover `rg` via PATH — use an absolute path.

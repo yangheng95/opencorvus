@@ -1,0 +1,64 @@
+---
+title: Agentic loop
+description: SessionLoop runs one projected agent session with exact tool routing and runtime-contract invariants.
+---
+
+Worker sessions follow the **standard agentic loop**: LLM emits tool-call → tool executes → result is fed back → next turn. `SessionLoop` owns one session; worker creation and dispatch remain outside that loop.
+
+## Turn lifecycle
+
+`SessionLoop` (`packages/opencorvus/src/session/loop.ts`) reads the latest user/assistant pair, resolves the process-local runtime contract for the persisted `WorkerTurnDescriptor`, streams the model response, executes projected tools, and persists every visible message part. A finished assistant turn waits for the next real user message; a tool-call turn continues after its tool results are persisted. The runtime contract is Turn execution machinery, not durable Task liveness.
+
+`collectLoopState` only derives the latest persisted turn facts. It does not create a second workflow or recursively instantiate agents.
+
+## Tool routing
+
+Each tool-call returned by the LLM is routed by `SessionLoop.resolveTools`:
+
+1. **Filter** — `resolveTools()` applies the `input.tools` allow-list so DashScope isn't bombarded with 30+ tools.
+2. **Permission check** — `PermissionNext.ask()` (see [Permissions](../../permissions/)).
+3. **Execute** — dispatch to the tool handler.
+4. **Write back** — the result becomes a `tool-result` part on the session message stream.
+
+## Projected dispatch
+
+The Orchestrator calls `dispatch_agent` with an exact dynamic agent ID declared by the active expert squad. The runner resolves that projection, derives its core-owned `base_role` template, creates the worker session, and installs the immutable runtime/tool/skill contract. `SessionLoop` never guesses an agent from a base role and never creates an arbitrary nested agent.
+
+## Outer loop wiring
+
+`runTaskLoop` (`packages/opencorvus/src/orchestrator/loop.ts`) serializes task wakes and calls the Orchestrator. The Orchestrator uses the common projected dispatch protocol to create worker sessions:
+
+```
+Orchestrator.runTaskLoop
+  └─ Orchestrator.processTask      (LLM decision)
+      └─ dispatch_agent(dispatch.target = exact projected agent ID)
+          └─ worker SessionLoop
+```
+
+## Key invariants
+
+### 1. Must use `streamText`, never `generateText`
+
+The LLM call in `session/loop.ts` uses Vercel AI SDK's `streamText`. **Do not** swap to `generateText` — reasoning models (DashScope `qwq`, Claude reasoning, o1) will time out while emitting reasoning tokens.
+
+### 2. `toolChoice: "auto"`
+
+Reasoning models must use `toolChoice: "auto"`, not `"required"`. With `required`, reasoning tokens eat tool-call slots, corrupting output.
+
+### 3. Stall-based timeouts, not wall-clock timeouts
+
+Tool-call timeouts are **inactivity timeouts**: long-running build/test calls are fine as long as stdout/stderr keeps flowing. Bash uses the bash tool inactivity timeout, and `opencorvus run` event-stream stalls can be tuned with `OPENCORVUS_RUN_STALL_TIMEOUT_MS`. Wall-clock timeouts are wrong.
+
+### 4. Tool-call outputs are JSON strings
+
+Tool `output` fields are **JSON strings**, not objects. Consumers must `JSON.parse`. Parse failure → let it crash. No silent fallback.
+
+## Doom-loop detection
+
+Runtime tooling records repetitive tool-call patterns and visual interaction loops. When surfaced as evidence, the orchestrator routes repair through the responsible worker or review stage instead of letting the same worker burn budget indefinitely.
+
+## What's next
+
+- [Architecture](./architecture.md)
+- [Integrity review reference](../../reference/evaluator/)
+- [Permissions](../../permissions/)

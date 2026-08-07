@@ -1,0 +1,98 @@
+---
+title: 架构总览
+description: OpenCorvus 通过 active 专家团投影与 artifact-backed 状态，把自然语言请求变成已验证的代码变更。
+---
+
+OpenCorvus 的职责是把自然语言请求变成已验证的代码变更。当前架构由 Orchestrator 主导：每次唤醒都读取任务快照、解析 active 专家团能力、调度精确的动态 worker ID，并把证据持久化为 SQLite 行和 artifact。
+
+如果需要可点击的当前运行架构图，见[企业级动态架构图](./enterprise-architecture.md)。
+
+## HTTP API 运行时分层
+
+HTTP 服务器（`packages/opencorvus/src/server/server.ts`）把路由切成两个真实层：
+
+- **Control plane（控制面）**：`/global/*`、`/auth/*`、`/ui/*`，以及 `/log`、`/shutdown`、`/restart`，挂载在 `Instance.provide` 中间件之前。即便没有打开项目目录也能工作。
+- **Project-scoped（项目作用域）**：操作当前工作区的路由（`/tasks`、`POST /task`、Task 写操作、`/session`、`/goal`、`/mcp`、`/experimental`、`/panel`、`/pty` 等）跑在 `Instance.provide({ directory, init: InstanceBootstrap })` 内部。目录来自 `?directory=` 或 `x-opencorvus-directory`。
+- **Task-record reads（Task 记录读取）**：`GET /task/{taskID}` 以及 Task 记录路由 `/status`、`/board`、`/progress`、`/events`、`/brief`、`/transcript`、`/interactions`、`/bindings`、`/operator-model-context` 和 Task conversation 读取路由都从 task 记录解析归属，不需要 `directory`。
+
+路由 handler 不直接读 `process.env`、不直连 SQL 表、不使用 `z.any()`。`bun run api:routes-check` 保护这条边界，`bun run docs:api` 从 OpenAPI 重新生成网页 API 参考。
+
+## 专家团投影
+
+`prompt_profile.active` 选择唯一专家团 package。`PromptProfileResolver` 把该 package 投影为一个 scheduler capability 与多个精确动态 worker capability。Base 是默认内置专家团，Advanced 是可独立选择的完整软件交付团队，Research Studio 是可独立选择的五 Agent 研究交付团队。选择另一个 package 会完整替换当前 package；Agent、prompt、skill、tool、mount、MCP resource 和 workflow 契约都不会继承或组合。
+
+内置 Advanced manifest 声明 `planned-delivery`、`evidence-investigation`、`greenfield-interface-delivery` 和 `reference-interface-delivery` 四张不可变 scheduler contract 图。greenfield 图在没有参考 URL 时承载完整的原创界面规划与复核谱系；只有 reference 图以 `interface-investigator` 开始，并要求 operator 已提供一个 source URL。它们不是 active/default workflow state 或执行引擎：Orchestrator 必须可见地选择与请求匹配的精确图。选中后每个声明 node 与依赖都是必需步骤；缺少前序证据时必须拒绝继续，不能省略、跳步、替换或调整顺序。
+
+每个投影 worker 通过 `base_role` runtime-template 种子选择 code-owned typed adapter。`requirements`、`architect`、`build`、`integrity` 等 adapter ID 是宿主 ABI（Application Binary Interface，应用二进制接口）模块名，不是可运行 Agent 身份或固定团队顺序。
+
+## 运行时层次
+
+```
+User request
+  ↓
+Channel / UI / API
+  ↓
+Engine task row
+  ↓
+Orchestrator session
+  ├─ scheduler tools: dispatch_agent / manage_task / evidence 与 coordination tools
+  ├─ active projection: 精确动态 Agent ID + 不可变的绑定 workflow 契约
+  ├─ durable artifacts: workflow selection / dispatch execution / domain facts / review / host observations
+  └─ explicit user interactions: questions and permissions
+  ↓
+Worker sessions
+  ├─ 精确 capability_projection.agents.<agent-id> 身份
+  ├─ base_role runtime-template 种子 + typed adapter ABI
+  └─ projected prompt / model / tools / skills / mounts
+```
+
+Session/Trace 是持久化历史与身份，Turn/Attempt 是一次模型执行，Runtime
+只是可丢弃的进程内执行结构，例如 stream、取消句柄、MCP（Model Context
+Protocol，模型上下文协议）连接、tool instance、callback 与 Promise。服务重启
+可以销毁 Runtime，但不会使 Session message、worker descriptor 或 coordination
+request 失效。Targeted operator steer 从持久化且经过 hash 校验的 worker
+descriptor 冻结身份，记录 durable request，再唤醒 Orchestrator。只有明确的
+in-flight continuation 需要旧 Runtime；不存在旧 Runtime 时，Orchestrator 仍可
+可见地选择 fresh worker Turn。
+
+## 职责边界
+
+| 组件                       | 职责                                                                                | 当前源码                                                                                                                   |
+| -------------------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Channel / API              | 把外部输入转成 Task 创建、消息和控制操作                                            | `packages/opencorvus/src/channel/ingress.ts`、`packages/opencorvus/src/server/routes/`                                     |
+| Engine                     | 存储 Task、versioned Delivery Slice、不可变 execution/domain/review facts、Host observation 与 interaction | `packages/opencorvus/src/engine/engine.sql.ts`、`packages/opencorvus/src/engine/store.ts` |
+| Orchestrator               | 唯一任务级决策者；读取 `describeTask`、调度精确 active worker，并根据证据决定下一步 | `packages/opencorvus/src/orchestrator/agent.ts`、`packages/opencorvus/src/orchestrator/tools.ts`                           |
+| Expert-squad projection    | 拥有 active 团队身份、绑定协作契约、prompt、skill、tool 与资源授权                  | `packages/opencorvus/src/expert-squad/prompt-profile-resolver.ts`                                                          |
+| Runtime template / adapter | 提供受信 prompt、tool、Session、persistence 与 typed domain ABI 种子，但不成为运行身份 | `packages/opencorvus/src/agent/runtime-template-registry.ts`、`packages/opencorvus/src/agent/dispatch-adapter-contract.ts` |
+
+## 两层循环
+
+### 外层：Orchestrator Wake Loop
+
+`runTaskLoop`（`packages/opencorvus/src/orchestrator/loop.ts`）按 task 串行化唤醒并调用 `Orchestrator.processTask`。每次唤醒都读取当前 describe / artifact 快照，再决定下一次 tool call。
+
+### 内层：Session Agentic Loop
+
+`SessionLoop`（`packages/opencorvus/src/session/loop.ts`）运行每个 worker session：
+
+```
+LLM 发出 tool call → tool 执行 → tool result 写回 → 下一轮模型调用
+```
+
+`dispatch_agent` 为一个精确 active 投影 ID 创建 worker session。其 runtime template 随后调用已声明的 typed adapter；adapter 名仍是实现 ABI，不是 worker 身份。
+
+## Delivery Slice 与物理执行
+
+用户界面的 Goal 是 versioned Delivery Slice contract。Selected workflow 的每个 node 在一个 Task 中只执行一次；dispatch lineage 可以引用精确 Slice revisions 作为 subjects。Session/worktree 是 physical execution evidence，Task 独占 business lifecycle，Goal 面板从真实 workflow、Session、Artifact、review 与 Task decision 派生进度。
+
+## 数据流
+
+详见 [Task / Delivery Slice 数据模型](./delivery-slice-task.md)。
+
+## 你接下来要看的
+
+- [Task / Delivery Slice 数据模型](./delivery-slice-task.md)
+- [企业级动态架构图](./enterprise-architecture.md)
+- [Agentic Loop 内循环](./agent-loop.md)
+- [OpenCorvus 配置](../../config/)
+- [Integrity review 参考](../../reference/evaluator/)

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "warmupMs": 5000,
+  "snapshotCadenceMs": 5000,
+  "idleSettleMs": 5000,
+  "controlDurationMs": 10000,
+  "shortSoakDurationMs": 30000,
+  "overnightDurationMs": 28800000,
+  "controlRuns": 3,
+  "browserCycles": 3,
+  "lspQueries": 3
+}

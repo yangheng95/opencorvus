@@ -1,0 +1,15 @@
+# Force LF line endings for all text files
+* text=auto eol=lf
+
+# Binary files
+*.ico binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.exe binary
+*.msi filter=lfs diff=lfs merge=lfs -text
+*.dll binary
+*.so binary
+*.dylib binary
+*.patch -whitespace

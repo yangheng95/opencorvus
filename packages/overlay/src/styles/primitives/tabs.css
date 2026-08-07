@@ -1,0 +1,129 @@
+.oc-tabs {
+  --oc-tabs-height: var(--oc-density-chip-height);
+  --oc-tabs-gap: var(--oc-border-width);
+  --oc-tabs-padding-x: var(--oc-border-width);
+  --oc-tab-padding-x: var(--oc-header-gap);
+  --oc-tab-bg: transparent;
+  --oc-tab-color: var(--text-soft);
+  --oc-tab-active-bg: var(--ui-list-selected-bg);
+  --oc-tab-active-color: var(--text-strong);
+
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--oc-tabs-height);
+  height: var(--oc-tabs-height);
+  gap: var(--oc-tabs-gap);
+  padding: 0 var(--oc-tabs-padding-x);
+  background: transparent;
+}
+
+.oc-tabs[data-size="sm"] {
+  --oc-tabs-height: var(--oc-density-chip-height);
+}
+
+.oc-tabs[data-size="md"] {
+  --oc-tabs-height: var(--oc-density-control-height);
+}
+
+.oc-tabs[data-tone="neutral"] {
+  --oc-tab-active-bg: var(--surface-hover);
+  --oc-tab-active-color: var(--text-strong);
+}
+
+.oc-tabs[data-layout="strip"] {
+  flex-direction: row;
+}
+
+.oc-tabs[data-layout="rail"] {
+  --oc-tabs-height: auto;
+  --oc-tabs-gap: calc(3px * var(--ui-scale));
+  --oc-tabs-padding-x: 0;
+
+  width: 100%;
+  height: auto;
+  align-items: stretch;
+  flex-direction: column;
+}
+
+.oc-tabs[data-layout="rail"] .oc-tab {
+  width: 100%;
+  min-height: var(--oc-density-control-height);
+  height: auto;
+  justify-content: flex-start;
+  padding: calc(5px * var(--ui-scale)) calc(7px * var(--ui-scale));
+  border: var(--oc-border-width) solid transparent;
+  border-radius: var(--oc-radius-soft);
+  font: var(--ui-font-weight-body) var(--ui-font-control) var(--font);
+  text-align: left;
+  text-transform: none;
+  white-space: normal;
+}
+
+.oc-tabs[data-layout="rail"] .oc-tab:is([data-selected], [data-highlighted], :hover, :focus-visible) {
+  border-color: color-mix(in srgb, var(--accent) 34%, transparent);
+}
+
+.oc-tab {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--oc-tabs-height);
+  height: var(--oc-tabs-height);
+  padding: 0 var(--oc-tab-padding-x);
+  border: 0;
+  border-radius: 0;
+  background: var(--oc-tab-bg);
+  color: var(--oc-tab-color);
+  font: var(--oc-header-title-font);
+  letter-spacing: var(--ui-letter-spacing-normal);
+  text-transform: var(--oc-header-title-transform);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--ui-duration-base) var(--ui-timing-standard),
+    color var(--ui-duration-base) var(--ui-timing-standard),
+    opacity var(--ui-duration-base) var(--ui-timing-standard);
+}
+
+.oc-tab[data-size="sm"] {
+  --oc-tabs-height: var(--oc-density-chip-height);
+}
+
+.oc-tab[data-size="md"] {
+  --oc-tabs-height: var(--oc-density-control-height);
+}
+
+.oc-tab[data-tone="neutral"] {
+  --oc-tab-color: var(--text-soft);
+}
+
+.oc-tab[data-selected],
+.oc-tab[data-pressed] {
+  --oc-tab-bg: var(--oc-tab-active-bg);
+  --oc-tab-color: var(--oc-tab-active-color);
+}
+
+.oc-tab[data-highlighted]:not(:disabled):not([data-disabled]),
+.oc-tab:hover:not(:disabled):not([data-disabled]) {
+  --oc-tab-bg: var(--ui-list-hover-bg);
+  --oc-tab-color: var(--text-strong);
+}
+
+.oc-tab:disabled,
+.oc-tab[data-disabled] {
+  cursor: default;
+  opacity: var(--ui-opacity-disabled);
+}
+
+.oc-tab:focus-visible {
+  --oc-tab-bg: var(--ui-list-hover-bg);
+  --oc-tab-color: var(--text-strong);
+
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(1px * var(--ui-scale));
+}
+
+.oc-tab:is([data-selected], [data-pressed]):is([data-highlighted], :hover, :focus-visible) {
+  --oc-tab-bg: var(--ui-list-selected-hover-bg);
+}

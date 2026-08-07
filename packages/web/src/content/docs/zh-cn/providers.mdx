@@ -1,0 +1,108 @@
+---
+title: Provider 与模型
+description: OpenCorvus 的 LLM provider 配置与模型选择策略。
+---
+
+OpenCorvus 的 LLM 抽象构建在 [Vercel AI SDK](https://sdk.vercel.ai/) 之上，通过 `@ai-sdk/*` 子包接入各家 provider。
+
+## 内置 provider
+
+从 `packages/opencorvus/package.json` 实际声明的依赖：
+
+| Provider                                                                                | 包                                                     |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| Anthropic                                                                               | `@ai-sdk/anthropic`                                    |
+| OpenAI / 兼容                                                                           | `@ai-sdk/openai` + `@ai-sdk/openai-compatible`         |
+| Google                                                                                  | `@ai-sdk/google` + `@ai-sdk/google-vertex`             |
+| Amazon Bedrock                                                                          | `@ai-sdk/amazon-bedrock`                               |
+| Azure OpenAI                                                                            | `@ai-sdk/azure`                                        |
+| Cerebras / Cohere / DeepInfra / Groq / Mistral / Perplexity / TogetherAI / Vercel / xAI | 对应 `@ai-sdk/*` 包                                    |
+| GitLab AI                                                                               | `@gitlab/gitlab-ai-provider`                           |
+| OpenRouter                                                                              | `@openrouter/ai-sdk-provider`                          |
+| Vercel Gateway                                                                          | `ai-gateway-provider`                                  |
+
+国内常用别名（在 `channel-runtime/.env.example` 中声明）：
+
+| 别名                     | 底层                       |
+| ------------------------ | -------------------------- |
+| `alibaba-cn`             | DashScope（阿里云）        |
+| `alibaba-coding-plan-cn` | DashScope Coding Plan 专线 |
+| `moonshotai-cn`          | Moonshot（月之暗面）       |
+| `deepseek`               | DeepSeek                   |
+
+## 配置方式
+
+### 方式 A：环境变量
+
+各 provider 官方 key 名直接生效：
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+export OPENAI_API_KEY=sk-...
+export GOOGLE_GENERATIVE_AI_API_KEY=...
+export DEEPSEEK_API_KEY=...
+export OPENROUTER_API_KEY=...
+
+# 阿里云 DashScope
+export DASHSCOPE_API_KEY=sk-...                 # alibaba-cn 和 DashScope 共享 key
+export ALIBABA_CODING_PLAN_API_KEY=sk-sp-...    # alibaba-coding-plan-cn
+```
+
+### 方式 B：自定义 provider（OpenAI-兼容网关）
+
+在 `opencorvus.jsonc` 里：
+
+```jsonc
+{
+  "provider": {
+    "gateway": {
+      "api": "https://your-openai-compatible-gateway.example/v1",
+      "env": ["GATEWAY_API_KEY"],
+      "models": {
+        "gpt-5.4": { "name": "GPT-5.4", "tool_call": true },
+      },
+    },
+  },
+  "model": "gateway/gpt-5.4",
+}
+```
+
+`env` 数组声明该 provider 所需的环境变量名；缺失时报错退出，不 fallback。Provider base URL 由 model database 决定，不依据密钥前缀改写路由。
+
+## 模型选择策略
+
+模型选择具有明确的身份层：
+
+| 场景 | 配置位置 |
+| --- | --- |
+| 项目默认模型 | `model` |
+| 固定 Primary/Helper/Host 身份 | `agent.<fixed-id>.model` |
+| worker 运行模板 | `runtime_templates.<base-role>.model` |
+| 精确投影 worker | `expert_squads.<squad-id>.agents.<agent-id>.runtime.model` |
+| Vision / 截图理解 | `OPENCORVUS_VISION_MODEL` |
+
+计划阶段与执行阶段分离的目的：**用强但慢的模型规划，用快但够用的模型执行**。典型配置：
+
+```jsonc
+{
+  "model": "openai/gpt-5.5",
+  "agent": {
+    "coding": { "model": "anthropic/claude-sonnet-4-6" },
+  },
+  "runtime_templates": {
+    "architect": { "model": "anthropic/claude-sonnet-4-6" },
+  },
+}
+```
+
+## Reasoning 模型注意事项
+
+对于 claude reasoning、qwq、o1 等 reasoning 模型：
+
+1. **必须用 `streamText`**，不能 `generateText`（否则 reasoning tokens 期间连接超时）。
+2. **必须用 `toolChoice: "auto"`**，不能 `"required"`。
+3. **prompt 缓存**对 Anthropic reasoning 模型有效，有 5 分钟 TTL；尽量让多次 LLM 调用复用 system prompt。
+
+## 禁用 provider
+
+如果你想强制不走某个 provider（例如不用 DeepSeek），**不要**依赖启发式匹配——改为不配置对应 env 即可。OpenCorvus 在检测到 provider 无 key 时直接把该 provider 从可用列表移除。

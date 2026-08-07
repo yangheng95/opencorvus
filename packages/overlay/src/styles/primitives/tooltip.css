@@ -1,0 +1,39 @@
+.oc-tooltip {
+  /* Kobalte owns positioning. Its patched LayerStack leaves non-blocking
+     layers free of inline pointer styles, so this descriptive primitive
+     remains outside pointer hit testing without an important override. */
+  pointer-events: none;
+  box-sizing: border-box;
+  max-width: min(calc(360px * var(--ui-scale)), calc(100cqw - calc(32px * var(--ui-scale))));
+  padding: calc(6px * var(--ui-scale)) calc(8px * var(--ui-scale));
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-large);
+  background: var(--surface-elevated);
+  color: var(--text-strong);
+  font-family: var(--font);
+  font-size: var(--ui-font-tiny);
+  line-height: 1.4;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  box-shadow: var(--shadow-lg);
+  z-index: calc(var(--ui-z-dialog) + 2);
+}
+
+.oc-tooltip-explainer {
+  display: grid;
+  width: min(calc(280px * var(--ui-scale)), calc(100cqw - calc(32px * var(--ui-scale))));
+  gap: calc(3px * var(--ui-scale));
+  padding: calc(8px * var(--ui-scale)) calc(10px * var(--ui-scale));
+}
+
+.oc-tooltip-explainer__heading {
+  color: var(--text-strong);
+  font-size: var(--ui-font-small);
+  font-weight: var(--ui-font-weight-strong);
+  line-height: var(--ui-line-height-tight);
+}
+
+.oc-tooltip-explainer__description {
+  color: var(--text-muted);
+  line-height: 1.45;
+}

@@ -1,0 +1,83 @@
+---
+title: Channels overview
+description: OpenCorvus channel ingress with native adapters and explicitly planned provider integrations.
+---
+
+`packages/channel-runtime/` maps every external platform to a `platform : channel : thread` identity. Each thread owns one OpenCorvus session, so replies retain the same task context.
+
+## Supported channels
+
+`ChannelCatalog` exposes 27 channel identities. Thirteen native adapters are runtime-ready; fourteen provider integrations remain planned. The catalog is the single source for backend configuration, runtime construction, the Overlay settings UI, and documentation links.
+
+### Native OpenCorvus adapters
+
+| Channel         | Documentation            | Transport                 |
+| --------------- | ------------------------ | ------------------------- |
+| Slack           | [Setup](./slack.md)      | Socket Mode               |
+| Telegram        | [Setup](./telegram.md)   | Long polling              |
+| Discord         | [Setup](./discord.md)    | Gateway WebSocket         |
+| Feishu / Lark   | [Setup](./feishu.md)     | Webhook                   |
+| WhatsApp        | [Setup](./whatsapp.md)   | WhatsApp Business webhook |
+| Google Chat     | [Setup](./googlechat.md) | Webhook                   |
+| Microsoft Teams | [Setup](./msteams.md)    | Webhook                   |
+| LINE            | [Setup](./line.md)       | Webhook                   |
+| Matrix          | [Setup](./matrix.md)     | Long polling              |
+| Mattermost      | [Setup](./mattermost.md) | Webhook                   |
+| Signal          | [Setup](./signal.md)     | Signal CLI service        |
+| WeCom           | [Setup](./wecom.md)      | Webhook                   |
+| DingTalk        | [Setup](./dingtalk.md)   | Webhook                   |
+
+### Planned provider integrations
+
+The remaining 14 identities are not runtime-ready. Their current upstream packages require the OpenClaw application runtime rather than a thin standalone provider contract. OpenCorvus does not embed that application runtime or maintain a large compatibility runtime.
+
+| Channel        | Official documentation                                                                | Candidate source           |
+| -------------- | ------------------------------------------------------------------------------------- | -------------------------- |
+| ClickClack     | [OpenClaw](https://docs.openclaw.ai/channels/clickclack)                              | `@openclaw/clickclack`     |
+| iMessage       | [OpenClaw](https://docs.openclaw.ai/channels/imessage)                                | `openclaw` runtime         |
+| IRC            | [OpenClaw](https://docs.openclaw.ai/channels/irc)                                     | `@openclaw/irc`            |
+| Nextcloud Talk | [OpenClaw](https://docs.openclaw.ai/channels/nextcloud-talk)                          | `@openclaw/nextcloud-talk` |
+| Nostr          | [OpenClaw](https://docs.openclaw.ai/channels/nostr)                                   | `@openclaw/nostr`          |
+| QQ Bot         | [OpenCorvus fields](./qqbot.md) · [OpenClaw](https://docs.openclaw.ai/channels/qqbot) | `@openclaw/qqbot`          |
+| Raft           | [OpenClaw](https://docs.openclaw.ai/channels/raft)                                    | `@openclaw/raft`           |
+| Reef           | [OpenClaw](https://docs.openclaw.ai/channels/reef)                                    | `openclaw` runtime         |
+| SMS            | [OpenClaw](https://docs.openclaw.ai/channels/sms)                                     | `@openclaw/sms`            |
+| Synology Chat  | [OpenClaw](https://docs.openclaw.ai/channels/synology-chat)                           | `@openclaw/synology-chat`  |
+| Tlon           | [OpenClaw](https://docs.openclaw.ai/channels/tlon)                                    | `@openclaw/tlon`           |
+| Twitch         | [OpenClaw](https://docs.openclaw.ai/channels/twitch)                                  | `@openclaw/twitch`         |
+| Zalo           | [OpenClaw](https://docs.openclaw.ai/channels/zalo)                                    | `@openclaw/zalo`           |
+| Zalo Personal  | [OpenClaw](https://docs.openclaw.ai/channels/zalouser)                                | `@openclaw/zalouser`       |
+
+## Run channel-runtime
+
+```bash
+cd packages/channel-runtime
+cp .env.example .env
+bun run dev
+```
+
+`registerAdapters()` starts configured native channels and skips planned entries.
+
+## Message flow
+
+```text
+Provider gateway
+  -> ChannelAdapter.onMessage(IncomingMessage)
+  -> ChannelRuntime.handleMessage()
+  -> session create/reuse
+  -> client.session.promptAsync()
+
+OpenCorvus event stream
+  -> ChannelRuntime.handleEvent()
+  -> provider-owned sendText/sendMedia
+```
+
+OpenCorvus remains authoritative for sessions, channel links, permissions, attachments, and model execution.
+
+## Add a channel
+
+- Promote a planned provider only when it exposes a thin standalone lifecycle/ingress/outbound contract; do not reproduce another application's runtime surface.
+- For an OpenCorvus-specific channel, add one native adapter and register its factory in the native factory projector.
+- Do not add a provider switch, a second channel list, or a large compatibility runtime.
+
+See [Environment reference](../reference/env.md) for shared controls.

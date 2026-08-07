@@ -1,0 +1,83 @@
+---
+title: Quickstart
+description: Drive the first end-to-end task in your own repo in 5 minutes or less.
+---
+
+## 1. Start the headless server
+
+```bash
+cd /path/to/your/repo
+opencorvus serve
+```
+
+Default: `127.0.0.1:7878`. Common flags:
+
+| flag                   | purpose                                                   |
+| ---------------------- | --------------------------------------------------------- |
+| `--hostname 0.0.0.0`   | Listen externally; set `OPENCORVUS_SERVER_PASSWORD` to enable HTTP Basic Auth |
+| `--port 7878`          | Change port                                               |
+| `--project-dir <path>` | Target repo                                               |
+| `--mdns`               | Enable mDNS service discovery                             |
+
+> If you expose beyond localhost without `OPENCORVUS_SERVER_PASSWORD`, the server starts but prints `server is unsecured` and leaves HTTP Basic Auth disabled.
+
+## 2. Open the UI (optional)
+
+Browse to `http://127.0.0.1:7878/ui/` for the overlay panel. Or launch the native Tauri window:
+
+```bash
+bun run dev:overlay   # from repo root
+```
+
+## 3. Create a task over HTTP
+
+```bash
+curl -X POST http://127.0.0.1:7878/task \
+  -H "content-type: application/json" \
+  -H "x-opencorvus-directory: $PWD" \
+  -d '{
+    "request": "Add unit tests for src/foo.ts covering happy path and 2 error paths."
+  }'
+```
+
+Response: `202` with `{ "task_id": "tsk_..." }`.
+
+## 4. Stream progress (SSE)
+
+```bash
+curl -N http://127.0.0.1:7878/task/<task_id>/events
+```
+
+You'll see orchestrator and stage events such as `requirements`, `architect`, `goal.running`, `integrity`, `acceptance_running`, and `done`.
+
+On failure, `replan.triggered` or `retry.triggered` fire, then execution resumes.
+
+## 5. Task endpoints
+
+| endpoint                  | purpose                  | directory  |
+| ------------------------- | ------------------------ | ---------- |
+| `GET /tasks`              | list project tasks       | required   |
+| `GET /task/<id>`          | task state               | not needed |
+| `GET /task/<id>/board`    | Kanban view              | not needed |
+| `POST /task/<id>/message` | append follow-up         | required   |
+| `POST /task/<id>/retry`   | retry with same plan     | required   |
+| `POST /task/<id>/replan`  | discard plan and re-plan | required   |
+| `POST /task/<id>/cancel`  | cancel                   | required   |
+
+## 6. Via Slack
+
+```bash
+export SLACK_BOT_TOKEN=xoxb-...
+export SLACK_APP_TOKEN=xapp-...
+bun run --cwd packages/channel-runtime dev
+```
+
+At-mention the bot's first message in any channel to create a task; later messages in the same thread are injected as follow-ups. See [Slack channel](../channels/slack.md).
+
+## Common pitfalls
+
+1. **Stuck in spec phase** — LLM provider is unreachable. Run `opencorvus doctor`.
+2. **Integrity review keeps failing** — repo has no executable build/test commands. Build / integrity walks up from `owned_paths` to find the nearest `package.json`.
+3. **Permission request never resolves** — built-in permissions default to `allow`; check whether project config explicitly sets `ask`, then either reply in the UI or change that rule to `allow`.
+
+Next: [Architecture](../concepts/architecture.md).

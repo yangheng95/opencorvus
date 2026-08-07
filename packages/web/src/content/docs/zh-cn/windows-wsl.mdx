@@ -1,0 +1,49 @@
+---
+title: Windows 与 WSL
+description: 在 Windows 原生或 WSL 下运行 OpenCorvus 的注意点与建议。
+---
+
+OpenCorvus 基于 Bun，在 Windows 原生支持。当需要完整 Linux 工具链一致性（ripgrep、bash 沙箱、git worktree 行为）时，建议在 WSL 下运行。
+
+## 原生 Windows
+
+Bun 官方提供 Windows 构建，OpenCorvus 直接复用。
+
+### 路径处理
+
+- Bash 工具调用路由到配置的 shell（`opencorvus.jsonc` 中的 `shell` 字段）。Windows 上默认优先 `pwsh`，再 `cmd.exe`。
+- Bun 的 `Bun.spawn()` 同时接受正斜杠和反斜杠；OpenCorvus 在传给 LLM 前会做路径归一化。
+- overlay、`opencorvus serve` 均以原生 Windows 二进制运行。
+
+### 已知坑
+
+| 现象                       | 解决                                            |
+| -------------------------- | ----------------------------------------------- |
+| 后台任务的 `cwd` 漂移      | 自定义命令内使用绝对路径                        |
+| 打包产物里嵌套 `.git` 目录 | 不要在 `dist/` 里跑 `git`                       |
+| `PATH` 中找不到 ripgrep    | 绝对路径或用 scoop / winget 安装                |
+| 长路径限制                 | 对深 `node_modules` 仓库启用 Windows 长路径支持 |
+
+## WSL
+
+需要与 Linux CI 一致时，用 WSL2：
+
+```bash
+# Ubuntu-on-WSL 内
+curl -fsSL https://bun.sh/install | bash
+git clone https://github.com/yangheng95/opencorvus
+cd opencorvus
+bun install
+bun run --cwd packages/opencorvus dev -- serve
+```
+
+Overlay 开发仍然需要原生 Windows（Tauri 不在 WSL 下）；只有 headless 的 `opencorvus serve` 适合 WSL。
+
+## 原生 vs WSL 选哪个
+
+| 需求                                 | 推荐                                                         |
+| ------------------------------------ | ------------------------------------------------------------ |
+| 跑 Overlay 桌面 UI                   | **原生 Windows**（Tauri 只在那）                             |
+| Headless server / CI 类环境          | **WSL2**（更接近 Linux runner）                              |
+| 大量 bash 任务由 agent 执行          | **WSL2** 优                                                  |
+| Windows 上编辑、WSL 跑 server 的混合 | 可以，但同一个仓库目录只在一边操作；不要跨 `\\wsl$` 双向操作 |

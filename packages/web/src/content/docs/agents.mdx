@@ -1,0 +1,173 @@
+---
+title: Agents
+description: OpenCorvus agent identities, runtime templates, and expert-squad projection.
+---
+
+OpenCorvus separates **runtime identities** from **runtime templates**. A caller always addresses an agent by its real identity; a template only supplies default prompt, model, tools, permissions, and session behavior.
+
+## Core identities
+
+Core runtime identities are closed sets owned by the platform:
+
+- **Primary assistants** are user-selectable top-level assistants such as `coding`, `chat`, `control`, and `mission`.
+- **Host agents** are fixed platform coordinators. The task scheduler host is `orchestrator`.
+- **Helper agents** are private platform services such as title or compaction helpers. They are not dispatch targets.
+
+Unknown core identities fail immediately. OpenCorvus does not discover arbitrary local agent markdown files or create agents from inline config.
+
+Goal is the user-facing name for a versioned Delivery Slice. It stores one delivery contract and acceptance surface; Task is the sole business-lifecycle owner.
+
+## Projected agents
+
+Worker identities come from the active expert-squad package under:
+
+```text
+.opencorvus/expert-squads/<namespace>/<squad-id>/
+```
+
+The manifest's `capability_projection.agents.<agent-id>` key is a package worker's exact identity. `dispatch_agent.dispatch.target`, the persisted `WorkerTurnDescriptor`, messages, tools, skills, Model Context Protocol providers, catalog rows, and skill mounts retain that ID. The sole platform worker is scheduler-only `universal-build`; it never appears in package agents, virtual workflows, catalog membership, or public `projected_agent_ids`.
+
+Each projected worker declares a required `base_role`. The base role selects a core-owned Application Binary Interface (ABI) template seed for prompt, model, tools, permissions, session, and adapter behavior. It is not the running identity or an alias and cannot be used as a dispatch target unless the package explicitly declares the same string as an agent ID.
+
+All 13 resource arrays on the scheduler and every worker are required; use explicit empty arrays when the package grants no resource of that kind.
+
+The same manifest v1 declares an explicit `virtual_workflows` record. Use `{}` for direct dispatch without a binding graph. Every declared node executes once per Task:
+
+```jsonc
+"capability_projection": {
+  "agents": {
+    "security-reviewer": {
+      "label": "Security reviewer",
+      "base_role": "integrity"
+    }
+  },
+  "virtual_workflows": {
+    "delivery-review": {
+      "label": "Delivery review",
+      "description": "Review completed delivery evidence.",
+      "nodes": {
+        "security-review": {
+          "agent_id": "security-reviewer",
+          "description": "Review the Task and cited Delivery Slice revisions.",
+          "depends_on": []
+        }
+      }
+    }
+  }
+}
+```
+
+This excerpt shows identity and planning fields; start from the generated portable expert-squad template for the complete strict manifest.
+
+## Develop an external squad
+
+Use direct projected-Agent dispatch with `virtual_workflows: {}` when no binding graph is needed. Requirements, Architect, Integrity, review, and Delivery Slice inputs are package-owned design choices justified by the domain responsibility graph. Registry and Software Development Kit (SDK) validate manifest shape, exact projected-agent/dependency references, canonical dependency order, and acyclicity; they do not impose one universal role topology.
+
+Use the Node-only authoring surface from the existing SDK to materialize a new source directory. The SDK's runtime manifest v1 schema is the portable source consumed by both authoring and Registry. The writer validates completely, writes a same-parent staging directory, atomically renames it into place, and refuses an existing destination.
+
+```ts
+import { createOpenCorvusClient } from "@opencorvus-ai/sdk"
+import {
+  validateExpertSquadPackageDefinition,
+  writeExpertSquadPackage,
+  type ExpertSquadPackageDefinition,
+} from "@opencorvus-ai/sdk/expert-squad-authoring"
+
+const definition: ExpertSquadPackageDefinition = { manifest, files }
+validateExpertSquadPackageDefinition(definition)
+await writeExpertSquadPackage({ directory: sourceDirectory, definition })
+
+const client = createOpenCorvusClient({ baseUrl, directory: projectDirectory })
+await client.expertSquad.validateFolder({ sourceDirectory }, { throwOnError: true })
+await client.expertSquad.importFolder(
+  { sourceDirectory, replace: false, installationScope: "project" },
+  { throwOnError: true },
+)
+```
+
+Start from `templates/portable-expert-squad-template` in the repository for a complete concrete definition. Validation is read-only and uses the real Registry; import is a separate explicit Manager operation and does not activate the package. Folder and ZIP imports require `installationScope: "project" | "global"`; both scopes use the same Registry and manifest identity rules. Select the installed manifest ID through `prompt_profile.active` only when the project should use it.
+
+Package resource refs follow one grammar. Shared Skills, tools, and Model Context Protocol (MCP) servers use `<squad-id>/shared/<name>`; agent-local resources use `<squad-id>/<agent-id>/<name>` and can be projected only by that agent. A Skill is a directory containing `SKILL.md`; a tool is `tools/<name>.ts` or the matching agent-local path; an MCP server is `mcp/<name>.jsonc` or the matching agent-local path. Select one MCP capability with `<server-ref>/tool/<name>`, `<server-ref>/prompt/<name>`, or `<server-ref>/resource/<name>`. `package_mcp_server_refs` mounts all capabilities declared by that server, so do not repeat those capabilities in typed MCP ref arrays. Default host resources use the separate `default/...` namespace.
+
+Virtual workflows declare exact executable collaboration variants. A graph does not have to include every projected agent, but every node it does declare is mandatory after that workflow is selected. Before dispatch, the scheduler visibly identifies the exact workflow matching the request and evidence. It must obtain terminal-success evidence for every node, respect every `depends_on` edge, and refuse continuation rather than omit, skip, substitute, or reorder a node.
+
+Every node executes once per Task. Before the first domain dispatch, the Orchestrator records one immutable, visible workflow-selection decision bound to the Task, workflow, exact package revision/digest, and real scheduler message/tool identity. Dispatch lineage binds the selected node, Session, physical execution, and optional exact Delivery Slice revision subjects. Slice subjects never multiply nodes or create scheduling ancestry. The graph has no dispatch scope, current-node pointer, step status, automatic advancement, or Host execution authority.
+
+Conditional paths require separate workflow declarations.
+
+### Compose independent squads
+
+A multi-squad delivery keeps five identities separate:
+
+- the **Mission** owns the final user outcome and the dependent stage-Task ledger;
+- a **Task** is one fixed-profile squad stage and one visible root session;
+- a **Goal** is a versioned Delivery Slice contract inside that Task;
+- an **Expert Squad** is a self-contained capability package fixed for the Task lifetime;
+- an **Agent** is a role inside the active squad, not an implicit cross-squad stage.
+
+Use a user-invoked coordination Skill when several squads cooperate. Mission creates only the earliest ready stage Task and gives it an explicit `promptProfile`, exact workflow, predecessor Task ID, and terminal accepted evidence. The Task keeps that squad for its complete lifetime, creates only local Delivery Slices, and runs every selected workflow node once. After terminal acceptance, Mission creates the next fixed-profile Task.
+
+The authoring SDK can validate this static composition contract against the exact manifests:
+
+```ts
+import {
+  validateExpertSquadCollaboration,
+  type ExpertSquadCollaborationDefinition,
+} from "@opencorvus-ai/sdk/expert-squad-authoring"
+
+const collaboration: ExpertSquadCollaborationDefinition = {
+  schema_version: 1,
+  stage_execution: "mission_task",
+  id: "research-to-delivery",
+  label: "Research to delivery",
+  inputs: ["task-brief"],
+  outputs: ["accepted-delivery"],
+  stages: [researchStage, deliveryStage],
+}
+
+validateExpertSquadCollaboration({ definition: collaboration, manifests })
+```
+
+Each stage names an exact `squad_id`, `workflow_id`, earlier `depends_on` stages, and visible `consumes`/`produces` evidence keys. `stage_execution: "mission_task"` makes the ownership boundary explicit: the fixed-profile Task and its complete selected binding workflow own the stage. A stage workflow contains Task-level nodes and can pass exact Slice revision subjects. The validator is authoring-time integrity only: it does not select a squad, create a Mission Task or Slice, dispatch an agent, persist stage state, or auto-advance. Runtime truth remains Mission-owned Tasks, Task-local Slice revisions, visible messages and tool calls, each Task's `prompt_profile.active`, and `PromptProfileResolver`.
+
+Global installation checks the target manifest ID against every project directory already registered with OpenCorvus before writing. A previously unknown directory is checked when it is first opened; OpenCorvus does not scan unrelated user directories or maintain a second package identity index.
+
+Select one package through `prompt_profile.active`. The active package is resolved once into scheduler and worker capabilities. Inactive packages remain discoverable and selectable through catalog manifest and selector metadata, but they do not contribute active runtime prompts, tools, skills, providers, mounts, or runtime hashes.
+
+## Package tool trust
+
+Installing an expert-squad package that contains executable tools is an explicit trust decision. Package tools are trusted executable extensions, in the same trust class as installed plugins, and run inside the OpenCorvus host process with the capabilities granted by the active projection.
+
+OpenCorvus verifies the exact compiled bytes, declared dependency closure, package ownership boundaries, and SHA-256 digests before loading a package tool. Those checks provide deterministic and portable execution; they are not a security sandbox for hostile code. Do not install executable packages from an untrusted source. Supporting untrusted package code would require a separate process boundary and capability protocol rather than another in-process loader.
+
+The `tool({ args })` authoring API constructs one complete object input schema inside the package bundle's own Zod runtime. OpenCorvus projects that schema directly for local validation and provider conversion; package tools must not export a second runtime schema authority.
+
+Package tools that consume compiled webpage evidence must import `CompiledWebpageStructureSchema` and `CompiledWebpageAssetGraphSchema` from `@opencorvus-ai/plugin`. These schemas are the single compiled-webpage ABI; copying their shape into a squad creates a conflicting contract.
+
+## Built-in Base, Advanced, and Research Studio
+
+`base` is the default built-in expert-squad package and Advanced's convenient composite version. Its compact `composite-delivery` workflow dispatches Explore `base-researcher`, Delegated Worker `base-planner`, Build `base-developer`, and Delegated Worker `base-tester` in order, so each role inherits compatible runtime ownership. The fixed `integrity-verified-delivery` variant adds package-owned Integrity `base-integrity-reviewer` after testing. The fixed `visual-verified-delivery` variant runs Tester and Visual Quality Assurance `base-visual-reviewer` in parallel after development, then joins their evidence at the Integrity Reviewer. The Orchestrator selects exactly one graph, and every node in that graph is mandatory. The core identities publish and select the canonical `base/research-report`, `base/implementation-plan`, `base/development-report`, and `base/test-report` handoffs; reviewers use typed VisualReview and IntegrityReview evidence. Base does not create or consume RequirementSet, ContractGraph, Goal, or Delivery Slice planning facts.
+
+`advanced` is the independently selectable full built-in software-development team for request interpretation, requirements, architecture, workload review, source and external research, interface investigation and design, implementation, testing, visual review, system-integrity review, and claim verification. Every delivery graph retains Requirements → Architect traceability. Independent investigation starts together; after architecture, workload and delivery work share a frontier; after implementation, testing and independent review share a frontier whenever their Artifact inputs permit it. These are package-owned dynamic identities, not core roles.
+
+`research-studio` is the independently selectable built-in research-delivery team. Its Planner, Deep Researcher, Evidence Analyst, Fact Checker, and Report Writer execute the exact `direct-writing`, `evidence-synthesis`, or `full-research` manifest workflow and produce a durable cited report. It is embedded directly and is not released through Market or project payload provisioning.
+
+`universal-build` remains the platform implementation and repository-repair identity for work outside a narrower package-owned implementation contract. Advanced delivery workflows use their own Build `implementation-engineer` and Delegated Worker `test-engineer`; this does not remove the scheduler-only platform capability.
+
+Selecting another expert-squad package replaces the current package's complete projection. Packages do not inherit or combine Base, Advanced, Research Studio, or sibling agents, prompts, skills, tools, mounts, Model Context Protocol resources, or guidance graphs. Resolver-owned `universal-build` remains available only to the scheduler and consumes runtime-template/top-level configuration rather than package agent overrides.
+
+Expert-squad manifest versions use `YYYY.MM.DD.N`, where `N` is that Squad's positive revision ordinal for the date. The Registry rejects arbitrary SemVer, bare dates, timestamps, invalid calendar dates, and zero or leading-zero ordinals.
+
+## Dispatch
+
+Only the Orchestrator dispatches projected workers. It calls `dispatch_agent` with an exact active agent ID. The runner resolves that projection, derives its runtime template from `base_role`, creates the worker session, persists an immutable `WorkerTurnDescriptor`, and installs a process-local runtime contract for that Turn. The process-local contract is execution machinery: its absence cannot erase the Session, durable facts, or visible messages, and it is not Task liveness.
+
+`virtual_workflows` is a frozen, binding scheduler contract rather than an execution engine or state machine. The Orchestrator selects the matching graph through visible reasoning and must respect its complete node/dependency order. The graph cannot select itself, store step status, auto-advance, or dispatch agents; real scheduling and refusal remain visible Orchestrator tool calls.
+
+## Facts, Turns, and acceptance
+
+Projected tools write durable domain facts; they are not terminal submit/finalizer calls. A normal model stream end is only a physical Turn observation. The visible final assistant message owns the worker's narrative handoff, limitations, blockers, and stable references. Git changes, command/test exits, process facts, and attachment consumption are recorded independently as Host observations.
+
+Dispatch lineage and execution attempts are immutable physical evidence identities, not business lifecycle. The Orchestrator evaluates persisted Sessions, real final message/error locators, domain artifacts, reviewer facts, and Host observations directly. Each Task completion appends a typed decision artifact citing accepted current Slice revisions, workflow selection, package revision, and exact evidence. The Goal panel derives progress from those facts and never writes Goal status, retry, attempt, result, or workspace state.
+
+See [Extensions](../extensions/) for the expert-squad package boundary and [Config](../config/) for selecting an active package and configuring core runtime templates.

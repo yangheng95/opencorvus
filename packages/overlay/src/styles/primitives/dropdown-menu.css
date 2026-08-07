@@ -1,0 +1,65 @@
+.oc-menu {
+  box-sizing: border-box;
+  display: grid;
+  gap: calc(3px * var(--ui-scale));
+  padding: calc(6px * var(--ui-scale));
+  border: var(--ui-focused-popup-border);
+  border-radius: var(--oc-radius-large);
+  outline: none;
+  background: var(--menu-panel-bg);
+  color: var(--text-strong);
+  box-shadow: var(--ui-focused-popup-shadow);
+  z-index: var(--ui-z-overlay);
+}
+
+.oc-menu-item {
+  appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--oc-density-control-height);
+  display: flex;
+  align-items: center;
+  gap: calc(8px * var(--ui-scale));
+  padding: calc(6px * var(--ui-scale)) calc(9px * var(--ui-scale));
+  border: 0;
+  border-radius: var(--oc-radius-soft);
+  outline: none;
+  background: transparent;
+  color: var(--text-soft);
+  font-family: var(--font);
+  font-size: var(--ui-font-control);
+  line-height: var(--ui-line-height-tight);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color var(--ui-duration-base) var(--ui-timing-standard),
+    color var(--ui-duration-base) var(--ui-timing-standard),
+    opacity var(--ui-duration-base) var(--ui-timing-standard);
+}
+
+.oc-menu-item:not([data-checked]):is(:hover, [data-highlighted], :focus-visible) {
+  background: var(--ui-list-hover-bg);
+  color: var(--text-strong);
+}
+
+.oc-menu-item[data-checked] {
+  background: var(--ui-list-selected-bg);
+  color: var(--text-strong);
+}
+
+.oc-menu-item[data-checked]:is(:hover, [data-highlighted], :focus-visible) {
+  background: var(--ui-list-selected-hover-bg);
+}
+
+.oc-menu-item[data-disabled],
+.oc-menu-item:disabled {
+  cursor: default;
+  opacity: var(--ui-opacity-disabled);
+}
+
+.oc-menu-separator {
+  height: var(--oc-border-width);
+  margin: calc(4px * var(--ui-scale)) calc(7px * var(--ui-scale));
+  border: 0;
+  background: var(--border);
+}

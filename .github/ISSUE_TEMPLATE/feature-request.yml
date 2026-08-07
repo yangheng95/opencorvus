@@ -1,0 +1,52 @@
+name: Feature request
+description: Propose a user problem or capability for OpenCorvus
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Explain the user problem, limitation, or workflow gap.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: Describe the observable result without prescribing unnecessary implementation details.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context and examples
+      description: Include representative workflows, constraints, or links that clarify the request.
+    validations:
+      required: false
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe existing workarounds or related capabilities, if any.
+    validations:
+      required: false
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - I can help implement this
+        - I can help test or document this
+        - I am reporting the need only
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmation
+      options:
+        - label: I searched existing issues and discussions for this request.
+          required: true
+        - label: I agree to follow the Code of Conduct.
+          required: true

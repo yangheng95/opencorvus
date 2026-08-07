@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "identity": "expert-squad-evolution-development-statistics-v1",
+  "pairing_keys": [
+    "case_id",
+    "repetition"
+  ],
+  "arms": [
+    "baseline",
+    "candidate"
+  ],
+  "required_statistics": [
+    "mean",
+    "median",
+    "variance",
+    "confidence_interval",
+    "win_tie_loss",
+    "failure_rate",
+    "unavailable_rate",
+    "token_delta",
+    "cost_delta",
+    "activity_delta"
+  ],
+  "confidence_interval": {
+    "method": "paired_bootstrap",
+    "confidence_level": 0.95,
+    "resamples": 10000
+  },
+  "required_unavailable_policy": "null_aggregate_with_typed_reason",
+  "ranking_scope": "exact_campaign_only"
+}

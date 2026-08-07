@@ -1,0 +1,2037 @@
+---
+const locale = Astro.props.locale === "zh" ? "zh" : "en"
+const standalone = Astro.props.standalone === true
+const rootClass = standalone ? "oc-arch-explorer oc-arch-explorer--standalone" : "oc-arch-explorer"
+const publicBase = import.meta.env.BASE_URL.replace(/\/$/, "")
+const localeBase = locale === "zh" ? `${publicBase}/zh-cn` : publicBase
+const standaloneHref = `${localeBase}/architecture-explorer/`
+const docsHref = `${localeBase}/concepts/enterprise-architecture/`
+---
+
+<section class={rootClass} data-oc-architecture-explorer data-locale={locale}>
+  <header class="oc-arch-header">
+    <div class="oc-arch-title-block">
+      <p class="oc-arch-kicker">{locale === "zh" ? "OpenCorvus current runtime map" : "OpenCorvus current runtime map"}</p>
+      <h1>{locale === "zh" ? "企业级架构工作台" : "Enterprise Architecture Workbench"}</h1>
+      <p>
+        {
+          locale === "zh"
+            ? "用源码路径、artifact kind、agent 责任边界和 overlay 投影链路描述当前系统，而不是历史流程图。"
+            : "A source-traceable map of the current runtime: artifact kinds, agent ownership, execution boundaries, and overlay projection."
+        }
+      </p>
+    </div>
+    <div class="oc-arch-header-actions">
+      {
+        standalone ? (
+          <a href={docsHref}>{locale === "zh" ? "返回文档入口" : "Back to docs entry"}</a>
+        ) : (
+          <a href={standaloneHref}>{locale === "zh" ? "打开全屏工作台" : "Open full-screen workbench"}</a>
+        )
+      }
+    </div>
+  </header>
+
+  <div class="oc-arch-control-strip">
+    <label class="oc-arch-search">
+      <span>{locale === "zh" ? "检索组件 / 源码 / artifact" : "Search component / source / artifact"}</span>
+      <input data-arch-search type="search" autocomplete="off" />
+    </label>
+    <div class="oc-arch-view-tabs" data-arch-view-tabs aria-label={locale === "zh" ? "架构视图" : "Architecture views"}></div>
+  </div>
+
+  <div class="oc-arch-stats" data-arch-stats></div>
+
+  <div class="oc-arch-shell">
+    <aside class="oc-arch-domain-rail">
+      <div class="oc-arch-panel-head">
+        <span>{locale === "zh" ? "领域目录" : "Domain index"}</span>
+        <strong data-arch-domain-count></strong>
+      </div>
+      <nav data-arch-domain-list aria-label={locale === "zh" ? "架构领域" : "Architecture domains"}></nav>
+    </aside>
+
+    <main class="oc-arch-main">
+      <section class="oc-arch-flow" aria-label={locale === "zh" ? "当前运行链路" : "Current runtime chain"}>
+        <div class="oc-arch-section-title">
+          <span data-arch-view-title></span>
+          <p data-arch-view-summary></p>
+        </div>
+        <div class="oc-arch-flow-steps" data-arch-flow></div>
+      </section>
+
+      <section class="oc-arch-blueprint" aria-label={locale === "zh" ? "架构领域蓝图" : "Architecture domain blueprint"}>
+        <div class="oc-arch-section-title">
+          <span>{locale === "zh" ? "领域蓝图" : "Domain blueprint"}</span>
+          <p>
+            {
+              locale === "zh"
+                ? "每个领域都绑定当前源码、单一数据责任和与相邻领域的显式契约。"
+                : "Each domain binds current source, one data responsibility, and explicit contracts to adjacent domains."
+            }
+          </p>
+        </div>
+        <div class="oc-arch-domain-grid" data-arch-domain-grid></div>
+      </section>
+
+      <section class="oc-arch-contracts" aria-label={locale === "zh" ? "契约矩阵" : "Contract matrix"}>
+        <div class="oc-arch-section-title">
+          <span>{locale === "zh" ? "当前视图契约" : "Active view contracts"}</span>
+          <p>
+            {
+              locale === "zh"
+                ? "视图切换会更换这里的契约集合，用于区分 runtime、data、A2A、overlay 和治理面。"
+                : "Changing views replaces this contract set across runtime, data, A2A, overlay, and governance surfaces."
+            }
+          </p>
+        </div>
+        <div class="oc-arch-contract-list" data-arch-contracts></div>
+      </section>
+    </main>
+
+    <aside class="oc-arch-inspector" data-arch-inspector aria-live="polite"></aside>
+  </div>
+
+  <section class="oc-arch-evidence" aria-label={locale === "zh" ? "当前证据索引" : "Current evidence index"}>
+    <div class="oc-arch-section-title">
+      <span>{locale === "zh" ? "证据索引" : "Evidence index"}</span>
+      <p>{locale === "zh" ? "选中领域后，这里只展示该领域的源码锚点和持久记录。" : "After selecting a domain, this shows only that domain's source anchors and durable records."}</p>
+    </div>
+    <div class="oc-arch-evidence-grid" data-arch-evidence></div>
+  </section>
+</section>
+
+<style is:global>
+  .oc-arch-explorer {
+    --oc-bg: #f6f3ec;
+    --oc-panel: #fffdf8;
+    --oc-panel-strong: #ffffff;
+    --oc-ink: #1c1d1f;
+    --oc-muted: #5d6066;
+    --oc-faint: #8a8d94;
+    --oc-line: #d9d3c4;
+    --oc-line-strong: #b9b09e;
+    --oc-control: #263238;
+    --oc-engine: #2f6f73;
+    --oc-agent: #9b6b1d;
+    --oc-exec: #596bb3;
+    --oc-evidence: #a94f68;
+    --oc-overlay: #5d7f38;
+    --oc-extension: #7a5a96;
+    --oc-shadow: 0 18px 45px rgba(31, 34, 38, 0.12);
+    box-sizing: border-box;
+    color: var(--oc-ink);
+    font-family:
+      Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    letter-spacing: 0;
+    margin: 2rem 0 2.5rem;
+    width: 100%;
+  }
+
+  .oc-arch-explorer *,
+  .oc-arch-explorer *::before,
+  .oc-arch-explorer *::after {
+    box-sizing: border-box;
+    letter-spacing: 0;
+  }
+
+  .oc-arch-explorer--standalone {
+    min-height: 100vh;
+    margin: 0;
+    padding: 1.25rem;
+    background:
+      linear-gradient(90deg, rgba(38, 50, 56, 0.05) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(38, 50, 56, 0.04) 1px, transparent 1px), var(--oc-bg);
+    background-size: 44px 44px;
+  }
+
+  .oc-arch-explorer:not(.oc-arch-explorer--standalone) {
+    max-width: 1180px;
+  }
+
+  .oc-arch-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: start;
+    margin-bottom: 1rem;
+  }
+
+  .oc-arch-title-block {
+    display: grid;
+    gap: 0.45rem;
+    max-width: 940px;
+  }
+
+  .oc-arch-kicker,
+  .oc-arch-title-block p,
+  .oc-arch-section-title p,
+  .oc-arch-search span,
+  .oc-arch-domain-sub,
+  .oc-arch-flow-card small,
+  .oc-arch-contract-row p,
+  .oc-arch-inspector p,
+  .oc-arch-evidence-item span {
+    margin: 0;
+    color: var(--oc-muted);
+  }
+
+  .oc-arch-kicker {
+    color: var(--oc-engine);
+    font-size: 0.76rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .oc-arch-title-block h1 {
+    margin: 0;
+    color: var(--oc-ink) !important;
+    font-size: clamp(1.9rem, 3vw, 3.05rem) !important;
+    font-weight: 760 !important;
+    line-height: 1.02;
+    text-transform: none !important;
+  }
+
+  .oc-arch-title-block p {
+    max-width: 860px;
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  .oc-arch-header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .oc-arch-header-actions a {
+    display: inline-flex;
+    min-height: 2.4rem;
+    align-items: center;
+    border: 1px solid var(--oc-control);
+    border-radius: 6px;
+    padding: 0.55rem 0.8rem;
+    background: var(--oc-control);
+    color: #fff !important;
+    font-size: 0.86rem;
+    font-weight: 720;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .oc-arch-control-strip {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.4fr);
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .oc-arch-search {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .oc-arch-search input {
+    width: 100%;
+    min-height: 2.6rem;
+    border: 1px solid var(--oc-line);
+    border-radius: 6px;
+    padding: 0.55rem 0.75rem;
+    background: var(--oc-panel-strong);
+    color: var(--oc-ink);
+    font: inherit;
+  }
+
+  .oc-arch-view-tabs {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.35rem;
+    align-self: end;
+  }
+
+  .oc-arch-view-tab,
+  .oc-arch-domain-button,
+  .oc-arch-domain-card,
+  .oc-arch-domain-select,
+  .oc-arch-component-chip,
+  .oc-arch-flow-card,
+  .oc-arch-contract-row {
+    border: 1px solid var(--oc-line);
+    border-radius: 7px;
+    background: var(--oc-panel);
+    color: var(--oc-ink);
+    font: inherit;
+  }
+
+  .oc-arch-view-tab,
+  .oc-arch-domain-button,
+  .oc-arch-domain-select,
+  .oc-arch-component-chip,
+  .oc-arch-flow-card {
+    cursor: pointer;
+  }
+
+  .oc-arch-view-tab {
+    min-height: 2.6rem;
+    padding: 0.45rem 0.55rem;
+    text-align: center;
+    font-size: 0.76rem;
+    font-weight: 760;
+    line-height: 1.14;
+    white-space: normal;
+  }
+
+  .oc-arch-view-tab[aria-pressed="true"] {
+    border-color: var(--oc-control);
+    background: var(--oc-control);
+    color: #fff;
+  }
+
+  .oc-arch-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.65rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .oc-arch-stat {
+    min-height: 4.25rem;
+    border: 1px solid var(--oc-line);
+    border-radius: 7px;
+    padding: 0.65rem 0.75rem;
+    background: rgba(255, 253, 248, 0.82);
+  }
+
+  .oc-arch-stat strong {
+    display: block;
+    color: var(--oc-ink);
+    font-size: 1.35rem;
+    font-weight: 780 !important;
+    line-height: 1.05;
+  }
+
+  .oc-arch-stat span {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--oc-muted);
+    font-size: 0.78rem;
+    line-height: 1.3;
+  }
+
+  .oc-arch-shell {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr) 300px;
+    gap: 0.9rem;
+    align-items: start;
+  }
+
+  .oc-arch-domain-rail,
+  .oc-arch-flow,
+  .oc-arch-blueprint,
+  .oc-arch-contracts,
+  .oc-arch-inspector,
+  .oc-arch-evidence {
+    border: 1px solid var(--oc-line);
+    border-radius: 8px;
+    background: rgba(255, 253, 248, 0.9);
+    box-shadow: var(--oc-shadow);
+  }
+
+  .oc-arch-domain-rail,
+  .oc-arch-inspector {
+    position: sticky;
+    top: 1rem;
+  }
+
+  .oc-arch-panel-head,
+  .oc-arch-section-title {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.75rem 0.85rem;
+    border-bottom: 1px solid var(--oc-line);
+  }
+
+  .oc-arch-panel-head {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .oc-arch-panel-head span,
+  .oc-arch-section-title span {
+    color: var(--oc-ink);
+    font-size: 0.9rem;
+    font-weight: 780;
+  }
+
+  .oc-arch-panel-head strong {
+    color: var(--oc-muted);
+    font-size: 0.78rem;
+  }
+
+  .oc-arch-section-title p {
+    font-size: 0.78rem;
+    line-height: 1.42;
+  }
+
+  .oc-arch-domain-rail nav {
+    display: grid;
+    gap: 0.45rem;
+    padding: 0.65rem;
+    max-height: calc(100vh - 16rem);
+    overflow: auto;
+  }
+
+  .oc-arch-domain-button {
+    display: grid;
+    gap: 0.3rem;
+    padding: 0.55rem;
+    text-align: left;
+  }
+
+  .oc-arch-domain-button[aria-current="true"],
+  .oc-arch-domain-card[data-selected="true"],
+  .oc-arch-component-chip[aria-pressed="true"],
+  .oc-arch-flow-card[aria-pressed="true"] {
+    border-color: var(--domain-color, var(--oc-control));
+    box-shadow: inset 4px 0 0 var(--domain-color, var(--oc-control));
+    background: #fff;
+  }
+
+  .oc-arch-domain-button[data-match="false"],
+  .oc-arch-domain-card[data-match="false"] {
+    opacity: 0.34;
+  }
+
+  .oc-arch-domain-line {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.45rem;
+    align-items: center;
+  }
+
+  .oc-arch-domain-index {
+    display: inline-flex;
+    width: 1.6rem;
+    height: 1.6rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--domain-color, var(--oc-control));
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 800;
+  }
+
+  .oc-arch-domain-name {
+    overflow-wrap: anywhere;
+    font-size: 0.82rem;
+    font-weight: 760;
+    line-height: 1.25;
+  }
+
+  .oc-arch-domain-sub {
+    font-size: 0.72rem;
+    line-height: 1.32;
+  }
+
+  .oc-arch-main {
+    display: grid;
+    gap: 0.9rem;
+    min-width: 0;
+  }
+
+  .oc-arch-flow-steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.55rem;
+    padding: 0.75rem;
+  }
+
+  .oc-arch-flow-card {
+    position: relative;
+    display: grid;
+    gap: 0.35rem;
+    min-height: 5.8rem;
+    padding: 0.65rem;
+    text-align: left;
+  }
+
+  .oc-arch-flow-card b {
+    color: var(--oc-ink);
+    font-size: 0.78rem;
+    line-height: 1.25;
+  }
+
+  .oc-arch-flow-card small {
+    font-size: 0.7rem;
+    line-height: 1.35;
+  }
+
+  .oc-arch-domain-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+    padding: 0.75rem;
+  }
+
+  .oc-arch-domain-card {
+    display: grid;
+    gap: 0.55rem;
+    min-height: 10rem;
+    padding: 0.72rem;
+    text-align: left;
+  }
+
+  .oc-arch-domain-select {
+    display: grid;
+    gap: 0.55rem;
+    width: 100%;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    text-align: left;
+  }
+
+  .oc-arch-domain-card-header {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.55rem;
+    align-items: start;
+  }
+
+  .oc-arch-layer-tag {
+    display: inline-flex;
+    width: max-content;
+    max-width: 100%;
+    border: 1px solid color-mix(in srgb, var(--domain-color, var(--oc-control)) 40%, var(--oc-line));
+    border-radius: 999px;
+    padding: 0.18rem 0.45rem;
+    background: color-mix(in srgb, var(--domain-color, var(--oc-control)) 12%, #fff);
+    color: var(--domain-color, var(--oc-control));
+    font-size: 0.68rem;
+    font-weight: 800;
+  }
+
+  .oc-arch-domain-card h3 {
+    margin: 0;
+    color: var(--oc-ink) !important;
+    font-size: 0.98rem !important;
+    font-weight: 780 !important;
+    line-height: 1.22;
+  }
+
+  .oc-arch-domain-card p {
+    margin: 0;
+    color: var(--oc-muted);
+    font-size: 0.78rem;
+    line-height: 1.42;
+  }
+
+  .oc-arch-component-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .oc-arch-component-chip {
+    min-height: 1.95rem;
+    padding: 0.28rem 0.45rem;
+    font-size: 0.72rem;
+    font-weight: 720;
+  }
+
+  .oc-arch-records {
+    display: grid;
+    gap: 0.22rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .oc-arch-records li {
+    display: grid;
+    grid-template-columns: 0.45rem minmax(0, 1fr);
+    gap: 0.35rem;
+    align-items: start;
+    color: var(--oc-muted);
+    font-size: 0.72rem;
+    line-height: 1.35;
+  }
+
+  .oc-arch-records li::before {
+    content: "";
+    width: 0.42rem;
+    height: 0.42rem;
+    margin-top: 0.34rem;
+    border-radius: 999px;
+    background: var(--domain-color, var(--oc-control));
+  }
+
+  .oc-arch-contract-list {
+    display: grid;
+    gap: 0.45rem;
+    padding: 0.75rem;
+  }
+
+  .oc-arch-contract-row {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr) 7rem;
+    gap: 0.55rem;
+    align-items: center;
+    min-height: 3.5rem;
+    padding: 0.58rem 0.65rem;
+  }
+
+  .oc-arch-contract-node {
+    overflow-wrap: anywhere;
+    color: var(--oc-ink);
+    font-size: 0.72rem;
+    font-weight: 780;
+    line-height: 1.25;
+  }
+
+  .oc-arch-contract-row p {
+    font-size: 0.73rem;
+    line-height: 1.38;
+  }
+
+  .oc-arch-inspector {
+    min-height: 34rem;
+    overflow: hidden;
+  }
+
+  .oc-arch-inspector-inner {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0.85rem;
+  }
+
+  .oc-arch-inspector-kicker {
+    width: max-content;
+    max-width: 100%;
+    border-radius: 999px;
+    padding: 0.22rem 0.5rem;
+    background: color-mix(in srgb, var(--domain-color, var(--oc-control)) 14%, #fff);
+    color: var(--domain-color, var(--oc-control));
+    font-size: 0.7rem;
+    font-weight: 820;
+  }
+
+  .oc-arch-inspector h2 {
+    margin: 0;
+    color: var(--oc-ink) !important;
+    font-size: 1.25rem !important;
+    font-weight: 800 !important;
+    line-height: 1.15;
+  }
+
+  .oc-arch-inspector p {
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+
+  .oc-arch-detail-block {
+    display: grid;
+    gap: 0.38rem;
+  }
+
+  .oc-arch-detail-block h3 {
+    margin: 0;
+    color: var(--oc-ink) !important;
+    font-size: 0.78rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+  }
+
+  .oc-arch-detail-block ul {
+    display: grid;
+    gap: 0.32rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .oc-arch-detail-block li,
+  .oc-arch-code-list code {
+    overflow-wrap: anywhere;
+    color: var(--oc-muted);
+    font-size: 0.73rem;
+    line-height: 1.38;
+  }
+
+  .oc-arch-code-list {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .oc-arch-code-list code {
+    display: block;
+    border: 1px solid var(--oc-line);
+    border-radius: 6px;
+    padding: 0.35rem 0.45rem;
+    background: #f4f0e7;
+    color: #3a3d42;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  }
+
+  .oc-arch-evidence {
+    margin-top: 0.9rem;
+  }
+
+  .oc-arch-evidence-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.55rem;
+    padding: 0.75rem;
+  }
+
+  .oc-arch-evidence-item {
+    display: grid;
+    gap: 0.3rem;
+    border: 1px solid var(--oc-line);
+    border-radius: 7px;
+    padding: 0.55rem;
+    background: var(--oc-panel);
+  }
+
+  .oc-arch-evidence-item strong {
+    overflow-wrap: anywhere;
+    color: var(--oc-ink);
+    font-size: 0.74rem;
+    font-weight: 780 !important;
+    line-height: 1.28;
+  }
+
+  .oc-arch-evidence-item span {
+    overflow-wrap: anywhere;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: 0.68rem;
+    line-height: 1.35;
+  }
+
+  .oc-arch-empty {
+    border: 1px dashed var(--oc-line-strong);
+    border-radius: 7px;
+    padding: 1rem;
+    color: var(--oc-muted);
+    font-size: 0.82rem;
+  }
+
+  .oc-arch-view-tab:focus-visible,
+  .oc-arch-search input:focus-visible,
+  .oc-arch-domain-button:focus-visible,
+  .oc-arch-domain-select:focus-visible,
+  .oc-arch-component-chip:focus-visible,
+  .oc-arch-flow-card:focus-visible {
+    outline: 2px solid var(--domain-color, var(--oc-control));
+    outline-offset: 2px;
+  }
+
+  @media (min-width: 78rem) {
+    .oc-arch-explorer:not(.oc-arch-explorer--standalone) {
+      width: min(1180px, calc(100vw - 22rem));
+      margin-left: -3rem;
+    }
+  }
+
+  @media (max-width: 86rem) {
+    .oc-arch-control-strip {
+      grid-template-columns: 1fr;
+    }
+
+    .oc-arch-shell {
+      grid-template-columns: 220px minmax(0, 1fr);
+    }
+
+    .oc-arch-domain-rail {
+      position: static;
+    }
+
+    .oc-arch-inspector {
+      position: static;
+      grid-column: 1 / -1;
+      min-height: 0;
+    }
+  }
+
+  @media (max-width: 1120px) {
+    .oc-arch-flow-steps {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .oc-arch-evidence-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 820px) {
+    .oc-arch-explorer--standalone {
+      padding: 0.8rem;
+    }
+
+    .oc-arch-header,
+    .oc-arch-control-strip,
+    .oc-arch-shell {
+      grid-template-columns: 1fr;
+    }
+
+    .oc-arch-header-actions {
+      justify-content: start;
+    }
+
+    .oc-arch-stats,
+    .oc-arch-view-tabs,
+    .oc-arch-flow-steps,
+    .oc-arch-domain-grid,
+    .oc-arch-evidence-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .oc-arch-domain-rail {
+      position: static;
+    }
+
+    .oc-arch-domain-rail nav {
+      max-height: none;
+    }
+
+    .oc-arch-contract-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  type ArchLocale = "en" | "zh"
+  type LocalizedText = { en: string; zh: string }
+  type ArchComponent = { id: string; title: string; responsibility: LocalizedText; sources: string[] }
+  type ArchDomain = {
+    id: string
+    index: string
+    color: string
+    layer: LocalizedText
+    title: LocalizedText
+    summary: LocalizedText
+    responsibilities: LocalizedText[]
+    boundaries: LocalizedText[]
+    records: string[]
+    sources: string[]
+    components: ArchComponent[]
+  }
+  type ArchView = {
+    id: string
+    title: LocalizedText
+    summary: LocalizedText
+    sequence: string[]
+    contracts: Array<[string, string, LocalizedText]>
+  }
+  type ArchCopy = {
+    searchPlaceholder: string
+    selectedComponent: string
+    selectedDomain: string
+    responsibilities: string
+    boundaries: string
+    sourcePaths: string
+      durableRecords: string
+      highlightedStreams: string
+      components: string
+      relatedContracts: string
+      selectionPath: string
+      noSearch: string
+      statLabels: string[]
+  }
+
+  const architectureCopy: Record<ArchLocale, ArchCopy> = {
+    en: {
+      searchPlaceholder: "Try: integrity_review, cardTreeStore, BuildAgent, agent_coordination",
+      selectedComponent: "Selected component",
+      selectedDomain: "Selected domain",
+      responsibilities: "Responsibilities",
+      boundaries: "Boundaries",
+      sourcePaths: "Source paths",
+      durableRecords: "Durable records",
+      highlightedStreams: "Highlighted artifact streams",
+      components: "Components",
+      relatedContracts: "Related contracts",
+      selectionPath: "Selection path",
+      noSearch: "No current architecture item matches this search.",
+      statLabels: ["current runtime domains", "clickable components", "EngineArtifactKind total", "highlighted artifact streams"],
+    },
+    zh: {
+      searchPlaceholder: "例如：integrity_review、cardTreeStore、BuildAgent、agent_coordination",
+      selectedComponent: "选中组件",
+      selectedDomain: "选中领域",
+      responsibilities: "职责",
+      boundaries: "边界",
+      sourcePaths: "源码路径",
+      durableRecords: "持久记录",
+      highlightedStreams: "重点 artifact 流",
+      components: "组件",
+      relatedContracts: "相关契约",
+      selectionPath: "选中路径",
+      noSearch: "没有当前架构项匹配这个检索。",
+      statLabels: ["当前运行领域", "可点击组件", "EngineArtifactKind 总数", "重点 artifact 流"],
+    },
+  }
+
+  const currentEngineArtifactKinds = [
+    "patch",
+    "log",
+    "image",
+    "link",
+    "git_ref",
+    "pr",
+    "host_verification_observation",
+    "visual_feedback_verification",
+    "build_host_observation",
+    "goal_graph_projection",
+    "integrity_review",
+    "fact_check_review",
+    "visual_review",
+    "requirement_set",
+    "research_brief",
+    "frontend_research_brief",
+    "frontend_design",
+    "design_resource_manifest",
+    "architect_contract_graph",
+    "goal_workload",
+    "dispatch_lineage",
+    "operator_message_wake",
+    "queued_operator_wake",
+    "exploration",
+    "browser_preview_target",
+    "browser_preview_evidence",
+    "orchestrator-stream-error",
+    "task-infrastructure-error",
+    "tool-execute-error",
+    "agent_coordination_request",
+    "agent_coordination_response",
+    "agent_coordination_action",
+    "task_completion_decision",
+  ] as const
+
+  const architectureViews: ArchView[] = [
+    {
+      id: "runtime",
+      title: { en: "Runtime chain", zh: "运行链路" },
+      summary: {
+        en: "From external input to task lifecycle, specialist work, evidence, and UI projection.",
+        zh: "从外部输入到任务生命周期、专家执行、证据沉淀和界面投影。",
+      },
+      sequence: [
+        "ingress-control",
+        "engine-spine",
+        "orchestrator-host",
+        "agent-team",
+        "worktree-execution",
+        "verification",
+        "overlay-projection",
+      ],
+      contracts: [
+        ["ingress-control", "engine-spine", { en: "Validated channel/control input becomes task/session work through EngineService.", zh: "经过校验的 channel/control 输入由 EngineService 转为 task/session 工作。" }],
+        ["engine-spine", "orchestrator-host", { en: "Snapshots, artifacts, decision log, and tools form the orchestrator's observable state.", zh: "snapshot、artifact、decision log 与工具构成 orchestrator 可观察状态。" }],
+        ["orchestrator-host", "agent-team", { en: "The orchestrator invokes explicit workflow tools; workers do not own task lifecycle.", zh: "orchestrator 调用显式 workflow tools；worker 不拥有 task 生命周期。" }],
+        ["agent-team", "worktree-execution", { en: "Build receives the Task request, contracts, attachments, and exact Delivery Slice revision subjects.", zh: "Build 接收 Task 请求、契约、附件和精确 Delivery Slice revision subjects。" }],
+        ["worktree-execution", "verification", { en: "Changed files, preview targets, screenshots, and verdicts become durable evidence.", zh: "改动文件、preview target、截图和 verdict 变成持久证据。" }],
+        ["verification", "overlay-projection", { en: "Event stream and persisted board data project into operator-facing cards.", zh: "事件流和持久 board 数据投影成操作者可见卡片。" }],
+      ],
+    },
+    {
+      id: "data",
+      title: { en: "Data spine", zh: "数据脊柱" },
+      summary: {
+        en: "The current durable model centers on engine_artifact rows, not retired run/evaluation tables.",
+        zh: "当前持久模型以 engine_artifact 行为中心，不再叙述退役 run/evaluation 表。",
+      },
+      sequence: ["engine-spine", "a2a-coordination", "worktree-execution", "verification", "overlay-projection", "docs-ops"],
+      contracts: [
+        ["engine-spine", "worktree-execution", { en: "dispatch_lineage identifies an immutable execution while build_host_observation records Host-owned Git, diff, and workspace facts.", zh: "dispatch_lineage 标识不可变执行，build_host_observation 记录 Host 所有的 Git、diff 与 workspace 事实。" }],
+        ["engine-spine", "verification", { en: "Host observations and integrity_review are artifact rows bound to the Task, dispatch lineage, and exact Delivery Slice revision subjects.", zh: "Host observation 与 integrity_review 是绑定 Task、dispatch lineage 和精确 Delivery Slice revision subjects 的 artifact 行。" }],
+        ["engine-spine", "a2a-coordination", { en: "agent_coordination_request/response/action are durable rows, not side-channel chat.", zh: "agent_coordination_request/response/action 是持久行，不是旁路聊天。" }],
+        ["overlay-projection", "engine-spine", { en: "Overlay reads backend task/board/event surfaces and does not create a second truth source.", zh: "Overlay 读取后端 task/board/event surface，不制造第二事实源。" }],
+        ["docs-ops", "engine-spine", { en: "Docs must describe artifact-backed current tables and reject retired vocabulary.", zh: "文档必须描述 artifact-backed 当前表并拒绝退役词汇。" }],
+      ],
+    },
+    {
+      id: "agents",
+      title: { en: "Agent ownership", zh: "Agent 职责" },
+      summary: {
+        en: "Specialist agents publish bounded artifacts; the orchestrator alone chooses lifecycle actions.",
+        zh: "专家 agent 发布边界明确的 artifact；只有 orchestrator 选择生命周期动作。",
+      },
+      sequence: ["orchestrator-host", "agent-team", "a2a-coordination", "worktree-execution", "verification"],
+      contracts: [
+        ["orchestrator-host", "agent-team", { en: "requirements, architect, workload_analysis, build, visual_qa, integrity are explicit tools.", zh: "requirements、architect、workload_analysis、build、visual_qa、integrity 都是显式工具。" }],
+        ["agent-team", "a2a-coordination", { en: "A worker asks for coordination through artifacts that the orchestrator must answer visibly.", zh: "worker 通过 artifact 请求协作，orchestrator 必须可见地回答。" }],
+        ["agent-team", "verification", { en: "visual_qa reviews visible product evidence; integrity owns final session-bound acceptance.", zh: "visual_qa 复核可见产品证据；integrity 拥有最终 session-bound acceptance。" }],
+        ["agent-team", "worktree-execution", { en: "Build owns implementation sessions and merge_back, not requirement mining.", zh: "Build 拥有实现 session 与 merge_back，不负责需求挖掘。" }],
+      ],
+    },
+    {
+      id: "overlay",
+      title: { en: "Overlay projection", zh: "Overlay 投影" },
+      summary: {
+        en: "Backend events project into a single Solid store through tree-writer before UI rendering.",
+        zh: "后端事件先通过 tree-writer 投影到单一 Solid store，再渲染 UI。",
+      },
+      sequence: ["engine-spine", "verification", "overlay-projection", "operator-surfaces"],
+      contracts: [
+        ["engine-spine", "overlay-projection", { en: "SSE events are routed through event-policy and tree-writer before they touch cardTreeStore.", zh: "SSE 事件先经过 event-policy 与 tree-writer，才写入 cardTreeStore。" }],
+        ["verification", "overlay-projection", { en: "Browser Preview uses saved backend preview target/evidence, not local iframe state.", zh: "Browser Preview 使用后端保存的 preview target/evidence，不使用本地 iframe 状态。" }],
+        ["overlay-projection", "operator-surfaces", { en: "Conversation, Board, BrowserPreview, and Screenshot surfaces read the projected store.", zh: "Conversation、Board、BrowserPreview、Screenshot surface 读取投影后的 store。" }],
+      ],
+    },
+    {
+      id: "a2a",
+      title: { en: "A2A coordination", zh: "A2A 协作" },
+      summary: {
+        en: "Agent-to-agent requests are persisted, answered, and optionally redispatched by orchestrator tools.",
+        zh: "Agent-to-agent request 由 orchestrator tools 持久化、回答，并在需要时 redispatch。",
+      },
+      sequence: ["agent-team", "a2a-coordination", "orchestrator-host", "engine-spine"],
+      contracts: [
+        ["agent-team", "a2a-coordination", { en: "Workers create coordination requests with evidence refs and expected owner.", zh: "Worker 创建带 evidence refs 与目标 owner 的协作请求。" }],
+        ["a2a-coordination", "orchestrator-host", { en: "respond_agent_coordination claims the request and records response/action artifacts.", zh: "respond_agent_coordination 认领请求并记录 response/action artifact。" }],
+        ["orchestrator-host", "agent-team", { en: "Redispatch is tied to the response action artifact and scheduler workflow binding.", zh: "Redispatch 绑定 response action artifact 和 scheduler workflow binding。" }],
+        ["a2a-coordination", "engine-spine", { en: "All A2A traffic remains queryable in engine_artifact.", zh: "所有 A2A 流量都可在 engine_artifact 中查询。" }],
+      ],
+    },
+  ]
+
+  const architectureDomains: ArchDomain[] = [
+    {
+      id: "ingress-control",
+      index: "01",
+      color: "#263238",
+      layer: { en: "Control", zh: "控制" },
+      title: { en: "Ingress and control plane", zh: "入口与控制平面" },
+      summary: {
+        en: "Normalizes channel, panel, gateway, and CLI input before the task engine sees it.",
+        zh: "在任务引擎接收之前，统一规范 channel、panel、gateway 与 CLI 输入。",
+      },
+      responsibilities: [
+        { en: "Parse external requests into ControlMessageInput and streamable results.", zh: "把外部请求解析为 ControlMessageInput 与可流式返回结果。" },
+        { en: "Bind channel replies to pending task interactions rather than inventing local state.", zh: "把 channel 回复绑定到 pending task interaction，而不是创建本地状态。" },
+        { en: "Expose gateway/panel/orchestrator routes as the API boundary.", zh: "通过 gateway/panel/orchestrator routes 暴露 API 边界。" },
+      ],
+      boundaries: [
+        { en: "Does not decide task lifecycle; it delegates to EngineService.", zh: "不决定 task 生命周期；只委托 EngineService。" },
+        { en: "Does not own overlay projection or agent session execution.", zh: "不拥有 overlay 投影或 agent session 执行。" },
+      ],
+      records: ["control_account", "session message/tool parts", "task interaction reply/reject"],
+      sources: [
+        "packages/opencorvus/src/channel/ingress.ts",
+        "packages/opencorvus/src/control/message.ts",
+        "packages/opencorvus/src/server/routes/gateway.ts",
+        "packages/opencorvus/src/server/routes/panel.ts",
+        "packages/opencorvus/src/server/routes/orchestrator.ts",
+      ],
+      components: [
+        {
+          id: "channel-ingress",
+          title: "ChannelIngress",
+          responsibility: { en: "External channel adapter for Slack and future channel runtimes.", zh: "Slack 与后续 channel runtime 的外部入口适配器。" },
+          sources: ["packages/opencorvus/src/channel/ingress.ts", "packages/channel-runtime/src/adapters/slack.ts"],
+        },
+        {
+          id: "control-message",
+          title: "ControlMessage",
+          responsibility: { en: "Session-aware control dispatcher with streaming support.", zh: "具备 session 语义和流式输出的控制分发器。" },
+          sources: ["packages/opencorvus/src/control/message.ts", "packages/opencorvus/src/control/message-schema.ts"],
+        },
+        {
+          id: "route-boundary",
+          title: "Gateway / panel / orchestrator routes",
+          responsibility: { en: "HTTP boundary for tasks, sessions, board, progress, and interactions.", zh: "task、session、board、progress、interaction 的 HTTP 边界。" },
+          sources: ["packages/opencorvus/src/server/routes/gateway.ts", "packages/opencorvus/src/server/routes/orchestrator.ts"],
+        },
+      ],
+    },
+    {
+      id: "engine-spine",
+      index: "02",
+      color: "#2f6f73",
+      layer: { en: "Engine", zh: "引擎" },
+      title: { en: "Task engine and artifact spine", zh: "任务引擎与 artifact 脊柱" },
+      summary: {
+        en: "The durable source for Tasks, immutable Delivery Slice revisions, dispatch lineage, artifacts, trace, coordination records, and Board progress facts.",
+        zh: "Task、不可变 Delivery Slice revision、dispatch lineage、artifact、trace、协作记录和 Board progress facts 的持久事实源。",
+      },
+      responsibilities: [
+        { en: "Persist task lifecycle and latest observable state.", zh: "持久化 task 生命周期和最新可观察状态。" },
+        { en: "Store dispatch_lineage, build_host_observation, host_verification_observation, integrity_review, task_completion_decision, and A2A artifacts.", zh: "存储 dispatch_lineage、build_host_observation、host_verification_observation、integrity_review、task_completion_decision 和 A2A artifacts。" },
+              { en: "Reconstruct board/progress/brief projections from durable records.", zh: "从持久记录重建 board、progress、brief 投影。" },
+      ],
+      boundaries: [
+        { en: "No retired Goal attempt, Goal result, Goal workspace, or engine_evaluation record should be described as current.", zh: "不得把退役 Goal attempt、Goal result、Goal workspace 或 engine_evaluation 记录描述成当前实现。" },
+        { en: "Does not render operator UI; overlay projects from its events and snapshots.", zh: "不渲染操作者 UI；overlay 从事件和 snapshot 投影。" },
+      ],
+      records: [
+        "engine_artifact kind=dispatch_lineage",
+        "engine_artifact kind=build_host_observation",
+        "engine_artifact kind=host_verification_observation",
+        "engine_artifact kind=integrity_review",
+        "engine_artifact kind=agent_coordination_*",
+      ],
+      sources: [
+        "packages/opencorvus/src/task-api/index.ts",
+        "packages/opencorvus/src/engine/engine.sql.ts",
+        "packages/opencorvus/src/engine/persist.ts",
+        "packages/opencorvus/src/engine/store.ts",
+        "packages/opencorvus/src/engine/describe.ts",
+      ],
+      components: [
+        {
+          id: "engine-service",
+          title: "EngineService",
+          responsibility: { en: "Task API namespace used by routes, tools, and channels.", zh: "被 routes、tools 与 channels 使用的 Task API 命名空间。" },
+          sources: ["packages/opencorvus/src/task-api/index.ts"],
+        },
+        {
+          id: "artifact-table",
+          title: "EngineArtifactTable",
+          responsibility: { en: "Append-only durable evidence and process stream.", zh: "append-only 的持久证据和过程流。" },
+          sources: ["packages/opencorvus/src/engine/engine.sql.ts", "packages/opencorvus/src/engine/persist.ts"],
+        },
+        {
+          id: "engine-store",
+          title: "Engine store/describe",
+          responsibility: { en: "Queries reconstruct current state from artifact-backed records.", zh: "查询从 artifact-backed 记录重建当前状态。" },
+          sources: ["packages/opencorvus/src/engine/store.ts", "packages/opencorvus/src/engine/describe.ts"],
+        },
+        {
+          id: "event-log",
+          title: "Trace and decision log",
+          responsibility: { en: "Observable audit trail for task decisions and replay.", zh: "task 决策与重放的可观察审计轨迹。" },
+          sources: ["packages/opencorvus/src/engine/event-log.ts", "packages/opencorvus/src/engine/writer.ts"],
+        },
+      ],
+    },
+    {
+      id: "orchestrator-host",
+      index: "03",
+      color: "#9b6b1d",
+      layer: { en: "Decision", zh: "决策" },
+      title: { en: "Orchestrator host", zh: "Orchestrator 主机" },
+      summary: {
+        en: "The task-level decision owner that selects explicit tools, not a fixed planner/deliver pipeline.",
+        zh: "task-level 决策所有者，选择显式工具，不是固定 planner/deliver 流水线。",
+      },
+      responsibilities: [
+        { en: "Read task snapshots and choose the next visible tool or lifecycle action.", zh: "读取 task snapshot 并选择下一步可见工具或生命周期动作。" },
+        { en: "Dispatch stage agents with scoped inputs and materialized evidence.", zh: "用限定输入和已物化证据调度 stage agents。" },
+        { en: "Judge task completion from the latest post-build integrity_review alongside other visible facts.", zh: "结合最新 post-build integrity_review 与其他可见事实判断 task 是否完成。" },
+      ],
+      boundaries: [
+        { en: "Does not hide synthetic messages or private alternate conversations.", zh: "不隐藏 synthetic message，也不创建私有平行对话。" },
+        { en: "Does not use old planner/deliver/evaluation vocabulary as current runtime.", zh: "不把旧 planner/deliver/evaluation 词汇当作当前 runtime。" },
+      ],
+      records: ["decision-log entries", "stage artifacts", "integrity_review ref for Orchestrator judgment"],
+      sources: [
+        "packages/opencorvus/src/orchestrator/agent.ts",
+        "packages/opencorvus/src/orchestrator/tools.ts",
+        "packages/opencorvus/src/orchestrator/loop.ts",
+        "packages/opencorvus/src/orchestrator/task-event.ts",
+        "packages/opencorvus/src/prompt/core/orchestrator-core.txt",
+      ],
+      components: [
+        {
+          id: "orchestrator-agent",
+          title: "Orchestrator agent",
+          responsibility: { en: "Master task agent that reasons over snapshots and explicit tools.", zh: "基于 snapshot 与显式工具推理的 master task agent。" },
+          sources: ["packages/opencorvus/src/orchestrator/agent.ts", "packages/opencorvus/src/prompt/core/orchestrator-core.txt"],
+        },
+        {
+          id: "workflow-tools",
+          title: "Workflow tools",
+          responsibility: { en: "frontend_research, frontend_design, analyze_intent, requirements, architect, workload_analysis, build, visual_qa, integrity, fact_check, lifecycle, and coordination tools.", zh: "frontend_research、frontend_design、analyze_intent、requirements、architect、workload_analysis、build、visual_qa、integrity、fact_check、lifecycle 与 coordination tools。" },
+          sources: ["packages/opencorvus/src/orchestrator/tools.ts"],
+        },
+        {
+          id: "orchestrator-loop",
+          title: "Loop and task events",
+          responsibility: { en: "Wakes, resumes, and emits task-observable progress.", zh: "唤醒、恢复并发出 task 可观察进度。" },
+          sources: ["packages/opencorvus/src/orchestrator/loop.ts", "packages/opencorvus/src/orchestrator/task-event.ts"],
+        },
+      ],
+    },
+    {
+      id: "agent-team",
+      index: "04",
+      color: "#b06c22",
+      layer: { en: "Agents", zh: "Agents" },
+      title: { en: "Specialist agent team", zh: "专家 Agent 团队" },
+      summary: {
+        en: "Role-scoped agents publish requirements, architecture, build, visual, and integrity evidence.",
+        zh: "角色限定 agent 发布 requirements、architecture、build、visual 与 integrity evidence。",
+      },
+      responsibilities: [
+        { en: "Map tasks to role contracts and tool pools.", zh: "把任务映射到角色契约和 tool pool。" },
+        { en: "Produce bounded artifacts instead of owning the global task state.", zh: "产出边界明确的 artifact，而不是拥有全局 task 状态。" },
+        { en: "Separate visual QA from final integrity acceptance.", zh: "区分 visual QA 和最终 integrity acceptance。" },
+      ],
+      boundaries: [
+        { en: "Build implements; requirements and architect do not edit files.", zh: "Build 负责实现；requirements 和 architect 不编辑文件。" },
+        { en: "visual_qa is product review, not final task completion.", zh: "visual_qa 是产品复核，不是最终 task completion。" },
+      ],
+      records: ["requirements rows", "architect contract graph", "goal workload brief", "visual_review", "integrity_review"],
+      sources: [
+        "packages/opencorvus/src/agent/role-contract.ts",
+        "packages/opencorvus/src/agent/tool-pool-contract.ts",
+        "packages/opencorvus/src/requirements/agent.ts",
+        "packages/opencorvus/src/architect/agent.ts",
+        "packages/opencorvus/src/visual-qa/output-tools.ts",
+        "packages/opencorvus/src/integrity/render-markdown.ts",
+      ],
+      components: [
+        {
+          id: "frontend-research-agent",
+          title: "frontend_research",
+          responsibility: { en: "Publishes source-page investigation packets when rendered webpage evidence is needed.", zh: "需要渲染网页证据时发布 source-page investigation packets。" },
+          sources: ["packages/opencorvus/src/research/agent.ts", "packages/opencorvus/src/orchestrator/tools.ts"],
+        },
+        {
+          id: "frontend-design-agent",
+          title: "frontend_design",
+          responsibility: { en: "Produces frontend implementation templates and visual material manifests for downstream agents.", zh: "为下游 agent 产出前端实现模板和视觉材料 manifest。" },
+          sources: ["packages/opencorvus/src/frontend-design", "packages/opencorvus/src/orchestrator/tools.ts"],
+        },
+        {
+          id: "intent-agent",
+          title: "analyze_intent",
+          responsibility: { en: "Classifies task shape and escalation needs before heavy workflow stages.", zh: "在重型 workflow stage 前分类任务形态和升级需求。" },
+          sources: ["packages/opencorvus/src/intent-analysis/agent.ts", "packages/opencorvus/src/agent/role-contract.ts"],
+        },
+        {
+          id: "requirements-agent",
+          title: "requirements",
+          responsibility: { en: "Extracts user requirements and foundational decisions; does not produce goals.", zh: "提取用户需求和基础决策；不产出 goals。" },
+          sources: ["packages/opencorvus/src/requirements/agent.ts", "packages/opencorvus/src/agent/role-contract.ts"],
+        },
+        {
+          id: "architect-agent",
+          title: "architect",
+          responsibility: { en: "Owns goal decomposition, interface contracts, and graph integrity.", zh: "负责 goal 分解、接口契约和 graph integrity。" },
+          sources: ["packages/opencorvus/src/architect/agent.ts", "packages/opencorvus/src/architect/contract-graph.ts"],
+        },
+        {
+          id: "workload-agent",
+          title: "workload_analysis",
+          responsibility: { en: "Reviews architect goals for under-specification and execution inventory before build.", zh: "build 前复核 architect goals 的欠规格风险和执行清单。" },
+          sources: ["packages/opencorvus/src/goal-workload-analyst/agent.ts", "packages/opencorvus/src/orchestrator/tools.ts"],
+        },
+        {
+          id: "build-workflow-agent",
+          title: "build",
+          responsibility: { en: "Runs implementation sessions against scoped goals and publishes build evidence.", zh: "围绕 scoped goals 运行实现 session 并发布 build evidence。" },
+          sources: ["packages/opencorvus/src/build/agent.ts", "packages/opencorvus/src/orchestrator/tools.ts"],
+        },
+        {
+          id: "visual-qa-agent",
+          title: "visual_qa",
+          responsibility: { en: "Reviews visible product evidence after build work.", zh: "在 build 工作后复核可见产品证据。" },
+          sources: ["packages/opencorvus/src/visual-qa/acceptance-semantics.ts", "packages/opencorvus/src/visual-qa/output-tools.ts"],
+        },
+        {
+          id: "integrity-agent",
+          title: "integrity",
+          responsibility: { en: "Final session-bound acceptance reviewer.", zh: "最终 session-bound acceptance reviewer。" },
+          sources: ["packages/opencorvus/src/integrity", "packages/opencorvus/src/orchestrator/tools.ts"],
+        },
+        {
+          id: "fact-check-agent",
+          title: "fact_check",
+          responsibility: { en: "Verifies factual claims in visible worker messages and domain artifacts.", zh: "核验 worker 可见消息与领域 artifact 中的事实声明。" },
+          sources: ["packages/opencorvus/src/fact-check/index.ts", "packages/opencorvus/src/agent/role-contract.ts"],
+        },
+      ],
+    },
+    {
+      id: "a2a-coordination",
+      index: "05",
+      color: "#8f5d99",
+      layer: { en: "A2A", zh: "A2A" },
+      title: { en: "Artifact-backed A2A coordination", zh: "Artifact-backed A2A 协作" },
+      summary: {
+        en: "Worker requests, orchestrator responses, and redispatch actions are all durable artifacts.",
+        zh: "Worker request、orchestrator response 与 redispatch action 都是持久 artifact。",
+      },
+      responsibilities: [
+        { en: "Persist coordination requests with owner, evidence refs, and status.", zh: "持久化带 owner、evidence refs 和 status 的协作请求。" },
+        { en: "Bind answers to respond_agent_coordination tool execution.", zh: "把回答绑定到 respond_agent_coordination tool execution。" },
+        { en: "Record response/action artifacts for replay and audit.", zh: "记录 response/action artifact 用于重放和审计。" },
+      ],
+      boundaries: [
+        { en: "Not free-form peer chat between agents.", zh: "不是 agent 之间的自由聊天。" },
+        { en: "Redispatch must be tied to scheduler workflow binding and response/action artifacts.", zh: "Redispatch 必须绑定 scheduler workflow binding 与 response/action artifact。" },
+      ],
+      records: ["agent_coordination_request", "agent_coordination_response", "agent_coordination_action"],
+      sources: [
+        "packages/opencorvus/src/engine/agent-coordination.ts",
+        "packages/opencorvus/src/orchestrator/tools.ts",
+        "packages/opencorvus/src/engine/describe.ts",
+        "packages/opencorvus/src/agent/tool-pool-contract.ts",
+      ],
+      components: [
+        {
+          id: "coordination-runtime",
+          title: "Agent coordination runtime",
+          responsibility: { en: "Creates, claims, answers, cancels, and redispatches requests.", zh: "创建、认领、回答、取消和 redispatch 请求。" },
+          sources: ["packages/opencorvus/src/engine/agent-coordination.ts"],
+        },
+        {
+          id: "respond-tool",
+          title: "respond_agent_coordination",
+          responsibility: { en: "Orchestrator tool that answers pending requests and records visible action.", zh: "回答 pending request 并记录可见 action 的 orchestrator tool。" },
+          sources: ["packages/opencorvus/src/orchestrator/tools.ts"],
+        },
+        {
+          id: "coordination-snapshot",
+          title: "Coordination snapshot",
+          responsibility: { en: "Describes pending requests inside task snapshots.", zh: "在 task snapshot 中描述 pending request。" },
+          sources: ["packages/opencorvus/src/engine/describe.ts"],
+        },
+      ],
+    },
+    {
+      id: "worktree-execution",
+      index: "06",
+      color: "#596bb3",
+      layer: { en: "Execution", zh: "执行" },
+      title: { en: "Task and Session worktree execution", zh: "Task 与 Session worktree 执行" },
+      summary: {
+        en: "BuildAgent owns isolated implementation sessions and managed worktrees; Host tools own git, command, and merge observations.",
+        zh: "BuildAgent 拥有隔离实现 session 和 managed worktree；git、command 与 merge observations 由 Host 工具记录。",
+      },
+      responsibilities: [
+        { en: "Record immutable dispatch lineage and real Session terminal facts for implementation executions.", zh: "为实现执行记录不可变 dispatch lineage 与真实 Session terminal facts。" },
+        { en: "Run projected workers through the internal SessionLoop with scoped contracts and task artifacts.", zh: "通过内部 SessionLoop 用限定契约和 task artifacts 运行投影 worker。" },
+        { en: "Record Host-observed changed files, diffs, command exits, and merge results.", zh: "记录 Host 观察到的 changed files、diff、command exits 和 merge 结果。" },
+      ],
+      boundaries: [
+        { en: "Does not decide final task completion.", zh: "不决定最终 task completion。" },
+        { en: "Does not edit the user main worktree outside the owned execution contract.", zh: "不在执行契约外编辑用户主工作区。" },
+      ],
+      records: ["dispatch_lineage", "session messages", "build_host_observation", "command/test tool calls"],
+      sources: [
+        "packages/opencorvus/src/build/agent.ts",
+        "packages/opencorvus/src/build/types.ts",
+        "packages/opencorvus/src/worktree/index.ts",
+        "packages/opencorvus/src/session/loop.ts",
+        "packages/opencorvus/src/engine/persist.ts",
+      ],
+      components: [
+        {
+          id: "build-agent",
+          title: "BuildAgent.run",
+          responsibility: { en: "Task-level implementation owner with exact Delivery Slice revisions as evidence subjects.", zh: "Task 级实现 owner；精确 Delivery Slice revisions 仅作为 evidence subjects。" },
+          sources: ["packages/opencorvus/src/build/agent.ts", "packages/opencorvus/src/build/types.ts"],
+        },
+        {
+          id: "managed-worktree",
+          title: "Managed worktree",
+          responsibility: { en: "Canonical workspace identity owned jointly by the Task and physical Session.", zh: "由 Task 与物理 Session 共同拥有的 canonical workspace identity。" },
+          sources: ["packages/opencorvus/src/worktree/index.ts", "packages/opencorvus/src/engine/persist.ts"],
+        },
+        {
+          id: "internal-agent-runtime",
+          title: "Internal agent runtime",
+          responsibility: { en: "Single SessionLoop runtime used by BuildAgent for projected dynamic agents.", zh: "BuildAgent 为投影动态 agent 使用的单一 SessionLoop runtime。" },
+          sources: ["packages/opencorvus/src/session/loop.ts", "packages/opencorvus/src/agent/runtime-template-registry.ts"],
+        },
+      ],
+    },
+    {
+      id: "verification",
+      index: "07",
+      color: "#a94f68",
+      layer: { en: "Evidence", zh: "证据" },
+      title: { en: "Verification and visual evidence", zh: "验证与视觉证据" },
+      summary: {
+        en: "Task-scoped preview targets, screenshots, visual QA, and integrity attempts make acceptance observable.",
+        zh: "task-scoped preview target、截图、visual QA 和 integrity attempt 让验收可观察。",
+      },
+      responsibilities: [
+        { en: "Save backend preview targets and Playwright evidence per task.", zh: "按 task 保存后端 preview target 与 Playwright evidence。" },
+        { en: "Separate product visual review from final integrity acceptance.", zh: "区分产品视觉复核和最终 integrity acceptance。" },
+        { en: "Read concrete post-build integrity_review facts before judging complete_task.", zh: "判断 complete_task 前读取具体 post-build integrity_review 事实。" },
+      ],
+      boundaries: [
+        { en: "No headless-only visual acceptance for frontend work.", zh: "前端工作不得只有 headless 视觉验收。" },
+        { en: "No local iframe or query override as evidence source.", zh: "不得把本地 iframe 或 query override 当成证据源。" },
+      ],
+      records: ["host_verification_observation", "integrity_review", "browser preview target", "screenshot evidence"],
+      sources: [
+        "packages/opencorvus/src/browser/webpage/extract.ts",
+        "packages/opencorvus/src/tool/browser-preview.ts",
+        "packages/opencorvus/src/visual-qa/acceptance-semantics.ts",
+        "packages/opencorvus/src/orchestrator/tools.ts",
+        "packages/overlay/src/services/browser-preview.ts",
+      ],
+      components: [
+        {
+          id: "browser-preview-tool",
+          title: "BrowserPreviewTool",
+          responsibility: { en: "Backend-owned preview target and capture tool.", zh: "后端拥有的 preview target 与 capture tool。" },
+          sources: ["packages/opencorvus/src/tool/browser-preview.ts", "packages/opencorvus/src/browser/webpage/extract.ts"],
+        },
+        {
+          id: "visual-evidence",
+          title: "host_verification_observation",
+          responsibility: { en: "Artifact kind for screenshot/runtime evidence.", zh: "截图/runtime evidence 对应的 artifact kind。" },
+          sources: ["packages/opencorvus/src/engine/engine.sql.ts", "packages/opencorvus/src/engine/store.ts"],
+        },
+        {
+          id: "integrity-attempt",
+          title: "integrity_review",
+          responsibility: { en: "Final post-build acceptance evidence required by complete_task.", zh: "complete_task 要求的最终 post-build acceptance evidence。" },
+          sources: ["packages/opencorvus/src/orchestrator/tools.ts", "packages/opencorvus/src/engine/persist.ts"],
+        },
+      ],
+    },
+    {
+      id: "overlay-projection",
+      index: "08",
+      color: "#5d7f38",
+      layer: { en: "Overlay", zh: "Overlay" },
+      title: { en: "Overlay projection model", zh: "Overlay 投影模型" },
+      summary: {
+        en: "SSE events become cardTreeStore writes through tree-writer, then Solid views render the operator workbench.",
+        zh: "SSE 事件经 tree-writer 写入 cardTreeStore，然后 Solid views 渲染操作者工作台。",
+      },
+      responsibilities: [
+        { en: "Route task events through one projection writer.", zh: "把 task events 通过一个 projection writer 路由。" },
+        { en: "Keep cardTreeStore as the reactive UI source.", zh: "保持 cardTreeStore 为 reactive UI source。" },
+        { en: "Render Conversation, Board, BrowserPreview, Screenshot, and settings surfaces.", zh: "渲染 Conversation、Board、BrowserPreview、Screenshot 与 settings surfaces。" },
+      ],
+      boundaries: [
+        { en: "UI components do not mutate cardTreeStore directly.", zh: "UI components 不直接 mutate cardTreeStore。" },
+        { en: "Browser Preview uses task backend evidence, not transient local state.", zh: "Browser Preview 使用 task backend evidence，不使用瞬时本地状态。" },
+      ],
+      records: ["SSE event", "CardNode", "cardTreeStore.cards", "cardTreeStore.order", "screenshotItems"],
+      sources: [
+        "packages/overlay/src/services/events.ts",
+        "packages/overlay/src/services/tree-writer.ts",
+        "packages/overlay/src/store/card-tree.ts",
+        "packages/overlay/src/components/Conversation.tsx",
+        "packages/overlay/src/components/Board.tsx",
+        "packages/overlay/src/components/BrowserPreviewPanel.tsx",
+        "packages/overlay/src/components/ScreenshotBrowserPanel.tsx",
+      ],
+      components: [
+        {
+          id: "event-policy",
+          title: "Event policy",
+          responsibility: { en: "SSE routing and task event policy before projection.", zh: "投影前的 SSE 路由和 task event policy。" },
+          sources: ["packages/overlay/src/services/events.ts", "packages/overlay/src/services/event-policy.ts"],
+        },
+        {
+          id: "tree-writer",
+          title: "tree-writer",
+          responsibility: { en: "Single mutation path into cardTreeStore.", zh: "写入 cardTreeStore 的单一 mutation 路径。" },
+          sources: ["packages/overlay/src/services/tree-writer.ts"],
+        },
+        {
+          id: "card-tree-store",
+          title: "cardTreeStore",
+          responsibility: { en: "Solid reactive source for rendered task cards.", zh: "渲染 task cards 的 Solid reactive source。" },
+          sources: ["packages/overlay/src/store/card-tree.ts"],
+        },
+        {
+          id: "operator-views",
+          title: "Operator views",
+          responsibility: { en: "Conversation, Board, Browser Preview, and Screenshot surfaces.", zh: "Conversation、Board、Browser Preview 与 Screenshot surfaces。" },
+          sources: ["packages/overlay/src/components/Conversation.tsx", "packages/overlay/src/components/Board.tsx", "packages/overlay/src/components/BrowserPreviewPanel.tsx", "packages/overlay/src/components/ScreenshotBrowserPanel.tsx"],
+        },
+      ],
+    },
+    {
+      id: "provider-extension",
+      index: "09",
+      color: "#6a6f28",
+      layer: { en: "Extension", zh: "扩展" },
+      title: { en: "Provider, MCP, plugin, and channel extensions", zh: "Provider、MCP、Plugin 与 Channel 扩展" },
+      summary: {
+        en: "Integration layer for model providers, MCP tools, plugins, skills, and external channels.",
+        zh: "模型 provider、MCP tools、plugins、skills 与外部 channels 的集成层。",
+      },
+      responsibilities: [
+        { en: "Discover and transform provider/model capabilities.", zh: "发现并转换 provider/model capabilities。" },
+        { en: "Expose MCP and plugin capabilities through explicit tool surfaces.", zh: "通过显式 tool surface 暴露 MCP 与 plugin capabilities。" },
+        { en: "Keep channel runtimes behind ChannelIngress contracts.", zh: "把 channel runtime 放在 ChannelIngress 契约后面。" },
+      ],
+      boundaries: [
+        { en: "Extensions do not bypass orchestrator lifecycle ownership.", zh: "扩展不绕过 orchestrator lifecycle ownership。" },
+        { en: "Tool availability is explicit per role and session.", zh: "工具可用性按 role 与 session 显式定义。" },
+      ],
+      records: ["provider model catalog", "MCP auth/config", "plugin manifests", "channel bindings"],
+      sources: [
+        "packages/opencorvus/src/provider/transform.ts",
+        "packages/opencorvus/src/provider/models.ts",
+        "packages/opencorvus/src/mcp/index.ts",
+        "packages/opencorvus/src/mcp/auth.ts",
+        "packages/opencorvus/src/plugin/index.ts",
+        "packages/opencorvus/src/skill/manager.ts",
+        "packages/channel-runtime",
+      ],
+      components: [
+        {
+          id: "provider-layer",
+          title: "Provider layer",
+          responsibility: { en: "Normalizes external model/provider metadata.", zh: "规范化外部 model/provider metadata。" },
+          sources: ["packages/opencorvus/src/provider/transform.ts", "packages/opencorvus/src/provider/models.ts"],
+        },
+        {
+          id: "mcp-layer",
+          title: "MCP layer",
+          responsibility: { en: "Tool/resource integration with explicit auth and route boundaries.", zh: "带显式 auth 与 route 边界的 tool/resource 集成。" },
+          sources: ["packages/opencorvus/src/mcp/index.ts", "packages/opencorvus/src/mcp/auth.ts"],
+        },
+        {
+          id: "plugin-layer",
+          title: "Plugin layer",
+          responsibility: { en: "Loads local plugin bundles and exposes extension points through server routes.", zh: "加载本地 plugin bundles，并通过 server routes 暴露扩展点。" },
+          sources: ["packages/opencorvus/src/plugin/index.ts", "packages/opencorvus/src/server/routes/plugin.ts"],
+        },
+        {
+          id: "skill-layer",
+          title: "Skill layer",
+          responsibility: { en: "Discovers, mounts, and exposes skill instructions/tools to eligible agents.", zh: "发现、挂载并向符合条件的 agents 暴露 skill instructions/tools。" },
+          sources: ["packages/opencorvus/src/skill/manager.ts", "packages/opencorvus/src/skill/mounts.ts", "packages/opencorvus/src/tool/skill.ts"],
+        },
+        {
+          id: "channel-runtime",
+          title: "Channel runtime",
+          responsibility: { en: "External chat channel adapters behind ingress contracts.", zh: "入口契约后的外部聊天频道适配器。" },
+          sources: ["packages/channel-runtime", "packages/opencorvus/src/channel"],
+        },
+      ],
+    },
+    {
+      id: "docs-ops",
+      index: "10",
+      color: "#7b5b3c",
+      layer: { en: "Governance", zh: "治理" },
+      title: { en: "Docs, specs, and operational checks", zh: "文档、方案与运行检查" },
+      summary: {
+        en: "The architecture is governed by checked-in specs, generated API docs, benchmark scripts, and visual evidence rules.",
+        zh: "架构由已落盘 specs、生成 API 文档、benchmark 脚本和视觉证据规则治理。",
+      },
+      responsibilities: [
+        { en: "Keep current docs aligned with source and the consolidated spec index.", zh: "保持当前文档与源码、集中 spec 索引一致。" },
+        { en: "Generate API reference instead of manually editing generated docs.", zh: "生成 API reference，而不是手工编辑生成文档。" },
+        { en: "Use screenshot-based validation for frontend-visible deliverables.", zh: "对前端可见交付使用截图验收。" },
+      ],
+      boundaries: [
+        { en: "Docs are not an alternate runtime truth source.", zh: "文档不是另一个 runtime 事实源。" },
+        { en: "Benchmarks do not replace final artifact review.", zh: "benchmark 不替代最终交付物复审。" },
+      ],
+      records: ["specs/current/architecture/**", "specs/records/YYYY-MM/**", "packages/web docs", "OpenAPI generated reference", "benchmark evidence"],
+      sources: [
+        "specs/current/architecture/01-agents.md",
+        "specs/records/2026-06/2026-06-25-visual-evidence-no-hard-gate-root-repair.md",
+        "specs/current/architecture/09-verification-evidence.md",
+        "packages/web/src/content/docs/concepts/architecture.mdx",
+        "packages/web/src/content/docs/reference/api.mdx",
+        "packages/opencorvus/test/script/document-health.test.ts",
+      ],
+      components: [
+        {
+          id: "spec-ledger",
+          title: "New architecture specs",
+          responsibility: { en: "Checked-in decision records for current architecture constraints.", zh: "当前架构约束的已落盘决策记录。" },
+          sources: ["specs/current/architecture/01-agents.md", "specs/records/2026-06/README.md"],
+        },
+        {
+          id: "web-docs",
+          title: "Starlight docs",
+          responsibility: { en: "Published docs surface for concepts, guides, and generated references.", zh: "概念、指南和生成参考文档的发布面。" },
+          sources: ["packages/web/src/content/docs", "packages/web/astro.config.mjs"],
+        },
+        {
+          id: "document-health",
+          title: "Document health checks",
+          responsibility: { en: "Tests that protect generated docs and route/reference consistency.", zh: "保护生成文档和 route/reference 一致性的测试。" },
+          sources: ["packages/opencorvus/test/script/document-health.test.ts", "packages/opencorvus/test/script/routes-check-openapi.test.ts"],
+        },
+      ],
+    },
+    {
+      id: "operator-surfaces",
+      index: "UI",
+      color: "#47708f",
+      layer: { en: "Surface", zh: "界面" },
+      title: { en: "Operator-facing surfaces", zh: "操作者界面" },
+      summary: {
+        en: "The human-facing workbench that displays projected cards, task progress, previews, files, and settings.",
+        zh: "面向人的工作台，展示投影卡片、任务进度、预览、文件和设置。",
+      },
+      responsibilities: [
+        { en: "Render task cards and session replies from projected state.", zh: "从投影状态渲染 task cards 和 session replies。" },
+        { en: "Expose task list, worktree, file explorer, dialogs, and settings surfaces.", zh: "暴露 task list、worktree、file explorer、dialogs 与 settings surfaces。" },
+        { en: "Keep user interactions routed back through services and backend APIs.", zh: "把用户交互经 services 和后端 API 路由回系统。" },
+      ],
+      boundaries: [
+        { en: "Does not create independent task truth separate from EngineService.", zh: "不创建独立于 EngineService 的 task 事实。" },
+        { en: "Does not own card projection mutation logic.", zh: "不拥有 card projection mutation 逻辑。" },
+      ],
+      records: ["Solid components", "overlay services", "settings store", "task store"],
+      sources: [
+        "packages/overlay/src/components/App.tsx",
+        "packages/overlay/src/components/TaskList.tsx",
+        "packages/overlay/src/components/TaskStatusHeader.tsx",
+        "packages/overlay/src/services/task.ts",
+        "packages/overlay/src/services/api.ts",
+      ],
+      components: [
+        {
+          id: "overlay-app",
+          title: "Overlay App shell",
+          responsibility: { en: "Desktop operator shell and workbench composition.", zh: "桌面端操作者 shell 与 workbench 组合。" },
+          sources: ["packages/overlay/src/components/App.tsx", "packages/overlay/src/main.tsx"],
+        },
+        {
+          id: "task-services",
+          title: "Task services",
+          responsibility: { en: "API-backed task selection, hydration, and action layer.", zh: "基于 API 的 task selection、hydrate 与 action 层。" },
+          sources: ["packages/overlay/src/services/task.ts", "packages/overlay/src/services/api.ts"],
+        },
+      ],
+    },
+  ]
+
+  function localize(value: string | LocalizedText, locale: ArchLocale): string {
+    if (typeof value === "string") return value
+    const text = value[locale]
+    if (typeof text !== "string") throw new Error(`architecture explorer: missing ${locale} text`)
+    return text
+  }
+
+  function domainByID(id: string): ArchDomain {
+    const domain = architectureDomains.find((item) => item.id === id)
+    if (!domain) throw new Error(`architecture explorer: unknown domain ${id}`)
+    return domain
+  }
+
+  function viewByID(id: string): ArchView {
+    const view = architectureViews.find((item) => item.id === id)
+    if (!view) throw new Error(`architecture explorer: unknown view ${id}`)
+    return view
+  }
+
+  function componentByID(id: string): { domain: ArchDomain; component: ArchComponent } {
+    for (const domain of architectureDomains) {
+      const component = domain.components.find((item) => item.id === id)
+      if (component) return { domain, component }
+    }
+    throw new Error(`architecture explorer: unknown component ${id}`)
+  }
+
+  function itemSearchText(domain: ArchDomain, locale: ArchLocale): string {
+    const componentText = domain.components
+      .map((component) => `${component.title} ${localize(component.responsibility, locale)} ${component.sources.join(" ")}`)
+      .join(" ")
+    return [
+      domain.id,
+      domain.index,
+      localize(domain.layer, locale),
+      localize(domain.title, locale),
+      localize(domain.summary, locale),
+      domain.responsibilities.map((item) => localize(item, locale)).join(" "),
+      domain.boundaries.map((item) => localize(item, locale)).join(" "),
+      domain.sources.join(" "),
+      domain.records.join(" "),
+      componentText,
+    ].join(" ").toLowerCase()
+  }
+
+  function createElement<K extends keyof HTMLElementTagNameMap>(
+    tag: K,
+    className = "",
+    text = "",
+  ): HTMLElementTagNameMap[K] {
+    const el = document.createElement(tag)
+    if (className) el.className = className
+    if (text.length > 0) el.textContent = text
+    return el
+  }
+
+  function clear(el: HTMLElement): void {
+    el.replaceChildren()
+  }
+
+  function requireElement<T extends Element>(root: ParentNode, selector: string): T {
+    const el = root.querySelector(selector)
+    if (!el) throw new Error(`architecture explorer: missing element ${selector}`)
+    return el as T
+  }
+
+  function initArchitectureExplorer(root: HTMLElement): void {
+    const localeValue = root.dataset.locale
+    if (localeValue !== "en" && localeValue !== "zh") throw new Error("architecture explorer: invalid locale")
+    const locale: ArchLocale = localeValue
+    const copy = architectureCopy[locale]
+    const els = {
+      search: requireElement<HTMLInputElement>(root, "[data-arch-search]"),
+      tabs: requireElement<HTMLElement>(root, "[data-arch-view-tabs]"),
+      stats: requireElement<HTMLElement>(root, "[data-arch-stats]"),
+      domainCount: requireElement<HTMLElement>(root, "[data-arch-domain-count]"),
+      domainList: requireElement<HTMLElement>(root, "[data-arch-domain-list]"),
+      viewTitle: requireElement<HTMLElement>(root, "[data-arch-view-title]"),
+      viewSummary: requireElement<HTMLElement>(root, "[data-arch-view-summary]"),
+      flow: requireElement<HTMLElement>(root, "[data-arch-flow]"),
+      grid: requireElement<HTMLElement>(root, "[data-arch-domain-grid]"),
+      contracts: requireElement<HTMLElement>(root, "[data-arch-contracts]"),
+      inspector: requireElement<HTMLElement>(root, "[data-arch-inspector]"),
+      evidence: requireElement<HTMLElement>(root, "[data-arch-evidence]"),
+    }
+
+    let activeViewID = "runtime"
+    let activeDomainID = "engine-spine"
+    let activeComponentID = ""
+    let search = ""
+
+    els.search.placeholder = copy.searchPlaceholder
+    els.search.addEventListener("input", () => {
+      search = els.search.value.trim().toLowerCase()
+      if (search.length > 0) {
+        const firstMatch = architectureDomains.find((domain) => matches(domain))
+        if (firstMatch) {
+          activeViewID = preferredViewForDomain(firstMatch.id)
+          activeDomainID = firstMatch.id
+          if (activeComponentID) {
+            const found = componentByID(activeComponentID)
+            if (found.domain.id !== firstMatch.id || !componentMatches(found.component)) activeComponentID = ""
+          }
+        }
+      }
+      render()
+    })
+
+    function activeDomainIDs(): Set<string> {
+      return new Set(viewByID(activeViewID).sequence)
+    }
+
+    function matches(domain: ArchDomain): boolean {
+      return search.length === 0 || itemSearchText(domain, locale).includes(search)
+    }
+
+    function searchHasMatches(): boolean {
+      return search.length === 0 || architectureDomains.some((domain) => matches(domain))
+    }
+
+    function componentMatches(component: ArchComponent): boolean {
+      return (
+        search.length === 0 ||
+        [component.id, component.title, localize(component.responsibility, locale), component.sources.join(" ")]
+          .join(" ")
+          .toLowerCase()
+          .includes(search)
+      )
+    }
+
+    function relatedContracts(domainID: string): string[] {
+      const view = viewByID(activeViewID)
+      return view.contracts
+        .filter(([fromID, toID]) => fromID === domainID || toID === domainID)
+        .map(([fromID, toID, label]) => {
+          const from = domainByID(fromID)
+          const to = domainByID(toID)
+          return `${localize(from.title, locale)} -> ${localize(to.title, locale)}: ${localize(label, locale)}`
+        })
+    }
+
+    function selectionPath(domain: ArchDomain, component?: ArchComponent): string {
+      const view = viewByID(activeViewID)
+      const parts = [localize(view.title, locale), localize(domain.title, locale)]
+      if (component) parts.push(component.title)
+      return parts.join(" / ")
+    }
+
+    function preferredViewForDomain(domainID: string): string {
+      if (viewByID(activeViewID).sequence.includes(domainID)) return activeViewID
+      const preferred: Record<string, string> = {
+        "a2a-coordination": "a2a",
+        "overlay-projection": "overlay",
+        "operator-surfaces": "overlay",
+        "agent-team": "agents",
+        "worktree-execution": "agents",
+        verification: "data",
+        "engine-spine": "data",
+      }
+      const preferredID = preferred[domainID]
+      if (preferredID && viewByID(preferredID).sequence.includes(domainID)) return preferredID
+      const view = architectureViews.find((item) => item.sequence.includes(domainID))
+      if (!view) throw new Error(`architecture explorer: no view contains domain ${domainID}`)
+      return view.id
+    }
+
+    function setDomain(id: string): void {
+      activeViewID = preferredViewForDomain(id)
+      activeDomainID = id
+      activeComponentID = ""
+      render()
+    }
+
+    function setComponent(id: string): void {
+      const found = componentByID(id)
+      activeViewID = preferredViewForDomain(found.domain.id)
+      activeDomainID = found.domain.id
+      activeComponentID = id
+      render()
+    }
+
+    function renderTabs(): void {
+      clear(els.tabs)
+      for (const view of architectureViews) {
+        const button = createElement("button", "oc-arch-view-tab", localize(view.title, locale))
+        button.type = "button"
+        button.setAttribute("aria-pressed", view.id === activeViewID ? "true" : "false")
+        button.addEventListener("click", () => {
+          activeViewID = view.id
+          const selectedView = viewByID(activeViewID)
+          if (!selectedView.sequence.includes(activeDomainID)) {
+            const firstDomainID = selectedView.sequence[0]
+            if (!firstDomainID) throw new Error(`architecture explorer: empty sequence for view ${activeViewID}`)
+            activeDomainID = firstDomainID
+            activeComponentID = ""
+          }
+          render()
+        })
+        els.tabs.appendChild(button)
+      }
+    }
+
+    function renderStats(): void {
+      clear(els.stats)
+      const values = [
+        String(architectureDomains.length),
+        String(architectureDomains.reduce((total, domain) => total + domain.components.length, 0)),
+        String(currentEngineArtifactKinds.length),
+        String(["dispatch_lineage", "build_host_observation", "host_verification_observation", "visual_feedback_verification", "visual_review", "integrity_review", "task_completion_decision", "agent_coordination_request", "agent_coordination_response", "agent_coordination_action"].length),
+      ]
+      for (const [index, label] of copy.statLabels.entries()) {
+        const card = createElement("div", "oc-arch-stat")
+        const value = values[index]
+        if (!value) throw new Error(`architecture explorer: missing stat value ${index}`)
+        card.appendChild(createElement("strong", "", value))
+        card.appendChild(createElement("span", "", label))
+        els.stats.appendChild(card)
+      }
+      els.domainCount.textContent = `${architectureDomains.length}`
+    }
+
+    function renderDomainList(): void {
+      clear(els.domainList)
+      let visible = 0
+      for (const domain of architectureDomains) {
+        const isMatch = matches(domain)
+        if (search.length > 0 && !isMatch) continue
+        if (isMatch) visible += 1
+        const button = createElement("button", "oc-arch-domain-button")
+        button.type = "button"
+        button.dataset.domainId = domain.id
+        button.style.setProperty("--domain-color", domain.color)
+        button.dataset.match = isMatch ? "true" : "false"
+        button.setAttribute("aria-current", domain.id === activeDomainID ? "true" : "false")
+        button.addEventListener("click", () => setDomain(domain.id))
+
+        const line = createElement("div", "oc-arch-domain-line")
+        line.appendChild(createElement("span", "oc-arch-domain-index", domain.index))
+        line.appendChild(createElement("span", "oc-arch-domain-name", localize(domain.title, locale)))
+        button.appendChild(line)
+        button.appendChild(createElement("span", "oc-arch-domain-sub", localize(domain.summary, locale)))
+        els.domainList.appendChild(button)
+      }
+      if (visible === 0) els.domainList.appendChild(createElement("div", "oc-arch-empty", copy.noSearch))
+    }
+
+    function renderFlow(): void {
+      const view = viewByID(activeViewID)
+      els.viewTitle.textContent = localize(view.title, locale)
+      els.viewSummary.textContent = localize(view.summary, locale)
+      clear(els.flow)
+      for (const domainID of view.sequence) {
+        const domain = domainByID(domainID)
+        const button = createElement("button", "oc-arch-flow-card")
+        button.type = "button"
+        button.dataset.domainId = domain.id
+        button.style.setProperty("--domain-color", domain.color)
+        button.setAttribute("aria-pressed", domain.id === activeDomainID ? "true" : "false")
+        button.addEventListener("click", () => setDomain(domain.id))
+        button.appendChild(createElement("span", "oc-arch-layer-tag", localize(domain.layer, locale)))
+        button.appendChild(createElement("b", "", `${domain.index} ${localize(domain.title, locale)}`))
+        button.appendChild(createElement("small", "", localize(domain.summary, locale)))
+        els.flow.appendChild(button)
+      }
+    }
+
+    function renderDomainGrid(): void {
+      clear(els.grid)
+      const focused = activeDomainIDs()
+      let visible = 0
+      for (const domain of architectureDomains) {
+        const isMatch = matches(domain)
+        if (search.length > 0 && !isMatch) continue
+        if (isMatch) visible += 1
+        const card = createElement("article", "oc-arch-domain-card")
+        card.dataset.domainId = domain.id
+        card.style.setProperty("--domain-color", domain.color)
+        card.dataset.match = isMatch ? "true" : "false"
+        card.dataset.selected = domain.id === activeDomainID ? "true" : "false"
+        if (!focused.has(domain.id)) card.style.opacity = search.length > 0 && isMatch ? "0.72" : "0.46"
+
+        const select = createElement("button", "oc-arch-domain-select")
+        select.type = "button"
+        select.dataset.domainId = domain.id
+        select.style.setProperty("--domain-color", domain.color)
+        select.setAttribute("aria-pressed", domain.id === activeDomainID ? "true" : "false")
+        select.addEventListener("click", () => setDomain(domain.id))
+
+        const header = createElement("div", "oc-arch-domain-card-header")
+        header.appendChild(createElement("span", "oc-arch-domain-index", domain.index))
+        const titleBlock = createElement("div")
+        titleBlock.appendChild(createElement("span", "oc-arch-layer-tag", localize(domain.layer, locale)))
+        titleBlock.appendChild(createElement("h3", "", localize(domain.title, locale)))
+        header.appendChild(titleBlock)
+        select.appendChild(header)
+        select.appendChild(createElement("p", "", localize(domain.summary, locale)))
+        card.appendChild(select)
+
+        const chips = createElement("div", "oc-arch-component-list")
+        for (const component of domain.components) {
+          if (search.length > 0 && !componentMatches(component)) continue
+          const chip = createElement("button", "oc-arch-component-chip", component.title)
+          chip.type = "button"
+          chip.dataset.componentId = component.id
+          chip.style.setProperty("--domain-color", domain.color)
+          chip.setAttribute("aria-pressed", component.id === activeComponentID ? "true" : "false")
+          chip.addEventListener("click", (event: MouseEvent) => {
+            event.stopPropagation()
+            setComponent(component.id)
+          })
+          chips.appendChild(chip)
+        }
+        card.appendChild(chips)
+
+        const records = createElement("ul", "oc-arch-records")
+        for (const record of domain.records.slice(0, 3)) records.appendChild(createElement("li", "", record))
+        card.appendChild(records)
+        els.grid.appendChild(card)
+      }
+      if (visible === 0) els.grid.appendChild(createElement("div", "oc-arch-empty", copy.noSearch))
+    }
+
+    function renderContracts(): void {
+      const view = viewByID(activeViewID)
+      clear(els.contracts)
+      for (const [fromID, toID, label] of view.contracts) {
+        const from = domainByID(fromID)
+        const to = domainByID(toID)
+        const row = createElement("div", "oc-arch-contract-row")
+        row.style.setProperty("--domain-color", from.color)
+        row.appendChild(createElement("div", "oc-arch-contract-node", localize(from.title, locale)))
+        row.appendChild(createElement("p", "", localize(label, locale)))
+        row.appendChild(createElement("div", "oc-arch-contract-node", localize(to.title, locale)))
+        els.contracts.appendChild(row)
+      }
+    }
+
+    function renderInspector(): void {
+      clear(els.inspector)
+      if (!searchHasMatches()) {
+        els.inspector.appendChild(createElement("div", "oc-arch-empty", copy.noSearch))
+        return
+      }
+      const domain = domainByID(activeDomainID)
+      const inner = createElement("div", "oc-arch-inspector-inner")
+      inner.style.setProperty("--domain-color", domain.color)
+
+      if (activeComponentID) {
+        const found = componentByID(activeComponentID)
+        inner.appendChild(createElement("div", "oc-arch-inspector-kicker", copy.selectedComponent))
+        inner.appendChild(createElement("h2", "", found.component.title))
+        inner.appendChild(createElement("p", "", localize(found.component.responsibility, locale)))
+        inner.appendChild(detailList(copy.selectionPath, [selectionPath(found.domain, found.component)], "text"))
+        inner.appendChild(detailList(copy.responsibilities, [localize(found.component.responsibility, locale)], "text"))
+        inner.appendChild(detailList(copy.sourcePaths, found.component.sources, "code"))
+        inner.appendChild(detailList(copy.durableRecords, found.domain.records, "code"))
+        inner.appendChild(detailList(copy.boundaries, found.domain.boundaries.map((item) => localize(item, locale)), "text"))
+        inner.appendChild(detailList(copy.relatedContracts, relatedContracts(found.domain.id), "text"))
+      } else {
+        inner.appendChild(createElement("div", "oc-arch-inspector-kicker", copy.selectedDomain))
+        inner.appendChild(createElement("h2", "", localize(domain.title, locale)))
+        inner.appendChild(createElement("p", "", localize(domain.summary, locale)))
+        inner.appendChild(detailList(copy.selectionPath, [selectionPath(domain)], "text"))
+        inner.appendChild(detailList(copy.durableRecords, domain.records, "code"))
+        inner.appendChild(detailList(copy.sourcePaths, domain.sources, "code"))
+        inner.appendChild(detailList(copy.responsibilities, domain.responsibilities.map((item) => localize(item, locale)), "text"))
+        inner.appendChild(detailList(copy.boundaries, domain.boundaries.map((item) => localize(item, locale)), "text"))
+        inner.appendChild(detailList(copy.relatedContracts, relatedContracts(domain.id), "text"))
+      }
+
+      els.inspector.appendChild(inner)
+    }
+
+    function detailList(title: string, items: string[], mode: "code" | "text"): HTMLElement {
+      const block = createElement("div", "oc-arch-detail-block")
+      block.appendChild(createElement("h3", "", title))
+      if (mode === "code") {
+        const list = createElement("div", "oc-arch-code-list")
+        for (const item of items) list.appendChild(createElement("code", "", item))
+        block.appendChild(list)
+      } else {
+        const list = createElement("ul")
+        for (const item of items) list.appendChild(createElement("li", "", item))
+        block.appendChild(list)
+      }
+      return block
+    }
+
+    function renderEvidence(): void {
+      clear(els.evidence)
+      if (!searchHasMatches()) {
+        els.evidence.appendChild(createElement("div", "oc-arch-empty", copy.noSearch))
+        return
+      }
+      const domain = domainByID(activeDomainID)
+      const evidenceItems = activeComponentID
+        ? (() => {
+            const found = componentByID(activeComponentID)
+            return [
+              { label: copy.selectionPath, value: selectionPath(found.domain, found.component) },
+              { label: copy.responsibilities, value: localize(found.component.responsibility, locale) },
+              ...found.component.sources.map((source) => ({ label: copy.sourcePaths, value: source })),
+              ...found.domain.records.map((record) => ({ label: copy.durableRecords, value: record })),
+            ]
+          })()
+        : [
+            { label: copy.selectionPath, value: selectionPath(domain) },
+            ...domain.records.map((record) => ({ label: copy.highlightedStreams, value: record })),
+            ...domain.sources.map((source) => ({ label: copy.sourcePaths, value: source })),
+          ]
+      for (const item of evidenceItems) {
+        const card = createElement("div", "oc-arch-evidence-item")
+        card.appendChild(createElement("strong", "", item.label))
+        card.appendChild(createElement("span", "", item.value))
+        els.evidence.appendChild(card)
+      }
+    }
+
+    function render(): void {
+      renderTabs()
+      renderStats()
+      renderDomainList()
+      renderFlow()
+      renderDomainGrid()
+      renderContracts()
+      renderInspector()
+      renderEvidence()
+    }
+
+    render()
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>("[data-oc-architecture-explorer]")) initArchitectureExplorer(root)
+</script>

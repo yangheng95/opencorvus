@@ -1,0 +1,65 @@
+---
+title: Tools
+description: Built-in tools the LLM can call when working in OpenCorvus.
+---
+
+OpenCorvus ships a set of built-in tools the agent can call. Tools live under `packages/opencorvus/src/tool/` and are registered through `packages/opencorvus/src/tool/registry.ts`.
+
+## Built-in tools
+
+| Tool                   | Purpose                                                 |
+| ---------------------- | ------------------------------------------------------- |
+| `bash`                 | Execute shell commands through the configured shell     |
+| `browser_preview`      | Inspect and interact with a browser preview              |
+| `read`                 | Read a file (line-numbered, range-aware)                |
+| `write`                | Create or overwrite a file                              |
+| `edit`                 | Apply targeted string replacements                      |
+| `apply_patch`          | Apply a unified diff                                    |
+| `glob`                 | Find files by glob pattern                              |
+| `search_code`          | Search file contents                                    |
+| `list`                 | Directory listing                                       |
+| `webfetch`             | Fetch URL contents                                      |
+| `websearch`            | Run a web search                                        |
+| `lsp`                  | Query the language server                               |
+| `memory`               | Persistent memory store                                 |
+| `todoread` / `todowrite` | Read and update the agent's todo list                 |
+| `external_code_search` | Search external code sources                            |
+| `skill`                | Load a projected Skill                                  |
+| `delegate_agent`       | Dispatch a bounded helper from coding or chat assistants |
+| `panel`                | Operate the OpenCorvus control panel                    |
+| `planner`              | Manage the assistant planning surface                   |
+| `mission_state`        | Read Mission coordination state                         |
+| `wait`                 | Yield until an external wake condition                  |
+| `request_orchestrator_decision` / `send_mailbox_message` | Exchange visible worker coordination messages |
+| `question`             | Ask the user (when `OPENCORVUS_ENABLE_QUESTION_TOOL=1`) |
+| `schedule`             | Schedule follow-up actions                              |
+| `batch`                | Run a batch of tools in one turn                        |
+| `analytics`            | Emit telemetry events                                   |
+
+## Task Orchestrator tools
+
+Task Orchestrator sessions receive scheduler tools from the active expert-squad projection. These are not global ToolRegistry entries:
+
+- `dispatch_agent` dispatches one exact dynamic agent ID declared under the active `capability_projection.agents` map.
+- `manage_task` owns Task lifecycle and creates or revises Delivery Slice contracts. It does not complete/reject/retry a Goal or bind Goal workspaces.
+
+## Disabling a tool
+
+```jsonc
+{
+  "tools": {
+    "write": false,
+    "bash": false,
+  },
+}
+```
+
+This prevents the LLM from receiving the tool definition. Use it for review-only or sandboxed agents.
+
+## Permissions
+
+Most write/execute tools route through the permission system. See [Permissions](../permissions/) for `allow / ask / deny` rules.
+
+## Adding new tools
+
+Additional executable tools belong to an installed [expert-squad package](../agents/). Its manifest projects exact package tool references only to the active scheduler or dynamic agents that declare them. Plugins may intercept tool definitions and execution, but cannot register agent tools.

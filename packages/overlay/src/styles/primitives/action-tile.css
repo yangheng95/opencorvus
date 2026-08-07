@@ -1,0 +1,8 @@
+/* Action tiles are interactive containers, not elongated control pills.
+ * The primitive owns their container shape while feature surfaces arrange
+ * domain content and choose semantic icon color. */
+.oc-action-tile {
+  border-radius: var(--oc-radius-large);
+  text-align: left;
+  white-space: normal;
+}

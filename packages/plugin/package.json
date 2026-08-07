@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@opencorvus-ai/plugin",
+  "version": "0.0.35-beta",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.type-tests.json",
+    "build": "tsc"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./tool": "./src/tool.ts",
+    "./files": "./src/files.ts",
+    "./artifact-catalog": "./src/artifact-catalog.ts",
+    "./project-path": "./src/project-path.ts",
+    "./task-artifact": "./src/task-artifact.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@opencorvus-ai/sdk": "workspace:*",
+    "hono": "catalog:",
+    "property-information": "7.2.0",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@tsconfig/node22": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "@typescript/native-preview": "catalog:"
+  }
+}

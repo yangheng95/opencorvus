@@ -1,0 +1,72 @@
+---
+title: Install
+description: Install the verified native OpenCorvus bundle for your platform.
+---
+
+## Native installation
+
+```bash
+curl -fsSL https://opencorvus.ai/install | bash
+opencorvus --version
+opencorvus doctor
+```
+
+The installer selects the native Windows x64, macOS x64/arm64, or Linux
+x64/arm64 archive and installs the complete runtime bundle under
+the canonical runtime root's `bin` directory. The executable, Ripgrep, browser runtime, native modules,
+and Overlay UI stay together; OpenCorvus is not installed as an incomplete
+single-file executable.
+
+Git is required for project and worktree operations. Python ≥ 3.9 is optional
+for code execution and some skills. On Windows, use `python`, **not `python3`**
+(the Store stub intercepts it).
+
+## Build from source
+
+Source builds require Bun ≥ 1.3.14 and Node.js ≥ 22.
+
+```bash
+git clone https://github.com/yangheng95/opencorvus.git
+cd opencorvus
+bun install
+bun run package:native-binary
+bun packages/opencorvus/src/index.ts doctor
+# bundle and archive under packages/opencorvus/dist/
+```
+
+Monorepo layout: `packages/opencorvus` (core), `packages/overlay` (Tauri desktop), `packages/channel-runtime` (multi-channel adapters), `packages/channel-config` (channel registry and schema).
+
+## Verify
+
+```bash
+opencorvus doctor
+```
+
+`doctor` checks dependencies, network, and LLM provider connectivity.
+
+## Minimal config
+
+Drop a minimal project config at `<repo>/.opencorvus/opencorvus.jsonc`:
+
+```jsonc
+{
+  "model": "openai/gpt-5.5",
+}
+```
+
+Then set an API key (pick one):
+
+```bash
+export DASHSCOPE_API_KEY=sk-...       # Alibaba DashScope
+# or
+export ANTHROPIC_API_KEY=sk-ant-...   # Anthropic
+# or
+export OPENAI_API_KEY=sk-...          # OpenAI
+```
+
+Full config: [OpenCorvus configuration](../../config/).
+
+## Next
+
+- [Quickstart](./quickstart.md)
+- [Architecture](../concepts/architecture.md)

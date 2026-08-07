@@ -1,0 +1,9 @@
+# Base Expert Squad
+
+Select `base` for an ordinary repository delivery whose complete requested outcome is owned by its compact non-Goal composite chain: research report, complete implementation plan, development report, and test report, with fixed verified-delivery variants when independent integrity or real rendered visual evidence is required.
+
+Base is Advanced's convenient composite version. It retains distinct research, planning, development, testing, integrity-review, and visual-review identities while omitting Advanced's requirements engineering, architecture, specialist interface-design, fact-check, and broader investigation identities. Select `composite-delivery` for ordinary complete Task delivery, `integrity-verified-delivery` when acceptance requires independent system-level completeness review, or `visual-verified-delivery` for User-Interface, graphical, preview, or rendered-output work that requires fresh visual evidence followed by integrity review. Select `advanced` when its full-team contracts are materially required, or select a more specific installed Expert Squad when its declared domain workflow owns the complete outcome.
+
+One selected Base Task is a substantial delivery closure. Workload size, duration, acceptance-item count, deliverable formats, directories, data generation, reports, audits, tests, and same-Task Artifact dependencies do not divide it into Mission phases. Base's Orchestrator and declared workflow identities coordinate those internal responsibilities inside the same Task.
+
+Base visibly selects exactly one of its three binding workflows before the first domain dispatch. Every node in that selected graph is mandatory; neither reviewer is an optional node inside a graph. Base never creates Goal-derived planning facts and never combines its graph with an Advanced workflow. If the current Task already started domain execution under another active package, do not switch it in place.

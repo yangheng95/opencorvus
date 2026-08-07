@@ -1,0 +1,65 @@
+---
+title: 工具
+description: OpenCorvus 内置可供 LLM 调用的工具。
+---
+
+OpenCorvus 内置一组工具供 agent 调用。工具实现位于 `packages/opencorvus/src/tool/`，通过 `packages/opencorvus/src/tool/registry.ts` 注册。
+
+## 内置工具
+
+| 工具                   | 用途                                                 |
+| ---------------------- | ---------------------------------------------------- |
+| `bash`                 | 通过配置的 shell 执行命令                            |
+| `browser_preview`      | 检查并操作 browser preview                           |
+| `read`                 | 读取文件（带行号、范围）                             |
+| `write`                | 创建或覆盖文件                                       |
+| `edit`                 | 精确字符串替换                                       |
+| `apply_patch`          | 应用 unified diff                                    |
+| `glob`                 | 按 glob 查找文件                                     |
+| `search_code`          | 搜索文件内容                                         |
+| `list`                 | 目录列表                                             |
+| `webfetch`             | 抓取 URL                                             |
+| `websearch`            | 网络搜索                                             |
+| `lsp`                  | 查询语言服务器                                       |
+| `memory`               | 持久化记忆存储                                       |
+| `todoread` / `todowrite` | 读取和更新 agent 的 todo list                     |
+| `external_code_search` | 搜索外部代码源                                       |
+| `skill`                | 加载 projected Skill                                 |
+| `delegate_agent`       | 从 coding 或 chat assistant 派发有边界的 helper     |
+| `panel`                | 操作 OpenCorvus 控制面板                             |
+| `planner`              | 管理 assistant planning surface                     |
+| `mission_state`        | 读取 Mission 协调状态                                |
+| `wait`                 | 等待外部 wake 条件                                   |
+| `request_orchestrator_decision` / `send_mailbox_message` | 交换可见的 worker 协调消息 |
+| `question`             | 向用户提问（需 `OPENCORVUS_ENABLE_QUESTION_TOOL=1`） |
+| `schedule`             | 安排后续动作                                         |
+| `batch`                | 一轮内批量执行多个工具                               |
+| `analytics`            | 上报遥测事件                                         |
+
+## Task Orchestrator 工具
+
+Task Orchestrator session 从 active expert-squad projection 获得 scheduler 工具；它们不是全局 ToolRegistry 条目：
+
+- `dispatch_agent` 只派发 active `capability_projection.agents` map 中声明的精确 dynamic agent ID。
+- `manage_task` 拥有 Task lifecycle，并创建或修订 Delivery Slice contract；它不完成、拒绝、retry Goal，也不绑定 Goal workspace。
+
+## 禁用某个工具
+
+```jsonc
+{
+  "tools": {
+    "write": false,
+    "bash": false,
+  },
+}
+```
+
+LLM 将拿不到对应工具定义。审查类或沙箱 agent 适用。
+
+## 权限
+
+大多数写/执行类工具走权限系统。详见 [Permissions](../permissions/)。
+
+## 添加新工具
+
+新增的可执行工具属于已安装的[专家团 package](../agents/)。manifest 只把精确的 package tool reference 投影给 active scheduler 或声明它的动态 agent。Plugin 可以拦截工具定义和执行，但不能注册 agent 工具。

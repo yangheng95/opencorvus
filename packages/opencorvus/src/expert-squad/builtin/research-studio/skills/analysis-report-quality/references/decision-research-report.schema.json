@@ -1,0 +1,503 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opencorvus.local/schema/decision-research-report-v1.json",
+  "$comment": "JSON means JavaScript Object Notation. This Schema is the positive data-integrity contract for the decision-research-report/v1 template.",
+  "title": "Decision Research Report V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["report"],
+  "properties": {
+    "report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "decision_question",
+        "audience",
+        "publication_date",
+        "template_id",
+        "primary_surface",
+        "section_applicability",
+        "scope",
+        "data_vintage",
+        "executive_answer",
+        "decision_bullets",
+        "confidence",
+        "analysis_modes",
+        "transaction_analysis",
+        "time_series_analysis",
+        "kpis",
+        "findings",
+        "evidence_modules",
+        "comparisons",
+        "recommendations",
+        "limitations",
+        "methods",
+        "sources",
+        "reproducibility_resources"
+      ],
+      "properties": {
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "decision_question": { "$ref": "#/$defs/nonEmptyText" },
+        "audience": { "$ref": "#/$defs/nonEmptyText" },
+        "publication_date": { "$ref": "#/$defs/nonEmptyText" },
+        "template_id": { "const": "decision-research-report/v1" },
+        "primary_surface": { "enum": ["standalone_html", "markdown"] },
+        "section_applicability": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "report_masthead",
+            "executive_answer",
+            "kpi_scorecard",
+            "critical_findings",
+            "comparative_evidence",
+            "recommended_actions",
+            "risks_limitations_unresolved",
+            "method_reproducibility",
+            "source_notes"
+          ],
+          "properties": {
+            "report_masthead": { "const": "required" },
+            "executive_answer": { "const": "required" },
+            "kpi_scorecard": { "const": "required" },
+            "critical_findings": { "const": "required" },
+            "comparative_evidence": { "$ref": "#/$defs/sectionApplicability" },
+            "recommended_actions": { "const": "required" },
+            "risks_limitations_unresolved": { "const": "required" },
+            "method_reproducibility": { "const": "required" },
+            "source_notes": { "const": "required" }
+          }
+        },
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["population", "geography", "period", "currency_and_units", "exclusions"],
+          "properties": {
+            "population": { "$ref": "#/$defs/nonEmptyText" },
+            "geography": { "$ref": "#/$defs/nonEmptyText" },
+            "period": { "$ref": "#/$defs/nonEmptyText" },
+            "currency_and_units": { "$ref": "#/$defs/nonEmptyText" },
+            "exclusions": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyText" } }
+          }
+        },
+        "data_vintage": { "$ref": "#/$defs/nonEmptyText" },
+        "executive_answer": { "$ref": "#/$defs/nonEmptyText" },
+        "decision_bullets": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 5,
+          "items": { "$ref": "#/$defs/nonEmptyText" }
+        },
+        "confidence": { "enum": ["high", "medium", "low"] },
+        "analysis_modes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["transaction", "time_series", "other"] }
+        },
+        "transaction_analysis": { "$ref": "#/$defs/transactionAnalysis" },
+        "time_series_analysis": { "$ref": "#/$defs/timeSeriesAnalysis" },
+        "kpis": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/kpi" }
+        },
+        "findings": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 7,
+          "items": { "$ref": "#/$defs/finding" }
+        },
+        "evidence_modules": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/evidenceModule" }
+        },
+        "comparisons": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/comparison" }
+        },
+        "recommendations": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/recommendation" }
+        },
+        "limitations": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/limitation" }
+        },
+        "methods": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/method" }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/source" }
+        },
+        "reproducibility_resources": {
+          "type": "array",
+          "minItems": 3,
+          "allOf": [
+            {
+              "contains": {
+                "type": "object",
+                "required": ["role"],
+                "properties": { "role": { "const": "report_model" } }
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "required": ["role"],
+                "properties": { "role": { "const": "markdown_archive" } }
+              },
+              "minContains": 1,
+              "maxContains": 1
+            },
+            {
+              "contains": {
+                "type": "object",
+                "required": ["role"],
+                "properties": { "role": { "const": "reproducibility" } }
+              },
+              "minContains": 1
+            }
+          ],
+          "items": { "$ref": "#/$defs/resource" }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["analysis_modes"],
+            "properties": { "analysis_modes": { "type": "array", "contains": { "const": "transaction" } } }
+          },
+          "then": { "properties": { "transaction_analysis": { "$ref": "#/$defs/transactionAnalysisRequired" } } }
+        },
+        {
+          "if": {
+            "required": ["analysis_modes"],
+            "properties": { "analysis_modes": { "type": "array", "contains": { "const": "time_series" } } }
+          },
+          "then": { "properties": { "time_series_analysis": { "$ref": "#/$defs/timeSeriesAnalysisRequired" } } }
+        },
+        {
+          "if": {
+            "required": ["primary_surface"],
+            "properties": { "primary_surface": { "const": "standalone_html" } }
+          },
+          "then": {
+            "properties": {
+              "reproducibility_resources": {
+                "type": "array",
+                "allOf": [
+                  {
+                    "contains": {
+                      "type": "object",
+                      "required": ["role"],
+                      "properties": { "role": { "const": "primary_report" } }
+                    },
+                    "minContains": 1,
+                    "maxContains": 1
+                  },
+                  {
+                    "contains": {
+                      "type": "object",
+                      "required": ["role"],
+                      "properties": { "role": { "const": "visual_review" } }
+                    },
+                    "minContains": 1
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "nonEmptyText": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sectionApplicability": {
+      "oneOf": [
+        { "const": "required" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["not_applicable_reason"],
+          "properties": {
+            "not_applicable_reason": { "$ref": "#/$defs/nonEmptyText" }
+          }
+        }
+      ]
+    },
+    "kpi": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "value", "unit", "period", "definition", "claim_id", "evidence_ref", "change_context"],
+      "properties": {
+        "label": { "$ref": "#/$defs/nonEmptyText" },
+        "value": {},
+        "unit": { "$ref": "#/$defs/nonEmptyText" },
+        "period": { "$ref": "#/$defs/nonEmptyText" },
+        "definition": { "$ref": "#/$defs/nonEmptyText" },
+        "claim_id": { "$ref": "#/$defs/nonEmptyText" },
+        "evidence_ref": { "$ref": "#/$defs/nonEmptyText" },
+        "change_context": { "$ref": "#/$defs/nonEmptyText" }
+      }
+    },
+    "applicability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["not_applicable_reason"],
+      "properties": { "not_applicable_reason": { "$ref": "#/$defs/nonEmptyText" } }
+    },
+    "transactionClass": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence", "primary_population_treatment", "record_count", "amount"],
+      "properties": {
+        "evidence": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmptyText" } },
+        "primary_population_treatment": { "enum": ["included", "excluded", "sensitivity_only"] },
+        "record_count": { "type": "integer", "minimum": 0 },
+        "amount": { "type": "number" }
+      }
+    },
+    "transactionAnalysisRequired": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["taxonomy", "primary_population_rule", "unresolved_rows", "sensitivity_results", "reconciliation"],
+      "properties": {
+        "taxonomy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "merchandise",
+            "return",
+            "shipping",
+            "discount",
+            "fee",
+            "voucher",
+            "bad_debt_accounting_adjustment",
+            "unknown"
+          ],
+          "properties": {
+            "merchandise": { "$ref": "#/$defs/transactionClass" },
+            "return": { "$ref": "#/$defs/transactionClass" },
+            "shipping": { "$ref": "#/$defs/transactionClass" },
+            "discount": { "$ref": "#/$defs/transactionClass" },
+            "fee": { "$ref": "#/$defs/transactionClass" },
+            "voucher": { "$ref": "#/$defs/transactionClass" },
+            "bad_debt_accounting_adjustment": { "$ref": "#/$defs/transactionClass" },
+            "unknown": { "$ref": "#/$defs/transactionClass" }
+          }
+        },
+        "primary_population_rule": { "$ref": "#/$defs/nonEmptyText" },
+        "unresolved_rows": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyText" } },
+        "sensitivity_results": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmptyText" } },
+        "reconciliation": { "$ref": "#/$defs/nonEmptyText" }
+      }
+    },
+    "transactionAnalysis": {
+      "oneOf": [{ "$ref": "#/$defs/applicability" }, { "$ref": "#/$defs/transactionAnalysisRequired" }]
+    },
+    "timeSeriesAnalysisRequired": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["date_support", "business_calendar_evidence", "anomaly_validation"],
+      "properties": {
+        "date_support": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["observed_activity", "structural_non_operating", "confirmed_zero_activity", "data_gap"],
+          "properties": {
+            "observed_activity": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyText" } },
+            "structural_non_operating": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyText" } },
+            "confirmed_zero_activity": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyText" } },
+            "data_gap": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyText" } }
+          }
+        },
+        "business_calendar_evidence": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmptyText" } },
+        "anomaly_validation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["parameters", "sensitivity_results", "known_event_recovery", "false_positive_review"],
+          "properties": {
+            "parameters": { "$ref": "#/$defs/nonEmptyText" },
+            "sensitivity_results": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmptyText" } },
+            "known_event_recovery": { "$ref": "#/$defs/nonEmptyText" },
+            "false_positive_review": { "$ref": "#/$defs/nonEmptyText" }
+          }
+        }
+      }
+    },
+    "timeSeriesAnalysis": {
+      "oneOf": [{ "$ref": "#/$defs/applicability" }, { "$ref": "#/$defs/timeSeriesAnalysisRequired" }]
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["headline", "claim_id", "evidence_ref", "interpretation", "confidence", "decision_implication"],
+      "properties": {
+        "headline": { "$ref": "#/$defs/nonEmptyText" },
+        "claim_id": { "$ref": "#/$defs/nonEmptyText" },
+        "evidence_ref": { "$ref": "#/$defs/nonEmptyText" },
+        "interpretation": { "$ref": "#/$defs/nonEmptyText" },
+        "confidence": { "enum": ["high", "medium", "low"] },
+        "decision_implication": { "$ref": "#/$defs/nonEmptyText" },
+        "evidence_module_ref": { "$ref": "#/$defs/nonEmptyText" },
+        "no_visual_reason": { "$ref": "#/$defs/nonEmptyText" }
+      },
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["evidence_module_ref"],
+          "properties": { "evidence_module_ref": true, "no_visual_reason": false }
+        },
+        {
+          "type": "object",
+          "required": ["no_visual_reason"],
+          "properties": { "evidence_module_ref": false, "no_visual_reason": true }
+        }
+      ]
+    },
+    "evidenceModule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "module_id",
+        "kind",
+        "data_ref",
+        "title",
+        "subtitle",
+        "population",
+        "period",
+        "unit",
+        "claim_ids",
+        "source_note",
+        "takeaway",
+        "presentation"
+      ],
+      "properties": {
+        "module_id": { "$ref": "#/$defs/nonEmptyText" },
+        "kind": { "enum": ["chart", "table"] },
+        "data_ref": { "$ref": "#/$defs/nonEmptyText" },
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "subtitle": { "$ref": "#/$defs/nonEmptyText" },
+        "population": { "$ref": "#/$defs/nonEmptyText" },
+        "period": { "$ref": "#/$defs/nonEmptyText" },
+        "unit": { "$ref": "#/$defs/nonEmptyText" },
+        "claim_ids": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmptyText" } },
+        "source_note": { "$ref": "#/$defs/nonEmptyText" },
+        "takeaway": { "$ref": "#/$defs/nonEmptyText" },
+        "presentation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["form", "encodings", "decision_emphasis", "color_semantics", "accessibility_description"],
+          "properties": {
+            "form": { "$ref": "#/$defs/nonEmptyText" },
+            "encodings": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmptyText" } },
+            "decision_emphasis": { "$ref": "#/$defs/nonEmptyText" },
+            "color_semantics": { "$ref": "#/$defs/nonEmptyText" },
+            "accessibility_description": { "$ref": "#/$defs/nonEmptyText" }
+          }
+        }
+      }
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["question", "dimensions", "evidence_ref", "decision_takeaway"],
+      "properties": {
+        "question": { "$ref": "#/$defs/nonEmptyText" },
+        "dimensions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmptyText" } },
+        "evidence_ref": { "$ref": "#/$defs/nonEmptyText" },
+        "decision_takeaway": { "$ref": "#/$defs/nonEmptyText" }
+      }
+    },
+    "recommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action",
+        "evidence_claim_ids",
+        "expected_effect",
+        "owner_or_decision_maker",
+        "priority",
+        "time_horizon",
+        "risk_or_tradeoff"
+      ],
+      "properties": {
+        "action": { "$ref": "#/$defs/nonEmptyText" },
+        "evidence_claim_ids": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmptyText" } },
+        "expected_effect": { "$ref": "#/$defs/nonEmptyText" },
+        "owner_or_decision_maker": { "$ref": "#/$defs/nonEmptyText" },
+        "priority": { "$ref": "#/$defs/nonEmptyText" },
+        "time_horizon": { "$ref": "#/$defs/nonEmptyText" },
+        "risk_or_tradeoff": { "$ref": "#/$defs/nonEmptyText" }
+      }
+    },
+    "limitation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category", "statement", "decision_impact"],
+      "properties": {
+        "category": { "enum": ["data", "method", "contrary_evidence", "unresolved_question"] },
+        "statement": { "$ref": "#/$defs/nonEmptyText" },
+        "decision_impact": { "$ref": "#/$defs/nonEmptyText" }
+      }
+    },
+    "method": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "inputs", "transformation", "validation"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyText" },
+        "inputs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/nonEmptyText" } },
+        "transformation": { "$ref": "#/$defs/nonEmptyText" },
+        "validation": { "$ref": "#/$defs/nonEmptyText" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "title", "pointer", "retrieval_date", "claim_ids"],
+      "properties": {
+        "source_id": { "$ref": "#/$defs/nonEmptyText" },
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "pointer": { "$ref": "#/$defs/nonEmptyText" },
+        "retrieval_date": { "$ref": "#/$defs/nonEmptyText" },
+        "claim_ids": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyText" } }
+      }
+    },
+    "resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "path", "description"],
+      "properties": {
+        "role": {
+          "enum": [
+            "primary_report",
+            "markdown_archive",
+            "report_model",
+            "reproducibility",
+            "supporting_evidence",
+            "visual_review"
+          ]
+        },
+        "path": { "$ref": "#/$defs/nonEmptyText" },
+        "description": { "$ref": "#/$defs/nonEmptyText" }
+      }
+    }
+  }
+}

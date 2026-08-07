@@ -1,0 +1,36 @@
+---
+title: WeCom (Enterprise WeChat)
+description: WeCom adapter using self-built app + receive-message webhook mode.
+---
+
+## Prerequisites
+
+1. Create a self-built app in the [WeCom admin console](https://work.weixin.qq.com/).
+2. Obtain:
+   - **CorpID**
+   - **App Secret**
+   - **AgentID**
+3. Configure Receive Message URL: `https://<your-public-host>/wecom` with Token / EncodingAESKey.
+
+## Environment
+
+```bash
+export WECOM_CORP_ID=...
+export WECOM_SECRET=...
+export WECOM_AGENT_ID=...
+export WECOM_CALLBACK_TOKEN=...
+export WECOM_ENCODING_AES_KEY=...
+export WECOM_WEBHOOK_HOST=0.0.0.0
+export WECOM_WEBHOOK_PORT=16672
+export WECOM_WEBHOOK_PATH=/wecom
+```
+
+## Thread semantics
+
+WeCom has no explicit thread concept; thread key = `FromUserName + AgentID`.
+
+## Troubleshooting
+
+- **URL validation fails**: WeCom requires public HTTPS and exact Token / EncodingAESKey values; use Cloudflare Tunnel for local dev.
+- **Decryption fails**: EncodingAESKey mismatch with the console.
+- **errcode 40014 on send**: access_token expired (WeCom 2h TTL). OpenCorvus refreshes automatically; persistent failure indicates a wrong Secret.

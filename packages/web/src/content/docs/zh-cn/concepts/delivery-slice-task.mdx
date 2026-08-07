@@ -1,0 +1,55 @@
+---
+title: "数据模型：Task / Delivery Slice / 执行证据"
+description: Task 生命周期、版本化 Delivery Slice 合同、物理执行、review 与派生进度。
+---
+
+OpenCorvus 将 business lifecycle、交付范围和物理执行分开。
+
+```text
+Task
+ ├─ workflow selection（不可变 package/workflow decision）
+ ├─ DeliverySlice[]
+ │   └─ DeliverySliceRevision[]
+ ├─ dispatch lineage / execution attempts / Sessions
+ ├─ domain Artifacts 与 Host observations
+ ├─ 绑定精确 Slice revision 的 reviewer artifacts
+ └─ task_completion_decision
+```
+
+## Task 独占 business lifecycle
+
+Task 是唯一 business-lifecycle container。Orchestrator 追加 completion decision 时，必须引用 selected workflow、精确 package revision/digest、已验收的当前 Delivery Slice revisions、reviewer artifacts 与真实 execution/message evidence。Reopen 保留历史 decision。
+
+## Goal 是 versioned Delivery Slice
+
+产品界面继续把 Delivery Slice 称为 **Goal**。稳定 `delivery_slice_id` 连接不可变 revisions。每个 revision 保存 objective、acceptance specifications、owned paths、priority、kind 与精确 RequirementSet/ContractGraph refs。
+
+Slice 不拥有 status、dependencies、attempt、result、retry count、workspace、Session 或 cleanup。编辑 Goal 会追加新 revision；旧 revision 的 evidence 保留可见历史，但不能满足当前合同。
+
+## Workflow 与执行
+
+Selected workflow 的每个 node 在一个 Task 中只执行一次。可选 Slice revision refs 是 worker input、evidence 与 review 的 typed subject，不会扩增 workflow node。
+
+Physical execution 属于 immutable dispatch lineage、execution attempt 与真实 Session。Terminal delivery 指向真实 final assistant message 或 terminal error/tool event；它不是 Goal result 或业务 verdict。
+
+## Review 与 Goal 进度
+
+Reviewer artifact 把 judgment/evidence 绑定到精确 Slice revision。Goal 面板读时派生：
+
+- 当前 contract revision；
+- 适用 Task workflow-node coverage；
+- live/terminal Sessions；
+- exact-revision Artifact coverage；
+- accepted、rejected 或 inconclusive review facts；
+- Task completion 是否引用该 accepted review。
+
+UI 可以展示 `not_started`、`in_progress`、`in_review`、`changes_requested`、`accepted` 或 `settled`。这些是 read-only projection，不是持久 lifecycle 或 scheduling 字段。
+
+## API 规则
+
+- Goal API 创建 Slice 或追加 revision，不完成、拒绝、retry 或绑定 workspace。
+- Execution API 暴露 dispatch、Session、final-message/error 与 Host-observation facts。
+- Task API 暴露唯一 lifecycle 与 completion decision。
+- Artifact/review API 使用精确 immutable locator 与 Slice revision subject。
+
+详见[架构总览](./architecture.md)、[Agent](../../agents/)和[评估器](../../reference/evaluator/)。

@@ -1,0 +1,19 @@
+/* ─────────────────────────────────────────────────────────────
+   Field-input group + scrollable-shell baseline (extracted 2026-05-04).
+   ───────────────────────────────────────────────────────────── */
+
+.sidebar,
+.chat,
+.sections,
+.oc-section,
+.oc-section__body,
+.config-section-body,
+.sidebar-body,
+.chat-scroll,
+.dialog-form,
+.extension-settings-row .s-row-main,
+.channel-doc-copy,
+.knowledge-item-main {
+  min-width: 0;
+  min-height: 0;
+}

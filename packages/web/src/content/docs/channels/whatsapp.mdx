@@ -1,0 +1,42 @@
+---
+title: WhatsApp
+description: WhatsApp adapter via Meta's official WhatsApp Business Cloud API webhook.
+---
+
+WhatsApp adapter uses the official **WhatsApp Business Cloud API** (Meta) webhook. Personal accounts (Web/Desktop) are not supported.
+
+## Prerequisites
+
+1. Register with [Meta Business Suite](https://business.facebook.com/) and create a WhatsApp Business account.
+2. Create an App in Meta Developer Portal → add WhatsApp product.
+3. Obtain:
+   - **Phone Number ID**
+   - **Permanent Access Token** (System User token recommended)
+   - **App Secret** (used to verify webhook payload signatures)
+   - **Verify Token** (arbitrary string, used during webhook validation)
+4. Configure Webhook: `https://<your-public-host>/whatsapp`, subscribe to `messages`.
+
+## Environment
+
+```bash
+export WHATSAPP_ACCESS_TOKEN=...
+export WHATSAPP_PHONE_NUMBER_ID=...
+export WHATSAPP_APP_SECRET=...
+export WHATSAPP_VERIFY_TOKEN=...
+export WHATSAPP_WEBHOOK_HOST=0.0.0.0
+export WHATSAPP_WEBHOOK_PORT=16667
+export WHATSAPP_WEBHOOK_PATH=/whatsapp
+```
+
+## Thread semantics
+
+WhatsApp is 1:1; thread key = `wa_id` (counterparty phone number).
+
+## 24-hour window
+
+WhatsApp enforces **customer-initiated conversation**: a business can reply freely for 24 hours after the customer's last message; after that, only Template messages are allowed. OpenCorvus surfaces the error rather than dropping messages.
+
+## Troubleshooting
+
+- **Verify Token mismatch**: ensure env equals the Meta Developer Portal value.
+- **Past 24h window**: register a Template and use the template variant of `POST /messages`.

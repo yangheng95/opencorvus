@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@tsconfig/bun/tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": [],
+    "noImplicitAny": false,
+    "noUncheckedIndexedAccess": false,
+    "customConditions": ["browser"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "exclude": ["script/**/*", "test/**/*", "src/skill/builtin/**/*"]
+}

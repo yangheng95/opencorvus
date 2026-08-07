@@ -1,0 +1,896 @@
+/* Sidebar surface — owns the rail column's shell + header controls. */
+
+.sidebar {
+  --sidebar-static-nav-row-height: calc(36px * var(--ui-scale));
+
+  width: var(--ui-sidebar-width);
+  min-width: min(100%, var(--ui-rail-min-width));
+  max-width: var(--ui-sidebar-width);
+  flex: 0 1 var(--ui-sidebar-width);
+  display: flex;
+  flex-direction: row;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text);
+  transition:
+    width var(--ui-duration-base) var(--ui-timing-standard),
+    min-width var(--ui-duration-base) var(--ui-timing-standard);
+  overflow: hidden;
+}
+
+.sidebar-content {
+  background: transparent;
+}
+
+/* Sidebar header text lanes: panel collapse control, title, then
+   right-side actions. */
+.sidebar-title {
+  flex: 1 1 auto;
+}
+
+.sidebar-header-actions {
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.sidebar-header-actions[data-active="false"] {
+  display: none;
+}
+
+.sidebar-header-actions .oc-button[data-ui="left-panel-open-project"] {
+  --oc-button-height: calc(24px * var(--ui-scale));
+  --oc-button-padding-x: 0;
+  --oc-button-bg: color-mix(in srgb, var(--surface-inset) 64%, transparent);
+  --oc-button-color: var(--text-soft);
+  --oc-button-shadow: inset 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--border) 78%, transparent);
+
+  width: calc(24px * var(--ui-scale));
+  min-width: calc(24px * var(--ui-scale));
+}
+
+.sidebar-header-actions .oc-button[data-ui="left-panel-open-project"]:hover,
+.sidebar-header-actions .oc-button[data-ui="left-panel-open-project"]:focus-visible {
+  --oc-button-bg: color-mix(in srgb, var(--accent) 12%, var(--surface-inset));
+  --oc-button-color: var(--text-strong);
+  --oc-button-shadow:
+    inset 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--accent) 32%, var(--border)),
+    0 calc(4px * var(--ui-scale)) calc(10px * var(--ui-scale))
+      color-mix(in srgb, var(--ui-shadow-tone) 16%, transparent);
+}
+
+body .sidebar-header.oc-surface-header {
+  display: none;
+}
+
+.sidebar-codex-static-nav {
+  display: grid;
+  gap: calc(2px * var(--ui-scale));
+  padding: calc(1px * var(--ui-scale)) var(--ui-left-rail-section-inline-inset);
+}
+
+.sidebar-codex-primary-nav {
+  padding-bottom: calc(2px * var(--ui-scale));
+}
+
+.sidebar-codex-primary-row {
+  display: block;
+  align-items: center;
+  gap: calc(4px * var(--ui-scale));
+}
+
+.sidebar-codex-shortcuts {
+  padding-top: 0;
+}
+
+.sidebar-codex-action.oc-button,
+.sidebar-codex-action {
+  --oc-button-height: var(--sidebar-static-nav-row-height);
+  --oc-button-padding-x: var(--ui-left-rail-row-control-inline-inset);
+  --oc-button-gap: var(--ui-left-rail-row-label-gap);
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-color: var(--text-soft);
+  --oc-button-shadow: none;
+
+  display: grid;
+  grid-template-columns: var(--ui-left-rail-row-icon-track) minmax(0, 1fr) auto;
+  align-items: center;
+  justify-items: start;
+  width: 100%;
+  color: var(--text-soft);
+  font-size: var(--ui-font-navigation);
+  font-weight: var(--ui-font-weight-body);
+  text-align: left;
+}
+
+.sidebar-codex-action.oc-button:hover,
+.sidebar-codex-action.oc-button:focus-visible,
+.sidebar-codex-action:hover,
+.sidebar-codex-action:focus-within {
+  --oc-button-bg: var(--hover-wash);
+  --oc-button-color: var(--text-strong);
+
+  color: var(--text-strong);
+}
+
+.sidebar-codex-action svg {
+  grid-column: 1;
+}
+
+.sidebar-codex-action-label {
+  grid-column: 2;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-codex-shortcut {
+  grid-column: 3;
+  border-radius: var(--oc-radius-pill);
+  background: color-mix(in srgb, var(--text-strong) 8%, transparent);
+  color: var(--text-muted);
+  font-size: var(--ui-font-small);
+  line-height: 1;
+  padding: calc(4px * var(--ui-scale)) calc(8px * var(--ui-scale));
+}
+
+/* Sidebar body: scrollable region beneath the header that holds the
+   task list panel + group clusters. The 8px padding + 6px gap values
+   below fold the late overrides at the styles.css tail (canonical was
+   10px / 12 / 8 / 2 — late wins, surface declares the rendered values). */
+.sidebar-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: calc(6px * var(--ui-scale)) var(--ui-left-rail-body-inline-inset);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sidebar-footer {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(8px * var(--ui-scale));
+  padding: calc(10px * var(--ui-scale)) calc(14px * var(--ui-scale));
+  border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 60%, transparent);
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.chat-version {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: calc(10px * var(--ui-scale));
+  min-width: 0;
+  color: var(--text-soft);
+  line-height: 1.2;
+  overflow: hidden;
+}
+
+.chat-version-copy {
+  --oc-button-height: auto;
+  --oc-button-padding-x: 0;
+  --oc-button-padding-y: 0;
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-color: inherit;
+  --oc-button-shadow: none;
+
+  display: grid;
+  width: 100%;
+  grid-template-columns: calc(28px * var(--ui-scale)) minmax(0, 1fr);
+  column-gap: calc(8px * var(--ui-scale));
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  text-align: start;
+  color: inherit;
+}
+
+.chat-version-copy:hover,
+.chat-version-copy:focus-visible {
+  --oc-button-bg: var(--hover-wash);
+  --oc-button-color: var(--text-strong);
+}
+
+.chat-version-avatar {
+  grid-row: 1 / span 2;
+  display: inline-flex;
+  width: calc(28px * var(--ui-scale));
+  height: calc(28px * var(--ui-scale));
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--oc-radius-pill);
+  background: color-mix(in srgb, var(--good) 62%, var(--surface-inset));
+  color: var(--text-on-strong);
+  font-size: var(--ui-font-small);
+  font-weight: var(--ui-font-weight-strong);
+}
+
+:is(.chat-version-name, .chat-version-plan) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-version-name {
+  color: var(--text-strong);
+  font-size: calc(13px * var(--ui-scale));
+}
+
+.chat-version-plan {
+  color: var(--text-muted);
+  font-size: var(--ui-font-small);
+}
+
+.sidebar-connection {
+  flex: 0 0 auto;
+}
+
+.conn-badge[data-ui="connection-badge"] {
+  --conn-badge-dot: var(--text-muted);
+
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(5px * var(--ui-scale));
+  padding: calc(5px * var(--ui-scale)) calc(8px * var(--ui-scale));
+  font-size: var(--ui-font-small);
+  font-weight: var(--ui-font-weight-medium);
+  letter-spacing: var(--ui-letter-spacing-normal);
+  user-select: none;
+  color: var(--text-muted);
+}
+
+.conn-badge::before {
+  content: "";
+  display: inline-block;
+  width: calc(6px * var(--ui-scale));
+  height: calc(6px * var(--ui-scale));
+  border-radius: 50%;
+  background: var(--conn-badge-dot);
+  flex-shrink: 0;
+}
+
+.sidebar-account-menu {
+  min-width: calc(190px * var(--ui-scale));
+}
+
+.conn-badge[data-status="online"] {
+  --conn-badge-dot: var(--good);
+}
+
+.conn-badge[data-status="offline"] {
+  --conn-badge-dot: var(--bad);
+}
+
+.conn-badge[data-status="connecting"] {
+  --conn-badge-dot: var(--warn);
+}
+
+.conn-badge__label {
+  color: inherit;
+  text-transform: none;
+}
+
+.sidebar-footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.sidebar-footer a:hover {
+  color: var(--text-soft);
+  text-decoration: underline;
+}
+
+.sidebar-list {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: calc(10px * var(--ui-scale));
+  padding: calc(4px * var(--ui-scale));
+}
+
+.task-list-panel {
+  display: flex;
+  flex-direction: column;
+  gap: calc(6px * var(--ui-scale));
+  min-height: 100%;
+}
+
+.sidebar-list.session-list-panel {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  overflow: hidden;
+  padding: 0;
+  border: 0 solid transparent;
+  background: transparent;
+}
+
+.sidebar-list-group {
+  display: flex;
+  flex-direction: column;
+  gap: calc(6px * var(--ui-scale));
+}
+
+.sidebar-list-cluster {
+  display: flex;
+  flex-direction: column;
+  gap: calc(2px * var(--ui-scale));
+}
+
+/* Task row mini: a single task entry in the sidebar list. Flat shell —
+   no border, no shadow — chrome shows up only on :hover/:focus-within
+   and on [data-active]. The state overrides themselves (hover +
+   active background) still live in styles.css until the action button
+   chrome is reworked, but the resting shell is the canonical here. */
+.task-row-mini {
+  display: grid;
+  grid-template-columns: var(--ui-left-rail-row-icon-track) minmax(0, 1fr) max-content;
+  align-items: center;
+  gap: var(--ui-left-rail-row-label-gap);
+  flex: 0 0 auto;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: calc(1px * var(--ui-scale)) calc(6px * var(--ui-scale)) calc(1px * var(--ui-scale))
+    var(--ui-left-rail-row-control-inline-inset);
+  border: var(--oc-border-width) solid transparent;
+  position: relative;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.task-row-body {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: calc(4px * var(--ui-scale));
+  min-width: 0;
+  max-width: 100%;
+}
+
+.oc-button[data-ui="ledger-row-main"] {
+  --oc-button-height: auto;
+  --oc-button-padding-x: calc(3px * var(--ui-scale));
+  --oc-button-padding-y: calc(2px * var(--ui-scale));
+  --oc-button-gap: calc(4px * var(--ui-scale));
+  --oc-button-color: var(--text-soft);
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-align: left;
+}
+
+/* The row main button must not paint its own hover surface: the row is
+   the feedback unit. A button-local bright fill inside a wash-darkened
+   row read as a detached floating box that only wrapped half the row.
+   (.task-row-main is repeated to reach the ghost-hover primitive's
+   specificity; the primitive rule carries two :not() attribute checks.) */
+.oc-button.task-row-main[data-ui="ledger-row-main"]:hover,
+.oc-button.task-row-main[data-ui="ledger-row-main"]:focus-visible {
+  --oc-button-bg: transparent;
+}
+
+.task-row-head {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: calc(5px * var(--ui-scale));
+  overflow: hidden;
+}
+
+.oc-button[data-ui="ledger-row-main"] strong {
+  display: block;
+  font-size: var(--ui-font-body);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: 1.25;
+  letter-spacing: var(--ui-letter-spacing-normal);
+  color: var(--text-soft);
+  min-width: 0;
+  max-width: 100%;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.task-row-stamp {
+  display: block;
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: var(--ui-font-small);
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--ui-letter-spacing-loose);
+  transition: opacity var(--ui-duration-base) var(--ui-timing-standard);
+}
+
+.task-row-mini::before {
+  content: "";
+  position: absolute;
+  left: calc(3px * var(--ui-scale));
+  top: calc(6px * var(--ui-scale));
+  bottom: calc(6px * var(--ui-scale));
+  width: calc(2px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: transparent;
+}
+
+.task-row-mini[data-active="true"] {
+  border-color: transparent;
+}
+
+.task-row-mini[data-active="true"]::before {
+  background: transparent;
+}
+
+.task-row-mini[data-notification-unread="true"] {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--warn) 13%, transparent), transparent 72%),
+    color-mix(in srgb, var(--surface-hover) 62%, transparent);
+  border-color: color-mix(in srgb, var(--warn) 34%, transparent);
+}
+
+.task-row-mini[data-notification-unread="true"]::before {
+  background: var(--warn);
+}
+
+.task-row-mini[data-active="true"][data-notification-unread="true"] {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--warn) 11%, transparent), transparent 76%),
+    color-mix(in srgb, var(--accent) 10%, var(--surface-hover));
+  border-color: color-mix(in srgb, var(--warn) 36%, var(--accent));
+}
+
+.task-row-right {
+  grid-column: 3;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: calc(3px * var(--ui-scale));
+  flex: 0 0 auto;
+  min-width: 0;
+  width: 100%;
+  padding: 0;
+  position: relative;
+  z-index: var(--ui-z-decoration);
+  pointer-events: none;
+}
+.task-row-right .task-row-stamp {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: calc(54px * var(--ui-scale));
+  margin: 0;
+  pointer-events: none;
+}
+
+/* Tree lineage children toggle — sits at the start of .task-row-right
+   and shows the direct-child count plus a chevron the user clicks to
+   expand/collapse the subtree. data-has-active triggers a subtle pulse
+   when any direct child is mid-run; data-has-failed paints the chip in
+   the danger tone so red bubbles up to the parent. */
+.oc-button[data-ui="task-row-children-toggle"] {
+  --oc-button-height: calc(18px * var(--ui-scale));
+  --oc-button-padding-x: calc(5px * var(--ui-scale));
+  --oc-button-padding-y: 0;
+  --oc-button-gap: calc(2px * var(--ui-scale));
+  --oc-button-color: var(--text-soft);
+  --oc-button-border: var(--oc-border-width) solid var(--border);
+  --oc-button-bg: transparent;
+  --oc-button-shadow: none;
+
+  flex: 0 0 auto;
+  pointer-events: auto;
+}
+
+.task-row-children-count {
+  font-variant-numeric: tabular-nums;
+}
+
+.oc-button[data-ui="task-row-children-toggle"][data-has-active="true"] {
+  --oc-button-color: var(--accent);
+  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+.oc-button[data-ui="task-row-children-toggle"][data-has-active="true"]::before {
+  content: "";
+  display: block;
+  width: calc(6px * var(--ui-scale));
+  height: calc(6px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: var(--accent);
+  animation: task-row-children-pulse var(--ui-duration-loop-connection-pulse) var(--ui-timing-standard) infinite;
+}
+
+@keyframes task-row-children-pulse {
+  0%,
+  100% {
+    opacity: var(--ui-opacity-faint);
+    transform: scale(1);
+  }
+  50% {
+    opacity: var(--ui-opacity-full);
+    transform: scale(1.25);
+  }
+}
+
+/* Failed beats active — if both are present, failed colour wins so
+   the user is not lulled by the active accent on a row that already
+   has a broken descendant. */
+.oc-button[data-ui="task-row-children-toggle"][data-has-failed="true"] {
+  --oc-button-color: var(--bad);
+  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 32%, transparent);
+  --oc-button-bg: color-mix(in srgb, var(--bad) 8%, transparent);
+}
+
+.oc-button[data-ui="task-row-children-toggle"][data-has-failed="true"]::before {
+  background: var(--bad);
+}
+
+/* Cross-directory nested children — drag is disabled (canDrag returns
+   false); fade the row slightly so the user understands it's borrowed
+   from another project rather than queued in this group. */
+.task-row-mini[data-cross-directory="true"] {
+  opacity: var(--ui-opacity-subtle);
+}
+
+.task-list-error {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: calc(12px * var(--ui-scale));
+  padding: calc(12px * var(--ui-scale)) calc(14px * var(--ui-scale));
+  margin: calc(8px * var(--ui-scale)) 0 calc(10px * var(--ui-scale));
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 34%, var(--border));
+  border-radius: var(--oc-radius-large);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bad) 10%, transparent),
+      color-mix(in srgb, var(--bad) 3.4%, transparent) 72%,
+      transparent
+    ),
+    color-mix(in srgb, var(--surface-strong) 74%, transparent);
+  box-shadow:
+    0 calc(10px * var(--ui-scale)) calc(18px * var(--ui-scale))
+      color-mix(in srgb, var(--ui-shadow-tone) 31%, transparent),
+    inset 0 calc(1px * var(--ui-scale)) 0 var(--ui-highlight-tone);
+  font-size: var(--ui-font-control);
+  color: var(--text-soft);
+}
+.task-list-error-msg {
+  flex: 1 1 calc(220px * var(--ui-scale));
+  display: grid;
+  gap: calc(8px * var(--ui-scale));
+  word-break: break-word;
+}
+
+.task-list-error-msg::before {
+  content: "";
+  width: calc(10px * var(--ui-scale));
+  height: calc(10px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: color-mix(in srgb, var(--bad) 92%, transparent);
+  box-shadow: 0 0 0 calc(4px * var(--ui-scale)) color-mix(in srgb, var(--bad) 12%, transparent);
+}
+
+.task-list-error .oc-button[data-ui="task-list-error-retry"] {
+  --oc-button-padding-x: calc(12px * var(--ui-scale));
+  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 38%, transparent);
+  --oc-button-bg: color-mix(in srgb, var(--bad) 8%, transparent);
+  --oc-button-color: var(--bad);
+
+  flex: 0 0 auto;
+  align-self: flex-start;
+  min-height: calc(30px * var(--ui-scale));
+  transition:
+    border-color var(--ui-duration-base),
+    background var(--ui-duration-base),
+    color var(--ui-duration-base);
+}
+.task-list-error .oc-button[data-ui="task-list-error-retry"]:hover:enabled,
+.task-list-error .oc-button[data-ui="task-list-error-retry"]:focus-visible:enabled {
+  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 52%, transparent);
+  --oc-button-bg: color-mix(in srgb, var(--bad) 14%, transparent);
+}
+.task-list-error .oc-button[data-ui="task-list-error-retry"]:disabled {
+  cursor: progress;
+}
+
+.task-list-search {
+  margin: var(--ui-gap-sm) var(--ui-gap-md) var(--ui-gap-md);
+}
+
+.ledger-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-sm);
+  padding: var(--ui-gap-md) var(--ui-gap-md) 0;
+}
+
+.ledger-skeleton-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-sm);
+}
+
+.ledger-loading-label {
+  --px-exact: 1; /* visually-hidden text uses exact 1px clipping geometry. */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ledger-skeleton-row {
+  height: calc(48px * var(--ui-scale));
+  border-radius: var(--oc-radius-soft);
+  background: var(--subtle-2);
+}
+
+.ledger-skeleton-row:nth-child(2) {
+  opacity: var(--ui-opacity-subtle);
+}
+
+.ledger-skeleton-row:nth-child(3) {
+  opacity: var(--ui-opacity-dim);
+}
+
+.project-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: calc(1px * var(--ui-scale)) 0 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.project-group + .project-group {
+  margin-top: calc(1px * var(--ui-scale));
+}
+
+.project-group-head {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: calc(3px * var(--ui-scale));
+  min-width: 0;
+}
+
+.project-group-actions {
+  position: static;
+  z-index: var(--ui-z-raised);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0;
+  min-width: 0;
+  padding-inline-start: calc(8px * var(--ui-scale));
+  background: transparent;
+  opacity: var(--ui-opacity-hidden);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity var(--ui-duration-base),
+    visibility var(--ui-duration-base);
+}
+
+.project-group[data-project-actions="true"]:hover .project-group-actions,
+.project-group[data-project-actions="true"]:focus-within .project-group-actions,
+.project-group:has(.oc-button[data-ui="project-group-more"][aria-expanded="true"]) .project-group-actions {
+  opacity: var(--ui-opacity-full);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.project-group .oc-button[data-ui="project-group-toggle"] {
+  --oc-button-height: var(--oc-density-navigation-row);
+  --oc-button-padding-x: var(--ui-left-rail-row-control-inline-inset);
+  --oc-button-padding-y: calc(1px * var(--ui-scale));
+  --oc-button-border: 0 solid transparent;
+  --oc-button-color: var(--text-muted);
+
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: var(--ui-left-rail-row-icon-track) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--ui-left-rail-row-label-gap);
+  height: var(--oc-density-navigation-row);
+  min-height: var(--oc-density-navigation-row);
+  font-size: var(--ui-font-navigation);
+  text-align: left;
+  transition:
+    background var(--ui-duration-base),
+    color var(--ui-duration-base);
+}
+
+.project-group .oc-button[data-ui="project-group-toggle"]:hover,
+.project-group .oc-button[data-ui="project-group-toggle"]:focus-visible {
+  --oc-button-bg: transparent;
+  --oc-button-color: var(--text-soft);
+}
+
+.project-group .oc-button[data-ui="project-group-more"],
+.project-group .oc-button[data-ui="project-group-new-chat"] {
+  --oc-button-height: var(--ui-left-rail-project-action-size);
+  --oc-button-padding-x: 0;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-bg: transparent;
+  --oc-button-color: color-mix(in srgb, var(--text-muted) 82%, transparent);
+  --oc-button-shadow: none;
+
+  width: var(--ui-left-rail-project-action-size);
+  min-width: var(--ui-left-rail-project-action-size);
+  height: var(--ui-left-rail-project-action-size);
+  min-height: var(--ui-left-rail-project-action-size);
+  flex: 0 0 auto;
+}
+
+.project-group .oc-button[data-ui="project-group-more"]:hover,
+.project-group .oc-button[data-ui="project-group-more"]:focus-visible,
+.project-group .oc-button[data-ui="project-group-more"][aria-expanded="true"],
+.project-group .oc-button[data-ui="project-group-new-chat"]:hover,
+.project-group .oc-button[data-ui="project-group-new-chat"]:focus-visible {
+  --oc-button-bg: transparent;
+  --oc-button-color: var(--text-strong);
+}
+
+.project-group-menu {
+  min-width: calc(210px * var(--ui-scale));
+  gap: calc(2px * var(--ui-scale));
+}
+
+.project-group-menu-item {
+  display: grid;
+  grid-template-columns: calc(20px * var(--ui-scale)) minmax(0, 1fr);
+}
+
+.project-group-menu-item > svg {
+  color: var(--text-muted);
+}
+
+.project-group-menu-item[data-tone="danger"]:hover,
+.project-group-menu-item[data-tone="danger"][data-highlighted],
+.project-group-menu-item[data-tone="danger"]:focus-visible {
+  color: var(--bad);
+}
+
+.project-group-menu-item[data-pinned="true"] > svg {
+  color: var(--accent);
+}
+
+.project-group-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--text-muted) 86%, transparent);
+}
+
+.project-group-chevron {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--text-muted) 86%, transparent);
+}
+
+.project-group-copy {
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: calc(5px * var(--ui-scale));
+  overflow: hidden;
+}
+
+.project-group-name {
+  display: block;
+  font-size: var(--ui-font-navigation);
+  font-weight: var(--ui-font-weight-body);
+  line-height: var(--ui-line-height-tight);
+  letter-spacing: var(--ui-letter-spacing-normal);
+  color: var(--text-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 0 1 auto;
+  min-width: calc(42px * var(--ui-scale));
+}
+
+.project-group-parent {
+  display: none;
+  font-size: var(--ui-font-small);
+  color: color-mix(in srgb, var(--text-muted) 92%, var(--text-soft));
+  opacity: var(--ui-opacity-subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.project-group-count {
+  display: none;
+  min-width: calc(18px * var(--ui-scale));
+  height: calc(17px * var(--ui-scale));
+  padding: 0 calc(5px * var(--ui-scale));
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 86%, transparent);
+  border-radius: var(--oc-radius-pill);
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  line-height: calc(17px * var(--ui-scale));
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.project-group-body {
+  display: grid;
+  gap: calc(2px * var(--ui-scale));
+  padding-left: var(--ui-left-rail-tree-depth);
+  animation: project-group-body-reveal var(--ui-duration-base) var(--ui-timing-standard);
+}
+
+.project-group[data-collapsed="true"] .oc-button[data-ui="project-group-toggle"] {
+  --oc-button-color: var(--text-muted);
+}
+
+.project-group-show-more {
+  justify-self: center;
+  margin-top: calc(2px * var(--ui-scale));
+}
+
+@keyframes project-group-body-reveal {
+  from {
+    opacity: var(--ui-opacity-hidden);
+    transform: translateY(calc(-3px * var(--ui-scale)));
+  }
+  to {
+    opacity: var(--ui-opacity-full);
+    transform: translateY(0);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Extracted from styles.css 2026-05-04: collapsed sidebar variants.
+   ───────────────────────────────────────────────────────────── */
+
+.sidebar[data-collapsed="true"] {
+  width: var(--ui-collapsed-pane-width);
+  min-width: var(--ui-collapsed-pane-width);
+  max-width: var(--ui-collapsed-pane-width);
+  flex: 0 0 var(--ui-collapsed-pane-width);
+}

@@ -1,0 +1,30 @@
+---
+title: Microsoft Teams
+description: Teams adapter using Bot Framework Webhook mode.
+---
+
+## Prerequisites
+
+1. Create a Bot Service (Azure Bot resource) in [Azure Portal](https://portal.azure.com/).
+2. Obtain **Microsoft App ID** and **Client Secret** (Certificates & Secrets).
+3. In Teams Developer Portal, create an App manifest bound to the Bot.
+4. Messaging endpoint: `https://<your-public-host>/msteams`.
+
+## Environment
+
+```bash
+export MSTEAMS_APP_ID=...
+export MSTEAMS_APP_SECRET=...
+export MSTEAMS_WEBHOOK_HOST=0.0.0.0
+export MSTEAMS_WEBHOOK_PORT=16669
+export MSTEAMS_WEBHOOK_PATH=/msteams
+```
+
+## Thread semantics
+
+Teams `conversation.id` is thread key. Reply-chains stay in the same thread.
+
+## Troubleshooting
+
+- **401 Unauthorized**: Azure App ID / Secret mismatch with manifest.
+- **AccessDenied on tenant**: the Bot has not been approved for sideloading by that tenant's administrator.

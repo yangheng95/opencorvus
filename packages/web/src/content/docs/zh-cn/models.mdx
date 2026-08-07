@@ -1,0 +1,65 @@
+---
+title: 模型
+description: 在 OpenCorvus 中选择 LLM 模型、models.dev 集成与按 agent 覆盖。
+---
+
+OpenCorvus 从明确的身份层解析模型。底层 provider 列表见 [Providers](../providers/)。
+
+## 模型层级
+
+| 场景 | 配置位置 |
+| --- | --- |
+| 项目默认模型 | `model` |
+| 固定 Primary/Helper/Host 身份 | `agent.<fixed-id>.model` |
+| worker 运行模板种子 | `runtime_templates.<base-role>.model` |
+| 精确投影 worker | `expert_squads.<squad-id>.agents.<agent-id>.runtime.model` |
+| Vision / 截图理解 | `OPENCORVUS_VISION_MODEL` 环境变量 |
+
+精确投影 worker 覆盖其运行模板，运行模板覆盖项目默认值。`base_role` 永远不表示 worker 身份。
+
+```jsonc
+{
+  "model": "openai/gpt-5.5",
+  "agent": {
+    "coding": { "model": "anthropic/claude-sonnet-4-6" },
+  },
+  "runtime_templates": {
+    "architect": { "model": "anthropic/claude-sonnet-4-6" },
+    "build": { "model": "openai/gpt-5.5" },
+  },
+  "expert_squads": {
+    "review-team": {
+      "agents": {
+        "security-reviewer": {
+          "runtime": { "model": "anthropic/claude-sonnet-4-6" },
+        },
+      },
+    },
+  },
+}
+```
+
+## models.dev
+
+OpenCorvus 运行时只读取一个必需的 JSON catalog。可用 `OPENCORVUS_MODELS_PATH` 指定位置；未指定时读取全局 durable data 目录下的 `models.json`。fresh install 会由 executable 校验编译内置的 bootstrap catalog，并在不联网的情况下原子 provision 该默认文件。已有默认文件与显式 override 永远不会被 bootstrap 覆盖；显式 override 缺失或 catalog 无效时会直接报错，不会读取其他来源。
+
+运行 `opencorvus models --refresh` 才会显式拉取 [models.dev](https://models.dev)、补齐必需的本地 provider，并原子替换该 catalog。普通启动不会隐式联网获取模型元数据。
+
+## 列出可用模型
+
+```bash
+opencorvus models
+opencorvus models openai --verbose
+```
+
+列出已配置 provider 的模型。传入 provider ID 会限制输出范围；通过 config 的 `disabled_providers` 禁用某个 provider 后，其模型会从列表移除。
+
+## 模型变体
+
+部分 provider 暴露模型变体（如长上下文 / 标准）。ACP 的 `unstable_setSessionModel` 直接支持变体。
+
+## 选型建议
+
+- **Reasoning 模型**（Claude reasoning、o-系列、qwq）适合规划，但**必须用 `streamText` + `toolChoice: "auto"`**，详见 [Providers](../providers/)。
+- **便宜的快模型**通常足以执行；build evidence 与最终 integrity review 会捕获回归。
+- **Vision** — 把 `OPENCORVUS_VISION_MODEL` 设为多模态模型（如 `anthropic/claude-sonnet-4-6`），仅在有截图/图像输入时触发。

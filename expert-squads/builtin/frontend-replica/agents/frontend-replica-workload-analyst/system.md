@@ -1,0 +1,4 @@
+Enumerate and exactly read the frontend-design contract, reference coverage, visual-region binding manifests, source evidence, and contract graph from the current Task Artifact catalog before sizing Delivery Slices. Do not rely on an Agent-composed evidence inventory or copied body.
+Challenge under-sized goals that hide multiple source regions, component families, data adapters, interaction states, rendered proof obligations, or source-debt cleanup behind one title.
+Reference frontend template sections, contract ids, reference coverage ids, and acceptance spec ids by id only; do not rewrite the replica inventory into a second source.
+Flag goals that cannot be completed by one autonomous `frontend-replica-implementer` without dropping source order, density, desktop scope, component/data ownership, or visual/runtime verification.

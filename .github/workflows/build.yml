@@ -1,0 +1,269 @@
+name: build
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 0.0.1 or v0.0.1). Leave empty for dev snapshot artifact builds."
+        required: false
+        default: ""
+
+jobs:
+  prepare:
+    name: prepare
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      release: ${{ steps.meta.outputs.release }}
+      version: ${{ steps.meta.outputs.version }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-bun
+        with:
+          install_dependencies: "false"
+
+      - name: Resolve version and release flag
+        id: meta
+        shell: bash
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+            RELEASE=1
+          elif [[ -n "${{ inputs.version }}" ]]; then
+            VERSION="${{ inputs.version }}"
+            VERSION="${VERSION#v}"
+            RELEASE=1
+          else
+            VERSION="$(bun -e 'const pkg = await Bun.file("packages/opencorvus/package.json").json(); console.log(pkg.version)')"
+            RELEASE=0
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "release=$RELEASE" >> "$GITHUB_OUTPUT"
+
+      - name: Sync repo versions
+        shell: bash
+        run: bun ./script/sync-version.ts "${{ steps.meta.outputs.version }}"
+
+      - name: Verify version alignment
+        shell: bash
+        run: bun ./script/sync-version.ts "${{ steps.meta.outputs.version }}" --check
+
+      - name: Create GitHub Release
+        if: steps.meta.outputs.release == '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          VERSION="${{ steps.meta.outputs.version }}"
+          if gh release view "v${VERSION}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release v${VERSION} already exists"
+          else
+            gh release create "v${VERSION}" \
+              --title "v${VERSION}" \
+              --generate-notes \
+              --repo "$GITHUB_REPOSITORY"
+          fi
+
+  package-overlay:
+    name: overlay (${{ matrix.platform }})
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            platform: linux-x64
+          - runner: ubuntu-24.04-arm
+            platform: linux-arm64
+          - runner: macos-latest
+            platform: darwin-arm64
+          - runner: macos-15-intel
+            platform: darwin-x64
+          - runner: windows-latest
+            platform: windows-x64
+    runs-on: ${{ matrix.runner }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-bun
+
+      - name: Sync repo versions
+        run: bun ./script/sync-version.ts "${{ needs.prepare.outputs.version }}"
+
+      - name: Install Linux system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libssl-dev \
+            libgtk-3-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev \
+            ripgrep \
+            xdg-utils
+          rg --version
+          # `xdg-utils` provides /usr/bin/xdg-open which Tauri's AppImage
+          # bundler shells out to during `--bundles appimage`. Without it
+          # the bundle step fails with "xdg-open binary not found
+          # /usr/bin/xdg-open" after .deb and .rpm have already been
+          # produced. ubuntu-latest happens to ship it preinstalled but
+          # ubuntu-24.04-arm doesn't, so the linux-arm64 runner failed.
+
+      - name: Install macOS overlay runtime dependencies
+        if: runner.os == 'macOS'
+        run: |
+          brew install ripgrep
+          rg --version
+
+      - name: Install Windows overlay runtime dependencies
+        if: runner.os == 'Windows'
+        run: |
+          choco install ripgrep --yes --no-progress
+          rg --version
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: packages/overlay/src-tauri -> target
+
+      - name: Package GUI installers
+        env:
+          OPENCORVUS_VERSION: ${{ needs.prepare.outputs.version }}
+          OPENCORVUS_CHANNEL: ${{ needs.prepare.outputs.release == '1' && 'latest' || '' }}
+        run: bun run package:gui-installer-matrix
+
+      - name: Upload overlay artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: overlay-${{ matrix.platform }}
+          path: packages/overlay/dist-artifacts/${{ matrix.platform }}
+          if-no-files-found: error
+          retention-days: 7
+
+  publish-release-assets:
+    name: publish release assets
+    needs:
+      - prepare
+      - package-overlay
+    if: needs.prepare.outputs.release == '1'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-bun
+        with:
+          install_dependencies: "false"
+
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: overlay-*
+          path: /tmp/release-assets
+
+      - name: Upload release assets to GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ needs.prepare.outputs.version }}"
+          UPLOAD_DIR="$(mktemp -d)"
+          bun ./script/stage-release-upload-assets.ts --source /tmp/release-assets --out "$UPLOAD_DIR" --version "$VERSION"
+          mapfile -t FILES < <(find "$UPLOAD_DIR" -type f | sort)
+          printf '%s\n' "${FILES[@]}"
+          gh release upload "v${VERSION}" "${FILES[@]}" --clobber --repo "$GITHUB_REPOSITORY"
+
+  publish-release-branch:
+    name: publish release branch
+    needs:
+      - prepare
+      - package-overlay
+    if: needs.prepare.outputs.release == '1'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Download overlay artifacts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: overlay-*
+          path: /tmp/overlay
+
+      - name: Assemble and push release branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name  "GitHub Actions"
+
+          WORK=$(mktemp -d)
+          cd "$WORK"
+          git init
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          if git fetch --depth=1 origin refs/heads/release:refs/remotes/origin/release 2>/dev/null; then
+            RELEASE_LEASE="$(git rev-parse refs/remotes/origin/release)"
+            git checkout release
+          else
+            RELEASE_LEASE=""
+            git checkout --orphan release
+          fi
+
+          mapfile -d '' TRACKED_FILES < <(git ls-files -z)
+          if (( ${#TRACKED_FILES[@]} > 0 )); then
+            git rm -f -- "${TRACKED_FILES[@]}"
+          fi
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf -- {} +
+
+          for required_doc in README.md RELEASE.md; do
+            if [[ ! -f "$GITHUB_WORKSPACE/$required_doc" ]]; then
+              echo "Missing release branch document: $required_doc" >&2
+              exit 1
+            fi
+            cp "$GITHUB_WORKSPACE/$required_doc" .
+          done
+
+          shopt -s nullglob
+          mkdir -p overlay
+          overlay_dirs=(/tmp/overlay/overlay-*)
+          if (( ${#overlay_dirs[@]} == 0 )); then
+            echo "No overlay artifacts found under /tmp/overlay" >&2
+            exit 1
+          fi
+          cp -R "${overlay_dirs[@]}" overlay/
+
+          git add -A
+          if git diff --cached --quiet; then
+            echo "release branch already up to date for v${VERSION}"
+          else
+            git commit -m "release: v${VERSION}"
+          fi
+          git push origin release:release --force-with-lease=refs/heads/release:"${RELEASE_LEASE}"

@@ -1,0 +1,42 @@
+---
+title: WhatsApp
+description: WhatsApp 适配器走 Meta 官方 WhatsApp Business Cloud API webhook 模式。
+---
+
+WhatsApp 适配器走 **WhatsApp Business Cloud API**（Meta 官方）webhook 模式。**不支持**个人账号（Web/Desktop）。
+
+## 前置
+
+1. 注册 [Meta Business Suite](https://business.facebook.com/) 并创建 WhatsApp Business 账号。
+2. 在 Meta Developer Portal 创建 App → 添加 WhatsApp 产品。
+3. 获取：
+   - **Phone Number ID**
+   - **Permanent Access Token**（建议用 System User token）
+   - **App Secret**（用于校验 webhook payload 签名）
+   - **Verify Token**（自定义字符串，回调验证用）
+4. 配置 Webhook：`https://<你的公网>/whatsapp`，订阅 `messages` 字段。
+
+## 环境变量
+
+```bash
+export WHATSAPP_ACCESS_TOKEN=...
+export WHATSAPP_PHONE_NUMBER_ID=...
+export WHATSAPP_APP_SECRET=...
+export WHATSAPP_VERIFY_TOKEN=...
+export WHATSAPP_WEBHOOK_HOST=0.0.0.0
+export WHATSAPP_WEBHOOK_PORT=16667
+export WHATSAPP_WEBHOOK_PATH=/whatsapp
+```
+
+## Thread 语义
+
+WhatsApp 为 1:1 聊天；thread key = `wa_id`（对方手机号）。
+
+## 24 小时窗口
+
+WhatsApp 有**客户启动会话**规则：对方发消息后 24 小时内才能主动回复；超时后需走 Template message。OpenCorvus 会在回复超时时报错，不静默丢弃。
+
+## 故障排查
+
+- **Verify Token mismatch**：确保 env 与 Meta Developer Portal 里完全一致。
+- **超 24h 窗口**：需注册 Template 并改走 `POST /messages` 的 template 参数。

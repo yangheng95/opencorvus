@@ -1,0 +1,129 @@
+---
+title: CLI 参考
+description: opencorvus 是统一的 CLI 入口，所有子命令在 packages/opencorvus/src/index.ts 注册。
+---
+
+`opencorvus` 是统一的 CLI 命令。源码子命令在 `packages/opencorvus/src/index.ts` 注册；本地构建产物位于 `packages/opencorvus/dist/opencorvus-<platform>/opencorvus`。
+
+## 全局 flag
+
+| flag                | 说明                               |
+| ------------------- | ---------------------------------- |
+| `--help`, `-h`      | 显示帮助                           |
+| `--version`, `-v`   | 显示版本                           |
+| `--print-logs`      | 将日志打印到 stderr                |
+| `--log-level LEVEL` | `DEBUG`、`INFO`、`WARN` 或 `ERROR` |
+
+## 子命令
+
+### `opencorvus serve`
+
+启动 headless HTTP API 服务器。
+
+```bash
+opencorvus serve [flags]
+```
+
+| flag              | 默认               | 说明                                             |
+| ----------------- | ------------------ | ------------------------------------------------ |
+| `--hostname`      | `127.0.0.1`        | 监听地址；启用 `--mdns` 且未配置时使用 `0.0.0.0` |
+| `--port`          | `7878`             | 监听端口                                         |
+| `--project-dir`   | `cwd()`            | 工作仓库路径                                     |
+| `--mdns`          | off                | 启用 mDNS 服务发现                               |
+| `--mdns-domain`   | `opencorvus.local` | mDNS 域名                                        |
+| `--cors <origin>` | 无                 | 额外允许的 CORS origin，可重复传入               |
+
+`OPENCORVUS_SERVER_PASSWORD` 通过环境变量设置，不是 CLI flag。
+
+### `opencorvus run`
+
+从命令行运行任务。
+
+```bash
+opencorvus run "实现 src/foo.ts 的单元测试" [flags]
+```
+
+| flag                    | 说明                                       |
+| ----------------------- | ------------------------------------------ | ------------------------------ |
+| `--command CMD`         | 执行 `CMD`，并把 message 参数作为命令参数  |
+| `--continue`, `-c`      | 续接最后一次 session                       |
+| `--session ID`, `-s ID` | 续接指定 session                           |
+| `--fork`                | 续接前先 fork session                      |
+| `--share`               | 产出 share 链接                            |
+| `--model MODEL`, `-m`   | 为 session 使用 `provider/model`           |
+| `--agent NAME`          | 使用指定 agent                             |
+| `--format <format>`（`default` 或 `json`）                 | 选择格式化输出或原始 JSON 事件 |
+| `--file PATH`, `-f`     | 附加一个或多个文件                         |
+| `--title TITLE`         | 设置 session 标题                          |
+| `--attach URL`          | 连接到正在运行的 OpenCorvus server         |
+| `--dir PATH`            | 指定运行目录；使用 `--attach` 时是远端路径 |
+| `--port PORT`           | 本地 server 端口                           |
+| `--variant VALUE`       | provider 特定的 reasoning variant          |
+| `--thinking`            | 显示 thinking blocks                       |
+
+### `opencorvus auth`
+
+Provider 凭据必须通过显式子命令管理。
+
+```bash
+opencorvus auth login [url]
+opencorvus auth logout
+opencorvus auth list
+```
+
+### `opencorvus models`
+
+列出可用模型。传入 provider ID 可限制输出范围。
+
+```bash
+opencorvus models
+opencorvus models openai --verbose
+opencorvus models --refresh
+```
+
+### `opencorvus mcp`
+
+MCP（Model Context Protocol）server 通过 `mcp` 命令族管理。
+
+```bash
+opencorvus mcp list
+opencorvus mcp add
+opencorvus mcp auth [name]
+opencorvus mcp auth list
+opencorvus mcp logout [name]
+opencorvus mcp debug <name>
+```
+
+`opencorvus mcp browser` 是内部 browser sidecar 入口。
+
+### 其他常用命令
+
+| 命令                            | 用途                                                     |
+| ------------------------------- | -------------------------------------------------------- |
+| `opencorvus acp`                | 启动 [ACP（Agent Client Protocol）](../acp.md) server    |
+| `opencorvus db`                 | 打开 SQLite shell、运行位置参数 query、打印路径或重置 DB |
+| `opencorvus debug`              | 调试 config、文件、LSP、snapshot、skill 和路径            |
+| `opencorvus doctor`             | 诊断安装和运行依赖                                       |
+| `opencorvus export [sessionID]` | 将 session 数据导出为 JSON                               |
+| `opencorvus generate`           | 运行配置驱动的生成                                       |
+| `opencorvus github`             | GitHub Action runtime 入口                               |
+| `opencorvus import`             | 导入 session 或 task                                     |
+| `opencorvus pr`                 | PR 辅助命令                                              |
+| `opencorvus session`            | session 管理                                             |
+| `opencorvus stats`              | 统计信息                                                 |
+| `opencorvus upgrade`            | 升级自身                                                 |
+| `opencorvus uninstall`          | 卸载                                                     |
+
+任何命令都可以带 `--help` 查看精确参数。
+
+## 退出码
+
+CLI 在 fatal runtime error 时设置退出码 `1`。成功运行退出码为 `0`；中断进程使用运行时的 signal 行为。
+
+> 早期草案规划过专门的配置错误和任务失败退出码；当前 CLI 未实现这些专用退出码。
+
+## Shell 补全
+
+```bash
+opencorvus completion > opencorvus-completion.sh
+```

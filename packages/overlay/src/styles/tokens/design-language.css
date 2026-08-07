@@ -1,0 +1,339 @@
+:root {
+  /* Radius scale — 5 tokens, single source. Any value outside this set is
+   * rejected by `radius-token-coverage.test.ts`. The legacy
+   * `--oc-radius-panel`, `--oc-radius-card`, `--oc-radius-control`,
+   * `--radius`, `--radius-lg`, `--panel-radius`, `--card-radius`,
+   * `--section-corner`, `--oc-button-radius`, `--oc-titlebar-status-radius`
+   * were retired here on 2026-05-04 (flat-redesign Step 1) — see
+   * deleted overlay flat redesign plan and the migration script
+   * `packages/overlay/script/migrate-flat-redesign-step1.ts`. */
+  --oc-radius-none: 0;
+  --oc-radius-soft: calc(8px * var(--ui-scale, 1));
+  --oc-radius-large: calc(12px * var(--ui-scale, 1));
+  --oc-radius-xl: calc(24px * var(--ui-scale, 1));
+  --oc-radius-pill: 999px;
+
+  /* Font-weight scale — 3 tokens, single source.
+   *
+   * Step 5 v3 (2026-05-04): the 2-token plan (body / strong) was
+   * extended to 3 (body / medium / strong) when the migration audit
+   * found ~16 callsites that had a meaningful subtle-emphasis weight
+   * (5xx tier) — folding them into body would lose the visual
+   * hierarchy on meta labels and soft section headings, while folding
+   * them into strong would re-create the "通篇粗体" complaint the
+   * scale was meant to solve. Three tokens land the Pareto cut.
+   *
+   * Mapping: 400 → body, 500 → medium, 600/620/650/680 → strong,
+   * 700/720/760/780/bold → strong (down-tier the heaviest weights so
+   * the overlay reads calm, not shouty). Surface declarations consume
+   * these semantic tokens instead of literal weights. */
+  --ui-font-weight-body: 400;
+  --ui-font-weight-medium: 500;
+  --ui-font-weight-strong: 600;
+
+  /* OC means OpenCorvus. Text actions use the compact Codex button rhythm
+   * without coupling form fields or circular icon controls to that height. */
+  --oc-density-button-height: calc(28px * var(--ui-scale, 1));
+  --oc-density-control-height: calc(32px * var(--ui-scale, 1));
+  --oc-density-icon-button: calc(32px * var(--ui-scale, 1));
+  --oc-density-chip-height: calc(24px * var(--ui-scale, 1));
+  --oc-density-navigation-row: calc(26px * var(--ui-scale, 1));
+  --oc-border-width: 1px;
+
+  /* Motion scale — transition tokens plus named animation cycle tokens.
+   * Step 8a (2026-05-04) established the transition scale; Batch 8
+   * (2026-05-07) adds animation cycle durations so surfaces do not carry
+   * per-file timing literals.
+   *
+   * fast = hover/press feedback; base = default state transitions
+   * (color/background/border/opacity); slow = visible layout/transform
+   * shifts (width/translate). timing is always `ease` — no cubic-bezier
+   * noise. Animation loop tokens are named by the visible motion role
+   * because spinner, pulse, progress, and shimmer cycles do not share a
+   * single interaction scale. Any value outside this set is rejected by
+   * `flat-redesign-motion-coverage.test.ts`. */
+  --ui-duration-instant: 0s;
+  --ui-duration-fast: 80ms;
+  --ui-duration-base: 120ms;
+  --ui-duration-slow: 200ms;
+  --ui-duration-loop-agent-spin: 0.7s;
+  --ui-duration-loop-spin: 0.8s;
+  --ui-duration-loop-notification-spin: 0.9s;
+  --ui-duration-loop-provider-refresh-spin: 1s;
+  --ui-duration-loop-progress: 1.1s;
+  --ui-duration-loop-connection-pulse: 1.4s;
+  --ui-duration-loop-pulse: 1.6s;
+  --ui-duration-loop-skeleton-shimmer: 1.6s;
+  --ui-duration-loop-tool-wave: 6.8s;
+  --ui-timing-standard: ease;
+
+  /* Elevation scale — 9 z-index tokens. Step 8a (2026-05-04).
+   * Named by stacking *role*, not numeric magnitude. Elements in the
+   * same role should not visually overlap; only cross-role layering
+   * uses z-index. Surface declarations consume these named roles instead
+   * of literal stacking values. */
+  --ui-z-below: -1;
+  --ui-z-base: 0;
+  --ui-z-decoration: 1;
+  --ui-z-raised: 2;
+  --ui-z-sticky: 10;
+  --ui-z-overlay: 100;
+  --ui-z-titlebar: 9000;
+  --ui-z-dialog: 10000;
+  --ui-z-toast: 12000;
+
+  /* Opacity scale — 6 semantic tokens. Step 8a (2026-05-04).
+   * Named by the element's *presence* relative to its parent, not
+   * numeric value. The legacy `--oc-disabled-opacity: 0.55` was
+   * renamed to `--ui-opacity-disabled` (rule 8 single source — no
+   * backward alias). Surface declarations route opacity through these
+   * semantic presence levels instead of literal values. */
+  --ui-opacity-hidden: 0;
+  --ui-opacity-faint: 0.4;
+  --ui-opacity-disabled: 0.55;
+  --ui-opacity-dim: 0.7;
+  --ui-opacity-subtle: 0.85;
+  --ui-opacity-full: 1;
+
+  /* Letter-spacing — semantic tightness levels. */
+  --ui-letter-spacing-tight: -0.01em;
+  --ui-letter-spacing-normal: 0;
+  --ui-letter-spacing-loose: 0.04em;
+
+  /* Responsive breakpoints (px literals retained in @media rules).
+   * Browsers do not support var() in media query conditions without a
+   * custom-media transform, so surface styles cite these token names in
+   * breakpoint comments and keep the matching px values in place. */
+  --ui-breakpoint-sm: 520px;
+  --ui-breakpoint-md: 760px;
+  --ui-breakpoint-lg: 900px;
+  --ui-breakpoint-xl: 1200px;
+  --oc-header-height: calc(40px * var(--ui-scale, 1));
+  --oc-header-padding-x: calc(6px * var(--ui-scale, 1));
+  --oc-header-padding-y: 0;
+  --oc-header-gap: calc(6px * var(--ui-scale, 1));
+  --oc-header-title-font: 550 var(--ui-font-title, 12px) var(--font, sans-serif);
+  --oc-header-title-line-height: 1;
+  --oc-header-title-letter-spacing: 0;
+  --oc-header-title-transform: none;
+  --oc-header-border: 0 solid transparent;
+  --oc-header-shadow: none;
+  --oc-titlebar-gap: calc(2px * var(--ui-scale, 1));
+  --oc-titlebar-cluster-gap: calc(6px * var(--ui-scale, 1));
+  --oc-titlebar-navigation-gap: calc(4px * var(--ui-scale, 1));
+  --oc-titlebar-menu-gap: calc(3px * var(--ui-scale, 1));
+  --oc-titlebar-menu-padding-x: calc(6px * var(--ui-scale, 1));
+  --oc-titlebar-macos-controls-inset: 78px;
+  --oc-icon-size-compact: calc(12px * var(--ui-scale, 1));
+  --oc-icon-size-standard: calc(14px * var(--ui-scale, 1));
+  --oc-icon-size-medium: calc(16px * var(--ui-scale, 1));
+  --oc-icon-size-large: calc(20px * var(--ui-scale, 1));
+  --oc-icon-size-display: calc(40px * var(--ui-scale, 1));
+  --oc-icon-size: var(--oc-icon-size-standard);
+  --oc-control-shadow: none;
+
+  /* Structural layout tokens — non-themed physical constants. Moved
+   * here 2026-05-04 (theme-architecture Step 0) from cascade/dark.css's
+   * `:root, body[data-theme="dark"]` block, which used to be the
+   * implicit dark fallback for any token light/vscode-dark forgot to
+   * redeclare. Lifting these to :root scope retires the leak —
+   * `cascade/*.css` now hold *only* palette tokens scoped to specific
+   * `body[data-theme="..."]` selectors.
+   *
+   * Font families, font sizes, title/subhead weight + tracking, and
+   * the panel/rail layout dimensions are theme-independent (zh-CN
+   * vs en-US copy might want different sizes, but that's a locale
+   * concern, not a theme concern). */
+  /* SC means Simplified Chinese. The paired families compose Latin and Chinese
+   * glyph coverage from locally packaged WOFF2 (Web Open Font Format 2) assets. */
+  --font: "Geist Variable", "Noto Sans SC Variable";
+  --mono: "JetBrains Mono Variable", "Noto Sans SC Variable";
+
+  /* `--title-weight / --title-track / --subhead-weight / --subhead-track`
+   * thin aliases were retired 2026-05-04 (Step 5 v3) — they redirected
+   * to canonical tokens with no extra value (rule 8 single source).
+   * Consumers now reference `--ui-font-weight-strong` and `0`/literal
+   * tracking directly. */
+
+  /* Typography scale — 4-tier hierarchy: display > heading > title >= body.
+   * Restores visual structure after iter48 capped all four to 12px
+   * (2026-05-03 feedback superseded by 2026-05-04 reference design request).
+   * Raised 2026-07-08 to a Codex app style 14px body baseline without
+   * changing layout density tokens or --ui-scale.
+   * display: major empty-state headings, onboarding copy.
+   * heading: panel / section titles, dialog headers.
+   * title:   card titles, sidebar item titles, menu items.
+   * body:    body text, message content. */
+  --ui-font-display: calc(32px * var(--ui-scale));
+  --ui-font-heading: calc(20px * var(--ui-scale));
+  --ui-font-title: calc(15px * var(--ui-scale));
+  --ui-font-brand: calc(18px * var(--ui-scale));
+  --ui-font-body: calc(14px * var(--ui-scale));
+  --ui-font-control: calc(14px * var(--ui-scale));
+  --ui-font-compact-row: calc(var(--ui-font-control) - calc(1px * var(--ui-scale)));
+  --ui-font-meta: calc(12px * var(--ui-scale));
+  --ui-font-small: calc(12px * var(--ui-scale));
+  --ui-font-tiny: calc(11px * var(--ui-scale));
+  --ui-font-code: calc(13px * var(--ui-scale));
+  --ui-font-navigation: var(--ui-font-body);
+  --ui-line-height-tight: 1.35;
+
+  --ui-titlebar-height: calc(36px * var(--ui-scale));
+  --ui-panel-header-height: calc(40px * var(--ui-scale));
+  --ui-workspace-contextbar-height: var(--ui-panel-header-height);
+  /* UI (User Interface) Workbench contour uses wider low-alpha coverage so
+     its diagonal stays continuous at fractional desktop display scales while
+     retaining the perceived weight of the shared one-pixel border. */
+  --ui-workspace-contour:
+    calc(1.5px * var(--ui-scale)) solid
+      color-mix(in srgb, var(--border-strong) 68%, transparent);
+  --ui-header-control-height: var(--oc-density-icon-button);
+  --ui-panel-padding-x: calc(10px * var(--ui-scale));
+  --ui-panel-padding-y: calc(8px * var(--ui-scale));
+  --ui-capsule-height: calc(32px * var(--ui-scale));
+  --ui-resizer-width: 1px;
+  --ui-collapsed-pane-width: var(--oc-header-height);
+  /* One hierarchy contract owns the left Dock's section, top-level row,
+     and repeated tree-depth axes. The runtime-measured scrollbar gutter
+     stays truthful when hosts expose no left-rail scrollbar chrome. */
+  --ui-left-rail-body-inline-inset: calc(8px * var(--ui-scale));
+  --ui-left-rail-section-inline-inset: calc(10px * var(--ui-scale));
+  --ui-left-rail-row-control-inline-inset: calc(8px * var(--ui-scale));
+  --ui-left-rail-row-icon-track: calc(18px * var(--ui-scale));
+  --ui-left-rail-row-label-gap: calc(8px * var(--ui-scale));
+  --ui-left-rail-tree-depth: calc(20px * var(--ui-scale));
+  --ui-left-rail-nav-icon-inset: calc(
+    var(--ui-left-rail-body-inline-inset) + var(--ui-left-rail-section-inline-inset) +
+      var(--ui-left-rail-row-control-inline-inset)
+  );
+  --ui-left-rail-project-action-size: calc(20px * var(--ui-scale));
+  --ui-left-rail-project-action-half-size: calc(10px * var(--ui-scale));
+  --ui-left-rail-project-action-center-inset: calc(
+    var(--ui-left-rail-body-inline-inset) + var(--ui-left-rail-section-inline-inset) +
+      var(--ui-left-rail-scrollbar-gutter-x) + var(--ui-left-rail-project-action-half-size)
+  );
+  --oc-brand-claude-code: #d97757;
+  --oc-brand-gemini: #8e75b2;
+
+  --ui-rail-width: clamp(calc(280px * var(--ui-scale)), 18cqw, calc(336px * var(--ui-scale)));
+  --ui-rail-min-width: calc(280px * var(--ui-scale));
+  --ui-sidebar-width: var(--ui-rail-width);
+  --ui-chat-priority-width: calc(640px * var(--ui-scale));
+  --ui-chat-min-width: calc(500px * var(--ui-scale));
+  --ui-chat-header-padding-x: calc(16px * var(--ui-scale));
+  --ui-workbench-panel-min-width: calc(280px * var(--ui-scale));
+  --ui-runtime-environment-panel-width: calc(300px * var(--ui-scale));
+  --ui-runtime-environment-anchor-shift: calc(var(--ui-header-control-height) + var(--oc-header-gap));
+  --ui-runtime-environment-chat-clearance: calc(
+    var(--ui-runtime-environment-panel-width) + var(--ui-chat-header-padding-x)
+  );
+  --ui-right-dock-max-width: calc(960px * var(--ui-scale));
+  --ui-right-dock-tab-preferred-width: calc(176px * var(--ui-scale));
+  --ui-right-dock-tab-min-width: calc(72px * var(--ui-scale));
+
+  /* Theme swatch previews: the titlebar theme-picker shows a 12x12 chip
+     for each available theme. These previews are metadata about *other*
+     themes, not the active one, so the gradients are deliberately fixed
+     hex literals routed through tokens instead of palette tokens. */
+  --oc-theme-swatch-dark: linear-gradient(135deg, #1a1b1e 50%, #26282c 50%);
+  --oc-theme-swatch-light: linear-gradient(135deg, #f2f2f2 50%, #ffffff 50%);
+  --oc-theme-swatch-vscode-dark: linear-gradient(135deg, #1e1e1e 50%, #252526 50%);
+  --oc-theme-swatch-system: linear-gradient(135deg, #1a1b1e 50%, #f2f2f2 50%);
+
+  /* Agent stage palette. Each pipeline stage carries a stable identity
+     hue so users can spot which agent emitted a card in a long log:
+     goal=violet, architect=teal, planner=cobalt, executor=amber.
+     The default fallback is the same cobalt as planner.
+     The hues are intentional metadata, not theme-
+     adaptive: stage identity must read the same in every overlay
+     theme so muscle memory stays portable. Surfaces consume these
+     through color-mix() with the alpha they need; raw alpha values
+     do not belong in design-language. */
+  --oc-stage-default: #6eb7ff;
+  --oc-stage-goal: #8c6edc;
+  --oc-stage-architect: #50aaa0;
+  --oc-stage-planner: #64a0dc;
+  --oc-stage-executor: #e68c32;
+}
+
+/* Theme-wired tokens MUST live at body scope, not :root. CSS custom
+ * properties resolve `var()` references at the scope where they are
+ * declared — declaring `--oc-control-bg: var(--surface-inset)` at
+ * `:root` freezes the value to whatever `--surface-inset` is on
+ * `:root` (the dark default), and `body[data-theme="light"]`
+ * overriding `--surface-inset` on `body` does NOT update the
+ * already-resolved `--oc-control-bg` that `:root` exported. Putting
+ * these declarations on `body` makes the indirection resolve at
+ * body scope, where the active `data-theme` palette is in effect.
+ *
+ * Bug fix history: discovered 2026-05-04 when the cwd dropdown's
+ * `--oc-control-bg` rendered as the dark navy `rgba(20, 24, 44,
+ * 0.92)` in light + vscode-dark themes despite `--surface-inset`
+ * being theme-correct on body. The `:root`-scoped indirection was
+ * the cause. */
+body {
+  /* Interaction washes — the single source for hover/selected feedback on
+   * ghost chrome. Derived from --text-strong so the wash always moves the
+   * fill *toward* the text color: darker on light themes, lighter on dark
+   * themes, regardless of which surface the control sits on. Solid
+   * --surface-hover stays reserved for opaque hover surfaces guaranteed
+   * to sit on --surface (menus, option lists); anything resting on the
+   * rail/bg must use the wash so hover never reads brighter than its own
+   * background. */
+  --hover-wash: color-mix(in srgb, var(--text-strong) 6%, transparent);
+  --selected-wash: color-mix(in srgb, var(--text-strong) 9%, transparent);
+  --ui-list-hover-bg: color-mix(in srgb, var(--text-strong) 7%, transparent);
+  --ui-list-selected-bg: color-mix(in srgb, var(--accent) 12%, transparent);
+  --ui-list-selected-hover-bg: color-mix(in srgb, var(--accent) 16%, transparent);
+  --ui-list-danger-hover-bg: color-mix(in srgb, var(--bad) 10%, transparent);
+
+  --oc-control-bg: var(--surface-inset);
+  --oc-control-bg-hover: var(--surface-hover);
+  --oc-control-border: var(--border);
+  --oc-control-border-hover: var(--border-hover);
+  --oc-control-focus-ring: color-mix(in srgb, var(--accent) 18%, transparent);
+  --surface-elevated: var(--surface-strong);
+  --oc-header-bg: var(--surface-strong);
+  --oc-titlebar-menu-text: var(--text-strong);
+
+  /* Native form-control tint (checkbox / radio / range / progress / select
+   * indeterminate stripes). Single source of truth — surface CSS used to
+   * sprinkle `accent-color: var(--accent)` per-component (field.css,
+   * settings.css, titlebar.css), each one a copy of the same intent
+   * (rule 9). One declaration here covers every native control without
+   * the per-surface dance. */
+  accent-color: var(--accent);
+
+  /* Diff palette derived from the active theme's accent/bad/good
+   * + text-strong tokens. Previously declared at :root in styles.css,
+   * which froze them to the dark-default values; light + vscode-dark
+   * never picked up their own palette. Body scope re-resolves the
+   * var() chain per theme. */
+  --diff-add-fg: color-mix(in srgb, var(--accent) 58%, var(--text-strong) 42%);
+  --diff-add-bg: color-mix(in srgb, var(--accent) 12%, transparent);
+  --diff-add-border: color-mix(in srgb, var(--accent) 22%, transparent);
+  --diff-del-fg: color-mix(in srgb, var(--bad) 58%, var(--text-strong) 42%);
+  --diff-del-bg: color-mix(in srgb, var(--bad) 10%, transparent);
+  --diff-del-border: color-mix(in srgb, var(--bad) 22%, transparent);
+  --diff-add-row-bg: color-mix(in srgb, var(--good) 9%, transparent);
+  --diff-del-row-bg: color-mix(in srgb, var(--bad) 10%, transparent);
+
+  /* Step 7 (2026-05-04): the legacy `--ok / --warning / --danger /
+   * --text-dim` body-scope aliases were retired here — zero
+   * consumers across the codebase (verified by full grep). They were
+   * single-redirect aliases for `--good / --warn / --bad /
+   * --text-muted`; consumers reference the canonical tokens directly.
+   *
+   * Theme-architecture Step 0 (2026-05-04): the body-scope patches
+   * for `--accent-shadow` and `--accent-glow` were retired (rule 8 —
+   * no double source). The old guide-card token family was removed
+   * entirely when the titlebar guide moved onto canonical popup tokens
+   * instead of a one-off card surface. */
+}
+
+body:is([data-theme="dark"], [data-theme="vscode-dark"]) {
+  --ui-list-hover-bg: color-mix(in srgb, var(--text-strong) 9%, transparent);
+  --ui-list-selected-bg: color-mix(in srgb, var(--accent) 20%, transparent);
+  --ui-list-selected-hover-bg: color-mix(in srgb, var(--accent) 26%, transparent);
+  --ui-list-danger-hover-bg: color-mix(in srgb, var(--bad) 16%, transparent);
+}

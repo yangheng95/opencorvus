@@ -1,0 +1,103 @@
+---
+title: Plugins（插件）
+description: 用 TypeScript 编写插件，hook 进 OpenCorvus 的服务、认证、LLM 请求与运行时集成。
+---
+
+Plugin 是 OpenCorvus 的进程级扩展机制。与 Skill（通过 `skill` 工具显式加载 Markdown 工作流）不同，Plugin 是 TypeScript/JavaScript 代码，可在运行时 hook 进核心事件链、提供服务或认证、修改 LLM 请求参数，并拦截真实的命令和工具执行 hook。Agent 可执行工具属于 active [专家团 package](../agents/)，不由 Plugin 注册。
+
+源码：`packages/opencorvus/src/plugin/index.ts`、`packages/plugin/src/index.ts`（接口）
+
+## 1. Plugin vs Skill
+
+| 维度 | Skill                       | Plugin                                            |
+| ---- | --------------------------- | ------------------------------------------------- |
+| 实现 | Markdown + YAML             | TypeScript/JavaScript 模块                        |
+| 加载 | agent 调用 `skill` 工具加载 | 服务启动时，全局常驻                              |
+| 能力 | 给 agent 提供可加载工作流   | hook LLM 请求 / 提供服务 / 拦截事件 / 扩展 review |
+| 门槛 | 零代码                      | 实现 `Plugin` 函数接口                            |
+
+## 2. 默认插件
+
+### Provider Auth（内部）
+
+Provider Auth 插件编译进运行时（`src/plugin/index.ts`）。GitLab 与 Poe 分别静态导入上游 `opencode-gitlab-auth`、`opencode-poe-auth` 包；OpenAI Codex、GitHub Copilot、Cloudflare、Azure、DigitalOcean、Snowflake Cortex 与 xAI 使用仓库内已同步实现。它们不是用户 `plugin` 配置项。
+
+第三方 npm 插件只在 `plugin` 配置数组中显式声明后加载。
+
+Plugin 是显式信任的进程内可执行扩展，不是 sandbox。安装、模块加载、配置和 service 注册必须在项目启动阶段全部成功。后续 hook 失败会让触发它的 LLM、命令、工具或事件操作失败；OpenCorvus 不会继续消费未修改或部分修改的结果。
+
+## 3. 加载流程
+
+`Plugin.state()`（`src/plugin/index.ts`）：
+
+1. 加载 `INTERNAL_PLUGINS`（内置 Provider Auth）
+2. 合并 config 的 `plugin` 数组，逐项：
+   - `file://` 前缀 → 直接 `import()`
+   - 否则 → `BunProc.install(pkg, version)` 后 `import()`
+3. 对每个导出的 Plugin 函数，调用 `fn(ctx)` 得到 `Hooks` 对象推入全局 hooks
+
+```typescript
+// packages/plugin/src/index.ts
+export type Plugin = (input: PluginInput) => Promise<Hooks>
+```
+
+## 4. 编写自己的 Plugin
+
+```bash
+bun add @opencorvus-ai/plugin
+```
+
+```typescript
+// my-plugin.ts
+import { Plugin } from "@opencorvus-ai/plugin"
+
+export const MyPlugin: Plugin = async (ctx) => {
+  return {
+    "chat.params": async (_input, output) => {
+      output.temperature = 0.3
+    },
+    "tool.execute.before": async (input) => {
+      console.info(`即将运行 ${input.tool}`)
+    },
+  }
+}
+```
+
+## 5. 全部 Hooks
+
+完整列表见 `packages/plugin/src/index.ts`。常用：
+
+| Hook                                 | 时机                       |
+| ------------------------------------ | -------------------------- |
+| `event`                              | 任意 Bus 事件发布          |
+| `config`                             | 配置加载后                 |
+| `auth`                               | provider 认证扩展          |
+| `chat.message`                       | 收到新消息                 |
+| `chat.params`                        | LLM 请求参数构建后、发送前 |
+| `chat.headers`                       | LLM HTTP 头构建后          |
+| `shell.env`                          | shell 命令前注入 env       |
+| `tool.execute.before`                | 工具执行前（可改 args）    |
+| `tool.execute.after`                 | 工具执行后（可改输出）     |
+| `tool.definition`                    | 工具定义发给 LLM 前        |
+| `experimental.chat.system.transform` | system prompt 构建后       |
+
+## 6. 在 config 中声明
+
+```jsonc
+{
+  "plugin": ["my-npm-plugin@1.0.0", "file:///path/to/my-plugin.ts"],
+}
+```
+
+或把插件文件放在 `.opencorvus/plugin/` 目录（`*.ts` / `*.js`），自动发现（`src/config/config.ts`）。
+
+## 7. Plugin、Provider 与投影 Agent
+
+Plugin 不直接替换 Provider、投影 Agent 或 active expert-squad 工具投影，但可通过：
+
+- `auth` hook — 为特定 Provider 实现自定义认证
+- `chat.headers` / `chat.params` — 请求前修改参数
+- `event` — 接收真实 Bus 事件
+- `shell.env` 与 tool interception hooks — 修改运行环境或工具调用
+
+Agent 身份和 capability 由 active expert-squad 投影决定，Plugin 不干预。

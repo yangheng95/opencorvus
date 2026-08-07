@@ -1,0 +1,178 @@
+---
+title: GitHub Action
+description: 通过 GitHub 评论、Issue 或 PR 事件、定时任务和手动工作流触发 AI 编码代理。
+---
+
+OpenCorvus GitHub Action 会从支持的 GitHub 事件触发 AI 编码代理，包括评论、Issue 或 PR 生命周期事件、定时任务和手动工作流。
+
+源码：`github/action.yml`（Action 定义）、`packages/opencorvus/src/cli/cmd/github.ts`（运行时）。
+
+## 定位
+
+以 **composite action** 发布。核心流程：
+
+1. 为 runner 设置 Bun。
+2. 直接运行仓库源码入口：`bun "$GITHUB_ACTION_PATH/../packages/opencorvus/src/index.ts" github run`。
+3. 解析 GitHub 事件 payload，打开目标项目、创建 session，并在进程内调用 `SessionPrompt.prompt`。
+4. 结果经 Octokit 写回 Issue/PR 评论；代码有变动时自动 commit、push、开 PR。
+
+支持触发事件（`packages/opencorvus/src/cli/cmd/github.ts`）：
+
+- `issue_comment` — Issue 评论、PR 评论（通过 `issue.pull_request` 区分）
+- `pull_request_review_comment` — PR "Files" 标签页的行级 review 评论
+- `issues` — Issue 生命周期事件
+- `pull_request` — PR 生命周期事件
+- `schedule` — 定时仓库自动化
+- `workflow_dispatch` — 手动触发的仓库自动化
+
+评论触发会从 GitHub 评论里读取 `/opencorvus` 或 `/oc` 请求。`issues`、`schedule` 和 `workflow_dispatch` 必须配置 `prompt` 输入，因为这些 payload 没有评论正文。
+
+## 输入参数
+
+| 参数               | 必填 | 默认                        | 说明                                            |
+| ------------------ | ---- | --------------------------- | ----------------------------------------------- |
+| `model`            | ✓    | —                           | `provider/model`，如 `alibaba-coding-plan-cn/qwen3.5-plus` |
+| `share`            | —    | 公开仓库 `true`             | 是否共享到 `opencorvus.ai/s/<id>`               |
+| `prompt`           | —    | —                           | 自定义 prompt，覆盖默认行为                     |
+| `mentions`         | —    | `/opencorvus,/oc`           | 触发短语（逗号分隔，大小写不敏感）              |
+| `variant`          | —    | —                           | provider 推理等级（`high` / `max` / `minimal`） |
+| `oidc_base_url`    | —    | `https://api.opencorvus.ai` | 自定义 App 安装时的 OIDC 换 token 接口          |
+
+（`github/action.yml`）
+
+## 产物
+
+Action 无 `outputs:` 字段。运行期产物：
+
+- **评论更新**：立即创建 `[Working...](<run-url>)` 占位评论，完成后替换为 AI 回复
+- **代码提交**：工作树脏 → 自动 commit + push；author=`opencorvus-agent[bot]`，co-author=触发用户
+- **PR 创建**：Issue 场景下有代码变更时自动开 PR，title=AI 摘要（≤40 字符），body 含 `Closes #<issue>`
+- **共享链接**（可选）：附 `opencorvus.ai/s/<shareId>`
+
+（`packages/opencorvus/src/cli/cmd/github.ts`）
+
+## Secrets 配置
+
+### OpenCorvus GitHub App
+
+需 `id-token: write`。Action 通过 OIDC 自动换 App Token，不要手动接入仓库 token。
+
+只需 LLM key：
+
+```yaml
+env:
+  ALIBABA_CODING_PLAN_API_KEY: ${{ secrets.ALIBABA_CODING_PLAN_API_KEY }}
+```
+
+## Workflow 权限
+
+默认 App/OIDC 安装保持仓库 token 只读。写权限来自 OIDC 换到的 App Token：
+
+```yaml
+permissions:
+  id-token: write # OIDC
+  contents: read
+  pull-requests: read
+  issues: read
+```
+
+本仓库 `.github/workflows/opencorvus.yml` 实际只声明 read 权限，因为写权限由 App Token 携带。
+
+## 权限校验
+
+用户发 `/oc` 时校验其仓库权限必须为 `admin` 或 `write`；失败拒绝执行。
+
+## 完整 workflow 示例
+
+### 评论触发
+
+```yaml
+name: opencorvus
+on:
+  issue_comment: { types: [created] }
+  pull_request_review_comment: { types: [created] }
+jobs:
+  opencorvus:
+    if: |
+      contains(github.event.comment.body, ' /oc') ||
+      startsWith(github.event.comment.body, '/oc') ||
+      contains(github.event.comment.body, ' /opencorvus') ||
+      startsWith(github.event.comment.body, '/opencorvus')
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: read
+      issues: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: yangheng95/opencorvus/github@latest
+        env:
+          ALIBABA_CODING_PLAN_API_KEY: ${{ secrets.ALIBABA_CODING_PLAN_API_KEY }}
+          OPENCORVUS_PERMISSION: '{"bash": "deny"}'
+        with:
+          model: alibaba-coding-plan-cn/qwen3.5-plus
+```
+
+### 仓库事件
+
+```yaml
+name: opencorvus-repository
+on:
+  issues: { types: [opened, reopened] }
+  pull_request: { types: [opened, synchronize, reopened, ready_for_review] }
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch: {}
+jobs:
+  opencorvus:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: read
+      issues: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: yangheng95/opencorvus/github@latest
+        env:
+          ALIBABA_CODING_PLAN_API_KEY: ${{ secrets.ALIBABA_CODING_PLAN_API_KEY }}
+          OPENCORVUS_PERMISSION: '{"bash": "deny"}'
+        with:
+          model: alibaba-coding-plan-cn/qwen3.5-plus
+          prompt: 根据触发的 Issue、PR、定时任务或手动工作流维护这个仓库。
+```
+
+## 使用示例
+
+| 评论                                      | 效果                              |
+| ----------------------------------------- | --------------------------------- |
+| `/opencorvus explain this issue`          | 阅读 Issue 线程，回复解释         |
+| `/opencorvus fix this`                    | 新分支、实现、开 PR               |
+| `/oc`（PR 评论）                          | 对当前 PR 做 review               |
+| `/oc add error handling here`（行级评论） | 在指定行位置添加错误处理并 commit |
+
+## 代码流转
+
+```
+issue_comment / pull_request_review_comment / issues / pull_request / schedule / workflow_dispatch
+  ├─ isPullRequest()
+  │  ├─ 同仓库 PR → checkoutLocalBranch → chat → pushToLocalBranch
+  │  └─ Fork PR   → checkoutForkBranch  → chat → pushToForkBranch
+  ├─ Issue → checkoutNewBranch → chat → pushToNewBranch → createPR
+  └─ 仓库自动化 → checkoutNewBranch → chat → pushToNewBranch
+```
+
+（`packages/opencorvus/src/cli/cmd/github.ts`）
+
+## 本地调试
+
+```bash
+bun test packages/opencorvus/test/cli/github-action-run.test.ts
+```
+
+仓库测试会模拟 event payload，并继续走与发布 Action 相同的 OIDC App Token 交换路径。

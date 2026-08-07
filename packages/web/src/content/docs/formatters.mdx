@@ -1,0 +1,50 @@
+---
+title: Formatters
+description: How OpenCorvus auto-formats code touched by the agent.
+---
+
+OpenCorvus auto-formats files the agent writes or edits, using the formatter that matches the file's language and the project's configuration. Implementation: `packages/opencorvus/src/format/`.
+
+## Built-in detection
+
+OpenCorvus detects formatters by inspecting the project's tooling:
+
+| Formatter      | Trigger                                                                 |
+| -------------- | ----------------------------------------------------------------------- |
+| `prettier`     | `prettier` in `package.json` deps or `.prettierrc*` config present      |
+| `gofmt`        | `*.go` files in repo                                                    |
+| `rustfmt`      | `Cargo.toml` present                                                    |
+| `black`        | `pyproject.toml` with `tool.black` or `requirements*.txt` lists `black` |
+| Project script | `package.json` `format` / `lint:fix` scripts                            |
+
+The exact registry is in `packages/opencorvus/src/format/formatter.ts`.
+
+## Configuration
+
+Override or extend in [config](../config/) under `formatter`:
+
+```jsonc
+{
+  "formatter": {
+    "prettier": { "disabled": true },
+    "custom-prettier": {
+      "command": ["npx", "prettier", "--write", "$FILE"],
+      "environment": { "NODE_ENV": "development" },
+      "extensions": [".js", ".ts", ".jsx", ".tsx"],
+    },
+  },
+}
+```
+
+- `disabled` — turn off a built-in formatter.
+- `command` — argv list; `$FILE` is replaced with the path.
+- `environment` — extra env vars for the formatter process.
+- `extensions` — file suffixes that trigger this formatter.
+
+## When formatters run
+
+Formatters run **after** a successful `write` / `edit` / `apply_patch` tool call and before the step result is recorded. Failures fall through with a warning — they do not block the agent.
+
+## Disabling all formatting
+
+Set every relevant formatter to `disabled: true`, or remove its trigger (e.g., delete `.prettierrc*`). There is no global "disable formatters" switch.

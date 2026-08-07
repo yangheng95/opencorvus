@@ -1,0 +1,67 @@
+---
+title: 服务器
+description: OpenCorvus HTTP 服务器运行时、路由模块与集成接口。
+---
+
+`opencorvus serve` 启动 OpenCorvus HTTP API 服务器，是 [SDK](../sdk/)、Overlay UI、[ACP](../acp/) 桥与外部集成（GitHub Action、channel runtime 等）的底层基础。
+
+源码：`packages/opencorvus/src/server/`。
+
+## 启动
+
+```bash
+opencorvus serve --hostname 127.0.0.1 --port 7878
+```
+
+完整 flag 见 [CLI](../cli/)。绑定非 loopback 且需要保护 API 时设置 `OPENCORVUS_SERVER_PASSWORD`。
+
+## 架构
+
+- `server.ts` — HTTP 入口，挂载所有路由模块
+- `defaults.ts` — 默认端口、主机和 server URL 规则
+- `event.ts` — SSE 事件多路复用
+- `mdns.ts` — 可选 mDNS 服务发现
+- `overlay-ui.ts` — 在 `/ui/` 提供 Overlay UI 静态资源
+- `in-process-client.ts` — `opencorvus acp` 用的进程内 SDK client
+- `shutdown.ts` — 优雅关停 hook
+
+## 路由模块
+
+大多数 HTTP 路由分散在 `packages/opencorvus/src/server/routes/` 的多个聚焦模块中：
+
+| 模块                 | 模块                      | 模块                            |
+| -------------------- | ------------------------- | ------------------------------- |
+| `app.ts`             | `attachment.ts`           | `auth.ts`                       |
+| `browser-preview.ts` | `channel.ts`              | `coding.ts`                     |
+| `config.ts`          | `control.ts`              | `conversation-capability.ts`    |
+| `documentation.ts`   | `experimental.ts`         | `expert-squad.ts`               |
+| `export.ts`          | `file.ts`                 | `gateway.ts`                    |
+| `global.ts`          | `interactive-artifact.ts` | `mailbox.ts`                    |
+| `mcp.ts`             | `mission-skill.ts`        | `mission.ts`                    |
+| `orchestrator.ts`    | `panel.ts`                | `permission.ts`                 |
+| `plugin.ts`          | `project.ts`              | `provider.ts`                   |
+| `pty.ts`             | `question.ts`             | `right-sidebar-conversation.ts` |
+| `session.ts`         | `skill.ts`                | `terminal.ts`                   |
+| `work-ledger.ts`     |                           |                                 |
+
+每个模块负责一段相关 API（例如 `permission.ts` 暴露 `/permission/*`，`mcp.ts` 暴露 `/mcp/*`）。
+`QuickNoteRoutes` 是挂载在该目录外的功能路由：源码位于 `packages/opencorvus/src/quicknote/routes.ts`，由 `app.ts` 挂载到 `/api/v1/notes`。
+
+## 流式
+
+长事件通过 `/event` 上的 SSE 流式输出。SDK 暴露为 `client.event.subscribe()`。指数退避重连（上限 60s）在客户端实现。
+
+## 认证
+
+设置 `OPENCORVUS_SERVER_PASSWORD` 后，请求必须使用 HTTP Basic Auth。用户名为 `OPENCORVUS_SERVER_USERNAME`，未设置时默认 `opencorvus`；密码为 `OPENCORVUS_SERVER_PASSWORD`。SDK 配置 `password` 后会自动设置 `Authorization` header。
+
+## 嵌入式
+
+```ts
+import { createOpenCorvus } from "@opencorvus-ai/sdk"
+const { client, server } = await createOpenCorvus({ directory: "/path/to/repo" })
+```
+
+进程内随机端口启 server 并返回连接好的 client。无需独立的 `opencorvus serve` 进程时使用。
+
+完整 client 接口见 [SDK](../sdk/)。

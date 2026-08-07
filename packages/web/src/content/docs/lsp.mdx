@@ -1,0 +1,35 @@
+---
+title: LSP servers
+description: OpenCorvus auto-loads language servers for files the agent touches.
+---
+
+OpenCorvus integrates with Language Server Protocol (LSP) servers to give the agent **diagnostics, hovers, and definitions** for code it works on. Implementation: `packages/opencorvus/src/lsp/`.
+
+## How it works
+
+When the agent reads or edits a file, OpenCorvus:
+
+1. Detects the language by file extension (`packages/opencorvus/src/lsp/language.ts`).
+2. Spawns the appropriate language server (`packages/opencorvus/src/lsp/server.ts`).
+3. Reuses the server across subsequent files of the same language.
+4. Surfaces diagnostics via the `lsp` tool so the agent can inspect them.
+
+## Supported languages
+
+The detector ships with mappings for the common languages — TypeScript/JavaScript, Python, Go, Rust, and others — using the standard community LSP servers (e.g. `typescript-language-server`, `gopls`, `rust-analyzer`, `pyright`).
+
+The exact set evolves; check `packages/opencorvus/src/lsp/language.ts` for the current registry.
+
+## When LSP runs
+
+LSP only runs lazily — the first time the agent touches a file in language X, the matching server starts. Idle servers are torn down when the session ends.
+
+## Configuration
+
+LSP servers are auto-discovered. There is no per-language config in `opencorvus.jsonc` today; if a language server is missing on `PATH`, OpenCorvus does not produce semantic LSP diagnostics for that language.
+
+If you need a non-standard server binary, install it on `PATH` under the conventional name; the LSP layer does not currently support arbitrary command paths.
+
+## Relation to formatters
+
+LSP and [formatters](../formatters/) are distinct: LSP gives the agent semantic feedback _before_ a write; formatters run _after_ a write to clean up output style.

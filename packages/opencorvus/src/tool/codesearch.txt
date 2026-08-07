@@ -1,0 +1,15 @@
+- Search and get relevant external programming context using Exa Code API
+- Tool name: `external_code_search`
+- Use this tool for third-party libraries, SDKs, APIs, frameworks, and code that is NOT in the current repository
+- Do NOT use this tool to inspect, search, or verify files, symbols, or behavior that exist in the local repository or workspace
+- Returns comprehensive external code examples, documentation, and API references
+- Optimized for finding programming patterns and solutions outside the current codebase
+
+Usage notes:
+- First search the local repository with `search_code`/read tools when the question is about this project, its files, or its behavior
+- Use this tool only when local code search cannot answer the question because the needed context is external
+  - Adjustable token count (1000-50000) for focused or comprehensive results
+  - Default 5000 tokens provides balanced context for most queries
+  - Use lower values for specific questions, higher values for comprehensive documentation
+  - Supports queries about third-party frameworks, libraries, APIs, and programming concepts
+  - Examples: 'React useState hook examples', 'Python pandas dataframe filtering', 'Express.js middleware'

@@ -1,0 +1,15 @@
+---
+title: QQ Bot
+description: QQ Bot through the official OpenClaw channel plugin.
+---
+
+OpenCorvus uses the published `@openclaw/qqbot` implementation. Provider setup, supported routing, and platform restrictions are documented in the [official OpenClaw QQ Bot guide](https://docs.openclaw.ai/channels/qqbot).
+
+## Environment
+
+```bash
+export QQBOT_APP_ID=...           # required: QQ Bot application ID
+export QQBOT_CLIENT_SECRET=...    # required: QQ Bot client secret
+```
+
+The former `qq` adapter and `QQ_BOT_*` variables no longer exist. `qqbot` is the canonical catalog and runtime identity.

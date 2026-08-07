@@ -1,0 +1,30 @@
+---
+title: Integrity Review
+description: OpenCorvus 如何记录执行、验证、精确 revision review 与 Task completion evidence。
+---
+
+Review evidence 与 physical execution、Task lifecycle 分离。Reviewer 评估精确 current Delivery Slice revisions；只有 Orchestrator 拥有 Task completion decision。
+
+## 当前 review 流程
+
+1. **Execution evidence**：Task-level workflow node 创建 immutable dispatch lineage、execution attempt、真实 Session 与 final assistant-message/terminal-error locator。Host observation 拥有 git、diff、command 与 runtime facts。
+2. **Verification observations**：runtime check、browser capture 与 visual feedback 使用各自 strict Artifact family，并引用精确 execution 与 Slice revision subjects。
+3. **Visual review**：Task 有前端交付面时，Visual Quality Assurance (QA) 复核真实可见产品，但不完成 Task。
+4. **Reviewer artifact**：selected reviewer 对精确 Slice revisions 与 evidence locators 记录 accepted、rejected 或 inconclusive judgment。
+5. **Completion decision**：Orchestrator 追加唯一 Task decision，引用 workflow selection、精确 package revision/digest、accepted current-Slice reviews 与真实 message/evidence locators。
+
+旧 revision review 保留为可见历史，但不能满足新 Goal revision。Physical abort 或 cleanup failure 是 execution evidence，不是 rejection。
+
+## Artifact records
+
+Review path 从 workflow selection、dispatch lineage、execution outcome、Host observations、browser evidence、visual review、reviewer artifacts 与 `task_completion_decision` 等不可变事实重建。不存在 Goal attempt/result/workspace lifecycle aggregate。
+
+## Goal 面板 projection
+
+Goal 面板分别展示 current revision、workflow coverage、live/terminal Sessions、Artifact coverage、reviewer judgment 与 Task settlement。Display value 只读，不能调度工作或完成 Task。
+
+## 下一步
+
+- [架构总览](../../concepts/architecture/)
+- [Task / Delivery Slice 数据模型](../../concepts/delivery-slice-task/)
+- [Benchmark](../../operations/benchmark/)

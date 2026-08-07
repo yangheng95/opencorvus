@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "namespace": "template",
+  "id": "portable-template",
+  "name": "Portable Expert Squad Template",
+  "label": "Portable Expert Squad Template",
+  "description": "Concrete invoice-ledger reconciliation sample for authoring portable OpenCorvus expert squads.",
+  "version": "2026.08.01.2",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Invoice ledger reconciliation authoring sample. Use only after copying, renaming, and specializing the package.",
+    "selection_guidance": "After specializing this sample, select its manifest id only for ledger-to-settlement reconciliation that requires source-row evidence.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": false,
+      "built_in_tool_ids": [
+        "capability_search",
+        "skill",
+        "question",
+        "read_context",
+        "dispatch_agent",
+        "manage_task",
+        "wait",
+        "browser_preview",
+        "bash",
+        "respond_agent_coordination",
+        "cancel_subagent"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [],
+      "default_tool_refs": [],
+      "package_tool_refs": [
+        "portable-template/shared/reconciliation-policy"
+      ],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "ledger-requirements": {
+        "label": "Ledger Requirements Analyst",
+        "description": "Defines source-record, period, currency, tolerance, and close-report requirements.",
+        "base_role": "requirements",
+        "prompt": "agents/ledger-requirements/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "reconciliation-architect": {
+        "label": "Reconciliation Architect",
+        "description": "Designs deterministic matching rules and evidence-preserving reconciliation architecture.",
+        "base_role": "architect",
+        "prompt": "agents/reconciliation-architect/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "primary-reconciliation-builder": {
+        "label": "Primary Reconciliation Builder",
+        "description": "Implements the read-only source comparison and reconciliation result pipeline.",
+        "base_role": "build",
+        "prompt": "agents/primary-reconciliation-builder/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "exception-remediation-builder": {
+        "label": "Exception Remediation Builder",
+        "description": "Implements approved exception classification and auditable remediation outputs.",
+        "base_role": "build",
+        "prompt": "agents/exception-remediation-builder/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "source-evidence-explorer": {
+        "label": "Source Evidence Explorer",
+        "description": "Locates authoritative ledgers, settlement exports, refund records, and existing close evidence.",
+        "base_role": "explore",
+        "prompt": "agents/source-evidence-explorer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "settlement-researcher": {
+        "label": "Settlement Semantics Researcher",
+        "description": "Researches source-system schemas, settlement semantics, refund flows, and audit constraints.",
+        "base_role": "deep-research",
+        "prompt": "agents/settlement-researcher/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "close-integrity-reviewer": {
+        "label": "Close Integrity Reviewer",
+        "description": "Rejects close results that omit evidence, hide exceptions, or change approved rules.",
+        "base_role": "integrity",
+        "prompt": "agents/close-integrity-reviewer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "discrepancy-fact-checker": {
+        "label": "Discrepancy Fact Checker",
+        "description": "Verifies sampled matched and unmatched records against the raw source rows.",
+        "base_role": "fact-check",
+        "prompt": "agents/discrepancy-fact-checker/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "close-workload-planner": {
+        "label": "Close Workload Planner",
+        "description": "Sizes evidence collection, rule definition, implementation, verification, and delivery work.",
+        "base_role": "goal-workload-analyst",
+        "prompt": "agents/close-workload-planner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "delivery": {
+        "label": "Invoice Ledger Reconciliation Delivery",
+        "description": "Evidence-guided invoice ledger reconciliation from source investigation through delivery and independent review.",
+        "nodes": {
+          "ledger-requirements": {
+            "agent_id": "ledger-requirements",
+            "description": "Defines source-record, period, currency, tolerance, and close-report requirements.",
+            "depends_on": [
+              "settlement-researcher",
+              "source-evidence-explorer"
+            ]
+          },
+          "reconciliation-architect": {
+            "agent_id": "reconciliation-architect",
+            "description": "Designs deterministic matching rules and evidence-preserving reconciliation architecture.",
+            "depends_on": [
+              "ledger-requirements"
+            ]
+          },
+          "primary-reconciliation-builder": {
+            "agent_id": "primary-reconciliation-builder",
+            "description": "Implements the read-only source comparison and reconciliation result pipeline.",
+            "depends_on": [
+              "close-workload-planner",
+              "reconciliation-architect"
+            ]
+          },
+          "exception-remediation-builder": {
+            "agent_id": "exception-remediation-builder",
+            "description": "Implements approved exception classification and auditable remediation outputs.",
+            "depends_on": [
+              "close-workload-planner",
+              "reconciliation-architect"
+            ]
+          },
+          "source-evidence-explorer": {
+            "agent_id": "source-evidence-explorer",
+            "description": "Locates authoritative ledgers, settlement exports, refund records, and existing close evidence.",
+            "depends_on": []
+          },
+          "settlement-researcher": {
+            "agent_id": "settlement-researcher",
+            "description": "Researches source-system schemas, settlement semantics, refund flows, and audit constraints.",
+            "depends_on": []
+          },
+          "close-integrity-reviewer": {
+            "agent_id": "close-integrity-reviewer",
+            "description": "Rejects close results that omit evidence, hide exceptions, or change approved rules.",
+            "depends_on": [
+              "exception-remediation-builder",
+              "primary-reconciliation-builder"
+            ]
+          },
+          "discrepancy-fact-checker": {
+            "agent_id": "discrepancy-fact-checker",
+            "description": "Verifies sampled matched and unmatched records against the raw source rows.",
+            "depends_on": [
+              "close-integrity-reviewer",
+              "settlement-researcher"
+            ]
+          },
+          "close-workload-planner": {
+            "agent_id": "close-workload-planner",
+            "description": "Sizes evidence collection, rule definition, implementation, verification, and delivery work.",
+            "depends_on": [
+              "reconciliation-architect"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

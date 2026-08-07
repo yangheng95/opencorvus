@@ -1,0 +1,204 @@
+.oc-select-content {
+  z-index: calc(var(--ui-z-dialog) + 1);
+  overflow: hidden;
+  min-width: calc(120px * var(--ui-scale));
+  max-width: min(calc(360px * var(--ui-scale)), calc(100cqw - (var(--ui-gap-md) * 2)));
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-large);
+  background: var(--menu-panel-bg);
+  color: var(--text-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.oc-select-trigger {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-gap-md);
+  width: 100%;
+  height: var(--oc-density-control-height);
+  padding: 0 var(--ui-gap-md);
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-large);
+  background: var(--surface-strong);
+  color: var(--text-strong);
+  box-shadow: none;
+  font: inherit;
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-body);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--ui-duration-fast) var(--ui-timing-standard),
+    background-color var(--ui-duration-base) var(--ui-timing-standard),
+    box-shadow var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.oc-select-trigger:hover:not([data-disabled]):not(:disabled) {
+  border-color: var(--border-hover);
+  background: var(--surface-hover);
+}
+
+.oc-select-trigger:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 calc(2px * var(--ui-scale)) var(--oc-control-focus-ring);
+}
+
+.oc-select-trigger[data-disabled],
+.oc-select-trigger:disabled {
+  cursor: default;
+  opacity: var(--ui-opacity-disabled);
+}
+
+.oc-select-trigger > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oc-select-listbox {
+  max-height: min(
+    calc(260px * var(--ui-scale)),
+    calc(var(--ui-overlay-shell-height) - var(--oc-density-control-height))
+  );
+  overflow: auto;
+  padding: var(--ui-gap-xs);
+}
+
+.oc-select-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-gap-md);
+  min-height: calc(30px * var(--ui-scale));
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
+  border-radius: var(--oc-radius-soft);
+  color: var(--text-strong);
+  font-size: var(--ui-font-control);
+  line-height: 1.3;
+  cursor: default;
+  transition:
+    background-color var(--ui-duration-base) var(--ui-timing-standard),
+    color var(--ui-duration-base) var(--ui-timing-standard),
+    opacity var(--ui-duration-base) var(--ui-timing-standard);
+}
+
+.oc-select-option small {
+  color: var(--text-soft);
+}
+
+.oc-select-option-copy {
+  display: flex;
+  flex-direction: column;
+  gap: calc(2px * var(--ui-scale));
+  min-width: 0;
+}
+
+.oc-select-option-copy > span,
+.oc-select-option-copy small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oc-select-option[data-selected] {
+  background: var(--ui-list-selected-bg);
+  color: var(--text-strong);
+}
+
+.oc-select-option:not([data-selected]):is([data-highlighted], :hover, :focus-visible) {
+  background: var(--ui-list-hover-bg);
+}
+
+.oc-select-option:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 var(--oc-border-width) var(--border-hover);
+}
+
+.oc-select-option[data-selected]:is([data-highlighted], :hover, :focus-visible) {
+  background: var(--ui-list-selected-hover-bg);
+}
+
+.oc-select-indicator {
+  display: inline-flex;
+  color: var(--accent);
+}
+
+/* The composer uses the same closed Select primitive with a compact, inline
+ * trigger variant. Surfaces may arrange its root, but cannot restyle any
+ * internal trigger, popup, option, indicator, or icon part. */
+.oc-select-trigger[data-variant="composer"] {
+  justify-content: center;
+  gap: calc(5px * var(--ui-scale));
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+  height: var(--oc-density-chip-height);
+  min-height: var(--oc-density-chip-height);
+  padding: 0 calc(8px * var(--ui-scale));
+  border: 0;
+  border-radius: var(--oc-radius-pill);
+  background: transparent;
+  color: inherit;
+  box-shadow: none;
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: 1;
+}
+
+.oc-select-trigger[data-variant="composer"]:hover:not([data-disabled]):not(:disabled),
+.oc-select-trigger[data-variant="composer"]:focus-visible {
+  border-color: transparent;
+  background: var(--ui-list-hover-bg);
+  box-shadow: none;
+}
+
+.oc-select-trigger[data-variant="composer"] > .oc-select-value {
+  white-space: normal;
+}
+
+.oc-select-trigger[data-variant="composer"] > .oc-select-icon {
+  display: inline-flex;
+  width: calc(16px * var(--ui-scale));
+  height: calc(16px * var(--ui-scale));
+  flex: 0 0 auto;
+  color: var(--text-muted);
+}
+
+.oc-select-content[data-variant="composer"] {
+  min-width: calc(188px * var(--ui-scale));
+  padding: calc(8px * var(--ui-scale));
+}
+
+.oc-select-listbox[data-variant="composer"] {
+  display: flex;
+  flex-direction: column;
+  gap: calc(1px * var(--ui-scale));
+  max-height: min(calc(240px * var(--ui-scale)), calc(var(--ui-overlay-shell-height) - 32px));
+  padding: calc(6px * var(--ui-scale));
+  border: var(--oc-border-width) solid var(--divider-soft);
+  border-radius: var(--oc-radius-large);
+  background: color-mix(in srgb, var(--surface-elevated) 86%, transparent);
+}
+
+.oc-select-option[data-variant="composer"] {
+  justify-content: flex-start;
+  gap: calc(8px * var(--ui-scale));
+  min-height: calc(34px * var(--ui-scale));
+  padding-block: calc(4px * var(--ui-scale));
+  font-size: var(--ui-font-small);
+}
+
+.oc-select-option[data-variant="composer"] .oc-select-indicator {
+  margin-left: auto;
+}
+
+.oc-select-option[data-variant="composer"] .oc-select-option-copy {
+  flex: 1 1 auto;
+  align-self: stretch;
+  justify-content: center;
+}

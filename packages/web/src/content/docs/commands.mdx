@@ -1,0 +1,52 @@
+---
+title: Commands
+description: Built-in slash commands and how to define custom ones in OpenCorvus.
+---
+
+OpenCorvus provides a slash-command system for session prompts, including ACP `session/prompt`, with a `/command` prefix.
+
+## Built-in slash commands
+
+| Command  | Purpose                                                               |
+| -------- | --------------------------------------------------------------------- |
+| `/init`  | Initialize an `AGENTS.md` from the current repo                       |
+| `/share` | Generate a share link for the current session                         |
+| `/undo`  | Roll back the last agent change when snapshots are explicitly enabled |
+| `/help`  | Show the command map                                                  |
+
+The exact set is version-dependent — `/help` is authoritative.
+
+## Custom commands
+
+Define commands in [config](../config/) under `command`:
+
+```jsonc
+{
+  "command": {
+    "test": {
+      "template": "Run the full test suite with coverage report and show any failures.",
+      "description": "Run tests with coverage",
+      "agent": "build",
+      "model": "anthropic/claude-haiku-4-5",
+    },
+    "component": {
+      "template": "Create a new React component named $ARGUMENTS with TypeScript.",
+      "description": "Create a new component",
+    },
+  },
+}
+```
+
+`$ARGUMENTS` is replaced with whatever the user types after the command name.
+
+## Markdown-defined commands
+
+You can also define commands as markdown files under `<runtime-root>/config/commands/<name>.md` or `.opencorvus/commands/<name>.md`. The frontmatter holds metadata (description, agent, model); the body is the prompt template. The runtime root follows [Environment variables](../reference/env/).
+
+## Permissions in commands
+
+Custom commands run through the same permission system as direct prompts. If your command's template ends up triggering `bash` or `write`, [Permissions](../permissions/) still apply.
+
+## Snapshots & `/undo`
+
+`/undo` requires `snapshot: true` in [config](../config/). Snapshot capture is disabled by default; without that explicit setting, `/undo` is a no-op.

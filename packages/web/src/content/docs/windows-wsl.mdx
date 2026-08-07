@@ -1,0 +1,49 @@
+---
+title: Windows & WSL
+description: Run OpenCorvus on Windows or under WSL — quirks and recommendations.
+---
+
+OpenCorvus is built on Bun and runs natively on Windows. WSL is supported and recommended when you need full Linux toolchain parity (ripgrep, sandboxed bash, native git worktree behavior).
+
+## Native Windows
+
+Bun ships official Windows builds. OpenCorvus uses them directly.
+
+### Path handling
+
+- Bash tool calls are routed through the configured shell (`shell` in [config](../config/)). On Windows, the default discovery prefers `pwsh` then `cmd.exe`.
+- Bun's `Bun.spawn()` accepts both forward slashes and backslashes; OpenCorvus normalizes paths internally before passing to the LLM.
+- The overlay and `opencorvus serve` run as plain Windows binaries.
+
+### Known gotchas
+
+| Gotcha                                          | Workaround                                                          |
+| ----------------------------------------------- | ------------------------------------------------------------------- |
+| `cwd` drift in long-running background jobs     | Use absolute paths in custom commands                               |
+| Nested `.git` directories under packaged builds | Avoid running `git` inside `dist/` artifacts                        |
+| ripgrep not on `PATH`                           | Pass an absolute `rg.exe` path or install via scoop / winget        |
+| Long path limit                                 | Enable Windows long-path support for repos with deep `node_modules` |
+
+## WSL
+
+For maximum parity with the Linux CI environment, run inside WSL2:
+
+```bash
+# inside Ubuntu-on-WSL
+curl -fsSL https://bun.sh/install | bash
+git clone https://github.com/yangheng95/opencorvus
+cd opencorvus
+bun install
+bun run --cwd packages/opencorvus dev -- serve
+```
+
+When developing the overlay, the Tauri build still requires native Windows — only the headless `opencorvus serve` benefits from WSL parity.
+
+## Choosing native vs WSL
+
+| Need                                      | Recommendation                                                                      |
+| ----------------------------------------- | ----------------------------------------------------------------------------------- |
+| Run Overlay desktop UI                    | **Native Windows** — Tauri runs there                                               |
+| Headless server in CI-like environment    | **WSL2** — closer to Linux runners                                                  |
+| Bash-heavy tasks the agent will execute   | **WSL2** preferred                                                                  |
+| Mixed: edit on Windows, run server in WSL | OK, but pin a single repo path; do not cross-mount over `\\wsl$` from Windows tools |

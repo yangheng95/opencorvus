@@ -1,0 +1,83 @@
+---
+title: Channel 总览
+description: OpenCorvus 原生适配器与明确标记为 planned 的 provider 接入层。
+---
+
+`packages/channel-runtime/` 把外部平台统一映射为 `platform : channel : thread`。每个 thread 对应一个 OpenCorvus session，后续回复继续使用同一任务上下文。
+
+## 已支持的 Channel
+
+`ChannelCatalog` 共暴露 27 个 channel identity：13 个原生适配器 runtime-ready，14 个 provider 接入仍为 planned。共享 catalog 是后端配置、运行时构造、Overlay 设置界面和文档链接的唯一来源。
+
+### OpenCorvus 原生适配器
+
+| Channel         | 文档                    | 连接方式                  |
+| --------------- | ----------------------- | ------------------------- |
+| Slack           | [配置](./slack.md)      | Socket Mode               |
+| Telegram        | [配置](./telegram.md)   | Long polling              |
+| Discord         | [配置](./discord.md)    | Gateway WebSocket         |
+| 飞书 / Lark     | [配置](./feishu.md)     | Webhook                   |
+| WhatsApp        | [配置](./whatsapp.md)   | WhatsApp Business webhook |
+| Google Chat     | [配置](./googlechat.md) | Webhook                   |
+| Microsoft Teams | [配置](./msteams.md)    | Webhook                   |
+| LINE            | [配置](./line.md)       | Webhook                   |
+| Matrix          | [配置](./matrix.md)     | Long polling              |
+| Mattermost      | [配置](./mattermost.md) | Webhook                   |
+| Signal          | [配置](./signal.md)     | Signal CLI 服务           |
+| 企业微信        | [配置](./wecom.md)      | Webhook                   |
+| 钉钉            | [配置](./dingtalk.md)   | Webhook                   |
+
+### Planned provider 接入
+
+其余 14 个 identity 尚未 runtime-ready。现有上游包依赖 OpenClaw application runtime，而不是薄的独立 provider contract。OpenCorvus 不嵌入该 application runtime，也不维护大规模兼容 runtime。
+
+| Channel        | 官方文档                                                                            | 候选来源                   |
+| -------------- | ----------------------------------------------------------------------------------- | -------------------------- |
+| ClickClack     | [OpenClaw](https://docs.openclaw.ai/channels/clickclack)                            | `@openclaw/clickclack`     |
+| iMessage       | [OpenClaw](https://docs.openclaw.ai/channels/imessage)                              | `openclaw` runtime         |
+| IRC            | [OpenClaw](https://docs.openclaw.ai/channels/irc)                                   | `@openclaw/irc`            |
+| Nextcloud Talk | [OpenClaw](https://docs.openclaw.ai/channels/nextcloud-talk)                        | `@openclaw/nextcloud-talk` |
+| Nostr          | [OpenClaw](https://docs.openclaw.ai/channels/nostr)                                 | `@openclaw/nostr`          |
+| QQ Bot         | [OpenCorvus 字段](./qqbot.md) · [OpenClaw](https://docs.openclaw.ai/channels/qqbot) | `@openclaw/qqbot`          |
+| Raft           | [OpenClaw](https://docs.openclaw.ai/channels/raft)                                  | `@openclaw/raft`           |
+| Reef           | [OpenClaw](https://docs.openclaw.ai/channels/reef)                                  | `openclaw` runtime         |
+| SMS            | [OpenClaw](https://docs.openclaw.ai/channels/sms)                                   | `@openclaw/sms`            |
+| Synology Chat  | [OpenClaw](https://docs.openclaw.ai/channels/synology-chat)                         | `@openclaw/synology-chat`  |
+| Tlon           | [OpenClaw](https://docs.openclaw.ai/channels/tlon)                                  | `@openclaw/tlon`           |
+| Twitch         | [OpenClaw](https://docs.openclaw.ai/channels/twitch)                                | `@openclaw/twitch`         |
+| Zalo           | [OpenClaw](https://docs.openclaw.ai/channels/zalo)                                  | `@openclaw/zalo`           |
+| Zalo Personal  | [OpenClaw](https://docs.openclaw.ai/channels/zalouser)                              | `@openclaw/zalouser`       |
+
+## 运行 channel-runtime
+
+```bash
+cd packages/channel-runtime
+cp .env.example .env
+bun run dev
+```
+
+`registerAdapters()` 只启动已配置的原生 channel，并跳过 planned 条目。
+
+## 消息流
+
+```text
+平台 gateway
+  -> ChannelAdapter.onMessage(IncomingMessage)
+  -> ChannelRuntime.handleMessage()
+  -> 创建或复用 session
+  -> client.session.promptAsync()
+
+OpenCorvus 事件流
+  -> ChannelRuntime.handleEvent()
+  -> 平台插件自己的 sendText/sendMedia
+```
+
+Session、channel link、权限、附件和模型执行仍由 OpenCorvus 统一负责。
+
+## 新增 Channel
+
+- 只有 provider 暴露薄的独立 lifecycle / ingress / outbound contract 时，才能把 planned 条目提升为 ready；禁止复刻另一个应用的 runtime surface。
+- OpenCorvus 特有 channel：新增一个原生 adapter，并在原生 factory projector 注册。
+- 禁止添加 provider switch、第二份 channel 清单或大规模兼容 runtime。
+
+共享控制项见 [环境变量参考](../reference/env.md)。

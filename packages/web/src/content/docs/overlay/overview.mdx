@@ -1,0 +1,118 @@
+---
+title: Overlay
+description: OpenCorvus's Tauri 2 desktop panel — a translucent always-on-top window hosting opencorvus serve.
+---
+
+Overlay is OpenCorvus's **Tauri 2 desktop panel**: a translucent always-on-top window pinned to the bottom-right corner; it hosts the local `opencorvus serve` process and presents the agent workflow graphically.
+
+## Stack
+
+| Layer         | Choice                                        |
+| ------------- | --------------------------------------------- |
+| Desktop shell | Tauri 2 (Rust + WebView2/WKWebView/WebKitGTK) |
+| Frontend      | Solid.js 1.9 + Vite 7                         |
+| State         | Solid signals (`src/store/*`)                 |
+| Build         | Bun + `tauri build`                           |
+| Backend comms | SSE (EventSource) + HTTP REST                 |
+
+Sources: `packages/overlay/package.json`, `src-tauri/Cargo.toml`.
+
+## Launch modes
+
+### Dev
+
+```bash
+cd packages/overlay
+bun run dev        # tauri dev: Vite HMR + Rust hot reload
+bun run dev:vite   # frontend only (UI debugging)
+```
+
+Or from repo root:
+
+```bash
+bun run dev:overlay
+```
+
+### Package
+
+```bash
+bun run build:overlay   # retained developer build; produces the bound host executable
+```
+
+Release installers (`.msi`, `.dmg`, `.deb`, and other platform bundles) are
+produced by the native matrix through `packages/overlay/script/build.ts`.
+
+## Core panels
+
+| Panel                   | Role                                                  | File                                     |
+| ----------------------- | ----------------------------------------------------- | ---------------------------------------- |
+| **Board**               | Task lifecycle plus fact-derived Delivery Slice revision progress | `src/components/Board.tsx`               |
+| **WorkLedger**          | Left-hand project, Mission, Task, and chat ledger     | `src/components/WorkLedger.tsx`          |
+| **Conversation**        | Agent dialogue / tool calls / reasoning               | `src/components/Conversation.tsx`        |
+| **ChatComposer**        | Input with attachments                                | `src/components/ChatComposer.tsx`        |
+| **InteractionCard**     | Permission and question replies in timeline/dialogs   | `src/components/InteractionCard.tsx`     |
+| **ChangesPanel**        | Pending file diffs                                    | `src/components/ChangesPanel.tsx`        |
+| **MemoryPanel**         | Agent memory / context                                | `src/components/MemoryPanel.tsx`         |
+| **TracePanel**          | Execution trace                                       | `src/components/TracePanel.tsx`          |
+| **LogViewer**           | Raw logs                                              | `src/components/LogViewer.tsx`           |
+
+Settings navigation comes from `src/store/dialog.ts` `CONFIG_SECTIONS`; `ConfigDialogHost.tsx` groups those tabs under Personal, Expert Squad, Chat, Memory & Context, Integrations, Archived, and About.
+
+## Comms
+
+### SSE event streams
+
+1. **Task-detail stream** (per selected task)
+
+   ```
+   GET http://127.0.0.1:7878/task/{taskID}/events?after={sequence}
+   ```
+
+   The task-detail stream is a task-record read; it resolves the project from `taskID` and does not require `directory`.
+
+   Code: `src/services/sse.ts` `startSSE()`. Uses native `EventSource` to bypass WebView2's `fetch().body` buffering.
+
+2. **Global task-list stream** (app level)
+   ```
+   GET http://127.0.0.1:7878/task/events
+   ```
+   Code: `src/services/sse.ts` `startTaskListSSE()`. This stream owns OS notification routing from stamped `notify` metadata and refreshes the task-list badge projection.
+
+### Event routing
+
+`src/services/events.ts` `routeSSEEvent()`:
+
+| Event                                         | Sink                                                                |
+| --------------------------------------------- | ------------------------------------------------------------------- |
+| `message.updated / part.updated / part.delta` | messageStore batch                                                  |
+| `agent.updated`                               | agentEvents                                                         |
+| `config.changed`                              | reload config                                                       |
+| Per-task `task.* / goal.* / plan.*`           | `handleEventStreamEvent` + debounced Board refresh                  |
+| Global task-list events with `notify`         | `routeNotification()`; one owner for in-app toast / OS notification |
+
+## Rust-side native capabilities
+
+`src-tauri/src/main.rs` is the sole Rust source, registering all Tauri commands:
+
+| Command                                           | Role                                                                                                           |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `overlay_server_info` / `overlay_server_restart`  | Embedded opencorvus process management                                                                         |
+| `overlay_settings_load` / `overlay_settings_save` | Persists to Tauri's app config directory as `overlay.jsonc`                                                    |
+| `overlay_pick_dir` / `overlay_pick_files`         | File/dir dialogs                                                                                               |
+| `overlay_open_url` / `overlay_open_path`          | External open                                                                                                  |
+| `overlay_attention_set`                           | Tray blink                                                                                                     |
+| `overlay_badge_set`                               | Persistent dock/taskbar badge projection (`set_badge_count` on macOS/Linux, alert dot overlay icon on Windows) |
+| `overlay_toggle_devtools`                         | DevTools toggle                                                                                                |
+
+Process cleanup: Windows uses a Job Object + `KILL_ON_JOB_CLOSE`; Unix uses SIGKILL on the process group — ensuring the backend (and its children) are reaped on overlay exit.
+
+## Backend integration
+
+1. **On startup** (`main.rs` `setup`): locate embedded `opencorvus[.exe]`, pick a free port, spawn `opencorvus serve --hostname 127.0.0.1 --port <port>`.
+2. **Handshake**: frontend `initApp()` → `overlay_server_info` → updated API base URL.
+3. **Health probe**: `GET /global/health`, up to 8 retries.
+4. **Reconnect**: 10-second poll; auto-resume SSE when online returns.
+
+## Configuration
+
+Tauri's app config directory stores `overlay.jsonc` with UI preferences (theme, position, zoom, server URL override). The tray **Restart** menu restarts the backend process and reloads the frontend.

@@ -1,0 +1,68 @@
+{
+  "contract_owner": "squad-sdk",
+  "runtime_template_ids": [
+    "delegated-worker",
+    "intent-analysis",
+    "requirements",
+    "architect",
+    "goal-workload-analyst",
+    "build",
+    "explore",
+    "deep-research",
+    "frontend-research",
+    "frontend-design",
+    "visual-qa",
+    "integrity",
+    "fact-check"
+  ],
+  "tool_input": {
+    "schema_version": 1,
+    "namespace": "example",
+    "id": "source-backed-briefing",
+    "name": "Source-backed Briefing",
+    "label": "Source-backed Briefing",
+    "description": "Researches public evidence and delivers one source-backed briefing.",
+    "version": "2026.08.03.1",
+    "product_pillars": ["work"],
+    "readme": "# Source-backed Briefing\n\nA portable example with public evidence collection and verified briefing delivery.\n",
+    "selector": {
+      "summary": "Use for a bounded public-source briefing with independent claim verification.",
+      "selection_guidance": "Select when the complete outcome is a cited briefing rather than software implementation.",
+      "instructions": "# Selection\n\nChoose this Squad only for a bounded source-backed briefing.\n"
+    },
+    "scheduler": {
+      "prompt": "# Briefing Orchestrator\n\nSelect the verified-briefing workflow and preserve source attribution and explicit unknowns.\n"
+    },
+    "agents": {
+      "evidence-researcher": {
+        "label": "Evidence Researcher",
+        "description": "Collects attributable public evidence and records unknowns.",
+        "base_role": "deep-research",
+        "prompt": "# Evidence Researcher\n\nCollect real public sources, cite exact URLs and dates, and mark unavailable facts unknown.\n"
+      },
+      "briefing-writer": {
+        "label": "Briefing Writer",
+        "description": "Verifies the collected claims and delivers the final briefing.",
+        "base_role": "build",
+        "prompt": "# Briefing Writer\n\nRead the accepted evidence, verify every load-bearing claim, and deliver one cited briefing.\n"
+      }
+    },
+    "virtual_workflows": {
+      "verified-briefing": {
+        "label": "Verified Briefing",
+        "description": "Collect attributable public evidence, verify the load-bearing claims, and deliver one briefing.",
+        "nodes": {
+          "briefing-writer": {
+            "agent_id": "briefing-writer",
+            "description": "Verify the evidence and deliver the source-backed briefing.",
+            "depends_on": ["evidence-researcher"]
+          },
+          "evidence-researcher": {
+            "agent_id": "evidence-researcher",
+            "description": "Collect public evidence and record contradictions and unknowns."
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,211 @@
+/* ─────────────────────────────────────────────────────────────
+   Base / reset cascade (extracted from styles.css 2026-05-04)
+
+   Holds:
+   - Static :root design-token block (gaps, paddings, font sizes,
+     dialog widths) that doesn't switch with theme. The new
+     --oc-color-* palette in styles/themes/ governs theme switching;
+     these here are layout constants.
+   - Universal box-sizing reset, [hidden] override, body shell
+     (font / overflow / flex column / antialiasing).
+   - Native form-element font inheritance + anchor reset.
+   - Scrollbar setup (Firefox + WebKit) for the global hidden default and
+     the persistently available transcript scroller (#chatScroll).
+   - Reduced-motion @media that pins animation: none on shared
+     loading affordances.
+
+   Lives under styles/cascade/ rather than styles/tokens/ because
+   the tokens guard rejects universal selectors (`*`, `*::before`)
+   and pseudo-elements (`::-webkit-scrollbar`); cascade/ is a
+   non-guarded layer for cross-cutting cascade plumbing.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  --ui-scale: 1;
+
+  --session-scrollbar-size: calc(12px * var(--ui-scale));
+  --ui-left-rail-scrollbar-gutter-x: 0px;
+
+  --ui-font-label: var(--ui-font-meta);
+  --ui-gap-xs: calc(4px * var(--ui-scale));
+  --ui-gap-sm: calc(6px * var(--ui-scale));
+  --ui-gap-md: calc(8px * var(--ui-scale));
+  --ui-gap-lg: calc(12px * var(--ui-scale));
+  --ui-titlebar-padding-x: calc(8px * var(--ui-scale));
+  --ui-brand-logo-size: calc(14px * var(--ui-scale));
+  --ui-input-padding-y: calc(5px * var(--ui-scale));
+  --ui-input-padding-x: calc(8px * var(--ui-scale));
+  --ui-input-min-height: calc(34px * var(--ui-scale));
+  --ui-btn-padding-y: calc(5px * var(--ui-scale));
+  --ui-btn-padding-x: calc(12px * var(--ui-scale));
+  --ui-btn-mini-padding-y: calc(3px * var(--ui-scale));
+  --ui-btn-mini-padding-x: min(calc(8px * var(--ui-scale)), 8px);
+  --ui-pill-padding-y: calc(2px * var(--ui-scale));
+  --ui-pill-padding-x: calc(8px * var(--ui-scale));
+  --ui-pill-min-height: calc(20px * var(--ui-scale));
+  --ui-badge-padding-y: calc(1px * var(--ui-scale));
+  --ui-badge-padding-x: calc(6px * var(--ui-scale));
+  --ui-card-padding-y: calc(8px * var(--ui-scale));
+  --ui-card-padding-x: calc(10px * var(--ui-scale));
+  --ui-taskbar-padding-y: calc(5px * var(--ui-scale));
+  --ui-taskbar-padding-x: calc(10px * var(--ui-scale));
+  --ui-section-padding-y: calc(5px * var(--ui-scale));
+  --ui-section-padding-x: calc(10px * var(--ui-scale));
+  --ui-dialog-padding: calc(16px * var(--ui-scale));
+  --ui-dialog-gap: calc(12px * var(--ui-scale));
+  --ui-dialog-width: calc(380px * var(--ui-scale));
+  --ui-dialog-wide-width: calc(820px * var(--ui-scale));
+  --ui-dialog-wider-width: calc(980px * var(--ui-scale));
+  --ui-dialog-diff-width: calc(1040px * var(--ui-scale));
+  --ui-status-dot: calc(7px * var(--ui-scale));
+  --ui-chat-send-size: calc(32px * var(--ui-scale));
+  --ui-chat-min-height: calc(58px * var(--ui-scale));
+  --ui-chat-max-height: calc(140px * var(--ui-scale));
+  --ui-chat-message-content-width: calc(853px * var(--ui-scale));
+  --ui-chat-message-padding-x: calc(22px * var(--ui-scale));
+  --ui-chat-scrollbar-gutter-x: var(--session-scrollbar-size);
+  --ui-select-padding-right: calc(28px * var(--ui-scale));
+  /* --title-size / --subhead-size aliases retired 2026-05-04 (Step 5
+   * v3, rule 8). Consumers reference --ui-font-title / --ui-font-
+   * control directly. */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* The native WebView viewport must not receive surplus vertical wheel input
+ * from an exhausted internal scroller. Individual surfaces still own their
+ * own overflow ranges; this document-level policy prevents the viewport from
+ * rubber-banding into the host's default white backing surface. */
+html {
+  overscroll-behavior-y: none;
+  width: 100%;
+  height: 100%;
+  overflow: clip;
+  background: var(--body-bg);
+}
+
+body {
+  --ui-overlay-viewport-width: max(100vw, var(--ui-overlay-min-width));
+  --ui-overlay-shell-height: max(
+    var(--ui-overlay-min-height),
+    min(100vh, calc(var(--ui-overlay-viewport-width) / var(--ui-overlay-min-aspect-ratio)))
+  );
+  --ui-overlay-shell-width: max(var(--ui-overlay-min-width), var(--ui-overlay-viewport-width));
+
+  font-family: var(--font);
+  font-size: var(--ui-font-body);
+  line-height: 1.5;
+  color: var(--text);
+  position: fixed;
+  inset: 0 auto auto 0;
+  isolation: isolate;
+  background: var(--body-bg);
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  container: overlay-shell / inline-size;
+  width: var(--ui-overlay-shell-width);
+  margin: 0 auto;
+  min-width: var(--ui-overlay-min-width);
+  min-height: var(--ui-overlay-min-height);
+  height: var(--ui-overlay-shell-height);
+  display: flex;
+  flex-direction: column;
+  transition: background var(--ui-duration-base) var(--ui-timing-standard);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+#overlayAppHost {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Default: hide scrollbar UI everywhere. The chrome-style "scrollbar
+ * on every overflow:auto" is visual noise — most containers only need
+ * the ability to scroll on overflow. The transcript is the sole primary
+ * scroller that opts back into persistent native scrollbar geometry and
+ * theme paint.
+ * New opt-ins use the same id-or-class override pattern, not a global
+ * toggle. */
+* {
+  scrollbar-width: none;
+}
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+#chatScroll {
+  scrollbar-width: auto;
+  scrollbar-color: var(--scrollbar-thumb) var(--session-scrollbar-track);
+}
+
+#chatScroll::-webkit-scrollbar {
+  width: var(--session-scrollbar-size);
+}
+
+#chatScroll::-webkit-scrollbar-track {
+  background: var(--session-scrollbar-track);
+  border-radius: var(--oc-radius-pill);
+}
+
+#chatScroll::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--oc-radius-pill);
+  border: calc(2px * var(--ui-scale)) solid transparent;
+  background-clip: padding-box;
+}
+
+#chatScroll::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+.hidden {
+  display: none !important;
+}
+
+@keyframes oc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card__spinner {
+    animation: none !important;
+  }
+  .task-switch-progress[data-active="true"]::before {
+    animation: none;
+    transform: translateX(0);
+    background: var(--accent);
+    opacity: var(--ui-opacity-faint);
+  }
+}

@@ -1,0 +1,30 @@
+---
+title: Mattermost
+description: Mattermost adapter using Outgoing Webhook mode.
+---
+
+## Prerequisites
+
+1. Enable Outgoing Webhooks in Mattermost System Console → Integrations.
+2. Create a Bot Account → obtain a Bot Token.
+3. Configure Outgoing Webhook to target `https://<your-public-host>/mattermost` and copy its Token.
+
+## Environment
+
+```bash
+export MATTERMOST_SERVER_URL=https://mattermost.example.com
+export MATTERMOST_BOT_TOKEN=...
+export MATTERMOST_WEBHOOK_TOKEN=...
+export MATTERMOST_WEBHOOK_HOST=0.0.0.0
+export MATTERMOST_WEBHOOK_PORT=16671
+export MATTERMOST_WEBHOOK_PATH=/mattermost
+```
+
+## Thread semantics
+
+Mattermost `root_id` is thread key (the root message ID of a thread).
+
+## Troubleshooting
+
+- **Bot can't post**: ensure the Bot Account has been invited to the target channel.
+- **413 on upload**: Mattermost limits file size to 50 MB by default; raise it in System Console → File Storage.

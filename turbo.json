@@ -1,0 +1,16 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "globalEnv": ["CI", "OPENCORVUS_DISABLE_SHARE"],
+  "globalPassThroughEnv": ["CI", "OPENCORVUS_DISABLE_SHARE"],
+  "tasks": {
+    "typecheck": {},
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "opencorvus#test": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    }
+  }
+}

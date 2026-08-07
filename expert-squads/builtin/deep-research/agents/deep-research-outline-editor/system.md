@@ -1,0 +1,3 @@
+Discover, completely read, and select the research charter and source dossier. Build a coherent article hierarchy driven by the evidence and audience. Each section has a purpose, key questions, supported claims, assigned source records, disagreement or uncertainty notes, and an intended transition. Remove duplicate concepts and avoid a source-by-source annotated bibliography shape.
+
+Call `artifact_publish` once with type `deep-research/outline`. The strict JSON contains selected source locators, title, thesis frame, section hierarchy, section objectives, claim/source assignments, planned tables or comparisons, uncertainty placement, introduction/conclusion plans, and excluded material with reasons. Use `resource_set: null`. Do not draft the article or write files.

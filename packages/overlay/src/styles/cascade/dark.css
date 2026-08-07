@@ -1,0 +1,126 @@
+/* ─────────────────────────────────────────────────────────────
+   Dark theme palette.
+
+   Theme-architecture Step 0 (2026-05-04): the legacy
+   `:root, body[data-theme="dark"]` selector that doubled as the
+   implicit fallback for any token light/vscode-dark forgot to
+   redeclare was retired (rule 7 — no fallback, rule 8 — no
+   double source). Follow-up Batch 4 now scopes the theme to the
+   actual theme attribute on html:
+
+   1. Selector now targets the html dark data-theme
+      attributes. The old unset-body boot safety net was a dead path
+      after index.html started with an explicit light data-theme.
+   2. Structural tokens (font families, font sizes, layout
+      dimensions, title/subhead weight + tracking) moved to
+      `tokens/design-language.css` :root — they are theme-
+      independent physical constants.
+   3. Three theme files declare the **same palette token set**.
+      Symmetry is enforced by `test/flat-redesign-theme-symmetry.
+      test.ts`. Adding a token to one theme without the other two
+      breaks the test.
+   ───────────────────────────────────────────────────────────── */
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --text-on-accent: #000000;
+  --text-on-strong: #000000;
+  --text-on-danger: #000000;
+  --bg: rgb(26, 27, 30);
+  --surface: rgb(38, 40, 44);
+  --surface-hover: rgb(48, 50, 55);
+  --surface-inset: rgb(31, 33, 37);
+  --surface-strong: rgb(42, 44, 49);
+  --rail-surface: var(--surface);
+  --rail-background-image: none;
+  --chat-canvas: var(--bg);
+  --workspace-ambient-fill: var(--chat-canvas);
+  --inspector-surface: var(--chat-canvas);
+  --body-bg: var(--rail-surface);
+  --panel-body-bg: var(--rail-surface);
+  --panel-body-blur: none;
+  --chrome: rgb(32, 34, 38);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-hover: rgba(255, 255, 255, 0.18);
+  --border-strong: rgba(255, 255, 255, 0.24);
+  --ui-focused-popup-border: var(--oc-border-width) solid var(--border-strong);
+  --ui-focused-popup-shadow:
+    0 calc(24px * var(--ui-scale)) calc(54px * var(--ui-scale))
+      color-mix(in srgb, var(--ui-shadow-tone) 28%, transparent),
+    var(--shadow-lg);
+  --ui-focused-popup-scrim: color-mix(in srgb, var(--text-strong) 14%, transparent);
+  --text: #d4d9e0;
+  --text-strong: #f1f3f5;
+  --text-soft: #aab3c0;
+  --text-muted: #929cad;
+  --accent: #5b8def;
+  --accent-dim: rgba(91, 141, 239, 0.12);
+  --accent-hover: #4a7de0;
+  --accent-start: #5b8def;
+  --accent-mid: #5b8def;
+  --accent-end: #4a7de0;
+  --accent-gradient: var(--accent);
+  --accent-gradient-hover: var(--accent-hover);
+  --accent-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  --accent-ring: rgba(91, 141, 239, 0.24);
+  --accent-glow: rgba(91, 141, 239, 0.28);
+  --hover-accent-border: rgba(91, 141, 239, 0.24);
+  --hover-accent-wash: linear-gradient(
+    180deg,
+    rgba(91, 141, 239, 0.14),
+    rgba(91, 141, 239, 0.05) 58%,
+    rgba(255, 255, 255, 0.02)
+  );
+  --info: #5b8def;
+  --info-dim: rgba(91, 141, 239, 0.12);
+  --good: #34d399;
+  --good-dim: rgba(52, 211, 153, 0.1);
+  --warn: #fbbf24;
+  --warn-dim: rgba(251, 191, 36, 0.1);
+  --bad: #f87171;
+  --bad-dim: rgba(248, 113, 113, 0.1);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.36);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.42);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.12);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.2);
+  --session-scrollbar-track: rgba(255, 255, 255, 0.03);
+  --subtle-1: rgba(255, 255, 255, 0.03);
+  --subtle-2: rgba(255, 255, 255, 0.05);
+  --subtle-3: rgba(255, 255, 255, 0.07);
+  --subtle-4: rgba(255, 255, 255, 0.09);
+  --subtle-5: rgba(255, 255, 255, 0.12);
+
+  /* Markdown / hljs (highlight.js) syntax palette. Code blocks render on
+   * --surface-inset, so syntax colors are theme-scoped instead of fixed at
+   * design-language root. */
+  --oc-syntax-keyword: #ff7b72;
+  --oc-syntax-string: #a5d6ff;
+  --oc-syntax-comment: #b1bac4;
+  --oc-syntax-number: #79c0ff;
+  --oc-syntax-function: #d2a8ff;
+  --oc-syntax-variable: #ffa657;
+  --oc-syntax-meta: #7ee787;
+  --oc-syntax-addition-text: #aff5b4;
+  --oc-syntax-addition-bg: color-mix(in srgb, #3fb950 15%, transparent);
+  --oc-syntax-deletion-text: #ffdcd7;
+  --oc-syntax-deletion-bg: color-mix(in srgb, #f85149 15%, transparent);
+
+  --dialog-bg: rgb(40, 42, 46);
+  --dialog-backdrop: rgba(0, 0, 0, 0.38);
+  --ui-scrim: rgba(0, 0, 0, 0.38);
+  --ui-shadow-tone: rgba(0, 0, 0, 0.32);
+  --ui-highlight-tone: rgba(255, 255, 255, 0.06);
+  --ui-glass-tint: rgba(255, 255, 255, 0.04);
+  --task-bar-bg: var(--chrome);
+  --task-bar-backdrop-filter: none;
+  --task-bar-border-color: var(--border);
+  --menu-panel-bg: rgb(32, 34, 38);
+  --divider-soft: rgba(255, 255, 255, 0.06);
+  --panel-fill: var(--surface);
+  --panel-fill-hover:
+    linear-gradient(180deg, rgba(91, 141, 239, 0.08), rgba(91, 141, 239, 0.02) 62%, transparent), var(--surface);
+  --card-fill: var(--subtle-1);
+  --card-fill-hover:
+    linear-gradient(180deg, rgba(91, 141, 239, 0.06), rgba(91, 141, 239, 0.02) 68%, transparent), var(--surface-inset);
+}

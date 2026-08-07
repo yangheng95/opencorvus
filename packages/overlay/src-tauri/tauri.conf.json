@@ -1,0 +1,59 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nicedoc/tauri/refs/heads/v2/crates/tauri-cli/schema.json",
+  "productName": "OpenCorvus",
+  "version": "0.0.35-beta",
+  "identifier": "ai.opencorvus.overlay",
+  "build": {
+    "frontendDist": "../dist-vite",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "bun run dev:vite",
+    "beforeBuildCommand": "bun run build:vite"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "create": false,
+        "title": "OpenCorvus",
+        "width": 1280,
+        "height": 760,
+        "minWidth": 1120,
+        "minHeight": 720,
+        "resizable": true,
+        "decorations": true,
+        "hiddenTitle": true,
+        "titleBarStyle": "Overlay",
+        "trafficLightPosition": { "x": 10, "y": 20 },
+        "transparent": true,
+        "alwaysOnTop": false,
+        "skipTaskbar": false,
+        "visible": false,
+        "backgroundColor": "#f4f4f4",
+        "dragDropEnabled": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "plugins": {
+    "opencorvus": {
+      "initialWorkAreaRatio": 0.8
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "resources": ["resources/*"],
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+    "windows": {
+      "wix": {
+        "version": "0.0.35.0"
+      },
+      "webviewInstallMode": {
+        "type": "embedBootstrapper"
+      }
+    }
+  }
+}

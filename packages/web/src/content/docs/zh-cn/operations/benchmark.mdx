@@ -1,0 +1,32 @@
+---
+title: Benchmark
+description: 在真实 OpenCorvus 服务和持久数据库上执行端到端验收。
+---
+
+历史 Mission benchmark 包装脚本已经退役。端到端验收必须经过产品实际使用的公共服务、Task API、持久 SQLite 数据库和可见 UI。禁止用脚本建立平行编排路径，也禁止把缺省或未知业务字段自动判成失败。
+
+## 必需拓扑
+
+- 使用显式端口、项目目录和 `OPENCORVUS_HOME` 启动隔离的 `opencorvus serve` 进程。
+- 只通过公共 API 或可见 UI 创建和唤醒 Task。
+- 整轮执行与重启验证使用同一个隔离 home 下的 SQLite 数据库。
+- 数据库证据只允许用 SQLite 只读模式读取；产品状态修改必须通过公共 API。
+- 用定时 API/数据库快照监控，不要再实现 benchmark 专属轮询引擎。
+
+## 验收证据
+
+每个被测 Task 必须保留：
+
+- Task、Goal、attempt、Session、tool、artifact 和终态决策记录；
+- 源码、数据、测试、截图、报告和运行说明的真实项目相对路径；
+- 交付物根目录可离线执行的验证命令；
+- 视觉任务必须用 Node Playwright 对真实渲染目标生成浏览器证据；
+- 证据错误或缺失、路径错误、执行卡死、关键验收未满足时明确失败。
+
+可选字段缺省或明确记录为 `unknown` 并不天然构成失败，必须根据 Task 合同及其影响判断。
+
+## 完成后复核
+
+OpenCorvus 产生终态结果后，还必须独立运行交付物自己的验证命令、查看视觉截图、重新加载产品 UI，并确认持久数据库中的 Task 状态和证据一致。mock contract、预制报告或静态截图都不属于端到端验收。
+
+视觉定向调查使用 `visual-diff.ts`、`review-deliverable.ts` 等由 Node sidecar 驱动的 headed 工具。它们只是探针，不是 Mission 编排包装层。

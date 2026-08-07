@@ -1,0 +1,30 @@
+---
+title: Integrity Review
+description: How OpenCorvus records execution, verification, exact-revision review, and Task completion evidence.
+---
+
+Review evidence is separate from physical execution and Task lifecycle. A reviewer evaluates exact current Delivery Slice revisions; only the Orchestrator owns the Task completion decision.
+
+## Current review flow
+
+1. **Execution evidence** — a Task-level workflow node creates immutable dispatch lineage, an execution attempt, a real Session, and a final assistant-message or terminal-error locator. Host observations own git, diff, command, and runtime facts.
+2. **Verification observations** — runtime checks, browser captures, and visual feedback use their strict Artifact families and cite exact execution and Slice revision subjects.
+3. **Visual review** — Visual Quality Assurance (QA) reviews the visible product when the Task has a frontend surface; it does not complete the Task.
+4. **Reviewer artifact** — the selected reviewer records accepted, rejected, or inconclusive judgment against exact Slice revisions and exact evidence locators.
+5. **Completion decision** — the Orchestrator appends one Task decision citing the workflow selection, exact package revision/digest, accepted current Slice reviews, and real message/evidence locators.
+
+An old-revision review remains visible history but cannot satisfy a newer Goal revision. Physical abort or cleanup failure is execution evidence, not rejection.
+
+## Artifact records
+
+The review path is reconstructed from immutable facts such as workflow selection, dispatch lineage, execution outcome, Host observations, browser evidence, visual review, reviewer artifacts, and `task_completion_decision`. There is no Goal attempt/result/workspace lifecycle aggregate.
+
+## Goal panel projection
+
+The Goal panel independently shows current revision, workflow coverage, live/terminal Sessions, Artifact coverage, reviewer judgment, and Task settlement. Its display values are read-only and cannot schedule work or complete the Task.
+
+## What's next
+
+- [Architecture](../../concepts/architecture/)
+- [Task / Delivery Slice data model](../../concepts/delivery-slice-task/)
+- [Benchmark](../../operations/benchmark/)

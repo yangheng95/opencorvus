@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "strict": false,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "types": ["vite/client"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js"]
+}

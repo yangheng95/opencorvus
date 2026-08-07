@@ -1,0 +1,36 @@
+---
+title: 钉钉 (DingTalk)
+description: 钉钉适配器支持自建企业应用的 HTTP 回调。
+---
+
+## 前置
+
+1. 在 [钉钉开放平台](https://open.dingtalk.com/) 创建企业内部应用。
+2. 获取 **AppKey** 与 **AppSecret**。
+3. 配置事件订阅 → HTTP 回调：`https://<公网>/dingtalk`。
+
+## 环境变量
+
+```bash
+export DINGTALK_APP_KEY=...
+export DINGTALK_APP_SECRET=...
+export DINGTALK_CALLBACK_TOKEN=...
+export DINGTALK_ENCODING_AES_KEY=...
+export DINGTALK_DEFAULT_WEBHOOK=...      # 可选：群自定义机器人 webhook，用于无会话消息推送
+export DINGTALK_WEBHOOK_HOST=0.0.0.0
+export DINGTALK_WEBHOOK_PORT=16673
+export DINGTALK_WEBHOOK_PATH=/dingtalk
+```
+
+## Thread 语义
+
+钉钉群聊以 `conversationId` 作为 thread key；单聊以 `senderStaffId`。
+
+## DINGTALK_DEFAULT_WEBHOOK 的作用
+
+群自定义机器人 webhook 用于**无状态推送**（例如任务完成通知），与企业应用的双向交互互补。若只做被动响应可不设。
+
+## 故障排查
+
+- **回调 signature 校验失败**：确认钉钉事件订阅里的 Callback Token 和 EncodingAESKey 与环境变量完全一致。
+- **消息发不出**：应用未被管理员审批发布，或未加入目标群。

@@ -1,0 +1,54 @@
+.oc-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  gap: var(--ui-gap-xs);
+  max-width: 100%;
+  border: 0 solid transparent;
+  border-radius: var(--oc-radius-pill);
+  background: var(--surface-inset);
+  color: var(--text-soft);
+  font-family: var(--font);
+  font-size: var(--ui-font-meta);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: 1.2;
+  letter-spacing: var(--ui-letter-spacing-normal);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.oc-badge[data-size="sm"] {
+  padding: calc(2px * var(--ui-scale)) calc(6px * var(--ui-scale));
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-strong);
+}
+
+.oc-badge[data-size="md"] {
+  padding: calc(2px * var(--ui-scale)) var(--ui-gap-sm);
+}
+
+.oc-badge[data-tone="accent"] {
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface-inset));
+  color: color-mix(in srgb, var(--accent) 64%, var(--text-strong));
+}
+
+.oc-badge[data-tone="ok"] {
+  background: color-mix(in srgb, var(--good) 10%, var(--surface-inset));
+  color: color-mix(in srgb, var(--good) 64%, var(--text-strong));
+}
+
+.oc-badge[data-tone="warn"] {
+  background: color-mix(in srgb, var(--warn) 10%, var(--surface-inset));
+  color: color-mix(in srgb, var(--warn) 60%, var(--text-strong));
+}
+
+.oc-badge[data-tone="bad"] {
+  background: color-mix(in srgb, var(--bad) 10%, var(--surface-inset));
+  color: color-mix(in srgb, var(--bad) 64%, var(--text-strong));
+}
+
+.oc-badge[data-tone="muted"] {
+  background: transparent;
+  color: var(--text-muted);
+}

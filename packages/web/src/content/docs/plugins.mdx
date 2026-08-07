@@ -1,0 +1,66 @@
+---
+title: Plugins
+description: Write TypeScript plugins to extend OpenCorvus with hooks, services, authentication, and runtime integrations.
+---
+
+Plugins are OpenCorvus's process-level extension mechanism. Unlike Skills (Markdown instructions), a plugin is TypeScript/JavaScript code that hooks into core event chains, provides services or authentication, modifies LLM request params, and intercepts real command/tool execution hooks. Executable agent tools belong to active [expert-squad packages](../agents/), not plugins.
+
+Source: `packages/opencorvus/src/plugin/index.ts`, `packages/plugin/src/index.ts` (interface)
+
+## Plugin vs Skill
+
+| Dimension      | Skill           | Plugin                                                |
+| -------------- | --------------- | ----------------------------------------------------- |
+| Implementation | Markdown + YAML | TypeScript/JavaScript module                          |
+| Lifetime       | Session-scoped  | Process-wide, loaded at startup                       |
+| Capabilities   | Instructions    | Hook LLM requests, provide services, intercept events |
+| Dev effort     | Zero code       | Must implement `Plugin` function                      |
+
+## Default plugins
+
+Provider auth plugins are compiled into the runtime (`src/plugin/index.ts`). The GitLab and Poe implementations are statically imported from the upstream `opencode-gitlab-auth` and `opencode-poe-auth` packages; OpenAI Codex, GitHub Copilot, Cloudflare, Azure, DigitalOcean, Snowflake Cortex, and xAI use the synchronized in-repository implementations. They are not entries in the user `plugin` configuration.
+
+Third-party npm plugins load only when declared explicitly in the `plugin` config array.
+
+Plugins are trusted in-process executable extensions, not a sandbox. Installation, module loading, configuration, and service registration must all succeed during project startup. A later hook failure rejects the LLM, command, tool, or event operation that invoked it; OpenCorvus does not continue with an unchanged or partially changed result.
+
+## Writing a plugin
+
+```typescript
+import { Plugin } from "@opencorvus-ai/plugin"
+
+export const MyPlugin: Plugin = async (ctx) => {
+  return {
+    "chat.params": async (_input, output) => {
+      output.temperature = 0.3
+    },
+    "tool.execute.before": async (input) => {
+      console.info(`Running ${input.tool}`)
+    },
+  }
+}
+```
+
+Full hooks: `packages/plugin/src/index.ts`.
+
+| Hook                                         | When                                       |
+| -------------------------------------------- | ------------------------------------------ |
+| `chat.params` / `chat.headers`               | Modify LLM request                         |
+| `tool.definition`                            | Modify a projected tool definition         |
+| `tool.execute.before` / `tool.execute.after` | Observe or modify projected tool execution |
+| `shell.env`                                  | Inject env before shell                    |
+| `experimental.chat.system.transform`         | Append to system prompt                    |
+
+## Declaring plugins
+
+```jsonc
+{
+  "plugin": ["my-npm-plugin@1.0.0", "file:///path/to/my-plugin.ts"],
+}
+```
+
+Files in `.opencorvus/plugin/*.{ts,js}` auto-discovered (`src/config/config.ts`).
+
+## Relation to providers and projected agents
+
+Plugins don't directly replace providers, projected agents, or the active expert-squad tool projection. They influence runtime behavior via `auth` (custom auth flows), `chat.headers`/`chat.params` (request mutation), `event`, `shell.env`, and tool interception hooks. Agent identity and capability stay under the active expert-squad projection.

@@ -1,0 +1,131 @@
+---
+title: CLI
+description: OpenCorvus command-line interface reference.
+---
+
+`opencorvus` is the unified CLI command. Source subcommands are registered in `packages/opencorvus/src/index.ts`; local builds emit binaries under `packages/opencorvus/dist/opencorvus-<platform>/opencorvus`.
+
+## Global flags
+
+| flag                | purpose                             |
+| ------------------- | ----------------------------------- |
+| `--help`, `-h`      | Show help                           |
+| `--version`, `-v`   | Show version                        |
+| `--print-logs`      | Print logs to stderr                |
+| `--log-level LEVEL` | `DEBUG`, `INFO`, `WARN`, or `ERROR` |
+
+## Subcommands
+
+### `opencorvus serve`
+
+Starts the headless HTTP API server.
+
+```bash
+opencorvus serve [flags]
+```
+
+| flag              | default            | purpose                                                   |
+| ----------------- | ------------------ | --------------------------------------------------------- |
+| `--hostname`      | `127.0.0.1`        | Listen address; `--mdns` uses `0.0.0.0` unless configured |
+| `--port`          | `7878`             | Listen port                                               |
+| `--project-dir`   | `cwd()`            | Target repo                                               |
+| `--mdns`          | off                | Enable mDNS discovery                                     |
+| `--mdns-domain`   | `opencorvus.local` | mDNS domain                                               |
+| `--cors <origin>` | none               | Extra allowed CORS origin; repeat for multiple origins    |
+
+Set `OPENCORVUS_SERVER_PASSWORD` via environment variable, not a CLI flag.
+
+### `opencorvus run`
+
+Runs a task from the command line.
+
+```bash
+opencorvus run "Add unit tests for src/foo.ts" [flags]
+```
+
+| flag                    | purpose                                               |
+| ----------------------- | ----------------------------------------------------- | ------------------------------------------ |
+| `--command CMD`         | Run `CMD` and use message arguments as command args   |
+| `--continue`, `-c`      | Continue the last session                             |
+| `--session ID`, `-s ID` | Continue a specific session                           |
+| `--fork`                | Fork before continuing a session                      |
+| `--share`               | Produce a share link                                  |
+| `--model MODEL`, `-m`   | Use `provider/model` for the session                  |
+| `--agent NAME`          | Use a named agent                                     |
+| `--format <format>` (`default` or `json`)                             | Select formatted output or raw JSON events |
+| `--file PATH`, `-f`     | Attach one or more files                              |
+| `--title TITLE`         | Set the session title                                 |
+| `--attach URL`          | Attach to a running OpenCorvus server                 |
+| `--dir PATH`            | Run in a directory; remote path when using `--attach` |
+| `--port PORT`           | Local server port                                     |
+| `--variant VALUE`       | Provider-specific reasoning variant                   |
+| `--thinking`            | Show thinking blocks                                  |
+
+### `opencorvus auth`
+
+Provider credentials are managed with explicit subcommands.
+
+```bash
+opencorvus auth login [url]
+opencorvus auth logout
+opencorvus auth list
+```
+
+### `opencorvus models`
+
+Lists available models. Pass a provider ID to restrict output.
+
+```bash
+opencorvus models
+opencorvus models openai --verbose
+opencorvus models --refresh
+```
+
+### `opencorvus mcp`
+
+MCP (Model Context Protocol) servers are managed through the `mcp` command group.
+
+```bash
+opencorvus mcp list
+opencorvus mcp add
+opencorvus mcp auth [name]
+opencorvus mcp auth list
+opencorvus mcp logout [name]
+opencorvus mcp debug <name>
+```
+
+`opencorvus mcp browser` is an internal browser-sidecar entrypoint.
+
+### Other common commands
+
+| Command                         | Purpose                                                             |
+| ------------------------------- | ------------------------------------------------------------------- |
+| `opencorvus acp`                | Start the [Agent Client Protocol](../acp/) server                |
+| `opencorvus db`                 | Open the SQLite shell, run a positional query, print path, or reset |
+| `opencorvus debug`              | Debug config, files, LSP, snapshots, skills, and paths              |
+| `opencorvus doctor`             | Diagnose installation and runtime dependencies                      |
+| `opencorvus export [sessionID]` | Export session data as JSON                                         |
+| `opencorvus generate`           | Run configured generation                                           |
+| `opencorvus github`             | GitHub Action runtime entrypoint                                    |
+| `opencorvus import`             | Import sessions or tasks                                            |
+| `opencorvus pr`                 | Pull-request helpers                                                |
+| `opencorvus session`            | Session management                                                  |
+| `opencorvus stats`              | Statistics                                                          |
+| `opencorvus upgrade`            | Self-upgrade                                                        |
+| `opencorvus uninstall`          | Uninstall                                                           |
+
+Run any command with `--help` for its exact options.
+
+## Exit codes
+
+The CLI sets exit code `1` for fatal runtime errors. Successful runs exit with `0`; interrupted processes use the runtime's signal handling.
+
+:::note
+Earlier drafts planned dedicated config and task-failure exit codes. They are not implemented in the current CLI.
+:::
+
+## Shell completion
+
+```bash
+opencorvus completion > opencorvus-completion.sh
+```

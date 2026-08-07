@@ -1,0 +1,139 @@
+---
+title: Configuration
+description: Configure OpenCorvus with JSONC files and environment variables.
+---
+
+OpenCorvus loads JSONC config files and selected environment variables. There is no global `--config` CLI flag; use `OPENCORVUS_CONFIG` for an explicit file or `OPENCORVUS_CONFIG_CONTENT` for inline JSON.
+
+## File locations
+
+| Location                                  | Purpose                                     |
+| ----------------------------------------- | ------------------------------------------- |
+| `<runtime-root>/config/opencorvus.jsonc`  | Global user config under the canonical root |
+| `<project>/.opencorvus/opencorvus.jsonc`  | The project's single owned config file      |
+| `$OPENCORVUS_CONFIG_DIR/opencorvus.jsonc` | Explicit local config directory             |
+| `$OPENCORVUS_CONFIG`                      | Explicit single config file                 |
+| `OPENCORVUS_CONFIG_CONTENT`               | Inline JSON config content                  |
+
+The runtime root defaults to `%LOCALAPPDATA%/opencorvus` on Windows,
+`~/Library/Application Support/opencorvus` on macOS, and
+`$XDG_DATA_HOME/opencorvus` (or `~/.local/share/opencorvus`) on other platforms.
+Set the absolute `OPENCORVUS_HOME` path to choose a different root.
+
+Automatic project config discovery accepts only `<project>/.opencorvus/opencorvus.jsonc`. A project
+root or ancestor `opencorvus.json` / `opencorvus.jsonc`, a second ancestor `.opencorvus` config, or
+legacy global `config.json` is rejected with its exact path. OpenCorvus does not merge, migrate, or
+guess between competing project files. `OPENCORVUS_CONFIG` remains an explicit single-file input
+chosen by the operator.
+
+## Minimal config
+
+Create a project file at `<repo>/.opencorvus/opencorvus.jsonc`:
+
+```jsonc
+{
+  "$schema": "https://opencorvus.ai/config.json",
+  "model": "openai/gpt-5.5",
+}
+```
+
+## Complete example
+
+```jsonc
+{
+  "$schema": "https://opencorvus.ai/config.json",
+  "model": "github-copilot/claude-haiku-4.5",
+
+  "network": {
+    "proxy": {
+      "url": "http://127.0.0.1:7890",
+      "llmProvider": true,
+      "webResearch": true,
+    },
+  },
+
+  "skills": {
+    "paths": ["<abs-path>/skills-market/github.com-anthropics-skills"],
+    "urls": [],
+  },
+
+  "plugin": [],
+
+  "permission": {
+    "skill": {
+      "local-note": "deny",
+      "sora": "ask",
+      "figma": "ask",
+    },
+  },
+
+  "experimental": {
+    "auto_question": true,
+  },
+}
+```
+
+## Key fields
+
+### `model`
+
+Default LLM model. Format: `<providerId>/<modelId>`.
+
+### `network.proxy`
+
+HTTP(S) proxy settings. `llmProvider: true` routes model provider traffic through the proxy, and `webResearch: true` routes websearch/webfetch traffic through it. `url` supports `http://` and `https://`; use `username` / `password` for proxy authentication instead of embedding credentials in the URL.
+
+### `skills.paths` / `skills.urls`
+
+Local skill market paths and remote skill URLs. Loaded at startup. See [Skills](../skills/).
+
+### `permission`
+
+Per-skill and per-tool `allow`, `ask`, or `deny` rules. Rule order matters; later declarations override earlier declarations.
+
+See [Permissions](../permissions/).
+
+### `experimental.auto_question`
+
+Fine-grained switch for stale clarification questions. When enabled, a stale question interaction is rejected after the question timeout. Permission prompts are controlled by permission rules and `OPENCORVUS_PERMISSION_TIMEOUT_MS`.
+
+### `assistant`
+
+Configures shared assistant runtime inactivity and parallelism limits:
+
+```jsonc
+{
+  "assistant": {
+    "activity": {
+      "session_llm_idle_ms": 180000,
+      "task_queue_run_timeout_ms": 600000,
+    },
+    "max_executor_groups": 4,
+  },
+}
+```
+
+Agent identity, role prompts, tools, and skills come from the active expert-squad projection. Role-specific step budgets and visual-score rollback settings are not configuration surfaces.
+
+## Load order
+
+Current source loads config in this low-to-high precedence order:
+
+1. Remote `.well-known/opencorvus` organization defaults from stored well-known credentials.
+2. Packaged plugins bundled beside the executable.
+3. Canonical `opencorvus.jsonc` from the resolved global config directory.
+4. Explicit file from `OPENCORVUS_CONFIG`.
+5. The exact project-owned `<project>/.opencorvus/opencorvus.jsonc`.
+6. OpenCorvus resource directories: global config resources, project `.opencorvus/` resources, then `OPENCORVUS_CONFIG_DIR`. Ancestor project resource directories may contribute plugins or commands, but never a second config file.
+7. Inline JSON from `OPENCORVUS_CONFIG_CONTENT`.
+8. Managed enterprise config directory, when present.
+
+Managed config directories are `/Library/Application Support/opencorvus` on macOS, `%ProgramData%/opencorvus` on Windows, and `/etc/opencorvus` on Linux.
+
+:::note
+Environment variables are read by the running process. Load `.env` files before starting `opencorvus serve` or `opencorvus run`.
+:::
+
+## Hot reload
+
+Config hot reload is not supported. Restart `opencorvus serve` after changing config files or environment variables.

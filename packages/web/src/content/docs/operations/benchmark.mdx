@@ -1,0 +1,32 @@
+---
+title: Benchmark
+description: Run end-to-end acceptance against a real OpenCorvus service and persistent database.
+---
+
+End-to-end acceptance runs through the same public service, Task APIs, persistent SQLite database, and visible UI used by the product. Do not use a script that creates a parallel orchestration path or converts missing/default business fields into automatic failure.
+
+## Required topology
+
+- Start an isolated `opencorvus serve` process with an explicit port, project directory, and `OPENCORVUS_HOME`.
+- Create and wake Tasks only through the public API or visible UI.
+- Keep the SQLite database under that isolated home for the complete run and restart cycle.
+- Read database evidence with SQLite read-only mode. Product-state mutations must use the public API.
+- Use timed API/database snapshots for monitoring instead of a benchmark-specific polling engine.
+
+## Acceptance evidence
+
+Each tested Task must preserve:
+
+- its Task, Goal, attempt, Session, tool, artifact, and terminal decision records;
+- the actual project-relative paths for source, data, tests, screenshots, reports, and run instructions;
+- a root-level offline verification command for the produced deliverable;
+- real browser evidence for visual work, using Node Playwright against the actual rendered target;
+- explicit failure for wrong/missing evidence, broken paths, stuck execution, or unmet acceptance.
+
+An optional field or a documented `unknown` value is not itself a failure. Judge it by the Task contract and its stated impact.
+
+## Completion review
+
+After OpenCorvus reaches a terminal result, run the deliverable's own verification command independently, inspect visual screenshots, reload the product UI, and confirm the same Task status and evidence from the persistent database. A mocked contract test, canned report, or static screenshot is not end-to-end acceptance.
+
+For focused visual investigation, use the maintained headed Node-sidecar tools such as `visual-diff.ts` and `review-deliverable.ts`. They are probes, not Mission orchestration wrappers.

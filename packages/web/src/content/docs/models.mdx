@@ -1,0 +1,67 @@
+---
+title: Models
+description: Selecting LLM models in OpenCorvus, models.dev integration, and per-agent overrides.
+---
+
+OpenCorvus resolves models from explicit identity layers. See [Providers](../providers/) for the underlying provider list.
+
+## Model layers
+
+| Scenario | Where to set |
+| --- | --- |
+| Project default | `model` |
+| Fixed Primary/Helper/Host identity | `agent.<fixed-id>.model` |
+| Worker runtime-template seed | `runtime_templates.<base-role>.model` |
+| Exact projected worker | `expert_squads.<squad-id>.agents.<agent-id>.runtime.model` |
+| Vision / screenshot understanding | `OPENCORVUS_VISION_MODEL` environment variable |
+
+The exact projected worker wins over its runtime template, which wins over the project default. `base_role` never identifies a worker.
+
+```jsonc
+{
+  "model": "openai/gpt-5.5",
+  "agent": {
+    "coding": { "model": "anthropic/claude-sonnet-4-6" },
+  },
+  "runtime_templates": {
+    "architect": { "model": "anthropic/claude-sonnet-4-6" },
+    "build": { "model": "openai/gpt-5.5" },
+  },
+  "expert_squads": {
+    "review-team": {
+      "agents": {
+        "security-reviewer": {
+          "runtime": { "model": "anthropic/claude-sonnet-4-6" },
+        },
+      },
+    },
+  },
+}
+```
+
+## models.dev
+
+OpenCorvus reads one required JSON catalog at runtime. Set `OPENCORVUS_MODELS_PATH` to choose its location; otherwise OpenCorvus uses durable `models.json` under its global data directory. On a fresh install, the executable validates its bundled bootstrap catalog and atomically provisions that default file without network access. Existing default files and explicit overrides are never replaced by bootstrap provisioning; missing explicit overrides and invalid catalog data fail instead of reading another source.
+
+Run `opencorvus models --refresh` to explicitly fetch [models.dev](https://models.dev), add the required local providers, and atomically replace that catalog. Normal startup never fetches model metadata implicitly.
+
+## Listing available models
+
+```bash
+opencorvus models
+opencorvus models openai --verbose
+```
+
+This lists models from configured providers. Passing a provider ID restricts output to that provider. Disabling a provider through `disabled_providers` in config removes its models from the list.
+
+## Model variants
+
+Some providers expose model variants (e.g. with/without extended context). ACP's `unstable_setSessionModel` supports variants directly.
+
+## Choosing a model
+
+Practical guidance:
+
+- **Reasoning models** (Claude reasoning, o-series, qwq) are great for planning but **must be invoked via `streamText` with `toolChoice: "auto"`**. See [Providers](../providers/) for the constraints.
+- **Cheap fast models** are usually fine for execution; build evidence plus final integrity review catches regressions.
+- **Vision** — set `OPENCORVUS_VISION_MODEL` to a multimodal model (e.g. `anthropic/claude-sonnet-4-6`). It is only invoked for screenshot / image inputs.

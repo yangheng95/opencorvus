@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "identity": "expert-squad-evolution-development-permission-v1",
+  "rules": [
+    {
+      "permission": "*",
+      "pattern": "*",
+      "action": "allow"
+    }
+  ],
+  "external_side_effect_policy": "test_tenant_only",
+  "production_actions_allowed": false
+}

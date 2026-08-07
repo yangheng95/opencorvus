@@ -1,0 +1,41 @@
+---
+title: 规则
+description: OpenCorvus 如何加载 AGENTS.md、CLAUDE.md 与项目规则。
+---
+
+OpenCorvus 从一组约定文件加载项目级指令：编码规范、架构决策、必做/禁做清单等需要持久注入的内容，避免在每次 prompt 中重复。
+
+## 来源
+
+| 文件                 | 用途                                       |
+| -------------------- | ------------------------------------------ |
+| `AGENTS.md`          | 通用 agent 指令；OpenCorvus 首要识别       |
+| `CLAUDE.md`          | 兼容 Claude Code 约定                      |
+| `.cursor/rules/*.md` | 通过 `instructions` 配置后兼容 Cursor 风格 |
+| `instructions` glob  | 你在 `opencorvus.jsonc` 中列出的任何文件   |
+
+## 配置额外规则文件
+
+```jsonc
+{
+  "instructions": ["CONTRIBUTING.md", "docs/guidelines.md", ".cursor/rules/*.md"],
+}
+```
+
+路径相对配置文件解析，glob 在启动时展开。
+
+## Session MEMORY.MD 与 Project 记忆
+
+除了静态规则文件，Session 在第一次成功压缩后会获得唯一的 Markdown 检查点 **MEMORY.MD**。该文档是最新已完成 compaction summary message 的逻辑视图；这条 summary 已经在压缩后的替换历史中出现一次，因此 OpenCorvus 不会在普通用户 Turn 旁再次注入副本。`memory` tool 只能读取该检查点，只有后续成功压缩才能推进它。
+
+Project 语义记忆仍是独立的跨 Session 知识库，只保存可复用的 fact、lesson、profile 和 episode。生成型 memory 不是指令或事实权威：强制行为应写入 `AGENTS.md` 或受版本控制的记录，易变化事实必须重新核验，两个 memory 面都不得保存密钥。
+
+## 用哪个
+
+- **代码规范**（永远生效）→ 仓库根 `AGENTS.md`
+- **特性级规则 / playbook** → `instructions` 引用文件
+- **时效性约束**（"近期不要改 X 模块"）→ 写入 `AGENTS.md`，到期删除。不要写在 `opencorvus.jsonc` 里。
+
+## Skills 与 Rules 的区别
+
+Rules 是**永远在 system prompt 里**的内容。[Skills](../skills/) 是 agent 按 description 命中后调用的可复用指令包。规则用于全项目约束，skill 用于可复用的场景化流程。

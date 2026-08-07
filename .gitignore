@@ -1,0 +1,153 @@
+.DS_Store
+node_modules
+.worktrees
+.sst
+.env
+.idea
+.vscode
+.codex
+.codex-*-lkg.log
+.codex-*-lkg.txt
+.codex_out/
+.claude
+*~
+playground
+tmp
+.tmp
+.tmp-*
+packages/opencorvus/.*.tmp/
+dist
+ts-dist
+.turbo
+**/.serena
+.serena/
+/result
+refs
+Session.vim
+a.out
+bin/
+dist/
+dist-vite/
+target/
+.scripts
+.direnv/
+backups/
+code_review.txt
+
+
+# Local dev files
+.opencorvus-worktrees/
+.opencorvus-meta.json
+/opencorvus.json
+/opencorvus.jsonc
+/.zed/
+logs/
+*.bun-build
+tsconfig.tsbuildinfo
+tmp_slack_msg.json
+overlay.json
+*.traineddata
+*.exe
+
+# OpenCorvus runtime and generated paths
+node_modules/
+build/
+# Source dir conflicting with the generic `build/` ignore — `src/build/` is
+# the OpenCorvus build *agent* (post phase-3 of the isomorphic-agent
+# refactor), not a build-output directory.
+!packages/opencorvus/src/build/
+# Repository Expert Squad authoring packages are tracked inputs. Runtime
+# installations remain under the ignored `.opencorvus/` project root.
+!expert-squads/
+!expert-squads/**
+expert-squads/**/node_modules/
+expert-squads/**/dist/
+expert-squads/**/dist-vite/
+expert-squads/**/target/
+.output/
+.next/
+.nuxt/
+.svelte-kit/
+.env.*
+!.env.example
+*.db-shm
+*.db-wal
+*.tsbuildinfo
+coverage/
+.cache/
+.turbo/
+Thumbs.db
+
+# orphan/ad-hoc debug dumps
+.scratch/
+packages/web/qa/screenshots/
+
+# Windows reserved device names — cross-platform LLMs sometimes write
+# 'taskkill ... 2>nul' or '... > nul' from inside a bash shell, which
+# (unlike cmd.exe) happily creates a real file literally named 'nul'.
+# Git then refuses to index it ('short read while indexing nul') and
+# the whole baseline / delivery commit aborts. Same trap for the other
+# DOS devices (CON, PRN, AUX, COM1-9, LPT1-9). Case variants covered
+# because the file might land as 'nul', 'NUL', or mixed.
+nul
+NUL
+Nul
+con
+CON
+prn
+PRN
+aux
+AUX
+com1
+com2
+com3
+com4
+com5
+com6
+com7
+com8
+com9
+lpt1
+lpt2
+lpt3
+lpt4
+lpt5
+lpt6
+lpt7
+lpt8
+lpt9
+
+.opencorvus/runtime/
+.opencorvus/intent/
+.opencorvus/frontend-design/
+.opencorvus/decision-log.md
+.opencorvus/worktrees/
+.opencorvus/ownership/
+.opencorvus/trace/
+.opencorvus/attachments/
+.opencorvus/logs/
+.opencorvus/specs/
+_codex_*.log
+
+/artifacts/
+/opencorvus-dist/
+
+# Codex brief / review scratch files
+.tmp-codex-*
+_codex_*.prompt.md
+
+# SDK regen transient error logs
+packages/sdk/js/openapi-ts-error-*.log
+packages/overlay/src-tauri/target-codex-repaired/
+packages/overlay/dist-artifacts/
+packages/overlay/src-tauri/gen/schemas/macOS-schema.json
+
+# Benchmark / scratch artifacts at repo root
+/.tmp_g12_board.json
+packages/opencorvus/script/cache-probe/out/
+
+.opencorvus/.r/
+
+# Auto-added by OpenCorvus
+# the whole baseline / acceptance commit aborts. Same trap for the other
+.opencorvus/

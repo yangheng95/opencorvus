@@ -1,0 +1,1369 @@
+/* Composer stack: one geometry owner for the outside attachment strip and
+   the rounded input shell. */
+.chat-composer-stack {
+  --chat-composer-min-height: calc(112px * var(--ui-scale));
+  --chat-textarea-height: calc(56px * var(--ui-scale));
+  --chat-composer-font-size: var(--ui-font-control);
+  --chat-textarea-line-height: 1.34;
+  --chat-composer-action-size: var(--oc-density-icon-button);
+  --chat-compose-scale: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: calc(5px * var(--ui-scale));
+  width: min(100%, var(--conversation-message-content-width));
+  max-width: 100%;
+  margin: calc(16px * var(--ui-scale)) auto calc(20px * var(--ui-scale));
+  flex-shrink: 0;
+  container-type: inline-size;
+}
+
+/* Composer attachments strip: chips that show pending uploads outside the
+   input shell. The chip background and border use color-mix over the
+   surface palette so it adapts per theme. */
+.chat-attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(6px * var(--ui-scale));
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0 calc(2px * var(--ui-scale));
+}
+
+/* Flat-redesign Step 2 (2026-05-04): attachment chip border retired
+ * (rule §2.2 A); the surface-inset background against the composer's
+ * own surface delivers the boundary. */
+.chat-attachment-item {
+  display: flex;
+  align-items: center;
+  gap: calc(5px * var(--ui-scale));
+  background: color-mix(in srgb, var(--surface-inset) 78%, transparent);
+  border: 0;
+  border-radius: var(--oc-radius-soft);
+  padding: calc(4px * var(--ui-scale)) calc(8px * var(--ui-scale));
+  font-size: var(--ui-font-small);
+  color: var(--text-soft);
+  max-width: calc(220px * var(--ui-scale));
+  overflow: hidden;
+}
+
+.chat-attachment-thumb {
+  width: calc(28px * var(--ui-scale));
+  height: calc(28px * var(--ui-scale));
+  object-fit: cover;
+  border-radius: var(--oc-radius-soft);
+  flex-shrink: 0;
+}
+
+.oc-button[data-ui="image-preview-trigger"].composer-attachment-preview-trigger {
+  --oc-button-height: calc(28px * var(--ui-scale));
+  --oc-button-padding-x: 0;
+  --oc-button-padding-y: 0;
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-shadow: none;
+
+  width: calc(28px * var(--ui-scale));
+  min-width: calc(28px * var(--ui-scale));
+  height: calc(28px * var(--ui-scale));
+  flex: 0 0 calc(28px * var(--ui-scale));
+  overflow: hidden;
+  border-radius: var(--oc-radius-soft);
+  cursor: zoom-in;
+}
+
+.oc-button[data-ui="image-preview-trigger"].composer-attachment-preview-trigger:hover,
+.oc-button[data-ui="image-preview-trigger"].composer-attachment-preview-trigger:focus-visible {
+  --oc-button-bg: color-mix(in srgb, var(--surface-strong) 72%, transparent);
+}
+
+.chat-attachment-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(28px * var(--ui-scale));
+  height: calc(28px * var(--ui-scale));
+  background: color-mix(in srgb, var(--surface-strong) 84%, transparent);
+  border-radius: var(--oc-radius-soft);
+  font-size: var(--ui-font-small);
+  font-weight: var(--ui-font-weight-strong);
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.chat-attachment-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.chat-attachment-item .oc-button[data-ui="chat-attachment-remove"] {
+  --oc-button-height: var(--oc-density-chip-height);
+  --oc-button-padding-x: 0;
+
+  flex-shrink: 0;
+  width: var(--oc-density-chip-height);
+  min-width: var(--oc-density-chip-height);
+}
+
+/* Composer shell: the operator's primary input surface.
+   The parent layout owns outer spacing, so this shell stays marginless
+   while carrying its own radius token and inner padding. */
+.chat-input {
+  /* Compact density: the textarea floor keeps the Composer reading
+     as a command input rather than a card. */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: calc(6px * var(--ui-scale));
+  width: 100%;
+  max-width: 100%;
+  min-height: var(--chat-composer-min-height);
+  margin: 0;
+  padding: calc(12px * var(--ui-scale)) calc(16px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  box-sizing: border-box;
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 76%, transparent);
+  border-radius: var(--oc-radius-large);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow-md);
+  flex-shrink: 0;
+}
+
+.chat-input:focus-within {
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--border));
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--surface-elevated) 98%, transparent),
+    color-mix(in srgb, var(--surface-strong) 98%, transparent)
+  );
+  box-shadow:
+    0 0 0 calc(2px * var(--ui-scale)) color-mix(in srgb, var(--accent) 16%, transparent),
+    var(--shadow-lg);
+}
+
+.chat-resize-handle {
+  position: absolute;
+  top: calc(4px * var(--ui-scale));
+  left: calc(16px * var(--ui-scale));
+  right: calc(16px * var(--ui-scale));
+  height: calc(6px * var(--ui-scale));
+  margin: 0;
+  z-index: var(--ui-z-decoration);
+  cursor: ns-resize;
+  touch-action: none;
+  user-select: none;
+  border-radius: var(--oc-radius-soft);
+  background: transparent;
+}
+
+.chat-resize-handle:hover,
+.chat-resize-handle:focus-visible {
+  outline: none;
+  background: color-mix(in srgb, var(--surface-inset) 48%, transparent);
+}
+
+/* Composer textarea wrap and inner field: the wrap is the flex slot that
+   anchors the textarea to its height token; the textarea remains the actual
+   editable surface while visually reading as part of the composer shell. */
+.chat-textarea-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-self: stretch;
+  min-height: var(--chat-textarea-height);
+  box-sizing: border-box;
+}
+
+.chat-textarea-wrap .chat-textarea {
+  flex: 1;
+}
+
+.chat-textarea {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+  min-height: var(--chat-textarea-height);
+  box-sizing: border-box;
+}
+
+.chat-textarea-wrap[data-has-mention="true"] .chat-textarea {
+  color: transparent;
+  caret-color: var(--text-strong);
+  -webkit-text-fill-color: transparent;
+}
+
+.chat-mention-presentation {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: calc(5px * var(--ui-scale)) calc(6px * var(--ui-scale)) calc(3px * var(--ui-scale));
+  border: var(--oc-border-width) solid transparent;
+  color: var(--text-strong);
+  font: inherit;
+  font-size: var(--chat-composer-font-size);
+  font-weight: var(--ui-font-weight-body);
+  line-height: var(--chat-textarea-line-height);
+  overflow-wrap: break-word;
+  pointer-events: none;
+  white-space: pre-wrap;
+}
+
+.chat-mention-pill {
+  padding-block: calc(1px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface-inset));
+  box-shadow: inset 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--accent) 16%, transparent);
+  color: var(--accent);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Reference completion uses one grouped Listbox so every real object remains
+   reachable through a single keyboard path. */
+.composer-mention-menu {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + calc(8px * var(--ui-scale)));
+  width: min(calc(420px * var(--ui-scale)), calc(100cqw - calc(16px * var(--ui-scale))));
+  min-width: min(100%, calc(300px * var(--ui-scale)));
+}
+
+.composer-mention-panel {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+}
+
+.composer-mention-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  gap: calc(12px * var(--ui-scale));
+  padding: calc(4px * var(--ui-scale)) calc(9px * var(--ui-scale));
+  color: var(--text-soft);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+.composer-mention-menu-header > span:first-child {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.composer-mention-menu-hint {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-body);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.composer-mention-listbox {
+  --composer-mention-sticky-heading-height: calc(24px * var(--ui-scale));
+
+  display: grid;
+  max-height: min(
+    calc(328px * var(--ui-scale)),
+    calc(var(--ui-overlay-shell-height) - 32px),
+    var(--composer-mention-listbox-available-height, calc(var(--ui-overlay-shell-height) - 32px))
+  );
+  gap: calc(3px * var(--ui-scale));
+  overflow-y: auto;
+  scroll-padding-block-start: var(--composer-mention-sticky-heading-height);
+}
+
+.composer-mention-group {
+  position: sticky;
+  top: 0;
+  z-index: var(--ui-z-sticky);
+  display: flex;
+  align-items: center;
+  min-height: var(--composer-mention-sticky-heading-height);
+  padding: calc(5px * var(--ui-scale)) calc(9px * var(--ui-scale)) calc(3px * var(--ui-scale));
+  border-top: var(--oc-border-width) solid var(--divider-soft);
+  background: var(--menu-panel-bg);
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-medium);
+  letter-spacing: var(--ui-letter-spacing-loose);
+}
+
+.composer-mention-group:first-child {
+  border-top: 0;
+}
+
+.composer-mention-option {
+  display: grid;
+  grid-template-columns: calc(20px * var(--ui-scale)) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: calc(8px * var(--ui-scale));
+  height: calc(45px * var(--ui-scale));
+  min-height: calc(45px * var(--ui-scale));
+  padding: calc(6px * var(--ui-scale)) calc(9px * var(--ui-scale));
+}
+
+.composer-mention-option-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.composer-mention-option[data-selected] .composer-mention-option-icon,
+.composer-mention-option[data-highlighted] .composer-mention-option-icon {
+  color: var(--accent);
+}
+
+.composer-mention-option[data-disabled] {
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: var(--ui-opacity-disabled);
+}
+
+.composer-mention-option[data-disabled] .composer-mention-option-icon,
+.composer-mention-option[data-disabled] .composer-mention-option-kind {
+  color: currentColor;
+}
+
+.composer-mention-option-copy {
+  display: grid;
+  min-width: 0;
+  gap: calc(2px * var(--ui-scale));
+}
+
+:is(.composer-mention-option-label, .composer-mention-option-description) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.composer-mention-option-label {
+  color: inherit;
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-strong);
+}
+
+:is(.composer-mention-option-description, .composer-mention-option-kind) {
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+}
+
+.composer-mention-option-kind {
+  padding: calc(2px * var(--ui-scale)) calc(6px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: color-mix(in srgb, var(--surface-inset) 74%, transparent);
+  white-space: nowrap;
+}
+
+.composer-mention-option[data-mention-kind="skill"] .composer-mention-option-kind,
+.composer-mention-option[data-mention-kind="mission-skill"] .composer-mention-option-kind,
+.composer-mention-option[data-mention-kind="squad"] .composer-mention-option-kind {
+  animation: composer-discovery-color-pulse var(--ui-duration-loop-pulse) var(--ui-timing-standard) infinite;
+}
+
+.composer-mention-empty {
+  padding: calc(18px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-small);
+  text-align: center;
+}
+
+/* Floating placeholder overlay: the textarea's native placeholder is
+   plain text; this overlay layers a stylised hint with an animated caret
+   that shows when the textarea is empty. The caret pulse animation was
+   removed (kept the WebView2 compositor awake on idle composers). */
+.chat-placeholder-float {
+  position: absolute;
+  inset: 0;
+  padding: calc(5px * var(--ui-scale) * var(--chat-compose-scale))
+    calc(8px * var(--ui-scale) * var(--chat-compose-scale));
+  font-size: var(--chat-composer-font-size);
+  line-height: var(--chat-textarea-line-height);
+  color: var(--text-muted);
+  pointer-events: none;
+  overflow: hidden;
+  opacity: var(--ui-opacity-subtle);
+}
+
+.chat-placeholder-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.chat-placeholder-mentions {
+  color: var(--text-soft);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+/* Composer send/stop controls route through the shared Button primitive.
+   This surface only owns the textarea-matched geometry and the explicit
+   disabled token values that keep the primary action visible. */
+.chat-compose-meta-right .oc-button[data-mode] {
+  --oc-button-height: var(--chat-composer-action-size);
+  --oc-button-padding-x: 0;
+  --oc-button-gap: calc(6px * var(--ui-scale) * var(--chat-compose-scale));
+  --oc-button-bg: var(--text-strong);
+  --oc-button-border: 0 solid transparent;
+  --oc-button-color: var(--text-on-strong);
+
+  align-self: center;
+  width: var(--chat-composer-action-size);
+  min-width: var(--chat-composer-action-size);
+  min-height: var(--chat-composer-action-size);
+  flex-shrink: 0;
+  box-shadow: none;
+}
+
+.chat-compose-meta-right .oc-button[data-mode="send"]:disabled {
+  --oc-button-border: 0 solid transparent;
+  --oc-button-bg: color-mix(in srgb, var(--text-strong) 42%, var(--surface-inset));
+  --oc-button-color: var(--text-on-strong);
+
+  opacity: var(--ui-opacity-full);
+  box-shadow: inset 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--text-strong) 12%, transparent);
+}
+
+.chat-send-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.chat-send-label {
+  --px-exact: 1;
+
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Compose row: the textarea owns the upper writing area. Action buttons
+   share the bottom toolbar so the input shell stays compact. */
+.chat-compose-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  gap: 0;
+  min-width: 0;
+  min-height: var(--chat-textarea-height);
+  box-sizing: border-box;
+}
+
+/* Drag-over outline: dashed accent ring around the compose row when the
+   operator is dragging a file over the input. The 2px outline width is
+   the same in every theme so it stays as a fixed value rather than
+   `calc(2px * var(--ui-scale))` — outline thickness reads as a single
+   semantic affordance, not a layout dimension. */
+.chat-input[data-dragover] .chat-compose-row {
+  outline: calc(2px * var(--ui-scale)) dashed color-mix(in srgb, var(--accent) 50%, transparent);
+  outline-offset: calc(-2px * var(--ui-scale));
+  border-radius: var(--oc-radius-large);
+}
+
+.chat-input-warning {
+  display: flex;
+  align-items: center;
+  gap: calc(6px * var(--ui-scale));
+  min-width: 0;
+  padding: calc(4px * var(--ui-scale)) calc(6px * var(--ui-scale));
+  color: var(--warn);
+  font-size: var(--ui-font-meta);
+  line-height: 1.35;
+}
+
+.chat-input-warning svg {
+  flex: 0 0 auto;
+}
+
+.chat-input-warning span {
+  min-width: 0;
+}
+
+.composer-attachment-loaders {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: calc(4px * var(--ui-scale));
+  min-width: 0;
+  flex: 0 0 auto;
+}
+
+.chat-compose-meta-right {
+  position: relative;
+  z-index: var(--ui-z-decoration);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: calc(4px * var(--ui-scale) * var(--chat-compose-scale));
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.composer-attachment-input {
+  position: absolute;
+  width: calc(1px * var(--ui-scale));
+  height: calc(1px * var(--ui-scale));
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.composer-attachment-loader-trigger.oc-button {
+  --oc-button-height: calc(32px * var(--ui-scale));
+  --oc-button-padding-x: 0;
+  --oc-button-bg: transparent;
+  --oc-button-color: var(--text-muted);
+  --oc-button-shadow: none;
+
+  flex: 0 0 auto;
+}
+
+.composer-attachment-loader-trigger.oc-button:hover,
+.composer-attachment-loader-trigger.oc-button:focus-visible {
+  --oc-button-bg: var(--hover-wash);
+  --oc-button-color: var(--text-strong);
+  --oc-button-shadow: none;
+}
+
+.composer-attachment-menu {
+  position: fixed;
+  width: max-content;
+  min-width: calc(176px * var(--ui-scale));
+}
+
+.composer-attachment-menu-item {
+  display: grid;
+  grid-template-columns: calc(20px * var(--ui-scale)) minmax(0, 1fr);
+}
+
+.composer-attachment-loader-count {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Compose meta: attachment/runtime controls and model selection beneath
+   the textarea. Launch intent is owned by the left Dock entry. */
+.chat-compose-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(8px * var(--ui-scale) * var(--chat-compose-scale));
+  flex-wrap: nowrap;
+  min-width: 0;
+  padding: 0 calc(2px * var(--ui-scale) * var(--chat-compose-scale));
+  border-top: 0 solid transparent;
+}
+
+.chat-compose-meta-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: calc(5px * var(--ui-scale) * var(--chat-compose-scale));
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.composer-runtime-menu-item {
+  grid-template-columns: calc(20px * var(--ui-scale)) minmax(0, 1fr) auto auto;
+}
+
+.composer-runtime-menu-icon,
+.composer-runtime-menu-chevron {
+  color: var(--text-muted);
+  transition: color var(--ui-duration-fast);
+}
+
+.composer-runtime-menu-item[aria-expanded="true"] .composer-runtime-menu-icon,
+.composer-runtime-menu-item[data-highlighted] .composer-runtime-menu-icon,
+.composer-runtime-menu-item[data-highlighted] .composer-runtime-menu-chevron {
+  color: var(--text-strong);
+}
+
+.composer-runtime-menu-item[data-checked] .composer-runtime-menu-icon {
+  color: var(--accent);
+}
+
+.composer-runtime-menu-value {
+  min-width: calc(20px * var(--ui-scale));
+  color: var(--text-strong);
+  font-size: var(--chat-composer-font-size);
+  font-weight: var(--ui-font-weight-strong);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.composer-parallelism-menu {
+  position: fixed;
+  width: calc(244px * var(--ui-scale));
+  padding: calc(13px * var(--ui-scale));
+}
+
+.composer-parallelism-slider {
+  display: grid;
+  gap: calc(11px * var(--ui-scale));
+}
+
+.composer-parallelism-slider-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(12px * var(--ui-scale));
+  color: var(--text-strong);
+  font-size: var(--chat-composer-font-size);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+.composer-parallelism-slider-header [data-kb-slider-value-label] {
+  font-variant-numeric: tabular-nums;
+}
+
+.composer-parallelism-slider p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  line-height: 1.35;
+}
+
+.composer-intent-selects {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(6px * var(--ui-scale));
+  min-width: 0;
+}
+
+.composer-intent-select {
+  min-width: 0;
+  max-width: calc(124px * var(--ui-scale));
+}
+
+.composer-mode-option {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(6px * var(--ui-scale));
+  min-width: 0;
+  color: var(--text-strong);
+  font-size: var(--chat-composer-font-size);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: 1;
+}
+
+.composer-mode-menu-option {
+  width: 100%;
+  gap: calc(8px * var(--ui-scale));
+}
+
+.composer-context-flags {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(6px * var(--ui-scale));
+  min-width: 0;
+  overflow: hidden;
+}
+
+:is(.composer-context-flag.oc-badge, .composer-model-selector, .composer-reference-selector) {
+  --composer-pill-height: var(--oc-density-chip-height);
+
+  box-sizing: border-box;
+  height: var(--composer-pill-height);
+  min-height: var(--composer-pill-height);
+  border-radius: var(--oc-radius-pill);
+  box-shadow: none;
+}
+
+.composer-context-flag.oc-badge {
+  min-width: 0;
+  padding-inline: calc(8px * var(--ui-scale));
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 48%, transparent);
+  background: transparent;
+  font-size: var(--chat-composer-font-size);
+  overflow: hidden;
+}
+
+:is(.composer-model-selector, .composer-reference-selector) {
+  border: 0;
+  background: transparent;
+}
+
+.composer-context-squad-flag.oc-badge {
+  flex: 0 1 auto;
+}
+
+.composer-context-flag-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.composer-reference-selector {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+  max-width: calc(210px * var(--ui-scale));
+  flex: 0 1 auto;
+  align-items: center;
+}
+
+.composer-reference-trigger.oc-button {
+  --oc-button-height: var(--composer-pill-height);
+  --oc-button-padding-x: calc(8px * var(--ui-scale));
+  --oc-button-gap: calc(5px * var(--ui-scale));
+  --oc-button-border: 0 solid transparent;
+  --oc-button-bg: transparent;
+  --oc-button-color: var(--text-strong);
+  --oc-button-shadow: none;
+
+  min-width: 0;
+  max-width: 100%;
+  border: 0;
+  border-radius: var(--oc-radius-pill);
+}
+
+.composer-reference-trigger.oc-button:is(:hover, :focus-visible) {
+  --oc-button-bg: var(--ui-list-hover-bg);
+  --oc-button-border: 0 solid transparent;
+}
+
+.composer-reference-trigger-label {
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--chat-composer-font-size);
+  font-weight: var(--ui-font-weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.composer-reference-trigger-count {
+  display: inline-flex;
+  min-width: calc(18px * var(--ui-scale));
+  height: calc(18px * var(--ui-scale));
+  align-items: center;
+  justify-content: center;
+  padding-inline: calc(5px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface-inset));
+  color: var(--accent);
+  font-size: var(--ui-font-tiny);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.composer-reference-popover {
+  width: min(calc(430px * var(--ui-scale)), calc(var(--ui-overlay-shell-width) - 24px));
+  max-height: min(calc(520px * var(--ui-scale)), calc(var(--ui-overlay-shell-height) - 32px));
+  overflow: clip;
+  padding: 0;
+}
+
+.composer-reference-popover-heading {
+  display: grid;
+  gap: calc(2px * var(--ui-scale));
+  padding: calc(11px * var(--ui-scale)) calc(12px * var(--ui-scale)) calc(9px * var(--ui-scale));
+  border-bottom: var(--oc-border-width) solid var(--divider-soft);
+}
+
+.composer-reference-popover-heading > :last-child {
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+  line-height: 1.35;
+}
+
+.composer-reference-search,
+.model-selector-search {
+  padding: calc(9px * var(--ui-scale));
+  border-bottom: var(--oc-border-width) solid var(--divider-soft);
+  background: var(--menu-panel-bg);
+}
+
+.composer-reference-results {
+  max-height: calc(360px * var(--ui-scale));
+  overflow-y: auto;
+  padding: calc(8px * var(--ui-scale));
+  scrollbar-gutter: stable;
+}
+
+.composer-reference-section + .composer-reference-section {
+  margin-top: calc(10px * var(--ui-scale));
+}
+
+.composer-reference-section-title {
+  display: block;
+  padding: calc(2px * var(--ui-scale)) calc(7px * var(--ui-scale)) calc(5px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-strong);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.composer-reference-list {
+  display: grid;
+  gap: calc(2px * var(--ui-scale));
+  max-height: calc(370px * var(--ui-scale));
+  overflow-y: auto;
+  padding: calc(8px * var(--ui-scale));
+}
+
+.composer-reference-results .composer-reference-list {
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+}
+
+.composer-reference-listbox {
+  display: grid;
+  gap: calc(2px * var(--ui-scale));
+}
+
+.composer-reference-listbox .composer-reference-section:not(:first-child) {
+  margin-top: calc(8px * var(--ui-scale));
+}
+
+.composer-reference-option {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: calc(8px * var(--ui-scale));
+  width: 100%;
+  min-height: calc(42px * var(--ui-scale));
+  padding: calc(6px * var(--ui-scale)) calc(7px * var(--ui-scale));
+  border-radius: var(--oc-radius-medium);
+}
+
+.composer-reference-option[data-read-only="true"] {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.composer-reference-option-selection {
+  display: inline-flex;
+  width: calc(16px * var(--ui-scale));
+  height: calc(16px * var(--ui-scale));
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-soft);
+  color: transparent;
+}
+
+.composer-reference-option[data-selected] .composer-reference-option-selection {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+
+.composer-reference-option[data-reference-kind="action"] {
+  margin-top: calc(3px * var(--ui-scale));
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.composer-reference-option[data-system-role="expert_squad_generator"] {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.composer-reference-option[data-reference-kind="action"] .composer-reference-option-selection {
+  border-color: transparent;
+}
+
+.composer-reference-option-icon {
+  display: inline-flex;
+  width: calc(26px * var(--ui-scale));
+  height: calc(26px * var(--ui-scale));
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--oc-radius-soft);
+  background: var(--surface-inset);
+  color: var(--text-muted);
+}
+
+.composer-reference-option-icon:is([data-reference-kind="squad"], [data-reference-kind="action"]) {
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface-inset));
+  color: var(--accent);
+}
+
+.composer-reference-option-icon[data-system-role="expert_squad_generator"] {
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface-inset));
+}
+
+.composer-reference-option-system-badge {
+  flex: 0 0 auto;
+}
+
+.composer-reference-option-copy {
+  display: grid;
+  min-width: 0;
+  gap: calc(1px * var(--ui-scale));
+}
+
+.composer-reference-option-heading {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: calc(6px * var(--ui-scale));
+}
+
+.composer-reference-option-name {
+  min-width: 0;
+  max-width: 52%;
+  flex: 0 0 auto;
+  overflow: hidden;
+  color: var(--text-strong);
+  font-size: var(--ui-font-small);
+  font-weight: var(--ui-font-weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:is(.composer-reference-option-meta, .composer-reference-option-description) {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.composer-reference-option-meta {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.composer-reference-empty {
+  padding: calc(18px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-small);
+  text-align: center;
+}
+
+.composer-model-selector {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  max-width: calc(276px * var(--ui-scale));
+  flex: 0 1 auto;
+  align-items: center;
+  color: var(--text-strong);
+  transition: color var(--ui-duration-base) var(--ui-timing-standard);
+}
+
+/* The model selector is a wrapper around its Kobalte-backed trigger. */
+.composer-model-selector:has(.oc-button:focus-visible) {
+  color: var(--text-strong);
+}
+
+.composer-model-selector .oc-button[data-ui="composer-model-selector-trigger"] {
+  --oc-button-height: var(--composer-pill-height);
+  --oc-button-padding-x: calc(8px * var(--ui-scale));
+  --oc-button-gap: 0;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-bg: transparent;
+  --oc-button-color: inherit;
+  --oc-button-shadow: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(5px * var(--ui-scale));
+  width: auto;
+  max-width: 100%;
+  min-height: var(--oc-button-height);
+  min-width: 0;
+  padding: 0 calc(8px * var(--ui-scale));
+  border: 0;
+  border-radius: var(--oc-radius-pill);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: none;
+  transition:
+    background-color var(--ui-duration-base) var(--ui-timing-standard),
+    color var(--ui-duration-base) var(--ui-timing-standard);
+}
+
+.composer-model-selector .oc-button[data-ui="composer-model-selector-trigger"]:is(:hover, :focus-visible) {
+  --oc-button-bg: var(--ui-list-hover-bg);
+}
+
+.composer-model-selector-copy {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: calc(5px * var(--ui-scale));
+  min-width: 0;
+  max-width: 100%;
+  flex: 1 1 auto;
+}
+
+.composer-model-selector-value {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-strong);
+  font-size: var(--chat-composer-font-size);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.composer-model-usage-trigger {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.composer-model-usage-tooltip {
+  width: max-content;
+  max-width: calc(100cqw - calc(32px * var(--ui-scale)));
+  padding: calc(8px * var(--ui-scale)) calc(10px * var(--ui-scale));
+}
+
+.composer-model-usage-card {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  align-items: center;
+  min-width: calc(176px * var(--ui-scale));
+  gap: calc(16px * var(--ui-scale));
+}
+
+.composer-model-usage-label,
+.composer-model-usage-message {
+  color: var(--text-muted);
+  font-size: var(--ui-font-control);
+  line-height: var(--ui-line-height-tight);
+}
+
+.composer-model-usage-value {
+  justify-self: end;
+  color: var(--text-strong);
+  font-size: var(--ui-font-control);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--ui-font-weight-strong);
+  line-height: var(--ui-line-height-tight);
+  white-space: nowrap;
+}
+
+.composer-model-usage-card[data-exceeded="true"] .composer-model-usage-value,
+.composer-model-usage-error {
+  color: var(--bad);
+}
+
+.composer-model-usage-message {
+  justify-self: end;
+  white-space: nowrap;
+}
+
+.composer-model-selector-popover {
+  z-index: calc(var(--ui-z-dialog) + 1);
+  min-width: min(calc(420px * var(--ui-scale)), calc(var(--ui-overlay-shell-width) - 24px));
+}
+
+div:has(> .composer-model-selector-popover) {
+  z-index: calc(var(--ui-z-dialog) + 1) !important;
+}
+
+.composer-model-configure-provider.oc-button {
+  --oc-button-height: auto;
+  --oc-button-padding-x: calc(8px * var(--ui-scale));
+
+  justify-content: flex-start;
+  width: 100%;
+  margin-top: calc(6px * var(--ui-scale));
+  padding-block: calc(7px * var(--ui-scale));
+  border-top: var(--oc-border-width) solid var(--divider-soft);
+  border-radius: 0 0 var(--oc-radius-soft) var(--oc-radius-soft);
+  text-align: left;
+}
+
+.composer-model-configure-provider-copy {
+  display: grid;
+  min-width: 0;
+  gap: calc(2px * var(--ui-scale));
+}
+
+.composer-model-configure-provider-copy > :first-child {
+  animation: composer-discovery-color-pulse var(--ui-duration-loop-pulse) var(--ui-timing-standard) infinite;
+  font-size: var(--ui-font-small);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+.composer-model-configure-provider-copy small {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@keyframes composer-discovery-color-pulse {
+  0%,
+  100% {
+    color: var(--accent);
+  }
+
+  50% {
+    color: var(--good);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .composer-mention-option[data-mention-kind="skill"] .composer-mention-option-kind,
+  .composer-mention-option[data-mention-kind="mission-skill"] .composer-mention-option-kind,
+  .composer-mention-option[data-mention-kind="squad"] .composer-mention-option-kind,
+  .composer-model-configure-provider-copy > :first-child {
+    animation: none;
+    color: var(--accent);
+  }
+}
+
+/* Container query: when the composer container itself drops below
+   520px, hide the send label but keep the loader and selectors in one
+   meta row; each control owns its own truncation. */
+@container (max-width: 520px) {
+  .chat-compose-meta-right .oc-button[data-mode] {
+    --oc-button-padding-x: calc(10px * var(--ui-scale));
+  }
+
+  .chat-send-label {
+    display: none;
+  }
+}
+
+/* Composer container reflow: keep the primary action circular even when the
+   composer narrows; only tighten the internal rhythm. */
+@container (max-width: 760px) {
+  /* breakpoint: --ui-breakpoint-md */
+  .chat-compose-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .chat-compose-meta-right .oc-button[data-mode] {
+    width: var(--chat-composer-action-size);
+  }
+}
+
+.chat-placeholder-caret {
+  display: inline-block;
+  width: 0.42em;
+  height: 0.42em;
+  margin-left: calc(4px * var(--ui-scale));
+  vertical-align: middle;
+  background: var(--accent);
+  border-radius: 50%;
+  transform: translateY(-0.05em);
+  opacity: var(--ui-opacity-disabled);
+}
+
+.model-selector-popover {
+  min-width: 100%;
+  width: min(calc(460px * var(--ui-scale)), calc(var(--ui-overlay-shell-width) - 24px));
+  max-height: min(calc(520px * var(--ui-scale)), calc(var(--ui-overlay-shell-height) - 32px));
+  overflow: hidden;
+  padding: 0;
+}
+
+.model-selector-popover-body {
+  display: grid;
+  flex-direction: column;
+  gap: calc(7px * var(--ui-scale));
+  max-height: calc(390px * var(--ui-scale));
+  overflow-y: auto;
+  padding: calc(8px * var(--ui-scale));
+  scrollbar-gutter: stable;
+}
+
+.model-selector-popover-empty {
+  padding: calc(10px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-small);
+  line-height: 1.4;
+}
+
+.model-selector-popover-error {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: calc(8px * var(--ui-scale));
+}
+
+.model-selector-popover-error > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.model-selector-popover-group {
+  display: flex;
+  flex-direction: column;
+  gap: calc(3px * var(--ui-scale));
+  padding: calc(6px * var(--ui-scale));
+  border: var(--oc-border-width) solid var(--divider-soft);
+  border-radius: var(--oc-radius-large);
+  background: color-mix(in srgb, var(--surface-elevated) 86%, transparent);
+}
+
+.model-selector-popover-group-header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: calc(7px * var(--ui-scale));
+  padding: calc(1px * var(--ui-scale)) calc(4px * var(--ui-scale)) calc(5px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-strong);
+}
+
+.model-selector-provider-mark {
+  display: inline-flex;
+  width: calc(24px * var(--ui-scale));
+  height: calc(24px * var(--ui-scale));
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--oc-radius-soft);
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface-inset));
+  color: var(--accent);
+  font-size: var(--ui-font-small);
+}
+
+.model-selector-popover-group-copy {
+  display: grid;
+  min-width: 0;
+  gap: calc(1px * var(--ui-scale));
+}
+
+.model-selector-popover-group-name {
+  overflow: hidden;
+  color: var(--text-strong);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:is(.model-selector-popover-group-id, .model-selector-popover-group-count) {
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+.model-selector-popover-group-id {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.model-selector-popover-group-count {
+  padding: calc(3px * var(--ui-scale)) calc(7px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: var(--surface-inset);
+  white-space: nowrap;
+}
+
+.model-selector-listbox {
+  display: flex;
+  flex-direction: column;
+  gap: calc(1px * var(--ui-scale));
+}
+
+.model-selector-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(8px * var(--ui-scale));
+  min-height: calc(34px * var(--ui-scale));
+  padding-block: calc(4px * var(--ui-scale));
+  justify-content: flex-start;
+  font-size: var(--ui-font-small);
+}
+
+.composer-picker-option-icon {
+  display: inline-flex;
+  width: calc(20px * var(--ui-scale));
+  height: calc(20px * var(--ui-scale));
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--oc-radius-soft);
+  background: var(--surface-inset);
+  color: var(--text-muted);
+}
+
+.model-selector-option-copy {
+  display: grid;
+  min-width: 0;
+  flex: 1 1 auto;
+  gap: calc(2px * var(--ui-scale));
+}
+
+.composer-picker-option-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.model-selector-option-id {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.model-selector-option-check {
+  flex: 0 0 auto;
+  color: var(--accent);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Empty-task row (.chat-empty--task) — placeholder rendered when
+   the chat column has no current task. Stage tone routes through
+   text color instead of a card border.
+   ───────────────────────────────────────────────────────────── */
+
+.chat-empty--task {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: calc(14px * var(--ui-scale));
+  width: min(100%, calc(520px * var(--ui-scale)));
+  min-height: auto;
+  padding: calc(18px * var(--ui-scale)) calc(20px * var(--ui-scale));
+  border: 0 solid transparent;
+  border-left: 0 solid transparent;
+  border-radius: 0;
+  background: transparent;
+  opacity: var(--ui-opacity-full);
+}
+
+.chat-empty--task[data-status="queued"] {
+  color: var(--warn);
+}
+
+.chat-empty--task[data-status="failed"],
+.chat-empty--task[data-status="cancelled"] {
+  color: var(--bad);
+}

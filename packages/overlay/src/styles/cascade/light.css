@@ -1,0 +1,153 @@
+/* ─────────────────────────────────────────────────────────────
+   Light theme palette.
+
+   Theme-architecture Step 0 (2026-05-04): aligned with dark/vscode-
+   dark to declare the **same palette token set** (rule 8 — single
+   source). Previously this file was missing `--accent-shadow`,
+   `--accent-glow`, `--dialog-backdrop` (some patched via
+   design-language.css body block, others fell through to dark's
+   :root values — that leak is now closed). The structural
+   tokens that used to live here (font sizes, layout dimensions,
+   titlebar/panel/rail widths) moved to `tokens/design-language.css`
+   :root because they are theme-independent.
+   ───────────────────────────────────────────────────────────── */
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --text-on-accent: #ffffff;
+  --text-on-strong: #ffffff;
+  --text-on-danger: #101527;
+  --bg: rgb(244, 244, 244);
+  --surface: rgb(255, 255, 255);
+  --surface-hover: rgb(240, 240, 240);
+  --surface-inset: rgb(244, 244, 245);
+  --surface-strong: rgb(255, 255, 255);
+  --rail-surface: rgb(247, 247, 247);
+  --rail-background-image: linear-gradient(
+    180deg,
+    rgb(239, 247, 249) 0%,
+    rgb(247, 246, 245) 48%,
+    rgb(249, 245, 242) 64%,
+    rgb(239, 248, 244) 100%
+  );
+  --chat-canvas: rgb(255, 255, 255);
+  --workspace-ambient-fill: var(--chat-canvas);
+  --inspector-surface: var(--chat-canvas);
+  --body-bg: var(--rail-surface);
+  --panel-body-bg: var(--rail-surface);
+  --panel-body-blur: blur(20px);
+  --chrome: rgb(247, 247, 247);
+  --border: rgba(32, 38, 40, 0.14);
+  --border-hover: rgba(32, 38, 40, 0.28);
+  --border-strong: rgba(32, 38, 40, 0.22);
+  --ui-focused-popup-border: var(--oc-border-width) solid var(--border-strong);
+  --ui-focused-popup-shadow:
+    0 calc(24px * var(--ui-scale)) calc(54px * var(--ui-scale))
+      color-mix(in srgb, var(--ui-shadow-tone) 28%, transparent),
+    var(--shadow-lg);
+  --ui-focused-popup-scrim: color-mix(in srgb, var(--text-strong) 14%, transparent);
+  --text: #343a3d;
+  --text-strong: #181b1d;
+  --text-soft: #454c4f;
+  --text-muted: #596164;
+  --accent: #0969da;
+  --accent-dim: color-mix(in srgb, var(--accent) 7%, transparent);
+  --accent-hover: #0757b3;
+  --accent-start: #0969da;
+  --accent-mid: #0969da;
+  --accent-end: #0757b3;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-mid) 52%, var(--accent-end));
+  --accent-gradient-hover: linear-gradient(135deg, #367cff, #5748ec 56%, #7c40ea);
+  --accent-shadow: 0 10px 26px color-mix(in srgb, var(--accent) 18%, transparent);
+  --accent-ring: color-mix(in srgb, var(--accent) 20%, transparent);
+  --accent-glow: color-mix(in srgb, var(--accent) 18%, transparent);
+  --hover-accent-border: color-mix(in srgb, var(--accent) 25%, transparent);
+  --hover-accent-wash: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--accent) 10%, transparent),
+    color-mix(in srgb, var(--accent) 3%, transparent) 58%,
+    color-mix(in srgb, var(--surface-strong) 50%, transparent)
+  );
+  --info: #2f80ed;
+  --info-dim: rgba(47, 128, 237, 0.1);
+  --good: #28a66a;
+  --good-dim: rgba(40, 166, 106, 0.12);
+  --warn: #8f570c;
+  --warn-dim: rgba(143, 87, 12, 0.12);
+  --bad: #d85666;
+  --bad-dim: rgba(216, 86, 102, 0.12);
+  --shadow: inset 0 1px 0 color-mix(in srgb, var(--surface-strong) 82%, transparent);
+  --shadow-md:
+    0 4px 12px rgba(32, 38, 40, 0.08), inset 0 1px 0 color-mix(in srgb, var(--surface-strong) 86%, transparent);
+  --shadow-lg:
+    0 12px 32px rgba(32, 38, 40, 0.1), inset 0 1px 0 color-mix(in srgb, var(--surface-strong) 90%, transparent);
+  --scrollbar-thumb: rgba(32, 38, 40, 0.18);
+  --scrollbar-thumb-hover: color-mix(in srgb, var(--accent) 34%, transparent);
+  --session-scrollbar-track: color-mix(in srgb, var(--surface-strong) 48%, transparent);
+  --subtle-1: color-mix(in srgb, var(--accent) 4%, transparent);
+  --subtle-2: color-mix(in srgb, var(--accent) 6.5%, transparent);
+  --subtle-3: color-mix(in srgb, var(--accent) 8.5%, transparent);
+  --subtle-4: color-mix(in srgb, var(--accent) 12%, transparent);
+  --subtle-5: color-mix(in srgb, var(--accent) 16%, transparent);
+
+  /* Markdown / hljs (highlight.js) syntax palette. Code blocks render on
+   * --surface-inset, so syntax colors are theme-scoped instead of fixed at
+   * design-language root. */
+  --oc-syntax-keyword: #cf222e;
+  --oc-syntax-string: #0a3069;
+  --oc-syntax-comment: #57606a;
+  --oc-syntax-number: #0550ae;
+  --oc-syntax-function: #6f42c1;
+  --oc-syntax-variable: #953800;
+  --oc-syntax-meta: #116329;
+  --oc-syntax-addition-text: #116329;
+  --oc-syntax-addition-bg: color-mix(in srgb, #1a7f37 14%, transparent);
+  --oc-syntax-deletion-text: #82071e;
+  --oc-syntax-deletion-bg: color-mix(in srgb, #cf222e 12%, transparent);
+
+  --dialog-bg: rgb(255, 255, 255);
+  --dialog-backdrop: rgba(0, 0, 0, 0.4);
+  --ui-scrim: color-mix(in srgb, black 40%, transparent);
+  --ui-shadow-tone: color-mix(in srgb, black 10%, transparent);
+  --ui-highlight-tone: color-mix(in srgb, var(--surface-strong) 56%, transparent);
+  --ui-glass-tint: color-mix(in srgb, var(--surface-strong) 62%, transparent);
+  --task-bar-bg: var(--ui-glass-tint);
+  /* The task bar overlays a frequently changing transcript. A live blur
+   * forces the WebView compositor to re-raster its backdrop while scrolling,
+   * so the light theme deliberately uses the same opaque contract as the
+   * other themes. */
+  --task-bar-backdrop-filter: none;
+  --task-bar-border-color: color-mix(in srgb, var(--accent) 14%, var(--border));
+  --menu-panel-bg: rgb(255, 255, 255);
+  --divider-soft: rgba(32, 38, 40, 0.1);
+  --panel-fill:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-strong) 70%, transparent),
+      color-mix(in srgb, var(--surface-strong) 30%, transparent) 58%,
+      color-mix(in srgb, var(--surface-strong) 50%, transparent)
+    ),
+    var(--surface);
+  --panel-fill-hover:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent) 10%, transparent),
+      color-mix(in srgb, var(--surface-strong) 40%, transparent) 58%,
+      color-mix(in srgb, var(--surface-strong) 60%, transparent)
+    ),
+    var(--surface-hover);
+  --card-fill:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-strong) 70%, transparent),
+      color-mix(in srgb, var(--surface-strong) 30%, transparent) 72%
+    ),
+    var(--subtle-1);
+  --card-fill-hover:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent) 8%, transparent),
+      color-mix(in srgb, var(--surface-strong) 50%, transparent) 68%
+    ),
+    var(--surface-hover);
+}

@@ -1,0 +1,160 @@
+---
+title: MCP 服务器
+description: 将 OpenCorvus agent 接入本地或远程 MCP server。
+---
+
+MCP 是 Anthropic 主导、社区维护的开放协议，定义 LLM 应用与外部工具服务器的标准通信接口。协议规范：[modelcontextprotocol.io](https://modelcontextprotocol.io)。
+
+OpenCorvus 是 **MCP Client**：连接外部 MCP Server，并把其工具、提示词和资源投影进当前专家团 runtime。
+
+源码：`packages/opencorvus/src/mcp/index.ts`
+
+## 1. 消费外部 MCP Server
+
+### 连接时序
+
+1. 服务启动读 config `mcp` 字段（`src/mcp/index.ts`）
+2. 按 `type` 创建 transport：
+   - `"local"` → `StdioClientTransport`（子进程 stdin/stdout）
+   - `"remote"` → 必须显式配置 `transport`：标准远程 MCP endpoint 使用 `streamable-http`，仅支持 SSE 的 server 使用 `sse`
+3. 连接后 `client.listTools()`
+4. 工具名经 sanitize（非字母数字 → `_`）后以 `{clientName}_{toolName}` 注册到 session 工具集
+
+Agent 调用 MCP 工具时通过 `client.callTool()` 转发（`src/mcp/index.ts`）。
+
+## 2. 配置 MCP Server
+
+### 本地进程（stdio）
+
+```jsonc
+{
+  "mcp": {
+    "my-local-server": {
+      "type": "local",
+      "command": ["node", "/path/to/server/index.js"],
+      "environment": { "API_KEY": "sk-..." },
+      "enabled": true,
+      "timeout": 30000,
+    },
+  },
+}
+```
+
+字段（`src/config/config.ts`）：
+
+| 字段          | 说明                                 |
+| ------------- | ------------------------------------ |
+| `type`        | `"local"`                            |
+| `command`     | 命令 + 参数数组                      |
+| `environment` | 子进程额外 env（叠加 `process.env`） |
+| `enabled`     | `false` 跳过连接                     |
+| `timeout`     | 请求超时 ms（默认 30000）            |
+
+### 远程 OAuth Server
+
+```jsonc
+{
+  "mcp": {
+    "my-remote-server": {
+      "type": "remote",
+      "transport": "streamable-http",
+      "url": "https://mcp.example.com/api",
+      "enabled": true,
+      "timeout": 30000,
+    },
+  },
+}
+```
+
+字段（`src/config/config.ts`）：
+
+| 字段                 | 说明                                             |
+| -------------------- | ------------------------------------------------ |
+| `url`                | MCP Server HTTP(S) 地址                          |
+| `transport`          | 远程 MCP transport；只能是 `streamable-http` 或 `sse` |
+| `headers`            | Server 要求的非认证路由或租户请求头             |
+| `oauth`              | `McpOAuth \| false`；远程 server 默认启用 OAuth |
+| `oauth.clientId`     | 静态 client ID（跳过动态注册）                   |
+| `oauth.clientSecret` | client secret                                    |
+| `oauth.scope`        | OAuth scope                                      |
+
+## 3. 已支持的 MCP 能力
+
+| 能力                                         | 状态             |
+| -------------------------------------------- | ---------------- |
+| Tools (`listTools` + `callTool`)             | 完整             |
+| Prompts (`listPrompts` + `getPrompt`)        | 完整             |
+| Resources (`listResources` + `readResource`) | 完整             |
+| `ToolListChanged` 通知                       | 支持             |
+| StreamableHTTP / SSE / stdio transports      | 通过显式配置支持 |
+| OAuth 2.0 + PKCE                             | 远程默认开启     |
+| 动态 client 注册 (RFC 7591)                  | 支持             |
+
+## 4. OAuth 认证流程
+
+远程服务器返回 `UnauthorizedError` → 标记 `needs_auth`。执行：
+
+```bash
+opencorvus mcp auth <server-name>
+```
+
+OpenCorvus 本地启 callback server，打开浏览器跳转授权，code 交换 token 后持久化到解析后的 OpenCorvus data 目录下的 `mcp-auth.json`。
+
+查询状态：
+
+```bash
+opencorvus mcp list
+```
+
+清除认证：
+
+```bash
+opencorvus mcp logout <server-name>
+```
+
+## 5. 典型配置示例
+
+**本地 Filesystem Server：**
+
+```jsonc
+{
+  "mcp": {
+    "filesystem": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/home/user/projects"],
+    },
+  },
+}
+```
+
+**远程 OAuth Server：**
+
+```jsonc
+{
+  "mcp": {
+    "remote-tools": {
+      "type": "remote",
+      "transport": "streamable-http",
+      "url": "https://mcp.example.com/rpc",
+    },
+  },
+}
+```
+
+**禁用某个已配置的 Server：**
+
+```jsonc
+{ "mcp": { "github": { "type": "remote", "transport": "streamable-http", "url": "...", "enabled": false } } }
+```
+
+## 6. 连接状态
+
+| 状态                        | 含义                                    |
+| --------------------------- | --------------------------------------- |
+| `connected`                 | 连接成功                                |
+| `disabled`                  | `enabled: false` 或手动断开             |
+| `failed`                    | 连接失败（详见 `error`）                |
+| `needs_auth`                | 需要 OAuth                              |
+| `needs_client_registration` | 服务器不支持动态注册，需提供 `clientId` |
+
+默认超时 30000ms（`src/mcp/index.ts`）；可由 `timeout` 字段或全局 `experimental.mcp_timeout` 调整。

@@ -1,0 +1,265 @@
+import { ExpertSquadConversationAuthoring } from "@/expert-squad/conversation-authoring"
+import { RuntimeTemplateID } from "@/agent/runtime-template-id"
+import { Instance } from "@/project/instance"
+import {
+  ExpertSquadConfigurationSchema,
+  ExpertSquadDynamicAgentIDSchema,
+  ExpertSquadIDSchema,
+  ExpertSquadNamespaceSchema,
+  ExpertSquadProjectionResourcesSchema,
+  ProductPillarsSchema,
+  ExpertSquadTextPackageDefinitionSchema,
+  ExpertSquadVersionSchema,
+  ExpertSquadVirtualWorkflowNodeSchema,
+} from "@opencorvus-ai/sdk/expert-squad-authoring"
+import { tool as aiTool } from "ai"
+import z from "zod"
+import { Tool } from "./tool"
+import {
+  expertSquadGenerationAuthority,
+  type ExpertSquadGenerationTrace,
+} from "@/expert-squad/installation-metadata"
+
+const AuthoringProjectionResourceDefaults = {
+  built_in_tool_ids: ExpertSquadProjectionResourcesSchema.shape.built_in_tool_ids.default([]),
+  default_skill_refs: ExpertSquadProjectionResourcesSchema.shape.default_skill_refs.default([]),
+  package_skill_refs: ExpertSquadProjectionResourcesSchema.shape.package_skill_refs.default([]),
+  default_tool_refs: ExpertSquadProjectionResourcesSchema.shape.default_tool_refs.default([]),
+  package_tool_refs: ExpertSquadProjectionResourcesSchema.shape.package_tool_refs.default([]),
+  default_mcp_server_refs: ExpertSquadProjectionResourcesSchema.shape.default_mcp_server_refs.default([]),
+  package_mcp_server_refs: ExpertSquadProjectionResourcesSchema.shape.package_mcp_server_refs.default([]),
+  default_mcp_tool_refs: ExpertSquadProjectionResourcesSchema.shape.default_mcp_tool_refs.default([]),
+  package_mcp_tool_refs: ExpertSquadProjectionResourcesSchema.shape.package_mcp_tool_refs.default([]),
+  default_mcp_prompt_refs: ExpertSquadProjectionResourcesSchema.shape.default_mcp_prompt_refs.default([]),
+  package_mcp_prompt_refs: ExpertSquadProjectionResourcesSchema.shape.package_mcp_prompt_refs.default([]),
+  default_mcp_resource_refs: ExpertSquadProjectionResourcesSchema.shape.default_mcp_resource_refs.default([]),
+  package_mcp_resource_refs: ExpertSquadProjectionResourcesSchema.shape.package_mcp_resource_refs.default([]),
+}
+
+const AuthoringReferencedResourceDefaults = {
+  default_skill_refs: AuthoringProjectionResourceDefaults.default_skill_refs,
+  package_skill_refs: AuthoringProjectionResourceDefaults.package_skill_refs,
+  default_tool_refs: AuthoringProjectionResourceDefaults.default_tool_refs,
+  package_tool_refs: AuthoringProjectionResourceDefaults.package_tool_refs,
+  default_mcp_server_refs: AuthoringProjectionResourceDefaults.default_mcp_server_refs,
+  package_mcp_server_refs: AuthoringProjectionResourceDefaults.package_mcp_server_refs,
+  default_mcp_tool_refs: AuthoringProjectionResourceDefaults.default_mcp_tool_refs,
+  package_mcp_tool_refs: AuthoringProjectionResourceDefaults.package_mcp_tool_refs,
+  default_mcp_prompt_refs: AuthoringProjectionResourceDefaults.default_mcp_prompt_refs,
+  package_mcp_prompt_refs: AuthoringProjectionResourceDefaults.package_mcp_prompt_refs,
+  default_mcp_resource_refs: AuthoringProjectionResourceDefaults.default_mcp_resource_refs,
+  package_mcp_resource_refs: AuthoringProjectionResourceDefaults.package_mcp_resource_refs,
+}
+
+const AuthoringVirtualWorkflowNodeSchema = z
+  .object({
+    agent_id: ExpertSquadVirtualWorkflowNodeSchema.shape.agent_id,
+    description: ExpertSquadVirtualWorkflowNodeSchema.shape.description,
+    depends_on: z
+      .array(ExpertSquadIDSchema)
+      .default([])
+      .overwrite((values) => [...new Set(values)].sort()),
+  })
+  .strict()
+
+const AuthoringVirtualWorkflowSchema = z
+  .object({
+    label: z.string().trim().min(1),
+    description: z.string().trim().min(1),
+    nodes: z
+      .record(ExpertSquadIDSchema, AuthoringVirtualWorkflowNodeSchema)
+      .refine((nodes) => Object.keys(nodes).length > 0, { message: "virtual workflow requires at least one node" }),
+  })
+  .strict()
+
+export const ExpertSquadAuthorDefinitionSchema = ExpertSquadTextPackageDefinitionSchema
+
+const AuthoringSchedulerInputSchema = z
+  .object({
+    prompt: z.string().trim().min(1),
+    ...AuthoringReferencedResourceDefaults,
+  })
+  .strict()
+
+const AuthoringAgentInputSchema = z
+  .object({
+    label: z.string().trim().min(1),
+    description: z.string().trim().min(1),
+    base_role: z
+      .enum(RuntimeTemplateID.ids)
+      .describe(
+        "fact-check reviews exactly one existing assistant message per workflow node. Give it exactly one upstream producer dependency; use separate fact-check nodes for separate messages, or synthesize them into one message first. Use deep-research for independent public-source investigation.",
+      ),
+    prompt: z.string().trim().min(1),
+    ...AuthoringReferencedResourceDefaults,
+  })
+  .strict()
+
+export const ExpertSquadAuthorParameters = z
+  .object({
+    schema_version: z.literal(1),
+    namespace: ExpertSquadNamespaceSchema,
+    id: ExpertSquadIDSchema,
+    name: z.string().trim().min(1).optional(),
+    label: z.string().trim().min(1),
+    description: z.string().trim().min(1),
+    version: ExpertSquadVersionSchema,
+    product_pillars: ProductPillarsSchema.describe("Product pillars where this Expert Squad is valid."),
+    configuration: ExpertSquadConfigurationSchema.optional(),
+    expected_current_package_digest: z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .optional()
+      .describe("Required current installed package digest when replacing an existing package."),
+    readme: z.string().trim().min(1).describe("Complete README.md content."),
+    selector: z
+      .object({
+        summary: z.string().trim().min(1),
+        selection_guidance: z.string().trim().min(1),
+        instructions: z.string().trim().min(1).describe("Complete selector.md content."),
+      })
+      .strict(),
+    scheduler: AuthoringSchedulerInputSchema,
+    agents: z
+      .record(ExpertSquadDynamicAgentIDSchema, AuthoringAgentInputSchema)
+      .refine((agents) => Object.keys(agents).length > 0, { message: "at least one agent is required" }),
+    virtual_workflows: z.record(ExpertSquadIDSchema, AuthoringVirtualWorkflowSchema),
+    extra_files: z
+      .record(z.string(), z.string())
+      .default({})
+      .describe("Only additional package files required by declared package resources; omit when unused."),
+  })
+  .strict()
+  .superRefine((value, context) => {
+    const canonicalPaths = new Set([
+      "README.md",
+      "selector.md",
+      "agents/orchestrator/system.md",
+      ...Object.keys(value.agents).map((agentID) => `agents/${agentID}/system.md`),
+    ])
+    for (const file of Object.keys(value.extra_files)) {
+      if (!canonicalPaths.has(file)) continue
+      context.addIssue({
+        code: "custom",
+        path: ["extra_files", file],
+        message: `${file} is Host-owned; provide its content through the matching inline blueprint field`,
+      })
+    }
+  })
+
+export function buildExpertSquadAuthorDefinition(args: z.infer<typeof ExpertSquadAuthorParameters>) {
+  const input = ExpertSquadAuthorParameters.parse(args)
+  const { prompt: schedulerPrompt, ...schedulerProjection } = input.scheduler
+  const files: Record<string, string> = {
+    ...input.extra_files,
+    "README.md": input.readme,
+    "selector.md": input.selector.instructions,
+    "agents/orchestrator/system.md": schedulerPrompt,
+  }
+  const agents = Object.fromEntries(
+    Object.entries(input.agents).map(([agentID, agent]) => {
+      const prompt = `agents/${agentID}/system.md`
+      const { prompt: agentPrompt, ...projection } = agent
+      files[prompt] = agentPrompt
+      return [agentID, { ...projection, prompt }]
+    }),
+  )
+  return ExpertSquadAuthorDefinitionSchema.parse({
+    manifest: {
+      schema_version: input.schema_version,
+      namespace: input.namespace,
+      id: input.id,
+      ...(input.name ? { name: input.name } : {}),
+      label: input.label,
+      description: input.description,
+      version: input.version,
+      product_pillars: input.product_pillars,
+      configuration: input.configuration,
+      readme: "README.md",
+      selector: {
+        summary: input.selector.summary,
+        selection_guidance: input.selector.selection_guidance,
+        instructions: "selector.md",
+      },
+      capability_projection: {
+        scheduler: {
+          ...schedulerProjection,
+          base_role: "orchestrator",
+          prompt: "agents/orchestrator/system.md",
+          inherit_base_tools: true,
+          built_in_tool_ids: ["dispatch_agent"],
+        },
+        agents: Object.fromEntries(
+          Object.entries(agents).map(([agentID, projection]) => [
+            agentID,
+            {
+              ...projection,
+              inherit_base_tools: true,
+              built_in_tool_ids: [],
+            },
+          ]),
+        ),
+        virtual_workflows: input.virtual_workflows,
+      },
+    },
+    files,
+  })
+}
+
+function generationTrace(trace: ExpertSquadGenerationTrace) {
+  return {
+    ...expertSquadGenerationAuthority(trace),
+    method: "sdk_authoring" as const,
+  }
+}
+
+export async function authorProjectExpertSquad(
+  args: z.infer<typeof ExpertSquadAuthorParameters>,
+  trace: ExpertSquadGenerationTrace,
+) {
+  return ExpertSquadConversationAuthoring.author({
+    projectDirectory: Instance.project.worktree,
+    definition: buildExpertSquadAuthorDefinition(args),
+    installationScope: "project",
+    generation: generationTrace(trace),
+    expectedCurrentPackageDigest: args.expected_current_package_digest,
+  })
+}
+
+const DESCRIPTION = [
+  "Author, validate, and explicitly import one OpenCorvus Expert Squad through the canonical SDK writer.",
+  "Submit the compact authoring blueprint directly. Prompts and README/selector content are inline; the Host deterministically owns canonical manifest paths and package file projection. Empty resource arrays, empty depends_on arrays, and extra_files may be omitted.",
+  "The Host writes a temporary source package with @opencorvus-ai/sdk/expert-squad-authoring, validates it through the Registry, records exact Task and Session generation provenance, imports it into the current project's canonical .opencorvus/expert-squads root through the Manager, removes the temporary source, and returns exact installed identity, scope, agents, read-only workflow topology analysis, file count, canonical package digest, generation trace, and target.",
+  "The Host writes a temporary source package with @opencorvus-ai/sdk/expert-squad-authoring, validates it through the Registry, records exact Task and Session generation provenance, imports it into the current project's canonical .opencorvus/expert-squads root through the Manager, removes the temporary source, and returns exact installed identity, scope, agents, read-only workflow topology analysis, file count, canonical package digest, mutation operation, generation trace, and target.",
+  "A new project-owned ID installs directly. Replacing an existing exact ID requires expected_current_package_digest; a stale digest returns an explicit compare-and-swap conflict.",
+  "Every successful generation becomes discoverable through the current project catalog. The tool never activates the generated Squad and exposes no model-selected installation scope or target path.",
+].join("\n")
+
+export const ExpertSquadAuthorTool = Tool.define("expert_squad_author", {
+  description: DESCRIPTION,
+  parameters: ExpertSquadAuthorParameters,
+  async execute(args, ctx) {
+    const taskID = typeof ctx.extra?.taskID === "string" ? ctx.extra.taskID.trim() : ""
+    if (!taskID) throw new Error("expert_squad_author requires the current Task identity")
+    await ctx.ask({
+      permission: "expert_squad_author",
+      patterns: [`project:${Instance.project.id}`],
+      always: [],
+      metadata: { installationScope: "project", projectID: Instance.project.id },
+    })
+    const result = await authorProjectExpertSquad(args, { taskID, sessionID: ctx.sessionID })
+    return {
+      title: `Authored Agent Squad ${result.id}`,
+      metadata: result,
+      output: JSON.stringify(result, null, 2),
+    }
+  },
+})
+
+export function createExpertSquadAuthorAiTool(trace: ExpertSquadGenerationTrace) {
+  return aiTool({
+    description: DESCRIPTION,
+    inputSchema: ExpertSquadAuthorParameters,
+    execute: (args) => authorProjectExpertSquad(args, trace),
+  })
+}

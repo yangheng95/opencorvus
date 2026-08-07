@@ -1,0 +1,137 @@
+---
+title: ACP 支持
+description: 在任意兼容 ACP 的编辑器（如 Zed）中通过 stdin/stdout JSON-RPC 使用 OpenCorvus。
+---
+
+ACP 是**标准化的 AI 代理-编辑器通信协议**，通过统一接口把代理与客户端（编辑器）解耦。
+
+源码：`packages/opencorvus/src/acp/`，SDK：`@agentclientprotocol/sdk@0.14.1`。
+
+## `opencorvus acp` 命令
+
+```bash
+opencorvus acp                         # 当前目录
+opencorvus acp --cwd /path/to/project  # 指定工作目录
+OPENCORVUS_ENABLE_QUESTION_TOOL=1 opencorvus acp   # 启用 QuestionTool
+```
+
+源码：`packages/opencorvus/src/cli/cmd/acp.ts`
+
+启动行为：
+
+1. 随机端口启内部 `opencorvus serve`（HTTP REST）
+2. 创建 `@opencorvus-ai/sdk` 客户端连接内部服务
+3. 通过 `@agentclientprotocol/sdk` 的 `ndJsonStream` 在 **stdin/stdout** 建立 JSON-RPC 通道
+4. 实例化 `ACP.Agent`，等待客户端连接
+
+传输层：**newline-delimited JSON (ndjson) over stdio**，客户端与 `opencorvus` 进程通过标准输入输出通信，不暴露外部端口（`src/cli/cmd/acp.ts`）。
+
+## Zed 编辑器连接
+
+`~/.config/zed/settings.json`：
+
+```json
+{
+  "agent_servers": {
+    "OpenCorvus": {
+      "command": "opencorvus",
+      "args": ["acp"]
+    }
+  }
+}
+```
+
+Zed 按需 spawn `opencorvus acp`，通过 stdin/stdout 通信（`src/acp/README.md`）。
+
+## 支持的 ACP 方法
+
+### 初始化
+
+| 方法         | 说明                                                  |
+| ------------ | ----------------------------------------------------- |
+| `initialize` | 协商协议版本（返回 `protocolVersion: 1`），广播能力集 |
+
+广播的能力（`src/acp/agent.ts`）：`loadSession: true`，MCP 支持 `http` / `sse`，Prompt 支持 `embeddedContext` / `image`，Session 能力 `fork` / `list` / `resume`。
+
+### 会话管理
+
+| 方法                       | 说明                                      |
+| -------------------------- | ----------------------------------------- |
+| `session/new`              | 新建会话，映射到内部 opencorvus session   |
+| `session/load`             | 加载会话，回放消息历史，恢复模型与 mode   |
+| `unstable_listSessions`    | 按更新时间倒序列出，cursor 分页（100/页） |
+| `unstable_forkSession`     | Fork 会话，回放历史                       |
+| `unstable_resumeSession`   | 恢复会话（不回放历史）                    |
+| `unstable_setSessionModel` | 切换当前模型，支持 variant                |
+| `setSessionMode`           | 切换当前 agent（仅 primary）              |
+
+### 对话
+
+| 方法             | 说明                                                                                              |
+| ---------------- | ------------------------------------------------------------------------------------------------- |
+| `session/prompt` | 发消息，支持 `text` / `image` / `resource_link` / `resource`；`/command` 前缀路由到 slash command |
+
+### 实时通知（server → client）
+
+通过 `connection.sessionUpdate()`：
+
+| 事件                        | 时机                                         |
+| --------------------------- | -------------------------------------------- |
+| `agent_message_chunk`       | AI 文本流式输出（`message.part.delta` 驱动） |
+| `agent_thought_chunk`       | reasoning 内容流                             |
+| `tool_call`                 | 工具调用开始                                 |
+| `tool_call_update`          | 执行中 / 完成 / 失败                         |
+| `plan`                      | `todowrite` 完成时同步 ACP plan entries      |
+| `usage_update`              | prompt 完成后更新 token 与成本               |
+| `available_commands_update` | 会话加载时推送 slash command 列表            |
+
+### 认证
+
+:::caution
+`authenticate` **未实装**，调用抛 `"Authentication not implemented"`（`src/acp/agent.ts`）。
+:::
+
+## 权限处理
+
+ACP 转发内部 `permission.asked` 到客户端（通过 `connection.requestPermission()`）：`once` / `always` / `reject`。
+
+对 `edit` 类权限，客户端批准后 ACP 层调 `connection.writeTextFile()` 把 diff 应用后的内容同步给编辑器（`src/acp/agent.ts`）。
+
+## MCP 服务器支持
+
+`session/new` / `session/load` 参数可含 `mcpServers` 列表：
+
+- 本地进程（`command` + `args` + `env`）
+- 远程 HTTP/SSE（`url` + `headers`）
+
+会话建立后自动调 `sdk.mcp.add()` 注册到内部 opencorvus 实例。
+
+## vs `opencorvus serve`（REST）
+
+| 维度     | ACP                    | serve                    |
+| -------- | ---------------------- | ------------------------ |
+| 传输     | stdin/stdout（ndjson） | HTTP（REST + SSE）       |
+| 客户端   | ACP 兼容编辑器（Zed）  | 浏览器 / SDK / GH Action |
+| 协议     | ACP v1（JSON-RPC）     | 自有 REST                |
+| 流式     | `session/update` 通知  | SSE `/event`             |
+| 外部端口 | 不暴露                 | `7878`                   |
+| 并发     | 单客户端               | 多客户端                 |
+
+## vs MCP
+
+| 维度            | ACP                      | MCP                            |
+| --------------- | ------------------------ | ------------------------------ |
+| 定位            | 编辑器 ↔ AI 代理        | LLM ↔ 工具/数据源             |
+| 方向            | 编辑器调用代理           | LLM 调用工具                   |
+| 会话            | 有（`session/new/load`） | 无                             |
+| 权限 UI         | 代理向编辑器请求         | 无                             |
+| OpenCorvus 角色 | **ACP Server**（被连接） | **MCP Client**（连接外部 MCP） |
+
+## 当前限制
+
+（`src/acp/README.md`）
+
+- **认证**：`authenticate` 直接抛错
+- **Session 持久化**：`session/load` 回放历史消息，但不恢复工作目录快照
+- **Terminal**：`client.ts` 的 terminal 能力为 stub，未接 bash 工具
+- **Session mode 切换**：`setSessionMode` 已实装，但无动态切换 UI 反馈

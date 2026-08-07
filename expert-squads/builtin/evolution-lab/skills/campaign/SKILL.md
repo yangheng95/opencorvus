@@ -1,0 +1,16 @@
+---
+name: evolution-lab-campaign
+description: Execute an explicit Expert Squad incumbent-challenger campaign with immutable package revisions, exact run evidence, frozen scorers, independent integrity review, and a non-executing recommendation.
+---
+
+# Evolution Lab campaign
+
+Use exactly one stage workflow per Task: `evolution-opportunity-analysis`, `evolution-candidate-preparation`, or `evolution-campaign-evaluation`. Mission creates the dependent Evolution Lab and target-Squad Tasks, preserves each immutable `promptProfile`, and imports exact accepted terminal Artifacts between stages. Each declared node publishes its owned `evolution-lab/...@1` Artifact after completely reading and selecting exact predecessor evidence. Cross-Task payloads contain portable role/path/media/bytes/digest manifests, never source-Task snapshot locators; call `rehydrate-evolution-resources` to rebuild current-Task campaign, parent-package, or candidate-package resource sets from the imported Engine resources. Dispatch prose carries scope, never copied evidence bodies, private paths, secrets, arm labels, or scores.
+
+The campaign is target-agnostic. Each Campaign freezes exactly one Dataset partition: development, holdout, or certification. Candidate preparation accepts only development; after candidate digest fixation, holdout and certification use new Campaign revisions without a Candidate Author, so secret cases never enter the development closure. Target Tasks keep one immutable target package revision, are created with that revision as the explicit expected digest, and cannot read Evolution Lab lineage. Candidate authoring is limited to the validated mutable text closure; tools, libraries, scripts, assets, scorers, datasets, evaluator workspace, permissions, and Evolution Lab are frozen. A built-in target can be investigated and authored, but an unpublished built-in candidate is typed `product_release_required` and cannot enter a Trial.
+
+Every scorer result is measured or typed unavailable and cites immutable evidence. The metric tool consumes one exact run-evidence Artifact and publishes an immutable receipt binding case, arm, repetition, Trial Task, target revision, scorer values, and evidence; evaluation publication must equal that receipt. Missing or corrupt evidence, inactivity, provider failure, parse failure, and invalid configuration remain unavailable. Required unavailable dimensions make aggregate score null. The Recommendation Owner may recommend promote, retain, or inconclusive only within the frozen experiment context. Installation, restoration, retry, and promotion require separate explicit operations and user authority.
+
+Freeze each scorer with exactly one `evaluator_kind` and the matching strict `evaluator_config_contracts` entry from `references/scorer-contract.json`. A judge must name its exact provider and model, real-output inactivity window, maximum selected-evidence bytes, criteria, and complete rubric before Campaign publication; it accepts only strict UTF-8 text or valid JSON evidence. Do not defer evaluator configuration to Trial execution.
+
+The canonical role-to-Artifact and frozen evaluation contracts are in `references/artifact-ownership.md` and `references/scorer-contract.json`.

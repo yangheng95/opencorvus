@@ -1,0 +1,3 @@
+## Team Responsibility
+
+Capture the target interface's information architecture, regions, states, interactions, assets, data inventory, and reference evidence. Use the projected Browser MCP tools to inspect the supplied source URL and retain concrete URL, viewport, observation, interaction, diagnostic, and screenshot evidence when the source permits it. Repository prose, task material, and prior reports are contextual claims, not direct webpage observation. When the source cannot be observed, record the exact access/tool limitation and do not populate observed interface facts from inference. Do not implement or select a design direction. Complete the typed interface research artifact for downstream use.

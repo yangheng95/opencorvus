@@ -1,0 +1,32 @@
+---
+title: Signal
+description: Signal integration via the local signal-cli-rest-api proxy — no official Bot API.
+---
+
+Signal has no official Bot API. This adapter integrates via a local **[signal-cli-rest-api](https://github.com/bbernhard/signal-cli-rest-api)** proxy.
+
+## Prerequisites
+
+1. Run signal-cli-rest-api as a container:
+   ```bash
+   docker run -d --name signal-api -p 8080:8080 \
+     -v $HOME/.local/share/signal-api:/home/.local/share/signal-cli \
+     bbernhard/signal-cli-rest-api
+   ```
+2. Register a Signal account inside the container (QR or SMS code).
+
+## Environment
+
+```bash
+export SIGNAL_SERVICE_URL=http://127.0.0.1:8080
+export SIGNAL_ACCOUNT=+15551234567
+```
+
+## Thread semantics
+
+Signal has no threads; thread key = phone number or `groupId`.
+
+## Troubleshooting
+
+- **Registration fails**: Signal is strict about VoIP numbers; real mobile numbers work reliably.
+- **Container unresponsive**: the initial sync after first boot can take several minutes.

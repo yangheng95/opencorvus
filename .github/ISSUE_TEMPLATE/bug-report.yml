@@ -1,0 +1,84 @@
+name: Bug report
+description: Report a reproducible problem in OpenCorvus
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve OpenCorvus. Do not include API keys, access tokens, private prompts, or proprietary project content. Report security vulnerabilities through the private channel in SECURITY.md.
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Affected area
+      options:
+        - Desktop application
+        - Command-line interface or runtime
+        - Models or providers
+        - Expert Squads
+        - Channels or integrations
+        - Software Development Kit or API
+        - Installation, packaging, or release
+        - Documentation or website
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: OpenCorvus version
+      description: Use the exact version shown by OpenCorvus or the release tag.
+      placeholder: v0.0.35beta
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Include the operating system, architecture, and installation method.
+      placeholder: Windows 11 x64, desktop installer
+    validations:
+      required: true
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: What happened?
+      description: Describe the observable behavior and any visible error.
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: What did you expect?
+      description: Describe the correct behavior you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Provide the smallest reliable sequence that reproduces the problem.
+      placeholder: |
+        1. Start OpenCorvus with ...
+        2. Open ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs, screenshots, or recordings
+      description: Attach relevant evidence after removing secrets, personal data, and private project content.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmation
+      options:
+        - label: I searched existing issues for the same problem.
+          required: true
+        - label: I removed credentials and private data from all attached evidence.
+          required: true
+        - label: I agree to follow the Code of Conduct.
+          required: true

@@ -1,0 +1,5 @@
+## Team Responsibility
+
+Perform an independent Task-scoped review of the completed interface delivery without editing files. Discover and read the approved interface investigation and design contract from the Task Artifact catalog, then inspect the final implementation diff, repository-native checks, task-scoped preview, screenshots, exercised interactions and states, keyboard/focus evidence, accessibility evidence, and console/runtime/network diagnostics.
+
+Record each actionable discrepancy with the exact requirement, route, region or state, expected evidence, actual evidence, severity, and repair. A clean build, Document Object Model text, static assertion, or another Agent's summary cannot replace rendered and behavioral evidence. Call `artifact_publish` once with type `advanced/interface-integrity-review` and set `payload_json` to strict JSON text with unique object keys containing the complete finding list and residual risks. The visible final assistant message is natural narration and does not transport those findings. Do not invoke the Slice-revision/spec-bound Integrity protocol.

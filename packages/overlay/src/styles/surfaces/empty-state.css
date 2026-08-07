@@ -1,0 +1,54 @@
+/* ─────────────────────────────────────────────────────────────
+   Empty-state hint (.empty-hint / .empty-hint--card)
+   The "nothing here yet" placeholder used across sidebar lists,
+   inspector section bodies and diff preview. Two display modes:
+   - inline `.empty-hint` (loose text, no chrome) — default in
+     compact contexts.
+   - card `.empty-hint--card` + live container-prefixed empty-hints — boxed
+     with a colored dot rail.
+   The container-prefixed variants share their visual contract via a
+   single multi-selector rule rather than per-container forks.
+   ───────────────────────────────────────────────────────────── */
+
+.empty-hint {
+  display: block;
+  font-size: var(--ui-font-control);
+  color: var(--text-muted);
+  line-height: 1.4;
+  padding: calc(1px * var(--ui-scale)) 0;
+}
+
+.sidebar-list-cluster > .empty-hint,
+.diff-preview-empty .empty-hint,
+.empty-hint--card {
+  position: relative;
+  display: grid;
+  gap: calc(6px * var(--ui-scale));
+  width: min(100%, calc(320px * var(--ui-scale)));
+  margin: 0;
+  padding: calc(8px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 82%, transparent);
+  border-radius: var(--oc-radius-soft);
+  background: var(--surface);
+  color: var(--text-soft);
+}
+
+.sidebar-list-cluster > .empty-hint::before,
+.diff-preview-empty .empty-hint::before,
+.empty-hint--card::before {
+  content: "";
+  width: calc(7px * var(--ui-scale));
+  height: calc(7px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: var(--accent);
+}
+
+.sidebar-list-cluster > .empty-hint,
+.empty-hint--card {
+  max-width: calc(420px * var(--ui-scale));
+}
+
+.diff-preview-empty .empty-hint {
+  justify-items: center;
+  text-align: center;
+}

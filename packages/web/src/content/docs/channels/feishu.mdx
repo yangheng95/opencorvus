@@ -1,0 +1,41 @@
+---
+title: Feishu / Lark
+description: Feishu adapter using Webhook mode with event subscription and encrypted validation.
+---
+
+## Prerequisites
+
+1. Create a self-hosted app on [Feishu Open Platform](https://open.feishu.cn/), enable the Bot capability.
+2. Grant scopes: `im:message`, `im:message.group_at_msg`, `im:resource`.
+3. Configure Event Subscription (Event 2.0):
+   - Event: `im.message.receive_v1`
+   - Request URL: `https://<your-public-host>/feishu`
+
+## Environment
+
+```bash
+export FEISHU_APP_ID=cli_...
+export FEISHU_APP_SECRET=...
+export FEISHU_VERIFICATION_TOKEN=...
+export FEISHU_WEBHOOK_HOST=0.0.0.0
+export FEISHU_WEBHOOK_PORT=16666
+export FEISHU_WEBHOOK_PATH=/feishu
+```
+
+## Public exposure
+
+Expose `${HOST}:${PORT}${PATH}` via reverse proxy (nginx / Cloudflare Tunnel / frp).
+
+## Thread semantics
+
+Feishu `thread_id` (topic reply) is thread key; plain messages use `chat_id`.
+
+## Current state
+
+**Text MVP** (`.env.example`). Text messaging is complete; images and files use Feishu's `/open-apis/im/v1/images` and `/files`. Rich cards not yet supported.
+
+## Troubleshooting
+
+- **Webhook validation fails**: `FEISHU_VERIFICATION_TOKEN` must match the Open Platform value exactly.
+- **Messages sent but invisible**: check the app's visibility scope.
+- **Replies truncated**: single message ≤ 30,000 chars; OpenCorvus auto-splits.

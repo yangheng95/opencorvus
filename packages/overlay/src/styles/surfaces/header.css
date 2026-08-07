@@ -1,0 +1,96 @@
+.oc-surface-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--oc-header-height);
+  min-height: var(--oc-header-height);
+  max-height: var(--oc-header-height);
+  padding: var(--oc-header-padding-y) var(--oc-header-padding-x);
+  gap: var(--oc-header-gap);
+  background: var(--oc-header-bg);
+  border-block-end: var(--oc-header-border);
+  border-radius: 0;
+  box-shadow: var(--oc-header-shadow);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.sidebar-header.oc-surface-header {
+  background: var(--rail-surface);
+}
+
+.oc-surface-header[data-surface="settings-group"] {
+  width: 100%;
+  height: auto;
+  min-height: calc(28px * var(--ui-scale));
+  max-height: none;
+  padding: 0;
+  background: transparent;
+  border-block-end: 0 solid transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.chat-header.oc-surface-header {
+  --oc-header-height: var(--ui-panel-header-height);
+  --oc-header-padding-x: var(--ui-chat-header-padding-x);
+  --oc-header-gap: calc(10px * var(--ui-scale));
+  --oc-header-title-font: var(--ui-font-weight-strong) var(--ui-font-title) var(--font);
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  background: var(--chat-canvas);
+  border-block-end: var(--oc-border-width) solid var(--divider-soft);
+  box-shadow: none;
+}
+
+.chat-title-group {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: calc(4px * var(--ui-scale));
+}
+
+.chat-title-group .chat-title {
+  min-width: 0;
+}
+
+.chat-title-group .oc-button[data-ui="chat-title-more"] {
+  --oc-button-height: calc(24px * var(--ui-scale));
+  --oc-button-padding-x: 0;
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-shadow: none;
+
+  width: calc(24px * var(--ui-scale));
+  min-width: calc(24px * var(--ui-scale));
+  color: var(--text-muted);
+}
+
+.chat-title-menu {
+  min-width: calc(190px * var(--ui-scale));
+}
+
+.oc-surface-header__main,
+.oc-surface-header__actions {
+  display: flex;
+  align-items: center;
+  min-width: var(--oc-radius-none);
+  gap: var(--oc-header-gap);
+}
+
+.oc-surface-header[data-title="false"] .oc-surface-header__actions {
+  margin-inline-start: auto;
+}
+
+.oc-surface-header__title {
+  min-width: var(--oc-radius-none);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: var(--oc-header-title-font);
+  line-height: var(--oc-header-title-line-height);
+  letter-spacing: var(--ui-letter-spacing-normal);
+  text-transform: var(--oc-header-title-transform);
+  color: var(--text-strong);
+}

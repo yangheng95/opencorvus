@@ -1,0 +1,2207 @@
+/* Task-scope and Right Dock surface chrome. The filename is historical;
+   the retired Inspector aggregate panel no longer exists. */
+
+.sections {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  flex: 1 1 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--inspector-surface);
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.sections[data-collapsed="true"] {
+  width: var(--ui-collapsed-pane-width);
+  min-width: var(--ui-collapsed-pane-width);
+  max-width: var(--ui-collapsed-pane-width);
+  flex: 0 0 var(--ui-collapsed-pane-width);
+}
+
+.sections-content {
+  background: var(--inspector-surface);
+}
+
+.sections-title {
+  display: inline-flex;
+  align-items: center;
+  min-height: calc(16px * var(--ui-scale));
+}
+
+.task-scope-activity {
+  padding: 0;
+  background: var(--inspector-surface);
+  container: side-activity / inline-size;
+}
+
+.task-scope-panel {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface-hover) 24%, transparent), transparent 34%),
+    var(--inspector-surface);
+}
+
+.task-scope-panel .oc-surface-header[data-ui="task-scope-toolbar"] {
+  --oc-header-height: calc(34px * var(--ui-scale));
+  --oc-header-padding-x: calc(6px * var(--ui-scale));
+  --task-scope-toolbar-leading-inset: calc(var(--ui-gap-md) + var(--ui-gap-md));
+
+  flex: 0 0 auto;
+  gap: calc(6px * var(--ui-scale));
+  padding-inline-start: var(--task-scope-toolbar-leading-inset);
+  border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--border) 66%, transparent);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+}
+
+.task-scope-panel__badge {
+  flex: 0 0 auto;
+  min-width: calc(22px * var(--ui-scale));
+  min-height: calc(20px * var(--ui-scale));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 calc(7px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: color-mix(in srgb, var(--surface-inset) 84%, transparent);
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  font-weight: var(--ui-font-weight-strong);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.task-scope-panel__badge[data-tone="accent"] {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.task-scope-panel__badge[data-tone="good"] {
+  color: var(--good);
+  background: color-mix(in srgb, var(--good) 12%, transparent);
+}
+
+.task-scope-panel__badge[data-tone="bad"] {
+  color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 12%, transparent);
+}
+
+.task-scope-panel__badge[data-variant="metric"] {
+  font-family: var(--mono);
+}
+
+.task-scope-panel__body {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.task-scope-panel__stack {
+  border-radius: 0;
+  background: transparent;
+}
+
+.task-scope-panel__stack.task-scope-section-stack {
+  gap: var(--ui-gap-sm);
+}
+
+.task-scope-panel__content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-sm);
+  padding: calc(2px * var(--ui-scale)) 0 calc(2px * var(--ui-scale)) calc(8px * var(--ui-scale));
+  border-left: calc(2px * var(--ui-scale)) solid transparent;
+}
+
+.task-scope-panel__content--goals {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Section card stack: scrollable body that holds task-scope cards.
+   Stack gap + outer padding share `--ui-gap-sm` (6px) so the space
+   above the first card matches the gap between siblings — the
+   right-rail's single spacing rhythm. */
+.sections-stack {
+  display: flex;
+  flex: 1 1 0;
+  min-height: 0;
+  flex-direction: column;
+  gap: var(--ui-gap-sm);
+  padding: var(--ui-gap-sm);
+  overflow-y: auto;
+}
+
+/* Activity body container: inactive activities collapse via data-active. */
+.right-dock-panel-body {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.right-dock-panel-body[data-active="false"] {
+  display: none;
+}
+
+.right-dock-panel-body[data-right-dock-panel] {
+  display: flex;
+  min-height: 0;
+}
+
+.right-dock-panel-body[data-right-dock-panel][data-active="false"] {
+  display: none;
+}
+
+.browser-preview-panel {
+  container: browser-preview / inline-size;
+  display: flex;
+  flex: 1 1 0;
+  min-height: 0;
+  flex-direction: column;
+  background: var(--surface-inset);
+}
+
+.browser-preview-command-surface {
+  flex: 0 0 auto;
+  display: grid;
+  gap: calc(4px * var(--ui-scale));
+  padding: calc(7px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--border) 82%, transparent);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface-hover) 24%, transparent), transparent 88%), var(--surface);
+}
+
+.browser-preview-browser-controls {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oc-border-width);
+  padding: calc(2px * var(--ui-scale));
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--border-strong) 36%, var(--border));
+  border-radius: var(--oc-radius-soft);
+  background: var(--surface-inset);
+}
+
+.browser-preview-browser-controls .oc-button[data-size="icon"] {
+  --oc-button-height: calc(24px * var(--ui-scale));
+  width: calc(24px * var(--ui-scale));
+  min-width: calc(24px * var(--ui-scale));
+}
+
+.browser-preview-stage {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  background: var(--surface-inset);
+}
+
+.browser-preview-stage > .browser-preview-empty {
+  margin: auto;
+}
+
+.browser-preview-evidence {
+  flex: 1 1 0;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  gap: calc(8px * var(--ui-scale));
+  padding: calc(12px * var(--ui-scale));
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--good) 34%, var(--border));
+  background: color-mix(in srgb, var(--surface) 96%, transparent);
+  color: var(--text);
+  font-size: var(--ui-font-control);
+}
+
+.browser-preview-evidence[data-status="failed"] {
+  border-color: color-mix(in srgb, var(--bad) 42%, var(--border));
+}
+
+.browser-preview-evidence-header {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, max-content) minmax(0, 1fr);
+  align-items: center;
+  gap: calc(8px * var(--ui-scale));
+  color: var(--text-strong);
+}
+
+.browser-preview-evidence-header code,
+.browser-preview-evidence code {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  border: var(--oc-border-width) solid var(--border);
+  background: var(--surface-inset);
+  color: var(--text-muted);
+  padding: calc(4px * var(--ui-scale)) calc(6px * var(--ui-scale));
+  font-family: var(--mono);
+  font-size: var(--ui-font-meta);
+}
+
+.browser-preview-evidence p {
+  margin: 0;
+  color: var(--text);
+}
+
+.browser-preview-evidence-shot {
+  --oc-button-height: auto;
+  --oc-button-padding-x: 0;
+  --oc-button-padding-y: 0;
+  --oc-button-gap: 0;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  overflow: visible;
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: 0;
+  background: var(--surface-inset);
+  cursor: zoom-in;
+  white-space: normal;
+}
+
+.browser-preview-evidence-shot .browser-preview-evidence-image {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: none;
+  display: block;
+  object-fit: contain;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.browser-preview-live {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 100%;
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+}
+
+.browser-preview-native-frame {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--surface);
+  box-shadow: none;
+}
+
+.browser-preview-native-surface {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 100%;
+  position: relative;
+  outline: none;
+  border: 0;
+  border-radius: 0;
+  background: var(--surface);
+  overflow: hidden;
+  contain: layout;
+}
+
+.browser-preview-native-surface:focus-visible {
+  box-shadow: 0 0 0 calc(2px * var(--ui-scale)) color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+.browser-preview-native-surface .card__spinner {
+  position: absolute;
+  inset: calc(10px * var(--ui-scale)) auto auto calc(10px * var(--ui-scale));
+}
+
+.browser-preview-chrome {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: calc(8px * var(--ui-scale));
+}
+
+.browser-preview-chrome .browser-preview-browser-controls {
+  min-width: 0;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(1px * var(--ui-scale));
+  padding: 0;
+  border: 0;
+  border-radius: var(--oc-radius-pill);
+  background: transparent;
+}
+
+.browser-preview-chrome .browser-preview-browser-controls .oc-button[data-size="icon"] {
+  --oc-button-height: calc(28px * var(--ui-scale));
+  width: calc(28px * var(--ui-scale));
+  min-width: calc(28px * var(--ui-scale));
+  color: color-mix(in srgb, var(--text-muted) 78%, transparent);
+}
+
+.browser-preview-chrome .browser-preview-browser-controls .oc-button[data-size="icon"]:not(:disabled):hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+}
+
+.browser-preview-address-form {
+  position: relative;
+  min-width: 0;
+  display: block;
+}
+
+.browser-preview-address-field {
+  min-width: 0;
+  width: 100%;
+}
+
+.browser-preview-address-input {
+  padding-right: calc(36px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+}
+
+.browser-preview-address-form .oc-button[data-size="icon"] {
+  --oc-button-height: var(--oc-density-chip-height);
+  width: var(--oc-density-chip-height);
+  min-width: var(--oc-density-chip-height);
+  color: color-mix(in srgb, var(--text-muted) 72%, transparent);
+}
+
+.browser-preview-chrome-actions .oc-button[data-size="icon"] {
+  --oc-button-height: calc(28px * var(--ui-scale));
+  width: calc(28px * var(--ui-scale));
+  min-width: calc(28px * var(--ui-scale));
+  color: color-mix(in srgb, var(--text-muted) 72%, transparent);
+}
+
+.browser-preview-address-form > .oc-button[data-size="icon"] {
+  position: absolute;
+  top: 50%;
+  right: calc(3px * var(--ui-scale));
+  transform: translateY(-50%);
+}
+
+.browser-preview-address-form .oc-button[data-size="icon"]:not(:disabled):hover,
+.browser-preview-chrome-actions .oc-button[data-size="icon"]:not(:disabled):hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+}
+
+.browser-preview-address-error {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--bad);
+  font-family: var(--mono);
+  font-size: var(--ui-font-meta);
+}
+
+.browser-preview-chrome-actions {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.browser-preview-native-surface[data-selecting="true"] {
+  cursor: crosshair;
+}
+
+.browser-preview-node-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: var(--ui-z-raised);
+  /* The layer itself is click-through; only the popover inside re-enables
+     pointer events. The selection box stays non-interactive. */
+  pointer-events: none;
+}
+
+.browser-preview-node-selection-box {
+  pointer-events: none;
+  position: absolute;
+  z-index: var(--ui-z-decoration);
+  box-sizing: border-box;
+  border: calc(2px * var(--ui-scale)) solid var(--accent);
+  border-radius: var(--oc-radius-large);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  box-shadow:
+    0 0 0 calc(3px * var(--ui-scale)) color-mix(in srgb, var(--accent) 14%, transparent),
+    0 calc(12px * var(--ui-scale)) calc(34px * var(--ui-scale)) color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.browser-preview-node-selection-label {
+  position: absolute;
+  left: calc(-12px * var(--ui-scale));
+  top: calc(-16px * var(--ui-scale));
+  width: calc(34px * var(--ui-scale));
+  height: calc(34px * var(--ui-scale));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: calc(3px * var(--ui-scale)) solid var(--surface);
+  border-radius: var(--oc-radius-pill);
+  background: color-mix(in srgb, var(--accent) 92%, var(--surface));
+  color: var(--text-on-accent);
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-strong);
+  line-height: 1;
+  box-shadow: 0 calc(8px * var(--ui-scale)) calc(28px * var(--ui-scale))
+    color-mix(in srgb, var(--accent) 42%, transparent);
+}
+
+.browser-preview-node-comment-popover {
+  pointer-events: auto;
+  position: absolute;
+  z-index: var(--ui-z-sticky);
+  width: min(calc(360px * var(--ui-scale)), calc(100% - calc(16px * var(--ui-scale))));
+  display: grid;
+  gap: calc(12px * var(--ui-scale));
+  padding: calc(16px * var(--ui-scale));
+  border: var(--ui-focused-popup-border);
+  border-radius: var(--oc-radius-large);
+  background: color-mix(in srgb, var(--surface-strong) 84%, transparent);
+  box-shadow:
+    0 calc(22px * var(--ui-scale)) calc(52px * var(--ui-scale)) var(--ui-shadow-tone),
+    inset 0 var(--oc-border-width) 0 var(--ui-highlight-tone);
+  backdrop-filter: blur(calc(18px * var(--ui-scale)));
+}
+
+.browser-preview-node-comment-title {
+  overflow: hidden;
+  color: var(--text-strong);
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-strong);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.browser-preview-node-comment-details {
+  display: grid;
+  gap: calc(6px * var(--ui-scale));
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+}
+
+.browser-preview-node-comment-details div {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: calc(52px * var(--ui-scale)) minmax(0, 1fr);
+  gap: calc(10px * var(--ui-scale));
+}
+
+.browser-preview-node-comment-details :is(dt, dd) {
+  min-width: 0;
+  margin: 0;
+}
+
+.browser-preview-node-comment-details dd {
+  overflow: hidden;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.browser-preview-node-comment-input {
+  min-height: calc(92px * var(--ui-scale));
+  resize: vertical;
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-large);
+  background: color-mix(in srgb, var(--surface) 68%, transparent);
+  color: var(--text-strong);
+  font: inherit;
+  font-size: var(--ui-font-control);
+  outline: none;
+  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
+}
+
+.browser-preview-node-comment-input::placeholder {
+  color: color-mix(in srgb, var(--text-muted) 76%, transparent);
+}
+
+.browser-preview-node-comment-input:focus {
+  border-color: color-mix(in srgb, var(--accent) 58%, var(--text-on-accent) 12%);
+  box-shadow: 0 0 0 calc(2px * var(--ui-scale)) color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.browser-preview-node-comment-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: calc(8px * var(--ui-scale));
+}
+
+.browser-preview-evidence-facts {
+  display: grid;
+  gap: calc(6px * var(--ui-scale));
+  margin: 0;
+}
+
+.browser-preview-evidence-facts div {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(calc(72px * var(--ui-scale)), max-content) minmax(0, 1fr);
+  gap: calc(8px * var(--ui-scale));
+}
+
+.browser-preview-evidence-facts dt {
+  color: var(--text-soft);
+}
+
+.browser-preview-evidence-facts dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--text);
+}
+
+.browser-preview-empty {
+  width: min(calc(420px * var(--ui-scale)), calc(100% - calc(32px * var(--ui-scale))));
+  display: grid;
+  justify-items: center;
+  gap: calc(8px * var(--ui-scale));
+  padding: calc(18px * var(--ui-scale));
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  color: var(--text-soft);
+  text-align: center;
+  font-size: var(--ui-font-control);
+}
+
+.browser-preview-empty p {
+  margin: 0;
+  color: var(--text);
+}
+
+.browser-preview-empty code {
+  max-width: 100%;
+  display: block;
+  overflow-wrap: anywhere;
+  border: var(--oc-border-width) solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  padding: calc(4px * var(--ui-scale)) calc(6px * var(--ui-scale));
+  font-family: var(--mono);
+  font-size: var(--ui-font-meta);
+  text-align: left;
+}
+
+.browser-preview-new-tab {
+  flex: 1;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+  background: var(--surface);
+}
+
+@container browser-preview (max-width: 280px) {
+  .browser-preview-command-surface {
+    gap: calc(5px * var(--ui-scale));
+    padding: calc(5px * var(--ui-scale));
+  }
+}
+
+.file-explorer-panel {
+  display: flex;
+  flex: 1 1 0;
+  min-height: 0;
+  flex-direction: column;
+  gap: calc(6px * var(--ui-scale));
+  --file-explorer-row-depth: 0;
+}
+
+.file-explorer-context-menu {
+  position: fixed;
+  width: min(calc(260px * var(--ui-scale)), calc(100cqw - 16px));
+}
+
+.file-explorer-context-menu[hidden] {
+  display: none;
+}
+
+.file-explorer-menu-item {
+  display: grid;
+  gap: calc(2px * var(--ui-scale));
+  padding: calc(6px * var(--ui-scale)) calc(8px * var(--ui-scale));
+}
+
+.file-explorer-menu-item[data-tone="danger"] {
+  color: var(--bad);
+}
+
+:is(.file-explorer-menu-item-label, .file-explorer-menu-item-detail) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-explorer-menu-item-label {
+  font-weight: var(--ui-font-weight-medium);
+}
+
+.file-explorer-menu-item-detail {
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+}
+
+.file-explorer-menu-item:hover:not(:disabled):not([data-disabled]) .file-explorer-menu-item-detail,
+.file-explorer-menu-item[data-highlighted]:not(:disabled):not([data-disabled]) .file-explorer-menu-item-detail,
+.file-explorer-menu-item:focus-visible:not(:disabled):not([data-disabled]) .file-explorer-menu-item-detail {
+  color: var(--text-soft);
+}
+
+.file-explorer-panel .oc-surface-header[data-ui="file-explorer-toolbar"] .oc-surface-header__actions {
+  width: 100%;
+  flex: 1 1 auto;
+  margin-inline-start: 0;
+}
+
+.file-explorer-panel :where(.file-explorer-search) {
+  width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.file-explorer-upload-input {
+  --px-exact: 1px;
+  position: fixed;
+  width: var(--px-exact);
+  height: var(--px-exact);
+  opacity: var(--ui-opacity-hidden);
+  pointer-events: none;
+}
+
+.file-explorer-upload-message {
+  margin: 0 var(--ui-gap-sm);
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.file-explorer-upload-message[data-status="active"] {
+  color: color-mix(in srgb, var(--good) 76%, var(--text-soft));
+}
+
+.file-explorer-upload-message[data-status="error"] {
+  color: var(--bad);
+}
+
+.file-explorer-command-message {
+  margin: 0 var(--ui-gap-sm);
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.file-explorer-command-message[data-status="active"] {
+  color: color-mix(in srgb, var(--good) 76%, var(--text-soft));
+}
+
+.file-explorer-command-message[data-status="error"] {
+  color: var(--bad);
+}
+
+.file-explorer-list {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  contain: layout;
+}
+
+.file-explorer-list[data-virtualized="true"] {
+  overflow: hidden;
+}
+
+.file-explorer-list[data-drop-target="move"],
+.file-explorer-list[data-drop-target="upload"] {
+  outline: var(--oc-border-width) solid color-mix(in srgb, var(--accent) 60%, var(--border));
+  outline-offset: calc(-2px * var(--ui-scale));
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+
+.file-explorer-list[data-drop-target="invalid"] {
+  outline: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 62%, var(--border));
+  outline-offset: calc(-2px * var(--ui-scale));
+  background: color-mix(in srgb, var(--bad) 5%, transparent);
+}
+
+.file-explorer-virtual-window {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.file-explorer-virtual-item {
+  width: 100%;
+  min-width: 0;
+}
+
+.file-explorer-row {
+  --oc-button-height: var(--file-explorer-row-height);
+  --oc-button-padding-x: 0;
+  --oc-button-padding-y: 0;
+  --oc-button-gap: var(--file-explorer-row-gap);
+  --oc-button-color: var(--text-soft);
+  --oc-button-bg: transparent;
+  --oc-file-row-height: var(--file-explorer-row-height);
+  --oc-file-row-indent: var(--file-explorer-row-indent);
+  --oc-file-row-padding-start: var(--file-explorer-row-padding-start);
+  --oc-file-row-padding-end: var(--file-explorer-row-padding-end);
+  --oc-file-row-depth: var(--file-explorer-row-depth);
+
+  height: var(--file-explorer-row-height);
+}
+
+.file-explorer-row:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(-1px * var(--ui-scale));
+}
+
+.file-explorer-row[data-active="true"],
+.file-explorer-row[data-selected="true"] {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  --oc-button-color: var(--text-strong);
+}
+
+.file-explorer-row[data-dragging="true"] {
+  opacity: var(--ui-opacity-disabled);
+}
+
+.file-explorer-row[data-drop-target="move"],
+.file-explorer-row[data-drop-target="upload"] {
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface-hover));
+  --oc-button-color: var(--text-strong);
+  outline: var(--oc-border-width) solid color-mix(in srgb, var(--accent) 74%, var(--border));
+  outline-offset: calc(-1px * var(--ui-scale));
+}
+
+.file-explorer-row[data-drop-target="invalid"] {
+  background: color-mix(in srgb, var(--bad) 14%, var(--surface-hover));
+  --oc-button-color: var(--text-strong);
+  outline: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 72%, var(--border));
+  outline-offset: calc(-1px * var(--ui-scale));
+}
+
+.file-explorer-row[data-ignored="true"] {
+  --oc-button-color: color-mix(in srgb, var(--text-muted) 70%, transparent);
+}
+
+.file-explorer-empty {
+  padding: calc(18px * var(--ui-scale)) calc(8px * var(--ui-scale));
+}
+
+.file-explorer-empty .oc-button[data-ui="file-explorer-retry"] {
+  margin-top: calc(8px * var(--ui-scale));
+}
+
+.task-scope-section-stack {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  border-radius: 0;
+  background: transparent;
+}
+
+.task-scope-disclosure-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.task-scope-disclosure-item {
+  min-width: 0;
+  overflow: hidden;
+  border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
+  border-radius: 0;
+  background: transparent;
+}
+
+.task-scope-disclosure-item:last-child {
+  border-bottom: 0;
+}
+
+.task-scope-disclosure-item > .task-scope-disclosure-trigger {
+  min-height: var(--oc-density-control-height);
+  padding: 0 calc(6px * var(--ui-scale));
+  border-radius: 0;
+  color: var(--text);
+  font-size: var(--ui-font-compact-row);
+  font-weight: var(--ui-font-weight-body);
+  line-height: var(--ui-line-height-tight);
+}
+
+.task-scope-disclosure-item > .task-scope-disclosure-trigger:is(:hover, :focus-visible),
+.task-scope-disclosure-item[open] > .task-scope-disclosure-trigger {
+  background: color-mix(in srgb, var(--surface-hover) 68%, transparent);
+  color: var(--text-strong);
+}
+
+.task-scope-disclosure-item > .task-scope-disclosure-trigger > .oc-disclosure__indicator {
+  width: calc(16px * var(--ui-scale));
+  height: calc(16px * var(--ui-scale));
+  margin-left: 0;
+}
+
+.task-scope-disclosure-content {
+  border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
+  background: linear-gradient(180deg, var(--ui-highlight-tone), transparent 26%);
+}
+
+/* GWG (Goal Group) card — flat shell. Status is carried by
+   the icon and header/body content, not a decorative left rail. The
+   native Disclosure owns interaction while this surface owns only Goal
+   layout and state tint. */
+.gwg {
+  --gwg-surface-base: color-mix(in srgb, var(--surface-inset) 88%, transparent);
+  --gwg-surface-hover: color-mix(in srgb, var(--surface-hover) 72%, var(--surface));
+  --gwg-surface-muted: color-mix(in srgb, var(--surface) 82%, var(--surface-inset));
+  --gwg-surface-emphasis: color-mix(in srgb, var(--surface-strong) 74%, var(--surface));
+
+  position: relative;
+  scroll-margin-block: var(--ui-gap-lg);
+  border-radius: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+/* GWG header bar: clickable summary row carrying the status icon,
+   goal title, and optional priority/revision tags. Status modifiers stay
+   beside the base and use the canonical theme semantics for every state. */
+.gwg > .gwg-header {
+  display: grid;
+  grid-template-columns:
+    calc(14px * var(--ui-scale))
+    var(--gwg-revision-column-width)
+    minmax(0, 1fr)
+    auto
+    calc(16px * var(--ui-scale));
+  column-gap: calc(7px * var(--ui-scale));
+  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0;
+  cursor: pointer;
+  user-select: none;
+  text-align: left;
+  white-space: normal;
+}
+
+.gwg > .gwg-header:focus-visible {
+  outline-offset: calc(-2px * var(--ui-scale));
+}
+
+.gwg-title-row {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+}
+
+.gwg-header-meta {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: calc(4px * var(--ui-scale));
+}
+
+/* Delivery Slice acceptance uses the same compact Icon primitive and transparent
+   14-pixel alignment slot as the Environment Goal list. */
+.gwg-status-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(14px * var(--ui-scale));
+  height: calc(14px * var(--ui-scale));
+  flex-shrink: 0;
+  line-height: 1;
+  background: transparent;
+  color: var(--text-muted);
+  box-shadow: none;
+}
+
+.gwg[data-presentation-status="accepted"] .gwg-status-icon {
+  color: var(--good);
+}
+
+.gwg-execution-state {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  min-height: calc(18px * var(--ui-scale));
+  padding: 0 calc(6px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.gwg-execution-state[data-status="accepted"] {
+  background: var(--good-dim);
+  color: var(--good);
+}
+
+.gwg-execution-state[data-status="unaccepted"] {
+  background: var(--surface-hover);
+  color: var(--text-muted);
+}
+
+.gwg-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: inherit;
+  font-weight: var(--ui-font-weight-body);
+  line-height: inherit;
+  letter-spacing: var(--ui-letter-spacing-normal);
+  color: var(--text);
+}
+
+.gwg-revision {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-size: inherit;
+  font-weight: var(--ui-font-weight-body);
+  letter-spacing: var(--ui-letter-spacing-normal);
+  color: var(--text-muted);
+  line-height: inherit;
+}
+
+/* Branch pill — folded-state worktree branch indicator. Long branch
+   names (e.g. `goal-qc8zgjhy`) are ellipsis-truncated so they don't
+   crowd revision/advisory; hover title exposes the full workspace dir. */
+.gwg-branch-pill {
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: calc(10em * var(--ui-scale));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-strong);
+  letter-spacing: var(--ui-letter-spacing-loose);
+  padding: calc(2px * var(--ui-scale)) calc(8px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: color-mix(in srgb, var(--surface-inset) 84%, transparent);
+  color: var(--text-soft);
+  line-height: 1.4;
+}
+
+@container side-activity (max-width: 340px) {
+  .task-scope-panel .gwg-header-meta {
+    flex: 0 0 auto;
+    padding-top: calc(1px * var(--ui-scale));
+  }
+
+  .task-scope-panel .gwg-branch-pill {
+    display: none;
+  }
+}
+
+/* GWG body opens beneath the shared summary row. The shared task-scope
+   disclosure content owns its separator, wash, and motion. */
+.gwg-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-sm);
+  padding: 0 calc(6px * var(--ui-scale)) calc(6px * var(--ui-scale));
+}
+
+/* Objective block: Architect-written execution directive. Kept flat so
+   the GWG body does not become card-in-card chrome. */
+.gwg-objective {
+  margin-bottom: 0;
+  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  background: transparent;
+  border: 0 solid transparent;
+  border-radius: 0;
+}
+
+.gwg-objective-label {
+  font-weight: var(--ui-font-weight-strong);
+  letter-spacing: var(--ui-letter-spacing-loose);
+  color: var(--text-muted);
+  margin-bottom: calc(3px * var(--ui-scale));
+}
+
+.gwg-objective-text {
+  font-size: var(--ui-font-body);
+  color: var(--text);
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+/* Done-definition block — Architect's success criteria for this
+   goal. Same flat chrome as the objective. */
+.gwg-done-definition {
+  margin-bottom: 0;
+  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  background: transparent;
+  border: 0 solid transparent;
+  border-radius: 0;
+}
+
+.gwg-done-definition-label {
+  font-weight: var(--ui-font-weight-strong);
+  letter-spacing: var(--ui-letter-spacing-loose);
+  color: var(--text-muted);
+  margin-bottom: calc(3px * var(--ui-scale));
+}
+
+.gwg-done-definition-text {
+  font-size: var(--ui-font-body);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* Markdown reset for goal-card prose blocks: nuke the default
+   margins so the content sits flush against the card's own
+   padding. The descendant selector list also covers
+   `.gwg-plan-node-*` and `.gwg-eval-summary` rendered prose. */
+.gwg-objective-text .msg-text,
+.gwg-objective-text .md-frozen-block,
+.gwg-objective-text .md-active-text,
+.gwg-done-definition-text .msg-text,
+.gwg-done-definition-text .md-frozen-block,
+.gwg-done-definition-text .md-active-text,
+.gwg-plan-node-title .msg-text,
+.gwg-plan-node-brief .msg-text,
+.gwg-eval-summary .msg-text,
+.gwg-eval-summary .md-frozen-block,
+.gwg-eval-summary .md-active-text {
+  margin: 0;
+}
+
+.gwg-objective-text .msg-text > :first-child,
+.gwg-done-definition-text .msg-text > :first-child,
+.gwg-plan-node-title .msg-text > :first-child,
+.gwg-plan-node-brief .msg-text > :first-child,
+.gwg-eval-summary .msg-text > :first-child {
+  margin-top: 0;
+}
+
+.gwg-objective-text .msg-text > :last-child,
+.gwg-done-definition-text .msg-text > :last-child,
+.gwg-plan-node-title .msg-text > :last-child,
+.gwg-plan-node-brief .msg-text > :last-child,
+.gwg-eval-summary .msg-text > :last-child {
+  margin-bottom: 0;
+}
+
+/* Plan-node list (inside the plan-step body): numbered cards
+   with a leading absolute counter chip. The counter container
+   sits to the left of the body content via padding-inline-start
+   carrying the chip width + gap. */
+.gwg-plan-nodes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-xs);
+  counter-reset: gwg-plan;
+}
+
+.gwg-plan-node {
+  position: relative;
+  padding: var(--ui-gap-xs) var(--ui-gap-sm) var(--ui-gap-xs) calc(18px * var(--ui-scale) + var(--ui-gap-md));
+  background: var(--gwg-surface-hover);
+  border-radius: var(--oc-radius-soft);
+  counter-increment: gwg-plan;
+}
+
+.gwg-plan-node::before {
+  content: counter(gwg-plan);
+  position: absolute;
+  left: var(--ui-gap-sm);
+  top: calc(1px * var(--ui-scale) + var(--ui-gap-xs));
+  width: calc(16px * var(--ui-scale));
+  height: calc(16px * var(--ui-scale));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-strong);
+  border-radius: 50%;
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.gwg-plan-node-title {
+  font-size: var(--ui-font-title);
+  font-weight: var(--ui-font-weight-strong);
+  color: var(--text-strong);
+  line-height: 1.4;
+}
+
+.gwg-plan-node-brief {
+  margin-top: calc(2px * var(--ui-scale));
+  font-size: var(--ui-font-control);
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Eval verdict pill — accepted / rejected / inconclusive. The
+   inset rings are routed through color-mix on matching semantic tokens. */
+.gwg-verdict {
+  align-self: flex-start;
+  padding: calc(3px * var(--ui-scale)) var(--ui-gap-md);
+  border-radius: var(--oc-radius-pill);
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-strong);
+  text-transform: uppercase;
+  letter-spacing: var(--ui-letter-spacing-loose);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}
+
+.gwg-verdict--accepted {
+  background: var(--good-dim);
+  color: var(--good);
+  box-shadow: 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--good) 35%, transparent) inset;
+}
+
+.gwg-verdict--rejected {
+  background: var(--bad-dim);
+  color: var(--bad);
+  box-shadow: 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--bad) 35%, transparent) inset;
+}
+
+.gwg-verdict--inconclusive {
+  background: var(--warn-dim);
+  color: var(--warn);
+  box-shadow: 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--warn) 35%, transparent) inset;
+}
+
+.gwg-eval-summary {
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
+  background: var(--gwg-surface-hover);
+  border-left: calc(2px * var(--ui-scale)) solid color-mix(in srgb, var(--border) 84%, transparent);
+  border-radius: var(--oc-radius-soft);
+  font-size: var(--ui-font-small);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* Eval checks list — itemized pass/fail rows shown after the
+   verdict pill. Each `.gwg-check` row hosts an icon, a name, and
+   an optional `.gwg-check-evidence` mono-font snippet. The
+   passed/failed/pending status modifiers retint icon background
+   + box-shadow; the failed modifier also retints the name. */
+.gwg-checks {
+  display: flex;
+  flex-direction: column;
+  gap: calc(1px * var(--ui-scale));
+}
+
+.gwg-check {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-sm);
+  padding: calc(4px * var(--ui-scale)) var(--ui-gap-sm);
+  font-size: var(--ui-font-control);
+  border-radius: var(--oc-radius-soft);
+  transition: background var(--ui-duration-base) var(--ui-timing-standard);
+}
+
+.gwg-check + .gwg-check {
+  border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
+}
+
+.gwg-check:hover {
+  background: var(--gwg-surface-hover);
+}
+
+/* Check icon: same 14x14 round chip pattern as the step icon.
+   The earlier 10/10/10 clamp around the font-size collapsed to
+   its preferred value (min === max), so the clamp was a no-op
+   even visually — kept just `calc(10px * --ui-scale)` here. */
+.gwg-check-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(14px * var(--ui-scale));
+  height: calc(14px * var(--ui-scale));
+  flex-shrink: 0;
+  border-radius: 50%;
+  font-size: calc(10px * var(--ui-scale));
+  font-weight: var(--ui-font-weight-strong);
+  line-height: 1;
+  background: var(--gwg-surface-hover);
+  color: var(--text-muted);
+}
+
+.gwg-check-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: var(--ui-font-weight-medium);
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gwg-check-evidence {
+  font-family: var(--mono);
+  font-size: var(--ui-font-tiny);
+  color: var(--text-muted);
+  max-width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: calc(1px * var(--ui-scale)) calc(5px * var(--ui-scale));
+  background: var(--gwg-surface-base);
+  border-radius: var(--oc-radius-soft);
+}
+
+/* Status data attributes — passed / failed / pending. Inset rings'
+   raw rgba on --good / --bad routed through color-mix. */
+.gwg-check[data-check-status="passed"] .gwg-check-icon {
+  background: var(--good-dim);
+  color: var(--good);
+  box-shadow: 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--good) 35%, transparent) inset;
+}
+
+.gwg-check[data-check-status="failed"] .gwg-check-icon {
+  background: var(--bad-dim);
+  color: var(--bad);
+  box-shadow: 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--bad) 35%, transparent) inset;
+}
+
+.gwg-check[data-check-status="failed"] .gwg-check-name {
+  color: var(--bad);
+}
+
+.gwg-check[data-check-status="pending"] .gwg-check-icon {
+  background: var(--gwg-surface-hover);
+  color: var(--text-muted);
+}
+
+/* Requirements panel (RequirementsPanel.tsx): each row uses the same
+   task-scope disclosure rhythm as Goals, with a one-line indexed summary
+   and the complete description + metadata in its animated body. */
+.req-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-sm);
+}
+
+.req-item {
+  font-size: var(--ui-font-compact-row);
+}
+
+.req-item > .req-item-summary {
+  display: grid;
+  grid-template-columns: calc(74px * var(--ui-scale)) minmax(0, 1fr) calc(16px * var(--ui-scale));
+  align-items: center;
+  gap: calc(10px * var(--ui-scale));
+  min-width: 0;
+}
+
+.req-index {
+  font-family: var(--mono);
+  font-size: inherit;
+  font-weight: var(--ui-font-weight-strong);
+  color: var(--accent);
+  line-height: inherit;
+  white-space: nowrap;
+}
+
+.req-summary {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.req-item-body {
+  display: grid;
+  gap: calc(8px * var(--ui-scale));
+  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale)) calc(12px * var(--ui-scale));
+}
+
+.req-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(5px * var(--ui-scale));
+}
+
+/* Type / status pill family: flat dim-tinted chip carrying
+   uppercase short label. Three type variants and three status
+   variants each pull their tone from the corresponding
+   `--{semantic}-dim` / `--{semantic}` token pair. */
+.req-type,
+.req-status {
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-strong);
+  text-transform: uppercase;
+  letter-spacing: var(--ui-letter-spacing-loose);
+  padding: var(--ui-badge-padding-y) var(--ui-badge-padding-x);
+  border-radius: var(--oc-radius-pill);
+  flex-shrink: 0;
+}
+
+.req-type--explicit {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.req-type--inferred {
+  background: var(--warn-dim);
+  color: var(--warn);
+}
+
+.req-type--system {
+  background: var(--surface-hover);
+  color: var(--text-muted);
+}
+
+.req-status[data-req-status="accepted"] {
+  background: var(--good-dim);
+  color: var(--good);
+}
+
+.req-status[data-req-status="unaccepted"] {
+  background: var(--surface-hover);
+  color: var(--text-muted);
+}
+
+.req-desc {
+  min-width: 0;
+  color: var(--text);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+/* Priority pill: separate from type/status because it always
+   renders with the warn-tone palette regardless of value. */
+.req-priority {
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-strong);
+  text-transform: uppercase;
+  padding: var(--ui-badge-padding-y) var(--ui-badge-padding-x);
+  border-radius: var(--oc-radius-pill);
+  background: var(--warn-dim);
+  color: var(--warn);
+  flex-shrink: 0;
+}
+
+/* Spec detail content preserves formatting from the spec agent. */
+.req-spec-detail {
+  margin-top: var(--ui-gap-sm);
+}
+
+.req-spec-content {
+  font-family: var(--mono);
+  font-size: var(--ui-font-small);
+  color: var(--text-soft);
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: var(--ui-gap-sm);
+  background: var(--surface-inset);
+  border-radius: var(--oc-radius-soft);
+  max-height: calc(200px * var(--ui-scale));
+  overflow-y: auto;
+}
+
+/* IntegrityCard panel (IntegrityCard.tsx): renders the structured review
+   verdict, findings, repairs, disagreements, and missing coverage inside
+   task-scope panels. The
+   shared `.verdict-pill` primitive (used here + Board) still lives
+   in styles.css until its raw-rgba/hex chrome gets a token sweep. */
+.integrity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-md);
+}
+
+.integrity__header {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-sm);
+}
+
+.integrity__attempts {
+  font-size: var(--ui-font-tiny);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.integrity__summary {
+  margin: 0;
+  font-size: var(--ui-font-control);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.integrity__report {
+  margin: 0;
+  max-height: calc(320px * var(--ui-scale));
+  overflow: auto;
+  white-space: pre-wrap;
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
+  border-radius: var(--oc-radius-soft);
+  padding: var(--ui-gap-sm);
+  background: color-mix(in srgb, var(--surface-inset) 88%, transparent);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: var(--ui-font-small);
+  line-height: 1.55;
+  overflow-wrap: break-word;
+}
+
+.integrity__report-summary {
+  justify-content: flex-start;
+}
+
+.integrity__report-meta {
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-body);
+}
+
+.integrity__report-detail .integrity__report {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.integrity__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-xs);
+}
+
+.integrity__section-title {
+  margin: 0;
+  font-weight: var(--ui-font-weight-strong);
+  color: var(--text-strong);
+  letter-spacing: var(--ui-letter-spacing-loose);
+}
+
+.integrity__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-xs);
+}
+
+.integrity__reviewer-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(240px * var(--ui-scale))), 1fr));
+  gap: var(--ui-gap-sm);
+}
+
+.integrity__reviewer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-xs);
+  padding: var(--ui-gap-sm);
+  background: transparent;
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
+  border-left: calc(2px * var(--ui-scale)) solid color-mix(in srgb, var(--border) 72%, transparent);
+  border-radius: var(--oc-radius-soft);
+  contain: layout paint;
+}
+
+.integrity__reviewer[data-verdict="pass"] {
+  border-left-color: var(--good);
+}
+
+.integrity__reviewer[data-verdict="concerns"] {
+  border-left-color: var(--warn);
+}
+
+.integrity__reviewer[data-verdict="needs_correction"] {
+  border-left-color: var(--bad);
+}
+
+.integrity__reviewer-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ui-gap-sm);
+}
+
+.integrity__reviewer-title {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: calc(2px * var(--ui-scale));
+}
+
+.integrity__reviewer-name {
+  color: var(--text-strong);
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-strong);
+  overflow-wrap: anywhere;
+}
+
+.integrity__reviewer-scope {
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.integrity__reviewer-summary {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--ui-font-control);
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+.integrity__reviewer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-gap-xs);
+}
+
+.integrity__evidence-grid {
+  display: grid;
+  grid-template-columns: minmax(calc(92px * var(--ui-scale)), auto) minmax(0, 1fr);
+  gap: var(--ui-gap-xs) var(--ui-gap-sm);
+  margin: 0;
+  font-size: var(--ui-font-small);
+  line-height: 1.45;
+}
+
+.integrity__evidence-grid dt {
+  color: var(--text-muted);
+}
+
+.integrity__evidence-grid dd {
+  min-width: 0;
+  margin: 0;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.integrity__evidence-group {
+  display: flex;
+  flex-direction: column;
+  gap: calc(3px * var(--ui-scale));
+  padding-top: var(--ui-gap-xs);
+  border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 62%, transparent);
+}
+
+.integrity__evidence-group strong {
+  color: var(--text-strong);
+  font-size: var(--ui-font-small);
+}
+
+.integrity__evidence-group p {
+  display: flex;
+  flex-direction: column;
+  gap: calc(2px * var(--ui-scale));
+  margin: 0;
+  color: var(--text);
+  font-size: var(--ui-font-small);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.integrity__evidence-group small,
+.integrity__evidence-row small {
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+}
+
+.integrity__evidence-row {
+  display: flex;
+  flex-direction: column;
+  gap: calc(2px * var(--ui-scale));
+  margin: 0;
+  color: var(--text);
+  font-size: var(--ui-font-small);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  padding: var(--ui-gap-xs) var(--ui-gap-sm);
+  border-left: calc(2px * var(--ui-scale)) solid color-mix(in srgb, var(--border) 72%, transparent);
+}
+
+.integrity__evidence-row[data-status="passed"] {
+  border-left-color: var(--good);
+}
+
+.integrity__evidence-row[data-status="failed"] {
+  border-left-color: var(--bad);
+}
+
+.integrity__evidence-row[data-status="inconclusive"] {
+  border-left-color: var(--warn);
+}
+
+.integrity__manifest-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-gap-xs);
+  margin-top: var(--ui-gap-xs);
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+  line-height: 1.3;
+}
+
+.integrity__manifest-meta span {
+  max-width: 100%;
+  padding: var(--ui-badge-padding-y) var(--ui-badge-padding-x);
+  overflow-wrap: anywhere;
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
+  border-radius: var(--oc-radius-soft);
+  background: color-mix(in srgb, var(--surface-inset) 88%, transparent);
+}
+
+/* Issue / correction / missing rows use the current integrity card's
+   flat left-rail pattern. */
+:is(.integrity__issue, .integrity__correction, .integrity__missing) {
+  padding: var(--ui-gap-xs) var(--ui-gap-sm);
+  background: transparent;
+  border-left: calc(2px * var(--ui-scale)) solid color-mix(in srgb, var(--border) 72%, transparent);
+  border-radius: 0;
+  font-size: var(--ui-font-control);
+  line-height: 1.5;
+}
+
+.integrity__issue {
+  display: flex;
+  gap: var(--ui-gap-sm);
+  align-items: flex-start;
+}
+
+.integrity__correction {
+  display: flex;
+  flex-direction: column;
+  gap: calc(2px * var(--ui-scale));
+}
+
+.integrity__issue-body {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: calc(2px * var(--ui-scale));
+}
+
+.integrity__issue-desc {
+  color: var(--text);
+  overflow-wrap: break-word;
+}
+
+.integrity__issue-title {
+  color: var(--text-strong);
+  font-weight: var(--ui-font-weight-strong);
+}
+
+.integrity__issue-title::after {
+  content: ": ";
+}
+
+.integrity__issue[data-type="blocking"] {
+  border-left-color: var(--bad);
+}
+
+.integrity__issue[data-type="advisory"] {
+  border-left-color: var(--warn);
+}
+
+/* Correction sub-block: head row layered on the shared chrome. */
+.integrity__correction-head {
+  display: flex;
+  gap: var(--ui-gap-sm);
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.integrity__correction-reason {
+  color: var(--text);
+  flex: 1;
+  min-width: 0;
+}
+
+/* Missing-coverage row sub-text. */
+.integrity__missing-title {
+  font-weight: var(--ui-font-weight-strong);
+  color: var(--text-strong);
+}
+
+.integrity__missing-reason {
+  margin-top: calc(2px * var(--ui-scale));
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: var(--ui-font-small);
+}
+
+/* ArchitectPanel (ArchitectPanel.tsx): renders the architect
+   agent's decisions and the inferred category overview inside
+   the task-scope panel. The panel layers an overview row (count +
+   category pills + detail blurb) above a decisions list (per-
+   decision card with key/value/reason) and a streaming row
+   surfaced while the architect agent runs. */
+.arch-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-sm);
+}
+
+.arch-overview {
+  display: grid;
+  gap: calc(8px * var(--ui-scale));
+}
+
+.arch-summary {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ui-gap-sm);
+}
+
+.arch-count {
+  font-size: var(--ui-font-heading);
+  font-weight: var(--ui-font-weight-strong);
+  color: var(--accent);
+}
+
+.arch-count-label {
+  font-size: var(--ui-font-control);
+  color: var(--text-muted);
+}
+
+.arch-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-gap-xs);
+}
+
+.arch-detail {
+  font-size: var(--ui-font-control);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* Decision list: each flat row carries the decision key, target
+   goal id, decision value, and rationale on separate rows. */
+.arch-decisions {
+  display: grid;
+  gap: calc(7px * var(--ui-scale));
+}
+
+.arch-decision {
+  display: grid;
+  gap: calc(5px * var(--ui-scale));
+  padding: calc(9px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  border: 0 solid transparent;
+  border-radius: 0;
+  background: transparent;
+}
+
+.arch-decision-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-gap-sm);
+  min-width: 0;
+}
+
+.arch-decision-key {
+  min-width: 0;
+  color: var(--text-strong);
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.arch-decision-goal {
+  max-width: 45%;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: var(--ui-font-tiny);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.arch-decision-value {
+  color: var(--text);
+  font-size: var(--ui-font-control);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.arch-decision-reason {
+  color: var(--text-muted);
+  font-size: var(--ui-font-small);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.verdict-pill {
+  align-self: flex-start;
+  padding: calc(3px * var(--ui-scale)) var(--ui-gap-md);
+  border-radius: var(--oc-radius-pill);
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-strong);
+  text-transform: uppercase;
+  letter-spacing: var(--ui-letter-spacing-loose);
+  line-height: 1.4;
+}
+.verdict-pill[data-verdict="pass"],
+.verdict-pill[data-verdict="accepted"] {
+  background: var(--good-dim);
+  color: var(--good);
+  box-shadow: 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--good) 35%, transparent) inset;
+}
+.verdict-pill[data-verdict="concerns"] {
+  background: var(--warn-dim);
+  color: var(--warn);
+  box-shadow: 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--warn) 35%, transparent) inset;
+}
+.verdict-pill[data-verdict="needs_correction"],
+.verdict-pill[data-verdict="rejected"] {
+  background: var(--bad-dim);
+  color: var(--bad);
+  box-shadow: 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--bad) 35%, transparent) inset;
+}
+.verdict-pill[data-verdict="inflight"] {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  color: var(--accent);
+  box-shadow: 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--accent) 35%, transparent) inset;
+}
+.verdict-pill[data-verdict="empty"] {
+  background: var(--surface-inset);
+  color: var(--text-muted);
+  box-shadow: 0 0 0 var(--oc-border-width) var(--border) inset;
+}
+
+/* The session viewer dialog (rendered by services/dialog.ts when an
+ * operator opens an executor session from a task-scope workspace)
+ * shows a list of role-tagged messages. The .session-msg base + the
+ * two role variants ([data-role="assistant"|"user"]) plus the role
+ * label and message text canonicals live here next to the rest of
+ * the task-scope-side dialogs. */
+.session-msg {
+  display: flex;
+  flex-direction: column;
+  gap: calc(4px * var(--ui-scale));
+  padding: calc(10px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  border-radius: var(--oc-radius-large);
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 82%, transparent);
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+}
+
+.session-msg[data-role="assistant"] {
+  border-color: color-mix(in srgb, var(--accent) 16%, var(--border));
+  background:
+    linear-gradient(
+      180deg,
+      var(--ui-highlight-tone),
+      color-mix(in srgb, var(--accent) 1.2%, transparent) 74%,
+      transparent
+    ),
+    color-mix(in srgb, var(--surface) 88%, transparent);
+}
+
+.session-msg[data-role="user"] {
+  width: min(100%, calc(560px * var(--ui-scale)));
+  border-color: color-mix(in srgb, var(--accent) 18%, var(--border));
+  background: color-mix(in srgb, var(--accent-dim) 68%, transparent);
+}
+
+.session-msg-role {
+  font-size: var(--ui-font-tiny);
+  font-weight: var(--ui-font-weight-strong);
+  text-transform: uppercase;
+  letter-spacing: var(--ui-letter-spacing-loose);
+  color: var(--text-soft);
+}
+
+.session-msg[data-role="assistant"] .session-msg-role {
+  color: var(--accent);
+}
+
+.session-msg-text {
+  font-size: var(--ui-font-small);
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+  max-height: calc(200px * var(--ui-scale));
+  overflow-y: auto;
+}
+
+.session-msg .msg-tool {
+  margin: 0;
+}
+
+.session-msg .tool-detail {
+  font-size: var(--ui-font-small);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Task-scope misc (extracted 2026-05-04): embedded session list panel.
+   ───────────────────────────────────────────────────────────── */
+
+.session-list-panel {
+  display: flex;
+  flex-direction: column;
+  gap: calc(6px * var(--ui-scale));
+  min-height: calc(180px * var(--ui-scale));
+  max-height: calc(320px * var(--ui-scale));
+  overflow-y: auto;
+  padding: 0;
+  border-radius: 0;
+  border: 0 solid transparent;
+  background: transparent;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Task-scope list-row variants (extracted 2026-05-04): channel
+   document hover, gwg list + priority badge, goalsSection scroll
+   override. Memory and settings card chrome is owned by
+   surfaces/settings.css.
+   ───────────────────────────────────────────────────────────── */
+
+.channel-doc-card:hover {
+  background: var(--surface-hover);
+  border-color: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+#goalsSection > .oc-section__body {
+  max-height: none;
+  overflow-y: visible;
+  overscroll-behavior: auto;
+}
+
+.gwg-list {
+  --gwg-revision-column-width: 6.5ch;
+}
+
+/* Exact child-session transcript shown by the programmatic sub-agent dock tab. */
+.subagent-conversation-activity,
+.subagent-conversation-panel {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+.subagent-conversation-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--chat-canvas);
+}
+
+.subagent-conversation-panel__agents,
+.subagent-conversation-panel__selected-agent {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.subagent-conversation-panel__agent-selector {
+  width: 100%;
+  height: calc(48px * var(--ui-scale));
+  min-height: calc(48px * var(--ui-scale));
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding-right: calc(6px * var(--ui-scale));
+  border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--border) 82%, transparent);
+  background: var(--surface);
+}
+
+.subagent-conversation-panel__agent-tabs.oc-tabs {
+  --oc-tabs-height: calc(36px * var(--ui-scale));
+  --oc-tabs-gap: calc(4px * var(--ui-scale));
+  --oc-tabs-padding-x: calc(8px * var(--ui-scale));
+
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  justify-content: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: calc(6px * var(--ui-scale));
+  scroll-padding-inline: var(--oc-tabs-padding-x);
+  scrollbar-width: none;
+}
+
+.subagent-conversation-panel__agent-tab.oc-tab {
+  --chat-avatar-inline-size: calc(20px * var(--ui-scale));
+  --chat-avatar-ring-outset: calc(1px * var(--ui-scale));
+  --oc-tab-bg: transparent;
+  --oc-tab-active-bg: var(--surface-hover);
+
+  min-width: 0;
+  max-width: calc(220px * var(--ui-scale));
+  flex: 0 0 auto;
+  justify-content: flex-start;
+  gap: calc(6px * var(--ui-scale));
+  padding-inline: calc(8px * var(--ui-scale));
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
+  border-radius: var(--oc-radius-large);
+  font: var(--ui-font-weight-body) var(--ui-font-control) var(--font);
+  letter-spacing: var(--ui-letter-spacing-normal);
+  text-transform: none;
+}
+
+.subagent-conversation-panel__agent-tab.oc-tab[data-selected] {
+  border-color: color-mix(in srgb, var(--accent) 26%, var(--border));
+}
+
+.subagent-conversation-panel__agent-avatar {
+  flex: 0 0 auto;
+}
+
+.subagent-conversation-panel__agent-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subagent-conversation-panel__agent-tab > .oc-status-indicator {
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.subagent-conversation-panel__agent-menu-trigger.oc-button {
+  flex: 0 0 auto;
+  min-width: calc(44px * var(--ui-scale));
+  margin-left: calc(4px * var(--ui-scale));
+  padding-inline: calc(7px * var(--ui-scale));
+  border-left: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
+  border-radius: 0;
+}
+
+.subagent-conversation-panel__agent-menu.oc-menu {
+  width: min(calc(280px * var(--ui-scale)), calc(100vw - 24px));
+  max-height: min(calc(360px * var(--ui-scale)), calc(100vh - 24px));
+  overflow-y: auto;
+}
+
+.subagent-conversation-panel__agent-menu-item.oc-menu-item {
+  --chat-avatar-inline-size: calc(20px * var(--ui-scale));
+  --chat-avatar-ring-outset: calc(1px * var(--ui-scale));
+
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: calc(8px * var(--ui-scale));
+}
+
+.subagent-conversation-panel__agent-menu-item.oc-menu-item[data-active="true"] {
+  background: var(--surface-hover);
+}
+
+.subagent-conversation-panel__agent-menu-avatar {
+  flex: 0 0 auto;
+}
+
+.subagent-conversation-panel__agent-menu-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subagent-conversation-panel__agent-menu-status {
+  color: var(--text-muted);
+  font: var(--ui-font-weight-body) var(--ui-font-small) var(--font);
+  white-space: nowrap;
+}
+
+.subagent-conversation-panel__scroll {
+  --conversation-card-inline-size: 100%;
+
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(8px * var(--ui-scale));
+  overflow-y: auto;
+  padding: calc(10px * var(--ui-scale));
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+
+.subagent-conversation-panel__scroll[data-follow-lock="true"] {
+  overflow-anchor: none;
+}
+
+.subagent-conversation-panel__empty {
+  flex: 1 1 0;
+  min-height: calc(160px * var(--ui-scale));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: calc(8px * var(--ui-scale));
+  padding: calc(20px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-small);
+  text-align: center;
+}
+
+.subagent-conversation-panel__empty :is(strong, p) {
+  margin: 0;
+}

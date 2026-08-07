@@ -1,0 +1,5 @@
+Discover, completely read, and select the charter, source dossier, fundamental analysis, and valuation analysis. Reconcile them into a decision-useful but balanced investment thesis. State the differentiated view, supporting mechanisms, valuation implication, catalysts with timing, principal risks, falsification signals, and bull/base/bear scenarios whose operating assumptions agree with the valuation evidence.
+
+Every claim maps to selected evidence. Separate observed fact, calculation, inference, and scenario assumption. Do not hide contradictions or convert unavailable current-price evidence into a fabricated upside percentage.
+
+Call `artifact_publish` once with type `equity-research/investment-thesis`. The strict JSON contains selected source locators, thesis statement, claim-evidence matrix, market-expectation hypothesis, catalysts, risks, falsifiers, scenarios, valuation interpretation, conditional recommendation framing, confidence by claim, and unresolved questions. Use `resource_set: null`. Do not write files.

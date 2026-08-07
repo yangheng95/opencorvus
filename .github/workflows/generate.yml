@@ -1,0 +1,28 @@
+name: generated-artifacts
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Bun
+        uses: ./.github/actions/setup-bun
+
+      - name: Regenerate repository artifacts
+        run: ./script/generate.ts
+
+      - name: Verify generated artifacts are committed
+        run: bun ./script/generated-artifacts.ts --check-clean-worktree

@@ -1,0 +1,200 @@
+import type { ExpertSquadCatalogProfile, ExpertSquadCatalogSummary } from "@/expert-squad/catalog"
+import { BUILTIN_EXPERT_SQUAD_NAMESPACE } from "@/expert-squad/id"
+import { ExpertSquadRegistry } from "@/expert-squad/registry"
+import type { ExpertSquadPackageLocations } from "@/expert-squad/locations"
+import type { ExpertSquadGenerationMetadata } from "@/expert-squad/installation-metadata"
+import {
+  ProjectionHashDomain,
+  canonicalProjectionHash,
+  canonicalStringSet,
+  compareCanonicalStrings,
+  textSHA256,
+} from "@/expert-squad/projection-hash"
+
+export type ExpertSquadCatalogPackage = {
+  namespace: string
+  id: string
+  version: string
+  selector: ExpertSquadRegistry.SelectorMetadata
+  selectorInstructions: string
+  readmeContent?: string
+  root?: string
+  manifestPath?: string
+  readmePath?: string
+  installationScope?: ExpertSquadPackageLocations.InstallationScope
+  generation?: ExpertSquadGenerationMetadata
+  packageDigest?: string
+  manifest: ExpertSquadRegistry.Manifest
+}
+
+function displayLabel(label: string, namespace: string): string {
+  return namespace === BUILTIN_EXPERT_SQUAD_NAMESPACE ? label : `${namespace}/${label}`
+}
+
+function declarationResources(projection: ExpertSquadRegistry.Projection) {
+  return {
+    inherit_base_tools: projection.inherit_base_tools,
+    built_in_tool_ids: canonicalStringSet(projection.built_in_tool_ids, "catalog built_in_tool_ids"),
+    default_skill_refs: canonicalStringSet(projection.default_skill_refs, "catalog default_skill_refs"),
+    package_skill_refs: canonicalStringSet(projection.package_skill_refs, "catalog package_skill_refs"),
+    default_tool_refs: canonicalStringSet(projection.default_tool_refs, "catalog default_tool_refs"),
+    package_tool_refs: canonicalStringSet(projection.package_tool_refs, "catalog package_tool_refs"),
+    default_mcp_server_refs: canonicalStringSet(projection.default_mcp_server_refs, "catalog default_mcp_server_refs"),
+    package_mcp_server_refs: canonicalStringSet(projection.package_mcp_server_refs, "catalog package_mcp_server_refs"),
+    default_mcp_tool_refs: canonicalStringSet(projection.default_mcp_tool_refs, "catalog default_mcp_tool_refs"),
+    package_mcp_tool_refs: canonicalStringSet(projection.package_mcp_tool_refs, "catalog package_mcp_tool_refs"),
+    default_mcp_prompt_refs: canonicalStringSet(projection.default_mcp_prompt_refs, "catalog default_mcp_prompt_refs"),
+    package_mcp_prompt_refs: canonicalStringSet(projection.package_mcp_prompt_refs, "catalog package_mcp_prompt_refs"),
+    default_mcp_resource_refs: canonicalStringSet(
+      projection.default_mcp_resource_refs,
+      "catalog default_mcp_resource_refs",
+    ),
+    package_mcp_resource_refs: canonicalStringSet(
+      projection.package_mcp_resource_refs,
+      "catalog package_mcp_resource_refs",
+    ),
+  }
+}
+
+function declarationCapabilityProjection(
+  manifest: ExpertSquadRegistry.Manifest,
+): ExpertSquadCatalogProfile["capability_projection"] {
+  const scheduler = manifest.capability_projection.scheduler
+  return {
+    scheduler: {
+      base_role: "orchestrator",
+      ...(scheduler.prompt ? { prompt: scheduler.prompt } : {}),
+      ...declarationResources(scheduler),
+    },
+    agents: Object.fromEntries(
+      Object.entries(manifest.capability_projection.agents)
+        .sort(([left], [right]) => compareCanonicalStrings(left, right))
+        .map(([agentID, projection]) => [
+          agentID,
+          {
+            label: projection.label,
+            ...(projection.description ? { description: projection.description } : {}),
+            base_role: projection.base_role,
+            ...(projection.prompt ? { prompt: projection.prompt } : {}),
+            ...declarationResources(projection),
+          },
+        ]),
+    ),
+    virtual_workflows: Object.fromEntries(
+      Object.entries(manifest.capability_projection.virtual_workflows)
+        .sort(([left], [right]) => compareCanonicalStrings(left, right))
+        .map(([workflowID, workflow]) => [
+          workflowID,
+          {
+            label: workflow.label,
+            description: workflow.description,
+            nodes: Object.fromEntries(
+              Object.entries(workflow.nodes)
+                .sort(([left], [right]) => compareCanonicalStrings(left, right))
+                .map(([nodeID, node]) => [nodeID, { ...node, depends_on: [...node.depends_on] }]),
+            ),
+          },
+        ]),
+    ),
+  }
+}
+
+export function catalogProfileFromPackage(input: {
+  pkg: ExpertSquadCatalogPackage
+  builtIn: boolean
+}): ExpertSquadCatalogProfile {
+  const capabilityProjection = declarationCapabilityProjection(input.pkg.manifest)
+  return {
+    id: input.pkg.id,
+    name: ExpertSquadRegistry.displayName(input.pkg.manifest),
+    label: input.pkg.manifest.label,
+    description: input.pkg.manifest.description,
+    built_in: input.builtIn,
+    editable: false,
+    product_pillars: input.pkg.manifest.product_pillars,
+    ...(input.pkg.manifest.system_role ? { system_role: input.pkg.manifest.system_role } : {}),
+    ...(input.pkg.manifest.configuration ? { configuration: input.pkg.manifest.configuration } : {}),
+    declaration_hash: canonicalProjectionHash(ProjectionHashDomain.catalogDeclaration, {
+      namespace: input.pkg.namespace,
+      expert_squad_id: input.pkg.id,
+      version: input.pkg.version,
+      product_pillars: input.pkg.manifest.product_pillars,
+      system_role: input.pkg.manifest.system_role ?? null,
+      name: input.pkg.manifest.name ?? null,
+      label: input.pkg.manifest.label,
+      description: input.pkg.manifest.description ?? null,
+      configuration: input.pkg.manifest.configuration ?? null,
+      capability_projection: capabilityProjection,
+      readme_sha256: textSHA256(input.pkg.readmeContent ?? ""),
+      selector: {
+        ref: input.pkg.selector.ref,
+        id: input.pkg.selector.id,
+        label: input.pkg.selector.label,
+        description: input.pkg.selector.description ?? null,
+        summary: input.pkg.selector.summary,
+        selection_guidance: input.pkg.selector.selection_guidance,
+        instructions_sha256: textSHA256(input.pkg.selectorInstructions),
+      },
+    }),
+    capability_projection: capabilityProjection,
+  }
+}
+
+export function catalogSummaryFromPackage(input: {
+  pkg: ExpertSquadCatalogPackage
+  builtIn: boolean
+}): ExpertSquadCatalogSummary {
+  const profile = catalogProfileFromPackage(input)
+  const selector = {
+    ref: input.pkg.selector.ref,
+    id: input.pkg.selector.id,
+    label: input.pkg.selector.label,
+    description: input.pkg.selector.description,
+    summary: input.pkg.selector.summary,
+    selection_guidance: input.pkg.selector.selection_guidance,
+    instructions_path: "selector.md" as const,
+    instructions: input.pkg.selectorInstructions,
+  }
+  if (!selector.instructions.trim()) {
+    throw new Error(`Expert squad ${input.pkg.id} selector requires top-level selector.md instructions.`)
+  }
+  const readme = input.pkg.readmeContent ?? ""
+  if (!readme.trim()) throw new Error(`Expert squad ${input.pkg.id} README.md is blank.`)
+  if (!input.pkg.packageDigest) throw new Error(`Expert squad ${input.pkg.id} is missing its package digest.`)
+  const source = input.builtIn
+    ? { kind: "built_in" as const }
+    : (() => {
+        if (!input.pkg.root || !input.pkg.manifestPath || !input.pkg.readmePath) {
+          throw new Error(`Installed expert squad ${input.pkg.id} is missing canonical catalog paths.`)
+        }
+        if (!input.pkg.installationScope) {
+          throw new Error(`Installed expert squad ${input.pkg.id} is missing its installation scope.`)
+        }
+        if (!input.pkg.packageDigest) {
+          throw new Error(`Installed expert squad ${input.pkg.id} is missing its package digest.`)
+        }
+        return {
+          kind: "installed_package" as const,
+          installation_scope: input.pkg.installationScope,
+          package_digest: input.pkg.packageDigest,
+          namespace: input.pkg.namespace,
+          root: input.pkg.root,
+          manifest_path: input.pkg.manifestPath,
+          readme_path: input.pkg.readmePath,
+          ...(input.pkg.generation ? { generation: input.pkg.generation } : {}),
+        }
+      })()
+  return {
+    ...profile,
+    version: input.pkg.version,
+    package_digest: input.pkg.packageDigest,
+    display_label: displayLabel(profile.label, input.pkg.namespace),
+    source,
+    readme: {
+      path: "README.md",
+      append_target: "orchestrator",
+      content: readme,
+    },
+    selector,
+  }
+}

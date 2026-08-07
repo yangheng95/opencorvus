@@ -1,0 +1,28 @@
+#!/bin/sh
+set -e
+pre_push_refs=$(cat)
+# Check if bun version matches package.json
+# keep in sync with packages/script/src/index.ts semver qualifier
+bun -e '
+import { semver } from "bun";
+const pkg = await Bun.file("package.json").json();
+const expectedBunVersion = pkg.packageManager?.split("@")[1];
+if (!expectedBunVersion) {
+  throw new Error("packageManager field not found in root package.json");
+}
+const expectedBunVersionRange = `^${expectedBunVersion}`;
+if (!semver.satisfies(process.versions.bun, expectedBunVersionRange)) {
+  throw new Error(`This script requires bun@${expectedBunVersionRange}, but you are using bun@${process.versions.bun}`);
+}
+if (process.versions.bun !== expectedBunVersion) {
+  console.warn(`Warning: Bun version ${process.versions.bun} differs from expected ${expectedBunVersion}`);
+}
+'
+bun typecheck
+bun run api:routes-check
+bun run docs:check
+bun run overlay:i18n-check
+# Block in-tree secrets before they reach a remote branch. The script exits 1 on any hit and prints
+# the file:line + pattern id; deliberate test fixtures should mark the
+# offending line with `// secret-scan: ignore`.
+printf '%s\n' "$pre_push_refs" | bun run script/secret-scan.ts --pre-push-stdin

@@ -1,0 +1,10 @@
+.oc-popover {
+  box-sizing: border-box;
+  border: var(--ui-focused-popup-border);
+  border-radius: var(--oc-radius-large);
+  outline: none;
+  background: var(--dialog-bg);
+  color: var(--text-strong);
+  box-shadow: var(--ui-focused-popup-shadow);
+  z-index: var(--ui-z-overlay);
+}

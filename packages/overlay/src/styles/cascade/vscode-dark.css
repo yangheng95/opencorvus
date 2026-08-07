@@ -1,0 +1,137 @@
+/* ─────────────────────────────────────────────────────────────
+   VS Code dark palette — Overlay-owned historical Default Dark+ palette.
+
+   Theme isolation contract:
+
+   1. This is an Overlay-owned theme, available in Tauri, browser, and
+      VS Code webview hosts. It must not depend on host-injected
+      `--vscode-*` variables; those vary with the user's editor theme
+      and were the source of menu panels taking on unexpected colors.
+
+   2. No reference to tokens defined in cascade/dark.css or
+      cascade/light.css. VS Code dark is a sibling theme, not a
+      passthrough alias for either palette.
+
+   3. Black / white CSS keywords are allowed inside color-mix() for
+      structural scrims, high-lights, and shadow tones — they are
+      structural, not theme color (matches every major design system:
+      Material, Carbon, FAST).
+
+   The token name set is symmetric with cascade/dark.css and
+   cascade/light.css; only the values differ. flat-redesign-theme-
+   symmetry.test.ts pins the parity. flat-redesign-vscode-theme-
+   passthrough.test.ts pins the no-host-token discipline.
+   ───────────────────────────────────────────────────────────── */
+
+:root[data-theme="vscode-dark"] {
+  color-scheme: dark;
+
+  --text-on-accent: #000000;
+  --text-on-strong: #000000;
+  --text-on-danger: #000000;
+  --bg: rgb(30, 30, 30);
+  --surface: rgb(37, 37, 38);
+  --surface-hover: rgb(42, 45, 46);
+  --surface-inset: rgb(24, 24, 24);
+  --surface-strong: rgb(51, 51, 51);
+  --rail-surface: var(--surface);
+  --rail-background-image: none;
+  --chat-canvas: var(--bg);
+  --workspace-ambient-fill: var(--chat-canvas);
+  --inspector-surface: var(--chat-canvas);
+  --body-bg: var(--rail-surface);
+  --panel-body-bg: var(--rail-surface);
+  --panel-body-blur: none;
+  --chrome: rgb(60, 60, 60);
+  --border: rgba(255, 255, 255, 0.12);
+  --border-hover: rgba(0, 122, 204, 0.5);
+  --border-strong: rgba(255, 255, 255, 0.18);
+  --ui-focused-popup-border: var(--oc-border-width) solid var(--border-strong);
+  --ui-focused-popup-shadow:
+    0 calc(24px * var(--ui-scale)) calc(54px * var(--ui-scale))
+      color-mix(in srgb, var(--ui-shadow-tone) 28%, transparent),
+    var(--shadow-lg);
+  --ui-focused-popup-scrim: color-mix(in srgb, var(--text-strong) 14%, transparent);
+
+  --text: #d6d6d6;
+  --text-strong: #eeeeee;
+  --text-soft: #b3b3b3;
+  --text-muted: #9e9e9e;
+
+  --accent: #007acc;
+  --accent-dim: rgba(0, 122, 204, 0.18);
+  --accent-hover: #1a8fd4;
+  --accent-start: var(--accent);
+  --accent-mid: var(--accent);
+  --accent-end: var(--accent-hover);
+  --accent-gradient: var(--accent);
+  --accent-gradient-hover: var(--accent-hover);
+  --accent-shadow: 0 10px 26px color-mix(in srgb, var(--accent) 28%, transparent);
+  --accent-ring: color-mix(in srgb, var(--accent) 30%, transparent);
+  --accent-glow: color-mix(in srgb, var(--accent) 24%, transparent);
+  --hover-accent-border: color-mix(in srgb, var(--accent) 36%, transparent);
+  --hover-accent-wash: color-mix(in srgb, var(--accent) 10%, transparent);
+
+  --info: #3794ff;
+  --info-dim: color-mix(in srgb, var(--info) 12%, transparent);
+  --good: #73c991;
+  --good-dim: color-mix(in srgb, var(--good) 14%, transparent);
+  --warn: #cca700;
+  --warn-dim: color-mix(in srgb, var(--warn) 15%, transparent);
+  --bad: #f48771;
+  --bad-dim: color-mix(in srgb, var(--bad) 14%, transparent);
+
+  /* High-lights (white inset) and shadow tones (black scrim) are
+   * structural, not theme color — they shape edges and depth, and
+   * every dark UI uses the same physics regardless of palette. Black
+   * and white CSS keywords here are the standard expression of that
+   * structural concern (cf. Material elevation overlays, Carbon
+   * shadow scale). */
+  --shadow: inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+  --shadow-md: inset 0 1px 0 color-mix(in srgb, white 4.5%, transparent);
+  --shadow-lg: inset 0 1px 0 color-mix(in srgb, white 5%, transparent);
+
+  --scrollbar-thumb: color-mix(in srgb, #797979 40%, transparent);
+  --scrollbar-thumb-hover: color-mix(in srgb, #646464 70%, transparent);
+  --session-scrollbar-track: color-mix(in srgb, var(--text) 4%, transparent);
+
+  --subtle-1: color-mix(in srgb, var(--accent) 4%, transparent);
+  --subtle-2: color-mix(in srgb, var(--accent) 6%, transparent);
+  --subtle-3: color-mix(in srgb, var(--accent) 8%, transparent);
+  --subtle-4: color-mix(in srgb, var(--accent) 12%, transparent);
+  --subtle-5: color-mix(in srgb, var(--accent) 16%, transparent);
+
+  /* Markdown / hljs (highlight.js) syntax palette. Code blocks render on
+   * --surface-inset, so syntax colors are theme-scoped instead of fixed at
+   * design-language root. */
+  --oc-syntax-keyword: #ff7b72;
+  --oc-syntax-string: #a5d6ff;
+  --oc-syntax-comment: #b1bac4;
+  --oc-syntax-number: #79c0ff;
+  --oc-syntax-function: #d2a8ff;
+  --oc-syntax-variable: #ffa657;
+  --oc-syntax-meta: #7ee787;
+  --oc-syntax-addition-text: #aff5b4;
+  --oc-syntax-addition-bg: color-mix(in srgb, #3fb950 15%, transparent);
+  --oc-syntax-deletion-text: #ffdcd7;
+  --oc-syntax-deletion-bg: color-mix(in srgb, #f85149 15%, transparent);
+
+  --dialog-bg: rgb(37, 37, 38);
+  --dialog-backdrop: color-mix(in srgb, black 60%, transparent);
+  --ui-scrim: color-mix(in srgb, black 60%, transparent);
+  --ui-shadow-tone: color-mix(in srgb, black 32%, transparent);
+  --ui-highlight-tone: color-mix(in srgb, white 4%, transparent);
+  --ui-glass-tint: color-mix(in srgb, white 3%, transparent);
+
+  --task-bar-bg: var(--chrome);
+  --task-bar-backdrop-filter: none;
+  --task-bar-border-color: #454545;
+
+  --menu-panel-bg: rgb(31, 31, 31);
+  --divider-soft: color-mix(in srgb, var(--border) 60%, transparent);
+
+  --panel-fill: var(--surface);
+  --panel-fill-hover: var(--surface-hover);
+  --card-fill: rgba(45, 45, 48, 0.72);
+  --card-fill-hover: var(--surface-hover);
+}

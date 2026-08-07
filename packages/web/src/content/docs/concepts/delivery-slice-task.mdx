@@ -1,0 +1,55 @@
+---
+title: "Data model: Task / Delivery Slice / execution evidence"
+description: Task lifecycle, versioned Delivery Slice contracts, physical execution, review, and derived progress.
+---
+
+OpenCorvus keeps business lifecycle, delivery scope, and physical execution separate.
+
+```text
+Task
+ ├─ workflow selection (immutable package/workflow decision)
+ ├─ DeliverySlice[]
+ │   └─ DeliverySliceRevision[]
+ ├─ dispatch lineage / execution attempts / Sessions
+ ├─ domain Artifacts and Host observations
+ ├─ reviewer artifacts bound to exact Slice revisions
+ └─ task_completion_decision
+```
+
+## Task owns business lifecycle
+
+Task is the only business-lifecycle container. The Orchestrator completes a Task by appending one decision that cites the selected workflow, exact package revision/digest, accepted current Delivery Slice revisions, reviewer artifacts, and real execution/message evidence. Reopening preserves prior decisions.
+
+## Goal is a versioned Delivery Slice
+
+The product continues to label each Delivery Slice as a **Goal**. A stable `delivery_slice_id` links immutable revisions. Each revision contains its objective, acceptance specifications, owned paths, priority, kind, and exact RequirementSet/ContractGraph references.
+
+A Slice does not own status, dependencies, attempts, results, retry count, workspace, Session, or cleanup. Editing a Goal creates a new revision; evidence for an older revision stays visible but cannot satisfy the current contract.
+
+## Workflow and execution
+
+Every selected workflow node executes once per Task. Optional Slice revision references are typed subjects for worker input, evidence, and review; they never multiply workflow nodes.
+
+Physical execution belongs to immutable dispatch lineage, an execution attempt, and a real Session. Terminal delivery points to the real final assistant message or terminal error/tool event. It is not a Goal result or business verdict.
+
+## Review and Goal progress
+
+Reviewer artifacts bind their judgment and evidence to exact Slice revisions. The Goal panel derives, on read:
+
+- current contract revision;
+- applicable Task workflow-node coverage;
+- live and terminal Sessions;
+- exact-revision Artifact coverage;
+- accepted, rejected, or inconclusive review facts;
+- whether Task completion cites the accepted review.
+
+The UI may display `not_started`, `in_progress`, `in_review`, `changes_requested`, `accepted`, or `settled`. These values are read-only projections, never stored lifecycle or scheduling fields.
+
+## API rules
+
+- Goal APIs create a Slice or append a revision; they do not complete, reject, retry, or bind a workspace.
+- Execution APIs expose dispatch, Session, final-message/error, and Host-observation facts.
+- Task APIs expose the sole lifecycle and completion decision.
+- Artifact and review APIs use exact immutable locators and Slice revision subjects.
+
+See [Architecture](./architecture.md), [Agents](../../agents/), and [Evaluator](../../reference/evaluator/).

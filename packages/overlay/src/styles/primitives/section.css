@@ -1,0 +1,140 @@
+/* ── section.css ──
+ * Layout slots for the overlay's Disclosure-backed right-rail sections.
+ *
+ * Contract:
+ *   .oc-section              → Disclosure root (flex-column)
+ *   .oc-section__head        → Disclosure trigger (icon + title + badge)
+ *   .oc-section__icon        → SVG icon slot (shrink 0)
+ *   .oc-section__title       → section label (flex: 1)
+ *   .oc-section-heading      → standalone section/group heading typography
+ *   .oc-section__badge       → trailing chip (shrink 0)
+ *   .oc-section__body        → collapsible content area
+ *
+ * Disclosure owns the interactive chrome; this file owns the rich section
+ * label, icon, badge and body slots used by the task-scope rail.
+ */
+
+.oc-section {
+  --oc-section-head-height: var(--oc-density-control-height);
+  --oc-section-head-gap: var(--ui-gap-sm);
+  --oc-section-head-pad-x: var(--ui-gap-md);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.oc-section__head {
+  display: flex;
+  align-items: center;
+  min-height: var(--oc-section-head-height);
+  gap: var(--oc-section-head-gap);
+  padding: 0 var(--oc-section-head-pad-x);
+}
+
+.oc-section__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--text-soft);
+  transition: color var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.oc-section[open] > .oc-section__head > .oc-section__icon {
+  color: var(--accent);
+}
+
+.oc-section__title,
+.oc-section-heading {
+  font-size: var(--ui-font-title);
+  font-weight: var(--ui-font-weight-medium);
+  letter-spacing: var(--ui-letter-spacing-normal);
+  line-height: 1.2;
+}
+
+.oc-section__title {
+  flex: 1;
+  color: var(--text-strong);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oc-section__badge {
+  margin-left: auto;
+  position: relative;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: auto;
+  padding: var(--ui-pill-padding-y) var(--ui-pill-padding-x);
+  border-radius: var(--oc-radius-pill);
+  color: var(--text-soft);
+  font-size: var(--ui-font-small);
+  font-weight: var(--ui-font-weight-strong);
+  letter-spacing: var(--ui-letter-spacing-loose);
+  white-space: nowrap;
+}
+
+.oc-section__body {
+  padding: 0 var(--ui-gap-sm) var(--ui-gap-sm);
+}
+
+.oc-section__badge:empty {
+  display: none;
+}
+
+.oc-section__badge::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: calc(5px * var(--ui-scale));
+  height: calc(5px * var(--ui-scale));
+  border-radius: var(--oc-radius-pill);
+  background: color-mix(in srgb, var(--subtle-4) 96%, transparent);
+  transform: translateY(-50%);
+}
+
+.oc-section__badge[data-variant="metric"] {
+  padding-inline-start: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.oc-section__badge[data-variant="metric"]::before {
+  display: none;
+}
+
+.oc-section__badge[data-tone="good"] {
+  color: color-mix(in srgb, var(--accent) 82%, var(--text-soft));
+}
+
+.oc-section__badge[data-tone="good"]::before {
+  background: color-mix(in srgb, var(--accent) 84%, transparent);
+}
+
+.oc-section__badge[data-tone="bad"] {
+  color: var(--bad);
+}
+
+.oc-section__badge[data-tone="bad"]::before {
+  background: color-mix(in srgb, var(--bad) 84%, transparent);
+}
+
+.oc-section__badge[data-tone="warn"] {
+  color: var(--warn);
+}
+
+.oc-section__badge[data-tone="warn"]::before {
+  background: color-mix(in srgb, var(--warn) 84%, transparent);
+}
+
+.oc-section__badge[data-tone="accent"] {
+  color: var(--accent);
+}
+
+.oc-section__badge[data-tone="accent"]::before {
+  background: color-mix(in srgb, var(--accent) 84%, transparent);
+}

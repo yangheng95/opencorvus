@@ -1,0 +1,37 @@
+---
+title: Discord
+description: Discord adapter using Gateway WebSocket + REST API — no public callback required.
+---
+
+## Prerequisites
+
+1. Create an Application at [Discord Developer Portal](https://discord.com/developers/applications) → add Bot.
+2. **Enable these Privileged Gateway Intents**:
+   - `MESSAGE CONTENT INTENT`
+   - `SERVER MEMBERS INTENT`
+3. OAuth2 → URL Generator: select `bot`, `applications.commands`; Bot Permissions include `Send Messages`, `Read Message History`, `Attach Files`.
+4. Use the generated URL to invite the Bot to your server.
+
+## Environment
+
+```bash
+export DISCORD_BOT_TOKEN=...
+```
+
+## Thread semantics
+
+Discord's **Threads** (public/private) map directly to OpenCorvus threads. For regular channel messages, thread key = `channel_id + user_id` (DM-like).
+
+## Message type support
+
+| Type               | Supported                         |
+| ------------------ | --------------------------------- |
+| Text               | ✅ (Markdown subset)              |
+| Image / attachment | ✅                                |
+| Voice message      | ✅ via STT                        |
+| Slash command      | ⚠️ not yet; regular messages only |
+
+## Troubleshooting
+
+- **Bot online but unresponsive**: enable MESSAGE CONTENT INTENT (disabled by default since 2022).
+- **Upload fails**: free accounts limited to 25 MB per file; Nitro 100 MB.

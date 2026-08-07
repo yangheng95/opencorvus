@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json.schemastore.org/package",
+  "name": "@opencorvus-ai/script",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/bun": "catalog:"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

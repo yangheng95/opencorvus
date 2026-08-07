@@ -1,0 +1,35 @@
+---
+title: LSP 服务器
+description: OpenCorvus 自动为 agent 操作的文件加载语言服务器。
+---
+
+OpenCorvus 通过 LSP 给 agent 提供**诊断、悬浮信息、定义跳转**等能力。实现：`packages/opencorvus/src/lsp/`。
+
+## 工作流程
+
+agent 读/写文件时，OpenCorvus：
+
+1. 按后缀识别语言（`packages/opencorvus/src/lsp/language.ts`）
+2. 启动对应语言服务器（`packages/opencorvus/src/lsp/server.ts`）
+3. 同语言后续文件复用同一 server
+4. 通过 `lsp` 工具把 diagnostics 暴露给 agent
+
+## 支持语言
+
+内置常见语言映射——TypeScript/JavaScript、Python、Go、Rust 等，使用社区标准 LSP 服务器（`typescript-language-server`、`gopls`、`rust-analyzer`、`pyright` 等）。
+
+具体集合会演进，以 `packages/opencorvus/src/lsp/language.ts` 当前注册表为准。
+
+## 触发时机
+
+LSP 懒启动——agent 首次接触语言 X 的文件时启动对应 server。session 结束时空闲 server 销毁。
+
+## 配置
+
+LSP server 自动发现。`opencorvus.jsonc` 当前没有按语言的 LSP 配置；若 server 不在 `PATH`，OpenCorvus 不会为该语言产生 semantic LSP diagnostics。
+
+如需非标准 server 二进制，按惯例名安装到 `PATH`；当前 LSP 层不支持任意路径。
+
+## 与 formatter 的关系
+
+LSP 与 [formatter](../formatters/) 互补：LSP 在写入**前**给 agent 语义反馈；formatter 在写入**后**清理风格。

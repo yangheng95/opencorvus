@@ -1,0 +1,107 @@
+.oc-icon {
+  --oc-icon-render-size: var(--oc-icon-size-standard);
+
+  width: var(--oc-icon-render-size);
+  height: var(--oc-icon-render-size);
+  flex-shrink: 0;
+}
+
+.oc-icon[data-size="compact"] {
+  --oc-icon-render-size: var(--oc-icon-size-compact);
+}
+
+.oc-icon[data-size="medium"] {
+  --oc-icon-render-size: var(--oc-icon-size-medium);
+}
+
+.oc-icon[data-size="large"] {
+  --oc-icon-render-size: var(--oc-icon-size-large);
+}
+
+.oc-icon[data-size="display"] {
+  --oc-icon-render-size: var(--oc-icon-size-display);
+}
+
+.oc-icon-pin {
+  transform: rotate(45deg) scale(1);
+  transform-origin: center;
+}
+
+.oc-status-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--text-muted);
+}
+
+.oc-status-indicator .oc-icon {
+  overflow: visible;
+  vector-effect: non-scaling-stroke;
+}
+
+.oc-status-indicator__dot {
+  position: relative;
+  display: block;
+  width: calc(8px * var(--ui-scale));
+  height: calc(8px * var(--ui-scale));
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.oc-status-indicator[data-status="queued"] {
+  color: var(--text-soft);
+}
+
+.oc-status-indicator:is([data-status="active"], [data-status="running"]) {
+  color: var(--accent);
+}
+
+.oc-status-indicator[data-status="completed"] {
+  color: var(--good);
+}
+
+.oc-status-indicator:is([data-status="failed"], [data-status="error"]) {
+  color: var(--bad);
+}
+
+.oc-status-indicator[data-status="cancelled"] {
+  color: var(--warn);
+}
+
+.oc-status-indicator:is([data-status="active"], [data-status="running"])[data-appearance="dot"] {
+  color: var(--accent);
+}
+
+.oc-status-indicator:is([data-status="queued"], [data-status="active"], [data-status="running"], [data-status="failed"], [data-status="error"])[data-appearance="dot"]
+  .oc-status-indicator__dot::after {
+  content: "";
+  position: absolute;
+  inset: calc(-1px * var(--ui-scale));
+  border-radius: inherit;
+  background: currentColor;
+  opacity: 0;
+  transform: scale(1);
+  will-change: opacity, transform;
+  animation: oc-status-dot-halo var(--ui-duration-loop-connection-pulse) cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+@keyframes oc-status-dot-halo {
+  0% {
+    opacity: 0.32;
+    transform: scale(1);
+  }
+
+  72%,
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-status-indicator:is([data-status="queued"], [data-status="active"], [data-status="running"], [data-status="failed"], [data-status="error"])[data-appearance="dot"]
+    .oc-status-indicator__dot::after {
+    animation: none;
+  }
+}

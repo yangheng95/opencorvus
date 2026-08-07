@@ -1,0 +1,334 @@
+diff --git a/bun-sqlite/session.cjs b/bun-sqlite/session.cjs
+index eec82a17dcb91c0fe71a36b8cfebae49d90738a3..bef6c185616d3734d052ebd406e889175cda3175 100644
+--- a/bun-sqlite/session.cjs
++++ b/bun-sqlite/session.cjs
+@@ -23,9 +23,15 @@ var SQLiteBunSession = class extends __sqlite_core_session_ts.SQLiteSession {
+ 	prepareQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper) {
+ 		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, isResponseInArrayMode, customResultMapper);
+ 	}
++	prepareOneTimeQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper) {
++		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, isResponseInArrayMode, customResultMapper, false, true);
++	}
+ 	prepareRelationalQuery(query, fields, executeMethod, customResultMapper) {
+ 		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, false, customResultMapper, true);
+ 	}
++	prepareOneTimeRelationalQuery(query, fields, executeMethod, customResultMapper) {
++		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, false, customResultMapper, true, true);
++	}
+ 	transaction(transaction, config = {}) {
+ 		const tx = new SQLiteBunTransaction("sync", this.dialect, this, this.relations, this.schema);
+ 		let result;
+@@ -53,7 +59,7 @@ var SQLiteBunTransaction = class SQLiteBunTransaction extends __sqlite_core_inde
+ };
+ var PreparedQuery = class extends __sqlite_core_session_ts.SQLitePreparedQuery {
+ 	static [__entity_ts.entityKind] = "SQLiteBunPreparedQuery";
+-	constructor(stmt, query, logger, fields, executeMethod, _isResponseInArrayMode, customResultMapper, isRqbV2Query) {
++	constructor(stmt, query, logger, fields, executeMethod, _isResponseInArrayMode, customResultMapper, isRqbV2Query, isOneTimeQuery = false) {
+ 		super("sync", executeMethod, query);
+ 		this.stmt = stmt;
+ 		this.logger = logger;
+@@ -61,38 +67,70 @@ var PreparedQuery = class extends __sqlite_core_session_ts.SQLitePreparedQuery {
+ 		this._isResponseInArrayMode = _isResponseInArrayMode;
+ 		this.customResultMapper = customResultMapper;
+ 		this.isRqbV2Query = isRqbV2Query;
++		this.isOneTimeQuery = isOneTimeQuery;
++	}
++	finalized = false;
++	finalize() {
++		if (this.finalized) return;
++		this.stmt.finalize();
++		this.finalized = true;
++	}
++	withStatement(callback) {
++		if (this.finalized) throw new Error("Cannot execute a finalized Bun SQLite prepared query");
++		let result;
++		try {
++			result = callback();
++		} catch (error) {
++			if (!this.isOneTimeQuery) throw error;
++			try {
++				this.finalize();
++			} catch (finalizeError) {
++				throw new AggregateError([error, finalizeError], "Bun SQLite query and one-time statement finalization both failed", { cause: error });
++			}
++			throw error;
++		}
++		if (this.isOneTimeQuery) this.finalize();
++		return result;
+ 	}
+ 	run(placeholderValues) {
+-		const params = (0, __sql_sql_ts.fillPlaceholders)(this.query.params, placeholderValues ?? {});
+-		this.logger.logQuery(this.query.sql, params);
+-		return this.stmt.run(...params);
++		return this.withStatement(() => {
++			const params = (0, __sql_sql_ts.fillPlaceholders)(this.query.params, placeholderValues ?? {});
++			this.logger.logQuery(this.query.sql, params);
++			return this.stmt.run(...params);
++		});
+ 	}
+ 	all(placeholderValues) {
+-		if (this.isRqbV2Query) return this.allRqbV2(placeholderValues);
+-		const { fields, query, logger, joinsNotNullableMap, stmt, customResultMapper } = this;
+-		if (!fields && !customResultMapper) {
++		return this.withStatement(() => {
++			if (this.isRqbV2Query) return this.allRqbV2(placeholderValues);
++			const { fields, query, logger, joinsNotNullableMap, stmt, customResultMapper } = this;
++			if (!fields && !customResultMapper) {
++				const params = (0, __sql_sql_ts.fillPlaceholders)(query.params, placeholderValues ?? {});
++				logger.logQuery(query.sql, params);
++				return stmt.all(...params);
++			}
+ 			const params = (0, __sql_sql_ts.fillPlaceholders)(query.params, placeholderValues ?? {});
+ 			logger.logQuery(query.sql, params);
+-			return stmt.all(...params);
+-		}
+-		const rows = this.values(placeholderValues);
+-		if (customResultMapper) return customResultMapper(rows);
+-		return rows.map((row) => (0, __utils_ts.mapResultRow)(fields, row, joinsNotNullableMap));
++			const rows = stmt.values(...params);
++			if (customResultMapper) return customResultMapper(rows);
++			return rows.map((row) => (0, __utils_ts.mapResultRow)(fields, row, joinsNotNullableMap));
++		});
+ 	}
+ 	get(placeholderValues) {
+-		if (this.isRqbV2Query) return this.getRqbV2(placeholderValues);
+-		const params = (0, __sql_sql_ts.fillPlaceholders)(this.query.params, placeholderValues ?? {});
+-		this.logger.logQuery(this.query.sql, params);
+-		const { fields, joinsNotNullableMap, customResultMapper } = this;
+-		if (!fields && !customResultMapper) {
+-			const row$1 = this.stmt.get(...params);
+-			if (!row$1) return void 0;
+-			return row$1;
+-		}
+-		const row = this.stmt.values(...params)[0];
+-		if (!row) return;
+-		if (customResultMapper) return customResultMapper([row]);
+-		return (0, __utils_ts.mapResultRow)(fields, row, joinsNotNullableMap);
++		return this.withStatement(() => {
++			if (this.isRqbV2Query) return this.getRqbV2(placeholderValues);
++			const params = (0, __sql_sql_ts.fillPlaceholders)(this.query.params, placeholderValues ?? {});
++			this.logger.logQuery(this.query.sql, params);
++			const { fields, joinsNotNullableMap, customResultMapper } = this;
++			if (!fields && !customResultMapper) {
++				const row$1 = this.stmt.get(...params);
++				if (!row$1) return void 0;
++				return row$1;
++			}
++			const row = this.stmt.values(...params)[0];
++			if (!row) return;
++			if (customResultMapper) return customResultMapper([row]);
++			return (0, __utils_ts.mapResultRow)(fields, row, joinsNotNullableMap);
++		});
+ 	}
+ 	allRqbV2(placeholderValues) {
+ 		const { query, logger, stmt, customResultMapper } = this;
+@@ -109,9 +147,11 @@ var PreparedQuery = class extends __sqlite_core_session_ts.SQLitePreparedQuery {
+ 		return customResultMapper([row]);
+ 	}
+ 	values(placeholderValues) {
+-		const params = (0, __sql_sql_ts.fillPlaceholders)(this.query.params, placeholderValues ?? {});
+-		this.logger.logQuery(this.query.sql, params);
+-		return this.stmt.values(...params);
++		return this.withStatement(() => {
++			const params = (0, __sql_sql_ts.fillPlaceholders)(this.query.params, placeholderValues ?? {});
++			this.logger.logQuery(this.query.sql, params);
++			return this.stmt.values(...params);
++		});
+ 	}
+ 	/** @internal */
+ 	isResponseInArrayMode() {
+diff --git a/bun-sqlite/session.d.cts b/bun-sqlite/session.d.cts
+index 38b9a4807fbd313565fb1a3135692e7a270a0aea..6ee070ebf787137dfa8a3f5b2d4ff794830e6824 100644
+--- a/bun-sqlite/session.d.cts
++++ b/bun-sqlite/session.d.cts
+@@ -25,7 +25,9 @@ declare class SQLiteBunSession<TFullSchema extends Record<string, unknown>, TRel
+   constructor(client: Database, dialect: SQLiteSyncDialect, relations: TRelations, schema: V1.RelationalSchemaConfig<TSchema> | undefined, options?: SQLiteBunSessionOptions);
+   exec(query: string): void;
+   prepareQuery<T extends Omit<PreparedQueryConfig$2, 'run'>>(query: Query, fields: SelectedFieldsOrdered$1 | undefined, executeMethod: SQLiteExecuteMethod, isResponseInArrayMode: boolean, customResultMapper?: (rows: unknown[][]) => unknown): PreparedQuery<T>;
++  prepareOneTimeQuery<T extends Omit<PreparedQueryConfig$2, 'run'>>(query: Query, fields: SelectedFieldsOrdered$1 | undefined, executeMethod: SQLiteExecuteMethod, isResponseInArrayMode: boolean, customResultMapper?: (rows: unknown[][]) => unknown): PreparedQuery<T>;
+   prepareRelationalQuery<T extends Omit<PreparedQueryConfig$2, 'run'>>(query: Query, fields: SelectedFieldsOrdered$1 | undefined, executeMethod: SQLiteExecuteMethod, customResultMapper: (rows: Record<string, unknown>[]) => unknown): PreparedQuery<T, true>;
++  prepareOneTimeRelationalQuery<T extends Omit<PreparedQueryConfig$2, 'run'>>(query: Query, fields: SelectedFieldsOrdered$1 | undefined, executeMethod: SQLiteExecuteMethod, customResultMapper: (rows: Record<string, unknown>[]) => unknown): PreparedQuery<T, true>;
+   transaction<T>(transaction: (tx: SQLiteBunTransaction<TFullSchema, TRelations, TSchema>) => T, config?: SQLiteTransactionConfig): T;
+ }
+ declare class SQLiteBunTransaction<TFullSchema extends Record<string, unknown>, TRelations extends AnyRelations, TSchema extends V1.TablesRelationalConfig> extends SQLiteTransaction$1<'sync', void, TFullSchema, TRelations, TSchema> {
+@@ -46,8 +48,12 @@ declare class PreparedQuery<T extends PreparedQueryConfig$2 = PreparedQueryConfi
+   private _isResponseInArrayMode;
+   private customResultMapper?;
+   private isRqbV2Query?;
++  private isOneTimeQuery;
++  private finalized;
+   static readonly [entityKind]: string;
+-  constructor(stmt: Statement$1, query: Query, logger: Logger, fields: SelectedFieldsOrdered$1 | undefined, executeMethod: SQLiteExecuteMethod, _isResponseInArrayMode: boolean, customResultMapper?: ((rows: TIsRqbV2 extends true ? Record<string, unknown>[] : unknown[][]) => unknown) | undefined, isRqbV2Query?: TIsRqbV2 | undefined);
++  constructor(stmt: Statement$1, query: Query, logger: Logger, fields: SelectedFieldsOrdered$1 | undefined, executeMethod: SQLiteExecuteMethod, _isResponseInArrayMode: boolean, customResultMapper?: ((rows: TIsRqbV2 extends true ? Record<string, unknown>[] : unknown[][]) => unknown) | undefined, isRqbV2Query?: TIsRqbV2 | undefined, isOneTimeQuery?: boolean);
++  finalize(): void;
++  private withStatement;
+   run(placeholderValues?: Record<string, unknown>): bun_sqlite0.Changes;
+   all(placeholderValues?: Record<string, unknown>): T['all'];
+   get(placeholderValues?: Record<string, unknown>): T['get'];
+diff --git a/bun-sqlite/session.d.ts b/bun-sqlite/session.d.ts
+index 6db6252b8a7735c0f3736adf1bd40f3ac5a2861e..1797f27387986ac3423b71e3a91ec31c5a3a595c 100644
+--- a/bun-sqlite/session.d.ts
++++ b/bun-sqlite/session.d.ts
+@@ -25,7 +25,9 @@ declare class SQLiteBunSession<TFullSchema extends Record<string, unknown>, TRel
+   constructor(client: Database, dialect: SQLiteSyncDialect, relations: TRelations, schema: V1.RelationalSchemaConfig<TSchema> | undefined, options?: SQLiteBunSessionOptions);
+   exec(query: string): void;
+   prepareQuery<T extends Omit<PreparedQueryConfig$2, 'run'>>(query: Query, fields: SelectedFieldsOrdered$1 | undefined, executeMethod: SQLiteExecuteMethod$1, isResponseInArrayMode: boolean, customResultMapper?: (rows: unknown[][]) => unknown): PreparedQuery<T>;
++  prepareOneTimeQuery<T extends Omit<PreparedQueryConfig$2, 'run'>>(query: Query, fields: SelectedFieldsOrdered$1 | undefined, executeMethod: SQLiteExecuteMethod$1, isResponseInArrayMode: boolean, customResultMapper?: (rows: unknown[][]) => unknown): PreparedQuery<T>;
+   prepareRelationalQuery<T extends Omit<PreparedQueryConfig$2, 'run'>>(query: Query, fields: SelectedFieldsOrdered$1 | undefined, executeMethod: SQLiteExecuteMethod$1, customResultMapper: (rows: Record<string, unknown>[]) => unknown): PreparedQuery<T, true>;
++  prepareOneTimeRelationalQuery<T extends Omit<PreparedQueryConfig$2, 'run'>>(query: Query, fields: SelectedFieldsOrdered$1 | undefined, executeMethod: SQLiteExecuteMethod$1, customResultMapper: (rows: Record<string, unknown>[]) => unknown): PreparedQuery<T, true>;
+   transaction<T>(transaction: (tx: SQLiteBunTransaction<TFullSchema, TRelations, TSchema>) => T, config?: SQLiteTransactionConfig$1): T;
+ }
+ declare class SQLiteBunTransaction<TFullSchema extends Record<string, unknown>, TRelations extends AnyRelations, TSchema extends V1.TablesRelationalConfig> extends SQLiteTransaction<'sync', void, TFullSchema, TRelations, TSchema> {
+@@ -46,8 +48,12 @@ declare class PreparedQuery<T extends PreparedQueryConfig$2 = PreparedQueryConfi
+   private _isResponseInArrayMode;
+   private customResultMapper?;
+   private isRqbV2Query?;
++  private isOneTimeQuery;
++  private finalized;
+   static readonly [entityKind]: string;
+-  constructor(stmt: Statement$1, query: Query, logger: Logger, fields: SelectedFieldsOrdered$1 | undefined, executeMethod: SQLiteExecuteMethod$1, _isResponseInArrayMode: boolean, customResultMapper?: ((rows: TIsRqbV2 extends true ? Record<string, unknown>[] : unknown[][]) => unknown) | undefined, isRqbV2Query?: TIsRqbV2 | undefined);
++  constructor(stmt: Statement$1, query: Query, logger: Logger, fields: SelectedFieldsOrdered$1 | undefined, executeMethod: SQLiteExecuteMethod$1, _isResponseInArrayMode: boolean, customResultMapper?: ((rows: TIsRqbV2 extends true ? Record<string, unknown>[] : unknown[][]) => unknown) | undefined, isRqbV2Query?: TIsRqbV2 | undefined, isOneTimeQuery?: boolean);
++  finalize(): void;
++  private withStatement;
+   run(placeholderValues?: Record<string, unknown>): bun_sqlite0.Changes;
+   all(placeholderValues?: Record<string, unknown>): T['all'];
+   get(placeholderValues?: Record<string, unknown>): T['get'];
+diff --git a/bun-sqlite/session.js b/bun-sqlite/session.js
+index 8c9fd40081f8d0222af359a1b0f6ca526f6420eb..989cd13cb69366a3692ecf216cfd48a6479f74c0 100644
+--- a/bun-sqlite/session.js
++++ b/bun-sqlite/session.js
+@@ -22,9 +22,15 @@ var SQLiteBunSession = class extends SQLiteSession$1 {
+ 	prepareQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper) {
+ 		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, isResponseInArrayMode, customResultMapper);
+ 	}
++	prepareOneTimeQuery(query, fields, executeMethod, isResponseInArrayMode, customResultMapper) {
++		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, isResponseInArrayMode, customResultMapper, false, true);
++	}
+ 	prepareRelationalQuery(query, fields, executeMethod, customResultMapper) {
+ 		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, false, customResultMapper, true);
+ 	}
++	prepareOneTimeRelationalQuery(query, fields, executeMethod, customResultMapper) {
++		return new PreparedQuery(this.client.prepare(query.sql), query, this.logger, fields, executeMethod, false, customResultMapper, true, true);
++	}
+ 	transaction(transaction, config = {}) {
+ 		const tx = new SQLiteBunTransaction("sync", this.dialect, this, this.relations, this.schema);
+ 		let result;
+@@ -52,7 +58,7 @@ var SQLiteBunTransaction = class SQLiteBunTransaction extends SQLiteTransaction
+ };
+ var PreparedQuery = class extends SQLitePreparedQuery$1 {
+ 	static [entityKind] = "SQLiteBunPreparedQuery";
+-	constructor(stmt, query, logger, fields, executeMethod, _isResponseInArrayMode, customResultMapper, isRqbV2Query) {
++	constructor(stmt, query, logger, fields, executeMethod, _isResponseInArrayMode, customResultMapper, isRqbV2Query, isOneTimeQuery = false) {
+ 		super("sync", executeMethod, query);
+ 		this.stmt = stmt;
+ 		this.logger = logger;
+@@ -60,38 +66,70 @@ var PreparedQuery = class extends SQLitePreparedQuery$1 {
+ 		this._isResponseInArrayMode = _isResponseInArrayMode;
+ 		this.customResultMapper = customResultMapper;
+ 		this.isRqbV2Query = isRqbV2Query;
++		this.isOneTimeQuery = isOneTimeQuery;
++	}
++	finalized = false;
++	finalize() {
++		if (this.finalized) return;
++		this.stmt.finalize();
++		this.finalized = true;
++	}
++	withStatement(callback) {
++		if (this.finalized) throw new Error("Cannot execute a finalized Bun SQLite prepared query");
++		let result;
++		try {
++			result = callback();
++		} catch (error) {
++			if (!this.isOneTimeQuery) throw error;
++			try {
++				this.finalize();
++			} catch (finalizeError) {
++				throw new AggregateError([error, finalizeError], "Bun SQLite query and one-time statement finalization both failed", { cause: error });
++			}
++			throw error;
++		}
++		if (this.isOneTimeQuery) this.finalize();
++		return result;
+ 	}
+ 	run(placeholderValues) {
+-		const params = fillPlaceholders(this.query.params, placeholderValues ?? {});
+-		this.logger.logQuery(this.query.sql, params);
+-		return this.stmt.run(...params);
++		return this.withStatement(() => {
++			const params = fillPlaceholders(this.query.params, placeholderValues ?? {});
++			this.logger.logQuery(this.query.sql, params);
++			return this.stmt.run(...params);
++		});
+ 	}
+ 	all(placeholderValues) {
+-		if (this.isRqbV2Query) return this.allRqbV2(placeholderValues);
+-		const { fields, query, logger, joinsNotNullableMap, stmt, customResultMapper } = this;
+-		if (!fields && !customResultMapper) {
++		return this.withStatement(() => {
++			if (this.isRqbV2Query) return this.allRqbV2(placeholderValues);
++			const { fields, query, logger, joinsNotNullableMap, stmt, customResultMapper } = this;
++			if (!fields && !customResultMapper) {
++				const params = fillPlaceholders(query.params, placeholderValues ?? {});
++				logger.logQuery(query.sql, params);
++				return stmt.all(...params);
++			}
+ 			const params = fillPlaceholders(query.params, placeholderValues ?? {});
+ 			logger.logQuery(query.sql, params);
+-			return stmt.all(...params);
+-		}
+-		const rows = this.values(placeholderValues);
+-		if (customResultMapper) return customResultMapper(rows);
+-		return rows.map((row) => mapResultRow(fields, row, joinsNotNullableMap));
++			const rows = stmt.values(...params);
++			if (customResultMapper) return customResultMapper(rows);
++			return rows.map((row) => mapResultRow(fields, row, joinsNotNullableMap));
++		});
+ 	}
+ 	get(placeholderValues) {
+-		if (this.isRqbV2Query) return this.getRqbV2(placeholderValues);
+-		const params = fillPlaceholders(this.query.params, placeholderValues ?? {});
+-		this.logger.logQuery(this.query.sql, params);
+-		const { fields, joinsNotNullableMap, customResultMapper } = this;
+-		if (!fields && !customResultMapper) {
+-			const row$1 = this.stmt.get(...params);
+-			if (!row$1) return void 0;
+-			return row$1;
+-		}
+-		const row = this.stmt.values(...params)[0];
+-		if (!row) return;
+-		if (customResultMapper) return customResultMapper([row]);
+-		return mapResultRow(fields, row, joinsNotNullableMap);
++		return this.withStatement(() => {
++			if (this.isRqbV2Query) return this.getRqbV2(placeholderValues);
++			const params = fillPlaceholders(this.query.params, placeholderValues ?? {});
++			this.logger.logQuery(this.query.sql, params);
++			const { fields, joinsNotNullableMap, customResultMapper } = this;
++			if (!fields && !customResultMapper) {
++				const row$1 = this.stmt.get(...params);
++				if (!row$1) return void 0;
++				return row$1;
++			}
++			const row = this.stmt.values(...params)[0];
++			if (!row) return;
++			if (customResultMapper) return customResultMapper([row]);
++			return mapResultRow(fields, row, joinsNotNullableMap);
++		});
+ 	}
+ 	allRqbV2(placeholderValues) {
+ 		const { query, logger, stmt, customResultMapper } = this;
+@@ -108,9 +146,11 @@ var PreparedQuery = class extends SQLitePreparedQuery$1 {
+ 		return customResultMapper([row]);
+ 	}
+ 	values(placeholderValues) {
+-		const params = fillPlaceholders(this.query.params, placeholderValues ?? {});
+-		this.logger.logQuery(this.query.sql, params);
+-		return this.stmt.values(...params);
++		return this.withStatement(() => {
++			const params = fillPlaceholders(this.query.params, placeholderValues ?? {});
++			this.logger.logQuery(this.query.sql, params);
++			return this.stmt.values(...params);
++		});
+ 	}
+ 	/** @internal */
+ 	isResponseInArrayMode() {

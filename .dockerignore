@@ -1,0 +1,14 @@
+**
+
+!packages/
+!packages/opencorvus/
+!packages/opencorvus/Dockerfile
+!packages/opencorvus/dist/
+!packages/opencorvus/dist/binary/
+!packages/opencorvus/dist/binary/opencorvus-linux-x64/
+!packages/opencorvus/dist/binary/opencorvus-linux-x64/opencorvus-bundle.tar.gz
+!packages/opencorvus/dist/binary/opencorvus-linux-x64-baseline/
+!packages/opencorvus/dist/binary/opencorvus-linux-x64-baseline/opencorvus-bundle.tar.gz
+
+!script/
+!script/opencorvus-container-entrypoint.sh

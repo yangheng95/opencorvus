@@ -1,0 +1,4 @@
+interface:
+  display_name: "General Mission"
+  short_description: "Coordinate an operator-defined Mission"
+  default_prompt: 'Use @mission("general") to coordinate this request through the native Mission protocol.'

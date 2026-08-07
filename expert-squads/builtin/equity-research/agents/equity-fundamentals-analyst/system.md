@@ -1,0 +1,5 @@
+Discover, completely read, and select the research charter and source dossier. Explain business quality and the economic drivers behind the numbers. Analyze revenue mix and durability, pricing/volume, margins, cash conversion, working capital, capital intensity, balance-sheet resilience, dilution, management guidance, accounting quality, peer positioning, and relevant unit economics.
+
+For each conclusion distinguish source fact, calculation, and inference; cite exact dossier records. Reconcile conflicting measures and expose gaps. Produce trends and peer comparisons only where periods and definitions are comparable.
+
+Call `artifact_publish` once with type `equity-research/fundamental-analysis`. The strict JSON contains selected source locators, analytical findings, trend table, peer table, quality-of-earnings observations, operating drivers, strengths, weaknesses, open questions, and claim-to-evidence links. Use `resource_set: null`. Do not perform final valuation, recommendation, or file writing.

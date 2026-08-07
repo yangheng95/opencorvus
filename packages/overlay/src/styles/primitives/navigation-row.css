@@ -1,0 +1,28 @@
+/* Shared navigation-row interaction primitive. The base contract owns
+ * hover/selected feedback; the compact density variant additionally owns
+ * ledger-row geometry so Project and work-item bars cannot drift. */
+.oc-navigation-row {
+  border-radius: var(--oc-radius-large);
+  background: transparent;
+  transition:
+    background-color var(--ui-duration-base) var(--ui-timing-standard),
+    color var(--ui-duration-base) var(--ui-timing-standard);
+}
+
+.oc-navigation-row[data-density="compact"] {
+  height: var(--oc-density-navigation-row);
+  min-height: var(--oc-density-navigation-row);
+}
+
+.oc-navigation-row:is(:hover, :focus-within):not([data-active="true"]) {
+  background-color: var(--ui-list-hover-bg);
+}
+
+.oc-navigation-row[data-active="true"] {
+  background-color: var(--ui-list-selected-bg);
+  color: var(--text-strong);
+}
+
+.oc-navigation-row[data-active="true"]:is(:hover, :focus-within) {
+  background-color: var(--ui-list-selected-hover-bg);
+}

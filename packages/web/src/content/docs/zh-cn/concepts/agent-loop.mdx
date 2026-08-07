@@ -1,0 +1,64 @@
+---
+title: Agentic Loop
+description: SessionLoop 在精确运行合同下执行单个投影 agent session、工具路由和关键约束。
+---
+
+Worker session 内部是一个**标准的 agentic loop**：LLM 产生 tool-call → 工具执行 → 结果回填 → 下一轮。`SessionLoop` 只拥有一个 session；worker 创建和调度在该循环之外完成。
+
+## 回合生命周期
+
+`SessionLoop`（`packages/opencorvus/src/session/loop.ts`）读取最新 user/assistant 对，为持久化的 `WorkerTurnDescriptor` 解析进程本地 runtime contract，以流式方式调用模型，执行投影工具，并持久化所有可见消息 part。assistant 回合完成后等待下一条真实 user message；tool-call 回合在工具结果写入后继续。Runtime contract 是 Turn 执行机械结构，不是持久 Task liveness。
+
+`collectLoopState` 只提取已持久化的最新回合事实；它不会创建第二套 workflow，也不会递归实例化 agent。
+
+## 工具路由
+
+LLM 返回的每个 tool-call 由 `SessionLoop.resolveTools` 路由：
+
+1. **过滤**：`resolveTools()` 按 `input.tools` 白名单过滤，避免一次向 DashScope 发送 30 多个工具。
+2. **权限检查**：走 `PermissionNext.ask()`（见 [Permissions](../../permissions/)）。
+3. **执行**：调对应 tool handler。
+4. **结果回填**：以 `tool-result` part 写回 session messages。
+
+## 投影调度
+
+Orchestrator 调用 `dispatch_agent`，目标必须是 active 专家团声明的精确动态 agent ID。runner 解析该投影，从 core-owned `base_role` 模板派生运行配置，创建 worker session，并安装不可变的 runtime/tool/skill 合同。`SessionLoop` 不会从 base role 猜测 agent，也不会任意创建嵌套 agent。
+
+## 外层循环的触发
+
+`SessionLoop` 是 worker 内循环。外层的 `runTaskLoop`（`packages/opencorvus/src/orchestrator/loop.ts`）按 task 串行化 wake 并调用 Orchestrator；Orchestrator 再通过通用投影调度协议创建 worker sessions：
+
+```
+Orchestrator.runTaskLoop
+  └─ Orchestrator.processTask (LLM 决策)
+      └─ dispatch_agent(dispatch.target = 精确投影 agent ID)
+          └─ worker SessionLoop
+```
+
+## 关键约束
+
+### 1. 必须 `streamText`，不能 `generateText`
+
+`session/loop.ts` 的 LLM 调用使用 Vercel AI SDK 的 `streamText`。**不能改成 `generateText`**，否则 reasoning 模型（DashScope 的 qwq、claude reasoning 等）会在等待 reasoning tokens 时超时。
+
+### 2. `toolChoice: "auto"`
+
+reasoning 模型必须用 `toolChoice: "auto"`，不能用 `"required"`。用 required 时模型会把 reasoning tokens 挤占 tool-call 名额，导致格式错乱。
+
+### 3. 无活动超时，不是总时长超时
+
+Tool 调用超时必须是"无输出后的真实超时"，不能从启动时刻机械计时。长时间跑 build/test 的 tool 调用是合法的，只要 stdout/stderr 还在流。Bash 使用 bash tool 的无活动超时；`opencorvus run` 事件流 stall 可用 `OPENCORVUS_RUN_STALL_TIMEOUT_MS` 调整。
+
+### 4. Tool-call 结果必须结构化
+
+所有 tool 返回的 `output` 字段是 **JSON 字符串**（不是对象）。消费者需要自己 `JSON.parse`，parse 失败 → let it crash，不静默兜底。
+
+## Doom-loop 检测
+
+Runtime 工具会记录重复 tool-call 与视觉交互循环。相关证据暴露后，由 orchestrator 把修复路由给负责的 worker 或 review 阶段，而不是让同一个 worker 无限消耗预算。
+
+## 你接下来要看的
+
+- [架构总览](./architecture.md)
+- [Integrity review 参考](../../reference/evaluator/)
+- [Permissions](../../permissions/)

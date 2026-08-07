@@ -1,0 +1,54 @@
+---
+title: 网络
+description: OpenCorvus 的 HTTP/HTTPS 代理配置。
+---
+
+OpenCorvus 将显式代理设置保存在唯一的 `network.proxy` 配置项下。Overlay 的 Network 面板编辑同一个字段，**测试代理**按钮会使用当前表单草稿走代理发送一次请求，并显示 HTTP 状态码与耗时。
+
+## 配置
+
+```jsonc
+{
+  "network": {
+    "proxy": {
+      "url": "http://127.0.0.1:7890",
+      "username": "optional",
+      "password": "optional",
+      "llmProvider": true,
+      "webResearch": true,
+    },
+  },
+}
+```
+
+| 字段                    | 用途                                                                                       |
+| ----------------------- | ------------------------------------------------------------------------------------------ |
+| `url`                   | HTTP(S) 代理 URL。支持 `http://` 与 `https://`；认证信息必须放在 `username` / `password`。 |
+| `username` / `password` | 可选代理认证字段。填写 `password` 时必须填写 `username`。                                  |
+| `llmProvider`           | 将模型 provider 的 HTTP 请求转发到代理。                                                   |
+| `webResearch`           | 将 websearch 和 webfetch 请求转发到代理。                                                  |
+
+代理测试直接使用当前编辑的表单值，因此可以先测试再保存。代理失败时不会改走直连。
+
+## 环境变量
+
+对于 `network.proxy` 覆盖范围外的运行时路径，OpenCorvus 仍会读取标准代理环境变量。
+
+| 变量                          | 用途               |
+| ----------------------------- | ------------------ |
+| `HTTP_PROXY` / `http_proxy`   | HTTP 流量代理      |
+| `HTTPS_PROXY` / `https_proxy` | HTTPS 流量代理     |
+| `NO_PROXY` / `no_proxy`       | 逗号分隔的绕过域名 |
+
+## TLS / 自定义 CA
+
+对于企业自签证书，使用 Bun 标准的 `NODE_EXTRA_CA_CERTS` 或系统信任库：
+
+```bash
+export SSL_CERT_FILE=/etc/ssl/certs/corp-ca.pem
+opencorvus serve
+```
+
+:::caution
+OpenCorvus **不**提供禁用 TLS 校验的内置选项。若必须如此，需在 Bun 层面 workaround，并自行承担风险；这不属于受支持配置。
+:::

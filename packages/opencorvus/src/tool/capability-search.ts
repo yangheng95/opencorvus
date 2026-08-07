@@ -1,0 +1,74 @@
+import { Config } from "@/config/config"
+import { EffectiveConfig } from "@/config/effective"
+import { CapabilityCatalog, CapabilitySearchInput, searchCapabilityCatalog } from "@/capability/catalog"
+import { tool as aiTool } from "ai"
+import { createAiSdkToolFromInfo } from "./ai-sdk-adapter"
+import { Tool } from "./tool"
+
+export const CAPABILITY_SEARCH_TOOL_ID = "capability_search" as const
+export const CAPABILITY_SEARCH_DESCRIPTION =
+  'Search the caller-visible capability catalog by fuzzy text and exact filters. Stored kind "tool" means a platform tool and "mcp_tool" means a Model Context Protocol tool; omit kinds to search both, or use next_owner_kinds:["call_tool"] for every executable capability. Results are metadata references only: this tool never mounts, authenticates, approves, or executes a capability.'
+
+export const CapabilitySearchTool = Tool.define(CAPABILITY_SEARCH_TOOL_ID, async (initContext) => {
+  const config = initContext?.config ?? (await Config.get())
+  return {
+    description: CAPABILITY_SEARCH_DESCRIPTION,
+    parameters: CapabilitySearchInput,
+    async execute(params, ctx) {
+      const input = CapabilitySearchInput.parse(params)
+      const { caller, snapshot } = await CapabilityCatalog.runtimeSnapshot({
+        config,
+        sessionID: ctx.sessionID,
+        agentID: ctx.agent,
+        executionToolIDs: ctx.executionSurface.toolIDs,
+        harnessProjection: ctx.executionSurface.harness_projection,
+      })
+      const results = searchCapabilityCatalog(snapshot, caller, input)
+      return {
+        title: "Capability search",
+        metadata: {
+          catalog_revision: snapshot.catalog_revision,
+          caller,
+          result_count: results.length,
+        },
+        output: JSON.stringify(
+          {
+            catalog_revision: snapshot.catalog_revision,
+            caller,
+            harness_projection: ctx.executionSurface.harness_projection,
+            results,
+          },
+          null,
+          2,
+        ),
+      }
+    },
+  }
+})
+
+export function createCapabilitySearchAiTool(input: { taskID: string; signal?: AbortSignal }) {
+  return aiTool({
+    description: CAPABILITY_SEARCH_DESCRIPTION,
+    inputSchema: CapabilitySearchInput,
+    execute: async (args, options) => {
+      const meta = (options as { opencorvus?: Record<string, unknown> } | undefined)?.opencorvus
+      const sessionID = typeof meta?.sessionID === "string" ? meta.sessionID : ""
+      const adapted = await createAiSdkToolFromInfo({
+        info: CapabilitySearchTool,
+        agent: "orchestrator",
+        taskID: input.taskID,
+        signal: input.signal,
+        initCtx: {
+          config: await EffectiveConfig.effective({
+            taskID: input.taskID,
+            sessionID,
+          }),
+        },
+      })
+      if (typeof adapted.execute !== "function") {
+        throw new Error("capability_search: AI SDK adapter did not expose an executable Tool")
+      }
+      return adapted.execute(args, options)
+    },
+  })
+}

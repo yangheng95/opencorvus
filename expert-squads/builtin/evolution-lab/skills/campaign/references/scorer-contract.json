@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "required_dimensions": [
+    "delivery_correctness",
+    "requirement_coverage",
+    "evidence_integrity",
+    "tool_use_quality",
+    "stability",
+    "cost",
+    "activity_duration",
+    "failure_outcome",
+    "permission_and_side_effects",
+    "unavailable_ratio"
+  ],
+  "measurement_states": ["measured", "unavailable"],
+  "evaluator_config_contracts": {
+    "shell": {
+      "required": ["scorer_revision", "workspace_digest", "executable", "args", "parse", "inactivity_timeout_ms"],
+      "parse": ["exit_code", "stdout_number", "stdout_pattern"]
+    },
+    "judge": {
+      "required": [
+        "scorer_revision",
+        "provider_id",
+        "model_id",
+        "inactivity_timeout_ms",
+        "max_evidence_bytes",
+        "criteria",
+        "rubric"
+      ],
+      "evidence_media_types": ["text/*", "application/json"],
+      "evidence_encoding": "strict_utf8",
+      "streaming": true,
+      "retries": 0,
+      "timeout": "real_output_inactivity_only"
+    },
+    "prebuilt": {
+      "required": ["name", "scorer_revision"],
+      "name": ["visual-feedback-verification"]
+    },
+    "query": {
+      "required": ["scorer_revision", "sql", "value_column"]
+    },
+    "aggregator": {
+      "required": ["scorer_revision", "of", "op", "iteration_offset"],
+      "op": ["mean", "min", "max", "sum"]
+    }
+  },
+  "metric_receipt_identity": ["case_id", "arm", "repetition", "trial_task_id", "trial_revision_digest"],
+  "aggregate_when_required_unavailable": null,
+  "paired_statistics": ["mean", "median", "variance", "predeclared_confidence_interval", "win_tie_loss"],
+  "arm_outcomes": ["failure_rate", "unavailable_rate"],
+  "resource_deltas": ["token", "cost", "activity_duration_ms"],
+  "comparison": "matched_incumbent_challenger",
+  "promotion_authority": "none"
+}

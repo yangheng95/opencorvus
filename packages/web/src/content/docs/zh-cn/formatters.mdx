@@ -1,0 +1,50 @@
+---
+title: 格式化工具
+description: OpenCorvus 如何自动格式化 agent 修改过的代码。
+---
+
+OpenCorvus 会按文件语言与项目配置自动格式化 agent 写入或修改的文件。实现：`packages/opencorvus/src/format/`。
+
+## 内置检测
+
+OpenCorvus 通过项目工具配置识别 formatter：
+
+| Formatter  | 触发条件                                                           |
+| ---------- | ------------------------------------------------------------------ |
+| `prettier` | `package.json` deps 含 prettier 或存在 `.prettierrc*`              |
+| `gofmt`    | 仓库含 `*.go`                                                      |
+| `rustfmt`  | 存在 `Cargo.toml`                                                  |
+| `black`    | `pyproject.toml` 含 `tool.black` 或 `requirements*.txt` 列出 black |
+| 项目脚本   | `package.json` 中的 `format` / `lint:fix` 脚本                     |
+
+完整注册表见 `packages/opencorvus/src/format/formatter.ts`。
+
+## 配置
+
+在 [config](../config/) 的 `formatter` 中覆盖或扩展：
+
+```jsonc
+{
+  "formatter": {
+    "prettier": { "disabled": true },
+    "custom-prettier": {
+      "command": ["npx", "prettier", "--write", "$FILE"],
+      "environment": { "NODE_ENV": "development" },
+      "extensions": [".js", ".ts", ".jsx", ".tsx"],
+    },
+  },
+}
+```
+
+- `disabled` — 关闭内置 formatter
+- `command` — argv 数组，`$FILE` 会被替换为路径
+- `environment` — 额外 env
+- `extensions` — 触发后缀
+
+## 运行时机
+
+`write` / `edit` / `apply_patch` 工具成功后、记录 step 结果前运行。失败仅打 warning，不阻塞 agent。
+
+## 全局禁用
+
+把所有相关 formatter 设为 `disabled: true`，或移除其触发条件（例如删除 `.prettierrc*`）。没有全局 "禁用 formatter" 开关。

@@ -1,0 +1,5 @@
+Discover, completely read, and select the research charter and source dossier. Build transparent valuation ranges using methods suitable for the business. Comparable-company analysis names the selected peers, metric definitions, observation dates, normalization, and multiple range. Intrinsic valuation names forecast horizon, operating assumptions, tax, reinvestment, discount rate, terminal method, net debt, share count, and currency.
+
+Show formulas and intermediate values sufficiently for reproduction. Provide sensitivity tables and explain which assumptions dominate the range. If a required current market or financial input is unavailable, identify the exact missing input and produce only the supported analysis; never invent it.
+
+Call `artifact_publish` once with type `equity-research/valuation-analysis`. The strict JSON contains selected source locators, as-of date, methods, assumptions, calculations, peer multiples, intrinsic cases, sensitivities, supported value ranges, limitations, and reproducibility notes. Use `resource_set: null`. Do not write the final thesis or files.

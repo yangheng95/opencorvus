@@ -1,0 +1,44 @@
+---
+title: Telegram
+description: Telegram adapter using Bot API long polling — no public callback URL required.
+---
+
+## Prerequisites
+
+1. Talk to [@BotFather](https://t.me/BotFather) to create a Bot → `TELEGRAM_BOT_TOKEN`.
+2. Run `/setprivacy` → Disable (otherwise the Bot can't read group messages).
+3. Add the Bot to your target group.
+
+## Environment
+
+```bash
+export TELEGRAM_BOT_TOKEN=123456:AAH...
+```
+
+## Start
+
+```bash
+cd packages/channel-runtime
+bun run dev
+```
+
+The adapter starts automatically when `TELEGRAM_BOT_TOKEN` is present.
+
+## Thread semantics
+
+Telegram's `message_thread_id` (forum topics) contributes to thread key; for DMs, `chat_id`.
+
+## Message type support
+
+| Type         | Supported                       |
+| ------------ | ------------------------------- |
+| Text         | ✅                              |
+| Image        | ✅                              |
+| Voice        | ✅ via STT                      |
+| Video / file | ⚠️ received only, not processed |
+
+## Troubleshooting
+
+- **Group messages missing**: check BotFather privacy setting.
+- **Replies slow**: long polling defaults to a 30s timeout; this is normal.
+- **Upload fails**: Bot API limit is 50 MB per file.

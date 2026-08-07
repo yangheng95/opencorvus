@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@opencorvus-ai/transport-protocol",
+  "version": "0.0.35-beta",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Shared transport contracts for the OpenCorvus server, desktop host, browser overlay, and tests",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "catalog:",
+    "@types/node": "catalog:"
+  },
+  "dependencies": {
+    "@opencorvus-ai/sdk": "workspace:*",
+    "zod": "catalog:"
+  }
+}

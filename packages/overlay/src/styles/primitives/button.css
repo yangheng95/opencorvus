@@ -1,0 +1,348 @@
+/* Flat-redesign 2026-05-04: button typography is the single-source for
+ * every button family in the overlay. Font-size routes through
+ * `--ui-font-control` — the value the retired legacy class family used;
+ * oc-button previously inherited `--oc-header-title-font` which carries
+ * a different scale, producing the "按钮字体大小不一样" the user flagged.
+ * Primitive now owns the
+ * typography contract; other button surfaces inherit from it.
+ *
+ * Resting border is transparent so neighbouring chrome doesn't fight
+ * with the button. Hover/focus changes background only — the hover
+ * border-color flip that used to outline ghost icons (the three 金刚
+ * window controls in particular) was retired per rule §2.2 C. */
+.oc-button {
+  --oc-button-height: var(--oc-density-button-height);
+  --oc-button-padding-x: var(--oc-header-gap);
+  --oc-button-padding-y: 0;
+  --oc-button-gap: var(--oc-header-gap);
+  --oc-button-bg: transparent;
+  --oc-button-border: var(--oc-border-width) solid transparent;
+  --oc-button-color: var(--text-strong);
+  --oc-button-shadow: none;
+
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--oc-button-height);
+  min-height: var(--oc-button-height);
+  padding: var(--oc-button-padding-y) var(--oc-button-padding-x);
+  gap: var(--oc-button-gap);
+  border: var(--oc-button-border);
+  border-radius: var(--oc-radius-large);
+  background: var(--oc-button-bg);
+  color: var(--oc-button-color);
+  box-shadow: var(--oc-button-shadow);
+  font-family: var(--font);
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: 1;
+  letter-spacing: var(--ui-letter-spacing-normal);
+  text-transform: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--ui-duration-fast) var(--ui-timing-standard),
+    border-color var(--ui-duration-fast) var(--ui-timing-standard),
+    color var(--ui-duration-fast) var(--ui-timing-standard),
+    box-shadow var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.oc-button[data-size="mini"] {
+  --oc-button-height: var(--oc-density-chip-height);
+  --oc-button-padding-x: var(--ui-btn-mini-padding-x);
+  --oc-button-padding-y: var(--ui-btn-mini-padding-y);
+  font-size: var(--ui-font-small);
+}
+
+.oc-button[data-size="sm"] {
+  --oc-button-height: var(--oc-density-chip-height);
+}
+
+.oc-button[data-size="md"] {
+  --oc-button-height: var(--oc-density-button-height);
+}
+
+.oc-button[data-size="control"] {
+  --oc-button-height: var(--oc-density-control-height);
+}
+
+.oc-button[data-size="icon"] {
+  --oc-button-height: var(--oc-density-icon-button);
+  --oc-button-padding-x: 0;
+  border-radius: var(--oc-radius-pill);
+  width: var(--oc-density-icon-button);
+  min-width: var(--oc-density-icon-button);
+}
+
+.oc-button[data-chrome="workspace-split-primary"] {
+  border-radius: var(--oc-radius-large) 0 0 var(--oc-radius-large);
+}
+
+.oc-button[data-chrome="workspace-split-menu"] {
+  border-radius: 0 var(--oc-radius-large) var(--oc-radius-large) 0;
+}
+
+/* Icon actions are glyph-only controls. Background, border, and shadow stay
+ * transparent in every pointer state; color carries hover feedback while the
+ * shared focus-visible outline preserves keyboard affordance. */
+.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="icon-action"] {
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-color: var(--text-soft);
+  --oc-button-shadow: none;
+}
+
+/* Text disclosures participate in transcript flow instead of presenting as
+ * controls with their own surface. Colour is the only pointer-state signal;
+ * the canonical focus-visible ring remains owned by `.oc-button`. */
+.oc-button[data-variant="ghost"][data-chrome="text-disclosure"] {
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-color: var(--text-muted);
+  --oc-button-shadow: none;
+}
+
+/* Important context disclosures keep their outline hierarchy without painting
+ * an opaque nested surface over the owning message card. Theme accent washes
+ * stay translucent so both full-message and compact Agent-card backgrounds
+ * remain the visible material underneath. */
+.oc-button[data-variant="outline"][data-chrome="context-disclosure"] {
+  --oc-button-bg: var(--subtle-1);
+  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--accent) 18%, var(--border));
+  --oc-button-shadow: none;
+}
+
+/* Compact count-and-chevron disclosures use the shared pill silhouette while
+ * their owning surface remains responsible only for dimensions and colour. */
+.oc-button[data-variant="ghost"][data-chrome="pill-disclosure"] {
+  border-radius: var(--oc-radius-pill);
+}
+
+.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="window-control"] {
+  --oc-button-color: var(--text-soft);
+  --oc-button-bg: transparent;
+  --oc-button-shadow: none;
+}
+
+.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="window-control"][data-tone="danger"] {
+  --oc-button-color: var(--text-soft);
+  --oc-button-shadow: none;
+}
+
+.oc-button[data-variant="solid"] {
+  --oc-button-bg: var(--text-strong);
+  --oc-button-border: var(--oc-border-width) solid var(--text-strong);
+  --oc-button-color: var(--text-on-strong);
+}
+
+.oc-button[data-variant="outline"] {
+  --oc-button-bg: var(--surface-strong);
+  --oc-button-border: var(--oc-border-width) solid var(--border);
+  --oc-button-shadow: none;
+}
+
+.oc-button[data-variant="ghost"] {
+  --oc-button-bg: transparent;
+  --oc-button-border: var(--oc-border-width) solid transparent;
+}
+
+.oc-button[data-tone="neutral"] {
+  --oc-button-color: var(--text-strong);
+}
+
+.oc-button[data-tone="accent"] {
+  --oc-button-color: var(--accent);
+}
+
+.oc-button[data-tone="danger"] {
+  --oc-button-color: var(--bad);
+}
+
+.oc-button[data-variant="solid"][data-tone="neutral"],
+.oc-button[data-variant="solid"][data-tone="accent"] {
+  --oc-button-bg: var(--text-strong);
+  --oc-button-border: var(--oc-border-width) solid var(--text-strong);
+  --oc-button-color: var(--text-on-strong);
+}
+
+.oc-button[data-variant="solid"][data-tone="danger"] {
+  --oc-button-bg: var(--bad);
+  --oc-button-border: var(--oc-border-width) solid var(--bad);
+  --oc-button-color: var(--text-on-danger);
+}
+
+.oc-button[data-tone="danger"]:hover,
+.oc-button[data-tone="danger"]:focus-visible {
+  --oc-button-bg: var(--bad-dim);
+  --oc-button-border: var(--oc-border-width) solid transparent;
+  --oc-button-color: var(--bad);
+}
+
+.oc-button > svg {
+  flex: 0 0 auto;
+}
+
+.oc-armed-confirm-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.oc-armed-confirm-slot[data-confirm-slot="confirm"] {
+  display: none;
+}
+
+.oc-button[data-confirm="true"] > .oc-armed-confirm-slot[data-confirm-slot="default"] {
+  display: none;
+}
+
+.oc-button[data-confirm="true"] > .oc-armed-confirm-slot[data-confirm-slot="confirm"] {
+  display: inline-flex;
+}
+
+.oc-armed-confirm-slot > svg {
+  flex: 0 0 auto;
+}
+
+.oc-armed-confirm-status {
+  position: absolute;
+  width: calc(1px * var(--ui-scale));
+  height: calc(1px * var(--ui-scale));
+  padding: 0;
+  margin: calc(-1px * var(--ui-scale));
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.oc-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 calc(2px * var(--ui-scale)) var(--accent-ring);
+}
+
+/* Flat-redesign 2026-05-04 (rule §2.2 C): hover/focus does not flip
+ * border-color. Background tint alone carries the affordance — the
+ * shared non-solid controls without adding a second border signal. */
+.oc-button:not([data-tone="danger"]):not([data-variant="solid"]):hover,
+.oc-button:not([data-tone="danger"]):not([data-variant="solid"]):focus-visible {
+  --oc-button-bg: var(--hover-wash);
+}
+
+.oc-button[data-variant="outline"]:not([data-tone="danger"]):hover,
+.oc-button[data-variant="outline"]:not([data-tone="danger"]):focus-visible {
+  --oc-button-bg: var(--surface-hover);
+  --oc-button-border: var(--oc-border-width) solid var(--border-hover);
+  --oc-button-shadow: none;
+}
+
+.oc-button[data-variant="outline"][data-chrome="context-disclosure"]:hover,
+.oc-button[data-variant="outline"][data-chrome="context-disclosure"]:focus-visible {
+  --oc-button-bg: var(--subtle-3);
+  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--accent) 32%, var(--border));
+  --oc-button-shadow: none;
+}
+
+.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="icon-action"]:hover,
+.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="icon-action"]:focus-visible {
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-color: var(--text-strong);
+  --oc-button-shadow: none;
+}
+
+.oc-button[data-variant="ghost"][data-chrome="text-disclosure"]:hover,
+.oc-button[data-variant="ghost"][data-chrome="text-disclosure"]:focus-visible {
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-color: var(--text-soft);
+  --oc-button-shadow: none;
+}
+
+.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="icon-action"][data-copied="true"] {
+  --oc-button-bg: var(--good-dim);
+  --oc-button-color: var(--good);
+  --oc-button-shadow: inset 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--good) 50%, transparent);
+}
+
+.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="window-control"]:hover,
+.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="window-control"]:focus-visible {
+  --oc-button-color: var(--text-strong);
+  --oc-button-bg: var(--hover-wash);
+  --oc-button-shadow: none;
+}
+
+.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="window-control"][data-tone="danger"]:hover,
+.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="window-control"][data-tone="danger"]:focus-visible {
+  --oc-button-color: var(--text-on-danger);
+  --oc-button-bg: color-mix(in srgb, var(--bad) 88%, var(--surface));
+  --oc-button-shadow: none;
+}
+
+.oc-button[data-variant="solid"][data-tone="neutral"]:hover,
+.oc-button[data-variant="solid"][data-tone="neutral"]:focus-visible,
+.oc-button[data-variant="solid"][data-tone="accent"]:hover,
+.oc-button[data-variant="solid"][data-tone="accent"]:focus-visible {
+  --oc-button-bg: color-mix(in srgb, var(--text-strong) 86%, var(--surface));
+  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--text-strong) 86%, var(--surface));
+  --oc-button-color: var(--text-on-strong);
+}
+
+.oc-button[data-variant="solid"][data-tone="danger"]:hover,
+.oc-button[data-variant="solid"][data-tone="danger"]:focus-visible {
+  --oc-button-bg: color-mix(in srgb, var(--bad) 86%, var(--surface));
+  --oc-button-border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 86%, var(--surface));
+  --oc-button-color: var(--text-on-danger);
+}
+
+/* Full-row actions are content-owned disclosures inside a surface that owns
+ * the row feedback. Keep this semantic chrome after generic variant/state
+ * rules so the child cannot paint a second nested hover surface. */
+.oc-button[data-variant][data-chrome="row-action"] {
+  --oc-button-height: auto;
+  --oc-button-padding-x: 0;
+  --oc-button-padding-y: 0;
+  --oc-button-gap: calc(2px * var(--ui-scale));
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-color: inherit;
+  --oc-button-shadow: none;
+}
+
+.oc-button[data-variant][data-chrome="row-action"]:hover,
+.oc-button[data-variant][data-chrome="row-action"]:focus-visible {
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-color: inherit;
+  --oc-button-shadow: none;
+}
+
+.oc-button:disabled,
+.oc-button[aria-disabled="true"] {
+  cursor: default;
+  opacity: var(--ui-opacity-disabled);
+}
+
+.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="icon-action"]:disabled,
+.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="icon-action"][aria-disabled="true"] {
+  opacity: var(--ui-opacity-subtle);
+}
+
+/* Progressive collections share one quiet text action after the initially
+ * visible entries. The Button primitive retains keyboard focus ownership;
+ * this class only aligns the action with surrounding list content. */
+.oc-progressive-list {
+  min-width: 0;
+}
+
+.oc-button.oc-progressive-list__toggle {
+  --oc-button-padding-x: calc(6px * var(--ui-scale));
+
+  justify-content: flex-start;
+  margin-top: calc(4px * var(--ui-scale));
+  color: var(--text-muted);
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-body);
+}

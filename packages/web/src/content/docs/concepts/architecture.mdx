@@ -1,0 +1,99 @@
+---
+title: Architecture
+description: OpenCorvus turns natural-language requests into verified code changes through active expert-squad projections and artifact-backed state.
+---
+
+OpenCorvus's job is to turn a natural-language request into verified code changes. The current architecture is orchestrator-led: the orchestrator reads the task snapshot on every wake, resolves the active expert-squad capability, dispatches exact projected worker IDs, and records durable evidence as SQLite rows and artifacts.
+
+For a click-through source map of the current runtime, see [Enterprise architecture explorer](./enterprise-architecture.md).
+
+## HTTP API Runtime Layering
+
+The HTTP server (`packages/opencorvus/src/server/server.ts`) splits routes into two real layers:
+
+- **Control plane** — `/global/*`, `/auth/*`, `/ui/*`, plus `/log`, `/shutdown`, `/restart` are mounted before the `Instance.provide` middleware. They work even when no project directory is open.
+- **Project-scoped** — routes that operate on the active workspace (`/tasks`, `POST /task`, task writes, `/session`, `/goal`, `/mcp`, `/experimental`, `/panel`, `/pty`, ...) run inside `Instance.provide({ directory, init: InstanceBootstrap })`. They require a project directory from `?directory=` or `x-opencorvus-directory`.
+- **Task-record reads** — `GET /task/{taskID}` and the task record routes `/status`, `/board`, `/progress`, `/events`, `/brief`, `/transcript`, `/interactions`, `/bindings`, `/operator-model-context`, and task conversation reads resolve ownership from the task record. They do not require `directory`.
+
+Route handlers do not read `process.env`, open SQL tables directly, or use `z.any()`. `bun run api:routes-check` protects that boundary, and `bun run docs:api` regenerates the web API reference from OpenAPI.
+
+## Expert-Squad Projection
+
+`prompt_profile.active` selects one expert-squad package. `PromptProfileResolver` projects that package into one scheduler capability and its exact dynamic worker capabilities. Base is the built-in default, Advanced is the independently selectable full software-delivery team, and Research Studio is the independently selectable five-agent research-delivery team. Selecting another package replaces the current package completely; agents, prompts, skills, tools, mounts, Model Context Protocol resources, and workflow contracts are not inherited or combined.
+
+The built-in Advanced manifest declares `planned-delivery`, `evidence-investigation`, `greenfield-interface-delivery`, and `reference-interface-delivery` as immutable scheduler contracts. The greenfield graph carries its complete original-interface planning and review lineage without a source URL; only the reference graph begins with `interface-investigator` and requires one operator-supplied source URL. They are not active/default workflow state or an execution engine: the Orchestrator visibly selects the exact graph matching the request. After selection, every declared node and dependency is mandatory; missing predecessor evidence requires refusal rather than omission, skipping, substitution, or reordering.
+
+Each projected worker selects a code-owned typed adapter through its `base_role` runtime-template seed. Adapter IDs such as `requirements`, `architect`, `build`, and `integrity` name host Application Binary Interface modules; they are not runnable agent identities or a fixed team order.
+
+## Runtime Layers
+
+```
+User request
+  ↓
+Channel / UI / API
+  ↓
+Engine task row
+  ↓
+Orchestrator session
+  ├─ scheduler tools: dispatch_agent / manage_task / evidence and coordination tools
+  ├─ active projection: exact dynamic agent IDs + immutable binding workflow contracts
+  ├─ durable artifacts: workflow selection / dispatch execution / domain facts / review / host observations
+  └─ explicit user interactions: questions and permissions
+  ↓
+Worker sessions
+  ├─ exact capability_projection.agents.<agent-id> identity
+  ├─ base_role runtime-template seed + typed adapter ABI
+  └─ projected prompt / model / tools / skills / mounts
+```
+
+A Session/Trace is durable history and identity, a Turn/Attempt is one model
+execution, and Runtime is disposable process-local machinery such as the
+stream, cancellation handle, Model Context Protocol connections, tool
+instances, callbacks, and promises. Restarting the server may destroy Runtime;
+it does not invalidate Session messages, worker descriptors, or coordination
+requests. Targeted operator steer freezes identity from the persisted
+hash-verified worker descriptor, records a durable request, and wakes the
+Orchestrator. Only an explicit in-flight continuation requires the old Runtime;
+without it, the Orchestrator can visibly choose a fresh worker Turn.
+
+## Responsibilities
+
+| Component                    | Role                                                                                                               | Current source                                                                                                             |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| Channel / API                | Converts external input into task creation, messages, and control operations                                       | `packages/opencorvus/src/channel/ingress.ts`, `packages/opencorvus/src/server/routes/`                                     |
+| Engine                       | Stores Tasks, versioned Delivery Slices, immutable execution/domain/review facts, Host observations, and interactions | `packages/opencorvus/src/engine/engine.sql.ts`, `packages/opencorvus/src/engine/store.ts` |
+| Orchestrator                 | Single task-level decision maker. Reads `describeTask`, dispatches exact active workers, and decides from evidence | `packages/opencorvus/src/orchestrator/agent.ts`, `packages/opencorvus/src/orchestrator/tools.ts`                           |
+| Expert-squad projection      | Owns active team identities, binding collaboration contracts, prompts, skills, tools, and resource grants          | `packages/opencorvus/src/expert-squad/prompt-profile-resolver.ts`                                                          |
+| Runtime templates / adapters | Supply trusted prompt, tool, Session, persistence, and typed domain ABI seeds without becoming runtime identities | `packages/opencorvus/src/agent/runtime-template-registry.ts`, `packages/opencorvus/src/agent/dispatch-adapter-contract.ts` |
+
+## Two Loops
+
+### Outer: Orchestrator Wake Loop
+
+`runTaskLoop` (`packages/opencorvus/src/orchestrator/loop.ts`) serializes wakes for one task and calls `Orchestrator.processTask`. Each wake projects the persisted Task, messages, referenced artifacts, traces, and Host observations and decides the next tool call.
+
+### Inner: Session Agentic Loop
+
+`SessionLoop` (`packages/opencorvus/src/session/loop.ts`) runs every worker session:
+
+```
+LLM emits tool call → tool executes → tool result is appended → next model turn
+```
+
+`dispatch_agent` creates a worker session for one exact active projected ID. Its runtime template then invokes the declared typed adapter; the adapter name remains an implementation ABI, not the worker identity.
+
+## Delivery Slice and physical execution
+
+The user-facing Goal is a versioned Delivery Slice contract. Every selected workflow node executes once per Task; dispatch lineage may cite exact Slice revisions as subjects. Session/worktree execution is physical evidence, Task owns business lifecycle, and the Goal panel derives progress from real workflow, Session, Artifact, review, and Task-decision facts.
+
+## Data Flow
+
+See [Task / Delivery Slice data model](./delivery-slice-task.md).
+
+## What's Next
+
+- [Task / Delivery Slice data model](./delivery-slice-task.md)
+- [Enterprise architecture explorer](./enterprise-architecture.md)
+- [Agentic loop](./agent-loop.md)
+- [OpenCorvus configuration](../../config/)
+- [Integrity review reference](../../reference/evaluator/)

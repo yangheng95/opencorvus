@@ -1,0 +1,59 @@
+.oc-listbox {
+  --oc-listbox-item-height: var(--oc-density-control-height);
+
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  outline: none;
+}
+
+.oc-listbox[data-density="rich"] {
+  --oc-listbox-item-height: calc(44px * var(--ui-scale));
+}
+
+.oc-listbox-item {
+  appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--oc-listbox-item-height);
+  padding: calc(6px * var(--ui-scale)) calc(9px * var(--ui-scale));
+  border: 0;
+  border-radius: var(--oc-radius-soft);
+  outline: none;
+  background: transparent;
+  color: var(--text-soft);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--ui-duration-base) var(--ui-timing-standard),
+    color var(--ui-duration-base) var(--ui-timing-standard),
+    opacity var(--ui-duration-base) var(--ui-timing-standard);
+}
+
+.oc-listbox-item:not([data-selected]):is(:hover, [data-highlighted], :focus-visible) {
+  background: var(--ui-list-hover-bg);
+  color: var(--text-strong);
+}
+
+.oc-listbox-item:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(-1px * var(--ui-scale));
+}
+
+.oc-listbox-item[data-selected] {
+  background: var(--ui-list-selected-bg);
+  color: var(--text-strong);
+}
+
+.oc-listbox-item[data-selected]:is(:hover, [data-highlighted], :focus-visible) {
+  background: var(--ui-list-selected-hover-bg);
+}
+
+.oc-listbox-item[data-disabled],
+.oc-listbox-item:disabled {
+  cursor: default;
+  opacity: var(--ui-opacity-disabled);
+}

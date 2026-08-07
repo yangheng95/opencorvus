@@ -1,0 +1,18 @@
+---
+title: 企业级动态架构图
+description: 展示当前 OpenCorvus runtime、agent、data、evidence 与 overlay 层的可点击架构工作台。
+---
+
+import EnterpriseArchitectureExplorer from "../../../../components/EnterpriseArchitectureExplorer.astro"
+
+这个页面是当前 OpenCorvus 代码库的可追溯架构工作台。它只描述当前运行事实：Orchestrator 主导的 Task loop、Artifact-backed engine state、专家 Agent 边界、Task dispatch worktree、verification evidence，以及 Overlay 投影。
+
+用于评审会或架构 walkthrough 时，请打开[全屏架构工作台](../../architecture-explorer/)。下方嵌入版复用同一个组件和数据模型。
+
+<EnterpriseArchitectureExplorer locale="zh" />
+
+## 复审范围
+
+本图刻意排除已退役的 planner/deliver/evaluation-table 叙事。当前持久过程证据通过 `engine_artifact`、task snapshot、面向精确 projected identity 的显式 `dispatch_agent` 调用、task-scoped browser preview evidence、visual QA 与 Integrity attempts 表达。
+
+如果需要更紧凑的文字总览，见[架构总览](./architecture.md)。如果需要表级模型，见[Task / Delivery Slice 数据模型](./delivery-slice-task.md)。

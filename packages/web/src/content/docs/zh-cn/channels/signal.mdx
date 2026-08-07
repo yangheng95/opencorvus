@@ -1,0 +1,32 @@
+---
+title: Signal
+description: Signal 没有官方 Bot API，通过 signal-cli-rest-api 本地代理接入。
+---
+
+Signal 没有官方 Bot API，通过 **[signal-cli-rest-api](https://github.com/bbernhard/signal-cli-rest-api)** 本地代理接入。
+
+## 前置
+
+1. 跑一个 signal-cli-rest-api 容器：
+   ```bash
+   docker run -d --name signal-api -p 8080:8080 \
+     -v $HOME/.local/share/signal-api:/home/.local/share/signal-cli \
+     bbernhard/signal-cli-rest-api
+   ```
+2. 在容器里绑定一个 Signal 账号（扫码或用验证码）。
+
+## 环境变量
+
+```bash
+export SIGNAL_SERVICE_URL=http://127.0.0.1:8080
+export SIGNAL_ACCOUNT=+15551234567      # 你绑定的手机号
+```
+
+## Thread 语义
+
+Signal 没有 thread 概念；thread key = 对方手机号或 groupId。
+
+## 故障排查
+
+- **注册失败**：Signal 对 VoIP 号码严苛，建议用真实手机号。
+- **容器无响应**：容器启动后首次 sync 可能需要数分钟下载历史。

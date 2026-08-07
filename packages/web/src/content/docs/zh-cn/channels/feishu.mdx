@@ -1,0 +1,41 @@
+---
+title: 飞书 / Lark
+description: 飞书适配器走 Webhook 模式，通过事件订阅与加密校验接入。
+---
+
+## 前置
+
+1. 在 [飞书开放平台](https://open.feishu.cn/) 创建自建应用，启用"机器人"能力。
+2. 开通权限：`im:message`、`im:message.group_at_msg`、`im:resource`。
+3. 配置事件订阅（Event 2.0）：
+   - 事件：`im.message.receive_v1`
+   - 请求网址：`https://<你的公网地址>/feishu`
+
+## 环境变量
+
+```bash
+export FEISHU_APP_ID=cli_...
+export FEISHU_APP_SECRET=...
+export FEISHU_VERIFICATION_TOKEN=...       # 事件订阅中的 Verification Token
+export FEISHU_WEBHOOK_HOST=0.0.0.0
+export FEISHU_WEBHOOK_PORT=16666
+export FEISHU_WEBHOOK_PATH=/feishu
+```
+
+## 公网暴露
+
+若本机起服务，需反向代理到公网（nginx / Cloudflare Tunnel / frp）到 `${FEISHU_WEBHOOK_HOST}:${FEISHU_WEBHOOK_PORT}${FEISHU_WEBHOOK_PATH}`。
+
+## Thread 语义
+
+飞书 `thread_id`（话题回复）作为 thread key。普通消息以 `chat_id` 代替。
+
+## 当前状态
+
+**Text MVP**（`.env.example`）——文本消息完整可用，图片与文件上传走飞书的 `/open-apis/im/v1/images` 与 `/files`。富文本卡片暂不支持。
+
+## 故障排查
+
+- **Webhook 验证失败**：`FEISHU_VERIFICATION_TOKEN` 与开放平台里的要完全一致。
+- **消息返回但用户看不到**：检查应用的"可见范围"是否包含目标用户/群。
+- **回复被截断**：飞书文本消息单条 ≤ 30000 字符，OpenCorvus 会自动分段。

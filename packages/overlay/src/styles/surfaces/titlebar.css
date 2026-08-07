@@ -1,0 +1,485 @@
+/* The titlebar and workspace context bar share the rail palette without a
+ * separator. The titlebar closes the native composition boundary with the
+ * semantic rail paint; the context bar remains transparent to the rail below.
+ * The retired `::after` gradient and resting boundary border must stay absent. */
+.titlebar {
+  position: relative;
+  z-index: var(--ui-z-dialog);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  min-height: var(--ui-titlebar-height);
+  background-color: var(--rail-surface);
+  background-image: var(--rail-background-image);
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: var(--ui-overlay-shell-width) var(--ui-overlay-shell-height);
+  background-attachment: fixed;
+  border: 0;
+  border-bottom: 0;
+  flex-shrink: 0;
+  box-shadow: none;
+}
+
+.titlebar-top-row {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(calc(16px * var(--ui-scale)), 1fr) auto;
+  align-items: center;
+  gap: calc(2px * var(--ui-scale));
+  min-height: var(--ui-titlebar-height);
+  padding: 0 calc(8px * var(--ui-scale));
+}
+
+/* AppKit traffic lights keep a native logical position while application
+ * content zoom changes --ui-scale. Keep the one Web chrome row on the same
+ * canonical 36px geometry that owns the measured native alignment. */
+html[data-native-titlebar="macos"] {
+  --ui-titlebar-height: 36px;
+}
+
+html[data-native-titlebar="macos"] .titlebar-top-row {
+  --oc-density-chip-height: 24px;
+  --oc-icon-size-standard: 14px;
+  --oc-titlebar-cluster-gap: 6px;
+  --oc-titlebar-navigation-gap: 4px;
+
+  grid-template-columns: minmax(0, auto) minmax(calc(16px * var(--ui-scale)), 1fr);
+  gap: 2px;
+  padding-left: var(--oc-titlebar-macos-controls-inset);
+  padding-right: 8px;
+}
+
+.workspace-contextbar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: calc(4px * var(--ui-scale));
+  width: 100%;
+  min-width: 0;
+  min-height: var(--ui-workspace-contextbar-height);
+  flex: 0 0 var(--ui-workspace-contextbar-height);
+  padding-block: 0;
+  padding-inline-start: var(--ui-left-rail-nav-icon-inset);
+  padding-inline-end: calc(
+    var(--ui-left-rail-project-action-center-inset) - var(--ui-left-rail-project-action-half-size)
+  );
+  box-sizing: border-box;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+}
+
+.workspace-context-actions {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 0;
+  -webkit-app-region: no-drag;
+}
+
+.workspace-contextbar .workspace-command-action.oc-button {
+  --oc-button-height: var(--ui-left-rail-project-action-size);
+  --oc-button-padding-x: 0;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-bg: transparent;
+  --oc-button-color: var(--text-soft);
+  --oc-button-shadow: none;
+
+  width: var(--ui-left-rail-project-action-size);
+  min-width: var(--ui-left-rail-project-action-size);
+  height: var(--ui-left-rail-project-action-size);
+  align-self: center;
+  position: relative;
+  transform: translateY(calc(1px * var(--ui-scale)));
+  -webkit-app-region: no-drag;
+}
+
+.workspace-contextbar .workspace-command-action.oc-button:hover,
+.workspace-contextbar .workspace-command-action.oc-button:focus-visible,
+.workspace-contextbar .workspace-command-mailbox.oc-button[data-active="true"] {
+  --oc-button-bg: var(--hover-wash);
+  --oc-button-color: var(--text-strong);
+}
+
+.workspace-contextbar .workspace-command-mailbox.oc-button[data-chrome="icon-action"][data-attention="true"] {
+  --oc-button-color: var(--accent);
+}
+
+.workspace-command-mailbox__count.oc-badge {
+  position: absolute;
+  inset-block-start: calc(-3px * var(--ui-scale));
+  inset-inline-end: calc(-5px * var(--ui-scale));
+  min-width: calc(15px * var(--ui-scale));
+  height: calc(15px * var(--ui-scale));
+  padding: 0 calc(3px * var(--ui-scale));
+  box-sizing: border-box;
+  border: calc(1px * var(--ui-scale)) solid var(--rail-surface);
+  font-size: calc(9px * var(--ui-scale));
+  line-height: 1;
+  pointer-events: none;
+}
+
+.workspace-command-mailbox[data-attention="true"] .oc-icon {
+  animation: workspace-mailbox-attention var(--ui-duration-loop-pulse) var(--ui-timing-standard) infinite;
+}
+
+@keyframes workspace-mailbox-attention {
+  0%,
+  24%,
+  100% {
+    opacity: var(--ui-opacity-full);
+  }
+
+  12%,
+  36% {
+    opacity: var(--ui-opacity-faint);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workspace-command-mailbox[data-attention="true"] .oc-icon {
+    animation: none;
+  }
+}
+
+.titlebar-context-spacer {
+  min-width: 0;
+  height: 100%;
+  -webkit-app-region: drag;
+}
+
+.titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--oc-titlebar-cluster-gap);
+  min-width: 0;
+  justify-self: start;
+  -webkit-app-region: drag;
+}
+
+.titlebar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--oc-titlebar-gap);
+  flex: none;
+  min-width: 0;
+  justify-self: auto;
+  -webkit-app-region: drag;
+}
+
+.titlebar-navigation {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oc-titlebar-navigation-gap);
+  -webkit-app-region: no-drag;
+}
+
+#solidSidebarToggle {
+  display: inline-flex;
+  align-items: center;
+  -webkit-app-region: no-drag;
+}
+
+#solidSidebarToggle .oc-button[data-ui="titlebar-sidebar-toggle"] {
+  --oc-button-height: var(--oc-density-chip-height);
+  --oc-button-padding-x: 0;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-bg: transparent;
+  --oc-button-color: var(--text-soft);
+  --oc-button-shadow: none;
+
+  width: var(--oc-density-chip-height);
+  min-width: var(--oc-density-chip-height);
+  height: var(--oc-density-chip-height);
+}
+
+.titlebar-navigation .oc-button {
+  --oc-button-height: var(--oc-density-chip-height);
+  --oc-button-padding-x: 0;
+  --oc-button-border: 0 solid transparent;
+  --oc-button-bg: transparent;
+  --oc-button-color: var(--text-soft);
+  --oc-button-shadow: none;
+
+  width: var(--oc-density-chip-height);
+  min-width: var(--oc-density-chip-height);
+  height: var(--oc-density-chip-height);
+}
+
+.titlebar-navigation .oc-button:disabled {
+  --oc-button-color: color-mix(in srgb, var(--text-muted) 72%, transparent);
+
+  opacity: var(--ui-opacity-subtle);
+}
+
+.titlebar-spacer {
+  min-width: calc(20px * var(--ui-scale));
+  height: 100%;
+  grid-column: 2;
+  -webkit-app-region: drag;
+}
+
+.titlebar-utility {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--oc-titlebar-gap);
+  min-width: 0;
+  grid-column: 3;
+  justify-self: end;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar-actions,
+.titlebar-window-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--oc-titlebar-gap);
+  flex-shrink: 0;
+}
+
+.brand-logo {
+  display: none;
+  width: calc(16px * var(--ui-scale));
+  height: calc(16px * var(--ui-scale));
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.titlebar-theme-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(4px * var(--ui-scale));
+  margin-left: calc(32px * var(--ui-scale));
+}
+
+.titlebar-theme-option {
+  min-width: 0;
+}
+
+.titlebar-theme-option-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.titlebar-theme-option-swatch {
+  width: calc(12px * var(--ui-scale));
+  height: calc(12px * var(--ui-scale));
+  border-radius: var(--oc-radius-soft);
+  border: var(--oc-border-width) solid var(--border);
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.titlebar-theme-option-swatch[data-theme="dark"] {
+  background: var(--oc-theme-swatch-dark);
+}
+
+.titlebar-theme-option-swatch[data-theme="light"] {
+  background: var(--oc-theme-swatch-light);
+}
+
+.titlebar-theme-option-swatch[data-theme="vscode-dark"] {
+  background: var(--oc-theme-swatch-vscode-dark);
+}
+
+.titlebar-theme-option-swatch[data-theme="system"] {
+  background: var(--oc-theme-swatch-system);
+}
+
+.titlebar-brand-identity {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  text-align: left;
+  user-select: none;
+}
+
+.titlebar-brand-identity__copy {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.titlebar-brand-identity__wordmark {
+  color: var(--text-strong);
+  font-size: var(--ui-font-brand);
+  font-weight: var(--ui-font-weight-strong);
+  letter-spacing: var(--ui-letter-spacing-tight);
+  line-height: 1;
+}
+
+.titlebar-menubar .oc-button[data-ui="titlebar-menubar-trigger"] {
+  --oc-button-height: calc(22px * var(--ui-scale));
+  --oc-button-padding-x: var(--oc-titlebar-menu-padding-x);
+  --oc-button-border: 0 solid transparent;
+  --oc-button-color: var(--oc-titlebar-menu-text);
+
+  height: calc(22px * var(--ui-scale));
+  font-size: var(--ui-font-navigation);
+  white-space: nowrap;
+}
+
+.titlebar-menubar .oc-button[data-ui="titlebar-menubar-trigger"][data-expanded] {
+  --oc-button-bg: var(--subtle-3);
+  --oc-button-border: 0 solid transparent;
+  --oc-button-color: var(--text-strong);
+}
+
+.titlebar-menubar .oc-button[data-ui="titlebar-menubar-trigger"][data-expanded]:focus-visible {
+  --oc-button-shadow: inset 0 0 0 var(--oc-border-width) color-mix(in srgb, var(--border) 92%, transparent);
+
+  outline: none;
+}
+
+.titlebar-menu-trigger-compact {
+  display: none;
+}
+
+.titlebar-menubar {
+  display: flex;
+  align-items: center;
+  gap: var(--oc-titlebar-menu-gap);
+  min-width: 0;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar-menubar-slot {
+  position: relative;
+  display: flex;
+}
+
+.titlebar-menubar-panel {
+  z-index: var(--ui-z-dialog);
+  width: min(calc(280px * var(--ui-scale)), calc(100cqw - calc(24px * var(--ui-scale))));
+  max-height: min(calc(620px * var(--ui-scale)), calc(var(--ui-overlay-shell-height) - calc(88px * var(--ui-scale))));
+  overflow: auto;
+  gap: 0;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar-menubar-panel[data-menu="file"] {
+  width: min(calc(276px * var(--ui-scale)), calc(100cqw - calc(24px * var(--ui-scale))));
+}
+
+.titlebar-menubar-panel[data-menu="help"] {
+  width: min(calc(276px * var(--ui-scale)), calc(100cqw - calc(24px * var(--ui-scale))));
+}
+
+.titlebar-menubar-group {
+  display: grid;
+  gap: calc(3px * var(--ui-scale));
+}
+
+.titlebar-menubar-group + .titlebar-menubar-group {
+  padding-top: calc(7px * var(--ui-scale));
+}
+
+/* group title (e.g. "Theme", "Locale") — plain subheader, no pill chrome. */
+.titlebar-menubar-group-title {
+  padding: calc(4px * var(--ui-scale)) calc(8px * var(--ui-scale)) calc(2px * var(--ui-scale));
+  color: var(--text-muted);
+  font-weight: var(--ui-font-weight-medium);
+  letter-spacing: var(--ui-letter-spacing-normal);
+}
+
+.titlebar-menubar-item {
+  justify-content: space-between;
+  gap: calc(14px * var(--ui-scale));
+}
+
+.titlebar-menubar-range {
+  display: grid;
+  align-items: stretch;
+  gap: calc(6px * var(--ui-scale));
+}
+
+.titlebar-menubar-range:hover,
+.titlebar-menubar-range:focus-within {
+  background: var(--surface-hover);
+  color: var(--text-strong);
+  outline: none;
+}
+
+.titlebar-menubar-item:disabled .titlebar-menubar-item-title,
+.titlebar-menubar-item[data-disabled] .titlebar-menubar-item-title,
+.titlebar-menubar-item:disabled .titlebar-menubar-item-meta,
+.titlebar-menubar-item[data-disabled] .titlebar-menubar-item-meta {
+  color: var(--text-soft);
+}
+
+.titlebar-menubar-item-title {
+  color: var(--text-strong);
+  font-size: var(--ui-font-navigation);
+  line-height: 1.25;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.titlebar-menubar-item-meta {
+  color: var(--text-soft);
+  font-size: var(--ui-font-small);
+  line-height: 1.25;
+  flex: 0 0 auto;
+  max-width: 46%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.titlebar-menubar-range-copy {
+  min-width: 0;
+  display: grid;
+  gap: calc(2px * var(--ui-scale));
+}
+
+.titlebar-menubar-range-copy {
+  flex: 1 1 auto;
+}
+
+.titlebar-menubar-range-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(calc(34px * var(--ui-scale)), auto);
+  align-items: center;
+  gap: calc(8px * var(--ui-scale));
+}
+
+.titlebar-menubar-range-value {
+  color: var(--text-muted);
+  font-size: var(--ui-font-small);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.titlebar-menubar-range .oc-slider-track {
+  width: 100%;
+  min-width: 0;
+}
+
+.titlebar-theme-options-menubar {
+  grid-template-columns: minmax(0, 1fr);
+  margin-left: 0;
+  padding: calc(4px * var(--ui-scale));
+}
+
+.titlebar-menubar-range-copy .titlebar-menubar-item-meta {
+  max-width: none;
+  text-align: left;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Titlebar responsive collapse (extracted 2026-05-04). At
+   max-width 760px, the titlebar reflows to two stacked rows.
+   ───────────────────────────────────────────────────────────── */

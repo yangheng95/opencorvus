@@ -1,0 +1,35 @@
+{
+  "name": "@opencorvus-ai/channel-runtime",
+  "version": "0.0.35-beta",
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+    "@opencorvus-ai/channel-config": "workspace:*",
+    "@opencorvus-ai/sdk": "workspace:*",
+    "@opencorvus-ai/util": "workspace:*",
+    "@slack/bolt": "4.6.0",
+    "discord.js": "14.23.2",
+    "grammy": "1.40.1",
+    "jose": "6.2.2",
+    "proper-lockfile": "4.1.2"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "@types/proper-lockfile": "4.1.4",
+    "@typescript/native-preview": "catalog:",
+    "typescript": "catalog:"
+  },
+  "scripts": {
+    "dev": "bun run src/main.ts",
+    "typecheck": "tsgo --noEmit",
+    "test": "bun ../opencorvus/script/run-with-inactivity.ts --inactivity-ms 120000 -- bun test --timeout=0"
+  },
+  "optionalDependencies": {
+    "node-bin-darwin-arm64": "22.23.1",
+    "node-darwin-x64": "22.23.1",
+    "node-linux-arm64": "22.23.1",
+    "node-linux-x64": "22.23.1",
+    "node-win-x64": "22.23.1"
+  }
+}

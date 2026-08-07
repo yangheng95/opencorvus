@@ -1,0 +1,228 @@
+---
+title: JavaScript / TypeScript SDK
+description: "@opencorvus-ai/sdk 的生成式 OpenCorvus REST 客户端参考。"
+---
+
+**包名**：`@opencorvus-ai/sdk`
+**源码**：`packages/sdk/js/`
+**生成来源**：`packages/sdk/openapi.json`
+
+SDK 是 OpenCorvus REST API 的类型化封装。HTTP 方法、请求类型、响应类型与 SSE helper 由 `@hey-api/openapi-ts` 生成；`src/client.ts` 与 `src/server.ts` 提供 OpenCorvus 专用的客户端和服务端辅助函数。
+
+## 安装
+
+```bash
+bun add @opencorvus-ai/sdk
+```
+
+## 客户端
+
+```typescript
+import { createOpenCorvusClient } from "@opencorvus-ai/sdk"
+
+const client = createOpenCorvusClient({
+  baseUrl: "http://127.0.0.1:7878",
+  password: process.env.OPENCORVUS_SERVER_PASSWORD,
+})
+```
+
+`createOpenCorvusClient()` 接受生成 fetch client 的配置，并增加 OpenCorvus 专用选项：
+
+| 选项            | 用途                                                                                       |
+| --------------- | ------------------------------------------------------------------------------------------ |
+| `baseUrl`       | OpenCorvus 服务地址；未传时使用生成时的默认地址。                                          |
+| `directory`     | 为项目作用域请求添加 `directory` query 参数；Windows 下会规范化 `/c/repo` 这类 MSYS 路径。 |
+| `username`      | Basic Auth 用户名，默认 `opencorvus`。                                                     |
+| `password`      | Basic Auth 密码；服务端启用 `OPENCORVUS_SERVER_PASSWORD` 时传入该值。                      |
+| `headers`       | 额外 header；显式传入的 `Authorization` 不会被 `password` 覆盖。                           |
+| `fetch`         | 自定义 Fetch 实现，用于代理、埋点、测试或进程内适配。                                      |
+| `throwOnError`  | 为 `true` 时，失败响应直接 throw；否则返回 `{ error }`。                                   |
+| `responseStyle` | 生成客户端响应模式：默认 fields 对象，也可设为 `"data"` 返回纯数据。                       |
+
+## 调用与返回值
+
+普通非 SSE 方法默认返回 fields 对象：
+
+```typescript
+const result = await client.task.create({
+  request: "为 src/foo.ts 添加单元测试",
+})
+
+if (result.error) throw result.error
+const taskID = result.data.task_id
+```
+
+如果只想拿数据，可以全局或单次调用设置 `responseStyle: "data"`：
+
+```typescript
+const client = createOpenCorvusClient({
+  baseUrl: "http://127.0.0.1:7878",
+  responseStyle: "data",
+})
+
+const task = await client.task.create({
+  request: "为 src/foo.ts 添加单元测试",
+})
+```
+
+## SSE
+
+SSE 方法返回 `{ stream }`，其中 `stream` 是 `AsyncGenerator`。
+
+```typescript
+const abort = new AbortController()
+const { stream } = client.event.subscribe(undefined, {
+  signal: abort.signal,
+  sseMaxRetryAttempts: 10,
+})
+
+for await (const event of stream) {
+  console.log(event.type, event)
+}
+```
+
+常用 SSE 选项：`signal`、`onSseEvent`、`onSseError`、`sseDefaultRetryDelay`、`sseMaxRetryDelay`、`sseMaxRetryAttempts`。
+
+## 嵌入式服务
+
+调用方需要拉起一个 OpenCorvus server 进程并拿到已连接客户端时，使用 `createOpenCorvus()`。
+
+```typescript
+import { createOpenCorvus } from "@opencorvus-ai/sdk"
+
+const { client, server } = await createOpenCorvus({
+  port: 0,
+  config: { logLevel: "info" },
+})
+
+try {
+  const health = await client.global.health({ throwOnError: true })
+  console.log(health.data)
+} finally {
+  await server.close()
+}
+```
+
+返回结构：
+
+```typescript
+{
+  client: OpenCorvusClient
+  server: {
+    url: string
+    close: () => Promise<void>
+  }
+}
+```
+
+如果进程环境设置了 `OPENCORVUS_SERVER_PASSWORD`，`createOpenCorvus()` 会把该密码自动传给返回的 client。
+
+## 命名空间
+
+SDK 跟随 OpenAPI `operationId` 命名。点号分段变成 namespace，snake_case 方法名变成 camelCase。例如 `session.prompt_async` 映射为 `client.session.promptAsync()`。
+
+| 命名空间                                 | 示例                                                       |
+| ---------------------------------------- | ---------------------------------------------------------- |
+| `client.global.*`                        | `health`、`event`、`config.get`、`db.reset`                |
+| `client.task.*`                          | `create`、`list`、`message`、`retry`、`replan`、`followup` |
+| `client.session.*`                       | `create`、`prompt`、`promptAsync`、`events`、`trace`       |
+| `client.goal.*`                          | Delivery Slice 创建、immutable revision 与派生进度路由    |
+| `client.channel.*`                       | Channel runtime 与附件路由                                 |
+| `client.mcp.*`                           | MCP server 生命周期与认证路由                              |
+| `client.permission.*`                    | 权限 reply / reject 路由                                   |
+| `client.provider.*`                      | Provider 模型、认证与刷新路由                              |
+
+[HTTP API 参考](../api/) 是完整 operation 清单；每个 `operationId` 都按上述规则映射到 SDK namespace / method。
+
+## Expert Squad 开发
+
+Node-only `@opencorvus-ai/sdk/expert-squad-authoring` export 负责写入新的 canonical package directory，并对多个独立安装 squad 的静态合作关系进行校验。
+
+简单 direct dispatch 使用 `virtual_workflows: {}`。每个非空 workflow 表达一个完整 Task-level collaboration variant 与 mandatory dependencies；每个 node 在 Task 中只执行一次。Delivery Slice subject 是 typed dispatch/evidence ref，不是 node scope。SDK 与 Registry 校验数据形态、精确 Agent/依赖引用、canonical 排序与无环图，不强制某一种角色拓扑。
+
+每个投影 Agent 都继承 `base_role` 选择的平台 fact/Turn 协议。Package prompt 可以增加领域规则，但不能定义 terminal-report/finalizer 协议或复制 Host observation。正常 stream end 是 physical Turn observation；terminal delivery 引用真实 final message 或 error/tool event。Dispatch lineage 与 execution attempt 是 immutable physical evidence。Task 独占 lifecycle；completion decision 引用 current accepted Slice revisions、workflow/package identity 与 typed EvidenceLocators。
+
+每个 scheduler 和 worker 都自动获得 Core 自有的 `artifact_search`、`artifact_read` 与 `artifact_select` 发现/溯源能力，即使投影设置了 `inherit_base_tools: false`。Projected worker 还获得 `artifact_snapshot` 与 `artifact_publish`；scheduler 不获得发布权限。Worker 先用 `artifact_snapshot` 发布当前 Task 的项目文件，再把返回的精确内容寻址 `resource_set` locator 交给 `artifact_publish`；`resource_set` 是必填字段，无文件时传 `null`。Host 在可信边界内验证不可变 manifest，并按 UTF-8 字节路径顺序展开完整 refs，因此模型 transport 不会随文件数增长。下游 Agent 发现并精确读取这些不可变 locator，不扫描其他 worker 的可变目录。SDK 分别导出 discovery、publish 与合并常量来说明这些保留能力；package 不把这些 ID 重复写进 `built_in_tool_ids`，也不能遮蔽它们。没有 typed domain-output producer 的 worker 调用 `artifact_publish`，提交 canonical JSON、`<active-squad-id>/...` namespace 下的 `expert_output` type，以及从同一物理 Turn 较早完整读取中选择的本次发布专属 `source_artifact_locators`；Host 派生 Task、Session、Agent、active Squad、projection 与完整读取观察。已有 typed domain-output tool 和 package tool 仍是各自领域的唯一 publisher，禁止再通过 `artifact_publish` 复制同一事实。搜索显式选择 `version_scope=current|historical|all`、精确 label 与 provenance facet、`query.mode=substring|fuzzy` 以及 `sort=relevance|newest|oldest|name`；无 query 的 current-scope 枚举仍然合法。模糊结果只是候选，不能自动成为证据；消费者必须选择不可变 locator、完整精确读取，并在它确实是 typed output 语义来源时调用 `artifact_select`。完整但未选择的读取仍是观察；零选择合法。搜索结果采用有明确字节上限的 cursor 分页，因此单页条目可以少于请求的 `limit`；必须持续读取 `next_cursor` 直到 null。Agent 传输保留精确 entries、总数、provider errors、resolution 与 catalog-completeness 事实，绝不生成隐藏 `outputPath`。消费已选 locator 的 package-tool 代码应调用 Plugin ABI 的 `readExactArtifact(host, locator)` assembler，禁止自行重写 chunk 循环；该 API 在暴露字节前校验 locator 连续性、byte range、media type、总字节数、terminal marker 和最终 SHA-256。普通 dispatch outcome 与 Agent message 不运输领域 Artifact 清单、locator 或正文。跨 Task 导入 envelope 在不可变 `import_lineage` 内保留源 Artifact 的原始消费 provenance；目标 Task 的 observed/selected provenance 仍只属于目标 Task。用户显式固定的 locator 必须原样读取，不能静默换成搜索结果。搜索零结果和缺少可选领域字段都是合法观察；精确选定 locator 缺失、跨 Task、路径或 digest 错误、manifest/字节损坏以及文本不可读都是显式证据错误。
+
+Engine Artifact 发布只有两个显式入口。面向模型的 projected worker 调用 `artifact_publish`，并通过 `payload_json` 提交严格 JSON 文本；TypeScript package tool 则调用 `context.host.engineArtifacts.publish({ artifact_type, schema_version, label, payload, resources, source_artifact_locators })`，绝不调用或包装面向模型的工具。Task Artifact 是独立契约：package tool 先调用 `context.host.taskArtifacts.stage(...)`，再调用 `context.host.taskArtifacts.publish(...)` 发布不可变文件，并返回 typed snapshot locator。普通 package-tool 的 `return string` 只是可见 tool result，不会发布 Artifact。
+
+每个 package Engine Artifact publisher 都声明一个稳定的带 namespace 类型、正整数 schema version、稳定 label、canonical JSON payload、显式 resources（没有资源时为 `[]`）和显式 source locators（没有来源时为 `[]`），并且只返回精简的 `locator` 与 `sha256` receipt。Package Engine 与 Task publication 在 ToolHost 边界始终幂等；package code 没有 `idempotent` 字段，也不能退出稳定精确重试。消费者仍须通过 `artifact_search` 发现持久 authority，使用 `artifact_read` 完整读取其精确 locator，再调用 `artifact_select`；receipt 本身不是证据运输。Package tool 通过 `taskArtifacts` 发布大型、二进制或多文件资源，并返回 typed immutable snapshot locator，而不是为 snapshot 伪造 Engine Artifact envelope。公共 envelope 与 locator schema 来自 `@opencorvus-ai/plugin/artifact-catalog`，SDK 不复制第二份 schema。Scheduler-projected Engine Artifact publisher 只能在完整、精确的 current type/label 搜索返回零条后调用一次，随后必须重新搜索、完整读取并选择。Resume 时复用唯一的 current authority，不得重复发布；多个匹配、catalog 不完整或 provider error 都是显式 blocker。`ExpertSquadCollaborationDefinition` 的 `consumes` 与 `produces` 只描述语义证据拓扑，不配置运输、不携带清单值、不复制 payload，也不创建 renderer。
+
+Package 通过 `context.metadata(...)` 提交的自定义值只会出现在结果的 `package_metadata` 命名空间中。顶层 provenance、truncation 与 lifecycle-control metadata 由 Host 独占，package code 不能覆盖。
+
+Requirements worker 登记领域事实后，以可见叙事摘要正常结束 Turn。Adapter 持久化 immutable `RequirementSet`；下游 Task-level node 按 producer/type/workflow/node provenance 发现并读取精确 locator。Slice revision 可以引用该 locator，但不成为 execution owner。
+
+跨 Task authority 默认封闭。Mission 必须先枚举完整的 source Task 目录，再在创建下游 stage Task 时通过 `panel.create_task.artifact_imports` 传入 `{source_task_id, locator}`。精确的 `ArtifactReadLocator` 可以选择 `engine_artifact`、`task_artifact_snapshot` 或 `task_artifact_resource`。目标目录暴露目标 Task 自有的 imported Engine Artifact，保留 source type、schema、payload 与复制后的 resources，并在 envelope 中记录不可变 `import_lineage`。Task request prose、裸 source 标识、import receipt 类型、运行中后补 import 与跨 Task 读取都不是证据运输。
+
+```typescript
+import {
+  analyzeExpertSquadWorkflowTopology,
+  EXPERT_SQUAD_PLATFORM_ARTIFACT_DISCOVERY_TOOL_IDS,
+  EXPERT_SQUAD_PLATFORM_ARTIFACT_PUBLISH_TOOL_IDS,
+  EXPERT_SQUAD_PLATFORM_ARTIFACT_TOOL_IDS,
+  validateExpertSquadCollaboration,
+  validateExpertSquadManifestDispatchTopology,
+  validateExpertSquadPackageDefinition,
+  validateExpertSquadSourceCapabilities,
+  writeExpertSquadPackage,
+  type ExpertSquadCollaborationDefinition,
+  type ExpertSquadSourceCapabilityContract,
+} from "@opencorvus-ai/sdk/expert-squad-authoring"
+
+console.assert(
+  EXPERT_SQUAD_PLATFORM_ARTIFACT_DISCOVERY_TOOL_IDS.join(",") === "artifact_search,artifact_read,artifact_select",
+)
+console.assert(EXPERT_SQUAD_PLATFORM_ARTIFACT_PUBLISH_TOOL_IDS.join(",") === "artifact_snapshot,artifact_publish")
+console.assert(EXPERT_SQUAD_PLATFORM_ARTIFACT_TOOL_IDS.length === 5)
+validateExpertSquadManifestDispatchTopology(packageDefinition.manifest)
+const workflowTopology = analyzeExpertSquadWorkflowTopology(packageDefinition.manifest)
+validateExpertSquadPackageDefinition(packageDefinition)
+await writeExpertSquadPackage({ directory: sourceDirectory, definition: packageDefinition })
+
+const cooperation: ExpertSquadCollaborationDefinition = {
+  schema_version: 1,
+  stage_execution: "mission_task",
+  id: "research-to-build",
+  label: "Research to build",
+  inputs: ["task-brief"],
+  outputs: ["build-evidence"],
+  stages: [researchStage, buildStage],
+}
+validateExpertSquadCollaboration({ definition: cooperation, manifests: [researchManifest, buildManifest] })
+
+const sourceContract: ExpertSquadSourceCapabilityContract = JSON.parse(sourceContractText)
+validateExpertSquadSourceCapabilities({
+  definition: sourceContract,
+  collaborations: [cooperation],
+  manifests: [researchManifest, buildManifest],
+})
+```
+
+Package validator 是所有新建专家团共用的 authoring hook。SDK 单一拥有 portable manifest v1 运行时 schema、通用图完整性、package path ownership，以及必需的 README、selector 和 projected prompt entrypoint；`analyzeExpertSquadWorkflowTopology()` 会确定性返回初始 frontier、依赖深度 wave、join node、critical-path node count 与最大宽度，供作者识别意外串行。它是只读分析，不新增 manifest 字段、最小宽度规则、Runtime state 或调度 gate。Registry 复用同一 v1 schema，并补充 runtime template、资源闭包、文件系统和安装环境校验。Renderer 在输出前完成校验；writer 先完整写入同父目录 staging，再用一次 rename 发布。Collaboration validator 仍校验 Mission Task stage、精确 manifest/workflow 引用、前序依赖、连通 evidence 与唯一 producer。这些都是开发期检查，不会安装 package、创建 Task/Goal、dispatch agent、持久化 workflow state 或自动流转。闭包语义仍通过 `client.expertSquad.validateFolder()` 校验，安装必须显式调用 import。
+
+## 生成
+
+重新生成 OpenAPI、SDK 类型与 generated client：
+
+```bash
+bun ./packages/sdk/js/script/build.ts
+```
+
+从生成的 OpenAPI 规格重新生成/检查网页 API 参考：
+
+```bash
+bun run docs:api
+bun run docs:check
+```
+
+生成文件位于 `packages/sdk/js/src/gen/`。不要手写修改生成文件。
+
+## 导出与兼容
+
+使用包根入口：
+
+```typescript
+import { createOpenCorvusClient, createOpenCorvus } from "@opencorvus-ai/sdk"
+```
+
+当前没有 `@opencorvus-ai/sdk/v2` 子路径。包根入口只公开当前 `createOpenCorvus*` API；旧前缀导出名不属于当前契约。

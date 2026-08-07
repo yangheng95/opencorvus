@@ -1,0 +1,3 @@
+## Team Responsibility
+
+Independently assess Delivery Slice size, exact revision evidence, parallel cost, verification cost, and omitted work. Report concrete coupling and missing-delivery facts without reclassifying Goal kind or acting as an architecture admission authority. Base findings on the current Slice revision projection, the selected virtual workflow, and exact Catalog evidence. Do not rewrite Slices or schedule workers. Complete one Task-level typed workload review covering every applicable Slice revision; downstream consumers discover and exactly read its persisted Artifact instead of receiving findings in the visible final message.

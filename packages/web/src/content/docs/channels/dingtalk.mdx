@@ -1,0 +1,36 @@
+---
+title: DingTalk
+description: DingTalk adapter with HTTP callback for internal enterprise apps.
+---
+
+## Prerequisites
+
+1. Create an internal app at [DingTalk Open Platform](https://open.dingtalk.com/).
+2. Obtain **AppKey** and **AppSecret**.
+3. Configure Event Subscription → HTTP callback: `https://<your-public-host>/dingtalk`.
+
+## Environment
+
+```bash
+export DINGTALK_APP_KEY=...
+export DINGTALK_APP_SECRET=...
+export DINGTALK_CALLBACK_TOKEN=...
+export DINGTALK_ENCODING_AES_KEY=...
+export DINGTALK_DEFAULT_WEBHOOK=...       # optional: custom group bot webhook
+export DINGTALK_WEBHOOK_HOST=0.0.0.0
+export DINGTALK_WEBHOOK_PORT=16673
+export DINGTALK_WEBHOOK_PATH=/dingtalk
+```
+
+## Thread semantics
+
+Group chats use `conversationId`; DMs use `senderStaffId`.
+
+## DINGTALK_DEFAULT_WEBHOOK
+
+Custom group bot webhooks are useful for **stateless push** (e.g., task-complete notifications), complementing the two-way app integration. Optional.
+
+## Troubleshooting
+
+- **Callback signature invalid**: confirm the DingTalk callback Token and EncodingAESKey match the event subscription settings.
+- **Can't send messages**: the app might not yet be admin-approved, or hasn't joined the target group.

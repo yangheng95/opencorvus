@@ -1,0 +1,138 @@
+---
+title: 配置
+description: 通过 JSONC 文件和环境变量配置 OpenCorvus。
+---
+
+OpenCorvus 读取 JSONC config 文件和指定环境变量。当前没有全局 `--config` CLI flag；显式文件使用 `OPENCORVUS_CONFIG`，内联 JSON 使用 `OPENCORVUS_CONFIG_CONTENT`。
+
+## 配置文件位置
+
+| 位置                                      | 用途                            |
+| ----------------------------------------- | ------------------------------- |
+| `<runtime-root>/config/opencorvus.jsonc`  | canonical root 下的全局用户配置 |
+| `<project>/.opencorvus/opencorvus.jsonc`  | 项目唯一拥有的 config 文件      |
+| `$OPENCORVUS_CONFIG_DIR/opencorvus.jsonc` | 显式本地 config 目录            |
+| `$OPENCORVUS_CONFIG`                      | 显式单个 config 文件            |
+| `OPENCORVUS_CONFIG_CONTENT`               | 内联 JSON config                |
+
+runtime root 在 Windows 默认为 `%LOCALAPPDATA%/opencorvus`，macOS 默认为
+`~/Library/Application Support/opencorvus`，其他平台默认为
+`$XDG_DATA_HOME/opencorvus`（未设置时是 `~/.local/share/opencorvus`）。只接受绝对路径
+`OPENCORVUS_HOME` 作为显式 root。
+
+项目配置自动发现只接受 `<project>/.opencorvus/opencorvus.jsonc`。项目根或祖先中的
+`opencorvus.json` / `opencorvus.jsonc`、祖先 `.opencorvus` 中的第二份 config，以及旧的全局
+`config.json` 都会按精确路径被拒绝。OpenCorvus 不会合并、迁移或猜测使用哪个项目文件。
+`OPENCORVUS_CONFIG` 仍是由操作者显式选择的单文件输入。
+
+## 最小配置
+
+在项目里创建 `<repo>/.opencorvus/opencorvus.jsonc`：
+
+```jsonc
+{
+  "$schema": "https://opencorvus.ai/config.json",
+  "model": "openai/gpt-5.5",
+}
+```
+
+## 完整示例
+
+```jsonc
+{
+  "$schema": "https://opencorvus.ai/config.json",
+  "model": "github-copilot/claude-haiku-4.5",
+
+  "network": {
+    "proxy": {
+      "url": "http://127.0.0.1:7890",
+      "llmProvider": true,
+      "webResearch": true,
+    },
+  },
+
+  "skills": {
+    "paths": ["<abs-path>/skills-market/github.com-anthropics-skills"],
+    "urls": [],
+  },
+
+  "plugin": [],
+
+  "permission": {
+    "skill": {
+      "local-note": "deny",
+      "sora": "ask",
+      "figma": "ask",
+    },
+  },
+
+  "experimental": {
+    "auto_question": true,
+  },
+}
+```
+
+## 关键字段
+
+### `model`
+
+默认 LLM 模型。格式为 `<providerId>/<modelId>`。
+
+### `network.proxy`
+
+HTTP(S) 代理设置。`llmProvider: true` 会让模型 provider 流量走代理，`webResearch: true` 会让 websearch/webfetch 流量走代理。`url` 支持 `http://` 与 `https://`；代理认证请使用 `username` / `password`，不要把凭据内嵌在 URL 里。
+
+### `skills.paths` / `skills.urls`
+
+本地 skill 市场路径与远程 skill URL。启动时加载。详见 [Skills](../skills/)。
+
+### `permission`
+
+每个 skill 和 tool 的 `allow`、`ask`、`deny` 规则。规则顺序重要；后声明的规则覆盖先声明的规则。
+
+详见 [Permissions](../permissions/)。
+
+### `experimental.auto_question`
+
+悬置澄清提问的细粒度开关。开启时，过期 question interaction 会在 question timeout 后被拒绝。权限提示由 permission 规则和 `OPENCORVUS_PERMISSION_TIMEOUT_MS` 控制。
+
+### `assistant`
+
+配置共享的 assistant runtime 无活动阈值与并行上限：
+
+```jsonc
+{
+  "assistant": {
+    "activity": {
+      "session_llm_idle_ms": 180000,
+      "task_queue_run_timeout_ms": 600000,
+    },
+    "max_executor_groups": 4,
+  },
+}
+```
+
+Agent 身份、role prompt、tool 与 skill 来自 active expert-squad projection。Role 专用 step budget 与视觉分数回滚不再是配置面。
+
+## 配置加载顺序
+
+当前源码按以下低到高优先级加载：
+
+1. 已保存 well-known 凭据对应的远端 `.well-known/opencorvus` 组织默认配置。
+2. executable 旁打包的 plugins。
+3. 解析后的全局用户配置目录中的权威 `opencorvus.jsonc`。
+4. `OPENCORVUS_CONFIG` 指向的显式文件。
+5. 精确的项目自有 `<project>/.opencorvus/opencorvus.jsonc`。
+6. OpenCorvus resource 目录：全局 config resources、项目 `.opencorvus/` resources，然后是 `OPENCORVUS_CONFIG_DIR`。祖先项目 resource 目录仍可提供 plugin 或 command，但绝不会加载第二份 config。
+7. `OPENCORVUS_CONFIG_CONTENT` 提供的内联 JSON。
+8. managed enterprise config 目录（若存在）。
+
+managed config 目录：macOS 为 `/Library/Application Support/opencorvus`，Windows 为 `%ProgramData%/opencorvus`，Linux 为 `/etc/opencorvus`。
+
+:::note
+环境变量由运行中的进程读取。`.env` 文件必须在启动 `opencorvus serve` 或 `opencorvus run` 前加载。
+:::
+
+## 热重载
+
+目前不支持 config 热重载。修改 config 文件或环境变量后，需要重启 `opencorvus serve`。

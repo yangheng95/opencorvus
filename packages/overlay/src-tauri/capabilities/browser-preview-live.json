@@ -1,0 +1,10 @@
+{
+  "identifier": "browser-preview-live",
+  "description": "Allow the browser-preview child webview (external sites) to report node selections back to the host over the built-in IPC bridge.",
+  "webviews": ["browser-preview-live-webview-*"],
+  "remote": {
+    "urls": ["http://*/*", "https://*/*", "http://*", "https://*"]
+  },
+  "local": true,
+  "permissions": ["core:default"]
+}

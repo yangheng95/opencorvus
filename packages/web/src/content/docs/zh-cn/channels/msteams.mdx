@@ -1,0 +1,30 @@
+---
+title: Microsoft Teams
+description: Teams 适配器走 Bot Framework Webhook 模式。
+---
+
+## 前置
+
+1. [Azure Portal](https://portal.azure.com/) → 创建 Bot Service（Azure Bot 资源）。
+2. 获取 **Microsoft App ID** 与 **Client Secret**（在"证书与密码"中生成）。
+3. 在 Teams 开发者中心（Developer Portal）创建 App manifest，绑定 Bot。
+4. Messaging endpoint：`https://<你的公网>/msteams`。
+
+## 环境变量
+
+```bash
+export MSTEAMS_APP_ID=...
+export MSTEAMS_APP_SECRET=...
+export MSTEAMS_WEBHOOK_HOST=0.0.0.0
+export MSTEAMS_WEBHOOK_PORT=16669
+export MSTEAMS_WEBHOOK_PATH=/msteams
+```
+
+## Thread 语义
+
+Teams 的 `conversation.id` 作为 thread key。回复到 Reply chain 时会保持在同一 thread。
+
+## 故障排查
+
+- **401 Unauthorized**：Azure App ID / Secret 与 manifest 不匹配。
+- **AccessDenied on tenant**：Bot 未被目标 Tenant 管理员批准侧载（sideload）。
