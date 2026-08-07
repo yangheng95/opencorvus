@@ -103,12 +103,20 @@ export function nativeBinaryBuildEnv(baseEnv: NodeJS.ProcessEnv, packageVersion:
   }
 }
 
-export function nativeBinaryBuildCommands(repoRoot: string): NativeBinaryBuildCommand[] {
+export function nativeBinaryBuildCommands(repoRoot: string, skipUi = false): NativeBinaryBuildCommand[] {
   return [
     {
       cwd: repoRoot,
       argv: ["bun", "packages/sdk/js/script/build.ts"],
     },
+    ...(skipUi
+      ? []
+      : [
+          {
+            cwd: path.join(repoRoot, "packages", "overlay"),
+            argv: ["bun", "run", "build:vite"],
+          },
+        ]),
     {
       cwd: path.join(repoRoot, "packages", "opencorvus"),
       argv: ["bun", "run", "script/build.ts", "--single", "--baseline", "--no-clean"],
@@ -124,25 +132,23 @@ async function readPackageVersion(repoRoot: string): Promise<string> {
   return manifest.version
 }
 
-async function buildOverlayUi(repoRoot: string, env: NodeJS.ProcessEnv): Promise<void> {
-  const overlayRoot = path.join(repoRoot, "packages", "overlay")
-  await $`bun run build:vite`.cwd(overlayRoot).env(env)
-  const index = path.join(overlayRoot, "dist-vite", "index.html")
-  if (!fs.existsSync(index)) throw new Error(`Missing built Overlay UI: ${index}`)
-}
-
-async function buildNativeCli(
+async function buildNativeSources(
   repoRoot: string,
   platform: NodeJS.Platform,
   arch: NodeJS.Architecture,
   env: NodeJS.ProcessEnv,
+  skipUi: boolean,
 ): Promise<void> {
   const packageRoot = path.join(repoRoot, "packages", "opencorvus")
   for (const outputName of nativeBinaryOutputNames(platform, arch)) {
     await fs.promises.rm(path.join(packageRoot, "dist", outputName), { recursive: true, force: true })
   }
-  for (const command of nativeBinaryBuildCommands(repoRoot)) {
+  for (const command of nativeBinaryBuildCommands(repoRoot, skipUi)) {
     await $`${command.argv}`.cwd(command.cwd).env(env)
+  }
+  if (!skipUi) {
+    const index = path.join(repoRoot, "packages", "overlay", "dist-vite", "index.html")
+    if (!fs.existsSync(index)) throw new Error(`Missing built Overlay UI: ${index}`)
   }
 }
 
@@ -286,8 +292,7 @@ export async function packageNativeBinary(
 
   const packageVersion = await readPackageVersion(repoRoot)
   const env = nativeBinaryBuildEnv(opts.env ?? process.env, packageVersion)
-  if (!opts.skipBuild && !opts.skipUi) await buildOverlayUi(repoRoot, env)
-  if (!opts.skipBuild) await buildNativeCli(repoRoot, platform, arch, env)
+  if (!opts.skipBuild) await buildNativeSources(repoRoot, platform, arch, env, opts.skipUi === true)
 
   const artifacts = resolveNativeBinaryArtifacts(repoRoot, platform, arch)
   for (const artifact of artifacts) {
