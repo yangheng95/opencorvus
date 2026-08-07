@@ -20,6 +20,7 @@ jobs:
     outputs:
       release: ${{ steps.meta.outputs.release }}
       version: ${{ steps.meta.outputs.version }}
+      prerelease: ${{ steps.meta.outputs.prerelease }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -44,8 +45,10 @@ jobs:
             VERSION="$(bun -e 'const pkg = await Bun.file("packages/opencorvus/package.json").json(); console.log(pkg.version)')"
             RELEASE=0
           fi
+          PRERELEASE="$(bun -e 'import { releaseVersionMetadata } from "./script/sync-version.ts"; console.log(releaseVersionMetadata(Bun.argv.at(-1)).prerelease)' "$VERSION")"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "release=$RELEASE" >> "$GITHUB_OUTPUT"
+          echo "prerelease=$PRERELEASE" >> "$GITHUB_OUTPUT"
 
       - name: Sync repo versions
         shell: bash
@@ -262,6 +265,7 @@ jobs:
           if ! gh release view "v${VERSION}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             gh release create "v${VERSION}" \
               --draft \
+              --prerelease="${{ needs.prepare.outputs.prerelease }}" \
               --title "v${VERSION}" \
               --generate-notes \
               --repo "$GITHUB_REPOSITORY"
@@ -282,4 +286,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ needs.prepare.outputs.version }}
-        run: gh release edit "v${VERSION}" --draft=false --repo "$GITHUB_REPOSITORY"
+          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
+        run: gh release edit "v${VERSION}" --draft=false --prerelease="${PRERELEASE}" --repo "$GITHUB_REPOSITORY"

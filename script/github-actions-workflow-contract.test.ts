@@ -12,6 +12,7 @@ type WorkflowStep = {
 
 type WorkflowJob = {
   needs?: string | string[]
+  outputs?: Record<string, string>
   strategy?: {
     matrix?: {
       include?: Array<{ runner: string; platform: string }>
@@ -85,5 +86,26 @@ describe("GitHub Actions workflow contract", () => {
     })
     expect(jobs["publish-release-assets"]?.needs).toEqual(["prepare", "package-overlay", "package-cli"])
     expect(jobs["publish-release"]?.needs).toEqual(["prepare", "publish-release-assets"])
+    expect(jobs.prepare?.outputs).toEqual({
+      release: "${{ steps.meta.outputs.release }}",
+      version: "${{ steps.meta.outputs.version }}",
+      prerelease: "${{ steps.meta.outputs.prerelease }}",
+    })
+    expect(jobs.prepare?.steps?.find(({ name }) => name === "Resolve version and release flag")?.run).toContain(
+      "releaseVersionMetadata(Bun.argv.at(-1)).prerelease",
+    )
+    expect(
+      jobs["publish-release-assets"]?.steps?.find(({ name }) => name === "Upload release assets to GitHub Release")
+        ?.run,
+    ).toContain('--prerelease="${{ needs.prepare.outputs.prerelease }}"')
+    expect(jobs["publish-release"]?.steps?.find(({ name }) => name === "Publish verified draft")).toEqual({
+      name: "Publish verified draft",
+      env: {
+        GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
+        VERSION: "${{ needs.prepare.outputs.version }}",
+        PRERELEASE: "${{ needs.prepare.outputs.prerelease }}",
+      },
+      run: 'gh release edit "v${VERSION}" --draft=false --prerelease="${PRERELEASE}" --repo "$GITHUB_REPOSITORY"',
+    })
   })
 })

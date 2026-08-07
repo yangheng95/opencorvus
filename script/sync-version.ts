@@ -4,7 +4,7 @@ import path from "path"
 
 const root = path.resolve(import.meta.dir, "..")
 const canonicalPackage = "packages/opencorvus/package.json"
-const semverPattern = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*)?$/
+const semverPattern = /^\d+\.\d+\.\d+(?:-([0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*))?$/
 const compactPrereleasePattern = /^(\d+\.\d+\.\d+)([A-Za-z][0-9A-Za-z]*(?:[.-][0-9A-Za-z]+)*)$/
 
 export const releasePackageTargets = [
@@ -61,6 +61,14 @@ export function normalizeReleaseVersion(input?: string) {
     throw new Error(`Invalid version: ${value}. Use x.y.z, x.y.z-tag, x.y.ztag, or the same value prefixed with v.`)
   }
   return version
+}
+
+export function releaseVersionMetadata(input?: string) {
+  const version = normalizeReleaseVersion(input)
+  if (!version) throw new Error("Release version is required")
+  const parsed = version.match(semverPattern)
+  if (!parsed) throw new Error(`Cannot derive release metadata from invalid version: ${version}`)
+  return { version, prerelease: parsed[1] !== undefined }
 }
 
 function absolute(relative: string) {
