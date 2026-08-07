@@ -78,8 +78,11 @@ export interface StreamActivityOptions {
  *
  * Pairs with `withStreamActivity` — the monitor's combined signal flips, this
  * wrapper guarantees the consumer's loop actually exits with the
- * AbortError. Cleans up the upstream iterator via `iter.return?.()` so
- * provider-side resources (response body, fetch socket) get released.
+ * AbortError. Requests upstream cleanup via `iter.return?.()` so
+ * provider-side resources (response body, fetch socket) can be released,
+ * but does not await that untrusted cleanup promise: some provider iterators
+ * park `return()` on the same network read as `next()`, and awaiting it would
+ * turn a completed cancellation back into an indefinitely pending one.
  */
 export async function* abortableIterable<T>(source: AsyncIterable<T>, signal: AbortSignal): AsyncGenerator<T> {
   const iter = source[Symbol.asyncIterator]()
@@ -101,7 +104,11 @@ export async function* abortableIterable<T>(source: AsyncIterable<T>, signal: Ab
     }
   } finally {
     try {
-      await iter.return?.()
+      const cleanup = iter.return?.()
+      if (cleanup) {
+        if (signal.aborted) void Promise.resolve(cleanup).catch(() => undefined)
+        else await cleanup
+      }
     } catch {
       /* upstream already torn down */
     }
