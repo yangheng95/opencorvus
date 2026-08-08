@@ -3,6 +3,7 @@ import { and, eq } from "drizzle-orm"
 import { realpath } from "node:fs/promises"
 import { Database } from "@/storage/db"
 import { Filesystem } from "@/util/filesystem"
+import { TASK_PROCESS_MODE_ENV } from "@/runtime/task-process-deployment"
 import {
   activeExecutionCapsuleRuntimeFact,
   ExecutionCapsuleRuntimeUnavailableError,
@@ -15,11 +16,6 @@ import { EngineArtifactTable, EngineTaskTable } from "./engine.sql"
 const SHA256 = z.string().regex(/^[a-f0-9]{64}$/)
 export const TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL = "task-execution-capsule-binding-v1" as const
 export const TASK_NATIVE_PROCESS_BINDING_PROTOCOL = "task-native-process-binding-v1" as const
-export const TASK_PROCESS_MODE_ENV = "OPENCORVUS_TASK_PROCESS_MODE" as const
-
-export function declareNativeTaskProcessDeployment(): void {
-  if (process.env[TASK_PROCESS_MODE_ENV] === undefined) process.env[TASK_PROCESS_MODE_ENV] = "native"
-}
 
 export function configuredTaskProcessMode(): "native" | "capsule" {
   const mode = process.env[TASK_PROCESS_MODE_ENV]

@@ -1,8 +1,6 @@
 import { installProcessShims } from "@/runtime/shims"
-import { declareNativeTaskProcessDeployment } from "@/engine/task-execution-capsule-binding"
 
 installProcessShims()
-declareNativeTaskProcessDeployment()
 
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"

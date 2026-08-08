@@ -4,7 +4,7 @@ import { createManagedTemporaryDirectory, removeManagedDirectoryTree } from "@op
 import { Instance } from "../../src/project/instance"
 import { Database } from "../../src/storage/db"
 import { hostGit as git } from "../../src/util/git"
-import { declareNativeTaskProcessDeployment } from "../../src/engine/task-execution-capsule-binding"
+import { declareNativeTaskProcessDeployment } from "../../src/runtime/task-process-deployment"
 
 async function runGit(directory: string, args: string[]) {
   const result = await git(args, { cwd: directory, timeoutProfile: "default" })

@@ -6,6 +6,7 @@
 // startup, Flag namespace, runtime context) stay in their original modules.
 
 import { SystemProxy } from "./system-proxy"
+import { declareNativeTaskProcessDeployment } from "./task-process-deployment"
 
 declare const OPENCORVUS_EMBEDDED_ENV: Record<string, string> | undefined
 
@@ -34,7 +35,11 @@ export function installProcessShims() {
     warn("apply embedded env", error)
   }
 
-  // 2. Restore original CWD if launched via the self-contained launcher
+  // 2. Declare the ordinary production deployment after embedded and external
+  //    environment values have had the opportunity to select Capsule mode.
+  declareNativeTaskProcessDeployment()
+
+  // 3. Restore original CWD if launched via the self-contained launcher
   //    (launcher.ts changes CWD to the binary's directory for native module resolution)
   if (process.env.OPENCORVUS_ORIGINAL_CWD) {
     try {
@@ -44,15 +49,15 @@ export function installProcessShims() {
     }
   }
 
-  // 3. Mark this process as an agent / opencorvus instance
+  // 4. Mark this process as an agent / opencorvus instance
   process.env.AGENT = "1"
   process.env.OPENCORVUS = "1"
 
-  // 4. Prevent ai-sdk from logging warnings to stdout
+  // 5. Prevent ai-sdk from logging warnings to stdout
   //    https://github.com/vercel/ai/blob/2dc67e0ef538307f21368db32d5a12345d98831b/packages/ai/src/logger/log-warnings.ts#L85
   muteAISdkWarnings()
 
-  // 5. Auto-detect the operating-system proxy before any network client or
+  // 6. Auto-detect the operating-system proxy before any network client or
   //    child process starts. Explicit env values remain authoritative.
   //    Bun's fetch only honors HTTP_PROXY / HTTPS_PROXY / NO_PROXY env vars
   //    and ignores the OS-level proxy configuration (Internet Options /
