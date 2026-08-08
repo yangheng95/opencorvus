@@ -192,6 +192,12 @@ export const EngineGitProcess = {
       inRepository(repository),
     )
   },
+  sourceSnapshotPaths(cwd: string) {
+    return execute(
+      ["ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", "."],
+      { cwd },
+    )
+  },
   stageEntries(repository: EngineGitRepository) {
     return execute(["ls-files", "--stage", "-z", "--", "."], inRepository(repository))
   },
