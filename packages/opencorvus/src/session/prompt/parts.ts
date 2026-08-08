@@ -32,7 +32,10 @@ import { resolveSessionMessageIdentity } from "../message-identity"
 import type { SessionMessageIdentity } from "../message-identity"
 import type { SessionControl } from "../control"
 import { SessionRuntimeContractStore } from "../runtime-contract"
-import { resolveSessionExecutionAuthority } from "@/engine/task-session-lineage"
+import {
+  resolveSessionExecutionAuthority,
+  type SessionExecutionAuthority,
+} from "@/engine/task-session-lineage"
 
 const log = Log.create({ service: "session.prompt" })
 
@@ -105,6 +108,7 @@ export async function resolvePromptParts(
 export type UserMessagePersistenceHooks = {
   controls?: (message: Message.User) => SessionControl.CreateInput[]
   prepared?: PreparedUserMessage
+  executionAuthority?: SessionExecutionAuthority
   commitBundle?: (message: Message.User, parts: Message.Part[]) => void
 }
 
@@ -351,21 +355,40 @@ export function consumePreparedUserMessageRuntimeClaim(
 
 export async function materializeUserMessage(
   input: PromptInput,
-  persistence: Pick<UserMessagePersistenceHooks, "prepared"> = {},
+  persistence: Pick<UserMessagePersistenceHooks, "prepared" | "executionAuthority"> = {},
 ): Promise<MaterializedUserMessage> {
   const prepared = consumePreparedUserMessage(input, persistence.prepared ?? (await prepareUserMessage(input)))
   const { config, identity } = prepared
   const { agentID, runtime: agent } = identity
   const { model, variant } = prepared
   const runtimeContract = preparedRuntimeContracts.get(prepared)
+  const suppliedExecutionAuthority = persistence.executionAuthority
+  if (
+    suppliedExecutionAuthority &&
+    (suppliedExecutionAuthority.sessionID !== input.sessionID ||
+      suppliedExecutionAuthority.projectID !== Instance.project.id ||
+      path.resolve(suppliedExecutionAuthority.rootDirectory) !== path.resolve(Instance.directory))
+  ) {
+    throw new Error(`User message execution authority does not match prompt occurrence ${input.sessionID}`)
+  }
+  if (
+    suppliedExecutionAuthority?.kind === "task" &&
+    runtimeContract?.identity.taskID &&
+    suppliedExecutionAuthority.taskID !== runtimeContract.identity.taskID
+  ) {
+    throw new Error(`User message execution authority does not match runtime Task ${runtimeContract.identity.taskID}`)
+  }
   const executionAuthority = await resolveSessionExecutionAuthority({
-    sessionID: input.sessionID,
-    projectID: Instance.project.id,
-    rootDirectory: Instance.directory,
-    expected: runtimeContract?.identity.taskID
-      ? { kind: "task", taskID: runtimeContract.identity.taskID }
-      : { kind: "conversation" },
-  })
+      sessionID: input.sessionID,
+      projectID: Instance.project.id,
+      rootDirectory: Instance.directory,
+      expected:
+        suppliedExecutionAuthority?.kind === "task"
+          ? { kind: "task", taskID: suppliedExecutionAuthority.taskID }
+          : runtimeContract?.identity.taskID
+            ? { kind: "task", taskID: runtimeContract.identity.taskID }
+            : { kind: "conversation" },
+    })
   const lspProcessAuthority = executionAuthority.kind === "task"
     ? { kind: "task" as const, taskID: executionAuthority.taskID, cwd: executionAuthority.rootDirectory }
     : { kind: "host" as const, cwd: executionAuthority.rootDirectory }

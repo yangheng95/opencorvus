@@ -2,8 +2,15 @@ import { afterAll, describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { resolveSessionExecutionAuthority } from "../src/engine/task-session-lineage"
+import { persistQueuedTask } from "../src/engine/pipeline"
+import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
+import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
+import { Config } from "../src/config/config"
+import { PrimaryAssistantRegistry } from "../src/agent/primary-assistant-registry"
+import { sessionRuntimeFromNativeAgent } from "../src/agent/session-agent-runtime"
+import { materializeUserMessage, preparedUserMessageFromPreflight } from "../src/session/prompt/parts"
 import { BashTool } from "../src/tool/bash"
 import { GlobTool } from "../src/tool/glob"
 import { SearchCodeTool } from "../src/tool/grep"
@@ -19,6 +26,112 @@ afterAll(async () => {
 })
 
 describe("conversation Tool execution authority", () => {
+  test("materializes a Task-owned worker bootstrap message with its verified occurrence authority", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const taskSession = await Session.create({ kind: "root", title: "Task authority bootstrap root" })
+        const workerSession = await Session.create({
+          kind: "assistant",
+          title: "Task authority bootstrap worker",
+          parentID: taskSession.id,
+        })
+        const taskID = Identifier.ascending("task")
+        const packageRevision = {
+          scope: "built_in" as const,
+          projectID: null,
+          namespace: "builtin",
+          id: "base",
+          version: "2026.08.08.1",
+          packageDigest: "b".repeat(64),
+        }
+        const now = Date.now()
+        persistQueuedTask({
+          taskID,
+          sessionID: taskSession.id,
+          now,
+          title: "Task authority bootstrap",
+          request: "Materialize the exact Task-owned worker input",
+          productPillar: "code",
+          metadata: {},
+          projectID: Instance.project.id,
+          queue: false,
+          packageRevision,
+          executionCapsuleBinding: await prepareTaskProcessBinding({
+            mode: "native",
+            taskID,
+            projectID: Instance.project.id,
+            rootDirectory: project.path,
+            packageRevisionSHA256: packageRevision.packageDigest,
+            timeCreated: now,
+          }),
+        })
+        const prompt = {
+          sessionID: workerSession.id,
+          messageID: Identifier.ascending("message"),
+          author: "orchestrator",
+          agent: "coding",
+          model: { providerID: "test", modelID: "task-bootstrap-model" },
+          parts: [{ type: "text" as const, text: "Materialize the Task-owned bootstrap occurrence." }],
+        }
+        const config = await Config.get()
+        const runtime = sessionRuntimeFromNativeAgent(await PrimaryAssistantRegistry.get("coding", { config }))
+        const prepared = preparedUserMessageFromPreflight({
+          prompt,
+          config,
+          session: workerSession,
+          identity: { agentID: "coding", baseRole: "coding", runtime },
+          modelPreflight: { model: prompt.model },
+        })
+        const executionAuthority = await resolveSessionExecutionAuthority({
+          sessionID: workerSession.id,
+          projectID: Instance.project.id,
+          rootDirectory: project.path,
+          expected: { kind: "task", taskID },
+        })
+        const materialized = await materializeUserMessage(prompt, { prepared, executionAuthority })
+
+        expect({
+          authority: executionAuthority,
+          message: {
+            id: materialized.info.id,
+            sessionID: materialized.info.sessionID,
+            author: materialized.info.author,
+            agent: materialized.info.agent,
+          },
+          parts: materialized.parts.map((part) =>
+            part.type === "text"
+              ? { type: part.type, text: part.text, sessionID: part.sessionID, messageID: part.messageID }
+              : { type: part.type },
+          ),
+        }).toEqual({
+          authority: {
+            kind: "task",
+            sessionID: workerSession.id,
+            projectID: Instance.project.id,
+            taskID,
+            rootDirectory: project.path,
+          },
+          message: {
+            id: prompt.messageID,
+            sessionID: workerSession.id,
+            author: "orchestrator",
+            agent: "coding",
+          },
+          parts: [
+            {
+              type: "text",
+              text: "Materialize the Task-owned bootstrap occurrence.",
+              sessionID: workerSession.id,
+              messageID: prompt.messageID,
+            },
+          ],
+        })
+      },
+    })
+  })
+
   test("executes project file, search, process, and network effects without an engine Task", async () => {
     await using project = await memoryProject()
     await Instance.provide({

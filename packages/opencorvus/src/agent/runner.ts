@@ -122,6 +122,7 @@ import { Database } from "@/storage/db"
 import { findAgentCoordinationRequest } from "@/engine/agent-coordination"
 import { coordinationHandoffPrompt } from "@/prompt/fragments/coordination-handoff"
 import { requireTask } from "@/engine/store"
+import { resolveSessionExecutionAuthority } from "@/engine/task-session-lineage"
 import {
   DispatchTurnSchema,
   controlTextSHA256,
@@ -1398,7 +1399,16 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
       }
       try {
         authorityBundle = await (async () => {
-          const materialized = await materializeUserMessage(promptArgs, { prepared: materializationPrepared })
+          const materializationExecutionAuthority = await resolveSessionExecutionAuthority({
+            sessionID: session.id,
+            projectID: Instance.project.id,
+            rootDirectory: Instance.directory,
+            expected: { kind: "task", taskID: input.taskID },
+          })
+          const materialized = await materializeUserMessage(promptArgs, {
+            prepared: materializationPrepared,
+            executionAuthority: materializationExecutionAuthority,
+          })
           const expectedVariant = modelPreflight.variant
           if (
             materialized.info.role !== "user" ||
