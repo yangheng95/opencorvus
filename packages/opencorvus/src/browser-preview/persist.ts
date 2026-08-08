@@ -2,9 +2,10 @@ import { and, desc, eq } from "drizzle-orm"
 import fs from "node:fs/promises"
 import path from "node:path"
 import z from "zod"
-import { EngineArtifactTable } from "@/engine/engine.sql"
+import { EngineArtifactTable, EngineBrowserPreviewTargetIdentityTable } from "@/engine/engine.sql"
 import {
   insertEngineArtifact,
+  patchEngineArtifact,
   recordEngineArtifact,
   updateEngineArtifact,
   type EngineArtifactRow,
@@ -28,6 +29,7 @@ import {
   type BrowserPreviewCropIntent as BrowserPreviewCropIntentValue,
 } from "./region-schema"
 import { BrowserPreviewViewportList, normalizeBrowserPreviewViewports, type BrowserPreviewViewport } from "./viewport"
+import { canonicalBrowserPreviewUrl } from "./url-identity"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { TaskArtifactRefSchema, type TaskArtifactRef } from "@opencorvus-ai/plugin/task-artifact"
 import { EngineArtifactEnvelopeSchema } from "@opencorvus-ai/plugin/artifact-catalog"
@@ -403,54 +405,57 @@ export function persistBrowserPreviewTarget(input: {
   viewports: readonly BrowserPreviewViewport[]
   now?: number
 }): Promise<PersistedBrowserPreviewTarget> {
+  const canonicalUrl = canonicalBrowserPreviewUrl(input.url)
+  if (!canonicalUrl) throw new Error(`Invalid Browser Preview URL: ${input.url}`)
   const viewports = normalizeBrowserPreviewViewports(input.viewports)
-  const existing = findBrowserPreviewTargetByUrl(input)
-  const now = Math.max(input.now ?? Date.now(), existing ? existing.timeUpdated + 1 : 0)
-  const payload = {
-    url: input.url,
-    source: "engine-artifact" as const,
-    viewports,
-  }
-  if (existing) {
-    updateEngineArtifact({
-      id: existing.id,
+  const persisted = Database.transaction((db) => {
+    const existing = db
+      .select({ artifact: EngineArtifactTable })
+      .from(EngineBrowserPreviewTargetIdentityTable)
+      .innerJoin(EngineArtifactTable, eq(EngineBrowserPreviewTargetIdentityTable.artifact_id, EngineArtifactTable.id))
+      .where(
+        and(
+          eq(EngineBrowserPreviewTargetIdentityTable.task_id, input.taskID),
+          eq(EngineBrowserPreviewTargetIdentityTable.canonical_url, canonicalUrl),
+        ),
+      )
+      .get()?.artifact
+    const now = Math.max(input.now ?? Date.now(), existing ? existing.time_updated + 1 : 0)
+    const payload = { url: canonicalUrl, source: "engine-artifact" as const, viewports }
+    if (existing) {
+      patchEngineArtifact(db, { id: existing.id, label: "BrowserPreviewTarget", payload, timeUpdated: now })
+      return {
+        id: existing.id,
+        taskID: existing.task_id,
+        url: canonicalUrl,
+        source: "engine-artifact" as const,
+        viewports,
+        timeCreated: existing.time_created,
+        timeUpdated: now,
+      }
+    }
+    const id = Identifier.ascending("artifact")
+    insertEngineArtifact(db, {
+      id,
+      taskID: input.taskID,
+      kind: BROWSER_PREVIEW_TARGET_KIND,
       label: "BrowserPreviewTarget",
       payload,
-      timeUpdated: now,
+      timeCreated: now,
     })
-    const persisted: PersistedBrowserPreviewTarget = {
-      ...existing,
+    db.insert(EngineBrowserPreviewTargetIdentityTable)
+      .values({ task_id: input.taskID, canonical_url: canonicalUrl, artifact_id: id })
+      .run()
+    return {
+      id,
+      taskID: input.taskID,
+      url: canonicalUrl,
+      source: "engine-artifact" as const,
       viewports,
+      timeCreated: now,
       timeUpdated: now,
     }
-    return EngineProtocol.emit(
-      Event.TaskUpdated,
-      {
-        taskID: input.taskID,
-        status: deriveTaskStatus(requireTask(input.taskID)),
-        summary: "Browser preview target updated",
-      },
-      { source: "browser-preview.target" },
-    ).then(() => persisted)
-  }
-  const id = Identifier.ascending("artifact")
-  recordEngineArtifact({
-    id,
-    taskID: input.taskID,
-    kind: BROWSER_PREVIEW_TARGET_KIND,
-    label: "BrowserPreviewTarget",
-    payload,
-    timeCreated: now,
   })
-  const persisted: PersistedBrowserPreviewTarget = {
-    id,
-    taskID: input.taskID,
-    url: input.url,
-    source: "engine-artifact",
-    viewports,
-    timeCreated: now,
-    timeUpdated: now,
-  }
   return EngineProtocol.emit(
     Event.TaskUpdated,
     {
@@ -493,25 +498,21 @@ export function promoteBrowserPreviewTarget(input: {
 export function findRecentBrowserPreviewTargets(taskID: string, limit = 12): PersistedBrowserPreviewTarget[] {
   const rows = Database.use((db) =>
     db
-      .select()
-      .from(EngineArtifactTable)
-      .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, BROWSER_PREVIEW_TARGET_KIND)))
+      .select({ artifact: EngineArtifactTable })
+      .from(EngineBrowserPreviewTargetIdentityTable)
+      .innerJoin(EngineArtifactTable, eq(EngineBrowserPreviewTargetIdentityTable.artifact_id, EngineArtifactTable.id))
+      .where(eq(EngineBrowserPreviewTargetIdentityTable.task_id, taskID))
       .orderBy(
         desc(EngineArtifactTable.time_updated),
         desc(EngineArtifactTable.time_created),
         desc(EngineArtifactTable.id),
       )
-      .limit(Math.max(limit * 3, limit))
+      .limit(limit)
       .all(),
   )
-  const seen = new Set<string>()
-  const targets: PersistedBrowserPreviewTarget[] = []
-  for (const row of rows) {
+  return rows.map(({ artifact: row }) => {
     const payload = parseBrowserPreviewTargetPayload(row)
-    const key = payload.url.toLowerCase()
-    if (seen.has(key)) continue
-    seen.add(key)
-    targets.push({
+    return {
       id: row.id,
       taskID: row.task_id,
       url: payload.url,
@@ -519,10 +520,8 @@ export function findRecentBrowserPreviewTargets(taskID: string, limit = 12): Per
       viewports: payload.viewports,
       timeCreated: row.time_created,
       timeUpdated: row.time_updated,
-    })
-    if (targets.length >= limit) break
-  }
-  return targets
+    }
+  })
 }
 
 export function findBrowserPreviewTargetByID(input: {
@@ -554,41 +553,6 @@ export function findBrowserPreviewTargetByID(input: {
     timeCreated: row.time_created,
     timeUpdated: row.time_updated,
   }
-}
-
-function findBrowserPreviewTargetByUrl(input: {
-  taskID: string
-  url: string
-}): PersistedBrowserPreviewTarget | undefined {
-  const rows = Database.use((db) =>
-    db
-      .select()
-      .from(EngineArtifactTable)
-      .where(
-        and(eq(EngineArtifactTable.task_id, input.taskID), eq(EngineArtifactTable.kind, BROWSER_PREVIEW_TARGET_KIND)),
-      )
-      .orderBy(
-        desc(EngineArtifactTable.time_updated),
-        desc(EngineArtifactTable.time_created),
-        desc(EngineArtifactTable.id),
-      )
-      .limit(30)
-      .all(),
-  )
-  for (const row of rows) {
-    const payload = parseBrowserPreviewTargetPayload(row)
-    if (payload.url !== input.url) continue
-    return {
-      id: row.id,
-      taskID: row.task_id,
-      url: payload.url,
-      source: payload.source,
-      viewports: payload.viewports,
-      timeCreated: row.time_created,
-      timeUpdated: row.time_updated,
-    }
-  }
-  return undefined
 }
 
 function browserPreviewEvidenceCorruption(

@@ -331,6 +331,25 @@ export const EngineArtifactTable = sqliteTable(
   ],
 )
 
+/** Durable one-row authority for each Task + canonical Browser Preview URL.
+ * The primary key is the concurrency boundary for update-or-insert writers. */
+export const EngineBrowserPreviewTargetIdentityTable = sqliteTable(
+  "engine_browser_preview_target_identity",
+  {
+    task_id: text()
+      .notNull()
+      .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+    canonical_url: text().notNull(),
+    artifact_id: text()
+      .notNull()
+      .references(() => EngineArtifactTable.id, { onDelete: "cascade" }),
+  },
+  (table) => [
+    primaryKey({ columns: [table.task_id, table.canonical_url] }),
+    uniqueIndex("engine_browser_preview_target_identity_artifact_idx").on(table.artifact_id),
+  ],
+)
+
 /**
  * Prior Engine Artifact versions. The current table and this history table
  * form one partition: a version is present in exactly one of them. Retaining

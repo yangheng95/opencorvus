@@ -6,9 +6,9 @@ import { waitForBrowserPreviewUrlReachable } from "@/browser-preview/liveness"
 import { browserPreviewTaskEvidenceRoot } from "@/browser-preview/task-evidence-root"
 import {
   missingBrowserPreviewTarget,
-  normalizeBrowserPreviewUrl,
   resolveBrowserPreviewTarget,
 } from "@/browser-preview/target"
+import { canonicalBrowserPreviewUrl } from "@/browser-preview/url-identity"
 import { BrowserPreviewViewport, normalizeBrowserPreviewViewports } from "@/browser-preview/viewport"
 import {
   readTaskProcessBinding,
@@ -89,7 +89,7 @@ export const BrowserPreviewTool = Tool.define(BrowserPreviewToolID, async (initC
       const workdir = params.workdir ?? defaultWorkdir
       const viewports = normalizeBrowserPreviewViewports(params.viewports)
 
-      const explicitUrl = normalizeBrowserPreviewUrl(params.url)
+      const explicitUrl = canonicalBrowserPreviewUrl(params.url)
       if (params.url && !explicitUrl) {
         throw new Error(`Invalid browser preview URL: ${params.url}`)
       }

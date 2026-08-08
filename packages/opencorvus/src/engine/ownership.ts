@@ -4,6 +4,8 @@ import fs from "fs/promises"
 import path from "path"
 import { Log } from "@/util/log"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
+import { Filesystem } from "@/util/filesystem"
+import { Identifier } from "@/id/id"
 
 const log = Log.create({ service: "ownership" })
 
@@ -74,7 +76,7 @@ export namespace Ownership {
       .slice(0, 120)
   }
 
-  function workerMarkerFilename(worktreeDir: string): string {
+  function workerMarkerFilename(worktreeDir: string, sessionID: string): string {
     // Add the last 8 chars of a simple hash for uniqueness when two
     // different absolute paths share a basename (e.g. worktrees with the
     // same branch-derived name in different project roots).
@@ -84,7 +86,7 @@ export namespace Ownership {
       hash = (hash * 31 + worktreeDir.charCodeAt(i)) | 0
     }
     const suffix = (hash >>> 0).toString(16).padStart(8, "0").slice(-8)
-    return `${base || "worktree"}-${suffix}${MARKER_SUFFIX}`
+    return `${base || "worktree"}-${suffix}-${Identifier.directoryKey(sessionID)}${MARKER_SUFFIX}`
   }
 
   /**
@@ -107,30 +109,17 @@ export namespace Ownership {
   }
 
   async function ensureDir(dir: string): Promise<void> {
-    await fs.mkdir(dir, { recursive: true }).catch((err) => {
-      log.warn("failed to create ownership dir", { dir, error: String(err) })
-    })
+    await fs.mkdir(dir, { recursive: true })
   }
 
   async function writeMarker(filePath: string, marker: Marker): Promise<void> {
     await ensureDir(path.dirname(filePath))
     const body = JSON.stringify(marker, null, 2) + "\n"
-    await fs.writeFile(filePath, body, { encoding: "utf8" }).catch((err) => {
-      log.warn("failed to write ownership marker", {
-        filePath,
-        error: String(err),
-        taskID: marker.taskID,
-      })
-    })
+    await Filesystem.writeAtomic(filePath, body, 0o600)
   }
 
   async function deleteMarker(filePath: string): Promise<void> {
-    await fs.rm(filePath, { force: true }).catch((err) => {
-      log.warn("failed to remove ownership marker", {
-        filePath,
-        error: String(err),
-      })
-    })
+    await fs.rm(filePath, { force: true })
   }
 
   async function listMarkers(dir: string): Promise<Array<{ markerPath: string; marker: Marker | undefined }>> {
@@ -218,27 +207,97 @@ export namespace Ownership {
       }
       const filePath = path.join(
         worktreeMarkerDir(input.primaryWorktreeDir, marker),
-        workerMarkerFilename(input.worktreeDir),
+        workerMarkerFilename(input.worktreeDir, input.sessionID),
       )
       await writeMarker(filePath, marker)
       return filePath
     }
 
-    export async function clear(input: { primaryWorktreeDir: string; worktreeDir: string }): Promise<void> {
-      const filename = workerMarkerFilename(input.worktreeDir)
-      const markerPaths = (await listMarkersInDirs(worktreeMarkerScanDirs(input.primaryWorktreeDir)))
-        .map((entry) => entry.markerPath)
-        .filter((markerPath) => path.basename(markerPath) === filename)
-      if (markerPaths.length === 0) {
-        await deleteMarker(path.join(worktreeMarkerDir(input.primaryWorktreeDir), filename))
-        return
+    export async function releaseOwner(input: {
+      primaryWorktreeDir: string
+      worktreeDir: string
+      taskID: string
+      sessionID: string
+    }): Promise<void> {
+      const target = Filesystem.normalizePath(path.resolve(input.worktreeDir))
+      for (const { markerPath, marker } of await list(input.primaryWorktreeDir)) {
+        if (
+          marker.taskID === input.taskID &&
+          marker.sessionID === input.sessionID &&
+          Filesystem.normalizePath(path.resolve(marker.cwd)) === target
+        ) {
+          await deleteMarker(markerPath)
+        }
       }
-      for (const filePath of markerPaths) await deleteMarker(filePath)
+    }
+
+    export async function releaseSessionOwner(input: {
+      primaryWorktreeDir: string
+      worktreeDir: string
+      sessionID: string
+    }): Promise<void> {
+      const target = Filesystem.normalizePath(path.resolve(input.worktreeDir))
+      for (const { markerPath, marker } of await list(input.primaryWorktreeDir)) {
+        if (
+          marker.sessionID === input.sessionID &&
+          Filesystem.normalizePath(path.resolve(marker.cwd)) === target
+        ) {
+          await releaseOwner({
+            primaryWorktreeDir: input.primaryWorktreeDir,
+            worktreeDir: marker.cwd,
+            taskID: marker.taskID,
+            sessionID: marker.sessionID,
+          })
+        }
+      }
+    }
+
+    export async function releaseTaskOwners(input: { primaryWorktreeDir: string; taskID: string }): Promise<void> {
+      for (const { marker } of await list(input.primaryWorktreeDir)) {
+        if (marker.taskID !== input.taskID) continue
+        await releaseOwner({
+          primaryWorktreeDir: input.primaryWorktreeDir,
+          worktreeDir: marker.cwd,
+          taskID: marker.taskID,
+          sessionID: marker.sessionID,
+        })
+      }
+    }
+
+    export async function releaseDirectoryOwners(input: {
+      primaryWorktreeDir: string
+      worktreeDir: string
+    }): Promise<void> {
+      const target = Filesystem.normalizePath(path.resolve(input.worktreeDir))
+      for (const { marker } of await list(input.primaryWorktreeDir)) {
+        if (Filesystem.normalizePath(path.resolve(marker.cwd)) !== target) continue
+        await releaseOwner({
+          primaryWorktreeDir: input.primaryWorktreeDir,
+          worktreeDir: marker.cwd,
+          taskID: marker.taskID,
+          sessionID: marker.sessionID,
+        })
+      }
     }
 
     export async function list(primaryWorktreeDir: string): Promise<Array<{ markerPath: string; marker: Marker }>> {
       const raw = await listMarkersInDirs(worktreeMarkerScanDirs(primaryWorktreeDir))
       return raw.filter((r): r is { markerPath: string; marker: Marker } => !!r.marker && r.marker.kind === "worktree")
+    }
+
+    export async function hasLiveOwner(input: {
+      primaryWorktreeDir: string
+      worktreeDir: string
+      isOwnerPidAlive?: (pid: number) => boolean
+      isTaskOwner?: (taskID: string) => boolean
+    }): Promise<boolean> {
+      const target = Filesystem.normalizePath(path.resolve(input.worktreeDir))
+      const alive = input.isOwnerPidAlive ?? isPidAlive
+      for (const { marker } of await list(input.primaryWorktreeDir)) {
+        if (Filesystem.normalizePath(path.resolve(marker.cwd)) !== target) continue
+        if (alive(marker.ownerPid) && (input.isTaskOwner?.(marker.taskID) ?? true)) return true
+      }
+      return false
     }
 
     /**
@@ -286,6 +345,36 @@ export namespace Ownership {
         }
       }
       return out
+    }
+
+    export async function reconcileOrphans(input: {
+      primaryWorktreeDir: string
+      isPidAlive?: (pid: number) => boolean
+      canReleaseDeadOwner(taskID: string): boolean
+    }): Promise<{ released: number; preserved: number }> {
+      const orphans = await Worktree.orphans({
+        primaryWorktreeDir: input.primaryWorktreeDir,
+        isPidAlive: input.isPidAlive,
+      })
+      let released = 0
+      let preserved = 0
+      for (const orphan of orphans) {
+        const releasable =
+          orphan.reason === "target-missing" ||
+          (orphan.reason === "owner-process-dead" && input.canReleaseDeadOwner(orphan.marker.taskID))
+        if (!releasable) {
+          preserved += 1
+          continue
+        }
+        await releaseOwner({
+          primaryWorktreeDir: input.primaryWorktreeDir,
+          worktreeDir: orphan.marker.cwd,
+          taskID: orphan.marker.taskID,
+          sessionID: orphan.marker.sessionID,
+        })
+        released += 1
+      }
+      return { released, preserved }
     }
   }
 }

@@ -192,6 +192,10 @@ export namespace AutomationService {
 
   export function listRuns(id: string): AutomationRunView[] {
     assertPublicAutomation(id)
+    return listRunsForAutomation(id)
+  }
+
+  function listRunsForAutomation(id: string, fireID?: string): AutomationRunView[] {
     return Database.use((db) =>
       db
         .select({
@@ -212,7 +216,11 @@ export namespace AutomationService {
         })
         .from(AutomationRunTable)
         .leftJoin(SessionTable, eq(SessionTable.id, AutomationRunTable.session_id))
-        .where(eq(AutomationRunTable.automation_id, id))
+        .where(
+          fireID
+            ? and(eq(AutomationRunTable.automation_id, id), eq(AutomationRunTable.fire_id, fireID))
+            : eq(AutomationRunTable.automation_id, id),
+        )
         .orderBy(desc(AutomationRunTable.started_at), desc(AutomationRunTable.id))
         .all(),
     ).map((row) => ({
@@ -438,6 +446,18 @@ export namespace AutomationService {
   }
 
   export async function runNow(id: string): Promise<AutomationRunView[]> {
+    return runNowWithExecutor(id, execute)
+  }
+
+  async function runNowWithExecutor(
+    id: string,
+    executeFire: (
+      job: typeof AutomationTable.$inferSelect,
+      owner: string,
+      now: number,
+      reschedule: boolean,
+    ) => Promise<string>,
+  ): Promise<AutomationRunView[]> {
     const automation = assertPublicAutomation(id)
     if (
       automation.scope === "session" &&
@@ -469,21 +489,17 @@ export namespace AutomationService {
         automationID: id,
       })
     }
-    await execute(row, owner, now, false).catch(async (error) => {
+    const fireID = await executeFire(row, owner, now, false).catch(async (error) => {
       await fail(row, owner, error)
       throw error
     })
-    const fireID = Database.use((db) =>
-      db
-        .select({ fireID: AutomationRunTable.fire_id })
-        .from(AutomationRunTable)
-        .where(eq(AutomationRunTable.automation_id, id))
-        .orderBy(desc(AutomationRunTable.started_at), desc(AutomationRunTable.id))
-        .get(),
-    )?.fireID
-    const runs = listRuns(id).filter((run) => run.fireId === fireID)
+    const runs = listRunsForAutomation(id, fireID)
     if (runs.length === 0) throw new Error(`Automation ${id} completed without run records`)
     return runs
+  }
+
+  export const TestHooks = {
+    runNowWithExecutor,
   }
 
   function assertPublicAutomation(id: string) {
@@ -1122,7 +1138,7 @@ export namespace AutomationService {
     owner: string,
     now: number,
     reschedule: boolean,
-  ): Promise<void> {
+  ): Promise<string> {
     const fireID = Identifier.ascending("call")
     log.info("executing automation", { jobId: job.id, fireID, name: job.name, prompt: job.prompt.slice(0, 100) })
 
@@ -1159,7 +1175,7 @@ export namespace AutomationService {
         ...outcome,
         nextRun: "completed",
       })
-      return
+      return fireID
     }
 
     if (!job.recurrence) throw new Error(`Automation ${job.id} has no recurrence rule`)
@@ -1255,6 +1271,7 @@ export namespace AutomationService {
       failures: failures.length,
       nextRun: new Date(nextRun).toISOString(),
     })
+    return fireID
   }
 
   type ExecutionTarget = {

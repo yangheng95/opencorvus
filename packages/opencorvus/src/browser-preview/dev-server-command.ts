@@ -1,4 +1,4 @@
-import { normalizeBrowserPreviewUrl } from "./target"
+import { canonicalBrowserPreviewUrl } from "./url-identity"
 
 const FRONTEND_PACKAGE_MANAGERS = new Set(["npm", "pnpm", "bun", "yarn"])
 const FRONTEND_EXEC_COMMANDS = new Set(["npx", "bunx"])
@@ -68,11 +68,10 @@ export function deriveBrowserPreviewUrlsFromDevServerCommand(command: string): s
     const port = optionValue(tokens, ["--port", "-p"])
     if (!port || !validPort(port)) continue
     const host = browserReachableHost(optionValue(tokens, ["--host", "-H"]))
-    const normalized = normalizeBrowserPreviewUrl(`${host}:${port}`)
+    const normalized = canonicalBrowserPreviewUrl(`${host}:${port}`)
     if (!normalized) continue
-    const key = normalized.toLowerCase()
-    if (seen.has(key)) continue
-    seen.add(key)
+    if (seen.has(normalized)) continue
+    seen.add(normalized)
     urls.push(normalized)
   }
   return urls

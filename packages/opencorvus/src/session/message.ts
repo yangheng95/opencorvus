@@ -352,10 +352,22 @@ export namespace Message {
   })
   export type StepFinishPart = z.infer<typeof StepFinishPart>
 
+  /** JSON (JavaScript Object Notation) is the persisted Tool input value
+   * domain. Sharing this schema with every Tool state makes compaction a total
+   * projection over exactly the values that can be stored. */
+  const PersistedJSONValue = z.json()
+  // An empty OpenAPI schema is the complete JSON wire-value domain. Keep the
+  // recursive runtime validation in Zod without exporting its local $defs.
+  export const ToolInput: z.ZodType<unknown> = z.unknown().superRefine((value, context) => {
+    if (PersistedJSONValue.safeParse(value).success) return
+    context.addIssue({ code: "custom", message: "Expected a JSON value" })
+  })
+  export type ToolInput = z.infer<typeof ToolInput>
+
   export const ToolStatePending = z
     .object({
       status: z.literal("pending"),
-      input: z.unknown(),
+      input: ToolInput,
       raw: z.string(),
       time: z.object({
         start: z.number(),
@@ -370,7 +382,7 @@ export namespace Message {
   export const ToolStateRunning = z
     .object({
       status: z.literal("running"),
-      input: z.unknown(),
+      input: ToolInput,
       title: z.string().optional(),
       metadata: z.record(z.string(), z.any()).optional(),
       time: z.object({
@@ -385,7 +397,7 @@ export namespace Message {
   export const ToolStateCompleted = z
     .object({
       status: z.literal("completed"),
-      input: z.unknown(),
+      input: ToolInput,
       output: z.string(),
       title: z.string(),
       metadata: z.record(z.string(), z.any()),
@@ -408,7 +420,7 @@ export namespace Message {
   export const ToolStateError = z
     .object({
       status: z.literal("error"),
-      input: z.unknown(),
+      input: ToolInput,
       failure: ToolFailureCause,
       metadata: z.record(z.string(), z.any()).optional(),
       time: z.object({

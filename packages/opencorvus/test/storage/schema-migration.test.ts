@@ -13,7 +13,7 @@ import {
 } from "../../src/storage/schema-migration"
 
 const PREDECESSOR_FINGERPRINT = "05480e3d530365e768b00218f24c4a8d7bb281538315b600dd70827c90e33212"
-const CURRENT_FINGERPRINT = "b8d6df10b9f174560b1ee2c90b10b87e039ef375c61b0ccdc8463d9d6c7ed9fd"
+const CURRENT_FINGERPRINT = "43fb9964d9a3b2bc3d5b17af539bf441d31d0aba1d7eab2a4b8e8c67a88150ea"
 
 const legacyMemoryFileDDL = /* sql */ `CREATE TABLE "memory_file" (
   "id" text PRIMARY KEY NOT NULL,
@@ -53,7 +53,7 @@ async function temporaryDatabasePath() {
   return path.join(directory, "opencorvus.db")
 }
 
-function requiredSchemaSQL(sqlite: BunDatabase, type: "table" | "index", name: string) {
+function requiredSchemaSQL(sqlite: BunDatabase, type: "table" | "index" | "trigger", name: string) {
   const row = sqlite
     .query<{ sql: string | null }, [string, string]>("SELECT sql FROM sqlite_schema WHERE type = ? AND name = ?")
     .get(type, name)
@@ -70,6 +70,7 @@ function createPredecessorDatabase(databasePath: string, input: { scratchpadCont
   const memoryChunkProjectIndex = requiredSchemaSQL(sqlite, "index", "memory_chunk_project_idx")
 
   sqlite.run("PRAGMA foreign_keys = OFF")
+  sqlite.run('DROP TABLE "engine_browser_preview_target_identity"')
   sqlite.run('DROP TABLE "memory_embedding"')
   sqlite.run('DROP TABLE "memory_chunk"')
   sqlite.run('DROP TABLE "memory_file"')
@@ -137,13 +138,16 @@ describe("transactional schema migration", () => {
       "opencorvus.db-shm",
     ])
     predecessor.close(true)
-    expect(plan?.migrations.map((migration) => migration.id)).toEqual(["2026-08-06-project-memory-single-scope"])
+    expect(plan?.migrations.map((migration) => migration.id)).toEqual([
+      "2026-08-06-project-memory-single-scope",
+      "2026-08-08-browser-preview-target-identity",
+    ])
 
     const result = migrateDatabaseFile(databasePath, plan!, preparedBackup)
     expect(result).toMatchObject({
       fromFingerprint: PREDECESSOR_FINGERPRINT,
       toFingerprint: CURRENT_FINGERPRINT,
-      migrationIDs: ["2026-08-06-project-memory-single-scope"],
+      migrationIDs: ["2026-08-06-project-memory-single-scope", "2026-08-08-browser-preview-target-identity"],
     })
 
     const migrated = new BunDatabase(databasePath, { readonly: true })
@@ -177,7 +181,7 @@ describe("transactional schema migration", () => {
       format: "opencorvus.schema-migration-backup.v1",
       fromFingerprint: PREDECESSOR_FINGERPRINT,
       toFingerprint: CURRENT_FINGERPRINT,
-      migrationIDs: ["2026-08-06-project-memory-single-scope"],
+      migrationIDs: ["2026-08-06-project-memory-single-scope", "2026-08-08-browser-preview-target-identity"],
     })
     expect(result.backupFiles.map((file) => file.name)).toEqual([
       "opencorvus.db",
@@ -189,6 +193,65 @@ describe("transactional schema migration", () => {
     expect(backupDatabase.query("SELECT content FROM memory_chunk").all()).toEqual([{ content: "preserved content" }])
     expect(backupDatabase.query("SELECT content FROM quick_note").all()).toEqual([{ content: "preserved WAL content" }])
     backupDatabase.close(true)
+  })
+
+  test("projects the latest persisted Browser Preview target into its canonical identity authority", async () => {
+    const databasePath = await temporaryDatabasePath()
+    const predecessor = new BunDatabase(databasePath, { create: true })
+    predecessor.exec(SCHEMA_DDL)
+    predecessor.run('DROP TABLE "engine_browser_preview_target_identity"')
+    const artifactInsertGuard = requiredSchemaSQL(predecessor, "trigger", "engine_artifact_catalog_metadata_insert")
+    predecessor.run('DROP TRIGGER "engine_artifact_catalog_metadata_insert"')
+    predecessor.run(
+      `INSERT INTO project (id, worktree, name, time_created, time_updated, sandboxes)
+       VALUES ('project-browser', 'C:/project-browser', 'Browser project', 1, 1, '[]')`,
+    )
+    predecessor.run(
+      `INSERT INTO engine_task (
+         id, project_id, product_pillar, title, request, time_created, time_updated
+       ) VALUES ('task-browser', 'project-browser', 'code', 'Browser task', 'Browser task', 1, 1)`,
+    )
+    predecessor.run(`INSERT INTO engine_artifact_catalog_revision (revision) VALUES (1)`)
+    predecessor.run(
+      `INSERT INTO engine_artifact (
+         id, task_id, kind, label, payload, payload_block_sha256s,
+         payload_block_index_sha256, catalog_metadata_sha256, catalog_revision,
+         time_created, time_updated
+       ) VALUES (
+         'artifact-browser', 'task-browser', 'browser_preview_target', 'BrowserPreviewTarget',
+         '{"url":"http://localhost:3000/App?Mode=Dev#Top","source":"engine-artifact","viewports":[{"id":"desktop","labelKey":"desktop","width":1280,"height":720}]}',
+         '[]', 'block-index', 'catalog-metadata', 1, 1, 2
+       )`,
+    )
+    predecessor.exec(artifactInsertGuard)
+    expect(schemaObjectFingerprint(predecessor)).toBe(
+      "b8d6df10b9f174560b1ee2c90b10b87e039ef375c61b0ccdc8463d9d6c7ed9fd",
+    )
+    const plan = planSchemaMigration(predecessor)
+    const preparedBackup = createSchemaMigrationBackup(databasePath, plan!)
+    predecessor.close(true)
+
+    const result = migrateDatabaseFile(databasePath, plan!, preparedBackup)
+    const migrated = new BunDatabase(databasePath, { readonly: true })
+    expect(migrated.query("SELECT * FROM engine_browser_preview_target_identity").all()).toEqual([
+      {
+        task_id: "task-browser",
+        canonical_url: "http://localhost:3000/App?Mode=Dev#Top",
+        artifact_id: "artifact-browser",
+      },
+    ])
+    expect(migrated.query("PRAGMA foreign_key_check").all()).toEqual([])
+    expect(migrated.query("PRAGMA integrity_check").all()).toEqual([{ integrity_check: "ok" }])
+    migrated.close(true)
+    const backup = new BunDatabase(path.join(result.backupDirectory, "opencorvus.db"), { readonly: true })
+    expect(backup.query("SELECT id, payload FROM engine_artifact").all()).toEqual([
+      {
+        id: "artifact-browser",
+        payload:
+          '{"url":"http://localhost:3000/App?Mode=Dev#Top","source":"engine-artifact","viewports":[{"id":"desktop","labelKey":"desktop","width":1280,"height":720}]}',
+      },
+    ])
+    backup.close(true)
   })
 
   test("returns a typed failure and retains the predecessor transaction when removed data is not empty", async () => {

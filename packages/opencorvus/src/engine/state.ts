@@ -120,7 +120,10 @@ export async function terminalTask(
     const link = TaskCancellationEventLink.parse(options.cancellationRequest)
     cancellationRequest = requireTaskCancellationRequestEvent(terminalRow.id, link.eventID).event
   }
-  return applyTaskUpdate(terminalRow, values, summary, options, cancellationRequest)
+  const result = await applyTaskUpdate(terminalRow, values, summary, options, cancellationRequest)
+  const { Worktree } = await import("@/worktree")
+  await Worktree.releaseManagedWorktreeTaskOwners(row.id)
+  return result
 }
 
 function nonEmptyString(value: unknown): value is string {

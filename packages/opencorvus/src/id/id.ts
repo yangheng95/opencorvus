@@ -53,11 +53,17 @@ export namespace Identifier {
     return z.string().startsWith(prefixes[prefix])
   }
 
-  const LENGTH = 26
+  const RANDOM_LENGTH = 14
+  const FIELD_BYTES = 6
+  const FIELD_HEX_LENGTH = FIELD_BYTES * 2
+  const MAX_FIELD_VALUE = (1n << BigInt(FIELD_BYTES * 8)) - 1n
+  const ASCENDING_FORMAT_MARKER = "g"
+  const DESCENDING_FORMAT_MARKER = "-"
 
-  // State for monotonic ID generation
-  let lastTimestamp = 0
-  let counter = 0
+  let lastAscendingTimestamp = -1n
+  let ascendingSequence = 0n
+  let lastDescendingTimestamp = -1n
+  let descendingSequence = 0n
 
   export function ascending(prefix: keyof typeof prefixes, given?: string) {
     return generateID(prefix, false, given)
@@ -97,26 +103,57 @@ export namespace Identifier {
 
   export function create(prefix: keyof typeof prefixes, descending: boolean, timestamp?: number): string {
     const currentTimestamp = timestamp ?? Date.now()
-
-    if (currentTimestamp !== lastTimestamp) {
-      lastTimestamp = currentTimestamp
-      counter = 0
+    if (!Number.isSafeInteger(currentTimestamp) || currentTimestamp < 0) {
+      throw new Error(`ID timestamp must be a non-negative safe integer: ${currentTimestamp}`)
     }
-    counter++
+    const wallTimestamp = BigInt(currentTimestamp)
+    if (wallTimestamp > MAX_FIELD_VALUE) throw new Error(`ID timestamp exceeds the 48-bit field: ${currentTimestamp}`)
 
-    let now = BigInt(currentTimestamp) * BigInt(0x1000) + BigInt(counter)
-
-    now = descending ? ~now : now
-
-    const timeBytes = Buffer.alloc(6)
-    for (let i = 0; i < 6; i++) {
-      timeBytes[i] = Number((now >> BigInt(40 - 8 * i)) & BigInt(0xff))
+    let logicalTimestamp: bigint
+    let sequence: bigint
+    if (descending) {
+      if (wallTimestamp > lastDescendingTimestamp) {
+        lastDescendingTimestamp = wallTimestamp
+        descendingSequence = 0n
+      } else {
+        descendingSequence += 1n
+        if (descendingSequence > MAX_FIELD_VALUE) {
+          lastDescendingTimestamp += 1n
+          descendingSequence = 0n
+        }
+      }
+      logicalTimestamp = MAX_FIELD_VALUE - lastDescendingTimestamp
+      sequence = MAX_FIELD_VALUE - descendingSequence
+    } else {
+      if (wallTimestamp > lastAscendingTimestamp) {
+        lastAscendingTimestamp = wallTimestamp
+        ascendingSequence = 0n
+      } else {
+        ascendingSequence += 1n
+        if (ascendingSequence > MAX_FIELD_VALUE) {
+          lastAscendingTimestamp += 1n
+          ascendingSequence = 0n
+        }
+      }
+      logicalTimestamp = lastAscendingTimestamp
+      sequence = ascendingSequence
     }
 
-    return prefixes[prefix] + "_" + timeBytes.toString("hex") + randomBase62(LENGTH - 12)
+    return (
+      prefixes[prefix] +
+      "_" +
+      (descending ? DESCENDING_FORMAT_MARKER : ASCENDING_FORMAT_MARKER) +
+      fixedHex(logicalTimestamp) +
+      fixedHex(sequence) +
+      randomBase62(RANDOM_LENGTH)
+    )
   }
 
-  export const SHORT_PATH_BODY_LENGTH = 12
+  function fixedHex(value: bigint): string {
+    return value.toString(16).padStart(FIELD_HEX_LENGTH, "0")
+  }
+
+  export const SHORT_PATH_BODY_LENGTH = 1 + FIELD_HEX_LENGTH * 2
   export const DIRECTORY_KEY_LENGTH = 8
 
   const DIRECTORY_KEY_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
@@ -173,9 +210,14 @@ export namespace Identifier {
 
   /** Extract timestamp from an ascending ID. Does not work with descending IDs. */
   export function timestamp(id: string): number {
-    const prefix = id.split("_")[0]
-    const hex = id.slice(prefix.length + 1, prefix.length + 13)
+    const separator = id.lastIndexOf("_")
+    if (separator <= 0) throw new Error(`Invalid ID timestamp encoding: ${id}`)
+    if (id[separator + 1] !== ASCENDING_FORMAT_MARKER) {
+      throw new Error(`ID does not use the canonical ascending timestamp encoding: ${id}`)
+    }
+    const hex = id.slice(separator + 2, separator + 2 + FIELD_HEX_LENGTH)
+    if (!/^[0-9a-f]{12}$/.test(hex)) throw new Error(`Invalid ID timestamp encoding: ${id}`)
     const encoded = BigInt("0x" + hex)
-    return Number(encoded / BigInt(0x1000))
+    return Number(encoded)
   }
 }

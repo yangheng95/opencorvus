@@ -176,6 +176,19 @@ export namespace TaskQueueService {
     await drainUntilIdle("runNow")
   }
 
+  export const TestHooks = {
+    async claimReadyTaskIDs(input: {
+      limit: number
+      beforeValidation?: (sessionID: string) => void | Promise<void>
+    }): Promise<string[]> {
+      const claimed = await claimReadyTasks(input.limit, async (sessionID) => {
+        await input.beforeValidation?.(sessionID)
+        return assertSessionLineageInCurrentProject(sessionID)
+      })
+      return claimed.map((task) => task.id)
+    },
+  }
+
   export type QueuedTaskStatus = {
     taskID: string
     sessionID: string
@@ -438,7 +451,12 @@ export namespace TaskQueueService {
     ]
     if (input.source) where.push(eq(TaskQueueTable.source, input.source))
     const row = Database.use((db) =>
-      db.select({ id: TaskQueueTable.id }).from(TaskQueueTable).where(and(...where)).limit(1).get(),
+      db
+        .select({ id: TaskQueueTable.id })
+        .from(TaskQueueTable)
+        .where(and(...where))
+        .limit(1)
+        .get(),
     )
     return row !== undefined
   }
@@ -677,22 +695,9 @@ export namespace TaskQueueService {
     await recover(now)
     const limit = Math.max(0, concurrency() - current.inFlight.size)
     if (limit === 0) return []
-    const queued = pending(limit)
-    if (queued.length === 0) return []
-    log.info("found queued tasks", { count: queued.length, projectID: Instance.project.id, reason })
-    const list: Array<typeof TaskQueueTable.$inferSelect> = []
-    for (const item of queued) {
-      if (list.length >= limit) break
-      const valid = await assertSessionLineageInCurrentProject(item.session_id).catch(async (error) => {
-        await failQueued(item.id, item.session_id, error)
-        return undefined
-      })
-      if (!valid) continue
-      const task = claim(item.id, item.session_id)
-      if (!task) continue
-      list.push(task)
-    }
+    const list = await claimReadyTasks(limit)
     if (list.length === 0) return []
+    log.info("claimed queued tasks", { count: list.length, projectID: Instance.project.id, reason })
     const started = list.map((task) => {
       let running!: Promise<void>
       const inFlight: InFlightTask = {
@@ -727,6 +732,29 @@ export namespace TaskQueueService {
     return started
   }
 
+  async function claimReadyTasks(
+    limit: number,
+    validateSession: (sessionID: string) => Promise<Session.Info> = assertSessionLineageInCurrentProject,
+  ): Promise<QueueTaskRow[]> {
+    const list: Array<typeof TaskQueueTable.$inferSelect> = []
+    while (list.length < limit) {
+      const queued = pending(limit - list.length)
+      if (queued.length === 0) break
+      for (const item of queued) {
+        const valid = await validateSession(item.session_id).catch(async (error) => {
+          await failQueued(item.id, item.session_id, error)
+          return undefined
+        })
+        if (!valid) continue
+        const task = claim(item.id, item.session_id)
+        if (!task) continue
+        list.push(task)
+        if (list.length >= limit) break
+      }
+    }
+    return list
+  }
+
   function concurrency() {
     const raw = process.env[CONCURRENCY_ENV]
     if (!raw) return CONCURRENCY_LIMIT
@@ -757,47 +785,7 @@ export namespace TaskQueueService {
               WHERE running.session_id = ${TaskQueueTable.session_id}
                 AND running.status = 'running'
             )
-            AND NOT EXISTS (
-              SELECT 1
-              FROM a2a_task_queue better
-              WHERE better.session_id = ${TaskQueueTable.session_id}
-                AND better.status = 'queued'
-                AND (
-                  CASE better.priority
-                    WHEN 'high' THEN 0
-                    WHEN 'normal' THEN 1
-                    WHEN 'low' THEN 2
-                    ELSE 3
-                  END
-                    < CASE ${TaskQueueTable.priority}
-                        WHEN 'high' THEN 0
-                        WHEN 'normal' THEN 1
-                        WHEN 'low' THEN 2
-                        ELSE 3
-                      END
-                  OR (
-                    CASE better.priority
-                      WHEN 'high' THEN 0
-                      WHEN 'normal' THEN 1
-                      WHEN 'low' THEN 2
-                      ELSE 3
-                    END
-                      = CASE ${TaskQueueTable.priority}
-                          WHEN 'high' THEN 0
-                          WHEN 'normal' THEN 1
-                          WHEN 'low' THEN 2
-                          ELSE 3
-                        END
-                    AND (
-                      better.time_created < ${TaskQueueTable.time_created}
-                      OR (
-                        better.time_created = ${TaskQueueTable.time_created}
-                        AND better.id < ${TaskQueueTable.id}
-                      )
-                    )
-                  )
-                )
-            )`,
+            AND ${isBestQueuedTaskForSession()}`,
         )
         .orderBy(
           sql`CASE ${TaskQueueTable.priority}
@@ -841,13 +829,58 @@ export namespace TaskQueueService {
               SELECT ${SessionTable.id}
               FROM ${SessionTable}
               WHERE ${SessionTable.project_id} = ${Instance.project.id}
-            )`,
+            )
+            AND ${isBestQueuedTaskForSession()}`,
         )
         .returning()
         .get(),
     )
     if (task) scheduleRunningRecoveryTimer(task, "claim")
     return task
+  }
+
+  function isBestQueuedTaskForSession(): SQL {
+    return sql`NOT EXISTS (
+      SELECT 1
+      FROM a2a_task_queue better
+      WHERE better.session_id = ${TaskQueueTable.session_id}
+        AND better.status = 'queued'
+        AND (
+          CASE better.priority
+            WHEN 'high' THEN 0
+            WHEN 'normal' THEN 1
+            WHEN 'low' THEN 2
+            ELSE 3
+          END
+            < CASE ${TaskQueueTable.priority}
+                WHEN 'high' THEN 0
+                WHEN 'normal' THEN 1
+                WHEN 'low' THEN 2
+                ELSE 3
+              END
+          OR (
+            CASE better.priority
+              WHEN 'high' THEN 0
+              WHEN 'normal' THEN 1
+              WHEN 'low' THEN 2
+              ELSE 3
+            END
+              = CASE ${TaskQueueTable.priority}
+                  WHEN 'high' THEN 0
+                  WHEN 'normal' THEN 1
+                  WHEN 'low' THEN 2
+                  ELSE 3
+                END
+            AND (
+              better.time_created < ${TaskQueueTable.time_created}
+              OR (
+                better.time_created = ${TaskQueueTable.time_created}
+                AND better.id < ${TaskQueueTable.id}
+              )
+            )
+          )
+        )
+    )`
   }
 
   function ensureProgressSubscription(input: { directory: string; projectID: string }) {

@@ -10,6 +10,7 @@ import {
   type ExecutionCancellationOrigin,
 } from "./cancellation"
 import { AsyncLocalStorage } from "node:async_hooks"
+import { WorktreeOwnershipCriticalSection } from "@/worktree/ownership-critical-section"
 
 export class SessionPromptLoopFinishedError extends Error {
   constructor(public readonly sessionID: string) {
@@ -60,6 +61,7 @@ export namespace SessionPromptState {
       timeUpdated: number
       timeCancelled?: number
       cancellation?: ExecutionCancellationError
+      directoryOwnership: Disposable
     }
   >
 
@@ -165,7 +167,8 @@ export namespace SessionPromptState {
   export function start(sessionID: string, directory?: string) {
     if (existingStateEntryBySessionID(sessionID)) return
     if (promptStartReservations.has(sessionID)) throw new BusyError(sessionID)
-    const { promptState: s } = stateEntry(directory)
+    const { key, promptState: s } = stateEntry(directory)
+    const directoryOwnership = WorktreeOwnershipCriticalSection.acquire(key)
     const controller = new AbortController()
     const finished = createFinishSignal()
     const now = Date.now()
@@ -176,9 +179,18 @@ export namespace SessionPromptState {
       finish: finished.finish,
       timeCreated: now,
       timeUpdated: now,
+      directoryOwnership,
     }
     messageOwnersBySession.set(sessionID, { owners: new Map() })
-    SessionStatus.beginPromptGeneration(sessionID, controller.signal)
+    try {
+      SessionStatus.beginPromptGeneration(sessionID, controller.signal)
+    } catch (error) {
+      delete s[sessionID]
+      messageOwnersBySession.delete(sessionID)
+      directoryOwnership[Symbol.dispose]()
+      deleteDirectoryIfEmpty(key, s)
+      throw error
+    }
     promptOwnerCapture.getStore()?.(controller.signal)
     return controller.signal
   }
@@ -462,9 +474,13 @@ export namespace SessionPromptState {
     const queue = rootWakeQueues.get(rootSessionID)
     if (!queue || queue.entries.size === 0) return
     let timer: ReturnType<typeof setTimeout> | undefined
+    let unregisterIdleWaiter: (() => void) | undefined
     try {
       await Promise.race([
-        new Promise<void>((resolve) => queue.idleWaiters.add(resolve)),
+        new Promise<void>((resolve) => {
+          queue.idleWaiters.add(resolve)
+          unregisterIdleWaiter = () => queue.idleWaiters.delete(resolve)
+        }),
         new Promise<never>((_, reject) => {
           timer = setTimeout(
             () =>
@@ -477,6 +493,7 @@ export namespace SessionPromptState {
       ])
     } finally {
       if (timer) clearTimeout(timer)
+      unregisterIdleWaiter?.()
     }
   }
 
@@ -584,31 +601,87 @@ export namespace SessionPromptState {
     return Promise.resolve()
   }
 
-  export function finish(sessionID: string, abort?: AbortSignal, directory?: string, reason?: unknown) {
+  export const TestHooks = {
+    rootWakeQueueSnapshot(rootSessionID: string) {
+      const queue = rootWakeQueues.get(rootSessionID)
+      return queue ? { entries: queue.entries.size, idleWaiters: queue.idleWaiters.size } : undefined
+    },
+    promptResourceSnapshot(sessionID: string) {
+      const entry = existingStateEntryBySessionID(sessionID)
+      return {
+        promptOwners: entry?.promptState[sessionID] ? 1 : 0,
+        messageOwnerRegistries: messageOwnersBySession.has(sessionID) ? 1 : 0,
+        startReservations: promptStartReservations.has(sessionID) ? 1 : 0,
+        cancellationReceipts: cancellationReceipts.has(sessionID) ? 1 : 0,
+      }
+    },
+  }
+
+  function terminatePromptResources(input: {
+    sessionID: string
+    abort?: AbortSignal
+    directory?: string
+    reason?: unknown
+  }): boolean {
     const entry =
-      (abort ? existingStateEntryByAbort(sessionID, abort) : undefined) ??
-      existingStateEntryForSession(sessionID, directory)
-    const { key, promptState: s } = entry
-    const match = s?.[sessionID]
-    if (key === undefined) return
-    if (!match) return
-    if (abort && match.abort.signal !== abort) return
-    const error = reason ?? new SessionPromptLoopFinishedError(sessionID)
-    for (const cb of match.callbacks) {
-      cb.reject(error)
+      (input.abort ? existingStateEntryByAbort(input.sessionID, input.abort) : undefined) ??
+      existingStateEntryForSession(input.sessionID, input.directory)
+    const { key, promptState } = entry
+    const match = promptState?.[input.sessionID]
+    if (input.abort && match && match.abort.signal !== input.abort) return false
+    const errors: unknown[] = []
+    try {
+      if (match && key !== undefined) {
+        const error = input.reason ?? new SessionPromptLoopFinishedError(input.sessionID)
+        for (const callback of match.callbacks) {
+          try {
+            callback.reject(error)
+          } catch (callbackError) {
+            errors.push(callbackError)
+          }
+        }
+        match.callbacks = []
+        try {
+          match.finish()
+        } catch (finishError) {
+          errors.push(finishError)
+        }
+        try {
+          SessionStatus.finishPromptGeneration(input.sessionID, match.abort.signal)
+        } catch (statusError) {
+          errors.push(statusError)
+        }
+      }
+    } finally {
+      if (match && key !== undefined) {
+        try {
+          match.directoryOwnership[Symbol.dispose]()
+        } catch (ownershipError) {
+          errors.push(ownershipError)
+        }
+        delete promptState[input.sessionID]
+        deleteDirectoryIfEmpty(key, promptState)
+        void import("@/worktree")
+          .then(({ Worktree }) =>
+            Worktree.releaseManagedWorktreeSessionOwner({ directory: key, sessionID: input.sessionID }),
+          )
+          .catch((error) => log.warn("failed to release terminal prompt worktree owner", { sessionID: input.sessionID, error }))
+      }
+      messageOwnersBySession.delete(input.sessionID)
+      promptStartReservations.delete(input.sessionID)
+      cancellationReceipts.delete(input.sessionID)
     }
-    match.callbacks = []
-    match.finish()
-    SessionStatus.finishPromptGeneration(sessionID, match.abort.signal)
-    delete s[sessionID]
-    messageOwnersBySession.delete(sessionID)
-    deleteDirectoryIfEmpty(key, s)
+    if (errors.length === 1) throw errors[0]
+    if (errors.length > 1) throw new AggregateError(errors, `Failed to terminate prompt resources for ${input.sessionID}`)
+    return Boolean(match)
+  }
+
+  export function finish(sessionID: string, abort?: AbortSignal, directory?: string, reason?: unknown) {
+    terminatePromptResources({ sessionID, abort, directory, reason })
   }
 
   export function release(sessionID: string): void {
-    messageOwnersBySession.delete(sessionID)
-    promptStartReservations.delete(sessionID)
-    cancellationReceipts.delete(sessionID)
+    terminatePromptResources({ sessionID })
   }
 
   export function flushCallbacks(

@@ -154,6 +154,39 @@ const SCHEMA_MIGRATIONS: readonly SchemaMigration[] = Object.freeze([
       `ALTER TABLE "memory_file" DROP COLUMN "scope"`,
     ]),
   }),
+  Object.freeze({
+    id: "2026-08-08-browser-preview-target-identity",
+    fromFingerprint: "b8d6df10b9f174560b1ee2c90b10b87e039ef375c61b0ccdc8463d9d6c7ed9fd",
+    toFingerprint: "43fb9964d9a3b2bc3d5b17af539bf441d31d0aba1d7eab2a4b8e8c67a88150ea",
+    requiredEmptyTables: Object.freeze([]),
+    statements: Object.freeze([
+      `CREATE TABLE "engine_browser_preview_target_identity" (
+  "task_id" text NOT NULL,
+  "canonical_url" text NOT NULL,
+  "artifact_id" text NOT NULL,
+  PRIMARY KEY ("task_id", "canonical_url"),
+  FOREIGN KEY ("task_id") REFERENCES "engine_task"("id") ON DELETE CASCADE,
+  FOREIGN KEY ("artifact_id") REFERENCES "engine_artifact"("id") ON DELETE CASCADE
+)`,
+      `CREATE UNIQUE INDEX "engine_browser_preview_target_identity_artifact_idx" ON "engine_browser_preview_target_identity" ("artifact_id")`,
+      `INSERT INTO "engine_browser_preview_target_identity" ("task_id", "canonical_url", "artifact_id")
+SELECT "task_id", "canonical_url", "id"
+FROM (
+  SELECT
+    "task_id",
+    json_extract("payload", '$.url') AS "canonical_url",
+    "id",
+    row_number() OVER (
+      PARTITION BY "task_id", json_extract("payload", '$.url')
+      ORDER BY "time_updated" DESC, "time_created" DESC, "id" DESC
+    ) AS "identity_rank"
+  FROM "engine_artifact"
+  WHERE "kind" = 'browser_preview_target'
+    AND json_type("payload", '$.url') = 'text'
+)
+WHERE "identity_rank" = 1`,
+    ]),
+  }),
 ])
 
 function migrationBySourceFingerprint(): ReadonlyMap<string, SchemaMigration> {

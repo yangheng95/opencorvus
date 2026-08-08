@@ -54,7 +54,6 @@ import { SessionStatus } from "@/session/status"
 import { toolFailureCauseFromUnknown } from "@/session/tool-failure-cause"
 import { Worktree } from "@/worktree"
 import { gitCeilingEnvForWorktree } from "@/worktree/git-ceiling"
-import { Ownership } from "@/engine/ownership"
 import { requireTask } from "@/engine/store"
 import { recordTaskInfrastructureError, recordTaskLevelBuildHostObservation } from "@/engine/persist"
 import { EngineConfig } from "@/engine/config"
@@ -597,9 +596,9 @@ export namespace BuildAgent {
         const managedDir = input.managedWorktree.directory
         worktreeDir = managedDir
         worktreeBranch = input.managedWorktree.branch
-        await Ownership.Worktree.record({
-          primaryWorktreeDir: Instance.worktree,
-          worktreeDir: managedDir,
+        await Worktree.renewManagedWorktreeOwner({
+          projectID: task.project_id,
+          directory: managedDir,
           taskID: task.id,
           sessionID: buildSessionID,
         })
@@ -622,12 +621,6 @@ export namespace BuildAgent {
         })
         worktreeDir = info.directory
         worktreeBranch = info.branch
-        await Ownership.Worktree.record({
-          primaryWorktreeDir: Instance.worktree,
-          worktreeDir,
-          taskID: task.id,
-          sessionID: buildSessionID,
-        })
         baseRef = await resolveRequiredGitHead(worktreeDir)
       }
 

@@ -253,6 +253,9 @@ export namespace WorktreeGC {
           continue
         }
         if (!isOlderThan(stat, cutoff)) continue
+        // A sandbox registration is durable Task/workflow ownership. Physical
+        // age is not orphan evidence while that ownership still exists.
+        if (sandboxKeys.has(key)) continue
 
         const gitLink = path.join(displayDirectory, ".git")
         const hasGitLink = await fs
@@ -282,12 +285,33 @@ export namespace WorktreeGC {
   export async function apply(plan: Plan): Promise<ApplyResult> {
     let removed = 0
     let failed = 0
+    const projects = Database.use((db) =>
+      db.select({ worktree: ProjectTable.worktree }).from(ProjectTable).all(),
+    )
+    for (const project of projects) {
+      if (!project.worktree) continue
+      await Instance.provide({
+        directory: project.worktree,
+        fn: () => Worktree.reconcileOrphanWorktreeOwners(),
+      }).catch((error) => {
+        failed += 1
+        log.warn("orphan worktree owner reconciliation failed", {
+          primaryDir: project.worktree,
+          error: error instanceof Error ? error.message : String(error),
+        })
+      })
+    }
     for (const c of plan.candidates) {
       try {
-        await Instance.provide({
+        const result = await Instance.provide({
           directory: c.primaryDir,
-          fn: () => Worktree.removeManagedProjectWorktreeDirectory({ projectID: c.projectID, directory: c.directory }),
+          fn: () =>
+            Worktree.removeManagedProjectWorktreeDirectory({
+              projectID: c.projectID,
+              directory: c.directory,
+            }),
         })
+        if (!result.removed) continue
         removed++
         log.info("orphan worktree removed", {
           projectID: c.projectID,

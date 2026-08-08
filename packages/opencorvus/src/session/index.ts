@@ -1058,8 +1058,11 @@ export namespace Session {
     }
     Database.effect(() => {
       for (const sessionID of currentSessionIDs) {
-        SessionStatusLifecycle.release(sessionID)
-        SessionPromptState.release(sessionID)
+        try {
+          SessionStatusLifecycle.release(sessionID)
+        } finally {
+          SessionPromptState.release(sessionID)
+        }
       }
     })
     return deleted.length
@@ -1096,8 +1099,11 @@ export namespace Session {
       db.delete(SessionTable).where(eq(SessionTable.id, sessionID)).run()
       Database.effect(() => Database.incrementalVacuum())
       Database.effect(() => {
-        SessionStatusLifecycle.release(sessionID)
-        SessionPromptState.release(sessionID)
+        try {
+          SessionStatusLifecycle.release(sessionID)
+        } finally {
+          SessionPromptState.release(sessionID)
+        }
       })
       if (publishDeleted) {
         Database.effect(() =>

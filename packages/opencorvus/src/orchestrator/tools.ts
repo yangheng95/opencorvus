@@ -2208,7 +2208,6 @@ export function createOrchestratorTools(input: {
     runInWorktree: async ({ taskID: worktreeTaskID, sessionID, existingSessionID, targetAgentID, dispatchID, run }) => {
       const { Worktree } = await import("@/worktree")
       const { Instance } = await import("@/project/instance")
-      const { Ownership } = await import("@/engine/ownership")
       if (existingSessionID) {
         const session = await Session.get(existingSessionID)
         log.info("dispatch_agent reused isolated worktree", {
@@ -2222,12 +2221,6 @@ export function createOrchestratorTools(input: {
       }
       const workspace = await Worktree.create({
         name: `dispatch-${dispatchID.slice(-12)}`,
-        taskID: worktreeTaskID,
-        sessionID,
-      })
-      await Ownership.Worktree.record({
-        primaryWorktreeDir: Instance.worktree,
-        worktreeDir: workspace.directory,
         taskID: worktreeTaskID,
         sessionID,
       })

@@ -10,7 +10,7 @@ import {
 } from "@/execution-capsule/runtime"
 import { executionCapsuleSourceTreeDigest } from "@/execution-capsule/tree-digest"
 import { insertEngineArtifact } from "./artifact"
-import { EngineArtifactTable } from "./engine.sql"
+import { EngineArtifactTable, EngineTaskTable } from "./engine.sql"
 
 const SHA256 = z.string().regex(/^[a-f0-9]{64}$/)
 export const TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL = "task-execution-capsule-binding-v1" as const
@@ -177,6 +177,35 @@ export function readTaskProcessBinding(taskID: string): TaskProcessBindingPayloa
   )
   if (rows.length !== 1) throw new Error(`Task ${taskID} has ${rows.length} process authority bindings`)
   return TaskProcessBindingPayloadSchema.parse(rows[0]!.payload)
+}
+
+/** Durable physical-directory authority across dispatch recovery and prompt
+ *  handoff gaps. A Task process binding is immutable for the Task lifetime. */
+export function taskProcessBindingOwnsDirectory(input: { projectID: string; directory: string }): boolean {
+  const target = Filesystem.normalizePath(input.directory)
+  const { rows, activeTaskIDs } = Database.use((db) => ({
+    rows: db
+      .select({ payload: EngineArtifactTable.payload })
+      .from(EngineArtifactTable)
+      .where(eq(EngineArtifactTable.kind, "task_execution_capsule_binding"))
+      .all(),
+    activeTaskIDs: new Set(
+      db
+        .select({ id: EngineTaskTable.id, timeCompleted: EngineTaskTable.time_completed })
+        .from(EngineTaskTable)
+        .all()
+        .filter((task) => task.timeCompleted === null)
+        .map((task) => task.id),
+    ),
+  }))
+  for (const row of rows) {
+    const binding = TaskProcessBindingPayloadSchema.parse(row.payload)
+    if (binding.project_id !== input.projectID || !activeTaskIDs.has(binding.task_id)) continue
+    const root =
+      binding.protocol === TASK_NATIVE_PROCESS_BINDING_PROTOCOL ? binding.workspace_root : binding.workspace.root
+    if (Filesystem.normalizePath(root) === target) return true
+  }
+  return false
 }
 
 export function readTaskExecutionCapsuleBinding(taskID: string): TaskExecutionCapsuleBindingPayload | undefined {

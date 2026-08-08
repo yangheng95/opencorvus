@@ -52,6 +52,20 @@ export namespace MemorySearch {
 
     const nowMs = Date.now()
     const candidates = Math.min(200, limit * 6)
+    const kindFilter =
+      input.kinds && input.kinds.length > 0
+        ? sql`AND mf.kind IN (${sql.join(
+            input.kinds.map((kind) => sql`${kind}`),
+            sql`, `,
+          )})`
+        : sql``
+    const sourceFilter =
+      input.sources && input.sources.length > 0
+        ? sql`AND mf.source IN (${sql.join(
+            input.sources.map((source) => sql`${source}`),
+            sql`, `,
+          )})`
+        : sql``
     const rows = Database.use((db) =>
       db.all<{
         chunk_id: string
@@ -83,6 +97,8 @@ export namespace MemorySearch {
         JOIN memory_file mf ON mf.id = mc.file_id
         WHERE memory_fts MATCH ${query}
           AND memory_fts.project_id = ${input.projectId}
+          ${kindFilter}
+          ${sourceFilter}
         ORDER BY memory_fts.rank
         LIMIT ${candidates}
       `),
@@ -90,9 +106,6 @@ export namespace MemorySearch {
 
     const results: MemorySearchResult[] = []
     for (const row of rows) {
-      if (input.kinds && input.kinds.length > 0 && !input.kinds.includes(row.kind)) continue
-      if (input.sources && input.sources.length > 0 && !input.sources.includes(row.source)) continue
-
       let score = bm25RankToScore(row.rank)
       score *= KIND_WEIGHT[row.kind]
       score *= 0.8 + clampScore(row.importance, 60) / 200

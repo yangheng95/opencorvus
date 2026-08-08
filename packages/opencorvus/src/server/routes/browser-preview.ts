@@ -20,10 +20,10 @@ import {
 } from "../../browser-preview/persist"
 import {
   BrowserPreviewTarget,
-  normalizeBrowserPreviewUrl,
   resolveBrowserPreviewTarget,
   taskBrowserPreviewTarget,
 } from "../../browser-preview/target"
+import { canonicalBrowserPreviewUrl } from "../../browser-preview/url-identity"
 import { BrowserPreviewVerification } from "../../browser-preview/verification"
 import { BrowserPreviewViewportList } from "../../browser-preview/viewport"
 import {
@@ -46,7 +46,7 @@ const BrowserPreviewTargetSelectionRequest = z.union([
       url: z
         .string()
         .min(1)
-        .refine((value) => normalizeBrowserPreviewUrl(value) !== undefined, "Expected an HTTP(S) browser preview URL."),
+        .refine((value) => canonicalBrowserPreviewUrl(value) !== undefined, "Expected an HTTP(S) browser preview URL."),
       viewports: BrowserPreviewViewportList,
     })
     .strict(),
@@ -247,7 +247,7 @@ export const BrowserPreviewRoutes = lazy(() =>
         const body = c.req.valid("json")
         const projectRoot = browserPreviewTaskEvidenceRoot(taskID)
         if ("url" in body) {
-          const url = normalizeBrowserPreviewUrl(body.url)!
+          const url = canonicalBrowserPreviewUrl(body.url)!
           await persistBrowserPreviewTarget({ taskID, url, viewports: body.viewports })
           return c.json(await resolveBrowserPreviewTarget({ projectRoot, taskID }))
         }

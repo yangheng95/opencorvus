@@ -1,4 +1,4 @@
-import { normalizeBrowserPreviewUrl } from "./target"
+import { canonicalBrowserPreviewUrl } from "./url-identity"
 import { isLoopbackBrowserPreviewUrl } from "./liveness"
 
 const LOCAL_URL_TOKEN =
@@ -17,12 +17,11 @@ export function extractBrowserPreviewUrlsFromText(text: string): string[] {
   const urls: string[] = []
   const seen = new Set<string>()
   for (const match of scan.matchAll(LOCAL_URL_TOKEN)) {
-    const normalized = normalizeBrowserPreviewUrl(trimUrlToken(match[1]))
+    const normalized = canonicalBrowserPreviewUrl(trimUrlToken(match[1]))
     if (!normalized) continue
     if (!isLoopbackBrowserPreviewUrl(normalized)) continue
-    const key = normalized.toLowerCase()
-    if (seen.has(key)) continue
-    seen.add(key)
+    if (seen.has(normalized)) continue
+    seen.add(normalized)
     urls.push(normalized)
     if (urls.length >= MAX_EXTRACTED_PREVIEW_URLS) break
   }

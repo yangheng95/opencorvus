@@ -254,7 +254,7 @@ export namespace SessionCompaction {
     return keys
   }
 
-  function compactToolInputProjection(value: unknown): unknown {
+  function compactJsonProjection(value: unknown): unknown {
     const projected = projectToolInputValue(value, 0, new WeakSet())
     const serialized = JSON.stringify(projected)
     if (serialized.length <= TOOL_INPUT_JSON_MAX_CHARS) return projected
@@ -277,12 +277,16 @@ export namespace SessionCompaction {
     }
   }
 
+  function compactToolInputProjection(value: unknown): unknown {
+    return compactJsonProjection(Message.ToolInput.parse(value))
+  }
+
   function jsonForToolInputTranscript(value: unknown) {
     return jsonForTranscript(compactToolInputProjection(value))
   }
 
   function compactToolStateProjection(state: ToolStateForTranscript): unknown {
-    const projectedState = compactToolInputProjection(state)
+    const projectedState = compactJsonProjection(state)
     if (projectedState === null || typeof projectedState !== "object" || Array.isArray(projectedState))
       return projectedState
     if ("kind" in projectedState) return projectedState
