@@ -1,24 +1,14 @@
-import vegaEmbed, { type EmbedOptions, type Result as VegaEmbedResult } from "vega-embed"
+import vegaEmbed, { type Result as VegaEmbedResult } from "vega-embed"
 import { For, Show, createEffect, createMemo, createSignal, onCleanup, onMount } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import { observeAppliedTheme } from "../../services/theme"
 import { ArtifactFrame } from "./ArtifactFrame"
 import { artifactVegaConfig, artifactVisualTheme } from "./theme-color"
+import { INLINE_VEGA_EMBED_OPTIONS } from "./vega-embed-policy"
 
 type DashboardPayload = Extract<InteractiveArtifactPayload, { renderer: "dashboard@1" }>
 type DashboardViewPayload = DashboardPayload["views"][number]
 type DashboardRow = DashboardPayload["data"][number]
-
-const rejectExternalResource = async (uri: string): Promise<never> => {
-  throw new Error(`External dashboard resources are disabled: ${uri}`)
-}
-
-const inlineOnlyLoader: NonNullable<EmbedOptions["loader"]> = {
-  load: rejectExternalResource,
-  sanitize: rejectExternalResource,
-  http: rejectExternalResource,
-  file: rejectExternalResource,
-}
 
 const MAX_DASHBOARD_WIDTH = 1_600
 const MIN_DASHBOARD_PLOT_WIDTH = 240
@@ -74,13 +64,7 @@ function DashboardView(props: { view: DashboardViewPayload; data: DashboardRow[]
         background: source.background ?? "transparent",
         config: artifactVegaConfig(theme, sourceConfig),
       } as unknown as Parameters<typeof vegaEmbed>[1],
-      {
-        actions: { export: true, source: false, compiled: false, editor: false },
-        mode: "vega-lite",
-        renderer: "svg",
-        tooltip: true,
-        loader: inlineOnlyLoader,
-      },
+      INLINE_VEGA_EMBED_OPTIONS,
     )
       .then((next) => {
         if (generation !== current) {

@@ -1,22 +1,12 @@
-import vegaEmbed, { type EmbedOptions, type Result as VegaEmbedResult } from "vega-embed"
+import vegaEmbed, { type Result as VegaEmbedResult } from "vega-embed"
 import { Show, createSignal, onCleanup, onMount } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import { observeAppliedTheme } from "../../services/theme"
 import { ArtifactFrame } from "./ArtifactFrame"
 import { artifactVegaConfig, artifactVisualTheme } from "./theme-color"
+import { INLINE_VEGA_EMBED_OPTIONS } from "./vega-embed-policy"
 
 type ChartPayload = Extract<InteractiveArtifactPayload, { renderer: "chart@1" }>
-
-const rejectExternalResource = async (uri: string): Promise<never> => {
-  throw new Error(`External chart resources are disabled: ${uri}`)
-}
-
-const inlineOnlyLoader: NonNullable<EmbedOptions["loader"]> = {
-  load: rejectExternalResource,
-  sanitize: rejectExternalResource,
-  http: rejectExternalResource,
-  file: rejectExternalResource,
-}
 
 export function ChartArtifact(props: { payload: ChartPayload }) {
   let host: HTMLDivElement | undefined
@@ -63,13 +53,7 @@ export function ChartArtifact(props: { payload: ChartPayload }) {
       background: source.background ?? "transparent",
       config: artifactVegaConfig(theme, sourceConfig),
     }
-    void vegaEmbed(host, spec as unknown as Parameters<typeof vegaEmbed>[1], {
-      actions: { export: true, source: false, compiled: false, editor: false },
-      mode: "vega-lite",
-      renderer: "svg",
-      tooltip: true,
-      loader: inlineOnlyLoader,
-    })
+    void vegaEmbed(host, spec as unknown as Parameters<typeof vegaEmbed>[1], INLINE_VEGA_EMBED_OPTIONS)
       .then((result) => {
         if (generation !== renderGeneration) {
           result.finalize()
