@@ -254,9 +254,9 @@ The final targeted command passes 24 tests and 108 positive expectations across 
 | Item | Record |
 | --- | --- |
 | Operator request | Commit the complete repository state and write a durable continuation context before changing computers. |
-| Current objective | Finish one real DeepSeek `squad-sdk` end-to-end replacement of the project-owned `machine-learning-implementation` package without correction messages, operator intervention, a retrying author path, or automatic activation. |
-| Acceptance boundary | The compaction implementation repair and its non-UI contracts are complete. The latest real provider run created the intended Mission and Task but was deliberately stopped for the computer handoff before the Task produced worker messages or terminal evidence. It is not an accepted E2E result. |
-| Hard constraints | Preserve exact project authority; use `deepseek/deepseek-reasoner`; keep the Task profile fixed to `squad-sdk`; reviewer terminal success precedes exactly one canonical author occurrence; install version `2026.08.08.2` inactive; do not send correction messages; do not represent mocked or interrupted evidence as live acceptance. |
+| Current objective | On the new computer, submit one fresh real DeepSeek `squad-sdk` end-to-end creation of the project-owned `machine-learning-implementation` package without correction messages, operator intervention, a retrying author path, or automatic activation. |
+| Acceptance boundary | The compaction implementation repair and its non-UI contracts are complete. The previous machine's Mission, Task, Sessions, controls, Artifacts, project-local installation, and recording are runtime-local and are not execution authority on a clean clone. The latest interrupted run is historical evidence only and is not resumable or accepted. |
+| Hard constraints | Start from the new computer's exact project authority; use `deepseek/deepseek-reasoner`; keep the Task profile fixed to `squad-sdk`; treat an absent project package as normal creation and omit replacement identity/digest; reviewer terminal success precedes exactly one canonical author occurrence; install version `2026.08.08.2` inactive; do not send correction messages; do not represent mocked, copied, or interrupted evidence as live acceptance. |
 | Read evidence | This full record; isolated SQLite Session, Message, Part, Task, and Protocol Event rows; the generated package manifest and provenance; final Git status and commits; architecture and integrity reviewer reports. |
 | Repository searches | Compaction continuation projection, Session checkpoint publication, pending control settlement, Mission/Task creation, project authority, package Skill projection, authoring contracts, and source-tree stability. |
 | Independent review | Both the architecture reviewer and integrity reviewer approved the final compaction implementation after the shared final-step continuation projection, atomic summary/marker publication, real-error normalization, pending compare-and-swap settlement, public checkpoint invariants, and positive ownership-race tests were added. |
@@ -328,12 +328,35 @@ This occurrence is an interrupted acceptance run, neither success nor product fa
 - Recording evidence: 1,231 JPEG frames, 89,404,096 bytes. These temporary binary frames are intentionally not part of Git; copy that directory separately only if the raw recording must move computers.
 - The recorder sentinel was removed after capture, recorder process `2056` exited, isolated server process `13012` exited, and the agent-created Chrome tab was finalized. No unrelated process was stopped.
 
-### Exact continuation on the next computer
+### Authoritative handoff: mandatory fresh submission on the new computer
 
-1. Fetch the repository and verify `main` contains `98e7563aa` and `f1f4722f9`, plus the final handoff documentation commit. Confirm the worktree is clean and use Bun `1.3.14`.
-2. Read this entire record before changing code or creating a new acceptance occurrence. Do not repeat the already-complete compaction or squad contract repairs unless current code differs from these commits.
-3. If exact continuation of Mission `6a88312102b69782` is required, securely transfer the final isolated runtime directory before starting the server. It contains local runtime data and is not in Git. Never copy or commit `auth.json`; configure provider authentication independently on the new machine.
-4. If the isolated runtime was not transferred, mark the occurrence above as interrupted and run one fresh isolated real DeepSeek acceptance from the exact project. This is a fresh acceptance occurrence, not a corrective message or a replacement used to conceal a terminal failure.
-5. During the run, do not poll or send correction messages. Let the single fixed `squad-sdk` Task finish naturally, then read every Task Artifact and terminal receipt.
-6. Accept only if the independent reviewer reaches terminal success before exactly one canonical author occurrence; version `2026.08.08.2` installs at the same project identity; all six roles and both keyed workflows match; the package is self-contained and framework-neutral; and `prompt_profile.active` remains unchanged.
-7. If it fails, preserve the exact Mission, Task, Session, tool result, control, and provider evidence. Diagnose the causal chain before any new implementation. Do not add a gate, fallback, model-specific branch, synthetic summary, correction message, or replacement Task as a workaround.
+The previous machine's runtime identities are not portable. Mission `6a88312102b69782`, Task `tsk_g019fe0cc13f4000000000000Q9wO7T43cQVUbu`, their Sessions, controls, package-revision/capsule bindings, queued wake, and Task Artifacts exist only in the old isolated SQLite runtime. The project installation under `.opencorvus/expert-squads/` is also ignored by Git. A normal clone therefore has neither the old execution authority nor the installed v1 package. Do not attempt to resume those IDs, recreate their rows, copy their database as acceptance evidence, or claim that their prior `active` state continued.
+
+On the new computer, perform exactly one fresh submission from the clean repository project:
+
+1. Pull `main` and verify it contains `98e7563aa` (Generate Agent Squads contracts), `f1f4722f9` (compaction continuation repair), `502b85b43` (generated OpenAPI and Software Development Kit error projection), and this corrected Handoff commit. Confirm a clean worktree and Bun `1.3.14`.
+2. Configure DeepSeek authentication on the new machine without copying or committing `auth.json`. Start a clean isolated OpenCorvus runtime whose selected project is the exact new checkout before Mission creation.
+3. Inspect `.opencorvus/expert-squads/local/machine-learning-implementation`. On a normal clone it must be absent because project runtime installations are Git-ignored. Absence means **creation**, not project-authority mismatch and not replacement. Do not pass `expected_current_package_digest`, the old version, or the old digest to the authoring request.
+4. Submit one new Mission with `@squad("squad-sdk")` and model `deepseek/deepseek-reasoner`. Ask for the `sdk-authoring` workflow to create and install a project-scoped, namespace `local`, id `machine-learning-implementation`, version `2026.08.08.2` package. Keep it inactive and do not change `prompt_profile.active`.
+5. Require exactly these six role labels: `ML Solution Architect`, `Data Readiness Analyst`, `Experiment Designer`, `Model Implementation Engineer`, `ML Deployment Engineer`, and `ML Integrity Reviewer`.
+6. Require exactly two keyed virtual workflows: `ml-implementation` (business goal and data readiness -> experiment design -> model implementation -> deployment handoff -> independent integrity review) and `ml-feasibility-review` (solution architecture and data feasibility -> experiment feasibility -> independent integrity review).
+7. Require the package to be self-contained and framework-neutral. One independent reviewer must reach terminal success before the scheduler makes exactly one canonical `expert_squad_author` call. A typed author error is terminal; there is no retry, correction message, replacement Task, fallback, or model-specific branch.
+8. Do not poll, intervene, send clarification/correction messages, or edit the generated package. Let the single fixed-profile Task finish naturally, then enumerate and read every new Task Artifact and terminal receipt from the new runtime.
+9. Accept only when the new runtime proves: exact project installation of version `2026.08.08.2`; all six roles; both workflow graphs and dependency order; reviewer-before-author ordering; one author occurrence; self-contained/framework-neutral closure; inactive catalog state; unchanged `prompt_profile.active`; and a completed Mission receipt.
+10. If the fresh run fails, preserve its new Mission, Task, Session, tool result, compaction control, provider finish reason, and Artifact locators before diagnosing. The old machine's IDs remain comparison evidence only. Diagnose the causal chain before changing code; do not add a gate, fallback, synthetic summary, retry, correction message, or substitute execution identity.
+
+#### Ready-to-submit Mission request
+
+```text
+@squad("squad-sdk")
+
+在当前项目中使用 squad-sdk 的 sdk-authoring 工作流，从零创建并安装一个项目级、namespace=local、manifest id=machine-learning-implementation、version=2026.08.08.2 的“机器学习实施”专家团。当前项目没有已安装的同 ID package；这是正常 creation，不是 replacement，不要读取、声明或传递 expected_current_package_digest。
+
+角色必须恰好包含：ML Solution Architect、Data Readiness Analyst、Experiment Designer、Model Implementation Engineer、ML Deployment Engineer、ML Integrity Reviewer。
+
+必须声明两个 keyed virtual workflows：
+- ml-implementation：业务目标与数据就绪分析 -> 实验设计 -> 模型实现 -> 部署交接 -> 独立完整性审核。
+- ml-feasibility-review：方案架构与数据可行性分析 -> 实验可行性评估 -> 独立完整性审核。
+
+package 必须完整自包含、框架中立，不依赖其他专家团私有资源，不绑定特定云厂商或 MLOps 平台。先由独立 reviewer 完成完整 contract review；review terminal success 后，scheduler 只能调用一次 canonical expert_squad_author。首次 author success 或 typed error 都是终态，禁止 retry、纠偏消息、替换 Task、fallback 或自动激活。安装后保持 inactive，不修改 prompt_profile.active。在现有声明范围内无人干预地端到端完成，并返回完整 Task Artifact、review、author receipt、安装与 inactive 验收证据。
+```
