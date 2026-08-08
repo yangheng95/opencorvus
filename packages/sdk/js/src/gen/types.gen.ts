@@ -235,6 +235,15 @@ export type Command = {
   template: string
 }
 
+export type CompactionContinuationMissingError = {
+  data: {
+    assistantMessageID: string
+    message: string
+    sessionID: string
+  }
+  name: "CompactionContinuationMissingError"
+}
+
 export type CompactionPart = {
   anchor_id?: string
   auto: boolean
@@ -1394,6 +1403,7 @@ export type EventSessionError = {
       | SnapshotIntegrityError
       | SnapshotEmptyTreeError
       | ContextOverflowError
+      | CompactionContinuationMissingError
       | PromptBudgetOverflowError
       | ToolSchemaBudgetError
       | ModelImageInputTooLargeError
@@ -5144,6 +5154,7 @@ export type VisibleMessage =
         | SnapshotIntegrityError
         | SnapshotEmptyTreeError
         | ContextOverflowError
+        | CompactionContinuationMissingError
         | PromptBudgetOverflowError
         | ToolSchemaBudgetError
         | ModelImageInputTooLargeError
@@ -22661,6 +22672,7 @@ export type SessionCommandResponses = {
         | SnapshotIntegrityError
         | SnapshotEmptyTreeError
         | ContextOverflowError
+        | CompactionContinuationMissingError
         | PromptBudgetOverflowError
         | ToolSchemaBudgetError
         | ModelImageInputTooLargeError
@@ -23904,6 +23916,7 @@ export type SessionPromptResponses = {
         | SnapshotIntegrityError
         | SnapshotEmptyTreeError
         | ContextOverflowError
+        | CompactionContinuationMissingError
         | PromptBudgetOverflowError
         | ToolSchemaBudgetError
         | ModelImageInputTooLargeError
@@ -24385,6 +24398,7 @@ export type SessionShellResponses = {
       | SnapshotIntegrityError
       | SnapshotEmptyTreeError
       | ContextOverflowError
+      | CompactionContinuationMissingError
       | PromptBudgetOverflowError
       | ToolSchemaBudgetError
       | ModelImageInputTooLargeError

@@ -793,6 +793,38 @@
         ],
         "type": "object"
       },
+      "CompactionContinuationMissingError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "assistantMessageID": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "sessionID": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "sessionID",
+              "assistantMessageID"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "CompactionContinuationMissingError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "CompactionPart": {
         "properties": {
           "anchor_id": {
@@ -4429,6 +4461,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/ContextOverflowError"
+                  },
+                  {
+                    "$ref": "#/components/schemas/CompactionContinuationMissingError"
                   },
                   {
                     "$ref": "#/components/schemas/PromptBudgetOverflowError"
@@ -16864,6 +16899,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/ContextOverflowError"
+                  },
+                  {
+                    "$ref": "#/components/schemas/CompactionContinuationMissingError"
                   },
                   {
                     "$ref": "#/components/schemas/PromptBudgetOverflowError"
@@ -75295,6 +75333,9 @@
                               "$ref": "#/components/schemas/ContextOverflowError"
                             },
                             {
+                              "$ref": "#/components/schemas/CompactionContinuationMissingError"
+                            },
+                            {
                               "$ref": "#/components/schemas/PromptBudgetOverflowError"
                             },
                             {
@@ -80135,6 +80176,9 @@
                               "$ref": "#/components/schemas/ContextOverflowError"
                             },
                             {
+                              "$ref": "#/components/schemas/CompactionContinuationMissingError"
+                            },
+                            {
                               "$ref": "#/components/schemas/PromptBudgetOverflowError"
                             },
                             {
@@ -81397,6 +81441,9 @@
                         },
                         {
                           "$ref": "#/components/schemas/ContextOverflowError"
+                        },
+                        {
+                          "$ref": "#/components/schemas/CompactionContinuationMissingError"
                         },
                         {
                           "$ref": "#/components/schemas/PromptBudgetOverflowError"
