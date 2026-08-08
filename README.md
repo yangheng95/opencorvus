@@ -16,6 +16,7 @@
 <p align="center">
   <a href="https://opencorvus.ai">Website</a> ·
   <a href="https://opencorvus.ai/docs">Documentation</a> ·
+  <a href="#download-the-desktop-app">Downloads</a> ·
   <a href="#quick-start">Quick Start</a>
 </p>
 
@@ -158,7 +159,7 @@ publish a `-baseline.tar.gz` variant for processors without Advanced Vector
 Extensions 2 (AVX2).
 
 Replace `<version>` with the version shown on the release, for example
-`0.0.35-beta`. Download only the file you intend to install.
+`0.0.37-beta`. Download only the file you intend to install.
 
 ### Install from source
 

@@ -16,6 +16,7 @@
 <p align="center">
   <a href="https://opencorvus.ai">官方网站</a> ·
   <a href="https://opencorvus.ai/docs">产品文档</a> ·
+  <a href="#下载桌面安装包">下载</a> ·
   <a href="#快速开始">快速开始</a>
 </p>
 
@@ -138,7 +139,7 @@ Agent 停止运行不等于 Task 完成。OpenCorvus 会保存 Typed、内容寻
 x64 平台同时提供适用于不支持高级矢量扩展 2（Advanced Vector Extensions 2，AVX2）
 处理器的 `-baseline.tar.gz` 版本。
 
-把 `<version>` 替换成 Release 页面显示的版本，例如 `0.0.35-beta`。只需下载实际要
+把 `<version>` 替换成 Release 页面显示的版本，例如 `0.0.37-beta`。只需下载实际要
 安装的那一个文件。
 
 ### 从源码安装
