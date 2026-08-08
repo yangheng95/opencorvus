@@ -19,6 +19,7 @@ jobs:
     outputs:
       version: ${{ steps.meta.outputs.version }}
       prerelease: ${{ steps.meta.outputs.prerelease }}
+      update-channel: ${{ steps.meta.outputs.update-channel }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -39,8 +40,10 @@ jobs:
             VERSION="${VERSION#v}"
           fi
           PRERELEASE="$(bun -e 'import { releaseVersionMetadata } from "./script/sync-version.ts"; console.log(releaseVersionMetadata(Bun.argv.at(-1)).prerelease)' "$VERSION")"
+          UPDATE_CHANNEL="$(bun -e 'import { desktopUpdateChannel } from "./script/desktop-update-channel.ts"; console.log(desktopUpdateChannel(Bun.argv.at(-1)))' "$VERSION")"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "prerelease=$PRERELEASE" >> "$GITHUB_OUTPUT"
+          echo "update-channel=$UPDATE_CHANNEL" >> "$GITHUB_OUTPUT"
 
       - name: Sync repo versions
         shell: bash
@@ -123,6 +126,9 @@ jobs:
         env:
           OPENCORVUS_VERSION: ${{ needs.prepare.outputs.version }}
           OPENCORVUS_CHANNEL: latest
+          OPENCORVUS_UPDATER_PUBLIC_KEY: ${{ secrets.OPENCORVUS_UPDATER_PUBLIC_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         run: bun run package:gui-installer-matrix
 
       - name: Upload overlay artifact
@@ -247,6 +253,13 @@ jobs:
           UPLOAD_DIR="$(mktemp -d)"
           bun ./script/stage-release-upload-assets.ts --source /tmp/release-assets --out "$UPLOAD_DIR" --version "$VERSION"
           cp LICENSE THIRD_PARTY_NOTICES.md "$UPLOAD_DIR/"
+          PUBLISHED_AT="$(date -u -d "$(git show -s --format=%cI HEAD)" +%Y-%m-%dT%H:%M:%S.000Z)"
+          bun ./script/generate-desktop-update-manifest.ts \
+            --dir "$UPLOAD_DIR" \
+            --out "$UPLOAD_DIR/latest.json" \
+            --version "$VERSION" \
+            --repository "$GITHUB_REPOSITORY" \
+            --pub-date "$PUBLISHED_AT"
           (
             cd "$UPLOAD_DIR"
             sha256sum -- * > SHA256SUMS
@@ -277,4 +290,17 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ needs.prepare.outputs.version }}
           PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
-        run: gh release edit "v${VERSION}" --draft=false --prerelease="${PRERELEASE}" --repo "$GITHUB_REPOSITORY"
+          UPDATE_CHANNEL: ${{ needs.prepare.outputs.update-channel }}
+        run: |
+          gh release edit "v${VERSION}" --draft=false --prerelease="${PRERELEASE}" --repo "$GITHUB_REPOSITORY"
+          CHANNEL_TAG="desktop-update-${UPDATE_CHANNEL}"
+          if ! gh release view "$CHANNEL_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release create "$CHANNEL_TAG" \
+              --prerelease \
+              --title "OpenCorvus ${UPDATE_CHANNEL} desktop update channel" \
+              --notes "Mutable signed desktop update metadata. Installers remain in immutable versioned releases." \
+              --repo "$GITHUB_REPOSITORY"
+          fi
+          CHANNEL_DIR="$(mktemp -d)"
+          gh release download "v${VERSION}" --pattern latest.json --dir "$CHANNEL_DIR" --repo "$GITHUB_REPOSITORY"
+          gh release upload "$CHANNEL_TAG" "$CHANNEL_DIR/latest.json" --clobber --repo "$GITHUB_REPOSITORY"

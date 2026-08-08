@@ -53,12 +53,12 @@ It currently has these jobs:
 2. `package-overlay`: runs the GUI installer matrix natively on Linux x64, Linux ARM64, macOS ARM64, macOS x64, and Windows x64.
 3. `package-cli`: runs the portable CLI matrix on the same five native hosts.
 4. `publish-release-assets`: stages and uploads the validated GUI installers and CLI archives to the GitHub Release.
-5. `publish-release`: publishes the draft only after all independent Release assets upload successfully.
+5. `publish-release`: publishes the draft only after all independent Release assets upload successfully, then promotes the signed `latest.json` to the matching desktop update channel.
 
 The canonical release publishes both portable CLI archives and Tauri GUI installers:
 
 - `package-overlay` invokes `package:gui-installer-matrix`, which owns SDK preparation, Vite and Overlay server compilation, native Tauri bundles, staging, naming, and validation.
-- `script/check-release-assets.ts overlay --require-bundle` verifies each staged executable and installer set before upload.
+- `script/check-release-assets.ts overlay --require-bundle --require-updater` verifies each staged executable, installer set, selected updater artifact, and updater signature before upload.
 - `package-cli` invokes `package:binary-matrix`, which owns native CLI compilation, complete runtime staging, smoke execution, archive creation, and archive verification.
 - `script/package-linux-binary.ts` remains the remote/container overlay-server bundle with embedded UI under `dist/binary/*`; it is not the public terminal CLI archive.
 - `build:overlay` remains the developer-facing bound Tauri build command. Release installers use `packages/overlay/script/build.ts` through the GUI matrix owner.
@@ -82,12 +82,41 @@ independently downloadable asset on
 publish the aggregate Actions artifact, an unpacked CLI directory, or a staged
 bare executable.
 
+### Signed desktop update channels
+
+The desktop updater has one compiled trust root and two release channels:
+
+- semantic versions with a prerelease component use `desktop-update-beta/latest.json`;
+- versions without a prerelease component use `desktop-update-stable/latest.json`.
+
+Installers remain immutable assets on `v<version>` releases. The mutable channel
+release contains metadata only. `publish-release` updates that metadata after the
+complete version release is public, so a client never receives a manifest that
+points at a draft or partial installer set. Windows uses the signed NSIS
+(Nullsoft Scriptable Install System) setup executable, macOS uses Tauri's signed
+application archive, and Linux uses the signed AppImage.
+
+Release packaging requires these protected GitHub Actions secrets:
+
+- `OPENCORVUS_UPDATER_PUBLIC_KEY`: the complete Minisign-compatible public key compiled into every updater-enabled application;
+- `TAURI_SIGNING_PRIVATE_KEY`: the complete encrypted private key used only by native packaging jobs;
+- `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`: the private-key password.
+
+Generate the key pair with the installed Tauri command-line interface outside
+the repository and CI workspace, for example `tauri signer generate --write-keys
+<offline-path>`. Store an encrypted offline copy of the private key and password
+in separate recovery authorities, and record the public key fingerprint with the
+release operator runbook. A lost private key cannot sign updates accepted by
+existing clients. Replacing the public key creates a new trust root and therefore
+requires a conventionally installed bridge release signed by the old key; never
+silently substitute a new key in the channel metadata.
+
 ## Validation Commands
 
 Run the focused packaging contract tests after changing packaging logic:
 
 ```bash
-bun test script/release-asset-contract.test.ts script/stage-release-upload-assets.test.ts packages/opencorvus/test/browser-mcp-node-bundle.test.ts
+bun test script/release-asset-contract.test.ts script/stage-release-upload-assets.test.ts script/desktop-update-manifest.test.ts script/github-actions-workflow-contract.test.ts packages/opencorvus/test/browser-mcp-node-bundle.test.ts
 ```
 
 Build the complete native CLI package on the current supported host:

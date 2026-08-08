@@ -8,7 +8,10 @@ use std::{
     net::{SocketAddr, TcpListener, TcpStream, ToSocketAddrs},
     path::{Path, PathBuf},
     process::{Child, Command, Stdio},
-    sync::{Arc, Condvar, Mutex, Once, OnceLock},
+    sync::{
+        atomic::{AtomicBool, AtomicU64, Ordering},
+        Arc, Condvar, Mutex, Once, OnceLock,
+    },
     thread,
     time::{Duration, Instant, SystemTime, UNIX_EPOCH},
 };
@@ -38,6 +41,7 @@ use tauri::{
 use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 use tauri_plugin_notification::NotificationExt;
 use tauri_plugin_opener::OpenerExt;
+use tauri_plugin_updater::{Update, UpdaterExt};
 #[cfg(windows)]
 use winrt_toast_reborn::{register, Toast, ToastManager};
 
@@ -1302,6 +1306,111 @@ impl Default for Server {
             worker: StartupWorker::default(),
         }
     }
+}
+
+struct PreparedDesktopUpdate {
+    update: Update,
+    bytes: Vec<u8>,
+}
+
+struct DesktopUpdateCoordinator {
+    busy: Arc<AtomicBool>,
+    prepared: Mutex<Option<PreparedDesktopUpdate>>,
+}
+
+impl Default for DesktopUpdateCoordinator {
+    fn default() -> Self {
+        Self {
+            busy: Arc::new(AtomicBool::new(false)),
+            prepared: Mutex::new(None),
+        }
+    }
+}
+
+impl DesktopUpdateCoordinator {
+    fn begin(&self) -> Result<DesktopUpdateOperation, DesktopUpdateCommandError> {
+        self.busy
+            .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
+            .map_err(|_| {
+                DesktopUpdateCommandError::new(
+                    "DESKTOP_UPDATE_BUSY",
+                    "Another desktop update operation is already running.",
+                )
+            })?;
+        Ok(DesktopUpdateOperation {
+            busy: self.busy.clone(),
+        })
+    }
+}
+
+struct DesktopUpdateOperation {
+    busy: Arc<AtomicBool>,
+}
+
+impl Drop for DesktopUpdateOperation {
+    fn drop(&mut self) {
+        self.busy.store(false, Ordering::Release);
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct DesktopUpdateCommandError {
+    code: &'static str,
+    message: String,
+}
+
+impl DesktopUpdateCommandError {
+    fn new(code: &'static str, message: impl Into<String>) -> Self {
+        Self {
+            code,
+            message: message.into(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct DesktopUpdateInfo {
+    current_version: String,
+    available: bool,
+    version: Option<String>,
+    notes: Option<String>,
+    publication_date: Option<String>,
+    downloaded_bytes: Option<u64>,
+}
+
+impl DesktopUpdateInfo {
+    fn current() -> Self {
+        Self {
+            current_version: env!("CARGO_PKG_VERSION").to_string(),
+            available: false,
+            version: None,
+            notes: None,
+            publication_date: None,
+            downloaded_bytes: None,
+        }
+    }
+
+    fn available(update: &Update, downloaded_bytes: Option<u64>) -> Self {
+        Self {
+            current_version: update.current_version.clone(),
+            available: true,
+            version: Some(update.version.clone()),
+            notes: update.body.clone(),
+            publication_date: update.date.map(|date| date.to_string()),
+            downloaded_bytes,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct DesktopUpdateProgress {
+    version: String,
+    downloaded_bytes: u64,
+    total_bytes: Option<u64>,
+    finished: bool,
 }
 
 #[derive(Default)]
@@ -5104,6 +5213,202 @@ fn overlay_toggle_devtools<R: Runtime>(app: AppHandle<R>) -> Result<bool, String
     }
 }
 
+fn desktop_update_error(
+    code: &'static str,
+    context: &'static str,
+    error: impl std::fmt::Display,
+) -> DesktopUpdateCommandError {
+    DesktopUpdateCommandError::new(code, format!("{context}: {error}"))
+}
+
+fn emit_desktop_update_progress<R: Runtime>(app: &AppHandle<R>, progress: DesktopUpdateProgress) {
+    if let Err(error) = app.emit_to("main", "overlay:desktop-update-progress", progress) {
+        eprintln!("overlay: failed to emit desktop update progress: {error}");
+    }
+}
+
+#[tauri::command]
+async fn overlay_desktop_update_check<R: Runtime>(
+    app: AppHandle<R>,
+) -> Result<DesktopUpdateInfo, DesktopUpdateCommandError> {
+    let coordinator = app.state::<DesktopUpdateCoordinator>();
+    let _operation = coordinator.begin()?;
+    let updater = app.updater().map_err(|error| {
+        desktop_update_error(
+            "DESKTOP_UPDATE_CHECK_FAILED",
+            "Cannot configure desktop updater",
+            error,
+        )
+    })?;
+    let update = updater.check().await.map_err(|error| {
+        desktop_update_error(
+            "DESKTOP_UPDATE_CHECK_FAILED",
+            "Cannot check for desktop updates",
+            error,
+        )
+    })?;
+
+    let Some(update) = update else {
+        *coordinator.prepared.lock().unwrap() = None;
+        return Ok(DesktopUpdateInfo::current());
+    };
+    let info = DesktopUpdateInfo::available(&update, None);
+    if coordinator
+        .prepared
+        .lock()
+        .unwrap()
+        .as_ref()
+        .map(|prepared| prepared.update.version.as_str())
+        != Some(update.version.as_str())
+    {
+        *coordinator.prepared.lock().unwrap() = None;
+    }
+    Ok(info)
+}
+
+#[tauri::command]
+async fn overlay_desktop_update_download<R: Runtime>(
+    app: AppHandle<R>,
+    expected_version: String,
+) -> Result<DesktopUpdateInfo, DesktopUpdateCommandError> {
+    let expected_version = expected_version.trim().to_string();
+    if expected_version.is_empty() {
+        return Err(DesktopUpdateCommandError::new(
+            "DESKTOP_UPDATE_VERSION_REQUIRED",
+            "The expected desktop update version is required.",
+        ));
+    }
+    let coordinator = app.state::<DesktopUpdateCoordinator>();
+    let _operation = coordinator.begin()?;
+    let updater = app.updater().map_err(|error| {
+        desktop_update_error(
+            "DESKTOP_UPDATE_DOWNLOAD_FAILED",
+            "Cannot configure desktop updater",
+            error,
+        )
+    })?;
+    let update = updater
+        .check()
+        .await
+        .map_err(|error| {
+            desktop_update_error(
+                "DESKTOP_UPDATE_DOWNLOAD_FAILED",
+                "Cannot refresh desktop update",
+                error,
+            )
+        })?
+        .ok_or_else(|| {
+            DesktopUpdateCommandError::new(
+                "DESKTOP_UPDATE_NOT_AVAILABLE",
+                "The announced desktop update is no longer available.",
+            )
+        })?;
+    if update.version != expected_version {
+        return Err(DesktopUpdateCommandError::new(
+            "DESKTOP_UPDATE_VERSION_CHANGED",
+            format!(
+                "The desktop update changed from {expected_version} to {}. Check again before downloading.",
+                update.version
+            ),
+        ));
+    }
+
+    let downloaded = Arc::new(AtomicU64::new(0));
+    let progress_bytes = downloaded.clone();
+    let progress_app = app.clone();
+    let progress_version = update.version.clone();
+    let finish_bytes = downloaded.clone();
+    let finish_app = app.clone();
+    let finish_version = update.version.clone();
+    let bytes = update
+        .download(
+            move |chunk_length, content_length| {
+                let downloaded_bytes = progress_bytes
+                    .fetch_add(chunk_length as u64, Ordering::AcqRel)
+                    + chunk_length as u64;
+                emit_desktop_update_progress(
+                    &progress_app,
+                    DesktopUpdateProgress {
+                        version: progress_version.clone(),
+                        downloaded_bytes,
+                        total_bytes: content_length,
+                        finished: false,
+                    },
+                );
+            },
+            move || {
+                emit_desktop_update_progress(
+                    &finish_app,
+                    DesktopUpdateProgress {
+                        version: finish_version,
+                        downloaded_bytes: finish_bytes.load(Ordering::Acquire),
+                        total_bytes: None,
+                        finished: true,
+                    },
+                );
+            },
+        )
+        .await
+        .map_err(|error| {
+            desktop_update_error(
+                "DESKTOP_UPDATE_DOWNLOAD_FAILED",
+                "Cannot download signed desktop update",
+                error,
+            )
+        })?;
+    let info = DesktopUpdateInfo::available(&update, Some(bytes.len() as u64));
+    *coordinator.prepared.lock().unwrap() = Some(PreparedDesktopUpdate { update, bytes });
+    Ok(info)
+}
+
+#[tauri::command]
+fn overlay_desktop_update_install<R: Runtime>(
+    app: AppHandle<R>,
+    expected_version: String,
+) -> Result<bool, DesktopUpdateCommandError> {
+    let expected_version = expected_version.trim();
+    let coordinator = app.state::<DesktopUpdateCoordinator>();
+    let _operation = coordinator.begin()?;
+    let prepared = {
+        let mut prepared = coordinator.prepared.lock().unwrap();
+        let matches = prepared
+            .as_ref()
+            .map(|update| update.update.version.as_str())
+            == Some(expected_version);
+        if !matches {
+            return Err(DesktopUpdateCommandError::new(
+                "DESKTOP_UPDATE_NOT_DOWNLOADED",
+                format!("Desktop update {expected_version} has not been downloaded and verified."),
+            ));
+        }
+        prepared.take().unwrap()
+    };
+
+    {
+        let server = app.state::<Server>();
+        let _server_operation = server.operation.lock().unwrap();
+        stop_server_state(&server).map_err(|error| {
+            desktop_update_error(
+                "DESKTOP_UPDATE_SHUTDOWN_FAILED",
+                "Cannot establish terminal managed-backend ownership before update",
+                error,
+            )
+        })?;
+    }
+
+    if let Err(error) = prepared.update.install(&prepared.bytes) {
+        let recovery = restart_server(&app).err();
+        let recovery_suffix = recovery
+            .map(|restart_error| format!(" Managed backend restart also failed: {restart_error}"))
+            .unwrap_or_default();
+        return Err(DesktopUpdateCommandError::new(
+            "DESKTOP_UPDATE_INSTALL_FAILED",
+            format!("Cannot install verified desktop update: {error}.{recovery_suffix}"),
+        ));
+    }
+    app.restart()
+}
+
 #[tauri::command]
 fn overlay_quit<R: Runtime>(app: AppHandle<R>) -> Result<bool, String> {
     app.exit(0);
@@ -5301,13 +5606,15 @@ fn build_macos_application_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result
 fn main() {
     let builder = tauri::Builder::default()
         .manage(Server::default())
+        .manage(DesktopUpdateCoordinator::default())
         .manage(TrayAttention {
             state: Mutex::new(TrayAttentionState::default()),
             cvar: Condvar::new(),
         })
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
-        .plugin(tauri_plugin_notification::init());
+        .plugin(tauri_plugin_notification::init())
+        .plugin(tauri_plugin_updater::Builder::new().build());
 
     #[cfg(target_os = "macos")]
     let builder = builder
@@ -5346,6 +5653,9 @@ fn main() {
         overlay_badge_set,
         overlay_notification_send,
         overlay_toggle_devtools,
+        overlay_desktop_update_check,
+        overlay_desktop_update_download,
+        overlay_desktop_update_install,
         overlay_quit
     ]);
 
@@ -5375,6 +5685,9 @@ fn main() {
         overlay_attention_set,
         overlay_badge_set,
         overlay_notification_send,
+        overlay_desktop_update_check,
+        overlay_desktop_update_download,
+        overlay_desktop_update_install,
         overlay_quit
     ]);
 

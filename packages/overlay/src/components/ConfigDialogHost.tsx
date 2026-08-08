@@ -12,6 +12,7 @@ import NetworkPanel from "./settings/NetworkPanel"
 import ArchivePanel from "./settings/ArchivePanel"
 import ScheduledAutomationsPanel from "./settings/ScheduledAutomationsPanel"
 import { MemoryContextPanel } from "./settings/MemoryContextPanel"
+import DesktopUpdatePanel from "./settings/DesktopUpdatePanel"
 import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./settings/layout"
 import { Dialog } from "./ui/Dialog"
 import { Button } from "./ui/Button"
@@ -378,6 +379,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
                 </For>
               </SettingsSurface>
             </SettingsGroup>
+            <DesktopUpdatePanel />
             <SettingsGroup title={t("about.links")} contentInset>
               <div class="about-links">
                 <For each={ABOUT_LINKS}>

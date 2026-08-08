@@ -616,6 +616,12 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
           return invokeTauri("overlay_server_restart")
         case "devtools.toggle":
           return invokeTauri("overlay_toggle_devtools")
+        case "desktopUpdate.check":
+          return invokeTauri("overlay_desktop_update_check")
+        case "desktopUpdate.download":
+          return invokeTauri("overlay_desktop_update_download", { expectedVersion: command.expectedVersion })
+        case "desktopUpdate.install":
+          return invokeTauri("overlay_desktop_update_install", { expectedVersion: command.expectedVersion })
         case "window.quit":
           return invokeTauri("overlay_quit")
         case "badge.set":

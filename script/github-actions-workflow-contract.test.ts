@@ -7,6 +7,7 @@ type WorkflowStep = {
   shell?: string
   uses?: string
   run?: string
+  env?: Record<string, string>
   with?: Record<string, unknown>
 }
 
@@ -102,6 +103,7 @@ describe("GitHub Actions workflow contract", () => {
     expect(jobs.prepare?.outputs).toEqual({
       version: "${{ steps.meta.outputs.version }}",
       prerelease: "${{ steps.meta.outputs.prerelease }}",
+      "update-channel": "${{ steps.meta.outputs.update-channel }}",
     })
     expect(jobs.prepare?.steps?.find(({ name }) => name === "Resolve release version")?.run).toContain(
       "releaseVersionMetadata(Bun.argv.at(-1)).prerelease",
@@ -110,14 +112,26 @@ describe("GitHub Actions workflow contract", () => {
       jobs["publish-release-assets"]?.steps?.find(({ name }) => name === "Upload release assets to GitHub Release")
         ?.run,
     ).toContain('--prerelease="${{ needs.prepare.outputs.prerelease }}"')
+    expect(jobs["package-overlay"]?.steps?.find(({ name }) => name === "Package GUI installers")?.env).toEqual({
+      OPENCORVUS_VERSION: "${{ needs.prepare.outputs.version }}",
+      OPENCORVUS_CHANNEL: "latest",
+      OPENCORVUS_UPDATER_PUBLIC_KEY: "${{ secrets.OPENCORVUS_UPDATER_PUBLIC_KEY }}",
+      TAURI_SIGNING_PRIVATE_KEY: "${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}",
+      TAURI_SIGNING_PRIVATE_KEY_PASSWORD: "${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}",
+    })
+    expect(
+      jobs["publish-release-assets"]?.steps?.find(({ name }) => name === "Upload release assets to GitHub Release")
+        ?.run,
+    ).toContain("generate-desktop-update-manifest.ts")
     expect(jobs["publish-release"]?.steps?.find(({ name }) => name === "Publish verified draft")).toEqual({
       name: "Publish verified draft",
       env: {
         GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
         VERSION: "${{ needs.prepare.outputs.version }}",
         PRERELEASE: "${{ needs.prepare.outputs.prerelease }}",
+        UPDATE_CHANNEL: "${{ needs.prepare.outputs.update-channel }}",
       },
-      run: 'gh release edit "v${VERSION}" --draft=false --prerelease="${PRERELEASE}" --repo "$GITHUB_REPOSITORY"',
+      run: 'gh release edit "v${VERSION}" --draft=false --prerelease="${PRERELEASE}" --repo "$GITHUB_REPOSITORY"\nCHANNEL_TAG="desktop-update-${UPDATE_CHANNEL}"\nif ! gh release view "$CHANNEL_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then\n  gh release create "$CHANNEL_TAG" \\\n    --prerelease \\\n    --title "OpenCorvus ${UPDATE_CHANNEL} desktop update channel" \\\n    --notes "Mutable signed desktop update metadata. Installers remain in immutable versioned releases." \\\n    --repo "$GITHUB_REPOSITORY"\nfi\nCHANNEL_DIR="$(mktemp -d)"\ngh release download "v${VERSION}" --pattern latest.json --dir "$CHANNEL_DIR" --repo "$GITHUB_REPOSITORY"\ngh release upload "$CHANNEL_TAG" "$CHANNEL_DIR/latest.json" --clobber --repo "$GITHUB_REPOSITORY"\n',
     })
   })
 

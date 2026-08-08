@@ -970,6 +970,9 @@ export type NativeCommand =
   | { kind: "server.info" }
   | { kind: "server.restart" }
   | { kind: "devtools.toggle" }
+  | { kind: "desktopUpdate.check" }
+  | { kind: "desktopUpdate.download"; expectedVersion: string }
+  | { kind: "desktopUpdate.install"; expectedVersion: string }
   | { kind: "window.quit" }
   | { kind: "badge.set"; count: number }
   | { kind: "workspace.pickDir"; start?: string }
@@ -1185,10 +1188,14 @@ export function isNativeCommand(value: unknown): value is NativeCommand {
     case "server.info":
     case "server.restart":
     case "devtools.toggle":
+    case "desktopUpdate.check":
     case "window.quit":
     case "notification.permission":
     case "notification.requestPermission":
       return true
+    case "desktopUpdate.download":
+    case "desktopUpdate.install":
+      return isNonBlankString(obj["expectedVersion"])
     case "badge.set":
       return typeof obj["count"] === "number" && Number.isFinite(obj["count"]) && obj["count"] >= 0
     case "workspace.pickDir":

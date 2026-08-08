@@ -6,7 +6,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { overlayExecutableFileName, overlayPlatformFromNode } from "../packages/overlay/script/artifact-names"
 import { copyReleaseFile } from "./copy-release-file"
-import { overlayBundleArchitecture, overlayBundlePatterns } from "./release-asset-contract"
+import { overlayBundlePatterns, overlayUpdaterContract, updaterSignatureName } from "./release-asset-contract"
 import { runTimedStage } from "./timed-stage"
 
 export interface GuiInstallerMatrixRow {
@@ -112,18 +112,6 @@ function requireSingleMatchingFile(root: string, pattern: RegExp, label: string)
   return matches[0]!
 }
 
-function requireSingleMacApplication(root: string): string {
-  const macBundleRoot = path.join(root, "macos")
-  const matches = fs
-    .readdirSync(macBundleRoot, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && entry.name.endsWith(".app"))
-    .map((entry) => path.join(macBundleRoot, entry.name))
-  if (matches.length !== 1) {
-    throw new Error(`macOS application bundle must resolve to exactly one directory under ${macBundleRoot}`)
-  }
-  return matches[0]!
-}
-
 async function packageVersion(repoRoot: string, env: NodeJS.ProcessEnv): Promise<string> {
   const configured = env.OPENCORVUS_VERSION?.trim()
   if (configured) return configured.replace(/^v(?=\d)/, "")
@@ -164,21 +152,21 @@ export async function stageGuiInstallerArtifacts(
   staged.push(stagedExecutable)
 
   const expectedPatterns = overlayBundlePatterns(row.id, version)
+  const updater = overlayUpdaterContract(row.id, version)
   for (const expected of expectedPatterns) {
-    if (row.hostPlatform === "darwin" && expected.label === "macOS app archive bundle") continue
     const source = requireSingleMatchingFile(paths.bundleRoot, expected.pattern, expected.label)
     const destination = path.join(paths.output, path.basename(source))
     await copyReleaseFile(source, destination)
     staged.push(destination)
-  }
-
-  if (row.hostPlatform === "darwin") {
-    const application = requireSingleMacApplication(paths.bundleRoot)
-    const architecture = overlayBundleArchitecture(row.id).mac
-    if (!architecture) throw new Error(`Missing macOS bundle architecture for ${row.id}`)
-    const archiveName = `OpenCorvus_${version}_${architecture}.app.tar.gz`
-    await $`tar -czf ${archiveName} -C ${path.dirname(application)} ${path.basename(application)}`.cwd(paths.output)
-    staged.push(path.join(paths.output, archiveName))
+    if (updater.bundlePattern.test(path.basename(source))) {
+      const sourceSignature = updaterSignatureName(source)
+      if (!fs.existsSync(sourceSignature)) {
+        throw new Error(`Missing ${updater.label} signature: ${sourceSignature}`)
+      }
+      const destinationSignature = updaterSignatureName(destination)
+      await copyReleaseFile(sourceSignature, destinationSignature)
+      staged.push(destinationSignature)
+    }
   }
 
   return staged
@@ -186,7 +174,7 @@ export async function stageGuiInstallerArtifacts(
 
 async function validateGuiInstallerArtifacts(repoRoot: string, row: GuiInstallerMatrixRow, version: string) {
   const output = guiInstallerStagePaths(repoRoot, row).output
-  await $`bun ./script/check-release-assets.ts overlay --dir ${output} --platform ${row.id} --version ${version} --require-bundle`.cwd(
+  await $`bun ./script/check-release-assets.ts overlay --dir ${output} --platform ${row.id} --version ${version} --require-bundle --require-updater`.cwd(
     repoRoot,
   )
 }

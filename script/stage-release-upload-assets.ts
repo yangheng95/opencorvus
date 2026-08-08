@@ -2,7 +2,13 @@
 
 import fs from "node:fs/promises"
 import path from "node:path"
-import { cliArchiveNames, looksLikeOverlayBundle, overlayBundlePatterns } from "./release-asset-contract"
+import {
+  cliArchiveNames,
+  looksLikeOverlayBundle,
+  overlayBundlePatterns,
+  overlayUpdaterContract,
+  updaterSignatureName,
+} from "./release-asset-contract"
 
 function arg(name: string): string {
   const index = process.argv.indexOf(name)
@@ -39,6 +45,8 @@ function stagedName(file: string): string | undefined {
     const platform = artifact.slice("overlay-".length)
     const allowed = overlayBundlePatterns(platform, releaseVersion)
     if (allowed.some(({ pattern }) => pattern.test(basename))) return basename
+    const updater = overlayUpdaterContract(platform, releaseVersion)
+    if (basename.endsWith(".sig") && updater.bundlePattern.test(basename.slice(0, -4))) return basename
     if (looksLikeOverlayBundle(basename)) {
       throw new Error(`Overlay bundle does not match release ${releaseVersion} for ${platform}: ${basename}`)
     }
@@ -79,6 +87,15 @@ for (const [artifact, assets] of stagedByArtifact) {
       if (!assets.some((asset) => pattern.test(asset))) {
         throw new Error(`Missing ${label} in downloaded artifact ${artifact}`)
       }
+    }
+    const updater = overlayUpdaterContract(platform, releaseVersion)
+    const updaterBundles = assets.filter((asset) => updater.bundlePattern.test(asset))
+    if (updaterBundles.length !== 1) {
+      throw new Error(`${updater.label} must resolve to exactly one asset in downloaded artifact ${artifact}`)
+    }
+    const signature = updaterSignatureName(updaterBundles[0]!)
+    if (!assets.includes(signature)) {
+      throw new Error(`Missing ${updater.label} signature in downloaded artifact ${artifact}: ${signature}`)
     }
     continue
   }

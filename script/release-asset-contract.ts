@@ -11,6 +11,12 @@ export type OverlayBundlePattern = {
   pattern: RegExp
 }
 
+export type OverlayUpdaterContract = {
+  target: "linux-x86_64" | "linux-aarch64" | "darwin-x86_64" | "darwin-aarch64" | "windows-x86_64"
+  label: string
+  bundlePattern: RegExp
+}
+
 /** CLI means command-line interface; these are the public archive names for one native row. */
 export function cliArchiveNames(platform: string): string[] {
   if (platform === "linux-x64") {
@@ -84,6 +90,37 @@ export function overlayBundlePatterns(platform: string, version: string): Overla
     ]
   }
   throw new Error(`Unsupported overlay bundle platform: ${platform}`)
+}
+
+export function overlayUpdaterContract(platform: string, version: string): OverlayUpdaterContract {
+  const versionPattern = escapedVersionPattern(version)
+  const arch = overlayBundleArchitecture(platform)
+  if (platform === "windows-x64") {
+    return {
+      target: "windows-x86_64",
+      label: "Windows NSIS updater bundle",
+      bundlePattern: new RegExp(`^OpenCorvus_${versionPattern}_${arch.windows}(?:_[A-Za-z0-9-]+)?-setup\\.exe$`),
+    }
+  }
+  if (platform === "darwin-x64" || platform === "darwin-arm64") {
+    return {
+      target: platform === "darwin-x64" ? "darwin-x86_64" : "darwin-aarch64",
+      label: "macOS application updater archive",
+      bundlePattern: new RegExp(`^OpenCorvus_${versionPattern}_${arch.mac}\\.app\\.tar\\.gz$`),
+    }
+  }
+  if (platform === "linux-x64" || platform === "linux-arm64") {
+    return {
+      target: platform === "linux-x64" ? "linux-x86_64" : "linux-aarch64",
+      label: "Linux AppImage updater bundle",
+      bundlePattern: new RegExp(`^OpenCorvus_${versionPattern}_${arch.linuxAppImage}\\.AppImage$`),
+    }
+  }
+  throw new Error(`Unsupported overlay updater platform: ${platform}`)
+}
+
+export function updaterSignatureName(bundleName: string): string {
+  return `${bundleName}.sig`
 }
 
 export function looksLikeOverlayBundle(filename: string): boolean {

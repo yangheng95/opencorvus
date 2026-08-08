@@ -3,7 +3,7 @@
 import fs from "fs"
 import path from "path"
 import { artifactEmbeddedExecutableRelativePaths } from "../packages/opencorvus/script/build-artifact"
-import { overlayBundlePatterns } from "./release-asset-contract"
+import { overlayBundlePatterns, overlayUpdaterContract, updaterSignatureName } from "./release-asset-contract"
 
 const args = process.argv.slice(2)
 const mode = args[0]
@@ -115,6 +115,7 @@ const dir = path.resolve(flag("--dir") || "")
 const platform = flag("--platform")
 const current = version("--version")
 const requireBundle = args.includes("--require-bundle")
+const requireUpdater = args.includes("--require-updater")
 if (!dir || !platform || !current) {
   throw new Error("overlay mode requires --dir, --platform and --version")
 }
@@ -130,6 +131,15 @@ if (requireBundle) {
   for (const { pattern, label } of overlayBundlePatterns(platform, current)) {
     requireMatchingFile(dir, pattern, label)
   }
+}
+
+if (requireUpdater) {
+  const updater = overlayUpdaterContract(platform, current)
+  const bundle = list(dir).filter((file) => updater.bundlePattern.test(file))
+  if (bundle.length !== 1) {
+    throw new Error(`${updater.label} must resolve to exactly one file in ${dir}; found ${bundle.length}`)
+  }
+  requireFile(path.join(dir, updaterSignatureName(bundle[0]!)))
 }
 
 console.log(`Overlay assets validated for ${platform}`)

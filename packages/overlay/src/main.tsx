@@ -110,6 +110,7 @@ import { teardownApp } from "./services/init"
 import { stopTimers } from "./services/sync"
 import { nativeOpen } from "./utils/native"
 import { getHostTransport } from "./services/host-transport-runtime"
+import { checkDesktopUpdate } from "./services/desktop-update"
 import { installNativeWindowCloseLifecycle } from "./services/native-window-lifecycle"
 import { showOverlayWindow } from "./services/window"
 import { hydrateIconPlaceholders, installIconHtmlRenderer } from "./utils/icon-html"
@@ -2608,7 +2609,10 @@ runMainAsync("initApp", async () => {
       onSettingsLoaded: () => {
         setSettingsHydrated(true)
       },
-      onConnected: focusInitialRestoredTaskWorkspace,
+      onConnected: async () => {
+        await focusInitialRestoredTaskWorkspace()
+        void checkDesktopUpdate({ background: true })
+      },
     })
   } catch (error) {
     reportOverlayRuntimeError("initApp", error)
