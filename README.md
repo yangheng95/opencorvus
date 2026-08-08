@@ -1,5 +1,3 @@
-![OpenCorvus adapts Agentic systems and traditional algorithms into contracts, evidence, Artifacts, and one reviewed workflow](assets/heterogeneous-algorithm-foundry.png)
-
 <p align="center">
   <strong>OpenCorvus</strong>
 </p>
@@ -9,8 +7,7 @@
 </p>
 
 <p align="center">
-  <strong>Build an AI organization around the way you work.</strong><br>
-  <em>Customize Expert Squads. Run long-horizon Missions. Turn specialist collaboration into reviewed delivery.</em>
+  <strong>Open-source orchestration for multi-agent work.</strong>
 </p>
 
 <p align="center">
@@ -20,119 +17,37 @@
   <a href="#quick-start">Quick Start</a>
 </p>
 
-OpenCorvus is an open-source Agent Harness for building a dedicated artificial
-intelligence (AI) organization, not merely configuring another chatbot. Define
-the specialists, tools, models, and working methods your work requires; give
-them a real outcome; then let durable Missions coordinate the work across days,
-stages, and domains.
-
-Each specialist team remains accountable for its own Task. Research can inform
-planning, planning can guide implementation, and independent reviewers can
-challenge the result through accepted, traceable Artifacts instead of shared
-hidden context. You get an organization shaped around your work and one visible
-delivery trail from request to reviewed result.
+OpenCorvus runs agent work from a desktop application, Hypertext Transfer
+Protocol (HTTP) application programming interface (API), or connected channel.
+It assigns each Task to one fixed Expert Squad and, when the package requires
+one, a declared workflow. It streams execution and stores messages, tool results,
+Artifacts, and completion evidence. A Mission can coordinate several Tasks when
+an outcome needs different squads or explicit dependencies.
 
 > [!IMPORTANT]
 > OpenCorvus is under active development. This README describes capabilities in
 > the repository today. Output quality depends on the selected models, reachable
-> sources, installed capabilities, and evidence available to the run.
-> “Always-on” means the local or hosted OpenCorvus runtime remains online; a
-> powered-off machine cannot continue executing work.
+> sources, installed capabilities, and available evidence. Unattended work only
+> runs while the local or hosted OpenCorvus runtime is online.
 
-## Three reasons to build on OpenCorvus
+## Core model
 
-### 1. Customize the organization, not just the prompt
+| Object           | Role                                                                                                                        |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Mission          | Coordinates an outcome that spans multiple Tasks and records their dependencies.                                            |
+| Task             | Owns one project-scoped unit of work, one fixed Expert Squad, any selected workflow, its Sessions, and lifecycle decisions. |
+| Expert Squad     | Packages an agent roster, instructions, Skills, tools, Model Context Protocol (MCP) access, and any declared workflows.     |
+| Workflow         | Declares the agents that run for a Task and their dependency order.                                                         |
+| Artifact         | Stores a typed output or file snapshot with provenance so another agent or Task can read the exact result.                  |
+| Host observation | Records facts such as file changes and command results independently of an agent's summary.                                 |
 
-An **Expert Squad** is a self-contained organizational unit: specialist roles,
-instructions, Skills, tools, Model Context Protocol (MCP) servers, and a declared
-workflow packaged together. Start with the built-in code, research, office, and
-business squads, or use the Squad Software Development Kit (SDK) to create teams
-for your own domain and standards.
+For a Task, the selected Expert Squad remains fixed; a selected workflow is also
+fixed. Workers stream messages and tool calls, publish Artifacts when their
+contract requires them, and pass exact Artifact references to downstream
+workers. The Orchestrator uses those records and host observations for lifecycle
+decisions. Unresolved limitations and blockers remain visible in agent messages.
 
-Connect compatible models, coding agents, Agentic systems, deterministic tools,
-optimization models, and traditional algorithms through explicit adapters and
-self-contained packages:
-
-**adapt → contract → evidence → Artifact**
-
-OpenCorvus standardizes how capabilities enter a workflow and deliver results.
-It does not pretend arbitrary third-party code is automatically compatible or
-safe.
-
-### 2. Keep long-horizon work coherent
-
-Start with the outcome, not an agent topology. A durable **Mission** separates a
-large objective into accountable **Tasks** and preserves requirements, decisions,
-lineage, interactions, and accepted Artifacts as the work advances. A later
-stage continues from reviewed evidence instead of asking you to reconstruct the
-context or trust a summary from memory.
-
-Tasks are resumable, recurring work retains its history, and real blockers stay
-visible. When the local or hosted runtime remains online, OpenCorvus can keep
-advancing unattended work beyond a single chat turn or desktop session.
-
-### 3. Make Expert Squads collaborate as one delivery organization
-
-Every Task keeps one fixed Expert Squad and one declared workflow, so ownership
-never becomes ambiguous. The Mission coordinates the larger outcome: independent
-teams can work in parallel, dependent teams begin after their required evidence
-is accepted, and typed Artifacts carry exact sources and decisions between them.
-
-That makes cross-domain collaboration concrete. A research squad can hand an
-evidence dossier to a planning squad; a development squad can implement the
-accepted plan; testing and review squads can independently inspect the result.
-The final delivery retains the contribution and evidence of every stage.
-
-![One OpenCorvus Mission coordinates specialized Agent Teams and reunites their work as one reviewed delivery](assets/agent-teams-workflow.png)
-
-### Delivery is the finish line
-
-An agent stopping is not the same as a Task completing. OpenCorvus preserves
-typed, content-addressed **Artifacts**, exact lineage, implementation and source
-evidence, and independent review. If required evidence is missing, the blocker
-stays visible instead of being presented as a successful delivery.
-
-## Assemble an organization for the outcome
-
-| Outcome                         | Expert Squad collaboration                                                            | Reviewable delivery                                                            |
-| ------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| Ship a repository change        | Requirements and architecture → development → testing and review                      | Implementation, validation, version-control evidence, and independent findings |
-| Produce deep research           | Research charter → parallel source specialists → evidence synthesis → citation review | Source dossier, cited report, assumptions, and review evidence                 |
-| Analyze a company or market     | Source research → financial or market analysis → risk audit                           | Dated evidence, scenarios, risks, and an independently challenged conclusion   |
-| Create an editable presentation | Research and narrative → Office Artifact production → render and visual review        | PowerPoint Open XML Presentation (PPTX) package and exact reviewed file        |
-| Operate recurring work          | Scheduled triage → domain squad → review or permissioned action                       | Visible target, run history, retained context, and action-required state       |
-| Add your own specialty          | Squad SDK authoring → package validation → Mission assignment                         | A self-contained Expert Squad with exact identity, workflow, and capabilities  |
-
-## One Mission, many specialists, one accountable result
-
-```text
-your long-horizon outcome
-  → Mission owns the delivery chain
-     ├─ Task A · Research Squad ──────┐
-     ├─ Task B · Domain Squad ────────┼─ accepted Artifact evidence
-     └─ Task C · Analysis Squad ──────┘
-                                      ↓
-                         Task D · Build Squad
-                                      ↓
-                       Task E · Independent Review
-                                      ↓
-                          one reviewed delivery
-```
-
-1. Send an outcome from the desktop, Hypertext Transfer Protocol (HTTP)
-   application programming interface (API), Slack, or another connected channel.
-2. Let the Mission identify the specialist stages and their acceptance
-   boundaries.
-3. Bind every Task to one Expert Squad and one declared workflow for its complete
-   lifecycle.
-4. Run independent specialists in parallel and dependent specialists only after
-   their required evidence succeeds.
-5. Hand typed Artifacts between squads instead of copying conclusions through
-   orchestration prose.
-6. Let independent specialists review the implementation, runtime, visual,
-   source, and Artifact evidence their domain requires.
-7. Deliver one result when the full evidence chain supports it; otherwise keep
-   the real blocker visible.
+![Mission and Expert Squad execution flow](assets/agent-teams-workflow.png)
 
 ## Quick Start
 
@@ -175,7 +90,7 @@ The source build above is the repository-local installation path. Desktop
 downloads are verified by the native GitHub Actions package matrix attached to
 their release; a development Actions artifact is not a public installer feed.
 
-### Start your assistant
+### Start the server
 
 Start the headless server in the repository where you want OpenCorvus to work:
 
@@ -306,15 +221,6 @@ The gateway starts work from the first message in a thread, mirrors planning and
 delivery updates, accepts permission responses such as `allow`, `always`, and
 `reject`, and carries operator follow-ups back into the Task.
 
-## Where OpenCorvus fits
-
-| Category            | What it is best at                                  | What OpenCorvus adds                                                      |
-| ------------------- | --------------------------------------------------- | ------------------------------------------------------------------------- |
-| Agent frameworks    | Building custom agents and graphs                   | A user-facing Harness that owns long-running, cross-domain delivery       |
-| Workflow automation | Connecting applications and explicit business logic | Evidence-led Tasks whose next step can depend on reviewed work            |
-| Coding agents       | Working inside repositories                         | Code as one specialist path beside research, office, and business work    |
-| General assistants  | Broad conversational help                           | Dedicated teams, durable context, exact lineage, and reviewable Artifacts |
-
 ## Development
 
 ```bash
@@ -332,38 +238,16 @@ bun run --cwd packages/channel-runtime test
 bun ./packages/sdk/js/script/build.ts
 ```
 
-## Frequently asked questions
+## Limits
 
-### Does OpenCorvus replace my coding agent or model?
-
-No. OpenCorvus is the Harness around compatible capabilities. It gives them
-durable Tasks, specialist teams, permissions, remote channels, Artifact lineage,
-review loops, and operator feedback so their work becomes observable and
-reviewable.
-
-### Is OpenCorvus only for code?
-
-No. Code and Work are peer paths on the same Mission, permission, memory, and
-Artifact substrate. The repository already includes research, office, business,
-scheduled-work, channel, and specialist-package surfaces.
-
-### Does it keep context between runs?
-
-Yes. Tasks, requirements, dispatch lineage, interactions, Artifacts, acceptance
-evidence, Session state, and project knowledge are persisted locally in SQLite.
-Session-scoped and global memory and preferences can remain available to future
-runs in the same project.
-
-### Can it really work around the clock?
-
-Yes, while its local or hosted runtime remains online. Tasks are durable and
-resumable, but OpenCorvus cannot execute on a machine that has been shut down.
-
-### Is it finished?
-
-No. The core orchestration loop is implemented and the product surface continues
-to expand. This README describes current repository capabilities, not every
-planned integration.
+- OpenCorvus coordinates compatible models, tools, and executors; it does not
+  make arbitrary third-party code compatible or safe.
+- Persisted Tasks can be resumed, but no work executes while the owning runtime
+  is offline.
+- Results depend on model behavior, source access, installed capabilities, and
+  the evidence available to the run.
+- The project is in active development. Interfaces and packaged integrations may
+  change between beta releases.
 
 ## Documentation and contributing
 
@@ -383,35 +267,24 @@ codebase and still carries explicitly synchronized OpenCode work in its model
 provider, GitHub Copilot, and provider-plugin surfaces. We are grateful to the
 OpenCode maintainers and contributors for that foundation.
 
-The current product also depends on many excellent open-source projects. The
-following list highlights the projects that provide major product boundaries or
-ship as key capabilities; it is intentionally not a copy of the complete
-dependency graph.
+Major runtime and distribution dependencies include:
 
 - **Runtime and agent core:** [Bun](https://github.com/oven-sh/bun),
   [Vercel AI SDK](https://github.com/vercel/ai),
   [Hono](https://github.com/honojs/hono), and
-  [Drizzle ORM](https://github.com/drizzle-team/drizzle-orm) power the runtime,
-  streaming model integration, Hypertext Transfer Protocol (HTTP) application
-  programming interface (API), and SQLite persistence layers.
+  [Drizzle ORM](https://github.com/drizzle-team/drizzle-orm).
 - **Open interoperability:** the official
   [Model Context Protocol TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk),
   [MCP Apps](https://github.com/modelcontextprotocol/ext-apps), and
-  [Agent Client Protocol TypeScript SDK](https://github.com/agentclientprotocol/typescript-sdk)
-  connect OpenCorvus to tools, interactive applications, and external coding
-  agents.
+  [Agent Client Protocol TypeScript SDK](https://github.com/agentclientprotocol/typescript-sdk).
 - **Desktop application:** [Tauri](https://github.com/tauri-apps/tauri),
   [SolidJS](https://github.com/solidjs/solid), and
-  [Kobalte](https://github.com/kobaltedev/kobalte) provide the native shell,
-  reactive renderer, and accessible User Interface (UI) primitives.
+  [Kobalte](https://github.com/kobaltedev/kobalte).
 - **Execution and evidence:** [Playwright](https://github.com/microsoft/playwright),
   [CUA](https://github.com/trycua/cua), and
-  [OfficeCLI](https://github.com/iOfficeAI/OfficeCLI) underpin browser evidence,
-  host-native Computer Use, and editable Office Artifact inspection and
-  rendering.
+  [OfficeCLI](https://github.com/iOfficeAI/OfficeCLI).
 - **Packaged command-line runtime:** [Node.js](https://github.com/nodejs/node)
-  and [ripgrep](https://github.com/BurntSushi/ripgrep) are included in supported
-  release closures for Node-based sidecars and fast repository search.
+  and [ripgrep](https://github.com/BurntSushi/ripgrep).
 - **Interactive workbench:** [CodeMirror](https://github.com/codemirror/dev),
   [xterm.js](https://github.com/xtermjs/xterm.js),
   [Mermaid](https://github.com/mermaid-js/mermaid),
@@ -420,22 +293,18 @@ dependency graph.
   [Reveal.js](https://github.com/hakimel/reveal.js),
   [Vega-Lite](https://github.com/vega/vega-lite),
   [Cytoscape.js](https://github.com/cytoscape/cytoscape.js), and
-  [Univer](https://github.com/dream-num/univer) make the editor and interactive
-  Artifact surfaces possible.
+  [Univer](https://github.com/dream-num/univer).
 - **Built-in capability sources:** the bundled design and interview Skills
   adapt ideas and protocols from
   [Taste Skill](https://github.com/Leonxlnx/taste-skill) and
-  [Matt Pocock's Skills](https://github.com/mattpocock/skills); their local
-  provenance and license files remain with the adapted Skills.
+  [Matt Pocock's Skills](https://github.com/mattpocock/skills). Their provenance
+  and license files remain with the adapted Skills.
 - **Documentation:** [Astro](https://github.com/withastro/astro) and
-  [Starlight](https://github.com/withastro/starlight) power the documentation
-  site.
+  [Starlight](https://github.com/withastro/starlight).
 
-Thank you to every maintainer and contributor behind these projects and the
-many smaller dependencies recorded in the repository manifests. Each upstream
-project remains governed by its own license and trademarks. This acknowledgement
-does not replace the license and notice files that accompany source and release
-artifacts, and it does not imply endorsement or affiliation.
+The repository manifests and [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)
+contain the complete dependency and notice records. Each upstream project keeps
+its own license and trademarks.
 
 ## License
 
