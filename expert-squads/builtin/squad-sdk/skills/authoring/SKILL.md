@@ -1,13 +1,13 @@
 ---
 name: squad-sdk-authoring
 description: Author one portable, project-owned and traceable OpenCorvus Expert Squad through the Generate Agent Squads workflow and canonical SDK writer.
-required_tools:
-  - expert_squad_author
 ---
 
 # Generate Agent Squads authoring method
 
 Define one narrow domain, explicit selection guidance, and only the dynamic agents that perform real work.
+
+This Skill is the shared readable contract for the scheduler, source analyst, package architect, and contract reviewer. Loading it never grants a mutation tool. Only the scheduler projection owns `expert_squad_author`; projected workers use this Skill and its supporting definition contract to produce or review evidence, then follow their own role prompt without attempting the scheduler-only mutation.
 
 ## Conversation contract
 

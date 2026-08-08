@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import path from "node:path"
 import { Config } from "../../src/config/config"
+import { builtInPackageSources } from "../../src/expert-squad/builtin"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Instance } from "../../src/project/instance"
@@ -21,7 +22,7 @@ describe("Research Studio report-quality package", () => {
     expect(loaded.manifest).toMatchObject({
       id: "research-studio",
       name: "Research Studio",
-      version: "2026.08.07.1",
+      version: "2026.08.08.1",
       product_pillars: ["code", "work"],
     })
     expect(reportSkill?.snapshot.files.map((file) => file.path)).toEqual([
@@ -32,6 +33,16 @@ describe("Research Studio report-quality package", () => {
     const schemaFile = reportSkill!.bundle.files["references/decision-research-report.schema.json"]!
     const schemaText = typeof schemaFile === "string" ? schemaFile : schemaFile.content
     expect(JSON.parse(schemaText)).toMatchObject({
+      title: "Decision Research Report V1",
+      type: "object",
+    })
+    const embedded = builtInPackageSources.find((pkg) => pkg.id === "research-studio")!
+    const embeddedSchemaFile =
+      embedded.files["skills/analysis-report-quality/references/decision-research-report.schema.json"]
+    const embeddedSchemaText =
+      typeof embeddedSchemaFile === "string" ? embeddedSchemaFile : embeddedSchemaFile.content
+    expect(embeddedSchemaText).toBe(schemaText)
+    expect(JSON.parse(embeddedSchemaText)).toMatchObject({
       title: "Decision Research Report V1",
       type: "object",
     })
@@ -47,6 +58,7 @@ describe("Research Studio report-quality package", () => {
           projectDirectory: project.path,
           config,
         })
+        const sourcePackage = await ExpertSquadRegistry.loadSourcePackage(packageRoot)
         const agents = await Promise.all(
           ["research-studio-analyst", "research-studio-fact-checker", "research-studio-writer"].map((agentID) =>
             PromptProfileResolver.resolveWorkerCapability({
@@ -62,6 +74,7 @@ describe("Research Studio report-quality package", () => {
           "read",
           "browser_preview_capture",
         ])
+        expect(scheduler.packageRevision.packageDigest).toBe(sourcePackage.packageDigest)
         expect(agents.map((agent) => agent.productionSkills.map((skill) => skill.ref))).toEqual([
           [reportQualitySkillRef],
           [reportQualitySkillRef],

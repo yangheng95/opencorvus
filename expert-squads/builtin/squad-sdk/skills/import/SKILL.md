@@ -1,15 +1,13 @@
 ---
 name: squad-sdk-heterogeneous-import
 description: Agent-led heterogeneous Squad discovery, evidence review, blocker repair, lossless Skill-directory and portable remote MCP preservation, and canonical import into OpenCorvus.
-required_tools:
-  - multica_catalog
-  - multica_preview
-  - multica_import
 ---
 
 # Generate Agent Squads heterogeneous import method
 
 Import a Multica agent team through the official local Multica configuration and the strict OpenCorvus adapter. You own source discovery, evidence interpretation, autonomous diagnosis and repair, and the final report. The tools own source validation and package writes.
+
+This Skill is the shared readable contract for the scheduler, import analyst, and contract reviewer. Loading it never grants a mutation tool. Only the scheduler projection owns `multica_catalog`, `multica_preview`, and `multica_import`; projected workers inspect the scheduler's exact preview evidence and follow their own role prompt without attempting scheduler-only discovery, preview, or mutation.
 
 ## Procedure
 

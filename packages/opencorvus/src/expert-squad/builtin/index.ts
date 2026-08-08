@@ -65,6 +65,11 @@ export {
   SQUAD_SDK_EXPERT_SQUAD_ID,
 } from "./ids"
 
+function exactTextImport(content: unknown, source: string): string {
+  if (typeof content !== "string") throw new Error(`Embedded package source ${source} must load as exact text.`)
+  return content
+}
+
 export const builtInPackageSources = [
   {
     namespace: BUILTIN_EXPERT_SQUAD_NAMESPACE,
@@ -123,7 +128,10 @@ export const builtInPackageSources = [
       "skills/analysis-report-quality/references/decision-research-report-template.md":
         research_studio_decision_report_template_md,
       "skills/analysis-report-quality/references/decision-research-report.schema.json":
-        `${JSON.stringify(research_studio_decision_report_schema_json, null, 2)}\n`,
+        exactTextImport(
+          research_studio_decision_report_schema_json,
+          "research-studio/skills/analysis-report-quality/references/decision-research-report.schema.json",
+        ),
     },
   },
   {
@@ -139,7 +147,10 @@ export const builtInPackageSources = [
       "agents/squad-sdk-package-architect/system.md": squad_sdk_package_architect_system_md,
       "agents/squad-sdk-source-analyst/system.md": squad_sdk_source_analyst_system_md,
       "skills/authoring/SKILL.md": squad_sdk_authoring_skill_md,
-      "skills/authoring/references/definition-contract.json": `${JSON.stringify(squad_sdk_authoring_contract_json, null, 2)}\n`,
+      "skills/authoring/references/definition-contract.json": exactTextImport(
+        squad_sdk_authoring_contract_json,
+        "squad-sdk/skills/authoring/references/definition-contract.json",
+      ),
       "skills/import/SKILL.md": squad_sdk_import_skill_md,
     },
   },

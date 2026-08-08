@@ -3,9 +3,16 @@ import { mkdtemp, mkdir, rm, symlink, writeFile } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import {
+  ExecutionCapsuleTreeInspectionConflictError,
+  assertExecutionCapsuleDirectoryEntriesStable,
+  assertExecutionCapsuleSourceEnumerationStable,
   executionCapsuleSourceTreeDigest,
   executionCapsuleSourceTreeSnapshot,
+  executionCapsuleTreeDigest,
+  executionCapsuleTreeSnapshot,
 } from "../src/execution-capsule/tree-digest"
+
+const posixTest = process.platform === "win32" ? test.skip : test
 
 async function git(root: string, ...args: string[]) {
   const child = Bun.spawn(["git", ...args], { cwd: root, stdout: "pipe", stderr: "pipe" })
@@ -67,6 +74,139 @@ test("Task source snapshot equals the complete Git source selection", async () =
     })
   } finally {
     await Promise.all([rm(root, { recursive: true, force: true }), rm(dependency, { recursive: true, force: true })])
+  }
+})
+
+test("runtime tree and Task source tree each produce their complete canonical snapshot", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-capsule-tree-contract-"))
+  try {
+    await git(root, "init", "--quiet")
+    await writeFile(path.join(root, ".gitignore"), "runtime/\n")
+    await writeFile(path.join(root, "README.md"), "tracked source\n")
+    await mkdir(path.join(root, "src"))
+    await writeFile(path.join(root, "src", "app.ts"), "export const ready = true\n")
+    const runtime = path.join(root, "runtime")
+    await mkdir(path.join(runtime, "nested"), { recursive: true })
+    await writeFile(path.join(runtime, "z-last.txt"), "last\n")
+    await writeFile(path.join(runtime, "A-first.txt"), "first\n")
+    await writeFile(path.join(runtime, "nested", "mid.txt"), "middle\n")
+    await git(root, "add", ".gitignore", "README.md")
+
+    const runtimeSnapshot = await executionCapsuleTreeSnapshot(runtime)
+    const runtimeDigest = await executionCapsuleTreeDigest(runtime)
+    const sourceSnapshot = await executionCapsuleSourceTreeSnapshot(root)
+
+    expect({
+      runtimeFiles: runtimeSnapshot.files.map((file) => file.path),
+      repeatedRuntime: await executionCapsuleTreeSnapshot(runtime),
+      runtimeDigests: [runtimeDigest, await executionCapsuleTreeDigest(runtime)],
+      sourceFiles: sourceSnapshot.files.map((file) => file.path),
+    }).toEqual({
+      runtimeFiles: ["A-first.txt", "nested/mid.txt", "z-last.txt"],
+      repeatedRuntime: runtimeSnapshot,
+      runtimeDigests: [runtimeDigest, runtimeDigest],
+      sourceFiles: [".gitignore", "README.md", "src/app.ts"],
+    })
+  } finally {
+    await rm(root, { recursive: true, force: true })
+  }
+})
+
+test("symlinked root authority maps to the exact tree inspection conflict", async () => {
+  const container = await mkdtemp(path.join(os.tmpdir(), "opencorvus-capsule-root-authority-"))
+  try {
+    const source = path.join(container, "source")
+    const linkedRoot = path.join(container, "linked-root")
+    await mkdir(source)
+    await writeFile(path.join(source, "runtime.txt"), "runtime\n")
+    await symlink(source, linkedRoot, process.platform === "win32" ? "junction" : "dir")
+
+    try {
+      await executionCapsuleTreeSnapshot(linkedRoot)
+      throw new Error("Expected the exact Execution Capsule tree inspection conflict")
+    } catch (error) {
+      expect({
+        instance: error instanceof ExecutionCapsuleTreeInspectionConflictError,
+        value: ExecutionCapsuleTreeInspectionConflictError.isInstance(error) ? error.toObject() : null,
+      }).toEqual({
+        instance: true,
+        value: {
+          name: "ExecutionCapsuleTreeInspectionConflictError",
+          data: {
+            message: `Execution Capsule tree identity changed while reading ${linkedRoot}.`,
+            path: linkedRoot,
+            reason: "root_identity_changed",
+          },
+        },
+      })
+    }
+  } finally {
+    await rm(container, { recursive: true, force: true })
+  }
+})
+
+test("tree membership changes map to exact typed inspection conflicts", () => {
+  const directory = "runtime-directory"
+  const source = "task-source"
+  const inspect = (run: () => void) => {
+    try {
+      run()
+      throw new Error("Expected the exact Execution Capsule tree inspection conflict")
+    } catch (error) {
+      return ExecutionCapsuleTreeInspectionConflictError.isInstance(error) ? error.toObject() : null
+    }
+  }
+
+  expect([
+    inspect(() =>
+      assertExecutionCapsuleDirectoryEntriesStable(
+        directory,
+        [{ name: "runtime.js", type: "file" }],
+        [
+          { name: "runtime.js", type: "file" },
+          { name: "worker.js", type: "file" },
+        ],
+      ),
+    ),
+    inspect(() => assertExecutionCapsuleSourceEnumerationStable(source, ["README.md"], ["README.md", "src/app.ts"])),
+  ]).toEqual([
+    {
+      name: "ExecutionCapsuleTreeInspectionConflictError",
+      data: {
+        message: `Execution Capsule tree identity changed while reading ${directory}.`,
+        path: directory,
+        reason: "directory_entries_changed",
+      },
+    },
+    {
+      name: "ExecutionCapsuleTreeInspectionConflictError",
+      data: {
+        message: `Execution Capsule tree identity changed while reading ${source}.`,
+        path: source,
+        reason: "source_enumeration_changed",
+      },
+    },
+  ])
+})
+
+posixTest("Task source snapshot preserves the exact raw symlink target bytes", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-task-raw-symlink-"))
+  try {
+    await git(root, "init", "--quiet")
+    const rawTarget = Buffer.from([0x74, 0x61, 0x72, 0x67, 0x65, 0x74, 0x2d, 0x80])
+    await symlink(rawTarget, path.join(root, "raw-link"))
+    await git(root, "add", "raw-link")
+
+    const snapshot = await executionCapsuleSourceTreeSnapshot(root)
+    expect({
+      files: snapshot.files.map((file) => file.path),
+      target: Buffer.from(snapshot.files[0]!.bytes_base64, "base64"),
+    }).toEqual({
+      files: ["raw-link"],
+      target: rawTarget,
+    })
+  } finally {
+    await rm(root, { recursive: true, force: true })
   }
 })
 
