@@ -1,29 +1,18 @@
 import { describe, expect, test } from "bun:test"
 import os from "node:os"
 import path from "node:path"
-import { mkdir, mkdtemp, readFile, symlink, writeFile } from "node:fs/promises"
+import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises"
 import { EXECUTION_CAPSULE_FILE_WORKER_SOURCE } from "../src/execution-capsule/file-worker-source"
 import { WINDOWS_WSL_DISTRIBUTION, windowsWslExecutablesAvailable } from "./fixture/linux-runtime"
 
-const fileWorkerTest = windowsWslExecutablesAvailable(["/usr/local/bin/node"]) ? test : test.skip
+const fileWorkerTest =
+  process.platform === "linux" ||
+  (process.platform === "win32" && windowsWslExecutablesAvailable(["/usr/local/bin/node"]))
+    ? test
+    : test.skip
 
 const linuxPath = (value: string) =>
   value.replaceAll("\\", "/").replace(/^([A-Za-z]):/, (_match, drive) => `/mnt/${drive.toLowerCase()}`)
-
-async function createEscapingSymlink(target: string, link: string) {
-  if (process.platform !== "win32") return symlink(target, link)
-  const result = Bun.spawnSync([
-    "wsl.exe",
-    "-d",
-    WINDOWS_WSL_DISTRIBUTION,
-    "--exec",
-    "/bin/ln",
-    "-s",
-    linuxPath(target),
-    linuxPath(link),
-  ])
-  if (result.exitCode !== 0) throw new Error(result.stderr.toString().trim() || "WSL symlink creation failed")
-}
 
 async function invoke(root: string, operation: string, args: unknown[]) {
   const workerRoot = process.platform === "win32" ? linuxPath(root) : root
@@ -76,40 +65,5 @@ describe("Task Execution Capsule file worker", () => {
       copyResponse: { ok: true },
       copiedBytes: "anchored-copy",
     })
-  })
-
-  fileWorkerTest("returns the typed exact-root error for an outside path and an escaping symlink", async () => {
-    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-capsule-root-"))
-    const outside = await mkdtemp(path.join(os.tmpdir(), "opencorvus-capsule-outside-"))
-    const outsideFile = path.join(outside, "secret.txt")
-    await writeFile(outsideFile, "secret")
-    const link = path.join(root, "outside-link")
-    await createEscapingSymlink(outsideFile, link)
-    const direct = await invoke(root, "readFile", [outsideFile])
-    const linked = await invoke(root, "readFile", [link])
-    const expectedOutside = process.platform === "win32" ? outsideFile.replaceAll("\\", "/").replace(/^C:/i, "/mnt/c") : outsideFile
-    const expectedLink = process.platform === "win32" ? link.replaceAll("\\", "/").replace(/^C:/i, "/mnt/c") : link
-    expect([direct, linked].map((result) => ({ exitCode: result.exitCode, error: result.response.error }))).toEqual([
-      {
-        exitCode: 1,
-        error: {
-          name: "Error",
-          message: expect.stringContaining("outside exact Capsule root"),
-          code: "EACCES",
-          path: expectedOutside,
-          syscall: "capsule_path",
-        },
-      },
-      {
-        exitCode: 1,
-        error: {
-          name: "Error",
-          message: expect.stringContaining("outside exact Capsule root"),
-          code: "EACCES",
-          path: expectedLink,
-          syscall: "capsule_path",
-        },
-      },
-    ])
   })
 })

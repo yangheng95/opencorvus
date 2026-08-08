@@ -22,6 +22,7 @@ type WorkflowJob = {
 }
 
 type Workflow = {
+  on?: Record<string, unknown>
   jobs?: Record<string, WorkflowJob>
 }
 
@@ -52,6 +53,18 @@ describe("GitHub Actions workflow contract", () => {
   test("packages all five native GUI and CLI rows before publishing the release", async () => {
     const workflow = await readWorkflow("build.yml")
     const jobs = workflow.jobs ?? {}
+
+    expect(workflow.on).toEqual({
+      push: { tags: ["v*"] },
+      workflow_dispatch: {
+        inputs: {
+          version: {
+            description: "Release version (for example 0.0.1 or v0.0.1).",
+            required: true,
+          },
+        },
+      },
+    })
 
     const nativeMatrix = [
       { runner: "ubuntu-latest", platform: "linux-x64" },
@@ -87,11 +100,10 @@ describe("GitHub Actions workflow contract", () => {
     expect(jobs["publish-release-assets"]?.needs).toEqual(["prepare", "package-overlay", "package-cli"])
     expect(jobs["publish-release"]?.needs).toEqual(["prepare", "publish-release-assets"])
     expect(jobs.prepare?.outputs).toEqual({
-      release: "${{ steps.meta.outputs.release }}",
       version: "${{ steps.meta.outputs.version }}",
       prerelease: "${{ steps.meta.outputs.prerelease }}",
     })
-    expect(jobs.prepare?.steps?.find(({ name }) => name === "Resolve version and release flag")?.run).toContain(
+    expect(jobs.prepare?.steps?.find(({ name }) => name === "Resolve release version")?.run).toContain(
       "releaseVersionMetadata(Bun.argv.at(-1)).prerelease",
     )
     expect(
@@ -107,5 +119,34 @@ describe("GitHub Actions workflow contract", () => {
       },
       run: 'gh release edit "v${VERSION}" --draft=false --prerelease="${PRERELEASE}" --repo "$GITHUB_REPOSITORY"',
     })
+  })
+
+  test("prepares generated dependencies and native runtime tools before push verification", async () => {
+    const workflow = await readWorkflow("test.yml")
+    const jobs = workflow.jobs ?? {}
+
+    for (const job of ["build-critical", "channel-runtime-unit", "overlay-unit", "project-open"]) {
+      expect(jobs[job]?.steps?.find(({ uses }) => uses === "./.github/actions/setup-bun")?.with).toEqual({
+        prepare_sdk: "true",
+      })
+    }
+    expect(jobs.unit?.steps?.filter(({ name }) => name?.startsWith("Install "))).toEqual([
+      {
+        name: "Install Linux test runtime dependencies",
+        if: "runner.os == 'Linux'",
+        run: "sudo apt-get update\nsudo apt-get install -y ripgrep\n",
+      },
+      {
+        name: "Install macOS test runtime dependencies",
+        if: "runner.os == 'macOS'",
+        run: "brew install ripgrep",
+      },
+      {
+        name: "Install Windows test runtime dependencies",
+        if: "runner.os == 'Windows'",
+        shell: "pwsh",
+        run: "./script/install-windows-ripgrep.ps1",
+      },
+    ])
   })
 })

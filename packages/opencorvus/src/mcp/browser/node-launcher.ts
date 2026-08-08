@@ -174,36 +174,48 @@ export namespace BrowserMCPNodeLauncher {
     const outdir =
       sourceCacheDirectory ?? path.join(Global.Path.cache, "browser-mcp-node")
     await fs.mkdir(outdir, { recursive: true })
-    const entrypoint = `${transport}.ts`
-    const result = await Bun.build({
-      entrypoints: [path.join(import.meta.dir, entrypoint)],
-      target: "node",
-      external: ["electron"],
-    })
-    if (!result.success) {
-      const detail = result.logs.map((item) => item.message).join("; ")
-      throw new Error(`Failed to build Browser MCP node bundle: ${detail}`)
-    }
-    if (result.outputs.length !== 1) {
-      throw new Error(`Browser MCP ${transport} bundle produced ${result.outputs.length} outputs, expected one`)
-    }
-    const bytes = Buffer.from(await result.outputs[0]!.arrayBuffer())
-    const digest = createHash("sha256").update(bytes).digest("hex")
-    const published = path.join(outdir, `${transport}-${digest}.mjs`)
-    if (await exists(published)) return published
-
     const staging = path.join(outdir, `.${transport}-${process.pid}-${randomUUID()}.mjs`)
-    await fs.writeFile(staging, bytes, { flag: "wx" })
+    const child = await ProcessSupervisor.spawnHostCommand({
+      executable: process.execPath,
+      args: [
+        "build",
+        path.join(import.meta.dir, `${transport}.ts`),
+        "--target=node",
+        "--external=electron",
+        `--outfile=${staging}`,
+      ],
+      cwd: process.cwd(),
+      env: process.env,
+      owner: "browser-mcp-source-bundle",
+    })
+    let stderr = ""
+    child.stdout?.resume()
+    child.stderr?.setEncoding("utf8")
+    child.stderr?.on("data", (chunk) => (stderr += String(chunk)))
     try {
-      await fs.rename(staging, published)
+      const code = await child.exited
+      await ProcessSupervisor.disposeAndWaitForExit(child, `browser MCP ${transport} source bundle build`)
+      if (code !== 0) throw new Error(`Failed to build Browser MCP node bundle: ${stderr.trim()}`)
+      const bytes = await fs.readFile(staging)
+      const digest = createHash("sha256").update(bytes).digest("hex")
+      const published = path.join(outdir, `${transport}-${digest}.mjs`)
+      if (await exists(published)) return published
+      try {
+        await fs.rename(staging, published)
+      } catch (error) {
+        const code = (error as NodeJS.ErrnoException).code
+        if (code !== "EEXIST" && code !== "ENOTEMPTY") throw error
+        if (!(await exists(published))) throw error
+      }
+      return published
     } catch (error) {
-      const code = (error as NodeJS.ErrnoException).code
-      if (code !== "EEXIST" && code !== "ENOTEMPTY") throw error
-      if (!(await exists(published))) throw error
+      await ProcessSupervisor.disposeAndWaitForExit(child, `browser MCP ${transport} source bundle cleanup`).catch(
+        () => undefined,
+      )
+      throw error
     } finally {
       await fs.unlink(staging).catch(() => undefined)
     }
-    return published
   }
 
   async function exists(file: string) {

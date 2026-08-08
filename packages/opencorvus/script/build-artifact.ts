@@ -57,6 +57,18 @@ export function artifactBrowserMcpNodeRuntimeModules(): ArtifactRuntimeNodeModul
   return [{ name: "playwright" }]
 }
 
+export async function buildArtifactBrowserMcpNodeBundle(input: {
+  entrypoint: string
+  outdir?: string
+}) {
+  return Bun.build({
+    entrypoints: [input.entrypoint],
+    ...(input.outdir ? { outdir: input.outdir } : {}),
+    target: "node",
+    external: artifactBrowserMcpNodeExternalModules(),
+  })
+}
+
 export function artifactSourcemap(): "none" {
   return "none"
 }

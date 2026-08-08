@@ -9,6 +9,10 @@ inputs:
     description: "Stage the exact native Bun compile runtimes declared by packageManager."
     required: false
     default: "false"
+  prepare_sdk:
+    description: "Build the generated Software Development Kit outputs required by direct workspace consumers."
+    required: false
+    default: "false"
 runs:
   using: "composite"
   steps:
@@ -108,3 +112,8 @@ runs:
       shell: bash
       env:
         HUSKY: "0"
+
+    - name: Build generated Software Development Kit
+      if: ${{ inputs.prepare_sdk == 'true' }}
+      run: bun run --cwd packages/sdk/js build
+      shell: bash

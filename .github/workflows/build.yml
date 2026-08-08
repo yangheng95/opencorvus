@@ -7,9 +7,8 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Release version (e.g. 0.0.1 or v0.0.1). Leave empty for dev snapshot artifact builds."
-        required: false
-        default: ""
+        description: "Release version (for example 0.0.1 or v0.0.1)."
+        required: true
 
 jobs:
   prepare:
@@ -18,7 +17,6 @@ jobs:
     permissions:
       contents: write
     outputs:
-      release: ${{ steps.meta.outputs.release }}
       version: ${{ steps.meta.outputs.version }}
       prerelease: ${{ steps.meta.outputs.prerelease }}
     steps:
@@ -30,24 +28,18 @@ jobs:
         with:
           install_dependencies: "false"
 
-      - name: Resolve version and release flag
+      - name: Resolve release version
         id: meta
         shell: bash
         run: |
           if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
             VERSION="${GITHUB_REF_NAME#v}"
-            RELEASE=1
-          elif [[ -n "${{ inputs.version }}" ]]; then
+          else
             VERSION="${{ inputs.version }}"
             VERSION="${VERSION#v}"
-            RELEASE=1
-          else
-            VERSION="$(bun -e 'const pkg = await Bun.file("packages/opencorvus/package.json").json(); console.log(pkg.version)')"
-            RELEASE=0
           fi
           PRERELEASE="$(bun -e 'import { releaseVersionMetadata } from "./script/sync-version.ts"; console.log(releaseVersionMetadata(Bun.argv.at(-1)).prerelease)' "$VERSION")"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "release=$RELEASE" >> "$GITHUB_OUTPUT"
           echo "prerelease=$PRERELEASE" >> "$GITHUB_OUTPUT"
 
       - name: Sync repo versions
@@ -130,7 +122,7 @@ jobs:
       - name: Package GUI installers
         env:
           OPENCORVUS_VERSION: ${{ needs.prepare.outputs.version }}
-          OPENCORVUS_CHANNEL: ${{ needs.prepare.outputs.release == '1' && 'latest' || '' }}
+          OPENCORVUS_CHANNEL: latest
         run: bun run package:gui-installer-matrix
 
       - name: Upload overlay artifact
@@ -207,7 +199,7 @@ jobs:
         env:
           NODE_OPTIONS: --max-old-space-size=8192
           OPENCORVUS_VERSION: ${{ needs.prepare.outputs.version }}
-          OPENCORVUS_CHANNEL: ${{ needs.prepare.outputs.release == '1' && 'latest' || '' }}
+          OPENCORVUS_CHANNEL: latest
         run: bun run package:binary-matrix
 
       - name: Upload CLI artifact
@@ -228,7 +220,6 @@ jobs:
       - prepare
       - package-overlay
       - package-cli
-    if: needs.prepare.outputs.release == '1'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -277,7 +268,6 @@ jobs:
     needs:
       - prepare
       - publish-release-assets
-    if: needs.prepare.outputs.release == '1'
     runs-on: ubuntu-latest
     permissions:
       contents: write

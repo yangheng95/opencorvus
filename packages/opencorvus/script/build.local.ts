@@ -14,7 +14,7 @@ process.chdir(dir)
 import { Script } from "@opencorvus-ai/script"
 import pkg from "../package.json"
 import {
-  artifactBrowserMcpNodeExternalModules,
+  buildArtifactBrowserMcpNodeBundle,
   artifactBrowserMcpNodeRuntimeModules,
   artifactBrowserMcpNodeExecutableName,
   artifactEntrypoints,
@@ -253,11 +253,9 @@ async function buildWindowsSupervisorHelper() {
 
 async function buildBrowserMcpNodeBundle(outdir: string) {
   await fs.promises.mkdir(outdir, { recursive: true })
-  const result = await Bun.build({
-    entrypoints: ["./src/mcp/browser/entry.ts"],
+  const result = await buildArtifactBrowserMcpNodeBundle({
+    entrypoint: "./src/mcp/browser/entry.ts",
     outdir,
-    target: "node",
-    external: artifactBrowserMcpNodeExternalModules(),
   })
   if (!result.success) {
     const detail = result.logs.map((item) => item.message).join("; ")

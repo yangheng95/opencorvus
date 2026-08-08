@@ -51,6 +51,21 @@ jobs:
           git config --global user.email "bot@opencorvus.ai"
           git config --global user.name "opencorvus"
 
+      - name: Install Linux test runtime dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep
+
+      - name: Install macOS test runtime dependencies
+        if: runner.os == 'macOS'
+        run: brew install ripgrep
+
+      - name: Install Windows test runtime dependencies
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./script/install-windows-ripgrep.ps1
+
       - name: Run unit tests
         run: bunx turbo run test --filter=opencorvus
 
@@ -68,6 +83,8 @@ jobs:
 
       - name: Setup Bun
         uses: ./.github/actions/setup-bun
+        with:
+          prepare_sdk: "true"
 
       - name: Run critical builds
         run: bun run --cwd packages/opencorvus build --single --skip-install
@@ -83,6 +100,8 @@ jobs:
 
       - name: Setup Bun
         uses: ./.github/actions/setup-bun
+        with:
+          prepare_sdk: "true"
 
       - name: Run channel runtime tests
         run: bun run --cwd packages/channel-runtime test
@@ -101,6 +120,8 @@ jobs:
 
       - name: Setup Bun
         uses: ./.github/actions/setup-bun
+        with:
+          prepare_sdk: "true"
 
       - name: Run overlay unit tests
         working-directory: packages/overlay
@@ -132,6 +153,8 @@ jobs:
 
       - name: Setup Bun
         uses: ./.github/actions/setup-bun
+        with:
+          prepare_sdk: "true"
 
       - name: Configure git identity
         run: |

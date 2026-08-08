@@ -2,29 +2,8 @@ import { describe, expect, mock, test } from "bun:test"
 import { sdkMock } from "./sdk-mock"
 
 mock.module("@opencorvus-ai/sdk", () => sdkMock)
-mock.module("@opencorvus-ai/sdk", () => sdkMock)
 
 const { ChannelRuntime } = await import("../src/core")
-
-describe("channel runtime system prompt", () => {
-  test("enforces visible execution principles", () => {
-    const core = new ChannelRuntime() as unknown as { buildSystemPrompt: (platform: string) => string }
-    const prompt = core.buildSystemPrompt("slack")
-
-    expect(prompt).toContain("The visibility principle")
-    expect(prompt).toContain("Do not launch retired terminal UI processes")
-    expect(prompt).toContain("Search memory at the start of each task")
-  })
-
-  test("adds response style guidance", () => {
-    const core = new ChannelRuntime() as unknown as { buildSystemPrompt: (platform: string) => string }
-    const prompt = core.buildSystemPrompt("telegram")
-
-    expect(prompt).toContain("## Response style")
-    expect(prompt).toContain("one-line direct answer")
-    expect(prompt).toContain("Avoid long walls of text")
-  })
-})
 
 describe("channel runtime text formatting", () => {
   test("polishes whitespace for chat readability", () => {

@@ -32,7 +32,7 @@ describe("Expert Squad evolution launcher", () => {
     const command =
       process.platform === "win32"
         ? {
-            executable: process.env.ComSpec!,
+            executable: path.join(process.env.SystemRoot!, "System32", "cmd.exe"),
             args: ["/d", "/s", "/c", "echo exact-host-runtime-attestation"],
           }
         : {

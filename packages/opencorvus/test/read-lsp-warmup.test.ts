@@ -11,6 +11,7 @@ import { Identifier } from "../src/id/id"
 import { persistQueuedTask } from "../src/engine/pipeline"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { ensureGitignore } from "../src/engine/git"
+import { resolveSessionExecutionAuthority } from "../src/engine/task-session-lineage"
 
 afterAll(resetMemoryDatabase)
 
@@ -65,6 +66,12 @@ describe("Read tool Language Server Protocol warm-up", () => {
               timeCreated: now,
             }),
           })
+          const executionAuthority = await resolveSessionExecutionAuthority({
+            sessionID: session.id,
+            projectID: Instance.project.id,
+            rootDirectory: project.path,
+            expected: { kind: "task", taskID },
+          })
           const tool = await ReadTool.init()
           const result = await tool.execute(
             { filePath: "sample.ts" },
@@ -75,6 +82,7 @@ describe("Read tool Language Server Protocol warm-up", () => {
               agent: "build",
               abort: new AbortController().signal,
               messages: [],
+              executionAuthority,
               executionSurface: Tool.executionSurface(["read"], []),
               metadata: () => {},
               ask: async () => {},
