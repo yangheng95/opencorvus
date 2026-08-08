@@ -138,14 +138,24 @@ export namespace SessionControl {
         .select()
         .from(SessionControlRecordTable)
         .where(
-          and(eq(SessionControlRecordTable.id, input.id), eq(SessionControlRecordTable.session_id, input.sessionID)),
+          and(
+            eq(SessionControlRecordTable.id, input.id),
+            eq(SessionControlRecordTable.session_id, input.sessionID),
+            eq(SessionControlRecordTable.status, "pending"),
+          ),
         )
         .get()
       if (!current) return undefined
       const payload = { ...current.payload, error: input.error }
       db.update(SessionControlRecordTable)
         .set({ status: "failed", payload, time_updated: now })
-        .where(eq(SessionControlRecordTable.id, input.id))
+        .where(
+          and(
+            eq(SessionControlRecordTable.id, input.id),
+            eq(SessionControlRecordTable.session_id, input.sessionID),
+            eq(SessionControlRecordTable.status, "pending"),
+          ),
+        )
         .run()
       return fromRow({ ...current, status: "failed", payload, time_updated: now })
     })

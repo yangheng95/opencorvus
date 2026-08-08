@@ -33,6 +33,7 @@ import { timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
 import { inlineBase64DataUrlMatch, inlineBase64DataUrlSnippet } from "@/util/inline-base64"
 import { withKeyedLock } from "@/util/lock"
 import { SessionControl } from "./control"
+import { CompactionHandoff } from "./compaction-handoff"
 import { SessionStatus as SessionStatusLifecycle } from "./status"
 import { SessionPromptState } from "./prompt/state"
 import {
@@ -1188,6 +1189,69 @@ export namespace Session {
 
   export const updateMessage = fn(Message.Info, async (msg) => {
     return upsertMessageRow(msg, { publishCreated: true, publishUpdated: true })
+  })
+
+  const PublishCompactionCheckpointInput = z.object({
+    info: Message.Assistant,
+    part: Message.CompactionPart,
+  })
+
+  export const publishCompactionCheckpoint = fn(PublishCompactionCheckpointInput, async (input) => {
+    if (
+      input.info.time.completed === undefined ||
+      !CompactionHandoff.isValidSummaryMessage(input.info)
+    ) {
+      throw new Error(`Compaction checkpoint assistant ${input.info.id} must be a valid completed summary`)
+    }
+    if (input.part.sessionID !== input.info.sessionID || input.part.messageID !== input.info.parentID) {
+      throw new Error(`Compaction checkpoint ${input.info.id} marker does not belong to its parent user message`)
+    }
+    let info: Message.VisibleInfo | undefined
+    let part: Message.CompactionPart | undefined
+    Database.transaction((db) => {
+      const parent = db
+        .select({ data: MessageTable.data })
+        .from(MessageTable)
+        .where(
+          and(
+            eq(MessageTable.id, input.info.parentID),
+            eq(MessageTable.session_id, input.info.sessionID),
+          ),
+        )
+        .get()
+      if (!parent || parent.data.role !== "user") {
+        throw new Error(`Compaction checkpoint ${input.info.id} parent must be a user message`)
+      }
+      const continuationParts = db
+        .select()
+        .from(PartTable)
+        .where(
+          and(
+            eq(PartTable.message_id, input.info.id),
+            eq(PartTable.session_id, input.info.sessionID),
+          ),
+        )
+        .orderBy(PartTable.time_created, PartTable.id)
+        .all()
+        .map((row) =>
+          Message.Part.parse({
+            ...row.data,
+            id: row.id,
+            sessionID: row.session_id,
+            messageID: row.message_id,
+          }),
+        )
+      const continuation = Message.compactionContinuationTextParts(continuationParts)
+        .map((item) => item.text)
+        .join("\n\n")
+      if (!continuation.trim()) {
+        throw new Error(`Compaction checkpoint assistant ${input.info.id} must contain final-step visible text`)
+      }
+      info = upsertMessageRow(input.info, { publishCreated: false, publishUpdated: true })
+      part = updatePartRow(input.part, { publish: true }, db).outputPart as Message.CompactionPart
+    })
+    if (!info || !part) throw new Error(`Compaction checkpoint ${input.info.id} was not persisted`)
+    return { info, part }
   })
 
   /**

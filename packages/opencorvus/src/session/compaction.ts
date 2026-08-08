@@ -24,11 +24,10 @@ import { InstructionPrompt } from "./instruction"
 import { TaskPlan } from "@/memory/task-plan"
 import { SessionMemory } from "@/memory/session-memory"
 import { Snapshot } from "@/snapshot"
-import type { ModelMessage } from "ai"
+import { stepCountIs, type ModelMessage, type Tool as AITool } from "ai"
 import { TodoStore } from "./todo-store"
 import { SessionControl } from "./control"
 import { createHash } from "node:crypto"
-import type { Tool as AITool } from "ai"
 import { CompactionToolResultReader } from "./compaction-tool-result-reader"
 import { ServeRuntimeMemoryMetrics } from "@/runtime/memory-metrics"
 
@@ -56,6 +55,37 @@ ServeRuntimeMemoryMetrics.register({
 
 export namespace SessionCompaction {
   const log = Log.create({ service: "session.compaction" })
+
+  export type ProcessFailure = {
+    status: "failed"
+    error: Error
+  }
+
+  type CompactionStep = {
+    text: string
+    toolCalls: readonly unknown[]
+  }
+
+  function compactionStepDisposition(
+    step: CompactionStep | undefined,
+  ): "tool_results_ready" | "summary_ready" | "summary_missing" {
+    if (!step) return "summary_missing"
+    if (step.toolCalls.length > 0) return "tool_results_ready"
+    return step.text.trim() ? "summary_ready" : "summary_missing"
+  }
+
+  function processFailureError(error: unknown): Error {
+    if (error instanceof Error) return error
+    if (error && typeof error === "object") {
+      const value = error as { name?: unknown; data?: { message?: unknown } }
+      if (typeof value.name === "string" && typeof value.data?.message === "string") {
+        const result = new Error(value.data.message, { cause: error })
+        result.name = value.name
+        return result
+      }
+    }
+    return new Error(String(error), { cause: error })
+  }
 
   export const Event = {
     Compacted: BusEvent.define(
@@ -389,7 +419,11 @@ export namespace SessionCompaction {
           )
         }
       }
-      for (const part of msg.parts) {
+      const parts =
+        info.role === "assistant" && CompactionHandoff.isValidSummaryMessage(info)
+          ? Message.compactionContinuationTextParts(msg.parts)
+          : msg.parts
+      for (const part of parts) {
         const rendered = renderTranscriptPart(part)
         if (rendered) lines.push(rendered)
       }
@@ -745,6 +779,7 @@ export namespace SessionCompaction {
     const compactionPart = parent.parts.find((part): part is Message.CompactionPart => part.type === "compaction")
     const config = await EffectiveConfig.effective({ sessionID: input.sessionID })
     const agent = await HelperAgentRegistry.get("compaction", { config })
+    if (!agent.steps) throw new Error("Compaction helper must declare a positive provider-step limit")
     const model = input.model
       ? await Provider.getModel(input.model.providerID, input.model.modelID, { config })
       : await resolveAgentModel(agent.name, { sessionID: input.sessionID })
@@ -783,7 +818,7 @@ export namespace SessionCompaction {
       sessionID: input.sessionID,
       agent: "compaction",
       variant: userMessage.variant,
-      summary: true,
+      summary: false,
       path: {
         cwd: Instance.directory,
         root: Instance.worktree,
@@ -839,12 +874,14 @@ export namespace SessionCompaction {
     ]
     const budget = requestBudget({ messages: providerMessages, config, model })
     if (budget.exceeds) {
-      processor.message.error = new Message.ContextOverflowError({
+      const error = new Message.ContextOverflowError({
         message: `Compaction request exceeds model context budget before provider call: estimated ${budget.estimatedTokens} tokens, usable budget ${budget.usableBudget}.`,
-      }).toObject()
+      })
+      processor.message.error = error.toObject()
       processor.message.finish = "error"
+      processor.message.time.completed = Date.now()
       await Session.updateMessage(processor.message)
-      return "stop"
+      return { status: "failed", error } satisfies ProcessFailure
     }
     const tools = {
       [CompactionToolResultReader.TOOL_NAME]: processRuntime.prepareProviderTool({
@@ -864,6 +901,10 @@ export namespace SessionCompaction {
       system: [],
       messages: providerMessages,
       model,
+      stopWhen: [
+        ({ steps }) => compactionStepDisposition(steps.at(-1)) === "summary_ready",
+        stepCountIs(agent.steps),
+      ],
     })
 
     if (result === "compact") {
@@ -872,31 +913,44 @@ export namespace SessionCompaction {
         assistantMessageID: processor.message.id,
         error: processor.message.error?.name,
       })
-      return "stop"
+      return {
+        status: "failed",
+        error: processFailureError(
+          processor.message.error ?? new Error("Compaction provider rejected the reduced request"),
+        ),
+      } satisfies ProcessFailure
     }
 
-    if (processor.message.error) return "stop"
+    if (processor.message.error) {
+      return { status: "failed", error: processFailureError(processor.message.error) } satisfies ProcessFailure
+    }
     processor.message.finish = processor.message.finish ?? "stop"
     await Session.updateMessage(processor.message)
 
-    const continuationSummary = (await MessageStore.parts(processor.message.id))
-      .filter((part): part is Message.TextPart => part.type === "text")
-      .map((part) => part.text)
-      .join("\n\n")
-    if (!continuationSummary.trim()) {
-      throw new Error("Successful compaction produced no visible continuation text for Session MEMORY.MD")
+    const continuationSummary = SessionMemory.continuationText(await MessageStore.parts(processor.message.id))
+    if (!continuationSummary.trim() || processor.message.finish === "tool-calls") {
+      const error = new Message.CompactionContinuationMissingError({
+        message: "Compaction provider completed without a final visible continuation summary.",
+        sessionID: input.sessionID,
+        assistantMessageID: processor.message.id,
+      })
+      processor.message.summary = false
+      processor.message.finish = "error"
+      processor.message.error = error.toObject()
+      processor.message.time.completed = processor.message.time.completed ?? Date.now()
+      await Session.updateMessage(processor.message)
+      return { status: "failed", error } satisfies ProcessFailure
     }
-    if (compactionPart) {
-      await Session.updatePart({
+    const marker = compactionPart
+      ? {
         ...compactionPart,
         auto: input.auto,
         overflow: input.overflow ?? compactionPart.overflow,
         focus: input.focus ?? compactionPart.focus,
         tail_start_id: selected.tail_start_id,
         anchor_id: selected.anchor_id,
-      })
-    } else {
-      await Session.updatePart({
+      }
+      : ({
         id: Identifier.ascending("part"),
         messageID: userMessage.id,
         sessionID: input.sessionID,
@@ -907,7 +961,9 @@ export namespace SessionCompaction {
         tail_start_id: selected.tail_start_id,
         anchor_id: selected.anchor_id,
       } satisfies Message.CompactionPart)
-    }
+
+    processor.message.summary = true
+    await Session.publishCompactionCheckpoint({ info: processor.message, part: marker })
 
     Bus.publish(Event.Compacted, { sessionID: input.sessionID })
 
@@ -957,6 +1013,7 @@ export namespace SessionCompaction {
 
   export const TestHooks = {
     compactToolInputProjection,
+    compactionStepDisposition,
     selectCompactionInput,
     runtimeContext,
     compactionTranscriptMessages,

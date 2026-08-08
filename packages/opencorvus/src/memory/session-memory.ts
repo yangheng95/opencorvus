@@ -12,11 +12,14 @@ export namespace SessionMemory {
     timeUpdated: number
   }
 
-  function content(message: Message.WithParts) {
-    const content = message.parts
-      .filter((part): part is Message.TextPart => part.type === "text")
+  export function continuationText(parts: Message.Part[]) {
+    return Message.compactionContinuationTextParts(parts)
       .map((part) => part.text)
       .join("\n\n")
+  }
+
+  function content(message: Message.WithParts) {
+    const content = continuationText(message.parts)
     if (!content.trim()) {
       throw new Error(`Session MEMORY.MD source ${message.info.id} has no visible Markdown content`)
     }

@@ -13,6 +13,7 @@ const definitions = {
   compaction: {
     name: "compaction",
     hidden: true,
+    steps: 20,
     prompt: PROMPT_COMPACTION,
     options: {},
   },

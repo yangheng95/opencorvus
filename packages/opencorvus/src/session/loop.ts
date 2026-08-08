@@ -241,6 +241,81 @@ export namespace SessionLoop {
     return SessionControl.pending(sessionID).some((control) => control.kind === "compaction_request")
   }
 
+  function compactionControlErrorText(error: unknown): string {
+    if (error && typeof error === "object") {
+      const value = error as { name?: unknown; data?: { message?: unknown } }
+      if (typeof value.name === "string" && typeof value.data?.message === "string") {
+        return `${value.name}: ${value.data.message}`
+      }
+    }
+    if (error instanceof Error) return `${error.name}: ${error.message}`
+    return String(error)
+  }
+
+  function compactionControlThrowable(error: unknown): Error {
+    if (error instanceof Error) return error
+    const value = error as { name?: unknown; data?: { message?: unknown } } | undefined
+    const result = new Error(
+      typeof value?.data?.message === "string" ? value.data.message : compactionControlErrorText(error),
+      { cause: error },
+    )
+    if (typeof value?.name === "string") result.name = value.name
+    return result
+  }
+
+  function compactionControlSettlementConflict(input: {
+    control: SessionControl.Record
+    intendedStatus: "consumed" | "failed"
+    cause?: unknown
+  }): Error {
+    return new Error(
+      `Compaction control ${input.control.id} was no longer pending while settling ${input.intendedStatus}.`,
+      input.cause === undefined ? undefined : { cause: input.cause },
+    )
+  }
+
+  async function executeCompactionControl(input: {
+    control: SessionControl.Record
+    sessionID: string
+    run: () => Promise<Awaited<ReturnType<typeof SessionCompaction.process>>>
+  }): Promise<"continue" | "stop"> {
+    let result: Awaited<ReturnType<typeof SessionCompaction.process>>
+    try {
+      result = await input.run()
+    } catch (error) {
+      const settled = SessionControl.fail({
+        id: input.control.id,
+        sessionID: input.sessionID,
+        error: compactionControlErrorText(error),
+      })
+      if (!settled) {
+        throw compactionControlSettlementConflict({ control: input.control, intendedStatus: "failed", cause: error })
+      }
+      throw error
+    }
+    if (typeof result === "object") {
+      const throwable = compactionControlThrowable(result.error)
+      const settled = SessionControl.fail({
+        id: input.control.id,
+        sessionID: input.sessionID,
+        error: compactionControlErrorText(result.error),
+      })
+      if (!settled) {
+        throw compactionControlSettlementConflict({
+          control: input.control,
+          intendedStatus: "failed",
+          cause: throwable,
+        })
+      }
+      throw throwable
+    }
+    const settled = SessionControl.consume({ id: input.control.id, sessionID: input.sessionID })
+    if (!settled) {
+      throw compactionControlSettlementConflict({ control: input.control, intendedStatus: "consumed" })
+    }
+    return result
+  }
+
   export const sessionKindRequiresRuntimeContract = sessionKindRequiresRuntimeContractImpl
   export const validateSessionRuntimeContractForContinuation = validateSessionRuntimeContractForContinuationImpl
 
@@ -2019,31 +2094,37 @@ export namespace SessionLoop {
                   if (disposition === "stop") break
                   continue
                 }
-                const result = await SessionCompaction.process(
-                  {
-                    messages: msgs,
-                    parentID: sourceUserMessageID,
-                    abort,
-                    sessionID,
-                    auto: compactionControl.kind === "compaction_request",
-                    overflow: compactionControl.payload.overflow === true,
-                    focus:
-                      typeof compactionControl.payload.focus === "string" ? compactionControl.payload.focus : undefined,
-                    model:
-                      compactionControl.payload.model &&
-                      typeof compactionControl.payload.model === "object" &&
-                      !Array.isArray(compactionControl.payload.model) &&
-                      typeof (compactionControl.payload.model as { providerID?: unknown }).providerID === "string" &&
-                      typeof (compactionControl.payload.model as { modelID?: unknown }).modelID === "string"
-                        ? {
-                            providerID: (compactionControl.payload.model as { providerID: string }).providerID,
-                            modelID: (compactionControl.payload.model as { modelID: string }).modelID,
-                          }
-                        : undefined,
-                  },
-                  { prepareProviderTool, createStructuredOutputTool, structuredOutputToolChoice },
-                )
-                SessionControl.consume({ id: compactionControl.id, sessionID })
+                const result = await executeCompactionControl({
+                  control: compactionControl,
+                  sessionID,
+                  run: () =>
+                    SessionCompaction.process(
+                      {
+                        messages: msgs,
+                        parentID: sourceUserMessageID,
+                        abort,
+                        sessionID,
+                        auto: compactionControl.kind === "compaction_request",
+                        overflow: compactionControl.payload.overflow === true,
+                        focus:
+                          typeof compactionControl.payload.focus === "string"
+                            ? compactionControl.payload.focus
+                            : undefined,
+                        model:
+                          compactionControl.payload.model &&
+                          typeof compactionControl.payload.model === "object" &&
+                          !Array.isArray(compactionControl.payload.model) &&
+                          typeof (compactionControl.payload.model as { providerID?: unknown }).providerID === "string" &&
+                          typeof (compactionControl.payload.model as { modelID?: unknown }).modelID === "string"
+                            ? {
+                                providerID: (compactionControl.payload.model as { providerID: string }).providerID,
+                                modelID: (compactionControl.payload.model as { modelID: string }).modelID,
+                              }
+                            : undefined,
+                      },
+                      { prepareProviderTool, createStructuredOutputTool, structuredOutputToolChoice },
+                    ),
+                })
                 if (result === "stop") break
                 continue
               }
@@ -2070,6 +2151,7 @@ export namespace SessionLoop {
                   },
                   { prepareProviderTool, createStructuredOutputTool, structuredOutputToolChoice },
                 )
+                if (typeof result === "object") throw result.error
                 if (result === "stop") break
                 continue
               }
@@ -3141,6 +3223,7 @@ export namespace SessionLoop {
   export const TestHooks = {
     collectLoopState,
     consumeCompletedCompactionControl,
+    executeCompactionControl,
     sessionStateContext,
     waitForUserMessage,
     resolveToolExecutionAuthority,

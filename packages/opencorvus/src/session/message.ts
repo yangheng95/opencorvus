@@ -87,6 +87,10 @@ export namespace Message {
     "CompactionTaskAuthorityError",
     z.object({ message: z.string(), sessionID: z.string(), anchorMessageID: z.string() }),
   )
+  export const CompactionContinuationMissingError = NamedError.create(
+    "CompactionContinuationMissingError",
+    z.object({ message: z.string(), sessionID: z.string(), assistantMessageID: z.string() }),
+  )
   /**
    * Predictive-compaction fired but compaction cannot rescue this turn â€”
    * either there is no message history to summarise (`assistantMsgCount=0`
@@ -507,6 +511,13 @@ export namespace Message {
     })
   export type Part = z.infer<typeof Part>
 
+  export function compactionContinuationTextParts(parts: readonly Part[]): TextPart[] {
+    const finalStepStart = parts.findLastIndex((part) => part.type === "step-start")
+    return parts
+      .slice(finalStepStart + 1)
+      .filter((part): part is TextPart => part.type === "text")
+  }
+
   export const VisiblePart = z
     .discriminatedUnion("type", [
       TextPart.extend({ orderKey: z.string().min(1) }),
@@ -543,6 +554,7 @@ export namespace Message {
         SnapshotIntegrityError.Schema,
         SnapshotEmptyTreeError.Schema,
         ContextOverflowError.Schema,
+        CompactionContinuationMissingError.Schema,
         PromptBudgetOverflowError.Schema,
         ToolSchemaBudgetError.Schema,
         ModelImageInputTooLargeError.Schema,
@@ -990,8 +1002,12 @@ export namespace Message {
     const seenStatefulKeys = new Set<string>()
     for (let i = input.length - 1; i >= 0; i--) {
       const msg = input[i]
-      for (let j = msg.parts.length - 1; j >= 0; j--) {
-        const p = msg.parts[j]
+      const parts =
+        msg.info.role === "assistant" && CompactionHandoff.isValidSummaryMessage(msg.info)
+          ? compactionContinuationTextParts(msg.parts)
+          : msg.parts
+      for (let j = parts.length - 1; j >= 0; j--) {
+        const p = parts[j]
         const statefulKey = p.type === "tool" ? statefulSnapshotToolKey(p.tool, p.state.input) : undefined
         if (
           p.type === "tool" &&
@@ -1157,7 +1173,10 @@ export namespace Message {
             text: assistantErrorText(msg.info.error),
           })
         }
-        for (const part of msg.parts) {
+        const parts = CompactionHandoff.isValidSummaryMessage(msg.info)
+          ? compactionContinuationTextParts(msg.parts)
+          : msg.parts
+        for (const part of parts) {
           if (part.type === "text")
             assistantMessage.parts.push({
               type: "text",
@@ -1493,6 +1512,8 @@ export namespace Message {
       case Message.OutputLengthError.isInstance(e):
         return e
       case Message.StructuredOutputPayloadError.isInstance(e):
+        return e.toObject()
+      case Message.CompactionContinuationMissingError.isInstance(e):
         return e.toObject()
       case ModelImageInputTooLargeError.isInstance(e):
         return e.toObject()
