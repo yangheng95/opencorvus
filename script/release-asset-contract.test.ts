@@ -81,4 +81,35 @@ describe("Overlay release asset contract", () => {
       },
     })
   })
+
+  test("maps Tauri's native macOS updater archive to architecture-specific public assets", () => {
+    expect(
+      Object.fromEntries(
+        ["darwin-x64", "darwin-arm64"].map((platform) => {
+          const archive = overlayBundlePatterns(platform, "0.0.37-beta").find(
+            (item) => item.label === "macOS app archive bundle",
+          )!
+          return [
+            platform,
+            {
+              sourceMatched: archive.sourcePattern!.test("OpenCorvus.app.tar.gz"),
+              assetName: archive.assetName,
+              publicMatched: archive.pattern.test(archive.assetName!),
+            },
+          ]
+        }),
+      ),
+    ).toEqual({
+      "darwin-x64": {
+        sourceMatched: true,
+        assetName: "OpenCorvus_0.0.37-beta_x64.app.tar.gz",
+        publicMatched: true,
+      },
+      "darwin-arm64": {
+        sourceMatched: true,
+        assetName: "OpenCorvus_0.0.37-beta_aarch64.app.tar.gz",
+        publicMatched: true,
+      },
+    })
+  })
 })

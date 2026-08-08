@@ -9,6 +9,8 @@ export type OverlayBundleArchitecture = {
 export type OverlayBundlePattern = {
   label: string
   pattern: RegExp
+  sourcePattern?: RegExp
+  assetName?: string
 }
 
 export type OverlayUpdaterContract = {
@@ -70,6 +72,8 @@ export function overlayBundlePatterns(platform: string, version: string): Overla
       {
         label: "macOS app archive bundle",
         pattern: new RegExp(`^OpenCorvus_${versionPattern}_${arch.mac}\\.app\\.tar\\.gz$`),
+        sourcePattern: /^OpenCorvus\.app\.tar\.gz$/,
+        assetName: `OpenCorvus_${version}_${arch.mac}.app.tar.gz`,
       },
     ]
   }

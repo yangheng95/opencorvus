@@ -154,11 +154,15 @@ export async function stageGuiInstallerArtifacts(
   const expectedPatterns = overlayBundlePatterns(row.id, version)
   const updater = overlayUpdaterContract(row.id, version)
   for (const expected of expectedPatterns) {
-    const source = requireSingleMatchingFile(paths.bundleRoot, expected.pattern, expected.label)
-    const destination = path.join(paths.output, path.basename(source))
+    const source = requireSingleMatchingFile(
+      paths.bundleRoot,
+      expected.sourcePattern ?? expected.pattern,
+      expected.label,
+    )
+    const destination = path.join(paths.output, expected.assetName ?? path.basename(source))
     await copyReleaseFile(source, destination)
     staged.push(destination)
-    if (updater.bundlePattern.test(path.basename(source))) {
+    if (updater.bundlePattern.test(path.basename(destination))) {
       const sourceSignature = updaterSignatureName(source)
       if (!fs.existsSync(sourceSignature)) {
         throw new Error(`Missing ${updater.label} signature: ${sourceSignature}`)
