@@ -196,18 +196,12 @@ Useful Task endpoints:
 - `POST /task/<task_id>/replan` with the Task project directory
 - `POST /task/<task_id>/cancel` with the Task project directory
 
-### External coding executors
+### Coding CLI shortcuts
 
-OpenCorvus includes its own executor and can dispatch to supported coding
-command-line interfaces when they are installed and discovery is enabled:
-
-```bash
-export OPENCORVUS_AUTO_DISCOVER_EXECUTORS=1
-```
-
-Current executor display names are OpenCorvus (`opencorvus`), Codex (`codex`),
-and Claude Code (`claude-code`). Selecting an undiscovered external executor is
-rejected explicitly; OpenCorvus does not silently substitute another executor.
+The desktop can discover installed Claude Code, Codex, Gemini Code, GitHub
+Copilot, and GLM Code command-line interfaces and open one in a terminal at the
+current project directory. This starts an interactive terminal command; it does
+not assign the Task to an external executor.
 
 ### Slack
 

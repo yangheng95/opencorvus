@@ -185,18 +185,11 @@ Artifact 和真实阻塞。宿主专用安装细节、PowerShell 命令、安全
 - `POST /task/<task_id>/replan`，需要 Task 项目目录
 - `POST /task/<task_id>/cancel`，需要 Task 项目目录
 
-### 外部编码执行器
+### Coding CLI 快捷入口
 
-OpenCorvus 提供内置执行器；安装受支持的编码命令行界面（Command-Line Interface，
-CLI）并启用发现后，也可以调度外部执行器：
-
-```bash
-export OPENCORVUS_AUTO_DISCOVER_EXECUTORS=1
-```
-
-当前执行器显示名称为 OpenCorvus（`opencorvus`）、Codex（`codex`）和 Claude Code
-（`claude-code`）。如果所选外部执行器未被发现，请求会被明确拒绝；OpenCorvus 不会
-静默换用另一个执行器。
+桌面端可以发现已安装的 Claude Code、Codex、Gemini Code、GitHub Copilot 和 GLM Code
+命令行界面（Command-Line Interface，CLI），并在当前项目目录的终端中打开所选 CLI。
+这只会启动一条交互式终端命令，不会把 Task 分配给外部执行器。
 
 ### Slack
 
