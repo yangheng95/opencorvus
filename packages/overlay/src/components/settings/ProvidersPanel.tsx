@@ -9,6 +9,7 @@ import { appStore, dismissProviderAuth, setAppStore } from "../../store/app"
 import { updateConfig, updateGlobalConfig } from "../../services/config"
 import { apiJson, ApiError } from "../../services/api"
 import { loadProviderInfo } from "../../services/config-load"
+import { requestProviderCatalogRefresh, requestProviderModelsRefresh } from "../../services/provider-refresh"
 import { activeDirectory } from "../../services/workspace"
 import {
   authenticateSelectedProvider,
@@ -126,16 +127,6 @@ export default function ProvidersPanel() {
     return value ? `${path}?directory=${encodeURIComponent(value)}` : path
   }
 
-  function refreshCatalogPath(directory: string): string {
-    return directory.trim() ? providerScopedPath("provider/refresh", directory) : "global/providers/refresh"
-  }
-
-  function refreshModelsPath(directory: string): string {
-    return directory.trim()
-      ? providerScopedPath("provider/models/refresh", directory)
-      : "global/providers/models/refresh"
-  }
-
   async function updateActiveProviderConfig(
     directory: string,
     mutator: (config: Record<string, any>) => void,
@@ -167,12 +158,7 @@ export default function ProvidersPanel() {
     setProviderRefreshError(null)
     setRefreshingProviders(true)
     try {
-      const result = (await apiJson(refreshCatalogPath(directory), { method: "POST" })) as {
-        ok: boolean
-        fetchedAt?: number
-        error?: string
-        issues?: Array<{ phase?: string; providerID?: string; message: string }>
-      }
+      const result = await requestProviderCatalogRefresh(directory)
       if (sequence !== providerRefreshSequence || activeDirectory().trim() !== directory) return
       if (!result.ok) {
         setProviderRefreshError(t("provider.catalog_refresh.failed", { reason: result.error || "unknown" }))
@@ -200,12 +186,7 @@ export default function ProvidersPanel() {
     setModelRefreshError(null)
     setRefreshingModels(true)
     try {
-      const result = (await apiJson(refreshModelsPath(directory), { method: "POST" })) as {
-        ok: boolean
-        fetchedAt?: number
-        error?: string
-        issues?: Array<{ phase?: string; providerID?: string; message: string }>
-      }
+      const result = await requestProviderModelsRefresh(directory)
       if (sequence !== modelRefreshSequence || activeDirectory().trim() !== directory) return
       if (!result.ok) {
         setModelRefreshError(t("provider.model_refresh.failed", { reason: result.error || "unknown" }))
@@ -248,7 +229,10 @@ export default function ProvidersPanel() {
         setLastModelsRefreshedAt(null)
         setProviderRefreshError(null)
         setModelRefreshError(null)
-        void reloadProviderInfo(directory)
+        void (async () => {
+          await refreshProviderCatalog(directory)
+          if (activeDirectory().trim() === directory) await reloadProviderInfo(directory)
+        })()
       },
     ),
   )
