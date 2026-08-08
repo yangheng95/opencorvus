@@ -1,7 +1,13 @@
 import { currentProjectDirectory } from "@/project/instance-context"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Database } from "@/storage/db"
-import { EngineGitProcess, type EngineGitRepository } from "./git-process"
+import {
+  EngineGitProcess,
+  type EngineGitFileFingerprint,
+  type EngineGitIndexEntry,
+  type EngineGitRawBlobSource,
+  type EngineGitRepository,
+} from "./git-process"
 import { Log } from "@/util/log"
 import { requireTask, type TaskRow } from "./store"
 import { insertEngineProgressSnapshot } from "./progress"
@@ -16,6 +22,7 @@ import { readTaskProcessBinding, TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL } from 
 import { Filesystem } from "@/util/filesystem"
 import { taskRootDirectory } from "./task-directory"
 import { executionCapsuleSourceTreeDigest } from "@/execution-capsule/tree-digest"
+import type { Stats } from "node:fs"
 
 const log = Log.create({ service: "engine-git" })
 
@@ -70,18 +77,17 @@ function save(task: TaskRow, patch: Record<string, unknown>, time = Date.now()) 
   return requireTask(task.id)
 }
 
-async function commit(input: {
-  task: TaskRow
-  mode: "baseline" | "result"
-}) {
+async function commit(input: { task: TaskRow; mode: "baseline" | "result" }) {
   const msg = message(input.task, input.mode)
   return checkpointWithGitMaintenance({
     taskID: input.task.id,
+    checkpointStage: input.mode,
     root: taskRootDirectory(input.task),
     subject: msg.subject,
     body: msg.body,
     allowEmptyRoot: false,
     expectedRepositories: input.mode === "result" ? baselineRepositories(input.task) : undefined,
+    expectedUninitialized: input.mode === "result" ? baselineUninitializedRepositories(input.task) : undefined,
   })
 }
 
@@ -103,6 +109,29 @@ type RepositoryCheckpoint = {
   head_before?: string
   dirty: boolean
   authority?: RepositoryAuthority
+  receipt?: RepositoryCheckpointReceipt
+}
+
+type RepositoryCheckpointReceipt = {
+  snapshot_path_count: number
+  index_entry_count: number
+  regular_file_count: number
+  symlink_count: number
+  gitlink_count: number
+  missing_path_count: number
+  directory_path_count: number
+  raw_blob_count: number
+  raw_byte_count: number
+  blob_import_process_count: 1
+  index_import_process_count: 1
+  phase_ms: {
+    enumeration: number
+    inspection: number
+    blob_import: number
+    index_projection: number
+    tree_and_commit: number
+    apply: number
+  }
 }
 
 type RepositoryAuthority = {
@@ -132,9 +161,12 @@ async function repositoryAuthority(repository: RepositoryNode, ref: string): Pro
   }
   const markerKind = markerStat.isDirectory() ? "directory" : "file"
   const markerRealpath = await fs.realpath(marker)
-  const markerSHA256 = markerKind === "file"
-    ? createHash("sha256").update(await fs.readFile(marker)).digest("hex")
-    : undefined
+  const markerSHA256 =
+    markerKind === "file"
+      ? createHash("sha256")
+          .update(await fs.readFile(marker))
+          .digest("hex")
+      : undefined
   const gitDirResult = await EngineGitProcess.absoluteGitDirectory(workspace)
   if (gitDirResult.exitCode !== 0) {
     throw new Error(gitOutputError(gitDirResult, `Repository ${repository.path} gitdir resolution failed`))
@@ -184,7 +216,18 @@ type RepositoryTransaction = {
   indexPath: string
   indexBackup: string
   indexExisted: boolean
+  preparedIndex?: string
 }
+
+type PreparedRepositoryCheckpoint = {
+  checkpoint: RepositoryCheckpoint
+  temporaryRoot: string
+  temporaryIndex: string
+  transaction: RepositoryTransaction
+  projectedGitlinks: Array<{ path: string; commit: string }>
+}
+
+type GitLease = Readonly<{ assertOwned(): void }>
 
 function repositoryTarget(repository: RepositoryNode): EngineGitRepository {
   const authority = repository.authority
@@ -196,6 +239,39 @@ async function repositoryHead(repository: RepositoryNode) {
   const result = await EngineGitProcess.head(repositoryTarget(repository))
   if (result.exitCode !== 0) return
   const value = result.text().trim()
+  return value || undefined
+}
+
+async function frozenRepositoryRef(transaction: RepositoryTransaction) {
+  const target = repositoryTarget(transaction.repository)
+  if (transaction.ref === "HEAD") {
+    const symbolic = await EngineGitProcess.symbolicHead(target)
+    if (symbolic.exitCode === 0) {
+      throw new Error(`recovery conflict: detached HEAD authority changed for ${transaction.repository.path}`)
+    }
+    if (symbolic.exitCode !== 1) {
+      throw new Error(
+        `recovery conflict: detached HEAD inspection failed for ${transaction.repository.path}: ${gitOutputError(
+          symbolic,
+          "git symbolic-ref failed",
+        )}`,
+      )
+    }
+  }
+  const resolved =
+    transaction.ref === "HEAD"
+      ? await EngineGitProcess.head(target)
+      : await EngineGitProcess.resolveRef(target, transaction.ref)
+  if (resolved.exitCode === 1 && transaction.ref !== "HEAD") return
+  if (resolved.exitCode !== 0) {
+    throw new Error(
+      `recovery conflict: owning ref inspection failed for ${transaction.repository.path}: ${gitOutputError(
+        resolved,
+        "git ref inspection failed",
+      )}`,
+    )
+  }
+  const value = resolved.text().trim()
   return value || undefined
 }
 
@@ -247,11 +323,14 @@ async function initializedRepository(directory: string, repositoryPath: string) 
   }
   const result = await EngineGitProcess.topLevel(directory)
   if (result.exitCode !== 0) {
-    throw new Error(`Initialized gitlink ${repositoryPath} is unreadable: ${gitOutputError(result, "git rev-parse failed")}`)
+    throw new Error(
+      `Initialized gitlink ${repositoryPath} is unreadable: ${gitOutputError(result, "git rev-parse failed")}`,
+    )
   }
   const topLevel = path.resolve(result.text().trim())
   const expected = path.resolve(directory)
-  const matches = process.platform === "win32" ? topLevel.toLowerCase() === expected.toLowerCase() : topLevel === expected
+  const matches =
+    process.platform === "win32" ? topLevel.toLowerCase() === expected.toLowerCase() : topLevel === expected
   if (!matches) throw new Error(`Gitlink ${repositoryPath} resolved to unexpected repository root ${topLevel}.`)
   return true
 }
@@ -288,25 +367,67 @@ async function repositoryTree(root: string) {
   return { repositories: result, uninitialized }
 }
 
-async function withRepositoryTreeLock<T>(fn: () => Promise<T>) {
-  const { Worktree } = await import("@/worktree")
-  return Worktree.withGitLock(fn)
+type FinalizedGitTransaction = {
+  rollback(): Promise<string[]>
+  cleanup(): Promise<void>
 }
 
-async function checkpointWithGitMaintenance(input: {
+type OwnedIndexLock = Readonly<{
+  path: string
+  fingerprint: EngineGitFileFingerprint
+}>
+
+type RegisterFinalizedGitTransaction = (transaction: FinalizedGitTransaction) => void
+
+async function withRepositoryTreeLock<T>(
+  fn: (lease: GitLease, register: RegisterFinalizedGitTransaction) => Promise<T>,
+) {
+  const { Worktree } = await import("@/worktree")
+  let finalized: FinalizedGitTransaction | undefined
+  try {
+    return await Worktree.withGitLock((lease) =>
+      fn(lease, (transaction) => {
+        if (finalized) throw new Error("Repository-tree checkpoint registered more than one finalized transaction")
+        finalized = transaction
+      }),
+    )
+  } catch (error) {
+    if (!finalized) throw error
+    const recoveryErrors = await finalized.rollback()
+    if (recoveryErrors.length > 0) {
+      throw new AggregateError(
+        [error, ...recoveryErrors.map((failure) => new Error(failure))],
+        `Project Git lease failed after checkpoint publication and recovery was incomplete: ${recoveryErrors.join("; ")}`,
+      )
+    }
+    throw error
+  } finally {
+    await finalized?.cleanup()
+  }
+}
+
+type CheckpointMaintenanceInput = {
   taskID: string
+  checkpointStage: "baseline" | "result" | "acceptance_round"
   root: string
   subject: string
   body: string
   allowEmptyRoot: boolean
   declaredFiles?: string[]
   expectedRepositories?: FrozenRepositoryRecord[]
-}) {
+  expectedUninitialized?: RepositoryCheckpoint[]
+  onActive?: () => void
+}
+
+async function checkpointWithGitMaintenanceOperation(input: CheckpointMaintenanceInput) {
   try {
     return await ProcessSupervisor.withTaskCheckpointLease(input.taskID, () =>
-      withRepositoryTreeLock(async () => {
+      withRepositoryTreeLock(async (gitLease, registerFinalizedTransaction) => {
+        input.onActive?.()
         if (input.expectedRepositories) await assertRepositoryAuthorities(input.root, input.expectedRepositories)
-        if (input.expectedRepositories) return checkpointRepositoryTree(input)
+        if (input.expectedRepositories) {
+          return checkpointRepositoryTree({ ...input, gitLease, registerFinalizedTransaction })
+        }
         const gitignorePath = path.join(input.root, ".gitignore")
         const originalGitignore = await fs.readFile(gitignorePath).then(
           (bytes) => ({ existed: true as const, bytes }),
@@ -315,23 +436,35 @@ async function checkpointWithGitMaintenance(input: {
             throw error
           },
         )
-        try {
-          await ensureGitignore(input.root)
-          const result = await checkpointRepositoryTree(input)
-          if (!("error" in result)) return result
-          const maintenanceErrors: string[] = []
+        const restoreOriginalGitignore = async () => {
           try {
             if (originalGitignore.existed) await fs.writeFile(gitignorePath, originalGitignore.bytes)
             else await fs.rm(gitignorePath, { force: true })
+            return []
           } catch (error) {
-            maintenanceErrors.push(`restore maintenance .gitignore failed: ${String(error)}`)
+            return [`restore maintenance .gitignore failed: ${String(error)}`]
           }
+        }
+        try {
+          await ensureGitignore(input.root)
+          const result = await checkpointRepositoryTree({
+            ...input,
+            gitLease,
+            registerFinalizedTransaction: (transaction) =>
+              registerFinalizedTransaction({
+                rollback: async () => [...(await transaction.rollback()), ...(await restoreOriginalGitignore())],
+                cleanup: transaction.cleanup,
+              }),
+          })
+          if (!("error" in result)) return result
+          const maintenanceErrors = await restoreOriginalGitignore()
           const priorRecovery = "recovery" in result ? result.recovery : undefined
           const errors = [...(priorRecovery?.errors ?? []), ...maintenanceErrors]
           return {
-            error: maintenanceErrors.length > 0
-              ? `${result.error} Maintenance recovery failed: ${maintenanceErrors.join("; ")}`
-              : result.error,
+            error:
+              maintenanceErrors.length > 0
+                ? `${result.error} Maintenance recovery failed: ${maintenanceErrors.join("; ")}`
+                : result.error,
             recovery: {
               ...(priorRecovery ?? {}),
               restored: (priorRecovery?.restored ?? true) && maintenanceErrors.length === 0,
@@ -339,13 +472,7 @@ async function checkpointWithGitMaintenance(input: {
             },
           }
         } catch (error) {
-          const maintenanceErrors: string[] = []
-          try {
-            if (originalGitignore.existed) await fs.writeFile(gitignorePath, originalGitignore.bytes)
-            else await fs.rm(gitignorePath, { force: true })
-          } catch (restoreError) {
-            maintenanceErrors.push(`restore maintenance .gitignore failed: ${String(restoreError)}`)
-          }
+          const maintenanceErrors = await restoreOriginalGitignore()
           return {
             error: `Repository-tree checkpoint maintenance failed: ${String(error)}${
               maintenanceErrors.length > 0 ? ` Recovery failed: ${maintenanceErrors.join("; ")}` : ""
@@ -360,6 +487,60 @@ async function checkpointWithGitMaintenance(input: {
   }
 }
 
+async function checkpointWithGitMaintenance(input: CheckpointMaintenanceInput) {
+  const started = performance.now()
+  let activeStarted: number | undefined
+  const traced = await EngineGitProcess.withCommandTrace(() =>
+    checkpointWithGitMaintenanceOperation({
+      ...input,
+      onActive: () => {
+        activeStarted ??= performance.now()
+      },
+    }),
+  )
+  const completed = performance.now()
+  const commandCounts = Object.fromEntries(
+    [...new Set(traced.commands)]
+      .toSorted()
+      .map((command) => [command, traced.commands.filter((candidate) => candidate === command).length]),
+  )
+  const repositories =
+    "repositories" in traced.value && Array.isArray(traced.value.repositories)
+      ? (traced.value.repositories as RepositoryCheckpoint[])
+      : []
+  const repositoryReceipts = repositories.flatMap((repository) => (repository.receipt ? [repository.receipt] : []))
+  return {
+    ...traced.value,
+    checkpoint_receipt: {
+      task_id: input.taskID,
+      checkpoint_stage: input.checkpointStage,
+      repository_count: repositories.length,
+      snapshot_path_count: repositoryReceipts.reduce((total, receipt) => total + receipt.snapshot_path_count, 0),
+      regular_file_count: repositoryReceipts.reduce((total, receipt) => total + receipt.regular_file_count, 0),
+      symlink_count: repositoryReceipts.reduce((total, receipt) => total + receipt.symlink_count, 0),
+      gitlink_count: repositoryReceipts.reduce((total, receipt) => total + receipt.gitlink_count, 0),
+      missing_path_count: repositoryReceipts.reduce((total, receipt) => total + receipt.missing_path_count, 0),
+      raw_blob_count: repositoryReceipts.reduce((total, receipt) => total + receipt.raw_blob_count, 0),
+      raw_byte_count: repositoryReceipts.reduce((total, receipt) => total + receipt.raw_byte_count, 0),
+      blob_import_process_count: traced.commands.filter((command) => command === "fast-import").length,
+      index_import_process_count: traced.commands.filter((command) => command === "update-index").length,
+      checkpoint_git_process_launch_count: traced.commands.length,
+      object_formats: [
+        ...new Set(
+          repositories.flatMap((repository) =>
+            repository.authority?.object_format ? [repository.authority.object_format] : [],
+          ),
+        ),
+      ].toSorted(),
+      queue_wait_ms: (activeStarted ?? completed) - started,
+      active_checkpoint_ms: completed - (activeStarted ?? started),
+      outcome: "error" in traced.value ? ("error" as const) : ("success" as const),
+      error_stage: "error" in traced.value ? ("checkpoint" as const) : undefined,
+      command_counts: commandCounts,
+    },
+  }
+}
+
 async function repositoryStatus(repository: RepositoryNode) {
   const [headBefore, ref, conflicts] = await Promise.all([
     repositoryHead(repository),
@@ -367,7 +548,9 @@ async function repositoryStatus(repository: RepositoryNode) {
     EngineGitProcess.unmerged(repositoryTarget(repository)),
   ])
   if (ref.exitCode !== 0 && ref.exitCode !== 1) {
-    throw new Error(`Git HEAD inspection failed for repository ${repository.path}: ${gitOutputError(ref, "git symbolic-ref failed")}`)
+    throw new Error(
+      `Git HEAD inspection failed for repository ${repository.path}: ${gitOutputError(ref, "git symbolic-ref failed")}`,
+    )
   }
   if (conflicts.exitCode !== 0) {
     throw new Error(
@@ -422,55 +605,244 @@ async function beginRepositoryTransactions(
   }
 }
 
+function fingerprint(stat: Stats): EngineGitFileFingerprint {
+  return {
+    device: stat.dev,
+    inode: stat.ino,
+    mode: stat.mode,
+    size: stat.size,
+    modifiedMilliseconds: stat.mtimeMs,
+    changedMilliseconds: stat.ctimeMs,
+  }
+}
+
+function sameFingerprint(left: EngineGitFileFingerprint, right: EngineGitFileFingerprint) {
+  return (
+    left.device === right.device &&
+    left.inode === right.inode &&
+    left.mode === right.mode &&
+    left.size === right.size &&
+    left.modifiedMilliseconds === right.modifiedMilliseconds &&
+    left.changedMilliseconds === right.changedMilliseconds
+  )
+}
+
+async function readOptionalFile(file: string) {
+  return fs.readFile(file).catch((error: NodeJS.ErrnoException) => {
+    if (error.code === "ENOENT") return undefined
+    throw error
+  })
+}
+
+async function writeSyncedFileHandle(handle: Awaited<ReturnType<typeof fs.open>>, bytes: Uint8Array) {
+  await handle.truncate(0)
+  await handle.writeFile(bytes)
+  await handle.sync()
+}
+
+async function prepareCanonicalIndexLock(transaction: RepositoryTransaction, temporaryIndex: string) {
+  const lockPath = `${transaction.indexPath}.lock`
+  const handle = await fs.open(lockPath, "wx", 0o600)
+  let failure: unknown
+  try {
+    const [current, predecessor, next] = await Promise.all([
+      readOptionalFile(transaction.indexPath),
+      transaction.indexExisted ? fs.readFile(transaction.indexBackup) : Promise.resolve(undefined),
+      fs.readFile(temporaryIndex),
+    ])
+    if (
+      (current === undefined) !== (predecessor === undefined) ||
+      (current && predecessor && !current.equals(predecessor))
+    ) {
+      throw new Error(`Canonical Git index changed during checkpoint preparation: ${transaction.repository.path}`)
+    }
+    await writeSyncedFileHandle(handle, next)
+  } catch (error) {
+    failure = error
+  }
+  try {
+    await handle.close()
+  } catch (closeError) {
+    failure = failure
+      ? new AggregateError(
+          [failure, closeError],
+          `Git index lock write and close failed for ${transaction.repository.path}`,
+        )
+      : closeError
+  }
+  if (failure) {
+    await fs.rm(lockPath, { force: true }).catch(() => undefined)
+    throw failure
+  }
+  return { path: lockPath, fingerprint: fingerprint(await fs.lstat(lockPath)) }
+}
+
+async function installCanonicalIndexLock(lock: OwnedIndexLock, transaction: RepositoryTransaction) {
+  await Filesystem.renameAfterTransientContention(lock.path, transaction.indexPath)
+}
+
+async function removeOwnedIndexLock(lock: OwnedIndexLock) {
+  const observed = await fs.lstat(lock.path).catch((error: NodeJS.ErrnoException) => {
+    if (error.code === "ENOENT") return undefined
+    throw error
+  })
+  if (!observed) return
+  if (!sameFingerprint(lock.fingerprint, fingerprint(observed))) {
+    throw new Error(`Git index lock ownership changed before cleanup: ${lock.path}`)
+  }
+  await fs.rm(lock.path)
+}
+
+async function restoreRepositoryTransaction(
+  transaction: RepositoryTransaction,
+  checkpoint: RepositoryCheckpoint,
+  ownedLock: OwnedIndexLock | undefined,
+) {
+  if (!transaction.preparedIndex || !checkpoint.commit) {
+    throw new Error(`Repository ${transaction.repository.path} has no prepared recovery projection`)
+  }
+  const lockPath = ownedLock?.path ?? `${transaction.indexPath}.lock`
+  let handle: Awaited<ReturnType<typeof fs.open>> | undefined
+  let lockAcquired = false
+  try {
+    if (ownedLock) {
+      let recreated = false
+      handle = await fs.open(lockPath, "r+", 0o600).catch((error: NodeJS.ErrnoException) => {
+        if (error.code === "ENOENT") {
+          recreated = true
+          return fs.open(lockPath, "wx", 0o600)
+        }
+        throw error
+      })
+      const observed = fingerprint(await handle.stat())
+      if (!recreated && !sameFingerprint(ownedLock.fingerprint, observed)) {
+        throw new Error(`recovery conflict: Git index lock ownership changed for ${transaction.repository.path}`)
+      }
+    } else {
+      handle = await fs.open(lockPath, "wx", 0o600)
+    }
+    lockAcquired = true
+
+    const [currentIndex, predecessorIndex, publishedIndex] = await Promise.all([
+      readOptionalFile(transaction.indexPath),
+      transaction.indexExisted ? fs.readFile(transaction.indexBackup) : Promise.resolve(undefined),
+      fs.readFile(transaction.preparedIndex),
+    ])
+    const expectedCurrentIndex = ownedLock ? predecessorIndex : publishedIndex
+    if (
+      (currentIndex === undefined) !== (expectedCurrentIndex === undefined) ||
+      (currentIndex && expectedCurrentIndex && !currentIndex.equals(expectedCurrentIndex))
+    ) {
+      throw new Error(`recovery conflict: canonical Git index changed for ${transaction.repository.path}`)
+    }
+
+    if (predecessorIndex) await writeSyncedFileHandle(handle, predecessorIndex)
+    else {
+      await handle.truncate(0)
+      await handle.sync()
+    }
+
+    const currentRef = await frozenRepositoryRef(transaction)
+    if (currentRef !== transaction.headBefore) {
+      if (currentRef !== checkpoint.commit) {
+        throw new Error(`recovery conflict: owning ref changed for ${transaction.repository.path}`)
+      }
+      const noDeref = transaction.ref === "HEAD"
+      const restored = transaction.headBefore
+        ? await EngineGitProcess.compareAndSwapRef(
+            repositoryTarget(transaction.repository),
+            transaction.ref,
+            transaction.headBefore,
+            checkpoint.commit,
+            { noDeref },
+          )
+        : await EngineGitProcess.deleteRef(
+            repositoryTarget(transaction.repository),
+            transaction.ref,
+            checkpoint.commit,
+            {
+              noDeref,
+            },
+          )
+      if (restored.exitCode !== 0) {
+        const observed = await frozenRepositoryRef(transaction)
+        if (observed !== transaction.headBefore) {
+          throw new Error(
+            `recovery conflict: owning ref restore failed for ${transaction.repository.path}: ${gitOutputError(
+              restored,
+              "git update-ref failed",
+            )}`,
+          )
+        }
+      }
+    }
+
+    if (predecessorIndex) {
+      await handle.close()
+      handle = undefined
+      await Filesystem.renameAfterTransientContention(lockPath, transaction.indexPath)
+    } else {
+      await fs.rm(transaction.indexPath, { force: true })
+      await handle.close()
+      handle = undefined
+      await fs.rm(lockPath, { force: true })
+    }
+  } catch (error) {
+    await handle?.close().catch(() => undefined)
+    handle = undefined
+    if (lockAcquired) await fs.rm(lockPath, { force: true }).catch(() => undefined)
+    throw error
+  } finally {
+    await handle?.close().catch(() => undefined)
+  }
+}
+
 async function restoreRepositoryTransactions(input: {
   transactions: RepositoryTransaction[]
   checkpoints: RepositoryCheckpoint[]
-  touchedPaths: Set<string>
+  ownedIndexLocks?: Map<string, OwnedIndexLock>
 }) {
   const errors: string[] = []
   for (const checkpoint of input.checkpoints.toReversed()) {
     if (checkpoint.mode !== "created_commit") continue
     const transaction = input.transactions.find((candidate) => candidate.repository.path === checkpoint.path)!
-    const current = checkpoint.commit ?? (await repositoryHead(transaction.repository))
-    if (!current) {
-      if (transaction.headBefore) {
-        const restored = await EngineGitProcess.compareAndSwapRef(
-          repositoryTarget(transaction.repository),
-          transaction.ref,
-          transaction.headBefore,
-          "0".repeat(transaction.repository.authority!.object_format === "sha256" ? 64 : 40),
-        )
-        if (restored.exitCode !== 0) {
-          errors.push(`restore ref ${checkpoint.path} failed: ${gitOutputError(restored, "git update-ref failed")}`)
-        }
-      }
-      continue
-    }
-    if (current === transaction.headBefore) continue
-    const restored = transaction.headBefore
-      ? await EngineGitProcess.compareAndSwapRef(
-          repositoryTarget(transaction.repository),
-          transaction.ref,
-          transaction.headBefore,
-          current,
-        )
-      : await EngineGitProcess.deleteRef(repositoryTarget(transaction.repository), transaction.ref, current)
-    if (restored.exitCode !== 0) {
-      errors.push(
-        `restore ref ${checkpoint.path} failed: ${gitOutputError(restored, "git update-ref failed")}`,
+    try {
+      await restoreRepositoryTransaction(
+        transaction,
+        checkpoint,
+        input.ownedIndexLocks?.get(transaction.repository.path),
       )
+    } catch (error) {
+      errors.push(`restore repository ${transaction.repository.path} failed: ${String(error)}`)
     }
   }
-  for (const transaction of input.transactions) {
-    if (!input.touchedPaths.has(transaction.repository.path)) continue
-    try {
-      if (transaction.indexExisted) await fs.copyFile(transaction.indexBackup, transaction.indexPath)
-      else await fs.rm(transaction.indexPath, { force: true })
-    } catch (error) {
-      errors.push(`restore index ${transaction.repository.path} failed: ${String(error)}`)
-    }
+  for (const lock of input.ownedIndexLocks?.values() ?? []) {
+    await removeOwnedIndexLock(lock).catch((error) => {
+      errors.push(`cleanup index lock ${lock.path} failed: ${String(error)}`)
+    })
   }
   return errors
+}
+
+async function cleanupRepositoryTransaction(input: {
+  prepared: PreparedRepositoryCheckpoint[]
+  ownedIndexLocks: Map<string, OwnedIndexLock>
+  backupRoot: string
+}) {
+  await Promise.all(
+    input.prepared.map((candidate) => fs.rm(candidate.temporaryRoot, { recursive: true, force: true })),
+  ).catch((error) => {
+    log.warn("repository-tree temporary index cleanup failed", { error: String(error) })
+  })
+  await Promise.all([...input.ownedIndexLocks.values()].map(removeOwnedIndexLock)).catch((error) => {
+    log.warn("repository-tree index lock cleanup failed", { error: String(error) })
+  })
+  await fs.rm(input.backupRoot, { recursive: true, force: true }).catch((error) => {
+    log.warn("repository-tree index backup cleanup failed", {
+      backupRoot: input.backupRoot,
+      error: String(error),
+    })
+  })
 }
 
 function repositoryCommitMessage(subjectLine: string, bodyText: string, repositoryPath: string) {
@@ -485,14 +857,16 @@ function filesOwnedByRepository(files: string[], repository: RepositoryNode, rep
   if (files.length === 0) return []
   return files.flatMap((file) => {
     const owner = repositories
-      .filter((candidate) => candidate.path !== "." && (file === candidate.path || file.startsWith(`${candidate.path}/`)))
+      .filter(
+        (candidate) => candidate.path !== "." && (file === candidate.path || file.startsWith(`${candidate.path}/`)),
+      )
       .toSorted((a, b) => b.path.length - a.path.length)[0]
     if ((owner?.path ?? ".") !== repository.path || file === repository.path) return []
     return [repository.path === "." ? file : file.slice(repository.path.length + 1)]
   })
 }
 
-async function commitRepository(input: {
+async function prepareRepository(input: {
   repository: RepositoryNode
   repositories: RepositoryNode[]
   transaction: RepositoryTransaction
@@ -501,11 +875,23 @@ async function commitRepository(input: {
   body: string
   allowEmpty: boolean
   declaredFiles: string[]
-}): Promise<RepositoryCheckpoint | { error: string }> {
+  preparedCommits: ReadonlyMap<string, string>
+}): Promise<PreparedRepositoryCheckpoint | { error: string }> {
   const temporary = await Global.createTemporaryDirectory("engine-git-index-")
   const temporaryIndex = path.join(temporary, "index")
+  const marksFile = path.join(temporary, "blob-marks")
   const target = repositoryTarget(input.repository)
+  let retained = false
   try {
+    const phase = {
+      enumeration: 0,
+      inspection: 0,
+      blob_import: 0,
+      index_projection: 0,
+      tree_and_commit: 0,
+      apply: 0,
+    }
+    const enumerationStarted = performance.now()
     const unmerged = await EngineGitProcess.unmerged(target)
     if (unmerged.exitCode !== 0) {
       return { error: gitOutputError(unmerged, `Git unmerged-index inspection failed for ${input.repository.path}`) }
@@ -521,66 +907,139 @@ async function commitRepository(input: {
     if (existing.exitCode !== 0) {
       return { error: gitOutputError(existing, `Git index mode inspection failed for ${input.repository.path}`) }
     }
-    const existingModes = new Map(
+    const existingEntries = new Map(
       zeroSeparated(existing.stdout, `index modes in ${input.repository.path}`).flatMap((entry) => {
-        const match = /^(\d{6}) [0-9a-f]+ 0\t([\s\S]+)$/i.exec(entry)
-        return match?.[1] && match[2] ? [[match[2], match[1]] as const] : []
+        const match = /^(\d{6}) ([0-9a-f]+) 0\t([\s\S]+)$/i.exec(entry)
+        return match?.[1] && match[2] && match[3] ? [[match[3], { mode: match[1], objectID: match[2] }] as const] : []
       }),
     )
     const initialized = await EngineGitProcess.initializeEmptyIndex(target, temporaryIndex)
     if (initialized.exitCode !== 0) {
-      return { error: gitOutputError(initialized, `Git temporary index initialization failed for ${input.repository.path}`) }
+      return {
+        error: gitOutputError(initialized, `Git temporary index initialization failed for ${input.repository.path}`),
+      }
     }
     const declared = new Set(filesOwnedByRepository(input.declaredFiles, input.repository, input.repositories))
     const paths = new Set(zeroSeparated(listed.stdout, `snapshot paths in ${input.repository.path}`))
     for (const value of declared) paths.add(value)
+    phase.enumeration = performance.now() - enumerationStarted
+
+    const inspectionStarted = performance.now()
+    const entries: Array<EngineGitIndexEntry | (Omit<EngineGitIndexEntry, "objectID"> & { mark: number })> = []
+    const sources: EngineGitRawBlobSource[] = []
+    let regularFileCount = 0
+    let symlinkCount = 0
+    let gitlinkCount = 0
+    let missingPathCount = 0
+    let directoryPathCount = 0
+    let rawByteCount = 0
+    let snapshotPathCount = 0
+    const projectedGitlinks: Array<{ path: string; commit: string }> = []
     for (const relativePath of [...paths].toSorted()) {
       if (!ProjectRuntimePaths.isSourceEnumerationAllowed(relativePath)) continue
-      const child = input.repositories.find((candidate) => candidate.path !== "." && (
-        input.repository.path === "."
-          ? candidate.path === relativePath
-          : candidate.path === `${input.repository.path}/${relativePath}`
-      ))
-      let mode: string
-      let objectID: string
+      snapshotPathCount += 1
+      const child = input.repositories.find(
+        (candidate) =>
+          candidate.path !== "." &&
+          (input.repository.path === "."
+            ? candidate.path === relativePath
+            : candidate.path === `${input.repository.path}/${relativePath}`),
+      )
       if (child) {
-        const childHead = await repositoryHead(child)
-        if (!childHead) return { error: `Initialized gitlink ${child.path} has no commit to record.` }
-        mode = "160000"
-        objectID = childHead
-      } else {
-        const absolute = path.join(input.repository.directory, relativePath)
-        let stat: Awaited<ReturnType<typeof fs.lstat>>
-        try {
-          stat = await fs.lstat(absolute)
-        } catch (error) {
-          if ((error as NodeJS.ErrnoException).code === "ENOENT") continue
-          throw error
-        }
-        if (stat.isDirectory()) continue
-        let hashPath = absolute
-        if (stat.isSymbolicLink()) {
-          hashPath = path.join(temporary, `symlink-${createHash("sha256").update(relativePath).digest("hex")}`)
-          await fs.writeFile(hashPath, await fs.readlink(absolute), { flag: "wx" })
-          mode = "120000"
-        } else if (stat.isFile()) {
-          mode = existingModes.get(relativePath) === "100755" || (process.platform !== "win32" && (stat.mode & 0o111) !== 0)
-            ? "100755"
-            : "100644"
-        } else {
-          return { error: `Repository ${input.repository.path} snapshot path ${relativePath} has unsupported file type.` }
-        }
-        const hashed = await EngineGitProcess.hashRawBlob(target, hashPath)
-        if (hashed.exitCode !== 0) {
-          return { error: gitOutputError(hashed, `Git raw blob hashing failed for ${relativePath}`) }
-        }
-        objectID = hashed.text().trim()
+        const childCommit = input.preparedCommits.get(child.path)
+        if (!childCommit) return { error: `Initialized gitlink ${child.path} has no prepared commit to record.` }
+        gitlinkCount += 1
+        projectedGitlinks.push({ path: child.path, commit: childCommit })
+        entries.push({ mode: "160000", objectID: childCommit, relativePath })
+        continue
       }
-      const indexed = await EngineGitProcess.addIndexEntry(target, temporaryIndex, mode, objectID, relativePath)
-      if (indexed.exitCode !== 0) {
-        return { error: gitOutputError(indexed, `Git temporary index update failed for ${relativePath}`) }
+
+      const absolute = path.join(input.repository.directory, relativePath)
+      let stat: Awaited<ReturnType<typeof fs.lstat>>
+      try {
+        stat = await fs.lstat(absolute)
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+          missingPathCount += 1
+          continue
+        }
+        throw error
       }
+      if (stat.isDirectory()) {
+        directoryPathCount += 1
+        const existing = existingEntries.get(relativePath)
+        if (existing?.mode === "160000") {
+          gitlinkCount += 1
+          projectedGitlinks.push({
+            path: input.repository.path === "." ? relativePath : `${input.repository.path}/${relativePath}`,
+            commit: existing.objectID,
+          })
+          entries.push({ mode: "160000", objectID: existing.objectID, relativePath })
+        }
+        continue
+      }
+
+      const mark = sources.length + 1
+      if (stat.isSymbolicLink()) {
+        const before = fingerprint(stat)
+        const bytes = await fs.readlink(absolute, { encoding: "buffer" })
+        const after = fingerprint(await fs.lstat(absolute))
+        if (!sameFingerprint(before, after)) {
+          return { error: `Symbolic link changed during checkpoint inspection: ${relativePath}` }
+        }
+        symlinkCount += 1
+        rawByteCount += bytes.byteLength
+        sources.push({ mark, content: { kind: "bytes", bytes } })
+        entries.push({ mode: "120000", mark, relativePath })
+        continue
+      }
+      if (!stat.isFile()) {
+        return { error: `Repository ${input.repository.path} snapshot path ${relativePath} has unsupported file type.` }
+      }
+      const sourceFingerprint = fingerprint(stat)
+      const mode =
+        existingEntries.get(relativePath)?.mode === "100755" ||
+        (process.platform !== "win32" && (stat.mode & 0o111) !== 0)
+          ? "100755"
+          : "100644"
+      regularFileCount += 1
+      rawByteCount += stat.size
+      sources.push({ mark, content: { kind: "file", absolutePath: absolute, fingerprint: sourceFingerprint } })
+      entries.push({ mode, mark, relativePath })
     }
+    phase.inspection = performance.now() - inspectionStarted
+
+    const blobImportStarted = performance.now()
+    const imported = await EngineGitProcess.importRawBlobs(
+      target,
+      sources,
+      marksFile,
+      input.repository.authority!.object_format,
+    )
+    if (imported.result.exitCode !== 0) {
+      return { error: gitOutputError(imported.result, `Git raw blob import failed for ${input.repository.path}`) }
+    }
+    phase.blob_import = performance.now() - blobImportStarted
+
+    const projectedEntries = entries.map(
+      (entry): EngineGitIndexEntry =>
+        "mark" in entry
+          ? {
+              mode: entry.mode,
+              objectID: imported.objectIDs.get(entry.mark)!,
+              relativePath: entry.relativePath,
+            }
+          : entry,
+    )
+    const indexProjectionStarted = performance.now()
+    const indexed = await EngineGitProcess.replaceIndexEntries(target, temporaryIndex, projectedEntries)
+    if (indexed.exitCode !== 0) {
+      return { error: gitOutputError(indexed, `Git temporary index projection failed for ${input.repository.path}`) }
+    }
+    input.transaction.preparedIndex = temporaryIndex
+    phase.index_projection = performance.now() - indexProjectionStarted
+
+    const treeAndCommitStarted = performance.now()
     const written = await EngineGitProcess.writeTree(target, temporaryIndex)
     if (written.exitCode !== 0) {
       return { error: gitOutputError(written, `Git tree assembly failed for ${input.repository.path}`) }
@@ -595,7 +1054,8 @@ async function commitRepository(input: {
       priorTree = resolved.text().trim()
     }
     if (treeID === priorTree && !input.allowEmpty) {
-      return {
+      phase.tree_and_commit = performance.now() - treeAndCommitStarted
+      const checkpoint: RepositoryCheckpoint = {
         path: input.repository.path,
         depth: input.repository.depth,
         ref: input.status.ref,
@@ -606,6 +1066,28 @@ async function commitRepository(input: {
         head_before: input.status.headBefore,
         dirty: false,
         authority: input.repository.authority,
+        receipt: {
+          snapshot_path_count: snapshotPathCount,
+          index_entry_count: projectedEntries.length,
+          regular_file_count: regularFileCount,
+          symlink_count: symlinkCount,
+          gitlink_count: gitlinkCount,
+          missing_path_count: missingPathCount,
+          directory_path_count: directoryPathCount,
+          raw_blob_count: sources.length,
+          raw_byte_count: rawByteCount,
+          blob_import_process_count: 1,
+          index_import_process_count: 1,
+          phase_ms: phase,
+        },
+      }
+      retained = true
+      return {
+        checkpoint,
+        temporaryRoot: temporary,
+        temporaryIndex,
+        transaction: input.transaction,
+        projectedGitlinks,
       }
     }
     const msg = repositoryCommitMessage(input.subject, input.body, input.repository.path)
@@ -620,18 +1102,8 @@ async function commitRepository(input: {
       return { error: gitOutputError(committed, `Git commit object creation failed for ${input.repository.path}`) }
     }
     const commitID = committed.text().trim()
-    const missing = "0".repeat(input.repository.authority!.object_format === "sha256" ? 64 : 40)
-    const updated = await EngineGitProcess.compareAndSwapRef(
-      target,
-      input.status.ref,
-      commitID,
-      input.status.headBefore ?? missing,
-    )
-    if (updated.exitCode !== 0) {
-      return { error: gitOutputError(updated, `Git owning-ref compare-and-swap failed for ${input.repository.path}`) }
-    }
-    await fs.copyFile(temporaryIndex, input.transaction.indexPath)
-    return {
+    phase.tree_and_commit = performance.now() - treeAndCommitStarted
+    const checkpoint: RepositoryCheckpoint = {
       path: input.repository.path,
       depth: input.repository.depth,
       ref: input.status.ref,
@@ -642,9 +1114,31 @@ async function commitRepository(input: {
       head_before: input.status.headBefore,
       dirty: treeID !== priorTree,
       authority: input.repository.authority,
+      receipt: {
+        snapshot_path_count: snapshotPathCount,
+        index_entry_count: projectedEntries.length,
+        regular_file_count: regularFileCount,
+        symlink_count: symlinkCount,
+        gitlink_count: gitlinkCount,
+        missing_path_count: missingPathCount,
+        directory_path_count: directoryPathCount,
+        raw_blob_count: sources.length,
+        raw_byte_count: rawByteCount,
+        blob_import_process_count: 1,
+        index_import_process_count: 1,
+        phase_ms: phase,
+      },
+    }
+    retained = true
+    return {
+      checkpoint,
+      temporaryRoot: temporary,
+      temporaryIndex,
+      transaction: input.transaction,
+      projectedGitlinks,
     }
   } finally {
-    await fs.rm(temporary, { recursive: true, force: true })
+    if (!retained) await fs.rm(temporary, { recursive: true, force: true })
   }
 }
 
@@ -656,6 +1150,9 @@ async function checkpointRepositoryTree(input: {
   allowEmptyRoot: boolean
   declaredFiles?: string[]
   expectedRepositories?: FrozenRepositoryRecord[]
+  expectedUninitialized?: RepositoryCheckpoint[]
+  gitLease: GitLease
+  registerFinalizedTransaction: RegisterFinalizedGitTransaction
 }) {
   const tree = input.expectedRepositories
     ? {
@@ -665,7 +1162,7 @@ async function checkpointRepositoryTree(input: {
           depth: repository.depth,
           authority: repository.authority,
         })),
-        uninitialized: [] as RepositoryCheckpoint[],
+        uninitialized: input.expectedUninitialized ?? [],
       }
     : await repositoryTree(input.root)
   const repositories = tree.repositories
@@ -707,12 +1204,14 @@ async function checkpointRepositoryTree(input: {
     statuses.set(repository, status)
   }
   const transactionSet = await beginRepositoryTransactions(repositories, statuses)
-  const checkpoints: RepositoryCheckpoint[] = []
-  const touchedPaths = new Set<string>()
+  const prepared: PreparedRepositoryCheckpoint[] = []
+  const applied: RepositoryCheckpoint[] = []
+  const ownedIndexLocks = new Map<string, OwnedIndexLock>()
+  let cleanupTransferred = false
   try {
+    const preparedCommits = new Map<string, string>()
     for (const repository of repositories.toSorted((a, b) => b.depth - a.depth)) {
-      touchedPaths.add(repository.path)
-      const checkpoint = await commitRepository({
+      const candidate = await prepareRepository({
         repository,
         repositories,
         transaction: transactionSet.transactions.find((candidate) => candidate.repository === repository)!,
@@ -721,91 +1220,119 @@ async function checkpointRepositoryTree(input: {
         body: input.body,
         allowEmpty: repository.path === "." && input.allowEmptyRoot,
         declaredFiles: input.declaredFiles ?? [],
+        preparedCommits,
       })
-      if ("error" in checkpoint) {
-        const recoveryErrors = await restoreRepositoryTransactions({
-          transactions: transactionSet.transactions,
-          checkpoints,
-          touchedPaths,
-        })
-        return {
-          error: recoveryErrors.length > 0 ? `${checkpoint.error} Recovery failed: ${recoveryErrors.join("; ")}` : checkpoint.error,
-          recovery: {
-            restored: recoveryErrors.length === 0,
-            committedRepositories: checkpoints
-              .filter((candidate) => candidate.mode === "created_commit")
-              .map((candidate) => ({ path: candidate.path, commit: candidate.commit })),
-            errors: recoveryErrors,
-          },
-        }
-      }
-      checkpoints.push(checkpoint)
+      if ("error" in candidate) throw new Error(candidate.error)
+      prepared.push(candidate)
+      const checkpoint = candidate.checkpoint
       if (
         checkpoint.mode === "created_commit" &&
         (!checkpoint.commit || checkpoint.commit === checkpoint.head_before)
       ) {
-        const recoveryErrors = await restoreRepositoryTransactions({
-          transactions: transactionSet.transactions,
-          checkpoints,
-          touchedPaths,
-        })
-        const validationError = checkpoint.commit
-          ? `Git commit for repository ${checkpoint.path} did not advance its owning ref.`
-          : `Git commit for repository ${checkpoint.path} succeeded but its new commit could not be resolved.`
-        return {
-          error: recoveryErrors.length > 0
-            ? `${validationError} Recovery failed: ${recoveryErrors.join("; ")}`
-            : validationError,
-          recovery: {
-            restored: recoveryErrors.length === 0,
-            committedRepositories: checkpoints
-              .filter((candidate) => candidate.mode === "created_commit")
-              .map((candidate) => ({ path: candidate.path, commit: candidate.commit })),
-            errors: recoveryErrors,
-          },
-        }
+        throw new Error(
+          checkpoint.commit
+            ? `Git commit for repository ${checkpoint.path} did not advance its owning ref.`
+            : `Git commit for repository ${checkpoint.path} succeeded but its new commit could not be resolved.`,
+        )
       }
+      if (checkpoint.commit) preparedCommits.set(repository.path, checkpoint.commit)
     }
+
+    const checkpoints = prepared.map((candidate) => candidate.checkpoint)
+    const projectedGitlinks = new Map(
+      prepared.flatMap((candidate) =>
+        candidate.projectedGitlinks.map((gitlink) => [gitlink.path, gitlink.commit] as const),
+      ),
+    )
+    const uninitialized = tree.uninitialized.flatMap((checkpoint) => {
+      const projectedCommit = projectedGitlinks.get(checkpoint.path)
+      return projectedCommit ? [{ ...checkpoint, commit: projectedCommit, head_before: projectedCommit }] : []
+    })
     const root = checkpoints.find((checkpoint) => checkpoint.path === ".")
     if (!root) {
-      const recoveryErrors = await restoreRepositoryTransactions({
-        transactions: transactionSet.transactions,
-        checkpoints,
-        touchedPaths,
-      })
-      return {
-        error: `Git repository tree checkpoint did not produce a root repository anchor.${
-          recoveryErrors.length > 0 ? ` Recovery failed: ${recoveryErrors.join("; ")}` : ""
-        }`,
-        recovery: { restored: recoveryErrors.length === 0, errors: recoveryErrors },
+      throw new Error("Git repository tree checkpoint did not produce a root repository anchor.")
+    }
+
+    for (const candidate of prepared) {
+      if (candidate.checkpoint.mode !== "created_commit") continue
+      input.gitLease.assertOwned()
+      ownedIndexLocks.set(
+        candidate.checkpoint.path,
+        await prepareCanonicalIndexLock(candidate.transaction, candidate.temporaryIndex),
+      )
+    }
+
+    for (const candidate of prepared) {
+      const checkpoint = candidate.checkpoint
+      if (checkpoint.mode !== "created_commit") continue
+      input.gitLease.assertOwned()
+      const commitID = checkpoint.commit!
+      const missing = "0".repeat(candidate.transaction.repository.authority!.object_format === "sha256" ? 64 : 40)
+      const updated = await EngineGitProcess.compareAndSwapRef(
+        repositoryTarget(candidate.transaction.repository),
+        candidate.transaction.ref,
+        commitID,
+        candidate.transaction.headBefore ?? missing,
+        { noDeref: candidate.transaction.ref === "HEAD" },
+      )
+      if (updated.exitCode !== 0) {
+        throw new Error(gitOutputError(updated, `Git owning-ref compare-and-swap failed for ${checkpoint.path}`))
       }
+      applied.push(checkpoint)
+      const applyStarted = performance.now()
+      const ownedIndexLock = ownedIndexLocks.get(checkpoint.path)!
+      await installCanonicalIndexLock(ownedIndexLock, candidate.transaction)
+      ownedIndexLocks.delete(checkpoint.path)
+      checkpoint.receipt!.phase_ms.apply = performance.now() - applyStarted
     }
-    return {
+    input.gitLease.assertOwned()
+    const result = {
       ...root,
-      repositories: [...checkpoints, ...tree.uninitialized].toSorted((a, b) => a.path.localeCompare(b.path)),
+      repositories: [...checkpoints, ...uninitialized].toSorted((a, b) => a.path.localeCompare(b.path)),
     }
+    input.registerFinalizedTransaction({
+      rollback: () =>
+        restoreRepositoryTransactions({
+          transactions: transactionSet.transactions,
+          checkpoints: applied,
+          ownedIndexLocks,
+        }),
+      cleanup: () =>
+        cleanupRepositoryTransaction({
+          prepared,
+          ownedIndexLocks,
+          backupRoot: transactionSet.backupRoot,
+        }),
+    })
+    cleanupTransferred = true
+    return result
   } catch (error) {
     const recoveryErrors = await restoreRepositoryTransactions({
       transactions: transactionSet.transactions,
-      checkpoints,
-      touchedPaths,
+      checkpoints: applied,
+      ownedIndexLocks,
     })
+    const failure = error instanceof Error ? error.message : String(error)
     return {
-      error: `Repository-tree checkpoint failed: ${String(error)}${
+      error: `Repository-tree checkpoint failed: ${failure}${
         recoveryErrors.length > 0 ? ` Recovery failed: ${recoveryErrors.join("; ")}` : ""
       }`,
       recovery: {
         restored: recoveryErrors.length === 0,
-        committedRepositories: checkpoints
+        committedRepositories: applied
           .filter((candidate) => candidate.mode === "created_commit")
           .map((candidate) => ({ path: candidate.path, commit: candidate.commit })),
         errors: recoveryErrors,
       },
     }
   } finally {
-    await fs.rm(transactionSet.backupRoot, { recursive: true, force: true }).catch((error) => {
-      log.warn("repository-tree index backup cleanup failed", { backupRoot: transactionSet.backupRoot, error: String(error) })
-    })
+    if (!cleanupTransferred) {
+      await cleanupRepositoryTransaction({
+        prepared,
+        ownedIndexLocks,
+        backupRoot: transactionSet.backupRoot,
+      })
+    }
   }
 }
 
@@ -871,11 +1398,47 @@ function baselineRepositories(task: TaskRow): FrozenRepositoryRecord[] {
   return authorities
 }
 
+function baselineUninitializedRepositories(task: TaskRow): RepositoryCheckpoint[] {
+  const repositories = baseline(task)?.repositories
+  if (!Array.isArray(repositories)) {
+    throw new Error(`Task ${task.id} baseline is missing repository authority records`)
+  }
+  return repositories.flatMap((repository) => {
+    if (!repository || typeof repository !== "object" || Array.isArray(repository)) return []
+    const record = repository as Record<string, unknown>
+    if (record.mode !== "uninitialized") return []
+    if (
+      typeof record.path !== "string" ||
+      !Number.isInteger(record.depth) ||
+      (record.depth as number) <= 0 ||
+      record.ref !== "gitlink" ||
+      typeof record.commit !== "string" ||
+      record.head_before !== record.commit ||
+      record.dirty !== false
+    ) {
+      throw new Error(`Task ${task.id} baseline contains an invalid uninitialized repository record`)
+    }
+    return [
+      {
+        path: record.path,
+        depth: record.depth as number,
+        ref: "gitlink",
+        mode: "uninitialized" as const,
+        commit: record.commit,
+        head_before: record.commit,
+        dirty: false,
+      },
+    ]
+  })
+}
+
 async function assertRepositoryAuthorities(root: string, repositories: FrozenRepositoryRecord[]) {
   const canonicalRoot = await fs.realpath(root)
   const frozenRoot = repositories.find((repository) => repository.path === ".")!
   if (canonicalRoot !== frozenRoot.authority.workspace) {
-    throw new Error(`Task root ${canonicalRoot} does not equal frozen repository root ${frozenRoot.authority.workspace}`)
+    throw new Error(
+      `Task root ${canonicalRoot} does not equal frozen repository root ${frozenRoot.authority.workspace}`,
+    )
   }
   for (const frozen of repositories) {
     const authority = frozen.authority
@@ -897,7 +1460,9 @@ async function assertRepositoryAuthorities(root: string, repositories: FrozenRep
       throw new Error(`Repository authority .git marker identity changed: ${canonicalWorkspace}`)
     }
     if (markerKind === "file") {
-      const digest = createHash("sha256").update(await fs.readFile(marker)).digest("hex")
+      const digest = createHash("sha256")
+        .update(await fs.readFile(marker))
+        .digest("hex")
       if (digest !== authority.git_marker_sha256) {
         throw new Error(`Repository authority .git marker bytes changed: ${canonicalWorkspace}`)
       }
@@ -955,12 +1520,14 @@ async function commitAcceptanceRound(input: {
   log.info("commitAcceptanceRound: repository-tree checkpoint start", { cwd })
   const result = await checkpointWithGitMaintenance({
     taskID: input.task.id,
+    checkpointStage: "acceptance_round",
     root: cwd,
     subject: subjectLine,
     body: (input.verdict.summary ?? "").trim(),
     allowEmptyRoot: true,
     declaredFiles: await declaredFilesPresentInWorktree(input.declaredChangedFiles ?? [], cwd),
     expectedRepositories: baselineRepositories(input.task),
+    expectedUninitialized: baselineUninitializedRepositories(input.task),
   })
   log.info("commitAcceptanceRound: repository-tree checkpoint done", {
     error: "error" in result ? result.error : undefined,
@@ -973,6 +1540,7 @@ async function commitAcceptanceRound(input: {
       iteration: input.iteration,
       error: result.error,
       recovery: "recovery" in result ? result.recovery : undefined,
+      checkpoint_receipt: result.checkpoint_receipt,
     })
     return { mode: "skipped", error: result.error }
   }
@@ -1023,9 +1591,10 @@ export namespace EngineGit {
   export async function prepare(task: TaskRow) {
     if (baseline(task)) return { task }
     const processBinding = readTaskProcessBinding(task.id)
-    const initialTreeSHA256 = processBinding.protocol === TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL
-      ? processBinding.workspace.initial_tree_sha256
-      : processBinding.initial_tree_sha256
+    const initialTreeSHA256 =
+      processBinding.protocol === TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL
+        ? processBinding.workspace.initial_tree_sha256
+        : processBinding.initial_tree_sha256
     const executionBaselineTreeSHA256 = await executionCapsuleSourceTreeDigest(taskRootDirectory(task))
     if (executionBaselineTreeSHA256 !== initialTreeSHA256) {
       const summary = `Task ${task.id} workspace changed between creation and first execution`
@@ -1056,6 +1625,7 @@ export namespace EngineGit {
         stage: "baseline",
         error: next.error,
         recovery: "recovery" in next ? next.recovery : undefined,
+        checkpoint_receipt: next.checkpoint_receipt,
       })
       return { task, error: summary }
     }
@@ -1074,6 +1644,7 @@ export namespace EngineGit {
           message: next.message,
           head_before: next.head_before,
           repositories: "repositories" in next ? next.repositories : undefined,
+          checkpoint_receipt: next.checkpoint_receipt,
           snapshot,
           workspace_tree_sha256: executionBaselineTreeSHA256,
           dirty: next.dirty,
@@ -1102,6 +1673,7 @@ export namespace EngineGit {
         commit: next.commit,
         message: next.message,
         repositories: "repositories" in next ? next.repositories : undefined,
+        checkpoint_receipt: next.checkpoint_receipt,
         snapshot,
       },
       time,
@@ -1124,6 +1696,7 @@ export namespace EngineGit {
         stage: "result",
         error: next.error,
         recovery: "recovery" in next ? next.recovery : undefined,
+        checkpoint_receipt: next.checkpoint_receipt,
       })
       return { task, error: summary }
     }
@@ -1141,6 +1714,7 @@ export namespace EngineGit {
           message: next.message,
           head_before: next.head_before,
           repositories: "repositories" in next ? next.repositories : undefined,
+          checkpoint_receipt: next.checkpoint_receipt,
           dirty: next.dirty,
           staged: 0,
           modified: next.dirty ? 1 : 0,
@@ -1168,6 +1742,7 @@ export namespace EngineGit {
         commit: next.commit,
         message: next.message,
         repositories: "repositories" in next ? next.repositories : undefined,
+        checkpoint_receipt: next.checkpoint_receipt,
       },
       time,
     )

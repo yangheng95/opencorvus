@@ -2,7 +2,10 @@ import { expect, test } from "bun:test"
 import { mkdtemp, mkdir, rm, symlink, writeFile } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
-import { executionCapsuleSourceTreeDigest, executionCapsuleSourceTreeSnapshot } from "../src/execution-capsule/tree-digest"
+import {
+  executionCapsuleSourceTreeDigest,
+  executionCapsuleSourceTreeSnapshot,
+} from "../src/execution-capsule/tree-digest"
 
 async function git(root: string, ...args: string[]) {
   const child = Bun.spawn(["git", ...args], { cwd: root, stdout: "pipe", stderr: "pipe" })
@@ -63,9 +66,46 @@ test("Task source snapshot equals the complete Git source selection", async () =
       repeated: first,
     })
   } finally {
-    await Promise.all([
-      rm(root, { recursive: true, force: true }),
-      rm(dependency, { recursive: true, force: true }),
-    ])
+    await Promise.all([rm(root, { recursive: true, force: true }), rm(dependency, { recursive: true, force: true })])
+  }
+})
+
+test("Task source snapshot projects initialized nested repository source bytes", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-task-nested-source-"))
+  try {
+    await git(root, "init", "--quiet")
+    await git(root, "config", "user.name", "OpenCorvus Test")
+    await git(root, "config", "user.email", "opencorvus-test@example.invalid")
+    await writeFile(path.join(root, "root.txt"), "root source\n")
+    const child = path.join(root, "child")
+    await mkdir(child)
+    await git(child, "init", "--quiet")
+    await git(child, "config", "user.name", "OpenCorvus Test")
+    await git(child, "config", "user.email", "opencorvus-test@example.invalid")
+    await writeFile(path.join(child, "child.txt"), "child source one\n")
+    await git(child, "add", "child.txt")
+    await git(child, "commit", "--quiet", "-m", "child source")
+    await git(root, "add", "root.txt", "child")
+
+    const first = await executionCapsuleSourceTreeSnapshot(root)
+    const firstDigest = await executionCapsuleSourceTreeDigest(root)
+    await writeFile(path.join(child, "child.txt"), "child source two\n")
+    const second = await executionCapsuleSourceTreeSnapshot(root)
+
+    expect({
+      firstFiles: first.files.map((file) => file.path),
+      firstChildBytes: Buffer.from(first.files[0]!.bytes_base64, "base64").toString(),
+      secondFiles: second.files.map((file) => file.path),
+      secondChildBytes: Buffer.from(second.files[0]!.bytes_base64, "base64").toString(),
+      digests: [firstDigest, await executionCapsuleSourceTreeDigest(root)],
+    }).toEqual({
+      firstFiles: ["child/child.txt", "root.txt"],
+      firstChildBytes: "child source one\n",
+      secondFiles: ["child/child.txt", "root.txt"],
+      secondChildBytes: "child source two\n",
+      digests: [firstDigest, expect.stringMatching(/^[0-9a-f]{64}$/)],
+    })
+  } finally {
+    await rm(root, { recursive: true, force: true })
   }
 })

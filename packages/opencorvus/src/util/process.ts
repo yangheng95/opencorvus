@@ -24,6 +24,10 @@ export namespace Process {
     nothrow?: boolean
     inactivityTimeoutMs?: number
     inactivityTimeoutMessage?: string
+    /** Binary standard-input chunks written with backpressure through the owned supervisor handle. */
+    input?: AsyncIterable<Uint8Array>
+    /** Observes the successful creation of the supervised child process. */
+    onSpawned?: () => void
   }
 
   export interface Result {
@@ -70,6 +74,61 @@ export namespace Process {
       const existingError = (stream as NodeJS.ReadableStream & { errored?: Error | null }).errored
       if (existingError) reject(existingError)
     })
+  }
+
+  async function writeInput(
+    stream: NodeJS.WritableStream,
+    input: AsyncIterable<Uint8Array>,
+    onActivity: () => void,
+  ): Promise<void> {
+    let observedError: unknown
+    const recordError = (error: unknown) => {
+      observedError ??= error
+    }
+    stream.on("error", recordError)
+    try {
+      for await (const value of input) {
+        if (observedError) throw observedError
+        const chunk = Buffer.isBuffer(value) ? value : Buffer.from(value)
+        if (chunk.length === 0) continue
+        const accepted = stream.write(chunk)
+        onActivity()
+        if (!accepted) {
+          await new Promise<void>((resolve, reject) => {
+            const cleanup = () => {
+              stream.removeListener("drain", drained)
+              stream.removeListener("error", failed)
+            }
+            const drained = () => {
+              cleanup()
+              resolve()
+            }
+            const failed = (error: unknown) => {
+              cleanup()
+              reject(error)
+            }
+            stream.once("drain", drained)
+            stream.once("error", failed)
+          })
+        }
+      }
+      if (observedError) throw observedError
+      await new Promise<void>((resolve, reject) => {
+        const cleanup = () => stream.removeListener("error", failed)
+        const failed = (error: unknown) => {
+          cleanup()
+          reject(error)
+        }
+        stream.once("error", failed)
+        stream.end(() => {
+          cleanup()
+          resolve()
+        })
+      })
+      if (observedError) throw observedError
+    } finally {
+      stream.removeListener("error", recordError)
+    }
   }
 
   async function terminateOwnedProcess(proc: ChildProcess, exited: Promise<number>, command: string[]) {
@@ -178,17 +237,14 @@ export namespace Process {
     return child
   }
 
-  type CommandSpawner = (
-    opts: ProcessSupervisor.CommandSpawnOptions,
-  ) => Promise<ProcessSupervisor.Handle>
+  type CommandSpawner = (opts: ProcessSupervisor.CommandSpawnOptions) => Promise<ProcessSupervisor.Handle>
 
-  async function runWithSpawner(
-    cmd: string[],
-    opts: RunOptions,
-    spawnCommand: CommandSpawner,
-  ): Promise<Result> {
+  async function runWithSpawner(cmd: string[], opts: RunOptions, spawnCommand: CommandSpawner): Promise<Result> {
     if (opts.exactEnv && opts.env !== undefined) {
       throw new Error("Process.run accepts exactly one of env or exactEnv")
+    }
+    if (opts.input && opts.stdin && opts.stdin !== "pipe") {
+      throw new Error("Process.run binary input requires piped stdin")
     }
     const command = normalizeExecutableArgv(cmd)
     const handle = await spawnCommand({
@@ -196,8 +252,21 @@ export namespace Process {
       args: command.slice(1),
       cwd: opts.cwd,
       env: opts.exactEnv ?? (opts.env === null ? {} : opts.env ? { ...process.env, ...opts.env } : undefined),
-      stdin: opts.stdin === "pipe" ? "pipe" : "ignore",
+      stdin: opts.input || opts.stdin === "pipe" ? "pipe" : "ignore",
     })
+    try {
+      opts.onSpawned?.()
+    } catch (observerError) {
+      try {
+        await ProcessSupervisor.disposeAndWaitForExit(handle, "Process.run spawn observer failure")
+      } catch (cleanupError) {
+        throw ProcessSupervisor.combineFailures("Process.run spawn observation and disposal failed", [
+          observerError,
+          cleanupError,
+        ])
+      }
+      throw observerError
+    }
 
     if (!handle.stdout || !handle.stderr) throw new Error("Process output not available")
 
@@ -245,13 +314,23 @@ export namespace Process {
       }, opts.inactivityTimeoutMs)
       inactivityTimer.unref?.()
     }
-    const onOutputActivity = () => refreshInactivityTimer()
-    const stdoutBuffered = collectOutput(handle.stdout, onOutputActivity)
-    const stderrBuffered = collectOutput(handle.stderr, onOutputActivity)
+    const onProcessActivity = () => refreshInactivityTimer()
+    const stdoutBuffered = collectOutput(handle.stdout, onProcessActivity)
+    const stderrBuffered = collectOutput(handle.stderr, onProcessActivity)
+    let inputFailure: unknown
+    const inputWritten = opts.input
+      ? (handle.stdin
+          ? writeInput(handle.stdin, opts.input, onProcessActivity)
+          : Promise.reject(new Error("Process input was requested but the supervisor did not expose stdin"))
+        ).catch((error) => {
+          inputFailure = error
+          requestTermination()
+        })
+      : Promise.resolve()
     if (opts.inactivityTimeoutMs !== undefined) {
       refreshInactivityTimer()
     }
-    const processCompleted = Promise.all([handle.exited, stdoutBuffered, stderrBuffered])
+    const processCompleted = Promise.all([handle.exited, stdoutBuffered, stderrBuffered, inputWritten])
     const terminationCompleted = terminationRequested.then(async (cleanup) => {
       const terminatedCode = await cleanup
       const [terminatedStdout, terminatedStderr] = await Promise.all([stdoutBuffered, stderrBuffered])
@@ -261,6 +340,7 @@ export namespace Process {
     try {
       ;[code, stdout, stderr] = await Promise.race([processCompleted, terminationCompleted])
       if (terminationPromise) code = await terminationPromise
+      if (inputFailure) throw inputFailure
     } catch (error) {
       primaryError = error
       throw error
@@ -299,13 +379,9 @@ export namespace Process {
     cmd: string[],
     opts: Omit<RunOptions, "cwd"> = {},
   ): Promise<Result> {
-    return runWithSpawner(
-      cmd,
-      { ...opts, cwd: identity.cwd },
-      (spawnOptions) => {
-        const { cwd: _cwd, ...taskOptions } = spawnOptions
-        return ProcessSupervisor.spawnTaskCommand(identity, taskOptions)
-      },
-    )
+    return runWithSpawner(cmd, { ...opts, cwd: identity.cwd }, (spawnOptions) => {
+      const { cwd: _cwd, ...taskOptions } = spawnOptions
+      return ProcessSupervisor.spawnTaskCommand(identity, taskOptions)
+    })
   }
 }
