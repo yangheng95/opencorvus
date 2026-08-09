@@ -107,12 +107,14 @@ const mockModelRef = `${mockProviderID}/${mockModelID}`
 const repoRoot = path.resolve(import.meta.dir, "../../../..")
 
 function mockProviderEnabled() {
-  return process.env.MISSION_RANDOM_PORT_E2E_MOCK_PROVIDER === "1"
+  if (process.env.MISSION_RANDOM_PORT_E2E_MOCK_PROVIDER === "1") {
+    throw new Error("MISSION_RANDOM_PORT_E2E_MOCK_PROVIDER is not supported for the live DeepSeek Mission E2E benchmark")
+  }
+  return false
 }
 
-function selectedModelRef(mockProvider: BunServer | undefined) {
+function selectedModelRef() {
   const override = process.env.MISSION_RANDOM_PORT_E2E_MODEL
-  if (mockProvider) return override ?? mockModelRef
   if (override && override !== liveModelRef) {
     throw new Error(`MISSION_RANDOM_PORT_E2E_MODEL must be ${liveModelRef}, got ${JSON.stringify(override)}`)
   }
@@ -787,7 +789,7 @@ async function main() {
     evidence.mockProviderURL = mockProvider.url.toString()
     installMockProviderConfig(evidence.mockProviderURL)
   }
-  const model = selectedModelRef(mockProvider)
+  const model = selectedModelRef()
   evidence.modelRef = model
   const { Log } = await import("@/util/log")
   await Log.init({ print: false })
