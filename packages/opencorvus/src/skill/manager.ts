@@ -330,9 +330,7 @@ export namespace SkillManager {
         : input.kind === "url"
           ? normalizeUrl(input.value)
           : resolveSource(input.value)
-    return withSkillCatalogMutation(() =>
-      withSkillSourceMutation(sourceKey, () => installResolved(input)),
-    )
+    return withSkillCatalogMutation(() => withSkillSourceMutation(sourceKey, () => installResolved(input)))
   }
 
   async function installResolved(input: z.output<typeof InstallInput>) {

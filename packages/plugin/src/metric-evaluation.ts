@@ -48,13 +48,24 @@ export const PrebuiltMetricEvaluatorConfigSchema = z
   })
   .strict()
 
-export const QueryMetricEvaluatorConfigSchema = z
-  .object({
-    scorer_revision: SHA256Schema,
-    sql: z.string().min(1),
-    value_column: z.string().min(1),
-  })
-  .strict()
+export const QueryMetricEvaluatorConfigSchema = z.discriminatedUnion("query", [
+  z
+    .object({
+      scorer_revision: SHA256Schema,
+      query: z.literal("constant_value"),
+      value: z.number(),
+    })
+    .strict(),
+  z
+    .object({
+      scorer_revision: SHA256Schema,
+      query: z.literal("metric_result_value"),
+      metric_spec_id: z.string().min(1),
+      iteration_offset: z.number().int(),
+      result_column: z.enum(["raw_value", "normalized_value"]),
+    })
+    .strict(),
+])
 
 export const AggregatorMetricEvaluatorConfigSchema = z
   .object({

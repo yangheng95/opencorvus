@@ -9,6 +9,7 @@ import { badRequestBody } from "./error"
 const log = Log.create({ service: "server" })
 const requestIDs = new WeakMap<object, string>()
 const REQUEST_ID_CONTEXT_KEY = "opencorvusRequestID"
+const PUBLIC_UNKNOWN_ERROR_MESSAGE = "Internal server error. See x-opencorvus-request-id for diagnostics."
 
 type NamedErrorLike = Error & {
   name: string
@@ -107,6 +108,9 @@ export function serverErrorResponse(err: Error | unknown, c: Context): Response 
     error: normalized,
   })
   if (namedError) {
+    if (normalized.name === "UnknownError") {
+      return c.json(new NamedError.Unknown({ message: publicUnknownErrorMessage() }).toObject(), { status })
+    }
     return c.json(normalized.toObject(), { status })
   }
   if (normalized instanceof HTTPException) {
@@ -119,8 +123,15 @@ export function serverErrorResponse(err: Error | unknown, c: Context): Response 
     }
     return c.json(new NamedError.Unknown({ message }).toObject(), { status })
   }
-  const message = normalized instanceof Error ? normalized.message : String(normalized)
-  return c.json(new NamedError.Unknown({ message }).toObject(), {
+  return c.json(new NamedError.Unknown({ message: publicUnknownErrorMessage() }).toObject(), {
     status: 500,
   })
+}
+
+export function publicUnknownErrorMessage(): string {
+  return PUBLIC_UNKNOWN_ERROR_MESSAGE
+}
+
+export function publicUnknownStreamError() {
+  return { type: "error" as const, message: publicUnknownErrorMessage() }
 }

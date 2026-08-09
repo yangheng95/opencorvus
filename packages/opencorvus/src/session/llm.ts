@@ -61,6 +61,22 @@ export namespace LLM {
 
   export type StreamResult = ReturnType<typeof streamText<ToolSet>>
 
+  export function telemetryConfig(input: {
+    enabled: boolean | undefined
+    username: string | undefined
+    sessionID: string
+  }) {
+    return {
+      isEnabled: input.enabled,
+      recordInputs: false,
+      recordOutputs: false,
+      metadata: {
+        userId: input.username ?? "unknown",
+        sessionId: input.sessionID,
+      },
+    }
+  }
+
   export async function composeSystem(input: {
     agentID: string
     agent: SessionAgentRuntime
@@ -261,13 +277,11 @@ export namespace LLM {
       stopWhen: input.stopWhen,
       messages: requestMessages,
       model: ProviderLLM.wrapModel(language, input.model, options),
-      experimental_telemetry: {
-        isEnabled: cfg.experimental?.openTelemetry,
-        metadata: {
-          userId: cfg.username ?? "unknown",
-          sessionId: input.sessionID,
-        },
-      },
+      experimental_telemetry: telemetryConfig({
+        enabled: cfg.experimental?.openTelemetry,
+        username: cfg.username,
+        sessionID: input.sessionID,
+      }),
     })
     return result
   }

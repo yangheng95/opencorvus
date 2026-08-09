@@ -704,9 +704,7 @@ export namespace ExpertSquadRegistry {
       .map(([relativePath, content]) => ({
         relativePath,
         bytes:
-          typeof content === "string"
-            ? Buffer.from(content, "utf8")
-            : Buffer.from(content.content, content.encoding),
+          typeof content === "string" ? Buffer.from(content, "utf8") : Buffer.from(content.content, content.encoding),
       }))
       .sort((left, right) => left.relativePath.localeCompare(right.relativePath))
     const digest = embeddedPackageDigest(source)
@@ -1875,13 +1873,11 @@ export namespace ExpertSquadRegistry {
   }
 
   export async function loadPackageRevisionSnapshot(packageRevisionDigest: string): Promise<LoadedPackage> {
-    const digest = z.string().regex(/^[a-f0-9]{64}$/).parse(packageRevisionDigest)
-    const root = path.join(
-      Global.Path.data,
-      "expert-squad-package-revisions",
-      PACKAGE_SNAPSHOT_ABI,
-      digest,
-    )
+    const digest = z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .parse(packageRevisionDigest)
+    const root = path.join(Global.Path.data, "expert-squad-package-revisions", PACKAGE_SNAPSHOT_ABI, digest)
     const state = await lstatIfExists(root)
     if (!state?.isDirectory()) {
       throw new Error(`expert squad immutable package snapshot is missing: ${digest}`)

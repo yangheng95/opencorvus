@@ -6,6 +6,7 @@ import type {
   OAuthClientInformationFull,
 } from "@modelcontextprotocol/sdk/shared/auth.js"
 import { McpAuth } from "./auth"
+import { oauthAuthorizationLogFields } from "./oauth-log"
 import { Log } from "../util/log"
 
 const log = Log.create({ service: "mcp.oauth" })
@@ -46,6 +47,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
     private authRevision: McpAuth.Revision,
     private assertCurrent?: () => Promise<void>,
     private ownedOAuthState?: string,
+    private correlationID: string = crypto.randomUUID(),
   ) {}
 
   get redirectUrl(): string {
@@ -145,7 +147,11 @@ export class McpOAuthProvider implements OAuthClientProvider {
   }
 
   async redirectToAuthorization(authorizationUrl: URL): Promise<void> {
-    log.info("redirecting to authorization", { mcpName: this.mcpName, url: authorizationUrl.toString() })
+    log.info("redirecting to authorization", oauthAuthorizationLogFields({
+      mcpName: this.mcpName,
+      authorizationUrl,
+      correlationID: this.correlationID,
+    }))
     await this.callbacks.onRedirect(authorizationUrl)
   }
 

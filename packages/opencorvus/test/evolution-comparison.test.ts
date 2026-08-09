@@ -44,8 +44,8 @@ describe("Evolution Lab deterministic comparison", () => {
       evaluator_kind: "query" as const,
       evaluator_config: {
         scorer_revision: resourceDigest,
-        sql: "SELECT 1 AS value",
-        value_column: "value",
+        query: "constant_value" as const,
+        value: 1,
       },
     }
     const campaign = EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse({

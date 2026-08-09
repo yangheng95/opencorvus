@@ -2,6 +2,10 @@
 
 Latest autonomous Visual Reviewer dispatch contract: [`2026-08-09-autonomous-visual-review-dispatch.md`](records/2026-08/2026-08-09-autonomous-visual-review-dispatch.md).
 
+Current security, permission, and metric-evaluator architecture: [`security-permission.md`](current/architecture/security-permission.md).
+
+Latest P0.1 architecture-debt remediation: [`2026-08-09-architecture-debt-p0-1-remediation.md`](records/2026-08/2026-08-09-architecture-debt-p0-1-remediation.md).
+
 Latest architecture debt remediation plan: [`2026-08-09-architecture-debt-remediation-plan.md`](records/2026-08/2026-08-09-architecture-debt-remediation-plan.md).
 
 Paused backend algorithm test/debug loop evidence: [`2026-08-09-backend-algorithm-test-loop.md`](records/2026-08/2026-08-09-backend-algorithm-test-loop.md).

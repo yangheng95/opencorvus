@@ -2,6 +2,8 @@
 
 - [2026-08-09-autonomous-visual-review-dispatch.md](2026-08-09-autonomous-visual-review-dispatch.md) removes category-inferred mandatory Visual Reviewer routing for greenfield interfaces, adds an explicit independently visual-verified Advanced workflow, and preserves reference-fidelity review.
 
+- [2026-08-09-architecture-debt-p0-1-remediation.md](2026-08-09-architecture-debt-p0-1-remediation.md) records the rescanned P0.1 authority, deletion boundaries, and focused acceptance.
+
 - [2026-08-09-architecture-debt-remediation-plan.md](2026-08-09-architecture-debt-remediation-plan.md) defines the evidence-backed repository architecture debt remediation sequence, source-of-truth convergence rules, security-first priority register, verification gates, and independent review requirement.
 
 - [2026-08-09-backend-algorithm-test-loop.md](2026-08-09-backend-algorithm-test-loop.md) records the paused two-case real-backend algorithm test/debug loop, its Recall, reproducible evidence, independent root-cause analyses, partial fixes, validation state, and remaining stop-condition gaps.

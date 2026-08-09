@@ -52,7 +52,8 @@ import { QuickNoteRoutes } from "@/quicknote/routes"
 import { hasServerShutdownHandler, requestServerShutdown } from "../shutdown"
 import { canRestartServer, startServerRestart } from "../restart"
 import { AppDocumentation } from "./documentation"
-import { serverErrorResponse } from "../error-handler"
+import { requestID, serverErrorResponse } from "../error-handler"
+import { writeVcsCommitMessageStreamError } from "../vcs-stream-error"
 import { Event as ServerEvent, payload as serverEventPayload } from "../event"
 
 const log = Log.create({ service: "server" })
@@ -460,6 +461,8 @@ export function AppRoutes(root: Hono) {
       validator("json", VcsCommitMessageInput),
       async (c) => {
         const input = c.req.valid("json")
+        const streamRequestID = requestID(c)
+        c.header("x-opencorvus-request-id", streamRequestID)
         c.header("X-Accel-Buffering", "no")
         c.header("X-Content-Type-Options", "nosniff")
         return streamProjectSSE(c, Instance.directory, async (stream) => {
@@ -476,12 +479,11 @@ export function AppRoutes(root: Hono) {
             const event = VcsCommitMessageStreamEvent.parse({ type: "done", message })
             await stream.writeSSE({ data: JSON.stringify(event) })
           } catch (error) {
-            const event = VcsCommitMessageStreamEvent.parse({
-              type: "error",
-              message: error instanceof Error ? error.message : String(error),
-            })
-            await stream.writeSSE({
-              data: JSON.stringify(event),
+            await writeVcsCommitMessageStreamError({
+              stream,
+              error,
+              requestID: streamRequestID,
+              logError: (message, fields) => log.error(message, fields),
             })
           }
         })

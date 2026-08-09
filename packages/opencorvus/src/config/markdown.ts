@@ -1,8 +1,7 @@
 import { NamedError } from "@opencorvus-ai/util/error"
-import matter from "gray-matter"
-import * as yaml from "js-yaml"
 import { z } from "zod"
 import { Filesystem } from "../util/filesystem"
+import { parseFrontmatter, stringifyFrontmatter } from "../util/frontmatter"
 
 export namespace ConfigMarkdown {
   export const FILE_REGEX = /(?<![\w`])@(\.?[^\s`,.]*(?:\.[^\s`,.]+)*)/g
@@ -78,22 +77,9 @@ export namespace ConfigMarkdown {
     return Array.from(template.matchAll(SHELL_REGEX))
   }
 
-  const matterOptions = {
-    engines: {
-      yaml: {
-        parse(input: string) {
-          return yaml.load(input) ?? {}
-        },
-        stringify(input: unknown) {
-          return yaml.dump(input ?? {})
-        },
-      },
-    },
-  }
-
   export function parseText(template: string, source: string) {
     try {
-      return matter(template, matterOptions)
+      return parseFrontmatter(template)
     } catch (err) {
       throw new FrontmatterError(
         {
@@ -106,7 +92,7 @@ export namespace ConfigMarkdown {
   }
 
   export function stringify(content: string, data: object) {
-    return matter.stringify(content, data, matterOptions)
+    return stringifyFrontmatter(content, data)
   }
 
   export async function parse(filePath: string) {
