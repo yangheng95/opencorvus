@@ -7,7 +7,7 @@
 - Hard constraints: do not preserve fallback or compatibility paths; do not use host workflow gates to teach LLM flow; all LLM calls remain streaming; messages and logs must not synthesize or leak hidden sensitive content; no UI automation applies to this backend-only batch.
 - Read materials: `specs/records/2026-08/2026-08-09-architecture-debt-remediation-plan.md`, `packages/opencorvus/src/permission/next.ts`, `packages/opencorvus/src/session/llm.ts`, `packages/opencorvus/src/mcp/**`, `packages/opencorvus/src/server/error-handler.ts`, `packages/opencorvus/src/metrics/**`, `packages/plugin/src/metric-evaluation.ts`, and the Evolution Lab scorer contract artifacts.
 - Whole-repository search results: security-sensitive findings were located in permission approval merging, LLM telemetry options, MCP OAuth logging, server unknown-error responses, and raw SQL metric query evaluators. No earlier `specs/current/architecture/**` authority existed in the isolated worktree before this repair.
-- Independent agent feedback: the prior remediation plan review required adding current architecture authority before implementation; no implementation review has run yet for this repair branch.
+- Independent agent feedback: three read-only reviews of the first P0 implementation found no unresolved issue at that time. A later whole-repository rescan found reachable bypasses and regressions; the P0.1 contract below supersedes the incomplete first-batch closure. Three P0.1 reviews found callback-validation, credential-output, control-flow-test, ignored-spec-delivery, malformed-callback-lifecycle, database-order evidence, and early callback-rejection handling gaps. All findings were corrected; the fourth independent review reported zero unresolved findings.
 
 ## Authority
 
@@ -16,6 +16,15 @@
 3. OAuth logs may record flow phase, MCP server identity, authorization host, callback path, booleans, error code strings, and pending counts. Logs must not record full authorization URLs, OAuth `state`, authorization `code`, token values, or lists of pending states.
 4. Public unknown HTTP errors return a stable `UnknownError` body with a generic message. The request identifier is exposed through `x-opencorvus-request-id` and logged server-side with the full diagnostic.
 5. Query metric evaluators are typed named projections, not arbitrary SQL. They may emit a constant measurement or read a declared column from an existing metric result for a relative iteration.
+
+## P0.1 Closure
+
+1. Pending permission requests retain the current ruleset used at admission. Direct requests and `always` propagation use the same evaluator; persisted approvals cannot settle a request whose current decision is `ask` or `deny`.
+2. Public error identity is determined by typed error identity, not HTTP status alone. `UnknownError` and unclassified exceptions receive the generic response; other typed errors preserve their public name at status 500.
+3. Same-iteration metric dependencies read only results produced by the current evaluation occurrence and follow a deterministic dependency order. Cross-iteration dependencies read durable history. Cycles settle as typed unavailable measurements without historical fallback.
+4. YAML frontmatter parse and stringify use the same explicit js-yaml v4 engine.
+5. Credential diagnostics expose presence and expiry only. Streaming error events expose a generic public message and request id while private logs retain the exception.
+6. OAuth correlation identifiers are random flow metadata independent of OAuth state and are present in start and callback diagnostics without exposing authorization secrets.
 
 ## Non-Goals
 

@@ -108,7 +108,7 @@ export function serverErrorResponse(err: Error | unknown, c: Context): Response 
     error: normalized,
   })
   if (namedError) {
-    if (status === 500) {
+    if (normalized.name === "UnknownError") {
       return c.json(new NamedError.Unknown({ message: publicUnknownErrorMessage() }).toObject(), { status })
     }
     return c.json(normalized.toObject(), { status })
@@ -130,4 +130,8 @@ export function serverErrorResponse(err: Error | unknown, c: Context): Response 
 
 export function publicUnknownErrorMessage(): string {
   return PUBLIC_UNKNOWN_ERROR_MESSAGE
+}
+
+export function publicUnknownStreamError() {
+  return { type: "error" as const, message: publicUnknownErrorMessage() }
 }

@@ -101,8 +101,9 @@ export async function executeMetrics(
           .join("; ")}`
   const results: MetricResult[] = []
   const unavailable: ExecuteMetricsOutcome["unavailable"] = []
+  const currentResults = new Map<string, MetricResult>()
 
-  for (const spec of readSpecsForTask(input.task_id)) {
+  for (const spec of orderMetricSpecsForEvaluation(readSpecsForTask(input.task_id))) {
     let attempt: EvaluationAttempt
     if (selectionFailure) {
       attempt = unavailableAttempt("selected_evidence_unavailable", selectionFailure, {
@@ -114,7 +115,7 @@ export async function executeMetrics(
       })
     } else {
       try {
-        attempt = await evaluateSpec(spec, input, context, selectedBatch.reads)
+        attempt = await evaluateSpec(spec, input, context, selectedBatch.reads, currentResults)
       } catch (cause) {
         const message = errorMessage(cause)
         log.warn("metric evaluator failed", { spec_id: spec.id, name: spec.name, error: message })
@@ -156,6 +157,7 @@ export async function executeMetrics(
     if (attempt.status === "unavailable") {
       unavailable.push({ spec_id: spec.id, reason_code: attempt.reason_code, evidence_ref: evidenceRef })
     }
+    currentResults.set(spec.id, result)
     results.push(result)
   }
   return { results, unavailable }
@@ -222,6 +224,7 @@ async function evaluateSpec(
   input: ExecuteMetricsInput,
   context: MetricExecutorContext,
   selectedEvidence: readonly ExactArtifactRead[],
+  currentResults: ReadonlyMap<string, MetricResult>,
 ): Promise<EvaluationAttempt> {
   switch (spec.evaluator_kind) {
     case "shell":
@@ -231,10 +234,49 @@ async function evaluateSpec(
     case "prebuilt":
       return runPrebuilt(spec, input)
     case "query":
-      return runQuery(spec, input)
+      return runQuery(spec, input, currentResults)
     case "aggregator":
-      return runAggregator(spec, input)
+      return runAggregator(spec, input, currentResults)
   }
+}
+
+function currentIterationDependencies(spec: MetricSpec): string[] {
+  if (spec.evaluator_kind === "query") {
+    const config = QueryMetricEvaluatorConfigSchema.safeParse(spec.evaluator_config)
+    if (config.success && config.data.query === "metric_result_value" && config.data.iteration_offset === 0) {
+      return [config.data.metric_spec_id]
+    }
+  }
+  if (spec.evaluator_kind === "aggregator") {
+    const config = AggregatorMetricEvaluatorConfigSchema.safeParse(spec.evaluator_config)
+    if (config.success && config.data.iteration_offset === 0) return config.data.of
+  }
+  return []
+}
+
+export function orderMetricSpecsForEvaluation(specs: readonly MetricSpec[]): MetricSpec[] {
+  const byID = new Map(specs.map((spec) => [spec.id, spec]))
+  const remaining = new Set(byID.keys())
+  const completed = new Set<string>()
+  const ordered: MetricSpec[] = []
+
+  while (remaining.size > 0) {
+    const ready = [...remaining]
+      .filter((id) =>
+        currentIterationDependencies(byID.get(id)!).every(
+          (dependencyID) => !byID.has(dependencyID) || completed.has(dependencyID),
+        ),
+      )
+      .sort()
+    const next = ready.length > 0 ? ready : [...remaining].sort()
+    for (const id of next) {
+      ordered.push(byID.get(id)!)
+      remaining.delete(id)
+      completed.add(id)
+    }
+  }
+
+  return ordered
 }
 
 export function normalize(rawValue: number, spec: MetricSpec): number {
@@ -525,7 +567,11 @@ async function runPrebuilt(spec: MetricSpec, input: ExecuteMetricsInput): Promis
   })
 }
 
-async function runQuery(spec: MetricSpec, input: ExecuteMetricsInput): Promise<EvaluationAttempt> {
+async function runQuery(
+  spec: MetricSpec,
+  input: ExecuteMetricsInput,
+  currentResults: ReadonlyMap<string, MetricResult>,
+): Promise<EvaluationAttempt> {
   const config = QueryMetricEvaluatorConfigSchema.safeParse(spec.evaluator_config)
   if (!config.success) return unavailableAttempt("configuration_invalid", z.prettifyError(config.error), {})
   if (config.data.query === "constant_value") {
@@ -544,7 +590,10 @@ async function runQuery(spec: MetricSpec, input: ExecuteMetricsInput): Promise<E
       iteration,
     })
   }
-  const row = latestMetricResult(input.task_id, iteration, config.data.metric_spec_id)
+  const row =
+    config.data.iteration_offset === 0
+      ? currentResults.get(config.data.metric_spec_id)
+      : latestMetricResult(input.task_id, iteration, config.data.metric_spec_id)
   if (!row?.evidence_fresh) {
     return unavailableAttempt("input_unavailable", "Query metric result input is unavailable", {
       scorer_revision: config.data.scorer_revision,
@@ -587,7 +636,11 @@ function latestMetricResult(taskID: string, iteration: number, metricSpecID: str
   return latest
 }
 
-async function runAggregator(spec: MetricSpec, input: ExecuteMetricsInput): Promise<EvaluationAttempt> {
+async function runAggregator(
+  spec: MetricSpec,
+  input: ExecuteMetricsInput,
+  currentResults: ReadonlyMap<string, MetricResult>,
+): Promise<EvaluationAttempt> {
   const config = AggregatorMetricEvaluatorConfigSchema.safeParse(spec.evaluator_config)
   if (!config.success) return unavailableAttempt("configuration_invalid", z.prettifyError(config.error), {})
   const iteration = input.iteration + config.data.iteration_offset
@@ -597,7 +650,10 @@ async function runAggregator(spec: MetricSpec, input: ExecuteMetricsInput): Prom
       iteration,
     })
   const wanted = new Set(config.data.of)
-  const rows = readResultsForIteration(input.task_id, iteration).filter((row) => wanted.has(row.metric_spec_id))
+  const rows =
+    config.data.iteration_offset === 0
+      ? [...currentResults.values()].filter((row) => wanted.has(row.metric_spec_id))
+      : readResultsForIteration(input.task_id, iteration).filter((row) => wanted.has(row.metric_spec_id))
   const latest = new Map<string, MetricResult>()
   for (const row of rows) {
     const current = latest.get(row.metric_spec_id)

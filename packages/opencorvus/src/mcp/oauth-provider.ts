@@ -47,6 +47,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
     private authRevision: McpAuth.Revision,
     private assertCurrent?: () => Promise<void>,
     private ownedOAuthState?: string,
+    private correlationID: string = crypto.randomUUID(),
   ) {}
 
   get redirectUrl(): string {
@@ -146,7 +147,11 @@ export class McpOAuthProvider implements OAuthClientProvider {
   }
 
   async redirectToAuthorization(authorizationUrl: URL): Promise<void> {
-    log.info("redirecting to authorization", oauthAuthorizationLogFields({ mcpName: this.mcpName, authorizationUrl }))
+    log.info("redirecting to authorization", oauthAuthorizationLogFields({
+      mcpName: this.mcpName,
+      authorizationUrl,
+      correlationID: this.correlationID,
+    }))
     await this.callbacks.onRedirect(authorizationUrl)
   }
 

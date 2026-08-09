@@ -1,6 +1,10 @@
 import { describe, expect, test } from "bun:test"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { QueryMetricEvaluatorConfigSchema } from "@opencorvus-ai/plugin"
+import z from "zod"
+import { mcpDebugCredentialStatus } from "../src/cli/cmd/mcp"
+import { orderMetricSpecsForEvaluation } from "../src/metrics/executor"
+import type { MetricSpec } from "../src/metrics/types"
 import { PermissionNext } from "../src/permission/next"
 import { LLM } from "../src/session/llm"
 import {
@@ -9,7 +13,8 @@ import {
   oauthCallbackMissingStateLogFields,
   oauthCallbackReceivedLogFields,
 } from "../src/mcp/oauth-log"
-import { publicUnknownErrorMessage, serverErrorResponse } from "../src/server/error-handler"
+import { publicUnknownErrorMessage, publicUnknownStreamError, serverErrorResponse } from "../src/server/error-handler"
+import { parseFrontmatter, stringifyFrontmatter } from "../src/util/frontmatter"
 
 const digest = "a".repeat(64)
 
@@ -22,6 +27,10 @@ describe("P0 security contract repairs", () => {
     expect(PermissionNext.evaluateRequest("bash", "npm test", currentDeny, approved).action).toBe("deny")
     expect(PermissionNext.evaluateRequest("bash", "npm test", currentAsk, approved).action).toBe("ask")
     expect(PermissionNext.evaluateRequest("bash", "npm test", [], approved).action).toBe("allow")
+    expect(
+      PermissionNext.evaluateRequestPatterns({ permission: "bash", patterns: ["npm test"] }, currentAsk, approved)
+        .action,
+    ).toBe("ask")
   })
 
   test("LLM telemetry keeps operational metadata without input or output capture", () => {
@@ -37,21 +46,28 @@ describe("P0 security contract repairs", () => {
   })
 
   test("OAuth log fields expose flow metadata only", () => {
+    const correlationID = "ca2bb7a2-2103-48ce-b63c-2c55dd855a8a"
     expect(
       oauthAuthorizationLogFields({
         mcpName: "github",
         authorizationUrl: "https://idp.example/oauth/authorize?code=secret-code&state=secret-state",
+        correlationID,
       }),
-    ).toEqual({ mcpName: "github", authorizationHost: "idp.example" })
-    expect(oauthCallbackReceivedLogFields({ code: "secret-code", error: null })).toEqual({
+    ).toEqual({ mcpName: "github", authorizationHost: "idp.example", correlationID })
+    expect(oauthCallbackReceivedLogFields({ code: "secret-code", error: null, correlationID })).toEqual({
+      correlationID,
       hasCode: true,
       hasError: false,
       error: undefined,
     })
-    expect(oauthCallbackMissingStateLogFields({ path: "/mcp/oauth/callback" })).toEqual({
+    expect(oauthCallbackMissingStateLogFields({ path: "/mcp/oauth/callback", correlationID })).toEqual({
+      correlationID,
       path: "/mcp/oauth/callback",
     })
-    expect(oauthCallbackInvalidStateLogFields({ pendingCount: 2 })).toEqual({ pendingCount: 2 })
+    expect(oauthCallbackInvalidStateLogFields({ pendingCount: 2, correlationID })).toEqual({
+      correlationID,
+      pendingCount: 2,
+    })
   })
 
   test("public unknown errors use a generic body and request-id header", async () => {
@@ -88,6 +104,100 @@ describe("P0 security contract repairs", () => {
       name: "UnknownError",
       data: { message: publicUnknownErrorMessage() },
     })
+
+    const PluginServiceRegistrationError = NamedError.create(
+      "PluginServiceRegistrationError",
+      z.object({ message: z.string(), pluginID: z.string() }),
+    )
+    const typedResponse = serverErrorResponse(
+      new PluginServiceRegistrationError({ message: "registration failed", pluginID: "calendar" }),
+      context as never,
+    )
+    expect(typedResponse.status).toBe(500)
+    expect(await typedResponse.json()).toEqual({
+      name: "PluginServiceRegistrationError",
+      data: { message: "registration failed", pluginID: "calendar" },
+    })
+    expect(publicUnknownStreamError()).toEqual({
+      type: "error",
+      message: publicUnknownErrorMessage(),
+    })
+  })
+
+  test("frontmatter uses the configured YAML codec for parse and stringify", () => {
+    const encoded = stringifyFrontmatter("body\n", { title: "Contract", tags: ["p0", "yaml"] })
+    const parsed = parseFrontmatter(encoded)
+    expect(parsed.data).toEqual({ title: "Contract", tags: ["p0", "yaml"] })
+    expect(parsed.content).toBe("body\n")
+  })
+
+  test("MCP debug credentials report presence without token material", () => {
+    const status = mcpDebugCredentialStatus({
+      tokens: { accessToken: "super-secret-access-token", refreshToken: "super-secret-refresh-token" },
+      clientInfo: { clientId: "private-client-id", clientSecret: "private-client-secret" },
+    })
+    expect(status).toEqual({
+      accessToken: "present",
+      refreshToken: "present",
+      clientID: "present",
+      clientSecret: "present",
+    })
+  })
+
+  test("same-iteration metric dependencies have deterministic evaluation order", () => {
+    const common = {
+      task_id: "task-1",
+      scope: "global" as const,
+      goal_id: null,
+      description: "contract fixture",
+      unit: "ratio",
+      direction: "higher_better" as const,
+      target: 1,
+      floor: 0,
+      weight: 1,
+      observation_class: "quality" as const,
+      source: "baseline" as const,
+      frozen_at: 1,
+      created_by: "architect" as const,
+    }
+    const source = {
+      ...common,
+      id: "source",
+      name: "source",
+      evaluator_kind: "query" as const,
+      evaluator_config: { scorer_revision: digest, query: "constant_value", value: 1 },
+    } satisfies MetricSpec
+    const projection = {
+      ...common,
+      id: "projection",
+      name: "projection",
+      evaluator_kind: "query" as const,
+      evaluator_config: {
+        scorer_revision: digest,
+        query: "metric_result_value",
+        metric_spec_id: source.id,
+        iteration_offset: 0,
+        result_column: "raw_value",
+      },
+    } satisfies MetricSpec
+    const aggregate = {
+      ...common,
+      id: "aggregate",
+      name: "aggregate",
+      evaluator_kind: "aggregator" as const,
+      evaluator_config: {
+        scorer_revision: digest,
+        of: [projection.id],
+        op: "mean",
+        iteration_offset: 0,
+      },
+    } satisfies MetricSpec
+
+    expect(orderMetricSpecsForEvaluation([aggregate, projection, source]).map((spec) => spec.id)).toEqual([
+      "source",
+      "projection",
+      "aggregate",
+    ])
   })
 
   test("query evaluator config is a typed named projection", () => {

@@ -162,6 +162,7 @@ export namespace PermissionNext {
         string,
         {
           info: Request
+          ruleset: Ruleset
           resolve: () => void
           reject: (e: any) => void
           timer: ReturnType<typeof setTimeout> | undefined
@@ -239,6 +240,7 @@ export namespace PermissionNext {
         }, timeout)
         s.pending[id] = {
           info,
+          ruleset: [...ruleset],
           resolve,
           reject,
           timer,
@@ -304,10 +306,8 @@ export namespace PermissionNext {
         const sessionID = existing.info.sessionID
         for (const [id, pending] of entries(s.pending)) {
           if (pending.info.sessionID !== sessionID) continue
-          const ok = pending.info.patterns.every(
-            (pattern) => evaluate(pending.info.permission, pattern, s.approved).action === "allow",
-          )
-          if (!ok) continue
+          const decision = evaluateRequestPatterns(pending.info, pending.ruleset, s.approved)
+          if (decision.action !== "allow") continue
           clearTimeout(pending.timer)
           delete s.pending[id]
           Bus.publish(Event.Replied, {
@@ -378,6 +378,21 @@ export namespace PermissionNext {
     const currentRule = evaluate(permission, pattern, currentRuleset)
     if (currentRule.action === "deny" || currentRule.action === "ask") return currentRule
     return evaluate(permission, pattern, approvedRuleset, currentRuleset)
+  }
+
+  export function evaluateRequestPatterns(
+    request: Pick<Request, "permission" | "patterns">,
+    currentRuleset: Ruleset,
+    approvedRuleset: Ruleset | undefined,
+  ): Rule {
+    let decision: Rule = { action: "allow", permission: request.permission, pattern: "*" }
+    for (const pattern of request.patterns) {
+      const rule = evaluateRequest(request.permission, pattern, currentRuleset, approvedRuleset)
+      if (rule.action === "deny") return rule
+      if (rule.action === "ask") decision = rule
+      if (rule.action === "allow" && decision.action === "allow") decision = rule
+    }
+    return decision
   }
 
   const EDIT_TOOLS = ["edit", "write", "patch", "multiedit"]

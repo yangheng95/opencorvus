@@ -39,6 +39,19 @@ function currentMcpAuthKey(mcpName: string): string {
   return McpAuth.scopedKey({ projectID: Instance.project.id, mcpName })
 }
 
+export function mcpDebugCredentialStatus(entry: McpAuth.Entry | undefined) {
+  return {
+    accessToken: entry?.tokens ? "present" : "absent",
+    refreshToken: entry?.tokens?.refreshToken ? "present" : "absent",
+    clientID: entry?.clientInfo ? "present" : "absent",
+    clientSecret: entry?.clientInfo?.clientSecret ? "present" : "absent",
+  } as const
+}
+
+export function mcpDebugClientInformationLine(clientInfo: { client_id: string } | undefined) {
+  return clientInfo ? "Client ID available: present" : "No client ID - dynamic registration will be attempted"
+}
+
 type McpEntry = NonNullable<Config.Info["mcp"]>[string]
 
 type McpConfigured = Config.Mcp
@@ -666,18 +679,19 @@ export const McpDebugCommand = cmd({
 
         const entry = await McpAuth.get(currentMcpAuthKey(serverName))
         if (entry?.tokens) {
-          prompts.log.info(`  Access token: ${entry.tokens.accessToken.substring(0, 20)}...`)
+          const credentialStatus = mcpDebugCredentialStatus(entry)
+          prompts.log.info(`  Access token: ${credentialStatus.accessToken}`)
           if (entry.tokens.expiresAt) {
             const expiresDate = new Date(entry.tokens.expiresAt * 1000)
             const isExpired = entry.tokens.expiresAt < Date.now() / 1000
             prompts.log.info(`  Expires: ${expiresDate.toISOString()} ${isExpired ? "(EXPIRED)" : ""}`)
           }
-          if (entry.tokens.refreshToken) {
-            prompts.log.info(`  Refresh token: present`)
-          }
+          prompts.log.info(`  Refresh token: ${credentialStatus.refreshToken}`)
         }
         if (entry?.clientInfo) {
-          prompts.log.info(`  Client ID: ${entry.clientInfo.clientId}`)
+          const credentialStatus = mcpDebugCredentialStatus(entry)
+          prompts.log.info(`  Client ID: ${credentialStatus.clientID}`)
+          prompts.log.info(`  Client secret: ${credentialStatus.clientSecret}`)
           if (entry.clientInfo.clientSecretExpiresAt) {
             const expiresDate = new Date(entry.clientInfo.clientSecretExpiresAt * 1000)
             prompts.log.info(`  Client secret expires: ${expiresDate.toISOString()}`)
@@ -761,11 +775,7 @@ export const McpDebugCommand = cmd({
 
                 // Check if dynamic registration would be attempted
                 const clientInfo = await authProvider.clientInformation()
-                if (clientInfo) {
-                  prompts.log.info(`Client ID available: ${clientInfo.client_id}`)
-                } else {
-                  prompts.log.info("No client ID - dynamic registration will be attempted")
-                }
+                prompts.log.info(mcpDebugClientInformationLine(clientInfo))
               } else {
                 prompts.log.error(`Connection error: ${error instanceof Error ? error.message : String(error)}`)
               }

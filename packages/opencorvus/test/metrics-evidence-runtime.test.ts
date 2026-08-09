@@ -6,7 +6,7 @@ import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { Database, eq } from "../src/storage/db"
 import { EngineTaskTable } from "../src/engine/engine.sql"
-import { EngineMetricResultTable } from "../src/metrics/metrics.sql"
+import { EngineMetricResultTable, EngineMetricSpecTable } from "../src/metrics/metrics.sql"
 import { persistQueuedTask } from "../src/engine/pipeline"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { createTaskArtifactStoreExecution } from "../src/task-artifact/store"
@@ -483,6 +483,53 @@ describe("Metric scorer exact evidence runtime", () => {
             iteration_offset: 0,
           },
         })
+        const cycleSpecIDs = ["metric-cycle-a", "metric-cycle-b"] as const
+        const outOfOrderSpecIDs = {
+          dependent: "metric-a-out-of-order-dependent",
+          source: "metric-z-out-of-order-source",
+        } as const
+        Database.use((db) =>
+          db
+            .insert(EngineMetricSpecTable)
+            .values(
+              [
+                {
+                  id: outOfOrderSpecIDs.dependent,
+                  evaluator_config: {
+                    scorer_revision: digest,
+                    query: "metric_result_value",
+                    metric_spec_id: outOfOrderSpecIDs.source,
+                    iteration_offset: 0,
+                    result_column: "raw_value",
+                  },
+                },
+                {
+                  id: outOfOrderSpecIDs.source,
+                  evaluator_config: { scorer_revision: digest, query: "constant_value", value: 0.25 },
+                },
+                ...cycleSpecIDs.map((id, index) => ({
+                  id,
+                  evaluator_config: {
+                    scorer_revision: digest,
+                    query: "metric_result_value",
+                    metric_spec_id: cycleSpecIDs[1 - index]!,
+                    iteration_offset: 0,
+                    result_column: "raw_value",
+                  },
+                })),
+              ].map(({ id, evaluator_config }) => ({
+                ...common,
+                id,
+                name: id,
+                evaluator_kind: "query" as const,
+                evaluator_config,
+                source: "baseline" as const,
+                frozen_at: Date.now(),
+                created_by: "architect" as const,
+              })),
+            )
+            .run(),
+        )
 
         const dummyVisualReviewID = recordEngineArtifact({
           taskID,
@@ -583,11 +630,23 @@ describe("Metric scorer exact evidence runtime", () => {
         expect(bySpec.get(metricResultQuerySpec.id)).toMatchObject({ raw_value: 7, evidence_fresh: true })
         expect(bySpec.get(emptyQuerySpec.id)).toMatchObject({ raw_value: null, evidence_fresh: false })
         expect(bySpec.get(aggregatorSpec.id)).toMatchObject({ raw_value: 0.5, evidence_fresh: true })
+        expect(bySpec.get(outOfOrderSpecIDs.source)).toMatchObject({ raw_value: 0.25, evidence_fresh: true })
+        expect(bySpec.get(outOfOrderSpecIDs.dependent)).toMatchObject({ raw_value: 0.25, evidence_fresh: true })
+        expect(outcome.results.map((result) => result.metric_spec_id)).toEqual(
+          expect.arrayContaining([outOfOrderSpecIDs.source, outOfOrderSpecIDs.dependent]),
+        )
+        expect(
+          outcome.results.findIndex((result) => result.metric_spec_id === outOfOrderSpecIDs.source),
+        ).toBeLessThan(outcome.results.findIndex((result) => result.metric_spec_id === outOfOrderSpecIDs.dependent))
+        expect(bySpec.get(cycleSpecIDs[0])).toMatchObject({ raw_value: null, evidence_fresh: false })
+        expect(bySpec.get(cycleSpecIDs[1])).toMatchObject({ raw_value: null, evidence_fresh: false })
         expect(bySpec.get(prebuiltSpec.id)).toMatchObject({ raw_value: 0, evidence_fresh: true })
         expect(judgeSawExactBytes).toBe(true)
         expect(outcome.unavailable.map((item) => item.reason_code).sort()).toEqual([
           "inactivity_timeout",
           "inactivity_timeout",
+          "input_unavailable",
+          "input_unavailable",
           "input_unavailable",
           "input_unavailable",
           "parse_failed",
@@ -623,6 +682,8 @@ describe("Metric scorer exact evidence runtime", () => {
           ),
         )
         expect(unavailableEvidence.map((item) => item.status)).toEqual([
+          "unavailable",
+          "unavailable",
           "unavailable",
           "unavailable",
           "unavailable",

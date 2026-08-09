@@ -1037,6 +1037,7 @@ export namespace MCP {
   type PendingOAuthFlow = {
     state: string
     revision: McpAuth.Revision
+    correlationID: string
   }
   const pendingOAuthFlows = new Map<string, PendingOAuthFlow>()
 
@@ -2603,6 +2604,7 @@ export namespace MCP {
       }
 
       if (authKey) {
+        const correlationID = crypto.randomUUID()
         authProvider = new McpOAuthProvider(
           key,
           authKey,
@@ -2614,12 +2616,18 @@ export namespace MCP {
           },
           {
             onRedirect: async (url) => {
-              log.info("oauth redirect requested", oauthAuthorizationLogFields({ mcpName: key, authorizationUrl: url }))
+              log.info("oauth redirect requested", oauthAuthorizationLogFields({
+                mcpName: key,
+                authorizationUrl: url,
+                correlationID,
+              }))
               // Store the URL - actual browser opening is handled by startAuth
             },
           },
           McpAuth.revision(authKey),
           () => assertCredentialIdentity(key, mcp),
+          undefined,
+          correlationID,
         )
       }
 
@@ -3351,6 +3359,7 @@ export namespace MCP {
     const oauthState = Array.from(crypto.getRandomValues(new Uint8Array(32)))
       .map((b) => b.toString(16).padStart(2, "0"))
       .join("")
+    const correlationID = crypto.randomUUID()
     const authKey = mcpAuthKey(mcpName)
     const previousFlow = pendingOAuthFlows.get(authKey)
     if (previousFlow) McpOAuthCallback.cancelPending(authKey)
@@ -3401,6 +3410,7 @@ export namespace MCP {
       authRevision,
       () => assertCredentialIdentity(mcpName, mcpConfig),
       oauthState,
+      correlationID,
     )
 
     const { transport } = createRemoteTransport(mcpConfig, authProvider, mcpFetchRequestInit(authTimeout))
@@ -3426,11 +3436,11 @@ export namespace MCP {
           if (McpAuth.revision(authKey) !== authRevision) {
             throw new Error(`MCP auth lease was revoked: ${authKey}`)
           }
-          pendingOAuthFlows.set(authKey, { state: oauthState, revision: authRevision })
+          pendingOAuthFlows.set(authKey, { state: oauthState, revision: authRevision, correlationID })
           retainOAuthState = true
           businessResult = {
             authorizationUrl: capturedUrl.toString(),
-            flow: { state: oauthState, revision: authRevision },
+            flow: { state: oauthState, revision: authRevision, correlationID },
           }
         } catch (ownerError) {
           businessError = ownerError
@@ -3528,13 +3538,17 @@ export namespace MCP {
 
     // The SDK has already added the state parameter to the authorization URL
     // We just need to open the browser
-    log.info("opening browser for oauth", oauthAuthorizationLogFields({ mcpName, authorizationUrl }))
+    log.info("opening browser for oauth", oauthAuthorizationLogFields({
+      mcpName,
+      authorizationUrl,
+      correlationID: flow.correlationID,
+    }))
 
     // Register the callback BEFORE opening the browser to avoid race condition
     // when the IdP has an active SSO session and redirects immediately
     // Register under the project-scoped auth key so same-name MCP servers
     // in different active projects keep independent callback ownership.
-    const callbackPromise = McpOAuthCallback.waitForCallback(oauthState, authKey)
+    const callbackSettlement = McpOAuthCallback.waitForCallbackSettlement(oauthState, authKey, flow.correlationID)
 
     try {
       const subprocess = await open(authorizationUrl)
@@ -3564,9 +3578,10 @@ export namespace MCP {
     }
 
     // Wait for callback using the already-registered promise
-    const code = await callbackPromise
+    const callback = await callbackSettlement
+    if (callback.status === "rejected") throw callback.error
 
-    return finishAuthCallback(mcpName, code, oauthState)
+    return finishAuthCallback(mcpName, callback.code, oauthState)
   }
 
   async function assertOAuthState(mcpName: string, authKey: string, oauthState: string): Promise<PendingOAuthFlow> {
@@ -3653,6 +3668,8 @@ export namespace MCP {
       },
       authRevision,
       () => assertCredentialIdentity(mcpName, mcpConfig),
+      undefined,
+      owner.correlationID,
     )
     const authTimeout = effectiveTimeout(mcpConfig, cfg.experimental?.mcp_timeout)
     const { transport } = createRemoteTransport(mcpConfig, authProvider, mcpFetchRequestInit(authTimeout))
@@ -3675,7 +3692,7 @@ export namespace MCP {
       if (status.status === "failed") throw new Error(status.error)
       return status
     } catch (error) {
-      log.error("failed to finish oauth", { mcpName, error })
+      log.error("failed to finish oauth", { mcpName, correlationID: owner.correlationID, error })
       throw error
     } finally {
       if (pendingOAuthFlows.get(authKey) === owner) pendingOAuthFlows.delete(authKey)
