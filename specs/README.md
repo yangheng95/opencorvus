@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest autonomous Visual Reviewer dispatch contract: [`2026-08-09-autonomous-visual-review-dispatch.md`](records/2026-08/2026-08-09-autonomous-visual-review-dispatch.md).
+
 Latest architecture debt remediation plan: [`2026-08-09-architecture-debt-remediation-plan.md`](records/2026-08/2026-08-09-architecture-debt-remediation-plan.md).
 
 Paused backend algorithm test/debug loop evidence: [`2026-08-09-backend-algorithm-test-loop.md`](records/2026-08/2026-08-09-backend-algorithm-test-loop.md).

@@ -21,7 +21,7 @@ HTTP 服务器（`packages/opencorvus/src/server/server.ts`）把路由切成两
 
 `prompt_profile.active` 选择唯一专家团 package。`PromptProfileResolver` 把该 package 投影为一个 scheduler capability 与多个精确动态 worker capability。Base 是默认内置专家团，Advanced 是可独立选择的完整软件交付团队，Research Studio 是可独立选择的五 Agent 研究交付团队。选择另一个 package 会完整替换当前 package；Agent、prompt、skill、tool、mount、MCP resource 和 workflow 契约都不会继承或组合。
 
-内置 Advanced manifest 声明 `planned-delivery`、`evidence-investigation`、`greenfield-interface-delivery` 和 `reference-interface-delivery` 四张不可变 scheduler contract 图。greenfield 图在没有参考 URL 时承载完整的原创界面规划与复核谱系；只有 reference 图以 `interface-investigator` 开始，并要求 operator 已提供一个 source URL。它们不是 active/default workflow state 或执行引擎：Orchestrator 必须可见地选择与请求匹配的精确图。选中后每个声明 node 与依赖都是必需步骤；缺少前序证据时必须拒绝继续，不能省略、跳步、替换或调整顺序。
+内置 Advanced manifest 声明 `planned-delivery`、`evidence-investigation`、`greenfield-interface-delivery`、`greenfield-interface-visual-delivery` 和 `reference-interface-delivery` 五张不可变 scheduler contract 图。标准 greenfield 图在没有参考 URL 时承载完整的原创界面规划、实现 Agent 自有的真实页面检查、测试以及独立接口/系统审查。只有当请求或仓库契约明确要求独立 Visual Reviewer 判断时才选择 visual greenfield 图；存在 UI 工作本身不会触发它。只有 reference 图以 `interface-investigator` 开始，要求 operator 已提供一个 source URL，并始终保留渲染参考复核。它们不是 active/default workflow state 或执行引擎：Orchestrator 必须可见地选择与请求匹配的精确图。选中后每个声明 node 与依赖都是必需步骤；缺少前序证据时必须拒绝继续，不能省略、跳步、替换或调整顺序。
 
 每个投影 worker 通过 `base_role` runtime-template 种子选择 code-owned typed adapter。`requirements`、`architect`、`build`、`integrity` 等 adapter ID 是宿主 ABI（Application Binary Interface，应用二进制接口）模块名，不是可运行 Agent 身份或固定团队顺序。
 

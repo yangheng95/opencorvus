@@ -1,6 +1,6 @@
 # Base
 
-Base is the built-in default Expert Squad and the convenient composite version of Advanced. It owns one complete ordinary repository Task through a compact research, planning, development, and testing chain without Goal-based development, and adds package-owned Integrity and Visual Reviewer identities through fixed verified-delivery workflows. The Task may contain a large workload and many product, data, report, audit, and validation deliverables; these are internal responsibilities, not Mission phase boundaries.
+Base is the built-in default Expert Squad and the convenient composite version of Advanced. It owns one complete ordinary repository Task through a compact research, planning, development, and testing chain without Goal-based development, and exposes package-owned Integrity and Visual Reviewer identities through explicitly selected verified-delivery workflows. The Task may contain a large workload and many product, data, report, audit, and validation deliverables; these are internal responsibilities, not Mission phase boundaries.
 
 ## Fact and Turn Contract
 
@@ -19,11 +19,11 @@ Base has exactly six projected Agent identities. Research uses the read-oriented
 - `base-integrity-reviewer` independently inspects the complete applicable handoff, final behavior, tests, runtime evidence, and unresolved risk and publishes typed IntegrityReview evidence.
 - `base-visual-reviewer` exercises the real rendered target and interaction states through the Browser projection and publishes typed VisualReview evidence without repairing product code.
 
-Base declares three fixed binding workflows because manifest nodes cannot be optional:
+Base declares three fixed binding workflows because manifest nodes cannot be optional. The Orchestrator chooses among them from explicit acceptance requirements rather than the deliverable category:
 
 - `composite-delivery` requires terminal-success evidence at every Researcher → Planner → Developer → Tester dependency.
 - `integrity-verified-delivery` adds the Integrity Reviewer after the complete test-backed handoff.
-- `visual-verified-delivery` runs Tester and Visual Reviewer in parallel after development, then runs the Integrity Reviewer after both evidence branches succeed.
+- `visual-verified-delivery` runs Tester and Visual Reviewer in parallel after development, then runs the Integrity Reviewer after both evidence branches succeed; select it only when the operator or repository explicitly requires an independent Visual Reviewer judgment.
 
 The Orchestrator visibly selects exactly one graph before domain dispatch, and every node in that graph is mandatory. The workflows do not create or consume RequirementSet, ContractGraph, Goal, Delivery Slice, Requirements, Architect, or workload-analysis planning facts. The Task remains the sole lifecycle owner, and the Orchestrator judges completion from visible messages, immutable Artifacts, typed review evidence, dispatch lineage, the final diff, command results, the test verdict, and rendered evidence when applicable.
 

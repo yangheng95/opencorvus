@@ -5,7 +5,7 @@
   "name": "Advanced",
   "label": "Advanced",
   "description": "Built-in advanced software delivery team with retained Requirements-to-Architect traceability and parallel investigation, implementation, testing, interface, and independent-review frontiers.",
-  "version": "2026.08.06.1",
+  "version": "2026.08.09.1",
   "product_pillars": ["code", "work"],
   "readme": "README.md",
   "selector": {
@@ -420,7 +420,63 @@
       },
       "greenfield-interface-delivery": {
         "label": "Greenfield Interface Delivery",
-        "description": "Deliver a new interface without a source URL through parallel intent, Requirements, and repository investigation; an exact Requirements-to-Architect join; parallel interface design and workload review; implementation; then parallel testing, visual review, and independent reviews.",
+        "description": "Deliver a new interface without a source URL through parallel intent, Requirements, and repository investigation; an exact Requirements-to-Architect join; parallel interface design and workload review; implementation-owned real-page inspection; then parallel testing and independent interface/system reviews.",
+        "nodes": {
+          "request-interpreter": {
+            "agent_id": "request-interpreter",
+            "description": "Confirms the greenfield interface intent, inputs, and scope without inventing a source-interface dependency.",
+            "depends_on": [],
+          },
+          "requirement-engineer": {
+            "agent_id": "requirement-engineer",
+            "description": "Registers falsifiable product, data, interaction, and visual requirements for the original interface.",
+            "depends_on": [],
+          },
+          "source-investigator": {
+            "agent_id": "source-investigator",
+            "description": "Investigates the target repository, design-system implementation surface, and ownership boundaries in parallel with intent and Requirements work.",
+            "depends_on": [],
+          },
+          "solution-architect": {
+            "agent_id": "solution-architect",
+            "description": "Joins exact intent, RequirementSet, and repository evidence into traceable interface contracts, immutable Delivery Slice revisions, and assembly ownership.",
+            "depends_on": ["request-interpreter", "requirement-engineer", "source-investigator"],
+          },
+          "interface-designer": {
+            "agent_id": "interface-designer",
+            "description": "Produces an original, traceable interface design and implementation contract from the approved requirements and architecture evidence.",
+            "depends_on": ["solution-architect"],
+          },
+          "workload-reviewer": {
+            "agent_id": "workload-reviewer",
+            "description": "Challenges Slice size, ownership, and verification workload in parallel with interface design after the Architect contract exists.",
+            "depends_on": ["solution-architect"],
+          },
+          "implementation-engineer": {
+            "agent_id": "implementation-engineer",
+            "description": "Implements the approved interface contract after design evidence exists while preserving the Architect ownership boundaries.",
+            "depends_on": ["interface-designer"],
+          },
+          "test-engineer": {
+            "agent_id": "test-engineer",
+            "description": "Executes applicable non-UI tests and runtime checks independently after implementation evidence exists.",
+            "depends_on": ["implementation-engineer"],
+          },
+          "interface-integrity-reviewer": {
+            "agent_id": "interface-integrity-reviewer",
+            "description": "Independently reviews implemented interface behavior and rendered evidence.",
+            "depends_on": ["implementation-engineer"],
+          },
+          "system-integrity-reviewer": {
+            "agent_id": "system-integrity-reviewer",
+            "description": "Reviews requirement, contract, implementation, and workload evidence independently of testing and visual review.",
+            "depends_on": ["implementation-engineer", "workload-reviewer"],
+          },
+        },
+      },
+      "greenfield-interface-visual-delivery": {
+        "label": "Greenfield Interface Delivery With Independent Visual Review",
+        "description": "Deliver a new interface without a source URL when the operator or repository explicitly requires a separate Visual Reviewer judgment, using the complete greenfield interface graph plus independent rendered review.",
         "nodes": {
           "request-interpreter": {
             "agent_id": "request-interpreter",
