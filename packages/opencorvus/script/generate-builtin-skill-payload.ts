@@ -1,10 +1,10 @@
 #!/usr/bin/env bun
 
-import matter from "gray-matter"
 import fs from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { Skill } from "../src/skill/skill"
+import { parseFrontmatter } from "../src/util/frontmatter"
 
 type BuiltinSkillInput = {
   name: string
@@ -71,7 +71,7 @@ async function collectFiles(root: string): Promise<string[]> {
 }
 
 async function skillName(skillPath: string): Promise<string> {
-  const parsed = matter(await readCanonicalText(skillPath))
+  const parsed = parseFrontmatter(await readCanonicalText(skillPath))
   return Skill.parseDefinition(parsed.data, skillPath).name
 }
 

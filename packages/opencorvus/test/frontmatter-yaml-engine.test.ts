@@ -1,4 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test"
+import path from "node:path"
+import { discoverBuiltinSkills } from "../script/generate-builtin-skill-payload"
 import { ConfigMarkdown } from "../src/config/markdown"
 import { Instance } from "../src/project/instance"
 import { Skill } from "../src/skill/skill"
@@ -42,5 +44,12 @@ describe("frontmatter YAML engine", () => {
         )
       },
     })
+  })
+
+  test("generates the built-in Skill payload catalog with the shared YAML engine", async () => {
+    const repoRoot = path.resolve(import.meta.dir, "../../..")
+    const skills = await discoverBuiltinSkills(repoRoot)
+
+    expect(skills.some((skill) => skill.name === "design-taste-frontend")).toBe(true)
   })
 })
