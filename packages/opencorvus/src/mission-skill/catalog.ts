@@ -1,5 +1,4 @@
 import path from "path"
-import matter from "gray-matter"
 import z from "zod"
 import { ConfigMarkdown } from "@/config/markdown"
 import { Global } from "@/global"
@@ -8,6 +7,7 @@ import { createInstanceState } from "@/project/instance-state"
 import { Skill } from "@/skill/skill"
 import { Glob } from "@/util/glob"
 import { Filesystem } from "@/util/filesystem"
+import { parseFrontmatter } from "@/util/frontmatter"
 import { builtinMissionSkillSources } from "./builtin-payload"
 import { MissionSkillRoots } from "./roots"
 
@@ -125,7 +125,7 @@ export namespace MissionSkillCatalog {
 
     for (const raw of builtinMissionSkillSources) {
       try {
-        const markdown = matter(raw.skill)
+        const markdown = parseFrontmatter(raw.skill)
         const definition = Skill.parseDefinition(markdown.data, `builtin mission skill ${raw.name}`)
         if (definition.name !== raw.name) {
           throw new Skill.InvalidError({

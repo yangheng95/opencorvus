@@ -146,7 +146,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
             weight: 1,
             observation_class: "quality",
             evaluator_kind: "query",
-            evaluator_config: { scorer_revision: digest, sql: "SELECT 1 AS value", value_column: "value" },
+            evaluator_config: { scorer_revision: digest, query: "constant_value", value: 1 },
           },
         ],
         frozen_inputs: {
@@ -754,8 +754,8 @@ describe("Evolution Artifact and exact evidence Host", () => {
                       evaluator_kind: "query",
                       evaluator_config: {
                         scorer_revision: scorerResource.sha256,
-                        sql: "SELECT 1 AS value",
-                        value_column: "value",
+                        query: "constant_value",
+                        value: 1,
                       },
                     },
                   ],
@@ -1794,8 +1794,8 @@ describe("Evolution Artifact and exact evidence Host", () => {
                   evaluator_kind: "query",
                   evaluator_config: {
                     scorer_revision: developmentResource.sha256,
-                    sql: "SELECT 1 AS value",
-                    value_column: "value",
+                    query: "constant_value",
+                    value: 1,
                   },
                 },
               ],

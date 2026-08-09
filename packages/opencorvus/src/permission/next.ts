@@ -205,7 +205,7 @@ export namespace PermissionNext {
       const { ruleset, timeoutMs, ...request } = input
       let shouldAsk = false
       for (const pattern of request.patterns ?? []) {
-        const rule = evaluate(request.permission, pattern, ruleset, s.approved)
+        const rule = evaluateRequest(request.permission, pattern, ruleset, s.approved)
         log.info("evaluated", { permission: request.permission, pattern, action: rule })
         if (rule.action === "deny")
           throw new DeniedError(ruleset.filter((r) => Wildcard.match(request.permission, r.permission)))
@@ -367,6 +367,17 @@ export namespace PermissionNext {
     log.debug("evaluate", { permission, pattern, ruleset: merged })
     const match = merged.findLast((rule) => matches(permission, pattern, rule))
     return match ?? { action: "allow", permission, pattern: "*" }
+  }
+
+  export function evaluateRequest(
+    permission: string,
+    pattern: string,
+    currentRuleset: Ruleset,
+    approvedRuleset: Ruleset | undefined,
+  ): Rule {
+    const currentRule = evaluate(permission, pattern, currentRuleset)
+    if (currentRule.action === "deny" || currentRule.action === "ask") return currentRule
+    return evaluate(permission, pattern, approvedRuleset, currentRuleset)
   }
 
   const EDIT_TOOLS = ["edit", "write", "patch", "multiedit"]

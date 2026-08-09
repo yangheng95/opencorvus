@@ -39,7 +39,17 @@
       "name": ["visual-feedback-verification"]
     },
     "query": {
-      "required": ["scorer_revision", "sql", "value_column"]
+      "variants": [
+        {
+          "query": "constant_value",
+          "required": ["scorer_revision", "query", "value"]
+        },
+        {
+          "query": "metric_result_value",
+          "required": ["scorer_revision", "query", "metric_spec_id", "iteration_offset", "result_column"],
+          "result_column": ["raw_value", "normalized_value"]
+        }
+      ]
     },
     "aggregator": {
       "required": ["scorer_revision", "of", "op", "iteration_offset"],

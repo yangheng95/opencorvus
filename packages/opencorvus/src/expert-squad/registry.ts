@@ -32,7 +32,7 @@ import { createHash } from "node:crypto"
 import { isUtf8 } from "node:buffer"
 import type { Dirent } from "fs"
 import { lstat, mkdir, mkdtemp, readFile, readdir, realpath, rename, rm, writeFile } from "fs/promises"
-import matter from "gray-matter"
+import { parseFrontmatter } from "@/util/frontmatter"
 import { parse as parseJsonc, type ParseError, printParseErrorCode } from "jsonc-parser"
 import path from "path"
 import z from "zod"
@@ -365,7 +365,7 @@ export namespace ExpertSquadRegistry {
   }
 
   function parseReadmeText(text: string, context: string): string {
-    const parsed = matter(text)
+    const parsed = parseFrontmatter(text)
     const content = parsed.content.trim()
     if (!content) throw new Error(`${context}: referenced file is blank`)
     return content
@@ -704,9 +704,7 @@ export namespace ExpertSquadRegistry {
       .map(([relativePath, content]) => ({
         relativePath,
         bytes:
-          typeof content === "string"
-            ? Buffer.from(content, "utf8")
-            : Buffer.from(content.content, content.encoding),
+          typeof content === "string" ? Buffer.from(content, "utf8") : Buffer.from(content.content, content.encoding),
       }))
       .sort((left, right) => left.relativePath.localeCompare(right.relativePath))
     const digest = embeddedPackageDigest(source)
@@ -925,7 +923,7 @@ export namespace ExpertSquadRegistry {
         if (!skillFile) throw new Error(`Package skill ${ref}: missing SKILL.md`)
         if (!isUtf8(skillFile.bytes)) throw new Error(`Package skill ${ref}: SKILL.md must be UTF-8 text`)
         const raw = Buffer.from(skillFile.bytes).toString("utf8")
-        const parsed = matter(raw)
+        const parsed = parseFrontmatter(raw)
         const definition = input.packageSkillDefinition.safeParse(parsed.data)
         if (!definition.success) {
           throw new Error(`Package skill ${ref}: invalid frontmatter: ${definition.error.message}`)
@@ -1875,13 +1873,11 @@ export namespace ExpertSquadRegistry {
   }
 
   export async function loadPackageRevisionSnapshot(packageRevisionDigest: string): Promise<LoadedPackage> {
-    const digest = z.string().regex(/^[a-f0-9]{64}$/).parse(packageRevisionDigest)
-    const root = path.join(
-      Global.Path.data,
-      "expert-squad-package-revisions",
-      PACKAGE_SNAPSHOT_ABI,
-      digest,
-    )
+    const digest = z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .parse(packageRevisionDigest)
+    const root = path.join(Global.Path.data, "expert-squad-package-revisions", PACKAGE_SNAPSHOT_ABI, digest)
     const state = await lstatIfExists(root)
     if (!state?.isDirectory()) {
       throw new Error(`expert squad immutable package snapshot is missing: ${digest}`)

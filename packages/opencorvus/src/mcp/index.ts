@@ -32,6 +32,7 @@ import { createInstanceState } from "../project/instance-state"
 import { Installation } from "../installation"
 import { McpOAuthProvider } from "./oauth-provider"
 import { McpOAuthCallback } from "./oauth-callback"
+import { oauthAuthorizationLogFields } from "./oauth-log"
 import { McpAuth } from "./auth"
 import { BrowserMCPBuiltin } from "./browser/builtin"
 import { BusEvent } from "../bus/bus-event"
@@ -2613,7 +2614,7 @@ export namespace MCP {
           },
           {
             onRedirect: async (url) => {
-              log.info("oauth redirect requested", { key, url: url.toString() })
+              log.info("oauth redirect requested", oauthAuthorizationLogFields({ mcpName: key, authorizationUrl: url }))
               // Store the URL - actual browser opening is handled by startAuth
             },
           },
@@ -3527,7 +3528,7 @@ export namespace MCP {
 
     // The SDK has already added the state parameter to the authorization URL
     // We just need to open the browser
-    log.info("opening browser for oauth", { mcpName, url: authorizationUrl, state: oauthState })
+    log.info("opening browser for oauth", oauthAuthorizationLogFields({ mcpName, authorizationUrl }))
 
     // Register the callback BEFORE opening the browser to avoid race condition
     // when the IdP has an active SSO session and redirects immediately

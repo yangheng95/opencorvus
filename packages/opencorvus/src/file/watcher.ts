@@ -99,8 +99,8 @@ export namespace FileWatcher {
             return true
           },
         })
-        .then((active) => {
-          if (active !== true) throw new Error(`${label} fired after its instance owner was released`)
+        .then(async (active) => {
+          if ((await active) !== true) throw new Error(`${label} fired after its instance owner was released`)
         })
         .catch((error) => {
           log.error("persistent file watcher callback failed", { label, error: errorMessage(error) })

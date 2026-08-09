@@ -6,6 +6,7 @@ import type {
   OAuthClientInformationFull,
 } from "@modelcontextprotocol/sdk/shared/auth.js"
 import { McpAuth } from "./auth"
+import { oauthAuthorizationLogFields } from "./oauth-log"
 import { Log } from "../util/log"
 
 const log = Log.create({ service: "mcp.oauth" })
@@ -145,7 +146,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
   }
 
   async redirectToAuthorization(authorizationUrl: URL): Promise<void> {
-    log.info("redirecting to authorization", { mcpName: this.mcpName, url: authorizationUrl.toString() })
+    log.info("redirecting to authorization", oauthAuthorizationLogFields({ mcpName: this.mcpName, authorizationUrl }))
     await this.callbacks.onRedirect(authorizationUrl)
   }
 

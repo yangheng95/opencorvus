@@ -1,5 +1,10 @@
 import { Log } from "../util/log"
 import { OAUTH_CALLBACK_PORT, OAUTH_CALLBACK_PATH } from "./oauth-provider"
+import {
+  oauthCallbackInvalidStateLogFields,
+  oauthCallbackMissingStateLogFields,
+  oauthCallbackReceivedLogFields,
+} from "./oauth-log"
 
 const log = Log.create({ service: "mcp.oauth-callback" })
 
@@ -89,12 +94,15 @@ export namespace McpOAuthCallback {
           const error = url.searchParams.get("error")
           const errorDescription = url.searchParams.get("error_description")
 
-          log.info("received oauth callback", { hasCode: !!code, state, error })
+          log.info("received oauth callback", oauthCallbackReceivedLogFields({ code, error }))
 
           // Enforce state parameter presence
           if (!state) {
             const errorMsg = "Missing required state parameter - potential CSRF attack"
-            log.error("oauth callback missing state parameter", { url: url.toString() })
+            log.error(
+              "oauth callback missing state parameter",
+              oauthCallbackMissingStateLogFields({ path: url.pathname }),
+            )
             return new Response(HTML_ERROR(errorMsg), {
               status: 400,
               headers: { "Content-Type": "text/html" },
@@ -125,7 +133,10 @@ export namespace McpOAuthCallback {
           // Validate state parameter
           if (!pendingAuths.has(state)) {
             const errorMsg = "Invalid or expired state parameter - potential CSRF attack"
-            log.error("oauth callback with invalid state", { state, pendingStates: Array.from(pendingAuths.keys()) })
+            log.error(
+              "oauth callback with invalid state",
+              oauthCallbackInvalidStateLogFields({ pendingCount: pendingAuths.size }),
+            )
             return new Response(HTML_ERROR(errorMsg), {
               status: 400,
               headers: { "Content-Type": "text/html" },

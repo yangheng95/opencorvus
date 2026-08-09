@@ -1,7 +1,7 @@
 import { NamedError } from "@opencorvus-ai/util/error"
-import matter from "gray-matter"
 import { z } from "zod"
 import { Filesystem } from "../util/filesystem"
+import { parseFrontmatter } from "../util/frontmatter"
 
 export namespace ConfigMarkdown {
   export const FILE_REGEX = /(?<![\w`])@(\.?[^\s`,.]*(?:\.[^\s`,.]+)*)/g
@@ -80,7 +80,7 @@ export namespace ConfigMarkdown {
   export async function parse(filePath: string) {
     const template = await Filesystem.readText(filePath)
     try {
-      return matter(template)
+      return parseFrontmatter(template)
     } catch (err) {
       throw new FrontmatterError(
         {

@@ -444,8 +444,20 @@ describe("Metric scorer exact evidence runtime", () => {
           evaluator_kind: "query",
           evaluator_config: {
             scorer_revision: digest,
-            sql: "SELECT 0 AS value",
-            value_column: "value",
+            query: "constant_value",
+            value: 0,
+          },
+        })
+        const metricResultQuerySpec = registerBaselineSpec({
+          ...common,
+          name: "measured-metric-result-query",
+          evaluator_kind: "query",
+          evaluator_config: {
+            scorer_revision: digest,
+            query: "metric_result_value",
+            metric_spec_id: measuredSpec.id,
+            iteration_offset: 0,
+            result_column: "raw_value",
           },
         })
         const emptyQuerySpec = registerBaselineSpec({
@@ -454,8 +466,10 @@ describe("Metric scorer exact evidence runtime", () => {
           evaluator_kind: "query",
           evaluator_config: {
             scorer_revision: digest,
-            sql: "SELECT 0 AS value WHERE 0",
-            value_column: "value",
+            query: "metric_result_value",
+            metric_spec_id: "missing-metric-result",
+            iteration_offset: 0,
+            result_column: "raw_value",
           },
         })
         const aggregatorSpec = registerBaselineSpec({
@@ -566,6 +580,7 @@ describe("Metric scorer exact evidence runtime", () => {
         expect(bySpec.get(judgeSpec.id)).toMatchObject({ raw_value: 1, evidence_fresh: true })
         expect(bySpec.get(invalidJudgeSpec.id)).toMatchObject({ raw_value: null, evidence_fresh: false })
         expect(bySpec.get(zeroQuerySpec.id)).toMatchObject({ raw_value: 0, evidence_fresh: true })
+        expect(bySpec.get(metricResultQuerySpec.id)).toMatchObject({ raw_value: 7, evidence_fresh: true })
         expect(bySpec.get(emptyQuerySpec.id)).toMatchObject({ raw_value: null, evidence_fresh: false })
         expect(bySpec.get(aggregatorSpec.id)).toMatchObject({ raw_value: 0.5, evidence_fresh: true })
         expect(bySpec.get(prebuiltSpec.id)).toMatchObject({ raw_value: 0, evidence_fresh: true })

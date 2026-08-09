@@ -1,6 +1,6 @@
 import { lstat, mkdir, mkdtemp, rename, rm } from "fs/promises"
 import { randomUUID } from "node:crypto"
-import matter from "gray-matter"
+import { parseFrontmatter } from "@/util/frontmatter"
 import path from "path"
 import z from "zod"
 import { Config } from "@/config/config"
@@ -330,9 +330,7 @@ export namespace SkillManager {
         : input.kind === "url"
           ? normalizeUrl(input.value)
           : resolveSource(input.value)
-    return withSkillCatalogMutation(() =>
-      withSkillSourceMutation(sourceKey, () => installResolved(input)),
-    )
+    return withSkillCatalogMutation(() => withSkillSourceMutation(sourceKey, () => installResolved(input)))
   }
 
   async function installResolved(input: z.output<typeof InstallInput>) {
@@ -675,7 +673,7 @@ async function validateSkillDirectory(dir: string): Promise<Skill.Definition[]> 
   }
   const definitions: Skill.Definition[] = []
   for (const file of matches.sort()) {
-    const parsed = matter(await Filesystem.readText(file))
+    const parsed = parseFrontmatter(await Filesystem.readText(file))
     definitions.push(Skill.parseDefinition(parsed.data, file))
   }
   return definitions
@@ -1035,7 +1033,7 @@ function parseSkillRoots(files: NormalizedSkillFile[]): ParsedSkillRoot[] {
         return dir === "." ? "" : dir
       })
       .filter(Boolean)
-    const parsed = matter(new TextDecoder().decode(skillFile.bytes))
+    const parsed = parseFrontmatter(new TextDecoder().decode(skillFile.bytes))
     const definition = Skill.parseDefinition(parsed.data, skillFile.path)
     const info = {
       name: definition.name,

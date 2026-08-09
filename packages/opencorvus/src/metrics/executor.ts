@@ -1,7 +1,6 @@
 import { createHash } from "node:crypto"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
-import { sql as rawSQL } from "drizzle-orm"
 import z from "zod"
 import {
   ArtifactReadLocatorListSchema,
@@ -18,7 +17,6 @@ import {
   QueryMetricEvaluatorConfigSchema,
   ShellMetricEvaluatorConfigSchema,
 } from "@opencorvus-ai/plugin"
-import { Database } from "@/storage/db"
 import { Instance } from "@/project/instance"
 import { runTaskCommandWithInactivity } from "@/shell/command-inactivity"
 import { Filesystem } from "@/util/filesystem"
@@ -233,7 +231,7 @@ async function evaluateSpec(
     case "prebuilt":
       return runPrebuilt(spec, input)
     case "query":
-      return runQuery(spec)
+      return runQuery(spec, input)
     case "aggregator":
       return runAggregator(spec, input)
   }
@@ -265,12 +263,15 @@ async function runShell(spec: MetricSpec, context: MetricExecutorContext, taskID
   if (!parsed.success) return unavailableAttempt("configuration_invalid", z.prettifyError(parsed.error), {})
   const config = parsed.data
   const cwd = config.cwd ? Filesystem.resolve(config.cwd) : (context.workDir ?? Filesystem.resolve(Instance.directory))
-  const result = await runTaskCommandWithInactivity({ taskID, cwd }, {
-    executable: config.executable,
-    args: config.args,
-    env: process.env,
-    inactivityTimeoutMs: config.inactivity_timeout_ms,
-  })
+  const result = await runTaskCommandWithInactivity(
+    { taskID, cwd },
+    {
+      executable: config.executable,
+      args: config.args,
+      env: process.env,
+      inactivityTimeoutMs: config.inactivity_timeout_ms,
+    },
+  )
   const execution = {
     scorer_revision: config.scorer_revision,
     workspace_digest: config.workspace_digest,
@@ -524,22 +525,66 @@ async function runPrebuilt(spec: MetricSpec, input: ExecuteMetricsInput): Promis
   })
 }
 
-async function runQuery(spec: MetricSpec): Promise<EvaluationAttempt> {
+async function runQuery(spec: MetricSpec, input: ExecuteMetricsInput): Promise<EvaluationAttempt> {
   const config = QueryMetricEvaluatorConfigSchema.safeParse(spec.evaluator_config)
   if (!config.success) return unavailableAttempt("configuration_invalid", z.prettifyError(config.error), {})
-  const rows = Database.use((db) => db.all(rawSQL.raw(config.data.sql))) as Array<Record<string, unknown>>
-  if (rows.length === 0)
-    return unavailableAttempt("input_unavailable", "Query scorer returned no rows", {
+  if (config.data.query === "constant_value") {
+    return measured(config.data.value, {
       scorer_revision: config.data.scorer_revision,
-      rows,
+      query: config.data.query,
+      value: config.data.value,
     })
-  const raw = Number(rows[0]![config.data.value_column])
+  }
+
+  const iteration = input.iteration + config.data.iteration_offset
+  if (iteration < 0) {
+    return unavailableAttempt("input_unavailable", "Query metric result iteration is negative", {
+      scorer_revision: config.data.scorer_revision,
+      query: config.data.query,
+      iteration,
+    })
+  }
+  const row = latestMetricResult(input.task_id, iteration, config.data.metric_spec_id)
+  if (!row?.evidence_fresh) {
+    return unavailableAttempt("input_unavailable", "Query metric result input is unavailable", {
+      scorer_revision: config.data.scorer_revision,
+      query: config.data.query,
+      metric_spec_id: config.data.metric_spec_id,
+      iteration,
+      input_evidence: row?.evidence_ref ?? null,
+    })
+  }
+  const raw = row[config.data.result_column]
   return Number.isFinite(raw)
-    ? measured(raw, { scorer_revision: config.data.scorer_revision, rows, value_column: config.data.value_column })
-    : unavailableAttempt("parse_failed", `Query scorer column ${config.data.value_column} is not numeric`, {
+    ? measured(raw, {
         scorer_revision: config.data.scorer_revision,
-        rows,
+        query: config.data.query,
+        metric_spec_id: config.data.metric_spec_id,
+        iteration,
+        result_column: config.data.result_column,
+        input_evidence: row.evidence_ref,
       })
+    : unavailableAttempt("parse_failed", `Query metric result column ${config.data.result_column} is not numeric`, {
+        scorer_revision: config.data.scorer_revision,
+        query: config.data.query,
+        metric_spec_id: config.data.metric_spec_id,
+        iteration,
+      })
+}
+
+function latestMetricResult(taskID: string, iteration: number, metricSpecID: string): MetricResult | undefined {
+  let latest: MetricResult | undefined
+  for (const row of readResultsForIteration(taskID, iteration)) {
+    if (row.metric_spec_id !== metricSpecID) continue
+    if (
+      !latest ||
+      row.computed_at > latest.computed_at ||
+      (row.computed_at === latest.computed_at && row.id > latest.id)
+    ) {
+      latest = row
+    }
+  }
+  return latest
 }
 
 async function runAggregator(spec: MetricSpec, input: ExecuteMetricsInput): Promise<EvaluationAttempt> {
