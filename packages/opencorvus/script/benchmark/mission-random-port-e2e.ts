@@ -5,11 +5,11 @@ import os from "node:os"
 import path from "node:path"
 import { spawnSync } from "node:child_process"
 
-type CaseID = "m01" | "m02" | "m03" | "m04"
+type CaseID = "m01" | "m02" | "m03" | "m04" | "m05"
 
 function selectedCaseID(): CaseID {
   const raw = process.env.MISSION_RANDOM_PORT_E2E_CASE ?? "m01"
-  if (raw === "m01" || raw === "m02" || raw === "m03" || raw === "m04") return raw
+  if (raw === "m01" || raw === "m02" || raw === "m03" || raw === "m04" || raw === "m05") return raw
   throw new Error(`unsupported MISSION_RANDOM_PORT_E2E_CASE ${JSON.stringify(raw)}`)
 }
 
@@ -128,7 +128,7 @@ const allowedM03HarnessMetadata = new Set([".gitignore", ".opencorvus/opencorvus
 
 function mockProviderEnabled() {
   const enabled = process.env.MISSION_RANDOM_PORT_E2E_MOCK_PROVIDER === "1"
-  if (enabled && (caseID === "m03" || caseID === "m04")) {
+  if (enabled && (caseID === "m03" || caseID === "m04" || caseID === "m05")) {
     throw new Error(`MISSION_RANDOM_PORT_E2E_MOCK_PROVIDER is not supported for the ${caseID.toUpperCase()} live DeepSeek Mission E2E benchmark`)
   }
   return enabled
@@ -1017,6 +1017,47 @@ function m04EvidenceAuthority(messages: unknown, taskID: string): {
   return { queryTask, queryArtifacts, readCompletionDecision, completeMissionWithReadLocator, readLocator }
 }
 
+function m05NoChildEvidence(messages: unknown): {
+  globPackageJSON: boolean
+  readPackageJSON: boolean
+  stateWrite: boolean
+  completeMissionEmptyAcceptances: boolean
+} {
+  const completed = completedToolParts(messages)
+  const globPackageJSON = completed.some((part) => {
+    if (part.tool !== "glob") return false
+    const input = inputRecord(part.input)
+    const pattern = typeof input.pattern === "string" ? input.pattern : ""
+    return pattern.includes("package.json") && String(part.output ?? "").includes("package.json")
+  })
+  const readPackageJSON = completed.some((part) => {
+    if (part.tool !== "read") return false
+    const input = inputRecord(part.input)
+    const filePath = typeof input.filePath === "string" ? input.filePath : ""
+    const output = String(part.output ?? "")
+    return (
+      filePath.replace(/\\/g, "/").endsWith("package.json") &&
+      output.includes("mission-random-port-e2e-fixture") &&
+      output.includes("node test.js")
+    )
+  })
+  const stateWrite = completed.some((part) => {
+    const input = inputRecord(part.input)
+    return part.tool === "mission_state" && input.action === "write" && typeof input.file === "string"
+  })
+  const completeMissionEmptyAcceptances = completed.some((part) => {
+    const input = inputRecord(part.input)
+    return (
+      part.tool === "panel" &&
+      input.action === "complete_mission" &&
+      Array.isArray(input.task_acceptances) &&
+      input.task_acceptances.length === 0 &&
+      parsedToolOutput(part).kind === "mission_completed"
+    )
+  })
+  return { globPackageJSON, readPackageJSON, stateWrite, completeMissionEmptyAcceptances }
+}
+
 function collectToolEvidence(messages: unknown): {
   missionSkill: boolean
   publish: boolean
@@ -1161,10 +1202,12 @@ function evaluate() {
   const tools = collectToolEvidence(evidence.messages)
   if (!tools.missionSkill) failures.push("no completed mission_skill general evidence found in session messages")
   if (tools.createTaskFailure) failures.push(`panel.create_task failed: ${tools.createTaskFailure}`)
-  if (!tools.createdTaskID) {
-    failures.push("no completed panel.create_task created task evidence found in session messages")
-  } else if (!statusHasTask(evidence.status, tools.createdTaskID)) {
-    failures.push(`mission status did not expose created child task ${tools.createdTaskID}`)
+  if (caseID !== "m05") {
+    if (!tools.createdTaskID) {
+      failures.push("no completed panel.create_task created task evidence found in session messages")
+    } else if (!statusHasTask(evidence.status, tools.createdTaskID)) {
+      failures.push(`mission status did not expose created child task ${tools.createdTaskID}`)
+    }
   }
   if (!evidence.activityCursor || JSON.stringify(evidence.activityCursor).length < 5) {
     failures.push("activity cursor missing")
@@ -1235,6 +1278,19 @@ function evaluate() {
       }
     }
   }
+  if (caseID === "m05") {
+    const noChild = m05NoChildEvidence(evidence.messages)
+    const taskCount = statusTasks(evidence.status).length
+    if (taskCount !== 0) failures.push(`M05 current child Task set is not empty: ${taskCount}`)
+    if (tools.createdTaskIDs.length !== 0) failures.push(`M05 created child Tasks unexpectedly: ${tools.createdTaskIDs.join(", ")}`)
+    if (!noChild.globPackageJSON) failures.push("M05 did not glob package.json")
+    if (!noChild.readPackageJSON) failures.push("M05 did not read package.json with expected fixture values")
+    if (!noChild.stateWrite) failures.push("M05 did not write Mission state")
+    if (!tools.publish) failures.push("M05 did not produce completed publish_interactive_artifact evidence")
+    if (!noChild.completeMissionEmptyAcceptances) {
+      failures.push("M05 did not complete Mission with empty task_acceptances")
+    }
+  }
   if (artifacts.length === 0 && !tools.publish && (evidence.projectArchive?.bytes ?? 0) === 0) {
     failures.push("no publish/artifact/project-archive evidence found")
   }
@@ -1261,20 +1317,31 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
       turnArtifacts: evidence.turnArtifacts,
     })
     const tools = collectToolEvidence(evidence.messages)
-    const hasTask = !!tools.createdTaskID && statusHasTask(evidence.status, tools.createdTaskID)
+    const noChild = caseID === "m05" ? m05NoChildEvidence(evidence.messages) : undefined
+    const hasTask =
+      caseID === "m05"
+        ? statusTasks(evidence.status).length === 0 && tools.createdTaskIDs.length === 0
+        : !!tools.createdTaskID && statusHasTask(evidence.status, tools.createdTaskID)
     const taskIDs = statusTasks(evidence.status)
       .map((task) => inputRecord(task).taskID)
       .filter((taskID): taskID is string => typeof taskID === "string")
     if (tools.createdTaskID && !taskIDs.includes(tools.createdTaskID)) taskIDs.push(tools.createdTaskID)
     await resolveM03OptionalTestingInteractions(baseURL, taskIDs)
     const hasArtifact =
-      caseID === "m02" || caseID === "m03" || caseID === "m04"
+      caseID === "m02" || caseID === "m03" || caseID === "m04" || caseID === "m05"
         ? tools.publish
         : responseArray(evidence.turnArtifacts).length > 0 || tools.publish
     const hasResumeSettlement =
-      caseID === "m02" || caseID === "m03" || caseID === "m04"
+      caseID === "m02" || caseID === "m03" || caseID === "m04" || caseID === "m05"
         ? tools.publish && tools.completeMission
         : tools.resumeHandoff || tools.publish
+    const hasCaseEvidence =
+      caseID === "m05"
+        ? !!noChild?.globPackageJSON &&
+          !!noChild.readPackageJSON &&
+          !!noChild.stateWrite &&
+          !!noChild.completeMissionEmptyAcceptances
+        : true
     if (tools.createTaskFailure) return
     const assistantComplete = allAssistantMessagesComplete(evidence.messages)
     const idle = missionActivityIdle(evidence.status)
@@ -1283,6 +1350,7 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
     if (!hasTask) missing.push("Mission status child Task")
     if (!hasArtifact) missing.push("required publish/artifact evidence")
     if (!hasResumeSettlement) missing.push("resume settlement evidence")
+    if (!hasCaseEvidence) missing.push("M05 no-child project inspection evidence")
     if (!assistantComplete) missing.push("completed assistant messages")
     if (!idle) missing.push("inactive Mission activity")
     if (
@@ -1290,6 +1358,7 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
       hasTask &&
       hasArtifact &&
       hasResumeSettlement &&
+      hasCaseEvidence &&
       assistantComplete &&
       idle
     )
@@ -1401,6 +1470,14 @@ async function main() {
                 "The child Task must read package.json only, produce one concise Task artifact reporting package name and the test script value, and must not modify project files or run npm test.",
                 "After creating that single child Task, create no additional or replacement child Tasks. If that single child Task cannot complete, record the blocker in handoff.md and stop blocked instead of creating another Task.",
               ].join("\n")
+            : caseID === "m05"
+              ? [
+                  '@mission("general")',
+                  "Run this as a bounded no-child Mission. Do not create any child Task and do not use any @squad reference.",
+                  "Use Mission's own glob tool to locate package.json, then use Mission's own read tool to read package.json.",
+                  "Write Mission state recording the package name and scripts.test value, publish a compact summary artifact with publish_interactive_artifact, then complete the Mission with panel.complete_mission using task_acceptances: [].",
+                  "Do not modify project files, do not run npm test, and do not install dependencies.",
+                ].join("\n")
           : [
               '@mission("general")',
               "Introduce the Mission plan briefly, load the general Mission Skill, write Mission state, dispatch one small code Task that runs npm test, and keep evidence concise.",
@@ -1430,6 +1507,8 @@ async function main() {
               ? "Resume from Mission state, query the child Task and its artifacts, publish a compact repair summary with publish_interactive_artifact, and complete the Mission once the index.js repair and npm test evidence are ready. If not ready, record the exact pending state in handoff.md."
               : caseID === "m04"
                 ? "Resume from Mission state, query exactly the one current child Task, enumerate its artifacts, read the current task_completion_decision artifact completely, publish a compact evidence-authority digest with publish_interactive_artifact, then complete the Mission with the complete current child Task set containing only that Task and the exact completion-decision locator you read. If the child evidence is not ready, record the exact pending state in handoff.md; do not create any replacement or additional child Task."
+                : caseID === "m05"
+                  ? "Resume the bounded no-child Mission. If it is not already complete, use Mission's own glob/read evidence for package.json, write Mission state, publish a compact artifact, and call panel.complete_mission with task_acceptances: []. Do not create any child Task, do not use any @squad reference, do not run npm test, and do not modify files."
             : "Resume from Mission state and publish a compact completion summary artifact if the child Task evidence is ready. If not ready, record the exact pending state in handoff.md.",
         ...(model ? { model } : {}),
       }),
