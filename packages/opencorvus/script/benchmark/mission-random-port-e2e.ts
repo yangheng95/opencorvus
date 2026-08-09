@@ -5,11 +5,11 @@ import os from "node:os"
 import path from "node:path"
 import { spawnSync } from "node:child_process"
 
-type CaseID = "m01" | "m02"
+type CaseID = "m01" | "m02" | "m03"
 
 function selectedCaseID(): CaseID {
   const raw = process.env.MISSION_RANDOM_PORT_E2E_CASE ?? "m01"
-  if (raw === "m01" || raw === "m02") return raw
+  if (raw === "m01" || raw === "m02" || raw === "m03") return raw
   throw new Error(`unsupported MISSION_RANDOM_PORT_E2E_CASE ${JSON.stringify(raw)}`)
 }
 
@@ -89,6 +89,24 @@ type Evidence = {
     sessions: number
     toolParts: number
   }
+  projectVerification?: {
+    npmTestStatus: number | null
+    stdout: string
+    stderr: string
+    indexSource: string
+    indexDiff: string
+    allChangedFiles: string[]
+    changedFiles: string[]
+    fullDiffStat: string
+    baselineCommit: string
+    headCommit: string
+  }
+  interactionReplies?: Array<{
+    interactionID: string
+    taskID: string
+    title: string
+    status: string
+  }>
   blocker?: {
     phase: string
     message: string
@@ -105,9 +123,15 @@ const mockProviderID = "mock-openai-compatible"
 const mockModelID = "mission-e2e"
 const mockModelRef = `${mockProviderID}/${mockModelID}`
 const repoRoot = path.resolve(import.meta.dir, "../../../..")
+let initialFixtureCommit = ""
+const allowedM03HarnessMetadata = new Set([".gitignore", ".opencorvus/opencorvus.jsonc"])
 
 function mockProviderEnabled() {
-  return process.env.MISSION_RANDOM_PORT_E2E_MOCK_PROVIDER === "1"
+  const enabled = process.env.MISSION_RANDOM_PORT_E2E_MOCK_PROVIDER === "1"
+  if (enabled && caseID === "m03") {
+    throw new Error("MISSION_RANDOM_PORT_E2E_MOCK_PROVIDER is not supported for the M03 live DeepSeek Mission E2E benchmark")
+  }
+  return enabled
 }
 
 function selectedModelRef(mockProvider: BunServer | undefined) {
@@ -126,8 +150,24 @@ function artifactPath() {
 async function writeEvidence() {
   const output = artifactPath()
   await fs.mkdir(path.dirname(output), { recursive: true })
-  await fs.writeFile(output, JSON.stringify(evidence, null, 2))
+  evidence.mockProviderRequests = mockProviderRequests
+  await fs.writeFile(output, JSON.stringify(redactSensitive(evidence), null, 2))
   return output
+}
+
+function redactSensitive(value: unknown): unknown {
+  if (typeof value === "string") {
+    return value
+      .replace(/\*{4}[0-9A-Fa-f]{4,}\b/g, "****<redacted>")
+      .replace(/\b(api key\s*:\s*)([^,\s"'}]+)/gi, "$1<redacted>")
+      .replace(/\b(authorization\s*:\s*)(bearer\s+)?[^,\s"'}]+/gi, "$1<redacted>")
+      .replace(/\b(bearer\s+)[A-Za-z0-9._~+/=-]+/gi, "$1<redacted>")
+  }
+  if (Array.isArray(value)) return value.map((item) => redactSensitive(item))
+  if (value && typeof value === "object") {
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, redactSensitive(item)]))
+  }
+  return value
 }
 
 function git(args: string[]) {
@@ -135,6 +175,14 @@ function git(args: string[]) {
   if (result.status !== 0) {
     throw new Error(`git ${args.join(" ")} failed: ${result.stderr || result.stdout}`)
   }
+}
+
+function gitOutput(args: string[]) {
+  const result = spawnSync("git", args, { cwd: project, encoding: "utf8" })
+  if (result.status !== 0) {
+    throw new Error(`git ${args.join(" ")} failed: ${result.stderr || result.stdout}`)
+  }
+  return result.stdout.trim()
 }
 
 async function prepareProject() {
@@ -153,7 +201,10 @@ async function prepareProject() {
       2,
     ),
   )
-  await fs.writeFile(path.join(project, "index.js"), "export function answer() { return 41 + 1 }\n")
+  await fs.writeFile(
+    path.join(project, "index.js"),
+    caseID === "m03" ? "export function answer() { return 41 }\n" : "export function answer() { return 41 + 1 }\n",
+  )
   await fs.writeFile(
     path.join(project, "test.js"),
     "import { answer } from './index.js'\nif (answer() !== 42) throw new Error('answer mismatch')\nconsole.log('ok')\n",
@@ -163,6 +214,7 @@ async function prepareProject() {
   git(["config", "user.name", "Mission E2E"])
   git(["add", "."])
   git(["commit", "-m", "initial fixture"])
+  initialFixtureCommit = gitOutput(["rev-parse", "HEAD"])
 }
 
 function installMockProviderConfig(baseURL: string) {
@@ -326,6 +378,55 @@ const IdentifierLike = {
 }
 
 function firstMissionToolCalls(): MockToolCall[] {
+  if (caseID === "m02") {
+    return [
+      {
+        id: "call_m02_first_skill",
+        name: "mission_skill",
+        arguments: { name: "general" },
+      },
+      {
+        id: "call_m02_first_frontier",
+        name: "mission_state",
+        arguments: {
+          action: "write",
+          file: "frontier.md",
+          content: [
+            "# M02 Frontier",
+            "",
+            "- Case: random-port Mission read-only inventory, resume, publish, and complete.",
+            "- Fixture command: npm test must not be run by the child Task.",
+          ].join("\n"),
+        },
+      },
+      {
+        id: "call_m02_first_tasks",
+        name: "mission_state",
+        arguments: {
+          action: "write",
+          file: "tasks.md",
+          content: "- [ ] Create one queued read-only inventory child Task.\n",
+        },
+      },
+      {
+        id: "call_m02_first_catalog",
+        name: "panel",
+        arguments: { action: "expert_squad_catalog" },
+      },
+      {
+        id: "call_m02_first_task",
+        name: "panel",
+        arguments: {
+          action: "create_task",
+          title: "Read-only code inventory inspection",
+          request:
+            "Inspect package.json, index.js, and test.js without running npm test or modifying files. Produce concise inventory evidence.",
+          promptProfile: "base",
+          queue: true,
+        },
+      },
+    ]
+  }
   return [
     {
       id: "call_m01_first_skill",
@@ -421,18 +522,158 @@ function resumeMissionToolCalls(): MockToolCall[] {
   ]
 }
 
-function childTaskToolCalls(): MockToolCall[] {
+function childEvidenceLocators(transcript: string): JsonRecord[] {
+  const sessionID =
+    transcript.match(/(?:sessionID|session_id)["'`:=\s]+(ses_[A-Za-z0-9_\-]+)/)?.[1] ??
+    transcript.match(/(ses_[A-Za-z0-9_\-]+)/)?.[1]
+  const messageID =
+    transcript.match(/(?:messageID|message_id)["'`:=\s]+(msg_[A-Za-z0-9_\-]+)/)?.[1] ??
+    transcript.match(/(msg_[A-Za-z0-9_\-]+)/)?.[1]
+  if (sessionID && messageID) return [{ source: "session_message", session_id: sessionID, message_id: messageID }]
+  if (sessionID) return [{ source: "session", session_id: sessionID }]
+  return []
+}
+
+function childTaskToolCalls(transcript: string): MockToolCall[] {
+  const evidenceLocators = childEvidenceLocators(transcript)
   return [
     {
       id: "call_m01_child_complete",
       name: "manage_task",
       arguments: {
         action: "complete_task",
-        summary: "Fixture npm test request acknowledged by the deterministic Mission E2E child Task.",
-        evidence_locators: [],
+        summary:
+          caseID === "m02"
+            ? "Read-only inventory completed: package.json declares test, index.js exports answer, test.js asserts answer() equals 42, and no files were modified."
+            : "Fixture npm test request acknowledged by the deterministic Mission E2E child Task.",
+        evidence_locators: evidenceLocators,
         deliverable_artifact_locators: [],
         accepted_delivery_slice_revision_ids: [],
         workflow_id: null,
+      },
+    },
+  ]
+}
+
+function firstTaskIDFromTranscript(transcript: string): string | undefined {
+  return transcript.match(/tsk_[A-Za-z0-9_]+/)?.[0]
+}
+
+function visitJSON(value: unknown, visit: (value: unknown) => void, seen = new Set<unknown>()) {
+  visit(value)
+  if (typeof value === "string") {
+    const trimmed = value.trim()
+    if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+      try {
+        visitJSON(JSON.parse(trimmed), visit, seen)
+      } catch {}
+    }
+    return
+  }
+  if (!value || typeof value !== "object" || seen.has(value)) return
+  seen.add(value)
+  if (Array.isArray(value)) {
+    for (const item of value) visitJSON(item, visit, seen)
+    return
+  }
+  for (const item of Object.values(value as JsonRecord)) visitJSON(item, visit, seen)
+}
+
+function completionDecisionLocatorFromMessages(messages: unknown): JsonRecord | undefined {
+  let locator: JsonRecord | undefined
+  visitJSON(messages, (value) => {
+    if (locator || !value || typeof value !== "object" || Array.isArray(value)) return
+    const record = value as JsonRecord
+    if (record.kind !== "task_completion_decision") return
+    const candidate = inputRecord(record.locator)
+    if (
+      candidate.source === "engine_artifact" &&
+      typeof candidate.artifact_id === "string" &&
+      typeof candidate.catalog_revision === "number" &&
+      typeof candidate.expected_sha256 === "string"
+    ) {
+      locator = candidate
+    }
+  })
+  return locator
+}
+
+function m02ResumeCatalogToolCalls(taskID: string): MockToolCall[] {
+  return [
+    {
+      id: "call_m02_resume_state_list",
+      name: "mission_state",
+      arguments: { action: "list" },
+    },
+    {
+      id: "call_m02_resume_frontier",
+      name: "mission_state",
+      arguments: { action: "read", file: "frontier.md" },
+    },
+    {
+      id: "call_m02_resume_handoff",
+      name: "mission_state",
+      arguments: {
+        action: "write",
+        file: "handoff.md",
+        content: [
+          "# M02 Handoff",
+          "",
+          "Resume verified persisted Mission state and is reconciling the child inventory Task.",
+        ].join("\n"),
+      },
+    },
+    {
+      id: "call_m02_resume_publish",
+      name: "publish_interactive_artifact",
+      arguments: {
+        artifact: {
+          schemaVersion: "1",
+          renderer: "document@1",
+          title: "M02 Inventory Summary",
+          markdown: [
+            "# M02 Inventory Summary",
+            "",
+            "- Backend served this case on a random loopback port.",
+            "- The child Task inspected package.json, index.js, and test.js without modifying files.",
+            "- Mission is reconciling the completion decision evidence before final completion.",
+          ].join("\n"),
+        },
+      },
+    },
+    {
+      id: "call_m02_resume_query_artifacts",
+      name: "panel",
+      arguments: { action: "query_task_artifacts", taskID },
+    },
+  ]
+}
+
+function m02ResumeReadToolCalls(taskID: string, locator: JsonRecord): MockToolCall[] {
+  return [
+    {
+      id: "call_m02_resume_query_task",
+      name: "panel",
+      arguments: { action: "query_task", taskIDs: [taskID] },
+    },
+    {
+      id: "call_m02_resume_read_completion",
+      name: "panel",
+      arguments: { action: "read_task_artifact", taskID, locator },
+    },
+  ]
+}
+
+function m02ResumeCompleteToolCalls(taskID: string, locator: JsonRecord): MockToolCall[] {
+  return [
+    {
+      id: "call_m02_resume_complete",
+      name: "panel",
+      arguments: {
+        action: "complete_mission",
+        summary:
+          "Mission complete: read-only inventory evidence was published and the child Task completion decision was reconciled.",
+        task_acceptances: [{ task_id: taskID, evidence_locators: [locator] }],
       },
     },
   ]
@@ -442,14 +683,28 @@ async function handleMockChat(request: Request): Promise<Response> {
   const body = (await request.json().catch(() => ({}))) as JsonRecord
   const toolNames = toolNamesFromRequest(body)
   const transcript = JSON.stringify(body.messages ?? [])
+  const taskID = firstTaskIDFromTranscript(transcript)
+  const completionDecisionLocator = completionDecisionLocatorFromMessages(body.messages)
   let responseKind = "generic-text"
   let response: Response
-  if (transcript.includes("call_m01_child_complete")) {
+  if (caseID === "m02" && transcript.includes("call_m02_resume_complete")) {
+    responseKind = "m02-resume-final"
+    response = textResponse("M02 resume complete: Mission published the inventory summary and recorded completion.")
+  } else if (caseID === "m02" && taskID && completionDecisionLocator && transcript.includes("call_m02_resume_read_completion")) {
+    responseKind = "m02-resume-complete-tools"
+    response = toolResponse(m02ResumeCompleteToolCalls(taskID, completionDecisionLocator))
+  } else if (caseID === "m02" && taskID && completionDecisionLocator) {
+    responseKind = "m02-resume-read-tools"
+    response = toolResponse(m02ResumeReadToolCalls(taskID, completionDecisionLocator))
+  } else if (transcript.includes("call_m01_child_complete")) {
     responseKind = "child-final"
     response = textResponse("Child Task completed from the deterministic lifecycle decision.")
   } else if (toolNames.includes("manage_task")) {
     responseKind = "child-tools"
-    response = toolResponse(childTaskToolCalls())
+    response = toolResponse(childTaskToolCalls(transcript))
+  } else if (caseID === "m02" && transcript.includes("Resume from Mission state") && taskID) {
+    responseKind = "m02-resume-catalog-tools"
+    response = toolResponse(m02ResumeCatalogToolCalls(taskID))
   } else if (transcript.includes("call_m01_resume_publish")) {
     responseKind = "resume-final"
     response = textResponse("Resume complete: Mission state was read and a compact summary artifact was published.")
@@ -460,6 +715,11 @@ async function handleMockChat(request: Request): Promise<Response> {
     responseKind = "first-final"
     response = textResponse(
       "Mission M01 is introduced: general skill loaded, state recorded, and one queued fixture Task was created.",
+    )
+  } else if (caseID === "m02" && transcript.includes("call_m02_first_task")) {
+    responseKind = "m02-first-final"
+    response = textResponse(
+      "Mission M02 is introduced: general skill loaded, state recorded, and one queued read-only inventory Task was created.",
     )
   } else if (toolNames.includes("mission_skill") && toolNames.includes("panel")) {
     responseKind = "first-tools"
@@ -633,6 +893,39 @@ function parseJsonOutput(output: unknown): JsonRecord {
   }
 }
 
+function m02ReadCompletionDecisionPayloads(messages: unknown): JsonRecord[] {
+  return completedToolParts(messages)
+    .filter((part) => part.tool === "panel" && inputRecord(part.input).action === "read_task_artifact")
+    .map((part) => {
+      const chunk = parseJsonOutput(part.output)
+      return typeof chunk.text === "string" ? parseJsonOutput(chunk.text) : {}
+    })
+    .filter((payload) => Array.isArray(payload.evidence_locators) || Array.isArray(payload.deliverable_artifact_locators))
+}
+
+function structurallyValidEvidenceLocator(value: unknown): boolean {
+  const locator = inputRecord(value)
+  if (locator.source === "session") return typeof locator.session_id === "string" && locator.session_id.startsWith("ses_")
+  if (locator.source === "session_message") {
+    return (
+      typeof locator.session_id === "string" &&
+      locator.session_id.startsWith("ses_") &&
+      typeof locator.message_id === "string" &&
+      locator.message_id.startsWith("msg_")
+    )
+  }
+  if (locator.source === "engine_artifact") {
+    return (
+      typeof locator.artifact_id === "string" &&
+      locator.artifact_id.startsWith("art_") &&
+      typeof locator.catalog_revision === "number" &&
+      typeof locator.expected_sha256 === "string" &&
+      /^[a-f0-9]{64}$/i.test(locator.expected_sha256)
+    )
+  }
+  return false
+}
+
 function collectToolEvidence(messages: unknown): {
   missionSkill: boolean
   publish: boolean
@@ -676,15 +969,98 @@ function statusHasTask(status: unknown, taskID: string) {
   return statusTasks(status).some((task) => inputRecord(task).taskID === taskID)
 }
 
+async function resolveM03OptionalTestingInteractions(baseURL: string, taskIDs: string[]) {
+  if (caseID !== "m03") return
+  const replied = new Set((evidence.interactionReplies ?? []).map((item) => item.interactionID))
+  for (const taskID of taskIDs) {
+    const interactions = responseArray(await requestJSON(baseURL, `/task/${taskID}/interactions`))
+    for (const item of interactions) {
+      const interaction = inputRecord(item)
+      const interactionID = typeof interaction.id === "string" ? interaction.id : undefined
+      if (!interactionID || replied.has(interactionID)) continue
+      if (interaction.status !== "pending" || interaction.type !== "question") continue
+      const title = typeof interaction.title === "string" ? interaction.title : ""
+      const body = typeof interaction.body === "string" ? interaction.body : ""
+      if (!`${title}\n${body}`.toLowerCase().includes("optional testing")) continue
+      const reply = inputRecord(
+        await requestJSON(baseURL, `/interaction/${interactionID}/reply`, {
+          method: "POST",
+          body: JSON.stringify({
+            autoReply: false,
+            message:
+              "Run the configured npm test now. This M03 benchmark requires real test evidence before completion.",
+          }),
+        }),
+      )
+      evidence.interactionReplies ??= []
+      evidence.interactionReplies.push({
+        interactionID,
+        taskID,
+        title,
+        status: typeof reply.status === "string" ? reply.status : "",
+      })
+      replied.add(interactionID)
+    }
+  }
+}
+
+function runProjectVerification() {
+  const result = spawnSync("npm", ["test"], { cwd: project, encoding: "utf8", shell: process.platform === "win32" })
+  const headCommit = gitOutput(["rev-parse", "HEAD"])
+  const diff = spawnSync("git", ["diff", initialFixtureCommit, "--", "index.js"], { cwd: project, encoding: "utf8" })
+  const allChangedFiles = gitOutput(["diff", "--name-only", initialFixtureCommit, "--", "."])
+    .split(/\r?\n/)
+    .filter(Boolean)
+  const changedFiles = allChangedFiles.filter((file) => !allowedM03HarnessMetadata.has(file))
+  const fullDiffStat = gitOutput(["diff", "--stat", initialFixtureCommit, "--", "."])
+  return fs.readFile(path.join(project, "index.js"), "utf8").then((indexSource) => {
+    evidence.projectVerification = {
+      npmTestStatus: result.status,
+      stdout: result.stdout ?? "",
+      stderr: result.stderr ?? "",
+      indexSource,
+      indexDiff: diff.stdout ?? "",
+      allChangedFiles,
+      changedFiles,
+      fullDiffStat,
+      baselineCommit: initialFixtureCommit,
+      headCommit,
+    }
+  })
+}
+
 function missionActivityIdle(status: unknown): boolean {
   const record = inputRecord(status)
   const activity = inputRecord(record.activity)
   return record.status === "inactive" && activity.running === 0
 }
 
+function signatureStatus(status: unknown): unknown {
+  const record = inputRecord(status)
+  if (!("generatedAt" in record)) return status
+  const { generatedAt: _generatedAt, ...stable } = record
+  return stable
+}
+
 function evaluate() {
   const failures: string[] = []
   if (!evidence.baseURL) failures.push("backend URL missing")
+  const preflight = inputRecord(evidence.providerPreflight)
+  if (caseID === "m03" || !evidence.mockProviderURL) {
+    if (evidence.modelRef !== liveModelRef) failures.push(`modelRef is not ${liveModelRef}`)
+    if (evidence.mockProviderURL) failures.push("mock provider URL present in live DeepSeek evidence")
+    if (preflight.ok !== true) failures.push("DeepSeek provider preflight did not report ok true")
+    if (preflight.status !== "connected") failures.push("DeepSeek provider preflight did not report connected")
+    if (preflight.providerID !== "deepseek") failures.push("DeepSeek provider preflight providerID mismatch")
+    if (preflight.modelID !== "deepseek-v4-flash") failures.push("DeepSeek provider preflight modelID mismatch")
+  } else {
+    if (evidence.modelRef !== mockModelRef) failures.push(`mock modelRef is not ${mockModelRef}`)
+    if (preflight.ok !== true || preflight.status !== "skipped") {
+      failures.push("mock provider preflight was not skipped")
+    }
+    if (preflight.providerID !== mockProviderID) failures.push("mock provider preflight providerID mismatch")
+    if (preflight.modelID !== mockModelID) failures.push("mock provider preflight modelID mismatch")
+  }
   if (evidence.firstWake?.created !== true) failures.push("first wake did not create mission")
   if (evidence.secondWake?.created !== false) failures.push("second wake did not resume mission")
   if (evidence.firstWake?.missionID !== evidence.secondWake?.missionID) failures.push("resume missionID mismatch")
@@ -708,6 +1084,45 @@ function evaluate() {
   if (caseID === "m02" && !tools.completeMission) {
     failures.push("M02 did not produce completed panel.complete_mission evidence")
   }
+  if (caseID === "m02") {
+    const payloads = m02ReadCompletionDecisionPayloads(evidence.messages)
+    const hasChildEvidence = payloads.some((payload) => {
+      return [...responseArray(payload.evidence_locators), ...responseArray(payload.deliverable_artifact_locators)].some(
+        structurallyValidEvidenceLocator,
+      )
+    })
+    if (!hasChildEvidence) {
+      failures.push("M02 child completion decision did not contain structurally valid evidence or deliverable locators")
+    }
+  }
+  if (caseID === "m03") {
+    if (!tools.publish) failures.push("M03 did not produce completed publish_interactive_artifact evidence")
+    if (!tools.completeMission) failures.push("M03 did not produce completed panel.complete_mission evidence")
+    if (evidence.projectVerification?.npmTestStatus !== 0) {
+      failures.push(`M03 npm test did not pass, status ${evidence.projectVerification?.npmTestStatus}`)
+    }
+    if (!evidence.projectVerification?.indexDiff.trim()) {
+      failures.push("M03 index.js diff is empty")
+    }
+    const indexDiff = evidence.projectVerification?.indexDiff ?? ""
+    const indexSource = evidence.projectVerification?.indexSource ?? ""
+    const changedFiles = evidence.projectVerification?.changedFiles ?? []
+    if (changedFiles.length !== 1 || changedFiles[0] !== "index.js") {
+      failures.push(`M03 changed files are not exactly index.js: ${changedFiles.join(", ") || "<none>"}`)
+    }
+    if (!indexDiff.includes("-export function answer() { return 41 }")) {
+      failures.push("M03 index.js diff does not remove the original failing return value")
+    }
+    if (
+      !indexDiff.includes("+export function answer() { return 42") &&
+      !indexDiff.includes("+export function answer() { return 41 + 1")
+    ) {
+      failures.push("M03 index.js diff does not add a passing return value")
+    }
+    if (indexSource.includes("export function answer() { return 41 }\n")) {
+      failures.push("M03 final index.js still contains the original failing implementation")
+    }
+  }
   if (artifacts.length === 0 && !tools.publish && (evidence.projectArchive?.bytes ?? 0) === 0) {
     failures.push("no publish/artifact/project-archive evidence found")
   }
@@ -721,41 +1136,59 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
   let last = ""
   let quietSince = Date.now()
   const deadline = Date.now() + Number(process.env.MISSION_RANDOM_PORT_E2E_TIMEOUT_MS ?? 12 * 60 * 1000)
+  let missing: string[] = []
   while (Date.now() < deadline) {
     evidence.status = await requestJSON(baseURL, `/mission/${missionID}/status`)
     evidence.activityCursor = await requestJSON(baseURL, `/mission/${missionID}/activity-cursor`)
     evidence.messages = await requestJSON(baseURL, `/session/${sessionID}/message`)
     evidence.turnArtifacts = await requestJSON(baseURL, `/session/${sessionID}/turn-artifacts`)
     const signature = JSON.stringify({
-      status: evidence.status,
+      status: signatureStatus(evidence.status),
       activityCursor: evidence.activityCursor,
       messages: evidence.messages,
       turnArtifacts: evidence.turnArtifacts,
     })
     const tools = collectToolEvidence(evidence.messages)
     const hasTask = !!tools.createdTaskID && statusHasTask(evidence.status, tools.createdTaskID)
+    const taskIDs = statusTasks(evidence.status)
+      .map((task) => inputRecord(task).taskID)
+      .filter((taskID): taskID is string => typeof taskID === "string")
+    if (tools.createdTaskID && !taskIDs.includes(tools.createdTaskID)) taskIDs.push(tools.createdTaskID)
+    await resolveM03OptionalTestingInteractions(baseURL, taskIDs)
     const hasArtifact =
-      caseID === "m02" ? tools.publish : responseArray(evidence.turnArtifacts).length > 0 || tools.publish
-    const hasResumeSettlement = caseID === "m02" ? tools.publish && tools.completeMission : tools.resumeHandoff || tools.publish
+      caseID === "m02" || caseID === "m03"
+        ? tools.publish
+        : responseArray(evidence.turnArtifacts).length > 0 || tools.publish
+    const hasResumeSettlement =
+      caseID === "m02" || caseID === "m03" ? tools.publish && tools.completeMission : tools.resumeHandoff || tools.publish
     if (tools.createTaskFailure) return
+    const assistantComplete = allAssistantMessagesComplete(evidence.messages)
+    const idle = missionActivityIdle(evidence.status)
+    missing = []
+    if (!tools.missionSkill) missing.push("completed mission_skill general")
+    if (!hasTask) missing.push("Mission status child Task")
+    if (!hasArtifact) missing.push("required publish/artifact evidence")
+    if (!hasResumeSettlement) missing.push("resume settlement evidence")
+    if (!assistantComplete) missing.push("completed assistant messages")
+    if (!idle) missing.push("inactive Mission activity")
     if (
       tools.missionSkill &&
       hasTask &&
       hasArtifact &&
       hasResumeSettlement &&
-      allAssistantMessagesComplete(evidence.messages) &&
-      missionActivityIdle(evidence.status)
+      assistantComplete &&
+      idle
     )
       return
     if (signature !== last) {
       last = signature
       quietSince = Date.now()
     } else if (Date.now() - quietSince > 120_000) {
-      throw new Error("mission evidence quiet timeout before Mission activity became idle")
+      throw new Error(`mission evidence quiet timeout; missing: ${missing.join(", ") || "unknown"}`)
     }
     await Bun.sleep(5_000)
   }
-  throw new Error("mission evidence deadline reached before Mission activity became idle")
+  throw new Error(`mission evidence deadline reached; missing: ${missing.join(", ") || "unknown"}`)
 }
 
 async function recordShutdownStep(step: string, operation: Promise<unknown>): Promise<boolean> {
@@ -810,11 +1243,17 @@ async function main() {
             "Introduce the Mission plan briefly, load the general Mission Skill, write Mission state, and dispatch one small read-only code Task that inspects package.json, index.js, and test.js without running npm test.",
             "The child Task should produce a concise inventory artifact listing file names, script names, exported function names, and the expected test assertion. Do not modify project files.",
           ].join("\n")
-        : [
-            '@mission("general")',
-            "Introduce the Mission plan briefly, load the general Mission Skill, write Mission state, dispatch one small code Task that runs npm test, and keep evidence concise.",
-            "Use the existing tiny fixture project. Do not modify unrelated files.",
-          ].join("\n")
+        : caseID === "m03"
+          ? [
+              '@mission("general")',
+              "Introduce the Mission plan briefly, load the general Mission Skill, write Mission state, and dispatch one small implementation Task that repairs the failing fixture.",
+              "The fixture currently has index.js returning the wrong value while test.js expects answer() === 42. The child Task must edit only index.js, run npm test, and leave concise evidence.",
+            ].join("\n")
+          : [
+              '@mission("general")',
+              "Introduce the Mission plan briefly, load the general Mission Skill, write Mission state, dispatch one small code Task that runs npm test, and keep evidence concise.",
+              "Use the existing tiny fixture project. Do not modify unrelated files.",
+            ].join("\n")
     evidence.firstWake = await requestJSON(evidence.baseURL, "/mission/wake", {
       method: "POST",
       body: JSON.stringify({
@@ -835,6 +1274,8 @@ async function main() {
         text:
           caseID === "m02"
             ? "Resume from Mission state, query the child Task and its artifacts, then publish a compact inventory summary with publish_interactive_artifact. If the child evidence is not ready, record the exact pending state in handoff.md."
+            : caseID === "m03"
+              ? "Resume from Mission state, query the child Task and its artifacts, publish a compact repair summary with publish_interactive_artifact, and complete the Mission once the index.js repair and npm test evidence are ready. If not ready, record the exact pending state in handoff.md."
             : "Resume from Mission state and publish a compact completion summary artifact if the child Task evidence is ready. If not ready, record the exact pending state in handoff.md.",
         ...(model ? { model } : {}),
       }),
@@ -842,23 +1283,26 @@ async function main() {
 
     currentPhase = "collect"
     await waitForEvidence(evidence.baseURL, missionID, sessionID)
+    if (caseID === "m03") await runProjectVerification()
     await requestArchive(evidence.baseURL, missionID)
     evidence.mockProviderRequests = mockProviderRequests
     evaluate()
     const output = await writeEvidence()
-    console.log(JSON.stringify({ output, verdict: evidence.verdict, baseURL: evidence.baseURL }, null, 2))
+    console.log(JSON.stringify(redactSensitive({ output, verdict: evidence.verdict, baseURL: evidence.baseURL }), null, 2))
     if (evidence.verdict?.status !== "accepted") process.exitCode = 1
   } catch (error) {
     evidence.blocker = {
       phase: currentPhase,
-      message: error instanceof Error ? error.message : String(error),
+      message: redactSensitive(error instanceof Error ? error.message : String(error)) as string,
     }
     evidence.verdict = {
       status: "rejected",
       failures: [evidence.blocker.message],
     }
     const output = await writeEvidence()
-    console.log(JSON.stringify({ output, verdict: evidence.verdict, baseURL: evidence.baseURL, blocker: evidence.blocker }, null, 2))
+    console.log(
+      JSON.stringify(redactSensitive({ output, verdict: evidence.verdict, baseURL: evidence.baseURL, blocker: evidence.blocker }), null, 2),
+    )
     process.exitCode = 1
   } finally {
     currentPhase = "shutdown"
