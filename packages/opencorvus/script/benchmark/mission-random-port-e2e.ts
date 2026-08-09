@@ -5,11 +5,11 @@ import os from "node:os"
 import path from "node:path"
 import { spawnSync } from "node:child_process"
 
-type CaseID = "m01" | "m02" | "m03" | "m04" | "m05"
+type CaseID = "m01" | "m02" | "m03" | "m04" | "m05" | "m06"
 
 function selectedCaseID(): CaseID {
   const raw = process.env.MISSION_RANDOM_PORT_E2E_CASE ?? "m01"
-  if (raw === "m01" || raw === "m02" || raw === "m03" || raw === "m04" || raw === "m05") return raw
+  if (raw === "m01" || raw === "m02" || raw === "m03" || raw === "m04" || raw === "m05" || raw === "m06") return raw
   throw new Error(`unsupported MISSION_RANDOM_PORT_E2E_CASE ${JSON.stringify(raw)}`)
 }
 
@@ -128,7 +128,7 @@ const allowedM03HarnessMetadata = new Set([".gitignore", ".opencorvus/opencorvus
 
 function mockProviderEnabled() {
   const enabled = process.env.MISSION_RANDOM_PORT_E2E_MOCK_PROVIDER === "1"
-  if (enabled && (caseID === "m03" || caseID === "m04" || caseID === "m05")) {
+  if (enabled && (caseID === "m03" || caseID === "m04" || caseID === "m05" || caseID === "m06")) {
     throw new Error(`MISSION_RANDOM_PORT_E2E_MOCK_PROVIDER is not supported for the ${caseID.toUpperCase()} live DeepSeek Mission E2E benchmark`)
   }
   return enabled
@@ -1058,6 +1058,83 @@ function m05NoChildEvidence(messages: unknown): {
   return { globPackageJSON, readPackageJSON, stateWrite, completeMissionEmptyAcceptances }
 }
 
+function isNoChildCase(id: CaseID) {
+  return id === "m05" || id === "m06"
+}
+
+function m06SkillStateEvidence(messages: unknown): {
+  baseSkill: boolean
+  supportingSkillFile: boolean
+  stateWrites: boolean
+  stateListCalled: boolean
+  stateReadMarker: boolean
+  publish: boolean
+  completeMissionEmptyAcceptances: boolean
+} {
+  const completed = completedToolParts(messages)
+  const baseSkill = completed.some((part) => {
+    const input = inputRecord(part.input)
+    return part.tool === "mission_skill" && input.name === "general" && !("file" in input)
+  })
+  const supportingSkillFile = completed.some((part) => {
+    const input = inputRecord(part.input)
+    const output = String(part.output ?? "")
+    return (
+      part.tool === "mission_skill" &&
+      input.name === "general" &&
+      input.file === "agents/openai.yaml" &&
+      (output.includes("default_prompt") || output.includes("General Mission"))
+    )
+  })
+  const writtenFiles = new Set(
+    completed
+      .filter((part) => {
+        const input = inputRecord(part.input)
+        return part.tool === "mission_state" && input.action === "write" && typeof input.file === "string"
+      })
+      .map((part) => String(inputRecord(part.input).file)),
+  )
+  const stateWrites = ["frontier.md", "tasks.md", "notes.md"].every((file) => writtenFiles.has(file))
+  const stateListCalled = completed.some((part) => {
+    const input = inputRecord(part.input)
+    return part.tool === "mission_state" && input.action === "list"
+  })
+  const readMarkerFiles = new Set(
+    completed
+      .filter((part) => {
+        const input = inputRecord(part.input)
+        return (
+          part.tool === "mission_state" &&
+          input.action === "read" &&
+          typeof input.file === "string" &&
+          String(part.output ?? "").includes("M06-SKILL-FILE")
+        )
+      })
+      .map((part) => String(inputRecord(part.input).file)),
+  )
+  const stateReadMarker = ["frontier.md", "tasks.md", "notes.md"].every((file) => readMarkerFiles.has(file))
+  const publish = completed.some((part) => part.tool === "publish_interactive_artifact")
+  const completeMissionEmptyAcceptances = completed.some((part) => {
+    const input = inputRecord(part.input)
+    return (
+      part.tool === "panel" &&
+      input.action === "complete_mission" &&
+      Array.isArray(input.task_acceptances) &&
+      input.task_acceptances.length === 0 &&
+      parsedToolOutput(part).kind === "mission_completed"
+    )
+  })
+  return {
+    baseSkill,
+    supportingSkillFile,
+    stateWrites,
+    stateListCalled,
+    stateReadMarker,
+    publish,
+    completeMissionEmptyAcceptances,
+  }
+}
+
 function collectToolEvidence(messages: unknown): {
   missionSkill: boolean
   publish: boolean
@@ -1180,7 +1257,7 @@ function evaluate() {
   const failures: string[] = []
   if (!evidence.baseURL) failures.push("backend URL missing")
   const preflight = inputRecord(evidence.providerPreflight)
-  if (caseID === "m03" || !evidence.mockProviderURL) {
+  if (caseID === "m03" || caseID === "m06" || !evidence.mockProviderURL) {
     if (evidence.modelRef !== liveModelRef) failures.push(`modelRef is not ${liveModelRef}`)
     if (evidence.mockProviderURL) failures.push("mock provider URL present in live DeepSeek evidence")
     if (preflight.ok !== true) failures.push("DeepSeek provider preflight did not report ok true")
@@ -1202,7 +1279,7 @@ function evaluate() {
   const tools = collectToolEvidence(evidence.messages)
   if (!tools.missionSkill) failures.push("no completed mission_skill general evidence found in session messages")
   if (tools.createTaskFailure) failures.push(`panel.create_task failed: ${tools.createTaskFailure}`)
-  if (caseID !== "m05") {
+  if (!isNoChildCase(caseID)) {
     if (!tools.createdTaskID) {
       failures.push("no completed panel.create_task created task evidence found in session messages")
     } else if (!statusHasTask(evidence.status, tools.createdTaskID)) {
@@ -1291,6 +1368,21 @@ function evaluate() {
       failures.push("M05 did not complete Mission with empty task_acceptances")
     }
   }
+  if (caseID === "m06") {
+    const skillState = m06SkillStateEvidence(evidence.messages)
+    const taskCount = statusTasks(evidence.status).length
+    if (taskCount !== 0) failures.push(`M06 current child Task set is not empty: ${taskCount}`)
+    if (tools.createdTaskIDs.length !== 0) failures.push(`M06 created child Tasks unexpectedly: ${tools.createdTaskIDs.join(", ")}`)
+    if (!skillState.baseSkill) failures.push("M06 did not load base general Mission Skill")
+    if (!skillState.supportingSkillFile) failures.push("M06 did not load general Mission Skill supporting file agents/openai.yaml")
+    if (!skillState.stateWrites) failures.push("M06 did not write required Mission state files")
+    if (!skillState.stateListCalled) failures.push("M06 did not call mission_state list")
+    if (!skillState.stateReadMarker) failures.push("M06 did not read frontier.md, tasks.md, and notes.md containing M06-SKILL-FILE")
+    if (!skillState.publish) failures.push("M06 did not produce completed publish_interactive_artifact evidence")
+    if (!skillState.completeMissionEmptyAcceptances) {
+      failures.push("M06 did not complete Mission with empty task_acceptances")
+    }
+  }
   if (artifacts.length === 0 && !tools.publish && (evidence.projectArchive?.bytes ?? 0) === 0) {
     failures.push("no publish/artifact/project-archive evidence found")
   }
@@ -1318,8 +1410,9 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
     })
     const tools = collectToolEvidence(evidence.messages)
     const noChild = caseID === "m05" ? m05NoChildEvidence(evidence.messages) : undefined
+    const skillState = caseID === "m06" ? m06SkillStateEvidence(evidence.messages) : undefined
     const hasTask =
-      caseID === "m05"
+      isNoChildCase(caseID)
         ? statusTasks(evidence.status).length === 0 && tools.createdTaskIDs.length === 0
         : !!tools.createdTaskID && statusHasTask(evidence.status, tools.createdTaskID)
     const taskIDs = statusTasks(evidence.status)
@@ -1328,11 +1421,11 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
     if (tools.createdTaskID && !taskIDs.includes(tools.createdTaskID)) taskIDs.push(tools.createdTaskID)
     await resolveM03OptionalTestingInteractions(baseURL, taskIDs)
     const hasArtifact =
-      caseID === "m02" || caseID === "m03" || caseID === "m04" || caseID === "m05"
+      caseID === "m02" || caseID === "m03" || caseID === "m04" || caseID === "m05" || caseID === "m06"
         ? tools.publish
         : responseArray(evidence.turnArtifacts).length > 0 || tools.publish
     const hasResumeSettlement =
-      caseID === "m02" || caseID === "m03" || caseID === "m04" || caseID === "m05"
+      caseID === "m02" || caseID === "m03" || caseID === "m04" || caseID === "m05" || caseID === "m06"
         ? tools.publish && tools.completeMission
         : tools.resumeHandoff || tools.publish
     const hasCaseEvidence =
@@ -1341,6 +1434,14 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
           !!noChild.readPackageJSON &&
           !!noChild.stateWrite &&
           !!noChild.completeMissionEmptyAcceptances
+        : caseID === "m06"
+          ? !!skillState?.baseSkill &&
+            !!skillState.supportingSkillFile &&
+            !!skillState.stateWrites &&
+            !!skillState.stateListCalled &&
+            !!skillState.stateReadMarker &&
+            !!skillState.publish &&
+            !!skillState.completeMissionEmptyAcceptances
         : true
     if (tools.createTaskFailure) return
     const assistantComplete = allAssistantMessagesComplete(evidence.messages)
@@ -1350,7 +1451,7 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
     if (!hasTask) missing.push("Mission status child Task")
     if (!hasArtifact) missing.push("required publish/artifact evidence")
     if (!hasResumeSettlement) missing.push("resume settlement evidence")
-    if (!hasCaseEvidence) missing.push("M05 no-child project inspection evidence")
+    if (!hasCaseEvidence) missing.push(`${caseID.toUpperCase()} no-child case evidence`)
     if (!assistantComplete) missing.push("completed assistant messages")
     if (!idle) missing.push("inactive Mission activity")
     if (
@@ -1374,7 +1475,36 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
   throw new Error(`mission evidence deadline reached; missing: ${missing.join(", ") || "unknown"}`)
 }
 
+async function waitForInitialM06StateWrites(baseURL: string, missionID: string, sessionID: string) {
+  let last = ""
+  let quietSince = Date.now()
+  const deadline = Date.now() + Number(process.env.MISSION_RANDOM_PORT_E2E_INITIAL_TASK_TIMEOUT_MS ?? 5 * 60 * 1000)
+  while (Date.now() < deadline) {
+    evidence.status = await requestJSON(baseURL, `/mission/${missionID}/status`)
+    evidence.messages = await requestJSON(baseURL, `/session/${sessionID}/message`)
+    const skillState = m06SkillStateEvidence(evidence.messages)
+    if (skillState.baseSkill && skillState.supportingSkillFile && skillState.stateWrites) return
+    const signature = JSON.stringify({
+      status: signatureStatus(evidence.status),
+      messages: evidence.messages,
+      skillState,
+    })
+    if (signature !== last) {
+      last = signature
+      quietSince = Date.now()
+    } else if (Date.now() - quietSince > 120_000) {
+      throw new Error("initial M06 state-write quiet timeout before resume")
+    }
+    await Bun.sleep(5_000)
+  }
+  throw new Error("initial M06 state-write deadline reached before resume")
+}
+
 async function waitForInitialChildTask(baseURL: string, missionID: string, sessionID: string) {
+  if (caseID === "m06") {
+    await waitForInitialM06StateWrites(baseURL, missionID, sessionID)
+    return
+  }
   if (caseID !== "m04") {
     await Bun.sleep(15_000)
     return
@@ -1469,7 +1599,7 @@ async function main() {
                 "Introduce the Mission plan briefly, load the general Mission Skill, write Mission state, and create exactly one child Task now using promptProfile base.",
                 "The child Task must read package.json only, produce one concise Task artifact reporting package name and the test script value, and must not modify project files or run npm test.",
                 "After creating that single child Task, create no additional or replacement child Tasks. If that single child Task cannot complete, record the blocker in handoff.md and stop blocked instead of creating another Task.",
-              ].join("\n")
+                ].join("\n")
             : caseID === "m05"
               ? [
                   '@mission("general")',
@@ -1478,6 +1608,15 @@ async function main() {
                   "Write Mission state recording the package name and scripts.test value, publish a compact summary artifact with publish_interactive_artifact, then complete the Mission with panel.complete_mission using task_acceptances: [].",
                   "Do not modify project files, do not run npm test, and do not install dependencies.",
                 ].join("\n")
+              : caseID === "m06"
+                ? [
+                    '@mission("general")',
+                    "Run this as a bounded no-child Mission. Do not create any child Task and do not use any @squad reference.",
+                    'After loading the base general Mission Skill, call mission_skill again with name "general" and file "agents/openai.yaml".',
+                    'Write frontier.md, tasks.md, and notes.md with the exact marker "M06-SKILL-FILE" and a short note that agents/openai.yaml was loaded.',
+                    "For this first wake, stop after those Mission state writes and handoff.md. Do not call mission_state read, publish_interactive_artifact, or panel.complete_mission yet; the next wake will verify read-back and complete.",
+                    "Do not modify project files, do not run npm test, and do not install dependencies.",
+                  ].join("\n")
           : [
               '@mission("general")',
               "Introduce the Mission plan briefly, load the general Mission Skill, write Mission state, dispatch one small code Task that runs npm test, and keep evidence concise.",
@@ -1509,6 +1648,8 @@ async function main() {
                 ? "Resume from Mission state, query exactly the one current child Task, enumerate its artifacts, read the current task_completion_decision artifact completely, publish a compact evidence-authority digest with publish_interactive_artifact, then complete the Mission with the complete current child Task set containing only that Task and the exact completion-decision locator you read. If the child evidence is not ready, record the exact pending state in handoff.md; do not create any replacement or additional child Task."
                 : caseID === "m05"
                   ? "Resume the bounded no-child Mission. If it is not already complete, use Mission's own glob/read evidence for package.json, write Mission state, publish a compact artifact, and call panel.complete_mission with task_acceptances: []. Do not create any child Task, do not use any @squad reference, do not run npm test, and do not modify files."
+                  : caseID === "m06"
+                    ? 'Resume the bounded no-child Mission. Call mission_state list, then read frontier.md, tasks.md, and notes.md and verify each read contains "M06-SKILL-FILE". Publish a compact skill-file/state-resume digest with publish_interactive_artifact, then call panel.complete_mission with task_acceptances: []. Do not create any child Task, do not use any @squad reference, do not run npm test, and do not modify files.'
             : "Resume from Mission state and publish a compact completion summary artifact if the child Task evidence is ready. If not ready, record the exact pending state in handoff.md.",
         ...(model ? { model } : {}),
       }),
