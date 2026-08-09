@@ -11,7 +11,9 @@
 
 .mission-board__header {
   flex: 0 0 auto;
+  height: auto;
   min-height: calc(70px * var(--ui-scale));
+  max-height: none;
   padding: var(--ui-gap-md) var(--ui-gap-lg);
   border-bottom: var(--oc-border-width) solid var(--border);
   background: var(--surface);
@@ -55,11 +57,9 @@
 
 .mission-board__heading p {
   margin: 0;
-  overflow: hidden;
   color: var(--text-muted);
   font-size: var(--ui-font-small);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .mission-board__controls {

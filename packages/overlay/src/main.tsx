@@ -841,7 +841,7 @@ async function deleteMissionBoardMission(mission: MissionRecord): Promise<boolea
     { missionID: mission.missionID, directory: mission.directory },
     {
       surface: "overlay.work_ledger",
-      reason: "Operator permanently deleted the Mission from Task Board",
+      reason: "Operator permanently deleted the Mission from Mission Board",
     },
   )
   if (!deleted) throw new Error(t("mission_board.delete.failed"))
