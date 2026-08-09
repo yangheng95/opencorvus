@@ -1,0 +1,19 @@
+{
+  "status": 200,
+  "statusText": "OK",
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag",
+    "content-length": "114",
+    "content-type": "application/json",
+    "date": "Sun, 09 Aug 2026 02:23:31 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "69e2f9ad-f66b-4fec-9d48-2d6416f758a8"
+  },
+  "body": {
+    "ok": true,
+    "status": "connected",
+    "providerID": "openai",
+    "modelID": "gpt-5.6-luna",
+    "message": "Provider is reachable."
+  }
+}

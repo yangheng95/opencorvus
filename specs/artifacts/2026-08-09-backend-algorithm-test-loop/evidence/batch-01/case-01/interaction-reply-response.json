@@ -1,0 +1,63 @@
+{
+  "status": 200,
+  "statusText": "OK",
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag",
+    "content-length": "1681",
+    "content-type": "application/json",
+    "date": "Sun, 09 Aug 2026 02:34:19 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "72f35274-d05c-4da9-85c3-cd244ecae0d5"
+  },
+  "body": {
+    "id": "int_g019fe45dc3da000000000000TtSwMM6LfSzdKx",
+    "taskID": "tsk_g019fe4553121000000000000jDPTepv4q6J7MI",
+    "orderKey": "v1:0001786242778070:0000000000000070:0000000000000000:interaction:int_g019fe45dc3da000000000000TtSwMM6LfSzdKx",
+    "responseOrderKey": "v1:0001786242859487:0000000000000070:0000000000000000:interaction:int_g019fe45dc3da000000000000TtSwMM6LfSzdKx_response",
+    "sessionID": "ses_-fe601baabf6bffffffffffffbdrmkbhIeAJ4Dk",
+    "externalID": "que_g019fe45dc3d6000000000000KBhjoBivGa7q2h",
+    "type": "question",
+    "status": "answered",
+    "title": "验证预算",
+    "body": "除请求中强制执行的 `node --test` 外，是否运行一项额外的可选保障？推荐跳过以保持紧凑；若运行，将执行现有项目检查器覆盖的额外回归/完整测试范围，预计增加约 1 个工作单元的时间与少量令牌。",
+    "payload": {
+      "questions": [
+        {
+          "question": "除请求中强制执行的 `node --test` 外，是否运行一项额外的可选保障？推荐跳过以保持紧凑；若运行，将执行现有项目检查器覆盖的额外回归/完整测试范围，预计增加约 1 个工作单元的时间与少量令牌。",
+          "header": "验证预算",
+          "options": [
+            {
+              "value": "skip_optional_testing",
+              "label": "跳过可选测试",
+              "description": "仅执行请求和工作流明确要求的验证。"
+            },
+            {
+              "value": "run_optional_testing",
+              "label": "运行可选保障",
+              "description": "在强制检查之外运行项目现有的额外回归覆盖。"
+            }
+          ],
+          "multiple": false,
+          "custom": true
+        }
+      ],
+      "expiry": {
+        "origin": "deadline",
+        "timeoutMs": 300000,
+        "timeExpires": 1786243078070
+      }
+    },
+    "response": {
+      "answers": [
+        [
+          "skip_optional_testing"
+        ]
+      ]
+    },
+    "time": {
+      "created": 1786242778070,
+      "updated": 1786242859487,
+      "resolved": 1786242859487
+    }
+  }
+}

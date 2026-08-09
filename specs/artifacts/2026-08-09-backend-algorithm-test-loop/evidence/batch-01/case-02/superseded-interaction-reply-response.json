@@ -1,0 +1,18 @@
+{
+  "status": 404,
+  "statusText": "Not Found",
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag",
+    "content-length": "117",
+    "content-type": "application/json",
+    "date": "Sun, 09 Aug 2026 02:36:21 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "cd927e0a-0d5d-4968-9508-cbc1d2cd1e64"
+  },
+  "body": {
+    "name": "NotFoundError",
+    "data": {
+      "message": "Question request not found: que_g019fe45584c4000000000000jzXVdj9DryJ9iv"
+    }
+  }
+}

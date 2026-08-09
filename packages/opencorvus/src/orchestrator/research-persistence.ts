@@ -6,6 +6,7 @@ import {
 import { ResearchArtifactContractError } from "@/engine/persist"
 import { recordTaskInfrastructureErrorBestEffort } from "./infrastructure-observation"
 import z from "zod"
+import { resolveDispatchOccurrenceAuthority } from "@/engine/dispatch-lineage"
 
 function issuePathSegment(segment: PropertyKey): string | number {
   return typeof segment === "number" || typeof segment === "string"
@@ -33,6 +34,7 @@ function deterministicContractIssues(error: unknown): DispatchFailureIssue[] | u
 
 export function persistResearchArtifactBestEffort(input: {
   taskID: string
+  dispatchID: string
   component: "deep-research" | "frontend-research"
   operation: "persist-research-brief" | "persist-partial-research-brief"
   sessionID: string
@@ -71,6 +73,10 @@ export function persistResearchArtifactBestEffort(input: {
         errorName,
         failureIssues,
         infrastructureError: infrastructureRef,
+        recoveryAuthority: resolveDispatchOccurrenceAuthority({
+          taskID: input.taskID,
+          dispatchID: input.dispatchID,
+        }),
       })
     }
     return DispatchOutcome.partial({

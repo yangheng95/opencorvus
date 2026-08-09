@@ -16,6 +16,7 @@ import {
   inspectArtifactExecutableClosure,
   normalizeArtifactExecutablePermissions,
 } from "../packages/opencorvus/script/runtime-executable-contract"
+import { preparePackageBuildEnvironment } from "./package-build-environment"
 
 export type NativeBinaryPlatform = "linux" | "darwin" | "windows"
 
@@ -299,7 +300,10 @@ export async function packageNativeBinary(
   assertNativeBinaryHost(platform, arch)
 
   const packageVersion = await readPackageVersion(repoRoot)
-  const env = nativeBinaryBuildEnv(opts.env ?? process.env, packageVersion)
+  const env = await preparePackageBuildEnvironment(
+    repoRoot,
+    nativeBinaryBuildEnv(opts.env ?? process.env, packageVersion),
+  )
   if (!opts.skipBuild) await buildNativeSources(repoRoot, platform, arch, env, opts.skipUi === true)
 
   const artifacts = resolveNativeBinaryArtifacts(repoRoot, platform, arch)

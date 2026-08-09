@@ -44,7 +44,10 @@ import rehydrateEvolutionResourcesTool from "../../../expert-squads/builtin/evol
 import { prepareTaskProcessBinding, readTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { EngineGit, ensureGitignore } from "../src/engine/git"
 import { Worktree } from "../src/worktree"
-import { executionCapsuleTreeDigest, executionCapsuleTreeSnapshot } from "../src/execution-capsule/tree-digest"
+import {
+  executionCapsuleSourceTreeDigest,
+  executionCapsuleSourceTreeSnapshot,
+} from "../src/execution-capsule/tree-digest"
 
 let project: Awaited<ReturnType<typeof memoryProject>> | undefined
 
@@ -683,7 +686,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
           const trialWorktree = await Worktree.create({ name: `evolution-trial-${taskID}` })
           await ensureGitignore(trialWorktree.directory)
           const campaignWorkspaceSnapshot = canonicalWorkspaceTreeJSON(
-            await executionCapsuleTreeSnapshot(trialWorktree.directory),
+            await executionCapsuleSourceTreeSnapshot(trialWorktree.directory),
           )
           const campaignInputStage = await host.taskArtifacts.stage({ trees: ["campaign-inputs"] })
           const campaignInputNames = [
@@ -720,7 +723,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
           const workspaceResource = campaignInput.get("workspace-template.json")!
           const permissionResource = campaignInput.get("permission-snapshot.json")!
           const scorerResource = campaignInput.get("scorer-correctness.json")!
-          const campaignWorkspaceTreeSHA256 = await executionCapsuleTreeDigest(trialWorktree.directory)
+          const campaignWorkspaceTreeSHA256 = await executionCapsuleSourceTreeDigest(trialWorktree.directory)
           ;(scope.owner as { agentID: string }).agentID = "evolution-experiment-planner"
           const campaignReceipt = JSON.parse(
             await publishEvolutionArtifactTool.execute(
@@ -1493,10 +1496,11 @@ describe("Evolution Artifact and exact evidence Host", () => {
         const taskID = Identifier.ascending("task")
         const missionID = Identifier.ascending("mission")
         const missionSessionID = Identifier.ascending("session")
+        const timeCreated = Date.now()
         persistQueuedTask({
           taskID,
           sessionID: session.id,
-          now: Date.now(),
+          now: timeCreated,
           title: "Evolution package fixture",
           request: "Materialize exact package revision",
           productPillar: "code",
@@ -1513,7 +1517,7 @@ describe("Evolution Artifact and exact evidence Host", () => {
             version: loaded.manifest.version,
             packageDigest: loaded.packageDigest,
           },
-          executionCapsuleBinding: await taskProcessBinding(taskID, loaded.packageDigest, Date.now()),
+          executionCapsuleBinding: await taskProcessBinding(taskID, loaded.packageDigest, timeCreated),
         })
         const createExecution = (identity: string) =>
           createTaskArtifactStoreExecution({

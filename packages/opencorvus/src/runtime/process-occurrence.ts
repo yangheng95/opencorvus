@@ -2,6 +2,7 @@ import fs from "node:fs"
 import path from "node:path"
 import z from "zod"
 import { ProcessRecoveryPhysicalEvidence } from "@/engine/process-recovery-fact"
+import { Global } from "@/global"
 
 const ProcessOccurrenceEnvelope = z
   .object({
@@ -40,6 +41,27 @@ export type ProcessRecoveryPhysicalEvidence = z.infer<typeof ProcessRecoveryPhys
 
 const UNKNOWN_REASON = "No managed sidecar supervisor occurrence evidence is available for this backend process"
 
+export type ProcessOccurrenceEvidenceErrorReason =
+  | "path_not_absolute"
+  | "outside_managed_occurrence_directory"
+  | "physical_path_escape"
+  | "not_regular_file"
+  | "unreadable_or_invalid_envelope"
+  | "identity_mismatch"
+
+export class ProcessOccurrenceEvidenceError extends Error {
+  override readonly name = "ProcessOccurrenceEvidenceError"
+  readonly code = "PROCESS_OCCURRENCE_EVIDENCE_INVALID"
+
+  constructor(
+    readonly reason: ProcessOccurrenceEvidenceErrorReason,
+    message: string,
+    options?: ErrorOptions,
+  ) {
+    super(message, options)
+  }
+}
+
 function unknownPhysicalEvidence(): ProcessRecoveryPhysicalEvidence {
   return {
     kind: "unmanaged_process_cause_unknown",
@@ -47,19 +69,54 @@ function unknownPhysicalEvidence(): ProcessRecoveryPhysicalEvidence {
   }
 }
 
-function occurrenceDirectory(): string | undefined {
-  const runtimeRoot = process.env.OPENCORVUS_HOME?.trim()
-  if (!runtimeRoot || !path.isAbsolute(runtimeRoot)) return undefined
-  return path.resolve(runtimeRoot, "data", "process-occurrences")
+function occurrenceDirectory(): string {
+  return path.resolve(Global.Path.data, "process-occurrences")
+}
+
+function samePhysicalPath(left: string, right: string): boolean {
+  if (process.platform === "win32") return left.toLowerCase() === right.toLowerCase()
+  return left === right
 }
 
 function readExactEnvelope(file: string): ProcessOccurrenceEnvelope {
-  if (!path.isAbsolute(file)) throw new Error(`Supervisor process occurrence path is not absolute: ${file}`)
-  const directory = occurrenceDirectory()
-  if (!directory || path.dirname(path.resolve(file)) !== directory) {
-    throw new Error(`Supervisor process occurrence path is outside the managed occurrence directory: ${file}`)
+  if (!path.isAbsolute(file)) {
+    throw new ProcessOccurrenceEvidenceError(
+      "path_not_absolute",
+      `Supervisor process occurrence path is not absolute: ${file}`,
+    )
   }
-  return ProcessOccurrenceEnvelope.parse(JSON.parse(fs.readFileSync(file, "utf8")))
+  const directory = occurrenceDirectory()
+  const resolvedFile = path.resolve(file)
+  if (!samePhysicalPath(path.dirname(resolvedFile), directory)) {
+    throw new ProcessOccurrenceEvidenceError(
+      "outside_managed_occurrence_directory",
+      `Supervisor process occurrence path is outside the managed occurrence directory: ${file}`,
+    )
+  }
+  try {
+    const physicalDirectory = fs.realpathSync.native(directory)
+    const physicalFile = fs.realpathSync.native(resolvedFile)
+    if (!samePhysicalPath(path.dirname(physicalFile), physicalDirectory)) {
+      throw new ProcessOccurrenceEvidenceError(
+        "physical_path_escape",
+        `Supervisor process occurrence path resolves outside the managed occurrence directory: ${file}`,
+      )
+    }
+    if (!fs.statSync(physicalFile).isFile()) {
+      throw new ProcessOccurrenceEvidenceError(
+        "not_regular_file",
+        `Supervisor process occurrence path is not a regular file: ${file}`,
+      )
+    }
+    return ProcessOccurrenceEnvelope.parse(JSON.parse(fs.readFileSync(physicalFile, "utf8")))
+  } catch (error) {
+    if (error instanceof ProcessOccurrenceEvidenceError) throw error
+    throw new ProcessOccurrenceEvidenceError(
+      "unreadable_or_invalid_envelope",
+      `Supervisor process occurrence envelope is unreadable or invalid: ${file}`,
+      { cause: error },
+    )
+  }
 }
 
 function managedEvidence(file: string, envelope: ProcessOccurrenceEnvelope): ProcessRecoveryPhysicalEvidence {
@@ -81,7 +138,8 @@ export function validateProcessPhysicalEvidence(
     envelope.process_occurrence_id !== parsed.process_occurrence_id ||
     envelope.supervisor_observation_id !== parsed.supervisor_observation_id
   ) {
-    throw new Error(
+    throw new ProcessOccurrenceEvidenceError(
+      "identity_mismatch",
       `Managed process occurrence evidence ${parsed.process_occurrence_id} no longer matches its envelope`,
     )
   }

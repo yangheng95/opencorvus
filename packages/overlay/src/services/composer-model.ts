@@ -8,6 +8,8 @@ export interface ComposerModelSessionTarget {
   directory: string
 }
 
+let composerModelProjectionGeneration = 0
+
 function normalizedModel(value: unknown): string {
   return typeof value === "string" ? value.trim() : ""
 }
@@ -36,13 +38,36 @@ function activeComposerModelSessionTarget(): ComposerModelSessionTarget | null {
   return null
 }
 
+/**
+ * Re-read the canonical effective model for the currently selected Task or
+ * Session when that root Session's config changes outside the selection
+ * response that initiated the write.
+ */
+export function refreshActiveComposerModelFromSession(changedSessionID?: string): Promise<string> | undefined {
+  const target = activeComposerModelSessionTarget()
+  if (!target) return undefined
+  const changed = changedSessionID?.trim()
+  if (changed && target.sessionID !== changed) return undefined
+  return projectComposerModelFromSession(target, () => activeTargetMatches(target))
+}
+
 function activeTargetMatches(target: ComposerModelSessionTarget): boolean {
   const active = activeComposerModelSessionTarget()
   return !!active && targetKey(active) === targetKey(target)
 }
 
+function beginComposerModelProjection(): number {
+  composerModelProjectionGeneration += 1
+  return composerModelProjectionGeneration
+}
+
+function ownsComposerModelProjection(generation: number, target: ComposerModelSessionTarget): boolean {
+  return generation === composerModelProjectionGeneration && activeTargetMatches(target)
+}
+
 /** Clear the current-view projection before changing Task or Session identity. */
 export function clearComposerModelProjection(): void {
+  beginComposerModelProjection()
   setAppStore("composerModel", "")
 }
 
@@ -54,9 +79,10 @@ export async function projectComposerModelFromSession(
   target: ComposerModelSessionTarget,
   ownsResponse: () => boolean,
 ): Promise<string> {
+  const generation = beginComposerModelProjection()
   const saved = await getSessionConfig(target)
   const model = normalizedModel(saved.config.model)
-  if (ownsResponse()) setAppStore("composerModel", model)
+  if (ownsResponse() && ownsComposerModelProjection(generation, target)) setAppStore("composerModel", model)
   return model
 }
 
@@ -71,6 +97,7 @@ export async function selectComposerModel(model: string): Promise<void> {
     throw new Error("selectComposerModel: model must be a trimmed provider/model reference")
   }
 
+  const generation = beginComposerModelProjection()
   const previous = appStore.composerModel
   const target = activeComposerModelSessionTarget()
   if (boardStore.selectedSource && !target) {
@@ -84,11 +111,11 @@ export async function selectComposerModel(model: string): Promise<void> {
       ...target,
       diff: { model: selected },
     })
-    if (activeTargetMatches(target)) {
+    if (ownsComposerModelProjection(generation, target)) {
       setAppStore("composerModel", normalizedModel(saved.config.model))
     }
   } catch (error) {
-    if (activeTargetMatches(target)) setAppStore("composerModel", previous)
+    if (ownsComposerModelProjection(generation, target)) setAppStore("composerModel", previous)
     throw error
   }
 }

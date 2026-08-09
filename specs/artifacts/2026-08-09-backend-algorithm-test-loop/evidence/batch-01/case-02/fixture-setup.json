@@ -1,0 +1,82 @@
+{
+  "runID": "2026-08-09T02-23-30-230Z",
+  "directory": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-02",
+  "setup": [
+    {
+      "command": [
+        "git",
+        "init",
+        "-b",
+        "main"
+      ],
+      "cwd": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-02",
+      "status": 0,
+      "signal": null,
+      "stdout": "Initialized empty Git repository in C:/Users/chuan/AppData/Local/Temp/opencorvus-backend-algorithm-loop/2026-08-09T02-23-30-230Z/case-02/.git/\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "config",
+        "user.name",
+        "OpenCorvus E2E"
+      ],
+      "cwd": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-02",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "config",
+        "user.email",
+        "opencorvus-e2e@example.invalid"
+      ],
+      "cwd": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-02",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "add",
+        "."
+      ],
+      "cwd": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-02",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": "warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'src/waves.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'test/waves.test.js', LF will be replaced by CRLF the next time Git touches it\n"
+    },
+    {
+      "command": [
+        "git",
+        "commit",
+        "-m",
+        "test: seed backend algorithm case"
+      ],
+      "cwd": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-02",
+      "status": 0,
+      "signal": null,
+      "stdout": "[main (root-commit) 43172b3] test: seed backend algorithm case\n 3 files changed, 54 insertions(+)\n create mode 100644 package.json\n create mode 100644 src/waves.js\n create mode 100644 test/waves.test.js\n",
+      "stderr": ""
+    }
+  ],
+  "initialVerification": {
+    "command": [
+      "node",
+      "--test"
+    ],
+    "cwd": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-02",
+    "status": 1,
+    "signal": null,
+    "stdout": "✖ builds deterministic waves and waits for every fan-in predecessor (1.1579ms)\n✖ is independent of object insertion order (0.1735ms)\n✖ reports the sorted members of a dependency cycle (1.0804ms)\nℹ tests 3\nℹ suites 0\nℹ pass 0\nℹ fail 3\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 162.2045\n\n✖ failing tests:\n\ntest at test\\waves.test.js:5:1\n✖ builds deterministic waves and waits for every fan-in predecessor (1.1579ms)\n  Error: Not implemented\n      at dependencyWaves (file:///C:/Users/chuan/AppData/Local/Temp/opencorvus-backend-algorithm-loop/2026-08-09T02-23-30-230Z/case-02/src/waves.js:11:9)\n      at TestContext.<anonymous> (file:///C:/Users/chuan/AppData/Local/Temp/opencorvus-backend-algorithm-loop/2026-08-09T02-23-30-230Z/case-02/test/waves.test.js:7:5)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.start (node:internal/test_runner/test:1096:17)\n      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17)\n\ntest at test\\waves.test.js:19:1\n✖ is independent of object insertion order (0.1735ms)\n  Error: Not implemented\n      at dependencyWaves (file:///C:/Users/chuan/AppData/Local/Temp/opencorvus-backend-algorithm-loop/2026-08-09T02-23-30-230Z/case-02/src/waves.js:11:9)\n      at TestContext.<anonymous> (file:///C:/Users/chuan/AppData/Local/Temp/opencorvus-backend-algorithm-loop/2026-08-09T02-23-30-230Z/case-02/test/waves.test.js:22:20)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n      at Test.postRun (node:internal/test_runner/test:1330:19)\n      at Test.run (node:internal/test_runner/test:1258:12)\n      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)\n\ntest at test\\waves.test.js:26:1\n✖ reports the sorted members of a dependency cycle (1.0804ms)\n  AssertionError [ERR_ASSERTION]: The validation function is expected to return \"true\". Received false\n  \n  Caught error:\n  \n  Error: Not implemented\n      at TestContext.<anonymous> (file:///C:/Users/chuan/AppData/Local/Temp/opencorvus-backend-algorithm-loop/2026-08-09T02-23-30-230Z/case-02/test/waves.test.js:27:10)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n      at Test.postRun (node:internal/test_runner/test:1330:19)\n      at Test.run (node:internal/test_runner/test:1258:12)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: Error: Not implemented\n        at dependencyWaves (file:///C:/Users/chuan/AppData/Local/Temp/opencorvus-backend-algorithm-loop/2026-08-09T02-23-30-230Z/case-02/src/waves.js:11:9)\n        at file:///C:/Users/chuan/AppData/Local/Temp/opencorvus-backend-algorithm-loop/2026-08-09T02-23-30-230Z/case-02/test/waves.test.js:28:11\n        at getActual (node:assert:611:5)\n        at strict.throws (node:assert:759:24)\n        at TestContext.<anonymous> (file:///C:/Users/chuan/AppData/Local/Temp/opencorvus-backend-algorithm-loop/2026-08-09T02-23-30-230Z/case-02/test/waves.test.js:27:10)\n        at Test.runInAsyncScope (node:async_hooks:227:14)\n        at Test.run (node:internal/test_runner/test:1201:25)\n        at Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n        at Test.postRun (node:internal/test_runner/test:1330:19)\n        at Test.run (node:internal/test_runner/test:1258:12),\n    operator: 'throws',\n    diff: 'simple'\n  }\n",
+    "stderr": ""
+  },
+  "baselineCommit": "43172b390f2ac0f28c8f6a0277b05d02fa9530bf"
+}

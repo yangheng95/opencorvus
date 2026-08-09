@@ -350,7 +350,7 @@ export namespace Session {
     })
   })
 
-  export async function createNext(input: {
+  export async function prepareNext(input: {
     /** Required. The session's role/purpose — see SessionKind in session.sql.ts.
      *  Authoritative for UI channel routing. There is NO default: every
      *  caller must state what the session is for. */
@@ -383,19 +383,28 @@ export namespace Session {
         updated: Date.now(),
       },
     }
-    log.info("created", result)
+    return result
+  }
+
+  /** Persist one exact prepared Session inside the caller's active transaction.
+   * Creation and update events are post-commit effects, so a rolled-back
+   * authority bundle never exposes a physical Session to observers. */
+  export function persistPreparedNext(result: Info): Info {
     Database.use((db) => {
       db.insert(SessionTable).values(toRow(result)).run()
-      Database.effect(() =>
-        Bus.publish(Event.Created, {
+      Database.effect(() => {
+        log.info("created", result)
+        return Bus.publish(Event.Created, {
           info: result,
-        }),
-      )
-    })
-    Bus.publish(Event.Updated, {
-      info: result,
+        })
+      })
+      Database.effect(() => Bus.publish(Event.Updated, { info: result }))
     })
     return result
+  }
+
+  export async function createNext(input: Parameters<typeof prepareNext>[0]) {
+    return persistPreparedNext(await prepareNext(input))
   }
 
   const SessionProjectInput = z.object({
@@ -1057,12 +1066,12 @@ export namespace Session {
         `Session tree ${input.sessionID} deletion removed ${deleted.length} rows, expected ${currentSessionIDs.length}`,
       )
     }
-    Database.effect(() => {
+    Database.effect(async () => {
       for (const sessionID of currentSessionIDs) {
         try {
           SessionStatusLifecycle.release(sessionID)
         } finally {
-          SessionPromptState.release(sessionID)
+          await SessionPromptState.release(sessionID)
         }
       }
     })
@@ -1099,11 +1108,11 @@ export namespace Session {
     Database.use((db) => {
       db.delete(SessionTable).where(eq(SessionTable.id, sessionID)).run()
       Database.effect(() => Database.incrementalVacuum())
-      Database.effect(() => {
+      Database.effect(async () => {
         try {
           SessionStatusLifecycle.release(sessionID)
         } finally {
-          SessionPromptState.release(sessionID)
+          await SessionPromptState.release(sessionID)
         }
       })
       if (publishDeleted) {
@@ -1197,10 +1206,7 @@ export namespace Session {
   })
 
   export const publishCompactionCheckpoint = fn(PublishCompactionCheckpointInput, async (input) => {
-    if (
-      input.info.time.completed === undefined ||
-      !CompactionHandoff.isValidSummaryMessage(input.info)
-    ) {
+    if (input.info.time.completed === undefined || !CompactionHandoff.isValidSummaryMessage(input.info)) {
       throw new Error(`Compaction checkpoint assistant ${input.info.id} must be a valid completed summary`)
     }
     if (input.part.sessionID !== input.info.sessionID || input.part.messageID !== input.info.parentID) {
@@ -1212,12 +1218,7 @@ export namespace Session {
       const parent = db
         .select({ data: MessageTable.data })
         .from(MessageTable)
-        .where(
-          and(
-            eq(MessageTable.id, input.info.parentID),
-            eq(MessageTable.session_id, input.info.sessionID),
-          ),
-        )
+        .where(and(eq(MessageTable.id, input.info.parentID), eq(MessageTable.session_id, input.info.sessionID)))
         .get()
       if (!parent || parent.data.role !== "user") {
         throw new Error(`Compaction checkpoint ${input.info.id} parent must be a user message`)
@@ -1225,12 +1226,7 @@ export namespace Session {
       const continuationParts = db
         .select()
         .from(PartTable)
-        .where(
-          and(
-            eq(PartTable.message_id, input.info.id),
-            eq(PartTable.session_id, input.info.sessionID),
-          ),
-        )
+        .where(and(eq(PartTable.message_id, input.info.id), eq(PartTable.session_id, input.info.sessionID)))
         .orderBy(PartTable.time_created, PartTable.id)
         .all()
         .map((row) =>
@@ -1707,7 +1703,7 @@ export namespace Session {
       delta: z.string(),
     }),
     async (input) => {
-      Bus.publish(Message.Event.PartDelta, input)
+      return Bus.publish(Message.Event.PartDelta, input)
     },
   )
 

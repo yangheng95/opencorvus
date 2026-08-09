@@ -36,6 +36,7 @@ import { Bus } from "../bus"
 import { ProviderTransform } from "../provider/transform"
 import { ProviderSchema } from "../provider/schema"
 import { requiresOpenAIStrictToolSchema } from "../provider/strict-tool-schema"
+import { materializeToolExecutionInput } from "../provider/tool-execution-input"
 import { SystemPrompt } from "./system"
 import { EffectiveConfig } from "@/config/effective"
 import { resolveAgentModel, resolveProjectedWorkerModel } from "@/agent/model"
@@ -138,13 +139,11 @@ export namespace SessionLoop {
   async function resolveToolExecutionAuthority(input: {
     sessionID: string
     projectID: string
-    rootDirectory: string
     runtimeIdentity?: { taskID: string }
   }) {
     return resolveSessionExecutionAuthority({
       sessionID: input.sessionID,
       projectID: input.projectID,
-      rootDirectory: input.rootDirectory,
       expected: input.runtimeIdentity
         ? { kind: "task", taskID: input.runtimeIdentity.taskID }
         : { kind: "conversation" },
@@ -752,7 +751,7 @@ export namespace SessionLoop {
       validate?: (args: unknown) => Promise<ValidationResult>
     }
     const args = requiresOpenAIStrictToolSchema(input.model)
-      ? stripProviderNullOptionals(input.name, input.inputSchema, input.args)
+      ? materializeOpenAIStrictToolInput(input.name, input.inputSchema, input.args)
       : input.args
     if (typeof schema.validate !== "function") return args
 
@@ -766,90 +765,12 @@ export namespace SessionLoop {
     throw invalidProviderToolInput(input.name, args, result.error)
   }
 
-  function stripProviderNullOptionals(toolName: string, inputSchema: unknown, args: unknown): unknown {
+  function materializeOpenAIStrictToolInput(toolName: string, inputSchema: unknown, args: unknown): unknown {
     try {
-      const rawJsonSchema = asSchema(inputSchema as never).jsonSchema
-      return stripNullOptionalsFromJsonSchema(rawJsonSchema, args)
+      return materializeToolExecutionInput(inputSchema, args)
     } catch (err) {
       throw invalidProviderToolInput(toolName, args, err)
     }
-  }
-
-  function stripNullOptionalsFromJsonSchema(schema: unknown, value: unknown, dropUnknownNulls = false): unknown {
-    const selected = selectJsonSchemaVariant(schema, value)
-    if (selected !== schema) return stripNullOptionalsFromJsonSchema(selected, value, true)
-    if (!schema || typeof schema !== "object" || Array.isArray(schema)) return value
-    const record = schema as Record<string, unknown>
-    if (record.type === "array" && Array.isArray(value)) {
-      return value.map((item) => stripNullOptionalsFromJsonSchema(record.items, item))
-    }
-    const properties = record.properties
-    if (!properties || typeof properties !== "object" || Array.isArray(properties)) return value
-    if (!value || typeof value !== "object" || Array.isArray(value)) return value
-
-    const required = new Set(
-      Array.isArray(record.required) ? record.required.filter((item) => typeof item === "string") : [],
-    )
-    const out: Record<string, unknown> = {}
-    for (const [key, item] of Object.entries(value as Record<string, unknown>)) {
-      const propertySchema = (properties as Record<string, unknown>)[key]
-      if (item === null && propertySchema === undefined && dropUnknownNulls) {
-        continue
-      }
-      if (
-        item === null &&
-        propertySchema !== undefined &&
-        !required.has(key) &&
-        !jsonSchemaAllowsNull(propertySchema)
-      ) {
-        continue
-      }
-      out[key] = propertySchema !== undefined ? stripNullOptionalsFromJsonSchema(propertySchema, item, false) : item
-    }
-    return out
-  }
-
-  function selectJsonSchemaVariant(schema: unknown, value: unknown): unknown {
-    if (!schema || typeof schema !== "object" || Array.isArray(schema)) return schema
-    if (!value || typeof value !== "object" || Array.isArray(value)) return schema
-    const record = schema as Record<string, unknown>
-    const variants = Array.isArray(record.anyOf) ? record.anyOf : Array.isArray(record.oneOf) ? record.oneOf : undefined
-    if (!variants) return schema
-    const valueRecord = value as Record<string, unknown>
-    for (const variant of variants) {
-      if (!variant || typeof variant !== "object" || Array.isArray(variant)) continue
-      const variantRecord = variant as Record<string, unknown>
-      const properties = variantRecord.properties
-      if (!properties || typeof properties !== "object" || Array.isArray(properties)) continue
-      const required = new Set(
-        Array.isArray(variantRecord.required) ? variantRecord.required.filter((item) => typeof item === "string") : [],
-      )
-      let matchedConst = false
-      let mismatched = false
-      for (const [key, propertySchema] of Object.entries(properties as Record<string, unknown>)) {
-        if (!propertySchema || typeof propertySchema !== "object" || Array.isArray(propertySchema)) continue
-        if (!("const" in propertySchema)) continue
-        if (!required.has(key)) continue
-        matchedConst = true
-        if (valueRecord[key] !== (propertySchema as Record<string, unknown>).const) {
-          mismatched = true
-          break
-        }
-      }
-      if (matchedConst && !mismatched) return variant
-    }
-    return schema
-  }
-
-  function jsonSchemaAllowsNull(schema: unknown): boolean {
-    if (!schema || typeof schema !== "object" || Array.isArray(schema)) return false
-    const record = schema as Record<string, unknown>
-    if (record.type === "null") return true
-    if (Array.isArray(record.type) && record.type.includes("null")) return true
-    return (
-      (Array.isArray(record.anyOf) && record.anyOf.some(jsonSchemaAllowsNull)) ||
-      (Array.isArray(record.oneOf) && record.oneOf.some(jsonSchemaAllowsNull))
-    )
   }
 
   function invalidProviderToolInput(toolName: string, args: unknown, cause: unknown): InvalidToolInputError {
@@ -1945,7 +1866,7 @@ export namespace SessionLoop {
         if (persistedReply) {
           flushCallbacks(sessionID, persistedReply, directory, "reply", input.reply_to_message_id)
           if (startedOwner) {
-            finish(sessionID, abort, directory)
+            await finish(sessionID, abort, directory)
             return firstResult
           }
         }
@@ -1954,7 +1875,7 @@ export namespace SessionLoop {
       if (!resume_existing) await terminalizeRecoveredIncompleteAssistant(sessionID)
     } catch (error) {
       if (abort && !resume_existing) {
-        finish(sessionID, abort, directory, error)
+        await finish(sessionID, abort, directory, error)
       } else {
         SessionPromptState.rejectAttachedCallbacks(
           sessionID,
@@ -2027,7 +1948,6 @@ export namespace SessionLoop {
           const runActiveTurn = async () => {
             while (true) {
               touch(sessionID, directory)
-              SessionStatus.set(sessionID, { type: "streaming" }, { promptGenerationOwner: abort })
               log.info("loop", { step, sessionID })
               if (abort.aborted) break
               const msgs = await Message.filterCompacted(MessageStore.stream(sessionID))
@@ -2050,6 +1970,9 @@ export namespace SessionLoop {
                 const { waitForWake } = await beginStandby({ sessionID, abort, afterID: lastAssistant.id })
                 return { type: "standby" as const, waitForWake }
               }
+
+              SessionStatus.beginExecutionOccurrence(sessionID, lastUser.id, abort)
+              await SessionStatus.set(sessionID, { type: "streaming" }, { promptGenerationOwner: abort })
 
               step++
               if (step === 1) {
@@ -2295,7 +2218,7 @@ export namespace SessionLoop {
         }
       } finally {
         const s = state(directory)[sessionID]
-        if (s?.abort.signal === abort) finish(sessionID, abort, directory)
+        if (s?.abort.signal === abort) await finish(sessionID, abort, directory)
       }
     })()
 
@@ -2378,7 +2301,6 @@ export namespace SessionLoop {
     const executionAuthority = await resolveToolExecutionAuthority({
       sessionID: input.session.id,
       projectID: Instance.project.id,
-      rootDirectory: Instance.directory,
       runtimeIdentity: runtimeContract?.identity,
     })
     let executionHarnessProjection: HarnessProjection | undefined
@@ -2649,8 +2571,8 @@ export namespace SessionLoop {
         ? await ConversationCapability.runtimeMcpTools(input.config, input.agentID, input.session.id)
         : undefined
     const defaultMcpProcessAuthority = executionAuthority.kind === "task"
-      ? MCP.taskProcessAuthority(executionAuthority.taskID, executionAuthority.rootDirectory)
-      : MCP.hostProcessAuthority(executionAuthority.rootDirectory)
+      ? MCP.taskProcessAuthority(executionAuthority.taskID, executionAuthority.directory)
+      : MCP.hostProcessAuthority(executionAuthority.directory)
     const resolvedMcpTools =
       exactRuntimeContractTools || !includeMcpTools
         ? {}

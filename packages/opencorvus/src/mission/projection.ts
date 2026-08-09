@@ -117,7 +117,7 @@ export function projectMissionTasks(session: MissionSession): MissionTaskProject
 export function missionRecord(session: MissionSession): MissionRecordValue {
   const tasks = projectMissionTasks(session)
   const status = SessionStatus.get(session.id)
-  const interruptible = status.type === "streaming" || status.type === "retry"
+  const interruptible = SessionStatus.isExecuting(status)
   const pendingByTask = pendingInteractionCounts(tasks.map((task) => task.id))
   const pendingInteractions = tasks.reduce((total, task) => total + (pendingByTask.get(task.id) ?? 0), 0)
   const board = missionBoardProjection(session, {
@@ -148,12 +148,14 @@ export function missionStatusRecord(session: MissionSession): z.infer<typeof Mis
   const tasks = listTaskRows(
     listMissionTasks({ projectID: session.projectID, missionID: session.missionID, sessionID: session.id }),
   ).map(({ task }) => taskStatusDetailFromBoard(compileBoard({ taskID: task.id })))
+  const sessionStatus = SessionStatus.get(session.id)
   return missionStatusSnapshot({
     missionID: session.missionID,
     sessionID: session.id,
     title: session.title,
     directory: session.directory,
     productPillar: session.productPillar,
+    missionActivity: SessionStatus.isExecuting(sessionStatus) ? "running" : "inactive",
     tasks,
   })
 }

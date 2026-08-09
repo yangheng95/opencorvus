@@ -21,8 +21,8 @@ import {
   applyLiveConversationAgentSessionStatus,
   applyLiveConversationAgentTodoUpdated,
 } from "../store/conversation-agents"
-import { loadConfigInfo } from "./config-load"
 import { markSessionConfigStale } from "./config"
+import { refreshActiveComposerModelFromSession } from "./composer-model"
 import { markExpertSquadCatalogStale } from "./expert-squad"
 import { applyEvent as applyTreeWriterEvent } from "./tree-writer"
 import { refreshConversationTurnArtifacts, scheduleLatestConversationTailMerge } from "./conversation"
@@ -197,31 +197,8 @@ function scheduleRewindClearRecovery(
 // ── Main router ──
 
 const BOARD_EVENT_DEBOUNCE = 500
-const CONFIG_EVENT_DEBOUNCE = 50
 
 let tasksKickTimer: ReturnType<typeof setTimeout> | null = null
-let configKickTimer: ReturnType<typeof setTimeout> | null = null
-
-export function __resetEventTimersForTest(): void {
-  if (tasksKickTimer) {
-    clearTimeout(tasksKickTimer)
-    tasksKickTimer = null
-  }
-  if (configKickTimer) {
-    clearTimeout(configKickTimer)
-    configKickTimer = null
-  }
-}
-
-function scheduleConfigReload(): void {
-  if (configKickTimer) clearTimeout(configKickTimer)
-  configKickTimer = setTimeout(() => {
-    configKickTimer = null
-    void loadConfigInfo().catch((err: unknown) => {
-      console.error("[sse] config.changed refresh failed", err)
-    })
-  }, CONFIG_EVENT_DEBOUNCE)
-}
 
 /**
  * Route a parsed SSE event to the appropriate Solid store or action.
@@ -393,10 +370,17 @@ export function routeSSEEvent(event: any, recovery: SelectedTaskRecoverySchedule
 
   const properties = record(event?.properties) ? event.properties : record(event?.payload) ? event.payload : {}
 
-  // ── Config changed → refresh appStore.config ──
+  // Session overlays and project config are separate authorities. A Session
+  // config event must re-project the selected root Session; loading /config
+  // here would overwrite the freshly persisted Session model with the
+  // project default and disable the Composer.
   if (type === "config.changed") {
-    markSessionConfigStale()
-    scheduleConfigReload()
+    const changedSessionID = typeof properties.sessionID === "string" ? properties.sessionID.trim() : ""
+    if (!changedSessionID) throw new Error("config.changed is missing canonical properties.sessionID")
+    markSessionConfigStale(changedSessionID)
+    void refreshActiveComposerModelFromSession(changedSessionID)?.catch((err: unknown) => {
+      console.error("[sse] Session config projection refresh failed", err)
+    })
     advanceHandledSelectedTaskSequence(event)
     markHandledSelectedLiveEvent(event)
     return true

@@ -1,0 +1,59 @@
+{
+  "status": 200,
+  "statusText": "OK",
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag",
+    "content-length": "1777",
+    "content-type": "application/json",
+    "date": "Sun, 09 Aug 2026 04:02:04 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "7fe36b68-7cc1-41c8-b44b-3ac2403c4be8"
+  },
+  "body": {
+    "message": "Operator message recorded. Task wake dispatched.",
+    "wake_status": "started",
+    "should_resume": true,
+    "user_message": {
+      "info": {
+        "id": "msg_g019fe4af57b1000000000000327th7vKdiK7Br",
+        "sessionID": "ses_-fe601baacd34ffffffffffffUUaKXgq4wICotv",
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1786248124337
+        },
+        "agent": "orchestrator",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-5.6-luna"
+        },
+        "extra": {
+          "task_root_message": {
+            "protocol": "task-root-message",
+            "taskID": "tsk_g019fe4553121000000000000jDPTepv4q6J7MI",
+            "kind": "operator",
+            "source": "backend-algorithm-test-loop"
+          }
+        },
+        "orderKey": "v1:0001786248124337:0000000000000030:0000000000000000:message:msg_g019fe4af57b1000000000000327th7vKdiK7Br",
+        "resolvedRole": "user",
+        "channel": "main",
+        "agentID": "orchestrator",
+        "sessionAgentID": "orchestrator",
+        "originSource": ""
+      },
+      "parts": [
+        {
+          "id": "prt_g019fe4af57b100000000000191DpNm8B4PcoPB",
+          "sessionID": "ses_-fe601baacd34ffffffffffffUUaKXgq4wICotv",
+          "messageID": "msg_g019fe4af57b1000000000000327th7vKdiK7Br",
+          "orderKey": "v1:0001786248124338:0000000000000031:0000000000000000:part:prt_g019fe4af57b100000000000191DpNm8B4PcoPB",
+          "type": "text",
+          "text": "The durable workflow evidence shows that the earlier physical Build Session was created before any WorkerTurnDescriptor or Developer dispatch lineage committed. It is audit evidence, not a prior logical occurrence or continuation authority. The projected MCP runtime and recovery defects are repaired and focused verification passes. Re-read this exact operator message and the current workflow snapshot; the dependency-ready base-developer node has occurrence_not_committed, so dispatch its one authorized initial Turn now. Then run the mission's required real checker and continue the existing workflow to a terminal outcome.",
+          "kind": "user_content",
+          "source": "user"
+        }
+      ]
+    }
+  }
+}

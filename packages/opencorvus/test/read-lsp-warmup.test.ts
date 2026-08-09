@@ -12,6 +12,8 @@ import { persistQueuedTask } from "../src/engine/pipeline"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { ensureGitignore } from "../src/engine/git"
 import { resolveSessionExecutionAuthority } from "../src/engine/task-session-lineage"
+import { Bus } from "../src/bus"
+import { GlobalBus } from "../src/bus/global"
 
 afterAll(resetMemoryDatabase)
 
@@ -22,12 +24,22 @@ describe("Read tool Language Server Protocol warm-up", () => {
     await writeFile(source, "export const exactValue = 42\n")
 
     let finishWarmup: (() => void) | undefined
-    const restoreWarmup = LSP.setWarmFileTouchForTest(
-      () =>
-        new Promise<void>((resolve) => {
-          finishWarmup = resolve
-        }),
-    )
+    let completeWarmup: (() => void) | undefined
+    const warmupCompleted = new Promise<void>((resolve) => {
+      completeWarmup = resolve
+    })
+    let warmupProjectID: string | undefined
+    const globalEvents: Array<{ directory?: string; payload: { type?: string } }> = []
+    const onGlobalEvent = (event: { directory?: string; payload: { type?: string } }) => globalEvents.push(event)
+    GlobalBus.on("event", onGlobalEvent)
+    const restoreWarmup = LSP.setWarmFileTouchForTest(async () => {
+      await new Promise<void>((resolve) => {
+        finishWarmup = resolve
+      })
+      warmupProjectID = Instance.project.id
+      await Bus.publish(LSP.Event.Updated, {})
+      completeWarmup?.()
+    })
     try {
       await Instance.provide({
         directory: project.path,
@@ -69,7 +81,6 @@ describe("Read tool Language Server Protocol warm-up", () => {
           const executionAuthority = await resolveSessionExecutionAuthority({
             sessionID: session.id,
             projectID: Instance.project.id,
-            rootDirectory: project.path,
             expected: { kind: "task", taskID },
           })
           const tool = await ReadTool.init()
@@ -99,9 +110,16 @@ describe("Read tool Language Server Protocol warm-up", () => {
           expect(result.output).toContain("export const exactValue = 42")
         },
       })
+      finishWarmup?.()
+      await warmupCompleted
+      expect(warmupProjectID).toBeDefined()
+      expect(
+        globalEvents.filter((event) => event.payload.type === LSP.Event.Updated.type).map((event) => event.directory),
+      ).toEqual([project.path])
     } finally {
       finishWarmup?.()
       restoreWarmup()
+      GlobalBus.off("event", onGlobalEvent)
     }
   })
 })

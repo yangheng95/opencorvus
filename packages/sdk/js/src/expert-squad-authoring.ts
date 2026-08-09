@@ -1,5 +1,6 @@
 import { lstat, mkdir, mkdtemp, rename, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
+import { setTimeout as delay } from "node:timers/promises"
 import z from "zod"
 import {
   ExpertSquadManifestV1Schema,
@@ -910,6 +911,19 @@ export function renderExpertSquadPackageFiles(
   return Object.fromEntries(validatePackageFiles(files))
 }
 
+async function publishStagingDirectory(stagingDirectory: string, directory: string): Promise<void> {
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      await rename(stagingDirectory, directory)
+      return
+    } catch (error) {
+      const code = error instanceof Error && "code" in error ? error.code : undefined
+      if (process.platform !== "win32" || (code !== "EPERM" && code !== "EACCES") || attempt >= 9) throw error
+      await delay(Math.min(50 * 2 ** attempt, 500))
+    }
+  }
+}
+
 export async function writeExpertSquadPackage(
   input: WriteExpertSquadPackageInput,
 ): Promise<WriteExpertSquadPackageResult> {
@@ -934,7 +948,7 @@ export async function writeExpertSquadPackage(
       await mkdir(path.dirname(target), { recursive: true })
       await writeFile(target, content)
     }
-    await rename(stagingDirectory, directory)
+    await publishStagingDirectory(stagingDirectory, directory)
     stagingDirectory = undefined
   } catch (error) {
     if (stagingDirectory) {

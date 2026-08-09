@@ -262,21 +262,23 @@ function enqueueTaskEvent(task: TaskRow, event: OrchestratorEvent): string {
   const messageID = event.rootMessage?.messageID.trim() ?? event.missionAcceptanceResume?.messageID.trim()
   const requestID = event.coordinationRequest?.requestID.trim()
   const recoveryFactID = event.processRecovery?.recoveryFactID.trim()
-  return persistQueuedOperatorWake(task, event, { messageID, requestID, recoveryFactID })
+  const waitJobID = event.taskWaitWake?.jobID.trim()
+  return persistQueuedOperatorWake(task, event, { messageID, requestID, recoveryFactID, waitJobID })
 }
 
 function persistQueuedOperatorWakeInTransaction(
   db: Database.TxOrDb,
   task: TaskRow,
   event: OrchestratorEvent,
-  identity: { messageID?: string; requestID?: string; recoveryFactID?: string },
+  identity: { messageID?: string; requestID?: string; recoveryFactID?: string; waitJobID?: string },
   now = Date.now(),
 ): string {
   if (!task.session_id) throw new TaskQueueError(`Task ${task.id} has no root session`, "session_not_bound", task.id)
   const messageID = identity.messageID
   const requestID = identity.requestID
   const recoveryFactID = identity.recoveryFactID
-  if (messageID || requestID || recoveryFactID) {
+  const waitJobID = identity.waitJobID
+  if (messageID || requestID || recoveryFactID || waitJobID) {
     const exists = db
       .select({ id: EngineArtifactTable.id })
       .from(EngineArtifactTable)
@@ -289,7 +291,9 @@ function persistQueuedOperatorWakeInTransaction(
             ? sql`json_extract(${EngineArtifactTable.payload}, '$.message_id') = ${messageID}`
             : requestID
               ? sql`json_extract(${EngineArtifactTable.payload}, '$.request_id') = ${requestID}`
-              : sql`json_extract(${EngineArtifactTable.payload}, '$.recovery_fact_id') = ${recoveryFactID}`,
+              : recoveryFactID
+                ? sql`json_extract(${EngineArtifactTable.payload}, '$.recovery_fact_id') = ${recoveryFactID}`
+                : sql`json_extract(${EngineArtifactTable.payload}, '$.wait_job_id') = ${waitJobID}`,
         ),
       )
       .get()
@@ -317,13 +321,16 @@ function persistQueuedOperatorWakeInTransaction(
         ? `${requestID}:${priorAttempts + 1}`
         : recoveryFactID
           ? recoveryFactID
-          : Identifier.ascending("artifact")),
+          : waitJobID
+            ? event.taskWaitWake?.fireID
+            : Identifier.ascending("artifact")),
     delivery_attempt: priorAttempts + 1,
     task_id: task.id,
     root_session_id: task.session_id,
     ...(messageID ? { message_id: messageID } : {}),
     ...(requestID ? { request_id: requestID } : {}),
     ...(recoveryFactID ? { recovery_fact_id: recoveryFactID } : {}),
+    ...(waitJobID ? { wait_job_id: waitJobID } : {}),
     source_kind: sourceKind,
     event: OrchestratorEventSchema.parse(event),
     time_queued: now,
@@ -381,9 +388,51 @@ export function persistQueuedMissionAcceptanceResumeInTransaction(
 function persistQueuedOperatorWake(
   task: TaskRow,
   event: OrchestratorEvent,
-  identity: { messageID?: string; requestID?: string; recoveryFactID?: string },
+  identity: { messageID?: string; requestID?: string; recoveryFactID?: string; waitJobID?: string },
 ): string {
   return Database.use((db) => persistQueuedOperatorWakeInTransaction(db, task, event, identity))
+}
+
+export function persistQueuedTaskWaitWakeInTransaction(
+  db: Database.TxOrDb,
+  input: {
+    taskID: string
+    projectID: string
+    jobID: string
+    fireID: string
+    dueAt: number
+    note: string
+    now: number
+  },
+): string {
+  const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, input.taskID)).get()
+  if (!task) throw new Error(`Queued Task wait wake task not found: ${input.taskID}`)
+  if (task.project_id !== input.projectID) {
+    throw new Error(
+      `Queued Task wait wake project mismatch for ${input.taskID}: expected ${input.projectID}, found ${task.project_id}`,
+    )
+  }
+  return persistQueuedOperatorWakeInTransaction(
+    db,
+    task,
+    {
+      note: input.note,
+      taskWaitWake: { jobID: input.jobID, fireID: input.fireID, dueAt: input.dueAt },
+    },
+    { waitJobID: input.jobID },
+    input.now,
+  )
+}
+
+export const TestHooks = {
+  persistTaskWaitWake(input: { taskID: string; jobID: string; fireID: string; dueAt?: number; note: string }): string {
+    const task = findTask(input.taskID)
+    if (!task) throw new Error(`Task wait wake task not found: ${input.taskID}`)
+    return enqueueTaskEvent(task, {
+      note: input.note,
+      taskWaitWake: { jobID: input.jobID, fireID: input.fireID, dueAt: input.dueAt ?? 0 },
+    })
+  },
 }
 
 export function persistQueuedCoordinationWakeInTransaction(
@@ -454,7 +503,11 @@ export function persistProcessShutdownRecoveryHandoffs(input: {
     const affectedSubjects: ProcessRecoveryFactContextValue["affected_subjects"] = task.ownedSessionIDs.map(
       (sessionID) => {
         const session = Database.use((db) =>
-          db.select({ timeCreated: SessionTable.time_created }).from(SessionTable).where(eq(SessionTable.id, sessionID)).get(),
+          db
+            .select({ timeCreated: SessionTable.time_created })
+            .from(SessionTable)
+            .where(eq(SessionTable.id, sessionID))
+            .get(),
         )
         if (!session) throw new Error(`Process shutdown Session ${sessionID} is missing`)
         const occurrence = SessionStatus.executionOccurrence(sessionID)
@@ -1076,7 +1129,7 @@ function latestSessionStatusEvent(sessionID: string) {
   return event ? { id: event.id, emittedAt: event.time.emitted, payload: event.payload } : undefined
 }
 
-function interruptedSessionEvidence(input: {
+export function listInterruptedSessionEvidence(input: {
   taskID: string
   rootSessionID: string
   ownedSessionIDs: ReadonlySet<string>
@@ -1086,9 +1139,24 @@ function interruptedSessionEvidence(input: {
     const descriptor = session.runtimeContractError
       ? undefined
       : WorkerTurnDescriptor.latestForSession(session.sessionID)
-    const preparedAfterLatestLifecycle =
-      descriptor?.payload.lifecycle.priorLifecycleEventID !== undefined &&
-      descriptor.payload.lifecycle.priorLifecycleEventID === event?.id
+    const priorLifecycleEventID = descriptor?.payload.lifecycle.priorLifecycleEventID
+    if (priorLifecycleEventID) {
+      let priorLifecycle
+      try {
+        priorLifecycle = ProtocolStore.requireEvent(priorLifecycleEventID)
+      } catch (error) {
+        throw new Error(
+          `Interrupted Session ${session.sessionID} Worker Turn ${descriptor.id} references missing prior lifecycle event ${priorLifecycleEventID}`,
+          { cause: error },
+        )
+      }
+      if (priorLifecycle.sessionID !== session.sessionID || priorLifecycle.type !== SessionStatus.Event.Status.type) {
+        throw new Error(
+          `Interrupted Session ${session.sessionID} Worker Turn ${descriptor.id} prior lifecycle event ${priorLifecycleEventID} has different authority`,
+        )
+      }
+    }
+    const preparedAfterLatestLifecycle = descriptor !== undefined && priorLifecycleEventID === event?.id
     if (
       session.sessionID === input.rootSessionID ||
       input.ownedSessionIDs.has(session.sessionID) ||
@@ -1117,9 +1185,7 @@ function interruptedSessionEvidence(input: {
         ? (event.payload.status as { type?: unknown }).type
         : undefined
     const eventInputMessageID =
-      event?.payload && typeof event.payload.inputMessageID === "string"
-        ? event.payload.inputMessageID
-        : undefined
+      event?.payload && typeof event.payload.inputMessageID === "string" ? event.payload.inputMessageID : undefined
     const inputMessageID = resolveProcessRecoveryInputAuthority({
       preparedWorkerInputMessageID: preparedAfterLatestLifecycle
         ? descriptor?.payload.messageAuthority.user_message_id
@@ -1242,7 +1308,7 @@ export async function reconcileInterruptedTaskExecutions(): Promise<number> {
       const taskSnapshot = findTask(taskID)
       if (!taskSnapshot?.session_id) continue
       const ownedSessionIDs = new Set(listOwnedPromptSessionsForTask(taskID).map((owner) => owner.sessionID))
-      const sessions = interruptedSessionEvidence({
+      const sessions = listInterruptedSessionEvidence({
         taskID,
         rootSessionID: taskSnapshot.session_id,
         ownedSessionIDs,
@@ -1277,7 +1343,7 @@ export async function reconcileInterruptedTaskExecutions(): Promise<number> {
             continue
           }
           using _promptStartReservation = SessionPromptState.claimPromptStartReservation(listTaskSessionIDs(taskID))
-          const refreshedSessions = interruptedSessionEvidence({
+          const refreshedSessions = listInterruptedSessionEvidence({
             taskID,
             rootSessionID: taskSnapshot.session_id,
             ownedSessionIDs: new Set(),
@@ -1392,7 +1458,8 @@ export async function reconcileInterruptedTaskExecutions(): Promise<number> {
               })()
             : undefined
           if (interrupted.status === "prepared") {
-            if (!worker) throw new Error(`Interrupted prepared Session ${interrupted.session_id} has no Worker authority`)
+            if (!worker)
+              throw new Error(`Interrupted prepared Session ${interrupted.session_id} has no Worker authority`)
             return {
               kind: "affected_prepared_worker_turn" as const,
               session_id: interrupted.session_id,
@@ -1414,7 +1481,7 @@ export async function reconcileInterruptedTaskExecutions(): Promise<number> {
       const promptStartReservation = SessionPromptState.claimPromptStartReservation(listTaskSessionIDs(taskID))
       let recovery: { recoveryFactID: string; wakeAvailable: boolean } | undefined
       try {
-        const refreshedSessions = interruptedSessionEvidence({
+        const refreshedSessions = listInterruptedSessionEvidence({
           taskID,
           rootSessionID: taskSnapshot.session_id,
           ownedSessionIDs: new Set(),
@@ -1808,7 +1875,10 @@ export async function dispatchPersistedTaskLoop(taskID: string): Promise<Dispatc
     }
     return "started"
   }
-  throw new TaskQueueError(`Task ${taskID} is terminal before its persisted wake can dispatch`, "task_terminal", taskID)
+  if (!(await drainQueuedTaskEvent(taskID))) {
+    throw new Error(`Task ${taskID} persisted wake could not be attached to its terminal conversation`)
+  }
+  return "started"
 }
 
 async function consumePendingWaitCronForAcceptedWake(task: TaskRow, reason: string): Promise<void> {

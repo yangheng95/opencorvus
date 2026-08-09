@@ -418,20 +418,20 @@ mod windows_helper {
         let standard_handles = inherited_standard_handles()?;
         let target = create_suspended_target(&request, Some(&standard_handles))?;
 
-        let resumed = unsafe { ResumeThread(target.thread.0) };
-        if resumed == u32::MAX {
-            return Err(with_created_process_cleanup(
-                "ResumeThread failed".into(),
-                target.process.0,
-                target.pid,
-            ));
-        }
-
         if let Err(error) =
             publish_ready_marker(&request.ready_file, &request.request_id, target.pid)
         {
             return Err(with_created_process_cleanup(
                 error,
+                target.process.0,
+                target.pid,
+            ));
+        }
+
+        let resumed = unsafe { ResumeThread(target.thread.0) };
+        if resumed == u32::MAX {
+            return Err(with_created_process_cleanup(
+                "ResumeThread failed".into(),
                 target.process.0,
                 target.pid,
             ));

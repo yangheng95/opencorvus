@@ -359,7 +359,7 @@ async function withOfficeWorkspace<T>(
     projectRoot = taskPrimaryProjectRoot(authority.taskID, { activeProjectID: input.projectID })
   } else {
     const session = await Session.get(authority.sessionID)
-    if (session.projectID !== input.projectID || path.resolve(session.directory) !== path.resolve(authority.rootDirectory)) {
+    if (session.projectID !== input.projectID || path.resolve(session.directory) !== path.resolve(authority.directory)) {
       throw new Error(`Office Artifact conversation ${authority.sessionID} execution identity is inconsistent`)
     }
   }

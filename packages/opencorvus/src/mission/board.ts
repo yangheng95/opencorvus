@@ -3,10 +3,11 @@ import { isDeepStrictEqual } from "node:util"
 import { Database, and, desc, eq } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { Message } from "@/session/message"
+import { MissionPanelActionSchema } from "@/panel/capability"
+import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
 import type { MissionSession } from "./session"
 import {
   MissionCompletionFact,
-  MissionCompletionActionInput,
   MissionCompletionReceipt,
   type MissionCompletionFactValue,
 } from "./completion"
@@ -104,8 +105,15 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
       sessionID: session.id,
     })
     if (!part.success || part.data.tool !== "panel" || part.data.state.status !== "completed") continue
-    const input = MissionCompletionActionInput.safeParse(part.data.state.input)
-    if (!input.success) continue
+    let input: z.infer<typeof MissionPanelActionSchema>
+    try {
+      input = MissionPanelActionSchema.parse(
+        materializeToolExecutionInput(MissionPanelActionSchema, part.data.state.input),
+      )
+    } catch {
+      continue
+    }
+    if (input.action !== "complete_mission") continue
     let decoded: unknown
     try {
       decoded = JSON.parse(part.data.state.output)
@@ -114,14 +122,17 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
     }
     const receipt = MissionCompletionReceipt.safeParse(decoded)
     if (!receipt.success) continue
+    const receiptInputAcceptances = receipt.data.task_acceptances.map(
+      ({ terminal_lifecycle_reference: _reference, ...acceptance }) => acceptance,
+    )
     if (
       receipt.data.mission_id !== session.missionID ||
       receipt.data.mission_session_id !== session.id ||
       receipt.data.assistant_message_id !== row.messageID ||
       receipt.data.tool_call_id !== part.data.callID ||
       receipt.data.tool_part_id !== row.id ||
-      receipt.data.summary !== input.data.summary ||
-      !isDeepStrictEqual(receipt.data.task_acceptances, input.data.task_acceptances)
+      receipt.data.summary !== input.summary ||
+      !isDeepStrictEqual(receiptInputAcceptances, input.task_acceptances)
     ) {
       continue
     }

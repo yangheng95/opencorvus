@@ -1,0 +1,16 @@
+{
+  "method": "POST",
+  "url": "http://127.0.0.1:7878/interaction/int_g019fe46107570000000000007sRC7RyzIhSHcr/reply",
+  "headers": {
+    "content-type": "application/json",
+    "x-opencorvus-directory": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-02"
+  },
+  "body": {
+    "autoReply": false,
+    "answers": [
+      [
+        "skip_optional_testing"
+      ]
+    ]
+  }
+}

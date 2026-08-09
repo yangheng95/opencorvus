@@ -48,7 +48,6 @@ export function createRuntimeRepairTools(input: {
         const executionAuthority = await resolveSessionExecutionAuthority({
           sessionID: meta.orchestratorSessionID,
           projectID: Instance.project.id,
-          rootDirectory: Instance.directory,
           expected: { kind: "task", taskID: input.taskID },
         })
         const result = await initialized.execute(params, {

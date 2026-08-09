@@ -145,6 +145,7 @@ export function missionStatusSnapshot(input: {
   title: string
   directory: string
   productPillar: z.infer<typeof ProductPillarSchema>
+  missionActivity: TaskActivityState
   tasks: TaskStatusDetail[]
   generatedAt?: number
 }): MissionStatusSnapshot {
@@ -156,8 +157,8 @@ export function missionStatusSnapshot(input: {
     },
     { total: 0, running: 0, inactive: 0 },
   )
-  const activity = activitySummary(input.tasks.map((task) => task.status))
-  const status: TaskActivityState = taskCounts.running > 0 ? "running" : "inactive"
+  const activity = activitySummary([input.missionActivity, ...input.tasks.map((task) => task.status)])
+  const status: TaskActivityState = activity.running > 0 ? "running" : "inactive"
 
   return MissionStatusSnapshot.parse({
     missionID: input.missionID,

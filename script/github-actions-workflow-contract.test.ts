@@ -144,6 +144,11 @@ describe("GitHub Actions workflow contract", () => {
         prepare_sdk: "true",
       })
     }
+    expect(jobs["build-critical"]?.steps?.find(({ name }) => name === "Install critical build runtime dependencies"))
+      .toEqual({
+        name: "Install critical build runtime dependencies",
+        run: "sudo apt-get update\nsudo apt-get install -y ripgrep\n",
+      })
     expect(jobs.unit?.steps?.filter(({ name }) => name?.startsWith("Install "))).toEqual([
       {
         name: "Install Linux test runtime dependencies",

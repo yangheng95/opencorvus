@@ -1,0 +1,82 @@
+{
+  "runID": "2026-08-09T02-23-30-230Z",
+  "directory": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-01",
+  "setup": [
+    {
+      "command": [
+        "git",
+        "init",
+        "-b",
+        "main"
+      ],
+      "cwd": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-01",
+      "status": 0,
+      "signal": null,
+      "stdout": "Initialized empty Git repository in C:/Users/chuan/AppData/Local/Temp/opencorvus-backend-algorithm-loop/2026-08-09T02-23-30-230Z/case-01/.git/\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "config",
+        "user.name",
+        "OpenCorvus E2E"
+      ],
+      "cwd": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-01",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "config",
+        "user.email",
+        "opencorvus-e2e@example.invalid"
+      ],
+      "cwd": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-01",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "add",
+        "."
+      ],
+      "cwd": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-01",
+      "status": 0,
+      "signal": null,
+      "stdout": "",
+      "stderr": "warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'src/windows.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'test/windows.test.js', LF will be replaced by CRLF the next time Git touches it\n"
+    },
+    {
+      "command": [
+        "git",
+        "commit",
+        "-m",
+        "test: seed backend algorithm case"
+      ],
+      "cwd": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-01",
+      "status": 0,
+      "signal": null,
+      "stdout": "[main (root-commit) 48d4905] test: seed backend algorithm case\n 3 files changed, 54 insertions(+)\n create mode 100644 package.json\n create mode 100644 src/windows.js\n create mode 100644 test/windows.test.js\n",
+      "stderr": ""
+    }
+  ],
+  "initialVerification": {
+    "command": [
+      "node",
+      "--test"
+    ],
+    "cwd": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-01",
+    "status": 1,
+    "signal": null,
+    "stdout": "✖ merges overlapping, nested, and chained windows with stable labels (5.013ms)\n✔ keeps adjacent windows distinct (0.7078ms)\n✖ rejects malformed windows with the typed error contract (1.6264ms)\nℹ tests 3\nℹ suites 0\nℹ pass 1\nℹ fail 2\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 155.4943\n\n✖ failing tests:\n\ntest at test\\windows.test.js:5:1\n✖ merges overlapping, nested, and chained windows with stable labels (5.013ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n  + actual - expected\n  \n    [\n      {\n        end: 12,\n        labels: [\n  +       'deploy'\n  +     ],\n  +     start: 8\n  +   },\n  +   {\n  +     end: 5,\n  +     labels: [\n  +       'cache',\n          'api',\n  +     ],\n  +     start: 1\n  +   },\n  +   {\n  +     end: 9,\n  +     labels: [\n  +       'api',\n  -       'cache',\n          'database',\n  +     ],\n  +     start: 4\n  +   },\n  +   {\n  +     end: 3,\n  +     labels: [\n  -       'deploy',\n          'nested'\n        ],\n  +     start: 2\n  -     start: 1\n      }\n    ]\n  \n      at TestContext.<anonymous> (file:///C:/Users/chuan/AppData/Local/Temp/opencorvus-backend-algorithm-loop/2026-08-09T02-23-30-230Z/case-01/test/windows.test.js:6:10)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.start (node:internal/test_runner/test:1096:17)\n      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: [ { start: 8, end: 12, labels: [Array] }, { start: 1, end: 5, labels: [Array] }, { start: 4, end: 9, labels: [Array] }, { start: 2, end: 3, labels: [Array] } ],\n    expected: [ { start: 1, end: 12, labels: [Array] } ],\n    operator: 'deepStrictEqual',\n    diff: 'simple'\n  }\n\ntest at test\\windows.test.js:30:1\n✖ rejects malformed windows with the typed error contract (1.6264ms)\n  AssertionError [ERR_ASSERTION]: Missing expected exception.\n      at TestContext.<anonymous> (file:///C:/Users/chuan/AppData/Local/Temp/opencorvus-backend-algorithm-loop/2026-08-09T02-23-30-230Z/case-01/test/windows.test.js:31:10)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n      at Test.postRun (node:internal/test_runner/test:1330:19)\n      at Test.run (node:internal/test_runner/test:1258:12)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {\n    generatedMessage: false,\n    code: 'ERR_ASSERTION',\n    actual: undefined,\n    operator: 'throws',\n    diff: 'simple'\n  }\n",
+    "stderr": ""
+  },
+  "baselineCommit": "48d4905f8f45684b251d8a91e0321e9b0d0e0b2f"
+}

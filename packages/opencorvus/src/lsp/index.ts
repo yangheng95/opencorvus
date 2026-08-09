@@ -17,6 +17,7 @@ import {
   TASK_EXECUTION_CAPSULE_BINDING_PROTOCOL,
 } from "@/engine/task-execution-capsule-binding"
 import { Process } from "@/util/process"
+import { InstanceLifecycleContext, type InstanceLifecycleCapabilities } from "@/project/instance-lifecycle-context"
 
 export namespace LSP {
   const log = Log.create({ service: "lsp" })
@@ -58,6 +59,11 @@ export namespace LSP {
     clients: LSPClient.Info[]
     spawning: Map<string, Promise<LSPClient.Info | undefined>>
     disposed: boolean
+    owner: PersistentProjectOwner
+  }
+  type PersistentProjectOwner = {
+    directory: string
+    lifecycle: InstanceLifecycleCapabilities
   }
   export type ProcessAuthority = { kind: "host"; cwd?: string } | { kind: "task"; taskID: string; cwd?: string }
   const clientProcessAuthorities = new WeakMap<LSPClient.Info, string>()
@@ -66,13 +72,31 @@ export namespace LSP {
     return authority.kind === "host" ? "host" : `task:${authority.taskID}`
   }
 
-  const createState = (servers: Record<string, LSPServer.Info>, clients: LSPClient.Info[] = []): State => ({
+  const createState = (
+    servers: Record<string, LSPServer.Info>,
+    owner: PersistentProjectOwner,
+    clients: LSPClient.Info[] = [],
+  ): State => ({
     broken: new Map<string, number>(),
     servers,
     clients,
     spawning: new Map<string, Promise<LSPClient.Info | undefined>>(),
     disposed: false,
+    owner,
   })
+
+  async function runPersistentProjectOperation<R>(
+    owner: PersistentProjectOwner,
+    label: string,
+    operation: () => R | Promise<R>,
+  ): Promise<R> {
+    const receipt = await owner.lifecycle.reenter({
+      directory: owner.directory,
+      fn: async () => ({ active: true as const, value: await operation() }),
+    })
+    if (!receipt) throw new Error(`${label} started after its project Instance was released`)
+    return receipt.value
+  }
 
   async function disposeClient(client: LSPClient.Info) {
     await client.shutdown()
@@ -147,11 +171,15 @@ export namespace LSP {
     async () => {
       const clients: LSPClient.Info[] = []
       const servers: Record<string, LSPServer.Info> = {}
+      const owner = {
+        directory: Instance.directory,
+        lifecycle: InstanceLifecycleContext.use(),
+      }
       const cfg = await Config.get()
 
       if (cfg.lsp === false) {
         log.info("all LSPs are disabled")
-        return createState(servers, clients)
+        return createState(servers, owner, clients)
       }
 
       for (const server of LSPServer.builtInServers()) {
@@ -193,7 +221,7 @@ export namespace LSP {
           .join(", "),
       })
 
-      return createState(servers, clients)
+      return createState(servers, owner, clients)
     },
     async (state) => {
       state.disposed = true
@@ -260,24 +288,28 @@ export namespace LSP {
     const extension = path.parse(file).ext || file
     const result: LSPClient.Info[] = []
     const authorityKey = processAuthorityKey(authority)
-    const stdio: LSPServer.StdioSpawner = authority.kind === "host"
-      ? async (command, argsOrOptions, maybeOptions) => LSPServer.spawnHostStdio(command, argsOrOptions, maybeOptions)
-      : async (command, argsOrOptions, maybeOptions) =>
-          LSPServer.spawnTaskStdio(authority.taskID, command, argsOrOptions, maybeOptions)
-    const probe: LSPServer.ProcessProbe = authority.kind === "host"
-      ? (root, argv) => Process.runHost(argv, {
-          cwd: root,
-          stdin: "ignore",
-          nothrow: true,
-          inactivityTimeoutMs: 30_000,
-          inactivityTimeoutMessage: `LSP capability probe ${argv.join(" ")} was inactive`,
-        })
-      : (root, argv) => Process.runTask({ taskID: authority.taskID, cwd: root }, argv, {
-          stdin: "ignore",
-          nothrow: true,
-          inactivityTimeoutMs: 30_000,
-          inactivityTimeoutMessage: `LSP capability probe ${argv.join(" ")} was inactive`,
-        })
+    const stdio: LSPServer.StdioSpawner =
+      authority.kind === "host"
+        ? async (command, argsOrOptions, maybeOptions) => LSPServer.spawnHostStdio(command, argsOrOptions, maybeOptions)
+        : async (command, argsOrOptions, maybeOptions) =>
+            LSPServer.spawnTaskStdio(authority.taskID, command, argsOrOptions, maybeOptions)
+    const probe: LSPServer.ProcessProbe =
+      authority.kind === "host"
+        ? (root, argv) =>
+            Process.runHost(argv, {
+              cwd: root,
+              stdin: "ignore",
+              nothrow: true,
+              inactivityTimeoutMs: 30_000,
+              inactivityTimeoutMessage: `LSP capability probe ${argv.join(" ")} was inactive`,
+            })
+        : (root, argv) =>
+            Process.runTask({ taskID: authority.taskID, cwd: root }, argv, {
+              stdin: "ignore",
+              nothrow: true,
+              inactivityTimeoutMs: 30_000,
+              inactivityTimeoutMessage: `LSP capability probe ${argv.join(" ")} was inactive`,
+            })
 
     async function schedule(server: LSPServer.Info, root: string, key: string) {
       if (s.disposed) return undefined
@@ -311,11 +343,25 @@ export namespace LSP {
             exitBeforeRegistration = reason
             return
           }
-          const retained = s.clients.filter((candidate) => candidate !== client)
-          if (retained.length === s.clients.length) return
-          s.clients = retained
-          log.warn(`LSP server ${server.id} exited; evicted client`, { root, error: reason.message })
-          Bus.publish(Event.Updated, {})
+          if (s.disposed) return
+          void runPersistentProjectOperation(s.owner, `LSP server ${server.id} exit`, async () => {
+            if (s.disposed || !client) return
+            const retained = s.clients.filter((candidate) => candidate !== client)
+            if (retained.length === s.clients.length) return
+            s.clients = retained
+            log.warn(`LSP server ${server.id} exited; evicted client`, { root, error: reason.message })
+            await Bus.publish(Event.Updated, {})
+          }).catch((error) => {
+            log.error(`LSP server ${server.id} exit reconciliation failed`, { root, error: String(error) })
+          })
+        },
+        onDiagnostics(properties) {
+          if (s.disposed) return
+          return runPersistentProjectOperation(s.owner, `LSP server ${server.id} diagnostics`, () =>
+            Bus.publish(LSPClient.Event.Diagnostics, properties),
+          ).catch((error) => {
+            log.error(`LSP server ${server.id} diagnostics publication failed`, { root, error: String(error) })
+          })
         },
       }).catch(async (err) => {
         markBroken(s, key)
@@ -395,7 +441,7 @@ export namespace LSP {
       if (s.disposed) continue
 
       result.push(client)
-      Bus.publish(Event.Updated, {})
+      await Bus.publish(Event.Updated, {})
     }
 
     return result
@@ -436,11 +482,7 @@ export namespace LSP {
     },
   }
 
-  async function touchFileWithAuthority(
-    authority: ProcessAuthority,
-    input: string,
-    waitForDiagnostics?: boolean,
-  ) {
+  async function touchFileWithAuthority(authority: ProcessAuthority, input: string, waitForDiagnostics?: boolean) {
     log.info("touching file", { file: input })
     const clients = await getClients(input, authority)
     await Promise.all(
@@ -476,9 +518,13 @@ export namespace LSP {
    * result or its tool lifecycle open.
    */
   export function warmFile(input: string, authority: ProcessAuthority) {
-    const operation = warmFileTouchForTest
-      ? warmFileTouchForTest(input, false)
-      : touchFileWithAuthority(authority, input, false)
+    const owner = {
+      directory: Instance.directory,
+      lifecycle: InstanceLifecycleContext.use(),
+    }
+    const operation = runPersistentProjectOperation(owner, `LSP file warm-up for ${input}`, () =>
+      warmFileTouchForTest ? warmFileTouchForTest(input, false) : touchFileWithAuthority(authority, input, false),
+    )
     void operation.catch((error) => {
       log.error("LSP file warm-up failed", { file: input, error: String(error) })
     })
@@ -589,7 +635,10 @@ export namespace LSP {
     return documentSymbolWithAuthority(authority, uri)
   }
 
-  export async function definition(input: { file: string; line: number; character: number }, authority: ProcessAuthority) {
+  export async function definition(
+    input: { file: string; line: number; character: number },
+    authority: ProcessAuthority,
+  ) {
     return runWithAuthority(authority, input.file, (client) =>
       client.connection
         .sendRequest("textDocument/definition", {
@@ -600,7 +649,10 @@ export namespace LSP {
     ).then((result) => result.flat().filter(Boolean))
   }
 
-  export async function references(input: { file: string; line: number; character: number }, authority: ProcessAuthority) {
+  export async function references(
+    input: { file: string; line: number; character: number },
+    authority: ProcessAuthority,
+  ) {
     return runWithAuthority(authority, input.file, (client) =>
       client.connection
         .sendRequest("textDocument/references", {
@@ -612,7 +664,10 @@ export namespace LSP {
     ).then((result) => result.flat().filter(Boolean))
   }
 
-  export async function implementation(input: { file: string; line: number; character: number }, authority: ProcessAuthority) {
+  export async function implementation(
+    input: { file: string; line: number; character: number },
+    authority: ProcessAuthority,
+  ) {
     return runWithAuthority(authority, input.file, (client) =>
       client.connection
         .sendRequest("textDocument/implementation", {
@@ -623,7 +678,10 @@ export namespace LSP {
     ).then((result) => result.flat().filter(Boolean))
   }
 
-  export async function prepareCallHierarchy(input: { file: string; line: number; character: number }, authority: ProcessAuthority) {
+  export async function prepareCallHierarchy(
+    input: { file: string; line: number; character: number },
+    authority: ProcessAuthority,
+  ) {
     return runWithAuthority(authority, input.file, (client) =>
       client.connection
         .sendRequest("textDocument/prepareCallHierarchy", {
@@ -634,7 +692,10 @@ export namespace LSP {
     ).then((result) => result.flat().filter(Boolean))
   }
 
-  export async function incomingCalls(input: { file: string; line: number; character: number }, authority: ProcessAuthority) {
+  export async function incomingCalls(
+    input: { file: string; line: number; character: number },
+    authority: ProcessAuthority,
+  ) {
     return runWithAuthority(authority, input.file, async (client) => {
       const items = (await client.connection
         .sendRequest("textDocument/prepareCallHierarchy", {
@@ -647,7 +708,10 @@ export namespace LSP {
     }).then((result) => result.flat().filter(Boolean))
   }
 
-  export async function outgoingCalls(input: { file: string; line: number; character: number }, authority: ProcessAuthority) {
+  export async function outgoingCalls(
+    input: { file: string; line: number; character: number },
+    authority: ProcessAuthority,
+  ) {
     return runWithAuthority(authority, input.file, async (client) => {
       const items = (await client.connection
         .sendRequest("textDocument/prepareCallHierarchy", {

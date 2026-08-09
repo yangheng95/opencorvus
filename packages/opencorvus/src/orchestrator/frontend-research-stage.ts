@@ -37,6 +37,8 @@ export function createFrontendResearchStageDispatcher(dependencies: FrontendRese
     onDispatchAuthorityCommit?: import("@/agent/runner").AgentDispatchAuthorityCommit
     onRuntimeReady?: (sessionID: string) => void | Promise<void>
   }): Promise<DispatchOutcomeResult> {
+    const dispatchID = dispatch.dispatchTurn?.current_dispatch_id
+    if (!dispatchID) throw new Error("Frontend Research dispatch requires current dispatch authority")
     const sourceUrls = dispatch.sourceUrls?.filter(isHttpWebpageUrl)
     try {
       const result = await FrontendResearchAgent.run({
@@ -72,6 +74,7 @@ export function createFrontendResearchStageDispatcher(dependencies: FrontendRese
         const provenance = artifactProvenanceForAgentTurn(result.sessionID, result.finalMessageID)
         return persistResearchArtifactBestEffort({
           taskID: dependencies.taskID,
+          dispatchID,
           component: "frontend-research",
           operation: "persist-partial-research-brief",
           sessionID: result.sessionID,
@@ -99,6 +102,7 @@ export function createFrontendResearchStageDispatcher(dependencies: FrontendRese
       try {
         const outcome = persistResearchArtifactBestEffort({
           taskID: dependencies.taskID,
+          dispatchID,
           component: "frontend-research",
           operation: "persist-research-brief",
           sessionID: result.sessionID,

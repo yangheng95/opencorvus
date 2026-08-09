@@ -1,0 +1,13 @@
+$ bun ./src/index.ts serve --hostname "127.0.0.1" --port "7878" --project-dir "C:\\Users\\chuan\\.codex\\worktrees\\0dbb\\opencorvus" --print-logs
+83 |     tool_part_id: z.string().min(1),
+84 |     tool_call_id: z.string().min(1),
+85 |     tool_name: z.literal("dispatch_agent"),
+86 |     child_session_id: z.string().min(1),
+87 |     target_agent_id: z.string().min(1),
+88 |     projected_worker_identity: ProjectedWorkerIdentitySchema,
+                                    ^
+ReferenceError: Cannot access 'ProjectedWorkerIdentitySchema' before initialization.
+      at C:\Users\chuan\.codex\worktrees\0dbb\opencorvus\packages\opencorvus\src\engine\dispatch-lineage.ts:88:32
+
+Bun v1.3.14 (Windows x64)
+error: script "dev" exited with code 1

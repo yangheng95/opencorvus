@@ -1244,28 +1244,25 @@ export namespace ProcessSupervisor {
       throwStreamFailures()
       const marker = await readReadyMarker()
       if (marker) return marker.target_pid
-      if (exitObserved) {
-        throwStreamFailures()
-        const finalMarker = await readReadyMarker()
-        if (finalMarker) return finalMarker.target_pid
-        const detail = input.startupDetails()
-        const suffix = detail ? `\n${detail}` : ""
-        if (exitError) {
-          throw new Error(
-            `Windows process supervisor failed before publishing readiness for command '${input.command}' (${startupIdentity}): ${errorMessage(exitError)}${suffix}`,
-          )
-        }
-        throw new Error(
-          `Windows process supervisor exited before publishing readiness for command '${input.command}' (exit=${exitCode}; ${startupIdentity})${suffix}`,
-        )
-      }
       await Bun.sleep(20)
     }
     throwStreamFailures()
     const finalMarker = await readReadyMarker()
     if (finalMarker) return finalMarker.target_pid
+    const detail = input.startupDetails()
+    const suffix = detail ? `\n${detail}` : ""
+    if (exitObserved) {
+      if (exitError) {
+        throw new Error(
+          `Windows process supervisor failed before publishing readiness for command '${input.command}' (${startupIdentity}): ${errorMessage(exitError)}${suffix}`,
+        )
+      }
+      throw new Error(
+        `Windows process supervisor exited before publishing readiness for command '${input.command}' (exit=${exitCode}; ${startupIdentity})${suffix}`,
+      )
+    }
     throw new Error(
-      `Windows process supervisor did not publish readiness for command '${input.command}' (${startupIdentity})`,
+      `Windows process supervisor did not publish readiness for command '${input.command}' (${startupIdentity})${suffix}`,
     )
   }
 

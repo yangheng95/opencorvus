@@ -19,6 +19,7 @@ import { Database } from "@/storage/db"
 import { persistIntentAnalysisArtifact } from "@/engine/persist"
 import { artifactProvenanceForAgentTurn } from "@/agent/artifact-read-facts"
 import { IntentAnalysisAgent } from "@/intent-analysis/agent"
+import { requireTaskOrchestratorToolExecutionContext } from "./tool-execution-context"
 
 const log = Log.create({ service: "analyze-intent-tool" })
 
@@ -38,6 +39,10 @@ export function createAnalyzeIntentTool<TSchema extends z.ZodType<AnalyzeIntentI
       inputSchema: input.inputSchema,
       execute: async ({ reason, attachment_refs }, executionInput) => {
         const execution = requireDispatchAdapterExecutionContext(executionInput)
+        const toolExecution = await requireTaskOrchestratorToolExecutionContext(execution.toolOptions, "analyze_intent", {
+          taskID: input.taskID,
+          agentSessionID: input.agentSessionID,
+        })
         const task = input.requireTask()
         const agentID = execution.agentID
         let output
@@ -94,6 +99,10 @@ export function createAnalyzeIntentTool<TSchema extends z.ZodType<AnalyzeIntentI
           if (blockers.length > 0) {
             const clarification = await Question.askAndFormat({
               sessionID: input.agentSessionID,
+              tool: {
+                messageID: toolExecution.orchestratorMessageID,
+                callID: toolExecution.toolCallID,
+              },
               questions: blockers.map(clarificationToQuestionInfo),
             })
             if (clarification.status !== "answered") {

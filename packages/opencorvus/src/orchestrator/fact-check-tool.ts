@@ -11,6 +11,7 @@ import { Log } from "@/util/log"
 import { recordTaskInfrastructureErrorBestEffort } from "./infrastructure-observation"
 import { artifactProvenanceForAgentTurn } from "@/agent/artifact-read-facts"
 import { FactCheckAgent } from "@/fact-check"
+import { resolveDispatchOccurrenceAuthority } from "@/engine/dispatch-lineage"
 
 const log = Log.create({ service: "fact-check-tool" })
 
@@ -112,6 +113,10 @@ export function createFactCheckTool(dependencies: FactCheckToolDependencies) {
         return DispatchOutcome.infrastructureFailure({
           operation: "resolve_fact_check_target",
           message: `Projected agent "${factCheckAgentName}" was not started via the fact_check adapter: ${targetScope.error}`,
+          recoveryAuthority: resolveDispatchOccurrenceAuthority({
+            taskID: task.id,
+            dispatchID: execution.dispatch.dispatchID,
+          }),
         })
       }
       const resolvedArgs = dependencies.stageInputSchema.parse({

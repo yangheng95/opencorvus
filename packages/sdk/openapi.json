@@ -202,7 +202,7 @@
         "type": "object"
       },
       "Auth": {
-        "anyOf": [
+        "oneOf": [
           {
             "$ref": "#/components/schemas/OAuth"
           },
@@ -1317,7 +1317,7 @@
             "additionalProperties": {
               "anyOf": [
                 {
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "$ref": "#/components/schemas/McpLocalConfig"
                     },
@@ -1659,7 +1659,7 @@
         "type": "object"
       },
       "ConversationCapabilityUpdate": {
-        "anyOf": [
+        "oneOf": [
           {
             "additionalProperties": false,
             "properties": {
@@ -1826,7 +1826,7 @@
         "type": "object"
       },
       "Event": {
-        "anyOf": [
+        "oneOf": [
           {
             "$ref": "#/components/schemas/Event.agent.coordination.action"
           },
@@ -1931,6 +1931,9 @@
           },
           {
             "$ref": "#/components/schemas/Event.mission.handoff"
+          },
+          {
+            "$ref": "#/components/schemas/Event.permission.abandoned"
           },
           {
             "$ref": "#/components/schemas/Event.permission.asked"
@@ -2538,7 +2541,7 @@
                 "type": "string"
               },
               "processAuthority": {
-                "anyOf": [
+                "oneOf": [
                   {
                     "additionalProperties": false,
                     "properties": {
@@ -2958,7 +2961,7 @@
               },
               "evidenceLocators": {
                 "items": {
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "additionalProperties": false,
                       "properties": {
@@ -3660,6 +3663,45 @@
           },
           "type": {
             "const": "mission.handoff",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "properties"
+        ],
+        "type": "object"
+      },
+      "Event.permission.abandoned": {
+        "properties": {
+          "properties": {
+            "properties": {
+              "origin": {
+                "const": "infrastructure",
+                "type": "string"
+              },
+              "requestID": {
+                "type": "string"
+              },
+              "sessionID": {
+                "type": "string"
+              },
+              "timeResolved": {
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "sessionID",
+              "requestID",
+              "origin",
+              "timeResolved"
+            ],
+            "type": "object"
+          },
+          "type": {
+            "const": "permission.abandoned",
             "type": "string"
           }
         },
@@ -4437,7 +4479,7 @@
                 "type": "object"
               },
               "error": {
-                "anyOf": [
+                "oneOf": [
                   {
                     "$ref": "#/components/schemas/ProviderAuthError"
                   },
@@ -4956,7 +4998,7 @@
               },
               "evidenceLocators": {
                 "items": {
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "additionalProperties": false,
                       "properties": {
@@ -6087,7 +6129,7 @@
                   "type": "object"
                 },
                 "source": {
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "additionalProperties": false,
                       "properties": {
@@ -6105,7 +6147,7 @@
                       "additionalProperties": false,
                       "properties": {
                         "generation": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "additionalProperties": false,
                               "properties": {
@@ -6776,7 +6818,7 @@
                 "type": "object"
               },
               "source": {
-                "anyOf": [
+                "oneOf": [
                   {
                     "additionalProperties": false,
                     "properties": {
@@ -6794,7 +6836,7 @@
                     "additionalProperties": false,
                     "properties": {
                       "generation": {
-                        "anyOf": [
+                        "oneOf": [
                           {
                             "additionalProperties": false,
                             "properties": {
@@ -7447,7 +7489,7 @@
                   "type": "object"
                 },
                 "source": {
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "additionalProperties": false,
                       "properties": {
@@ -7465,7 +7507,7 @@
                       "additionalProperties": false,
                       "properties": {
                         "generation": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "additionalProperties": false,
                               "properties": {
@@ -8046,7 +8088,7 @@
         "type": "object"
       },
       "FilePartSource": {
-        "anyOf": [
+        "oneOf": [
           {
             "$ref": "#/components/schemas/FileSource"
           },
@@ -8394,7 +8436,7 @@
         "type": "object"
       },
       "InteractiveArtifactPayload": {
-        "anyOf": [
+        "oneOf": [
           {
             "additionalProperties": false,
             "properties": {
@@ -9033,7 +9075,7 @@
                       "additionalProperties": false,
                       "properties": {
                         "geometry": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "additionalProperties": false,
                               "properties": {
@@ -9272,7 +9314,7 @@
             "properties": {
               "cells": {
                 "items": {
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "additionalProperties": false,
                       "properties": {
@@ -9319,7 +9361,7 @@
                         "outputs": {
                           "default": [],
                           "items": {
-                            "anyOf": [
+                            "oneOf": [
                               {
                                 "additionalProperties": false,
                                 "properties": {
@@ -10000,7 +10042,7 @@
               },
               "items": {
                 "items": {
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "additionalProperties": false,
                       "properties": {
@@ -10763,7 +10805,7 @@
                 "additionalProperties": false,
                 "properties": {
                   "authority": {
-                    "anyOf": [
+                    "oneOf": [
                       {
                         "additionalProperties": false,
                         "properties": {
@@ -10868,7 +10910,7 @@
                     "type": "object"
                   },
                   "lifecycle": {
-                    "anyOf": [
+                    "oneOf": [
                       {
                         "additionalProperties": false,
                         "properties": {
@@ -11212,7 +11254,7 @@
         "type": "object"
       },
       "MCPStatus": {
-        "anyOf": [
+        "oneOf": [
           {
             "$ref": "#/components/schemas/MCPStatusConnected"
           },
@@ -12201,7 +12243,8 @@
         "additionalProperties": false,
         "properties": {
           "credential": {
-            "anyOf": [
+            "description": "Static credential placement. The secret is stored in the user-owned MCP auth store, never in project config.",
+            "oneOf": [
               {
                 "additionalProperties": false,
                 "properties": {
@@ -12256,8 +12299,7 @@
                 ],
                 "type": "object"
               }
-            ],
-            "description": "Static credential placement. The secret is stored in the user-owned MCP auth store, never in project config."
+            ]
           },
           "enabled": {
             "description": "Enable or disable the MCP server on startup",
@@ -13111,7 +13153,7 @@
         "type": "object"
       },
       "OutputFormat": {
-        "anyOf": [
+        "oneOf": [
           {
             "$ref": "#/components/schemas/OutputFormatText"
           },
@@ -13155,7 +13197,7 @@
         "type": "object"
       },
       "Part": {
-        "anyOf": [
+        "oneOf": [
           {
             "$ref": "#/components/schemas/TextPart"
           },
@@ -13797,7 +13839,7 @@
         "type": "object"
       },
       "ProviderAccountUsage": {
-        "anyOf": [
+        "oneOf": [
           {
             "$ref": "#/components/schemas/ProviderMonetaryBalanceUsage"
           },
@@ -13823,7 +13865,7 @@
         "type": "string"
       },
       "ProviderAccountUsageResponse": {
-        "anyOf": [
+        "oneOf": [
           {
             "properties": {
               "ok": {
@@ -13960,7 +14002,7 @@
         "type": "object"
       },
       "ProviderAuthPrompt": {
-        "anyOf": [
+        "oneOf": [
           {
             "properties": {
               "key": {
@@ -16322,7 +16364,7 @@
         "type": "object"
       },
       "ToolState": {
-        "anyOf": [
+        "oneOf": [
           {
             "$ref": "#/components/schemas/ToolStatePending"
           },
@@ -16697,7 +16739,7 @@
         "type": "object"
       },
       "VisibleMessage": {
-        "anyOf": [
+        "oneOf": [
           {
             "properties": {
               "agent": {
@@ -16875,7 +16917,7 @@
                 "type": "number"
               },
               "error": {
-                "anyOf": [
+                "oneOf": [
                   {
                     "$ref": "#/components/schemas/ProviderAuthError"
                   },
@@ -17068,7 +17110,7 @@
         ]
       },
       "VisibleMessagePart": {
-        "anyOf": [
+        "oneOf": [
           {
             "additionalProperties": false,
             "properties": {
@@ -19196,7 +19238,7 @@
                           "type": "string"
                         },
                         "local_action": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "additionalProperties": false,
                               "properties": {
@@ -24572,7 +24614,7 @@
                             "type": "object"
                           },
                           "source": {
-                            "anyOf": [
+                            "oneOf": [
                               {
                                 "additionalProperties": false,
                                 "properties": {
@@ -24590,7 +24632,7 @@
                                 "additionalProperties": false,
                                 "properties": {
                                   "generation": {
-                                    "anyOf": [
+                                    "oneOf": [
                                       {
                                         "additionalProperties": false,
                                         "properties": {
@@ -24779,7 +24821,7 @@
                       "type": "array"
                     },
                     "scope": {
-                      "anyOf": [
+                      "oneOf": [
                         {
                           "additionalProperties": false,
                           "properties": {
@@ -25323,7 +25365,7 @@
                             "type": "object"
                           },
                           "source": {
-                            "anyOf": [
+                            "oneOf": [
                               {
                                 "additionalProperties": false,
                                 "properties": {
@@ -25341,7 +25383,7 @@
                                 "additionalProperties": false,
                                 "properties": {
                                   "generation": {
-                                    "anyOf": [
+                                    "oneOf": [
                                       {
                                         "additionalProperties": false,
                                         "properties": {
@@ -26069,7 +26111,7 @@
                     "type": "string"
                   },
                   "intent": {
-                    "anyOf": [
+                    "oneOf": [
                       {
                         "additionalProperties": false,
                         "properties": {
@@ -26499,7 +26541,7 @@
                           "type": "string"
                         },
                         "target": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "additionalProperties": false,
                               "properties": {
@@ -26582,7 +26624,7 @@
                     },
                     "integrity_issues": {
                       "items": {
-                        "anyOf": [
+                        "oneOf": [
                           {
                             "additionalProperties": false,
                             "properties": {
@@ -26713,7 +26755,7 @@
                                     "type": "string"
                                   },
                                   "producer": {
-                                    "anyOf": [
+                                    "oneOf": [
                                       {
                                         "additionalProperties": false,
                                         "properties": {
@@ -27027,7 +27069,7 @@
                                     "type": "string"
                                   },
                                   "producer": {
-                                    "anyOf": [
+                                    "oneOf": [
                                       {
                                         "additionalProperties": false,
                                         "properties": {
@@ -27266,7 +27308,7 @@
                                 "type": "string"
                               },
                               "target": {
-                                "anyOf": [
+                                "oneOf": [
                                   {
                                     "additionalProperties": false,
                                     "properties": {
@@ -27334,7 +27376,7 @@
                                 ]
                               },
                               "trial_execution": {
-                                "anyOf": [
+                                "oneOf": [
                                   {
                                     "additionalProperties": false,
                                     "properties": {
@@ -27444,7 +27486,7 @@
                                       "type": "string"
                                     },
                                     "producer": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "additionalProperties": false,
                                           "properties": {
@@ -27764,7 +27806,7 @@
                                             "type": "string"
                                           },
                                           "producer": {
-                                            "anyOf": [
+                                            "oneOf": [
                                               {
                                                 "additionalProperties": false,
                                                 "properties": {
@@ -28104,7 +28146,7 @@
                                       },
                                       "graph_issues": {
                                         "items": {
-                                          "anyOf": [
+                                          "oneOf": [
                                             {
                                               "additionalProperties": false,
                                               "properties": {
@@ -28196,7 +28238,7 @@
                                                       "type": "string"
                                                     },
                                                     "producer": {
-                                                      "anyOf": [
+                                                      "oneOf": [
                                                         {
                                                           "additionalProperties": false,
                                                           "properties": {
@@ -28467,7 +28509,7 @@
                                                       "type": "string"
                                                     },
                                                     "producer": {
-                                                      "anyOf": [
+                                                      "oneOf": [
                                                         {
                                                           "additionalProperties": false,
                                                           "properties": {
@@ -28754,7 +28796,7 @@
                                                       "type": "string"
                                                     },
                                                     "producer": {
-                                                      "anyOf": [
+                                                      "oneOf": [
                                                         {
                                                           "additionalProperties": false,
                                                           "properties": {
@@ -29016,7 +29058,7 @@
                                                 },
                                                 "evidence": {
                                                   "items": {
-                                                    "anyOf": [
+                                                    "oneOf": [
                                                       {
                                                         "additionalProperties": false,
                                                         "properties": {
@@ -29236,7 +29278,7 @@
                                                       "type": "string"
                                                     },
                                                     "producer": {
-                                                      "anyOf": [
+                                                      "oneOf": [
                                                         {
                                                           "additionalProperties": false,
                                                           "properties": {
@@ -29779,7 +29821,7 @@
                                                   "type": "string"
                                                 },
                                                 "producer": {
-                                                  "anyOf": [
+                                                  "oneOf": [
                                                     {
                                                       "additionalProperties": false,
                                                       "properties": {
@@ -30037,7 +30079,7 @@
                                                 },
                                                 "evidence": {
                                                   "items": {
-                                                    "anyOf": [
+                                                    "oneOf": [
                                                       {
                                                         "additionalProperties": false,
                                                         "properties": {
@@ -30209,7 +30251,7 @@
                                                   "type": "string"
                                                 },
                                                 "manager_receipt": {
-                                                  "anyOf": [
+                                                  "oneOf": [
                                                     {
                                                       "additionalProperties": false,
                                                       "properties": {
@@ -30437,7 +30479,7 @@
                                                   "type": "string"
                                                 },
                                                 "target": {
-                                                  "anyOf": [
+                                                  "oneOf": [
                                                     {
                                                       "additionalProperties": false,
                                                       "properties": {
@@ -30629,7 +30671,7 @@
                                         "properties": {
                                           "evidence": {
                                             "items": {
-                                              "anyOf": [
+                                              "oneOf": [
                                                 {
                                                   "additionalProperties": false,
                                                   "properties": {
@@ -30838,7 +30880,7 @@
                                         "properties": {
                                           "evidence": {
                                             "items": {
-                                              "anyOf": [
+                                              "oneOf": [
                                                 {
                                                   "additionalProperties": false,
                                                   "properties": {
@@ -31107,7 +31149,7 @@
                                         "type": "string"
                                       },
                                       "producer": {
-                                        "anyOf": [
+                                        "oneOf": [
                                           {
                                             "additionalProperties": false,
                                             "properties": {
@@ -31317,7 +31359,7 @@
                                 },
                                 "graph_issues": {
                                   "items": {
-                                    "anyOf": [
+                                    "oneOf": [
                                       {
                                         "additionalProperties": false,
                                         "properties": {
@@ -31409,7 +31451,7 @@
                                                 "type": "string"
                                               },
                                               "producer": {
-                                                "anyOf": [
+                                                "oneOf": [
                                                   {
                                                     "additionalProperties": false,
                                                     "properties": {
@@ -31680,7 +31722,7 @@
                                                 "type": "string"
                                               },
                                               "producer": {
-                                                "anyOf": [
+                                                "oneOf": [
                                                   {
                                                     "additionalProperties": false,
                                                     "properties": {
@@ -31967,7 +32009,7 @@
                                                 "type": "string"
                                               },
                                               "producer": {
-                                                "anyOf": [
+                                                "oneOf": [
                                                   {
                                                     "additionalProperties": false,
                                                     "properties": {
@@ -32229,7 +32271,7 @@
                                           },
                                           "evidence": {
                                             "items": {
-                                              "anyOf": [
+                                              "oneOf": [
                                                 {
                                                   "additionalProperties": false,
                                                   "properties": {
@@ -32449,7 +32491,7 @@
                                                 "type": "string"
                                               },
                                               "producer": {
-                                                "anyOf": [
+                                                "oneOf": [
                                                   {
                                                     "additionalProperties": false,
                                                     "properties": {
@@ -32755,7 +32797,7 @@
                                         "type": "string"
                                       },
                                       "producer": {
-                                        "anyOf": [
+                                        "oneOf": [
                                           {
                                             "additionalProperties": false,
                                             "properties": {
@@ -33018,7 +33060,7 @@
                                         "type": "string"
                                       },
                                       "producer": {
-                                        "anyOf": [
+                                        "oneOf": [
                                           {
                                             "additionalProperties": false,
                                             "properties": {
@@ -33390,7 +33432,7 @@
                           },
                           "graph_issues": {
                             "items": {
-                              "anyOf": [
+                              "oneOf": [
                                 {
                                   "additionalProperties": false,
                                   "properties": {
@@ -33482,7 +33524,7 @@
                                           "type": "string"
                                         },
                                         "producer": {
-                                          "anyOf": [
+                                          "oneOf": [
                                             {
                                               "additionalProperties": false,
                                               "properties": {
@@ -33753,7 +33795,7 @@
                                           "type": "string"
                                         },
                                         "producer": {
-                                          "anyOf": [
+                                          "oneOf": [
                                             {
                                               "additionalProperties": false,
                                               "properties": {
@@ -34040,7 +34082,7 @@
                                           "type": "string"
                                         },
                                         "producer": {
-                                          "anyOf": [
+                                          "oneOf": [
                                             {
                                               "additionalProperties": false,
                                               "properties": {
@@ -34302,7 +34344,7 @@
                                     },
                                     "evidence": {
                                       "items": {
-                                        "anyOf": [
+                                        "oneOf": [
                                           {
                                             "additionalProperties": false,
                                             "properties": {
@@ -34522,7 +34564,7 @@
                                           "type": "string"
                                         },
                                         "producer": {
-                                          "anyOf": [
+                                          "oneOf": [
                                             {
                                               "additionalProperties": false,
                                               "properties": {
@@ -34796,7 +34838,7 @@
                                   "type": "string"
                                 },
                                 "producer": {
-                                  "anyOf": [
+                                  "oneOf": [
                                     {
                                       "additionalProperties": false,
                                       "properties": {
@@ -35266,7 +35308,7 @@
                           "type": "string"
                         },
                         "target": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "additionalProperties": false,
                               "properties": {
@@ -35349,7 +35391,7 @@
                     },
                     "integrity_issues": {
                       "items": {
-                        "anyOf": [
+                        "oneOf": [
                           {
                             "additionalProperties": false,
                             "properties": {
@@ -35480,7 +35522,7 @@
                                     "type": "string"
                                   },
                                   "producer": {
-                                    "anyOf": [
+                                    "oneOf": [
                                       {
                                         "additionalProperties": false,
                                         "properties": {
@@ -35766,7 +35808,7 @@
                                   "type": "string"
                                 },
                                 "producer": {
-                                  "anyOf": [
+                                  "oneOf": [
                                     {
                                       "additionalProperties": false,
                                       "properties": {
@@ -36005,7 +36047,7 @@
                               "type": "string"
                             },
                             "target": {
-                              "anyOf": [
+                              "oneOf": [
                                 {
                                   "additionalProperties": false,
                                   "properties": {
@@ -36073,7 +36115,7 @@
                               ]
                             },
                             "trial_execution": {
-                              "anyOf": [
+                              "oneOf": [
                                 {
                                   "additionalProperties": false,
                                   "properties": {
@@ -36183,7 +36225,7 @@
                                     "type": "string"
                                   },
                                   "producer": {
-                                    "anyOf": [
+                                    "oneOf": [
                                       {
                                         "additionalProperties": false,
                                         "properties": {
@@ -36503,7 +36545,7 @@
                                           "type": "string"
                                         },
                                         "producer": {
-                                          "anyOf": [
+                                          "oneOf": [
                                             {
                                               "additionalProperties": false,
                                               "properties": {
@@ -36843,7 +36885,7 @@
                                     },
                                     "graph_issues": {
                                       "items": {
-                                        "anyOf": [
+                                        "oneOf": [
                                           {
                                             "additionalProperties": false,
                                             "properties": {
@@ -36935,7 +36977,7 @@
                                                     "type": "string"
                                                   },
                                                   "producer": {
-                                                    "anyOf": [
+                                                    "oneOf": [
                                                       {
                                                         "additionalProperties": false,
                                                         "properties": {
@@ -37206,7 +37248,7 @@
                                                     "type": "string"
                                                   },
                                                   "producer": {
-                                                    "anyOf": [
+                                                    "oneOf": [
                                                       {
                                                         "additionalProperties": false,
                                                         "properties": {
@@ -37493,7 +37535,7 @@
                                                     "type": "string"
                                                   },
                                                   "producer": {
-                                                    "anyOf": [
+                                                    "oneOf": [
                                                       {
                                                         "additionalProperties": false,
                                                         "properties": {
@@ -37755,7 +37797,7 @@
                                               },
                                               "evidence": {
                                                 "items": {
-                                                  "anyOf": [
+                                                  "oneOf": [
                                                     {
                                                       "additionalProperties": false,
                                                       "properties": {
@@ -37975,7 +38017,7 @@
                                                     "type": "string"
                                                   },
                                                   "producer": {
-                                                    "anyOf": [
+                                                    "oneOf": [
                                                       {
                                                         "additionalProperties": false,
                                                         "properties": {
@@ -38518,7 +38560,7 @@
                                                 "type": "string"
                                               },
                                               "producer": {
-                                                "anyOf": [
+                                                "oneOf": [
                                                   {
                                                     "additionalProperties": false,
                                                     "properties": {
@@ -38776,7 +38818,7 @@
                                               },
                                               "evidence": {
                                                 "items": {
-                                                  "anyOf": [
+                                                  "oneOf": [
                                                     {
                                                       "additionalProperties": false,
                                                       "properties": {
@@ -38948,7 +38990,7 @@
                                                 "type": "string"
                                               },
                                               "manager_receipt": {
-                                                "anyOf": [
+                                                "oneOf": [
                                                   {
                                                     "additionalProperties": false,
                                                     "properties": {
@@ -39176,7 +39218,7 @@
                                                 "type": "string"
                                               },
                                               "target": {
-                                                "anyOf": [
+                                                "oneOf": [
                                                   {
                                                     "additionalProperties": false,
                                                     "properties": {
@@ -39368,7 +39410,7 @@
                                       "properties": {
                                         "evidence": {
                                           "items": {
-                                            "anyOf": [
+                                            "oneOf": [
                                               {
                                                 "additionalProperties": false,
                                                 "properties": {
@@ -39577,7 +39619,7 @@
                                       "properties": {
                                         "evidence": {
                                           "items": {
-                                            "anyOf": [
+                                            "oneOf": [
                                               {
                                                 "additionalProperties": false,
                                                 "properties": {
@@ -39846,7 +39888,7 @@
                                       "type": "string"
                                     },
                                     "producer": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "additionalProperties": false,
                                           "properties": {
@@ -40056,7 +40098,7 @@
                               },
                               "graph_issues": {
                                 "items": {
-                                  "anyOf": [
+                                  "oneOf": [
                                     {
                                       "additionalProperties": false,
                                       "properties": {
@@ -40148,7 +40190,7 @@
                                               "type": "string"
                                             },
                                             "producer": {
-                                              "anyOf": [
+                                              "oneOf": [
                                                 {
                                                   "additionalProperties": false,
                                                   "properties": {
@@ -40419,7 +40461,7 @@
                                               "type": "string"
                                             },
                                             "producer": {
-                                              "anyOf": [
+                                              "oneOf": [
                                                 {
                                                   "additionalProperties": false,
                                                   "properties": {
@@ -40706,7 +40748,7 @@
                                               "type": "string"
                                             },
                                             "producer": {
-                                              "anyOf": [
+                                              "oneOf": [
                                                 {
                                                   "additionalProperties": false,
                                                   "properties": {
@@ -40968,7 +41010,7 @@
                                         },
                                         "evidence": {
                                           "items": {
-                                            "anyOf": [
+                                            "oneOf": [
                                               {
                                                 "additionalProperties": false,
                                                 "properties": {
@@ -41188,7 +41230,7 @@
                                               "type": "string"
                                             },
                                             "producer": {
-                                              "anyOf": [
+                                              "oneOf": [
                                                 {
                                                   "additionalProperties": false,
                                                   "properties": {
@@ -41494,7 +41536,7 @@
                                       "type": "string"
                                     },
                                     "producer": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "additionalProperties": false,
                                           "properties": {
@@ -41757,7 +41799,7 @@
                                       "type": "string"
                                     },
                                     "producer": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "additionalProperties": false,
                                           "properties": {
@@ -42129,7 +42171,7 @@
                         },
                         "graph_issues": {
                           "items": {
-                            "anyOf": [
+                            "oneOf": [
                               {
                                 "additionalProperties": false,
                                 "properties": {
@@ -42221,7 +42263,7 @@
                                         "type": "string"
                                       },
                                       "producer": {
-                                        "anyOf": [
+                                        "oneOf": [
                                           {
                                             "additionalProperties": false,
                                             "properties": {
@@ -42492,7 +42534,7 @@
                                         "type": "string"
                                       },
                                       "producer": {
-                                        "anyOf": [
+                                        "oneOf": [
                                           {
                                             "additionalProperties": false,
                                             "properties": {
@@ -42779,7 +42821,7 @@
                                         "type": "string"
                                       },
                                       "producer": {
-                                        "anyOf": [
+                                        "oneOf": [
                                           {
                                             "additionalProperties": false,
                                             "properties": {
@@ -43041,7 +43083,7 @@
                                   },
                                   "evidence": {
                                     "items": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "additionalProperties": false,
                                           "properties": {
@@ -43261,7 +43303,7 @@
                                         "type": "string"
                                       },
                                       "producer": {
-                                        "anyOf": [
+                                        "oneOf": [
                                           {
                                             "additionalProperties": false,
                                             "properties": {
@@ -43535,7 +43577,7 @@
                                 "type": "string"
                               },
                               "producer": {
-                                "anyOf": [
+                                "oneOf": [
                                   {
                                     "additionalProperties": false,
                                     "properties": {
@@ -43884,7 +43926,7 @@
                                     "type": "string"
                                   },
                                   "producer": {
-                                    "anyOf": [
+                                    "oneOf": [
                                       {
                                         "additionalProperties": false,
                                         "properties": {
@@ -44138,7 +44180,7 @@
                                         },
                                         "evidence": {
                                           "items": {
-                                            "anyOf": [
+                                            "oneOf": [
                                               {
                                                 "additionalProperties": false,
                                                 "properties": {
@@ -44431,7 +44473,7 @@
                                     "type": "string"
                                   },
                                   "producer": {
-                                    "anyOf": [
+                                    "oneOf": [
                                       {
                                         "additionalProperties": false,
                                         "properties": {
@@ -44644,13 +44686,13 @@
                           },
                           "scorer_results": {
                             "items": {
-                              "anyOf": [
+                              "oneOf": [
                                 {
                                   "additionalProperties": false,
                                   "properties": {
                                     "evidence": {
                                       "items": {
-                                        "anyOf": [
+                                        "oneOf": [
                                           {
                                             "additionalProperties": false,
                                             "properties": {
@@ -44841,7 +44883,7 @@
                                   "properties": {
                                     "evidence": {
                                       "items": {
-                                        "anyOf": [
+                                        "oneOf": [
                                           {
                                             "additionalProperties": false,
                                             "properties": {
@@ -45161,7 +45203,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "anyOf": [
+                "oneOf": [
                   {
                     "additionalProperties": false,
                     "properties": {
@@ -45470,7 +45512,7 @@
                         },
                         "evidence": {
                           "items": {
-                            "anyOf": [
+                            "oneOf": [
                               {
                                 "additionalProperties": false,
                                 "properties": {
@@ -45642,7 +45684,7 @@
                           "type": "string"
                         },
                         "manager_receipt": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "additionalProperties": false,
                               "properties": {
@@ -45870,7 +45912,7 @@
                           "type": "string"
                         },
                         "target": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "additionalProperties": false,
                               "properties": {
@@ -46194,7 +46236,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "additionalProperties": false,
                       "properties": {
@@ -46779,7 +46821,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "additionalProperties": false,
                       "properties": {
@@ -47360,7 +47402,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "additionalProperties": false,
                       "properties": {
@@ -48888,7 +48930,7 @@
                   "properties": {
                     "installed": {
                       "items": {
-                        "anyOf": [
+                        "oneOf": [
                           {
                             "additionalProperties": false,
                             "properties": {
@@ -49357,7 +49399,7 @@
                     },
                     "skipped": {
                       "items": {
-                        "anyOf": [
+                        "oneOf": [
                           {
                             "additionalProperties": false,
                             "properties": {
@@ -50221,7 +50263,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "receipt": {
-                      "anyOf": [
+                      "oneOf": [
                         {
                           "additionalProperties": false,
                           "properties": {
@@ -53164,7 +53206,7 @@
                           "type": "string"
                         },
                         "local_action": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "additionalProperties": false,
                               "properties": {
@@ -53331,7 +53373,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "anyOf": [
+                "oneOf": [
                   {
                     "additionalProperties": false,
                     "properties": {
@@ -53649,7 +53691,8 @@
                         "type": "string"
                       },
                       "locator": {
-                        "anyOf": [
+                        "description": "Exact typed locator returned by Artifact search, including its immutable digest.",
+                        "oneOf": [
                           {
                             "additionalProperties": false,
                             "properties": {
@@ -53811,8 +53854,7 @@
                             ],
                             "type": "object"
                           }
-                        ],
-                        "description": "Exact typed locator returned by Artifact search, including its immutable digest."
+                        ]
                       },
                       "max_bytes": {
                         "default": 24576,
@@ -53855,7 +53897,7 @@
                             "evidence_locators": {
                               "description": "Exact Task Artifact locators completely read earlier in this Mission Turn.",
                               "items": {
-                                "anyOf": [
+                                "oneOf": [
                                   {
                                     "additionalProperties": false,
                                     "properties": {
@@ -54027,48 +54069,10 @@
                               "description": "Current child Task accepted by this Mission decision.",
                               "minLength": 1,
                               "type": "string"
-                            },
-                            "terminal_lifecycle_reference": {
-                              "additionalProperties": false,
-                              "description": "Exact current completed occurrence reviewed by Mission.",
-                              "properties": {
-                                "terminalError": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "terminalEventID": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "terminalReason": {
-                                  "const": "interrupted",
-                                  "type": "string"
-                                },
-                                "terminalStatus": {
-                                  "enum": [
-                                    "completed",
-                                    "failed",
-                                    "cancelled"
-                                  ],
-                                  "type": "string"
-                                },
-                                "timeCompleted": {
-                                  "exclusiveMinimum": 0,
-                                  "maximum": 9007199254740991,
-                                  "type": "integer"
-                                }
-                              },
-                              "required": [
-                                "terminalEventID",
-                                "terminalStatus",
-                                "timeCompleted"
-                              ],
-                              "type": "object"
                             }
                           },
                           "required": [
                             "task_id",
-                            "terminal_lifecycle_reference",
                             "evidence_locators"
                           ],
                           "type": "object"
@@ -54774,7 +54778,7 @@
                       "evidence_locators": {
                         "description": "Exact source Task locators completely read earlier in this same Mission Turn.",
                         "items": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "additionalProperties": false,
                               "properties": {
@@ -54947,43 +54951,6 @@
                         "minLength": 1,
                         "type": "string"
                       },
-                      "terminal_lifecycle_reference": {
-                        "additionalProperties": false,
-                        "description": "Exact current terminal occurrence that Mission reviewed; stale references return a lifecycle conflict.",
-                        "properties": {
-                          "terminalError": {
-                            "minLength": 1,
-                            "type": "string"
-                          },
-                          "terminalEventID": {
-                            "minLength": 1,
-                            "type": "string"
-                          },
-                          "terminalReason": {
-                            "const": "interrupted",
-                            "type": "string"
-                          },
-                          "terminalStatus": {
-                            "enum": [
-                              "completed",
-                              "failed",
-                              "cancelled"
-                            ],
-                            "type": "string"
-                          },
-                          "timeCompleted": {
-                            "exclusiveMinimum": 0,
-                            "maximum": 9007199254740991,
-                            "type": "integer"
-                          }
-                        },
-                        "required": [
-                          "terminalEventID",
-                          "terminalStatus",
-                          "timeCompleted"
-                        ],
-                        "type": "object"
-                      },
                       "text": {
                         "description": "Visible Mission-authored repair request describing the observed acceptance gap.",
                         "maxLength": 32000,
@@ -54994,7 +54961,6 @@
                     "required": [
                       "action",
                       "taskID",
-                      "terminal_lifecycle_reference",
                       "text",
                       "evidence_locators"
                     ],
@@ -55737,7 +55703,7 @@
                             "scorers": {
                               "description": "At least one scorer — a spec without a scorer is untestable.",
                               "items": {
-                                "anyOf": [
+                                "oneOf": [
                                   {
                                     "additionalProperties": false,
                                     "properties": {
@@ -55757,7 +55723,7 @@
                                         "type": "string"
                                       },
                                       "spec": {
-                                        "anyOf": [
+                                        "oneOf": [
                                           {
                                             "additionalProperties": false,
                                             "properties": {
@@ -56246,7 +56212,7 @@
                       "type": "string"
                     },
                     "local_action": {
-                      "anyOf": [
+                      "oneOf": [
                         {
                           "additionalProperties": false,
                           "properties": {
@@ -56664,7 +56630,7 @@
                         "type": "string"
                       },
                       "target": {
-                        "anyOf": [
+                        "oneOf": [
                           {
                             "additionalProperties": false,
                             "properties": {
@@ -56812,7 +56778,7 @@
                     "type": "string"
                   },
                   "target": {
-                    "anyOf": [
+                    "oneOf": [
                       {
                         "additionalProperties": false,
                         "properties": {
@@ -57193,7 +57159,7 @@
                     "type": "string"
                   },
                   "target": {
-                    "anyOf": [
+                    "oneOf": [
                       {
                         "additionalProperties": false,
                         "properties": {
@@ -57347,7 +57313,7 @@
                       "type": "string"
                     },
                     "target": {
-                      "anyOf": [
+                      "oneOf": [
                         {
                           "additionalProperties": false,
                           "properties": {
@@ -58623,7 +58589,7 @@
                                 "type": "object"
                               },
                               "source": {
-                                "anyOf": [
+                                "oneOf": [
                                   {
                                     "additionalProperties": false,
                                     "properties": {
@@ -58641,7 +58607,7 @@
                                     "additionalProperties": false,
                                     "properties": {
                                       "generation": {
-                                        "anyOf": [
+                                        "oneOf": [
                                           {
                                             "additionalProperties": false,
                                             "properties": {
@@ -61275,7 +61241,7 @@
                       "additionalProperties": false,
                       "properties": {
                         "locator": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "additionalProperties": false,
                               "properties": {
@@ -63877,7 +63843,7 @@
                           },
                           "evidenceLocators": {
                             "items": {
-                              "anyOf": [
+                              "oneOf": [
                                 {
                                   "additionalProperties": false,
                                   "properties": {
@@ -64264,7 +64230,7 @@
             "content": {
               "text/event-stream": {
                 "schema": {
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "additionalProperties": false,
                       "properties": {
@@ -64855,7 +64821,7 @@
                 "additionalProperties": false,
                 "properties": {
                   "config": {
-                    "anyOf": [
+                    "oneOf": [
                       {
                         "$ref": "#/components/schemas/McpLocalConfig"
                       },
@@ -67622,7 +67588,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "anyOf": [
+                "oneOf": [
                   {
                     "additionalProperties": false,
                     "properties": {
@@ -70235,7 +70201,7 @@
                       "type": "string"
                     },
                     "local_action": {
-                      "anyOf": [
+                      "oneOf": [
                         {
                           "additionalProperties": false,
                           "properties": {
@@ -70475,7 +70441,7 @@
             "content": {
               "text/event-stream": {
                 "schema": {
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "additionalProperties": false,
                       "properties": {
@@ -70553,7 +70519,7 @@
                               "type": "string"
                             },
                             "local_action": {
-                              "anyOf": [
+                              "oneOf": [
                                 {
                                   "additionalProperties": false,
                                   "properties": {
@@ -71281,6 +71247,33 @@
                       },
                       "type": "array"
                     },
+                    "worktreeGCPreservations": {
+                      "items": {
+                        "properties": {
+                          "detail": {
+                            "type": "string"
+                          },
+                          "primaryDir": {
+                            "type": "string"
+                          },
+                          "projectID": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "const": "registry-unavailable",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "projectID",
+                          "primaryDir",
+                          "reason",
+                          "detail"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
                     "worktreeOrphans": {
                       "items": {
                         "properties": {
@@ -71338,7 +71331,8 @@
                   },
                   "required": [
                     "worktreeOrphans",
-                    "worktreeGCCandidates"
+                    "worktreeGCCandidates",
+                    "worktreeGCPreservations"
                   ],
                   "type": "object"
                 }
@@ -73616,7 +73610,7 @@
             "content": {
               "text/event-stream": {
                 "schema": {
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "additionalProperties": false,
                       "properties": {
@@ -75167,7 +75161,7 @@
                   },
                   "parts": {
                     "items": {
-                      "anyOf": [
+                      "oneOf": [
                         {
                           "properties": {
                             "filename": {
@@ -75307,7 +75301,7 @@
                           "type": "number"
                         },
                         "error": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "$ref": "#/components/schemas/ProviderAuthError"
                             },
@@ -76925,7 +76919,7 @@
                                 "properties": {
                                   "activity": {
                                     "items": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "properties": {
                                             "id": {
@@ -77203,7 +77197,7 @@
                                 "properties": {
                                   "activity": {
                                     "items": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "properties": {
                                             "id": {
@@ -77888,7 +77882,7 @@
                                   "type": "boolean"
                                 },
                                 "locator": {
-                                  "anyOf": [
+                                  "oneOf": [
                                     {
                                       "additionalProperties": false,
                                       "properties": {
@@ -78010,7 +78004,7 @@
                                 "producer": {
                                   "anyOf": [
                                     {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "additionalProperties": false,
                                           "properties": {
@@ -78226,7 +78220,7 @@
                                   "type": "integer"
                                 },
                                 "version": {
-                                  "anyOf": [
+                                  "oneOf": [
                                     {
                                       "additionalProperties": false,
                                       "properties": {
@@ -78446,7 +78440,7 @@
                                 "properties": {
                                   "activity": {
                                     "items": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "properties": {
                                             "id": {
@@ -78724,7 +78718,7 @@
                                 "properties": {
                                   "activity": {
                                     "items": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "properties": {
                                             "id": {
@@ -80041,7 +80035,7 @@
                   },
                   "parts": {
                     "items": {
-                      "anyOf": [
+                      "oneOf": [
                         {
                           "$ref": "#/components/schemas/TextPartInput"
                         },
@@ -80150,7 +80144,7 @@
                           "type": "number"
                         },
                         "error": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "$ref": "#/components/schemas/ProviderAuthError"
                             },
@@ -80967,7 +80961,7 @@
                   },
                   "parts": {
                     "items": {
-                      "anyOf": [
+                      "oneOf": [
                         {
                           "$ref": "#/components/schemas/TextPartInput"
                         },
@@ -81417,7 +81411,7 @@
                       "type": "number"
                     },
                     "error": {
-                      "anyOf": [
+                      "oneOf": [
                         {
                           "$ref": "#/components/schemas/ProviderAuthError"
                         },
@@ -82118,7 +82112,7 @@
                               "type": "boolean"
                             },
                             "locator": {
-                              "anyOf": [
+                              "oneOf": [
                                 {
                                   "additionalProperties": false,
                                   "properties": {
@@ -82240,7 +82234,7 @@
                             "producer": {
                               "anyOf": [
                                 {
-                                  "anyOf": [
+                                  "oneOf": [
                                     {
                                       "additionalProperties": false,
                                       "properties": {
@@ -82456,7 +82450,7 @@
                               "type": "integer"
                             },
                             "version": {
-                              "anyOf": [
+                              "oneOf": [
                                 {
                                   "additionalProperties": false,
                                   "properties": {
@@ -83685,7 +83679,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "anyOf": [
+                "oneOf": [
                   {
                     "additionalProperties": false,
                     "properties": {
@@ -85209,7 +85203,7 @@
                       "additionalProperties": false,
                       "properties": {
                         "locator": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "additionalProperties": false,
                               "properties": {
@@ -86845,7 +86839,7 @@
                         },
                         "deliverableArtifactLocators": {
                           "items": {
-                            "anyOf": [
+                            "oneOf": [
                               {
                                 "additionalProperties": false,
                                 "properties": {
@@ -87013,7 +87007,7 @@
                         },
                         "evidenceLocators": {
                           "items": {
-                            "anyOf": [
+                            "oneOf": [
                               {
                                 "additionalProperties": false,
                                 "properties": {
@@ -87283,7 +87277,7 @@
                           "type": "string"
                         },
                         "workflowBinding": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "additionalProperties": false,
                               "properties": {
@@ -87741,7 +87735,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "anyOf": [
+                "oneOf": [
                   {
                     "additionalProperties": false,
                     "properties": {
@@ -87932,7 +87926,8 @@
                     "type": "integer"
                   },
                   "locator": {
-                    "anyOf": [
+                    "description": "Exact typed locator returned by Artifact search, including its immutable digest.",
+                    "oneOf": [
                       {
                         "additionalProperties": false,
                         "properties": {
@@ -88094,8 +88089,7 @@
                         ],
                         "type": "object"
                       }
-                    ],
-                    "description": "Exact typed locator returned by Artifact search, including its immutable digest."
+                    ]
                   },
                   "max_bytes": {
                     "default": 24576,
@@ -88765,7 +88759,7 @@
                                 "scorers": {
                                   "description": "At least one scorer — a spec without a scorer is untestable.",
                                   "items": {
-                                    "anyOf": [
+                                    "oneOf": [
                                       {
                                         "additionalProperties": false,
                                         "properties": {
@@ -88785,7 +88779,7 @@
                                             "type": "string"
                                           },
                                           "spec": {
-                                            "anyOf": [
+                                            "oneOf": [
                                               {
                                                 "additionalProperties": false,
                                                 "properties": {
@@ -89989,7 +89983,7 @@
                             },
                             "deliverableArtifactLocators": {
                               "items": {
-                                "anyOf": [
+                                "oneOf": [
                                   {
                                     "additionalProperties": false,
                                     "properties": {
@@ -90157,7 +90151,7 @@
                             },
                             "evidenceLocators": {
                               "items": {
-                                "anyOf": [
+                                "oneOf": [
                                   {
                                     "additionalProperties": false,
                                     "properties": {
@@ -90427,7 +90421,7 @@
                               "type": "string"
                             },
                             "workflowBinding": {
-                              "anyOf": [
+                              "oneOf": [
                                 {
                                   "additionalProperties": false,
                                   "properties": {
@@ -91790,7 +91784,7 @@
                               "type": "array"
                             },
                             "locator": {
-                              "anyOf": [
+                              "oneOf": [
                                 {
                                   "additionalProperties": false,
                                   "properties": {
@@ -94234,7 +94228,7 @@
                                 "properties": {
                                   "activity": {
                                     "items": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "properties": {
                                             "id": {
@@ -94512,7 +94506,7 @@
                                 "properties": {
                                   "activity": {
                                     "items": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "properties": {
                                             "id": {
@@ -95258,7 +95252,7 @@
                                     "scorers": {
                                       "description": "At least one scorer — a spec without a scorer is untestable.",
                                       "items": {
-                                        "anyOf": [
+                                        "oneOf": [
                                           {
                                             "additionalProperties": false,
                                             "properties": {
@@ -95278,7 +95272,7 @@
                                                 "type": "string"
                                               },
                                               "spec": {
-                                                "anyOf": [
+                                                "oneOf": [
                                                   {
                                                     "additionalProperties": false,
                                                     "properties": {
@@ -96482,7 +96476,7 @@
                                 },
                                 "deliverableArtifactLocators": {
                                   "items": {
-                                    "anyOf": [
+                                    "oneOf": [
                                       {
                                         "additionalProperties": false,
                                         "properties": {
@@ -96650,7 +96644,7 @@
                                 },
                                 "evidenceLocators": {
                                   "items": {
-                                    "anyOf": [
+                                    "oneOf": [
                                       {
                                         "additionalProperties": false,
                                         "properties": {
@@ -96920,7 +96914,7 @@
                                   "type": "string"
                                 },
                                 "workflowBinding": {
-                                  "anyOf": [
+                                  "oneOf": [
                                     {
                                       "additionalProperties": false,
                                       "properties": {
@@ -97577,7 +97571,7 @@
                                   "type": "boolean"
                                 },
                                 "locator": {
-                                  "anyOf": [
+                                  "oneOf": [
                                     {
                                       "additionalProperties": false,
                                       "properties": {
@@ -97699,7 +97693,7 @@
                                 "producer": {
                                   "anyOf": [
                                     {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "additionalProperties": false,
                                           "properties": {
@@ -97915,7 +97909,7 @@
                                   "type": "integer"
                                 },
                                 "version": {
-                                  "anyOf": [
+                                  "oneOf": [
                                     {
                                       "additionalProperties": false,
                                       "properties": {
@@ -98135,7 +98129,7 @@
                                 "properties": {
                                   "activity": {
                                     "items": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "properties": {
                                             "id": {
@@ -98413,7 +98407,7 @@
                                 "properties": {
                                   "activity": {
                                     "items": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "properties": {
                                             "id": {
@@ -99336,7 +99330,7 @@
                                 "properties": {
                                   "activity": {
                                     "items": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "properties": {
                                             "id": {
@@ -99614,7 +99608,7 @@
                                 "properties": {
                                   "activity": {
                                     "items": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "properties": {
                                             "id": {
@@ -100250,7 +100244,7 @@
                                 "properties": {
                                   "activity": {
                                     "items": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "properties": {
                                             "id": {
@@ -100528,7 +100522,7 @@
                                 "properties": {
                                   "activity": {
                                     "items": {
-                                      "anyOf": [
+                                      "oneOf": [
                                         {
                                           "properties": {
                                             "id": {
@@ -101909,7 +101903,7 @@
                                 "scorers": {
                                   "description": "At least one scorer — a spec without a scorer is untestable.",
                                   "items": {
-                                    "anyOf": [
+                                    "oneOf": [
                                       {
                                         "additionalProperties": false,
                                         "properties": {
@@ -101929,7 +101923,7 @@
                                             "type": "string"
                                           },
                                           "spec": {
-                                            "anyOf": [
+                                            "oneOf": [
                                               {
                                                 "additionalProperties": false,
                                                 "properties": {
@@ -102839,7 +102833,7 @@
                             },
                             "deliverableArtifactLocators": {
                               "items": {
-                                "anyOf": [
+                                "oneOf": [
                                   {
                                     "additionalProperties": false,
                                     "properties": {
@@ -103007,7 +103001,7 @@
                             },
                             "evidenceLocators": {
                               "items": {
-                                "anyOf": [
+                                "oneOf": [
                                   {
                                     "additionalProperties": false,
                                     "properties": {
@@ -103277,7 +103271,7 @@
                               "type": "string"
                             },
                             "workflowBinding": {
-                              "anyOf": [
+                              "oneOf": [
                                 {
                                   "additionalProperties": false,
                                   "properties": {
@@ -104089,7 +104083,7 @@
                         },
                         "deliverableArtifactLocators": {
                           "items": {
-                            "anyOf": [
+                            "oneOf": [
                               {
                                 "additionalProperties": false,
                                 "properties": {
@@ -104257,7 +104251,7 @@
                         },
                         "evidenceLocators": {
                           "items": {
-                            "anyOf": [
+                            "oneOf": [
                               {
                                 "additionalProperties": false,
                                 "properties": {
@@ -104527,7 +104521,7 @@
                           "type": "string"
                         },
                         "workflowBinding": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "additionalProperties": false,
                               "properties": {
@@ -105242,7 +105236,7 @@
                         },
                         "deliverableArtifactLocators": {
                           "items": {
-                            "anyOf": [
+                            "oneOf": [
                               {
                                 "additionalProperties": false,
                                 "properties": {
@@ -105410,7 +105404,7 @@
                         },
                         "evidenceLocators": {
                           "items": {
-                            "anyOf": [
+                            "oneOf": [
                               {
                                 "additionalProperties": false,
                                 "properties": {
@@ -105680,7 +105674,7 @@
                           "type": "string"
                         },
                         "workflowBinding": {
-                          "anyOf": [
+                          "oneOf": [
                             {
                               "additionalProperties": false,
                               "properties": {
@@ -106166,7 +106160,7 @@
               "schema": {
                 "properties": {
                   "anchor": {
-                    "anyOf": [
+                    "oneOf": [
                       {
                         "properties": {
                           "anchorEventID": {
@@ -107068,7 +107062,7 @@
                             },
                             "deliverableArtifactLocators": {
                               "items": {
-                                "anyOf": [
+                                "oneOf": [
                                   {
                                     "additionalProperties": false,
                                     "properties": {
@@ -107236,7 +107230,7 @@
                             },
                             "evidenceLocators": {
                               "items": {
-                                "anyOf": [
+                                "oneOf": [
                                   {
                                     "additionalProperties": false,
                                     "properties": {
@@ -107506,7 +107500,7 @@
                               "type": "string"
                             },
                             "workflowBinding": {
-                              "anyOf": [
+                              "oneOf": [
                                 {
                                   "additionalProperties": false,
                                   "properties": {
@@ -109073,7 +109067,7 @@
                               "type": "boolean"
                             },
                             "locator": {
-                              "anyOf": [
+                              "oneOf": [
                                 {
                                   "additionalProperties": false,
                                   "properties": {
@@ -109195,7 +109189,7 @@
                             "producer": {
                               "anyOf": [
                                 {
-                                  "anyOf": [
+                                  "oneOf": [
                                     {
                                       "additionalProperties": false,
                                       "properties": {
@@ -109411,7 +109405,7 @@
                               "type": "integer"
                             },
                             "version": {
-                              "anyOf": [
+                              "oneOf": [
                                 {
                                   "additionalProperties": false,
                                   "properties": {
@@ -110579,7 +110573,7 @@
             "content": {
               "text/event-stream": {
                 "schema": {
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "additionalProperties": false,
                       "properties": {
@@ -110915,7 +110909,7 @@
                     },
                     "rows": {
                       "items": {
-                        "anyOf": [
+                        "oneOf": [
                           {
                             "additionalProperties": false,
                             "properties": {
@@ -111361,7 +111355,7 @@
                     },
                     "rows": {
                       "items": {
-                        "anyOf": [
+                        "oneOf": [
                           {
                             "additionalProperties": false,
                             "properties": {
@@ -111804,7 +111798,7 @@
             "content": {
               "text/event-stream": {
                 "schema": {
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "additionalProperties": false,
                       "properties": {

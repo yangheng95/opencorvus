@@ -135,7 +135,7 @@ type CatalogSourceSnapshot = Readonly<{
 }>
 
 type CatalogCursor = Readonly<{
-  version: 6
+  version: 8
   searchABIVersion: number
   authoritySHA256: string
   filtersSHA256: string
@@ -146,9 +146,27 @@ type CatalogCursor = Readonly<{
   sourceSnapshots: readonly CatalogSourceSnapshot[]
   availableSources: readonly ArtifactCatalogEntry["source"][]
   providerErrors: ArtifactSearchPage["provider_errors"]
-  afterKey: string
   afterSortTuple: readonly (string | number)[]
 }>
+
+type CatalogSourceCode = 0 | 1
+
+type CatalogCursorPayloadWire = readonly [
+  version: 8,
+  searchABIVersion: number,
+  authoritySHA256: string,
+  filtersSHA256: string,
+  engineCatalogRevisionUpper: number,
+  snapshotSequenceUpper: number,
+  catalogTotal: number,
+  filteredTotal: number,
+  sourceSnapshots: readonly (readonly [CatalogSourceCode, string, number])[],
+  availableSourceMask: number,
+  providerErrors: readonly (readonly [CatalogSourceCode, string])[],
+  afterSortTuple: readonly (string | number)[],
+]
+
+type CatalogCursorWire = readonly [...CatalogCursorPayloadWire, integritySHA256: string]
 
 export type ArtifactReadResult = Readonly<{
   chunk: ArtifactReadChunk
@@ -227,8 +245,50 @@ function authorityDigest(authority: TaskArtifactReadAuthority): string {
   )
 }
 
+function catalogSourceCode(source: ArtifactCatalogEntry["source"]): CatalogSourceCode {
+  return source === "engine_artifact" ? 0 : 1
+}
+
+function catalogSourceFromCode(code: CatalogSourceCode): ArtifactCatalogEntry["source"] {
+  return code === 0 ? "engine_artifact" : "task_artifact"
+}
+
+function compactCursorDigest(digest: string): string {
+  return Buffer.from(digest, "hex").toString("base64url")
+}
+
+function expandCursorDigest(digest: string): string | undefined {
+  if (!/^[A-Za-z0-9_-]{43}$/.test(digest)) return undefined
+  const bytes = Buffer.from(digest, "base64url")
+  if (bytes.byteLength !== 32 || bytes.toString("base64url") !== digest) return undefined
+  return bytes.toString("hex")
+}
+
 function encodeCursor(cursor: CatalogCursor): string {
-  return Buffer.from(stableJSON(cursor), "utf8").toString("base64url")
+  const availableSourceMask = cursor.availableSources.reduce(
+    (mask, source) => mask | (source === "engine_artifact" ? 1 : 2),
+    0,
+  )
+  const payload: CatalogCursorPayloadWire = [
+    8,
+    cursor.searchABIVersion,
+    compactCursorDigest(cursor.authoritySHA256),
+    compactCursorDigest(cursor.filtersSHA256),
+    cursor.engineCatalogRevisionUpper,
+    cursor.snapshotSequenceUpper,
+    cursor.catalogTotal,
+    cursor.filteredTotal,
+    cursor.sourceSnapshots.map((snapshot) => [
+      catalogSourceCode(snapshot.source),
+      compactCursorDigest(snapshot.membershipSHA256),
+      snapshot.catalogTotal,
+    ]),
+    availableSourceMask,
+    cursor.providerErrors.map((error) => [catalogSourceCode(error.source), error.message]),
+    cursor.afterSortTuple,
+  ]
+  const wire: CatalogCursorWire = [...payload, compactCursorDigest(sha256(stableJSON(payload)))]
+  return Buffer.from(stableJSON(wire), "utf8").toString("base64url")
 }
 
 function decodeCursor(input: string): CatalogCursor {
@@ -238,60 +298,97 @@ function decodeCursor(input: string): CatalogCursor {
   } catch (cause) {
     throw new Error("artifact_search cursor is not valid canonical base64url JSON", { cause })
   }
-  if (!decoded || typeof decoded !== "object") throw new Error("artifact_search cursor must be an object")
-  const value = decoded as Partial<CatalogCursor>
+  if (!Array.isArray(decoded)) throw new Error("artifact_search cursor must be a compact tuple")
+  const value = decoded as unknown as Partial<CatalogCursorWire>
+  const integritySHA256 = typeof value[12] === "string" ? expandCursorDigest(value[12]) : undefined
+  if (value.length !== 13 || value[0] !== 8 || !integritySHA256) {
+    throw new Error("artifact_search cursor has an invalid shape")
+  }
+  const payload = value.slice(0, 12) as unknown as CatalogCursorPayloadWire
+  if (sha256(stableJSON(payload)) !== integritySHA256) {
+    throw new Error("artifact_search cursor integrity check failed")
+  }
+  const sourceSnapshots = value[8]
+  const availableSourceMask = value[9]
+  const providerErrors = value[10]
+  const afterSortTuple = value[11]
+  const authoritySHA256 = typeof value[2] === "string" ? expandCursorDigest(value[2]) : undefined
+  const filtersSHA256 = typeof value[3] === "string" ? expandCursorDigest(value[3]) : undefined
   if (
-    value.version !== 6 ||
-    value.searchABIVersion !== ARTIFACT_SEARCH_ABI_VERSION ||
-    typeof value.authoritySHA256 !== "string" ||
-    typeof value.filtersSHA256 !== "string" ||
-    typeof value.engineCatalogRevisionUpper !== "number" ||
-    !Number.isInteger(value.engineCatalogRevisionUpper) ||
-    value.engineCatalogRevisionUpper < 0 ||
-    typeof value.snapshotSequenceUpper !== "number" ||
-    !Number.isInteger(value.snapshotSequenceUpper) ||
-    typeof value.catalogTotal !== "number" ||
-    !Number.isInteger(value.catalogTotal) ||
-    value.catalogTotal < 0 ||
-    typeof value.filteredTotal !== "number" ||
-    !Number.isInteger(value.filteredTotal) ||
-    value.filteredTotal < 0 ||
-    !Array.isArray(value.sourceSnapshots) ||
-    value.sourceSnapshots.some(
+    value[1] !== ARTIFACT_SEARCH_ABI_VERSION ||
+    !authoritySHA256 ||
+    !filtersSHA256 ||
+    typeof value[4] !== "number" ||
+    !Number.isInteger(value[4]) ||
+    value[4] < 0 ||
+    typeof value[5] !== "number" ||
+    !Number.isInteger(value[5]) ||
+    value[5] < 0 ||
+    typeof value[6] !== "number" ||
+    !Number.isInteger(value[6]) ||
+    value[6] < 0 ||
+    typeof value[7] !== "number" ||
+    !Number.isInteger(value[7]) ||
+    value[7] < 0 ||
+    !Array.isArray(sourceSnapshots) ||
+    sourceSnapshots.some(
       (snapshot) =>
-        !snapshot ||
-        typeof snapshot !== "object" ||
-        !["engine_artifact", "task_artifact"].includes(snapshot.source) ||
-        typeof snapshot.membershipSHA256 !== "string" ||
-        !/^[a-f0-9]{64}$/.test(snapshot.membershipSHA256) ||
-        typeof snapshot.catalogTotal !== "number" ||
-        !Number.isInteger(snapshot.catalogTotal) ||
-        snapshot.catalogTotal < 0,
+        !Array.isArray(snapshot) ||
+        snapshot.length !== 3 ||
+        (snapshot[0] !== 0 && snapshot[0] !== 1) ||
+        typeof snapshot[1] !== "string" ||
+        !expandCursorDigest(snapshot[1]) ||
+        typeof snapshot[2] !== "number" ||
+        !Number.isInteger(snapshot[2]) ||
+        snapshot[2] < 0,
     ) ||
-    new Set(value.sourceSnapshots.map((snapshot) => snapshot.source)).size !== value.sourceSnapshots.length ||
-    !Array.isArray(value.availableSources) ||
-    value.availableSources.some((source) => !["engine_artifact", "task_artifact"].includes(source)) ||
-    new Set(value.availableSources).size !== value.availableSources.length ||
-    !Array.isArray(value.providerErrors) ||
-    value.providerErrors.some(
+    new Set(sourceSnapshots.map((snapshot) => snapshot[0])).size !== sourceSnapshots.length ||
+    typeof availableSourceMask !== "number" ||
+    !Number.isInteger(availableSourceMask) ||
+    availableSourceMask < 0 ||
+    availableSourceMask > 3 ||
+    !Array.isArray(providerErrors) ||
+    providerErrors.some(
       (error) =>
-        !error ||
-        typeof error !== "object" ||
-        !["engine_artifact", "task_artifact"].includes(error.source) ||
-        typeof error.message !== "string" ||
-        error.message.length === 0,
+        !Array.isArray(error) ||
+        error.length !== 2 ||
+        (error[0] !== 0 && error[0] !== 1) ||
+        typeof error[1] !== "string" ||
+        error[1].length === 0,
     ) ||
-    new Set(value.providerErrors.map((error) => error.source)).size !== value.providerErrors.length ||
-    typeof value.afterKey !== "string" ||
-    value.afterKey.length === 0 ||
-    !Array.isArray(value.afterSortTuple) ||
-    value.afterSortTuple.some((item) => typeof item !== "string" && typeof item !== "number")
+    new Set(providerErrors.map((error) => error[0])).size !== providerErrors.length ||
+    !Array.isArray(afterSortTuple) ||
+    afterSortTuple.length === 0 ||
+    afterSortTuple.some((item) => typeof item !== "string" && typeof item !== "number")
   ) {
     throw new Error("artifact_search cursor has an invalid shape")
   }
-  const canonical = encodeCursor(value as CatalogCursor)
+  const cursor: CatalogCursor = {
+    version: 8,
+    searchABIVersion: value[1],
+    authoritySHA256,
+    filtersSHA256,
+    engineCatalogRevisionUpper: value[4],
+    snapshotSequenceUpper: value[5],
+    catalogTotal: value[6],
+    filteredTotal: value[7],
+    sourceSnapshots: sourceSnapshots.map((snapshot) => ({
+      source: catalogSourceFromCode(snapshot[0]),
+      membershipSHA256: expandCursorDigest(snapshot[1])!,
+      catalogTotal: snapshot[2],
+    })),
+    availableSources: ([0, 1] as const)
+      .filter((code) => (availableSourceMask & (code === 0 ? 1 : 2)) !== 0)
+      .map(catalogSourceFromCode),
+    providerErrors: providerErrors.map((error) => ({
+      source: catalogSourceFromCode(error[0]),
+      message: error[1],
+    })),
+    afterSortTuple,
+  }
+  const canonical = encodeCursor(cursor)
   if (canonical !== input) throw new Error("artifact_search cursor is not canonical")
-  return value as CatalogCursor
+  return cursor
 }
 
 function assertEngineCatalogRowIntegrity(row: EngineCatalogRow): void {
@@ -610,10 +707,6 @@ function candidateMatch(
     return { tier: "fuzzy_metadata", score: metadata.score, matched_fields: ["metadata"] }
   }
   return undefined
-}
-
-function candidateKey(candidate: CatalogCandidate): string {
-  return `${candidate.entry.source}\u0000${candidate.stableID}`
 }
 
 function candidateTime(candidate: CatalogCandidate): number {
@@ -1056,7 +1149,6 @@ export async function searchTaskArtifacts(input: {
   const afterIndex = cursor
     ? filtered.findIndex(
         (candidate) =>
-          candidateKey(candidate) === cursor.afterKey &&
           stableJSON(candidateSortTuple(candidate, parsed.sort!)) === stableJSON(cursor.afterSortTuple),
       )
     : -1
@@ -1087,7 +1179,7 @@ export async function searchTaskArtifacts(input: {
     next_cursor:
       hasMore && last
         ? encodeCursor({
-            version: 6,
+            version: 8,
             searchABIVersion: ARTIFACT_SEARCH_ABI_VERSION,
             authoritySHA256: scopeSHA256,
             filtersSHA256: filterSHA256,
@@ -1098,7 +1190,6 @@ export async function searchTaskArtifacts(input: {
             sourceSnapshots: expectedSourceSnapshots,
             availableSources,
             providerErrors,
-            afterKey: candidateKey(last),
             afterSortTuple: candidateSortTuple(last, parsed.sort!),
           })
         : null,

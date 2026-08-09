@@ -11,6 +11,10 @@ import {
 } from "./cancellation"
 import { AsyncLocalStorage } from "node:async_hooks"
 import { WorktreeOwnershipCriticalSection } from "@/worktree/ownership-critical-section"
+import {
+  releaseManagedWorktreeSessionOwner,
+  type ManagedWorktreeSessionOwnerAuthority,
+} from "@/worktree/managed-session-owner"
 
 export class SessionPromptLoopFinishedError extends Error {
   constructor(public readonly sessionID: string) {
@@ -62,6 +66,7 @@ export namespace SessionPromptState {
       timeCancelled?: number
       cancellation?: ExecutionCancellationError
       directoryOwnership: Disposable
+      worktreeOwnerAuthority: ManagedWorktreeSessionOwnerAuthority
     }
   >
 
@@ -180,6 +185,12 @@ export namespace SessionPromptState {
       timeCreated: now,
       timeUpdated: now,
       directoryOwnership,
+      worktreeOwnerAuthority: {
+        projectID: Instance.project.id,
+        primaryWorktreeDir: Instance.project.worktree,
+        directory: key,
+        sessionID,
+      },
     }
     messageOwnersBySession.set(sessionID, { owners: new Map() })
     try {
@@ -617,12 +628,12 @@ export namespace SessionPromptState {
     },
   }
 
-  function terminatePromptResources(input: {
+  async function terminatePromptResources(input: {
     sessionID: string
     abort?: AbortSignal
     directory?: string
     reason?: unknown
-  }): boolean {
+  }): Promise<boolean> {
     const entry =
       (input.abort ? existingStateEntryByAbort(input.sessionID, input.abort) : undefined) ??
       existingStateEntryForSession(input.sessionID, input.directory)
@@ -661,11 +672,11 @@ export namespace SessionPromptState {
         }
         delete promptState[input.sessionID]
         deleteDirectoryIfEmpty(key, promptState)
-        void import("@/worktree")
-          .then(({ Worktree }) =>
-            Worktree.releaseManagedWorktreeSessionOwner({ directory: key, sessionID: input.sessionID }),
-          )
-          .catch((error) => log.warn("failed to release terminal prompt worktree owner", { sessionID: input.sessionID, error }))
+        try {
+          await releaseManagedWorktreeSessionOwner(match.worktreeOwnerAuthority)
+        } catch (releaseError) {
+          errors.push(releaseError)
+        }
       }
       messageOwnersBySession.delete(input.sessionID)
       promptStartReservations.delete(input.sessionID)
@@ -676,12 +687,12 @@ export namespace SessionPromptState {
     return Boolean(match)
   }
 
-  export function finish(sessionID: string, abort?: AbortSignal, directory?: string, reason?: unknown) {
-    terminatePromptResources({ sessionID, abort, directory, reason })
+  export async function finish(sessionID: string, abort?: AbortSignal, directory?: string, reason?: unknown) {
+    await terminatePromptResources({ sessionID, abort, directory, reason })
   }
 
-  export function release(sessionID: string): void {
-    terminatePromptResources({ sessionID })
+  export async function release(sessionID: string): Promise<void> {
+    await terminatePromptResources({ sessionID })
   }
 
   export function flushCallbacks(

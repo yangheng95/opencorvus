@@ -11,6 +11,7 @@ import {
   footprintsAboveControlCeiling,
   parseProcessTable,
   processTree,
+  requireRuntimeProviderSnapshots,
   validateConfig,
   type ProcessRow,
 } from "./runtime-memory-soak-support"
@@ -202,7 +203,8 @@ async function waitForServerUrl(lines: string[], exited: Promise<number>): Promi
   throw new Error("Packaged serve did not publish its random-port URL within 15 seconds")
 }
 
-function observeAllocatorLine(text: string, snapshots: AllocatorSnapshot[]) {
+function observeAllocatorLine(text: string, snapshots: AllocatorSnapshot[]): string[] {
+  const errors: string[] = []
   for (const line of text.split(/\r?\n/)) {
     if (!line.includes("runtime.memory.metrics")) continue
     try {
@@ -214,10 +216,16 @@ function observeAllocatorLine(text: string, snapshots: AllocatorSnapshot[]) {
         candidate.process &&
         candidate.providers
       ) {
-        snapshots.push(candidate as AllocatorSnapshot)
+        try {
+          requireRuntimeProviderSnapshots(candidate.providers)
+          snapshots.push(candidate as AllocatorSnapshot)
+        } catch (error) {
+          errors.push(error instanceof Error ? error.message : String(error))
+        }
       }
     } catch {}
   }
+  return errors
 }
 
 async function runBrowserCycle(
@@ -362,6 +370,7 @@ async function runOnce(input: {
   }
   const output: string[] = []
   const allocatorSnapshots: AllocatorSnapshot[] = []
+  const allocatorProviderErrors = new Set<string>()
   const discoveredPids = new Set<number>()
   const checkpoints: Checkpoint[] = []
   const errors: string[] = []
@@ -376,7 +385,7 @@ async function runOnce(input: {
   const capture = (chunk: Buffer | string) => {
     const text = chunk.toString()
     output.push(text)
-    observeAllocatorLine(text, allocatorSnapshots)
+    for (const error of observeAllocatorLine(text, allocatorSnapshots)) allocatorProviderErrors.add(error)
   }
   serve.stdout?.on("data", capture)
   serve.stderr?.on("data", capture)
@@ -446,6 +455,7 @@ async function runOnce(input: {
   }
 
   const finalRows = currentProcessRows()
+  errors.push(...allocatorProviderErrors)
   const remaining = finalRows.filter((row) => discoveredPids.has(row.pid))
   if (remaining.length > 0) {
     errors.push(`Attributable processes remained after settle: ${JSON.stringify(remaining)}`)

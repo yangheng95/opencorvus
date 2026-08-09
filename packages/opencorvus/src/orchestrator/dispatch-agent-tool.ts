@@ -31,6 +31,8 @@ import { EvidenceLocatorListSchema } from "@opencorvus-ai/plugin/artifact-catalo
 import type { EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import { WorkerTurnSettlementError } from "@/agent/runner"
 import { exactEngineArtifactLocator } from "@/artifact-catalog"
+import { WorkflowNodeOccurrenceConflictError } from "@/engine/workflow-node-occurrence"
+import { resolveDispatchOccurrenceAuthority } from "@/engine/dispatch-lineage"
 
 export type DispatchAgentExecute = (
   args: unknown,
@@ -189,7 +191,7 @@ export function createDispatchAgentTool(input: {
             .min(1)
             .describe("Only new instruction for this successor Turn; original adapter input remains frozen."),
           evidence_locators: EvidenceLocatorListSchema.default([]).describe(
-            "Exact new durable evidence identities selected for this successor Turn.",
+            "Exact new durable evidence identities selected for this successor Turn. A session_message locator must be Task-owned and pair the Message with its actual producing Session; for a Mission acceptance-repair Task-root message, use the Task root Session authority and never missionSessionID.",
           ),
         })
         .strict(),
@@ -381,7 +383,23 @@ export function createDispatchAgentTool(input: {
         }
         return await run()
       } catch (error) {
+        if (error instanceof WorkflowNodeOccurrenceConflictError) {
+          return DispatchOutcome.infrastructureFailure({
+            operation: "workflow_node_initial_claim",
+            message: error.message,
+            errorName: error.name,
+            recoveryAuthority: { occurrence_status: "occurrence_not_committed" },
+            failureIssues: [
+              {
+                code: error.code,
+                path: ["dispatch", "turn", "workflow_subject", "node_id"],
+                message: error.message,
+              },
+            ],
+          })
+        }
         if (error instanceof WorkerTurnSettlementError) {
+          if (!dispatchID) throw error
           return DispatchOutcome.infrastructureFailure({
             operation: error.operation,
             message: error.message,
@@ -389,6 +407,7 @@ export function createDispatchAgentTool(input: {
             sessionID: error.sessionID,
             finalMessageID: error.finalMessageID,
             workerTurn: error.evidence,
+            recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID: input.taskID, dispatchID }),
             failureIssues: [
               {
                 code: error.causeErrorName,
@@ -441,10 +460,12 @@ export function createDispatchAgentTool(input: {
           }
           throw error
         }
+        if (!dispatchID) throw error
         return DispatchOutcome.infrastructureFailure({
           operation: `${projectedAgent.identity.dispatchAdapterID}_adapter`,
           message: error instanceof Error ? error.message : String(error),
           sessionID: childSessionID,
+          recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID: input.taskID, dispatchID }),
         })
       }
     },

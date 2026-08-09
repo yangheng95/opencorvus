@@ -24,10 +24,10 @@ import { SessionPromptState } from "@/session/prompt/state"
 import { ProjectGitLock } from "@/worktree/git-lock"
 import { WorktreeOwnershipCriticalSection } from "@/worktree/ownership-critical-section"
 import { taskProcessBindingOwnsDirectory } from "@/engine/task-execution-capsule-binding"
-import { AsyncLocalStorage } from "node:async_hooks"
 import { Ownership } from "@/engine/ownership"
 import { findTask } from "@/engine/store"
 import { isTaskTerminal } from "@/engine/task-status"
+import { releaseManagedWorktreeSessionOwner as releaseManagedSessionOwner } from "@/worktree/managed-session-owner"
 
 export namespace Worktree {
   const log = Log.create({ service: "worktree" })
@@ -35,51 +35,15 @@ export namespace Worktree {
   const registeredWorktreeListRequests = new Map<string, Promise<RegisteredWorktreeEntry[]>>()
   const DIRECTORY_REMOVE_MAX_RETRIES = 1200
   const DIRECTORY_REMOVE_RETRY_DELAY_MS = 250
-  const gitLeaseContext = new AsyncLocalStorage<ProjectGitLock.Lease>()
 
   // One filesystem lease serializes every repository mutation across this
   // process and sibling OpenCorvus processes. proper-lockfile owns renewal;
   // the adjacent JSON file is atomic diagnostic metadata, not a second lock.
   export async function withGitLock<T>(fn: (lease: ProjectGitLock.Lease) => Promise<T>): Promise<T> {
-    const inherited = gitLeaseContext.getStore()
-    if (inherited) {
-      inherited.assertOwned()
-      const result = await fn(inherited)
-      inherited.assertOwned()
-      return result
-    }
-    const lockPath = ProjectRuntimePaths.projectGitLock(Instance.project.worktree)
-    let lease: ProjectGitLock.Lease
-    try {
-      lease = await ProjectGitLock.acquire(lockPath, Instance.project.id)
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code === "ELOCKED") {
-        const owner = await ProjectGitLock.readOwner(lockPath)
-        throw new CreateFailedError({
-          message: `Timed out waiting for project git lock ${lockPath} held by pid ${owner?.pid ?? "unknown"}`,
-        })
-      }
-      throw error
-    }
-
-    let result: T | undefined
-    let operationError: unknown
-    try {
-      result = await gitLeaseContext.run(lease, () => fn(lease))
-      lease.assertOwned()
-    } catch (error) {
-      operationError = error
-    }
-    try {
-      await lease.release()
-    } catch (releaseError) {
-      if (operationError) {
-        throw new AggregateError([operationError, releaseError], `Project Git operation and lock release both failed`)
-      }
-      throw releaseError
-    }
-    if (operationError) throw operationError
-    return result as T
+    return ProjectGitLock.withLease(
+      { projectID: Instance.project.id, primaryWorktreeDir: Instance.project.worktree },
+      fn,
+    )
   }
 
   /**
@@ -1130,16 +1094,12 @@ export namespace Worktree {
   }
 
   export async function releaseManagedWorktreeSessionOwner(input: {
+    projectID: string
+    primaryWorktreeDir: string
     directory: string
     sessionID: string
   }): Promise<void> {
-    await withGitLock(() =>
-      Ownership.Worktree.releaseSessionOwner({
-        primaryWorktreeDir: Instance.project.worktree,
-        worktreeDir: input.directory,
-        sessionID: input.sessionID,
-      }),
-    )
+    await releaseManagedSessionOwner(input)
   }
 
   export async function releaseManagedWorktreeTaskOwners(taskID: string): Promise<void> {

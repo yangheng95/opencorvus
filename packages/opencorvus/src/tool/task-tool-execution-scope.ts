@@ -78,7 +78,7 @@ export function executionAuthorityFromTaskToolScope(scope: TaskToolExecutionScop
     sessionID: scope.sessionID,
     projectID: scope.projectID,
     taskID: scope.taskID,
-    rootDirectory: scope.projectDirectory,
+    directory: scope.projectDirectory,
   })
 }
 

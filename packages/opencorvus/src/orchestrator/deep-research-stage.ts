@@ -35,6 +35,8 @@ export function createDeepResearchStageDispatcher(dependencies: DeepResearchStag
     onDispatchAuthorityCommit?: import("@/agent/runner").AgentDispatchAuthorityCommit
     onRuntimeReady?: (sessionID: string) => void | Promise<void>
   }): Promise<DispatchOutcomeResult> {
+    const dispatchID = dispatch.dispatchTurn?.current_dispatch_id
+    if (!dispatchID) throw new Error("Deep Research dispatch requires current dispatch authority")
     try {
       const result = await DeepResearchAgent.run({
         agentID: dispatch.agentID,
@@ -67,6 +69,7 @@ export function createDeepResearchStageDispatcher(dependencies: DeepResearchStag
         )
         return persistResearchArtifactBestEffort({
           taskID: dependencies.taskID,
+          dispatchID,
           component: "deep-research",
           operation: "persist-partial-research-brief",
           sessionID: result.sessionID,
@@ -91,6 +94,7 @@ export function createDeepResearchStageDispatcher(dependencies: DeepResearchStag
       )
       return persistResearchArtifactBestEffort({
         taskID: dependencies.taskID,
+        dispatchID,
         component: "deep-research",
         operation: "persist-research-brief",
         sessionID: result.sessionID,

@@ -13,7 +13,6 @@ import {
   CrossTaskArtifactImportListSchema,
   refineArtifactSearchInput,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference"
 import { MissionCompletionInput } from "@/mission/completion"
 import { TaskCancellationReason } from "@opencorvus-ai/transport-protocol"
 
@@ -144,13 +143,22 @@ function schemaTuple(items: CapabilityTuple): SchemaTuple {
   return schemas(items) as unknown as SchemaTuple
 }
 
+function unrefinedCapabilitySchema(item: Capability) {
+  return z
+    .object({
+      action: z.literal(item.action),
+      ...item.params,
+    })
+    .strict() as z.ZodObject<any>
+}
+
 function agentSchemas<const T extends readonly Capability[]>(
   items: T,
   options: { requireMissionTaskIdentity?: boolean } = {},
 ) {
   return items.map((item) => {
     if (item.action === "create_task") {
-      const baseSchema = item.schema.omit({ metadata: true, source: true }).extend({
+      const baseSchema = unrefinedCapabilitySchema(item).omit({ metadata: true, source: true }).extend({
         checks: AgentTaskCheckConfig.optional(),
       })
       const schema = options.requireMissionTaskIdentity
@@ -172,7 +180,7 @@ function agentSchemas<const T extends readonly Capability[]>(
 
 function panelUISchema(item: Capability) {
   return item.action === "create_task"
-    ? item.schema.omit({ artifact_imports: true }).superRefine(refineCreateTaskChannelBinding)
+    ? unrefinedCapabilitySchema(item).omit({ artifact_imports: true }).superRefine(refineCreateTaskChannelBinding)
     : item.schema
 }
 
@@ -419,9 +427,6 @@ export const PanelCapabilityRegistry = list(
     surfaces: ["panel"],
     params: {
       taskID: z.string().min(1).describe("Completed or failed source Task in the current Mission lineage."),
-      terminal_lifecycle_reference: TerminalLifecycleReferenceSchema.describe(
-        "Exact current terminal occurrence that Mission reviewed; stale references return a lifecycle conflict.",
-      ),
       text: z
         .string()
         .trim()

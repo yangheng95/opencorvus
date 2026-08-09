@@ -100,7 +100,6 @@ describe("delegate_agent", () => {
           const executionAuthority = await resolveSessionExecutionAuthority({
             sessionID: input.sessionID,
             projectID: Instance.project.id,
-            rootDirectory: Instance.directory,
             expected: { kind: "conversation" },
           })
           const toolContext: Tool.Context = {

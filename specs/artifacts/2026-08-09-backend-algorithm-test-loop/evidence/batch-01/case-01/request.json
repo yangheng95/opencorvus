@@ -1,0 +1,36 @@
+{
+  "method": "POST",
+  "url": "http://127.0.0.1:7878/task",
+  "headers": {
+    "content-type": "application/json",
+    "x-opencorvus-directory": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-01"
+  },
+  "body": {
+    "requestID": "2026-08-09T02-23-30-230Z-case-01",
+    "source": "backend-algorithm-batch-01",
+    "productPillar": "code",
+    "model": "openai/gpt-5.6-luna",
+    "title": "Repair deterministic interval-window aggregation",
+    "request": "Repair the existing algorithm defect in src/windows.js.\nRead package.json, the implementation, and every test before editing.\nDo not change, delete, skip, or weaken tests. Do not add dependencies.\nImplement one clear current algorithm: validate every window, sort input without mutating the caller, merge only windows with a positive-width overlap (adjacent end/start boundaries stay separate), and aggregate labels as unique lexicographically sorted strings.\nMalformed windows must throw the existing InvalidWindowError contract, which is a RangeError with code INVALID_WINDOW.\nRun node --test through the real project checker and finish only after all tests pass. Keep the change focused and report the exact verification result.",
+    "queue": false,
+    "budget": {
+      "maxExecutorGroups": 1
+    },
+    "checks": {
+      "test": [
+        "node --test"
+      ],
+      "artifact": {
+        "require_changed_files": true,
+        "min_changed_files": 1,
+        "require_diff": true,
+        "require_summary": true,
+        "mode": "strict"
+      }
+    },
+    "metadata": {
+      "batch": "2026-08-09-01",
+      "case": "case-01"
+    }
+  }
+}

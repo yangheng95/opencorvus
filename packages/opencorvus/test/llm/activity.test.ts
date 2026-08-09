@@ -1,0 +1,103 @@
+import { describe, expect, test } from "bun:test"
+import {
+  DefaultLLMActivityPolicy,
+  chunkHeartbeatKind,
+  withLLMActivity,
+  type LLMActivityEvent,
+} from "@/llm/activity"
+
+const policy = {
+  ...DefaultLLMActivityPolicy,
+  totalMs: 1_000,
+  firstByteMs: 100,
+  idleMs: 30,
+  maxRetries: { default: 0, idle: 1 },
+  backoffMs: () => 0,
+}
+
+function waitForAbort(signal: AbortSignal): Promise<never> {
+  return new Promise((_, reject) => {
+    const rejectAbort = () => reject(signal.reason)
+    if (signal.aborted) rejectAbort()
+    else signal.addEventListener("abort", rejectAbort, { once: true })
+  })
+}
+
+describe("LLM semantic activity", () => {
+  test("retries an attempt whose transport emits only repeated no-op first-byte observations", async () => {
+    const events: LLMActivityEvent[] = []
+    let attempts = 0
+    const result = await withLLMActivity(
+      { sessionID: "session-semantic-idle", provider: "test", model: "semantic-idle" },
+      policy,
+      new AbortController().signal,
+      async (run) => {
+        attempts += 1
+        if (run.attempt > 0) {
+          run.bump("text-delta")
+          return "recovered"
+        }
+        run.bump("first-byte")
+        const noOpTransport = setInterval(() => run.bump("first-byte"), 5)
+        try {
+          return await waitForAbort(run.signal)
+        } finally {
+          clearInterval(noOpTransport)
+        }
+      },
+      (event) => events.push(event),
+    )
+
+    expect(result).toBe("recovered")
+    expect(attempts).toBe(2)
+    expect(events.filter((event) => event.type === "heartbeat" && event.kind === "first-byte")).toHaveLength(2)
+    expect(events.find((event) => event.type === "retry")).toMatchObject({
+      type: "retry",
+      attempt: 1,
+      cls: "idle",
+      lastHeartbeat: { kind: "first-byte" },
+    })
+    expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "done" })
+  })
+
+  test("keeps one attempt alive while nonempty semantic deltas arrive inside the idle window", async () => {
+    const events: LLMActivityEvent[] = []
+    let attempts = 0
+    const result = await withLLMActivity(
+      { sessionID: "session-semantic-progress", provider: "test", model: "semantic-progress" },
+      policy,
+      new AbortController().signal,
+      async (run) => {
+        attempts += 1
+        run.bump("first-byte")
+        for (let index = 0; index < 5; index += 1) {
+          await new Promise((resolve) => setTimeout(resolve, 10))
+          run.signal.throwIfAborted()
+          run.bump("tool-input-delta")
+        }
+        return "completed"
+      },
+      (event) => events.push(event),
+    )
+
+    expect({ result, attempts }).toEqual({ result: "completed", attempts: 1 })
+    expect(events.some((event) => event.type === "retry")).toBe(false)
+    expect(events.filter((event) => event.type === "heartbeat" && event.kind === "tool-input-delta")).toHaveLength(5)
+    expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "done" })
+  })
+
+  test("classifies only accepted nonempty chunk payloads as semantic progress", () => {
+    expect([
+      chunkHeartbeatKind({ type: "start" }),
+      chunkHeartbeatKind({ type: "tool-input-delta", toolCallId: "call-1", inputTextDelta: "" }),
+      chunkHeartbeatKind({ type: "reasoning-delta", id: "reasoning-1", text: "" }),
+      chunkHeartbeatKind({ type: "unknown-provider-keepalive" }),
+      chunkHeartbeatKind({
+        type: "tool-input-delta",
+        toolCallId: "call-1",
+        inputTextDelta: '{"query":"NVDA"}',
+      }),
+      chunkHeartbeatKind({ type: "text-delta", id: "text-1", text: "NVIDIA" }),
+    ]).toEqual([null, null, null, null, "tool-input-delta", "text-delta"])
+  })
+})

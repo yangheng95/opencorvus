@@ -98,13 +98,11 @@ describe("explicit conversation and Task execution authority", () => {
         const taskAuthority = await resolveSessionExecutionAuthority({
           sessionID: session.id,
           projectID: Instance.project.id,
-          rootDirectory: project.path,
           expected: { kind: "task", taskID },
         })
         const conversationAuthority = await resolveSessionExecutionAuthority({
           sessionID: hostSession.id,
           projectID: Instance.project.id,
-          rootDirectory: project.path,
           expected: { kind: "conversation" },
         })
         if (taskAuthority.kind !== "task" || conversationAuthority.kind !== "conversation") {
@@ -124,7 +122,6 @@ describe("explicit conversation and Task execution authority", () => {
         const terminalFollowupAuthority = await SessionLoop.TestHooks.resolveToolExecutionAuthority({
           sessionID: session.id,
           projectID: Instance.project.id,
-          rootDirectory: project.path,
           runtimeIdentity: { taskID },
         })
         expect({ status: SessionStatus.get(session.id), authority: terminalFollowupAuthority }).toEqual({
@@ -211,7 +208,7 @@ describe("explicit conversation and Task execution authority", () => {
             cwd: project.path,
             connectionOwner: owner,
             connectionIdentity: "shared-logical-server",
-            processAuthority: MCP.taskProcessAuthority(taskAuthority.taskID, taskAuthority.rootDirectory),
+            processAuthority: MCP.taskProcessAuthority(taskAuthority.taskID, taskAuthority.directory),
             toolName: "authority_echo",
             args: {},
           })

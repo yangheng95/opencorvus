@@ -1,0 +1,63 @@
+{
+  "status": 200,
+  "statusText": "OK",
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag",
+    "content-length": "1855",
+    "content-type": "application/json",
+    "date": "Sun, 09 Aug 2026 02:36:43 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "7061f472-819b-48df-b459-74693c3f47cd"
+  },
+  "body": {
+    "id": "int_g019fe46107570000000000007sRC7RyzIhSHcr",
+    "taskID": "tsk_g019fe4553003000000000000hJoJ6IqJUBRerP",
+    "orderKey": "v1:0001786242991958:0000000000000070:0000000000000000:interaction:int_g019fe46107570000000000007sRC7RyzIhSHcr",
+    "responseOrderKey": "v1:0001786243003156:0000000000000070:0000000000000000:interaction:int_g019fe46107570000000000007sRC7RyzIhSHcr_response",
+    "sessionID": "ses_-fe601baabf85ffffffffffffywlMbIym5Hx2Rg",
+    "externalID": "que_g019fe4610756000000000000yHDdw4IfxyCO10",
+    "type": "question",
+    "status": "answered",
+    "title": "Verification budget",
+    "body": "The required acceptance floor already includes reading package.json, src/waves.js, every test, implementing the focused change, and running the real `node --test` checker. Should I also run the smallest additional assurance increment—an independent integrity review of the final diff and test evidence (about 1 extra worker turn)?",
+    "payload": {
+      "questions": [
+        {
+          "question": "The required acceptance floor already includes reading package.json, src/waves.js, every test, implementing the focused change, and running the real `node --test` checker. Should I also run the smallest additional assurance increment—an independent integrity review of the final diff and test evidence (about 1 extra worker turn)?",
+          "header": "Verification budget",
+          "options": [
+            {
+              "value": "skip_optional_testing",
+              "label": "Skip optional testing",
+              "description": "Use only the mandatory implementation and real project checker."
+            },
+            {
+              "value": "run_optional_testing",
+              "label": "Run optional review",
+              "description": "Add one independent integrity review of the final diff and test evidence."
+            }
+          ],
+          "multiple": false,
+          "custom": true
+        }
+      ],
+      "expiry": {
+        "origin": "deadline",
+        "timeoutMs": 300000,
+        "timeExpires": 1786243291958
+      }
+    },
+    "response": {
+      "answers": [
+        [
+          "skip_optional_testing"
+        ]
+      ]
+    },
+    "time": {
+      "created": 1786242991958,
+      "updated": 1786243003156,
+      "resolved": 1786243003156
+    }
+  }
+}

@@ -6,6 +6,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { overlayExecutableFileName, overlayPlatformFromNode } from "../packages/overlay/script/artifact-names"
 import { copyReleaseFile } from "./copy-release-file"
+import { preparePackageBuildEnvironment } from "./package-build-environment"
 import { overlayBundlePatterns, overlayUpdaterContract, updaterSignatureName } from "./release-asset-contract"
 import { runTimedStage } from "./timed-stage"
 
@@ -196,7 +197,7 @@ export async function packageGuiInstallerMatrix(
   }
 
   const version = await packageVersion(repoRoot, env)
-  const buildEnv = guiInstallerBuildEnvironment(env, version)
+  const buildEnv = await preparePackageBuildEnvironment(repoRoot, guiInstallerBuildEnvironment(env, version))
   const results: GuiInstallerMatrixResult[] = []
   for (const row of GUI_INSTALLER_MATRIX) {
     if (row !== supported[0]) {

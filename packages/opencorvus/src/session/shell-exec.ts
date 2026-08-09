@@ -232,7 +232,6 @@ export namespace SessionShell {
     const executionAuthority = await resolveSessionExecutionAuthority({
       sessionID: input.sessionID,
       projectID: Instance.project.id,
-      rootDirectory: Instance.directory,
       expected: identity.runtimeContract?.identity.taskID
         ? { kind: "task", taskID: identity.runtimeContract.identity.taskID }
         : { kind: "conversation" },

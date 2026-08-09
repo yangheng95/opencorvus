@@ -13,7 +13,7 @@ import {
 } from "../../src/storage/schema-migration"
 
 const PREDECESSOR_FINGERPRINT = "05480e3d530365e768b00218f24c4a8d7bb281538315b600dd70827c90e33212"
-const CURRENT_FINGERPRINT = "43fb9964d9a3b2bc3d5b17af539bf441d31d0aba1d7eab2a4b8e8c67a88150ea"
+const CURRENT_FINGERPRINT = "3bb5a088946bab5912f8e640b4d6b14069b4380b07a42aedadfdd54686b329fa"
 
 const legacyMemoryFileDDL = /* sql */ `CREATE TABLE "memory_file" (
   "id" text PRIMARY KEY NOT NULL,
@@ -70,6 +70,7 @@ function createPredecessorDatabase(databasePath: string, input: { scratchpadCont
   const memoryChunkProjectIndex = requiredSchemaSQL(sqlite, "index", "memory_chunk_project_idx")
 
   sqlite.run("PRAGMA foreign_keys = OFF")
+  sqlite.run('DROP TABLE "engine_workflow_node_occurrence"')
   sqlite.run('DROP TABLE "engine_browser_preview_target_identity"')
   sqlite.run('DROP TABLE "memory_embedding"')
   sqlite.run('DROP TABLE "memory_chunk"')
@@ -141,13 +142,18 @@ describe("transactional schema migration", () => {
     expect(plan?.migrations.map((migration) => migration.id)).toEqual([
       "2026-08-06-project-memory-single-scope",
       "2026-08-08-browser-preview-target-identity",
+      "2026-08-09-workflow-node-occurrence-authority",
     ])
 
     const result = migrateDatabaseFile(databasePath, plan!, preparedBackup)
     expect(result).toMatchObject({
       fromFingerprint: PREDECESSOR_FINGERPRINT,
       toFingerprint: CURRENT_FINGERPRINT,
-      migrationIDs: ["2026-08-06-project-memory-single-scope", "2026-08-08-browser-preview-target-identity"],
+      migrationIDs: [
+        "2026-08-06-project-memory-single-scope",
+        "2026-08-08-browser-preview-target-identity",
+        "2026-08-09-workflow-node-occurrence-authority",
+      ],
     })
 
     const migrated = new BunDatabase(databasePath, { readonly: true })
@@ -181,7 +187,11 @@ describe("transactional schema migration", () => {
       format: "opencorvus.schema-migration-backup.v1",
       fromFingerprint: PREDECESSOR_FINGERPRINT,
       toFingerprint: CURRENT_FINGERPRINT,
-      migrationIDs: ["2026-08-06-project-memory-single-scope", "2026-08-08-browser-preview-target-identity"],
+      migrationIDs: [
+        "2026-08-06-project-memory-single-scope",
+        "2026-08-08-browser-preview-target-identity",
+        "2026-08-09-workflow-node-occurrence-authority",
+      ],
     })
     expect(result.backupFiles.map((file) => file.name)).toEqual([
       "opencorvus.db",
@@ -199,6 +209,7 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    predecessor.run('DROP TABLE "engine_workflow_node_occurrence"')
     predecessor.run('DROP TABLE "engine_browser_preview_target_identity"')
     const artifactInsertGuard = requiredSchemaSQL(predecessor, "trigger", "engine_artifact_catalog_metadata_insert")
     predecessor.run('DROP TRIGGER "engine_artifact_catalog_metadata_insert"')
@@ -252,6 +263,152 @@ describe("transactional schema migration", () => {
       },
     ])
     backup.close(true)
+  })
+
+  test("migrates one logical workflow occurrence as bound and preserves duplicate initials as conflicted", async () => {
+    const databasePath = await temporaryDatabasePath()
+    const predecessor = new BunDatabase(databasePath, { create: true })
+    predecessor.exec(SCHEMA_DDL)
+    predecessor.run('DROP TABLE "engine_workflow_node_occurrence"')
+    const artifactInsertGuard = requiredSchemaSQL(predecessor, "trigger", "engine_artifact_catalog_metadata_insert")
+    predecessor.run('DROP TRIGGER "engine_artifact_catalog_metadata_insert"')
+    predecessor.run(
+      `INSERT INTO project (id, worktree, name, time_created, time_updated, sandboxes)
+       VALUES ('project-workflow', 'C:/project-workflow', 'Workflow project', 1, 1, '[]')`,
+    )
+    for (const sessionID of ["session-root", "session-research", "session-valuation-a", "session-valuation-b"]) {
+      predecessor.run(
+        `INSERT INTO session (
+           id, project_id, slug, directory, title, version, kind, time_created, time_updated
+         ) VALUES (?, 'project-workflow', ?, 'C:/project-workflow', ?, 'test', 'delegated-worker', 1, 1)`,
+        [sessionID, sessionID, sessionID],
+      )
+    }
+    predecessor.run(
+      `INSERT INTO engine_task (
+         id, project_id, session_id, product_pillar, title, request, time_created, time_updated
+       ) VALUES (
+         'task-workflow', 'project-workflow', 'session-root', 'work',
+         'Workflow task', 'Test workflow migration', 1, 1
+       )`,
+    )
+    const workflowBinding = {
+      kind: "virtual_workflow",
+      workflow_id: "research-workflow",
+      package_revision: {
+        scope: "built_in",
+        project_id: null,
+        namespace: "builtin",
+        id: "research",
+        version: "2026.08.09.1",
+        package_digest: "d".repeat(64),
+      },
+      nodes: [
+        { node_id: "research", agent_id: "researcher", depends_on: [] },
+        { node_id: "valuation", agent_id: "analyst", depends_on: [] },
+      ],
+    }
+    const lineages = [
+      {
+        id: "lineage-research-initial",
+        dispatchID: "dispatch-research",
+        occurrenceID: "dispatch-research",
+        childSessionID: "session-research",
+        nodeID: "research",
+        time: 10,
+      },
+      {
+        id: "lineage-research-continuation",
+        dispatchID: "dispatch-research-followup",
+        occurrenceID: "dispatch-research",
+        childSessionID: "session-research",
+        nodeID: "research",
+        time: 11,
+      },
+      {
+        id: "lineage-valuation-a",
+        dispatchID: "dispatch-valuation-a",
+        occurrenceID: "dispatch-valuation-a",
+        childSessionID: "session-valuation-a",
+        nodeID: "valuation",
+        time: 12,
+      },
+      {
+        id: "lineage-valuation-b",
+        dispatchID: "dispatch-valuation-b",
+        occurrenceID: "dispatch-valuation-b",
+        childSessionID: "session-valuation-b",
+        nodeID: "valuation",
+        time: 13,
+      },
+    ]
+    for (const [index, lineage] of lineages.entries()) {
+      predecessor.run(`INSERT INTO engine_artifact_catalog_revision (revision) VALUES (?)`, [index + 1])
+      predecessor.run(
+        `INSERT INTO engine_artifact (
+           id, task_id, kind, label, payload, payload_block_sha256s,
+           payload_block_index_sha256, catalog_metadata_sha256, catalog_revision,
+           time_created, time_updated
+         ) VALUES (?, 'task-workflow', 'dispatch_lineage', 'DispatchLineage', ?, '[]', ?, ?, ?, ?, ?)`,
+        [
+          lineage.id,
+          JSON.stringify({
+            dispatch_id: lineage.dispatchID,
+            workflow_occurrence_id: lineage.occurrenceID,
+            child_session_id: lineage.childSessionID,
+            workflow_binding: workflowBinding,
+            workflow_node_id: lineage.nodeID,
+            adapter_input: {},
+          }),
+          `block-${index}`,
+          `metadata-${index}`,
+          index + 1,
+          lineage.time,
+          lineage.time,
+        ],
+      )
+    }
+    predecessor.exec(artifactInsertGuard)
+    expect(schemaObjectFingerprint(predecessor)).toBe(
+      "43fb9964d9a3b2bc3d5b17af539bf441d31d0aba1d7eab2a4b8e8c67a88150ea",
+    )
+    const plan = planSchemaMigration(predecessor)
+    const preparedBackup = createSchemaMigrationBackup(databasePath, plan!)
+    predecessor.close(true)
+
+    migrateDatabaseFile(databasePath, plan!, preparedBackup)
+    const migrated = new BunDatabase(databasePath, { readonly: true })
+    const rows = migrated
+      .query(
+        `SELECT workflow_node_id, state, workflow_occurrence_id, initial_dispatch_id,
+                child_session_id, dispatch_lineage_artifact_id, conflict_lineage_ids
+         FROM engine_workflow_node_occurrence
+         ORDER BY workflow_node_id`,
+      )
+      .all() as Array<Record<string, unknown>>
+    expect(rows).toEqual([
+      {
+        workflow_node_id: "research",
+        state: "bound",
+        workflow_occurrence_id: "dispatch-research",
+        initial_dispatch_id: "dispatch-research",
+        child_session_id: "session-research",
+        dispatch_lineage_artifact_id: "lineage-research-initial",
+        conflict_lineage_ids: "[]",
+      },
+      {
+        workflow_node_id: "valuation",
+        state: "conflicted",
+        workflow_occurrence_id: null,
+        initial_dispatch_id: null,
+        child_session_id: null,
+        dispatch_lineage_artifact_id: null,
+        conflict_lineage_ids: '["lineage-valuation-a","lineage-valuation-b"]',
+      },
+    ])
+    expect(migrated.query("PRAGMA foreign_key_check").all()).toEqual([])
+    expect(migrated.query("PRAGMA integrity_check").all()).toEqual([{ integrity_check: "ok" }])
+    migrated.close(true)
   })
 
   test("returns a typed failure and retains the predecessor transaction when removed data is not empty", async () => {

@@ -23,7 +23,7 @@ jobs:
 
       - name: Verify generated SDK and OpenAPI
         run: |
-          ./script/generate.ts
+          bun ./script/generate.ts
           bun --cwd packages/opencorvus dev generate > /tmp/openapi.generated.json
           diff -u /tmp/openapi.generated.json packages/sdk/openapi.json
           bun ./script/generated-artifacts.ts --check-clean-worktree

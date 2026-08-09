@@ -5,6 +5,7 @@ import { Scheduler } from "./index"
 import { Session } from "@/session"
 import { SessionWake } from "@/session/wake"
 import { EngineTaskTable } from "@/engine/engine.sql"
+import { persistQueuedTaskWaitWakeInTransaction } from "@/engine/queue"
 import { Log } from "@/util/log"
 import { Instance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
@@ -308,8 +309,8 @@ export namespace AutomationService {
     )
     if (!task) throw new NotFoundError({ message: `Task not found: ${input.taskId}` })
     if (!task.sessionID) throw new Error(`Task ${input.taskId} has no root session; cannot schedule task wake.`)
-    await Session.assertLineageInProject({ sessionID: task.sessionID, projectID: input.projectId })
-    return task
+    const rootSession = await Session.assertLineageInProject({ sessionID: task.sessionID, projectID: input.projectId })
+    return { ...task, rootSession }
   }
 
   export async function create(input: CreateAutomationInput): Promise<{ id: string; name: string; nextRun: number }> {
@@ -754,6 +755,7 @@ export namespace AutomationService {
     source: string
     detail: string
   }): Promise<ConsumedAutomationWaits & { dispatchResult?: string }> {
+    const task = await assertTaskRootSessionInProject({ taskId: input.taskId, projectId: input.projectId })
     const owner = Identifier.ascending("call")
     const claimed = await claimPendingTaskWaitsFromActivity({
       taskId: input.taskId,
@@ -764,20 +766,24 @@ export namespace AutomationService {
     if (jobIDs.length === 0) return { jobIDs }
     let dispatchResult: string
     try {
-      dispatchResult = await requireTaskWakeRuntime().dispatchTaskLoop({
-        taskID: input.taskId,
-        event: {
-          note: renderTaskWaitEarlyActivityNote({
-            source: input.source,
-            detail: input.detail,
-            jobIDs,
+      dispatchResult = await runInTargetProject({
+        directory: task.rootSession.directory,
+        fn: () =>
+          requireTaskWakeRuntime().dispatchTaskLoop({
+            taskID: input.taskId,
+            event: {
+              note: renderTaskWaitEarlyActivityNote({
+                source: input.source,
+                detail: input.detail,
+                jobIDs,
+              }),
+              taskWaitActivity: {
+                source: input.source,
+                detail: input.detail,
+                jobIDs,
+              },
+            },
           }),
-          taskWaitActivity: {
-            source: input.source,
-            detail: input.detail,
-            jobIDs,
-          },
-        },
       })
     } catch (error) {
       for (const job of claimed) await fail(job, owner, error)
@@ -1139,7 +1145,7 @@ export namespace AutomationService {
     now: number,
     reschedule: boolean,
   ): Promise<string> {
-    const fireID = Identifier.ascending("call")
+    const fireID = job.kind === "delay" && job.task_id ? `cal_task_wait_${job.id}` : Identifier.ascending("call")
     log.info("executing automation", { jobId: job.id, fireID, name: job.name, prompt: job.prompt.slice(0, 100) })
 
     const timer = setInterval(() => {
@@ -1158,16 +1164,25 @@ export namespace AutomationService {
     if (job.kind === "delay") {
       let outcome: Awaited<ReturnType<typeof executeDelayedWake>>
       try {
-        outcome = await executeDelayedWake(job, fireID)
+        outcome = await executeDelayedWake(job, fireID, owner)
       } finally {
         clearInterval(timer)
       }
-      Database.use((db) =>
-        db
-          .delete(AutomationTable)
-          .where(and(eq(AutomationTable.id, job.id), eq(AutomationTable.lease_owner, owner)))
-          .run(),
-      )
+      if (!outcome.automationConsumed) {
+        const consumed = Database.use((db) =>
+          db
+            .delete(AutomationTable)
+            .where(and(eq(AutomationTable.id, job.id), eq(AutomationTable.lease_owner, owner)))
+            .returning({ id: AutomationTable.id })
+            .get(),
+        )
+        if (!consumed) {
+          throw new AutomationRunningConflictError({
+            message: `Automation ${job.id} lost its execution lease before one-shot completion`,
+            automationID: job.id,
+          })
+        }
+      }
       log.info("automation triggered session wake", {
         jobId: job.id,
         fireID,
@@ -1362,17 +1377,77 @@ export namespace AutomationService {
   async function executeDelayedWake(
     job: typeof AutomationTable.$inferSelect,
     fireID: string,
-  ): Promise<{ sessionID?: string; taskID?: string; dispatchResult?: string }> {
+    owner: string,
+  ): Promise<{
+    sessionID?: string
+    taskID?: string
+    wakeID?: string
+    dispatchResult?: string
+    dispatchError?: string
+    automationConsumed?: true
+  }> {
     if (job.task_id) {
       if (!job.project_id) throw new Error(`Delayed task wake ${job.id} has no project owner`)
-      await assertTaskRootSessionInProject({ taskId: job.task_id, projectId: job.project_id })
-      const dispatchResult = await requireTaskWakeRuntime().dispatchTaskLoop({
-        taskID: job.task_id,
-        event: {
-          note: renderTaskWaitWakeNote(job, fireID),
+      const task = await assertTaskRootSessionInProject({ taskId: job.task_id, projectId: job.project_id })
+      return await runInTargetProject({
+        directory: task.rootSession.directory,
+        fn: async () => {
+          const committedAt = Date.now()
+          const wakeID = Database.transaction((tx) => {
+            const persistedWakeID = persistQueuedTaskWaitWakeInTransaction(tx, {
+              taskID: job.task_id!,
+              projectID: job.project_id!,
+              jobID: job.id,
+              fireID,
+              dueAt: job.next_run,
+              note: renderTaskWaitWakeNote(job, fireID),
+              now: committedAt,
+            })
+            const consumed = tx
+              .delete(AutomationTable)
+              .where(
+                and(
+                  eq(AutomationTable.id, job.id),
+                  eq(AutomationTable.project_id, job.project_id!),
+                  eq(AutomationTable.task_id, job.task_id!),
+                  eq(AutomationTable.kind, "delay"),
+                  eq(AutomationTable.status, "active"),
+                  eq(AutomationTable.lease_owner, owner),
+                ),
+              )
+              .returning({ id: AutomationTable.id })
+              .get()
+            if (!consumed) {
+              throw new AutomationRunningConflictError({
+                message: `Automation ${job.id} lost its execution lease before Task wait ownership transfer`,
+                automationID: job.id,
+              })
+            }
+            return persistedWakeID
+          })
+          try {
+            const dispatchResult = await requireTaskWakeRuntime().dispatchPersistedTaskLoop(job.task_id!)
+            return { taskID: job.task_id!, wakeID, dispatchResult, automationConsumed: true as const }
+          } catch (error) {
+            const dispatchError = error instanceof Error ? error.message : String(error)
+            log.error("scheduled Task wait ingress remains queued after delivery failure", {
+              jobId: job.id,
+              taskID: job.task_id!,
+              wakeID,
+              fireID,
+              error: dispatchError,
+              errorName: error instanceof Error ? error.name : undefined,
+            })
+            return {
+              taskID: job.task_id!,
+              wakeID,
+              dispatchResult: "queued",
+              dispatchError,
+              automationConsumed: true as const,
+            }
+          }
         },
       })
-      return { taskID: job.task_id, dispatchResult }
     }
 
     if (!job.project_id) throw new Error(`Delayed session wake ${job.id} has no project owner`)

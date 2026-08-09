@@ -406,10 +406,17 @@ export namespace MCP {
     idleWaiters: Set<() => void>
   }
 
+  type ScopedConnectionOwnerState = {
+    id: string
+    entries: Map<string, OwnedScopedConnectionEntry>
+    cleanupPending: Set<McpConnection>
+    projectState?: McpState
+    close?: () => Promise<void>
+  }
+
   function scopedConnectionOwnerKey(input: ScopedConnectionInput, identity: string): string {
     return createHash("sha256").update(JSON.stringify(canonicalConfigValue({
       identity,
-      key: input.key,
       cwd: input.cwd,
       processAuthority: input.processAuthority,
       mcp: input.mcp,
@@ -430,8 +437,17 @@ export namespace MCP {
     if (!normalizedID) throw new Error("Scoped MCP connection owner requires a non-empty id")
     const entries = new Map<string, OwnedScopedConnectionEntry>()
     const cleanupPending = new Set<McpConnection>()
+    const ownerState: ScopedConnectionOwnerState = { id: normalizedID, entries, cleanupPending }
     let closed = false
     let closePromise: Promise<void> | undefined
+
+    const registerOwnerState = async () => {
+      if (ownerState.projectState) return ownerState.projectState
+      const projectState = await state()
+      projectState.scopedOwners.add(ownerState)
+      ownerState.projectState = projectState
+      return projectState
+    }
 
     const waitForIdle = async (entry: OwnedScopedConnectionEntry) => {
       if (entry.active === 0) return
@@ -446,11 +462,12 @@ export namespace MCP {
         if (!identity) {
           throw new Error(`Scoped MCP connection owner ${normalizedID} requires connectionIdentity`)
         }
+        await registerOwnerState()
         const ownerKey = scopedConnectionOwnerKey(input, identity)
         let entry = entries.get(ownerKey)
         if (!entry) {
           let candidate!: OwnedScopedConnectionEntry
-          const connecting = createSafely(input.key, input.mcp, {
+          const connecting = createSafely(identity, input.mcp, {
             processAuthority: input.processAuthority,
             cwd: input.cwd,
             authKey: false,
@@ -470,7 +487,7 @@ export namespace MCP {
           })
           candidate = {
             identity,
-            key: input.key,
+            key: identity,
             connecting,
             active: 0,
             idleWaiters: new Set(),
@@ -497,7 +514,6 @@ export namespace MCP {
         closePromise ??= (async () => {
           closed = true
           const owned = [...entries.values()]
-          entries.clear()
           await Promise.all(owned.map(waitForIdle))
           const connections = await Promise.allSettled(
             owned.map(async (entry) => entry.connection ?? (await entry.connecting)),
@@ -516,8 +532,14 @@ export namespace MCP {
           )
           if (errors.length > 0) {
             await transferScopedCleanupToInstance(cleanupPending)
+            entries.clear()
+            ownerState.projectState?.scopedOwners.delete(ownerState)
+            ownerState.projectState = undefined
             throw new AggregateError(errors, `Failed to close scoped MCP connection owner ${normalizedID}`)
           }
+          entries.clear()
+          ownerState.projectState?.scopedOwners.delete(ownerState)
+          ownerState.projectState = undefined
         })()
         try {
           await closePromise
@@ -527,6 +549,7 @@ export namespace MCP {
         }
       },
     }
+    ownerState.close = () => owner.close()
     return owner
   }
 
@@ -1325,6 +1348,7 @@ export namespace MCP {
     connectionAttempts: Set<Promise<void>>
     cleanupPending: Set<string>
     connectionCleanupPending: Map<string, Set<McpConnection>>
+    scopedOwners: Set<ScopedConnectionOwnerState>
     reconcilePending: Set<string>
     runtimeConnectionOverrides: Record<string, { ownerIdentity: string; ownerGeneration: number; config: Config.Mcp }>
     runtimeControlTails: Map<string, Promise<void>>
@@ -1724,6 +1748,7 @@ export namespace MCP {
       const connectionAttempts = new Set<Promise<void>>()
       const cleanupPending = new Set<string>()
       const connectionCleanupPending = new Map<string, Set<McpConnection>>()
+      const scopedOwners = new Set<ScopedConnectionOwnerState>()
       const reconcilePending = new Set<string>()
       const runtimeConnectionOverrides: McpState["runtimeConnectionOverrides"] = {}
       const runtimeControlTails = new Map<string, Promise<void>>()
@@ -1757,6 +1782,7 @@ export namespace MCP {
         connectionAttempts,
         cleanupPending,
         connectionCleanupPending,
+        scopedOwners,
         reconcilePending,
         runtimeConnectionOverrides,
         runtimeControlTails,
@@ -1766,6 +1792,7 @@ export namespace MCP {
     async (state) => {
       const connecting = [...state.connectionAttempts]
       const settledConnections = await Promise.allSettled(connecting)
+      await Promise.all([...state.scopedOwners].map((owner) => owner.close?.()))
       for (const key of Object.keys(state.connecting)) delete state.connecting[key]
       for (const key of Object.keys(state.connectingIdentity)) delete state.connectingIdentity[key]
       const connections = new Set([
@@ -2548,6 +2575,7 @@ export namespace MCP {
     const globalTimeout = options.globalTimeout ?? cfg?.experimental?.mcp_timeout
     const requestTimeout = effectiveTimeout(mcp, globalTimeout)
     const directory = options.cwd ?? Instance.directory
+    const builtinBrowser = mcp.type === "local" && BrowserMCPBuiltin.isBuiltinLocalConfig(mcp)
 
     log.info("found", { key, type: mcp.type })
     let mcpClient: MCPClient | undefined
@@ -2681,17 +2709,23 @@ export namespace MCP {
     }
 
     if (mcp.type === "local") {
-      const builtinBrowserProcess = key === BrowserMCPBuiltin.ServerName && BrowserMCPBuiltin.isBuiltinLocalConfig(mcp)
-        ? await BrowserMCPBuiltin.resolveStdioProcess()
-        : undefined
       const [configuredCommand, ...configuredArgs] = mcp.command
-      const cmd = builtinBrowserProcess?.executable ?? configuredCommand
-      const args = builtinBrowserProcess?.args ?? configuredArgs
+      const baseEnvironment = localMcpBaseEnvironment(configuredCommand, mcp)
+      const processPlan = builtinBrowser
+        ? await BrowserMCPBuiltin.resolveStdioProcess({
+            env: await browserMcpBridgeEnvironment(baseEnvironment),
+          })
+        : {
+            executable: configuredCommand,
+            args: configuredArgs,
+            env: baseEnvironment,
+          }
+      const cmd = processPlan.executable
+      const args = processPlan.args
       const cwd = directory
       connectionCwd = cwd
-      const processEnvironment = builtinBrowserProcess?.env ?? await localMcpEnvironment(key, cmd, mcp)
       const env = Object.fromEntries(
-        Object.entries(processEnvironment).filter((entry): entry is [string, string] => typeof entry[1] === "string"),
+        Object.entries(processPlan.env).filter((entry): entry is [string, string] => typeof entry[1] === "string"),
       )
       const transport = new SupervisedStdioClientTransport({
         stderr: "pipe",
@@ -2808,7 +2842,7 @@ export namespace MCP {
       cwd: connectionCwd,
       createdAt: Date.now(),
       lastUsedAt: Date.now(),
-      sharedProjectScoped: key === BrowserMCPBuiltin.ServerName,
+      sharedProjectScoped: builtinBrowser,
       configIdentity: mcpConfigIdentity(mcp),
     }
     return {
@@ -2818,14 +2852,12 @@ export namespace MCP {
     }
   }
 
-  async function localMcpEnvironment(key: string, cmd: string, mcp: Extract<Config.Mcp, { type: "local" }>) {
-    const env: Record<string, string> = {
+  function localMcpBaseEnvironment(cmd: string, mcp: Extract<Config.Mcp, { type: "local" }>) {
+    return {
       ...Env.snapshot(),
       ...(cmd === "opencorvus" ? { BUN_BE_BUN: "1" } : {}),
       ...mcp.environment,
     }
-    if (key !== BrowserMCPBuiltin.ServerName) return env
-    return browserMcpBridgeEnvironment(env)
   }
 
   export async function status() {
@@ -2872,15 +2904,39 @@ export namespace MCP {
   }
 
   export async function connectionStats() {
-    const s = await state()
-    const connections = objectValues(s.connections)
+    const states = await Promise.all(state.inspectAll().map((entry) => entry.state))
+    const connections = new Set<McpConnection>()
+    let scopedConnecting = 0
+    for (const project of states) {
+      for (const connection of objectValues(project.connections)) connections.add(connection)
+      for (const pending of project.connectionCleanupPending.values()) {
+        for (const connection of pending) connections.add(connection)
+      }
+      for (const owner of project.scopedOwners) {
+        for (const entry of owner.entries.values()) {
+          if (entry.connection) connections.add(entry.connection)
+          else scopedConnecting++
+        }
+        for (const connection of owner.cleanupPending) connections.add(connection)
+      }
+    }
+    const connected = [...connections]
     return {
-      connected: connections.length,
-      local: connections.filter((connection) => connection.type === "local").length,
-      remote: connections.filter((connection) => connection.type === "remote").length,
-      localStdioTransports: connections.filter((connection) => connection.type === "local" && connection.transport)
+      projects: states.length,
+      connected: connected.length,
+      local: connected.filter((connection) => connection.type === "local").length,
+      remote: connected.filter((connection) => connection.type === "remote").length,
+      localStdioTransports: connected.filter((connection) => connection.type === "local" && connection.transport)
         .length,
-      connecting: objectValues(s.connecting).filter(Boolean).length,
+      connecting: states.reduce(
+        (total, project) => total + objectValues(project.connecting).filter(Boolean).length,
+        scopedConnecting,
+      ),
+      failedAwaitingReconnect: states.reduce(
+        (total, project) =>
+          total + objectValues(project.status).filter((status) => status.status === "failed").length,
+        0,
+      ),
     }
   }
 

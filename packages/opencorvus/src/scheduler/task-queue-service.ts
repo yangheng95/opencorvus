@@ -187,6 +187,30 @@ export namespace TaskQueueService {
       })
       return claimed.map((task) => task.id)
     },
+    trackChildSessionProgress(input: {
+      taskID: string
+      rootSessionID: string
+      directory: string
+      projectID: string
+    }): () => void {
+      const current = state()
+      if (current.inFlight.has(input.taskID)) {
+        throw new Error(`Task Queue test progress owner already exists: ${input.taskID}`)
+      }
+      const inFlight: InFlightTask = {
+        promise: Promise.resolve(),
+        cleanup: () => undefined,
+        sessionID: input.rootSessionID,
+        source: "task-queue-child-progress-positive-contract",
+        progressSessionIDs: new Set([input.rootSessionID]),
+      }
+      current.inFlight.set(input.taskID, inFlight)
+      ensureProgressSubscription({ directory: input.directory, projectID: input.projectID })
+      return () => {
+        if (current.inFlight.get(input.taskID) === inFlight) current.inFlight.delete(input.taskID)
+        releaseProgressSubscriptionIfIdle(current)
+      }
+    },
   }
 
   export type QueuedTaskStatus = {

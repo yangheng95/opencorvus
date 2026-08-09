@@ -717,6 +717,7 @@ export type Event =
   | EventMessageRemoved
   | EventMessageUpdated
   | EventMissionHandoff
+  | EventPermissionAbandoned
   | EventPermissionAsked
   | EventPermissionReplied
   | EventProjectUpdated
@@ -1189,6 +1190,16 @@ export type EventMissionHandoff = {
     timeCreated: number
   }
   type: "mission.handoff"
+}
+
+export type EventPermissionAbandoned = {
+  properties: {
+    origin: "infrastructure"
+    requestID: string
+    sessionID: string
+    timeResolved: number
+  }
+  type: "permission.abandoned"
 }
 
 export type EventPermissionAsked = {
@@ -2876,19 +2887,7 @@ export type InteractiveArtifactPayload =
                 structuredContent?: {
                   [key: string]: unknown
                 }
-                [key: string]:
-                  | unknown
-                  | {
-                      [key: string]: unknown
-                    }
-                  | Array<{
-                      [key: string]: unknown
-                    }>
-                  | boolean
-                  | {
-                      [key: string]: unknown
-                    }
-                  | undefined
+                [key: string]: unknown
               }
               status: "completed"
             }
@@ -3123,14 +3122,7 @@ export type McpAppHostRequest =
             taskId: string
           }
           progressToken?: string | number
-          [key: string]:
-            | unknown
-            | {
-                taskId: string
-              }
-            | string
-            | number
-            | undefined
+          [key: string]: unknown
         }
         arguments?: {
           [key: string]: unknown
@@ -3149,14 +3141,7 @@ export type McpAppHostRequest =
             taskId: string
           }
           progressToken?: string | number
-          [key: string]:
-            | unknown
-            | {
-                taskId: string
-              }
-            | string
-            | number
-            | undefined
+          [key: string]: unknown
         }
         cursor?: string
       }
@@ -3169,14 +3154,7 @@ export type McpAppHostRequest =
             taskId: string
           }
           progressToken?: string | number
-          [key: string]:
-            | unknown
-            | {
-                taskId: string
-              }
-            | string
-            | number
-            | undefined
+          [key: string]: unknown
         }
         cursor?: string
       }
@@ -3189,14 +3167,7 @@ export type McpAppHostRequest =
             taskId: string
           }
           progressToken?: string | number
-          [key: string]:
-            | unknown
-            | {
-                taskId: string
-              }
-            | string
-            | number
-            | undefined
+          [key: string]: unknown
         }
         cursor?: string
       }
@@ -3209,14 +3180,7 @@ export type McpAppHostRequest =
             taskId: string
           }
           progressToken?: string | number
-          [key: string]:
-            | unknown
-            | {
-                taskId: string
-              }
-            | string
-            | number
-            | undefined
+          [key: string]: unknown
         }
         uri: string
       }
@@ -3229,14 +3193,7 @@ export type McpAppHostRequest =
             taskId: string
           }
           progressToken?: string | number
-          [key: string]:
-            | unknown
-            | {
-                taskId: string
-              }
-            | string
-            | number
-            | undefined
+          [key: string]: unknown
         }
         cursor?: string
       }
@@ -4105,80 +4062,10 @@ export type ProviderConfig = {
            * Disable this variant for the model
            */
           disabled?: boolean
-          [key: string]: unknown | boolean | undefined
+          [key: string]: unknown
         }
       }
-      [key: string]:
-        | unknown
-        | boolean
-        | {
-            cache_read?: number
-            cache_write?: number
-            context_over_200k?: {
-              cache_read?: number
-              cache_write?: number
-              input: number
-              output: number
-            }
-            input: number
-            output: number
-          }
-        | {
-            modes: {
-              [key: string]: {
-                cost?: {
-                  cache_read?: number
-                  cache_write?: number
-                  input: number
-                  output: number
-                }
-                provider: {
-                  body: {
-                    [key: string]: unknown
-                  }
-                  headers?: {
-                    [key: string]: string
-                  }
-                }
-              }
-            }
-          }
-        | string
-        | {
-            [key: string]: string
-          }
-        | true
-        | {
-            field: "reasoning_content" | "reasoning_details"
-          }
-        | {
-            context: number
-            input?: number
-            output: number
-          }
-        | {
-            input: Array<"text" | "audio" | "image" | "video" | "pdf">
-            output: Array<"text" | "audio" | "image" | "video" | "pdf">
-          }
-        | {
-            [key: string]: unknown
-          }
-        | {
-            api?: string
-            npm?: string
-          }
-        | "alpha"
-        | "beta"
-        | {
-            [key: string]: {
-              /**
-               * Disable this variant for the model
-               */
-              disabled?: boolean
-              [key: string]: unknown | boolean | undefined
-            }
-          }
-        | undefined
+      [key: string]: unknown
     }
   }
   name?: string
@@ -4194,7 +4081,7 @@ export type ProviderConfig = {
      * Timeout in milliseconds for requests to this provider. Default is 300000 (5 minutes). Set to false to disable timeout.
      */
     timeout?: number | false
-    [key: string]: unknown | string | boolean | number | false | undefined
+    [key: string]: unknown
   }
   whitelist?: Array<string>
 }
@@ -14987,16 +14874,6 @@ export type GatewayControlActionData = {
            * Current child Task accepted by this Mission decision.
            */
           task_id: string
-          /**
-           * Exact current completed occurrence reviewed by Mission.
-           */
-          terminal_lifecycle_reference: {
-            terminalError?: string
-            terminalEventID: string
-            terminalReason?: "interrupted"
-            terminalStatus: "completed" | "failed" | "cancelled"
-            timeCompleted: number
-          }
         }>
       }
     | {
@@ -15150,7 +15027,7 @@ export type GatewayControlActionData = {
           actor?: unknown
           actor_session_id?: unknown
           mission?: unknown
-          [key: string]: unknown | undefined
+          [key: string]: unknown
         }
         /**
          * Model reference in provider/model format for the new task.
@@ -15317,16 +15194,6 @@ export type GatewayControlActionData = {
          * Completed or failed source Task in the current Mission lineage.
          */
         taskID: string
-        /**
-         * Exact current terminal occurrence that Mission reviewed; stale references return a lifecycle conflict.
-         */
-        terminal_lifecycle_reference: {
-          terminalError?: string
-          terminalEventID: string
-          terminalReason?: "interrupted"
-          terminalStatus: "completed" | "failed" | "cancelled"
-          timeCompleted: number
-        }
         /**
          * Visible Mission-authored repair request describing the observed acceptance gap.
          */
@@ -20906,6 +20773,12 @@ export type ProjectCurrentCleanupCandidatesResponses = {
       directory: string
       primaryDir: string
       projectID: string
+    }>
+    worktreeGCPreservations: Array<{
+      detail: string
+      primaryDir: string
+      projectID: string
+      reason: "registry-unavailable"
     }>
     worktreeOrphans: Array<{
       marker: {

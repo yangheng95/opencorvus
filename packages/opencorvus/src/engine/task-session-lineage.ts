@@ -104,46 +104,57 @@ export function sessionBelongsToTask(sessionID: string, taskID: string): boolean
 }
 
 export type SessionExecutionAuthority =
-  | Readonly<{ kind: "conversation"; sessionID: string; projectID: string; rootDirectory: string }>
-  | Readonly<{ kind: "task"; sessionID: string; projectID: string; taskID: string; rootDirectory: string }>
+  | Readonly<{ kind: "conversation"; sessionID: string; projectID: string; directory: string }>
+  | Readonly<{ kind: "task"; sessionID: string; projectID: string; taskID: string; directory: string }>
 
 /** Resolve a model-effect owner from durable Session lineage and the explicit occurrence contract. */
 export async function resolveSessionExecutionAuthority(input: {
   sessionID: string
   projectID: string
-  rootDirectory: string
   expected: Readonly<{ kind: "conversation" }> | Readonly<{ kind: "task"; taskID: string }>
+  /** Fresh worker Session prepared in memory but not yet visible. Its parent
+   * lineage remains durable and is validated by the same traversal. */
+  pendingSession?: Readonly<{ id: string; projectID: string; parentID?: string; directory: string }>
 }): Promise<SessionExecutionAuthority> {
+  if (input.pendingSession && input.pendingSession.id !== input.sessionID) {
+    throw new Error(
+      `Pending Session authority ${input.pendingSession.id} does not match execution Session ${input.sessionID}`,
+    )
+  }
   const visited = new Set<string>()
   const taskOwners = new Set<string>()
+  let executionDirectory: string | undefined
   let current: string | undefined = input.sessionID
   while (current) {
     if (visited.has(current)) throw new Error(`Session lineage contains a cycle at ${current}`)
     visited.add(current)
-    const row = Database.use((db) =>
-      db
-        .select({
-          projectID: SessionTable.project_id,
-          parentID: SessionTable.parent_id,
-          directory: SessionTable.directory,
-        })
-        .from(SessionTable)
-        .where(eq(SessionTable.id, current!))
-        .get(),
-    )
+    const pending = current === input.pendingSession?.id ? input.pendingSession : undefined
+    const row =
+      pending ??
+      Database.use((db) =>
+        db
+          .select({
+            projectID: SessionTable.project_id,
+            parentID: SessionTable.parent_id,
+            directory: SessionTable.directory,
+          })
+          .from(SessionTable)
+          .where(eq(SessionTable.id, current!))
+          .get(),
+      )
     if (!row) throw new Error(`Session lineage is missing durable Session ${current}`)
     if (row.projectID !== input.projectID) {
       throw new Error(`Session ${current} belongs to project ${row.projectID}, expected ${input.projectID}`)
     }
-    if (path.resolve(row.directory) !== path.resolve(input.rootDirectory)) {
-      throw new Error(`Session ${current} directory ${row.directory} does not match process root ${input.rootDirectory}`)
-    }
+    if (current === input.sessionID) executionDirectory = path.resolve(row.directory)
     const owners = Database.use((db) =>
       db.select({ id: EngineTaskTable.id }).from(EngineTaskTable).where(eq(EngineTaskTable.session_id, current!)).all(),
     )
     for (const owner of owners) taskOwners.add(owner.id)
     current = row.parentID ?? undefined
   }
+
+  if (!executionDirectory) throw new Error(`Session ${input.sessionID} has no execution directory`)
 
   if (input.expected.kind === "conversation") {
     if (taskOwners.size > 0) {
@@ -153,7 +164,7 @@ export async function resolveSessionExecutionAuthority(input: {
       kind: "conversation",
       sessionID: input.sessionID,
       projectID: input.projectID,
-      rootDirectory: path.resolve(input.rootDirectory),
+      directory: executionDirectory,
     })
   }
 
@@ -162,12 +173,12 @@ export async function resolveSessionExecutionAuthority(input: {
       `Session ${input.sessionID} Task ownership does not equal explicit runtime Task ${input.expected.taskID}`,
     )
   }
-  const execution = await resolveTaskProcessExecution({ taskID: input.expected.taskID, cwd: input.rootDirectory })
+  const execution = await resolveTaskProcessExecution({ taskID: input.expected.taskID, cwd: executionDirectory })
   return Object.freeze({
     kind: "task",
     sessionID: input.sessionID,
     projectID: input.projectID,
     taskID: input.expected.taskID,
-    rootDirectory: execution.kind === "task_native" ? execution.cwd : execution.capsule.cwd,
+    directory: execution.kind === "task_native" ? execution.cwd : execution.capsule.cwd,
   })
 }

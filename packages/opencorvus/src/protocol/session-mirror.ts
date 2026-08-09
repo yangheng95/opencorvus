@@ -3,7 +3,7 @@ import { PermissionNext } from "@/permission/next"
 import { ProtocolStore } from "@/protocol/store"
 import { Question } from "@/question"
 import { Message, Session, SessionStatus } from "@/session"
-import { sessionRole } from "@/engine/task-session-lineage"
+import { sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
 import {
   enrichMessageEventProperties,
   originSourceFromMessageExtra,
@@ -266,6 +266,14 @@ export function mapSessionBusEvent(
       payload,
     }
   }
+  if (event.type === PermissionNext.Event.Abandoned.type) {
+    const payload = stampSessionEventPayload(sessionID, props, questionResponseOrderKey(props))
+    return {
+      type: "permission.abandoned",
+      summary: "Permission abandoned by infrastructure",
+      payload,
+    }
+  }
   if (event.type === Question.Event.Asked.type) {
     const payload = stampSessionEventPayload(sessionID, props, questionRequestOrderKey(props))
     return {
@@ -309,7 +317,7 @@ export function mapSessionBusEvent(
   return
 }
 
-async function shouldMirrorSessionScopedStream(sessionID: string): Promise<boolean> {
+function shouldMirrorSessionScopedStream(sessionID: string): boolean {
   const role = sessionRole(sessionID)
   if (role === "mission") return true
   return role === "assistant"
@@ -317,13 +325,31 @@ async function shouldMirrorSessionScopedStream(sessionID: string): Promise<boole
 
 export async function mirrorSessionBusEvent(event: SessionBusEvent, sessionID: string): Promise<void> {
   if (sessionBusEventSessionID(event) !== sessionID) return
-  if (!(await shouldMirrorSessionScopedStream(sessionID))) return
   const mapped = mapSessionBusEvent(event, { sessionID })
   if (!mapped) return
   const orderKey = mapped.payload?.orderKey
   if (typeof orderKey !== "string" || orderKey.length === 0) {
     throw new Error(`session-mirror: ${mapped.type} missing envelope orderKey`)
   }
+  if (sessionRole(sessionID) === "root" && mapped.type === "config.changed") {
+    const taskID = taskIDForSession(sessionID)
+    if (!taskID) return
+    ProtocolStore.dispatchEphemeral({
+      type: mapped.type,
+      aggregate: "task",
+      taskID,
+      sessionID,
+      source: "session.bridge",
+      orderKey,
+      payload: {
+        ...(mapped.payload ?? {}),
+        taskID,
+        summary: mapped.summary ?? mapped.type,
+      },
+    })
+    return
+  }
+  if (!shouldMirrorSessionScopedStream(sessionID)) return
   ProtocolStore.dispatchEphemeral({
     type: mapped.type,
     aggregate: "session",

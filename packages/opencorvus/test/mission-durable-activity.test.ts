@@ -42,10 +42,11 @@ describe("Mission durable activity", () => {
           title: "Benchmark trial",
         })
         const taskID = Identifier.ascending("task")
+        const timeCreated = Date.now()
         persistQueuedTask({
           taskID,
           sessionID: taskSession.id,
-          now: Date.now(),
+          now: timeCreated,
           title: "Benchmark trial",
           request: "Run one exact benchmark trial",
           productPillar: "code",
@@ -61,7 +62,7 @@ describe("Mission durable activity", () => {
             projectID: Instance.project.id,
             rootDirectory: Instance.directory,
             packageRevisionSHA256: packageRevision.packageDigest,
-            timeCreated: Date.now(),
+            timeCreated,
           }),
         })
 

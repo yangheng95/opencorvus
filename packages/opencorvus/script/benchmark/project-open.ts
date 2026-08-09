@@ -30,7 +30,7 @@ export function resolveIdleTimeoutMs(argv: string[]) {
 
 async function runStep(label: string, command: string[], idleTimeoutMs: number) {
   process.stdout.write(`[project-open] ${label}: started\n`)
-  const result = await Process.run(command, {
+  const result = await Process.runHost(command, {
     cwd: repoRoot,
     inactivityTimeoutMs: idleTimeoutMs,
     inactivityTimeoutMessage: `${label} produced no stdout/stderr activity for ${idleTimeoutMs}ms`,

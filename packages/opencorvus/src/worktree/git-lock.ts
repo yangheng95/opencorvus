@@ -4,6 +4,8 @@ import { randomUUID } from "node:crypto"
 import path from "node:path"
 import lockfile from "proper-lockfile"
 import { Filesystem } from "@/util/filesystem"
+import { ProjectRuntimePaths } from "@/project/runtime-paths"
+import { AsyncLocalStorage } from "node:async_hooks"
 
 const STALE_MILLISECONDS = 30_000
 const UPDATE_MILLISECONDS = 1_000
@@ -41,6 +43,50 @@ export namespace ProjectGitLock {
     owner: ProjectGitLockOwner
     assertOwned(): void
     release(): Promise<void>
+  }
+
+  const leaseContext = new AsyncLocalStorage<Lease>()
+
+  export async function withLease<T>(
+    input: { projectID: string; primaryWorktreeDir: string },
+    fn: (lease: Lease) => Promise<T>,
+  ): Promise<T> {
+    const inherited = leaseContext.getStore()
+    if (inherited) {
+      inherited.assertOwned()
+      const result = await fn(inherited)
+      inherited.assertOwned()
+      return result
+    }
+    const lockPath = ProjectRuntimePaths.projectGitLock(input.primaryWorktreeDir)
+    let lease: Lease
+    try {
+      lease = await acquire(lockPath, input.projectID)
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === "ELOCKED") {
+        const owner = await readOwner(lockPath)
+        throw new Error(`Timed out waiting for project git lock ${lockPath} held by pid ${owner?.pid ?? "unknown"}`)
+      }
+      throw error
+    }
+    let result: T | undefined
+    let operationError: unknown
+    try {
+      result = await leaseContext.run(lease, () => fn(lease))
+      lease.assertOwned()
+    } catch (error) {
+      operationError = error
+    }
+    try {
+      await lease.release()
+    } catch (releaseError) {
+      if (operationError) {
+        throw new AggregateError([operationError, releaseError], "Project Git operation and lock release both failed")
+      }
+      throw releaseError
+    }
+    if (operationError) throw operationError
+    return result as T
   }
 
   export async function readOwner(target: string): Promise<ProjectGitLockOwner | undefined> {

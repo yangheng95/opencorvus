@@ -96,6 +96,7 @@ import type {
   ConfigUpdateResponses,
   ConversationCapabilityUpdate,
   CreateQuickNoteRequest,
+  EventSubscribeResponse,
   EventSubscribeResponses,
   ExperimentalEventscheduleCreateErrors,
   ExperimentalEventscheduleCreateResponses,
@@ -210,6 +211,7 @@ import type {
   GlobalDbMysqlSchemaResponses,
   GlobalDisposeErrors,
   GlobalDisposeResponses,
+  GlobalEventResponse,
   GlobalEventResponses,
   GlobalHealthResponses,
   GlobalProjectsAnonymousResponses,
@@ -250,6 +252,7 @@ import type {
   InteractionReplyErrors,
   InteractionReplyResponses,
   InteractiveArtifactEventsMcpAppErrors,
+  InteractiveArtifactEventsMcpAppResponse,
   InteractiveArtifactEventsMcpAppResponses,
   InteractiveArtifactReadSessionArtifactErrors,
   InteractiveArtifactReadSessionArtifactResponses,
@@ -268,6 +271,7 @@ import type {
   MailboxDeleteManyErrors,
   MailboxDeleteManyResponses,
   MailboxDeleteResponses,
+  MailboxEventsResponse,
   MailboxEventsResponses,
   MailboxListErrors,
   MailboxListResponses,
@@ -331,6 +335,7 @@ import type {
   PanelKnowledgeMemoryListResponses,
   PanelKnowledgeMemorySearchResponses,
   PanelMessageResponses,
+  PanelMessageStreamResponse,
   PanelMessageStreamResponses,
   Part as Part2,
   PartDeleteErrors,
@@ -388,6 +393,7 @@ import type {
   PtyInputResponses,
   PtyListResponses,
   PtyOutputErrors,
+  PtyOutputResponse,
   PtyOutputResponses,
   PtyRemoveErrors,
   PtyRemoveResponses,
@@ -424,6 +430,7 @@ import type {
   SessionDeleteMessageResponses,
   SessionDeleteResponses,
   SessionDiffResponses,
+  SessionEventsResponse,
   SessionEventsResponses,
   SessionForkResponses,
   SessionGetErrors,
@@ -490,6 +497,7 @@ import type {
   TaskCreateResponses,
   TaskDeleteErrors,
   TaskDeleteResponses,
+  TaskEventsResponse,
   TaskEventsResponses,
   TaskGetErrors,
   TaskGetResponses,
@@ -500,6 +508,7 @@ import type {
   TaskInjectResponses,
   TaskInteractionsErrors,
   TaskInteractionsResponses,
+  TaskListEventsResponse,
   TaskListEventsResponses,
   TaskListResponses,
   TaskMessageErrors,
@@ -553,6 +562,7 @@ import type {
   VcsBranchesResponses,
   VcsCommitErrors,
   VcsCommitMessageStreamErrors,
+  VcsCommitMessageStreamResponse,
   VcsCommitMessageStreamResponses,
   VcsCommitResponses,
   VcsDiffErrors,
@@ -567,6 +577,7 @@ import type {
   WorkCapabilityGetResponses,
   WorkCapabilityUpdateErrors,
   WorkCapabilityUpdateResponses,
+  WorkLedgerEventsResponse,
   WorkLedgerEventsResponses,
   WorkLedgerListArchivedErrors,
   WorkLedgerListArchivedResponses,
@@ -588,10 +599,11 @@ import type {
   WorktreeResetResponses,
 } from "./types.gen.js"
 
-export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<
-  TData,
-  ThrowOnError
-> & {
+export type Options<
+  TData extends TDataShape = TDataShape,
+  ThrowOnError extends boolean = boolean,
+  TResponse = unknown,
+> = Options2<TData, ThrowOnError, TResponse> & {
   /**
    * You can provide a client instance returned by `createClient()` instead of
    * individual options. This might be also useful if you want to implement a
@@ -2053,7 +2065,7 @@ export class Computer extends HeyApiClient {
   }
 }
 
-export class Proxy extends HeyApiClient {
+export class Proxy_ extends HeyApiClient {
   /**
    * Test network proxy
    *
@@ -2196,13 +2208,13 @@ export class Config extends HeyApiClient {
     })
   }
 
-  private _proxy?: Proxy
-  get proxy(): Proxy {
-    return (this._proxy ??= new Proxy({ client: this.client }))
+  private _proxy?: Proxy_
+  get proxy(): Proxy_ {
+    return (this._proxy ??= new Proxy_({ client: this.client }))
   }
 }
 
-export class Event extends HeyApiClient {
+export class Event_ extends HeyApiClient {
   /**
    * Subscribe to events
    *
@@ -2212,7 +2224,7 @@ export class Event extends HeyApiClient {
     parameters?: {
       directory?: string
     },
-    options?: Options<never, ThrowOnError>,
+    options?: Options<never, ThrowOnError, EventSubscribeResponse>,
   ) {
     const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
     return (options?.client ?? this.client).sse.get<EventSubscribeResponses, unknown, ThrowOnError>({
@@ -3617,7 +3629,7 @@ export class Export extends HeyApiClient {
   }
 }
 
-export class File extends HeyApiClient {
+export class File_ extends HeyApiClient {
   /**
    * List files
    *
@@ -4367,16 +4379,6 @@ export class Control extends HeyApiClient {
                * Current child Task accepted by this Mission decision.
                */
               task_id: string
-              /**
-               * Exact current completed occurrence reviewed by Mission.
-               */
-              terminal_lifecycle_reference: {
-                terminalError?: string
-                terminalEventID: string
-                terminalReason?: "interrupted"
-                terminalStatus: "completed" | "failed" | "cancelled"
-                timeCompleted: number
-              }
             }>
           }
         | {
@@ -4530,7 +4532,7 @@ export class Control extends HeyApiClient {
               actor?: unknown
               actor_session_id?: unknown
               mission?: unknown
-              [key: string]: unknown | undefined
+              [key: string]: unknown
             }
             /**
              * Model reference in provider/model format for the new task.
@@ -4697,16 +4699,6 @@ export class Control extends HeyApiClient {
              * Completed or failed source Task in the current Mission lineage.
              */
             taskID: string
-            /**
-             * Exact current terminal occurrence that Mission reviewed; stale references return a lifecycle conflict.
-             */
-            terminal_lifecycle_reference: {
-              terminalError?: string
-              terminalEventID: string
-              terminalReason?: "interrupted"
-              terminalStatus: "completed" | "failed" | "cancelled"
-              timeCompleted: number
-            }
             /**
              * Visible Mission-authored repair request describing the observed acceptance gap.
              */
@@ -6092,7 +6084,7 @@ export class Global extends HeyApiClient {
    *
    * Subscribe to global events from the OpenCorvus system using server-sent events.
    */
-  public event<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
+  public event<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError, GlobalEventResponse>) {
     return (options?.client ?? this.client).sse.get<GlobalEventResponses, unknown, ThrowOnError>({
       url: "/global/event",
       ...options,
@@ -6523,7 +6515,7 @@ export class List extends HeyApiClient {
    *
    * Pure change-notification SSE for the task list sidebar. Emits `{type, taskID, sequence}` when a persisted task aggregate event changes the task-list projection. Conversation stream/status chunks belong to /task/:taskID/events and are intentionally not sent here. Notify-worthy events also carry `notificationDetails` for copyable diagnostics. No replay — clients call /task separately to fetch the refreshed list.
    */
-  public events<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
+  public events<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError, TaskListEventsResponse>) {
     return (options?.client ?? this.client).sse.get<TaskListEventsResponses, unknown, ThrowOnError>({
       url: "/task/events",
       ...options,
@@ -7384,7 +7376,7 @@ export class Task extends HeyApiClient {
     parameters: {
       taskID: string
     },
-    options?: Options<never, ThrowOnError>,
+    options?: Options<never, ThrowOnError, TaskEventsResponse>,
   ) {
     const params = buildClientParams([parameters], [{ args: [{ in: "path", key: "taskID" }] }])
     return (options?.client ?? this.client).sse.get<TaskEventsResponses, unknown, ThrowOnError>({
@@ -8225,7 +8217,7 @@ export class Mailbox extends HeyApiClient {
    *
    * Pure change-notification Server-Sent Events stream. Clients refetch /mailbox for the canonical projection.
    */
-  public events<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
+  public events<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError, MailboxEventsResponse>) {
     return (options?.client ?? this.client).sse.get<MailboxEventsResponses, unknown, ThrowOnError>({
       url: "/mailbox/events",
       ...options,
@@ -9354,7 +9346,7 @@ export class Message extends HeyApiClient {
       thread?: string
       user_id?: string
     },
-    options?: Options<never, ThrowOnError>,
+    options?: Options<never, ThrowOnError, PanelMessageStreamResponse>,
   ) {
     const params = buildClientParams(
       [parameters],
@@ -10612,7 +10604,7 @@ export class Pty extends HeyApiClient {
       directory?: string
       cursor?: number
     },
-    options?: Options<never, ThrowOnError>,
+    options?: Options<never, ThrowOnError, PtyOutputResponse>,
   ) {
     const params = buildClientParams(
       [parameters],
@@ -11390,7 +11382,7 @@ export class Session4 extends HeyApiClient {
       sessionID: string
       directory?: string
     },
-    options?: Options<never, ThrowOnError>,
+    options?: Options<never, ThrowOnError, SessionEventsResponse>,
   ) {
     const params = buildClientParams(
       [parameters],
@@ -11955,7 +11947,7 @@ export class InteractiveArtifact extends HeyApiClient {
       artifactID: string
       directory?: string
     },
-    options?: Options<never, ThrowOnError>,
+    options?: Options<never, ThrowOnError, InteractiveArtifactEventsMcpAppResponse>,
   ) {
     const params = buildClientParams(
       [parameters],
@@ -12872,7 +12864,7 @@ export class CommitMessage extends HeyApiClient {
       sessionID?: string
       taskID?: string
     },
-    options?: Options<never, ThrowOnError>,
+    options?: Options<never, ThrowOnError, VcsCommitMessageStreamResponse>,
   ) {
     const params = buildClientParams(
       [parameters],
@@ -13155,7 +13147,9 @@ export class WorkLedger extends HeyApiClient {
    *
    * Unified Work Ledger Server-Sent Events (SSE) stream. Generic Mission, Chat, Work, Task, and Project changes tell clients to refetch /work-ledger; conversation handoffs carry exact caller and target lineage for activation followed by caller archival.
    */
-  public events<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
+  public events<ThrowOnError extends boolean = false>(
+    options?: Options<never, ThrowOnError, WorkLedgerEventsResponse>,
+  ) {
     return (options?.client ?? this.client).sse.get<WorkLedgerEventsResponses, unknown, ThrowOnError>({
       url: "/work-ledger/events",
       ...options,
@@ -13368,9 +13362,9 @@ export class OpenCorvusClient extends HeyApiClient {
     return (this._config ??= new Config({ client: this.client }))
   }
 
-  private _event?: Event
-  get event(): Event {
-    return (this._event ??= new Event({ client: this.client }))
+  private _event?: Event_
+  get event(): Event_ {
+    return (this._event ??= new Event_({ client: this.client }))
   }
 
   private _experimental?: Experimental
@@ -13398,9 +13392,9 @@ export class OpenCorvusClient extends HeyApiClient {
     return (this._export ??= new Export({ client: this.client }))
   }
 
-  private _file?: File
-  get file(): File {
-    return (this._file ??= new File({ client: this.client }))
+  private _file?: File_
+  get file(): File_ {
+    return (this._file ??= new File_({ client: this.client }))
   }
 
   private _find?: Find

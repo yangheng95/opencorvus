@@ -88,6 +88,10 @@ export namespace SessionStatus {
     })
   export type Info = z.infer<typeof Info>
 
+  export function isExecuting(status: Info): boolean {
+    return status.type === "streaming" || status.type === "retry"
+  }
+
   export const LifecycleOrderKey = z.string().min(1).refine(isSessionOrderKey, {
     message: "expected session orderKey",
   })
@@ -282,27 +286,24 @@ export namespace SessionStatus {
       // the outer publication would form a promise cycle through Bus.publish.
       const dispatchingPublication = { status: parsedStatus, completion: Promise.resolve() }
       publications[key] = dispatchingPublication
-      let pending: Array<Promise<unknown>>
+      let completion!: Promise<void>
       try {
-        const orderKey = executionLifecycleOrderKey(sessionID, inputMessageID)
-        pending = [
-          Bus.publish(Event.Status, {
+        completion = runAsInstanceActivity(async () => {
+          // The publication must be constructed inside the tracked activity.
+          // Wrapping an already-started Bus Promise only tracks its lifetime;
+          // it cannot retrofit AsyncLocal activity authority onto subscriber
+          // continuations. The resolved placeholder remains visible while
+          // the activity factory synchronously starts Bus dispatch, so a
+          // re-entrant set() cannot await the publication that is waiting for
+          // that same subscriber.
+          const orderKey = executionLifecycleOrderKey(sessionID, inputMessageID)
+          await Bus.publish(Event.Status, {
             sessionID,
             inputMessageID,
             ...(options?.taskID ? { taskID: options.taskID } : {}),
             orderKey,
             status: parsedStatus,
-          }),
-        ]
-      } catch (error) {
-        if (publications[key] === dispatchingPublication) delete publications[key]
-        restoreTerminalAfterPublicationFailure()
-        throw error
-      }
-      let completion!: Promise<void>
-      try {
-        completion = runAsInstanceActivity(async () => {
-          await Promise.all(pending)
+          })
         })
           .then(() => {
             if (publications[key]?.completion === completion) {

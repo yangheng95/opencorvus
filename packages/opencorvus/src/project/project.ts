@@ -16,10 +16,20 @@ import { hostGit as git } from "../util/git"
 import { Glob } from "../util/glob"
 import { which } from "@/util/which"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
+import { NamedError } from "@opencorvus-ai/util/error"
 
 export namespace Project {
   const log = Log.create({ service: "project" })
   type Row = typeof ProjectTable.$inferSelect
+
+  export const DirectoryIntegrityError = NamedError.create(
+    "ProjectDirectoryIntegrityError",
+    z.object({
+      directory: z.string(),
+      reason: z.enum(["missing", "not-directory"]),
+      message: z.string(),
+    }),
+  )
 
   function gitpath(cwd: string, name: string) {
     if (!name) return cwd
@@ -67,6 +77,26 @@ export namespace Project {
   function isMissingPathError(error: unknown) {
     const code = typeof error === "object" && error && "code" in error ? String(error.code) : ""
     return code === "ENOENT" || code === "ENOTDIR"
+  }
+
+  async function assertDirectoryIntegrity(directory: string): Promise<void> {
+    let info
+    try {
+      info = await stat(directory)
+    } catch (error) {
+      if (!isMissingPathError(error)) throw error
+      throw new DirectoryIntegrityError({
+        directory,
+        reason: "missing",
+        message: `Project directory does not exist: ${directory}`,
+      })
+    }
+    if (info.isDirectory()) return
+    throw new DirectoryIntegrityError({
+      directory,
+      reason: "not-directory",
+      message: `Project directory is not a directory: ${directory}`,
+    })
   }
 
   async function realComparePath(value: string) {
@@ -507,6 +537,7 @@ export namespace Project {
   }
 
   export async function fromDirectory(directory: string) {
+    await assertDirectoryIntegrity(directory)
     log.info("fromDirectory", { directory })
 
     const data = await iife(async () => {

@@ -8,6 +8,16 @@ import os from "node:os"
 import path from "node:path"
 
 describe("ProcessSupervisor control-plane authority", () => {
+  test("returns a fast command's real nonzero exit after the native readiness handshake", async () => {
+    const handle = await ProcessSupervisor.spawnHostCommand({
+      executable: process.execPath,
+      args: ["-e", "process.exit(7)"],
+      owner: "process-supervisor-fast-exit-contract",
+    })
+    expect(await handle.exited).toBe(7)
+    await ProcessSupervisor.disposeAndWaitForExit(handle, "fast nonzero control-plane process")
+  })
+
   test("executes a control-plane process while the Task Capsule runtime is configured", async () => {
     const previousDescriptor = process.env.OPENCORVUS_EXECUTION_CAPSULE_DESCRIPTOR
     const directory = await mkdtemp(path.join(os.tmpdir(), "opencorvus-host-ripgrep-"))

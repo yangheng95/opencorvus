@@ -18,6 +18,7 @@ import { EventService } from "../scheduler/event-service"
 import { TaskQueueService } from "../scheduler/task-queue-service"
 import { EngineService } from "@/task-api"
 import { EngineEventLog } from "@/engine/event-log"
+import { EngineInteraction } from "@/engine/interaction"
 import { ChannelSupervisor } from "@/channel/supervisor"
 import { Config } from "@/config/config"
 import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
@@ -98,6 +99,12 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   ensureTaskMessageProtocolBridge()
   ensureSessionProtocolBridge()
   ensureMissionCallerReceiptBridge()
+  await ProjectOpenLifecycle.stage("engine-interaction.reconcile-recovered-waiters", lifecycleContext, () =>
+    EngineInteraction.reconcileRecoveredPendingWaiters({
+      projectID: Instance.project.id,
+      timeResolved: Date.now(),
+    }),
+  )
   await ProjectOpenLifecycle.stage("engine-queue.recover-interrupted-executions", lifecycleContext, async () => {
     try {
       await reconcileInterruptedTaskExecutions()

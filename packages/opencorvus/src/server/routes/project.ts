@@ -45,9 +45,17 @@ const WorktreeGCCandidate = z.object({
   directory: z.string(),
 })
 
+const WorktreeGCPreservation = z.object({
+  projectID: z.string(),
+  primaryDir: z.string(),
+  reason: z.literal("registry-unavailable"),
+  detail: z.string(),
+})
+
 const CleanupCandidates = z.object({
   worktreeOrphans: OwnershipCandidate.array(),
   worktreeGCCandidates: WorktreeGCCandidate.array(),
+  worktreeGCPreservations: WorktreeGCPreservation.array(),
 })
 
 const CurrentProjectUpdateInput = z.object({
@@ -289,6 +297,9 @@ export const ProjectRoutes = lazy(() =>
               primaryDir: candidate.primaryDir,
               directory: candidate.directory,
             })),
+          worktreeGCPreservations: gcPlan.preservations.filter(
+            (preservation) => path.resolve(preservation.primaryDir) === current,
+          ),
         })
       },
     )

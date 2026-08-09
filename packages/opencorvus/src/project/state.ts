@@ -2,6 +2,12 @@ import { Log } from "@/util/log"
 import { lifecycleError } from "./lifecycle-error"
 
 export namespace State {
+  export type Accessor<S> = (() => S) & {
+    reset(): Promise<void>
+    resetAll(): Promise<void>
+    inspectAll(): ReadonlyArray<Readonly<{ key: string; state: S }>>
+  }
+
   interface Entry {
     state: any
     dispose?: (state: any) => Promise<void>
@@ -151,7 +157,7 @@ export namespace State {
         )
       }
       return entry.state as S
-    }) as (() => S) & { reset(): Promise<void>; resetAll(): Promise<void> }
+    }) as Accessor<S>
     fn.reset = async () => {
       const key = root()
       const entries = recordsByKey.get(key)
@@ -178,6 +184,15 @@ export namespace State {
       } finally {
         if (initDisposals.get(init) === operation) initDisposals.delete(init)
       }
+    }
+    fn.inspectAll = () => {
+      const snapshot: Array<Readonly<{ key: string; state: S }>> = []
+      for (const [key, entries] of recordsByKey) {
+        const entry = entries.get(init)
+        if (!entry) continue
+        snapshot.push({ key, state: entry.state as S })
+      }
+      return snapshot
     }
     return fn
   }

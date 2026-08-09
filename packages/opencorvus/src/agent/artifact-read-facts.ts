@@ -10,6 +10,8 @@ import {
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import { Database, and, asc, desc, eq, gt, or, sql } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
+import { MissionPanelActionSchema } from "@/panel/capability"
+import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
 
 function locatorKey(locator: ArtifactReadLocator): string {
   return artifactReadLocatorKey(locator)
@@ -51,7 +53,7 @@ function factScopeConditions(scope: ArtifactFactScope | undefined) {
   ]
 }
 
-function assistantMessageScope(sessionID: string, assistantMessageID: string) {
+export function assistantTurnFactScope(sessionID: string, assistantMessageID: string) {
   const row = Database.use((db) =>
     db
       .select({ data: MessageTable.data, timeCreated: MessageTable.time_created })
@@ -127,8 +129,12 @@ export function completeArtifactReadLocatorsForSession(
     const rawInput = state?.input
     if (data.tool === "panel") {
       if (!rawInput || typeof rawInput !== "object" || Array.isArray(rawInput)) continue
-      const { action, taskID, ...read } = rawInput as Record<string, unknown>
-      if (action !== "read_task_artifact") continue
+      if ((rawInput as Record<string, unknown>).action !== "read_task_artifact") continue
+      const panelInput = MissionPanelActionSchema.parse(
+        materializeToolExecutionInput(MissionPanelActionSchema, rawInput),
+      )
+      if (panelInput.action !== "read_task_artifact") continue
+      const { action: _action, taskID, ...read } = panelInput
       if (options?.panelTaskID !== undefined && taskID !== options.panelTaskID) continue
       const request = ArtifactReadInputSchema.parse(read)
       if (typeof state?.output !== "string") {
@@ -211,7 +217,7 @@ export function selectedArtifactFactsForSession(
       throw new Error(`Completed artifact_select tool part ${row.id} output differs from its input.`)
     }
     const key = locatorKey(selected.locator)
-    const selectionMessageScope = assistantMessageScope(sessionID, row.messageID)
+    const selectionMessageScope = assistantTurnFactScope(sessionID, row.messageID)
     const completedBeforeSelection = completeArtifactReadLocatorsForSession(sessionID, {
       turnParentMessageID: selectionMessageScope.turnParentMessageID,
       beforeMessage: {
@@ -255,7 +261,7 @@ export function artifactProvenanceForSession(
 
 export function artifactProvenanceForAgentTurn(sessionID: string, finalAssistantMessageID: string) {
   return artifactProvenanceForSession(sessionID, {
-    turnParentMessageID: assistantMessageScope(sessionID, finalAssistantMessageID).turnParentMessageID,
+    turnParentMessageID: assistantTurnFactScope(sessionID, finalAssistantMessageID).turnParentMessageID,
   })
 }
 
@@ -263,7 +269,7 @@ export function completeArtifactReadsBeforePublication(input: {
   sessionID: string
   assistantMessageID: string
 }): ArtifactReadLocator[] {
-  const scope = assistantMessageScope(input.sessionID, input.assistantMessageID)
+  const scope = assistantTurnFactScope(input.sessionID, input.assistantMessageID)
   return completeArtifactReadLocatorsForSession(input.sessionID, {
     turnParentMessageID: scope.turnParentMessageID,
     beforeMessage: scope.message,
@@ -275,7 +281,7 @@ export function completeArtifactReadsBeforePanelAction(input: {
   assistantMessageID: string
   taskID: string
 }): ArtifactReadLocator[] {
-  const scope = assistantMessageScope(input.sessionID, input.assistantMessageID)
+  const scope = assistantTurnFactScope(input.sessionID, input.assistantMessageID)
   return completeArtifactReadLocatorsForSession(input.sessionID, {
     turnParentMessageID: scope.turnParentMessageID,
     beforeMessage: scope.message,
@@ -287,7 +293,7 @@ export function selectedArtifactLocatorsBeforePublication(input: {
   sessionID: string
   assistantMessageID: string
 }): ArtifactReadLocator[] {
-  const scope = assistantMessageScope(input.sessionID, input.assistantMessageID)
+  const scope = assistantTurnFactScope(input.sessionID, input.assistantMessageID)
   const selected = new Map<string, ArtifactReadLocator>()
   for (const fact of selectedArtifactFactsForSession(input.sessionID, {
     turnParentMessageID: scope.turnParentMessageID,

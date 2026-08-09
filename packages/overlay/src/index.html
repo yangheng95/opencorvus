@@ -1,6 +1,10 @@
 <!doctype html>
 <html lang="en-US" data-theme="light">
   <head>
+    <script>
+      const acceptanceLocale = new URLSearchParams(location.search).get("acceptance-locale")
+      if (acceptanceLocale) globalThis.__OPENCORVUS_LOCALE__ = acceptanceLocale
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OpenCorvus</title>

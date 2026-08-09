@@ -1,0 +1,9 @@
+$ bun run --cwd packages/opencorvus dev serve --hostname "127.0.0.1" --port "7878" --project-dir "C:\\Users\\chuan\\.codex\\worktrees\\0dbb\\opencorvus" --print-logs
+$ bun ./src/index.ts serve --hostname "127.0.0.1" --port "7878" --project-dir "C:\\Users\\chuan\\.codex\\worktrees\\0dbb\\opencorvus" --print-logs
+{"level":"info","time":"2026-08-09T02:17:15.214Z","service":"default","version":"local","args":["serve","--hostname","127.0.0.1","--port","7878","--project-dir","C:\\Users\\chuan\\.codex\\worktrees\\0dbb\\opencorvus","--print-logs"],"logDomain":"non-session","message":"opencorvus"}
+{"level":"info","time":"2026-08-09T02:17:15.385Z","service":"config","path":"C:\\Users\\chuan\\AppData\\Local\\opencorvus-e2e-2026-08-09-batch-01\\config\\opencorvus.jsonc","logDomain":"non-session","message":"loading"}
+{"level":"info","time":"2026-08-09T02:17:15.395Z","service":"db","path":"C:\\Users\\chuan\\AppData\\Local\\opencorvus-e2e-2026-08-09-batch-01\\data\\opencorvus.db","logDomain":"non-session","message":"opening database"}
+{"level":"info","time":"2026-08-09T02:17:15.465Z","service":"db","logDomain":"non-session","message":"schema applied"}
+{"level":"info","time":"2026-08-09T02:17:15.475Z","service":"automation-service","logDomain":"non-session","message":"global automation service initialized"}
+{"level":"info","time":"2026-08-09T02:17:15.507Z","service":"runtime.memory","pid":64848,"uptimeMs":6690,"process":{"rss":447836160,"heapUsed":147694549,"heapTotal":157648896,"external":23849141,"arrayBuffers":464},"providers":{"host-mcp":{"error":"No context found for instance"},"trace":{"eventsWritten":0,"bytesWritten":0,"boundedEvents":0,"blobRefs":0,"truncatedPayloads":0,"blobBytesWritten":0},"session-compaction":{"neverCompacted":0,"noCoveredHistory":0,"invalidBoundary":0,"prunedParts":0},"supervised-processes":{"live":0,"owners":{}}},"logDomain":"non-session","message":"runtime.memory.metrics"}
+error: script "dev" exited with code 255

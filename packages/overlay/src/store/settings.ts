@@ -9,7 +9,7 @@ import { DEFAULT_THEME_ID, sanitizeThemeForHost, type OverlayThemeID } from "../
 import type { PersistedOverlaySettings } from "../services/persisted-overlay-settings"
 import { parsePersistedOverlaySettings } from "../services/persisted-overlay-settings"
 import type { WorkLedgerOrganization, WorkLedgerSort } from "@opencorvus-ai/transport-protocol"
-import { sanitizeLocale } from "../utils/i18n"
+import { runtimeLocale, sanitizeLocale } from "../utils/i18n"
 
 // ── Types ──
 
@@ -111,7 +111,7 @@ export function sanitizeProjectEditor(value: any): ProjectEditorID {
 
 // ── Default locale ──
 
-const DEFAULT_LOCALE = "en-US"
+const DEFAULT_LOCALE = runtimeLocale()
 
 // ── Defaults ──
 

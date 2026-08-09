@@ -1,5 +1,4 @@
 import { BusEvent } from "@/bus/bus-event"
-import { Bus } from "@/bus"
 import path from "path"
 import { pathToFileURL, fileURLToPath } from "url"
 import { createMessageConnection, StreamMessageReader, StreamMessageWriter } from "vscode-jsonrpc/node"
@@ -114,6 +113,7 @@ export namespace LSPClient {
     server: LSPServer.Handle
     root: string
     onExit?: (reason: Error) => void
+    onDiagnostics?: (properties: z.output<(typeof Event.Diagnostics)["properties"]>) => void | Promise<void>
   }) {
     const l = log.clone().tag("serverID", input.serverID)
     l.info("starting client")
@@ -139,7 +139,7 @@ export namespace LSPClient {
       const exists = diagnostics.has(filePath)
       diagnostics.set(filePath, params.diagnostics)
       if (!exists && input.serverID === "typescript") return
-      Bus.publish(Event.Diagnostics, { path: filePath, serverID: input.serverID })
+      void input.onDiagnostics?.({ path: filePath, serverID: input.serverID })
     })
     connection.onRequest("window/workDoneProgress/create", (params) => {
       l.info("window/workDoneProgress/create", params)

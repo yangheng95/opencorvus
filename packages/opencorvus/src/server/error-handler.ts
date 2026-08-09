@@ -49,6 +49,7 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "OwnedPromptControllersError") return 409
   if (err.name === "AnonymousProjectPromotionError") return 400
   if (err.name === "InvalidDirectoryError") return 400
+  if (err.name === "ProjectDirectoryIntegrityError") return 400
   if (err.name === "ChildSessionConfigError") return 400
   if (err.name === "WorktreeNotGitError") return 412
   if (err.name === "VcsPrerequisiteError") return 412

@@ -6,7 +6,8 @@ import { requireTask } from "@/engine/store"
 import { MessageStore } from "@/session/message-store"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
-import { TaskRootMessageProvenance } from "@/task-api/task-root-message"
+import { TaskRootMessageProvenance, type TaskRootMessageKind } from "@/task-api/task-root-message"
+import { requireTaskOrchestratorToolExecutionContext } from "./tool-execution-context"
 
 const log = Log.create({ service: "task-tools" })
 
@@ -17,18 +18,60 @@ export const ORCHESTRATOR_QUESTION_DESCRIPTION =
   "A local runtime, process, provider, projected-worker, repository, or Tool failure is recovery evidence, never a user decision and never authority to ask whether work should continue or stop; use the exact dispatch, named wait, recovery, or lifecycle action instead. " +
   "The questions appear in the Task Interaction panel. Each question may provide options for click-selection; omit options for free text. Set multiple=true to allow multi-select. Returns a model-visible answered, operator-rejected, or automatic-deadline-expired outcome."
 
+export function authorizedTaskRootMessagesForWake(input: {
+  rootMessage?: {
+    messageID: string
+    kind: "operator" | "orchestrator"
+  }
+  taskIntent?: {
+    supersededOperatorMessageIDs: readonly string[]
+  }
+  missionAcceptanceResume?: {
+    messageID: string
+  }
+}): Array<{ messageID: string; kind: TaskRootMessageKind; expectedSource?: string }> {
+  return [
+    ...(input.rootMessage ? [input.rootMessage] : []),
+    ...(input.taskIntent?.supersededOperatorMessageIDs.map((messageID) => ({
+      messageID,
+      kind: "operator" as const,
+    })) ?? []),
+    ...(input.missionAcceptanceResume
+      ? [
+          {
+            messageID: input.missionAcceptanceResume.messageID,
+            kind: "mission" as const,
+            expectedSource: "mission.acceptance_resume",
+          },
+        ]
+      : []),
+  ]
+}
+
+function expectedTaskRootMessageAuthor(kind: TaskRootMessageKind): "user" | "orchestrator" | "mission" {
+  switch (kind) {
+    case "operator":
+      return "user"
+    case "orchestrator":
+      return "orchestrator"
+    case "mission":
+      return "mission"
+  }
+}
+
 export function createOrchestratorInteractionTools(input: {
   taskID: string
   agentSessionID: string
   allowedRootMessages: readonly {
     messageID: string
-    kind: "operator" | "orchestrator"
+    kind: TaskRootMessageKind
+    expectedSource?: string
   }[]
 }) {
   return {
     read_task_message: tool({
       description:
-        "Read one exact already-recorded task-root message ID authorized by this wake's Wake Provenance. The initial Task creator request is already the normal User Request and is not eligible for this tool. Retry/Replan may authorize ordered superseded operator messages by ID; this tool never grants broad root-Session history access.",
+        "Read one exact already-recorded task-root message ID explicitly authorized by this wake's Wake Provenance as the current root message, Mission acceptance-resume message, or an ordered superseded Retry/Replan operator message. The initial Task creator request is already the normal User Request and is not eligible for this tool. This tool never grants broad root-Session history access.",
       inputSchema: z
         .object({
           message_id: z.string().min(1).describe("Exact authorized task-root message ID."),
@@ -48,7 +91,7 @@ export function createOrchestratorInteractionTools(input: {
         if (message.info.role !== "user") {
           throw new Error(`Task-root message ${message_id} must have role=user, received ${message.info.role}`)
         }
-        const expectedAuthor = wake.kind === "operator" ? "user" : "orchestrator"
+        const expectedAuthor = expectedTaskRootMessageAuthor(wake.kind)
         if (message.info.author !== expectedAuthor) {
           throw new Error(
             `Task-root message ${message_id} kind=${wake.kind} requires author=${expectedAuthor}, received ${message.info.author}`,
@@ -62,6 +105,11 @@ export function createOrchestratorInteractionTools(input: {
         }
         if (provenance.kind !== wake.kind) {
           throw new Error(`Task-root message ${message_id} provenance kind=${provenance.kind}, expected ${wake.kind}`)
+        }
+        if (wake.expectedSource !== undefined && provenance.source !== wake.expectedSource) {
+          throw new Error(
+            `Task-root message ${message_id} provenance source=${provenance.source}, expected ${wake.expectedSource}`,
+          )
         }
         const textParts = message.parts.filter((part) => part.type === "text").map((part) => part.text)
         const fileParts = message.parts
@@ -104,10 +152,15 @@ export function createOrchestratorInteractionTools(input: {
           .describe("1-4 questions to ask in a single turn."),
         reason: z.string().optional().describe("Why you're asking (short, shown in logs — not to the user)."),
       }),
-      execute: async ({ questions, reason }) => {
+      execute: async ({ questions, reason }, options) => {
         log.info("question", { taskID: input.taskID, count: questions.length, reason })
+        const execution = await requireTaskOrchestratorToolExecutionContext(options, "question", {
+          taskID: input.taskID,
+          agentSessionID: input.agentSessionID,
+        })
         const { output } = await Question.askAndFormat({
           sessionID: input.agentSessionID,
+          tool: { messageID: execution.orchestratorMessageID, callID: execution.toolCallID },
           questions: questions.map((question) => ({
             question: question.question,
             header: question.header,

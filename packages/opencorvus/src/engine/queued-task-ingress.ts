@@ -160,6 +160,26 @@ const TaskWaitActivity = z
   })
   .strict()
 
+const TaskWaitWake = z
+  .object({
+    ...CommonShape,
+    source_kind: z.literal("task_wait_wake"),
+    wait_job_id: z.string().min(1),
+    event: z
+      .object({
+        ...NoteShape,
+        taskWaitWake: z
+          .object({
+            jobID: z.string().min(1),
+            fireID: z.string().min(1),
+            dueAt: z.number().int().nonnegative(),
+          })
+          .strict(),
+      })
+      .strict(),
+  })
+  .strict()
+
 const OrchestratorEvent = z
   .object({
     ...CommonShape,
@@ -181,6 +201,7 @@ export const QueuedTaskIngressSchema = z
     CoordinationRequest,
     InfrastructureRecovery,
     TaskWaitActivity,
+    TaskWaitWake,
     OrchestratorEvent,
   ])
   .superRefine((payload, context) => {
@@ -207,6 +228,9 @@ export const QueuedTaskIngressSchema = z
     ) {
       context.addIssue({ code: "custom", message: "queued recovery identity does not match processRecovery" })
     }
+    if (payload.source_kind === "task_wait_wake" && payload.wait_job_id !== payload.event.taskWaitWake.jobID) {
+      context.addIssue({ code: "custom", message: "queued task wait identity does not match taskWaitWake" })
+    }
   })
 
 export type QueuedTaskIngress = z.infer<typeof QueuedTaskIngressSchema>
@@ -222,6 +246,7 @@ export function queuedTaskIngressSourceKind(event: OrchestratorEvent): QueuedTas
   if (parsed.coordinationRequest) candidates.push("coordination_request")
   if (parsed.processRecovery) candidates.push("infrastructure_recovery")
   if (parsed.taskWaitActivity) candidates.push("task_wait_activity")
+  if (parsed.taskWaitWake) candidates.push("task_wait_wake")
   if (parsed.note && candidates.length === 0) candidates.push("orchestrator_event")
   if (candidates.length !== 1) {
     throw new Error(`Queued Task ingress requires exactly one source kind; received ${candidates.join(", ") || "none"}`)

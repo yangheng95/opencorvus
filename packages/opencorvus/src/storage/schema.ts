@@ -26,6 +26,7 @@ export {
   EngineGoalTable,
   EngineInteractionRequestTable,
   EngineArtifactTable,
+  EngineWorkflowNodeOccurrenceTable,
   EngineBrowserPreviewTargetIdentityTable,
   EngineArtifactCatalogRevisionTable,
   EngineArtifactVersionTable,

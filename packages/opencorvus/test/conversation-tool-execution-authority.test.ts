@@ -87,10 +87,12 @@ describe("conversation Tool execution authority", () => {
         const executionAuthority = await resolveSessionExecutionAuthority({
           sessionID: workerSession.id,
           projectID: Instance.project.id,
-          rootDirectory: project.path,
           expected: { kind: "task", taskID },
         })
-        const materialized = await materializeUserMessage(prompt, { prepared, executionAuthority })
+        const materialized = await materializeUserMessage(prompt, {
+          prepared,
+          executionAuthorityResolution: { expected: { kind: "task", taskID } },
+        })
 
         expect({
           authority: executionAuthority,
@@ -111,7 +113,7 @@ describe("conversation Tool execution authority", () => {
             sessionID: workerSession.id,
             projectID: Instance.project.id,
             taskID,
-            rootDirectory: project.path,
+            directory: project.path,
           },
           message: {
             id: prompt.messageID,
@@ -141,7 +143,6 @@ describe("conversation Tool execution authority", () => {
         const executionAuthority = await resolveSessionExecutionAuthority({
           sessionID: session.id,
           projectID: Instance.project.id,
-          rootDirectory: project.path,
           expected: { kind: "conversation" },
         })
         const abort = new AbortController().signal
@@ -201,7 +202,7 @@ describe("conversation Tool execution authority", () => {
               kind: "conversation",
               sessionID: session.id,
               projectID: Instance.project.id,
-              rootDirectory: project.path,
+              directory: project.path,
             },
             persisted: "conversation-authority-value\n",
             read: true,

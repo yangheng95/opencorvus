@@ -4,6 +4,10 @@ import {
   type EngineArtifactLocator,
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import z from "zod"
+import {
+  DispatchOccurrenceAuthoritySchema,
+  type DispatchOccurrenceAuthority,
+} from "@/engine/dispatch-occurrence-authority"
 
 const IdentifierSchema = z.string().min(1).max(512)
 const MESSAGE_LIMIT = 4_096
@@ -89,6 +93,7 @@ export const DispatchOutcomeSchema = z.discriminatedUnion("kind", [
       kind: z.literal("infrastructure_failure"),
       operation: IdentifierSchema,
       message: z.string().min(1).max(MESSAGE_LIMIT),
+      recovery_authority: DispatchOccurrenceAuthoritySchema,
       session_id: IdentifierSchema.optional(),
       final_message_id: IdentifierSchema.optional().describe(
         "Visible final specialist message when the failed operation happened after a real terminal worker Turn.",
@@ -172,6 +177,7 @@ export namespace DispatchOutcome {
     errorName?: string
     failureIssues?: readonly DispatchFailureIssue[]
     infrastructureError?: EngineArtifactLocator
+    recoveryAuthority: DispatchOccurrenceAuthority
     workerTurn?: {
       descriptorID: string
       descriptorHash: string
@@ -184,6 +190,7 @@ export namespace DispatchOutcome {
       kind: "infrastructure_failure",
       operation: normalizeIdentifier(input.operation, "dispatch_adapter"),
       message: normalizeInfrastructureMessage(input.message),
+      recovery_authority: DispatchOccurrenceAuthoritySchema.parse(input.recoveryAuthority),
       ...(input.sessionID ? { session_id: input.sessionID } : {}),
       ...(input.finalMessageID ? { final_message_id: input.finalMessageID } : {}),
       ...(input.errorName

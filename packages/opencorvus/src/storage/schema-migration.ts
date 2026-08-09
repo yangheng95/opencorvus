@@ -184,7 +184,106 @@ FROM (
   WHERE "kind" = 'browser_preview_target'
     AND json_type("payload", '$.url') = 'text'
 )
-WHERE "identity_rank" = 1`,
+      WHERE "identity_rank" = 1`,
+    ]),
+  }),
+  Object.freeze({
+    id: "2026-08-09-workflow-node-occurrence-authority",
+    fromFingerprint: "43fb9964d9a3b2bc3d5b17af539bf441d31d0aba1d7eab2a4b8e8c67a88150ea",
+    toFingerprint: "3bb5a088946bab5912f8e640b4d6b14069b4380b07a42aedadfdd54686b329fa",
+    requiredEmptyTables: Object.freeze([]),
+    statements: Object.freeze([
+      `CREATE TABLE "engine_workflow_node_occurrence" (
+  "task_id" text NOT NULL,
+  "workflow_id" text NOT NULL,
+  "workflow_node_id" text NOT NULL,
+  "workflow_binding" text NOT NULL,
+  "state" text NOT NULL,
+  "workflow_occurrence_id" text,
+  "initial_dispatch_id" text,
+  "child_session_id" text,
+  "dispatch_lineage_artifact_id" text,
+  "conflict_lineage_ids" text NOT NULL DEFAULT '[]',
+  "time_created" integer NOT NULL,
+  "time_updated" integer NOT NULL,
+  PRIMARY KEY ("task_id", "workflow_id", "workflow_node_id"),
+  FOREIGN KEY ("task_id") REFERENCES "engine_task"("id") ON DELETE CASCADE,
+  FOREIGN KEY ("child_session_id") REFERENCES "session"("id") ON DELETE RESTRICT,
+  FOREIGN KEY ("dispatch_lineage_artifact_id") REFERENCES "engine_artifact"("id") ON DELETE RESTRICT
+)`,
+      `CREATE UNIQUE INDEX "engine_workflow_node_occurrence_identity_idx" ON "engine_workflow_node_occurrence" ("task_id", "workflow_occurrence_id") WHERE "workflow_occurrence_id" IS NOT NULL`,
+      `CREATE UNIQUE INDEX "engine_workflow_node_occurrence_lineage_idx" ON "engine_workflow_node_occurrence" ("dispatch_lineage_artifact_id") WHERE "dispatch_lineage_artifact_id" IS NOT NULL`,
+      `WITH "lineage" AS (
+  SELECT
+    "id",
+    "task_id",
+    json_extract("payload", '$.workflow_binding.workflow_id') AS "workflow_id",
+    json_extract("payload", '$.workflow_node_id') AS "workflow_node_id",
+    json_extract("payload", '$.workflow_binding') AS "workflow_binding",
+    json_extract("payload", '$.workflow_occurrence_id') AS "workflow_occurrence_id",
+    json_extract("payload", '$.dispatch_id') AS "dispatch_id",
+    json_extract("payload", '$.child_session_id') AS "child_session_id",
+    "time_created",
+    "time_updated"
+  FROM "engine_artifact"
+  WHERE "kind" = 'dispatch_lineage'
+    AND json_extract("payload", '$.workflow_binding.kind') = 'virtual_workflow'
+    AND json_type("payload", '$.workflow_binding.workflow_id') = 'text'
+    AND json_type("payload", '$.workflow_node_id') = 'text'
+),
+"unambiguous_occurrence" AS (
+  SELECT "task_id", "workflow_id", "workflow_node_id"
+  FROM "lineage"
+  GROUP BY "task_id", "workflow_id", "workflow_node_id"
+  HAVING count(DISTINCT "workflow_occurrence_id") = 1
+    AND sum(CASE WHEN "dispatch_id" = "workflow_occurrence_id" THEN 1 ELSE 0 END) = 1
+    AND count(DISTINCT "child_session_id") = 1
+)
+INSERT INTO "engine_workflow_node_occurrence" (
+  "task_id", "workflow_id", "workflow_node_id", "workflow_binding", "state",
+  "workflow_occurrence_id", "initial_dispatch_id", "child_session_id",
+  "dispatch_lineage_artifact_id", "conflict_lineage_ids", "time_created", "time_updated"
+)
+SELECT
+  "task_id", "workflow_id", "workflow_node_id", "workflow_binding", 'bound',
+  "workflow_occurrence_id", "dispatch_id", "child_session_id", "id", json('[]'),
+  "time_created", "time_updated"
+FROM "lineage"
+INNER JOIN "unambiguous_occurrence" USING ("task_id", "workflow_id", "workflow_node_id")
+WHERE "dispatch_id" = "workflow_occurrence_id"`,
+      `WITH "lineage" AS (
+  SELECT
+    "id",
+    "task_id",
+    json_extract("payload", '$.workflow_binding.workflow_id') AS "workflow_id",
+    json_extract("payload", '$.workflow_node_id') AS "workflow_node_id",
+    json_extract("payload", '$.workflow_binding') AS "workflow_binding",
+    "time_created",
+    "time_updated"
+  FROM "engine_artifact"
+  WHERE "kind" = 'dispatch_lineage'
+    AND json_extract("payload", '$.workflow_binding.kind') = 'virtual_workflow'
+    AND json_type("payload", '$.workflow_binding.workflow_id') = 'text'
+    AND json_type("payload", '$.workflow_node_id') = 'text'
+)
+INSERT INTO "engine_workflow_node_occurrence" (
+  "task_id", "workflow_id", "workflow_node_id", "workflow_binding", "state",
+  "workflow_occurrence_id", "initial_dispatch_id", "child_session_id",
+  "dispatch_lineage_artifact_id", "conflict_lineage_ids", "time_created", "time_updated"
+)
+SELECT
+  "task_id", "workflow_id", "workflow_node_id", min("workflow_binding"), 'conflicted',
+  NULL, NULL, NULL, NULL, json_group_array("id"), min("time_created"), max("time_updated")
+FROM "lineage"
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM "engine_workflow_node_occurrence" AS "authority"
+  WHERE "authority"."task_id" = "lineage"."task_id"
+    AND "authority"."workflow_id" = "lineage"."workflow_id"
+    AND "authority"."workflow_node_id" = "lineage"."workflow_node_id"
+)
+GROUP BY "task_id", "workflow_id", "workflow_node_id"
+`,
     ]),
   }),
 ])

@@ -86,6 +86,11 @@ jobs:
         with:
           prepare_sdk: "true"
 
+      - name: Install critical build runtime dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep
+
       - name: Run critical builds
         run: bun run --cwd packages/opencorvus build --single --skip-install
 

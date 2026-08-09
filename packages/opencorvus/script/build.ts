@@ -5,6 +5,7 @@ import fs from "fs"
 import path from "path"
 import os from "os"
 import { fileURLToPath } from "url"
+import { preparePackageBuildEnvironment } from "../../../script/package-build-environment"
 import { runTimedStage } from "../../../script/timed-stage"
 
 const __filename = fileURLToPath(import.meta.url)
@@ -40,6 +41,7 @@ import { prepareEmbeddedOverlayUiPlugin } from "./embedded-overlay-ui-plugin"
 
 const repoRoot = path.resolve(dir, "../..")
 
+Object.assign(process.env, await preparePackageBuildEnvironment(repoRoot, process.env))
 await generateOpencorvusGeneratedBuildArtifacts({ packageRoot: dir, repoRoot, log: console.log })
 
 const singleFlag = process.argv.includes("--single")

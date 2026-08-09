@@ -1936,7 +1936,7 @@ export namespace PromptProfileResolver {
       providerName: input.providerName,
       get: (args?: Record<string, string>) =>
         MCP.getScopedPrompt({
-          key: input.providerName,
+          key: serverName,
           mcp,
           promptName,
           cwd: input.cwd,
@@ -1946,7 +1946,7 @@ export namespace PromptProfileResolver {
         }),
       getProjectionPayload: (args?: Record<string, string>) =>
         MCP.getScopedPromptProjectionPayload({
-          key: input.providerName,
+          key: serverName,
           mcp,
           promptName,
           cwd: input.cwd,
@@ -1974,7 +1974,7 @@ export namespace PromptProfileResolver {
       providerName: input.providerName,
       read: () =>
         MCP.readScopedResource({
-          key: input.providerName,
+          key: serverName,
           mcp,
           resourceName,
           cwd: input.cwd,
@@ -1983,7 +1983,7 @@ export namespace PromptProfileResolver {
         }),
       readProjectionPayload: () =>
         MCP.readScopedResourceProjectionPayload({
-          key: input.providerName,
+          key: serverName,
           mcp,
           resourceName,
           cwd: input.cwd,
@@ -2182,7 +2182,7 @@ export namespace PromptProfileResolver {
         : configuredMcp
     if (!mcp) throw new Error(`Active expert squad projects missing default MCP server default/mcp/${serverName}.`)
     const rawTool = await MCP.scopedTool({
-      key: input.providerName,
+      key: serverName,
       mcp,
       toolName,
       cwd: input.cwd,

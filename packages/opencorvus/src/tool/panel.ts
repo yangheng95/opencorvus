@@ -49,49 +49,27 @@ import {
   artifactReadLocatorKey,
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import { completeArtifactReadsBeforePanelAction } from "@/agent/artifact-read-facts"
+import { reviewedTerminalLifecycleReferenceBeforePanelAction } from "@/agent/task-review-facts"
 import { listMissionTasks } from "@/engine/store"
-import { MissionCompletionReceipt } from "@/mission/completion"
+import { MissionCompletionReceipt, MissionCompletionTaskAcceptance } from "@/mission/completion"
 import {
   requireCurrentTerminalLifecycleReference,
   sameTerminalLifecycleReference,
 } from "@/engine/terminal-lifecycle-reference"
+import {
+  PanelQueryTaskErrorRow,
+  PanelQueryTaskOutput,
+  PanelQueryTaskRow,
+  PanelQueryTaskSummaryRow,
+  PanelTaskFailureResult,
+  PanelTaskResult,
+} from "@/panel/task-query"
 
 const localOnly = (ctx: Tool.Context) => {
   const surface = resolvePanelSurface(ctx)
   return surface === "panel" || surface === "right-sidebar"
 }
 
-const PanelTaskStatus = z.enum(["queued", "active", "completed", "failed", "cancelled"])
-const PanelTaskResultStatus = PanelTaskStatus
-const PanelTaskFailureResult = z.object({
-  source: z.string().optional(),
-  title: z.string().optional(),
-  summary: z.string(),
-})
-const PanelTaskResult = z.object({
-  status: PanelTaskResultStatus,
-  summary: z.string(),
-  failure: PanelTaskFailureResult.optional(),
-})
-const PanelQueryTaskErrorRow = z.object({
-  taskID: z.string(),
-  error: z.string(),
-})
-const PanelQueryTaskSummaryRow = z.object({
-  taskID: z.string(),
-  title: z.string(),
-  status: PanelTaskStatus,
-  created: z.number().optional(),
-  started: z.number().optional(),
-  completed: z.number().optional(),
-  error: z.string().optional(),
-  result: PanelTaskResult,
-  pendingInteractions: z.number().int().nonnegative().optional(),
-})
-const PanelQueryTaskRow = z.union([PanelQueryTaskSummaryRow, PanelQueryTaskErrorRow])
-const PanelQueryTaskOutput = z.object({
-  tasks: z.array(PanelQueryTaskRow),
-})
 const PanelTaskArtifactPage = ArtifactSearchTransportPageSchema.extend({
   taskID: z.string().min(1),
 })
@@ -283,6 +261,9 @@ async function panelTaskArtifactPage(
 }
 
 async function panelTaskSummaryRow(board: PanelTaskBoard): Promise<z.infer<typeof PanelQueryTaskSummaryRow>> {
+  const terminalLifecycleReference = ["completed", "failed", "cancelled"].includes(board.task.status)
+    ? requireCurrentTerminalLifecycleReference(board.task.id)
+    : undefined
   return PanelQueryTaskSummaryRow.parse({
     taskID: board.task.id,
     title: board.task.title,
@@ -292,6 +273,7 @@ async function panelTaskSummaryRow(board: PanelTaskBoard): Promise<z.infer<typeo
     completed: board.task.time?.completed,
     error: board.task.error,
     result: panelTaskResult(board),
+    terminal_lifecycle_reference: terminalLifecycleReference,
   })
 }
 
@@ -715,15 +697,21 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               `Expected [${expectedTaskIDs.join(", ")}], received [${acceptedTaskIDs.join(", ")}].`,
           )
         }
+        const authoritativeAcceptances: Array<z.infer<typeof MissionCompletionTaskAcceptance>> = []
         for (const acceptance of params.task_acceptances) {
           EngineService.requireMissionArtifactSource(acceptance.task_id, {
             missionID: mission.missionID,
             sessionID: mission.id,
           })
           const currentReference = requireCurrentTerminalLifecycleReference(acceptance.task_id)
+          const reviewedReference = reviewedTerminalLifecycleReferenceBeforePanelAction({
+            sessionID: ctx.sessionID,
+            assistantMessageID: ctx.messageID,
+            taskID: acceptance.task_id,
+          })
           if (
             currentReference.terminalStatus !== "completed" ||
-            !sameTerminalLifecycleReference(currentReference, acceptance.terminal_lifecycle_reference)
+            !sameTerminalLifecycleReference(currentReference, reviewedReference)
           ) {
             throw new Error(
               `panel.complete_mission Task ${acceptance.task_id} must cite its exact current completed occurrence.`,
@@ -745,6 +733,10 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               `panel.complete_mission Task ${acceptance.task_id} evidence must be completely read in this Mission Turn.`,
             )
           }
+          authoritativeAcceptances.push({
+            ...acceptance,
+            terminal_lifecycle_reference: reviewedReference,
+          })
         }
         return {
           title: "Mission completed",
@@ -754,7 +746,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               mission_id: mission.missionID,
               mission_session_id: mission.id,
               summary: params.summary,
-              task_acceptances: params.task_acceptances,
+              task_acceptances: authoritativeAcceptances,
               assistant_message_id: identity.messageID,
               tool_call_id: identity.toolCallID,
               tool_part_id: identity.toolPartID,
@@ -1127,7 +1119,11 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
             messageID: identity.messageID,
             toolCallID: identity.toolCallID,
           },
-          reviewedTerminalLifecycleReference: params.terminal_lifecycle_reference,
+          reviewedTerminalLifecycleReference: reviewedTerminalLifecycleReferenceBeforePanelAction({
+            sessionID: ctx.sessionID,
+            assistantMessageID: ctx.messageID,
+            taskID: params.taskID,
+          }),
           text: params.text,
           evidenceLocators: params.evidence_locators,
           completeEvidenceLocators,

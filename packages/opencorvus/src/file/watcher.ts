@@ -52,7 +52,11 @@ export namespace FileWatcher {
     assertHealthy: () => void
     dispose: () => Promise<void>
   }
-  export type PersistentCallbackRunner = (directory: string, label: string, callback: () => void) => void
+  export type PersistentCallbackRunner = (
+    directory: string,
+    label: string,
+    callback: () => Promise<unknown>,
+  ) => Promise<void>
 
   const disposedSubscriptions = new WeakSet<Subscription>()
   const subscriptionDisposals = new WeakMap<Subscription, Promise<void>>()
@@ -61,10 +65,17 @@ export namespace FileWatcher {
     return requireRuntimePackage<typeof import("@parcel/watcher")>("@parcel/watcher")
   })
 
-  function publish(evt: { type: string; path: string }) {
-    if (evt.type === "create" || evt.type === "add") Bus.publish(Event.Updated, { file: evt.path, event: "add" })
-    if (evt.type === "update" || evt.type === "change") Bus.publish(Event.Updated, { file: evt.path, event: "change" })
-    if (evt.type === "delete" || evt.type === "unlink") Bus.publish(Event.Updated, { file: evt.path, event: "unlink" })
+  function publish(evt: { type: string; path: string }): Promise<unknown> {
+    if (evt.type === "create" || evt.type === "add") {
+      return Bus.publish(Event.Updated, { file: evt.path, event: "add" })
+    }
+    if (evt.type === "update" || evt.type === "change") {
+      return Bus.publish(Event.Updated, { file: evt.path, event: "change" })
+    }
+    if (evt.type === "delete" || evt.type === "unlink") {
+      return Bus.publish(Event.Updated, { file: evt.path, event: "unlink" })
+    }
+    return Promise.resolve()
   }
 
   function normalizeError(error: unknown, message: string) {
@@ -80,11 +91,11 @@ export namespace FileWatcher {
 
   function persistentCallbackRunner(lifecycle: InstanceLifecycleCapabilities): PersistentCallbackRunner {
     return (directory, label, callback) => {
-      void lifecycle
+      return lifecycle
         .reenter({
           directory,
-          fn: () => {
-            callback()
+          fn: async () => {
+            await callback()
             return true
           },
         })
@@ -130,11 +141,15 @@ export namespace FileWatcher {
     return controller.subscription
   }
 
-  function subscribeFile(directory: string, file: string, runPersistentCallback: PersistentCallbackRunner): Subscription {
+  function subscribeFile(
+    directory: string,
+    file: string,
+    runPersistentCallback: PersistentCallbackRunner,
+  ): Subscription {
     const watcher = watch(file, { persistent: false }, () => {
-      runPersistentCallback(directory, `Native file watcher callback for ${file}`, () => {
-        publish({ type: "change", path: file })
-      })
+      void runPersistentCallback(directory, `Native file watcher callback for ${file}`, () =>
+        publish({ type: "change", path: file }),
+      )
     })
     return createNativeSubscription(watcher, file)
   }
@@ -312,9 +327,7 @@ export namespace FileWatcher {
           controller.fail(normalizeError(err, `Parcel watcher failed for ${dir}`))
           return
         }
-        runPersistentCallback(dir, `Parcel watcher callback for ${dir}`, () => {
-          evts.forEach(publish)
-        })
+        void runPersistentCallback(dir, `Parcel watcher callback for ${dir}`, () => Promise.all(evts.map(publish)))
       },
       {
         ignore,
@@ -368,9 +381,7 @@ export namespace FileWatcher {
 
       const initialized = await initializeSubscriptions(async (subscriptions) => {
         if (Flag.OPENCORVUS_EXPERIMENTAL_FILEWATCHER) {
-          subscriptions.push(
-            await subscribe(projectDirectory, [...FileIgnore.PATTERNS, ...cfgIgnores]),
-          )
+          subscriptions.push(await subscribe(projectDirectory, [...FileIgnore.PATTERNS, ...cfgIgnores]))
         }
 
         if (Project.isGitRepo(projectDirectory)) {
@@ -407,5 +418,9 @@ export namespace FileWatcher {
     const group = await state()
     InstanceLifecycleContext.use().registerHealthCheck("file-watcher", group.assertHealthy)
     group.assertHealthy()
+  }
+
+  export const TestHooks = {
+    persistentCallbackRunner,
   }
 }

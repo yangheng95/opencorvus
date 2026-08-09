@@ -6,6 +6,7 @@ import { cancelSessionPromptInScope, type TaskAgentPromptSession } from "./cance
 import type { ExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { ProtocolStore } from "@/protocol/store"
 import { SessionStatus } from "@/session/status"
+import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 
 export type TaskAgentLifecycleReport = {
   taskID: string
@@ -83,26 +84,35 @@ export async function publishTaskAgentCancellationStatusesAfterSettlement(input:
   task: TaskRow
   reason: string
 }): Promise<string[]> {
-  const sessions = listTaskConversationAgentSessions(input.task.id).filter(
-    (session) =>
-      isAgentInvocationSession(session) &&
-      session.latestStatus !== undefined &&
-      session.latestStatus.type !== "terminal",
-  )
-  for (const row of sessions) {
-    const lifecycle = ProtocolStore.latestSessionEvent(row.sessionID, SessionStatus.Event.Status.type)
-    const inputMessageID = lifecycle?.payload?.inputMessageID
-    if (typeof inputMessageID !== "string" || inputMessageID.length === 0) {
-      throw new Error(`Task ${input.task.id} execution ${row.sessionID} has no input message identity`)
+  const sessions = listTaskConversationAgentSessions(input.task.id).flatMap((session) => {
+    if (!isAgentInvocationSession(session) || session.latestStatus?.type === "terminal") return []
+    const lifecycle = ProtocolStore.latestSessionEvent(session.sessionID, SessionStatus.Event.Status.type)
+    const lifecycleInputMessageID =
+      typeof lifecycle?.payload?.inputMessageID === "string" ? lifecycle.payload.inputMessageID : undefined
+    const descriptorInputMessageID = WorkerTurnDescriptor.latestForSession(session.sessionID)?.payload.messageAuthority
+      .user_message_id
+    if (
+      descriptorInputMessageID &&
+      lifecycleInputMessageID &&
+      descriptorInputMessageID !== lifecycleInputMessageID
+    ) {
+      throw new Error(
+        `Task ${input.task.id} execution ${session.sessionID} lifecycle input ${lifecycleInputMessageID} conflicts with Worker Turn Descriptor input ${descriptorInputMessageID}`,
+      )
     }
+    const inputMessageID = descriptorInputMessageID ?? lifecycleInputMessageID
+    if (!inputMessageID) return []
+    return [{ session, inputMessageID }]
+  })
+  for (const row of sessions) {
     const session = await Session.getInProject({
-      sessionID: row.sessionID,
+      sessionID: row.session.sessionID,
       projectID: input.task.project_id,
     })
     await publishSettledSessionTerminalStatus({
       session,
       taskID: input.task.id,
-      inputMessageID,
+      inputMessageID: row.inputMessageID,
       status: {
         type: "terminal",
         reason: "aborted",
@@ -110,5 +120,5 @@ export async function publishTaskAgentCancellationStatusesAfterSettlement(input:
       },
     })
   }
-  return sessions.map((session) => session.sessionID)
+  return sessions.map((row) => row.session.sessionID)
 }

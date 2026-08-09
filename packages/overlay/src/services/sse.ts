@@ -44,6 +44,7 @@ import {
   selectedTaskSseLifecycleStatus,
   taskRuntimeActivityKey,
 } from "./task-runtime-activity"
+import { refreshActiveComposerModelFromSession } from "./composer-model"
 
 let sseHandle: StreamHandle | null = null
 let sseRetryTimer: any = null
@@ -289,6 +290,19 @@ function observeSseReconnect(owner: string, promise: Promise<void>): void {
   })
 }
 
+function refreshComposerModelAfterSelectedStreamConnect(eventType: "task.connected" | "session.connected"): void {
+  void refreshActiveComposerModelFromSession()?.catch((error) => {
+    AppLog.error("sse", `failed to hydrate Composer model after ${eventType}`, {
+      eventType,
+      error: formatErrorDetails(error),
+      diagnosticID: `sse:composer-model-hydration:${eventType}`,
+      diagnosticTitle: "Composer model refresh failed",
+      diagnosticMessage: `The selected root Session model could not be refreshed after ${eventType}.`,
+      diagnosticDetails: formatErrorDetails(error),
+    })
+  })
+}
+
 const RECONNECT_DELAY_MS = 3000
 export const SELECTED_TASK_STREAM_STALL_MS = 35_000
 
@@ -426,8 +440,11 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
           logMalformedSsePayload({ stream: "selected-task", taskID, directory, data, error })
           return
         }
-        if (event.type === "task.heartbeat" || event.type === "task.connected") return
-        if (event.type === "session.heartbeat" || event.type === "session.connected") return
+        if (event.type === "task.heartbeat" || event.type === "session.heartbeat") return
+        if (event.type === "task.connected" || event.type === "session.connected") {
+          refreshComposerModelAfterSelectedStreamConnect(event.type)
+          return
+        }
         recordSelectedTaskSseUpdate(event, taskID)
         if (event.type === "task.live_replay_expired") {
           liveReplayExpiredClose = true

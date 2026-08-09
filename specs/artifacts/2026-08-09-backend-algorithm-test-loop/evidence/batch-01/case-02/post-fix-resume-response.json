@@ -1,0 +1,59 @@
+{
+  "status": 200,
+  "statusText": "OK",
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag",
+    "content-length": "1712",
+    "content-type": "application/json",
+    "date": "Sun, 09 Aug 2026 03:26:22 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "b3f82b54-6441-47e3-a0ce-4dadf0065be4"
+  },
+  "body": {
+    "message": "Operator message recorded. Task wake dispatched.",
+    "wake_status": "started",
+    "should_resume": true,
+    "user_message": {
+      "info": {
+        "id": "msg_g019fe48ea7cf000000000000ld1ZG6lhL8fOCf",
+        "sessionID": "ses_-fe601baacd81ffffffffffff8egAULcoLzh3hl",
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1786245982159
+        },
+        "agent": "orchestrator",
+        "model": {
+          "providerID": "openai",
+          "modelID": "gpt-5.6-luna"
+        },
+        "extra": {
+          "task_root_message": {
+            "protocol": "task-root-message",
+            "taskID": "tsk_g019fe4553003000000000000hJoJ6IqJUBRerP",
+            "kind": "operator",
+            "source": "backend-algorithm-test-loop"
+          }
+        },
+        "orderKey": "v1:0001786245982159:0000000000000030:0000000000000000:message:msg_g019fe48ea7cf000000000000ld1ZG6lhL8fOCf",
+        "resolvedRole": "user",
+        "channel": "main",
+        "agentID": "orchestrator",
+        "sessionAgentID": "orchestrator",
+        "originSource": ""
+      },
+      "parts": [
+        {
+          "id": "prt_g019fe48ea7cf000000000001oD6y325j5q81iN",
+          "sessionID": "ses_-fe601baacd81ffffffffffff8egAULcoLzh3hl",
+          "messageID": "msg_g019fe48ea7cf000000000000ld1ZG6lhL8fOCf",
+          "orderKey": "v1:0001786245982162:0000000000000031:0000000000000000:part:prt_g019fe48ea7cf000000000001oD6y325j5q81iN",
+          "type": "text",
+          "text": "The backend infrastructure defects that blocked the prior implementation occurrence are now repaired: the projected MCP runtime, durable task-wait project re-entry, interaction recovery, and prompt ownership settlement have all passed focused verification. The historical wait job and every persisted retry wake are consumed. Re-read the current durable Task evidence, create exactly one valid successor implementation occurrence for the remaining Build work, then run the mission's required real checker and continue the existing workflow to a terminal outcome.",
+          "kind": "user_content",
+          "source": "user"
+        }
+      ]
+    }
+  }
+}

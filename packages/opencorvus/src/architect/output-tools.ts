@@ -39,7 +39,7 @@ import { ContractIRSchema } from "./contract-ir"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { discriminatorRepairHint } from "@/session/repair-hint"
 
-const RegisterContractToolInputBaseSchema = ArchitectContractRefSchema.omit({
+const RegisterContractToolInputBaseSchema = z.object(ArchitectContractRefSchema.shape).omit({
   ir: true,
   route: true,
   component: true,

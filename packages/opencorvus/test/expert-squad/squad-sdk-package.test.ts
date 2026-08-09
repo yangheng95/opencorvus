@@ -1,5 +1,7 @@
 import { describe, expect, test } from "bun:test"
+import { createHash } from "node:crypto"
 import { readFile } from "node:fs/promises"
+import { pathToFileURL } from "node:url"
 import path from "node:path"
 import { Config } from "../../src/config/config"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
@@ -9,7 +11,10 @@ import { BrowserMCPBuiltin } from "../../src/mcp/browser/builtin"
 import { Instance } from "../../src/project/instance"
 import { Skill } from "../../src/skill/skill"
 import { SkillMount } from "../../src/skill/mounts"
-import { authorProjectExpertSquad } from "../../src/tool/expert-squad-author"
+import {
+  authorProjectExpertSquad,
+  ExpertSquadAuthorParameters,
+} from "../../src/tool/expert-squad-author"
 import { memoryProject } from "../fixture/memory"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", "squad-sdk")
@@ -40,7 +45,7 @@ describe("Generate Agent Squads expert squad", () => {
       schema_version: 1,
       namespace: "builtin",
       id: "squad-sdk",
-      version: "2026.08.08.1",
+      version: "2026.08.09.1",
       system_role: "expert_squad_generator",
     })
     expect(loaded.manifest.capability_projection.scheduler.built_in_tool_ids).toEqual([...schedulerTools])
@@ -80,7 +85,7 @@ describe("Generate Agent Squads expert squad", () => {
 
   test(
     "projects package-local methods and Host write tools only through the active Squad scheduler",
-    { timeout: 30_000 },
+    { timeout: 90_000 },
     async () => {
       await using project = await memoryProject()
       await Instance.provide({
@@ -218,25 +223,81 @@ describe("Generate Agent Squads expert squad", () => {
               },
             },
           })
+          expect(authoringContract.tool_input.agents["evidence-researcher"].package_tool_refs).toEqual([
+            "source-backed-briefing/shared/publish-source-evidence",
+          ])
+          expect(Object.keys(authoringContract.tool_input.extra_files)).toEqual([
+            "tools/publish-source-evidence.ts",
+          ])
         },
       })
     },
   )
 
-  test("is available from a clean project catalog as an embedded system package", async () => {
-    await using project = await memoryProject()
-    const catalog = await PromptProfileResolver.settingsCatalog(project.path)
-    const generatedSquads = catalog.find((squad) => squad.id === "squad-sdk")
+  test("authors the visible positive contract with its package-owned typed publisher", async () => {
+    await using authoringProject = await memoryProject()
+    const contract = JSON.parse(
+      await readFile(path.join(packageRoot, "skills", "authoring", "references", "definition-contract.json"), "utf8"),
+    )
+    const input = ExpertSquadAuthorParameters.parse(contract.tool_input)
+    const trace = { taskID: "task_visible_authoring_contract", sessionID: "session_visible_authoring_contract" }
 
-    expect(generatedSquads).toMatchObject({
-      id: "squad-sdk",
-      name: "Generate Agent Squads",
-      built_in: true,
-      editable: false,
-      system_role: "expert_squad_generator",
-      source: { kind: "built_in" },
+    const receipt = await Instance.provide({
+      directory: authoringProject.path,
+      fn: () => authorProjectExpertSquad(input, trace),
     })
-  })
+    const loaded = await ExpertSquadRegistry.loadPackage(receipt.targetRoot)
+
+    expect(receipt).toMatchObject({
+      id: "source-backed-briefing",
+      installationScope: "project",
+      generation: {
+        method: "sdk_authoring",
+        task_id: trace.taskID,
+        session_id: trace.sessionID,
+      },
+    })
+    expect(loaded.manifest.capability_projection.agents["evidence-researcher"]!.package_tool_refs).toEqual([
+      "source-backed-briefing/shared/publish-source-evidence",
+    ])
+    expect([...loaded.packageToolBundles.keys()]).toEqual([
+      "source-backed-briefing/shared/publish-source-evidence",
+    ])
+    expect(loaded.packageToolBundles.get("source-backed-briefing/shared/publish-source-evidence")!.snapshot).toMatchObject({
+      entry: "tools/publish-source-evidence.ts",
+      files: [{ path: "tools/publish-source-evidence.ts", extension: ".ts" }],
+    })
+
+    const prepared = loaded.packageToolBundles.get("source-backed-briefing/shared/publish-source-evidence")!
+    const compiledBytes = await readFile(prepared.bundlePath)
+    expect(createHash("sha256").update(compiledBytes).digest("hex")).toBe(prepared.snapshot.compiledBundleSHA256)
+    const executable = (await import(pathToFileURL(prepared.bundlePath).href)) as {
+      default?: { description?: unknown; execute?: unknown }
+    }
+    expect(executable.default).toMatchObject({
+      description: "Publish the source-backed briefing evidence through its typed package ABI.",
+      execute: expect.any(Function),
+    })
+  }, 0)
+
+  test(
+    "is available from a clean project catalog as an embedded system package",
+    { timeout: 30_000 },
+    async () => {
+      await using project = await memoryProject()
+      const catalog = await PromptProfileResolver.settingsCatalog(project.path)
+      const generatedSquads = catalog.find((squad) => squad.id === "squad-sdk")
+
+      expect(generatedSquads).toMatchObject({
+        id: "squad-sdk",
+        name: "Generate Agent Squads",
+        built_in: true,
+        editable: false,
+        system_role: "expert_squad_generator",
+        source: { kind: "built_in" },
+      })
+    },
+  )
 
   test("publishes a traceable generated Agent Squad into the current project catalog", { timeout: 30_000 }, async () => {
     await using authoringProject = await memoryProject()

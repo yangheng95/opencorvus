@@ -1,7 +1,7 @@
 // ── Markdown Renderer (powered by marked + highlight.js) ──
 
 import { marked } from "marked"
-import LinkifyIt from "linkify-it"
+import { LinkifyIt } from "linkify-it"
 import hljs from "highlight.js/lib/core"
 import langTS from "highlight.js/lib/languages/typescript"
 import langJS from "highlight.js/lib/languages/javascript"

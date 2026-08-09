@@ -1,0 +1,10 @@
+{
+  "method": "POST",
+  "url": "http://127.0.0.1:7878/global/providers/openai/test",
+  "headers": {
+    "content-type": "application/json"
+  },
+  "body": {
+    "modelID": "gpt-5.6-luna"
+  }
+}

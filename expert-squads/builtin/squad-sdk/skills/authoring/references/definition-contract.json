@@ -38,7 +38,8 @@
         "label": "Evidence Researcher",
         "description": "Collects attributable public evidence and records unknowns.",
         "base_role": "deep-research",
-        "prompt": "# Evidence Researcher\n\nCollect real public sources, cite exact URLs and dates, and mark unavailable facts unknown.\n"
+        "prompt": "# Evidence Researcher\n\nCollect real public sources, cite exact URLs and dates, mark unavailable facts unknown, and publish the complete structured evidence once through the package-owned publish-source-evidence tool.\n",
+        "package_tool_refs": ["source-backed-briefing/shared/publish-source-evidence"]
       },
       "briefing-writer": {
         "label": "Briefing Writer",
@@ -63,6 +64,9 @@
           }
         }
       }
+    },
+    "extra_files": {
+      "tools/publish-source-evidence.ts": "import { tool } from \"@opencorvus-ai/plugin\"\n\nconst ClaimSchema = tool.schema.object({\n  claim: tool.schema.string().min(1),\n  source_url: tool.schema.string().url(),\n  observed_at: tool.schema.string().min(1),\n}).strict()\n\nconst EvidenceSchema = tool.schema.object({\n  claims: tool.schema.array(ClaimSchema).min(1),\n  unknowns: tool.schema.array(tool.schema.string().min(1)),\n}).strict()\n\nexport default tool({\n  description: \"Publish the source-backed briefing evidence through its typed package ABI.\",\n  args: { evidence: EvidenceSchema },\n  async execute(args, context) {\n    const publication = await context.host.engineArtifacts.publish({\n      artifact_type: \"source-backed-briefing/source-evidence\",\n      schema_version: 1,\n      label: \"Source-backed briefing evidence\",\n      payload: args.evidence,\n      resources: [],\n      source_artifact_locators: [],\n    })\n    context.metadata({\n      title: \"Published source-backed briefing evidence\",\n      metadata: { artifact_sha256: publication.sha256 },\n    })\n    return JSON.stringify({ locator: publication.locator, sha256: publication.sha256 })\n  },\n})\n"
     }
   }
 }

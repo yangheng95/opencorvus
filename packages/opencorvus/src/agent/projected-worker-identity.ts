@@ -64,6 +64,64 @@ export const ProjectedWorkerIdentitySchema = z
 
 export type ProjectedWorkerIdentity = z.output<typeof ProjectedWorkerIdentitySchema>
 
+const CONTINUATION_EXECUTION_IDENTITY_FIELDS = [
+  "agentID",
+  "baseRole",
+  "sessionKind",
+  "dispatchAdapterID",
+  "runtimeTemplateABIVersion",
+  "dispatchAdapterABIVersion",
+] as const satisfies readonly (keyof ProjectedWorkerIdentity)[]
+
+export type ProjectedWorkerContinuationIdentityField = (typeof CONTINUATION_EXECUTION_IDENTITY_FIELDS)[number]
+
+export interface ProjectedWorkerContinuationIdentityDifference {
+  field: ProjectedWorkerContinuationIdentityField
+  previous: ProjectedWorkerIdentity[ProjectedWorkerContinuationIdentityField]
+  current: ProjectedWorkerIdentity[ProjectedWorkerContinuationIdentityField]
+}
+
+export class ProjectedWorkerContinuationIncompatibleError extends Error {
+  override readonly name = "ProjectedWorkerContinuationIncompatibleError"
+
+  constructor(
+    readonly subject: string,
+    readonly differences: readonly ProjectedWorkerContinuationIdentityDifference[],
+  ) {
+    super(
+      `${subject} is incompatible with the current projected worker execution contract: ${differences
+        .map((difference) => `${difference.field}=${difference.previous}->${difference.current}`)
+        .join(", ")}`,
+    )
+  }
+}
+
+/**
+ * Successor Turns may record a new projection hash, model, and complete system
+ * prompt. They can reuse an existing physical worker Session only while its
+ * stable worker identity and both execution ABIs remain exact.
+ */
+export function assertProjectedWorkerContinuationCompatible(input: {
+  previous: ProjectedWorkerIdentity
+  current: ProjectedWorkerIdentity
+  subject: string
+}): void {
+  const differences = CONTINUATION_EXECUTION_IDENTITY_FIELDS.flatMap((field) =>
+    input.previous[field] === input.current[field]
+      ? []
+      : [
+          {
+            field,
+            previous: input.previous[field],
+            current: input.current[field],
+          } satisfies ProjectedWorkerContinuationIdentityDifference,
+        ],
+  )
+  if (differences.length > 0) {
+    throw new ProjectedWorkerContinuationIncompatibleError(input.subject, differences)
+  }
+}
+
 export function sameProjectedWorkerIdentity(left: ProjectedWorkerIdentity, right: ProjectedWorkerIdentity): boolean {
   return (
     left.agentID === right.agentID &&

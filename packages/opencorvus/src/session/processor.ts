@@ -267,6 +267,7 @@ export namespace SessionProcessor {
     // Reasoning delta buffer: aggregate per-token deltas into batched SSE updates
     const reasoningDeltaBuf = new Map<string, string>()
     let reasoningFlushTimer: ReturnType<typeof setTimeout> | null = null
+    let reasoningFlushOperation: Promise<void> | undefined
 
     const result = {
       get message() {
@@ -337,9 +338,62 @@ export namespace SessionProcessor {
           },
         }
         {
+          let currentText: Message.TextPart | undefined
+          let reasoningMap: Record<string, Message.ReasoningPart> = {}
+          const flushReasoningDeltas = async () => {
+            const buffered = [...reasoningDeltaBuf]
+            reasoningDeltaBuf.clear()
+            for (const [partID, delta] of buffered) {
+              if (!delta.replace(/[\[\]\s]/g, "")) continue
+              const part = Object.values(reasoningMap).find((candidate) => candidate.id === partID)
+              if (!part) continue
+              await Session.updatePartDelta({
+                sessionID: part.sessionID,
+                messageID: part.messageID,
+                partID: part.id,
+                field: "text",
+                delta,
+              })
+            }
+          }
+          const reportReasoningFlushFailure = (error: unknown) => {
+            log.warn("reasoning delta flush failed", {
+              sessionID: input.assistantMessage.sessionID,
+              messageID: input.assistantMessage.id,
+              error: error instanceof Error ? error.message : String(error),
+            })
+          }
+          const scheduleReasoningFlush = () => {
+            if (reasoningFlushTimer || reasoningFlushOperation) return
+            reasoningFlushTimer = setTimeout(() => {
+              reasoningFlushTimer = null
+              const operation = flushReasoningDeltas().catch(reportReasoningFlushFailure)
+              reasoningFlushOperation = operation
+              void operation.finally(() => {
+                if (reasoningFlushOperation === operation) reasoningFlushOperation = undefined
+              })
+            }, 200)
+          }
+          const settleReasoningFlush = async (flush: boolean) => {
+            if (reasoningFlushTimer) {
+              clearTimeout(reasoningFlushTimer)
+              reasoningFlushTimer = null
+            }
+            const operation = reasoningFlushOperation
+            if (operation) await operation
+            if (flush) await flushReasoningDeltas()
+            else reasoningDeltaBuf.clear()
+          }
+          const closeOpenReasoningParts = async () => {
+            await settleReasoningFlush(true)
+            for (const [reasoningID, part] of Object.entries(reasoningMap)) {
+              part.text = part.text.trimEnd()
+              part.time = { ...part.time, end: Date.now() }
+              await Session.updatePart(part)
+              delete reasoningMap[reasoningID]
+            }
+          }
           try {
-            let currentText: Message.TextPart | undefined
-            let reasoningMap: Record<string, Message.ReasoningPart> = {}
             const attemptScopes = new Map<number, AttemptWriteScope>()
             const cloneTokens = (): Message.Assistant["tokens"] => ({
               ...input.assistantMessage.tokens,
@@ -388,6 +442,7 @@ export namespace SessionProcessor {
               const failedAttempt = event.attempt - 1
               const scope = attemptScopes.get(failedAttempt)
               if (!scope) return
+              await settleReasoningFlush(false)
               const createdPartIDs = [...scope.createdPartIDs]
               if (scope.toolExecutionStarted) {
                 throw new ProcessorUnsafeRetryError(failedAttempt, createdPartIDs, cause)
@@ -432,8 +487,10 @@ export namespace SessionProcessor {
                 const stream = await LLM.stream({ ...streamInput, abort: run.signal })
 
                 for await (const value of abortableIterable(stream.fullStream, run.signal)) {
+                  run.bump("first-byte")
                   await streamInput.stream?.onChunk?.({ chunk: value } as never)
-                  run.bump(chunkHeartbeatKind(value))
+                  const heartbeatKind = chunkHeartbeatKind(value as unknown as Record<string, unknown>)
+                  if (heartbeatKind) run.bump(heartbeatKind)
                   run.signal.throwIfAborted()
                   switch (value.type) {
                     case "start":
@@ -470,58 +527,14 @@ export namespace SessionProcessor {
                         const bufKey = part.id
                         const prev = reasoningDeltaBuf.get(bufKey) || ""
                         reasoningDeltaBuf.set(bufKey, prev + value.text)
-                        if (!reasoningFlushTimer) {
-                          reasoningFlushTimer = setTimeout(() => {
-                            reasoningFlushTimer = null
-                            void (async () => {
-                              for (const [pid, buf] of reasoningDeltaBuf) {
-                                // Skip deltas that are only brackets/whitespace
-                                if (buf.replace(/[\[\]\s]/g, "")) {
-                                  const rp = Object.values(reasoningMap).find((p: any) => p.id === pid) as any
-                                  if (rp) {
-                                    await Session.updatePartDelta({
-                                      sessionID: rp.sessionID,
-                                      messageID: rp.messageID,
-                                      partID: rp.id,
-                                      field: "text",
-                                      delta: buf,
-                                    })
-                                  }
-                                }
-                              }
-                              reasoningDeltaBuf.clear()
-                            })().catch((error) => {
-                              reasoningDeltaBuf.clear()
-                              log.warn("reasoning delta flush failed", {
-                                sessionID: input.assistantMessage.sessionID,
-                                messageID: input.assistantMessage.id,
-                                error: error instanceof Error ? error.message : String(error),
-                              })
-                            })
-                          }, 200)
-                        }
+                        scheduleReasoningFlush()
                       }
                       break
 
                     case "reasoning-end":
                       if (value.id in reasoningMap) {
                         // Flush any buffered reasoning delta before closing the part
-                        if (reasoningFlushTimer) {
-                          clearTimeout(reasoningFlushTimer)
-                          reasoningFlushTimer = null
-                        }
-                        const endPart = reasoningMap[value.id]
-                        const remaining = reasoningDeltaBuf.get(endPart.id)
-                        if (remaining && remaining.replace(/[\[\]\s]/g, "")) {
-                          await Session.updatePartDelta({
-                            sessionID: endPart.sessionID,
-                            messageID: endPart.messageID,
-                            partID: endPart.id,
-                            field: "text",
-                            delta: remaining,
-                          })
-                        }
-                        reasoningDeltaBuf.delete(endPart.id)
+                        await settleReasoningFlush(true)
 
                         const part = reasoningMap[value.id]
                         part.text = part.text.trimEnd()
@@ -678,6 +691,10 @@ export namespace SessionProcessor {
                           permission: "doom_loop",
                           patterns: [value.toolName],
                           sessionID: input.assistantMessage.sessionID,
+                          tool: {
+                            messageID: input.assistantMessage.id,
+                            callID: value.toolCallId,
+                          },
                           metadata: {
                             tool: value.toolName,
                             input: value.input,
@@ -703,9 +720,7 @@ export namespace SessionProcessor {
                         const match = toolcalls[value.toolCallId] ?? (await priorToolPart(value.toolCallId))
                         if (match && (match.state.status === "running" || match.state.status === "pending")) {
                           const resolvedInput =
-                            value.input === undefined
-                              ? match.state.input
-                              : cloneToolInputForPersistence(value.input)
+                            value.input === undefined ? match.state.input : cloneToolInputForPersistence(value.input)
                           await Session.updatePart({
                             ...match,
                             state: {
@@ -770,9 +785,7 @@ export namespace SessionProcessor {
                         const match = toolcalls[value.toolCallId] ?? (await priorToolPart(value.toolCallId))
                         if (match && (match.state.status === "running" || match.state.status === "pending")) {
                           const resolvedInput =
-                            value.input === undefined
-                              ? match.state.input
-                              : cloneToolInputForPersistence(value.input)
+                            value.input === undefined ? match.state.input : cloneToolInputForPersistence(value.input)
                           const classification =
                             (value as { dynamic?: boolean }).dynamic === true ? "tool-input-invalid" : "tool-execution"
                           const failure = toolFailureCauseFromUnknown({
@@ -962,12 +975,22 @@ export namespace SessionProcessor {
                 // after backoffMs"; the overlay's spinner reads exactly
                 // these SessionStatus retry events.
                 if (event.type === "retry") {
+                  const lastHeartbeat = event.lastHeartbeat
+                    ? `${event.lastHeartbeat.kind}@${new Date(event.lastHeartbeat.ts).toISOString()}`
+                    : "none"
+                  log.warn("activity retry", {
+                    activityID: event.id,
+                    attempt: event.attempt,
+                    cls: event.cls,
+                    backoffMs: event.backoffMs,
+                    lastHeartbeat,
+                  })
                   SessionStatus.set(
                     input.sessionID,
                     {
                       type: "retry",
                       attempt: event.attempt,
-                      message: `${event.cls}: backoff ${event.backoffMs}ms`,
+                      message: `${event.cls}: backoff ${event.backoffMs}ms; last heartbeat ${lastHeartbeat}`,
                       next: event.ts + event.backoffMs,
                     },
                     { promptGenerationOwner: input.abort },
@@ -1042,6 +1065,7 @@ export namespace SessionProcessor {
               SessionStatus.set(input.sessionID, { type: "idle" }, { promptGenerationOwner: input.abort })
             }
           }
+          await closeOpenReasoningParts()
           if (snapshot) {
             try {
               const patch = await Snapshot.patch(snapshot)

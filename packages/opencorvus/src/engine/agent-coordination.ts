@@ -33,6 +33,10 @@ export const AgentCoordinationRedispatchBindingSchema = ProjectedWorkerBindingSc
 export type AgentCoordinationRedispatchBinding = z.infer<typeof AgentCoordinationRedispatchBindingSchema>
 
 export type AgentCoordinationSeverity = "info" | "blocked" | "failure"
+
+export function agentCoordinationQuestionID(actionID: string): string {
+  return Identifier.ascending("question", `que_agent_coordination_${actionID}`)
+}
 export type AgentCoordinationRequestStatus = "pending" | "responded" | "cancelled"
 export type AgentCoordinationRequestOrigin = "worker_handoff" | "operator_steer"
 export type AgentCoordinationDecision =

@@ -44,11 +44,6 @@ function requireArrayResponse(path: string, value: unknown): unknown[] {
   return value
 }
 
-function configuredComposerModel(config: Record<string, unknown>): string {
-  const model = config.model
-  return typeof model === "string" ? model.trim() : ""
-}
-
 function providerLoadIssue(
   resource: ProviderLoadIssue["resource"],
   error: unknown,
@@ -154,7 +149,7 @@ export async function loadConfigInfo(
   }
 
   setAppStore({
-    ...(config ? { config, composerModel: configuredComposerModel(config) } : {}),
+    ...(config ? { config } : {}),
     ...(channels ? { channels } : {}),
     configLoadIssues: issues,
   })

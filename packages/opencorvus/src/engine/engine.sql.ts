@@ -4,6 +4,7 @@ import { ProjectTable } from "@/project/project.sql"
 import { SessionTable } from "@/session/session.sql"
 import { Timestamps } from "@/storage/schema.sql"
 import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
+import type { SelectedWorkflowBinding } from "./workflow-binding"
 
 export type EngineBudget = {
   max_executor_groups?: number
@@ -328,6 +329,38 @@ export const EngineArtifactTable = sqliteTable(
       .where(
         sql`${table.kind} = 'agent_coordination_request' AND json_extract(${table.payload}, '$.origin') = 'worker_handoff' AND json_extract(${table.payload}, '$.status') = 'pending'`,
       ),
+  ],
+)
+
+/** Single durable admission authority for one virtual workflow node in one
+ * Task. A bound row is committed atomically with its child Session, first
+ * message, Turn descriptor, and dispatch lineage. Historical duplicates are
+ * retained as an explicit conflicted row instead of selecting a replacement. */
+export const EngineWorkflowNodeOccurrenceTable = sqliteTable(
+  "engine_workflow_node_occurrence",
+  {
+    task_id: text()
+      .notNull()
+      .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+    workflow_id: text().notNull(),
+    workflow_node_id: text().notNull(),
+    workflow_binding: text({ mode: "json" }).$type<SelectedWorkflowBinding>().notNull(),
+    state: text({ enum: ["bound", "conflicted"] }).notNull(),
+    workflow_occurrence_id: text(),
+    initial_dispatch_id: text(),
+    child_session_id: text().references(() => SessionTable.id, { onDelete: "restrict" }),
+    dispatch_lineage_artifact_id: text().references(() => EngineArtifactTable.id, { onDelete: "restrict" }),
+    conflict_lineage_ids: text({ mode: "json" }).$type<string[]>().notNull().default([]),
+    ...Timestamps,
+  },
+  (table) => [
+    primaryKey({ columns: [table.task_id, table.workflow_id, table.workflow_node_id] }),
+    uniqueIndex("engine_workflow_node_occurrence_identity_idx")
+      .on(table.task_id, table.workflow_occurrence_id)
+      .where(sql`${table.workflow_occurrence_id} IS NOT NULL`),
+    uniqueIndex("engine_workflow_node_occurrence_lineage_idx")
+      .on(table.dispatch_lineage_artifact_id)
+      .where(sql`${table.dispatch_lineage_artifact_id} IS NOT NULL`),
   ],
 )
 

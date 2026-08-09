@@ -14,20 +14,34 @@ import { Worktree } from "../src/worktree"
 
 describe("ascending identifier logical clock", () => {
   test("emits a strict total order across counter overflow and wall-clock rollback", () => {
-    const lowerBoundary = 2 ** 36 - 1
-    const upperBoundary = 2 ** 36
-    const lowerBoundaryID = Identifier.create("message", false, lowerBoundary)
-    const upperBoundaryID = Identifier.create("message", false, upperBoundary)
-    expect(Identifier.timestamp(lowerBoundaryID)).toBe(lowerBoundary)
-    expect(Identifier.timestamp(upperBoundaryID)).toBe(upperBoundary)
-    expect(lowerBoundaryID < upperBoundaryID).toBe(true)
-    expect(Identifier.timestamp(Identifier.create("plan_node", false, upperBoundary + 1))).toBe(upperBoundary + 1)
-    const canonicalAscending = Identifier.create("message", false, upperBoundary + 2)
-    const canonicalDescending = Identifier.create("message", true, upperBoundary + 2)
-    const legacyAscending = `msg_ffffffffffff${"z".repeat(14)}`
-    const legacyDescending = `msg_000000000000${"0".repeat(14)}`
-    expect(legacyAscending < canonicalAscending).toBe(true)
-    expect(canonicalDescending < legacyDescending).toBe(true)
+    const boundaryScript = [
+      `import { Identifier } from "./src/id/id.ts"`,
+      `const lower = 2 ** 36 - 1`,
+      `const upper = 2 ** 36`,
+      `const lowerID = Identifier.create("message", false, lower)`,
+      `const upperID = Identifier.create("message", false, upper)`,
+      `const planID = Identifier.create("plan_node", false, upper + 1)`,
+      `const ascendingID = Identifier.create("message", false, upper + 2)`,
+      `const descendingID = Identifier.create("message", true, upper + 2)`,
+      `console.log(JSON.stringify({ lower: Identifier.timestamp(lowerID), upper: Identifier.timestamp(upperID), plan: Identifier.timestamp(planID), ordered: lowerID < upperID, legacyAscendingOrdered: "msg_ffffffffffffzzzzzzzzzzzzzz" < ascendingID, legacyDescendingOrdered: descendingID < "msg_00000000000000000000000000" }))`,
+    ].join(";")
+    const boundary = Bun.spawnSync([process.execPath, "-e", boundaryScript], {
+      cwd: path.resolve(import.meta.dir, ".."),
+      stdout: "pipe",
+      stderr: "pipe",
+    })
+    expect({ exitCode: boundary.exitCode, stderr: Buffer.from(boundary.stderr).toString() }).toEqual({
+      exitCode: 0,
+      stderr: "",
+    })
+    expect(JSON.parse(Buffer.from(boundary.stdout).toString())).toEqual({
+      lower: 2 ** 36 - 1,
+      upper: 2 ** 36,
+      plan: 2 ** 36 + 1,
+      ordered: true,
+      legacyAscendingOrdered: true,
+      legacyDescendingOrdered: true,
+    })
 
     const timestamp = Date.now() + 60_000
     const ids = Array.from({ length: 4_100 }, () => Identifier.create("message", false, timestamp))
@@ -182,6 +196,8 @@ describe("worktree ownership critical section", () => {
             .sort(),
         ).toEqual([firstSessionID, secondSessionID].sort())
         await Worktree.releaseManagedWorktreeSessionOwner({
+          projectID: Instance.project.id,
+          primaryWorktreeDir: Instance.project.worktree,
           directory: worktree.directory,
           sessionID: firstSessionID,
         })
@@ -214,41 +230,78 @@ describe("worktree ownership critical section", () => {
 })
 
 describe("prompt ownership termination", () => {
-  test("releases the complete prompt resource set idempotently", () => {
+  test("releases a managed-worktree Session owner after its Instance lease closes", async () => {
+    await using project = await memoryProject()
+    const taskID = Identifier.ascending("task")
     const sessionID = Identifier.ascending("session")
-    SessionPromptState.start(sessionID, `${import.meta.dir}/prompt-owner-contract`)
-    expect(SessionPromptState.TestHooks.promptResourceSnapshot(sessionID)).toEqual({
-      promptOwners: 1,
-      messageOwnerRegistries: 1,
-      startReservations: 0,
-      cancellationReceipts: 0,
+    let primaryWorktreeDir = ""
+    let managedWorktreeDir = ""
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        primaryWorktreeDir = Instance.project.worktree
+        const worktree = await Worktree.create({ name: `closed-lease-${taskID.slice(-8)}`, taskID, sessionID })
+        managedWorktreeDir = worktree.directory
+        SessionPromptState.start(sessionID, managedWorktreeDir)
+      },
     })
-    SessionPromptState.release(sessionID)
-    SessionPromptState.release(sessionID)
-    expect(SessionPromptState.TestHooks.promptResourceSnapshot(sessionID)).toEqual({
-      promptOwners: 0,
-      messageOwnerRegistries: 0,
-      startReservations: 0,
-      cancellationReceipts: 0,
+
+    await SessionPromptState.release(sessionID)
+
+    expect(
+      (await Ownership.Worktree.list(primaryWorktreeDir)).filter(
+        (entry) => entry.marker.cwd === managedWorktreeDir && entry.marker.sessionID === sessionID,
+      ),
+    ).toEqual([])
+  })
+
+  test("releases the complete prompt resource set idempotently", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const sessionID = Identifier.ascending("session")
+        SessionPromptState.start(sessionID, `${import.meta.dir}/prompt-owner-contract`)
+        expect(SessionPromptState.TestHooks.promptResourceSnapshot(sessionID)).toEqual({
+          promptOwners: 1,
+          messageOwnerRegistries: 1,
+          startReservations: 0,
+          cancellationReceipts: 0,
+        })
+        await SessionPromptState.release(sessionID)
+        await SessionPromptState.release(sessionID)
+        expect(SessionPromptState.TestHooks.promptResourceSnapshot(sessionID)).toEqual({
+          promptOwners: 0,
+          messageOwnerRegistries: 0,
+          startReservations: 0,
+          cancellationReceipts: 0,
+        })
+      },
     })
   })
 
-  test("releases ownership and side tables when status termination fails", () => {
-    const sessionID = Identifier.ascending("session")
-    SessionPromptState.start(sessionID, `${import.meta.dir}/prompt-owner-status-failure`)
-    const status = spyOn(SessionStatus, "finishPromptGeneration").mockImplementation(() => {
-      throw new Error("status termination failed")
-    })
-    try {
-      expect(() => SessionPromptState.release(sessionID)).toThrow("status termination failed")
-    } finally {
-      status.mockRestore()
-    }
-    expect(SessionPromptState.TestHooks.promptResourceSnapshot(sessionID)).toEqual({
-      promptOwners: 0,
-      messageOwnerRegistries: 0,
-      startReservations: 0,
-      cancellationReceipts: 0,
+  test("releases ownership and side tables when status termination fails", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const sessionID = Identifier.ascending("session")
+        SessionPromptState.start(sessionID, `${import.meta.dir}/prompt-owner-status-failure`)
+        const status = spyOn(SessionStatus, "finishPromptGeneration").mockImplementation(() => {
+          throw new Error("status termination failed")
+        })
+        try {
+          await expect(SessionPromptState.release(sessionID)).rejects.toThrow("status termination failed")
+        } finally {
+          status.mockRestore()
+        }
+        expect(SessionPromptState.TestHooks.promptResourceSnapshot(sessionID)).toEqual({
+          promptOwners: 0,
+          messageOwnerRegistries: 0,
+          startReservations: 0,
+          cancellationReceipts: 0,
+        })
+      },
     })
   })
 })

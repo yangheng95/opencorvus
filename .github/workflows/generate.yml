@@ -22,7 +22,7 @@ jobs:
         uses: ./.github/actions/setup-bun
 
       - name: Regenerate repository artifacts
-        run: ./script/generate.ts
+        run: bun ./script/generate.ts
 
       - name: Verify generated artifacts are committed
         run: bun ./script/generated-artifacts.ts --check-clean-worktree

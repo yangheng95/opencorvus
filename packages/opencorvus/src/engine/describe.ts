@@ -329,6 +329,7 @@ export interface TaskWorkflowNodeDesc {
   dispatches: TaskWorkflowDispatchDesc[]
   terminal_success: boolean
   terminal_success_predecessor_ids: string[]
+  occurrence_status: "occurrence_not_committed" | "occurrence_committed"
 }
 
 export interface TaskWorkflowExecutionDesc {
@@ -718,6 +719,7 @@ function describeTaskWorkflowExecution(task: TaskRow): TaskWorkflowExecutionDesc
           dispatches: directDispatches,
           terminal_success: directDispatches.some((dispatch) => dispatch.terminal_success),
           terminal_success_predecessor_ids: [],
+          occurrence_status: directDispatches.length > 0 ? "occurrence_committed" : "occurrence_not_committed",
         },
       ],
       frontier_node_ids: [],
@@ -756,16 +758,18 @@ function describeTaskWorkflowExecution(task: TaskRow): TaskWorkflowExecutionDesc
       .filter((node) => dispatchesByNodeID.get(node.node_id)?.some((dispatch) => dispatch.terminal_success))
       .map((node) => node.node_id),
   )
-  const nodes = binding.nodes.map(
-    (node): TaskWorkflowNodeDesc => ({
+  const nodes = binding.nodes.map((node): TaskWorkflowNodeDesc => {
+    const nodeDispatches = dispatchesByNodeID.get(node.node_id) ?? []
+    return {
       node_id: node.node_id,
       agent_id: node.agent_id,
       depends_on: node.depends_on,
-      dispatches: dispatchesByNodeID.get(node.node_id) ?? [],
+      dispatches: nodeDispatches,
       terminal_success: terminalSuccessNodeIDs.has(node.node_id),
       terminal_success_predecessor_ids: node.depends_on.filter((nodeID) => terminalSuccessNodeIDs.has(nodeID)),
-    }),
-  )
+      occurrence_status: nodeDispatches.length > 0 ? "occurrence_committed" : "occurrence_not_committed",
+    }
+  })
   return {
     binding,
     nodes,
@@ -1025,7 +1029,8 @@ function renderTaskWorkflowExecution(execution: TaskWorkflowExecutionDesc | unde
   for (const node of execution.nodes) {
     lines.push(
       `- node=${node.node_id}; agent=${node.agent_id}; depends_on=${node.depends_on.join(",") || "(none)"}; ` +
-        `terminal_success=${node.terminal_success}; terminal_success_predecessors=${node.terminal_success_predecessor_ids.join(",") || "(none)"}`,
+        `occurrence_status=${node.occurrence_status}; terminal_success=${node.terminal_success}; ` +
+          `terminal_success_predecessors=${node.terminal_success_predecessor_ids.join(",") || "(none)"}`,
     )
     for (const dispatch of node.dispatches) {
       const status = dispatch.session_status
@@ -1039,6 +1044,9 @@ function renderTaskWorkflowExecution(execution: TaskWorkflowExecutionDesc | unde
     }
   }
   lines.push(`- dependency_ready_undispatched_frontier=${execution.frontier_node_ids.join(",") || "(none)"}`)
+  lines.push(
+    "A frontier node has occurrence_status=occurrence_not_committed and its next dispatch uses turn.kind=initial. A physical created-only Session is audit evidence, not continuation authority. A node with occurrence_status=occurrence_committed may be continued only through an exact dispatch ID listed above.",
+  )
   lines.push(
     "This is a natural-wake projection of immutable dispatch lineage and real Session observations. It is evidence for Orchestrator judgment, not persisted workflow step state, a queue, an admission rule, or a Host scheduling gate.",
   )
@@ -1244,8 +1252,8 @@ export function renderTaskDescription(desc: TaskDesc): string {
     }
     lines.push(
       `These are Host/runtime/tooling facts. They do not retroactively change any expert report, Session terminal fact, ` +
-        `Delivery Slice review, or Task business conclusion. Continue from existing facts. Resolve command-side infrastructure ` +
-        `directly and continue the exact affected workflow or phase-closure occurrence through its bound lineage. Build cannot replace ` +
+        `Delivery Slice review, or Task business conclusion. Continue from existing facts. Resolve command-side infrastructure directly, then inspect immutable dispatch lineage. ` +
+        `A created-only Session has occurrence_not_committed and does not block the dependency-ready node's one initial dispatch; an occurrence_committed failure must continue through its exact listed dispatch ID. Build cannot replace ` +
         `another mandatory node's terminal-success evidence. Keep the fixed Squad and Phase; do not create a correction Task.`,
     )
   }
@@ -1361,8 +1369,7 @@ export function renderTaskDescription(desc: TaskDesc): string {
     lines.push(
       `Each entry is a persisted assistant tool call in this task's session tree with no completion/error result ` +
         `and no current-process session owner. Treat it as execution evidence from a previous interrupted wake; ` +
-        `inspect the immutable workflow execution evidence before acting. Settle the physical interruption and recover the exact affected workflow or ` +
-        `phase-closure occurrence through its bound lineage without allocating another logical occurrence. Preserve the fixed Squad and Phase; ` +
+        `inspect the immutable workflow execution evidence before acting. Settle the physical interruption, then use initial for a dependency-ready occurrence_not_committed node or the exact dispatch ID for an occurrence_committed continuation. Preserve the fixed Squad and Phase; ` +
         `ask the operator only for external authority, destructive approval, or an irreducible product decision.`,
     )
   }
@@ -1393,8 +1400,8 @@ export function renderTaskDescription(desc: TaskDesc): string {
     lines.push(
       `These entries are failed agent/tool sessions made visible to this prompt. ` +
         `Treat quota/network/provider failures as failed physical child Sessions of the current Task; an attached Delivery Slice revision is only an evidence subject. ` +
-        `Continue the exact affected workflow or phase-closure occurrence through its bound lineage. A mandatory non-Build node's terminal-success evidence and Artifact cannot be transferred to Build. ` +
-        `Do not allocate another logical occurrence, create a new Task, or infer a fresh Task start merely because the latest wake repeats the original request.`,
+        `Inspect immutable dispatch lineage: use initial when the affected dependency-ready node is occurrence_not_committed, and continue only an occurrence_committed node through its exact dispatch ID. A mandatory non-Build node's terminal-success evidence and Artifact cannot be transferred to Build. ` +
+        `Do not create a new Task or infer a fresh Task start merely because the latest wake repeats the original request.`,
     )
   }
 
@@ -1408,7 +1415,7 @@ export function renderTaskDescription(desc: TaskDesc): string {
     }
     lines.push(
       `These entries are persisted tool-call failures with the original ToolFailureCause. ` +
-        `Use them as audit evidence. Repair command-side failures directly and continue the exact affected workflow or phase-closure occurrence through its bound lineage. Build cannot replace another mandatory node's evidence contract. ` +
+        `Use them as audit evidence. Repair command-side failures directly, then use initial for an affected dependency-ready occurrence_not_committed node or the exact dispatch ID for an occurrence_committed continuation. Build cannot replace another mandatory node's evidence contract. ` +
         `Use a terminal lifecycle decision only for a proven external, destructive, fixed-Squad-authority, or irreducible product-decision blocker.`,
     )
   }

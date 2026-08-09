@@ -5,13 +5,15 @@ import { EngineArtifactTable, type EngineMetadata } from "@/engine/engine.sql"
 import { Identifier } from "@/id/id"
 import { and, asc, desc, eq, sql, Database } from "@/storage/db"
 import z from "zod"
-import {
-  SelectedWorkflowBindingSchema,
-  type SelectedWorkflowBinding,
-} from "./workflow-binding"
+import { SelectedWorkflowBindingSchema, type SelectedWorkflowBinding } from "./workflow-binding"
 import { assertCurrentDeliverySliceRevisionIDs } from "./store"
 import { assertTaskWorkflowBindingInTransaction } from "./workflow-binding-facts"
 import { assertCurrentDeliverySliceRevisionIDsInTransaction } from "./delivery-slice-membership-facts"
+import type { DispatchOccurrenceAuthority } from "./dispatch-occurrence-authority"
+import {
+  assertWorkflowNodeOccurrenceLineageInTransaction,
+  bindWorkflowNodeOccurrenceLineageInTransaction,
+} from "./workflow-node-occurrence"
 
 export interface DispatchLineagePayload extends EngineMetadata {
   dispatch_id: string
@@ -166,9 +168,7 @@ export function recordDispatchLineage(input: {
       workflow_binding: input.origin.workflowBinding,
       workflow_node_id: input.origin.workflowNodeID,
       workflow_occurrence_id: input.origin.workflowOccurrenceID ?? input.origin.dispatchID,
-      ...(input.origin.coordinationActionID
-        ? { coordination_action_id: input.origin.coordinationActionID }
-        : {}),
+      ...(input.origin.coordinationActionID ? { coordination_action_id: input.origin.coordinationActionID } : {}),
       ...(input.origin.continuationOfDispatchID
         ? { continuation_of_dispatch_id: input.origin.continuationOfDispatchID }
         : {}),
@@ -189,6 +189,16 @@ export function recordDispatchLineage(input: {
       deliverySliceRevisionIDs: payload.delivery_slice_revision_ids,
       subject: "Dispatch lineage",
     })
+    const occurrenceCommit = assertWorkflowNodeOccurrenceLineageInTransaction({
+      db,
+      taskID: input.origin.taskID,
+      workflowBinding: input.origin.workflowBinding,
+      workflowNodeID: input.origin.workflowNodeID,
+      dispatchID: input.origin.dispatchID,
+      workflowOccurrenceID: input.origin.workflowOccurrenceID ?? input.origin.dispatchID,
+      childSessionID: input.childSessionID,
+      continuation: !!input.origin.continuationOfDispatchID || !!input.origin.coordinationActionID,
+    })
     insertEngineArtifact(db, {
       id: artifactID,
       taskID: input.origin.taskID,
@@ -196,6 +206,12 @@ export function recordDispatchLineage(input: {
       label: "dispatch-lineage",
       payload,
       timeCreated: now,
+    })
+    bindWorkflowNodeOccurrenceLineageInTransaction({
+      db,
+      commit: occurrenceCommit,
+      lineageArtifactID: artifactID,
+      now,
     })
   })
   return {
@@ -237,6 +253,20 @@ export function findDispatchLineageByDispatchID(input: {
     throw new Error(`Dispatch identity ${input.dispatchID} has ${matches.length} lineages in Task ${input.taskID}`)
   }
   return matches[0]
+}
+
+export function resolveDispatchOccurrenceAuthority(input: {
+  taskID: string
+  dispatchID: string
+}): DispatchOccurrenceAuthority {
+  const lineage = findDispatchLineageByDispatchID(input)
+  return lineage
+    ? {
+        occurrence_status: "occurrence_committed",
+        dispatch_lineage_id: lineage.artifactID,
+        dispatch_id: lineage.dispatchID,
+      }
+    : { occurrence_status: "occurrence_not_committed" }
 }
 
 /** Resolve the immutable child created by one exact parent tool execution. */

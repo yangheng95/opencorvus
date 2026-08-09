@@ -34,18 +34,21 @@ export class UnsupportedLocaleError extends Error {
 function firstRuntimeLocaleCandidate(): string | undefined {
   const values = [
     typeof globalThis !== "undefined" ? (globalThis as any).__OPENCORVUS_LOCALE__ : "",
-    typeof document !== "undefined" ? document.documentElement.lang : "",
     typeof navigator !== "undefined" ? navigator.language : "",
   ]
   return values.map((item) => String(item || "").trim()).find(Boolean)
 }
 
-function initialLocale(): SupportedLocale {
-  const candidate = firstRuntimeLocaleCandidate()
-  return candidate ? sanitizeLocale(candidate) : "en-US"
+export function supportedLocaleFromRuntime(value: unknown): SupportedLocale {
+  const locale = String(value || "").trim()
+  return /^zh(?:[-_]|$)/i.test(locale) ? "zh-CN" : "en-US"
 }
 
-let currentLocale: SupportedLocale = initialLocale()
+export function runtimeLocale(): SupportedLocale {
+  return supportedLocaleFromRuntime(firstRuntimeLocaleCandidate())
+}
+
+let currentLocale: SupportedLocale = runtimeLocale()
 
 function localeValue(key: string, locale: string = currentLocale): any {
   appStore.localeSeq

@@ -791,17 +791,21 @@ export function runAsInstanceActivity<R>(fn: () => Promise<R>): Promise<R> {
 
 function startLeaseActivity<R>(lease: Lease, fn: () => Promise<R>): Promise<R> {
   const scope: ActivityScope = { lease, closed: false }
-  let activity!: Promise<R>
-  activity = lifecycleContext.without(() =>
-    activityContext.provide(scope, () =>
-      Promise.resolve()
-        .then(fn)
-        .finally(() => {
-          scope.closed = true
-          lease.activities.delete(activity)
-        }),
-    ),
+  let started!: Promise<R>
+  lifecycleContext.without(() =>
+    activityContext.provide(scope, () => {
+      try {
+        started = Promise.resolve(fn())
+      } catch (error) {
+        started = Promise.reject(error)
+      }
+    }),
   )
+  let activity!: Promise<R>
+  activity = started.finally(() => {
+    scope.closed = true
+    lease.activities.delete(activity)
+  })
   lease.activities.add(activity)
   return activity
 }
@@ -849,6 +853,12 @@ export const Instance: InstanceApi = {
     for (;;) {
       const entry = getOrCreateCacheEntry(directory, key)
       entry.lastAccess = ++accessSequence
+      // Project discovery is the authority for this exact entry. Await it
+      // before capability preflight so a deterministic discovery failure is
+      // returned to the caller once. The context promise removes its failed
+      // cache entry, and treating that self-removal as a concurrent cache
+      // replacement here would otherwise rebuild the same entry forever.
+      const initial = await entry.context
       if (input.init) {
         try {
           await prepareCapabilityPreflight(key, entry, input.init)
@@ -889,7 +899,6 @@ export const Instance: InstanceApi = {
       }
       const lease = createLease(key, entry, "read", release)
       try {
-        const initial = await entry.context
         return await leaseContext.provide(lease, () =>
           provideLeaseContext(lease, initial, async () => {
             const ctx = await prepareContext(key, entry, lease, input.init)
@@ -1067,10 +1076,7 @@ export const Instance: InstanceApi = {
     init: () => S,
     dispose: ((state: Awaited<S>) => Promise<void>) | undefined,
     label: string,
-  ): (() => S) & {
-    reset(): Promise<void>
-    resetAll(): Promise<void>
-  } {
+  ): State.Accessor<S> {
     return createInstanceState(init, dispose, label)
   },
   async dispose() {

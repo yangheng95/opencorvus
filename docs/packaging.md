@@ -121,6 +121,15 @@ bun test script/release-asset-contract.test.ts script/stage-release-upload-asset
 
 Build the complete native CLI package on the current supported host:
 
+Both native matrix entrypoints initialize `<repo>/.scratch/package-runtime` as
+their build-time OpenCorvus runtime root and project its canonical `tmp`
+directory through `TEMP`, `TMP`, and `TMPDIR`. This keeps build validation,
+content-addressed package snapshots, and pinned runtime downloads out of the
+operator's production AppData. The canonical backend release build applies the
+same projection when invoked directly. An explicitly configured absolute
+`OPENCORVUS_HOME` replaces this default root and remains the only runtime-path
+authority for that package invocation.
+
 ```bash
 bun run package:binary-matrix
 ```

@@ -1,0 +1,86 @@
+[
+  {
+    "id": "int_g019fe45dc3da000000000000TtSwMM6LfSzdKx",
+    "taskID": "tsk_g019fe4553121000000000000jDPTepv4q6J7MI",
+    "orderKey": "v1:0001786242778070:0000000000000070:0000000000000000:interaction:int_g019fe45dc3da000000000000TtSwMM6LfSzdKx",
+    "sessionID": "ses_-fe601baabf6bffffffffffffbdrmkbhIeAJ4Dk",
+    "externalID": "que_g019fe45dc3d6000000000000KBhjoBivGa7q2h",
+    "type": "question",
+    "status": "pending",
+    "title": "验证预算",
+    "body": "除请求中强制执行的 `node --test` 外，是否运行一项额外的可选保障？推荐跳过以保持紧凑；若运行，将执行现有项目检查器覆盖的额外回归/完整测试范围，预计增加约 1 个工作单元的时间与少量令牌。",
+    "payload": {
+      "questions": [
+        {
+          "question": "除请求中强制执行的 `node --test` 外，是否运行一项额外的可选保障？推荐跳过以保持紧凑；若运行，将执行现有项目检查器覆盖的额外回归/完整测试范围，预计增加约 1 个工作单元的时间与少量令牌。",
+          "header": "验证预算",
+          "options": [
+            {
+              "value": "skip_optional_testing",
+              "label": "跳过可选测试",
+              "description": "仅执行请求和工作流明确要求的验证。"
+            },
+            {
+              "value": "run_optional_testing",
+              "label": "运行可选保障",
+              "description": "在强制检查之外运行项目现有的额外回归覆盖。"
+            }
+          ],
+          "multiple": false,
+          "custom": true
+        }
+      ],
+      "expiry": {
+        "origin": "deadline",
+        "timeoutMs": 300000,
+        "timeExpires": 1786243078070
+      }
+    },
+    "time": {
+      "created": 1786242778070,
+      "updated": 1786242778070
+    }
+  },
+  {
+    "id": "int_g019fe4556e9d000000000000iPkluG08G2uc9k",
+    "taskID": "tsk_g019fe4553121000000000000jDPTepv4q6J7MI",
+    "orderKey": "v1:0001786242231962:0000000000000070:0000000000000000:interaction:int_g019fe4556e9d000000000000iPkluG08G2uc9k",
+    "sessionID": "ses_-fe601baabf6bffffffffffffbdrmkbhIeAJ4Dk",
+    "externalID": "que_g019fe4556e9a000000000000vY1GqRFFxD50s1",
+    "type": "question",
+    "status": "pending",
+    "title": "Verification budget",
+    "body": "Beyond the mandatory real-project `node --test` run and the required workflow checks, should I run one additional independent integrity review of the final change? Recommended: skip optional testing for the compact path. Running it adds a separate review pass and modest extra time/tokens.",
+    "payload": {
+      "questions": [
+        {
+          "question": "Beyond the mandatory real-project `node --test` run and the required workflow checks, should I run one additional independent integrity review of the final change? Recommended: skip optional testing for the compact path. Running it adds a separate review pass and modest extra time/tokens.",
+          "header": "Verification budget",
+          "options": [
+            {
+              "value": "skip_optional_testing",
+              "label": "Skip optional testing",
+              "description": "Run only the mandatory checks and required delivery workflow."
+            },
+            {
+              "value": "run_optional_testing",
+              "label": "Run integrity review",
+              "description": "Add one independent final integrity review after tests; modest extra time/tokens."
+            }
+          ],
+          "multiple": false,
+          "custom": false
+        }
+      ],
+      "expiry": {
+        "origin": "deadline",
+        "timeoutMs": 300000,
+        "timeExpires": 1786242531962
+      }
+    },
+    "time": {
+      "created": 1786242231962,
+      "updated": 1786242231962
+    }
+  }
+]

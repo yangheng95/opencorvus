@@ -22,6 +22,14 @@ export const OrchestratorEventSchema = z
       })
       .strict()
       .optional(),
+    taskWaitWake: z
+      .object({
+        jobID: z.string().min(1),
+        fireID: z.string().min(1),
+        dueAt: z.number().int().nonnegative(),
+      })
+      .strict()
+      .optional(),
     rootMessage: z
       .object({
         messageID: z.string().min(1),

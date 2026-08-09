@@ -139,6 +139,15 @@ export namespace PermissionNext {
         autoReply: z.boolean(),
       }),
     ),
+    Abandoned: BusEvent.define(
+      "permission.abandoned",
+      z.object({
+        sessionID: z.string(),
+        requestID: z.string(),
+        origin: z.literal("infrastructure"),
+        timeResolved: z.number().int().positive(),
+      }),
+    ),
   }
 
   const state = createInstanceState(
@@ -166,8 +175,15 @@ export namespace PermissionNext {
     },
     async (s) => {
       for (const id of Object.keys(s.pending)) {
-        clearTimeout(s.pending[id].timer)
+        const pending = s.pending[id]
+        clearTimeout(pending.timer)
         delete s.pending[id]
+        await Bus.publish(Event.Abandoned, {
+          sessionID: pending.info.sessionID,
+          requestID: pending.info.id,
+          origin: "infrastructure",
+          timeResolved: Date.now(),
+        })
       }
     },
     "permission",
@@ -317,6 +333,24 @@ export namespace PermissionNext {
       }
     },
   )
+
+  /**
+   * Publish the terminal occurrence for a durable Permission whose owning
+   * project Instance was replaced and therefore has no process-local waiter.
+   */
+  export async function abandonRecovered(input: {
+    sessionID: string
+    requestID: string
+    timeResolved: number
+  }): Promise<void> {
+    log.warn("recovered permission abandoned by infrastructure", { requestID: input.requestID })
+    await Bus.publish(Event.Abandoned, {
+      sessionID: input.sessionID,
+      requestID: input.requestID,
+      origin: "infrastructure",
+      timeResolved: input.timeResolved,
+    })
+  }
 
   /**
    * Hierarchical permission resolution. Rulesets stack (project → session →

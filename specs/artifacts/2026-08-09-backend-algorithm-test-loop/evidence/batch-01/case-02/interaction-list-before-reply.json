@@ -1,0 +1,86 @@
+[
+  {
+    "id": "int_g019fe46107570000000000007sRC7RyzIhSHcr",
+    "taskID": "tsk_g019fe4553003000000000000hJoJ6IqJUBRerP",
+    "orderKey": "v1:0001786242991958:0000000000000070:0000000000000000:interaction:int_g019fe46107570000000000007sRC7RyzIhSHcr",
+    "sessionID": "ses_-fe601baabf85ffffffffffffywlMbIym5Hx2Rg",
+    "externalID": "que_g019fe4610756000000000000yHDdw4IfxyCO10",
+    "type": "question",
+    "status": "pending",
+    "title": "Verification budget",
+    "body": "The required acceptance floor already includes reading package.json, src/waves.js, every test, implementing the focused change, and running the real `node --test` checker. Should I also run the smallest additional assurance increment—an independent integrity review of the final diff and test evidence (about 1 extra worker turn)?",
+    "payload": {
+      "questions": [
+        {
+          "question": "The required acceptance floor already includes reading package.json, src/waves.js, every test, implementing the focused change, and running the real `node --test` checker. Should I also run the smallest additional assurance increment—an independent integrity review of the final diff and test evidence (about 1 extra worker turn)?",
+          "header": "Verification budget",
+          "options": [
+            {
+              "value": "skip_optional_testing",
+              "label": "Skip optional testing",
+              "description": "Use only the mandatory implementation and real project checker."
+            },
+            {
+              "value": "run_optional_testing",
+              "label": "Run optional review",
+              "description": "Add one independent integrity review of the final diff and test evidence."
+            }
+          ],
+          "multiple": false,
+          "custom": true
+        }
+      ],
+      "expiry": {
+        "origin": "deadline",
+        "timeoutMs": 300000,
+        "timeExpires": 1786243291958
+      }
+    },
+    "time": {
+      "created": 1786242991958,
+      "updated": 1786242991958
+    }
+  },
+  {
+    "id": "int_g019fe45584c5000000000000POUkTiSKkv3Ich",
+    "taskID": "tsk_g019fe4553003000000000000hJoJ6IqJUBRerP",
+    "orderKey": "v1:0001786242237636:0000000000000070:0000000000000000:interaction:int_g019fe45584c5000000000000POUkTiSKkv3Ich",
+    "sessionID": "ses_-fe601baabf85ffffffffffffywlMbIym5Hx2Rg",
+    "externalID": "que_g019fe45584c4000000000000jzXVdj9DryJ9iv",
+    "type": "question",
+    "status": "pending",
+    "title": "Verification budget",
+    "body": "The required acceptance floor already includes reading the repository tests and running the real `node --test` checker. Should I add optional assurance beyond that floor?",
+    "payload": {
+      "questions": [
+        {
+          "question": "The required acceptance floor already includes reading the repository tests and running the real `node --test` checker. Should I add optional assurance beyond that floor?",
+          "header": "Verification budget",
+          "options": [
+            {
+              "value": "skip_optional_testing",
+              "label": "Skip optional testing",
+              "description": "Recommended: perform only the required repository investigation, implementation, and mandated node --test verification."
+            },
+            {
+              "value": "run_optional_testing",
+              "label": "Run optional testing",
+              "description": "Add one focused independent integrity review of the final diff and test evidence; small additional time/token cost."
+            }
+          ],
+          "multiple": false,
+          "custom": true
+        }
+      ],
+      "expiry": {
+        "origin": "deadline",
+        "timeoutMs": 300000,
+        "timeExpires": 1786242537636
+      }
+    },
+    "time": {
+      "created": 1786242237636,
+      "updated": 1786242237636
+    }
+  }
+]

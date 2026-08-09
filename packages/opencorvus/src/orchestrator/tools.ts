@@ -13,7 +13,10 @@ import {
   sameProjectedWorkerBinding,
   type ProjectedWorkerBinding,
 } from "@/agent/projected-worker-binding"
-import { sameProjectedWorkerIdentity } from "@/agent/projected-worker-identity"
+import {
+  assertProjectedWorkerContinuationCompatible,
+  sameProjectedWorkerIdentity,
+} from "@/agent/projected-worker-identity"
 import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { Bus } from "@/bus"
@@ -31,6 +34,7 @@ import { assertTaskEvidenceLocators } from "@/engine/evidence-locator"
 import { DecisionLogTable } from "@/decision-log/schema"
 import {
   bindAgentCoordinationRedispatchSuccessor,
+  agentCoordinationQuestionID,
   completeAgentCoordinationAction,
   createAgentCoordinationResponse,
   failAgentCoordinationAction,
@@ -132,7 +136,7 @@ import {
 } from "./delivery-slice-contract-tools"
 import { createIntegrityReviewStage } from "./integrity-review-stage"
 import { createIntegrityReviewRunner, createIntegrityTool } from "./integrity-tool"
-import { createOrchestratorInteractionTools } from "./interaction-tools"
+import { authorizedTaskRootMessagesForWake, createOrchestratorInteractionTools } from "./interaction-tools"
 import type { TerminalConversationAuthority } from "./terminal-conversation-authority"
 import { createReadContextTool } from "./read-context-tool"
 import { createReadAgentMessageTool } from "./read-agent-message-tool"
@@ -695,10 +699,6 @@ function agentCoordinationWorkerMessagePartID(actionID: string): string {
   return Identifier.ascending("part", `prt_agent_coordination_${actionID}`)
 }
 
-function agentCoordinationQuestionID(actionID: string): string {
-  return Identifier.ascending("question", `que_agent_coordination_${actionID}`)
-}
-
 function recordedAgentCoordinationWorkerMessageID(
   action: NonNullable<ReturnType<typeof findAgentCoordinationAction>>,
 ): string | undefined {
@@ -887,6 +887,9 @@ export function createOrchestratorTools(input: {
     kind: "retry" | "replan"
     actor: "operator"
     supersededOperatorMessageIDs: string[]
+  }
+  missionAcceptanceResume?: {
+    messageID: string
   }
   terminalConversationAuthority?: TerminalConversationAuthority
 }) {
@@ -1161,7 +1164,6 @@ export function createOrchestratorTools(input: {
         const executionAuthority = await resolveSessionExecutionAuthority({
           sessionID: execution.orchestratorSessionID,
           projectID: Instance.project.id,
-          rootDirectory: Instance.directory,
           expected: { kind: "task", taskID },
         })
         return await initialized.execute(args, {
@@ -1477,12 +1479,7 @@ export function createOrchestratorTools(input: {
     ...createOrchestratorInteractionTools({
       taskID,
       agentSessionID: input.agentSessionID,
-      allowedRootMessages: input.rootMessage
-        ? [input.rootMessage]
-        : (input.taskIntent?.supersededOperatorMessageIDs.map((messageID) => ({
-            messageID,
-            kind: "operator" as const,
-          })) ?? []),
+      allowedRootMessages: authorizedTaskRootMessagesForWake(input),
     }),
 
     ...createDeliverySliceContractTools({
@@ -1625,14 +1622,16 @@ export function createOrchestratorTools(input: {
           const activeAgent = input.dispatchAgents.find(
             (candidate) => candidate.identity.agentID === request.payload.worker_binding.identity.agentID,
           )
-          if (
-            !activeAgent ||
-            !sameProjectedWorkerIdentity(activeAgent.identity, request.payload.worker_binding.identity)
-          ) {
+          if (!activeAgent) {
             throw new Error(
-              `respond_agent_coordination redispatch agent ${request.payload.worker_binding.identity.agentID} no longer matches the frozen active projection`,
+              `respond_agent_coordination redispatch agent ${request.payload.worker_binding.identity.agentID} is absent from the current projection`,
             )
           }
+          assertProjectedWorkerContinuationCompatible({
+            previous: request.payload.worker_binding.identity,
+            current: activeAgent.identity,
+            subject: `respond_agent_coordination redispatch agent ${activeAgent.identity.agentID}`,
+          })
           const response = await createAgentCoordinationResponse({
             taskID,
             requestID: request.payload.request_id,
@@ -2283,11 +2282,11 @@ export function createOrchestratorTools(input: {
           request,
         })
         const expectedScope = requireAgentCoordinationWorkerWorkScope({ request, binding: coordinationBinding })
-        if (!sameProjectedWorkerIdentity(coordinationBinding.identity, projectedAgent.identity)) {
-          throw new Error(
-            `dispatch_agent coordination action ${coordinationActionID} worker identity does not match the current ${targetAgentID} projection`,
-          )
-        }
+        assertProjectedWorkerContinuationCompatible({
+          previous: coordinationBinding.identity,
+          current: projectedAgent.identity,
+          subject: `dispatch_agent coordination action ${coordinationActionID}`,
+        })
         if (expectedScope.kind !== workScope.kind) {
           throw new Error(`dispatch_agent coordination action ${coordinationActionID} work scope does not match`)
         }
@@ -2325,11 +2324,11 @@ export function createOrchestratorTools(input: {
             `dispatch_agent continuation source ${continuationDispatchID} does not exist in Task ${ownershipTaskID}`,
           )
         }
-        if (!sameProjectedWorkerIdentity(sourceLineage.payload.projected_worker_identity, projectedAgent.identity)) {
-          throw new Error(
-            `dispatch_agent continuation source ${continuationDispatchID} worker identity does not match the current ${targetAgentID} projection`,
-          )
-        }
+        assertProjectedWorkerContinuationCompatible({
+          previous: sourceLineage.payload.projected_worker_identity,
+          current: projectedAgent.identity,
+          subject: `dispatch_agent continuation source ${continuationDispatchID}`,
+        })
         if (JSON.stringify(sourceLineage.payload.work_scope) !== JSON.stringify(workScope)) {
           throw new Error(`dispatch_agent continuation source ${continuationDispatchID} work scope does not match`)
         }
@@ -2390,6 +2389,7 @@ export function createOrchestratorTools(input: {
               task_authority: authority,
             },
       )
+      if (signal?.aborted) throw new Error(`dispatch_agent ${targetAgentID} aborted before lineage preparation`)
       let recordedLineage: ReturnType<typeof recordDispatchLineage> | undefined
       const observeSession = (sessionID: string) => {
         if (recordedLineage && recordedLineage.payload.child_session_id !== sessionID) {

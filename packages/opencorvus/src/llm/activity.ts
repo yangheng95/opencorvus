@@ -78,48 +78,46 @@ export type HeartbeatKind =
   | "manual"
 
 /**
- * Map AI SDK fullStream chunk types to the canonical HeartbeatKind. Returns
- * null for chunks that should NOT count as upstream liveness — currently
- * none, since `start` already arrives after first byte and downstream
- * heartbeats follow. The `default` branch returns "manual" so unknown chunk
- * types still refresh idle without misclassification.
- *
- * Provider adapters MUST call run.bump() exactly once per real upstream
- * event with the kind returned here. Missing kinds is the most common
- * cause of false-positive idle trips.
+ * Map AI SDK fullStream chunks to semantic progress. Physical transport
+ * arrival is reported separately as `first-byte`: unknown, empty, and no-op
+ * chunks prove only that bytes are moving and cannot extend semantic idle.
  */
-export function chunkHeartbeatKind(chunk: { type?: string }): HeartbeatKind {
+export function chunkHeartbeatKind(chunk: Record<string, unknown>): HeartbeatKind | null {
+  const nonEmpty = (...keys: string[]) =>
+    keys.some((key) => typeof chunk[key] === "string" && (chunk[key] as string).length > 0)
   switch (chunk?.type) {
     case "start":
-      return "manual"
+      return null
     case "start-step":
       return "step-start"
     case "finish-step":
       return "step-finish"
     case "finish":
-      return "manual"
+      return null
     case "text-start":
-    case "text-delta":
     case "text-end":
-      return "text-delta"
+      return nonEmpty("id") ? "text-delta" : null
+    case "text-delta":
+      return nonEmpty("text") ? "text-delta" : null
     case "reasoning-start":
-    case "reasoning-delta":
     case "reasoning-end":
-      return "reasoning-delta"
+      return nonEmpty("id") ? "reasoning-delta" : null
+    case "reasoning-delta":
+      return nonEmpty("text") ? "reasoning-delta" : null
     case "tool-input-start":
-      return "tool-input-start"
+      return nonEmpty("toolCallId", "id") && nonEmpty("toolName") ? "tool-input-start" : null
     case "tool-input-delta":
-      return "tool-input-delta"
+      return nonEmpty("toolCallId", "id") && nonEmpty("inputTextDelta", "delta") ? "tool-input-delta" : null
     case "tool-input-end":
-      return "tool-input-end"
+      return nonEmpty("toolCallId", "id") ? "tool-input-end" : null
     case "tool-call":
-      return "tool-call"
+      return nonEmpty("toolCallId") && nonEmpty("toolName") ? "tool-call" : null
     case "tool-result":
       return "tool-result"
     case "tool-error":
       return "tool-error"
     default:
-      return "manual"
+      return null
   }
 }
 
@@ -151,7 +149,16 @@ export type LLMActivityEvent =
   | { type: "heartbeat"; id: string; ts: number; kind: HeartbeatKind }
   | { type: "paused"; id: string; ts: number; reason: string }
   | { type: "resumed"; id: string; ts: number; reason: string }
-  | { type: "retry"; id: string; ts: number; attempt: number; cls: ErrorClass; backoffMs: number; reason: string }
+  | {
+      type: "retry"
+      id: string
+      ts: number
+      attempt: number
+      cls: ErrorClass
+      backoffMs: number
+      reason: string
+      lastHeartbeat?: { kind: HeartbeatKind; ts: number }
+    }
   | {
       type: "terminal"
       id: string
@@ -562,6 +569,7 @@ export async function withLLMActivity<T>(
       const idleHolder: { monitor: StreamActivityMonitor | null } = { monitor: null }
       let unregisterActivityMonitor: (() => void) | undefined
       const idleCtrl = new AbortController()
+      let lastHeartbeat: { kind: HeartbeatKind; ts: number } | undefined
 
       const composed = AbortSignal.any([externalProxy.signal, totalCtrl.signal, firstByteCtrl.signal, idleCtrl.signal])
 
@@ -588,17 +596,22 @@ export async function withLLMActivity<T>(
         attempt,
         bump: (kind: HeartbeatKind) => {
           if (terminalEmitted) return
+          if (kind === "first-byte" && firstByteSeen) return
           if (!firstByteSeen && HEARTBEAT_FIRST_BYTE.has(kind)) {
             firstByteSeen = true
             clearTimeout(firstByteTimer)
             startIdleMonitor()
-            sink({ type: "heartbeat", id, ts: Date.now(), kind: "first-byte" })
+            const ts = Date.now()
+            lastHeartbeat = { kind: "first-byte", ts }
+            sink({ type: "heartbeat", id, ts, kind: "first-byte" })
             // Fall through and also emit the original kind unless caller
             // explicitly bumped "first-byte" (in which case we already did).
             if (kind === "first-byte") return
           }
           idleHolder.monitor?.observe()
-          sink({ type: "heartbeat", id, ts: Date.now(), kind })
+          const ts = Date.now()
+          lastHeartbeat = { kind, ts }
+          sink({ type: "heartbeat", id, ts, kind })
         },
         pause: (owner: string) => {
           if (terminalEmitted) return
@@ -684,6 +697,7 @@ export async function withLLMActivity<T>(
           cls,
           backoffMs: wait,
           reason: err instanceof Error ? `${err.name}: ${err.message.slice(0, 200)}` : String(err).slice(0, 200),
+          ...(lastHeartbeat ? { lastHeartbeat } : {}),
         }
 
         if (options.beforeRetry) {

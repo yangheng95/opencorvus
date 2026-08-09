@@ -89,6 +89,7 @@ export namespace Question {
 
   type PendingQuestion = {
     info: Request
+    durableContinuation: boolean
     waiters: Array<{
       resolve: (answers: Answer[]) => void
       reject: (e: any) => void
@@ -139,7 +140,14 @@ export namespace Question {
       // We deliberately do NOT call entry.reject — by the time dispose runs, callers
       // have abandoned their await, and rejecting would surface as an unhandled rejection.
       for (const id of Object.keys(s.pending)) {
-        finalizePending(s.pending, id, () => {})
+        const entry = takePending(s.pending, id)
+        if (!entry || entry.durableContinuation) continue
+        await Bus.publish(Event.Abandoned, {
+          sessionID: entry.info.sessionID,
+          requestID: entry.info.id,
+          origin: "infrastructure",
+          timeResolved: Date.now(),
+        })
       }
     },
     "question",
@@ -264,6 +272,7 @@ export namespace Question {
       }
       s.pending[id] = {
         info,
+        durableContinuation: input.requestID !== undefined,
         waiters: [{ resolve, reject }],
         timer: undefined,
       }
@@ -419,6 +428,25 @@ export namespace Question {
       rejectWaiters(existing, error)
       throw error
     }
+  }
+
+  /**
+   * Publish the terminal occurrence for a durable Question whose owning
+   * project Instance was replaced. The former in-memory waiter is already
+   * gone, so bootstrap supplies the exact persisted Session/request identity.
+   */
+  export async function abandonRecovered(input: {
+    sessionID: string
+    requestID: string
+    timeResolved: number
+  }): Promise<void> {
+    log.warn("recovered question abandoned by infrastructure", { requestID: input.requestID })
+    await Bus.publish(Event.Abandoned, {
+      sessionID: input.sessionID,
+      requestID: input.requestID,
+      origin: "infrastructure",
+      timeResolved: input.timeResolved,
+    })
   }
 
   export async function list() {

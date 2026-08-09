@@ -2,7 +2,6 @@ import { tool } from "ai"
 import type { Tool } from "./tool"
 import { currentTaskToolInvocationSurface } from "./task-tool-invocation"
 import { resolveSessionExecutionAuthority } from "@/engine/task-session-lineage"
-import { Instance } from "@/project/instance"
 
 type InitializedTool = Awaited<ReturnType<Tool.Info["init"]>>
 type ToolExecutionResult = Awaited<ReturnType<InitializedTool["execute"]>>
@@ -47,7 +46,6 @@ export async function createAiSdkToolFromInfo(input: ToolInfoAiSdkAdapterInput) 
         const executionAuthority = await resolveSessionExecutionAuthority({
           sessionID: execution.sessionID,
           projectID: execution.projectID,
-          rootDirectory: Instance.directory,
           expected: { kind: "task", taskID: input.taskID },
         })
         const result = await initialized.execute(args as never, {

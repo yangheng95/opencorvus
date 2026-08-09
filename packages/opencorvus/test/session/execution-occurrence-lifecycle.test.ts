@@ -1,6 +1,7 @@
 import { afterEach, expect, test } from "bun:test"
 import { Bus } from "../../src/bus"
-import { Instance } from "../../src/project/instance"
+import { GlobalBus } from "../../src/bus/global"
+import { Instance, runAsInstanceActivity } from "../../src/project/instance"
 import { Session } from "../../src/session"
 import { SessionStatus } from "../../src/session/status"
 import { resetDatabase } from "../fixture/db"
@@ -129,6 +130,115 @@ test("a failed terminal publication releases its occurrence latch for the succes
         expect(SessionStatus.getExecution(session.id, input.id)).toEqual({ type: "terminal", reason: "completed" })
       } finally {
         stopCapture()
+      }
+    },
+  })
+})
+
+test("an unawaited lifecycle publication retains subscriber authority until the exact global envelope settles", async () => {
+  await using project = await tmpdir({ git: true })
+  let unsubscribeStatus = () => {}
+  const globalEvents: Array<{ directory?: string; payload: unknown }> = []
+  const onGlobalEvent = (event: { directory?: string; payload: unknown }) => globalEvents.push(event)
+  GlobalBus.on("event", onGlobalEvent)
+  let sessionID = ""
+  let inputMessageID = ""
+  const subscriberReads: string[] = []
+  try {
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "assistant", title: "tracked lifecycle publication" })
+        const input = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          role: "user",
+          sessionID: session.id,
+          author: "user",
+          time: { created: Date.now() },
+          agent: "assistant",
+          model: { providerID: "test", modelID: "test" },
+        })
+        sessionID = session.id
+        inputMessageID = input.id
+        unsubscribeStatus = Bus.subscribe(SessionStatus.Event.Status, async (event) => {
+          if (event.properties.sessionID !== session.id) return
+          await new Promise((resolve) => setTimeout(resolve, 25))
+          subscriberReads.push((await Session.get(session.id)).id)
+        })
+
+        const owner = new AbortController()
+        SessionStatus.beginExecutionOccurrence(session.id, input.id, owner.signal)
+        void SessionStatus.set(session.id, { type: "idle" }, { inputMessageID: input.id })
+      },
+    })
+
+    expect(subscriberReads).toEqual([sessionID])
+    expect(
+      globalEvents
+        .filter(
+          (event) =>
+            (event.payload as { type?: string }).type === SessionStatus.Event.Status.type &&
+            (event.payload as { properties?: { sessionID?: string } }).properties?.sessionID === sessionID,
+        )
+        .map((event) => ({
+          directory: event.directory,
+          inputMessageID: (event.payload as { properties: { inputMessageID: string } }).properties.inputMessageID,
+          status: (event.payload as { properties: { status: SessionStatus.Info } }).properties.status,
+        })),
+    ).toEqual([{ directory: project.path, inputMessageID, status: { type: "idle" } }])
+  } finally {
+    unsubscribeStatus()
+    GlobalBus.off("event", onGlobalEvent)
+  }
+})
+
+test("a synchronous activity factory error is an owned rejected Promise and the lease remains usable", async () => {
+  await using project = await tmpdir({ git: true })
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const failed = runAsInstanceActivity(() => {
+        throw new Error("activity factory rejected before its first await")
+      })
+      await expect(failed).rejects.toThrow("activity factory rejected before its first await")
+      await expect(
+        runAsInstanceActivity(async () => {
+          await Promise.resolve()
+          return Instance.project.id
+        }),
+      ).resolves.toBe(Instance.project.id)
+    },
+  })
+})
+
+test("a synchronous lifecycle subscriber can re-enter the same publication without a Promise cycle", async () => {
+  await using project = await tmpdir({ git: true })
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "lifecycle re-entry" })
+      const input = await Session.updateMessage({
+        id: Identifier.ascending("message"),
+        role: "user",
+        sessionID: session.id,
+        author: "user",
+        time: { created: Date.now() },
+        agent: "assistant",
+        model: { providerID: "test", modelID: "test" },
+      })
+      const owner = new AbortController()
+      SessionStatus.beginExecutionOccurrence(session.id, input.id, owner.signal)
+      const observed: SessionStatus.Info[] = []
+      const unsubscribe = Bus.subscribe(SessionStatus.Event.Status, (event) => {
+        if (event.properties.sessionID !== session.id) return
+        observed.push(event.properties.status)
+        return SessionStatus.set(session.id, event.properties.status, { inputMessageID: input.id })
+      })
+      try {
+        await SessionStatus.set(session.id, { type: "streaming" }, { inputMessageID: input.id })
+        expect(observed).toEqual([{ type: "streaming" }])
+      } finally {
+        unsubscribe()
       }
     },
   })

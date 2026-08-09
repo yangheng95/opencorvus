@@ -22,6 +22,48 @@ export type ProcessRow = {
   command: string
 }
 
+export type HostMcpRuntimeMetrics = {
+  projects: number
+  connected: number
+  local: number
+  remote: number
+  localStdioTransports: number
+  connecting: number
+  failedAwaitingReconnect: number
+}
+
+const HOST_MCP_METRIC_FIELDS = [
+  "projects",
+  "connected",
+  "local",
+  "remote",
+  "localStdioTransports",
+  "connecting",
+  "failedAwaitingReconnect",
+] as const
+
+export function requireRuntimeProviderSnapshots(providers: Record<string, unknown>): HostMcpRuntimeMetrics {
+  for (const [id, snapshot] of Object.entries(providers)) {
+    if (!snapshot || typeof snapshot !== "object" || Array.isArray(snapshot)) continue
+    const error = (snapshot as { error?: unknown }).error
+    if (typeof error === "string" && error.length > 0) {
+      throw new Error(`Runtime memory provider ${id} failed: ${error}`)
+    }
+  }
+  const raw = providers["host-mcp"]
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    throw new Error("Runtime memory provider host-mcp did not publish an object snapshot")
+  }
+  const snapshot = raw as Record<string, unknown>
+  for (const field of HOST_MCP_METRIC_FIELDS) {
+    const value = snapshot[field]
+    if (!Number.isInteger(value) || (value as number) < 0) {
+      throw new Error(`Runtime memory provider host-mcp field ${field} must be a non-negative integer`)
+    }
+  }
+  return snapshot as HostMcpRuntimeMetrics
+}
+
 export function parseProcessTable(raw: string): ProcessRow[] {
   const rows: ProcessRow[] = []
   for (const line of raw.split(/\r?\n/)) {

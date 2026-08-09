@@ -73,6 +73,10 @@ import {
   type ProjectedAgentWorkScope as ProjectedAgentWorkScopeValue,
 } from "@/agent/projected-agent-work-scope"
 import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
+import {
+  assertProjectedWorkerContinuationCompatible,
+  ProjectedWorkerContinuationIncompatibleError,
+} from "@/agent/projected-worker-identity"
 import { sessionRuntimeWithResolvedModel } from "@/agent/session-agent-runtime"
 import type { RuntimeTemplateID } from "@/agent/runtime-template-id"
 import { textSHA256 } from "@/expert-squad/projection-hash"
@@ -122,7 +126,6 @@ import { Database } from "@/storage/db"
 import { findAgentCoordinationRequest } from "@/engine/agent-coordination"
 import { coordinationHandoffPrompt } from "@/prompt/fragments/coordination-handoff"
 import { requireTask } from "@/engine/store"
-import { resolveSessionExecutionAuthority } from "@/engine/task-session-lineage"
 import {
   DispatchTurnSchema,
   controlTextSHA256,
@@ -192,11 +195,10 @@ export interface RunAgentSessionInput<C> {
   signal?: AbortSignal
   /** Optional progress observer. */
   onStatus?: (summary: string) => void | Promise<void>
-  /** Fires immediately after a fresh child Session is persisted and before
-   *  any projected-worker initialization. Return value is a disposer that runs
+  /** Fires immediately after a fresh child Session and its initial dispatch
+   *  authority bundle commit atomically. Return value is a disposer that runs
    *  after initialization or prompting completes, including failure. Use this
-   *  boundary only to observe the physical Session identity. Logical dispatch
-   *  lineage is committed from onRuntimeReady after descriptor authority exists. */
+   *  boundary only to observe the now-durable physical Session identity. */
   onSessionCreated?: (
     session: Awaited<ReturnType<typeof Session.createNext>>,
   ) => Promise<AgentSessionObserverDisposable | void> | AgentSessionObserverDisposable | void
@@ -932,6 +934,38 @@ async function recordAgentErrorForOrchestrator(input: {
   })
 }
 
+function recordDispatchPreparationError(input: {
+  taskID?: string
+  attemptedSessionID: string
+  agentName: string
+  kind: SessionKind
+  error: unknown
+}) {
+  if (!input.taskID) return
+  try {
+    recordTaskInfrastructureError({
+      taskID: input.taskID,
+      component: "agent-dispatch",
+      operation: "prepare-worker-turn",
+      reason: input.error instanceof Error ? `${input.error.name}: ${input.error.message}` : String(input.error),
+      errorName: input.error instanceof Error ? input.error.name : undefined,
+      context: {
+        attempted_session_id: input.attemptedSessionID,
+        agent: input.agentName,
+        session_kind: input.kind,
+      },
+      now: Date.now(),
+    })
+  } catch (observationError) {
+    log.error("dispatch preparation failure observation persistence failed", {
+      taskID: input.taskID,
+      attemptedSessionID: input.attemptedSessionID,
+      agentID: input.agentName,
+      error: observationError instanceof Error ? observationError.message : String(observationError),
+    })
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Core runner
 // ---------------------------------------------------------------------------
@@ -1145,7 +1179,7 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
   }
   const session = existingSessionID
     ? await Session.get(existingSessionID)
-    : await Session.createNext({
+    : await Session.prepareNext({
         id: input.newSessionID,
         kind,
         parentID: input.parentSessionID,
@@ -1168,9 +1202,6 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
   let committedInputMessageID: string | undefined
   let untransferredMcpOwner: MCP.ScopedConnectionOwner | undefined
   try {
-    if (!existingSessionID && input.onSessionCreated) {
-      registerLifecycle(await input.onSessionCreated(session))
-    }
     if (existingSessionID) {
       if (session.kind !== kind) {
         throw new AgentRunError(kind, `existing session ${session.id} has kind=${session.kind}, expected ${kind}`)
@@ -1183,29 +1214,32 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
         )
       }
       const priorDescriptor = WorkerTurnDescriptor.latestForSession(session.id)
+      if (priorDescriptor) {
+        try {
+          assertProjectedWorkerContinuationCompatible({
+            previous: priorDescriptor.payload.identity,
+            current: capabilityIdentity,
+            subject: `existing session ${session.id}`,
+          })
+        } catch (error) {
+          if (error instanceof ProjectedWorkerContinuationIncompatibleError) {
+            throw new AgentRunError(kind, error.message, { cause: error })
+          }
+          throw error
+        }
+      }
       if (
         priorDescriptor &&
-        (priorDescriptor.payload.identity.agentID !== capabilityIdentity.agentID ||
-          priorDescriptor.payload.identity.baseRole !== capabilityIdentity.baseRole ||
-          priorDescriptor.payload.identity.sessionKind !== capabilityIdentity.sessionKind ||
-          priorDescriptor.payload.identity.dispatchAdapterID !== capabilityIdentity.dispatchAdapterID ||
-          priorDescriptor.payload.identity.runtimeTemplateABIVersion !== capabilityIdentity.runtimeTemplateABIVersion ||
-          priorDescriptor.payload.identity.dispatchAdapterABIVersion !== capabilityIdentity.dispatchAdapterABIVersion ||
-          priorDescriptor.payload.identity.projectionHash !== capabilityIdentity.projectionHash ||
-          priorDescriptor.payload.model.selection !== "explicit" ||
-          priorDescriptor.payload.model.providerID !== resolvedModelRef.providerID ||
-          priorDescriptor.payload.model.modelID !== resolvedModelRef.modelID ||
-          priorDescriptor.payload.prompt.systemSha256 !== systemPromptHash ||
-          priorDescriptor.payload.expertSquadID !== workerCapability.expertSquadID ||
+        (priorDescriptor.payload.expertSquadID !== workerCapability.expertSquadID ||
           !sameExpertSquadPackageRevision(priorDescriptor.payload.packageRevision, workerCapability.packageRevision) ||
           priorDescriptor.payload.lifecycle.taskID !== input.taskID ||
           !ProjectedAgentWorkScope.equals(priorDescriptor.payload.lifecycle.workScope, workScope))
       ) {
         throw new AgentRunError(
           kind,
-          `existing session ${session.id} projected worker identity is stale: ` +
-            `expected ${workerCapability.expertSquadID}/${capabilityIdentity.agentID}/${capabilityIdentity.projectionHash}, ` +
-            `found ${priorDescriptor.payload.expertSquadID}/${priorDescriptor.payload.identity.agentID}/${priorDescriptor.payload.identity.projectionHash}`,
+          `existing session ${session.id} continuation authority is stale: ` +
+            `expected ${workerCapability.expertSquadID}/${capabilityIdentity.agentID}/${input.taskID}, ` +
+            `found ${priorDescriptor.payload.expertSquadID}/${priorDescriptor.payload.identity.agentID}/${priorDescriptor.payload.lifecycle.taskID}`,
         )
       }
       if (dispatchTurn?.kind !== "continuation") {
@@ -1332,20 +1366,6 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
         const reason = props.error?.data?.message ?? props.error?.message ?? "unknown error"
         streamErrors.push({ reason, name: props.error?.name })
       })
-      if (input.signal) {
-        input.signal.addEventListener("abort", abortPrompt, { once: true })
-        abortListenerInstalled = true
-        if (input.signal.aborted) {
-          abortPrompt()
-          throw new ExecutionCancellationError({
-            source: "session_prompt",
-            message: "aborted before runtime installation",
-            sessionID: session.id,
-            origin: parentSignalOrigin(),
-          })
-        }
-      }
-
       log.info(`${agentID} agent starting`, {
         kind,
         sessionID: session.id,
@@ -1399,15 +1419,12 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
       }
       try {
         authorityBundle = await (async () => {
-          const materializationExecutionAuthority = await resolveSessionExecutionAuthority({
-            sessionID: session.id,
-            projectID: Instance.project.id,
-            rootDirectory: Instance.directory,
-            expected: { kind: "task", taskID: input.taskID },
-          })
           const materialized = await materializeUserMessage(promptArgs, {
             prepared: materializationPrepared,
-            executionAuthority: materializationExecutionAuthority,
+            executionAuthorityResolution: {
+              expected: { kind: "task", taskID: input.taskID },
+              ...(!existingSessionID ? { pendingSession: session } : {}),
+            },
           })
           const expectedVariant = modelPreflight.variant
           if (
@@ -1462,6 +1479,10 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
           let continuationPrepared!: ReturnType<typeof rebindPreparedUserMessageInput>
           let continuationPromptArgs!: Parameters<typeof SessionPrompt.prompt>[0]
           Database.transaction(() => {
+            if (input.signal?.aborted) {
+              throw new AgentRunError(kind, "aborted before initial dispatch authority commit")
+            }
+            if (!existingSessionID) Session.persistPreparedNext(session)
             const priorLifecycleEventID = ProtocolStore.latestSessionEvent(
               session.id,
               SessionStatus.Event.Status.type,
@@ -1519,6 +1540,9 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
                 })
               },
             })
+            if (input.signal?.aborted) {
+              throw new AgentRunError(kind, "aborted during initial dispatch authority commit")
+            }
           })
           return { descriptor, persistedUserMessageCompletion, continuationPrepared, continuationPromptArgs }
         })()
@@ -1526,10 +1550,9 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
         messageWriteClaim[Symbol.dispose]()
         throw error
       }
-      messageWriteClaim[Symbol.dispose]()
       const { descriptor, persistedUserMessageCompletion, continuationPrepared, continuationPromptArgs } = authorityBundle
       committedInputMessageID = descriptor.payload.messageAuthority.user_message_id
-      const persistedUserMessage = await persistedUserMessageCompletion.complete()
+      messageWriteClaim[Symbol.dispose]()
       using promptRuntimeClaim = installAndClaimPreparedUserMessageRuntime(continuationPrepared, {
         identity: {
           identityKind: "projected-worker",
@@ -1563,6 +1586,23 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
         resources: { mcp: mcpOwner },
       })
       untransferredMcpOwner = undefined
+      if (input.signal) {
+        input.signal.addEventListener("abort", abortPrompt, { once: true })
+        abortListenerInstalled = true
+        if (input.signal.aborted) {
+          abortPrompt()
+          throw new ExecutionCancellationError({
+            source: "session_prompt",
+            message: "aborted after initial dispatch authority commit",
+            sessionID: session.id,
+            origin: parentSignalOrigin(),
+          })
+        }
+      }
+      if (!existingSessionID && input.onSessionCreated) {
+        registerLifecycle(await input.onSessionCreated(session))
+      }
+      const persistedUserMessage = await persistedUserMessageCompletion.complete()
       if (input.signal?.aborted) {
         throw new AgentRunError(kind, "aborted before runtime-ready notification")
       }
@@ -1612,6 +1652,16 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
     await untransferredMcpOwner?.close()
     disposeLifecycle()
     if (err instanceof WorkerTurnSettlementError) throw err
+    if (!committedInputMessageID) {
+      recordDispatchPreparationError({
+        taskID: input.taskID,
+        attemptedSessionID: session.id,
+        agentName: agentID,
+        kind,
+        error: err,
+      })
+      throw err
+    }
     return await failProjectedWorkerTurn({
       run: input,
       session,

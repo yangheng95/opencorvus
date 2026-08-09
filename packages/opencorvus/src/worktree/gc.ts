@@ -56,7 +56,13 @@ export namespace WorktreeGC {
     directory: string
     reason: "old-clean" | "old-zombie" | "registry-prunable" | "sandbox-missing"
   }
-  export type Plan = { candidates: Candidate[] }
+  export type Preservation = {
+    projectID: string
+    primaryDir: string
+    reason: "registry-unavailable"
+    detail: string
+  }
+  export type Plan = { candidates: Candidate[]; preservations: Preservation[] }
   export type ApplyResult = { removed: number; failed: number }
 
   export function init() {
@@ -187,6 +193,7 @@ export namespace WorktreeGC {
     )
 
     const candidates: Candidate[] = []
+    const preservations: Preservation[] = []
 
     for (const project of projects) {
       const primaryDir = project.worktree
@@ -199,14 +206,24 @@ export namespace WorktreeGC {
 
       const registeredByDirectory = new Map<string, Worktree.RegisteredWorktreeEntry>()
       const sandboxKeys = new Set<string>()
-      const registered = await Worktree.listRegisteredWorktrees(primaryDir).catch((error) => {
-        log.warn("failed to read git worktree registry; preserving registry-only candidates", {
+      let registered: Worktree.RegisteredWorktreeEntry[]
+      try {
+        registered = await Worktree.listRegisteredWorktrees(primaryDir)
+      } catch (error) {
+        const detail = error instanceof Error ? error.message : String(error)
+        preservations.push({
           projectID: project.id,
           primaryDir,
-          error: error instanceof Error ? error.message : String(error),
+          reason: "registry-unavailable",
+          detail,
         })
-        return [] as Worktree.RegisteredWorktreeEntry[]
-      })
+        log.warn("failed to read git worktree registry; preserving the entire project", {
+          projectID: project.id,
+          primaryDir,
+          error: detail,
+        })
+        continue
+      }
       for (const entry of registered) {
         if (!(await Worktree.isManagedWorktreeDirectory(primaryDir, entry.path))) continue
         const key = await realCanon(entry.path)
@@ -279,7 +296,7 @@ export namespace WorktreeGC {
       }
     }
 
-    return { candidates }
+    return { candidates, preservations }
   }
 
   export async function apply(plan: Plan): Promise<ApplyResult> {

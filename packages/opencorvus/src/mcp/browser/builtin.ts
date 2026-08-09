@@ -61,12 +61,15 @@ export namespace BrowserMCPBuiltin {
     return JSON.stringify(config.command) === JSON.stringify(command())
   }
 
-  export async function resolveStdioProcess() {
+  export async function resolveStdioProcess(input: { env?: NodeJS.ProcessEnv } = {}) {
     const runtime = await BrowserMCPNodeLauncher.resolveRuntime({ transport: "stdio" })
     return Object.freeze({
       executable: runtime.node,
       args: [runtime.bundle, "stdio"],
-      env: await BrowserMCPNodeLauncher.childEnvironment({ packaged: runtime.packaged }),
+      env: await BrowserMCPNodeLauncher.childEnvironment({
+        packaged: runtime.packaged,
+        env: input.env,
+      }),
     })
   }
 }

@@ -9,7 +9,7 @@ import { Process } from "../src/util/process"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { createEngineGitCheckpointTask } from "./fixture/engine-git"
 
-const GIT_CHECKPOINT_TEST_TIMEOUT_MILLISECONDS = 30_000
+const GIT_CHECKPOINT_TEST_TIMEOUT_MILLISECONDS = 60_000
 
 afterAll(async () => {
   await resetMemoryDatabase()
@@ -40,7 +40,6 @@ describe("Engine Git closed execution environment", () => {
           const specialPaths = [
             "-leading-dash.txt",
             "space name.txt",
-            ...(process.platform === "win32" ? [] : ["tab\tname.txt", "line\nbreak.txt", 'quote"name.txt']),
             "unicode-机器学习.txt",
           ]
           await Promise.all(

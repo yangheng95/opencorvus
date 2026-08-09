@@ -1,0 +1,17 @@
+{
+  "status": 202,
+  "statusText": "Accepted",
+  "headers": {
+    "access-control-expose-headers": "Content-Disposition,Content-Range,ETag",
+    "content-length": "236",
+    "content-type": "application/json",
+    "date": "Sun, 09 Aug 2026 02:23:36 GMT",
+    "vary": "Origin",
+    "x-opencorvus-request-id": "b5090e82-8d39-4dbd-8c16-17309328dee5"
+  },
+  "body": {
+    "task_id": "tsk_g019fe4553003000000000000hJoJ6IqJUBRerP",
+    "project_id": "7141ec3dc150edd7e201bc937f844a0ed09ac06b",
+    "directory": "C:\\Users\\chuan\\AppData\\Local\\Temp\\opencorvus-backend-algorithm-loop\\2026-08-09T02-23-30-230Z\\case-02"
+  }
+}

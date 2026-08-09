@@ -12,6 +12,7 @@ export interface TaskWakeRuntime {
     taskID: string
     event?: OrchestratorEvent
   }): Promise<TaskWakeDispatchResult>
+  dispatchPersistedTaskLoop(taskID: string): Promise<TaskWakeDispatchResult>
 }
 
 let installedRuntime: TaskWakeRuntime | undefined

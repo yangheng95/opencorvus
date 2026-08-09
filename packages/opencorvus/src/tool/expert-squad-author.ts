@@ -26,7 +26,9 @@ const AuthoringProjectionResourceDefaults = {
   default_skill_refs: ExpertSquadProjectionResourcesSchema.shape.default_skill_refs.default([]),
   package_skill_refs: ExpertSquadProjectionResourcesSchema.shape.package_skill_refs.default([]),
   default_tool_refs: ExpertSquadProjectionResourcesSchema.shape.default_tool_refs.default([]),
-  package_tool_refs: ExpertSquadProjectionResourcesSchema.shape.package_tool_refs.default([]),
+  package_tool_refs: ExpertSquadProjectionResourcesSchema.shape.package_tool_refs.default([]).describe(
+    "Exact package tool refs projected to this owner. A shared ref <squad-id>/shared/<tool-id> requires extra_files[\"tools/<tool-id>.ts\"]; an Agent-owned ref <squad-id>/<agent-id>/<tool-id> requires extra_files[\"agents/<agent-id>/tools/<tool-id>.ts\"]. There is no top-level tools input field.",
+  ),
   default_mcp_server_refs: ExpertSquadProjectionResourcesSchema.shape.default_mcp_server_refs.default([]),
   package_mcp_server_refs: ExpertSquadProjectionResourcesSchema.shape.package_mcp_server_refs.default([]),
   default_mcp_tool_refs: ExpertSquadProjectionResourcesSchema.shape.default_mcp_tool_refs.default([]),
@@ -128,7 +130,9 @@ export const ExpertSquadAuthorParameters = z
     extra_files: z
       .record(z.string(), z.string())
       .default({})
-      .describe("Only additional package files required by declared package resources; omit when unused."),
+      .describe(
+        "Additional package files required by declared resources. Package tool entrypoints are tools/<tool-id>.ts for shared refs or agents/<agent-id>/tools/<tool-id>.ts for Agent-owned refs; supporting code belongs under lib/ or agents/<agent-id>/lib/. Omit when unused. There is no top-level tools input field.",
+      ),
   })
   .strict()
   .superRefine((value, context) => {
@@ -230,6 +234,7 @@ export async function authorProjectExpertSquad(
 const DESCRIPTION = [
   "Author, validate, and explicitly import one OpenCorvus Expert Squad through the canonical SDK writer.",
   "Submit the compact authoring blueprint directly. Prompts and README/selector content are inline; the Host deterministically owns canonical manifest paths and package file projection. Empty resource arrays, empty depends_on arrays, and extra_files may be omitted.",
+  'Package tools use no top-level tools field. Put each shared entrypoint in extra_files["tools/<tool-id>.ts"] and project <squad-id>/shared/<tool-id> through package_tool_refs; Agent-owned entries use extra_files["agents/<agent-id>/tools/<tool-id>.ts"] and <squad-id>/<agent-id>/<tool-id>. Supporting code lives under lib/ or the matching Agent lib/.',
   "The Host writes a temporary source package with @opencorvus-ai/sdk/expert-squad-authoring, validates it through the Registry, records exact Task and Session generation provenance, imports it into the current project's canonical .opencorvus/expert-squads root through the Manager, removes the temporary source, and returns exact installed identity, scope, agents, read-only workflow topology analysis, file count, canonical package digest, generation trace, and target.",
   "The Host writes a temporary source package with @opencorvus-ai/sdk/expert-squad-authoring, validates it through the Registry, records exact Task and Session generation provenance, imports it into the current project's canonical .opencorvus/expert-squads root through the Manager, removes the temporary source, and returns exact installed identity, scope, agents, read-only workflow topology analysis, file count, canonical package digest, mutation operation, generation trace, and target.",
   "A new project-owned ID installs directly. Replacing an existing exact ID requires expected_current_package_digest; a stale digest returns an explicit compare-and-swap conflict.",

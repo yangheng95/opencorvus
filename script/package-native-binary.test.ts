@@ -1,6 +1,17 @@
 import { expect, test } from "bun:test"
 import path from "node:path"
-import { nativeBinaryArchiveListingCommand, nativeBinaryBuildCommands } from "./package-native-binary"
+import {
+  nativeBinaryArchiveListingCommand,
+  nativeBinaryBuildCommands,
+  nativeBinaryBuildEnv,
+} from "./package-native-binary"
+
+test("native binary build environment retains the selected release identity", () => {
+  expect(nativeBinaryBuildEnv({ OPENCORVUS_CHANNEL: "latest" }, "0.0.37-beta")).toMatchObject({
+    OPENCORVUS_CHANNEL: "latest",
+    OPENCORVUS_VERSION: "0.0.37-beta",
+  })
+})
 
 test("native binary build prepares the SDK before its overlay and CLI consumers", () => {
   const repoRoot = path.resolve("clean-native-binary-source")
