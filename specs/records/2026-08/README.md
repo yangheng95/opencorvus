@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-09-architecture-debt-remediation-plan.md](2026-08-09-architecture-debt-remediation-plan.md) defines the evidence-backed repository architecture debt remediation sequence, source-of-truth convergence rules, security-first priority register, verification gates, and independent review requirement.
+
 - [2026-08-09-backend-algorithm-test-loop.md](2026-08-09-backend-algorithm-test-loop.md) records the paused two-case real-backend algorithm test/debug loop, its Recall, reproducible evidence, independent root-cause analyses, partial fixes, validation state, and remaining stop-condition gaps.
 
 - [2026-08-09-backend-algorithm-e2e-loop.md](2026-08-09-backend-algorithm-e2e-loop.md) defines the two-case, resource-capped, real-backend algorithm debug loop, its current random-loopback/`openai/gpt-5.6-luna` acceptance baseline, independent pre-fix audits, root-cause regression rules, live evidence ledger, and strict stop condition.

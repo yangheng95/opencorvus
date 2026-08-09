@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest architecture debt remediation plan: [`2026-08-09-architecture-debt-remediation-plan.md`](records/2026-08/2026-08-09-architecture-debt-remediation-plan.md).
+
 Paused backend algorithm test/debug loop evidence: [`2026-08-09-backend-algorithm-test-loop.md`](records/2026-08/2026-08-09-backend-algorithm-test-loop.md).
 
 Latest backend algorithm real-path debug loop: [`2026-08-09-backend-algorithm-e2e-loop.md`](records/2026-08/2026-08-09-backend-algorithm-e2e-loop.md).
