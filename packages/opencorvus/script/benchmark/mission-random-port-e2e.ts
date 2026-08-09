@@ -5,11 +5,20 @@ import os from "node:os"
 import path from "node:path"
 import { spawnSync } from "node:child_process"
 
-type CaseID = "m01" | "m02" | "m03" | "m04" | "m05" | "m06" | "m07"
+type CaseID = "m01" | "m02" | "m03" | "m04" | "m05" | "m06" | "m07" | "m08"
 
 function selectedCaseID(): CaseID {
   const raw = process.env.MISSION_RANDOM_PORT_E2E_CASE ?? "m01"
-  if (raw === "m01" || raw === "m02" || raw === "m03" || raw === "m04" || raw === "m05" || raw === "m06" || raw === "m07") {
+  if (
+    raw === "m01" ||
+    raw === "m02" ||
+    raw === "m03" ||
+    raw === "m04" ||
+    raw === "m05" ||
+    raw === "m06" ||
+    raw === "m07" ||
+    raw === "m08"
+  ) {
     return raw
   }
   throw new Error(`unsupported MISSION_RANDOM_PORT_E2E_CASE ${JSON.stringify(raw)}`)
@@ -131,7 +140,15 @@ const allowedM03HarnessMetadata = new Set([".gitignore", ".opencorvus/opencorvus
 
 function mockProviderEnabled() {
   const enabled = process.env.MISSION_RANDOM_PORT_E2E_MOCK_PROVIDER === "1"
-  if (enabled && (caseID === "m03" || caseID === "m04" || caseID === "m05" || caseID === "m06" || caseID === "m07")) {
+  if (
+    enabled &&
+    (caseID === "m03" ||
+      caseID === "m04" ||
+      caseID === "m05" ||
+      caseID === "m06" ||
+      caseID === "m07" ||
+      caseID === "m08")
+  ) {
     throw new Error(`MISSION_RANDOM_PORT_E2E_MOCK_PROVIDER is not supported for the ${caseID.toUpperCase()} live DeepSeek Mission E2E benchmark`)
   }
   return enabled
@@ -839,13 +856,15 @@ type ToolEvidencePart = {
   input: unknown
   output: unknown
   failure: unknown
+  messageIndex: number
+  partIndex: number
 }
 
 function toolParts(messages: unknown): ToolEvidencePart[] {
   const parts: ToolEvidencePart[] = []
-  for (const message of responseArray(messages)) {
+  for (const [messageIndex, message] of responseArray(messages).entries()) {
     if (!message || typeof message !== "object" || Array.isArray(message)) continue
-    for (const part of responseArray((message as JsonRecord).parts)) {
+    for (const [partIndex, part] of responseArray((message as JsonRecord).parts).entries()) {
       if (!part || typeof part !== "object" || Array.isArray(part)) continue
       const record = part as JsonRecord
       const state = record.state
@@ -858,6 +877,8 @@ function toolParts(messages: unknown): ToolEvidencePart[] {
         input: toolState.input,
         output: toolState.output,
         failure: toolState.failure,
+        messageIndex,
+        partIndex,
       })
     }
   }
@@ -951,6 +972,21 @@ function locatorMatches(left: unknown, right: unknown): boolean {
   return !!leftKey && leftKey === locatorKey(right)
 }
 
+function partPrecedes(left: ToolEvidencePart, right: ToolEvidencePart): boolean {
+  if (left.messageIndex !== right.messageIndex) return left.messageIndex < right.messageIndex
+  return left.partIndex < right.partIndex
+}
+
+function lastUserMessageIndexBefore(messages: unknown, messageIndex: number): number {
+  let last = -1
+  for (const [index, message] of responseArray(messages).entries()) {
+    if (index >= messageIndex) break
+    if (!message || typeof message !== "object" || Array.isArray(message)) continue
+    if (inputRecord((message as JsonRecord).info).role === "user") last = index
+  }
+  return last
+}
+
 function inputMentionsTask(input: unknown, taskID: string): boolean {
   let found = false
   visitJSON(input, (value) => {
@@ -978,10 +1014,9 @@ function m04EvidenceAuthority(messages: unknown, taskID: string): {
     return part.tool === "panel" && input.action === "query_task" && inputMentionsTask(input, taskID)
   })
   const completionDecisionLocators: JsonRecord[] = []
-  const queryArtifacts = completed.some((part) => {
+  for (const part of completed) {
     const input = inputRecord(part.input)
-    if (part.tool !== "panel" || input.action !== "query_task_artifacts" || input.taskID !== taskID) return false
-    let found = false
+    if (part.tool !== "panel" || input.action !== "query_task_artifacts" || input.taskID !== taskID) continue
     visitJSON(parsedToolOutput(part), (value) => {
       if (!value || typeof value !== "object" || Array.isArray(value)) return
       const record = value as JsonRecord
@@ -989,10 +1024,9 @@ function m04EvidenceAuthority(messages: unknown, taskID: string): {
       const locator = inputRecord(record.locator)
       if (!structurallyValidEvidenceLocator(locator)) return
       completionDecisionLocators.push(locator)
-      found = true
     })
-    return found
-  })
+  }
+  const queryArtifacts = completionDecisionLocators.length > 0
   let readLocator: JsonRecord | undefined
   const readCompletionDecision = completed.some((part) => {
     const input = inputRecord(part.input)
@@ -1240,6 +1274,159 @@ function m07ArtifactImportEvidence(messages: unknown, createdTaskIDs: string[]):
   }
 }
 
+function m08ResumeTaskEvidence(messages: unknown, createdTaskIDs: string[]): {
+  taskID?: string
+  queryTask: boolean
+  queryArtifacts: boolean
+  resumeTask: boolean
+  resumeInputHasLocator: boolean
+  resumedMarkerRead: boolean
+  completionDecisionRead: boolean
+  completeMissionWithReadLocator: boolean
+  finalCompletionAcceptsSingleTask: boolean
+} {
+  const [taskID] = createdTaskIDs
+  if (!taskID) {
+    return {
+      queryTask: false,
+      queryArtifacts: false,
+      resumeTask: false,
+      resumeInputHasLocator: false,
+      resumedMarkerRead: false,
+      completionDecisionRead: false,
+      completeMissionWithReadLocator: false,
+      finalCompletionAcceptsSingleTask: false,
+    }
+  }
+  const completed = completedToolParts(messages)
+  const completionDecisionLocators: JsonRecord[] = []
+  const queryTask = completed.some((part) => {
+    const input = inputRecord(part.input)
+    return part.tool === "panel" && input.action === "query_task" && inputMentionsTask(input, taskID)
+  })
+  for (const part of completed) {
+    const input = inputRecord(part.input)
+    if (part.tool !== "panel" || input.action !== "query_task_artifacts" || input.taskID !== taskID) continue
+    visitJSON(parsedToolOutput(part), (value) => {
+      if (!value || typeof value !== "object" || Array.isArray(value)) return
+      const record = value as JsonRecord
+      if (record.kind !== "task_completion_decision") return
+      const locator = inputRecord(record.locator)
+      if (!structurallyValidEvidenceLocator(locator)) return
+      completionDecisionLocators.push(locator)
+    })
+  }
+  const queryArtifacts = completionDecisionLocators.length > 0
+  const resumeParts = completed.filter((part) => {
+    const input = inputRecord(part.input)
+    return part.tool === "panel" && input.action === "resume_task" && input.taskID === taskID
+  })
+  const successfulResumeParts = resumeParts.filter((part) => parsedToolOutput(part).kind === "resumed")
+  const resumeTask = successfulResumeParts.length > 0
+  const completeReadParts = completed.filter((part) => {
+    const input = inputRecord(part.input)
+    if (part.tool !== "panel" || input.action !== "read_task_artifact" || input.taskID !== taskID) return false
+    const chunk = parsedToolOutput(part)
+    return chunk.complete === true && chunk.next_offset === null && typeof chunk.text === "string"
+  })
+  const resumeInputHasLocator = successfulResumeParts.some((resumePart) => {
+    const turnStart = lastUserMessageIndexBefore(messages, resumePart.messageIndex)
+    const readBeforeResumeLocators = completeReadParts
+      .filter((readPart) => readPart.messageIndex > turnStart && partPrecedes(readPart, resumePart))
+      .map((readPart) => inputRecord(inputRecord(readPart.input).locator))
+      .filter(structurallyValidEvidenceLocator)
+    return responseArray(inputRecord(resumePart.input).evidence_locators).some((locator) =>
+      readBeforeResumeLocators.some((readLocator) => locatorMatches(readLocator, locator)),
+    )
+  })
+  let sawResume = false
+  let resumedMarkerRead = false
+  let completionDecisionReadLocator: JsonRecord | undefined
+  const readAfterResumeLocators: JsonRecord[] = []
+  for (const part of completed) {
+    const input = inputRecord(part.input)
+    if (part.tool === "panel" && input.action === "resume_task" && input.taskID === taskID && parsedToolOutput(part).kind === "resumed") {
+      sawResume = true
+      continue
+    }
+    if (!sawResume || part.tool !== "panel" || input.action !== "read_task_artifact" || input.taskID !== taskID) continue
+    const locator = inputRecord(input.locator)
+    const chunk = parsedToolOutput(part)
+    if (chunk.complete !== true || chunk.next_offset !== null || typeof chunk.text !== "string") continue
+    if (structurallyValidEvidenceLocator(locator)) readAfterResumeLocators.push(locator)
+    if (chunk.text.includes("M08-RESUME-ADDED")) {
+      resumedMarkerRead = true
+    }
+    if (completionDecisionLocators.some((candidate) => locatorMatches(candidate, locator))) {
+      completionDecisionReadLocator = locator
+    }
+  }
+  const completionDecisionRead = !!completionDecisionReadLocator
+  const completeMissionWithReadLocator =
+    completed.some((part) => {
+      const input = inputRecord(part.input)
+      if (part.tool !== "panel" || input.action !== "complete_mission" || parsedToolOutput(part).kind !== "mission_completed") {
+        return false
+      }
+      const turnStart = lastUserMessageIndexBefore(messages, part.messageIndex)
+      const finalTurnReadLocators = completeReadParts
+        .filter((readPart) => readPart.messageIndex > turnStart && partPrecedes(readPart, part))
+        .map((readPart) => inputRecord(inputRecord(readPart.input).locator))
+        .filter(structurallyValidEvidenceLocator)
+      const finalTurnCompletionDecisionLocators: JsonRecord[] = []
+      for (const queryPart of completed) {
+        const queryInput = inputRecord(queryPart.input)
+        if (
+          queryPart.tool !== "panel" ||
+          queryInput.action !== "query_task_artifacts" ||
+          queryInput.taskID !== taskID ||
+          queryPart.messageIndex <= turnStart ||
+          !partPrecedes(queryPart, part)
+        ) {
+          continue
+        }
+        visitJSON(parsedToolOutput(queryPart), (value) => {
+          if (!value || typeof value !== "object" || Array.isArray(value)) return
+          const record = value as JsonRecord
+          if (record.kind !== "task_completion_decision") return
+          const locator = inputRecord(record.locator)
+          if (structurallyValidEvidenceLocator(locator)) finalTurnCompletionDecisionLocators.push(locator)
+        })
+      }
+      return responseArray(input.task_acceptances).some((acceptance) => {
+        const record = inputRecord(acceptance)
+        const acceptedLocators = responseArray(record.evidence_locators)
+        return (
+          record.task_id === taskID &&
+          acceptedLocators.length > 0 &&
+          acceptedLocators.some((locator) =>
+            finalTurnCompletionDecisionLocators.some((completionLocator) => locatorMatches(locator, completionLocator)),
+          ) &&
+          acceptedLocators.every((locator) => finalTurnReadLocators.some((readLocator) => locatorMatches(readLocator, locator)))
+        )
+      })
+    })
+  const finalCompletionAcceptsSingleTask = completed.some((part) => {
+    const input = inputRecord(part.input)
+    if (part.tool !== "panel" || input.action !== "complete_mission" || parsedToolOutput(part).kind !== "mission_completed") {
+      return false
+    }
+    const accepted = responseArray(input.task_acceptances).map((item) => inputRecord(item).task_id)
+    return accepted.length === 1 && accepted[0] === taskID
+  })
+  return {
+    taskID,
+    queryTask,
+    queryArtifacts,
+    resumeTask,
+    resumeInputHasLocator,
+    resumedMarkerRead,
+    completionDecisionRead,
+    completeMissionWithReadLocator,
+    finalCompletionAcceptsSingleTask,
+  }
+}
+
 function collectToolEvidence(messages: unknown): {
   missionSkill: boolean
   publish: boolean
@@ -1362,7 +1549,7 @@ function evaluate() {
   const failures: string[] = []
   if (!evidence.baseURL) failures.push("backend URL missing")
   const preflight = inputRecord(evidence.providerPreflight)
-  if (caseID === "m03" || caseID === "m06" || caseID === "m07" || !evidence.mockProviderURL) {
+  if (caseID === "m03" || caseID === "m06" || caseID === "m07" || caseID === "m08" || !evidence.mockProviderURL) {
     if (evidence.modelRef !== liveModelRef) failures.push(`modelRef is not ${liveModelRef}`)
     if (evidence.mockProviderURL) failures.push("mock provider URL present in live DeepSeek evidence")
     if (preflight.ok !== true) failures.push("DeepSeek provider preflight did not report ok true")
@@ -1379,13 +1566,15 @@ function evaluate() {
   }
   if (evidence.firstWake?.created !== true) failures.push("first wake did not create mission")
   if (evidence.secondWake?.created !== false) failures.push("second wake did not resume mission")
-  if (caseID === "m07" && evidence.thirdWake?.created !== false) failures.push("third wake did not resume mission")
+  if ((caseID === "m07" || caseID === "m08") && evidence.thirdWake?.created !== false) {
+    failures.push("third wake did not resume mission")
+  }
   if (evidence.firstWake?.missionID !== evidence.secondWake?.missionID) failures.push("resume missionID mismatch")
   if (evidence.firstWake?.sessionID !== evidence.secondWake?.sessionID) failures.push("resume sessionID mismatch")
-  if (caseID === "m07" && evidence.thirdWake?.missionID !== evidence.firstWake?.missionID) {
+  if ((caseID === "m07" || caseID === "m08") && evidence.thirdWake?.missionID !== evidence.firstWake?.missionID) {
     failures.push("third wake missionID mismatch")
   }
-  if (caseID === "m07" && evidence.thirdWake?.sessionID !== evidence.firstWake?.sessionID) {
+  if ((caseID === "m07" || caseID === "m08") && evidence.thirdWake?.sessionID !== evidence.firstWake?.sessionID) {
     failures.push("third wake sessionID mismatch")
   }
   const tools = collectToolEvidence(evidence.messages)
@@ -1521,6 +1710,26 @@ function evaluate() {
     }
     if (!tools.publish) failures.push("M07 did not produce completed publish_interactive_artifact evidence")
   }
+  if (caseID === "m08") {
+    if (tools.createdTaskIDs.length !== 1) {
+      failures.push(`M08 expected exactly one created child Task, saw ${tools.createdTaskIDs.length}`)
+    }
+    const taskID = tools.createdTaskIDs[0]
+    const statusTaskIDs = statusTasks(evidence.status).map((task) => inputRecord(task).taskID)
+    if (!taskID || statusTaskIDs.length !== 1 || statusTaskIDs[0] !== taskID) {
+      failures.push(`M08 current child Task set mismatch: ${statusTaskIDs.join(", ") || "<none>"}`)
+    }
+    const resume = m08ResumeTaskEvidence(evidence.messages, tools.createdTaskIDs)
+    if (!resume.queryTask) failures.push("M08 did not query the child Task")
+    if (!resume.queryArtifacts) failures.push("M08 did not enumerate child Task artifacts")
+    if (!resume.resumeTask) failures.push("M08 did not resume the same child Task")
+    if (!resume.resumeInputHasLocator) failures.push("M08 resume_task input did not cite the exact same-turn read evidence locator")
+    if (!resume.resumedMarkerRead) failures.push("M08 did not completely read resumed artifact evidence containing M08-RESUME-ADDED")
+    if (!resume.completionDecisionRead) failures.push("M08 did not read the child completion decision")
+    if (!resume.completeMissionWithReadLocator) failures.push("M08 complete_mission did not cite only final-turn read locators")
+    if (!resume.finalCompletionAcceptsSingleTask) failures.push("M08 did not complete Mission with exactly the resumed child Task accepted")
+    if (!tools.publish) failures.push("M08 did not produce completed publish_interactive_artifact evidence")
+  }
   if (artifacts.length === 0 && !tools.publish && (evidence.projectArchive?.bytes ?? 0) === 0) {
     failures.push("no publish/artifact/project-archive evidence found")
   }
@@ -1550,6 +1759,7 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
     const noChild = caseID === "m05" ? m05NoChildEvidence(evidence.messages) : undefined
     const skillState = caseID === "m06" ? m06SkillStateEvidence(evidence.messages) : undefined
     const importState = caseID === "m07" ? m07ArtifactImportEvidence(evidence.messages, tools.createdTaskIDs) : undefined
+    const resumeState = caseID === "m08" ? m08ResumeTaskEvidence(evidence.messages, tools.createdTaskIDs) : undefined
     const hasTask =
       isNoChildCase(caseID)
         ? statusTasks(evidence.status).length === 0 && tools.createdTaskIDs.length === 0
@@ -1557,6 +1767,10 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
           ? tools.createdTaskIDs.length === 2 &&
             statusTasks(evidence.status).length === 2 &&
             tools.createdTaskIDs.every((taskID) => statusHasTask(evidence.status, taskID))
+          : caseID === "m08"
+            ? tools.createdTaskIDs.length === 1 &&
+              statusTasks(evidence.status).length === 1 &&
+              statusHasTask(evidence.status, tools.createdTaskIDs[0])
           : !!tools.createdTaskID && statusHasTask(evidence.status, tools.createdTaskID)
     const taskIDs = statusTasks(evidence.status)
       .map((task) => inputRecord(task).taskID)
@@ -1564,11 +1778,23 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
     if (tools.createdTaskID && !taskIDs.includes(tools.createdTaskID)) taskIDs.push(tools.createdTaskID)
     await resolveM03OptionalTestingInteractions(baseURL, taskIDs)
     const hasArtifact =
-      caseID === "m02" || caseID === "m03" || caseID === "m04" || caseID === "m05" || caseID === "m06" || caseID === "m07"
+      caseID === "m02" ||
+      caseID === "m03" ||
+      caseID === "m04" ||
+      caseID === "m05" ||
+      caseID === "m06" ||
+      caseID === "m07" ||
+      caseID === "m08"
         ? tools.publish
         : responseArray(evidence.turnArtifacts).length > 0 || tools.publish
     const hasResumeSettlement =
-      caseID === "m02" || caseID === "m03" || caseID === "m04" || caseID === "m05" || caseID === "m06" || caseID === "m07"
+      caseID === "m02" ||
+      caseID === "m03" ||
+      caseID === "m04" ||
+      caseID === "m05" ||
+      caseID === "m06" ||
+      caseID === "m07" ||
+      caseID === "m08"
         ? tools.publish && tools.completeMission
         : tools.resumeHandoff || tools.publish
     const hasCaseEvidence =
@@ -1600,6 +1826,15 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
                 authority.completeMissionWithReadLocator
               )
             })
+        : caseID === "m08"
+          ? !!resumeState?.queryTask &&
+            !!resumeState.queryArtifacts &&
+            !!resumeState.resumeTask &&
+            !!resumeState.resumeInputHasLocator &&
+            !!resumeState.resumedMarkerRead &&
+            !!resumeState.completionDecisionRead &&
+            !!resumeState.completeMissionWithReadLocator &&
+            !!resumeState.finalCompletionAcceptsSingleTask
         : true
     if (tools.createTaskFailure) return
     const assistantComplete = allAssistantMessagesComplete(evidence.messages)
@@ -1609,7 +1844,7 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
     if (!hasTask) missing.push("Mission status child Task")
     if (!hasArtifact) missing.push("required publish/artifact evidence")
     if (!hasResumeSettlement) missing.push("resume settlement evidence")
-    if (!hasCaseEvidence) missing.push(`${caseID.toUpperCase()} no-child case evidence`)
+    if (!hasCaseEvidence) missing.push(`${caseID.toUpperCase()} case evidence`)
     if (!assistantComplete) missing.push("completed assistant messages")
     if (!idle) missing.push("inactive Mission activity")
     if (
@@ -1694,6 +1929,40 @@ async function waitForM07CompletedChildTasks(baseURL: string, missionID: string,
   throw new Error(`M07 child Task stage ${expectedCount} deadline reached before resume`)
 }
 
+async function waitForM08ResumedChildTask(baseURL: string, missionID: string, sessionID: string, requireResume: boolean) {
+  let last = ""
+  let quietSince = Date.now()
+  const quietTimeoutMs = Number(process.env.MISSION_RANDOM_PORT_E2E_M08_STAGE_TIMEOUT_MS ?? 120_000)
+  if (!Number.isFinite(quietTimeoutMs) || quietTimeoutMs <= 0) {
+    throw new Error("MISSION_RANDOM_PORT_E2E_M08_STAGE_TIMEOUT_MS must be a positive finite inactivity timeout")
+  }
+  while (true) {
+    evidence.status = await requestJSON(baseURL, `/mission/${missionID}/status`)
+    evidence.activityCursor = await requestJSON(baseURL, `/mission/${missionID}/activity-cursor`)
+    evidence.messages = await requestJSON(baseURL, `/session/${sessionID}/message`)
+    const tools = collectToolEvidence(evidence.messages)
+    const resume = m08ResumeTaskEvidence(evidence.messages, tools.createdTaskIDs)
+    if (tools.createTaskFailure) throw new Error(`panel.create_task failed before M08 stage boundary: ${tools.createTaskFailure}`)
+    const exactlyOneCompleted =
+      tools.createdTaskIDs.length === 1 && statusTasks(evidence.status).length === 1 && inactiveMissionTaskCount(evidence.status) === 1
+    if (exactlyOneCompleted && (!requireResume || (resume.resumeTask && resume.resumeInputHasLocator))) return
+    const signature = JSON.stringify({
+      status: signatureStatus(evidence.status),
+      activityCursor: evidence.activityCursor,
+      messages: evidence.messages,
+      createdTaskIDs: tools.createdTaskIDs,
+      resume,
+    })
+    if (signature !== last) {
+      last = signature
+      quietSince = Date.now()
+    } else if (Date.now() - quietSince > quietTimeoutMs) {
+      throw new Error(`M08 child Task ${requireResume ? "resume" : "initial"} stage quiet timeout before next wake`)
+    }
+    await Bun.sleep(5_000)
+  }
+}
+
 async function waitForInitialChildTask(baseURL: string, missionID: string, sessionID: string) {
   if (caseID === "m06") {
     await waitForInitialM06StateWrites(baseURL, missionID, sessionID)
@@ -1701,6 +1970,10 @@ async function waitForInitialChildTask(baseURL: string, missionID: string, sessi
   }
   if (caseID === "m07") {
     await waitForM07CompletedChildTasks(baseURL, missionID, sessionID, 1)
+    return
+  }
+  if (caseID === "m08") {
+    await waitForM08ResumedChildTask(baseURL, missionID, sessionID, false)
     return
   }
   if (caseID !== "m04") {
@@ -1823,6 +2096,14 @@ async function main() {
                       "The upstream Task must read only package.json and test.js, must not modify files, must not run npm test, and must produce a concise durable artifact describing package name, test script, imported module path, assertion value, and files read.",
                       "After creating that single upstream Task, create no downstream Task yet. Record in handoff.md that the next wake must query the upstream Task, enumerate artifacts, read one locator completely, then create the downstream Task with artifact_imports.",
                     ].join("\n")
+                  : caseID === "m08"
+                    ? [
+                        '@mission("general")',
+                        '@squad("base")',
+                        "Introduce the Mission plan briefly, load the general Mission Skill, write Mission state, and create exactly one child Task using promptProfile base.",
+                        "The child Task must read only package.json, must not modify files, must not run npm test, and must produce one concise draft artifact containing the exact marker M08-INITIAL-DRAFT.",
+                        "The child Task must not include M08-RESUME-ADDED in its first delivery. After creating that single child Task, create no replacement or additional child Task. Record in handoff.md that the next wake must query, enumerate artifacts, read one locator completely, then resume the same child Task with panel.resume_task.",
+                      ].join("\n")
           : [
               '@mission("general")',
               "Introduce the Mission plan briefly, load the general Mission Skill, write Mission state, dispatch one small code Task that runs npm test, and keep evidence concise.",
@@ -1858,6 +2139,8 @@ async function main() {
                     ? 'Resume the bounded no-child Mission. Call mission_state list, then read frontier.md, tasks.md, and notes.md and verify each read contains "M06-SKILL-FILE". Publish a compact skill-file/state-resume digest with publish_interactive_artifact, then call panel.complete_mission with task_acceptances: []. Do not create any child Task, do not use any @squad reference, do not run npm test, and do not modify files.'
                     : caseID === "m07"
                       ? "Resume the cross-Task artifact import Mission. Query exactly the one upstream child Task, call panel.query_task_artifacts for it, read one concrete upstream artifact locator completely with panel.read_task_artifact, then create exactly one downstream child Task using promptProfile base with artifact_imports containing that upstream task_id and the exact read locator. Do not copy the upstream artifact body into the downstream request prose. The downstream Task should use the imported artifact to produce a concise import-consumer artifact and must not modify files or run npm test. After creating that downstream Task, stop and write handoff.md; do not publish or complete the Mission yet."
+                      : caseID === "m08"
+                        ? "Resume the same-child Task Mission. Query exactly the one current child Task, enumerate its artifacts with panel.query_task_artifacts, read one concrete artifact locator completely with panel.read_task_artifact, then call panel.resume_task for that same child Task using the exact evidence locator you read. The resumed Task must produce a concise additional artifact containing the exact marker M08-RESUME-ADDED. Do not create any replacement or additional child Task, do not publish, and do not complete the Mission yet. Write handoff.md with the same child Task ID and the fact that the third wake must read resumed evidence before completion."
             : "Resume from Mission state and publish a compact completion summary artifact if the child Task evidence is ready. If not ready, record the exact pending state in handoff.md.",
         ...(model ? { model } : {}),
       }),
@@ -1872,6 +2155,20 @@ async function main() {
           productPillar: "code",
           text:
             "Resume the cross-Task artifact import Mission for final acceptance. Query both child Tasks in the same turn, enumerate artifacts for both with panel.query_task_artifacts, completely read the current task_completion_decision artifact for each Task, publish a compact import topology digest with publish_interactive_artifact, then call panel.complete_mission with exactly both current child Tasks accepted and only the exact completion-decision locators you read in this turn. Do not create any additional or replacement child Task.",
+          ...(model ? { model } : {}),
+        }),
+      })
+    }
+
+    if (caseID === "m08") {
+      await waitForM08ResumedChildTask(evidence.baseURL, missionID, sessionID, true)
+      evidence.thirdWake = await requestJSON(evidence.baseURL, "/mission/wake", {
+        method: "POST",
+        body: JSON.stringify({
+          missionID,
+          productPillar: "code",
+          text:
+            "Resume the same-child Task Mission for final acceptance. Query exactly the one current child Task, enumerate its artifacts, completely read current artifact evidence containing M08-RESUME-ADDED, then completely read the current task_completion_decision artifact for that same Task. Publish a compact resume digest with publish_interactive_artifact, then call panel.complete_mission with exactly this one current child Task accepted and only exact locators read in this turn. Do not create any additional or replacement child Task.",
           ...(model ? { model } : {}),
         }),
       })
