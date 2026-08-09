@@ -888,6 +888,7 @@ export function WorkLedger(props: WorkLedgerProps) {
   let controller: AbortController | null = null
   let loadSequence = 0
   let loadedRows: WorkLedgerRow[] = []
+  let startGlobalChatAfterCreateMenuClose = false
   const organizationPreferenceOwner = createPersistedSelectionOwner<WorkLedgerOrganization, PersistedOverlaySettings>({
     read: () => settingsStore.workLedgerOrganization,
     write: (value) => setSettingsStore("workLedgerOrganization", value),
@@ -1073,6 +1074,10 @@ export function WorkLedger(props: WorkLedgerProps) {
           details: formatErrorDetails(nextError),
         })
       })
+  }
+
+  function prepareStartFromScratch(): void {
+    startGlobalChatAfterCreateMenuClose = true
   }
 
   async function updateProjectPinned(project: WorkLedgerProjectRow, pinned: boolean): Promise<void> {
@@ -1362,6 +1367,11 @@ export function WorkLedger(props: WorkLedgerProps) {
                 <DropdownMenu.Content
                   class="work-ledger-toolbar-menu work-ledger-create-menu"
                   data-ui="work-ledger-create-menu"
+                  onCloseAutoFocus={() => {
+                    if (!startGlobalChatAfterCreateMenuClose) return
+                    startGlobalChatAfterCreateMenuClose = false
+                    startGlobalChat()
+                  }}
                 >
                   <Tooltip.Root openDelay={240} closeDelay={80} placement="right-start" gutter={8} fitViewport>
                     <Tooltip.Trigger
@@ -1369,7 +1379,7 @@ export function WorkLedger(props: WorkLedgerProps) {
                       type="button"
                       class="work-ledger-toolbar-menu-item"
                       data-ui="work-ledger-start-from-scratch"
-                      onSelect={startGlobalChat}
+                      onSelect={prepareStartFromScratch}
                     >
                       <Icon name="plus" size="medium" />
                       <span>{t("work_ledger.create.from_scratch")}</span>

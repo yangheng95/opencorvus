@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Work Ledger “Start from scratch” focus repair: [`2026-08-09-work-ledger-start-from-scratch-focus.md`](records/2026-08/2026-08-09-work-ledger-start-from-scratch-focus.md).
+
 Latest autonomous Visual Reviewer dispatch contract: [`2026-08-09-autonomous-visual-review-dispatch.md`](records/2026-08/2026-08-09-autonomous-visual-review-dispatch.md).
 
 Current security, permission, and metric-evaluator architecture: [`security-permission.md`](current/architecture/security-permission.md).

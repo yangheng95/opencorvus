@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-09-work-ledger-start-from-scratch-focus.md](2026-08-09-work-ledger-start-from-scratch-focus.md) repairs the create-menu close-autofocus race so the directory-free Composer remains visibly focused, and aligns the Vite development checker with the existing `esnext` Overlay target.
+
 - [2026-08-09-v0.0.38-beta-release.md](2026-08-09-v0.0.38-beta-release.md) converges the complete repository worktree, repairs live dependencies exposed by benchmark retirement, advances the canonical release family, and records the pushed `v0.0.38-beta` prerelease evidence.
 
 - [2026-08-09-autonomous-visual-review-dispatch.md](2026-08-09-autonomous-visual-review-dispatch.md) removes category-inferred mandatory Visual Reviewer routing for greenfield interfaces, adds an explicit independently visual-verified Advanced workflow, and preserves reference-fidelity review.

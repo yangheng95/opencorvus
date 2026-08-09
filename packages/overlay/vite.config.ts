@@ -92,6 +92,11 @@ export default defineConfig({
       allow: [path.resolve(__dirname, "..", "..")],
     },
   },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: "esnext",
+    },
+  },
   build: {
     outDir: "../dist-vite",
     emptyOutDir: true,
