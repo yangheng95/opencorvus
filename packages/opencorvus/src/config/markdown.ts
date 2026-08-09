@@ -1,5 +1,6 @@
 import { NamedError } from "@opencorvus-ai/util/error"
 import matter from "gray-matter"
+import * as yaml from "js-yaml"
 import { z } from "zod"
 import { Filesystem } from "../util/filesystem"
 
@@ -77,19 +78,40 @@ export namespace ConfigMarkdown {
     return Array.from(template.matchAll(SHELL_REGEX))
   }
 
-  export async function parse(filePath: string) {
-    const template = await Filesystem.readText(filePath)
+  const matterOptions = {
+    engines: {
+      yaml: {
+        parse(input: string) {
+          return yaml.load(input) ?? {}
+        },
+        stringify(input: unknown) {
+          return yaml.dump(input ?? {})
+        },
+      },
+    },
+  }
+
+  export function parseText(template: string, source: string) {
     try {
-      return matter(template)
+      return matter(template, matterOptions)
     } catch (err) {
       throw new FrontmatterError(
         {
-          path: filePath,
-          message: `${filePath}: Failed to parse YAML frontmatter: ${err instanceof Error ? err.message : String(err)}`,
+          path: source,
+          message: `${source}: Failed to parse YAML frontmatter: ${err instanceof Error ? err.message : String(err)}`,
         },
         { cause: err },
       )
     }
+  }
+
+  export function stringify(content: string, data: object) {
+    return matter.stringify(content, data, matterOptions)
+  }
+
+  export async function parse(filePath: string) {
+    const template = await Filesystem.readText(filePath)
+    return parseText(template, filePath)
   }
 
   export const FrontmatterError = NamedError.create(

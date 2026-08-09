@@ -95,7 +95,7 @@ type StateFactory = <S>(
 type InstanceApi = {
   provide<R>(input: { directory: string; init?: InstanceInit; fn: () => R }): Promise<R>
   provideProjectIdentity<R>(input: { directory: string; fn: () => R }): Promise<R>
-  tryProvideActive<R>(input: { directory: string; fn: () => R }): Promise<R | undefined>
+  tryProvideActive<R>(input: { directory: string; fn: () => R }): Promise<Awaited<R> | undefined>
   forEachActive(input: { fn: () => void | Promise<void> }): Promise<void>
   readonly directory: string
   readonly worktree: string
@@ -810,7 +810,7 @@ function startLeaseActivity<R>(lease: Lease, fn: () => Promise<R>): Promise<R> {
   return activity
 }
 
-export function reenterActiveInstance<R>(input: { directory: string; fn: () => R }): Promise<R | undefined> {
+export function reenterActiveInstance<R>(input: { directory: string; fn: () => R }): Promise<Awaited<R> | undefined> {
   return runOutsideInstanceContext(() => Instance.tryProvideActive(input))
 }
 
@@ -943,7 +943,7 @@ export const Instance: InstanceApi = {
       }
     }
   },
-  async tryProvideActive<R>(input: { directory: string; fn: () => R }): Promise<R | undefined> {
+  async tryProvideActive<R>(input: { directory: string; fn: () => R }): Promise<Awaited<R> | undefined> {
     assertNotDisposing()
     const directory = Filesystem.resolve(input.directory)
     const key = instanceCacheKey(directory)

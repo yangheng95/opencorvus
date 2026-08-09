@@ -1,5 +1,4 @@
 import path from "path"
-import matter from "gray-matter"
 import z from "zod"
 import { ConfigMarkdown } from "@/config/markdown"
 import { Global } from "@/global"
@@ -125,7 +124,7 @@ export namespace MissionSkillCatalog {
 
     for (const raw of builtinMissionSkillSources) {
       try {
-        const markdown = matter(raw.skill)
+        const markdown = ConfigMarkdown.parseText(raw.skill, `builtin mission skill ${raw.name}`)
         const definition = Skill.parseDefinition(markdown.data, `builtin mission skill ${raw.name}`)
         if (definition.name !== raw.name) {
           throw new Skill.InvalidError({

@@ -91,17 +91,16 @@ export namespace FileWatcher {
 
   function persistentCallbackRunner(lifecycle: InstanceLifecycleCapabilities): PersistentCallbackRunner {
     return (directory, label, callback) => {
-      return lifecycle
-        .reenter({
+      return (async () => {
+        const active = await lifecycle.reenter({
           directory,
           fn: async () => {
             await callback()
             return true
           },
         })
-        .then((active) => {
-          if (active !== true) throw new Error(`${label} fired after its instance owner was released`)
-        })
+        if (active !== true) throw new Error(`${label} fired after its instance owner was released`)
+      })()
         .catch((error) => {
           log.error("persistent file watcher callback failed", { label, error: errorMessage(error) })
         })

@@ -13,9 +13,10 @@
  * synthesise wake notes to push the LLM through a fixed pipeline. Past
  * iterations grew three such gates (acceptance-rejection rewake,
  * build-settled-without-deliver rewake, general orchestrator-stream-error
- * rewake); all three were FSM in disguise and have been deleted. A completed
- * prose-only wake remains visible as the natural assistant message and
- * settles. Only explicit external ingress can re-enter the task loop.
+ * rewake); all three were FSM in disguise and have been deleted. External
+ * ingress settlement is owned by the durable queue: a current operator/root
+ * message must be read and paired with a scheduler decision before the wake is
+ * marked delivered. Only explicit external ingress can re-enter the task loop.
  *
  * What this owns:
  *   - Marking queued → active so the cwd-scoped queue sees ownership.
@@ -44,7 +45,7 @@ export async function runTaskLoop(input: {
   wakeID?: string
 }) {
   if (input.signal?.aborted) return
-  await runTaskLoopInner(input)
+  return runTaskLoopInner(input)
 }
 
 /**
@@ -53,10 +54,11 @@ export async function runTaskLoop(input: {
  * Single-pass: enter, mark active if queued, run `Orchestrator.processTask`
  * once with the caller event, exit. If the LLM stops mid-task after a valid
  * decision (acceptance rejection, build settled, stream error, pending
- * question), the next external trigger re-enters this function. A wake that
- * makes no scheduler decision leaves its natural assistant message visible
- * and settles; only a real external event may start another pass. Concurrent
- * entries for the same task are serialised by `runTaskLoop`.
+ * question), the next external trigger re-enters this function. Current
+ * operator/root ingress is not considered delivered until the queue verifies
+ * that this physical pass read the exact ingress message and made a scheduler
+ * decision. Concurrent entries for the same task are serialised by
+ * `runTaskLoop`.
  */
 async function runTaskLoopInner(input: {
   taskID: string
@@ -145,7 +147,8 @@ async function runTaskLoopInner(input: {
   log.info("decision point", { taskID, note: event?.note })
 
   try {
-    await Orchestrator.processTask(taskID, event, signal, wakeID)
+    const finalMessageID = await Orchestrator.processTask(taskID, event, signal, wakeID)
+    return finalMessageID ? { finalMessageID } : {}
   } catch (err) {
     if (signal?.aborted) return
     // Pass the Error object directly so Log.formatError walks the stack +

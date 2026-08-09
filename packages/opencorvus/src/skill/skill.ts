@@ -3,7 +3,6 @@ import path from "path"
 import os from "os"
 import { createHash } from "node:crypto"
 import { rm } from "node:fs/promises"
-import matter from "gray-matter"
 import { Config } from "../config/config"
 import { Instance } from "../project/instance"
 import { createInstanceState } from "../project/instance-state"
@@ -302,7 +301,7 @@ export namespace Skill {
     const { source } = input
     const dir = path.join(input.cacheRoot, builtinCacheKey(source.name))
     const skillPath = path.join(dir, "SKILL.md")
-    const parsedSource = matter(source.skill)
+    const parsedSource = ConfigMarkdown.parseText(source.skill, `${input.label} ${source.name}`)
     const definition = parseDefinition(parsedSource.data, `${input.label} ${source.name}`)
     if (definition.name !== source.name) {
       throw new InvalidError({
@@ -311,7 +310,7 @@ export namespace Skill {
       })
     }
     await rm(dir, { recursive: true, force: true })
-    const next = matter.stringify(parsedSource.content, parsedSource.data)
+    const next = ConfigMarkdown.stringify(parsedSource.content, parsedSource.data)
     await Filesystem.write(skillPath, next)
     await Promise.all(
       Object.entries(source.files).map(([file, content]) => {
@@ -329,7 +328,7 @@ export namespace Skill {
     const bundle = info.bundle
     if (!bundle) throw new InvalidError({ path: info.name, message: "Skill has no bundled directory snapshot." })
     validateBundleFiles(bundle.files)
-    const parsed = matter(bundle.skill)
+    const parsed = ConfigMarkdown.parseText(bundle.skill, `bundled skill ${info.name}`)
     const definition = parseDefinition(parsed.data, `bundled skill ${info.name}`)
     if (definition.name !== info.name) {
       throw new InvalidError({
@@ -460,7 +459,7 @@ export namespace Skill {
 
     // Register immutable descriptor content without filesystem work. Supporting files materialize only on exact load.
     for (const raw of builtins()) {
-      const md = matter(raw.skill)
+      const md = ConfigMarkdown.parseText(raw.skill, `builtin skill ${raw.name}`)
       const parsed = parseDefinition(md.data, "builtin skill")
       if (parsed.name !== raw.name) {
         throw new InvalidError({

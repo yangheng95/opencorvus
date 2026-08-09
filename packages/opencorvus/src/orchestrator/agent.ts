@@ -418,7 +418,8 @@ export function currentWakeControlProjection(input: { taskID: string; event?: Or
   const taskIntent = input.event?.taskIntent
   const missionAcceptanceResume = input.event?.missionAcceptanceResume
   if (!taskIntent && !missionAcceptanceResume) return undefined
-  if (taskIntent && missionAcceptanceResume) {
+  const currentControlCount = [taskIntent, missionAcceptanceResume].filter(Boolean).length
+  if (currentControlCount > 1) {
     throw new Error(`Task ${input.taskID} wake has multiple current control occurrences`)
   }
   if (!input.wakeID) {
@@ -479,8 +480,8 @@ export namespace Orchestrator {
     event?: OrchestratorEvent,
     wakeSignal?: AbortSignal,
     wakeID?: string,
-  ): Promise<void> {
-    await processInvocation(taskID, event, wakeSignal, undefined, wakeID)
+  ): Promise<string | undefined> {
+    return processInvocation(taskID, event, wakeSignal, undefined, wakeID)
   }
 
   export async function processTerminalConversation(input: {

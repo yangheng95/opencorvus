@@ -14,6 +14,7 @@
 
 import { MessageTable, SessionTable } from "@/session/session.sql"
 import { Message } from "@/session/message"
+import { MessageStore } from "@/session/message-store"
 import { isDeepStrictEqual } from "node:util"
 import { ProtocolStore } from "@/protocol/store"
 import { Database, and, desc, eq, sql } from "@/storage/db"
@@ -25,6 +26,7 @@ import { claimNextEngineTaskForCwd, claimQueuedEngineTaskForCwd, setEngineTaskQu
 import { findTask, listOwnedPromptSessionsForTask, listStartedIncompleteTaskIDs, type TaskRow } from "./store"
 import { deriveTaskStatus, isTaskActive, isTaskQueued, isTaskTerminal } from "./task-status"
 import { OrchestratorEventSchema, type OrchestratorEvent } from "@/orchestrator/event"
+import { ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY } from "@/orchestrator/stateful-tool-names"
 import { Identifier } from "@/id/id"
 import { Event } from "./model"
 import { EngineProtocol } from "./protocol"
@@ -65,12 +67,21 @@ function artifactPayloadRecord(payload: unknown): Record<string, unknown> {
   return payload && typeof payload === "object" && !Array.isArray(payload) ? (payload as Record<string, unknown>) : {}
 }
 
+export type TaskLoopRunResult = {
+  finalMessageID?: string
+}
+
+type MessageFence = {
+  timeCreated: number
+  id: string
+}
+
 type TaskLoopRunner = (input: {
   taskID: string
   event?: OrchestratorEvent
   signal?: AbortSignal
   wakeID?: string
-}) => Promise<void>
+}) => Promise<TaskLoopRunResult | void>
 
 const taskLoopRuntime = createInstanceState(
   () => ({ runner: undefined as TaskLoopRunner | undefined }),
@@ -686,6 +697,219 @@ function markQueuedOperatorWakeDrained(artifactID: string): void {
   updateEngineArtifact({ id: artifactID, label: "drained" })
 }
 
+function markQueuedOperatorWakeDeliveryFailed(input: {
+  artifactID: string
+  ingress: QueuedTaskIngress
+  errorName: string
+  message: string
+  now?: number
+}): void {
+  const now = input.now ?? Date.now()
+  const payload = QueuedTaskIngressSchema.parse({
+    ...input.ingress,
+    delivery_result: {
+      status: "delivery_failed",
+      error_name: input.errorName,
+      message: input.message,
+      time_completed: now,
+    },
+  })
+  updateEngineArtifact({
+    id: input.artifactID,
+    label: "delivery_failed",
+    payload,
+    timeUpdated: now,
+  })
+}
+
+class QueuedWakeSettlementError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = "QueuedWakeSettlementError"
+  }
+}
+
+function wakeRequiredMessageIDs(ingress: QueuedTaskIngress): string[] {
+  if (
+    ingress.source_kind === "operator_message" ||
+    ingress.source_kind === "orchestrator_message" ||
+    ingress.source_kind === "mission_acceptance_resume"
+  ) {
+    return [ingress.message_id]
+  }
+  if (ingress.source_kind === "operator_intent") {
+    return ingress.event.taskIntent.supersededOperatorMessageIDs
+  }
+  return []
+}
+
+function wakeRequiresDecisionEffect(ingress: QueuedTaskIngress): boolean {
+  return (
+    ingress.source_kind === "operator_message" ||
+    ingress.source_kind === "orchestrator_message" ||
+    ingress.source_kind === "operator_intent" ||
+    ingress.source_kind === "mission_acceptance_resume" ||
+    ingress.source_kind === "task_wait_wake"
+  )
+}
+
+async function assistantMessagesForWakeSettlement(input: {
+  taskID: string
+  wakeID: string
+  finalMessageID: string
+  messageFence?: MessageFence
+}): Promise<Message.WithParts[]> {
+  const row = Database.use((db) =>
+    db
+      .select({
+        sessionID: MessageTable.session_id,
+        parentID: sql<string | null>`json_extract(${MessageTable.data}, '$.parentID')`,
+        timeCreated: MessageTable.time_created,
+      })
+      .from(MessageTable)
+      .where(eq(MessageTable.id, input.finalMessageID))
+      .get(),
+  )
+  if (!row) {
+    throw new QueuedWakeSettlementError(
+      `Task ${input.taskID} wake ${input.wakeID} completed without persisted assistant message ${input.finalMessageID}`,
+    )
+  }
+  if (!row.parentID) {
+    throw new QueuedWakeSettlementError(
+      `Task ${input.taskID} wake ${input.wakeID} final message ${input.finalMessageID} has no parent user message`,
+    )
+  }
+  const messageIDs = Database.use((db) =>
+    db
+      .select({ id: MessageTable.id })
+      .from(MessageTable)
+      .where(
+        and(
+          eq(MessageTable.session_id, row.sessionID),
+          sql`json_extract(${MessageTable.data}, '$.role') = 'assistant'`,
+          sql`json_extract(${MessageTable.data}, '$.parentID') = ${row.parentID}`,
+          input.messageFence
+            ? sql`(${MessageTable.time_created} > ${input.messageFence.timeCreated} OR (${MessageTable.time_created} = ${input.messageFence.timeCreated} AND ${MessageTable.id} > ${input.messageFence.id}))`
+            : undefined,
+          sql`${MessageTable.time_created} <= ${row.timeCreated}`,
+        )!,
+      )
+      .orderBy(MessageTable.time_created, MessageTable.id)
+      .all()
+      .map((message) => message.id),
+  )
+  const storedMessages = await MessageStore.byIDs({ sessionID: row.sessionID, messageIDs })
+  const messagesByID = new Map(storedMessages.map((message) => [message.info.id, message]))
+  const messages = messageIDs.map((id) => messagesByID.get(id)).filter((message): message is Message.WithParts => Boolean(message))
+  if (messages.length === 0 || messages.length !== messageIDs.length || messages.at(-1)?.info.id !== input.finalMessageID) {
+    throw new QueuedWakeSettlementError(
+      `Task ${input.taskID} wake ${input.wakeID} final message ${input.finalMessageID} is not the final assistant message for its invocation`,
+    )
+  }
+  return messages
+}
+
+type CompletedToolPart = Message.ToolPart & { state: Message.ToolStateCompleted }
+
+function completedToolParts(messages: Message.WithParts[]): CompletedToolPart[] {
+  return messages.flatMap((message) =>
+    message.parts.filter((part): part is CompletedToolPart => part.type === "tool" && part.state.status === "completed"),
+  )
+}
+
+function completedToolPartsForMessage(message: Message.WithParts): CompletedToolPart[] {
+  return message.parts.filter((part): part is CompletedToolPart => part.type === "tool" && part.state.status === "completed")
+}
+
+function toolInputMessageID(part: CompletedToolPart): string | undefined {
+  if (!part.state.input || typeof part.state.input !== "object" || Array.isArray(part.state.input)) return undefined
+  const input = part.state.input as Record<string, unknown>
+  return typeof input.message_id === "string" ? input.message_id : undefined
+}
+
+function hasDecisionEffect(part: CompletedToolPart): boolean {
+  const effect = part.state.metadata[ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]
+  return effect === "decision" || effect === "continuation"
+}
+
+function hasDecisionAfterRequiredReads(messages: Message.WithParts[], requiredMessageIDs: string[]): boolean {
+  if (requiredMessageIDs.length === 0) return completedToolParts(messages).some(hasDecisionEffect)
+  const readMessageIDs = new Set<string>()
+  for (const message of messages) {
+    const toolParts = completedToolPartsForMessage(message)
+    if (requiredMessageIDs.every((messageID) => readMessageIDs.has(messageID)) && toolParts.some(hasDecisionEffect)) {
+      return true
+    }
+    for (const part of toolParts) {
+      if (part.tool !== "read_task_message") continue
+      const messageID = toolInputMessageID(part)
+      if (messageID) readMessageIDs.add(messageID)
+    }
+  }
+  return false
+}
+
+async function assertQueuedWakeSettlement(input: {
+  taskID: string
+  wake: NonNullable<ReturnType<typeof findNextPendingQueuedOperatorWake>>
+  result: TaskLoopRunResult | void
+  messageFence?: MessageFence
+}): Promise<void> {
+  const requiredMessageIDs = wakeRequiredMessageIDs(input.wake.ingress)
+  const requiresDecision = wakeRequiresDecisionEffect(input.wake.ingress)
+  if (requiredMessageIDs.length === 0 && !requiresDecision) return
+  const finalMessageID = input.result?.finalMessageID
+  if (!finalMessageID) {
+    throw new QueuedWakeSettlementError(
+      `Task ${input.taskID} wake ${input.wake.id} completed without a final assistant message for ${input.wake.ingress.source_kind} ingress`,
+    )
+  }
+  const messages = await assistantMessagesForWakeSettlement({
+    taskID: input.taskID,
+    wakeID: input.wake.id,
+    finalMessageID,
+    messageFence: input.messageFence,
+  })
+  const toolParts = completedToolParts(messages)
+  const readMessageIDs = new Set(
+    toolParts.flatMap((part) => {
+      if (part.tool !== "read_task_message") return []
+      const messageID = toolInputMessageID(part)
+      return messageID ? [messageID] : []
+    }),
+  )
+  const readCurrentIngress = requiredMessageIDs.every((messageID) => readMessageIDs.has(messageID))
+  if (!readCurrentIngress) {
+    throw new QueuedWakeSettlementError(
+      `Task ${input.taskID} wake ${input.wake.id} final message ${finalMessageID} did not read current ingress messages ${requiredMessageIDs.join(",")}`,
+    )
+  }
+  if (requiresDecision && !toolParts.some(hasDecisionEffect)) {
+    throw new QueuedWakeSettlementError(
+      `Task ${input.taskID} wake ${input.wake.id} final message ${finalMessageID} did not make a scheduler decision`,
+    )
+  }
+  if (requiresDecision && !hasDecisionAfterRequiredReads(messages, requiredMessageIDs)) {
+    throw new QueuedWakeSettlementError(
+      `Task ${input.taskID} wake ${input.wake.id} final message ${finalMessageID} did not make a scheduler decision after reading current ingress`,
+    )
+  }
+}
+
+function latestMessageFence(): MessageFence | undefined {
+  return Database.use((db) =>
+    db
+      .select({
+        id: MessageTable.id,
+        timeCreated: MessageTable.time_created,
+      })
+      .from(MessageTable)
+      .orderBy(desc(MessageTable.time_created), desc(MessageTable.id))
+      .get(),
+  )
+}
+
 function hasQueuedTaskEvent(taskID: string): boolean {
   return findNextPendingQueuedOperatorWake(taskID) !== undefined
 }
@@ -853,13 +1077,15 @@ function launchTaskLoop(
             }
             throw signal.reason
           }
-          await runTaskLoop({ taskID: task.id, event: wake.event, signal, wakeID: wake.id })
+          const messageFence = latestMessageFence()
+          const result = await runTaskLoop({ taskID: task.id, event: wake.event, signal, wakeID: wake.id })
           if (signal.aborted) {
             if (!isExecutionCancellationError(signal.reason)) {
               throw new Error(`Root Session wake ${wake.id} has an untyped in-flight cancellation reason`)
             }
             throw signal.reason
           }
+          await assertQueuedWakeSettlement({ taskID: task.id, wake, result, messageFence })
         },
       })
       markQueuedOperatorWakeDrained(wake.id)
@@ -877,7 +1103,12 @@ function launchTaskLoop(
     // failed attempt again. Durable coordination requests remain pending;
     // bootstrap reconciliation may create/revive one later wake by request
     // identity without turning this catch into a retry state machine.
-    updateEngineArtifact({ id: wake.id, label: "delivery_failed" })
+    markQueuedOperatorWakeDeliveryFailed({
+      artifactID: wake.id,
+      ingress: wake.ingress,
+      errorName: error instanceof Error ? error.name : "Error",
+      message: error instanceof Error ? error.message : String(error),
+    })
     await runWithIndependentProjectIdentity({
       directory,
       fn: async () => {

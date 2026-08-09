@@ -298,6 +298,7 @@ export namespace Log {
     durableDestination = undefined
     logpath = ""
     root = createRootLogger(stderrDestination, level)
+    generation++
     await closeDestination(previousDestination)
   }
 

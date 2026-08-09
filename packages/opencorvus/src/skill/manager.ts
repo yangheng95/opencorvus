@@ -1,9 +1,9 @@
 import { lstat, mkdir, mkdtemp, rename, rm } from "fs/promises"
 import { randomUUID } from "node:crypto"
-import matter from "gray-matter"
 import path from "path"
 import z from "zod"
 import { Config } from "@/config/config"
+import { ConfigMarkdown } from "@/config/markdown"
 import { updateGlobalConfigPatchAtomic } from "@/config/update-global"
 import { Global } from "@/global"
 import { PermissionNext } from "@/permission/next"
@@ -675,7 +675,7 @@ async function validateSkillDirectory(dir: string): Promise<Skill.Definition[]> 
   }
   const definitions: Skill.Definition[] = []
   for (const file of matches.sort()) {
-    const parsed = matter(await Filesystem.readText(file))
+    const parsed = ConfigMarkdown.parseText(await Filesystem.readText(file), file)
     definitions.push(Skill.parseDefinition(parsed.data, file))
   }
   return definitions
@@ -1035,7 +1035,7 @@ function parseSkillRoots(files: NormalizedSkillFile[]): ParsedSkillRoot[] {
         return dir === "." ? "" : dir
       })
       .filter(Boolean)
-    const parsed = matter(new TextDecoder().decode(skillFile.bytes))
+    const parsed = ConfigMarkdown.parseText(new TextDecoder().decode(skillFile.bytes), skillFile.path)
     const definition = Skill.parseDefinition(parsed.data, skillFile.path)
     const info = {
       name: definition.name,

@@ -9830,6 +9830,26 @@
         "open_weights": false,
         "cost": { "input": 0.28, "output": 0.42, "cache_read": 0.028 },
         "limit": { "context": 128000, "output": 128000 }
+      },
+      "deepseek-v4-flash": {
+        "id": "deepseek-v4-flash",
+        "name": "DeepSeek V4 Flash",
+        "description": "Fast DeepSeek V4 lane for economical reasoning, coding, and long-context work",
+        "family": "deepseek-flash",
+        "attachment": false,
+        "reasoning": true,
+        "reasoning_options": [],
+        "tool_call": true,
+        "interleaved": { "field": "reasoning_content" },
+        "structured_output": true,
+        "temperature": true,
+        "knowledge": "2025-05",
+        "release_date": "2026-04-24",
+        "last_updated": "2026-07-31",
+        "modalities": { "input": ["text"], "output": ["text"] },
+        "open_weights": true,
+        "cost": { "input": 0.076, "output": 0.153, "cache_read": 0.014 },
+        "limit": { "context": 1050000, "output": 384000 }
       }
     }
   },
