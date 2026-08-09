@@ -1,9 +1,0 @@
-{
-  "$schema": "https://opencorvus.ai/config.json",
-  "model": "deepseek/deepseek-chat",
-  "small_model": "deepseek/deepseek-chat",
-  "enabled_providers": [
-    "deepseek"
-  ],
-  "permission": "allow"
-}

@@ -132,72 +132,6 @@ jobs:
         working-directory: packages/overlay
         run: bun run test
 
-  project-open:
-    name: project-open (${{ matrix.settings.name }})
-    strategy:
-      fail-fast: false
-      matrix:
-        settings:
-          - name: linux
-            host: ubuntu-latest
-          - name: macos-arm64
-            host: macos-latest
-          - name: macos-x64
-            host: macos-15-intel
-          - name: windows
-            host: windows-latest
-    runs-on: ${{ matrix.settings.host }}
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with:
-          persist-credentials: false
-
-      - name: Setup Bun
-        uses: ./.github/actions/setup-bun
-        with:
-          prepare_sdk: "true"
-
-      - name: Configure git identity
-        run: |
-          git config --global user.email "bot@opencorvus.ai"
-          git config --global user.name "opencorvus"
-
-      - name: Install Linux system dependencies
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libwebkit2gtk-4.1-dev \
-            libssl-dev \
-            libgtk-3-dev \
-            libayatana-appindicator3-dev \
-            librsvg2-dev \
-            ripgrep
-
-      - name: Install macOS runtime dependency
-        if: runner.os == 'macOS'
-        run: brew install ripgrep
-
-      - name: Install Windows runtime dependency
-        if: runner.os == 'Windows'
-        run: choco install ripgrep --yes --no-progress
-
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: |
-            packages/overlay/src-tauri -> target
-            packages/opencorvus/native/process-supervisor -> target
-
-      - name: Run project-open benchmark with inactivity timeout
-        run: bun packages/opencorvus/script/benchmark/project-open.ts --idle-timeout-ms 600000
-
   required:
     name: test (linux)
     runs-on: ubuntu-latest
@@ -207,7 +141,6 @@ jobs:
       - build-critical
       - channel-runtime-unit
       - overlay-unit
-      - project-open
     if: always()
     steps:
       - name: Verify upstream test jobs passed
@@ -217,10 +150,8 @@ jobs:
           echo "build-critical=${{ needs['build-critical'].result }}"
           echo "channel-runtime-unit=${{ needs['channel-runtime-unit'].result }}"
           echo "overlay-unit=${{ needs['overlay-unit'].result }}"
-          echo "project-open=${{ needs['project-open'].result }}"
           test "${{ needs['version-sync'].result }}" = "success"
           test "${{ needs.unit.result }}" = "success"
           test "${{ needs['build-critical'].result }}" = "success"
           test "${{ needs['channel-runtime-unit'].result }}" = "success"
           test "${{ needs['overlay-unit'].result }}" = "success"
-          test "${{ needs['project-open'].result }}" = "success"

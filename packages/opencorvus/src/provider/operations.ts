@@ -3,6 +3,7 @@ import { Auth } from "../auth"
 import type { Config } from "../config/config"
 import { ProviderLLM } from "./llm"
 import { Provider } from "./provider"
+import { ProviderError } from "./error"
 
 export type ProviderOperationScope = {
   config: () => Promise<Config.Info>
@@ -206,7 +207,9 @@ export async function testProviderConnection(
     for await (const part of stream.fullStream) {
       if (part.type === "error") {
         const error = part.error
-        streamErrors.push(error instanceof Error ? error.message : String(error))
+        streamErrors.push(
+          ProviderError.redactSensitiveProviderText(error instanceof Error ? error.message : String(error)),
+        )
       }
     }
     if (streamErrors.length > 0) {
@@ -221,7 +224,9 @@ export async function testProviderConnection(
     }
   } catch (error) {
     const cause = error instanceof Error && error.cause instanceof Error ? error.cause : undefined
-    const message = cause?.message || (error instanceof Error ? error.message : String(error))
+    const message = ProviderError.redactSensitiveProviderText(
+      cause?.message || (error instanceof Error ? error.message : String(error)),
+    )
     return {
       status: 200,
       body: { ok: false, status: "error", providerID, modelID: selectedModelID, message },

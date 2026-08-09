@@ -74,7 +74,7 @@ publish a `-baseline.tar.gz` variant for processors without Advanced Vector
 Extensions 2 (AVX2).
 
 Replace `<version>` with the version shown on the release, for example
-`0.0.37-beta`. Download only the file you intend to install.
+`0.0.38-beta`. Download only the file you intend to install.
 
 ### Install from source
 

@@ -20,7 +20,7 @@ Latest root README AI-slop removal: [`2026-08-09-readme-ai-slop-removal.md`](rec
 
 Latest repository-local package build runtime root repair: [`2026-08-08-package-build-runtime-root.md`](records/2026-08/2026-08-08-package-build-runtime-root.md).
 
-Latest `v0.0.37-beta` release plan and evidence: [`2026-08-08-v0.0.37-beta-release.md`](records/2026-08/2026-08-08-v0.0.37-beta-release.md).
+Latest `v0.0.38-beta` release plan and evidence: [`2026-08-09-v0.0.38-beta-release.md`](records/2026-08/2026-08-09-v0.0.38-beta-release.md).
 
 Latest first-open locale language selection: [`2026-08-08-first-open-locale-language-selection.md`](records/2026-08/2026-08-08-first-open-locale-language-selection.md).
 

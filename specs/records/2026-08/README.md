@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-09-v0.0.38-beta-release.md](2026-08-09-v0.0.38-beta-release.md) converges the complete repository worktree, repairs live dependencies exposed by benchmark retirement, advances the canonical release family, and records the pushed `v0.0.38-beta` prerelease evidence.
+
 - [2026-08-09-autonomous-visual-review-dispatch.md](2026-08-09-autonomous-visual-review-dispatch.md) removes category-inferred mandatory Visual Reviewer routing for greenfield interfaces, adds an explicit independently visual-verified Advanced workflow, and preserves reference-fidelity review.
 
 - [2026-08-09-architecture-debt-p0-1-remediation.md](2026-08-09-architecture-debt-p0-1-remediation.md) records the rescanned P0.1 authority, deletion boundaries, and focused acceptance.
@@ -17,8 +19,6 @@
 - [2026-08-09-readme-ai-slop-removal.md](2026-08-09-readme-ai-slop-removal.md) removes the root READMEs' repetitive promotional narrative and replaces it with a compact, bilingual product model, operating instructions, and explicit limitations.
 
 - [2026-08-08-package-build-runtime-root.md](2026-08-08-package-build-runtime-root.md) binds both package matrices to one repository-local canonical build runtime root and removes their implicit AppData write dependency without changing the production runtime default.
-
-- [2026-08-08-v0.0.37-beta-release.md](2026-08-08-v0.0.37-beta-release.md) plans and records the canonical `0.0.37-beta` version bump, prominent README download entry points, scoped delivery, and live GitHub prerelease evidence.
 
 - [2026-08-08-first-open-locale-language-selection.md](2026-08-08-first-open-locale-language-selection.md) makes the fresh Overlay choose Chinese for Chinese runtime locales and English otherwise while retaining the persisted language as the only later-open authority.
 

@@ -4,9 +4,16 @@
 
 ## 未发布
 
+## 0.0.38beta - 2026-08-09
+
+### Added
+
+- 增加 Provider 错误凭据脱敏契约，防止 API Key 和 Bearer Token 进入诊断消息与响应正文。
+
 ### Changed
 
 - 将 workspace 的 Bun 类型依赖和独立决策站点的包管理器规范统一到 Bun `1.3.14`，重新生成依赖锁定结果并移除旧 Bun 类型 package。
+- 退役旧 benchmark 执行树及其专用测试与 CI job，把仍在使用的浏览器停滞检测迁移到当前脚本路径，并保留 Host MCP（Model Context Protocol，模型上下文协议）的真实连接统计契约。
 
 ## 0.0.37beta - 2026-08-08
 

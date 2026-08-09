@@ -21,6 +21,7 @@ import { applyProviderPolicy } from "./policy"
 import { CUSTOM_LOADERS, smallModelPriority, type CustomModelLoader } from "./vendor"
 import { installProvider, loadProviderModule } from "./install"
 import { InvalidModelReferenceError as ProviderInvalidModelReferenceError, parseModelReference } from "./model-ref"
+import { ProviderError } from "./error"
 import { proxiedFetchInit, resolveNetworkProxy } from "../util/network-proxy"
 import { Plugin } from "../plugin"
 import { BUNDLED_PROVIDERS } from "./bundled"
@@ -522,9 +523,7 @@ export namespace Provider {
           if (result && (result.autoload || providers[providerID])) {
             if (result.getModel) modelLoaders[providerID] = result.getModel
             const opts = result.options ?? {}
-            const patch: Partial<Info> = providers[providerID]
-              ? { options: opts }
-              : { source: "custom", options: opts }
+            const patch: Partial<Info> = providers[providerID] ? { options: opts } : { source: "custom", options: opts }
             mergeProvider(providerID, patch)
           }
         } catch (error) {
@@ -846,7 +845,7 @@ export namespace Provider {
           //      see _session-20260428-130617.out incident.
           if (!response.ok) {
             clearInactivityTimer()
-            const text = await response.text().catch(() => "")
+            const text = ProviderError.redactSensitiveProviderText(await response.text().catch(() => ""))
             let detail = ""
             try {
               const json = JSON.parse(text)
@@ -869,7 +868,9 @@ export namespace Provider {
             // fetch accepts string | URL | Request; URL has .href, Request has .url
             const url = typeof input === "string" ? input : input instanceof URL ? input.href : (input?.url ?? "")
             throw new APICallError({
-              message: `Provider ${model.providerID} returned HTTP ${response.status}: ${detail || response.statusText}`,
+              message: ProviderError.redactSensitiveProviderText(
+                `Provider ${model.providerID} returned HTTP ${response.status}: ${detail || response.statusText}`,
+              ),
               url,
               requestBodyValues,
               statusCode: response.status,

@@ -1,5 +1,4 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { requireRuntimeProviderSnapshots } from "../../script/benchmark/runtime-memory-soak-support"
 import { MCP } from "@/mcp"
 import { Instance } from "@/project/instance"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
@@ -35,15 +34,4 @@ describe("Host MCP runtime memory metrics", () => {
     await Instance.provide({ directory: second.path, fn: () => Instance.dispose() })
     expect(await MCP.connectionStats()).toEqual(zeroSnapshot)
   }, 0)
-
-  test("accepts the required Host MCP success shape and surfaces provider failures to the soak checker", () => {
-    expect(requireRuntimeProviderSnapshots({ "host-mcp": { ...zeroSnapshot, projects: 2, connected: 1 } })).toEqual({
-      ...zeroSnapshot,
-      projects: 2,
-      connected: 1,
-    })
-    expect(() =>
-      requireRuntimeProviderSnapshots({ "host-mcp": { error: "No context found for instance" } }),
-    ).toThrow("Runtime memory provider host-mcp failed: No context found for instance")
-  })
 })

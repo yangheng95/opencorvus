@@ -1,4 +1,4 @@
-import type { OverlayPage } from "../../../overlay/test/launch"
+import type { OverlayPage } from "../../overlay/test/launch"
 
 type NavigationAction<T> = () => Promise<T>
 

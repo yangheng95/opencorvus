@@ -29,4 +29,4 @@ description: 在真实 OpenCorvus 服务和持久数据库上执行端到端验�
 
 OpenCorvus 产生终态结果后，还必须独立运行交付物自己的验证命令、查看视觉截图、重新加载产品 UI，并确认持久数据库中的 Task 状态和证据一致。mock contract、预制报告或静态截图都不属于端到端验收。
 
-视觉定向调查使用 `visual-diff.ts`、`review-deliverable.ts` 等由 Node sidecar 驱动的 headed 工具。它们只是探针，不是 Mission 编排包装层。
+视觉定向调查使用当前的 `script/screenshot-overlay.ts` 或 `script/overlay-snap.ts`，由 Node sidecar 对真实页面生成浏览器证据。它们只是人工复核工具，不是 Mission 编排包装层。

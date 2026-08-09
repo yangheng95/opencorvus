@@ -3,6 +3,14 @@ import { STATUS_CODES } from "http"
 import { iife } from "@/util/iife"
 
 export namespace ProviderError {
+  export function redactSensitiveProviderText(input: string): string {
+    return input
+      .replace(/\*{4}[0-9A-Fa-f]{4,}\b/g, "****<redacted>")
+      .replace(/\b((?:x[-_]?api[-_ ]?key|api[-_ ]?key)["']?\s*[:=]\s*["']?)([^,;\s"'}]+)/gi, "$1<redacted>")
+      .replace(/\b(authorization["']?\s*[:=]\s*["']?)(bearer\s+)?[^,;\s"'}]+/gi, "$1<redacted>")
+      .replace(/\b(bearer\s+)[A-Za-z0-9._~+/=-]+/gi, "$1<redacted>")
+  }
+
   // Adapted from overflow detection patterns in:
   // https://github.com/badlogic/pi-mono/blob/main/packages/ai/src/utils/overflow.ts
   const OVERFLOW_PATTERNS = [
@@ -195,8 +203,8 @@ export namespace ProviderError {
     if (overflow) {
       return {
         type: "context_overflow",
-        message: overflow,
-        responseBody,
+        message: redactSensitiveProviderText(overflow),
+        responseBody: redactSensitiveProviderText(responseBody),
       }
     }
 
@@ -206,21 +214,24 @@ export namespace ProviderError {
           type: "api_error",
           message: "Quota exceeded. Check your plan and billing details.",
           isRetryable: false,
-          responseBody,
+          responseBody: redactSensitiveProviderText(responseBody),
         }
       case "usage_not_included":
         return {
           type: "api_error",
           message: "To use Codex with your ChatGPT plan, upgrade to Plus: https://chatgpt.com/explore/plus.",
           isRetryable: false,
-          responseBody,
+          responseBody: redactSensitiveProviderText(responseBody),
         }
       case "invalid_prompt":
         return {
           type: "api_error",
-          message: typeof body?.error?.message === "string" ? body?.error?.message : "Invalid prompt.",
+          message:
+            typeof body?.error?.message === "string"
+              ? redactSensitiveProviderText(body?.error?.message)
+              : "Invalid prompt.",
           isRetryable: false,
-          responseBody,
+          responseBody: redactSensitiveProviderText(responseBody),
         }
     }
   }
@@ -247,12 +258,12 @@ export namespace ProviderError {
     if (overflow) {
       return {
         type: "context_overflow",
-        message: overflow,
-        responseBody: input.error.responseBody,
+        message: redactSensitiveProviderText(overflow),
+        responseBody: input.error.responseBody ? redactSensitiveProviderText(input.error.responseBody) : undefined,
       }
     }
 
-    const m = message(input.error)
+    const m = redactSensitiveProviderText(message(input.error))
     const quota = quotaExhaustedSignal({
       statusCode: input.error.statusCode,
       responseBody: input.error.responseBody,
@@ -262,7 +273,7 @@ export namespace ProviderError {
       return {
         type: "context_overflow",
         message: m,
-        responseBody: input.error.responseBody,
+        responseBody: input.error.responseBody ? redactSensitiveProviderText(input.error.responseBody) : undefined,
       }
     }
 
@@ -277,7 +288,7 @@ export namespace ProviderError {
           ? isOpenAiErrorRetryable(input.error)
           : input.error.isRetryable,
       responseHeaders: input.error.responseHeaders,
-      responseBody: input.error.responseBody,
+      responseBody: input.error.responseBody ? redactSensitiveProviderText(input.error.responseBody) : undefined,
       metadata,
     }
   }

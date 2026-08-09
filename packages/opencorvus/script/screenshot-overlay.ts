@@ -10,7 +10,7 @@
  */
 
 import { launchBrowser } from "../../overlay/test/launch"
-import { gotoWithBrowserInactivity } from "./benchmark/browser-inactivity"
+import { gotoWithBrowserInactivity } from "./browser-inactivity"
 import path from "node:path"
 
 const out = process.argv[2]

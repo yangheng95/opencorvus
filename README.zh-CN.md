@@ -69,7 +69,7 @@ Worker。Orchestrator 根据这些记录和宿主观察处理生命周期决策�
 x64 平台同时提供适用于不支持高级矢量扩展 2（Advanced Vector Extensions 2，AVX2）
 处理器的 `-baseline.tar.gz` 版本。
 
-把 `<version>` 替换成 Release 页面显示的版本，例如 `0.0.37-beta`。只需下载实际要
+把 `<version>` 替换成 Release 页面显示的版本，例如 `0.0.38-beta`。只需下载实际要
 安装的那一个文件。
 
 ### 从源码安装

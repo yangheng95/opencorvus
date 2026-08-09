@@ -47,7 +47,7 @@ describe("GitHub Actions workflow contract", () => {
       }
     }
 
-    expect(checkoutReferences).toHaveLength(16)
+    expect(checkoutReferences).toHaveLength(15)
     expect(checkoutReferences.map(({ uses }) => uses)).toEqual(checkoutReferences.map(() => "actions/checkout@v6"))
   })
 
@@ -139,16 +139,17 @@ describe("GitHub Actions workflow contract", () => {
     const workflow = await readWorkflow("test.yml")
     const jobs = workflow.jobs ?? {}
 
-    for (const job of ["build-critical", "channel-runtime-unit", "overlay-unit", "project-open"]) {
+    for (const job of ["build-critical", "channel-runtime-unit", "overlay-unit"]) {
       expect(jobs[job]?.steps?.find(({ uses }) => uses === "./.github/actions/setup-bun")?.with).toEqual({
         prepare_sdk: "true",
       })
     }
-    expect(jobs["build-critical"]?.steps?.find(({ name }) => name === "Install critical build runtime dependencies"))
-      .toEqual({
-        name: "Install critical build runtime dependencies",
-        run: "sudo apt-get update\nsudo apt-get install -y ripgrep\n",
-      })
+    expect(
+      jobs["build-critical"]?.steps?.find(({ name }) => name === "Install critical build runtime dependencies"),
+    ).toEqual({
+      name: "Install critical build runtime dependencies",
+      run: "sudo apt-get update\nsudo apt-get install -y ripgrep\n",
+    })
     expect(jobs.unit?.steps?.filter(({ name }) => name?.startsWith("Install "))).toEqual([
       {
         name: "Install Linux test runtime dependencies",

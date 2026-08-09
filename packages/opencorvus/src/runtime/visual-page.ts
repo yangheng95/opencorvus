@@ -2,14 +2,12 @@
  * Visual similarity evaluator — Browser Runtime screenshot + SSIM check.
  * SSIM means structural similarity index measure.
  *
- * The same logic that ships in `script/benchmark/visual-diff.ts` (which is
- * now a thin CLI (command-line interface) wrapper) lives here as a library so the Delivery Slice evaluator
- * can run it inside the orchestrator. Every fig2code-style task that lists a
+ * The current implementation lives here as a library so the Delivery Slice
+ * evaluator can run it inside the orchestrator. Every fig2code-style task that lists a
  * visual reference automatically gets a structural-similarity check without
  * any external pipeline tooling.
  *
- * Behaviour matches the CLI (single source of truth for thresholds and the
- * SSIM map analysis):
+ * This module is the single source of truth for thresholds and SSIM map analysis:
  *   - Render a live http(s) target URL with Chromium at the reference's
  *     natural viewport (or a caller-supplied size).
  *   - Compare against the reference PNG using SSIM. Fail when either
