@@ -5,11 +5,13 @@ import os from "node:os"
 import path from "node:path"
 import { spawnSync } from "node:child_process"
 
-type CaseID = "m01" | "m02" | "m03" | "m04" | "m05" | "m06"
+type CaseID = "m01" | "m02" | "m03" | "m04" | "m05" | "m06" | "m07"
 
 function selectedCaseID(): CaseID {
   const raw = process.env.MISSION_RANDOM_PORT_E2E_CASE ?? "m01"
-  if (raw === "m01" || raw === "m02" || raw === "m03" || raw === "m04" || raw === "m05" || raw === "m06") return raw
+  if (raw === "m01" || raw === "m02" || raw === "m03" || raw === "m04" || raw === "m05" || raw === "m06" || raw === "m07") {
+    return raw
+  }
   throw new Error(`unsupported MISSION_RANDOM_PORT_E2E_CASE ${JSON.stringify(raw)}`)
 }
 
@@ -68,6 +70,7 @@ type Evidence = {
   }>
   firstWake?: JsonRecord
   secondWake?: JsonRecord
+  thirdWake?: JsonRecord
   status?: unknown
   activityCursor?: unknown
   messages?: unknown
@@ -128,7 +131,7 @@ const allowedM03HarnessMetadata = new Set([".gitignore", ".opencorvus/opencorvus
 
 function mockProviderEnabled() {
   const enabled = process.env.MISSION_RANDOM_PORT_E2E_MOCK_PROVIDER === "1"
-  if (enabled && (caseID === "m03" || caseID === "m04" || caseID === "m05" || caseID === "m06")) {
+  if (enabled && (caseID === "m03" || caseID === "m04" || caseID === "m05" || caseID === "m06" || caseID === "m07")) {
     throw new Error(`MISSION_RANDOM_PORT_E2E_MOCK_PROVIDER is not supported for the ${caseID.toUpperCase()} live DeepSeek Mission E2E benchmark`)
   }
   return enabled
@@ -1135,6 +1138,108 @@ function m06SkillStateEvidence(messages: unknown): {
   }
 }
 
+function locatorCandidatesFromArtifactPage(output: unknown): JsonRecord[] {
+  const locators: JsonRecord[] = []
+  visitJSON(parseJsonOutput(output), (value) => {
+    if (!value || typeof value !== "object" || Array.isArray(value)) return
+    const record = value as JsonRecord
+    const locator = inputRecord(record.locator)
+    if (structurallyValidEvidenceLocator(locator)) locators.push(locator)
+  })
+  return locators
+}
+
+function m07ArtifactImportEvidence(messages: unknown, createdTaskIDs: string[]): {
+  upstreamTaskID?: string
+  downstreamTaskID?: string
+  upstreamCatalogLocator?: JsonRecord
+  upstreamReadLocator?: JsonRecord
+  upstreamArtifactRead: boolean
+  downstreamCreateWithImport: boolean
+  downstreamOutputImportMapping: boolean
+  finalQueryBothTasks: boolean
+  finalCompletionAcceptsBoth: boolean
+} {
+  const [upstreamTaskID, downstreamTaskID] = createdTaskIDs
+  if (!upstreamTaskID || !downstreamTaskID) {
+    return {
+      upstreamTaskID,
+      downstreamTaskID,
+      upstreamArtifactRead: false,
+      downstreamCreateWithImport: false,
+      downstreamOutputImportMapping: false,
+      finalQueryBothTasks: false,
+      finalCompletionAcceptsBoth: false,
+    }
+  }
+  const completed = completedToolParts(messages)
+  const upstreamCatalogLocators = completed
+    .filter((part) => {
+      const input = inputRecord(part.input)
+      return part.tool === "panel" && input.action === "query_task_artifacts" && input.taskID === upstreamTaskID
+    })
+    .flatMap((part) => locatorCandidatesFromArtifactPage(part.output))
+  let upstreamReadLocator: JsonRecord | undefined
+  const upstreamArtifactRead = completed.some((part) => {
+    const input = inputRecord(part.input)
+    if (part.tool !== "panel" || input.action !== "read_task_artifact" || input.taskID !== upstreamTaskID) return false
+    const locator = inputRecord(input.locator)
+    if (!upstreamCatalogLocators.some((candidate) => locatorMatches(candidate, locator))) return false
+    const chunk = parsedToolOutput(part)
+    if (chunk.complete !== true) return false
+    upstreamReadLocator = locator
+    return true
+  })
+  const downstreamCreatePart = completed.find((part) => {
+    if (part.tool !== "panel") return false
+    const input = inputRecord(part.input)
+    if (input.action !== "create_task") return false
+    return parseJsonOutput(part.output).task_id === downstreamTaskID
+  })
+  const downstreamImports = responseArray(inputRecord(downstreamCreatePart?.input).artifact_imports)
+  const downstreamCreateWithImport =
+    !!upstreamReadLocator &&
+    downstreamImports.some((item) => {
+      const record = inputRecord(item)
+      return record.source_task_id === upstreamTaskID && locatorMatches(record.locator, upstreamReadLocator)
+    })
+  const downstreamMappings = responseArray(parseJsonOutput(downstreamCreatePart?.output).artifact_imports)
+  const downstreamOutputImportMapping =
+    !!upstreamReadLocator &&
+    downstreamMappings.some((item) => {
+      const record = inputRecord(item)
+      return record.source_task_id === upstreamTaskID && locatorMatches(record.source_locator, upstreamReadLocator)
+    })
+  const finalQueryBothTasks = completed.some((part) => {
+    const input = inputRecord(part.input)
+    return (
+      part.tool === "panel" &&
+      input.action === "query_task" &&
+      inputMentionsTask(input, upstreamTaskID) &&
+      inputMentionsTask(input, downstreamTaskID)
+    )
+  })
+  const finalCompletionAcceptsBoth = completed.some((part) => {
+    const input = inputRecord(part.input)
+    if (part.tool !== "panel" || input.action !== "complete_mission" || parsedToolOutput(part).kind !== "mission_completed") {
+      return false
+    }
+    const accepted = responseArray(input.task_acceptances).map((item) => inputRecord(item).task_id).sort()
+    return accepted.length === 2 && accepted[0] === [upstreamTaskID, downstreamTaskID].sort()[0] && accepted[1] === [upstreamTaskID, downstreamTaskID].sort()[1]
+  })
+  return {
+    upstreamTaskID,
+    downstreamTaskID,
+    upstreamCatalogLocator: upstreamCatalogLocators[0],
+    upstreamReadLocator,
+    upstreamArtifactRead,
+    downstreamCreateWithImport,
+    downstreamOutputImportMapping,
+    finalQueryBothTasks,
+    finalCompletionAcceptsBoth,
+  }
+}
+
 function collectToolEvidence(messages: unknown): {
   missionSkill: boolean
   publish: boolean
@@ -1257,7 +1362,7 @@ function evaluate() {
   const failures: string[] = []
   if (!evidence.baseURL) failures.push("backend URL missing")
   const preflight = inputRecord(evidence.providerPreflight)
-  if (caseID === "m03" || caseID === "m06" || !evidence.mockProviderURL) {
+  if (caseID === "m03" || caseID === "m06" || caseID === "m07" || !evidence.mockProviderURL) {
     if (evidence.modelRef !== liveModelRef) failures.push(`modelRef is not ${liveModelRef}`)
     if (evidence.mockProviderURL) failures.push("mock provider URL present in live DeepSeek evidence")
     if (preflight.ok !== true) failures.push("DeepSeek provider preflight did not report ok true")
@@ -1274,8 +1379,15 @@ function evaluate() {
   }
   if (evidence.firstWake?.created !== true) failures.push("first wake did not create mission")
   if (evidence.secondWake?.created !== false) failures.push("second wake did not resume mission")
+  if (caseID === "m07" && evidence.thirdWake?.created !== false) failures.push("third wake did not resume mission")
   if (evidence.firstWake?.missionID !== evidence.secondWake?.missionID) failures.push("resume missionID mismatch")
   if (evidence.firstWake?.sessionID !== evidence.secondWake?.sessionID) failures.push("resume sessionID mismatch")
+  if (caseID === "m07" && evidence.thirdWake?.missionID !== evidence.firstWake?.missionID) {
+    failures.push("third wake missionID mismatch")
+  }
+  if (caseID === "m07" && evidence.thirdWake?.sessionID !== evidence.firstWake?.sessionID) {
+    failures.push("third wake sessionID mismatch")
+  }
   const tools = collectToolEvidence(evidence.messages)
   if (!tools.missionSkill) failures.push("no completed mission_skill general evidence found in session messages")
   if (tools.createTaskFailure) failures.push(`panel.create_task failed: ${tools.createTaskFailure}`)
@@ -1383,6 +1495,32 @@ function evaluate() {
       failures.push("M06 did not complete Mission with empty task_acceptances")
     }
   }
+  if (caseID === "m07") {
+    if (tools.createdTaskIDs.length !== 2) {
+      failures.push(`M07 expected exactly two created child Tasks, saw ${tools.createdTaskIDs.length}`)
+    }
+    const taskIDs = tools.createdTaskIDs
+    const statusTaskIDs = statusTasks(evidence.status).map((task) => inputRecord(task).taskID)
+    if (statusTaskIDs.length !== 2 || !taskIDs.every((taskID) => statusTaskIDs.includes(taskID))) {
+      failures.push(`M07 current child Task set mismatch: ${statusTaskIDs.join(", ") || "<none>"}`)
+    }
+    const artifactImport = m07ArtifactImportEvidence(evidence.messages, taskIDs)
+    if (!artifactImport.upstreamArtifactRead) failures.push("M07 did not completely read an upstream artifact locator")
+    if (!artifactImport.downstreamCreateWithImport) failures.push("M07 downstream Task was not created with matching artifact_imports")
+    if (!artifactImport.downstreamOutputImportMapping) failures.push("M07 downstream create_task output did not report import mapping")
+    if (!artifactImport.finalQueryBothTasks) failures.push("M07 did not query both child Tasks before final completion")
+    if (!artifactImport.finalCompletionAcceptsBoth) failures.push("M07 did not complete Mission with exactly both child Tasks accepted")
+    for (const taskID of taskIDs) {
+      const authority = m04EvidenceAuthority(evidence.messages, taskID)
+      if (!authority.queryTask) failures.push(`M07 did not query child Task ${taskID}`)
+      if (!authority.queryArtifacts) failures.push(`M07 did not enumerate child Task artifacts for ${taskID}`)
+      if (!authority.readCompletionDecision) failures.push(`M07 did not read completion decision for ${taskID}`)
+      if (!authority.completeMissionWithReadLocator) {
+        failures.push(`M07 complete_mission did not cite the read completion-decision locator for ${taskID}`)
+      }
+    }
+    if (!tools.publish) failures.push("M07 did not produce completed publish_interactive_artifact evidence")
+  }
   if (artifacts.length === 0 && !tools.publish && (evidence.projectArchive?.bytes ?? 0) === 0) {
     failures.push("no publish/artifact/project-archive evidence found")
   }
@@ -1411,21 +1549,26 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
     const tools = collectToolEvidence(evidence.messages)
     const noChild = caseID === "m05" ? m05NoChildEvidence(evidence.messages) : undefined
     const skillState = caseID === "m06" ? m06SkillStateEvidence(evidence.messages) : undefined
+    const importState = caseID === "m07" ? m07ArtifactImportEvidence(evidence.messages, tools.createdTaskIDs) : undefined
     const hasTask =
       isNoChildCase(caseID)
         ? statusTasks(evidence.status).length === 0 && tools.createdTaskIDs.length === 0
-        : !!tools.createdTaskID && statusHasTask(evidence.status, tools.createdTaskID)
+        : caseID === "m07"
+          ? tools.createdTaskIDs.length === 2 &&
+            statusTasks(evidence.status).length === 2 &&
+            tools.createdTaskIDs.every((taskID) => statusHasTask(evidence.status, taskID))
+          : !!tools.createdTaskID && statusHasTask(evidence.status, tools.createdTaskID)
     const taskIDs = statusTasks(evidence.status)
       .map((task) => inputRecord(task).taskID)
       .filter((taskID): taskID is string => typeof taskID === "string")
     if (tools.createdTaskID && !taskIDs.includes(tools.createdTaskID)) taskIDs.push(tools.createdTaskID)
     await resolveM03OptionalTestingInteractions(baseURL, taskIDs)
     const hasArtifact =
-      caseID === "m02" || caseID === "m03" || caseID === "m04" || caseID === "m05" || caseID === "m06"
+      caseID === "m02" || caseID === "m03" || caseID === "m04" || caseID === "m05" || caseID === "m06" || caseID === "m07"
         ? tools.publish
         : responseArray(evidence.turnArtifacts).length > 0 || tools.publish
     const hasResumeSettlement =
-      caseID === "m02" || caseID === "m03" || caseID === "m04" || caseID === "m05" || caseID === "m06"
+      caseID === "m02" || caseID === "m03" || caseID === "m04" || caseID === "m05" || caseID === "m06" || caseID === "m07"
         ? tools.publish && tools.completeMission
         : tools.resumeHandoff || tools.publish
     const hasCaseEvidence =
@@ -1442,6 +1585,21 @@ async function waitForEvidence(baseURL: string, missionID: string, sessionID: st
             !!skillState.stateReadMarker &&
             !!skillState.publish &&
             !!skillState.completeMissionEmptyAcceptances
+        : caseID === "m07"
+          ? !!importState?.upstreamArtifactRead &&
+            !!importState.downstreamCreateWithImport &&
+            !!importState.downstreamOutputImportMapping &&
+            !!importState.finalQueryBothTasks &&
+            !!importState.finalCompletionAcceptsBoth &&
+            tools.createdTaskIDs.every((taskID) => {
+              const authority = m04EvidenceAuthority(evidence.messages, taskID)
+              return (
+                authority.queryTask &&
+                authority.queryArtifacts &&
+                authority.readCompletionDecision &&
+                authority.completeMissionWithReadLocator
+              )
+            })
         : true
     if (tools.createTaskFailure) return
     const assistantComplete = allAssistantMessagesComplete(evidence.messages)
@@ -1500,9 +1658,49 @@ async function waitForInitialM06StateWrites(baseURL: string, missionID: string, 
   throw new Error("initial M06 state-write deadline reached before resume")
 }
 
+function inactiveMissionTaskCount(status: unknown) {
+  return statusTasks(status).filter((task) => {
+    const record = inputRecord(task)
+    return record.status === "inactive" && record.lifecycleStatus === "completed"
+  }).length
+}
+
+async function waitForM07CompletedChildTasks(baseURL: string, missionID: string, sessionID: string, expectedCount: number) {
+  let last = ""
+  let quietSince = Date.now()
+  const deadline = Date.now() + Number(process.env.MISSION_RANDOM_PORT_E2E_INITIAL_TASK_TIMEOUT_MS ?? 5 * 60 * 1000)
+  while (Date.now() < deadline) {
+    evidence.status = await requestJSON(baseURL, `/mission/${missionID}/status`)
+    evidence.messages = await requestJSON(baseURL, `/session/${sessionID}/message`)
+    const tools = collectToolEvidence(evidence.messages)
+    const tasks = statusTasks(evidence.status)
+    if (tools.createTaskFailure) throw new Error(`panel.create_task failed before M07 stage boundary: ${tools.createTaskFailure}`)
+    if (tasks.length === expectedCount && tools.createdTaskIDs.length === expectedCount && inactiveMissionTaskCount(evidence.status) === expectedCount) {
+      return
+    }
+    const signature = JSON.stringify({
+      status: signatureStatus(evidence.status),
+      messages: evidence.messages,
+      createdTaskIDs: tools.createdTaskIDs,
+    })
+    if (signature !== last) {
+      last = signature
+      quietSince = Date.now()
+    } else if (Date.now() - quietSince > 120_000) {
+      throw new Error(`M07 child Task stage ${expectedCount} quiet timeout before resume`)
+    }
+    await Bun.sleep(5_000)
+  }
+  throw new Error(`M07 child Task stage ${expectedCount} deadline reached before resume`)
+}
+
 async function waitForInitialChildTask(baseURL: string, missionID: string, sessionID: string) {
   if (caseID === "m06") {
     await waitForInitialM06StateWrites(baseURL, missionID, sessionID)
+    return
+  }
+  if (caseID === "m07") {
+    await waitForM07CompletedChildTasks(baseURL, missionID, sessionID, 1)
     return
   }
   if (caseID !== "m04") {
@@ -1617,6 +1815,14 @@ async function main() {
                     "For this first wake, stop after those Mission state writes and handoff.md. Do not call mission_state read, publish_interactive_artifact, or panel.complete_mission yet; the next wake will verify read-back and complete.",
                     "Do not modify project files, do not run npm test, and do not install dependencies.",
                   ].join("\n")
+                : caseID === "m07"
+                  ? [
+                      '@mission("general")',
+                      '@squad("base")',
+                      "Introduce the Mission plan briefly, load the general Mission Skill, write Mission state, and create exactly one upstream child Task using promptProfile base.",
+                      "The upstream Task must read only package.json and test.js, must not modify files, must not run npm test, and must produce a concise durable artifact describing package name, test script, imported module path, assertion value, and files read.",
+                      "After creating that single upstream Task, create no downstream Task yet. Record in handoff.md that the next wake must query the upstream Task, enumerate artifacts, read one locator completely, then create the downstream Task with artifact_imports.",
+                    ].join("\n")
           : [
               '@mission("general")',
               "Introduce the Mission plan briefly, load the general Mission Skill, write Mission state, dispatch one small code Task that runs npm test, and keep evidence concise.",
@@ -1650,10 +1856,26 @@ async function main() {
                   ? "Resume the bounded no-child Mission. If it is not already complete, use Mission's own glob/read evidence for package.json, write Mission state, publish a compact artifact, and call panel.complete_mission with task_acceptances: []. Do not create any child Task, do not use any @squad reference, do not run npm test, and do not modify files."
                   : caseID === "m06"
                     ? 'Resume the bounded no-child Mission. Call mission_state list, then read frontier.md, tasks.md, and notes.md and verify each read contains "M06-SKILL-FILE". Publish a compact skill-file/state-resume digest with publish_interactive_artifact, then call panel.complete_mission with task_acceptances: []. Do not create any child Task, do not use any @squad reference, do not run npm test, and do not modify files.'
+                    : caseID === "m07"
+                      ? "Resume the cross-Task artifact import Mission. Query exactly the one upstream child Task, call panel.query_task_artifacts for it, read one concrete upstream artifact locator completely with panel.read_task_artifact, then create exactly one downstream child Task using promptProfile base with artifact_imports containing that upstream task_id and the exact read locator. Do not copy the upstream artifact body into the downstream request prose. The downstream Task should use the imported artifact to produce a concise import-consumer artifact and must not modify files or run npm test. After creating that downstream Task, stop and write handoff.md; do not publish or complete the Mission yet."
             : "Resume from Mission state and publish a compact completion summary artifact if the child Task evidence is ready. If not ready, record the exact pending state in handoff.md.",
         ...(model ? { model } : {}),
       }),
     })
+
+    if (caseID === "m07") {
+      await waitForM07CompletedChildTasks(evidence.baseURL, missionID, sessionID, 2)
+      evidence.thirdWake = await requestJSON(evidence.baseURL, "/mission/wake", {
+        method: "POST",
+        body: JSON.stringify({
+          missionID,
+          productPillar: "code",
+          text:
+            "Resume the cross-Task artifact import Mission for final acceptance. Query both child Tasks in the same turn, enumerate artifacts for both with panel.query_task_artifacts, completely read the current task_completion_decision artifact for each Task, publish a compact import topology digest with publish_interactive_artifact, then call panel.complete_mission with exactly both current child Tasks accepted and only the exact completion-decision locators you read in this turn. Do not create any additional or replacement child Task.",
+          ...(model ? { model } : {}),
+        }),
+      })
+    }
 
     currentPhase = "collect"
     await waitForEvidence(evidence.baseURL, missionID, sessionID)
