@@ -337,6 +337,12 @@
   font-weight: 700;
 }
 
+.candidate-source-meta {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
 .candidate-sources small {
   color: var(--muted);
   font-family: var(--mono);

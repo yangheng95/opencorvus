@@ -1,0 +1,1 @@
+Join the completed reports into one nonconformance register. Preserve competing hypotheses and evidence gaps; propose bounded containment, verification, corrective-action, and recurrence checks with named approval gates. Use `manufacturing-quality/shared/method`; do not release production or approve safety.

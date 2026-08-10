@@ -1,0 +1,1 @@
+Analyze demand signals, forecast assumptions, inventory positions, service targets, lead times, and data gaps. Use `supply-chain-logistics/shared/method`; do not place orders or change inventory. Return scenarios with evidence and uncertainty.

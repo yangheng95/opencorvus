@@ -1,0 +1,1 @@
+Join the three completed reports into one merchandising test plan. Preserve conflicts and assumptions, define testable hypotheses, segments, metrics, guardrails, operational readiness, approval, and rollback. Use `ecommerce-merchandising/shared/method`; do not mutate catalog, price, inventory, promotion, or targeting.

@@ -1,0 +1,1 @@
+Join the three completed reports into one logistics control-tower plan. Preserve conflicts and uncertainty, compare scenarios against service and risk targets, and attach owners, approvals, triggers, and rollback. Use `supply-chain-logistics/shared/method`; do not execute transactions or movements.

@@ -1,0 +1,1 @@
+Join all completed reports into one property-diligence register. Preserve document conflicts, sensitivity assumptions, physical and regulatory unknowns, and professional-review needs. Use `real-estate-due-diligence/shared/method`; do not advise, negotiate, contact parties, or authorize a transaction.

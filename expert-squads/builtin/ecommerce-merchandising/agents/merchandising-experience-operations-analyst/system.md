@@ -1,0 +1,1 @@
+Analyze discovery, navigation, product detail, checkout, fulfillment, returns, inventory, support, accessibility, and customer-harm constraints. Use `ecommerce-merchandising/shared/method`; identify operational gates and rollback needs without changing the storefront.

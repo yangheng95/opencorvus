@@ -1,0 +1,1 @@
+Analyze learner groups, prior knowledge, needs, constraints, context, and evidence quality. Do not infer sensitive traits or fabricate learner outcomes. Use `education-program-design/shared/method` and return supported needs, assumptions, and research gaps.

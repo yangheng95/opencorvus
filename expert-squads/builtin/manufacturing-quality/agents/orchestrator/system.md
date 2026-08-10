@@ -1,0 +1,1 @@
+Coordinate manufacturing-quality analysis under read-only authority. Freeze product, process, lot/time boundary, safety constraints, and decision owner. Dispatch process evidence, defect analysis, and control verification in parallel; dispatch disposition only after all reports exist. Require `manufacturing-quality/shared/method` and preserve traceability and approvals.

@@ -951,6 +951,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/cloud-platform-architecture",
+    "namespace": "builtin",
+    "id": "cloud-platform-architecture",
+    "label": "Cloud Platform Architecture",
+    "version": "2026.08.10.1",
+    "packageDigest": "89f797dffac08c9c469c2fb55f96414af2ea9662bd3f0027950fb5251c87f717",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "cloud-platform-architecture/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/commercial-legal",
     "namespace": "builtin",
     "id": "commercial-legal",
@@ -987,6 +1004,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/cybersecurity-assurance",
+    "namespace": "builtin",
+    "id": "cybersecurity-assurance",
+    "label": "Cybersecurity Assurance",
+    "version": "2026.08.10.1",
+    "packageDigest": "00c7cef0ffd9cf21cd296af67fd0c6a2484fff3ce237c721cf1e48ba50bccd5e",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "cybersecurity-assurance/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/data-analysis",
     "namespace": "builtin",
     "id": "data-analysis",
@@ -1006,6 +1040,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/data-engineering-reliability",
+    "namespace": "builtin",
+    "id": "data-engineering-reliability",
+    "label": "Data Engineering Reliability",
+    "version": "2026.08.10.1",
+    "packageDigest": "f7273e3c27acbb60872e6ab16dbc587618b4cf7c463d27263775b98e803a2b08",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "data-engineering-reliability/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/deep-research",
     "namespace": "builtin",
     "id": "deep-research",
@@ -1022,6 +1073,40 @@ export const generatedShippedSquadFacts = [
       "deep-research/shared/workflow"
     ],
     "agentCount": 6,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/ecommerce-merchandising",
+    "namespace": "builtin",
+    "id": "ecommerce-merchandising",
+    "label": "Ecommerce Merchandising",
+    "version": "2026.08.10.1",
+    "packageDigest": "c1c2c2800ce2fc9b509393c6edeca75505269165aba4df4c3d99a6e750b5a107",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "ecommerce-merchandising/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/education-program-design",
+    "namespace": "builtin",
+    "id": "education-program-design",
+    "label": "Education Program Design",
+    "version": "2026.08.10.1",
+    "packageDigest": "4cbb0ef9cd9809134c29e4462ef8aaf992cdd18e4a3408ffa16c5fab267dfa0c",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "education-program-design/shared/method"
+    ],
+    "agentCount": 4,
     "workflowCount": 1
   },
   {
@@ -1112,6 +1197,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 2
   },
   {
+    "identity": "builtin/healthcare-operations",
+    "namespace": "builtin",
+    "id": "healthcare-operations",
+    "label": "Healthcare Operations",
+    "version": "2026.08.10.1",
+    "packageDigest": "0ff88183c6d3661c5623598a23f76ddbe57c74e92ad36e8cfbe0ab3a52a94433",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "healthcare-operations/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/hr-operations",
     "namespace": "builtin",
     "id": "hr-operations",
@@ -1160,6 +1262,23 @@ export const generatedShippedSquadFacts = [
     ],
     "packageSkillRefs": [
       "localization-adaptation/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/manufacturing-quality",
+    "namespace": "builtin",
+    "id": "manufacturing-quality",
+    "label": "Manufacturing Quality",
+    "version": "2026.08.10.1",
+    "packageDigest": "1a655157c2218a9dd6f6694defe1be8182d1c7a77eb95d2d02afb81e6041549b",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "manufacturing-quality/shared/method"
     ],
     "agentCount": 4,
     "workflowCount": 1
@@ -1290,6 +1409,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/real-estate-due-diligence",
+    "namespace": "builtin",
+    "id": "real-estate-due-diligence",
+    "label": "Real Estate Due Diligence",
+    "version": "2026.08.10.1",
+    "packageDigest": "1b67c9b4b70ffc060660527ed0f567e30d6d584c592d5e85354e4078d301f9e6",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "real-estate-due-diligence/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/research-studio",
     "namespace": "builtin",
     "id": "research-studio",
@@ -1343,6 +1479,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/scientific-research-design",
+    "namespace": "builtin",
+    "id": "scientific-research-design",
+    "label": "Scientific Research Design",
+    "version": "2026.08.10.1",
+    "packageDigest": "8dac43b5145ed6e0558c01d8eef72e77a3ad5ca45d9e50df3dfb65915b3c325d",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "scientific-research-design/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/seo-geo",
     "namespace": "builtin",
     "id": "seo-geo",
@@ -1379,6 +1532,23 @@ export const generatedShippedSquadFacts = [
     ],
     "agentCount": 4,
     "workflowCount": 2
+  },
+  {
+    "identity": "builtin/supply-chain-logistics",
+    "namespace": "builtin",
+    "id": "supply-chain-logistics",
+    "label": "Supply Chain Logistics",
+    "version": "2026.08.10.1",
+    "packageDigest": "de01cb46926dfa4ff4654110b9e2b9de6eb223aa1a2de6d055f6de7f2f5a26a7",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "supply-chain-logistics/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
   },
   {
     "identity": "builtin/tax-compliance",

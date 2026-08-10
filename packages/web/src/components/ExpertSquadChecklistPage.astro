@@ -56,6 +56,7 @@ const copy = zh
       plan: "并行边界",
       skillSource: "Skill 来源",
       target: "目标路径",
+      asset: "专属资产",
       revision: "固定版本",
       priority: "优先级",
       declarationTitle: "并行工作声明",
@@ -107,6 +108,7 @@ const copy = zh
       plan: "Parallel boundary",
       skillSource: "Skill source",
       target: "Target path",
+      asset: "Dedicated asset",
       revision: "Pinned revision",
       priority: "Priority",
       declarationTitle: "Parallel-work declaration",
@@ -259,8 +261,11 @@ const evidenceLabel = (evidence: (typeof expertSquadRoadmapCandidates)[number]["
                         <span>{copy.skillSource}</span>
                         <a href={source.url} target="_blank" rel="noreferrer">{source.repository}</a>
                         <code>{source.license}</code>
-                        <small>{copy.target}: {source.targetPath}</small>
-                        {source.revision && <small>{copy.revision}: {source.revision}</small>}
+                        <div class="candidate-source-meta">
+                          <small>{copy.target}: {source.targetPath}</small>
+                          {source.assets.map((asset) => <small>{copy.asset}: {asset}</small>)}
+                          {source.revision && <small>{copy.revision}: {source.revision}</small>}
+                        </div>
                       </div>
                     ))}
                     {shipped && (

@@ -1,0 +1,1 @@
+Design assessment evidence, feedback loops, accommodations, and accessibility checks aligned to stated outcomes. Do not fabricate scores, credentials, or compliance claims. Use `education-program-design/shared/method` and identify human review needs.

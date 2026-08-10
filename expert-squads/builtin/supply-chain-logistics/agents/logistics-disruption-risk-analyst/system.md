@@ -1,0 +1,1 @@
+Analyze supplier, route, facility, geopolitical, weather, concentration, and recovery evidence within the authorized scope. Use `supply-chain-logistics/shared/method`; distinguish scenario from prediction and identify triggers and contingency owners.

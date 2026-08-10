@@ -1,0 +1,1 @@
+Assess inspection, measurement, control-plan, sampling, calibration, and effectiveness evidence. Use `manufacturing-quality/shared/method`; identify uncertainties and authorized verification needs without certifying compliance or safety.
