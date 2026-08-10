@@ -417,13 +417,18 @@ function renderTaskAttachmentInventory(
 export function currentWakeControlProjection(input: { taskID: string; event?: OrchestratorEvent; wakeID?: string }) {
   const taskIntent = input.event?.taskIntent
   const missionAcceptanceResume = input.event?.missionAcceptanceResume
-  if (!taskIntent && !missionAcceptanceResume) return undefined
-  const currentControlCount = [taskIntent, missionAcceptanceResume].filter(Boolean).length
+  const agentLifecycleDelivery = input.event?.agentLifecycleDelivery
+  if (!taskIntent && !missionAcceptanceResume && !agentLifecycleDelivery) return undefined
+  const currentControlCount = [taskIntent, missionAcceptanceResume, agentLifecycleDelivery].filter(Boolean).length
   if (currentControlCount > 1) {
     throw new Error(`Task ${input.taskID} wake has multiple current control occurrences`)
   }
   if (!input.wakeID) {
-    const kind = taskIntent ? taskIntent.kind : "mission acceptance-resume"
+    const kind = taskIntent
+      ? taskIntent.kind
+      : missionAcceptanceResume
+        ? "mission acceptance-resume"
+        : "agent lifecycle delivery"
     throw new Error(`Task ${input.taskID} ${kind} wake is missing its persisted ingress identity`)
   }
   const messageID = `msg_${input.wakeID.slice(input.wakeID.indexOf("_") + 1)}`
@@ -445,6 +450,25 @@ export function currentWakeControlProjection(input: { taskID: string; event?: Or
         wakeID: input.wakeID,
         taskID: input.taskID,
         taskIntent,
+      },
+    }
+  }
+  if (agentLifecycleDelivery) {
+    return {
+      messageID,
+      author: "orchestrator" as const,
+      text: [
+        "# Orchestrator Lifecycle Delivery Control",
+        "",
+        `The orchestration runtime accepted canonical terminal lifecycle event ${agentLifecycleDelivery.eventID} from Worker Session ${agentLifecycleDelivery.sessionID} for dispatch ${agentLifecycleDelivery.dispatchID}.`,
+        "This orchestrator-authored control Turn delivers that exact real occurrence as current ingress; it does not quote the worker or prescribe the Task or workflow outcome.",
+        "Read the current workflow, dispatch lineage, and Artifact snapshot, then record the next scheduling or lifecycle decision with its matching real tool call before this Turn ends.",
+      ].join("\n"),
+      wakeReason: {
+        source: "agent.lifecycle_delivery" as const,
+        wakeID: input.wakeID,
+        taskID: input.taskID,
+        agentLifecycleDelivery,
       },
     }
   }
@@ -665,7 +689,8 @@ export namespace Orchestrator {
           event?.coordinationRequest ||
           event?.taskWaitActivity ||
           event?.taskWaitWake ||
-          event?.processRecovery,
+          event?.processRecovery ||
+          event?.agentLifecycleDelivery,
       )
       const resolveRuntimeSystem = async () => {
         systemContext = await buildSystemParts(
@@ -1238,6 +1263,15 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
       `Current processRecovery=${event.processRecovery.recoveryFactID}; physical_evidence=${JSON.stringify(recovery.physical_evidence)}; ` +
         `affected_subjects=${JSON.stringify(recovery.affected_subjects)}. This exact infrastructure occurrence triggered the current wake. ` +
         `Continue or repair only the referenced input-message/descriptor/dispatch authorities; created-only subjects have no fabricated execution lifecycle.`,
+    )
+  }
+
+  if (event?.agentLifecycleDelivery) {
+    currentIngressCount += 1
+    const delivery = event.agentLifecycleDelivery
+    lines.push(
+      `Current agentLifecycleDelivery: event_id=${delivery.eventID}; session_id=${delivery.sessionID}; dispatch_id=${delivery.dispatchID}. ` +
+        "The current visible control Turn is authored by the orchestrator and delivers this exact terminal worker lifecycle occurrence without quoting or impersonating the worker. Read the current workflow, dispatch lineage, and Artifact snapshot, then record the next scheduling or lifecycle decision with its matching real tool call before this decision pass ends.",
     )
   }
 

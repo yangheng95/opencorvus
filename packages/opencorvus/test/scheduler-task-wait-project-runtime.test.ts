@@ -11,6 +11,7 @@ import { AutomationService } from "../src/scheduler/automation-service"
 import { QueuedTaskIngressSchema } from "../src/engine/queued-task-ingress"
 import { Database, and, eq, sql } from "../src/storage/db"
 import { EngineService } from "../src/task-api"
+import { Session } from "../src/session"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterAll(async () => {
@@ -19,6 +20,58 @@ afterAll(async () => {
 })
 
 describe("scheduled Task wait project runtime", () => {
+  test("assigns early Task-wait activity to the direct scheduler Session", async () => {
+    await using project = await memoryProject()
+
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const config = Config.Info.parse({ prompt_profile: { active: "base" } })
+        const capability = await PromptProfileResolver.resolveSchedulerCapability({
+          projectDirectory: project.path,
+          config,
+        })
+        configureTaskLoopRunner(async () => {})
+        const taskID = await EngineService.createTask(
+          {
+            requestID: "direct-scheduler-task-wait-activity",
+            request: "Resolve the Session that owns early Task-wait activity",
+            productPillar: "code",
+            model: "firmware/gpt-5",
+            promptProfile: "base",
+            expectedPackageDigest: capability.packageRevision.packageDigest,
+            queue: true,
+          },
+          { actor: "user" },
+        )
+        await waitForQueueCompletionHooksForTest()
+        const rootSessionID = requireTask(taskID).session_id
+        if (!rootSessionID) throw new Error("Task wait activity fixture expected a root Session")
+        const scheduler = await Session.create({
+          kind: "orchestrator",
+          parentID: rootSessionID,
+          title: "Direct Task scheduler",
+        })
+        const worker = await Session.create({
+          kind: "build",
+          parentID: scheduler.id,
+          title: "Descendant worker",
+        })
+
+        const ownership = await Promise.all(
+          [scheduler, worker].map(async (session) => ({
+            sessionID: session.id,
+            taskID: await AutomationService.taskIDForDirectSchedulerActivity(session.id),
+          })),
+        )
+        expect(ownership).toEqual([
+          { sessionID: scheduler.id, taskID },
+          { sessionID: worker.id, taskID: undefined },
+        ])
+      },
+    })
+  }, 20_000)
+
   test("atomically transfers one durable wait occurrence into the root Session project", async () => {
     await using project = await memoryProject()
     let taskID = ""

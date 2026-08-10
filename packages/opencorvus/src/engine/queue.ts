@@ -62,6 +62,7 @@ export { TaskQueueError } from "./task-directory"
 const log = Log.create({ service: "engine.queue" })
 const INTERRUPTED_TASK_WAKE_SETTLE_TIMEOUT_MS = 60_000
 const loopCompletionHooksForTest = new Set<Promise<void>>()
+const terminalIngressCompletions = new Map<string, Promise<void>>()
 
 function artifactPayloadRecord(payload: unknown): Record<string, unknown> {
   return payload && typeof payload === "object" && !Array.isArray(payload) ? (payload as Record<string, unknown>) : {}
@@ -1413,19 +1414,38 @@ function attachTerminalIngressCompletion(
   wake: NonNullable<ReturnType<typeof findNextPendingQueuedOperatorWake>>,
   directory: string,
 ): void {
+  if (terminalIngressCompletions.has(wake.id)) return
   const completion = Database.runOutsideContext(() =>
     runOutsideInstanceContext(() =>
-      runWithIndependentProjectIdentity({
-        directory,
-        fn: () =>
-          deliverTerminalTaskIngress({
-            task,
-            ingressArtifactID: wake.id,
-            ingress: wake.ingress,
+      SessionPromptState.waitForRootWakeSettlement(wake.rootSessionID, wake.id)
+        .then(() =>
+          runWithIndependentProjectIdentity({
+            directory,
+            fn: () => {
+              const currentWake = Database.use((db) =>
+                db
+                  .select({ label: EngineArtifactTable.label })
+                  .from(EngineArtifactTable)
+                  .where(
+                    and(
+                      eq(EngineArtifactTable.id, wake.id),
+                      eq(EngineArtifactTable.task_id, task.id),
+                      eq(EngineArtifactTable.kind, "queued_operator_wake"),
+                    ),
+                  )
+                  .get(),
+              )
+              if (currentWake?.label !== "pending") return undefined
+              return deliverTerminalTaskIngress({
+                task,
+                ingressArtifactID: wake.id,
+                ingress: wake.ingress,
+              })
+            },
           }),
-      })
+        )
         .then(async (delivery) => {
-          if (!delivery.settled) return
+          if (!delivery?.settled) return
           await runWithIndependentProjectIdentity({
             directory,
             fn: async () => {
@@ -1444,8 +1464,12 @@ function attachTerminalIngressCompletion(
         }),
     ),
   )
+  terminalIngressCompletions.set(wake.id, completion)
   loopCompletionHooksForTest.add(completion)
-  void completion.finally(() => loopCompletionHooksForTest.delete(completion))
+  void completion.finally(() => {
+    if (terminalIngressCompletions.get(wake.id) === completion) terminalIngressCompletions.delete(wake.id)
+    loopCompletionHooksForTest.delete(completion)
+  })
 }
 
 export async function waitForQueueCompletionHooksForTest(): Promise<void> {

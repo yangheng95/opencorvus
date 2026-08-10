@@ -56,4 +56,39 @@ describe("algorithm repair contracts", () => {
     settleWake()
     await wake
   })
+
+  test("reuses one durable wake identity only after its current physical owner settles", async () => {
+    let settleCurrent!: () => void
+    let currentStarted!: () => void
+    const observedCurrentStart = new Promise<void>((resolve) => (currentStarted = resolve))
+    const current = SessionPromptState.enqueueRootWake({
+      rootSessionID: "root_wake_settlement_contract",
+      wakeID: "wake_settlement_contract",
+      run: async () => {
+        currentStarted()
+        await new Promise<void>((resolve) => (settleCurrent = resolve))
+      },
+    })
+    await observedCurrentStart
+
+    const nextDelivery = SessionPromptState.waitForRootWakeSettlement(
+      "root_wake_settlement_contract",
+      "wake_settlement_contract",
+    ).then(() =>
+      SessionPromptState.enqueueRootWake({
+        rootSessionID: "root_wake_settlement_contract",
+        wakeID: "wake_settlement_contract",
+        run: async () => ({ phase: "terminal_delivery" as const }),
+      }),
+    )
+
+    expect(SessionPromptState.TestHooks.rootWakeQueueSnapshot("root_wake_settlement_contract")).toEqual({
+      entries: 1,
+      idleWaiters: 0,
+    })
+    settleCurrent()
+    await current
+    expect(await nextDelivery).toEqual({ phase: "terminal_delivery" })
+    expect(SessionPromptState.TestHooks.rootWakeQueueSnapshot("root_wake_settlement_contract")).toBeUndefined()
+  })
 })

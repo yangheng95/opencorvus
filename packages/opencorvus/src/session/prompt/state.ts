@@ -329,6 +329,17 @@ export namespace SessionPromptState {
   }
 
   /**
+   * Wait for the current physical owner of one durable wake identity to
+   * settle. Callers may then re-evaluate durable state before deciding
+   * whether the same wake still requires a different delivery phase.
+   */
+  export async function waitForRootWakeSettlement(rootSessionID: string, wakeID: string): Promise<void> {
+    const execution = rootWakeQueues.get(rootSessionID)?.entries.get(wakeID)
+    if (!execution) return
+    await execution.catch(() => undefined)
+  }
+
+  /**
    * Serialize persisted scheduler wakes by the Task root Session identity.
    * A wake ID is the durable artifact identity supplied by the caller; this
    * process-local queue owns ordering only and never decides whether work is

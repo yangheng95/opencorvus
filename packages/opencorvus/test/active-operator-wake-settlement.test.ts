@@ -22,7 +22,7 @@ import { TASK_CANCELLED_EVENT_TYPE, TASK_CANCELLATION_REQUESTED_EVENT_TYPE } fro
 import { pendingTaskCancellationProjection } from "@/engine/cancellation-projection"
 import { EngineProtocol } from "@/engine/protocol"
 import { deriveTaskStatus } from "@/engine/task-status"
-import { reconcilePendingCancelledTaskSettlements } from "@/engine/state"
+import { reconcilePendingCancelledTaskSettlements, terminalTask } from "@/engine/state"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { requireTask } from "@/engine/store"
 import { Identifier } from "@/id/id"
@@ -30,6 +30,7 @@ import { ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY } from "@/orchestrator/statef
 import { Instance } from "@/project/instance"
 import { ProtocolStore } from "@/protocol/store"
 import { Session } from "@/session"
+import { SessionPromptState } from "@/session/prompt/state"
 import type { Message } from "@/session/message"
 import { Database, and, desc, eq, sql } from "@/storage/db"
 import { EngineService } from "@/task-api"
@@ -980,6 +981,73 @@ describe("active operator wake settlement", () => {
           ).length,
           label: rows[0]?.label,
         }).toEqual({ invocations: 1, occurrences: 1, label: "drained" })
+      },
+    })
+  })
+
+  test("settles the owning lifecycle wake before evaluating its terminal delivery phase", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Lifecycle wake terminal handoff",
+          request: "Complete from this exact worker lifecycle occurrence",
+        })
+        const event = {
+          note: "Complete from terminal worker lifecycle occurrence",
+          agentLifecycleDelivery: {
+            eventID: "evt_worker_terminal_handoff",
+            sessionID: "ses_worker_terminal_handoff",
+            dispatchID: "dispatch_worker_terminal_handoff",
+          },
+        }
+        let duplicateDispatchStatus = ""
+        configureTaskLoopRunner(async ({ event: currentEvent }) => {
+          const finalMessageID = await persistFinalAssistantMessage({
+            rootSessionID,
+            text: "Completed the Task from the exact terminal worker lifecycle occurrence.",
+            parts: (sessionID, messageID) => [
+              completedToolPart({
+                sessionID,
+                messageID,
+                callID: "call_complete_from_lifecycle",
+                tool: "manage_task",
+                stateInput: { action: "complete_task" },
+                metadata: { [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: "decision" },
+              }),
+            ],
+          })
+          await terminalTask(requireTask(taskID), { status: "completed" }, "Lifecycle handoff completed")
+          duplicateDispatchStatus = await dispatchTaskLoop({ taskID, event: currentEvent })
+          return { finalMessageID }
+        })
+
+        expect(await dispatchTaskLoop({ taskID, event })).toBe("started")
+        await waitForQueueCompletionHooksForTest()
+        const rows = Database.use((db) =>
+          db
+            .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+            .all(),
+        )
+        const occurrence = rows.filter(
+          (row) => QueuedTaskIngressSchema.parse(row.payload).lifecycle_event_id === event.agentLifecycleDelivery.eventID,
+        )
+        expect({
+          taskStatus: deriveTaskStatus(requireTask(taskID)),
+          duplicateDispatchStatus,
+          occurrenceCount: occurrence.length,
+          occurrenceLabel: occurrence[0]?.label,
+          rootWakeQueue: SessionPromptState.TestHooks.rootWakeQueueSnapshot(rootSessionID),
+        }).toEqual({
+          taskStatus: "completed",
+          duplicateDispatchStatus: "started",
+          occurrenceCount: 1,
+          occurrenceLabel: "drained",
+          rootWakeQueue: undefined,
+        })
       },
     })
   })

@@ -34,6 +34,7 @@ import { exactEngineArtifactLocator } from "@/artifact-catalog"
 import { WorkflowNodeOccurrenceConflictError } from "@/engine/workflow-node-occurrence"
 import { resolveDispatchOccurrenceAuthority } from "@/engine/dispatch-lineage"
 import { Log } from "@/util/log"
+import { runAsInstanceActivity } from "@/project/instance"
 
 const log = Log.create({ service: "dispatch-agent-tool" })
 
@@ -85,22 +86,55 @@ export type RunDispatchAgentInWorktree = <T>(input: {
 }) => Promise<T>
 
 export async function detachDispatchExecution(input: {
-  execution: Promise<DispatchOutcomeResult>
+  execution: () => Promise<DispatchOutcomeResult>
   committedLineage: Promise<{ sessionID: string; artifactID: string }>
+  runAsActivity: <T>(run: () => Promise<T>) => Promise<T>
   deliver: (input: { sessionID: string; outcome?: DispatchOutcomeResult; executionError?: unknown }) => Promise<void>
   onDeliveryFailure: (input: { sessionID: string; error: unknown }) => void
 }): Promise<DispatchOutcomeResult> {
-  const first = await Promise.race([
-    input.execution.then((outcome) => ({ kind: "completed" as const, outcome })),
-    input.committedLineage.then((lineage) => ({ kind: "accepted" as const, lineage })),
-  ])
+  type FirstResult =
+    | { kind: "completed"; outcome: DispatchOutcomeResult }
+    | { kind: "accepted"; lineage: { sessionID: string; artifactID: string } }
+  let resolveFirst!: (result: FirstResult) => void
+  let rejectFirst!: (error: unknown) => void
+  const firstResult = new Promise<FirstResult>((resolve, reject) => {
+    resolveFirst = resolve
+    rejectFirst = reject
+  })
+  let acceptedSessionID: string | undefined
+  const activity = input.runAsActivity(async () => {
+    try {
+      // The execution factory must start inside the activity. Tracking an
+      // already-started Promise cannot retrofit Instance authority onto its
+      // existing AsyncLocal continuations.
+      const execution = input.execution()
+      const first = await Promise.race<FirstResult>([
+        execution.then((outcome) => ({ kind: "completed" as const, outcome })),
+        input.committedLineage.then((lineage) => ({ kind: "accepted" as const, lineage })),
+      ])
+      if (first.kind === "completed") {
+        resolveFirst(first)
+        return
+      }
+      acceptedSessionID = first.lineage.sessionID
+      resolveFirst(first)
+      await execution.then(
+        (outcome) => input.deliver({ sessionID: first.lineage.sessionID, outcome }),
+        (executionError) => input.deliver({ sessionID: first.lineage.sessionID, executionError }),
+      )
+    } catch (error) {
+      if (!acceptedSessionID) {
+        rejectFirst(error)
+        return
+      }
+      throw error
+    }
+  })
+  void activity.catch((error) => {
+    if (acceptedSessionID) input.onDeliveryFailure({ sessionID: acceptedSessionID, error })
+  })
+  const first = await firstResult
   if (first.kind === "completed") return first.outcome
-  void input.execution
-    .then(
-      (outcome) => input.deliver({ sessionID: first.lineage.sessionID, outcome }),
-      (executionError) => input.deliver({ sessionID: first.lineage.sessionID, executionError }),
-    )
-    .catch((error) => input.onDeliveryFailure({ sessionID: first.lineage.sessionID, error }))
   return DispatchOutcome.accepted({
     sessionID: first.lineage.sessionID,
     dispatchLineageID: first.lineage.artifactID,
@@ -399,7 +433,7 @@ export function createDispatchAgentTool(input: {
           )
           return DispatchAdapterContractRegistry.outputSchema(projectedAgent.identity.dispatchAdapterID).parse(outcome)
         }
-        const execution =
+        const execution = () =>
           useWorktree && projectedAgent.identity.dispatchAdapterID !== "build"
             ? (() => {
                 const worktreeSessionID = dispatch.existingSessionID ?? preparedSessionID
@@ -419,6 +453,7 @@ export function createDispatchAgentTool(input: {
         return await detachDispatchExecution({
           execution,
           committedLineage,
+          runAsActivity: runAsInstanceActivity,
           deliver: async ({ sessionID: completedSessionID }) => {
             const { ProtocolStore } = await import("@/protocol/store")
             const descriptor = WorkerTurnDescriptor.findForDispatch({

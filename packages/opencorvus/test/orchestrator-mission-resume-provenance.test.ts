@@ -81,3 +81,45 @@ test("Mission acceptance resume projects one current read and real-decision obli
   expect(retryControl?.text).toContain("proves only that the Host accepted a prior request to reopen the Task")
   expect(retryControl?.text).toContain("not Mission acceptance of deliverables")
 })
+
+test("terminal worker lifecycle delivery projects an explicit current decision obligation", () => {
+  const event = OrchestratorEventSchema.parse({
+    agentLifecycleDelivery: {
+      eventID: "pev_terminal_worker",
+      sessionID: "ses_terminal_worker",
+      dispatchID: "art_terminal_dispatch",
+    },
+  })
+
+  const notice = renderWakeProvenanceNotice(event, "tsk_terminal_worker")
+
+  expect(notice).toContain(
+    "Current agentLifecycleDelivery: event_id=pev_terminal_worker; session_id=ses_terminal_worker; dispatch_id=art_terminal_dispatch.",
+  )
+  expect(notice).toContain("authored by the orchestrator")
+  expect(notice).toContain("without quoting or impersonating the worker")
+  expect(notice).toContain("record the next scheduling or lifecycle decision")
+  expect(notice).toContain("matching real tool call")
+
+  const control = currentWakeControlProjection({
+    taskID: "tsk_terminal_worker",
+    event,
+    wakeID: "art_terminal_worker_wake",
+  })
+  expect(control).toMatchObject({
+    messageID: "msg_terminal_worker_wake",
+    author: "orchestrator",
+    wakeReason: {
+      source: "agent.lifecycle_delivery",
+      wakeID: "art_terminal_worker_wake",
+      taskID: "tsk_terminal_worker",
+      agentLifecycleDelivery: event.agentLifecycleDelivery,
+    },
+  })
+  expect(control?.text).toContain("# Orchestrator Lifecycle Delivery Control")
+  expect(control?.text).toContain("accepted canonical terminal lifecycle event pev_terminal_worker")
+  expect(control?.text).toContain("orchestrator-authored control Turn")
+  expect(control?.text).toContain("does not quote the worker")
+  expect(control?.text).toContain("or prescribe the Task or workflow outcome")
+  expect(control?.text).toContain("matching real tool call")
+})

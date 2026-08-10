@@ -6,6 +6,8 @@
 
 - [2026-08-10-opencorvus-com-racknerd-hosting.md](2026-08-10-opencorvus-com-racknerd-hosting.md) defines the root-domain Astro identity, RackNerd static-service topology, GoDaddy DNS replacement boundary, managed HTTPS, exact dirty-worktree bundle provenance, and real public acceptance sequence.
 
+- [2026-08-10-expert-squad-publish-install-reuse-e2e.md](2026-08-10-expert-squad-publish-install-reuse-e2e.md) composes real `squad-sdk` generation, a visible post-generation upload decision, hosted ZIP validation and immutable browser download, explicit desktop strict import, and a fresh no-intervention reuse Task.
+
 - [2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md](2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md) defines the manifest-derived draggable Expert Squad planning checklist, WorkBuddy and open-source Skill research boundary, and the three-package saved-Skill completeness repair with real-page acceptance.
 
 - [2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md](2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md) reconstructs the false-started operator-message stall and non-convergent Cancel incident, identifies the shared root-control/process/checkpoint defects, and defines the single-ingress, asynchronous-dispatch, idempotent-cancellation, Windows/LSP, real-checker, and visual acceptance repair sequence.
