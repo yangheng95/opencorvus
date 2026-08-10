@@ -31,7 +31,7 @@ import { Badge, type BadgeTone } from "./ui/Badge"
 type OperatorIngressPresentation = { label: string; tone: BadgeTone; state: string; title?: string }
 
 function operatorIngressPresentation(messageID: string | undefined): OperatorIngressPresentation | undefined {
-  if (!messageID) return undefined
+  if (!messageID || boardStore.selectedSource?.kind !== "task") return undefined
   const artifact = boardStore.board?.artifacts.find(
     (item: any) => item.kind === "queued_operator_wake" && item.payload?.message_id === messageID,
   )

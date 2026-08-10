@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest standalone Session card ingress projection repair: [`2026-08-10-session-card-ingress-projection-repair.md`](records/2026-08/2026-08-10-session-card-ingress-projection-repair.md).
+
 Latest `v0.0.39-beta` Windows repackage: [`2026-08-10-v0.0.39-beta-windows-repackage.md`](records/2026-08/2026-08-10-v0.0.39-beta-windows-repackage.md).
 
 Latest Task control responsiveness and cancellation convergence repair plan: [`2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md`](records/2026-08/2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md).

@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-10-session-card-ingress-projection-repair.md](2026-08-10-session-card-ingress-projection-repair.md) restricts Task ingress artifact presentation to selected Task conversations so standalone Session turns render their persisted content without acquiring a false Task-board contract.
+
 - [2026-08-10-v0.0.39-beta-windows-repackage.md](2026-08-10-v0.0.39-beta-windows-repackage.md) advances the canonical release family to `0.0.39-beta` and records the native Windows graphical user interface and command-line interface repackage evidence.
 
 - [2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md](2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md) reconstructs the false-started operator-message stall and non-convergent Cancel incident, identifies the shared root-control/process/checkpoint defects, and defines the single-ingress, asynchronous-dispatch, idempotent-cancellation, Windows/LSP, real-checker, and visual acceptance repair sequence.
