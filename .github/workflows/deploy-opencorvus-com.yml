@@ -54,6 +54,9 @@ jobs:
         env:
           HUSKY: "0"
 
+      - name: Build SDK dependency
+        run: bun run --cwd packages/sdk/js build
+
       - name: Verify fixed canonical archive bytes
         run: bun test packages/opencorvus/test/expert-squad/static-distribution-archive.test.ts
 
@@ -75,6 +78,9 @@ jobs:
         run: bun install --frozen-lockfile --no-progress --ignore-scripts
         env:
           HUSKY: "0"
+
+      - name: Build SDK dependency
+        run: bun run --cwd packages/sdk/js build
 
       - name: Require a browser trust root
         shell: bash
