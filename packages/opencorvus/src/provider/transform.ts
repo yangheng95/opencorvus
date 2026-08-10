@@ -51,16 +51,144 @@ export namespace ProviderTransform {
     "@openrouter/ai-sdk-provider",
   ])
 
+  const OPENAI_RESPONSES_FILE_MIMES = new Set([
+    "application/pdf",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/vnd.ms-excel",
+    "text/csv",
+    "application/csv",
+    "text/tsv",
+    "text/x-iif",
+    "application/x-iif",
+    "application/vnd.google-apps.spreadsheet",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/msword",
+    "application/rtf",
+    "application/vnd.oasis.opendocument.text",
+    "application/vnd.apple.pages",
+    "application/vnd.google-apps.document",
+    "application/vnd.apple.iwork",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "application/vnd.ms-powerpoint",
+    "application/vnd.apple.keynote",
+    "application/vnd.google-apps.presentation",
+    "application/javascript",
+    "application/typescript",
+    "text/xml",
+    "text/x-shellscript",
+    "text/x-rst",
+    "text/x-makefile",
+    "text/x-lisp",
+    "text/x-asm",
+    "text/vbscript",
+    "text/css",
+    "message/rfc822",
+    "application/x-sql",
+    "application/x-scala",
+    "application/x-rust",
+    "application/x-powershell",
+    "text/x-diff",
+    "text/x-patch",
+    "application/x-patch",
+    "text/plain",
+    "text/markdown",
+    "text/x-java",
+    "text/x-script.python",
+    "text/x-python",
+    "text/x-c",
+    "text/x-c++",
+    "text/x-golang",
+    "text/html",
+    "text/x-php",
+    "application/x-php",
+    "application/x-httpd-php",
+    "application/x-httpd-php-source",
+    "text/x-ruby",
+    "text/x-sh",
+    "text/x-bash",
+    "application/x-bash",
+    "text/x-zsh",
+    "text/x-tex",
+    "text/x-csharp",
+    "application/json",
+    "text/x-typescript",
+    "text/javascript",
+    "text/x-go",
+    "text/x-rust",
+    "text/x-scala",
+    "text/x-kotlin",
+    "text/x-swift",
+    "text/x-lua",
+    "text/x-r",
+    "text/x-R",
+    "text/x-julia",
+    "text/x-perl",
+    "text/x-objectivec",
+    "text/x-objectivec++",
+    "text/x-erlang",
+    "text/x-elixir",
+    "text/x-haskell",
+    "text/x-clojure",
+    "text/x-groovy",
+    "text/x-dart",
+    "text/x-awk",
+    "application/x-awk",
+    "text/jsx",
+    "text/tsx",
+    "text/x-handlebars",
+    "text/x-mustache",
+    "text/x-ejs",
+    "text/x-jinja2",
+    "text/x-liquid",
+    "text/x-erb",
+    "text/x-twig",
+    "text/x-pug",
+    "text/x-jade",
+    "text/x-tmpl",
+    "text/x-cmake",
+    "text/x-dockerfile",
+    "text/x-gradle",
+    "text/x-ini",
+    "text/x-properties",
+    "text/x-protobuf",
+    "application/x-protobuf",
+    "text/x-sql",
+    "text/x-sass",
+    "text/x-scss",
+    "text/x-less",
+    "text/x-hcl",
+    "text/x-terraform",
+    "application/x-terraform",
+    "text/x-toml",
+    "application/x-toml",
+    "application/graphql",
+    "application/x-graphql",
+    "text/x-graphql",
+    "application/x-ndjson",
+    "application/json5",
+    "application/x-json5",
+    "text/x-yaml",
+    "application/toml",
+    "application/x-yaml",
+    "application/yaml",
+    "text/x-astro",
+    "text/srt",
+    "application/x-subrip",
+    "text/x-subrip",
+    "text/vtt",
+    "text/x-vcard",
+    "text/calendar",
+  ])
+
   /**
    * Identifies the one typed AI SDK (Artificial Intelligence Software
    * Development Kit) content part that the configured provider adapter can
    * preserve for a tool-result attachment.
    *
    * Images keep their dedicated `image-data` semantics and model capability
-   * check. Arbitrary files use `file-data` only on the exact OpenAI Responses
-   * route configured by `provider/vendor.ts`; the installed OpenAI adapter
-   * maps that part to `input_file` without restricting the MIME (Multipurpose
-   * Internet Mail Extensions) type. Generic OpenAI-compatible, Anthropic,
+   * check. Files use `file-data` only on the exact OpenAI Responses route and
+   * for MIME (Multipurpose Internet Mail Extensions) types accepted by the
+   * OpenAI file-input contract. Generic OpenAI-compatible, Anthropic,
    * Bedrock, Gateway, and OpenRouter adapters are deliberately not inferred
    * from package or model names.
    */
@@ -87,7 +215,12 @@ export namespace ProviderTransform {
       }
     }
 
-    if (model.providerID === "openai" && model.api.npm === "@ai-sdk/openai") {
+    const normalizedMime = mime.split(";", 1)[0].trim().toLowerCase()
+    if (
+      model.providerID === "openai" &&
+      model.api.npm === "@ai-sdk/openai" &&
+      OPENAI_RESPONSES_FILE_MIMES.has(normalizedMime)
+    ) {
       return {
         contentType: "file-data",
         adapter: "openai-responses",
@@ -96,7 +229,7 @@ export namespace ProviderTransform {
 
     return {
       contentType: "unsupported",
-      reason: `provider ${model.providerID} adapter ${model.api.npm} has no verified arbitrary file-data tool-result transport`,
+      reason: `provider ${model.providerID} adapter ${model.api.npm} has no verified file-data transport for MIME ${mime}`,
     }
   }
 

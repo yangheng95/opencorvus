@@ -537,6 +537,7 @@ export namespace Vcs {
   }
 
   async function currentBranch(): Promise<string | undefined> {
+    if (!Project.isGitRepo(currentProject().worktree)) return undefined
     const result = await git(["symbolic-ref", "--quiet", "--short", "HEAD"], {
       cwd: currentProject().worktree,
       timeoutProfile: "fast",

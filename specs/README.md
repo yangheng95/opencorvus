@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Task structured-file replay recovery and local repackage: [`2026-08-10-task-file-replay-and-recovery-repackage.md`](records/2026-08/2026-08-10-task-file-replay-and-recovery-repackage.md).
+
 Latest Work Ledger “Start from scratch” focus repair: [`2026-08-09-work-ledger-start-from-scratch-focus.md`](records/2026-08/2026-08-09-work-ledger-start-from-scratch-focus.md).
 
 Latest autonomous Visual Reviewer dispatch contract: [`2026-08-09-autonomous-visual-review-dispatch.md`](records/2026-08/2026-08-09-autonomous-visual-review-dispatch.md).

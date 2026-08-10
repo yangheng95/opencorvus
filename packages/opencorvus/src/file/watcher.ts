@@ -49,7 +49,7 @@ export namespace FileWatcher {
     | { ok: true; subscriptions: Subscription[] }
     | { ok: false; subscriptions: Subscription[]; error: unknown }
   export type SubscriptionGroup = {
-    assertHealthy: () => void
+    assertInitialized: () => "initialized"
     dispose: () => Promise<void>
   }
   export type PersistentCallbackRunner = (
@@ -245,20 +245,15 @@ export namespace FileWatcher {
     onFailure: (error: unknown) => void,
     initialFailure?: { error: unknown },
   ): SubscriptionGroup {
-    const failures: unknown[] = []
     const detach: Array<() => void> = []
-    let unhealthy: unknown
-    let hasFailure = false
+    const initializationError = initialFailure
+      ? thrownError(initialFailure.error, "File watcher initialization failed")
+      : undefined
     let disposal: Promise<void> | undefined
     let observedRuntimeDisposal: Promise<void> | undefined
     let disposed = false
 
-    const recordFailure = (error: unknown) => {
-      failures.push(thrownError(error, "File watcher lifecycle failed"))
-      hasFailure = true
-      unhealthy = failures.length === 1 ? error : new AggregateError([...failures], "File watcher lifecycle failed")
-      onFailure(unhealthy)
-    }
+    const reportRuntimeFailure = (error: unknown) => onFailure(thrownError(error, "File watcher lifecycle failed"))
     const dispose = () => {
       if (disposed) return Promise.resolve()
       if (disposal) return disposal
@@ -283,23 +278,24 @@ export namespace FileWatcher {
         },
         (disposalError) => {
           if (observedRuntimeDisposal === operation) observedRuntimeDisposal = undefined
-          recordFailure(disposalError)
+          reportRuntimeFailure(disposalError)
         },
       )
     }
     const runtimeFailure = (error: Error) => {
-      recordFailure(error)
+      reportRuntimeFailure(error)
       disposeAfterRuntimeFailure()
     }
 
     for (const subscription of subscriptions) {
       detach.push(subscription.onFailure(runtimeFailure))
     }
-    if (initialFailure) recordFailure(initialFailure.error)
+    if (initializationError) onFailure(initializationError)
 
     return {
-      assertHealthy() {
-        if (hasFailure) throw unhealthy
+      assertInitialized() {
+        if (initializationError) throw initializationError
+        return "initialized"
       },
       dispose,
     }
@@ -415,8 +411,7 @@ export namespace FileWatcher {
       return
     }
     const group = await state()
-    InstanceLifecycleContext.use().registerHealthCheck("file-watcher", group.assertHealthy)
-    group.assertHealthy()
+    group.assertInitialized()
   }
 
   export const TestHooks = {

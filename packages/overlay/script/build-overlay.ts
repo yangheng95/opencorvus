@@ -15,6 +15,7 @@
  *   bun run build:overlay                                # full pipeline (host triple)
  *   bun run build:overlay --target <triple>              # cross-compile to triple (e.g. aarch64-pc-windows-msvc)
  *   bun run build:overlay --skip-tauri                   # UI only (step 1)
+ *   bun run build:overlay --skip-dist-copy               # keep target/release only for an installer bundle
  *
  * Note: the caller is responsible for stopping any running overlay process
  * before invoking this script. On Windows, Cargo's linker will fail with
@@ -47,6 +48,7 @@ const tauri = path.resolve(dir, "src-tauri")
 // ── Args ──
 const argv = process.argv.slice(2)
 const skipTauri = argv.includes("--skip-tauri")
+const skipDistCopy = argv.includes("--skip-dist-copy")
 const targetTripleArg = (() => {
   const i = argv.indexOf("--target")
   return i >= 0 ? argv[i + 1] : undefined
@@ -224,16 +226,20 @@ if (!(await exists(builtOverlay))) {
 
 // ── Step 6: Copy to dist/ ──
 step("Copy binary to dist/")
-await fs.mkdir(distRoot, { recursive: true })
-await copyFileForce(builtOverlay, packagedOverlay)
-console.log(`→ ${packagedOverlay}`)
+if (skipDistCopy) {
+  console.log("skipped (--skip-dist-copy); target/release remains the installer input")
+} else {
+  await fs.mkdir(distRoot, { recursive: true })
+  await copyFileForce(builtOverlay, packagedOverlay)
+  console.log(`→ ${packagedOverlay}`)
+}
 
 // WebView2Loader.dll — only present under the *-pc-windows-gnu target.
 // On MSVC, `webview2-com-sys` static-links `WebView2LoaderStatic.lib` and the
 // exe has no IAT import for the dll. On GNU, the loader is dynamically imported
 // and `tauri-build` copies the dll into target/<triple>/release/. Copy it
 // alongside the exe iff cargo produced one — don't fail if absent.
-if (isWindows) {
+if (isWindows && !skipDistCopy) {
   const dllSrc = path.join(release, "WebView2Loader.dll")
   if (await exists(dllSrc)) {
     const dllDst = path.join(distRoot, "WebView2Loader.dll")

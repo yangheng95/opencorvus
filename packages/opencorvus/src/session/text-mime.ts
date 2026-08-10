@@ -55,9 +55,11 @@ const TEXT_EXTS = new Set([
  * a binary file part to the model.
  */
 export function isDecodableText(mime: string, filename?: string): boolean {
-  if (mime.startsWith("text/")) return true
-  if (TEXT_APP_MIMES.has(mime)) return true
-  if (mime === "application/octet-stream" && filename) {
+  const normalizedMime = mime.split(";", 1)[0].trim().toLowerCase()
+  if (normalizedMime.startsWith("text/")) return true
+  if (TEXT_APP_MIMES.has(normalizedMime)) return true
+  if (normalizedMime.endsWith("+json") || normalizedMime.endsWith("+xml")) return true
+  if (normalizedMime === "application/octet-stream" && filename) {
     const ext = filename.split(".").pop()?.toLowerCase() ?? ""
     return TEXT_EXTS.has(ext)
   }
@@ -71,6 +73,15 @@ export function isDecodableText(mime: string, filename?: string): boolean {
  */
 export const MAX_TEXT_DECODE_BYTES = 200_000
 
+export function decodeTextBytes(raw: Uint8Array): string {
+  const bytes = Buffer.from(raw)
+  if (bytes.length > MAX_TEXT_DECODE_BYTES) {
+    const truncated = bytes.subarray(0, MAX_TEXT_DECODE_BYTES).toString("utf-8")
+    return `${truncated}\n\n[... truncated — file exceeds ${MAX_TEXT_DECODE_BYTES / 1024}KB limit ...]`
+  }
+  return bytes.toString("utf-8")
+}
+
 /**
  * Extract and decode the base64 payload from a data URL to UTF-8 text.
  * e.g. "data:text/markdown;base64,IyBIZWxsbw==" → "# Hello"
@@ -79,12 +90,7 @@ export const MAX_TEXT_DECODE_BYTES = 200_000
  * larger, so the model is explicitly aware of the truncation.
  */
 export function decodeDataUrlText(dataUrl: string): string {
-  const raw = decodeDataUrlBase64Bytes(dataUrl, "decodeDataUrlText")
-  if (raw.length > MAX_TEXT_DECODE_BYTES) {
-    const truncated = raw.subarray(0, MAX_TEXT_DECODE_BYTES).toString("utf-8")
-    return `${truncated}\n\n[... truncated — file exceeds ${MAX_TEXT_DECODE_BYTES / 1024}KB limit ...]`
-  }
-  return raw.toString("utf-8")
+  return decodeTextBytes(decodeDataUrlBase64Bytes(dataUrl, "decodeDataUrlText"))
 }
 
 /**
