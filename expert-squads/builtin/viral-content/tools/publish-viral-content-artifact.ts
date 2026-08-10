@@ -53,18 +53,22 @@ const labels: Readonly<Record<ViralContentArtifactType, string>> = {
 }
 
 export default tool({
-  description: "Validate and publish one strict viral-content Artifact with exact typed predecessors and immutable resources.",
+  description: "Validate and publish one strict viral-content Artifact with exact typed predecessors and immutable resources. Publish viral-content/delivery before any interactive Artifact and give it exactly the six typed campaign predecessors; never include snapshot, document@1, table@1, or other interactive Artifact locators.",
   args: {
     artifact_type: ViralContentArtifactTypeSchema,
     payload: tool.schema.unknown(),
     resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),
-    source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema),
+    source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema).describe(
+      "Exact typed predecessor locators only. viral-content/delivery requires exactly campaign-brief, audience-dossier, trend-dossier, concept-set, copy-pack, and review; exclude snapshots and interactive Artifacts.",
+    ),
   },
   async execute(args, context) {
     const payload = parseViralContentArtifact(args.artifact_type, args.payload)
     const expected = expectedSources[args.artifact_type]
     if (args.source_artifact_locators.length !== expected.length) {
-      throw new Error(`${args.artifact_type} requires ${expected.length} exact source Artifact locator(s)`)
+      throw new Error(
+        `${args.artifact_type} requires exactly ${expected.length} typed predecessor locator(s), received ${args.source_artifact_locators.length}; exclude snapshot and interactive Artifact locators`,
+      )
     }
     const batch = await readExactArtifactsSettled(context.host.engineArtifacts, args.source_artifact_locators)
     if (batch.diagnostics.length > 0) {
