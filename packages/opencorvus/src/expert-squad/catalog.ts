@@ -29,6 +29,21 @@ export const ExpertSquadCatalogSourceSchema = z.discriminatedUnion("kind", [
     .strict(),
 ])
 
+export const ExpertSquadCatalogIndexSourceSchema = z.discriminatedUnion("kind", [
+  z
+    .object({
+      kind: z.literal("built_in"),
+    })
+    .strict(),
+  z
+    .object({
+      kind: z.literal("installed_package"),
+      installation_scope: ExpertSquadPackageLocations.InstallationScopeSchema,
+      namespace: z.string(),
+    })
+    .strict(),
+])
+
 export const ExpertSquadCatalogReadmeSchema = z
   .object({
     path: z.literal("README.md"),
@@ -75,46 +90,156 @@ export const ExpertSquadCatalogSummarySchema = ExpertSquadCatalogProfileSchema.e
   source: ExpertSquadCatalogSourceSchema,
   readme: ExpertSquadCatalogReadmeSchema,
   selector: ExpertSquadCatalogSelectorSchema,
-}).strict()
+})
+  .strict()
+  .meta({ ref: "ExpertSquadCatalogSummary" })
 
-export const ExpertSquadRecommendationSchema = z
+export const ExpertSquadCatalogIndexEntrySchema = z
   .object({
-    id: z.string(),
-    name: z.string(),
-    label: z.string(),
-    display_label: z.string(),
-    description: z.string().optional(),
-    version: z.string(),
+    id: z.string().min(1).max(160),
+    name: z.string().min(1).max(160),
+    display_label: z.string().min(1).max(240),
+    description: z.string().min(1).max(1_000).optional(),
     built_in: z.boolean(),
     product_pillars: ProductPillarsSchema,
-    package_digest: z
-      .string()
-      .regex(/^[a-f0-9]{64}$/)
-      .optional(),
-    selector: z
-      .object({
-        summary: z.string(),
-        selection_guidance: z.string(),
-      })
-      .strict(),
-    workflows: z.array(
+    system_role: z.enum(["expert_squad_generator"]).optional(),
+    source: ExpertSquadCatalogIndexSourceSchema,
+  })
+  .strict()
+  .meta({ ref: "ExpertSquadCatalogIndexEntry" })
+
+export const ExpertSquadCatalogInspectionSchema = ExpertSquadCatalogIndexEntrySchema.extend({
+  label: z.string().min(1).max(160),
+  version: z.string().min(1).max(80),
+  selector: z
+    .object({
+      summary: z.string().min(1).max(1_000),
+      selection_guidance: z.string().min(1).max(2_000),
+    })
+    .strict(),
+  workflow_count: z.number().int().nonnegative(),
+  workflows: z
+    .array(
       z
         .object({
-          id: z.string(),
-          label: z.string(),
-          description: z.string(),
+          id: z.string().min(1).max(160),
+          label: z.string().min(1).max(240),
+          description: z.string().min(1).max(500),
           node_count: z.number().int().positive(),
         })
         .strict(),
-    ),
+    )
+    .max(20),
+  next_workflow_cursor: z.string().min(1).nullable(),
+})
+  .strict()
+  .meta({ ref: "ExpertSquadCatalogInspection" })
+
+export const ExpertSquadCatalogPageSchema = z
+  .object({
+    catalog_revision: z.string().regex(/^[a-f0-9]{64}$/),
+    entries: z.array(ExpertSquadCatalogIndexEntrySchema).max(20),
+    next_cursor: z.string().min(1).nullable(),
+    total_count: z.number().int().nonnegative(),
   })
   .strict()
+  .meta({ ref: "ExpertSquadCatalogPage" })
+
+export const ExpertSquadPackageRevisionSchema = z
+  .object({
+    scope: z.enum(["built_in", "project", "global"]),
+    project_id: z.string().nullable(),
+    namespace: z.string().min(1),
+    id: z.string().min(1),
+    version: z.string().min(1),
+    package_digest: z.string().regex(/^[a-f0-9]{64}$/),
+  })
+  .strict()
+  .meta({ ref: "ExpertSquadPackageRevision" })
+
+export const ExpertSquadInventoryStatusSchema = z
+  .object({
+    catalog_revision: z.string().regex(/^[a-f0-9]{64}$/),
+    effective_count: z.number().int().nonnegative(),
+    installation_count: z.number().int().nonnegative(),
+    issue_count: z.number().int().nonnegative(),
+    warning_count: z.number().int().nonnegative(),
+  })
+  .strict()
+  .meta({ ref: "ExpertSquadInventoryStatus" })
+
+export const ExpertSquadDiagnosticSchema = z.discriminatedUnion("kind", [
+  z.object({ kind: z.literal("issue"), issue: ExpertSquadRegistry.DiscoveryIssue }).strict(),
+  z.object({ kind: z.literal("warning"), warning: ExpertSquadRegistry.DiscoveryWarning }).strict(),
+])
+
+export const ExpertSquadDiagnosticPageSchema = z
+  .object({
+    catalog_revision: z.string().regex(/^[a-f0-9]{64}$/),
+    entries: z.array(ExpertSquadDiagnosticSchema).max(20),
+    next_cursor: z.string().min(1).nullable(),
+    total_count: z.number().int().nonnegative(),
+  })
+  .strict()
+  .meta({ ref: "ExpertSquadDiagnosticPage" })
+
+export const ExpertSquadSettingsDetailSchema = z
+  .object({
+    scope: z.object({ kind: z.literal("project"), directory: z.string() }).strict(),
+    selected: ExpertSquadCatalogSummarySchema,
+  })
+  .strict()
+  .meta({ ref: "ExpertSquadSettingsDetail" })
+
+export const ExpertSquadCatalogSearchQuerySchema = z.object({
+  view: z.enum(["effective", "installations"]).default("effective"),
+  query: z.string().max(500).default(""),
+  productPillar: z.enum(["code", "work"]).optional(),
+  cursor: z.string().min(1).optional(),
+  limit: z.coerce.number().int().min(1).max(20).default(20),
+})
+
+export const ExpertSquadCatalogInspectionQuerySchema = z
+  .object({
+    id: z.string().min(1).max(160),
+    installationScope: z.enum(["built_in", "project", "global"]).optional(),
+    namespace: z.string().min(1).max(160).optional(),
+    workflowCursor: z.string().min(1).optional(),
+  })
+  .strict()
+  .superRefine((query, context) => {
+    const installed = query.installationScope === "project" || query.installationScope === "global"
+    if (installed === Boolean(query.namespace)) return
+    context.addIssue({
+      code: "custom",
+      message: "namespace is required exactly when installationScope selects a physical installation",
+      path: ["namespace"],
+    })
+  })
+
+export const ExpertSquadSettingsDetailQuerySchema = z
+  .object({
+    id: z.string().min(1).max(160),
+    installationScope: z.enum(["built_in", "project", "global"]),
+    namespace: z.string().min(1).max(160).optional(),
+  })
+  .strict()
+  .superRefine((query, context) => {
+    const installed = query.installationScope === "project" || query.installationScope === "global"
+    if (installed === Boolean(query.namespace)) return
+    context.addIssue({
+      code: "custom",
+      message: "namespace is required exactly when installationScope selects a physical installation",
+      path: ["namespace"],
+    })
+  })
 
 export const ExpertSquadCatalogActiveSchema = z
   .object({
     effective: z.string(),
     project: z.string(),
     session_override: z.string().nullable(),
+    package_revision: ExpertSquadPackageRevisionSchema,
   })
   .strict()
 
@@ -144,19 +269,6 @@ export const ExpertSquadCatalogSkillSummarySchema = z
   })
   .strict()
 
-export const ExpertSquadCatalogSelectorSkillSchema = z
-  .object({
-    kind: z.literal("selector"),
-    expert_squad_id: z.string(),
-    name: z.string(),
-    description: z.string(),
-    instructions: z.string(),
-    digest: z.string(),
-    location: z.string(),
-    required_tools: z.tuple([]),
-  })
-  .strict()
-
 export const ExpertSquadCatalogProductionGrantSchema = z
   .object({
     kind: z.literal("production"),
@@ -178,7 +290,6 @@ export const ExpertSquadActiveSkillProjectionSchema = z
     selector_skill_names: z.array(z.string()),
     production_skill_names: z.array(z.string()),
     projected_skill_names: z.array(z.string()),
-    selector_skills: z.array(ExpertSquadCatalogSelectorSkillSchema),
     production_grants: z.array(ExpertSquadCatalogProductionGrantSchema),
   })
   .strict()
@@ -224,26 +335,15 @@ export const ExpertSquadCatalogSchema = z
     active: ExpertSquadCatalogActiveSchema,
     default: z.string(),
     scope: ExpertSquadCatalogScopeSchema,
-    squads: z.array(ExpertSquadCatalogSummarySchema),
-    installations: z.array(ExpertSquadCatalogSummarySchema),
-    issues: z.array(ExpertSquadRegistry.DiscoveryIssue),
-    warnings: z.array(ExpertSquadRegistry.DiscoveryWarning),
+    launch_catalog_revision: z.string().regex(/^[a-f0-9]{64}$/),
     active_agent_projection: ExpertSquadActiveAgentProjectionSchema,
     active_skill_projection: ExpertSquadActiveSkillProjectionSchema,
   })
   .strict()
 
-export const ExpertSquadSettingsSurfaceSchema = z
-  .object({
-    scope: z.object({ kind: z.literal("project"), directory: z.string() }).strict(),
-    squads: z.array(ExpertSquadCatalogSummarySchema),
-    installations: z.array(ExpertSquadCatalogSummarySchema),
-    warnings: z.array(ExpertSquadRegistry.DiscoveryWarning),
-    selected: ExpertSquadCatalogSummarySchema,
-  })
-  .strict()
-  .meta({ ref: "ExpertSquadSettingsSurface" })
-
 export type ExpertSquadCatalogSummary = z.output<typeof ExpertSquadCatalogSummarySchema>
-export type ExpertSquadRecommendation = z.output<typeof ExpertSquadRecommendationSchema>
+export type ExpertSquadCatalogIndexEntry = z.output<typeof ExpertSquadCatalogIndexEntrySchema>
+export type ExpertSquadCatalogInspection = z.output<typeof ExpertSquadCatalogInspectionSchema>
+export type ExpertSquadCatalogPage = z.output<typeof ExpertSquadCatalogPageSchema>
+export type ExpertSquadDiagnosticPage = z.output<typeof ExpertSquadDiagnosticPageSchema>
 export type ExpertSquadCatalog = z.output<typeof ExpertSquadCatalogSchema>

@@ -4,7 +4,7 @@ import { readMissionDurableActivity } from "../src/engine/durable-activity"
 import { EngineTaskTable } from "../src/engine/engine.sql"
 import { persistQueuedTask } from "../src/engine/pipeline"
 import { Identifier } from "../src/id/id"
-import { ensureMissionSession } from "../src/mission/session"
+import { ensureMissionSession, MissionExpertSquadSnapshotMismatchError } from "../src/mission/session"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { MessageTable, SessionTable } from "../src/session/session.sql"
@@ -29,13 +29,72 @@ afterAll(async () => {
 })
 
 describe("Mission durable activity", () => {
+  test("resumes only the same immutable Expert Squad snapshot", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const input = {
+          missionID: "immutable-snapshot-resume",
+          defaultCwd: project.path,
+          productPillar: "code" as const,
+          heldExpertSquadIDs: ["base"] as [string, ...string[]],
+        }
+        const created = await ensureMissionSession(input)
+        const resumed = await ensureMissionSession(input)
+        expect(resumed.id).toBe(created.id)
+        try {
+          await ensureMissionSession({ ...input, heldExpertSquadIDs: ["advanced"] })
+          throw new Error("Expected immutable Mission Expert Squad snapshot mismatch")
+        } catch (error) {
+          expect(error).toBeInstanceOf(MissionExpertSquadSnapshotMismatchError)
+          expect((error as InstanceType<typeof MissionExpertSquadSnapshotMismatchError>).toObject().data).toMatchObject(
+            {
+              missionID: input.missionID,
+              heldCount: 1,
+              heldSnapshotHash: expect.stringMatching(/^[a-f0-9]{64}$/),
+            },
+          )
+        }
+        const app = new Hono().route("/mission", MissionRoutes())
+        const response = await app.fetch(
+          new Request("http://opencorvus.test/mission/wake", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              missionID: input.missionID,
+              productPillar: input.productPillar,
+              text: "Resume with the requested immutable Expert Squad snapshot.",
+              expertSquadIDs: ["advanced"],
+              model: "firmware/gpt-5",
+            }),
+          }),
+        )
+        expect(response.status).toBe(400)
+        expect(await response.json()).toMatchObject({
+          name: "MissionExpertSquadSnapshotMismatchError",
+          data: {
+            missionID: input.missionID,
+            heldCount: 1,
+            heldSnapshotHash: expect.stringMatching(/^[a-f0-9]{64}$/),
+          },
+        })
+      },
+    })
+  }, 0)
+
   test("projects one restart-safe cursor from Mission and child Task durable facts", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const missionID = "benchmark-mission"
-        const mission = await ensureMissionSession({ missionID, defaultCwd: project.path, productPillar: "code" })
+        const mission = await ensureMissionSession({
+          missionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
         const taskSession = await Session.create({
           kind: "root",
           parentID: mission.id,

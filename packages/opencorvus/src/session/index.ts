@@ -39,6 +39,7 @@ import { SessionPromptState } from "./prompt/state"
 import {
   TaskPromptProfileImmutableError,
   requireTaskPackageRevisionBinding,
+  requireTaskResolvedPackageRevision,
 } from "@/engine/task-package-revision-binding"
 
 export namespace Session {
@@ -606,6 +607,7 @@ export namespace Session {
           await PromptProfileResolver.assertSkillMountConfig({
             projectDirectory: capabilityProjectDirectory,
             config: effective,
+            packageRevision: initialTask ? requireTaskResolvedPackageRevision(initialTask.id) : undefined,
           })
         }
         return Database.transaction((db) => {

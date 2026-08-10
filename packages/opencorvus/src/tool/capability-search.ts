@@ -24,18 +24,22 @@ export const CapabilitySearchTool = Tool.define(CAPABILITY_SEARCH_TOOL_ID, async
         harnessProjection: ctx.executionSurface.harness_projection,
       })
       const results = searchCapabilityCatalog(snapshot, caller, input)
+      const visibleExpertSquadCount = snapshot.entries.filter(
+        (entry) => entry.ref.kind === "expert_squad" && entry.discoverable_by.includes(caller),
+      ).length
       return {
         title: "Capability search",
         metadata: {
           catalog_revision: snapshot.catalog_revision,
           caller,
           result_count: results.length,
+          visible_expert_squad_count: visibleExpertSquadCount,
         },
         output: JSON.stringify(
           {
             catalog_revision: snapshot.catalog_revision,
             caller,
-            harness_projection: ctx.executionSurface.harness_projection,
+            visible_expert_squad_count: visibleExpertSquadCount,
             results,
           },
           null,

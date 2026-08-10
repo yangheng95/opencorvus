@@ -1,5 +1,11 @@
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { requireTaskResolvedPackageRevision } from "./task-package-revision-binding"
+import { taskIDForSession } from "./task-session-lineage"
+
+export function taskPackageRevisionForSession(sessionID: string) {
+  const taskID = taskIDForSession(sessionID)
+  return taskID ? requireTaskResolvedPackageRevision(taskID) : undefined
+}
 
 export async function resolvePinnedTaskSchedulerTurnProjection(input: {
   taskID: string

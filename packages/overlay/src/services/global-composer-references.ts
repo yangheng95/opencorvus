@@ -1,5 +1,6 @@
 import type { GlobalComposerReferencesResponse } from "@opencorvus-ai/sdk"
 import { apiJson } from "./api"
+import type { ExpertSquadSearchResponse } from "@opencorvus-ai/sdk"
 
 export type { GlobalComposerReferencesResponse }
 
@@ -14,4 +15,16 @@ export async function loadGlobalComposerReferences(): Promise<GlobalComposerRefe
   } finally {
     if (pendingGlobalComposerReferences === pending) pendingGlobalComposerReferences = null
   }
+}
+
+export async function searchGlobalComposerExpertSquads(input: {
+  query?: string
+  productPillar?: "code" | "work"
+  cursor?: string
+  limit?: number
+}): Promise<ExpertSquadSearchResponse> {
+  const params = new URLSearchParams({ query: input.query?.trim() ?? "", limit: String(input.limit ?? 20) })
+  if (input.productPillar) params.set("productPillar", input.productPillar)
+  if (input.cursor) params.set("cursor", input.cursor)
+  return await apiJson<ExpertSquadSearchResponse>(`global/composer-expert-squads?${params.toString()}`)
 }

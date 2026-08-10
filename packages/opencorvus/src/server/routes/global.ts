@@ -40,8 +40,7 @@ import {
 } from "@/storage/mysql-transfer"
 import { settleCanonicalProviderCatalogInvalidation, settleProviderRefreshInvalidation } from "../provider-refresh"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
-import { ExpertSquadCatalogSummarySchema } from "@/expert-squad/catalog"
-import { ExpertSquadRegistry } from "@/expert-squad/registry"
+import { ExpertSquadCatalogPageSchema, ExpertSquadCatalogSearchQuerySchema } from "@/expert-squad/catalog"
 import { MissionSkillCatalog } from "@/mission-skill/catalog"
 import { Skill } from "@/skill/skill"
 import { AutomationService } from "@/scheduler/automation-service"
@@ -143,8 +142,7 @@ const GlobalComposerReferencesResponse = z
       .strict(),
     expert_squads: z
       .object({
-        squads: ExpertSquadCatalogSummarySchema.array(),
-        issues: ExpertSquadRegistry.DiscoveryIssue.array(),
+        page: ExpertSquadCatalogPageSchema,
       })
       .strict(),
     mission_skills: MissionSkillCatalog.Response,
@@ -322,16 +320,47 @@ export const GlobalRoutes = lazy(() =>
         },
       }),
       async (c) => {
-        const [skills, expertSquads, missionSkills] = await Promise.all([
+        const [skills, expertSquadPage, missionSkills] = await Promise.all([
           Skill.globalSummaries(),
-          PromptProfileResolver.globalCatalog(),
+          PromptProfileResolver.searchCatalog({ limit: 20 }),
           MissionSkillCatalog.globalSummaries(),
         ])
         return c.json(
           GlobalComposerReferencesResponse.parse({
             skills,
-            expert_squads: expertSquads,
+            expert_squads: {
+              page: expertSquadPage,
+            },
             mission_skills: missionSkills,
+          }),
+        )
+      },
+    )
+    .get(
+      "/composer-expert-squads",
+      describeRoute({
+        summary: "Search global Composer expert squads",
+        description:
+          "Returns a bounded page of built-in and user-global Expert Squads without creating a Project or Session.",
+        operationId: "global.composerExpertSquads",
+        responses: {
+          200: {
+            description: "Bounded global Composer Expert Squad page",
+            content: { "application/json": { schema: resolver(ExpertSquadCatalogPageSchema) } },
+          },
+          ...errors(400, 500),
+        },
+      }),
+      validator("query", ExpertSquadCatalogSearchQuerySchema),
+      async (c) => {
+        const query = c.req.valid("query")
+        return c.json(
+          await PromptProfileResolver.searchCatalog({
+            view: query.view,
+            query: query.query,
+            productPillar: query.productPillar,
+            cursor: query.cursor,
+            limit: query.limit,
           }),
         )
       },

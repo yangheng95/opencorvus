@@ -14,7 +14,7 @@ export async function resolveMissionLaunchExpertSquadIDs(input: {
   const catalog = await PromptProfileResolver.recommendationCatalog({
     projectDirectory: input.projectDirectory,
     productPillar: input.productPillar,
-    visibleExpertSquadIDs: input.requestedExpertSquadIDs,
+    restrictToExpertSquadIDs: input.requestedExpertSquadIDs,
   })
   return MissionVisibleExpertSquadIDs.parse(catalog.map((squad) => squad.id))
 }

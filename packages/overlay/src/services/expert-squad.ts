@@ -18,28 +18,30 @@ import type {
   ExpertSquadImportFolderResponse,
   ExpertSquadInstallPayloadResponse,
   ExpertSquadMarketResponse,
+  ExpertSquadMarketDetailResponse,
   ExpertSquadReleasePayloadResponse,
   ExpertSquadUpdateData,
   ExpertSquadUpdateResponse,
-  ExpertSquadSettingsResponse,
+  ExpertSquadSearchResponse,
+  ExpertSquadInventoryStatusResponse,
+  ExpertSquadDiagnosticsResponse,
+  ExpertSquadInspectResponse,
+  ExpertSquadSettingsDetailResponse,
 } from "@opencorvus-ai/sdk"
 import { appStore } from "../store/app"
 import { apiJson } from "./api"
 import { patchSessionConfig, updateConfig, type SessionConfigResponse } from "./config"
 
 export type ExpertSquadCatalog = ExpertSquadCatalogResponse
-export interface ExpertSquadCapabilitySurface {
-  scope: { kind: "project"; directory: string }
-  squad: ExpertSquadCatalog["squads"][number]
-}
-export type ExpertSquadSettingsSurface = ExpertSquadSettingsResponse
+export type ExpertSquadCatalogPage = ExpertSquadSearchResponse
+export type ExpertSquadInventoryStatus = ExpertSquadInventoryStatusResponse
+export type ExpertSquadDiagnosticsPage = ExpertSquadDiagnosticsResponse
+export type ExpertSquadInspection = ExpertSquadInspectResponse
+export type ExpertSquadSettingsSurface = ExpertSquadSettingsDetailResponse
+export type ExpertSquadDetail = ExpertSquadSettingsSurface["selected"]
 export type ExpertSquadConfiguration = ExpertSquadConfigurationGetResponse
 export type ExpertSquadConfigurationUpdates = NonNullable<ExpertSquadConfigurationUpdateData["body"]>["updates"]
-export type ExpertSquadOption = ExpertSquadCatalog["squads"][number]
-export type ExpertSquadCapabilityProjectionEntry = Omit<
-  ExpertSquadOption["capability_projection"]["scheduler"],
-  "base_role" | "inherit_base_tools" | "prompt"
->
+export type ExpertSquadOption = ExpertSquadCatalogPage["entries"][number]
 export type ExpertSquadCatalogScope = ExpertSquadCatalog["scope"]
 
 export type ExpertSquadImportFolderInput = ExpertSquadImportFolderData["body"] & { directory: string }
@@ -50,7 +52,9 @@ export type ExpertSquadImportResult = ExpertSquadImportFolderResponse | ExpertSq
 
 export type ExpertSquadReleasePayloadResult = ExpertSquadReleasePayloadResponse
 
-export type ExpertSquadMarketItem = ExpertSquadMarketResponse[number]
+export type ExpertSquadMarketPage = ExpertSquadMarketResponse
+export type ExpertSquadMarketIndexItem = ExpertSquadMarketPage["entries"][number]
+export type ExpertSquadMarketItem = ExpertSquadMarketDetailResponse
 export type ExpertSquadMarketInstallResult = ExpertSquadInstallPayloadResponse
 export type ExpertSquadUpdateSource = NonNullable<ExpertSquadUpdateData["body"]>["source"]
 export type ExpertSquadUpdateResult = ExpertSquadUpdateResponse
@@ -151,20 +155,72 @@ export async function loadExpertSquadCatalog(scope: ExpertSquadCatalogScope): Pr
 
 export async function loadExpertSquadSettings(
   directory: string,
-  id?: string,
-  installationScope?: ExpertSquadInstallationScope | "built_in",
+  id: string,
+  installationScope: ExpertSquadInstallationScope | "built_in",
+  namespace?: string,
 ): Promise<ExpertSquadSettingsSurface> {
   if (!appStore.connected) throw new Error("Cannot load expert squad settings while disconnected")
   const params = new URLSearchParams({ directory: directory.trim() })
   if (!params.get("directory")) throw new Error("loadExpertSquadSettings: directory is required")
-  if (id?.trim()) params.set("id", id.trim())
-  if (installationScope) params.set("installationScope", installationScope)
-  const path = `expert-squad/settings?${params.toString()}`
+  params.set("id", id.trim())
+  params.set("installationScope", installationScope)
+  if (namespace) params.set("namespace", namespace)
+  const path = `expert-squad/settings/detail?${params.toString()}`
   try {
     return await apiJson<ExpertSquadSettingsSurface>(path)
   } catch (error) {
     throw new Error(`GET /${path} failed: ${errorMessage(error)}`)
   }
+}
+
+export async function inspectExpertSquad(input: {
+  directory: string
+  id: string
+  installationScope?: ExpertSquadInstallationScope | "built_in"
+  namespace?: string
+  workflowCursor?: string
+}): Promise<ExpertSquadInspection> {
+  const params = new URLSearchParams({ directory: input.directory.trim(), id: input.id.trim() })
+  if (!params.get("directory")) throw new Error("inspectExpertSquad: directory is required")
+  if (input.installationScope) params.set("installationScope", input.installationScope)
+  if (input.namespace) params.set("namespace", input.namespace)
+  if (input.workflowCursor) params.set("workflowCursor", input.workflowCursor)
+  return await apiJson<ExpertSquadInspection>(`expert-squad/inspect?${params.toString()}`)
+}
+
+export async function searchExpertSquads(input: {
+  directory: string
+  view?: "effective" | "installations"
+  query?: string
+  productPillar?: "code" | "work"
+  cursor?: string
+  limit?: number
+}): Promise<ExpertSquadCatalogPage> {
+  const params = new URLSearchParams({
+    directory: input.directory.trim(),
+    view: input.view ?? "effective",
+    query: input.query?.trim() ?? "",
+    limit: String(input.limit ?? 20),
+  })
+  if (!params.get("directory")) throw new Error("searchExpertSquads: directory is required")
+  if (input.productPillar) params.set("productPillar", input.productPillar)
+  if (input.cursor) params.set("cursor", input.cursor)
+  return await apiJson<ExpertSquadCatalogPage>(`expert-squad/search?${params.toString()}`)
+}
+
+export async function loadExpertSquadInventoryStatus(directory: string): Promise<ExpertSquadInventoryStatus> {
+  const path = directoryScopedPath("expert-squad/inventory-status", directory, "loadExpertSquadInventoryStatus")
+  return await apiJson<ExpertSquadInventoryStatus>(path)
+}
+
+export async function loadExpertSquadDiagnostics(
+  directory: string,
+  input: { cursor?: string; limit?: number } = {},
+): Promise<ExpertSquadDiagnosticsPage> {
+  const params = new URLSearchParams({ directory: directory.trim(), limit: String(input.limit ?? 20) })
+  if (!params.get("directory")) throw new Error("loadExpertSquadDiagnostics: directory is required")
+  if (input.cursor) params.set("cursor", input.cursor)
+  return await apiJson<ExpertSquadDiagnosticsPage>(`expert-squad/diagnostics?${params.toString()}`)
 }
 
 export async function loadExpertSquadConfiguration(
@@ -285,13 +341,28 @@ export async function releaseExpertSquadPayload(directory: string): Promise<Expe
   return result
 }
 
-export async function loadExpertSquadMarket(directory: string): Promise<ExpertSquadMarketItem[]> {
-  const path = directoryScopedPath("expert-squad/market", directory, "loadExpertSquadMarket")
+export async function loadExpertSquadMarket(
+  directory: string,
+  input: { query?: string; availability?: "all" | "available" | "installed"; cursor?: string; limit?: number } = {},
+): Promise<ExpertSquadMarketPage> {
+  const params = new URLSearchParams({
+    directory: directory.trim(),
+    query: input.query?.trim() ?? "",
+    availability: input.availability ?? "all",
+    limit: String(input.limit ?? 20),
+  })
+  if (input.cursor) params.set("cursor", input.cursor)
+  const path = `expert-squad/market?${params.toString()}`
   try {
-    return (await apiJson(path)) as ExpertSquadMarketItem[]
+    return await apiJson<ExpertSquadMarketPage>(path)
   } catch (error) {
     throw new Error(`GET /${path} failed: ${errorMessage(error)}`)
   }
+}
+
+export async function loadExpertSquadMarketDetail(directory: string, id: string): Promise<ExpertSquadMarketItem> {
+  const params = new URLSearchParams({ directory: directory.trim(), id: id.trim() })
+  return await apiJson<ExpertSquadMarketItem>(`expert-squad/market/detail?${params.toString()}`)
 }
 
 export async function installExpertSquadMarketPackage(

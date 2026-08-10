@@ -539,19 +539,32 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
       )
     }
     switch (params.action) {
-      case "expert_squad_catalog": {
+      case "expert_squad_inspect": {
         if (actor !== "mission") {
-          throw new Error(`panel.expert_squad_catalog is only permitted for Mission.`)
+          throw new Error(`panel.expert_squad_inspect is only permitted for Mission.`)
         }
         const missionSession = await Session.get(ctx.sessionID)
-        const squads = await PromptProfileResolver.recommendationCatalog({
-          projectDirectory: missionSession.directory,
+        const heldExpertSquadIDs = missionVisibleExpertSquadIDs(missionSession)
+        if (!heldExpertSquadIDs.includes(params.id)) {
+          throw new Error(`Mission does not hold Expert Squad ${JSON.stringify(params.id)}.`)
+        }
+        const projectDirectory = await EffectiveConfig.capabilityProjectDirectory({ sessionID: ctx.sessionID })
+        const [candidate] = await PromptProfileResolver.recommendationCatalog({
+          projectDirectory,
           productPillar: missionProductPillar(missionSession),
-          visibleExpertSquadIDs: missionVisibleExpertSquadIDs(missionSession),
+          restrictToExpertSquadIDs: [params.id],
         })
+        const squad = candidate
+          ? await PromptProfileResolver.catalogInspection({
+              projectDirectory,
+              id: candidate.id,
+              workflowCursor: params.workflowCursor,
+            })
+          : undefined
+        if (!squad) throw new Error(`Mission-held Expert Squad ${JSON.stringify(params.id)} is unavailable.`)
         return {
-          title: "Expert Squads",
-          output: JSON.stringify({ squads }),
+          title: "Expert Squad",
+          output: JSON.stringify({ squad }),
           metadata: {},
         }
       }
@@ -916,10 +929,12 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           }
         }
         const missionID = newChatForwardedMissionID()
+        const capabilityProjectDirectory = await EffectiveConfig.capabilityProjectDirectory({
+          sessionID: callerSession.id,
+        })
         const heldExpertSquadIDs = await resolveMissionLaunchExpertSquadIDs({
-          projectDirectory: callerSession.directory,
+          projectDirectory: capabilityProjectDirectory,
           productPillar: rightSidebarConversationExperience(callerSession) === "work" ? "work" : "code",
-          requestedExpertSquadIDs: [],
         })
         const missionSession = await ensureMissionSession({
           missionID,

@@ -6,6 +6,8 @@ import { conversationMessageHasDisplay } from "@/conversation/view"
 import { Instance } from "@/project/instance"
 import {
   ensureMissionSession,
+  assertMissionExpertSquadSnapshot,
+  MissionExpertSquadSnapshotMismatchError,
   findExistingMissionSession,
   getMissionSessionByDirectory,
   listGlobalMissionSessions,
@@ -21,7 +23,7 @@ import {
   MissionVisibleExpertSquadIDs,
   ProductPillarSchema,
 } from "@/mission/schema"
-import { missionExpertSquadSnapshotsMatch, resolveMissionLaunchExpertSquadIDs } from "@/mission/expert-squad-authority"
+import { resolveMissionLaunchExpertSquadIDs } from "@/mission/expert-squad-authority"
 import { MissionRecord, missionRecord, missionStatusRecord } from "@/mission/projection"
 import { listMissionTasks } from "@/engine/store"
 import { deriveTaskStatus } from "@/engine/task-status"
@@ -41,7 +43,7 @@ import { UserUploadInput, UserUploadList } from "@/engine/model"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { awaitSessionPromptFinishedInScope, cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { createTaskCancellationIncomplete } from "@/engine/cancellation-error"
-import { badRequestBody, errors } from "../error"
+import { badRequestBody, badRequestOrNamedErrorResponse, errors } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import type { TaskCancellationOrigin } from "@/engine/cancellation-origin"
@@ -616,7 +618,10 @@ export function MissionRoutes() {
             description: "Mission wake accepted",
             content: { "application/json": { schema: resolver(MissionWakeResult) } },
           },
-          ...errors(400),
+          400: badRequestOrNamedErrorResponse(
+            "Mission wake request or immutable Expert Squad snapshot rejected",
+            "MissionExpertSquadSnapshotMismatchError",
+          ),
         },
       }),
       validator("json", MissionWakeInput),
@@ -632,26 +637,20 @@ export function MissionRoutes() {
         let launchHeldExpertSquadIDs: MissionVisibleExpertSquadIDs | undefined
         if (input.model) configPatch.model = input.model
         try {
-          const preview = Config.previewOverlayUpdate(await Config.get(), storedOverlay, configPatch)
-          await validateConfigModelReferences(preview.effective, "mission.configOverlay")
           if (existingSession) {
             if (missionProductPillar(existingSession) !== input.productPillar) {
               throw new Error(`Mission ${missionID} already holds a different immutable product pillar.`)
             }
             const heldExpertSquadIDs = missionVisibleExpertSquadIDs(existingSession)
-            if (input.expertSquadIDs !== undefined) {
-              const requestedExpertSquadIDs = await resolveMissionLaunchExpertSquadIDs({
-                projectDirectory: Instance.project.worktree,
-                productPillar: input.productPillar,
-                requestedExpertSquadIDs: input.expertSquadIDs,
-              })
-              if (!missionExpertSquadSnapshotsMatch(heldExpertSquadIDs, requestedExpertSquadIDs)) {
-                throw new Error(
-                  `Mission ${missionID} already holds the immutable Expert Squad snapshot ` +
-                    `${heldExpertSquadIDs.map((id) => JSON.stringify(id)).join(", ")}.`,
-                )
-              }
-            }
+            launchHeldExpertSquadIDs =
+              input.expertSquadIDs === undefined
+                ? heldExpertSquadIDs
+                : await resolveMissionLaunchExpertSquadIDs({
+                    projectDirectory: Instance.project.worktree,
+                    productPillar: input.productPillar,
+                    requestedExpertSquadIDs: input.expertSquadIDs,
+                  })
+            assertMissionExpertSquadSnapshot(missionID, heldExpertSquadIDs, launchHeldExpertSquadIDs)
           } else {
             launchHeldExpertSquadIDs = await resolveMissionLaunchExpertSquadIDs({
               projectDirectory: Instance.project.worktree,
@@ -659,6 +658,14 @@ export function MissionRoutes() {
               requestedExpertSquadIDs: input.expertSquadIDs,
             })
           }
+        } catch (error) {
+          if (error instanceof MissionExpertSquadSnapshotMismatchError) return c.json(error.toObject(), 400)
+          const message = error instanceof Error ? error.message : String(error)
+          return c.json(badRequestBody(message), 400)
+        }
+        try {
+          const preview = Config.previewOverlayUpdate(await Config.get(), storedOverlay, configPatch)
+          await validateConfigModelReferences(preview.effective, "mission.configOverlay")
         } catch (error) {
           const message = error instanceof Error ? error.message : String(error)
           return c.json(badRequestBody(message), 400)
@@ -671,12 +678,18 @@ export function MissionRoutes() {
         // distinguishes "started" from "resumed". The lookup and the ensure
         // call both use the active request directory, so linked worktrees do
         // not resume each other's Mission session.
-        const session = await ensureMissionSession({
-          missionID,
-          defaultCwd: Instance.directory,
-          productPillar: input.productPillar,
-          heldExpertSquadIDs: launchHeldExpertSquadIDs,
-        })
+        let session
+        try {
+          session = await ensureMissionSession({
+            missionID,
+            defaultCwd: Instance.directory,
+            productPillar: input.productPillar,
+            heldExpertSquadIDs: launchHeldExpertSquadIDs,
+          })
+        } catch (error) {
+          if (error instanceof MissionExpertSquadSnapshotMismatchError) return c.json(error.toObject(), 400)
+          throw error
+        }
         await Session.mergeConfigOverlay({
           sessionID: session.id,
           patch: configPatch,

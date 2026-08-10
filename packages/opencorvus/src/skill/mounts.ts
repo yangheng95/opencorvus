@@ -15,6 +15,7 @@ import { DefaultSkillRefSchema, defaultSkillRefFromName } from "./default-skill-
 import { Skill } from "./skill"
 import { SkillManager } from "./manager"
 import { skillDisabledReason, skillLoaderAvailable } from "./eligibility"
+import { taskPackageRevisionForSession } from "@/engine/task-package-projection"
 
 export namespace SkillMount {
   export const DisabledReason = z.enum([
@@ -419,7 +420,8 @@ export namespace SkillMount {
           EffectiveConfig.overlay({ sessionID: input.sessionID }),
         ])
       : await Config.get().then((config) => [config, config, Instance.project.worktree, undefined] as const)
-    const activeExpertSquadID = PromptProfile.activeID(effectiveConfig)
+    const packageRevision = input?.sessionID ? taskPackageRevisionForSession(input.sessionID) : undefined
+    const activeExpertSquadID = packageRevision?.id ?? PromptProfile.activeID(effectiveConfig)
     if (input?.sessionID && input.expertSquadID && input.expertSquadID !== activeExpertSquadID) {
       throw new Error(
         `Session skill mount matrix targets expert squad ${input.expertSquadID}, but the session is active on ${activeExpertSquadID}.`,
@@ -435,6 +437,7 @@ export namespace SkillMount {
       projectDirectory,
       config: projectionConfig,
       defaultSkills: installed,
+      packageRevision,
     })
     const rows: MatrixRow[] = []
     const agents: AgentEntry[] = []

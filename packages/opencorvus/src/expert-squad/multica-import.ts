@@ -1438,9 +1438,9 @@ export namespace MulticaExpertSquadImport {
     const config = await loadConfig(input.configPath)
     const [sourceSquads, installed] = await Promise.all([
       requestJSON({ config, pathname: "/api/squads", schema: MulticaSourceSquadCatalogSchema }),
-      ExpertSquadRegistry.discover(input.projectDirectory),
+      ExpertSquadRegistry.discoverAvailable(input.projectDirectory),
     ])
-    const installedIDs = new Set(installed.map((entry) => entry.id))
+    const installedIDs = new Set(installed.items.map((entry) => entry.id))
     return MulticaSquadCatalogSchema.parse(
       await Promise.all(
         sourceSquads.map(async ({ member_preview: _memberPreview, ...squad }) => ({

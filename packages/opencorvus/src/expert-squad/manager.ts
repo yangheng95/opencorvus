@@ -1,5 +1,5 @@
 import { BlobWriter, Uint8ArrayReader, Writer, ZipReader, ZipWriter } from "@zip.js/zip.js"
-import { randomUUID } from "crypto"
+import { createHash, randomUUID } from "node:crypto"
 import { cp, lstat, mkdir, open, readFile, readdir, rename, rm, writeFile } from "fs/promises"
 import { parse as parseJsonc, printParseErrorCode, type ParseError } from "jsonc-parser"
 import os from "node:os"
@@ -24,6 +24,7 @@ import { Log } from "@/util/log"
 import { EngineArtifactEnvelopeSchema, EvolutionPromotionReceiptSchema } from "@opencorvus-ai/plugin"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { Database, eq } from "@/storage/db"
+import { scoreDiscoveryFields } from "@/capability/fuzzy"
 
 export namespace ExpertSquadPackageManager {
   const log = Log.create({ service: "expert-squad.package-manager" })
@@ -177,6 +178,25 @@ export namespace ExpertSquadPackageManager {
       updateAvailable: boolean
     }>
   }
+
+  export interface PayloadMarketIndexItem {
+    namespace: string
+    id: string
+    name: string
+    label: string
+    description?: string
+    version: string
+    installationScopes: ExpertSquadPackageLocations.InstallationScope[]
+  }
+
+  export interface PayloadMarketPage {
+    catalogRevision: string
+    entries: PayloadMarketIndexItem[]
+    nextCursor: string | null
+    totalCount: number
+  }
+
+  export type PayloadMarketAvailability = "all" | "available" | "installed"
 
   export type InstallPayloadResult = PackageMutationReceipt
 
@@ -1092,56 +1112,219 @@ export namespace ExpertSquadPackageManager {
     installedPackageDigest: string
   }
 
-  function installationKey(scope: ExpertSquadPackageLocations.InstallationScope, id: string) {
-    return `${scope}:${id}`
+  async function marketInstallationScopes(projectDirectory: string) {
+    const scopes = new Map<string, ExpertSquadPackageLocations.InstallationScope[]>()
+    const inventory = await ExpertSquadRegistry.discoverAvailable(projectDirectory)
+    for (const declaration of inventory.installations) {
+      if (!declaration.installationScope) continue
+      const current = scopes.get(declaration.id) ?? []
+      current.push(declaration.installationScope)
+      scopes.set(declaration.id, current)
+    }
+    const scopeOrder: Record<ExpertSquadPackageLocations.InstallationScope, number> = { project: 0, global: 1 }
+    for (const current of scopes.values()) current.sort((left, right) => scopeOrder[left] - scopeOrder[right])
+    return scopes
   }
 
-  async function marketExistingPackageMap(projectDirectory: string): Promise<Map<string, MarketExistingPackage>> {
-    const existing = new Map<string, MarketExistingPackage>()
-    for (const identity of await ExpertSquadRegistry.discoverInstalledPackageIdentities(projectDirectory)) {
-      existing.set(installationKey(identity.location, identity.id), {
-        installationScope: identity.location,
-        installedVersion: identity.version,
-        installedPackageDigest: await ExpertSquadRegistry.installedPackageDigest(identity.root),
-      })
+  const payloadMarketDeclarations = payloadPackageSources.map((source) =>
+    ExpertSquadRegistry.loadEmbeddedCatalogDeclaration(source),
+  )
+  const payloadMarketSnapshotCache = new Map<
+    string,
+    {
+      generation: number
+      snapshot: Promise<{
+        revision: string
+        installationScopes: Map<string, ExpertSquadPackageLocations.InstallationScope[]>
+        ranked: Map<string, typeof payloadMarketDeclarations>
+      }>
     }
-    return existing
+  >()
+
+  async function payloadMarketSnapshot(projectDirectory: string) {
+    const key = path.resolve(projectDirectory)
+    const generation = ExpertSquadRegistry.catalogInventoryGeneration()
+    const active = payloadMarketSnapshotCache.get(key)
+    if (active?.generation === generation) return active.snapshot
+    const snapshot = (async () => {
+      const installationScopes = await marketInstallationScopes(projectDirectory)
+      const revision = createHash("sha256")
+        .update(
+          JSON.stringify({
+            declarations: payloadMarketDeclarations.map(({ manifest: _manifest, ...entry }) => entry),
+            installation_scopes: [...installationScopes.entries()].sort(([left], [right]) => left.localeCompare(right)),
+          }),
+        )
+        .digest("hex")
+      return { revision, installationScopes, ranked: new Map<string, typeof payloadMarketDeclarations>() }
+    })()
+    payloadMarketSnapshotCache.delete(key)
+    payloadMarketSnapshotCache.set(key, { generation, snapshot })
+    if (payloadMarketSnapshotCache.size > 64) {
+      payloadMarketSnapshotCache.delete(payloadMarketSnapshotCache.keys().next().value!)
+    }
+    try {
+      return await snapshot
+    } catch (error) {
+      if (payloadMarketSnapshotCache.get(key)?.snapshot === snapshot) payloadMarketSnapshotCache.delete(key)
+      throw error
+    }
+  }
+
+  export async function payloadMarketPage(input: {
+    projectDirectory: string
+    query?: string
+    availability?: PayloadMarketAvailability
+    cursor?: string
+    limit?: number
+  }): Promise<PayloadMarketPage> {
+    const snapshot = await payloadMarketSnapshot(input.projectDirectory)
+    const query = input.query?.trim() ?? ""
+    const availability = input.availability ?? "all"
+    const queryFingerprint = createHash("sha256")
+      .update(JSON.stringify({ query: query.toLowerCase(), availability }))
+      .digest("hex")
+    let ranked = snapshot.ranked.get(queryFingerprint)
+    if (!ranked) {
+      ranked = payloadMarketDeclarations
+        .filter((entry) => {
+          const installed = (snapshot.installationScopes.get(entry.id)?.length ?? 0) > 0
+          if (availability === "available") return !installed
+          if (availability === "installed") return installed
+          return true
+        })
+        .flatMap((entry) => {
+          if (!query) return [{ entry, score: null as number | null }]
+          const score = scoreDiscoveryFields(query, [
+            { text: entry.id, weight: 1 },
+            { text: entry.name, weight: 1 },
+            { text: entry.label, weight: 0.96 },
+            { text: entry.description ?? "", weight: 0.9 },
+            { text: entry.manifest.selector.summary, weight: 0.82 },
+            { text: entry.manifest.selector.selection_guidance, weight: 0.72 },
+          ])
+          return score === undefined ? [] : [{ entry, score }]
+        })
+        .sort((left, right) => {
+          if (left.score !== right.score) {
+            if (left.score === null) return -1
+            if (right.score === null) return 1
+            return right.score - left.score
+          }
+          return left.entry.id.localeCompare(right.entry.id)
+        })
+        .map(({ entry }) => entry)
+    }
+    snapshot.ranked.set(queryFingerprint, ranked)
+    if (snapshot.ranked.size > 128) snapshot.ranked.delete(snapshot.ranked.keys().next().value!)
+    let offset = 0
+    if (input.cursor) {
+      const parsed = z
+        .object({ revision: z.string(), query_fingerprint: z.string(), offset: z.number().int().nonnegative() })
+        .strict()
+        .parse(JSON.parse(Buffer.from(input.cursor, "base64url").toString("utf8")))
+      if (parsed.revision !== snapshot.revision) throw new Error("Expert Squad market cursor is stale.")
+      if (parsed.query_fingerprint !== queryFingerprint) {
+        throw new Error("Expert Squad market cursor belongs to a different bounded query.")
+      }
+      offset = parsed.offset
+    }
+    const limit = z
+      .number()
+      .int()
+      .min(1)
+      .max(20)
+      .parse(input.limit ?? 20)
+    const page = ranked.slice(offset, offset + limit)
+    const nextOffset = offset + page.length
+    return {
+      catalogRevision: snapshot.revision,
+      entries: page.map((entry) => ({
+        namespace: entry.namespace,
+        id: entry.id,
+        name: entry.name.slice(0, 160),
+        label: entry.label.slice(0, 160),
+        ...(entry.description?.length ? { description: entry.description.slice(0, 1_000) } : {}),
+        version: entry.version.slice(0, 80),
+        installationScopes: snapshot.installationScopes.get(entry.id) ?? [],
+      })),
+      nextCursor:
+        nextOffset < ranked.length
+          ? Buffer.from(
+              JSON.stringify({
+                revision: snapshot.revision,
+                query_fingerprint: queryFingerprint,
+                offset: nextOffset,
+              }),
+              "utf8",
+            ).toString("base64url")
+          : null,
+      totalCount: ranked.length,
+    }
+  }
+
+  export async function payloadMarketDetail(input: {
+    projectDirectory: string
+    id: string
+  }): Promise<PayloadMarketItem | undefined> {
+    const id = ExpertSquadRegistry.parseID(input.id, "expert squad market package id")
+    const source = payloadPackageSources.find((candidate) => candidate.id === id)
+    if (!source) return undefined
+    const loaded = ExpertSquadRegistry.loadEmbeddedPackageDeclaration(source)
+    const installations = (
+      await Promise.all(
+        (["project", "global"] as const).map(async (scope): Promise<MarketExistingPackage | undefined> => {
+          const installed = await ExpertSquadRegistry.loadInstalledCatalogPackage({
+            projectDirectory: input.projectDirectory,
+            installationScope: scope,
+            namespace: loaded.namespace,
+            id: loaded.id,
+          })
+          return installed
+            ? {
+                installationScope: scope,
+                installedVersion: installed.version,
+                installedPackageDigest: installed.packageDigest,
+              }
+            : undefined
+        }),
+      )
+    )
+      .filter((item): item is MarketExistingPackage => item !== undefined)
+      .map((item) => ({
+        installationScope: item.installationScope,
+        installedVersion: item.installedVersion,
+        installedPackageDigest: item.installedPackageDigest,
+        updateAvailable:
+          item.installedVersion !== loaded.version || item.installedPackageDigest !== loaded.packageDigest,
+      }))
+    return {
+      namespace: loaded.namespace,
+      id: loaded.id,
+      name: loaded.name,
+      label: loaded.label,
+      description: loaded.description,
+      version: loaded.version,
+      packageDigest: loaded.packageDigest,
+      selectorSummary: loaded.selector.summary,
+      agents: Object.entries(loaded.manifest.capability_projection.agents).map(([agentID, projection]) => ({
+        id: agentID,
+        label: projection.label,
+        description: projection.description,
+        baseRole: projection.base_role,
+      })),
+      ...payloadCapabilityCounts(loaded),
+      installations,
+    } satisfies PayloadMarketItem
   }
 
   export async function payloadMarket(input: { projectDirectory: string }): Promise<PayloadMarketItem[]> {
-    const existingPackages = await marketExistingPackageMap(input.projectDirectory)
-    return payloadPackageSources.map((source) => {
-      const loaded = ExpertSquadRegistry.loadEmbeddedPackageDeclaration(source)
-      const projectInstallation = existingPackages.get(installationKey("project", loaded.id))
-      const globalInstallation = existingPackages.get(installationKey("global", loaded.id))
-      const installations = [projectInstallation, globalInstallation]
-        .filter((item): item is MarketExistingPackage => item !== undefined)
-        .map((item) => ({
-          installationScope: item.installationScope,
-          installedVersion: item.installedVersion,
-          installedPackageDigest: item.installedPackageDigest,
-          updateAvailable:
-            item.installedVersion !== loaded.version || item.installedPackageDigest !== loaded.packageDigest,
-        }))
-      return {
-        namespace: loaded.namespace,
-        id: loaded.id,
-        name: loaded.name,
-        label: loaded.label,
-        description: loaded.description,
-        version: loaded.version,
-        packageDigest: loaded.packageDigest,
-        selectorSummary: loaded.selector.summary,
-        agents: Object.entries(loaded.manifest.capability_projection.agents).map(([id, projection]) => ({
-          id,
-          label: projection.label,
-          description: projection.description,
-          baseRole: projection.base_role,
-        })),
-        ...payloadCapabilityCounts(loaded),
-        installations,
-      }
-    })
+    const items = await Promise.all(
+      payloadPackageSources.map((source) =>
+        payloadMarketDetail({ projectDirectory: input.projectDirectory, id: source.id }),
+      ),
+    )
+    return items.filter((item): item is PayloadMarketItem => item !== undefined)
   }
 
   export async function installPayloadPackage(input: {

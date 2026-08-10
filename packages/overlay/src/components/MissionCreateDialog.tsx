@@ -10,6 +10,7 @@ import { Dialog } from "./ui/Dialog"
 import { Icon } from "./ui/Icon"
 import { SegmentedControl, type SegmentedControlOption } from "./ui/SegmentedControl"
 import { SelectControl } from "./ui/SelectControl"
+import { SearchField } from "./ui/SearchField"
 import { TextField } from "./ui/TextField"
 
 type MissionCreateMode = "manual" | "ai"
@@ -33,6 +34,7 @@ export interface MissionCreateDialogProps {
   productPillar: ProductPillar
   expertSquads: readonly ExpertSquadOption[]
   activeExpertSquadID: string
+  onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
   onClose: () => void
   onCreateManual: (input: MissionManualCreateRequest) => Promise<void>
   onCreateWithAI: (input: MissionCreateRequest) => Promise<void>
@@ -44,6 +46,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const [request, setRequest] = createSignal("")
   const [projectDirectory, setProjectDirectory] = createSignal("")
   const [expertSquadID, setExpertSquadID] = createSignal("")
+  const [expertSquadQuery, setExpertSquadQuery] = createSignal("")
   const [submitting, setSubmitting] = createSignal(false)
   const [error, setError] = createSignal("")
   const [modelAvailable, setModelAvailable] = createSignal(false)
@@ -66,7 +69,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const expertSquadOptions = createMemo<SelectOption[]>(() =>
     props.expertSquads.map((squad) => ({
       value: squad.id,
-      label: squad.display_label || squad.label,
+      label: squad.display_label,
       description: squad.description,
     })),
   )
@@ -94,6 +97,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     setRequest("")
     setProjectDirectory(preferredDirectory)
     setExpertSquadID(preferredSquad)
+    setExpertSquadQuery("")
     setSubmitting(false)
     setError("")
     queueMicrotask(() => requestRef?.focus())
@@ -263,6 +267,16 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
           </TextField.Root>
           <TextField.Root>
             <TextField.Label>{t("mission_board.create.expert_squad")}</TextField.Label>
+            <SearchField
+              value={expertSquadQuery()}
+              onValueChange={(value) => {
+                setExpertSquadQuery(value)
+                props.onExpertSquadQuery?.(value, expertSquadID() ? [expertSquadID()] : [])
+              }}
+              onClear={() => props.onExpertSquadQuery?.("", expertSquadID() ? [expertSquadID()] : [])}
+              placeholder={t("chat.references.search_placeholder")}
+              size="sm"
+            />
             <SelectControl<SelectOption>
               options={expertSquadOptions()}
               value={selectedExpertSquad()}

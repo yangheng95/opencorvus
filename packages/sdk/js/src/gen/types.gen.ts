@@ -1717,34 +1717,71 @@ export type EventWorktreeReady = {
   type: "worktree.ready"
 }
 
-export type ExpertSquadSettingsSurface = {
-  installations: Array<{
-    built_in: boolean
-    capability_projection: {
-      agents: {
-        [key: string]: {
-          base_role: string
-          built_in_tool_ids: Array<string>
-          default_mcp_prompt_refs: Array<string>
-          default_mcp_resource_refs: Array<string>
-          default_mcp_server_refs: Array<string>
-          default_mcp_tool_refs: Array<string>
-          default_skill_refs: Array<string>
-          default_tool_refs: Array<string>
-          description?: string
-          inherit_base_tools: boolean
-          label: string
-          package_mcp_prompt_refs: Array<string>
-          package_mcp_resource_refs: Array<string>
-          package_mcp_server_refs: Array<string>
-          package_mcp_tool_refs: Array<string>
-          package_skill_refs: Array<string>
-          package_tool_refs: Array<string>
-          prompt?: string
-        }
+export type ExpertSquadCatalogIndexEntry = {
+  built_in: boolean
+  description?: string
+  display_label: string
+  id: string
+  name: string
+  product_pillars: Array<"code" | "work">
+  source:
+    | {
+        kind: "built_in"
       }
-      scheduler: {
-        base_role: "orchestrator"
+    | {
+        installation_scope: "project" | "global"
+        kind: "installed_package"
+        namespace: string
+      }
+  system_role?: "expert_squad_generator"
+}
+
+export type ExpertSquadCatalogInspection = {
+  built_in: boolean
+  description?: string
+  display_label: string
+  id: string
+  label: string
+  name: string
+  next_workflow_cursor: string | null
+  product_pillars: Array<"code" | "work">
+  selector: {
+    selection_guidance: string
+    summary: string
+  }
+  source:
+    | {
+        kind: "built_in"
+      }
+    | {
+        installation_scope: "project" | "global"
+        kind: "installed_package"
+        namespace: string
+      }
+  system_role?: "expert_squad_generator"
+  version: string
+  workflow_count: number
+  workflows: Array<{
+    description: string
+    id: string
+    label: string
+    node_count: number
+  }>
+}
+
+export type ExpertSquadCatalogPage = {
+  catalog_revision: string
+  entries: Array<ExpertSquadCatalogIndexEntry>
+  next_cursor: string | null
+  total_count: number
+}
+
+export type ExpertSquadCatalogSummary = {
+  built_in: boolean
+  capability_projection: {
+    agents: {
+      [key: string]: {
+        base_role: string
         built_in_tool_ids: Array<string>
         default_mcp_prompt_refs: Array<string>
         default_mcp_resource_refs: Array<string>
@@ -1752,7 +1789,9 @@ export type ExpertSquadSettingsSurface = {
         default_mcp_tool_refs: Array<string>
         default_skill_refs: Array<string>
         default_tool_refs: Array<string>
+        description?: string
         inherit_base_tools: boolean
+        label: string
         package_mcp_prompt_refs: Array<string>
         package_mcp_resource_refs: Array<string>
         package_mcp_server_refs: Array<string>
@@ -1761,360 +1800,172 @@ export type ExpertSquadSettingsSurface = {
         package_tool_refs: Array<string>
         prompt?: string
       }
-      virtual_workflows: {
-        [key: string]: {
-          description: string
-          label: string
-          nodes: {
-            [key: string]: {
-              agent_id: string
-              depends_on: Array<string>
-              description: string
-            }
+    }
+    scheduler: {
+      base_role: "orchestrator"
+      built_in_tool_ids: Array<string>
+      default_mcp_prompt_refs: Array<string>
+      default_mcp_resource_refs: Array<string>
+      default_mcp_server_refs: Array<string>
+      default_mcp_tool_refs: Array<string>
+      default_skill_refs: Array<string>
+      default_tool_refs: Array<string>
+      inherit_base_tools: boolean
+      package_mcp_prompt_refs: Array<string>
+      package_mcp_resource_refs: Array<string>
+      package_mcp_server_refs: Array<string>
+      package_mcp_tool_refs: Array<string>
+      package_skill_refs: Array<string>
+      package_tool_refs: Array<string>
+      prompt?: string
+    }
+    virtual_workflows: {
+      [key: string]: {
+        description: string
+        label: string
+        nodes: {
+          [key: string]: {
+            agent_id: string
+            depends_on: Array<string>
+            description: string
           }
         }
       }
     }
-    configuration?: {
-      fields: Array<{
-        description?: string
-        key: string
-        label: string
-        placeholder?: string
-        required: boolean
-        type: "boolean" | "text" | "secret"
-      }>
-    }
-    declaration_hash: string
-    description?: string
-    display_label: string
-    editable: boolean
-    id: string
-    label: string
-    name: string
-    package_digest: string
-    product_pillars: Array<"code" | "work">
-    readme: {
-      append_target: "orchestrator"
-      content: string
-      path: "README.md"
-    }
-    selector: {
+  }
+  configuration?: {
+    fields: Array<{
       description?: string
-      id: string
-      instructions: string
-      instructions_path: "selector.md"
+      key: string
       label: string
-      ref: string
-      selection_guidance: string
-      summary: string
-    }
-    source:
-      | {
-          kind: "built_in"
+      placeholder?: string
+      required: boolean
+      type: "boolean" | "text" | "secret"
+    }>
+  }
+  declaration_hash: string
+  description?: string
+  display_label: string
+  editable: boolean
+  id: string
+  label: string
+  name: string
+  package_digest: string
+  product_pillars: Array<"code" | "work">
+  readme: {
+    append_target: "orchestrator"
+    content: string
+    path: "README.md"
+  }
+  selector: {
+    description?: string
+    id: string
+    instructions: string
+    instructions_path: "selector.md"
+    label: string
+    ref: string
+    selection_guidance: string
+    summary: string
+  }
+  source:
+    | {
+        kind: "built_in"
+      }
+    | {
+        generation?:
+          | {
+              generated_at: string
+              generator_expert_squad_id: "squad-sdk"
+              method: "sdk_authoring"
+              session_id: string
+              task_id: string
+            }
+          | {
+              generated_at: string
+              generator_expert_squad_id: "squad-sdk"
+              mapping_digest: string
+              method: "heterogeneous_import"
+              session_id: string
+              source_digest: string
+              task_id: string
+            }
+        installation_scope: "project" | "global"
+        kind: "installed_package"
+        manifest_path: string
+        namespace: string
+        package_digest: string
+        readme_path: string
+        root: string
+      }
+  system_role?: "expert_squad_generator"
+  version: string
+}
+
+export type ExpertSquadDiagnosticPage = {
+  catalog_revision: string
+  entries: Array<
+    | {
+        issue: {
+          id?: string
+          location: string
+          message: string
+          namespace?: string
+          phase: "location.scan" | "namespace.scan" | "package.identity" | "package.catalog" | "identity.duplicate"
         }
-      | {
-          generation?:
-            | {
-                generated_at: string
-                generator_expert_squad_id: "squad-sdk"
-                method: "sdk_authoring"
-                session_id: string
-                task_id: string
-              }
-            | {
-                generated_at: string
-                generator_expert_squad_id: "squad-sdk"
-                mapping_digest: string
-                method: "heterogeneous_import"
-                session_id: string
-                source_digest: string
-                task_id: string
-              }
-          installation_scope: "project" | "global"
-          kind: "installed_package"
-          manifest_path: string
-          namespace: string
-          package_digest: string
-          readme_path: string
-          root: string
+        kind: "issue"
+      }
+    | {
+        kind: "warning"
+        warning: {
+          code: "project_overrides_global"
+          effective: {
+            id: string
+            namespace: string
+            package_digest: string
+            root: string
+            scope: "project" | "global"
+            version: string
+          }
+          logical_id: string
+          severity: "warning"
+          shadowed: {
+            id: string
+            namespace: string
+            package_digest: string
+            root: string
+            scope: "project" | "global"
+            version: string
+          }
         }
-    system_role?: "expert_squad_generator"
-    version: string
-  }>
+      }
+  >
+  next_cursor: string | null
+  total_count: number
+}
+
+export type ExpertSquadInventoryStatus = {
+  catalog_revision: string
+  effective_count: number
+  installation_count: number
+  issue_count: number
+  warning_count: number
+}
+
+export type ExpertSquadPackageRevision = {
+  id: string
+  namespace: string
+  package_digest: string
+  project_id: string | null
+  scope: "built_in" | "project" | "global"
+  version: string
+}
+
+export type ExpertSquadSettingsDetail = {
   scope: {
     directory: string
     kind: "project"
   }
-  selected: {
-    built_in: boolean
-    capability_projection: {
-      agents: {
-        [key: string]: {
-          base_role: string
-          built_in_tool_ids: Array<string>
-          default_mcp_prompt_refs: Array<string>
-          default_mcp_resource_refs: Array<string>
-          default_mcp_server_refs: Array<string>
-          default_mcp_tool_refs: Array<string>
-          default_skill_refs: Array<string>
-          default_tool_refs: Array<string>
-          description?: string
-          inherit_base_tools: boolean
-          label: string
-          package_mcp_prompt_refs: Array<string>
-          package_mcp_resource_refs: Array<string>
-          package_mcp_server_refs: Array<string>
-          package_mcp_tool_refs: Array<string>
-          package_skill_refs: Array<string>
-          package_tool_refs: Array<string>
-          prompt?: string
-        }
-      }
-      scheduler: {
-        base_role: "orchestrator"
-        built_in_tool_ids: Array<string>
-        default_mcp_prompt_refs: Array<string>
-        default_mcp_resource_refs: Array<string>
-        default_mcp_server_refs: Array<string>
-        default_mcp_tool_refs: Array<string>
-        default_skill_refs: Array<string>
-        default_tool_refs: Array<string>
-        inherit_base_tools: boolean
-        package_mcp_prompt_refs: Array<string>
-        package_mcp_resource_refs: Array<string>
-        package_mcp_server_refs: Array<string>
-        package_mcp_tool_refs: Array<string>
-        package_skill_refs: Array<string>
-        package_tool_refs: Array<string>
-        prompt?: string
-      }
-      virtual_workflows: {
-        [key: string]: {
-          description: string
-          label: string
-          nodes: {
-            [key: string]: {
-              agent_id: string
-              depends_on: Array<string>
-              description: string
-            }
-          }
-        }
-      }
-    }
-    configuration?: {
-      fields: Array<{
-        description?: string
-        key: string
-        label: string
-        placeholder?: string
-        required: boolean
-        type: "boolean" | "text" | "secret"
-      }>
-    }
-    declaration_hash: string
-    description?: string
-    display_label: string
-    editable: boolean
-    id: string
-    label: string
-    name: string
-    package_digest: string
-    product_pillars: Array<"code" | "work">
-    readme: {
-      append_target: "orchestrator"
-      content: string
-      path: "README.md"
-    }
-    selector: {
-      description?: string
-      id: string
-      instructions: string
-      instructions_path: "selector.md"
-      label: string
-      ref: string
-      selection_guidance: string
-      summary: string
-    }
-    source:
-      | {
-          kind: "built_in"
-        }
-      | {
-          generation?:
-            | {
-                generated_at: string
-                generator_expert_squad_id: "squad-sdk"
-                method: "sdk_authoring"
-                session_id: string
-                task_id: string
-              }
-            | {
-                generated_at: string
-                generator_expert_squad_id: "squad-sdk"
-                mapping_digest: string
-                method: "heterogeneous_import"
-                session_id: string
-                source_digest: string
-                task_id: string
-              }
-          installation_scope: "project" | "global"
-          kind: "installed_package"
-          manifest_path: string
-          namespace: string
-          package_digest: string
-          readme_path: string
-          root: string
-        }
-    system_role?: "expert_squad_generator"
-    version: string
-  }
-  squads: Array<{
-    built_in: boolean
-    capability_projection: {
-      agents: {
-        [key: string]: {
-          base_role: string
-          built_in_tool_ids: Array<string>
-          default_mcp_prompt_refs: Array<string>
-          default_mcp_resource_refs: Array<string>
-          default_mcp_server_refs: Array<string>
-          default_mcp_tool_refs: Array<string>
-          default_skill_refs: Array<string>
-          default_tool_refs: Array<string>
-          description?: string
-          inherit_base_tools: boolean
-          label: string
-          package_mcp_prompt_refs: Array<string>
-          package_mcp_resource_refs: Array<string>
-          package_mcp_server_refs: Array<string>
-          package_mcp_tool_refs: Array<string>
-          package_skill_refs: Array<string>
-          package_tool_refs: Array<string>
-          prompt?: string
-        }
-      }
-      scheduler: {
-        base_role: "orchestrator"
-        built_in_tool_ids: Array<string>
-        default_mcp_prompt_refs: Array<string>
-        default_mcp_resource_refs: Array<string>
-        default_mcp_server_refs: Array<string>
-        default_mcp_tool_refs: Array<string>
-        default_skill_refs: Array<string>
-        default_tool_refs: Array<string>
-        inherit_base_tools: boolean
-        package_mcp_prompt_refs: Array<string>
-        package_mcp_resource_refs: Array<string>
-        package_mcp_server_refs: Array<string>
-        package_mcp_tool_refs: Array<string>
-        package_skill_refs: Array<string>
-        package_tool_refs: Array<string>
-        prompt?: string
-      }
-      virtual_workflows: {
-        [key: string]: {
-          description: string
-          label: string
-          nodes: {
-            [key: string]: {
-              agent_id: string
-              depends_on: Array<string>
-              description: string
-            }
-          }
-        }
-      }
-    }
-    configuration?: {
-      fields: Array<{
-        description?: string
-        key: string
-        label: string
-        placeholder?: string
-        required: boolean
-        type: "boolean" | "text" | "secret"
-      }>
-    }
-    declaration_hash: string
-    description?: string
-    display_label: string
-    editable: boolean
-    id: string
-    label: string
-    name: string
-    package_digest: string
-    product_pillars: Array<"code" | "work">
-    readme: {
-      append_target: "orchestrator"
-      content: string
-      path: "README.md"
-    }
-    selector: {
-      description?: string
-      id: string
-      instructions: string
-      instructions_path: "selector.md"
-      label: string
-      ref: string
-      selection_guidance: string
-      summary: string
-    }
-    source:
-      | {
-          kind: "built_in"
-        }
-      | {
-          generation?:
-            | {
-                generated_at: string
-                generator_expert_squad_id: "squad-sdk"
-                method: "sdk_authoring"
-                session_id: string
-                task_id: string
-              }
-            | {
-                generated_at: string
-                generator_expert_squad_id: "squad-sdk"
-                mapping_digest: string
-                method: "heterogeneous_import"
-                session_id: string
-                source_digest: string
-                task_id: string
-              }
-          installation_scope: "project" | "global"
-          kind: "installed_package"
-          manifest_path: string
-          namespace: string
-          package_digest: string
-          readme_path: string
-          root: string
-        }
-    system_role?: "expert_squad_generator"
-    version: string
-  }>
-  warnings: Array<{
-    code: "project_overrides_global"
-    effective: {
-      id: string
-      namespace: string
-      package_digest: string
-      root: string
-      scope: "project" | "global"
-      version: string
-    }
-    logical_id: string
-    severity: "warning"
-    shadowed: {
-      id: string
-      namespace: string
-      package_digest: string
-      root: string
-      scope: "project" | "global"
-      version: string
-    }
-  }>
+  selected: ExpertSquadCatalogSummary
 }
 
 export type FeishuChannelConfig = {
@@ -7801,6 +7652,7 @@ export type ExpertSquadCatalogResponses = {
   200: {
     active: {
       effective: string
+      package_revision: ExpertSquadPackageRevision
       project: string
       session_override: string | null
     }
@@ -7868,149 +7720,9 @@ export type ExpertSquadCatalogResponses = {
       projected_tool_ids: Array<string>
       projection_hash: string
       selector_skill_names: Array<string>
-      selector_skills: Array<{
-        description: string
-        digest: string
-        expert_squad_id: string
-        instructions: string
-        kind: "selector"
-        location: string
-        name: string
-        required_tools: Array<unknown>
-      }>
     }
     default: string
-    installations: Array<{
-      built_in: boolean
-      capability_projection: {
-        agents: {
-          [key: string]: {
-            base_role: string
-            built_in_tool_ids: Array<string>
-            default_mcp_prompt_refs: Array<string>
-            default_mcp_resource_refs: Array<string>
-            default_mcp_server_refs: Array<string>
-            default_mcp_tool_refs: Array<string>
-            default_skill_refs: Array<string>
-            default_tool_refs: Array<string>
-            description?: string
-            inherit_base_tools: boolean
-            label: string
-            package_mcp_prompt_refs: Array<string>
-            package_mcp_resource_refs: Array<string>
-            package_mcp_server_refs: Array<string>
-            package_mcp_tool_refs: Array<string>
-            package_skill_refs: Array<string>
-            package_tool_refs: Array<string>
-            prompt?: string
-          }
-        }
-        scheduler: {
-          base_role: "orchestrator"
-          built_in_tool_ids: Array<string>
-          default_mcp_prompt_refs: Array<string>
-          default_mcp_resource_refs: Array<string>
-          default_mcp_server_refs: Array<string>
-          default_mcp_tool_refs: Array<string>
-          default_skill_refs: Array<string>
-          default_tool_refs: Array<string>
-          inherit_base_tools: boolean
-          package_mcp_prompt_refs: Array<string>
-          package_mcp_resource_refs: Array<string>
-          package_mcp_server_refs: Array<string>
-          package_mcp_tool_refs: Array<string>
-          package_skill_refs: Array<string>
-          package_tool_refs: Array<string>
-          prompt?: string
-        }
-        virtual_workflows: {
-          [key: string]: {
-            description: string
-            label: string
-            nodes: {
-              [key: string]: {
-                agent_id: string
-                depends_on: Array<string>
-                description: string
-              }
-            }
-          }
-        }
-      }
-      configuration?: {
-        fields: Array<{
-          description?: string
-          key: string
-          label: string
-          placeholder?: string
-          required: boolean
-          type: "boolean" | "text" | "secret"
-        }>
-      }
-      declaration_hash: string
-      description?: string
-      display_label: string
-      editable: boolean
-      id: string
-      label: string
-      name: string
-      package_digest: string
-      product_pillars: Array<"code" | "work">
-      readme: {
-        append_target: "orchestrator"
-        content: string
-        path: "README.md"
-      }
-      selector: {
-        description?: string
-        id: string
-        instructions: string
-        instructions_path: "selector.md"
-        label: string
-        ref: string
-        selection_guidance: string
-        summary: string
-      }
-      source:
-        | {
-            kind: "built_in"
-          }
-        | {
-            generation?:
-              | {
-                  generated_at: string
-                  generator_expert_squad_id: "squad-sdk"
-                  method: "sdk_authoring"
-                  session_id: string
-                  task_id: string
-                }
-              | {
-                  generated_at: string
-                  generator_expert_squad_id: "squad-sdk"
-                  mapping_digest: string
-                  method: "heterogeneous_import"
-                  session_id: string
-                  source_digest: string
-                  task_id: string
-                }
-            installation_scope: "project" | "global"
-            kind: "installed_package"
-            manifest_path: string
-            namespace: string
-            package_digest: string
-            readme_path: string
-            root: string
-          }
-      system_role?: "expert_squad_generator"
-      version: string
-    }>
-    issues: Array<{
-      id?: string
-      location: string
-      message: string
-      namespace?: string
-      phase: "location.scan" | "namespace.scan" | "package.identity" | "package.catalog" | "identity.duplicate"
-    }>
+    launch_catalog_revision: string
     scope:
       | {
           directory: string
@@ -8021,151 +7733,6 @@ export type ExpertSquadCatalogResponses = {
           kind: "session"
           sessionID: string
         }
-    squads: Array<{
-      built_in: boolean
-      capability_projection: {
-        agents: {
-          [key: string]: {
-            base_role: string
-            built_in_tool_ids: Array<string>
-            default_mcp_prompt_refs: Array<string>
-            default_mcp_resource_refs: Array<string>
-            default_mcp_server_refs: Array<string>
-            default_mcp_tool_refs: Array<string>
-            default_skill_refs: Array<string>
-            default_tool_refs: Array<string>
-            description?: string
-            inherit_base_tools: boolean
-            label: string
-            package_mcp_prompt_refs: Array<string>
-            package_mcp_resource_refs: Array<string>
-            package_mcp_server_refs: Array<string>
-            package_mcp_tool_refs: Array<string>
-            package_skill_refs: Array<string>
-            package_tool_refs: Array<string>
-            prompt?: string
-          }
-        }
-        scheduler: {
-          base_role: "orchestrator"
-          built_in_tool_ids: Array<string>
-          default_mcp_prompt_refs: Array<string>
-          default_mcp_resource_refs: Array<string>
-          default_mcp_server_refs: Array<string>
-          default_mcp_tool_refs: Array<string>
-          default_skill_refs: Array<string>
-          default_tool_refs: Array<string>
-          inherit_base_tools: boolean
-          package_mcp_prompt_refs: Array<string>
-          package_mcp_resource_refs: Array<string>
-          package_mcp_server_refs: Array<string>
-          package_mcp_tool_refs: Array<string>
-          package_skill_refs: Array<string>
-          package_tool_refs: Array<string>
-          prompt?: string
-        }
-        virtual_workflows: {
-          [key: string]: {
-            description: string
-            label: string
-            nodes: {
-              [key: string]: {
-                agent_id: string
-                depends_on: Array<string>
-                description: string
-              }
-            }
-          }
-        }
-      }
-      configuration?: {
-        fields: Array<{
-          description?: string
-          key: string
-          label: string
-          placeholder?: string
-          required: boolean
-          type: "boolean" | "text" | "secret"
-        }>
-      }
-      declaration_hash: string
-      description?: string
-      display_label: string
-      editable: boolean
-      id: string
-      label: string
-      name: string
-      package_digest: string
-      product_pillars: Array<"code" | "work">
-      readme: {
-        append_target: "orchestrator"
-        content: string
-        path: "README.md"
-      }
-      selector: {
-        description?: string
-        id: string
-        instructions: string
-        instructions_path: "selector.md"
-        label: string
-        ref: string
-        selection_guidance: string
-        summary: string
-      }
-      source:
-        | {
-            kind: "built_in"
-          }
-        | {
-            generation?:
-              | {
-                  generated_at: string
-                  generator_expert_squad_id: "squad-sdk"
-                  method: "sdk_authoring"
-                  session_id: string
-                  task_id: string
-                }
-              | {
-                  generated_at: string
-                  generator_expert_squad_id: "squad-sdk"
-                  mapping_digest: string
-                  method: "heterogeneous_import"
-                  session_id: string
-                  source_digest: string
-                  task_id: string
-                }
-            installation_scope: "project" | "global"
-            kind: "installed_package"
-            manifest_path: string
-            namespace: string
-            package_digest: string
-            readme_path: string
-            root: string
-          }
-      system_role?: "expert_squad_generator"
-      version: string
-    }>
-    warnings: Array<{
-      code: "project_overrides_global"
-      effective: {
-        id: string
-        namespace: string
-        package_digest: string
-        root: string
-        scope: "project" | "global"
-        version: string
-      }
-      logical_id: string
-      severity: "warning"
-      shadowed: {
-        id: string
-        namespace: string
-        package_digest: string
-        root: string
-        scope: "project" | "global"
-        version: string
-      }
-    }>
   }
 }
 
@@ -8280,6 +7847,42 @@ export type ExpertSquadConfigurationUpdateResponses = {
 
 export type ExpertSquadConfigurationUpdateResponse =
   ExpertSquadConfigurationUpdateResponses[keyof ExpertSquadConfigurationUpdateResponses]
+
+export type ExpertSquadDiagnosticsData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    cursor?: string
+    limit?: number
+  }
+  url: "/expert-squad/diagnostics"
+}
+
+export type ExpertSquadDiagnosticsErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Internal server error
+   */
+  500: UnknownError
+}
+
+export type ExpertSquadDiagnosticsError = ExpertSquadDiagnosticsErrors[keyof ExpertSquadDiagnosticsErrors]
+
+export type ExpertSquadDiagnosticsResponses = {
+  /**
+   * Bounded Expert Squad diagnostics
+   */
+  200: ExpertSquadDiagnosticPage
+}
+
+export type ExpertSquadDiagnosticsResponse = ExpertSquadDiagnosticsResponses[keyof ExpertSquadDiagnosticsResponses]
 
 export type ExpertSquadEvolutionAuthorizationData = {
   body: {
@@ -12734,6 +12337,53 @@ export type ExpertSquadImportFolderResponses = {
 
 export type ExpertSquadImportFolderResponse = ExpertSquadImportFolderResponses[keyof ExpertSquadImportFolderResponses]
 
+export type ExpertSquadInspectData = {
+  body?: never
+  path?: never
+  query: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    id: string
+    installationScope?: "built_in" | "project" | "global"
+    namespace?: string
+    workflowCursor?: string
+  }
+  url: "/expert-squad/inspect"
+}
+
+export type ExpertSquadInspectErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Expert Squad not found
+   */
+  404: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "NotFoundError"
+  }
+  /**
+   * Internal server error
+   */
+  500: UnknownError
+}
+
+export type ExpertSquadInspectError = ExpertSquadInspectErrors[keyof ExpertSquadInspectErrors]
+
+export type ExpertSquadInspectResponses = {
+  /**
+   * Expert-squad declaration inspection
+   */
+  200: ExpertSquadCatalogInspection
+}
+
+export type ExpertSquadInspectResponse = ExpertSquadInspectResponses[keyof ExpertSquadInspectResponses]
+
 export type ExpertSquadInstallPayloadData = {
   body: {
     id: string
@@ -12900,6 +12550,41 @@ export type ExpertSquadInstallPayloadResponses = {
 export type ExpertSquadInstallPayloadResponse =
   ExpertSquadInstallPayloadResponses[keyof ExpertSquadInstallPayloadResponses]
 
+export type ExpertSquadInventoryStatusData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/expert-squad/inventory-status"
+}
+
+export type ExpertSquadInventoryStatusErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Internal server error
+   */
+  500: UnknownError
+}
+
+export type ExpertSquadInventoryStatusError = ExpertSquadInventoryStatusErrors[keyof ExpertSquadInventoryStatusErrors]
+
+export type ExpertSquadInventoryStatusResponses = {
+  /**
+   * Expert-squad inventory status
+   */
+  200: ExpertSquadInventoryStatus
+}
+
+export type ExpertSquadInventoryStatusResponse =
+  ExpertSquadInventoryStatusResponses[keyof ExpertSquadInventoryStatusResponses]
+
 export type ExpertSquadMarketData = {
   body?: never
   path?: never
@@ -12908,6 +12593,10 @@ export type ExpertSquadMarketData = {
      * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
      */
     directory?: string
+    query?: string
+    availability?: "all" | "available" | "installed"
+    cursor?: string
+    limit?: number
   }
   url: "/expert-squad/market"
 }
@@ -12930,7 +12619,65 @@ export type ExpertSquadMarketResponses = {
   /**
    * Expert squad market entries
    */
-  200: Array<{
+  200: {
+    catalog_revision: string
+    entries: Array<{
+      description?: string
+      id: string
+      installation_scopes: Array<"project" | "global">
+      label: string
+      name: string
+      namespace: string
+      version: string
+    }>
+    next_cursor: string | null
+    total_count: number
+  }
+}
+
+export type ExpertSquadMarketResponse = ExpertSquadMarketResponses[keyof ExpertSquadMarketResponses]
+
+export type ExpertSquadMarketDetailData = {
+  body?: never
+  path?: never
+  query: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    id: string
+  }
+  url: "/expert-squad/market/detail"
+}
+
+export type ExpertSquadMarketDetailErrors = {
+  /**
+   * Expert squad market rejected
+   */
+  400: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "ExpertSquadPackageError"
+  }
+  /**
+   * Expert Squad not found
+   */
+  404: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "NotFoundError"
+  }
+}
+
+export type ExpertSquadMarketDetailError = ExpertSquadMarketDetailErrors[keyof ExpertSquadMarketDetailErrors]
+
+export type ExpertSquadMarketDetailResponses = {
+  /**
+   * Bundled expert-squad detail
+   */
+  200: {
     agents: Array<{
       base_role: string
       description?: string
@@ -12954,10 +12701,10 @@ export type ExpertSquadMarketResponses = {
     skill_count: number
     tool_count: number
     version: string
-  }>
+  }
 }
 
-export type ExpertSquadMarketResponse = ExpertSquadMarketResponses[keyof ExpertSquadMarketResponses]
+export type ExpertSquadMarketDetailResponse = ExpertSquadMarketDetailResponses[keyof ExpertSquadMarketDetailResponses]
 
 export type ExpertSquadMulticaPreviewData = {
   body: {
@@ -13442,7 +13189,7 @@ export type ExpertSquadReleasePayloadResponses = {
 export type ExpertSquadReleasePayloadResponse =
   ExpertSquadReleasePayloadResponses[keyof ExpertSquadReleasePayloadResponses]
 
-export type ExpertSquadSettingsData = {
+export type ExpertSquadSearchData = {
   body?: never
   path?: never
   query?: {
@@ -13450,13 +13197,53 @@ export type ExpertSquadSettingsData = {
      * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
      */
     directory?: string
-    id?: string
-    installationScope?: "built_in" | "project" | "global"
+    view?: "effective" | "installations"
+    query?: string
+    productPillar?: "code" | "work"
+    cursor?: string
+    limit?: number
   }
-  url: "/expert-squad/settings"
+  url: "/expert-squad/search"
 }
 
-export type ExpertSquadSettingsErrors = {
+export type ExpertSquadSearchErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Internal server error
+   */
+  500: UnknownError
+}
+
+export type ExpertSquadSearchError = ExpertSquadSearchErrors[keyof ExpertSquadSearchErrors]
+
+export type ExpertSquadSearchResponses = {
+  /**
+   * Bounded expert-squad search page
+   */
+  200: ExpertSquadCatalogPage
+}
+
+export type ExpertSquadSearchResponse = ExpertSquadSearchResponses[keyof ExpertSquadSearchResponses]
+
+export type ExpertSquadSettingsDetailData = {
+  body?: never
+  path?: never
+  query: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    id: string
+    installationScope: "built_in" | "project" | "global"
+    namespace?: string
+  }
+  url: "/expert-squad/settings/detail"
+}
+
+export type ExpertSquadSettingsDetailErrors = {
   /**
    * Bad request
    */
@@ -13476,16 +13263,17 @@ export type ExpertSquadSettingsErrors = {
   500: UnknownError
 }
 
-export type ExpertSquadSettingsError = ExpertSquadSettingsErrors[keyof ExpertSquadSettingsErrors]
+export type ExpertSquadSettingsDetailError = ExpertSquadSettingsDetailErrors[keyof ExpertSquadSettingsDetailErrors]
 
-export type ExpertSquadSettingsResponses = {
+export type ExpertSquadSettingsDetailResponses = {
   /**
-   * Project Expert Squad settings
+   * Exact expert-squad settings detail
    */
-  200: ExpertSquadSettingsSurface
+  200: ExpertSquadSettingsDetail
 }
 
-export type ExpertSquadSettingsResponse = ExpertSquadSettingsResponses[keyof ExpertSquadSettingsResponses]
+export type ExpertSquadSettingsDetailResponse =
+  ExpertSquadSettingsDetailResponses[keyof ExpertSquadSettingsDetailResponses]
 
 export type ExpertSquadUninstallData = {
   body: {
@@ -14659,7 +14447,15 @@ export type GatewayChannelMessageResponse = GatewayChannelMessageResponses[keyof
 export type GatewayControlActionData = {
   body:
     | {
-        action: "expert_squad_catalog"
+        action: "expert_squad_inspect"
+        /**
+         * Exact held Expert Squad manifest ID returned by capability_search.
+         */
+        id: string
+        /**
+         * Opaque next_workflow_cursor returned by the preceding inspection of this exact Squad.
+         */
+        workflowCursor?: string
       }
     | {
         action: "multica_catalog"
@@ -15069,7 +14865,7 @@ export type GatewayControlActionData = {
          */
         productPillar?: "code" | "work"
         /**
-         * Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose this from expert_squad_catalog for every created Task. Non-Mission callers may omit it to inherit their effective prompt_profile.active.
+         * Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose a held ID returned by capability_search and may inspect it with expert_squad_inspect. Non-Mission callers may omit it to inherit their effective prompt_profile.active.
          */
         promptProfile?: string
         /**
@@ -16171,6 +15967,42 @@ export type GlobalChatCreateResponses = {
 
 export type GlobalChatCreateResponse = GlobalChatCreateResponses[keyof GlobalChatCreateResponses]
 
+export type GlobalComposerExpertSquadsData = {
+  body?: never
+  path?: never
+  query?: {
+    view?: "effective" | "installations"
+    query?: string
+    productPillar?: "code" | "work"
+    cursor?: string
+    limit?: number
+  }
+  url: "/global/composer-expert-squads"
+}
+
+export type GlobalComposerExpertSquadsErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * Internal server error
+   */
+  500: UnknownError
+}
+
+export type GlobalComposerExpertSquadsError = GlobalComposerExpertSquadsErrors[keyof GlobalComposerExpertSquadsErrors]
+
+export type GlobalComposerExpertSquadsResponses = {
+  /**
+   * Bounded global Composer Expert Squad page
+   */
+  200: ExpertSquadCatalogPage
+}
+
+export type GlobalComposerExpertSquadsResponse =
+  GlobalComposerExpertSquadsResponses[keyof GlobalComposerExpertSquadsResponses]
+
 export type GlobalComposerReferencesData = {
   body?: never
   path?: never
@@ -16193,137 +16025,7 @@ export type GlobalComposerReferencesResponses = {
    */
   200: {
     expert_squads: {
-      issues: Array<{
-        id?: string
-        location: string
-        message: string
-        namespace?: string
-        phase: "location.scan" | "namespace.scan" | "package.identity" | "package.catalog" | "identity.duplicate"
-      }>
-      squads: Array<{
-        built_in: boolean
-        capability_projection: {
-          agents: {
-            [key: string]: {
-              base_role: string
-              built_in_tool_ids: Array<string>
-              default_mcp_prompt_refs: Array<string>
-              default_mcp_resource_refs: Array<string>
-              default_mcp_server_refs: Array<string>
-              default_mcp_tool_refs: Array<string>
-              default_skill_refs: Array<string>
-              default_tool_refs: Array<string>
-              description?: string
-              inherit_base_tools: boolean
-              label: string
-              package_mcp_prompt_refs: Array<string>
-              package_mcp_resource_refs: Array<string>
-              package_mcp_server_refs: Array<string>
-              package_mcp_tool_refs: Array<string>
-              package_skill_refs: Array<string>
-              package_tool_refs: Array<string>
-              prompt?: string
-            }
-          }
-          scheduler: {
-            base_role: "orchestrator"
-            built_in_tool_ids: Array<string>
-            default_mcp_prompt_refs: Array<string>
-            default_mcp_resource_refs: Array<string>
-            default_mcp_server_refs: Array<string>
-            default_mcp_tool_refs: Array<string>
-            default_skill_refs: Array<string>
-            default_tool_refs: Array<string>
-            inherit_base_tools: boolean
-            package_mcp_prompt_refs: Array<string>
-            package_mcp_resource_refs: Array<string>
-            package_mcp_server_refs: Array<string>
-            package_mcp_tool_refs: Array<string>
-            package_skill_refs: Array<string>
-            package_tool_refs: Array<string>
-            prompt?: string
-          }
-          virtual_workflows: {
-            [key: string]: {
-              description: string
-              label: string
-              nodes: {
-                [key: string]: {
-                  agent_id: string
-                  depends_on: Array<string>
-                  description: string
-                }
-              }
-            }
-          }
-        }
-        configuration?: {
-          fields: Array<{
-            description?: string
-            key: string
-            label: string
-            placeholder?: string
-            required: boolean
-            type: "boolean" | "text" | "secret"
-          }>
-        }
-        declaration_hash: string
-        description?: string
-        display_label: string
-        editable: boolean
-        id: string
-        label: string
-        name: string
-        package_digest: string
-        product_pillars: Array<"code" | "work">
-        readme: {
-          append_target: "orchestrator"
-          content: string
-          path: "README.md"
-        }
-        selector: {
-          description?: string
-          id: string
-          instructions: string
-          instructions_path: "selector.md"
-          label: string
-          ref: string
-          selection_guidance: string
-          summary: string
-        }
-        source:
-          | {
-              kind: "built_in"
-            }
-          | {
-              generation?:
-                | {
-                    generated_at: string
-                    generator_expert_squad_id: "squad-sdk"
-                    method: "sdk_authoring"
-                    session_id: string
-                    task_id: string
-                  }
-                | {
-                    generated_at: string
-                    generator_expert_squad_id: "squad-sdk"
-                    mapping_digest: string
-                    method: "heterogeneous_import"
-                    session_id: string
-                    source_digest: string
-                    task_id: string
-                  }
-              installation_scope: "project" | "global"
-              kind: "installed_package"
-              manifest_path: string
-              namespace: string
-              package_digest: string
-              readme_path: string
-              root: string
-            }
-        system_role?: "expert_squad_generator"
-        version: string
-      }>
+      page: ExpertSquadCatalogPage
     }
     mission_skills: {
       issues: Array<{
@@ -19202,9 +18904,16 @@ export type MissionWakeData = {
 
 export type MissionWakeErrors = {
   /**
-   * Bad request
+   * Mission wake request or immutable Expert Squad snapshot rejected
    */
-  400: BadRequestError
+  400:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "MissionExpertSquadSnapshotMismatchError"
+      }
 }
 
 export type MissionWakeError = MissionWakeErrors[keyof MissionWakeErrors]

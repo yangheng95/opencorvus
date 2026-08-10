@@ -135,6 +135,7 @@ import { TaskChannelBindingProjectConflictError, TaskGlobalProjectBindingError }
 import { TaskRootMessageKind, TaskRootMessageProvenance } from "./task-root-message"
 import {
   assertNoCallerSuppliedTaskCreatorMetadata,
+  assertTaskCreatorExpertSquadAuthority,
   TaskCreator,
   TaskCreatorMetadata,
   projectTaskCreatorMetadata,
@@ -1418,6 +1419,7 @@ export namespace EngineService {
     assertNoCallerSuppliedChildTaskLineage(parsed)
     assertNoCallerSuppliedTaskCreatorMetadata(parsed.metadata)
     const creator = await resolveTaskCreator(rawCreator)
+    assertTaskCreatorExpertSquadAuthority({ creator, promptProfile: parsed.promptProfile })
     const input = CreateTaskInput.parse({
       ...parsed,
       ...(creator.actor === "mission" ? { source: "mission" } : {}),

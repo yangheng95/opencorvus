@@ -15,8 +15,36 @@ import {
 } from "./schema"
 import type { SessionPrompt } from "@/session/prompt"
 import { missionExpertSquadSnapshotsMatch } from "./expert-squad-authority"
+import { NamedError } from "@opencorvus-ai/util/error"
+import { createHash } from "node:crypto"
+import z from "zod"
 
 export type MissionSession = Session.Info & { missionID: string; productPillar: ProductPillar }
+
+export const MissionExpertSquadSnapshotMismatchError = NamedError.create(
+  "MissionExpertSquadSnapshotMismatchError",
+  z.object({
+    message: z.string(),
+    missionID: MissionID,
+    heldCount: z.number().int().positive(),
+    heldSnapshotHash: z.string().regex(/^[a-f0-9]{64}$/),
+  }),
+)
+
+export function assertMissionExpertSquadSnapshot(
+  missionID: MissionID,
+  held: MissionVisibleExpertSquadIDs,
+  requested: MissionVisibleExpertSquadIDs,
+): void {
+  if (missionExpertSquadSnapshotsMatch(held, requested)) return
+  const heldSnapshotHash = createHash("sha256").update(JSON.stringify(held)).digest("hex")
+  throw new MissionExpertSquadSnapshotMismatchError({
+    message: `Mission ${missionID} already holds a different immutable Expert Squad snapshot.`,
+    missionID,
+    heldCount: held.length,
+    heldSnapshotHash,
+  })
+}
 
 /**
  * Project the fixed Mission control-plane capability onto a user prompt.
@@ -95,29 +123,6 @@ export async function setMissionPendingPrompt(input: {
       mission: {
         ...currentMission,
         ...(input.pendingPrompt ? { pendingPrompt: MissionPendingPrompt.parse(input.pendingPrompt) } : {}),
-      },
-    },
-  })
-}
-
-export async function setMissionVisibleExpertSquadIDs(input: {
-  session: Session.Info
-  expertSquadIDs: MissionVisibleExpertSquadIDs
-}): Promise<Session.Info> {
-  if (input.session.kind !== "mission") {
-    throw new Error(`Session ${input.session.id} is not a Mission session.`)
-  }
-  const metadata = (input.session.metadata ?? {}) as Record<string, unknown>
-  const mission = metadata.mission
-  if (!mission || typeof mission !== "object" || Array.isArray(mission)) {
-    throw new Error(`Mission session ${input.session.id} is missing metadata.mission.`)
-  }
-  return Session.mergeMetadata({
-    sessionID: input.session.id,
-    patch: {
-      mission: {
-        ...(mission as Record<string, unknown>),
-        visibleExpertSquadIDs: MissionVisibleExpertSquadIDs.parse(input.expertSquadIDs),
       },
     },
   })
@@ -299,7 +304,7 @@ async function ensureMissionSessionInner(input: {
   missionID: MissionID
   directory: string
   productPillar: ProductPillar
-  heldExpertSquadIDs?: MissionVisibleExpertSquadIDs
+  heldExpertSquadIDs: MissionVisibleExpertSquadIDs
 }) {
   const missionID = input.missionID
   const existingID = findMissionSessionIDByDirectory({ missionID, directory: input.directory })
@@ -308,14 +313,7 @@ async function ensureMissionSessionInner(input: {
     if (missionProductPillar(existing) !== input.productPillar) {
       throw new Error(`Mission ${missionID} already holds a different immutable product pillar.`)
     }
-    if (
-      input.heldExpertSquadIDs &&
-      !missionExpertSquadSnapshotsMatch(missionVisibleExpertSquadIDs(existing), input.heldExpertSquadIDs)
-    ) {
-      throw new Error(
-        `Mission ${missionID} already holds a different immutable Expert Squad snapshot.`,
-      )
-    }
+    assertMissionExpertSquadSnapshot(missionID, missionVisibleExpertSquadIDs(existing), input.heldExpertSquadIDs)
     await ensureMissionRuntimeDirectory({ directory: existing.directory, missionID })
     return withMissionID(existing, missionID)
   }
@@ -333,9 +331,7 @@ async function ensureMissionSessionInner(input: {
         channelKey: channelKeyForMission(missionID),
         cwd: input.directory,
         productPillar: input.productPillar,
-        ...(input.heldExpertSquadIDs
-          ? { visibleExpertSquadIDs: input.heldExpertSquadIDs }
-          : {}),
+        visibleExpertSquadIDs: input.heldExpertSquadIDs,
       },
     },
   })
@@ -347,7 +343,7 @@ export async function ensureMissionSession(input: {
   missionID: string
   defaultCwd: string
   productPillar: ProductPillar
-  heldExpertSquadIDs?: MissionVisibleExpertSquadIDs
+  heldExpertSquadIDs: MissionVisibleExpertSquadIDs
 }) {
   const missionID = MissionID.parse(input.missionID)
   const directory = normalizeDirectory(input.defaultCwd)
@@ -358,14 +354,7 @@ export async function ensureMissionSession(input: {
     if (session.productPillar !== input.productPillar) {
       throw new Error(`Mission ${missionID} already holds a different immutable product pillar.`)
     }
-    if (
-      input.heldExpertSquadIDs &&
-      !missionExpertSquadSnapshotsMatch(missionVisibleExpertSquadIDs(session), input.heldExpertSquadIDs)
-    ) {
-      throw new Error(
-        `Mission ${missionID} already holds a different immutable Expert Squad snapshot.`,
-      )
-    }
+    assertMissionExpertSquadSnapshot(missionID, missionVisibleExpertSquadIDs(session), input.heldExpertSquadIDs)
     return session
   }
 

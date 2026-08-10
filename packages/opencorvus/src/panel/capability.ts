@@ -189,7 +189,7 @@ function panelUISchemas<const T extends readonly Capability[]>(items: T) {
 }
 
 const MissionPanelCapabilityActions = [
-  "expert_squad_catalog",
+  "expert_squad_inspect",
   "multica_catalog",
   "create_task",
   "query_task",
@@ -220,12 +220,19 @@ function selectCapabilities(actions: readonly string[], context: string): Capabi
 
 export const PanelCapabilityRegistry = list(
   item({
-    action: "expert_squad_catalog",
+    action: "expert_squad_inspect",
     description:
-      "List the exact immutable Expert Squad snapshot held by this Mission for stage planning and Task ownership recommendations. The Mission launch path resolves either the operator-selected IDs or all Squads installed at launch into this persisted snapshot; later installations never widen it.",
+      "Inspect selector guidance and workflow summaries for one exact Expert Squad candidate returned by held-filtered capability_search. This never enumerates the Mission held set or returns a full package declaration.",
     kind: "query",
     surfaces: ["panel"],
-    params: {},
+    params: {
+      id: ExpertSquadIDSchema.describe("Exact held Expert Squad manifest ID returned by capability_search."),
+      workflowCursor: z
+        .string()
+        .min(1)
+        .optional()
+        .describe("Opaque next_workflow_cursor returned by the preceding inspection of this exact Squad."),
+    },
   }),
   item({
     action: "multica_catalog",
@@ -340,7 +347,7 @@ export const PanelCapabilityRegistry = list(
         .optional()
         .describe("Model reference in provider/model format for the new task."),
       promptProfile: ExpertSquadIDSchema.optional().describe(
-        "Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose this from expert_squad_catalog for every created Task. Non-Mission callers may omit it to inherit their effective prompt_profile.active.",
+        "Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose a held ID returned by capability_search and may inspect it with expert_squad_inspect. Non-Mission callers may omit it to inherit their effective prompt_profile.active.",
       ),
       expectedPackageDigest: z
         .string()

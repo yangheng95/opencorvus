@@ -96,9 +96,17 @@ import {
 } from "./services/pane"
 import { panelMessage } from "./services/chat"
 import { loadConversationCapability } from "./services/conversation-capability"
-import { loadExpertSquadCatalog, type ExpertSquadCatalogScope } from "./services/expert-squad"
+import {
+  inspectExpertSquad,
+  loadExpertSquadCatalog,
+  searchExpertSquads,
+  type ExpertSquadCatalogScope,
+} from "./services/expert-squad"
 import { loadMissionSkillCatalog } from "./services/mission-skill"
-import { loadGlobalComposerReferences } from "./services/global-composer-references"
+import {
+  loadGlobalComposerReferences,
+  searchGlobalComposerExpertSquads,
+} from "./services/global-composer-references"
 import { resolveComposerSubmitRoute } from "./services/composer-submit-route"
 import {
   VisibleComposerReferences as VisibleComposerReferencesSchema,
@@ -193,6 +201,7 @@ import {
   createGlobalComposerReferenceCatalogSnapshot,
   createComposerReferenceCatalogSnapshotFromSettled,
   emptyComposerExpertSquadCatalog,
+  mergeComposerExpertSquadOptions,
 } from "./services/composer-expert-squad-catalog"
 import { currentUIScale, layoutTokenPx } from "./utils/layout-tokens"
 
@@ -1572,6 +1581,7 @@ const [composerExpertSquadCatalogSnapshot, setComposerExpertSquadCatalogSnapshot
 let expertSquadLoadSequence = 0
 let expertSquadInFlight: { requestKey: string; promise: Promise<void> } | null = null
 let expertSquadLoadedRequestKey = ""
+let expertSquadSearchSequence = 0
 async function refreshExpertSquads(
   scope: ExpertSquadCatalogScope | Extract<ComposerReferenceCatalogScopeState, { kind: "global" }>,
   requestKey: string,
@@ -1588,17 +1598,25 @@ async function refreshExpertSquads(
         expertSquadLoadedRequestKey = requestKey
         return
       }
-      const [catalog, missionSkillCatalog, chatCapability] = await Promise.allSettled([
-        loadExpertSquadCatalog(scope),
+      const catalogPromise = loadExpertSquadCatalog(scope)
+      const activeInspectionPromise = catalogPromise.then((catalog) =>
+        inspectExpertSquad({ directory: scope.directory, id: catalog.active.effective }),
+      )
+      const [catalog, squads, missionSkillCatalog, chatCapability, activeInspection] = await Promise.allSettled([
+        catalogPromise,
+        searchExpertSquads({ directory: scope.directory, productPillar: composerIntent().productPillar }),
         loadMissionSkillCatalog(scope),
         loadConversationCapability(scope.directory, "chat"),
+        activeInspectionPromise,
       ])
       if (sequence !== expertSquadLoadSequence) return
       setComposerExpertSquadCatalogSnapshot(
         createComposerReferenceCatalogSnapshotFromSettled(requestKey, composerExpertSquadCatalogSnapshot(), {
           catalog,
+          squads,
           missionSkills: missionSkillCatalog,
           chatCapability,
+          activeInspection,
         }),
       )
       expertSquadLoadedRequestKey = requestKey
@@ -1621,6 +1639,48 @@ async function refreshExpertSquads(
   })()
   expertSquadInFlight = { requestKey, promise }
   await promise
+}
+
+async function searchComposerExpertSquads(query: string, selectedExpertSquadIDs: readonly string[] = []): Promise<void> {
+  const sequence = ++expertSquadSearchSequence
+  const requestKey = composerReferenceCatalogRequestKey()
+  const scope = composerReferenceCatalogScope()
+  if (scope.kind === "pending" || scope.kind === "unavailable") return
+  try {
+    const page =
+      scope.kind === "global"
+        ? await searchGlobalComposerExpertSquads({
+            query,
+            productPillar: composerIntent().productPillar,
+            limit: 20,
+          })
+        : await searchExpertSquads({
+            directory: scope.directory,
+            query,
+            productPillar: composerIntent().productPillar,
+            limit: 20,
+          })
+    if (sequence !== expertSquadSearchSequence || requestKey !== composerReferenceCatalogRequestKey()) return
+    setComposerExpertSquadCatalogSnapshot((current) =>
+      current.requestKey === requestKey
+        ? {
+            ...current,
+            squads: mergeComposerExpertSquadOptions(page.entries, current.squads, [
+              current.activeID,
+              ...selectedExpertSquadIDs,
+            ]),
+            error: "",
+          }
+        : current,
+    )
+  } catch (error) {
+    if (sequence !== expertSquadSearchSequence || requestKey !== composerReferenceCatalogRequestKey()) return
+    const message = `expert squad search: ${runtimeErrorMessage(error)}`
+    setComposerExpertSquadCatalogSnapshot((current) =>
+      current.requestKey === requestKey ? { ...current, error: message } : current,
+    )
+    AppLog.warn("composer-reference", "Expert Squad search failed", { error: message, requestKey })
+  }
 }
 
 function newRequestComposerDraftKey(): string {
@@ -1875,6 +1935,7 @@ function OverlayRoot() {
           defaultProjectDirectory={activeDirectory()}
           productPillar={composerIntent().productPillar}
           expertSquads={composerExpertSquadCatalog().squads}
+          onExpertSquadQuery={(query, selectedIDs) => void searchComposerExpertSquads(query, selectedIDs)}
           activeExpertSquadID={composerExpertSquadCatalog().activeID}
           onOpenMission={(mission) =>
             runMainAsync("mission-board.open-mission", () => openMissionBoardMission(mission))
@@ -2089,6 +2150,7 @@ function OverlayRoot() {
           missionSkills={composerExpertSquadCatalog().missionSkills}
           referenceCatalogError={composerExpertSquadCatalog().error}
           expertSquads={composerExpertSquadCatalog().squads}
+          onExpertSquadQuery={(query, selectedIDs) => void searchComposerExpertSquads(query, selectedIDs)}
           activeExpertSquadID={composerExpertSquadCatalog().activeID}
           conversationActive={Boolean(activeTaskID() || activeSessionID())}
           launchReferences={composerLaunchReferences()}
@@ -2577,28 +2639,6 @@ window.addEventListener("beforeunload", () => {
   stopTimers()
 })
 installSystemThemeListener(() => applyTheme(settingsStore.theme))
-
-// Dev-only hook used by `script/snap-settings.ts` to drive the config
-// dialog open from Playwright. Vite dev does not happily serve the
-// `.ts` modules to a dynamic-import call from a foreign origin, so the
-// snap script cannot reach `openConfigDialog` through the module graph
-// — it reaches in via `window.__OC_DEV__` instead. Gated on
-// `import.meta.env.DEV` so the production bundle does not carry it.
-//
-// The application root mounts before `initApp()` starts, so these
-// assertions only verify that the shared host is available to the
-// snapshot script while the backend is offline.
-if (import.meta.env.DEV) {
-  function assertOverlayAppMounted(): void {
-    if (!overlayAppHost.firstElementChild) throw new Error("Overlay application root is not mounted")
-  }
-  ;(window as any).__OC_DEV__ = {
-    openConfigDialog,
-    ensureConfigHost: assertOverlayAppMounted,
-    openGoalDialog,
-    ensureGoalHost: assertOverlayAppMounted,
-  }
-}
 
 // ── Init ──
 

@@ -121,6 +121,8 @@ import type {
   ExpertSquadConfigurationGetResponses,
   ExpertSquadConfigurationUpdateErrors,
   ExpertSquadConfigurationUpdateResponses,
+  ExpertSquadDiagnosticsErrors,
+  ExpertSquadDiagnosticsResponses,
   ExpertSquadEvolutionAuthorizationErrors,
   ExpertSquadEvolutionAuthorizationResponses,
   ExpertSquadEvolutionHistoryDetailErrors,
@@ -135,8 +137,14 @@ import type {
   ExpertSquadImportFileResponses,
   ExpertSquadImportFolderErrors,
   ExpertSquadImportFolderResponses,
+  ExpertSquadInspectErrors,
+  ExpertSquadInspectResponses,
   ExpertSquadInstallPayloadErrors,
   ExpertSquadInstallPayloadResponses,
+  ExpertSquadInventoryStatusErrors,
+  ExpertSquadInventoryStatusResponses,
+  ExpertSquadMarketDetailErrors,
+  ExpertSquadMarketDetailResponses,
   ExpertSquadMarketErrors,
   ExpertSquadMarketResponses,
   ExpertSquadMulticaPreviewErrors,
@@ -145,8 +153,10 @@ import type {
   ExpertSquadMulticaSquadsResponses,
   ExpertSquadReleasePayloadErrors,
   ExpertSquadReleasePayloadResponses,
-  ExpertSquadSettingsErrors,
-  ExpertSquadSettingsResponses,
+  ExpertSquadSearchErrors,
+  ExpertSquadSearchResponses,
+  ExpertSquadSettingsDetailErrors,
+  ExpertSquadSettingsDetailResponses,
   ExpertSquadUninstallErrors,
   ExpertSquadUninstallResponses,
   ExpertSquadUpdateErrors,
@@ -199,6 +209,8 @@ import type {
   GlobalAutomationsUpdateResponses,
   GlobalChatCreateErrors,
   GlobalChatCreateResponses,
+  GlobalComposerExpertSquadsErrors,
+  GlobalComposerExpertSquadsResponses,
   GlobalComposerReferencesErrors,
   GlobalComposerReferencesResponses,
   GlobalConfigGetErrors,
@@ -2823,9 +2835,9 @@ export class Configuration extends HeyApiClient {
 
 export class ExpertSquad extends HeyApiClient {
   /**
-   * List expert squads and active capability projection
+   * Resolve the active expert-squad capability projection
    *
-   * Returns the effective expert-squad catalog for the current project or session. The active value is still the single prompt_profile.active config field; this route exposes its expert-squad package view.
+   * Returns only the active runtime projection for the current project or session. Use bounded search and exact inspection for inactive packages. Task sessions remain pinned to their creation-time package revision.
    */
   public catalog<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -2847,6 +2859,42 @@ export class ExpertSquad extends HeyApiClient {
     )
     return (options?.client ?? this.client).get<ExpertSquadCatalogResponses, ExpertSquadCatalogErrors, ThrowOnError>({
       url: "/expert-squad/catalog",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Page Expert Squad discovery diagnostics
+   *
+   * Returns at most 20 discovery issues or override warnings from the current catalog snapshot.
+   */
+  public diagnostics<ThrowOnError extends boolean = false>(
+    parameters?: {
+      directory?: string
+      cursor?: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "cursor" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      ExpertSquadDiagnosticsResponses,
+      ExpertSquadDiagnosticsErrors,
+      ThrowOnError
+    >({
+      url: "/expert-squad/diagnostics",
       ...options,
       ...params,
     })
@@ -3250,6 +3298,42 @@ export class ExpertSquad extends HeyApiClient {
   }
 
   /**
+   * Inspect one expert-squad declaration
+   *
+   * Returns bounded selector and workflow guidance for one exact effective or physical installation identity.
+   */
+  public inspect<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      id: string
+      installationScope?: "built_in" | "project" | "global"
+      namespace?: string
+      workflowCursor?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "id" },
+            { in: "query", key: "installationScope" },
+            { in: "query", key: "namespace" },
+            { in: "query", key: "workflowCursor" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<ExpertSquadInspectResponses, ExpertSquadInspectErrors, ThrowOnError>({
+      url: "/expert-squad/inspect",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
    * Install one bundled expert squad
    *
    * Installs the selected bundled expert-squad payload package into the explicitly selected project or user-global catalog without activating or overwriting it. If that scope already contains the package, installed is false and version/packageDigest describe the existing bytes at targetRoot.
@@ -3291,19 +3375,93 @@ export class ExpertSquad extends HeyApiClient {
   }
 
   /**
-   * Browse bundled expert squads
+   * Get expert-squad inventory status
    *
-   * Lists bundled expert-squad payload packages with manifest-owned identity, member and capability summaries, and project installation state.
+   * Returns declaration and diagnostic counts without package bodies or unbounded diagnostic arrays.
    */
-  public market<ThrowOnError extends boolean = false>(
+  public inventoryStatus<ThrowOnError extends boolean = false>(
     parameters?: {
       directory?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
     const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
+    return (options?.client ?? this.client).get<
+      ExpertSquadInventoryStatusResponses,
+      ExpertSquadInventoryStatusErrors,
+      ThrowOnError
+    >({
+      url: "/expert-squad/inventory-status",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Browse bundled expert squads
+   *
+   * Returns a bounded manifest-derived page of bundled expert-squad payload packages. Rich package and update detail is loaded only for an exact selection.
+   */
+  public market<ThrowOnError extends boolean = false>(
+    parameters?: {
+      directory?: string
+      query?: string
+      availability?: "all" | "available" | "installed"
+      cursor?: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "query" },
+            { in: "query", key: "availability" },
+            { in: "query", key: "cursor" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
     return (options?.client ?? this.client).get<ExpertSquadMarketResponses, ExpertSquadMarketErrors, ThrowOnError>({
       url: "/expert-squad/market",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Inspect one bundled expert squad
+   *
+   * Returns digest, selector, agents, capability counts, and exact installation revisions for one selection.
+   */
+  public marketDetail<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      id: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "id" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      ExpertSquadMarketDetailResponses,
+      ExpertSquadMarketDetailErrors,
+      ThrowOnError
+    >({
+      url: "/expert-squad/market/detail",
       ...options,
       ...params,
     })
@@ -3439,15 +3597,54 @@ export class ExpertSquad extends HeyApiClient {
   }
 
   /**
-   * Inspect project Expert Squad settings
+   * Search expert-squad declarations
    *
-   * Returns the project-installed Squad declarations and one exact selected declaration without resolving or changing the active runtime profile.
+   * Returns at most twenty manifest-derived entries and an opaque cursor. Rich selector guidance and full package detail require exact follow-up requests.
    */
-  public settings<ThrowOnError extends boolean = false>(
+  public search<ThrowOnError extends boolean = false>(
     parameters?: {
       directory?: string
-      id?: string
-      installationScope?: "built_in" | "project" | "global"
+      view?: "effective" | "installations"
+      query?: string
+      productPillar?: "code" | "work"
+      cursor?: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "view" },
+            { in: "query", key: "query" },
+            { in: "query", key: "productPillar" },
+            { in: "query", key: "cursor" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<ExpertSquadSearchResponses, ExpertSquadSearchErrors, ThrowOnError>({
+      url: "/expert-squad/search",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Load one full expert-squad settings declaration
+   *
+   * Loads README, selector instructions, digest, and runtime declaration only for one exact selected identity.
+   */
+  public settingsDetail<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      id: string
+      installationScope: "built_in" | "project" | "global"
+      namespace?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -3459,12 +3656,17 @@ export class ExpertSquad extends HeyApiClient {
             { in: "query", key: "directory" },
             { in: "query", key: "id" },
             { in: "query", key: "installationScope" },
+            { in: "query", key: "namespace" },
           ],
         },
       ],
     )
-    return (options?.client ?? this.client).get<ExpertSquadSettingsResponses, ExpertSquadSettingsErrors, ThrowOnError>({
-      url: "/expert-squad/settings",
+    return (options?.client ?? this.client).get<
+      ExpertSquadSettingsDetailResponses,
+      ExpertSquadSettingsDetailErrors,
+      ThrowOnError
+    >({
+      url: "/expert-squad/settings/detail",
       ...options,
       ...params,
     })
@@ -4164,7 +4366,15 @@ export class Control extends HeyApiClient {
       directory?: string
       body:
         | {
-            action: "expert_squad_catalog"
+            action: "expert_squad_inspect"
+            /**
+             * Exact held Expert Squad manifest ID returned by capability_search.
+             */
+            id: string
+            /**
+             * Opaque next_workflow_cursor returned by the preceding inspection of this exact Squad.
+             */
+            workflowCursor?: string
           }
         | {
             action: "multica_catalog"
@@ -4574,7 +4784,7 @@ export class Control extends HeyApiClient {
              */
             productPillar?: "code" | "work"
             /**
-             * Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose this from expert_squad_catalog for every created Task. Non-Mission callers may omit it to inherit their effective prompt_profile.active.
+             * Exact expert-squad manifest ID that owns the new Task for its full lifetime. Mission must choose a held ID returned by capability_search and may inspect it with expert_squad_inspect. Non-Mission callers may omit it to inherit their effective prompt_profile.active.
              */
             promptProfile?: string
             /**
@@ -6054,6 +6264,46 @@ export class Work2 extends HeyApiClient {
 }
 
 export class Global extends HeyApiClient {
+  /**
+   * Search global Composer expert squads
+   *
+   * Returns a bounded page of built-in and user-global Expert Squads without creating a Project or Session.
+   */
+  public composerExpertSquads<ThrowOnError extends boolean = false>(
+    parameters?: {
+      view?: "effective" | "installations"
+      query?: string
+      productPillar?: "code" | "work"
+      cursor?: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "view" },
+            { in: "query", key: "query" },
+            { in: "query", key: "productPillar" },
+            { in: "query", key: "cursor" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      GlobalComposerExpertSquadsResponses,
+      GlobalComposerExpertSquadsErrors,
+      ThrowOnError
+    >({
+      url: "/global/composer-expert-squads",
+      ...options,
+      ...params,
+    })
+  }
+
   /**
    * List global Composer references
    *

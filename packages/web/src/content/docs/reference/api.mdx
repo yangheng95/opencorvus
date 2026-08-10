@@ -28,6 +28,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/global/automations/{id}/run` | Run a scheduled automation now Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `global.automations.run` |
 | GET | `/global/automations/{id}/runs` | List scheduled automation runs Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.runs` |
 | POST | `/global/chat` | Create Chat in a temporary project Body: `model`; Errors: `BadRequestError`. | `global.chat.create` |
+| GET | `/global/composer-expert-squads` | Search global Composer expert squads Errors: `BadRequestError`, `UnknownError`. | `global.composerExpertSquads` |
 | GET | `/global/composer-references` | List global Composer references Errors: `UnknownError`. | `global.composerReferences` |
 | GET | `/global/config` | Get global configuration Errors: `NonCanonicalConfigFileError`. | `global.config.get` |
 | PATCH | `/global/config` | Update global configuration Errors: `BadRequestError`, `NonCanonicalConfigFileError`. | `global.config.update` |
@@ -123,7 +124,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | PATCH | `/mailbox/{messageID}` | Update a mailbox item Body: `action`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `mailbox.acknowledge` |
 | GET | `/mission` | List Missions | `mission.list` |
 | POST | `/mission/draft` | Create a Mission draft Body: `expertSquadIDs`, `productPillar`, `request`, `title`; Errors: `BadRequestError`. | `mission.createDraft` |
-| POST | `/mission/wake` | Wake the Mission agent Body: `attachments`, `expertSquadIDs`, `missionID`, `model`, `productPillar`, `text`; Errors: `BadRequestError`. | `mission.wake` |
+| POST | `/mission/wake` | Wake the Mission agent Body: `attachments`, `expertSquadIDs`, `missionID`, `model`, `productPillar`, `text`; Errors: `BadRequestError`, `MissionExpertSquadSnapshotMismatchError`. | `mission.wake` |
 | DELETE | `/mission/{missionID}` | Delete a Mission Body: `reason`, `surface`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.delete` |
 | POST | `/mission/{missionID}/abort` | Abort a Mission Body: `reason`, `surface`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.abort` |
 | GET | `/mission/{missionID}/activity-cursor` | Get Mission durable activity cursor Errors: `LogFileNotFoundError`, `NotFoundError`. | `mission.activityCursor` |
@@ -260,7 +261,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 |---|---|---|---|
 | GET | `/gateway/capabilities` | List gateway capabilities | `gateway.capabilities` |
 | POST | `/gateway/channel/{platform}/message` | Handle gateway channel message Body: `allow_create`, `allow_session_mutation`, `attachments`, `bind`, `channel`, `model`, `platform`, `request_id`, `source`, `task_id`, `text`, `thread`, `user_id`. | `gateway.channel.message` |
-| POST | `/gateway/control/action` | Run gateway control action Body: `acceptance_specs`, `action`, `allow_create`, `artifact_types`, `byte_offset`, `channel`, `checks`, `created_at_or_after_ms`, `created_before_ms`, `cursor`, `delivery`, `directory`, `evidence_locators`, `expectedPackageDigest`, `goalID`, `goal_ids`, `import_source_task_ids`, `includeInteractions`, `interactionID`, `kinds`, `labels`, `locator`, `match`, `max_bytes`, `media_types`, `message`, `metadata`, `model`, `platform`, `producer_agent_ids`, `producer_session_ids`, `producer_squad_ids`, `productPillar`, `promptProfile`, `query`, `queue`, `reason`, `reply`, `request`, `request_id`, `sessionID`, `sort`, `source`, `sources`, `summary`, `taskID`, `taskIDs`, `task_acceptances`, `text`, `thread`, `title`, `user_id`, `version_scope`. | `gateway.control.action` |
+| POST | `/gateway/control/action` | Run gateway control action Body: `acceptance_specs`, `action`, `allow_create`, `artifact_types`, `byte_offset`, `channel`, `checks`, `created_at_or_after_ms`, `created_before_ms`, `cursor`, `delivery`, `directory`, `evidence_locators`, `expectedPackageDigest`, `goalID`, `goal_ids`, `id`, `import_source_task_ids`, `includeInteractions`, `interactionID`, `kinds`, `labels`, `locator`, `match`, `max_bytes`, `media_types`, `message`, `metadata`, `model`, `platform`, `producer_agent_ids`, `producer_session_ids`, `producer_squad_ids`, `productPillar`, `promptProfile`, `query`, `queue`, `reason`, `reply`, `request`, `request_id`, `sessionID`, `sort`, `source`, `sources`, `summary`, `taskID`, `taskIDs`, `task_acceptances`, `text`, `thread`, `title`, `user_id`, `version_scope`, `workflowCursor`. | `gateway.control.action` |
 | POST | `/gateway/control/message` | Handle gateway control message Body: `allow_create`, `attachments`, `channel`, `model`, `request_id`, `sessionID`, `source`, `surface`, `taskID`, `text`, `thread`, `user_id`. | `gateway.control.message` |
 | GET | `/gateway/stats` | Get gateway stats | `gateway.stats` |
 
@@ -288,9 +289,10 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 
 | Method | Path | Summary | operationId |
 |---|---|---|---|
-| GET | `/expert-squad/catalog` | List expert squads and active capability projection Errors: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.catalog` |
+| GET | `/expert-squad/catalog` | Resolve the active expert-squad capability projection Errors: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.catalog` |
 | GET | `/expert-squad/configuration` | Get expert squad configuration Errors: `ExpertSquadPackageError`. | `expertSquad.configuration.get` |
 | PUT | `/expert-squad/configuration` | Update expert squad configuration Body: `id`, `installationScope`, `updates`; Errors: `ExpertSquadPackageError`. | `expertSquad.configuration.update` |
+| GET | `/expert-squad/diagnostics` | Page Expert Squad discovery diagnostics Errors: `BadRequestError`, `UnknownError`. | `expertSquad.diagnostics` |
 | POST | `/expert-squad/evolution-authorization` | Authorize an expert squad evolution mutation Body: `confirmationText`, `intent`, `sessionID`, `taskID`; Errors: `ExpertSquadPackageError`. | `expertSquad.evolutionAuthorization` |
 | GET | `/expert-squad/evolution-history` | Read expert squad evolution history Errors: `ExpertSquadPackageError`. | `expertSquad.evolutionHistory` |
 | POST | `/expert-squad/evolution-history/detail` | Read one exact expert squad evolution campaign Body: `campaignLocator`, `campaignTaskID`, `candidateLocator`, `catalogRevisionUpper`, `comparisonLocator`, `id`, `installationScope`, `namespace`; Errors: `EvolutionHistoryAuthorityError`, `ExpertSquadPackageError`. | `expertSquad.evolutionHistoryDetail` |
@@ -298,12 +300,16 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/expert-squad/export` | Export an expert squad ZIP archive Body: `id`, `installationScope`; Errors: `ExpertSquadPackageError`. | `expertSquad.export` |
 | POST | `/expert-squad/import-file` | Import an expert squad ZIP archive Body: `archiveBase64`, `expectedCurrentPackageDigest`, `filename`, `installationScope`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.importFile` |
 | POST | `/expert-squad/import-folder` | Import an expert squad folder Body: `expectedCurrentPackageDigest`, `installationScope`, `sourceDirectory`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.importFolder` |
+| GET | `/expert-squad/inspect` | Inspect one expert-squad declaration Errors: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.inspect` |
 | POST | `/expert-squad/install-payload` | Install one bundled expert squad Body: `id`, `installationScope`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.installPayload` |
+| GET | `/expert-squad/inventory-status` | Get expert-squad inventory status Errors: `BadRequestError`, `UnknownError`. | `expertSquad.inventoryStatus` |
 | GET | `/expert-squad/market` | Browse bundled expert squads Errors: `ExpertSquadPackageError`. | `expertSquad.market` |
+| GET | `/expert-squad/market/detail` | Inspect one bundled expert squad Errors: `ExpertSquadPackageError`, `NotFoundError`. | `expertSquad.marketDetail` |
 | POST | `/expert-squad/multica/preview` | Preview a Multica squad import Body: `mapping`, `squadID`; Errors: `ExpertSquadPackageError`. | `expertSquad.multicaPreview` |
 | GET | `/expert-squad/multica/squads` | List Multica squads with expert-squad installation status Errors: `ExpertSquadPackageError`. | `expertSquad.multicaSquads` |
 | POST | `/expert-squad/release-payload` | Release bundled expert-squad packages Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.releasePayload` |
-| GET | `/expert-squad/settings` | Inspect project Expert Squad settings Errors: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.settings` |
+| GET | `/expert-squad/search` | Search expert-squad declarations Errors: `BadRequestError`, `UnknownError`. | `expertSquad.search` |
+| GET | `/expert-squad/settings/detail` | Load one full expert-squad settings declaration Errors: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.settingsDetail` |
 | POST | `/expert-squad/uninstall` | Uninstall an expert squad package Body: `id`, `installationScope`, `replacementID`; Errors: `ExpertSquadPackageError`. | `expertSquad.uninstall` |
 | POST | `/expert-squad/update` | Update an installed expert squad Body: `expectedCurrentPackageDigest`, `id`, `installationScope`, `source`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.update` |
 | POST | `/expert-squad/validate-folder` | Validate an expert squad source folder Body: `sourceDirectory`; Errors: `ExpertSquadPackageError`. | `expertSquad.validateFolder` |

@@ -28,6 +28,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/global/automations/{id}/run` | Run a scheduled automation now 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `global.automations.run` |
 | GET | `/global/automations/{id}/runs` | List scheduled automation runs 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.runs` |
 | POST | `/global/chat` | Create Chat in a temporary project 请求体: `model`; 错误: `BadRequestError`. | `global.chat.create` |
+| GET | `/global/composer-expert-squads` | Search global Composer expert squads 错误: `BadRequestError`, `UnknownError`. | `global.composerExpertSquads` |
 | GET | `/global/composer-references` | List global Composer references 错误: `UnknownError`. | `global.composerReferences` |
 | GET | `/global/config` | Get global configuration 错误: `NonCanonicalConfigFileError`. | `global.config.get` |
 | PATCH | `/global/config` | Update global configuration 错误: `BadRequestError`, `NonCanonicalConfigFileError`. | `global.config.update` |
@@ -123,7 +124,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | PATCH | `/mailbox/{messageID}` | Update a mailbox item 请求体: `action`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `mailbox.acknowledge` |
 | GET | `/mission` | List Missions | `mission.list` |
 | POST | `/mission/draft` | Create a Mission draft 请求体: `expertSquadIDs`, `productPillar`, `request`, `title`; 错误: `BadRequestError`. | `mission.createDraft` |
-| POST | `/mission/wake` | Wake the Mission agent 请求体: `attachments`, `expertSquadIDs`, `missionID`, `model`, `productPillar`, `text`; 错误: `BadRequestError`. | `mission.wake` |
+| POST | `/mission/wake` | Wake the Mission agent 请求体: `attachments`, `expertSquadIDs`, `missionID`, `model`, `productPillar`, `text`; 错误: `BadRequestError`, `MissionExpertSquadSnapshotMismatchError`. | `mission.wake` |
 | DELETE | `/mission/{missionID}` | Delete a Mission 请求体: `reason`, `surface`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.delete` |
 | POST | `/mission/{missionID}/abort` | Abort a Mission 请求体: `reason`, `surface`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.abort` |
 | GET | `/mission/{missionID}/activity-cursor` | Get Mission durable activity cursor 错误: `LogFileNotFoundError`, `NotFoundError`. | `mission.activityCursor` |
@@ -260,7 +261,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 |---|---|---|---|
 | GET | `/gateway/capabilities` | List gateway capabilities | `gateway.capabilities` |
 | POST | `/gateway/channel/{platform}/message` | Handle gateway channel message 请求体: `allow_create`, `allow_session_mutation`, `attachments`, `bind`, `channel`, `model`, `platform`, `request_id`, `source`, `task_id`, `text`, `thread`, `user_id`. | `gateway.channel.message` |
-| POST | `/gateway/control/action` | Run gateway control action 请求体: `acceptance_specs`, `action`, `allow_create`, `artifact_types`, `byte_offset`, `channel`, `checks`, `created_at_or_after_ms`, `created_before_ms`, `cursor`, `delivery`, `directory`, `evidence_locators`, `expectedPackageDigest`, `goalID`, `goal_ids`, `import_source_task_ids`, `includeInteractions`, `interactionID`, `kinds`, `labels`, `locator`, `match`, `max_bytes`, `media_types`, `message`, `metadata`, `model`, `platform`, `producer_agent_ids`, `producer_session_ids`, `producer_squad_ids`, `productPillar`, `promptProfile`, `query`, `queue`, `reason`, `reply`, `request`, `request_id`, `sessionID`, `sort`, `source`, `sources`, `summary`, `taskID`, `taskIDs`, `task_acceptances`, `text`, `thread`, `title`, `user_id`, `version_scope`. | `gateway.control.action` |
+| POST | `/gateway/control/action` | Run gateway control action 请求体: `acceptance_specs`, `action`, `allow_create`, `artifact_types`, `byte_offset`, `channel`, `checks`, `created_at_or_after_ms`, `created_before_ms`, `cursor`, `delivery`, `directory`, `evidence_locators`, `expectedPackageDigest`, `goalID`, `goal_ids`, `id`, `import_source_task_ids`, `includeInteractions`, `interactionID`, `kinds`, `labels`, `locator`, `match`, `max_bytes`, `media_types`, `message`, `metadata`, `model`, `platform`, `producer_agent_ids`, `producer_session_ids`, `producer_squad_ids`, `productPillar`, `promptProfile`, `query`, `queue`, `reason`, `reply`, `request`, `request_id`, `sessionID`, `sort`, `source`, `sources`, `summary`, `taskID`, `taskIDs`, `task_acceptances`, `text`, `thread`, `title`, `user_id`, `version_scope`, `workflowCursor`. | `gateway.control.action` |
 | POST | `/gateway/control/message` | Handle gateway control message 请求体: `allow_create`, `attachments`, `channel`, `model`, `request_id`, `sessionID`, `source`, `surface`, `taskID`, `text`, `thread`, `user_id`. | `gateway.control.message` |
 | GET | `/gateway/stats` | Get gateway stats | `gateway.stats` |
 
@@ -288,9 +289,10 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 
 | Method | 路径 | 说明 | operationId |
 |---|---|---|---|
-| GET | `/expert-squad/catalog` | List expert squads and active capability projection 错误: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.catalog` |
+| GET | `/expert-squad/catalog` | Resolve the active expert-squad capability projection 错误: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.catalog` |
 | GET | `/expert-squad/configuration` | Get expert squad configuration 错误: `ExpertSquadPackageError`. | `expertSquad.configuration.get` |
 | PUT | `/expert-squad/configuration` | Update expert squad configuration 请求体: `id`, `installationScope`, `updates`; 错误: `ExpertSquadPackageError`. | `expertSquad.configuration.update` |
+| GET | `/expert-squad/diagnostics` | Page Expert Squad discovery diagnostics 错误: `BadRequestError`, `UnknownError`. | `expertSquad.diagnostics` |
 | POST | `/expert-squad/evolution-authorization` | Authorize an expert squad evolution mutation 请求体: `confirmationText`, `intent`, `sessionID`, `taskID`; 错误: `ExpertSquadPackageError`. | `expertSquad.evolutionAuthorization` |
 | GET | `/expert-squad/evolution-history` | Read expert squad evolution history 错误: `ExpertSquadPackageError`. | `expertSquad.evolutionHistory` |
 | POST | `/expert-squad/evolution-history/detail` | Read one exact expert squad evolution campaign 请求体: `campaignLocator`, `campaignTaskID`, `candidateLocator`, `catalogRevisionUpper`, `comparisonLocator`, `id`, `installationScope`, `namespace`; 错误: `EvolutionHistoryAuthorityError`, `ExpertSquadPackageError`. | `expertSquad.evolutionHistoryDetail` |
@@ -298,12 +300,16 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/expert-squad/export` | Export an expert squad ZIP archive 请求体: `id`, `installationScope`; 错误: `ExpertSquadPackageError`. | `expertSquad.export` |
 | POST | `/expert-squad/import-file` | Import an expert squad ZIP archive 请求体: `archiveBase64`, `expectedCurrentPackageDigest`, `filename`, `installationScope`; 错误: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.importFile` |
 | POST | `/expert-squad/import-folder` | Import an expert squad folder 请求体: `expectedCurrentPackageDigest`, `installationScope`, `sourceDirectory`; 错误: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.importFolder` |
+| GET | `/expert-squad/inspect` | Inspect one expert-squad declaration 错误: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.inspect` |
 | POST | `/expert-squad/install-payload` | Install one bundled expert squad 请求体: `id`, `installationScope`; 错误: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.installPayload` |
+| GET | `/expert-squad/inventory-status` | Get expert-squad inventory status 错误: `BadRequestError`, `UnknownError`. | `expertSquad.inventoryStatus` |
 | GET | `/expert-squad/market` | Browse bundled expert squads 错误: `ExpertSquadPackageError`. | `expertSquad.market` |
+| GET | `/expert-squad/market/detail` | Inspect one bundled expert squad 错误: `ExpertSquadPackageError`, `NotFoundError`. | `expertSquad.marketDetail` |
 | POST | `/expert-squad/multica/preview` | Preview a Multica squad import 请求体: `mapping`, `squadID`; 错误: `ExpertSquadPackageError`. | `expertSquad.multicaPreview` |
 | GET | `/expert-squad/multica/squads` | List Multica squads with expert-squad installation status 错误: `ExpertSquadPackageError`. | `expertSquad.multicaSquads` |
 | POST | `/expert-squad/release-payload` | Release bundled expert-squad packages 错误: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.releasePayload` |
-| GET | `/expert-squad/settings` | Inspect project Expert Squad settings 错误: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.settings` |
+| GET | `/expert-squad/search` | Search expert-squad declarations 错误: `BadRequestError`, `UnknownError`. | `expertSquad.search` |
+| GET | `/expert-squad/settings/detail` | Load one full expert-squad settings declaration 错误: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.settingsDetail` |
 | POST | `/expert-squad/uninstall` | Uninstall an expert squad package 请求体: `id`, `installationScope`, `replacementID`; 错误: `ExpertSquadPackageError`. | `expertSquad.uninstall` |
 | POST | `/expert-squad/update` | Update an installed expert squad 请求体: `expectedCurrentPackageDigest`, `id`, `installationScope`, `source`; 错误: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.update` |
 | POST | `/expert-squad/validate-folder` | Validate an expert squad source folder 请求体: `sourceDirectory`; 错误: `ExpertSquadPackageError`. | `expertSquad.validateFolder` |

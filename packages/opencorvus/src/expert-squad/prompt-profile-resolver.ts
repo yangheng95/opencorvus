@@ -34,7 +34,6 @@ import {
   bindProjectedTaskToolRuntime,
   resolvePackageTaskToolExecutionScope,
   resolveProjectedTaskToolExecutionScope,
-  executionAuthorityFromTaskToolScope,
   type PackageToolRuntimeBinding,
   type ProjectedTaskToolRuntimeBinding,
 } from "@/tool/task-tool-execution-scope"
@@ -44,12 +43,24 @@ import { builtInPackageSources, getLoadedBuiltInPackages } from "./builtin"
 import { executePackageToolInCapsule, introspectPackageToolInCapsule } from "./package-tool-capsule"
 import {
   ExpertSquadCatalogSchema,
-  ExpertSquadRecommendationSchema,
+  ExpertSquadCatalogIndexEntrySchema,
+  ExpertSquadCatalogInspectionSchema,
+  ExpertSquadCatalogPageSchema,
+  ExpertSquadDiagnosticPageSchema,
+  ExpertSquadInventoryStatusSchema,
+  type ExpertSquadCatalogIndexEntry,
+  type ExpertSquadCatalogInspection,
+  type ExpertSquadCatalogPage,
+  type ExpertSquadDiagnosticPage,
   type ExpertSquadCatalog,
   type ExpertSquadCatalogSummary,
-  type ExpertSquadRecommendation,
 } from "./catalog"
-import { catalogSummaryFromPackage as catalogSummaryFromCapabilityPackage } from "./catalog-profile"
+import {
+  catalogIndexFromPackage as catalogIndexFromCapabilityPackage,
+  catalogInspectionFromPackage as catalogInspectionFromCapabilityPackage,
+  catalogSummaryFromPackage as catalogSummaryFromCapabilityPackage,
+} from "./catalog-profile"
+import { scoreDiscoveryFields } from "@/capability/fuzzy"
 import {
   defaultMcpPromptProviderName as defaultMcpPromptProviderNameFromRef,
   defaultMcpResourceProviderName as defaultMcpResourceProviderNameFromRef,
@@ -76,6 +87,7 @@ import { configuredProjectedWorkerModelRef } from "@/agent/model"
 import { ExpertSquadConfigurationStore } from "./configuration"
 import { createHarnessProjection } from "@/capability/harness-projection"
 import { capabilityRef, type CapabilityKind, type CapabilityRef } from "@/capability/ref"
+import { NamedError } from "@opencorvus-ai/util/error"
 
 type ConfigLike = {
   model?: Config.Info["model"]
@@ -100,6 +112,7 @@ export namespace PromptProfileResolver {
     sessionOverride: string | null
     scope: { kind: "project"; directory: string } | { kind: "session"; directory: string; sessionID: string }
     defaultSkills?: Skill.Info[]
+    packageRevision?: ExpertSquadPackageRevision
   }
 
   export interface ResolvedComposeInput {
@@ -141,17 +154,6 @@ export namespace PromptProfileResolver {
         skill: Skill.Info
         snapshot: ExpertSquadRegistry.PackageSkillSnapshot
       }
-
-  export interface ResolvedSelectorSkill {
-    kind: "selector"
-    expertSquadID: string
-    name: string
-    description: string
-    instructions: string
-    digest: string
-    location: string
-    requiredTools: []
-  }
 
   export type PreparedPackageTool =
     ExpertSquadRegistry.LoadedPackage["packageToolBundles"] extends ReadonlyMap<string, infer Prepared>
@@ -407,7 +409,6 @@ export namespace PromptProfileResolver {
     selectorSkillNames: string[]
     productionSkillNames: string[]
     projectedSkillNames: string[]
-    selectorSkills: ResolvedSelectorSkill[]
     productionSkills: ProductionSkillGrant[]
     skillInventory: Skill.Info[]
   }
@@ -507,22 +508,11 @@ export namespace PromptProfileResolver {
     }
   }
 
-  async function discoverExternalPackages(
-    projectDirectory: string,
-  ): Promise<ExpertSquadRegistry.PackageCatalogEntry[]> {
-    const entries = await ExpertSquadRegistry.discover(projectDirectory)
-    for (const entry of entries) assertNoBuiltInCollision(entry.id)
-    return entries
-  }
-
-  async function discoverAvailableExternalPackages(
-    projectDirectory?: string,
-    reconcileEvolutionMutations = true,
-  ) {
+  async function discoverAvailableExternalPackages(projectDirectory?: string, reconcileEvolutionMutations = true) {
     const result = projectDirectory
       ? await ExpertSquadRegistry.discoverAvailable(projectDirectory, { reconcileEvolutionMutations })
       : await ExpertSquadRegistry.discoverGlobalAvailable()
-    const items: ExpertSquadRegistry.PackageCatalogEntry[] = []
+    const items: ExpertSquadRegistry.CatalogDeclaration[] = []
     const issues = [...result.issues]
     for (const entry of result.items) {
       if (Object.hasOwn(builtInPackages(), entry.id)) {
@@ -538,27 +528,24 @@ export namespace PromptProfileResolver {
       items.push(entry)
     }
     if (projectDirectory) {
-      const effective = result as ExpertSquadRegistry.EffectiveDiscoveryResult<ExpertSquadRegistry.PackageCatalogEntry>
+      const effective = result as ExpertSquadRegistry.EffectiveDiscoveryResult<ExpertSquadRegistry.CatalogDeclaration>
       return { items, issues, installations: effective.installations, warnings: effective.warnings }
     }
     return { items, issues, installations: result.items, warnings: [] as ExpertSquadRegistry.DiscoveryWarning[] }
   }
 
   async function externalCatalogPackages(projectDirectory?: string): Promise<{
-    packages: Record<string, ExpertSquadRegistry.CatalogPackage>
-    installations: ExpertSquadRegistry.CatalogPackage[]
+    packages: Record<string, ExpertSquadRegistry.CatalogDeclaration>
+    installations: ExpertSquadRegistry.CatalogDeclaration[]
     issues: ExpertSquadRegistry.DiscoveryIssue[]
     warnings: ExpertSquadRegistry.DiscoveryWarning[]
   }> {
-    const result: Record<string, ExpertSquadRegistry.CatalogPackage> = {}
+    const result: Record<string, ExpertSquadRegistry.CatalogDeclaration> = {}
     const discovered = await discoverAvailableExternalPackages(projectDirectory)
     const issues = [...discovered.issues]
     for (const entry of discovered.items) {
       try {
-        const loaded = {
-          ...(await ExpertSquadRegistry.loadCatalogPackage(entry.root)),
-          installationScope: entry.installationScope,
-        }
+        const loaded = entry
         if (loaded.id !== entry.id) {
           throw new Error(
             `Discovered expert squad ${JSON.stringify(entry.id)} loaded mismatched manifest id ${JSON.stringify(loaded.id)}.`,
@@ -579,13 +566,10 @@ export namespace PromptProfileResolver {
         })
       }
     }
-    const installations: ExpertSquadRegistry.CatalogPackage[] = []
+    const installations: ExpertSquadRegistry.CatalogDeclaration[] = []
     for (const entry of discovered.installations) {
       try {
-        const loaded = {
-          ...(await ExpertSquadRegistry.loadCatalogPackage(entry.root)),
-          installationScope: entry.installationScope,
-        }
+        const loaded = entry
         assertNoBuiltInCollision(loaded.id)
         installations.push(loaded)
       } catch (error) {
@@ -747,11 +731,12 @@ export namespace PromptProfileResolver {
     projectDirectory: string
     config: ConfigLike
     defaultSkills?: Skill.Info[]
+    packageRevision?: ExpertSquadPackageRevision
   }): Promise<void> {
     const defaultSkills =
       input.defaultSkills ?? (await Instance.provide({ directory: input.projectDirectory, fn: () => Skill.all() }))
     const defaultSkillsByName = skillInventoryByName(defaultSkills)
-    const projectEntries = await discoverExternalPackages(input.projectDirectory)
+    const projectEntries = (await discoverAvailableExternalPackages(input.projectDirectory)).items
     const projectEntriesByID = new Map(projectEntries.map((entry) => [entry.id, entry]))
     for (const expertSquadID of Object.keys(input.config.skill_mounts ?? {}).sort(compareCanonicalStrings)) {
       ExpertSquadRegistry.parseID(expertSquadID)
@@ -762,17 +747,32 @@ export namespace PromptProfileResolver {
           `External expert squad package id ${JSON.stringify(expertSquadID)} collides with a built-in expert squad id.`,
         )
       }
-      const active: SkillMountProfilePackage = builtIn
-        ? { profileID: expertSquadID, builtIn: true, pkg: builtIn }
-        : projectEntry
-          ? {
-              profileID: expertSquadID,
-              builtIn: false,
-              pkg: await ExpertSquadRegistry.loadCatalogPackage(projectEntry.root),
-            }
-          : (() => {
-              throw new Error(`skill_mounts references unknown expert squad ${JSON.stringify(expertSquadID)}.`)
-            })()
+      const pinned =
+        input.packageRevision?.id === expertSquadID
+          ? await ExpertSquadRegistry.loadPackageRevisionSnapshot(input.packageRevision.packageDigest)
+          : undefined
+      const active: SkillMountProfilePackage = pinned
+        ? {
+            profileID: expertSquadID,
+            builtIn: input.packageRevision!.scope === "built_in",
+            pkg: {
+              ...pinned,
+              ...(input.packageRevision!.scope === "built_in"
+                ? {}
+                : { installationScope: input.packageRevision!.scope }),
+            },
+          }
+        : builtIn
+          ? { profileID: expertSquadID, builtIn: true, pkg: builtIn }
+          : projectEntry
+            ? {
+                profileID: expertSquadID,
+                builtIn: false,
+                pkg: projectEntry,
+              }
+            : (() => {
+                throw new Error(`skill_mounts references unknown expert squad ${JSON.stringify(expertSquadID)}.`)
+              })()
       if (active.pkg.id !== expertSquadID) {
         throw new Error(
           `Discovered expert squad ${JSON.stringify(expertSquadID)} loaded mismatched manifest id ${JSON.stringify(active.pkg.id)}.`,
@@ -989,6 +989,34 @@ export namespace PromptProfileResolver {
     })
   }
 
+  function catalogIndexFromPackage(input: {
+    pkg:
+      | BuiltInPackage
+      | ExpertSquadRegistry.CatalogDeclaration
+      | ExpertSquadRegistry.CatalogPackage
+      | ExpertSquadRegistry.LoadedPackage
+    builtIn: boolean
+  }): ExpertSquadCatalogIndexEntry {
+    return catalogIndexFromCapabilityPackage({
+      pkg: input.pkg,
+      builtIn: input.builtIn,
+    })
+  }
+
+  function catalogInspectionFromPackage(input: {
+    pkg:
+      | BuiltInPackage
+      | ExpertSquadRegistry.CatalogDeclaration
+      | ExpertSquadRegistry.CatalogPackage
+      | ExpertSquadRegistry.LoadedPackage
+    builtIn: boolean
+    workflows: ExpertSquadCatalogInspection["workflows"]
+    workflowCount: number
+    nextWorkflowCursor?: string | null
+  }): ExpertSquadCatalogInspection {
+    return catalogInspectionFromCapabilityPackage(input)
+  }
+
   type McpCapabilityKind = "tool" | "prompt" | "resource"
 
   function defaultMcpTypedPartsFromRef(
@@ -1026,9 +1054,7 @@ export namespace PromptProfileResolver {
       const server = config.mcp?.[serverName]
       if (!server) throw new Error(`Active expert squad projects missing default MCP server default/mcp/${serverName}.`)
       result[serverName] =
-        serverName === ComputerMCPBuiltin.ServerName
-          ? ComputerMCPBuiltin.localConfig()
-          : Config.Mcp.parse(server)
+        serverName === ComputerMCPBuiltin.ServerName ? ComputerMCPBuiltin.localConfig() : Config.Mcp.parse(server)
     }
     return result
   }
@@ -1791,14 +1817,7 @@ export namespace PromptProfileResolver {
             },
           })
         })
-        const truncated = await Truncate.output(
-          result.output,
-          {
-            sessionID: scope.sessionID,
-            executionAuthority: executionAuthorityFromTaskToolScope(scope),
-          },
-          scope.executionSurface,
-        )
+        const truncated = await Truncate.output(result.output, { sessionID: scope.sessionID }, scope.executionSurface)
         const resultMetadata: Record<string, unknown> = {
           ...(Object.keys(result.metadata).length > 0 ? { package_metadata: result.metadata } : {}),
           package_tool_ref: input.ref,
@@ -1936,7 +1955,7 @@ export namespace PromptProfileResolver {
       providerName: input.providerName,
       get: (args?: Record<string, string>) =>
         MCP.getScopedPrompt({
-          key: serverName,
+          key: input.providerName,
           mcp,
           promptName,
           cwd: input.cwd,
@@ -1946,7 +1965,7 @@ export namespace PromptProfileResolver {
         }),
       getProjectionPayload: (args?: Record<string, string>) =>
         MCP.getScopedPromptProjectionPayload({
-          key: serverName,
+          key: input.providerName,
           mcp,
           promptName,
           cwd: input.cwd,
@@ -1974,7 +1993,7 @@ export namespace PromptProfileResolver {
       providerName: input.providerName,
       read: () =>
         MCP.readScopedResource({
-          key: serverName,
+          key: input.providerName,
           mcp,
           resourceName,
           cwd: input.cwd,
@@ -1983,7 +2002,7 @@ export namespace PromptProfileResolver {
         }),
       readProjectionPayload: () =>
         MCP.readScopedResourceProjectionPayload({
-          key: serverName,
+          key: input.providerName,
           mcp,
           resourceName,
           cwd: input.cwd,
@@ -2104,10 +2123,7 @@ export namespace PromptProfileResolver {
         })
         const truncated = await Truncate.output(
           materialized.text,
-          {
-            sessionID: scope.sessionID,
-            executionAuthority: executionAuthorityFromTaskToolScope(scope),
-          },
+          { sessionID: scope.sessionID },
           scope.executionSurface,
         )
         return MCP.bindAppToolResult(
@@ -2182,7 +2198,7 @@ export namespace PromptProfileResolver {
         : configuredMcp
     if (!mcp) throw new Error(`Active expert squad projects missing default MCP server default/mcp/${serverName}.`)
     const rawTool = await MCP.scopedTool({
-      key: serverName,
+      key: input.providerName,
       mcp,
       toolName,
       cwd: input.cwd,
@@ -2204,10 +2220,7 @@ export namespace PromptProfileResolver {
         })
         const truncated = await Truncate.output(
           materialized.text,
-          {
-            sessionID: scope.sessionID,
-            executionAuthority: executionAuthorityFromTaskToolScope(scope),
-          },
+          { sessionID: scope.sessionID },
           scope.executionSurface,
         )
         return MCP.bindAppToolResult(
@@ -3147,41 +3160,6 @@ export namespace PromptProfileResolver {
     return `${id}-expert-squad`
   }
 
-  function selectorSkillFromPackage(input: {
-    pkg: Pick<ExpertSquadRegistry.PackageCatalogEntry, "id" | "label" | "description" | "selector"> & {
-      selectorInstructions: string
-    }
-  }): ResolvedSelectorSkill {
-    const instructions = input.pkg.selectorInstructions.trim()
-    if (!instructions) {
-      throw new Error(`Expert squad ${input.pkg.id} selector requires top-level selector.md instructions.`)
-    }
-    const name = selectorSkillName(input.pkg.id)
-    const description = `Orchestrator skill for ${input.pkg.label} tasks. ${input.pkg.selector.summary}`
-    const requiredTools = [] as const
-    const digest = canonicalProjectionHash(ProjectionHashDomain.selector, {
-      expert_squad_id: input.pkg.id,
-      name,
-      label: input.pkg.label,
-      description,
-      package_description: input.pkg.description ?? null,
-      summary: input.pkg.selector.summary,
-      selection_guidance: input.pkg.selector.selection_guidance,
-      instructions,
-      required_tools: requiredTools,
-    })
-    return {
-      kind: "selector",
-      expertSquadID: input.pkg.id,
-      name,
-      description,
-      instructions,
-      digest,
-      location: `opencorvus-expert-squad-selector://${encodeURIComponent(input.pkg.id)}?sha256=${digest}`,
-      requiredTools: [...requiredTools],
-    }
-  }
-
   function cloneProductionSkill(skill: Skill.Info): Skill.Info {
     const taskSignals = skill.auto_detect?.task_signals
     return {
@@ -3393,7 +3371,7 @@ export namespace PromptProfileResolver {
   }
 
   type ProjectSelectorPackage = {
-    pkg: Parameters<typeof selectorSkillFromPackage>[0]["pkg"]
+    pkg: ExpertSquadRegistry.CatalogDeclaration
   }
 
   async function loadProjectSelectorPackages(
@@ -3402,13 +3380,10 @@ export namespace PromptProfileResolver {
   ): Promise<ProjectSelectorPackage[]> {
     if (!projectDirectory) return []
     const selectors: ProjectSelectorPackage[] = []
-    for (const entry of await discoverExternalPackages(projectDirectory)) {
+    for (const entry of (await discoverAvailableExternalPackages(projectDirectory)).items) {
       assertNoBuiltInCollision(entry.id)
       if (entry.id === activeProfileID) continue
-      const loaded = {
-        ...(await ExpertSquadRegistry.loadCatalogPackage(entry.root)),
-        installationScope: entry.installationScope,
-      }
+      const loaded = entry
       if (loaded.id !== entry.id) {
         throw new Error(
           `Discovered selector expert squad ${JSON.stringify(entry.id)} loaded mismatched manifest id ${JSON.stringify(loaded.id)}.`,
@@ -3442,7 +3417,7 @@ export namespace PromptProfileResolver {
       ...schedulerOnlyWorkerCapabilities,
       ...workerCapabilities,
     ])
-    const selectorPackages: Array<Parameters<typeof selectorSkillFromPackage>[0]> = [
+    const selectorPackages = [
       ...getLoadedBuiltInPackages()
         .filter((pkg) => pkg.id !== active.profileID)
         .map((pkg) => ({ pkg })),
@@ -3452,10 +3427,10 @@ export namespace PromptProfileResolver {
         .filter((entry) => entry.pkg.id !== active.profileID)
         .map((entry) => ({ pkg: entry.pkg })),
     ]
-    const selectorSkills = selectorPackages
-      .map(selectorSkillFromPackage)
-      .sort((left, right) => compareCanonicalStrings(left.expertSquadID, right.expertSquadID))
-    const selectorSkillNames = selectorSkills.map((skill) => skill.name)
+    const selectorSkillNames = selectorPackages
+      .map((entry) => ({ id: entry.pkg.id, name: selectorSkillName(entry.pkg.id) }))
+      .sort((left, right) => compareCanonicalStrings(left.id, right.id))
+      .map((entry) => entry.name)
     const productionSkillNames = canonicalStringSet(
       [...new Set(productionSkills.map((grant) => grant.skill.name))],
       `active expert squad ${active.pkg.id}.productionSkillNames`,
@@ -3517,7 +3492,6 @@ export namespace PromptProfileResolver {
       selectorSkillNames,
       productionSkillNames,
       projectedSkillNames: [...productionSkillNames],
-      selectorSkills,
       productionSkills,
       skillInventory: input.context.defaultSkills.map(cloneProductionSkill),
     })
@@ -3592,18 +3566,22 @@ export namespace PromptProfileResolver {
   export async function assertKnownProfileID(input: ProfileIDInput): Promise<void> {
     PromptProfileIDSchema.parse(input.profileID)
     if (Object.hasOwn(builtInPackages(), input.profileID)) {
-      const entries =
-        input.scope === "global"
-          ? await ExpertSquadRegistry.findInstalledPackageIdentitiesForProjects([], input.profileID)
-          : input.projectDirectory
-            ? await ExpertSquadRegistry.discover(input.projectDirectory)
-            : []
-      for (const entry of entries) {
-        if (entry.id === input.profileID) {
-          throw new Error(
-            `External expert squad package id ${JSON.stringify(input.profileID)} collides with a built-in expert squad id.`,
-          )
-        }
+      let collision = false
+      if (input.scope === "global") {
+        const discovered = await ExpertSquadRegistry.discoverGlobalAvailable()
+        collision =
+          discovered.items.some((entry) => entry.id === input.profileID) ||
+          discovered.issues.some((entry) => entry.id === input.profileID)
+      } else if (input.projectDirectory) {
+        const discovered = await ExpertSquadRegistry.discoverAvailable(input.projectDirectory)
+        collision =
+          discovered.installations.some((entry) => entry.id === input.profileID) ||
+          discovered.issues.some((entry) => entry.id === input.profileID)
+      }
+      if (collision) {
+        throw new Error(
+          `External expert squad package id ${JSON.stringify(input.profileID)} collides with a built-in expert squad id.`,
+        )
       }
       return
     }
@@ -3683,148 +3661,382 @@ export namespace PromptProfileResolver {
     }
   }
 
-  async function catalogInventory(projectDirectory?: string) {
+  async function buildCatalogInventory(projectDirectory?: string) {
     const [external, builtInPackagesByID] = await Promise.all([
       externalCatalogPackages(projectDirectory),
       Promise.resolve(builtInPackages()),
     ])
     const projectPackagesByID = external.packages
-    const squads: ExpertSquadCatalogSummary[] = [
-      ...Object.values(builtInPackagesByID).map((pkg) =>
-        catalogSummaryFromPackage({
-          pkg,
-          builtIn: true,
-        }),
-      ),
-      ...Object.values(projectPackagesByID).map((pkg) =>
-        catalogSummaryFromPackage({
-          pkg,
-          builtIn: false,
-        }),
-      ),
-    ]
-    const installations = [
-      ...Object.values(builtInPackagesByID).map((pkg) => catalogSummaryFromPackage({ pkg, builtIn: true })),
-      ...external.installations
+    const effectiveRows = [
+      ...Object.values(builtInPackagesByID).map((pkg) => ({ pkg, builtIn: true as const })),
+      ...Object.values(projectPackagesByID).map((pkg) => ({ pkg, builtIn: false as const })),
+    ].map((row) => ({
+      ...row,
+      index: catalogIndexFromPackage(row),
+    }))
+    const installationRows = [
+      ...Object.values(builtInPackagesByID).map((pkg) => ({ pkg, builtIn: true as const })),
+      ...[...external.installations]
         .sort((left, right) => {
           if (left.installationScope === right.installationScope) return left.id.localeCompare(right.id)
           return left.installationScope === "project" ? -1 : 1
         })
-        .map((pkg) => catalogSummaryFromPackage({ pkg, builtIn: false })),
-    ]
+        .map((pkg) => ({ pkg, builtIn: false as const })),
+    ].map((row) => ({
+      ...row,
+      index: catalogIndexFromPackage(row),
+    }))
+    const declarationRevision = (row: (typeof installationRows)[number]) =>
+      createHash("sha256")
+        .update(JSON.stringify({ version: row.pkg.version, manifest: row.pkg.manifest }))
+        .digest("hex")
+    const revision = createHash("sha256")
+      .update(
+        JSON.stringify({
+          effective: effectiveRows.map((row) => ({ index: row.index, declaration: declarationRevision(row) })),
+          installations: installationRows.map((row) => ({ index: row.index, declaration: declarationRevision(row) })),
+          issues: external.issues,
+          warnings: external.warnings,
+        }),
+      )
+      .digest("hex")
     return {
       projectPackagesByID,
       builtInPackagesByID,
-      squads,
-      installations,
+      externalInstallations: external.installations,
+      effectiveRows,
+      installationRows,
+      squads: effectiveRows.map((row) => row.index),
+      installations: installationRows.map((row) => row.index),
+      revision,
       issues: external.issues,
       warnings: external.warnings,
     }
   }
 
-  export async function recommendationCatalog(input: {
-    projectDirectory: string
-    productPillar: "code" | "work"
-    visibleExpertSquadIDs?: readonly string[]
-  }): Promise<ExpertSquadRecommendation[]> {
-    const visibleIDs = [...new Set(input.visibleExpertSquadIDs ?? [])]
-    const { squads, projectPackagesByID } = await catalogInventory(input.projectDirectory)
-    const byID = new Map(squads.map((squad) => [squad.id, squad]))
-    const unknown = visibleIDs.filter((id) => !byID.has(id))
-    if (unknown.length > 0) {
-      throw new Error(`Unknown Mission-visible expert squad ${unknown.map((id) => JSON.stringify(id)).join(", ")}.`)
+  type CatalogInventory = Awaited<ReturnType<typeof buildCatalogInventory>>
+  const catalogInventoryCache = new Map<string, { generation: number; inventory: Promise<CatalogInventory> }>()
+
+  async function catalogInventory(projectDirectory?: string): Promise<CatalogInventory> {
+    const generation = ExpertSquadRegistry.catalogInventoryGeneration()
+    const key = projectDirectory ? path.resolve(projectDirectory) : "<global>"
+    const active = catalogInventoryCache.get(key)
+    if (active?.generation === generation) return active.inventory
+    const inventory = buildCatalogInventory(projectDirectory)
+    catalogInventoryCache.delete(key)
+    catalogInventoryCache.set(key, { generation, inventory })
+    if (catalogInventoryCache.size > 64) catalogInventoryCache.delete(catalogInventoryCache.keys().next().value!)
+    try {
+      return await inventory
+    } catch (error) {
+      if (catalogInventoryCache.get(key)?.inventory === inventory) catalogInventoryCache.delete(key)
+      throw error
     }
-    const requested = visibleIDs.length === 0 ? squads : visibleIDs.map((id) => byID.get(id)!)
-    const incompatible = requested.filter((squad) => !squad.product_pillars.includes(input.productPillar))
-    if (visibleIDs.length > 0 && incompatible.length > 0) {
-      throw new Error(
-        `Mission-visible expert squad ${incompatible.map((squad) => JSON.stringify(squad.id)).join(", ")} does not support product pillar ${JSON.stringify(input.productPillar)}.`,
-      )
-    }
-    const selected = requested.filter((squad) => squad.product_pillars.includes(input.productPillar))
-    return selected.map((squad) =>
-      ExpertSquadRecommendationSchema.parse({
-        id: squad.id,
-        name: squad.name,
-        label: squad.label,
-        display_label: squad.display_label,
-        description: squad.description,
-        version: squad.version,
-        built_in: squad.built_in,
-        product_pillars: squad.product_pillars,
-        ...(projectPackagesByID[squad.id] ? { package_digest: projectPackagesByID[squad.id].packageDigest } : {}),
-        selector: {
-          summary: squad.selector.summary,
-          selection_guidance: squad.selector.selection_guidance,
-        },
-        workflows: Object.entries(squad.capability_projection.virtual_workflows)
-          .sort(([left], [right]) => compareCanonicalStrings(left, right))
-          .map(([id, workflow]) => ({
-            id,
-            label: workflow.label,
-            description: workflow.description,
-            node_count: Object.keys(workflow.nodes).length,
-          })),
-      }),
+  }
+
+  const CatalogCursorSchema = z
+    .object({ revision: z.string(), query_fingerprint: z.string(), offset: z.number().int().nonnegative() })
+    .strict()
+
+  function encodeCatalogCursor(revision: string, queryFingerprint: string, offset: number): string {
+    return Buffer.from(JSON.stringify({ revision, query_fingerprint: queryFingerprint, offset }), "utf8").toString(
+      "base64url",
     )
   }
 
-  export async function globalCatalog(): Promise<{
-    squads: ExpertSquadCatalogSummary[]
-    issues: ExpertSquadRegistry.DiscoveryIssue[]
-  }> {
-    const { squads, issues } = await catalogInventory()
-    return { squads, issues }
-  }
-
-  export async function settingsCatalog(projectDirectory: string): Promise<ExpertSquadCatalogSummary[]> {
-    return (await catalogInventory(projectDirectory)).squads
-  }
-
-  export async function settingsInventory(projectDirectory: string) {
-    const inventory = await catalogInventory(projectDirectory)
-    return {
-      squads: inventory.squads,
-      installations: inventory.installations,
-      warnings: inventory.warnings,
+  function decodeCatalogCursor(cursor: string, revision: string, queryFingerprint: string): number {
+    let parsed: z.output<typeof CatalogCursorSchema>
+    try {
+      parsed = CatalogCursorSchema.parse(JSON.parse(Buffer.from(cursor, "base64url").toString("utf8")))
+    } catch {
+      throw new Error("Expert Squad catalog cursor is invalid.")
     }
+    if (parsed.revision !== revision) {
+      throw new Error(`Expert Squad catalog cursor is stale: expected ${revision}, received ${parsed.revision}.`)
+    }
+    if (parsed.query_fingerprint !== queryFingerprint) {
+      throw new Error("Expert Squad catalog cursor belongs to a different bounded query.")
+    }
+    return parsed.offset
+  }
+
+  function catalogQueryFingerprint(value: unknown): string {
+    return createHash("sha256").update(JSON.stringify(value)).digest("hex")
+  }
+
+  function catalogRowKey(entry: ExpertSquadCatalogIndexEntry): string {
+    return entry.source.kind === "built_in"
+      ? `built_in:${entry.id}`
+      : `${entry.source.installation_scope}:${entry.source.namespace}:${entry.id}`
+  }
+
+  export async function searchCatalog(input: {
+    projectDirectory?: string
+    view?: "effective" | "installations"
+    query?: string
+    productPillar?: "code" | "work"
+    restrictToExpertSquadIDs?: readonly string[]
+    cursor?: string
+    limit?: number
+  }): Promise<ExpertSquadCatalogPage> {
+    const inventory = await catalogInventory(input.projectDirectory)
+    const sourceRows = input.view === "installations" ? inventory.installationRows : inventory.effectiveRows
+    const restrictedIDs = input.restrictToExpertSquadIDs
+      ? new Set([...new Set(input.restrictToExpertSquadIDs)])
+      : undefined
+    const query = input.query?.trim() ?? ""
+    const queryFingerprint = catalogQueryFingerprint({
+      kind: "catalog_search",
+      view: input.view ?? "effective",
+      query: query.toLowerCase(),
+      product_pillar: input.productPillar ?? null,
+      restricted_ids: restrictedIDs ? [...restrictedIDs].sort(compareCanonicalStrings) : null,
+    })
+    const rankedCacheKey = `${inventory.revision}:${queryFingerprint}`
+    let ranked = rankedCatalogSearches.get(rankedCacheKey)
+    if (!ranked) {
+      ranked = sourceRows
+        .filter((row) => !restrictedIDs || restrictedIDs.has(row.index.id))
+        .filter((row) => !input.productPillar || row.index.product_pillars.includes(input.productPillar))
+        .flatMap((row) => {
+          if (!query) return [{ index: row.index, score: null as number | null }]
+          const score = scoreDiscoveryFields(query, [
+            { text: row.index.id, weight: 1 },
+            { text: row.index.name, weight: 1 },
+            { text: row.index.display_label, weight: 0.96 },
+            { text: row.index.description ?? "", weight: 0.9 },
+          ])
+          return score === undefined ? [] : [{ index: row.index, score }]
+        })
+        .sort((left, right) => {
+          if (left.score !== right.score) {
+            if (left.score === null) return -1
+            if (right.score === null) return 1
+            return right.score - left.score
+          }
+          return catalogRowKey(left.index).localeCompare(catalogRowKey(right.index))
+        })
+        .map(({ index }) => index)
+      rankedCatalogSearches.set(rankedCacheKey, ranked)
+      if (rankedCatalogSearches.size > 128) rankedCatalogSearches.delete(rankedCatalogSearches.keys().next().value!)
+    }
+    const limit = z
+      .number()
+      .int()
+      .min(1)
+      .max(20)
+      .parse(input.limit ?? 20)
+    const offset = input.cursor ? decodeCatalogCursor(input.cursor, inventory.revision, queryFingerprint) : 0
+    const pageRows = ranked.slice(offset, offset + limit)
+    const nextOffset = offset + pageRows.length
+    return ExpertSquadCatalogPageSchema.parse({
+      catalog_revision: inventory.revision,
+      entries: pageRows,
+      next_cursor:
+        nextOffset < ranked.length ? encodeCatalogCursor(inventory.revision, queryFingerprint, nextOffset) : null,
+      total_count: ranked.length,
+    })
+  }
+
+  const rankedCatalogSearches = new Map<string, ExpertSquadCatalogIndexEntry[]>()
+  const catalogWorkflowSummaries = new Map<string, ExpertSquadCatalogInspection["workflows"]>()
+  const catalogDiagnosticEntries = new Map<string, ExpertSquadDiagnosticPage["entries"]>()
+
+  export const MissionVisibleExpertSquadCatalogError = NamedError.create(
+    "MissionVisibleExpertSquadCatalogError",
+    z.object({
+      message: z.string(),
+      code: z.literal("MISSION_VISIBLE_EXPERT_SQUAD_CATALOG_UNAVAILABLE"),
+      heldCount: z.number().int().positive(),
+      unknownCount: z.number().int().nonnegative(),
+      incompatibleCount: z.number().int().nonnegative(),
+      heldSnapshotHash: z.string().regex(/^[a-f0-9]{64}$/),
+      catalogRevision: z.string().regex(/^[a-f0-9]{64}$/),
+    }),
+  )
+
+  export async function recommendationCatalog(input: {
+    projectDirectory: string
+    productPillar: "code" | "work"
+    restrictToExpertSquadIDs?: readonly string[]
+  }): Promise<ExpertSquadCatalogIndexEntry[]> {
+    const restrictedIDs = input.restrictToExpertSquadIDs ? [...new Set(input.restrictToExpertSquadIDs)] : undefined
+    const { effectiveRows, revision } = await catalogInventory(input.projectDirectory)
+    const byID = new Map(effectiveRows.map((row) => [row.index.id, row.index]))
+    const unknown = (restrictedIDs ?? []).filter((id) => !byID.has(id))
+    const requested =
+      restrictedIDs === undefined
+        ? [...byID.values()]
+        : restrictedIDs.flatMap((id) => {
+            const squad = byID.get(id)
+            return squad ? [squad] : []
+          })
+    const incompatible = requested.filter((squad) => !squad.product_pillars.includes(input.productPillar))
+    if (restrictedIDs !== undefined && (unknown.length > 0 || incompatible.length > 0)) {
+      const heldSnapshotHash = createHash("sha256")
+        .update(JSON.stringify([...restrictedIDs].sort(compareCanonicalStrings)))
+        .digest("hex")
+      throw new MissionVisibleExpertSquadCatalogError({
+        message: "The immutable Mission-visible Expert Squad catalog is unavailable.",
+        code: "MISSION_VISIBLE_EXPERT_SQUAD_CATALOG_UNAVAILABLE",
+        heldCount: restrictedIDs.length,
+        unknownCount: unknown.length,
+        incompatibleCount: incompatible.length,
+        heldSnapshotHash,
+        catalogRevision: revision,
+      })
+    }
+    const selected = requested.filter((squad) => squad.product_pillars.includes(input.productPillar))
+    return selected.map((squad) => ExpertSquadCatalogIndexEntrySchema.parse(squad))
+  }
+
+  export async function catalogInspection(input: {
+    projectDirectory?: string
+    id: string
+    installationScope?: "built_in" | "project" | "global"
+    namespace?: string
+    workflowCursor?: string
+  }): Promise<ExpertSquadCatalogInspection | undefined> {
+    if (
+      input.installationScope &&
+      input.installationScope !== "built_in" &&
+      !input.namespace
+    ) {
+      throw new Error("Installed expert squad inspection requires namespace.")
+    }
+    const inventory = await catalogInventory(input.projectDirectory)
+    const rows = input.installationScope ? inventory.installationRows : inventory.effectiveRows
+    const row = rows.find((row) => {
+      if (row.index.id !== input.id) return false
+      if (!input.installationScope) return true
+      if (input.installationScope === "built_in") return row.index.source.kind === "built_in"
+      return (
+        row.index.source.kind === "installed_package" &&
+        row.index.source.installation_scope === input.installationScope &&
+        (!input.namespace || row.index.source.namespace === input.namespace)
+      )
+    })
+    if (!row) return undefined
+    const workflowCount = Object.keys(row.pkg.manifest.capability_projection.virtual_workflows).length
+    const queryFingerprint = catalogQueryFingerprint({
+      kind: "workflow_inspection",
+      identity: catalogRowKey(row.index),
+    })
+    const offset = input.workflowCursor
+      ? decodeCatalogCursor(input.workflowCursor, inventory.revision, queryFingerprint)
+      : 0
+    const workflowCacheKey = `${inventory.revision}:${catalogRowKey(row.index)}`
+    let workflows = catalogWorkflowSummaries.get(workflowCacheKey)
+    if (!workflows) {
+      workflows = Object.entries(row.pkg.manifest.capability_projection.virtual_workflows)
+        .sort(([left], [right]) => compareCanonicalStrings(left, right))
+        .map(([id, workflow]) => ({
+          id,
+          label: workflow.label.slice(0, 240),
+          description: workflow.description.slice(0, 500),
+          node_count: Object.keys(workflow.nodes).length,
+        }))
+      catalogWorkflowSummaries.set(workflowCacheKey, workflows)
+      if (catalogWorkflowSummaries.size > 64) catalogWorkflowSummaries.delete(catalogWorkflowSummaries.keys().next().value!)
+    }
+    const nextOffset = Math.min(offset + 20, workflowCount)
+    return catalogInspectionFromPackage({
+      pkg: row.pkg,
+      builtIn: row.builtIn,
+      workflows: workflows.slice(offset, offset + 20),
+      workflowCount,
+      nextWorkflowCursor:
+        nextOffset < workflowCount ? encodeCatalogCursor(inventory.revision, queryFingerprint, nextOffset) : null,
+    })
+  }
+
+  export async function settingsInventory(projectDirectory?: string) {
+    const inventory = await catalogInventory(projectDirectory)
+    return ExpertSquadInventoryStatusSchema.parse({
+      catalog_revision: inventory.revision,
+      effective_count: inventory.squads.length,
+      installation_count: inventory.installations.length,
+      issue_count: inventory.issues.length,
+      warning_count: inventory.warnings.length,
+    })
+  }
+
+  export async function catalogDiagnostics(input: {
+    projectDirectory?: string
+    cursor?: string
+    limit?: number
+  }): Promise<ExpertSquadDiagnosticPage> {
+    const inventory = await catalogInventory(input.projectDirectory)
+    let entries = catalogDiagnosticEntries.get(inventory.revision)
+    if (!entries) {
+      entries = [
+        ...inventory.issues.map((issue) => ({ kind: "issue" as const, issue })),
+        ...inventory.warnings.map((warning) => ({ kind: "warning" as const, warning })),
+      ]
+      catalogDiagnosticEntries.set(inventory.revision, entries)
+      if (catalogDiagnosticEntries.size > 64) {
+        catalogDiagnosticEntries.delete(catalogDiagnosticEntries.keys().next().value!)
+      }
+    }
+    const queryFingerprint = catalogQueryFingerprint({ kind: "catalog_diagnostics" })
+    const offset = input.cursor ? decodeCatalogCursor(input.cursor, inventory.revision, queryFingerprint) : 0
+    const limit = z
+      .number()
+      .int()
+      .min(1)
+      .max(20)
+      .parse(input.limit ?? 20)
+    const page = entries.slice(offset, offset + limit)
+    const nextOffset = offset + page.length
+    return ExpertSquadDiagnosticPageSchema.parse({
+      catalog_revision: inventory.revision,
+      entries: page,
+      next_cursor:
+        nextOffset < entries.length ? encodeCatalogCursor(inventory.revision, queryFingerprint, nextOffset) : null,
+      total_count: entries.length,
+    })
+  }
+
+  export async function settingsDetail(input: {
+    projectDirectory: string
+    id: string
+    installationScope: "built_in" | "project" | "global"
+    namespace?: string
+  }): Promise<ExpertSquadCatalogSummary | undefined> {
+    if (input.installationScope === "built_in") {
+      const pkg = builtInPackages()[input.id]
+      return pkg ? catalogSummaryFromPackage({ pkg, builtIn: true }) : undefined
+    }
+    if (!input.namespace) throw new Error("Installed expert squad settings detail requires namespace.")
+    const loaded = await ExpertSquadRegistry.loadInstalledCatalogPackage({
+      projectDirectory: input.projectDirectory,
+      installationScope: input.installationScope,
+      namespace: input.namespace,
+      id: input.id,
+    })
+    if (!loaded) return undefined
+    const pkg = {
+      ...loaded,
+      installationScope: input.installationScope,
+    }
+    return catalogSummaryFromPackage({ pkg, builtIn: false })
   }
 
   export async function catalog(input: ExpertSquadCatalogInput): Promise<ExpertSquadCatalog> {
-    const active = PromptProfile.activeID(input.config)
     const projectDirectory = input.scope.directory
-    const [{ projectPackagesByID, builtInPackagesByID, squads, installations, issues, warnings }, defaultSkills] =
-      await Promise.all([
-        catalogInventory(projectDirectory),
-        input.defaultSkills === undefined
-          ? Instance.provide({ directory: projectDirectory, fn: () => Skill.all() })
-          : Promise.resolve(input.defaultSkills),
-      ])
-    const builtInActivePackage = builtInPackagesByID[active]
-    const projectActivePackage = projectPackagesByID[active]
-    if (builtInActivePackage && projectActivePackage) {
-      throw new Error(
-        `External expert squad package id ${JSON.stringify(active)} collides with a built-in expert squad id.`,
-      )
-    }
-    const loadedProjectActivePackage = projectActivePackage
-      ? {
-          ...(await ExpertSquadRegistry.loadPackage(projectActivePackage.root)),
-          installationScope: projectActivePackage.installationScope,
-        }
-      : undefined
-    if (loadedProjectActivePackage && loadedProjectActivePackage.id !== active) {
-      throw new Error(
-        `Discovered expert squad ${JSON.stringify(active)} loaded mismatched manifest id ${JSON.stringify(loadedProjectActivePackage.id)}.`,
-      )
-    }
-    const activePackage: ActiveProfilePackage = builtInActivePackage
-      ? { profileID: active, builtIn: true, pkg: await loadBuiltInRuntimePackage(active) }
-      : loadedProjectActivePackage
-        ? { profileID: active, builtIn: false, pkg: loadedProjectActivePackage }
-        : (() => {
-            throw new Error(`Unknown prompt profile ${JSON.stringify(active)}`)
-          })()
+    const [inventory, defaultSkills] = await Promise.all([
+      catalogInventory(projectDirectory),
+      input.defaultSkills === undefined
+        ? Instance.provide({ directory: projectDirectory, fn: () => Skill.all() })
+        : Promise.resolve(input.defaultSkills),
+    ])
+    const activePackage = await packageForActiveProfile({
+      projectDirectory,
+      config: input.config,
+      defaultSkills,
+      packageRevision: input.packageRevision,
+    })
+    const active = activePackage.profileID
     const context: CapabilityResolutionContext = {
       active: activePackage,
       projectID:
@@ -3835,28 +4047,31 @@ export namespace PromptProfileResolver {
       defaultSkillsByName: skillInventoryByName(defaultSkills),
     }
     const activeCapabilitySet = await resolvePackageCapabilitySet(context, input.config)
-    if (!squads.some((squad) => squad.id === active)) {
-      throw new Error(`Unknown prompt profile ${JSON.stringify(active)}`)
-    }
     const skillProjection = await resolveSkillProjectionForContext({
       context,
       config: input.config,
       projectDirectory,
-      projectSelectorPackages: Object.values(projectPackagesByID).map((pkg) => ({ pkg })),
+      projectSelectorPackages: Object.values(inventory.projectPackagesByID).map((pkg) => ({ pkg })),
       capabilitySet: activeCapabilitySet,
     })
+    const packageRevision = resolvedPackageRevision(context)
     return ExpertSquadCatalogSchema.parse({
       active: {
         effective: active,
         project: input.projectActive,
         session_override: input.sessionOverride,
+        package_revision: {
+          scope: packageRevision.scope,
+          project_id: packageRevision.projectID,
+          namespace: packageRevision.namespace,
+          id: packageRevision.id,
+          version: packageRevision.version,
+          package_digest: packageRevision.packageDigest,
+        },
       },
       default: DEFAULT_PROMPT_PROFILE_ID,
       scope: input.scope,
-      squads,
-      installations,
-      issues,
-      warnings,
+      launch_catalog_revision: inventory.revision,
       active_agent_projection: await activeAgentProjection({
         capabilitySet: activeCapabilitySet,
         promptProfileActive: active,
@@ -3870,16 +4085,6 @@ export namespace PromptProfileResolver {
         selector_skill_names: skillProjection.selectorSkillNames,
         production_skill_names: skillProjection.productionSkillNames,
         projected_skill_names: skillProjection.projectedSkillNames,
-        selector_skills: skillProjection.selectorSkills.map((skill) => ({
-          kind: skill.kind,
-          expert_squad_id: skill.expertSquadID,
-          name: skill.name,
-          description: skill.description,
-          instructions: skill.instructions,
-          digest: skill.digest,
-          location: skill.location,
-          required_tools: skill.requiredTools,
-        })),
         production_grants: skillProjection.productionSkills.map((grant) => ({
           kind: grant.kind,
           authority: grant.authority,

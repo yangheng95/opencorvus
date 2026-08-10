@@ -38,6 +38,7 @@ export interface ComposerReferenceSelectorProps {
   skills: readonly ComposerReferenceSkillOption[]
   missionSkills: readonly ComposerReferenceSkillOption[]
   expertSquads: readonly ExpertSquadOption[]
+  onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
   activeExpertSquad?: ExpertSquadOption
   launchReferences: VisibleComposerReferences
   readOnly: boolean
@@ -137,6 +138,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
     setOpen(next)
     if (!next) {
       setQuery("")
+      props.onExpertSquadQuery?.("", props.launchReferences.expertSquadIDs)
       return
     }
     if (!props.readOnly) queueMicrotask(() => searchInputRef?.focus())
@@ -261,7 +263,10 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
             <div class="composer-reference-search">
               <SearchField
                 value={query()}
-                onValueChange={setQuery}
+                onValueChange={(value) => {
+                  setQuery(value)
+                  props.onExpertSquadQuery?.(value, props.launchReferences.expertSquadIDs)
+                }}
                 onClear={() => searchInputRef?.focus()}
                 placeholder={t("chat.references.search_placeholder")}
                 size="sm"

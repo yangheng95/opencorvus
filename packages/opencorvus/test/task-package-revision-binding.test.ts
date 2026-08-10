@@ -20,17 +20,25 @@ import { Config } from "../src/config/config"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
 import { EngineService } from "../src/task-api"
 import { configureTaskLoopRunner, startQueuedTaskInCwd } from "../src/engine/queue"
-import { resolvePinnedTaskSchedulerTurnProjection } from "../src/engine/task-package-projection"
+import {
+  resolvePinnedTaskSchedulerTurnProjection,
+  taskPackageRevisionForSession,
+} from "../src/engine/task-package-projection"
 import { ProcessSupervisor } from "../src/shell/process-supervisor"
 import { CreateTaskInput } from "../src/engine/model"
 import { MissionPanelActionSchema } from "../src/panel/capability"
-import { cp, readFile, writeFile } from "node:fs/promises"
+import { cp, mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { ExpertSquadPackageManager } from "../src/expert-squad/manager"
 import { ExpertSquadRegistry } from "../src/expert-squad/registry"
 import { ExecutionCapsuleRuntimeUnavailableError } from "../src/execution-capsule/runtime"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { materializeMirrorPrismPackage } from "./fixture/expert-squad"
+import { ensureMissionSession } from "../src/mission/session"
+import { MissionExpertSquadAuthorityError } from "../src/task-api/task-creator"
+import { SkillMount } from "../src/skill/mounts"
+import { PromptProfile } from "../src/agent/prompt-profile"
+import { parse as parseJsonc } from "jsonc-parser"
 
 const packageRevision = {
   scope: "built_in" as const,
@@ -81,6 +89,81 @@ async function createBoundTask() {
 }
 
 describe("Task package revision binding", () => {
+  test("enforces the immutable Mission held-Squad authority at Task creation", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        configureTaskLoopRunner(async () => {})
+        const mission = await ensureMissionSession({
+          missionID: "mission-authority-held",
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        const taskID = await EngineService.createTask(
+          {
+            requestID: `mission-held-${Identifier.ascending("artifact")}`,
+            title: "Held Base delivery",
+            request: "Create one Task with the Mission-held Base expert squad",
+            productPillar: "code",
+            model: "firmware/gpt-5",
+            promptProfile: "base",
+            queue: true,
+          },
+          { actor: "mission", sessionID: mission.id },
+        )
+        expect(requireTaskPackageRevisionBinding(taskID)).toMatchObject({ id: "base", scope: "built_in" })
+
+        try {
+          await EngineService.createTask(
+            {
+              requestID: `mission-unheld-${Identifier.ascending("artifact")}`,
+              title: "Unheld Advanced delivery",
+              request: "Attempt a Task with an Expert Squad outside Mission authority",
+              productPillar: "code",
+              model: "firmware/gpt-5",
+              promptProfile: "advanced",
+              queue: true,
+            },
+            { actor: "mission", sessionID: mission.id },
+          )
+          throw new Error("Expected Mission Expert Squad authority contract")
+        } catch (error) {
+          expect(error).toBeInstanceOf(MissionExpertSquadAuthorityError)
+          expect((error as InstanceType<typeof MissionExpertSquadAuthorityError>).toObject().data).toEqual({
+            message: 'Mission may create a Task only with a held Expert Squad; received "advanced".',
+            missionSessionID: mission.id,
+            requestedProfileID: "advanced",
+            heldExpertSquadCount: 1,
+            heldExpertSquadSnapshotHash: expect.stringMatching(/^[a-f0-9]{64}$/),
+          })
+        }
+        try {
+          await EngineService.createTask(
+            {
+              requestID: `mission-missing-profile-${Identifier.ascending("artifact")}`,
+              title: "Missing Expert Squad delivery",
+              request: "Attempt a Mission Task without an explicit Expert Squad",
+              productPillar: "code",
+              model: "firmware/gpt-5",
+              queue: true,
+            },
+            { actor: "mission", sessionID: mission.id },
+          )
+          throw new Error("Expected explicit Mission Expert Squad authority contract")
+        } catch (error) {
+          expect(error).toBeInstanceOf(MissionExpertSquadAuthorityError)
+          expect((error as InstanceType<typeof MissionExpertSquadAuthorityError>).toObject().data).toMatchObject({
+            missionSessionID: mission.id,
+            requestedProfileID: null,
+            heldExpertSquadCount: 1,
+          })
+        }
+      },
+    })
+  }, 0)
+
   test("commits one exact package revision with the Task and projects it through Task reads", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -401,7 +484,34 @@ describe("Task package revision binding", () => {
         await cp(sourcePackage, candidateDirectory, { recursive: true })
         const manifestPath = path.join(candidateDirectory, "expert-squad.jsonc")
         const manifest = await readFile(manifestPath, "utf8")
-        await writeFile(manifestPath, manifest.replace('"version": "2026.08.07.1"', '"version": "2026.08.07.2"'))
+        const candidateManifest = parseJsonc(manifest) as {
+          version: string
+          capability_projection: {
+            agents: Record<string, { base_role?: unknown; prompt?: unknown; [key: string]: unknown }>
+          }
+        }
+        candidateManifest.version = "2026.08.07.2"
+        const sourceAgent = Object.values(candidateManifest.capability_projection.agents).find(
+          (agent) => typeof agent.prompt === "string",
+        )
+        if (!sourceAgent || typeof sourceAgent.prompt !== "string") {
+          throw new Error("Pinned revision fixture requires one frontend-design Agent prompt")
+        }
+        candidateManifest.capability_projection.agents["candidate-skill-owner"] = {
+          ...sourceAgent,
+          label: "Candidate Skill Owner",
+          prompt: "agents/candidate-skill-owner/system.md",
+          base_role: "frontend-design",
+          default_skill_refs: ["default/skill/design-taste-frontend"],
+          package_skill_refs: [],
+        }
+        await writeFile(manifestPath, `${JSON.stringify(candidateManifest, null, 2)}\n`)
+        const candidateAgentDirectory = path.join(candidateDirectory, "agents", "candidate-skill-owner")
+        await mkdir(candidateAgentDirectory, { recursive: true })
+        await cp(
+          path.join(candidateDirectory, ...sourceAgent.prompt.split("/")),
+          path.join(candidateAgentDirectory, "system.md"),
+        )
         await writeFile(
           path.join(candidateDirectory, "README.md"),
           `${await readFile(path.join(candidateDirectory, "README.md"), "utf8")}\nCandidate benchmark revision.\n`,
@@ -445,6 +555,41 @@ describe("Task package revision binding", () => {
             })
           ).packageRevision.packageDigest,
         ).toBe(candidate.packageDigest)
+        const sessionID = requireTask(taskID).session_id
+        const packageRevisionForSession = taskPackageRevisionForSession(sessionID)
+        expect(packageRevisionForSession?.packageDigest).toBe(candidate.packageDigest)
+        const [projectConfig, effectiveConfig] = await Promise.all([
+          EffectiveConfig.base({ sessionID }),
+          EffectiveConfig.effective({ sessionID }),
+        ])
+        const catalog = await PromptProfileResolver.catalog({
+          config: effectiveConfig,
+          projectActive: PromptProfile.activeID(projectConfig),
+          sessionOverride: "prism",
+          scope: { kind: "session", directory: project.path, sessionID },
+          packageRevision: packageRevisionForSession,
+        })
+        expect(catalog.active.package_revision.package_digest).toBe(candidate.packageDigest)
+        const matrix = await SkillMount.matrix({ sessionID })
+        expect(matrix.active_profile).toBe("prism")
+        expect(matrix.projection_hash).toBe(catalog.active_skill_projection.projection_hash)
+        const mutatedMatrix = await SkillMount.setOverride({
+          scope: "session",
+          sessionID,
+          expertSquadID: "prism",
+          agentID: "candidate-skill-owner",
+          defaultSkillRef: "default/skill/design-taste-frontend",
+          override: false,
+        })
+        expect(mutatedMatrix.agents.find((agent) => agent.agent_id === "candidate-skill-owner")).toMatchObject({
+          base_role: "frontend-design",
+          skill_mountable: true,
+        })
+        expect(
+          mutatedMatrix.matrix
+            .find((row) => row.agent_id === "candidate-skill-owner")
+            ?.grants.find((grant) => grant.ref === "default/skill/design-taste-frontend"),
+        ).toMatchObject({ session_override: false, manifest_grant: true, effective: true })
       },
     })
   }, 0)

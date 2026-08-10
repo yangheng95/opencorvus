@@ -31,7 +31,17 @@ import { Hono } from "hono"
 import { describeRoute, resolver, validator } from "hono-openapi"
 import z from "zod"
 import { errors, namedErrorResponse } from "../error"
-import { ExpertSquadCatalogSchema, ExpertSquadSettingsSurfaceSchema } from "@/expert-squad/catalog"
+import {
+  ExpertSquadCatalogInspectionQuerySchema,
+  ExpertSquadCatalogInspectionSchema,
+  ExpertSquadCatalogPageSchema,
+  ExpertSquadCatalogSchema,
+  ExpertSquadCatalogSearchQuerySchema,
+  ExpertSquadDiagnosticPageSchema,
+  ExpertSquadInventoryStatusSchema,
+  ExpertSquadSettingsDetailQuerySchema,
+  ExpertSquadSettingsDetailSchema,
+} from "@/expert-squad/catalog"
 import {
   MulticaExpertSquadImport,
   MulticaImportPreviewSchema,
@@ -52,6 +62,7 @@ import {
 import { ExpertSquadIDSchema } from "@/expert-squad/id"
 import { NotFoundError } from "@/storage/db"
 import { taskRootOwnsPackageRevisionBinding } from "@/engine/task-package-revision-binding"
+import { taskPackageRevisionForSession } from "@/engine/task-package-projection"
 
 export const ExpertSquadPackageError = NamedError.create(
   "ExpertSquadPackageError",
@@ -194,16 +205,38 @@ const PayloadMarketItem = z
   })
   .strict()
 
-const PayloadMarketResult = z.array(PayloadMarketItem)
+const PayloadMarketIndexItem = z
+  .object({
+    namespace: z.string().min(1).max(160),
+    id: z.string().min(1).max(160),
+    name: z.string().min(1).max(160),
+    label: z.string().min(1).max(160),
+    description: z.string().min(1).max(1_000).optional(),
+    version: z.string().min(1).max(80),
+    installation_scopes: z.array(ExpertSquadPackageLocations.InstallationScopeSchema).max(2),
+  })
+  .strict()
+const PayloadMarketPage = z
+  .object({
+    catalog_revision: z.string().regex(/^[a-f0-9]{64}$/),
+    entries: z.array(PayloadMarketIndexItem).max(20),
+    next_cursor: z.string().nullable(),
+    total_count: z.number().int().nonnegative(),
+  })
+  .strict()
 const InstallPayloadResult = PackageMutationReceipt
-const EvolutionMutationResult = z.object({
-  locator: EngineArtifactLocatorSchema,
-  receipt: EvolutionPromotionReceiptSchema,
-}).strict()
-const UpdateResult = z.object({
-  source: PackageUpdateClient.Source,
-  receipt: PackageMutationReceipt,
-}).strict()
+const EvolutionMutationResult = z
+  .object({
+    locator: EngineArtifactLocatorSchema,
+    receipt: EvolutionPromotionReceiptSchema,
+  })
+  .strict()
+const UpdateResult = z
+  .object({
+    source: PackageUpdateClient.Source,
+    receipt: PackageMutationReceipt,
+  })
+  .strict()
 const UninstallResult = z
   .object({
     namespace: z.string(),
@@ -260,6 +293,7 @@ async function resolvedCatalog(query: z.output<typeof CatalogQuery>) {
     projectActive: PromptProfile.activeID(projectConfig),
     sessionOverride: sessionPromptProfileOverride(owner),
     scope: { kind: "session", directory: projectDirectory, sessionID: owner.id },
+    packageRevision: taskPackageRevisionForSession(owner.id),
   })
 }
 
@@ -402,9 +436,9 @@ export function ExpertSquadRoutes() {
     .get(
       "/catalog",
       describeRoute({
-        summary: "List expert squads and active capability projection",
+        summary: "Resolve the active expert-squad capability projection",
         description:
-          "Returns the effective expert-squad catalog for the current project or session. The active value is still the single prompt_profile.active config field; this route exposes its expert-squad package view.",
+          "Returns only the active runtime projection for the current project or session. Use bounded search and exact inspection for inactive packages. Task sessions remain pinned to their creation-time package revision.",
         operationId: "expertSquad.catalog",
         responses: {
           200: {
@@ -425,53 +459,140 @@ export function ExpertSquadRoutes() {
       },
     )
     .get(
-      "/settings",
+      "/search",
       describeRoute({
-        summary: "Inspect project Expert Squad settings",
+        summary: "Search expert-squad declarations",
         description:
-          "Returns the project-installed Squad declarations and one exact selected declaration without resolving or changing the active runtime profile.",
-        operationId: "expertSquad.settings",
+          "Returns at most twenty manifest-derived entries and an opaque cursor. Rich selector guidance and full package detail require exact follow-up requests.",
+        operationId: "expertSquad.search",
         responses: {
           200: {
-            description: "Project Expert Squad settings",
-            content: { "application/json": { schema: resolver(ExpertSquadSettingsSurfaceSchema) } },
+            description: "Bounded expert-squad search page",
+            content: { "application/json": { schema: resolver(ExpertSquadCatalogPageSchema) } },
+          },
+          ...errors(400, 500),
+        },
+      }),
+      validator("query", ExpertSquadCatalogSearchQuerySchema),
+      async (c) => {
+        const query = c.req.valid("query")
+        return c.json(
+          await PromptProfileResolver.searchCatalog({
+            projectDirectory: Instance.project.worktree,
+            view: query.view,
+            query: query.query,
+            productPillar: query.productPillar,
+            cursor: query.cursor,
+            limit: query.limit,
+          }),
+        )
+      },
+    )
+    .get(
+      "/inventory-status",
+      describeRoute({
+        summary: "Get expert-squad inventory status",
+        description:
+          "Returns declaration and diagnostic counts without package bodies or unbounded diagnostic arrays.",
+        operationId: "expertSquad.inventoryStatus",
+        responses: {
+          200: {
+            description: "Expert-squad inventory status",
+            content: { "application/json": { schema: resolver(ExpertSquadInventoryStatusSchema) } },
+          },
+          ...errors(400, 500),
+        },
+      }),
+      async (c) => c.json(await PromptProfileResolver.settingsInventory(Instance.project.worktree)),
+    )
+    .get(
+      "/inspect",
+      describeRoute({
+        summary: "Inspect one expert-squad declaration",
+        description:
+          "Returns bounded selector and workflow guidance for one exact effective or physical installation identity.",
+        operationId: "expertSquad.inspect",
+        responses: {
+          200: {
+            description: "Expert-squad declaration inspection",
+            content: { "application/json": { schema: resolver(ExpertSquadCatalogInspectionSchema) } },
           },
           ...errors(400, 500),
           404: namedErrorResponse("Expert Squad not found", "NotFoundError"),
         },
       }),
+      validator("query", ExpertSquadCatalogInspectionQuerySchema),
+      async (c) => {
+        const query = c.req.valid("query")
+        const selected = await PromptProfileResolver.catalogInspection({
+          projectDirectory: Instance.project.worktree,
+          id: query.id,
+          installationScope: "installationScope" in query ? query.installationScope : undefined,
+          namespace: "namespace" in query ? query.namespace : undefined,
+          workflowCursor: query.workflowCursor,
+        })
+        if (!selected) throw new NotFoundError({ message: `Expert squad not found: ${query.id}` })
+        return c.json(selected)
+      },
+    )
+    .get(
+      "/diagnostics",
+      describeRoute({
+        summary: "Page Expert Squad discovery diagnostics",
+        description: "Returns at most 20 discovery issues or override warnings from the current catalog snapshot.",
+        operationId: "expertSquad.diagnostics",
+        responses: {
+          200: {
+            description: "Bounded Expert Squad diagnostics",
+            content: { "application/json": { schema: resolver(ExpertSquadDiagnosticPageSchema) } },
+          },
+          ...errors(400, 500),
+        },
+      }),
       validator(
         "query",
-        z
-          .object({
-            id: ExpertSquadIDSchema.optional(),
-            installationScope: z.enum(["built_in", "project", "global"]).optional(),
-          })
-          .refine((query) => Boolean(query.id) === Boolean(query.installationScope), {
-            message: "id and installationScope must be supplied together",
-          }),
+        z.object({ cursor: z.string().min(1).optional(), limit: z.coerce.number().int().min(1).max(20).default(20) }),
       ),
       async (c) => {
         const query = c.req.valid("query")
-        const id = query.id
-        const inventory = await PromptProfileResolver.settingsInventory(Instance.directory)
-        const selected = id
-          ? inventory.installations.find(
-              (candidate) =>
-                candidate.id === id &&
-                (candidate.source.kind === "built_in"
-                  ? query.installationScope === "built_in"
-                  : candidate.source.installation_scope === query.installationScope),
-            )
-          : inventory.installations[0]
-        if (!selected)
-          throw new NotFoundError({ message: id ? `Expert squad not found: ${id}` : "No Expert Squads installed" })
         return c.json(
-          ExpertSquadSettingsSurfaceSchema.parse({
+          await PromptProfileResolver.catalogDiagnostics({
+            projectDirectory: Instance.project.worktree,
+            cursor: query.cursor,
+            limit: query.limit,
+          }),
+        )
+      },
+    )
+    .get(
+      "/settings/detail",
+      describeRoute({
+        summary: "Load one full expert-squad settings declaration",
+        description:
+          "Loads README, selector instructions, digest, and runtime declaration only for one exact selected identity.",
+        operationId: "expertSquad.settingsDetail",
+        responses: {
+          200: {
+            description: "Exact expert-squad settings detail",
+            content: { "application/json": { schema: resolver(ExpertSquadSettingsDetailSchema) } },
+          },
+          ...errors(400, 500),
+          404: namedErrorResponse("Expert Squad not found", "NotFoundError"),
+        },
+      }),
+      validator("query", ExpertSquadSettingsDetailQuerySchema),
+      async (c) => {
+        const query = c.req.valid("query")
+        const selected = await PromptProfileResolver.settingsDetail({
+          projectDirectory: Instance.project.worktree,
+          id: query.id,
+          installationScope: query.installationScope,
+          namespace: "namespace" in query ? query.namespace : undefined,
+        })
+        if (!selected) throw new NotFoundError({ message: `Expert squad not found: ${query.id}` })
+        return c.json(
+          ExpertSquadSettingsDetailSchema.parse({
             scope: { kind: "project", directory: Instance.project.worktree },
-            squads: inventory.squads,
-            installations: inventory.installations,
-            warnings: inventory.warnings,
             selected,
           }),
         )
@@ -482,28 +603,86 @@ export function ExpertSquadRoutes() {
       describeRoute({
         summary: "Browse bundled expert squads",
         description:
-          "Lists bundled expert-squad payload packages with manifest-owned identity, member and capability summaries, and project installation state.",
+          "Returns a bounded manifest-derived page of bundled expert-squad payload packages. Rich package and update detail is loaded only for an exact selection.",
         operationId: "expertSquad.market",
         responses: {
           200: {
             description: "Expert squad market entries",
             content: {
               "application/json": {
-                schema: resolver(PayloadMarketResult),
+                schema: resolver(PayloadMarketPage),
               },
             },
           },
           400: namedErrorResponse("Expert squad market rejected", "ExpertSquadPackageError"),
         },
       }),
+      validator(
+        "query",
+        z.object({
+          query: z.string().max(500).default(""),
+          availability: z.enum(["all", "available", "installed"]).default("all"),
+          cursor: z.string().min(1).optional(),
+          limit: z.coerce.number().int().min(1).max(20).default(20),
+        }),
+      ),
       async (c) => {
-        const items = await packageRoute(() =>
-          ExpertSquadPackageManager.payloadMarket({
+        const query = c.req.valid("query")
+        const page = await packageRoute(() =>
+          ExpertSquadPackageManager.payloadMarketPage({
             projectDirectory: Instance.project.worktree,
+            query: query.query,
+            availability: query.availability,
+            cursor: query.cursor,
+            limit: query.limit,
           }),
         )
         return c.json(
-          items.map((item) => ({
+          PayloadMarketPage.parse({
+            catalog_revision: page.catalogRevision,
+            entries: page.entries.map((item) => ({
+              namespace: item.namespace,
+              id: item.id,
+              name: item.name,
+              label: item.label,
+              description: item.description,
+              version: item.version,
+              installation_scopes: item.installationScopes,
+            })),
+            next_cursor: page.nextCursor,
+            total_count: page.totalCount,
+          }),
+        )
+      },
+    )
+    .get(
+      "/market/detail",
+      describeRoute({
+        summary: "Inspect one bundled expert squad",
+        description:
+          "Returns digest, selector, agents, capability counts, and exact installation revisions for one selection.",
+        operationId: "expertSquad.marketDetail",
+        responses: {
+          200: {
+            description: "Bundled expert-squad detail",
+            content: { "application/json": { schema: resolver(PayloadMarketItem) } },
+          },
+          400: namedErrorResponse("Expert squad market rejected", "ExpertSquadPackageError"),
+          404: namedErrorResponse("Expert Squad not found", "NotFoundError"),
+        },
+      }),
+      validator("query", z.object({ id: ExpertSquadIDSchema })),
+      async (c) => {
+        const item = await packageRoute(() =>
+          ExpertSquadPackageManager.payloadMarketDetail({
+            projectDirectory: Instance.project.worktree,
+            id: c.req.valid("query").id,
+          }),
+        )
+        if (!item)
+          throw new NotFoundError({ message: `Expert squad market package not found: ${c.req.valid("query").id}` })
+        return c.json(
+          PayloadMarketItem.parse({
             namespace: item.namespace,
             id: item.id,
             name: item.name,
@@ -527,7 +706,7 @@ export function ExpertSquadRoutes() {
               installed_package_digest: installation.installedPackageDigest,
               update_available: installation.updateAvailable,
             })),
-          })),
+          }),
         )
       },
     )
