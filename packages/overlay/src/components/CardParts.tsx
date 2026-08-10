@@ -21,6 +21,7 @@ import { conversationDisclosureExpanded, setConversationDisclosureExpanded } fro
 import { partitionCardMessageRuns } from "../utils/card-message-run"
 import { DelegatedContextDisclosure } from "./DelegatedContextDisclosure"
 import { ConversationTurnArtifactSummary } from "./ConversationTurnArtifactSummary"
+import { isConversationSourcePart, SourceParts } from "./SourceParts"
 
 function unsupportedPartFallback(part: any) {
   const type = String(part?.type || "")
@@ -126,6 +127,52 @@ interface PartCollectionProps {
   turnArtifacts?: NonNullable<CardNode["turnArtifacts"]>
 }
 
+type CitationRenderRun =
+  | { kind: "source"; parts: ReturnType<typeof sourceParts> }
+  | { kind: "part"; parts: any[] }
+
+function sourceParts(parts: any[]) {
+  return parts.filter(isConversationSourcePart)
+}
+
+function citationRenderRuns(parts: any[]): CitationRenderRun[] {
+  const runs: CitationRenderRun[] = []
+  for (const part of parts) {
+    const kind: CitationRenderRun["kind"] = isConversationSourcePart(part) ? "source" : "part"
+    const previous = runs.at(-1)
+    if (previous?.kind === kind) previous.parts.push(part)
+    else runs.push({ kind, parts: [part] } as CitationRenderRun)
+  }
+  return runs
+}
+
+function CitationAwareBodyParts(props: PartCollectionProps) {
+  return (
+    <Index each={citationRenderRuns(props.parts)}>
+      {(run) => (
+        <Show
+          when={run().kind === "source"}
+          fallback={
+            <Index each={run().parts}>
+              {(part) => (
+                <RenderableCardPart
+                  part={part()}
+                  depth={props.depth}
+                  streaming={props.streaming}
+                  streamingTextPart={props.streamingTextPart}
+                  renderNestedCard={props.renderNestedCard}
+                />
+              )}
+            </Index>
+          }
+        >
+          <SourceParts sources={sourceParts(run().parts)} />
+        </Show>
+      )}
+    </Index>
+  )
+}
+
 function ExecutionEventRun(props: PartCollectionProps) {
   return (
     <div class="msg-work-details__body">
@@ -209,18 +256,7 @@ function ChronologicalCollapsedParts(props: PartCollectionProps & { runs: Messag
       {(run) => (
         <Show
           when={run().kind === "execution"}
-          fallback={
-            <Index each={run().parts}>
-              {(part) => (
-                <RenderableCardPart
-                  part={part()}
-                  depth={props.depth}
-                  streaming={props.streaming}
-                  renderNestedCard={props.renderNestedCard}
-                />
-              )}
-            </Index>
-          }
+          fallback={<CitationAwareBodyParts {...props} parts={run().parts} />}
         >
           <ExecutionDisclosureRun {...props} parts={run().parts} />
         </Show>
@@ -230,18 +266,7 @@ function ChronologicalCollapsedParts(props: PartCollectionProps & { runs: Messag
 }
 
 function BodyParts(props: PartCollectionProps) {
-  return (
-    <Index each={props.parts}>
-      {(part) => (
-        <RenderableCardPart
-          part={part()}
-          depth={props.depth}
-          streaming={props.streaming}
-          renderNestedCard={props.renderNestedCard}
-        />
-      )}
-    </Index>
-  )
+  return <CitationAwareBodyParts {...props} />
 }
 
 function PartCollection(props: PartCollectionProps) {

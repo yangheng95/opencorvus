@@ -41,6 +41,7 @@ import {
   materializeToolResultInlineAttachments,
 } from "@/tool/result-attachment-materialization"
 import { Instance } from "@/project/instance"
+import { persistMessageSources } from "./source-persistence"
 
 export namespace SessionProcessor {
   const DOOM_LOOP_THRESHOLD = 3
@@ -716,6 +717,11 @@ export namespace SessionProcessor {
                       const displayParts = Array.isArray((value.output as { display?: unknown }).display)
                         ? ((value.output as { display: unknown[] }).display ?? [])
                         : []
+                      const sourcePayloads = Array.isArray((value.output as { sources?: unknown }).sources)
+                        ? ((value.output as { sources: unknown[] }).sources ?? []).map((source) =>
+                            Message.SourcePayload.parse(source),
+                          )
+                        : []
                       await withToolPartLock(value.toolCallId, async () => {
                         const match = toolcalls[value.toolCallId] ?? (await priorToolPart(value.toolCallId))
                         if (match && (match.state.status === "running" || match.state.status === "pending")) {
@@ -755,6 +761,14 @@ export namespace SessionProcessor {
                             await Session.updatePart(displayPart)
                             existingPartIDs.add(displayPart.id)
                           }
+                        }
+                        if (sourcePayloads.length > 0) {
+                          const persisted = await persistMessageSources({
+                            sessionID: input.assistantMessage.sessionID,
+                            messageID: input.assistantMessage.id,
+                            sources: sourcePayloads,
+                          })
+                          for (const part of persisted) trackCreatedPart(run.attempt, part.id)
                         }
                       })
                       const control = toolResultControl(metadata)
@@ -953,6 +967,35 @@ export namespace SessionProcessor {
                       }
                       currentText = undefined
                       break
+
+                    case "source": {
+                      const source =
+                        value.sourceType === "url"
+                          ? Message.SourceUrlPayload.parse({
+                              type: "source-url",
+                              sourceId: value.id,
+                              url: value.url,
+                              title: value.title,
+                              provider: input.assistantMessage.providerID,
+                              providerMetadata: value.providerMetadata,
+                            })
+                          : Message.SourceDocumentPayload.parse({
+                              type: "source-document",
+                              sourceId: value.id,
+                              mediaType: value.mediaType,
+                              title: value.title,
+                              filename: value.filename,
+                              provider: input.assistantMessage.providerID,
+                              providerMetadata: value.providerMetadata,
+                            })
+                      const persisted = await persistMessageSources({
+                        sessionID: input.assistantMessage.sessionID,
+                        messageID: input.assistantMessage.id,
+                        sources: [source],
+                      })
+                      for (const part of persisted) trackCreatedPart(run.attempt, part.id)
+                      break
+                    }
 
                     case "finish":
                       await streamInput.stream?.onFinish?.(value as never)

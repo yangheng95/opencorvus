@@ -50,6 +50,7 @@ export type PublicSquadRecord = {
     required: number
   }
 }
+
 const localizedCopyByIdentity: Record<string, { description: LocalizedText; selectorSummary: LocalizedText }> = {
   "builtin/frontend-replica": {
     description: {
@@ -138,3 +139,4 @@ export function publicPath(locale: PublicLocale, path = "") {
 export function squadPath(locale: PublicLocale, record: PublicSquadRecord) {
   return publicPath(locale, `/market/${record.identity.namespace}/${record.identity.id}/`)
 }
+

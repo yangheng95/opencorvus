@@ -106,3 +106,4 @@ export function projectExpertSquadFacts(loaded: FactSource) {
 }
 
 export type ExpertSquadFacts = ReturnType<typeof projectExpertSquadFacts>
+

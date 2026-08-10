@@ -106,6 +106,16 @@ describe("Read tool Language Server Protocol warm-up", () => {
               lines: 1,
               totalLines: 1,
             },
+            sources: [
+              {
+                type: "source-file",
+                sourceId: expect.any(String),
+                path: source,
+                title: "sample.ts",
+                range: { startLine: 1, endLine: 1 },
+                provider: "opencorvus-read",
+              },
+            ],
           })
           expect(result.output).toContain("export const exactValue = 42")
         },

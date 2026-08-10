@@ -357,6 +357,14 @@ export namespace SessionCompaction {
           part.source?.type ?? "attachment",
           "</file>",
         ].join("")
+      case "source-url":
+        return `<source-url id="${escapeTranscriptText(part.sourceId)}" url="${escapeTranscriptText(part.url)}">${transcriptText(part.title ?? part.url)}</source-url>`
+      case "source-document":
+        return `<source-document id="${escapeTranscriptText(part.sourceId)}" media-type="${escapeTranscriptText(part.mediaType)}">${transcriptText(part.title)}</source-document>`
+      case "source-file": {
+        const range = part.range ? ` lines="${part.range.startLine}-${part.range.endLine}"` : ""
+        return `<source-file id="${escapeTranscriptText(part.sourceId)}" path="${escapeTranscriptText(part.path)}"${range}>${transcriptText(part.title)}</source-file>`
+      }
       case "patch":
         return `<patch>${transcriptText(Snapshot.formatPatchEvidence(part))}</patch>`
       case "tool": {

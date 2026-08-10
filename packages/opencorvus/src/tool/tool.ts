@@ -78,6 +78,7 @@ export namespace Tool {
         metadata: M
         output: string
         attachments?: Omit<Message.FilePart, "id" | "sessionID" | "messageID">[]
+        sources?: Message.SourcePayload[]
         display?: Omit<Message.InteractiveArtifactPart, "id" | "sessionID" | "messageID" | "orderKey">[]
       }>
       formatValidationError?(error: z.ZodError): string

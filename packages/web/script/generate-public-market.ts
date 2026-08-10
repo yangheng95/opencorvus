@@ -36,3 +36,4 @@ const output = [
 ].join("\n")
 
 await writeFile(new URL("../src/content/public-market-facts.generated.ts", import.meta.url), output)
+

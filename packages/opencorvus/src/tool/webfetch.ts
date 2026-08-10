@@ -7,6 +7,7 @@ import { Truncate } from "./truncation"
 import { Config } from "../config/config"
 import { proxiedFetchInit, resolveNetworkProxy } from "../util/network-proxy"
 import { assertTaskNetworkCapability } from "@/engine/task-execution-capsule-binding"
+import { urlSource } from "./source"
 
 const MAX_RESPONSE_SIZE = 5 * 1024 * 1024 // 5MB
 const DEFAULT_TIMEOUT = 30 * 1000 // 30 seconds
@@ -111,6 +112,11 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
   const contentType = response.headers.get("content-type") || ""
   const mime = contentType.split(";")[0]?.trim().toLowerCase() || ""
   const title = `${params.url} (${contentType})`
+  const source = urlSource({
+    url: response.url || params.url,
+    title: response.url || params.url,
+    provider: "opencorvus-webfetch",
+  })
 
   // Check if response is an image
   const isImage = mime.startsWith("image/") && mime !== "image/svg+xml" && mime !== "image/vnd.fastbidsheet"
@@ -128,6 +134,7 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
           url: `data:${mime};base64,${base64Content}`,
         },
       ],
+      sources: [source],
     }
   }
 
@@ -141,12 +148,14 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
         return {
           ...markdown,
           title,
+          sources: [source],
         }
       }
       const markdown = formatFetchedText(content)
       return {
         ...markdown,
         title,
+        sources: [source],
       }
 
     case "text":
@@ -155,12 +164,14 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
         return {
           ...text,
           title,
+          sources: [source],
         }
       }
       const text = formatFetchedText(content)
       return {
         ...text,
         title,
+        sources: [source],
       }
 
     case "html":
@@ -168,6 +179,7 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
       return {
         ...html,
         title,
+        sources: [source],
       }
 
     default:
@@ -175,6 +187,7 @@ export async function executeWebFetch(params: z.infer<typeof WebFetchParameters>
       return {
         ...output,
         title,
+        sources: [source],
       }
   }
 }

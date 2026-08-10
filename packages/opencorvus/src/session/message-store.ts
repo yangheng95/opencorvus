@@ -227,6 +227,9 @@ export namespace MessageStore {
       VISIBLE_PART_TYPE.patch,
       VISIBLE_PART_TYPE.file,
       VISIBLE_PART_TYPE.partError,
+      VISIBLE_PART_TYPE.sourceUrl,
+      VISIBLE_PART_TYPE.sourceDocument,
+      VISIBLE_PART_TYPE.sourceFile,
     ]
     for (const [executionID, scope] of scopes) {
       const candidates: ConversationAgentActivityItem[] = []

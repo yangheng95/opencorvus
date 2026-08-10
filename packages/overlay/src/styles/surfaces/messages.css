@@ -930,6 +930,121 @@
   overscroll-behavior: contain;
 }
 
+.msg-sources {
+  display: grid;
+  gap: calc(6px * var(--ui-scale));
+  min-width: 0;
+  margin-block: calc(8px * var(--ui-scale)) calc(2px * var(--ui-scale));
+}
+
+.msg-sources__heading {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(5px * var(--ui-scale));
+  width: fit-content;
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: var(--ui-line-height-tight);
+}
+
+.msg-sources__heading .oc-icon {
+  color: var(--accent);
+}
+
+.msg-sources__count {
+  display: inline-grid;
+  place-items: center;
+  min-width: calc(17px * var(--ui-scale));
+  min-height: calc(17px * var(--ui-scale));
+  padding-inline: calc(4px * var(--ui-scale));
+  border-radius: var(--ui-radius-pill);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+  font-size: var(--ui-font-micro);
+}
+
+.msg-sources__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(6px * var(--ui-scale));
+  min-width: 0;
+}
+
+.msg-source-chip {
+  appearance: none;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(5px * var(--ui-scale));
+  min-width: 0;
+  max-width: min(100%, calc(310px * var(--ui-scale)));
+  min-height: calc(28px * var(--ui-scale));
+  padding: calc(3px * var(--ui-scale)) calc(8px * var(--ui-scale)) calc(3px * var(--ui-scale))
+    calc(5px * var(--ui-scale));
+  border: 1px solid color-mix(in srgb, var(--border) 82%, var(--accent) 18%);
+  border-radius: var(--ui-radius-md);
+  background: color-mix(in srgb, var(--surface-raised) 92%, var(--accent) 8%);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--ui-font-meta);
+  line-height: var(--ui-line-height-tight);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    border-color var(--ui-duration-fast) var(--ui-timing-standard),
+    background var(--ui-duration-fast) var(--ui-timing-standard),
+    color var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.msg-source-chip:hover,
+.msg-source-chip:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 46%, var(--border));
+  background: color-mix(in srgb, var(--surface-raised) 84%, var(--accent) 16%);
+  color: var(--text-strong);
+  outline: none;
+}
+
+.msg-source-chip__index {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: calc(18px * var(--ui-scale));
+  height: calc(18px * var(--ui-scale));
+  border-radius: var(--ui-radius-sm);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent);
+  font-size: var(--ui-font-micro);
+  font-weight: var(--ui-font-weight-semibold);
+}
+
+.msg-source-chip .oc-icon {
+  flex: none;
+  color: var(--text-muted);
+}
+
+.msg-source-chip__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.msg-source-tooltip {
+  display: grid;
+  gap: calc(4px * var(--ui-scale));
+  max-width: calc(420px * var(--ui-scale));
+}
+
+.msg-source-tooltip > span {
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+.msg-source-tooltip > span:empty {
+  display: none;
+}
+
 /* ─────────────────────────────────────────────────────────────
    Extracted from styles.css 2026-05-04: chat-message accessory
    chrome (msg-patch chip, msg-tool-* chrome)

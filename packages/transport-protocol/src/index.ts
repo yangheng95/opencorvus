@@ -558,6 +558,9 @@ export const CONVERSATION_DISPLAY_MESSAGE_PART_TYPES = [
   "text",
   "part-error",
   "reasoning",
+  "source-url",
+  "source-document",
+  "source-file",
   "tool",
   "patch",
   "file",
@@ -605,6 +608,26 @@ export type ConversationAgentActivityItem =
       type: "part-error"
       title?: string
       message: string
+    })
+  | (ConversationAgentActivityBase & {
+      type: "source-url"
+      sourceId: string
+      url: string
+      title?: string
+    })
+  | (ConversationAgentActivityBase & {
+      type: "source-document"
+      sourceId: string
+      mediaType: string
+      title: string
+      filename?: string
+    })
+  | (ConversationAgentActivityBase & {
+      type: "source-file"
+      sourceId: string
+      path: string
+      title: string
+      range?: { startLine: number; endLine: number }
     })
 
 function compactConversationAgentActivityText(value: unknown, limit: number): string {
@@ -685,6 +708,46 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
           ...(title ? { title } : {}),
           message,
         }
+      : null
+  }
+  if (part.type === "source-url") {
+    const sourceId = compactConversationAgentActivityText(part.sourceId, 160)
+    const url = compactConversationAgentActivityText(part.url, 2048)
+    const title = compactConversationAgentActivityText(part.title, 240)
+    return sourceId && /^https?:\/\//i.test(url)
+      ? { id, orderKey, type: "source-url", sourceId, url, ...(title ? { title } : {}) }
+      : null
+  }
+  if (part.type === "source-document") {
+    const sourceId = compactConversationAgentActivityText(part.sourceId, 160)
+    const mediaType = compactConversationAgentActivityText(part.mediaType, 160)
+    const title = compactConversationAgentActivityText(part.title, 240)
+    const filename = compactConversationAgentActivityText(part.filename, 240)
+    return sourceId && mediaType && title
+      ? {
+          id,
+          orderKey,
+          type: "source-document",
+          sourceId,
+          mediaType,
+          title,
+          ...(filename ? { filename } : {}),
+        }
+      : null
+  }
+  if (part.type === "source-file") {
+    const sourceId = compactConversationAgentActivityText(part.sourceId, 160)
+    const path = compactConversationAgentActivityText(part.path, 1024)
+    const title = compactConversationAgentActivityText(part.title, 240)
+    const rawRange = part.range && typeof part.range === "object" ? (part.range as Record<string, unknown>) : undefined
+    const startLine = typeof rawRange?.startLine === "number" ? rawRange.startLine : undefined
+    const endLine = typeof rawRange?.endLine === "number" ? rawRange.endLine : undefined
+    const range =
+      startLine !== undefined && endLine !== undefined && startLine > 0 && endLine >= startLine
+        ? { startLine, endLine }
+        : undefined
+    return sourceId && path && title
+      ? { id, orderKey, type: "source-file", sourceId, path, title, ...(range ? { range } : {}) }
       : null
   }
   return null

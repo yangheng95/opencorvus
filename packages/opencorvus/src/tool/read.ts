@@ -12,6 +12,7 @@ import { AttachmentStore } from "../storage/attachment-store"
 import { redactInlinePayloads } from "../util/inline-base64"
 import { DEFAULT_TEXT_FILE_LIMIT, isBinaryBytes, readTextFilePageContent, renderTextFilePage } from "./text-file"
 import { executionFiles, executionProcessAuthority } from "./execution-files"
+import { fileSource } from "./source"
 
 const DEFAULT_READ_LIMIT = DEFAULT_TEXT_FILE_LIMIT
 
@@ -166,6 +167,7 @@ export const ReadTool = Tool.define("read", {
             url: `data:${mime};base64,${Buffer.from(await files.readFile(filepath)).toString("base64")}`,
           },
         ],
+        sources: [fileSource({ path: filepath, title, provider: "opencorvus-read" })],
       }
     }
 
@@ -201,6 +203,14 @@ export const ReadTool = Tool.define("read", {
         lines: page.lines,
         totalLines: page.totalLines,
       },
+      sources: [
+        fileSource({
+          path: filepath,
+          title,
+          ...(page.lines > 0 ? { range: { startLine: page.offset, endLine: page.lastReadLine } } : {}),
+          provider: "opencorvus-read",
+        }),
+      ],
     }
   },
 })

@@ -31,7 +31,7 @@ export const ExternalCodeSearchTool = Tool.define("external_code_search", {
       },
     })
 
-    const text = await exaMcpCall({
+    const result = await exaMcpCall({
       executionAuthority: Tool.requireExecutionAuthority(ctx),
       name: "get_code_context_exa",
       arguments: {
@@ -45,7 +45,7 @@ export const ExternalCodeSearchTool = Tool.define("external_code_search", {
 
     return {
       output:
-        text ??
+        result?.text ??
         "No code snippets or documentation found. Please try a different query, be more specific about the library or programming concept, or check the spelling of framework names.",
       title: `External code search: ${params.query}`,
       metadata: {},
