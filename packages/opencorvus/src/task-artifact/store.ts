@@ -657,7 +657,7 @@ async function listCommittedSnapshotRecordsUnlocked(
   validateScope()
   const reservedSequences = await listReservedPublicationSequences(scope)
   const reservedSequenceSet = new Set(reservedSequences)
-  const snapshotsRoot = path.join(ProjectRuntimePaths.taskArtifactRoot(scope.projectDirectory, scope.taskID), "s")
+  const snapshotsRoot = path.join(ProjectRuntimePaths.taskArtifactRoot(scope.projectDirectory, scope.taskID), "snapshots")
   let entries
   try {
     entries = await fs.readdir(snapshotsRoot, { withFileTypes: true })

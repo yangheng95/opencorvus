@@ -253,7 +253,7 @@ export const UserUploadList = UserUploadInput.array()
 
 /**
  * Persisted attachment reference. Once the bytes live in AttachmentStore
- * (`<projectDir>/.opencorvus/.r/b/a/<sha>.<ext>`), every downstream layer
+ * (`<projectDir>/.opencorvus/.r/project/attachments/<sha>.<ext>`), every downstream layer
  * — queue table row, task loop, orchestrator, frontend-design, requirements — only
  * carries this small, URL-addressable reference. Agents that need the raw
  * bytes for multimodal LLM input read them back through AttachmentStore.

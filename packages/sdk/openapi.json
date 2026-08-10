@@ -2090,7 +2090,7 @@
                 "type": "string"
               },
               "sessionID": {
-                "pattern": "^ses.*",
+                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               },
               "status": {
@@ -2105,7 +2105,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -2141,14 +2141,14 @@
                 "type": "string"
               },
               "sessionID": {
-                "pattern": "^ses.*",
+                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               },
               "summary": {
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -2186,7 +2186,7 @@
                 "type": "string"
               },
               "sessionID": {
-                "pattern": "^ses.*",
+                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               },
               "severity": {
@@ -2201,7 +2201,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -2254,14 +2254,14 @@
                 "type": "string"
               },
               "sessionID": {
-                "pattern": "^ses.*",
+                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               },
               "summary": {
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -2386,7 +2386,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -2424,7 +2424,7 @@
                 "type": "string"
               },
               "sessionID": {
-                "pattern": "^ses.*",
+                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -2487,7 +2487,7 @@
                 "type": "string"
               },
               "callerSessionID": {
-                "pattern": "^ses.*",
+                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               },
               "directory": {
@@ -2503,7 +2503,7 @@
                 "type": "string"
               },
               "targetSessionID": {
-                "pattern": "^ses.*",
+                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               },
               "timeCreated": {
@@ -2752,7 +2752,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -2795,7 +2795,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -2913,7 +2913,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -3221,7 +3221,7 @@
                 "type": "number"
               },
               "sessionID": {
-                "pattern": "^ses.*",
+                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               },
               "subject": {
@@ -3233,7 +3233,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -3430,7 +3430,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               },
               "text": {
@@ -3624,7 +3624,7 @@
                 "type": "string"
               },
               "callerSessionID": {
-                "pattern": "^ses.*",
+                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               },
               "directory": {
@@ -3638,7 +3638,7 @@
                 "type": "string"
               },
               "missionSessionID": {
-                "pattern": "^ses.*",
+                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               },
               "projectID": {
@@ -4103,7 +4103,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -4175,7 +4175,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -4220,7 +4220,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -4770,7 +4770,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               },
               "toolCallID": {
@@ -4820,7 +4820,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               },
               "timeCompleted": {
@@ -4862,7 +4862,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               },
               "timeCompleted": {
@@ -4908,7 +4908,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -4947,7 +4947,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               },
               "terminalReason": {
@@ -5259,7 +5259,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -5299,7 +5299,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -5350,7 +5350,7 @@
                 "type": "integer"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -5391,7 +5391,7 @@
                 "type": "string"
               },
               "taskID": {
-                "pattern": "^tsk.*",
+                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                 "type": "string"
               }
             },
@@ -8186,7 +8186,7 @@
             "type": "string"
           },
           "id": {
-            "pattern": "^ses.*",
+            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
             "type": "string"
           },
           "kind": {
@@ -8220,7 +8220,7 @@
             "type": "object"
           },
           "parentID": {
-            "pattern": "^ses.*",
+            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
             "type": "string"
           },
           "permission": {
@@ -13484,7 +13484,7 @@
             "type": "string"
           },
           "sessionID": {
-            "pattern": "^ses.*",
+            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
             "type": "string"
           },
           "tool": {
@@ -14787,7 +14787,7 @@
             "type": "array"
           },
           "sessionID": {
-            "pattern": "^ses.*",
+            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
             "type": "string"
           },
           "timeCreated": {
@@ -15118,7 +15118,7 @@
             "type": "string"
           },
           "id": {
-            "pattern": "^ses.*",
+            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
             "type": "string"
           },
           "kind": {
@@ -15152,7 +15152,7 @@
             "type": "object"
           },
           "parentID": {
-            "pattern": "^ses.*",
+            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
             "type": "string"
           },
           "permission": {
@@ -60873,7 +60873,7 @@
                                   "type": "number"
                                 },
                                 "sessionID": {
-                                  "pattern": "^ses.*",
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 }
                               },
@@ -60924,7 +60924,7 @@
                                 "sessionID": {
                                   "anyOf": [
                                     {
-                                      "pattern": "^ses.*",
+                                      "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                       "type": "string"
                                     },
                                     {
@@ -60942,7 +60942,7 @@
                                   "type": "string"
                                 },
                                 "taskID": {
-                                  "pattern": "^tsk.*",
+                                  "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 },
                                 "time": {
@@ -61025,7 +61025,7 @@
                                 "type": "string"
                               },
                               "id": {
-                                "pattern": "^tsk.*",
+                                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                 "type": "string"
                               },
                               "orderKey": {
@@ -61120,7 +61120,7 @@
                               "sessionID": {
                                 "anyOf": [
                                   {
-                                    "pattern": "^ses.*",
+                                    "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                     "type": "string"
                                   },
                                   {
@@ -62037,7 +62037,7 @@
                       "type": "string"
                     },
                     "task_id": {
-                      "pattern": "^tsk.*",
+                      "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
                     }
                   },
@@ -62760,7 +62760,7 @@
                     "sessionID": {
                       "anyOf": [
                         {
-                          "pattern": "^ses.*",
+                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         {
@@ -62778,7 +62778,7 @@
                       "type": "string"
                     },
                     "taskID": {
-                      "pattern": "^tsk.*",
+                      "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
                     },
                     "time": {
@@ -62997,7 +62997,7 @@
                     "sessionID": {
                       "anyOf": [
                         {
-                          "pattern": "^ses.*",
+                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         {
@@ -63015,7 +63015,7 @@
                       "type": "string"
                     },
                     "taskID": {
-                      "pattern": "^tsk.*",
+                      "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
                     },
                     "time": {
@@ -68505,7 +68505,7 @@
                                       "type": "integer"
                                     },
                                     "sessionID": {
-                                      "pattern": "^ses.*",
+                                      "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                       "type": "string"
                                     }
                                   },
@@ -68521,7 +68521,7 @@
                                 "type": "array"
                               },
                               "taskID": {
-                                "pattern": "^tsk.*",
+                                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                 "type": "string"
                               }
                             },
@@ -68553,7 +68553,7 @@
                                   "properties": {
                                     "activeSessionIDs": {
                                       "items": {
-                                        "pattern": "^ses.*",
+                                        "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                         "type": "string"
                                       },
                                       "type": "array"
@@ -68567,7 +68567,7 @@
                                     },
                                     "sessionIDs": {
                                       "items": {
-                                        "pattern": "^ses.*",
+                                        "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                         "type": "string"
                                       },
                                       "type": "array"
@@ -68860,7 +68860,7 @@
                                 "type": "string"
                               },
                               "taskID": {
-                                "pattern": "^tsk.*",
+                                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                 "type": "string"
                               },
                               "topLevelSessionIDs": {
@@ -74180,7 +74180,7 @@
                     "type": "object"
                   },
                   "parentID": {
-                    "pattern": "^ses.*",
+                    "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                     "type": "string"
                   },
                   "permission": {
@@ -74430,7 +74430,7 @@
             "name": "sessionID",
             "required": true,
             "schema": {
-              "pattern": "^ses.*",
+              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           },
@@ -74648,7 +74648,7 @@
             "name": "sessionID",
             "required": true,
             "schema": {
-              "pattern": "^ses.*",
+              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -75021,7 +75021,7 @@
             "name": "sessionID",
             "required": true,
             "schema": {
-              "pattern": "^ses.*",
+              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -77778,7 +77778,7 @@
                             "type": "array"
                           },
                           "sessionID": {
-                            "pattern": "^ses.*",
+                            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "timeCreated": {
@@ -78336,7 +78336,7 @@
                             "additionalProperties": false,
                             "properties": {
                               "id": {
-                                "pattern": "^tsk.*",
+                                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                 "type": "string"
                               },
                               "reason": {
@@ -79096,7 +79096,7 @@
             "name": "sessionID",
             "required": true,
             "schema": {
-              "pattern": "^ses.*",
+              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           },
@@ -79271,7 +79271,7 @@
             "name": "sessionID",
             "required": true,
             "schema": {
-              "pattern": "^ses.*",
+              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -82566,7 +82566,7 @@
                         "additionalProperties": false,
                         "properties": {
                           "id": {
-                            "pattern": "^tsk.*",
+                            "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "reason": {
@@ -85999,7 +85999,7 @@
                       "type": "string"
                     },
                     "task_id": {
-                      "pattern": "^tsk.*",
+                      "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
                     }
                   },
@@ -86400,7 +86400,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -86599,7 +86599,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -86706,7 +86706,7 @@
                           "type": "integer"
                         },
                         "sessionID": {
-                          "pattern": "^ses.*",
+                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         "source": {
@@ -87262,7 +87262,7 @@
                           "type": "string"
                         },
                         "orchestratorSessionID": {
-                          "pattern": "^ses.*",
+                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         "timeRecorded": {
@@ -87464,7 +87464,7 @@
                       "type": "string"
                     },
                     "id": {
-                      "pattern": "^tsk.*",
+                      "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
                     },
                     "metadata": {
@@ -87569,7 +87569,7 @@
                     "sessionID": {
                       "anyOf": [
                         {
-                          "pattern": "^ses.*",
+                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         {
@@ -87726,7 +87726,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -87907,7 +87907,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -88211,7 +88211,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -88286,7 +88286,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -88443,7 +88443,7 @@
                             "type": "object"
                           },
                           "taskID": {
-                            "pattern": "^tsk.*",
+                            "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "time": {
@@ -88667,7 +88667,7 @@
                                 "type": "integer"
                               },
                               "sessionID": {
-                                "pattern": "^ses.*",
+                                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                 "type": "string"
                               }
                             },
@@ -88683,7 +88683,7 @@
                           "type": "array"
                         },
                         "taskID": {
-                          "pattern": "^tsk.*",
+                          "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         }
                       },
@@ -89049,7 +89049,7 @@
                             "properties": {
                               "activeSessionIDs": {
                                 "items": {
-                                  "pattern": "^ses.*",
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 },
                                 "type": "array"
@@ -89063,7 +89063,7 @@
                               },
                               "sessionIDs": {
                                 "items": {
-                                  "pattern": "^ses.*",
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 },
                                 "type": "array"
@@ -89157,7 +89157,7 @@
                               },
                               "sessionIDs": {
                                 "items": {
-                                  "pattern": "^ses.*",
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 },
                                 "type": "array"
@@ -89312,7 +89312,7 @@
                           "sessionID": {
                             "anyOf": [
                               {
-                                "pattern": "^ses.*",
+                                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                 "type": "string"
                               },
                               {
@@ -89330,7 +89330,7 @@
                             "type": "string"
                           },
                           "taskID": {
-                            "pattern": "^tsk.*",
+                            "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "time": {
@@ -89476,7 +89476,7 @@
                                   "type": "string"
                                 },
                                 "sessionID": {
-                                  "pattern": "^ses.*",
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 }
                               },
@@ -89516,7 +89516,7 @@
                             "type": "string"
                           },
                           "sessionID": {
-                            "pattern": "^ses.*",
+                            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "source": {
@@ -89730,7 +89730,7 @@
                           "type": "string"
                         },
                         "taskID": {
-                          "pattern": "^tsk.*",
+                          "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         "topLevelSessionIDs": {
@@ -89850,7 +89850,7 @@
                               "type": "integer"
                             },
                             "sessionID": {
-                              "pattern": "^ses.*",
+                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                               "type": "string"
                             },
                             "source": {
@@ -90406,7 +90406,7 @@
                               "type": "string"
                             },
                             "orchestratorSessionID": {
-                              "pattern": "^ses.*",
+                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                               "type": "string"
                             },
                             "timeRecorded": {
@@ -90608,7 +90608,7 @@
                           "type": "string"
                         },
                         "id": {
-                          "pattern": "^tsk.*",
+                          "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         "metadata": {
@@ -90713,7 +90713,7 @@
                         "sessionID": {
                           "anyOf": [
                             {
-                              "pattern": "^ses.*",
+                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                               "type": "string"
                             },
                             {
@@ -90876,7 +90876,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -93712,7 +93712,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -93833,7 +93833,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           },
@@ -93988,7 +93988,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -94146,7 +94146,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           },
@@ -94936,7 +94936,7 @@
                                 "type": "object"
                               },
                               "taskID": {
-                                "pattern": "^tsk.*",
+                                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                 "type": "string"
                               },
                               "time": {
@@ -95160,7 +95160,7 @@
                                     "type": "integer"
                                   },
                                   "sessionID": {
-                                    "pattern": "^ses.*",
+                                    "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                     "type": "string"
                                   }
                                 },
@@ -95176,7 +95176,7 @@
                               "type": "array"
                             },
                             "taskID": {
-                              "pattern": "^tsk.*",
+                              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                               "type": "string"
                             }
                           },
@@ -95542,7 +95542,7 @@
                                 "properties": {
                                   "activeSessionIDs": {
                                     "items": {
-                                      "pattern": "^ses.*",
+                                      "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                       "type": "string"
                                     },
                                     "type": "array"
@@ -95556,7 +95556,7 @@
                                   },
                                   "sessionIDs": {
                                     "items": {
-                                      "pattern": "^ses.*",
+                                      "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                       "type": "string"
                                     },
                                     "type": "array"
@@ -95650,7 +95650,7 @@
                                   },
                                   "sessionIDs": {
                                     "items": {
-                                      "pattern": "^ses.*",
+                                      "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                       "type": "string"
                                     },
                                     "type": "array"
@@ -95805,7 +95805,7 @@
                               "sessionID": {
                                 "anyOf": [
                                   {
-                                    "pattern": "^ses.*",
+                                    "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                     "type": "string"
                                   },
                                   {
@@ -95823,7 +95823,7 @@
                                 "type": "string"
                               },
                               "taskID": {
-                                "pattern": "^tsk.*",
+                                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                 "type": "string"
                               },
                               "time": {
@@ -95969,7 +95969,7 @@
                                       "type": "string"
                                     },
                                     "sessionID": {
-                                      "pattern": "^ses.*",
+                                      "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                       "type": "string"
                                     }
                                   },
@@ -96009,7 +96009,7 @@
                                 "type": "string"
                               },
                               "sessionID": {
-                                "pattern": "^ses.*",
+                                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                 "type": "string"
                               },
                               "source": {
@@ -96223,7 +96223,7 @@
                               "type": "string"
                             },
                             "taskID": {
-                              "pattern": "^tsk.*",
+                              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                               "type": "string"
                             },
                             "topLevelSessionIDs": {
@@ -96343,7 +96343,7 @@
                                   "type": "integer"
                                 },
                                 "sessionID": {
-                                  "pattern": "^ses.*",
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 },
                                 "source": {
@@ -96899,7 +96899,7 @@
                                   "type": "string"
                                 },
                                 "orchestratorSessionID": {
-                                  "pattern": "^ses.*",
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 },
                                 "timeRecorded": {
@@ -97101,7 +97101,7 @@
                               "type": "string"
                             },
                             "id": {
-                              "pattern": "^tsk.*",
+                              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                               "type": "string"
                             },
                             "metadata": {
@@ -97206,7 +97206,7 @@
                             "sessionID": {
                               "anyOf": [
                                 {
-                                  "pattern": "^ses.*",
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 },
                                 {
@@ -97408,7 +97408,7 @@
                             "type": "integer"
                           },
                           "session_id": {
-                            "pattern": "^ses.*",
+                            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "source": {
@@ -97419,7 +97419,7 @@
                             "type": "string"
                           },
                           "task_id": {
-                            "pattern": "^tsk.*",
+                            "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "timestamp": {
@@ -98025,7 +98025,7 @@
                             "additionalProperties": false,
                             "properties": {
                               "id": {
-                                "pattern": "^tsk.*",
+                                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                 "type": "string"
                               },
                               "reason": {
@@ -98778,7 +98778,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           },
@@ -98939,7 +98939,7 @@
                             "type": "integer"
                           },
                           "session_id": {
-                            "pattern": "^ses.*",
+                            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "source": {
@@ -98950,7 +98950,7 @@
                             "type": "string"
                           },
                           "task_id": {
-                            "pattern": "^tsk.*",
+                            "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "timestamp": {
@@ -99057,7 +99057,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           },
@@ -99177,7 +99177,7 @@
                             "type": "integer"
                           },
                           "session_id": {
-                            "pattern": "^ses.*",
+                            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "source": {
@@ -99188,7 +99188,7 @@
                             "type": "string"
                           },
                           "task_id": {
-                            "pattern": "^tsk.*",
+                            "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "timestamp": {
@@ -99973,7 +99973,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           },
@@ -100067,7 +100067,7 @@
                             "type": "integer"
                           },
                           "session_id": {
-                            "pattern": "^ses.*",
+                            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "source": {
@@ -100078,7 +100078,7 @@
                             "type": "string"
                           },
                           "task_id": {
-                            "pattern": "^tsk.*",
+                            "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "timestamp": {
@@ -100890,7 +100890,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -100972,7 +100972,7 @@
                       "type": "integer"
                     },
                     "session_id": {
-                      "pattern": "^ses.*",
+                      "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
                     },
                     "source": {
@@ -100983,7 +100983,7 @@
                       "type": "string"
                     },
                     "task_id": {
-                      "pattern": "^tsk.*",
+                      "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
                     },
                     "timestamp": {
@@ -101038,7 +101038,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -101196,7 +101196,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -101243,7 +101243,7 @@
                       "sessionID": {
                         "anyOf": [
                           {
-                            "pattern": "^ses.*",
+                            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           {
@@ -101261,7 +101261,7 @@
                         "type": "string"
                       },
                       "taskID": {
-                        "pattern": "^tsk.*",
+                        "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                         "type": "string"
                       },
                       "time": {
@@ -101391,7 +101391,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -101669,7 +101669,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -101699,11 +101699,11 @@
                       "type": "object"
                     },
                     "sessionID": {
-                      "pattern": "^ses.*",
+                      "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
                     },
                     "taskID": {
-                      "pattern": "^tsk.*",
+                      "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
                     }
                   },
@@ -101826,7 +101826,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -102193,7 +102193,7 @@
                             "properties": {
                               "activeSessionIDs": {
                                 "items": {
-                                  "pattern": "^ses.*",
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 },
                                 "type": "array"
@@ -102207,7 +102207,7 @@
                               },
                               "sessionIDs": {
                                 "items": {
-                                  "pattern": "^ses.*",
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 },
                                 "type": "array"
@@ -102301,7 +102301,7 @@
                               },
                               "sessionIDs": {
                                 "items": {
-                                  "pattern": "^ses.*",
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 },
                                 "type": "array"
@@ -102428,7 +102428,7 @@
                             "type": "number"
                           },
                           "sessionID": {
-                            "pattern": "^ses.*",
+                            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           }
                         },
@@ -102479,7 +102479,7 @@
                           "sessionID": {
                             "anyOf": [
                               {
-                                "pattern": "^ses.*",
+                                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                 "type": "string"
                               },
                               {
@@ -102497,7 +102497,7 @@
                             "type": "string"
                           },
                           "taskID": {
-                            "pattern": "^tsk.*",
+                            "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "time": {
@@ -102572,7 +102572,7 @@
                             "type": "string"
                           },
                           "taskID": {
-                            "pattern": "^tsk.*",
+                            "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "time": {
@@ -102700,7 +102700,7 @@
                               "type": "integer"
                             },
                             "sessionID": {
-                              "pattern": "^ses.*",
+                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                               "type": "string"
                             },
                             "source": {
@@ -103256,7 +103256,7 @@
                               "type": "string"
                             },
                             "orchestratorSessionID": {
-                              "pattern": "^ses.*",
+                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                               "type": "string"
                             },
                             "timeRecorded": {
@@ -103458,7 +103458,7 @@
                           "type": "string"
                         },
                         "id": {
-                          "pattern": "^tsk.*",
+                          "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         "metadata": {
@@ -103563,7 +103563,7 @@
                         "sessionID": {
                           "anyOf": [
                             {
-                              "pattern": "^ses.*",
+                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                               "type": "string"
                             },
                             {
@@ -103730,7 +103730,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -103843,7 +103843,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -103950,7 +103950,7 @@
                           "type": "integer"
                         },
                         "sessionID": {
-                          "pattern": "^ses.*",
+                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         "source": {
@@ -104506,7 +104506,7 @@
                           "type": "string"
                         },
                         "orchestratorSessionID": {
-                          "pattern": "^ses.*",
+                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         "timeRecorded": {
@@ -104708,7 +104708,7 @@
                       "type": "string"
                     },
                     "id": {
-                      "pattern": "^tsk.*",
+                      "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
                     },
                     "metadata": {
@@ -104813,7 +104813,7 @@
                     "sessionID": {
                       "anyOf": [
                         {
-                          "pattern": "^ses.*",
+                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         {
@@ -104996,7 +104996,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -105103,7 +105103,7 @@
                           "type": "integer"
                         },
                         "sessionID": {
-                          "pattern": "^ses.*",
+                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         "source": {
@@ -105659,7 +105659,7 @@
                           "type": "string"
                         },
                         "orchestratorSessionID": {
-                          "pattern": "^ses.*",
+                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         "timeRecorded": {
@@ -105861,7 +105861,7 @@
                       "type": "string"
                     },
                     "id": {
-                      "pattern": "^tsk.*",
+                      "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
                     },
                     "metadata": {
@@ -105966,7 +105966,7 @@
                     "sessionID": {
                       "anyOf": [
                         {
-                          "pattern": "^ses.*",
+                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         {
@@ -106149,7 +106149,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -106197,7 +106197,7 @@
                             "type": "string"
                           },
                           "sessionID": {
-                            "pattern": "^ses.*",
+                            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           }
                         },
@@ -106337,7 +106337,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -106433,7 +106433,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           },
@@ -106457,11 +106457,11 @@
                       "type": "boolean"
                     },
                     "session_id": {
-                      "pattern": "^ses.*",
+                      "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
                     },
                     "task_id": {
-                      "pattern": "^tsk.*",
+                      "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
                     }
                   },
@@ -106593,7 +106593,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           },
@@ -106638,11 +106638,11 @@
                       "type": "string"
                     },
                     "session_id": {
-                      "pattern": "^ses.*",
+                      "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
                     },
                     "task_id": {
-                      "pattern": "^tsk.*",
+                      "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                       "type": "string"
                     },
                     "wake_status": {
@@ -106805,7 +106805,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -106929,7 +106929,7 @@
                               "type": "integer"
                             },
                             "sessionID": {
-                              "pattern": "^ses.*",
+                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                               "type": "string"
                             },
                             "source": {
@@ -107485,7 +107485,7 @@
                               "type": "string"
                             },
                             "orchestratorSessionID": {
-                              "pattern": "^ses.*",
+                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                               "type": "string"
                             },
                             "timeRecorded": {
@@ -107687,7 +107687,7 @@
                           "type": "string"
                         },
                         "id": {
-                          "pattern": "^tsk.*",
+                          "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         "metadata": {
@@ -107792,7 +107792,7 @@
                         "sessionID": {
                           "anyOf": [
                             {
-                              "pattern": "^ses.*",
+                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                               "type": "string"
                             },
                             {
@@ -107956,7 +107956,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -108127,7 +108127,7 @@
                                 "type": "integer"
                               },
                               "sessionID": {
-                                "pattern": "^ses.*",
+                                "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                 "type": "string"
                               }
                             },
@@ -108143,7 +108143,7 @@
                           "type": "array"
                         },
                         "taskID": {
-                          "pattern": "^tsk.*",
+                          "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         }
                       },
@@ -108175,7 +108175,7 @@
                             "properties": {
                               "activeSessionIDs": {
                                 "items": {
-                                  "pattern": "^ses.*",
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 },
                                 "type": "array"
@@ -108189,7 +108189,7 @@
                               },
                               "sessionIDs": {
                                 "items": {
-                                  "pattern": "^ses.*",
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 },
                                 "type": "array"
@@ -108482,7 +108482,7 @@
                           "type": "string"
                         },
                         "taskID": {
-                          "pattern": "^tsk.*",
+                          "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                           "type": "string"
                         },
                         "topLevelSessionIDs": {
@@ -108637,7 +108637,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -108897,7 +108897,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -108995,7 +108995,7 @@
             "name": "taskID",
             "required": true,
             "schema": {
-              "pattern": "^tsk.*",
+              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
               "type": "string"
             }
           }
@@ -109521,7 +109521,7 @@
                         "additionalProperties": false,
                         "properties": {
                           "id": {
-                            "pattern": "^tsk.*",
+                            "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                             "type": "string"
                           },
                           "reason": {
@@ -109756,7 +109756,7 @@
                                   "type": "number"
                                 },
                                 "sessionID": {
-                                  "pattern": "^ses.*",
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 }
                               },
@@ -109807,7 +109807,7 @@
                                 "sessionID": {
                                   "anyOf": [
                                     {
-                                      "pattern": "^ses.*",
+                                      "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                       "type": "string"
                                     },
                                     {
@@ -109825,7 +109825,7 @@
                                   "type": "string"
                                 },
                                 "taskID": {
-                                  "pattern": "^tsk.*",
+                                  "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                   "type": "string"
                                 },
                                 "time": {
@@ -109908,7 +109908,7 @@
                                 "type": "string"
                               },
                               "id": {
-                                "pattern": "^tsk.*",
+                                "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                 "type": "string"
                               },
                               "orderKey": {
@@ -110003,7 +110003,7 @@
                               "sessionID": {
                                 "anyOf": [
                                   {
-                                    "pattern": "^ses.*",
+                                    "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
                                     "type": "string"
                                   },
                                   {

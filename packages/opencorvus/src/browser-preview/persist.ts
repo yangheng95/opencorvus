@@ -1072,7 +1072,7 @@ export function toRuntimeRelativePath(projectRoot: string, input: string): strin
 
 function toBrowserPreviewRuntimeRelativePath(projectRoot: string, taskID: string, input: string): string {
   const normalized = input.replaceAll("\\", "/")
-  const browserPreviewRoot = ProjectRuntimePaths.taskRelative(taskID, "bp").replaceAll("\\", "/")
+  const browserPreviewRoot = ProjectRuntimePaths.taskRelative(taskID, "browser-preview").replaceAll("\\", "/")
   if (normalized === browserPreviewRoot || normalized.startsWith(`${browserPreviewRoot}/`)) {
     return normalized
   }
@@ -1086,7 +1086,9 @@ function toBrowserPreviewRuntimeRelativePath(projectRoot: string, taskID: string
     throw new Error(`Browser preview artifact path must be runtime-relative or absolute: ${input}`)
   }
   const absolute = path.resolve(input)
-  const absoluteBrowserPreviewRoot = path.resolve(ProjectRuntimePaths.taskAbsolute(projectRoot, taskID, "bp"))
+  const absoluteBrowserPreviewRoot = path.resolve(
+    ProjectRuntimePaths.taskAbsolute(projectRoot, taskID, "browser-preview"),
+  )
   if (absolute !== absoluteBrowserPreviewRoot && !absolute.startsWith(absoluteBrowserPreviewRoot + path.sep)) {
     throw new Error(`Browser preview artifact path must be under task browser-preview job root: ${input}`)
   }
@@ -1111,7 +1113,7 @@ export function resolveRuntimeRelativePath(projectRoot: string, input: string): 
 
 function resolveBrowserPreviewRuntimeRelativePath(projectRoot: string, taskID: string, input: string): string {
   const normalized = input.replaceAll("\\", "/")
-  const browserPreviewRoot = ProjectRuntimePaths.taskRelative(taskID, "bp").replaceAll("\\", "/")
+  const browserPreviewRoot = ProjectRuntimePaths.taskRelative(taskID, "browser-preview").replaceAll("\\", "/")
   if (!(normalized === browserPreviewRoot || normalized.startsWith(`${browserPreviewRoot}/`))) {
     throw new Error(`Browser preview artifact path is outside task browser-preview job root: ${input}`)
   }

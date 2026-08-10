@@ -16,18 +16,31 @@ function idSegment(input: string): string {
   return safeSegment(Identifier.directoryKey(input))
 }
 
-function idFanout(input: string): [string, string] {
-  const key = idSegment(input)
-  return [key.slice(0, 2), key.slice(2)]
-}
-
 function scopedKey(scope: string, input: string): string {
   return safeSegment(Identifier.scopedDirectoryKey(scope, input))
 }
 
-function scopedFanout(scope: string, input: string): [string, string] {
-  const key = scopedKey(scope, input)
-  return [key.slice(0, 2), key.slice(2)]
+function identitySegment(input: string): string {
+  const segment = safeSegment(input)
+  const upper = segment.toUpperCase()
+  if (
+    segment !== input ||
+    segment === "." ||
+    segment === ".." ||
+    segment.endsWith(".") ||
+    /^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\.|$)/.test(upper)
+  ) {
+    throw new Error(`ProjectRuntimePaths: invalid identity segment ${input}`)
+  }
+  return segment
+}
+
+function typedIdentitySegment(kind: "task" | "session", input: string): string {
+  const segment = identitySegment(input)
+  if (!Identifier.isCanonical(kind, segment)) {
+    throw new Error(`ProjectRuntimePaths: invalid ${kind} identity ${input}`)
+  }
+  return segment
 }
 
 function taskSessionKey(taskID: string, sessionID: string): string {
@@ -75,11 +88,15 @@ export namespace ProjectRuntimePaths {
   }
 
   export function taskRoot(projectDir: string, taskID: string): string {
-    return path.join(projectRuntimeRoot(projectDir), "t", ...idFanout(taskID))
+    return path.join(taskCollectionRoot(projectDir), typedIdentitySegment("task", taskID))
   }
 
   export function taskRootFromRuntimeRoot(runtimeRoot: string, taskID: string): string {
-    return path.join(runtimeRoot, "t", ...idFanout(taskID))
+    return path.join(runtimeRoot, "tasks", typedIdentitySegment("task", taskID))
+  }
+
+  export function taskCollectionRoot(projectDir: string): string {
+    return path.join(projectRuntimeRoot(projectDir), "tasks")
   }
 
   export function taskRootReadCandidatesFromRuntimeRoot(runtimeRoot: string, taskID: string): string[] {
@@ -87,7 +104,7 @@ export namespace ProjectRuntimePaths {
   }
 
   export function taskRelative(taskID: string, ...parts: string[]): string {
-    return path.posix.join(relativeRuntimeRoot(), "t", ...idFanout(taskID), ...parts)
+    return path.posix.join(relativeRuntimeRoot(), "tasks", typedIdentitySegment("task", taskID), ...parts)
   }
 
   export function taskAbsolute(projectDir: string, taskID: string, ...parts: string[]): string {
@@ -99,7 +116,7 @@ export namespace ProjectRuntimePaths {
   }
 
   export function taskArtifactRoot(projectDir: string, taskID: string): string {
-    return taskAbsolute(projectDir, taskID, "ta")
+    return taskAbsolute(projectDir, taskID, "artifacts")
   }
 
   export function taskArtifactStageRoot(projectDir: string, taskID: string, snapshotID: string): string {
@@ -107,11 +124,11 @@ export namespace ProjectRuntimePaths {
   }
 
   export function taskArtifactSnapshotRoot(projectDir: string, taskID: string, snapshotID: string): string {
-    return path.join(taskArtifactRoot(projectDir, taskID), "s", safeSegment(snapshotID))
+    return path.join(taskArtifactRoot(projectDir, taskID), "snapshots", safeSegment(snapshotID))
   }
 
   export function taskArtifactPublicationSequenceRoot(projectDir: string, taskID: string): string {
-    return path.join(taskArtifactRoot(projectDir, taskID), "q")
+    return path.join(taskArtifactRoot(projectDir, taskID), "publication-sequence")
   }
 
   export function taskArtifactMaterializationRoot(
@@ -119,7 +136,11 @@ export namespace ProjectRuntimePaths {
     taskID: string,
     materializationID: string,
   ): string {
-    return path.join(taskArtifactRoot(projectDir, taskID), "m", safeSegment(materializationID))
+    return path.join(taskArtifactRoot(projectDir, taskID), "materializations", safeSegment(materializationID))
+  }
+
+  export function taskArtifactReadMaterializationRoot(projectDir: string, taskID: string): string {
+    return path.join(taskArtifactRoot(projectDir, taskID), "materializations", "reads")
   }
 
   export function taskAbsoluteReadCandidatesFromRuntimeRoot(
@@ -131,15 +152,15 @@ export namespace ProjectRuntimePaths {
   }
 
   export function sessionRoot(projectDir: string, taskID: string, sessionID: string): string {
-    return path.join(
-      projectRuntimeRoot(projectDir),
-      "s",
-      ...scopedFanout("task-session", taskSessionKey(taskID, sessionID)),
-    )
+    return taskAbsolute(projectDir, taskID, "sessions", typedIdentitySegment("session", sessionID))
   }
 
   export function sessionRootFromRuntimeRoot(runtimeRoot: string, taskID: string, sessionID: string): string {
-    return path.join(runtimeRoot, "s", ...scopedFanout("task-session", taskSessionKey(taskID, sessionID)))
+    return path.join(
+      taskRootFromRuntimeRoot(runtimeRoot, taskID),
+      "sessions",
+      typedIdentitySegment("session", sessionID),
+    )
   }
 
   export function sessionRootReadCandidatesFromRuntimeRoot(
@@ -150,34 +171,28 @@ export namespace ProjectRuntimePaths {
     return [sessionRootFromRuntimeRoot(runtimeRoot, taskID, sessionID)]
   }
 
-  export function tracePath(projectDir: string, taskID: string, sessionID: string): string {
-    return path.join(sessionRoot(projectDir, taskID, sessionID), "trace.jsonl")
-  }
-
-  export function tracePathFromRuntimeRoot(runtimeRoot: string, taskID: string, sessionID: string): string {
-    return path.join(sessionRootFromRuntimeRoot(runtimeRoot, taskID, sessionID), "trace.jsonl")
-  }
-
-  export function tracePathReadCandidatesFromRuntimeRoot(
-    runtimeRoot: string,
-    taskID: string,
-    sessionID: string,
-  ): string[] {
-    return sessionRootReadCandidatesFromRuntimeRoot(runtimeRoot, taskID, sessionID).map((root) =>
-      path.join(root, "trace.jsonl"),
-    )
-  }
-
   export function toolOutputDir(projectDir: string, taskID: string, sessionID: string): string {
     return path.join(sessionRoot(projectDir, taskID, sessionID), "tool-output")
   }
 
   export function sessionTraceIndexPathFromRuntimeRoot(runtimeRoot: string, sessionID: string): string {
-    return path.join(runtimeRoot, "sx", ...idFanout(sessionID), "index.json")
+    return path.join(
+      runtimeRoot,
+      "project",
+      "indexes",
+      "task-sessions",
+      typedIdentitySegment("session", sessionID),
+      "index.json",
+    )
   }
 
   export function rootSessionToolOutputDir(projectDir: string, sessionID: string): string {
-    return path.join(projectRuntimeRoot(projectDir), "sx", ...idFanout(sessionID), "tool-output")
+    return path.join(
+      projectRuntimeRoot(projectDir),
+      "conversations",
+      typedIdentitySegment("session", sessionID),
+      "tool-output",
+    )
   }
 
   export function intentPaths(projectDir: string, taskID: string): { relative: string; absolute: string } {
@@ -202,8 +217,8 @@ export namespace ProjectRuntimePaths {
     absoluteDir: string
   } {
     return {
-      relativeDir: taskRelative(taskID, "fd"),
-      absoluteDir: taskAbsolute(projectDir, taskID, "fd"),
+      relativeDir: taskRelative(taskID, "frontend-design"),
+      absoluteDir: taskAbsolute(projectDir, taskID, "frontend-design"),
     }
   }
 
@@ -225,8 +240,9 @@ export namespace ProjectRuntimePaths {
     evidenceJsonAbsolute: string
     citationMapAbsolute: string
   } {
-    const relativeDir = taskRelative(taskID, "dr", ...idFanout(sessionID))
-    const absoluteDir = taskAbsolute(projectDir, taskID, "dr", ...idFanout(sessionID))
+    const session = typedIdentitySegment("session", sessionID)
+    const relativeDir = taskRelative(taskID, "research", "deep", session)
+    const absoluteDir = taskAbsolute(projectDir, taskID, "research", "deep", session)
     return {
       relativeDir,
       absoluteDir,
@@ -247,8 +263,9 @@ export namespace ProjectRuntimePaths {
     evidenceJsonAbsolute: string
     citationMapAbsolute: string
   } {
-    const relativeDir = taskRelative(taskID, "fr", ...idFanout(sessionID))
-    const absoluteDir = taskAbsolute(projectDir, taskID, "fr", ...idFanout(sessionID))
+    const session = typedIdentitySegment("session", sessionID)
+    const relativeDir = taskRelative(taskID, "research", "frontend", session)
+    const absoluteDir = taskAbsolute(projectDir, taskID, "research", "frontend", session)
     return {
       relativeDir,
       absoluteDir,
@@ -266,7 +283,7 @@ export namespace ProjectRuntimePaths {
     screenshots: string
     checkWorkspaces: string
   } {
-    const root = taskAbsolute(projectDir, taskID, "a")
+    const root = taskAbsolute(projectDir, taskID, "acceptance")
     return {
       root,
       screenshots: path.join(root, "screenshots"),
@@ -275,18 +292,18 @@ export namespace ProjectRuntimePaths {
   }
 
   export function browserPreviewJobRoot(projectDir: string, taskID: string, jobID: string): string {
-    return taskAbsolute(projectDir, taskID, "bp", ...idFanout(jobID))
+    return taskAbsolute(projectDir, taskID, "browser-preview", identitySegment(jobID))
   }
 
   export function browserPreviewJobRelative(taskID: string, jobID: string, ...parts: string[]): string {
-    return taskRelative(taskID, "bp", ...idFanout(jobID), ...parts)
+    return taskRelative(taskID, "browser-preview", identitySegment(jobID), ...parts)
   }
 
   export function tasklessAcceptancePaths(projectDir: string): {
     root: string
     checkWorkspaces: string
   } {
-    const root = path.join(projectRuntimeRoot(projectDir), "a", "no-task")
+    const root = path.join(projectRuntimeRoot(projectDir), "acceptance", "no-task")
     return {
       root,
       checkWorkspaces: path.join(root, "check-workspaces"),
@@ -294,7 +311,7 @@ export namespace ProjectRuntimePaths {
   }
 
   export function docsRoot(projectDir: string, taskID: string): string {
-    return taskAbsolute(projectDir, taskID, "docs")
+    return taskAbsolute(projectDir, taskID, "documents")
   }
 
   export function docsPaths(
@@ -319,43 +336,59 @@ export namespace ProjectRuntimePaths {
   }
 
   export function missionRoot(projectDir: string, missionID: string): string {
-    return path.join(projectRuntimeRoot(projectDir), "m", ...scopedFanout("mission", missionID))
+    return path.join(projectRuntimeRoot(projectDir), "missions", identitySegment(missionID))
   }
 
   export function attachmentBlobRoot(projectDir: string): string {
-    return path.join(projectRuntimeRoot(projectDir), "b", "a")
+    return path.join(projectRuntimeRoot(projectDir), "project", "attachments")
   }
 
   export function snapshotCacheRoot(projectDir: string, projectID: string): string {
-    return path.join(projectRuntimeRoot(projectDir), "c", "snap", safeSegment(projectID))
+    return path.join(projectRuntimeRoot(projectDir), "project", "cache", "snapshots", safeSegment(projectID))
   }
 
   export function sessionDiffRoot(projectDir: string, projectID: string): string {
-    return path.join(projectRuntimeRoot(projectDir), "c", "sdiff", safeSegment(projectID))
+    return path.join(projectRuntimeRoot(projectDir), "project", "cache", "session-diffs", safeSegment(projectID))
   }
 
   export function sessionDiffPath(projectDir: string, projectID: string, sessionID: string): string {
-    return path.join(sessionDiffRoot(projectDir, projectID), `${idSegment(sessionID)}.json`)
+    return path.join(
+      sessionDiffRoot(projectDir, projectID),
+      `${idSegment(typedIdentitySegment("session", sessionID))}.json`,
+    )
   }
 
   export function worktreesRoot(projectDir: string): string {
-    return path.join(projectRuntimeRoot(projectDir), "w")
+    return path.join(projectRuntimeRoot(projectDir), "project", "worktrees")
   }
 
   export function worktreeDir(projectDir: string, taskID: string, sessionID: string): string {
-    return path.join(
-      worktreesRoot(projectDir),
-      ...scopedFanout("task-session", taskSessionKey(taskID, sessionID)),
-      "worktree",
+    return path.join(sessionRoot(projectDir, taskID, sessionID), "worktree")
+  }
+
+  export function isManagedWorktreePath(projectDir: string, candidate: string): boolean {
+    const relative = path.relative(projectRuntimeRoot(projectDir), candidate)
+    if (!relative || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) return false
+    const parts = relative.split(path.sep)
+    if (parts[0] === "project" && parts[1] === "worktrees" && parts.length >= 3) return true
+    return (
+      parts.length === 5 &&
+      parts[0] === "tasks" &&
+      Identifier.isCanonical("task", parts[1]!) &&
+      parts[2] === "sessions" &&
+      Identifier.isCanonical("session", parts[3]!) &&
+      parts[4] === "worktree"
     )
   }
 
   export function worktreeBranch(input: BranchInput): string {
-    return `opencorvus/s/${scopedKey("task-session", taskSessionKey(input.taskID, input.sessionID))}`
+    const taskID = typedIdentitySegment("task", input.taskID)
+    const sessionID = typedIdentitySegment("session", input.sessionID)
+    return `opencorvus/s/${scopedKey("task-session", taskSessionKey(taskID, sessionID))}`
   }
 
   export function ownershipRoot(projectDir: string): string {
-    return path.join(projectRuntimeRoot(projectDir), "o")
+    return taskCollectionRoot(projectDir)
   }
 
   export function ownershipPaths(
@@ -368,21 +401,31 @@ export namespace ProjectRuntimePaths {
     worktreeMarkerName: string
     processMarkerPrefix: string
   } {
-    const task = idSegment(taskID)
-    const session = idSegment(sessionID)
+    const session = typedIdentitySegment("session", sessionID)
+    const root = path.join(sessionRoot(projectDir, taskID, sessionID), "ownership")
     return {
-      worktreeMarkerDir: path.join(ownershipRoot(projectDir), "w", ...idFanout(taskID)),
-      processMarkerDir: path.join(ownershipRoot(projectDir), "p", ...idFanout(taskID)),
-      worktreeMarkerName: `${session}.json`,
+      worktreeMarkerDir: path.join(root, "worktrees"),
+      processMarkerDir: path.join(root, "processes"),
+      worktreeMarkerName: `${session}.ownership.json`,
       processMarkerPrefix: `${session}-`,
     }
   }
 
   export function projectGitLock(projectDir: string): string {
-    return path.join(projectRuntimeRoot(projectDir), "l", "project-git.lock")
+    return path.join(projectRuntimeRoot(projectDir), "project", "locks", "project-git.lock")
   }
 
   export const legacyRuntimeRelativePaths = [
+    path.posix.join(".opencorvus", ".r", "t"),
+    path.posix.join(".opencorvus", ".r", "s"),
+    path.posix.join(".opencorvus", ".r", "sx"),
+    path.posix.join(".opencorvus", ".r", "b"),
+    path.posix.join(".opencorvus", ".r", "m"),
+    path.posix.join(".opencorvus", ".r", "w"),
+    path.posix.join(".opencorvus", ".r", "o"),
+    path.posix.join(".opencorvus", ".r", "c"),
+    path.posix.join(".opencorvus", ".r", "l"),
+    path.posix.join(".opencorvus", ".r", "a"),
     path.posix.join(".opencorvus", "runtime"),
     path.posix.join(".opencorvus", "intent"),
     path.posix.join(".opencorvus", "frontend-design"),

@@ -271,7 +271,11 @@ async function buildPromptParts(input: FrontendDesignPromptProjection, agentID: 
 }
 
 function buildUserPrompt(input: FrontendDesignPromptProjection, agentID: string): string {
-  const visualSkeletonRef = ProjectRuntimePaths.taskRelative(input.taskID, "fd", "visual-html-skeleton")
+  const visualSkeletonRef = ProjectRuntimePaths.taskRelative(
+    input.taskID,
+    "frontend-design",
+    "visual-html-skeleton",
+  )
   const sections = [
     `# Delegation\n\nProjected agent "${agentID}" is asked through the frontend_design adapter to produce the high-fidelity visual HTML skeleton contract, frontend template, fillable modules, material inventory, visual/data contracts, known transcription problems, and projected-consumer handoff notes for this task. Read the exact DesignResourceManifest locator before assigning intent, authority, or relationships to neutral file refs; never infer semantics from MIME, filename, order, or task wording.`,
     `# Dispatch instruction\n\n${input.instruction}`,

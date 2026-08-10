@@ -35,7 +35,7 @@ const log = Log.create({ service: "decision-log-bundle" })
 export namespace DecisionLogBundle {
   /** Relative path used by agents whose file tools resolve against the
    *  project directory (in-process OpenCorvus `read` tool). */
-  export const RELATIVE_PATH_TEMPLATE = ".opencorvus/.r/t/<task-key>/decision-log.md"
+  export const RELATIVE_PATH_TEMPLATE = ".opencorvus/.r/tasks/<task-id>/decision-log.md"
 
   /**
    * Resolve the bundle paths for a project directory. `relative` is for
@@ -48,7 +48,7 @@ export namespace DecisionLogBundle {
 
   /**
    * Render the complete decision log and write it to
-   * `<projectDir>/.opencorvus/.r/t/<task-key>/decision-log.md`. Returns the absolute path.
+   * `<projectDir>/.opencorvus/.r/tasks/<task-id>/decision-log.md`. Returns the absolute path.
    *
    * HARD FAIL (rule 7 — no fallback): a write failure throws. The caller must
    * not swallow it and continue on the truncated prompt — a stale or missing

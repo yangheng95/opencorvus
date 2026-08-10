@@ -24,7 +24,7 @@ import { Session } from "@/session"
  * dispatched engine_tasks.
  *
  * Directory layout (relative to the project directory at run time):
- *   .opencorvus/.r/m/<mission-key2>/<mission-key6>/
+ *   .opencorvus/.r/missions/<mission-id>/
  *     frontier.md   — outstanding work + the mission contract
  *     tasks.md      — engine_task IDs the mission has dispatched + status
  *     handoff.md    — brief for the next wake of this same mission
@@ -51,7 +51,7 @@ function runtimeBase() {
   // resolve relative to it. If a mission ever needs to switch cwd
   // (multi-worktree mission), that decision is explicit at the wake
   // boundary, not silently here.
-  return path.resolve(ProjectRuntimePaths.projectRuntimeRoot(Instance.directory), "m")
+  return path.resolve(ProjectRuntimePaths.projectRuntimeRoot(Instance.directory), "missions")
 }
 
 function missionDir(missionID: string) {
@@ -151,7 +151,7 @@ export const MissionStateTool = Tool.define("mission_state", {
   description: [
     "Read, write, or list the state files for the CURRENT mission.",
     "The mission is resolved automatically from your session — you do NOT pass a missionID.",
-    "All I/O is confined to `.opencorvus/.r/m/<this-mission-key>/` with a fixed",
+    "All I/O is confined to `.opencorvus/.r/missions/<this-mission-id>/` with a fixed",
     "file-name vocabulary: frontier.md, tasks.md, handoff.md, notes.md.",
     "Use this to carry mission progress across wake cycles — do NOT use read/write/glob.",
     "",

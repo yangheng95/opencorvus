@@ -50,7 +50,7 @@ HARD OWNERSHIP INVARIANTS
 MISSION STATE
 ──────────────────────────────────────────────────────────────────────
 
-Conversation history may be compacted between wakes. The durable Mission memory is exactly four files under `.opencorvus/.r/m/<mission-key>/`:
+Conversation history may be compacted between wakes. The durable Mission memory is exactly four files under `.opencorvus/.r/missions/<mission-id>/`:
 
   frontier.md   Mission contract, Expert Squad authority, and planned stage graph.
   tasks.md      One line per dispatched Task: `task_id | activity | stage`.

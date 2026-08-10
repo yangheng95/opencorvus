@@ -9,8 +9,7 @@ import { Identifier } from "@/id/id"
 
 const log = Log.create({ service: "ownership" })
 
-const WORKTREE_DIR = "w"
-const MARKER_SUFFIX = ".json"
+const MARKER_SUFFIX = ".ownership.json"
 
 export namespace Ownership {
   /** On-disk marker written next to each tracked worktree. */
@@ -46,21 +45,13 @@ export namespace Ownership {
 
   function worktreeMarkerDir(
     primaryWorktreeDir: string,
-    marker?: Pick<Marker, "taskID" | "sessionID">,
+    marker: Pick<Marker, "taskID" | "sessionID">,
   ): string {
-    if (marker?.taskID && marker.sessionID) {
-      return ProjectRuntimePaths.ownershipPaths(
-        primaryWorktreeDir,
-        marker.taskID,
-        marker.sessionID,
-      )
-        .worktreeMarkerDir
-    }
-    return path.join(ownershipRoot(primaryWorktreeDir), WORKTREE_DIR)
+    return ProjectRuntimePaths.ownershipPaths(primaryWorktreeDir, marker.taskID, marker.sessionID).worktreeMarkerDir
   }
 
   function worktreeMarkerScanDirs(primaryWorktreeDir: string): string[] {
-    return [worktreeMarkerDir(primaryWorktreeDir), path.join(ownershipRoot(primaryWorktreeDir), "w")]
+    return [ownershipRoot(primaryWorktreeDir)]
   }
 
   /**

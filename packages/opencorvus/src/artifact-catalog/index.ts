@@ -50,7 +50,7 @@ import {
   type TaskArtifactSnapshotRecord,
 } from "@/task-artifact/store"
 import type { TaskToolExecutionScope } from "@/tool/task-tool-execution-scope"
-import { Global } from "@/global"
+import { ProjectRuntimePaths } from "@/project/runtime-paths"
 
 type EngineCatalogRow = Readonly<{
   id: string
@@ -1849,7 +1849,10 @@ export async function readTaskArtifact(input: {
       throw new Error("artifact_read materialized resource bytes do not match the immutable locator")
     }
     const name = path.basename(read.locator.ref.path).replaceAll(/[^A-Za-z0-9._-]/g, "_") || "artifact"
-    const directory = path.join(Global.Path.cache, "artifact-materializations", input.authority.taskID)
+    const directory = ProjectRuntimePaths.taskArtifactReadMaterializationRoot(
+      input.authority.projectDirectory,
+      input.authority.taskID,
+    )
     const target = path.join(directory, `${digest}-${name}`)
     await fs.mkdir(directory, { recursive: true })
     const stage = path.join(directory, `.${digest}-${randomUUID()}.tmp`)

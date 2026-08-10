@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-10-task-runtime-directory-isolation.md](2026-08-10-task-runtime-directory-isolation.md) rebuilds `.opencorvus/.r` around one readable root per Task and nests all Task Session, worktree, trace, output, ownership, artifact, evidence, and document state beneath it.
+
 - [2026-08-10-task-file-replay-and-recovery-repackage.md](2026-08-10-task-file-replay-and-recovery-repackage.md) repairs structured-text Artifact replay at the provider boundary, preserves immutable Task recovery authority, and records focused verification plus the local Windows repackage.
 
 - [2026-08-09-work-ledger-start-from-scratch-focus.md](2026-08-09-work-ledger-start-from-scratch-focus.md) repairs the create-menu close-autofocus race so the directory-free Composer remains visibly focused, and aligns the Vite development checker with the existing `esnext` Overlay target.

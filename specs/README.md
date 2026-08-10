@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest per-Task runtime directory isolation: [`2026-08-10-task-runtime-directory-isolation.md`](records/2026-08/2026-08-10-task-runtime-directory-isolation.md).
+
 Latest Task structured-file replay recovery and local repackage: [`2026-08-10-task-file-replay-and-recovery-repackage.md`](records/2026-08/2026-08-10-task-file-replay-and-recovery-repackage.md).
 
 Latest Work Ledger “Start from scratch” focus repair: [`2026-08-09-work-ledger-start-from-scratch-focus.md`](records/2026-08/2026-08-09-work-ledger-start-from-scratch-focus.md).
@@ -7,6 +9,8 @@ Latest Work Ledger “Start from scratch” focus repair: [`2026-08-09-work-ledg
 Latest autonomous Visual Reviewer dispatch contract: [`2026-08-09-autonomous-visual-review-dispatch.md`](records/2026-08/2026-08-09-autonomous-visual-review-dispatch.md).
 
 Current security, permission, and metric-evaluator architecture: [`security-permission.md`](current/architecture/security-permission.md).
+
+Current per-Task runtime directory architecture: [`task-runtime-directory.md`](current/architecture/task-runtime-directory.md).
 
 Latest P0.1 architecture-debt remediation: [`2026-08-09-architecture-debt-p0-1-remediation.md`](records/2026-08/2026-08-09-architecture-debt-p0-1-remediation.md).
 

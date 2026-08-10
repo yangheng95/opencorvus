@@ -48,7 +48,8 @@ export namespace Worktree {
 
   /**
    * Single source for the per-project worktree root. Managed worktrees live
-   * UNDER `<primary>/.opencorvus/.r/w/` (co-located with other
+   * under the Task Session that owns them, while unscoped worktrees live under
+   * `<primary>/.opencorvus/.r/project/worktrees/` (co-located with other
    * runtime scratch, covered by the `/.opencorvus/` .gitignore entry). `create()`
    * and `WorktreeGC` MUST both derive the root from here — two inline
    * `path.join(...,".opencorvus","worktrees")` would be a double source
@@ -900,9 +901,8 @@ export namespace Worktree {
   }
 
   export async function isManagedWorktreeDirectory(primaryDir: string, directory: string): Promise<boolean> {
-    const root = await canonical(worktreesRoot(primaryDir))
     const target = await canonical(directory)
-    return target.startsWith(`${root}${path.sep}`)
+    return ProjectRuntimePaths.isManagedWorktreePath(await canonical(primaryDir), target)
   }
 
   async function findWorktreeEntry(stdout: Uint8Array | Buffer | undefined, directory: string) {
@@ -954,12 +954,11 @@ export namespace Worktree {
       throw new RemoveFailedError({ message: "Primary worktree not found" })
     }
     const primaryKey = await canonical(primaryEntry.path)
-    const managedRoot = await canonical(worktreesRoot(primaryEntry.path))
     const out: ProjectWorktreeInfo[] = []
     for (const entry of parsed) {
       const key = await canonical(entry.path)
       const isPrimary = key === primaryKey
-      const owned = key.startsWith(`${managedRoot}${path.sep}`)
+      const owned = ProjectRuntimePaths.isManagedWorktreePath(primaryKey, key)
       if (!isPrimary && !owned) continue
       const status = isPrimary ? "primary" : "managed"
       out.push(

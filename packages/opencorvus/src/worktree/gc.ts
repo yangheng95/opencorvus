@@ -3,6 +3,7 @@ import path from "path"
 import { Database } from "../storage/db"
 import { ProjectTable } from "../project/project.sql"
 import { Instance } from "../project/instance"
+import { ProjectRuntimePaths } from "../project/runtime-paths"
 import { Log } from "../util/log"
 import { Scheduler } from "../scheduler"
 import { hostGit as runGit } from "../util/git"
@@ -16,7 +17,7 @@ import { Worktree } from "./index"
  * orphaned-worktree sweep (§2.1 / §6 of that doc, and the addendum
  * `orphan worktree garbage collection contract`).
  *
- * A managed path under `<primary>/.opencorvus/.r/w/` is removed ONLY when
+ * A managed path under a Task Session or `.opencorvus/.r/project/worktrees/` is removed ONLY when
  * it is genuinely abandoned junk. "Older than N days" is necessary but NOT
  * sufficient for physical directories: §2.3 of the lifecycle doc forbids
  * deleting failed / aborted / cancelled / restart worktrees because that
@@ -137,30 +138,28 @@ export namespace WorktreeGC {
     return new TextDecoder().decode(input)
   }
 
-  function isDirectoryKeyPart(input: string, length: number): boolean {
-    return input.length === length && /^[0-9A-Za-z]+$/.test(input)
-  }
-
-  async function worktreeDirectories(root: string): Promise<string[]> {
+  async function worktreeDirectories(primaryDir: string): Promise<string[]> {
+    const root = Worktree.worktreesRoot(primaryDir)
     const entries = await fs.readdir(root, { withFileTypes: true }).catch((err: NodeJS.ErrnoException) => {
       if (err.code === "ENOENT") return [] as import("fs").Dirent[]
       throw err
     })
-    const directories: string[] = []
-    for (const entry of entries) {
-      if (!entry.isDirectory()) continue
-      const firstDir = path.join(root, entry.name)
-      const children = await fs.readdir(firstDir, { withFileTypes: true }).catch(() => [] as import("fs").Dirent[])
-      const fanoutChildren = children.filter((child) => child.isDirectory() && isDirectoryKeyPart(child.name, 6))
-      if (isDirectoryKeyPart(entry.name, 2) && fanoutChildren.length > 0) {
-        for (const child of fanoutChildren) {
-          const leaf = path.join(firstDir, child.name, "worktree")
-          const stat = await fs.stat(leaf).catch(() => undefined)
-          if (stat?.isDirectory()) directories.push(leaf)
-        }
-        continue
+    const directories = entries.filter((entry) => entry.isDirectory()).map((entry) => path.join(root, entry.name))
+    const tasksRoot = ProjectRuntimePaths.taskCollectionRoot(primaryDir)
+    const tasks = await fs.readdir(tasksRoot, { withFileTypes: true }).catch((err: NodeJS.ErrnoException) => {
+      if (err.code === "ENOENT") return [] as import("fs").Dirent[]
+      throw err
+    })
+    for (const task of tasks) {
+      if (!task.isDirectory() || task.isSymbolicLink()) continue
+      const sessionsRoot = path.join(tasksRoot, task.name, "sessions")
+      const sessions = await fs.readdir(sessionsRoot, { withFileTypes: true }).catch(() => [] as import("fs").Dirent[])
+      for (const session of sessions) {
+        if (!session.isDirectory() || session.isSymbolicLink()) continue
+        const worktree = path.join(sessionsRoot, session.name, "worktree")
+        const stat = await fs.stat(worktree).catch(() => undefined)
+        if (stat?.isDirectory()) directories.push(worktree)
       }
-      directories.push(firstDir)
     }
     return directories
   }
@@ -198,9 +197,8 @@ export namespace WorktreeGC {
     for (const project of projects) {
       const primaryDir = project.worktree
       if (!primaryDir) continue
-      const root = Worktree.worktreesRoot(primaryDir)
       const directories = new Map<string, string>()
-      for (const directory of await worktreeDirectories(root)) {
+      for (const directory of await worktreeDirectories(primaryDir)) {
         await addManagedPath({ primaryDir, directory, out: directories })
       }
 
