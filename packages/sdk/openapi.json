@@ -110986,6 +110986,14 @@
                                     "archived": {
                                       "type": "number"
                                     },
+                                    "cancellationStatus": {
+                                      "enum": [
+                                        "none",
+                                        "cancelling",
+                                        "cancelled"
+                                      ],
+                                      "type": "string"
+                                    },
                                     "created": {
                                       "type": "number"
                                     },
@@ -111079,6 +111087,7 @@
                                     "updated",
                                     "pinned",
                                     "lifecycleStatus",
+                                    "cancellationStatus",
                                     "activityStatus",
                                     "priority",
                                     "source",
@@ -111395,6 +111404,14 @@
                                     "archived": {
                                       "type": "number"
                                     },
+                                    "cancellationStatus": {
+                                      "enum": [
+                                        "none",
+                                        "cancelling",
+                                        "cancelled"
+                                      ],
+                                      "type": "string"
+                                    },
                                     "created": {
                                       "type": "number"
                                     },
@@ -111488,6 +111505,7 @@
                                     "updated",
                                     "pinned",
                                     "lifecycleStatus",
+                                    "cancellationStatus",
                                     "activityStatus",
                                     "priority",
                                     "source",
@@ -111539,6 +111557,14 @@
                               },
                               "archived": {
                                 "type": "number"
+                              },
+                              "cancellationStatus": {
+                                "enum": [
+                                  "none",
+                                  "cancelling",
+                                  "cancelled"
+                                ],
+                                "type": "string"
                               },
                               "created": {
                                 "type": "number"
@@ -111633,6 +111659,7 @@
                               "updated",
                               "pinned",
                               "lifecycleStatus",
+                              "cancellationStatus",
                               "activityStatus",
                               "priority",
                               "source",
