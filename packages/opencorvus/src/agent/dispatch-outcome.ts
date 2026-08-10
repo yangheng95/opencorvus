@@ -62,6 +62,32 @@ const WorkerTurnSettlementEvidenceSchema = z
   })
   .strict()
 
+export const DispatchInfrastructureFailureOutcomeSchema = z
+  .object({
+    kind: z.literal("infrastructure_failure"),
+    operation: IdentifierSchema,
+    message: z.string().min(1).max(MESSAGE_LIMIT),
+    recovery_authority: DispatchOccurrenceAuthoritySchema,
+    session_id: IdentifierSchema.optional(),
+    final_message_id: IdentifierSchema.optional().describe(
+      "Visible final specialist message when the failed operation happened after a real terminal worker Turn.",
+    ),
+    error_name: IdentifierSchema.optional(),
+    failure_issues: z
+      .array(DispatchFailureIssueSchema)
+      .min(1)
+      .optional()
+      .describe(
+        "Typed contract or validation issues supplied by the thrown error. Absence means no exact structured issue evidence was available.",
+      ),
+    infrastructure_error: EngineArtifactLocatorSchema.optional(),
+    worker_turn: WorkerTurnSettlementEvidenceSchema.optional(),
+  })
+  .strict()
+  .describe(
+    "A dispatch or post-Turn operation failed. failure_issues, when present, are typed deterministic contract evidence; this terminal outcome never authorizes an automatic retry.",
+  )
+
 export const DispatchOutcomeSchema = z.discriminatedUnion("kind", [
   z
     .object({
@@ -91,31 +117,7 @@ export const DispatchOutcomeSchema = z.discriminatedUnion("kind", [
     .describe(
       "A real terminal worker Turn exists, but a required post-Turn operation did not complete without typed deterministic contract-failure evidence.",
     ),
-  z
-    .object({
-      kind: z.literal("infrastructure_failure"),
-      operation: IdentifierSchema,
-      message: z.string().min(1).max(MESSAGE_LIMIT),
-      recovery_authority: DispatchOccurrenceAuthoritySchema,
-      session_id: IdentifierSchema.optional(),
-      final_message_id: IdentifierSchema.optional().describe(
-        "Visible final specialist message when the failed operation happened after a real terminal worker Turn.",
-      ),
-      error_name: IdentifierSchema.optional(),
-      failure_issues: z
-        .array(DispatchFailureIssueSchema)
-        .min(1)
-        .optional()
-        .describe(
-          "Typed contract or validation issues supplied by the thrown error. Absence means no exact structured issue evidence was available.",
-        ),
-      infrastructure_error: EngineArtifactLocatorSchema.optional(),
-      worker_turn: WorkerTurnSettlementEvidenceSchema.optional(),
-    })
-    .strict()
-    .describe(
-      "A dispatch or post-Turn operation failed. failure_issues, when present, are typed deterministic contract evidence; this terminal outcome never authorizes an automatic retry.",
-    ),
+  DispatchInfrastructureFailureOutcomeSchema,
 ])
 
 export type DispatchOutcome = z.infer<typeof DispatchOutcomeSchema>

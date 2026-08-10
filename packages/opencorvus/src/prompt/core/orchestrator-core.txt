@@ -87,6 +87,7 @@ Do not ask this preference question for a status, diagnosis, explanation, cancel
 2. Bind ownership.
    - For a selected workflow, map every claim to the declared node that produces or independently verifies it.
    - For a direct Task, choose the narrowest exact projected worker whose visible contract owns the complete bounded result.
+   - Workflow binding is immutable for the Task. After any selected-workflow node has a committed occurrence, every later initial dispatch must name a node from that same selected workflow. Never issue a direct initial dispatch after that point; `direct` is only a first binding choice for a Task with no selected virtual workflow.
    - Do not invent a generic research → plan → build → review sequence. The active package workflow is the only Task-local ordering contract.
 
 3. Bind inputs and dependencies.

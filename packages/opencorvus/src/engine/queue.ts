@@ -61,6 +61,7 @@ export { TaskQueueError } from "./task-directory"
 
 const log = Log.create({ service: "engine.queue" })
 const INTERRUPTED_TASK_WAKE_SETTLE_TIMEOUT_MS = 60_000
+const MAX_CURRENT_RUNTIME_TERMINAL_INGRESS_DELIVERY_ATTEMPTS = 2
 const loopCompletionHooksForTest = new Set<Promise<void>>()
 
 function artifactPayloadRecord(payload: unknown): Record<string, unknown> {
@@ -315,9 +316,17 @@ function enqueueTaskEvent(task: TaskRow, event: OrchestratorEvent): string {
   const messageID = event.rootMessage?.messageID.trim() ?? event.missionAcceptanceResume?.messageID.trim()
   const requestID = event.coordinationRequest?.requestID.trim()
   const recoveryFactID = event.processRecovery?.recoveryFactID.trim()
+  const infrastructureFactID = event.dispatchInfrastructureFailure?.infrastructureFactID.trim()
   const waitJobID = event.taskWaitWake?.jobID.trim()
   const lifecycleEventID = event.agentLifecycleDelivery?.eventID.trim()
-  return persistQueuedOperatorWake(task, event, { messageID, requestID, recoveryFactID, waitJobID, lifecycleEventID })
+  return persistQueuedOperatorWake(task, event, {
+    messageID,
+    requestID,
+    recoveryFactID,
+    infrastructureFactID,
+    waitJobID,
+    lifecycleEventID,
+  })
 }
 
 function persistQueuedOperatorWakeInTransaction(
@@ -328,6 +337,7 @@ function persistQueuedOperatorWakeInTransaction(
     messageID?: string
     requestID?: string
     recoveryFactID?: string
+    infrastructureFactID?: string
     waitJobID?: string
     lifecycleEventID?: string
   },
@@ -337,11 +347,12 @@ function persistQueuedOperatorWakeInTransaction(
   const messageID = identity.messageID
   const requestID = identity.requestID
   const recoveryFactID = identity.recoveryFactID
+  const infrastructureFactID = identity.infrastructureFactID
   const waitJobID = identity.waitJobID
   const lifecycleEventID = identity.lifecycleEventID
-  if (messageID || requestID || recoveryFactID || waitJobID || lifecycleEventID) {
+  if (messageID || requestID || recoveryFactID || infrastructureFactID || waitJobID || lifecycleEventID) {
     const exists = db
-      .select({ id: EngineArtifactTable.id })
+      .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
       .from(EngineArtifactTable)
       .where(
         and(
@@ -354,13 +365,45 @@ function persistQueuedOperatorWakeInTransaction(
               ? sql`json_extract(${EngineArtifactTable.payload}, '$.request_id') = ${requestID}`
               : recoveryFactID
                 ? sql`json_extract(${EngineArtifactTable.payload}, '$.recovery_fact_id') = ${recoveryFactID}`
-                : waitJobID
-                  ? sql`json_extract(${EngineArtifactTable.payload}, '$.wait_job_id') = ${waitJobID}`
-                  : sql`json_extract(${EngineArtifactTable.payload}, '$.lifecycle_event_id') = ${lifecycleEventID}`,
+                : infrastructureFactID
+                  ? sql`json_extract(${EngineArtifactTable.payload}, '$.infrastructure_fact_id') = ${infrastructureFactID}`
+                  : waitJobID
+                    ? sql`json_extract(${EngineArtifactTable.payload}, '$.wait_job_id') = ${waitJobID}`
+                    : sql`json_extract(${EngineArtifactTable.payload}, '$.lifecycle_event_id') = ${lifecycleEventID}`,
         ),
       )
       .get()
-    if (exists) return exists.id
+    if (exists) {
+      if ((lifecycleEventID || infrastructureFactID) && exists.label === "delivery_failed") {
+        const ingress = QueuedTaskIngressSchema.parse(exists.payload)
+        if (ingress.delivery_attempt < MAX_CURRENT_RUNTIME_TERMINAL_INGRESS_DELIVERY_ATTEMPTS) {
+          const {
+            delivery_result: _failedDelivery,
+            queued_by_instance_directory: _failedInstanceDirectory,
+            queued_by_project_id: _failedProjectID,
+            ...retryIngress
+          } = ingress
+          patchEngineArtifact(db, {
+            id: exists.id,
+            label: "pending",
+            payload: {
+              ...retryIngress,
+              delivery_attempt: ingress.delivery_attempt + 1,
+              time_queued: now,
+              queued_by_process_id: process.pid,
+              ...(Instance.current()
+                ? {
+                    queued_by_instance_directory: Instance.directory,
+                    queued_by_project_id: Instance.project.id,
+                  }
+                : {}),
+            },
+            timeUpdated: now,
+          })
+        }
+      }
+      return exists.id
+    }
   }
   const priorAttempts = requestID
     ? (db
@@ -384,17 +427,20 @@ function persistQueuedOperatorWakeInTransaction(
         ? `${requestID}:${priorAttempts + 1}`
         : recoveryFactID
           ? recoveryFactID
-          : waitJobID
-            ? event.taskWaitWake?.fireID
-            : lifecycleEventID
-              ? lifecycleEventID
-              : Identifier.ascending("artifact")),
+          : infrastructureFactID
+            ? infrastructureFactID
+            : waitJobID
+              ? event.taskWaitWake?.fireID
+              : lifecycleEventID
+                ? lifecycleEventID
+                : Identifier.ascending("artifact")),
     delivery_attempt: priorAttempts + 1,
     task_id: task.id,
     root_session_id: task.session_id,
     ...(messageID ? { message_id: messageID } : {}),
     ...(requestID ? { request_id: requestID } : {}),
     ...(recoveryFactID ? { recovery_fact_id: recoveryFactID } : {}),
+    ...(infrastructureFactID ? { infrastructure_fact_id: infrastructureFactID } : {}),
     ...(waitJobID ? { wait_job_id: waitJobID } : {}),
     ...(lifecycleEventID ? { lifecycle_event_id: lifecycleEventID } : {}),
     source_kind: sourceKind,
@@ -476,6 +522,7 @@ function persistQueuedOperatorWake(
     messageID?: string
     requestID?: string
     recoveryFactID?: string
+    infrastructureFactID?: string
     waitJobID?: string
     lifecycleEventID?: string
   },
@@ -839,10 +886,7 @@ export function requeueInterruptedRunningTaskIngresses(): number {
         eq(EngineTaskCancellationAuthorityTable.task_id, EngineTaskTable.id),
       )
       .where(
-        and(
-          eq(EngineTaskTable.project_id, Instance.project.id),
-          sql`${EngineTaskTable.time_completed} IS NOT NULL`,
-        ),
+        and(eq(EngineTaskTable.project_id, Instance.project.id), sql`${EngineTaskTable.time_completed} IS NOT NULL`),
       )
       .all(),
   )
@@ -1300,11 +1344,9 @@ function launchTaskLoop(
       errorName: error instanceof Error ? error.name : undefined,
     })
     if (isExecutionCancellationError(error)) return
-    // The delivery attempt is physically over. Keeping this exact wake
-    // pending would make the completion hook immediately launch the same
-    // failed attempt again. Durable coordination requests remain pending;
-    // bootstrap reconciliation may create/revive one later wake by request
-    // identity without turning this catch into a retry state machine.
+    // The delivery attempt is physically over. Persist the exact failure
+    // before the completion hook applies the bounded retry reserved for
+    // exact terminal-lifecycle or dispatch-infrastructure delivery identities.
     markQueuedOperatorWakeDeliveryFailed({
       artifactID: wake.id,
       ingress: wake.ingress,
@@ -1374,7 +1416,7 @@ function attachLoopCompletion(taskID: string, wakeID: string, cwd: string, loopP
               }
               const currentWake = Database.use((db) =>
                 db
-                  .select({ label: EngineArtifactTable.label })
+                  .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
                   .from(EngineArtifactTable)
                   .where(
                     and(
@@ -1386,6 +1428,42 @@ function attachLoopCompletion(taskID: string, wakeID: string, cwd: string, loopP
                   .get(),
               )
               if (currentWake?.label === "pending") return
+              if (currentWake?.label === "delivery_failed") {
+                const ingress = QueuedTaskIngressSchema.parse(currentWake.payload)
+                const lifecycleDelivery =
+                  ingress.source_kind === "agent_lifecycle_delivery" ? ingress.event.agentLifecycleDelivery : undefined
+                if (
+                  lifecycleDelivery &&
+                  ingress.delivery_attempt < MAX_CURRENT_RUNTIME_TERMINAL_INGRESS_DELIVERY_ATTEMPTS
+                ) {
+                  const result = await reconcileTerminalAgentLifecycleDelivery({
+                    taskID,
+                    sessionID: lifecycleDelivery.sessionID,
+                    dispatchID: lifecycleDelivery.dispatchID,
+                  })
+                  if (result === "delivered" || result === "already_delivered") return
+                  log.warn("failed lifecycle wake was not eligible for current-runtime reconciliation", {
+                    taskID,
+                    wakeID,
+                    sessionID: lifecycleDelivery.sessionID,
+                    dispatchID: lifecycleDelivery.dispatchID,
+                    result,
+                  })
+                }
+                if (
+                  ingress.source_kind === "dispatch_infrastructure_failure" &&
+                  ingress.delivery_attempt < MAX_CURRENT_RUNTIME_TERMINAL_INGRESS_DELIVERY_ATTEMPTS
+                ) {
+                  const result = await dispatchTaskLoop({ taskID, event: ingress.event })
+                  if (result === "started" || result === "queued") return
+                  log.warn("failed dispatch infrastructure wake was not eligible for current-runtime reconciliation", {
+                    taskID,
+                    wakeID,
+                    infrastructureFactID: ingress.infrastructure_fact_id,
+                    result,
+                  })
+                }
+              }
               if (await drainQueuedTaskEvent(taskID)) return
               await advanceQueue(cwd)
             },
@@ -1530,7 +1608,9 @@ export async function drainPendingQueuedOperatorWakes(): Promise<number> {
     ),
   )
   const taskIDs = [
-    ...new Set(pendingQueuedOperatorWakeTaskIDs(Instance.project.id).filter((taskID) => !cancellingTaskIDs.has(taskID))),
+    ...new Set(
+      pendingQueuedOperatorWakeTaskIDs(Instance.project.id).filter((taskID) => !cancellingTaskIDs.has(taskID)),
+    ),
   ]
   let drained = 0
   const failures: string[] = []
@@ -2253,6 +2333,9 @@ export async function dispatchTaskLoop(input: DispatchTaskLoopInput): Promise<Di
   const task = findTask(input.taskID)
   if (!task) throw new TaskQueueError(`Task ${input.taskID} does not exist`, "task_not_found", input.taskID)
   const persistedWakeID = enqueueTaskEvent(task, OrchestratorEventSchema.parse(input.event ?? { note: "Task wake" }))
+  if (isTaskTerminal(task) && findQueuedOperatorWakeByID(task.id, persistedWakeID)?.label === "delivery_failed") {
+    return "ignored"
+  }
   const { assertTaskExecutionCapsuleRuntime } = await import("@/engine/task-execution-capsule-binding")
   try {
     await assertTaskExecutionCapsuleRuntime(task.id)
@@ -2318,7 +2401,8 @@ export async function dispatchTaskLoop(input: DispatchTaskLoopInput): Promise<Di
       await input.beforeAcceptedWake?.({ taskID: task.id, result })
       return result
     }
-    if (["drained", "delivery_failed", "terminal_inapplicable"].includes(existing.label)) {
+    if (existing.label === "delivery_failed") return "ignored"
+    if (["drained", "terminal_inapplicable"].includes(existing.label)) {
       await input.beforeAcceptedWake?.({ taskID: task.id, result: "started" })
       return "started"
     }
@@ -2359,6 +2443,87 @@ export async function dispatchPersistedTaskLoop(taskID: string): Promise<Dispatc
   return "started"
 }
 
+export type TerminalAgentLifecycleDeliveryReconciliation =
+  | "missing_lineage"
+  | "missing_descriptor"
+  | "nonterminal"
+  | "delivery_exhausted"
+  | "already_delivered"
+  | "delivered"
+
+/**
+ * Reconcile one exact dispatch lineage into its lifecycle-event-keyed root wake.
+ * This is the sole writer for normal detached completion and startup recovery;
+ * callers decide whether a not-yet-terminal result is expected in their phase.
+ */
+export async function reconcileTerminalAgentLifecycleDelivery(input: {
+  taskID: string
+  sessionID: string
+  dispatchID: string
+}): Promise<TerminalAgentLifecycleDeliveryReconciliation> {
+  const lineage = listDispatchLineage(input.taskID).find(
+    (candidate) => candidate.dispatchID === input.dispatchID && candidate.payload.child_session_id === input.sessionID,
+  )
+  if (!lineage) return "missing_lineage"
+  const descriptor = WorkerTurnDescriptor.findForDispatch({
+    sessionID: input.sessionID,
+    dispatchID: input.dispatchID,
+  })
+  if (!descriptor) return "missing_descriptor"
+  const lifecycle = ProtocolStore.latestSessionOccurrenceEvent(
+    input.sessionID,
+    "agent.execution.lifecycle",
+    descriptor.payload.messageAuthority.user_message_id,
+  )
+  const status = lifecycle?.payload?.status
+  if (!lifecycle || !status || typeof status !== "object" || (status as Record<string, unknown>).type !== "terminal") {
+    return "nonterminal"
+  }
+  const delivered = Database.use((db) =>
+    db
+      .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.task_id, input.taskID),
+          eq(EngineArtifactTable.kind, "queued_operator_wake"),
+          sql`json_extract(${EngineArtifactTable.payload}, '$.lifecycle_event_id') = ${lifecycle.id}`,
+        ),
+      )
+      .get(),
+  )
+  if (delivered) {
+    if (delivered.label !== "delivery_failed") return "already_delivered"
+    const ingress = Database.use((db) =>
+      db
+        .select({ payload: EngineArtifactTable.payload })
+        .from(EngineArtifactTable)
+        .where(eq(EngineArtifactTable.id, delivered.id))
+        .get(),
+    )
+    if (
+      ingress &&
+      QueuedTaskIngressSchema.parse(ingress.payload).delivery_attempt >=
+        MAX_CURRENT_RUNTIME_TERMINAL_INGRESS_DELIVERY_ATTEMPTS
+    ) {
+      return "delivery_exhausted"
+    }
+  }
+  const dispatchResult = await dispatchTaskLoop({
+    taskID: input.taskID,
+    event: {
+      note: `Worker Session ${input.sessionID} completed dispatch ${input.dispatchID}.`,
+      agentLifecycleDelivery: {
+        eventID: lifecycle.id,
+        sessionID: input.sessionID,
+        dispatchID: input.dispatchID,
+      },
+    },
+  })
+  if (dispatchResult === "ignored") return "delivery_exhausted"
+  return "delivered"
+}
+
 export async function reconcileTerminalAgentLifecycleDeliveries(): Promise<number> {
   const tasks = Database.use((db) =>
     db
@@ -2376,44 +2541,12 @@ export async function reconcileTerminalAgentLifecycleDeliveries(): Promise<numbe
   let reconciled = 0
   for (const task of tasks) {
     for (const lineage of listDispatchLineage(task.id)) {
-      const descriptor = WorkerTurnDescriptor.findForDispatch({
+      const result = await reconcileTerminalAgentLifecycleDelivery({
+        taskID: task.id,
         sessionID: lineage.payload.child_session_id,
         dispatchID: lineage.dispatchID,
       })
-      if (!descriptor) continue
-      const lifecycle = ProtocolStore.latestSessionOccurrenceEvent(
-        lineage.payload.child_session_id,
-        "agent.execution.lifecycle",
-        descriptor.payload.messageAuthority.user_message_id,
-      )
-      const status = lifecycle?.payload?.status
-      if (!status || typeof status !== "object" || (status as Record<string, unknown>).type !== "terminal") continue
-      const delivered = Database.use((db) =>
-        db
-          .select({ id: EngineArtifactTable.id })
-          .from(EngineArtifactTable)
-          .where(
-            and(
-              eq(EngineArtifactTable.task_id, task.id),
-              eq(EngineArtifactTable.kind, "queued_operator_wake"),
-              sql`json_extract(${EngineArtifactTable.payload}, '$.lifecycle_event_id') = ${lifecycle.id}`,
-            ),
-          )
-          .get(),
-      )
-      if (delivered) continue
-      await dispatchTaskLoop({
-        taskID: task.id,
-        event: {
-          note: `Recover terminal worker Session ${lineage.payload.child_session_id} dispatch ${lineage.dispatchID}.`,
-          agentLifecycleDelivery: {
-            eventID: lifecycle.id,
-            sessionID: lineage.payload.child_session_id,
-            dispatchID: lineage.dispatchID,
-          },
-        },
-      })
-      reconciled += 1
+      if (result === "delivered") reconciled += 1
     }
   }
   return reconciled

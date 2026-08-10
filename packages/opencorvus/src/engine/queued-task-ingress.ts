@@ -147,6 +147,20 @@ const InfrastructureRecovery = z
   })
   .strict()
 
+const DispatchInfrastructureFailure = z
+  .object({
+    ...CommonShape,
+    source_kind: z.literal("dispatch_infrastructure_failure"),
+    infrastructure_fact_id: z.string().min(1),
+    event: z
+      .object({
+        ...NoteShape,
+        dispatchInfrastructureFailure: OrchestratorEventSchema.shape.dispatchInfrastructureFailure.unwrap(),
+      })
+      .strict(),
+  })
+  .strict()
+
 const AgentLifecycleDelivery = z
   .object({
     ...CommonShape,
@@ -214,6 +228,7 @@ export const QueuedTaskIngressSchema = z
     MissionAcceptanceResume,
     CoordinationRequest,
     InfrastructureRecovery,
+    DispatchInfrastructureFailure,
     AgentLifecycleDelivery,
     TaskWaitActivity,
     TaskWaitWake,
@@ -244,6 +259,15 @@ export const QueuedTaskIngressSchema = z
       context.addIssue({ code: "custom", message: "queued recovery identity does not match processRecovery" })
     }
     if (
+      payload.source_kind === "dispatch_infrastructure_failure" &&
+      payload.infrastructure_fact_id !== payload.event.dispatchInfrastructureFailure.infrastructureFactID
+    ) {
+      context.addIssue({
+        code: "custom",
+        message: "queued dispatch infrastructure identity does not match dispatchInfrastructureFailure",
+      })
+    }
+    if (
       payload.source_kind === "agent_lifecycle_delivery" &&
       payload.lifecycle_event_id !== payload.event.agentLifecycleDelivery.eventID
     ) {
@@ -266,6 +290,7 @@ export function queuedTaskIngressSourceKind(event: OrchestratorEvent): QueuedTas
   if (parsed.missionAcceptanceResume) candidates.push("mission_acceptance_resume")
   if (parsed.coordinationRequest) candidates.push("coordination_request")
   if (parsed.processRecovery) candidates.push("infrastructure_recovery")
+  if (parsed.dispatchInfrastructureFailure) candidates.push("dispatch_infrastructure_failure")
   if (parsed.agentLifecycleDelivery) candidates.push("agent_lifecycle_delivery")
   if (parsed.taskWaitActivity) candidates.push("task_wait_activity")
   if (parsed.taskWaitWake) candidates.push("task_wait_wake")

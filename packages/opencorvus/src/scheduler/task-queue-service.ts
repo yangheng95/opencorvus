@@ -1047,7 +1047,7 @@ export namespace TaskQueueService {
     } catch (error) {
       cleanup()
       if (inFlight.promptOwner) {
-        SessionPrompt.cancelOwned(task.session_id, queueDirectory, inFlight.promptOwner, {
+        const settlement = SessionPrompt.cancelOwned(task.session_id, queueDirectory, inFlight.promptOwner, {
           origin: createExecutionCancellationOrigin({
             actor: "runtime",
             source: "runtime.prompt_owner",
@@ -1058,7 +1058,9 @@ export namespace TaskQueueService {
             queueOccurrenceID: task.id,
           }),
         })
-        await SessionPrompt.waitForOwnedFinish(task.session_id, queueDirectory, inFlight.promptOwner)
+        await (settlement?.finished ??
+          SessionPrompt.waitForOwnedFinish(task.session_id, queueDirectory, inFlight.promptOwner))
+        SessionPrompt.clearCancellationReceipt(task.session_id, inFlight.promptOwner)
       }
       throw error
     }

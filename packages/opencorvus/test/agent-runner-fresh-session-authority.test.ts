@@ -1,13 +1,21 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
 import { DelegatedWorkerAgent } from "@/delegated-worker/agent"
+import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/agent/dispatch-adapter-contract"
 import { createDispatchLineageOrigin, listDispatchLineage, recordDispatchLineage } from "@/engine/dispatch-lineage"
-import { EngineWorkflowNodeOccurrenceTable } from "@/engine/engine.sql"
+import { EngineArtifactTable, EngineWorkflowNodeOccurrenceTable } from "@/engine/engine.sql"
 import { persistQueuedTask } from "@/engine/pipeline"
+import { reconcileTerminalAgentLifecycleDelivery, waitForQueueCompletionHooksForTest } from "@/engine/queue"
+import { QueuedTaskIngressSchema } from "@/engine/queued-task-ingress"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { selectedWorkflowBinding } from "@/engine/workflow-binding"
+import {
+  assertTaskWorkflowBindingInTransaction,
+  TaskWorkflowBindingConflictError,
+} from "@/engine/workflow-binding-facts"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
+import { ProtocolStore } from "@/protocol/store"
 import { Provider } from "@/provider/provider"
 import type { Provider as ProviderType } from "@/provider/provider"
 import { Session } from "@/session"
@@ -17,6 +25,7 @@ import { resolveSessionMessageIdentity } from "@/session/message-identity"
 import { materializeUserMessage, preparedUserMessageFromPreflight } from "@/session/prompt/parts"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
+import { createDispatchAgentTool, type DispatchAdapterExecutors } from "@/orchestrator/dispatch-agent-tool"
 import { Config } from "@/config/config"
 import { EffectiveConfig } from "@/config/effective"
 import { Database, and, eq } from "@/storage/db"
@@ -72,6 +81,11 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
         packageRevision,
       })
       const scheduler = await PromptProfileResolver.resolveSchedulerCapability({
+        projectDirectory: Instance.project.worktree,
+        config,
+        packageRevision,
+      })
+      const skillProjection = await PromptProfileResolver.resolveSkillProjection({
         projectDirectory: Instance.project.worktree,
         config,
         packageRevision,
@@ -277,6 +291,144 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
 
         expect(result).toMatchObject({ sessionID: committedSessionID })
         expect(processorStarts).toBe(1)
+        const descriptor = WorkerTurnDescriptor.findForDispatch({
+          sessionID: committedSessionID!,
+          dispatchID,
+        })
+        const lifecycle = ProtocolStore.latestSessionOccurrenceEvent(
+          committedSessionID!,
+          "agent.execution.lifecycle",
+          descriptor!.payload.messageAuthority.user_message_id,
+        )
+        expect(lifecycle).toMatchObject({
+          sessionID: committedSessionID,
+          payload: { status: { type: "terminal", reason: "completed" } },
+        })
+        const blockerTaskID = Identifier.ascending("task")
+        const blockerRoot = await Session.create({ kind: "root", title: "Occupied root queue owner" })
+        persistQueuedTask({
+          taskID: blockerTaskID,
+          sessionID: blockerRoot.id,
+          now: Date.now(),
+          title: "Occupied root queue owner",
+          request: "Keep the root queue occupied while lifecycle delivery is accepted",
+          productPillar: "work",
+          source: "test",
+          priority: "normal",
+          metadata: {},
+          projectID: Instance.project.id,
+          queue: false,
+          packageRevision,
+          executionCapsuleBinding: await prepareTaskProcessBinding({
+            mode: "native",
+            taskID: blockerTaskID,
+            projectID: Instance.project.id,
+            rootDirectory: Instance.directory,
+            packageRevisionSHA256: packageRevision.packageDigest,
+            timeCreated: Date.now(),
+          }),
+        })
+        expect(
+          await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
+        ).toBe("delivered")
+        await waitForQueueCompletionHooksForTest()
+        expect(
+          await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
+        ).toBe("already_delivered")
+        const lifecycleWakes = Database.use((db) =>
+          db
+            .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+            .all(),
+        )
+          .map((row) => ({ label: row.label, ingress: QueuedTaskIngressSchema.parse(row.payload) }))
+          .filter((row) => row.ingress.lifecycle_event_id === lifecycle!.id)
+        expect(lifecycleWakes).toMatchObject([
+          {
+            label: "pending",
+            ingress: {
+              lifecycle_event_id: lifecycle!.id,
+              event: {
+                agentLifecycleDelivery: {
+                  eventID: lifecycle!.id,
+                  sessionID: committedSessionID,
+                  dispatchID,
+                },
+              },
+            },
+          },
+        ])
+        const directBinding = selectedWorkflowBinding({
+          projection: {
+            packageRevision,
+            virtualWorkflows: scheduler.virtualWorkflows,
+          },
+          workflowID: null,
+        })
+        try {
+          Database.use((db) => assertTaskWorkflowBindingInTransaction({ db, taskID, workflowBinding: directBinding }))
+          throw new Error("Expected immutable workflow binding conflict")
+        } catch (error) {
+          expect(error).toBeInstanceOf(TaskWorkflowBindingConflictError)
+          expect(error).toMatchObject({
+            code: "task_workflow_binding_conflict",
+            taskID,
+            artifactID: lineageArtifactID,
+          })
+        }
+        const executors = Object.fromEntries(
+          DispatchAdapterContractRegistry.ids.map((id) => [
+            id,
+            async () => {
+              throw new Error(`unexpected ${id} provider execution`)
+            },
+          ]),
+        ) as Record<AgentDispatchAdapterID, DispatchAdapterExecutors[AgentDispatchAdapterID]>
+        const dispatchTool = createDispatchAgentTool({
+          taskID,
+          projectedAgents: skillProjection.projectedAgents,
+          executors,
+          openLineage({ workflowBinding: requestedBinding }) {
+            return Database.use((db) =>
+              assertTaskWorkflowBindingInTransaction({ db, taskID, workflowBinding: requestedBinding! }),
+            ) as never
+          },
+          runInWorktree: async ({ run }) => await run(),
+          runDetached: async (run) => await run(),
+          runDetachedRecovery: async (run) => await run(),
+        })
+        const conflictOutcome = await (dispatchTool.execute as any)(
+          {
+            dispatch: {
+              target: projection.workerCapability.identity.agentID,
+              work_scope: { kind: "task" },
+              use_worktree: false,
+              turn: {
+                kind: "initial",
+                workflow_subject: { kind: "direct" },
+                input: {
+                  goal_ids: [],
+                  instruction: "attempt an invalid direct dispatch after virtual workflow selection",
+                  reason: "verify immutable binding is exposed by the public dispatch contract",
+                },
+              },
+            },
+          },
+          {},
+        )
+        expect(conflictOutcome).toMatchObject({
+          kind: "infrastructure_failure",
+          operation: "workflow_binding_initial_claim",
+          error_name: "TaskWorkflowBindingConflictError",
+          recovery_authority: { occurrence_status: "occurrence_not_committed" },
+          failure_issues: [
+            {
+              code: "task_workflow_binding_conflict",
+              path: ["dispatch", "turn", "workflow_subject"],
+            },
+          ],
+        })
       } finally {
         processorSpy.mockRestore()
         providerSpy.mockRestore()

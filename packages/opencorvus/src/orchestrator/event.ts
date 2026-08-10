@@ -1,6 +1,7 @@
 import z from "zod"
 import { ArtifactReadLocatorSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
+import { DispatchInfrastructureFailureOutcomeSchema } from "@/agent/dispatch-outcome"
 
 export const TaskIntentSchema = z
   .object({
@@ -58,6 +59,21 @@ export const OrchestratorEventSchema = z
     processRecovery: z
       .object({ recoveryFactID: z.string().min(1) })
       .strict()
+      .optional(),
+    dispatchInfrastructureFailure: z
+      .object({
+        infrastructureFactID: z.string().min(1),
+        outcome: DispatchInfrastructureFailureOutcomeSchema,
+      })
+      .strict()
+      .superRefine((delivery, context) => {
+        if (delivery.outcome.infrastructure_error?.artifact_id !== delivery.infrastructureFactID) {
+          context.addIssue({
+            code: "custom",
+            message: "dispatch infrastructure failure identity does not match its exact Artifact locator",
+          })
+        }
+      })
       .optional(),
     agentLifecycleDelivery: z
       .object({

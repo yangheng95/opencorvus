@@ -79,6 +79,10 @@ import { Identifier } from "@/id/id"
 import { publishFailedAgentCoordinationTurnStatus } from "@/orchestrator/agent-coordination-session-lifecycle"
 import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
 import { Instance } from "@/project/instance"
+import {
+  runWithIndependentProjectIdentity,
+  runWithInitializedIndependentProject,
+} from "@/project/independent-project-owner"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import { AutomationTable } from "@/scheduler/automation.sql"
@@ -897,6 +901,7 @@ export function createOrchestratorTools(input: {
     throw new Error("createOrchestratorTools requires the exact turn-owned dynamic-agent projection.")
   }
   const { taskID } = input
+  const taskProjectDirectory = taskPrimaryProjectRoot(taskID, { activeProjectID: Instance.project.id })
 
   async function requireCurrentTaskRootSessionLineage(): Promise<TaskWithRootSession> {
     const task = requireTask(taskID)
@@ -2111,9 +2116,7 @@ export function createOrchestratorTools(input: {
               !requestDescriptor ||
               requestDescriptor.hash !== request.payload.worker_binding.workerTurnDescriptorHash
             ) {
-              throw new Error(
-                `A2A request ${request.payload.request_id} has no exact Worker Turn descriptor authority`,
-              )
+              throw new Error(`A2A request ${request.payload.request_id} has no exact Worker Turn descriptor authority`)
             }
             await publishFailedAgentCoordinationTurnStatus({
               taskID,
@@ -2204,6 +2207,16 @@ export function createOrchestratorTools(input: {
     projectedAgents: input.dispatchAgents,
     executors: dispatchAdapterExecutors,
     signal: input.signal,
+    runDetached: (run) =>
+      runWithInitializedIndependentProject({
+        directory: taskProjectDirectory,
+        fn: run,
+      }),
+    runDetachedRecovery: (run) =>
+      runWithIndependentProjectIdentity({
+        directory: taskProjectDirectory,
+        fn: run,
+      }),
     runInWorktree: async ({ taskID: worktreeTaskID, sessionID, existingSessionID, targetAgentID, dispatchID, run }) => {
       const { Worktree } = await import("@/worktree")
       const { Instance } = await import("@/project/instance")

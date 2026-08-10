@@ -11,6 +11,11 @@ import path from "node:path"
 import { memoryProject } from "./fixture/memory"
 import { Instance } from "../src/project/instance"
 import { Worktree } from "../src/worktree"
+import { Session } from "../src/session"
+import {
+  assertSessionPromptSubtreeFinished,
+  requestSessionPromptSubtreeCancellation,
+} from "../src/engine/cancellation-scope"
 
 describe("ascending identifier logical clock", () => {
   test("emits a strict total order across counter overflow and wall-clock rollback", () => {
@@ -301,6 +306,97 @@ describe("prompt ownership termination", () => {
           startReservations: 0,
           cancellationReceipts: 0,
         })
+      },
+    })
+  })
+
+  test("reports cleanup failure when subtree settlement starts after the prompt owner has finished", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "assistant", title: "Delayed cancellation settlement" })
+        SessionPromptState.start(session.id, session.directory)
+        const requested = await requestSessionPromptSubtreeCancellation({
+          sessionID: session.id,
+          projectID: session.projectID,
+          handle: "test.delayed-subtree-settlement",
+          origin: {
+            actor: "runtime",
+            source: "task.lifecycle",
+            surface: "test",
+            requestID: Identifier.ascending("message"),
+            reason: "verify delayed cancellation settlement",
+          },
+        })
+        expect(requested.cancelledSessions.map((entry) => entry.id)).toEqual([session.id])
+
+        const status = spyOn(SessionStatus, "finishPromptGeneration").mockImplementation(() => {
+          throw new Error("delayed prompt cleanup failed")
+        })
+        try {
+          await expect(SessionPromptState.release(session.id)).rejects.toThrow("delayed prompt cleanup failed")
+        } finally {
+          status.mockRestore()
+        }
+
+        const assertSettlement = () =>
+          assertSessionPromptSubtreeFinished({
+            sessions: requested.cancelledSessions,
+            failures: requested.failures,
+            handle: "test.delayed-subtree-settlement",
+          })
+        await expect(assertSettlement()).rejects.toMatchObject({
+          name: "TaskCancellationIncompleteError",
+          message: expect.stringContaining("delayed prompt cleanup failed"),
+        })
+        await expect(assertSettlement()).rejects.toMatchObject({
+          name: "TaskCancellationIncompleteError",
+          message: expect.stringContaining("delayed prompt cleanup failed"),
+        })
+        expect(() => SessionPromptState.start(session.id, session.directory)).toThrow(
+          expect.objectContaining({ name: "BusyError" }),
+        )
+        expect(SessionPromptState.TestHooks.promptResourceSnapshot(session.id)).toEqual({
+          promptOwners: 0,
+          messageOwnerRegistries: 0,
+          startReservations: 0,
+          cancellationReceipts: 1,
+        })
+      },
+    })
+  })
+
+  test("holds replacement admission from live-owner cleanup through terminal handoff", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const sessionID = Identifier.ascending("session")
+        const directory = `${import.meta.dir}/prompt-owner-terminal-handoff`
+        const owner = SessionPromptState.start(sessionID, directory)!
+        const reservation = SessionPromptState.claimPromptSettlementReservation(sessionID, directory, owner)
+        const settlement = SessionPromptState.cancelOwned(sessionID, directory, owner, {
+          origin: {
+            actor: "runtime",
+            source: "runtime.prompt_owner",
+            surface: "test",
+            requestID: Identifier.ascending("message"),
+            reason: "verify terminal handoff reservation",
+            targetSessionID: sessionID,
+          },
+        })!
+        await SessionPromptState.release(sessionID)
+        await settlement.finished
+
+        expect(SessionPromptState.TestHooks.promptResourceSnapshot(sessionID).startReservations).toBe(1)
+        expect(() => SessionPromptState.start(sessionID, directory)).toThrow(
+          expect.objectContaining({ name: "BusyError" }),
+        )
+        reservation[Symbol.dispose]()
+
+        expect(SessionPromptState.start(sessionID, directory)).toBeInstanceOf(AbortSignal)
+        await SessionPromptState.release(sessionID)
       },
     })
   })

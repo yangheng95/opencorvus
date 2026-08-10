@@ -18,7 +18,7 @@ export function cancelSessionPromptInScope(input: {
   taskID?: string
   handle?: string
   origin: ExecutionCancellationOrigin
-}): boolean {
+}): SessionPromptState.CancellationReceipt | undefined {
   const handle = input.handle ?? "SessionPrompt.cancel"
   const cancelled = SessionPromptState.cancel(input.session.id, input.session.directory, {
     origin: input.origin,
@@ -166,14 +166,14 @@ export async function terminateSessionPromptInScope(input: {
   session: Pick<SessionInfo, "id" | "directory">
   origin: ExecutionCancellationOrigin
 }): Promise<boolean> {
-  const cancelled = SessionPromptState.cancel(input.session.id, input.session.directory, { origin: input.origin })
-  if (cancelled) {
+  const settlement = SessionPromptState.cancel(input.session.id, input.session.directory, { origin: input.origin })
+  if (settlement) {
     await awaitSessionPromptFinishedInScope({
       session: input.session,
       handle: "SessionPrompt.terminate",
     })
   }
-  return cancelled
+  return Boolean(settlement)
 }
 
 export async function terminateOwnedSessionPromptInScope(input: {
@@ -184,15 +184,16 @@ export async function terminateOwnedSessionPromptInScope(input: {
   inactivityTimeoutMs?: number
 }): Promise<boolean> {
   const handle = input.handle ?? "SessionPrompt.terminateOwned"
-  const cancelled = SessionPromptState.cancelOwned(input.session.id, input.session.directory, input.owner, {
-    origin: input.origin,
-  })
-  if (!cancelled) return false
+  const settlement =
+    SessionPromptState.cancelOwned(input.session.id, input.session.directory, input.owner, {
+      origin: input.origin,
+    }) ?? SessionPromptState.cancellationReceipt(input.session.id, input.session.directory, input.owner)
+  if (!settlement) return false
   try {
     await waitForPromptFinishAfterInactivity({
       sessionID: input.session.id,
       directory: input.session.directory,
-      promptFinished: SessionPromptState.waitForOwnedFinish(input.session.id, input.session.directory, input.owner),
+      promptFinished: settlement.finished,
       inactivityTimeoutMs: input.inactivityTimeoutMs ?? DEFAULT_PROMPT_SETTLE_INACTIVITY_MS,
       label: handle,
     })
@@ -203,8 +204,8 @@ export async function terminateOwnedSessionPromptInScope(input: {
         { type: "terminal", reason: "aborted", error: receipt.error.message },
         { promptGenerationOwner: input.owner },
       )
-      SessionPromptState.clearCancellationReceipt(input.session.id, input.owner)
     }
+    SessionPromptState.clearCancellationReceipt(input.session.id, input.owner)
     return true
   } catch (cause) {
     throw createTaskCancellationIncomplete({ handle, cause })
@@ -217,12 +218,14 @@ export async function cancelSessionPromptByID(input: {
   handle?: string
   origin: ExecutionCancellationOrigin
 }): Promise<boolean> {
-  return cancelSessionPromptInScope({
-    session: await Session.get(input.sessionID),
-    taskID: input.taskID,
-    handle: input.handle,
-    origin: input.origin,
-  })
+  return Boolean(
+    cancelSessionPromptInScope({
+      session: await Session.get(input.sessionID),
+      taskID: input.taskID,
+      handle: input.handle,
+      origin: input.origin,
+    }),
+  )
 }
 
 function waitForPromptFinishAfterInactivity(input: {

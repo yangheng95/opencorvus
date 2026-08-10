@@ -24,6 +24,7 @@ export namespace SessionPrompt {
   export const capturePromptOwner = SessionPromptState.capturePromptOwner
   export const cancelOwned = SessionPromptState.cancelOwned
   export const waitForOwnedFinish = SessionPromptState.waitForOwnedFinish
+  export const clearCancellationReceipt = SessionPromptState.clearCancellationReceipt
 
   export const {
     LoopInput,

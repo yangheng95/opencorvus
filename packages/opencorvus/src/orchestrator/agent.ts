@@ -1241,6 +1241,15 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
     )
   }
 
+  if (event?.dispatchInfrastructureFailure) {
+    currentIngressCount += 1
+    const failure = event.dispatchInfrastructureFailure
+    lines.push(
+      `Current dispatchInfrastructureFailure=${failure.infrastructureFactID}; typed_outcome=${JSON.stringify(failure.outcome)}. ` +
+        "This exact accepted worker dispatch failed during physical settlement. Use its Artifact locator, Worker Turn descriptor, and recovery authority as the current infrastructure ingress; do not infer a terminal worker lifecycle or create a second failure fact.",
+    )
+  }
+
   if (currentIngressCount === 0) {
     lines.push(
       "This wake contains no typed current ingress. Historical user messages, retry requests, Task intents, lifecycle occurrences, and coordination requests remain audit history only; do not describe them as what the user currently asks or reuse them as fresh authorization.",

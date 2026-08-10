@@ -585,6 +585,52 @@ export function enrichLifecycleProperties(
   return enriched
 }
 
+/**
+ * Stamp Session-scoped routing metadata without inventing an execution
+ * input-message authority. Provider stream errors can occur before or between
+ * message execution facts; a worker's latest durable Turn descriptor supplies
+ * its projected identity while the Session row remains the routing authority.
+ */
+export function enrichSessionErrorProperties(
+  properties: Record<string, unknown>,
+  sessionID: string,
+  input: { orderKey: string },
+): Record<string, unknown> {
+  const kind = sessionRole(sessionID)
+  if (!kind) {
+    throw new Error(
+      `bridge: session error for session ${sessionID} has no kind in the database. ` +
+        `Every session error must target a persisted Session row.`,
+    )
+  }
+  const row = Database.use((db) =>
+    db.select({ metadata: SessionTable.metadata }).from(SessionTable).where(eq(SessionTable.id, sessionID)).get(),
+  )
+  if (!row) throw new Error(`bridge: session error for session ${sessionID} has no persisted Session row`)
+  const projectedIdentity = RuntimeTemplateRegistry.isWorkerSessionKind(kind)
+    ? WorkerTurnDescriptor.latestForSession(sessionID)?.payload.identity
+    : undefined
+  const agentID = persistedSessionAgentID({
+    sessionID,
+    sessionKind: kind,
+    metadata: row.metadata,
+    projectedIdentity,
+  })
+  const provided = typeof properties.orderKey === "string" ? properties.orderKey.trim() : ""
+  if (provided && provided !== input.orderKey) {
+    throw new Error(`bridge: session error for session ${sessionID} orderKey drift between input and session row`)
+  }
+  const parentSessionID = sessionParentID(sessionID)
+  return {
+    ...properties,
+    orderKey: input.orderKey,
+    channel: kind === "root" ? "main" : kind,
+    agentID,
+    ...(kind === "root" ? {} : { resolvedRole: agentID }),
+    ...(parentSessionID ? { parentSessionID } : {}),
+  }
+}
+
 function bridgeFailureSummary(type: string, error: string) {
   return `Session bridge failed to persist ${type}: ${error}`
 }
@@ -629,7 +675,7 @@ async function appendBridgeEvent(input: {
   sessionID: string
   orderKey?: string
   payload: Record<string, unknown>
-}) {
+}, options?: { required?: boolean }) {
   const now = Date.now()
   try {
     await ProtocolStore.appendEvent({
@@ -672,6 +718,7 @@ async function appendBridgeEvent(input: {
         { cause: err },
       )
     }
+    if (options?.required) throw err
   }
 }
 
@@ -802,9 +849,9 @@ export async function persistTaskSessionLifecycle(type: string, properties: Reco
     const error = err instanceof Error ? err.message : String(err)
     await appendBridgePreparationFailure({ type, properties, error })
     log.warn("bridge: session lifecycle preparation failed", { type, error })
-    return
+    throw err
   }
-  await appendBridgeEvent(event)
+  await appendBridgeEvent(event, { required: true })
 }
 
 async function persistPublishedTaskSessionLifecycle(type: string, properties: Record<string, unknown>) {
@@ -891,7 +938,7 @@ async function bridgeSessionError(type: string, properties: Record<string, unkno
     const taskID = taskIDForSession(sessionID)
     if (!taskID) return
     const orderKey = sessionLifecycleOrderKey(sessionID)
-    const enriched = enrichLifecycleProperties(properties, sessionID, { orderKey })
+    const enriched = enrichSessionErrorProperties(properties, sessionID, { orderKey })
     event = {
       type,
       taskID,
@@ -1101,9 +1148,6 @@ export function ensureTaskMessageProtocolBridge() {
     Bus.subscribe(SessionStatus.Event.Status, async (event) => {
       await persistPublishedTaskSessionLifecycle(SessionStatus.Event.Status.type, event.properties)
     })
-    Bus.subscribe(SessionEvents.Error, async (event) => {
-      await bridgeSessionError(SessionEvents.Error.type, event.properties)
-    })
     Bus.subscribe(Bus.InstanceDisposed, (event) => {
       initializedLocalDirectories.delete(event.properties.directory)
     })
@@ -1123,7 +1167,13 @@ export function ensureTaskMessageProtocolBridge() {
     const sessionID = sessionFromProperties(props)
     if (!sessionID) throw new Error(`cross-instance message bridge ${envelope.payload.type} has no session identity`)
     const hostDirectory = hostProjectDirectoryForSession(sessionID)
-    if (envelope.directory && Project.samePath(envelope.directory, hostDirectory)) return
+    if (
+      envelope.payload.type !== SessionEvents.Error.type &&
+      envelope.directory &&
+      Project.samePath(envelope.directory, hostDirectory)
+    ) {
+      return
+    }
     const handler = CROSS_INSTANCE_HANDLERS[envelope.payload.type]
     if (!handler) return
     return enqueueCrossInstanceBridge(envelope.payload.type, props, hostDirectory, envelope.directory, handler)

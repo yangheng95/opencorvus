@@ -4,6 +4,7 @@ import {
   persistTaskSessionLifecycle,
 } from "@/orchestrator/protocol/message-bridge"
 import { Instance } from "@/project/instance"
+import { runWithIndependentProjectIdentity } from "@/project/independent-project-owner"
 import type { Session } from "@/session"
 import { executionLifecycleOrderKey, SessionStatus } from "@/session/status"
 
@@ -25,7 +26,7 @@ export async function publishSessionStatus(
   status: SessionStatus.Info,
   options?: { promptGenerationOwner?: AbortSignal; inputMessageID?: string; taskID?: string },
 ): Promise<void> {
-  await Instance.provideProjectIdentity({
+  await runWithIndependentProjectIdentity({
     directory: session.directory,
     fn: () => {
       ensureTaskMessageProtocolBridge()
@@ -70,7 +71,7 @@ async function persistSettledSessionTerminalStatus(
 export async function publishSettledSessionTerminalStatus(
   input: SettledSessionTerminalStatusInput,
 ): Promise<Extract<SessionStatus.Info, { type: "terminal" }>> {
-  return Instance.provideProjectIdentity({
+  return runWithIndependentProjectIdentity({
     directory: input.session.directory,
     fn: () => persistSettledSessionTerminalStatus(input),
   })

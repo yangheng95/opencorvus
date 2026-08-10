@@ -46,6 +46,7 @@ export namespace ProjectGitLock {
   }
 
   const leaseContext = new AsyncLocalStorage<Lease>()
+  const activeLeaseLifecycles = new Set<Promise<void>>()
 
   export async function withLease<T>(
     input: { projectID: string; primaryWorktreeDir: string },
@@ -58,35 +59,48 @@ export namespace ProjectGitLock {
       inherited.assertOwned()
       return result
     }
-    const lockPath = ProjectRuntimePaths.projectGitLock(input.primaryWorktreeDir)
-    let lease: Lease
+    let finishLifecycle!: () => void
+    const lifecycle = new Promise<void>((resolve) => (finishLifecycle = resolve))
+    activeLeaseLifecycles.add(lifecycle)
     try {
-      lease = await acquire(lockPath, input.projectID)
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code === "ELOCKED") {
-        const owner = await readOwner(lockPath)
-        throw new Error(`Timed out waiting for project git lock ${lockPath} held by pid ${owner?.pid ?? "unknown"}`)
+      const lockPath = ProjectRuntimePaths.projectGitLock(input.primaryWorktreeDir)
+      let lease: Lease
+      try {
+        lease = await acquire(lockPath, input.projectID)
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code === "ELOCKED") {
+          const owner = await readOwner(lockPath)
+          throw new Error(`Timed out waiting for project git lock ${lockPath} held by pid ${owner?.pid ?? "unknown"}`)
+        }
+        throw error
       }
-      throw error
-    }
-    let result: T | undefined
-    let operationError: unknown
-    try {
-      result = await leaseContext.run(lease, () => fn(lease))
-      lease.assertOwned()
-    } catch (error) {
-      operationError = error
-    }
-    try {
-      await lease.release()
-    } catch (releaseError) {
-      if (operationError) {
-        throw new AggregateError([operationError, releaseError], "Project Git operation and lock release both failed")
+      let result: T | undefined
+      let operationError: unknown
+      try {
+        result = await leaseContext.run(lease, () => fn(lease))
+        lease.assertOwned()
+      } catch (error) {
+        operationError = error
       }
-      throw releaseError
+      try {
+        await lease.release()
+      } catch (releaseError) {
+        if (operationError) {
+          throw new AggregateError([operationError, releaseError], "Project Git operation and lock release both failed")
+        }
+        throw releaseError
+      }
+      if (operationError) throw operationError
+      return result as T
+    } finally {
+      finishLifecycle()
+      activeLeaseLifecycles.delete(lifecycle)
     }
-    if (operationError) throw operationError
-    return result as T
+  }
+
+  /** Wait for every outer acquire/operate/release lifecycle in this process. */
+  export async function waitForIdle(): Promise<void> {
+    while (activeLeaseLifecycles.size > 0) await Promise.allSettled([...activeLeaseLifecycles])
   }
 
   export async function readOwner(target: string): Promise<ProjectGitLockOwner | undefined> {

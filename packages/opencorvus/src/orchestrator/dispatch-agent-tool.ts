@@ -32,6 +32,7 @@ import type { EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import { WorkerTurnSettlementError } from "@/agent/runner"
 import { exactEngineArtifactLocator } from "@/artifact-catalog"
 import { WorkflowNodeOccurrenceConflictError } from "@/engine/workflow-node-occurrence"
+import { TaskWorkflowBindingConflictError } from "@/engine/workflow-binding-facts"
 import { resolveDispatchOccurrenceAuthority } from "@/engine/dispatch-lineage"
 import { Log } from "@/util/log"
 
@@ -84,23 +85,154 @@ export type RunDispatchAgentInWorktree = <T>(input: {
   run: () => Promise<T>
 }) => Promise<T>
 
+export type RunDetachedDispatch = <T>(run: () => Promise<T>) => Promise<T>
+
+const detachedDispatchPipelines = new Set<Promise<void>>()
+
+function trackDetachedDispatchPipeline(pipeline: Promise<void>): void {
+  detachedDispatchPipelines.add(pipeline)
+  void pipeline.finally(() => detachedDispatchPipelines.delete(pipeline))
+}
+
+export async function waitForDetachedDispatchPipelinesForTest(): Promise<void> {
+  while (detachedDispatchPipelines.size > 0) await Promise.all([...detachedDispatchPipelines])
+}
+
+function workerTurnSettlementFailureOutcome(input: {
+  taskID: string
+  dispatchID: string
+  error: WorkerTurnSettlementError
+}): Extract<DispatchOutcomeResult, { kind: "infrastructure_failure" }> {
+  const outcome = DispatchOutcome.infrastructureFailure({
+    operation: input.error.operation,
+    message: input.error.message,
+    errorName: input.error.name,
+    sessionID: input.error.sessionID,
+    finalMessageID: input.error.finalMessageID,
+    workerTurn: input.error.evidence,
+    recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID: input.taskID, dispatchID: input.dispatchID }),
+    failureIssues: [
+      {
+        code: input.error.causeErrorName,
+        path: ["worker_turn", input.error.operation],
+        message: input.error.causeMessage,
+      },
+    ],
+    ...(input.error.infrastructureArtifactID
+      ? {
+          infrastructureError: exactEngineArtifactLocator({
+            taskID: input.taskID,
+            artifactID: input.error.infrastructureArtifactID,
+          }),
+        }
+      : {}),
+  })
+  if (outcome.kind !== "infrastructure_failure") {
+    throw new Error("Worker Turn settlement failure constructor returned a non-infrastructure outcome")
+  }
+  return outcome
+}
+
 export async function detachDispatchExecution(input: {
-  execution: Promise<DispatchOutcomeResult>
+  execute: () => Promise<DispatchOutcomeResult>
+  runDetached: RunDetachedDispatch
+  runDetachedRecovery: RunDetachedDispatch
   committedLineage: Promise<{ sessionID: string; artifactID: string }>
   deliver: (input: { sessionID: string; outcome?: DispatchOutcomeResult; executionError?: unknown }) => Promise<void>
-  onDeliveryFailure: (input: { sessionID: string; error: unknown }) => void
+  onDeliveryFailure: (input: { sessionID: string; error: unknown }) => void | Promise<void>
+  onPipelineOwnerCleanupFailure: (input: { sessionID: string; error: unknown }) => void | Promise<void>
 }): Promise<DispatchOutcomeResult> {
+  const execution = input.runDetached(input.execute)
   const first = await Promise.race([
-    input.execution.then((outcome) => ({ kind: "completed" as const, outcome })),
+    execution.then((outcome) => ({ kind: "completed" as const, outcome })),
     input.committedLineage.then((lineage) => ({ kind: "accepted" as const, lineage })),
   ])
   if (first.kind === "completed") return first.outcome
-  void input.execution
-    .then(
-      (outcome) => input.deliver({ sessionID: first.lineage.sessionID, outcome }),
-      (executionError) => input.deliver({ sessionID: first.lineage.sessionID, executionError }),
+  const supervisedPipeline = (async () => {
+    const deliveryInput = await execution.then(
+      (outcome) => ({ sessionID: first.lineage.sessionID, outcome }),
+      (executionError) => ({ sessionID: first.lineage.sessionID, executionError }),
     )
-    .catch((error) => input.onDeliveryFailure({ sessionID: first.lineage.sessionID, error }))
+    const deliverWithRecovery = async () => {
+      try {
+        await input.deliver(deliveryInput)
+      } catch (error) {
+        try {
+          await input.onDeliveryFailure({ sessionID: first.lineage.sessionID, error })
+        } catch (recoveryError) {
+          log.error("detached dispatch completion recovery failed", {
+            sessionID: first.lineage.sessionID,
+            error: recoveryError instanceof Error ? recoveryError.message : String(recoveryError),
+            errorName: recoveryError instanceof Error ? recoveryError.name : undefined,
+          })
+        }
+      }
+    }
+    const publishOwnerCleanupFailure = async (ownerError: unknown) => {
+      let callbackSettled = false
+      try {
+        await input.runDetachedRecovery(async () => {
+          try {
+            await input.onPipelineOwnerCleanupFailure({ sessionID: first.lineage.sessionID, error: ownerError })
+          } finally {
+            callbackSettled = true
+          }
+        })
+      } catch (recoveryError) {
+        log.error("detached dispatch pipeline owner recovery failed", {
+          sessionID: first.lineage.sessionID,
+          ownerError: ownerError instanceof Error ? ownerError.message : String(ownerError),
+          ownerErrorName: ownerError instanceof Error ? ownerError.name : undefined,
+          recoveryCallbackSettled: callbackSettled,
+          recoveryError: recoveryError instanceof Error ? recoveryError.message : String(recoveryError),
+          recoveryErrorName: recoveryError instanceof Error ? recoveryError.name : undefined,
+        })
+      }
+    }
+    for (let ownerAttempt = 1; ownerAttempt <= 2; ownerAttempt += 1) {
+      let callbackSettled = false
+      try {
+        await input.runDetached(async () => {
+          try {
+            await deliverWithRecovery()
+          } finally {
+            callbackSettled = true
+          }
+        })
+        return
+      } catch (ownerError) {
+        if (!callbackSettled && ownerAttempt < 2) continue
+        if (callbackSettled) {
+          await publishOwnerCleanupFailure(ownerError)
+          return
+        }
+        let recoveryCallbackSettled = false
+        try {
+          await input.runDetachedRecovery(async () => {
+            try {
+              await deliverWithRecovery()
+            } finally {
+              recoveryCallbackSettled = true
+            }
+          })
+        } catch (recoveryError) {
+          if (recoveryCallbackSettled) {
+            await publishOwnerCleanupFailure(recoveryError)
+          } else {
+            log.error("detached dispatch recovery owner initialization failed", {
+              sessionID: first.lineage.sessionID,
+              ownerError: ownerError instanceof Error ? ownerError.message : String(ownerError),
+              ownerErrorName: ownerError instanceof Error ? ownerError.name : undefined,
+              recoveryError: recoveryError instanceof Error ? recoveryError.message : String(recoveryError),
+              recoveryErrorName: recoveryError instanceof Error ? recoveryError.name : undefined,
+            })
+          }
+        }
+        return
+      }
+    }
+  })()
+  trackDetachedDispatchPipeline(supervisedPipeline)
   return DispatchOutcome.accepted({
     sessionID: first.lineage.sessionID,
     dispatchLineageID: first.lineage.artifactID,
@@ -130,6 +262,8 @@ export function createDispatchAgentTool(input: {
   signal?: AbortSignal
   openLineage: OpenDispatchAgentLineage
   runInWorktree: RunDispatchAgentInWorktree
+  runDetached: RunDetachedDispatch
+  runDetachedRecovery: RunDetachedDispatch
 }) {
   if (input.projectedAgents.length === 0) {
     throw new Error("dispatch_agent requires at least one projected agent")
@@ -200,7 +334,7 @@ export function createDispatchAgentTool(input: {
         .object({
           kind: z.literal("initial"),
           workflow_subject: DispatchWorkflowSubjectSchema.describe(
-            "Exact Task workflow subject for this first logical node occurrence.",
+            "Exact Task workflow subject for this first logical node occurrence. After any virtual workflow node has committed, every later initial dispatch must name another node from that same selected virtual workflow; direct is valid only before the Task has selected a virtual workflow.",
           ),
           input: publicAdapterInputSchema.describe(
             `Exact immutable ${agentID} adapter input for the initial worker Turn.`,
@@ -246,6 +380,7 @@ export function createDispatchAgentTool(input: {
   return tool({
     description:
       "Single scheduler agent dispatch tool. In dispatch, use target to select an exact projected worker identity. Use turn.kind=initial with workflow_subject and target-specific turn.input for a first node occurrence. Use turn.kind=continuation with one explicit lineage authority, guidance, and evidence_locators only for a successor Turn. " +
+      "A Task has one immutable workflow binding: after the first virtual-workflow initial dispatch commits, every later initial dispatch must use a node from that same workflow; never switch to direct. Direct initial dispatches are only for a Task that has not selected a virtual workflow. " +
       "Every call must declare use_worktree. Concurrent write-capable Task dispatches use managed worktrees when repository ownership requires isolation; read-only or proven-disjoint dispatches may use false. " +
       "A newly started worker returns accepted as soon as its durable lineage and Session exist; continue the root control Turn without waiting for that worker. A fast worker may instead return terminal_success, partial, infrastructure_failure, or a coordination request. terminal_success is already terminal: never call wait for it; discover persisted domain facts through artifact_search, exact artifact_read, and artifact_select for semantic sources. " +
       "This replaces separate visible worker-stage tools such as requirements, architect, build, visual_qa, integrity, fact_check, research, workload, intent analysis, and explore.",
@@ -399,61 +534,68 @@ export function createDispatchAgentTool(input: {
           )
           return DispatchAdapterContractRegistry.outputSchema(projectedAgent.identity.dispatchAdapterID).parse(outcome)
         }
-        const execution =
-          useWorktree && projectedAgent.identity.dispatchAdapterID !== "build"
-            ? (() => {
-                const worktreeSessionID = dispatch.existingSessionID ?? preparedSessionID
-                if (!worktreeSessionID) {
-                  throw new Error(`dispatch_agent ${target} did not allocate its managed-worktree Session identity`)
-                }
-                return input.runInWorktree({
-                  taskID: input.taskID,
-                  sessionID: worktreeSessionID,
-                  existingSessionID: dispatch.existingSessionID,
-                  targetAgentID: target,
-                  dispatchID: dispatch.dispatchID,
-                  run,
-                })
-              })()
-            : run()
+        const executeDetached = async () => {
+          if (useWorktree && projectedAgent.identity.dispatchAdapterID !== "build") {
+            const worktreeSessionID = dispatch.existingSessionID ?? preparedSessionID
+            if (!worktreeSessionID) {
+              throw new Error(`dispatch_agent ${target} did not allocate its managed-worktree Session identity`)
+            }
+            return await input.runInWorktree({
+              taskID: input.taskID,
+              sessionID: worktreeSessionID,
+              existingSessionID: dispatch.existingSessionID,
+              targetAgentID: target,
+              dispatchID: dispatch.dispatchID,
+              run,
+            })
+          }
+          return await run()
+        }
         return await detachDispatchExecution({
-          execution,
+          execute: executeDetached,
+          runDetached: input.runDetached,
+          runDetachedRecovery: input.runDetachedRecovery,
           committedLineage,
-          deliver: async ({ sessionID: completedSessionID }) => {
-            const { ProtocolStore } = await import("@/protocol/store")
-            const descriptor = WorkerTurnDescriptor.findForDispatch({
+          deliver: async ({ sessionID: completedSessionID, outcome, executionError }) => {
+            const { dispatchTaskLoop, reconcileTerminalAgentLifecycleDelivery } = await import("@/engine/queue")
+            const completedOutcome =
+              outcome ??
+              (executionError instanceof WorkerTurnSettlementError
+                ? workerTurnSettlementFailureOutcome({
+                    taskID: input.taskID,
+                    dispatchID: dispatch.dispatchID,
+                    error: executionError,
+                  })
+                : undefined)
+            if (completedOutcome?.kind === "infrastructure_failure") {
+              const infrastructureFactID = completedOutcome.infrastructure_error?.artifact_id
+              if (!infrastructureFactID) {
+                throw new Error(
+                  `dispatch_agent ${target} infrastructure outcome has no durable Artifact for Session ${completedSessionID}`,
+                )
+              }
+              await dispatchTaskLoop({
+                taskID: input.taskID,
+                event: {
+                  note: `Accepted worker Session ${completedSessionID} failed ${completedOutcome.operation}`,
+                  dispatchInfrastructureFailure: { infrastructureFactID, outcome: completedOutcome },
+                },
+              })
+              return
+            }
+            if (executionError) throw executionError
+            const result = await reconcileTerminalAgentLifecycleDelivery({
+              taskID: input.taskID,
               sessionID: completedSessionID,
               dispatchID: dispatch.dispatchID,
             })
-            if (!descriptor) {
+            if (result !== "delivered" && result !== "already_delivered") {
               throw new Error(
-                `dispatch_agent ${target} completed without a Turn descriptor for dispatch ${dispatch.dispatchID}`,
+                `dispatch_agent ${target} completion delivery is ${result} for Session ${completedSessionID}`,
               )
             }
-            const lifecycle = ProtocolStore.latestSessionOccurrenceEvent(
-              completedSessionID,
-              "agent.execution.lifecycle",
-              descriptor.payload.messageAuthority.user_message_id,
-            )
-            if (!lifecycle) {
-              throw new Error(
-                `dispatch_agent ${target} completed without a canonical lifecycle event for Session ${completedSessionID}`,
-              )
-            }
-            const { dispatchTaskLoop } = await import("@/engine/queue")
-            await dispatchTaskLoop({
-              taskID: input.taskID,
-              event: {
-                note: `Worker Session ${completedSessionID} completed dispatch ${dispatch.dispatchID}.`,
-                agentLifecycleDelivery: {
-                  eventID: lifecycle.id,
-                  sessionID: completedSessionID,
-                  dispatchID: dispatch.dispatchID,
-                },
-              },
-            })
           },
-          onDeliveryFailure: ({ sessionID: completedSessionID, error }) => {
+          onDeliveryFailure: async ({ sessionID: completedSessionID, error }) => {
             log.error("detached dispatch completion delivery failed", {
               taskID: input.taskID,
               target,
@@ -462,9 +604,97 @@ export function createDispatchAgentTool(input: {
               error: error instanceof Error ? error.message : String(error),
               errorName: error instanceof Error ? error.name : undefined,
             })
+            const { recordTaskInfrastructureError } = await import("@/engine/persist")
+            const infrastructureArtifactID = recordTaskInfrastructureError({
+              taskID: input.taskID,
+              component: "dispatch-agent",
+              operation: "deliver-terminal-worker-lifecycle",
+              reason: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+              errorName: error instanceof Error ? error.name : undefined,
+              sessionID: completedSessionID,
+              context: { target, dispatchID: dispatch.dispatchID },
+            })
+            const { reconcileTerminalAgentLifecycleDelivery } = await import("@/engine/queue")
+            const result = await reconcileTerminalAgentLifecycleDelivery({
+              taskID: input.taskID,
+              sessionID: completedSessionID,
+              dispatchID: dispatch.dispatchID,
+            })
+            if (result === "delivered" || result === "already_delivered") return
+            const { dispatchTaskLoop } = await import("@/engine/queue")
+            await dispatchTaskLoop({
+              taskID: input.taskID,
+              event: {
+                note:
+                  `Detached worker Session ${completedSessionID} dispatch ${dispatch.dispatchID} failed completion delivery. ` +
+                  `Inspect infrastructure Artifact ${infrastructureArtifactID}; terminal lifecycle reconciliation is ${result}.`,
+              },
+            })
+          },
+          onPipelineOwnerCleanupFailure: async ({ sessionID: completedSessionID, error }) => {
+            const { recordTaskInfrastructureError } = await import("@/engine/persist")
+            const infrastructureArtifactID = recordTaskInfrastructureError({
+              taskID: input.taskID,
+              component: "dispatch-agent",
+              operation: "settle-detached-pipeline-owner",
+              reason: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
+              errorName: error instanceof Error ? error.name : undefined,
+              sessionID: completedSessionID,
+              context: { target, dispatchID: dispatch.dispatchID },
+            })
+            const outcome = DispatchOutcome.infrastructureFailure({
+              operation: "settle-detached-pipeline-owner",
+              message: error instanceof Error ? error.message : String(error),
+              errorName: error instanceof Error ? error.name : undefined,
+              sessionID: completedSessionID,
+              recoveryAuthority: resolveDispatchOccurrenceAuthority({
+                taskID: input.taskID,
+                dispatchID: dispatch.dispatchID,
+              }),
+              infrastructureError: exactEngineArtifactLocator({
+                taskID: input.taskID,
+                artifactID: infrastructureArtifactID,
+              }),
+              failureIssues: [
+                {
+                  code: error instanceof Error ? error.name : "PipelineOwnerCleanupError",
+                  path: ["detached_pipeline", "owner_cleanup"],
+                  message: error instanceof Error ? error.message : String(error),
+                },
+              ],
+            })
+            if (outcome.kind !== "infrastructure_failure") {
+              throw new Error("Detached pipeline owner failure constructor returned a non-infrastructure outcome")
+            }
+            const { dispatchTaskLoop } = await import("@/engine/queue")
+            await dispatchTaskLoop({
+              taskID: input.taskID,
+              event: {
+                note: `Accepted worker Session ${completedSessionID} pipeline owner cleanup failed`,
+                dispatchInfrastructureFailure: {
+                  infrastructureFactID: infrastructureArtifactID,
+                  outcome,
+                },
+              },
+            })
           },
         })
       } catch (error) {
+        if (error instanceof TaskWorkflowBindingConflictError) {
+          return DispatchOutcome.infrastructureFailure({
+            operation: "workflow_binding_initial_claim",
+            message: error.message,
+            errorName: error.name,
+            recoveryAuthority: { occurrence_status: "occurrence_not_committed" },
+            failureIssues: [
+              {
+                code: error.code,
+                path: ["dispatch", "turn", "workflow_subject"],
+                message: error.message,
+              },
+            ],
+          })
+        }
         if (error instanceof WorkflowNodeOccurrenceConflictError) {
           return DispatchOutcome.infrastructureFailure({
             operation: "workflow_node_initial_claim",
@@ -482,30 +712,7 @@ export function createDispatchAgentTool(input: {
         }
         if (error instanceof WorkerTurnSettlementError) {
           if (!dispatchID) throw error
-          return DispatchOutcome.infrastructureFailure({
-            operation: error.operation,
-            message: error.message,
-            errorName: error.name,
-            sessionID: error.sessionID,
-            finalMessageID: error.finalMessageID,
-            workerTurn: error.evidence,
-            recoveryAuthority: resolveDispatchOccurrenceAuthority({ taskID: input.taskID, dispatchID }),
-            failureIssues: [
-              {
-                code: error.causeErrorName,
-                path: ["worker_turn", error.operation],
-                message: error.causeMessage,
-              },
-            ],
-            ...(error.infrastructureArtifactID
-              ? {
-                  infrastructureError: exactEngineArtifactLocator({
-                    taskID: input.taskID,
-                    artifactID: error.infrastructureArtifactID,
-                  }),
-                }
-              : {}),
-          })
+          return workerTurnSettlementFailureOutcome({ taskID: input.taskID, dispatchID, error })
         }
         if (isExecutionCancellationError(error)) {
           if (childSessionID && error.sessionID !== childSessionID) {
