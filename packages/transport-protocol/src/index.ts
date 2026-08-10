@@ -319,6 +319,7 @@ export const WorkLedgerTaskRow = z
     updated: z.number(),
     pinned: z.boolean(),
     lifecycleStatus: WorkLedgerTaskLifecycleStatus,
+    cancellationStatus: z.enum(["none", "cancelling", "cancelled"]),
     activityStatus: WorkLedgerActivityStatus,
     priority: WorkLedgerTaskPriority,
     source: z.string(),

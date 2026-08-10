@@ -32,10 +32,7 @@ function normalizeIdentifier(value: string, fallback: string): string {
 
 function normalizeInfrastructureMessage(value: string): string {
   const normalized = value.trim()
-  return (normalized.length > 0 ? normalized : "Unknown infrastructure failure").slice(
-    0,
-    MESSAGE_LIMIT,
-  )
+  return (normalized.length > 0 ? normalized : "Unknown infrastructure failure").slice(0, MESSAGE_LIMIT)
 }
 
 function normalizeFailureIssues(
@@ -43,9 +40,7 @@ function normalizeFailureIssues(
 ): DispatchFailureIssue[] | undefined {
   if (!issues || issues.length === 0) return undefined
   return issues.map((issue) => ({
-    ...(issue.code
-      ? { code: normalizeIdentifier(issue.code, "infrastructure_failure") }
-      : {}),
+    ...(issue.code ? { code: normalizeIdentifier(issue.code, "infrastructure_failure") } : {}),
     path: [...issue.path],
     message: normalizeInfrastructureMessage(issue.message),
   }))
@@ -68,6 +63,14 @@ const WorkerTurnSettlementEvidenceSchema = z
   .strict()
 
 export const DispatchOutcomeSchema = z.discriminatedUnion("kind", [
+  z
+    .object({
+      kind: z.literal("accepted"),
+      session_id: IdentifierSchema,
+      dispatch_lineage_id: IdentifierSchema,
+    })
+    .strict()
+    .describe("The worker Turn has a durable lineage and is running independently of the root Orchestrator Turn."),
   TerminalSessionSchema.extend({
     kind: z.literal("terminal_success"),
   }).strict(),
@@ -127,10 +130,15 @@ export namespace DispatchOutcome {
     return DispatchOutcomeSchema.parse(input)
   }
 
-  export function terminal(input: {
-    sessionID: string
-    finalMessageID: string
-  }): DispatchOutcome {
+  export function accepted(input: { sessionID: string; dispatchLineageID: string }): DispatchOutcome {
+    return parse({
+      kind: "accepted",
+      session_id: input.sessionID,
+      dispatch_lineage_id: input.dispatchLineageID,
+    })
+  }
+
+  export function terminal(input: { sessionID: string; finalMessageID: string }): DispatchOutcome {
     return parse({
       kind: "terminal_success",
       session_id: input.sessionID,
@@ -193,9 +201,7 @@ export namespace DispatchOutcome {
       recovery_authority: DispatchOccurrenceAuthoritySchema.parse(input.recoveryAuthority),
       ...(input.sessionID ? { session_id: input.sessionID } : {}),
       ...(input.finalMessageID ? { final_message_id: input.finalMessageID } : {}),
-      ...(input.errorName
-        ? { error_name: normalizeIdentifier(input.errorName, "Error") }
-        : {}),
+      ...(input.errorName ? { error_name: normalizeIdentifier(input.errorName, "Error") } : {}),
       ...(failureIssues ? { failure_issues: failureIssues } : {}),
       ...(input.infrastructureError ? { infrastructure_error: input.infrastructureError } : {}),
       ...(input.workerTurn

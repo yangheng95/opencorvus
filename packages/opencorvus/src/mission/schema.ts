@@ -3,7 +3,7 @@ import { ExpertSquadIDSchema } from "@/expert-squad/id"
 export { ProductPillarSchema, type ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
 
 // Mission identifier shape. It matches mission_state's path guard before the
-// ID is converted to the `.opencorvus/.r/m/<mission-key2>/<mission-key6>/`
+// ID is used as the readable `.opencorvus/.r/missions/<mission-id>/`
 // runtime namespace.
 export const MissionID = z
   .string()

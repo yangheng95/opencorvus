@@ -99,7 +99,7 @@ export interface DecisionLogReader {
    * Render the COMPLETE decision log as a phase-sectioned markdown document —
    * no value cap, no entry limit, every field (key/value/reason/goal/time).
    * This is the body `DecisionLogBundle` materializes under
-   * `.opencorvus/.r/t/<task-key>/decision-log.md` so a shell/worktree agent can read the full
+   * `.opencorvus/.r/tasks/<task-id>/decision-log.md` so a shell/worktree agent can read the full
    * WHY behind any decision the truncated inline `toPromptSection` summary
    * elided. The SQLite `decision_log` table stays the single source of truth;
    * this is a regenerated, read-only projection. "" when the log is empty.

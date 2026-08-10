@@ -852,6 +852,8 @@ export type EventArtifactPersisted = {
       | "operator_message_wake"
       | "mission_acceptance_resume_receipt"
       | "queued_operator_wake"
+      | "task_checkpoint_settlement"
+      | "task_auxiliary_settlement"
       | "exploration"
       | "browser_preview_target"
       | "browser_preview_evidence"
@@ -18852,6 +18854,7 @@ export type MissionListResponses = {
     }
     tasks: Array<{
       activityStatus: "running" | "inactive"
+      cancellationStatus: "none" | "cancelling" | "cancelled"
       completed?: number
       created: number
       description: string
@@ -19127,6 +19130,7 @@ export type MissionCreateDraftResponses = {
     }
     tasks: Array<{
       activityStatus: "running" | "inactive"
+      cancellationStatus: "none" | "cancelling" | "cancelled"
       completed?: number
       created: number
       description: string
@@ -19494,6 +19498,7 @@ export type MissionSetArchivedResponses = {
     }
     tasks: Array<{
       activityStatus: "running" | "inactive"
+      cancellationStatus: "none" | "cancelling" | "cancelled"
       completed?: number
       created: number
       description: string
@@ -19899,6 +19904,7 @@ export type MissionRenameResponses = {
     }
     tasks: Array<{
       activityStatus: "running" | "inactive"
+      cancellationStatus: "none" | "cancelling" | "cancelled"
       completed?: number
       created: number
       description: string
@@ -25807,70 +25813,135 @@ export type TaskGetResponses = {
     budget?: {
       maxExecutorGroups?: number
     }
-    cancellation?: {
-      actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-      messageID?: string
-      missionID?: string
-      reason: string
-      requestEventID: string
-      requestID: string
-      requestedAt: number
-      sessionID?: string
-      source:
-        | "task.cancel"
-        | "task.delete"
-        | "task.archive"
-        | "mission.abort"
-        | "mission.archive"
-        | "mission.delete"
-        | "panel.cancel_task"
-        | "orchestrator.cancel_task"
-        | "session.delete"
-        | "project.delete"
-      surface:
-        | "api"
-        | "overlay.work_ledger"
-        | "overlay.selected_task"
-        | "overlay.composer_stop"
-        | "overlay.chat_request_stop"
-        | "overlay.interrupt_task"
-        | "overlay.archive_panel"
-        | "panel"
-        | "gateway"
-        | "slack"
-        | "telegram"
-        | "discord"
-        | "feishu"
-        | "whatsapp"
-        | "googlechat"
-        | "msteams"
-        | "line"
-        | "matrix"
-        | "mattermost"
-        | "signal"
-        | "wecom"
-        | "dingtalk"
-        | "clickclack"
-        | "imessage"
-        | "irc"
-        | "nextcloud-talk"
-        | "nostr"
-        | "qqbot"
-        | "raft"
-        | "reef"
-        | "sms"
-        | "synology-chat"
-        | "tlon"
-        | "twitch"
-        | "zalo"
-        | "zalouser"
-        | "right-sidebar"
-        | "orchestrator"
-      terminalAt: number
-      terminalEventID: string
-      toolCallID?: string
-      toolPartID?: string
-    }
+    cancellation?:
+      | {
+          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+          messageID?: string
+          missionID?: string
+          reason: string
+          requestEventID: string
+          requestID: string
+          requestedAt: number
+          sessionID?: string
+          source:
+            | "task.cancel"
+            | "task.delete"
+            | "task.archive"
+            | "mission.abort"
+            | "mission.archive"
+            | "mission.delete"
+            | "panel.cancel_task"
+            | "orchestrator.cancel_task"
+            | "session.delete"
+            | "project.delete"
+          status: "cancelling"
+          surface:
+            | "api"
+            | "overlay.work_ledger"
+            | "overlay.selected_task"
+            | "overlay.composer_stop"
+            | "overlay.chat_request_stop"
+            | "overlay.interrupt_task"
+            | "overlay.archive_panel"
+            | "panel"
+            | "gateway"
+            | "slack"
+            | "telegram"
+            | "discord"
+            | "feishu"
+            | "whatsapp"
+            | "googlechat"
+            | "msteams"
+            | "line"
+            | "matrix"
+            | "mattermost"
+            | "signal"
+            | "wecom"
+            | "dingtalk"
+            | "clickclack"
+            | "imessage"
+            | "irc"
+            | "nextcloud-talk"
+            | "nostr"
+            | "qqbot"
+            | "raft"
+            | "reef"
+            | "sms"
+            | "synology-chat"
+            | "tlon"
+            | "twitch"
+            | "zalo"
+            | "zalouser"
+            | "right-sidebar"
+            | "orchestrator"
+          toolCallID?: string
+          toolPartID?: string
+        }
+      | {
+          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+          messageID?: string
+          missionID?: string
+          reason: string
+          requestEventID: string
+          requestID: string
+          requestedAt: number
+          sessionID?: string
+          source:
+            | "task.cancel"
+            | "task.delete"
+            | "task.archive"
+            | "mission.abort"
+            | "mission.archive"
+            | "mission.delete"
+            | "panel.cancel_task"
+            | "orchestrator.cancel_task"
+            | "session.delete"
+            | "project.delete"
+          status: "cancelled"
+          surface:
+            | "api"
+            | "overlay.work_ledger"
+            | "overlay.selected_task"
+            | "overlay.composer_stop"
+            | "overlay.chat_request_stop"
+            | "overlay.interrupt_task"
+            | "overlay.archive_panel"
+            | "panel"
+            | "gateway"
+            | "slack"
+            | "telegram"
+            | "discord"
+            | "feishu"
+            | "whatsapp"
+            | "googlechat"
+            | "msteams"
+            | "line"
+            | "matrix"
+            | "mattermost"
+            | "signal"
+            | "wecom"
+            | "dingtalk"
+            | "clickclack"
+            | "imessage"
+            | "irc"
+            | "nextcloud-talk"
+            | "nostr"
+            | "qqbot"
+            | "raft"
+            | "reef"
+            | "sms"
+            | "synology-chat"
+            | "tlon"
+            | "twitch"
+            | "zalo"
+            | "zalouser"
+            | "right-sidebar"
+            | "orchestrator"
+          terminalAt: number
+          terminalEventID: string
+          toolCallID?: string
+          toolPartID?: string
+        }
     completionDecision?: {
       acceptedDeliverySliceRevisionIDs: Array<string>
       artifactLocator: {
@@ -26321,6 +26392,8 @@ export type TaskBoardResponses = {
         | "operator_message_wake"
         | "mission_acceptance_resume_receipt"
         | "queued_operator_wake"
+        | "task_checkpoint_settlement"
+        | "task_auxiliary_settlement"
         | "exploration"
         | "browser_preview_target"
         | "browser_preview_evidence"
@@ -26719,70 +26792,135 @@ export type TaskBoardResponses = {
       budget?: {
         maxExecutorGroups?: number
       }
-      cancellation?: {
-        actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-        messageID?: string
-        missionID?: string
-        reason: string
-        requestEventID: string
-        requestID: string
-        requestedAt: number
-        sessionID?: string
-        source:
-          | "task.cancel"
-          | "task.delete"
-          | "task.archive"
-          | "mission.abort"
-          | "mission.archive"
-          | "mission.delete"
-          | "panel.cancel_task"
-          | "orchestrator.cancel_task"
-          | "session.delete"
-          | "project.delete"
-        surface:
-          | "api"
-          | "overlay.work_ledger"
-          | "overlay.selected_task"
-          | "overlay.composer_stop"
-          | "overlay.chat_request_stop"
-          | "overlay.interrupt_task"
-          | "overlay.archive_panel"
-          | "panel"
-          | "gateway"
-          | "slack"
-          | "telegram"
-          | "discord"
-          | "feishu"
-          | "whatsapp"
-          | "googlechat"
-          | "msteams"
-          | "line"
-          | "matrix"
-          | "mattermost"
-          | "signal"
-          | "wecom"
-          | "dingtalk"
-          | "clickclack"
-          | "imessage"
-          | "irc"
-          | "nextcloud-talk"
-          | "nostr"
-          | "qqbot"
-          | "raft"
-          | "reef"
-          | "sms"
-          | "synology-chat"
-          | "tlon"
-          | "twitch"
-          | "zalo"
-          | "zalouser"
-          | "right-sidebar"
-          | "orchestrator"
-        terminalAt: number
-        terminalEventID: string
-        toolCallID?: string
-        toolPartID?: string
-      }
+      cancellation?:
+        | {
+            actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+            messageID?: string
+            missionID?: string
+            reason: string
+            requestEventID: string
+            requestID: string
+            requestedAt: number
+            sessionID?: string
+            source:
+              | "task.cancel"
+              | "task.delete"
+              | "task.archive"
+              | "mission.abort"
+              | "mission.archive"
+              | "mission.delete"
+              | "panel.cancel_task"
+              | "orchestrator.cancel_task"
+              | "session.delete"
+              | "project.delete"
+            status: "cancelling"
+            surface:
+              | "api"
+              | "overlay.work_ledger"
+              | "overlay.selected_task"
+              | "overlay.composer_stop"
+              | "overlay.chat_request_stop"
+              | "overlay.interrupt_task"
+              | "overlay.archive_panel"
+              | "panel"
+              | "gateway"
+              | "slack"
+              | "telegram"
+              | "discord"
+              | "feishu"
+              | "whatsapp"
+              | "googlechat"
+              | "msteams"
+              | "line"
+              | "matrix"
+              | "mattermost"
+              | "signal"
+              | "wecom"
+              | "dingtalk"
+              | "clickclack"
+              | "imessage"
+              | "irc"
+              | "nextcloud-talk"
+              | "nostr"
+              | "qqbot"
+              | "raft"
+              | "reef"
+              | "sms"
+              | "synology-chat"
+              | "tlon"
+              | "twitch"
+              | "zalo"
+              | "zalouser"
+              | "right-sidebar"
+              | "orchestrator"
+            toolCallID?: string
+            toolPartID?: string
+          }
+        | {
+            actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+            messageID?: string
+            missionID?: string
+            reason: string
+            requestEventID: string
+            requestID: string
+            requestedAt: number
+            sessionID?: string
+            source:
+              | "task.cancel"
+              | "task.delete"
+              | "task.archive"
+              | "mission.abort"
+              | "mission.archive"
+              | "mission.delete"
+              | "panel.cancel_task"
+              | "orchestrator.cancel_task"
+              | "session.delete"
+              | "project.delete"
+            status: "cancelled"
+            surface:
+              | "api"
+              | "overlay.work_ledger"
+              | "overlay.selected_task"
+              | "overlay.composer_stop"
+              | "overlay.chat_request_stop"
+              | "overlay.interrupt_task"
+              | "overlay.archive_panel"
+              | "panel"
+              | "gateway"
+              | "slack"
+              | "telegram"
+              | "discord"
+              | "feishu"
+              | "whatsapp"
+              | "googlechat"
+              | "msteams"
+              | "line"
+              | "matrix"
+              | "mattermost"
+              | "signal"
+              | "wecom"
+              | "dingtalk"
+              | "clickclack"
+              | "imessage"
+              | "irc"
+              | "nextcloud-talk"
+              | "nostr"
+              | "qqbot"
+              | "raft"
+              | "reef"
+              | "sms"
+              | "synology-chat"
+              | "tlon"
+              | "twitch"
+              | "zalo"
+              | "zalouser"
+              | "right-sidebar"
+              | "orchestrator"
+            terminalAt: number
+            terminalEventID: string
+            toolCallID?: string
+            toolPartID?: string
+          }
       completionDecision?: {
         acceptedDeliverySliceRevisionIDs: Array<string>
         artifactLocator: {
@@ -27932,9 +28070,137 @@ export type TaskCancelError = TaskCancelErrors[keyof TaskCancelErrors]
 
 export type TaskCancelResponses = {
   /**
-   * Task cancelled
+   * Task cancellation accepted or completed
    */
-  200: boolean
+  202:
+    | {
+        actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+        messageID?: string
+        missionID?: string
+        reason: string
+        requestEventID: string
+        requestID: string
+        requestedAt: number
+        sessionID?: string
+        source:
+          | "task.cancel"
+          | "task.delete"
+          | "task.archive"
+          | "mission.abort"
+          | "mission.archive"
+          | "mission.delete"
+          | "panel.cancel_task"
+          | "orchestrator.cancel_task"
+          | "session.delete"
+          | "project.delete"
+        status: "cancelling"
+        surface:
+          | "api"
+          | "overlay.work_ledger"
+          | "overlay.selected_task"
+          | "overlay.composer_stop"
+          | "overlay.chat_request_stop"
+          | "overlay.interrupt_task"
+          | "overlay.archive_panel"
+          | "panel"
+          | "gateway"
+          | "slack"
+          | "telegram"
+          | "discord"
+          | "feishu"
+          | "whatsapp"
+          | "googlechat"
+          | "msteams"
+          | "line"
+          | "matrix"
+          | "mattermost"
+          | "signal"
+          | "wecom"
+          | "dingtalk"
+          | "clickclack"
+          | "imessage"
+          | "irc"
+          | "nextcloud-talk"
+          | "nostr"
+          | "qqbot"
+          | "raft"
+          | "reef"
+          | "sms"
+          | "synology-chat"
+          | "tlon"
+          | "twitch"
+          | "zalo"
+          | "zalouser"
+          | "right-sidebar"
+          | "orchestrator"
+        toolCallID?: string
+        toolPartID?: string
+      }
+    | {
+        actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+        messageID?: string
+        missionID?: string
+        reason: string
+        requestEventID: string
+        requestID: string
+        requestedAt: number
+        sessionID?: string
+        source:
+          | "task.cancel"
+          | "task.delete"
+          | "task.archive"
+          | "mission.abort"
+          | "mission.archive"
+          | "mission.delete"
+          | "panel.cancel_task"
+          | "orchestrator.cancel_task"
+          | "session.delete"
+          | "project.delete"
+        status: "cancelled"
+        surface:
+          | "api"
+          | "overlay.work_ledger"
+          | "overlay.selected_task"
+          | "overlay.composer_stop"
+          | "overlay.chat_request_stop"
+          | "overlay.interrupt_task"
+          | "overlay.archive_panel"
+          | "panel"
+          | "gateway"
+          | "slack"
+          | "telegram"
+          | "discord"
+          | "feishu"
+          | "whatsapp"
+          | "googlechat"
+          | "msteams"
+          | "line"
+          | "matrix"
+          | "mattermost"
+          | "signal"
+          | "wecom"
+          | "dingtalk"
+          | "clickclack"
+          | "imessage"
+          | "irc"
+          | "nextcloud-talk"
+          | "nostr"
+          | "qqbot"
+          | "raft"
+          | "reef"
+          | "sms"
+          | "synology-chat"
+          | "tlon"
+          | "twitch"
+          | "zalo"
+          | "zalouser"
+          | "right-sidebar"
+          | "orchestrator"
+        terminalAt: number
+        terminalEventID: string
+        toolCallID?: string
+        toolPartID?: string
+      }
 }
 
 export type TaskCancelResponse = TaskCancelResponses[keyof TaskCancelResponses]
@@ -28157,6 +28423,8 @@ export type TaskConversationResponses = {
           | "operator_message_wake"
           | "mission_acceptance_resume_receipt"
           | "queued_operator_wake"
+          | "task_checkpoint_settlement"
+          | "task_auxiliary_settlement"
           | "exploration"
           | "browser_preview_target"
           | "browser_preview_evidence"
@@ -28555,70 +28823,135 @@ export type TaskConversationResponses = {
         budget?: {
           maxExecutorGroups?: number
         }
-        cancellation?: {
-          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-          messageID?: string
-          missionID?: string
-          reason: string
-          requestEventID: string
-          requestID: string
-          requestedAt: number
-          sessionID?: string
-          source:
-            | "task.cancel"
-            | "task.delete"
-            | "task.archive"
-            | "mission.abort"
-            | "mission.archive"
-            | "mission.delete"
-            | "panel.cancel_task"
-            | "orchestrator.cancel_task"
-            | "session.delete"
-            | "project.delete"
-          surface:
-            | "api"
-            | "overlay.work_ledger"
-            | "overlay.selected_task"
-            | "overlay.composer_stop"
-            | "overlay.chat_request_stop"
-            | "overlay.interrupt_task"
-            | "overlay.archive_panel"
-            | "panel"
-            | "gateway"
-            | "slack"
-            | "telegram"
-            | "discord"
-            | "feishu"
-            | "whatsapp"
-            | "googlechat"
-            | "msteams"
-            | "line"
-            | "matrix"
-            | "mattermost"
-            | "signal"
-            | "wecom"
-            | "dingtalk"
-            | "clickclack"
-            | "imessage"
-            | "irc"
-            | "nextcloud-talk"
-            | "nostr"
-            | "qqbot"
-            | "raft"
-            | "reef"
-            | "sms"
-            | "synology-chat"
-            | "tlon"
-            | "twitch"
-            | "zalo"
-            | "zalouser"
-            | "right-sidebar"
-            | "orchestrator"
-          terminalAt: number
-          terminalEventID: string
-          toolCallID?: string
-          toolPartID?: string
-        }
+        cancellation?:
+          | {
+              actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+              messageID?: string
+              missionID?: string
+              reason: string
+              requestEventID: string
+              requestID: string
+              requestedAt: number
+              sessionID?: string
+              source:
+                | "task.cancel"
+                | "task.delete"
+                | "task.archive"
+                | "mission.abort"
+                | "mission.archive"
+                | "mission.delete"
+                | "panel.cancel_task"
+                | "orchestrator.cancel_task"
+                | "session.delete"
+                | "project.delete"
+              status: "cancelling"
+              surface:
+                | "api"
+                | "overlay.work_ledger"
+                | "overlay.selected_task"
+                | "overlay.composer_stop"
+                | "overlay.chat_request_stop"
+                | "overlay.interrupt_task"
+                | "overlay.archive_panel"
+                | "panel"
+                | "gateway"
+                | "slack"
+                | "telegram"
+                | "discord"
+                | "feishu"
+                | "whatsapp"
+                | "googlechat"
+                | "msteams"
+                | "line"
+                | "matrix"
+                | "mattermost"
+                | "signal"
+                | "wecom"
+                | "dingtalk"
+                | "clickclack"
+                | "imessage"
+                | "irc"
+                | "nextcloud-talk"
+                | "nostr"
+                | "qqbot"
+                | "raft"
+                | "reef"
+                | "sms"
+                | "synology-chat"
+                | "tlon"
+                | "twitch"
+                | "zalo"
+                | "zalouser"
+                | "right-sidebar"
+                | "orchestrator"
+              toolCallID?: string
+              toolPartID?: string
+            }
+          | {
+              actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+              messageID?: string
+              missionID?: string
+              reason: string
+              requestEventID: string
+              requestID: string
+              requestedAt: number
+              sessionID?: string
+              source:
+                | "task.cancel"
+                | "task.delete"
+                | "task.archive"
+                | "mission.abort"
+                | "mission.archive"
+                | "mission.delete"
+                | "panel.cancel_task"
+                | "orchestrator.cancel_task"
+                | "session.delete"
+                | "project.delete"
+              status: "cancelled"
+              surface:
+                | "api"
+                | "overlay.work_ledger"
+                | "overlay.selected_task"
+                | "overlay.composer_stop"
+                | "overlay.chat_request_stop"
+                | "overlay.interrupt_task"
+                | "overlay.archive_panel"
+                | "panel"
+                | "gateway"
+                | "slack"
+                | "telegram"
+                | "discord"
+                | "feishu"
+                | "whatsapp"
+                | "googlechat"
+                | "msteams"
+                | "line"
+                | "matrix"
+                | "mattermost"
+                | "signal"
+                | "wecom"
+                | "dingtalk"
+                | "clickclack"
+                | "imessage"
+                | "irc"
+                | "nextcloud-talk"
+                | "nostr"
+                | "qqbot"
+                | "raft"
+                | "reef"
+                | "sms"
+                | "synology-chat"
+                | "tlon"
+                | "twitch"
+                | "zalo"
+                | "zalouser"
+                | "right-sidebar"
+                | "orchestrator"
+              terminalAt: number
+              terminalEventID: string
+              toolCallID?: string
+              toolPartID?: string
+            }
         completionDecision?: {
           acceptedDeliverySliceRevisionIDs: Array<string>
           artifactLocator: {
@@ -29838,16 +30171,18 @@ export type TaskMessageError = TaskMessageErrors[keyof TaskMessageErrors]
 
 export type TaskMessageResponses = {
   /**
-   * Task message handled
+   * Task message durably accepted for delivery
    */
-  200: {
+  202: {
+    current_owner_ingress_id?: string
+    ingress_id?: string
     message: string
-    should_resume: boolean
+    queue_position?: number
     user_message?: {
       info: TaskMessageUserInfo
       parts: Array<TaskMessageUserPart>
     }
-    wake_status: "started" | "queued" | "not_woken"
+    wake_status: "accepted" | "queued" | "not_woken"
   }
 }
 
@@ -30176,70 +30511,135 @@ export type TaskProgressResponses = {
       budget?: {
         maxExecutorGroups?: number
       }
-      cancellation?: {
-        actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-        messageID?: string
-        missionID?: string
-        reason: string
-        requestEventID: string
-        requestID: string
-        requestedAt: number
-        sessionID?: string
-        source:
-          | "task.cancel"
-          | "task.delete"
-          | "task.archive"
-          | "mission.abort"
-          | "mission.archive"
-          | "mission.delete"
-          | "panel.cancel_task"
-          | "orchestrator.cancel_task"
-          | "session.delete"
-          | "project.delete"
-        surface:
-          | "api"
-          | "overlay.work_ledger"
-          | "overlay.selected_task"
-          | "overlay.composer_stop"
-          | "overlay.chat_request_stop"
-          | "overlay.interrupt_task"
-          | "overlay.archive_panel"
-          | "panel"
-          | "gateway"
-          | "slack"
-          | "telegram"
-          | "discord"
-          | "feishu"
-          | "whatsapp"
-          | "googlechat"
-          | "msteams"
-          | "line"
-          | "matrix"
-          | "mattermost"
-          | "signal"
-          | "wecom"
-          | "dingtalk"
-          | "clickclack"
-          | "imessage"
-          | "irc"
-          | "nextcloud-talk"
-          | "nostr"
-          | "qqbot"
-          | "raft"
-          | "reef"
-          | "sms"
-          | "synology-chat"
-          | "tlon"
-          | "twitch"
-          | "zalo"
-          | "zalouser"
-          | "right-sidebar"
-          | "orchestrator"
-        terminalAt: number
-        terminalEventID: string
-        toolCallID?: string
-        toolPartID?: string
-      }
+      cancellation?:
+        | {
+            actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+            messageID?: string
+            missionID?: string
+            reason: string
+            requestEventID: string
+            requestID: string
+            requestedAt: number
+            sessionID?: string
+            source:
+              | "task.cancel"
+              | "task.delete"
+              | "task.archive"
+              | "mission.abort"
+              | "mission.archive"
+              | "mission.delete"
+              | "panel.cancel_task"
+              | "orchestrator.cancel_task"
+              | "session.delete"
+              | "project.delete"
+            status: "cancelling"
+            surface:
+              | "api"
+              | "overlay.work_ledger"
+              | "overlay.selected_task"
+              | "overlay.composer_stop"
+              | "overlay.chat_request_stop"
+              | "overlay.interrupt_task"
+              | "overlay.archive_panel"
+              | "panel"
+              | "gateway"
+              | "slack"
+              | "telegram"
+              | "discord"
+              | "feishu"
+              | "whatsapp"
+              | "googlechat"
+              | "msteams"
+              | "line"
+              | "matrix"
+              | "mattermost"
+              | "signal"
+              | "wecom"
+              | "dingtalk"
+              | "clickclack"
+              | "imessage"
+              | "irc"
+              | "nextcloud-talk"
+              | "nostr"
+              | "qqbot"
+              | "raft"
+              | "reef"
+              | "sms"
+              | "synology-chat"
+              | "tlon"
+              | "twitch"
+              | "zalo"
+              | "zalouser"
+              | "right-sidebar"
+              | "orchestrator"
+            toolCallID?: string
+            toolPartID?: string
+          }
+        | {
+            actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+            messageID?: string
+            missionID?: string
+            reason: string
+            requestEventID: string
+            requestID: string
+            requestedAt: number
+            sessionID?: string
+            source:
+              | "task.cancel"
+              | "task.delete"
+              | "task.archive"
+              | "mission.abort"
+              | "mission.archive"
+              | "mission.delete"
+              | "panel.cancel_task"
+              | "orchestrator.cancel_task"
+              | "session.delete"
+              | "project.delete"
+            status: "cancelled"
+            surface:
+              | "api"
+              | "overlay.work_ledger"
+              | "overlay.selected_task"
+              | "overlay.composer_stop"
+              | "overlay.chat_request_stop"
+              | "overlay.interrupt_task"
+              | "overlay.archive_panel"
+              | "panel"
+              | "gateway"
+              | "slack"
+              | "telegram"
+              | "discord"
+              | "feishu"
+              | "whatsapp"
+              | "googlechat"
+              | "msteams"
+              | "line"
+              | "matrix"
+              | "mattermost"
+              | "signal"
+              | "wecom"
+              | "dingtalk"
+              | "clickclack"
+              | "imessage"
+              | "irc"
+              | "nextcloud-talk"
+              | "nostr"
+              | "qqbot"
+              | "raft"
+              | "reef"
+              | "sms"
+              | "synology-chat"
+              | "tlon"
+              | "twitch"
+              | "zalo"
+              | "zalouser"
+              | "right-sidebar"
+              | "orchestrator"
+            terminalAt: number
+            terminalEventID: string
+            toolCallID?: string
+            toolPartID?: string
+          }
       completionDecision?: {
         acceptedDeliverySliceRevisionIDs: Array<string>
         artifactLocator: {
@@ -30530,70 +30930,135 @@ export type TaskReplanResponses = {
     budget?: {
       maxExecutorGroups?: number
     }
-    cancellation?: {
-      actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-      messageID?: string
-      missionID?: string
-      reason: string
-      requestEventID: string
-      requestID: string
-      requestedAt: number
-      sessionID?: string
-      source:
-        | "task.cancel"
-        | "task.delete"
-        | "task.archive"
-        | "mission.abort"
-        | "mission.archive"
-        | "mission.delete"
-        | "panel.cancel_task"
-        | "orchestrator.cancel_task"
-        | "session.delete"
-        | "project.delete"
-      surface:
-        | "api"
-        | "overlay.work_ledger"
-        | "overlay.selected_task"
-        | "overlay.composer_stop"
-        | "overlay.chat_request_stop"
-        | "overlay.interrupt_task"
-        | "overlay.archive_panel"
-        | "panel"
-        | "gateway"
-        | "slack"
-        | "telegram"
-        | "discord"
-        | "feishu"
-        | "whatsapp"
-        | "googlechat"
-        | "msteams"
-        | "line"
-        | "matrix"
-        | "mattermost"
-        | "signal"
-        | "wecom"
-        | "dingtalk"
-        | "clickclack"
-        | "imessage"
-        | "irc"
-        | "nextcloud-talk"
-        | "nostr"
-        | "qqbot"
-        | "raft"
-        | "reef"
-        | "sms"
-        | "synology-chat"
-        | "tlon"
-        | "twitch"
-        | "zalo"
-        | "zalouser"
-        | "right-sidebar"
-        | "orchestrator"
-      terminalAt: number
-      terminalEventID: string
-      toolCallID?: string
-      toolPartID?: string
-    }
+    cancellation?:
+      | {
+          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+          messageID?: string
+          missionID?: string
+          reason: string
+          requestEventID: string
+          requestID: string
+          requestedAt: number
+          sessionID?: string
+          source:
+            | "task.cancel"
+            | "task.delete"
+            | "task.archive"
+            | "mission.abort"
+            | "mission.archive"
+            | "mission.delete"
+            | "panel.cancel_task"
+            | "orchestrator.cancel_task"
+            | "session.delete"
+            | "project.delete"
+          status: "cancelling"
+          surface:
+            | "api"
+            | "overlay.work_ledger"
+            | "overlay.selected_task"
+            | "overlay.composer_stop"
+            | "overlay.chat_request_stop"
+            | "overlay.interrupt_task"
+            | "overlay.archive_panel"
+            | "panel"
+            | "gateway"
+            | "slack"
+            | "telegram"
+            | "discord"
+            | "feishu"
+            | "whatsapp"
+            | "googlechat"
+            | "msteams"
+            | "line"
+            | "matrix"
+            | "mattermost"
+            | "signal"
+            | "wecom"
+            | "dingtalk"
+            | "clickclack"
+            | "imessage"
+            | "irc"
+            | "nextcloud-talk"
+            | "nostr"
+            | "qqbot"
+            | "raft"
+            | "reef"
+            | "sms"
+            | "synology-chat"
+            | "tlon"
+            | "twitch"
+            | "zalo"
+            | "zalouser"
+            | "right-sidebar"
+            | "orchestrator"
+          toolCallID?: string
+          toolPartID?: string
+        }
+      | {
+          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+          messageID?: string
+          missionID?: string
+          reason: string
+          requestEventID: string
+          requestID: string
+          requestedAt: number
+          sessionID?: string
+          source:
+            | "task.cancel"
+            | "task.delete"
+            | "task.archive"
+            | "mission.abort"
+            | "mission.archive"
+            | "mission.delete"
+            | "panel.cancel_task"
+            | "orchestrator.cancel_task"
+            | "session.delete"
+            | "project.delete"
+          status: "cancelled"
+          surface:
+            | "api"
+            | "overlay.work_ledger"
+            | "overlay.selected_task"
+            | "overlay.composer_stop"
+            | "overlay.chat_request_stop"
+            | "overlay.interrupt_task"
+            | "overlay.archive_panel"
+            | "panel"
+            | "gateway"
+            | "slack"
+            | "telegram"
+            | "discord"
+            | "feishu"
+            | "whatsapp"
+            | "googlechat"
+            | "msteams"
+            | "line"
+            | "matrix"
+            | "mattermost"
+            | "signal"
+            | "wecom"
+            | "dingtalk"
+            | "clickclack"
+            | "imessage"
+            | "irc"
+            | "nextcloud-talk"
+            | "nostr"
+            | "qqbot"
+            | "raft"
+            | "reef"
+            | "sms"
+            | "synology-chat"
+            | "tlon"
+            | "twitch"
+            | "zalo"
+            | "zalouser"
+            | "right-sidebar"
+            | "orchestrator"
+          terminalAt: number
+          terminalEventID: string
+          toolCallID?: string
+          toolPartID?: string
+        }
     completionDecision?: {
       acceptedDeliverySliceRevisionIDs: Array<string>
       artifactLocator: {
@@ -30833,70 +31298,135 @@ export type TaskRetryResponses = {
     budget?: {
       maxExecutorGroups?: number
     }
-    cancellation?: {
-      actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-      messageID?: string
-      missionID?: string
-      reason: string
-      requestEventID: string
-      requestID: string
-      requestedAt: number
-      sessionID?: string
-      source:
-        | "task.cancel"
-        | "task.delete"
-        | "task.archive"
-        | "mission.abort"
-        | "mission.archive"
-        | "mission.delete"
-        | "panel.cancel_task"
-        | "orchestrator.cancel_task"
-        | "session.delete"
-        | "project.delete"
-      surface:
-        | "api"
-        | "overlay.work_ledger"
-        | "overlay.selected_task"
-        | "overlay.composer_stop"
-        | "overlay.chat_request_stop"
-        | "overlay.interrupt_task"
-        | "overlay.archive_panel"
-        | "panel"
-        | "gateway"
-        | "slack"
-        | "telegram"
-        | "discord"
-        | "feishu"
-        | "whatsapp"
-        | "googlechat"
-        | "msteams"
-        | "line"
-        | "matrix"
-        | "mattermost"
-        | "signal"
-        | "wecom"
-        | "dingtalk"
-        | "clickclack"
-        | "imessage"
-        | "irc"
-        | "nextcloud-talk"
-        | "nostr"
-        | "qqbot"
-        | "raft"
-        | "reef"
-        | "sms"
-        | "synology-chat"
-        | "tlon"
-        | "twitch"
-        | "zalo"
-        | "zalouser"
-        | "right-sidebar"
-        | "orchestrator"
-      terminalAt: number
-      terminalEventID: string
-      toolCallID?: string
-      toolPartID?: string
-    }
+    cancellation?:
+      | {
+          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+          messageID?: string
+          missionID?: string
+          reason: string
+          requestEventID: string
+          requestID: string
+          requestedAt: number
+          sessionID?: string
+          source:
+            | "task.cancel"
+            | "task.delete"
+            | "task.archive"
+            | "mission.abort"
+            | "mission.archive"
+            | "mission.delete"
+            | "panel.cancel_task"
+            | "orchestrator.cancel_task"
+            | "session.delete"
+            | "project.delete"
+          status: "cancelling"
+          surface:
+            | "api"
+            | "overlay.work_ledger"
+            | "overlay.selected_task"
+            | "overlay.composer_stop"
+            | "overlay.chat_request_stop"
+            | "overlay.interrupt_task"
+            | "overlay.archive_panel"
+            | "panel"
+            | "gateway"
+            | "slack"
+            | "telegram"
+            | "discord"
+            | "feishu"
+            | "whatsapp"
+            | "googlechat"
+            | "msteams"
+            | "line"
+            | "matrix"
+            | "mattermost"
+            | "signal"
+            | "wecom"
+            | "dingtalk"
+            | "clickclack"
+            | "imessage"
+            | "irc"
+            | "nextcloud-talk"
+            | "nostr"
+            | "qqbot"
+            | "raft"
+            | "reef"
+            | "sms"
+            | "synology-chat"
+            | "tlon"
+            | "twitch"
+            | "zalo"
+            | "zalouser"
+            | "right-sidebar"
+            | "orchestrator"
+          toolCallID?: string
+          toolPartID?: string
+        }
+      | {
+          actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+          messageID?: string
+          missionID?: string
+          reason: string
+          requestEventID: string
+          requestID: string
+          requestedAt: number
+          sessionID?: string
+          source:
+            | "task.cancel"
+            | "task.delete"
+            | "task.archive"
+            | "mission.abort"
+            | "mission.archive"
+            | "mission.delete"
+            | "panel.cancel_task"
+            | "orchestrator.cancel_task"
+            | "session.delete"
+            | "project.delete"
+          status: "cancelled"
+          surface:
+            | "api"
+            | "overlay.work_ledger"
+            | "overlay.selected_task"
+            | "overlay.composer_stop"
+            | "overlay.chat_request_stop"
+            | "overlay.interrupt_task"
+            | "overlay.archive_panel"
+            | "panel"
+            | "gateway"
+            | "slack"
+            | "telegram"
+            | "discord"
+            | "feishu"
+            | "whatsapp"
+            | "googlechat"
+            | "msteams"
+            | "line"
+            | "matrix"
+            | "mattermost"
+            | "signal"
+            | "wecom"
+            | "dingtalk"
+            | "clickclack"
+            | "imessage"
+            | "irc"
+            | "nextcloud-talk"
+            | "nostr"
+            | "qqbot"
+            | "raft"
+            | "reef"
+            | "sms"
+            | "synology-chat"
+            | "tlon"
+            | "twitch"
+            | "zalo"
+            | "zalouser"
+            | "right-sidebar"
+            | "orchestrator"
+          terminalAt: number
+          terminalEventID: string
+          toolCallID?: string
+          toolPartID?: string
+        }
     completionDecision?: {
       acceptedDeliverySliceRevisionIDs: Array<string>
       artifactLocator: {
@@ -31309,7 +31839,7 @@ export type TaskSessionOperatorSteerResponses = {
     request_id: string
     session_id: string
     task_id: string
-    wake_status: "started" | "queued"
+    wake_status: "accepted" | "queued"
   }
 }
 
@@ -31382,70 +31912,135 @@ export type TaskQueueStartNowResponses = {
       budget?: {
         maxExecutorGroups?: number
       }
-      cancellation?: {
-        actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-        messageID?: string
-        missionID?: string
-        reason: string
-        requestEventID: string
-        requestID: string
-        requestedAt: number
-        sessionID?: string
-        source:
-          | "task.cancel"
-          | "task.delete"
-          | "task.archive"
-          | "mission.abort"
-          | "mission.archive"
-          | "mission.delete"
-          | "panel.cancel_task"
-          | "orchestrator.cancel_task"
-          | "session.delete"
-          | "project.delete"
-        surface:
-          | "api"
-          | "overlay.work_ledger"
-          | "overlay.selected_task"
-          | "overlay.composer_stop"
-          | "overlay.chat_request_stop"
-          | "overlay.interrupt_task"
-          | "overlay.archive_panel"
-          | "panel"
-          | "gateway"
-          | "slack"
-          | "telegram"
-          | "discord"
-          | "feishu"
-          | "whatsapp"
-          | "googlechat"
-          | "msteams"
-          | "line"
-          | "matrix"
-          | "mattermost"
-          | "signal"
-          | "wecom"
-          | "dingtalk"
-          | "clickclack"
-          | "imessage"
-          | "irc"
-          | "nextcloud-talk"
-          | "nostr"
-          | "qqbot"
-          | "raft"
-          | "reef"
-          | "sms"
-          | "synology-chat"
-          | "tlon"
-          | "twitch"
-          | "zalo"
-          | "zalouser"
-          | "right-sidebar"
-          | "orchestrator"
-        terminalAt: number
-        terminalEventID: string
-        toolCallID?: string
-        toolPartID?: string
-      }
+      cancellation?:
+        | {
+            actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+            messageID?: string
+            missionID?: string
+            reason: string
+            requestEventID: string
+            requestID: string
+            requestedAt: number
+            sessionID?: string
+            source:
+              | "task.cancel"
+              | "task.delete"
+              | "task.archive"
+              | "mission.abort"
+              | "mission.archive"
+              | "mission.delete"
+              | "panel.cancel_task"
+              | "orchestrator.cancel_task"
+              | "session.delete"
+              | "project.delete"
+            status: "cancelling"
+            surface:
+              | "api"
+              | "overlay.work_ledger"
+              | "overlay.selected_task"
+              | "overlay.composer_stop"
+              | "overlay.chat_request_stop"
+              | "overlay.interrupt_task"
+              | "overlay.archive_panel"
+              | "panel"
+              | "gateway"
+              | "slack"
+              | "telegram"
+              | "discord"
+              | "feishu"
+              | "whatsapp"
+              | "googlechat"
+              | "msteams"
+              | "line"
+              | "matrix"
+              | "mattermost"
+              | "signal"
+              | "wecom"
+              | "dingtalk"
+              | "clickclack"
+              | "imessage"
+              | "irc"
+              | "nextcloud-talk"
+              | "nostr"
+              | "qqbot"
+              | "raft"
+              | "reef"
+              | "sms"
+              | "synology-chat"
+              | "tlon"
+              | "twitch"
+              | "zalo"
+              | "zalouser"
+              | "right-sidebar"
+              | "orchestrator"
+            toolCallID?: string
+            toolPartID?: string
+          }
+        | {
+            actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
+            messageID?: string
+            missionID?: string
+            reason: string
+            requestEventID: string
+            requestID: string
+            requestedAt: number
+            sessionID?: string
+            source:
+              | "task.cancel"
+              | "task.delete"
+              | "task.archive"
+              | "mission.abort"
+              | "mission.archive"
+              | "mission.delete"
+              | "panel.cancel_task"
+              | "orchestrator.cancel_task"
+              | "session.delete"
+              | "project.delete"
+            status: "cancelled"
+            surface:
+              | "api"
+              | "overlay.work_ledger"
+              | "overlay.selected_task"
+              | "overlay.composer_stop"
+              | "overlay.chat_request_stop"
+              | "overlay.interrupt_task"
+              | "overlay.archive_panel"
+              | "panel"
+              | "gateway"
+              | "slack"
+              | "telegram"
+              | "discord"
+              | "feishu"
+              | "whatsapp"
+              | "googlechat"
+              | "msteams"
+              | "line"
+              | "matrix"
+              | "mattermost"
+              | "signal"
+              | "wecom"
+              | "dingtalk"
+              | "clickclack"
+              | "imessage"
+              | "irc"
+              | "nextcloud-talk"
+              | "nostr"
+              | "qqbot"
+              | "raft"
+              | "reef"
+              | "sms"
+              | "synology-chat"
+              | "tlon"
+              | "twitch"
+              | "zalo"
+              | "zalouser"
+              | "right-sidebar"
+              | "orchestrator"
+            terminalAt: number
+            terminalEventID: string
+            toolCallID?: string
+            toolPartID?: string
+          }
       completionDecision?: {
         acceptedDeliverySliceRevisionIDs: Array<string>
         artifactLocator: {
@@ -32617,6 +33212,7 @@ export type WorkLedgerListResponses = {
           tasks: Array<{
             activityStatus: "running" | "inactive"
             archived?: number
+            cancellationStatus: "none" | "cancelling" | "cancelled"
             created: number
             description: string
             directory: string
@@ -32713,6 +33309,7 @@ export type WorkLedgerListArchivedResponses = {
           tasks: Array<{
             activityStatus: "running" | "inactive"
             archived?: number
+            cancellationStatus: "none" | "cancelling" | "cancelled"
             created: number
             description: string
             directory: string
@@ -32737,6 +33334,7 @@ export type WorkLedgerListArchivedResponses = {
       | {
           activityStatus: "running" | "inactive"
           archived?: number
+          cancellationStatus: "none" | "cancelling" | "cancelled"
           created: number
           description: string
           directory: string

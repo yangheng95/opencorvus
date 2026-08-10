@@ -867,7 +867,7 @@ export interface OperatorSteerResult {
   task_id: string
   session_id: string
   request_id: string
-  wake_status: "started" | "queued"
+  wake_status: "accepted" | "queued"
 }
 
 export class OperatorSteerInputError extends Error {

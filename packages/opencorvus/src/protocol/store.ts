@@ -1,5 +1,5 @@
 import { Identifier } from "@/id/id"
-import { Database, and, asc, desc, eq, gt, lte, or } from "@/storage/db"
+import { Database, and, asc, desc, eq, gt, lte, or, sql } from "@/storage/db"
 import { Context } from "@/util/context"
 import { withKeyedLock } from "@/util/lock"
 import { Log } from "@/util/log"
@@ -421,6 +421,24 @@ export namespace ProtocolStore {
         .select()
         .from(ProtocolEventTable)
         .where(and(eq(ProtocolEventTable.session_id, sessionID), eq(ProtocolEventTable.type, type)))
+        .orderBy(desc(ProtocolEventTable.emitted_at), desc(ProtocolEventTable.seq), desc(ProtocolEventTable.id))
+        .get(),
+    )
+    return row ? eventView(row) : undefined
+  }
+
+  export function latestSessionOccurrenceEvent(sessionID: string, type: string, inputMessageID: string) {
+    const row = Database.use((db) =>
+      db
+        .select()
+        .from(ProtocolEventTable)
+        .where(
+          and(
+            eq(ProtocolEventTable.session_id, sessionID),
+            eq(ProtocolEventTable.type, type),
+            sql`json_extract(${ProtocolEventTable.payload}, '$.inputMessageID') = ${inputMessageID}`,
+          ),
+        )
         .orderBy(desc(ProtocolEventTable.emitted_at), desc(ProtocolEventTable.seq), desc(ProtocolEventTable.id))
         .get(),
     )

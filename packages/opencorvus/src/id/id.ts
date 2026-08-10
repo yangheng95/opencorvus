@@ -49,7 +49,21 @@ export namespace Identifier {
     activity: "act",
   } as const
 
+  type RuntimeIdentityPrefix = "task" | "session"
+
+  export function canonicalPattern(prefix: RuntimeIdentityPrefix): RegExp {
+    const expected = prefixes[prefix]
+    return new RegExp(`^${expected}_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$`)
+  }
+
+  export function isCanonical(prefix: RuntimeIdentityPrefix, input: string): boolean {
+    return canonicalPattern(prefix).test(input)
+  }
+
   export function schema(prefix: keyof typeof prefixes) {
+    if (prefix === "task" || prefix === "session") {
+      return z.string().regex(canonicalPattern(prefix), { message: `Invalid canonical ${prefix} identifier` })
+    }
     return z.string().startsWith(prefixes[prefix])
   }
 
@@ -85,6 +99,12 @@ export namespace Identifier {
       return create(prefix, descending)
     }
 
+    if (prefix === "task" || prefix === "session") {
+      if (!isCanonical(prefix, given)) {
+        throw new Error(`ID ${given} is not a canonical ${prefix} identifier`)
+      }
+      return given
+    }
     if (!given.startsWith(prefixes[prefix])) {
       throw new Error(`ID ${given} does not start with ${prefixes[prefix]}`)
     }

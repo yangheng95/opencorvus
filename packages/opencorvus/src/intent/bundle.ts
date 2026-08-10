@@ -17,7 +17,7 @@
 // reference (and lean on the goal contract's paraphrase, leaking architect
 // intent into build), or it would search the workspace and hallucinate.
 //
-// Single source of truth: `<project.worktree>/.opencorvus/.r/t/<task-key>/intent/request.md`.
+// Single source of truth: `<project.worktree>/.opencorvus/.r/tasks/<task-id>/intent/request.md`.
 // Mirrors AttachmentStore's resolution path (Project.get(projectID).worktree
 // — NOT Instance.directory, which can drift) so writers and readers always
 // agree on the location.
@@ -46,7 +46,7 @@ export namespace IntentBundle {
 
   /** Relative path used by agents whose file tools resolve against the
    *  project directory (in-process OpenCorvus `read` tool — tool/read.ts). */
-  export const RELATIVE_PATH_TEMPLATE = ".opencorvus/.r/t/<task-key>/intent/request.md"
+  export const RELATIVE_PATH_TEMPLATE = ".opencorvus/.r/tasks/<task-id>/intent/request.md"
 
   export function relativePath(taskID: string): string {
     return ProjectRuntimePaths.intentPaths("", taskID).relative
@@ -57,7 +57,7 @@ export namespace IntentBundle {
    * consumers (OpenCorvus `read` resolves against the project dir);
    * `absolute` is for consumers whose current working directory is an isolated Task dispatch worktree — a relative
    * `.opencorvus/...` would not resolve there. `absolute` points at the real
-   * write location (`<project.worktree>/.opencorvus/.r/t/<task-key>/intent/request.md`) so
+   * write location (`<project.worktree>/.opencorvus/.r/tasks/<task-id>/intent/request.md`) so
    * writer and reader agree (same resolution as `write`). Throws on unknown
    * project (rule 7 — load-bearing, no silent fallback).
    */

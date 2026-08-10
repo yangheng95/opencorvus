@@ -1,12 +1,12 @@
 # August 2026 Records
 
-- [2026-08-10-hosted-expert-squad-market-integration.md](2026-08-10-hosted-expert-squad-market-integration.md) records the target-repository public Expert Squad market, exact immutable download and response accounting, local upload rehearsal, and desktop deep-link installation handoff.
+- [2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md](2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md) reconstructs the false-started operator-message stall and non-convergent Cancel incident, identifies the shared root-control/process/checkpoint defects, and defines the single-ingress, asynchronous-dispatch, idempotent-cancellation, Windows/LSP, real-checker, and visual acceptance repair sequence.
 
-- [2026-08-10-workbuddy-expert-squad-expansion-and-e2e.md](2026-08-10-workbuddy-expert-squad-expansion-and-e2e.md) records the corrected-repository migration of nine WorkBuddy Expert Squads, immutable Artifact publication authority, and fresh OpenAI Terra end-to-end acceptance.
+- [2026-08-10-task-start-e2e-recovery.md](2026-08-10-task-start-e2e-recovery.md) records the active-but-zero-execution Mission Task failure boundary and validates the rebuilt package through a real HTTP Mission-to-Task expert workflow plus packaged restart replay.
 
-- [2026-08-10-expert-squad-bounded-catalog-and-context.md](2026-08-10-expert-squad-bounded-catalog-and-context.md) replaces eager full Expert Squad enumeration with bounded compact retrieval, exact detail and Host-owned Mission/Task authority, with scale, visual and independent-review acceptance.
+- [2026-08-10-task-runtime-directory-isolation.md](2026-08-10-task-runtime-directory-isolation.md) rebuilds `.opencorvus/.r` around one readable root per Task and nests all Task Session, worktree, trace, output, ownership, artifact, evidence, and document state beneath it.
 
-- [2026-08-10-host-search-and-unified-citations.md](2026-08-10-host-search-and-unified-citations.md) defines the corrected-repository implementation of one Exa-first, in-process Open-WebSearch fallback and one persisted source domain for web, provider-document, and local-file citations.
+- [2026-08-10-task-file-replay-and-recovery-repackage.md](2026-08-10-task-file-replay-and-recovery-repackage.md) repairs structured-text Artifact replay at the provider boundary, preserves immutable Task recovery authority, and records focused verification plus the local Windows repackage.
 
 - [2026-08-09-work-ledger-start-from-scratch-focus.md](2026-08-09-work-ledger-start-from-scratch-focus.md) repairs the create-menu close-autofocus race so the directory-free Composer remains visibly focused, and aligns the Vite development checker with the existing `esnext` Overlay target.
 

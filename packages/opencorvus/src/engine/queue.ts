@@ -17,10 +17,10 @@ import { Message } from "@/session/message"
 import { MessageStore } from "@/session/message-store"
 import { isDeepStrictEqual } from "node:util"
 import { ProtocolStore } from "@/protocol/store"
-import { Database, and, desc, eq, sql } from "@/storage/db"
+import { Database, and, desc, eq, isNull, sql } from "@/storage/db"
 import { Log } from "@/util/log"
-import { EngineArtifactTable, EngineTaskTable } from "./engine.sql"
-import { insertEngineArtifact, updateEngineArtifact, updateEngineArtifactsWhere } from "./artifact"
+import { EngineArtifactTable, EngineTaskCancellationAuthorityTable, EngineTaskTable } from "./engine.sql"
+import { insertEngineArtifact, patchEngineArtifact, updateEngineArtifact, updateEngineArtifactsWhere } from "./artifact"
 import { insertEngineProgressSnapshot } from "./progress"
 import { claimNextEngineTaskForCwd, claimQueuedEngineTaskForCwd, setEngineTaskQueueOrder } from "./task"
 import { findTask, listOwnedPromptSessionsForTask, listStartedIncompleteTaskIDs, type TaskRow } from "./store"
@@ -55,7 +55,7 @@ import {
   type ProcessRecoveryFactContext as ProcessRecoveryFactContextValue,
 } from "./process-recovery-fact"
 import { currentProcessPhysicalEvidence, interruptedProcessPhysicalEvidence } from "@/runtime/process-occurrence"
-import { findDispatchLineageByDispatchID } from "./dispatch-lineage"
+import { findDispatchLineageByDispatchID, listDispatchLineage } from "./dispatch-lineage"
 
 export { TaskQueueError } from "./task-directory"
 
@@ -105,6 +105,48 @@ function requireTaskLoopRunner(): TaskLoopRunner {
 
 export function discardQueuedTaskEvent(taskID: string): void {
   discardPendingQueuedOperatorWakes(taskID)
+}
+
+export function terminalizeQueuedTaskEventsForCancellation(input: {
+  taskID: string
+  cancellationRequestEventID: string
+  now?: number
+}): void {
+  const now = input.now ?? Date.now()
+  Database.transaction((db) => terminalizeQueuedTaskEventsForCancellationInTransaction(db, { ...input, now }))
+}
+
+export function terminalizeQueuedTaskEventsForCancellationInTransaction(
+  db: Database.TxOrDb,
+  input: { taskID: string; cancellationRequestEventID: string; now: number },
+): void {
+  const rows = db
+    .select({ id: EngineArtifactTable.id, payload: EngineArtifactTable.payload })
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.task_id, input.taskID),
+        eq(EngineArtifactTable.kind, "queued_operator_wake"),
+        sql`${EngineArtifactTable.label} IN ('pending', 'running')`,
+      ),
+    )
+    .all()
+  for (const row of rows) {
+    const ingress = QueuedTaskIngressSchema.parse(row.payload)
+    patchEngineArtifact(db, {
+      id: row.id,
+      label: "terminal_inapplicable",
+      payload: QueuedTaskIngressSchema.parse({
+        ...ingress,
+        delivery_result: {
+          status: "terminal_inapplicable",
+          reason: `Task cancellation ${input.cancellationRequestEventID} made this ingress inapplicable.`,
+          time_completed: input.now,
+        },
+      }),
+      timeUpdated: input.now,
+    })
+  }
 }
 
 export function retirePendingQueuedTaskEventsForOperatorIntentInTransaction(
@@ -274,14 +316,21 @@ function enqueueTaskEvent(task: TaskRow, event: OrchestratorEvent): string {
   const requestID = event.coordinationRequest?.requestID.trim()
   const recoveryFactID = event.processRecovery?.recoveryFactID.trim()
   const waitJobID = event.taskWaitWake?.jobID.trim()
-  return persistQueuedOperatorWake(task, event, { messageID, requestID, recoveryFactID, waitJobID })
+  const lifecycleEventID = event.agentLifecycleDelivery?.eventID.trim()
+  return persistQueuedOperatorWake(task, event, { messageID, requestID, recoveryFactID, waitJobID, lifecycleEventID })
 }
 
 function persistQueuedOperatorWakeInTransaction(
   db: Database.TxOrDb,
   task: TaskRow,
   event: OrchestratorEvent,
-  identity: { messageID?: string; requestID?: string; recoveryFactID?: string; waitJobID?: string },
+  identity: {
+    messageID?: string
+    requestID?: string
+    recoveryFactID?: string
+    waitJobID?: string
+    lifecycleEventID?: string
+  },
   now = Date.now(),
 ): string {
   if (!task.session_id) throw new TaskQueueError(`Task ${task.id} has no root session`, "session_not_bound", task.id)
@@ -289,7 +338,8 @@ function persistQueuedOperatorWakeInTransaction(
   const requestID = identity.requestID
   const recoveryFactID = identity.recoveryFactID
   const waitJobID = identity.waitJobID
-  if (messageID || requestID || recoveryFactID || waitJobID) {
+  const lifecycleEventID = identity.lifecycleEventID
+  if (messageID || requestID || recoveryFactID || waitJobID || lifecycleEventID) {
     const exists = db
       .select({ id: EngineArtifactTable.id })
       .from(EngineArtifactTable)
@@ -304,7 +354,9 @@ function persistQueuedOperatorWakeInTransaction(
               ? sql`json_extract(${EngineArtifactTable.payload}, '$.request_id') = ${requestID}`
               : recoveryFactID
                 ? sql`json_extract(${EngineArtifactTable.payload}, '$.recovery_fact_id') = ${recoveryFactID}`
-                : sql`json_extract(${EngineArtifactTable.payload}, '$.wait_job_id') = ${waitJobID}`,
+                : waitJobID
+                  ? sql`json_extract(${EngineArtifactTable.payload}, '$.wait_job_id') = ${waitJobID}`
+                  : sql`json_extract(${EngineArtifactTable.payload}, '$.lifecycle_event_id') = ${lifecycleEventID}`,
         ),
       )
       .get()
@@ -334,7 +386,9 @@ function persistQueuedOperatorWakeInTransaction(
           ? recoveryFactID
           : waitJobID
             ? event.taskWaitWake?.fireID
-            : Identifier.ascending("artifact")),
+            : lifecycleEventID
+              ? lifecycleEventID
+              : Identifier.ascending("artifact")),
     delivery_attempt: priorAttempts + 1,
     task_id: task.id,
     root_session_id: task.session_id,
@@ -342,6 +396,7 @@ function persistQueuedOperatorWakeInTransaction(
     ...(requestID ? { request_id: requestID } : {}),
     ...(recoveryFactID ? { recovery_fact_id: recoveryFactID } : {}),
     ...(waitJobID ? { wait_job_id: waitJobID } : {}),
+    ...(lifecycleEventID ? { lifecycle_event_id: lifecycleEventID } : {}),
     source_kind: sourceKind,
     event: OrchestratorEventSchema.parse(event),
     time_queued: now,
@@ -383,6 +438,24 @@ export function persistQueuedTaskIntentInTransaction(
   )
 }
 
+export function persistQueuedRootMessageWakeInTransaction(
+  db: Database.TxOrDb,
+  input: {
+    task: TaskRow
+    messageID: string
+    kind: "operator" | "orchestrator"
+    now: number
+  },
+): string {
+  return persistQueuedOperatorWakeInTransaction(
+    db,
+    input.task,
+    { rootMessage: { messageID: input.messageID, kind: input.kind } },
+    { messageID: input.messageID },
+    input.now,
+  )
+}
+
 export function persistQueuedMissionAcceptanceResumeInTransaction(
   db: Database.TxOrDb,
   input: {
@@ -399,7 +472,13 @@ export function persistQueuedMissionAcceptanceResumeInTransaction(
 function persistQueuedOperatorWake(
   task: TaskRow,
   event: OrchestratorEvent,
-  identity: { messageID?: string; requestID?: string; recoveryFactID?: string; waitJobID?: string },
+  identity: {
+    messageID?: string
+    requestID?: string
+    recoveryFactID?: string
+    waitJobID?: string
+    lifecycleEventID?: string
+  },
 ): string {
   return Database.use((db) => persistQueuedOperatorWakeInTransaction(db, task, event, identity))
 }
@@ -693,8 +772,122 @@ function findNextPendingQueuedOperatorWake(taskID: string):
   }
 }
 
+function findPendingQueuedOperatorWakeByID(
+  taskID: string,
+  artifactID: string,
+): NonNullable<ReturnType<typeof findNextPendingQueuedOperatorWake>> | undefined {
+  const row = Database.use((db) =>
+    db
+      .select({
+        id: EngineArtifactTable.id,
+        payload: EngineArtifactTable.payload,
+        timeCreated: EngineArtifactTable.time_created,
+      })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.id, artifactID),
+          eq(EngineArtifactTable.task_id, taskID),
+          eq(EngineArtifactTable.kind, "queued_operator_wake"),
+          eq(EngineArtifactTable.label, "pending"),
+        ),
+      )
+      .get(),
+  )
+  if (!row) return undefined
+  const payload = QueuedTaskIngressSchema.parse(row.payload)
+  return {
+    id: row.id,
+    timeCreated: row.timeCreated,
+    wakeID: payload.wake_id,
+    rootSessionID: payload.root_session_id,
+    ingress: payload,
+    event: payload.event,
+  }
+}
+
+function findQueuedOperatorWakeByID(taskID: string, artifactID: string) {
+  const row = Database.use((db) =>
+    db
+      .select({
+        id: EngineArtifactTable.id,
+        label: EngineArtifactTable.label,
+        payload: EngineArtifactTable.payload,
+        timeCreated: EngineArtifactTable.time_created,
+      })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.id, artifactID),
+          eq(EngineArtifactTable.task_id, taskID),
+          eq(EngineArtifactTable.kind, "queued_operator_wake"),
+        ),
+      )
+      .get(),
+  )
+  if (!row) return undefined
+  return { ...row, ingress: QueuedTaskIngressSchema.parse(row.payload) }
+}
+
+export function requeueInterruptedRunningTaskIngresses(): number {
+  const cancelledTasks = Database.use((db) =>
+    db
+      .select({ id: EngineTaskTable.id, requestEventID: EngineTaskCancellationAuthorityTable.request_event_id })
+      .from(EngineTaskTable)
+      .innerJoin(
+        EngineTaskCancellationAuthorityTable,
+        eq(EngineTaskCancellationAuthorityTable.task_id, EngineTaskTable.id),
+      )
+      .where(
+        and(
+          eq(EngineTaskTable.project_id, Instance.project.id),
+          sql`${EngineTaskTable.time_completed} IS NOT NULL`,
+        ),
+      )
+      .all(),
+  )
+  for (const task of cancelledTasks) {
+    terminalizeQueuedTaskEventsForCancellation({
+      taskID: task.id,
+      cancellationRequestEventID: task.requestEventID!,
+    })
+  }
+  const rows = Database.use((db) =>
+    db
+      .select({ id: EngineArtifactTable.id, payload: EngineArtifactTable.payload })
+      .from(EngineArtifactTable)
+      .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, EngineArtifactTable.task_id))
+      .leftJoin(
+        EngineTaskCancellationAuthorityTable,
+        eq(EngineTaskCancellationAuthorityTable.task_id, EngineTaskTable.id),
+      )
+      .where(
+        and(
+          eq(EngineArtifactTable.kind, "queued_operator_wake"),
+          eq(EngineArtifactTable.label, "running"),
+          eq(EngineTaskTable.project_id, Instance.project.id),
+          isNull(EngineTaskTable.time_completed),
+          isNull(EngineTaskCancellationAuthorityTable.request_event_id),
+        ),
+      )
+      .all(),
+  )
+  let requeued = 0
+  for (const row of rows) {
+    const ingress = QueuedTaskIngressSchema.parse(row.payload)
+    if (SessionPromptState.rootWakeQueuePosition(ingress.root_session_id, row.id) !== undefined) continue
+    updateEngineArtifact({ id: row.id, label: "pending", timeUpdated: Date.now() })
+    requeued += 1
+  }
+  return requeued
+}
+
 function markQueuedOperatorWakeDrained(artifactID: string): void {
   updateEngineArtifact({ id: artifactID, label: "drained" })
+}
+
+function markQueuedOperatorWakeRunning(artifactID: string): void {
+  updateEngineArtifact({ id: artifactID, label: "running" })
 }
 
 function markQueuedOperatorWakeDeliveryFailed(input: {
@@ -745,8 +938,6 @@ function wakeRequiredMessageIDs(ingress: QueuedTaskIngress): string[] {
 
 function wakeRequiresDecisionEffect(ingress: QueuedTaskIngress): boolean {
   return (
-    ingress.source_kind === "operator_message" ||
-    ingress.source_kind === "orchestrator_message" ||
     ingress.source_kind === "operator_intent" ||
     ingress.source_kind === "mission_acceptance_resume" ||
     ingress.source_kind === "task_wait_wake"
@@ -801,8 +992,14 @@ async function assistantMessagesForWakeSettlement(input: {
   )
   const storedMessages = await MessageStore.byIDs({ sessionID: row.sessionID, messageIDs })
   const messagesByID = new Map(storedMessages.map((message) => [message.info.id, message]))
-  const messages = messageIDs.map((id) => messagesByID.get(id)).filter((message): message is Message.WithParts => Boolean(message))
-  if (messages.length === 0 || messages.length !== messageIDs.length || messages.at(-1)?.info.id !== input.finalMessageID) {
+  const messages = messageIDs
+    .map((id) => messagesByID.get(id))
+    .filter((message): message is Message.WithParts => Boolean(message))
+  if (
+    messages.length === 0 ||
+    messages.length !== messageIDs.length ||
+    messages.at(-1)?.info.id !== input.finalMessageID
+  ) {
     throw new QueuedWakeSettlementError(
       `Task ${input.taskID} wake ${input.wakeID} final message ${input.finalMessageID} is not the final assistant message for its invocation`,
     )
@@ -814,12 +1011,16 @@ type CompletedToolPart = Message.ToolPart & { state: Message.ToolStateCompleted 
 
 function completedToolParts(messages: Message.WithParts[]): CompletedToolPart[] {
   return messages.flatMap((message) =>
-    message.parts.filter((part): part is CompletedToolPart => part.type === "tool" && part.state.status === "completed"),
+    message.parts.filter(
+      (part): part is CompletedToolPart => part.type === "tool" && part.state.status === "completed",
+    ),
   )
 }
 
 function completedToolPartsForMessage(message: Message.WithParts): CompletedToolPart[] {
-  return message.parts.filter((part): part is CompletedToolPart => part.type === "tool" && part.state.status === "completed")
+  return message.parts.filter(
+    (part): part is CompletedToolPart => part.type === "tool" && part.state.status === "completed",
+  )
 }
 
 function toolInputMessageID(part: CompletedToolPart): string | undefined {
@@ -1068,6 +1269,7 @@ function launchTaskLoop(
     rootSessionID: wake.rootSessionID,
     wakeID: wake.id,
     run: async (signal) => {
+      markQueuedOperatorWakeRunning(wake.id)
       await runWithIndependentProjectIdentity({
         directory,
         fn: async () => {
@@ -1316,7 +1518,20 @@ export async function drainQueuedTaskEvent(taskID: string): Promise<boolean> {
 
 export async function drainPendingQueuedOperatorWakes(): Promise<number> {
   reconcilePendingCoordinationRequestWakes()
-  const taskIDs = [...new Set(pendingQueuedOperatorWakeTaskIDs(Instance.project.id))]
+  const cancellingTaskIDs = new Set(
+    Database.use((db) =>
+      db
+        .select({ taskID: EngineTaskCancellationAuthorityTable.task_id })
+        .from(EngineTaskCancellationAuthorityTable)
+        .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, EngineTaskCancellationAuthorityTable.task_id))
+        .where(eq(EngineTaskTable.project_id, Instance.project.id))
+        .all()
+        .map((row) => row.taskID),
+    ),
+  )
+  const taskIDs = [
+    ...new Set(pendingQueuedOperatorWakeTaskIDs(Instance.project.id).filter((taskID) => !cancellingTaskIDs.has(taskID))),
+  ]
   let drained = 0
   const failures: string[] = []
   for (const taskID of taskIDs) {
@@ -2037,11 +2252,24 @@ export function dispatchTaskLoopInBackground(input: DispatchTaskLoopInput, opera
 export async function dispatchTaskLoop(input: DispatchTaskLoopInput): Promise<DispatchTaskLoopResult> {
   const task = findTask(input.taskID)
   if (!task) throw new TaskQueueError(`Task ${input.taskID} does not exist`, "task_not_found", input.taskID)
+  const persistedWakeID = enqueueTaskEvent(task, OrchestratorEventSchema.parse(input.event ?? { note: "Task wake" }))
   const { assertTaskExecutionCapsuleRuntime } = await import("@/engine/task-execution-capsule-binding")
-  await assertTaskExecutionCapsuleRuntime(task.id)
+  try {
+    await assertTaskExecutionCapsuleRuntime(task.id)
+  } catch (error) {
+    const wake = findQueuedOperatorWakeByID(task.id, persistedWakeID)
+    if (wake?.label === "pending") {
+      markQueuedOperatorWakeDeliveryFailed({
+        artifactID: wake.id,
+        ingress: wake.ingress,
+        errorName: error instanceof Error ? error.name : "TaskExecutionCapsuleRuntimeError",
+        message: error instanceof Error ? error.message : String(error),
+      })
+    }
+    throw error
+  }
   if (isTaskTerminal(task)) {
     const cwd = taskRootDirectory(task)
-    enqueueTaskEvent(task, OrchestratorEventSchema.parse(input.event ?? { note: "Task wake" }))
     await input.beforeAcceptedWake?.({ taskID: task.id, result: "started" })
     if (!(await drainQueuedTaskEvent(task.id))) {
       log.info("terminal Task ingress is queued behind the current root prompt owner", {
@@ -2053,7 +2281,6 @@ export async function dispatchTaskLoop(input: DispatchTaskLoopInput): Promise<Di
     return "started"
   }
   const cwd = taskRootDirectory(task)
-  enqueueTaskEvent(task, input.event ?? { note: "Task wake" })
   if (task.session_id && SessionPromptState.isRootSessionProcessShutdownHandoffActive(task.session_id)) {
     await consumePendingWaitCronForAcceptedWake(task, "task wake accepted for post-destructive-scope delivery")
     await input.beforeAcceptedWake?.({ taskID: task.id, result: "queued" })
@@ -2081,11 +2308,30 @@ export async function dispatchTaskLoop(input: DispatchTaskLoopInput): Promise<Di
   // don't want to block on task completion.
   const runTaskLoop = requireTaskLoopRunner()
   await consumePendingWaitCronForAcceptedWake(task, "task wake accepted as active re-entry")
-  await input.beforeAcceptedWake?.({ taskID: task.id, result: "started" })
-  const wake = findNextPendingQueuedOperatorWake(task.id)
-  if (!wake) throw new Error(`Task ${task.id} persisted wake disappeared before root Session enqueue`)
-  attachLoopCompletion(task.id, wake.id, cwd, launchTaskLoop(task, wake, cwd, runTaskLoop))
-  return "started"
+  const wake = findPendingQueuedOperatorWakeByID(task.id, persistedWakeID)
+  if (!wake) {
+    const existing = findQueuedOperatorWakeByID(task.id, persistedWakeID)
+    if (!existing) throw new Error(`Task ${task.id} persisted wake disappeared before root Session enqueue`)
+    if (existing.label === "running") {
+      const position = SessionPromptState.rootWakeQueuePosition(existing.ingress.root_session_id, existing.id)
+      const result = position === undefined || position === 0 ? "started" : "queued"
+      await input.beforeAcceptedWake?.({ taskID: task.id, result })
+      return result
+    }
+    if (["drained", "delivery_failed", "terminal_inapplicable"].includes(existing.label)) {
+      await input.beforeAcceptedWake?.({ taskID: task.id, result: "started" })
+      return "started"
+    }
+    throw new Error(`Task ${task.id} persisted wake ${persistedWakeID} has unsupported state ${existing.label}`)
+  }
+  const loop = launchTaskLoop(task, wake, cwd, runTaskLoop)
+  const position = SessionPromptState.rootWakeQueuePosition(wake.rootSessionID, wake.id)
+  if (position === undefined)
+    throw new Error(`Task ${task.id} wake ${wake.id} was not attached to its root Session queue`)
+  const result = position === 0 ? "started" : "queued"
+  await input.beforeAcceptedWake?.({ taskID: task.id, result })
+  attachLoopCompletion(task.id, wake.id, cwd, loop)
+  return result
 }
 
 export async function dispatchPersistedTaskLoop(taskID: string): Promise<DispatchTaskLoopResult> {
@@ -2104,12 +2350,73 @@ export async function dispatchPersistedTaskLoop(taskID: string): Promise<Dispatc
     if (!(await drainQueuedTaskEvent(taskID))) {
       throw new Error(`Task ${taskID} persisted wake could not be attached to its active root Session`)
     }
-    return "started"
+    const position = SessionPromptState.rootWakeQueuePosition(wake.rootSessionID, wake.id)
+    return position === undefined || position === 0 ? "started" : "queued"
   }
   if (!(await drainQueuedTaskEvent(taskID))) {
     throw new Error(`Task ${taskID} persisted wake could not be attached to its terminal conversation`)
   }
   return "started"
+}
+
+export async function reconcileTerminalAgentLifecycleDeliveries(): Promise<number> {
+  const tasks = Database.use((db) =>
+    db
+      .select({ id: EngineTaskTable.id })
+      .from(EngineTaskTable)
+      .where(
+        and(
+          eq(EngineTaskTable.project_id, Instance.project.id),
+          sql`${EngineTaskTable.time_started} IS NOT NULL`,
+          sql`${EngineTaskTable.time_completed} IS NULL`,
+        ),
+      )
+      .all(),
+  )
+  let reconciled = 0
+  for (const task of tasks) {
+    for (const lineage of listDispatchLineage(task.id)) {
+      const descriptor = WorkerTurnDescriptor.findForDispatch({
+        sessionID: lineage.payload.child_session_id,
+        dispatchID: lineage.dispatchID,
+      })
+      if (!descriptor) continue
+      const lifecycle = ProtocolStore.latestSessionOccurrenceEvent(
+        lineage.payload.child_session_id,
+        "agent.execution.lifecycle",
+        descriptor.payload.messageAuthority.user_message_id,
+      )
+      const status = lifecycle?.payload?.status
+      if (!status || typeof status !== "object" || (status as Record<string, unknown>).type !== "terminal") continue
+      const delivered = Database.use((db) =>
+        db
+          .select({ id: EngineArtifactTable.id })
+          .from(EngineArtifactTable)
+          .where(
+            and(
+              eq(EngineArtifactTable.task_id, task.id),
+              eq(EngineArtifactTable.kind, "queued_operator_wake"),
+              sql`json_extract(${EngineArtifactTable.payload}, '$.lifecycle_event_id') = ${lifecycle.id}`,
+            ),
+          )
+          .get(),
+      )
+      if (delivered) continue
+      await dispatchTaskLoop({
+        taskID: task.id,
+        event: {
+          note: `Recover terminal worker Session ${lineage.payload.child_session_id} dispatch ${lineage.dispatchID}.`,
+          agentLifecycleDelivery: {
+            eventID: lifecycle.id,
+            sessionID: lineage.payload.child_session_id,
+            dispatchID: lineage.dispatchID,
+          },
+        },
+      })
+      reconciled += 1
+    }
+  }
+  return reconciled
 }
 
 async function consumePendingWaitCronForAcceptedWake(task: TaskRow, reason: string): Promise<void> {

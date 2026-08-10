@@ -39,6 +39,8 @@ async function rethrowWithCleanup(
 }
 
 export namespace ProcessSupervisor {
+  export type TaskCancellationRole = "mandatory" | "auxiliary"
+
   export interface SpawnOptions {
     command: string
     shell: string
@@ -47,6 +49,7 @@ export namespace ProcessSupervisor {
     stdin?: "ignore" | "pipe"
     gracefulTerminationMs?: number
     owner?: string
+    taskCancellationRole?: TaskCancellationRole
   }
 
   export interface CommandSpawnOptions {
@@ -57,6 +60,7 @@ export namespace ProcessSupervisor {
     stdin?: "ignore" | "pipe"
     gracefulTerminationMs?: number
     owner?: string
+    taskCancellationRole?: TaskCancellationRole
     /** Launch a replacement process outside the current supervisor's native cleanup job. */
     detached?: boolean
   }
@@ -68,7 +72,10 @@ export namespace ProcessSupervisor {
     stdin: NodeJS.WritableStream | null
     stdout: NodeJS.ReadableStream | null
     stderr: NodeJS.ReadableStream | null
+    /** Physical process exit. Output collectors must separately await outputSettled. */
     exited: Promise<number>
+    /** Completion of stdout/stderr delivery after physical exit. */
+    outputSettled?: Promise<void>
     terminate(): Promise<void>
     dispose(): Promise<void>
     unref(): void
@@ -110,6 +117,7 @@ export namespace ProcessSupervisor {
     cwd?: string
     owner: string
     taskID?: string
+    taskCancellationRole: TaskCancellationRole
     handle: Handle
   }
 
@@ -121,44 +129,59 @@ export namespace ProcessSupervisor {
   let nextLiveHandleID = 1
   const liveHandles = new Map<number, LiveHandle>()
   const taskSpawnRegistrations = new Map<string, Set<Promise<void>>>()
-  const taskLeaseKey = (taskID: string) => `task-process:${taskID}`
+  const taskLeaseKey = (taskID: string, role: TaskCancellationRole) => `task-process:${taskID}:${role}`
+  const RUNTIME_MANDATORY_SPAWN_LEASE_KEY = "runtime-task-process:mandatory"
 
-  function registerTaskSpawn(taskID: string): () => void {
+  function registerTaskSpawn(leaseKey: string): () => void {
     let settle!: () => void
     const registration = new Promise<void>((resolve) => (settle = resolve))
-    const registrations = taskSpawnRegistrations.get(taskID) ?? new Set<Promise<void>>()
+    const registrations = taskSpawnRegistrations.get(leaseKey) ?? new Set<Promise<void>>()
     registrations.add(registration)
-    taskSpawnRegistrations.set(taskID, registrations)
+    taskSpawnRegistrations.set(leaseKey, registrations)
     return () => {
       registrations.delete(registration)
-      if (registrations.size === 0) taskSpawnRegistrations.delete(taskID)
+      if (registrations.size === 0) taskSpawnRegistrations.delete(leaseKey)
       settle()
     }
   }
 
-  async function taskProcessReadLease(taskID: string) {
+  async function taskProcessReadLease(taskID: string, role: TaskCancellationRole) {
+    const runtimeAdmission = role === "mandatory" ? await Lock.read(RUNTIME_MANDATORY_SPAWN_LEASE_KEY) : undefined
     let finishRegistration: (() => void) | undefined
-    const lease = await Lock.read(taskLeaseKey(taskID), () => {
-      finishRegistration = registerTaskSpawn(taskID)
-    })
-    return {
-      lease,
-      finishRegistration: () => finishRegistration?.(),
+    const leaseKey = taskLeaseKey(taskID, role)
+    try {
+      const lease = await Lock.read(leaseKey, () => {
+        finishRegistration = registerTaskSpawn(leaseKey)
+      })
+      return {
+        lease,
+        finishRegistration: () => {
+          finishRegistration?.()
+          runtimeAdmission?.[Symbol.dispose]()
+        },
+      }
+    } catch (error) {
+      runtimeAdmission?.[Symbol.dispose]()
+      throw error
     }
   }
 
-  export async function spawnTaskShell(identity: TaskProcessIdentity, opts: Omit<SpawnOptions, "cwd">): Promise<Handle> {
-    const spawn = await taskProcessReadLease(identity.taskID)
+  export async function spawnTaskShell(
+    identity: TaskProcessIdentity,
+    opts: Omit<SpawnOptions, "cwd">,
+  ): Promise<Handle> {
+    const spawn = await taskProcessReadLease(identity.taskID, opts.taskCancellationRole ?? "mandatory")
     try {
       const execution = await resolveTaskProcessExecution(identity)
-      const handle = execution.kind === "task_capsule"
-        ? await spawnTaskCapsuleCommand({
-            command: { executable: opts.shell, args: ["-c", opts.command], env: opts.env },
-            capsule: execution.capsule,
-            stdin: opts.stdin,
-            gracefulTerminationMs: opts.gracefulTerminationMs,
-          })
-        : await (factory ?? defaultSpawnShell)({ ...opts, cwd: identity.cwd })
+      const handle =
+        execution.kind === "task_capsule"
+          ? await spawnTaskCapsuleCommand({
+              command: { executable: opts.shell, args: ["-c", opts.command], env: opts.env },
+              capsule: execution.capsule,
+              stdin: opts.stdin,
+              gracefulTerminationMs: opts.gracefulTerminationMs,
+            })
+          : await (factory ?? defaultSpawnShell)({ ...opts, cwd: identity.cwd })
       const tracked = trackLiveHandle({ ...opts, cwd: identity.cwd }, handle, identity.taskID)
       spawn.finishRegistration()
       void tracked.exited.finally(() => spawn.lease[Symbol.dispose]()).catch(() => undefined)
@@ -181,17 +204,18 @@ export namespace ProcessSupervisor {
     if (opts.detached) {
       throw new Error("Task Execution Capsule commands cannot detach from their systemd lifecycle owner")
     }
-    const spawn = await taskProcessReadLease(identity.taskID)
+    const spawn = await taskProcessReadLease(identity.taskID, opts.taskCancellationRole ?? "mandatory")
     try {
       const execution = await resolveTaskProcessExecution(identity)
-      const handle = execution.kind === "task_capsule"
-        ? await spawnTaskCapsuleCommand({
-            command: { executable: opts.executable, args: opts.args, env: opts.env },
-            capsule: execution.capsule,
-            stdin: opts.stdin,
-            gracefulTerminationMs: opts.gracefulTerminationMs,
-          })
-        : await (commandFactory ?? defaultSpawnCommand)({ ...opts, cwd: identity.cwd })
+      const handle =
+        execution.kind === "task_capsule"
+          ? await spawnTaskCapsuleCommand({
+              command: { executable: opts.executable, args: opts.args, env: opts.env },
+              capsule: execution.capsule,
+              stdin: opts.stdin,
+              gracefulTerminationMs: opts.gracefulTerminationMs,
+            })
+          : await (commandFactory ?? defaultSpawnCommand)({ ...opts, cwd: identity.cwd })
       const tracked = trackLiveHandle({ ...opts, cwd: identity.cwd }, handle, identity.taskID)
       spawn.finishRegistration()
       void tracked.exited.finally(() => spawn.lease[Symbol.dispose]()).catch(() => undefined)
@@ -302,10 +326,20 @@ export namespace ProcessSupervisor {
     return { disposed: matches.length, pids: matches.map((entry) => entry.pid) }
   }
 
-  async function disposeLiveProcessesForTask(taskID: string): Promise<void> {
-    const matches = Array.from(liveHandles.values()).filter((entry) => entry.taskID === taskID)
+  async function disposeLiveProcessesForTask(
+    taskID: string,
+    role?: TaskCancellationRole,
+    physicalExitOnly = false,
+  ): Promise<void> {
+    const matches = Array.from(liveHandles.values()).filter(
+      (entry) => entry.taskID === taskID && (role === undefined || entry.taskCancellationRole === role),
+    )
     const results = await Promise.allSettled(
-      matches.map((entry) => disposeAndWaitForExit(entry.handle, `Task ${taskID} supervised process ${entry.pid}`)),
+      matches.map((entry) =>
+        physicalExitOnly
+          ? requestDisposeAndWaitForPhysicalExit(entry.handle, `Task ${taskID} supervised process ${entry.pid}`)
+          : disposeAndWaitForExit(entry.handle, `Task ${taskID} supervised process ${entry.pid}`),
+      ),
     )
     const failures = results.filter((result): result is PromiseRejectedResult => result.status === "rejected")
     if (failures.length > 0) {
@@ -316,17 +350,83 @@ export namespace ProcessSupervisor {
     }
   }
 
-  export async function withTaskCheckpointLease<T>(taskID: string, run: () => Promise<T>): Promise<T> {
-    const reservation = Lock.reserveWrite(taskLeaseKey(taskID))
+  /** Holds the Task process write lease across the physical stop proof and the
+   * terminal commit so no new mutating Task process can enter the gap. */
+  export async function withTaskCancellationBarrier<T>(taskID: string, terminalCommit: () => Promise<T>): Promise<T> {
+    const leaseKey = taskLeaseKey(taskID, "mandatory")
+    const reservation = Lock.reserveWrite(leaseKey)
     try {
-      const registrations = taskSpawnRegistrations.get(taskID)
+      const registrations = taskSpawnRegistrations.get(leaseKey)
       if (registrations) await Promise.all([...registrations])
-      await disposeLiveProcessesForTask(taskID)
+      await disposeLiveProcessesForTask(taskID, "mandatory", true)
       await disposeTaskExecutionCapsule(taskID)
       using lease = await reservation.acquired
-      return run()
+      const remaining = Array.from(liveHandles.values()).filter(
+        (entry) => entry.taskID === taskID && entry.taskCancellationRole === "mandatory",
+      )
+      if (remaining.length > 0) {
+        throw new Error(`Task ${taskID} still owns ${remaining.length} mandatory process(es) after cancellation stop`)
+      }
+      return await terminalCommit()
     } catch (error) {
       reservation.cancel()
+      throw error
+    }
+  }
+
+  export async function settleTaskAuxiliaryProcesses(taskID: string): Promise<void> {
+    await disposeLiveProcessesForTask(taskID, "auxiliary")
+  }
+
+  /** Stops every Task-owned mutating process before this backend relinquishes
+   * its exclusive database runtime ownership. Prompt/tool settlement runs
+   * first, so no new mandatory spawn may be admitted while this proof runs. */
+  export async function acquireRuntimeMandatorySettlementGate(): Promise<Disposable> {
+    const reservation = Lock.reserveWrite(RUNTIME_MANDATORY_SPAWN_LEASE_KEY)
+    let gate: Disposable | undefined
+    try {
+      gate = await reservation.acquired
+      const taskIDs = [
+        ...new Set(
+          [...liveHandles.values()]
+            .filter((entry) => entry.taskID && entry.taskCancellationRole === "mandatory")
+            .map((entry) => entry.taskID!),
+        ),
+      ]
+      for (const taskID of taskIDs) await withTaskCancellationBarrier(taskID, async () => undefined)
+      const remaining = [...liveHandles.values()].filter(
+        (entry) => entry.taskID && entry.taskCancellationRole === "mandatory",
+      )
+      if (remaining.length > 0) {
+        throw new Error(`Runtime still owns ${remaining.length} mandatory Task process(es) after settlement`)
+      }
+      return gate
+    } catch (error) {
+      reservation.cancel()
+      gate?.[Symbol.dispose]()
+      throw error
+    }
+  }
+
+  export async function withTaskCheckpointLease<T>(taskID: string, run: () => Promise<T>): Promise<T> {
+    const mandatoryLeaseKey = taskLeaseKey(taskID, "mandatory")
+    const auxiliaryLeaseKey = taskLeaseKey(taskID, "auxiliary")
+    const mandatoryReservation = Lock.reserveWrite(mandatoryLeaseKey)
+    const auxiliaryReservation = Lock.reserveWrite(auxiliaryLeaseKey)
+    try {
+      const registrations = [
+        ...(taskSpawnRegistrations.get(mandatoryLeaseKey) ?? []),
+        ...(taskSpawnRegistrations.get(auxiliaryLeaseKey) ?? []),
+      ]
+      if (registrations.length > 0) await Promise.all(registrations)
+      await disposeLiveProcessesForTask(taskID)
+      await disposeTaskExecutionCapsule(taskID)
+      using mandatoryLease = await mandatoryReservation.acquired
+      using auxiliaryLease = await auxiliaryReservation.acquired
+      return run()
+    } catch (error) {
+      mandatoryReservation.cancel()
+      auxiliaryReservation.cancel()
       throw error
     }
   }
@@ -412,7 +512,7 @@ export namespace ProcessSupervisor {
   }
 
   function trackLiveHandle(
-    opts: { cwd?: string; owner?: string; detached?: boolean },
+    opts: { cwd?: string; owner?: string; detached?: boolean; taskCancellationRole?: TaskCancellationRole },
     handle: Handle,
     taskID?: string,
   ): Handle {
@@ -431,6 +531,7 @@ export namespace ProcessSupervisor {
       stdout: handle.stdout,
       stderr: handle.stderr,
       exited: handle.exited,
+      outputSettled: handle.outputSettled,
       terminate: () => handle.terminate(),
       dispose: async () => {
         await handle.dispose()
@@ -441,7 +542,15 @@ export namespace ProcessSupervisor {
         if (opts.detached) unregister()
       },
     }
-    liveHandles.set(id, { id, pid: handle.pid, cwd, owner, taskID, handle: tracked })
+    liveHandles.set(id, {
+      id,
+      pid: handle.pid,
+      cwd,
+      owner,
+      taskID,
+      taskCancellationRole: opts.taskCancellationRole ?? "mandatory",
+      handle: tracked,
+    })
     void handle.exited.finally(unregister).catch(() => undefined)
     return tracked
   }
@@ -499,29 +608,47 @@ export namespace ProcessSupervisor {
   ): Promise<number> {
     const cleanupTimeoutMs = opts.cleanupTimeoutMs ?? TERMINATION_CLEANUP_TIMEOUT_MS
     const exitTimeoutMs = opts.exitTimeoutMs ?? TERMINATION_EXIT_TIMEOUT_MS
-    void handle.exited.catch(() => undefined)
-    const cleanup = await Promise.allSettled([
+    const [cleanup, exit, output] = await Promise.allSettled([
       awaitWithTimeout(
         handle.dispose(),
         cleanupTimeoutMs,
         `${label} dispose cleanup did not finish within ${cleanupTimeoutMs}ms`,
       ),
-    ]).then(([result]) => result!)
-    const exit = await Promise.allSettled([
       awaitWithTimeout(
         handle.exited,
         exitTimeoutMs,
-        `${label} dispose cleanup completed but process did not exit within ${exitTimeoutMs}ms`,
+        `${label} process did not exit within ${exitTimeoutMs}ms after disposal was requested`,
       ),
-    ]).then(([result]) => result!)
-    if (cleanup.status === "rejected" || exit.status === "rejected") {
-      const failures = [
+      awaitWithTimeout(
+        handle.outputSettled ?? handle.exited.then(() => undefined),
+        exitTimeoutMs,
+        `${label} output did not settle within ${exitTimeoutMs}ms after disposal was requested`,
+      ),
+    ])
+    if (cleanup.status === "rejected" || exit.status === "rejected" || output.status === "rejected") {
+      throw combineFailures(`${label} disposal failed`, [
         ...(cleanup.status === "rejected" ? [cleanup.reason] : []),
         ...(exit.status === "rejected" ? [exit.reason] : []),
-      ]
-      throw combineFailures(`${label} disposal failed`, failures)
+        ...(output.status === "rejected" ? [output.reason] : []),
+      ])
     }
     return exit.value
+  }
+
+  export async function requestDisposeAndWaitForPhysicalExit(
+    handle: Handle,
+    label: string,
+    opts: { exitTimeoutMs?: number } = {},
+  ): Promise<number> {
+    const cleanup = handle.dispose()
+    void cleanup.catch((error) => {
+      process.emitWarning(`${label} deferred cleanup failed after physical exit: ${errorMessage(error)}`)
+    })
+    return await awaitWithTimeout(
+      handle.exited,
+      opts.exitTimeoutMs ?? TERMINATION_EXIT_TIMEOUT_MS,
+      `${label} process did not exit after disposal was requested`,
+    )
   }
 
   export async function terminateProcessTree(pid: number, label = `process ${pid}`): Promise<void> {
@@ -904,14 +1031,14 @@ export namespace ProcessSupervisor {
       },
     )
     const exited = helperExitOutcome.then((outcome) => {
-      const failures = [...outputFailures]
-      if ("error" in outcome) {
-        failures.unshift(outcome.error)
-      } else if (failures.length === 0) {
-        return outcome.code
+      if ("error" in outcome) throw outcome.error
+      return outcome.code
+    })
+    const outputSettled = (helperHandle.outputSettled ?? helperHandle.exited.then(() => undefined)).then(() => {
+      if (outputFailures.length === 1) throw outputFailures[0]
+      if (outputFailures.length > 1) {
+        throw new AggregateError(outputFailures, "Windows process supervisor output streams failed")
       }
-      if (failures.length === 1) throw failures[0]
-      throw new AggregateError(failures, "Windows process supervisor process and output streams failed")
     })
     // Consumers still observe the original rejected promise; this attachment
     // prevents an early process or stream rejection from becoming unhandled.
@@ -977,6 +1104,7 @@ export namespace ProcessSupervisor {
       stdout,
       stderr,
       exited,
+      outputSettled,
       terminate,
       dispose,
     }
@@ -990,22 +1118,19 @@ export namespace ProcessSupervisor {
     let disposal: Promise<void> | undefined
     let termination: Promise<void> | undefined
     let settled = false
-    let exitCode: number | null = null
-    let exitSignal: NodeJS.Signals | null = null
     const exited = new Promise<number>((resolve, reject) => {
       proc.once("exit", (code, signal) => {
         settled = true
-        exitCode = code
-        exitSignal = signal
-      })
-      proc.once("close", (code, signal) => {
-        settled = true
-        resolve(code ?? exitCode ?? (signal || exitSignal ? 1 : 0))
+        resolve(code ?? (signal ? 1 : 0))
       })
       proc.once("error", (error) => {
         settled = true
         reject(error)
       })
+    })
+    const outputSettled = new Promise<void>((resolve, reject) => {
+      proc.once("close", () => resolve())
+      proc.once("error", reject)
     })
 
     const terminate = () => {
@@ -1051,6 +1176,7 @@ export namespace ProcessSupervisor {
       stdout: proc.stdout,
       stderr: proc.stderr,
       exited,
+      outputSettled,
       terminate,
       dispose,
       unref() {

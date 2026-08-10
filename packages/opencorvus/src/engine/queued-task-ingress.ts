@@ -147,6 +147,20 @@ const InfrastructureRecovery = z
   })
   .strict()
 
+const AgentLifecycleDelivery = z
+  .object({
+    ...CommonShape,
+    source_kind: z.literal("agent_lifecycle_delivery"),
+    lifecycle_event_id: z.string().min(1),
+    event: z
+      .object({
+        ...NoteShape,
+        agentLifecycleDelivery: OrchestratorEventSchema.shape.agentLifecycleDelivery.unwrap(),
+      })
+      .strict(),
+  })
+  .strict()
+
 const TaskWaitActivity = z
   .object({
     ...CommonShape,
@@ -200,6 +214,7 @@ export const QueuedTaskIngressSchema = z
     MissionAcceptanceResume,
     CoordinationRequest,
     InfrastructureRecovery,
+    AgentLifecycleDelivery,
     TaskWaitActivity,
     TaskWaitWake,
     OrchestratorEvent,
@@ -228,6 +243,12 @@ export const QueuedTaskIngressSchema = z
     ) {
       context.addIssue({ code: "custom", message: "queued recovery identity does not match processRecovery" })
     }
+    if (
+      payload.source_kind === "agent_lifecycle_delivery" &&
+      payload.lifecycle_event_id !== payload.event.agentLifecycleDelivery.eventID
+    ) {
+      context.addIssue({ code: "custom", message: "queued lifecycle delivery identity does not match event" })
+    }
     if (payload.source_kind === "task_wait_wake" && payload.wait_job_id !== payload.event.taskWaitWake.jobID) {
       context.addIssue({ code: "custom", message: "queued task wait identity does not match taskWaitWake" })
     }
@@ -245,6 +266,7 @@ export function queuedTaskIngressSourceKind(event: OrchestratorEvent): QueuedTas
   if (parsed.missionAcceptanceResume) candidates.push("mission_acceptance_resume")
   if (parsed.coordinationRequest) candidates.push("coordination_request")
   if (parsed.processRecovery) candidates.push("infrastructure_recovery")
+  if (parsed.agentLifecycleDelivery) candidates.push("agent_lifecycle_delivery")
   if (parsed.taskWaitActivity) candidates.push("task_wait_activity")
   if (parsed.taskWaitWake) candidates.push("task_wait_wake")
   if (parsed.note && candidates.length === 0) candidates.push("orchestrator_event")

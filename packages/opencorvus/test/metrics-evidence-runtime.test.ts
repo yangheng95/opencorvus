@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import path from "node:path"
-import { writeFile } from "node:fs/promises"
+import { readFile, writeFile } from "node:fs/promises"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
@@ -287,6 +287,14 @@ describe("Metric scorer exact evidence runtime", () => {
           files: [{ tree: "judge-input", path: "source.txt", media_type: "text/plain" }],
         })
         const sourceLocator = { source: "task_artifact_resource" as const, ref: sourcePublication.artifacts[0]! }
+        const materializedSource = await readTaskArtifact({
+          authority: { projectID: Instance.project.id, projectDirectory: project.path, taskID },
+          read: { locator: sourceLocator, byte_offset: 0, max_bytes: 1, delivery: "materialized_file" },
+        })
+        expect(path.dirname(materializedSource.chunk.materialized_path!)).toBe(
+          ProjectRuntimePaths.taskArtifactReadMaterializationRoot(project.path, taskID),
+        )
+        expect(await readFile(materializedSource.chunk.materialized_path!, "utf8")).toBe(sourceText)
 
         const digest = "d".repeat(64)
         const executable = Bun.which("node")!

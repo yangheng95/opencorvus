@@ -134,6 +134,7 @@ describe("canonical Work Ledger and Project Worktree response contracts", () => 
       priority: "normal",
       source: "operator",
       queueOrder: 0,
+      productPillar: "code",
       pendingInteractions: 0,
       missionID: "mission-1",
       missionSessionID: "session-1",
@@ -150,6 +151,7 @@ describe("canonical Work Ledger and Project Worktree response contracts", () => 
       updated: 2,
       pinned: true,
       interruptible: true,
+      productPillar: "code",
       taskStats: { total: 1, running: 1, inactive: 0 },
       pendingInteractions: 0,
       tasks: [task],
@@ -162,7 +164,7 @@ describe("canonical Work Ledger and Project Worktree response contracts", () => 
     const worktree = {
       name: "session-1",
       branch: "opencorvus/s/session-1",
-      directory: "/repo/.opencorvus/.r/w/session-1/worktree",
+      directory: "/repo/.opencorvus/.r/tasks/tsk_1/sessions/ses_1/worktree",
       status: "managed",
       removable: true,
     }

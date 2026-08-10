@@ -32,7 +32,7 @@ import {
   type EngineMetadata,
 } from "./engine.sql"
 import { deriveTaskStatus, taskTerminalReason } from "./task-status"
-import { taskCancellationProjection } from "./cancellation-projection"
+import { pendingTaskCancellationProjection, taskCancellationProjection } from "./cancellation-projection"
 import { GoalWorkloadArtifactSchema, type GoalWorkloadArtifact } from "@/goal-workload-analyst/types"
 import type { RequirementSet } from "@/requirements/types"
 import {
@@ -1220,7 +1220,8 @@ export function viewTask(row: TaskRow, input?: { directory?: string }) {
     request: row.request,
     status,
     terminalReason: taskTerminalReason(row),
-    cancellation: status === "cancelled" ? taskCancellationProjection(row.id) : undefined,
+    cancellation:
+      status === "cancelled" ? taskCancellationProjection(row.id) : pendingTaskCancellationProjection(row.id),
     priority: row.priority,
     packageRevisionBinding: requireTaskPackageRevisionBinding(row.id),
     queue: {

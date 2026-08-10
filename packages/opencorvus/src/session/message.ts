@@ -12,7 +12,7 @@ import { ProviderError } from "@/provider/error"
 import { type SystemError } from "bun"
 import type { Provider } from "@/provider/provider"
 import { ProviderTransform } from "@/provider/transform"
-import { decodeDataUrlBase64Bytes, isDecodableText } from "./text-mime"
+import { decodeDataUrlBase64Bytes, decodeTextBytes, isDecodableText } from "./text-mime"
 import { STATEFUL_SNAPSHOT_TOOL_NAMES, statefulSnapshotToolKey } from "@/orchestrator/stateful-tool-names"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { CompactionHandoff } from "./compaction-handoff"
@@ -912,7 +912,21 @@ export namespace Message {
     // capability. This makes unsupported transports observable without letting
     // missing or corrupt evidence masquerade as a harmless provider omission.
     const resolvedAttachments = await Promise.all(rawAttachments.map(resolveToolResultAttachment))
-    const transports = resolvedAttachments.map((attachment) => ({
+    const textAttachments = resolvedAttachments.filter((attachment) =>
+      isDecodableText(attachment.mime, attachment.filename),
+    )
+    const binaryAttachments = resolvedAttachments.filter(
+      (attachment) => !isDecodableText(attachment.mime, attachment.filename),
+    )
+    const decodedAttachmentText = textAttachments
+      .map((attachment) =>
+        [
+          `[Tool-result text attachment: ${attachment.filename ?? attachment.safeReference}; mime=${attachment.mime}; ref=${attachment.safeReference}; sha256=${attachment.sha256}; bytes=${attachment.byteLength}]`,
+          decodeTextBytes(attachment.bytes),
+        ].join("\n"),
+      )
+      .join("\n\n")
+    const transports = binaryAttachments.map((attachment) => ({
       attachment,
       transport: ProviderTransform.toolResultAttachmentTransport(model, attachment.mime),
     }))
@@ -969,7 +983,9 @@ export namespace Message {
         : typeof outputObject.output === "string"
           ? outputObject.output
           : ""
-    const text = [baseText, unsupportedText, ...cropNotes].filter((item) => item.length > 0).join("\n\n")
+    const text = [baseText, decodedAttachmentText, unsupportedText, ...cropNotes]
+      .filter((item) => item.length > 0)
+      .join("\n\n")
 
     if (attachmentParts.length === 0) {
       if (text.length > 0) return { type: "text" as const, value: text }

@@ -1223,4 +1223,30 @@ export namespace Database {
       throwNormalized(error, "Database.transaction")
     }
   }
+
+  /** Acquire SQLite's cross-process writer reservation before the first read.
+   * Use for find-or-create authorities whose losing caller must observe the
+   * winner instead of racing a deferred read transaction into SQLITE_BUSY. */
+  export function immediateTransaction<T>(
+    callback: (tx: TxOrDb) => T,
+    ..._synchronousOnly: T extends PromiseLike<unknown> ? [never] : []
+  ): T {
+    assertDatabaseAccess("Database.immediateTransaction")
+    throwIfUnavailable()
+    const active = ctx.tryUse()
+    if (active) return assertSynchronousResult(callback(active.tx), "Database.immediateTransaction")
+
+    try {
+      const effects: (() => void | Promise<void>)[] = []
+      const result = Client().transaction(
+        (tx) =>
+          provideDatabaseContext({ tx, effects, closed: false }, "Database.immediateTransaction", () => callback(tx)),
+        { behavior: "immediate" },
+      )
+      drainEffects(effects)
+      return result
+    } catch (error) {
+      throwNormalized(error, "Database.immediateTransaction")
+    }
+  }
 }

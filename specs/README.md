@@ -1,18 +1,20 @@
 # Specs Storage Index
 
-Latest hosted Expert Squad market integration and local end-to-end rehearsal: [`2026-08-10-hosted-expert-squad-market-integration.md`](records/2026-08/2026-08-10-hosted-expert-squad-market-integration.md).
+Latest Task control responsiveness and cancellation convergence repair plan: [`2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md`](records/2026-08/2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md).
 
-Latest WorkBuddy Expert Squad expansion and fresh target E2E plan: [`2026-08-10-workbuddy-expert-squad-expansion-and-e2e.md`](records/2026-08/2026-08-10-workbuddy-expert-squad-expansion-and-e2e.md).
+Current Task control-plane architecture: [`task-control-plane.md`](current/architecture/task-control-plane.md).
 
-Latest bounded Expert Squad catalog and context closure: [`2026-08-10-expert-squad-bounded-catalog-and-context.md`](records/2026-08/2026-08-10-expert-squad-bounded-catalog-and-context.md).
+Latest per-Task runtime directory isolation: [`2026-08-10-task-runtime-directory-isolation.md`](records/2026-08/2026-08-10-task-runtime-directory-isolation.md).
 
-Latest Host search fallback and unified message citations: [`2026-08-10-host-search-and-unified-citations.md`](records/2026-08/2026-08-10-host-search-and-unified-citations.md).
+Latest Task structured-file replay recovery and local repackage: [`2026-08-10-task-file-replay-and-recovery-repackage.md`](records/2026-08/2026-08-10-task-file-replay-and-recovery-repackage.md).
 
 Latest Work Ledger “Start from scratch” focus repair: [`2026-08-09-work-ledger-start-from-scratch-focus.md`](records/2026-08/2026-08-09-work-ledger-start-from-scratch-focus.md).
 
 Latest autonomous Visual Reviewer dispatch contract: [`2026-08-09-autonomous-visual-review-dispatch.md`](records/2026-08/2026-08-09-autonomous-visual-review-dispatch.md).
 
 Current security, permission, and metric-evaluator architecture: [`security-permission.md`](current/architecture/security-permission.md).
+
+Current per-Task runtime directory architecture: [`task-runtime-directory.md`](current/architecture/task-runtime-directory.md).
 
 Latest P0.1 architecture-debt remediation: [`2026-08-09-architecture-debt-p0-1-remediation.md`](records/2026-08/2026-08-09-architecture-debt-p0-1-remediation.md).
 

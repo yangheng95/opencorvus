@@ -231,6 +231,10 @@ function taskCanStop(row: WorkLedgerTaskRow): boolean {
   return row.lifecycleStatus === "queued" || row.lifecycleStatus === "active"
 }
 
+function taskCancellationPending(row: WorkLedgerTaskRow): boolean {
+  return row.cancellationStatus === "cancelling"
+}
+
 function missionHasVisibleStoppableTask(row: WorkLedgerMissionRow): boolean {
   return row.tasks.some(taskCanStop)
 }
@@ -366,6 +370,7 @@ function WorkLedgerRowView(props: {
   const hasSelectedMissionTask = () =>
     row().kind === "mission" && (row() as WorkLedgerMissionRow).tasks.some((task) => props.isSelected?.(task) === true)
   const rowLoading = () => workLedgerPresentationStatus(row()) === "active"
+  const cancellationPending = () => row().kind === "task" && taskCancellationPending(row() as WorkLedgerTaskRow)
 
   const canStop = () => {
     const current = row()
@@ -408,6 +413,7 @@ function WorkLedgerRowView(props: {
   function stopLabel() {
     if (row().kind === "mission") return t("mission.ledger.abort_title")
     if (row().kind === "chat") return t("coding_assistant.ledger.stop_title")
+    if (cancellationPending()) return t("task.cancelling_button_title")
     return t("task.cancel_button_title")
   }
 
@@ -596,7 +602,8 @@ function WorkLedgerRowView(props: {
                 tone="neutral"
                 data-chrome="icon-action"
                 data-ui={stopDataUi()}
-                disabled={busy()}
+                data-state={cancellationPending() ? "pending" : "idle"}
+                disabled={busy() || cancellationPending()}
                 tabIndex={rowActions.actionButtonTabIndex()}
                 title={stopLabel()}
                 aria-label={stopLabel()}
@@ -610,7 +617,7 @@ function WorkLedgerRowView(props: {
                   })
                 }}
               >
-                <Icon name="stop" />
+                <Icon name={cancellationPending() ? "loading" : "stop"} />
               </Button>
             </Show>
             <Show when={showDownloadActions && canDownload()}>

@@ -35,6 +35,7 @@ import { CreateTaskInput } from "@/engine/model"
 import { installInProcessServerApp } from "./in-process-client"
 import { projectRouteUsesIdentityContext } from "./project-route-context"
 import { AutomationService } from "@/scheduler/automation-service"
+import { Scheduler } from "@/scheduler"
 
 muteAISdkWarnings()
 
@@ -64,6 +65,32 @@ export namespace Server {
   export interface RuntimeTransferHandle {
     quiesced: Promise<void>
     releaseOwnership(): void
+  }
+
+  export async function settleCurrentProcessExecution(reason: string) {
+    const schedulerSettlement = Scheduler.disposeGlobal()
+    void schedulerSettlement.catch((error) => {
+      log.error("global scheduler settlement failed", { error })
+    })
+    const { terminateCurrentProcessOwnedExecution } = await import("../engine/writer")
+    const terminated = await terminateCurrentProcessOwnedExecution({ reason })
+    try {
+      await schedulerSettlement
+      const mandatorySpawnGate = await ProcessSupervisor.acquireRuntimeMandatorySettlementGate()
+      return {
+        ...terminated,
+        releaseHandoff() {
+          try {
+            mandatorySpawnGate[Symbol.dispose]()
+          } finally {
+            terminated.releaseHandoff()
+          }
+        },
+      }
+    } catch (error) {
+      terminated.releaseHandoff()
+      throw error
+    }
   }
 
   /** Stop request admission while retaining the database runtime lease until
@@ -460,6 +487,7 @@ export namespace Server {
   }) {
     const runtimeOwnership = RuntimeServerOwnership.acquire({ database: Database.Path() })
     let boundServer: ReturnType<typeof Bun.serve> | undefined
+    let runtimeStopInstalled = false
     try {
       configureCorsOrigins(opts.cors)
       AutomationService.initGlobal()
@@ -519,6 +547,7 @@ export namespace Server {
       let listenerStopped = false
       let ownershipReleased = false
       let quiesceOperation: Promise<void> | undefined
+      let stopOperation: Promise<void> | undefined
       let cleanupFailures: unknown[] = []
       const releaseOwnership = () => {
         if (ownershipReleased) return
@@ -573,19 +602,48 @@ export namespace Server {
         return operation
       }
       runtimeTransfers.set(server, { quiesce, releaseOwnership })
-      server.stop = async (closeActiveConnections?: boolean) => {
-        await quiesce(closeActiveConnections)
-        releaseOwnership()
-        if (cleanupFailures.length === 1) throw cleanupFailures[0]
-        if (cleanupFailures.length > 1) {
-          throw new AggregateError(cleanupFailures, "Server cleanup failed after listener stopped")
-        }
+      server.stop = (closeActiveConnections?: boolean) => {
+        if (stopOperation) return stopOperation
+        const operation = (async () => {
+          await quiesce(closeActiveConnections)
+          const terminated = await settleCurrentProcessExecution("Server.stop graceful runtime shutdown")
+          try {
+            releaseOwnership()
+          } finally {
+            terminated.releaseHandoff()
+          }
+          if (cleanupFailures.length === 1) throw cleanupFailures[0]
+          if (cleanupFailures.length > 1) {
+            throw new AggregateError(cleanupFailures, "Server cleanup failed after listener stopped")
+          }
+        })()
+        stopOperation = operation
+        void operation.catch(() => {
+          if (!ownershipReleased && stopOperation === operation) stopOperation = undefined
+        })
+        return operation
       }
+      runtimeStopInstalled = true
 
       return server
     } catch (error) {
-      if (boundServer) void Promise.resolve(boundServer.stop(true))
-      runtimeOwnership.release()
+      if (runtimeStopInstalled) {
+        void Promise.resolve(boundServer!.stop(true)).catch((cleanupError) => {
+          log.error("server startup cleanup failed; retaining runtime ownership", { error: cleanupError })
+        })
+      } else {
+        void (async () => {
+          if (boundServer) await boundServer.stop(true)
+          const terminated = await settleCurrentProcessExecution("Server.listen initialization failure")
+          try {
+            runtimeOwnership.release()
+          } finally {
+            terminated.releaseHandoff()
+          }
+        })().catch((cleanupError) => {
+          log.error("server startup cleanup failed; retaining runtime ownership", { error: cleanupError })
+        })
+      }
       throw error
     }
   }

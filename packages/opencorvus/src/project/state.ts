@@ -74,6 +74,7 @@ export namespace State {
     })
     entry.disposal = operation
     const release = () => {
+      if (keyDisposals.has(key)) return
       if (entry.disposal === operation) entry.disposal = undefined
     }
     void operation.then(release, release)
@@ -81,19 +82,21 @@ export namespace State {
   }
 
   async function disposeTargets(targets: EntryTarget[], detachWithoutDisposer = false) {
-    const results = await Promise.allSettled(
-      targets.map((target) => disposeEntry(target.key, target.init, target.entry, detachWithoutDisposer)),
-    )
     const errors: Error[] = []
-    for (const result of results) {
-      if (result.status === "rejected") errors.push(lifecycleError(result.reason, "State entry disposal"))
+    for (const target of targets.toReversed()) {
+      if (recordsByKey.get(target.key)?.get(target.init) !== target.entry) continue
+      try {
+        await disposeEntry(target.key, target.init, target.entry, detachWithoutDisposer)
+      } catch (error) {
+        errors.push(lifecycleError(error, "State entry disposal"))
+      }
     }
     if (errors.length === 1) throw errors[0]
     if (errors.length > 1) throw new AggregateError(errors, `${errors.length} state entries failed to dispose`)
   }
 
-  function assertAvailable(key: string, init: unknown, entry?: Entry) {
-    if (keyDisposals.has(key)) throw new Error(`State key ${key} is being disposed`)
+  function assertAvailable(key: string, init: unknown, entry?: Entry, existingDependency = false) {
+    if (keyDisposals.has(key) && !existingDependency) throw new Error(`State key ${key} is being disposed`)
     if (initDisposals.has(init)) throw new Error("State initializer is being reset across all keys")
     if (entry?.disposal) throw new Error(`State ${entry.label} for key ${key} is being disposed`)
   }
@@ -106,16 +109,16 @@ export namespace State {
   ) {
     const fn = (() => {
       const key = root()
-      assertAvailable(key, init)
       let entries = recordsByKey.get(key)
+      const exists = entries?.get(init)
+      if (exists) {
+        assertAvailable(key, init, exists, true)
+        return exists.state as S
+      }
+      assertAvailable(key, init)
       if (!entries) {
         entries = new Map<string, Entry>()
         recordsByKey.set(key, entries)
-      }
-      const exists = entries.get(init)
-      if (exists) {
-        assertAvailable(key, init, exists)
-        return exists.state as S
       }
       let initialized: S
       try {
@@ -215,20 +218,20 @@ export namespace State {
     }, 10000)
     warning.unref()
 
-    const operation = (async () => {
-      const targets: EntryTarget[] = []
-      for (const [init, entry] of entries) {
-        targets.push({ key, init, entry })
-      }
-
-      await disposeTargets(targets)
-    })()
+    const targets: EntryTarget[] = []
+    for (const [init, entry] of entries) {
+      targets.push({ key, init, entry })
+    }
+    const operation = disposeTargets(targets)
     keyDisposals.set(key, operation)
 
     try {
       await operation
     } finally {
       clearTimeout(warning)
+      for (const target of targets) {
+        if (recordsByKey.get(target.key)?.get(target.init) === target.entry) target.entry.disposal = undefined
+      }
       if (keyDisposals.get(key) === operation) keyDisposals.delete(key)
     }
 

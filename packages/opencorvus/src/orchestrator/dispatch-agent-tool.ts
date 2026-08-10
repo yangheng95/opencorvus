@@ -26,13 +26,16 @@ import {
 } from "@/engine/workflow-binding"
 import { Identifier } from "@/id/id"
 import type { DispatchTurn } from "./dispatch-turn-projection"
-import type { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
+import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { EvidenceLocatorListSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 import type { EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import { WorkerTurnSettlementError } from "@/agent/runner"
 import { exactEngineArtifactLocator } from "@/artifact-catalog"
 import { WorkflowNodeOccurrenceConflictError } from "@/engine/workflow-node-occurrence"
 import { resolveDispatchOccurrenceAuthority } from "@/engine/dispatch-lineage"
+import { Log } from "@/util/log"
+
+const log = Log.create({ service: "dispatch-agent-tool" })
 
 export type DispatchAgentExecute = (
   args: unknown,
@@ -80,6 +83,29 @@ export type RunDispatchAgentInWorktree = <T>(input: {
   dispatchID: string
   run: () => Promise<T>
 }) => Promise<T>
+
+export async function detachDispatchExecution(input: {
+  execution: Promise<DispatchOutcomeResult>
+  committedLineage: Promise<{ sessionID: string; artifactID: string }>
+  deliver: (input: { sessionID: string; outcome?: DispatchOutcomeResult; executionError?: unknown }) => Promise<void>
+  onDeliveryFailure: (input: { sessionID: string; error: unknown }) => void
+}): Promise<DispatchOutcomeResult> {
+  const first = await Promise.race([
+    input.execution.then((outcome) => ({ kind: "completed" as const, outcome })),
+    input.committedLineage.then((lineage) => ({ kind: "accepted" as const, lineage })),
+  ])
+  if (first.kind === "completed") return first.outcome
+  void input.execution
+    .then(
+      (outcome) => input.deliver({ sessionID: first.lineage.sessionID, outcome }),
+      (executionError) => input.deliver({ sessionID: first.lineage.sessionID, executionError }),
+    )
+    .catch((error) => input.onDeliveryFailure({ sessionID: first.lineage.sessionID, error }))
+  return DispatchOutcome.accepted({
+    sessionID: first.lineage.sessionID,
+    dispatchLineageID: first.lineage.artifactID,
+  })
+}
 
 export function bindDispatchAdapterExecutors(
   input: Record<AgentDispatchAdapterID, DispatchAgentExecute>,
@@ -221,7 +247,7 @@ export function createDispatchAgentTool(input: {
     description:
       "Single scheduler agent dispatch tool. In dispatch, use target to select an exact projected worker identity. Use turn.kind=initial with workflow_subject and target-specific turn.input for a first node occurrence. Use turn.kind=continuation with one explicit lineage authority, guidance, and evidence_locators only for a successor Turn. " +
       "Every call must declare use_worktree. Concurrent write-capable Task dispatches use managed worktrees when repository ownership requires isolation; read-only or proven-disjoint dispatches may use false. " +
-      "Every adapter returns terminal_success, partial, infrastructure_failure, or a coordination request. terminal_success is already terminal: never call wait for it; discover persisted domain facts through artifact_search, exact artifact_read, and artifact_select for semantic sources. " +
+      "A newly started worker returns accepted as soon as its durable lineage and Session exist; continue the root control Turn without waiting for that worker. A fast worker may instead return terminal_success, partial, infrastructure_failure, or a coordination request. terminal_success is already terminal: never call wait for it; discover persisted domain facts through artifact_search, exact artifact_read, and artifact_select for semantic sources. " +
       "This replaces separate visible worker-stage tools such as requirements, architect, build, visual_qa, integrity, fact_check, research, workload, intent analysis, and explore.",
     inputSchema,
     outputSchema: DispatchOutcomeSchema,
@@ -328,6 +354,10 @@ export function createDispatchAgentTool(input: {
           useWorktree && projectedAgent.identity.dispatchAdapterID !== "build" && !dispatch.existingSessionID
             ? Identifier.descending("session")
             : undefined
+        let resolveCommittedLineage!: (lineage: { sessionID: string; artifactID: string }) => void
+        const committedLineage = new Promise<{ sessionID: string; artifactID: string }>((resolve) => {
+          resolveCommittedLineage = resolve
+        })
         const trackedDispatch: DispatchAgentLineageHandle = {
           dispatchID: dispatch.dispatchID,
           deliverySliceRevisionIDs: dispatch.deliverySliceRevisionIDs,
@@ -346,7 +376,9 @@ export function createDispatchAgentTool(input: {
           },
           commitSession: (sessionID, descriptor) => {
             trackedDispatch.observeSession(sessionID)
-            return dispatch.commitSession(sessionID, descriptor)
+            const committed = dispatch.commitSession(sessionID, descriptor)
+            resolveCommittedLineage({ sessionID, artifactID: committed.artifactID })
+            return committed
           },
         }
         if (dispatch.existingSessionID) {
@@ -367,21 +399,71 @@ export function createDispatchAgentTool(input: {
           )
           return DispatchAdapterContractRegistry.outputSchema(projectedAgent.identity.dispatchAdapterID).parse(outcome)
         }
-        if (useWorktree && projectedAgent.identity.dispatchAdapterID !== "build") {
-          const worktreeSessionID = dispatch.existingSessionID ?? preparedSessionID
-          if (!worktreeSessionID) {
-            throw new Error(`dispatch_agent ${target} did not allocate its managed-worktree Session identity`)
-          }
-          return await input.runInWorktree({
-            taskID: input.taskID,
-            sessionID: worktreeSessionID,
-            existingSessionID: dispatch.existingSessionID,
-            targetAgentID: target,
-            dispatchID: dispatch.dispatchID,
-            run,
-          })
-        }
-        return await run()
+        const execution =
+          useWorktree && projectedAgent.identity.dispatchAdapterID !== "build"
+            ? (() => {
+                const worktreeSessionID = dispatch.existingSessionID ?? preparedSessionID
+                if (!worktreeSessionID) {
+                  throw new Error(`dispatch_agent ${target} did not allocate its managed-worktree Session identity`)
+                }
+                return input.runInWorktree({
+                  taskID: input.taskID,
+                  sessionID: worktreeSessionID,
+                  existingSessionID: dispatch.existingSessionID,
+                  targetAgentID: target,
+                  dispatchID: dispatch.dispatchID,
+                  run,
+                })
+              })()
+            : run()
+        return await detachDispatchExecution({
+          execution,
+          committedLineage,
+          deliver: async ({ sessionID: completedSessionID }) => {
+            const { ProtocolStore } = await import("@/protocol/store")
+            const descriptor = WorkerTurnDescriptor.findForDispatch({
+              sessionID: completedSessionID,
+              dispatchID: dispatch.dispatchID,
+            })
+            if (!descriptor) {
+              throw new Error(
+                `dispatch_agent ${target} completed without a Turn descriptor for dispatch ${dispatch.dispatchID}`,
+              )
+            }
+            const lifecycle = ProtocolStore.latestSessionOccurrenceEvent(
+              completedSessionID,
+              "agent.execution.lifecycle",
+              descriptor.payload.messageAuthority.user_message_id,
+            )
+            if (!lifecycle) {
+              throw new Error(
+                `dispatch_agent ${target} completed without a canonical lifecycle event for Session ${completedSessionID}`,
+              )
+            }
+            const { dispatchTaskLoop } = await import("@/engine/queue")
+            await dispatchTaskLoop({
+              taskID: input.taskID,
+              event: {
+                note: `Worker Session ${completedSessionID} completed dispatch ${dispatch.dispatchID}.`,
+                agentLifecycleDelivery: {
+                  eventID: lifecycle.id,
+                  sessionID: completedSessionID,
+                  dispatchID: dispatch.dispatchID,
+                },
+              },
+            })
+          },
+          onDeliveryFailure: ({ sessionID: completedSessionID, error }) => {
+            log.error("detached dispatch completion delivery failed", {
+              taskID: input.taskID,
+              target,
+              dispatchID: dispatch.dispatchID,
+              sessionID: completedSessionID,
+              error: error instanceof Error ? error.message : String(error),
+              errorName: error instanceof Error ? error.name : undefined,
+            })
+          },
+        })
       } catch (error) {
         if (error instanceof WorkflowNodeOccurrenceConflictError) {
           return DispatchOutcome.infrastructureFailure({

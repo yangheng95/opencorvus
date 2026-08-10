@@ -23,6 +23,7 @@ import { Database, eq, sql } from "@/storage/db"
 import { activityFromTaskLifecycle } from "@/status/task-status-snapshot"
 import { rightSidebarConversationExperience } from "@/chat/session"
 import { TaskQueueService } from "@/scheduler/task-queue-service"
+import { pendingTaskCancellationProjection } from "@/engine/cancellation-projection"
 
 export {
   WorkLedgerArchiveList,
@@ -106,6 +107,7 @@ function workLedgerTaskFromMissionTask(
     updated: task.updated,
     pinned: task.pinned,
     lifecycleStatus: task.lifecycleStatus,
+    cancellationStatus: task.cancellationStatus,
     activityStatus: task.activityStatus,
     priority: task.priority,
     source: task.source,
@@ -135,6 +137,12 @@ function workLedgerArchivedTaskFromTaskID(taskID: string, pendingInteractions: R
     updated: task.time_updated,
     pinned: task.time_pinned !== null,
     lifecycleStatus,
+    cancellationStatus:
+      lifecycleStatus === "cancelled"
+        ? "cancelled"
+        : pendingTaskCancellationProjection(task.id)
+          ? "cancelling"
+          : "none",
     activityStatus: activityFromTaskLifecycle(lifecycleStatus),
     priority: task.priority,
     source: task.source,

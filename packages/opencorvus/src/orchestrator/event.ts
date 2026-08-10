@@ -59,6 +59,14 @@ export const OrchestratorEventSchema = z
       .object({ recoveryFactID: z.string().min(1) })
       .strict()
       .optional(),
+    agentLifecycleDelivery: z
+      .object({
+        eventID: z.string().min(1),
+        sessionID: z.string().min(1),
+        dispatchID: z.string().min(1),
+      })
+      .strict()
+      .optional(),
   })
   .strict()
 

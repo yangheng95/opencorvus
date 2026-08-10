@@ -486,8 +486,8 @@ export function validateResearchBriefIntegrity(brief: ResearchBrief): string | u
 
 export function validateResearchBriefTaskBoundary(brief: ResearchBrief, taskID: string): string | undefined {
   const expectedPrefixes = [
-    `${ProjectRuntimePaths.taskRelative(taskID, "dr")}/`,
-    `${ProjectRuntimePaths.taskRelative(taskID, "fr")}/`,
+    `${ProjectRuntimePaths.taskRelative(taskID, "research", "deep")}/`,
+    `${ProjectRuntimePaths.taskRelative(taskID, "research", "frontend")}/`,
   ]
   const bundlePaths = [brief.bundle.full_markdown_path, brief.bundle.evidence_json_path, brief.bundle.citation_map_path]
   for (const bundlePath of bundlePaths) {

@@ -104,6 +104,7 @@ async function probeBrowserPreviewUrl(url: string, task: { taskID?: string; cwd?
     handle.stdout?.setEncoding?.("utf8")
     handle.stdout?.on("data", (chunk) => (stdout += String(chunk)))
     const code = await handle.exited
+    await handle.outputSettled
     await ProcessSupervisor.disposeAndWaitForExit(handle, "browser preview liveness")
     if (code !== 0) throw new Error(`Task ${task.taskID} Browser preview liveness exited ${code}`)
     return stdout === "reachable"

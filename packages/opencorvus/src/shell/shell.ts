@@ -68,11 +68,7 @@ export namespace Shell {
 
   type ShellSpawner = (options: ProcessSupervisor.SpawnOptions) => Promise<ProcessSupervisor.Handle>
 
-  async function runWithSpawner(
-    command: string,
-    opts: RunOptions,
-    spawnShell: ShellSpawner,
-  ): Promise<RunResult> {
+  async function runWithSpawner(command: string, opts: RunOptions, spawnShell: ShellSpawner): Promise<RunResult> {
     const shell = acceptable()
     const guardEnv = await PidGuard.env(shell)
     const supervisor = await spawnShell({
@@ -135,6 +131,7 @@ export namespace Shell {
       if (terminationPromise) {
         await terminationPromise
       }
+      await supervisor.outputSettled
       const stdoutBytes = Buffer.concat(stdoutChunks)
       const stderrBytes = Buffer.concat(stderrChunks)
       return {

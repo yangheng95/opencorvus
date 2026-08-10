@@ -7,7 +7,6 @@ import {
   EngineArtifactVersionTable,
   EngineTaskTable,
 } from "@/engine/engine.sql"
-import { Identifier } from "@/id/id"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
 import { and, Database, eq, gt, sql } from "@/storage/db"
@@ -89,41 +88,34 @@ export async function removeUnreferencedTaskArtifactRoots(input: {
       .where(eq(EngineTaskTable.project_id, input.projectID))
       .all(),
   )
-  const activeKeys = new Set(activeTasks.map((task) => Identifier.directoryKey(task.id)))
-  const tasksRoot = path.join(ProjectRuntimePaths.projectRuntimeRoot(input.projectDirectory), "t")
-  let prefixes: import("node:fs").Dirent[]
+  const activeTaskIDs = new Set(activeTasks.map((task) => task.id))
+  const tasksRoot = ProjectRuntimePaths.taskCollectionRoot(input.projectDirectory)
+  let taskEntries: import("node:fs").Dirent[]
   try {
-    prefixes = await fs.readdir(tasksRoot, { withFileTypes: true })
+    taskEntries = await fs.readdir(tasksRoot, { withFileTypes: true })
   } catch (cause) {
     if (missing(cause)) {
-      prefixes = []
+      taskEntries = []
     } else {
       throw cause
     }
   }
   const removed: string[] = []
-  for (const prefix of prefixes) {
-    if (!prefix.isDirectory() || prefix.isSymbolicLink()) continue
-    const prefixRoot = path.join(tasksRoot, prefix.name)
-    const suffixes = await fs.readdir(prefixRoot, { withFileTypes: true })
-    for (const suffix of suffixes) {
-      if (!suffix.isDirectory() || suffix.isSymbolicLink()) continue
-      const key = `${prefix.name}${suffix.name}`
-      if (activeKeys.has(key)) continue
-      const target = path.join(prefixRoot, suffix.name, "ta")
-      let targetInfo
-      try {
-        targetInfo = await fs.lstat(target)
-      } catch (cause) {
-        if (missing(cause)) continue
-        throw cause
-      }
-      if (!targetInfo.isDirectory() || targetInfo.isSymbolicLink()) {
-        throw new Error(`Unreferenced TaskArtifact recovery target is not a real directory: ${target}`)
-      }
-      await fs.rm(target, { recursive: true, force: false })
-      removed.push(target)
+  for (const entry of taskEntries) {
+    if (!entry.isDirectory() || entry.isSymbolicLink() || activeTaskIDs.has(entry.name)) continue
+    const target = path.join(tasksRoot, entry.name, "artifacts")
+    let targetInfo
+    try {
+      targetInfo = await fs.lstat(target)
+    } catch (cause) {
+      if (missing(cause)) continue
+      throw cause
     }
+    if (!targetInfo.isDirectory() || targetInfo.isSymbolicLink()) {
+      throw new Error(`Unreferenced TaskArtifact recovery target is not a real directory: ${target}`)
+    }
+    await fs.rm(target, { recursive: true, force: false })
+    removed.push(target)
   }
 
   for (const task of activeTasks) {
