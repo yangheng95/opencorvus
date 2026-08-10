@@ -47,8 +47,33 @@ describe("GitHub Actions workflow contract", () => {
       }
     }
 
-    expect(checkoutReferences).toHaveLength(15)
-    expect(checkoutReferences.map(({ uses }) => uses)).toEqual(checkoutReferences.map(() => "actions/checkout@v6"))
+    expect(checkoutReferences).toEqual([
+      { file: "build-overlays.yml", job: "build-overlay", uses: "actions/checkout@v6" },
+      { file: "build.yml", job: "prepare", uses: "actions/checkout@v6" },
+      { file: "build.yml", job: "package-overlay", uses: "actions/checkout@v6" },
+      { file: "build.yml", job: "package-cli", uses: "actions/checkout@v6" },
+      { file: "build.yml", job: "publish-release-assets", uses: "actions/checkout@v6" },
+      { file: "codeql.yml", job: "analyze", uses: "actions/checkout@v6" },
+      {
+        file: "deploy-opencorvus-com.yml",
+        job: "archive-determinism",
+        uses: "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+      },
+      {
+        file: "deploy-opencorvus-com.yml",
+        job: "build",
+        uses: "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+      },
+      { file: "generate.yml", job: "verify", uses: "actions/checkout@v6" },
+      { file: "security.yml", job: "repository", uses: "actions/checkout@v6" },
+      { file: "security.yml", job: "dependency-review", uses: "actions/checkout@v6" },
+      { file: "test.yml", job: "version-sync", uses: "actions/checkout@v6" },
+      { file: "test.yml", job: "unit", uses: "actions/checkout@v6" },
+      { file: "test.yml", job: "build-critical", uses: "actions/checkout@v6" },
+      { file: "test.yml", job: "channel-runtime-unit", uses: "actions/checkout@v6" },
+      { file: "test.yml", job: "overlay-unit", uses: "actions/checkout@v6" },
+      { file: "typecheck.yml", job: "typecheck", uses: "actions/checkout@v6" },
+    ])
   })
 
   test("packages all five native GUI and CLI rows before publishing the release", async () => {
@@ -168,5 +193,22 @@ describe("GitHub Actions workflow contract", () => {
         run: "./script/install-windows-ripgrep.ps1",
       },
     ])
+  })
+
+  test("bootstraps every generator consumer and preserves the preload-owned unit process", async () => {
+    for (const file of ["generate.yml", "typecheck.yml"]) {
+      const workflow = await readWorkflow(file)
+      const setup = Object.values(workflow.jobs ?? {})
+        .flatMap((job) => job.steps ?? [])
+        .find(({ uses }) => uses === "./.github/actions/setup-bun")
+      expect(setup?.with).toEqual({ prepare_sdk: "true" })
+    }
+
+    const packageDefinition = await Bun.file(
+      path.join(import.meta.dir, "..", "packages", "opencorvus", "package.json"),
+    ).json()
+    expect(packageDefinition.scripts.test).toBe(
+      "bun script/run-with-inactivity.ts --inactivity-ms 120000 -- bun script/run-test-files.ts --concurrency 2 test",
+    )
   })
 })

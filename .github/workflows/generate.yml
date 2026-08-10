@@ -20,6 +20,8 @@ jobs:
 
       - name: Setup Bun
         uses: ./.github/actions/setup-bun
+        with:
+          prepare_sdk: "true"
 
       - name: Regenerate repository artifacts
         run: bun ./script/generate.ts

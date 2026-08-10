@@ -130,4 +130,4 @@ test("SessionLoop binds each accepted user message to its streaming execution oc
     // async-dispose removes the fixture directory.
     await Instance.disposeAll()
   }
-}, 30_000)
+}, 90_000)

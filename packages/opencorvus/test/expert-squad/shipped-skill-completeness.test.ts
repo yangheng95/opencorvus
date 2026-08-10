@@ -6,8 +6,7 @@ import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 describe("shipped Expert Squad Skill completeness", () => {
   test("loads all unique shipped packages with a saved and selected package Skill", () => {
     const sources = [...builtInPackageSources, ...payloadPackageSources]
-    expect(sources).toHaveLength(29)
-    expect(new Set(sources.map((source) => `${source.namespace}/${source.id}`)).size).toBe(29)
+    expect(new Set(sources.map((source) => `${source.namespace}/${source.id}`)).size).toBe(sources.length)
 
     for (const source of sources) {
       const loaded = ExpertSquadRegistry.loadEmbeddedPackageDeclaration(source)

@@ -1044,9 +1044,9 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
         sessionID = session.id
         const tool = await MemoryTool.init()
         const toolSchema = z.toJSONSchema(tool.parameters) as {
-          anyOf: Array<{ properties: { action: { const: string } } }>
+          oneOf: Array<{ properties: { action: { const: string } } }>
         }
-        expect(toolSchema.anyOf.map((entry) => entry.properties.action.const)).toEqual([
+        expect(toolSchema.oneOf.map((entry) => entry.properties.action.const)).toEqual([
           "session_read",
           "search",
           "get",

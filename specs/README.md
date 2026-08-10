@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest GitHub Actions push convergence: [`2026-08-11-github-actions-push-convergence.md`](records/2026-08/2026-08-11-github-actions-push-convergence.md).
+
 Latest ten-domain Expert Squad expansion: [`2026-08-10-ten-domain-expert-squad-expansion.md`](records/2026-08/2026-08-10-ten-domain-expert-squad-expansion.md).
 
 Latest Expert Squad static distribution and RackNerd deployment plan: [`2026-08-10-expert-squad-static-distribution-and-racknerd-deploy.md`](records/2026-08/2026-08-10-expert-squad-static-distribution-and-racknerd-deploy.md).

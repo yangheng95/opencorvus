@@ -15,6 +15,7 @@ import { ExpertSquadRoutes } from "../../src/server/routes/expert-squad"
 import { ensureMissionSession } from "../../src/mission/session"
 import { CapabilitySearchTool } from "../../src/tool/capability-search"
 import { Tool } from "../../src/tool/tool"
+import { payloadPackageSources } from "../../generated/expert-squad-payload"
 
 function scalePackageDefinition(id: string): ExpertSquadPackageDefinition {
   const emptyResources = {
@@ -497,7 +498,12 @@ describe("Expert Squad catalog index", () => {
       firstCount: firstPage.entries.length,
       secondCount: secondPage.entries.length,
       uniqueCount: new Set([...firstPage.entries, ...secondPage.entries].map((entry) => entry.id)).size,
-    }).toEqual({ totalCount: 15, firstCount: 5, secondCount: 5, uniqueCount: 10 })
+    }).toEqual({
+      totalCount: payloadPackageSources.length,
+      firstCount: 5,
+      secondCount: 5,
+      uniqueCount: 10,
+    })
     const installed = await ExpertSquadPackageManager.payloadMarketPage({
       projectDirectory: project.path,
       availability: "installed",
@@ -560,19 +566,18 @@ describe("Expert Squad catalog index", () => {
         const app = new Hono().route("/expert-squad", ExpertSquadRoutes())
         const request = async (path: string) => {
           const response = await app.fetch(new Request(`http://opencorvus.test/expert-squad/${path}`))
-          expect(response.status).toBe(200)
+          expect(response.status, path).toBe(200)
           return response.json() as Promise<Record<string, unknown>>
         }
-        const [active, page, inspection, status, diagnostics, detail, market, marketDetail] = await Promise.all([
-          request("catalog"),
-          request("search?view=installations&limit=2"),
-          request("inspect?id=base&installationScope=built_in"),
-          request("inventory-status"),
-          request("diagnostics?limit=20"),
-          request("settings/detail?id=base&installationScope=built_in"),
-          request("market?limit=5"),
-          request("market/detail?id=deep-research"),
-        ])
+        const active = await request("catalog")
+        const page = await request("search?view=installations&limit=2")
+        const directory = encodeURIComponent(project.path)
+        const inspection = await request(`inspect?directory=${directory}&id=base&installationScope=built_in`)
+        const status = await request("inventory-status")
+        const diagnostics = await request("diagnostics?limit=20")
+        const detail = await request(`settings/detail?directory=${directory}&id=base&installationScope=built_in`)
+        const market = await request("market?limit=5")
+        const marketDetail = await request("market/detail?id=deep-research")
         expect(active).toMatchObject({ active: { effective: "base" }, default: "base" })
         expect(page).toMatchObject({ entries: expect.any(Array) })
         expect(inspection).toMatchObject({ id: "base", workflow_count: 3, next_workflow_cursor: null })
@@ -583,7 +588,7 @@ describe("Expert Squad catalog index", () => {
         })
         expect(diagnostics).toMatchObject({ entries: [], total_count: 0, next_cursor: null })
         expect(detail).toMatchObject({ selected: { id: "base", source: { kind: "built_in" } } })
-        expect(market).toMatchObject({ entries: expect.any(Array), total_count: 15 })
+        expect(market).toMatchObject({ entries: expect.any(Array), total_count: payloadPackageSources.length })
         expect(marketDetail).toMatchObject({ id: "deep-research" })
       },
     })

@@ -285,8 +285,11 @@ describe("Generate Agent Squads expert squad", () => {
     { timeout: 30_000 },
     async () => {
       await using project = await memoryProject()
-      const catalog = await PromptProfileResolver.settingsCatalog(project.path)
-      const generatedSquads = catalog.find((squad) => squad.id === "squad-sdk")
+      const generatedSquads = await PromptProfileResolver.settingsDetail({
+        projectDirectory: project.path,
+        id: "squad-sdk",
+        installationScope: "built_in",
+      })
 
       expect(generatedSquads).toMatchObject({
         id: "squad-sdk",
@@ -339,8 +342,12 @@ describe("Generate Agent Squads expert squad", () => {
           trace,
         ),
     })
-    const projectCatalog = await PromptProfileResolver.settingsCatalog(authoringProject.path)
-    const generated = projectCatalog.find((squad) => squad.id === generatedID)
+    const generated = await PromptProfileResolver.settingsDetail({
+      projectDirectory: authoringProject.path,
+      namespace: "test",
+      id: generatedID,
+      installationScope: "project",
+    })
     const metadata = await readExpertSquadInstallationMetadata(receipt.targetRoot)
 
     expect(receipt).toMatchObject({

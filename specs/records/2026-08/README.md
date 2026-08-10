@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-11-github-actions-push-convergence.md](2026-08-11-github-actions-push-convergence.md) repairs clean-runner SDK bootstrap ordering and preload-owned test execution, and requires a green proof push before deleting older Actions runs.
+
 - [2026-08-10-ten-domain-expert-squad-expansion.md](2026-08-10-ten-domain-expert-squad-expansion.md) defines ten new domain packages, dedicated Skill and asset ownership, pinned open-source adaptations, clean-room professional boundaries, and package, HTTP, and real-page acceptance.
 
 - [2026-08-10-expert-squad-static-distribution-and-racknerd-deploy.md](2026-08-10-expert-squad-static-distribution-and-racknerd-deploy.md) defines deterministic downloads for all 39 shipped Expert Squad resources, signed immutable catalogs, and an isolated least-privilege RackNerd website deployment path.

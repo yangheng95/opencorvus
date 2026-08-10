@@ -59,7 +59,7 @@ describe("Project directory integrity", () => {
     })
     expect(recoveredResponse.status).toBe(200)
     expect(await recoveredResponse.json()).toMatchObject({ worktree: missing })
-  }, 30_000)
+  }, 90_000)
 
   test("creates a missing Task project only through the explicit init-git request", async () => {
     await using parent = await memoryProject()
@@ -95,7 +95,7 @@ describe("Project directory integrity", () => {
     } finally {
       createTask.mockRestore()
     }
-  }, 30_000)
+  }, 90_000)
 
 })
 

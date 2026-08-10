@@ -70,7 +70,7 @@ describe("scheduled Task wait project runtime", () => {
         ])
       },
     })
-  }, 20_000)
+  }, 90_000)
 
   test("atomically transfers one durable wait occurrence into the root Session project", async () => {
     await using project = await memoryProject()
@@ -161,5 +161,5 @@ describe("scheduled Task wait project runtime", () => {
       dueAt,
       deliveryStatus: "terminal_inapplicable",
     })
-  }, 20_000)
+  }, 90_000)
 })

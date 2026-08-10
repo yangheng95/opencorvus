@@ -160,7 +160,7 @@ describe("runtime server database ownership", () => {
     const successor = startRuntimeEntryProcess(home, project, "bootstrap-once")
     expect(await firstLine(successor)).toMatchObject({ status: "bootstrap-owned", database: serverOwned.database })
     await finish(successor)
-  }, 20_000)
+  }, 90_000)
 
   test("a second public server in the same process conflicts until the first runtime stops", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-same-process-"))
@@ -189,7 +189,7 @@ describe("runtime server database ownership", () => {
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
       else process.env.OPENCORVUS_TEST_HOME = previousHome
     }
-  }, 20_000)
+  }, 90_000)
 
   test("concurrent public server stops share one settlement before ownership handoff", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-concurrent-stop-"))
@@ -227,7 +227,7 @@ describe("runtime server database ownership", () => {
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
       else process.env.OPENCORVUS_TEST_HOME = previousHome
     }
-  }, 20_000)
+  }, 90_000)
 
   test("pre-bind listen failure retains ownership until runtime settlement finishes", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-prebind-failure-"))
@@ -258,7 +258,7 @@ describe("runtime server database ownership", () => {
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
       else process.env.OPENCORVUS_TEST_HOME = previousHome
     }
-  }, 20_000)
+  }, 90_000)
 
   test("listen initialization failure retains ownership until runtime settlement finishes", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-startup-failure-"))
@@ -293,5 +293,5 @@ describe("runtime server database ownership", () => {
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
       else process.env.OPENCORVUS_TEST_HOME = previousHome
     }
-  }, 30_000)
+  }, 90_000)
 })

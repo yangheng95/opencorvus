@@ -12,6 +12,7 @@ import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 describe("P0 security runtime paths", () => {
   test("always permission propagation preserves a pending current ask decision", async () => {
     const project = await memoryProject()
+    const sessionID = "ses_runtime"
     try {
       await Instance.provide({
         directory: project.path,
@@ -34,7 +35,7 @@ describe("P0 security runtime paths", () => {
           try {
             const first = PermissionNext.ask({
               id: "per_runtime_first",
-              sessionID: "session-runtime",
+              sessionID,
               permission: "workspace.write",
               patterns: ["fixture"],
               metadata: {},
@@ -43,7 +44,7 @@ describe("P0 security runtime paths", () => {
             })
             const second = PermissionNext.ask({
               id: "per_runtime_second",
-              sessionID: "session-runtime",
+              sessionID,
               permission: "workspace.write",
               patterns: ["fixture"],
               metadata: {},
@@ -60,13 +61,13 @@ describe("P0 security runtime paths", () => {
 
             expect(replies).toEqual([
               {
-                sessionID: "session-runtime",
+                sessionID,
                 requestID: "per_runtime_first",
                 reply: "always",
                 autoReply: false,
               },
               {
-                sessionID: "session-runtime",
+                sessionID,
                 requestID: "per_runtime_second",
                 reply: "once",
                 autoReply: false,

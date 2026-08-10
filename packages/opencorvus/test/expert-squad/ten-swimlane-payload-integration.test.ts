@@ -5,6 +5,7 @@ import { ExpertSquadPackageManager } from "../../src/expert-squad/manager"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Instance } from "../../src/project/instance"
+import { payloadPackageSources } from "../../generated/expert-squad-payload"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 const newSquadIDs = [
@@ -34,7 +35,7 @@ describe("Ten-swimlane generated payload integration", () => {
       .filter((entry) => newSquadIDs.includes(entry.id as (typeof newSquadIDs)[number]))
       .map((entry) => ({ id: entry.id, skillCount: entry.skillCount }))
 
-    expect(market).toHaveLength(25)
+    expect(market).toHaveLength(payloadPackageSources.length)
     expect(additions).toEqual([...newSquadIDs].sort().map((id) => ({ id, skillCount: 1 })))
   })
 
