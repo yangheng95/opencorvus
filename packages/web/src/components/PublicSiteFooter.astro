@@ -1,0 +1,24 @@
+---
+import { publicPath, type PublicLocale } from "../content/public-market"
+
+const { locale } = Astro.props as { locale: PublicLocale }
+const copy =
+  locale === "zh-cn"
+    ? { statement: "开放的 Agent Harness，为每项工作组建一支真正能交付的专家团。", docs: "文档", source: "源代码", discuss: "讨论" }
+    : {
+        statement: "An open Agent Harness for assembling the Expert Squad each piece of work actually needs.",
+        docs: "Documentation",
+        source: "Source",
+        discuss: "Discussions",
+      }
+---
+
+<footer class="public-footer">
+  <p class="footer-mark">OpenCorvus</p>
+  <p>{copy.statement}</p>
+  <nav aria-label={locale === "zh-cn" ? "页脚" : "Footer"}>
+    <a href={publicPath(locale, "/start/quickstart/")}>{copy.docs}</a>
+    <a href="https://github.com/yangheng95/opencorvus">{copy.source}</a>
+    <a href="https://github.com/yangheng95/opencorvus/discussions">{copy.discuss}</a>
+  </nav>
+</footer>

@@ -41,6 +41,11 @@
     "opencorvus": {
       "initialWorkAreaRatio": 0.8
     },
+    "deep-link": {
+      "desktop": {
+        "schemes": ["opencorvus"]
+      }
+    },
     "updater": {
       "pubkey": "development-build-has-no-update-trust-root",
       "endpoints": []

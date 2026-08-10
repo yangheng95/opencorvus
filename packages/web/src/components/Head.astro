@@ -4,14 +4,14 @@ import config from '../../config.mjs'
 
 const {
   entry: {
-    slug,
+    id,
     data: { title },
   },
   head,
 } = Astro.locals.starlightRoute;
 const t = Astro.locals.t as (key: string) => string
 const titleSuffix = t("app.head.titleSuffix")
-const isHome = slug === "" || slug === "zh-cn"
+const isHome = id === "" || id === "zh-cn"
 const ogImage = `${config.url}/social-share.png`
 ---
 

@@ -12376,6 +12376,15 @@
             "$ref": "#/components/schemas/ReasoningPart"
           },
           {
+            "$ref": "#/components/schemas/SourceUrlPart"
+          },
+          {
+            "$ref": "#/components/schemas/SourceDocumentPart"
+          },
+          {
+            "$ref": "#/components/schemas/SourceFilePart"
+          },
+          {
             "$ref": "#/components/schemas/FilePart"
           },
           {
@@ -14665,6 +14674,206 @@
         ],
         "type": "object"
       },
+      "SourceDocumentPart": {
+        "properties": {
+          "filename": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "mediaType": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "messageID": {
+            "type": "string"
+          },
+          "orderKey": {
+            "type": "string"
+          },
+          "provider": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "providerMetadata": {
+            "additionalProperties": {},
+            "propertyNames": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "sessionID": {
+            "type": "string"
+          },
+          "sourceId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "const": "source-document",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "sessionID",
+          "messageID",
+          "type",
+          "sourceId",
+          "mediaType",
+          "title"
+        ],
+        "type": "object"
+      },
+      "SourceFilePart": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "messageID": {
+            "type": "string"
+          },
+          "orderKey": {
+            "type": "string"
+          },
+          "path": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "provider": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "providerMetadata": {
+            "additionalProperties": {},
+            "propertyNames": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "range": {
+            "$ref": "#/components/schemas/SourceFileRange"
+          },
+          "sessionID": {
+            "type": "string"
+          },
+          "sourceId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "symbol": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "const": "source-file",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "sessionID",
+          "messageID",
+          "type",
+          "sourceId",
+          "path",
+          "title"
+        ],
+        "type": "object"
+      },
+      "SourceFileRange": {
+        "properties": {
+          "endLine": {
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991,
+            "type": "integer"
+          },
+          "startLine": {
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "startLine",
+          "endLine"
+        ],
+        "type": "object"
+      },
+      "SourceUrlPart": {
+        "properties": {
+          "author": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "messageID": {
+            "type": "string"
+          },
+          "orderKey": {
+            "type": "string"
+          },
+          "provider": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "providerMetadata": {
+            "additionalProperties": {},
+            "propertyNames": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "publishedAt": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sessionID": {
+            "type": "string"
+          },
+          "snippet": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "sourceId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "const": "source-url",
+            "type": "string"
+          },
+          "url": {
+            "format": "uri",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "sessionID",
+          "messageID",
+          "type",
+          "sourceId",
+          "url"
+        ],
+        "type": "object"
+      },
       "StepFinishPart": {
         "properties": {
           "cost": {
@@ -16453,6 +16662,193 @@
               "type",
               "text",
               "time"
+            ],
+            "type": "object"
+          },
+          {
+            "properties": {
+              "author": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "messageID": {
+                "type": "string"
+              },
+              "orderKey": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "provider": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "providerMetadata": {
+                "additionalProperties": {},
+                "propertyNames": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              "publishedAt": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "sessionID": {
+                "type": "string"
+              },
+              "snippet": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "sourceId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "type": {
+                "const": "source-url",
+                "type": "string"
+              },
+              "url": {
+                "format": "uri",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "sessionID",
+              "messageID",
+              "orderKey",
+              "type",
+              "sourceId",
+              "url"
+            ],
+            "type": "object"
+          },
+          {
+            "properties": {
+              "filename": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "mediaType": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "messageID": {
+                "type": "string"
+              },
+              "orderKey": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "provider": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "providerMetadata": {
+                "additionalProperties": {},
+                "propertyNames": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              "sessionID": {
+                "type": "string"
+              },
+              "sourceId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "type": {
+                "const": "source-document",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "sessionID",
+              "messageID",
+              "orderKey",
+              "type",
+              "sourceId",
+              "mediaType",
+              "title"
+            ],
+            "type": "object"
+          },
+          {
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "messageID": {
+                "type": "string"
+              },
+              "orderKey": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "path": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "provider": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "providerMetadata": {
+                "additionalProperties": {},
+                "propertyNames": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              "range": {
+                "$ref": "#/components/schemas/SourceFileRange"
+              },
+              "sessionID": {
+                "type": "string"
+              },
+              "sourceId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "symbol": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "type": {
+                "const": "source-file",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "sessionID",
+              "messageID",
+              "orderKey",
+              "type",
+              "sourceId",
+              "path",
+              "title"
             ],
             "type": "object"
           },
@@ -43820,6 +44216,10 @@
                     "archiveBase64": {
                       "type": "string"
                     },
+                    "archiveSha256": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
                     "fileCount": {
                       "maximum": 9007199254740991,
                       "minimum": 0,
@@ -43830,12 +44230,26 @@
                     },
                     "id": {
                       "type": "string"
+                    },
+                    "namespace": {
+                      "type": "string"
+                    },
+                    "packageDigest": {
+                      "pattern": "^[a-f0-9]{64}$",
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
                     }
                   },
                   "required": [
+                    "namespace",
                     "id",
+                    "version",
+                    "packageDigest",
                     "filename",
                     "archiveBase64",
+                    "archiveSha256",
                     "fileCount"
                   ],
                   "type": "object"
@@ -43877,6 +44291,619 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.expertSquad.export({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/expert-squad/import-exact-file": {
+      "post": {
+        "description": "Validate and install one downloaded ZIP only when its exact namespace, id, version, and canonical package digest match the web-to-client handoff target.",
+        "operationId": "expertSquad.importExactFile",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "archiveBase64": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "expectedCurrentPackageDigest": {
+                    "pattern": "^[a-f0-9]{64}$",
+                    "type": "string"
+                  },
+                  "expectedID": {
+                    "maxLength": 64,
+                    "minLength": 1,
+                    "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+                    "type": "string"
+                  },
+                  "expectedNamespace": {
+                    "maxLength": 64,
+                    "minLength": 1,
+                    "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+                    "type": "string"
+                  },
+                  "expectedPackageDigest": {
+                    "pattern": "^[a-f0-9]{64}$",
+                    "type": "string"
+                  },
+                  "expectedVersion": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "filename": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "installationScope": {
+                    "enum": [
+                      "project",
+                      "global"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "archiveBase64",
+                  "installationScope",
+                  "expectedNamespace",
+                  "expectedID",
+                  "expectedVersion",
+                  "expectedPackageDigest"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "after": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "installationScope": {
+                              "enum": [
+                                "project",
+                                "global"
+                              ],
+                              "type": "string"
+                            },
+                            "namespace": {
+                              "type": "string"
+                            },
+                            "packageDigest": {
+                              "description": "Canonical digest of the package bytes present at targetRoot after the operation.",
+                              "pattern": "^[a-f0-9]{64}$",
+                              "type": "string"
+                            },
+                            "projectDirectory": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "targetRoot": {
+                              "type": "string"
+                            },
+                            "version": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "description": "Manifest version of the package bytes present at targetRoot after the operation."
+                            }
+                          },
+                          "required": [
+                            "installationScope",
+                            "projectDirectory",
+                            "namespace",
+                            "id",
+                            "version",
+                            "packageDigest",
+                            "targetRoot"
+                          ],
+                          "type": "object"
+                        },
+                        "before": {
+                          "type": "null"
+                        },
+                        "operation": {
+                          "const": "installed",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "operation",
+                        "before",
+                        "after"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "after": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "installationScope": {
+                              "enum": [
+                                "project",
+                                "global"
+                              ],
+                              "type": "string"
+                            },
+                            "namespace": {
+                              "type": "string"
+                            },
+                            "packageDigest": {
+                              "description": "Canonical digest of the package bytes present at targetRoot after the operation.",
+                              "pattern": "^[a-f0-9]{64}$",
+                              "type": "string"
+                            },
+                            "projectDirectory": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "targetRoot": {
+                              "type": "string"
+                            },
+                            "version": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "description": "Manifest version of the package bytes present at targetRoot after the operation."
+                            }
+                          },
+                          "required": [
+                            "installationScope",
+                            "projectDirectory",
+                            "namespace",
+                            "id",
+                            "version",
+                            "packageDigest",
+                            "targetRoot"
+                          ],
+                          "type": "object"
+                        },
+                        "before": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "installationScope": {
+                              "enum": [
+                                "project",
+                                "global"
+                              ],
+                              "type": "string"
+                            },
+                            "namespace": {
+                              "type": "string"
+                            },
+                            "packageDigest": {
+                              "description": "Canonical digest of the package bytes present at targetRoot after the operation.",
+                              "pattern": "^[a-f0-9]{64}$",
+                              "type": "string"
+                            },
+                            "projectDirectory": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "targetRoot": {
+                              "type": "string"
+                            },
+                            "version": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "description": "Manifest version of the package bytes present at targetRoot after the operation."
+                            }
+                          },
+                          "required": [
+                            "installationScope",
+                            "projectDirectory",
+                            "namespace",
+                            "id",
+                            "version",
+                            "packageDigest",
+                            "targetRoot"
+                          ],
+                          "type": "object"
+                        },
+                        "operation": {
+                          "const": "unchanged",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "operation",
+                        "before",
+                        "after"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "after": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "installationScope": {
+                              "enum": [
+                                "project",
+                                "global"
+                              ],
+                              "type": "string"
+                            },
+                            "namespace": {
+                              "type": "string"
+                            },
+                            "packageDigest": {
+                              "description": "Canonical digest of the package bytes present at targetRoot after the operation.",
+                              "pattern": "^[a-f0-9]{64}$",
+                              "type": "string"
+                            },
+                            "projectDirectory": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "targetRoot": {
+                              "type": "string"
+                            },
+                            "version": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "description": "Manifest version of the package bytes present at targetRoot after the operation."
+                            }
+                          },
+                          "required": [
+                            "installationScope",
+                            "projectDirectory",
+                            "namespace",
+                            "id",
+                            "version",
+                            "packageDigest",
+                            "targetRoot"
+                          ],
+                          "type": "object"
+                        },
+                        "before": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "installationScope": {
+                              "enum": [
+                                "project",
+                                "global"
+                              ],
+                              "type": "string"
+                            },
+                            "namespace": {
+                              "type": "string"
+                            },
+                            "packageDigest": {
+                              "description": "Canonical digest of the package bytes present at targetRoot after the operation.",
+                              "pattern": "^[a-f0-9]{64}$",
+                              "type": "string"
+                            },
+                            "projectDirectory": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "targetRoot": {
+                              "type": "string"
+                            },
+                            "version": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "description": "Manifest version of the package bytes present at targetRoot after the operation."
+                            }
+                          },
+                          "required": [
+                            "installationScope",
+                            "projectDirectory",
+                            "namespace",
+                            "id",
+                            "version",
+                            "packageDigest",
+                            "targetRoot"
+                          ],
+                          "type": "object"
+                        },
+                        "operation": {
+                          "const": "replaced",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "operation",
+                        "before",
+                        "after"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "after": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "installationScope": {
+                              "enum": [
+                                "project",
+                                "global"
+                              ],
+                              "type": "string"
+                            },
+                            "namespace": {
+                              "type": "string"
+                            },
+                            "packageDigest": {
+                              "description": "Canonical digest of the package bytes present at targetRoot after the operation.",
+                              "pattern": "^[a-f0-9]{64}$",
+                              "type": "string"
+                            },
+                            "projectDirectory": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "targetRoot": {
+                              "type": "string"
+                            },
+                            "version": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "description": "Manifest version of the package bytes present at targetRoot after the operation."
+                            }
+                          },
+                          "required": [
+                            "installationScope",
+                            "projectDirectory",
+                            "namespace",
+                            "id",
+                            "version",
+                            "packageDigest",
+                            "targetRoot"
+                          ],
+                          "type": "object"
+                        },
+                        "before": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "installationScope": {
+                              "enum": [
+                                "project",
+                                "global"
+                              ],
+                              "type": "string"
+                            },
+                            "namespace": {
+                              "type": "string"
+                            },
+                            "packageDigest": {
+                              "description": "Canonical digest of the package bytes present at targetRoot after the operation.",
+                              "pattern": "^[a-f0-9]{64}$",
+                              "type": "string"
+                            },
+                            "projectDirectory": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "targetRoot": {
+                              "type": "string"
+                            },
+                            "version": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "description": "Manifest version of the package bytes present at targetRoot after the operation."
+                            }
+                          },
+                          "required": [
+                            "installationScope",
+                            "projectDirectory",
+                            "namespace",
+                            "id",
+                            "version",
+                            "packageDigest",
+                            "targetRoot"
+                          ],
+                          "type": "object"
+                        },
+                        "operation": {
+                          "const": "restored",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "operation",
+                        "before",
+                        "after"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Imported exact expert squad package revision"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "ExpertSquadPackageError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Expert squad package import rejected"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "ExpertSquadPackageMutationConflictError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Expert squad package changed"
+          }
+        },
+        "summary": "Import an exact hosted expert squad ZIP revision",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.expertSquad.importExactFile({\n  ...\n})"
           }
         ]
       }
@@ -45061,11 +46088,11 @@
         "operationId": "expertSquad.inspect",
         "parameters": [
           {
-            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
             "in": "query",
             "name": "directory",
-            "required": false,
+            "required": true,
             "schema": {
+              "minLength": 1,
               "type": "string"
             }
           },
@@ -48157,11 +49184,11 @@
         "operationId": "expertSquad.settingsDetail",
         "parameters": [
           {
-            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
             "in": "query",
             "name": "directory",
-            "required": false,
+            "required": true,
             "schema": {
+              "minLength": 1,
               "type": "string"
             }
           },

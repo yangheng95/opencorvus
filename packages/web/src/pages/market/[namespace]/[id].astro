@@ -1,0 +1,15 @@
+---
+import SquadDetailPage from "../../../components/SquadDetailPage.astro"
+import { publicSquadRecords } from "../../../content/public-market"
+
+export function getStaticPaths() {
+  return publicSquadRecords.map((record) => ({
+    params: { namespace: record.identity.namespace, id: record.identity.id },
+    props: { record },
+  }))
+}
+
+const { record } = Astro.props
+---
+
+<SquadDetailPage locale="root" {record} />

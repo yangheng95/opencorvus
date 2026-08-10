@@ -4,6 +4,7 @@
   "exclude": ["dist"],
   "compilerOptions": {
     "jsx": "preserve",
-    "jsxImportSource": "solid-js"
+    "jsxImportSource": "solid-js",
+    "types": ["bun"]
   }
 }

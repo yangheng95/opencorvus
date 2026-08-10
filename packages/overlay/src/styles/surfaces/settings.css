@@ -3527,3 +3527,47 @@ button.s-row:focus-visible {
 .log-source[data-source="pipeline"] {
   color: color-mix(in srgb, var(--accent) 60%, var(--bad));
 }
+.expert-squad-hosted-handoff {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: calc(14px * var(--ui-scale));
+  align-items: start;
+  margin-bottom: calc(20px * var(--ui-scale));
+  padding: calc(18px * var(--ui-scale));
+  border-inline-start: calc(4px * var(--ui-scale)) solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 7%, var(--settings-surface-base));
+}
+
+.expert-squad-hosted-handoff-copy {
+  min-width: 0;
+  display: grid;
+  gap: calc(6px * var(--ui-scale));
+}
+
+.expert-squad-hosted-handoff-copy h2,
+.expert-squad-hosted-handoff-copy p {
+  margin: 0;
+}
+
+.expert-squad-hosted-handoff-copy h2 {
+  color: var(--text-strong);
+  font-size: var(--ui-font-title);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+.expert-squad-hosted-handoff-copy p,
+.expert-squad-hosted-handoff-copy code {
+  color: var(--text-soft);
+  font-size: var(--ui-font-meta);
+}
+
+.expert-squad-hosted-handoff-copy code {
+  overflow-wrap: anywhere;
+}
+
+.expert-squad-hosted-handoff-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: calc(8px * var(--ui-scale));
+}

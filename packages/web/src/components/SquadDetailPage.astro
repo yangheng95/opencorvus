@@ -1,0 +1,494 @@
+---
+import PublicSiteLayout from "./PublicSiteLayout.astro"
+import WorkflowTopology from "./WorkflowTopology.astro"
+import { publicPath, type PublicLocale, type PublicSquadRecord } from "../content/public-market"
+
+const { locale, record } = Astro.props as { locale: PublicLocale; record: PublicSquadRecord }
+const detailPath = `/market/${record.identity.namespace}/${record.identity.id}/`
+const apiBase = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/api/registry`
+const recordApiPath = `${apiBase}/records/${encodeURIComponent(record.identity.namespace)}/${encodeURIComponent(record.identity.id)}/${encodeURIComponent(record.identity.version)}/${record.identity.digest}`
+const downloadPath = `${recordApiPath}/archive`
+const copy =
+  locale === "zh-cn"
+    ? {
+        title: `${record.label} · 专家团市场 · OpenCorvus`,
+        description: record.description[locale],
+        languageHref: publicPath("root", detailPath),
+        eyebrow: "专家团 revision 记录",
+        currentSource: "当前源码能力包",
+        summary: record.description[locale],
+        inspect: "查看安装路径",
+        demonstrate: "演示执行契约",
+        openClient: "打开 OpenCorvus 并安装",
+        download: "下载精确 ZIP",
+        downloadChecking: "正在核对本地托管沙箱中的精确 revision…",
+        downloadReady: "精确 revision 已绑定；可唤起 OpenCorvus 继续选 scope，或直接下载 ZIP。",
+        downloadUnavailable: "本地托管沙箱未运行或此精确 revision 不可用；不会改用其他版本。",
+        archiveDigest: "Archive SHA-256",
+        downloadResponses: "已发出下载响应",
+        archivePending: "由本地托管沙箱提供",
+        trust: "可信机制",
+        revision: "精确 revision",
+        identity: "身份",
+        version: "版本",
+        digest: "能力包 SHA-256",
+        digestMeaning: "SHA-256（Secure Hash Algorithm 256-bit，256 位安全散列算法）绑定这份目录记录与精确能力包内容。",
+        copyDigest: "复制 digest",
+        copied: "已复制",
+        tabs: ["概览", "Agent 与工作流", "能力与权限", "版本与来源", "安装要求"],
+        overviewTitle: "适合什么工作",
+        overviewBody: record.selectorSummary[locale],
+        facts: [
+          ["产品支柱", record.pillars.join(" + ")],
+          ["Agent 阵容", `${record.agents.length} 个声明角色`],
+          ["绑定工作流", `${record.workflows.length} 条完整声明图`],
+          ["完整能力投影", `${record.projectedCapabilities.skills} Skills · ${record.projectedCapabilities.tools} tools · ${record.projectedCapabilities.mcp} MCP refs`],
+        ],
+        agentsTitle: "职责在运行前就已经声明",
+        agentsBody: "以下完整阵容由构建步骤从 exact manifest revision 生成。Agent 标识与 base role 参与运行投影；头像、评分或人设不参与选择。",
+        workflowTitle: "证据依赖，而不是隐藏状态机",
+        workflowBody: "下方是 manifest capability projection 中的完整 workflow node 与 depends_on 合同。公共市场只能读取并解释它，不能重排或另建一套调度状态。",
+        capabilitiesTitle: "安装前公开能力范围",
+        capabilitiesBody: "完整投影包含 built-in、default 与 package-owned 引用；能力包自带子集单独列出，不能拿子集冒充全部权限。",
+        capabilityFacts: [
+          ["完整 Skill 投影", `${record.projectedCapabilities.skills} 个唯一引用；其中 ${record.packageOwnedCapabilities.skills} 个属于 package-owned 子集`],
+          ["完整工具投影", `${record.projectedCapabilities.tools} 个唯一引用；其中 ${record.packageOwnedCapabilities.tools} 个属于 package-owned 子集`],
+          ["完整 MCP 投影", `${record.projectedCapabilities.mcp} 个 server/tool/prompt/resource 引用；其中 ${record.packageOwnedCapabilities.mcp} 个属于 package-owned 子集`],
+          ["配置要求", `${record.configuration.fields} 个字段 · ${record.configuration.required} 个必填`],
+        ],
+        provenanceTitle: "一个列表项只绑定一个内容 revision",
+        provenanceBody: "当前 digest 根据仓库中这份能力包的规范化文件树计算。本地 Manager 在安装时会再次验证结构、身份与 digest。",
+        demoTitle: "Manifest 执行契约演示",
+        demoBody: "这是绑定当前 package digest 的声明工作流 walkthrough，不是正在执行的 Agent、计时器或语言模型输出。真实执行只发生在在线的 OpenCorvus runtime 中。",
+        demoPinned: "演示固定 revision",
+        demoEvidence: "每个节点只有在 depends_on 前序证据完成后才具备调度条件；本页面只解释合同，不推进运行状态。",
+        proposedTitle: "拟建 publication envelope",
+        proposedBody: "发布者身份、许可证、源仓库、签名、attestation 与审核状态目前不属于 manifest v1。未来 registry 可以把它们作为绑定 exact digest 的发布 envelope，但不能伪装成当前已经验证。",
+        installTitle: "安装不是激活",
+        installBody: "网页通过 opencorvus:// 把精确 identity、version、package digest、archive SHA 与不可变下载地址交给桌面端。客户端重新核验后，仍要求你明确选择 scope。",
+        installSteps: [
+          ["01", "拉取精确 identity、version 与 digest"],
+          ["02", "本地重算 digest 并执行严格能力包验证"],
+          ["03", "用户明确选择 project 或 user-global scope"],
+          ["04", "Manager 原子导入并返回 mutation receipt"],
+          ["05", "安装完成后另行选择专家团，才会改变 active profile"],
+        ],
+        dialogTitle: "安装 handoff 的责任边界",
+        dialogBody: "真正的 scope 选择发生在被唤起的 OpenCorvus 客户端。这里仅解释 project/global 的不同，不会自行提交安装。",
+        projectScope: "Project scope",
+        projectScopeBody: "只在当前项目目录生效；同 ID 的项目安装覆盖 global 版本。",
+        globalScope: "User-global scope",
+        globalScopeBody: "对当前用户目录可用，但不会自动覆盖项目安装。",
+        noBridge: "当前已实现桌面 deep-link 接管与精确摘要绑定；发布者签名、远程 registry 权威与公共审核仍未实现。",
+        close: "关闭",
+        guide: "阅读发布与安装边界",
+      }
+    : {
+        title: `${record.label} · Expert Squad market · OpenCorvus`,
+        description: record.description[locale],
+        languageHref: publicPath("zh-cn", detailPath),
+        eyebrow: "Expert Squad revision record",
+        currentSource: "Current source package",
+        summary: record.description[locale],
+        inspect: "Inspect install path",
+        demonstrate: "Walk through the contract",
+        openClient: "Open & install in OpenCorvus",
+        download: "Download exact ZIP",
+        downloadChecking: "Checking this exact revision in the local hosted sandbox…",
+        downloadReady: "The exact revision is bound. Open it in OpenCorvus to choose a scope, or download the ZIP directly.",
+        downloadUnavailable: "The local hosted sandbox is offline or this exact revision is unavailable. No other version will be substituted.",
+        archiveDigest: "Archive SHA-256",
+        downloadResponses: "Download responses issued",
+        archivePending: "Provided by the local hosted sandbox",
+        trust: "Trust model",
+        revision: "Exact revision",
+        identity: "Identity",
+        version: "Version",
+        digest: "Package SHA-256",
+        digestMeaning: "SHA-256 (Secure Hash Algorithm 256-bit) binds this catalog record to the exact package content.",
+        copyDigest: "Copy digest",
+        copied: "Copied",
+        tabs: ["Overview", "Agents & workflow", "Capabilities", "Versions & provenance", "Install requirements"],
+        overviewTitle: "When to choose this team",
+        overviewBody: record.selectorSummary[locale],
+        facts: [
+          ["Product pillars", record.pillars.join(" + ")],
+          ["Agent roster", `${record.agents.length} declared roles`],
+          ["Binding workflows", `${record.workflows.length} complete declared graphs`],
+          ["Full capability projection", `${record.projectedCapabilities.skills} Skills · ${record.projectedCapabilities.tools} tools · ${record.projectedCapabilities.mcp} MCP refs`],
+        ],
+        agentsTitle: "Responsibilities are declared before runtime",
+        agentsBody:
+          "This complete roster is generated at build time from the exact manifest revision. Agent identity and base role participate in runtime projection; avatars, ratings, and personas do not.",
+        workflowTitle: "Evidence dependencies, not a hidden state machine",
+        workflowBody:
+          "Below are the complete workflow nodes and depends_on contracts from the manifest capability projection. A public market may read and explain them, but cannot reorder them or create a second scheduling state.",
+        capabilitiesTitle: "Capability scope is visible before install",
+        capabilitiesBody:
+          "The full projection includes built-in, default, and package-owned references. The package-owned subset is disclosed separately and never presented as the complete permission surface.",
+        capabilityFacts: [
+          ["Full Skill projection", `${record.projectedCapabilities.skills} unique references; ${record.packageOwnedCapabilities.skills} are the package-owned subset`],
+          ["Full tool projection", `${record.projectedCapabilities.tools} unique references; ${record.packageOwnedCapabilities.tools} are the package-owned subset`],
+          ["Full MCP projection", `${record.projectedCapabilities.mcp} server/tool/prompt/resource references; ${record.packageOwnedCapabilities.mcp} are the package-owned subset`],
+          ["Configuration", `${record.configuration.fields} fields · ${record.configuration.required} required`],
+        ],
+        provenanceTitle: "One listing binds one content revision",
+        provenanceBody:
+          "The current digest is computed from this repository package's canonical file tree. The local Manager validates shape, identity, topology, and digest again during install.",
+        demoTitle: "Manifest operating-contract walkthrough",
+        demoBody:
+          "This walkthrough is pinned to the current package digest. It is not a running Agent session, timer, or generated language-model output. Real execution requires an online OpenCorvus runtime.",
+        demoPinned: "Walkthrough pinned revision",
+        demoEvidence:
+          "A node becomes schedulable only after its depends_on evidence is terminal. This page explains that contract and does not advance runtime state.",
+        proposedTitle: "Proposed publication envelope",
+        proposedBody:
+          "Publisher identity, license, source repository, signature, attestation, and review status are not manifest v1 fields today. A future registry may bind them to the exact digest in a publication envelope; they cannot appear as already verified.",
+        installTitle: "Installation is not activation",
+        installBody:
+          "The website passes exact identity, version, package digest, archive SHA, and immutable download URL through opencorvus://. The client verifies them again and still requires an explicit scope choice.",
+        installSteps: [
+          ["01", "Fetch the exact identity, version, and digest"],
+          ["02", "Recompute the digest locally and run strict package validation"],
+          ["03", "Require the operator to choose project or user-global scope"],
+          ["04", "Import atomically through the Manager and return a mutation receipt"],
+          ["05", "Select the installed Squad separately before the active profile changes"],
+        ],
+        dialogTitle: "Install handoff boundary",
+        dialogBody:
+          "The launched OpenCorvus client owns the real scope choice. This page only explains project and global behavior and does not submit an install itself.",
+        projectScope: "Project scope",
+        projectScopeBody: "Applies only inside the current project; the same package ID overrides a global installation.",
+        globalScope: "User-global scope",
+        globalScopeBody: "Available to the current user, but never silently overrides a project installation.",
+        noBridge: "Desktop deep-link handoff and exact digest binding are implemented. Publisher signatures, remote registry authority, and public review remain unbuilt.",
+        close: "Close",
+        guide: "Read publishing and install boundaries",
+      }
+
+const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
+---
+
+<PublicSiteLayout
+  {locale}
+  current="market"
+  title={copy.title}
+  description={copy.description}
+  languageHref={copy.languageHref}
+>
+  <main
+    id="main-content"
+    class="public-main"
+    data-detail-root
+    data-copied-text={copy.copied}
+    data-record-api={recordApiPath}
+    data-namespace={record.identity.namespace}
+    data-package-id={record.identity.id}
+    data-version={record.identity.version}
+    data-package-digest={record.identity.digest}
+    data-download-ready={copy.downloadReady}
+    data-download-unavailable={copy.downloadUnavailable}
+  >
+    <section class="detail-hero" aria-labelledby="squad-title">
+      <div>
+        <p class="eyebrow">{copy.eyebrow}</p>
+        <span class="status-label">{copy.currentSource}</span>
+        <h1 id="squad-title">{record.label}</h1>
+        <p class="detail-summary">{copy.summary}</p>
+        <div class="detail-actions">
+          <button class="secondary-action" type="button" data-open-demo>{copy.demonstrate}</button>
+          <a class="primary-action" aria-disabled="true" data-open-opencorvus>{copy.openClient}</a>
+          <a class="secondary-action" href={downloadPath} download data-exact-download>{copy.download}</a>
+          <button class="text-button" type="button" data-open-install>{copy.inspect}</button>
+        </div>
+        <p class="hosted-action-status" role="status" aria-live="polite" data-download-status>{copy.downloadChecking}</p>
+      </div>
+
+      <aside class="revision-card" aria-label={copy.revision}>
+        <p class="eyebrow">{copy.revision}</p>
+        <dl>
+          <div><dt>{copy.identity}</dt><dd>{record.identity.namespace}/{record.identity.id}</dd></div>
+          <div><dt>{copy.version}</dt><dd>{record.identity.version}</dd></div>
+          <div><dt>{copy.digest}</dt><dd data-full-digest>{record.identity.digest}</dd></div>
+          <div><dt>{copy.archiveDigest}</dt><dd data-archive-digest>{copy.archivePending}</dd></div>
+          <div><dt>{copy.downloadResponses}</dt><dd data-download-responses>—</dd></div>
+        </dl>
+        <p class="section-lead" style="font-size: 12px; margin-top: 12px;">{copy.digestMeaning}</p>
+        <div class="copy-row">
+          <button class="copy-button" type="button" data-copy-digest>{copy.copyDigest}</button>
+          <span aria-live="polite" data-copy-status></span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="detail-topology" aria-labelledby="detail-topology-title">
+      <div class="detail-topology-heading">
+        <p class="eyebrow">{locale === "zh-cn" ? "有界执行图" : "Bound execution graph"}</p>
+        <h2 id="detail-topology-title">{copy.workflowTitle}</h2>
+        <p>{copy.workflowBody}</p>
+      </div>
+      <WorkflowTopology {record} {locale} expanded />
+    </section>
+
+    <div class="detail-tabs" role="tablist" aria-label={record.label}>
+      {copy.tabs.map((label, index) => (
+        <button
+          class="detail-tab"
+          type="button"
+          role="tab"
+          id={`tab-${panelIDs[index]}`}
+          aria-controls={`panel-${panelIDs[index]}`}
+          aria-selected={index === 0 ? "true" : "false"}
+          tabindex={index === 0 ? 0 : -1}
+          data-detail-tab
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+
+    <section class="detail-panel" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" data-detail-panel>
+      <div class="detail-grid">
+        <div><h2>{copy.overviewTitle}</h2><p>{copy.overviewBody}</p></div>
+        <ul class="fact-list">
+          {copy.facts.map(([label, value]) => <li><strong>{label}</strong><span>{value}</span></li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="detail-panel" id="panel-agents" role="tabpanel" aria-labelledby="tab-agents" data-detail-panel hidden>
+      <div>
+        <div class="detail-grid" style="margin-bottom: 52px;">
+          <div><h2>{copy.agentsTitle}</h2></div>
+          <p class="section-lead" style="margin: 0;">{copy.agentsBody}</p>
+        </div>
+        <ul class="agent-roster">
+          {record.agents.map((agent) => (
+            <li><strong>{agent.label}</strong><code>{agent.baseRole}</code><span>{agent.description}</span></li>
+          ))}
+        </ul>
+        <div class="detail-grid" style="margin: 72px 0 36px;">
+          <div><h2>{copy.workflowTitle}</h2></div>
+          <p class="section-lead" style="margin: 0;">{copy.workflowBody}</p>
+        </div>
+        {record.workflows.map((workflow) => (
+          <section class="workflow-contract" aria-labelledby={`workflow-${workflow.id}`}>
+            <p class="eyebrow"><code>{workflow.id}</code></p>
+            <h3 id={`workflow-${workflow.id}`}>{workflow.label}</h3>
+            <p>{workflow.description}</p>
+            <ol class="workflow-list">
+              {workflow.nodes.map((node, index) => (
+                <li>
+                  <span class="workflow-index">{String(index + 1).padStart(2, "0")}</span>
+                  <strong>{node.agentID}</strong>
+                  <span>{node.description}</span>
+                  <span>{node.dependsOn.length === 0 ? "depends_on: []" : `depends_on: ${node.dependsOn.join(", ")}`}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ))}
+      </div>
+    </section>
+
+    <section class="detail-panel" id="panel-capabilities" role="tabpanel" aria-labelledby="tab-capabilities" data-detail-panel hidden>
+      <div class="detail-grid">
+        <div><h2>{copy.capabilitiesTitle}</h2><p>{copy.capabilitiesBody}</p></div>
+        <ul class="fact-list">
+          {copy.capabilityFacts.map(([label, value]) => <li><strong>{label}</strong><span>{value}</span></li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="detail-panel" id="panel-provenance" role="tabpanel" aria-labelledby="tab-provenance" data-detail-panel hidden>
+      <div class="detail-grid">
+        <div><h2>{copy.provenanceTitle}</h2><p>{copy.provenanceBody}</p></div>
+        <div>
+          <ul class="fact-list">
+            <li><strong>{copy.identity}</strong><span class="mono">{record.identity.namespace}/{record.identity.id}</span></li>
+            <li><strong>{copy.version}</strong><span class="mono">{record.identity.version}</span></li>
+            <li><strong>{copy.digest}</strong><span class="mono" style="overflow-wrap: anywhere;">{record.identity.digest}</span></li>
+          </ul>
+          <div class="concept-notice">
+            <strong>{copy.proposedTitle}</strong><br />{copy.proposedBody}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="detail-panel" id="panel-install" role="tabpanel" aria-labelledby="tab-install" data-detail-panel hidden>
+      <div class="detail-grid">
+        <div><h2>{copy.installTitle}</h2><p>{copy.installBody}</p></div>
+        <ol class="workflow-list">
+          {copy.installSteps.map(([number, label]) => (
+            <li style="grid-template-columns: 52px 1fr;"><span class="workflow-index">{number}</span><strong>{label}</strong></li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <dialog class="walkthrough-dialog" data-demo-dialog aria-labelledby="demo-dialog-title">
+      <div class="dialog-body">
+        <p class="eyebrow">{copy.demoPinned}</p>
+        <h2 id="demo-dialog-title">{copy.demoTitle}</h2>
+        <p>{copy.demoBody}</p>
+        <div class="walkthrough-revision">
+          <code>{record.identity.namespace}/{record.identity.id}@{record.identity.version}</code>
+          <code>package sha256:{record.identity.digest}</code>
+        </div>
+        <p class="walkthrough-evidence">{copy.demoEvidence}</p>
+        <div class="walkthrough-workflows">
+          {record.workflows.map((workflow) => (
+            <section aria-labelledby={`demo-workflow-${workflow.id}`}>
+              <p class="eyebrow"><code>{workflow.id}</code></p>
+              <h3 id={`demo-workflow-${workflow.id}`}>{workflow.label}</h3>
+              <ol>
+                {workflow.nodes.map((node, index) => (
+                  <li>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <strong>{node.agentID}</strong>
+                    <small>{node.dependsOn.length === 0 ? "depends_on: []" : `depends_on: ${node.dependsOn.join(", ")}`}</small>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          ))}
+        </div>
+        <div class="dialog-actions">
+          <button class="secondary-action" type="button" data-close-demo>{copy.close}</button>
+          <a class="primary-action" href={publicPath(locale, "/trust/")}>{copy.trust}</a>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="install-dialog" data-install-dialog aria-labelledby="install-dialog-title">
+      <div class="dialog-body">
+        <h2 id="install-dialog-title">{copy.dialogTitle}</h2>
+        <p>{copy.dialogBody}</p>
+        <fieldset class="scope-options">
+          <legend class="eyebrow">{locale === "zh-cn" ? "必须明确选择 scope" : "Explicit scope is required"}</legend>
+          <label class="scope-option">
+            <input type="radio" name="installation-scope" value="project" />
+            <span><b>{copy.projectScope}</b><small>{copy.projectScopeBody}</small></span>
+          </label>
+          <label class="scope-option">
+            <input type="radio" name="installation-scope" value="global" />
+            <span><b>{copy.globalScope}</b><small>{copy.globalScopeBody}</small></span>
+          </label>
+        </fieldset>
+        <p class="concept-notice">{copy.noBridge}</p>
+        <div class="dialog-actions">
+          <button class="secondary-action" type="button" data-close-install>{copy.close}</button>
+          <a class="primary-action" href={publicPath(locale, "/publish/")}>{copy.guide}</a>
+        </div>
+      </div>
+    </dialog>
+  </main>
+</PublicSiteLayout>
+
+<script>
+  const detailRoot = document.querySelector<HTMLElement>("[data-detail-root]")
+  if (detailRoot) {
+    const tabs = Array.from(detailRoot.querySelectorAll<HTMLButtonElement>("[data-detail-tab]"))
+    const panels = Array.from(detailRoot.querySelectorAll<HTMLElement>("[data-detail-panel]"))
+    const selectTab = (index: number) => {
+      tabs.forEach((tab, candidate) => {
+        const selected = candidate === index
+        tab.setAttribute("aria-selected", String(selected))
+        tab.tabIndex = selected ? 0 : -1
+      })
+      panels.forEach((panel, candidate) => (panel.hidden = candidate !== index))
+    }
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => selectTab(index))
+      tab.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return
+        event.preventDefault()
+        const direction = event.key === "ArrowRight" ? 1 : -1
+        const next = (index + direction + tabs.length) % tabs.length
+        selectTab(next)
+        tabs[next]?.focus()
+      })
+    })
+
+    const digest = detailRoot.querySelector<HTMLElement>("[data-full-digest]")!
+    const copyButton = detailRoot.querySelector<HTMLButtonElement>("[data-copy-digest]")!
+    const copyStatus = detailRoot.querySelector<HTMLElement>("[data-copy-status]")!
+    copyButton.addEventListener("click", async () => {
+      await navigator.clipboard.writeText(digest.textContent?.trim() ?? "")
+      copyStatus.textContent = detailRoot.dataset.copiedText ?? ""
+    })
+
+    const download = detailRoot.querySelector<HTMLAnchorElement>("[data-exact-download]")!
+    const openInOpenCorvus = detailRoot.querySelector<HTMLAnchorElement>("[data-open-opencorvus]")!
+    const downloadStatus = detailRoot.querySelector<HTMLElement>("[data-download-status]")!
+    const archiveDigest = detailRoot.querySelector<HTMLElement>("[data-archive-digest]")!
+    const downloadResponses = detailRoot.querySelector<HTMLElement>("[data-download-responses]")!
+    fetch(detailRoot.dataset.recordApi ?? "", { headers: { Accept: "application/json" } })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`Hosted sandbox returned ${response.status}`)
+        const record = await response.json()
+        if (typeof record.downloadPath !== "string" || typeof record.archive?.sha256 !== "string") {
+          throw new Error("Hosted sandbox record is incomplete")
+        }
+        download.href = record.downloadPath
+        download.removeAttribute("aria-disabled")
+        const archiveUrl = new URL(record.downloadPath, window.location.origin).href
+        const handoff = new URL("opencorvus://expert-squad/install")
+        handoff.searchParams.set("namespace", detailRoot.dataset.namespace ?? "")
+        handoff.searchParams.set("id", detailRoot.dataset.packageId ?? "")
+        handoff.searchParams.set("version", detailRoot.dataset.version ?? "")
+        handoff.searchParams.set("packageDigest", detailRoot.dataset.packageDigest ?? "")
+        handoff.searchParams.set("archiveSha256", record.archive.sha256)
+        handoff.searchParams.set("archiveBytes", String(record.archive.bytes))
+        handoff.searchParams.set("archiveUrl", archiveUrl)
+        openInOpenCorvus.href = handoff.href
+        openInOpenCorvus.removeAttribute("aria-disabled")
+        archiveDigest.textContent = record.archive.sha256
+        downloadResponses.textContent = String(Number(record.downloadResponses ?? 0))
+        downloadStatus.textContent = detailRoot.dataset.downloadReady ?? ""
+      })
+      .catch(() => {
+        download.removeAttribute("href")
+        download.setAttribute("aria-disabled", "true")
+        openInOpenCorvus.removeAttribute("href")
+        openInOpenCorvus.setAttribute("aria-disabled", "true")
+        downloadStatus.textContent = detailRoot.dataset.downloadUnavailable ?? ""
+      })
+
+    const demoDialog = detailRoot.querySelector<HTMLDialogElement>("[data-demo-dialog]")!
+    const demoTrigger = detailRoot.querySelector<HTMLButtonElement>("[data-open-demo]")!
+    demoTrigger.addEventListener("click", () => {
+      demoDialog.showModal()
+      demoDialog.scrollTop = 0
+      demoDialog.querySelector<HTMLElement>("#demo-dialog-title")?.focus({ preventScroll: true })
+    })
+    detailRoot.querySelector<HTMLButtonElement>("[data-close-demo]")!.addEventListener("click", () => demoDialog.close())
+    demoDialog.addEventListener("cancel", (event) => {
+      event.preventDefault()
+      demoDialog.close()
+    })
+    demoDialog.addEventListener("close", () => demoTrigger.focus())
+    demoDialog.addEventListener("click", (event) => {
+      if (event.target === demoDialog) demoDialog.close()
+    })
+
+    const dialog = detailRoot.querySelector<HTMLDialogElement>("[data-install-dialog]")!
+    const installTrigger = detailRoot.querySelector<HTMLButtonElement>("[data-open-install]")!
+    installTrigger.addEventListener("click", () => dialog.showModal())
+    detailRoot.querySelector<HTMLButtonElement>("[data-close-install]")!.addEventListener("click", () => dialog.close())
+    dialog.addEventListener("cancel", (event) => {
+      event.preventDefault()
+      dialog.close()
+    })
+    dialog.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return
+      event.preventDefault()
+      dialog.close()
+    })
+    dialog.addEventListener("close", () => installTrigger.focus())
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close()
+    })
+  }
+</script>

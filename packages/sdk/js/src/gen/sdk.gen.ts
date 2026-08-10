@@ -133,6 +133,8 @@ import type {
   ExpertSquadEvolutionMutationResponses,
   ExpertSquadExportErrors,
   ExpertSquadExportResponses,
+  ExpertSquadImportExactFileErrors,
+  ExpertSquadImportExactFileResponses,
   ExpertSquadImportFileErrors,
   ExpertSquadImportFileResponses,
   ExpertSquadImportFolderErrors,
@@ -3210,6 +3212,59 @@ export class ExpertSquad extends HeyApiClient {
   }
 
   /**
+   * Import an exact hosted expert squad ZIP revision
+   *
+   * Validate and install one downloaded ZIP only when its exact namespace, id, version, and canonical package digest match the web-to-client handoff target.
+   */
+  public importExactFile<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      archiveBase64: string
+      expectedCurrentPackageDigest?: string
+      expectedID: string
+      expectedNamespace: string
+      expectedPackageDigest: string
+      expectedVersion: string
+      filename?: string
+      installationScope: "project" | "global"
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "body", key: "archiveBase64" },
+            { in: "body", key: "expectedCurrentPackageDigest" },
+            { in: "body", key: "expectedID" },
+            { in: "body", key: "expectedNamespace" },
+            { in: "body", key: "expectedPackageDigest" },
+            { in: "body", key: "expectedVersion" },
+            { in: "body", key: "filename" },
+            { in: "body", key: "installationScope" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<
+      ExpertSquadImportExactFileResponses,
+      ExpertSquadImportExactFileErrors,
+      ThrowOnError
+    >({
+      url: "/expert-squad/import-exact-file",
+      ...options,
+      ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
+    })
+  }
+
+  /**
    * Import an expert squad ZIP archive
    *
    * Validate and install a dropped expert-squad ZIP archive into the explicitly selected project or user-global expert-squad catalog.
@@ -3304,7 +3359,7 @@ export class ExpertSquad extends HeyApiClient {
    */
   public inspect<ThrowOnError extends boolean = false>(
     parameters: {
-      directory?: string
+      directory: string
       id: string
       installationScope?: "built_in" | "project" | "global"
       namespace?: string
@@ -3641,7 +3696,7 @@ export class ExpertSquad extends HeyApiClient {
    */
   public settingsDetail<ThrowOnError extends boolean = false>(
     parameters: {
-      directory?: string
+      directory: string
       id: string
       installationScope: "built_in" | "project" | "global"
       namespace?: string

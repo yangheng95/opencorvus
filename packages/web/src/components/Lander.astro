@@ -50,6 +50,9 @@ const webApplicationCard = {
         <span>{landingProductName}</span>
       </a>
       <nav aria-label="Primary navigation">
+        <a href={locale === "zh-cn" ? `${publicBase}/zh-cn/market/` : `${publicBase}/market/`}>{content.nav.market}</a>
+        <a href={locale === "zh-cn" ? `${publicBase}/zh-cn/publish/` : `${publicBase}/publish/`}>{content.nav.publish}</a>
+        <a href={locale === "zh-cn" ? `${publicBase}/zh-cn/trust/` : `${publicBase}/trust/`}>{content.nav.trust}</a>
         <a href="#download">{content.nav.download}</a>
         <a href="#features">{content.nav.features}</a>
         <a href="#expert-squads">{content.nav.expertSquads}</a>

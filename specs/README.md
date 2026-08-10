@@ -1,6 +1,12 @@
 # Specs Storage Index
 
+Latest hosted Expert Squad market integration and local end-to-end rehearsal: [`2026-08-10-hosted-expert-squad-market-integration.md`](records/2026-08/2026-08-10-hosted-expert-squad-market-integration.md).
+
 Latest WorkBuddy Expert Squad expansion and fresh target E2E plan: [`2026-08-10-workbuddy-expert-squad-expansion-and-e2e.md`](records/2026-08/2026-08-10-workbuddy-expert-squad-expansion-and-e2e.md).
+
+Latest bounded Expert Squad catalog and context closure: [`2026-08-10-expert-squad-bounded-catalog-and-context.md`](records/2026-08/2026-08-10-expert-squad-bounded-catalog-and-context.md).
+
+Latest Host search fallback and unified message citations: [`2026-08-10-host-search-and-unified-citations.md`](records/2026-08/2026-08-10-host-search-and-unified-citations.md).
 
 Latest Work Ledger “Start from scratch” focus repair: [`2026-08-09-work-ledger-start-from-scratch-focus.md`](records/2026-08/2026-08-09-work-ledger-start-from-scratch-focus.md).
 

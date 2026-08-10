@@ -1,0 +1,34 @@
+---
+import { Image } from "astro:assets"
+import BrandMark from "../../../overlay/src-tauri/icons/icon.png"
+import { publicPath, type PublicLocale } from "../content/public-market"
+
+type Props = {
+  locale: PublicLocale
+  current: "home" | "market" | "publish" | "trust"
+  languageHref: string
+  embedded?: boolean
+}
+
+const { locale, current, languageHref, embedded = false } = Astro.props
+const HeaderTag = embedded ? "div" : "header"
+const copy =
+  locale === "zh-cn"
+    ? { market: "专家团市场", publish: "发布", trust: "可信机制", docs: "文档", language: "English" }
+    : { market: "Expert Squads", publish: "Publish", trust: "Trust", docs: "Docs", language: "简体中文" }
+---
+
+{!embedded && <a class="skip-link" href="#main-content">{locale === "zh-cn" ? "跳到主要内容" : "Skip to content"}</a>}
+<HeaderTag class="public-header" aria-label={locale === "zh-cn" ? "主导航" : "Primary navigation"}>
+  <a class="public-brand" href={publicPath(locale)} aria-label="OpenCorvus home">
+    <Image src={BrandMark} width={34} height={34} alt="" loading="eager" />
+    <span>OpenCorvus</span>
+  </a>
+  <nav class="public-nav" aria-label={locale === "zh-cn" ? "网站" : "Site"}>
+    <a href={publicPath(locale, "/market/")} aria-current={current === "market" ? "page" : undefined}>{copy.market}</a>
+    <a href={publicPath(locale, "/publish/")} aria-current={current === "publish" ? "page" : undefined}>{copy.publish}</a>
+    <a href={publicPath(locale, "/trust/")} aria-current={current === "trust" ? "page" : undefined}>{copy.trust}</a>
+    <a href={publicPath(locale, "/start/quickstart/")}>{copy.docs}</a>
+  </nav>
+  <a class="language-switch" href={languageHref}>{copy.language}</a>
+</HeaderTag>

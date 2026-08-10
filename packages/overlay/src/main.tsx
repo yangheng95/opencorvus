@@ -121,6 +121,7 @@ import { getHostTransport } from "./services/host-transport-runtime"
 import { checkDesktopUpdate } from "./services/desktop-update"
 import { installNativeWindowCloseLifecycle } from "./services/native-window-lifecycle"
 import { showOverlayWindow } from "./services/window"
+import { installExpertSquadInstallHandoffBridge } from "./services/expert-squad-install-handoff"
 import { hydrateIconPlaceholders, installIconHtmlRenderer } from "./utils/icon-html"
 import { installNativeContextMenuSuppression } from "./utils/context-menu"
 import {
@@ -2496,6 +2497,7 @@ overlayAppHost.replaceChildren()
 disposers.push(render(() => <OverlayRoot />, overlayAppHost))
 await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
 await showOverlayWindow()
+disposers.push(await installExpertSquadInstallHandoffBridge())
 
 // ── Right dock width resize ──
 // The right dock is resized by dragging `#rightDockResizer`. Width persists to

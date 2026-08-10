@@ -28,6 +28,9 @@ type LandingContent = {
     dialog: string
   }
   nav: {
+    market: string
+    publish: string
+    trust: string
     download: string
     features: string
     expertSquads: string
@@ -93,6 +96,9 @@ export const landingContent = {
       dialog: "Product screenshot preview",
     },
     nav: {
+      market: "Marketplace",
+      publish: "Publish",
+      trust: "Trust",
       download: "Download",
       features: "Use cases",
       expertSquads: "Expert Squads",
@@ -224,6 +230,9 @@ export const landingContent = {
       dialog: "产品截图预览",
     },
     nav: {
+      market: "专家团市场",
+      publish: "发布",
+      trust: "可信机制",
       download: "下载",
       features: "使用场景",
       expertSquads: "专家团",

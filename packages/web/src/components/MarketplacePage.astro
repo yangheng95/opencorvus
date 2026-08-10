@@ -1,0 +1,333 @@
+---
+import PublicSiteLayout from "./PublicSiteLayout.astro"
+import WorkflowTopology from "./WorkflowTopology.astro"
+import { publicPath, publicSquadRecords, squadPath, type PublicLocale } from "../content/public-market"
+
+const { locale } = Astro.props as { locale: PublicLocale }
+const hostedApiBase = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/api/registry`
+const copy =
+  locale === "zh-cn"
+    ? {
+        title: "专家团市场 · OpenCorvus",
+        description: "查看由精确能力包身份、工作流、能力与版本事实组成的 OpenCorvus 专家团目录概念。",
+        languageHref: publicPath("root", "/market/"),
+        eyebrow: "公共目录概念 · 精选源码 revision",
+        heading: "按执行契约选团队。",
+        lead: "这里列出的不是头像和口号，而是一份份可检查的执行契约：固定身份、版本、能力、工作流与内容摘要。",
+        registryTitle: "当前显示的是精选源码 revision",
+        registryBody:
+          "事实字段由构建步骤直接读取当前 payload market 与精确 manifest 投影；本页仅负责选择展示身份和本地化说明。远程 registry、发布者身份、签名与审核服务仍属于拟建层。",
+        search: "搜索专家团",
+        placeholder: "名称或用途",
+        filter: "按产品支柱筛选",
+        all: "全部",
+        code: "代码",
+        work: "工作",
+        multi: "多支柱",
+        states: "目录异常状态",
+        stateBody:
+          "未来 registry 离线、版本撤回或精确 revision 不可用时，客户端必须明确失败，不能静默改用其他来源或旧版本。",
+        snapshot: "精确事实 · 编辑选集",
+        suffix: "条记录",
+        agents: "个 Agent",
+        workflows: "条工作流",
+        skills: "项 Skill",
+        tools: "项工具",
+        mcpRefs: "项 MCP 引用",
+        emptyTitle: "没有符合条件的专家团。",
+        emptyBody: "清空搜索或选择其他产品支柱。本页不会用相似名称替代精确身份。",
+        hostedTitle: "本地托管沙箱中的不可变 revisions",
+        hostedBody: "这一栏来自当前同源托管进程：仓库快照和已确认的验证提交都绑定完整 identity、package digest 与 archive SHA-256。它不是公共发布目录，不代表发布者审核或真实运行。",
+        hostedLoading: "正在读取本地托管沙箱…",
+        hostedOffline: "本地托管沙箱未运行。上方编辑目录仍可阅读，但上传和精确 ZIP 下载不可用。",
+        hostedCount: "个沙箱 revisions",
+        archiveHash: "archive SHA-256",
+        repositorySnapshot: "仓库快照",
+        validatedSubmission: "验证提交 · 非公共发布",
+        openClient: "打开 OpenCorvus 并安装",
+        download: "仅下载精确 ZIP",
+        downloadResponses: "已发出下载响应",
+      }
+    : {
+        title: "Expert Squad market · OpenCorvus",
+        description: "Explore an OpenCorvus Expert Squad catalog concept built from exact package identity, workflow, capability, and revision facts.",
+        languageHref: publicPath("zh-cn", "/market/"),
+        eyebrow: "Public catalog concept · selected source revisions",
+        heading: "Choose by operating contract.",
+        lead:
+          "These are inspectable operating contracts, not avatars and slogans: fixed identity, revision, capability projection, workflow, and selection guidance.",
+        registryTitle: "You are viewing selected source revisions",
+        registryBody:
+          "A build step reads factual fields from the current payload market and exact manifest projection; this page owns only editorial selection and localized explanation. A remote registry, publisher identity, signatures, and review service remain proposed layers.",
+        search: "Search Expert Squads",
+        placeholder: "Name or use case",
+        filter: "Filter by product pillar",
+        all: "All",
+        code: "Code",
+        work: "Work",
+        multi: "Multi-pillar",
+        states: "Catalog failure states",
+        stateBody:
+          "If a future registry is offline, a revision is withdrawn, or exact bytes are unavailable, the client must fail visibly. It must not silently choose another source or older package.",
+        snapshot: "Exact facts · editorial selection",
+        suffix: "records",
+        agents: "Agents",
+        workflows: "workflows",
+        skills: "Skills",
+        tools: "tools",
+        mcpRefs: "MCP refs",
+        emptyTitle: "No Expert Squads match these conditions.",
+        emptyBody: "Clear the search or choose another product pillar. Similar names never substitute for exact identity.",
+        hostedTitle: "Immutable revisions in the local hosted sandbox",
+        hostedBody:
+          "This section comes from the same-origin hosting process. Repository snapshots and confirmed validation submissions bind complete identity, package digest, and archive SHA-256. It is not a public catalog, publisher review, or live runtime.",
+        hostedLoading: "Reading the local hosted sandbox…",
+        hostedOffline: "The local hosted sandbox is offline. The editorial catalog above remains readable, but upload and exact ZIP download are unavailable.",
+        hostedCount: "sandbox revisions",
+        archiveHash: "archive SHA-256",
+        repositorySnapshot: "Repository snapshot",
+        validatedSubmission: "Validated submission · not public",
+        openClient: "Open & install in OpenCorvus",
+        download: "Download exact ZIP only",
+        downloadResponses: "download responses issued",
+      }
+---
+
+<PublicSiteLayout
+  {locale}
+  current="market"
+  title={copy.title}
+  description={copy.description}
+  languageHref={copy.languageHref}
+>
+  <main id="main-content" class="public-main" data-market-root>
+    <section class="market-intro" aria-labelledby="market-title">
+      <div class="market-intro-grid">
+        <div>
+          <p class="eyebrow">{copy.eyebrow}</p>
+          <h1 id="market-title">{copy.heading}</h1>
+          <p class="section-lead">{copy.lead}</p>
+        </div>
+        <aside class="registry-fact">
+          <strong>{copy.registryTitle}</strong>
+          <p>{copy.registryBody}</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="market-workspace" aria-label={copy.heading}>
+      <aside class="market-controls">
+        <label for="market-search">{copy.search}</label>
+        <input id="market-search" class="market-search" type="search" placeholder={copy.placeholder} autocomplete="off" />
+
+        <p class="filter-heading">{copy.filter}</p>
+        <div class="market-filter-list" role="group" aria-label={copy.filter}>
+          <button class="market-filter" type="button" data-market-filter="all" aria-pressed="true">{copy.all}</button>
+          <button class="market-filter" type="button" data-market-filter="code" aria-pressed="false">{copy.code}</button>
+          <button class="market-filter" type="button" data-market-filter="work" aria-pressed="false">{copy.work}</button>
+          <button class="market-filter" type="button" data-market-filter="multi" aria-pressed="false">{copy.multi}</button>
+        </div>
+
+        <details class="state-notes">
+          <summary>{copy.states}</summary>
+          <p>{copy.stateBody}</p>
+          <a class="text-action" href={publicPath(locale, "/trust/")}>{locale === "zh-cn" ? "查看可信机制" : "Read the trust model"} →</a>
+        </details>
+      </aside>
+
+      <div>
+        <div class="results-toolbar">
+          <span
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            data-market-status
+            data-count-suffix={copy.suffix}
+            data-empty-status={copy.emptyTitle}
+          >{publicSquadRecords.length} {copy.suffix}</span>
+          <span>{copy.snapshot}</span>
+        </div>
+        <div class="market-results">
+          {publicSquadRecords.map((record) => (
+            <a
+              class="market-record"
+              href={squadPath(locale, record)}
+              data-market-record
+              data-pillars={record.pillars.join(" ")}
+              data-search={`${record.label} ${record.identity.namespace} ${record.identity.id} ${record.description[locale]} ${record.selectorSummary[locale]}`.toLowerCase()}
+            >
+              <div>
+                <span class="squad-identity">{record.identity.namespace}/{record.identity.id}</span>
+                <h2>{record.label}</h2>
+              </div>
+              <div class="market-record-copy">
+                <p>{record.description[locale]}</p>
+                <p class="selector-line">{record.selectorSummary[locale]}</p>
+                <WorkflowTopology {record} {locale} />
+              </div>
+              <div class="record-meta">
+                <span>v{record.identity.version}</span>
+                <span>{record.agents.length} {copy.agents} · {record.workflows.length} {copy.workflows}</span>
+                <span>{record.projectedCapabilities.skills} {copy.skills} · {record.projectedCapabilities.tools} {copy.tools}</span>
+                <span>{record.projectedCapabilities.mcp} {copy.mcpRefs}</span>
+                <code>sha256:{record.identity.digest.slice(0, 12)}…</code>
+              </div>
+            </a>
+          ))}
+        </div>
+        <div class="market-empty" data-market-empty hidden>
+          <h2>{copy.emptyTitle}</h2>
+          <p>{copy.emptyBody}</p>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="hosted-registry-section"
+      aria-labelledby="hosted-registry-title"
+      data-hosted-registry
+      data-api={hostedApiBase}
+      data-offline={copy.hostedOffline}
+      data-count-label={copy.hostedCount}
+      data-archive-label={copy.archiveHash}
+      data-snapshot-label={copy.repositorySnapshot}
+      data-submission-label={copy.validatedSubmission}
+      data-open-client-label={copy.openClient}
+      data-download-label={copy.download}
+      data-download-count-label={copy.downloadResponses}
+    >
+      <div class="detail-grid">
+        <div>
+          <p class="eyebrow">Local hosted registry simulation</p>
+          <h2 id="hosted-registry-title">{copy.hostedTitle}</h2>
+        </div>
+        <p class="section-lead">{copy.hostedBody}</p>
+      </div>
+      <p class="hosted-registry-status" role="status" aria-live="polite" data-hosted-status>{copy.hostedLoading}</p>
+      <div class="hosted-record-list" data-hosted-records></div>
+    </section>
+  </main>
+</PublicSiteLayout>
+
+<script>
+  const marketRoot = document.querySelector<HTMLElement>("[data-market-root]")
+  if (marketRoot) {
+    const search = marketRoot.querySelector<HTMLInputElement>("#market-search")!
+    const filters = Array.from(marketRoot.querySelectorAll<HTMLButtonElement>("[data-market-filter]"))
+    const records = Array.from(marketRoot.querySelectorAll<HTMLElement>("[data-market-record]"))
+    const status = marketRoot.querySelector<HTMLElement>("[data-market-status]")!
+    const empty = marketRoot.querySelector<HTMLElement>("[data-market-empty]")!
+    let activeFilter = "all"
+
+    const refresh = () => {
+      const query = search.value.trim().toLowerCase()
+      let visible = 0
+      for (const record of records) {
+        const pillars = record.dataset.pillars?.split(" ") ?? []
+        const pillarMatch =
+          activeFilter === "all" ||
+          (activeFilter === "multi" ? pillars.length > 1 : pillars.includes(activeFilter))
+        const searchMatch = !query || record.dataset.search?.includes(query)
+        record.hidden = !(pillarMatch && searchMatch)
+        if (!record.hidden) visible += 1
+      }
+      status.textContent = visible > 0 ? `${visible} ${status.dataset.countSuffix}` : status.dataset.emptyStatus ?? ""
+      empty.hidden = visible > 0
+    }
+
+    search.addEventListener("input", refresh)
+    for (const filter of filters) {
+      filter.addEventListener("click", () => {
+        activeFilter = filter.dataset.marketFilter ?? "all"
+        for (const candidate of filters) candidate.setAttribute("aria-pressed", String(candidate === filter))
+        refresh()
+      })
+    }
+  }
+
+  const hostedRoot = document.querySelector<HTMLElement>("[data-hosted-registry]")
+  if (hostedRoot) {
+    const status = hostedRoot.querySelector<HTMLElement>("[data-hosted-status]")!
+    const list = hostedRoot.querySelector<HTMLElement>("[data-hosted-records]")!
+    fetch(`${hostedRoot.dataset.api}/records`, { headers: { Accept: "application/json" } })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`Hosted sandbox returned ${response.status}`)
+        return await response.json()
+      })
+      .then((payload) => {
+        const records = Array.isArray(payload.records) ? payload.records : []
+        status.textContent = `${records.length} ${hostedRoot.dataset.countLabel}`
+        for (const record of records) {
+          const article = document.createElement("article")
+          article.className = "hosted-record"
+
+          const title = document.createElement("div")
+          const identity = document.createElement("code")
+          identity.textContent = `${record.facts.identity.namespace}/${record.facts.identity.id}@${record.facts.identity.version}`
+          const heading = document.createElement("h3")
+          heading.textContent = record.facts.label
+          title.append(identity, heading)
+
+          const facts = document.createElement("div")
+          facts.className = "hosted-record-digests"
+          const packageDigest = document.createElement("code")
+          packageDigest.textContent = `package sha256:${record.facts.identity.digest}`
+          const archiveDigest = document.createElement("code")
+          archiveDigest.textContent = `${hostedRoot.dataset.archiveLabel}:${record.archive.sha256}`
+          facts.append(packageDigest, archiveDigest)
+
+          const actions = document.createElement("div")
+          actions.className = "hosted-record-actions"
+          const source = document.createElement("span")
+          source.className = "status-label"
+          source.textContent =
+            record.source === "repository_snapshot"
+              ? hostedRoot.dataset.snapshotLabel ?? ""
+              : hostedRoot.dataset.submissionLabel ?? ""
+          const download = document.createElement("a")
+          download.className = "text-action"
+          download.href = record.downloadPath
+          download.download = ""
+          download.textContent = `${hostedRoot.dataset.downloadLabel} →`
+          const openClient = document.createElement("a")
+          openClient.className = "hosted-open-client"
+          const archiveUrl = new URL(record.downloadPath, window.location.origin).href
+          const handoff = new URL("opencorvus://expert-squad/install")
+          handoff.searchParams.set("namespace", record.facts.identity.namespace)
+          handoff.searchParams.set("id", record.facts.identity.id)
+          handoff.searchParams.set("version", record.facts.identity.version)
+          handoff.searchParams.set("packageDigest", record.facts.identity.digest)
+          handoff.searchParams.set("archiveSha256", record.archive.sha256)
+          handoff.searchParams.set("archiveBytes", String(record.archive.bytes))
+          handoff.searchParams.set("archiveUrl", archiveUrl)
+          openClient.href = handoff.href
+          openClient.textContent = `${hostedRoot.dataset.openClientLabel} ↗`
+          const downloadCount = document.createElement("span")
+          downloadCount.className = "hosted-download-count"
+          downloadCount.textContent = `${Number(record.downloadResponses ?? 0)} ${hostedRoot.dataset.downloadCountLabel}`
+          const refreshDownloadCount = () => {
+            window.setTimeout(async () => {
+              try {
+                const response = await fetch(record.downloadPath.replace(/\/archive$/, ""), {
+                  headers: { Accept: "application/json" },
+                })
+                if (!response.ok) return
+                const refreshed = await response.json()
+                downloadCount.textContent = `${Number(refreshed.downloadResponses ?? 0)} ${hostedRoot.dataset.downloadCountLabel}`
+              } catch {
+                // The existing hosted status already explains the local-only availability boundary.
+              }
+            }, 900)
+          }
+          download.addEventListener("click", refreshDownloadCount)
+          openClient.addEventListener("click", refreshDownloadCount)
+          actions.append(source, downloadCount, openClient, download)
+          article.append(title, facts, actions)
+          list.append(article)
+        }
+      })
+      .catch(() => {
+        status.textContent = hostedRoot.dataset.offline ?? ""
+      })
+  }
+</script>

@@ -201,6 +201,7 @@ export const ExpertSquadCatalogSearchQuerySchema = z.object({
 
 export const ExpertSquadCatalogInspectionQuerySchema = z
   .object({
+    directory: z.string().min(1),
     id: z.string().min(1).max(160),
     installationScope: z.enum(["built_in", "project", "global"]).optional(),
     namespace: z.string().min(1).max(160).optional(),
@@ -219,6 +220,7 @@ export const ExpertSquadCatalogInspectionQuerySchema = z
 
 export const ExpertSquadSettingsDetailQuerySchema = z
   .object({
+    directory: z.string().min(1),
     id: z.string().min(1).max(160),
     installationScope: z.enum(["built_in", "project", "global"]),
     namespace: z.string().min(1).max(160).optional(),

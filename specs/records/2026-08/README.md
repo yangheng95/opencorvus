@@ -1,6 +1,12 @@
 # August 2026 Records
 
+- [2026-08-10-hosted-expert-squad-market-integration.md](2026-08-10-hosted-expert-squad-market-integration.md) records the target-repository public Expert Squad market, exact immutable download and response accounting, local upload rehearsal, and desktop deep-link installation handoff.
+
 - [2026-08-10-workbuddy-expert-squad-expansion-and-e2e.md](2026-08-10-workbuddy-expert-squad-expansion-and-e2e.md) records the corrected-repository migration of nine WorkBuddy Expert Squads, immutable Artifact publication authority, and fresh OpenAI Terra end-to-end acceptance.
+
+- [2026-08-10-expert-squad-bounded-catalog-and-context.md](2026-08-10-expert-squad-bounded-catalog-and-context.md) replaces eager full Expert Squad enumeration with bounded compact retrieval, exact detail and Host-owned Mission/Task authority, with scale, visual and independent-review acceptance.
+
+- [2026-08-10-host-search-and-unified-citations.md](2026-08-10-host-search-and-unified-citations.md) defines the corrected-repository implementation of one Exa-first, in-process Open-WebSearch fallback and one persisted source domain for web, provider-document, and local-file citations.
 
 - [2026-08-09-work-ledger-start-from-scratch-focus.md](2026-08-09-work-ledger-start-from-scratch-focus.md) repairs the create-menu close-autofocus race so the directory-free Composer remains visibly focused, and aligns the Vite development checker with the existing `esnext` Overlay target.
 

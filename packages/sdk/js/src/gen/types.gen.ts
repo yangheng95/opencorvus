@@ -3581,6 +3581,9 @@ export type Part =
   | TextPart
   | PartErrorPart
   | ReasoningPart
+  | SourceUrlPart
+  | SourceDocumentPart
+  | SourceFilePart
   | FilePart
   | InteractiveArtifactPart
   | ToolPart
@@ -4401,6 +4404,62 @@ export type SnapshotPart = {
   type: "snapshot"
 }
 
+export type SourceDocumentPart = {
+  filename?: string
+  id: string
+  mediaType: string
+  messageID: string
+  orderKey?: string
+  provider?: string
+  providerMetadata?: {
+    [key: string]: unknown
+  }
+  sessionID: string
+  sourceId: string
+  title: string
+  type: "source-document"
+}
+
+export type SourceFilePart = {
+  id: string
+  messageID: string
+  orderKey?: string
+  path: string
+  provider?: string
+  providerMetadata?: {
+    [key: string]: unknown
+  }
+  range?: SourceFileRange
+  sessionID: string
+  sourceId: string
+  symbol?: string
+  title: string
+  type: "source-file"
+}
+
+export type SourceFileRange = {
+  endLine: number
+  startLine: number
+}
+
+export type SourceUrlPart = {
+  author?: string
+  id: string
+  messageID: string
+  orderKey?: string
+  provider?: string
+  providerMetadata?: {
+    [key: string]: unknown
+  }
+  publishedAt?: string
+  sessionID: string
+  snippet?: string
+  sourceId: string
+  title?: string
+  type: "source-url"
+  url: string
+}
+
 export type StepFinishPart = {
   cost: number
   id: string
@@ -4976,6 +5035,54 @@ export type VisibleMessagePart =
         start: number
       }
       type: "reasoning"
+    }
+  | {
+      author?: string
+      id: string
+      messageID: string
+      orderKey: string
+      provider?: string
+      providerMetadata?: {
+        [key: string]: unknown
+      }
+      publishedAt?: string
+      sessionID: string
+      snippet?: string
+      sourceId: string
+      title?: string
+      type: "source-url"
+      url: string
+    }
+  | {
+      filename?: string
+      id: string
+      mediaType: string
+      messageID: string
+      orderKey: string
+      provider?: string
+      providerMetadata?: {
+        [key: string]: unknown
+      }
+      sessionID: string
+      sourceId: string
+      title: string
+      type: "source-document"
+    }
+  | {
+      id: string
+      messageID: string
+      orderKey: string
+      path: string
+      provider?: string
+      providerMetadata?: {
+        [key: string]: unknown
+      }
+      range?: SourceFileRange
+      sessionID: string
+      sourceId: string
+      symbol?: string
+      title: string
+      type: "source-file"
     }
   | {
       filename?: string
@@ -11996,13 +12103,189 @@ export type ExpertSquadExportResponses = {
    */
   200: {
     archiveBase64: string
+    archiveSha256: string
     fileCount: number
     filename: string
     id: string
+    namespace: string
+    packageDigest: string
+    version: string
   }
 }
 
 export type ExpertSquadExportResponse = ExpertSquadExportResponses[keyof ExpertSquadExportResponses]
+
+export type ExpertSquadImportExactFileData = {
+  body: {
+    archiveBase64: string
+    expectedCurrentPackageDigest?: string
+    expectedID: string
+    expectedNamespace: string
+    expectedPackageDigest: string
+    expectedVersion: string
+    filename?: string
+    installationScope: "project" | "global"
+  }
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/expert-squad/import-exact-file"
+}
+
+export type ExpertSquadImportExactFileErrors = {
+  /**
+   * Expert squad package import rejected
+   */
+  400: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "ExpertSquadPackageError"
+  }
+  /**
+   * Expert squad package changed
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "ExpertSquadPackageMutationConflictError"
+  }
+}
+
+export type ExpertSquadImportExactFileError = ExpertSquadImportExactFileErrors[keyof ExpertSquadImportExactFileErrors]
+
+export type ExpertSquadImportExactFileResponses = {
+  /**
+   * Imported exact expert squad package revision
+   */
+  200:
+    | {
+        after: {
+          id: string
+          installationScope: "project" | "global"
+          namespace: string
+          /**
+           * Canonical digest of the package bytes present at targetRoot after the operation.
+           */
+          packageDigest: string
+          projectDirectory: string | null
+          targetRoot: string
+          /**
+           * Manifest version of the package bytes present at targetRoot after the operation.
+           */
+          version: string | null
+        }
+        before: null
+        operation: "installed"
+      }
+    | {
+        after: {
+          id: string
+          installationScope: "project" | "global"
+          namespace: string
+          /**
+           * Canonical digest of the package bytes present at targetRoot after the operation.
+           */
+          packageDigest: string
+          projectDirectory: string | null
+          targetRoot: string
+          /**
+           * Manifest version of the package bytes present at targetRoot after the operation.
+           */
+          version: string | null
+        }
+        before: {
+          id: string
+          installationScope: "project" | "global"
+          namespace: string
+          /**
+           * Canonical digest of the package bytes present at targetRoot after the operation.
+           */
+          packageDigest: string
+          projectDirectory: string | null
+          targetRoot: string
+          /**
+           * Manifest version of the package bytes present at targetRoot after the operation.
+           */
+          version: string | null
+        }
+        operation: "unchanged"
+      }
+    | {
+        after: {
+          id: string
+          installationScope: "project" | "global"
+          namespace: string
+          /**
+           * Canonical digest of the package bytes present at targetRoot after the operation.
+           */
+          packageDigest: string
+          projectDirectory: string | null
+          targetRoot: string
+          /**
+           * Manifest version of the package bytes present at targetRoot after the operation.
+           */
+          version: string | null
+        }
+        before: {
+          id: string
+          installationScope: "project" | "global"
+          namespace: string
+          /**
+           * Canonical digest of the package bytes present at targetRoot after the operation.
+           */
+          packageDigest: string
+          projectDirectory: string | null
+          targetRoot: string
+          /**
+           * Manifest version of the package bytes present at targetRoot after the operation.
+           */
+          version: string | null
+        }
+        operation: "replaced"
+      }
+    | {
+        after: {
+          id: string
+          installationScope: "project" | "global"
+          namespace: string
+          /**
+           * Canonical digest of the package bytes present at targetRoot after the operation.
+           */
+          packageDigest: string
+          projectDirectory: string | null
+          targetRoot: string
+          /**
+           * Manifest version of the package bytes present at targetRoot after the operation.
+           */
+          version: string | null
+        }
+        before: {
+          id: string
+          installationScope: "project" | "global"
+          namespace: string
+          /**
+           * Canonical digest of the package bytes present at targetRoot after the operation.
+           */
+          packageDigest: string
+          projectDirectory: string | null
+          targetRoot: string
+          /**
+           * Manifest version of the package bytes present at targetRoot after the operation.
+           */
+          version: string | null
+        }
+        operation: "restored"
+      }
+}
+
+export type ExpertSquadImportExactFileResponse =
+  ExpertSquadImportExactFileResponses[keyof ExpertSquadImportExactFileResponses]
 
 export type ExpertSquadImportFileData = {
   body: {
@@ -12341,10 +12624,7 @@ export type ExpertSquadInspectData = {
   body?: never
   path?: never
   query: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
+    directory: string
     id: string
     installationScope?: "built_in" | "project" | "global"
     namespace?: string
@@ -13232,10 +13512,7 @@ export type ExpertSquadSettingsDetailData = {
   body?: never
   path?: never
   query: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
+    directory: string
     id: string
     installationScope: "built_in" | "project" | "global"
     namespace?: string

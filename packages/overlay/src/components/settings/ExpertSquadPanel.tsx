@@ -58,6 +58,12 @@ import { showAppDialog } from "../../services/app-dialog"
 import { TextField } from "../ui/TextField"
 import { Switch } from "../ui/Switch"
 import ExpertSquadEvolutionPanel from "./ExpertSquadEvolutionPanel"
+import {
+  clearExpertSquadInstallHandoff,
+  downloadExpertSquadInstallArchive,
+  expertSquadInstallHandoff,
+  importExactExpertSquadHandoff,
+} from "../../services/expert-squad-install-handoff"
 
 function markdownHtml(value: string): string {
   if (!value.trim()) {
@@ -316,6 +322,11 @@ async function fileToBase64(file: Blob): Promise<string> {
     reader.onerror = () => reject(reader.error || new Error("Failed to read expert-squad archive"))
     reader.readAsDataURL(file)
   })
+}
+
+async function sha256Hex(bytes: ArrayBuffer): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", bytes)
+  return Array.from(new Uint8Array(digest), (value) => value.toString(16).padStart(2, "0")).join("")
 }
 
 function saveBase64Archive(filename: string, archiveBase64: string): void {
@@ -1033,6 +1044,46 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
     if (archiveInput) archiveInput.value = ""
   }
 
+  async function installHostedHandoff(targetInstallationScope: ExpertSquadInstallationScope) {
+    const handoff = expertSquadInstallHandoff()
+    const captured = captureCatalogActionScope()
+    if (!handoff || !captured) return
+    await runBusy(
+      `install-handoff:${targetInstallationScope}:${handoff.id}`,
+      async () => {
+        const bytes = await downloadExpertSquadInstallArchive(handoff)
+        const archiveSha256 = await sha256Hex(bytes)
+        if (archiveSha256 !== handoff.archiveSha256) {
+          throw new Error(
+            `Hosted Expert Squad archive digest mismatch: expected ${handoff.archiveSha256}, received ${archiveSha256}`,
+          )
+        }
+        if (currentScopeIdentity() !== captured.identity) return
+        const result = await importExactExpertSquadHandoff({
+          handoff,
+          directory: captured.scope.directory,
+          archiveBase64: await fileToBase64(new Blob([bytes], { type: "application/zip" })),
+          filename: `${handoff.id}-${handoff.version}.zip`,
+          installationScope: targetInstallationScope,
+        })
+        if (currentScopeIdentity() !== captured.identity) return
+        if (
+          result.after.namespace !== handoff.namespace ||
+          result.after.id !== handoff.id ||
+          result.after.version !== handoff.version ||
+          result.after.packageDigest !== handoff.packageDigest
+        ) {
+          throw new Error("Exact Expert Squad import receipt does not match the hosted handoff target")
+        }
+        clearExpertSquadInstallHandoff(handoff)
+        await refreshCatalog(`${targetInstallationScope}:${result.after.id}`, captured.scope, captured.identity)
+        if (isInstallPage()) await refreshMarket(result.after.id, captured.scope, captured.identity)
+        showNotice(t("expert_squad.hosted_handoff_installed", { id: result.after.id }), "active")
+      },
+      captured.identity,
+    )
+  }
+
   function openArchivePicker() {
     const captured = captureCatalogActionScope()
     if (!captured) return
@@ -1487,6 +1538,32 @@ export default function ExpertSquadPanel(props: { page: "install" | "details" })
       <SettingsPanel class="general-panel expert-squad-panel">
         <SettingsGroup>
           <Show when={isInstallPage()}>
+            <Show when={expertSquadInstallHandoff()} keyed>
+              {(handoff) => (
+                <SettingsSurface class="expert-squad-hosted-handoff" data-ui="expert-squad-hosted-handoff">
+                  <div class="expert-squad-hosted-handoff-copy">
+                    <Badge tone="accent">{t("expert_squad.hosted_handoff_badge")}</Badge>
+                    <h2>{t("expert_squad.hosted_handoff_title", { id: handoff.id })}</h2>
+                    <p>{t("expert_squad.hosted_handoff_body")}</p>
+                    <code>
+                      {handoff.namespace}/{handoff.id}@{handoff.version}
+                    </code>
+                    <code>sha256:{handoff.packageDigest}</code>
+                  </div>
+                  <div class="expert-squad-hosted-handoff-actions">
+                    <Button type="button" variant="solid" size="md" tone="accent" onClick={() => void installHostedHandoff("project")}>
+                      {t("expert_squad.install_project")}
+                    </Button>
+                    <Button type="button" variant="outline" size="md" tone="neutral" onClick={() => void installHostedHandoff("global")}>
+                      {t("expert_squad.install_global")}
+                    </Button>
+                    <Button type="button" variant="ghost" size="md" tone="neutral" onClick={() => clearExpertSquadInstallHandoff(handoff)}>
+                      {t("common.cancel")}
+                    </Button>
+                  </div>
+                </SettingsSurface>
+              )}
+            </Show>
             <div class="expert-squad-install-intro">
               <div>
                 <h2>{t("expert_squad.market_title")}</h2>

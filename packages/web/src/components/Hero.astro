@@ -2,8 +2,8 @@
 import Default from '@astrojs/starlight/components/Hero.astro';
 import Lander from './Lander.astro';
 
-const { data, slug } = Astro.locals.starlightRoute.entry;
-const isLandingPage = Boolean(data.hero) && (slug === "" || slug === "zh-cn");
+const { data, id } = Astro.locals.starlightRoute.entry;
+const isLandingPage = Boolean(data.hero) && (id === "" || id === "zh-cn");
 ---
 
 { isLandingPage

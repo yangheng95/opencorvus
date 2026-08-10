@@ -38,6 +38,8 @@ use tauri::{
     utils::config::Color,
     AppHandle, Emitter, Manager, Runtime, UserAttentionType,
 };
+#[cfg(any(target_os = "macos", windows, target_os = "linux"))]
+use tauri_plugin_deep_link::DeepLinkExt;
 use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 use tauri_plugin_notification::NotificationExt;
 use tauri_plugin_opener::OpenerExt;
@@ -56,6 +58,7 @@ const TRAY_TOOLTIP_DEFAULT: &str = "OpenCorvus";
 const TRAY_TOOLTIP_ALERT: &str = "OpenCorvus - Action required";
 const OVERLAY_STARTUP_SURFACE: Color = Color(244, 244, 244, 255);
 const STARTUP_PROGRESS_EVENT: &str = "overlay:startup-progress";
+const EXPERT_SQUAD_INSTALL_HANDOFF_EVENT: &str = "opencorvus:expert-squad-install";
 const SERVER_HEALTH_READINESS_TIMEOUT: Duration = Duration::from_secs(30);
 const SERVER_HEALTH_ATTEMPT_TIMEOUT: Duration = Duration::from_millis(750);
 const SERVER_HEALTH_RETRY_INTERVAL: Duration = Duration::from_millis(100);
@@ -1298,6 +1301,31 @@ struct Server {
     worker: StartupWorker,
 }
 
+#[derive(Default)]
+struct PendingExpertSquadInstallHandoff(Mutex<Option<String>>);
+
+fn accept_expert_squad_install_handoff<R: Runtime>(app: &AppHandle<R>, raw: &str) {
+    let parsed = match tauri::Url::parse(raw) {
+        Ok(value)
+            if value.scheme() == "opencorvus"
+                && value.host_str() == Some("expert-squad")
+                && value.path() == "/install" =>
+        {
+            value
+        }
+        _ => return,
+    };
+    let raw = parsed.to_string();
+    *app.state::<PendingExpertSquadInstallHandoff>()
+        .0
+        .lock()
+        .unwrap() = Some(raw.clone());
+    let _ = app.emit_to("main", EXPERT_SQUAD_INSTALL_HANDOFF_EVENT, raw);
+    if let Some(window) = app.get_webview_window("main") {
+        show_window(&window);
+    }
+}
+
 impl Default for Server {
     fn default() -> Self {
         Self {
@@ -1736,6 +1764,13 @@ fn overlay_settings_save<R: Runtime>(
     let text = format_overlay_settings_text(&settings)?;
     write_overlay_settings_text(&path, &text)?;
     Ok(true)
+}
+
+#[tauri::command]
+fn overlay_expert_squad_install_handoff_take(
+    pending: tauri::State<'_, PendingExpertSquadInstallHandoff>,
+) -> Option<String> {
+    pending.0.lock().unwrap().take()
 }
 
 #[tauri::command]
@@ -5604,8 +5639,18 @@ fn build_macos_application_menu<R: Runtime>(app: &AppHandle<R>) -> tauri::Result
 }
 
 fn main() {
-    let builder = tauri::Builder::default()
+    let builder = tauri::Builder::default();
+
+    #[cfg(any(target_os = "macos", windows, target_os = "linux"))]
+    let builder = builder.plugin(tauri_plugin_single_instance::init(|app, argv, _cwd| {
+        for argument in argv {
+            accept_expert_squad_install_handoff(app, &argument);
+        }
+    }));
+
+    let builder = builder
         .manage(Server::default())
+        .manage(PendingExpertSquadInstallHandoff::default())
         .manage(DesktopUpdateCoordinator::default())
         .manage(TrayAttention {
             state: Mutex::new(TrayAttentionState::default()),
@@ -5615,6 +5660,9 @@ fn main() {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_updater::Builder::new().build());
+
+    #[cfg(any(target_os = "macos", windows, target_os = "linux"))]
+    let builder = builder.plugin(tauri_plugin_deep_link::init());
 
     #[cfg(target_os = "macos")]
     let builder = builder
@@ -5630,6 +5678,7 @@ fn main() {
     let builder = builder.invoke_handler(tauri::generate_handler![
         overlay_settings_load,
         overlay_settings_save,
+        overlay_expert_squad_install_handoff_take,
         overlay_server_info,
         overlay_server_restart,
         overlay_startup_retry,
@@ -5663,6 +5712,7 @@ fn main() {
     let builder = builder.invoke_handler(tauri::generate_handler![
         overlay_settings_load,
         overlay_settings_save,
+        overlay_expert_squad_install_handoff_take,
         overlay_server_info,
         overlay_server_restart,
         overlay_startup_retry,
@@ -5705,6 +5755,35 @@ fn main() {
                 state: Mutex::new(TrayAttentionState::default()),
                 cvar: Condvar::new(),
             });
+            #[cfg(any(target_os = "macos", windows, target_os = "linux"))]
+            {
+                // A first Windows protocol launch reaches the registered executable as a
+                // command-line argument. The deep-link plugin's `get_current()` is not a
+                // reliable source for that cold-start argument, so ingest argv through the
+                // same strict handoff parser used by the single-instance callback.
+                for argument in std::env::args().skip(1) {
+                    accept_expert_squad_install_handoff(app.handle(), &argument);
+                }
+                let handle = app.handle().clone();
+                app.deep_link().on_open_url(move |event| {
+                    for url in event.urls() {
+                        accept_expert_squad_install_handoff(&handle, url.as_str());
+                    }
+                });
+                if let Some(urls) = app
+                    .deep_link()
+                    .get_current()
+                    .map_err(std::io::Error::other)?
+                {
+                    for url in urls {
+                        accept_expert_squad_install_handoff(app.handle(), url.as_str());
+                    }
+                }
+                #[cfg(any(windows, target_os = "linux"))]
+                app.deep_link()
+                    .register_all()
+                    .map_err(std::io::Error::other)?;
+            }
             let runtime_paths =
                 overlay_runtime_paths(app.handle()).map_err(std::io::Error::other)?;
             fs::create_dir_all(&runtime_paths.webview_dir)?;

@@ -52,6 +52,12 @@
       "import": "./dist/expert-squad-manifest-v1.js",
       "default": "./dist/expert-squad-manifest-v1.js"
     },
+    "./expert-squad-package-contract": {
+      "source": "./src/expert-squad-package-contract.ts",
+      "types": "./dist/expert-squad-package-contract.d.ts",
+      "import": "./dist/expert-squad-package-contract.js",
+      "default": "./dist/expert-squad-package-contract.js"
+    },
     "./project-path": {
       "source": "./src/project-path.ts",
       "types": "./dist/project-path.d.ts",

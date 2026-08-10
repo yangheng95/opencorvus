@@ -59,7 +59,7 @@ import {
   ExpertSquadConfigurationStore,
   ExpertSquadConfigurationUpdateSchema,
 } from "@/expert-squad/configuration"
-import { ExpertSquadIDSchema } from "@/expert-squad/id"
+import { ExpertSquadIDSchema, ExpertSquadNamespaceSchema } from "@/expert-squad/id"
 import { NotFoundError } from "@/storage/db"
 import { taskRootOwnsPackageRevisionBinding } from "@/engine/task-package-revision-binding"
 import { taskPackageRevisionForSession } from "@/engine/task-package-projection"
@@ -93,6 +93,13 @@ const ImportFileInput = z
     installationScope: ExpertSquadPackageLocations.InstallationScopeSchema,
   })
   .strict()
+
+const ImportExactFileInput = ImportFileInput.extend({
+  expectedNamespace: ExpertSquadNamespaceSchema,
+  expectedID: ExpertSquadIDSchema,
+  expectedVersion: z.string().min(1),
+  expectedPackageDigest: z.string().regex(/^[a-f0-9]{64}$/),
+})
 
 const ExportInput = z
   .object({
@@ -255,9 +262,13 @@ const UninstallResult = z
   .strict()
 
 const ExportResult = z.object({
+  namespace: z.string(),
   id: z.string(),
+  version: z.string(),
+  packageDigest: z.string().regex(/^[a-f0-9]{64}$/),
   filename: z.string(),
   archiveBase64: z.string(),
+  archiveSha256: z.string().regex(/^[a-f0-9]{64}$/),
   fileCount: z.number().int().nonnegative(),
 })
 
@@ -1150,6 +1161,42 @@ export function ExpertSquadRoutes() {
       },
     )
     .post(
+      "/import-exact-file",
+      describeRoute({
+        summary: "Import an exact hosted expert squad ZIP revision",
+        description:
+          "Validate and install one downloaded ZIP only when its exact namespace, id, version, and canonical package digest match the web-to-client handoff target.",
+        operationId: "expertSquad.importExactFile",
+        responses: {
+          200: {
+            description: "Imported exact expert squad package revision",
+            content: { "application/json": { schema: resolver(PackageMutationReceipt) } },
+          },
+          400: namedErrorResponse("Expert squad package import rejected", "ExpertSquadPackageError"),
+          409: namedErrorResponse("Expert squad package changed", "ExpertSquadPackageMutationConflictError"),
+        },
+      }),
+      validator("json", ImportExactFileInput),
+      async (c) => {
+        const input = c.req.valid("json")
+        return c.json(
+          await packageRoute(() =>
+            ExpertSquadPackageManager.importArchive({
+              projectDirectory: Instance.project.worktree,
+              archiveBase64: input.archiveBase64,
+              filename: input.filename,
+              installationScope: input.installationScope,
+              expectedCurrentPackageDigest: input.expectedCurrentPackageDigest,
+              expectedNamespace: input.expectedNamespace,
+              expectedID: input.expectedID,
+              expectedVersion: input.expectedVersion,
+              expectedPackageDigest: input.expectedPackageDigest,
+            }),
+          ),
+        )
+      },
+    )
+    .post(
       "/export",
       describeRoute({
         summary: "Export an expert squad ZIP archive",
@@ -1179,9 +1226,13 @@ export function ExpertSquadRoutes() {
           }),
         )
         return c.json({
+          namespace: exported.namespace,
           id: exported.id,
+          version: exported.version,
+          packageDigest: exported.packageDigest,
           filename: exported.filename,
           archiveBase64: Buffer.from(exported.bytes).toString("base64"),
+          archiveSha256: exported.archiveSha256,
           fileCount: exported.fileCount,
         })
       },

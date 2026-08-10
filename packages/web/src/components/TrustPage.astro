@@ -1,0 +1,127 @@
+---
+import PublicSiteLayout from "./PublicSiteLayout.astro"
+import { publicPath, type PublicLocale } from "../content/public-market"
+
+const { locale } = Astro.props as { locale: PublicLocale }
+const copy =
+  locale === "zh-cn"
+    ? {
+        title: "专家团可信机制 · OpenCorvus",
+        description: "从能力包来源到本地安装 receipt 的 OpenCorvus 专家团信任链概念。",
+        languageHref: publicPath("root", "/trust/"),
+        eyebrow: "信任来自证据链",
+        heading: "不要相信一个徽章，要检查每一环。",
+        lead: "专家团会携带指令、Skills、工具与工作流。公共市场必须让来源、内容、审核、下载和本地安装都能指向同一个不可变 revision。",
+        chainTitle: "revision 证据链",
+        stages: [
+          ["能力包来源", "SDK 生成或显式导入一份自包含目录；manifest ID 是逻辑身份。", "当前"],
+          ["结构与拓扑验证", "Registry 检查 schema、路径、引用闭包、Agent 投影与 binding workflow。", "当前"],
+          ["规范化 SHA-256", "文件树和内容按稳定 framing 计算 64 位十六进制 digest。", "当前"],
+          ["发布者签名", "发布者身份、签名与 attestation 绑定 exact digest，而不是只绑定名称。", "拟建"],
+          ["审核记录", "风险披露、审核版本、撤回原因与 replacement 规则形成可查记录。", "拟建"],
+          ["客户端重算", "客户端下载 exact revision，本地重算 digest 并再次严格验证。", "当前基础"],
+          ["明确 scope", "用户在提交前选择 project 或 user-global；系统不能猜测默认值。", "当前"],
+          ["原子 receipt", "Manager 完成原子导入并返回 before/after revision；安装仍不等于激活。", "当前"],
+        ],
+        statesTitle: "失败必须可见",
+        states: [
+          ["REGISTRY_OFFLINE", "目录不可达时停止发现与更新；不改用未知镜像。"],
+          ["REVISION_WITHDRAWN", "保留撤回事实和原因；不把 latest 指向另一份内容冒充同一 revision。"],
+          ["DIGEST_MISMATCH", "本地 bytes 与 listing 不一致时拒绝导入，并保留原有目录。"],
+          ["IDENTITY_MISMATCH", "archive 中 namespace、id 或 version 与请求不一致时直接失败。"],
+          ["REVIEW_EXPIRED", "未来审核结论必须绑定 revision 和审核版本；过期状态不能显示为已验证。"],
+          ["SCOPE_REQUIRED", "没有明确 project/user-global 选择时，不执行安装。"],
+        ],
+        boundaryTitle: "当前保护与拟建保护",
+        boundaryBody: "当前代码已经拥有规范化 digest、严格 archive/manifest 校验、expected current digest、原子目录切换和 receipt。发布者签名、身份认证、审核与公共撤回服务仍是拟建层。",
+        catalog: "回到专家团目录",
+        publish: "查看发布模型",
+      }
+    : {
+        title: "Expert Squad trust model · OpenCorvus",
+        description: "The OpenCorvus Expert Squad chain of trust concept from package source to local install receipt.",
+        languageHref: publicPath("zh-cn", "/trust/"),
+        eyebrow: "Trust is an evidence chain",
+        heading: "Do not trust a badge. Inspect every link.",
+        lead:
+          "An Expert Squad carries instructions, Skills, tools, and workflows. A public market must make source, content, review, download, and local install point to the same immutable revision.",
+        chainTitle: "Revision evidence chain",
+        stages: [
+          ["Package source", "The Software Development Kit generates, or the operator imports, one self-contained directory; manifest ID is logical identity.", "Current"],
+          ["Shape and topology validation", "The Registry checks schema, paths, reference closure, Agent projection, and binding workflow.", "Current"],
+          ["Canonical SHA-256", "The file tree and content produce one stable 64-hex digest through canonical framing.", "Current"],
+          ["Publisher signature", "Publisher identity, signature, and attestation bind the exact digest, not only a display name.", "Proposed"],
+          ["Review record", "Risk disclosure, review version, withdrawal reason, and replacement rules form an inspectable record.", "Proposed"],
+          ["Client recomputation", "The client fetches the exact revision, recomputes the digest, and repeats strict validation locally.", "Current foundation"],
+          ["Explicit scope", "The operator chooses project or user-global before commit; the system cannot guess a default.", "Current"],
+          ["Atomic receipt", "The Manager imports atomically and returns before/after revision facts; installation still does not activate.", "Current"],
+        ],
+        statesTitle: "Failure must remain visible",
+        states: [
+          ["REGISTRY_OFFLINE", "Stop discovery and updates when the catalog is unreachable; do not choose an unknown mirror."],
+          ["REVISION_WITHDRAWN", "Preserve withdrawal fact and reason; never point latest to different bytes under the same revision."],
+          ["DIGEST_MISMATCH", "Reject import when local bytes differ from the listing, and leave the existing catalog untouched."],
+          ["IDENTITY_MISMATCH", "Fail when archive namespace, id, or version differs from the requested identity."],
+          ["REVIEW_EXPIRED", "A future review verdict binds a revision and review version; expired status cannot render as verified."],
+          ["SCOPE_REQUIRED", "Do not install without an explicit project or user-global choice."],
+        ],
+        boundaryTitle: "Current protections and proposed protections",
+        boundaryBody:
+          "The current code already has a canonical digest, strict archive and manifest validation, expected-current-digest checks, atomic directory switching, and receipts. Publisher signatures, identity authentication, review, and public withdrawal services remain proposed layers.",
+        catalog: "Return to the Expert Squad catalog",
+        publish: "Inspect the publication model",
+      }
+---
+
+<PublicSiteLayout
+  {locale}
+  current="trust"
+  title={copy.title}
+  description={copy.description}
+  languageHref={copy.languageHref}
+>
+  <main id="main-content" class="public-main">
+    <section class="utility-intro" aria-labelledby="trust-title">
+      <div><p class="eyebrow">{copy.eyebrow}</p><h1 id="trust-title">{copy.heading}</h1></div>
+      <p class="section-lead">{copy.lead}</p>
+    </section>
+
+    <section class="utility-section" aria-labelledby="trust-chain-title">
+      <p class="eyebrow">{copy.chainTitle}</p>
+      <h2 id="trust-chain-title">{copy.chainTitle}</h2>
+      <ol class="trust-chain" style="margin-top: 44px;">
+        {copy.stages.map(([title, description, status], index) => (
+          <li>
+            <span class="chain-number">0{index + 1}</span>
+            <h3>{title}</h3>
+            <p>{description}</p>
+            <span class="status-label" data-tone={status.includes("Proposed") || status.includes("拟建") ? "proposed" : "current"}>{status}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="utility-section" aria-labelledby="failure-states-title">
+      <div class="landing-band-header">
+        <h2 id="failure-states-title">{copy.statesTitle}</h2>
+        <p class="section-lead">{copy.boundaryBody}</p>
+      </div>
+      <div class="state-grid">
+        {copy.states.map(([code, description]) => (
+          <article><h3>{code}</h3><p>{description}</p></article>
+        ))}
+      </div>
+    </section>
+
+    <section class="utility-section detail-grid" aria-labelledby="trust-boundary-title">
+      <div><p class="eyebrow">Current / Proposed</p><h2 id="trust-boundary-title">{copy.boundaryTitle}</h2></div>
+      <div>
+        <p class="section-lead" style="margin: 0;">{copy.boundaryBody}</p>
+        <div class="hero-actions">
+          <a class="primary-action" href={publicPath(locale, "/market/")}>{copy.catalog}</a>
+          <a class="secondary-action" href={publicPath(locale, "/publish/")}>{copy.publish}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</PublicSiteLayout>

@@ -14,14 +14,12 @@ import { ExpertSquadInstallLock } from "./install-lock"
 import { ExpertSquadPackageLocations } from "./locations"
 import { payloadPackageSources } from "../../generated/expert-squad-payload"
 import { ExpertSquadRegistry } from "./registry"
-import {
-  writeExpertSquadInstallationMetadata,
-  type ExpertSquadGenerationMetadata,
-} from "./installation-metadata"
+import { writeExpertSquadInstallationMetadata, type ExpertSquadGenerationMetadata } from "./installation-metadata"
 import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod"
 import { Log } from "@/util/log"
 import { EngineArtifactEnvelopeSchema, EvolutionPromotionReceiptSchema } from "@opencorvus-ai/plugin"
+import { EXPERT_SQUAD_ARCHIVE_IMPORT_LIMITS } from "@opencorvus-ai/sdk/expert-squad-package-contract"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { Database, eq } from "@/storage/db"
 import { scoreDiscoveryFields } from "@/capability/fuzzy"
@@ -94,8 +92,10 @@ export namespace ExpertSquadPackageManager {
     filename?: string
     installationScope: ExpertSquadPackageLocations.InstallationScope
     expectedCurrentPackageDigest?: string
+    expectedNamespace?: string
     expectedID?: string
     expectedVersion?: string
+    expectedPackageDigest?: string
   }
 
   export interface ExportInput {
@@ -140,9 +140,13 @@ export namespace ExpertSquadPackageManager {
   )
 
   export interface ExportResult {
+    namespace: string
     id: string
+    version: string
+    packageDigest: string
     filename: string
     bytes: Uint8Array
+    archiveSha256: string
     fileCount: number
   }
 
@@ -217,13 +221,7 @@ export namespace ExpertSquadPackageManager {
     bytes: Uint8Array
   }
 
-  export const archiveImportLimits = {
-    base64Characters: 24 * 1024 * 1024,
-    archiveBytes: 18 * 1024 * 1024,
-    entries: 512,
-    fileBytes: 4 * 1024 * 1024,
-    totalUnpackedBytes: 16 * 1024 * 1024,
-  } as const
+  export const archiveImportLimits = EXPERT_SQUAD_ARCHIVE_IMPORT_LIMITS
 
   function scratchBaseForLocation(location: ExpertSquadPackageLocations.Location) {
     return path.join(location.configRoot, "expert-squad-staging")
@@ -991,8 +989,13 @@ export namespace ExpertSquadPackageManager {
     return ExpertSquadCleanup.run(
       async () => {
         await writeArchiveFiles(sourceRoot, await readArchiveFiles(input))
-        if (input.expectedID || input.expectedVersion) {
+        if (input.expectedNamespace || input.expectedID || input.expectedVersion || input.expectedPackageDigest) {
           const loaded = await ExpertSquadRegistry.loadSourcePackage(sourceRoot)
+          if (input.expectedNamespace && loaded.namespace !== input.expectedNamespace) {
+            throw new Error(
+              `Expert squad update namespace mismatch: expected ${input.expectedNamespace}, received ${loaded.namespace}`,
+            )
+          }
           if (input.expectedID && loaded.id !== input.expectedID) {
             throw new Error(
               `Expert squad update identity mismatch: expected ${input.expectedID}, received ${loaded.id}`,
@@ -1001,6 +1004,11 @@ export namespace ExpertSquadPackageManager {
           if (input.expectedVersion && loaded.version !== input.expectedVersion) {
             throw new Error(
               `Expert squad update version mismatch: expected ${input.expectedVersion}, received ${loaded.version}`,
+            )
+          }
+          if (input.expectedPackageDigest && loaded.packageDigest !== input.expectedPackageDigest) {
+            throw new Error(
+              `Expert squad package digest mismatch: expected ${input.expectedPackageDigest}, received ${loaded.packageDigest}`,
             )
           }
         }
@@ -1568,19 +1576,29 @@ export namespace ExpertSquadPackageManager {
     })
     const loaded = await ExpertSquadRegistry.loadPackage(root)
     const zip = new ZipWriter(new BlobWriter("application/zip"))
-    const files = await collectPackageFiles(root)
+    const files = (await collectPackageFiles(root)).sort((left, right) =>
+      left.replace(/\\/g, "/").localeCompare(right.replace(/\\/g, "/")),
+    )
+    const canonicalArchiveDate = new Date("1980-01-01T00:00:00.000Z")
     for (const file of files) {
       const absolute = path.join(root, file)
       const info = await lstat(absolute)
       if (!info.isFile()) continue
       const bytes = new Uint8Array(await Filesystem.readArrayBuffer(absolute))
-      await zip.add(zipPath(loaded.namespace, loaded.id, ...file.split(path.sep)), new Uint8ArrayReader(bytes))
+      await zip.add(zipPath(loaded.namespace, loaded.id, ...file.split(path.sep)), new Uint8ArrayReader(bytes), {
+        lastModDate: canonicalArchiveDate,
+      })
     }
     const blob = await zip.close()
+    const bytes = new Uint8Array(await blob.arrayBuffer())
     return {
+      namespace: loaded.namespace,
       id: loaded.id,
+      version: loaded.version,
+      packageDigest: loaded.packageDigest,
       filename: `${loaded.id}-expert-squad.zip`,
-      bytes: new Uint8Array(await blob.arrayBuffer()),
+      bytes,
+      archiveSha256: createHash("sha256").update(bytes).digest("hex"),
       fileCount: files.length,
     }
   }
