@@ -674,7 +674,12 @@
 
 .composer-mode-menu-option {
   width: 100%;
-  gap: calc(10px * var(--ui-scale));
+  gap: calc(8px * var(--ui-scale));
+}
+
+.composer-mode-menu-option .composer-picker-option-icon {
+  width: calc(24px * var(--ui-scale));
+  height: calc(24px * var(--ui-scale));
 }
 
 .composer-context-flags {

@@ -1,5 +1,5 @@
 import * as Select from "@kobalte/core/select"
-import { Show, type JSX } from "solid-js"
+import { createSignal, Show, type JSX } from "solid-js"
 import { Icon } from "./Icon"
 import { Tooltip } from "./Tooltip"
 
@@ -42,6 +42,7 @@ export function SelectControl<T extends object>(props: SelectControlProps<T>): J
   const shouldWrapOptionCopy = () => !!props.renderOptionDescription || !!props.renderOptionTooltip
 
   function SelectControlItem(itemProps: Select.SelectRootItemComponentProps<T>): JSX.Element {
+    const [tooltipHovered, setTooltipHovered] = createSignal(false)
     const option = () => itemProps.item.rawValue
     const description = () => props.renderOptionDescription?.(option())
     const tooltip = () => props.renderOptionTooltip?.(option())
@@ -79,12 +80,16 @@ export function SelectControl<T extends object>(props: SelectControlProps<T>): J
         }
       >
         {(tooltipCopy) => (
-          <Tooltip.Root openDelay={180} closeDelay={80} placement="left" gutter={8}>
+          <Tooltip.Root open={tooltipHovered()} placement="left" gutter={8}>
             <Tooltip.Trigger
               as={Select.Item}
               item={itemProps.item}
               class="oc-select-option"
               data-variant={variant()}
+              onPointerEnter={(event) => {
+                if (event.pointerType !== "touch") setTooltipHovered(true)
+              }}
+              onPointerLeave={() => setTooltipHovered(false)}
               {...optionData()}
             >
               {optionContent()}
