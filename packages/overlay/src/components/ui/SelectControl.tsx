@@ -114,6 +114,9 @@ export function SelectControl<T extends object>(props: SelectControlProps<T>): J
       <Select.HiddenSelect aria-label={props.ariaLabel} aria-labelledby={props.ariaLabelledBy} />
       <Select.Portal>
         <Select.Content class="oc-select-content" data-variant={variant()}>
+          <Show when={variant() === "composer" && props.ariaLabel}>
+            <div class="oc-select-heading">{props.ariaLabel}</div>
+          </Show>
           <Select.Listbox class="oc-select-listbox" data-variant={variant()} />
         </Select.Content>
       </Select.Portal>

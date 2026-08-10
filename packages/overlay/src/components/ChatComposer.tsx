@@ -1489,7 +1489,7 @@ export function ChatComposer(props: ChatComposerProps) {
                       triggerDataUI="composer-product-pillar-select"
                       renderValue={renderIntentValue}
                       renderOptionLabel={renderIntentOption}
-                      renderOptionTooltip={(option) => <span>{option.description}</span>}
+                      renderOptionDescription={(option) => <span>{option.description}</span>}
                     />
                     <SelectControl<ComposerIntentOption<ConversationTarget>>
                       class="composer-intent-select"
@@ -1508,7 +1508,7 @@ export function ChatComposer(props: ChatComposerProps) {
                       triggerDataUI="composer-conversation-target-select"
                       renderValue={renderIntentValue}
                       renderOptionLabel={renderIntentOption}
-                      renderOptionTooltip={(option) => <span>{option.description}</span>}
+                      renderOptionDescription={(option) => <span>{option.description}</span>}
                     />
                   </div>
                   <ComposerReferenceSelector

@@ -158,6 +158,8 @@
 }
 
 .oc-select-trigger[data-variant="composer"] > .oc-select-value {
+  display: inline-flex;
+  align-items: center;
   white-space: normal;
 }
 
@@ -166,30 +168,42 @@
   width: calc(16px * var(--ui-scale));
   height: calc(16px * var(--ui-scale));
   flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
   color: var(--text-muted);
+  line-height: 0;
 }
 
 .oc-select-content[data-variant="composer"] {
-  min-width: calc(188px * var(--ui-scale));
-  padding: calc(8px * var(--ui-scale));
+  width: calc(304px * var(--ui-scale));
+  min-width: calc(260px * var(--ui-scale));
+  padding: 0;
+  border-color: color-mix(in srgb, var(--border) 82%, transparent);
+  box-shadow: var(--ui-focused-popup-shadow);
+}
+
+.oc-select-content[data-variant="composer"] > .oc-select-heading {
+  padding: calc(12px * var(--ui-scale)) calc(14px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  border-bottom: var(--oc-border-width) solid var(--divider-soft);
+  color: var(--text-strong);
+  font-size: var(--ui-font-small);
+  font-weight: var(--ui-font-weight-strong);
+  line-height: var(--ui-line-height-tight);
 }
 
 .oc-select-listbox[data-variant="composer"] {
   display: flex;
   flex-direction: column;
-  gap: calc(1px * var(--ui-scale));
+  gap: calc(3px * var(--ui-scale));
   max-height: min(calc(240px * var(--ui-scale)), calc(var(--ui-overlay-shell-height) - 32px));
-  padding: calc(6px * var(--ui-scale));
-  border: var(--oc-border-width) solid var(--divider-soft);
-  border-radius: var(--oc-radius-large);
-  background: color-mix(in srgb, var(--surface-elevated) 86%, transparent);
+  padding: calc(8px * var(--ui-scale));
 }
 
 .oc-select-option[data-variant="composer"] {
   justify-content: flex-start;
-  gap: calc(8px * var(--ui-scale));
-  min-height: calc(34px * var(--ui-scale));
-  padding-block: calc(4px * var(--ui-scale));
+  gap: calc(10px * var(--ui-scale));
+  min-height: calc(56px * var(--ui-scale));
+  padding: calc(8px * var(--ui-scale)) calc(10px * var(--ui-scale));
   font-size: var(--ui-font-small);
 }
 
@@ -199,6 +213,11 @@
 
 .oc-select-option[data-variant="composer"] .oc-select-option-copy {
   flex: 1 1 auto;
-  align-self: stretch;
   justify-content: center;
+}
+
+.oc-select-option[data-variant="composer"] .oc-select-option-copy > small {
+  color: var(--text-muted);
+  font-size: var(--ui-font-tiny);
+  line-height: 1.35;
 }

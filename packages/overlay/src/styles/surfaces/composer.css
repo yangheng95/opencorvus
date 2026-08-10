@@ -668,9 +668,13 @@
   line-height: 1;
 }
 
+.composer-mode-option > .oc-icon {
+  flex: 0 0 auto;
+}
+
 .composer-mode-menu-option {
   width: 100%;
-  gap: calc(8px * var(--ui-scale));
+  gap: calc(10px * var(--ui-scale));
 }
 
 .composer-context-flags {
@@ -1300,8 +1304,8 @@ div:has(> .composer-model-selector-popover) {
 
 .composer-picker-option-icon {
   display: inline-flex;
-  width: calc(20px * var(--ui-scale));
-  height: calc(20px * var(--ui-scale));
+  width: calc(32px * var(--ui-scale));
+  height: calc(32px * var(--ui-scale));
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Composer intent Select visual repair: [`2026-08-10-composer-intent-select-visual-repair.md`](records/2026-08/2026-08-10-composer-intent-select-visual-repair.md).
+
 Latest per-Task runtime directory isolation: [`2026-08-10-task-runtime-directory-isolation.md`](records/2026-08/2026-08-10-task-runtime-directory-isolation.md).
 
 Latest Task structured-file replay recovery and local repackage: [`2026-08-10-task-file-replay-and-recovery-repackage.md`](records/2026-08/2026-08-10-task-file-replay-and-recovery-repackage.md).
