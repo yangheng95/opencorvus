@@ -11,6 +11,11 @@ import path from "node:path"
 import { memoryProject } from "./fixture/memory"
 import { Instance } from "../src/project/instance"
 import { Worktree } from "../src/worktree"
+import { Session } from "../src/session"
+import { terminateOwnedSessionPromptInScope } from "../src/engine/cancellation-scope"
+import { createExecutionCancellationOrigin } from "../src/session/prompt/cancellation"
+import { ProjectRuntimePaths } from "../src/project/runtime-paths"
+import { Bus } from "../src/bus"
 
 describe("ascending identifier logical clock", () => {
   test("emits a strict total order across counter overflow and wall-clock rollback", () => {
@@ -296,6 +301,124 @@ describe("prompt ownership termination", () => {
           status.mockRestore()
         }
         expect(SessionPromptState.TestHooks.promptResourceSnapshot(sessionID)).toEqual({
+          promptOwners: 0,
+          messageOwnerRegistries: 0,
+          startReservations: 0,
+          cancellationReceipts: 0,
+        })
+      },
+    })
+  })
+
+  test("publishes the exact owned cancellation after prompt resources finish", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "assistant", title: "owned cancellation receipt" })
+        const input = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          role: "user",
+          sessionID: session.id,
+          author: "user",
+          time: { created: Date.now() },
+          agent: "assistant",
+          model: { providerID: "test", modelID: "test" },
+        })
+        const owner = SessionPromptState.start(session.id, session.directory)
+        if (!owner) throw new Error("Expected a fresh prompt owner")
+        SessionStatus.beginExecutionOccurrence(session.id, input.id, owner)
+        await SessionStatus.set(session.id, { type: "streaming" }, {
+          publish: false,
+          inputMessageID: input.id,
+          promptGenerationOwner: owner,
+        })
+
+        const lock = await ProjectGitLock.acquire(
+          ProjectRuntimePaths.projectGitLock(Instance.project.worktree),
+          Instance.project.id,
+        )
+        try {
+          const origin = createExecutionCancellationOrigin({
+            actor: "runtime",
+            source: "runtime.prompt_owner",
+            surface: "algorithm-batch-one",
+            reason: "focused owned cancellation",
+            targetSessionID: session.id,
+          })
+          expect(
+            SessionPromptState.cancelOwned(session.id, session.directory, owner, {
+              origin,
+              settlementRequired: false,
+            }),
+          ).toBe(true)
+          const termination = terminateOwnedSessionPromptInScope({
+            session,
+            owner,
+            origin,
+          })
+          const firstSettlement = termination.then(
+            () => ({ status: "fulfilled" as const }),
+            (error) => ({ status: "rejected" as const, error }),
+          )
+          const finish = SessionPromptState.finish(session.id, owner, session.directory)
+          while (!SessionPromptState.TestHooks.isPromptTerminating(session.id, session.directory)) {
+            await Bun.sleep(10)
+          }
+          const nextEntry = SessionPromptState.enterLoop({
+            sessionID: session.id,
+            directory: session.directory,
+            resumeExisting: false,
+            resultMode: "reply",
+          })
+          const stopFailure = Bus.subscribe(SessionStatus.Event.Status, () => {
+            throw new Error("focused terminal publication failure")
+          })
+          try {
+            await lock.release()
+            await finish
+            expect(await firstSettlement).toMatchObject({
+              status: "rejected",
+              error: { name: "TaskCancellationIncompleteError" },
+            })
+          } finally {
+            stopFailure()
+          }
+          expect(SessionStatus.getExecution(session.id, input.id)).toEqual({ type: "streaming" })
+          expect(SessionPromptState.TestHooks.promptResourceSnapshot(session.id)).toEqual({
+            promptOwners: 0,
+            messageOwnerRegistries: 0,
+            startReservations: 0,
+            cancellationReceipts: 1,
+          })
+
+          expect(
+            await terminateOwnedSessionPromptInScope({
+              session,
+              owner,
+              origin,
+            }),
+          ).toBe(true)
+          const next = await nextEntry
+          expect(next.startedOwner).toBe(true)
+          expect(SessionStatus.getExecution(session.id, input.id)).toEqual({
+            type: "terminal",
+            reason: "aborted",
+            error: "focused owned cancellation",
+          })
+          const nextResult = next.firstResult.then(
+            () => undefined,
+            (error) => error,
+          )
+          await SessionPromptState.release(session.id)
+          expect(await nextResult).toMatchObject({
+            name: "SessionPromptLoopFinishedError",
+            sessionID: session.id,
+          })
+        } finally {
+          await lock.release()
+        }
+        expect(SessionPromptState.TestHooks.promptResourceSnapshot(session.id)).toEqual({
           promptOwners: 0,
           messageOwnerRegistries: 0,
           startReservations: 0,

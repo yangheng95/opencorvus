@@ -713,6 +713,7 @@ async function settlePhysicalWorkerTurn(
         targetSessionID: input.session.id,
         taskID: input.taskID,
       }),
+      settleBeforeReuse: true,
     })
     if (cancelled) {
       await SessionPromptState.waitForFinish(input.session.id, input.session.directory)
@@ -1310,6 +1311,7 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
         taskID: input.taskID,
         handle: `${kind}.agent.signal`,
         origin: parentSignalOrigin(),
+        settleBeforeReuse: true,
       })
     }
     let errorUnsub: (() => void) | undefined

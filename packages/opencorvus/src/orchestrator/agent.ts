@@ -773,6 +773,7 @@ export namespace Orchestrator {
                 taskID,
                 handle: "orchestrator.abort-cascade",
                 origin: { ...origin, targetSessionID: descendant.id },
+                settleBeforeReuse: false,
               })
             }
           } catch (err) {
@@ -786,6 +787,7 @@ export namespace Orchestrator {
               taskID,
               handle: "orchestrator.abort-cascade",
               origin: { ...origin, targetSessionID: agentSession.id },
+              settleBeforeReuse: false,
             })
             throw err
           }

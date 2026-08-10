@@ -201,6 +201,7 @@ export async function terminateCurrentProcessOwnedExecution(input: {
                 targetSessionID: owner.session.id,
                 ...(taskID ? { taskID } : {}),
               }),
+              settleBeforeReuse: true,
             })
             const settledToolParts = await abortOpenToolParts(owner.sessionID, input.reason)
             return { didCancel, settledToolParts }
