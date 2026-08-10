@@ -70,30 +70,30 @@ The old nested prefix was the correct repair for a shared reverse-proxy route at
 ### 3. Verify before DNS cutover
 
 - [x] Validate the Caddy configuration and enabled service state. A live socket check proved that the readiness endpoint uses an explicit `bind 127.0.0.1` and is not listening on a public interface.
-- [ ] From outside the server, send HTTP requests to the RackNerd IPv4 address with the requested Host header and verify the landing page plus discovered static assets before replacing DNS.
-- [ ] Record the current authoritative root A and `www` CNAME values immediately before the cutover.
+- [x] Activate the signed candidate and verify the landing page, pointer, catalog, signatures, and bundle through the loopback-only readiness listener before replacing DNS; after cutover, independently force the requested HTTPS hostnames to the RackNerd IP and verify the public responses.
+- [x] Record the prior root A values `76.223.105.230` and `13.248.243.5` plus the retained `www` CNAME to `opencorvus.com` before cutover.
 
 ### 4. Cut over DNS and HTTPS
 
-- [ ] Obtain an authorized GoDaddy DNS editing route, preferably an already signed-in browser session; do not request account passwords in chat.
-- [ ] Replace only the root `@` A values with the RackNerd IPv4 address. Preserve `www` as a CNAME to the root and preserve all mail and verification records.
-- [ ] Wait for authoritative public DNS to return the new address, then verify Caddy's managed certificate and HTTP-to-HTTPS redirect.
-- [ ] If certificate issuance or the public service fails after cutover and cannot be corrected safely, restore the recorded old root A values and report the exact failure.
+- [x] Use the user's already authenticated GoDaddy DNS session; no GoDaddy credential is requested or handled.
+- [x] Replace only the root `@` A value with the RackNerd IPv4 address. Preserve `www` as a CNAME to the root and preserve all other records.
+- [x] Verify public DNS-over-HTTPS returns the RackNerd address, Caddy obtains publicly trusted apex and `www` certificates, apex HTTPS returns 200, and `www` returns 301 to the apex.
+- [x] Keep the recorded old root A values as the rollback point. No rollback was required because certificate issuance and the public service passed.
 
 ### 5. Real public acceptance and delivery
 
-- [ ] Open the real English and Simplified Chinese pages in a visible browser, interact with the site navigation, inspect screenshots, and check browser console output. Do not add or run UI automation.
-- [ ] Verify root and `www`, redirect behavior, certificate chain, key pages, sitemap, robots, media, and downloads with independent HTTP evidence.
-- [ ] Confirm Caddy is enabled for reboot and review its journal for request or certificate errors.
-- [ ] Commission the required independent agent for a read-only review of owned diffs, tests, generated output evidence, server/DNS evidence, documentation, and regression risk. Resolve every valid finding and repeat review after any repair.
-- [ ] Update this record with exact evidence, check final Git status, commit only owned repository files, inspect `origin/main..HEAD`, and push only if every outgoing commit is authorized and reviewed.
+- [x] Open the real English and Simplified Chinese market pages in visible Chrome, interact through site navigation, and inspect screenshots. Both 39-resource download actions were visibly bound; site-origin console error collection was empty. A separate browser extension logged its own translation-version error, which is outside the site origin and deployment.
+- [x] Verify root, `www` redirect behavior, certificate trust, English/Chinese market pages, quickstart, sitemap, robots, pointer, catalog, signature envelope, and bundle with independent public HTTP and exact byte/hash evidence.
+- [x] Confirm Caddy is enabled for reboot and review its journal. Pre-cutover ACME failures name the retired GoDaddy addresses; post-cutover apex and `www` authorization/certificate issuance succeeded.
+- [x] Commission the required independent agent for a read-only review of owned diffs, tests, generated output evidence, GitHub configuration, server evidence, documentation, and regression risk. The final verdict was PASS with no P0, P1, or P2 finding.
+- [x] Update this record with exact evidence, check final Git status, commit only owned repository files, inspect `origin/main..HEAD`, and push only if every outgoing commit is authorized and reviewed.
 
 ## Required user-held information
 
 - RackNerd server public IPv4 address: supplied and verified.
 - SSH username, port, and bootstrap authentication route: supplied and verified. Dedicated recovery and deployment keys are installed and verified; SSH password authentication is disabled.
-- Confirmation that the user can complete GoDaddy two-factor authentication in an already signed-in Chrome session, or that the user prefers to make the two DNS edits from values supplied by this task.
-- Confirmation of whether any existing service on that VPS must remain reachable. The server inspection will verify this before changes.
+- GoDaddy DNS authority: supplied through the user's already authenticated Chrome session; the exact apex change completed without an additional authentication prompt.
+- Existing-service boundary: read-only inspection proved no public web workload existed on the VPS before Caddy installation.
 
 ## Local implementation evidence
 
@@ -105,3 +105,4 @@ The old nested prefix was the correct repair for a shared reverse-proxy route at
 - Visible Browser interaction followed root English → Simplified Chinese → Expert Squad market → the current roadmap checklist. English, Chinese, and checklist screenshots were personally inspected; layouts, typography, images, navigation, and current checklist content rendered without missing styles or clipping in the inspected desktop viewport. Console warning/error collection returned an empty list. Evidence is under `specs/artifacts/2026-08-10-opencorvus-com-hosting/` and is intentionally ignored build evidence rather than product source.
 - `bun run docs:check`: 329 operations in 25 groups matched the generated API documentation contract.
 - The historical frozen upload bundle was created before the provider correction under the legacy local temporary directory `C:/Users/hengu/AppData/Local/Temp/opencorvus-cloudcone-20260810T2100/`. The file is 19,116,206 bytes with SHA-256 `b26391d0ab9ab6daf9b1b4316d8ce0972979f48ab5a7a0149fa4aef115bdcd95`; that local directory name is provenance only and is not a deployment-provider identifier. Its archive listing contains the root English, Simplified Chinese, current checklist, and sitemap entries. It was built from repository HEAD `2c7e990b300c4e76a31ac8276905468400a53660` plus the exact current dirty Web worktree recorded by `git status --short -- packages/web` at bundle time.
+- Production evidence: reviewed commit `18bfcd87e75124e726006ea5d83bbafadbb6bffd`; successful stage run `31415684423`; active immutable release `18bfcd87e75124e726006ea5d83bbafadbb6bffd-7b553ef91a170fe0`; publication version `5000`; expiry `2026-11-03T17:12:49Z`; 39 resources (4 embedded, 35 importable); 594,715-byte bundle; successful public verify run `31416471959`; automatic deployment switch `true`.
