@@ -6,7 +6,7 @@ on:
     paths:
       - ".github/actions/setup-bun/**"
       - ".github/workflows/deploy-opencorvus-com.yml"
-      - "deploy/cloudcone/**"
+      - "deploy/racknerd/**"
       - "expert-squads/builtin/**"
       - "packages/opencorvus/generated/expert-squad-payload.ts"
       - "packages/opencorvus/src/expert-squad/**"
@@ -93,8 +93,8 @@ jobs:
       - name: Verify canonical Expert Squad archives
         run: bun test packages/opencorvus/test/expert-squad/static-distribution-archive.test.ts packages/web/test/expert-squad-static-distribution.test.ts packages/web/test/expert-squad-publication.test.ts
 
-      - name: Verify CloudCone activation and rollback paths
-        run: bash deploy/cloudcone/test-opencorvus-activate-release.sh
+      - name: Verify RackNerd activation and rollback paths
+        run: bash deploy/racknerd/test-opencorvus-activate-release.sh
 
       - name: Check website
         run: bun run --cwd packages/web check
@@ -128,7 +128,7 @@ jobs:
           include-hidden-files: true
 
   sign-and-deploy:
-    name: sign and deploy CloudCone release
+    name: sign and deploy RackNerd release
     needs: [archive-determinism, build]
     if: ${{ github.event_name == 'workflow_dispatch' || vars.OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED == 'true' }}
     runs-on: ubuntu-latest
@@ -416,18 +416,18 @@ jobs:
       - name: Deploy immutable release and atomically switch current
         shell: bash
         env:
-          CLOUDCONE_HOST: ${{ secrets.CLOUDCONE_HOST }}
-          CLOUDCONE_PORT: ${{ vars.CLOUDCONE_SSH_PORT }}
-          CLOUDCONE_USER: ${{ vars.CLOUDCONE_DEPLOY_USER }}
-          CLOUDCONE_SSH_PRIVATE_KEY: ${{ secrets.CLOUDCONE_SSH_PRIVATE_KEY }}
-          CLOUDCONE_KNOWN_HOSTS: ${{ secrets.CLOUDCONE_KNOWN_HOSTS }}
+          RACKNERD_HOST: ${{ secrets.RACKNERD_HOST }}
+          RACKNERD_PORT: ${{ vars.RACKNERD_SSH_PORT }}
+          RACKNERD_USER: ${{ vars.RACKNERD_DEPLOY_USER }}
+          RACKNERD_SSH_PRIVATE_KEY: ${{ secrets.RACKNERD_SSH_PRIVATE_KEY }}
+          RACKNERD_KNOWN_HOSTS: ${{ secrets.RACKNERD_KNOWN_HOSTS }}
           RELEASE_ID: ${{ steps.release.outputs.id }}
           DEPLOYMENT_MODE: ${{ inputs.deployment_mode || 'daily' }}
         run: |
           set -euo pipefail
           umask 077
           cleanup_deploy_credentials() {
-            rm -f "$RUNNER_TEMP/cloudcone-deploy-key" "$RUNNER_TEMP/cloudcone-known-hosts"
+            rm -f "$RUNNER_TEMP/racknerd-deploy-key" "$RUNNER_TEMP/racknerd-known-hosts"
           }
           trap cleanup_deploy_credentials EXIT
           probe_public_release() {
@@ -509,26 +509,26 @@ jobs:
             trap - EXIT
             exit 0
           fi
-          test -n "$CLOUDCONE_HOST"
-          test -n "$CLOUDCONE_PORT"
-          test -n "$CLOUDCONE_USER"
-          printf '%s\n' "$CLOUDCONE_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/cloudcone-deploy-key"
-          printf '%s\n' "$CLOUDCONE_KNOWN_HOSTS" > "$RUNNER_TEMP/cloudcone-known-hosts"
-          SSH=(ssh -i "$RUNNER_TEMP/cloudcone-deploy-key" -p "$CLOUDCONE_PORT" -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$RUNNER_TEMP/cloudcone-known-hosts")
-          SCP=(scp -i "$RUNNER_TEMP/cloudcone-deploy-key" -P "$CLOUDCONE_PORT" -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$RUNNER_TEMP/cloudcone-known-hosts")
-          "${SSH[@]}" "$CLOUDCONE_USER@$CLOUDCONE_HOST" "mkdir -p /srv/opencorvus/incoming/$RELEASE_ID"
+          test -n "$RACKNERD_HOST"
+          test -n "$RACKNERD_PORT"
+          test -n "$RACKNERD_USER"
+          printf '%s\n' "$RACKNERD_SSH_PRIVATE_KEY" > "$RUNNER_TEMP/racknerd-deploy-key"
+          printf '%s\n' "$RACKNERD_KNOWN_HOSTS" > "$RUNNER_TEMP/racknerd-known-hosts"
+          SSH=(ssh -i "$RUNNER_TEMP/racknerd-deploy-key" -p "$RACKNERD_PORT" -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$RUNNER_TEMP/racknerd-known-hosts")
+          SCP=(scp -i "$RUNNER_TEMP/racknerd-deploy-key" -P "$RACKNERD_PORT" -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$RUNNER_TEMP/racknerd-known-hosts")
+          "${SSH[@]}" "$RACKNERD_USER@$RACKNERD_HOST" "mkdir -p /srv/opencorvus/incoming/$RELEASE_ID"
           "${SCP[@]}" "$RUNNER_TEMP/$RELEASE_ID.tar.gz" "$RUNNER_TEMP/$RELEASE_ID.tar.gz.sha256" \
-            "$RUNNER_TEMP/DEPLOY_SHA256SUMS" "$CLOUDCONE_USER@$CLOUDCONE_HOST:/srv/opencorvus/incoming/$RELEASE_ID/"
-          "${SSH[@]}" "$CLOUDCONE_USER@$CLOUDCONE_HOST" \
+            "$RUNNER_TEMP/DEPLOY_SHA256SUMS" "$RACKNERD_USER@$RACKNERD_HOST:/srv/opencorvus/incoming/$RELEASE_ID/"
+          "${SSH[@]}" "$RACKNERD_USER@$RACKNERD_HOST" \
             "/usr/local/bin/opencorvus-activate-release '$RELEASE_ID' '/srv/opencorvus/incoming/$RELEASE_ID/$RELEASE_ID.tar.gz' '/srv/opencorvus/incoming/$RELEASE_ID/DEPLOY_SHA256SUMS'"
           if [ "$DEPLOYMENT_MODE" = "bootstrap-stage" ]; then
-            echo "Bootstrap release passed the CloudCone loopback readiness check; DNS has not been probed"
+            echo "Bootstrap release passed the RackNerd loopback readiness check; DNS has not been probed"
             cleanup_deploy_credentials
             trap - EXIT
             exit 0
           fi
           if ! probe_public_release candidate/expert-squads/catalog.json; then
-            ROLLBACK_TARGET=$("${SSH[@]}" "$CLOUDCONE_USER@$CLOUDCONE_HOST" \
+            ROLLBACK_TARGET=$("${SSH[@]}" "$RACKNERD_USER@$RACKNERD_HOST" \
               "/usr/local/bin/opencorvus-activate-release --rollback '$RELEASE_ID'")
             if [ "$ROLLBACK_TARGET" = "no-previous-release" ]; then
               if curl --fail --silent --show-error "https://opencorvus.com/" > /dev/null; then

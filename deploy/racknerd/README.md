@@ -1,10 +1,10 @@
-# opencorvus.com CloudCone bootstrap
+# opencorvus.com RackNerd bootstrap
 
 This directory contains the one-time server bootstrap inputs for the static `opencorvus.com` deployment. It does not expose the local Hosted Registry simulation.
 
 ## Required facts
 
-Before the first deployment, record the CloudCone server IP, SSH port, operating system, existing listeners/services, deploy username, and the exact SSH host-key fingerprint. Inspect the server read-only before changing Caddy or `/srv/opencorvus`.
+Before the first deployment, record the RackNerd server IP, SSH port, operating system, existing listeners/services, deploy username, and the exact SSH host-key fingerprint. Inspect the server read-only before changing Caddy or `/srv/opencorvus`.
 
 ## Server boundary
 
@@ -22,16 +22,16 @@ Configure a protected `production` Environment restricted to `main`, then add:
 
 Secrets:
 
-- `CLOUDCONE_HOST`
-- `CLOUDCONE_SSH_PRIVATE_KEY`
-- `CLOUDCONE_KNOWN_HOSTS` — the preverified complete known-hosts line; do not populate it with runtime `ssh-keyscan`
+- `RACKNERD_HOST`
+- `RACKNERD_SSH_PRIVATE_KEY`
+- `RACKNERD_KNOWN_HOSTS` — the preverified complete known-hosts line; do not populate it with runtime `ssh-keyscan`
 - `EXPERT_SQUAD_SIGNING_PRIVATE_KEY_B64` — base64 of a dedicated Ed25519 private PEM, separate from the desktop updater key
 - `EXPERT_SQUAD_SECONDARY_SIGNING_PRIVATE_KEY_B64` — optional second Ed25519 key used only during an old/new rotation overlap
 
 Variables:
 
-- `CLOUDCONE_SSH_PORT`
-- `CLOUDCONE_DEPLOY_USER`
+- `RACKNERD_SSH_PORT`
+- `RACKNERD_DEPLOY_USER`
 - `EXPERT_SQUAD_SIGNING_KEY_ID`
 - `EXPERT_SQUAD_SECONDARY_SIGNING_KEY_ID` — required exactly when the optional secondary private key is present
 - `EXPERT_SQUAD_TRUSTED_KEYS_JSON` — repository-level variable (not a secret) containing every currently trusted key as `{ "keyId", "publicKeySpkiBase64" }`; keep old and new roots together throughout a rotation overlap
@@ -52,7 +52,7 @@ The immutable release ID is `<commit SHA>-<publication-pointer SHA-256 prefix>`.
 The first release is a deliberate three-stage operation; ordinary pushes use only the later daily path:
 
 1. Manually run `deploy opencorvus.com` with `deployment_mode=bootstrap-stage`. It uploads and activates the immutable candidate, then the server validates the homepage, pointer, catalog, signature envelope, and bundle through the loopback readiness listener. It intentionally does not call the public domain.
-2. Only after that run succeeds, replace the GoDaddy apex A record with the CloudCone IPv4 address, keep `www` as a CNAME to the apex, and remove conflicting parked-site A/AAAA records. Wait for public DNS convergence and Caddy's public certificate issuance.
+2. Only after that run succeeds, replace the GoDaddy apex A record with the RackNerd IPv4 address, keep `www` as a CNAME to the apex, and remove conflicting parked-site A/AAAA records. Wait for public DNS convergence and Caddy's public certificate issuance.
 3. Without changing the source revision, signing keys, bootstrap publication version, or bootstrap expiry, manually rerun the workflow with `deployment_mode=bootstrap-verify`. This mode does not upload or activate a release; it requires the public pointer to be byte-identical to the staged candidate and verifies all content-addressed bytes over public HTTPS.
 
 After bootstrap verification succeeds, set `OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED=true`. Subsequent matching `main` pushes, monthly renewal runs, and manual `deployment_mode=daily` runs use upload → local readiness → public HTTPS probe, with server rollback on a failed public probe. Before that switch, push and schedule events still run the cross-platform archive and website verification jobs but cannot enter the production signing/deploy job. Also verify `www` redirect behavior, reboot persistence, and Caddy logs during the one-time cutover.

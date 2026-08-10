@@ -2,7 +2,9 @@
 
 - [2026-08-10-ten-domain-expert-squad-expansion.md](2026-08-10-ten-domain-expert-squad-expansion.md) defines ten new domain packages, dedicated Skill and asset ownership, pinned open-source adaptations, clean-room professional boundaries, and package, HTTP, and real-page acceptance.
 
-- [2026-08-10-expert-squad-static-distribution-and-cloudcone-deploy.md](2026-08-10-expert-squad-static-distribution-and-cloudcone-deploy.md) defines deterministic downloads for all 39 shipped Expert Squad resources, signed immutable catalogs, and an isolated least-privilege CloudCone website deployment path.
+- [2026-08-10-expert-squad-static-distribution-and-racknerd-deploy.md](2026-08-10-expert-squad-static-distribution-and-racknerd-deploy.md) defines deterministic downloads for all 39 shipped Expert Squad resources, signed immutable catalogs, and an isolated least-privilege RackNerd website deployment path.
+
+- [2026-08-10-opencorvus-com-racknerd-hosting.md](2026-08-10-opencorvus-com-racknerd-hosting.md) defines the root-domain Astro identity, RackNerd static-service topology, GoDaddy DNS replacement boundary, managed HTTPS, exact dirty-worktree bundle provenance, and real public acceptance sequence.
 
 - [2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md](2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md) defines the manifest-derived draggable Expert Squad planning checklist, WorkBuddy and open-source Skill research boundary, and the three-package saved-Skill completeness repair with real-page acceptance.
 

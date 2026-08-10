@@ -122,11 +122,11 @@ async function runBash(script: string, root: string, mode: string, failOnce = fa
   const environment = {
     ...process.env,
     RUNNER_TEMP: bashPath(runnerTemp),
-    CLOUDCONE_HOST: "fixture.invalid",
-    CLOUDCONE_PORT: "22",
-    CLOUDCONE_USER: "deploy",
-    CLOUDCONE_SSH_PRIVATE_KEY: "test-only-key",
-    CLOUDCONE_KNOWN_HOSTS: "fixture.invalid ssh-ed25519 AAAAfixture",
+    RACKNERD_HOST: "fixture.invalid",
+    RACKNERD_PORT: "22",
+    RACKNERD_USER: "deploy",
+    RACKNERD_SSH_PRIVATE_KEY: "test-only-key",
+    RACKNERD_KNOWN_HOSTS: "fixture.invalid ssh-ed25519 AAAAfixture",
     RELEASE_ID: releaseID,
     DEPLOYMENT_MODE: mode,
     DEPLOY_TEST_LOG: bashPath(path.join(root, "deploy.log")),
@@ -144,7 +144,7 @@ async function runBash(script: string, root: string, mode: string, failOnce = fa
     child.on("exit", (code) => resolve(code ?? 1))
   })
   const log = await readFile(path.join(root, "deploy.log"), "utf8").catch(() => "")
-  const privateKeyWasRemoved = await readFile(path.join(runnerTemp, "cloudcone-deploy-key")).then(
+  const privateKeyWasRemoved = await readFile(path.join(runnerTemp, "racknerd-deploy-key")).then(
     () => false,
     () => true,
   )
