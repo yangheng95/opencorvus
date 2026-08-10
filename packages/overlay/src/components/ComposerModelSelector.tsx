@@ -408,7 +408,7 @@ export function ComposerModelSelector(props: ComposerModelSelectorProps) {
                   {modelLabel()}
                 </span>
               </span>
-              <Icon name="chevron-down" size="medium" />
+              <Icon class="composer-disclosure-chevron" name="chevron-down" size="medium" />
             </Popover.Trigger>
           </Tooltip.Trigger>
           <Tooltip.Portal>

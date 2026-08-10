@@ -1011,6 +1011,17 @@
   --oc-button-bg: var(--ui-list-hover-bg);
 }
 
+.composer-disclosure-chevron {
+  transform: rotate(-90deg);
+  transition: transform var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.composer-model-selector
+  .oc-button[data-ui="composer-model-selector-trigger"]:is([aria-expanded="true"], [data-expanded])
+  .composer-disclosure-chevron {
+  transform: rotate(0deg);
+}
+
 .composer-model-selector-copy {
   display: flex;
   flex-direction: row;

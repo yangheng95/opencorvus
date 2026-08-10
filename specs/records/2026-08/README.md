@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-10-composer-dropdown-disclosure-and-density.md](2026-08-10-composer-dropdown-disclosure-and-density.md) makes all three Composer dropdown arrows reflect real disclosure state and returns Work/Chat options to one-line rows with hover details.
+
 - [2026-08-10-subagent-conversation-selector-deduplication.md](2026-08-10-subagent-conversation-selector-deduplication.md) keeps execution occurrences intact while projecting one latest-status selector item per unique subagent conversation.
 
 - [2026-08-10-composer-intent-select-visual-repair.md](2026-08-10-composer-intent-select-visual-repair.md) repairs the Composer Work/Chat trigger alignment and replaces the nested compact popup with a titled, descriptive intent list based on the supplied visual reference.

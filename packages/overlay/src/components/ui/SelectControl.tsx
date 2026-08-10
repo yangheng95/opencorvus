@@ -39,7 +39,7 @@ function withClass(base: string, extra?: string): string {
 
 export function SelectControl<T extends object>(props: SelectControlProps<T>): JSX.Element {
   const variant = () => props.variant ?? "control"
-  const shouldWrapOptionCopy = () => !!props.renderOptionDescription
+  const shouldWrapOptionCopy = () => !!props.renderOptionDescription || !!props.renderOptionTooltip
 
   function SelectControlItem(itemProps: Select.SelectRootItemComponentProps<T>): JSX.Element {
     const option = () => itemProps.item.rawValue
@@ -52,31 +52,49 @@ export function SelectControl<T extends object>(props: SelectControlProps<T>): J
         <Show when={description()}>{(value) => <small>{value()}</small>}</Show>
       </>
     )
-    return (
-      <Select.Item item={itemProps.item} class="oc-select-option" data-variant={variant()} {...optionData()}>
-        <Show
-          when={tooltip()}
-          fallback={
-            <Show when={shouldWrapOptionCopy()} fallback={optionCopy()}>
-              <span class="oc-select-option-copy">{optionCopy()}</span>
-            </Show>
-          }
-        >
-          {(tooltipCopy) => (
-            <Tooltip.Root openDelay={180} closeDelay={80} placement="left" gutter={8}>
-              <Tooltip.Trigger as="span" class="oc-select-option-copy">
-                {optionCopy()}
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content class="oc-select-option-tooltip">{tooltipCopy()}</Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
+    const optionContent = () => (
+      <>
+        <Show when={shouldWrapOptionCopy()} fallback={optionCopy()}>
+          <span class="oc-select-option-copy">{optionCopy()}</span>
+        </Show>
+        <Show when={tooltip()}>
+          {(tooltipDescription) => (
+            <Select.ItemDescription as="span" class="oc-select-option-tooltip-description">
+              {tooltipDescription()}
+            </Select.ItemDescription>
           )}
         </Show>
         <Select.ItemIndicator class="oc-select-indicator">
           <Icon name="status-completed" size="compact" />
         </Select.ItemIndicator>
-      </Select.Item>
+      </>
+    )
+    return (
+      <Show
+        when={tooltip()}
+        fallback={
+          <Select.Item item={itemProps.item} class="oc-select-option" data-variant={variant()} {...optionData()}>
+            {optionContent()}
+          </Select.Item>
+        }
+      >
+        {(tooltipCopy) => (
+          <Tooltip.Root openDelay={180} closeDelay={80} placement="left" gutter={8}>
+            <Tooltip.Trigger
+              as={Select.Item}
+              item={itemProps.item}
+              class="oc-select-option"
+              data-variant={variant()}
+              {...optionData()}
+            >
+              {optionContent()}
+            </Tooltip.Trigger>
+            <Tooltip.Portal>
+              <Tooltip.Content class="oc-select-option-tooltip">{tooltipCopy()}</Tooltip.Content>
+            </Tooltip.Portal>
+          </Tooltip.Root>
+        )}
+      </Show>
     )
   }
 

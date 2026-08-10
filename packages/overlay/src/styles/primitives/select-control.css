@@ -105,6 +105,18 @@
   white-space: nowrap;
 }
 
+.oc-select-option-tooltip-description {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  margin: -1px;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
 .oc-select-option[data-selected] {
   background: var(--ui-list-selected-bg);
   color: var(--text-strong);
@@ -172,6 +184,12 @@
   justify-content: center;
   color: var(--text-muted);
   line-height: 0;
+  transform: rotate(-90deg);
+  transition: transform var(--ui-duration-fast) var(--ui-timing-standard);
+}
+
+.oc-select-trigger[data-variant="composer"]:is([aria-expanded="true"], [data-expanded]) > .oc-select-icon {
+  transform: rotate(0deg);
 }
 
 .oc-select-content[data-variant="composer"] {
@@ -202,8 +220,8 @@
 .oc-select-option[data-variant="composer"] {
   justify-content: flex-start;
   gap: calc(10px * var(--ui-scale));
-  min-height: calc(56px * var(--ui-scale));
-  padding: calc(8px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  min-height: calc(40px * var(--ui-scale));
+  padding: calc(4px * var(--ui-scale)) calc(10px * var(--ui-scale));
   font-size: var(--ui-font-small);
 }
 
@@ -214,10 +232,4 @@
 .oc-select-option[data-variant="composer"] .oc-select-option-copy {
   flex: 1 1 auto;
   justify-content: center;
-}
-
-.oc-select-option[data-variant="composer"] .oc-select-option-copy > small {
-  color: var(--text-muted);
-  font-size: var(--ui-font-tiny);
-  line-height: 1.35;
 }

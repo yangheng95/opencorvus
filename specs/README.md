@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Composer dropdown disclosure and density repair: [`2026-08-10-composer-dropdown-disclosure-and-density.md`](records/2026-08/2026-08-10-composer-dropdown-disclosure-and-density.md).
+
 Latest subagent conversation selector deduplication: [`2026-08-10-subagent-conversation-selector-deduplication.md`](records/2026-08/2026-08-10-subagent-conversation-selector-deduplication.md).
 
 Latest Composer intent Select visual repair: [`2026-08-10-composer-intent-select-visual-repair.md`](records/2026-08/2026-08-10-composer-intent-select-visual-repair.md).
