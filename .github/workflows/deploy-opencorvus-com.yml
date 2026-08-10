@@ -13,6 +13,8 @@ on:
       - "packages/web/**"
       - "bun.lock"
       - "package.json"
+  schedule:
+    - cron: "17 3 1 * *"
   workflow_dispatch:
     inputs:
       deployment_mode:
@@ -157,8 +159,9 @@ jobs:
           SECONDARY_SIGNING_PRIVATE_KEY_B64: ${{ secrets.EXPERT_SQUAD_SECONDARY_SIGNING_PRIVATE_KEY_B64 }}
           SECONDARY_SIGNING_KEY_ID: ${{ vars.EXPERT_SQUAD_SECONDARY_SIGNING_KEY_ID }}
           TRUSTED_KEYS_JSON: ${{ vars.EXPERT_SQUAD_TRUSTED_KEYS_JSON }}
-          PUBLICATION_VERSION: ${{ vars.EXPERT_SQUAD_PUBLICATION_VERSION }}
-          PUBLICATION_EXPIRES_AT: ${{ vars.EXPERT_SQUAD_PUBLICATION_EXPIRES_AT }}
+          DEPLOYMENT_MODE: ${{ inputs.deployment_mode || 'daily' }}
+          BOOTSTRAP_PUBLICATION_VERSION: ${{ vars.EXPERT_SQUAD_BOOTSTRAP_PUBLICATION_VERSION }}
+          BOOTSTRAP_PUBLICATION_EXPIRES_AT: ${{ vars.EXPERT_SQUAD_BOOTSTRAP_PUBLICATION_EXPIRES_AT }}
         run: |
           set -euo pipefail
           umask 077
@@ -173,6 +176,33 @@ jobs:
               SIGNING_PUBLIC_KEY_SPKI_B64 SECONDARY_SIGNING_PUBLIC_KEY_SPKI_B64
           }
           trap cleanup_signing_material EXIT
+          case "$DEPLOYMENT_MODE" in
+            daily)
+              export PUBLICATION_VERSION="$(python3 - <<'PY'
+          import os
+          run_number = int(os.environ["GITHUB_RUN_NUMBER"])
+          attempt = int(os.environ["GITHUB_RUN_ATTEMPT"])
+          if run_number <= 0 or attempt <= 0 or attempt >= 1000:
+              raise SystemExit("GitHub run metadata is outside the publication-version contract")
+          version = run_number * 1000 + attempt
+          if version > 9007199254740991:
+              raise SystemExit("derived publication version is not a JavaScript safe integer")
+          print(version)
+          PY
+              )"
+              export PUBLICATION_EXPIRES_AT="$(python3 - <<'PY'
+          import datetime
+          expires = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=90)
+          print(expires.replace(microsecond=0).isoformat().replace("+00:00", "Z"))
+          PY
+              )"
+              ;;
+            bootstrap-stage|bootstrap-verify)
+              export PUBLICATION_VERSION="$BOOTSTRAP_PUBLICATION_VERSION"
+              export PUBLICATION_EXPIRES_AT="$BOOTSTRAP_PUBLICATION_EXPIRES_AT"
+              ;;
+            *) echo "invalid deployment mode: $DEPLOYMENT_MODE" >&2; exit 2 ;;
+          esac
           test -n "$SIGNING_PRIVATE_KEY_B64"
           test -n "$SIGNING_KEY_ID"
           test -n "$TRUSTED_KEYS_JSON"
@@ -376,7 +406,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          RELEASE_ID="${GITHUB_SHA}-$(jq -r '.bundle.sha256' candidate/expert-squads/catalog.json | cut -c1-16)"
+          RELEASE_ID="${GITHUB_SHA}-$(sha256sum candidate/expert-squads/catalog.json | cut -c1-16)"
           echo "id=$RELEASE_ID" >> "$GITHUB_OUTPUT"
           (cd candidate && find . -type f -print | LC_ALL=C sort | xargs sha256sum) > "$RUNNER_TEMP/DEPLOY_SHA256SUMS"
           tar --sort=name --mtime='1980-01-01 UTC' --owner=0 --group=0 --numeric-owner \
