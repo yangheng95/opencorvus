@@ -12,8 +12,6 @@ import { Instance } from "../../project/instance"
 import { InstructionPrompt } from "../instruction"
 import { Plugin } from "../../plugin"
 import { MCP } from "../../mcp"
-import { LSP } from "../../lsp"
-import type { Range } from "../../lsp/schema"
 import { ReadTool } from "../../tool/read"
 import { FileTime } from "../../file/time"
 import { ConfigMarkdown } from "../../config/markdown"
@@ -381,10 +379,6 @@ export async function materializeUserMessage(
         : { kind: "conversation" }),
     ...(authorityResolution?.pendingSession ? { pendingSession: authorityResolution.pendingSession } : {}),
   })
-  const lspProcessAuthority = executionAuthority.kind === "task"
-    ? { kind: "task" as const, taskID: executionAuthority.taskID, cwd: executionAuthority.directory }
-    : { kind: "host" as const, cwd: executionAuthority.directory }
-
   const info: Message.Info = {
     id: input.messageID ?? Identifier.ascending("message"),
     role: "user",
@@ -561,27 +555,10 @@ export async function materializeUserMessage(
                     end: url.searchParams.get("end"),
                   }
                   if (range.start != null) {
-                    const filePathURI = part.url.split("?")[0]
-                    let start = parseFileRangeLine(range.start, "start")
-                    let end = range.end != null ? parseFileRangeLine(range.end, "end") : undefined
+                    const start = parseFileRangeLine(range.start, "start")
+                    const end = range.end != null ? parseFileRangeLine(range.end, "end") : undefined
                     if (end !== undefined && end < start) {
                       throw new Error("file range end must be greater than or equal to start")
-                    }
-                    if (start === end) {
-                      const symbols = await LSP.documentSymbol(filePathURI, lspProcessAuthority)
-                      for (const symbol of symbols) {
-                        let range: Range | undefined
-                        if ("range" in symbol) {
-                          range = symbol.range
-                        } else if ("location" in symbol) {
-                          range = symbol.location.range
-                        }
-                        if (range?.start?.line && range.start.line === start) {
-                          start = range.start.line
-                          end = range.end?.line ?? start
-                          break
-                        }
-                      }
                     }
                     offset = start
                     if (end !== undefined) {

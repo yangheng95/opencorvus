@@ -143,7 +143,6 @@ const primaryExecutionGlobal = [
   "schedule",
   "planner",
   "mission_state",
-  "lsp",
   "batch",
 ] as const
 
@@ -175,7 +174,6 @@ const delegatedWorkerGlobal = [
   "skill",
   "apply_patch",
   "memory",
-  "lsp",
   "batch",
   ...WORKER_COMMUNICATION_TOOL_IDS,
 ] as const
@@ -201,7 +199,6 @@ export const runtimeTemplateAssignments = Object.freeze({
       "glob",
       "search_code",
       "external_code_search",
-      "lsp",
       "webfetch",
       "websearch",
       "panel",

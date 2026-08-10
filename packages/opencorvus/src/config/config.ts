@@ -1338,7 +1338,8 @@ export namespace Config {
           {
             error: "For custom LSP servers, 'extensions' array is required.",
           },
-        ),
+        )
+        .describe("Deprecated compatibility field. Language Server Protocol runtimes are disabled and this value is ignored."),
       prompt: z
         .record(z.string(), z.string())
         .optional()

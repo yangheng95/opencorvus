@@ -1,6 +1,5 @@
 import { Plugin } from "../plugin"
 import { Format } from "../format"
-import { LSP } from "../lsp"
 import { FileWatcher } from "../file/watcher"
 import { File } from "../file"
 import { Project } from "./project"
@@ -68,7 +67,6 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   }
   await ProjectOpenLifecycle.stage("plugin.init", lifecycleContext, () => Plugin.init())
   Format.init()
-  await ProjectOpenLifecycle.stage("lsp.init", lifecycleContext, () => LSP.init())
   await ProjectOpenLifecycle.stage("file-watcher.init", lifecycleContext, () => FileWatcher.init())
   await ProjectOpenLifecycle.stage("file.init", lifecycleContext, () => File.init())
   await ProjectOpenLifecycle.stage("vcs.init", lifecycleContext, () => Vcs.init())

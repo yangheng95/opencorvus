@@ -49,7 +49,6 @@ export const GLOBAL_TOOL_IDS = [
   "wait",
   ...WORKER_COMMUNICATION_TOOL_IDS,
   "analytics",
-  "lsp",
   BATCH_TOOL_ID,
 ] as const
 

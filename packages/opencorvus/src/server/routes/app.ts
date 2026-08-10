@@ -732,7 +732,7 @@ export function AppRoutes(root: Hono) {
       "/lsp",
       describeRoute({
         summary: "Get LSP status",
-        description: "Get LSP server status",
+        description: "Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.",
         operationId: "lsp.status",
         responses: {
           200: {

@@ -21,7 +21,7 @@ export function builtInToolProviderState(
       ? "available"
       : "unavailable"
   }
-  if (toolID === "lsp") return Flag.OPENCORVUS_EXPERIMENTAL_LSP_TOOL ? "available" : "unavailable"
+  if (toolID === "lsp") return "unavailable"
   return "available"
 }
 
@@ -67,7 +67,6 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     { PlannerTool },
     { MissionStateTool },
     { AnalyticsTool },
-    { LspTool },
     { PublishInteractiveArtifactTool },
     { OfficeArtifactInspectTool, OfficeArtifactAuthorTool, OfficeArtifactValidateTool, OfficeArtifactDeliverTool },
     { ArtifactSearchTool, ArtifactReadTool, ArtifactSelectTool, ArtifactSnapshotTool, ArtifactPublishTool },
@@ -96,7 +95,6 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     import("./planner"),
     import("./mission-state"),
     import("./analytics"),
-    import("./lsp"),
     import("./publish-interactive-artifact"),
     import("./office-artifact"),
     import("./artifact-catalog"),
@@ -154,7 +152,6 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     OfficeArtifactAuthorTool,
     OfficeArtifactValidateTool,
     OfficeArtifactDeliverTool,
-    LspTool,
   ])
 }
 

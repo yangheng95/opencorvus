@@ -443,6 +443,9 @@ export type Config = {
    */
   locale?: "en-US" | "zh-CN"
   logLevel?: LogLevel
+  /**
+   * Deprecated compatibility field. Language Server Protocol runtimes are disabled and this value is ignored.
+   */
   lsp?:
     | false
     | {

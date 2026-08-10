@@ -4258,7 +4258,7 @@ export class Find extends HeyApiClient {
   /**
    * Find symbols
    *
-   * Search for workspace symbols like functions, classes, and variables using LSP.
+   * Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.
    */
   public symbols<ThrowOnError extends boolean = false>(
     parameters: {
@@ -8441,7 +8441,7 @@ export class Lsp extends HeyApiClient {
   /**
    * Get LSP status
    *
-   * Get LSP server status
+   * Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.
    */
   public status<ThrowOnError extends boolean = false>(
     parameters?: {

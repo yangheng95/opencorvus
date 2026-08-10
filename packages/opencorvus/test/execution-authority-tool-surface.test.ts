@@ -23,7 +23,6 @@ const conversationEffects = [
   "schedule",
   "planner",
   "mission_state",
-  "lsp",
   "batch",
 ] as const
 

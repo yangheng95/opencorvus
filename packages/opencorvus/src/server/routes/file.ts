@@ -90,7 +90,7 @@ export const FileRoutes = lazy(() =>
       "/find/symbol",
       describeRoute({
         summary: "Find symbols",
-        description: "Search for workspace symbols like functions, classes, and variables using LSP.",
+        description: "Compatibility endpoint. Language Server Protocol runtimes are disabled, so this returns an empty array.",
         operationId: "find.symbols",
         responses: {
           200: {

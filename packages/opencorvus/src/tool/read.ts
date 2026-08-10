@@ -1,7 +1,6 @@
 import z from "zod"
 import * as path from "path"
 import { Tool } from "./tool"
-import { LSP } from "../lsp"
 import { FileTime } from "../file/time"
 import DESCRIPTION from "./read.txt"
 import { Instance } from "../project/instance"
@@ -11,7 +10,7 @@ import { Filesystem } from "../util/filesystem"
 import { AttachmentStore } from "../storage/attachment-store"
 import { redactInlinePayloads } from "../util/inline-base64"
 import { DEFAULT_TEXT_FILE_LIMIT, isBinaryBytes, readTextFilePageContent, renderTextFilePage } from "./text-file"
-import { executionFiles, executionProcessAuthority } from "./execution-files"
+import { executionFiles } from "./execution-files"
 import { fileSource } from "./source"
 
 const DEFAULT_READ_LIMIT = DEFAULT_TEXT_FILE_LIMIT
@@ -185,7 +184,6 @@ export const ReadTool = Tool.define("read", {
     output += renderTextFilePage(page)
     output += "\n</content>"
 
-    LSP.warmFile(filepath, executionProcessAuthority(ctx))
     FileTime.read(ctx.sessionID, filepath)
 
     if (instructions.length > 0) {
