@@ -11,7 +11,10 @@ import {
   type Accessor,
 } from "solid-js"
 import { boardStore, type BoardSource } from "../store/board"
-import { conversationAgentRecordsForSource } from "../store/conversation-agents"
+import {
+  conversationAgentRecordForSourceSession,
+  conversationAgentRecordsForSource,
+} from "../store/conversation-agents"
 import {
   loadSubagentConversation,
   mergeSubagentConversation,
@@ -106,14 +109,16 @@ export function SubagentConversationPanel(props: {
   onSessionSelect: (sessionID: string) => void
 }) {
   const records = createMemo(() => conversationAgentRecordsForSource(boardStore.selectedSource))
-  const sessionIDs = createMemo(() => records().map((candidate) => candidate.sessionID), [], {
+  const sessionIDs = createMemo(() => [...new Set(records().map((candidate) => candidate.sessionID))], [], {
     equals: (previous, next) =>
       previous.length === next.length && previous.every((sessionID, index) => sessionID === next[index]),
   })
+  const recordForSession = (sessionID: string) =>
+    conversationAgentRecordForSourceSession(boardStore.selectedSource, sessionID)
   const selectedRecord = createMemo(() => {
     const sessionID = props.sessionID().trim()
     if (!sessionID) return undefined
-    return records().find((candidate) => candidate.sessionID === sessionID)
+    return recordForSession(sessionID)
   })
   let agentTabListElement: HTMLDivElement | undefined
   let revealSelectedFrame: number | undefined
@@ -213,7 +218,7 @@ export function SubagentConversationPanel(props: {
               <For each={sessionIDs()}>
                 {(sessionID) => {
                   const candidate = createMemo(() => {
-                    const record = records().find((item) => item.sessionID === sessionID)
+                    const record = recordForSession(sessionID)
                     if (!record) throw new Error(`Sub-agent selector missing activity record for ${sessionID}`)
                     return record
                   })
@@ -245,7 +250,7 @@ export function SubagentConversationPanel(props: {
                 }}
               </For>
             </TabList>
-            <Show when={records().length > 1}>
+            <Show when={sessionIDs().length > 1}>
               <DropdownMenu.Root placement="bottom-end" gutter={6} fitViewport>
                 <DropdownMenu.Trigger
                   as={Button}
@@ -255,8 +260,8 @@ export function SubagentConversationPanel(props: {
                   tone="neutral"
                   class="subagent-conversation-panel__agent-menu-trigger"
                   data-ui="subagent-agent-menu-trigger"
-                  aria-label={t("subagent.conversation.all_agents", { count: records().length })}
-                  title={t("subagent.conversation.all_agents", { count: records().length })}
+                  aria-label={t("subagent.conversation.all_agents", { count: sessionIDs().length })}
+                  title={t("subagent.conversation.all_agents", { count: sessionIDs().length })}
                 >
                   <Icon name="more-horizontal" size="compact" />
                 </DropdownMenu.Trigger>
@@ -265,7 +270,7 @@ export function SubagentConversationPanel(props: {
                     <For each={sessionIDs()}>
                       {(sessionID) => {
                         const candidate = createMemo(() => {
-                          const record = records().find((item) => item.sessionID === sessionID)
+                          const record = recordForSession(sessionID)
                           if (!record) throw new Error(`Sub-agent menu missing activity record for ${sessionID}`)
                           return record
                         })

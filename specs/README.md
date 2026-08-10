@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest subagent conversation selector deduplication: [`2026-08-10-subagent-conversation-selector-deduplication.md`](records/2026-08/2026-08-10-subagent-conversation-selector-deduplication.md).
+
 Latest Composer intent Select visual repair: [`2026-08-10-composer-intent-select-visual-repair.md`](records/2026-08/2026-08-10-composer-intent-select-visual-repair.md).
 
 Latest per-Task runtime directory isolation: [`2026-08-10-task-runtime-directory-isolation.md`](records/2026-08/2026-08-10-task-runtime-directory-isolation.md).

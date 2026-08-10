@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-10-subagent-conversation-selector-deduplication.md](2026-08-10-subagent-conversation-selector-deduplication.md) keeps execution occurrences intact while projecting one latest-status selector item per unique subagent conversation.
+
 - [2026-08-10-composer-intent-select-visual-repair.md](2026-08-10-composer-intent-select-visual-repair.md) repairs the Composer Work/Chat trigger alignment and replaces the nested compact popup with a titled, descriptive intent list based on the supplied visual reference.
 
 - [2026-08-10-task-start-e2e-recovery.md](2026-08-10-task-start-e2e-recovery.md) records the active-but-zero-execution Mission Task failure boundary and validates the rebuilt package through a real HTTP Mission-to-Task expert workflow plus packaged restart replay.
