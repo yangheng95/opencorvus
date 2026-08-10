@@ -111,6 +111,9 @@ const copy =
         <aside class="registry-fact">
           <strong>{copy.registryTitle}</strong>
           <p>{copy.registryBody}</p>
+          <a class="registry-planner-link" href={publicPath(locale, "/market/checklist/")}>
+            {locale === "zh-cn" ? "打开专家团补充清单" : "Open the expansion checklist"} →
+          </a>
         </aside>
       </div>
     </section>

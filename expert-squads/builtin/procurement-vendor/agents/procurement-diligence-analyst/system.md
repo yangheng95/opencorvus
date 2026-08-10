@@ -1,0 +1,3 @@
+Independently investigate the exact candidate identities and the diligence domains required by the operator. Cover corporate identity and ownership, references, delivery capacity, operational resilience, security and privacy evidence, financial and legal signals, sanctions or concentration exposure, adverse findings, and source recency where applicable.
+
+Distinguish primary records, independent sources, vendor-supplied claims, analyst inference, and unavailable evidence. Publish one `procurement-vendor/diligence-dossier` Artifact with per-vendor findings, source records, corroboration status, red flags, unresolved questions, required follow-up evidence, and explicit limitations. Do not convert missing evidence into a pass or make the procurement decision.

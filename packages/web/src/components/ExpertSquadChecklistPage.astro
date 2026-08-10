@@ -1,0 +1,458 @@
+---
+import PublicSiteLayout from "./PublicSiteLayout.astro"
+import "../styles/expert-squad-checklist.css"
+import { publicPath, type PublicLocale } from "../content/public-market"
+import {
+  expertSquadRoadmapCandidates,
+  researchVerifiedAt,
+  workbuddyTeamEvidence,
+} from "../content/workbuddy-expert-squad-candidates"
+import { generatedShippedSquadFacts } from "../content/public-market-facts.generated"
+
+const { locale } = Astro.props as { locale: PublicLocale }
+const zh = locale === "zh-cn"
+const skillReadyCount = generatedShippedSquadFacts.filter(
+  (squad) => squad.packageSkillPaths.length > 0 && squad.packageSkillRefs.length > 0,
+).length
+const shippedSquadByID = new Map<string, (typeof generatedShippedSquadFacts)[number]>(
+  generatedShippedSquadFacts.map((squad) => [squad.id, squad]),
+)
+const copy = zh
+  ? {
+      title: "专家团补充清单 · OpenCorvus",
+      description: "调查 WorkBuddy 常用团队、OpenCorvus 当前覆盖与开源 Skill 来源，并生成可拖拽的并行补充声明。",
+      languageHref: publicPath("root", "/market/checklist/"),
+      eyebrow: "当前包事实 + 外部研究 + 本地决策草稿",
+      heading: "先选对专家团，再并行补充。",
+      lead: "勾选你想优先补充的专家团，拖拽调整顺序，并明确哪些包可以独立并行。清单不会改动运行时配置或真实任务队列。",
+      factTitle: "Skill 完整性已经收敛",
+      factBody: `当前随产品交付的 ${generatedShippedSquadFacts.length} 个唯一专家团中，${skillReadyCount} 个拥有真实包内 Skill 文件及 manifest 投影。`,
+      evidenceTitle: "WorkBuddy 证据边界",
+      evidenceLead: "官方资料直接证实的命名团队很少；典型任务、市场观察和通用候选必须分开标注。",
+      officialPreset: "官方预置",
+      officialTask: "官方典型任务",
+      covered: "OpenCorvus 当前覆盖",
+      inventoryTitle: "当前交付清单",
+      inventoryLead: "这些事实由 embedded 与 payload manifest 在构建时生成，不由页面手写。",
+      embedded: "内嵌",
+      market: "市场 payload",
+      skill: "包内 Skill",
+      candidateTitle: "下一批候选",
+      candidateLead: "选择、排序和并行声明只保存在此浏览器。已经加入产品的批次仍可纳入并行复核或下一轮增强声明。",
+      recommended: "建议优先调查",
+      sourceReview: "开源源码待审",
+      licenseReview: "许可证待核验",
+      authored: "需要自研 Skill",
+      blocked: "运行能力阻塞",
+      shipped: "已加入市场包",
+      officialCapability: "WorkBuddy 官方能力",
+      marketInference: "市场需求推断",
+      select: "纳入下一批",
+      selectShipped: "纳入并行复核声明",
+      parallel: "允许独立并行实现",
+      moveUp: "上移",
+      moveDown: "下移",
+      roles: "建议角色",
+      plan: "并行边界",
+      skillSource: "Skill 来源",
+      target: "目标路径",
+      revision: "固定版本",
+      priority: "优先级",
+      declarationTitle: "并行工作声明",
+      declarationLead: "声明只描述实施所有权；payload、共享事实、文档、最终验证、审查、提交和推送仍串行收敛。",
+      note: "给实施团队的备注",
+      notePlaceholder: "例如：先并行复核浏览器验收与办公交付；产品管理在证据汇合后串行收敛。",
+      copy: "复制声明",
+      reset: "重置草稿",
+      copied: "已复制",
+      selected: "已选择",
+      parallelSelected: "并行包",
+      verified: "研究核验",
+    }
+  : {
+      title: "Expert Squad expansion checklist · OpenCorvus",
+      description: "Investigate WorkBuddy team patterns, current OpenCorvus coverage, and open-source Skill sources in a draggable parallel-work checklist.",
+      languageHref: publicPath("zh-cn", "/market/checklist/"),
+      eyebrow: "Current package facts + external research + local decision draft",
+      heading: "Choose the right Squads, then expand in parallel.",
+      lead: "Select the next Expert Squads, drag them into priority order, and declare which packages can be implemented independently. This draft never changes runtime configuration or the real Task queue.",
+      factTitle: "Skill completeness is converged",
+      factBody: `${skillReadyCount} of ${generatedShippedSquadFacts.length} uniquely shipped Expert Squads contain package-local Skill files and manifest projections.`,
+      evidenceTitle: "WorkBuddy evidence boundary",
+      evidenceLead: "Few named teams are directly confirmed by official material; representative tasks, market observations, and general candidates remain distinct.",
+      officialPreset: "Official preset",
+      officialTask: "Official representative task",
+      covered: "Current OpenCorvus coverage",
+      inventoryTitle: "Current shipped inventory",
+      inventoryLead: "These facts are generated from embedded and payload manifests at build time, not handwritten by this page.",
+      embedded: "Embedded",
+      market: "Market payload",
+      skill: "package Skill",
+      candidateTitle: "Next candidates",
+      candidateLead: "Selection, order, and parallel declarations stay in this browser. Delivered packages remain selectable for parallel review or a later enhancement batch.",
+      recommended: "Recommended for early review",
+      sourceReview: "Open-source review",
+      licenseReview: "License review",
+      authored: "Authored Skill required",
+      blocked: "Runtime blocked",
+      shipped: "Shipped in Market",
+      officialCapability: "Official WorkBuddy capability",
+      marketInference: "Market-demand inference",
+      select: "Add to next batch",
+      selectShipped: "Add to parallel review declaration",
+      parallel: "Allow independent parallel implementation",
+      moveUp: "Move up",
+      moveDown: "Move down",
+      roles: "Suggested roles",
+      plan: "Parallel boundary",
+      skillSource: "Skill source",
+      target: "Target path",
+      revision: "Pinned revision",
+      priority: "Priority",
+      declarationTitle: "Parallel-work declaration",
+      declarationLead: "This declares implementation ownership only; payload generation, shared facts, docs, final verification, review, commit, and push still converge serially.",
+      note: "Implementation note",
+      notePlaceholder: "For example: review browser acceptance and office delivery in parallel; converge product management after both evidence sets.",
+      copy: "Copy declaration",
+      reset: "Reset draft",
+      copied: "Copied",
+      selected: "Selected",
+      parallelSelected: "Parallel packages",
+      verified: "Research verified",
+    }
+
+const statusLabel = (status: (typeof expertSquadRoadmapCandidates)[number]["status"]) =>
+  ({
+    source_review: copy.sourceReview,
+    license_review: copy.licenseReview,
+    authored_required: copy.authored,
+    blocked: copy.blocked,
+  })[status]
+const evidenceLabel = (evidence: (typeof expertSquadRoadmapCandidates)[number]["evidence"]) =>
+  evidence === "market_inference" ? copy.marketInference : copy.officialCapability
+---
+
+<PublicSiteLayout
+  {locale}
+  current="planner"
+  title={copy.title}
+  description={copy.description}
+  languageHref={copy.languageHref}
+>
+  <main id="main-content" class="public-main checklist-page" data-checklist-root data-locale={locale}>
+    <section class="market-intro checklist-intro" aria-labelledby="checklist-title">
+      <div class="market-intro-grid">
+        <div>
+          <p class="eyebrow">{copy.eyebrow}</p>
+          <h1 id="checklist-title">{copy.heading}</h1>
+          <p class="section-lead">{copy.lead}</p>
+        </div>
+        <aside class="registry-fact checklist-fact">
+          <strong>{copy.factTitle}</strong>
+          <p>{copy.factBody}</p>
+          <code>{skillReadyCount}/{generatedShippedSquadFacts.length} SKILL READY</code>
+        </aside>
+      </div>
+    </section>
+
+    <section class="checklist-evidence" aria-labelledby="workbuddy-evidence-title">
+      <header class="checklist-section-header">
+        <div>
+          <p class="eyebrow">01 / RESEARCH BOUNDARY</p>
+          <h2 id="workbuddy-evidence-title">{copy.evidenceTitle}</h2>
+        </div>
+        <p>{copy.evidenceLead}</p>
+      </header>
+      <div class="workbuddy-evidence-grid">
+        {workbuddyTeamEvidence.map((item) => (
+          <article>
+            <div>
+              <span class="status-label" data-tone={item.confidence === "official_preset" ? "proposed" : undefined}>
+                {item.confidence === "official_preset" ? copy.officialPreset : copy.officialTask}
+              </span>
+              <h3>{item.label[locale]}</h3>
+            </div>
+            <p><strong>{copy.covered}</strong> · {item.coveredBy.join(" · ")}</p>
+            <a class="text-action" href={item.source} target="_blank" rel="noreferrer">{zh ? "查看来源" : "Open source"} ↗</a>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="checklist-inventory" aria-labelledby="shipped-inventory-title">
+      <header class="checklist-section-header">
+        <div>
+          <p class="eyebrow">02 / MANIFEST FACTS</p>
+          <h2 id="shipped-inventory-title">{copy.inventoryTitle}</h2>
+        </div>
+        <p>{copy.inventoryLead}</p>
+      </header>
+      <div class="shipped-squad-grid">
+        {generatedShippedSquadFacts.map((squad) => (
+          <article class="shipped-squad" data-ready={squad.packageSkillPaths.length > 0 && squad.packageSkillRefs.length > 0}>
+            <span class="shipped-index">{squad.installSurface === "embedded" ? copy.embedded : copy.market}</span>
+            <h3>{squad.label}</h3>
+            <code>{squad.identity}</code>
+            <p>{squad.packageSkillPaths.length} {copy.skill} · {squad.packageSkillRefs.join(" · ")}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="checklist-candidates" aria-labelledby="roadmap-candidates-title">
+      <header class="checklist-section-header">
+        <div>
+          <p class="eyebrow">03 / OPERATOR DECISION</p>
+          <h2 id="roadmap-candidates-title">{copy.candidateTitle}</h2>
+        </div>
+        <p>{copy.candidateLead}</p>
+      </header>
+
+      <div class="checklist-workspace">
+        <ol class="candidate-list" data-candidate-list>
+          {expertSquadRoadmapCandidates.map((candidate, index) => {
+            const shipped = shippedSquadByID.get(candidate.id)
+            const blocked = candidate.status === "blocked" || candidate.status === "license_review"
+            return (
+              <li
+                class="candidate-card"
+                data-candidate-id={candidate.id}
+                data-shipped={shipped ? "true" : "false"}
+                tabindex="-1"
+              >
+                <div class="candidate-rank">
+                  <span>{copy.priority}</span>
+                  <strong data-priority>{String(index + 1).padStart(2, "0")}</strong>
+                  <span class="drag-grip" data-drag-handle aria-hidden="true">⠿</span>
+                </div>
+                <div class="candidate-main">
+                  <header>
+                    <div>
+                      <div class="candidate-badges">
+                        {shipped && <span class="status-label" data-tone="ready">{copy.shipped}</span>}
+                        {!shipped && <span class="status-label" data-status={candidate.status}>{statusLabel(candidate.status)}</span>}
+                        <span class="status-label" data-tone="evidence">{evidenceLabel(candidate.evidence)}</span>
+                        {candidate.recommended && <span class="status-label" data-tone="proposed">{copy.recommended}</span>}
+                      </div>
+                      <h3>{candidate.label[locale]}</h3>
+                      <code>{candidate.id}</code>
+                    </div>
+                    <div class="candidate-actions">
+                      <button type="button" data-move="-1" aria-label={`${copy.moveUp}: ${candidate.label[locale]}`}>↑</button>
+                      <button type="button" data-move="1" aria-label={`${copy.moveDown}: ${candidate.label[locale]}`}>↓</button>
+                    </div>
+                  </header>
+                  <p>{candidate.description[locale]}</p>
+                  <div class="candidate-detail-grid">
+                    <div>
+                      <strong>{copy.roles}</strong>
+                      <p>{candidate.roles[locale].join(" · ")}</p>
+                    </div>
+                    <div>
+                      <strong>{copy.plan}</strong>
+                      <p>{candidate.parallelPlan[locale]}</p>
+                    </div>
+                  </div>
+                  <div class="candidate-sources">
+                    {candidate.skillSources.map((source) => (
+                      <div>
+                        <span>{copy.skillSource}</span>
+                        <a href={source.url} target="_blank" rel="noreferrer">{source.repository}</a>
+                        <code>{source.license}</code>
+                        <small>{copy.target}: {source.targetPath}</small>
+                        {source.revision && <small>{copy.revision}: {source.revision}</small>}
+                      </div>
+                    ))}
+                    {shipped && (
+                      <div>
+                        <span>{copy.skill}</span>
+                        <code>{shipped.packageSkillRefs.join(" · ")}</code>
+                        <small>{shipped.version} · {shipped.packageDigest}</small>
+                      </div>
+                    )}
+                  </div>
+                  <div class="candidate-controls">
+                    <label>
+                      <input type="checkbox" data-select disabled={blocked} />
+                      <span>{shipped ? copy.selectShipped : copy.select}</span>
+                    </label>
+                    <label>
+                      <input type="checkbox" data-parallel disabled />
+                      <span>{copy.parallel}</span>
+                    </label>
+                  </div>
+                </div>
+              </li>
+            )
+          })}
+        </ol>
+
+        <aside class="declaration-panel">
+          <p class="eyebrow">04 / OWNERSHIP DECLARATION</p>
+          <h2>{copy.declarationTitle}</h2>
+          <p>{copy.declarationLead}</p>
+          <div class="declaration-counts" role="status" aria-live="polite">
+            <span><b data-selected-count>0</b> {copy.selected}</span>
+            <span><b data-parallel-count>0</b> {copy.parallelSelected}</span>
+            <span>{copy.verified} · {researchVerifiedAt}</span>
+          </div>
+          <label class="declaration-note" for="checklist-note">{copy.note}</label>
+          <textarea id="checklist-note" maxlength="2000" placeholder={copy.notePlaceholder} data-note></textarea>
+          <pre data-declaration tabindex="0"></pre>
+          <div class="declaration-actions">
+            <button class="primary-action" type="button" data-copy>{copy.copy}</button>
+            <button class="secondary-action" type="button" data-reset>{copy.reset}</button>
+          </div>
+          <p class="declaration-feedback" role="status" aria-live="polite" data-feedback></p>
+        </aside>
+      </div>
+    </section>
+  </main>
+</PublicSiteLayout>
+
+<script>
+  import { expertSquadRoadmapCandidates } from "../content/workbuddy-expert-squad-candidates"
+  import {
+    EXPERT_SQUAD_CHECKLIST_STORAGE_KEY,
+    createDefaultChecklistDraft,
+    exportParallelWorkDeclaration,
+    moveChecklistID,
+    parseChecklistDraft,
+    reorderChecklistIDs,
+  } from "../lib/expert-squad-checklist-state"
+
+  const root = document.querySelector<HTMLElement>("[data-checklist-root]")
+  if (root) {
+    const locale = root.dataset.locale === "zh-cn" ? "zh-cn" : "root"
+    const candidateIDs = expertSquadRoadmapCandidates.map((candidate) => candidate.id)
+    const candidateList = root.querySelector<HTMLOListElement>("[data-candidate-list]")!
+    const cards = new Map(
+      Array.from(candidateList.querySelectorAll<HTMLElement>("[data-candidate-id]")).map((card) => [
+        card.dataset.candidateId!,
+        card,
+      ]),
+    )
+    const note = root.querySelector<HTMLTextAreaElement>("[data-note]")!
+    const declaration = root.querySelector<HTMLElement>("[data-declaration]")!
+    const feedback = root.querySelector<HTMLElement>("[data-feedback]")!
+    const selectedCount = root.querySelector<HTMLElement>("[data-selected-count]")!
+    const parallelCount = root.querySelector<HTMLElement>("[data-parallel-count]")!
+    let draggedID: string | undefined
+    let draft = createDefaultChecklistDraft(candidateIDs)
+
+    try {
+      const saved = window.localStorage.getItem(EXPERT_SQUAD_CHECKLIST_STORAGE_KEY)
+      if (saved) draft = parseChecklistDraft(JSON.parse(saved), candidateIDs)
+    } catch {
+      draft = createDefaultChecklistDraft(candidateIDs)
+    }
+
+    const persist = () => {
+      try {
+        window.localStorage.setItem(EXPERT_SQUAD_CHECKLIST_STORAGE_KEY, JSON.stringify(draft))
+      } catch {
+        feedback.textContent = locale === "zh-cn" ? "浏览器未允许保存本地草稿。" : "The browser did not allow local draft storage."
+      }
+    }
+
+    const clearDragState = () => {
+      draggedID = undefined
+      for (const candidate of cards.values()) {
+        delete candidate.dataset.dragging
+        delete candidate.dataset.dropTarget
+      }
+    }
+
+    const cardAtPoint = (x: number, y: number) =>
+      document.elementFromPoint(x, y)?.closest<HTMLElement>("[data-candidate-id]")
+
+    const render = () => {
+      for (const [index, id] of draft.orderedIds.entries()) {
+        const card = cards.get(id)!
+        candidateList.append(card)
+        card.querySelector<HTMLElement>("[data-priority]")!.textContent = String(index + 1).padStart(2, "0")
+        const select = card.querySelector<HTMLInputElement>("[data-select]")!
+        const parallel = card.querySelector<HTMLInputElement>("[data-parallel]")!
+        select.checked = draft.selectedIds.includes(id)
+        parallel.checked = draft.parallelIds.includes(id)
+        parallel.disabled = !select.checked
+        card.dataset.selected = String(select.checked)
+      }
+      note.value = draft.note
+      selectedCount.textContent = String(draft.selectedIds.length)
+      parallelCount.textContent = String(draft.parallelIds.length)
+      declaration.textContent = exportParallelWorkDeclaration(draft, expertSquadRoadmapCandidates, locale)
+      persist()
+    }
+
+    for (const [id, card] of cards) {
+      const select = card.querySelector<HTMLInputElement>("[data-select]")!
+      const parallel = card.querySelector<HTMLInputElement>("[data-parallel]")!
+      const dragHandle = card.querySelector<HTMLElement>("[data-drag-handle]")!
+      select.addEventListener("change", () => {
+        draft.selectedIds = select.checked
+          ? [...draft.selectedIds, id]
+          : draft.selectedIds.filter((candidateID) => candidateID !== id)
+        if (!select.checked) draft.parallelIds = draft.parallelIds.filter((candidateID) => candidateID !== id)
+        render()
+      })
+      parallel.addEventListener("change", () => {
+        draft.parallelIds = parallel.checked
+          ? [...draft.parallelIds, id]
+          : draft.parallelIds.filter((candidateID) => candidateID !== id)
+        render()
+      })
+      for (const move of card.querySelectorAll<HTMLButtonElement>("[data-move]")) {
+        move.addEventListener("click", () => {
+          draft.orderedIds = moveChecklistID(draft.orderedIds, id, move.dataset.move === "-1" ? -1 : 1)
+          render()
+          card.focus()
+        })
+      }
+      dragHandle.addEventListener("mousedown", (event) => {
+        if (event.button !== 0) return
+        event.preventDefault()
+        draggedID = id
+        card.dataset.dragging = "true"
+      })
+    }
+
+    document.addEventListener("mousemove", (event) => {
+      if (!draggedID) return
+      event.preventDefault()
+      const target = cardAtPoint(event.clientX, event.clientY)
+      for (const candidate of cards.values()) {
+        if (candidate === target && candidate.dataset.candidateId !== draggedID) {
+          candidate.dataset.dropTarget = "true"
+        } else {
+          delete candidate.dataset.dropTarget
+        }
+      }
+    })
+    document.addEventListener("mouseup", (event) => {
+      if (!draggedID) return
+      const targetID = cardAtPoint(event.clientX, event.clientY)?.dataset.candidateId
+      if (targetID && targetID !== draggedID) {
+        draft.orderedIds = reorderChecklistIDs(draft.orderedIds, draggedID, targetID)
+      }
+      clearDragState()
+      render()
+    })
+
+    note.addEventListener("input", () => {
+      draft.note = note.value
+      render()
+    })
+    root.querySelector<HTMLButtonElement>("[data-copy]")!.addEventListener("click", async () => {
+      await navigator.clipboard.writeText(declaration.textContent ?? "")
+      feedback.textContent = locale === "zh-cn" ? "已复制" : "Copied"
+    })
+    root.querySelector<HTMLButtonElement>("[data-reset]")!.addEventListener("click", () => {
+      draft = createDefaultChecklistDraft(candidateIDs)
+      feedback.textContent = ""
+      render()
+    })
+
+    render()
+  }
+</script>

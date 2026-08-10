@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md](2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md) defines the manifest-derived draggable Expert Squad planning checklist, WorkBuddy and open-source Skill research boundary, and the three-package saved-Skill completeness repair with real-page acceptance.
+
 - [2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md](2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md) reconstructs the false-started operator-message stall and non-convergent Cancel incident, identifies the shared root-control/process/checkpoint defects, and defines the single-ingress, asynchronous-dispatch, idempotent-cancellation, Windows/LSP, real-checker, and visual acceptance repair sequence.
 
 - [2026-08-10-task-start-e2e-recovery.md](2026-08-10-task-start-e2e-recovery.md) records the active-but-zero-execution Mission Task failure boundary and validates the rebuilt package through a real HTTP Mission-to-Task expert workflow plus packaged restart replay.

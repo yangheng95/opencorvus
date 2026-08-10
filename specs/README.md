@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Expert Squad roadmap checklist and saved-Skill completeness repair: [`2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md`](records/2026-08/2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md).
+
 Latest Task control responsiveness and cancellation convergence repair plan: [`2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md`](records/2026-08/2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md).
 
 Current Task control-plane architecture: [`task-control-plane.md`](current/architecture/task-control-plane.md).

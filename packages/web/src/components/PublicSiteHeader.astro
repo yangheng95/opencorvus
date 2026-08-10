@@ -5,7 +5,7 @@ import { publicPath, type PublicLocale } from "../content/public-market"
 
 type Props = {
   locale: PublicLocale
-  current: "home" | "market" | "publish" | "trust"
+  current: "home" | "market" | "planner" | "publish" | "trust"
   languageHref: string
   embedded?: boolean
 }
@@ -14,8 +14,8 @@ const { locale, current, languageHref, embedded = false } = Astro.props
 const HeaderTag = embedded ? "div" : "header"
 const copy =
   locale === "zh-cn"
-    ? { market: "专家团市场", publish: "发布", trust: "可信机制", docs: "文档", language: "English" }
-    : { market: "Expert Squads", publish: "Publish", trust: "Trust", docs: "Docs", language: "简体中文" }
+    ? { market: "专家团市场", planner: "补充清单", publish: "发布", trust: "可信机制", docs: "文档", language: "English" }
+    : { market: "Expert Squads", planner: "Roadmap", publish: "Publish", trust: "Trust", docs: "Docs", language: "简体中文" }
 ---
 
 {!embedded && <a class="skip-link" href="#main-content">{locale === "zh-cn" ? "跳到主要内容" : "Skip to content"}</a>}
@@ -26,6 +26,7 @@ const copy =
   </a>
   <nav class="public-nav" aria-label={locale === "zh-cn" ? "网站" : "Site"}>
     <a href={publicPath(locale, "/market/")} aria-current={current === "market" ? "page" : undefined}>{copy.market}</a>
+    <a href={publicPath(locale, "/market/checklist/")} aria-current={current === "planner" ? "page" : undefined}>{copy.planner}</a>
     <a href={publicPath(locale, "/publish/")} aria-current={current === "publish" ? "page" : undefined}>{copy.publish}</a>
     <a href={publicPath(locale, "/trust/")} aria-current={current === "trust" ? "page" : undefined}>{copy.trust}</a>
     <a href={publicPath(locale, "/start/quickstart/")}>{copy.docs}</a>

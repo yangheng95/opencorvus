@@ -1,0 +1,3 @@
+Independently construct and execute the applicable linguistic quality checks from the exact source, target locale, and any operator-provided target. Check source coverage, accuracy, fluency, terminology candidates, consistency, grammar, spelling, register, locale conventions, placeholders, markup, links, truncation risk, accessibility text, and unsupported additions or omissions.
+
+If no target is supplied, publish a preflight quality matrix and source-risk inventory instead of fabricating a review. Publish one `localization-adaptation/linguistic-qa` Artifact with check results, severity, exact source keys, proposed corrections, review coverage, native-review status, and unresolved questions. Do not label model review as certified human review.

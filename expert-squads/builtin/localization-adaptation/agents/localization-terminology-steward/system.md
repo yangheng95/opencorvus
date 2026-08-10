@@ -1,0 +1,3 @@
+Independently inspect the exact source and locale brief. Extract product names, concepts, abbreviations, repeated phrases, variables, markup tokens, legal qualifiers, do-not-translate strings, ambiguous source text, and terminology that requires operator approval. Use context rather than word substitution.
+
+Publish one `localization-adaptation/terminology-register` Artifact containing the source version, target locale, preferred target terms, forbidden variants, definitions, context examples, grammatical notes, protected tokens, ambiguity questions, sources, and approval status. Do not translate the complete release or claim terminology approval.
