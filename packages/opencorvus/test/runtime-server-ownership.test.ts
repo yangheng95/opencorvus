@@ -8,6 +8,7 @@ import { ProcessSupervisor } from "../src/shell/process-supervisor"
 import { ServeRuntimeMemoryMetrics } from "../src/runtime/memory-metrics"
 import { RuntimeServerOwnershipConflictError } from "../src/server/runtime-server-ownership"
 import { Server } from "../src/server/server"
+import { Database } from "../src/storage/db"
 
 const temporaryDirectories: string[] = []
 const children = new Set<ChildProcessWithoutNullStreams>()
@@ -157,8 +158,8 @@ describe("runtime server database ownership", () => {
     await finish(contender)
 
     await finish(server)
-    const successor = startRuntimeEntryProcess(home, project, "bootstrap-once")
-    expect(await firstLine(successor)).toMatchObject({ status: "bootstrap-owned", database: serverOwned.database })
+    const successor = startOwnershipProcess(String(serverOwned.database), "once")
+    expect(await firstLine(successor)).toMatchObject({ status: "acquired", owner: { database: serverOwned.database } })
     await finish(successor)
   }, 90_000)
 
@@ -218,8 +219,8 @@ describe("runtime server database ownership", () => {
       await Promise.all([firstStop, joinedStop])
       stopped = true
 
-      const successor = startRuntimeEntryProcess(home, project, "bootstrap-once")
-      expect(await firstLine(successor)).toMatchObject({ status: "bootstrap-owned" })
+      const successor = startOwnershipProcess(Database.Path(), "once")
+      expect(await firstLine(successor)).toMatchObject({ status: "acquired", owner: { database: Database.Path() } })
       await finish(successor)
     } finally {
       if (!gateReleased) gate[Symbol.dispose]()
@@ -251,8 +252,8 @@ describe("runtime server database ownership", () => {
         gate[Symbol.dispose]()
       }
       await Bun.sleep(100)
-      const successor = startRuntimeEntryProcess(home, project, "bootstrap-once")
-      expect(await firstLine(successor)).toMatchObject({ status: "bootstrap-owned" })
+      const successor = startOwnershipProcess(Database.Path(), "once")
+      expect(await firstLine(successor)).toMatchObject({ status: "acquired", owner: { database: Database.Path() } })
       await finish(successor)
     } finally {
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
@@ -286,8 +287,8 @@ describe("runtime server database ownership", () => {
         gate[Symbol.dispose]()
       }
       await Bun.sleep(100)
-      const successor = startRuntimeEntryProcess(home, project, "bootstrap-once")
-      expect(await firstLine(successor)).toMatchObject({ status: "bootstrap-owned" })
+      const successor = startOwnershipProcess(Database.Path(), "once")
+      expect(await firstLine(successor)).toMatchObject({ status: "acquired", owner: { database: Database.Path() } })
       await finish(successor)
     } finally {
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
