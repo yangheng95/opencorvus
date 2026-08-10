@@ -334,6 +334,7 @@
       "devDependencies": {
         "@astrojs/check": "0.9.6",
         "@playwright/test": "^1.59.1",
+        "@types/bun": "catalog:",
         "@types/node": "catalog:",
         "typescript": "catalog:",
       },

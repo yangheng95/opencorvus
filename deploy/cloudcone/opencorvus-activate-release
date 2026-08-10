@@ -1,0 +1,236 @@
+#!/usr/bin/env bash
+set -euo pipefail
+umask 022
+
+ROOT=${OPENCORVUS_DEPLOY_ROOT:-/srv/opencorvus}
+RELEASES="$ROOT/releases"
+CURRENT="$ROOT/current"
+PREVIOUS="$ROOT/previous"
+CADDY_CONFIG=${OPENCORVUS_CADDY_CONFIG:-/etc/caddy/Caddyfile}
+
+validate_release_tree() {
+  python3 - "$1" <<'PY'
+import datetime, hashlib, json, pathlib, re, sys
+tree = pathlib.Path(sys.argv[1]).resolve()
+if not (tree / "index.html").is_file():
+    raise SystemExit("release index is missing")
+pointer_path = tree / "expert-squads/catalog.json"
+pointer = json.loads(pointer_path.read_text("utf-8"))
+resources = pointer.get("resources")
+if pointer.get("protocol") != "opencorvus/expert-squad-publication@1" or not isinstance(resources, dict):
+    raise SystemExit("invalid publication pointer")
+counts = [resources.get(key) for key in ("total", "embeddedAlreadyAvailable", "bundledMarketImportable")]
+if any(not isinstance(value, int) or isinstance(value, bool) or value < 0 for value in counts) or counts[0] <= 0 or counts[0] != counts[1] + counts[2]:
+    raise SystemExit("invalid publication resource counts")
+version = pointer.get("publicationVersion")
+if not isinstance(version, int) or isinstance(version, bool) or version <= 0:
+    raise SystemExit("invalid publication version")
+expires = pointer.get("expiresAt")
+if not isinstance(expires, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z", expires):
+    raise SystemExit("invalid publication expiry")
+if datetime.datetime.fromisoformat(expires.replace("Z", "+00:00")) <= datetime.datetime.now(datetime.timezone.utc):
+    raise SystemExit("publication is expired")
+
+patterns = {
+    "catalog": r"/expert-squads/catalogs/([a-f0-9]{64})\.json",
+    "signatures": r"/expert-squads/signatures/([a-f0-9]{64})\.json",
+    "bundle": r"/expert-squads/bundles/([a-f0-9]{64})/all-expert-squads\.zip",
+}
+documents = {}
+for name, pattern in patterns.items():
+    reference = pointer.get(name)
+    if not isinstance(reference, dict) or not isinstance(reference.get("path"), str):
+        raise SystemExit(f"invalid {name} reference")
+    match = re.fullmatch(pattern, reference["path"])
+    digest = reference.get("sha256")
+    size = reference.get("bytes")
+    if not match or match.group(1) != digest or not isinstance(size, int) or isinstance(size, bool) or size <= 0:
+        raise SystemExit(f"invalid content-addressed {name} reference")
+    target = (tree / reference["path"].lstrip("/")).resolve()
+    if tree not in target.parents or not target.is_file():
+        raise SystemExit(f"{name} escapes or is missing from the release tree")
+    raw = target.read_bytes()
+    if len(raw) != size or hashlib.sha256(raw).hexdigest() != digest:
+        raise SystemExit(f"{name} byte binding failed")
+    if name != "bundle":
+        documents[name] = json.loads(raw)
+
+catalog = documents["catalog"]
+packages = catalog.get("packages")
+if (
+    catalog.get("protocol") != "opencorvus/expert-squad-static-catalog@1"
+    or catalog.get("resources") != resources
+    or not isinstance(packages, list)
+    or len(packages) != resources["total"]
+    or sum(item.get("disposition") == "embedded_already_available" for item in packages if isinstance(item, dict)) != resources["embeddedAlreadyAvailable"]
+    or sum(item.get("disposition") == "bundled_market_importable" for item in packages if isinstance(item, dict)) != resources["bundledMarketImportable"]
+):
+    raise SystemExit("invalid signed catalog")
+envelope = documents["signatures"]
+threshold = envelope.get("threshold")
+signatures = envelope.get("signatures")
+if (
+    envelope.get("protocol") != "opencorvus/expert-squad-catalog-signatures@1"
+    or envelope.get("publicationVersion") != version
+    or envelope.get("expiresAt") != expires
+    or envelope.get("catalog") != pointer["catalog"]
+    or envelope.get("bundle") != pointer["bundle"]
+    or not isinstance(threshold, int) or isinstance(threshold, bool) or threshold <= 0
+    or not isinstance(signatures, list) or len(signatures) < threshold
+):
+    raise SystemExit("invalid signature envelope")
+print(version)
+PY
+}
+
+probe_live_release() {
+  local probe pointer name path digest bytes output
+  probe=$(mktemp -d)
+  curl --fail --silent --show-error http://127.0.0.1:8080/ > "$probe/index.html" || { rm -rf -- "$probe"; return 1; }
+  curl --fail --silent --show-error \
+    http://127.0.0.1:8080/expert-squads/catalog.json > "$probe/pointer.json" || { rm -rf -- "$probe"; return 1; }
+  pointer="$probe/pointer.json"
+  cmp "$pointer" "$CURRENT/expert-squads/catalog.json" || { rm -rf -- "$probe"; return 1; }
+  python3 - "$pointer" > "$probe/references.tsv" <<'PY'
+import json, sys
+pointer = json.load(open(sys.argv[1], encoding="utf-8"))
+if pointer.get("protocol") != "opencorvus/expert-squad-publication@1":
+    raise SystemExit("invalid live pointer")
+for name in ("catalog", "signatures", "bundle"):
+    reference = pointer[name]
+    print(name, reference["path"], reference["sha256"], reference["bytes"], sep="\t")
+PY
+  test -s "$probe/references.tsv" || { rm -rf -- "$probe"; return 1; }
+  while IFS=$'\t' read -r name path digest bytes; do
+    output="$probe/$name"
+    curl --fail --silent --show-error \
+      "http://127.0.0.1:8080$path" > "$output" || { rm -rf -- "$probe"; return 1; }
+    test "$(stat -c %s "$output")" -eq "$bytes" || { rm -rf -- "$probe"; return 1; }
+    test "$(sha256sum "$output" | cut -d' ' -f1)" = "$digest" || { rm -rf -- "$probe"; return 1; }
+  done < "$probe/references.tsv"
+  rm -rf -- "$probe"
+}
+
+prune_unreferenced_releases() {
+  local current_target previous_target keep_unreferenced=3 kept=0 directory name
+  current_target=$(readlink "$CURRENT" 2>/dev/null || true)
+  previous_target=$(readlink "$PREVIOUS" 2>/dev/null || true)
+  while IFS= read -r directory; do
+    name=$(basename "$directory")
+    [[ "$name" =~ ^[a-f0-9]{40}-[a-f0-9]{16}$ ]] || continue
+    if [ "releases/$name" = "$current_target" ] || [ "releases/$name" = "$previous_target" ]; then continue; fi
+    if [ "$kept" -lt "$keep_unreferenced" ]; then
+      kept=$((kept + 1))
+      continue
+    fi
+    case "$(realpath "$directory")" in "$RELEASES"/*) rm -rf -- "$directory" ;; *) return 1 ;; esac
+  done < <(find "$RELEASES" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' | sort -rn | cut -d' ' -f2-)
+}
+
+if [ "$#" -eq 2 ] && [ "$1" = "--rollback" ]; then
+  RELEASE_ID=$2
+  if [[ ! "$RELEASE_ID" =~ ^[a-f0-9]{40}-[a-f0-9]{16}$ ]]; then
+    echo "invalid rollback release id" >&2
+    exit 2
+  fi
+  test -L "$CURRENT"
+  test "$(readlink "$CURRENT")" = "releases/$RELEASE_ID"
+  if [ ! -L "$PREVIOUS" ]; then
+    rm -f "$CURRENT"
+    rm -rf -- "$RELEASES/$RELEASE_ID"
+    printf '%s\n' "no-previous-release"
+    exit 0
+  fi
+  PREVIOUS_TARGET=$(readlink "$PREVIOUS")
+  case "$PREVIOUS_TARGET" in releases/*) ;; *) echo "invalid previous release target" >&2; exit 1 ;; esac
+  test -d "$ROOT/$PREVIOUS_TARGET"
+  ln -s "$PREVIOUS_TARGET" "$ROOT/.public-rollback-$RELEASE_ID"
+  mv -T "$ROOT/.public-rollback-$RELEASE_ID" "$CURRENT"
+  rm -rf -- "$RELEASES/$RELEASE_ID"
+  printf '%s\n' "$PREVIOUS_TARGET"
+  exit 0
+fi
+
+if [ "$#" -ne 3 ]; then
+  echo "usage: opencorvus-activate-release <release-id> <archive.tar.gz> <deploy-checksums> | --rollback <release-id>" >&2
+  exit 2
+fi
+
+RELEASE_ID=$1
+ARCHIVE=$2
+DEPLOY_CHECKSUMS=$3
+if [[ ! "$RELEASE_ID" =~ ^[a-f0-9]{40}-[a-f0-9]{16}$ ]]; then
+  echo "invalid release id" >&2
+  exit 2
+fi
+
+INCOMING="$ROOT/incoming/$RELEASE_ID"
+ARCHIVE_REAL=$(realpath "$ARCHIVE")
+CHECKSUMS_REAL=$(realpath "$DEPLOY_CHECKSUMS")
+case "$ARCHIVE_REAL" in "$INCOMING"/*) ;; *) echo "archive is outside the release inbox" >&2; exit 2 ;; esac
+case "$CHECKSUMS_REAL" in "$INCOMING"/*) ;; *) echo "checksums are outside the release inbox" >&2; exit 2 ;; esac
+
+cd "$INCOMING"
+sha256sum --check "$(basename "$ARCHIVE_REAL").sha256"
+if tar -tzf "$ARCHIVE_REAL" | grep -E '(^/|(^|/)\.\.(/|$))'; then
+  echo "release archive contains an unsafe path" >&2
+  exit 1
+fi
+if tar -tvzf "$ARCHIVE_REAL" | awk 'substr($1,1,1) != "-" && substr($1,1,1) != "d" { found=1 } END { exit !found }'; then
+  echo "release archive contains a link or special entry" >&2
+  exit 1
+fi
+
+mkdir -p "$RELEASES"
+TARGET="$RELEASES/$RELEASE_ID"
+if [ -e "$TARGET" ]; then
+  echo "immutable release already exists: $TARGET" >&2
+  exit 1
+fi
+CANDIDATE=$(mktemp -d "$RELEASES/.candidate-$RELEASE_ID.XXXXXX")
+trap 'rm -rf -- "$CANDIDATE"' EXIT
+tar --extract --gzip --file "$ARCHIVE_REAL" --directory "$CANDIDATE" --no-same-owner --no-same-permissions
+if find "$CANDIDATE" -mindepth 1 ! -type f ! -type d -print -quit | grep -q .; then
+  echo "extracted release contains a link or special file" >&2
+  exit 1
+fi
+(cd "$CANDIDATE" && sha256sum --check "$CHECKSUMS_REAL")
+find "$CANDIDATE" -type d -exec chmod 0755 {} +
+find "$CANDIDATE" -type f -exec chmod 0644 {} +
+NEW_VERSION=$(validate_release_tree "$CANDIDATE")
+caddy validate --config "$CADDY_CONFIG"
+
+OLD_TARGET=""
+if [ -L "$CURRENT" ]; then OLD_TARGET=$(readlink "$CURRENT"); fi
+if [ -n "$OLD_TARGET" ]; then
+  case "$OLD_TARGET" in releases/*) ;; *) echo "invalid current release target" >&2; exit 1 ;; esac
+  OLD_VERSION=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["publicationVersion"])' "$ROOT/$OLD_TARGET/expert-squads/catalog.json")
+  if [ "$NEW_VERSION" -le "$OLD_VERSION" ]; then
+    echo "publication version must increase: current=$OLD_VERSION candidate=$NEW_VERSION" >&2
+    exit 1
+  fi
+fi
+mv "$CANDIDATE" "$TARGET"
+trap - EXIT
+ln -s "releases/$RELEASE_ID" "$ROOT/.current-$RELEASE_ID"
+mv -T "$ROOT/.current-$RELEASE_ID" "$CURRENT"
+
+if ! probe_live_release; then
+  if [ -n "$OLD_TARGET" ]; then
+    ln -s "$OLD_TARGET" "$ROOT/.rollback-$RELEASE_ID"
+    mv -T "$ROOT/.rollback-$RELEASE_ID" "$CURRENT"
+  else
+    rm -f "$CURRENT"
+  fi
+  rm -rf -- "$TARGET"
+  echo "local readiness check failed; current was rolled back" >&2
+  exit 1
+fi
+
+if [ -n "$OLD_TARGET" ]; then
+  ln -s "$OLD_TARGET" "$ROOT/.previous-$RELEASE_ID"
+  mv -T "$ROOT/.previous-$RELEASE_ID" "$PREVIOUS"
+fi
+rm -rf -- "$INCOMING"
+prune_unreferenced_releases
+printf '%s\n' "$RELEASE_ID"

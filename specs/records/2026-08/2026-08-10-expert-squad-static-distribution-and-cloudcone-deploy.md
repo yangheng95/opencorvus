@@ -1,0 +1,104 @@
+# Expert Squad Static Distribution and CloudCone Deploy
+
+## Recall
+
+### User request
+
+- Host the current public website at `opencorvus.com` on the user's CloudCone virtual server.
+- Make later website publication automatic.
+- Provide one-click download of every shipped Expert Squad resource.
+- Ask for infrastructure or credential information only when it becomes necessary.
+- Obtain an independent Agent review before implementation and begin only after the review boundary is safe.
+
+### Acceptance criteria
+
+- One canonical generator consumes the exact 4 embedded and 35 bundled-market `EmbeddedPackageSource` values and produces 39 deterministic per-package ZIP archives, an exact-byte canonical catalog, checksums, and one deterministic unsigned bundle input. The isolated production job creates the content-addressed all-resources ZIP before signing, then binds that exact bundle and catalog in the signature set.
+- The catalog distinguishes `embedded` packages, which are already available in OpenCorvus, from `bundled_market` packages, which are importable. Downloading all resources includes both classes; it does not claim that all 39 need installation.
+- The public market offers one “download all resources” action. At click time it reads the no-cache publication pointer, validates version/expiry/counts and exact content references, verifies the signature threshold against build-time Ed25519 public-key trust roots, rejects rollback below the highest locally accepted version, then fetches and hashes the ZIP before saving it. English and Chinese copy state the exact resource count and installation boundary; the compiled HTML never hardcodes a pre-signing bundle digest.
+- Production publication signs a domain-separated, length-framed message containing the protocol, algorithm, publication version, expiry, exact catalog byte length and SHA-256, and the bundle path, byte length, and SHA-256 using Ed25519 and an explicit key ID. The threshold is one valid trusted signature; optional old/new signers produce a two-signature overlap during deliberate rotation. The signing step is mandatory for deployment; no unsigned artifact can be promoted as a production catalog.
+- A GitHub Actions website workflow is separate from native installer workflows, uses read-only repository permissions, a protected production environment, an explicit post-bootstrap automatic-deploy switch, a pinned server host key, a restricted non-root deploy user, immutable release directories, server-side checksum verification, health checks, and an atomic `current` symlink switch while retaining the prior release.
+- A normal source push may build and deploy only the static website/resources. It does not create a tag, GitHub Release, native installer, or desktop updater asset.
+- Focused positive tests prove deterministic archives/catalog/bundle, complete 39-resource coverage, exact 4/35 disposition, and generated links. Real-page screenshots and console evidence validate the changed website surface; no User Interface automation test is created or run.
+- External deployment and Domain Name System (DNS) cutover are reported as pending until the exact CloudCone host/access and GoDaddy DNS authority are supplied and verified.
+
+### Hard constraints
+
+- Repository: `D:\myhexin-local\opencorvus`, branch `main`, starting commit `2c7e990b300c4e76a31ac8276905468400a53660`, upstream `origin/main`, remote `https://github.com/yangheng95/opencorvus.git`.
+- The shared worktree contains extensive staged and unstaged Expert Squad, website, and documentation changes belonging to other work. Only exact task-owned paths or hunks may be edited, staged, committed, or pushed. No reset, clean, stash, broad restore, new branch, or worktree is authorized.
+- `builtInPackageSources` is the authority for 4 embedded packages and `payloadPackageSources` is the authority for 35 bundled-market packages. The public generator must not create a third inventory.
+- `prompt_profile.active` remains the sole activation authority. Downloading resources does not install or activate a package.
+- This is phase one: automatic publication and one-click download only. It does not add an `install-batch` deep link or claim that “install all” is complete. The current Manager has only per-ID locks and single-package atomic publication; `releasePayloadPackages` can leave a successfully installed prefix after a later failure. A future phase-two install-all feature requires prepare-all, a complete lock set, rollback/crash recovery, explicit scope and conflict decisions, trusted catalog verification, one visible confirmation, and no automatic activation.
+- The local Hosted Registry remains an explicitly non-authoritative loopback simulation and is not deployed publicly.
+- Secrets, private keys, passwords, host-key material, and tokens are never written to the repository, prompt, spec, logs, artifacts, or commit. Public-key trust material may be committed only when a production signing key is deliberately provisioned.
+- No public DNS record, server, GitHub secret/environment, or other external state is changed until the user supplies or authorizes the exact access path.
+
+### Sources read and whole-repository search
+
+- Repository `AGENTS.md`; current extension architecture; the public hosting record; Expert Squad roadmap and publish/install/reuse records; package Manager, Registry, built-in inventory, generated payload inventory, install lock, exact archive handoff, public market generator/components, website scripts, package scripts, and existing GitHub Actions workflows.
+- Whole-repository searches found one single-directory `exportArchive` implementation, one per-ID `ExpertSquadInstallLock`, one sequential `releasePayloadPackages` path, 4 embedded sources, initially 25 and now 35 payload sources, and no batch-install deep link or signed catalog protocol.
+- The existing public market generator already projects shipped facts from the current 4+35 source set but generates no distributable archives, catalog, signatures, or all-resources bundle.
+- The existing hosted registry performs local upload/download simulation and declares no publication authority; exposing it on the public VPS would cross its security boundary.
+- Official GitHub and Caddy documentation were consulted for environment-scoped deployment secrets, least-privilege workflow permissions, managed static HTTPS, configuration validation/reload, and atomic release operation.
+
+### Problem-depth and impact analysis
+
+- Observable gap: the website can describe shipped Expert Squads but cannot provide one stable artifact containing all resources, and there is no ordinary-push website deployment path to CloudCone.
+- Direct trigger: `packages/web` build currently regenerates facts only. No build step materializes exact source bytes into public download artifacts, and no website-only workflow transfers a verified build to the server.
+- Data/control-flow root cause: shipped-source authority, archive encoding, public catalog projection, signing, and deployment are separate or absent. Reusing installed-directory export would incorrectly require installing embedded packages and would reject their built-in identities on import.
+- Why the old path is insufficient: single-package Manager export operates on an installed directory; local Hosted Registry is non-authoritative; sequential payload release is not a transaction; native build/release workflows have a different trigger and authority boundary.
+- Affected surfaces: Expert Squad archive primitives, website generated data/public files/market copy, package scripts, GitHub Actions, deployment documentation, focused tests, static build output, and real-page acceptance. Desktop batch installation, third-party publication, namespace reservation, public review/moderation, analytics, native packaging, tags, and Releases are explicitly excluded.
+- Unknown until credentials arrive: CloudCone operating system, target IP/SSH port/user, existing reverse proxy/services, writable release root, server host key, GitHub production-environment availability, and whether GoDaddy DNS changes will be made through an already signed-in browser or manually by the user.
+
+### Independent Agent feedback
+
+- Independent read-only reviewer `/root/release_architecture_review` found the initial proposal blocked if implemented literally: the then-current 29 sources were split 4 embedded plus 25 payload; installed-directory export could not produce the full set; sequential release was not batch atomic; no signature/key-rotation protocol or batch deep link existed; CloudCone deployment had to be isolated from native packaging and use least privilege with verified rollback. During implementation, the authoritative payload set expanded to 35, so the frozen publication contract was advanced to the current 39 total instead of silently omitting the ten new resources.
+- This plan resolves those findings by implementing source-based deterministic distribution for all current 39 resources, limiting the user-facing action to one-click download, explicitly excluding install-all, making signature mandatory at production promotion, and defining an isolated immutable static deployment. The reviewer did not participate in implementation.
+- The review pass over the first implementation found additional blockers in cross-step shell-function lifetime, signer public/private key matching, scattered resource counts, first-DNS-cutover sequencing, deploy-user ownership, first-release rollback, and exact workflow-path coverage. The implementation now derives counts from the authoritative source/catalog chain, verifies signing-key SubjectPublicKeyInfo (SPKI) bytes against the browser trust root, keeps deployment helpers within their executing step, supports separate `bootstrap-stage`, `bootstrap-verify`, and `daily` modes, and exercises those exact workflow bodies in integration harnesses. A post-repair read-only verdict remains required.
+
+## Frozen design
+
+### Distribution artifacts
+
+- Canonical source archive path: `expert-squads/archives/<namespace>/<id>/<version>/<packageDigest>/<archiveSha256>.zip`.
+- Immutable catalog path: `expert-squads/catalogs/<catalogSha256>.json`.
+- Content-addressed signature-set path: `expert-squads/signatures/<signatureSetSha256>.json`.
+- Mutable discovery pointer: `expert-squads/catalog.json`; it contains the protocol, publication version and expiry plus catalog, signature set, and bundle path, SHA-256, and byte length. It is served with `Cache-Control: no-cache` and is updated only as the final atomic publication step.
+- All-resources bundle: `expert-squads/bundles/<bundleSha256>/all-expert-squads.zip`; it contains the exact immutable catalog, publication input, standard `sha256sum` manifest, and the 39 already-generated package ZIPs without re-encoding package content. The external content-addressed signature envelope binds that bundle, avoiding any signature/bundle digest cycle; rotating only signatures does not change bundle bytes.
+- ZIP entries and catalog records use UTF-8 byte ordering and the canonical ZIP epoch; locale-sensitive ordering is forbidden. Catalog bytes are UTF-8 with one terminal newline and an explicitly ordered schema. Repeated export of the same source must be byte-equal, with one fixed-fixture hash checked locally on Windows and by the website workflow on Windows, Linux, and macOS before production promotion.
+- The signed message is `opencorvus/expert-squad-catalog-signature@1` plus explicit unsigned-integer length framing for every subsequent field. It binds `Ed25519`, key ID, publication version, expiry, catalog byte length and SHA-256, and bundle path, byte length, and SHA-256. The browser verifier rejects unknown protocol/algorithm/key, insufficient signature threshold, expiry, byte/hash mismatch, and a publication version lower than the highest version it has already accepted. Browser public trust roots are generated into the exact website build; phase-two desktop installation still requires its own native trust-root and package transaction design.
+
+### Deployment
+
+- Build and verification run from the exact checked-out commit. The unprivileged build job emits the fixed unsigned catalog, archives, checksum manifest, and signing input. Before bootstrap verification, ordinary pushes cannot enter the production job; a repository safety switch is enabled only after the staged release passes public verification. The protected signing/deploy job does not check out or execute repository code after loading the private key: it downloads the digest-verified build artifact, invokes only fixed runner/OpenSSL operations, removes key material from the environment, then constructs the signature set, final bundle, and pointer. Production signing fails closed when signing material is absent.
+- Deployment uploads to a new `/srv/opencorvus/releases/<commit>-<bundleSha-prefix>` directory, verifies the deploy manifest and the pointer-to-signature/catalog/bundle byte chain on the VPS, rejects non-increasing publication versions, validates the Caddy configuration, then atomically repoints `/srv/opencorvus/current` and probes the loopback-only Caddy readiness listener. First-release failure removes `current` and the failed immutable target so the exact candidate can be retried; update failure restores the prior target; the public post-deploy probe invokes rollback and verifies recovery.
+- Caddy serves only `/srv/opencorvus/current`, manages HTTPS for `opencorvus.com` and `www.opencorvus.com`, and redirects `www` to the apex. Rollback repoints `current` to the retained prior release.
+
+## Execution plan
+
+1. Extract one deterministic archive primitive that accepts a validated `EmbeddedPackageSource`; reuse it for the existing installed-package export and the public distribution generator.
+2. Generate and positively test all 39 immutable archives, canonical catalog, checksum manifest, unsigned signing input, and deterministic bundle input. Add the isolated production signing/final-bundle step with exact-byte verification and multiple-envelope support.
+3. Integrate generated artifacts into the Astro build and add English/Chinese one-click download actions that resolve the final bundle through the runtime publication pointer, with exact 39-resource and 4/35 disposition copy.
+4. Add the isolated GitHub Actions static deployment workflow plus checked-in Caddy/deploy templates and an operator handoff listing the required GitHub environment variables/secrets and DNS records.
+5. Run focused non-UI tests, generator determinism checks, website type/check/build, documentation checks, and real desktop-page visual/console/HTTP acceptance.
+6. Obtain a fresh independent read-only final review; resolve every valid finding and rerun affected acceptance.
+7. Stage only exact owned paths/hunks, create one scoped commit, inspect the complete `origin/main..HEAD` set, and push only if every outgoing commit is authorized and reviewed. Actual VPS deployment and DNS cutover wait for the missing access facts.
+
+## Current status
+
+- Independent pre-implementation review and two implementation review passes are complete. Their valid findings have been repaired; the post-repair reviewer returned PASS with no P0/P1 code defects and requested only a focused control-character path error-contract test, which is now included.
+- Implemented one source-based canonical archive primitive reused by installed-directory export, a source-derived generator for the current 39 resources, immutable per-package archives/catalog/checksums/signing input, generated website metadata, the English/Chinese runtime-pointer download surface, a protected website-only GitHub Actions workflow, and CloudCone Caddy/activation/bootstrap files. Resource counts are no longer duplicated in runtime validators.
+- Fresh focused verification:
+  - canonical distribution, signed-publication, and shipped-inventory tests passed 13 tests with 495 assertions against the expanded 39-resource inventory, including installed/source archive byte parity, the canonical path error contract, trusted Ed25519 verification, expiry, rollback, byte binding, verified bundle download, and exact 4/35 coverage;
+  - existing exact archive import: 1 test passed with 4 assertions;
+  - `packages/opencorvus` typecheck passed;
+  - Astro check passed with 0 errors, 0 warnings, and one unrelated existing unused-variable hint;
+  - Astro build completed 123 pages and copied exactly 39 resource ZIPs after raising the explicit Safari floor from 14.0 to 14.1, the narrowest target on which pinned `esbuild@0.28.1` does not attempt its unsupported destructuring lowering; inherited Starlight override and tolerated server transform warnings remained non-fatal;
+  - the exact workflow signing body ran twice with two temporary Ed25519 rotation keys; signatures verified, both envelopes and bundles were byte-identical, all 41 bundle manifest entries passed `sha256sum --check`, browser code verified the exact workflow output, a signer/private-key mismatch was rejected, and the final bundle was 596,536 bytes at SHA-256 `0b2a681f546255ac783231905f630c143d477be015e5aa6c2b90f48c765273b2`;
+  - the exact deploy-step integration exercised `daily` success, public-probe rollback, `bootstrap-stage`, `bootstrap-verify`, and deploy-credential cleanup; the CloudCone activation integration exercised first success, update success, explicit rollback, equal-version rejection, update health failure restoration, first-release health failure cleanup, and exact retry in an isolated Linux root;
+  - `docs:check` passed for 329 operations in 25 groups;
+  - real in-app Chromium inspection of the final temporary signed candidate confirmed English and Chinese ready states, exact 39 and 4/35 copy, desktop composition, and `scrollWidth` 1265 at `innerWidth` 1280. The English download action executed against the exact content-addressed bundle link; the signed candidate's actual 596,536 bytes and SHA-256 matched the pointer. The intentionally excluded `/api/registry/records` loopback-sandbox endpoint remained rendered as offline;
+  - workflow YAML parsed and all 15 Bash run bodies plus both deploy scripts passed `bash -n`; `git diff --check`, OpenCorvus typecheck, exact archive import, activation integration, and `docs:check` for 329 operations in 25 groups passed;
+  - a fresh `bun install --frozen-lockfile` was attempted after manifest/lock reconciliation but the package registry closed every metadata request (`ConnectionClosed`); this external network failure does not replace the successful local checker/build evidence and remains to be reverified in clean continuous integration.
+- The shared branch advanced during this task from the recorded starting commit to `700a35da775613005e53c933e5dcb5d382b85fb0`, equal to `origin/main`. The concurrent ten-squad expansion required by the 39-resource output is now independently committed and pushed at that revision.
+- Final independent re-review passed with no unresolved implementation or security finding. The worktree still contains unrelated unstaged edits and untracked files, so the task commit must use exact path/hunk staging and leave those changes untouched.
+- CloudCone deployment, signed bundle rehearsal with the real production key, GitHub Environment configuration, GoDaddy DNS cutover, and real public HTTPS/bundle acceptance remain pending the server access facts and production signing material listed in `deploy/cloudcone/README.md`.

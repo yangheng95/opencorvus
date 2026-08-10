@@ -1,4 +1,4 @@
-import { BlobWriter, Uint8ArrayReader, Writer, ZipReader, ZipWriter } from "@zip.js/zip.js"
+import { Uint8ArrayReader, Writer, ZipReader } from "@zip.js/zip.js"
 import { createHash, randomUUID } from "node:crypto"
 import { cp, lstat, mkdir, open, readFile, readdir, rename, rm, writeFile } from "fs/promises"
 import { parse as parseJsonc, printParseErrorCode, type ParseError } from "jsonc-parser"
@@ -14,6 +14,7 @@ import { ExpertSquadInstallLock } from "./install-lock"
 import { ExpertSquadPackageLocations } from "./locations"
 import { payloadPackageSources } from "../../generated/expert-squad-payload"
 import { ExpertSquadRegistry } from "./registry"
+import { ExpertSquadArchive } from "./archive"
 import { writeExpertSquadInstallationMetadata, type ExpertSquadGenerationMetadata } from "./installation-metadata"
 import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod"
@@ -1536,18 +1537,16 @@ export namespace ExpertSquadPackageManager {
     })
   }
 
-  function zipPath(...parts: string[]) {
-    return parts.join("/").replace(/\\/g, "/")
-  }
-
   async function collectPackageFiles(root: string) {
     const files: string[] = []
     async function walk(current: string) {
-      const entries = (await readdir(current, { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name))
+      const entries = (await readdir(current, { withFileTypes: true })).sort((a, b) =>
+        ExpertSquadArchive.compareUTF8(a.name, b.name),
+      )
       for (const entry of entries) {
         if (entry.isSymbolicLink()) throw new Error(`Expert squad package export rejects symbolic link: ${entry.name}`)
         if (ExpertSquadRegistry.isRuntimeInternalEntry(entry.name, entry.isDirectory())) {
-          throw new Error(`Expert squad package export rejects runtime entry: ${entry.name}`)
+          continue
         }
         const child = path.join(current, entry.name)
         if (entry.isDirectory()) {
@@ -1575,31 +1574,20 @@ export namespace ExpertSquadPackageManager {
       context: "expert squad export root",
     })
     const loaded = await ExpertSquadRegistry.loadPackage(root)
-    const zip = new ZipWriter(new BlobWriter("application/zip"))
     const files = (await collectPackageFiles(root)).sort((left, right) =>
-      left.replace(/\\/g, "/").localeCompare(right.replace(/\\/g, "/")),
+      ExpertSquadArchive.compareUTF8(left.replace(/\\/g, "/"), right.replace(/\\/g, "/")),
     )
-    const canonicalArchiveDate = new Date("1980-01-01T00:00:00.000Z")
-    for (const file of files) {
-      const absolute = path.join(root, file)
-      const info = await lstat(absolute)
-      if (!info.isFile()) continue
-      const bytes = new Uint8Array(await Filesystem.readArrayBuffer(absolute))
-      await zip.add(zipPath(loaded.namespace, loaded.id, ...file.split(path.sep)), new Uint8ArrayReader(bytes), {
-        lastModDate: canonicalArchiveDate,
-      })
-    }
-    const blob = await zip.close()
-    const bytes = new Uint8Array(await blob.arrayBuffer())
-    return {
+    return ExpertSquadArchive.create({
       namespace: loaded.namespace,
       id: loaded.id,
       version: loaded.version,
       packageDigest: loaded.packageDigest,
-      filename: `${loaded.id}-expert-squad.zip`,
-      bytes,
-      archiveSha256: createHash("sha256").update(bytes).digest("hex"),
-      fileCount: files.length,
-    }
+      files: await Promise.all(
+        files.map(async (file) => ({
+          path: file.split(path.sep).join("/"),
+          bytes: new Uint8Array(await Filesystem.readArrayBuffer(path.join(root, file))),
+        })),
+      ),
+    })
   }
 }

@@ -2,6 +2,8 @@
 
 - [2026-08-10-ten-domain-expert-squad-expansion.md](2026-08-10-ten-domain-expert-squad-expansion.md) defines ten new domain packages, dedicated Skill and asset ownership, pinned open-source adaptations, clean-room professional boundaries, and package, HTTP, and real-page acceptance.
 
+- [2026-08-10-expert-squad-static-distribution-and-cloudcone-deploy.md](2026-08-10-expert-squad-static-distribution-and-cloudcone-deploy.md) defines deterministic downloads for all 39 shipped Expert Squad resources, signed immutable catalogs, and an isolated least-privilege CloudCone website deployment path.
+
 - [2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md](2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md) defines the manifest-derived draggable Expert Squad planning checklist, WorkBuddy and open-source Skill research boundary, and the three-package saved-Skill completeness repair with real-page acceptance.
 
 - [2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md](2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md) reconstructs the false-started operator-message stall and non-convergent Cancel incident, identifies the shared root-control/process/checkpoint defects, and defines the single-ingress, asynchronous-dispatch, idempotent-cancellation, Windows/LSP, real-checker, and visual acceptance repair sequence.

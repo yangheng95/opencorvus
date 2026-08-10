@@ -12,7 +12,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings"
 const astroRehypeAutolinkHeadings = /** @type {import("@astrojs/markdown-remark").RehypePlugin} */ (
   /** @type {unknown} */ (rehypeAutolinkHeadings)
 )
-const publicBase = "/opencorvus-dist/dist"
+const publicBase = config.base
 
 // https://astro.build/config
 export default defineConfig({
@@ -29,6 +29,12 @@ export default defineConfig({
     rehypePlugins: [rehypeHeadingIds, [astroRehypeAutolinkHeadings, { behavior: "wrap" }]],
   },
   build: {},
+  vite: {
+    // esbuild 0.28 no longer lowers destructuring for Safari 14.0. Safari 14.1 is the
+    // narrowest target that preserves the site's previous baseline without making
+    // Astro's own audit client fail the production build.
+    build: { target: ["chrome87", "edge88", "firefox78", "safari14.1"] },
+  },
   integrations: [
     solidJs(),
     starlight({

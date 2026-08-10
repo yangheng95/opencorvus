@@ -6,6 +6,7 @@ import { ExpertSquadRegistry } from "../../opencorvus/src/expert-squad/registry"
 import { EMBEDDED_EXPERT_SQUAD_IDS } from "../../opencorvus/src/expert-squad/builtin/ids"
 import { payloadPackageSources } from "../../opencorvus/generated/expert-squad-payload"
 import { projectExpertSquadFacts } from "../src/lib/expert-squad-facts"
+import { generateExpertSquadDistribution } from "./generate-expert-squad-distribution"
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..")
 
@@ -113,3 +114,4 @@ const output = [
 ].join("\n")
 
 await writeFile(new URL("../src/content/public-market-facts.generated.ts", import.meta.url), output)
+await generateExpertSquadDistribution()

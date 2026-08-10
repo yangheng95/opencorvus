@@ -2,6 +2,8 @@
 
 Latest ten-domain Expert Squad expansion: [`2026-08-10-ten-domain-expert-squad-expansion.md`](records/2026-08/2026-08-10-ten-domain-expert-squad-expansion.md).
 
+Latest Expert Squad static distribution and CloudCone deployment plan: [`2026-08-10-expert-squad-static-distribution-and-cloudcone-deploy.md`](records/2026-08/2026-08-10-expert-squad-static-distribution-and-cloudcone-deploy.md).
+
 Latest Expert Squad roadmap checklist and saved-Skill completeness repair: [`2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md`](records/2026-08/2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md).
 
 Latest Task control responsiveness and cancellation convergence repair plan: [`2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md`](records/2026-08/2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md).

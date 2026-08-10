@@ -1,0 +1,24 @@
+(opencorvus_static) {
+	root * /srv/opencorvus/current
+	encode zstd gzip
+
+	@expert_squad_pointer path /expert-squads/catalog.json
+	header @expert_squad_pointer Cache-Control "no-store, max-age=0"
+
+	@expert_squad_immutable path_regexp expert_squad_immutable ^/expert-squads/(archives|catalogs|signatures|bundles)/[a-f0-9/._-]+$
+	header @expert_squad_immutable Cache-Control "public, max-age=31536000, immutable"
+
+	file_server
+}
+
+opencorvus.com {
+	import opencorvus_static
+}
+
+http://127.0.0.1:8080 {
+	import opencorvus_static
+}
+
+www.opencorvus.com {
+	redir https://opencorvus.com{uri} permanent
+}
