@@ -5,7 +5,7 @@ export type CandidateSkillSource = {
   repository: string
   url: string
   license: string
-  review: "ready_for_source_review" | "license_review" | "authored_required" | "runtime_blocked"
+  review: "pinned_open_source" | "license_review" | "authored_draft" | "runtime_blocked"
   targetPath: string
   assets: readonly string[]
   revision?: string
@@ -20,11 +20,12 @@ export type ExpertSquadRoadmapCandidate = {
   parallelPlan: Record<ChecklistLocale, string>
   dependsOn: readonly string[]
   skillSources: readonly CandidateSkillSource[]
-  status: "source_review" | "license_review" | "authored_required" | "blocked"
+  status: "pinned_open_source" | "license_review" | "authored_draft" | "blocked"
+  generationState: "pending_confirmation" | "implementing"
   recommended: boolean
 }
 
-export const researchVerifiedAt = "2026-08-10"
+export const researchVerifiedAt = "2026-08-11"
 
 export const workbuddyTeamEvidence = [
   {
@@ -56,309 +57,381 @@ const authored = (name: string, targetPath: string, assets: readonly string[]): 
   repository: "OpenCorvus authored",
   url: "https://github.com/yangheng95/opencorvus",
   license: "MIT",
-  review: "authored_required",
+  review: "authored_draft",
   targetPath,
   assets,
 })
 
-export const expertSquadRoadmapCandidates: readonly ExpertSquadRoadmapCandidate[] = [
+const expertSquadRoadmapCandidateDefinitions: readonly Omit<ExpertSquadRoadmapCandidate, "generationState">[] = [
   {
-    id: "cybersecurity-assurance",
-    label: { root: "Cybersecurity Assurance", "zh-cn": "网络安全保障" },
+    id: "insurance-claims-operations",
+    label: { root: "Insurance Claims Operations", "zh-cn": "保险理赔运营" },
     description: {
-      root: "Map threat evidence, control coverage, and incident readiness into an accountable assurance register.",
-      "zh-cn": "把威胁证据、控制覆盖与事件响应准备度汇合为可问责的安全保障登记册。",
-    },
-    evidence: "market_inference",
-    roles: {
-      root: ["Threat analyst", "Control analyst", "Readiness analyst", "Assurance integrator"],
-      "zh-cn": ["威胁分析", "控制分析", "响应准备分析", "保障汇总"],
-    },
-    parallelPlan: {
-      root: "Threat, control, and readiness reviews run independently; the assurance register joins all three.",
-      "zh-cn": "威胁、控制和响应准备三路独立开展；保障登记册等待三路结果后汇合。",
-    },
-    dependsOn: [],
-    skillSources: [
-      {
-        name: "bounded agent-owasp-compliance adaptation",
-        repository: "github/awesome-copilot",
-        url: "https://github.com/github/awesome-copilot",
-        license: "MIT",
-        review: "ready_for_source_review",
-        targetPath: "expert-squads/builtin/cybersecurity-assurance/skills/method/SKILL.md",
-        assets: [
-          "expert-squads/builtin/cybersecurity-assurance/skills/method/assets/security-assurance-register.md",
-        ],
-        revision: "3f0bba475ec40b9680e1d0311b9caffeec5ad4c3",
-      },
-    ],
-    status: "source_review",
-    recommended: true,
-  },
-  {
-    id: "cloud-platform-architecture",
-    label: { root: "Cloud Platform Architecture", "zh-cn": "云平台架构" },
-    description: {
-      root: "Turn workload, reliability, cost, and operations evidence into a bounded cloud architecture decision record.",
-      "zh-cn": "把工作负载、可靠性、成本与运维证据汇合为边界明确的云架构决策记录。",
-    },
-    evidence: "market_inference",
-    roles: {
-      root: ["Workload analyst", "Reliability analyst", "FinOps analyst", "Architecture owner"],
-      "zh-cn": ["负载分析", "可靠性分析", "云成本分析", "架构负责人"],
-    },
-    parallelPlan: {
-      root: "Workload, reliability, and cost/operations branches run in parallel before one architecture join.",
-      "zh-cn": "负载、可靠性、成本与运维分支并行，最后由架构负责人统一汇合。",
-    },
-    dependsOn: [],
-    skillSources: [
-      {
-        name: "bounded cloud-design-patterns adaptation",
-        repository: "github/awesome-copilot",
-        url: "https://github.com/github/awesome-copilot",
-        license: "MIT",
-        review: "ready_for_source_review",
-        targetPath: "expert-squads/builtin/cloud-platform-architecture/skills/method/SKILL.md",
-        assets: ["expert-squads/builtin/cloud-platform-architecture/skills/method/assets/cloud-decision-record.md"],
-        revision: "3f0bba475ec40b9680e1d0311b9caffeec5ad4c3",
-      },
-    ],
-    status: "source_review",
-    recommended: true,
-  },
-  {
-    id: "data-engineering-reliability",
-    label: { root: "Data Engineering Reliability", "zh-cn": "数据工程可靠性" },
-    description: {
-      root: "Join data contracts, pipeline resilience, and observability into a reviewable data-product release pack.",
-      "zh-cn": "把数据契约、流水线韧性和可观测性汇合为可复核的数据产品发布包。",
-    },
-    evidence: "market_inference",
-    roles: {
-      root: ["Contract analyst", "Resilience analyst", "Observability analyst", "Release integrator"],
-      "zh-cn": ["契约分析", "韧性分析", "可观测性分析", "发布汇总"],
-    },
-    parallelPlan: {
-      root: "Contract, resilience, and observability reviews run independently before release integration.",
-      "zh-cn": "契约、韧性和可观测性三路独立评估，之后统一汇入发布决策。",
-    },
-    dependsOn: [],
-    skillSources: [
-      {
-        name: "bounded data-quality-and-contract-testing adaptation",
-        repository: "vaquarkhan/data-engineering-agent-skills",
-        url: "https://github.com/vaquarkhan/data-engineering-agent-skills",
-        license: "MIT",
-        review: "ready_for_source_review",
-        targetPath: "expert-squads/builtin/data-engineering-reliability/skills/method/SKILL.md",
-        assets: ["expert-squads/builtin/data-engineering-reliability/skills/method/assets/data-product-contract.md"],
-        revision: "421ef57e8d42c464b29339193c18dd5bd2946bc2",
-      },
-    ],
-    status: "source_review",
-    recommended: true,
-  },
-  {
-    id: "scientific-research-design",
-    label: { root: "Scientific Research Design", "zh-cn": "科学研究设计" },
-    description: {
-      root: "Build a research decision register from evidence landscape, competing hypotheses, rigor, and ethics.",
-      "zh-cn": "从证据版图、竞争性假设、严谨性与伦理分析形成研究决策登记册。",
-    },
-    evidence: "market_inference",
-    roles: {
-      root: ["Evidence analyst", "Hypothesis analyst", "Rigor and ethics reviewer", "Research integrator"],
-      "zh-cn": ["证据分析", "假设分析", "严谨性与伦理复核", "研究汇总"],
-    },
-    parallelPlan: {
-      root: "Evidence, hypotheses, and rigor/ethics run independently; the research decision waits for all three.",
-      "zh-cn": "证据、假设、严谨性与伦理三路独立推进；研究决策等待全部完成后汇合。",
-    },
-    dependsOn: [],
-    skillSources: [
-      {
-        name: "bounded scientific-brainstorming adaptation",
-        repository: "K-Dense-AI/scientific-agent-skills",
-        url: "https://github.com/K-Dense-AI/scientific-agent-skills",
-        license: "MIT",
-        review: "ready_for_source_review",
-        targetPath: "expert-squads/builtin/scientific-research-design/skills/method/SKILL.md",
-        assets: [
-          "expert-squads/builtin/scientific-research-design/skills/method/assets/research-decision-register.md",
-        ],
-        revision: "7eb9c23c32ecf7f8c19cb45ded3150534ccefe6a",
-      },
-    ],
-    status: "source_review",
-    recommended: true,
-  },
-  {
-    id: "healthcare-operations",
-    label: { root: "Healthcare Operations", "zh-cn": "医疗运营" },
-    description: {
-      root: "Analyze de-identified service flow, capacity and access, safety, and privacy without clinical authority.",
-      "zh-cn": "基于去标识化证据分析服务流程、容量与可及性、安全和隐私，不承担临床决策。",
-    },
-    evidence: "market_inference",
-    roles: {
-      root: ["Service-flow analyst", "Capacity analyst", "Safety and privacy analyst", "Improvement owner"],
-      "zh-cn": ["服务流程分析", "容量分析", "安全与隐私分析", "改进负责人"],
-    },
-    parallelPlan: {
-      root: "Flow, capacity/access, and safety/privacy reviews run independently before an accountable operations join.",
-      "zh-cn": "流程、容量与可及性、安全与隐私三路独立分析，之后统一汇入运营改进包。",
-    },
-    dependsOn: [],
-    skillSources: [
-      authored(
-        "healthcare operations method",
-        "expert-squads/builtin/healthcare-operations/skills/method/SKILL.md",
-        ["expert-squads/builtin/healthcare-operations/skills/method/assets/healthcare-operations-register.md"],
-      ),
-    ],
-    status: "authored_required",
-    recommended: true,
-  },
-  {
-    id: "education-program-design",
-    label: { root: "Education Program Design", "zh-cn": "教育项目设计" },
-    description: {
-      root: "Align learner evidence, curriculum structure, assessment, and accessibility in one measurable blueprint.",
-      "zh-cn": "把学习者证据、课程结构、评估与无障碍要求对齐为可衡量的学习方案。",
-    },
-    evidence: "market_inference",
-    roles: {
-      root: ["Learner analyst", "Curriculum architect", "Assessment and accessibility analyst", "Program integrator"],
-      "zh-cn": ["学习者分析", "课程架构", "评估与无障碍分析", "项目汇总"],
-    },
-    parallelPlan: {
-      root: "Learner, curriculum, and assessment/accessibility branches run independently before blueprint integration.",
-      "zh-cn": "学习者、课程、评估与无障碍分支并行，最后统一形成学习方案。",
-    },
-    dependsOn: [],
-    skillSources: [
-      authored(
-        "education program design method",
-        "expert-squads/builtin/education-program-design/skills/method/SKILL.md",
-        ["expert-squads/builtin/education-program-design/skills/method/assets/learning-program-blueprint.md"],
-      ),
-    ],
-    status: "authored_required",
-    recommended: true,
-  },
-  {
-    id: "supply-chain-logistics",
-    label: { root: "Supply Chain Logistics", "zh-cn": "供应链与物流" },
-    description: {
-      root: "Join demand and inventory, transport constraints, and disruption risk into a logistics control-tower plan.",
-      "zh-cn": "把需求与库存、运输约束和中断风险汇合为物流控制塔方案。",
-    },
-    evidence: "market_inference",
-    roles: {
-      root: ["Demand analyst", "Transport analyst", "Disruption analyst", "Logistics plan owner"],
-      "zh-cn": ["需求分析", "运输分析", "中断风险分析", "物流方案负责人"],
-    },
-    parallelPlan: {
-      root: "Demand/inventory, transport, and disruption branches run independently before scenario integration.",
-      "zh-cn": "需求与库存、运输、中断风险三路独立推进，之后统一进行情景整合。",
-    },
-    dependsOn: [],
-    skillSources: [
-      authored(
-        "supply-chain logistics method",
-        "expert-squads/builtin/supply-chain-logistics/skills/method/SKILL.md",
-        ["expert-squads/builtin/supply-chain-logistics/skills/method/assets/logistics-control-tower.md"],
-      ),
-    ],
-    status: "authored_required",
-    recommended: false,
-  },
-  {
-    id: "manufacturing-quality",
-    label: { root: "Manufacturing Quality", "zh-cn": "制造质量" },
-    description: {
-      root: "Combine process evidence, defect analysis, and control verification into a traceable nonconformance pack.",
-      "zh-cn": "把过程证据、缺陷分析和控制验证汇合为可追溯的不合格处置包。",
-    },
-    evidence: "market_inference",
-    roles: {
-      root: ["Process analyst", "Defect specialist", "Control verifier", "Disposition owner"],
-      "zh-cn": ["过程分析", "缺陷分析", "控制验证", "处置负责人"],
-    },
-    parallelPlan: {
-      root: "Process, defect, and control-verification branches run in parallel before disposition review.",
-      "zh-cn": "过程、缺陷和控制验证三路并行，之后进入统一处置复核。",
-    },
-    dependsOn: [],
-    skillSources: [
-      authored(
-        "manufacturing quality method",
-        "expert-squads/builtin/manufacturing-quality/skills/method/SKILL.md",
-        ["expert-squads/builtin/manufacturing-quality/skills/method/assets/nonconformance-register.md"],
-      ),
-    ],
-    status: "authored_required",
-    recommended: false,
-  },
-  {
-    id: "real-estate-due-diligence",
-    label: { root: "Real Estate Due Diligence", "zh-cn": "房地产尽职调查" },
-    description: {
-      root: "Join property documents, market and financial evidence, and physical and regulatory risks for professional review.",
-      "zh-cn": "把房产文件、市场与财务证据、实体与监管风险汇合，供专业人员复核。",
-    },
-    evidence: "market_inference",
-    roles: {
-      root: ["Document analyst", "Market and financial analyst", "Physical and regulatory analyst", "Diligence owner"],
-      "zh-cn": ["文件分析", "市场与财务分析", "实体与监管分析", "尽调负责人"],
-    },
-    parallelPlan: {
-      root: "Document, market/financial, and physical/regulatory branches run independently before the diligence join.",
-      "zh-cn": "文件、市场与财务、实体与监管三路独立分析，之后汇合为尽调包。",
-    },
-    dependsOn: [],
-    skillSources: [
-      authored(
-        "property diligence method",
-        "expert-squads/builtin/real-estate-due-diligence/skills/method/SKILL.md",
-        ["expert-squads/builtin/real-estate-due-diligence/skills/method/assets/property-diligence-register.md"],
-      ),
-    ],
-    status: "authored_required",
-    recommended: false,
-  },
-  {
-    id: "ecommerce-merchandising",
-    label: { root: "Ecommerce Merchandising", "zh-cn": "电商商品运营" },
-    description: {
-      root: "Turn catalog, demand and pricing, and experience and operations evidence into a reversible test plan.",
-      "zh-cn": "把商品目录、需求与定价、体验与运营证据转化为可回滚的测试方案。",
+      root: "Join claim evidence, policy traceability, and process controls into a human-reviewed evidence pack.",
+      "zh-cn": "把理赔证据、保单追溯与流程控制汇合为供人工复核的证据包。",
     },
     evidence: "market_inference",
     roles: {
       root: [
-        "Catalog analyst",
-        "Demand and pricing analyst",
-        "Experience and operations analyst",
-        "Merchandising owner",
+        "Claim evidence analyst",
+        "Policy traceability analyst",
+        "Control and risk analyst",
+        "Evidence pack owner",
       ],
-      "zh-cn": ["目录分析", "需求与定价分析", "体验与运营分析", "商品运营负责人"],
+      "zh-cn": ["理赔证据分析", "保单追溯分析", "控制与风险分析", "证据包负责人"],
     },
     parallelPlan: {
-      root: "Catalog, demand/pricing, and experience/operations branches run independently before test-plan integration.",
-      "zh-cn": "目录、需求与定价、体验与运营三路独立推进，之后统一形成测试计划。",
+      root: "Claim evidence, policy traceability, and control-risk reviews run independently before one evidence join.",
+      "zh-cn": "理赔证据、保单追溯、控制与风险三路独立推进，之后统一汇合。",
+    },
+    dependsOn: [],
+    skillSources: [
+      {
+        name: "bounded process-mapper adaptation",
+        repository: "alirezarezvani/claude-skills",
+        url: "https://github.com/alirezarezvani/claude-skills",
+        license: "MIT",
+        review: "pinned_open_source",
+        targetPath: "expert-squads/builtin/insurance-claims-operations/skills/method/SKILL.md",
+        assets: ["expert-squads/builtin/insurance-claims-operations/skills/method/assets/claims-evidence-register.md"],
+        revision: "aa8d778811a557a2c28ccadda4cf3d0bd028a4cc",
+      },
+    ],
+    status: "pinned_open_source",
+    recommended: true,
+  },
+  {
+    id: "energy-utilities-planning",
+    label: { root: "Energy and Utilities Planning", "zh-cn": "能源与公用事业规划" },
+    description: {
+      root: "Compare demand, supply, reliability, cost, and emissions scenarios without operational authority.",
+      "zh-cn": "比较需求、供给、可靠性、成本与排放情景，不承担运行操作权限。",
+    },
+    evidence: "market_inference",
+    roles: {
+      root: ["Demand and supply analyst", "Reliability analyst", "Cost and emissions analyst", "Utility plan owner"],
+      "zh-cn": ["需求与供给分析", "可靠性分析", "成本与排放分析", "规划负责人"],
+    },
+    parallelPlan: {
+      root: "Demand/supply, reliability, and cost/emissions branches run independently before scenario integration.",
+      "zh-cn": "需求与供给、可靠性、成本与排放三路并行，最后统一形成情景方案。",
     },
     dependsOn: [],
     skillSources: [
       authored(
-        "ecommerce merchandising method",
-        "expert-squads/builtin/ecommerce-merchandising/skills/method/SKILL.md",
-        ["expert-squads/builtin/ecommerce-merchandising/skills/method/assets/merchandising-test-plan.md"],
+        "energy-utilities-planning method",
+        "expert-squads/builtin/energy-utilities-planning/skills/method/SKILL.md",
+        ["expert-squads/builtin/energy-utilities-planning/skills/method/assets/utility-scenario-register.md"],
       ),
     ],
-    status: "authored_required",
+    status: "authored_draft",
+    recommended: true,
+  },
+  {
+    id: "agriculture-food-systems",
+    label: { root: "Agriculture and Food Systems", "zh-cn": "农业与食品系统" },
+    description: {
+      root: "Build a seasonal system plan from production, resource, market, and biosecurity evidence.",
+      "zh-cn": "从生产、资源、市场与生物安全证据形成季节性系统方案。",
+    },
+    evidence: "market_inference",
+    roles: {
+      root: [
+        "Production analyst",
+        "Resource and input analyst",
+        "Market and biosecurity analyst",
+        "Food-system plan owner",
+      ],
+      "zh-cn": ["生产分析", "资源与投入分析", "市场与生物安全分析", "食品系统方案负责人"],
+    },
+    parallelPlan: {
+      root: "Production, resource/input, and market/biosecurity branches run independently before the seasonal join.",
+      "zh-cn": "生产、资源与投入、市场与生物安全三路独立分析，之后汇合为季节方案。",
+    },
+    dependsOn: [],
+    skillSources: [
+      authored(
+        "agriculture-food-systems method",
+        "expert-squads/builtin/agriculture-food-systems/skills/method/SKILL.md",
+        ["expert-squads/builtin/agriculture-food-systems/skills/method/assets/season-system-plan.md"],
+      ),
+    ],
+    status: "authored_draft",
+    recommended: true,
+  },
+  {
+    id: "construction-project-controls",
+    label: { root: "Construction Project Controls", "zh-cn": "建设项目控制" },
+    description: {
+      root: "Join scope, schedule, cost, procurement, site-risk, and quality evidence into a controls register.",
+      "zh-cn": "把范围、进度、成本、采购、现场风险与质量证据汇合为项目控制登记册。",
+    },
+    evidence: "market_inference",
+    roles: {
+      root: [
+        "Scope and schedule analyst",
+        "Cost and procurement analyst",
+        "Site risk and quality analyst",
+        "Controls owner",
+      ],
+      "zh-cn": ["范围与进度分析", "成本与采购分析", "现场风险与质量分析", "项目控制负责人"],
+    },
+    parallelPlan: {
+      root: "Scope/schedule, cost/procurement, and site-risk/quality reviews run independently before control integration.",
+      "zh-cn": "范围与进度、成本与采购、现场风险与质量三路独立评估，最后汇合。",
+    },
+    dependsOn: [],
+    skillSources: [
+      {
+        name: "bounded senior-pm adaptation",
+        repository: "alirezarezvani/claude-skills",
+        url: "https://github.com/alirezarezvani/claude-skills",
+        license: "MIT",
+        review: "pinned_open_source",
+        targetPath: "expert-squads/builtin/construction-project-controls/skills/method/SKILL.md",
+        assets: [
+          "expert-squads/builtin/construction-project-controls/skills/method/assets/project-controls-register.md",
+        ],
+        revision: "aa8d778811a557a2c28ccadda4cf3d0bd028a4cc",
+      },
+    ],
+    status: "pinned_open_source",
+    recommended: true,
+  },
+  {
+    id: "telecom-network-assurance",
+    label: { root: "Telecom Network Assurance", "zh-cn": "电信网络保障" },
+    description: {
+      root: "Map demand, topology, service levels, capacity, and change risk into a non-operational assurance plan.",
+      "zh-cn": "把需求、拓扑、服务水平、容量与变更风险汇合为非操作性的保障方案。",
+    },
+    evidence: "market_inference",
+    roles: {
+      root: [
+        "Demand and topology analyst",
+        "Service-level analyst",
+        "Capacity and change-risk analyst",
+        "Assurance owner",
+      ],
+      "zh-cn": ["需求与拓扑分析", "服务水平分析", "容量与变更风险分析", "保障负责人"],
+    },
+    parallelPlan: {
+      root: "Demand/topology, service-level, and capacity/change-risk branches run independently before assurance integration.",
+      "zh-cn": "需求与拓扑、服务水平、容量与变更风险三路并行，之后统一汇合。",
+    },
+    dependsOn: [],
+    skillSources: [
+      {
+        name: "bounded slo-architect adaptation",
+        repository: "alirezarezvani/claude-skills",
+        url: "https://github.com/alirezarezvani/claude-skills",
+        license: "MIT",
+        review: "pinned_open_source",
+        targetPath: "expert-squads/builtin/telecom-network-assurance/skills/method/SKILL.md",
+        assets: ["expert-squads/builtin/telecom-network-assurance/skills/method/assets/network-assurance-register.md"],
+        revision: "aa8d778811a557a2c28ccadda4cf3d0bd028a4cc",
+      },
+    ],
+    status: "pinned_open_source",
+    recommended: true,
+  },
+  {
+    id: "public-sector-service-delivery",
+    label: { root: "Public Sector Service Delivery", "zh-cn": "公共服务交付" },
+    description: {
+      root: "Join resident needs, process and accessibility evidence, and policy-delivery risk into an outcome register.",
+      "zh-cn": "把居民需求、流程与无障碍证据、政策交付风险汇合为成果登记册。",
+    },
+    evidence: "market_inference",
+    roles: {
+      root: [
+        "Resident needs analyst",
+        "Process and accessibility analyst",
+        "Policy delivery-risk analyst",
+        "Service plan owner",
+      ],
+      "zh-cn": ["居民需求分析", "流程与无障碍分析", "政策交付风险分析", "服务方案负责人"],
+    },
+    parallelPlan: {
+      root: "Resident, process/accessibility, and policy-risk branches run independently before service-plan synthesis.",
+      "zh-cn": "居民、流程与无障碍、政策风险三路独立推进，之后统一形成服务方案。",
+    },
+    dependsOn: [],
+    skillSources: [
+      authored(
+        "public-sector-service-delivery method",
+        "expert-squads/builtin/public-sector-service-delivery/skills/method/SKILL.md",
+        [
+          "expert-squads/builtin/public-sector-service-delivery/skills/method/assets/service-delivery-outcome-register.md",
+        ],
+      ),
+    ],
+    status: "authored_draft",
+    recommended: true,
+  },
+  {
+    id: "nonprofit-grant-operations",
+    label: { root: "Nonprofit Grant Operations", "zh-cn": "非营利资助运营" },
+    description: {
+      root: "Join funder fit, program evidence, budget, compliance, and delivery readiness without submission authority.",
+      "zh-cn": "把资助方匹配、项目证据、预算、合规与交付准备度汇合，不承担提交权限。",
+    },
+    evidence: "market_inference",
+    roles: {
+      root: ["Funder-fit analyst", "Program evidence analyst", "Budget and compliance analyst", "Grant pack owner"],
+      "zh-cn": ["资助方匹配分析", "项目证据分析", "预算与合规分析", "资助包负责人"],
+    },
+    parallelPlan: {
+      root: "Funder-fit, program-evidence, and budget/compliance branches run independently before grant-pack integration.",
+      "zh-cn": "资助方匹配、项目证据、预算与合规三路独立分析，之后统一汇合。",
+    },
+    dependsOn: [],
+    skillSources: [
+      {
+        name: "bounded research-grants adaptation",
+        repository: "K-Dense-AI/scientific-agent-skills",
+        url: "https://github.com/K-Dense-AI/scientific-agent-skills",
+        license: "MIT",
+        review: "pinned_open_source",
+        targetPath: "expert-squads/builtin/nonprofit-grant-operations/skills/method/SKILL.md",
+        assets: ["expert-squads/builtin/nonprofit-grant-operations/skills/method/assets/grant-delivery-plan.md"],
+        revision: "7eb9c23c32ecf7f8c19cb45ded3150534ccefe6a",
+      },
+    ],
+    status: "pinned_open_source",
     recommended: false,
   },
+  {
+    id: "hospitality-service-operations",
+    label: { root: "Hospitality Service Operations", "zh-cn": "酒店服务运营" },
+    description: {
+      root: "Join guest journey, revenue and capacity, workforce, safety, and recovery evidence into a reversible plan.",
+      "zh-cn": "把宾客旅程、收益与容量、人员、安全和服务恢复证据汇合为可回滚方案。",
+    },
+    evidence: "market_inference",
+    roles: {
+      root: [
+        "Guest journey analyst",
+        "Revenue and capacity analyst",
+        "Workforce and safety analyst",
+        "Hospitality plan owner",
+      ],
+      "zh-cn": ["宾客旅程分析", "收益与容量分析", "人员与安全分析", "酒店运营方案负责人"],
+    },
+    parallelPlan: {
+      root: "Guest, revenue/capacity, and workforce/safety branches run independently before operations integration.",
+      "zh-cn": "宾客、收益与容量、人员与安全三路并行，之后统一形成运营方案。",
+    },
+    dependsOn: [],
+    skillSources: [
+      authored(
+        "hospitality-service-operations method",
+        "expert-squads/builtin/hospitality-service-operations/skills/method/SKILL.md",
+        ["expert-squads/builtin/hospitality-service-operations/skills/method/assets/guest-service-operations-plan.md"],
+      ),
+    ],
+    status: "authored_draft",
+    recommended: false,
+  },
+  {
+    id: "life-sciences-regulatory",
+    label: { root: "Life Sciences Regulatory Readiness", "zh-cn": "生命科学监管准备" },
+    description: {
+      root: "Join product, evidence, pathway, market, quality, and risk inputs into a draft readiness register.",
+      "zh-cn": "把产品、证据、路径、市场、质量与风险输入汇合为监管准备登记册草案。",
+    },
+    evidence: "market_inference",
+    roles: {
+      root: [
+        "Product and evidence analyst",
+        "Pathway and market analyst",
+        "Quality and risk analyst",
+        "Readiness owner",
+      ],
+      "zh-cn": ["产品与证据分析", "路径与市场分析", "质量与风险分析", "准备度负责人"],
+    },
+    parallelPlan: {
+      root: "Product/evidence, pathway/market, and quality/risk branches run independently before readiness synthesis.",
+      "zh-cn": "产品与证据、路径与市场、质量与风险三路独立分析，之后统一形成准备度结论。",
+    },
+    dependsOn: [],
+    skillSources: [
+      {
+        name: "bounded regulatory-affairs-head adaptation",
+        repository: "alirezarezvani/claude-skills",
+        url: "https://github.com/alirezarezvani/claude-skills",
+        license: "MIT",
+        review: "pinned_open_source",
+        targetPath: "expert-squads/builtin/life-sciences-regulatory/skills/method/SKILL.md",
+        assets: [
+          "expert-squads/builtin/life-sciences-regulatory/skills/method/assets/regulatory-readiness-register.md",
+        ],
+        revision: "aa8d778811a557a2c28ccadda4cf3d0bd028a4cc",
+      },
+    ],
+    status: "pinned_open_source",
+    recommended: false,
+  },
+  {
+    id: "academic-paper-review",
+    label: { root: "Academic Paper Review", "zh-cn": "学术论文审阅" },
+    description: {
+      root: "Review manuscripts through literature positioning, novelty, logic, methods and facts, hallucination checks, presentation quality, and integrated revision guidance.",
+      "zh-cn": "从文献定位、创新性、逻辑、方法与事实、幻觉检查、表达质量到整合修订建议，对论文做完整审阅。",
+    },
+    evidence: "market_inference",
+    roles: {
+      root: [
+        "Review-charter planner",
+        "Literature-landscape reviewer",
+        "Novelty and contribution reviewer",
+        "Logic and argument reviewer",
+        "Methods, statistics, and facts reviewer",
+        "Presentation and figure reviewer",
+        "Citation and hallucination auditor",
+        "Review integration editor",
+      ],
+      "zh-cn": [
+        "审阅章程规划",
+        "文献版图审阅",
+        "创新性与贡献审阅",
+        "逻辑与论证审阅",
+        "方法、统计与事实审阅",
+        "表达与图表审阅",
+        "引用与幻觉审计",
+        "审阅整合编辑",
+      ],
+    },
+    parallelPlan: {
+      root: "After the charter, literature, logic, methods/facts, presentation, and citation/hallucination branches run independently; novelty follows literature, then one editor joins all evidence.",
+      "zh-cn":
+        "章程冻结后，文献、逻辑、方法/事实、表达、引用/幻觉五路独立推进；创新性承接文献结果，最后由整合编辑汇合全部证据。",
+    },
+    dependsOn: [],
+    skillSources: [
+      {
+        name: "bounded peer-review, literature-review, scholar-evaluation, and scientific-visualization adaptation",
+        repository: "K-Dense-AI/scientific-agent-skills",
+        url: "https://github.com/K-Dense-AI/scientific-agent-skills",
+        license: "MIT",
+        review: "pinned_open_source",
+        targetPath: "expert-squads/builtin/academic-paper-review/skills/academic-paper-review-method/SKILL.md",
+        assets: [
+          "expert-squads/builtin/academic-paper-review/skills/academic-paper-review-method/assets/review-evidence-register.md",
+          "expert-squads/builtin/academic-paper-review/skills/academic-paper-review-method/assets/novelty-prior-art-matrix.md",
+          "expert-squads/builtin/academic-paper-review/skills/academic-paper-review-method/assets/claim-citation-hallucination-ledger.md",
+          "expert-squads/builtin/academic-paper-review/skills/academic-paper-review-method/assets/presentation-quality-checklist.md",
+        ],
+        revision: "7eb9c23c32ecf7f8c19cb45ded3150534ccefe6a",
+      },
+    ],
+    status: "pinned_open_source",
+    recommended: true,
+  },
 ] as const
+
+export const expertSquadRoadmapCandidates: readonly ExpertSquadRoadmapCandidate[] =
+  expertSquadRoadmapCandidateDefinitions.map((candidate) => ({
+    ...candidate,
+    generationState: "pending_confirmation",
+  }))

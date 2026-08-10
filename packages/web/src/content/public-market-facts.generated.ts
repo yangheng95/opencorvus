@@ -558,8 +558,8 @@ export const generatedPublicMarketFacts = [
     "identity": {
       "namespace": "builtin",
       "id": "equity-research",
-      "version": "2026.08.05.1",
-      "digest": "a580ded3f60a3612f3a49e4d3602878cd789f1973a3d0529e6f22fd1bb719b9a"
+      "version": "2026.08.11.1",
+      "digest": "09fa222ee4d40d6573270aa40fff1fc9540693e27ca90829ab2aa17af036b536"
     },
     "name": "Equity Research",
     "label": "Equity Research",
@@ -1114,8 +1114,8 @@ export const generatedShippedSquadFacts = [
     "namespace": "builtin",
     "id": "equity-research",
     "label": "Equity Research",
-    "version": "2026.08.05.1",
-    "packageDigest": "a580ded3f60a3612f3a49e4d3602878cd789f1973a3d0529e6f22fd1bb719b9a",
+    "version": "2026.08.11.1",
+    "packageDigest": "09fa222ee4d40d6573270aa40fff1fc9540693e27ca90829ab2aa17af036b536",
     "installSurface": "bundled_market",
     "packageSkillPaths": [
       "skills/method/SKILL.md",

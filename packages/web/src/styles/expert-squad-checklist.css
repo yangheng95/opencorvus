@@ -160,7 +160,7 @@
     background-color 120ms ease;
 }
 
-.candidate-card[data-selected="true"] {
+.candidate-card[data-parallel="true"] {
   background: var(--cobalt-wash);
   box-shadow: 7px 7px 0 var(--ink);
 }
@@ -227,7 +227,7 @@
 }
 
 .candidate-badges .status-label[data-status="license_review"],
-.candidate-badges .status-label[data-status="authored_required"] {
+.candidate-badges .status-label[data-status="authored_draft"] {
   border-color: #9c4a10;
   background: #f6e1cc;
   color: #703000;
@@ -423,6 +423,15 @@
 .declaration-counts b {
   color: var(--cobalt);
   font-size: 17px;
+}
+
+.generation-state-counts {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 24px;
+}
+
+.generation-state-counts span:last-child {
+  grid-column: auto;
 }
 
 .declaration-note {

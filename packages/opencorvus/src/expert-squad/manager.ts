@@ -24,6 +24,7 @@ import { EXPERT_SQUAD_ARCHIVE_IMPORT_LIMITS } from "@opencorvus-ai/sdk/expert-sq
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { Database, eq } from "@/storage/db"
 import { scoreDiscoveryFields } from "@/capability/fuzzy"
+import { ExpertSquadIDSchema, ExpertSquadNamespaceSchema } from "./id"
 
 export namespace ExpertSquadPackageManager {
   const log = Log.create({ service: "expert-squad.package-manager" })
@@ -31,6 +32,12 @@ export namespace ExpertSquadPackageManager {
     constructor() {
       super("Injected abrupt expert squad evolution mutation termination")
       this.name = "EvolutionMutationAbruptTerminationForTest"
+    }
+  }
+  export class PackageMutationAbruptTerminationForTest extends Error {
+    constructor() {
+      super("Injected abrupt expert squad package mutation termination")
+      this.name = "PackageMutationAbruptTerminationForTest"
     }
   }
   class EvolutionMutationCleanupPendingError extends Error {
@@ -41,6 +48,9 @@ export namespace ExpertSquadPackageManager {
   }
   let evolutionMutationInterruptForTest: (() => Promise<void>) | undefined
   let evolutionReceiptReadForTest: (() => void) | undefined
+  let packageMutationAfterTargetMoveInterruptForTest: (() => Promise<void>) | undefined
+  let packageMutationAfterTargetInstallInterruptForTest: (() => Promise<void>) | undefined
+  let packageMutationAfterBackupRemovalFailureForTest: (() => Promise<void>) | undefined
 
   export namespace TestHooks {
     export function interruptAfterTargetInstallBeforeReceiptOnce() {
@@ -71,6 +81,45 @@ export namespace ExpertSquadPackageManager {
         restore: () => {
           evolutionReceiptReadForTest = previous
         },
+      }
+    }
+
+    export function interruptAfterTargetMoveBeforeInstallOnce() {
+      const previous = packageMutationAfterTargetMoveInterruptForTest
+      let pending = true
+      packageMutationAfterTargetMoveInterruptForTest = async () => {
+        if (!pending) return
+        pending = false
+        throw new PackageMutationAbruptTerminationForTest()
+      }
+      return () => {
+        packageMutationAfterTargetMoveInterruptForTest = previous
+      }
+    }
+
+    export function failAfterBackupRemovalBeforeJournalRemovalOnce() {
+      const previous = packageMutationAfterBackupRemovalFailureForTest
+      let pending = true
+      packageMutationAfterBackupRemovalFailureForTest = async () => {
+        if (!pending) return
+        pending = false
+        throw new Error("Injected replacement journal removal failure after commit")
+      }
+      return () => {
+        packageMutationAfterBackupRemovalFailureForTest = previous
+      }
+    }
+
+    export function interruptAfterTargetInstallBeforeBackupCleanupOnce() {
+      const previous = packageMutationAfterTargetInstallInterruptForTest
+      let pending = true
+      packageMutationAfterTargetInstallInterruptForTest = async () => {
+        if (!pending) return
+        pending = false
+        throw new PackageMutationAbruptTerminationForTest()
+      }
+      return () => {
+        packageMutationAfterTargetInstallInterruptForTest = previous
       }
     }
   }
@@ -156,6 +205,19 @@ export namespace ExpertSquadPackageManager {
     skipped: PackageMutationReceipt[]
   }
 
+  export interface DefaultPayloadProvisionResult {
+    installed: PackageMutationReceipt[]
+    updated: PackageMutationReceipt[]
+    unchanged: InstalledPackageRevision[]
+    removed: Array<{ namespace: string; id: string; payloadDigest: string }>
+    preserved: Array<{
+      namespace: string
+      id: string
+      payloadDigest: string
+      installedPackageDigest: string
+    }>
+  }
+
   export interface PayloadMarketAgent {
     id: string
     label: string
@@ -232,64 +294,248 @@ export namespace ExpertSquadPackageManager {
     return path.join(location.packagesRoot, namespace, id)
   }
 
-  function stagingRootForLocation(location: ExpertSquadPackageLocations.Location, label: string) {
-    return path.join(scratchBaseForLocation(location), `.staging-${label}-${randomUUID()}`)
+  function stagingRootForLocation(
+    location: ExpertSquadPackageLocations.Location,
+    label: string,
+    operationID: string,
+  ) {
+    return path.join(scratchBaseForLocation(location), `.staging-${label}-${operationID}`)
   }
 
-  function backupRootForLocation(location: ExpertSquadPackageLocations.Location, label: string) {
-    return path.join(scratchBaseForLocation(location), `.replace-${label}-${randomUUID()}`)
+  function backupRootForLocation(
+    location: ExpertSquadPackageLocations.Location,
+    label: string,
+    operationID: string,
+  ) {
+    return path.join(scratchBaseForLocation(location), `.replace-${label}-${operationID}`)
+  }
+
+  function discardRootForLocation(
+    location: ExpertSquadPackageLocations.Location,
+    label: string,
+    operationID: string,
+  ) {
+    return path.join(scratchBaseForLocation(location), `.discard-${label}-${operationID}`)
   }
 
   const EvolutionMutationJournalSchema = z.object({
     protocol: z.literal("opencorvus/expert-squad-evolution-mutation-intent@1"),
+    operationID: z.string().uuid(),
     identity: z.object({ taskID: z.string().min(1), artifactID: z.string().min(1) }).strict(),
     target: z.string().min(1),
     staging: z.string().min(1),
     backup: z.string().min(1),
+    discard: z.string().min(1),
     installationScope: ExpertSquadPackageLocations.InstallationScopeSchema,
     projectDirectory: z.string().min(1).nullable(),
-    namespace: z.string().min(1),
-    id: z.string().min(1),
+    namespace: ExpertSquadNamespaceSchema,
+    id: ExpertSquadIDSchema,
     managerOperation: z.enum(["replaced", "restored"]),
     beforePackageDigest: z.string().regex(/^[a-f0-9]{64}$/),
     afterPackageDigest: z.string().regex(/^[a-f0-9]{64}$/),
   }).strict()
   type EvolutionMutationJournal = z.infer<typeof EvolutionMutationJournalSchema>
 
+  const PackageReplacementJournalSchema = z.object({
+    protocol: z.literal("opencorvus/expert-squad-package-replacement-intent@1"),
+    operationID: z.string().uuid(),
+    target: z.string().min(1),
+    staging: z.string().min(1),
+    backup: z.string().min(1),
+    discard: z.string().min(1),
+    installationScope: ExpertSquadPackageLocations.InstallationScopeSchema,
+    projectDirectory: z.string().min(1).nullable(),
+    namespace: ExpertSquadNamespaceSchema,
+    id: ExpertSquadIDSchema,
+    beforePackageDigest: z.string().regex(/^[a-f0-9]{64}$/),
+    afterPackageDigest: z.string().regex(/^[a-f0-9]{64}$/),
+  }).strict()
+  type PackageReplacementJournal = z.infer<typeof PackageReplacementJournalSchema>
+
   function evolutionMutationJournalPath(location: ExpertSquadPackageLocations.Location, id: string) {
     return path.join(scratchBaseForLocation(location), `.evolution-mutation-${id}.json`)
   }
 
-  async function writeEvolutionMutationJournal(file: string, value: EvolutionMutationJournal) {
+  function packageReplacementJournalPath(location: ExpertSquadPackageLocations.Location, id: string) {
+    return path.join(scratchBaseForLocation(location), `.package-replacement-${id}.json`)
+  }
+
+  async function writeMutationJournal(file: string, value: EvolutionMutationJournal | PackageReplacementJournal) {
     const temporary = `${file}.${randomUUID()}.tmp`
     const bytes = JSON.stringify(value)
-    await writeFile(temporary, bytes, { encoding: "utf8", flag: "wx" })
-    const handle = await open(temporary, "r+")
+    let published = false
     try {
-      await handle.sync()
-    } finally {
-      await handle.close()
-    }
-    await rename(temporary, file)
-    if (process.platform !== "win32") {
-      const directory = await open(path.dirname(file), "r")
+      await writeFile(temporary, bytes, { encoding: "utf8", flag: "wx" })
+      const handle = await open(temporary, "r+")
       try {
-        await directory.sync()
+        await handle.sync()
       } finally {
-        await directory.close()
+        await handle.close()
       }
+      await rename(temporary, file)
+      published = true
+      if (process.platform !== "win32") {
+        const directory = await open(path.dirname(file), "r")
+        try {
+          await directory.sync()
+        } finally {
+          await directory.close()
+        }
+      }
+    } catch (error) {
+      const cleanup = await Promise.allSettled([
+        rm(temporary, { force: true }),
+        ...(published ? [rm(file, { force: true })] : []),
+      ])
+      const failures = cleanup.filter((result): result is PromiseRejectedResult => result.status === "rejected")
+      if (failures.length > 0)
+        throw new AggregateError(
+          [error, ...failures.map((failure) => failure.reason)],
+          "Expert squad mutation journal write failed and temporary cleanup was incomplete",
+          { cause: error },
+        )
+      throw error
     }
   }
 
-  async function packageDigestAt(root: string) {
+  type PackagePathState =
+    | { kind: "absent" }
+    | { kind: "package"; packageDigest: string }
+    | { kind: "partial" }
+
+  async function packageStateAt(root: string): Promise<PackagePathState> {
     const state = await lstat(root).catch((error: NodeJS.ErrnoException) => {
       if (error.code === "ENOENT") return undefined
       throw error
     })
-    if (!state) return undefined
+    if (!state) return { kind: "absent" }
     if (!state.isDirectory() || state.isSymbolicLink())
       throw new Error(`Expert squad mutation recovery path is not an ordinary directory: ${root}`)
-    return (await ExpertSquadRegistry.loadCatalogPackage(root, { canonicalFolder: false })).packageDigest
+    try {
+      return {
+        kind: "package",
+        packageDigest: (await ExpertSquadRegistry.loadCatalogPackage(root, { canonicalFolder: false })).packageDigest,
+      }
+    } catch {
+      return { kind: "partial" }
+    }
+  }
+
+  function packageStateHasDigest(state: PackagePathState, packageDigest: string) {
+    return state.kind === "package" && state.packageDigest === packageDigest
+  }
+
+  function packageStateIsDisposable(state: PackagePathState, expectedPackageDigest: string) {
+    return state.kind === "absent" || state.kind === "partial" || packageStateHasDigest(state, expectedPackageDigest)
+  }
+
+  function assertMutationJournalLocation(
+    journal: {
+      target: string
+      staging: string
+      backup: string
+      discard: string
+      operationID: string
+      installationScope: ExpertSquadPackageLocations.InstallationScope
+      projectDirectory: string | null
+      namespace: string
+      id: string
+    },
+    location: ExpertSquadPackageLocations.Location,
+    id: string,
+  ) {
+    if (
+      journal.id !== id ||
+      journal.installationScope !== location.kind ||
+      (location.kind === "global" && journal.projectDirectory !== null) ||
+      (location.kind === "project" &&
+        (journal.projectDirectory === null ||
+          Filesystem.normalizePath(ProjectRuntimePaths.projectConfigRoot(journal.projectDirectory)) !==
+            Filesystem.normalizePath(location.configRoot)))
+    ) {
+      throw new Error("Expert squad mutation journal installation identity does not equal its catalog location")
+    }
+    const target = targetRootForLocation(location, journal.namespace, journal.id)
+    const scratch = scratchBaseForLocation(location)
+    const label = `${journal.namespace}-${journal.id}`
+    const expectedPaths = {
+      target,
+      staging: stagingRootForLocation(location, label, journal.operationID),
+      backup: backupRootForLocation(location, label, journal.operationID),
+      discard: discardRootForLocation(location, label, journal.operationID),
+    }
+    assertInside(location.packagesRoot, expectedPaths.target, "expert squad mutation journal target root")
+    assertInside(scratch, expectedPaths.staging, "expert squad mutation journal staging root")
+    assertInside(scratch, expectedPaths.backup, "expert squad mutation journal backup root")
+    assertInside(scratch, expectedPaths.discard, "expert squad mutation journal discard root")
+    for (const [kind, expected] of Object.entries(expectedPaths)) {
+      if (journal[kind as keyof typeof expectedPaths] !== expected) {
+        throw new Error(`Expert squad mutation journal ${kind} does not equal ${expected}`)
+      }
+    }
+  }
+
+  async function reconcilePackageReplacementJournal(input: {
+    location: ExpertSquadPackageLocations.Location
+    id: string
+  }): Promise<"none" | "rolled-back" | "committed"> {
+    const journalPath = packageReplacementJournalPath(input.location, input.id)
+    const text = await readFile(journalPath, "utf8").catch((error: NodeJS.ErrnoException) => {
+      if (error.code === "ENOENT") return undefined
+      throw error
+    })
+    if (text === undefined) return "none"
+    const journal = PackageReplacementJournalSchema.parse(JSON.parse(text))
+    assertMutationJournalLocation(journal, input.location, input.id)
+    const [targetState, stagingState, backupState, discardState] = await Promise.all([
+      packageStateAt(journal.target),
+      packageStateAt(journal.staging),
+      packageStateAt(journal.backup),
+      packageStateAt(journal.discard),
+    ])
+
+    if (
+      packageStateHasDigest(targetState, journal.beforePackageDigest) &&
+      packageStateIsDisposable(stagingState, journal.afterPackageDigest) &&
+      backupState.kind === "absent" &&
+      packageStateIsDisposable(discardState, journal.afterPackageDigest)
+    ) {
+      await rm(journal.staging, { recursive: true, force: true })
+      await rm(journal.discard, { recursive: true, force: true })
+      await rm(journalPath)
+      await ExpertSquadRegistry.invalidateAvailable()
+      return "rolled-back"
+    }
+    if (
+      packageStateHasDigest(backupState, journal.beforePackageDigest) &&
+      (targetState.kind === "absent" || packageStateHasDigest(targetState, journal.afterPackageDigest)) &&
+      packageStateIsDisposable(stagingState, journal.afterPackageDigest) &&
+      packageStateIsDisposable(discardState, journal.afterPackageDigest)
+    ) {
+      if (packageStateHasDigest(targetState, journal.afterPackageDigest)) {
+        if (discardState.kind !== "absent") await rm(journal.discard, { recursive: true, force: true })
+        await rename(journal.target, journal.discard)
+      }
+      await rename(journal.backup, journal.target)
+      await rm(journal.staging, { recursive: true, force: true })
+      await rm(journal.discard, { recursive: true, force: true })
+      await rm(journalPath)
+      await ExpertSquadRegistry.invalidateAvailable()
+      return "rolled-back"
+    }
+    if (
+      packageStateHasDigest(targetState, journal.afterPackageDigest) &&
+      packageStateIsDisposable(stagingState, journal.afterPackageDigest) &&
+      (backupState.kind === "absent" || backupState.kind === "partial") &&
+      discardState.kind === "absent"
+    ) {
+      await rm(journal.staging, { recursive: true, force: true })
+      await rm(journal.backup, { recursive: true, force: true })
+      await rm(journalPath)
+      await ExpertSquadRegistry.invalidateAvailable()
+      return "committed"
+    }
+    throw new Error("Expert squad package replacement journal has an unknown interrupted filesystem state")
   }
 
   function committedEvolutionReceipt(journal: EvolutionMutationJournal) {
@@ -340,31 +586,18 @@ export namespace ExpertSquadPackageManager {
     })
     if (text === undefined) return
     const journal = EvolutionMutationJournalSchema.parse(JSON.parse(text))
-    const target = targetRootForLocation(input.location, journal.namespace, input.id)
-    const scratch = scratchBaseForLocation(input.location)
-    if (Filesystem.normalizePath(journal.target) !== Filesystem.normalizePath(target))
-      throw new Error(`Expert squad mutation journal target does not equal ${target}`)
-    assertInside(scratch, journal.staging, "expert squad mutation journal staging root")
-    assertInside(scratch, journal.backup, "expert squad mutation journal backup root")
-    if (
-      journal.id !== input.id ||
-      journal.installationScope !== input.location.kind ||
-      (input.location.kind === "global" && journal.projectDirectory !== null) ||
-      (input.location.kind === "project" &&
-        (journal.projectDirectory === null ||
-          Filesystem.normalizePath(ProjectRuntimePaths.projectConfigRoot(journal.projectDirectory)) !==
-            Filesystem.normalizePath(input.location.configRoot)))
-    )
-      throw new Error("Expert squad mutation journal installation identity does not equal its catalog location")
+    assertMutationJournalLocation(journal, input.location, input.id)
     const committed = committedEvolutionReceipt(journal)
-    const targetDigest = await packageDigestAt(journal.target)
-    const backupDigest = await packageDigestAt(journal.backup)
+    const targetState = await packageStateAt(journal.target)
+    const backupState = await packageStateAt(journal.backup)
+    const discardState = await packageStateAt(journal.discard)
     if (committed) {
-      if (targetDigest !== journal.afterPackageDigest)
+      if (!packageStateHasDigest(targetState, journal.afterPackageDigest))
         throw new Error("Committed expert squad mutation journal does not match the installed revision")
       const cleanup = await Promise.allSettled([
         rm(journal.backup, { recursive: true, force: true }),
         rm(journal.staging, { recursive: true, force: true }),
+        rm(journal.discard, { recursive: true, force: true }),
       ])
       const failures = cleanup.filter((result): result is PromiseRejectedResult => result.status === "rejected")
       if (failures.length > 0)
@@ -378,18 +611,29 @@ export namespace ExpertSquadPackageManager {
       }
       return
     }
-    if (targetDigest === journal.beforePackageDigest && backupDigest === undefined) {
+    if (
+      packageStateHasDigest(targetState, journal.beforePackageDigest) &&
+      backupState.kind === "absent" &&
+      packageStateIsDisposable(discardState, journal.afterPackageDigest)
+    ) {
       await rm(journal.staging, { recursive: true, force: true })
+      await rm(journal.discard, { recursive: true, force: true })
       await rm(journalPath)
       return
     }
-    if (backupDigest !== journal.beforePackageDigest)
+    if (!packageStateHasDigest(backupState, journal.beforePackageDigest))
       throw new Error("Uncommitted expert squad mutation journal has no exact prior revision backup")
-    if (targetDigest !== undefined && targetDigest !== journal.afterPackageDigest)
+    if (!(targetState.kind === "absent" || packageStateHasDigest(targetState, journal.afterPackageDigest)))
       throw new Error("Uncommitted expert squad mutation journal target has an unknown revision")
-    if (targetDigest !== undefined) await rm(journal.target, { recursive: true })
+    if (!packageStateIsDisposable(discardState, journal.afterPackageDigest))
+      throw new Error("Uncommitted expert squad mutation journal discard has an unknown revision")
+    if (packageStateHasDigest(targetState, journal.afterPackageDigest)) {
+      if (discardState.kind !== "absent") await rm(journal.discard, { recursive: true, force: true })
+      await rename(journal.target, journal.discard)
+    }
     await rename(journal.backup, journal.target)
     await rm(journal.staging, { recursive: true, force: true })
+    await rm(journal.discard, { recursive: true, force: true })
     await rm(journalPath)
     await ExpertSquadRegistry.invalidateAvailable()
   }
@@ -757,6 +1001,10 @@ export namespace ExpertSquadPackageManager {
     const targetLocation = input.targetLocation
     const target = targetRootForLocation(targetLocation, loaded.namespace, loaded.id)
     return ExpertSquadInstallLock.run(loaded.id, async () => {
+      await reconcilePackageReplacementJournal({
+        location: targetLocation,
+        id: loaded.id,
+      })
       if (input.durableReceipt)
         await reconcileEvolutionMutationJournal({
           location: targetLocation,
@@ -772,8 +1020,10 @@ export namespace ExpertSquadPackageManager {
       const base = targetLocation.packagesRoot
       const scratch = scratchBaseForLocation(targetLocation)
       const installLabel = `${loaded.namespace}-${loaded.id}`
-      const staging = stagingRootForLocation(targetLocation, installLabel)
-      const backup = backupRootForLocation(targetLocation, installLabel)
+      const operationID = randomUUID()
+      const staging = stagingRootForLocation(targetLocation, installLabel, operationID)
+      const backup = backupRootForLocation(targetLocation, installLabel, operationID)
+      const discard = discardRootForLocation(targetLocation, installLabel, operationID)
       const targetState = await lstat(target).catch((error: NodeJS.ErrnoException) => {
         if (error.code === "ENOENT") return undefined
         throw error
@@ -829,16 +1079,22 @@ export namespace ExpertSquadPackageManager {
       await mkdir(scratch, { recursive: true })
       assertInside(scratch, staging, "expert squad staging root")
       assertInside(scratch, backup, "expert squad replacement backup")
+      assertInside(scratch, discard, "expert squad replacement discard")
       assertInside(base, target, "expert squad target root")
       await mkdir(path.dirname(target), { recursive: true })
       await rm(staging, { recursive: true, force: true })
       await rm(backup, { recursive: true, force: true })
+      await rm(discard, { recursive: true, force: true })
 
       let targetMoved = false
       let targetInstalled = false
       let committedReceipt: PackageMutationReceipt | undefined
+      let completedReceipt: PackageMutationReceipt | undefined
       let mutationJournal: EvolutionMutationJournal | undefined
       const journalPath = evolutionMutationJournalPath(targetLocation, loaded.id)
+      let replacementJournal: PackageReplacementJournal | undefined
+      let replacementJournalWritten = false
+      const replacementJournalFile = packageReplacementJournalPath(targetLocation, loaded.id)
       try {
         await cp(source, staging, {
           recursive: true,
@@ -873,10 +1129,12 @@ export namespace ExpertSquadPackageManager {
           if (!before) throw new Error("Durable expert squad evolution mutation requires an installed prior revision")
           const journal: EvolutionMutationJournal = {
             protocol: "opencorvus/expert-squad-evolution-mutation-intent@1",
+            operationID,
             identity: input.durableReceipt.identity,
             target,
             staging,
             backup,
+            discard,
             installationScope: targetLocation.kind,
             projectDirectory: before.projectDirectory,
             namespace: loaded.namespace,
@@ -885,13 +1143,32 @@ export namespace ExpertSquadPackageManager {
             beforePackageDigest: before.packageDigest,
             afterPackageDigest: loaded.packageDigest,
           }
-          await writeEvolutionMutationJournal(journalPath, journal)
+          await writeMutationJournal(journalPath, journal)
           mutationJournal = journal
+        } else if (existing) {
+          if (!before) throw new Error("Expert squad replacement requires an exact installed prior revision")
+          replacementJournal = {
+            protocol: "opencorvus/expert-squad-package-replacement-intent@1",
+            operationID,
+            target,
+            staging,
+            backup,
+            discard,
+            installationScope: targetLocation.kind,
+            projectDirectory: before.projectDirectory,
+            namespace: loaded.namespace,
+            id: loaded.id,
+            beforePackageDigest: before.packageDigest,
+            afterPackageDigest: loaded.packageDigest,
+          }
+          await writeMutationJournal(replacementJournalFile, replacementJournal)
+          replacementJournalWritten = true
         }
 
         if (existing) {
           await rename(target, backup)
           targetMoved = true
+          await packageMutationAfterTargetMoveInterruptForTest?.()
         }
         await rename(staging, target)
         targetInstalled = true
@@ -906,6 +1183,8 @@ export namespace ExpertSquadPackageManager {
         const receipt: PackageMutationReceipt = !before
           ? { operation: "installed", before: null, after }
           : { operation: input.replacementOperation!, before, after }
+        completedReceipt = receipt
+        await packageMutationAfterTargetInstallInterruptForTest?.()
         await evolutionMutationInterruptForTest?.()
         if (input.durableReceipt) {
           await input.durableReceipt.commit(receipt)
@@ -914,10 +1193,17 @@ export namespace ExpertSquadPackageManager {
           committedReceipt = receipt
         }
         await rm(backup, { recursive: true, force: true })
+        if (replacementJournal) await packageMutationAfterBackupRemovalFailureForTest?.()
         if (input.durableReceipt) await rm(journalPath)
+        if (replacementJournal) await rm(replacementJournalFile)
         return receipt
       } catch (error) {
-        if (error instanceof EvolutionMutationAbruptTerminationForTest) throw error
+        if (
+          error instanceof EvolutionMutationAbruptTerminationForTest ||
+          error instanceof PackageMutationAbruptTerminationForTest
+        ) {
+          throw error
+        }
         if (input.durableReceipt && mutationJournal) {
           let durableReceipt
           try {
@@ -933,10 +1219,10 @@ export namespace ExpertSquadPackageManager {
             if (!committedReceipt)
               throw new Error("Committed expert squad mutation has no exact Manager receipt")
             try {
-            await reconcileEvolutionMutationJournal({
-              location: targetLocation,
-              id: loaded.id,
-            })
+              await reconcileEvolutionMutationJournal({
+                location: targetLocation,
+                id: loaded.id,
+              })
             } catch (cleanupError) {
               if (!(cleanupError instanceof EvolutionMutationCleanupPendingError)) throw cleanupError
               log.error("Committed expert squad mutation cleanup remains journaled", {
@@ -947,6 +1233,45 @@ export namespace ExpertSquadPackageManager {
             }
             return committedReceipt
           }
+          try {
+            await reconcileEvolutionMutationJournal({
+              location: targetLocation,
+              id: loaded.id,
+            })
+          } catch (recoveryError) {
+            throw new AggregateError(
+              [error, recoveryError],
+              "Expert squad evolution mutation rollback remains journaled for recovery",
+              { cause: error },
+            )
+          }
+          throw error
+        }
+        if (replacementJournalWritten) {
+          let disposition: "none" | "rolled-back" | "committed"
+          try {
+            disposition = await reconcilePackageReplacementJournal({
+              location: targetLocation,
+              id: loaded.id,
+            })
+          } catch (recoveryError) {
+            throw new AggregateError(
+              [error, recoveryError],
+              "Expert squad package replacement outcome remains journaled for recovery",
+              { cause: error },
+            )
+          }
+          if (disposition === "committed") {
+            if (!completedReceipt)
+              throw new Error("Committed expert squad package replacement has no exact Manager receipt")
+            return completedReceipt
+          }
+          if (disposition === "rolled-back") throw error
+          throw new AggregateError(
+            [error],
+            "Expert squad package replacement journal disappeared before recovery",
+            { cause: error },
+          )
         }
         const cleanupActions: Array<() => Promise<void>> = [() => rm(staging, { recursive: true, force: true })]
         if (targetMoved) {
@@ -958,7 +1283,7 @@ export namespace ExpertSquadPackageManager {
           cleanupActions.push(() => rm(target, { recursive: true, force: true }))
         }
         if (targetMoved || targetInstalled) cleanupActions.push(() => ExpertSquadRegistry.invalidateAvailable())
-        return ExpertSquadCleanup.rethrowWithFailures(
+        return await ExpertSquadCleanup.rethrowWithFailures(
           error,
           ExpertSquadCleanup.packageInstallationFailureMessage,
           cleanupActions,
@@ -1061,6 +1386,228 @@ export namespace ExpertSquadPackageManager {
     } finally {
       await rm(sourceRoot, { recursive: true, force: true })
     }
+  }
+
+  const PayloadProvisioningEntrySchema = z
+    .object({
+      namespace: z.string().min(1),
+      id: z.string().min(1),
+      payload_digest: z.string().regex(/^[a-f0-9]{64}$/),
+      disposition: z.enum(["managed", "removed", "modified"]),
+      installed_package_digest: z
+        .string()
+        .regex(/^[a-f0-9]{64}$/)
+        .nullable(),
+    })
+    .strict()
+
+  const PayloadProvisioningStateSchema = z
+    .object({
+      protocol: z.literal("opencorvus/expert-squad-payload-provisioning@1"),
+      entries: z.array(PayloadProvisioningEntrySchema),
+    })
+    .strict()
+    .superRefine((value, ctx) => {
+      const seen = new Set<string>()
+      for (const [index, entry] of value.entries.entries()) {
+        if (seen.has(entry.id)) {
+          ctx.addIssue({
+            code: "custom",
+            message: `Duplicate payload provisioning id ${entry.id}`,
+            path: ["entries", index, "id"],
+          })
+        }
+        seen.add(entry.id)
+        if (entry.disposition === "removed" && entry.installed_package_digest !== null) {
+          ctx.addIssue({
+            code: "custom",
+            message: "Removed payload provisioning entries cannot retain an installed digest",
+            path: ["entries", index, "installed_package_digest"],
+          })
+        }
+        if (entry.disposition !== "removed" && entry.installed_package_digest === null) {
+          ctx.addIssue({
+            code: "custom",
+            message: `${entry.disposition} payload provisioning entries require an installed digest`,
+            path: ["entries", index, "installed_package_digest"],
+          })
+        }
+        if (
+          entry.disposition === "managed" &&
+          entry.installed_package_digest !== entry.payload_digest
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message: "Managed payload provisioning entries require identical payload and installed digests",
+            path: ["entries", index, "installed_package_digest"],
+          })
+        }
+      }
+    })
+  type PayloadProvisioningEntry = z.infer<typeof PayloadProvisioningEntrySchema>
+  type PayloadProvisioningState = z.infer<typeof PayloadProvisioningStateSchema>
+
+  function payloadProvisioningStatePath(projectDirectory: string) {
+    return ProjectRuntimePaths.expertSquadPayloadProvisioningState(Filesystem.resolve(projectDirectory))
+  }
+
+  async function readPayloadProvisioningState(projectDirectory: string): Promise<PayloadProvisioningState> {
+    const file = payloadProvisioningStatePath(projectDirectory)
+    if (!(await Filesystem.exists(file))) {
+      return { protocol: "opencorvus/expert-squad-payload-provisioning@1", entries: [] }
+    }
+    try {
+      return PayloadProvisioningStateSchema.parse(await Filesystem.readJson(file))
+    } catch (error) {
+      throw new Error(
+        `Expert squad payload provisioning state is invalid at ${file}: ${error instanceof Error ? error.message : String(error)}`,
+        { cause: error },
+      )
+    }
+  }
+
+  async function writePayloadProvisioningState(
+    projectDirectory: string,
+    entries: ReadonlyMap<string, PayloadProvisioningEntry>,
+  ) {
+    const state = PayloadProvisioningStateSchema.parse({
+      protocol: "opencorvus/expert-squad-payload-provisioning@1",
+      entries: [...entries.values()].sort((left, right) => left.id.localeCompare(right.id)),
+    })
+    await Filesystem.writeAtomic(payloadProvisioningStatePath(projectDirectory), `${JSON.stringify(state, null, 2)}\n`)
+  }
+
+  function projectRevision(
+    projectDirectory: string,
+    loaded: ExpertSquadRegistry.CatalogPackage,
+  ): InstalledPackageRevision {
+    return {
+      installationScope: "project",
+      projectDirectory: Filesystem.resolve(projectDirectory),
+      namespace: loaded.namespace,
+      id: loaded.id,
+      version: loaded.version,
+      packageDigest: loaded.packageDigest,
+      targetRoot: loaded.root,
+    }
+  }
+
+  /**
+   * Reconciles the repository-hosted payload into one project's installed
+   * catalog. The ledger distinguishes product defaults from operator-owned
+   * removal or package-byte changes; it never acts as a second package catalog.
+   */
+  export async function provisionDefaultPayloadPackages(input: {
+    projectDirectory: string
+  }): Promise<DefaultPayloadProvisionResult> {
+    const projectDirectory = Filesystem.resolve(input.projectDirectory)
+    const lockID = `payload-${createHash("sha256").update(projectDirectory).digest("hex")}`
+    return ExpertSquadInstallLock.run(lockID, async () => {
+      await reconcilePendingLocations([ExpertSquadPackageLocations.project(projectDirectory)])
+      const state = await readPayloadProvisioningState(projectDirectory)
+      const entries = new Map(state.entries.map((entry) => [entry.id, entry]))
+      const result: DefaultPayloadProvisionResult = {
+        installed: [],
+        updated: [],
+        unchanged: [],
+        removed: [],
+        preserved: [],
+      }
+
+      for (const source of payloadPackageSources) {
+        const payload = validatePayloadPackageSource(source)
+        const previous = entries.get(payload.id)
+        if (previous && previous.namespace !== payload.namespace) {
+          throw new Error(
+            `Expert squad payload namespace changed for ${payload.id}: ledger has ${previous.namespace}, payload has ${payload.namespace}`,
+          )
+        }
+        const current = await ExpertSquadRegistry.loadInstalledCatalogPackage({
+          projectDirectory,
+          installationScope: "project",
+          namespace: payload.namespace,
+          id: payload.id,
+        })
+
+        let next: PayloadProvisioningEntry
+        if (!current) {
+          if (previous) {
+            next = {
+              namespace: payload.namespace,
+              id: payload.id,
+              payload_digest: payload.packageDigest,
+              disposition: "removed",
+              installed_package_digest: null,
+            }
+            result.removed.push({
+              namespace: payload.namespace,
+              id: payload.id,
+              payloadDigest: payload.packageDigest,
+            })
+          } else {
+            const receipt = await installPayloadPackageSource({
+              projectDirectory,
+              source,
+              loaded: payload,
+              installationScope: "project",
+            })
+            result.installed.push(receipt)
+            next = {
+              namespace: payload.namespace,
+              id: payload.id,
+              payload_digest: payload.packageDigest,
+              disposition: "managed",
+              installed_package_digest: receipt.after.packageDigest,
+            }
+          }
+        } else if (current.packageDigest === payload.packageDigest) {
+          const revision = projectRevision(projectDirectory, current)
+          result.unchanged.push(revision)
+          next = {
+            namespace: payload.namespace,
+            id: payload.id,
+            payload_digest: payload.packageDigest,
+            disposition: "managed",
+            installed_package_digest: current.packageDigest,
+          }
+        } else if (previous?.disposition === "managed" && current.packageDigest === previous.payload_digest) {
+          const receipt = await installPayloadPackageSource({
+            projectDirectory,
+            source,
+            loaded: payload,
+            installationScope: "project",
+            expectedCurrentPackageDigest: current.packageDigest,
+          })
+          result.updated.push(receipt)
+          next = {
+            namespace: payload.namespace,
+            id: payload.id,
+            payload_digest: payload.packageDigest,
+            disposition: "managed",
+            installed_package_digest: receipt.after.packageDigest,
+          }
+        } else {
+          next = {
+            namespace: payload.namespace,
+            id: payload.id,
+            payload_digest: payload.packageDigest,
+            disposition: "modified",
+            installed_package_digest: current.packageDigest,
+          }
+          result.preserved.push({
+            namespace: payload.namespace,
+            id: payload.id,
+            payloadDigest: payload.packageDigest,
+            installedPackageDigest: current.packageDigest,
+          })
+        }
+
+        entries.set(payload.id, next)
+        await writePayloadProvisioningState(projectDirectory, entries)
+      }
+
+      return result
+    })
   }
 
   export async function releasePayloadPackages(input: { projectDirectory: string }): Promise<ReleasePayloadResult> {
@@ -1459,14 +2006,25 @@ export namespace ExpertSquadPackageManager {
         throw error
       })
       for (const entry of entries) {
-        if (!entry.isFile() || !entry.name.startsWith(".evolution-mutation-") || !entry.name.endsWith(".json")) continue
+        if (!entry.isFile() || !entry.name.endsWith(".json")) continue
         const file = path.join(scratch, entry.name)
-        const journal = EvolutionMutationJournalSchema.parse(JSON.parse(await readFile(file, "utf8")))
-        if (Filesystem.normalizePath(file) !== Filesystem.normalizePath(evolutionMutationJournalPath(location, journal.id)))
-          throw new Error(`Expert squad mutation journal filename does not equal its manifest ID: ${file}`)
-        await ExpertSquadInstallLock.run(journal.id, () =>
-          reconcileEvolutionMutationJournal({ location, id: journal.id }),
-        )
+        if (entry.name.startsWith(".evolution-mutation-")) {
+          const journal = EvolutionMutationJournalSchema.parse(JSON.parse(await readFile(file, "utf8")))
+          if (Filesystem.normalizePath(file) !== Filesystem.normalizePath(evolutionMutationJournalPath(location, journal.id)))
+            throw new Error(`Expert squad mutation journal filename does not equal its manifest ID: ${file}`)
+          await ExpertSquadInstallLock.run(journal.id, () =>
+            reconcileEvolutionMutationJournal({ location, id: journal.id }),
+          )
+          continue
+        }
+        if (entry.name.startsWith(".package-replacement-")) {
+          const journal = PackageReplacementJournalSchema.parse(JSON.parse(await readFile(file, "utf8")))
+          if (Filesystem.normalizePath(file) !== Filesystem.normalizePath(packageReplacementJournalPath(location, journal.id)))
+            throw new Error(`Expert squad replacement journal filename does not equal its manifest ID: ${file}`)
+          await ExpertSquadInstallLock.run(journal.id, () =>
+            reconcilePackageReplacementJournal({ location, id: journal.id }),
+          )
+        }
       }
     }
   }
@@ -1487,6 +2045,7 @@ export namespace ExpertSquadPackageManager {
     const id = ExpertSquadRegistry.parseID(input.id, "expert squad mutation reconciliation id")
     ExpertSquadInstallLock.assertHeld(input.lease, id)
     for (const location of ExpertSquadPackageLocations.discover(input.projectDirectory)) {
+      await reconcilePackageReplacementJournal({ location, id })
       await reconcileEvolutionMutationJournal({ location, id })
     }
   }

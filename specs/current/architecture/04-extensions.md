@@ -67,8 +67,9 @@ file/folder/ZIP import 和 MCP（Model Context Protocol，模型上下文协议�
 
 Expert squad 是 OpenCorvus 内部的 scenario / agent capability package，不是外部
 Codex skill。运行时内置 package 只保留默认便捷开发包 `base`、完整通用团队 `advanced`、研究交付团队 `research-studio` 与专家团生成包 `squad-sdk`；其他 squad 的分发形态是
-payload，必须先释放成项目目录 `.opencorvus/expert-squads/<namespace>/<id>/`，再通过普通
-package discovery / catalog 进入运行时。分发 payload 由
+payload。完整项目 bootstrap 在配置校验前把仓库托管的全部 payload 默认配置到项目目录
+`.opencorvus/expert-squads/<namespace>/<id>/`，随后才通过普通 package discovery / catalog
+进入运行时。分发 payload 由
 `packages/opencorvus/script/generate-expert-squad-payload.ts` 在构建前从仓库作者源
 `expert-squads/<namespace>/<id>/` 明文包生成，禁止手写平行清单。运行时安装包仍只存在于
 项目或用户全局 `.opencorvus/expert-squads/<namespace>/<id>/`，运行时 resolver 不扫描仓库作者源。
@@ -99,7 +100,22 @@ Manager 的 folder/ZIP 安装协议要求 caller 显式选择 `project | global`
 `.opencorvus/expert-squads/<namespace>/<id>/` 或
 `Global.Path.config/expert-squads/<namespace>/<id>/`；HTTP、OpenAPI、SDK 和 Overlay 使用同一字段，
 不存在默认值、产品名分支或第二入口。普通 folder/ZIP caller 继续显式选择 scope；Generate Agent Squads
-的 SDK authoring 与 Multica import 固定选择 project，bundled payload provisioning 也固定属于项目。Registry 分别维护 project 与 user-global 的严格安装清单，并为精确
+的 SDK authoring 与 Multica import 固定选择 project，bundled payload provisioning 也固定属于项目。
+默认配置使用 `.opencorvus/.r/project/expert-squad-payload-provisioning.json` 作为唯一的原子
+runtime ledger：首次项目 bootstrap 安装全部 payload，新版本补齐新 ID；只有当前安装摘要仍等于
+ledger 记录的上一份 payload 摘要时才以 compare-and-swap（比较并交换）更新。曾经配置后缺失的
+package 记为 operator removal，摘要分歧的 package 记为 operator modification，后续启动均不静默
+重装或覆盖。该 ledger 只记录 disposition 与 payload/installed digest，不复制 manifest、catalog 或
+package bytes；删除或重新安装后的下一次 reconciliation 从真实安装目录收敛其状态。普通 package
+replacement 在移动旧 target 前保存 `.package-replacement-<id>.json` 持久 intent；进程在任一 rename
+窗口或递归 scratch 清理中终止时，Registry/Manager reconciliation 从精确 before/after digest 与
+`absent | exact package | partial scratch` 状态回滚未完成替换，或确认 backup 已开始清理后的完整新
+target，再由 payload ledger 收敛。每份 intent 使用一个 UUID v4 operation ID，把 staging、backup 与
+discard 精确绑定为同一 namespace/ID 的三个不同 canonical scratch 子目录；任意 scratch root、别包路径
+或路径 alias 在文件状态读取前失败。回滚从不递归删除安装 target：只有 target 仍是精确 after digest 时
+才先原子 rename 到 intent 自有 discard，再原子恢复精确 before backup；partial target 被视为 operator
+或未知字节并原样保留、失败关闭。目录暂时缺失不会被误判成 operator removal。Registry 分别维护
+project 与 user-global 的严格安装清单，并为精确
 项目上下文生成单一有效 catalog；project 的同 ID package 覆盖 global package 并产生 typed warning，
 同一 scope 跨 namespace 重复仍在写入前失败。只要 project identity 已存在，即使其 package 损坏也
 禁止 fallback 到同 ID global package。安装不修改
@@ -289,8 +305,9 @@ Expert Squad Market 只从严格 bundled declaration 和已安装 package identi
 payload release、folder/ZIP validate/import 是 package provisioning/repair 控制面：它们仍要求精确项目
 directory，但服务端只进入 project identity context，不执行完整 runtime bootstrap。因而旧 manifest 可以继续被
 catalog 严格拒绝，同时用户仍可从 Market 按已安装 scope 显式执行 builtin replacement；catalog、activation、
-export、uninstall 和普通 runtime routes 仍执行完整 bootstrap。这里没有自动覆盖、旧 schema 兼容或 source
-fallback，替换仍只走 `ExpertSquadPackageManager` 的严格原子更新实现。
+export、uninstall 和普通 runtime routes 仍执行完整 bootstrap，并在配置校验前运行上述默认 payload
+reconciliation。这里没有无条件自动覆盖、旧 schema 兼容或 source fallback；默认受管更新和显式替换
+都只走 `ExpertSquadPackageManager` 的严格原子 compare-and-swap 与持久 replacement-intent 恢复实现。
 
 ### Built-in Skills —— inventory 与运行投影分离
 

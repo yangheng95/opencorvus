@@ -17,6 +17,8 @@ const skillReadyCount = generatedShippedSquadFacts.filter(
 const shippedSquadByID = new Map<string, (typeof generatedShippedSquadFacts)[number]>(
   generatedShippedSquadFacts.map((squad) => [squad.id, squad]),
 )
+const pendingCandidates = expertSquadRoadmapCandidates.filter((candidate) => !shippedSquadByID.has(candidate.id))
+const implementingCount = pendingCandidates.filter((candidate) => candidate.generationState === "implementing").length
 const copy = zh
   ? {
       title: "专家团补充清单 · OpenCorvus",
@@ -24,7 +26,7 @@ const copy = zh
       languageHref: publicPath("root", "/market/checklist/"),
       eyebrow: "当前包事实 + 外部研究 + 本地决策草稿",
       heading: "先选对专家团，再并行补充。",
-      lead: "勾选你想优先补充的专家团，拖拽调整顺序，并明确哪些包可以独立并行。清单不会改动运行时配置或真实任务队列。",
+      lead: "本批固定包含十个领域；拖拽只决定生成优先级，勾选只声明哪些包可作为独立并行泳道。清单不会改动运行时配置或真实任务队列。",
       factTitle: "Skill 完整性已经收敛",
       factBody: `当前随产品交付的 ${generatedShippedSquadFacts.length} 个唯一专家团中，${skillReadyCount} 个拥有真实包内 Skill 文件及 manifest 投影。`,
       evidenceTitle: "WorkBuddy 证据边界",
@@ -38,18 +40,19 @@ const copy = zh
       market: "市场 payload",
       skill: "包内 Skill",
       candidateTitle: "下一批候选",
-      candidateLead: "选择、排序和并行声明只保存在此浏览器。已经加入产品的批次仍可纳入并行复核或下一轮增强声明。",
+      candidateLead: "本批固定包含下列 10 个待生成领域。拖拽顺序就是生成优先级；并行勾选定义可独立实施的泳道。已交付专家团不会进入这里。",
+      pendingState: "待确认生成",
+      implementingState: "生成中",
+      deliveredState: "已交付",
       recommended: "建议优先调查",
-      sourceReview: "开源源码待审",
+      sourceReview: "开源 Skill 已固定",
       licenseReview: "许可证待核验",
-      authored: "需要自研 Skill",
+      authored: "自研 Skill 草案已落盘",
       blocked: "运行能力阻塞",
       shipped: "已加入市场包",
       officialCapability: "WorkBuddy 官方能力",
       marketInference: "市场需求推断",
-      select: "纳入下一批",
-      selectShipped: "纳入并行复核声明",
-      parallel: "允许独立并行实现",
+      parallel: "允许作为独立并行生成泳道",
       moveUp: "上移",
       moveDown: "下移",
       roles: "建议角色",
@@ -59,15 +62,15 @@ const copy = zh
       asset: "专属资产",
       revision: "固定版本",
       priority: "优先级",
-      declarationTitle: "并行工作声明",
-      declarationLead: "声明只描述实施所有权；payload、共享事实、文档、最终验证、审查、提交和推送仍串行收敛。",
-      note: "给实施团队的备注",
-      notePlaceholder: "例如：先并行复核浏览器验收与办公交付；产品管理在证据汇合后串行收敛。",
-      copy: "复制声明",
+      declarationTitle: "生成目标声明",
+      declarationLead: "这份声明固定本批十个领域的生成顺序和独立并行泳道；只有全部 Skill、资产和真实安装验收合格后才进入已交付清单。",
+      note: "给本批生成任务的备注",
+      notePlaceholder: "例如：能源与农业可并行；监管类专家团必须在独立专业复核后汇合。",
+      copy: "复制生成目标",
       reset: "重置草稿",
       copied: "已复制",
-      selected: "已选择",
-      parallelSelected: "并行包",
+      selected: "本批领域",
+      parallelSelected: "并行泳道",
       verified: "研究核验",
     }
   : {
@@ -76,7 +79,7 @@ const copy = zh
       languageHref: publicPath("zh-cn", "/market/checklist/"),
       eyebrow: "Current package facts + external research + local decision draft",
       heading: "Choose the right Squads, then expand in parallel.",
-      lead: "Select the next Expert Squads, drag them into priority order, and declare which packages can be implemented independently. This draft never changes runtime configuration or the real Task queue.",
+      lead: "This batch always contains ten domains. Dragging changes generation priority only; checks only declare independent parallel lanes. This draft never changes runtime configuration or the real Task queue.",
       factTitle: "Skill completeness is converged",
       factBody: `${skillReadyCount} of ${generatedShippedSquadFacts.length} uniquely shipped Expert Squads contain package-local Skill files and manifest projections.`,
       evidenceTitle: "WorkBuddy evidence boundary",
@@ -90,18 +93,19 @@ const copy = zh
       market: "Market payload",
       skill: "package Skill",
       candidateTitle: "Next candidates",
-      candidateLead: "Selection, order, and parallel declarations stay in this browser. Delivered packages remain selectable for parallel review or a later enhancement batch.",
+      candidateLead: "This fixed batch contains the ten pending domains below. Drag order is generation priority; parallel checks declare independent implementation lanes. Delivered Squads never appear here.",
+      pendingState: "Awaiting confirmation",
+      implementingState: "Implementing",
+      deliveredState: "Delivered",
       recommended: "Recommended for early review",
-      sourceReview: "Open-source review",
+      sourceReview: "Open-source Skill pinned",
       licenseReview: "License review",
-      authored: "Authored Skill required",
+      authored: "Authored Skill draft saved",
       blocked: "Runtime blocked",
       shipped: "Shipped in Market",
       officialCapability: "Official WorkBuddy capability",
       marketInference: "Market-demand inference",
-      select: "Add to next batch",
-      selectShipped: "Add to parallel review declaration",
-      parallel: "Allow independent parallel implementation",
+      parallel: "Allow as an independent parallel generation lane",
       moveUp: "Move up",
       moveDown: "Move down",
       roles: "Suggested roles",
@@ -111,23 +115,23 @@ const copy = zh
       asset: "Dedicated asset",
       revision: "Pinned revision",
       priority: "Priority",
-      declarationTitle: "Parallel-work declaration",
-      declarationLead: "This declares implementation ownership only; payload generation, shared facts, docs, final verification, review, commit, and push still converge serially.",
-      note: "Implementation note",
-      notePlaceholder: "For example: review browser acceptance and office delivery in parallel; converge product management after both evidence sets.",
-      copy: "Copy declaration",
+      declarationTitle: "Generation-goal declaration",
+      declarationLead: "This fixes the generation order and independent parallel lanes for all ten domains. A Squad enters delivered inventory only after its Skill, assets, and real installation acceptance pass.",
+      note: "Batch generation note",
+      notePlaceholder: "For example: run energy and agriculture in parallel; converge regulated Squads only after independent professional review.",
+      copy: "Copy generation goal",
       reset: "Reset draft",
       copied: "Copied",
-      selected: "Selected",
-      parallelSelected: "Parallel packages",
+      selected: "Domains in batch",
+      parallelSelected: "Parallel lanes",
       verified: "Research verified",
     }
 
 const statusLabel = (status: (typeof expertSquadRoadmapCandidates)[number]["status"]) =>
   ({
-    source_review: copy.sourceReview,
+    pinned_open_source: copy.sourceReview,
     license_review: copy.licenseReview,
-    authored_required: copy.authored,
+    authored_draft: copy.authored,
     blocked: copy.blocked,
   })[status]
 const evidenceLabel = (evidence: (typeof expertSquadRoadmapCandidates)[number]["evidence"]) =>
@@ -210,16 +214,21 @@ const evidenceLabel = (evidence: (typeof expertSquadRoadmapCandidates)[number]["
         <p>{copy.candidateLead}</p>
       </header>
 
+      <div class="declaration-counts generation-state-counts" aria-label={zh ? "专家团生成状态" : "Expert Squad generation states"}>
+        <span><b>{pendingCandidates.length - implementingCount}</b> {copy.pendingState}</span>
+        <span><b>{implementingCount}</b> {copy.implementingState}</span>
+        <span><b>{generatedShippedSquadFacts.length}</b> {copy.deliveredState}</span>
+      </div>
+
       <div class="checklist-workspace">
         <ol class="candidate-list" data-candidate-list>
-          {expertSquadRoadmapCandidates.map((candidate, index) => {
-            const shipped = shippedSquadByID.get(candidate.id)
+          {pendingCandidates.map((candidate, index) => {
             const blocked = candidate.status === "blocked" || candidate.status === "license_review"
             return (
               <li
                 class="candidate-card"
                 data-candidate-id={candidate.id}
-                data-shipped={shipped ? "true" : "false"}
+                data-generation-state={candidate.generationState}
                 tabindex="-1"
               >
                 <div class="candidate-rank">
@@ -231,8 +240,10 @@ const evidenceLabel = (evidence: (typeof expertSquadRoadmapCandidates)[number]["
                   <header>
                     <div>
                       <div class="candidate-badges">
-                        {shipped && <span class="status-label" data-tone="ready">{copy.shipped}</span>}
-                        {!shipped && <span class="status-label" data-status={candidate.status}>{statusLabel(candidate.status)}</span>}
+                        <span class="status-label" data-tone={candidate.generationState === "implementing" ? "ready" : "proposed"}>
+                          {candidate.generationState === "implementing" ? copy.implementingState : copy.pendingState}
+                        </span>
+                        <span class="status-label" data-status={candidate.status}>{statusLabel(candidate.status)}</span>
                         <span class="status-label" data-tone="evidence">{evidenceLabel(candidate.evidence)}</span>
                         {candidate.recommended && <span class="status-label" data-tone="proposed">{copy.recommended}</span>}
                       </div>
@@ -268,21 +279,10 @@ const evidenceLabel = (evidence: (typeof expertSquadRoadmapCandidates)[number]["
                         </div>
                       </div>
                     ))}
-                    {shipped && (
-                      <div>
-                        <span>{copy.skill}</span>
-                        <code>{shipped.packageSkillRefs.join(" · ")}</code>
-                        <small>{shipped.version} · {shipped.packageDigest}</small>
-                      </div>
-                    )}
                   </div>
                   <div class="candidate-controls">
                     <label>
-                      <input type="checkbox" data-select disabled={blocked} />
-                      <span>{shipped ? copy.selectShipped : copy.select}</span>
-                    </label>
-                    <label>
-                      <input type="checkbox" data-parallel disabled />
+                      <input type="checkbox" data-parallel disabled={blocked} />
                       <span>{copy.parallel}</span>
                     </label>
                   </div>
@@ -297,7 +297,7 @@ const evidenceLabel = (evidence: (typeof expertSquadRoadmapCandidates)[number]["
           <h2>{copy.declarationTitle}</h2>
           <p>{copy.declarationLead}</p>
           <div class="declaration-counts" role="status" aria-live="polite">
-            <span><b data-selected-count>0</b> {copy.selected}</span>
+            <span><b data-selected-count>{pendingCandidates.length}</b> {copy.selected}</span>
             <span><b data-parallel-count>0</b> {copy.parallelSelected}</span>
             <span>{copy.verified} · {researchVerifiedAt}</span>
           </div>
@@ -329,7 +329,6 @@ const evidenceLabel = (evidence: (typeof expertSquadRoadmapCandidates)[number]["
   const root = document.querySelector<HTMLElement>("[data-checklist-root]")
   if (root) {
     const locale = root.dataset.locale === "zh-cn" ? "zh-cn" : "root"
-    const candidateIDs = expertSquadRoadmapCandidates.map((candidate) => candidate.id)
     const candidateList = root.querySelector<HTMLOListElement>("[data-candidate-list]")!
     const cards = new Map(
       Array.from(candidateList.querySelectorAll<HTMLElement>("[data-candidate-id]")).map((card) => [
@@ -337,10 +336,10 @@ const evidenceLabel = (evidence: (typeof expertSquadRoadmapCandidates)[number]["
         card,
       ]),
     )
+    const candidateIDs = Array.from(cards.keys())
     const note = root.querySelector<HTMLTextAreaElement>("[data-note]")!
     const declaration = root.querySelector<HTMLElement>("[data-declaration]")!
     const feedback = root.querySelector<HTMLElement>("[data-feedback]")!
-    const selectedCount = root.querySelector<HTMLElement>("[data-selected-count]")!
     const parallelCount = root.querySelector<HTMLElement>("[data-parallel-count]")!
     let draggedID: string | undefined
     let draft = createDefaultChecklistDraft(candidateIDs)
@@ -376,31 +375,19 @@ const evidenceLabel = (evidence: (typeof expertSquadRoadmapCandidates)[number]["
         const card = cards.get(id)!
         candidateList.append(card)
         card.querySelector<HTMLElement>("[data-priority]")!.textContent = String(index + 1).padStart(2, "0")
-        const select = card.querySelector<HTMLInputElement>("[data-select]")!
         const parallel = card.querySelector<HTMLInputElement>("[data-parallel]")!
-        select.checked = draft.selectedIds.includes(id)
         parallel.checked = draft.parallelIds.includes(id)
-        parallel.disabled = !select.checked
-        card.dataset.selected = String(select.checked)
+        card.dataset.parallel = String(parallel.checked)
       }
       note.value = draft.note
-      selectedCount.textContent = String(draft.selectedIds.length)
       parallelCount.textContent = String(draft.parallelIds.length)
       declaration.textContent = exportParallelWorkDeclaration(draft, expertSquadRoadmapCandidates, locale)
       persist()
     }
 
     for (const [id, card] of cards) {
-      const select = card.querySelector<HTMLInputElement>("[data-select]")!
       const parallel = card.querySelector<HTMLInputElement>("[data-parallel]")!
       const dragHandle = card.querySelector<HTMLElement>("[data-drag-handle]")!
-      select.addEventListener("change", () => {
-        draft.selectedIds = select.checked
-          ? [...draft.selectedIds, id]
-          : draft.selectedIds.filter((candidateID) => candidateID !== id)
-        if (!select.checked) draft.parallelIds = draft.parallelIds.filter((candidateID) => candidateID !== id)
-        render()
-      })
       parallel.addEventListener("change", () => {
         draft.parallelIds = parallel.checked
           ? [...draft.parallelIds, id]
