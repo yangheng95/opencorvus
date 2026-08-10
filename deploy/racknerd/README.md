@@ -2,6 +2,75 @@
 
 This directory contains the one-time server bootstrap inputs for the static `opencorvus.com` deployment. It does not expose the local Hosted Registry simulation.
 
+## Documentation and credential source of truth
+
+- This README is the committed, secret-free operating runbook. `production.env.example` is the complete configuration template.
+- The current Windows operator account keeps the recoverable production inventory at `%LOCALAPPDATA%/OpenCorvus/deployment-vault/opencorvus.com`. Its `production.env` contains actual non-secret values and paths, `vault-manifest.json` contains key fingerprints and SHA-256 bindings, and `known_hosts` contains the pinned public SSH host keys.
+- Actual deploy/signing private keys are stored only as `*.dpapi.json` envelopes encrypted by Windows Data Protection API (DPAPI) with `CurrentUser` scope. The folder and files must have inherited access disabled and grant full control only to the current Windows identity and `SYSTEM`.
+- GitHub Environment secrets are write-only delivery copies, not a backup. Never place private bytes in this repository, an issue, a workflow variable, shell history, or documentation. The RackNerd root password is a provider-console recovery credential and is deliberately outside this deployment vault.
+- `vault.ps1` protects, verifies, and restores a credential without printing its bytes. A restored private key is an ephemeral recovery file: upload or use it, then delete it immediately. DPAPI recovery requires the same Windows user profile; back up that profile through the user's normal encrypted Windows backup policy.
+
+Verify both encrypted keys without restoring plaintext:
+
+```powershell
+$vault = Join-Path $env:LOCALAPPDATA "OpenCorvus/deployment-vault/opencorvus.com"
+$manifest = Get-Content (Join-Path $vault "vault-manifest.json") -Raw | ConvertFrom-Json
+./deploy/racknerd/vault.ps1 -Action Verify -InputPath (Join-Path $vault "racknerd-deploy-key.dpapi.json") -Label $manifest.deployKey.label -ExpectedSha256 $manifest.deployKey.privateSha256
+./deploy/racknerd/vault.ps1 -Action Verify -InputPath (Join-Path $vault "expert-squad-signing-key.dpapi.json") -Label $manifest.signingKey.label -ExpectedSha256 $manifest.signingKey.privateSha256
+```
+
+Restore one key only when recovery requires it:
+
+```powershell
+./deploy/racknerd/vault.ps1 -Action Restore -InputPath <dpapi-envelope> -OutputPath <temporary-private-key-inside-private-vault> -Label <manifest-label> -ExpectedSha256 <manifest-sha256>
+```
+
+`Protect` and `Restore` reject an output directory unless its ACL already grants full control only to the current Windows identity and `SYSTEM`. They create an empty output, apply the final private-file ACL, and only then write credential bytes; any create, ACL, or write failure removes the output before returning the error.
+
+## Current production inventory
+
+The committed values below are non-secret facts; `production.env` in the local vault is the complete machine-readable copy.
+
+| Boundary | Current value |
+| --- | --- |
+| Public origins | `https://opencorvus.com`, `https://www.opencorvus.com` |
+| DNS | GoDaddy; apex A points to the RackNerd IPv4; `www` is a CNAME to the apex |
+| GitHub repository / Environment | `yangheng95/opencorvus` / `production`, restricted to `main` |
+| RackNerd SSH | port `22`, deploy user `opencorvus-deploy` |
+| Web service | Caddy `2.11.4`, public TCP `80`/`443`, readiness only on `127.0.0.1:8080` |
+| Release storage | `/srv/opencorvus/releases`, `/srv/opencorvus/current`, `/srv/opencorvus/previous` |
+| Server configuration | `/etc/caddy/Caddyfile`, `/usr/local/bin/opencorvus-activate-release` |
+| Current signing key ID | `expert-squad-ed25519-2026-08-11` |
+| Automatic deployment switch | repository variable `OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED=true` |
+
+Current GitHub Environment variables are `RACKNERD_SSH_PORT`, `RACKNERD_DEPLOY_USER`, `EXPERT_SQUAD_SIGNING_KEY_ID`, `EXPERT_SQUAD_BOOTSTRAP_PUBLICATION_VERSION`, and `EXPERT_SQUAD_BOOTSTRAP_PUBLICATION_EXPIRES_AT`. Current repository variables are `EXPERT_SQUAD_TRUSTED_KEYS_JSON` and `OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED`. Current Environment secrets are `RACKNERD_HOST`, `RACKNERD_KNOWN_HOSTS`, `RACKNERD_SSH_PRIVATE_KEY`, and `EXPERT_SQUAD_SIGNING_PRIVATE_KEY_B64`. The optional secondary signing key/ID must be absent outside a planned rotation overlap.
+
+The local vault maps the two private-key secrets as follows:
+
+| GitHub secret | Local recovery source |
+| --- | --- |
+| `RACKNERD_SSH_PRIVATE_KEY` | `racknerd-deploy-key.dpapi.json` plus the `deployKey` label/digest in `vault-manifest.json` |
+| `EXPERT_SQUAD_SIGNING_PRIVATE_KEY_B64` | `expert-squad-signing-key.dpapi.json` plus the `signingKey` label/digest in `vault-manifest.json`; base64-encode the restored PEM before uploading |
+| `RACKNERD_KNOWN_HOSTS` | `known_hosts`, pinned and hashed by `vault-manifest.json` |
+| `RACKNERD_HOST` | `RACKNERD_HOST` in local `production.env` |
+
+## Recovery and reuse
+
+1. Clone the repository and verify `deploy/racknerd/Caddyfile`, the activation script, this runbook, and the vault manifest hashes before touching production.
+2. On the same Windows account, run the two `Verify` commands above. Restore only the credential being used into the vault directory; `vault.ps1` refuses overwrite and applies a current-user/SYSTEM-only access control list (ACL).
+3. Recreate GitHub variables from `production.env`. Upload the restored deploy key to `RACKNERD_SSH_PRIVATE_KEY`. For the signing key, base64-encode the restored PEM bytes and upload that result to `EXPERT_SQUAD_SIGNING_PRIVATE_KEY_B64`. Upload `known_hosts` to `RACKNERD_KNOWN_HOSTS`. Delete each restored plaintext file immediately after upload.
+4. Verify the deploy key with strict host-key checking, then manually run `deployment_mode=daily`. Require all five jobs to pass and verify the public pointer, catalog, signature envelope, and bundle before considering recovery complete.
+5. For a new VPS, run the server preparation boundary below first, then point DNS only after a successful `bootstrap-stage`; use `bootstrap-verify` after public HTTPS converges. For an existing VPS, never rerun bootstrap blindly over unknown services or `/srv` ownership.
+
+Routine operations:
+
+- Website/source publication: push a matching path to `main`; the workflow builds all three canonical archive platforms plus the website, signs, validates, uploads, switches the immutable release, probes public HTTPS, and rolls back on failure.
+- Manual renewal: run `deployment_mode=daily`. The monthly schedule is best-effort only; monitor expiry separately because GitHub can disable inactive schedules.
+- Health: check `systemctl status caddy`, `caddy validate --config /etc/caddy/Caddyfile`, `journalctl -u caddy`, the `/srv/opencorvus/current` symlink, public root/market routes, and `/expert-squads/catalog.json`.
+- Rollback: invoke the root-owned activator only through the reviewed release contract; never repoint `current` to an unvalidated directory manually.
+- Signing rotation: first add the new public root and secondary key/ID, publish a successful dual-signature `daily` release, then promote the new key, remove the secondary secret/ID and old root, and publish a second successful new-only release.
+- Deploy-key rotation: append and test the new public key, replace the GitHub secret, require one successful real deployment, then converge `authorized_keys` to the new key.
+
 ## Required facts
 
 Before the first deployment, record the RackNerd server IP, SSH port, operating system, existing listeners/services, deploy username, and the exact SSH host-key fingerprint. Inspect the server read-only before changing Caddy or `/srv/opencorvus`.
