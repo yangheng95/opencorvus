@@ -48,9 +48,14 @@ export const RightSidebarConversationSessionResponse = z.object({
   session: SessionApi.Info,
 })
 
-export async function createRightSidebarConversationSession(experience: ConversationExperience) {
-  return SessionApi.create({
+export async function createRightSidebarConversationSession(
+  experience: ConversationExperience,
+  options?: { id?: string },
+) {
+  return SessionApi.createNext({
+    id: options?.id,
     kind: "assistant",
+    directory: Instance.directory,
     title: rightSidebarConversationDefaultTitle(experience),
     metadata: rightSidebarConversationMetadata(experience),
   })

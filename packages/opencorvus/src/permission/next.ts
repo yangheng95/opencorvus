@@ -230,12 +230,12 @@ export namespace PermissionNext {
             patterns: request.patterns,
           })
           delete s.pending[id]
-          Bus.publish(Event.Replied, {
+          Bus.own(Bus.publish(Event.Replied, {
             sessionID: request.sessionID,
             requestID: id,
             reply: "reject",
             autoReply: true,
-          })
+          }))
           reject(new RejectedError())
         }, timeout)
         s.pending[id] = {
@@ -245,7 +245,7 @@ export namespace PermissionNext {
           reject,
           timer,
         }
-        Bus.publish(Event.Asked, info)
+        Bus.own(Bus.publish(Event.Asked, info))
       })
     },
   )
@@ -263,12 +263,12 @@ export namespace PermissionNext {
       if (!existing) throw new NotFoundError({ message: `Permission request not found: ${input.requestID}` })
       clearTimeout(existing.timer)
       delete s.pending[input.requestID]
-      Bus.publish(Event.Replied, {
+      Bus.own(Bus.publish(Event.Replied, {
         sessionID: existing.info.sessionID,
         requestID: existing.info.id,
         reply: input.reply,
         autoReply: input.autoReply,
-      })
+      }))
       if (input.reply === "reject") {
         existing.reject(input.message ? new CorrectedError(input.message) : new RejectedError())
         // Reject all other pending permissions for this session
@@ -277,12 +277,12 @@ export namespace PermissionNext {
           if (pending.info.sessionID === sessionID) {
             clearTimeout(pending.timer)
             delete s.pending[id]
-            Bus.publish(Event.Replied, {
+            Bus.own(Bus.publish(Event.Replied, {
               sessionID: pending.info.sessionID,
               requestID: pending.info.id,
               reply: "reject",
               autoReply: true,
-            })
+            }))
             pending.reject(new RejectedError())
           }
         }
@@ -310,12 +310,12 @@ export namespace PermissionNext {
           if (decision.action !== "allow") continue
           clearTimeout(pending.timer)
           delete s.pending[id]
-          Bus.publish(Event.Replied, {
+          Bus.own(Bus.publish(Event.Replied, {
             sessionID: pending.info.sessionID,
             requestID: pending.info.id,
             reply: "always",
             autoReply: true,
-          })
+          }))
           pending.resolve()
         }
 

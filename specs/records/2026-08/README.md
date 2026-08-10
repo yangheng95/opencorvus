@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-11-scheduler-systemic-fault-audit-and-repair.md](2026-08-11-scheduler-systemic-fault-audit-and-repair.md) records the independent systemic audit, shared ownership-handoff root model, confirmed scheduler defect register, repair order, and executable acceptance loop.
+
 - [2026-08-10-task-detached-worker-lifecycle-convergence-repair.md](2026-08-10-task-detached-worker-lifecycle-convergence-repair.md) diagnoses and repairs detached worker execution, terminal lifecycle publication, durable delivery, current-runtime reconciliation, provider-error projection, and immutable workflow-selection convergence as one ownership chain.
 
 - [2026-08-10-session-card-ingress-projection-repair.md](2026-08-10-session-card-ingress-projection-repair.md) restricts Task ingress artifact presentation to selected Task conversations so standalone Session turns render their persisted content without acquiring a false Task-board contract.

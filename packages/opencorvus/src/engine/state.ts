@@ -19,6 +19,9 @@ import {
 import { requireTaskCancellationRequestEvent } from "./cancellation-projection"
 import { ProtocolStore } from "@/protocol/store"
 import { insertEngineArtifact, patchEngineArtifact } from "./artifact"
+import { Project } from "@/project/project"
+import { runWithIndependentProjectIdentity } from "@/project/independent-project-owner"
+import { waitForRuntimeSettlementIdle } from "@/runtime/execution-settlement"
 
 const log = Log.create({ service: "engine-state" })
 
@@ -177,7 +180,11 @@ export async function terminalTask(
 }
 
 const settlementOperations = new Map<string, Promise<void>>()
+const settlementLeaseFences = new Map<string, AbortController>()
 const settlementRetryTimers = new Map<string, ReturnType<typeof setTimeout>>()
+const settlementFollowups = new Set<string>()
+let settlementAdmissionGate: symbol | undefined
+let beforeCancelledTaskRollbackRecoveryForTest: (() => void | Promise<void>) | undefined
 const settlementOwnerID = `settlement-owner:${randomUUID()}`
 const SETTLEMENT_LEASE_MS = 10_000
 const SETTLEMENT_HEARTBEAT_MS = 2_000
@@ -209,24 +216,38 @@ function claimSettlementArtifact(artifactID: string): SettlementClaim {
   })
 }
 
-function renewSettlementLease(artifactID: string): void {
-  Database.immediateTransaction((db) => {
+function renewSettlementLease(artifactID: string): boolean {
+  return Database.immediateTransaction((db) => {
     const row = db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, artifactID)).get()
-    if (!row || row.label !== "running") return
+    if (!row || row.label !== "running") return false
     const payload = row.payload as Record<string, unknown>
-    if (payload.owner_id !== settlementOwnerID) return
+    if (payload.owner_id !== settlementOwnerID) return false
     patchEngineArtifact(db, {
       id: artifactID,
       payload: { ...payload, lease_expires_at: Date.now() + SETTLEMENT_LEASE_MS },
       timeUpdated: Date.now(),
     })
+    return true
   })
+}
+
+function renewSettlementLeaseOrAbort(artifactID: string, fence: AbortController): void {
+  if (fence.signal.aborted) return
+  try {
+    if (renewSettlementLease(artifactID)) return
+    fence.abort(new Error(`Settlement ${artifactID} owner lease is no longer authoritative`))
+  } catch (error) {
+    log.error("cancelled Task settlement heartbeat failed", {
+      artifactID,
+      error: error instanceof Error ? error.message : String(error),
+    })
+    fence.abort(error)
+  }
 }
 
 function completeSettlementArtifact(input: {
   artifactID: string
   claimed: Record<string, unknown>
-  status: "completed" | "failed"
   payload: Record<string, unknown>
   completed: number
 }): void {
@@ -238,14 +259,59 @@ function completeSettlementArtifact(input: {
     }
     patchEngineArtifact(db, {
       id: input.artifactID,
-      label: input.status,
-      payload: { ...input.claimed, ...input.payload, status: input.status, time_completed: input.completed },
+      label: "completed",
+      payload: { ...input.claimed, ...input.payload, status: "completed", time_completed: input.completed },
       timeUpdated: input.completed,
     })
   })
 }
 
-function scheduleSettlementRetry(artifactID: string, run: (claimed: Record<string, unknown>) => Promise<void>): void {
+function deferSettlementArtifact(input: {
+  artifactID: string
+  claimed: Record<string, unknown>
+  failures: Array<{ stage: string; error: string }>
+}): void {
+  Database.immediateTransaction((db) => {
+    const row = db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, input.artifactID)).get()
+    const current = row?.payload as Record<string, unknown> | undefined
+    if (!row || row.label !== "running" || current?.owner_id !== settlementOwnerID) {
+      throw new Error(`Settlement ${input.artifactID} owner lease is no longer authoritative`)
+    }
+    const {
+      owner_id: _ownerID,
+      owner_process_id: _ownerProcessID,
+      owner_started_at: _ownerStartedAt,
+      lease_expires_at: _leaseExpiresAt,
+      time_completed: _timeCompleted,
+      ...retryable
+    } = input.claimed
+    const now = Date.now()
+    patchEngineArtifact(db, {
+      id: input.artifactID,
+      label: "pending",
+      payload: {
+        ...retryable,
+        status: "pending",
+        attempt: Number(input.claimed.attempt ?? 0) + 1,
+        last_failure: input.failures,
+        time_last_failed: now,
+      },
+      timeUpdated: now,
+    })
+  })
+}
+
+function throwSettlementFailures(kind: string, failures: Array<{ stage: string; error: string }>): never {
+  throw new AggregateError(
+    failures.map((failure) => new Error(`${failure.stage}: ${failure.error}`)),
+    `${kind} requires retry after ${failures.length} failed operation(s)`,
+  )
+}
+
+type SettlementOperation = (claimed: Record<string, unknown>, signal: AbortSignal) => Promise<void>
+
+function scheduleSettlementRetry(artifactID: string, run: SettlementOperation): void {
+  if (settlementAdmissionGate) return
   if (settlementRetryTimers.has(artifactID)) return
   const timer = setTimeout(() => {
     settlementRetryTimers.delete(artifactID)
@@ -255,8 +321,19 @@ function scheduleSettlementRetry(artifactID: string, run: (claimed: Record<strin
   settlementRetryTimers.set(artifactID, timer)
 }
 
-function runSettlementOperation(artifactID: string, run: (claimed: Record<string, unknown>) => Promise<void>): void {
-  if (settlementOperations.has(artifactID)) return
+function runSettlementOperation(artifactID: string, run: SettlementOperation): void {
+  if (settlementAdmissionGate) return
+  const existingOperation = settlementOperations.get(artifactID)
+  if (existingOperation) {
+    if (settlementFollowups.has(artifactID)) return
+    settlementFollowups.add(artifactID)
+    const resume = () => {
+      settlementFollowups.delete(artifactID)
+      if (!settlementAdmissionGate) runSettlementOperation(artifactID, run)
+    }
+    void existingOperation.then(resume, resume)
+    return
+  }
   let claim: SettlementClaim
   try {
     claim = claimSettlementArtifact(artifactID)
@@ -274,21 +351,17 @@ function runSettlementOperation(artifactID: string, run: (claimed: Record<string
     return
   }
   const claimed = claim.payload
-  const heartbeat = setInterval(() => {
-    try {
-      renewSettlementLease(artifactID)
-    } catch (error) {
-      log.error("cancelled Task settlement heartbeat failed", {
-        artifactID,
-        error: error instanceof Error ? error.message : String(error),
-      })
-    }
-  }, SETTLEMENT_HEARTBEAT_MS)
+  const leaseFence = new AbortController()
+  settlementLeaseFences.set(artifactID, leaseFence)
+  const heartbeat = setInterval(() => renewSettlementLeaseOrAbort(artifactID, leaseFence), SETTLEMENT_HEARTBEAT_MS)
   heartbeat.unref?.()
-  const operation = run(claimed).finally(() => {
-    clearInterval(heartbeat)
-    settlementOperations.delete(artifactID)
-  })
+  const operation = Promise.resolve()
+    .then(() => run(claimed, leaseFence.signal))
+    .finally(() => {
+      clearInterval(heartbeat)
+      if (settlementLeaseFences.get(artifactID) === leaseFence) settlementLeaseFences.delete(artifactID)
+      settlementOperations.delete(artifactID)
+    })
   settlementOperations.set(artifactID, operation)
   void operation.catch((error) => {
     log.error("cancelled Task settlement operation crashed", {
@@ -299,35 +372,164 @@ function runSettlementOperation(artifactID: string, run: (claimed: Record<string
   })
 }
 
+type CancelledTaskSettlementGate = Disposable & {
+  waitForIdle(inactivityTimeoutMilliseconds?: number): Promise<void>
+  commit(): void
+  rollback(): () => Promise<void>
+}
+
+export class CancelledTaskSettlementInactivityError extends Error {
+  override readonly name = "CancelledTaskSettlementInactivityError"
+
+  constructor(
+    public readonly artifactIDs: readonly string[],
+    public readonly inactivityTimeoutMilliseconds: number,
+  ) {
+    super(
+      `Cancelled Task settlement made no progress for ${inactivityTimeoutMilliseconds}ms; ` +
+        `${artifactIDs.length} artifact(s) remain: ${artifactIDs.join(", ")}`,
+    )
+  }
+}
+
+async function resumeCancelledTaskSettlementsByProject(): Promise<void> {
+  await beforeCancelledTaskRollbackRecoveryForTest?.()
+  const projectIDs = Database.use((db) =>
+    db
+      .selectDistinct({ projectID: EngineTaskTable.project_id })
+      .from(EngineArtifactTable)
+      .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, EngineArtifactTable.task_id))
+      .where(
+        and(
+          sql`${EngineArtifactTable.kind} IN ('task_checkpoint_settlement', 'task_auxiliary_settlement')`,
+          sql`${EngineArtifactTable.label} IN ('pending', 'running')`,
+        ),
+      )
+      .all(),
+  )
+  const failures: unknown[] = []
+  for (const { projectID } of projectIDs) {
+    const project = Project.get(projectID)
+    if (!project) {
+      failures.push(new Error(`Cancelled Task settlement references missing project ${projectID}`))
+      continue
+    }
+    try {
+      await runWithIndependentProjectIdentity({
+        directory: project.worktree,
+        fn: () => {
+          if (Instance.project.id !== projectID) {
+            throw new Error(
+              `Cancelled Task settlement rollback resolved project ${Instance.project.id}, expected ${projectID}`,
+            )
+          }
+          reconcilePendingCancelledTaskSettlements()
+        },
+      })
+    } catch (error) {
+      failures.push(error)
+    }
+  }
+  if (failures.length > 0) {
+    throw new AggregateError(failures, "Failed to resume cancelled Task settlements after runtime rollback")
+  }
+}
+
+export function acquireCancelledTaskSettlementGate(): CancelledTaskSettlementGate {
+  if (settlementAdmissionGate) throw new Error("Cancelled Task settlement is already quiescing")
+  const token = Symbol("cancelled-task-settlement")
+  settlementAdmissionGate = token
+  for (const timer of settlementRetryTimers.values()) clearTimeout(timer)
+  settlementRetryTimers.clear()
+  let decision: "pending" | "commit" | "rollback" = "pending"
+  let disposed = false
+  let rollbackCompleted = false
+  let rollbackOperation: Promise<void> | undefined
+  return {
+    async waitForIdle(inactivityTimeoutMilliseconds) {
+      if (inactivityTimeoutMilliseconds === undefined) {
+        while (settlementOperations.size > 0) await Promise.allSettled([...settlementOperations.values()])
+        return
+      }
+      await waitForRuntimeSettlementIdle({
+        snapshot: () =>
+          [...settlementOperations].map(([artifactID, settled]) => ({ label: artifactID, settled })),
+        inactivityTimeoutMilliseconds,
+        inactivityError: (artifactIDs) =>
+          new CancelledTaskSettlementInactivityError(artifactIDs, inactivityTimeoutMilliseconds),
+      })
+    },
+    commit() {
+      if (decision === "rollback") throw new Error("Cancelled Task settlement rollback is already authoritative")
+      decision = "commit"
+    },
+    rollback() {
+      if (decision === "commit") throw new Error("Cancelled Task settlement commit is already authoritative")
+      decision = "rollback"
+      return async () => {
+        if (!disposed) {
+          throw new Error("Cancelled Task settlement rollback can resume only after all admission gates reopen")
+        }
+        if (rollbackCompleted) return
+        if (rollbackOperation) return await rollbackOperation
+        rollbackOperation = resumeCancelledTaskSettlementsByProject().then(() => {
+          rollbackCompleted = true
+        })
+        try {
+          await rollbackOperation
+        } finally {
+          rollbackOperation = undefined
+        }
+      }
+    },
+    [Symbol.dispose]() {
+      if (settlementAdmissionGate !== token) return
+      if (decision === "pending") {
+        throw new Error("Cancelled Task settlement gate requires an explicit commit or rollback decision")
+      }
+      settlementAdmissionGate = undefined
+      disposed = true
+    },
+  }
+}
+
 function scheduleCancelledTaskAuxiliarySettlement(task: TaskRow, settlementArtifactID: string): void {
-  runSettlementOperation(settlementArtifactID, async (claimed) => {
+  runSettlementOperation(settlementArtifactID, async (claimed, signal) => {
     const failures: Array<{ stage: string; error: string }> = []
     try {
+      signal.throwIfAborted()
       const { ProcessSupervisor } = await import("@/shell/process-supervisor")
-      await ProcessSupervisor.settleTaskAuxiliaryProcesses(task.id)
+      await ProcessSupervisor.settleTaskAuxiliaryProcesses(task.id, { signal })
+      signal.throwIfAborted()
     } catch (error) {
+      signal.throwIfAborted()
       failures.push({
         stage: "auxiliary_process_settlement",
         error: error instanceof Error ? error.message : String(error),
       })
     }
+    signal.throwIfAborted()
+    if (failures.length > 0) {
+      deferSettlementArtifact({ artifactID: settlementArtifactID, claimed, failures })
+      throwSettlementFailures("Cancelled Task auxiliary settlement", failures)
+    }
     const completed = Date.now()
     completeSettlementArtifact({
       artifactID: settlementArtifactID,
       claimed,
-      status: failures.length === 0 ? "completed" : "failed",
-      payload: failures.length > 0 ? { failures } : {},
+      payload: {},
       completed,
     })
   })
 }
 
 function scheduleCancelledTaskCheckpointSettlement(task: TaskRow, settlementArtifactID: string): void {
-  runSettlementOperation(settlementArtifactID, async (claimed) => {
+  runSettlementOperation(settlementArtifactID, async (claimed, signal) => {
     const currentTask = requireTask(task.id)
     let checkpoint: Record<string, unknown> | undefined
     const failures: Array<{ stage: string; error: string }> = []
     try {
+      signal.throwIfAborted()
       const existing = ((currentTask.metadata as Record<string, any>)?.git?.result ?? undefined) as
         | Record<string, unknown>
         | undefined
@@ -336,11 +538,13 @@ function scheduleCancelledTaskCheckpointSettlement(task: TaskRow, settlementArti
       } else {
         const { EngineGit } = await import("./git")
         const baseline = await EngineGit.prepare(currentTask)
+        signal.throwIfAborted()
         if (baseline.error) {
           log.error("cancelled Task baseline checkpoint settlement failed", { taskID: task.id, error: baseline.error })
           failures.push({ stage: "baseline", error: baseline.error })
         } else {
           const result = await EngineGit.complete(baseline.task)
+          signal.throwIfAborted()
           if (result.error) {
             log.error("cancelled Task result checkpoint settlement failed", { taskID: task.id, error: result.error })
             failures.push({ stage: "result", error: result.error })
@@ -350,6 +554,7 @@ function scheduleCancelledTaskCheckpointSettlement(task: TaskRow, settlementArti
         }
       }
     } catch (error) {
+      signal.throwIfAborted()
       log.error("cancelled Task checkpoint settlement crashed", {
         taskID: task.id,
         error: error instanceof Error ? error.message : String(error),
@@ -358,9 +563,12 @@ function scheduleCancelledTaskCheckpointSettlement(task: TaskRow, settlementArti
       failures.push({ stage: "checkpoint", error: error instanceof Error ? error.message : String(error) })
     }
     try {
+      signal.throwIfAborted()
       const { Worktree } = await import("@/worktree")
-      await Worktree.releaseManagedWorktreeTaskOwners(task.id)
+      await Worktree.releaseManagedWorktreeTaskOwners(task.id, { signal })
+      signal.throwIfAborted()
     } catch (error) {
+      signal.throwIfAborted()
       log.error("cancelled Task worktree settlement failed", {
         taskID: task.id,
         error: error instanceof Error ? error.message : String(error),
@@ -368,14 +576,17 @@ function scheduleCancelledTaskCheckpointSettlement(task: TaskRow, settlementArti
       })
       failures.push({ stage: "worktree_release", error: error instanceof Error ? error.message : String(error) })
     }
+    signal.throwIfAborted()
+    if (failures.length > 0) {
+      deferSettlementArtifact({ artifactID: settlementArtifactID, claimed, failures })
+      throwSettlementFailures("Cancelled Task checkpoint settlement", failures)
+    }
     const completed = Date.now()
     completeSettlementArtifact({
       artifactID: settlementArtifactID,
       claimed,
-      status: failures.length === 0 ? "completed" : "failed",
       payload: {
         ...(checkpoint ? { checkpoint } : {}),
-        ...(failures.length > 0 ? { failures } : {}),
       },
       completed,
     })
@@ -392,6 +603,7 @@ export function reconcilePendingCancelledTaskSettlements(): number {
         and(
           sql`${EngineArtifactTable.kind} IN ('task_checkpoint_settlement', 'task_auxiliary_settlement')`,
           sql`${EngineArtifactTable.label} IN ('pending', 'running')`,
+          eq(EngineTaskTable.project_id, Instance.project.id),
         ),
       )
       .all(),
@@ -404,6 +616,40 @@ export function reconcilePendingCancelledTaskSettlements(): number {
     }
   }
   return pending.length
+}
+
+export const CancelledTaskSettlementTestHooks = {
+  installBeforeRollbackRecovery(hook: () => void | Promise<void>): Disposable {
+    if (beforeCancelledTaskRollbackRecoveryForTest) {
+      throw new Error("Cancelled Task rollback recovery test hook is already installed")
+    }
+    beforeCancelledTaskRollbackRecoveryForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (beforeCancelledTaskRollbackRecoveryForTest === hook) {
+          beforeCancelledTaskRollbackRecoveryForTest = undefined
+        }
+      },
+    }
+  },
+  trackSettlementOperation(artifactID: string, operation: Promise<void>): Disposable {
+    if (settlementOperations.has(artifactID)) throw new Error(`Settlement ${artifactID} is already active`)
+    const tracked = Promise.resolve(operation).finally(() => {
+      if (settlementOperations.get(artifactID) === tracked) settlementOperations.delete(artifactID)
+    })
+    settlementOperations.set(artifactID, tracked)
+    void tracked.catch(() => undefined)
+    return {
+      [Symbol.dispose]() {
+        if (settlementOperations.get(artifactID) === tracked) settlementOperations.delete(artifactID)
+      },
+    }
+  },
+  renewLeaseNow(artifactID: string): void {
+    const fence = settlementLeaseFences.get(artifactID)
+    if (!fence) throw new Error(`Settlement ${artifactID} has no live lease fence`)
+    renewSettlementLeaseOrAbort(artifactID, fence)
+  },
 }
 
 function nonEmptyString(value: unknown): value is string {

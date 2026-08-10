@@ -2671,18 +2671,18 @@ export namespace MCP {
               status: "needs_client_registration" as const,
               error: "Server does not support dynamic client registration. Please provide clientId in config.",
             }
-            Bus.publish(AuthRequired, {
+            Bus.publishOwned(AuthRequired, {
               name: key,
               message: `Server "${key}" requires a pre-registered client ID. Add clientId to your config.`,
               reason: "needs_client_registration",
-            }).catch((e) => log.debug("failed to publish MCP auth notice", { error: e }))
+            })
           } else {
             status = { status: "needs_auth" as const }
-            Bus.publish(AuthRequired, {
+            Bus.publishOwned(AuthRequired, {
               name: key,
               message: `Server "${key}" requires authentication. Run: opencorvus mcp auth ${key}`,
               reason: "needs_auth",
-            }).catch((e) => log.debug("failed to publish MCP auth notice", { error: e }))
+            })
           }
           try {
             await closeClientAndTransport(key, client, transport)
@@ -3574,7 +3574,7 @@ export namespace MCP {
       // Browser opening failed (e.g., in remote/headless sessions like SSH, devcontainers)
       // Emit event so CLI can display the URL for manual opening
       log.warn("failed to open browser, user must open URL manually", { mcpName, error })
-      Bus.publish(BrowserOpenFailed, { mcpName, url: authorizationUrl })
+      Bus.publishOwned(BrowserOpenFailed, { mcpName, url: authorizationUrl })
     }
 
     // Wait for callback using the already-registered promise

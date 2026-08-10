@@ -21,7 +21,10 @@ describe("Work Ledger interruption activity", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await createRightSidebarConversationSession("work")
+        const session = await Session.mergeMetadata({
+          sessionID: (await createRightSidebarConversationSession("work")).id,
+          patch: { configOverlay: { model: "openai/gpt-5.6-sol" } },
+        })
         const now = Date.now()
         Database.use((db) =>
           db
@@ -33,7 +36,7 @@ describe("Work Ledger interruption activity", () => {
               priority: "normal",
               status: "queued",
               source: "session.prompt_async",
-              metadata: { kind: "session_prompt", input: {} },
+              metadata: { kind: "session_wake", messageID: Identifier.ascending("message"), input: {} },
               time_created: now,
               time_updated: now,
             })
@@ -66,7 +69,7 @@ describe("Work Ledger interruption activity", () => {
           }
           if (event.properties.queueTaskID === queueTaskID && event.properties.status === "failed") resolveFailed()
         })
-        const enqueuedTaskID = TaskQueueService.enqueuePrompt({
+        const { taskID: enqueuedTaskID } = await TaskQueueService.enqueuePromptAfterPersistingUserMessage({
           sessionID: session.id,
           source: "session.prompt_async",
           prompt: {

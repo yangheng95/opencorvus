@@ -150,7 +150,7 @@ export namespace SessionStatus {
     promptGenerationOwners[sessionID] = owner
   }
 
-  export function beginExecutionOccurrence(sessionID: string, inputMessageID: string, owner: AbortSignal): void {
+  export function beginExecutionOccurrence(sessionID: string, inputMessageID: string, owner?: AbortSignal): void {
     requireDurableInputMessage(sessionID, inputMessageID)
     const current = executionOccurrences[sessionID]
     if (current?.inputMessageID === inputMessageID && current.owner === owner) return

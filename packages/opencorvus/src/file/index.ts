@@ -553,7 +553,7 @@ export namespace File {
   async function notifyEdited(files: readonly string[]): Promise<void> {
     const settled = await Promise.allSettled(
       files.map((file) =>
-        Bus.publish(Event.Edited, {
+        Bus.publishOwned(Event.Edited, {
           file,
           processAuthority: { kind: "host", cwd: Instance.directory },
         }),
@@ -1407,7 +1407,7 @@ export namespace File {
       }))
       await Promise.allSettled(
         results.map((item) =>
-          Bus.publish(Event.Edited, {
+          Bus.publishOwned(Event.Edited, {
             file: item.path,
             processAuthority: { kind: "host", cwd: Instance.directory },
           }),

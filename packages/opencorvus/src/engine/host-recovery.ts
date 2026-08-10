@@ -14,6 +14,18 @@ export type StartedTaskProjectRecoveryResult = {
   failures: StartedTaskProjectRecoveryFailure[]
 }
 
+export function assertStartedTaskProjectRecoverySucceeded(
+  result: StartedTaskProjectRecoveryResult,
+): StartedTaskProjectRecoveryResult {
+  if (result.failures.length === 0) return result
+  throw new AggregateError(
+    result.failures.map(
+      (failure) => new Error(`${failure.directory || "<unresolved>"}: ${failure.error}`),
+    ),
+    `Failed to recover ${result.failures.length} started Task project(s)`,
+  )
+}
+
 type StartedTaskDirectoryDiscovery = {
   directories: string[]
   failures: Array<StartedTaskProjectRecoveryFailure & { taskID: string }>

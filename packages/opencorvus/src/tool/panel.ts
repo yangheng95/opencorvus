@@ -973,7 +973,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
             missionID,
           },
         })
-        publishMissionHandoff(attachedMissionSession)
+        await publishMissionHandoff(attachedMissionSession)
         return {
           title: "Mission started",
           output: JSON.stringify({
@@ -1076,7 +1076,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           },
         })
         const hydratedWorkSession = await Session.get(workSession.id)
-        publishConversationHandoff({
+        await publishConversationHandoff({
           targetSession: hydratedWorkSession,
           callerSession,
           callerMessageID,

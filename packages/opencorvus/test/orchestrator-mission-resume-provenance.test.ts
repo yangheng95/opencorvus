@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test"
-import { currentWakeControlProjection, renderWakeProvenanceNotice } from "@/orchestrator/agent"
+import { renderWakeProvenanceNotice } from "@/orchestrator/agent"
 import { OrchestratorEventSchema } from "@/orchestrator/event"
 import { authorizedTaskRootMessagesForWake } from "@/orchestrator/interaction-tools"
 
@@ -29,35 +29,14 @@ test("Mission acceptance resume projects one current read and real-decision obli
     },
   })
 
-  const notice = renderWakeProvenanceNotice(event, "tsk_current_acceptance")
+  const notice = renderWakeProvenanceNotice(event, "tsk_current_acceptance", "art_current_acceptance_wake")
 
+  expect(notice).toContain("Current durable wake occurrence=art_current_acceptance_wake")
+  expect(notice).toContain("mission_id=mission-current-acceptance")
+  expect(notice).toContain("reviewed_terminal_event=pev_reviewed_terminal_occurrence")
   expect(notice).toContain(`read_task_message(message_id="${messageID}"`)
   expect(notice).toContain("record at least one current scheduling or lifecycle decision")
   expect(notice).toContain("matching real tool call")
-  expect(notice).toContain("a prose-only response")
-
-  const control = currentWakeControlProjection({
-    taskID: "tsk_current_acceptance",
-    event,
-    wakeID: "art_current_acceptance_wake",
-  })
-  expect(control).toMatchObject({
-    messageID: "msg_current_acceptance_wake",
-    author: "mission",
-    wakeReason: {
-      source: "mission.acceptance_resume",
-      wakeID: "art_current_acceptance_wake",
-      taskID: "tsk_current_acceptance",
-      missionAcceptanceResume: event.missionAcceptanceResume,
-    },
-  })
-  expect(control?.text).toContain("# Mission Acceptance Repair Control")
-  expect(control?.text).toContain(`read_task_message(message_id="${messageID}"`)
-  expect(control?.text).toContain("matching real tool call")
-  expect(control?.text).toContain("proves only that the Host accepted a prior request to reopen the Task")
-  expect(control?.text).toContain("not Mission acceptance of deliverables")
-  expect(control?.text).toContain("missionSessionID identifies the originating Mission")
-  expect(control?.text).toContain("actual Task-root Session authority")
 
   expect(authorizedTaskRootMessagesForWake(event)).toEqual([
     {
@@ -67,17 +46,39 @@ test("Mission acceptance resume projects one current read and real-decision obli
     },
   ])
 
-  const retryControl = currentWakeControlProjection({
-    taskID: "tsk_current_acceptance",
-    event: OrchestratorEventSchema.parse({
+  const retryNotice = renderWakeProvenanceNotice(
+    OrchestratorEventSchema.parse({
       taskIntent: {
         kind: "retry",
         actor: "operator",
         supersededOperatorMessageIDs: [],
       },
     }),
-    wakeID: "art_current_retry_wake",
-  })
-  expect(retryControl?.text).toContain("proves only that the Host accepted a prior request to reopen the Task")
-  expect(retryControl?.text).toContain("not Mission acceptance of deliverables")
+    "tsk_current_acceptance",
+    "art_current_retry_wake",
+  )
+  expect(retryNotice).toContain("Current durable wake occurrence=art_current_retry_wake")
+  expect(retryNotice).toContain("Current taskIntent=retry; actor=operator")
+  expect(retryNotice).toContain("requested a fresh scheduling decision for the same Task")
+})
+
+test("agent lifecycle delivery projects its exact current occurrence", () => {
+  const notice = renderWakeProvenanceNotice(
+    OrchestratorEventSchema.parse({
+      agentLifecycleDelivery: {
+        eventID: "pev_worker_terminal_delivery",
+        sessionID: "ses_worker_terminal_delivery",
+        dispatchID: "dispatch_worker_terminal_delivery",
+      },
+    }),
+    "tsk_lifecycle_delivery",
+    "art_lifecycle_delivery_wake",
+  )
+
+  expect(notice).toContain("Current durable wake occurrence=art_lifecycle_delivery_wake")
+  expect(notice).toContain("Current agentLifecycleDelivery")
+  expect(notice).toContain("event_id=pev_worker_terminal_delivery")
+  expect(notice).toContain("session_id=ses_worker_terminal_delivery")
+  expect(notice).toContain("dispatch_id=dispatch_worker_terminal_delivery")
+  expect(notice).toContain("durable agent.execution.lifecycle")
 })

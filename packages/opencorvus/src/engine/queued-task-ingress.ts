@@ -58,6 +58,8 @@ export function sameTerminalIngressResult(left: TerminalIngressResult, right: Te
 const CommonShape = {
   wake_id: z.string().min(1),
   delivery_attempt: z.number().int().positive(),
+  delivery_runtime_id: z.string().min(1).optional(),
+  delivery_runtime_attempt: z.number().int().positive().optional(),
   task_id: z.string().min(1),
   root_session_id: z.string().min(1),
   time_queued: z.number().int().nonnegative(),

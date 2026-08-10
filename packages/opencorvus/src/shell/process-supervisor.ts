@@ -14,6 +14,7 @@ import {
 } from "@/execution-capsule/runtime"
 import { resolveTaskProcessExecution } from "@/engine/task-execution-capsule-binding"
 import { Lock } from "@/util/lock"
+import { awaitWithAbort } from "@/util/abort"
 
 const SIGKILL_TIMEOUT_MS = 200
 
@@ -352,21 +353,30 @@ export namespace ProcessSupervisor {
 
   /** Holds the Task process write lease across the physical stop proof and the
    * terminal commit so no new mutating Task process can enter the gap. */
-  export async function withTaskCancellationBarrier<T>(taskID: string, terminalCommit: () => Promise<T>): Promise<T> {
+  export async function withTaskCancellationBarrier<T>(
+    taskID: string,
+    terminalCommit: () => Promise<T>,
+    options?: { signal?: AbortSignal },
+  ): Promise<T> {
+    options?.signal?.throwIfAborted()
     const leaseKey = taskLeaseKey(taskID, "mandatory")
     const reservation = Lock.reserveWrite(leaseKey)
     try {
       const registrations = taskSpawnRegistrations.get(leaseKey)
-      if (registrations) await Promise.all([...registrations])
+      if (registrations) await awaitWithAbort(Promise.all([...registrations]), options?.signal)
+      options?.signal?.throwIfAborted()
       await disposeLiveProcessesForTask(taskID, "mandatory", true)
+      options?.signal?.throwIfAborted()
       await disposeTaskExecutionCapsule(taskID)
-      using lease = await reservation.acquired
+      options?.signal?.throwIfAborted()
+      using lease = await awaitWithAbort(reservation.acquired, options?.signal)
       const remaining = Array.from(liveHandles.values()).filter(
         (entry) => entry.taskID === taskID && entry.taskCancellationRole === "mandatory",
       )
       if (remaining.length > 0) {
         throw new Error(`Task ${taskID} still owns ${remaining.length} mandatory process(es) after cancellation stop`)
       }
+      options?.signal?.throwIfAborted()
       return await terminalCommit()
     } catch (error) {
       reservation.cancel()
@@ -374,8 +384,13 @@ export namespace ProcessSupervisor {
     }
   }
 
-  export async function settleTaskAuxiliaryProcesses(taskID: string): Promise<void> {
+  export async function settleTaskAuxiliaryProcesses(
+    taskID: string,
+    options?: { signal?: AbortSignal },
+  ): Promise<void> {
+    options?.signal?.throwIfAborted()
     await disposeLiveProcessesForTask(taskID, "auxiliary")
+    options?.signal?.throwIfAborted()
   }
 
   /** Stops every Task-owned mutating process before this backend relinquishes

@@ -616,7 +616,11 @@ export class WorkerTurnSettlementError extends Error {
 
   constructor(
     readonly sessionID: string,
-    readonly operation: "settle-prompt-owner" | "detach-runtime-identity" | "close-runtime-resources",
+    readonly operation:
+      | "settle-prompt-owner"
+      | "detach-runtime-identity"
+      | "close-runtime-resources"
+      | "publish-terminal-lifecycle",
     readonly infrastructureArtifactID: string | undefined,
     readonly evidence: WorkerTurnSettlementEvidence | undefined,
     readonly finalMessageID: string | undefined,
@@ -644,7 +648,11 @@ function workerTurnSettlementEvidence(sessionID: string): WorkerTurnSettlementEv
 function recordWorkerTurnSettlementFailure(
   input: PhysicalWorkerTurnSettlementInput & {
     sessionID: string
-    operation: "settle-prompt-owner" | "detach-runtime-identity" | "close-runtime-resources"
+    operation:
+      | "settle-prompt-owner"
+      | "detach-runtime-identity"
+      | "close-runtime-resources"
+      | "publish-terminal-lifecycle"
     error: unknown
     evidence?: WorkerTurnSettlementEvidence
   },
@@ -743,31 +751,8 @@ async function settlePhysicalWorkerTurn(
     )
   }
   if (!generationReservation) throw new Error(`Session ${input.session.id} settlement reservation was not acquired`)
-  let resources: ReturnType<typeof SessionRuntimeContractStore.clear>
   try {
-    resources = SessionRuntimeContractStore.clear(input.session.id)
-  } catch (error) {
-    generationReservation[Symbol.dispose]()
-    const artifactID = recordWorkerTurnSettlementFailure({
-      ...input,
-      sessionID: input.session.id,
-      operation: "detach-runtime-identity",
-      error,
-      evidence,
-    })
-    throw new WorkerTurnSettlementError(
-      input.session.id,
-      "detach-runtime-identity",
-      artifactID,
-      evidence,
-      input.finalMessageID,
-      error instanceof Error ? error.name : "UnknownError",
-      error instanceof Error ? error.message : String(error),
-      error,
-    )
-  }
-  try {
-    await resources?.mcp.close()
+    await SessionRuntimeContractStore.dispose(input.session.id)
   } catch (error) {
     generationReservation[Symbol.dispose]()
     const artifactID = recordWorkerTurnSettlementFailure({
@@ -799,11 +784,32 @@ async function publishPhysicallySettledWorkerTerminal(
   },
 ): Promise<void> {
   using _generationReservation = await settlePhysicalWorkerTurn(input)
-  await publishSessionStatus(input.session, input.status, {
-    promptGenerationOwner: input.promptGenerationOwner,
-    inputMessageID: input.inputMessageID,
-    taskID: input.taskID,
-  })
+  try {
+    await publishSessionStatus(input.session, input.status, {
+      promptGenerationOwner: input.promptGenerationOwner,
+      inputMessageID: input.inputMessageID,
+      taskID: input.taskID,
+    })
+  } catch (error) {
+    const evidence = workerTurnSettlementEvidence(input.session.id)
+    const artifactID = recordWorkerTurnSettlementFailure({
+      ...input,
+      sessionID: input.session.id,
+      operation: "publish-terminal-lifecycle",
+      error,
+      evidence,
+    })
+    throw new WorkerTurnSettlementError(
+      input.session.id,
+      "publish-terminal-lifecycle",
+      artifactID,
+      evidence,
+      input.finalMessageID,
+      error instanceof Error ? error.name : "UnknownError",
+      error instanceof Error ? error.message : String(error),
+      error,
+    )
+  }
 }
 
 export function promptToolSwitchesForAgentRun(input: {

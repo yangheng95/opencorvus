@@ -35,6 +35,7 @@ import { WorkflowNodeOccurrenceConflictError } from "@/engine/workflow-node-occu
 import { TaskWorkflowBindingConflictError } from "@/engine/workflow-binding-facts"
 import { resolveDispatchOccurrenceAuthority } from "@/engine/dispatch-lineage"
 import { Log } from "@/util/log"
+import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 
 const log = Log.create({ service: "dispatch-agent-tool" })
 
@@ -88,10 +89,103 @@ export type RunDispatchAgentInWorktree = <T>(input: {
 export type RunDetachedDispatch = <T>(run: () => Promise<T>) => Promise<T>
 
 const detachedDispatchPipelines = new Set<Promise<void>>()
+const detachedDispatchPipelineFailures = new Map<string, { generation: number; error: unknown }>()
+const detachedDispatchPipelineGenerations = new Map<string, number>()
+let detachedDispatchPipelineGeneration = 0
+let detachedDispatchSettlementGate: symbol | undefined
 
-function trackDetachedDispatchPipeline(pipeline: Promise<void>): void {
-  detachedDispatchPipelines.add(pipeline)
-  void pipeline.finally(() => detachedDispatchPipelines.delete(pipeline))
+function reserveDetachedDispatchPipeline(): (input: {
+  pipeline: Promise<void>
+  dispatchLineageID?: string
+}) => void {
+  if (detachedDispatchSettlementGate) {
+    throw new Error("Detached dispatch admission is closed for runtime settlement")
+  }
+  const runtimeReservation = RuntimeExecutionSettlement.reserve(
+    "detached_dispatch_pipeline",
+    `detached-dispatch-pipeline:${detachedDispatchPipelineGeneration + 1}`,
+  )
+  let settle!: (pipeline: Promise<void>) => void
+  const reservation = new Promise<void>((resolve, reject) => {
+    settle = (pipeline) => void pipeline.then(resolve, reject)
+  })
+  detachedDispatchPipelines.add(reservation)
+  runtimeReservation.settleWith(reservation)
+  let committed = false
+  return ({ pipeline, dispatchLineageID }) => {
+    if (committed) throw new Error("Detached dispatch pipeline reservation was already committed")
+    committed = true
+    const generation = ++detachedDispatchPipelineGeneration
+    if (dispatchLineageID) detachedDispatchPipelineGenerations.set(dispatchLineageID, generation)
+    void reservation
+      .then(
+        () => {
+          if (
+            dispatchLineageID &&
+            detachedDispatchPipelineGenerations.get(dispatchLineageID) === generation
+          ) {
+            detachedDispatchPipelineFailures.delete(dispatchLineageID)
+            detachedDispatchPipelineGenerations.delete(dispatchLineageID)
+          }
+        },
+        (error) => {
+          if (
+            dispatchLineageID &&
+            detachedDispatchPipelineGenerations.get(dispatchLineageID) === generation
+          ) {
+            detachedDispatchPipelineFailures.set(dispatchLineageID, { generation, error })
+          }
+        },
+      )
+      .finally(() => detachedDispatchPipelines.delete(reservation))
+    settle(pipeline)
+  }
+}
+
+/**
+ * Clear one process-local failed pipeline barrier only after the exact durable
+ * dispatch occurrence has acquired a replacement root-delivery authority.
+ * Callers must prove that authority from the committed lineage/ingress; this
+ * function deliberately accepts no Session-wide or Task-wide fallback key.
+ */
+export function settleDetachedDispatchPipelineRecovery(dispatchLineageID: string): void {
+  const exactID = dispatchLineageID.trim()
+  if (!exactID) throw new Error("Detached dispatch recovery requires an exact dispatch lineage Artifact ID")
+  detachedDispatchPipelineFailures.delete(exactID)
+  detachedDispatchPipelineGenerations.delete(exactID)
+}
+
+export type DetachedDispatchSettlementGate = Disposable & {
+  waitForIdle(): Promise<void>
+}
+
+export function acquireDetachedDispatchSettlementGate(): DetachedDispatchSettlementGate {
+  if (detachedDispatchSettlementGate) throw new Error("Detached dispatch settlement is already in progress")
+  const token = Symbol("detached-dispatch-settlement")
+  detachedDispatchSettlementGate = token
+  return {
+    async waitForIdle() {
+      while (detachedDispatchPipelines.size > 0) {
+        await Promise.allSettled([...detachedDispatchPipelines])
+      }
+      if (detachedDispatchPipelineFailures.size > 0) {
+        const failures = [...detachedDispatchPipelineFailures.entries()].map(
+          ([dispatchLineageID, failure]) =>
+            new Error(
+              `Detached dispatch lineage ${dispatchLineageID} has no successful replacement delivery authority`,
+              { cause: failure.error },
+            ),
+        )
+        throw new AggregateError(
+          failures,
+          `Failed to settle ${failures.length} detached dispatch pipeline(s)`,
+        )
+      }
+    },
+    [Symbol.dispose]: () => {
+      if (detachedDispatchSettlementGate === token) detachedDispatchSettlementGate = undefined
+    },
+  }
 }
 
 export async function waitForDetachedDispatchPipelinesForTest(): Promise<void> {
@@ -139,15 +233,37 @@ export async function detachDispatchExecution(input: {
   runDetachedRecovery: RunDetachedDispatch
   committedLineage: Promise<{ sessionID: string; artifactID: string }>
   deliver: (input: { sessionID: string; outcome?: DispatchOutcomeResult; executionError?: unknown }) => Promise<void>
-  onDeliveryFailure: (input: { sessionID: string; error: unknown }) => void | Promise<void>
+  onDeliveryFailure: (input: {
+    sessionID: string
+    outcome?: DispatchOutcomeResult
+    executionError?: unknown
+    error: unknown
+  }) => void | Promise<void>
   onPipelineOwnerCleanupFailure: (input: { sessionID: string; error: unknown }) => void | Promise<void>
 }): Promise<DispatchOutcomeResult> {
-  const execution = input.runDetached(input.execute)
-  const first = await Promise.race([
-    execution.then((outcome) => ({ kind: "completed" as const, outcome })),
-    input.committedLineage.then((lineage) => ({ kind: "accepted" as const, lineage })),
-  ])
-  if (first.kind === "completed") return first.outcome
+  const commitPipelineReservation = reserveDetachedDispatchPipeline()
+  const execution = Promise.resolve().then(() => input.runDetached(input.execute))
+  let first:
+    | { kind: "completed"; outcome: DispatchOutcomeResult }
+    | { kind: "accepted"; lineage: { sessionID: string; artifactID: string } }
+  try {
+    first = await Promise.race([
+      execution.then((outcome) => ({ kind: "completed" as const, outcome })),
+      input.committedLineage.then((lineage) => ({ kind: "accepted" as const, lineage })),
+    ])
+  } catch (error) {
+    commitPipelineReservation({
+      pipeline: execution.then(
+        () => undefined,
+        () => undefined,
+      ),
+    })
+    throw error
+  }
+  if (first.kind === "completed") {
+    commitPipelineReservation({ pipeline: Promise.resolve() })
+    return first.outcome
+  }
   const supervisedPipeline = (async () => {
     const deliveryInput = await execution.then(
       (outcome) => ({ sessionID: first.lineage.sessionID, outcome }),
@@ -157,82 +273,52 @@ export async function detachDispatchExecution(input: {
       try {
         await input.deliver(deliveryInput)
       } catch (error) {
-        try {
-          await input.onDeliveryFailure({ sessionID: first.lineage.sessionID, error })
-        } catch (recoveryError) {
-          log.error("detached dispatch completion recovery failed", {
-            sessionID: first.lineage.sessionID,
-            error: recoveryError instanceof Error ? recoveryError.message : String(recoveryError),
-            errorName: recoveryError instanceof Error ? recoveryError.name : undefined,
-          })
-        }
+        await input.onDeliveryFailure({ ...deliveryInput, error })
       }
     }
     const publishOwnerCleanupFailure = async (ownerError: unknown) => {
-      let callbackSettled = false
-      try {
-        await input.runDetachedRecovery(async () => {
-          try {
-            await input.onPipelineOwnerCleanupFailure({ sessionID: first.lineage.sessionID, error: ownerError })
-          } finally {
-            callbackSettled = true
-          }
-        })
-      } catch (recoveryError) {
-        log.error("detached dispatch pipeline owner recovery failed", {
-          sessionID: first.lineage.sessionID,
-          ownerError: ownerError instanceof Error ? ownerError.message : String(ownerError),
-          ownerErrorName: ownerError instanceof Error ? ownerError.name : undefined,
-          recoveryCallbackSettled: callbackSettled,
-          recoveryError: recoveryError instanceof Error ? recoveryError.message : String(recoveryError),
-          recoveryErrorName: recoveryError instanceof Error ? recoveryError.name : undefined,
-        })
-      }
+      await input.runDetachedRecovery(async () => {
+        await input.onPipelineOwnerCleanupFailure({ sessionID: first.lineage.sessionID, error: ownerError })
+      })
     }
     for (let ownerAttempt = 1; ownerAttempt <= 2; ownerAttempt += 1) {
-      let callbackSettled = false
+      let callbackCompleted = false
       try {
         await input.runDetached(async () => {
-          try {
-            await deliverWithRecovery()
-          } finally {
-            callbackSettled = true
-          }
+          await deliverWithRecovery()
+          callbackCompleted = true
         })
         return
       } catch (ownerError) {
-        if (!callbackSettled && ownerAttempt < 2) continue
-        if (callbackSettled) {
+        if (!callbackCompleted && ownerAttempt < 2) continue
+        if (callbackCompleted) {
           await publishOwnerCleanupFailure(ownerError)
           return
         }
-        let recoveryCallbackSettled = false
+        let recoveryCompleted = false
         try {
           await input.runDetachedRecovery(async () => {
-            try {
-              await deliverWithRecovery()
-            } finally {
-              recoveryCallbackSettled = true
-            }
+            await deliverWithRecovery()
+            recoveryCompleted = true
           })
+          return
         } catch (recoveryError) {
-          if (recoveryCallbackSettled) {
+          if (recoveryCompleted) {
             await publishOwnerCleanupFailure(recoveryError)
-          } else {
-            log.error("detached dispatch recovery owner initialization failed", {
-              sessionID: first.lineage.sessionID,
-              ownerError: ownerError instanceof Error ? ownerError.message : String(ownerError),
-              ownerErrorName: ownerError instanceof Error ? ownerError.name : undefined,
-              recoveryError: recoveryError instanceof Error ? recoveryError.message : String(recoveryError),
-              recoveryErrorName: recoveryError instanceof Error ? recoveryError.name : undefined,
-            })
+            return
           }
+          throw new AggregateError(
+            [ownerError, recoveryError],
+            `Detached dispatch ${first.lineage.sessionID} exhausted delivery owners`,
+          )
         }
-        return
       }
     }
   })()
-  trackDetachedDispatchPipeline(supervisedPipeline)
+  commitPipelineReservation({
+    pipeline: supervisedPipeline,
+    dispatchLineageID: first.lineage.artifactID,
+  })
   return DispatchOutcome.accepted({
     sessionID: first.lineage.sessionID,
     dispatchLineageID: first.lineage.artifactID,
@@ -595,7 +681,7 @@ export function createDispatchAgentTool(input: {
               )
             }
           },
-          onDeliveryFailure: async ({ sessionID: completedSessionID, error }) => {
+          onDeliveryFailure: async ({ sessionID: completedSessionID, outcome, executionError, error }) => {
             log.error("detached dispatch completion delivery failed", {
               taskID: input.taskID,
               target,
@@ -604,16 +690,66 @@ export function createDispatchAgentTool(input: {
               error: error instanceof Error ? error.message : String(error),
               errorName: error instanceof Error ? error.name : undefined,
             })
-            const { recordTaskInfrastructureError } = await import("@/engine/persist")
-            const infrastructureArtifactID = recordTaskInfrastructureError({
-              taskID: input.taskID,
-              component: "dispatch-agent",
-              operation: "deliver-terminal-worker-lifecycle",
-              reason: error instanceof Error ? `${error.name}: ${error.message}` : String(error),
-              errorName: error instanceof Error ? error.name : undefined,
-              sessionID: completedSessionID,
-              context: { target, dispatchID: dispatch.dispatchID },
-            })
+            let infrastructureOutcome: Extract<DispatchOutcomeResult, { kind: "infrastructure_failure" }> | undefined
+            if (outcome?.kind === "infrastructure_failure") infrastructureOutcome = outcome
+            if (!infrastructureOutcome && executionError instanceof WorkerTurnSettlementError) {
+              infrastructureOutcome = workerTurnSettlementFailureOutcome({
+                taskID: input.taskID,
+                dispatchID: dispatch.dispatchID,
+                error: executionError,
+              })
+            }
+            if (executionError && !infrastructureOutcome) {
+              const { recordTaskInfrastructureError } = await import("@/engine/persist")
+              const infrastructureArtifactID = recordTaskInfrastructureError({
+                taskID: input.taskID,
+                component: "dispatch-agent",
+                operation: "execute-detached-worker",
+                reason:
+                  executionError instanceof Error
+                    ? `${executionError.name}: ${executionError.message}`
+                    : String(executionError),
+                errorName: executionError instanceof Error ? executionError.name : undefined,
+                sessionID: completedSessionID,
+                context: { target, dispatchID: dispatch.dispatchID },
+              })
+              const failedOutcome = DispatchOutcome.infrastructureFailure({
+                operation: "execute-detached-worker",
+                message: executionError instanceof Error ? executionError.message : String(executionError),
+                errorName: executionError instanceof Error ? executionError.name : undefined,
+                sessionID: completedSessionID,
+                recoveryAuthority: resolveDispatchOccurrenceAuthority({
+                  taskID: input.taskID,
+                  dispatchID: dispatch.dispatchID,
+                }),
+                infrastructureError: exactEngineArtifactLocator({
+                  taskID: input.taskID,
+                  artifactID: infrastructureArtifactID,
+                }),
+              })
+              if (failedOutcome.kind !== "infrastructure_failure") {
+                throw new Error("Detached worker failure constructor returned a non-infrastructure outcome")
+              }
+              infrastructureOutcome = failedOutcome
+            }
+            if (infrastructureOutcome) {
+              const infrastructureFactID = infrastructureOutcome.infrastructure_error?.artifact_id
+              if (!infrastructureFactID) {
+                throw new Error(
+                  `Detached dispatch infrastructure recovery has no durable fact for ${completedSessionID}`,
+                )
+              }
+              const { dispatchTaskLoop } = await import("@/engine/queue")
+              const result = await dispatchTaskLoop({
+                taskID: input.taskID,
+                event: {
+                  note: `Accepted worker Session ${completedSessionID} failed ${infrastructureOutcome.operation}`,
+                  dispatchInfrastructureFailure: { infrastructureFactID, outcome: infrastructureOutcome },
+                },
+              })
+              if (result === "started" || result === "queued") return
+              throw new Error(`Detached dispatch infrastructure ingress is ${result} for ${completedSessionID}`)
+            }
             const { reconcileTerminalAgentLifecycleDelivery } = await import("@/engine/queue")
             const result = await reconcileTerminalAgentLifecycleDelivery({
               taskID: input.taskID,
@@ -621,15 +757,7 @@ export function createDispatchAgentTool(input: {
               dispatchID: dispatch.dispatchID,
             })
             if (result === "delivered" || result === "already_delivered") return
-            const { dispatchTaskLoop } = await import("@/engine/queue")
-            await dispatchTaskLoop({
-              taskID: input.taskID,
-              event: {
-                note:
-                  `Detached worker Session ${completedSessionID} dispatch ${dispatch.dispatchID} failed completion delivery. ` +
-                  `Inspect infrastructure Artifact ${infrastructureArtifactID}; terminal lifecycle reconciliation is ${result}.`,
-              },
-            })
+            throw new Error(`Detached worker lifecycle recovery is ${result} for Session ${completedSessionID}`)
           },
           onPipelineOwnerCleanupFailure: async ({ sessionID: completedSessionID, error }) => {
             const { recordTaskInfrastructureError } = await import("@/engine/persist")

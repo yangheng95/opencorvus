@@ -125,7 +125,7 @@ export function missionReceipt(session: Session.Info): MissionReceiptMetadata | 
  * has been persisted. The Mission remains a separate Session; this event only
  * connects its already-durable caller lineage to the current user interface.
  */
-export function publishMissionHandoff(session: Session.Info): MissionHandoffEvent {
+export async function publishMissionHandoff(session: Session.Info): Promise<MissionHandoffEvent> {
   if (session.kind !== "mission") {
     throw new Error(`Mission handoff requires a mission session: ${session.id}`)
   }
@@ -141,7 +141,7 @@ export function publishMissionHandoff(session: Session.Info): MissionHandoffEven
     callerMessageID: caller.message_id,
     timeCreated: Date.now(),
   })
-  void Bus.publish(MissionHandoffEvent, event)
+  await Bus.publish(MissionHandoffEvent, event)
   return event
 }
 

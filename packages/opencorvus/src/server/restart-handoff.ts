@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto"
 import { Env } from "@/runtime/env"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
+import { RuntimeServerOwnershipHandoffPendingError } from "./runtime-server-ownership"
 
 const RESTART_HANDOFF_ENV = "OPENCORVUS_RESTART_HANDOFF"
 const RESTART_HANDOFF_PREFIX = "OPENCORVUS_RESTART:"
@@ -206,7 +207,7 @@ export async function beginRestartHandoff(input: {
         error = ProcessSupervisor.combineFailures("Restart replacement and cleanup failed", [error, cleanupError])
       }
     }
-    if (listenerQuiesceStarted) {
+    if (listenerQuiesceStarted && restartFailureDisposition(error) === "restore-listener") {
       try {
         await input.restoreListener()
       } catch (restoreError) {
@@ -218,4 +219,8 @@ export async function beginRestartHandoff(input: {
     }
     throw error
   }
+}
+
+export function restartFailureDisposition(error: unknown): "remain-quiesced" | "restore-listener" {
+  return error instanceof RuntimeServerOwnershipHandoffPendingError ? "remain-quiesced" : "restore-listener"
 }

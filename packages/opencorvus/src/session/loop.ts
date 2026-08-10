@@ -569,7 +569,7 @@ export namespace SessionLoop {
       },
     } satisfies Message.TextPart)
     await Session.updateMessage(input.processor.message)
-    Bus.publish(Session.Event.Error, {
+    await Bus.publish(Session.Event.Error, {
       sessionID: input.sessionID,
       orderKey: sessionLifecycleOrderKey(input.sessionID),
       error: input.error,
@@ -1243,11 +1243,11 @@ export namespace SessionLoop {
       },
       modelID: input.model.id,
       providerID: input.model.providerID,
-      ...(runtimeIdentity?.identityKind === "projected-scheduler" && runtimeIdentity.terminalIngressID
+      ...(runtimeIdentity?.identityKind === "projected-scheduler" && runtimeIdentity.taskIngressID
         ? {
             taskIngress: {
-              id: runtimeIdentity.terminalIngressID,
-              kind: runtimeIdentity.terminalIngressKind!,
+              id: runtimeIdentity.taskIngressID,
+              kind: runtimeIdentity.taskIngressKind!,
             },
           }
         : {}),
@@ -1776,9 +1776,14 @@ export namespace SessionLoop {
    * synchronous dispatch. Persist the real interruption before continuing so
    * every Agent and Expert Squad family observes one truthful message stream.
    */
-  export async function terminalizeRecoveredIncompleteAssistant(sessionID: string): Promise<boolean> {
+  export async function terminalizeRecoveredIncompleteAssistant(
+    sessionID: string,
+    signal?: AbortSignal,
+  ): Promise<boolean> {
+    signal?.throwIfAborted()
     const candidates: Message.WithParts[] = []
     for await (const message of MessageStore.stream(sessionID)) {
+      signal?.throwIfAborted()
       if (message.info.role === "user") break
       if (message.info.role !== "assistant") continue
       if (message.info.time.completed === undefined) candidates.push(message)
@@ -1787,12 +1792,14 @@ export namespace SessionLoop {
 
     const now = Date.now()
     for (const candidate of candidates) {
+      signal?.throwIfAborted()
       if (candidate.info.role !== "assistant") continue
       const interruption = new Error(
         `Previous process ended before Session ${sessionID} completed assistant message ${candidate.info.id}`,
       )
       interruption.name = "ProcessExecutionInterruptedError"
       for (const part of candidate.parts) {
+        signal?.throwIfAborted()
         if (part.type !== "tool" || (part.state.status !== "pending" && part.state.status !== "running")) continue
         const taskID = taskIDForSession(sessionID)
         const lineage =
@@ -1837,11 +1844,13 @@ export namespace SessionLoop {
             },
           },
         })
+        signal?.throwIfAborted()
       }
       candidate.info.error = Message.fromError(interruption, { providerID: candidate.info.providerID })
       candidate.info.finish = "error"
       candidate.info.time.completed = now
       await Session.updateMessage(candidate.info)
+      signal?.throwIfAborted()
     }
     return true
   }
@@ -2111,10 +2120,10 @@ export namespace SessionLoop {
                           sessionID,
                           explicitModel: lastUser.model,
                         })
-                ).catch((e) => {
+                ).catch(async (e) => {
                   if (Provider.ModelNotFoundError.isInstance(e)) {
                     const hint = e.data.suggestions?.length ? ` Did you mean: ${e.data.suggestions.join(", ")}?` : ""
-                    Bus.publish(Session.Event.Error, {
+                    await Bus.publish(Session.Event.Error, {
                       sessionID,
                       orderKey: sessionLifecycleOrderKey(sessionID),
                       error: new NamedError.Unknown({

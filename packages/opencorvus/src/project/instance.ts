@@ -106,6 +106,7 @@ type InstanceApi = {
   state: StateFactory
   dispose(): Promise<void>
   disposeAll(): Promise<void>
+  acquireProcessSettlementGate(): Disposable
   converge(input: { maximumRetained: number }): Promise<InstanceCacheConvergence>
   scheduleConvergence(input: { maximumRetained: number }): void
 }
@@ -167,6 +168,15 @@ const pendingEvictions = new Set<CacheEntry>()
 
 const disposal = {
   all: undefined as Promise<void> | undefined,
+}
+let processSettlementGate: symbol | undefined
+
+export class InstanceProcessAdmissionClosedError extends Error {
+  override readonly name = "InstanceProcessAdmissionClosedError"
+
+  constructor() {
+    super("Instance process admission is closed during runtime settlement")
+  }
 }
 
 function instanceCacheKey(directory: string) {
@@ -465,6 +475,9 @@ function assertEntryCurrent(key: string, entry: CacheEntry) {
 
 function assertNotDisposing() {
   if (disposal.all) throw new Error("Cannot enter an instance while global instance disposal is in progress")
+  if (processSettlementGate && !leaseContext.tryUse()) {
+    throw new InstanceProcessAdmissionClosedError()
+  }
 }
 
 function assertContextHealthy(entry: CacheEntry) {
@@ -822,6 +835,20 @@ export function reenterActiveInstance<R>(input: { directory: string; fn: () => R
 }
 
 export const Instance: InstanceApi = {
+  acquireProcessSettlementGate(): Disposable {
+    if (processSettlementGate) throw new Error("Instance process settlement is already in progress")
+    const token = Symbol("instance-process-settlement")
+    processSettlementGate = token
+    return {
+      [Symbol.dispose]() {
+        if (processSettlementGate !== token) return
+        processSettlementGate = undefined
+        if (convergenceRequested && !scheduledConvergence) {
+          Instance.scheduleConvergence({ maximumRetained: scheduledMaximumRetained })
+        }
+      },
+    }
+  },
   async provide<R>(input: { directory: string; init?: InstanceInit; fn: () => R }): Promise<R> {
     assertNotDisposing()
     // Normalize project directories once so cache keys and boundary checks stay stable.
@@ -1107,6 +1134,7 @@ export const Instance: InstanceApi = {
     })
   },
   async converge(input) {
+    assertNotDisposing()
     SchedulerTaskOwner.assertCanStartLifecycleDisposal("instance cache convergence")
     if (leaseContext.tryUse()) {
       throw new Error("Cannot converge the instance cache from within an active instance callback")
@@ -1187,7 +1215,9 @@ export const Instance: InstanceApi = {
           void disposal.then((settled) =>
             Promise.resolve().then(() => {
               Log.Default.info("delayed Project runtime convergence settled", { directory, outcome: settled })
-              if (scheduled) Instance.scheduleConvergence({ maximumRetained: scheduledMaximumRetained })
+              if (scheduled && !processSettlementGate) {
+                Instance.scheduleConvergence({ maximumRetained: scheduledMaximumRetained })
+              }
             }),
           )
         }
@@ -1209,6 +1239,7 @@ export const Instance: InstanceApi = {
     return await operation
   },
   scheduleConvergence(input) {
+    assertNotDisposing()
     scheduledMaximumRetained = Math.max(1, Math.floor(input.maximumRetained))
     convergenceRequested = true
     if (scheduledConvergence) return
@@ -1222,10 +1253,15 @@ export const Instance: InstanceApi = {
           }
         }
       })
-      .catch((error) => Log.Default.error("scheduled instance cache convergence failed", { error }))
+      .catch((error) => {
+        if (error instanceof InstanceProcessAdmissionClosedError) return
+        Log.Default.error("scheduled instance cache convergence failed", { error })
+      })
       .finally(() => {
         scheduledConvergence = undefined
-        if (convergenceRequested) Instance.scheduleConvergence({ maximumRetained: scheduledMaximumRetained })
+        if (convergenceRequested && !processSettlementGate) {
+          Instance.scheduleConvergence({ maximumRetained: scheduledMaximumRetained })
+        }
       })
   },
   async disposeAll() {

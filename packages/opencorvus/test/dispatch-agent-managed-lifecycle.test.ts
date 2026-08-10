@@ -8,20 +8,29 @@ import { Config } from "@/config/config"
 import { EffectiveConfig } from "@/config/effective"
 import { DelegatedWorkerAgent } from "@/delegated-worker/agent"
 import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import { expertSquadPackageRevisionBinding } from "@/engine/expert-squad-package-revision-binding"
 import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
+import { recordTaskInfrastructureError } from "@/engine/persist"
 import { persistQueuedTask } from "@/engine/pipeline"
 import { QueuedTaskIngressSchema } from "@/engine/queued-task-ingress"
 import {
   dispatchTaskLoop,
+  reconcileFailedExactTerminalIngressDeliveries,
   reconcileTerminalAgentLifecycleDelivery,
   reconcileTerminalAgentLifecycleDeliveries,
+  reconcileUndeliveredDispatchInfrastructureFacts,
+  TestHooks as QueueTestHooks,
   waitForQueueCompletionHooksForTest,
 } from "@/engine/queue"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
+import { terminalTask } from "@/engine/state"
+import { requireTask } from "@/engine/store"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Identifier } from "@/id/id"
 import {
   createDispatchAgentTool,
+  acquireDetachedDispatchSettlementGate,
+  detachDispatchExecution,
   waitForDetachedDispatchPipelinesForTest,
   type DispatchAdapterExecutors,
 } from "@/orchestrator/dispatch-agent-tool"
@@ -36,11 +45,18 @@ import type { OrchestratorEvent } from "@/orchestrator/event"
 import { ProtocolStore } from "@/protocol/store"
 import { Provider } from "@/provider/provider"
 import type { Provider as ProviderType } from "@/provider/provider"
+import {
+  RuntimeExecutionSettlement,
+  RuntimeExecutionSettlementInactivityError,
+} from "@/runtime/execution-settlement"
+import { Server } from "@/server/server"
 import { Session } from "@/session"
+import { Message } from "@/session/message"
 import { SessionPromptState } from "@/session/prompt/state"
 import { SessionProcessor } from "@/session/processor"
 import { SessionRuntimeContractStore } from "@/session/runtime-contract"
 import { Database, and, eq } from "@/storage/db"
+import { EngineService } from "@/task-api"
 import { Worktree } from "@/worktree"
 import { ProjectGitLock } from "@/worktree/git-lock"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
@@ -83,6 +99,8 @@ async function verifyDetachedDispatchLifecycle(input: {
   exhaustRootFailure?: boolean
   pipelineOwnerCleanupFailure?: boolean
   deliveryOwnerInitializationFailures?: number
+  recoverAfterRuntimeRestart?: boolean
+  recoverMissingInfrastructureWake?: boolean
 }) {
   const project = await memoryProject()
   let worktreeDirectory = ""
@@ -100,6 +118,7 @@ async function verifyDetachedDispatchLifecycle(input: {
   const replacementAdmissionErrors: string[] = []
   let managedTool: ReturnType<typeof createDispatchAgentTool> | undefined
   let loopSpy: ReturnType<typeof spyOn> | undefined
+  let mcpCloseSpy: ReturnType<typeof spyOn> | undefined
   const detachedRuns = new Set<Promise<unknown>>()
   let detachedOwnerSequence = 0
   const trackDetached = <T>(execution: Promise<T>): Promise<T> => {
@@ -142,21 +161,6 @@ async function verifyDetachedDispatchLifecycle(input: {
     rejectWorkerSettlement = reject
   })
   const providerSpy = spyOn(Provider, "getModel").mockResolvedValue(providerModel())
-  const clearRuntimeContract = SessionRuntimeContractStore.clear
-  const clearRuntimeContractSpy = spyOn(SessionRuntimeContractStore, "clear").mockImplementation((sessionID) => {
-    const resources = clearRuntimeContract(sessionID)
-    if (!input.closeRuntimeResourcesFailure || sessionID !== workerSessionID || !resources?.mcp) return resources
-    const ownedMcp = resources.mcp
-    return {
-      mcp: {
-        id: ownedMcp.id,
-        async close() {
-          await ownedMcp.close()
-          throw new Error("injected worker MCP close failure")
-        },
-      },
-    }
-  })
   const appendEvent = ProtocolStore.appendEvent
   const appendEventSpy = spyOn(ProtocolStore, "appendEvent").mockImplementation(async (event) => {
     const isWorkerTerminal =
@@ -240,7 +244,7 @@ async function verifyDetachedDispatchLifecycle(input: {
           productPillar: "code",
           source: "test",
           priority: "normal",
-          metadata: {},
+          metadata: { actor: "user" },
           projectID,
           queue: true,
           packageRevision,
@@ -256,9 +260,59 @@ async function verifyDetachedDispatchLifecycle(input: {
         loopSpy = spyOn(OrchestratorLoop, "runTaskLoop").mockImplementation(async (loopInput) => {
           rootAttempts += 1
           rootEvents.push(loopInput.event)
-          if (input.exhaustRootFailure || (input.retryRootFailure && rootAttempts === 1)) {
+          if (
+            (input.exhaustRootFailure && (!input.recoverAfterRuntimeRestart || rootAttempts <= 2)) ||
+            (input.retryRootFailure && rootAttempts === 1)
+          ) {
             throw new Error("transient root lifecycle delivery failure")
           }
+          if (!loopInput.wakeID) throw new Error("managed lifecycle root delivery has no durable ingress ID")
+          const wake = Database.use((db) =>
+            db
+              .select({ payload: EngineArtifactTable.payload })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.id, loopInput.wakeID!))
+              .get(),
+          )
+          if (!wake) throw new Error(`managed lifecycle ingress ${loopInput.wakeID} disappeared`)
+          const ingress = QueuedTaskIngressSchema.parse(wake.payload)
+          const orchestrator = await Session.create({
+            kind: "orchestrator",
+            parentID: root.id,
+            title: "Managed lifecycle root delivery",
+          })
+          const now = Date.now()
+          const finalMessageID = Identifier.ascending("message")
+          const assistant: Message.Assistant = {
+            id: finalMessageID,
+            sessionID: orchestrator.id,
+            parentID: Identifier.ascending("message"),
+            role: "assistant",
+            author: "orchestrator",
+            time: { created: now, completed: now + 1 },
+            agent: "orchestrator",
+            providerID: "test",
+            modelID: "managed-dispatch-lifecycle",
+            path: { cwd: Instance.directory, root: Instance.project.worktree },
+            cost: 0,
+            tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+            finish: "stop",
+            taskIngress: { id: loopInput.wakeID, kind: ingress.source_kind },
+          }
+          await Session.persistMessage({
+            info: assistant,
+            parts: [
+              {
+                id: Identifier.ascending("part"),
+                sessionID: orchestrator.id,
+                messageID: finalMessageID,
+                type: "text",
+                text: "Durable root delivery completed",
+                time: { start: now, end: now + 1 },
+              },
+            ],
+          })
+          return { finalMessageID }
         })
         const executors = Object.fromEntries(
           DispatchAdapterContractRegistry.ids.map((id) => [
@@ -286,7 +340,13 @@ async function verifyDetachedDispatchLifecycle(input: {
                       },
                     })
                     resolveWorkerSettlement()
-                    return outcome
+                    if ("coordinationRequest" in outcome) {
+                      throw new Error("Managed lifecycle fixture unexpectedly requested coordination")
+                    }
+                    return DispatchOutcome.terminal({
+                      sessionID: outcome.sessionID,
+                      finalMessageID: outcome.finalMessageID,
+                    })
                   } catch (error) {
                     rejectWorkerSettlement(error)
                     throw error
@@ -392,6 +452,11 @@ async function verifyDetachedDispatchLifecycle(input: {
       }),
     ])
     expect(receipt).toMatchObject({ kind: "accepted", session_id: workerSessionID })
+    if (input.closeRuntimeResourcesFailure) {
+      const mcp = SessionRuntimeContractStore.get(workerSessionID)?.resources?.mcp
+      if (!mcp) throw new Error(`Worker Session ${workerSessionID} has no MCP runtime resource`)
+      mcpCloseSpy = spyOn(mcp, "close").mockRejectedValueOnce(new Error("injected worker MCP close failure"))
+    }
     releaseWorker()
     if (input.closeRuntimeResourcesFailure) {
       let settlementError: unknown
@@ -506,6 +571,26 @@ async function verifyDetachedDispatchLifecycle(input: {
           if (input.exhaustRootFailure) {
             expect(await dispatchTaskLoop({ taskID, event: rootEvents[0] })).toBe("ignored")
             expect(rootAttempts).toBe(2)
+            if (input.recoverAfterRuntimeRestart) {
+              using _successorRuntime = QueueTestHooks.replaceTerminalIngressDeliveryRuntime("successor-runtime")
+              expect(await reconcileFailedExactTerminalIngressDeliveries()).toBe(1)
+              await waitForQueueCompletionHooksForTest()
+              const recovered = Database.use((db) =>
+                db
+                  .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+                  .from(EngineArtifactTable)
+                  .where(
+                    and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")),
+                  )
+                  .get(),
+              )!
+              expect({ label: recovered.label, ingress: QueuedTaskIngressSchema.parse(recovered.payload) }).toMatchObject({
+                label: "drained",
+                ingress: { delivery_attempt: 3, delivery_runtime_id: "successor-runtime", delivery_runtime_attempt: 1 },
+              })
+              expect(rootAttempts).toBe(3)
+              return
+            }
             Database.use((db) =>
               db
                 .update(EngineTaskTable)
@@ -516,12 +601,45 @@ async function verifyDetachedDispatchLifecycle(input: {
             expect(await dispatchTaskLoop({ taskID, event: rootEvents[0] })).toBe("ignored")
             expect(rootAttempts).toBe(2)
           }
+          if (input.recoverMissingInfrastructureWake) {
+            Database.use((db) =>
+              db
+                .delete(EngineArtifactTable)
+                .where(
+                  and(
+                    eq(EngineArtifactTable.task_id, taskID),
+                    eq(EngineArtifactTable.kind, "queued_operator_wake"),
+                  ),
+                )
+                .run(),
+            )
+            expect(await reconcileUndeliveredDispatchInfrastructureFacts()).toBe(1)
+            await waitForQueueCompletionHooksForTest()
+            const recoveredWake = Database.use((db) =>
+              db
+                .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+                .from(EngineArtifactTable)
+                .where(
+                  and(
+                    eq(EngineArtifactTable.task_id, taskID),
+                    eq(EngineArtifactTable.kind, "queued_operator_wake"),
+                  ),
+                )
+                .get(),
+            )!
+            expect({ label: recoveredWake.label, ingress: QueuedTaskIngressSchema.parse(recoveredWake.payload) }).toMatchObject({
+              label: "drained",
+              ingress: { infrastructure_fact_id: typedError.infrastructureArtifactID },
+            })
+          }
         },
       })
       await ProjectGitLock.waitForIdle()
       return
     }
     await workerSettlement
+    await awaitDetachedRuns()
+    await waitForQueueCompletionHooksForTest()
     expect(
       terminalSettlementSnapshots.map(({ reason, resources }) => ({
         reason,
@@ -612,6 +730,30 @@ async function verifyDetachedDispatchLifecycle(input: {
             }),
           ).toBe("ignored")
           expect(rootAttempts).toBe(2)
+          if (input.recoverAfterRuntimeRestart) {
+            using _successorRuntime = QueueTestHooks.replaceTerminalIngressDeliveryRuntime(
+              "successor-lifecycle-runtime",
+            )
+            expect(await reconcileFailedExactTerminalIngressDeliveries()).toBe(1)
+            await waitForQueueCompletionHooksForTest()
+            const recovered = Database.use((db) =>
+              db
+                .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+                .from(EngineArtifactTable)
+                .where(eq(EngineArtifactTable.id, lifecycleWake!.id))
+                .get(),
+            )!
+            expect({ label: recovered.label, ingress: QueuedTaskIngressSchema.parse(recovered.payload) }).toMatchObject({
+              label: "drained",
+              ingress: {
+                delivery_attempt: 3,
+                delivery_runtime_id: "successor-lifecycle-runtime",
+                delivery_runtime_attempt: 1,
+              },
+            })
+            expect(rootAttempts).toBe(3)
+            return
+          }
           Database.use((db) =>
             db.update(EngineTaskTable).set({ time_completed: Date.now() }).where(eq(EngineTaskTable.id, taskID)).run(),
           )
@@ -687,10 +829,17 @@ async function verifyDetachedDispatchLifecycle(input: {
     releaseWorker()
     await awaitDetachedRuns()
     await waitForQueueCompletionHooksForTest()
+    {
+      using runtimeGate = RuntimeExecutionSettlement.acquireSettlementGate()
+      runtimeGate.closeAdmission(["protocol_publication", "engine_queue_completion"])
+      await runtimeGate.waitForIdle(["protocol_publication"])
+      await runtimeGate.waitForIdle(["engine_queue_completion"])
+      runtimeGate.commit()
+    }
     await ProjectGitLock.waitForIdle()
     processorSpy.mockRestore()
     providerSpy.mockRestore()
-    clearRuntimeContractSpy.mockRestore()
+    mcpCloseSpy?.mockRestore()
     appendEventSpy.mockRestore()
     loopSpy?.mockRestore()
     if (worktreeDirectory) {
@@ -708,6 +857,7 @@ async function verifyDetachedDispatchLifecycle(input: {
       })
     }
     await project[Symbol.asyncDispose]()
+    using effectGate = await Database.acquireEffectSettlementGate(60_000)
   }
 }
 
@@ -776,12 +926,173 @@ test(
 )
 
 test(
+  "revives the exact exhausted typed ingress once in a successor runtime",
+  () =>
+    verifyDetachedDispatchLifecycle({
+      useWorktree: false,
+      retryRootFailure: false,
+      closeRuntimeResourcesFailure: true,
+      exhaustRootFailure: true,
+      recoverAfterRuntimeRestart: true,
+    }),
+  60_000,
+)
+
+test(
+  "reconstructs a missing typed ingress from its accepted dispatch infrastructure fact",
+  () =>
+    verifyDetachedDispatchLifecycle({
+      useWorktree: false,
+      retryRootFailure: false,
+      closeRuntimeResourcesFailure: true,
+      recoverMissingInfrastructureWake: true,
+    }),
+  60_000,
+)
+
+test("startup reconstructs and delivers an accepted infrastructure fact for a terminal Task", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
+        prompt_profile: { active: "base" },
+      })
+      const packageRevision = await PromptProfileResolver.resolveActivePackageRevision({
+        projectDirectory: Instance.project.worktree,
+        config,
+      })
+      const skillProjection = await PromptProfileResolver.resolveSkillProjection({
+        projectDirectory: Instance.project.worktree,
+        config,
+        packageRevision,
+      })
+      const projectedAgent = skillProjection.projectedAgents.find(
+        (candidate) => candidate.identity.agentID === "base-planner",
+      )!
+      const taskID = Identifier.ascending("task")
+      const root = await Session.create({
+        kind: "root",
+        title: "Terminal infrastructure startup recovery",
+        metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
+      })
+      const now = Date.now()
+      persistQueuedTask({
+        taskID,
+        sessionID: root.id,
+        now,
+        title: "Terminal infrastructure startup recovery",
+        request: "Deliver the exact durable infrastructure fact after startup",
+        productPillar: "code",
+        source: "test",
+        priority: "normal",
+        metadata: { actor: "user" },
+        projectID: Instance.project.id,
+        queue: false,
+        packageRevision,
+        executionCapsuleBinding: await prepareTaskProcessBinding({
+          mode: "native",
+          taskID,
+          projectID: Instance.project.id,
+          rootDirectory: Instance.directory,
+          packageRevisionSHA256: packageRevision.packageDigest,
+          timeCreated: now,
+        }),
+      })
+      const dispatchID = Identifier.ascending("artifact")
+      const lineage = recordDispatchLineage({
+        origin: createDispatchLineageOrigin({
+          dispatchID,
+          taskID,
+          orchestratorSessionID: root.id,
+          orchestratorMessageID: Identifier.ascending("message"),
+          toolPartID: Identifier.ascending("part"),
+          toolCallID: "call_terminal_infrastructure_startup_recovery",
+          targetAgentID: projectedAgent.identity.agentID,
+          projectedWorkerIdentity: projectedAgent.identity,
+          workScope: { kind: "task" },
+          workflowBinding: {
+            kind: "direct",
+            package_revision: expertSquadPackageRevisionBinding(packageRevision),
+          },
+          workflowNodeID: null,
+          adapterInput: { instruction: "Inspect the Task" },
+        }),
+        childSessionID: Identifier.ascending("session"),
+      })
+      const infrastructureFactID = recordTaskInfrastructureError({
+        taskID,
+        component: "worker-runtime",
+        operation: "close-runtime-resources",
+        reason: "The accepted dispatch completed physically but runtime cleanup failed",
+        errorName: "RuntimeCleanupError",
+        context: { current_dispatch_id: dispatchID },
+      })
+      await terminalTask(
+        requireTask(taskID),
+        { status: "failed", error: "Injected terminal state after the accepted infrastructure fact was committed" },
+        "Terminalized after the accepted dispatch infrastructure fact",
+      )
+      expect(await reconcileUndeliveredDispatchInfrastructureFacts()).toBe(1)
+      await waitForQueueCompletionHooksForTest()
+      const exactWake = Database.use((db) =>
+        db
+          .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+          .from(EngineArtifactTable)
+          .where(
+            and(
+              eq(EngineArtifactTable.task_id, taskID),
+              eq(EngineArtifactTable.kind, "queued_operator_wake"),
+            ),
+          )
+          .get(),
+      )!
+      expect({ label: exactWake.label, ingress: QueuedTaskIngressSchema.parse(exactWake.payload) }).toMatchObject({
+        label: "drained",
+        ingress: {
+          source_kind: "dispatch_infrastructure_failure",
+          infrastructure_fact_id: infrastructureFactID,
+          delivery_result: {
+            status: "terminal_inapplicable",
+            reason: "dispatch_infrastructure_failure carries no terminal conversation authority",
+          },
+          event: {
+            dispatchInfrastructureFailure: {
+              infrastructureFactID,
+              outcome: {
+                recovery_authority: {
+                  occurrence_status: "occurrence_committed",
+                  dispatch_lineage_id: lineage.artifactID,
+                  dispatch_id: dispatchID,
+                },
+              },
+            },
+          },
+        },
+      })
+    },
+  })
+}, 60_000)
+
+test(
   "keeps an exhausted terminal lifecycle ingress at delivery attempt two",
   () =>
     verifyDetachedDispatchLifecycle({
       useWorktree: false,
       retryRootFailure: false,
       exhaustRootFailure: true,
+    }),
+  60_000,
+)
+
+test(
+  "revives an exact exhausted lifecycle ingress in a successor runtime startup scan",
+  () =>
+    verifyDetachedDispatchLifecycle({
+      useWorktree: false,
+      retryRootFailure: false,
+      exhaustRootFailure: true,
+      recoverAfterRuntimeRestart: true,
     }),
   60_000,
 )
@@ -796,3 +1107,129 @@ test(
     }),
   60_000,
 )
+
+test("holds runtime settlement until an accepted detached delivery pipeline is durable", async () => {
+  const settlementEvents: string[] = []
+  let finishExecution!: () => void
+  const executionReady = new Promise<void>((resolve) => (finishExecution = resolve))
+  let finishDelivery!: () => void
+  const deliveryReady = new Promise<void>((resolve) => (finishDelivery = resolve))
+  const receipt = await detachDispatchExecution({
+    execute: async () => {
+      await executionReady
+      settlementEvents.push("execution_completed")
+      return DispatchOutcome.terminal({ sessionID: "session-detached-barrier", finalMessageID: "message-terminal" })
+    },
+    runDetached: async (run) => await run(),
+    runDetachedRecovery: async (run) => await run(),
+    committedLineage: Promise.resolve({ sessionID: "session-detached-barrier", artifactID: "lineage-detached-barrier" }),
+    deliver: async () => {
+      await deliveryReady
+      settlementEvents.push("delivery_completed")
+    },
+    onDeliveryFailure: async () => undefined,
+    onPipelineOwnerCleanupFailure: async () => undefined,
+  })
+  expect(receipt).toMatchObject({ kind: "accepted", session_id: "session-detached-barrier" })
+  const gate = acquireDetachedDispatchSettlementGate()
+  const settlement = gate.waitForIdle().then(() => {
+    settlementEvents.push("gate_settled")
+  })
+  finishExecution()
+  finishDelivery()
+  await settlement
+  expect(settlementEvents).toEqual(["execution_completed", "delivery_completed", "gate_settled"])
+  gate[Symbol.dispose]()
+})
+
+test("bounds Server settlement on a held detached pipeline and succeeds with the same owner after late settlement", async () => {
+  let finishExecution!: () => void
+  const executionReady = new Promise<void>((resolve) => (finishExecution = resolve))
+  const receipt = await detachDispatchExecution({
+    execute: async () => {
+      await executionReady
+      return DispatchOutcome.terminal({ sessionID: "session-detached-timeout", finalMessageID: "message-terminal" })
+    },
+    runDetached: async (run) => await run(),
+    runDetachedRecovery: async (run) => await run(),
+    committedLineage: Promise.resolve({ sessionID: "session-detached-timeout", artifactID: "lineage-detached-timeout" }),
+    deliver: async () => undefined,
+    onDeliveryFailure: async () => undefined,
+    onPipelineOwnerCleanupFailure: async () => undefined,
+  })
+  expect(receipt).toMatchObject({ kind: "accepted", dispatch_lineage_id: "lineage-detached-timeout" })
+  using _timeout = Server.TestHooks.installRuntimeSettlementInactivityTimeout(50)
+  await expect(
+    Server.settleCurrentProcessExecution("held detached pipeline", { disposeInstances: async () => undefined }),
+  ).rejects.toBeInstanceOf(RuntimeExecutionSettlementInactivityError)
+
+  finishExecution()
+  await waitForDetachedDispatchPipelinesForTest()
+  const settled = await Server.settleCurrentProcessExecution("late detached pipeline settlement", {
+    disposeInstances: async () => undefined,
+  })
+  await settled.releaseHandoff(false)
+})
+
+test("replaces one exact failed detached pipeline authority after its durable recovery settles", async () => {
+  const dispatchLineageID = "lineage-detached-recovery"
+  let finishFailedExecution!: () => void
+  const failedExecutionReady = new Promise<void>((resolve) => (finishFailedExecution = resolve))
+  const failedReceipt = await detachDispatchExecution({
+    execute: async () => {
+      await failedExecutionReady
+      return DispatchOutcome.terminal({ sessionID: "session-detached-recovery", finalMessageID: "message-failed" })
+    },
+    runDetached: async (run) => await run(),
+    runDetachedRecovery: async (run) => await run(),
+    committedLineage: Promise.resolve({ sessionID: "session-detached-recovery", artifactID: dispatchLineageID }),
+    deliver: async () => {
+      throw new Error("injected detached delivery failure")
+    },
+    onDeliveryFailure: async () => {
+      throw new Error("injected durable recovery failure")
+    },
+    onPipelineOwnerCleanupFailure: async () => undefined,
+  })
+  expect(failedReceipt).toMatchObject({ kind: "accepted", dispatch_lineage_id: dispatchLineageID })
+  finishFailedExecution()
+
+  const failedGate = acquireDetachedDispatchSettlementGate()
+  try {
+    await expect(failedGate.waitForIdle()).rejects.toMatchObject({
+      name: "AggregateError",
+      errors: [expect.objectContaining({ message: expect.stringContaining(dispatchLineageID) })],
+    })
+  } finally {
+    failedGate[Symbol.dispose]()
+  }
+
+  let finishRecoveredExecution!: () => void
+  const recoveredExecutionReady = new Promise<void>((resolve) => (finishRecoveredExecution = resolve))
+  const recoveryEvents: string[] = []
+  const recoveredReceipt = await detachDispatchExecution({
+    execute: async () => {
+      await recoveredExecutionReady
+      recoveryEvents.push("execution_recovered")
+      return DispatchOutcome.terminal({ sessionID: "session-detached-recovery", finalMessageID: "message-recovered" })
+    },
+    runDetached: async (run) => await run(),
+    runDetachedRecovery: async (run) => await run(),
+    committedLineage: Promise.resolve({ sessionID: "session-detached-recovery", artifactID: dispatchLineageID }),
+    deliver: async () => {
+      recoveryEvents.push("delivery_recovered")
+    },
+    onDeliveryFailure: async () => undefined,
+    onPipelineOwnerCleanupFailure: async () => undefined,
+  })
+  expect(recoveredReceipt).toMatchObject({ kind: "accepted", dispatch_lineage_id: dispatchLineageID })
+  const recoveredGate = acquireDetachedDispatchSettlementGate()
+  try {
+    const settled = recoveredGate.waitForIdle().then(() => recoveryEvents.push("gate_settled"))
+    finishRecoveredExecution()
+    await settled
+    expect(recoveryEvents).toEqual(["execution_recovered", "delivery_recovered", "gate_settled"])
+  } finally {
+    recoveredGate[Symbol.dispose]()
+  }
+})

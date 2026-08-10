@@ -672,7 +672,7 @@ export namespace Message {
     taskIngress: z
       .object({
         id: z.string().min(1),
-        kind: z.enum(["operator_message", "coordination_request"]),
+        kind: z.string().min(1),
       })
       .strict()
       .optional(),

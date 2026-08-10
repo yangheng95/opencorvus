@@ -6,6 +6,7 @@ import lockfile from "proper-lockfile"
 import { Filesystem } from "@/util/filesystem"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { AsyncLocalStorage } from "node:async_hooks"
+import { waitForRuntimeSettlementIdle } from "@/runtime/execution-settlement"
 
 const STALE_MILLISECONDS = 30_000
 const UPDATE_MILLISECONDS = 1_000
@@ -39,14 +40,54 @@ function isOwner(value: unknown): value is ProjectGitLockOwner {
 }
 
 export namespace ProjectGitLock {
+  export class SettlementInactivityError extends Error {
+    override readonly name = "ProjectGitLockSettlementInactivityError"
+
+    constructor(
+      public readonly activeLeaseCount: number,
+      public readonly inactivityTimeoutMilliseconds: number,
+    ) {
+      super(
+        `Project Git lock settlement made no progress for ${inactivityTimeoutMilliseconds}ms; ` +
+          `${activeLeaseCount} lease lifecycle(s) remain`,
+      )
+    }
+  }
   export type Lease = {
     owner: ProjectGitLockOwner
+    lockPath: string
     assertOwned(): void
     release(): Promise<void>
   }
 
   const leaseContext = new AsyncLocalStorage<Lease>()
   const activeLeaseLifecycles = new Set<Promise<void>>()
+  let settlementGate: symbol | undefined
+
+  export type SettlementGate = Disposable & { waitForIdle(inactivityTimeoutMilliseconds?: number): Promise<void> }
+
+  export function acquireSettlementGate(): SettlementGate {
+    if (settlementGate) throw new Error("Project Git lock settlement is already in progress")
+    const token = Symbol("project-git-lock-settlement")
+    settlementGate = token
+    return {
+      async waitForIdle(inactivityTimeoutMilliseconds) {
+        if (inactivityTimeoutMilliseconds === undefined) {
+          while (activeLeaseLifecycles.size > 0) await Promise.allSettled([...activeLeaseLifecycles])
+          return
+        }
+        await waitForRuntimeSettlementIdle({
+          snapshot: () =>
+            [...activeLeaseLifecycles].map((settled, index) => ({ label: `project-git-lock:${index}`, settled })),
+          inactivityTimeoutMilliseconds,
+          inactivityError: (labels) => new SettlementInactivityError(labels.length, inactivityTimeoutMilliseconds),
+        })
+      },
+      [Symbol.dispose]() {
+        if (settlementGate === token) settlementGate = undefined
+      },
+    }
+  }
 
   export async function withLease<T>(
     input: { projectID: string; primaryWorktreeDir: string },
@@ -54,11 +95,18 @@ export namespace ProjectGitLock {
   ): Promise<T> {
     const inherited = leaseContext.getStore()
     if (inherited) {
+      const requestedLockPath = path.resolve(ProjectRuntimePaths.projectGitLock(input.primaryWorktreeDir))
+      if (inherited.owner.projectID !== input.projectID || path.resolve(inherited.lockPath) !== requestedLockPath) {
+        throw new Error(
+          `Cannot reuse project Git lock ${inherited.lockPath} for ${requestedLockPath}; nested lock authority differs`,
+        )
+      }
       inherited.assertOwned()
       const result = await fn(inherited)
       inherited.assertOwned()
       return result
     }
+    if (settlementGate) throw new Error("Cannot start a project Git lock lifecycle during runtime settlement")
     let finishLifecycle!: () => void
     const lifecycle = new Promise<void>((resolve) => (finishLifecycle = resolve))
     activeLeaseLifecycles.add(lifecycle)
@@ -112,6 +160,7 @@ export namespace ProjectGitLock {
   }
 
   export async function acquire(target: string, projectID: string): Promise<Lease> {
+    if (settlementGate) throw new Error("Cannot acquire a project Git lock during runtime settlement")
     await fs.mkdir(path.dirname(target), { recursive: true })
     let compromised: unknown
     const releaseOwnership = await lockfile.lock(target, {
@@ -148,6 +197,7 @@ export namespace ProjectGitLock {
     let releasePromise: Promise<void> | undefined
     return {
       owner,
+      lockPath: target,
       assertOwned() {
         if (compromised) {
           throw new Error(`Project Git lock ${target} was compromised`, { cause: compromised })

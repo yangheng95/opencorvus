@@ -15,7 +15,7 @@ export type TaskAgentLifecycleReport = {
   cancellationFailures: unknown[]
 }
 
-export async function collectTaskAgentLifecycleHandles(task: TaskRow): Promise<{
+export async function collectTaskAgentLifecycleHandles(task: TaskRow, signal?: AbortSignal): Promise<{
   taskID: string
   sessionIDs: string[]
   promptSessions: TaskAgentPromptSession[]
@@ -25,12 +25,19 @@ export async function collectTaskAgentLifecycleHandles(task: TaskRow): Promise<{
 
   const sessionIDs = new Set<string>()
   for (const sessionID of rootSessionIDs) {
+    signal?.throwIfAborted()
     const tree = await Session.treeInProject({ sessionID, projectID: task.project_id })
+    signal?.throwIfAborted()
     for (const id of tree) sessionIDs.add(id)
   }
 
   const promptSessions = await Promise.all(
-    [...sessionIDs].map((sessionID) => Session.getInProject({ sessionID, projectID: task.project_id })),
+    [...sessionIDs].map(async (sessionID) => {
+      signal?.throwIfAborted()
+      const session = await Session.getInProject({ sessionID, projectID: task.project_id })
+      signal?.throwIfAborted()
+      return session
+    }),
   )
 
   return {
@@ -45,12 +52,14 @@ export async function requestTaskAgentLifecycleCancellation(input: {
   reason: string
   handle?: string
   origin: Omit<ExecutionCancellationOrigin, "targetSessionID">
+  signal?: AbortSignal
 }): Promise<TaskAgentLifecycleReport> {
-  const handles = await collectTaskAgentLifecycleHandles(input.task)
+  const handles = await collectTaskAgentLifecycleHandles(input.task, input.signal)
   const cancelledSessions: TaskAgentPromptSession[] = []
   const cancellationFailures: unknown[] = []
 
   for (const session of handles.promptSessions.slice().reverse()) {
+    input.signal?.throwIfAborted()
     try {
       if (
         cancelSessionPromptInScope({
@@ -62,6 +71,7 @@ export async function requestTaskAgentLifecycleCancellation(input: {
       ) {
         cancelledSessions.push(session)
       }
+      input.signal?.throwIfAborted()
     } catch (error) {
       cancellationFailures.push(error)
     }
@@ -83,32 +93,36 @@ export async function requestTaskAgentLifecycleCancellation(input: {
 export async function publishTaskAgentCancellationStatusesAfterSettlement(input: {
   task: TaskRow
   reason: string
+  signal?: AbortSignal
 }): Promise<string[]> {
+  input.signal?.throwIfAborted()
   const sessions = listTaskConversationAgentSessions(input.task.id).flatMap((session) => {
-    if (!isAgentInvocationSession(session) || session.latestStatus?.type === "terminal") return []
-    const lifecycle = ProtocolStore.latestSessionEvent(session.sessionID, SessionStatus.Event.Status.type)
-    const lifecycleInputMessageID =
-      typeof lifecycle?.payload?.inputMessageID === "string" ? lifecycle.payload.inputMessageID : undefined
+    if (!isAgentInvocationSession(session)) return []
     const descriptorInputMessageID = WorkerTurnDescriptor.latestForSession(session.sessionID)?.payload.messageAuthority
       .user_message_id
-    if (
-      descriptorInputMessageID &&
-      lifecycleInputMessageID &&
-      descriptorInputMessageID !== lifecycleInputMessageID
-    ) {
-      throw new Error(
-        `Task ${input.task.id} execution ${session.sessionID} lifecycle input ${lifecycleInputMessageID} conflicts with Worker Turn Descriptor input ${descriptorInputMessageID}`,
-      )
-    }
+    const sessionLifecycle = descriptorInputMessageID
+      ? ProtocolStore.latestSessionOccurrenceEvent(
+          session.sessionID,
+          SessionStatus.Event.Status.type,
+          descriptorInputMessageID,
+        )
+      : ProtocolStore.latestSessionEvent(session.sessionID, SessionStatus.Event.Status.type)
+    if ((sessionLifecycle?.payload?.status as SessionStatus.Info | undefined)?.type === "terminal") return []
+    const lifecycleInputMessageID =
+      typeof sessionLifecycle?.payload?.inputMessageID === "string"
+        ? sessionLifecycle.payload.inputMessageID
+        : undefined
     const inputMessageID = descriptorInputMessageID ?? lifecycleInputMessageID
     if (!inputMessageID) return []
     return [{ session, inputMessageID }]
   })
   for (const row of sessions) {
+    input.signal?.throwIfAborted()
     const session = await Session.getInProject({
       sessionID: row.session.sessionID,
       projectID: input.task.project_id,
     })
+    input.signal?.throwIfAborted()
     await publishSettledSessionTerminalStatus({
       session,
       taskID: input.task.id,
@@ -118,6 +132,7 @@ export async function publishTaskAgentCancellationStatusesAfterSettlement(input:
         reason: "aborted",
         error: input.reason,
       },
+      signal: input.signal,
     })
   }
   return sessions.map((row) => row.session.sessionID)

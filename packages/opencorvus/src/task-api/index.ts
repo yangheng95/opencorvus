@@ -38,6 +38,7 @@ import { SessionStatus } from "@/session/status"
 import { Database, NotFoundError, and, eq, inArray, isNull, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { Filesystem } from "@/util/filesystem"
+import { awaitWithAbort } from "@/util/abort"
 import { compileBoard, boardTag } from "@/workbench/board"
 import { compileBrief } from "@/workbench/brief"
 import {
@@ -136,6 +137,7 @@ import { persistQueuedTask } from "@/engine/pipeline"
 import { SessionPromptState } from "@/session/prompt/state"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { createExecutionCancellationOrigin, type ExecutionCancellationOrigin } from "@/session/prompt/cancellation"
+import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { TaskChannelBindingProjectConflictError, TaskGlobalProjectBindingError } from "@/engine/task-project-error"
 import { TaskRootMessageKind, TaskRootMessageProvenance } from "./task-root-message"
 import {
@@ -423,11 +425,25 @@ async function provideTaskRootSessionInstance<T>(task: TaskRow, fn: () => Promis
   return Instance.provide({ directory: session.directory, fn })
 }
 
-async function provideActiveTaskRootSessionInstance<T>(task: TaskRow, fn: () => Promise<T>): Promise<T | undefined> {
+async function provideActiveTaskRootSessionInstance<T>(
+  task: TaskRow,
+  fn: () => Promise<T>,
+  signal?: AbortSignal,
+): Promise<T | undefined> {
+  signal?.throwIfAborted()
   if (!task.session_id) return fn()
   const session = await Session.assertLineageInProject({ sessionID: task.session_id, projectID: task.project_id })
-  if (Instance.current()) return fn()
-  return Instance.tryProvideActive({ directory: session.directory, fn })
+  signal?.throwIfAborted()
+  const operation = Instance.current()
+    ? fn()
+    : Instance.tryProvideActive({
+        directory: session.directory,
+        fn: () => {
+          signal?.throwIfAborted()
+          return fn()
+        },
+      })
+  return await awaitWithAbort(operation, signal)
 }
 
 async function awaitRootSessionWakeQueueSettled(task: TaskRow, inactivityTimeoutMs: number): Promise<void> {
@@ -448,11 +464,14 @@ async function awaitTaskQueuePromptsIdle(input: {
   inactivityTimeoutMs: number
   taskID?: string
   handle: string
+  signal?: AbortSignal
 }): Promise<void> {
+  input.signal?.throwIfAborted()
   try {
     await TaskQueueService.awaitSessionPromptsIdle({
       sessionIDs: input.sessionIDs,
       inactivityTimeoutMs: input.inactivityTimeoutMs,
+      signal: input.signal,
     })
   } catch (cause) {
     throw createTaskCancellationIncomplete({
@@ -708,6 +727,74 @@ const cancellationOperations = new Map<string, Promise<boolean>>()
 const cancellationConvergenceOwnerID = `cancellation-owner:${randomUUID()}`
 const CANCELLATION_CONVERGENCE_LEASE_MS = 10_000
 const CANCELLATION_CONVERGENCE_HEARTBEAT_MS = 2_000
+let cancellationConvergenceHeartbeatFailureForTest: "zero-row" | "exception" | undefined
+let beforeLateCancellationStageForTest:
+  | ((input: { signal: AbortSignal; failHeartbeat(mode: "zero-row" | "exception"): void }) => void | Promise<void>)
+  | undefined
+
+function renewCancellationConvergenceLease(taskID: string): boolean {
+  const injectedFailure = cancellationConvergenceHeartbeatFailureForTest
+  cancellationConvergenceHeartbeatFailureForTest = undefined
+  if (injectedFailure === "exception") throw new Error("injected Task cancellation convergence heartbeat failure")
+  return Database.immediateTransaction((db) =>
+    Boolean(
+      db
+        .update(EngineTaskCancellationAuthorityTable)
+        .set({ convergence_lease_expires_at: Date.now() + CANCELLATION_CONVERGENCE_LEASE_MS })
+        .where(
+          and(
+            eq(EngineTaskCancellationAuthorityTable.task_id, taskID),
+            eq(
+              EngineTaskCancellationAuthorityTable.convergence_owner_id,
+              injectedFailure === "zero-row" ? `${cancellationConvergenceOwnerID}:stale` : cancellationConvergenceOwnerID,
+            ),
+          ),
+        )
+        .returning({ taskID: EngineTaskCancellationAuthorityTable.task_id })
+        .get(),
+    ),
+  )
+}
+
+function renewCancellationConvergenceLeaseOrFence(taskID: string, fence: AbortController): void {
+  if (fence.signal.aborted) return
+  try {
+    if (renewCancellationConvergenceLease(taskID)) return
+    fence.abort(new Error(`Task ${taskID} cancellation convergence owner lease is no longer authoritative`))
+  } catch (error) {
+    log.error("Task cancellation convergence heartbeat failed", {
+      taskID,
+      ownerID: cancellationConvergenceOwnerID,
+      error: error instanceof Error ? error.message : String(error),
+    })
+    fence.abort(error)
+  }
+}
+
+export const TaskCancellationConvergenceTestHooks = {
+  failNextHeartbeat(mode: "zero-row" | "exception"): Disposable {
+    if (cancellationConvergenceHeartbeatFailureForTest) {
+      throw new Error("Task cancellation convergence heartbeat failure is already armed")
+    }
+    cancellationConvergenceHeartbeatFailureForTest = mode
+    return {
+      [Symbol.dispose]() {
+        cancellationConvergenceHeartbeatFailureForTest = undefined
+      },
+    }
+  },
+  installBeforeLateStage(
+    hook: (input: { signal: AbortSignal; failHeartbeat(mode: "zero-row" | "exception"): void }) => void | Promise<void>,
+  ): Disposable {
+    if (beforeLateCancellationStageForTest) throw new Error("Task cancellation late-stage hook is already installed")
+    beforeLateCancellationStageForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (beforeLateCancellationStageForTest === hook) beforeLateCancellationStageForTest = undefined
+      },
+    }
+  },
+}
 
 async function acquireCancellationConvergence(taskID: string) {
   for (;;) {
@@ -739,30 +826,47 @@ async function acquireCancellationConvergence(taskID: string) {
       return true
     })
     if (claimed) {
-      const heartbeat = setInterval(() => {
-        try {
-          Database.immediateTransaction((db) => {
-            db.update(EngineTaskCancellationAuthorityTable)
-              .set({ convergence_lease_expires_at: Date.now() + CANCELLATION_CONVERGENCE_LEASE_MS })
-              .where(
-                and(
-                  eq(EngineTaskCancellationAuthorityTable.task_id, taskID),
-                  eq(EngineTaskCancellationAuthorityTable.convergence_owner_id, cancellationConvergenceOwnerID),
-                ),
-              )
-              .run()
-          })
-        } catch (error) {
-          log.error("Task cancellation convergence heartbeat failed", {
-            taskID,
-            ownerID: cancellationConvergenceOwnerID,
-            error: error instanceof Error ? error.message : String(error),
-          })
-        }
-      }, CANCELLATION_CONVERGENCE_HEARTBEAT_MS)
+      const leaseFence = new AbortController()
+      const heartbeat = setInterval(
+        () => renewCancellationConvergenceLeaseOrFence(taskID, leaseFence),
+        CANCELLATION_CONVERGENCE_HEARTBEAT_MS,
+      )
       heartbeat.unref?.()
+      if (cancellationConvergenceHeartbeatFailureForTest) {
+        renewCancellationConvergenceLeaseOrFence(taskID, leaseFence)
+      }
       return {
+        signal: leaseFence.signal,
+        failHeartbeatForTest(mode: "zero-row" | "exception") {
+          if (cancellationConvergenceHeartbeatFailureForTest) {
+            throw new Error("Task cancellation convergence heartbeat failure is already armed")
+          }
+          cancellationConvergenceHeartbeatFailureForTest = mode
+          renewCancellationConvergenceLeaseOrFence(taskID, leaseFence)
+        },
+        assertActive() {
+          leaseFence.signal.throwIfAborted()
+          const authority = Database.use((db) =>
+            db
+              .select({
+                ownerID: EngineTaskCancellationAuthorityTable.convergence_owner_id,
+                leaseExpiresAt: EngineTaskCancellationAuthorityTable.convergence_lease_expires_at,
+              })
+              .from(EngineTaskCancellationAuthorityTable)
+              .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
+              .get(),
+          )
+          if (
+            authority?.ownerID !== cancellationConvergenceOwnerID ||
+            (authority.leaseExpiresAt ?? 0) <= Date.now()
+          ) {
+            const error = new Error(`Task ${taskID} cancellation convergence owner lease is no longer authoritative`)
+            leaseFence.abort(error)
+            throw error
+          }
+        },
         assertInTransaction(db: Database.TxOrDb) {
+          leaseFence.signal.throwIfAborted()
           const authority = db
             .select({
               ownerID: EngineTaskCancellationAuthorityTable.convergence_owner_id,
@@ -778,9 +882,8 @@ async function acquireCancellationConvergence(taskID: string) {
             throw new Error(`Task ${taskID} cancellation convergence owner lease is no longer authoritative`)
           }
         },
-        close(completed: boolean) {
+        close() {
           clearInterval(heartbeat)
-          if (completed) return
           Database.immediateTransaction((db) => {
             db.update(EngineTaskCancellationAuthorityTable)
               .set({
@@ -2304,6 +2407,7 @@ export namespace EngineService {
   export async function setTaskArchived(taskID: string, archived: boolean, options?: DestructiveTaskOptions) {
     let task = requireTaskInCurrentProject(taskID)
     if ((task.time_archived !== null) === archived) return true
+    let publication: Bus.Publication | undefined
     if (archived) {
       if (!task.session_id) throw new Error(`Task ${taskID} has no root Session`)
       const executionCancellationOrigin = physicalTaskCancellationOrigin({
@@ -2341,71 +2445,93 @@ export namespace EngineService {
           options,
         )
         const timeUpdated = Date.now()
-        Database.use((db) =>
+        Database.transaction((db) => {
           setEngineTaskArchived(db, {
             taskID,
             timeArchived: timeUpdated,
             timeUpdated,
-          }),
-        )
+          })
+          publication = Bus.publishOwnedInTransaction(
+            Event.TaskUpdated,
+            {
+              taskID,
+              status: deriveTaskStatus(task),
+              summary: "Task archived",
+            },
+          )
+        })
       } finally {
         destructiveScope.close()
       }
     } else {
       const timeUpdated = Date.now()
-      Database.use((db) =>
+      Database.transaction((db) => {
         setEngineTaskArchived(db, {
           taskID,
           timeArchived: null,
           timeUpdated,
-        }),
-      )
+        })
+        publication = Bus.publishOwnedInTransaction(
+          Event.TaskUpdated,
+          {
+            taskID,
+            status: deriveTaskStatus(task),
+            summary: "Task restored",
+          },
+        )
+      })
     }
-    await Bus.publish(Event.TaskUpdated, {
-      taskID,
-      status: deriveTaskStatus(requireTaskInCurrentProject(taskID)),
-      summary: archived ? "Task archived" : "Task restored",
-    })
+    await publication
     return true
   }
 
   export async function updateTaskBudget(taskID: string, budget: z.input<typeof Budget> | null) {
     const task = requireTaskInCurrentProject(taskID)
     const parsed = budget ? budgetRow(budget) : null
-    Database.use((db) => setEngineTaskBudget(db, { taskID, budget: parsed }))
-    await Bus.publish(Event.TaskUpdated, {
-      taskID,
-      status: deriveTaskStatus(task),
-      summary: "Task budget updated",
+    let publication: Bus.Publication | undefined
+    Database.transaction((db) => {
+      setEngineTaskBudget(db, { taskID, budget: parsed })
+      publication = Bus.publishOwnedInTransaction(Event.TaskUpdated, {
+        taskID,
+        status: deriveTaskStatus(task),
+        summary: "Task budget updated",
+      })
     })
+    await publication
     return true
   }
 
   export async function updateTaskTitle(taskID: string, title: string) {
     const task = requireTaskInCurrentProject(taskID)
-    Database.use((db) => setEngineTaskTitle(db, { taskID, title }))
-    await Bus.publish(Event.TaskUpdated, {
-      taskID,
-      status: deriveTaskStatus(task),
-      summary: "Task title updated",
+    let publication: Bus.Publication | undefined
+    Database.transaction((db) => {
+      setEngineTaskTitle(db, { taskID, title })
+      publication = Bus.publishOwnedInTransaction(Event.TaskUpdated, {
+        taskID,
+        status: deriveTaskStatus(task),
+        summary: "Task title updated",
+      })
     })
+    await publication
     return true
   }
 
   export async function setTaskPinned(taskID: string, pinned: boolean) {
     const task = requireTaskInCurrentProject(taskID)
     if ((task.time_pinned !== null) === pinned) return true
-    Database.use((db) =>
+    let publication: Bus.Publication | undefined
+    Database.transaction((db) => {
       setEngineTaskPinned(db, {
         taskID,
         timePinned: pinned ? Date.now() : null,
-      }),
-    )
-    await Bus.publish(Event.TaskUpdated, {
-      taskID,
-      status: deriveTaskStatus(task),
-      summary: pinned ? "Task pinned" : "Task unpinned",
+      })
+      publication = Bus.publishOwnedInTransaction(Event.TaskUpdated, {
+        taskID,
+        status: deriveTaskStatus(task),
+        summary: pinned ? "Task pinned" : "Task unpinned",
+      })
     })
+    await publication
     return true
   }
 }
@@ -2620,20 +2746,27 @@ export namespace EngineService {
         .where(and(eq(EngineTaskTable.project_id, Instance.project.id), isNull(EngineTaskTable.time_completed)))
         .all(),
     )
-    let recovered = 0
+    const operations: Promise<void>[] = []
     for (const row of rows) {
       const pending = findPendingTaskCancellationRequestEvent(row.id)
       if (!pending) continue
-      void cancelTask(row.id, { origin: pending.request.origin }).catch((error) => {
-        log.error("recovered Task cancellation convergence failed", {
-          taskID: row.id,
-          requestEventID: pending.requested.id,
-          error: error instanceof Error ? error.message : String(error),
+      operations.push(
+        cancelTask(row.id, { origin: pending.request.origin }).then(() => undefined).catch((error) => {
+          log.error("recovered Task cancellation convergence failed", {
+            taskID: row.id,
+            requestEventID: pending.requested.id,
+            error: error instanceof Error ? error.message : String(error),
+          })
+          throw error
         })
-      })
-      recovered += 1
+      )
     }
-    return recovered
+    const settled = await Promise.allSettled(operations)
+    const failures = settled.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
+    if (failures.length > 0) {
+      throw new AggregateError(failures, `Failed to recover ${failures.length} pending Task cancellation(s)`)
+    }
+    return operations.length
   }
 
   export function cancelTask(taskID: string, options: CancelTaskOptions): Promise<boolean> {
@@ -2641,7 +2774,9 @@ export namespace EngineService {
     if (isTaskCancelled(task)) return Promise.resolve(true)
     const existing = cancellationOperations.get(taskID)
     if (existing) return existing
+    const authority = RuntimeExecutionSettlement.reserve("task_cancellation", `task-cancellation:${taskID}`)
     const operation = cancelTaskOnce(taskID, options)
+    authority.settleWith(operation)
     cancellationOperations.set(taskID, operation)
     void operation
       .finally(() => {
@@ -2725,11 +2860,13 @@ export namespace EngineService {
     })
     const convergenceOwner = await acquireCancellationConvergence(taskID)
     if (!convergenceOwner) return true
-    const destructiveScope = SessionPromptState.beginRootSessionDestructiveScope(
-      task.session_id,
-      executionCancellationOrigin,
-    )
+    let destructiveScope: ReturnType<typeof SessionPromptState.beginRootSessionDestructiveScope> | undefined
     try {
+      convergenceOwner.assertActive()
+      destructiveScope = SessionPromptState.beginRootSessionDestructiveScope(
+        task.session_id,
+        executionCancellationOrigin,
+      )
       const taskDirectory = taskCwd(taskID)
       const decisions = createDecisionLog(taskID)
       const promptSettleInactivityMs = options.promptSettleInactivityMs ?? CANCEL_PROMPT_SETTLE_INACTIVITY_MS
@@ -2759,58 +2896,83 @@ export namespace EngineService {
         throw createTaskCancellationIncomplete({ taskID, handle: label, cause: err })
       }
 
+      convergenceOwner.assertActive()
       const lifecycle = await requestTaskAgentLifecycleCancellation({
         task,
         reason: "task cancelled",
         handle: "task-api.cancel-task",
         origin: executionCancellationOrigin,
+        signal: convergenceOwner.signal,
       })
+      convergenceOwner.assertActive()
       const queueCancelledInCurrentInstance = Boolean(Instance.current())
       const queuedPromptCancellations = TaskQueueService.cancelSessionPrompts({
         sessionIDs: lifecycle.sessionIDs,
         reason: "task cancelled",
         origin: executionCancellationOrigin,
       })
+      convergenceOwner.assertActive()
       if (!queueCancelledInCurrentInstance) {
-        await provideActiveTaskRootSessionInstance(task, async () => {
-          TaskQueueService.cancelSessionPrompts({
-            sessionIDs: lifecycle.sessionIDs,
-            reason: "task cancelled",
-            origin: executionCancellationOrigin,
-          })
-        })
+        await provideActiveTaskRootSessionInstance(
+          task,
+          async () => {
+            convergenceOwner.assertActive()
+            TaskQueueService.cancelSessionPrompts({
+              sessionIDs: lifecycle.sessionIDs,
+              reason: "task cancelled",
+              origin: executionCancellationOrigin,
+            })
+          },
+          convergenceOwner.signal,
+        )
       }
-      await provideActiveTaskRootSessionInstance(task, () =>
-        awaitTaskQueuePromptsIdle({
-          sessionIDs: lifecycle.sessionIDs,
-          inactivityTimeoutMs: queueSettleInactivityMs,
-          taskID,
-          handle: "TaskQueueService.awaitSessionPromptsIdle",
-        }),
+      convergenceOwner.assertActive()
+      await provideActiveTaskRootSessionInstance(
+        task,
+        () =>
+          awaitTaskQueuePromptsIdle({
+            sessionIDs: lifecycle.sessionIDs,
+            inactivityTimeoutMs: queueSettleInactivityMs,
+            taskID,
+            handle: "TaskQueueService.awaitSessionPromptsIdle",
+            signal: convergenceOwner.signal,
+          }),
+        convergenceOwner.signal,
       )
+      convergenceOwner.assertActive()
       await assertSessionPromptSubtreeFinished({
         sessions: lifecycle.cancelledSessions,
         failures: lifecycle.cancellationFailures,
         taskID,
         inactivityTimeoutMs: promptSettleInactivityMs,
+        signal: convergenceOwner.signal,
       })
       const { SessionLoop } = await import("@/session/loop")
       let interruptedAssistantSessions = 0
-      await provideActiveTaskRootSessionInstance(task, async () => {
-        for (const sessionID of lifecycle.sessionIDs) {
-          if (sessionID === task.session_id) continue
-          if (await SessionLoop.terminalizeRecoveredIncompleteAssistant(sessionID)) {
-            interruptedAssistantSessions += 1
+      await provideActiveTaskRootSessionInstance(
+        task,
+        async () => {
+          for (const sessionID of lifecycle.sessionIDs) {
+            convergenceOwner.assertActive()
+            if (sessionID === task.session_id) continue
+            if (await SessionLoop.terminalizeRecoveredIncompleteAssistant(sessionID, convergenceOwner.signal)) {
+              interruptedAssistantSessions += 1
+            }
           }
-        }
-      })
+        },
+        convergenceOwner.signal,
+      )
+      convergenceOwner.assertActive()
       const convergedAgentSessionIDs = await publishTaskAgentCancellationStatusesAfterSettlement({
         task,
         reason: "task cancelled",
+        signal: convergenceOwner.signal,
       })
+      convergenceOwner.assertActive()
       const pendingCoordinationRequestsCancelled = await cancelPendingAgentCoordinationRequestsForTask({
         taskID,
         reason: "task cancelled",
+        signal: convergenceOwner.signal,
       })
       decisions.append({
         phase: "cancel",
@@ -2831,31 +2993,53 @@ export namespace EngineService {
         reason:
           "Task cancellation collected and cancelled every task-owned agent lifecycle handle before terminal status.",
       })
-      await SessionPromptState.waitForRootWakeQueueIdle(task.session_id, queueSettleInactivityMs).catch((err) =>
+      convergenceOwner.assertActive()
+      if (beforeLateCancellationStageForTest) {
+        await awaitWithAbort(
+          Promise.resolve(
+            beforeLateCancellationStageForTest({
+              signal: convergenceOwner.signal,
+              failHeartbeat: (mode) => convergenceOwner.failHeartbeatForTest(mode),
+            }),
+          ),
+          convergenceOwner.signal,
+        )
+      }
+      convergenceOwner.assertActive()
+      await SessionPromptState.waitForRootWakeQueueIdle(
+        task.session_id,
+        queueSettleInactivityMs,
+        convergenceOwner.signal,
+      ).catch((err) =>
         onAbortFailure("root Session wake queue idle before cancellation terminal write", err, {}),
       )
-      const terminalResult = await ProcessSupervisor.withTaskCancellationBarrier(taskID, () =>
-        terminalTask(
-          task,
-          {
-            status: "cancelled",
-            error: "task cancelled",
-            time_completed: Date.now(),
-          },
-          "Task cancelled",
-          {
-            projectDir: taskDirectory,
-            cancellationRequest: { eventID: cancellationRequest.id },
-            transactionEffect(db) {
-              convergenceOwner.assertInTransaction(db)
-              terminalizeQueuedTaskEventsForCancellationInTransaction(db, {
-                taskID,
-                cancellationRequestEventID: cancellationRequest.id,
-                now: Date.now(),
-              })
+      convergenceOwner.assertActive()
+      const terminalResult = await ProcessSupervisor.withTaskCancellationBarrier(
+        taskID,
+        () =>
+          terminalTask(
+            task,
+            {
+              status: "cancelled",
+              error: "task cancelled",
+              time_completed: Date.now(),
             },
-          },
-        ),
+            "Task cancelled",
+            {
+              projectDir: taskDirectory,
+              cancellationRequest: { eventID: cancellationRequest.id },
+              transactionEffect(db) {
+                convergenceOwner.assertInTransaction(db)
+                deleteEngineChannelBindingsForTask(db, taskID)
+                terminalizeQueuedTaskEventsForCancellationInTransaction(db, {
+                  taskID,
+                  cancellationRequestEventID: cancellationRequest.id,
+                  now: Date.now(),
+                })
+              },
+            },
+          ),
+        { signal: convergenceOwner.signal },
       )
       if (!isTaskCancelled(terminalResult)) {
         decisions.append({
@@ -2876,12 +3060,13 @@ export namespace EngineService {
           ),
         })
       }
-      // Clean up channel bindings so the thread is not reused
-      Database.use((db) => deleteEngineChannelBindingsForTask(db, taskID))
       return true
     } finally {
-      destructiveScope.close()
-      convergenceOwner.close(isTaskCancelled(requireTaskInCurrentProject(taskID)))
+      try {
+        destructiveScope?.close()
+      } finally {
+        convergenceOwner.close()
+      }
     }
   }
 

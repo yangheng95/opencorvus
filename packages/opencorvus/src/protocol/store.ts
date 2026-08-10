@@ -463,9 +463,7 @@ export namespace ProtocolStore {
   }
 
   export function appendEventInTransaction(input: EventInput) {
-    if (!Database.hasActiveContext()) {
-      throw new Error("ProtocolStore.appendEventInTransaction requires an active Database transaction")
-    }
+    Database.requireActiveTransaction("ProtocolStore.appendEventInTransaction")
     const now = input.emitted_at ?? Date.now()
     const seq =
       typeof input.seq === "number" && input.seq > 0

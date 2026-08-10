@@ -33,7 +33,9 @@ export namespace Truncate {
       id: "tool.truncation.cleanup",
       interval: HOUR_MS,
       runAtStart: true,
-      run: cleanup,
+      run: async (signal) => {
+        await cleanup(signal)
+      },
       scope: "global",
     })
   }
@@ -64,24 +66,42 @@ export namespace Truncate {
     return [...new Set(Project.list().map((project) => ProjectRuntimePaths.projectRuntimeRoot(project.worktree)))]
   }
 
-  async function cleanupRoot(root: string, cutoff: number) {
-    const entries = [
-      ...(await Glob.scan("s/*/*/tool-output/tool_*", { cwd: root, include: "file" })),
-      ...(await Glob.scan("sx/*/*/tool-output/tool_*", { cwd: root, include: "file" })),
-    ]
+  async function cleanupRoot(
+    root: string,
+    cutoff: number,
+    signal?: AbortSignal,
+  ): Promise<{ scanned: number; removed: string[] }> {
+    signal?.throwIfAborted()
+    const entries = (
+      await Promise.all(
+        ProjectRuntimePaths.toolOutputFilePatterns().map((pattern) =>
+          Glob.scan(pattern, { cwd: root, include: "file" }),
+        ),
+      )
+    ).flat()
+    const removed: string[] = []
     for (const entry of entries) {
+      signal?.throwIfAborted()
       const filepath = path.join(root, entry)
       const stat = await statExistingFile(filepath)
       if (!stat || stat.mtimeMs >= cutoff) continue
       await unlinkExistingFile(filepath)
+      signal?.throwIfAborted()
+      removed.push(filepath)
     }
+    return { scanned: entries.length, removed }
   }
 
-  export async function cleanup() {
+  export async function cleanup(signal?: AbortSignal) {
     const cutoff = Date.now() - RETENTION_MS
+    const receipt = { scanned: 0, removed: [] as string[] }
     for (const root of registeredRuntimeRoots()) {
-      await cleanupRoot(root, cutoff)
+      signal?.throwIfAborted()
+      const rootReceipt = await cleanupRoot(root, cutoff, signal)
+      receipt.scanned += rootReceipt.scanned
+      receipt.removed.push(...rootReceipt.removed)
     }
+    return receipt
   }
 
   function hasRecoveryTool(surface?: ToolExecutionSurface): boolean {
@@ -98,11 +118,7 @@ export namespace Truncate {
    * tool output (build log, test failure, error trace) is almost always at
    * the END. Callers that genuinely want the head can override.
    */
-  export async function output(
-    text: string,
-    options: Options = {},
-    surface?: ToolExecutionSurface,
-  ): Promise<Result> {
+  export async function output(text: string, options: Options = {}, surface?: ToolExecutionSurface): Promise<Result> {
     const maxLines = options.maxLines ?? MAX_LINES
     const maxBytes = options.maxBytes ?? MAX_BYTES
     const direction = options.direction ?? "tail"

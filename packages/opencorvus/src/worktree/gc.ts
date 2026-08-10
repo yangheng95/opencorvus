@@ -72,13 +72,14 @@ export namespace WorktreeGC {
       interval: GC_INTERVAL_MS,
       runAtStart: true,
       scope: "global",
-      run: async () => {
+      run: async (signal) => {
         if (running) return
         running = true
         try {
-          const plan = await inspect()
+          const plan = await inspect({ signal })
+          signal.throwIfAborted()
           if (plan.candidates.length === 0) return
-          await apply(plan)
+          await apply(plan, { signal })
         } finally {
           running = false
         }
@@ -101,20 +102,22 @@ export namespace WorktreeGC {
     return stat.mtimeMs < cutoff
   }
 
-  async function gitClean(directory: string): Promise<boolean> {
+  async function gitClean(directory: string, signal?: AbortSignal): Promise<boolean> {
     const status = await runGit(["status", "--porcelain"], {
       cwd: directory,
       timeoutProfile: "default",
+      abort: signal,
     }).catch(() => undefined)
     // Probe failure with a present .git linkage is uncertainty → not clean.
     if (!status || status.exitCode !== 0) return false
     return decode(status.stdout).trim().length === 0
   }
 
-  async function noInTransitCommits(directory: string, primaryBranch: string): Promise<boolean> {
+  async function noInTransitCommits(directory: string, primaryBranch: string, signal?: AbortSignal): Promise<boolean> {
     const revs = await runGit(["rev-list", "--count", `${primaryBranch}..HEAD`], {
       cwd: directory,
       timeoutProfile: "fast",
+      abort: signal,
     }).catch(() => undefined)
     if (!revs || revs.exitCode !== 0) return false
     return decode(revs.stdout).trim() === "0"
@@ -124,10 +127,12 @@ export namespace WorktreeGC {
     primaryDir: string,
     primaryBranch: string,
     branch: string,
+    signal?: AbortSignal,
   ): Promise<boolean> {
     const revs = await runGit(["rev-list", "--count", `${primaryBranch}..${branch}`], {
       cwd: primaryDir,
       timeoutProfile: "fast",
+      abort: signal,
     }).catch(() => undefined)
     if (!revs || revs.exitCode !== 0) return false
     return decode(revs.stdout).trim() === "0"
@@ -164,10 +169,11 @@ export namespace WorktreeGC {
     return directories
   }
 
-  async function primaryBranchOf(primaryDir: string): Promise<string | undefined> {
+  async function primaryBranchOf(primaryDir: string, signal?: AbortSignal): Promise<string | undefined> {
     const head = await runGit(["rev-parse", "--abbrev-ref", "HEAD"], {
       cwd: primaryDir,
       timeoutProfile: "fast",
+      abort: signal,
     }).catch(() => undefined)
     if (!head || head.exitCode !== 0) return undefined
     const branch = decode(head.stdout).trim()
@@ -180,7 +186,8 @@ export namespace WorktreeGC {
     input.out.set(await realCanon(input.directory), input.directory)
   }
 
-  export async function inspect(opts?: { retentionDays?: number; now?: number }): Promise<Plan> {
+  export async function inspect(opts?: { retentionDays?: number; now?: number; signal?: AbortSignal }): Promise<Plan> {
+    opts?.signal?.throwIfAborted()
     const days = opts?.retentionDays ?? DEFAULT_RETENTION_DAYS
     const cutoff = (opts?.now ?? Date.now()) - days * 24 * 60 * 60 * 1000
 
@@ -195,10 +202,12 @@ export namespace WorktreeGC {
     const preservations: Preservation[] = []
 
     for (const project of projects) {
+      opts?.signal?.throwIfAborted()
       const primaryDir = project.worktree
       if (!primaryDir) continue
       const directories = new Map<string, string>()
       for (const directory of await worktreeDirectories(primaryDir)) {
+        opts?.signal?.throwIfAborted()
         await addManagedPath({ primaryDir, directory, out: directories })
       }
 
@@ -223,6 +232,7 @@ export namespace WorktreeGC {
         continue
       }
       for (const entry of registered) {
+        opts?.signal?.throwIfAborted()
         if (!(await Worktree.isManagedWorktreeDirectory(primaryDir, entry.path))) continue
         const key = await realCanon(entry.path)
         registeredByDirectory.set(key, entry)
@@ -236,9 +246,10 @@ export namespace WorktreeGC {
       }
       // Resolved once per project; if we cannot determine primary branch we
       // cannot evaluate the in-transit-commits gate → preserve everything.
-      const primaryBranch = await primaryBranchOf(primaryDir)
+      const primaryBranch = await primaryBranchOf(primaryDir, opts?.signal)
 
       for (const directory of directories) {
+        opts?.signal?.throwIfAborted()
         const [key, displayDirectory] = directory
         const registeredEntry = registeredByDirectory.get(key)
         const stat = await fs.stat(displayDirectory).catch(() => undefined)
@@ -247,7 +258,7 @@ export namespace WorktreeGC {
             registeredEntry?.prunable === true &&
             primaryBranch &&
             registeredEntry.branch &&
-            (await branchHasNoInTransitCommits(primaryDir, primaryBranch, registeredEntry.branch))
+            (await branchHasNoInTransitCommits(primaryDir, primaryBranch, registeredEntry.branch, opts?.signal))
           ) {
             candidates.push({
               projectID: project.id,
@@ -287,8 +298,8 @@ export namespace WorktreeGC {
         }
 
         if (!primaryBranch) continue
-        if (!(await gitClean(displayDirectory))) continue
-        if (!(await noInTransitCommits(displayDirectory, primaryBranch))) continue
+        if (!(await gitClean(displayDirectory, opts?.signal))) continue
+        if (!(await noInTransitCommits(displayDirectory, primaryBranch, opts?.signal))) continue
 
         candidates.push({ projectID: project.id, primaryDir, directory: displayDirectory, reason: "old-clean" })
       }
@@ -297,18 +308,19 @@ export namespace WorktreeGC {
     return { candidates, preservations }
   }
 
-  export async function apply(plan: Plan): Promise<ApplyResult> {
+  export async function apply(plan: Plan, options?: { signal?: AbortSignal }): Promise<ApplyResult> {
+    options?.signal?.throwIfAborted()
     let removed = 0
     let failed = 0
-    const projects = Database.use((db) =>
-      db.select({ worktree: ProjectTable.worktree }).from(ProjectTable).all(),
-    )
+    const projects = Database.use((db) => db.select({ worktree: ProjectTable.worktree }).from(ProjectTable).all())
     for (const project of projects) {
+      options?.signal?.throwIfAborted()
       if (!project.worktree) continue
       await Instance.provide({
         directory: project.worktree,
         fn: () => Worktree.reconcileOrphanWorktreeOwners(),
       }).catch((error) => {
+        options?.signal?.throwIfAborted()
         failed += 1
         log.warn("orphan worktree owner reconciliation failed", {
           primaryDir: project.worktree,
@@ -317,6 +329,7 @@ export namespace WorktreeGC {
       })
     }
     for (const c of plan.candidates) {
+      options?.signal?.throwIfAborted()
       try {
         const result = await Instance.provide({
           directory: c.primaryDir,
@@ -326,6 +339,7 @@ export namespace WorktreeGC {
               directory: c.directory,
             }),
         })
+        options?.signal?.throwIfAborted()
         if (!result.removed) continue
         removed++
         log.info("orphan worktree removed", {

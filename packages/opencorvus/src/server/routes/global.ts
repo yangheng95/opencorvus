@@ -44,6 +44,7 @@ import { ExpertSquadCatalogPageSchema, ExpertSquadCatalogSearchQuerySchema } fro
 import { MissionSkillCatalog } from "@/mission-skill/catalog"
 import { Skill } from "@/skill/skill"
 import { AutomationService } from "@/scheduler/automation-service"
+import { AutomationRunOutcomes } from "@/scheduler/automation.sql"
 import { ProviderAccountUsage } from "@/provider/account-usage"
 
 const log = Log.create({ service: "server" })
@@ -85,7 +86,7 @@ const AutomationView = z
   })
   .strict()
 
-const AutomationRunView = z
+export const AutomationRunViewSchema = z
   .object({
     id: z.string(),
     automationId: z.string(),
@@ -102,7 +103,7 @@ const AutomationRunView = z
         productPillar: z.enum(["code", "work"]).nullable(),
       })
       .nullable(),
-    outcome: z.enum(["running", "succeeded", "failed"]),
+    outcome: z.enum(AutomationRunOutcomes),
     startedAt: z.number(),
     completedAt: z.number().nullable(),
     error: z.string().nullable(),
@@ -215,7 +216,7 @@ export const GlobalRoutes = lazy(() =>
         responses: {
           200: {
             description: "One completed run per target",
-            content: { "application/json": { schema: resolver(z.array(AutomationRunView)) } },
+            content: { "application/json": { schema: resolver(z.array(AutomationRunViewSchema)) } },
           },
           ...errors(400, 404, 409),
         },
@@ -230,7 +231,7 @@ export const GlobalRoutes = lazy(() =>
         responses: {
           200: {
             description: "Scheduled automation run history",
-            content: { "application/json": { schema: resolver(z.array(AutomationRunView)) } },
+            content: { "application/json": { schema: resolver(z.array(AutomationRunViewSchema)) } },
           },
           ...errors(400, 404),
         },

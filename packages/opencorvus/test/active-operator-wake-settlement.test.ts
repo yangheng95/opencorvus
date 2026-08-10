@@ -5,13 +5,18 @@ import {
   configureTaskLoopRunner,
   dispatchTaskLoop,
   dispatchPersistedTaskLoop,
+  persistQueuedCoordinationWakeInTransaction,
   persistQueuedTaskIntentInTransaction,
   persistQueuedTaskWaitWakeInTransaction,
+  reconcileFailedExactTerminalIngressDeliveries,
+  reconcileInterruptedTaskExecutions,
   requeueInterruptedRunningTaskIngresses,
+  TestHooks as QueueTestHooks,
   waitForQueueCompletionHooksForTest,
 } from "@/engine/queue"
 import {
   EngineArtifactTable,
+  EngineChannelBindingTable,
   EngineProgressSnapshotTable,
   EngineTaskCancellationAuthorityTable,
 } from "@/engine/engine.sql"
@@ -22,18 +27,33 @@ import { TASK_CANCELLED_EVENT_TYPE, TASK_CANCELLATION_REQUESTED_EVENT_TYPE } fro
 import { pendingTaskCancellationProjection } from "@/engine/cancellation-projection"
 import { EngineProtocol } from "@/engine/protocol"
 import { deriveTaskStatus } from "@/engine/task-status"
-import { reconcilePendingCancelledTaskSettlements } from "@/engine/state"
+import { createDecisionLog } from "@/decision-log"
+import {
+  acquireCancelledTaskSettlementGate,
+  CancelledTaskSettlementTestHooks,
+  reconcilePendingCancelledTaskSettlements,
+  terminalTask,
+} from "@/engine/state"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { requireTask } from "@/engine/store"
 import { Identifier } from "@/id/id"
-import { ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY } from "@/orchestrator/stateful-tool-names"
+import { Orchestrator } from "@/orchestrator/agent"
+import { createTerminalConversationAuthority } from "@/orchestrator/terminal-conversation-authority"
+import { createOrchestratorTools } from "@/orchestrator/tools"
 import { Instance } from "@/project/instance"
 import { ProtocolStore } from "@/protocol/store"
 import { Session } from "@/session"
-import type { Message } from "@/session/message"
+import { SessionStatus } from "@/session/status"
+import { publishSettledSessionTerminalStatusInCurrentProject } from "@/session/status-publication"
+import { SessionPromptState } from "@/session/prompt/state"
+import { Message } from "@/session/message"
+import { MessageTable } from "@/session/session.sql"
 import { Database, and, desc, eq, sql } from "@/storage/db"
-import { EngineService } from "@/task-api"
+import { EngineService, TaskCancellationConvergenceTestHooks } from "@/task-api"
+import { ChannelIngress } from "@/channel/ingress"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
+import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
+import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 const packageRevision = {
@@ -88,7 +108,7 @@ function completedToolPart(input: {
   }
 }
 
-async function createActiveTask(input: { title: string; request: string }) {
+async function createActiveTask(input: { title: string; request: string; queue?: boolean }) {
   const taskID = Identifier.ascending("task")
   const root = await Session.create({
     kind: "root",
@@ -107,7 +127,7 @@ async function createActiveTask(input: { title: string; request: string }) {
     priority: "normal",
     metadata: {},
     projectID: Instance.project.id,
-    queue: false,
+    queue: input.queue ?? false,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",
@@ -122,7 +142,7 @@ async function createActiveTask(input: { title: string; request: string }) {
 }
 
 async function waitForCancelledCheckpoint(taskID: string) {
-  const settlementDeadline = Date.now() + 5_000
+  const settlementDeadline = Date.now() + 15_000
   let settlement: { label: string; payload: { status?: string } } | undefined
   while (Date.now() < settlementDeadline) {
     settlement = Database.use(
@@ -145,6 +165,7 @@ async function waitForCancelledCheckpoint(taskID: string) {
 async function persistFinalAssistantMessage(input: {
   rootSessionID: string
   text: string
+  taskIngress?: { id: string; kind: string }
   parts?: (sessionID: string, messageID: string) => Message.Part[]
 }) {
   const session = await Session.create({
@@ -168,6 +189,7 @@ async function persistFinalAssistantMessage(input: {
     cost: 0,
     tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
     finish: "stop",
+    taskIngress: input.taskIngress,
   }
   await Session.persistMessage({
     info,
@@ -183,6 +205,7 @@ async function persistAssistantInvocation(input: {
   rootSessionID: string
   sessionID?: string
   parentID?: string
+  taskIngress?: { id: string; kind: string }
   turns: {
     text: string
     parts?: (sessionID: string, messageID: string) => Message.Part[]
@@ -215,6 +238,7 @@ async function persistAssistantInvocation(input: {
       cost: 0,
       tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
       finish: "stop",
+      taskIngress: input.taskIngress,
     }
     await Session.persistMessage({
       info,
@@ -235,7 +259,7 @@ async function persistOperatorRootMessage(input: { taskID: string; rootSessionID
       id: messageID,
       sessionID: input.rootSessionID,
       role: "user",
-      author: "operator",
+      author: "user",
       time: { created: now },
       agent: "orchestrator",
       model: { providerID: "openai", modelID: "gpt-5.6-sol" },
@@ -588,7 +612,7 @@ describe("active operator wake settlement", () => {
             queued_by_process_id: process.pid + 10_000,
           },
         })
-        expect(requeueInterruptedRunningTaskIngresses()).toBe(0)
+        expect(await requeueInterruptedRunningTaskIngresses()).toBe(0)
 
         expect(
           await EngineService.cancelTask(taskID, {
@@ -618,7 +642,7 @@ describe("active operator wake settlement", () => {
         }).toEqual({
           requestIDs: [requested.id],
           status: "cancelled",
-          convergenceOwner: expect.stringMatching(/^cancellation-owner:/),
+          convergenceOwner: null,
         })
         expect(
           Database.use((db) =>
@@ -634,16 +658,197 @@ describe("active operator wake settlement", () => {
     })
   }, 0)
 
-  test("commits terminal cancellation before recording a failed post-terminal checkpoint settlement", async () => {
+  for (const failureMode of ["zero-row", "exception"] as const) {
+    test(`fences cancellation convergence after a ${failureMode} heartbeat failure and resumes its durable request`, async () => {
+      await using project = await memoryProject()
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const { taskID } = await createActiveTask({
+            title: `Cancellation heartbeat ${failureMode}`,
+            request: "Fence the stale owner before any later physical cancellation stage",
+          })
+          const origin = {
+            actor: "user" as const,
+            source: "task.cancel",
+            surface: "api",
+            requestID: `cancel-heartbeat-${failureMode}`,
+            reason: "operator requested cancellation",
+          }
+          let failure: unknown
+          {
+            using _heartbeatFailure = TaskCancellationConvergenceTestHooks.failNextHeartbeat(failureMode)
+            try {
+              await EngineService.cancelTask(taskID, { origin })
+            } catch (error) {
+              failure = error
+            }
+          }
+          expect({
+            failure: failure instanceof Error ? failure.message : String(failure),
+            taskStatus: deriveTaskStatus(requireTask(taskID)),
+            cancellation: pendingTaskCancellationProjection(taskID),
+            convergenceOwner: Database.use(
+              (db) =>
+                db
+                  .select({ ownerID: EngineTaskCancellationAuthorityTable.convergence_owner_id })
+                  .from(EngineTaskCancellationAuthorityTable)
+                  .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
+                  .get()?.ownerID,
+            ),
+          }).toMatchObject({
+            failure:
+              failureMode === "zero-row"
+                ? `Task ${taskID} cancellation convergence owner lease is no longer authoritative`
+                : "injected Task cancellation convergence heartbeat failure",
+            taskStatus: "active",
+            cancellation: { status: "cancelling", requestID: origin.requestID },
+            convergenceOwner: null,
+          })
+
+          await Promise.resolve()
+          expect(await EngineService.cancelTask(taskID, { origin })).toBe(true)
+          expect(deriveTaskStatus(requireTask(taskID))).toBe("cancelled")
+          await waitForCancelledCheckpoint(taskID)
+        },
+      })
+    }, 0)
+  }
+
+  test("aborts a late cancellation wait when its convergence heartbeat loses the lease", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const { taskID } = await createActiveTask({
-          title: "Cancellation with changed workspace",
-          request: "Cancel even when the immutable checkpoint baseline cannot be prepared",
+          title: "Late cancellation heartbeat fence",
+          request: "Lose the convergence lease after prompt, queue, and lifecycle settlement",
         })
-        await Bun.write(`${project.path}/changed-after-task-creation.txt`, "workspace changed")
+        const origin = {
+          actor: "user" as const,
+          source: "task.cancel",
+          surface: "api",
+          requestID: "cancel-heartbeat-late-stage",
+          reason: "operator requested cancellation",
+        }
+        let lateSignal: AbortSignal | undefined
+        const lateStage = TaskCancellationConvergenceTestHooks.installBeforeLateStage(({ signal, failHeartbeat }) => {
+          lateSignal = signal
+          queueMicrotask(() => failHeartbeat("zero-row"))
+          return new Promise<void>(() => undefined)
+        })
+        let failure: unknown
+        try {
+          await EngineService.cancelTask(taskID, { origin })
+        } catch (error) {
+          failure = error
+        } finally {
+          lateStage[Symbol.dispose]()
+        }
+
+        expect({
+          failure: failure instanceof Error ? failure.message : String(failure),
+          lateSignalAborted: lateSignal?.aborted,
+          taskStatus: deriveTaskStatus(requireTask(taskID)),
+          cancellation: pendingTaskCancellationProjection(taskID),
+          convergenceOwner: Database.use(
+            (db) =>
+              db
+                .select({ ownerID: EngineTaskCancellationAuthorityTable.convergence_owner_id })
+                .from(EngineTaskCancellationAuthorityTable)
+                .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
+                .get()?.ownerID,
+          ),
+        }).toMatchObject({
+          failure: `Task ${taskID} cancellation convergence owner lease is no longer authoritative`,
+          lateSignalAborted: true,
+          taskStatus: "active",
+          cancellation: { status: "cancelling", requestID: origin.requestID },
+          convergenceOwner: null,
+        })
+
+        expect(await EngineService.cancelTask(taskID, { origin })).toBe(true)
+        expect(deriveTaskStatus(requireTask(taskID))).toBe("cancelled")
+        await waitForCancelledCheckpoint(taskID)
+      },
+    })
+  }, 0)
+
+  test("commits channel binding release with cancellation and routes the same thread to a new Task", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const route = {
+          platform: "test",
+          channel: `cancel-route-${Identifier.ascending("channel")}`,
+          thread: "root",
+        }
+        const first = await createActiveTask({
+          title: "Channel-bound cancellation owner",
+          request: "Release this exact route in the cancellation terminal commit",
+        })
+        ChannelIngress.bindThread({ ...route, taskID: first.taskID, payload: { ingress: "first" } })
+        expect(ChannelIngress.findBinding(route.platform, route.channel, route.thread)).toMatchObject({
+          task_id: first.taskID,
+          payload: { ingress: "first" },
+        })
+
+        const origin = {
+          actor: "user" as const,
+          source: "task.cancel",
+          surface: "api",
+          requestID: "cancel-channel-binding-owner",
+          reason: "operator requested cancellation",
+        }
+        expect(await EngineService.cancelTask(first.taskID, { origin })).toBe(true)
+        const releasedBindings = Database.use((db) =>
+          db
+            .select({ id: EngineChannelBindingTable.id })
+            .from(EngineChannelBindingTable)
+            .where(eq(EngineChannelBindingTable.task_id, first.taskID))
+            .all(),
+        )
+
+        const successor = await createActiveTask({
+          title: "Channel route successor",
+          request: "Own the released thread as a new ingress route",
+        })
+        ChannelIngress.bindThread({ ...route, taskID: successor.taskID, payload: { ingress: "successor" } })
+        expect(await EngineService.cancelTask(first.taskID, { origin })).toBe(true)
+        expect({
+          releasedBindings,
+          route: ChannelIngress.findBinding(route.platform, route.channel, route.thread),
+        }).toEqual({
+          releasedBindings: [],
+          route: expect.objectContaining({
+            task_id: successor.taskID,
+            platform: route.platform,
+            channel: route.channel,
+            thread: route.thread,
+            payload: { ingress: "successor" },
+          }),
+        })
+      },
+    })
+  }, 0)
+
+  test("retries the same post-terminal auxiliary settlement after a runtime gate rollback", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID } = await createActiveTask({
+          title: "Cancellation settlement gate rollback",
+          request: "Resume the exact auxiliary receipt after a shutdown gate rolls back",
+        })
+        let auxiliaryAttempts = 0
+        const auxiliarySettlement = spyOn(ProcessSupervisor, "settleTaskAuxiliaryProcesses").mockImplementation(
+          async () => {
+            auxiliaryAttempts += 1
+            if (auxiliaryAttempts === 1) throw new Error("injected first auxiliary settlement failure")
+          },
+        )
 
         expect(
           await EngineService.cancelTask(taskID, {
@@ -651,7 +856,7 @@ describe("active operator wake settlement", () => {
               actor: "user",
               source: "task.cancel",
               surface: "api",
-              requestID: "cancel-with-checkpoint-failure",
+              requestID: "cancel-with-auxiliary-failure",
               reason: "operator requested cancellation",
             },
           }),
@@ -660,47 +865,72 @@ describe("active operator wake settlement", () => {
 
         const deadline = Date.now() + 15_000
         let settlement:
-          | { label: string; payload: { status?: string; failures?: Array<{ stage?: string }> } }
+          | {
+              id: string
+              label: string
+              payload: { status?: string; attempt?: number; last_failure?: Array<{ stage?: string }> }
+            }
           | undefined
         while (Date.now() < deadline) {
           settlement = Database.use(
             (db) =>
               db
-                .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+                .select({
+                  id: EngineArtifactTable.id,
+                  label: EngineArtifactTable.label,
+                  payload: EngineArtifactTable.payload,
+                })
                 .from(EngineArtifactTable)
                 .where(
                   and(
                     eq(EngineArtifactTable.task_id, taskID),
-                    eq(EngineArtifactTable.kind, "task_checkpoint_settlement"),
+                    eq(EngineArtifactTable.kind, "task_auxiliary_settlement"),
                   ),
                 )
                 .get() as typeof settlement,
           )
-          if (settlement && !["pending", "running"].includes(settlement.label)) break
+          if (settlement?.payload.last_failure?.some((failure) => failure.stage === "auxiliary_process_settlement"))
+            break
+          await Bun.sleep(20)
+        }
+        const auxiliarySettlementID = settlement!.id
+        expect(settlement).toMatchObject({
+          id: auxiliarySettlementID,
+          payload: {
+            attempt: expect.any(Number),
+            last_failure: [{ stage: "auxiliary_process_settlement" }],
+          },
+        })
+        const gate = acquireCancelledTaskSettlementGate()
+        await gate.waitForIdle()
+        const resumeAfterRollback = gate.rollback()
+        gate[Symbol.dispose]()
+        await resumeAfterRollback()
+        const recoveryDeadline = Date.now() + 30_000
+        while (Date.now() < recoveryDeadline) {
+          const currentSettlement = Database.use(
+            (db) =>
+              db
+                .select({
+                  id: EngineArtifactTable.id,
+                  label: EngineArtifactTable.label,
+                  payload: EngineArtifactTable.payload,
+                })
+                .from(EngineArtifactTable)
+                .where(eq(EngineArtifactTable.id, auxiliarySettlementID))
+                .get() as typeof settlement,
+          )
+          if (currentSettlement) settlement = currentSettlement
+          if (settlement?.label === "completed") break
           await Bun.sleep(20)
         }
         expect(settlement).toMatchObject({
-          label: "failed",
-          payload: { status: "failed", failures: [{ stage: "baseline" }] },
+          id: auxiliarySettlementID,
+          label: "completed",
+          payload: { status: "completed", attempt: expect.any(Number) },
         })
-        const allSettlementsDeadline = Date.now() + 5_000
-        while (Date.now() < allSettlementsDeadline) {
-          const active = Database.use((db) =>
-            db
-              .select({ id: EngineArtifactTable.id })
-              .from(EngineArtifactTable)
-              .where(
-                and(
-                  eq(EngineArtifactTable.task_id, taskID),
-                  sql`${EngineArtifactTable.kind} IN ('task_checkpoint_settlement', 'task_auxiliary_settlement')`,
-                  sql`${EngineArtifactTable.label} IN ('pending', 'running')`,
-                ),
-              )
-              .all(),
-          )
-          if (active.length === 0) break
-          await Bun.sleep(20)
-        }
+        expect(auxiliaryAttempts).toBe(2)
+        auxiliarySettlement.mockRestore()
         expect(
           Database.use((db) =>
             db
@@ -717,9 +947,8 @@ describe("active operator wake settlement", () => {
           ),
         ).toEqual([
           { kind: "task_auxiliary_settlement", label: "completed" },
-          { kind: "task_checkpoint_settlement", label: "failed" },
+          { kind: "task_checkpoint_settlement", label: "completed" },
         ])
-        await unlink(`${project.path}/changed-after-task-creation.txt`)
         const settlementID = recordEngineArtifact({
           taskID,
           kind: "task_checkpoint_settlement",
@@ -777,6 +1006,314 @@ describe("active operator wake settlement", () => {
           resultCheckpoints: resultCheckpoints.length,
           resultHistory: Array.isArray(gitMetadata?.result_history) ? gitMetadata.result_history.length : undefined,
         }).toEqual({ label: "completed", resultCheckpoints: 1, resultHistory: 0 })
+      },
+    })
+  }, 0)
+
+  test("fences displaced cancellation settlement owners before successor cleanup", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        for (const failureMode of ["owner-steal", "renew-throw"] as const) {
+          const { taskID } = await createActiveTask({
+            title: `Cancellation settlement lease fence ${failureMode}`,
+            request: "Abort the displaced cleanup owner before its successor starts",
+          })
+          const events: string[] = []
+          let activeOwners = 0
+          let attempt = 0
+          const auxiliarySettlement = spyOn(ProcessSupervisor, "settleTaskAuxiliaryProcesses").mockImplementation(
+            async (_taskID, options) => {
+              attempt += 1
+              const currentAttempt = attempt
+              expect(activeOwners).toBe(0)
+              activeOwners += 1
+              events.push(`start:${currentAttempt}`)
+              try {
+                if (currentAttempt === 1) {
+                  const signal = options?.signal
+                  if (!signal) throw new Error("settlement cleanup did not receive its lease fence")
+                  await new Promise<void>((resolve) => {
+                    if (signal.aborted) return resolve()
+                    signal.addEventListener("abort", () => resolve(), { once: true })
+                  })
+                  events.push(`aborted:${currentAttempt}`)
+                  signal.throwIfAborted()
+                }
+              } finally {
+                activeOwners -= 1
+                events.push(`settled:${currentAttempt}`)
+              }
+            },
+          )
+          try {
+            expect(
+              await EngineService.cancelTask(taskID, {
+                origin: {
+                  actor: "user",
+                  source: "task.cancel",
+                  surface: "api",
+                  requestID: `cancel-settlement-fence-${failureMode}`,
+                  reason: "operator requested cancellation",
+                },
+              }),
+            ).toBe(true)
+            let settlement: { id: string; label: string; payload: Record<string, unknown> } | undefined
+            const runningDeadline = Date.now() + 5_000
+            while (Date.now() < runningDeadline) {
+              settlement = Database.use(
+                (db) =>
+                  db
+                    .select({
+                      id: EngineArtifactTable.id,
+                      label: EngineArtifactTable.label,
+                      payload: EngineArtifactTable.payload,
+                    })
+                    .from(EngineArtifactTable)
+                    .where(
+                      and(
+                        eq(EngineArtifactTable.task_id, taskID),
+                        eq(EngineArtifactTable.kind, "task_auxiliary_settlement"),
+                      ),
+                    )
+                    .get() as typeof settlement,
+              )
+              if (settlement?.label === "running" && events.includes("start:1")) break
+              await Bun.sleep(10)
+            }
+            expect(settlement).toMatchObject({ label: "running", payload: { owner_id: expect.any(String) } })
+
+            if (failureMode === "owner-steal") {
+              updateEngineArtifact({
+                id: settlement!.id,
+                payload: { ...settlement!.payload, owner_id: "successor-owner", lease_expires_at: 0 },
+              })
+              CancelledTaskSettlementTestHooks.renewLeaseNow(settlement!.id)
+            } else {
+              const immediateTransaction = Database.immediateTransaction
+              const renewalFailure = spyOn(Database, "immediateTransaction").mockImplementation((() => {
+                throw new Error("injected settlement lease renewal failure")
+              }) as typeof Database.immediateTransaction)
+              try {
+                CancelledTaskSettlementTestHooks.renewLeaseNow(settlement!.id)
+              } finally {
+                renewalFailure.mockRestore()
+              }
+              if (Database.immediateTransaction !== immediateTransaction) {
+                throw new Error("settlement renewal transaction spy did not restore")
+              }
+            }
+
+            const quiesce = acquireCancelledTaskSettlementGate()
+            await quiesce.waitForIdle()
+            expect({ activeOwners, events }).toEqual({
+              activeOwners: 0,
+              events: ["start:1", "aborted:1", "settled:1"],
+            })
+            const current = Database.use((db) =>
+              db
+                .select({ payload: EngineArtifactTable.payload })
+                .from(EngineArtifactTable)
+                .where(eq(EngineArtifactTable.id, settlement!.id))
+                .get(),
+            )!.payload as Record<string, unknown>
+            const {
+              owner_id: _ownerID,
+              owner_process_id: _ownerProcessID,
+              owner_started_at: _ownerStartedAt,
+              lease_expires_at: _leaseExpiresAt,
+              ...pending
+            } = current
+            updateEngineArtifact({ id: settlement!.id, label: "pending", payload: { ...pending, status: "pending" } })
+            quiesce.commit()
+            quiesce[Symbol.dispose]()
+            expect(reconcilePendingCancelledTaskSettlements()).toBeGreaterThanOrEqual(1)
+            const successorGate = acquireCancelledTaskSettlementGate()
+            await successorGate.waitForIdle()
+            successorGate.commit()
+            successorGate[Symbol.dispose]()
+            expect({ activeOwners, events }).toEqual({
+              activeOwners: 0,
+              events: ["start:1", "aborted:1", "settled:1", "start:2", "settled:2"],
+            })
+            expect(
+              Database.use((db) =>
+                db
+                  .select({ label: EngineArtifactTable.label })
+                  .from(EngineArtifactTable)
+                  .where(eq(EngineArtifactTable.id, settlement!.id))
+                  .get(),
+              ),
+            ).toEqual({ label: "completed" })
+          } finally {
+            auxiliarySettlement.mockRestore()
+          }
+        }
+      },
+    })
+  }, 0)
+
+  test("reconciles cancelled Task settlements only in their owning project", async () => {
+    await using projectA = await memoryProject()
+    await using projectB = await memoryProject()
+    let taskB = ""
+
+    await Instance.provide({
+      directory: projectB.path,
+      fn: async () => {
+        taskB = (
+          await createActiveTask({
+            title: "Project-scoped cancellation settlement",
+            request: "Keep cancellation settlement inside this project authority",
+          })
+        ).taskID
+        const gate = acquireCancelledTaskSettlementGate()
+        try {
+          expect(
+            await EngineService.cancelTask(taskB, {
+              origin: {
+                actor: "user",
+                source: "task.cancel",
+                surface: "api",
+                requestID: "project-scoped-cancellation-settlement",
+                reason: "exercise project-scoped recovery",
+              },
+            }),
+          ).toBe(true)
+          await gate.waitForIdle()
+        } finally {
+          gate.commit()
+          gate[Symbol.dispose]()
+        }
+      },
+    })
+
+    await Instance.provide({
+      directory: projectA.path,
+      fn: async () => {
+        expect(reconcilePendingCancelledTaskSettlements()).toBe(0)
+        expect(
+          Database.use((db) =>
+            db
+              .select({ kind: EngineArtifactTable.kind, label: EngineArtifactTable.label })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.task_id, taskB),
+                  sql`${EngineArtifactTable.kind} IN ('task_checkpoint_settlement', 'task_auxiliary_settlement')`,
+                ),
+              )
+              .orderBy(EngineArtifactTable.kind)
+              .all(),
+          ),
+        ).toEqual([
+          { kind: "task_auxiliary_settlement", label: "pending" },
+          { kind: "task_checkpoint_settlement", label: "pending" },
+        ])
+      },
+    })
+
+    await Instance.provide({
+      directory: projectB.path,
+      fn: async () => {
+        expect(reconcilePendingCancelledTaskSettlements()).toBe(2)
+        const gate = acquireCancelledTaskSettlementGate()
+        try {
+          await gate.waitForIdle()
+        } finally {
+          gate.commit()
+          gate[Symbol.dispose]()
+        }
+        expect(
+          Database.use((db) =>
+            db
+              .select({ kind: EngineArtifactTable.kind, label: EngineArtifactTable.label })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.task_id, taskB),
+                  sql`${EngineArtifactTable.kind} IN ('task_checkpoint_settlement', 'task_auxiliary_settlement')`,
+                ),
+              )
+              .orderBy(EngineArtifactTable.kind)
+              .all(),
+          ),
+        ).toEqual([
+          { kind: "task_auxiliary_settlement", label: "completed" },
+          { kind: "task_checkpoint_settlement", label: "completed" },
+        ])
+      },
+    })
+  }, 0)
+
+  test("retries the same cancelled-Task rollback receipt until durable settlement owners recover", async () => {
+    await using project = await memoryProject()
+    let taskID = ""
+    let gate!: ReturnType<typeof acquireCancelledTaskSettlementGate>
+    let resume!: () => Promise<void>
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        taskID = (
+          await createActiveTask({
+            title: "Retry cancelled Task rollback receipt",
+            request: "Recover both durable cancellation settlement owners",
+          })
+        ).taskID
+        gate = acquireCancelledTaskSettlementGate()
+        resume = gate.rollback()
+        expect(
+          await EngineService.cancelTask(taskID, {
+            origin: {
+              actor: "user",
+              source: "task.cancel",
+              surface: "api",
+              requestID: "cancelled-task-rollback-retry",
+              reason: "exercise exact rollback retry",
+            },
+          }),
+        ).toBe(true)
+        await gate.waitForIdle()
+      },
+    })
+    await Instance.disposeAll()
+    gate[Symbol.dispose]()
+    let rollbackAttempts = 0
+    using _failure = CancelledTaskSettlementTestHooks.installBeforeRollbackRecovery(() => {
+      rollbackAttempts += 1
+      if (rollbackAttempts === 1) throw new Error("injected cancelled Task rollback recovery failure")
+    })
+    await expect(resume()).rejects.toThrow("injected cancelled Task rollback recovery failure")
+    await resume()
+    const settledGate = acquireCancelledTaskSettlementGate()
+    await settledGate.waitForIdle()
+    settledGate.commit()
+    settledGate[Symbol.dispose]()
+
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const settlementOwners = Database.use((db) =>
+          db
+            .select({ kind: EngineArtifactTable.kind, label: EngineArtifactTable.label })
+            .from(EngineArtifactTable)
+            .where(
+              and(
+                eq(EngineArtifactTable.task_id, taskID),
+                sql`${EngineArtifactTable.kind} IN ('task_checkpoint_settlement', 'task_auxiliary_settlement')`,
+              ),
+            )
+            .orderBy(EngineArtifactTable.kind)
+            .all(),
+        )
+        expect({ rollbackAttempts, settlementOwners }).toEqual({
+          rollbackAttempts: 2,
+          settlementOwners: [
+            { kind: "task_auxiliary_settlement", label: "completed" },
+            { kind: "task_checkpoint_settlement", label: "pending" },
+          ],
+        })
       },
     })
   }, 0)
@@ -848,7 +1385,7 @@ describe("active operator wake settlement", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const { taskID, rootSessionID } = await createActiveTask({
+        const { taskID } = await createActiveTask({
           title: "Contended operator wake",
           request: "Keep operator messages ordered while work is active",
         })
@@ -857,7 +1394,7 @@ describe("active operator wake settlement", () => {
         let observeFirstStarted!: () => void
         const firstStarted = new Promise<void>((resolve) => (observeFirstStarted = resolve))
         let invocation = 0
-        configureTaskLoopRunner(async ({ event }) => {
+        configureTaskLoopRunner(async ({ event, wakeID }) => {
           invocation += 1
           if (invocation === 1) {
             observeFirstStarted()
@@ -868,6 +1405,7 @@ describe("active operator wake settlement", () => {
           return {
             finalMessageID: await persistAssistantInvocation({
               rootSessionID,
+              taskIngress: { id: wakeID!, kind: "operator_message" },
               turns: [
                 {
                   text: `Read ordered operator ingress ${invocation}.`,
@@ -938,13 +1476,14 @@ describe("active operator wake settlement", () => {
         let started!: () => void
         const observedStart = new Promise<void>((resolve) => (started = resolve))
         let invocations = 0
-        configureTaskLoopRunner(async () => {
+        configureTaskLoopRunner(async ({ wakeID }) => {
           invocations += 1
           started()
           await released
           return {
             finalMessageID: await persistFinalAssistantMessage({
               rootSessionID,
+              taskIngress: { id: wakeID!, kind: "agent_lifecycle_delivery" },
               text: "Observed the exact terminal worker lifecycle occurrence.",
             }),
           }
@@ -984,12 +1523,661 @@ describe("active operator wake settlement", () => {
     })
   })
 
-  test("requeues a prior-process running ingress and drains its original occurrence", async () => {
+  test("records a typed delivery failure when lifecycle ingress has no assistant settlement", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID } = await createActiveTask({
+          title: "Lifecycle delivery settlement",
+          request: "Settle one exact worker lifecycle delivery with visible assistant evidence",
+        })
+        let invocations = 0
+        configureTaskLoopRunner(async () => {
+          invocations += 1
+          return
+        })
+        const event = {
+          note: "Deliver worker lifecycle occurrence with exact settlement",
+          agentLifecycleDelivery: {
+            eventID: "evt_worker_lifecycle_settlement",
+            sessionID: "ses_worker_lifecycle_settlement",
+            dispatchID: "dispatch_worker_lifecycle_settlement",
+          },
+        }
+
+        expect(await dispatchTaskLoop({ taskID, event })).toBe("started")
+        await waitForQueueCompletionHooksForTest()
+        const row = Database.use((db) =>
+          db
+            .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+            .get(),
+        )!
+
+        expect({ invocations, label: row.label, ingress: QueuedTaskIngressSchema.parse(row.payload) }).toMatchObject({
+          invocations: 1,
+          label: "delivery_failed",
+          ingress: {
+            lifecycle_event_id: event.agentLifecycleDelivery.eventID,
+            delivery_attempt: 1,
+            delivery_result: {
+              status: "delivery_failed",
+              error_name: "QueuedWakeSettlementError",
+              message: expect.stringContaining("completed without a final assistant message"),
+            },
+          },
+        })
+      },
+    })
+  })
+
+  test("retries the exact terminal Task ingress after its first conversation delivery fails", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
+          title: "Terminal ingress retry",
+          request: "Retry one exact terminal conversation delivery",
+        })
+        await EngineService.cancelTask(taskID, {
+          origin: {
+            actor: "user",
+            source: "task.cancel",
+            surface: "api",
+            requestID: "terminal-ingress-retry-cancel",
+            reason: "move the Task to a terminal occurrence",
+          },
+        })
+        let attempts = 0
+        const terminalConversation = spyOn(Orchestrator, "processTerminalConversation").mockImplementation(async () => {
+          attempts += 1
+          if (attempts <= 2) throw new Error(`injected terminal conversation delivery failure ${attempts}`)
+          return await persistFinalAssistantMessage({
+            rootSessionID,
+            text: "Recovered the exact terminal conversation ingress.",
+          })
+        })
+        let runtimeOwner = RuntimeServerOwnership.acquire({ database: Database.Path() })
+        const firstRuntimeOccurrenceID = runtimeOwner.owner.occurrenceID
+        try {
+          const accepted = await EngineService.handleTaskMessage(taskID, {
+            text: "Explain the terminal result through this exact ingress.",
+            source: "operator.test",
+          })
+          expect(accepted.wake_status).toBe("accepted")
+          await waitForQueueCompletionHooksForTest()
+          const exhausted = Database.use((db) =>
+            db
+              .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.id, accepted.ingress_id!))
+              .get(),
+          )!
+          expect({
+            attempts,
+            label: exhausted.label,
+            ingress: QueuedTaskIngressSchema.parse(exhausted.payload),
+          }).toMatchObject({
+            attempts: 2,
+            label: "delivery_failed",
+            ingress: { delivery_attempt: 2, delivery_runtime_attempt: 2 },
+          })
+          runtimeOwner.release()
+          runtimeOwner = RuntimeServerOwnership.acquire({ database: Database.Path() })
+          const successorRuntimeOccurrenceID = runtimeOwner.owner.occurrenceID
+          expect(successorRuntimeOccurrenceID).not.toBe(firstRuntimeOccurrenceID)
+          expect(await reconcileFailedExactTerminalIngressDeliveries()).toBe(1)
+          await waitForQueueCompletionHooksForTest()
+          const row = Database.use((db) =>
+            db
+              .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.id, accepted.ingress_id!))
+              .get(),
+          )!
+          expect({ attempts, label: row.label, ingress: QueuedTaskIngressSchema.parse(row.payload) }).toMatchObject({
+            attempts: 3,
+            label: "drained",
+            ingress: {
+              delivery_attempt: 3,
+              delivery_runtime_id: successorRuntimeOccurrenceID,
+              delivery_runtime_attempt: 1,
+            },
+          })
+        } finally {
+          runtimeOwner.release()
+          terminalConversation.mockRestore()
+        }
+      },
+    })
+  }, 30_000)
+
+  test("settles one durable Task loop launch receipt after a transient acceptance write failure", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Task loop launch receipt retry",
+          request: "Attach one claimed queue launch and settle its durable receipt",
+          queue: true,
+        })
+        configureTaskLoopRunner(async ({ wakeID }) => ({
+          finalMessageID: await persistFinalAssistantMessage({
+            rootSessionID,
+            taskIngress: { id: wakeID!, kind: "orchestrator_event" },
+            text: "The claimed Task loop is attached.",
+          }),
+        }))
+        using _failure = QueueTestHooks.failNextTaskLoopLaunchAcceptanceWrites(1)
+
+        expect(await dispatchTaskLoop({ taskID, event: { note: "Start the queued Task" } })).toBe("started")
+        const deadline = Date.now() + 3_000
+        let launch: { id: string; label: string; payload: { status?: string; acceptance_attempt?: number } } | undefined
+        while (Date.now() < deadline) {
+          launch = Database.use((db) =>
+            db
+              .select({
+                id: EngineArtifactTable.id,
+                label: EngineArtifactTable.label,
+                payload: EngineArtifactTable.payload,
+              })
+              .from(EngineArtifactTable)
+              .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_loop_launch")))
+              .get(),
+          ) as typeof launch
+          if (launch?.label === "completed") break
+          await Bun.sleep(20)
+        }
+        await waitForQueueCompletionHooksForTest()
+        expect(launch).toMatchObject({
+          id: expect.any(String),
+          label: "completed",
+          payload: { status: "loop_attached", acceptance_attempt: 2 },
+        })
+        expect(deriveTaskStatus(requireTask(taskID))).toBe("active")
+      },
+    })
+  })
+
+  test("retries one exact completion receipt and advances the queued sibling before runtime settlement", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const first = await createActiveTask({
+          title: "Completion retry source",
+          request: "Complete and advance the same-directory sibling",
+          queue: true,
+        })
+        const sibling = await createActiveTask({
+          title: "Completion retry sibling",
+          request: "Start after the source completion receipt settles",
+          queue: true,
+        })
+        const events: string[] = []
+        configureTaskLoopRunner(async ({ taskID, wakeID }) => {
+          const rootSessionID = taskID === first.taskID ? first.rootSessionID : sibling.rootSessionID
+          const finalMessageID = await persistFinalAssistantMessage({
+            rootSessionID,
+            taskIngress: { id: wakeID!, kind: "orchestrator_event" },
+            text: `Settled queue loop for ${taskID}.`,
+          })
+          if (taskID === first.taskID) {
+            events.push("source_completed")
+            await terminalTask(
+              requireTask(taskID),
+              { status: "completed", time_completed: Date.now() },
+              "Completion retry source finished",
+            )
+          } else {
+            events.push("sibling_started")
+          }
+          return { finalMessageID }
+        })
+        using _failure = QueueTestHooks.failNextTaskLoopCompletionAdvances(1)
+
+        expect(await dispatchTaskLoop({ taskID: first.taskID, event: { note: "Start completion retry source" } })).toBe(
+          "started",
+        )
+        const gate = RuntimeExecutionSettlement.acquireSettlementGate()
+        try {
+          await gate.waitForIdle(["engine_queue_completion"])
+          events.push("runtime_settled")
+        } finally {
+          gate[Symbol.dispose]()
+        }
+
+        const receipt = Database.use((db) =>
+          db
+            .select({ payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(
+              and(
+                eq(EngineArtifactTable.task_id, first.taskID),
+                eq(EngineArtifactTable.kind, "task_loop_launch"),
+              ),
+            )
+            .get(),
+        )?.payload as { completion_receipt?: Record<string, unknown> }
+        expect({ events, receipt: receipt.completion_receipt }).toEqual({
+          events: ["source_completed", "sibling_started", "runtime_settled"],
+          receipt: expect.objectContaining({
+            status: "completed",
+            disposition: "cwd_queue_observed",
+            attempt: 2,
+          }),
+        })
+      },
+    })
+  })
+
+  test("persists a positive exact completion handoff before shutdown settlement crosses", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const source = await createActiveTask({
+          title: "Completion shutdown handoff",
+          request: "Retain the exact completion receipt during runtime quiescence",
+          queue: true,
+        })
+        configureTaskLoopRunner(async ({ taskID, wakeID }) => {
+          const finalMessageID = await persistFinalAssistantMessage({
+            rootSessionID: source.rootSessionID,
+            taskIngress: { id: wakeID!, kind: "orchestrator_event" },
+            text: "The source loop completed before runtime handoff.",
+          })
+          await terminalTask(
+            requireTask(taskID),
+            { status: "completed", time_completed: Date.now() },
+            "Completion shutdown source finished",
+          )
+          return { finalMessageID }
+        })
+        using _failure = QueueTestHooks.failNextTaskLoopCompletionAdvances(1)
+
+        expect(await dispatchTaskLoop({ taskID: source.taskID, event: { note: "Start shutdown handoff source" } })).toBe(
+          "started",
+        )
+        const failureDeadline = Date.now() + 15_000
+        while (QueueTestHooks.taskLoopCompletionAdvanceFailuresRemaining() > 0 && Date.now() < failureDeadline) {
+          await Bun.sleep(10)
+        }
+        expect(QueueTestHooks.taskLoopCompletionAdvanceFailuresRemaining()).toBe(0)
+
+        const gate = RuntimeExecutionSettlement.acquireSettlementGate()
+        try {
+          gate.closeAdmission(["engine_queue_completion"])
+          gate.requestCancellation(["engine_queue_completion"], new Error("test runtime shutdown"))
+          await gate.waitForIdle(["engine_queue_completion"])
+          gate.commit()
+        } finally {
+          gate[Symbol.dispose]()
+        }
+
+        const receipt = Database.use((db) =>
+          db
+            .select({ payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(
+              and(
+                eq(EngineArtifactTable.task_id, source.taskID),
+                eq(EngineArtifactTable.kind, "task_loop_launch"),
+              ),
+            )
+            .get(),
+        )?.payload as { completion_receipt?: Record<string, unknown> }
+        expect(receipt.completion_receipt).toEqual(
+          expect.objectContaining({
+            status: "completed",
+            disposition: "runtime_handoff",
+            attempt: expect.any(Number),
+          }),
+        )
+      },
+    })
+  })
+
+  test("hands a pre-run rejected wake and persistently unaccepted launch to successor recovery", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const source = await createActiveTask({
+          title: "Pre-run completion handoff",
+          request: "Keep one exact launch recoverable when root execution is destructively fenced",
+          queue: true,
+        })
+        let runnerInvocations = 0
+        configureTaskLoopRunner(async () => {
+          runnerInvocations += 1
+          throw new Error("The destructively fenced root wake must not enter the Task loop runner")
+        })
+        const destructiveScope = SessionPromptState.beginRootSessionDestructiveScope(source.rootSessionID, {
+          actor: "runtime",
+          source: "process.shutdown",
+          surface: "engine.queue.test",
+          requestID: "pre-run-completion-handoff",
+          reason: "Reject the root wake before its Task loop starts",
+          targetSessionID: source.rootSessionID,
+          taskID: source.taskID,
+        })
+        using _failure = QueueTestHooks.failNextTaskLoopLaunchAcceptanceWrites(1_000_000)
+        try {
+          expect(
+            await dispatchTaskLoop({ taskID: source.taskID, event: { note: "Start pre-run rejected source" } }),
+          ).toBe("started")
+          const launchDeadline = Date.now() + 3_000
+          let launch:
+            | { id: string; label: string; payload: { status?: string; wake_id?: string; handoff_attempt?: number } }
+            | undefined
+          while (Date.now() < launchDeadline) {
+            launch = Database.use((db) =>
+              db
+                .select({
+                  id: EngineArtifactTable.id,
+                  label: EngineArtifactTable.label,
+                  payload: EngineArtifactTable.payload,
+                })
+                .from(EngineArtifactTable)
+                .where(
+                  and(
+                    eq(EngineArtifactTable.task_id, source.taskID),
+                    eq(EngineArtifactTable.kind, "task_loop_launch"),
+                  ),
+                )
+                .get(),
+            ) as typeof launch
+            if (launch) break
+            await Bun.sleep(10)
+          }
+          expect(launch).toMatchObject({ id: expect.any(String), label: "pending" })
+
+          const gate = RuntimeExecutionSettlement.acquireSettlementGate()
+          try {
+            gate.closeAdmission(["engine_queue_completion"])
+            gate.requestCancellation(["engine_queue_completion"], new Error("test runtime shutdown"))
+            await gate.waitForIdle(["engine_queue_completion"])
+            gate.commit()
+          } finally {
+            gate[Symbol.dispose]()
+          }
+
+          const handedOff = Database.use((db) =>
+            db
+              .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.task_id, source.taskID),
+                  eq(EngineArtifactTable.kind, "task_loop_launch"),
+                ),
+              )
+              .get(),
+          ) as typeof launch
+          expect({ runnerInvocations, handedOff }).toMatchObject({
+            runnerInvocations: 0,
+            handedOff: {
+              id: launch!.id,
+              label: "pending",
+              payload: {
+                status: "runtime_handoff_pending",
+                wake_id: expect.any(String),
+                handoff_attempt: expect.any(Number),
+              },
+            },
+          })
+
+          destructiveScope.close()
+          expect(await reconcileInterruptedTaskExecutions()).toBe(1)
+          const recovered = Database.use((db) =>
+            db
+              .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.task_id, source.taskID),
+                  eq(EngineArtifactTable.kind, "task_loop_launch"),
+                ),
+              )
+              .get(),
+          )
+          expect({ recovered, taskStatus: deriveTaskStatus(requireTask(source.taskID)) }).toMatchObject({
+            recovered: {
+              id: launch!.id,
+              label: "completed",
+              payload: { status: "recovered_to_queue" },
+            },
+            taskStatus: "queued",
+          })
+        } finally {
+          destructiveScope.close()
+        }
+      },
+    })
+  })
+
+  test("recovers a drained exact wake after an abrupt launch-receipt gap without creating a replacement wake", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const source = await createActiveTask({
+          title: "Abrupt launch receipt gap",
+          request: "Recover the exact drained wake without manufacturing another occurrence",
+          queue: true,
+        })
+        configureTaskLoopRunner(async ({ wakeID }) => {
+          const finalMessageID = await persistFinalAssistantMessage({
+            rootSessionID: source.rootSessionID,
+            taskIngress: { id: wakeID!, kind: "orchestrator_event" },
+            text: "The exact launch wake completed before its launch receipt was accepted.",
+          })
+          const row = Database.use((db) =>
+            db
+              .select({ sessionID: MessageTable.session_id, data: MessageTable.data })
+              .from(MessageTable)
+              .where(eq(MessageTable.id, finalMessageID))
+              .get(),
+          )!
+          const assistant = Message.Assistant.parse({ ...row.data, id: finalMessageID, sessionID: row.sessionID })
+          await Session.updateMessage({
+            id: assistant.parentID,
+            sessionID: assistant.sessionID,
+            role: "user",
+            author: "orchestrator",
+            time: { created: assistant.time.created - 1 },
+            agent: "orchestrator",
+            model: { providerID: "test", modelID: "abrupt-launch-gap" },
+          })
+          await publishSettledSessionTerminalStatusInCurrentProject({
+            session: await Session.get(assistant.sessionID),
+            taskID: source.taskID,
+            inputMessageID: assistant.parentID,
+            status: { type: "terminal", reason: "completed" },
+          })
+          return { finalMessageID }
+        })
+        using _failure = QueueTestHooks.failNextTaskLoopLaunchAcceptanceWrites(1_000_000)
+
+        expect(await dispatchTaskLoop({ taskID: source.taskID, event: { note: "Start exact abrupt wake" } })).toBe(
+          "started",
+        )
+        const drainedDeadline = Date.now() + 10_000
+        let exactWake:
+          | { id: string; label: string; payload: ReturnType<typeof QueuedTaskIngressSchema.parse> }
+          | undefined
+        while (Date.now() < drainedDeadline) {
+          const row = Database.use((db) =>
+            db
+              .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.task_id, source.taskID),
+                  eq(EngineArtifactTable.kind, "queued_operator_wake"),
+                ),
+              )
+              .get(),
+          )
+          if (row?.label === "drained") {
+            exactWake = { ...row, payload: QueuedTaskIngressSchema.parse(row.payload) }
+            break
+          }
+          await Bun.sleep(10)
+        }
+        expect(exactWake).toMatchObject({ id: expect.any(String), label: "drained" })
+        const launchBeforeRestart = Database.use((db) =>
+          db
+            .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(
+              and(
+                eq(EngineArtifactTable.task_id, source.taskID),
+                eq(EngineArtifactTable.kind, "task_loop_launch"),
+              ),
+            )
+            .get(),
+        ) as { id: string; label: string; payload: { wake_id?: string } }
+        expect(launchBeforeRestart).toMatchObject({
+          id: expect.any(String),
+          label: "pending",
+          payload: { wake_id: exactWake!.id },
+        })
+
+        const gate = RuntimeExecutionSettlement.acquireSettlementGate()
+        try {
+          gate.closeAdmission(["engine_queue_completion"])
+          gate.requestCancellation(["engine_queue_completion"], new Error("simulate abrupt runtime replacement"))
+          await gate.waitForIdle(["engine_queue_completion"])
+          gate.commit()
+        } finally {
+          gate[Symbol.dispose]()
+        }
+
+        expect(await reconcileInterruptedTaskExecutions()).toBe(1)
+        const launches = Database.use((db) =>
+          db
+            .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(
+              and(
+                eq(EngineArtifactTable.task_id, source.taskID),
+                eq(EngineArtifactTable.kind, "task_loop_launch"),
+              ),
+            )
+            .all(),
+        )
+        const wakes = Database.use((db) =>
+          db
+            .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label })
+            .from(EngineArtifactTable)
+            .where(
+              and(
+                eq(EngineArtifactTable.task_id, source.taskID),
+                eq(EngineArtifactTable.kind, "queued_operator_wake"),
+              ),
+            )
+            .all(),
+        )
+        expect({ launches, wakes, taskStatus: deriveTaskStatus(requireTask(source.taskID)) }).toMatchObject({
+          launches: [
+            {
+              id: launchBeforeRestart.id,
+              label: "completed",
+              payload: {
+                status: "recovered_exact_wake_completion",
+                wake_id: exactWake!.id,
+                assistant_message_id: exactWake!.payload.delivery_result?.status === "completed"
+                  ? exactWake!.payload.delivery_result.assistant_message_id
+                  : undefined,
+              },
+            },
+          ],
+          wakes: [{ id: exactWake!.id, label: "drained" }],
+          taskStatus: "active",
+        })
+      },
+    })
+  })
+
+  test("hands a persistently failing Task loop launch receipt to shutdown and settles it for a terminal Task", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Task loop launch shutdown handoff",
+          request: "Retain the exact launch receipt across runtime shutdown",
+          queue: true,
+        })
+        configureTaskLoopRunner(async ({ wakeID }) => ({
+          finalMessageID: await persistFinalAssistantMessage({
+            rootSessionID,
+            taskIngress: { id: wakeID!, kind: "orchestrator_event" },
+            text: "The claimed Task loop is attached before shutdown.",
+          }),
+        }))
+        using _failure = QueueTestHooks.failNextTaskLoopLaunchAcceptanceWrites(1_000_000)
+
+        expect(await dispatchTaskLoop({ taskID, event: { note: "Start before shutdown" } })).toBe("started")
+        const attemptsBefore = QueueTestHooks.taskLoopLaunchAcceptanceAttempts()
+        await Bun.sleep(140)
+        const attemptsDuringFailure = QueueTestHooks.taskLoopLaunchAcceptanceAttempts() - attemptsBefore
+        const gate = RuntimeExecutionSettlement.acquireSettlementGate()
+        gate.closeAdmission(["engine_queue_completion"])
+        gate.requestCancellation(["engine_queue_completion"], new Error("test runtime shutdown"))
+        await gate.waitForIdle(["engine_queue_completion"])
+        expect(attemptsDuringFailure).toBeGreaterThanOrEqual(2)
+        expect(attemptsDuringFailure).toBeLessThanOrEqual(5)
+        expect(QueueTestHooks.taskLoopLaunchAcceptanceAttempts()).toBe(attemptsBefore + attemptsDuringFailure)
+        gate.commit()
+        gate[Symbol.dispose]()
+
+        const pending = Database.use((db) =>
+          db
+            .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label })
+            .from(EngineArtifactTable)
+            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_loop_launch")))
+            .get(),
+        )!
+        expect(pending).toMatchObject({ id: expect.any(String), label: "pending" })
+
+        await terminalTask(
+          requireTask(taskID),
+          { status: "failed", error: "Injected terminal state after shutdown retained the launch receipt" },
+          "Terminalized retained Task loop launch receipt",
+        )
+        expect(await reconcileInterruptedTaskExecutions()).toBe(1)
+        expect(
+          Database.use((db) =>
+            db
+              .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+              .from(EngineArtifactTable)
+              .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_loop_launch")))
+              .all(),
+          ),
+        ).toEqual([
+          {
+            id: pending.id,
+            label: "completed",
+            payload: expect.objectContaining({ status: "terminal_inapplicable", terminal_status: "failed" }),
+          },
+        ])
+      },
+    })
+  }, 60_000)
+
+  test("requeues a prior-process running ingress for an ordinary terminal Task and drains its original occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID } = await createActiveTask({
           title: "Recovered running ingress",
           request: "Resume the exact ingress left running by a prior host process",
         })
@@ -1015,29 +2203,349 @@ describe("active operator wake settlement", () => {
           label: "running",
           payload: { ...payload, queued_by_process_id: process.pid + 10_000 },
         })
-        configureTaskLoopRunner(async () => ({
-          finalMessageID: await persistFinalAssistantMessage({
-            rootSessionID,
-            text: "Recovered and settled the original retry ingress.",
-            parts: (sessionID, messageID) => [
-              completedToolPart({
-                sessionID,
-                messageID,
-                callID: "call_recovered_ingress_decision",
-                tool: "dispatch_agent",
-                stateInput: { dispatch: { target: "base-developer" } },
-                metadata: { [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: "decision" },
-              }),
-            ],
-          }),
-        }))
+        await terminalTask(
+          requireTask(taskID),
+          { status: "completed", time_completed: Date.now() },
+          "Task completed before the host restarted its running ingress",
+        )
 
-        expect(requeueInterruptedRunningTaskIngresses()).toBe(1)
+        expect(await requeueInterruptedRunningTaskIngresses()).toBe(1)
         expect(await dispatchPersistedTaskLoop(taskID)).toBe("started")
         await waitForQueueCompletionHooksForTest()
-        expect(latestQueuedOperatorWake(taskID)).toMatchObject({
+        expect(
+          Database.use((db) =>
+            db
+              .select({
+                id: EngineArtifactTable.id,
+                label: EngineArtifactTable.label,
+                payload: EngineArtifactTable.payload,
+              })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.id, artifactID))
+              .get(),
+          ),
+        ).toMatchObject({
+          id: artifactID,
           label: "drained",
-          payload: { wake_id: expect.any(String) },
+          payload: {
+            wake_id: payload.wake_id,
+            delivery_result: { status: "terminal_inapplicable" },
+          },
+        })
+      },
+    })
+  })
+
+  test("terminal conversation reads the exact operator message and persisted Task evidence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Terminal follow-up evidence",
+          request: "Answer one exact terminal follow-up from its recorded message",
+        })
+        await EngineService.cancelTask(taskID, {
+          origin: {
+            actor: "user",
+            source: "task.cancel",
+            surface: "api",
+            requestID: "terminal-follow-up-evidence-cancel",
+            reason: "establish a terminal occurrence for the conversation",
+          },
+        })
+        const messageID = await persistOperatorRootMessage({
+          taskID,
+          rootSessionID,
+          text: "Which exact terminal occurrence ended this Task?",
+        })
+        createDecisionLog(taskID).append({
+          phase: "operator_follow_up",
+          key: "terminal_occurrence",
+          value: "The exact cancellation occurrence remains the terminal authority.",
+          reason: "Answer the operator from persisted Task evidence.",
+        })
+        const ingress = QueuedTaskIngressSchema.parse({
+          wake_id: "art_terminal_follow_up_evidence",
+          delivery_attempt: 1,
+          task_id: taskID,
+          root_session_id: rootSessionID,
+          time_queued: Date.now(),
+          queued_by_process_id: process.pid,
+          source_kind: "operator_message",
+          message_id: messageID,
+          event: { rootMessage: { messageID, kind: "operator" } },
+        })
+        if (ingress.source_kind !== "operator_message") throw new Error("expected operator-message ingress")
+        const authority = createTerminalConversationAuthority({
+          taskID,
+          ingressID: ingress.wake_id,
+          ingress,
+        })
+        const { tools } = createOrchestratorTools({
+          taskID,
+          agentSessionID: rootSessionID,
+          dispatchAgents: [
+            {
+              identity: {
+                agentID: "base-developer",
+                baseRole: "build",
+                sessionKind: "build",
+                dispatchAdapterID: "build",
+                runtimeTemplateABIVersion: 1,
+                dispatchAdapterABIVersion: 1,
+                projectionHash: "b".repeat(64),
+              },
+              packageRevision,
+              virtualWorkflows: {},
+              capabilityOwner: "platform",
+              label: "terminal-read-test",
+              builtInToolIDs: [],
+              projectedToolIDs: [],
+            } as never,
+          ],
+          rootMessage: ingress.event.rootMessage,
+          terminalConversationAuthority: authority,
+        })
+        const read = tools.read_task_message as {
+          execute?: (args: { message_id: string; reason: string }, options: unknown) => Promise<unknown>
+        }
+        const readContext = tools.read_context as {
+          execute?: (args: { scope: "decisions" }, options: unknown) => Promise<unknown>
+        }
+        const artifactSearch = tools.artifact_search as {
+          execute?: (args: Record<string, never>, options: unknown) => Promise<{ output: string }>
+        }
+        if (!read.execute) throw new Error("read_task_message execution is unavailable")
+        if (!readContext.execute) throw new Error("read_context execution is unavailable")
+        if (!artifactSearch.execute) throw new Error("artifact_search execution is unavailable")
+
+        const result = await read.execute({ message_id: messageID, reason: "Answer the exact terminal follow-up." }, {})
+        const decisionContext = await readContext.execute({ scope: "decisions" }, {})
+        const catalog = await artifactSearch.execute(
+          {},
+          {
+            toolCallId: "terminal-artifact-search",
+            messages: [],
+            abortSignal: new AbortController().signal,
+            opencorvus: { sessionID: rootSessionID },
+          },
+        )
+
+        expect(result).toContain(`Task-root message ${messageID} (operator) is already recorded`)
+        expect(result).toContain("Which exact terminal occurrence ended this Task?")
+        expect(decisionContext).toContain("terminal_occurrence")
+        expect(decisionContext).toContain("The exact cancellation occurrence remains the terminal authority.")
+        expect(JSON.parse(catalog.output)).toMatchObject({ catalog_complete: true })
+      },
+    })
+  })
+
+  test("requeues a valid durable ingress while reporting a malformed peer item", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const malformedTask = await createActiveTask({
+          title: "Malformed recovery peer",
+          request: "Keep the independent valid recovery item progressing",
+        })
+        const validTask = await createActiveTask({
+          title: "Valid recovery peer",
+          request: "Recover this durable ingress despite another bad item",
+        })
+        const persistRunningIngress = (taskID: string) => {
+          let artifactID = ""
+          Database.transaction((db) => {
+            artifactID = persistQueuedTaskIntentInTransaction(db, {
+              task: requireTask(taskID),
+              intent: "retry",
+              supersededOperatorMessageIDs: [],
+              now: Date.now(),
+            })
+          })
+          const row = Database.use((db) =>
+            db
+              .select({ payload: EngineArtifactTable.payload })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.id, artifactID))
+              .get(),
+          )
+          updateEngineArtifact({
+            id: artifactID,
+            label: "running",
+            payload: { ...QueuedTaskIngressSchema.parse(row?.payload), queued_by_process_id: process.pid + 10_000 },
+          })
+          return artifactID
+        }
+        const malformedID = persistRunningIngress(malformedTask.taskID)
+        const validID = persistRunningIngress(validTask.taskID)
+        const queuePosition = spyOn(SessionPromptState, "rootWakeQueuePosition").mockImplementation(
+          (rootSessionID, wakeID) => {
+            if (wakeID === malformedID) throw new Error("injected malformed peer recovery failure")
+            return undefined
+          },
+        )
+        try {
+          await expect(requeueInterruptedRunningTaskIngresses()).rejects.toBeInstanceOf(AggregateError)
+        } finally {
+          queuePosition.mockRestore()
+        }
+        expect(
+          Database.use((db) =>
+            db
+              .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.id, validID))
+              .get(),
+          ),
+        ).toEqual({ id: validID, label: "pending" })
+      },
+    })
+  })
+
+  test("reconciles a committed active assistant result before requeueing its running ingress", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Active ingress crash reconciliation",
+          request: "Reuse the exact committed assistant result after restart",
+        })
+        const artifactID = Database.transaction((db) =>
+          persistQueuedTaskIntentInTransaction(db, {
+            task: requireTask(taskID),
+            intent: "retry",
+            supersededOperatorMessageIDs: [],
+            now: Date.now(),
+          }),
+        )
+        const assistantMessageID = await persistFinalAssistantMessage({
+          rootSessionID,
+          taskIngress: { id: artifactID, kind: "operator_intent" },
+          text: "The exact active ingress has a durable assistant result.",
+        })
+        updateEngineArtifact({ id: artifactID, label: "running" })
+
+        expect(await requeueInterruptedRunningTaskIngresses()).toBe(0)
+        expect(
+          Database.use((db) =>
+            db
+              .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.id, artifactID))
+              .get(),
+          ),
+        ).toMatchObject({
+          label: "drained",
+          payload: {
+            delivery_result: { status: "completed", assistant_message_id: assistantMessageID },
+          },
+        })
+      },
+    })
+  })
+
+  test("reuses one coordination ingress identity after a typed delivery failure", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Coordination ingress identity",
+          request: "Keep one durable occurrence for one coordination request",
+        })
+        const requestID = "coordination-request:stable-identity"
+        const firstID = Database.transaction((db) =>
+          persistQueuedCoordinationWakeInTransaction(db, { taskID, rootSessionID, requestID }),
+        )
+        const first = Database.use((db) =>
+          db.select({ payload: EngineArtifactTable.payload }).from(EngineArtifactTable).where(eq(EngineArtifactTable.id, firstID)).get(),
+        )
+        updateEngineArtifact({
+          id: firstID,
+          label: "delivery_failed",
+          payload: QueuedTaskIngressSchema.parse({
+            ...QueuedTaskIngressSchema.parse(first?.payload),
+            delivery_result: {
+              status: "delivery_failed",
+              error_name: "InjectedDeliveryError",
+              message: "Retry the same durable occurrence",
+              time_completed: Date.now(),
+            },
+          }),
+        })
+
+        const retryID = Database.transaction((db) =>
+          persistQueuedCoordinationWakeInTransaction(db, { taskID, rootSessionID, requestID }),
+        )
+        const rows = Database.use((db) =>
+          db
+            .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(
+              and(
+                eq(EngineArtifactTable.task_id, taskID),
+                eq(EngineArtifactTable.kind, "queued_operator_wake"),
+                sql`json_extract(${EngineArtifactTable.payload}, '$.request_id') = ${requestID}`,
+              ),
+            )
+            .all(),
+        )
+        expect({ firstID, retryID, rows }).toMatchObject({
+          firstID,
+          retryID: firstID,
+          rows: [{ id: firstID, label: "pending", payload: { delivery_attempt: 2, wake_id: requestID } }],
+        })
+      },
+    })
+  })
+
+  test("persists a historical terminal occurrence without replacing the live Session occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Historical lifecycle publication",
+          request: "Keep the live occurrence authoritative while recovery publishes history",
+        })
+        const historicalInput = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: rootSessionID,
+          role: "user",
+          author: "user",
+          time: { created: Date.now() },
+          agent: "orchestrator",
+          model: { providerID: "test", modelID: "historical-lifecycle" },
+        })
+        const liveInput = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: rootSessionID,
+          role: "user",
+          author: "user",
+          time: { created: Date.now() + 1 },
+          agent: "orchestrator",
+          model: { providerID: "test", modelID: "live-lifecycle" },
+        })
+        const liveOwner = new AbortController()
+        SessionStatus.beginExecutionOccurrence(rootSessionID, liveInput.id, liveOwner.signal)
+        await SessionStatus.set(rootSessionID, { type: "streaming" }, { publish: false, inputMessageID: liveInput.id })
+
+        await publishSettledSessionTerminalStatusInCurrentProject({
+          session: await Session.get(rootSessionID),
+          taskID,
+          inputMessageID: historicalInput.id,
+          status: { type: "terminal", reason: "completed" },
+        })
+
+        expect({
+          occurrence: SessionStatus.executionOccurrence(rootSessionID),
+          live: SessionStatus.getExecution(rootSessionID, liveInput.id),
+        }).toEqual({
+          occurrence: { inputMessageID: liveInput.id, owner: liveOwner.signal },
+          live: { type: "streaming" },
         })
       },
     })
@@ -1052,12 +2560,13 @@ describe("active operator wake settlement", () => {
           title: "Prose-only operator wake",
           request: "Wait for an operator follow-up",
         })
-        configureTaskLoopRunner(async ({ event }) => {
+        configureTaskLoopRunner(async ({ event, wakeID }) => {
           const messageID = event?.rootMessage?.messageID
           if (!messageID) throw new Error("operator status wake test expected a rootMessage event")
           return {
             finalMessageID: await persistFinalAssistantMessage({
               rootSessionID,
+              taskIngress: { id: wakeID!, kind: "operator_message" },
               text: "The current worker is still running and has not produced a terminal result.",
               parts: (sessionID, turnMessageID) => [
                 completedToolPart({
@@ -1101,12 +2610,13 @@ describe("active operator wake settlement", () => {
           title: "Settled operator wake",
           request: "Wait for an operator follow-up",
         })
-        configureTaskLoopRunner(async ({ event }) => {
+        configureTaskLoopRunner(async ({ event, wakeID }) => {
           const messageID = event?.rootMessage?.messageID
           if (!messageID) throw new Error("operator wake test expected a rootMessage event")
           return {
             finalMessageID: await persistAssistantInvocation({
               rootSessionID,
+              taskIngress: { id: wakeID!, kind: "operator_message" },
               turns: [
                 {
                   text: "Read the current follow-up.",
@@ -1132,7 +2642,6 @@ describe("active operator wake settlement", () => {
                       callID: "call_dispatch_continuation",
                       tool: "dispatch_agent",
                       stateInput: { dispatch: { target: "base-developer" } },
-                      metadata: { [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: "decision" },
                     }),
                   ],
                 },
@@ -1155,7 +2664,7 @@ describe("active operator wake settlement", () => {
           sourceKind: wake.payload.source_kind,
         }).toEqual({
           label: "drained",
-          deliveryStatus: undefined,
+          deliveryStatus: "completed",
           sourceKind: "operator_message",
         })
         expect(deriveTaskStatus(requireTask(taskID))).toBe("active")
@@ -1172,12 +2681,13 @@ describe("active operator wake settlement", () => {
           title: "Same-turn read and dispatch",
           request: "Wait for an operator follow-up",
         })
-        configureTaskLoopRunner(async ({ event }) => {
+        configureTaskLoopRunner(async ({ event, wakeID }) => {
           const messageID = event?.rootMessage?.messageID
           if (!messageID) throw new Error("operator wake test expected a rootMessage event")
           return {
             finalMessageID: await persistFinalAssistantMessage({
               rootSessionID,
+              taskIngress: { id: wakeID!, kind: "operator_message" },
               text: "Issued a read and dispatch in one tool batch.",
               parts: (sessionID, finalMessageID) => [
                 completedToolPart({
@@ -1196,7 +2706,6 @@ describe("active operator wake settlement", () => {
                   callID: "call_dispatch_same_turn",
                   tool: "dispatch_agent",
                   stateInput: { dispatch: { target: "base-developer" } },
-                  metadata: { [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: "decision" },
                 }),
               ],
             }),
@@ -1217,7 +2726,7 @@ describe("active operator wake settlement", () => {
           sourceKind: wake.payload.source_kind,
         }).toEqual({
           label: "drained",
-          deliveryStatus: undefined,
+          deliveryStatus: "completed",
           sourceKind: "operator_message",
         })
       },
@@ -1233,12 +2742,13 @@ describe("active operator wake settlement", () => {
           title: "Multi-turn settled operator wake",
           request: "Wait for an operator follow-up",
         })
-        configureTaskLoopRunner(async ({ event }) => {
+        configureTaskLoopRunner(async ({ event, wakeID }) => {
           const messageID = event?.rootMessage?.messageID
           if (!messageID) throw new Error("operator wake test expected a rootMessage event")
           return {
             finalMessageID: await persistAssistantInvocation({
               rootSessionID,
+              taskIngress: { id: wakeID!, kind: "operator_message" },
               turns: [
                 {
                   text: "Read the current operator message.",
@@ -1264,7 +2774,6 @@ describe("active operator wake settlement", () => {
                       callID: "call_dispatch_continuation",
                       tool: "dispatch_agent",
                       stateInput: { dispatch: { target: "base-developer" } },
-                      metadata: { [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: "decision" },
                     }),
                   ],
                 },
@@ -1290,7 +2799,7 @@ describe("active operator wake settlement", () => {
           sourceKind: wake.payload.source_kind,
         }).toEqual({
           label: "drained",
-          deliveryStatus: undefined,
+          deliveryStatus: "completed",
           sourceKind: "operator_message",
         })
       },
@@ -1326,13 +2835,12 @@ describe("active operator wake settlement", () => {
                   callID: "call_prior_dispatch",
                   tool: "dispatch_agent",
                   stateInput: { dispatch: { target: "base-developer" } },
-                  metadata: { [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: "decision" },
                 }),
               ],
             },
           ],
         })
-        configureTaskLoopRunner(async ({ event }) => {
+        configureTaskLoopRunner(async ({ event, wakeID }) => {
           const messageID = event?.rootMessage?.messageID
           if (!messageID) throw new Error("operator wake test expected a rootMessage event")
           return {
@@ -1340,6 +2848,7 @@ describe("active operator wake settlement", () => {
               rootSessionID,
               sessionID: session.id,
               parentID,
+              taskIngress: { id: wakeID!, kind: "operator_message" },
               turns: [
                 {
                   text: "Read the current operator message but made no scheduler decision.",
@@ -1375,14 +2884,14 @@ describe("active operator wake settlement", () => {
           sourceKind: wake.payload.source_kind,
         }).toEqual({
           label: "drained",
-          deliveryStatus: undefined,
+          deliveryStatus: "completed",
           sourceKind: "operator_message",
         })
       },
     })
   })
 
-  test("records delivery_failed when an operator intent wake ignores superseded messages and makes no decision", async () => {
+  test("drains the exact operator intent from its assistant receipt without requiring a named retrieval tool", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -1396,9 +2905,10 @@ describe("active operator wake settlement", () => {
           rootSessionID,
           text: "Retry by reading this retired operator message before scheduling.",
         })
-        configureTaskLoopRunner(async () => ({
+        configureTaskLoopRunner(async ({ wakeID }) => ({
           finalMessageID: await persistFinalAssistantMessage({
             rootSessionID,
+            taskIngress: { id: wakeID!, kind: "operator_intent" },
             text: "Retry acknowledged; I will continue later.",
           }),
         }))
@@ -1412,15 +2922,10 @@ describe("active operator wake settlement", () => {
         expect({
           label: wake.label,
           deliveryStatus: wake.payload.delivery_result?.status,
-          errorName:
-            wake.payload.delivery_result?.status === "delivery_failed"
-              ? wake.payload.delivery_result.error_name
-              : undefined,
           sourceKind: wake.payload.source_kind,
         }).toEqual({
-          label: "delivery_failed",
-          deliveryStatus: "delivery_failed",
-          errorName: "QueuedWakeSettlementError",
+          label: "drained",
+          deliveryStatus: "completed",
           sourceKind: "operator_intent",
         })
       },
@@ -1441,12 +2946,13 @@ describe("active operator wake settlement", () => {
           rootSessionID,
           text: "Retry by reading this retired operator message before scheduling.",
         })
-        configureTaskLoopRunner(async ({ event }) => {
+        configureTaskLoopRunner(async ({ event, wakeID }) => {
           const [messageID] = event?.taskIntent?.supersededOperatorMessageIDs ?? []
           if (!messageID) throw new Error("operator intent test expected a superseded operator message")
           return {
             finalMessageID: await persistAssistantInvocation({
               rootSessionID,
+              taskIngress: { id: wakeID!, kind: "operator_intent" },
               turns: [
                 {
                   text: "Read the retired operator message.",
@@ -1472,7 +2978,6 @@ describe("active operator wake settlement", () => {
                       callID: "call_dispatch_retry_continuation",
                       tool: "dispatch_agent",
                       stateInput: { dispatch: { target: "base-developer" } },
-                      metadata: { [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: "decision" },
                     }),
                   ],
                 },
@@ -1493,7 +2998,7 @@ describe("active operator wake settlement", () => {
           sourceKind: wake.payload.source_kind,
         }).toEqual({
           label: "drained",
-          deliveryStatus: undefined,
+          deliveryStatus: "completed",
           sourceKind: "operator_intent",
         })
       },
@@ -1509,11 +3014,12 @@ describe("active operator wake settlement", () => {
           title: "Settled task wait wake",
           request: "Wait for a scheduled continuation",
         })
-        configureTaskLoopRunner(async ({ event }) => {
+        configureTaskLoopRunner(async ({ event, wakeID }) => {
           if (!event?.taskWaitWake?.jobID) throw new Error("task wait test expected a taskWaitWake event")
           return {
             finalMessageID: await persistFinalAssistantMessage({
               rootSessionID,
+              taskIngress: { id: wakeID!, kind: "task_wait_wake" },
               text: "Observed the scheduled wait wake and dispatched the continuation.",
               parts: (sessionID, finalMessageID) => [
                 completedToolPart({
@@ -1522,7 +3028,6 @@ describe("active operator wake settlement", () => {
                   callID: "call_dispatch_wait_continuation",
                   tool: "dispatch_agent",
                   stateInput: { dispatch: { target: "base-developer" } },
-                  metadata: { [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: "decision" },
                 }),
               ],
             }),
@@ -1539,7 +3044,7 @@ describe("active operator wake settlement", () => {
           sourceKind: wake.payload.source_kind,
         }).toEqual({
           label: "drained",
-          deliveryStatus: undefined,
+          deliveryStatus: "completed",
           sourceKind: "task_wait_wake",
         })
       },

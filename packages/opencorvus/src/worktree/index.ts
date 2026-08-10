@@ -1101,10 +1101,16 @@ export namespace Worktree {
     await releaseManagedSessionOwner(input)
   }
 
-  export async function releaseManagedWorktreeTaskOwners(taskID: string): Promise<void> {
-    await withGitLock(() =>
-      Ownership.Worktree.releaseTaskOwners({ primaryWorktreeDir: Instance.project.worktree, taskID }),
-    )
+  export async function releaseManagedWorktreeTaskOwners(
+    taskID: string,
+    options?: { signal?: AbortSignal },
+  ): Promise<void> {
+    options?.signal?.throwIfAborted()
+    await withGitLock(async () => {
+      options?.signal?.throwIfAborted()
+      await Ownership.Worktree.releaseTaskOwners({ primaryWorktreeDir: Instance.project.worktree, taskID })
+      options?.signal?.throwIfAborted()
+    })
   }
 
   export async function reconcileOrphanWorktreeOwners(): Promise<number> {

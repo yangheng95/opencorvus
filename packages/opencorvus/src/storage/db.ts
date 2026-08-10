@@ -1,5 +1,5 @@
 import { Database as BunDatabase } from "bun:sqlite"
-import { eq } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
 import { drizzle, type SQLiteBunDatabase } from "drizzle-orm/bun-sqlite"
 import { type SQLiteTransaction } from "drizzle-orm/sqlite-core"
 export * from "drizzle-orm"
@@ -75,6 +75,14 @@ export const DatabaseResetTargetRemovalError = NamedError.create(
     ),
   }),
 )
+
+export class DatabaseEffectAdmissionClosedError extends Error {
+  override readonly name = "DatabaseEffectAdmissionClosedError"
+
+  constructor(public readonly operation: string) {
+    super(`${operation} rejected because database effect admission is closed during runtime settlement`)
+  }
+}
 
 const log = Log.create({ service: "db" })
 
@@ -384,6 +392,12 @@ export namespace Database {
   const effectOwnerContext = Context.create<EffectOwner>("database-effect-owner")
   const activeEffects = new Map<EffectOwner, Promise<void>>()
   let lifecycleOwner: LifecycleOwner | undefined
+  let effectSettlementGate: symbol | undefined
+  let effectSettlementAcquiring = false
+
+  function assertEffectAdmission(operation: string): void {
+    if (effectSettlementGate) throw new DatabaseEffectAdmissionClosedError(operation)
+  }
 
   function lifecycleConflict(operation: string, owner: LifecycleOwner) {
     return new Error(`${operation} rejected because Database.${owner.label} owns the database lifecycle`)
@@ -412,6 +426,12 @@ export namespace Database {
 
   function assertDatabaseAccess(operation: string) {
     assertInheritedOwnersOpen(operation)
+    if (effectSettlementGate) {
+      const acceptedEffectOwner = effectOwnerContext.tryUse()
+      if (!acceptedEffectOwner || acceptedEffectOwner.closed || !activeEffects.has(acceptedEffectOwner)) {
+        throw new DatabaseEffectAdmissionClosedError(operation)
+      }
+    }
     const owner = lifecycleOwner
     if (!owner) return
     const effectOwner = effectOwnerContext.tryUse()
@@ -968,7 +988,16 @@ export namespace Database {
     tx: TxOrDb
     effects: (() => void | Promise<void>)[]
     closed: boolean
+    transactionDepth: number
   }>("database")
+
+  export class ActiveDatabaseTransactionRequiredError extends Error {
+    override readonly name = "ActiveDatabaseTransactionRequiredError"
+
+    constructor(public readonly operation: string) {
+      super(`${operation} requires an active Database transaction`)
+    }
+  }
 
   const effectLog = Log.create({ service: "db-effect" })
   const EFFECT_FAILURE_SAMPLE_LIMIT = 32
@@ -1020,6 +1049,7 @@ export namespace Database {
   }
 
   function runEffect(fn: () => void | Promise<void>) {
+    assertEffectAdmission("Database.effect")
     const owner: EffectOwner = { closed: false }
     const finish = registerEffect(owner)
     let result: void | Promise<void>
@@ -1047,6 +1077,7 @@ export namespace Database {
     const normalizedLabel = label.trim()
     if (!normalizedLabel) return Promise.reject(new Error("Database.runLifecycleActivity requires a label"))
     const operationLabel = `Database.runLifecycleActivity(${normalizedLabel})`
+    if (effectSettlementGate) return Promise.reject(new DatabaseEffectAdmissionClosedError(operationLabel))
     const inheritedFailure = inheritedOwnerFailure(operationLabel)
     if (inheritedFailure) return Promise.reject(inheritedFailure)
     const databaseOwner = ctx.tryUse()
@@ -1079,7 +1110,7 @@ export namespace Database {
   }
 
   function provideDatabaseContext<T>(
-    owner: { tx: TxOrDb; effects: (() => void | Promise<void>)[]; closed: boolean },
+    owner: { tx: TxOrDb; effects: (() => void | Promise<void>)[]; closed: boolean; transactionDepth: number },
     operation: string,
     callback: () => T,
   ): T {
@@ -1109,7 +1140,7 @@ export namespace Database {
     try {
       throwIfUnavailable()
       const db = Client()
-      const owner = { effects: [] as (() => void | Promise<void>)[], tx: db, closed: false }
+      const owner = { effects: [] as (() => void | Promise<void>)[], tx: db, closed: false, transactionDepth: 0 }
       const result = provideDatabaseContext(owner, "Database.use", () => callback(db))
       drainEffects(owner.effects)
       return result
@@ -1128,6 +1159,7 @@ export namespace Database {
   }
 
   export function effect(fn: () => any | Promise<any>) {
+    assertEffectAdmission("Database.effect")
     assertLifecycleUnowned("Database.effect")
     const active = ctx.tryUse()
     if (active) {
@@ -1136,6 +1168,20 @@ export namespace Database {
       return
     }
     runEffect(fn)
+  }
+
+  export class EffectSettlementInactivityError extends Error {
+    override readonly name = "DatabaseEffectSettlementInactivityError"
+
+    constructor(
+      public readonly activeEffectCount: number,
+      public readonly inactivityTimeoutMilliseconds: number,
+    ) {
+      super(
+        `Database effect settlement made no progress for ${inactivityTimeoutMilliseconds}ms; ` +
+          `${activeEffectCount} lifecycle effect(s) remain`,
+      )
+    }
   }
 
   export function awaitEffectIdle(idleTimeoutMs: number): Promise<void> {
@@ -1165,9 +1211,7 @@ export namespace Database {
 
         const remaining = idleDeadline - Date.now()
         if (remaining <= 0) {
-          throw new Error(
-            `Database.awaitEffectIdle: ${activeEffects.size} post-commit effect(s) still active after ${idleTimeoutMs}ms without effect activity`,
-          )
+          throw new EffectSettlementInactivityError(activeEffects.size, idleTimeoutMs)
         }
 
         const snapshot = [...activeEffects.values()]
@@ -1197,9 +1241,87 @@ export namespace Database {
     return owner
   }
 
+  export async function acquireEffectSettlementGate(idleTimeoutMs: number): Promise<Disposable> {
+    if (effectSettlementGate || effectSettlementAcquiring) {
+      throw new Error("Database effect settlement is already in progress")
+    }
+    effectSettlementAcquiring = true
+    try {
+      for (;;) {
+        await awaitEffectIdle(idleTimeoutMs)
+        if (activeEffects.size > 0) continue
+        const token = Symbol("database-effect-settlement")
+        effectSettlementGate = token
+        return {
+          [Symbol.dispose]() {
+            if (effectSettlementGate === token) effectSettlementGate = undefined
+          },
+        }
+      }
+    } finally {
+      effectSettlementAcquiring = false
+    }
+  }
+
   export function hasActiveContext() {
     const active = ctx.tryUse()
     return active !== undefined && !active.closed
+  }
+
+  export function hasActiveTransaction() {
+    const active = ctx.tryUse()
+    return active !== undefined && !active.closed && active.transactionDepth > 0
+  }
+
+  export function requireActiveTransaction(operation: string): void {
+    if (!hasActiveTransaction()) throw new ActiveDatabaseTransactionRequiredError(operation)
+  }
+
+  let savepointSequence = 0
+
+  function runSavepoint<T>(db: TxOrDb, callback: () => T, operation: string): T {
+    const active = ctx.tryUse()
+    if (!active || active.closed || active.tx !== db) {
+      throw new ActiveDatabaseTransactionRequiredError(operation)
+    }
+    const name = `database_savepoint_${process.pid}_${++savepointSequence}`
+    const effectStart = active.effects.length
+    db.run(sql.raw(`SAVEPOINT "${name}"`))
+    try {
+      const result = assertSynchronousResult(
+        provideDatabaseContext(
+          {
+            tx: db,
+            effects: active.effects,
+            closed: false,
+            transactionDepth: active.transactionDepth + 1,
+          },
+          operation,
+          callback,
+        ),
+        operation,
+      )
+      db.run(sql.raw(`RELEASE SAVEPOINT "${name}"`))
+      return result
+    } catch (cause) {
+      active.effects.splice(effectStart)
+      try {
+        db.run(sql.raw(`ROLLBACK TO SAVEPOINT "${name}"`))
+      } finally {
+        db.run(sql.raw(`RELEASE SAVEPOINT "${name}"`))
+      }
+      throw cause
+    }
+  }
+
+  /** Create an exact nested SQLite transaction while preserving the Database
+   * context's transaction depth and post-commit effect ownership. */
+  export function savepoint<T>(
+    db: TxOrDb,
+    callback: () => T,
+    ..._synchronousOnly: T extends PromiseLike<unknown> ? [never] : []
+  ): T {
+    return runSavepoint(db, callback, "Database.savepoint")
   }
 
   export function transaction<T>(
@@ -1209,13 +1331,17 @@ export namespace Database {
     assertDatabaseAccess("Database.transaction")
     throwIfUnavailable()
     const active = ctx.tryUse()
-    if (active) return assertSynchronousResult(callback(active.tx), "Database.transaction")
+    if (active) return runSavepoint(active.tx, () => callback(active.tx), "Database.transaction")
 
     try {
       throwIfUnavailable()
       const effects: (() => void | Promise<void>)[] = []
       const result = Client().transaction((tx) => {
-        return provideDatabaseContext({ tx, effects, closed: false }, "Database.transaction", () => callback(tx))
+        return provideDatabaseContext(
+          { tx, effects, closed: false, transactionDepth: 1 },
+          "Database.transaction",
+          () => callback(tx),
+        )
       })
       drainEffects(effects)
       return result
@@ -1234,13 +1360,17 @@ export namespace Database {
     assertDatabaseAccess("Database.immediateTransaction")
     throwIfUnavailable()
     const active = ctx.tryUse()
-    if (active) return assertSynchronousResult(callback(active.tx), "Database.immediateTransaction")
+    if (active) return runSavepoint(active.tx, () => callback(active.tx), "Database.immediateTransaction")
 
     try {
       const effects: (() => void | Promise<void>)[] = []
       const result = Client().transaction(
         (tx) =>
-          provideDatabaseContext({ tx, effects, closed: false }, "Database.immediateTransaction", () => callback(tx)),
+          provideDatabaseContext(
+            { tx, effects, closed: false, transactionDepth: 1 },
+            "Database.immediateTransaction",
+            () => callback(tx),
+          ),
         { behavior: "immediate" },
       )
       drainEffects(effects)

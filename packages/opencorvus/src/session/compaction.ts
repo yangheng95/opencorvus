@@ -973,7 +973,7 @@ export namespace SessionCompaction {
     processor.message.summary = true
     await Session.publishCompactionCheckpoint({ info: processor.message, part: marker })
 
-    Bus.publish(Event.Compacted, { sessionID: input.sessionID })
+    await Bus.publish(Event.Compacted, { sessionID: input.sessionID })
 
     return input.auto ? "continue" : "stop"
   }

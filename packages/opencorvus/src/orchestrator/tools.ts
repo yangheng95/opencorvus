@@ -56,12 +56,6 @@ import {
   findDispatchLineageBySession,
   recordDispatchLineage,
 } from "@/engine/dispatch-lineage"
-import {
-  EngineArtifactTable,
-  EngineGoalTable,
-  EngineInteractionRequestTable,
-  EngineTaskTable,
-} from "@/engine/engine.sql"
 import { abortChildExecutionForSession } from "@/engine/execution-abort"
 import { clarificationTranscriptSection } from "@/engine/helpers"
 import { Event as EngineEvent } from "@/engine/model"
@@ -85,7 +79,6 @@ import {
 } from "@/project/independent-project-owner"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
-import { AutomationTable } from "@/scheduler/automation.sql"
 import { Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
 import { SessionPrompt } from "@/session/prompt"
@@ -96,7 +89,7 @@ import {
 } from "@/session/runtime-contract"
 import { sessionLifecycleOrderKey, SessionStatus } from "@/session/status"
 import { TOOL_RESULT_PARK_METADATA_KEY } from "@/session/tool-result-control"
-import { and, Database, eq, NotFoundError, sql } from "@/storage/db"
+import { and, Database, eq, NotFoundError } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { timelineOrderKey } from "@/timeline/order"
 import { READ_TOOL_DESCRIPTION, ReadTool, ReadToolParameters } from "@/tool/read"
@@ -147,11 +140,6 @@ import { createReadAgentMessageTool } from "./read-agent-message-tool"
 import { createRequirementsStageDispatcher } from "./requirements-stage"
 import { createRuntimeRepairTools } from "./runtime-repair-tools"
 import { stageInputDigest } from "./stage-input-digest"
-import {
-  isOrchestratorNoDecisionObservationToolName,
-  ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY,
-  type OrchestratorDecisionEffect,
-} from "./stateful-tool-names"
 import { cancelDispatchedSession } from "./subagent-cancellation-runtime"
 import { createSubagentCancellationTool } from "./subagent-cancellation-tool"
 import {
@@ -446,15 +434,6 @@ const MANAGE_TASK_ACTION_FIELDS = Object.fromEntries(
     Object.keys(ManageTaskActionInputSchemas[action].shape).sort((left, right) => left.localeCompare(right)),
   ]),
 ) as Record<keyof typeof ManageTaskActionInputSchemas, string[]>
-
-const MANAGE_TASK_ACTION_EFFECT = {
-  complete_task: "derive",
-  fail_task: "derive",
-  cancel_task: "derive",
-  add_goal: "continuation",
-  modify_goal: "continuation",
-  delete_goal: "continuation",
-} as const satisfies Record<keyof typeof ManageTaskActionInputSchemas, "derive" | "continuation">
 
 const ManageTaskInputSchema = z.discriminatedUnion(
   "action",
@@ -868,6 +847,23 @@ export function assertProjectedSchedulerReadPermission(request: { permission: st
   throw new Error(`scheduler read rejected permission ${request.permission}`)
 }
 
+const TERMINAL_TASK_TOOL_CAPABILITIES = {
+  skill: "read_only",
+  read: "read_only",
+  read_context: "read_only",
+  read_agent_message: "read_only",
+  read_task_message: "read_only",
+  capability_search: "read_only",
+  artifact_search: "read_only",
+  artifact_read: "read_only",
+  multica_catalog: "read_only",
+  multica_preview: "read_only",
+} as const satisfies Record<string, "read_only">
+
+function terminalTaskToolCapability(name: string): "read_only" | "mutation" {
+  return name in TERMINAL_TASK_TOOL_CAPABILITIES ? "read_only" : "mutation"
+}
+
 // Re-export the stateful-tool registry (defined in a dependency-free module
 // so `session/message.ts` can import it without creating a circular graph
 // through `@/session`). Surfacing it from this module keeps it visible to
@@ -932,78 +928,6 @@ export function createOrchestratorTools(input: {
   // Agents that need to ask the user a question do so directly via
   // `Question.ask`. Workflow steps never pause for input here.
 
-  function taskDecisionSignature() {
-    return Database.use((db) => {
-      const aggregate = (table: { task_id: unknown; time_updated: unknown }) =>
-        db
-          .select({
-            count: sql<number>`count(*)`,
-            updated: sql<number | null>`max(${table.time_updated})`,
-          })
-          .from(table as never)
-          .where(eq(table.task_id as never, taskID))
-          .get()
-      const task = db
-        .select({
-          time_updated: EngineTaskTable.time_updated,
-          time_completed: EngineTaskTable.time_completed,
-          error: EngineTaskTable.error,
-        })
-        .from(EngineTaskTable)
-        .where(eq(EngineTaskTable.id, taskID))
-        .get()
-      return JSON.stringify({
-        task,
-        artifacts: aggregate(EngineArtifactTable),
-        goals: aggregate(EngineGoalTable),
-        interactions: aggregate(EngineInteractionRequestTable),
-        automations: aggregate(AutomationTable),
-      })
-    })
-  }
-
-  function normalizeOrchestratorToolResult(result: unknown): { output: string; title: string; metadata: object } {
-    if (typeof result === "string") return { output: result, title: "", metadata: {} }
-    if (result && typeof result === "object") {
-      const record = result as Record<string, unknown>
-      const output =
-        typeof record.output === "string"
-          ? record.output
-          : typeof record.text === "string"
-            ? record.text
-            : JSON.stringify(record.output ?? record)
-      return {
-        ...record,
-        output,
-        title: typeof record.title === "string" ? record.title : "",
-        metadata: record.metadata && typeof record.metadata === "object" ? record.metadata : {},
-      } as { output: string; title: string; metadata: object }
-    }
-    return { output: String(result ?? ""), title: "", metadata: {} }
-  }
-
-  function explicitDecisionEffectFromMetadata(metadata: object): OrchestratorDecisionEffect | undefined {
-    const raw = (metadata as Record<string, unknown>)[ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]
-    return raw === "decision" || raw === "continuation" || raw === "observation" || raw === "none" ? raw : undefined
-  }
-
-  function withExplicitDecisionEffectMetadata(result: unknown, effect: OrchestratorDecisionEffect): unknown {
-    const normalized = normalizeOrchestratorToolResult(result)
-    return {
-      ...normalized,
-      metadata: {
-        ...normalized.metadata,
-        [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: effect,
-      },
-    }
-  }
-
-  function decisionEffectForTool(name: string, before: string, after: string): OrchestratorDecisionEffect {
-    if (isOrchestratorNoDecisionObservationToolName(name)) return "observation"
-    if (before !== after) return "decision"
-    return "none"
-  }
-
   function terminalTaskToolRefusal(name: string, task: TaskRow) {
     const status = deriveTaskStatus(task)
     return {
@@ -1011,9 +935,7 @@ export function createOrchestratorTools(input: {
         `Task ${task.id} is terminal (status=${status}); ${name} was not executed. ` +
         "Task-level scheduler tools may act only while the task is active. Use an explicit operator Retry or Replan to reopen this same Task when its scope remains recoverable; create a separate Task only for separate scope.",
       title: "Task is terminal",
-      metadata: {
-        [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: "observation" satisfies OrchestratorDecisionEffect,
-      },
+      metadata: {},
     }
   }
 
@@ -1024,9 +946,7 @@ export function createOrchestratorTools(input: {
         `the current Task status is ${deriveTaskStatus(task)}. This conversation-only Turn cannot dispatch work, wait, ` +
         "ask a new question, or change lifecycle. Recoverable execution requires explicit operator Retry/Replan.",
       title: "Terminal conversation authority",
-      metadata: {
-        [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: "observation" satisfies OrchestratorDecisionEffect,
-      },
+      metadata: {},
     }
   }
 
@@ -1041,6 +961,31 @@ export function createOrchestratorTools(input: {
     if (!isTaskTerminal(task)) return false
     const currentReference = requireCurrentTerminalLifecycleReference(task.id)
     return sameTerminalLifecycleReference(currentReference, authority.terminalLifecycleReference)
+  }
+
+  function isAuthorizedTerminalConversationMessageRead(name: string, args: unknown, task: TaskRow): boolean {
+    const authority = input.terminalConversationAuthority
+    if (!authority || authority.ingressKind !== "operator_message" || name !== "read_task_message") return false
+    if (!args || typeof args !== "object" || Array.isArray(args)) return false
+    if (authority.taskID !== task.id || !isTaskTerminal(task)) return false
+    const messageID = (args as Record<string, unknown>).message_id
+    if (messageID !== input.rootMessage?.messageID) return false
+    const currentReference = requireCurrentTerminalLifecycleReference(task.id)
+    return sameTerminalLifecycleReference(currentReference, authority.terminalLifecycleReference)
+  }
+
+  function isAuthorizedTerminalRead(name: string, args: unknown, task: TaskRow): boolean {
+    if (terminalTaskToolCapability(name) !== "read_only") return false
+    const authority = input.terminalConversationAuthority
+    if (authority) {
+      if (authority.taskID !== task.id || !isTaskTerminal(task)) return false
+      const currentReference = requireCurrentTerminalLifecycleReference(task.id)
+      if (!sameTerminalLifecycleReference(currentReference, authority.terminalLifecycleReference)) return false
+    }
+    if (name === "read_task_message") {
+      return isAuthorizedTerminalConversationMessageRead(name, args, task)
+    }
+    return true
   }
 
   function isTerminalAgentCoordinationFailTaskReplay(name: string, args: unknown, task: TaskRow): boolean {
@@ -1072,7 +1017,7 @@ export function createOrchestratorTools(input: {
     return action.payload.status === "pending" || action.payload.status === "completed"
   }
 
-  function withDecisionEffectMetadata(name: string, raw: unknown): unknown {
+  function withTerminalTaskAuthority(name: string, raw: unknown): unknown {
     const toolDef = raw as { execute?: (args: unknown, options: unknown) => Promise<unknown> }
     if (typeof toolDef.execute !== "function") return raw
     const execute = toolDef.execute
@@ -1080,29 +1025,22 @@ export function createOrchestratorTools(input: {
       ...(raw as object),
       execute: async (args: unknown, options: unknown) => {
         const currentTask = requireTask(taskID)
-        if (input.terminalConversationAuthority && !isTerminalConversationAcknowledgement(name, args, currentTask)) {
+        if (
+          input.terminalConversationAuthority &&
+          !isTerminalConversationAcknowledgement(name, args, currentTask) &&
+          !isAuthorizedTerminalRead(name, args, currentTask)
+        ) {
           return terminalConversationToolRefusal(name, currentTask)
         }
         if (
           isTaskTerminal(currentTask) &&
           !isTerminalAgentCoordinationFailTaskReplay(name, args, currentTask) &&
-          !isTerminalConversationAcknowledgement(name, args, currentTask)
+          !isTerminalConversationAcknowledgement(name, args, currentTask) &&
+          !isAuthorizedTerminalRead(name, args, currentTask)
         ) {
           return terminalTaskToolRefusal(name, currentTask)
         }
-        const before = taskDecisionSignature()
-        const result = await execute(args, options)
-        const after = taskDecisionSignature()
-        const normalized = normalizeOrchestratorToolResult(result)
-        const effect =
-          explicitDecisionEffectFromMetadata(normalized.metadata) ?? decisionEffectForTool(name, before, after)
-        return {
-          ...normalized,
-          metadata: {
-            ...normalized.metadata,
-            [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: effect,
-          },
-        }
+        return execute(args, options)
       },
     }
   }
@@ -2601,9 +2539,7 @@ export function createOrchestratorTools(input: {
         actionInput,
         optionsWithVisibleOrchestratorToolName(options, "manage_task"),
       )
-      return MANAGE_TASK_ACTION_EFFECT[action] === "continuation"
-        ? withExplicitDecisionEffectMetadata(result, "continuation")
-        : result
+      return result
     },
   })
 
@@ -2629,10 +2565,10 @@ export function createOrchestratorTools(input: {
     delete publicTools[hidden]
   }
 
-  const toolsWithDecisionMetadata = Object.fromEntries(
-    Object.entries(publicTools).map(([name, raw]) => [name, withDecisionEffectMetadata(name, raw)]),
+  const toolsWithTerminalTaskAuthority = Object.fromEntries(
+    Object.entries(publicTools).map(([name, raw]) => [name, withTerminalTaskAuthority(name, raw)]),
   )
   return {
-    tools: toolsWithDecisionMetadata,
+    tools: toolsWithTerminalTaskAuthority,
   }
 }

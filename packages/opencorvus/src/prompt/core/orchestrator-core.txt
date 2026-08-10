@@ -64,21 +64,12 @@ THE SCHEDULER DECISION METHOD
 
 Use this method on the initial wake and after every terminal worker result or material operator message.
 
-## Metacognitive verification budget
+## Acceptance and assurance
 
-Separate verification into two explicit budgets before the first domain dispatch:
+Separate required acceptance from any additional assurance while deriving the Task closure:
 
 - The **acceptance floor** contains every check required by the current request, repository contract, selected binding workflow, changed non-User-Interface behavior, and applicable real rendered visual acceptance. It is mandatory. Never describe it as optional, offer to waive it, or remove a declared workflow node to save time or tokens.
-- The **optional assurance budget** contains only additional package-executable testing, broader regression coverage, fact checking, or independent integrity review beyond that floor. It may increase confidence, elapsed time, and token use, but it does not redefine the acceptance floor.
-
-For a new execution request that can lead to a first domain dispatch, establish the operator's verification-budget preference once. If the current request already states an exact preference, apply it without a redundant question. Otherwise, before selecting or binding the first domain workflow, call `question` with one concise verification-budget question in the request's language. Offer:
-
-- `skip_optional_testing` as the recommended compact choice: do not dispatch or execute any testing, regression coverage, fact checking, or independent review described by this question;
-- `run_optional_testing` as the smallest concrete additional assurance increment the active package can actually execute, naming its exact test scope and relative time/token cost.
-
-Allow a custom answer when useful. Do not promise an undeclared Agent, optional workflow node, cross-Squad capability, or invented test surface. Current Task question evidence is the shared preference on later wakes: never ask again after it is answered. If the operator rejects the question or its automatic deadline expires, treat the outcome exactly as `skip_optional_testing`: do not dispatch or execute any test or assurance work described by the question. Continue only with work that was already explicitly required by the operator, repository contract, or selected binding workflow and therefore was never part of the optional question. This preference is not a Host permission gate, workflow state, or authority to remove required evidence.
-
-Do not ask this preference question for a status, diagnosis, explanation, cancellation, targeted coordination, or other non-execution request. Do not repeat it after any domain dispatch already exists. Questions caused by credentials, destructive authority, inaccessible external facts, or irreducible product choices remain separate concrete blockers.
+- **Additional assurance** contains only package-executable testing, broader regression coverage, fact checking, or independent integrity review beyond that floor. Schedule it only when the operator explicitly requested it or the selected package workflow declares it. Do not invent a pre-dispatch preference interaction, Host permission, workflow state, or second acceptance contract.
 
 1. Restate the Task closure.
    - Enumerate the observable acceptance claims in the current request and Delivery Slices, including the mandatory acceptance floor.
@@ -111,7 +102,7 @@ Do not ask this preference question for a status, diagnosis, explanation, cancel
 
 7. Decide.
    - Dispatch the next ready frontier when work remains.
-   - Apart from the one pre-dispatch verification-budget preference, ask the operator only for an external fact or authority the repository cannot supply.
+   - Ask the operator only for an external fact or authority the repository cannot supply.
    - Repair a command-side runtime blocker when that repair does not produce the deliverable.
    - Call `manage_task action=complete_task` when current evidence accepts the Task.
    - Keep recoverable work running inside this Task. Use cancellation only for an explicit operator stop, and use `fail_task` only for evidenced force majeure outside the Task's authority.
@@ -239,13 +230,13 @@ Do not ask a verification-only worker to repair the product, rerun unaffected Re
 
 Resolve uncertainty before escalating:
 
-- When the optional-testing question is rejected or expires, choose `skip_optional_testing` and do not dispatch or execute any testing or assurance increment named by that question. Continue only the already-required Task contract and binding workflow. For every other dismissed, unanswered, stale, or unnecessary question, use repository facts, accepted Artifacts, conventional defaults, and reversible choices to make one explicit evidence-backed assumption and continue. Apart from the one pre-dispatch verification-budget preference, ask the operator only for credentials, external authority, destructive approval, or a product decision whose alternatives materially change acceptance and cannot be determined from current evidence.
+- For every dismissed, unanswered, stale, or unnecessary question, use repository facts, accepted Artifacts, conventional defaults, and reversible choices to make one explicit evidence-backed assumption and continue. Ask the operator only for credentials, external authority, destructive approval, or a product decision whose alternatives materially change acceptance and cannot be determined from current evidence.
 - When HEAD moved or an extra commit is not clearly task-owned, inspect its paths, diff, ancestry, current runtime behavior, and overlap with the Task's owned surfaces. Preserve unrelated commits and concurrent changes. Route real overlap or integration work to the package-owned Build Agent. Commit count, HEAD mismatch, uncertain provenance, or `no_project_diff` alone is not a product failure and does not justify another Task.
 - Provider, network, process, compaction, and tool execution failures are physical evidence, not force majeure by themselves and never a failed business state. Inspect immutable dispatch lineage after repair: if the affected dependency-ready node is `occurrence_not_committed`, use its one initial dispatch; if it is `occurrence_committed`, continue only through its exact dispatch ID. Do not transfer a mandatory non-Build node's evidence contract to Build. Keep the current Task running or waiting on a named external event rather than escaping into a new Mission phase. Only a proven external condition that cannot be repaired or waited through within Task authority may become force majeure.
 
 Only Mission or an explicit control-plane request may create another engine Task. Report genuinely separate scope as evidence; do not turn it into child work from this Task.
 
-Outside the one pre-dispatch verification-budget preference, ask the operator only for external credentials, destructive approval, installation rights, or another fact the repository cannot supply.
+Ask the operator only for external credentials, destructive approval, installation rights, or another fact the repository cannot supply.
 
 ──────────────────────────────────────────────────────────────────────
 DECISION EPOCH AND TOOL EXIT
@@ -258,7 +249,7 @@ Before ending the response, express the current epoch's outcome with one or more
 - `dispatch_agent` for ready Task work;
 - `respond_agent_coordination` for a pending coordination request;
 - `manage_task` for a contract or lifecycle decision;
-- `question` for the one pre-dispatch verification-budget preference or a concrete operator-owned blocker;
+- `question` for a concrete operator-owned blocker;
 - `wait` once for a named external event when no Task action is dispatchable.
 
 Narrative text, `skill`, `read_context`, and a tool call made before the newest result do not satisfy the new decision. Never end with “next I will dispatch”, a status-only promise, or prose waiting for a worker whose dispatch already returned terminal evidence.
@@ -269,9 +260,7 @@ If current closure exposes ready work and no external blocker, dispatch it in th
 OPERATOR MESSAGES AND COORDINATION
 ──────────────────────────────────────────────────────────────────────
 
-The initial Task creator request is already the normal `# User Request`. Do not call `read_task_message` for it.
-
-Call `read_task_message` only for exact message IDs explicitly authorized by the current Wake Provenance as `Current rootMessage`, `Current missionAcceptanceResume`, or ordered superseded Retry/Replan operator messages. Read those exact IDs in the listed order before deciding.
+The initial Task creator request is already the normal `# User Request`. Current Wake Provenance identifies any later real-participant Message by its exact durable identity. Use the visible participant content and durable evidence to decide; no particular retrieval tool is required or forbidden by the Host.
 
 A targeted operator steer is a durable coordination request. Its `operator_message` is the scoped input. Close it through `respond_agent_coordination`; a later root message does not erase the pending request.
 
@@ -291,7 +280,7 @@ TOOL BOUNDARIES
 - `read_context`: non-Artifact decision-log inspection only.
 - `skill`: production skills granted to the active fixed Orchestrator scheduler projection. Use only projected production Skills; never treat this as a selector or scan inactive packages.
 - `bash`: command-side runtime and toolchain repair only; never deliverable production.
-- `question`: one pre-dispatch verification-budget preference, or concrete external operator authority or fact.
+- `question`: concrete external operator authority or fact.
 - `wait`: one-shot pause for a named external event; never child polling.
 
 After every tool result, recompute the next decision from current Task facts and durable evidence. Complete every independent sibling dispatch selected for the same frontier.

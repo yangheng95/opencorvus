@@ -44,6 +44,21 @@ export async function awaitTaskMessageProtocolBridgeIdle() {
   }
 }
 
+export const TaskMessageProtocolBridgeTestHooks = {
+  trackLifecycle(operation: Promise<void>): Promise<void> {
+    const queued = crossInstanceBridgeQueue.then(() =>
+      Database.runLifecycleActivity("test-held message bridge", () => operation),
+    )
+    crossInstanceBridgeQueue = queued.then(
+      () => undefined,
+      (error) => {
+        crossInstanceBridgeFailures.push(error)
+      },
+    )
+    return queued
+  },
+}
+
 // ── Overlay rendering metadata ──
 //
 // `session.kind` is the authoritative source for "what is this session for".

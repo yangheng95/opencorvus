@@ -13,7 +13,7 @@ import {
 } from "../../src/storage/schema-migration"
 
 const PREDECESSOR_FINGERPRINT = "05480e3d530365e768b00218f24c4a8d7bb281538315b600dd70827c90e33212"
-const CURRENT_FINGERPRINT = "10db39feae477909581d186d7eb561feddefcf667f8d6471b4907e71a9a5e515"
+const CURRENT_FINGERPRINT = "84af4e18ec989a211a7ee4dc574b535fce8cfbb7237eb73feb549a82ace1b058"
 
 const legacyMemoryFileDDL = /* sql */ `CREATE TABLE "memory_file" (
   "id" text PRIMARY KEY NOT NULL,
@@ -61,9 +61,16 @@ function requiredSchemaSQL(sqlite: BunDatabase, type: "table" | "index" | "trigg
   return row.sql
 }
 
+function dropBusPublicationOutbox(sqlite: BunDatabase) {
+  sqlite.run('DROP TABLE "bus_publication_delivery"')
+  sqlite.run('DROP TABLE "bus_publication_outbox"')
+}
+
 function createPredecessorDatabase(databasePath: string, input: { scratchpadContent?: string } = {}) {
   const sqlite = new BunDatabase(databasePath, { create: true })
   sqlite.exec(SCHEMA_DDL)
+  dropBusPublicationOutbox(sqlite)
+  sqlite.run('DROP TABLE "event_job_fire"')
   sqlite.run('DROP TABLE "engine_task_cancellation_authority"')
   const memoryChunkTable = requiredSchemaSQL(sqlite, "table", "memory_chunk")
   const memoryEmbeddingTable = requiredSchemaSQL(sqlite, "table", "memory_embedding")
@@ -145,6 +152,9 @@ describe("transactional schema migration", () => {
       "2026-08-08-browser-preview-target-identity",
       "2026-08-09-workflow-node-occurrence-authority",
       "2026-08-10-task-cancellation-authority",
+      "2026-08-11-event-job-fire-authority",
+      "2026-08-11-bus-publication-outbox-authority",
+      "2026-08-11-bus-publication-durable-retry-backoff",
     ])
 
     const result = migrateDatabaseFile(databasePath, plan!, preparedBackup)
@@ -156,6 +166,9 @@ describe("transactional schema migration", () => {
         "2026-08-08-browser-preview-target-identity",
         "2026-08-09-workflow-node-occurrence-authority",
         "2026-08-10-task-cancellation-authority",
+        "2026-08-11-event-job-fire-authority",
+        "2026-08-11-bus-publication-outbox-authority",
+        "2026-08-11-bus-publication-durable-retry-backoff",
       ],
     })
 
@@ -195,6 +208,9 @@ describe("transactional schema migration", () => {
         "2026-08-08-browser-preview-target-identity",
         "2026-08-09-workflow-node-occurrence-authority",
         "2026-08-10-task-cancellation-authority",
+        "2026-08-11-event-job-fire-authority",
+        "2026-08-11-bus-publication-outbox-authority",
+        "2026-08-11-bus-publication-durable-retry-backoff",
       ],
     })
     expect(result.backupFiles.map((file) => file.name)).toEqual([
@@ -213,6 +229,8 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    dropBusPublicationOutbox(predecessor)
+    predecessor.run('DROP TABLE "event_job_fire"')
     predecessor.run('DROP TABLE "engine_task_cancellation_authority"')
     predecessor.run('DROP TABLE "engine_workflow_node_occurrence"')
     predecessor.run('DROP TABLE "engine_browser_preview_target_identity"')
@@ -274,6 +292,8 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    dropBusPublicationOutbox(predecessor)
+    predecessor.run('DROP TABLE "event_job_fire"')
     predecessor.run('DROP TABLE "engine_task_cancellation_authority"')
     predecessor.run('DROP TABLE "engine_workflow_node_occurrence"')
     const artifactInsertGuard = requiredSchemaSQL(predecessor, "trigger", "engine_artifact_catalog_metadata_insert")
@@ -421,6 +441,8 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    dropBusPublicationOutbox(predecessor)
+    predecessor.run('DROP TABLE "event_job_fire"')
     predecessor.run('DROP TABLE "engine_task_cancellation_authority"')
     predecessor.run(
       `INSERT INTO project (id, worktree, name, time_created, time_updated, sandboxes)
@@ -452,6 +474,229 @@ describe("transactional schema migration", () => {
     expect(migrated.query("SELECT task_id, request_event_id FROM engine_task_cancellation_authority").all()).toEqual([
       { task_id: "task-cancel", request_event_id: "protocol-event-first" },
     ])
+    migrated.close(true)
+  })
+
+  test("reopens legacy failed settlement Artifacts as canonical pending resumable work", async () => {
+    const databasePath = await temporaryDatabasePath()
+    const predecessor = new BunDatabase(databasePath, { create: true })
+    predecessor.exec(SCHEMA_DDL)
+    dropBusPublicationOutbox(predecessor)
+    predecessor.run('DROP TABLE "event_job_fire"')
+    predecessor.run(
+      `INSERT INTO project (id, worktree, name, time_created, time_updated, sandboxes)
+       VALUES ('project-settlement', 'C:/project-settlement', 'Settlement project', 1, 1, '[]')`,
+    )
+    predecessor.run(
+      `INSERT INTO engine_task (id, project_id, product_pillar, title, request, time_created, time_updated)
+       VALUES ('task-settlement', 'project-settlement', 'code', 'Settlement task', 'Settle durably', 1, 1)`,
+    )
+    predecessor.run(`INSERT INTO engine_artifact_catalog_revision (revision) VALUES (1)`)
+    const failure = [{ stage: "checkpoint", error: "injected legacy failure" }]
+    const legacyPayload = JSON.stringify({
+      task_id: "task-settlement",
+      status: "failed",
+      attempt: 2,
+      failures: failure,
+      owner_id: "legacy-owner",
+      owner_process_id: 77,
+      owner_started_at: 100,
+      lease_expires_at: 200,
+      time_completed: 300,
+      time_requested: 50,
+    })
+    const zeroDigest = "0".repeat(64)
+    predecessor.run(
+      `INSERT INTO engine_artifact (
+         id, task_id, kind, label, payload, payload_sha256, payload_bytes,
+         payload_block_sha256s, payload_block_index_sha256, catalog_metadata_sha256,
+         catalog_revision, time_created, time_updated
+       ) VALUES (?, 'task-settlement', 'task_checkpoint_settlement', 'failed', ?, ?, ?, ?, ?, ?, 1, 10, 20)`,
+      [
+        "artifact-settlement",
+        legacyPayload,
+        zeroDigest,
+        Buffer.byteLength(legacyPayload),
+        JSON.stringify([zeroDigest]),
+        zeroDigest,
+        zeroDigest,
+      ],
+    )
+    expect(schemaObjectFingerprint(predecessor)).toBe(
+      "10db39feae477909581d186d7eb561feddefcf667f8d6471b4907e71a9a5e515",
+    )
+    const plan = planSchemaMigration(predecessor)!
+    expect(plan.migrations.map((migration) => migration.id)).toEqual([
+      "2026-08-11-event-job-fire-authority",
+      "2026-08-11-bus-publication-outbox-authority",
+      "2026-08-11-bus-publication-durable-retry-backoff",
+    ])
+    const preparedBackup = createSchemaMigrationBackup(databasePath, plan)
+    predecessor.close(true)
+    migrateDatabaseFile(databasePath, plan, preparedBackup)
+
+    const migrated = new BunDatabase(databasePath, { readonly: true })
+    const row = migrated
+      .query<
+        {
+          label: string
+          payload: string
+          payload_sha256: string
+          payload_bytes: number
+          catalog_revision: number
+        },
+        []
+      >(
+        `SELECT label, payload, payload_sha256, payload_bytes, catalog_revision
+         FROM engine_artifact WHERE id = 'artifact-settlement'`,
+      )
+      .get()!
+    expect({ label: row.label, payload: JSON.parse(row.payload), catalogRevision: row.catalog_revision }).toEqual({
+      label: "pending",
+      payload: {
+        task_id: "task-settlement",
+        status: "pending",
+        attempt: 3,
+        time_requested: 50,
+        last_failure: failure,
+      },
+      catalogRevision: 2,
+    })
+    expect({ bytes: row.payload_bytes, sha256: row.payload_sha256 }).toEqual({
+      bytes: Buffer.byteLength(row.payload),
+      sha256: new Bun.CryptoHasher("sha256").update(row.payload).digest("hex"),
+    })
+    expect(
+      migrated
+        .query("SELECT label, payload, catalog_revision FROM engine_artifact_version WHERE artifact_id = 'artifact-settlement'")
+        .all(),
+    ).toEqual([{ label: "failed", payload: legacyPayload, catalog_revision: 1 }])
+    expect(migrated.query("PRAGMA foreign_key_check").all()).toEqual([])
+    expect(migrated.query("PRAGMA integrity_check").all()).toEqual([{ integrity_check: "ok" }])
+    migrated.close(true)
+  })
+
+  test("preserves pending Bus outbox and every delivery receipt while adding durable retry authority", async () => {
+    const databasePath = await temporaryDatabasePath()
+    const predecessor = new BunDatabase(databasePath, { create: true })
+    predecessor.exec(SCHEMA_DDL)
+    dropBusPublicationOutbox(predecessor)
+    predecessor.exec(`CREATE TABLE "bus_publication_outbox" (
+  "occurrence_id" text PRIMARY KEY NOT NULL,
+  "project_id" text NOT NULL,
+  "directory" text NOT NULL,
+  "event_type" text NOT NULL,
+  "properties" text NOT NULL,
+  "causation" text,
+  "exact_settled" integer NOT NULL DEFAULT 0,
+  "wildcard_settled" integer NOT NULL DEFAULT 0,
+  "global_settled" integer NOT NULL DEFAULT 0,
+  "time_created" integer NOT NULL,
+  "time_updated" integer NOT NULL,
+  FOREIGN KEY ("project_id") REFERENCES "project"("id") ON DELETE CASCADE
+);
+CREATE INDEX "bus_publication_outbox_project_idx" ON "bus_publication_outbox" ("project_id", "time_created");
+CREATE INDEX "bus_publication_outbox_pending_idx" ON "bus_publication_outbox" ("exact_settled", "wildcard_settled", "global_settled");
+CREATE TABLE "bus_publication_delivery" (
+  "occurrence_id" text NOT NULL,
+  "phase" text NOT NULL,
+  "subscriber_id" text NOT NULL,
+  "durable" integer NOT NULL,
+  "settled" integer NOT NULL DEFAULT 0,
+  "time_created" integer NOT NULL,
+  "time_updated" integer NOT NULL,
+  PRIMARY KEY ("occurrence_id", "phase", "subscriber_id"),
+  FOREIGN KEY ("occurrence_id") REFERENCES "bus_publication_outbox"("occurrence_id") ON DELETE CASCADE
+);
+CREATE INDEX "bus_publication_delivery_pending_idx" ON "bus_publication_delivery" ("occurrence_id", "phase", "settled");`)
+    predecessor.run(
+      `INSERT INTO project (id, worktree, name, time_created, time_updated, sandboxes)
+       VALUES ('project-bus-retry', 'C:/project-bus-retry', 'Bus Retry', 1, 1, '[]')`,
+    )
+    const properties = JSON.stringify({ info: { id: "pending-bus-occurrence" }, nested: [1, 2, 3] })
+    const causation = JSON.stringify({
+      source: "test.predecessor",
+      occurrenceID: "cause-1",
+      ancestry: [{ occurrenceID: "root-1", sourceID: "source-1" }],
+    })
+    predecessor.run(
+      `INSERT INTO bus_publication_outbox (
+         occurrence_id, project_id, directory, event_type, properties, causation,
+         exact_settled, wildcard_settled, global_settled, time_created, time_updated
+       ) VALUES (?, 'project-bus-retry', 'C:/project-bus-retry', 'test.bus.pending', ?, ?, 0, 0, 0, 10, 20)`,
+      ["bus-occurrence:pending-migration", properties, causation],
+    )
+    for (const [phase, subscriberID, durable, settled] of [
+      ["exact", "exact-settled", 1, 1],
+      ["exact", "exact-pending", 1, 0],
+      ["wildcard", "wildcard-settled", 0, 1],
+      ["wildcard", "wildcard-pending", 1, 0],
+      ["global", "global-settled", 1, 1],
+      ["global", "global-pending", 1, 0],
+    ] as const) {
+      predecessor.run(
+        `INSERT INTO bus_publication_delivery (
+           occurrence_id, phase, subscriber_id, durable, settled, time_created, time_updated
+         ) VALUES ('bus-occurrence:pending-migration', ?, ?, ?, ?, 11, 21)`,
+        [phase, subscriberID, durable, settled],
+      )
+    }
+    expect(schemaObjectFingerprint(predecessor)).toBe(
+      "93cc480799a9788751c55fe87700ee99ef782a3f906693b612632ea67390c765",
+    )
+    const plan = planSchemaMigration(predecessor)!
+    expect(plan.migrations.map((migration) => migration.id)).toEqual([
+      "2026-08-11-bus-publication-durable-retry-backoff",
+    ])
+    const preparedBackup = createSchemaMigrationBackup(databasePath, plan)
+    predecessor.close(true)
+    migrateDatabaseFile(databasePath, plan, preparedBackup)
+
+    const migrated = new BunDatabase(databasePath, { readonly: true })
+    expect(
+      migrated
+        .query(
+          `SELECT occurrence_id, project_id, directory, event_type, properties, causation,
+                  exact_settled, wildcard_settled, global_settled,
+                  time_created, time_updated, attempt_count, next_attempt_at, last_error
+           FROM bus_publication_outbox`,
+        )
+        .all(),
+    ).toEqual([
+      {
+        occurrence_id: "bus-occurrence:pending-migration",
+        project_id: "project-bus-retry",
+        directory: "C:/project-bus-retry",
+        event_type: "test.bus.pending",
+        properties,
+        causation,
+        exact_settled: 0,
+        wildcard_settled: 0,
+        global_settled: 0,
+        time_created: 10,
+        time_updated: 20,
+        attempt_count: 0,
+        next_attempt_at: 0,
+        last_error: null,
+      },
+    ])
+    expect(
+      migrated
+        .query(
+          `SELECT occurrence_id, phase, subscriber_id, durable, settled, time_created, time_updated
+           FROM bus_publication_delivery ORDER BY phase, subscriber_id`,
+        )
+        .all(),
+    ).toEqual([
+      { occurrence_id: "bus-occurrence:pending-migration", phase: "exact", subscriber_id: "exact-pending", durable: 1, settled: 0, time_created: 11, time_updated: 21 },
+      { occurrence_id: "bus-occurrence:pending-migration", phase: "exact", subscriber_id: "exact-settled", durable: 1, settled: 1, time_created: 11, time_updated: 21 },
+      { occurrence_id: "bus-occurrence:pending-migration", phase: "global", subscriber_id: "global-pending", durable: 1, settled: 0, time_created: 11, time_updated: 21 },
+      { occurrence_id: "bus-occurrence:pending-migration", phase: "global", subscriber_id: "global-settled", durable: 1, settled: 1, time_created: 11, time_updated: 21 },
+      { occurrence_id: "bus-occurrence:pending-migration", phase: "wildcard", subscriber_id: "wildcard-pending", durable: 1, settled: 0, time_created: 11, time_updated: 21 },
+      { occurrence_id: "bus-occurrence:pending-migration", phase: "wildcard", subscriber_id: "wildcard-settled", durable: 0, settled: 1, time_created: 11, time_updated: 21 },
+    ])
+    expect(migrated.query("PRAGMA foreign_key_check").all()).toEqual([])
+    expect(migrated.query("PRAGMA integrity_check").all()).toEqual([{ integrity_check: "ok" }])
     migrated.close(true)
   })
 

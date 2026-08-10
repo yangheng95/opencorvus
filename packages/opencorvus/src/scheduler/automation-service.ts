@@ -1,5 +1,10 @@
-import { Database, NotFoundError, and, desc, eq, isNull, ne, or, sql } from "@/storage/db"
-import { AutomationProjectTargetTable, AutomationRunTable, AutomationTable } from "./automation.sql"
+import { Database, NotFoundError, and, desc, eq, inArray, isNull, ne, or, sql } from "@/storage/db"
+import {
+  AutomationProjectTargetTable,
+  AutomationRunOutcomes,
+  AutomationRunTable,
+  AutomationTable,
+} from "./automation.sql"
 import { Recurrence } from "./recurrence"
 import { Scheduler } from "./index"
 import { Session } from "@/session"
@@ -19,7 +24,7 @@ import { SessionStatus } from "@/session/status"
 import { Worktree } from "@/worktree"
 import { PanelSurface } from "@/panel/capability"
 import { Provider } from "@/provider/provider"
-import { SessionTable } from "@/session/session.sql"
+import { MessageTable, SessionTable } from "@/session/session.sql"
 import { rightSidebarConversationExperience, type ConversationExperience } from "@/chat/identity"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { ProjectTable } from "@/project/project.sql"
@@ -30,6 +35,8 @@ import { Filesystem } from "@/util/filesystem"
 import z from "zod"
 import { missionProductPillar } from "@/mission/session"
 import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
+import { createHash } from "node:crypto"
+import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 
 export type AutomationTarget =
   | { scope: "session"; sessionId: string }
@@ -88,7 +95,7 @@ export type AutomationRunView = {
     experience: ConversationExperience | null
     productPillar: ProductPillar | null
   } | null
-  outcome: "running" | "succeeded" | "failed"
+  outcome: (typeof AutomationRunOutcomes)[number]
   startedAt: number
   completedAt: number | null
   error: string | null
@@ -133,6 +140,7 @@ export const AutomationRunningConflictError = NamedError.create(
  * - failed jobs are retried with bounded exponential backoff
  */
 export namespace AutomationService {
+  let wakeSessionForTest: typeof SessionWake.wake | undefined
   const log = Log.create({ service: "automation-service" })
 
   const POLL_INTERVAL_MS = 1_000
@@ -158,13 +166,11 @@ export namespace AutomationService {
 
   export function init() {
     initGlobal()
-    reconcileInterruptedRuns({ projectID: Instance.project.id })
     installActivitySubscriptions()
     log.info("automation project hooks initialized", { projectID: Instance.project.id })
   }
 
   export function initGlobal() {
-    reconcileInterruptedRuns()
     Scheduler.register({
       id: "automation-service.poll",
       interval: POLL_INTERVAL_MS,
@@ -447,7 +453,7 @@ export namespace AutomationService {
   }
 
   export async function runNow(id: string): Promise<AutomationRunView[]> {
-    return runNowWithExecutor(id, execute)
+    return runNowWithExecutor(id, executeWithRuntimeSettlement)
   }
 
   async function runNowWithExecutor(
@@ -490,10 +496,7 @@ export namespace AutomationService {
         automationID: id,
       })
     }
-    const fireID = await executeFire(row, owner, now, false).catch(async (error) => {
-      await fail(row, owner, error)
-      throw error
-    })
+    const fireID = await executeFire(row, owner, now, false)
     const runs = listRunsForAutomation(id, fireID)
     if (runs.length === 0) throw new Error(`Automation ${id} completed without run records`)
     return runs
@@ -501,6 +504,44 @@ export namespace AutomationService {
 
   export const TestHooks = {
     runNowWithExecutor,
+    claim,
+    executeClaimedDueOccurrence(input: {
+      job: typeof AutomationTable.$inferSelect
+      owner: string
+      now: number
+      runtimeSignal?: AbortSignal
+    }) {
+      return execute(input.job, input.owner, input.now, true, input.runtimeSignal ?? new AbortController().signal)
+    },
+    createLeaseFence: createAutomationLeaseFence,
+    installLeaseRenewTimerFactory(factory: LeaseRenewTimerFactory): Disposable {
+      if (leaseRenewTimerFactoryForTest) throw new Error("Automation lease renew timer factory is already installed")
+      leaseRenewTimerFactoryForTest = factory
+      return {
+        [Symbol.dispose]() {
+          if (leaseRenewTimerFactoryForTest === factory) leaseRenewTimerFactoryForTest = undefined
+        },
+      }
+    },
+    installWakeExecutor(executor: typeof SessionWake.wake): Disposable {
+      if (wakeSessionForTest) throw new Error("Automation wake executor is already installed")
+      wakeSessionForTest = executor
+      return {
+        [Symbol.dispose]() {
+          if (wakeSessionForTest === executor) wakeSessionForTest = undefined
+        },
+      }
+    },
+    installFailurePersistenceHook(hook: (phase: "before" | "after") => void | Promise<void>): Disposable {
+      if (failurePersistenceHookForTest) throw new Error("Automation failure persistence test hook is already installed")
+      failurePersistenceHookForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (failurePersistenceHookForTest === hook) failurePersistenceHookForTest = undefined
+        },
+      }
+    },
+    executeWithRuntimeSettlement,
   }
 
   function assertPublicAutomation(id: string) {
@@ -856,13 +897,14 @@ export namespace AutomationService {
     )
   }
 
-  async function poll(): Promise<void> {
+  async function poll(signal?: AbortSignal): Promise<void> {
+    signal?.throwIfAborted()
     if (globalRunning) {
       log.info("poll skipped while previous run is still active")
       return
     }
     globalRunning = true
-    await run(Date.now()).finally(() => {
+    await run(Date.now(), signal).finally(() => {
       globalRunning = false
     })
   }
@@ -921,82 +963,8 @@ export namespace AutomationService {
     return provenance.success && provenance.data.kind === "operator"
   }
 
-  function reconcileInterruptedRuns(input?: { projectID?: string; now?: number }): void {
-    const now = input?.now ?? Date.now()
-    const message = "OpenCorvus restarted before this automation run settled"
-    const reconciled = Database.transaction((tx) => {
-      const interrupted = tx
-        .select({
-          id: AutomationRunTable.id,
-          automationID: AutomationRunTable.automation_id,
-          owner: AutomationRunTable.owner,
-          leaseOwner: AutomationTable.lease_owner,
-          leaseUntil: AutomationTable.lease_until,
-        })
-        .from(AutomationRunTable)
-        .innerJoin(AutomationTable, eq(AutomationTable.id, AutomationRunTable.automation_id))
-        .where(
-          input?.projectID
-            ? and(eq(AutomationRunTable.project_id, input.projectID), eq(AutomationRunTable.outcome, "running"))
-            : eq(AutomationRunTable.outcome, "running"),
-        )
-        .all()
-      const runIDs: string[] = []
-      const settledAutomations = new Set<string>()
-
-      for (const run of interrupted) {
-        if (run.owner === run.leaseOwner && run.leaseUntil > now) continue
-        if (run.owner === run.leaseOwner && !settledAutomations.has(run.automationID)) {
-          const automation = tx
-            .update(AutomationTable)
-            .set({ lease_until: sql`${AutomationTable.lease_until}` })
-            .where(
-              sql`${AutomationTable.id} = ${run.automationID}
-                AND ${AutomationTable.lease_owner} = ${run.owner}
-                AND ${AutomationTable.lease_until} <= ${now}`,
-            )
-            .returning()
-            .get()
-          if (!automation) continue
-          const step = automation.failure_count + 1
-          const wait = Math.min(MAX_BACKOFF_MS, 1000 * 2 ** Math.min(step, 30))
-          tx.update(AutomationTable)
-            .set({
-              failure_count: step,
-              last_error: message,
-              next_run: Math.max(automation.next_run, now + wait),
-              lease_until: 0,
-              lease_owner: null,
-            })
-            .where(and(eq(AutomationTable.id, run.automationID), eq(AutomationTable.lease_owner, run.owner)))
-            .run()
-          settledAutomations.add(run.automationID)
-        }
-        const settled = tx
-          .update(AutomationRunTable)
-          .set({ outcome: "failed", completed_at: now, error: message })
-          .where(
-            and(
-              eq(AutomationRunTable.id, run.id),
-              eq(AutomationRunTable.owner, run.owner),
-              eq(AutomationRunTable.outcome, "running"),
-            ),
-          )
-          .returning({ id: AutomationRunTable.id })
-          .get()
-        if (settled) runIDs.push(settled.id)
-      }
-      return runIDs
-    })
-    if (reconciled.length === 0) return
-    log.warn("interrupted automation runs reconciled", {
-      projectID: input?.projectID,
-      runIDs: reconciled,
-    })
-  }
-
-  async function run(now: number): Promise<void> {
-    reconcileInterruptedRuns({ now })
+  async function run(now: number, signal?: AbortSignal): Promise<void> {
+    signal?.throwIfAborted()
     const owner = `${process.pid}:${now}`
     const due = Database.use((db) =>
       db
@@ -1025,14 +993,16 @@ export namespace AutomationService {
     await Promise.all(
       Array.from({ length: slots }, async () => {
         while (true) {
+          signal?.throwIfAborted()
           const row = pick()
           if (!row) return
           const candidate = await validateDueAutomationBeforeClaim(row.id, now)
           if (!candidate) continue
           const job = claim(row.id, owner, now)
           if (!job) continue
-          await execute(job, owner, now, true).catch(async (err) => {
-            await fail(job, owner, err)
+          await executeWithRuntimeSettlement(job, owner, now, true, execute, signal).catch((error) => {
+            signal?.throwIfAborted()
+            return undefined
           })
         }
       }),
@@ -1061,7 +1031,7 @@ export namespace AutomationService {
       Database.use((db) =>
         db
           .update(AutomationTable)
-          .set({ next_run: now + HEARTBEAT_BUSY_RETRY_MS })
+          .set({ lease_until: now + HEARTBEAT_BUSY_RETRY_MS, lease_owner: null })
           .where(and(eq(AutomationTable.id, job.id), eq(AutomationTable.status, "active")))
           .run(),
       )
@@ -1144,149 +1114,210 @@ export namespace AutomationService {
     owner: string,
     now: number,
     reschedule: boolean,
+    runtimeSignal: AbortSignal,
   ): Promise<string> {
-    const fireID = job.kind === "delay" && job.task_id ? `cal_task_wait_${job.id}` : Identifier.ascending("call")
+    const scheduledDue = reschedule ? job.next_run : now
+    const fireID =
+      job.kind === "delay" && job.task_id
+        ? `cal_task_wait_${job.id}`
+        : deterministicAutomationID("cal", job.id, String(scheduledDue))
     log.info("executing automation", { jobId: job.id, fireID, name: job.name, prompt: job.prompt.slice(0, 100) })
 
-    const timer = setInterval(() => {
-      try {
-        renew(job.id, owner)
-      } catch (error) {
-        log.warn("automation lease renew failed", {
-          jobId: job.id,
-          name: job.name,
-          error: error instanceof Error ? error.message : String(error),
-        })
-      }
-    }, LEASE_RENEW_MS)
-    timer.unref()
+    const leaseFence = createAutomationLeaseFence(job.id, owner, fireID)
+    const executionSignal = AbortSignal.any([leaseFence.signal, runtimeSignal])
+    const leaseRenewTimer = startLeaseRenewTimer(() => leaseFence.renewOrAbort())
 
-    if (job.kind === "delay") {
-      let outcome: Awaited<ReturnType<typeof executeDelayedWake>>
-      try {
-        outcome = await executeDelayedWake(job, fireID, owner)
-      } finally {
-        clearInterval(timer)
+    try {
+      if (job.kind === "delay") {
+        const outcome = await executeDelayedWake(job, fireID, owner, executionSignal)
+        if (!outcome.automationConsumed) {
+          const consumed = Database.use((db) =>
+            db
+              .delete(AutomationTable)
+              .where(and(eq(AutomationTable.id, job.id), eq(AutomationTable.lease_owner, owner)))
+              .returning({ id: AutomationTable.id })
+              .get(),
+          )
+          if (!consumed) {
+            throw new AutomationRunningConflictError({
+              message: `Automation ${job.id} lost its execution lease before one-shot completion`,
+              automationID: job.id,
+            })
+          }
+        }
+        log.info("automation triggered session wake", {
+          jobId: job.id,
+          fireID,
+          name: job.name,
+          ...outcome,
+          nextRun: "completed",
+        })
+        return fireID
       }
-      if (!outcome.automationConsumed) {
-        const consumed = Database.use((db) =>
-          db
-            .delete(AutomationTable)
-            .where(and(eq(AutomationTable.id, job.id), eq(AutomationTable.lease_owner, owner)))
-            .returning({ id: AutomationTable.id })
-            .get(),
-        )
-        if (!consumed) {
+
+      if (!job.recurrence) throw new Error(`Automation ${job.id} has no recurrence rule`)
+      const targets = await executionTargets(job)
+      const runIDs = targets.map((target) => deterministicAutomationID("atr", fireID, automationTargetIdentity(target)))
+      Database.immediateTransaction((db) => {
+        const lease = db
+          .select({ owner: AutomationTable.lease_owner })
+          .from(AutomationTable)
+          .where(eq(AutomationTable.id, job.id))
+          .get()
+        if (lease?.owner !== owner) {
           throw new AutomationRunningConflictError({
-            message: `Automation ${job.id} lost its execution lease before one-shot completion`,
+            message: `Automation ${job.id} lost its execution lease before fire reservation`,
             automationID: job.id,
           })
         }
-      }
-      log.info("automation triggered session wake", {
+        db.insert(AutomationRunTable)
+          .values(
+            targets.map((target, index) => ({
+              id: runIDs[index],
+              automation_id: job.id,
+              fire_id: fireID,
+              target_scope: target.scope,
+              project_id: target.projectID,
+              owner,
+              outcome: "running" as const,
+              started_at: now,
+            })),
+          )
+          .onConflictDoNothing()
+          .run()
+        for (const runID of runIDs) {
+          db.update(AutomationRunTable)
+            .set({ owner, outcome: "running", completed_at: null, error: null, started_at: now })
+            .where(and(eq(AutomationRunTable.id, runID), ne(AutomationRunTable.outcome, "succeeded")))
+            .run()
+        }
+      })
+      const reservedRuns = new Map(
+        Database.use((db) =>
+          db
+            .select({
+              id: AutomationRunTable.id,
+              outcome: AutomationRunTable.outcome,
+              sessionID: AutomationRunTable.session_id,
+            })
+            .from(AutomationRunTable)
+            .where(inArray(AutomationRunTable.id, runIDs))
+            .all(),
+        ).map((run) => [run.id, run] as const),
+      )
+      let results: PromiseSettledResult<{ sessionID: string }>[] = []
+      results = await Promise.allSettled(
+        targets.map(async (target, index) => {
+          const reserved = reservedRuns.get(runIDs[index]!)
+          if (reserved?.outcome === "succeeded") {
+            if (!reserved.sessionID) throw new Error(`Succeeded Automation run ${reserved.id} has no Session authority`)
+            return { sessionID: reserved.sessionID }
+          }
+          const existing = findAutomationWake(job.id, fireID, target)
+          if (existing) return { sessionID: await resumeAutomationWake(existing) }
+          return executePublicWake(job, target, fireID, runIDs[index]!, owner, executionSignal)
+        }),
+      )
+      const committedAt = Date.now()
+      const failures = results
+        .map((result, index) =>
+          result.status === "rejected"
+            ? {
+                index,
+                message: result.reason instanceof Error ? result.reason.message : String(result.reason),
+              }
+            : undefined,
+        )
+        .filter((failure): failure is { index: number; message: string } => !!failure)
+      const error = failures.length > 0 ? failures.map((failure) => failure.message).join("; ") : null
+      const retryAt = error ? automationRetryAt(job.failure_count + 1, committedAt) : 0
+      const nextRun = error ? job.next_run : reschedule ? Recurrence.nextRun(job.recurrence, committedAt) : job.next_run
+      Database.transaction((tx) => {
+        const automation = tx
+          .update(AutomationTable)
+          .set({
+            last_run: committedAt,
+            next_run: nextRun,
+            failure_count: error ? sql`${AutomationTable.failure_count} + 1` : 0,
+            last_error: error,
+            lease_until: retryAt,
+            lease_owner: null,
+          })
+          .where(and(eq(AutomationTable.id, job.id), eq(AutomationTable.lease_owner, owner)))
+          .returning({ id: AutomationTable.id })
+          .get()
+        if (!automation) {
+          throw new AutomationRunningConflictError({
+            message: `Automation ${job.id} lost its execution lease before completion`,
+            automationID: job.id,
+          })
+        }
+        results.forEach((result, index) => {
+          const prior = tx
+            .select({ outcome: AutomationRunTable.outcome, sessionID: AutomationRunTable.session_id })
+            .from(AutomationRunTable)
+            .where(eq(AutomationRunTable.id, runIDs[index]))
+            .get()
+          if (prior?.outcome === "succeeded") return
+          const run = tx
+            .update(AutomationRunTable)
+            .set({
+              session_id: result.status === "fulfilled" ? result.value.sessionID : (prior?.sessionID ?? null),
+              outcome: result.status === "fulfilled" ? "succeeded" : "retry_wait",
+              completed_at: result.status === "fulfilled" ? committedAt : null,
+              error:
+                result.status === "rejected"
+                  ? result.reason instanceof Error
+                    ? result.reason.message
+                    : String(result.reason)
+                  : null,
+            })
+            .where(
+              and(
+                eq(AutomationRunTable.id, runIDs[index]),
+                eq(AutomationRunTable.owner, owner),
+                eq(AutomationRunTable.outcome, "running"),
+              ),
+            )
+            .returning({ id: AutomationRunTable.id })
+            .get()
+          if (!run) throw new Error(`Automation run ${runIDs[index]} was not running for lease owner ${owner}`)
+        })
+      })
+      log.info("automation fire completed", {
         jobId: job.id,
         fireID,
         name: job.name,
-        ...outcome,
-        nextRun: "completed",
+        targets: targets.length,
+        failures: failures.length,
+        nextRun: new Date(nextRun).toISOString(),
+        ...(retryAt ? { retryAt: new Date(retryAt).toISOString() } : {}),
       })
       return fireID
-    }
-
-    if (!job.recurrence) throw new Error(`Automation ${job.id} has no recurrence rule`)
-    const targets = await executionTargets(job)
-    const runIDs = targets.map(() => Identifier.ascending("automation_run"))
-    Database.use((db) =>
-      db
-        .insert(AutomationRunTable)
-        .values(
-          targets.map((target, index) => ({
-            id: runIDs[index],
-            automation_id: job.id,
-            fire_id: fireID,
-            target_scope: target.scope,
-            project_id: target.projectID,
-            owner,
-            outcome: "running" as const,
-            started_at: now,
-          })),
-        )
-        .run(),
-    )
-    let results: PromiseSettledResult<{ sessionID: string }>[] = []
-    try {
-      results = await Promise.allSettled(targets.map((target) => executePublicWake(job, target, fireID)))
     } finally {
-      clearInterval(timer)
+      leaseRenewTimer[Symbol.dispose]()
     }
-    const committedAt = Date.now()
-    const nextRun = reschedule ? Recurrence.nextRun(job.recurrence, committedAt) : job.next_run
-    const failures = results
-      .map((result, index) =>
-        result.status === "rejected"
-          ? {
-              index,
-              message: result.reason instanceof Error ? result.reason.message : String(result.reason),
-            }
-          : undefined,
-      )
-      .filter((failure): failure is { index: number; message: string } => !!failure)
-    const error = failures.length > 0 ? failures.map((failure) => failure.message).join("; ") : null
-    Database.transaction((tx) => {
-      const automation = tx
-        .update(AutomationTable)
-        .set({
-          last_run: committedAt,
-          next_run: nextRun,
-          failure_count: error ? sql`${AutomationTable.failure_count} + 1` : 0,
-          last_error: error,
-          lease_until: 0,
-          lease_owner: null,
-        })
-        .where(and(eq(AutomationTable.id, job.id), eq(AutomationTable.lease_owner, owner)))
-        .returning({ id: AutomationTable.id })
-        .get()
-      if (!automation) {
-        throw new AutomationRunningConflictError({
-          message: `Automation ${job.id} lost its execution lease before completion`,
-          automationID: job.id,
-        })
-      }
-      results.forEach((result, index) => {
-        const run = tx
-          .update(AutomationRunTable)
-          .set({
-            session_id: result.status === "fulfilled" ? result.value.sessionID : null,
-            outcome: result.status === "fulfilled" ? "succeeded" : "failed",
-            completed_at: committedAt,
-            error:
-              result.status === "rejected"
-                ? result.reason instanceof Error
-                  ? result.reason.message
-                  : String(result.reason)
-                : null,
-          })
-          .where(
-            and(
-              eq(AutomationRunTable.id, runIDs[index]),
-              eq(AutomationRunTable.owner, owner),
-              eq(AutomationRunTable.outcome, "running"),
-            ),
-          )
-          .returning({ id: AutomationRunTable.id })
-          .get()
-        if (!run) throw new Error(`Automation run ${runIDs[index]} was not running for lease owner ${owner}`)
-      })
+  }
+
+  function executeWithRuntimeSettlement(
+    job: typeof AutomationTable.$inferSelect,
+    owner: string,
+    now: number,
+    reschedule: boolean,
+    executeFire: typeof execute = execute,
+    lifecycleSignal?: AbortSignal,
+  ): Promise<string> {
+    const reservation = RuntimeExecutionSettlement.reserve(
+      "scheduler_automation_fire",
+      `automation-fire:${job.id}:${job.next_run}`,
+    )
+    const signal = lifecycleSignal ? AbortSignal.any([reservation.signal, lifecycleSignal]) : reservation.signal
+    const operation = executeFire(job, owner, now, reschedule, signal).catch(async (error) => {
+      await fail(job, owner, error)
+      throw error
     })
-    log.info("automation fire completed", {
-      jobId: job.id,
-      fireID,
-      name: job.name,
-      targets: targets.length,
-      failures: failures.length,
-      nextRun: new Date(nextRun).toISOString(),
-    })
-    return fireID
+    reservation.settleWith(operation)
+    return operation
   }
 
   type ExecutionTarget = {
@@ -1294,6 +1325,71 @@ export namespace AutomationService {
     projectID: string | null
     directory?: string
     sessionID?: string
+  }
+
+  function deterministicAutomationID(prefix: "cal" | "atr" | "ses" | "msg" | "prt", ...parts: string[]): string {
+    const digest = createHash("sha256").update(parts.join("\u0000")).digest("hex")
+    return `${prefix}_automation_${digest.slice(0, 32)}`
+  }
+
+  function automationTargetIdentity(target: ExecutionTarget): string {
+    if (target.scope === "session") return `session:${target.sessionID}`
+    if (target.scope === "project") return `project:${target.projectID}`
+    return "global"
+  }
+
+  function automationTargetSessionID(target: ExecutionTarget, runID: string): string {
+    return target.sessionID ?? deterministicAutomationID("ses", runID)
+  }
+
+  function findAutomationWake(
+    jobID: string,
+    fireID: string,
+    target: ExecutionTarget,
+  ): { sessionID: string; messageID: string } | undefined {
+    const sessionID = automationTargetSessionID(
+      target,
+      deterministicAutomationID("atr", fireID, automationTargetIdentity(target)),
+    )
+    const messageID = deterministicAutomationID(
+      "msg",
+      deterministicAutomationID("atr", fireID, automationTargetIdentity(target)),
+    )
+    return findExactAutomationWake({ jobID, fireID, sessionID, messageID })
+  }
+
+  async function resumeAutomationWake(existing: { sessionID: string; messageID: string }): Promise<string> {
+    const session = await Session.get(existing.sessionID)
+    SessionWake.resumePersistedWake({
+      sessionID: existing.sessionID,
+      messageID: existing.messageID,
+      directory: session.directory,
+    })
+    return existing.sessionID
+  }
+
+  function findExactAutomationWake(input: {
+    jobID: string
+    fireID: string
+    sessionID: string
+    messageID: string
+  }): { sessionID: string; messageID: string } | undefined {
+    const row = Database.use((db) =>
+      db
+        .select({ id: MessageTable.id, sessionID: MessageTable.session_id })
+        .from(MessageTable)
+        .where(
+          and(
+            eq(MessageTable.id, input.messageID),
+            eq(MessageTable.session_id, input.sessionID),
+            sql`json_extract(${MessageTable.data}, '$.extra.wake_reason.source') = 'scheduler.automation'`,
+            sql`json_extract(${MessageTable.data}, '$.extra.wake_reason.jobID') = ${input.jobID}`,
+            sql`json_extract(${MessageTable.data}, '$.extra.wake_reason.fireID') = ${input.fireID}`,
+          ),
+        )
+        .get(),
+    )
+    return row ? { sessionID: row.sessionID, messageID: row.id } : undefined
   }
 
   async function executionTargets(job: typeof AutomationTable.$inferSelect): Promise<ExecutionTarget[]> {
@@ -1314,15 +1410,33 @@ export namespace AutomationService {
     job: typeof AutomationTable.$inferSelect,
     target: ExecutionTarget,
     fireID: string,
+    runID: string,
+    owner: string,
+    signal: AbortSignal,
   ): Promise<{ sessionID: string }> {
+    const targetSessionID = automationTargetSessionID(target, runID)
     if (target.scope === "global") {
-      const created = await GlobalConversationService.create({
-        experience: "chat",
-        model: job.model_provider_id && job.model_id ? `${job.model_provider_id}/${job.model_id}` : undefined,
+      let globalSession = await Session.get(targetSessionID).catch((error) => {
+        if (error instanceof NotFoundError) return undefined
+        throw error
       })
+      if (!globalSession) {
+        try {
+          const created = await GlobalConversationService.create({
+            experience: "chat",
+            model: job.model_provider_id && job.model_id ? `${job.model_provider_id}/${job.model_id}` : undefined,
+            sessionID: targetSessionID,
+          })
+          globalSession = created.session
+        } catch (error) {
+          globalSession = await Session.get(targetSessionID).catch(() => {
+            throw error
+          })
+        }
+      }
       return await runInTargetProject({
-        directory: created.session.directory,
-        fn: async () => ({ sessionID: await wakeSession(job, fireID, created.session.id) }),
+        directory: globalSession.directory,
+        fn: async () => ({ sessionID: await wakeSession(job, fireID, globalSession.id, runID, runID, owner, signal) }),
       })
     }
     if (!target.directory) throw new Error(`Automation target ${target.projectID ?? target.scope} has no directory`)
@@ -1331,29 +1445,61 @@ export namespace AutomationService {
       fn: async () => {
         if (target.scope === "session") {
           if (!target.sessionID) throw new Error(`Session automation ${job.id} has no session target`)
-          return { sessionID: await wakeSession(job, fireID, target.sessionID) }
+          return { sessionID: await wakeSession(job, fireID, target.sessionID, runID, runID, owner, signal) }
         }
         if (job.execution_mode === "worktree") {
           const worktree = await Worktree.create({ name: `automation-${job.id}`, reuseIfValid: true })
           return await Instance.provide({
             directory: worktree.directory,
-            fn: async () => ({ sessionID: await wakeSession(job, fireID) }),
+            fn: async () => {
+              await ensureAutomationTargetSession(targetSessionID, job.prompt)
+              return { sessionID: await wakeSession(job, fireID, targetSessionID, runID, runID, owner, signal) }
+            },
           })
         }
-        return { sessionID: await wakeSession(job, fireID) }
+        await ensureAutomationTargetSession(targetSessionID, job.prompt)
+        return { sessionID: await wakeSession(job, fireID, targetSessionID, runID, runID, owner, signal) }
       },
     })
+  }
+
+  async function ensureAutomationTargetSession(sessionID: string, prompt: string): Promise<void> {
+    const existing = await Session.getInProject({ sessionID, projectID: Instance.project.id }).catch((error) => {
+      if (error instanceof NotFoundError) return undefined
+      throw error
+    })
+    if (existing) return
+    try {
+      await Session.createNext({
+        id: sessionID,
+        kind: "assistant",
+        directory: Instance.directory,
+        title: `Scheduled: ${prompt.slice(0, 60)}`,
+      })
+    } catch (error) {
+      const converged = await Session.getInProject({ sessionID, projectID: Instance.project.id }).catch(() => undefined)
+      if (!converged) throw error
+    }
   }
 
   async function wakeSession(
     job: typeof AutomationTable.$inferSelect,
     fireID: string,
-    sessionID?: string,
+    sessionID: string,
+    identityID: string,
+    runID: string | undefined,
+    owner: string,
+    signal: AbortSignal,
   ): Promise<string> {
-    if (!job.scope) throw new Error(`Public automation ${job.id} has no execution scope`)
-    return await SessionWake.wake({
+    const scope = job.kind === "delay" ? "session" : job.scope
+    if (!scope) throw new Error(`Automation ${job.id} has no execution scope`)
+    const messageID = deterministicAutomationID("msg", identityID)
+    const textPartID = deterministicAutomationID("prt", identityID)
+    return await (wakeSessionForTest ?? SessionWake.wake)({
       sessionID,
-      newConversationExperience: sessionID ? undefined : "chat",
+      messageID,
+      textPartID,
+      signal,
       prompt: job.prompt,
       author: "orchestrator",
       agent: job.agent === "default" ? undefined : job.agent,
@@ -1363,14 +1509,61 @@ export namespace AutomationService {
           : undefined,
       variant: job.reasoning_effort ?? undefined,
       surface: persistedSurface(job.surface),
+      commitBundle: (message, parts) => {
+        if (message.id !== messageID || !parts.some((part) => part.id === textPartID)) {
+          throw new Error(`Automation ${job.id} wake materialized identities outside fire ${fireID}`)
+        }
+        fenceAutomationWakeCommit({ automationID: job.id, runID, owner, sessionID: message.sessionID })
+      },
       reason: {
         source: "scheduler.automation",
         jobID: job.id,
         jobName: job.name,
         fireID,
-        scope: job.scope,
+        scope,
         recurrence: job.recurrence,
       },
+    })
+  }
+
+  function fenceAutomationWakeCommit(input: {
+    automationID: string
+    runID?: string
+    owner: string
+    sessionID: string
+  }): void {
+    Database.use((db) => {
+      const lease = db
+        .select({ owner: AutomationTable.lease_owner })
+        .from(AutomationTable)
+        .where(eq(AutomationTable.id, input.automationID))
+        .get()
+      if (lease?.owner !== input.owner) {
+        throw new AutomationRunningConflictError({
+          message: `Automation ${input.automationID} lost its lease before wake Message commit`,
+          automationID: input.automationID,
+        })
+      }
+      if (!input.runID) return
+      const run = db
+        .update(AutomationRunTable)
+        .set({ session_id: input.sessionID })
+        .where(
+          and(
+            eq(AutomationRunTable.id, input.runID),
+            eq(AutomationRunTable.automation_id, input.automationID),
+            eq(AutomationRunTable.owner, input.owner),
+            eq(AutomationRunTable.outcome, "running"),
+          ),
+        )
+        .returning({ id: AutomationRunTable.id })
+        .get()
+      if (!run) {
+        throw new AutomationRunningConflictError({
+          message: `Automation run ${input.runID} lost ownership before wake Message commit`,
+          automationID: input.automationID,
+        })
+      }
     })
   }
 
@@ -1378,6 +1571,7 @@ export namespace AutomationService {
     job: typeof AutomationTable.$inferSelect,
     fireID: string,
     owner: string,
+    signal: AbortSignal,
   ): Promise<{
     sessionID?: string
     taskID?: string
@@ -1387,6 +1581,7 @@ export namespace AutomationService {
     automationConsumed?: true
   }> {
     if (job.task_id) {
+      signal.throwIfAborted()
       if (!job.project_id) throw new Error(`Delayed task wake ${job.id} has no project owner`)
       const task = await assertTaskRootSessionInProject({ taskId: job.task_id, projectId: job.project_id })
       return await runInTargetProject({
@@ -1451,30 +1646,18 @@ export namespace AutomationService {
     }
 
     if (!job.project_id) throw new Error(`Delayed session wake ${job.id} has no project owner`)
-    const wake = () =>
-      SessionWake.wake({
-        sessionID: job.session_id ?? undefined,
-        prompt: job.prompt,
-        author: "orchestrator",
-        agent: job.agent === "default" ? undefined : job.agent,
-        model:
-          job.model_provider_id && job.model_id
-            ? { providerID: job.model_provider_id, modelID: job.model_id }
-            : undefined,
-        variant: job.reasoning_effort ?? undefined,
-        surface: persistedSurface(job.surface),
-        reason: {
-          source: "scheduler.automation",
-          jobID: job.id,
-          jobName: job.name,
-          fireID,
-          scope: "session",
-          recurrence: job.recurrence,
-        },
-      })
     const session = job.session_id
       ? await Session.assertLineageInProject({ sessionID: job.session_id, projectID: job.project_id })
       : undefined
+    if (!session) throw new Error(`Delayed session wake ${job.id} has no Session target`)
+    const identityID = deterministicAutomationID("atr", fireID, `session:${session.id}`)
+    const existing = findExactAutomationWake({
+      jobID: job.id,
+      fireID,
+      sessionID: session.id,
+      messageID: deterministicAutomationID("msg", identityID),
+    })
+    if (existing) return { sessionID: await resumeAutomationWake(existing) }
     const project = Database.use((db) =>
       db
         .select({ worktree: ProjectTable.worktree })
@@ -1484,8 +1667,8 @@ export namespace AutomationService {
     )
     if (!project) throw new NotFoundError({ message: `Delayed wake project not found: ${job.project_id}` })
     const sessionID = await runInTargetProject({
-      directory: session?.directory ?? project.worktree,
-      fn: wake,
+      directory: session.directory ?? project.worktree,
+      fn: () => wakeSession(job, fireID, session.id, identityID, undefined, owner, signal),
     })
     return { sessionID }
   }
@@ -1503,23 +1686,76 @@ export namespace AutomationService {
     return PanelSurface.parse(value)
   }
 
-  function renew(id: string, owner: string) {
-    Database.use((db) =>
+  function renew(id: string, owner: string): boolean {
+    return !!Database.use((db) =>
       db
         .update(AutomationTable)
         .set({
           lease_until: Date.now() + LEASE_MS,
         })
         .where(and(eq(AutomationTable.id, id), eq(AutomationTable.lease_owner, owner)))
-        .run(),
+        .returning({ id: AutomationTable.id })
+        .get(),
     )
   }
 
+  function createAutomationLeaseFence(automationID: string, owner: string, fireID: string) {
+    const controller = new AbortController()
+    const lose = (cause: unknown) => {
+      if (controller.signal.aborted) return
+      const reason =
+        cause instanceof AutomationRunningConflictError || cause instanceof Error ? cause : new Error(String(cause))
+      controller.abort(reason)
+      log.warn("automation lease fence lost", {
+        automationID,
+        fireID,
+        owner,
+        error: reason.message,
+      })
+    }
+    return {
+      signal: controller.signal,
+      renewOrAbort(): boolean {
+        try {
+          if (renew(automationID, owner)) return true
+          lose(
+            new AutomationRunningConflictError({
+              message: `Automation ${automationID} lost its execution lease during fire ${fireID}`,
+              automationID,
+            }),
+          )
+        } catch (error) {
+          lose(error)
+        }
+        return false
+      },
+    }
+  }
+
+  type LeaseRenewTimerFactory = (renew: () => boolean) => Disposable
+  let leaseRenewTimerFactoryForTest: LeaseRenewTimerFactory | undefined
+  let failurePersistenceHookForTest: ((phase: "before" | "after") => void | Promise<void>) | undefined
+
+  function startLeaseRenewTimer(renew: () => boolean): Disposable {
+    if (leaseRenewTimerFactoryForTest) return leaseRenewTimerFactoryForTest(renew)
+    const timer = setInterval(renew, LEASE_RENEW_MS)
+    timer.unref()
+    return {
+      [Symbol.dispose]() {
+        clearInterval(timer)
+      },
+    }
+  }
+
+  function automationRetryAt(step: number, now: number): number {
+    return now + Math.min(MAX_BACKOFF_MS, 1000 * 2 ** Math.min(step, 30))
+  }
+
   async function fail(job: typeof AutomationTable.$inferSelect, owner: string, err: unknown): Promise<void> {
+    await failurePersistenceHookForTest?.("before")
     const now = Date.now()
     const step = job.failure_count + 1
-    const wait = Math.min(MAX_BACKOFF_MS, 1000 * 2 ** Math.min(step, 30))
-    const nextRun = Math.max(job.next_run, now + wait)
+    const retryAt = automationRetryAt(step, now)
     const msg = err instanceof Error ? err.message : String(err)
 
     const finalized = Database.transaction((tx) => {
@@ -1528,8 +1764,7 @@ export namespace AutomationService {
         .set({
           failure_count: sql`${AutomationTable.failure_count} + 1`,
           last_error: msg,
-          next_run: nextRun,
-          lease_until: 0,
+          lease_until: retryAt,
           lease_owner: null,
         })
         .where(and(eq(AutomationTable.id, job.id), eq(AutomationTable.lease_owner, owner)))
@@ -1540,8 +1775,8 @@ export namespace AutomationService {
         const runs = tx
           .update(AutomationRunTable)
           .set({
-            outcome: "failed",
-            completed_at: now,
+            outcome: "retry_wait",
+            completed_at: null,
             error: msg,
           })
           .where(
@@ -1553,7 +1788,6 @@ export namespace AutomationService {
           )
           .returning({ id: AutomationRunTable.id })
           .all()
-        if (runs.length === 0) throw new Error(`Automation ${job.id} has no running record for lease owner ${owner}`)
       }
       return true
     })
@@ -1563,16 +1797,16 @@ export namespace AutomationService {
         jobId: job.id,
         name: job.name,
         error: msg,
-        retryAt: new Date(nextRun).toISOString(),
+        retryAt: new Date(retryAt).toISOString(),
       })
     }
+    await failurePersistenceHookForTest?.("after")
   }
 
   async function failBeforeLease(job: typeof AutomationTable.$inferSelect, err: unknown): Promise<void> {
     const now = Date.now()
     const step = job.failure_count + 1
-    const wait = Math.min(MAX_BACKOFF_MS, 1000 * 2 ** Math.min(step, 30))
-    const nextRun = Math.max(job.next_run, now + wait)
+    const retryAt = automationRetryAt(step, now)
     const msg = err instanceof Error ? err.message : String(err)
 
     Database.use((db) =>
@@ -1581,8 +1815,7 @@ export namespace AutomationService {
         .set({
           failure_count: sql`${AutomationTable.failure_count} + 1`,
           last_error: msg,
-          next_run: nextRun,
-          lease_until: 0,
+          lease_until: retryAt,
           lease_owner: null,
         })
         .where(
@@ -1596,7 +1829,7 @@ export namespace AutomationService {
       jobId: job.id,
       name: job.name,
       error: msg,
-      retryAt: new Date(nextRun).toISOString(),
+      retryAt: new Date(retryAt).toISOString(),
     })
   }
 

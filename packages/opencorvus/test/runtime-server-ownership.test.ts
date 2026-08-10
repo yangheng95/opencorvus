@@ -6,8 +6,21 @@ import os from "node:os"
 import path from "node:path"
 import { ProcessSupervisor } from "../src/shell/process-supervisor"
 import { ServeRuntimeMemoryMetrics } from "../src/runtime/memory-metrics"
-import { RuntimeServerOwnershipConflictError } from "../src/server/runtime-server-ownership"
+import {
+  RuntimeServerOwnership,
+  RuntimeServerOwnershipConflictError,
+  RuntimeServerOwnershipDatabaseMismatchError,
+  RuntimeServerOwnershipHandoffPendingError,
+  RuntimeServerOwnershipRecordInvalidError,
+  RuntimeServerStartupCleanupPendingError,
+} from "../src/server/runtime-server-ownership"
 import { Server } from "../src/server/server"
+import { RuntimeExecutionSettlement } from "../src/runtime/execution-settlement"
+import { Database } from "../src/storage/db"
+import { releaseServeRuntimeOwnership } from "../src/cli/cmd/serve"
+import { acquireServerRuntimeAfterRecovery } from "../src/cli/server-runtime"
+import { bootstrap } from "../src/cli/bootstrap"
+import { restartFailureDisposition } from "../src/server/restart-handoff"
 
 const temporaryDirectories: string[] = []
 const children = new Set<ChildProcessWithoutNullStreams>()
@@ -64,15 +77,228 @@ async function finish(child: ChildProcessWithoutNullStreams): Promise<void> {
     if (child.exitCode !== 0) throw new Error(`ownership fixture exited ${child.exitCode}`)
     return
   }
+  let errors = ""
+  child.stderr.setEncoding("utf8")
+  child.stderr.on("data", (chunk) => (errors += String(chunk)))
   child.stdin.end()
   await new Promise<void>((resolve, reject) => {
     child.once("error", reject)
-    child.once("exit", (code) => (code === 0 ? resolve() : reject(new Error(`ownership fixture exited ${code}`))))
+    child.once("exit", (code) =>
+      code === 0 ? resolve() : reject(new Error(`ownership fixture exited ${code}: ${errors}`)),
+    )
   })
   children.delete(child)
 }
 
 describe("runtime server database ownership", () => {
+  test("binds a listener only with ownership for the active canonical database", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-database-match-"))
+    temporaryDirectories.push(root)
+    const home = path.join(root, "home")
+    await import("node:fs/promises").then((fs) => fs.mkdir(home))
+    const previousHome = process.env.OPENCORVUS_TEST_HOME
+    process.env.OPENCORVUS_TEST_HOME = home
+    const otherDatabase = path.join(root, "other.db")
+    const otherOwnership = RuntimeServerOwnership.acquire({ database: otherDatabase })
+    try {
+      expect(() =>
+        Server.listenWithOwnedRuntime(
+          { hostname: "127.0.0.1", port: 0, randomPort: true },
+          otherOwnership,
+        ),
+      ).toThrow(RuntimeServerOwnershipDatabaseMismatchError)
+      await RuntimeServerOwnership.releaseWithRetry(otherOwnership)
+      const reusableOtherOwnership = RuntimeServerOwnership.acquire({ database: otherDatabase })
+      expect(reusableOtherOwnership.owner.database).toBe(path.resolve(otherDatabase))
+      reusableOtherOwnership.release()
+
+      const matchingOwnership = RuntimeServerOwnership.acquire({ database: Database.Path() })
+      const server = Server.listenWithOwnedRuntime(
+        { hostname: "127.0.0.1", port: 0, randomPort: true },
+        matchingOwnership,
+      )
+      expect(server.url).toBeInstanceOf(URL)
+      await server.stop(true)
+    } finally {
+      if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
+      else process.env.OPENCORVUS_TEST_HOME = previousHome
+    }
+  }, 60_000)
+
+  test("treats invalid canonical and handoff records as authoritative typed failures", async () => {
+    for (const kind of ["owner", "handoff"] as const) {
+      const directory = await mkdtemp(path.join(os.tmpdir(), `opencorvus-runtime-invalid-${kind}-`))
+      temporaryDirectories.push(directory)
+      const database = path.join(directory, "project.db")
+      const authorityFile =
+        kind === "owner"
+          ? RuntimeServerOwnership.TestHooks.ownerFile(database)
+          : RuntimeServerOwnership.TestHooks.handoffFile(database)
+      await writeFile(authorityFile, '{"pid":', "utf8")
+
+      expect(() => RuntimeServerOwnership.acquire({ database })).toThrow(RuntimeServerOwnershipRecordInvalidError)
+      expect(await readFile(authorityFile, "utf8")).toBe('{"pid":')
+    }
+  })
+
+  test("retains a retryable owner and delays handoff commit until every release stage succeeds", async () => {
+    for (const failure of ["filesystemLock", "ownerFileMove"] as const) {
+      const directory = await mkdtemp(path.join(os.tmpdir(), `opencorvus-runtime-release-${failure}-`))
+      temporaryDirectories.push(directory)
+      const database = path.join(directory, "project.db")
+      const owner = RuntimeServerOwnership.acquire({ database })
+      const handoff: string[] = []
+      using _failure = RuntimeServerOwnership.TestHooks.failNextRelease({ [failure]: 1 })
+
+      await expect(RuntimeServerOwnership.releaseWithRetry(owner, () => handoff.push("committed"), { attempts: 1 })).rejects.toThrow(
+        failure === "filesystemLock"
+          ? "injected runtime filesystem lock release failure"
+          : "injected runtime owner record move failure",
+      )
+      expect({ occurrenceID: RuntimeServerOwnership.currentOccurrenceID(database), handoff }).toEqual({
+        occurrenceID: owner.owner.occurrenceID,
+        handoff: [],
+      })
+
+      await RuntimeServerOwnership.releaseWithRetry(owner, () => handoff.push("committed"))
+      const successor = RuntimeServerOwnership.acquire({ database })
+      expect({ handoff, successor: successor.owner.occurrenceID }).toEqual({
+        handoff: ["committed"],
+        successor: expect.any(String),
+      })
+      successor.release()
+    }
+
+    const retryDirectory = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-release-retry-"))
+    temporaryDirectories.push(retryDirectory)
+    const retryDatabase = path.join(retryDirectory, "project.db")
+    const retryOwner = RuntimeServerOwnership.acquire({ database: retryDatabase })
+    const retryHandoff: string[] = []
+    using _transientFailure = RuntimeServerOwnership.TestHooks.failNextRelease({ filesystemLock: 1 })
+    await RuntimeServerOwnership.releaseWithRetry(retryOwner, () => retryHandoff.push("committed"), {
+      attempts: 2,
+      delayMilliseconds: 1,
+    })
+    expect({ occurrenceID: RuntimeServerOwnership.currentOccurrenceID(retryDatabase), retryHandoff }).toEqual({
+      occurrenceID: undefined,
+      retryHandoff: ["committed"],
+    })
+  })
+
+  test("blocks every process-local successor until an asynchronous afterRelease retry completes", async () => {
+    const directory = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-after-release-successor-"))
+    temporaryDirectories.push(directory)
+    const database = path.join(directory, "project.db")
+    const otherDatabase = path.join(directory, "other-project.db")
+    const owner = RuntimeServerOwnership.acquire({ database })
+    let rollbackCalls = 0
+    let commitAttempts = 0
+
+    await releaseServeRuntimeOwnership({
+      database,
+      occurrenceID: owner.owner.occurrenceID,
+      releaseOwnership: (afterRelease) =>
+        RuntimeServerOwnership.releaseWithRetry(owner, afterRelease, { attempts: 2, delayMilliseconds: 1 }),
+      commit() {
+        commitAttempts += 1
+        expect(() => RuntimeServerOwnership.acquire({ database })).toThrow(RuntimeServerOwnershipConflictError)
+        expect(() => RuntimeServerOwnership.acquire({ database: otherDatabase })).toThrow(
+          RuntimeServerOwnershipConflictError,
+        )
+        if (commitAttempts === 1) {
+          throw new Error("injected afterRelease failure after successor acquire")
+        }
+      },
+      rollback() {
+        rollbackCalls += 1
+      },
+    })
+
+    const successor = RuntimeServerOwnership.acquire({ database: otherDatabase })
+    expect({ rollbackCalls, commitAttempts, current: RuntimeServerOwnership.currentOccurrenceID(otherDatabase) }).toEqual({
+      rollbackCalls: 0,
+      commitAttempts: 2,
+      current: successor.owner.occurrenceID,
+    })
+    successor.release()
+  })
+
+  test("keeps the exact committed handoff pending after retry exhaustion and completes it without rollback", async () => {
+    const directory = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-pending-handoff-"))
+    temporaryDirectories.push(directory)
+    const database = path.join(directory, "project.db")
+    const successorDatabase = path.join(directory, "successor.db")
+    const owner = RuntimeServerOwnership.acquire({ database })
+    let rollbackCalls = 0
+    let commitAttempts = 0
+    let commitCanComplete = false
+    let pending: RuntimeServerOwnershipHandoffPendingError | undefined
+
+    try {
+      await releaseServeRuntimeOwnership({
+        database,
+        occurrenceID: owner.owner.occurrenceID,
+        releaseOwnership: (afterRelease) =>
+          RuntimeServerOwnership.releaseWithRetry(owner, afterRelease, { attempts: 3, delayMilliseconds: 1 }),
+        commit() {
+          commitAttempts += 1
+          if (!commitCanComplete) throw new Error("injected persistent committed-handoff cleanup failure")
+        },
+        rollback() {
+          rollbackCalls += 1
+        },
+      })
+    } catch (error) {
+      if (!(error instanceof RuntimeServerOwnershipHandoffPendingError)) throw error
+      pending = error
+    }
+
+    expect({ rollbackCalls, commitAttempts, owner: RuntimeServerOwnership.currentOccurrenceID(database) }).toEqual({
+      rollbackCalls: 0,
+      commitAttempts: 3,
+      owner: owner.owner.occurrenceID,
+    })
+    expect(restartFailureDisposition(pending)).toBe("remain-quiesced")
+    expect(() => RuntimeServerOwnership.acquire({ database: successorDatabase })).toThrow(
+      RuntimeServerOwnershipConflictError,
+    )
+
+    commitCanComplete = true
+    await pending!.complete()
+    const successor = RuntimeServerOwnership.acquire({ database: successorDatabase })
+    expect({ commitAttempts, successor: RuntimeServerOwnership.currentOccurrenceID(successorDatabase) }).toEqual({
+      commitAttempts: 4,
+      successor: successor.owner.occurrenceID,
+    })
+    successor.release()
+  })
+
+  test("releases startup ownership after pre-listen recovery fails so a successor can acquire", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-prelisten-recovery-"))
+    temporaryDirectories.push(root)
+    const home = path.join(root, "home")
+    await import("node:fs/promises").then((fs) => fs.mkdir(home))
+    const previousHome = process.env.OPENCORVUS_TEST_HOME
+    process.env.OPENCORVUS_TEST_HOME = home
+    try {
+      await expect(
+        acquireServerRuntimeAfterRecovery({
+          recover: async () => {
+            throw new Error("injected started Task recovery failure")
+          },
+          disposeInstances: () => Promise.resolve(),
+        }),
+      ).rejects.toThrow("injected started Task recovery failure")
+
+      const successor = RuntimeServerOwnership.acquire({ database: Database.Path() })
+      expect(RuntimeServerOwnership.currentOccurrenceID(Database.Path())).toBe(successor.owner.occurrenceID)
+      successor.release()
+    } finally {
+      if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
+      else process.env.OPENCORVUS_TEST_HOME = previousHome
+    }
+  })
+
   test("one backend owns a project database and a successor acquires it after handoff", async () => {
     const directory = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-owner-"))
     temporaryDirectories.push(directory)
@@ -180,8 +406,10 @@ describe("runtime server database ownership", () => {
       )
       await owner.stop(true)
       owner = undefined
+      RuntimeExecutionSettlement.reserve("task_queue", "stopped-runtime-settled").settle()
 
       successor = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
+      RuntimeExecutionSettlement.reserve("task_queue", "successor-runtime-recovery").settle()
       expect(successor.url).toBeInstanceOf(URL)
     } finally {
       if (successor) await successor.stop(true)
@@ -229,6 +457,120 @@ describe("runtime server database ownership", () => {
     }
   }, 20_000)
 
+  test("restores a quiesced listener under the retained owner after persistent release failure", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-release-rollback-"))
+    temporaryDirectories.push(root)
+    const home = path.join(root, "home")
+    const project = path.join(root, "project")
+    await import("node:fs/promises").then((fs) => Promise.all([fs.mkdir(home), fs.mkdir(project)]))
+    execFileSync("git", ["init"], { cwd: project, stdio: "ignore" })
+    const previousHome = process.env.OPENCORVUS_TEST_HOME
+    process.env.OPENCORVUS_TEST_HOME = home
+    let server = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
+    let restored = false
+    try {
+      const options = { hostname: "127.0.0.1", port: server.port!, randomPort: false }
+      const transfer = Server.beginRuntimeTransfer(server)
+      await transfer.quiesced
+      const terminated = await Server.settleCurrentProcessExecution("injected retained-owner restore", {
+        disposeInstances: () => Promise.resolve(),
+      })
+      using _failure = RuntimeServerOwnership.TestHooks.failNextRelease({ filesystemLock: 3 })
+      await expect(transfer.releaseOwnership(() => terminated.releaseHandoff(true))).rejects.toThrow(
+        "injected runtime filesystem lock release failure",
+      )
+      await terminated.releaseHandoff(false)
+
+      server = transfer.restoreListener(options)
+      restored = true
+      expect({ port: server.port, ownership: RuntimeServerOwnership.currentOccurrenceID(Database.Path()) }).toEqual({
+        port: options.port,
+        ownership: expect.any(String),
+      })
+    } finally {
+      if (restored) await server.stop(true)
+      if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
+      else process.env.OPENCORVUS_TEST_HOME = previousHome
+    }
+  }, 60_000)
+
+  test("reuses the retained in-process CLI owner after persistent release failure", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-cli-release-rollback-"))
+    temporaryDirectories.push(root)
+    const home = path.join(root, "home")
+    const project = path.join(root, "project")
+    await import("node:fs/promises").then((fs) => Promise.all([fs.mkdir(home), fs.mkdir(project)]))
+    execFileSync("git", ["init"], { cwd: project, stdio: "ignore" })
+    const previousHome = process.env.OPENCORVUS_TEST_HOME
+    process.env.OPENCORVUS_TEST_HOME = home
+    const retainedDatabase = Database.Path()
+    const failure = RuntimeServerOwnership.TestHooks.failNextRelease({ ownerFileMove: 3 })
+    try {
+      await expect(bootstrap(project, async () => "first-result")).rejects.toThrow(
+        "injected runtime owner record move failure",
+      )
+      failure[Symbol.dispose]()
+      const retainedOccurrence = RuntimeServerOwnership.currentOccurrenceID(retainedDatabase)
+      const otherDatabase = path.join(root, "other.db")
+      expect(() => RuntimeServerOwnership.acquire({ database: otherDatabase })).toThrow(
+        RuntimeServerOwnershipConflictError,
+      )
+      expect(RuntimeServerOwnership.currentOccurrenceID(retainedDatabase)).toBe(retainedOccurrence)
+      await expect(bootstrap(project, async () => "successor-result")).resolves.toBe("successor-result")
+      const otherOwner = RuntimeServerOwnership.acquire({ database: otherDatabase })
+      expect(otherOwner.owner.database).toBe(path.resolve(otherDatabase))
+      otherOwner.release()
+    } finally {
+      failure[Symbol.dispose]()
+      if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
+      else process.env.OPENCORVUS_TEST_HOME = previousHome
+    }
+  }, 60_000)
+
+  test("awaits the in-process CLI handoff commit receipt before admitting a successor owner", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-cli-delayed-commit-"))
+    temporaryDirectories.push(root)
+    const home = path.join(root, "home")
+    const project = path.join(root, "project")
+    await import("node:fs/promises").then((fs) => Promise.all([fs.mkdir(home), fs.mkdir(project)]))
+    execFileSync("git", ["init"], { cwd: project, stdio: "ignore" })
+    const previousHome = process.env.OPENCORVUS_TEST_HOME
+    process.env.OPENCORVUS_TEST_HOME = home
+    let commitStarted!: () => void
+    const started = new Promise<void>((resolve) => (commitStarted = resolve))
+    let releaseCommit!: () => void
+    const heldCommit = new Promise<void>((resolve) => (releaseCommit = resolve))
+    const settlement = spyOn(Server, "settleCurrentProcessExecution").mockImplementation(async (_reason, options) => {
+      await options?.disposeInstances?.()
+      return {
+        releaseHandoff: async (commit = true) => {
+          if (!commit) return
+          commitStarted()
+          await heldCommit
+        },
+      }
+    })
+    const otherDatabase = path.join(root, "successor.db")
+    try {
+      const completion = bootstrap(project, async () => "delayed-commit-result")
+      await started
+      expect(() => RuntimeServerOwnership.acquire({ database: otherDatabase })).toThrow(
+        RuntimeServerOwnershipConflictError,
+      )
+
+      releaseCommit()
+      await expect(completion).resolves.toBe("delayed-commit-result")
+      const successor = RuntimeServerOwnership.acquire({ database: otherDatabase })
+      expect(successor.owner.database).toBe(path.resolve(otherDatabase))
+      successor.release()
+    } finally {
+      releaseCommit()
+      settlement.mockRestore()
+      if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
+      else process.env.OPENCORVUS_TEST_HOME = previousHome
+    }
+  }, 60_000)
+
   test("pre-bind listen failure retains ownership until runtime settlement finishes", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-prebind-failure-"))
     temporaryDirectories.push(root)
@@ -258,7 +600,7 @@ describe("runtime server database ownership", () => {
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
       else process.env.OPENCORVUS_TEST_HOME = previousHome
     }
-  }, 20_000)
+  }, 60_000)
 
   test("listen initialization failure retains ownership until runtime settlement finishes", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-startup-failure-"))
@@ -293,5 +635,76 @@ describe("runtime server database ownership", () => {
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
       else process.env.OPENCORVUS_TEST_HOME = previousHome
     }
-  }, 30_000)
+  }, 60_000)
+
+  test("retains exact startup cleanup after persistent physical release failure until successor listen recovery", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-startup-physical-recovery-"))
+    temporaryDirectories.push(root)
+    const home = path.join(root, "home")
+    await import("node:fs/promises").then((fs) => fs.mkdir(home))
+    const previousHome = process.env.OPENCORVUS_TEST_HOME
+    process.env.OPENCORVUS_TEST_HOME = home
+    const metrics = spyOn(ServeRuntimeMemoryMetrics, "register").mockImplementation(() => {
+      throw new Error("injected startup failure before physical release")
+    })
+    const releaseFailure = RuntimeServerOwnership.TestHooks.failNextRelease({ ownerFileMove: 6 })
+    try {
+      expect(() => Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })).toThrow(
+        "injected startup failure before physical release",
+      )
+      await expect(RuntimeServerOwnership.TestHooks.completeRetainedStartupCleanup()).rejects.toThrow(
+        "injected runtime owner record move failure",
+      )
+      let pending: RuntimeServerStartupCleanupPendingError | undefined
+      try {
+        Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
+      } catch (error) {
+        if (!(error instanceof RuntimeServerStartupCleanupPendingError)) throw error
+        pending = error
+      }
+      await expect(pending!.complete()).rejects.toThrow("injected runtime owner record move failure")
+
+      releaseFailure[Symbol.dispose]()
+      metrics.mockRestore()
+      await RuntimeServerOwnership.TestHooks.completeRetainedStartupCleanup()
+      const successor = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
+      await successor.stop(true)
+    } finally {
+      releaseFailure[Symbol.dispose]()
+      metrics.mockRestore()
+      if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
+      else process.env.OPENCORVUS_TEST_HOME = previousHome
+    }
+  }, 60_000)
+
+  test("retains exact startup commit cleanup after physical handoff until successor listen recovery", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-startup-commit-recovery-"))
+    temporaryDirectories.push(root)
+    const home = path.join(root, "home")
+    await import("node:fs/promises").then((fs) => fs.mkdir(home))
+    const previousHome = process.env.OPENCORVUS_TEST_HOME
+    process.env.OPENCORVUS_TEST_HOME = home
+    const metrics = spyOn(ServeRuntimeMemoryMetrics, "register").mockImplementation(() => {
+      throw new Error("injected startup failure before committed handoff")
+    })
+    using _commitFailure = Server.TestHooks.failNextRuntimeHandoffCommit(3)
+    try {
+      expect(() => Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })).toThrow(
+        "injected startup failure before committed handoff",
+      )
+      await expect(RuntimeServerOwnership.TestHooks.completeRetainedStartupCleanup()).rejects.toBeInstanceOf(
+        RuntimeServerOwnershipHandoffPendingError,
+      )
+
+      metrics.mockRestore()
+      await RuntimeServerOwnership.TestHooks.completeRetainedStartupCleanup()
+      const successor = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
+      await successor.stop(true)
+    } finally {
+      metrics.mockRestore()
+      if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
+      else process.env.OPENCORVUS_TEST_HOME = previousHome
+    }
+  }, 60_000)
+
 })

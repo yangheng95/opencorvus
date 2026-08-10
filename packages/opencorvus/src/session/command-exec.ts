@@ -60,7 +60,7 @@ export namespace SessionCommand {
       const error = new NamedError.Unknown({
         message: `Command agent ${JSON.stringify(requestedAgentID)} is not a primary assistant`,
       })
-      Bus.publish(Session.Event.Error, {
+      await Bus.publish(Session.Event.Error, {
         sessionID: input.sessionID,
         orderKey: sessionLifecycleOrderKey(input.sessionID),
         error: error.toObject(),
@@ -133,7 +133,7 @@ export namespace SessionCommand {
       if (Provider.ModelNotFoundError.isInstance(e)) {
         const { providerID, modelID, suggestions } = e.data
         const hint = suggestions?.length ? ` Did you mean: ${suggestions.join(", ")}?` : ""
-        Bus.publish(Session.Event.Error, {
+        await Bus.publish(Session.Event.Error, {
           sessionID: input.sessionID,
           orderKey: sessionLifecycleOrderKey(input.sessionID),
           error: new NamedError.Unknown({ message: `Model not found: ${providerID}/${modelID}.${hint}` }).toObject(),
@@ -165,7 +165,7 @@ export namespace SessionCommand {
       variant: input.variant,
     })
 
-    Bus.publish(Command.Event.Executed, {
+    await Bus.publish(Command.Event.Executed, {
       name: input.command,
       sessionID: input.sessionID,
       arguments: input.arguments,

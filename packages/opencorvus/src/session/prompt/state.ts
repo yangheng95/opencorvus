@@ -15,6 +15,7 @@ import {
   releaseManagedWorktreeSessionOwner,
   type ManagedWorktreeSessionOwnerAuthority,
 } from "@/worktree/managed-session-owner"
+import { awaitWithAbort } from "@/util/abort"
 
 export class SessionPromptLoopFinishedError extends Error {
   constructor(public readonly sessionID: string) {
@@ -90,8 +91,13 @@ export namespace SessionPromptState {
     error: ExecutionCancellationError
     finished: Promise<void>
     outcome: "pending" | "succeeded" | "failed"
+    retryCleanup?: () => Promise<void>
+    settle: (error?: unknown) => void
+    retryRunning?: boolean
+    retryTimer?: ReturnType<typeof setTimeout>
   }
   const cancellationReceipts = new Map<string, CancellationReceipt>()
+  let processSettlementGate: symbol | undefined
   const messageOwnersBySession = new Map<string, { owners: Map<string, AbortSignal>; latestMessageID?: string }>()
   const rootWakeQueues = new Map<
     string,
@@ -172,6 +178,7 @@ export namespace SessionPromptState {
 
   export function start(sessionID: string, directory?: string) {
     if (existingStateEntryBySessionID(sessionID)) return
+    if (processSettlementGate) throw new Error("Cannot start a Session prompt during runtime settlement")
     const priorCancellation = cancellationReceipts.get(sessionID)
     if (priorCancellation?.outcome === "succeeded") cancellationReceipts.delete(sessionID)
     if (priorCancellation && priorCancellation.outcome !== "succeeded") throw new BusyError(sessionID)
@@ -213,6 +220,7 @@ export namespace SessionPromptState {
   }
 
   export function claimPromptStartReservation(sessionIDs: readonly string[]): Disposable {
+    if (processSettlementGate) throw new Error("Cannot reserve a Session prompt start during runtime settlement")
     const identities = [...new Set(sessionIDs)]
     for (const sessionID of identities) {
       if (
@@ -230,6 +238,17 @@ export namespace SessionPromptState {
         for (const sessionID of identities) {
           if (promptStartReservations.get(sessionID) === token) promptStartReservations.delete(sessionID)
         }
+      },
+    }
+  }
+
+  export function acquireProcessSettlementGate(): Disposable {
+    if (processSettlementGate) throw new Error("Session prompt runtime settlement is already in progress")
+    const token = Symbol("session-prompt-runtime-settlement")
+    processSettlementGate = token
+    return {
+      [Symbol.dispose]() {
+        if (processSettlementGate === token) processSettlementGate = undefined
       },
     }
   }
@@ -536,7 +555,12 @@ export namespace SessionPromptState {
     return (rootSessionProcessShutdownHandoffs.get(rootSessionID)?.size ?? 0) > 0
   }
 
-  export async function waitForRootWakeQueueIdle(rootSessionID: string, inactivityTimeoutMs: number): Promise<void> {
+  export async function waitForRootWakeQueueIdle(
+    rootSessionID: string,
+    inactivityTimeoutMs: number,
+    signal?: AbortSignal,
+  ): Promise<void> {
+    signal?.throwIfAborted()
     if (!Number.isInteger(inactivityTimeoutMs) || inactivityTimeoutMs <= 0) {
       throw new Error(`Invalid root Session wake idle timeout ${inactivityTimeoutMs}`)
     }
@@ -545,7 +569,8 @@ export namespace SessionPromptState {
     let inactiveAt = Date.now() + inactivityTimeoutMs
     const pollMs = Math.min(250, Math.max(25, Math.floor(inactivityTimeoutMs / 10)))
     while (remaining > 0) {
-      await new Promise((resolve) => setTimeout(resolve, pollMs))
+      await awaitWithAbort(new Promise((resolve) => setTimeout(resolve, pollMs)), signal)
+      signal?.throwIfAborted()
       const next = rootWakeQueues.get(rootSessionID)?.entries.size ?? 0
       if (next === 0) return
       if (next !== remaining) {
@@ -581,11 +606,39 @@ export namespace SessionPromptState {
     return cancellationReceipt(sessionID, directory)?.finished ?? Promise.resolve()
   }
 
+  function startCancellationReceiptRetry(receipt: CancellationReceipt): void {
+    if (receipt.outcome !== "failed" || !receipt.retryCleanup || receipt.retryRunning || receipt.retryTimer) return
+    const retry = receipt.retryCleanup
+    receipt.outcome = "pending"
+    receipt.retryRunning = true
+    void Promise.resolve()
+      .then(retry)
+      .then(
+        () => {
+          receipt.retryRunning = false
+          receipt.outcome = "succeeded"
+          receipt.retryCleanup = undefined
+          receipt.settle()
+        },
+        () => {
+          receipt.retryRunning = false
+          receipt.outcome = "failed"
+          const timer = setTimeout(() => {
+            if (receipt.retryTimer === timer) receipt.retryTimer = undefined
+            startCancellationReceiptRetry(receipt)
+          }, 250)
+          timer.unref()
+          receipt.retryTimer = timer
+        },
+      )
+  }
+
   export function cancellationReceipt(sessionID: string, directory?: string, owner?: AbortSignal) {
     const receipt = cancellationReceipts.get(sessionID)
     if (!receipt) return undefined
     if (directory !== undefined && receipt.directory !== directoryKey(directory)) return undefined
     if (owner !== undefined && receipt.owner !== owner) return undefined
+    startCancellationReceiptRetry(receipt)
     return receipt
   }
 
@@ -613,7 +666,10 @@ export namespace SessionPromptState {
     log.info("cancel", { sessionID })
     if (match.cancellation) {
       const receipt = cancellationReceipts.get(sessionID)
-      if (receipt?.owner === match.abort.signal) return receipt
+      if (receipt?.owner === match.abort.signal) {
+        startCancellationReceiptRetry(receipt)
+        return receipt
+      }
       throw new Error(`Session ${sessionID} cancelled prompt owner is missing its settlement receipt`)
     }
     const error = new ExecutionCancellationError({
@@ -624,12 +680,14 @@ export namespace SessionPromptState {
     })
     SessionStatus.abortActivityMonitor(sessionID, error)
     match.cancellation = error
+    const resourceSettlement = createFinishSignal()
     const receipt: CancellationReceipt = {
       directory: directoryKey(directory),
       owner: match.abort.signal,
       error,
-      finished: match.finished,
+      finished: resourceSettlement.finished,
       outcome: "pending",
+      settle: resourceSettlement.finish,
     }
     cancellationReceipts.set(sessionID, receipt)
     match.abort.abort(error)
@@ -671,10 +729,10 @@ export namespace SessionPromptState {
   }
 
   export function waitForOwnedFinish(sessionID: string, directory: string, owner: AbortSignal): Promise<void> {
-    const match = existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]
-    if (match?.abort.signal === owner) return match.finished
     const receipt = cancellationReceipts.get(sessionID)
     if (receipt?.directory === directoryKey(directory) && receipt.owner === owner) return receipt.finished
+    const match = existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]
+    if (match?.abort.signal === owner) return match.finished
     return Promise.resolve()
   }
 
@@ -708,6 +766,7 @@ export namespace SessionPromptState {
     const match = promptState?.[input.sessionID]
     if (input.abort && match && match.abort.signal !== input.abort) return false
     const errors: unknown[] = []
+    let worktreeReleaseError: unknown
     try {
       if (match && key !== undefined) {
         const error = input.reason ?? new SessionPromptLoopFinishedError(input.sessionID)
@@ -737,6 +796,7 @@ export namespace SessionPromptState {
         try {
           await releaseManagedWorktreeSessionOwner(match.worktreeOwnerAuthority)
         } catch (releaseError) {
+          worktreeReleaseError = releaseError
           errors.push(releaseError)
         }
       }
@@ -752,6 +812,14 @@ export namespace SessionPromptState {
     const receipt = match ? cancellationReceipts.get(input.sessionID) : undefined
     if (receipt && match && receipt.owner === match.abort.signal) {
       receipt.outcome = terminalError ? "failed" : "succeeded"
+      if (terminalError && errors.length === 1 && worktreeReleaseError !== undefined) {
+        receipt.retryCleanup = async () => {
+          await releaseManagedWorktreeSessionOwner(match.worktreeOwnerAuthority)
+        }
+        startCancellationReceiptRetry(receipt)
+      } else {
+        receipt.settle(terminalError)
+      }
     }
     match?.finish(terminalError)
     if (terminalError) throw terminalError

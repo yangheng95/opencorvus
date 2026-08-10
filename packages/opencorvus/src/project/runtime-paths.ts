@@ -195,6 +195,11 @@ export namespace ProjectRuntimePaths {
     )
   }
 
+  /** Current runtime-layout file patterns owned by tool-output retention. */
+  export function toolOutputFilePatterns(): readonly string[] {
+    return ["tasks/*/sessions/*/tool-output/tool_*", "conversations/*/tool-output/tool_*"]
+  }
+
   export function intentPaths(projectDir: string, taskID: string): { relative: string; absolute: string } {
     return {
       relative: taskRelative(taskID, "intent", "request.md"),

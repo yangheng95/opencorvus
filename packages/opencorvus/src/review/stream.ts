@@ -1,12 +1,40 @@
 import { Event } from "@/engine/model"
 import { EngineProtocol } from "@/engine/protocol"
 import type { TextHooks } from "@/llm/api"
+import {
+  RuntimeExecutionAdmissionClosedError,
+  RuntimeExecutionSettlement,
+} from "@/runtime/execution-settlement"
 import { Log } from "@/util/log"
 
 export type ReviewStreamPhase = "integrity"
 export type ReviewStreamStep = "manifest" | "runtime" | "visual" | "specialist" | "agent" | "post_repair"
 
 const log = Log.create({ service: "review-stream" })
+
+function publishReviewEvent(operation: string, emit: () => Promise<unknown>): void {
+  let authority
+  try {
+    authority = RuntimeExecutionSettlement.reserve("protocol_publication", `review-stream:${operation}`)
+  } catch (error) {
+    if (error instanceof RuntimeExecutionAdmissionClosedError) return
+    throw error
+  }
+  let publication: Promise<unknown>
+  try {
+    publication = emit()
+  } catch (error) {
+    authority.settle()
+    throw error
+  }
+  authority.settleWith(publication)
+  void publication.catch((error) => {
+    log.warn("review stream protocol publication failed", {
+      operation,
+      error: error instanceof Error ? error.message : String(error),
+    })
+  })
+}
 
 export function reviewIDForIntegrity(sessionID: string): string {
   return `integrity:${sessionID}`
@@ -21,16 +49,18 @@ export function emitReviewStreamStarted(input: {
   source: string
 }): void {
   if (!input.taskID || !input.reviewID) return
-  void EngineProtocol.emit(
-    Event.ReviewStreamStarted,
-    {
-      taskID: input.taskID,
-      reviewID: input.reviewID,
-      phase: input.phase,
-      sessionID: input.sessionID,
-      agentID: input.agentID,
-    },
-    { source: input.source },
+  publishReviewEvent("started", () =>
+    EngineProtocol.emit(
+      Event.ReviewStreamStarted,
+      {
+        taskID: input.taskID!,
+        reviewID: input.reviewID!,
+        phase: input.phase,
+        sessionID: input.sessionID,
+        agentID: input.agentID,
+      },
+      { source: input.source },
+    ),
   )
 }
 
@@ -49,22 +79,24 @@ export function emitReviewStreamProgress(input: {
   source: string
 }): void {
   if (!input.taskID || !input.reviewID) return
-  void EngineProtocol.emit(
-    Event.ReviewStreamProgress,
-    {
-      taskID: input.taskID,
-      reviewID: input.reviewID,
-      phase: input.phase,
-      agentID: input.agentID,
-      currentStep: input.currentStep,
-      activity: input.activity,
-      reviewerID: input.reviewerID,
-      roundID: input.roundID,
-      attempt: input.attempt,
-      elapsedMs: input.elapsedMs,
-      summary: input.summary,
-    },
-    { source: input.source },
+  publishReviewEvent("progress", () =>
+    EngineProtocol.emit(
+      Event.ReviewStreamProgress,
+      {
+        taskID: input.taskID!,
+        reviewID: input.reviewID!,
+        phase: input.phase,
+        agentID: input.agentID,
+        currentStep: input.currentStep,
+        activity: input.activity,
+        reviewerID: input.reviewerID,
+        roundID: input.roundID,
+        attempt: input.attempt,
+        elapsedMs: input.elapsedMs,
+        summary: input.summary,
+      },
+      { source: input.source },
+    ),
   )
 }
 
@@ -79,18 +111,20 @@ export function emitReviewStreamChunk(input: {
 }): void {
   if (!input.taskID || !input.reviewID) return
   if (!input.delta.replace(/[\[\]\s]/g, "")) return
-  void EngineProtocol.emit(
-    Event.ReviewStreamChunk,
-    {
-      taskID: input.taskID,
-      reviewID: input.reviewID,
-      phase: input.phase,
-      agentID: input.agentID,
-      kind: "reasoning",
-      delta: input.delta,
-      attempt: input.attempt,
-    },
-    { source: input.source },
+  publishReviewEvent("chunk", () =>
+    EngineProtocol.emit(
+      Event.ReviewStreamChunk,
+      {
+        taskID: input.taskID!,
+        reviewID: input.reviewID!,
+        phase: input.phase,
+        agentID: input.agentID,
+        kind: "reasoning",
+        delta: input.delta,
+        attempt: input.attempt,
+      },
+      { source: input.source },
+    ),
   )
 }
 

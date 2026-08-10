@@ -1,15 +1,12 @@
 import { Session } from "./index"
 import { Instance } from "@/project/instance"
-import {
-  provideInitializedProjectExecution,
-  runWithInitializedIndependentProject,
-} from "@/project/independent-project-owner"
+import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
 import { Log } from "@/util/log"
 import { SessionPrompt } from "./prompt"
 import { SessionContext } from "./context"
 import { EffectiveConfig } from "@/config/effective"
 import { resolveNativeSessionMessageIdentity, resolveSessionMessageIdentity } from "./message-identity"
-import type { PreparedUserMessage } from "./prompt/parts"
+import type { PreparedUserMessage, UserMessagePersistenceHooks } from "./prompt/parts"
 import { preflightUserMessageModel, preparedUserMessageFromPreflight } from "./prompt/parts"
 import { Identifier } from "@/id/id"
 import { PanelSurface } from "@/panel/capability"
@@ -21,6 +18,8 @@ import {
 } from "@/chat/session"
 import z from "zod"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
+import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
+import { createExecutionCancellationOrigin } from "./prompt/cancellation"
 
 /**
  * Session wake mechanism.
@@ -34,6 +33,13 @@ import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-re
  */
 export namespace SessionWake {
   const log = Log.create({ service: "session.wake" })
+  type WakeLoopExecutor = (input: {
+    sessionID: string
+    messageID: string
+    directory: string
+    signal: AbortSignal
+  }) => Promise<void>
+  let wakeLoopExecutorForTest: WakeLoopExecutor | undefined
 
   export const MissionChildTaskResultWakeReason = z
     .object({
@@ -86,6 +92,14 @@ export namespace SessionWake {
   export interface WakeInput {
     /** Existing session ID to wake. If omitted, creates a new session. */
     sessionID?: string
+    /** Exact durable message identity owned by a scheduler fire. */
+    messageID?: string
+    /** Exact durable primary text-part identity owned by a scheduler fire. */
+    textPartID?: string
+    /** Physical fire ownership signal; durable effects remain reconcilable after abort. */
+    signal?: AbortSignal
+    /** Durable owner fence committed atomically with the exact Message/Part bundle. */
+    commitBundle?: UserMessagePersistenceHooks["commitBundle"]
     /** The prompt to append as the next session message. */
     prompt: string
     /** Real participant that authored this wake payload. */
@@ -115,6 +129,7 @@ export namespace SessionWake {
    * Returns the session ID (existing or newly created).
    */
   export async function wake(input: WakeInput): Promise<string> {
+    if (input.signal?.aborted) throw input.signal.reason
     if (input.sessionID && input.newConversationExperience) {
       throw new Error("Session wake cannot apply a new conversation identity to an existing session")
     }
@@ -122,6 +137,7 @@ export namespace SessionWake {
     const sessionID = input.sessionID ?? Identifier.ascending("session")
     const authoredPrompt: SessionPrompt.PromptInput = {
       sessionID,
+      messageID: input.messageID,
       author: input.author,
       agent: input.newConversationExperience && !input.agent ? input.newConversationExperience : input.agent,
       model: input.model,
@@ -134,6 +150,7 @@ export namespace SessionWake {
       byteMaterializationProjectID: Instance.project.id,
       parts: [
         {
+          id: input.textPartID,
           type: "text",
           text: input.prompt,
         },
@@ -210,8 +227,11 @@ export namespace SessionWake {
     }
 
     return SessionContext.provide(session, async () => {
+      if (input.signal?.aborted) throw input.signal.reason
       const message = await SessionPrompt.prompt.force(resolvedPromptInput, {
         prepared,
+        signal: input.signal,
+        commitBundle: input.commitBundle,
         controls: (info) => [
           {
             sessionID,
@@ -239,25 +259,85 @@ export namespace SessionWake {
       // function enters the callback path (which resolves when the loop
       // processes our message).
       const directory = session.directory
-      await provideInitializedProjectExecution({
-        directory,
-        fn: () => undefined,
-      })
-      void runWithInitializedIndependentProject({
-        directory,
-        fn: async () => {
-          await SessionPrompt.loop({
-            sessionID,
-            resume_existing: false,
-            reply_to_message_id: message.info.id,
-          })
-          await SessionPrompt.waitForFinish(sessionID, directory)
-        },
-      }).catch((err) => {
-        log.error("wake loop failed", { sessionID, err })
-      })
+      startPersistedWakeLoop({ sessionID, messageID: message.info.id, directory })
 
       return sessionID
     })
+  }
+
+  export function resumePersistedWake(input: { sessionID: string; messageID: string; directory: string }): void {
+    startPersistedWakeLoop(input)
+  }
+
+  function startPersistedWakeLoop(input: { sessionID: string; messageID: string; directory: string }): void {
+    const reservation = RuntimeExecutionSettlement.reserve(
+      "session_wake_loop",
+      `session-wake-loop:${input.sessionID}:${input.messageID}`,
+    )
+    reservation.onCancel((reason) => {
+      try {
+        SessionPrompt.cancel(
+          input.sessionID,
+          input.directory,
+          createExecutionCancellationOrigin({
+            actor: "runtime",
+            source: "process.shutdown",
+            surface: "session-wake-loop",
+            reason: reason instanceof Error ? reason.message : String(reason),
+            targetSessionID: input.sessionID,
+            messageID: input.messageID,
+          }),
+        )
+      } catch (error) {
+        log.warn("wake loop cancellation callback failed", {
+          sessionID: input.sessionID,
+          messageID: input.messageID,
+          error,
+        })
+      }
+    })
+    const operation = Promise.resolve().then(() =>
+      (wakeLoopExecutorForTest ?? executeWakeLoop)({
+        ...input,
+        signal: reservation.signal,
+      }),
+    )
+    reservation.settleWith(operation)
+    void operation.catch((err) => {
+      log.error("wake loop failed", { sessionID: input.sessionID, messageID: input.messageID, err })
+    })
+  }
+
+  async function executeWakeLoop(input: {
+    sessionID: string
+    messageID: string
+    directory: string
+    signal: AbortSignal
+  }): Promise<void> {
+    await runWithInitializedIndependentProject({
+      directory: input.directory,
+      signal: input.signal,
+      fn: async () => {
+        input.signal.throwIfAborted()
+        await SessionPrompt.loop({
+          sessionID: input.sessionID,
+          resume_existing: false,
+          reply_to_message_id: input.messageID,
+        })
+        await SessionPrompt.waitForFinish(input.sessionID, input.directory)
+      },
+    })
+  }
+
+  export const TestHooks = {
+    installWakeLoopExecutor(executor: WakeLoopExecutor): Disposable {
+      if (wakeLoopExecutorForTest) throw new Error("SessionWake loop executor is already installed")
+      wakeLoopExecutorForTest = executor
+      return {
+        [Symbol.dispose]() {
+          if (wakeLoopExecutorForTest === executor) wakeLoopExecutorForTest = undefined
+        },
+      }
+    },
   }
 }

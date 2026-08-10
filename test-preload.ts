@@ -1,4 +1,6 @@
-await import("./packages/opencorvus/test/preload")
+const { registerTestRuntimeCleanup, setupTestRuntime } = await import("./packages/opencorvus/test/preload")
+await setupTestRuntime()
+registerTestRuntimeCleanup()
 
 // Vite-injected globals must exist before any src module loads, because
 // `utils/version.ts` reads `__OPENCORVUS_OVERLAY_VERSION__` at top level

@@ -276,7 +276,7 @@ export namespace Question {
         waiters: [{ resolve, reject }],
         timer: undefined,
       }
-      Bus.publish(Event.Asked, info)
+      Bus.publishOwned(Event.Asked, info)
       if (automatic) {
         s.pending[id].timer = setTimeout(
           () => {

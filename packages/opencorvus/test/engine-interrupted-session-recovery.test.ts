@@ -138,6 +138,51 @@ describe("interrupted prepared Worker Turn recovery", () => {
             latestInputMessageID: message.id,
           },
         )
+
+        const continuationMessage = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: worker.id,
+          role: "user",
+          author: "recovery-worker",
+          time: { created: now + 2 },
+          agent: "recovery-worker",
+          model: { providerID: "test", modelID: "recovery-model" },
+        })
+        const continuationPart = await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: worker.id,
+          messageID: continuationMessage.id,
+          type: "text",
+          text: "Execute the continuation occurrence",
+        })
+        WorkerTurnDescriptor.create({
+          sessionID: worker.id,
+          payload: {
+            ...descriptor.payload,
+            messageAuthority: {
+              user_message_id: continuationMessage.id,
+              control_text_parts: [
+                { part_id: continuationPart.id, text_sha256: controlTextSHA256(continuationPart.text) },
+              ],
+            },
+          },
+        })
+        expect(
+          await publishTaskAgentCancellationStatusesAfterSettlement({
+            task,
+            reason: "Cancel the exact continuation occurrence",
+          }),
+        ).toEqual([worker.id])
+        expect(listTaskConversationAgentSessions(taskID).find((session) => session.sessionID === worker.id)).toMatchObject(
+          {
+            latestStatus: {
+              type: "terminal",
+              reason: "aborted",
+              error: "Cancel the exact continuation occurrence",
+            },
+            latestInputMessageID: continuationMessage.id,
+          },
+        )
       },
     })
   }, 30_000)

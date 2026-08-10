@@ -46,6 +46,7 @@ export const ENGINE_ARTIFACT_KINDS = [
   "operator_message_wake",
   "mission_acceptance_resume_receipt",
   "queued_operator_wake",
+  "task_loop_launch",
   "task_checkpoint_settlement",
   "task_auxiliary_settlement",
   "exploration",

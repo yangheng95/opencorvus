@@ -3,13 +3,14 @@ import { Instance, runAsInstanceActivity } from "@/project/instance"
 import {
   provideInitializedProjectExecution,
   runWithIndependentProjectIdentity,
+  runWithInitializedIndependentProject,
 } from "@/project/independent-project-owner"
 import { createInstanceState } from "@/project/instance-state"
 import { Bus } from "@/bus"
 import { GlobalBus } from "@/bus/global"
 import { BusEvent } from "@/bus/bus-event"
 import { Session } from "@/session"
-import { SessionStatus, sessionLifecycleOrderKey } from "@/session/status"
+import { SessionStatus, executionLifecycleOrderKey, sessionLifecycleOrderKey } from "@/session/status"
 import { SessionPrompt } from "@/session/prompt"
 import { SessionPromptReplyError } from "@/session/prompt/state"
 import { SessionContext } from "@/session/context"
@@ -19,12 +20,17 @@ import { Database, and, eq, inArray, sql, type SQL } from "@/storage/db"
 import { Identifier } from "@/id/id"
 import { Log } from "@/util/log"
 import { AwaitTimeoutError } from "@/util/await-with-timeout"
+import { awaitWithAbort } from "@/util/abort"
 import { EngineConfig } from "@/engine/config"
-import { terminateOwnedSessionPromptInScope } from "@/engine/cancellation-scope"
 import { createExecutionCancellationOrigin, type ExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { TaskQueueTable } from "./task-queue.sql"
 import { SessionWake } from "@/session/wake"
 import { NamedError } from "@opencorvus-ai/util/error"
+import {
+  RuntimeExecutionAdmissionClosedError,
+  RuntimeExecutionSettlement,
+  type RuntimeExecutionReservation,
+} from "@/runtime/execution-settlement"
 
 export const TaskQueueEvent = {
   Changed: BusEvent.define(
@@ -45,11 +51,33 @@ export const TaskQueueEvent = {
   ),
 }
 
+export class RuntimeExecutionHandoffCancellation extends Error {
+  override readonly name = "RuntimeExecutionHandoffCancellation"
+
+  constructor(
+    readonly taskID: string,
+    readonly queueOccurrenceID: string,
+    readonly reason: string,
+  ) {
+    super(`Task Queue execution ${taskID} returned to queued state during runtime handoff: ${reason}`)
+  }
+}
+
+export class TaskQueueProcessRollbackRecoveryError extends Error {
+  override readonly name = "TaskQueueProcessRollbackRecoveryError"
+
+  constructor(
+    readonly directory: string,
+    readonly taskIDs: readonly string[],
+    cause: unknown,
+  ) {
+    super(`Task Queue rollback recovery failed for ${directory} (${taskIDs.join(", ") || "directory drain"})`, {
+      cause,
+    })
+  }
+}
+
 const RawTaskMetadata = z.discriminatedUnion("kind", [
-  z.object({
-    kind: z.literal("session_prompt"),
-    input: z.unknown(),
-  }),
   z.object({
     kind: z.literal("session_wake"),
     messageID: z.string(),
@@ -94,16 +122,15 @@ export namespace TaskQueueService {
 
   const CONCURRENCY_ENV = "OPENCORVUS_TASK_QUEUE_CONCURRENCY"
   const CONCURRENCY_LIMIT = 100
+  const RECOVERY_CONTROL_RETRY_MS = 1_000
 
-  function publishQueueChanged(input: {
+  function publishQueueChangedInTransaction(input: {
     queueTaskID: string
     sessionID: string
     status: "queued" | "failed"
     sequence: number
   }) {
-    void Bus.publish(TaskQueueEvent.Changed, input).catch((error) => {
-      log.warn("task queue changed publish failed", { ...input, error: message(error) })
-    })
+    return Bus.publishOwnedInTransaction(TaskQueueEvent.Changed, input)
   }
 
   export function deleteSettledForSessions(db: Database.TxOrDb, input: { sessionIDs: string[] }): void {
@@ -135,6 +162,8 @@ export namespace TaskQueueService {
     cleanup: () => void
     sessionID: string
     source: string
+    directory: string
+    authority: RuntimeExecutionReservation
     cancellationReason?: string
     cancellationOrigin?: ExecutionCancellationOrigin
     promptOwner?: AbortSignal
@@ -146,37 +175,372 @@ export namespace TaskQueueService {
     payload: any
   }
 
+  type QueuePromptStartHook = (signal: AbortSignal) => void | Promise<void>
+  let beforeQueuePromptStartForTest: QueuePromptStartHook | undefined
+  let beforeQueueClaimReservationForTest: ((taskID: string) => void | Promise<void>) | undefined
+  let beforeProcessRollbackRecoveryForTest:
+    | ((input: { directory: string; taskIDs: readonly string[] }) => void | Promise<void>)
+    | undefined
+
+  // Queue execution ownership is process/project-wide. Multiple Instance
+  // directories (primary worktree and managed worktrees) can represent the
+  // same project, so an Instance-local map cannot decide that a durable
+  // running claim is ownerless.
+  const processInFlight = new Map<string, InFlightTask>()
+  const processActiveDrains = new Map<Promise<Promise<void>[]>, { directory: string }>()
+  const interruptedRecoveryTimers = new Map<string, { task: QueueTaskRow; directory: string }>()
+  const runtimeRequeuedDirectories = new Set<string>()
+  type ProcessRollbackScope = {
+    token: symbol
+    recoveryTaskIDsByDirectory: Map<string, Set<string>>
+    requeuedTaskIDsByDirectory: Map<string, Set<string>>
+    drains: Set<Promise<Promise<void>[]>>
+  }
+  let processSettlementGate: ProcessRollbackScope | undefined
+
+  function captureProcessRollbackTask(
+    kind: "recovery" | "requeued",
+    directory: string,
+    taskID: string,
+  ): void {
+    const gate = processSettlementGate
+    if (!gate) return
+    const target = kind === "recovery" ? gate.recoveryTaskIDsByDirectory : gate.requeuedTaskIDsByDirectory
+    const taskIDs = target.get(directory) ?? new Set<string>()
+    taskIDs.add(taskID)
+    target.set(directory, taskIDs)
+  }
+
+  function captureProcessRollbackTaskForScope(
+    target: Map<string, Set<string>>,
+    directory: string,
+    taskID: string,
+  ): void {
+    const taskIDs = target.get(directory) ?? new Set<string>()
+    taskIDs.add(taskID)
+    target.set(directory, taskIDs)
+  }
+
+  function processRollbackDirectories(scope: ProcessRollbackScope): string[] {
+    return [...new Set([...scope.recoveryTaskIDsByDirectory.keys(), ...scope.requeuedTaskIDsByDirectory.keys()])].sort()
+  }
+
+  function clearProcessRollbackScope(scope: ProcessRollbackScope): void {
+    for (const [directory, taskIDs] of scope.recoveryTaskIDsByDirectory) {
+      for (const taskID of taskIDs) {
+        if (interruptedRecoveryTimers.get(taskID)?.directory === directory) interruptedRecoveryTimers.delete(taskID)
+      }
+    }
+    for (const directory of scope.requeuedTaskIDsByDirectory.keys()) runtimeRequeuedDirectories.delete(directory)
+  }
+
+  async function drainStartedExecutions(drain: Promise<Promise<void>[]>): Promise<Promise<void>[]> {
+    const result = await Promise.allSettled([drain])
+    const started = result[0]
+    return started.status === "fulfilled" ? started.value : []
+  }
+
+  async function joinDrainExecution(drain: Promise<Promise<void>[]>): Promise<void> {
+    await Promise.allSettled(await drainStartedExecutions(drain))
+  }
+
+  async function recoverProcessRollbackScope(scope: ProcessRollbackScope): Promise<void> {
+    let joinedDrains = 0
+    while (joinedDrains < scope.drains.size) {
+      const drains = [...scope.drains].slice(joinedDrains)
+      joinedDrains += drains.length
+      await Promise.all(drains.map(joinDrainExecution))
+    }
+    const failures: TaskQueueProcessRollbackRecoveryError[] = []
+    for (const directory of processRollbackDirectories(scope)) {
+      const recoveryTaskIDs = [...(scope.recoveryTaskIDsByDirectory.get(directory) ?? [])].sort()
+      const requeuedTaskIDs = [...(scope.requeuedTaskIDsByDirectory.get(directory) ?? [])].sort()
+      const taskIDs = [...new Set([...recoveryTaskIDs, ...requeuedTaskIDs])].sort()
+      try {
+        await runWithInitializedIndependentProject({
+          directory,
+          fn: async () => {
+            await beforeProcessRollbackRecoveryForTest?.({ directory, taskIDs })
+            for (const taskID of recoveryTaskIDs) {
+              const owner = interruptedRecoveryTimers.get(taskID)
+              if (!owner || owner.directory !== directory) continue
+              const current = Database.use((db) =>
+                db.select().from(TaskQueueTable).where(eq(TaskQueueTable.id, taskID)).get(),
+              )
+              if (current?.status === "running") {
+                scheduleRunningRecoveryTimer(current, "runtime settlement rollback resumed")
+              }
+              if (interruptedRecoveryTimers.get(taskID)?.directory === directory) {
+                interruptedRecoveryTimers.delete(taskID)
+              }
+            }
+            await drainUntilIdle("runtime settlement rollback resumed")
+            if (scope.requeuedTaskIDsByDirectory.has(directory)) runtimeRequeuedDirectories.delete(directory)
+          },
+        })
+      } catch (error) {
+        failures.push(new TaskQueueProcessRollbackRecoveryError(directory, taskIDs, error))
+      }
+    }
+    if (failures.length > 0) {
+      throw new AggregateError(failures, "Failed to resume Task Queue projects after runtime rollback")
+    }
+  }
+
   const state = createInstanceState(
     () => ({
+      acceptingDrain: true,
+      generation: 0,
       draining: false,
       activeDrain: undefined as Promise<Promise<void>[]> | undefined,
       inFlight: new Map<string, InFlightTask>(),
       recoveryTimers: new Map<string, ReturnType<typeof setTimeout>>(),
+      recoveryAuthorities: new Map<string, RuntimeExecutionReservation>(),
       recoveryTimerTokens: new Map<string, number>(),
       recoveryTimerSequence: 0,
       progressListener: undefined as ((message: QueueProgressEnvelope) => void) | undefined,
     }),
     async (current) => {
+      current.acceptingDrain = false
+      current.generation += 1
+      let drainStarted: Promise<void>[] = []
+      if (current.activeDrain) {
+        const activeDrain = current.activeDrain
+        processSettlementGate?.drains.add(activeDrain)
+        // Seal every in-progress async validation/hook before cancellation so
+        // no claim can appear after the disposer snapshots physical owners.
+        drainStarted = await drainStartedExecutions(activeDrain)
+      }
       if (current.progressListener) GlobalBus.off("event", current.progressListener)
       for (const timer of current.recoveryTimers.values()) clearTimeout(timer)
+      for (const authority of current.recoveryAuthorities.values()) authority.settle()
       current.recoveryTimers.clear()
+      current.recoveryAuthorities.clear()
       current.recoveryTimerTokens.clear()
+      for (const task of current.inFlight.values()) {
+        const origin = runtimeCancellationOrigin(task, "Task Queue instance is disposing")
+        requestExecutionCancellation(task, origin.reason, origin)
+      }
+      await Promise.allSettled([
+        ...new Set([...drainStarted, ...[...current.inFlight.values()].map((task) => task.promise)]),
+      ])
+      for (const [taskID, task] of current.inFlight) {
+        if (processInFlight.get(taskID) === task) processInFlight.delete(taskID)
+      }
       current.inFlight.clear()
+      for (const [taskID, owner] of interruptedRecoveryTimers) {
+        const retainedByRollback = processSettlementGate?.recoveryTaskIDsByDirectory
+          .get(owner.directory)
+          ?.has(taskID)
+        if (owner.directory === Instance.directory && !retainedByRollback) interruptedRecoveryTimers.delete(taskID)
+      }
+      if (!processSettlementGate?.requeuedTaskIDsByDirectory.has(Instance.directory)) {
+        runtimeRequeuedDirectories.delete(Instance.directory)
+      }
     },
     "task-queue-service",
   )
 
   export function init() {
+    log.info("task queue service registered")
+  }
+
+  export function start() {
     const recovered = requeueOwnerlessRunningRows()
-    if (recovered > 0) requestDrain("project bootstrap recovered ownerless queue rows")
-    log.info("task queue service initialized", { recoveredOwnerlessRows: recovered })
+    requestDrain(recovered > 0 ? "project bootstrap recovered ownerless queue rows" : "project bootstrap completed")
+    log.info("task queue service started", { recoveredOwnerlessRows: recovered })
+  }
+
+  export type ProcessSettlementGate = Disposable & {
+    commit(): void
+    rollback(): () => Promise<void>
+  }
+
+  export function acquireProcessSettlementGate(): ProcessSettlementGate {
+    if (processSettlementGate) throw new Error("Task Queue process settlement is already in progress")
+    const token = Symbol("task-queue-process-settlement")
+    const scope: ProcessRollbackScope = {
+      token,
+      recoveryTaskIDsByDirectory: new Map(),
+      requeuedTaskIDsByDirectory: new Map(),
+      drains: new Set(),
+    }
+    for (const [taskID, owner] of interruptedRecoveryTimers) {
+      captureProcessRollbackTaskForScope(scope.recoveryTaskIDsByDirectory, owner.directory, taskID)
+    }
+    for (const [taskID, task] of processInFlight) {
+      captureProcessRollbackTaskForScope(scope.requeuedTaskIDsByDirectory, task.directory, taskID)
+    }
+    for (const directory of runtimeRequeuedDirectories) {
+      if (!scope.requeuedTaskIDsByDirectory.has(directory)) {
+        scope.requeuedTaskIDsByDirectory.set(directory, new Set())
+      }
+    }
+    for (const drain of processActiveDrains.keys()) scope.drains.add(drain)
+    processSettlementGate = scope
+    let decision: "pending" | "commit" | "rollback" = "pending"
+    let disposed = false
+    let rollbackCompleted = false
+    let rollbackOperation: Promise<void> | undefined
+    return {
+      commit() {
+        if (decision === "rollback") throw new Error("Task Queue process settlement rollback is already authoritative")
+        decision = "commit"
+      },
+      rollback() {
+        if (decision === "commit") throw new Error("Task Queue process settlement commit is already authoritative")
+        decision = "rollback"
+        return async () => {
+          if (!disposed) throw new Error("Task Queue rollback can resume only after all runtime admission gates reopen")
+          if (rollbackCompleted) return
+          if (rollbackOperation) return await rollbackOperation
+          rollbackOperation = recoverProcessRollbackScope(scope).then(() => {
+            rollbackCompleted = true
+          })
+          try {
+            await rollbackOperation
+          } finally {
+            rollbackOperation = undefined
+          }
+        }
+      },
+      [Symbol.dispose]() {
+        if (processSettlementGate?.token !== token) return
+        if (decision === "pending") {
+          throw new Error("Task Queue process settlement gate requires an explicit commit or rollback decision")
+        }
+        processSettlementGate = undefined
+        disposed = true
+        if (decision === "commit") clearProcessRollbackScope(scope)
+      },
+    }
   }
 
   export async function runNow() {
-    await drainUntilIdle("runNow")
+    await runTaskQueueOwner(Instance.directory, () => drainUntilIdle("runNow"))
+  }
+
+  function runtimeCancellationOrigin(task: Pick<InFlightTask, "sessionID">, reason: unknown): ExecutionCancellationOrigin {
+    const message = reason instanceof Error ? reason.message : String(reason)
+    return createExecutionCancellationOrigin({
+      actor: "runtime",
+      source: "process.shutdown",
+      surface: "runtime",
+      requestID: `task-queue:${task.sessionID}`,
+      reason: message,
+      targetSessionID: task.sessionID,
+    })
+  }
+
+  function isExecutionCancellationOrigin(value: unknown): value is ExecutionCancellationOrigin {
+    if (!value || typeof value !== "object") return false
+    const candidate = value as Partial<ExecutionCancellationOrigin>
+    return (
+      typeof candidate.actor === "string" &&
+      typeof candidate.source === "string" &&
+      typeof candidate.surface === "string" &&
+      typeof candidate.requestID === "string" &&
+      typeof candidate.reason === "string"
+    )
+  }
+
+  function requestExecutionCancellation(
+    task: InFlightTask,
+    reason: string,
+    origin: ExecutionCancellationOrigin,
+  ): void {
+    if (!task.authority.signal.aborted) {
+      task.authority.cancel(origin)
+      return
+    }
+    task.cancellationReason = reason
+    task.cancellationOrigin = origin
+    task.cleanup()
+    if (!task.promptOwner) return
+    SessionPrompt.cancelOwned(task.sessionID, task.directory, task.promptOwner, { origin })
+  }
+
+  function createInFlightTask(input: {
+    taskID: string
+    sessionID: string
+    source: string
+    directory: string
+  }): InFlightTask {
+    const authority = RuntimeExecutionSettlement.reserve("task_queue", `queue-execution:${input.taskID}`)
+    const task: InFlightTask = {
+      promise: Promise.resolve(),
+      cleanup: () => undefined,
+      sessionID: input.sessionID,
+      source: input.source,
+      directory: input.directory,
+      authority,
+    }
+    authority.onCancel((reason) => {
+      const origin = isExecutionCancellationOrigin(reason) ? reason : runtimeCancellationOrigin(task, reason)
+      requestExecutionCancellation(task, origin.reason, origin)
+    })
+    return task
+  }
+
+  async function enterQueuePromptLoop(
+    task: Pick<QueueTaskRow, "id" | "session_id">,
+    inFlight: InFlightTask,
+    directory: string,
+  ): Promise<void> {
+    await beforeQueuePromptStartForTest?.(inFlight.authority.signal)
+    inFlight.authority.signal.throwIfAborted()
+    SessionPrompt.capturePromptOwner(task.session_id, directory)
+    if (inFlight.cancellationReason) throw new Error(inFlight.cancellationReason)
   }
 
   export const TestHooks = {
+    installBeforeProcessRollbackRecovery(
+      hook: (input: { directory: string; taskIDs: readonly string[] }) => void | Promise<void>,
+    ): Disposable {
+      if (beforeProcessRollbackRecoveryForTest) {
+        throw new Error("Task Queue process rollback recovery test hook is already installed")
+      }
+      beforeProcessRollbackRecoveryForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (beforeProcessRollbackRecoveryForTest === hook) beforeProcessRollbackRecoveryForTest = undefined
+        },
+      }
+    },
+    installBeforeQueueClaimReservation(hook: (taskID: string) => void | Promise<void>): Disposable {
+      if (beforeQueueClaimReservationForTest) throw new Error("Task Queue claim-reservation test hook is already installed")
+      beforeQueueClaimReservationForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (beforeQueueClaimReservationForTest === hook) beforeQueueClaimReservationForTest = undefined
+        },
+      }
+    },
+    runClaimedPromptStart(input: { taskID: string; sessionID: string; directory: string }): Promise<void> {
+      const inFlight = createInFlightTask({
+        taskID: input.taskID,
+        sessionID: input.sessionID,
+        source: "task-queue-claim-cancellation-contract",
+        directory: input.directory,
+      })
+      const operation = enterQueuePromptLoop(
+        { id: input.taskID, session_id: input.sessionID },
+        inFlight,
+        input.directory,
+      )
+      inFlight.promise = operation
+      inFlight.authority.settleWith(operation)
+      return operation
+    },
+    installBeforeQueuePromptStart(hook: QueuePromptStartHook): Disposable {
+      if (beforeQueuePromptStartForTest) throw new Error("Task Queue prompt-start test hook is already installed")
+      beforeQueuePromptStartForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (beforeQueuePromptStartForTest === hook) beforeQueuePromptStartForTest = undefined
+        },
+      }
+    },
     async claimReadyTaskIDs(input: {
       limit: number
       beforeValidation?: (sessionID: string) => void | Promise<void>
@@ -186,6 +550,9 @@ export namespace TaskQueueService {
         return assertSessionLineageInCurrentProject(sessionID)
       })
       return claimed.map((task) => task.id)
+    },
+    waitForDrainProgress(input: { started: Promise<void>[]; running: Promise<void>[] }): Promise<void> {
+      return waitForNextDrainSettlement(input.started, input.running)
     },
     trackChildSessionProgress(input: {
       taskID: string
@@ -197,19 +564,86 @@ export namespace TaskQueueService {
       if (current.inFlight.has(input.taskID)) {
         throw new Error(`Task Queue test progress owner already exists: ${input.taskID}`)
       }
-      const inFlight: InFlightTask = {
-        promise: Promise.resolve(),
-        cleanup: () => undefined,
+      const inFlight = createInFlightTask({
+        taskID: input.taskID,
         sessionID: input.rootSessionID,
         source: "task-queue-child-progress-positive-contract",
-        progressSessionIDs: new Set([input.rootSessionID]),
-      }
+        directory: input.directory,
+      })
+      inFlight.progressSessionIDs = new Set([input.rootSessionID])
       current.inFlight.set(input.taskID, inFlight)
+      processInFlight.set(input.taskID, inFlight)
       ensureProgressSubscription({ directory: input.directory, projectID: input.projectID })
       return () => {
         if (current.inFlight.get(input.taskID) === inFlight) current.inFlight.delete(input.taskID)
+        if (processInFlight.get(input.taskID) === inFlight) processInFlight.delete(input.taskID)
+        inFlight.authority.settle()
         releaseProgressSubscriptionIfIdle(current)
       }
+    },
+    trackRecoverableExecution(input: {
+      taskID: string
+      physicalSettlement: Promise<void>
+    }): Promise<RuntimeExecutionHandoffCancellation | undefined> {
+      const task = Database.use((db) => db.select().from(TaskQueueTable).where(eq(TaskQueueTable.id, input.taskID)).get())
+      if (!task || task.status !== "running") {
+        throw new Error(`Recoverable queue test execution requires running row ${input.taskID}`)
+      }
+      const current = state()
+      if (current.inFlight.has(task.id)) throw new Error(`Queue execution ${task.id} is already in flight`)
+      const inFlight = createInFlightTask({
+        taskID: task.id,
+        sessionID: task.session_id,
+        source: task.source,
+        directory: Instance.directory,
+      })
+      let settleDisposition!: (value: RuntimeExecutionHandoffCancellation | undefined) => void
+      const disposition = new Promise<RuntimeExecutionHandoffCancellation | undefined>((resolve) => {
+        settleDisposition = resolve
+      })
+      let running!: Promise<void>
+      current.inFlight.set(task.id, inFlight)
+      processInFlight.set(task.id, inFlight)
+      running = input.physicalSettlement
+        .then(() => {
+          assertInFlightNotCancelled(task, inFlight)
+          settleDisposition(undefined)
+        })
+        .catch(async (error) => {
+          settleDisposition(await settleExecutionFailure(task, inFlight, error))
+        })
+        .finally(() => {
+          if (current.inFlight.get(task.id)?.promise === running) current.inFlight.delete(task.id)
+          if (processInFlight.get(task.id)?.promise === running) processInFlight.delete(task.id)
+          if (Instance.current() && inFlight.cancellationOrigin?.source !== "process.shutdown") {
+            requestDrain(`recoverable queue execution ${task.id} settled`)
+          }
+        })
+      inFlight.promise = running
+      inFlight.authority.settleWith(running)
+      return disposition
+    },
+    async recoverAt(now: number): Promise<number> {
+      return recover(now)
+    },
+    async waitForRecoveryCancellation(taskID: string): Promise<string> {
+      const deadline = Date.now() + 5_000
+      while (Date.now() < deadline) {
+        const reason = state().inFlight.get(taskID)?.cancellationReason
+        if (reason) return reason
+        await new Promise((resolve) => setTimeout(resolve, 0))
+      }
+      throw new Error(`Queue execution ${taskID} did not receive recovery cancellation`)
+    },
+    completeRunning(taskID: string): boolean {
+      const task = Database.use((db) => db.select().from(TaskQueueTable).where(eq(TaskQueueTable.id, taskID)).get())
+      if (!task) throw new Error(`Queue task not found: ${taskID}`)
+      return complete(task) !== undefined
+    },
+    async failRunning(taskID: string, error: Error): Promise<void> {
+      const task = Database.use((db) => db.select().from(TaskQueueTable).where(eq(TaskQueueTable.id, taskID)).get())
+      if (!task) throw new Error(`Queue task not found: ${taskID}`)
+      await fail(task, error)
     },
   }
 
@@ -263,7 +697,7 @@ export namespace TaskQueueService {
 
   export async function executePrompt(
     raw: { sessionID: string; prompt: unknown; source?: string },
-    hooks?: { beforeLoop?: () => void | Promise<void> },
+    hooks?: { beforeLoop?: (signal?: AbortSignal) => void | Promise<void>; signal?: AbortSignal },
   ) {
     const input = z
       .object({
@@ -287,7 +721,7 @@ export namespace TaskQueueService {
 
   export async function executeCompaction(
     raw: z.input<typeof ExecuteCompactionInput>,
-    hooks?: { beforeLoop?: () => void | Promise<void> },
+    hooks?: { beforeLoop?: (signal?: AbortSignal) => void | Promise<void>; signal?: AbortSignal },
   ) {
     const input = ExecuteCompactionInput.parse(raw)
     const session = await assertSessionLineageInCurrentProject(input.sessionID)
@@ -304,48 +738,18 @@ export namespace TaskQueueService {
     return SessionContext.provide(session, () =>
       provideInitializedProjectExecution({
         directory: session.directory,
+        signal: hooks?.signal,
         fn: async () => {
-          const beforeLoop = hooks?.beforeLoop?.()
+          hooks?.signal?.throwIfAborted()
+          const beforeLoop = hooks?.beforeLoop?.(hooks.signal)
           if (beforeLoop) await beforeLoop
+          hooks?.signal?.throwIfAborted()
           return SessionPrompt.loop(
             input.auto ? { sessionID: input.sessionID } : { sessionID: input.sessionID, result_mode: "summary" },
           )
         },
       }),
     )
-  }
-
-  export function enqueuePrompt(raw: z.input<typeof EnqueuePromptInput>) {
-    const input = EnqueuePromptInput.parse(raw)
-    const id = Identifier.ascending("task")
-    const prompt = stampTaskQueueWakeReason(
-      validateQueuedPromptMaterialization(input.sessionID, promptSchema().parse(input.prompt), "new"),
-      { queueTaskID: id, queueSource: input.source ?? "api" },
-    )
-    const now = Date.now()
-    Database.use((db) =>
-      db
-        .insert(TaskQueueTable)
-        .values({
-          id,
-          session_id: input.sessionID,
-          prompt: firstText(prompt),
-          priority: input.priority ?? "normal",
-          status: "queued",
-          source: input.source ?? "api",
-          metadata: {
-            kind: "session_prompt",
-            input: { ...prompt },
-          },
-          time_created: now,
-          time_updated: now,
-        })
-        .run(),
-    )
-    log.info("task queued", { id, sessionID: input.sessionID, source: input.source ?? "api" })
-    publishQueueChanged({ queueTaskID: id, sessionID: input.sessionID, status: "queued", sequence: now })
-    requestDrain("enqueuePrompt")
-    return id
   }
 
   export function enqueueCompaction(raw: z.input<typeof EnqueueCompactionInput>) {
@@ -359,7 +763,7 @@ export namespace TaskQueueService {
       overflow: input.overflow,
       focus: input.focus,
     })
-    Database.use((db) =>
+    Database.transaction((db) => {
       db
         .insert(TaskQueueTable)
         .values({
@@ -376,8 +780,14 @@ export namespace TaskQueueService {
           time_created: now,
           time_updated: now,
         })
-        .run(),
-    )
+        .run()
+      publishQueueChangedInTransaction({
+        queueTaskID: id,
+        sessionID: input.sessionID,
+        status: "queued",
+        sequence: now,
+      })
+    })
     log.info("compaction task queued", { id, sessionID: input.sessionID, source: input.source ?? "api" })
     requestDrain("enqueueCompaction")
     return id
@@ -390,31 +800,43 @@ export namespace TaskQueueService {
       validateQueuedPromptMaterialization(input.sessionID, promptSchema().parse(input.prompt), "new"),
       { queueTaskID: id, queueSource: input.source ?? "api" },
     )
-    const userMessage = await SessionPrompt.prompt({
-      sessionID: input.sessionID,
-      ...prompt,
-      noReply: true,
-    })
     const now = Date.now()
-    Database.use((db) =>
-      db
-        .insert(TaskQueueTable)
-        .values({
-          id,
-          session_id: input.sessionID,
-          prompt: firstText(prompt),
-          priority: input.priority ?? "normal",
-          status: "queued",
-          source: input.source ?? "api",
-          metadata: {
-            kind: "session_wake",
-            messageID: userMessage.info.id,
-            input: { ...prompt },
-          },
-          time_created: now,
-          time_updated: now,
-        })
-        .run(),
+    const userMessage = await SessionPrompt.prompt(
+      {
+        sessionID: input.sessionID,
+        ...prompt,
+        noReply: true,
+      },
+      {
+        commitBundle: (message) => {
+          Database.use((db) =>
+            db
+              .insert(TaskQueueTable)
+              .values({
+                id,
+                session_id: input.sessionID,
+                prompt: firstText(prompt),
+                priority: input.priority ?? "normal",
+                status: "queued",
+                source: input.source ?? "api",
+                metadata: {
+                  kind: "session_wake",
+                  messageID: message.id,
+                  input: { ...prompt },
+                },
+                time_created: now,
+                time_updated: now,
+              })
+              .run(),
+          )
+          publishQueueChangedInTransaction({
+            queueTaskID: id,
+            sessionID: input.sessionID,
+            status: "queued",
+            sequence: now,
+          })
+        },
+      },
     )
     log.info("task queued after visible user message persisted", {
       id,
@@ -422,7 +844,6 @@ export namespace TaskQueueService {
       messageID: userMessage.info.id,
       source: input.source ?? "api",
     })
-    publishQueueChanged({ queueTaskID: id, sessionID: input.sessionID, status: "queued", sequence: now })
     requestDrain("enqueuePromptAfterPersistingUserMessage")
     return { taskID: id, userMessage }
   }
@@ -437,10 +858,10 @@ export namespace TaskQueueService {
     if (sessionIDs.length === 0) return 0
     const now = Date.now()
     const reason = input.reason
-    const cancelledRows = Database.use((db) => {
+    const cancelledRows = Database.transaction((db) => {
       const where: SQL[] = [inArray(TaskQueueTable.session_id, sessionIDs), eq(TaskQueueTable.status, "queued")]
       if (input.source) where.push(eq(TaskQueueTable.source, input.source))
-      return db
+      const rows = db
         .update(TaskQueueTable)
         .set({
           status: "failed",
@@ -451,12 +872,18 @@ export namespace TaskQueueService {
         .where(and(...where))
         .returning({ id: TaskQueueTable.id, sessionID: TaskQueueTable.session_id })
         .all()
+      for (const row of rows) {
+        publishQueueChangedInTransaction({
+          queueTaskID: row.id,
+          sessionID: row.sessionID,
+          status: "failed",
+          sequence: now,
+        })
+      }
+      return rows
     })
     if (Instance.current()) {
       for (const row of cancelledRows) clearRecoveryTimer(row.id)
-    }
-    for (const row of cancelledRows) {
-      publishQueueChanged({ queueTaskID: row.id, sessionID: row.sessionID, status: "failed", sequence: now })
     }
     const inFlightCancellations = requestInFlightCancellation({
       sessionIDs,
@@ -488,7 +915,6 @@ export namespace TaskQueueService {
   export function failQueuedOrRunning(input: { taskIDs: string[]; reason: string }): number {
     const taskIDs = [...new Set(input.taskIDs.filter((id) => id.length > 0))]
     if (taskIDs.length === 0) return 0
-    const current = Instance.current() ? state() : undefined
     const candidates = Database.use((db) =>
       db
         .select({ id: TaskQueueTable.id, sessionID: TaskQueueTable.session_id, status: TaskQueueTable.status })
@@ -496,16 +922,16 @@ export namespace TaskQueueService {
         .where(and(inArray(TaskQueueTable.id, taskIDs), inArray(TaskQueueTable.status, ["queued", "running"])))
         .all(),
     )
-    const ownedRunning = candidates.filter((row) => row.status === "running" && current?.inFlight.has(row.id))
+    const ownedRunning = candidates.filter((row) => row.status === "running" && processInFlight.has(row.id))
     const immediateIDs = candidates
-      .filter((row) => row.status === "queued" || (current !== undefined && !current.inFlight.has(row.id)))
+      .filter((row) => row.status === "queued" || !processInFlight.has(row.id))
       .map((row) => row.id)
     const now = Date.now()
     const rows =
       immediateIDs.length === 0
         ? []
-        : Database.use((db) =>
-            db
+        : Database.transaction((db) => {
+            const failed = db
               .update(TaskQueueTable)
               .set({
                 status: "failed",
@@ -516,31 +942,25 @@ export namespace TaskQueueService {
               .where(
                 and(inArray(TaskQueueTable.id, immediateIDs), inArray(TaskQueueTable.status, ["queued", "running"])),
               )
-              .returning({ id: TaskQueueTable.id })
-              .all(),
-          )
-    if (current) {
-      const directoryBySession = new Map(
-        Database.use((db) =>
-          db
-            .select({ id: SessionTable.id, directory: SessionTable.directory })
-            .from(SessionTable)
-            .where(
-              inArray(
-                SessionTable.id,
-                ownedRunning.map((row) => row.sessionID),
-              ),
-            )
-            .all(),
-        ).map((session) => [session.id, session.directory]),
-      )
+              .returning({ id: TaskQueueTable.id, sessionID: TaskQueueTable.session_id })
+              .all()
+            for (const row of failed) {
+              publishQueueChangedInTransaction({
+                queueTaskID: row.id,
+                sessionID: row.sessionID,
+                status: "failed",
+                sequence: now,
+              })
+            }
+            return failed
+          })
+    if (Instance.current()) {
       for (const row of rows) clearRecoveryTimer(row.id)
       for (const row of ownedRunning) {
         clearRecoveryTimer(row.id)
-        const inFlight = current.inFlight.get(row.id)
+        const inFlight = processInFlight.get(row.id)
         if (!inFlight) continue
-        inFlight.cancellationReason = input.reason
-        inFlight.cancellationOrigin = createExecutionCancellationOrigin({
+        const origin = createExecutionCancellationOrigin({
           actor: "scheduler",
           source: "task.lifecycle",
           surface: "scheduler",
@@ -549,13 +969,7 @@ export namespace TaskQueueService {
           targetSessionID: row.sessionID,
           queueOccurrenceID: row.id,
         })
-        inFlight.cleanup()
-        const directory = directoryBySession.get(row.sessionID)
-        if (directory && inFlight.promptOwner) {
-          SessionPrompt.cancelOwned(row.sessionID, directory, inFlight.promptOwner, {
-            origin: inFlight.cancellationOrigin,
-          })
-        }
+        requestExecutionCancellation(inFlight, input.reason, origin)
       }
     }
     return rows.length + ownedRunning.length
@@ -565,7 +979,9 @@ export namespace TaskQueueService {
     sessionIDs: string[]
     source?: string
     inactivityTimeoutMs?: number
+    signal?: AbortSignal
   }) {
+    input.signal?.throwIfAborted()
     const sessionIDs = normalizeSessionIDs(input.sessionIDs)
     if (sessionIDs.length === 0) return
     if (!Instance.current()) return
@@ -579,7 +995,8 @@ export namespace TaskQueueService {
     let lastSignature = ""
     let idleDeadline = inactivityTimeoutMs === undefined ? undefined : Date.now() + inactivityTimeoutMs
     while (true) {
-      const running = [...state().inFlight.entries()]
+      input.signal?.throwIfAborted()
+      const running = [...processInFlight.entries()]
         .filter(([, task]) => sessions.has(task.sessionID))
         .filter(([, task]) => !input.source || task.source === input.source)
       if (running.length === 0) {
@@ -598,7 +1015,7 @@ export namespace TaskQueueService {
         )
       }
       if (inactivityTimeoutMs === undefined) {
-        await Promise.all(running.map(([, task]) => task.promise))
+        await awaitWithAbort(Promise.all(running.map(([, task]) => task.promise)), input.signal)
         continue
       }
       const signature = running
@@ -626,10 +1043,13 @@ export namespace TaskQueueService {
           inactivityTimeoutMs,
         )
       }
-      await Promise.race([
-        Promise.allSettled(running.map(([, task]) => task.promise)),
-        new Promise<void>((resolve) => setTimeout(resolve, pollMs)),
-      ])
+      await awaitWithAbort(
+        Promise.race([
+          Promise.allSettled(running.map(([, task]) => task.promise)),
+          new Promise<void>((resolve) => setTimeout(resolve, pollMs)),
+        ]),
+        input.signal,
+      )
     }
   }
 
@@ -645,31 +1065,13 @@ export namespace TaskQueueService {
   }) {
     if (!Instance.current()) return 0
     const sessions = new Set(input.sessionIDs)
-    const liveSessions = Database.use((db) =>
-      db
-        .select({
-          id: SessionTable.id,
-          directory: SessionTable.directory,
-        })
-        .from(SessionTable)
-        .where(inArray(SessionTable.id, input.sessionIDs))
-        .all(),
-    )
-    const directoryBySession = new Map(liveSessions.map((session) => [session.id, session.directory]))
     let cancelled = 0
-    for (const task of state().inFlight.values()) {
+    for (const task of processInFlight.values()) {
       if (!sessions.has(task.sessionID)) continue
       if (input.source && task.source !== input.source) continue
-      task.cancellationReason = input.reason
-      task.cancellationOrigin = { ...input.origin, targetSessionID: task.sessionID }
-      task.cleanup()
+      const origin = { ...input.origin, targetSessionID: task.sessionID }
+      requestExecutionCancellation(task, input.reason, origin)
       cancelled += 1
-      const directory = directoryBySession.get(task.sessionID)
-      if (directory && task.promptOwner) {
-        SessionPrompt.cancelOwned(task.sessionID, directory, task.promptOwner, {
-          origin: task.cancellationOrigin,
-        })
-      }
     }
     return cancelled
   }
@@ -690,69 +1092,157 @@ export namespace TaskQueueService {
   }
 
   async function drainUntilIdle(reason: string) {
+    const directory = Instance.directory
     while (true) {
       const started = await drainReadyTasks(reason)
-      const current = state()
-      const running = [...current.inFlight.values()].map((task) => task.promise)
+      const running = [...processInFlight.values()]
+        .filter((task) => task.directory === directory)
+        .map((task) => task.promise)
       if (started.length === 0 && running.length === 0) return
-      await Promise.allSettled([...started, ...running])
+      await waitForNextDrainSettlement(started, running)
     }
+  }
+
+  function waitForNextDrainSettlement(started: Promise<void>[], running: Promise<void>[]): Promise<void> {
+    const operations = [...new Set([...started, ...running])]
+    return Promise.race(operations.map((operation) => operation.catch(() => undefined)))
   }
 
   async function drainReadyTasks(reason: string) {
     const current = state()
+    if (!current.acceptingDrain) throw new RuntimeExecutionAdmissionClosedError("task_queue")
     if (current.draining) {
       return current.activeDrain ? await current.activeDrain : []
     }
+    const generation = current.generation
     current.draining = true
-    current.activeDrain = run(Date.now(), reason)
+    const activeDrain = run(Date.now(), reason, current, generation)
+    current.activeDrain = activeDrain
+    processActiveDrains.set(activeDrain, { directory: Instance.directory })
+    processSettlementGate?.drains.add(activeDrain)
     try {
-      return await current.activeDrain
+      return await activeDrain
     } finally {
-      current.activeDrain = undefined
-      current.draining = false
+      processActiveDrains.delete(activeDrain)
+      if (current.activeDrain === activeDrain) {
+        current.activeDrain = undefined
+        current.draining = false
+      }
     }
   }
 
-  async function run(now: number, reason: string): Promise<Promise<void>[]> {
-    const current = state()
+  function assertDrainAuthority(current: ReturnType<typeof state>, generation: number): void {
+    if (!current.acceptingDrain || current.generation !== generation) {
+      throw new RuntimeExecutionAdmissionClosedError("task_queue")
+    }
+  }
+
+  async function run(
+    now: number,
+    reason: string,
+    current: ReturnType<typeof state>,
+    generation: number,
+  ): Promise<Promise<void>[]> {
     await recover(now)
+    assertDrainAuthority(current, generation)
     const limit = Math.max(0, concurrency() - current.inFlight.size)
     if (limit === 0) return []
-    const list = await claimReadyTasks(limit)
-    if (list.length === 0) return []
-    log.info("claimed queued tasks", { count: list.length, projectID: Instance.project.id, reason })
-    const started = list.map((task) => {
-      let running!: Promise<void>
-      const inFlight: InFlightTask = {
-        promise: Promise.resolve(),
-        cleanup: () => {},
-        sessionID: task.session_id,
-        source: task.source,
-      }
-      current.inFlight.set(task.id, inFlight)
-      running = execute(task, inFlight)
-        .catch(async (error) => {
+    const started = await claimAndStartReadyTasks(limit, current, generation)
+    if (started.length > 0) {
+      log.info("claimed queued tasks", { count: started.length, projectID: Instance.project.id, reason })
+    }
+    return started
+  }
+
+  function startClaimedExecution(
+    task: QueueTaskRow,
+    inFlight: InFlightTask,
+    current: ReturnType<typeof state>,
+  ): Promise<void> {
+    let running!: Promise<void>
+    current.inFlight.set(task.id, inFlight)
+    processInFlight.set(task.id, inFlight)
+    running = execute(task, inFlight)
+      .catch(async (error) => {
+        try {
+          await settleExecutionFailure(
+            task,
+            inFlight,
+            inFlight.cancellationReason ? new Error(inFlight.cancellationReason) : error,
+          )
+        } catch (failError) {
+          log.error("task failure handler failed", {
+            id: task.id,
+            sessionID: task.session_id,
+            originalError: message(error),
+            error: message(failError),
+          })
+        }
+      })
+      .finally(() => {
+        if (current.inFlight.get(task.id)?.promise === running) {
+          current.inFlight.delete(task.id)
+          if (processInFlight.get(task.id) === inFlight) processInFlight.delete(task.id)
+        }
+        releaseProgressSubscriptionIfIdle(current)
+        if (Instance.current() && inFlight.cancellationOrigin?.source !== "process.shutdown") {
+          requestDrain(`queue execution ${task.id} settled`)
+        }
+      })
+    inFlight.promise = running
+    inFlight.authority.settleWith(running)
+    return running
+  }
+
+  async function claimAndStartReadyTasks(
+    limit: number,
+    current: ReturnType<typeof state>,
+    generation: number,
+  ): Promise<Promise<void>[]> {
+    const started: Promise<void>[] = []
+    while (started.length < limit) {
+      const queued = pending(limit - started.length)
+      if (queued.length === 0) break
+      for (const item of queued) {
+        const valid = await assertSessionLineageInCurrentProject(item.session_id).catch(async (error) => {
+          await failQueued(item.id, item.session_id, error)
+          return undefined
+        })
+        if (!valid) continue
+        await beforeQueueClaimReservationForTest?.(item.id)
+        assertDrainAuthority(current, generation)
+        const inFlight = createInFlightTask({
+          taskID: item.id,
+          sessionID: item.session_id,
+          source: "claim-pending",
+          directory: Instance.directory,
+        })
+        try {
+          inFlight.authority.signal.throwIfAborted()
+          const task = claim(item.id, item.session_id)
+          if (!task) {
+            inFlight.authority.settle()
+            continue
+          }
+          inFlight.source = task.source
+          const running = startClaimedExecution(task, inFlight, current)
           try {
-            await fail(task, inFlight.cancellationReason ? new Error(inFlight.cancellationReason) : error)
-          } catch (failError) {
-            log.error("task failure handler failed", {
+            scheduleRunningRecoveryTimer(task, "claim")
+          } catch (error) {
+            log.error("Task Queue claim recovery timer failed after execution owner binding", {
               id: task.id,
               sessionID: task.session_id,
-              originalError: message(error),
-              error: message(failError),
+              error: message(error),
             })
           }
-        })
-        .finally(() => {
-          if (current.inFlight.get(task.id)?.promise === running) {
-            current.inFlight.delete(task.id)
-          }
-          releaseProgressSubscriptionIfIdle(current)
-        })
-      inFlight.promise = running
-      return running
-    })
+          started.push(running)
+        } catch (error) {
+          inFlight.authority.settle()
+          throw error
+        }
+        if (started.length >= limit) break
+      }
+    }
     return started
   }
 
@@ -760,6 +1250,9 @@ export namespace TaskQueueService {
     limit: number,
     validateSession: (sessionID: string) => Promise<Session.Info> = assertSessionLineageInCurrentProject,
   ): Promise<QueueTaskRow[]> {
+    const current = state()
+    const generation = current.generation
+    assertDrainAuthority(current, generation)
     const list: Array<typeof TaskQueueTable.$inferSelect> = []
     while (list.length < limit) {
       const queued = pending(limit - list.length)
@@ -770,6 +1263,7 @@ export namespace TaskQueueService {
           return undefined
         })
         if (!valid) continue
+        assertDrainAuthority(current, generation)
         const task = claim(item.id, item.session_id)
         if (!task) continue
         list.push(task)
@@ -789,6 +1283,12 @@ export namespace TaskQueueService {
   }
 
   function pending(limit: number) {
+    const now = Date.now()
+    const priorityRank = effectivePriorityRank(
+      sql`${TaskQueueTable.priority}`,
+      sql`${TaskQueueTable.time_created}`,
+      now,
+    )
     return Database.use((db) =>
       db
         .select({
@@ -809,15 +1309,10 @@ export namespace TaskQueueService {
               WHERE running.session_id = ${TaskQueueTable.session_id}
                 AND running.status = 'running'
             )
-            AND ${isBestQueuedTaskForSession()}`,
+            AND ${isBestQueuedTaskForSession(now)}`,
         )
         .orderBy(
-          sql`CASE ${TaskQueueTable.priority}
-            WHEN 'high' THEN 0
-            WHEN 'normal' THEN 1
-            WHEN 'low' THEN 2
-            ELSE 3
-          END`,
+          priorityRank,
           TaskQueueTable.time_created,
           TaskQueueTable.id,
         )
@@ -854,47 +1349,45 @@ export namespace TaskQueueService {
               FROM ${SessionTable}
               WHERE ${SessionTable.project_id} = ${Instance.project.id}
             )
-            AND ${isBestQueuedTaskForSession()}`,
+            AND ${isBestQueuedTaskForSession(now)}`,
         )
         .returning()
         .get(),
     )
-    if (task) scheduleRunningRecoveryTimer(task, "claim")
     return task
   }
 
-  function isBestQueuedTaskForSession(): SQL {
+  function effectivePriorityRank(priority: SQL, timeCreated: SQL, now: number): SQL {
+    const normalPromotionAt = now - 30_000
+    const lowNormalPromotionAt = now - 30_000
+    const lowHighPromotionAt = now - 60_000
+    return sql`CASE
+      WHEN ${priority} = 'high' THEN 0
+      WHEN ${priority} = 'normal' AND ${timeCreated} <= ${normalPromotionAt} THEN 0
+      WHEN ${priority} = 'normal' THEN 1
+      WHEN ${priority} = 'low' AND ${timeCreated} <= ${lowHighPromotionAt} THEN 0
+      WHEN ${priority} = 'low' AND ${timeCreated} <= ${lowNormalPromotionAt} THEN 1
+      WHEN ${priority} = 'low' THEN 2
+      ELSE 3
+    END`
+  }
+
+  function isBestQueuedTaskForSession(now: number): SQL {
+    const betterRank = effectivePriorityRank(sql`better.priority`, sql`better.time_created`, now)
+    const currentRank = effectivePriorityRank(
+      sql`${TaskQueueTable.priority}`,
+      sql`${TaskQueueTable.time_created}`,
+      now,
+    )
     return sql`NOT EXISTS (
       SELECT 1
       FROM a2a_task_queue better
       WHERE better.session_id = ${TaskQueueTable.session_id}
         AND better.status = 'queued'
         AND (
-          CASE better.priority
-            WHEN 'high' THEN 0
-            WHEN 'normal' THEN 1
-            WHEN 'low' THEN 2
-            ELSE 3
-          END
-            < CASE ${TaskQueueTable.priority}
-                WHEN 'high' THEN 0
-                WHEN 'normal' THEN 1
-                WHEN 'low' THEN 2
-                ELSE 3
-              END
+          ${betterRank} < ${currentRank}
           OR (
-            CASE better.priority
-              WHEN 'high' THEN 0
-              WHEN 'normal' THEN 1
-              WHEN 'low' THEN 2
-              ELSE 3
-            END
-              = CASE ${TaskQueueTable.priority}
-                  WHEN 'high' THEN 0
-                  WHEN 'normal' THEN 1
-                  WHEN 'low' THEN 2
-                  ELSE 3
-                END
+            ${betterRank} = ${currentRank}
             AND (
               better.time_created < ${TaskQueueTable.time_created}
               OR (
@@ -924,8 +1417,17 @@ export namespace TaskQueueService {
         ) {
           return
         }
-        for (const task of current.inFlight.values()) {
-          if (task.progressSessionIDs?.has(info.parentID)) task.progressSessionIDs.add(info.id)
+        for (const [taskID, task] of current.inFlight) {
+          if (!task.progressSessionIDs?.has(info.parentID)) continue
+          task.progressSessionIDs.add(info.id)
+          void runTaskQueueOwner(input.directory, async () => touch(taskID)).catch((error) => {
+            log.warn("task child Session creation touch failed", {
+              id: taskID,
+              sessionID: task.sessionID,
+              childSessionID: info.id,
+              error: message(error),
+            })
+          })
         }
         return
       }
@@ -995,10 +1497,7 @@ export namespace TaskQueueService {
       inFlight.progressSessionIDs = undefined
     }
     inFlight.cleanup = cleanup
-    const beforeLoop = () => {
-      SessionPrompt.capturePromptOwner(task.session_id, queueDirectory)
-      assertInFlightNotCancelled(task, inFlight)
-    }
+    const beforeLoop = () => enterQueuePromptLoop(task, inFlight, queueDirectory)
     try {
       assertInFlightNotCancelled(task, inFlight)
       await SessionPrompt.withPromptOwnerCapture(
@@ -1012,20 +1511,10 @@ export namespace TaskQueueService {
         },
         async () => {
           let result: Message.WithParts
-          if (metadata.data.kind === "session_prompt") {
-            result = await executeStoredPrompt(
-              {
-                sessionID: task.session_id,
-                prompt: metadata.data.input,
-                source: "task-queue-service",
-              },
-              {
-                beforeLoop,
-              },
-            )
-          } else if (metadata.data.kind === "session_wake") {
+          if (metadata.data.kind === "session_wake") {
             result = await executeSessionWake(task.session_id, metadata.data.messageID, {
               beforeLoop,
+              signal: inFlight.authority.signal,
             })
           } else {
             result = await executeCompaction(
@@ -1035,6 +1524,7 @@ export namespace TaskQueueService {
               },
               {
                 beforeLoop,
+                signal: inFlight.authority.signal,
               },
             )
           }
@@ -1066,40 +1556,30 @@ export namespace TaskQueueService {
     }
     cleanup()
     const now = Date.now()
-    const completed = Database.use((db) =>
-      db
-        .update(TaskQueueTable)
-        .set({
-          status: "completed",
-          time_completed: now,
-          error_message: null,
-          time_updated: now,
-        })
-        .where(and(eq(TaskQueueTable.id, task.id), eq(TaskQueueTable.status, "running")))
-        .returning({ id: TaskQueueTable.id })
-        .get(),
-    )
+    const completed = complete(task, now)
     if (!completed) {
       log.info("task finished after queue row was no longer running", { id: task.id, sessionID: task.session_id })
       return
     }
     clearRecoveryTimer(task.id)
     log.info("task completed", { id: task.id, sessionID: task.session_id })
-    await publishTaskQueueCompleted(task.id, task.session_id)
   }
 
   async function executeSessionWake(
     sessionID: string,
     messageID: string,
-    hooks?: { beforeLoop?: () => void | Promise<void> },
+    hooks?: { beforeLoop?: (signal?: AbortSignal) => void | Promise<void>; signal?: AbortSignal },
   ) {
     const session = await assertSessionLineageInCurrentProject(sessionID)
     return SessionContext.provide(session, () =>
       provideInitializedProjectExecution({
         directory: session.directory,
+        signal: hooks?.signal,
         fn: async () => {
-          const beforeLoop = hooks?.beforeLoop?.()
+          hooks?.signal?.throwIfAborted()
+          const beforeLoop = hooks?.beforeLoop?.(hooks.signal)
           if (beforeLoop) await beforeLoop
+          hooks?.signal?.throwIfAborted()
           return SessionPrompt.loop({ sessionID, reply_to_message_id: messageID })
         },
       }),
@@ -1137,7 +1617,7 @@ export namespace TaskQueueService {
         return undefined
       })
       if (!session) continue
-      const inFlight = state().inFlight.get(task.id)
+      const inFlight = processInFlight.get(task.id)
       const cancellationReason = "task timed out while running"
       const cancellationOrigin = createExecutionCancellationOrigin({
         actor: "scheduler",
@@ -1148,20 +1628,34 @@ export namespace TaskQueueService {
         targetSessionID: session.id,
         queueOccurrenceID: task.id,
       })
+      const promptCancelled = Boolean(inFlight?.promptOwner)
       if (inFlight) {
-        inFlight.cancellationReason = cancellationReason
-        inFlight.cancellationOrigin = cancellationOrigin
-      }
-      const promptCancelled = inFlight?.promptOwner
-        ? await terminateOwnedSessionPromptInScope({
-            session,
-            owner: inFlight.promptOwner,
-            origin: cancellationOrigin,
-            handle: "TaskQueueService.recover",
+        requestExecutionCancellation(inFlight, cancellationReason, cancellationOrigin)
+        // The persisted running claim remains the concurrency authority until
+        // the exact physical executor (including prompt cleanup and failure
+        // publication) has settled.  Releasing it here would let the next row
+        // for the same Session start while the cancelled executor still owns
+        // resources.
+        void inFlight.promise
+          .then(() => {
+            clearRecoveryTimer(task.id)
+            log.warn("settled stale running task after inactivity cancellation", {
+              id: task.id,
+              sessionID: task.session_id,
+              promptCancelled,
+            })
           })
-        : false
-      const failed = Database.use((db) =>
-        db
+          .catch((error) => {
+            log.error("stale running task settlement observer failed", {
+              id: task.id,
+              sessionID: task.session_id,
+              error: message(error),
+            })
+          })
+        continue
+      }
+      const failed = Database.transaction((db) => {
+        const row = db
           .update(TaskQueueTable)
           .set({
             status: "failed",
@@ -1171,8 +1665,17 @@ export namespace TaskQueueService {
           })
           .where(and(eq(TaskQueueTable.id, task.id), eq(TaskQueueTable.status, "running")))
           .returning({ id: TaskQueueTable.id })
-          .get(),
-      )
+          .get()
+        if (row) {
+          publishQueueChangedInTransaction({
+            queueTaskID: task.id,
+            sessionID: task.session_id,
+            status: "failed",
+            sequence: now,
+          })
+        }
+        return row
+      })
       if (!failed) continue
       recovered += 1
       clearRecoveryTimer(task.id)
@@ -1185,10 +1688,6 @@ export namespace TaskQueueService {
         sessionID: task.session_id,
         promptCancelled,
       })
-      if (inFlight) {
-        inFlight.cleanup()
-        state().inFlight.delete(task.id)
-      }
     }
     return recovered
   }
@@ -1214,12 +1713,12 @@ export namespace TaskQueueService {
         )
         .all(),
     )
-    const ownerless = rows.filter((row) => !current.inFlight.has(row.id))
+    const ownerless = rows.filter((row) => !processInFlight.has(row.id))
     if (ownerless.length === 0) return 0
     const ids = ownerless.map((row) => row.id)
     const now = Date.now()
-    const released = Database.use((db) =>
-      db
+    const released = Database.transaction((db) => {
+      const rows = db
         .update(TaskQueueTable)
         .set({
           status: "queued",
@@ -1230,8 +1729,18 @@ export namespace TaskQueueService {
         })
         .where(and(inArray(TaskQueueTable.id, ids), eq(TaskQueueTable.status, "running")))
         .returning({ id: TaskQueueTable.id })
-        .all(),
-    )
+        .all()
+      for (const row of ownerless) {
+        if (!rows.some((releasedRow) => releasedRow.id === row.id)) continue
+        publishQueueChangedInTransaction({
+          queueTaskID: row.id,
+          sessionID: row.sessionID,
+          status: "queued",
+          sequence: now,
+        })
+      }
+      return rows
+    })
     for (const row of released) clearRecoveryTimer(row.id)
     if (released.length > 0) {
       log.warn("released ownerless persisted queue claims after runtime restart", {
@@ -1245,21 +1754,71 @@ export namespace TaskQueueService {
     return Session.assertLineageInProject({ sessionID, projectID: Instance.project.id })
   }
 
-  async function fail(task: QueueTaskRow, error: unknown) {
-    const now = Date.now()
-    const failed = Database.use((db) =>
-      db
+  function complete(task: Pick<QueueTaskRow, "id" | "session_id">, now = Date.now()) {
+    return Database.transaction((db) => {
+      const row = db
         .update(TaskQueueTable)
         .set({
-          status: "failed",
+          status: "completed",
           time_completed: now,
-          error_message: message(error),
+          error_message: null,
           time_updated: now,
         })
         .where(and(eq(TaskQueueTable.id, task.id), eq(TaskQueueTable.status, "running")))
         .returning({ id: TaskQueueTable.id })
-        .get(),
-    )
+        .get()
+      if (row) {
+        Bus.publishOwnedInTransaction(TaskQueueEvent.Completed, {
+          queueTaskID: task.id,
+          sessionID: task.session_id,
+        })
+      }
+      return row
+    })
+  }
+
+  async function fail(task: QueueTaskRow, error: unknown) {
+    const now = Date.now()
+    const errorMessage = message(error)
+    const publishTerminal = SessionStatus.get(task.session_id).type !== "terminal"
+    const occurrence = publishTerminal ? SessionStatus.executionOccurrence(task.session_id) : undefined
+    const terminalStatus = { type: "terminal", reason: "error", error: errorMessage } as const
+    const failed = Database.transaction((db) => {
+      const row = db
+        .update(TaskQueueTable)
+        .set({
+          status: "failed",
+          time_completed: now,
+          error_message: errorMessage,
+          time_updated: now,
+        })
+        .where(and(eq(TaskQueueTable.id, task.id), eq(TaskQueueTable.status, "running")))
+        .returning({ id: TaskQueueTable.id })
+        .get()
+      if (!row) return undefined
+      publishQueueChangedInTransaction({
+        queueTaskID: task.id,
+        sessionID: task.session_id,
+        status: "failed",
+        sequence: now,
+      })
+      if (publishTerminal) {
+        Bus.publishOwnedInTransaction(Session.Event.Error, {
+          sessionID: task.session_id,
+          orderKey: sessionLifecycleOrderKey(task.session_id),
+          error: new NamedError.Unknown({ message: errorMessage }).toObject(),
+        })
+        if (occurrence) {
+          Bus.publishOwnedInTransaction(SessionStatus.Event.Status, {
+            sessionID: task.session_id,
+            inputMessageID: occurrence.inputMessageID,
+            orderKey: executionLifecycleOrderKey(task.session_id, occurrence.inputMessageID),
+            status: terminalStatus,
+          })
+        }
+      }
+      return row
+    })
     if (!failed) {
       log.info("task failed after queue row was no longer running", {
         id: task.id,
@@ -1269,33 +1828,11 @@ export namespace TaskQueueService {
       return
     }
     clearRecoveryTimer(task.id)
-    if (SessionStatus.get(task.session_id).type !== "terminal") {
-      const errorMessage = message(error)
-      const publications = await Promise.allSettled([
-        Promise.resolve().then(() =>
-          Bus.publish(Session.Event.Error, {
-            sessionID: task.session_id,
-            orderKey: sessionLifecycleOrderKey(task.session_id),
-            error: new NamedError.Unknown({ message: errorMessage }).toObject(),
-          }),
-        ),
-        Promise.resolve().then(() =>
-          SessionStatus.set(task.session_id, {
-            type: "terminal",
-            reason: "error",
-            error: errorMessage,
-          }),
-        ),
-      ])
-      const publicationFailures = publications.flatMap((result) =>
-        result.status === "rejected" ? [result.reason] : [],
-      )
-      if (publicationFailures.length > 0) {
-        throw new AggregateError(
-          publicationFailures,
-          `Queue task ${task.id} terminal publication failed for ${publicationFailures.length} owner(s)`,
-        )
-      }
+    if (publishTerminal && occurrence) {
+      await SessionStatus.set(task.session_id, terminalStatus, {
+        publish: false,
+        inputMessageID: occurrence.inputMessageID,
+      })
     }
     log.error("task failed", {
       id: task.id,
@@ -1304,10 +1841,60 @@ export namespace TaskQueueService {
     })
   }
 
+  async function settleExecutionFailure(
+    task: QueueTaskRow,
+    inFlight: InFlightTask,
+    error: unknown,
+  ): Promise<RuntimeExecutionHandoffCancellation | undefined> {
+    if (inFlight.cancellationOrigin?.source !== "process.shutdown") {
+      await fail(task, error)
+      return undefined
+    }
+    const handoff = new RuntimeExecutionHandoffCancellation(
+      task.id,
+      task.id,
+      inFlight.cancellationOrigin.reason,
+    )
+    const now = Date.now()
+    const resumed = Database.transaction((db) => {
+      const row = db
+        .update(TaskQueueTable)
+        .set({
+          status: "queued",
+          time_started: null,
+          time_completed: null,
+          error_message: null,
+          time_updated: now,
+        })
+        .where(and(eq(TaskQueueTable.id, task.id), eq(TaskQueueTable.status, "running")))
+        .returning({ id: TaskQueueTable.id })
+        .get()
+      if (row) {
+        publishQueueChangedInTransaction({
+          queueTaskID: task.id,
+          sessionID: task.session_id,
+          status: "queued",
+          sequence: now,
+        })
+      }
+      return row
+    })
+    if (!resumed) return handoff
+    clearRecoveryTimer(task.id)
+    runtimeRequeuedDirectories.add(inFlight.directory)
+    captureProcessRollbackTask("requeued", inFlight.directory, task.id)
+    log.info("returned Task Queue execution to resumable state after runtime handoff", {
+      id: task.id,
+      sessionID: task.session_id,
+      disposition: handoff.name,
+    })
+    return handoff
+  }
+
   async function failQueued(id: string, sessionID: string, error: unknown) {
     const now = Date.now()
-    const failed = Database.use((db) =>
-      db
+    const failed = Database.transaction((db) => {
+      const row = db
         .update(TaskQueueTable)
         .set({
           status: "failed",
@@ -1317,24 +1904,18 @@ export namespace TaskQueueService {
         })
         .where(and(eq(TaskQueueTable.id, id), eq(TaskQueueTable.status, "queued")))
         .returning({ id: TaskQueueTable.id })
-        .get(),
-    )
+        .get()
+      if (row) {
+        publishQueueChangedInTransaction({ queueTaskID: id, sessionID, status: "failed", sequence: now })
+      }
+      return row
+    })
     if (!failed) return
     clearRecoveryTimer(id)
     log.error("queued task rejected before claim", {
       id,
       sessionID,
       error: message(error),
-    })
-  }
-
-  async function publishTaskQueueCompleted(queueTaskID: string, sessionID: string) {
-    await Bus.publish(TaskQueueEvent.Completed, { queueTaskID, sessionID }).catch((error) => {
-      log.warn("task queue completed publish failed", {
-        queueTaskID,
-        sessionID,
-        error: message(error),
-      })
     })
   }
 
@@ -1373,6 +1954,7 @@ export namespace TaskQueueService {
   function scheduleRunningRecoveryTimer(task: QueueTaskRow, reason: string) {
     const directory = Instance.directory
     const current = state()
+    const authority = RuntimeExecutionSettlement.reserve("task_queue", `queue-recovery-timer:${task.id}`)
     const token = current.recoveryTimerSequence + 1
     current.recoveryTimerSequence = token
     current.recoveryTimerTokens.set(task.id, token)
@@ -1381,17 +1963,31 @@ export namespace TaskQueueService {
       clearTimeout(existing)
       current.recoveryTimers.delete(task.id)
     }
+    current.recoveryAuthorities.get(task.id)?.settle()
+    current.recoveryAuthorities.set(task.id, authority)
+    authority.onCancel(() => {
+      if (current.recoveryTimerTokens.get(task.id) !== token) return
+      interruptedRecoveryTimers.set(task.id, { task, directory })
+      captureProcessRollbackTask("recovery", directory, task.id)
+      const timer = current.recoveryTimers.get(task.id)
+      if (timer) clearTimeout(timer)
+      current.recoveryTimers.delete(task.id)
+      current.recoveryTimerTokens.delete(task.id)
+      if (current.recoveryAuthorities.get(task.id) === authority) current.recoveryAuthorities.delete(task.id)
+      authority.settle()
+    })
     void runAsInstanceActivity(async () => {
       const timeout = await runTimeout()
       if (state().recoveryTimerTokens.get(task.id) !== token) return
       const anchor = task.time_updated ?? task.time_started ?? Date.now()
       const delay = Math.max(0, anchor + timeout - Date.now())
       const timer = setTimeout(() => {
-        void runTaskQueueOwner(directory, async () => {
+        const operation = runTaskQueueOwner(directory, async () => {
           const latest = state()
           if (latest.recoveryTimerTokens.get(task.id) !== token) return
           latest.recoveryTimers.delete(task.id)
           latest.recoveryTimerTokens.delete(task.id)
+          if (latest.recoveryAuthorities.get(task.id) === authority) latest.recoveryAuthorities.delete(task.id)
           try {
             const recovered = await recover(Date.now())
             if (recovered > 0) await drainUntilIdle("task inactivity timeout")
@@ -1415,7 +2011,9 @@ export namespace TaskQueueService {
             reason,
             error: message(error),
           })
+          scheduleRecoveryControlRetry(task, directory, "task inactivity recovery owner failed")
         })
+        authority.settleWith(operation)
       }, delay)
       timer.unref()
       const latest = state()
@@ -1425,13 +2023,59 @@ export namespace TaskQueueService {
       }
       latest.recoveryTimers.set(task.id, timer)
     }).catch((error) => {
+      const latest = state()
+      if (latest.recoveryAuthorities.get(task.id) === authority) latest.recoveryAuthorities.delete(task.id)
+      authority.settle()
       log.error("task inactivity timer scheduling failed", {
         id: task.id,
         directory,
         reason,
         error: message(error),
       })
+      scheduleRecoveryControlRetry(task, directory, "task inactivity timer scheduling failed")
     })
+  }
+
+  function scheduleRecoveryControlRetry(task: QueueTaskRow, directory: string, reason: string) {
+    const current = state()
+    const authority = RuntimeExecutionSettlement.reserve("task_queue", `queue-recovery-control:${task.id}`)
+    const token = current.recoveryTimerSequence + 1
+    current.recoveryTimerSequence = token
+    current.recoveryTimerTokens.set(task.id, token)
+    const existing = current.recoveryTimers.get(task.id)
+    if (existing) clearTimeout(existing)
+    current.recoveryAuthorities.get(task.id)?.settle()
+    current.recoveryAuthorities.set(task.id, authority)
+    authority.onCancel(() => {
+      if (current.recoveryTimerTokens.get(task.id) !== token) return
+      interruptedRecoveryTimers.set(task.id, { task, directory })
+      captureProcessRollbackTask("recovery", directory, task.id)
+      const timer = current.recoveryTimers.get(task.id)
+      if (timer) clearTimeout(timer)
+      current.recoveryTimers.delete(task.id)
+      current.recoveryTimerTokens.delete(task.id)
+      if (current.recoveryAuthorities.get(task.id) === authority) current.recoveryAuthorities.delete(task.id)
+      authority.settle()
+    })
+    const timer = setTimeout(() => {
+      const latest = state()
+      if (latest.recoveryTimerTokens.get(task.id) !== token) return
+      latest.recoveryTimers.delete(task.id)
+      latest.recoveryTimerTokens.delete(task.id)
+      if (latest.recoveryAuthorities.get(task.id) === authority) latest.recoveryAuthorities.delete(task.id)
+      const operation = runTaskQueueOwner(directory, () => scheduleRunningRecoveryRetry(task, reason)).catch((error) => {
+        log.error("task inactivity recovery retry owner failed", {
+          id: task.id,
+          directory,
+          reason,
+          error: message(error),
+        })
+        scheduleRecoveryControlRetry(task, directory, reason)
+      })
+      authority.settleWith(operation)
+    }, RECOVERY_CONTROL_RETRY_MS)
+    timer.unref()
+    current.recoveryTimers.set(task.id, timer)
   }
 
   function scheduleRunningRecoveryRetry(task: QueueTaskRow, reason: string) {
@@ -1448,6 +2092,9 @@ export namespace TaskQueueService {
     if (timer) clearTimeout(timer)
     current.recoveryTimers.delete(taskID)
     current.recoveryTimerTokens.delete(taskID)
+    current.recoveryAuthorities.get(taskID)?.settle()
+    current.recoveryAuthorities.delete(taskID)
+    interruptedRecoveryTimers.delete(taskID)
   }
 
   async function runTimeout() {
@@ -1459,7 +2106,10 @@ export namespace TaskQueueService {
   }
 
   async function runTaskQueueOwner<R>(directory: string, fn: () => R): Promise<Awaited<R>> {
-    return await runWithIndependentProjectIdentity({ directory, fn })
+    const authority = RuntimeExecutionSettlement.reserve("task_queue", `queue-control:${directory}`)
+    const operation = runWithIndependentProjectIdentity({ directory, fn })
+    authority.settleWith(operation)
+    return await operation
   }
 }
 
@@ -1513,22 +2163,6 @@ function validateQueuedPromptMaterialization<T extends z.infer<ReturnType<typeof
     ...prompt,
     byteMaterializationProjectID: row.projectID,
   }
-}
-
-async function executeStoredPrompt(
-  input: { sessionID: string; prompt: unknown; source?: string },
-  hooks?: { beforeLoop?: () => void | Promise<void> },
-) {
-  const prompt = stampTaskQueueWakeReason(
-    validateQueuedPromptMaterialization(input.sessionID, promptSchema().parse(input.prompt), "stored"),
-    { queueSource: input.source },
-  )
-  const promptInput = {
-    sessionID: input.sessionID,
-    ...prompt,
-  }
-  if (hooks) return SessionPrompt.prompt(promptInput, hooks)
-  return SessionPrompt.prompt(promptInput)
 }
 
 function stampTaskQueueWakeReason<T extends z.infer<ReturnType<typeof promptSchema>>>(

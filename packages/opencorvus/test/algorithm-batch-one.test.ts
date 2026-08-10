@@ -12,6 +12,8 @@ import { memoryProject } from "./fixture/memory"
 import { Instance } from "../src/project/instance"
 import { Worktree } from "../src/worktree"
 import { Session } from "../src/session"
+import { createExecutionCancellationOrigin } from "../src/session/prompt/cancellation"
+import * as ManagedSessionOwner from "../src/worktree/managed-session-owner"
 import {
   assertSessionPromptSubtreeFinished,
   requestSessionPromptSubtreeCancellation,
@@ -124,6 +126,25 @@ describe("worktree ownership critical section", () => {
       expect(await Ownership.Worktree.hasLiveOwner({ primaryWorktreeDir: root, worktreeDir })).toBe(true)
     } finally {
       await rm(root, { recursive: true, force: true })
+    }
+  })
+
+  test("binds reentrant project Git leases to one canonical project authority", async () => {
+    const first = await mkdtemp(path.join(os.tmpdir(), "opencorvus-git-lease-a-"))
+    const second = await mkdtemp(path.join(os.tmpdir(), "opencorvus-git-lease-b-"))
+    try {
+      await ProjectGitLock.withLease({ projectID: "project-a", primaryWorktreeDir: first }, async (outer) => {
+        await ProjectGitLock.withLease({ projectID: "project-a", primaryWorktreeDir: first }, async (inner) => {
+          expect(inner.owner.token).toBe(outer.owner.token)
+          expect(path.resolve(inner.lockPath)).toBe(path.resolve(outer.lockPath))
+        })
+        await expect(
+          ProjectGitLock.withLease({ projectID: "project-b", primaryWorktreeDir: second }, async () => undefined),
+        ).rejects.toThrow("nested lock authority differs")
+      })
+    } finally {
+      await rm(first, { recursive: true, force: true })
+      await rm(second, { recursive: true, force: true })
     }
   })
 
@@ -258,6 +279,54 @@ describe("prompt ownership termination", () => {
         (entry) => entry.marker.cwd === managedWorktreeDir && entry.marker.sessionID === sessionID,
       ),
     ).toEqual([])
+  })
+
+  test("retries the exact managed-worktree cleanup receipt after a transient owner-release failure", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const taskID = Identifier.ascending("task")
+        const sessionID = Identifier.ascending("session")
+        const worktree = await Worktree.create({ name: `retry-owner-${taskID.slice(-8)}`, taskID, sessionID })
+        SessionPromptState.start(sessionID, worktree.directory)
+        const owner = SessionPromptState.promptOwner(sessionID)!
+        const receipt = SessionPromptState.cancelOwned(sessionID, worktree.directory, owner, {
+          origin: createExecutionCancellationOrigin({
+            actor: "runtime",
+            source: "runtime.prompt_owner",
+            surface: "agent",
+            requestID: sessionID,
+            reason: "settle managed worktree cleanup",
+            targetSessionID: sessionID,
+            taskID,
+          }),
+        })!
+        const releaseOwner = ManagedSessionOwner.releaseManagedWorktreeSessionOwner
+        let attempts = 0
+        const release = spyOn(ManagedSessionOwner, "releaseManagedWorktreeSessionOwner").mockImplementation(
+          async (authority) => {
+            attempts += 1
+            if (attempts === 1) throw new Error("injected transient managed owner release failure")
+            await releaseOwner(authority)
+          },
+        )
+        try {
+          await expect(SessionPromptState.finish(sessionID, owner, worktree.directory)).rejects.toThrow(
+            "injected transient managed owner release failure",
+          )
+          const retried = SessionPromptState.cancellationReceipt(sessionID, worktree.directory, owner)!
+          await retried.finished
+          SessionPromptState.clearCancellationReceipt(sessionID, owner)
+          expect({ attempts, outcome: retried.outcome }).toMatchObject({
+            attempts: 2,
+            outcome: "succeeded",
+          })
+        } finally {
+          release.mockRestore()
+        }
+      },
+    })
   })
 
   test("releases the complete prompt resource set idempotently", async () => {

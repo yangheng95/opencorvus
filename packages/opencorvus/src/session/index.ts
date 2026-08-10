@@ -338,7 +338,7 @@ export namespace Session {
 
   export const touch = fn(Identifier.schema("session"), async (sessionID) => {
     const now = Date.now()
-    Database.use((db) => {
+    Database.transaction((db) => {
       const row = db
         .update(SessionTable)
         .set({ time_updated: now })
@@ -347,7 +347,7 @@ export namespace Session {
         .get()
       if (!row) throw new NotFoundError({ message: `Session not found: ${sessionID}` })
       const info = fromRow(row)
-      Database.effect(() => Bus.publish(Event.Updated, { info }))
+      Bus.publishOwnedInTransaction(Event.Updated, { info })
     })
   })
 
@@ -391,15 +391,11 @@ export namespace Session {
    * Creation and update events are post-commit effects, so a rolled-back
    * authority bundle never exposes a physical Session to observers. */
   export function persistPreparedNext(result: Info): Info {
-    Database.use((db) => {
+    Database.transaction((db) => {
       db.insert(SessionTable).values(toRow(result)).run()
-      Database.effect(() => {
-        log.info("created", result)
-        return Bus.publish(Event.Created, {
-          info: result,
-        })
-      })
-      Database.effect(() => Bus.publish(Event.Updated, { info: result }))
+      log.info("created", result)
+      Bus.publishOwnedInTransaction(Event.Created, { info: result })
+      Bus.publishOwnedInTransaction(Event.Updated, { info: result })
     })
     return result
   }
@@ -454,7 +450,7 @@ export namespace Session {
       title: z.string(),
     }),
     async (input) => {
-      return Database.use((db) => {
+      return Database.transaction((db) => {
         const row = db
           .update(SessionTable)
           .set({ title: input.title, time_updated: Date.now() })
@@ -463,7 +459,7 @@ export namespace Session {
           .get()
         if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
         const info = fromRow(row)
-        Database.effect(() => Bus.publish(Event.Updated, { info }))
+        Bus.publishOwnedInTransaction(Event.Updated, { info })
         return info
       })
     },
@@ -535,7 +531,7 @@ export namespace Session {
       .returning()
       .get()!
     const info = fromRow(updated)
-    Database.effect(() => Bus.publish(Event.Updated, { info }))
+    Bus.publishOwnedInTransaction(Event.Updated, { info })
     return info
   }
 
@@ -653,8 +649,8 @@ export namespace Session {
             .returning()
             .get()!
           const info = fromRow(updated)
-          Database.effect(() => Bus.publish(Event.Updated, { info }))
-          Database.effect(() => Bus.publish(Event.ConfigChanged, { sessionID: input.sessionID }))
+          Bus.publishOwnedInTransaction(Event.Updated, { info })
+          Bus.publishOwnedInTransaction(Event.ConfigChanged, { sessionID: input.sessionID })
           return info
         })
       })
@@ -671,7 +667,7 @@ export namespace Session {
       time: z.number().nullable(),
     }),
     async (input) => {
-      return Database.use((db) => {
+      return Database.transaction((db) => {
         const row = db
           .update(SessionTable)
           .set({ time_archived: input.time, time_updated: Date.now() })
@@ -680,7 +676,7 @@ export namespace Session {
           .get()
         if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
         const info = fromRow(row)
-        Database.effect(() => Bus.publish(Event.Updated, { info }))
+        Bus.publishOwnedInTransaction(Event.Updated, { info })
         return info
       })
     },
@@ -692,7 +688,7 @@ export namespace Session {
       time: z.number().nullable(),
     }),
     async (input) => {
-      return Database.use((db) => {
+      return Database.transaction((db) => {
         const row = db
           .update(SessionTable)
           .set({
@@ -704,7 +700,7 @@ export namespace Session {
           .get()
         if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
         const info = fromRow(row)
-        Database.effect(() => Bus.publish(Event.Updated, { info }))
+        Bus.publishOwnedInTransaction(Event.Updated, { info })
         return info
       })
     },
@@ -716,7 +712,7 @@ export namespace Session {
       permission: PermissionNext.Ruleset,
     }),
     async (input) => {
-      return Database.use((db) => {
+      return Database.transaction((db) => {
         const row = db
           .update(SessionTable)
           .set({ permission: input.permission, time_updated: Date.now() })
@@ -725,7 +721,7 @@ export namespace Session {
           .get()
         if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
         const info = fromRow(row)
-        Database.effect(() => Bus.publish(Event.Updated, { info }))
+        Bus.publishOwnedInTransaction(Event.Updated, { info })
         return info
       })
     },
@@ -737,7 +733,7 @@ export namespace Session {
       summary: Info.shape.summary,
     }),
     async (input) => {
-      return Database.use((db) => {
+      return Database.transaction((db) => {
         const row = db
           .update(SessionTable)
           .set({
@@ -751,7 +747,7 @@ export namespace Session {
           .get()
         if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
         const info = fromRow(row)
-        Database.effect(() => Bus.publish(Event.Updated, { info }))
+        Bus.publishOwnedInTransaction(Event.Updated, { info })
         return info
       })
     },
@@ -1107,7 +1103,7 @@ export namespace Session {
       await removeSessionTree({ sessionID: child.id, projectID, publishDeleted })
     }
     // CASCADE delete handles messages and parts automatically
-    Database.use((db) => {
+    Database.transaction((db) => {
       db.delete(SessionTable).where(eq(SessionTable.id, sessionID)).run()
       Database.effect(() => Database.incrementalVacuum())
       Database.effect(async () => {
@@ -1118,11 +1114,7 @@ export namespace Session {
         }
       })
       if (publishDeleted) {
-        Database.effect(() =>
-          Bus.publish(Event.Deleted, {
-            info: session,
-          }),
-        )
+        Bus.publishOwnedInTransaction(Event.Deleted, { info: session })
       }
     })
   }
@@ -1160,7 +1152,7 @@ export namespace Session {
     },
   ): Message.VisibleInfo {
     let persisted: Message.VisibleInfo | undefined
-    Database.use((db) => {
+    Database.transaction((db) => {
       const existing = db
         .select({ time_created: MessageTable.time_created })
         .from(MessageTable)
@@ -1180,18 +1172,10 @@ export namespace Session {
         .onConflictDoUpdate({ target: MessageTable.id, set: { data } })
         .run()
       if (options.publishCreated && !existing) {
-        Database.effect(() =>
-          Bus.publish(Message.Event.Created, {
-            info: persistedMessage,
-          }),
-        )
+        Bus.publishOwnedInTransaction(Message.Event.Created, { info: persistedMessage })
       }
       if (options.publishUpdated) {
-        Database.effect(() =>
-          Bus.publish(Message.Event.Updated, {
-            info: persistedMessage,
-          }),
-        )
+        Bus.publishOwnedInTransaction(Message.Event.Updated, { info: persistedMessage })
       }
     })
     if (!persisted) throw new Error(`Session message ${msg.id} was not persisted`)
@@ -1306,11 +1290,7 @@ export namespace Session {
       upsertMessageRow(input.info, { publishCreated: false, publishUpdated: false })
       if (!existing) {
         const createdInfo = messageWithPersistedCreated(input.info, input.info.time.created)
-        Database.effect(() =>
-          Bus.publish(Message.Event.Created, {
-            info: createdInfo,
-          }),
-        )
+        Bus.publishOwnedInTransaction(Message.Event.Created, { info: createdInfo })
       }
       upsertMessageRow(input.info, { publishCreated: false, publishUpdated: true })
       for (const part of input.parts) updatePartRow(part, { publish: true })
@@ -1369,19 +1349,17 @@ export namespace Session {
     }),
     async (input) => {
       // CASCADE delete handles parts automatically
-      Database.use((db) => {
+      Database.transaction((db) => {
         const removed = db
           .delete(MessageTable)
           .where(and(eq(MessageTable.id, input.messageID), eq(MessageTable.session_id, input.sessionID)))
           .returning({ id: MessageTable.id })
           .get()
         if (!removed) throw new NotFoundError({ message: `Message not found: ${input.messageID}` })
-        Database.effect(() =>
-          Bus.publish(Message.Event.Removed, {
-            sessionID: input.sessionID,
-            messageID: input.messageID,
-          }),
-        )
+        Bus.publishOwnedInTransaction(Message.Event.Removed, {
+          sessionID: input.sessionID,
+          messageID: input.messageID,
+        })
       })
       return input.messageID
     },
@@ -1394,7 +1372,7 @@ export namespace Session {
       partID: Identifier.schema("part"),
     }),
     async (input) => {
-      Database.use((db) => {
+      Database.transaction((db) => {
         const removed = db
           .delete(PartTable)
           .where(
@@ -1407,13 +1385,11 @@ export namespace Session {
           .returning({ id: PartTable.id })
           .get()
         if (!removed) throw new NotFoundError({ message: `Part not found: ${input.partID}` })
-        Database.effect(() =>
-          Bus.publish(Message.Event.PartRemoved, {
-            sessionID: input.sessionID,
-            messageID: input.messageID,
-            partID: input.partID,
-          }),
-        )
+        Bus.publishOwnedInTransaction(Message.Event.PartRemoved, {
+          sessionID: input.sessionID,
+          messageID: input.messageID,
+          partID: input.partID,
+        })
       })
       return input.partID
     },
@@ -1519,11 +1495,11 @@ export namespace Session {
     let outputPart = part
     let messageOrderKey = ""
     const publishPartUpdated = () =>
-      Bus.publish(Message.Event.PartUpdated, {
+      Bus.publishOwnedInTransaction(Message.Event.PartUpdated, {
         orderKey: messageOrderKey,
         part: outputPart as Message.VisiblePart,
       })
-    const publishAfterCommit = options.publish && Database.hasActiveContext()
+    const publishAfterCommit = options.publish && Database.hasActiveTransaction()
     let wrotePart = false
     const write = (db: Database.TxOrDb) => {
       const message = db
@@ -1588,7 +1564,7 @@ export namespace Session {
         .onConflictDoUpdate({ target: PartTable.id, set: { data } })
         .run()
       wrotePart = true
-      if (publishAfterCommit) Database.effect(publishPartUpdated)
+      if (publishAfterCommit) publishPartUpdated()
     }
     if (transaction) write(transaction)
     else Database.use(write)
@@ -1606,14 +1582,12 @@ export namespace Session {
     part: Message.Part,
     options: { publish: boolean } = { publish: true },
   ): { outputPart: Message.Part; wrotePart: boolean } {
-    if (!Database.hasActiveContext()) {
-      throw new Error("Session.writePartInTransaction requires an active database transaction")
-    }
+    Database.requireActiveTransaction("Session.writePartInTransaction")
     return updatePartRow(part, options, db)
   }
 
   export const updatePart = fn(UpdatePartInput, async (part) => {
-    const publishAfterCommit = Database.hasActiveContext()
+    const publishAfterCommit = Database.hasActiveTransaction()
     const { outputPart, wrotePart } = updatePartRow(part, { publish: true })
     // SSE (Server-Sent Events) stream deltas depend on the part-created
     // event already being visible to live subscribers. Outside an existing

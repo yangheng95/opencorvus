@@ -313,7 +313,9 @@ for (const item of targets) {
     .filter(Boolean)
     .join("-")
   console.log(`building ${name}`)
-  await $`mkdir -p dist/${name}`
+  const artifactDirectory = path.join(dir, "dist", name)
+  await fs.promises.rm(artifactDirectory, { recursive: true, force: true })
+  await fs.promises.mkdir(artifactDirectory, { recursive: true })
 
   const executablePath = runtimeDir
     ? path.resolve(runtimeDir, runtimeName(item), item.os === "win32" ? "bun.exe" : "bun")

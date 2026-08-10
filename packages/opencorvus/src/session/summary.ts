@@ -50,7 +50,7 @@ export namespace SessionSummary {
       })
       return { stored: false, error: message }
     }
-    Bus.publish(Session.Event.Diff, {
+    await Bus.publish(Session.Event.Diff, {
       sessionID: input.sessionID,
       diff: input.diff,
     })

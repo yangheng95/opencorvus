@@ -9,8 +9,58 @@ import {
   removeManagedDirectoryTreeSync,
 } from "@opencorvus-ai/util/runtime-directories"
 
+let setupPromise: Promise<void> | undefined
+let testRuntimeDirectory: string | undefined
+let cleanupRegistered = false
+let terminalIngressRuntimeOverride: Disposable | undefined
+
+export function registerTestRuntimeCleanup(): void {
+  if (cleanupRegistered) return
+  const dir = testRuntimeDirectory
+  if (!dir) throw new Error("OpenCorvus test runtime cleanup requires completed setup")
+  cleanupRegistered = true
+  afterAll(
+    async () => {
+      const failures: unknown[] = []
+      const { Database } = await import("../src/storage/db")
+      const { Log } = await import("../src/util/log")
+      terminalIngressRuntimeOverride?.[Symbol.dispose]()
+      terminalIngressRuntimeOverride = undefined
+      try {
+        await Database.awaitEffectIdle(60_000)
+      } catch (error) {
+        failures.push(error)
+      }
+      try {
+        Database.close()
+      } catch (error) {
+        failures.push(error)
+      }
+      try {
+        await Log.close()
+      } catch (error) {
+        failures.push(error)
+      }
+      try {
+        await removeManagedDirectoryTree(dir)
+      } catch (error) {
+        failures.push(error)
+      }
+      if (failures.length === 1) throw failures[0]
+      if (failures.length > 1) throw new AggregateError(failures, "Test preload database and directory cleanup failed")
+    },
+    120_000,
+  )
+}
+
+export function setupTestRuntime(): Promise<void> {
+  setupPromise ??= (async () => {
+    ;(globalThis as typeof globalThis & { __OPENCORVUS_OVERLAY_VERSION__?: string }).__OPENCORVUS_OVERLAY_VERSION__ =
+      "test"
+
 const testRunsRoot = path.join(currentOpenCorvusRuntimePaths().temporary, "tests")
 const dir = await createManagedTemporaryDirectory(testRunsRoot, `${process.pid}-`)
+testRuntimeDirectory = dir
 const runtimeRoot = path.join(dir, "runtime-root")
 const temporaryDirectory = path.join(runtimeRoot, "tmp")
 await fs.mkdir(temporaryDirectory, { recursive: true })
@@ -23,37 +73,6 @@ process.env["TMPDIR"] = temporaryDirectory
 process.once("exit", () => {
   removeManagedDirectoryTreeSync(dir)
 })
-
-afterAll(
-  async () => {
-    const failures: unknown[] = []
-    const { Database } = await import("../src/storage/db")
-    const { Log } = await import("../src/util/log")
-    try {
-      await Database.awaitEffectIdle(60_000)
-    } catch (error) {
-      failures.push(error)
-    }
-    try {
-      Database.close()
-    } catch (error) {
-      failures.push(error)
-    }
-    try {
-      await Log.close()
-    } catch (error) {
-      failures.push(error)
-    }
-    try {
-      await removeManagedDirectoryTree(dir)
-    } catch (error) {
-      failures.push(error)
-    }
-    if (failures.length === 1) throw failures[0]
-    if (failures.length > 1) throw new AggregateError(failures, "Test preload database and directory cleanup failed")
-  },
-  120_000,
-)
 
 process.env["XDG_DATA_HOME"] = path.join(dir, "cross-desktop-group-data")
 process.env["XDG_CACHE_HOME"] = path.join(dir, "cross-desktop-group-cache")
@@ -116,3 +135,8 @@ const { installDefaultControlPlaneToolLoaders } = await import("../src/tool/cont
 installDefaultControlPlaneToolLoaders()
 const { installDefaultTaskWakeRuntime } = await import("../src/scheduler/task-wake-composition")
 installDefaultTaskWakeRuntime()
+const { TestHooks: QueueTestHooks } = await import("../src/engine/queue")
+terminalIngressRuntimeOverride = QueueTestHooks.replaceTerminalIngressDeliveryRuntime(`test-runtime:${process.pid}`)
+  })()
+  return setupPromise
+}

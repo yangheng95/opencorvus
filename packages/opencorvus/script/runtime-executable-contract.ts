@@ -23,7 +23,24 @@ function hasNativeBinaryMagic(header: Buffer): boolean {
 
 async function isNativeBinary(filename: string): Promise<boolean> {
   if (hasNativeBinaryExtension(filename)) return true
-  const handle = await fs.promises.open(path.toNamespacedPath(filename), "r")
+  const namespacedFilename = path.toNamespacedPath(filename)
+  let handle: fs.promises.FileHandle | undefined
+  let lastError: unknown
+  const maximumAttempts = 12
+  for (let attempt = 0; attempt < maximumAttempts; attempt += 1) {
+    try {
+      handle = await fs.promises.open(namespacedFilename, "r")
+      break
+    } catch (error) {
+      lastError = error
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT" || attempt === maximumAttempts - 1) throw error
+      // Windows package copies can briefly expose a directory entry before
+      // the file is openable. Retry the exact path, but keep a persistent
+      // disappearance fatal so an incomplete artifact cannot pass validation.
+      await new Promise<void>((resolve) => setTimeout(resolve, Math.min(500, 25 * 2 ** attempt)))
+    }
+  }
+  if (!handle) throw lastError
   try {
     const header = Buffer.alloc(4)
     const { bytesRead } = await handle.read(header, 0, header.length, 0)
@@ -55,16 +72,17 @@ export function artifactEmbeddedExecutablePaths(root: string, os = process.platf
 }
 
 export async function normalizeArtifactExecutablePermissions(input: { root: string; os: string }): Promise<string[]> {
+  const windows = input.os === "win32" || input.os.startsWith("windows")
   const executables = [
     ...new Set([
       ...artifactEmbeddedExecutablePaths(input.root, input.os),
-      ...(await discoverArtifactBinaryPaths(input.root)),
+      ...(windows ? [] : await discoverArtifactBinaryPaths(input.root)),
     ]),
   ].sort((left, right) => left.localeCompare(right))
   for (const executable of executables) {
     const info = await fs.promises.stat(path.toNamespacedPath(executable))
     if (!info.isFile()) throw new Error(`Packaged executable is not a file: ${executable}`)
-    if (input.os !== "win32" && !input.os.startsWith("windows")) {
+    if (!windows) {
       await fs.promises.chmod(path.toNamespacedPath(executable), ARTIFACT_EXECUTABLE_MODE)
     }
   }

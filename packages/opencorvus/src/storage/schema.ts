@@ -1,5 +1,6 @@
 export { ControlAccountTable } from "../control/control.sql"
 export { DatabaseAuthorityTable } from "./database.sql"
+export { BusPublicationDeliveryTable, BusPublicationOutboxTable } from "../bus/bus.sql"
 export { ChannelIngressReceiptTable } from "../channel/channel.sql"
 export {
   SessionTable,
@@ -17,7 +18,7 @@ export { ProjectTable } from "../project/project.sql"
 export { WorkspaceTable } from "../workspace/workspace.sql"
 export { MemoryFileTable, MemoryChunkTable, MemoryEmbeddingTable } from "../memory/memory.sql"
 export { AutomationProjectTargetTable, AutomationRunTable, AutomationTable } from "../scheduler/automation.sql"
-export { EventJobTable } from "../scheduler/event.sql"
+export { EventJobFireTable, EventJobTable } from "../scheduler/event.sql"
 export { TaskQueueTable } from "../scheduler/task-queue.sql"
 export { TaskPlanTable } from "../memory/task-plan.sql"
 export { WorkbenchBriefSnapshotTable } from "../workbench/workbench.sql"

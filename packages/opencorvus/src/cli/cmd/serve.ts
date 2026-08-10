@@ -19,9 +19,18 @@ import {
 import { clearServerRestartHandler, registerServerRestartHandler } from "../../server/restart"
 import { stopServerWithTimeout } from "../../server/stop"
 import { ManagedServerOwnership } from "../../server/managed-server-ownership"
-import { recoverStartedTaskExecutions } from "../../engine/host-recovery"
+import {
+  RuntimeServerOwnership,
+  RuntimeServerOwnershipHandoffPendingError,
+} from "../../server/runtime-server-ownership"
+import { Database } from "../../storage/db"
+import {
+  assertStartedTaskProjectRecoverySucceeded,
+  recoverStartedTaskExecutions,
+} from "../../engine/host-recovery"
 import { Instance } from "../../project/instance"
 import type { ArgumentsCamelCase } from "yargs"
+import { acquireServerRuntimeAfterRecovery, listenWithRecoveredServerRuntime } from "../server-runtime"
 
 /** Hide the console window on Windows using Win32 API. */
 function hideConsoleWindow() {
@@ -48,6 +57,26 @@ type ServeOptions = NetworkOptions & {
   "watchdog-interval-ms"?: number
 }
 const SERVE_STOP_TIMEOUT_MILLISECONDS = 5000
+
+export async function releaseServeRuntimeOwnership(input: {
+  database: string
+  occurrenceID: string
+  releaseOwnership(afterRelease: () => void | Promise<void>): Promise<void>
+  commit(): void | Promise<void>
+  rollback(): void | Promise<void>
+}): Promise<void> {
+  try {
+    await input.releaseOwnership(input.commit)
+  } catch (error) {
+    if (
+      !(error instanceof RuntimeServerOwnershipHandoffPendingError) &&
+      RuntimeServerOwnership.currentOccurrenceID(input.database) === input.occurrenceID
+    ) {
+      await input.rollback()
+    }
+    throw error
+  }
+}
 
 const serveBuilder = (yargs: Parameters<typeof withNetworkOptions>[0]) =>
   withNetworkOptions(yargs)
@@ -123,18 +152,27 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
 
   if (childHandoff) await waitForRestartBind(childHandoff)
 
-  let server: ReturnType<typeof Server.listen>
+  let preparedRuntime: Awaited<ReturnType<typeof listenWithRecoveredServerRuntime>>
   try {
-    server = Server.listen(opts)
-  } catch (error) {
+    preparedRuntime = await listenWithRecoveredServerRuntime({
+      options: opts,
+      recover: () => recoverStartedTasks(),
+      disposeInstances: () => Instance.disposeAll(),
+    })
+  } catch (recoveryError) {
     if (childHandoff) {
       sendRestartHandoffMessage(
-        { type: "failed", error: error instanceof Error ? error.message : String(error) },
+        { type: "failed", error: recoveryError instanceof Error ? recoveryError.message : String(recoveryError) },
         childHandoff,
       )
     }
-    throw error
+    throw recoveryError
   }
+  const startupRuntimeOwnership = preparedRuntime.ownership
+  let runtimeOccurrenceID = startupRuntimeOwnership.owner.occurrenceID
+  let startedTaskRecovery: Promise<void> = preparedRuntime.recovery
+
+  let server = preparedRuntime.server
   const serverUrl = `http://${server.hostname}:${server.port}`
   // Publish actual server URL so ChannelSupervisor can connect channel runtime to it
   process.env.OPENCORVUS_SERVER_URL = serverUrl
@@ -142,9 +180,8 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
   console.log(`overlay UI available at ${serverUrl}/ui/`)
 
   let shutdownPromise: Promise<void> | null = null
-  let startedTaskRecovery: Promise<void> = Promise.resolve()
   let processExecutionSettlement: Promise<void> | undefined
-  let releaseProcessExecutionHandoff: (() => void) | undefined
+  let releaseProcessExecutionHandoff: ((commit?: boolean) => void | Promise<void>) | undefined
   let runtimeTransfer: Server.RuntimeTransferHandle | undefined
   let ownership: ManagedServerOwnership.Handle | undefined
   let listenerTransferred = false
@@ -153,7 +190,9 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
     const reason = `Server shutdown source=${request.source} reason=${request.reason}`
     const settlement = (async () => {
       await startedTaskRecovery
-      const terminated = await Server.settleCurrentProcessExecution(reason)
+      const terminated = await Server.settleCurrentProcessExecution(reason, {
+        disposeInstances: () => Instance.disposeAll(),
+      })
       releaseProcessExecutionHandoff = terminated.releaseHandoff
       console.log(
         `[serve] settled process-owned prompts sessions=${terminated.sessions} toolParts=${terminated.toolParts}`,
@@ -187,7 +226,21 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
         listenerTransferred = true
       }
       await settleCurrentProcessExecution(request)
-      runtimeTransfer?.releaseOwnership()
+      try {
+        if (runtimeTransfer) {
+          await releaseServeRuntimeOwnership({
+            database: Database.Path(),
+            occurrenceID: runtimeOccurrenceID,
+            releaseOwnership: (afterRelease) => runtimeTransfer!.releaseOwnership(afterRelease),
+            commit: () => releaseProcessExecutionHandoff?.(true),
+            rollback: () => releaseProcessExecutionHandoff?.(false),
+          })
+        }
+        releaseProcessExecutionHandoff = undefined
+      } catch (error) {
+        releaseProcessExecutionHandoff = undefined
+        throw error
+      }
       ownership?.release()
     })()
     shutdownPromise = shutdown
@@ -243,19 +296,50 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
         console.log("[serve] restart settling process-owned execution")
         await settleCurrentProcessExecution({ source: "http-client", reason })
       },
-      releaseRuntimeOwnership: () => {
-        runtimeTransfer?.releaseOwnership()
+      releaseRuntimeOwnership: async () => {
+        const release = () =>
+          releaseServeRuntimeOwnership({
+            database: Database.Path(),
+            occurrenceID: runtimeOccurrenceID,
+            releaseOwnership: (afterRelease) => runtimeTransfer!.releaseOwnership(afterRelease),
+            commit: () => releaseProcessExecutionHandoff?.(true),
+            rollback: () => releaseProcessExecutionHandoff?.(false),
+          })
+        try {
+          if (runtimeTransfer) await release()
+          releaseProcessExecutionHandoff = undefined
+        } catch (error) {
+          if (error instanceof RuntimeServerOwnershipHandoffPendingError) {
+            await release()
+            releaseProcessExecutionHandoff = undefined
+          } else {
+            releaseProcessExecutionHandoff = undefined
+            processExecutionSettlement = undefined
+            throw error
+          }
+        }
         ownership?.release()
         ownership = undefined
       },
       restoreListener: async () => {
         await waitForReleasedListener(actualHostname, actualPort)
-        const restoredServer = Server.listen({
-          ...opts,
-          hostname: actualHostname,
-          port: actualPort,
-          randomPort: false,
-        })
+        const listenOptions = { ...opts, hostname: actualHostname, port: actualPort, randomPort: false }
+        const retainedOccurrenceID = RuntimeServerOwnership.currentOccurrenceID(Database.Path())
+        let restoredServer: ReturnType<typeof Server.listen>
+        if (retainedOccurrenceID === runtimeOccurrenceID) {
+          startedTaskRecovery = recoverStartedTasks()
+          await startedTaskRecovery
+          restoredServer = runtimeTransfer!.restoreListener(listenOptions)
+        } else {
+          const prepared = await listenWithRecoveredServerRuntime({
+            options: listenOptions,
+            recover: () => recoverStartedTasks(),
+            disposeInstances: () => Instance.disposeAll(),
+          })
+          startedTaskRecovery = prepared.recovery
+          runtimeOccurrenceID = prepared.ownership.owner.occurrenceID
+          restoredServer = prepared.server
+        }
         try {
           if (managed && !ownership) {
             ownership = ManagedServerOwnership.acquire({
@@ -274,14 +358,10 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
           throw error
         }
         server = restoredServer
+        runtimeOccurrenceID = RuntimeServerOwnership.currentOccurrenceID(Database.Path()) ?? runtimeOccurrenceID
         listenerTransferred = false
-        runtimeTransfer?.releaseOwnership()
         runtimeTransfer = undefined
-        releaseProcessExecutionHandoff?.()
-        releaseProcessExecutionHandoff = undefined
         processExecutionSettlement = undefined
-        startedTaskRecovery = recoverStartedTasks()
-        await startedTaskRecovery
       },
     }).then(({ drained }) => {
       clearServerRestartHandler(requestRestart)
@@ -324,6 +404,7 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
             `[serve] started Task project recovery failed directory=${failure.directory || "<unresolved>"}: ${failure.error}`,
           )
         }
+        assertStartedTaskProjectRecoverySucceeded(result)
         return Instance.converge({ maximumRetained: Flag.OPENCORVUS_PROJECT_RUNTIME_CACHE_LIMIT })
       })
       .then((result) => {
@@ -333,12 +414,7 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
           )
         }
       })
-      .catch((error) => {
-        console.error("[serve] started Task project recovery failed:", error)
-      })
   }
-
-  startedTaskRecovery = recoverStartedTasks()
 
   if (childHandoff) {
     sendRestartHandoffMessage({ type: "ready", url: serverUrl }, childHandoff)

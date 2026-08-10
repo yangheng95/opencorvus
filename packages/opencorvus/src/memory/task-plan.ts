@@ -75,7 +75,7 @@ export namespace TaskPlan {
     )
     const task = get(id)!
     log.info("task added", { id, goal: input.goal })
-    Bus.publish(Event.Updated, {
+    Bus.publishOwned(Event.Updated, {
       task: { id, sessionID: input.sessionID, goal: input.goal, status: "pending" },
     })
     return task
@@ -106,7 +106,7 @@ export namespace TaskPlan {
 
     const updated = get(taskID)!
     log.info("task updated", { id: taskID, changes })
-    Bus.publish(Event.Updated, {
+    Bus.publishOwned(Event.Updated, {
       task: {
         id: taskID,
         sessionID: updated.sessionID,

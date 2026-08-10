@@ -244,7 +244,7 @@ export namespace LLM {
       onError(event) {
         void input.stream?.onError?.(event)
         const error = Message.fromError(event.error, { providerID: input.model.providerID })
-        Bus.publish(SessionEvents.Error, {
+        Bus.publishOwned(SessionEvents.Error, {
           sessionID: input.sessionID,
           orderKey: sessionLifecycleOrderKey(input.sessionID),
           error,

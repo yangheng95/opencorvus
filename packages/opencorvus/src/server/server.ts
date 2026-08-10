@@ -10,7 +10,7 @@ import { requireServerUrl, setServerUrl } from "./runtime-url"
 import { Flag } from "../flag/flag"
 import { lazy } from "../util/lazy"
 import { InstanceBootstrap } from "../project/bootstrap"
-import { Instance, runOutsideInstanceContext } from "../project/instance"
+import { Instance, InstanceProcessAdmissionClosedError, runOutsideInstanceContext } from "../project/instance"
 import { Project } from "../project/project"
 import { websocket } from "hono/bun"
 import z from "zod"
@@ -23,7 +23,7 @@ import { muteAISdkWarnings } from "@/runtime/shims"
 import { OverlayUI } from "./overlay-ui"
 import { DEFAULT_SERVER_PORT } from "./defaults"
 import { requestID, serverErrorResponse } from "./error-handler"
-import { RuntimeServerOwnership } from "./runtime-server-ownership"
+import { RuntimeServerOwnership, RuntimeServerOwnershipHandoffPendingError } from "./runtime-server-ownership"
 import { Database } from "@/storage/db"
 import { configureCorsOrigins, isAllowedCorsOrigin, isAllowedRequestOrigin } from "./cors"
 import { ServeRuntimeMemoryMetrics } from "@/runtime/memory-metrics"
@@ -41,7 +41,49 @@ muteAISdkWarnings()
 
 export namespace Server {
   const log = Log.create({ service: "server" })
-  const runtimeTransfers = new WeakMap<object, { quiesce(): Promise<void>; releaseOwnership(): void }>()
+  const DEFAULT_RUNTIME_SETTLEMENT_INACTIVITY_TIMEOUT_MILLISECONDS = 60_000
+  let runtimeSettlementInactivityTimeoutMilliseconds = DEFAULT_RUNTIME_SETTLEMENT_INACTIVITY_TIMEOUT_MILLISECONDS
+  let runtimeHandoffCommitFailuresForTest = 0
+  type PendingRuntimeRollbackReceipt = {
+    label: string
+    receipt: () => Promise<void>
+    settled?: Promise<void>
+    succeeded: boolean
+    failure?: unknown
+  }
+  const pendingRuntimeRollbackReceipts = new Set<PendingRuntimeRollbackReceipt>()
+  let runtimeRollbackReceiptForTest: (() => Promise<void>) | undefined
+
+  export class RuntimeRollbackRecoveryInactivityError extends Error {
+    override readonly name = "RuntimeRollbackRecoveryInactivityError"
+
+    constructor(
+      public readonly labels: readonly string[],
+      public readonly inactivityTimeoutMilliseconds: number,
+    ) {
+      super(
+        `Runtime rollback recovery made no progress for ${inactivityTimeoutMilliseconds}ms; ` +
+          `${labels.length} receipt(s) remain: ${labels.join(", ")}`,
+      )
+    }
+  }
+  export type ListenOptions = {
+    port: number
+    hostname: string
+    mdns?: boolean
+    mdnsDomain?: string
+    cors?: string[]
+    randomPort?: boolean
+  }
+
+  const runtimeTransfers = new WeakMap<
+    object,
+    {
+      quiesce(): Promise<void>
+      releaseOwnership(afterRelease?: () => void | Promise<void>): Promise<void>
+      restoreListener(options: ListenOptions): ReturnType<typeof Bun.serve>
+    }
+  >()
   const inProcessApp = {
     fetch(request: Request) {
       return App().fetch(request)
@@ -52,9 +94,13 @@ export namespace Server {
     try {
       return await run()
     } finally {
-      runOutsideInstanceContext(() =>
-        Instance.scheduleConvergence({ maximumRetained: Flag.OPENCORVUS_PROJECT_RUNTIME_CACHE_LIMIT }),
-      )
+      try {
+        runOutsideInstanceContext(() =>
+          Instance.scheduleConvergence({ maximumRetained: Flag.OPENCORVUS_PROJECT_RUNTIME_CACHE_LIMIT }),
+        )
+      } catch (error) {
+        if (!(error instanceof InstanceProcessAdmissionClosedError)) throw error
+      }
     }
   }
 
@@ -64,33 +110,379 @@ export namespace Server {
 
   export interface RuntimeTransferHandle {
     quiesced: Promise<void>
-    releaseOwnership(): void
+    releaseOwnership(afterRelease?: () => void | Promise<void>): Promise<void>
+    restoreListener(options: ListenOptions): ReturnType<typeof Bun.serve>
   }
 
-  export async function settleCurrentProcessExecution(reason: string) {
-    const schedulerSettlement = Scheduler.disposeGlobal()
-    void schedulerSettlement.catch((error) => {
-      log.error("global scheduler settlement failed", { error })
-    })
-    const { terminateCurrentProcessOwnedExecution } = await import("../engine/writer")
-    const terminated = await terminateCurrentProcessOwnedExecution({ reason })
+  export async function settleCurrentProcessExecution(
+    reason: string,
+    options: { disposeInstances: () => Promise<void>; runtimeInactivityTimeoutMilliseconds?: number },
+  ) {
+    const settlementInactivityTimeoutMilliseconds =
+      options.runtimeInactivityTimeoutMilliseconds ?? runtimeSettlementInactivityTimeoutMilliseconds
+    const { RuntimeExecutionSettlement, waitForRuntimeSettlementIdle } = await import(
+      "../runtime/execution-settlement"
+    )
+    const startRollbackReceipt = (pending: PendingRuntimeRollbackReceipt): void => {
+      if (pending.settled || pending.succeeded) return
+      pending.failure = undefined
+      pending.settled = Promise.resolve()
+        .then(pending.receipt)
+        .then(
+          () => {
+            pending.succeeded = true
+          },
+          (error) => {
+            pending.failure = error
+          },
+        )
+    }
+    const awaitPendingRollbackReceipts = async (message: string, retryFailures: boolean): Promise<void> => {
+      if (retryFailures) {
+        for (const receipt of pendingRuntimeRollbackReceipts) {
+          if (receipt.failure !== undefined) receipt.settled = undefined
+          startRollbackReceipt(receipt)
+        }
+      }
+      await waitForRuntimeSettlementIdle({
+        snapshot: () =>
+          [...pendingRuntimeRollbackReceipts]
+            .filter((receipt) => !receipt.succeeded && receipt.failure === undefined && receipt.settled)
+            .map(({ label, settled }) => ({ label, settled: settled! })),
+        inactivityTimeoutMilliseconds: settlementInactivityTimeoutMilliseconds,
+        inactivityError: (labels) =>
+          new RuntimeRollbackRecoveryInactivityError(labels, settlementInactivityTimeoutMilliseconds),
+      })
+      const succeeded = [...pendingRuntimeRollbackReceipts].filter((receipt) => receipt.succeeded)
+      for (const receipt of succeeded) pendingRuntimeRollbackReceipts.delete(receipt)
+      const failures = [...pendingRuntimeRollbackReceipts].flatMap((receipt) =>
+        receipt.failure === undefined ? [] : [receipt.failure],
+      )
+      if (failures.length > 0) throw new AggregateError(failures, message)
+    }
+    await awaitPendingRollbackReceipts("Previous runtime rollback recovery failed", true)
+    const runtimeExecutionGate = RuntimeExecutionSettlement.acquireSettlementGate()
+    const settlementGates: Disposable[] = [runtimeExecutionGate]
+    let gatesReleased = false
+    const releaseSettlementGates = () => {
+      if (gatesReleased) return
+      gatesReleased = true
+      const failures: unknown[] = []
+      for (const gate of [...settlementGates].reverse()) {
+        try {
+          gate[Symbol.dispose]()
+        } catch (error) {
+          failures.push(error)
+        }
+      }
+      if (failures.length > 0) {
+        throw new AggregateError(failures, "Runtime settlement gate release failed")
+      }
+    }
+    const awaitRollbackReceipts = async (
+      receipts: Array<(() => Promise<void>) | undefined>,
+      message: string,
+    ): Promise<void> => {
+      const selectedReceipts = runtimeRollbackReceiptForTest ? [...receipts, runtimeRollbackReceiptForTest] : receipts
+      for (const [index, receipt] of selectedReceipts.entries()) {
+        if (!receipt) continue
+        const pending: PendingRuntimeRollbackReceipt = {
+          label: `runtime-rollback-receipt:${index}`,
+          receipt,
+          succeeded: false,
+        }
+        startRollbackReceipt(pending)
+        pendingRuntimeRollbackReceipts.add(pending)
+      }
+      await awaitPendingRollbackReceipts(message, false)
+    }
+    let detachedDispatchGate: (Disposable & { waitForIdle(): Promise<void> }) | undefined
+    let gitSettlementGate:
+      | (Disposable & { waitForIdle(inactivityTimeoutMilliseconds?: number): Promise<void> })
+      | undefined
+    let instanceSettlementGate: Disposable | undefined
+    let globalSchedulerSettlementGate: (Disposable & { commit(): void }) | undefined
+    let cancelledTaskSettlementGate:
+      | (Disposable & {
+          waitForIdle(inactivityTimeoutMilliseconds?: number): Promise<void>
+          commit(): void
+          rollback(): () => Promise<void>
+      })
+      | undefined
+    let eventFireSettlementGate:
+      | (Disposable & {
+          commit(): void
+          rollback(): () => Promise<void>
+      })
+      | undefined
+    let taskQueueSettlementGate:
+      | (Disposable & {
+          commit(): void
+          rollback(): () => Promise<void>
+        })
+      | undefined
+    let busSettlementGate:
+      | (Disposable & {
+          commit(): void
+          rollback(): () => Promise<void>
+        })
+      | undefined
     try {
+      runtimeExecutionGate.closeAdmission([
+        "scheduler_event_fire",
+        "scheduler_automation_fire",
+        "session_wake_loop",
+        "task_queue",
+        "task_cancellation",
+        "protocol_publication",
+        "detached_dispatch_pipeline",
+      ])
+      runtimeExecutionGate.requestCancellation(
+        [
+          "scheduler_event_fire",
+          "scheduler_automation_fire",
+          "session_wake_loop",
+          "task_queue",
+          "protocol_publication",
+          "detached_dispatch_pipeline",
+        ],
+        new Error(reason),
+      )
+      const { Bus } = await import("../bus")
+      busSettlementGate = Bus.acquireProcessSettlementGate()
+      settlementGates.push(busSettlementGate)
+      const { acquireDetachedDispatchSettlementGate } = await import("../orchestrator/dispatch-agent-tool")
+      detachedDispatchGate = acquireDetachedDispatchSettlementGate()
+      settlementGates.push(detachedDispatchGate)
+      const { SessionPromptState } = await import("../session/prompt/state")
+      settlementGates.push(SessionPromptState.acquireProcessSettlementGate())
+      globalSchedulerSettlementGate = Scheduler.acquireGlobalSettlementGate()
+      settlementGates.push(globalSchedulerSettlementGate)
+      const { acquireCancelledTaskSettlementGate } = await import("../engine/state")
+      cancelledTaskSettlementGate = acquireCancelledTaskSettlementGate()
+      settlementGates.push(cancelledTaskSettlementGate)
+      const { EventService } = await import("../scheduler/event-service")
+      eventFireSettlementGate = EventService.acquireProcessSettlementGate()
+      settlementGates.push(eventFireSettlementGate)
+      const { TaskQueueService } = await import("../scheduler/task-queue-service")
+      taskQueueSettlementGate = TaskQueueService.acquireProcessSettlementGate()
+      settlementGates.push(taskQueueSettlementGate)
+    } catch (error) {
+      const resumeCancelledTaskSettlements = cancelledTaskSettlementGate?.rollback()
+      const resumeEventFires = eventFireSettlementGate?.rollback()
+      const resumeTaskQueue = taskQueueSettlementGate?.rollback()
+      const resumeBusPublications = busSettlementGate?.rollback()
+      const rollbackFailures: unknown[] = []
+      try {
+        releaseSettlementGates()
+      } catch (rollbackError) {
+        rollbackFailures.push(rollbackError)
+      }
+      try {
+        await awaitRollbackReceipts(
+          [resumeCancelledTaskSettlements, resumeEventFires, resumeTaskQueue, resumeBusPublications],
+          "Runtime settlement admission rollback failed",
+        )
+      } catch (rollbackError) {
+        rollbackFailures.push(rollbackError)
+      }
+      if (rollbackFailures.length > 0) {
+        throw new AggregateError([error, ...rollbackFailures], "Runtime settlement gate acquisition and rollback failed")
+      }
+      throw error
+    }
+    let terminated:
+      | Awaited<ReturnType<(typeof import("../engine/writer"))["terminateCurrentProcessOwnedExecution"]>>
+      | undefined
+    try {
+      const schedulerSettlement = Scheduler.disposeGlobal({
+        inactivityTimeoutMilliseconds: settlementInactivityTimeoutMilliseconds,
+      })
+      void schedulerSettlement.catch((error) => {
+        log.error("global scheduler settlement failed", { error })
+      })
+      const { terminateCurrentProcessOwnedExecution } = await import("../engine/writer")
+      terminated = await terminateCurrentProcessOwnedExecution({ reason })
+      const settledExecution = terminated
       await schedulerSettlement
+      await runtimeExecutionGate.waitForIdle([
+        "scheduler_event_fire",
+        "scheduler_automation_fire",
+        "session_wake_loop",
+        "task_queue",
+        "task_cancellation",
+        "protocol_publication",
+        "detached_dispatch_pipeline",
+      ], settlementInactivityTimeoutMilliseconds)
+      await detachedDispatchGate!.waitForIdle()
+      runtimeExecutionGate.closeAdmission(["engine_queue_completion"])
+      runtimeExecutionGate.requestCancellation(["engine_queue_completion"], new Error(reason))
+      await runtimeExecutionGate.waitForIdle(
+        ["engine_queue_completion"],
+        settlementInactivityTimeoutMilliseconds,
+      )
+      await cancelledTaskSettlementGate!.waitForIdle(settlementInactivityTimeoutMilliseconds)
+      const { awaitTaskMessageProtocolBridgeIdle } = await import("../orchestrator/protocol/message-bridge")
+      await Database.awaitEffectIdle(settlementInactivityTimeoutMilliseconds)
+      await awaitTaskMessageProtocolBridgeIdle()
+      instanceSettlementGate = Instance.acquireProcessSettlementGate()
+      await options.disposeInstances()
+      const databaseEffectGate = await Database.acquireEffectSettlementGate(
+        settlementInactivityTimeoutMilliseconds,
+      )
+      settlementGates.push(databaseEffectGate)
+      await awaitTaskMessageProtocolBridgeIdle()
+      const { ProjectGitLock } = await import("../worktree/git-lock")
+      gitSettlementGate = ProjectGitLock.acquireSettlementGate()
+      settlementGates.push(gitSettlementGate)
+      await gitSettlementGate.waitForIdle(settlementInactivityTimeoutMilliseconds)
       const mandatorySpawnGate = await ProcessSupervisor.acquireRuntimeMandatorySettlementGate()
+      let commitDecisionApplied = false
+      let mandatorySpawnGateReleased = false
+      let settlementGatesReleased = false
+      let instanceGateReleased = false
+      let executionHandoffReleased = false
       return {
-        ...terminated,
-        releaseHandoff() {
-          try {
-            mandatorySpawnGate[Symbol.dispose]()
-          } finally {
-            terminated.releaseHandoff()
+        ...settledExecution,
+        releaseHandoff(commit = true): void | Promise<void> {
+          if (!commit && commitDecisionApplied) {
+            throw new Error("Committed runtime handoff cleanup must resume through its exact commit receipt")
           }
+          const resumeCancelledTaskSettlements = commit ? undefined : cancelledTaskSettlementGate!.rollback()
+          const resumeEventFires = commit ? undefined : eventFireSettlementGate!.rollback()
+          const resumeTaskQueue = commit ? undefined : taskQueueSettlementGate!.rollback()
+          const resumeBusPublications = commit ? undefined : busSettlementGate!.rollback()
+          if (commit) {
+            if (!commitDecisionApplied) {
+              if (runtimeHandoffCommitFailuresForTest > 0) {
+                runtimeHandoffCommitFailuresForTest -= 1
+                throw new Error("injected runtime handoff commit cleanup failure")
+              }
+              cancelledTaskSettlementGate!.commit()
+              eventFireSettlementGate!.commit()
+              taskQueueSettlementGate!.commit()
+              busSettlementGate!.commit()
+              globalSchedulerSettlementGate!.commit()
+              runtimeExecutionGate.commit()
+              commitDecisionApplied = true
+            }
+            if (!mandatorySpawnGateReleased) {
+              mandatorySpawnGate[Symbol.dispose]()
+              mandatorySpawnGateReleased = true
+            }
+            if (!settlementGatesReleased) {
+              try {
+                releaseSettlementGates()
+              } finally {
+                if (gatesReleased) settlementGatesReleased = true
+              }
+            }
+            if (!instanceGateReleased) {
+              instanceSettlementGate?.[Symbol.dispose]()
+              instanceSettlementGate = undefined
+              instanceGateReleased = true
+            }
+            if (!executionHandoffReleased) {
+              settledExecution.releaseHandoff()
+              executionHandoffReleased = true
+            }
+            return
+          }
+          return (async () => {
+            const failures: unknown[] = []
+            const attempt = (operation: () => void) => {
+              try {
+                operation()
+              } catch (error) {
+                failures.push(error)
+              }
+            }
+            attempt(() => {
+              mandatorySpawnGate[Symbol.dispose]()
+            })
+            attempt(releaseSettlementGates)
+            attempt(() => {
+              instanceSettlementGate?.[Symbol.dispose]()
+              instanceSettlementGate = undefined
+            })
+            attempt(() => settledExecution.releaseHandoff())
+            try {
+              await awaitRollbackReceipts(
+                [resumeCancelledTaskSettlements, resumeEventFires, resumeTaskQueue, resumeBusPublications],
+                "Runtime handoff rollback recovery failed",
+              )
+            } catch (error) {
+              failures.push(error)
+            }
+            if (failures.length > 0) throw new AggregateError(failures, "Runtime handoff rollback failed")
+          })()
         },
       }
     } catch (error) {
-      terminated.releaseHandoff()
+      const resumeCancelledTaskSettlements = cancelledTaskSettlementGate?.rollback()
+      const resumeEventFires = eventFireSettlementGate?.rollback()
+      const resumeTaskQueue = taskQueueSettlementGate?.rollback()
+      const resumeBusPublications = busSettlementGate?.rollback()
+      const rollbackFailures: unknown[] = []
+      const attempt = (operation: () => void) => {
+        try {
+          operation()
+        } catch (rollbackError) {
+          rollbackFailures.push(rollbackError)
+        }
+      }
+      attempt(() => {
+        instanceSettlementGate?.[Symbol.dispose]()
+        instanceSettlementGate = undefined
+      })
+      attempt(releaseSettlementGates)
+      attempt(() => terminated?.releaseHandoff())
+      try {
+        await awaitRollbackReceipts(
+          [resumeCancelledTaskSettlements, resumeEventFires, resumeTaskQueue, resumeBusPublications],
+          "Runtime settlement admission rollback failed",
+        )
+      } catch (rollbackError) {
+        rollbackFailures.push(rollbackError)
+      }
+      if (rollbackFailures.length > 0) {
+        throw new AggregateError([error, ...rollbackFailures], "Runtime settlement and rollback failed")
+      }
       throw error
     }
+  }
+
+  export const TestHooks = {
+    installRuntimeRollbackReceipt(receipt: () => Promise<void>): Disposable {
+      if (runtimeRollbackReceiptForTest) throw new Error("Runtime rollback receipt test hook is already installed")
+      runtimeRollbackReceiptForTest = receipt
+      return {
+        [Symbol.dispose]() {
+          if (runtimeRollbackReceiptForTest === receipt) runtimeRollbackReceiptForTest = undefined
+        },
+      }
+    },
+    failNextRuntimeHandoffCommit(attempts: number): Disposable {
+      const previous = runtimeHandoffCommitFailuresForTest
+      runtimeHandoffCommitFailuresForTest = attempts
+      return {
+        [Symbol.dispose]() {
+          runtimeHandoffCommitFailuresForTest = previous
+        },
+      }
+    },
+    installRuntimeSettlementInactivityTimeout(inactivityTimeoutMilliseconds: number): Disposable {
+      if (!Number.isInteger(inactivityTimeoutMilliseconds) || inactivityTimeoutMilliseconds <= 0) {
+        throw new Error(`Invalid runtime settlement inactivity timeout ${inactivityTimeoutMilliseconds}`)
+      }
+      const previous = runtimeSettlementInactivityTimeoutMilliseconds
+      runtimeSettlementInactivityTimeoutMilliseconds = inactivityTimeoutMilliseconds
+      return {
+        [Symbol.dispose]() {
+          runtimeSettlementInactivityTimeoutMilliseconds = previous
+        },
+      }
+    },
   }
 
   /** Stop request admission while retaining the database runtime lease until
@@ -98,7 +490,11 @@ export namespace Server {
   export function beginRuntimeTransfer(server: ReturnType<typeof Bun.serve>): RuntimeTransferHandle {
     const transfer = runtimeTransfers.get(server)
     if (!transfer) throw new Error("Server runtime transfer state is unavailable")
-    return { quiesced: transfer.quiesce(), releaseOwnership: transfer.releaseOwnership }
+    return {
+      quiesced: transfer.quiesce(),
+      releaseOwnership: transfer.releaseOwnership,
+      restoreListener: transfer.restoreListener,
+    }
   }
 
   /**
@@ -472,25 +868,23 @@ export namespace Server {
     }
   }
 
-  export function listen(opts: {
-    port: number
-    hostname: string
-    mdns?: boolean
-    mdnsDomain?: string
-    cors?: string[]
+  function bindWithRuntimeOwnership(
+    opts: ListenOptions,
+    retainedRuntimeOwnership?: RuntimeServerOwnership.Handle,
+  ) {
     /**
      * When true, port=0 maps directly to OS-assigned random port without
      * first attempting DEFAULT_SERVER_PORT. Required by independently
      * managed server instances so they never collide on the default port.
      */
-    randomPort?: boolean
-  }) {
-    const runtimeOwnership = RuntimeServerOwnership.acquire({ database: Database.Path() })
+    const runtimeOwnership =
+      retainedRuntimeOwnership ?? RuntimeServerOwnership.acquire({ database: Database.Path() })
+    RuntimeServerOwnership.assertHandleForDatabase(runtimeOwnership, Database.Path())
     let boundServer: ReturnType<typeof Bun.serve> | undefined
     let runtimeStopInstalled = false
     try {
       configureCorsOrigins(opts.cors)
-      AutomationService.initGlobal()
+      if (!retainedRuntimeOwnership) AutomationService.initGlobal()
 
       const args = {
         hostname: opts.hostname,
@@ -549,10 +943,17 @@ export namespace Server {
       let quiesceOperation: Promise<void> | undefined
       let stopOperation: Promise<void> | undefined
       let cleanupFailures: unknown[] = []
-      const releaseOwnership = () => {
+      const releaseOwnership = async (afterRelease?: () => void | Promise<void>) => {
         if (ownershipReleased) return
-        ownershipReleased = true
-        runtimeOwnership.release()
+        try {
+          await RuntimeServerOwnership.releaseWithRetry(runtimeOwnership, afterRelease)
+          ownershipReleased = true
+        } catch (error) {
+          ownershipReleased =
+            RuntimeServerOwnership.currentOccurrenceID(runtimeOwnership.database) !==
+            runtimeOwnership.owner.occurrenceID
+          throw error
+        }
       }
       const quiesce = (closeActiveConnections = true) => {
         if (quiesceOperation) return quiesceOperation
@@ -601,16 +1002,25 @@ export namespace Server {
         })
         return operation
       }
-      runtimeTransfers.set(server, { quiesce, releaseOwnership })
+      runtimeTransfers.set(server, {
+        quiesce,
+        releaseOwnership,
+        restoreListener: (options) => bindWithRuntimeOwnership(options, runtimeOwnership),
+      })
       server.stop = (closeActiveConnections?: boolean) => {
         if (stopOperation) return stopOperation
         const operation = (async () => {
           await quiesce(closeActiveConnections)
-          const terminated = await settleCurrentProcessExecution("Server.stop graceful runtime shutdown")
+          const terminated = await settleCurrentProcessExecution("Server.stop graceful runtime shutdown", {
+            disposeInstances: () => Instance.disposeAll(),
+          })
           try {
-            releaseOwnership()
-          } finally {
-            terminated.releaseHandoff()
+            await releaseOwnership(() => terminated.releaseHandoff(true))
+          } catch (error) {
+            if (!ownershipReleased && !(error instanceof RuntimeServerOwnershipHandoffPendingError)) {
+              await terminated.releaseHandoff(false)
+            }
+            throw error
           }
           if (cleanupFailures.length === 1) throw cleanupFailures[0]
           if (cleanupFailures.length > 1) {
@@ -627,24 +1037,59 @@ export namespace Server {
 
       return server
     } catch (error) {
-      if (runtimeStopInstalled) {
-        void Promise.resolve(boundServer!.stop(true)).catch((cleanupError) => {
-          log.error("server startup cleanup failed; retaining runtime ownership", { error: cleanupError })
-        })
-      } else {
-        void (async () => {
-          if (boundServer) await boundServer.stop(true)
-          const terminated = await settleCurrentProcessExecution("Server.listen initialization failure")
-          try {
-            runtimeOwnership.release()
-          } finally {
-            terminated.releaseHandoff()
+      let listenerCleanupComplete = boundServer === undefined
+      let terminated: Awaited<ReturnType<typeof settleCurrentProcessExecution>> | undefined
+      let cleanupFailure: unknown
+      const cleanup = RuntimeServerOwnership.retainStartupCleanup({
+        handle: runtimeOwnership,
+        async complete() {
+          if (cleanupFailure instanceof RuntimeServerOwnershipHandoffPendingError) {
+            await cleanupFailure.complete()
+            return
           }
-        })().catch((cleanupError) => {
-          log.error("server startup cleanup failed; retaining runtime ownership", { error: cleanupError })
-        })
-      }
+          if (runtimeStopInstalled) {
+            try {
+              await boundServer!.stop(true)
+              return
+            } catch (error) {
+              cleanupFailure = error
+              throw error
+            }
+          }
+          if (!listenerCleanupComplete && boundServer) {
+            await boundServer.stop(true)
+            listenerCleanupComplete = true
+          }
+          terminated ??= await settleCurrentProcessExecution("Server.listen initialization failure", {
+            disposeInstances: () => Instance.disposeAll(),
+          })
+          try {
+            await RuntimeServerOwnership.releaseWithRetry(runtimeOwnership, () => terminated!.releaseHandoff(true))
+          } catch (error) {
+            cleanupFailure = error
+            throw error
+          }
+        },
+      })
+      void cleanup.complete().catch((cleanupError) => {
+        log.error("server startup cleanup failed; exact recovery authority retained", { error: cleanupError })
+      })
       throw error
     }
+  }
+
+  export function listen(opts: ListenOptions) {
+    return bindWithRuntimeOwnership(opts)
+  }
+
+  export function acquireRuntimeOwnershipForStartup(): RuntimeServerOwnership.Handle {
+    return RuntimeServerOwnership.acquire({ database: Database.Path() })
+  }
+
+  export function listenWithOwnedRuntime(
+    opts: ListenOptions,
+    ownership: RuntimeServerOwnership.Handle,
+  ) {
+    return bindWithRuntimeOwnership(opts, ownership)
   }
 }

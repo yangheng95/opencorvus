@@ -24,10 +24,7 @@
  * `createOrchestratorTools`. Renaming a tool without updating this list
  * therefore fails CI rather than silently disabling projection.
  */
-export const STATEFUL_SNAPSHOT_TOOL_NAMES = [
-  // Live-state queries — called every turn; latest answer supersedes all.
-  "read_context",
-] as const
+export const STATEFUL_SNAPSHOT_TOOL_NAMES = [] as const
 
 export type StatefulSnapshotToolName = (typeof STATEFUL_SNAPSHOT_TOOL_NAMES)[number]
 
@@ -37,38 +34,3 @@ export function statefulSnapshotToolKey(toolName: string, _input: unknown): stri
   if (STATEFUL_SNAPSHOT_TOOL_NAME_SET.has(toolName)) return toolName
   return undefined
 }
-
-/**
- * Orchestrator tools that cannot by themselves complete a scheduling decision.
- *
- * These tools may be useful inside a wake, but a wake that stops after calling
- * only these tools has not changed task lifecycle, dispatched responsible
- * work, asked the operator, or updated the task plan. The orchestrator must
- * continue with a real decision tool in the same wake.
- */
-export const ORCHESTRATOR_NO_DECISION_OBSERVATION_TOOL_NAMES = [
-  "read_context",
-  "read",
-  "browser_preview",
-  "bash",
-] as const
-
-export type OrchestratorNoDecisionObservationToolName = (typeof ORCHESTRATOR_NO_DECISION_OBSERVATION_TOOL_NAMES)[number]
-
-const ORCHESTRATOR_NO_DECISION_OBSERVATION_TOOL_NAME_SET = new Set<string>(
-  ORCHESTRATOR_NO_DECISION_OBSERVATION_TOOL_NAMES,
-)
-
-export function isOrchestratorNoDecisionObservationToolName(
-  value: string,
-): value is OrchestratorNoDecisionObservationToolName {
-  return ORCHESTRATOR_NO_DECISION_OBSERVATION_TOOL_NAME_SET.has(value)
-}
-
-export const ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY = "orchestratorDecisionEffect"
-/**
- * `continuation` means the tool changed the durable plan but deliberately left
- * scheduler work to the same wake (for example, a corrected goal still needs
- * a responsible worker). It is observable progress, not a settled decision.
- */
-export type OrchestratorDecisionEffect = "decision" | "continuation" | "observation" | "none"

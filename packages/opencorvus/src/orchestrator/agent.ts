@@ -42,7 +42,6 @@
  * ───────────────────────────────────────────────────────────────────────────
  */
 import ORCHESTRATOR_CORE from "@/prompt/core/orchestrator-core.txt"
-import { isDeepStrictEqual } from "node:util"
 import { withObservableWorkNarrative } from "@/prompt/fragments/observable-work-narrative"
 import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contract"
 import { Provider } from "@/provider/provider"
@@ -79,6 +78,7 @@ import { readIterationHistory as readHistForPrompt } from "@/metrics/store"
 import { requireTask, terminalTask } from "@/engine"
 import { NotFoundError } from "@/storage/db"
 import { recordTaskInfrastructureError } from "@/engine/persist"
+import { queuedTaskIngressSourceKind } from "@/engine/queued-task-ingress"
 import { describeProcessRecoveryFact, describeTask, renderTaskDescription, type TaskDesc } from "@/engine/describe"
 import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
@@ -414,66 +414,6 @@ function renderTaskAttachmentInventory(
 // Public API
 // ---------------------------------------------------------------------------
 
-export function currentWakeControlProjection(input: { taskID: string; event?: OrchestratorEvent; wakeID?: string }) {
-  const taskIntent = input.event?.taskIntent
-  const missionAcceptanceResume = input.event?.missionAcceptanceResume
-  if (!taskIntent && !missionAcceptanceResume) return undefined
-  const currentControlCount = [taskIntent, missionAcceptanceResume].filter(Boolean).length
-  if (currentControlCount > 1) {
-    throw new Error(`Task ${input.taskID} wake has multiple current control occurrences`)
-  }
-  if (!input.wakeID) {
-    const kind = taskIntent ? taskIntent.kind : "mission acceptance-resume"
-    throw new Error(`Task ${input.taskID} ${kind} wake is missing its persisted ingress identity`)
-  }
-  const messageID = `msg_${input.wakeID.slice(input.wakeID.indexOf("_") + 1)}`
-  if (taskIntent) {
-    return {
-      messageID,
-      author: taskIntent.actor,
-      text: [
-        "# Operator Task Control",
-        "",
-        taskIntent.kind === "retry"
-          ? "Retry this same Task as a new non-terminal execution occurrence. Re-evaluate the current durable evidence and continue the work."
-          : "Replan this same Task as a new non-terminal execution occurrence. Re-evaluate the current durable evidence and choose the next concrete action.",
-        renderMissionAcceptanceResumeReceiptMeaning(),
-        "Before this Turn ends, make the current scheduling or lifecycle decision through the appropriate real tool. A historical completed or cancelled summary does not settle this occurrence.",
-      ].join("\n"),
-      wakeReason: {
-        source: "task.operator_intent" as const,
-        wakeID: input.wakeID,
-        taskID: input.taskID,
-        taskIntent,
-      },
-    }
-  }
-  return {
-    messageID,
-    author: "mission" as const,
-    text: [
-      "# Mission Acceptance Repair Control",
-      "",
-      "An evidence-backed Mission acceptance gap opened a new non-terminal execution occurrence for this same Task.",
-      `Read the one visible Mission-authored Task-root message with \`read_task_message(message_id="${missionAcceptanceResume!.messageID}", ...)\` before deciding.`,
-      "For any successor session_message evidence locator, pair that Message with its actual Task-root Session authority. missionSessionID identifies the originating Mission and is not the producing Session for the persisted visible Mission-authored Task-root message.",
-      renderMissionAcceptanceResumeReceiptMeaning(),
-      "Preserve the fixed Expert Squad and existing workflow binding. Choose the responsible existing lineage from current Task and Artifact evidence; this control does not prescribe a worker, verdict, or completion outcome.",
-      renderCurrentOccurrenceDecisionObligation(),
-    ].join("\n"),
-    wakeReason: {
-      source: "mission.acceptance_resume" as const,
-      wakeID: input.wakeID,
-      taskID: input.taskID,
-      missionAcceptanceResume,
-    },
-  }
-}
-
-function renderMissionAcceptanceResumeReceiptMeaning(): string {
-  return "A historical mission_acceptance_resume_receipt proves only that the Host accepted a prior request to reopen the Task. It is not Mission acceptance of deliverables, repair-completion evidence, or a lifecycle decision for this occurrence."
-}
-
 export namespace Orchestrator {
   export async function processTask(
     taskID: string,
@@ -590,10 +530,10 @@ export namespace Orchestrator {
 
       // 4. Build prompt. Each newly constructed Orchestrator child receives
       //    the original task brief once, authored by the durable task creator.
-      //    Follow-up operator text remains in its root message and is read by
-      //    exact ID through read_task_message. Retry/Replan is itself a real
-      //    operator control occurrence, so it becomes a visible, auditable
-      //    user-role Turn in this durable Orchestrator Session.
+      //    Follow-up operator text remains in its real root message. The wake
+      //    projects its exact identity without prescribing a retrieval tool. Typed Retry/Replan and
+      //    Mission resume occurrences stay in the system control projection;
+      //    the Host never fabricates a participant message for them.
       //    A wake can span multiple model turns while dispatch_agent waits for
       //    a child, so the contract resolves DB-backed task context per turn.
       let systemContext = await buildSystemParts(
@@ -604,41 +544,9 @@ export namespace Orchestrator {
         schedulerProjectDirectory,
       )
       const appendUserMessage = !(await sessionHasUserMessage(agentSession.id))
-      const currentWakeControl = currentWakeControlProjection({ taskID, event, wakeID })
-      const existingMessages = currentWakeControl ? await Session.messages({ sessionID: agentSession.id }) : []
-      const existingCurrentWakeControlMessage = currentWakeControl
-        ? existingMessages.find(
-            (message) => message.info.role === "user" && message.info.id === currentWakeControl.messageID,
-          )
-        : undefined
-      if (existingCurrentWakeControlMessage && currentWakeControl) {
-        const reason = (existingCurrentWakeControlMessage.info as Message.User).extra?.wake_reason
-        if (
-          existingCurrentWakeControlMessage.info.author !== currentWakeControl.author ||
-          (existingCurrentWakeControlMessage.info as Message.User).agent !== "orchestrator" ||
-          !isDeepStrictEqual(reason, currentWakeControl.wakeReason)
-        ) {
-          throw new Error(
-            `Task ${taskID} current wake control message ${currentWakeControl.messageID} conflicts with wake ${wakeID}`,
-          )
-        }
-      }
-      const latestCurrentWakeControlReply = existingCurrentWakeControlMessage
-        ? existingMessages
-            .filter(
-              (message) => message.info.role === "assistant" && message.info.parentID === currentWakeControl!.messageID,
-            )
-            .at(-1)
-        : undefined
-      const existingCurrentWakeControlReply =
-        latestCurrentWakeControlReply?.info.role === "assistant" &&
-        latestCurrentWakeControlReply.info.time.completed !== undefined &&
-        latestCurrentWakeControlReply.info.finish === "stop" &&
-        latestCurrentWakeControlReply.info.error === undefined
-          ? latestCurrentWakeControlReply
-          : undefined
-      const materializeCreatorBeforeCurrentWakeControl = appendUserMessage && Boolean(currentWakeControl)
-      const appendCreatorMessage = appendUserMessage && !currentWakeControl
+      const hasTypedControlOccurrence = Boolean(event?.taskIntent || event?.missionAcceptanceResume)
+      const materializeCreatorBeforeTypedControl = appendUserMessage && hasTypedControlOccurrence
+      const appendCreatorMessage = appendUserMessage && !hasTypedControlOccurrence
       const taskCreator = TaskCreatorMetadata.parse(task.metadata)
       const userText = appendCreatorMessage ? orchestratorUserText(task) : ""
       // Build attachment inventory when the task has file attachments. Wakes
@@ -654,18 +562,20 @@ export namespace Orchestrator {
         appendCreatorMessage,
         schedulerCapability.builtInToolIDs.includes("read"),
       )
-      const creatorInventoryText = materializeCreatorBeforeCurrentWakeControl
+      const creatorInventoryText = materializeCreatorBeforeTypedControl
         ? renderTaskAttachmentInventory(allAttachments, true, schedulerCapability.builtInToolIDs.includes("read"))
         : ""
       const enrichedUserText = appendCreatorMessage ? userText + inventoryText : ""
-      const wakeProvenanceNotice = renderWakeProvenanceNotice(event, taskID)
+      const wakeProvenanceNotice = renderWakeProvenanceNotice(event, taskID, wakeID)
       const hasCurrentWakeIngress = Boolean(
         event?.rootMessage ||
           event?.taskIntent ||
           event?.coordinationRequest ||
           event?.taskWaitActivity ||
           event?.taskWaitWake ||
-          event?.processRecovery,
+          event?.processRecovery ||
+          event?.agentLifecycleDelivery ||
+          event?.dispatchInfrastructureFailure,
       )
       const resolveRuntimeSystem = async () => {
         systemContext = await buildSystemParts(
@@ -688,12 +598,9 @@ export namespace Orchestrator {
       }
       // Build PromptInput.parts. Text only; attachment media is referenced by
       // URL/index in the prompt inventory.
-      const parts: Array<{ type: "text"; text: string }> =
-        currentWakeControl && !existingCurrentWakeControlMessage
-          ? [{ type: "text", text: currentWakeControl.text }]
-          : appendCreatorMessage
-            ? [{ type: "text", text: enrichedUserText }]
-            : []
+      const parts: Array<{ type: "text"; text: string }> = appendCreatorMessage
+        ? [{ type: "text", text: enrichedUserText }]
+        : []
       const partsWithIds = parts.map((p) => ({ ...p, id: Identifier.ascending("part") }))
       const creatorPartsWithIds = [
         { type: "text" as const, text: orchestratorUserText(task) + creatorInventoryText },
@@ -816,10 +723,12 @@ export namespace Orchestrator {
             contractKind: "orchestrator-wake",
             ...(terminalConversation
               ? {
-                  terminalIngressID: terminalConversationAuthority.ingressID,
-                  terminalIngressKind: terminalConversationAuthority.ingressKind,
+                  taskIngressID: terminalConversationAuthority.ingressID,
+                  taskIngressKind: terminalConversationAuthority.ingressKind,
                 }
-              : {}),
+              : wakeID && event
+                ? { taskIngressID: wakeID, taskIngressKind: queuedTaskIngressSourceKind(event) }
+                : {}),
             installedAt: Date.now(),
           },
           projectedTools: guard.tools as any,
@@ -833,15 +742,12 @@ export namespace Orchestrator {
           includeMcpTools: false,
           system: resolveRuntimeSystem,
           systemMode: "complete",
-          runOnce:
-            terminalConversation ||
-            Boolean(existingCurrentWakeControlMessage) ||
-            (!appendCreatorMessage && !currentWakeControl),
+          runOnce: terminalConversation || !appendCreatorMessage,
           resources: { mcp: schedulerMcpOwner },
         })
         schedulerMcpOwnerTransferred = true
         promptInFlight = true
-        if (materializeCreatorBeforeCurrentWakeControl) {
+        if (materializeCreatorBeforeTypedControl) {
           await SessionPrompt.prompt({
             sessionID: agentSession.id,
             author: taskCreator.actor,
@@ -852,33 +758,29 @@ export namespace Orchestrator {
             parts: creatorPartsWithIds,
           })
         }
-        finalMessage =
-          existingCurrentWakeControlReply ??
-          (await SessionContext.provide(agentSession, () =>
-            provideInitializedProjectExecution({
-              directory: agentSession.directory,
-              fn: () =>
-                runOrchestratorPromptWithInactivity({
-                  taskID,
-                  session: agentSession,
-                  run: async () =>
-                    appendCreatorMessage || (currentWakeControl && !existingCurrentWakeControlMessage)
-                      ? ((await SessionPrompt.prompt({
-                          sessionID: agentSession.id,
-                          messageID: currentWakeControl?.messageID,
-                          author: currentWakeControl?.author ?? taskCreator.actor,
-                          model: { providerID: model.providerID, modelID: model.api.id },
-                          agent: "orchestrator",
-                          byteMaterializationProjectID: agentSession.projectID,
-                          extra: currentWakeControl ? { wake_reason: currentWakeControl.wakeReason } : undefined,
-                          parts: partsWithIds,
-                        })) as Message.WithParts)
-                      : ((await SessionPrompt.loop({
-                          sessionID: agentSession.id,
-                        })) as Message.WithParts),
-                }),
-            }),
-          ))
+        finalMessage = await SessionContext.provide(agentSession, () =>
+          provideInitializedProjectExecution({
+            directory: agentSession.directory,
+            fn: () =>
+              runOrchestratorPromptWithInactivity({
+                taskID,
+                session: agentSession,
+                run: async () =>
+                  appendCreatorMessage
+                    ? ((await SessionPrompt.prompt({
+                        sessionID: agentSession.id,
+                        author: taskCreator.actor,
+                        model: { providerID: model.providerID, modelID: model.api.id },
+                        agent: "orchestrator",
+                        byteMaterializationProjectID: agentSession.projectID,
+                        parts: partsWithIds,
+                      })) as Message.WithParts)
+                    : ((await SessionPrompt.loop({
+                        sessionID: agentSession.id,
+                      })) as Message.WithParts),
+              }),
+          }),
+        )
         promptInFlight = false
       } finally {
         // SessionPrompt cancellation rejects attached callers before its
@@ -1004,7 +906,7 @@ export namespace Orchestrator {
           note: event?.note,
           promptSessionID: error.sessionID,
         })
-        return
+        throw error
       }
       const structured = serializeOrchestratorTaskError(error)
       const latestMessageID = agentSessionID ? await latestSessionMessageID(agentSessionID) : undefined
@@ -1156,12 +1058,13 @@ export function renderTaskRuntimeDirectory(projectDirectory: string): string {
   ].join("\n")
 }
 
-export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: string): string {
+export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: string, wakeID?: string): string {
   const lines = [
     "## Wake Provenance",
     "这是一条 wake 消息，不是用户发送的新消息。",
     "This is a wake message, not a user-authored message.",
   ]
+  if (wakeID) lines.push(`Current durable wake occurrence=${wakeID}.`)
   let currentIngressCount = 0
 
   if (event?.taskWaitActivity) {
@@ -1185,7 +1088,7 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
   if (event?.rootMessage) {
     currentIngressCount += 1
     lines.push(
-      `Current rootMessage=${event.rootMessage.messageID}; kind=${event.rootMessage.kind}. This exact message is current ingress for this wake; call \`read_task_message(message_id="${event.rootMessage.messageID}", ...)\` before deciding.`,
+      `Current rootMessage=${event.rootMessage.messageID}; kind=${event.rootMessage.kind}. This exact real-participant message is current ingress for this wake. Use its durable identity and visible contents when deciding; the Host does not prescribe a retrieval tool.`,
     )
   }
 
@@ -1197,7 +1100,7 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
     )
     if (supersededOperatorMessageIDs.length > 0) {
       lines.push(
-        `Ordered superseded operator messages=${supersededOperatorMessageIDs.join(",")}. Read every exact ID in this order through \`read_task_message(message_id=..., ...)\` before scheduling; these refs preserve visible ingress that the Retry/Replan transaction retired from delivery.`,
+        `Ordered superseded operator messages=${supersededOperatorMessageIDs.join(",")}. These exact identities preserve real participant ingress that the Retry/Replan transaction retired from delivery; use them in this order without any Host-prescribed tool workflow.`,
       )
     }
     if (kind === "retry") {
@@ -1218,7 +1121,7 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
       `Current missionAcceptanceResume: mission_id=${resume.missionID}; mission_session_id=${resume.missionSessionID}; ` +
         `message_id=${resume.messageID}; reviewed_terminal_event=${resume.reviewedTerminalLifecycleReference.terminalEventID}; ` +
         `evidence_locators=${JSON.stringify(resume.evidenceLocators)}. ` +
-        `This exact Mission-authored acceptance gap opened a new non-terminal execution occurrence for the same Task. Call \`read_task_message(message_id="${resume.messageID}", ...)\` before deciding. If a successor needs a session_message evidence locator, pair this Message with its actual Task-root Session authority; mission_session_id is origin provenance, not the producing Session. Preserve the Task's fixed Expert Squad and existing workflow binding, then use current Task and Artifact evidence to choose the responsible existing lineage for repair and fresh review. The Host does not prescribe a worker, verdict, or completion outcome.`,
+        `This exact Mission-authored acceptance gap opened a new non-terminal execution occurrence for the same Task. Use the real Message identified above when deciding, without a Host-prescribed retrieval tool. If a successor needs a session_message evidence locator, pair this Message with its actual Task-root Session authority; mission_session_id is origin provenance, not the producing Session. Preserve the Task's fixed Expert Squad and existing workflow binding, then use current Task and Artifact evidence to choose the responsible existing lineage for repair and fresh review. The Host does not prescribe a worker, verdict, or completion outcome.`,
       renderCurrentOccurrenceDecisionObligation(),
     )
   }
@@ -1250,12 +1153,22 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
     )
   }
 
+  if (event?.agentLifecycleDelivery) {
+    currentIngressCount += 1
+    const delivery = event.agentLifecycleDelivery
+    lines.push(
+      `Current agentLifecycleDelivery: event_id=${delivery.eventID}; session_id=${delivery.sessionID}; ` +
+        `dispatch_id=${delivery.dispatchID}. This exact lifecycle delivery occurrence triggered the current wake. ` +
+        "Read the durable agent.execution.lifecycle and dispatch evidence for its outcome; this provenance identifies the current ingress without replacing those durable facts.",
+    )
+  }
+
   if (currentIngressCount === 0) {
     lines.push(
       "This wake contains no typed current ingress. Historical user messages, retry requests, Task intents, lifecycle occurrences, and coordination requests remain audit history only; do not describe them as what the user currently asks or reuse them as fresh authorization.",
     )
     lines.push(
-      "On the initial Task wake, the creator request is already the normal `# User Request` in this Turn. It has no task-root message identity. Read it directly; call `read_task_message` only for an exact message ID explicitly listed by this Wake Provenance as `Current rootMessage`, `Current missionAcceptanceResume`, or an ordered superseded Retry/Replan operator message.",
+      "On the initial Task wake, the creator request is already the normal `# User Request` in this Turn. It has no task-root message identity. Read that real participant message directly.",
     )
   } else {
     lines.push(
@@ -1307,7 +1220,7 @@ async function buildSystemParts(
     ctx.push("## Current Wake Root Message")
     ctx.push(`- message_id=${event.rootMessage.messageID}; kind=${event.rootMessage.kind}`)
     ctx.push(
-      "- Call `read_task_message` once before deciding this wake; the message contents exist only in the task root session.",
+      "- This exact real-participant Message is the current ingress. The Host verifies its wake identity and the final assistant receipt, not a particular retrieval tool.",
     )
     ctx.push("")
   }

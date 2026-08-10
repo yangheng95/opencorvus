@@ -3,6 +3,13 @@ import { createHash, randomUUID } from "node:crypto"
 import fs from "node:fs"
 import path from "node:path"
 import { SCHEMA_DDL } from "./ddl"
+import {
+  deriveEngineArtifactCatalogMetadata,
+  engineArtifactCatalogMetadataSHA256,
+  serializeEngineArtifactPayload,
+} from "../engine/artifact-catalog-metadata"
+import { engineArtifactCatalogLabelIndex } from "../engine/artifact-catalog-constants"
+import type { EngineArtifactKind, EngineMetadata } from "../engine/engine.sql"
 
 type SchemaObjectShape = Map<string, string>
 
@@ -12,6 +19,7 @@ export type SchemaMigration = Readonly<{
   toFingerprint: string
   requiredEmptyTables: readonly string[]
   statements: readonly string[]
+  transformData?: (sqlite: BunDatabase) => void
 }>
 
 export type SchemaMigrationPlan = Readonly<{
@@ -138,6 +146,94 @@ export function findSchemaDrift(sqlite: BunDatabase): string | undefined {
 
 export function hasApplicationSchema(sqlite: BunDatabase): boolean {
   return readSchemaObjectShape(sqlite).size > 0
+}
+
+function normalizeLegacySettlementArtifacts(sqlite: BunDatabase): void {
+  const rows = sqlite
+    .query<
+      {
+        id: string
+        task_id: string
+        kind: EngineArtifactKind
+        payload: string
+        time_created: number
+        time_updated: number
+      },
+      []
+    >(
+      `SELECT id, task_id, kind, payload, time_created, time_updated
+       FROM engine_artifact
+       WHERE kind IN ('task_checkpoint_settlement', 'task_auxiliary_settlement')
+         AND label = 'failed'
+       ORDER BY id`,
+    )
+    .all()
+  for (const row of rows) {
+    const prior = JSON.parse(row.payload) as Record<string, unknown>
+    const {
+      owner_id: _ownerID,
+      owner_process_id: _ownerProcessID,
+      owner_started_at: _ownerStartedAt,
+      lease_expires_at: _leaseExpiresAt,
+      time_completed: _timeCompleted,
+      failures,
+      ...retryable
+    } = prior
+    const priorAttempt = Number(prior.attempt ?? 0)
+    const payload: EngineMetadata = {
+      ...retryable,
+      status: "pending",
+      attempt: Number.isSafeInteger(priorAttempt) && priorAttempt >= 0 ? priorAttempt + 1 : 1,
+      ...(failures === undefined ? {} : { last_failure: failures }),
+    }
+    const payloadText = serializeEngineArtifactPayload(payload)
+    const metadata = deriveEngineArtifactCatalogMetadata({ kind: row.kind, payloadText })
+    const revision = sqlite
+      .query<{ revision: number }, []>(
+        `INSERT INTO engine_artifact_catalog_revision DEFAULT VALUES RETURNING revision`,
+      )
+      .get()
+    if (!revision) throw new Error(`Settlement Artifact ${row.id} migration did not allocate a catalog revision`)
+    const catalogMetadataSHA256 = engineArtifactCatalogMetadataSHA256({
+      artifact_id: row.id,
+      task_id: row.task_id,
+      kind: row.kind,
+      label_index: engineArtifactCatalogLabelIndex("pending"),
+      time_created: row.time_created,
+      time_updated: row.time_updated,
+      ...metadata,
+    })
+    sqlite.run(
+      `UPDATE engine_artifact
+       SET label = ?, payload = ?, payload_sha256 = ?, payload_bytes = ?,
+           payload_block_sha256s = ?, payload_block_index_sha256 = ?,
+           catalog_artifact_type = ?, catalog_schema_diagnostic = ?, catalog_producer = ?,
+           catalog_import_source_task_id = ?, catalog_resource_count = ?, catalog_resource_media_types = ?,
+           catalog_search_text = ?, catalog_search_text_truncated = ?, catalog_metadata_sha256 = ?,
+           catalog_revision = ?
+       WHERE id = ? AND kind = ? AND label = 'failed'`,
+      [
+        "pending",
+        payloadText,
+        metadata.payload_sha256,
+        metadata.payload_bytes,
+        JSON.stringify(metadata.payload_block_sha256s),
+        metadata.payload_block_index_sha256,
+        metadata.catalog_artifact_type,
+        metadata.catalog_schema_diagnostic,
+        metadata.catalog_producer === null ? null : JSON.stringify(metadata.catalog_producer),
+        metadata.catalog_import_source_task_id,
+        metadata.catalog_resource_count,
+        JSON.stringify(metadata.catalog_resource_media_types),
+        metadata.catalog_search_text,
+        metadata.catalog_search_text_truncated ? 1 : 0,
+        catalogMetadataSHA256,
+        revision.revision,
+        row.id,
+        row.kind,
+      ],
+    )
+  }
 }
 
 const SCHEMA_MIGRATIONS: readonly SchemaMigration[] = Object.freeze([
@@ -316,7 +412,132 @@ WHERE "engine_task"."time_completed" IS NULL
     FROM "protocol_event"
     WHERE "protocol_event"."task_id" = "engine_task"."id"
       AND "protocol_event"."type" = 'task.cancellation.requested'
-  )`,
+      )`,
+    ]),
+  }),
+  Object.freeze({
+    id: "2026-08-11-event-job-fire-authority",
+    fromFingerprint: "10db39feae477909581d186d7eb561feddefcf667f8d6471b4907e71a9a5e515",
+    toFingerprint: "a8d0e5b094812a889f470d6d6f5b47663ab89ca46411029fd569dc7320913279",
+    requiredEmptyTables: Object.freeze([]),
+    statements: Object.freeze([
+      `CREATE TABLE "event_job_fire" (
+  "id" text PRIMARY KEY NOT NULL,
+  "event_job_id" text NOT NULL,
+  "project_id" text NOT NULL,
+  "event_occurrence_id" text NOT NULL,
+  "event_type" text NOT NULL,
+  "causation_fire_id" text,
+  "causation_ancestry" text NOT NULL,
+  "status" text NOT NULL,
+  "disposition" text,
+  "target_session_id" text NOT NULL,
+  "creates_session" integer NOT NULL,
+  "message_id" text,
+  "owner_id" text,
+  "owner_process_id" integer,
+  "lease_until" integer NOT NULL DEFAULT 0,
+  "attempt" integer NOT NULL DEFAULT 0,
+  "error" text,
+  "time_started" integer,
+  "time_completed" integer,
+  "time_created" integer NOT NULL,
+  "time_updated" integer NOT NULL,
+  FOREIGN KEY ("project_id") REFERENCES "project"("id") ON DELETE CASCADE
+)`,
+      `CREATE UNIQUE INDEX "event_job_fire_occurrence_idx" ON "event_job_fire" ("event_job_id", "event_occurrence_id")`,
+      `CREATE INDEX "event_job_fire_project_status_idx" ON "event_job_fire" ("project_id", "status")`,
+      `CREATE INDEX "event_job_fire_causation_idx" ON "event_job_fire" ("causation_fire_id")`,
+      `CREATE INDEX "event_job_fire_target_session_idx" ON "event_job_fire" ("target_session_id")`,
+    ]),
+    transformData: normalizeLegacySettlementArtifacts,
+  }),
+  Object.freeze({
+    id: "2026-08-11-bus-publication-outbox-authority",
+    fromFingerprint: "a8d0e5b094812a889f470d6d6f5b47663ab89ca46411029fd569dc7320913279",
+    toFingerprint: "93cc480799a9788751c55fe87700ee99ef782a3f906693b612632ea67390c765",
+    requiredEmptyTables: Object.freeze([]),
+    statements: Object.freeze([
+      `CREATE TABLE "bus_publication_outbox" (
+  "occurrence_id" text PRIMARY KEY NOT NULL,
+  "project_id" text NOT NULL,
+  "directory" text NOT NULL,
+  "event_type" text NOT NULL,
+  "properties" text NOT NULL,
+  "causation" text,
+  "exact_settled" integer NOT NULL DEFAULT 0,
+  "wildcard_settled" integer NOT NULL DEFAULT 0,
+  "global_settled" integer NOT NULL DEFAULT 0,
+  "time_created" integer NOT NULL,
+  "time_updated" integer NOT NULL,
+  FOREIGN KEY ("project_id") REFERENCES "project"("id") ON DELETE CASCADE
+)`,
+      `CREATE INDEX "bus_publication_outbox_project_idx" ON "bus_publication_outbox" ("project_id", "time_created")`,
+      `CREATE INDEX "bus_publication_outbox_pending_idx" ON "bus_publication_outbox" ("exact_settled", "wildcard_settled", "global_settled")`,
+      `CREATE TABLE "bus_publication_delivery" (
+  "occurrence_id" text NOT NULL,
+  "phase" text NOT NULL,
+  "subscriber_id" text NOT NULL,
+  "durable" integer NOT NULL,
+  "settled" integer NOT NULL DEFAULT 0,
+  "time_created" integer NOT NULL,
+  "time_updated" integer NOT NULL,
+  PRIMARY KEY ("occurrence_id", "phase", "subscriber_id"),
+  FOREIGN KEY ("occurrence_id") REFERENCES "bus_publication_outbox"("occurrence_id") ON DELETE CASCADE
+)`,
+      `CREATE INDEX "bus_publication_delivery_pending_idx" ON "bus_publication_delivery" ("occurrence_id", "phase", "settled")`,
+    ]),
+  }),
+  Object.freeze({
+    id: "2026-08-11-bus-publication-durable-retry-backoff",
+    fromFingerprint: "93cc480799a9788751c55fe87700ee99ef782a3f906693b612632ea67390c765",
+    toFingerprint: "84af4e18ec989a211a7ee4dc574b535fce8cfbb7237eb73feb549a82ace1b058",
+    requiredEmptyTables: Object.freeze([]),
+    statements: Object.freeze([
+      `CREATE TEMP TABLE "bus_publication_delivery_retry_backup" AS SELECT * FROM "bus_publication_delivery"`,
+      `DROP TABLE "bus_publication_delivery"`,
+      `CREATE TABLE "bus_publication_outbox_retry_next" (
+  "occurrence_id" text PRIMARY KEY NOT NULL,
+  "project_id" text NOT NULL,
+  "directory" text NOT NULL,
+  "event_type" text NOT NULL,
+  "properties" text NOT NULL,
+  "causation" text,
+  "exact_settled" integer NOT NULL DEFAULT 0,
+  "wildcard_settled" integer NOT NULL DEFAULT 0,
+  "global_settled" integer NOT NULL DEFAULT 0,
+  "time_created" integer NOT NULL,
+  "time_updated" integer NOT NULL,
+  "attempt_count" integer NOT NULL DEFAULT 0,
+  "next_attempt_at" integer NOT NULL DEFAULT 0,
+  "last_error" text,
+  FOREIGN KEY ("project_id") REFERENCES "project"("id") ON DELETE CASCADE
+)`,
+      `INSERT INTO "bus_publication_outbox_retry_next" (
+  "occurrence_id", "project_id", "directory", "event_type", "properties", "causation",
+  "exact_settled", "wildcard_settled", "global_settled", "time_created", "time_updated"
+) SELECT
+  "occurrence_id", "project_id", "directory", "event_type", "properties", "causation",
+  "exact_settled", "wildcard_settled", "global_settled", "time_created", "time_updated"
+FROM "bus_publication_outbox"`,
+      `DROP TABLE "bus_publication_outbox"`,
+      `ALTER TABLE "bus_publication_outbox_retry_next" RENAME TO "bus_publication_outbox"`,
+      `CREATE INDEX "bus_publication_outbox_project_idx" ON "bus_publication_outbox" ("project_id", "time_created")`,
+      `CREATE INDEX "bus_publication_outbox_pending_idx" ON "bus_publication_outbox" ("exact_settled", "wildcard_settled", "global_settled")`,
+      `CREATE TABLE "bus_publication_delivery" (
+  "occurrence_id" text NOT NULL,
+  "phase" text NOT NULL,
+  "subscriber_id" text NOT NULL,
+  "durable" integer NOT NULL,
+  "settled" integer NOT NULL DEFAULT 0,
+  "time_created" integer NOT NULL,
+  "time_updated" integer NOT NULL,
+  PRIMARY KEY ("occurrence_id", "phase", "subscriber_id"),
+  FOREIGN KEY ("occurrence_id") REFERENCES "bus_publication_outbox"("occurrence_id") ON DELETE CASCADE
+)`,
+      `INSERT INTO "bus_publication_delivery" SELECT * FROM "bus_publication_delivery_retry_backup"`,
+      `DROP TABLE "bus_publication_delivery_retry_backup"`,
+      `CREATE INDEX "bus_publication_delivery_pending_idx" ON "bus_publication_delivery" ("occurrence_id", "phase", "settled")`,
     ]),
   }),
 ])
@@ -502,6 +723,7 @@ export function migrateDatabaseFile(
       }
       assertMigrationPreconditions(sqlite, migration)
       for (const statement of migration.statements) sqlite.run(statement)
+      migration.transformData?.(sqlite)
       cursor = schemaObjectFingerprint(sqlite)
       if (cursor !== migration.toFingerprint) {
         throw new Error(`Migration ${migration.id} produced ${cursor}, expected ${migration.toFingerprint}`)

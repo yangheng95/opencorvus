@@ -19,12 +19,19 @@ export async function runWithIndependentProjectIdentity<R>(input: {
 
 export async function provideInitializedProjectExecution<R>(input: {
   directory: string
+  signal?: AbortSignal
   fn: () => R
 }): Promise<Awaited<R>> {
   const { InstanceBootstrap } = await import("./bootstrap")
+  input.signal?.throwIfAborted()
   return await Instance.provide({
     directory: Filesystem.resolve(input.directory),
-    fn: input.fn,
+    fn: async () => {
+      input.signal?.throwIfAborted()
+      const result = await input.fn()
+      input.signal?.throwIfAborted()
+      return result
+    },
     init: InstanceBootstrap,
   })
 }
@@ -38,10 +45,13 @@ export async function provideInitializedProjectExecution<R>(input: {
  */
 export async function runWithInitializedIndependentProject<R>(input: {
   directory: string
+  signal?: AbortSignal
   fn: () => R
 }): Promise<Awaited<R>> {
   const directory = Filesystem.resolve(input.directory)
   return await Database.runOutsideContext(() =>
-    runOutsideInstanceContext(() => provideInitializedProjectExecution({ directory, fn: input.fn })),
+    runOutsideInstanceContext(() =>
+      provideInitializedProjectExecution({ directory, signal: input.signal, fn: input.fn }),
+    ),
   )
 }

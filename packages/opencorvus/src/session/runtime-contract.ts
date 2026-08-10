@@ -51,8 +51,8 @@ export type SessionRuntimeContractIdentity =
         contractKind: "orchestrator-wake"
         expertSquadID: string
         taskID: string
-        terminalIngressID?: string
-        terminalIngressKind?: "operator_message" | "coordination_request"
+        taskIngressID?: string
+        taskIngressKind?: string
         workerTurnDescriptorID?: never
         workerTurnDescriptorHash?: never
       })
@@ -275,8 +275,8 @@ export namespace SessionRuntimeContractStore {
       if (typeof identity.taskID !== "string" || !identity.taskID.trim()) {
         throw new Error("Projected scheduler runtime contract requires taskID")
       }
-      if (Boolean(schedulerIdentity.terminalIngressID) !== Boolean(schedulerIdentity.terminalIngressKind)) {
-        throw new Error("Projected scheduler terminal ingress identity requires both ID and kind")
+      if (Boolean(schedulerIdentity.taskIngressID) !== Boolean(schedulerIdentity.taskIngressKind)) {
+        throw new Error("Projected scheduler Task ingress identity requires both ID and kind")
       }
       assertHarnessProjection(identity, contract)
       const owner = assertProjectedSkillSurface(
@@ -484,8 +484,14 @@ export namespace SessionRuntimeContractStore {
   }
 
   export async function dispose(sessionID: string): Promise<void> {
-    const resources = clear(sessionID)
-    await resources?.mcp.close()
+    const contract = contracts.get(sessionID)
+    if (!contract) return
+    using _operation = claimOperation(sessionID, contract, "close runtime resources")
+    await contract.resources?.mcp.close()
+    if (contracts.get(sessionID) !== contract) {
+      throw new Error(`SessionRuntimeContract changed while closing runtime resources for ${sessionID}`)
+    }
+    contracts.delete(sessionID)
   }
 
   export function claimOperation(

@@ -40,7 +40,9 @@ export async function awaitSessionPromptFinishedInScope(input: {
   taskID?: string
   handle?: string
   inactivityTimeoutMs?: number
+  signal?: AbortSignal
 }): Promise<boolean> {
+  input.signal?.throwIfAborted()
   const handle = input.handle ?? "SessionPrompt.finish"
   const receipt = SessionPromptState.cancellationReceipt(input.session.id, input.session.directory)
   if (!receipt && !SessionPromptState.hasOwnedPrompt(input.session.id, input.session.directory)) return false
@@ -51,13 +53,16 @@ export async function awaitSessionPromptFinishedInScope(input: {
       promptFinished: receipt?.finished,
       inactivityTimeoutMs: input.inactivityTimeoutMs ?? DEFAULT_PROMPT_SETTLE_INACTIVITY_MS,
       label: handle,
+      signal: input.signal,
     })
     if (receipt) {
+      input.signal?.throwIfAborted()
       await publishSessionStatus(
         input.session,
         { type: "terminal", reason: "aborted", error: receipt.error.message },
-        { promptGenerationOwner: receipt.owner },
+        { promptGenerationOwner: receipt.owner, signal: input.signal },
       )
+      input.signal?.throwIfAborted()
       SessionPromptState.clearCancellationReceipt(input.session.id, receipt.owner)
     }
     return true
@@ -136,7 +141,9 @@ export async function assertSessionPromptSubtreeFinished(input: {
   taskID?: string
   handle?: string
   inactivityTimeoutMs?: number
+  signal?: AbortSignal
 }): Promise<void> {
+  input.signal?.throwIfAborted()
   const handle = input.handle ?? "SessionPrompt.cancel"
   const failures = [...(input.failures ?? [])]
   const settled = await Promise.allSettled(
@@ -146,6 +153,7 @@ export async function assertSessionPromptSubtreeFinished(input: {
         taskID: input.taskID,
         handle: `${handle}.finish`,
         inactivityTimeoutMs: input.inactivityTimeoutMs,
+        signal: input.signal,
       }),
     ),
   )
@@ -234,7 +242,9 @@ function waitForPromptFinishAfterInactivity(input: {
   promptFinished?: Promise<void>
   inactivityTimeoutMs: number
   label: string
+  signal?: AbortSignal
 }): Promise<void> {
+  input.signal?.throwIfAborted()
   if (!input.promptFinished && !SessionPromptState.hasOwnedPrompt(input.sessionID, input.directory))
     return Promise.resolve()
 
@@ -263,8 +273,10 @@ function waitForPromptFinishAfterInactivity(input: {
       if (settled) return
       settled = true
       if (timer) clearTimeout(timer)
+      input.signal?.removeEventListener("abort", abort)
       fn()
     }
+    const abort = () => complete(() => reject(input.signal?.reason))
     const tick = () => {
       if (settled) return
       observeActivity()
@@ -278,7 +290,9 @@ function waitForPromptFinishAfterInactivity(input: {
     }
 
     observeActivity()
-    timer = setTimeout(tick, pollMs)
+    input.signal?.addEventListener("abort", abort, { once: true })
+    if (input.signal?.aborted) abort()
+    if (!settled) timer = setTimeout(tick, pollMs)
     promptFinished.then(
       () => complete(() => resolve()),
       (error) => complete(() => reject(error)),

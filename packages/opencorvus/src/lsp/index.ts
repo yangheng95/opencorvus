@@ -296,7 +296,7 @@ export namespace LSP {
         onDiagnostics(properties) {
           if (s.disposed) return
           return runPersistentProjectOperation(s.owner, `LSP server ${server.id} diagnostics`, () =>
-            Bus.publish(LSPClient.Event.Diagnostics, properties),
+            Bus.publishOwned(LSPClient.Event.Diagnostics, properties),
           ).catch((error) => {
             log.error(`LSP server ${server.id} diagnostics publication failed`, { root, error: String(error) })
           })
