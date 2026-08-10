@@ -33212,7 +33212,6 @@ export type WorkLedgerListResponses = {
           tasks: Array<{
             activityStatus: "running" | "inactive"
             archived?: number
-            cancellationStatus: "none" | "cancelling" | "cancelled"
             created: number
             description: string
             directory: string
@@ -33309,7 +33308,6 @@ export type WorkLedgerListArchivedResponses = {
           tasks: Array<{
             activityStatus: "running" | "inactive"
             archived?: number
-            cancellationStatus: "none" | "cancelling" | "cancelled"
             created: number
             description: string
             directory: string
@@ -33334,7 +33332,6 @@ export type WorkLedgerListArchivedResponses = {
       | {
           activityStatus: "running" | "inactive"
           archived?: number
-          cancellationStatus: "none" | "cancelling" | "cancelled"
           created: number
           description: string
           directory: string
