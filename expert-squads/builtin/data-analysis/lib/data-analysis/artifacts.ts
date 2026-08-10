@@ -29,9 +29,8 @@ const ActionSchema = tool.schema.object({
   timing: nonempty,
   success_measure: nonempty,
 }).strict()
-const stageSchema = <T extends string, D extends ReturnType<typeof tool.schema.object>>(type: T, details: D) =>
+const stageSchema = <T extends string, D extends ReturnType<typeof tool.schema.object>>(_type: T, details: D) =>
   tool.schema.object({
-    artifact_type: tool.schema.literal(type),
     as_of_date: nonempty,
     summary: nonempty,
     evidence: tool.schema.array(EvidenceSchema),
@@ -66,5 +65,6 @@ export type DataAnalysisArtifactType = tool.schema.infer<typeof DataAnalysisArti
 export const DATAANALYSIS_TERMINAL_ARTIFACT_TYPE = "data-analysis/report"
 
 export function parseDataAnalysisArtifact(type: DataAnalysisArtifactType, payload: unknown) {
+  DataAnalysisArtifactTypeSchema.parse(type)
   return DataAnalysisArtifactSchemas[type].parse(payload)
 }

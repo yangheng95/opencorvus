@@ -29,9 +29,8 @@ const ActionSchema = tool.schema.object({
   timing: nonempty,
   success_measure: nonempty,
 }).strict()
-const stageSchema = <T extends string, D extends ReturnType<typeof tool.schema.object>>(type: T, details: D) =>
+const stageSchema = <T extends string, D extends ReturnType<typeof tool.schema.object>>(_type: T, details: D) =>
   tool.schema.object({
-    artifact_type: tool.schema.literal(type),
     as_of_date: nonempty,
     summary: nonempty,
     evidence: tool.schema.array(EvidenceSchema),
@@ -66,5 +65,6 @@ export type HrOperationsArtifactType = tool.schema.infer<typeof HrOperationsArti
 export const HROPERATIONS_TERMINAL_ARTIFACT_TYPE = "hr-operations/operating-plan"
 
 export function parseHrOperationsArtifact(type: HrOperationsArtifactType, payload: unknown) {
+  HrOperationsArtifactTypeSchema.parse(type)
   return HrOperationsArtifactSchemas[type].parse(payload)
 }

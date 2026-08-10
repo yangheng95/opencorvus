@@ -62,7 +62,6 @@ const action = {
 }
 function payload<T extends HrOperationsArtifactType>(artifactType: T, details: unknown) {
   return {
-    artifact_type: artifactType,
     as_of_date: "2026-08-10",
     summary: `Complete ${artifactType} evidence`,
     evidence: [evidence],
