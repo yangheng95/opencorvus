@@ -91,6 +91,11 @@
 - Default payload provisioning now installs 45 packages. In clean Windows evidence, real runtime/database ownership handoffs took 37–47 seconds, project-directory integration cases took 26–29 seconds, a Session loop case took 28–31 seconds, and a scheduled wake case took 35 seconds. Their old 20- or 30-second budgets caused the first timeout and then cascading ownership failures.
 - Repair boundary: raise only those measured integration-test budgets to 90 seconds. Assertions, cleanup, inactivity monitoring, and failure behavior remain unchanged.
 
+### Root cause G: platform-specific crash simulation
+
+- The first proof push moved generated artifacts, typecheck, security, and all non-unit test jobs to success, then Linux exposed one stale-owner test defect: `child.kill()` sends SIGTERM, allowing the Linux fixture to perform normal owner-file cleanup before the test asserted crash residue. Windows termination had left the evidence behind, so the source-frozen Windows pass did not cover this signal difference.
+- Repair boundary: send SIGKILL for the one test that explicitly models an unclean crash. The existing assertions still require owner/lock residue, rewrite only the recorded PID/process identity, and prove that a successor acquires ownership.
+
 ### Why prior paths did not root-fix it
 
 - The earlier clean-runner repair added an opt-in SDK primitive and enabled it for then-known direct consumers, but later generator call graphs were not added to the contract, so two workflows silently drifted.
@@ -123,4 +128,4 @@
   - Turbo typecheck passed all eight participating package tasks.
   - The first complete isolated run found two measured 30-second budget failures. Both files passed alone, their three affected budgets were raised to 90 seconds, and the complete suite was repeated.
   - Final OpenCorvus suite: all 136 discovered test files passed in isolated Bun processes; Turbo reported 3/3 successful tasks in 11 minutes 30 seconds.
-- Independent agent review, live GitHub proof, and historical run deletion remain pending.
+- Independent review must remain clear after every repair. Final acceptance requires a later proof push with every triggered workflow successful before any historical Actions run is deleted.

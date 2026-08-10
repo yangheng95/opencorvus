@@ -118,7 +118,7 @@ describe("runtime server database ownership", () => {
     const database = path.join(directory, "project.db")
     const owner = startOwnershipProcess(database, "hold")
     await firstLine(owner)
-    owner.kill()
+    owner.kill("SIGKILL")
     await new Promise<void>((resolve) => owner.once("exit", () => resolve()))
     children.delete(owner)
 
