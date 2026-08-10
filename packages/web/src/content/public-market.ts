@@ -139,4 +139,3 @@ export function publicPath(locale: PublicLocale, path = "") {
 export function squadPath(locale: PublicLocale, record: PublicSquadRecord) {
   return publicPath(locale, `/market/${record.identity.namespace}/${record.identity.id}/`)
 }
-
