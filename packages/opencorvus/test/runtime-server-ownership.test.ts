@@ -73,6 +73,15 @@ async function finish(child: ChildProcessWithoutNullStreams): Promise<void> {
   children.delete(child)
 }
 
+async function terminateUncleanly(child: ChildProcessWithoutNullStreams): Promise<void> {
+  if (child.exitCode === null) {
+    const exited = new Promise<void>((resolve) => child.once("exit", () => resolve()))
+    child.kill("SIGKILL")
+    await exited
+  }
+  children.delete(child)
+}
+
 describe("runtime server database ownership", () => {
   test("one backend owns a project database and a successor acquires it after handoff", async () => {
     const directory = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-owner-"))
@@ -110,7 +119,10 @@ describe("runtime server database ownership", () => {
       existing: { database, pid: (acquired.owner as { pid: number }).pid },
     })
     await finish(contender)
-    await finish(owner)
+    // The stale mtime deliberately compromises proper-lockfile's heartbeat.
+    // Once live-process authority is proven, terminate the fixture without
+    // pretending that a deliberately compromised filesystem lock can release cleanly.
+    await terminateUncleanly(owner)
   })
 
   test("a stale owner record with a reused PID does not block the new process instance", async () => {
@@ -119,9 +131,7 @@ describe("runtime server database ownership", () => {
     const database = path.join(directory, "project.db")
     const owner = startOwnershipProcess(database, "hold")
     await firstLine(owner)
-    owner.kill("SIGKILL")
-    await new Promise<void>((resolve) => owner.once("exit", () => resolve()))
-    children.delete(owner)
+    await terminateUncleanly(owner)
 
     const entries = await readdir(directory, { withFileTypes: true })
     const ownerEntry = entries.find((entry) => entry.isFile() && entry.name.endsWith(".owner"))
