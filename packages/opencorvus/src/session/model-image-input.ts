@@ -130,24 +130,29 @@ export async function prepareModelImageInput(input: {
     return { mime: input.mime, bytes: input.bytes }
   }
 
-  const originalDimensions = readModelImageDimensions(input.bytes)
+  const normalized = await normalizeModelImageFormat(input)
+  const originalDimensions = readModelImageDimensions(normalized.bytes)
   if (!originalDimensions) {
-    assertModelImageInputWithinLimits(input)
-    return { mime: input.mime, bytes: input.bytes }
+    assertModelImageInputWithinLimits({ ...input, mime: normalized.mime, bytes: normalized.bytes })
+    return {
+      mime: normalized.mime,
+      bytes: normalized.bytes,
+      ...(normalized.note ? { note: normalized.note } : {}),
+    }
   }
 
   const cropped = await cropBlankMargins({
-    mime: input.mime,
-    bytes: input.bytes,
+    mime: normalized.mime,
+    bytes: normalized.bytes,
     originalDimensions,
   })
-  let bytes = cropped?.bytes ?? input.bytes
+  let bytes = cropped?.bytes ?? normalized.bytes
   let dimensions = readModelImageDimensions(bytes) ?? originalDimensions
   const crop = cropped?.crop
   const maxDimension = input.maxDimension ?? MAX_MODEL_IMAGE_INPUT_DIMENSION
   const maxPixels = input.maxPixels ?? MODEL_IMAGE_INPUT_PIXEL_BUDGET
   const resized = await resizeForModelInputLimits({
-    mime: input.mime,
+    mime: normalized.mime,
     bytes,
     dimensions,
     source: input.source,
@@ -166,7 +171,7 @@ export async function prepareModelImageInput(input: {
         ? ` after blank-margin crop from ${crop.originalWidth}x${crop.originalHeight}`
         : ""
     throw new ModelImageInputTooLargeError({
-      mime: input.mime,
+      mime: normalized.mime,
       source: input.source,
       width: dimensions.width,
       height: dimensions.height,
@@ -178,12 +183,13 @@ export async function prepareModelImageInput(input: {
       blankMarginCrop: crop,
       message:
         `Model image input too large: ${input.source} is ${dimensions.width}x${dimensions.height}${afterCrop} ` +
-        `(${pixels} pixels, ${input.mime}); max supported dimension is ${maxDimension}px and ` +
+        `(${pixels} pixels, ${normalized.mime}); max supported dimension is ${maxDimension}px and ` +
         `max model image pixels is ${maxPixels}.`,
     })
   }
 
   const notes: string[] = []
+  if (normalized.note) notes.push(normalized.note)
   if (crop) {
     notes.push(
       `[model-image-input] Cropped blank margins for ${input.source}: original ${crop.originalWidth}x${crop.originalHeight}, model input ${crop.width}x${crop.height}. Original attachment remains unchanged.`,
@@ -196,7 +202,7 @@ export async function prepareModelImageInput(input: {
   }
   const note = notes.length > 0 ? notes.join("\n") : undefined
   return {
-    mime: input.mime,
+    mime: normalized.mime,
     bytes,
     dimensions,
     ...(crop ? { crop } : {}),
@@ -205,11 +211,35 @@ export async function prepareModelImageInput(input: {
   }
 }
 
+async function normalizeModelImageFormat(input: {
+  mime: string
+  bytes: Buffer
+  source: string
+}): Promise<{ mime: string; bytes: Buffer; note?: string }> {
+  const mime = input.mime.toLowerCase().split(";")[0]?.trim()
+  if (mime === "image/png" || mime === "image/jpeg" || mime === "image/webp") {
+    return { mime, bytes: input.bytes }
+  }
+  if (mime === "image/jpg") return { mime: "image/jpeg", bytes: input.bytes }
+
+  const { data, info } = await sharp(input.bytes, { failOn: "error", pages: 1 })
+    .png()
+    .toBuffer({ resolveWithObject: true })
+  return {
+    mime: "image/png",
+    bytes: data,
+    note:
+      `[model-image-input] Converted ${input.source} from ${input.mime} to image/png ` +
+      `(${info.width}x${info.height}) for provider input. Original attachment remains unchanged.`,
+  }
+}
+
 async function cropBlankMargins(input: {
   mime: string
   bytes: Buffer
   originalDimensions: ImageDimensions
 }): Promise<{ bytes: Buffer; crop: ModelImageBlankMarginCrop } | undefined> {
+  if (input.originalDimensions.width < 3 || input.originalDimensions.height < 3) return undefined
   const encoder = encoderForMime(input.mime)
   if (!encoder) return undefined
   const { data, info } = await encoder(

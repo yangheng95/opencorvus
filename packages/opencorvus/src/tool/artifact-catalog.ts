@@ -25,6 +25,7 @@ import {
 } from "@/artifact-catalog"
 import { taskIDForSession } from "@/engine/task-session-lineage"
 import { publishTaskArtifactProjectFiles, readTaskArtifactResourceSet } from "@/task-artifact/store"
+import { resolveArtifactSnapshotReadAuthority } from "@/build/merge-back-publication-authority"
 import { tool as aiTool } from "ai"
 import { Tool } from "./tool"
 import { resolveCoreProjectedWorkerToolExecutionScope } from "./task-tool-execution-scope"
@@ -70,7 +71,8 @@ const ARTIFACT_PUBLISH_DESCRIPTION =
   "Use this for durable inter-Agent evidence; the visible final message remains narrative and is not Artifact transport."
 
 const ARTIFACT_SNAPSHOT_DESCRIPTION =
-  "Publish real files from the current Task product repository as one immutable Task Artifact snapshot. " +
+  "Publish real files from the canonical current Task primary project as one immutable Task Artifact snapshot. " +
+  "This tool never reads a projected worker's mutable managed worktree. A managed Build worker must commit, receive a merged merge_back result, and pass that exact primary_head as source_commit; the Host then reads the immutable Git commit bytes even if the primary worktree advances. " +
   "Supply canonical project-relative paths and normalized media types. The Host validates Task ownership and stable " +
   "regular-file bytes, then atomically publishes or reuses the exact Task-scoped content snapshot and returns one compact resource-set locator. The Host expands that set in canonical UTF-8 byte path order. Pass that locator to artifact_publish " +
   "when a semantic Engine Artifact owns the files. Downstream Agents discover and read locators from the catalog; " +
@@ -78,6 +80,13 @@ const ARTIFACT_SNAPSHOT_DESCRIPTION =
 
 const ArtifactSnapshotToolInputSchema = z
   .object({
+    source_commit: z
+      .string()
+      .regex(/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/)
+      .optional()
+      .describe(
+        "Exact immutable Git commit returned as primary_head by merge_back. Required for managed Build publication; omit only when the current Task project file itself is the canonical source and merge_back is unavailable.",
+      ),
     files: z
       .array(
         z
@@ -366,8 +375,13 @@ export const ArtifactSnapshotTool = Tool.define("artifact_snapshot", {
   parameters: ArtifactSnapshotToolInputSchema,
   async execute(args, ctx) {
     const scope = await resolveArtifactWorkerScope(ctx, "artifact_snapshot")
+    const source = await resolveArtifactSnapshotReadAuthority({
+      scope,
+      ...(args.source_commit ? { claimedSourceCommit: args.source_commit } : {}),
+    })
     const publication = await publishTaskArtifactProjectFiles({
       scope,
+      source,
       files: args.files.map((file) => ({
         path: file.path,
         mediaType: file.media_type,

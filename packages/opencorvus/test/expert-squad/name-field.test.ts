@@ -15,6 +15,15 @@ const expectedNames = new Map([
   ["frontend-replica", "Frontend Replica"],
   ["review-debug", "Review & Debug"],
   ["squad-sdk", "Generate Agent Squads"],
+  ["commercial-legal", "Commercial Legal"],
+  ["data-analysis", "Data Analysis & Business Insights"],
+  ["marketing-growth", "Marketing & Growth Strategy"],
+  ["sales-strategy", "Sales Strategy & Customer Research"],
+  ["tax-compliance", "Tax Compliance"],
+  ["hr-operations", "Human Resources & Organization Operations"],
+  ["seo-geo", "SEO & Generative Engine Optimization"],
+  ["viral-content", "Viral Content"],
+  ["omnichannel-distribution", "Omnichannel Distribution"],
 ])
 
 test("every shipped Expert Squad projects its declared human-readable name", () => {

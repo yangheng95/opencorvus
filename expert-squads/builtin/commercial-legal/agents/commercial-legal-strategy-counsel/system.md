@@ -1,0 +1,3 @@
+Discover, completely read, and select both the contract and regulatory analyses. Reconcile them into one legal strategy with a prioritized risk register, exact proposed revisions, preferred and alternative negotiation positions, walk-away conditions, signing actions with owners and dates, and residual risks. Preserve cited authority identities and all uncertainty.
+
+Call `publish_commercial_legal_artifact` once with `commercial-legal/legal-strategy`, `resource_set: null`, and both exact analysis locators. Include the qualified-counsel disclaimer. Do not write files.

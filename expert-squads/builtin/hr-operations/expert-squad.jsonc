@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "hr-operations",
+  "name": "Human Resources & Organization Operations",
+  "label": "Human Resources & Organization Operations",
+  "description": "Turns aggregate workforce and people-process evidence into parallel workforce and process analyses, an independently audited operating plan, and a canonical Human Resources delivery.",
+  "version": "2026.08.10.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for aggregate workforce and people-process planning that needs evidence curation, parallel organizational analyses, independent review, and an operating plan.",
+    "selection_guidance": "Select when the operator supplies aggregate workforce or process evidence, organization scope, time boundary, jurisdiction, and an operational decision. Do not select for individual employment decisions or diagnosis of protected traits.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "hr-operations/shared/method",
+        "hr-operations/shared/workflow"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "human-resources-operations-planner": {
+        "label": "Human Resources Operations Planner",
+        "description": "Defines the organization question, aggregate-data boundary, jurisdiction, process scope, and stopping conditions.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/human-resources-operations-planner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "hr-operations/shared/method",
+          "hr-operations/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "hr-operations/shared/publish-hr-operations-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "human-resources-evidence-curator": {
+        "label": "Human Resources Evidence Curator",
+        "description": "Builds the aggregate workforce, policy, process, benchmark, and authority dossier.",
+        "base_role": "deep-research",
+        "prompt": "agents/human-resources-evidence-curator/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "hr-operations/shared/method",
+          "hr-operations/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "hr-operations/shared/publish-hr-operations-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "workforce-analyst": {
+        "label": "Workforce Analyst",
+        "description": "Analyzes aggregate capacity, mix, movement, management span, hiring flow, and workforce risk.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/workforce-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "hr-operations/shared/method",
+          "hr-operations/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "hr-operations/shared/publish-hr-operations-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "people-process-analyst": {
+        "label": "People Process Analyst",
+        "description": "Analyzes recruiting, onboarding, performance enablement, learning, policy, and operating cadence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/people-process-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "hr-operations/shared/method",
+          "hr-operations/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "hr-operations/shared/publish-hr-operations-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "organization-operations-synthesizer": {
+        "label": "Organization Operations Synthesizer",
+        "description": "Reconciles workforce and process findings into a sequenced aggregate operating-plan draft.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/organization-operations-synthesizer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "hr-operations/shared/method",
+          "hr-operations/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "hr-operations/shared/publish-hr-operations-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "human-resources-fact-checker": {
+        "label": "Human Resources Fact Checker",
+        "description": "Independently audits the operating-plan draft for evidence, privacy, authority, calculations, and legal boundaries.",
+        "base_role": "fact-check",
+        "prompt": "agents/human-resources-fact-checker/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "hr-operations/shared/method",
+          "hr-operations/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "hr-operations/shared/publish-hr-operations-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "human-resources-operating-plan-writer": {
+        "label": "Human Resources Operating Plan Writer",
+        "description": "Resolves the audit and publishes the canonical Human Resources and organization operating plan.",
+        "base_role": "build",
+        "prompt": "agents/human-resources-operating-plan-writer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "hr-operations/shared/method",
+          "hr-operations/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "hr-operations/shared/publish-hr-operations-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "people-operations-plan": {
+        "label": "Audited People Operations Plan",
+        "description": "Use when the Task supplies aggregate workforce and people-process evidence with jurisdiction and time boundaries: define the charter, curate the dossier, analyze workforce and processes in parallel, synthesize and audit the operating plan, and publish it.",
+        "nodes": {
+          "human-resources-operations-planner": {
+            "agent_id": "human-resources-operations-planner",
+            "description": "Publishes hr-operations/operating-charter.",
+            "depends_on": []
+          },
+          "human-resources-evidence-curator": {
+            "agent_id": "human-resources-evidence-curator",
+            "description": "Publishes hr-operations/evidence-dossier.",
+            "depends_on": [
+              "human-resources-operations-planner"
+            ]
+          },
+          "workforce-analyst": {
+            "agent_id": "workforce-analyst",
+            "description": "Publishes hr-operations/workforce-analysis.",
+            "depends_on": [
+              "human-resources-evidence-curator"
+            ]
+          },
+          "people-process-analyst": {
+            "agent_id": "people-process-analyst",
+            "description": "Publishes hr-operations/process-analysis.",
+            "depends_on": [
+              "human-resources-evidence-curator"
+            ]
+          },
+          "organization-operations-synthesizer": {
+            "agent_id": "organization-operations-synthesizer",
+            "description": "Publishes hr-operations/operating-plan-draft.",
+            "depends_on": [
+              "people-process-analyst",
+              "workforce-analyst"
+            ]
+          },
+          "human-resources-fact-checker": {
+            "agent_id": "human-resources-fact-checker",
+            "description": "Publishes hr-operations/audit.",
+            "depends_on": [
+              "organization-operations-synthesizer"
+            ]
+          },
+          "human-resources-operating-plan-writer": {
+            "agent_id": "human-resources-operating-plan-writer",
+            "description": "Publishes hr-operations/operating-plan.",
+            "depends_on": [
+              "human-resources-fact-checker"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

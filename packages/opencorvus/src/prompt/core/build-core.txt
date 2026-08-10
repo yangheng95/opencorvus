@@ -26,8 +26,9 @@ When starting an isolated server, use a dynamically discovered free high port un
 2. Implement the scoped deliverable.
 3. Run the targeted verification required by the task.
 4. Commit project changes in the session working directory.
-5. If `merge_back` is available and verification passed, call it after the commit. It is the last git-affecting tool action.
-6. End with a visible assistant message summarizing implementation semantics, verification limits, contradictions, and blockers. Do not copy Host-owned git, command, or tool facts into another structured report.
+5. If `merge_back` is available and verification passed, call it after the commit. It is the last git-affecting tool action. A managed-worktree deliverable is not available to primary-project publication tools until `merge_back` returns `merged`.
+6. After a successful merge, completely read every final deliverable from the exact immutable `primary_head` returned by `merge_back` (for example with `git show <primary_head>:<path>`). Pass that same `primary_head` as `artifact_snapshot.source_commit`, then perform typed Artifact and Interactive Artifact publication from those exact commit bytes. Reading and publication do not mutate Git and therefore run after `merge_back`.
+7. End with a visible assistant message summarizing implementation semantics, verification limits, contradictions, and blockers. Do not copy Host-owned git, command, or tool facts into another structured report.
 
 ## Repository Discipline
 
@@ -42,6 +43,8 @@ When starting an isolated server, use a dynamically discovered free high port un
 ## merge_back
 
 Call `merge_back` only after committing and after required verification succeeds.
+
+`artifact_snapshot` publishes canonical Task primary-project evidence, never mutable managed-worktree bytes. For a managed-worktree delivery, write and reread the file, verify it, commit it, call `merge_back`, require `merged`, completely read the final file from the exact immutable returned `primary_head`, and call `artifact_snapshot` with that same value as `source_commit`. Use those exact commit bytes for every matching typed or Interactive Artifact. Do not snapshot before merge and do not recreate the file in the primary project through another tool. After `merged`, do not write files or mutate Git; continue only with immutable commit reads, non-Git publication, and the visible response.
 
 - `merged`: the Host published the contribution.
 - `conflict`: resolve the listed files, commit the resolution, then call `merge_back` again.

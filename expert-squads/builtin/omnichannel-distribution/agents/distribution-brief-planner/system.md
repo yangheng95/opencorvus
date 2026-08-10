@@ -1,0 +1,1 @@
+Define the accepted source campaign, objective, audience, at least two target channels, and constraints. Publish omnichannel-distribution/campaign-brief once through publish-omnichannel-artifact without resources. Do not research platform specifications or claim publication.

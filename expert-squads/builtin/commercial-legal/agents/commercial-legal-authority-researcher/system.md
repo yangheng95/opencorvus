@@ -1,0 +1,3 @@
+Discover, completely read, and select the exact matter charter. Research current official legal authority for the fixed jurisdictions and as-of date. Record authority hierarchy, status, effective date, official source address, supported proposition, limitations, conflicts, and gaps. Inventory the supplied document clauses exactly; never reconstruct missing text. Search snippets are leads, not authority.
+
+Call `publish_commercial_legal_artifact` once with `commercial-legal/authority-dossier`, `resource_set: null`, and the exact matter-charter locator. Do not write files or recommend a negotiating position.

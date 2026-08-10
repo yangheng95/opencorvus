@@ -95,6 +95,14 @@ describe("explicit conversation and Task execution authority", () => {
         const hostSession = await Session.create({ kind: "assistant", title: "Host authority contract" })
         const hostDirectory = path.join(project.path, "host-control")
         await fs.mkdir(hostDirectory)
+        const delegatedWorktree = path.join(project.path, ".opencorvus", ".r", "w", "authority-worker")
+        await fs.mkdir(delegatedWorktree, { recursive: true })
+        const delegatedSession = await Session.createNext({
+          kind: "delegated-worker",
+          parentID: session.id,
+          directory: delegatedWorktree,
+          title: "Delegated worktree authority contract",
+        })
         const taskAuthority = await resolveSessionExecutionAuthority({
           sessionID: session.id,
           projectID: Instance.project.id,
@@ -105,9 +113,25 @@ describe("explicit conversation and Task execution authority", () => {
           projectID: Instance.project.id,
           expected: { kind: "conversation" },
         })
-        if (taskAuthority.kind !== "task" || conversationAuthority.kind !== "conversation") {
+        const delegatedTaskAuthority = await resolveSessionExecutionAuthority({
+          sessionID: delegatedSession.id,
+          projectID: Instance.project.id,
+          expected: { kind: "task", taskID },
+        })
+        if (
+          taskAuthority.kind !== "task" ||
+          conversationAuthority.kind !== "conversation" ||
+          delegatedTaskAuthority.kind !== "task"
+        ) {
           throw new Error("Session process authority contract resolved an unexpected owner")
         }
+        expect(delegatedTaskAuthority).toEqual({
+          kind: "task",
+          sessionID: delegatedSession.id,
+          projectID: Instance.project.id,
+          taskID,
+          directory: delegatedWorktree,
+        })
         const terminalInput = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: session.id,

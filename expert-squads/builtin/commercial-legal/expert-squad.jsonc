@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "commercial-legal",
+  "name": "Commercial Legal",
+  "label": "Commercial Legal",
+  "description": "Jurisdiction- and date-bound commercial matter planning, authority research, parallel contract and regulatory analysis, legal strategy, independent review, and canonical reporting.",
+  "version": "2026.08.10.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for a bounded commercial contract, transaction, negotiation, or regulatory-risk review that requires current authority and a decision-ready report.",
+    "selection_guidance": "Select when the user supplies or identifies the matter, client position, jurisdiction, as-of date, and documents or clauses to review. Use Deep Research for general legal scholarship without a transaction-specific legal strategy.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "default_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": [],
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "package_skill_refs": [
+        "commercial-legal/shared/workflow",
+        "commercial-legal/shared/method"
+      ],
+      "package_tool_refs": []
+    },
+    "agents": {
+      "commercial-legal-matter-planner": {
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": [],
+        "label": "Commercial Legal Matter Planner",
+        "description": "Defines the exact legal matter, client position, jurisdiction, documents, questions, source policy, and acceptance boundary.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/commercial-legal-matter-planner/system.md",
+        "package_skill_refs": [
+          "commercial-legal/shared/workflow",
+          "commercial-legal/shared/method"
+        ],
+        "package_tool_refs": [
+          "commercial-legal/shared/publish-commercial-legal-artifact"
+        ]
+      },
+      "commercial-legal-authority-researcher": {
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": [],
+        "label": "Commercial Legal Authority Researcher",
+        "description": "Builds a dated official-authority dossier and exact document-clause inventory for the bounded matter.",
+        "base_role": "deep-research",
+        "prompt": "agents/commercial-legal-authority-researcher/system.md",
+        "package_skill_refs": [
+          "commercial-legal/shared/workflow",
+          "commercial-legal/shared/method"
+        ],
+        "package_tool_refs": [
+          "commercial-legal/shared/publish-commercial-legal-artifact"
+        ]
+      },
+      "commercial-legal-contract-analyst": {
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": [],
+        "label": "Commercial Legal Contract Analyst",
+        "description": "Performs clause-level commercial contract analysis and prepares precise revisions from the selected authority dossier.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/commercial-legal-contract-analyst/system.md",
+        "package_skill_refs": [
+          "commercial-legal/shared/workflow",
+          "commercial-legal/shared/method"
+        ],
+        "package_tool_refs": [
+          "commercial-legal/shared/publish-commercial-legal-artifact"
+        ]
+      },
+      "commercial-legal-regulatory-analyst": {
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": [],
+        "label": "Commercial Legal Regulatory Analyst",
+        "description": "Determines fact-bound regulatory applicability, obligations, exposure, and actions across the transaction.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/commercial-legal-regulatory-analyst/system.md",
+        "package_skill_refs": [
+          "commercial-legal/shared/workflow",
+          "commercial-legal/shared/method"
+        ],
+        "package_tool_refs": [
+          "commercial-legal/shared/publish-commercial-legal-artifact"
+        ]
+      },
+      "commercial-legal-strategy-counsel": {
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": [],
+        "label": "Commercial Legal Strategy Counsel",
+        "description": "Synthesizes contract and regulatory findings into prioritized revisions, negotiation positions, signing actions, and residual risk.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/commercial-legal-strategy-counsel/system.md",
+        "package_skill_refs": [
+          "commercial-legal/shared/workflow",
+          "commercial-legal/shared/method"
+        ],
+        "package_tool_refs": [
+          "commercial-legal/shared/publish-commercial-legal-artifact"
+        ]
+      },
+      "commercial-legal-fact-checker": {
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": [],
+        "label": "Commercial Legal Fact Checker",
+        "description": "Independently audits the single synthesized legal strategy for authority, clause traceability, date, jurisdiction, coverage, and calibrated conclusions.",
+        "base_role": "fact-check",
+        "prompt": "agents/commercial-legal-fact-checker/system.md",
+        "package_skill_refs": [
+          "commercial-legal/shared/workflow",
+          "commercial-legal/shared/method"
+        ],
+        "package_tool_refs": [
+          "commercial-legal/shared/publish-commercial-legal-artifact"
+        ]
+      },
+      "commercial-legal-report-writer": {
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": [],
+        "label": "Commercial Legal Report Writer",
+        "description": "Resolves the audit and publishes the canonical legal report and matching interactive document.",
+        "base_role": "build",
+        "prompt": "agents/commercial-legal-report-writer/system.md",
+        "package_skill_refs": [
+          "commercial-legal/shared/workflow",
+          "commercial-legal/shared/method"
+        ],
+        "package_tool_refs": [
+          "commercial-legal/shared/publish-commercial-legal-artifact"
+        ]
+      }
+    },
+    "virtual_workflows": {
+      "commercial-legal-review": {
+        "label": "Commercial Legal Review",
+        "description": "Use when the Task provides a bounded commercial matter, client position, governing jurisdictions, as-of date, and identifiable documents or clauses; every node is mandatory.",
+        "nodes": {
+          "commercial-legal-matter-planner": {
+            "agent_id": "commercial-legal-matter-planner",
+            "description": "Publishes the bounded matter charter.",
+            "depends_on": []
+          },
+          "commercial-legal-authority-researcher": {
+            "agent_id": "commercial-legal-authority-researcher",
+            "description": "Publishes the official-authority dossier and clause inventory.",
+            "depends_on": [
+              "commercial-legal-matter-planner"
+            ]
+          },
+          "commercial-legal-contract-analyst": {
+            "agent_id": "commercial-legal-contract-analyst",
+            "description": "Publishes clause-level contract analysis and revisions.",
+            "depends_on": [
+              "commercial-legal-authority-researcher"
+            ]
+          },
+          "commercial-legal-regulatory-analyst": {
+            "agent_id": "commercial-legal-regulatory-analyst",
+            "description": "Publishes fact-bound regulatory applicability analysis.",
+            "depends_on": [
+              "commercial-legal-authority-researcher"
+            ]
+          },
+          "commercial-legal-strategy-counsel": {
+            "agent_id": "commercial-legal-strategy-counsel",
+            "description": "Publishes the synthesized legal strategy.",
+            "depends_on": [
+              "commercial-legal-contract-analyst",
+              "commercial-legal-regulatory-analyst"
+            ]
+          },
+          "commercial-legal-fact-checker": {
+            "agent_id": "commercial-legal-fact-checker",
+            "description": "Independently audits the single synthesized strategy.",
+            "depends_on": [
+              "commercial-legal-strategy-counsel"
+            ]
+          },
+          "commercial-legal-report-writer": {
+            "agent_id": "commercial-legal-report-writer",
+            "description": "Publishes canonical Markdown, typed report, and matching interactive document.",
+            "depends_on": [
+              "commercial-legal-fact-checker"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

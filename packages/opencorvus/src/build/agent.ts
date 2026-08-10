@@ -65,6 +65,7 @@ import { AttachmentStore } from "@/storage/attachment-store"
 import { Database, eq } from "@/storage/db"
 import { buildObservationRefName, deleteBuildObservationRefs } from "@/engine/build-observation-ref"
 import { PartTable } from "@/session/session.sql"
+import { MergeBackToolOutputSchema } from "./merge-back-tool-contract"
 import { renderUserRequestSection } from "@/intent/request-prompt"
 import {
   artifactProvenanceFactHighWatermarkForSession,
@@ -746,15 +747,15 @@ export namespace BuildAgent {
         })
         if (outcome.status === "merged") {
           mergedHead = outcome.primaryHead
-          return {
+          return MergeBackToolOutputSchema.parse({
             status: "merged" as const,
             primary_head: outcome.primaryHead,
             primary_branch: outcome.primaryBranch,
             ...(outcome.primaryRecoveryCommit ? { primary_recovery_commit: outcome.primaryRecoveryCommit } : {}),
-          }
+          })
         }
         if (outcome.status === "conflict") {
-          return {
+          return MergeBackToolOutputSchema.parse({
             status: "conflict" as const,
             primary_branch: outcome.primaryBranch,
             primary_tip: outcome.primaryTip,
@@ -766,24 +767,25 @@ export namespace BuildAgent {
               "Then call merge_back again to ff-publish into " +
               outcome.primaryBranch +
               ".",
-          }
+          })
         }
         if (outcome.status === "blocked") {
-          return {
+          return MergeBackToolOutputSchema.parse({
             status: "blocked" as const,
             reason: outcome.reason,
             branch: outcome.branch,
             worktree_dir: outcome.worktreeDir,
             ...(outcome.dirtyPaths ? { dirty_paths: outcome.dirtyPaths } : {}),
             ...(outcome.mergeHead ? { merge_head: true } : {}),
-          }
+          })
         }
-        return {
+        return MergeBackToolOutputSchema.parse({
           status: "infra_error" as const,
           reason: outcome.reason,
           branch: outcome.branch,
+          ...(outcome.worktreeDir ? { worktree_dir: outcome.worktreeDir } : {}),
           ...(outcome.stderr ? { stderr: outcome.stderr } : {}),
-        }
+        })
       })
 
       type BuildCollector = Record<string, never>
@@ -804,7 +806,7 @@ export namespace BuildAgent {
                     "atomically under a host-side lock so concurrent Task Sessions do not " +
                     "race each other.\n\n" +
                     "Call this after you have committed all changes and verification passed. It is the last git-affecting action of the session. " +
-                    "After the tool result, summarize implementation semantics, limitations, and blockers in the final visible assistant message.\n\n" +
+                    "After a merged result, read final deliverables from the exact primary_head, pass that same full object ID to artifact_snapshot.source_commit, publish typed and Interactive Artifacts from those immutable bytes, then give the final visible assistant message. Do not write files or mutate Git after merge.\n\n" +
                     "Returns one of:\n" +
                     "  • {status:'merged', primary_head, primary_branch} — published.\n" +
                     "  • {status:'conflict', primary_branch, primary_tip, " +

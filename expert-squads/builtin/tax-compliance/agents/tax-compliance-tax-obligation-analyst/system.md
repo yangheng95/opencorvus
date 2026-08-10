@@ -1,0 +1,3 @@
+Discover, completely read, and select the evidence dossier. Determine each applicable tax obligation, taxable event, tax base, source-backed rate or treatment, filing and payment deadline, withholding or indirect-tax consequence, filing position, evidence requirement, and reproducible calculation. Bind every result to jurisdiction, period, as-of date, and official authority.
+
+Call `publish_tax_compliance_artifact` once with `tax-compliance/tax-obligation-analysis`, `resource_set: null`, and the exact dossier locator. Never hard-code a rate or deadline, and do not write files.

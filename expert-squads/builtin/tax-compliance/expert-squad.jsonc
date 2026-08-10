@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "tax-compliance",
+  "name": "Tax Compliance",
+  "label": "Tax Compliance",
+  "description": "Dated official-authority research, parallel accounting-controls and tax-obligation analysis, remediation planning, independent review, and canonical compliance reporting.",
+  "version": "2026.08.10.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for a bounded accounting and tax compliance assessment that requires official authority, reproducible calculations, remediation, and a decision-ready report.",
+    "selection_guidance": "Select when the user identifies entities, jurisdictions, reporting periods, transactions, reporting framework, and records or explicit data gaps. Use general research when no entity- and period-specific compliance plan is requested.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "default_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": [],
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "package_skill_refs": [
+        "tax-compliance/shared/workflow",
+        "tax-compliance/shared/method"
+      ],
+      "package_tool_refs": []
+    },
+    "agents": {
+      "tax-compliance-engagement-planner": {
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": [],
+        "label": "Tax Compliance Engagement Planner",
+        "description": "Defines entities, jurisdictions, periods, reporting framework, transactions, taxes, materiality, data cutoff, and questions.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/tax-compliance-engagement-planner/system.md",
+        "package_skill_refs": [
+          "tax-compliance/shared/workflow",
+          "tax-compliance/shared/method"
+        ],
+        "package_tool_refs": [
+          "tax-compliance/shared/publish-tax-compliance-artifact"
+        ]
+      },
+      "tax-compliance-authority-researcher": {
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": [],
+        "label": "Tax Compliance Authority Researcher",
+        "description": "Builds a dated official-authority and accounting-record evidence dossier for the bounded engagement.",
+        "base_role": "deep-research",
+        "prompt": "agents/tax-compliance-authority-researcher/system.md",
+        "package_skill_refs": [
+          "tax-compliance/shared/workflow",
+          "tax-compliance/shared/method"
+        ],
+        "package_tool_refs": [
+          "tax-compliance/shared/publish-tax-compliance-artifact"
+        ]
+      },
+      "tax-compliance-accounting-controls-analyst": {
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": [],
+        "label": "Tax Compliance Accounting Controls Analyst",
+        "description": "Analyzes accounting treatment, journal-entry logic, book-to-tax differences, reconciliations, document chains, and controls.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/tax-compliance-accounting-controls-analyst/system.md",
+        "package_skill_refs": [
+          "tax-compliance/shared/workflow",
+          "tax-compliance/shared/method"
+        ],
+        "package_tool_refs": [
+          "tax-compliance/shared/publish-tax-compliance-artifact"
+        ]
+      },
+      "tax-compliance-tax-obligation-analyst": {
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": [],
+        "label": "Tax Compliance Tax Obligation Analyst",
+        "description": "Determines fact-bound tax obligations, rates or treatments, deadlines, calculations, filing positions, and evidence needs.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/tax-compliance-tax-obligation-analyst/system.md",
+        "package_skill_refs": [
+          "tax-compliance/shared/workflow",
+          "tax-compliance/shared/method"
+        ],
+        "package_tool_refs": [
+          "tax-compliance/shared/publish-tax-compliance-artifact"
+        ]
+      },
+      "tax-compliance-remediation-analyst": {
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": [],
+        "label": "Tax Compliance Remediation Analyst",
+        "description": "Synthesizes accounting and tax findings into a prioritized compliance plan, reconciliation, calendar, and evidence-retention program.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/tax-compliance-remediation-analyst/system.md",
+        "package_skill_refs": [
+          "tax-compliance/shared/workflow",
+          "tax-compliance/shared/method"
+        ],
+        "package_tool_refs": [
+          "tax-compliance/shared/publish-tax-compliance-artifact"
+        ]
+      },
+      "tax-compliance-fact-checker": {
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": [],
+        "label": "Tax Compliance Fact Checker",
+        "description": "Independently audits the single synthesized compliance plan for authority, period, rate, arithmetic, reconciliation, coverage, and calibrated conclusions.",
+        "base_role": "fact-check",
+        "prompt": "agents/tax-compliance-fact-checker/system.md",
+        "package_skill_refs": [
+          "tax-compliance/shared/workflow",
+          "tax-compliance/shared/method"
+        ],
+        "package_tool_refs": [
+          "tax-compliance/shared/publish-tax-compliance-artifact"
+        ]
+      },
+      "tax-compliance-report-writer": {
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": [],
+        "label": "Tax Compliance Report Writer",
+        "description": "Resolves the audit and publishes the canonical tax compliance report and matching interactive document.",
+        "base_role": "build",
+        "prompt": "agents/tax-compliance-report-writer/system.md",
+        "package_skill_refs": [
+          "tax-compliance/shared/workflow",
+          "tax-compliance/shared/method"
+        ],
+        "package_tool_refs": [
+          "tax-compliance/shared/publish-tax-compliance-artifact"
+        ]
+      }
+    },
+    "virtual_workflows": {
+      "tax-compliance-assessment": {
+        "label": "Tax Compliance Assessment",
+        "description": "Use when the Task provides identifiable entities, jurisdictions, reporting periods, transactions, reporting framework, and accounting or filing records or explicit data gaps; every node is mandatory.",
+        "nodes": {
+          "tax-compliance-engagement-planner": {
+            "agent_id": "tax-compliance-engagement-planner",
+            "description": "Publishes the bounded engagement charter.",
+            "depends_on": []
+          },
+          "tax-compliance-authority-researcher": {
+            "agent_id": "tax-compliance-authority-researcher",
+            "description": "Publishes the official-authority and accounting-record dossier.",
+            "depends_on": [
+              "tax-compliance-engagement-planner"
+            ]
+          },
+          "tax-compliance-accounting-controls-analyst": {
+            "agent_id": "tax-compliance-accounting-controls-analyst",
+            "description": "Publishes accounting, reconciliation, document-chain, and control analysis.",
+            "depends_on": [
+              "tax-compliance-authority-researcher"
+            ]
+          },
+          "tax-compliance-tax-obligation-analyst": {
+            "agent_id": "tax-compliance-tax-obligation-analyst",
+            "description": "Publishes tax obligation, filing, and calculation analysis.",
+            "depends_on": [
+              "tax-compliance-authority-researcher"
+            ]
+          },
+          "tax-compliance-remediation-analyst": {
+            "agent_id": "tax-compliance-remediation-analyst",
+            "description": "Publishes the synthesized compliance and remediation plan.",
+            "depends_on": [
+              "tax-compliance-accounting-controls-analyst",
+              "tax-compliance-tax-obligation-analyst"
+            ]
+          },
+          "tax-compliance-fact-checker": {
+            "agent_id": "tax-compliance-fact-checker",
+            "description": "Independently audits the single synthesized compliance plan.",
+            "depends_on": [
+              "tax-compliance-remediation-analyst"
+            ]
+          },
+          "tax-compliance-report-writer": {
+            "agent_id": "tax-compliance-report-writer",
+            "description": "Publishes canonical Markdown, typed report, and matching interactive document.",
+            "depends_on": [
+              "tax-compliance-fact-checker"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

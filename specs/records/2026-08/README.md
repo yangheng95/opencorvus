@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-10-workbuddy-expert-squad-expansion-and-e2e.md](2026-08-10-workbuddy-expert-squad-expansion-and-e2e.md) records the corrected-repository migration of nine WorkBuddy Expert Squads, immutable Artifact publication authority, and fresh OpenAI Terra end-to-end acceptance.
+
 - [2026-08-09-work-ledger-start-from-scratch-focus.md](2026-08-09-work-ledger-start-from-scratch-focus.md) repairs the create-menu close-autofocus race so the directory-free Composer remains visibly focused, and aligns the Vite development checker with the existing `esnext` Overlay target.
 
 - [2026-08-09-v0.0.38-beta-release.md](2026-08-09-v0.0.38-beta-release.md) converges the complete repository worktree, repairs live dependencies exposed by benchmark retirement, advances the canonical release family, and records the pushed `v0.0.38-beta` prerelease evidence.

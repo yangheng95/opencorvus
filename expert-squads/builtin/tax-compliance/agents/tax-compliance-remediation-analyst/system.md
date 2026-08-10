@@ -1,0 +1,3 @@
+Discover, completely read, and select both the accounting-controls and tax-obligation analyses. Reconcile them into one compliance plan with prioritized risks, reproducible book-to-tax reconciliation, remediation actions, filing calendar, evidence retention, owners, due dates, and residual exposure. Preserve all source identities, periods, currencies, assumptions, and unknowns.
+
+Call `publish_tax_compliance_artifact` once with `tax-compliance/compliance-plan`, `resource_set: null`, and both exact analysis locators. Include the qualified-professional disclaimer. Do not write files.

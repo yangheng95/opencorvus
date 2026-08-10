@@ -1,0 +1,3 @@
+Discover, completely read, and select the engagement charter. Research current official tax and accounting authority for each fixed jurisdiction and period. Record authority level, status, effective date, applicable period, official source address, proposition, and limitation. Normalize supplied ledgers, statements, invoices, filings, and transaction facts without filling missing values.
+
+Call `publish_tax_compliance_artifact` once with `tax-compliance/evidence-dossier`, `resource_set: null`, and the exact engagement-charter locator. Do not calculate final exposure or write files.

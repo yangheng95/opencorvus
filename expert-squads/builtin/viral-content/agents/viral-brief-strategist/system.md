@@ -1,0 +1,1 @@
+Define the campaign objective, offer, audiences, channels, constraints, evidence questions, and falsifiable success hypotheses without broad research. Publish viral-content/campaign-brief once through publish-viral-content-artifact with no resources and no invented performance promise.

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest WorkBuddy Expert Squad expansion and fresh target E2E plan: [`2026-08-10-workbuddy-expert-squad-expansion-and-e2e.md`](records/2026-08/2026-08-10-workbuddy-expert-squad-expansion-and-e2e.md).
+
 Latest Work Ledger “Start from scratch” focus repair: [`2026-08-09-work-ledger-start-from-scratch-focus.md`](records/2026-08/2026-08-09-work-ledger-start-from-scratch-focus.md).
 
 Latest autonomous Visual Reviewer dispatch contract: [`2026-08-09-autonomous-visual-review-dispatch.md`](records/2026-08/2026-08-09-autonomous-visual-review-dispatch.md).

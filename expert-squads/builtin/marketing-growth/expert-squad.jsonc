@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "marketing-growth",
+  "name": "Marketing & Growth Strategy",
+  "label": "Marketing & Growth Strategy",
+  "description": "Evidence-led audience, channel, experiment, measurement, and campaign planning without guaranteed growth claims.",
+  "version": "2026.08.10.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Plan an evidence-backed marketing and growth campaign with explicit experiments and measurement.",
+    "selection_guidance": "Use for audience strategy, channel planning, campaign design, growth experiments, positioning, and measurement. Do not use to guarantee reach, conversion, or revenue.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "package_skill_refs": [
+        "marketing-growth/shared/workflow",
+        "marketing-growth/shared/method"
+      ],
+      "package_tool_refs": [],
+      "default_skill_refs": [],
+      "default_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "marketing-growth-planner": {
+        "label": "Marketing Growth Planner",
+        "description": "Defines scope, decisions, inputs, baselines, constraints, and the measurement contract.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/marketing-growth-planner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "package_skill_refs": [
+          "marketing-growth/shared/workflow",
+          "marketing-growth/shared/method"
+        ],
+        "package_tool_refs": [
+          "marketing-growth/shared/publish-marketing-growth-artifact"
+        ],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "marketing-growth-evidence-researcher": {
+        "label": "Marketing Evidence Researcher",
+        "description": "Builds a dated dossier of market, audience, competitor, channel, and benchmark evidence.",
+        "base_role": "deep-research",
+        "prompt": "agents/marketing-growth-evidence-researcher/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "package_skill_refs": [
+          "marketing-growth/shared/workflow",
+          "marketing-growth/shared/method"
+        ],
+        "package_tool_refs": [
+          "marketing-growth/shared/publish-marketing-growth-artifact"
+        ],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "marketing-growth-audience-analyst": {
+        "label": "Audience and Offer Analyst",
+        "description": "Analyzes audience problems, buying context, offer fit, positioning, and message hypotheses.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/marketing-growth-audience-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "package_skill_refs": [
+          "marketing-growth/shared/workflow",
+          "marketing-growth/shared/method"
+        ],
+        "package_tool_refs": [
+          "marketing-growth/shared/publish-marketing-growth-artifact"
+        ],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "marketing-growth-channel-analyst": {
+        "label": "Channel and Funnel Analyst",
+        "description": "Analyzes channel fit, funnel mechanics, economics, measurement, and experiment candidates.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/marketing-growth-channel-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "package_skill_refs": [
+          "marketing-growth/shared/workflow",
+          "marketing-growth/shared/method"
+        ],
+        "package_tool_refs": [
+          "marketing-growth/shared/publish-marketing-growth-artifact"
+        ],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "marketing-growth-strategist": {
+        "label": "Growth Strategy Synthesizer",
+        "description": "Combines both analyses into a prioritized campaign and experiment strategy.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/marketing-growth-strategist/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "package_skill_refs": [
+          "marketing-growth/shared/workflow",
+          "marketing-growth/shared/method"
+        ],
+        "package_tool_refs": [
+          "marketing-growth/shared/publish-marketing-growth-artifact"
+        ],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "marketing-growth-fact-checker": {
+        "label": "Marketing Growth Fact Checker",
+        "description": "Audits the strategy's claims, calculations, sources, experiment definitions, and delivery closure.",
+        "base_role": "fact-check",
+        "prompt": "agents/marketing-growth-fact-checker/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "package_skill_refs": [
+          "marketing-growth/shared/workflow",
+          "marketing-growth/shared/method"
+        ],
+        "package_tool_refs": [
+          "marketing-growth/shared/publish-marketing-growth-artifact"
+        ],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "marketing-growth-campaign-writer": {
+        "label": "Marketing Campaign Plan Writer",
+        "description": "Owns the corrected canonical campaign plan and interactive delivery.",
+        "base_role": "build",
+        "prompt": "agents/marketing-growth-campaign-writer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "package_skill_refs": [
+          "marketing-growth/shared/workflow",
+          "marketing-growth/shared/method"
+        ],
+        "package_tool_refs": [
+          "marketing-growth/shared/publish-marketing-growth-artifact"
+        ],
+        "default_skill_refs": [],
+        "default_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "marketing-growth-campaign": {
+        "label": "Marketing Growth Campaign",
+        "description": "Binding Marketing & Growth Strategy workflow. Every node runs exactly once; independent branches start concurrently and joins wait for every predecessor.",
+        "nodes": {
+          "marketing-growth-planner": {
+            "agent_id": "marketing-growth-planner",
+            "description": "Defines scope, decisions, inputs, baselines, constraints, and the measurement contract.",
+            "depends_on": []
+          },
+          "marketing-growth-evidence-researcher": {
+            "agent_id": "marketing-growth-evidence-researcher",
+            "description": "Builds a dated dossier of market, audience, competitor, channel, and benchmark evidence.",
+            "depends_on": [
+              "marketing-growth-planner"
+            ]
+          },
+          "marketing-growth-audience-analyst": {
+            "agent_id": "marketing-growth-audience-analyst",
+            "description": "Analyzes audience problems, buying context, offer fit, positioning, and message hypotheses.",
+            "depends_on": [
+              "marketing-growth-evidence-researcher"
+            ]
+          },
+          "marketing-growth-channel-analyst": {
+            "agent_id": "marketing-growth-channel-analyst",
+            "description": "Analyzes channel fit, funnel mechanics, economics, measurement, and experiment candidates.",
+            "depends_on": [
+              "marketing-growth-evidence-researcher"
+            ]
+          },
+          "marketing-growth-strategist": {
+            "agent_id": "marketing-growth-strategist",
+            "description": "Combines both analyses into a prioritized campaign and experiment strategy.",
+            "depends_on": [
+              "marketing-growth-audience-analyst",
+              "marketing-growth-channel-analyst"
+            ]
+          },
+          "marketing-growth-fact-checker": {
+            "agent_id": "marketing-growth-fact-checker",
+            "description": "Audits the strategy's claims, calculations, sources, experiment definitions, and delivery closure.",
+            "depends_on": [
+              "marketing-growth-strategist"
+            ]
+          },
+          "marketing-growth-campaign-writer": {
+            "agent_id": "marketing-growth-campaign-writer",
+            "description": "Owns the corrected canonical campaign plan and interactive delivery.",
+            "depends_on": [
+              "marketing-growth-fact-checker"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "namespace": "builtin",
+  "id": "sales-strategy",
+  "name": "Sales Strategy & Customer Research",
+  "label": "Sales Strategy & Customer Research",
+  "description": "Builds an attributable customer dossier, parallel opportunity and positioning analyses, an audited sales strategy, and a practical sales playbook.",
+  "version": "2026.08.10.1",
+  "product_pillars": [
+    "work"
+  ],
+  "readme": "README.md",
+  "selector": {
+    "summary": "Use for a bounded product, market, or account set that needs customer research, opportunity prioritization, positioning, and an audited sales playbook.",
+    "selection_guidance": "Select when the operator names the offering, target market or accounts, time boundary, evidence sources, and sales decision. Do not use for bulk unsolicited outreach or invented customer intelligence.",
+    "instructions": "selector.md"
+  },
+  "capability_projection": {
+    "scheduler": {
+      "base_role": "orchestrator",
+      "prompt": "agents/orchestrator/system.md",
+      "inherit_base_tools": true,
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
+      "default_skill_refs": [],
+      "package_skill_refs": [
+        "sales-strategy/shared/method",
+        "sales-strategy/shared/workflow"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
+    },
+    "agents": {
+      "sales-strategy-planner": {
+        "label": "Sales Strategy Planner",
+        "description": "Defines the sales question, evidence boundary, segments, decision criteria, and stopping conditions.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/sales-strategy-planner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "sales-strategy/shared/method",
+          "sales-strategy/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "sales-strategy/shared/publish-sales-strategy-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "sales-customer-researcher": {
+        "label": "Sales Customer Researcher",
+        "description": "Builds the attributable customer, buyer, market, and competitor evidence dossier.",
+        "base_role": "deep-research",
+        "prompt": "agents/sales-customer-researcher/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "sales-strategy/shared/method",
+          "sales-strategy/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "sales-strategy/shared/publish-sales-strategy-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "sales-opportunity-analyst": {
+        "label": "Sales Opportunity Analyst",
+        "description": "Prioritizes segments and opportunities from fit, need, timing, value, reachability, and delivery constraints.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/sales-opportunity-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "sales-strategy/shared/method",
+          "sales-strategy/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "sales-strategy/shared/publish-sales-strategy-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "sales-positioning-analyst": {
+        "label": "Sales Positioning Analyst",
+        "description": "Develops evidence-backed positioning, buyer messages, proof, objection responses, and competitive differentiation.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/sales-positioning-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "sales-strategy/shared/method",
+          "sales-strategy/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "sales-strategy/shared/publish-sales-strategy-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "sales-strategy-synthesizer": {
+        "label": "Sales Strategy Synthesizer",
+        "description": "Reconciles opportunity and positioning evidence into one sequenced sales strategy.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/sales-strategy-synthesizer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "sales-strategy/shared/method",
+          "sales-strategy/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "sales-strategy/shared/publish-sales-strategy-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "sales-strategy-fact-checker": {
+        "label": "Sales Strategy Fact Checker",
+        "description": "Independently audits the strategy brief for attribution, arithmetic, unsupported claims, and ethical boundaries.",
+        "base_role": "fact-check",
+        "prompt": "agents/sales-strategy-fact-checker/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "sales-strategy/shared/method",
+          "sales-strategy/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "sales-strategy/shared/publish-sales-strategy-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      },
+      "sales-playbook-writer": {
+        "label": "Sales Playbook Writer",
+        "description": "Resolves the audit and publishes the canonical sales strategy playbook.",
+        "base_role": "build",
+        "prompt": "agents/sales-playbook-writer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "sales-strategy/shared/method",
+          "sales-strategy/shared/workflow"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "sales-strategy/shared/publish-sales-strategy-artifact"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
+    },
+    "virtual_workflows": {
+      "sales-strategy-playbook": {
+        "label": "Evidence-backed Sales Strategy Playbook",
+        "description": "Use when the Task identifies an offering and target market or account set: define the research charter, build the customer dossier, analyze opportunity and positioning in parallel, synthesize and audit the strategy, and publish the playbook.",
+        "nodes": {
+          "sales-strategy-planner": {
+            "agent_id": "sales-strategy-planner",
+            "description": "Publishes sales-strategy/research-charter.",
+            "depends_on": []
+          },
+          "sales-customer-researcher": {
+            "agent_id": "sales-customer-researcher",
+            "description": "Publishes sales-strategy/customer-dossier.",
+            "depends_on": [
+              "sales-strategy-planner"
+            ]
+          },
+          "sales-opportunity-analyst": {
+            "agent_id": "sales-opportunity-analyst",
+            "description": "Publishes sales-strategy/opportunity-analysis.",
+            "depends_on": [
+              "sales-customer-researcher"
+            ]
+          },
+          "sales-positioning-analyst": {
+            "agent_id": "sales-positioning-analyst",
+            "description": "Publishes sales-strategy/positioning-analysis.",
+            "depends_on": [
+              "sales-customer-researcher"
+            ]
+          },
+          "sales-strategy-synthesizer": {
+            "agent_id": "sales-strategy-synthesizer",
+            "description": "Publishes sales-strategy/strategy-brief.",
+            "depends_on": [
+              "sales-opportunity-analyst",
+              "sales-positioning-analyst"
+            ]
+          },
+          "sales-strategy-fact-checker": {
+            "agent_id": "sales-strategy-fact-checker",
+            "description": "Publishes sales-strategy/audit.",
+            "depends_on": [
+              "sales-strategy-synthesizer"
+            ]
+          },
+          "sales-playbook-writer": {
+            "agent_id": "sales-playbook-writer",
+            "description": "Publishes sales-strategy/playbook.",
+            "depends_on": [
+              "sales-strategy-fact-checker"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
