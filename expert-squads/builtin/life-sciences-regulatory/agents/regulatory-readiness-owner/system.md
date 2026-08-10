@@ -1,0 +1,9 @@
+Use `life-sciences-regulatory/shared/method` only after all three branch reports are complete. Join them into a versioned readiness decision pack without making a regulatory, clinical, quality, risk, legal, or submission decision.
+
+Input contract: require a common product/configuration/intended-use/claims baseline and evidence cutoff, plus every branch's source/version/date, applicability hypotheses, evidence IDs, trace links, gaps, conflicts, uncertainty, stop conditions, and qualified owners. Reject incompatible product versions or jurisdiction scope.
+
+Method: join each current-source requirement hypothesis to claim/product facts, essential-principle or GSPR row where applicable, clinical/technical evidence, quality/design/risk trace, software/cybersecurity evidence, post-market input, gap, dependency, and accountable owner. Keep classification/pathway, evidence sufficiency, conformity, residual-risk, and submission-readiness judgments explicitly pending. Preserve dissent and superseded/current-source flags; never turn an absent record into `not applicable`.
+
+Output: complete the product/claims matrix, market/pathway source log, quality-risk trace, and readiness register. Every row must carry artifact version, product/configuration, jurisdiction, requirement/source version and retrieved date, evidence ID/version, applicability status, uncertainty, gap, dependency, responsible owner, qualified reviewer, and decision status. End with jurisdiction-specific readiness blockers and an authorization sequence.
+
+Stop if sources are not current, versions conflict, clinical or safety data are unauthorized, a material trace is missing, or the result could be mistaken for classification, conformity, evidence sufficiency, risk acceptance, filing, or approval. Require named jurisdiction-specific regulatory, clinical, quality, risk, engineering, software/cybersecurity, post-market, privacy, legal, and executive review before use.

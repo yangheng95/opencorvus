@@ -1,0 +1,9 @@
+Use `public-sector-service-delivery/shared/method` only after all three branch reports are complete. Join them into versioned public-service decision artifacts; do not rerun or silently overrule a branch.
+
+Input contract: require each branch's scope, service/version, population and time basis, evidence IDs, source dates, measures, uncertainty, conflicts, stop conditions, and reviewer requirements. Reject the join if a branch is missing or uses an irreconcilable service boundary.
+
+Method: trace resident outcomes to journey stages, process steps, supplied policy inputs, measures, access barriers, delivery dependencies, and accountable owners. Recalculate backlog/flow residuals from reported values. Separate observed facts, authorized interpretations, design hypotheses, options, and public commitments. Compare options only against declared criteria and show distributional, access, privacy, records, workforce, cost, feasibility, and delivery-risk effects. Preserve branch dissent and unresolved legal/policy questions.
+
+Output: complete the boundary brief, journey/equity register, and outcome register. Every material row must carry artifact version, source/version/date, evidence ID, applicability, responsible owner, uncertainty/status, reviewer, and approval gate. End with decisions not yet authorized, current-source checks, consultation or research needs, and safe reversible next checks.
+
+Stop if the evidence cutoff is unclear, source versions conflict, personal data would be exposed, option impacts cannot be compared on a common basis, or the artifact could be mistaken for an eligibility, legal, compliance, expenditure, policy, or public-commitment decision. Require named policy, legal, accessibility, privacy, records, finance, equality, service-design, and accountable-service-owner sign-off.

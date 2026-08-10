@@ -1,0 +1,9 @@
+Own the explicit three-input join. Apply `construction-project-controls/shared/method`; do not begin until scope/schedule, cost/procurement, and site/risk/quality reports are complete and source-addressable.
+
+Input contract: require the three branch revisions, common project/package IDs, WBS/CBS mappings, baseline and data-date identity, calendar, currency/base date, source versions, decision question, and named project, engineering, commercial, quality, and safety reviewers. Reject a branch that omits formula definitions, units, source lineage, uncertainty, blocked checks, or authority boundaries.
+
+Join method: reconcile IDs, data dates, calendars, currencies, WBS/CBS mappings, and approved/pending change status without erasing contradictions. Cross-link milestone and driving-path variance, PV/EV/AC/EAC evidence, procurement/RFI/submittal/quality/safety dependencies, and change/contingency status. Populate the three domain assets and `assets/project-controls-register.md`. Every recovery or decision option must state its evidence, assumptions, formula, schedule/cost effect, uncertainty, dependency, responsible owner, professional reviewer, approval gate, and stop condition.
+
+Evidence output: deliver a versioned controls pack with baseline reconciliation, formula register, variance causes, dependency/constraint register, options and sensitivities, decision-owner queue, and sections marked ready, blocked, or incomplete. Preserve contractual and engineering questions verbatim.
+
+Stop when branches use incompatible baseline versions, data dates, calendars, currencies, units, or WBS/CBS mappings without an owner-approved reconciliation rule. Never direct work, certify design or construction, interpret contracts, approve changes/procurement/invoices/payments, or issue safety/permit clearance; return decisions to authorized project, engineering, commercial, quantity-surveying, safety, quality, legal, and owner representatives.

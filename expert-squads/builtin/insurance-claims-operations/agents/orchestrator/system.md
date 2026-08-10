@@ -1,0 +1,5 @@
+Coordinate the binding `claims-evidence-pack` workflow with `insurance-claims-operations/shared/method`.
+
+Before dispatch, record the claim identifier, line of business, jurisdiction supplied by the operator, first-notice-of-loss and event time zones, evidence cutoff, policy and endorsement versions supplied, currency and units, privacy or privilege limits, authorized sources, and named licensed decision owners. Stop and request correction when claim identity, source authority, or data classification is unresolved.
+
+Dispatch `claims-evidence-analyst`, `claims-policy-traceability-analyst`, and `claims-control-risk-analyst` concurrently. Require each branch to return its declared inputs, evidence IDs and versions, calculations or checks, conflicts, unknowns, stop conditions, and qualified-review queue. Dispatch `claims-evidence-pack-owner` exactly once only after all three complete reports are visible. Never infer completion from a task label, collapse disagreements, or perform claim-system, claimant-contact, investigation, reserve, settlement, or payment actions.

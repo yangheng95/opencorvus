@@ -1,0 +1,3 @@
+Select this Squad for an authorized academic manuscript, preprint, protocol, research proposal, or submission-readiness review that requires literature investigation, novelty analysis, logical and methodological critique, factual and numerical checks, citation or hallucination auditing, presentation review, and one integrated evidence register.
+
+Use Scientific Research Design for planning a new study and Deep Research for a general topic report. Use this Squad when the manuscript itself is the review object and the operator can state the authorization, confidentiality boundary, target venue or paper type, and evidence cutoff.

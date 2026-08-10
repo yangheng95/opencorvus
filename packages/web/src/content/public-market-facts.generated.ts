@@ -900,6 +900,23 @@ export const generatedPublicMarketFacts = [
 
 export const generatedShippedSquadFacts = [
   {
+    "identity": "builtin/academic-paper-review",
+    "namespace": "builtin",
+    "id": "academic-paper-review",
+    "label": "Academic Paper Review",
+    "version": "2026.08.11.1",
+    "packageDigest": "8ef4c6b431ecbbddd2a0072f6c920a4d803bfc657032f43bba538243db031fe8",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/academic-paper-review-method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "academic-paper-review/shared/academic-paper-review-method"
+    ],
+    "agentCount": 8,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/advanced",
     "namespace": "builtin",
     "id": "advanced",
@@ -915,6 +932,23 @@ export const generatedShippedSquadFacts = [
     ],
     "agentCount": 14,
     "workflowCount": 5
+  },
+  {
+    "identity": "builtin/agriculture-food-systems",
+    "namespace": "builtin",
+    "id": "agriculture-food-systems",
+    "label": "Agriculture and Food Systems",
+    "version": "2026.08.11.1",
+    "packageDigest": "fb1fab33fdfd819ef316175f725db58930664319a66fa5865e5aab21857bddd8",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "agriculture-food-systems/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
   },
   {
     "identity": "builtin/base",
@@ -984,6 +1018,23 @@ export const generatedShippedSquadFacts = [
       "commercial-legal/shared/workflow"
     ],
     "agentCount": 7,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/construction-project-controls",
+    "namespace": "builtin",
+    "id": "construction-project-controls",
+    "label": "Construction Project Controls",
+    "version": "2026.08.11.1",
+    "packageDigest": "e4889a5be11078e7dd668a4d9f5767131b11f2fb5a82b7eb54c6658426ea5736",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "construction-project-controls/shared/method"
+    ],
+    "agentCount": 4,
     "workflowCount": 1
   },
   {
@@ -1110,6 +1161,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/energy-utilities-planning",
+    "namespace": "builtin",
+    "id": "energy-utilities-planning",
+    "label": "Energy and Utilities Planning",
+    "version": "2026.08.11.1",
+    "packageDigest": "7a58a95d67c91420d36a52259ffa7da2e739fe18fb750ac93d53c8cadb142bb6",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "energy-utilities-planning/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/equity-research",
     "namespace": "builtin",
     "id": "equity-research",
@@ -1214,6 +1282,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/hospitality-service-operations",
+    "namespace": "builtin",
+    "id": "hospitality-service-operations",
+    "label": "Hospitality Service Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "4651cf9749c0a3df45c028ef18731fe35daabf34de9376edbf46bb732758cb42",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "hospitality-service-operations/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/hr-operations",
     "namespace": "builtin",
     "id": "hr-operations",
@@ -1233,6 +1318,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/insurance-claims-operations",
+    "namespace": "builtin",
+    "id": "insurance-claims-operations",
+    "label": "Insurance Claims Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "aac9706463bf091bf9fd2fa7c1d8ff1d1118fecc102c4e952cd0c86070b77db1",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "insurance-claims-operations/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/knowledge-base-operations",
     "namespace": "builtin",
     "id": "knowledge-base-operations",
@@ -1245,6 +1347,23 @@ export const generatedShippedSquadFacts = [
     ],
     "packageSkillRefs": [
       "knowledge-base-operations/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/life-sciences-regulatory",
+    "namespace": "builtin",
+    "id": "life-sciences-regulatory",
+    "label": "Life Sciences Regulatory Readiness",
+    "version": "2026.08.11.1",
+    "packageDigest": "e1fa7a06072573bdd4600866bac92843adb5f6fca355debf6f4a2804d9aa15d9",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "life-sciences-regulatory/shared/method"
     ],
     "agentCount": 4,
     "workflowCount": 1
@@ -1315,6 +1434,23 @@ export const generatedShippedSquadFacts = [
     ],
     "packageSkillRefs": [
       "meeting-knowledge/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/nonprofit-grant-operations",
+    "namespace": "builtin",
+    "id": "nonprofit-grant-operations",
+    "label": "Nonprofit Grant Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "098acec6157dac99b0239222007c9f3f08544dd38c3b51a5ad1282224a703dfc",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "nonprofit-grant-operations/shared/method"
     ],
     "agentCount": 4,
     "workflowCount": 1
@@ -1404,6 +1540,23 @@ export const generatedShippedSquadFacts = [
     ],
     "packageSkillRefs": [
       "product-video/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/public-sector-service-delivery",
+    "namespace": "builtin",
+    "id": "public-sector-service-delivery",
+    "label": "Public Sector Service Delivery",
+    "version": "2026.08.11.1",
+    "packageDigest": "0c81f76f5ce8b713e3d14ba247b9415dfd6dc9514dda07e9bd056f07912f777e",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "public-sector-service-delivery/shared/method"
     ],
     "agentCount": 4,
     "workflowCount": 1
@@ -1567,6 +1720,23 @@ export const generatedShippedSquadFacts = [
       "tax-compliance/shared/workflow"
     ],
     "agentCount": 7,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/telecom-network-assurance",
+    "namespace": "builtin",
+    "id": "telecom-network-assurance",
+    "label": "Telecom Network Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "d1e94fcaf5ad6777b02038c50ca07584034d3014cc4c91fac8a2ca6c4c657c97",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "telecom-network-assurance/shared/method"
+    ],
+    "agentCount": 4,
     "workflowCount": 1
   },
   {

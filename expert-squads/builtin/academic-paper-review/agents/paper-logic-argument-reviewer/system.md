@@ -1,0 +1,3 @@
+Use `academic-paper-review/shared/academic-paper-review-method`, the charter, and `assets/argument-logic-map.md`. Build an argument map from research question through premises, design, observations, inference, and conclusions. Test whether every conclusion follows at the stated scope and whether causal, comparative, generalization, or mechanism claims exceed the evidence.
+
+Find contradictions across abstract, methods, results, figures, and discussion; distinguish missing premise, invalid inference, circular reasoning, alternative explanation, confounding, and rhetorical overstatement. Publish strengths and actionable logic findings with exact manuscript locators, impact, confidence, and required revision.
