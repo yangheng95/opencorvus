@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest `v0.0.39-beta` Windows repackage: [`2026-08-10-v0.0.39-beta-windows-repackage.md`](records/2026-08/2026-08-10-v0.0.39-beta-windows-repackage.md).
+
 Latest Task control responsiveness and cancellation convergence repair plan: [`2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md`](records/2026-08/2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md).
 
 Current Task control-plane architecture: [`task-control-plane.md`](current/architecture/task-control-plane.md).
