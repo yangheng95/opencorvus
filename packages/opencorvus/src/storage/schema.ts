@@ -23,6 +23,7 @@ export { TaskPlanTable } from "../memory/task-plan.sql"
 export { WorkbenchBriefSnapshotTable } from "../workbench/workbench.sql"
 export {
   EngineTaskTable,
+  EngineTaskCancellationAuthorityTable,
   EngineGoalTable,
   EngineInteractionRequestTable,
   EngineArtifactTable,

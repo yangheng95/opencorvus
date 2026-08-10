@@ -194,6 +194,7 @@ export namespace BrowserMCPNodeLauncher {
     child.stderr?.on("data", (chunk) => (stderr += String(chunk)))
     try {
       const code = await child.exited
+      await child.outputSettled
       await ProcessSupervisor.disposeAndWaitForExit(child, `browser MCP ${transport} source bundle build`)
       if (code !== 0) throw new Error(`Failed to build Browser MCP node bundle: ${stderr.trim()}`)
       const bytes = await fs.readFile(staging)

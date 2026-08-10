@@ -1,5 +1,7 @@
 import { createHash } from "node:crypto"
+import { execFileSync } from "node:child_process"
 import fs from "node:fs"
+import os from "node:os"
 import path from "node:path"
 import lockfile from "proper-lockfile"
 
@@ -7,11 +9,11 @@ export interface RuntimeServerOwnerInfo {
   pid: number
   database: string
   startedAt: number
+  processInstanceID: string
 }
 
 type LiveLease = {
   info: RuntimeServerOwnerInfo
-  references: number
   file: string
   releaseFilesystemLock: () => void
 }
@@ -39,7 +41,9 @@ function isOwnerInfo(value: unknown): value is RuntimeServerOwnerInfo {
     path.isAbsolute(input.database) &&
     typeof input.startedAt === "number" &&
     Number.isFinite(input.startedAt) &&
-    input.startedAt > 0
+    input.startedAt > 0 &&
+    typeof input.processInstanceID === "string" &&
+    input.processInstanceID.length > 0
   )
 }
 
@@ -47,6 +51,57 @@ function readOwner(file: string): RuntimeServerOwnerInfo | undefined {
   try {
     const parsed: unknown = JSON.parse(fs.readFileSync(file, "utf8"))
     return isOwnerInfo(parsed) ? parsed : undefined
+  } catch {
+    return undefined
+  }
+}
+
+function isProcessAlive(pid: number): boolean {
+  try {
+    process.kill(pid, 0)
+    return true
+  } catch (error) {
+    return (error as NodeJS.ErrnoException).code === "EPERM"
+  }
+}
+
+function processInstanceID(pid: number): string | undefined {
+  try {
+    if (process.platform === "linux") {
+      const stat = fs.readFileSync(`/proc/${pid}/stat`, "utf8")
+      const fields = stat
+        .slice(stat.lastIndexOf(")") + 2)
+        .trim()
+        .split(/\s+/)
+      const startTicks = fields[19]
+      return startTicks ? `linux:${startTicks}` : undefined
+    }
+    if (process.platform === "win32") {
+      const executable = path.join(
+        process.env.SystemRoot || process.env.WINDIR || "C:\\Windows",
+        "System32",
+        "WindowsPowerShell",
+        "v1.0",
+        "powershell.exe",
+      )
+      const value = execFileSync(
+        executable,
+        [
+          "-NoLogo",
+          "-NoProfile",
+          "-NonInteractive",
+          "-Command",
+          `(Get-Process -Id ${pid} -ErrorAction Stop).StartTime.ToUniversalTime().Ticks`,
+        ],
+        { encoding: "utf8", windowsHide: true, stdio: ["ignore", "pipe", "ignore"] },
+      ).trim()
+      return value ? `win32:${value}` : undefined
+    }
+    const value = execFileSync("ps", ["-o", "lstart=", "-p", String(pid)], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim()
+    return value ? `${os.platform()}:${value}` : undefined
   } catch {
     return undefined
   }
@@ -82,13 +137,21 @@ export namespace RuntimeServerOwnership {
 
     const local = liveLeases.get(key)
     if (local) {
-      if (local.info.pid !== pid) throw new RuntimeServerOwnershipConflictError(database, local.info)
-      local.references += 1
-      return handleFor(key, local)
+      throw new RuntimeServerOwnershipConflictError(database, local.info)
     }
 
     const file = ownerFilePath(database)
     fs.mkdirSync(path.dirname(file), { recursive: true })
+    const recordedOwner = readOwner(file)
+    if (recordedOwner && recordedOwner.pid !== pid) {
+      const observedInstanceID = processInstanceID(recordedOwner.pid)
+      if (
+        observedInstanceID === recordedOwner.processInstanceID ||
+        (observedInstanceID === undefined && isProcessAlive(recordedOwner.pid))
+      ) {
+        throw new RuntimeServerOwnershipConflictError(database, recordedOwner)
+      }
+    }
     let releaseFilesystemLock: () => void
     try {
       releaseFilesystemLock = lockfile.lockSync(file, { realpath: false })
@@ -99,10 +162,16 @@ export namespace RuntimeServerOwnership {
       throw error
     }
 
+    const currentProcessInstanceID = processInstanceID(pid)
+    if (!currentProcessInstanceID) {
+      releaseFilesystemLock()
+      throw new Error(`Cannot establish runtime server process-instance identity for PID ${pid}`)
+    }
     const info: RuntimeServerOwnerInfo = {
       pid,
       database,
       startedAt: input.now ?? Date.now(),
+      processInstanceID: currentProcessInstanceID,
     }
     try {
       fs.writeFileSync(file, JSON.stringify(info, null, 2), "utf8")
@@ -111,7 +180,7 @@ export namespace RuntimeServerOwnership {
       throw error
     }
 
-    const lease: LiveLease = { info, references: 1, file, releaseFilesystemLock }
+    const lease: LiveLease = { info, file, releaseFilesystemLock }
     liveLeases.set(key, lease)
     return handleFor(key, lease)
   }
@@ -126,8 +195,6 @@ export namespace RuntimeServerOwnership {
         released = true
         const current = liveLeases.get(key)
         if (!current || current !== lease) return
-        current.references -= 1
-        if (current.references > 0) return
         liveLeases.delete(key)
         try {
           const recorded = readOwner(current.file)

@@ -2369,6 +2369,8 @@
                   "operator_message_wake",
                   "mission_acceptance_resume_receipt",
                   "queued_operator_wake",
+                  "task_checkpoint_settlement",
+                  "task_auxiliary_settlement",
                   "exploration",
                   "browser_preview_target",
                   "browser_preview_evidence",
@@ -65888,6 +65890,14 @@
                               ],
                               "type": "string"
                             },
+                            "cancellationStatus": {
+                              "enum": [
+                                "none",
+                                "cancelling",
+                                "cancelled"
+                              ],
+                              "type": "string"
+                            },
                             "completed": {
                               "type": "number"
                             },
@@ -65953,6 +65963,7 @@
                             "title",
                             "description",
                             "lifecycleStatus",
+                            "cancellationStatus",
                             "activityStatus",
                             "priority",
                             "source",
@@ -66745,6 +66756,14 @@
                             ],
                             "type": "string"
                           },
+                          "cancellationStatus": {
+                            "enum": [
+                              "none",
+                              "cancelling",
+                              "cancelled"
+                            ],
+                            "type": "string"
+                          },
                           "completed": {
                             "type": "number"
                           },
@@ -66810,6 +66829,7 @@
                           "title",
                           "description",
                           "lifecycleStatus",
+                          "cancellationStatus",
                           "activityStatus",
                           "priority",
                           "source",
@@ -67764,6 +67784,14 @@
                             ],
                             "type": "string"
                           },
+                          "cancellationStatus": {
+                            "enum": [
+                              "none",
+                              "cancelling",
+                              "cancelled"
+                            ],
+                            "type": "string"
+                          },
                           "completed": {
                             "type": "number"
                           },
@@ -67829,6 +67857,7 @@
                           "title",
                           "description",
                           "lifecycleStatus",
+                          "cancellationStatus",
                           "activityStatus",
                           "priority",
                           "source",
@@ -69187,6 +69216,14 @@
                             ],
                             "type": "string"
                           },
+                          "cancellationStatus": {
+                            "enum": [
+                              "none",
+                              "cancelling",
+                              "cancelled"
+                            ],
+                            "type": "string"
+                          },
                           "completed": {
                             "type": "number"
                           },
@@ -69252,6 +69289,7 @@
                           "title",
                           "description",
                           "lifecycleStatus",
+                          "cancellationStatus",
                           "activityStatus",
                           "priority",
                           "source",
@@ -86665,138 +86703,275 @@
                       "type": "object"
                     },
                     "cancellation": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "actor": {
-                          "enum": [
-                            "user",
-                            "control_agent",
-                            "mission",
-                            "right_sidebar_conversation",
-                            "orchestrator"
+                      "oneOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "actor": {
+                              "enum": [
+                                "user",
+                                "control_agent",
+                                "mission",
+                                "right_sidebar_conversation",
+                                "orchestrator"
+                              ],
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "pattern": "^msg.*",
+                              "type": "string"
+                            },
+                            "missionID": {
+                              "maxLength": 64,
+                              "minLength": 1,
+                              "pattern": "^[a-z0-9-]+$",
+                              "type": "string"
+                            },
+                            "reason": {
+                              "maxLength": 2000,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "requestEventID": {
+                              "pattern": "^pev.*",
+                              "type": "string"
+                            },
+                            "requestID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "requestedAt": {
+                              "exclusiveMinimum": 0,
+                              "maximum": 9007199254740991,
+                              "type": "integer"
+                            },
+                            "sessionID": {
+                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                              "type": "string"
+                            },
+                            "source": {
+                              "enum": [
+                                "task.cancel",
+                                "task.delete",
+                                "task.archive",
+                                "mission.abort",
+                                "mission.archive",
+                                "mission.delete",
+                                "panel.cancel_task",
+                                "orchestrator.cancel_task",
+                                "session.delete",
+                                "project.delete"
+                              ],
+                              "type": "string"
+                            },
+                            "status": {
+                              "const": "cancelling",
+                              "type": "string"
+                            },
+                            "surface": {
+                              "enum": [
+                                "api",
+                                "overlay.work_ledger",
+                                "overlay.selected_task",
+                                "overlay.composer_stop",
+                                "overlay.chat_request_stop",
+                                "overlay.interrupt_task",
+                                "overlay.archive_panel",
+                                "panel",
+                                "gateway",
+                                "slack",
+                                "telegram",
+                                "discord",
+                                "feishu",
+                                "whatsapp",
+                                "googlechat",
+                                "msteams",
+                                "line",
+                                "matrix",
+                                "mattermost",
+                                "signal",
+                                "wecom",
+                                "dingtalk",
+                                "clickclack",
+                                "imessage",
+                                "irc",
+                                "nextcloud-talk",
+                                "nostr",
+                                "qqbot",
+                                "raft",
+                                "reef",
+                                "sms",
+                                "synology-chat",
+                                "tlon",
+                                "twitch",
+                                "zalo",
+                                "zalouser",
+                                "right-sidebar",
+                                "orchestrator"
+                              ],
+                              "type": "string"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "pattern": "^prt.*",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "requestEventID",
+                            "requestedAt",
+                            "source",
+                            "requestID",
+                            "actor",
+                            "surface",
+                            "reason",
+                            "status"
                           ],
-                          "type": "string"
+                          "type": "object"
                         },
-                        "messageID": {
-                          "pattern": "^msg.*",
-                          "type": "string"
-                        },
-                        "missionID": {
-                          "maxLength": 64,
-                          "minLength": 1,
-                          "pattern": "^[a-z0-9-]+$",
-                          "type": "string"
-                        },
-                        "reason": {
-                          "maxLength": 2000,
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "requestEventID": {
-                          "pattern": "^pev.*",
-                          "type": "string"
-                        },
-                        "requestID": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "requestedAt": {
-                          "exclusiveMinimum": 0,
-                          "maximum": 9007199254740991,
-                          "type": "integer"
-                        },
-                        "sessionID": {
-                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                          "type": "string"
-                        },
-                        "source": {
-                          "enum": [
-                            "task.cancel",
-                            "task.delete",
-                            "task.archive",
-                            "mission.abort",
-                            "mission.archive",
-                            "mission.delete",
-                            "panel.cancel_task",
-                            "orchestrator.cancel_task",
-                            "session.delete",
-                            "project.delete"
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "actor": {
+                              "enum": [
+                                "user",
+                                "control_agent",
+                                "mission",
+                                "right_sidebar_conversation",
+                                "orchestrator"
+                              ],
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "pattern": "^msg.*",
+                              "type": "string"
+                            },
+                            "missionID": {
+                              "maxLength": 64,
+                              "minLength": 1,
+                              "pattern": "^[a-z0-9-]+$",
+                              "type": "string"
+                            },
+                            "reason": {
+                              "maxLength": 2000,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "requestEventID": {
+                              "pattern": "^pev.*",
+                              "type": "string"
+                            },
+                            "requestID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "requestedAt": {
+                              "exclusiveMinimum": 0,
+                              "maximum": 9007199254740991,
+                              "type": "integer"
+                            },
+                            "sessionID": {
+                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                              "type": "string"
+                            },
+                            "source": {
+                              "enum": [
+                                "task.cancel",
+                                "task.delete",
+                                "task.archive",
+                                "mission.abort",
+                                "mission.archive",
+                                "mission.delete",
+                                "panel.cancel_task",
+                                "orchestrator.cancel_task",
+                                "session.delete",
+                                "project.delete"
+                              ],
+                              "type": "string"
+                            },
+                            "status": {
+                              "const": "cancelled",
+                              "type": "string"
+                            },
+                            "surface": {
+                              "enum": [
+                                "api",
+                                "overlay.work_ledger",
+                                "overlay.selected_task",
+                                "overlay.composer_stop",
+                                "overlay.chat_request_stop",
+                                "overlay.interrupt_task",
+                                "overlay.archive_panel",
+                                "panel",
+                                "gateway",
+                                "slack",
+                                "telegram",
+                                "discord",
+                                "feishu",
+                                "whatsapp",
+                                "googlechat",
+                                "msteams",
+                                "line",
+                                "matrix",
+                                "mattermost",
+                                "signal",
+                                "wecom",
+                                "dingtalk",
+                                "clickclack",
+                                "imessage",
+                                "irc",
+                                "nextcloud-talk",
+                                "nostr",
+                                "qqbot",
+                                "raft",
+                                "reef",
+                                "sms",
+                                "synology-chat",
+                                "tlon",
+                                "twitch",
+                                "zalo",
+                                "zalouser",
+                                "right-sidebar",
+                                "orchestrator"
+                              ],
+                              "type": "string"
+                            },
+                            "terminalAt": {
+                              "exclusiveMinimum": 0,
+                              "maximum": 9007199254740991,
+                              "type": "integer"
+                            },
+                            "terminalEventID": {
+                              "pattern": "^pev.*",
+                              "type": "string"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "pattern": "^prt.*",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "requestEventID",
+                            "requestedAt",
+                            "source",
+                            "requestID",
+                            "actor",
+                            "surface",
+                            "reason",
+                            "status",
+                            "terminalEventID",
+                            "terminalAt"
                           ],
-                          "type": "string"
-                        },
-                        "surface": {
-                          "enum": [
-                            "api",
-                            "overlay.work_ledger",
-                            "overlay.selected_task",
-                            "overlay.composer_stop",
-                            "overlay.chat_request_stop",
-                            "overlay.interrupt_task",
-                            "overlay.archive_panel",
-                            "panel",
-                            "gateway",
-                            "slack",
-                            "telegram",
-                            "discord",
-                            "feishu",
-                            "whatsapp",
-                            "googlechat",
-                            "msteams",
-                            "line",
-                            "matrix",
-                            "mattermost",
-                            "signal",
-                            "wecom",
-                            "dingtalk",
-                            "clickclack",
-                            "imessage",
-                            "irc",
-                            "nextcloud-talk",
-                            "nostr",
-                            "qqbot",
-                            "raft",
-                            "reef",
-                            "sms",
-                            "synology-chat",
-                            "tlon",
-                            "twitch",
-                            "zalo",
-                            "zalouser",
-                            "right-sidebar",
-                            "orchestrator"
-                          ],
-                          "type": "string"
-                        },
-                        "terminalAt": {
-                          "exclusiveMinimum": 0,
-                          "maximum": 9007199254740991,
-                          "type": "integer"
-                        },
-                        "terminalEventID": {
-                          "pattern": "^pev.*",
-                          "type": "string"
-                        },
-                        "toolCallID": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "toolPartID": {
-                          "pattern": "^prt.*",
-                          "type": "string"
+                          "type": "object"
                         }
-                      },
-                      "required": [
-                        "requestEventID",
-                        "terminalEventID",
-                        "requestedAt",
-                        "terminalAt",
-                        "source",
-                        "requestID",
-                        "actor",
-                        "surface",
-                        "reason"
-                      ],
-                      "type": "object"
+                      ]
                     },
                     "completionDecision": {
                       "properties": {
@@ -88386,6 +88561,8 @@
                               "operator_message_wake",
                               "mission_acceptance_resume_receipt",
                               "queued_operator_wake",
+                              "task_checkpoint_settlement",
+                              "task_auxiliary_settlement",
                               "exploration",
                               "browser_preview_target",
                               "browser_preview_evidence",
@@ -89809,138 +89986,275 @@
                           "type": "object"
                         },
                         "cancellation": {
-                          "additionalProperties": false,
-                          "properties": {
-                            "actor": {
-                              "enum": [
-                                "user",
-                                "control_agent",
-                                "mission",
-                                "right_sidebar_conversation",
-                                "orchestrator"
+                          "oneOf": [
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "actor": {
+                                  "enum": [
+                                    "user",
+                                    "control_agent",
+                                    "mission",
+                                    "right_sidebar_conversation",
+                                    "orchestrator"
+                                  ],
+                                  "type": "string"
+                                },
+                                "messageID": {
+                                  "pattern": "^msg.*",
+                                  "type": "string"
+                                },
+                                "missionID": {
+                                  "maxLength": 64,
+                                  "minLength": 1,
+                                  "pattern": "^[a-z0-9-]+$",
+                                  "type": "string"
+                                },
+                                "reason": {
+                                  "maxLength": 2000,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "requestEventID": {
+                                  "pattern": "^pev.*",
+                                  "type": "string"
+                                },
+                                "requestID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "requestedAt": {
+                                  "exclusiveMinimum": 0,
+                                  "maximum": 9007199254740991,
+                                  "type": "integer"
+                                },
+                                "sessionID": {
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                                  "type": "string"
+                                },
+                                "source": {
+                                  "enum": [
+                                    "task.cancel",
+                                    "task.delete",
+                                    "task.archive",
+                                    "mission.abort",
+                                    "mission.archive",
+                                    "mission.delete",
+                                    "panel.cancel_task",
+                                    "orchestrator.cancel_task",
+                                    "session.delete",
+                                    "project.delete"
+                                  ],
+                                  "type": "string"
+                                },
+                                "status": {
+                                  "const": "cancelling",
+                                  "type": "string"
+                                },
+                                "surface": {
+                                  "enum": [
+                                    "api",
+                                    "overlay.work_ledger",
+                                    "overlay.selected_task",
+                                    "overlay.composer_stop",
+                                    "overlay.chat_request_stop",
+                                    "overlay.interrupt_task",
+                                    "overlay.archive_panel",
+                                    "panel",
+                                    "gateway",
+                                    "slack",
+                                    "telegram",
+                                    "discord",
+                                    "feishu",
+                                    "whatsapp",
+                                    "googlechat",
+                                    "msteams",
+                                    "line",
+                                    "matrix",
+                                    "mattermost",
+                                    "signal",
+                                    "wecom",
+                                    "dingtalk",
+                                    "clickclack",
+                                    "imessage",
+                                    "irc",
+                                    "nextcloud-talk",
+                                    "nostr",
+                                    "qqbot",
+                                    "raft",
+                                    "reef",
+                                    "sms",
+                                    "synology-chat",
+                                    "tlon",
+                                    "twitch",
+                                    "zalo",
+                                    "zalouser",
+                                    "right-sidebar",
+                                    "orchestrator"
+                                  ],
+                                  "type": "string"
+                                },
+                                "toolCallID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "toolPartID": {
+                                  "pattern": "^prt.*",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "requestEventID",
+                                "requestedAt",
+                                "source",
+                                "requestID",
+                                "actor",
+                                "surface",
+                                "reason",
+                                "status"
                               ],
-                              "type": "string"
+                              "type": "object"
                             },
-                            "messageID": {
-                              "pattern": "^msg.*",
-                              "type": "string"
-                            },
-                            "missionID": {
-                              "maxLength": 64,
-                              "minLength": 1,
-                              "pattern": "^[a-z0-9-]+$",
-                              "type": "string"
-                            },
-                            "reason": {
-                              "maxLength": 2000,
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "requestEventID": {
-                              "pattern": "^pev.*",
-                              "type": "string"
-                            },
-                            "requestID": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "requestedAt": {
-                              "exclusiveMinimum": 0,
-                              "maximum": 9007199254740991,
-                              "type": "integer"
-                            },
-                            "sessionID": {
-                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                              "type": "string"
-                            },
-                            "source": {
-                              "enum": [
-                                "task.cancel",
-                                "task.delete",
-                                "task.archive",
-                                "mission.abort",
-                                "mission.archive",
-                                "mission.delete",
-                                "panel.cancel_task",
-                                "orchestrator.cancel_task",
-                                "session.delete",
-                                "project.delete"
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "actor": {
+                                  "enum": [
+                                    "user",
+                                    "control_agent",
+                                    "mission",
+                                    "right_sidebar_conversation",
+                                    "orchestrator"
+                                  ],
+                                  "type": "string"
+                                },
+                                "messageID": {
+                                  "pattern": "^msg.*",
+                                  "type": "string"
+                                },
+                                "missionID": {
+                                  "maxLength": 64,
+                                  "minLength": 1,
+                                  "pattern": "^[a-z0-9-]+$",
+                                  "type": "string"
+                                },
+                                "reason": {
+                                  "maxLength": 2000,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "requestEventID": {
+                                  "pattern": "^pev.*",
+                                  "type": "string"
+                                },
+                                "requestID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "requestedAt": {
+                                  "exclusiveMinimum": 0,
+                                  "maximum": 9007199254740991,
+                                  "type": "integer"
+                                },
+                                "sessionID": {
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                                  "type": "string"
+                                },
+                                "source": {
+                                  "enum": [
+                                    "task.cancel",
+                                    "task.delete",
+                                    "task.archive",
+                                    "mission.abort",
+                                    "mission.archive",
+                                    "mission.delete",
+                                    "panel.cancel_task",
+                                    "orchestrator.cancel_task",
+                                    "session.delete",
+                                    "project.delete"
+                                  ],
+                                  "type": "string"
+                                },
+                                "status": {
+                                  "const": "cancelled",
+                                  "type": "string"
+                                },
+                                "surface": {
+                                  "enum": [
+                                    "api",
+                                    "overlay.work_ledger",
+                                    "overlay.selected_task",
+                                    "overlay.composer_stop",
+                                    "overlay.chat_request_stop",
+                                    "overlay.interrupt_task",
+                                    "overlay.archive_panel",
+                                    "panel",
+                                    "gateway",
+                                    "slack",
+                                    "telegram",
+                                    "discord",
+                                    "feishu",
+                                    "whatsapp",
+                                    "googlechat",
+                                    "msteams",
+                                    "line",
+                                    "matrix",
+                                    "mattermost",
+                                    "signal",
+                                    "wecom",
+                                    "dingtalk",
+                                    "clickclack",
+                                    "imessage",
+                                    "irc",
+                                    "nextcloud-talk",
+                                    "nostr",
+                                    "qqbot",
+                                    "raft",
+                                    "reef",
+                                    "sms",
+                                    "synology-chat",
+                                    "tlon",
+                                    "twitch",
+                                    "zalo",
+                                    "zalouser",
+                                    "right-sidebar",
+                                    "orchestrator"
+                                  ],
+                                  "type": "string"
+                                },
+                                "terminalAt": {
+                                  "exclusiveMinimum": 0,
+                                  "maximum": 9007199254740991,
+                                  "type": "integer"
+                                },
+                                "terminalEventID": {
+                                  "pattern": "^pev.*",
+                                  "type": "string"
+                                },
+                                "toolCallID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "toolPartID": {
+                                  "pattern": "^prt.*",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "requestEventID",
+                                "requestedAt",
+                                "source",
+                                "requestID",
+                                "actor",
+                                "surface",
+                                "reason",
+                                "status",
+                                "terminalEventID",
+                                "terminalAt"
                               ],
-                              "type": "string"
-                            },
-                            "surface": {
-                              "enum": [
-                                "api",
-                                "overlay.work_ledger",
-                                "overlay.selected_task",
-                                "overlay.composer_stop",
-                                "overlay.chat_request_stop",
-                                "overlay.interrupt_task",
-                                "overlay.archive_panel",
-                                "panel",
-                                "gateway",
-                                "slack",
-                                "telegram",
-                                "discord",
-                                "feishu",
-                                "whatsapp",
-                                "googlechat",
-                                "msteams",
-                                "line",
-                                "matrix",
-                                "mattermost",
-                                "signal",
-                                "wecom",
-                                "dingtalk",
-                                "clickclack",
-                                "imessage",
-                                "irc",
-                                "nextcloud-talk",
-                                "nostr",
-                                "qqbot",
-                                "raft",
-                                "reef",
-                                "sms",
-                                "synology-chat",
-                                "tlon",
-                                "twitch",
-                                "zalo",
-                                "zalouser",
-                                "right-sidebar",
-                                "orchestrator"
-                              ],
-                              "type": "string"
-                            },
-                            "terminalAt": {
-                              "exclusiveMinimum": 0,
-                              "maximum": 9007199254740991,
-                              "type": "integer"
-                            },
-                            "terminalEventID": {
-                              "pattern": "^pev.*",
-                              "type": "string"
-                            },
-                            "toolCallID": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "toolPartID": {
-                              "pattern": "^prt.*",
-                              "type": "string"
+                              "type": "object"
                             }
-                          },
-                          "required": [
-                            "requestEventID",
-                            "terminalEventID",
-                            "requestedAt",
-                            "terminalAt",
-                            "source",
-                            "requestID",
-                            "actor",
-                            "surface",
-                            "reason"
-                          ],
-                          "type": "object"
+                          ]
                         },
                         "completionDecision": {
                           "properties": {
@@ -94028,15 +94342,283 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "202": {
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "oneOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "actor": {
+                          "enum": [
+                            "user",
+                            "control_agent",
+                            "mission",
+                            "right_sidebar_conversation",
+                            "orchestrator"
+                          ],
+                          "type": "string"
+                        },
+                        "messageID": {
+                          "pattern": "^msg.*",
+                          "type": "string"
+                        },
+                        "missionID": {
+                          "maxLength": 64,
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9-]+$",
+                          "type": "string"
+                        },
+                        "reason": {
+                          "maxLength": 2000,
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "requestEventID": {
+                          "pattern": "^pev.*",
+                          "type": "string"
+                        },
+                        "requestID": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "requestedAt": {
+                          "exclusiveMinimum": 0,
+                          "maximum": 9007199254740991,
+                          "type": "integer"
+                        },
+                        "sessionID": {
+                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                          "type": "string"
+                        },
+                        "source": {
+                          "enum": [
+                            "task.cancel",
+                            "task.delete",
+                            "task.archive",
+                            "mission.abort",
+                            "mission.archive",
+                            "mission.delete",
+                            "panel.cancel_task",
+                            "orchestrator.cancel_task",
+                            "session.delete",
+                            "project.delete"
+                          ],
+                          "type": "string"
+                        },
+                        "status": {
+                          "const": "cancelling",
+                          "type": "string"
+                        },
+                        "surface": {
+                          "enum": [
+                            "api",
+                            "overlay.work_ledger",
+                            "overlay.selected_task",
+                            "overlay.composer_stop",
+                            "overlay.chat_request_stop",
+                            "overlay.interrupt_task",
+                            "overlay.archive_panel",
+                            "panel",
+                            "gateway",
+                            "slack",
+                            "telegram",
+                            "discord",
+                            "feishu",
+                            "whatsapp",
+                            "googlechat",
+                            "msteams",
+                            "line",
+                            "matrix",
+                            "mattermost",
+                            "signal",
+                            "wecom",
+                            "dingtalk",
+                            "clickclack",
+                            "imessage",
+                            "irc",
+                            "nextcloud-talk",
+                            "nostr",
+                            "qqbot",
+                            "raft",
+                            "reef",
+                            "sms",
+                            "synology-chat",
+                            "tlon",
+                            "twitch",
+                            "zalo",
+                            "zalouser",
+                            "right-sidebar",
+                            "orchestrator"
+                          ],
+                          "type": "string"
+                        },
+                        "toolCallID": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "toolPartID": {
+                          "pattern": "^prt.*",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "requestEventID",
+                        "requestedAt",
+                        "source",
+                        "requestID",
+                        "actor",
+                        "surface",
+                        "reason",
+                        "status"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "actor": {
+                          "enum": [
+                            "user",
+                            "control_agent",
+                            "mission",
+                            "right_sidebar_conversation",
+                            "orchestrator"
+                          ],
+                          "type": "string"
+                        },
+                        "messageID": {
+                          "pattern": "^msg.*",
+                          "type": "string"
+                        },
+                        "missionID": {
+                          "maxLength": 64,
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9-]+$",
+                          "type": "string"
+                        },
+                        "reason": {
+                          "maxLength": 2000,
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "requestEventID": {
+                          "pattern": "^pev.*",
+                          "type": "string"
+                        },
+                        "requestID": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "requestedAt": {
+                          "exclusiveMinimum": 0,
+                          "maximum": 9007199254740991,
+                          "type": "integer"
+                        },
+                        "sessionID": {
+                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                          "type": "string"
+                        },
+                        "source": {
+                          "enum": [
+                            "task.cancel",
+                            "task.delete",
+                            "task.archive",
+                            "mission.abort",
+                            "mission.archive",
+                            "mission.delete",
+                            "panel.cancel_task",
+                            "orchestrator.cancel_task",
+                            "session.delete",
+                            "project.delete"
+                          ],
+                          "type": "string"
+                        },
+                        "status": {
+                          "const": "cancelled",
+                          "type": "string"
+                        },
+                        "surface": {
+                          "enum": [
+                            "api",
+                            "overlay.work_ledger",
+                            "overlay.selected_task",
+                            "overlay.composer_stop",
+                            "overlay.chat_request_stop",
+                            "overlay.interrupt_task",
+                            "overlay.archive_panel",
+                            "panel",
+                            "gateway",
+                            "slack",
+                            "telegram",
+                            "discord",
+                            "feishu",
+                            "whatsapp",
+                            "googlechat",
+                            "msteams",
+                            "line",
+                            "matrix",
+                            "mattermost",
+                            "signal",
+                            "wecom",
+                            "dingtalk",
+                            "clickclack",
+                            "imessage",
+                            "irc",
+                            "nextcloud-talk",
+                            "nostr",
+                            "qqbot",
+                            "raft",
+                            "reef",
+                            "sms",
+                            "synology-chat",
+                            "tlon",
+                            "twitch",
+                            "zalo",
+                            "zalouser",
+                            "right-sidebar",
+                            "orchestrator"
+                          ],
+                          "type": "string"
+                        },
+                        "terminalAt": {
+                          "exclusiveMinimum": 0,
+                          "maximum": 9007199254740991,
+                          "type": "integer"
+                        },
+                        "terminalEventID": {
+                          "pattern": "^pev.*",
+                          "type": "string"
+                        },
+                        "toolCallID": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "toolPartID": {
+                          "pattern": "^prt.*",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "requestEventID",
+                        "requestedAt",
+                        "source",
+                        "requestID",
+                        "actor",
+                        "surface",
+                        "reason",
+                        "status",
+                        "terminalEventID",
+                        "terminalAt"
+                      ],
+                      "type": "object"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Task cancelled"
+            "description": "Task cancellation accepted or completed"
           },
           "400": {
             "content": {
@@ -94879,6 +95461,8 @@
                                   "operator_message_wake",
                                   "mission_acceptance_resume_receipt",
                                   "queued_operator_wake",
+                                  "task_checkpoint_settlement",
+                                  "task_auxiliary_settlement",
                                   "exploration",
                                   "browser_preview_target",
                                   "browser_preview_evidence",
@@ -96302,138 +96886,275 @@
                               "type": "object"
                             },
                             "cancellation": {
-                              "additionalProperties": false,
-                              "properties": {
-                                "actor": {
-                                  "enum": [
-                                    "user",
-                                    "control_agent",
-                                    "mission",
-                                    "right_sidebar_conversation",
-                                    "orchestrator"
+                              "oneOf": [
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "actor": {
+                                      "enum": [
+                                        "user",
+                                        "control_agent",
+                                        "mission",
+                                        "right_sidebar_conversation",
+                                        "orchestrator"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "messageID": {
+                                      "pattern": "^msg.*",
+                                      "type": "string"
+                                    },
+                                    "missionID": {
+                                      "maxLength": 64,
+                                      "minLength": 1,
+                                      "pattern": "^[a-z0-9-]+$",
+                                      "type": "string"
+                                    },
+                                    "reason": {
+                                      "maxLength": 2000,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "requestEventID": {
+                                      "pattern": "^pev.*",
+                                      "type": "string"
+                                    },
+                                    "requestID": {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "requestedAt": {
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 9007199254740991,
+                                      "type": "integer"
+                                    },
+                                    "sessionID": {
+                                      "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                                      "type": "string"
+                                    },
+                                    "source": {
+                                      "enum": [
+                                        "task.cancel",
+                                        "task.delete",
+                                        "task.archive",
+                                        "mission.abort",
+                                        "mission.archive",
+                                        "mission.delete",
+                                        "panel.cancel_task",
+                                        "orchestrator.cancel_task",
+                                        "session.delete",
+                                        "project.delete"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "status": {
+                                      "const": "cancelling",
+                                      "type": "string"
+                                    },
+                                    "surface": {
+                                      "enum": [
+                                        "api",
+                                        "overlay.work_ledger",
+                                        "overlay.selected_task",
+                                        "overlay.composer_stop",
+                                        "overlay.chat_request_stop",
+                                        "overlay.interrupt_task",
+                                        "overlay.archive_panel",
+                                        "panel",
+                                        "gateway",
+                                        "slack",
+                                        "telegram",
+                                        "discord",
+                                        "feishu",
+                                        "whatsapp",
+                                        "googlechat",
+                                        "msteams",
+                                        "line",
+                                        "matrix",
+                                        "mattermost",
+                                        "signal",
+                                        "wecom",
+                                        "dingtalk",
+                                        "clickclack",
+                                        "imessage",
+                                        "irc",
+                                        "nextcloud-talk",
+                                        "nostr",
+                                        "qqbot",
+                                        "raft",
+                                        "reef",
+                                        "sms",
+                                        "synology-chat",
+                                        "tlon",
+                                        "twitch",
+                                        "zalo",
+                                        "zalouser",
+                                        "right-sidebar",
+                                        "orchestrator"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "toolCallID": {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "toolPartID": {
+                                      "pattern": "^prt.*",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "requestEventID",
+                                    "requestedAt",
+                                    "source",
+                                    "requestID",
+                                    "actor",
+                                    "surface",
+                                    "reason",
+                                    "status"
                                   ],
-                                  "type": "string"
+                                  "type": "object"
                                 },
-                                "messageID": {
-                                  "pattern": "^msg.*",
-                                  "type": "string"
-                                },
-                                "missionID": {
-                                  "maxLength": 64,
-                                  "minLength": 1,
-                                  "pattern": "^[a-z0-9-]+$",
-                                  "type": "string"
-                                },
-                                "reason": {
-                                  "maxLength": 2000,
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "requestEventID": {
-                                  "pattern": "^pev.*",
-                                  "type": "string"
-                                },
-                                "requestID": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "requestedAt": {
-                                  "exclusiveMinimum": 0,
-                                  "maximum": 9007199254740991,
-                                  "type": "integer"
-                                },
-                                "sessionID": {
-                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                                  "type": "string"
-                                },
-                                "source": {
-                                  "enum": [
-                                    "task.cancel",
-                                    "task.delete",
-                                    "task.archive",
-                                    "mission.abort",
-                                    "mission.archive",
-                                    "mission.delete",
-                                    "panel.cancel_task",
-                                    "orchestrator.cancel_task",
-                                    "session.delete",
-                                    "project.delete"
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "actor": {
+                                      "enum": [
+                                        "user",
+                                        "control_agent",
+                                        "mission",
+                                        "right_sidebar_conversation",
+                                        "orchestrator"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "messageID": {
+                                      "pattern": "^msg.*",
+                                      "type": "string"
+                                    },
+                                    "missionID": {
+                                      "maxLength": 64,
+                                      "minLength": 1,
+                                      "pattern": "^[a-z0-9-]+$",
+                                      "type": "string"
+                                    },
+                                    "reason": {
+                                      "maxLength": 2000,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "requestEventID": {
+                                      "pattern": "^pev.*",
+                                      "type": "string"
+                                    },
+                                    "requestID": {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "requestedAt": {
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 9007199254740991,
+                                      "type": "integer"
+                                    },
+                                    "sessionID": {
+                                      "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                                      "type": "string"
+                                    },
+                                    "source": {
+                                      "enum": [
+                                        "task.cancel",
+                                        "task.delete",
+                                        "task.archive",
+                                        "mission.abort",
+                                        "mission.archive",
+                                        "mission.delete",
+                                        "panel.cancel_task",
+                                        "orchestrator.cancel_task",
+                                        "session.delete",
+                                        "project.delete"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "status": {
+                                      "const": "cancelled",
+                                      "type": "string"
+                                    },
+                                    "surface": {
+                                      "enum": [
+                                        "api",
+                                        "overlay.work_ledger",
+                                        "overlay.selected_task",
+                                        "overlay.composer_stop",
+                                        "overlay.chat_request_stop",
+                                        "overlay.interrupt_task",
+                                        "overlay.archive_panel",
+                                        "panel",
+                                        "gateway",
+                                        "slack",
+                                        "telegram",
+                                        "discord",
+                                        "feishu",
+                                        "whatsapp",
+                                        "googlechat",
+                                        "msteams",
+                                        "line",
+                                        "matrix",
+                                        "mattermost",
+                                        "signal",
+                                        "wecom",
+                                        "dingtalk",
+                                        "clickclack",
+                                        "imessage",
+                                        "irc",
+                                        "nextcloud-talk",
+                                        "nostr",
+                                        "qqbot",
+                                        "raft",
+                                        "reef",
+                                        "sms",
+                                        "synology-chat",
+                                        "tlon",
+                                        "twitch",
+                                        "zalo",
+                                        "zalouser",
+                                        "right-sidebar",
+                                        "orchestrator"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "terminalAt": {
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 9007199254740991,
+                                      "type": "integer"
+                                    },
+                                    "terminalEventID": {
+                                      "pattern": "^pev.*",
+                                      "type": "string"
+                                    },
+                                    "toolCallID": {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "toolPartID": {
+                                      "pattern": "^prt.*",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "requestEventID",
+                                    "requestedAt",
+                                    "source",
+                                    "requestID",
+                                    "actor",
+                                    "surface",
+                                    "reason",
+                                    "status",
+                                    "terminalEventID",
+                                    "terminalAt"
                                   ],
-                                  "type": "string"
-                                },
-                                "surface": {
-                                  "enum": [
-                                    "api",
-                                    "overlay.work_ledger",
-                                    "overlay.selected_task",
-                                    "overlay.composer_stop",
-                                    "overlay.chat_request_stop",
-                                    "overlay.interrupt_task",
-                                    "overlay.archive_panel",
-                                    "panel",
-                                    "gateway",
-                                    "slack",
-                                    "telegram",
-                                    "discord",
-                                    "feishu",
-                                    "whatsapp",
-                                    "googlechat",
-                                    "msteams",
-                                    "line",
-                                    "matrix",
-                                    "mattermost",
-                                    "signal",
-                                    "wecom",
-                                    "dingtalk",
-                                    "clickclack",
-                                    "imessage",
-                                    "irc",
-                                    "nextcloud-talk",
-                                    "nostr",
-                                    "qqbot",
-                                    "raft",
-                                    "reef",
-                                    "sms",
-                                    "synology-chat",
-                                    "tlon",
-                                    "twitch",
-                                    "zalo",
-                                    "zalouser",
-                                    "right-sidebar",
-                                    "orchestrator"
-                                  ],
-                                  "type": "string"
-                                },
-                                "terminalAt": {
-                                  "exclusiveMinimum": 0,
-                                  "maximum": 9007199254740991,
-                                  "type": "integer"
-                                },
-                                "terminalEventID": {
-                                  "pattern": "^pev.*",
-                                  "type": "string"
-                                },
-                                "toolCallID": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "toolPartID": {
-                                  "pattern": "^prt.*",
-                                  "type": "string"
+                                  "type": "object"
                                 }
-                              },
-                              "required": [
-                                "requestEventID",
-                                "terminalEventID",
-                                "requestedAt",
-                                "terminalAt",
-                                "source",
-                                "requestID",
-                                "actor",
-                                "surface",
-                                "reason"
-                              ],
-                              "type": "object"
+                              ]
                             },
                             "completionDecision": {
                               "properties": {
@@ -101488,16 +102209,26 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "202": {
             "content": {
               "application/json": {
                 "schema": {
                   "properties": {
+                    "current_owner_ingress_id": {
+                      "pattern": "^art.*",
+                      "type": "string"
+                    },
+                    "ingress_id": {
+                      "pattern": "^art.*",
+                      "type": "string"
+                    },
                     "message": {
                       "type": "string"
                     },
-                    "should_resume": {
-                      "type": "boolean"
+                    "queue_position": {
+                      "exclusiveMinimum": 0,
+                      "maximum": 9007199254740991,
+                      "type": "integer"
                     },
                     "user_message": {
                       "properties": {
@@ -101519,7 +102250,7 @@
                     },
                     "wake_status": {
                       "enum": [
-                        "started",
+                        "accepted",
                         "queued",
                         "not_woken"
                       ],
@@ -101528,14 +102259,13 @@
                   },
                   "required": [
                     "message",
-                    "wake_status",
-                    "should_resume"
+                    "wake_status"
                   ],
                   "type": "object"
                 }
               }
             },
-            "description": "Task message handled"
+            "description": "Task message durably accepted for delivery"
           },
           "400": {
             "content": {
@@ -102659,138 +103389,275 @@
                           "type": "object"
                         },
                         "cancellation": {
-                          "additionalProperties": false,
-                          "properties": {
-                            "actor": {
-                              "enum": [
-                                "user",
-                                "control_agent",
-                                "mission",
-                                "right_sidebar_conversation",
-                                "orchestrator"
+                          "oneOf": [
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "actor": {
+                                  "enum": [
+                                    "user",
+                                    "control_agent",
+                                    "mission",
+                                    "right_sidebar_conversation",
+                                    "orchestrator"
+                                  ],
+                                  "type": "string"
+                                },
+                                "messageID": {
+                                  "pattern": "^msg.*",
+                                  "type": "string"
+                                },
+                                "missionID": {
+                                  "maxLength": 64,
+                                  "minLength": 1,
+                                  "pattern": "^[a-z0-9-]+$",
+                                  "type": "string"
+                                },
+                                "reason": {
+                                  "maxLength": 2000,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "requestEventID": {
+                                  "pattern": "^pev.*",
+                                  "type": "string"
+                                },
+                                "requestID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "requestedAt": {
+                                  "exclusiveMinimum": 0,
+                                  "maximum": 9007199254740991,
+                                  "type": "integer"
+                                },
+                                "sessionID": {
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                                  "type": "string"
+                                },
+                                "source": {
+                                  "enum": [
+                                    "task.cancel",
+                                    "task.delete",
+                                    "task.archive",
+                                    "mission.abort",
+                                    "mission.archive",
+                                    "mission.delete",
+                                    "panel.cancel_task",
+                                    "orchestrator.cancel_task",
+                                    "session.delete",
+                                    "project.delete"
+                                  ],
+                                  "type": "string"
+                                },
+                                "status": {
+                                  "const": "cancelling",
+                                  "type": "string"
+                                },
+                                "surface": {
+                                  "enum": [
+                                    "api",
+                                    "overlay.work_ledger",
+                                    "overlay.selected_task",
+                                    "overlay.composer_stop",
+                                    "overlay.chat_request_stop",
+                                    "overlay.interrupt_task",
+                                    "overlay.archive_panel",
+                                    "panel",
+                                    "gateway",
+                                    "slack",
+                                    "telegram",
+                                    "discord",
+                                    "feishu",
+                                    "whatsapp",
+                                    "googlechat",
+                                    "msteams",
+                                    "line",
+                                    "matrix",
+                                    "mattermost",
+                                    "signal",
+                                    "wecom",
+                                    "dingtalk",
+                                    "clickclack",
+                                    "imessage",
+                                    "irc",
+                                    "nextcloud-talk",
+                                    "nostr",
+                                    "qqbot",
+                                    "raft",
+                                    "reef",
+                                    "sms",
+                                    "synology-chat",
+                                    "tlon",
+                                    "twitch",
+                                    "zalo",
+                                    "zalouser",
+                                    "right-sidebar",
+                                    "orchestrator"
+                                  ],
+                                  "type": "string"
+                                },
+                                "toolCallID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "toolPartID": {
+                                  "pattern": "^prt.*",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "requestEventID",
+                                "requestedAt",
+                                "source",
+                                "requestID",
+                                "actor",
+                                "surface",
+                                "reason",
+                                "status"
                               ],
-                              "type": "string"
+                              "type": "object"
                             },
-                            "messageID": {
-                              "pattern": "^msg.*",
-                              "type": "string"
-                            },
-                            "missionID": {
-                              "maxLength": 64,
-                              "minLength": 1,
-                              "pattern": "^[a-z0-9-]+$",
-                              "type": "string"
-                            },
-                            "reason": {
-                              "maxLength": 2000,
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "requestEventID": {
-                              "pattern": "^pev.*",
-                              "type": "string"
-                            },
-                            "requestID": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "requestedAt": {
-                              "exclusiveMinimum": 0,
-                              "maximum": 9007199254740991,
-                              "type": "integer"
-                            },
-                            "sessionID": {
-                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                              "type": "string"
-                            },
-                            "source": {
-                              "enum": [
-                                "task.cancel",
-                                "task.delete",
-                                "task.archive",
-                                "mission.abort",
-                                "mission.archive",
-                                "mission.delete",
-                                "panel.cancel_task",
-                                "orchestrator.cancel_task",
-                                "session.delete",
-                                "project.delete"
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "actor": {
+                                  "enum": [
+                                    "user",
+                                    "control_agent",
+                                    "mission",
+                                    "right_sidebar_conversation",
+                                    "orchestrator"
+                                  ],
+                                  "type": "string"
+                                },
+                                "messageID": {
+                                  "pattern": "^msg.*",
+                                  "type": "string"
+                                },
+                                "missionID": {
+                                  "maxLength": 64,
+                                  "minLength": 1,
+                                  "pattern": "^[a-z0-9-]+$",
+                                  "type": "string"
+                                },
+                                "reason": {
+                                  "maxLength": 2000,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "requestEventID": {
+                                  "pattern": "^pev.*",
+                                  "type": "string"
+                                },
+                                "requestID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "requestedAt": {
+                                  "exclusiveMinimum": 0,
+                                  "maximum": 9007199254740991,
+                                  "type": "integer"
+                                },
+                                "sessionID": {
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                                  "type": "string"
+                                },
+                                "source": {
+                                  "enum": [
+                                    "task.cancel",
+                                    "task.delete",
+                                    "task.archive",
+                                    "mission.abort",
+                                    "mission.archive",
+                                    "mission.delete",
+                                    "panel.cancel_task",
+                                    "orchestrator.cancel_task",
+                                    "session.delete",
+                                    "project.delete"
+                                  ],
+                                  "type": "string"
+                                },
+                                "status": {
+                                  "const": "cancelled",
+                                  "type": "string"
+                                },
+                                "surface": {
+                                  "enum": [
+                                    "api",
+                                    "overlay.work_ledger",
+                                    "overlay.selected_task",
+                                    "overlay.composer_stop",
+                                    "overlay.chat_request_stop",
+                                    "overlay.interrupt_task",
+                                    "overlay.archive_panel",
+                                    "panel",
+                                    "gateway",
+                                    "slack",
+                                    "telegram",
+                                    "discord",
+                                    "feishu",
+                                    "whatsapp",
+                                    "googlechat",
+                                    "msteams",
+                                    "line",
+                                    "matrix",
+                                    "mattermost",
+                                    "signal",
+                                    "wecom",
+                                    "dingtalk",
+                                    "clickclack",
+                                    "imessage",
+                                    "irc",
+                                    "nextcloud-talk",
+                                    "nostr",
+                                    "qqbot",
+                                    "raft",
+                                    "reef",
+                                    "sms",
+                                    "synology-chat",
+                                    "tlon",
+                                    "twitch",
+                                    "zalo",
+                                    "zalouser",
+                                    "right-sidebar",
+                                    "orchestrator"
+                                  ],
+                                  "type": "string"
+                                },
+                                "terminalAt": {
+                                  "exclusiveMinimum": 0,
+                                  "maximum": 9007199254740991,
+                                  "type": "integer"
+                                },
+                                "terminalEventID": {
+                                  "pattern": "^pev.*",
+                                  "type": "string"
+                                },
+                                "toolCallID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "toolPartID": {
+                                  "pattern": "^prt.*",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "requestEventID",
+                                "requestedAt",
+                                "source",
+                                "requestID",
+                                "actor",
+                                "surface",
+                                "reason",
+                                "status",
+                                "terminalEventID",
+                                "terminalAt"
                               ],
-                              "type": "string"
-                            },
-                            "surface": {
-                              "enum": [
-                                "api",
-                                "overlay.work_ledger",
-                                "overlay.selected_task",
-                                "overlay.composer_stop",
-                                "overlay.chat_request_stop",
-                                "overlay.interrupt_task",
-                                "overlay.archive_panel",
-                                "panel",
-                                "gateway",
-                                "slack",
-                                "telegram",
-                                "discord",
-                                "feishu",
-                                "whatsapp",
-                                "googlechat",
-                                "msteams",
-                                "line",
-                                "matrix",
-                                "mattermost",
-                                "signal",
-                                "wecom",
-                                "dingtalk",
-                                "clickclack",
-                                "imessage",
-                                "irc",
-                                "nextcloud-talk",
-                                "nostr",
-                                "qqbot",
-                                "raft",
-                                "reef",
-                                "sms",
-                                "synology-chat",
-                                "tlon",
-                                "twitch",
-                                "zalo",
-                                "zalouser",
-                                "right-sidebar",
-                                "orchestrator"
-                              ],
-                              "type": "string"
-                            },
-                            "terminalAt": {
-                              "exclusiveMinimum": 0,
-                              "maximum": 9007199254740991,
-                              "type": "integer"
-                            },
-                            "terminalEventID": {
-                              "pattern": "^pev.*",
-                              "type": "string"
-                            },
-                            "toolCallID": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "toolPartID": {
-                              "pattern": "^prt.*",
-                              "type": "string"
+                              "type": "object"
                             }
-                          },
-                          "required": [
-                            "requestEventID",
-                            "terminalEventID",
-                            "requestedAt",
-                            "terminalAt",
-                            "source",
-                            "requestID",
-                            "actor",
-                            "surface",
-                            "reason"
-                          ],
-                          "type": "object"
+                          ]
                         },
                         "completionDecision": {
                           "properties": {
@@ -103909,138 +104776,275 @@
                       "type": "object"
                     },
                     "cancellation": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "actor": {
-                          "enum": [
-                            "user",
-                            "control_agent",
-                            "mission",
-                            "right_sidebar_conversation",
-                            "orchestrator"
+                      "oneOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "actor": {
+                              "enum": [
+                                "user",
+                                "control_agent",
+                                "mission",
+                                "right_sidebar_conversation",
+                                "orchestrator"
+                              ],
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "pattern": "^msg.*",
+                              "type": "string"
+                            },
+                            "missionID": {
+                              "maxLength": 64,
+                              "minLength": 1,
+                              "pattern": "^[a-z0-9-]+$",
+                              "type": "string"
+                            },
+                            "reason": {
+                              "maxLength": 2000,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "requestEventID": {
+                              "pattern": "^pev.*",
+                              "type": "string"
+                            },
+                            "requestID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "requestedAt": {
+                              "exclusiveMinimum": 0,
+                              "maximum": 9007199254740991,
+                              "type": "integer"
+                            },
+                            "sessionID": {
+                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                              "type": "string"
+                            },
+                            "source": {
+                              "enum": [
+                                "task.cancel",
+                                "task.delete",
+                                "task.archive",
+                                "mission.abort",
+                                "mission.archive",
+                                "mission.delete",
+                                "panel.cancel_task",
+                                "orchestrator.cancel_task",
+                                "session.delete",
+                                "project.delete"
+                              ],
+                              "type": "string"
+                            },
+                            "status": {
+                              "const": "cancelling",
+                              "type": "string"
+                            },
+                            "surface": {
+                              "enum": [
+                                "api",
+                                "overlay.work_ledger",
+                                "overlay.selected_task",
+                                "overlay.composer_stop",
+                                "overlay.chat_request_stop",
+                                "overlay.interrupt_task",
+                                "overlay.archive_panel",
+                                "panel",
+                                "gateway",
+                                "slack",
+                                "telegram",
+                                "discord",
+                                "feishu",
+                                "whatsapp",
+                                "googlechat",
+                                "msteams",
+                                "line",
+                                "matrix",
+                                "mattermost",
+                                "signal",
+                                "wecom",
+                                "dingtalk",
+                                "clickclack",
+                                "imessage",
+                                "irc",
+                                "nextcloud-talk",
+                                "nostr",
+                                "qqbot",
+                                "raft",
+                                "reef",
+                                "sms",
+                                "synology-chat",
+                                "tlon",
+                                "twitch",
+                                "zalo",
+                                "zalouser",
+                                "right-sidebar",
+                                "orchestrator"
+                              ],
+                              "type": "string"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "pattern": "^prt.*",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "requestEventID",
+                            "requestedAt",
+                            "source",
+                            "requestID",
+                            "actor",
+                            "surface",
+                            "reason",
+                            "status"
                           ],
-                          "type": "string"
+                          "type": "object"
                         },
-                        "messageID": {
-                          "pattern": "^msg.*",
-                          "type": "string"
-                        },
-                        "missionID": {
-                          "maxLength": 64,
-                          "minLength": 1,
-                          "pattern": "^[a-z0-9-]+$",
-                          "type": "string"
-                        },
-                        "reason": {
-                          "maxLength": 2000,
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "requestEventID": {
-                          "pattern": "^pev.*",
-                          "type": "string"
-                        },
-                        "requestID": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "requestedAt": {
-                          "exclusiveMinimum": 0,
-                          "maximum": 9007199254740991,
-                          "type": "integer"
-                        },
-                        "sessionID": {
-                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                          "type": "string"
-                        },
-                        "source": {
-                          "enum": [
-                            "task.cancel",
-                            "task.delete",
-                            "task.archive",
-                            "mission.abort",
-                            "mission.archive",
-                            "mission.delete",
-                            "panel.cancel_task",
-                            "orchestrator.cancel_task",
-                            "session.delete",
-                            "project.delete"
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "actor": {
+                              "enum": [
+                                "user",
+                                "control_agent",
+                                "mission",
+                                "right_sidebar_conversation",
+                                "orchestrator"
+                              ],
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "pattern": "^msg.*",
+                              "type": "string"
+                            },
+                            "missionID": {
+                              "maxLength": 64,
+                              "minLength": 1,
+                              "pattern": "^[a-z0-9-]+$",
+                              "type": "string"
+                            },
+                            "reason": {
+                              "maxLength": 2000,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "requestEventID": {
+                              "pattern": "^pev.*",
+                              "type": "string"
+                            },
+                            "requestID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "requestedAt": {
+                              "exclusiveMinimum": 0,
+                              "maximum": 9007199254740991,
+                              "type": "integer"
+                            },
+                            "sessionID": {
+                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                              "type": "string"
+                            },
+                            "source": {
+                              "enum": [
+                                "task.cancel",
+                                "task.delete",
+                                "task.archive",
+                                "mission.abort",
+                                "mission.archive",
+                                "mission.delete",
+                                "panel.cancel_task",
+                                "orchestrator.cancel_task",
+                                "session.delete",
+                                "project.delete"
+                              ],
+                              "type": "string"
+                            },
+                            "status": {
+                              "const": "cancelled",
+                              "type": "string"
+                            },
+                            "surface": {
+                              "enum": [
+                                "api",
+                                "overlay.work_ledger",
+                                "overlay.selected_task",
+                                "overlay.composer_stop",
+                                "overlay.chat_request_stop",
+                                "overlay.interrupt_task",
+                                "overlay.archive_panel",
+                                "panel",
+                                "gateway",
+                                "slack",
+                                "telegram",
+                                "discord",
+                                "feishu",
+                                "whatsapp",
+                                "googlechat",
+                                "msteams",
+                                "line",
+                                "matrix",
+                                "mattermost",
+                                "signal",
+                                "wecom",
+                                "dingtalk",
+                                "clickclack",
+                                "imessage",
+                                "irc",
+                                "nextcloud-talk",
+                                "nostr",
+                                "qqbot",
+                                "raft",
+                                "reef",
+                                "sms",
+                                "synology-chat",
+                                "tlon",
+                                "twitch",
+                                "zalo",
+                                "zalouser",
+                                "right-sidebar",
+                                "orchestrator"
+                              ],
+                              "type": "string"
+                            },
+                            "terminalAt": {
+                              "exclusiveMinimum": 0,
+                              "maximum": 9007199254740991,
+                              "type": "integer"
+                            },
+                            "terminalEventID": {
+                              "pattern": "^pev.*",
+                              "type": "string"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "pattern": "^prt.*",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "requestEventID",
+                            "requestedAt",
+                            "source",
+                            "requestID",
+                            "actor",
+                            "surface",
+                            "reason",
+                            "status",
+                            "terminalEventID",
+                            "terminalAt"
                           ],
-                          "type": "string"
-                        },
-                        "surface": {
-                          "enum": [
-                            "api",
-                            "overlay.work_ledger",
-                            "overlay.selected_task",
-                            "overlay.composer_stop",
-                            "overlay.chat_request_stop",
-                            "overlay.interrupt_task",
-                            "overlay.archive_panel",
-                            "panel",
-                            "gateway",
-                            "slack",
-                            "telegram",
-                            "discord",
-                            "feishu",
-                            "whatsapp",
-                            "googlechat",
-                            "msteams",
-                            "line",
-                            "matrix",
-                            "mattermost",
-                            "signal",
-                            "wecom",
-                            "dingtalk",
-                            "clickclack",
-                            "imessage",
-                            "irc",
-                            "nextcloud-talk",
-                            "nostr",
-                            "qqbot",
-                            "raft",
-                            "reef",
-                            "sms",
-                            "synology-chat",
-                            "tlon",
-                            "twitch",
-                            "zalo",
-                            "zalouser",
-                            "right-sidebar",
-                            "orchestrator"
-                          ],
-                          "type": "string"
-                        },
-                        "terminalAt": {
-                          "exclusiveMinimum": 0,
-                          "maximum": 9007199254740991,
-                          "type": "integer"
-                        },
-                        "terminalEventID": {
-                          "pattern": "^pev.*",
-                          "type": "string"
-                        },
-                        "toolCallID": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "toolPartID": {
-                          "pattern": "^prt.*",
-                          "type": "string"
+                          "type": "object"
                         }
-                      },
-                      "required": [
-                        "requestEventID",
-                        "terminalEventID",
-                        "requestedAt",
-                        "terminalAt",
-                        "source",
-                        "requestID",
-                        "actor",
-                        "surface",
-                        "reason"
-                      ],
-                      "type": "object"
+                      ]
                     },
                     "completionDecision": {
                       "properties": {
@@ -105062,138 +106066,275 @@
                       "type": "object"
                     },
                     "cancellation": {
-                      "additionalProperties": false,
-                      "properties": {
-                        "actor": {
-                          "enum": [
-                            "user",
-                            "control_agent",
-                            "mission",
-                            "right_sidebar_conversation",
-                            "orchestrator"
+                      "oneOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "actor": {
+                              "enum": [
+                                "user",
+                                "control_agent",
+                                "mission",
+                                "right_sidebar_conversation",
+                                "orchestrator"
+                              ],
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "pattern": "^msg.*",
+                              "type": "string"
+                            },
+                            "missionID": {
+                              "maxLength": 64,
+                              "minLength": 1,
+                              "pattern": "^[a-z0-9-]+$",
+                              "type": "string"
+                            },
+                            "reason": {
+                              "maxLength": 2000,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "requestEventID": {
+                              "pattern": "^pev.*",
+                              "type": "string"
+                            },
+                            "requestID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "requestedAt": {
+                              "exclusiveMinimum": 0,
+                              "maximum": 9007199254740991,
+                              "type": "integer"
+                            },
+                            "sessionID": {
+                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                              "type": "string"
+                            },
+                            "source": {
+                              "enum": [
+                                "task.cancel",
+                                "task.delete",
+                                "task.archive",
+                                "mission.abort",
+                                "mission.archive",
+                                "mission.delete",
+                                "panel.cancel_task",
+                                "orchestrator.cancel_task",
+                                "session.delete",
+                                "project.delete"
+                              ],
+                              "type": "string"
+                            },
+                            "status": {
+                              "const": "cancelling",
+                              "type": "string"
+                            },
+                            "surface": {
+                              "enum": [
+                                "api",
+                                "overlay.work_ledger",
+                                "overlay.selected_task",
+                                "overlay.composer_stop",
+                                "overlay.chat_request_stop",
+                                "overlay.interrupt_task",
+                                "overlay.archive_panel",
+                                "panel",
+                                "gateway",
+                                "slack",
+                                "telegram",
+                                "discord",
+                                "feishu",
+                                "whatsapp",
+                                "googlechat",
+                                "msteams",
+                                "line",
+                                "matrix",
+                                "mattermost",
+                                "signal",
+                                "wecom",
+                                "dingtalk",
+                                "clickclack",
+                                "imessage",
+                                "irc",
+                                "nextcloud-talk",
+                                "nostr",
+                                "qqbot",
+                                "raft",
+                                "reef",
+                                "sms",
+                                "synology-chat",
+                                "tlon",
+                                "twitch",
+                                "zalo",
+                                "zalouser",
+                                "right-sidebar",
+                                "orchestrator"
+                              ],
+                              "type": "string"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "pattern": "^prt.*",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "requestEventID",
+                            "requestedAt",
+                            "source",
+                            "requestID",
+                            "actor",
+                            "surface",
+                            "reason",
+                            "status"
                           ],
-                          "type": "string"
+                          "type": "object"
                         },
-                        "messageID": {
-                          "pattern": "^msg.*",
-                          "type": "string"
-                        },
-                        "missionID": {
-                          "maxLength": 64,
-                          "minLength": 1,
-                          "pattern": "^[a-z0-9-]+$",
-                          "type": "string"
-                        },
-                        "reason": {
-                          "maxLength": 2000,
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "requestEventID": {
-                          "pattern": "^pev.*",
-                          "type": "string"
-                        },
-                        "requestID": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "requestedAt": {
-                          "exclusiveMinimum": 0,
-                          "maximum": 9007199254740991,
-                          "type": "integer"
-                        },
-                        "sessionID": {
-                          "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                          "type": "string"
-                        },
-                        "source": {
-                          "enum": [
-                            "task.cancel",
-                            "task.delete",
-                            "task.archive",
-                            "mission.abort",
-                            "mission.archive",
-                            "mission.delete",
-                            "panel.cancel_task",
-                            "orchestrator.cancel_task",
-                            "session.delete",
-                            "project.delete"
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "actor": {
+                              "enum": [
+                                "user",
+                                "control_agent",
+                                "mission",
+                                "right_sidebar_conversation",
+                                "orchestrator"
+                              ],
+                              "type": "string"
+                            },
+                            "messageID": {
+                              "pattern": "^msg.*",
+                              "type": "string"
+                            },
+                            "missionID": {
+                              "maxLength": 64,
+                              "minLength": 1,
+                              "pattern": "^[a-z0-9-]+$",
+                              "type": "string"
+                            },
+                            "reason": {
+                              "maxLength": 2000,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "requestEventID": {
+                              "pattern": "^pev.*",
+                              "type": "string"
+                            },
+                            "requestID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "requestedAt": {
+                              "exclusiveMinimum": 0,
+                              "maximum": 9007199254740991,
+                              "type": "integer"
+                            },
+                            "sessionID": {
+                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                              "type": "string"
+                            },
+                            "source": {
+                              "enum": [
+                                "task.cancel",
+                                "task.delete",
+                                "task.archive",
+                                "mission.abort",
+                                "mission.archive",
+                                "mission.delete",
+                                "panel.cancel_task",
+                                "orchestrator.cancel_task",
+                                "session.delete",
+                                "project.delete"
+                              ],
+                              "type": "string"
+                            },
+                            "status": {
+                              "const": "cancelled",
+                              "type": "string"
+                            },
+                            "surface": {
+                              "enum": [
+                                "api",
+                                "overlay.work_ledger",
+                                "overlay.selected_task",
+                                "overlay.composer_stop",
+                                "overlay.chat_request_stop",
+                                "overlay.interrupt_task",
+                                "overlay.archive_panel",
+                                "panel",
+                                "gateway",
+                                "slack",
+                                "telegram",
+                                "discord",
+                                "feishu",
+                                "whatsapp",
+                                "googlechat",
+                                "msteams",
+                                "line",
+                                "matrix",
+                                "mattermost",
+                                "signal",
+                                "wecom",
+                                "dingtalk",
+                                "clickclack",
+                                "imessage",
+                                "irc",
+                                "nextcloud-talk",
+                                "nostr",
+                                "qqbot",
+                                "raft",
+                                "reef",
+                                "sms",
+                                "synology-chat",
+                                "tlon",
+                                "twitch",
+                                "zalo",
+                                "zalouser",
+                                "right-sidebar",
+                                "orchestrator"
+                              ],
+                              "type": "string"
+                            },
+                            "terminalAt": {
+                              "exclusiveMinimum": 0,
+                              "maximum": 9007199254740991,
+                              "type": "integer"
+                            },
+                            "terminalEventID": {
+                              "pattern": "^pev.*",
+                              "type": "string"
+                            },
+                            "toolCallID": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "toolPartID": {
+                              "pattern": "^prt.*",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "requestEventID",
+                            "requestedAt",
+                            "source",
+                            "requestID",
+                            "actor",
+                            "surface",
+                            "reason",
+                            "status",
+                            "terminalEventID",
+                            "terminalAt"
                           ],
-                          "type": "string"
-                        },
-                        "surface": {
-                          "enum": [
-                            "api",
-                            "overlay.work_ledger",
-                            "overlay.selected_task",
-                            "overlay.composer_stop",
-                            "overlay.chat_request_stop",
-                            "overlay.interrupt_task",
-                            "overlay.archive_panel",
-                            "panel",
-                            "gateway",
-                            "slack",
-                            "telegram",
-                            "discord",
-                            "feishu",
-                            "whatsapp",
-                            "googlechat",
-                            "msteams",
-                            "line",
-                            "matrix",
-                            "mattermost",
-                            "signal",
-                            "wecom",
-                            "dingtalk",
-                            "clickclack",
-                            "imessage",
-                            "irc",
-                            "nextcloud-talk",
-                            "nostr",
-                            "qqbot",
-                            "raft",
-                            "reef",
-                            "sms",
-                            "synology-chat",
-                            "tlon",
-                            "twitch",
-                            "zalo",
-                            "zalouser",
-                            "right-sidebar",
-                            "orchestrator"
-                          ],
-                          "type": "string"
-                        },
-                        "terminalAt": {
-                          "exclusiveMinimum": 0,
-                          "maximum": 9007199254740991,
-                          "type": "integer"
-                        },
-                        "terminalEventID": {
-                          "pattern": "^pev.*",
-                          "type": "string"
-                        },
-                        "toolCallID": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "toolPartID": {
-                          "pattern": "^prt.*",
-                          "type": "string"
+                          "type": "object"
                         }
-                      },
-                      "required": [
-                        "requestEventID",
-                        "terminalEventID",
-                        "requestedAt",
-                        "terminalAt",
-                        "source",
-                        "requestID",
-                        "actor",
-                        "surface",
-                        "reason"
-                      ],
-                      "type": "object"
+                      ]
                     },
                     "completionDecision": {
                       "properties": {
@@ -106647,7 +107788,7 @@
                     },
                     "wake_status": {
                       "enum": [
-                        "started",
+                        "accepted",
                         "queued"
                       ],
                       "type": "string"
@@ -106888,138 +108029,275 @@
                           "type": "object"
                         },
                         "cancellation": {
-                          "additionalProperties": false,
-                          "properties": {
-                            "actor": {
-                              "enum": [
-                                "user",
-                                "control_agent",
-                                "mission",
-                                "right_sidebar_conversation",
-                                "orchestrator"
+                          "oneOf": [
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "actor": {
+                                  "enum": [
+                                    "user",
+                                    "control_agent",
+                                    "mission",
+                                    "right_sidebar_conversation",
+                                    "orchestrator"
+                                  ],
+                                  "type": "string"
+                                },
+                                "messageID": {
+                                  "pattern": "^msg.*",
+                                  "type": "string"
+                                },
+                                "missionID": {
+                                  "maxLength": 64,
+                                  "minLength": 1,
+                                  "pattern": "^[a-z0-9-]+$",
+                                  "type": "string"
+                                },
+                                "reason": {
+                                  "maxLength": 2000,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "requestEventID": {
+                                  "pattern": "^pev.*",
+                                  "type": "string"
+                                },
+                                "requestID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "requestedAt": {
+                                  "exclusiveMinimum": 0,
+                                  "maximum": 9007199254740991,
+                                  "type": "integer"
+                                },
+                                "sessionID": {
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                                  "type": "string"
+                                },
+                                "source": {
+                                  "enum": [
+                                    "task.cancel",
+                                    "task.delete",
+                                    "task.archive",
+                                    "mission.abort",
+                                    "mission.archive",
+                                    "mission.delete",
+                                    "panel.cancel_task",
+                                    "orchestrator.cancel_task",
+                                    "session.delete",
+                                    "project.delete"
+                                  ],
+                                  "type": "string"
+                                },
+                                "status": {
+                                  "const": "cancelling",
+                                  "type": "string"
+                                },
+                                "surface": {
+                                  "enum": [
+                                    "api",
+                                    "overlay.work_ledger",
+                                    "overlay.selected_task",
+                                    "overlay.composer_stop",
+                                    "overlay.chat_request_stop",
+                                    "overlay.interrupt_task",
+                                    "overlay.archive_panel",
+                                    "panel",
+                                    "gateway",
+                                    "slack",
+                                    "telegram",
+                                    "discord",
+                                    "feishu",
+                                    "whatsapp",
+                                    "googlechat",
+                                    "msteams",
+                                    "line",
+                                    "matrix",
+                                    "mattermost",
+                                    "signal",
+                                    "wecom",
+                                    "dingtalk",
+                                    "clickclack",
+                                    "imessage",
+                                    "irc",
+                                    "nextcloud-talk",
+                                    "nostr",
+                                    "qqbot",
+                                    "raft",
+                                    "reef",
+                                    "sms",
+                                    "synology-chat",
+                                    "tlon",
+                                    "twitch",
+                                    "zalo",
+                                    "zalouser",
+                                    "right-sidebar",
+                                    "orchestrator"
+                                  ],
+                                  "type": "string"
+                                },
+                                "toolCallID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "toolPartID": {
+                                  "pattern": "^prt.*",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "requestEventID",
+                                "requestedAt",
+                                "source",
+                                "requestID",
+                                "actor",
+                                "surface",
+                                "reason",
+                                "status"
                               ],
-                              "type": "string"
+                              "type": "object"
                             },
-                            "messageID": {
-                              "pattern": "^msg.*",
-                              "type": "string"
-                            },
-                            "missionID": {
-                              "maxLength": 64,
-                              "minLength": 1,
-                              "pattern": "^[a-z0-9-]+$",
-                              "type": "string"
-                            },
-                            "reason": {
-                              "maxLength": 2000,
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "requestEventID": {
-                              "pattern": "^pev.*",
-                              "type": "string"
-                            },
-                            "requestID": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "requestedAt": {
-                              "exclusiveMinimum": 0,
-                              "maximum": 9007199254740991,
-                              "type": "integer"
-                            },
-                            "sessionID": {
-                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                              "type": "string"
-                            },
-                            "source": {
-                              "enum": [
-                                "task.cancel",
-                                "task.delete",
-                                "task.archive",
-                                "mission.abort",
-                                "mission.archive",
-                                "mission.delete",
-                                "panel.cancel_task",
-                                "orchestrator.cancel_task",
-                                "session.delete",
-                                "project.delete"
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "actor": {
+                                  "enum": [
+                                    "user",
+                                    "control_agent",
+                                    "mission",
+                                    "right_sidebar_conversation",
+                                    "orchestrator"
+                                  ],
+                                  "type": "string"
+                                },
+                                "messageID": {
+                                  "pattern": "^msg.*",
+                                  "type": "string"
+                                },
+                                "missionID": {
+                                  "maxLength": 64,
+                                  "minLength": 1,
+                                  "pattern": "^[a-z0-9-]+$",
+                                  "type": "string"
+                                },
+                                "reason": {
+                                  "maxLength": 2000,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "requestEventID": {
+                                  "pattern": "^pev.*",
+                                  "type": "string"
+                                },
+                                "requestID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "requestedAt": {
+                                  "exclusiveMinimum": 0,
+                                  "maximum": 9007199254740991,
+                                  "type": "integer"
+                                },
+                                "sessionID": {
+                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+                                  "type": "string"
+                                },
+                                "source": {
+                                  "enum": [
+                                    "task.cancel",
+                                    "task.delete",
+                                    "task.archive",
+                                    "mission.abort",
+                                    "mission.archive",
+                                    "mission.delete",
+                                    "panel.cancel_task",
+                                    "orchestrator.cancel_task",
+                                    "session.delete",
+                                    "project.delete"
+                                  ],
+                                  "type": "string"
+                                },
+                                "status": {
+                                  "const": "cancelled",
+                                  "type": "string"
+                                },
+                                "surface": {
+                                  "enum": [
+                                    "api",
+                                    "overlay.work_ledger",
+                                    "overlay.selected_task",
+                                    "overlay.composer_stop",
+                                    "overlay.chat_request_stop",
+                                    "overlay.interrupt_task",
+                                    "overlay.archive_panel",
+                                    "panel",
+                                    "gateway",
+                                    "slack",
+                                    "telegram",
+                                    "discord",
+                                    "feishu",
+                                    "whatsapp",
+                                    "googlechat",
+                                    "msteams",
+                                    "line",
+                                    "matrix",
+                                    "mattermost",
+                                    "signal",
+                                    "wecom",
+                                    "dingtalk",
+                                    "clickclack",
+                                    "imessage",
+                                    "irc",
+                                    "nextcloud-talk",
+                                    "nostr",
+                                    "qqbot",
+                                    "raft",
+                                    "reef",
+                                    "sms",
+                                    "synology-chat",
+                                    "tlon",
+                                    "twitch",
+                                    "zalo",
+                                    "zalouser",
+                                    "right-sidebar",
+                                    "orchestrator"
+                                  ],
+                                  "type": "string"
+                                },
+                                "terminalAt": {
+                                  "exclusiveMinimum": 0,
+                                  "maximum": 9007199254740991,
+                                  "type": "integer"
+                                },
+                                "terminalEventID": {
+                                  "pattern": "^pev.*",
+                                  "type": "string"
+                                },
+                                "toolCallID": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "toolPartID": {
+                                  "pattern": "^prt.*",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "requestEventID",
+                                "requestedAt",
+                                "source",
+                                "requestID",
+                                "actor",
+                                "surface",
+                                "reason",
+                                "status",
+                                "terminalEventID",
+                                "terminalAt"
                               ],
-                              "type": "string"
-                            },
-                            "surface": {
-                              "enum": [
-                                "api",
-                                "overlay.work_ledger",
-                                "overlay.selected_task",
-                                "overlay.composer_stop",
-                                "overlay.chat_request_stop",
-                                "overlay.interrupt_task",
-                                "overlay.archive_panel",
-                                "panel",
-                                "gateway",
-                                "slack",
-                                "telegram",
-                                "discord",
-                                "feishu",
-                                "whatsapp",
-                                "googlechat",
-                                "msteams",
-                                "line",
-                                "matrix",
-                                "mattermost",
-                                "signal",
-                                "wecom",
-                                "dingtalk",
-                                "clickclack",
-                                "imessage",
-                                "irc",
-                                "nextcloud-talk",
-                                "nostr",
-                                "qqbot",
-                                "raft",
-                                "reef",
-                                "sms",
-                                "synology-chat",
-                                "tlon",
-                                "twitch",
-                                "zalo",
-                                "zalouser",
-                                "right-sidebar",
-                                "orchestrator"
-                              ],
-                              "type": "string"
-                            },
-                            "terminalAt": {
-                              "exclusiveMinimum": 0,
-                              "maximum": 9007199254740991,
-                              "type": "integer"
-                            },
-                            "terminalEventID": {
-                              "pattern": "^pev.*",
-                              "type": "string"
-                            },
-                            "toolCallID": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "toolPartID": {
-                              "pattern": "^prt.*",
-                              "type": "string"
+                              "type": "object"
                             }
-                          },
-                          "required": [
-                            "requestEventID",
-                            "terminalEventID",
-                            "requestedAt",
-                            "terminalAt",
-                            "source",
-                            "requestID",
-                            "actor",
-                            "surface",
-                            "reason"
-                          ],
-                          "type": "object"
+                          ]
                         },
                         "completionDecision": {
                           "properties": {
@@ -111033,6 +112311,14 @@
                                     "archived": {
                                       "type": "number"
                                     },
+                                    "cancellationStatus": {
+                                      "enum": [
+                                        "none",
+                                        "cancelling",
+                                        "cancelled"
+                                      ],
+                                      "type": "string"
+                                    },
                                     "created": {
                                       "type": "number"
                                     },
@@ -111126,6 +112412,7 @@
                                     "updated",
                                     "pinned",
                                     "lifecycleStatus",
+                                    "cancellationStatus",
                                     "activityStatus",
                                     "priority",
                                     "source",
@@ -111442,6 +112729,14 @@
                                     "archived": {
                                       "type": "number"
                                     },
+                                    "cancellationStatus": {
+                                      "enum": [
+                                        "none",
+                                        "cancelling",
+                                        "cancelled"
+                                      ],
+                                      "type": "string"
+                                    },
                                     "created": {
                                       "type": "number"
                                     },
@@ -111535,6 +112830,7 @@
                                     "updated",
                                     "pinned",
                                     "lifecycleStatus",
+                                    "cancellationStatus",
                                     "activityStatus",
                                     "priority",
                                     "source",
@@ -111586,6 +112882,14 @@
                               },
                               "archived": {
                                 "type": "number"
+                              },
+                              "cancellationStatus": {
+                                "enum": [
+                                  "none",
+                                  "cancelling",
+                                  "cancelled"
+                                ],
+                                "type": "string"
                               },
                               "created": {
                                 "type": "number"
@@ -111680,6 +112984,7 @@
                               "updated",
                               "pinned",
                               "lifecycleStatus",
+                              "cancellationStatus",
                               "activityStatus",
                               "priority",
                               "source",

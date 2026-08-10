@@ -28,13 +28,16 @@ import { ProjectOpenLifecycle } from "./open-lifecycle"
 import {
   configureTaskLoopRunner,
   drainPendingQueuedOperatorWakes,
+  reconcileTerminalAgentLifecycleDeliveries,
   reconcileInterruptedTaskExecutions,
+  requeueInterruptedRunningTaskIngresses,
 } from "@/engine/queue"
 import { runTaskLoop } from "@/orchestrator/loop"
 import { installDefaultControlPlaneToolLoaders } from "@/tool/control-plane-tool-composition"
 import { installDefaultTaskWakeRuntime } from "@/scheduler/task-wake-composition"
 import { ensureSessionProtocolBridge } from "@/protocol/session-mirror"
 import { markConversationCapabilityTransactionalInit } from "@/conversation/capability-transaction"
+import { reconcilePendingCancelledTaskSettlements } from "@/engine/state"
 
 async function validateInstanceConversationCapabilities() {
   const lifecycleContext = {
@@ -95,6 +98,10 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   EventService.init()
   TaskQueueService.init()
   EngineService.init()
+  await ProjectOpenLifecycle.stage("engine-task.reconcile-pending-cancellations", lifecycleContext, async () => {
+    await EngineService.reconcilePendingTaskCancellations()
+    reconcilePendingCancelledTaskSettlements()
+  })
   EngineEventLog.init()
   ensureTaskMessageProtocolBridge()
   ensureSessionProtocolBridge()
@@ -118,6 +125,8 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   })
   await ProjectOpenLifecycle.stage("engine-queue.drain-persisted-wakes", lifecycleContext, async () => {
     try {
+      requeueInterruptedRunningTaskIngresses()
+      await reconcileTerminalAgentLifecycleDeliveries()
       await drainPendingQueuedOperatorWakes()
     } catch (error) {
       Log.Default.error("persisted coordination wake recovery failed", {

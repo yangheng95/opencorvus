@@ -94,6 +94,7 @@ import {
   timelineOrderKey,
 } from "@/timeline/order"
 import { TaskArchiveRequestBody, TaskCancellationRequestBody } from "@opencorvus-ai/transport-protocol"
+import { TaskCancellationProjection } from "@/engine/cancellation-origin"
 import {
   BUILD_OBSERVATION_CONTENT_CHUNK_BYTES,
   BuildObservationContentError,
@@ -1596,8 +1597,8 @@ export const EngineRoutes = lazy(() =>
         summary: "Handle task message",
         operationId: "task.message",
         responses: {
-          200: {
-            description: "Task message handled",
+          202: {
+            description: "Task message durably accepted for delivery",
             content: {
               "application/json": {
                 schema: resolver(TaskMessageResult),
@@ -1615,7 +1616,7 @@ export const EngineRoutes = lazy(() =>
       validator("param", z.object({ taskID: Task.shape.id })),
       validator("json", TaskMessageInput),
       async (c) => {
-        return c.json(await EngineService.handleTaskMessage(c.req.valid("param").taskID, c.req.valid("json")))
+        return c.json(await EngineService.handleTaskMessage(c.req.valid("param").taskID, c.req.valid("json")), 202)
       },
     )
     .post(
@@ -1731,11 +1732,11 @@ export const EngineRoutes = lazy(() =>
         summary: "Cancel task",
         operationId: "task.cancel",
         responses: {
-          200: {
-            description: "Task cancelled",
+          202: {
+            description: "Task cancellation accepted or completed",
             content: {
               "application/json": {
-                schema: resolver(z.boolean()),
+                schema: resolver(TaskCancellationProjection),
               },
             },
           },
@@ -1746,8 +1747,9 @@ export const EngineRoutes = lazy(() =>
       validator("json", TaskCancellationRequestBody),
       async (c) => {
         const body = c.req.valid("json")
+        const taskID = c.req.valid("param").taskID
         return c.json(
-          await EngineService.cancelTask(c.req.valid("param").taskID, {
+          await EngineService.requestTaskCancellation(taskID, {
             origin: {
               actor: "user",
               source: "task.cancel",
@@ -1756,6 +1758,7 @@ export const EngineRoutes = lazy(() =>
               reason: body.reason,
             },
           }),
+          202,
         )
       },
     )

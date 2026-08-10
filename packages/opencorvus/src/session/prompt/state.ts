@@ -309,6 +309,25 @@ export namespace SessionPromptState {
     return Boolean(promptState && Object.keys(promptState).length > 0)
   }
 
+  export function rootWakeQueuePosition(rootSessionID: string, wakeID: string): number | undefined {
+    const queue = rootWakeQueues.get(rootSessionID)
+    if (!queue) return undefined
+    const position = [...queue.entries.keys()].indexOf(wakeID)
+    return position < 0 ? undefined : position
+  }
+
+  export function rootWakeQueueProjection(rootSessionID: string, wakeID: string) {
+    const queue = rootWakeQueues.get(rootSessionID)
+    if (!queue) return undefined
+    const wakeIDs = [...queue.entries.keys()]
+    const position = wakeIDs.indexOf(wakeID)
+    if (position < 0) return undefined
+    return {
+      queuePosition: position + 1,
+      currentOwnerWakeID: wakeIDs[0]!,
+    }
+  }
+
   /**
    * Serialize persisted scheduler wakes by the Task root Session identity.
    * A wake ID is the durable artifact identity supplied by the caller; this
@@ -482,29 +501,24 @@ export namespace SessionPromptState {
     if (!Number.isInteger(inactivityTimeoutMs) || inactivityTimeoutMs <= 0) {
       throw new Error(`Invalid root Session wake idle timeout ${inactivityTimeoutMs}`)
     }
-    const queue = rootWakeQueues.get(rootSessionID)
-    if (!queue || queue.entries.size === 0) return
-    let timer: ReturnType<typeof setTimeout> | undefined
-    let unregisterIdleWaiter: (() => void) | undefined
-    try {
-      await Promise.race([
-        new Promise<void>((resolve) => {
-          queue.idleWaiters.add(resolve)
-          unregisterIdleWaiter = () => queue.idleWaiters.delete(resolve)
-        }),
-        new Promise<never>((_, reject) => {
-          timer = setTimeout(
-            () =>
-              reject(
-                new Error(`Root Session ${rootSessionID} wake queue did not settle within ${inactivityTimeoutMs}ms`),
-              ),
-            inactivityTimeoutMs,
-          )
-        }),
-      ])
-    } finally {
-      if (timer) clearTimeout(timer)
-      unregisterIdleWaiter?.()
+    let remaining = rootWakeQueues.get(rootSessionID)?.entries.size ?? 0
+    if (remaining === 0) return
+    let inactiveAt = Date.now() + inactivityTimeoutMs
+    const pollMs = Math.min(250, Math.max(25, Math.floor(inactivityTimeoutMs / 10)))
+    while (remaining > 0) {
+      await new Promise((resolve) => setTimeout(resolve, pollMs))
+      const next = rootWakeQueues.get(rootSessionID)?.entries.size ?? 0
+      if (next === 0) return
+      if (next !== remaining) {
+        remaining = next
+        inactiveAt = Date.now() + inactivityTimeoutMs
+        continue
+      }
+      if (Date.now() >= inactiveAt) {
+        throw new Error(
+          `Root Session ${rootSessionID} wake queue made no settlement progress for ${inactivityTimeoutMs}ms; ${remaining} wake(s) remain`,
+        )
+      }
     }
   }
 
@@ -683,7 +697,8 @@ export namespace SessionPromptState {
       cancellationReceipts.delete(input.sessionID)
     }
     if (errors.length === 1) throw errors[0]
-    if (errors.length > 1) throw new AggregateError(errors, `Failed to terminate prompt resources for ${input.sessionID}`)
+    if (errors.length > 1)
+      throw new AggregateError(errors, `Failed to terminate prompt resources for ${input.sessionID}`)
     return Boolean(match)
   }
 
@@ -710,7 +725,9 @@ export namespace SessionPromptState {
       if (resultMode !== "reply") return true
       if (result.info.role !== "assistant") return false
       if (replayedReplyToMessageID !== undefined) {
-        return callback.replyToMessageID === replayedReplyToMessageID && result.info.parentID === replayedReplyToMessageID
+        return (
+          callback.replyToMessageID === replayedReplyToMessageID && result.info.parentID === replayedReplyToMessageID
+        )
       }
       return callback.replyToMessageID === undefined || result.info.parentID === callback.replyToMessageID
     }

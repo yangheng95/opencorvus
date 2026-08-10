@@ -286,6 +286,39 @@ GROUP BY "task_id", "workflow_id", "workflow_node_id"
 `,
     ]),
   }),
+  Object.freeze({
+    id: "2026-08-10-task-cancellation-authority",
+    fromFingerprint: "3bb5a088946bab5912f8e640b4d6b14069b4380b07a42aedadfdd54686b329fa",
+    toFingerprint: "10db39feae477909581d186d7eb561feddefcf667f8d6471b4907e71a9a5e515",
+    requiredEmptyTables: Object.freeze([]),
+    statements: Object.freeze([
+      `CREATE TABLE "engine_task_cancellation_authority" (
+  "task_id" text PRIMARY KEY NOT NULL,
+  "request_event_id" text NOT NULL,
+  "convergence_owner_id" text,
+  "convergence_owner_process_id" integer,
+  "convergence_lease_expires_at" integer,
+  FOREIGN KEY ("task_id") REFERENCES "engine_task"("id") ON DELETE CASCADE
+)`,
+      `INSERT INTO "engine_task_cancellation_authority" ("task_id", "request_event_id")
+SELECT "engine_task"."id", (
+  SELECT "protocol_event"."id"
+  FROM "protocol_event"
+  WHERE "protocol_event"."task_id" = "engine_task"."id"
+    AND "protocol_event"."type" = 'task.cancellation.requested'
+  ORDER BY "protocol_event"."seq" ASC
+  LIMIT 1
+)
+FROM "engine_task"
+WHERE "engine_task"."time_completed" IS NULL
+  AND EXISTS (
+    SELECT 1
+    FROM "protocol_event"
+    WHERE "protocol_event"."task_id" = "engine_task"."id"
+      AND "protocol_event"."type" = 'task.cancellation.requested'
+  )`,
+    ]),
+  }),
 ])
 
 function migrationBySourceFingerprint(): ReadonlyMap<string, SchemaMigration> {

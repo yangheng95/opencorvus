@@ -1,5 +1,5 @@
 import { Database, eq } from "@/storage/db"
-import { EngineTaskTable } from "./engine.sql"
+import { EngineTaskCancellationAuthorityTable, EngineTaskTable } from "./engine.sql"
 import { writeTaskUpdateInTransaction } from "./state"
 import { isTaskTerminal } from "./task-status"
 import type { TaskRow } from "./store"
@@ -21,6 +21,11 @@ export function openTaskForContinuationInTransaction(input: {
       : {}
   delete metadata.cancelled
   delete metadata.interrupted
+  delete metadata.git
+  input.db
+    .delete(EngineTaskCancellationAuthorityTable)
+    .where(eq(EngineTaskCancellationAuthorityTable.task_id, input.taskID))
+    .run()
   return writeTaskUpdateInTransaction({
     db: input.db,
     taskID: input.taskID,

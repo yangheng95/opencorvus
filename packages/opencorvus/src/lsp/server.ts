@@ -221,6 +221,7 @@ export namespace LSPServer {
       env,
       stdin: "pipe",
       owner: "lsp",
+      taskCancellationRole: "auxiliary",
     })
     if (!supervisor.stdin || !supervisor.stdout || !supervisor.stderr) {
       await supervisor.dispose()

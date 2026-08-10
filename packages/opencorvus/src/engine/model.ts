@@ -315,7 +315,10 @@ export const CreateTaskInput = z
      *  until a later queue advance. */
     queue: z.boolean().default(false),
     promptProfile: z.string().min(1).optional(),
-    expectedPackageDigest: z.string().regex(/^[a-f0-9]{64}$/).optional(),
+    expectedPackageDigest: z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .optional(),
     budget: Budget.optional(),
     checks: CheckConfig.optional(),
     channelBinding: ChannelBinding.optional(),
@@ -561,8 +564,10 @@ const MessageVisibleWithPartsArray = z.lazy(() => Message.VisibleWithParts.array
 
 export const TaskMessageResult = z.object({
   message: z.string(),
-  wake_status: z.enum(["started", "queued", "not_woken"]),
-  should_resume: z.boolean(),
+  wake_status: z.enum(["accepted", "queued", "not_woken"]),
+  ingress_id: Identifier.schema("artifact").optional(),
+  queue_position: z.number().int().positive().optional(),
+  current_owner_ingress_id: Identifier.schema("artifact").optional(),
   /** The persisted user `Message` row + parts the server just wrote.
    *  Returned so the overlay can insert the real message into its store
    *  immediately (no client-side synthetic placeholder; rule 22). The
@@ -1118,7 +1123,7 @@ export const AgentSessionOperatorSteerResult = z.object({
   task_id: Identifier.schema("task"),
   session_id: Identifier.schema("session"),
   request_id: Identifier.schema("artifact"),
-  wake_status: z.enum(["started", "queued"]),
+  wake_status: z.enum(["accepted", "queued"]),
 })
 
 export const AgentSessionCancelResult = z.object({

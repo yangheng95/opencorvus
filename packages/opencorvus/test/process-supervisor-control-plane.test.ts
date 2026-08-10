@@ -8,6 +8,52 @@ import os from "node:os"
 import path from "node:path"
 
 describe("ProcessSupervisor control-plane authority", () => {
+  test("returns strict disposal only after physical exit and output settlement", async () => {
+    let releaseOutput!: () => void
+    const outputSettled = new Promise<void>((resolve) => (releaseOutput = resolve))
+    const handle: ProcessSupervisor.Handle = {
+      pid: 41_000,
+      stdin: null,
+      stdout: null,
+      stderr: null,
+      exited: Promise.resolve(0),
+      outputSettled,
+      async terminate() {},
+      async dispose() {},
+      unref() {},
+    }
+    setTimeout(releaseOutput, 30)
+    const startedAt = performance.now()
+    expect(await ProcessSupervisor.disposeAndWaitForExit(handle, "delayed output settlement")).toBe(0)
+    expect(performance.now() - startedAt).toBeGreaterThanOrEqual(20)
+  })
+
+  test("accepts proven process exit even when auxiliary disposal settlement is delayed", async () => {
+    let releaseDisposal!: () => void
+    const disposal = new Promise<void>((resolve) => (releaseDisposal = resolve))
+    const handle: ProcessSupervisor.Handle = {
+      pid: 41_001,
+      stdin: null,
+      stdout: null,
+      stderr: null,
+      exited: Promise.resolve(0),
+      async terminate() {},
+      async dispose() {
+        await disposal
+      },
+      unref() {},
+    }
+    try {
+      expect(
+        await ProcessSupervisor.requestDisposeAndWaitForPhysicalExit(handle, "already-exited process with delayed auxiliary cleanup", {
+          exitTimeoutMs: 20,
+        }),
+      ).toBe(0)
+    } finally {
+      releaseDisposal()
+    }
+  })
+
   test("returns a fast command's real nonzero exit after the native readiness handshake", async () => {
     const handle = await ProcessSupervisor.spawnHostCommand({
       executable: process.execPath,
@@ -39,6 +85,7 @@ describe("ProcessSupervisor control-plane authority", () => {
       handle.stdout?.setEncoding("utf8")
       handle.stdout?.on("data", (chunk) => (stdout += String(chunk)))
       const exitCode = await handle.exited
+      await handle.outputSettled
       await ProcessSupervisor.disposeAndWaitForExit(handle, "control-plane contract process")
       const files: string[] = []
       for await (const file of Ripgrep.filesForHost({ cwd: directory })) files.push(file)

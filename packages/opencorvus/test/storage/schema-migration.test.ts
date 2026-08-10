@@ -13,7 +13,7 @@ import {
 } from "../../src/storage/schema-migration"
 
 const PREDECESSOR_FINGERPRINT = "05480e3d530365e768b00218f24c4a8d7bb281538315b600dd70827c90e33212"
-const CURRENT_FINGERPRINT = "3bb5a088946bab5912f8e640b4d6b14069b4380b07a42aedadfdd54686b329fa"
+const CURRENT_FINGERPRINT = "10db39feae477909581d186d7eb561feddefcf667f8d6471b4907e71a9a5e515"
 
 const legacyMemoryFileDDL = /* sql */ `CREATE TABLE "memory_file" (
   "id" text PRIMARY KEY NOT NULL,
@@ -64,6 +64,7 @@ function requiredSchemaSQL(sqlite: BunDatabase, type: "table" | "index" | "trigg
 function createPredecessorDatabase(databasePath: string, input: { scratchpadContent?: string } = {}) {
   const sqlite = new BunDatabase(databasePath, { create: true })
   sqlite.exec(SCHEMA_DDL)
+  sqlite.run('DROP TABLE "engine_task_cancellation_authority"')
   const memoryChunkTable = requiredSchemaSQL(sqlite, "table", "memory_chunk")
   const memoryEmbeddingTable = requiredSchemaSQL(sqlite, "table", "memory_embedding")
   const memoryChunkFileIndex = requiredSchemaSQL(sqlite, "index", "memory_chunk_file_idx")
@@ -143,6 +144,7 @@ describe("transactional schema migration", () => {
       "2026-08-06-project-memory-single-scope",
       "2026-08-08-browser-preview-target-identity",
       "2026-08-09-workflow-node-occurrence-authority",
+      "2026-08-10-task-cancellation-authority",
     ])
 
     const result = migrateDatabaseFile(databasePath, plan!, preparedBackup)
@@ -153,6 +155,7 @@ describe("transactional schema migration", () => {
         "2026-08-06-project-memory-single-scope",
         "2026-08-08-browser-preview-target-identity",
         "2026-08-09-workflow-node-occurrence-authority",
+        "2026-08-10-task-cancellation-authority",
       ],
     })
 
@@ -191,6 +194,7 @@ describe("transactional schema migration", () => {
         "2026-08-06-project-memory-single-scope",
         "2026-08-08-browser-preview-target-identity",
         "2026-08-09-workflow-node-occurrence-authority",
+        "2026-08-10-task-cancellation-authority",
       ],
     })
     expect(result.backupFiles.map((file) => file.name)).toEqual([
@@ -209,6 +213,7 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    predecessor.run('DROP TABLE "engine_task_cancellation_authority"')
     predecessor.run('DROP TABLE "engine_workflow_node_occurrence"')
     predecessor.run('DROP TABLE "engine_browser_preview_target_identity"')
     const artifactInsertGuard = requiredSchemaSQL(predecessor, "trigger", "engine_artifact_catalog_metadata_insert")
@@ -269,6 +274,7 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    predecessor.run('DROP TABLE "engine_task_cancellation_authority"')
     predecessor.run('DROP TABLE "engine_workflow_node_occurrence"')
     const artifactInsertGuard = requiredSchemaSQL(predecessor, "trigger", "engine_artifact_catalog_metadata_insert")
     predecessor.run('DROP TRIGGER "engine_artifact_catalog_metadata_insert"')
@@ -408,6 +414,44 @@ describe("transactional schema migration", () => {
     ])
     expect(migrated.query("PRAGMA foreign_key_check").all()).toEqual([])
     expect(migrated.query("PRAGMA integrity_check").all()).toEqual([{ integrity_check: "ok" }])
+    migrated.close(true)
+  })
+
+  test("backfills one canonical cancellation authority from repeated durable requests", async () => {
+    const databasePath = await temporaryDatabasePath()
+    const predecessor = new BunDatabase(databasePath, { create: true })
+    predecessor.exec(SCHEMA_DDL)
+    predecessor.run('DROP TABLE "engine_task_cancellation_authority"')
+    predecessor.run(
+      `INSERT INTO project (id, worktree, name, time_created, time_updated, sandboxes)
+       VALUES ('project-cancel', 'C:/project-cancel', 'Cancellation project', 1, 1, '[]')`,
+    )
+    predecessor.run(
+      `INSERT INTO engine_task (id, project_id, product_pillar, title, request, time_created, time_updated)
+       VALUES ('task-cancel', 'project-cancel', 'code', 'Cancellation task', 'Cancel safely', 1, 1)`,
+    )
+    for (const [index, eventID] of ["protocol-event-first", "protocol-event-second"].entries()) {
+      predecessor.run(
+        `INSERT INTO protocol_event (
+           id, kind, type, aggregate_type, aggregate_id, task_id, source, seq, order_key,
+           emitted_at, payload, time_created, time_updated
+         ) VALUES (?, 'event', 'task.cancellation.requested', 'task', 'task-cancel', 'task-cancel',
+                   'task.cancel', ?, ?, ?, '{}', ?, ?)`,
+        [eventID, index + 1, `order-${index}`, index + 1, index + 1, index + 1],
+      )
+    }
+    expect(schemaObjectFingerprint(predecessor)).toBe(
+      "3bb5a088946bab5912f8e640b4d6b14069b4380b07a42aedadfdd54686b329fa",
+    )
+    const plan = planSchemaMigration(predecessor)!
+    const preparedBackup = createSchemaMigrationBackup(databasePath, plan)
+    predecessor.close(true)
+    migrateDatabaseFile(databasePath, plan, preparedBackup)
+
+    const migrated = new BunDatabase(databasePath, { readonly: true })
+    expect(migrated.query("SELECT task_id, request_event_id FROM engine_task_cancellation_authority").all()).toEqual([
+      { task_id: "task-cancel", request_event_id: "protocol-event-first" },
+    ])
     migrated.close(true)
   })
 

@@ -14,6 +14,7 @@ import { MissionID, MissionPendingPrompt, ProductPillarSchema } from "./schema"
 import { missionPendingPrompt, type MissionSession } from "./session"
 import { MissionBoardLane, missionBoardProjection } from "./board"
 import { MissionCompletionFact } from "./completion"
+import { pendingTaskCancellationProjection } from "@/engine/cancellation-projection"
 
 export const MissionTaskStatus = z.enum(["queued", "active", "completed", "failed", "cancelled"])
 
@@ -22,6 +23,7 @@ export const MissionTaskProjection = z.object({
   title: z.string(),
   description: z.string(),
   lifecycleStatus: MissionTaskStatus,
+  cancellationStatus: z.enum(["none", "cancelling", "cancelled"]),
   activityStatus: TaskActivityState,
   priority: z.enum(["critical", "high", "normal", "low"]),
   source: z.string(),
@@ -99,6 +101,12 @@ export function projectMissionTasks(session: MissionSession): MissionTaskProject
       title: task.title,
       description: task.request,
       lifecycleStatus,
+      cancellationStatus:
+        lifecycleStatus === "cancelled"
+          ? "cancelled"
+          : pendingTaskCancellationProjection(task.id)
+            ? "cancelling"
+            : "none",
       activityStatus: activityFromTaskLifecycle(lifecycleStatus),
       priority: task.priority,
       source: task.source,

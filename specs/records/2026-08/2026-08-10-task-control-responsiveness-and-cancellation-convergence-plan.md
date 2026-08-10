@@ -1,6 +1,6 @@
 # Task control responsiveness and cancellation convergence repair plan
 
-Status: proposed; investigation and implementation plan only. No product-code change is included in this record.
+Status: implementation in verification. Focused control-plane regressions and type checking pass; the real streaming checker and manual Overlay screenshot acceptance remain open.
 
 ## Recall
 
@@ -67,6 +67,8 @@ Read-only reviewer `/root/review_task_control_plan` found four valid issues, all
 - the 2-second threshold had to cover host-controlled ingress/prompt-owner/SSE transition rather than external-model response time;
 - terminal cancellation had to depend only on the mandatory execution-stop barrier, with LSP cleanup and Git checkpointing moved to durable non-blocking post-terminal settlement;
 - `agent.execution.lifecycle` had to remain the only child-terminal truth, with terminal ingress defined only as an event-ID-keyed reconstructible delivery record.
+
+Subsequent read-only rounds found and drove fixes for role-specific mandatory/auxiliary process leases, strict output settlement at every consumer, cross-process cancellation request ownership, renewable settlement ownership and retry, exact request-time preservation, and real-checker restart/process evidence. Review then found that the in-process CLI runtime bypassed database ownership, ordinary and startup-failure server stop released it too early, mandatory spawn admission could race the final proof, proper-lockfile staleness alone could permit a live owner takeover, pre-bind failure could leave a scheduler running after ownership release, same-process reference counting could let one public runtime stop another, and concurrent stop callers could release ownership while a duplicate global settlement was still active. The repaired single runtime contract covers both listening and in-process production entries, permits only one public lifecycle owner per database even within one process, joins concurrent stop callers to one full settlement operation, holds a runtime-global mandatory-spawn gate through ownership release, binds owner identity to the operating-system process-start fingerprint, and is exercised by controlled interleaving, pre-bind and post-bind startup failure, concurrent-stop joining, stale-heartbeat, PID-reuse, same-process conflict, and real cross-process Server-versus-CLI ownership tests. Checkpoint settlement also rereads the canonical Task on every retry so a receipt write failure cannot duplicate Git result work. The implementation remains under final independent review after these changes.
 
 ## Incident reconstruction
 
@@ -288,6 +290,22 @@ These are positive current-contract tests; retire the existing decision-effect t
 - Remove generic “started” wording and repeated-click behavior.
 - Add `specs/current/architecture/task-control-plane.md` as the current single source for ingress, dispatch, cancellation, process quiescence, checkpoint ordering, and restart recovery.
 - Update architecture/spec indexes and generated API documentation.
+
+## Implementation evidence
+
+- C01/C04/C14: Task messages now commit one `queued_operator_wake` identity, return `accepted` or `queued`, advance Task activity in the same transaction, and expose that artifact ID. The `operator_message_wake` current writer is removed; its enum value remains only for immutable historical rows.
+- C02: `dispatch_agent` returns an accepted dispatch receipt only after the worker Session lineage artifact is durably committed. The worker completion continues independently and delivers its exact terminal `agent.execution.lifecycle` event through an event-ID-keyed ingress.
+- C03: operator status answers settle after the exact message read and real visible assistant output; a scheduler mutation is not required.
+- C05/C06/C10/C12/C15: cancellation has one durable find-or-create request, a `cancelling` projection, process-local join plus startup reconciliation, a fast accepted API receipt, and exact infrastructure evidence for incomplete convergence.
+- C07/C08/C11: terminal cancellation depends on the mandatory execution-stop barrier. Pending/running ingress receives a cancellation-linked terminal disposition. Git checkpoint settlement is a durable recoverable post-terminal artifact whose failure cannot reverse `cancelled`.
+- C09: physical process `exited` and `outputSettled` are separate. Output consumers await stream settlement; cancellation liveness waits on physical exit.
+- C13: root-wake cancellation waits use an activity-resetting inactivity window and report the exact remaining wake count.
+- Overlay projections render queued/running/delivered/cancelled/failed ingress badges from board artifacts and a server-fact `cancelling` Task action state. No synthetic message or UI automation was added.
+- `packages/opencorvus/script/task-control-check.ts` owns the real server/provider/SSE/cancellation checker. It creates an isolated home and Git project, requires explicit real-provider authorization, accepts an explicit auth/config source, records timing/cardinality evidence, and removes only its validated temporary root.
+- The first implementation review found a false-terminal gap. The corrected path now holds a typed Task-process cancellation barrier through the terminal transaction, commits every ingress cancellation disposition atomically, accepts detached dispatch only after durable lineage, and commits visible operator message plus ingress in one transaction.
+- `engine_task_cancellation_authority` is the durable single-flight cancellation owner. Its schema migration backfills the first accepted request for a nonterminal legacy Task, including the repeated-request incident shape, without leaving a second current request writer.
+- Focused verification on 2026-08-10: 37 tests / 129 assertions passed across active ingress/cancellation, detached dispatch, process supervisor, LSP lifecycle, runtime-server ownership, and transactional schema-migration suites. They include a live auxiliary process remaining present while cancellation reaches terminal, strict output settlement, independent auxiliary/checkpoint receipts with expired-owner takeover and injected final-write recovery, a checkpoint receipt failure that still produces exactly one persisted Git result, exact cancellation request-event time preservation, cross-process cancellation convergence lease takeover, a mandatory spawn deliberately held across runtime settlement admission, a live owner with an artificially stale filesystem heartbeat, stale-owner PID reuse, pre-bind and post-bind startup-failure ownership retention, same-process duplicate public-runtime rejection and successor handoff, concurrent stop joining before ownership handoff, a real Server-versus-in-process-CLI database-owner conflict and successor handoff, restart-owned ingress disposition, durable cancellation reuse, and real mandatory-process exit. Root typecheck and generated SDK passed. `api:routes-check`, `docs:check` (322 operations / 25 groups), `git diff --check`, and cached/staged diff checks also passed after the final implementation changes; the Overlay production build passed after its final UI source change.
+- Remaining acceptance: the real provider checker and real Overlay screenshot review have not been run because they require explicit authorization to use credentials and incur external model calls. They are not represented as complete by the focused tests or build.
 
 ## Verification matrix
 

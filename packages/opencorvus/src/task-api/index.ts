@@ -1,4 +1,5 @@
 import z from "zod"
+import { randomUUID } from "node:crypto"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { HostAgentRegistry } from "@/agent/host-agent-registry"
 import { PromptProfile } from "@/agent/prompt-profile"
@@ -20,7 +21,6 @@ import { parseAcceptanceSpecs, renderSpecsAsText } from "@/acceptance/types"
 import { PermissionNext } from "@/permission/next"
 import { ProtocolStore } from "@/protocol/store"
 import { EngineProtocol } from "@/engine/protocol"
-import { clearRewindCursor } from "@/engine/rewind"
 import { ensureGitignore } from "@/engine/git"
 import { Instance } from "@/project/instance"
 import { InstanceBootstrap } from "@/project/bootstrap"
@@ -35,20 +35,21 @@ import { Message } from "@/session/message"
 import { decodeRawBase64Payload } from "@/session/text-mime"
 import { SessionPrompt } from "@/session/prompt"
 import { SessionStatus } from "@/session/status"
-import { Database, NotFoundError, and, eq, inArray, sql } from "@/storage/db"
+import { Database, NotFoundError, and, eq, inArray, isNull, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { Filesystem } from "@/util/filesystem"
 import { compileBoard, boardTag } from "@/workbench/board"
 import { compileBrief } from "@/workbench/brief"
 import {
   EngineArtifactTable,
+  EngineTaskCancellationAuthorityTable,
   EngineChannelBindingTable,
   EngineGoalTable,
   EngineTaskTable,
   type EngineInteractionStatus,
   type EngineMetadata,
 } from "@/engine/engine.sql"
-import { insertEngineArtifact, recordEngineArtifact } from "@/engine/artifact"
+import { insertEngineArtifact } from "@/engine/artifact"
 import { deleteBuildObservationRefs } from "@/engine/build-observation-ref"
 import {
   TaskCreationIdempotencyConflictError,
@@ -70,6 +71,7 @@ import {
   setEngineTaskBudget,
   setEngineTaskPinned,
   setEngineTaskTitle,
+  touchEngineTask,
   clearEngineTaskRewindCursor,
 } from "@/engine/task"
 import {
@@ -92,10 +94,12 @@ import { writeTaskChecks } from "@/engine/checks"
 import {
   drainQueuedTaskEvent,
   discardQueuedTaskEvent,
+  terminalizeQueuedTaskEventsForCancellationInTransaction,
   directoryQueueSnapshot,
   dispatchPersistedTaskLoop,
   dispatchTaskLoop,
   persistQueuedTaskIntentInTransaction,
+  persistQueuedRootMessageWakeInTransaction,
   persistQueuedMissionAcceptanceResumeInTransaction,
   queuedTaskEventStats,
   retirePendingQueuedTaskEventsForOperatorIntentInTransaction,
@@ -130,6 +134,7 @@ import {
 } from "@/engine/task-status"
 import { persistQueuedTask } from "@/engine/pipeline"
 import { SessionPromptState } from "@/session/prompt/state"
+import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { createExecutionCancellationOrigin, type ExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { TaskChannelBindingProjectConflictError, TaskGlobalProjectBindingError } from "@/engine/task-project-error"
 import { TaskRootMessageKind, TaskRootMessageProvenance } from "./task-root-message"
@@ -149,7 +154,11 @@ import {
   TaskCancellationOrigin,
   type TaskCancellationOrigin as TaskCancellationOriginValue,
 } from "@/engine/cancellation-origin"
-import { taskCancellationProjection } from "@/engine/cancellation-projection"
+import {
+  findPendingTaskCancellationRequestEvent,
+  pendingTaskCancellationProjection,
+  taskCancellationProjection,
+} from "@/engine/cancellation-projection"
 import {
   publishTaskAgentCancellationStatusesAfterSettlement,
   requestTaskAgentLifecycleCancellation,
@@ -218,7 +227,6 @@ import {
 const log = Log.create({ service: "assistant" })
 
 type TaskMessageWakeStatus = Extract<DispatchTaskLoopResult, "started" | "queued"> | "not_woken"
-type OperatorMessageWakeLabel = Extract<DispatchTaskLoopResult, "started" | "queued"> | "failed"
 
 export const TaskEmptyMessageError = NamedError.create(
   "TaskEmptyMessageError",
@@ -253,6 +261,15 @@ export const TaskControlIntentLifecycleConflictError = NamedError.create(
     taskID: z.string(),
     operation: z.enum(["retry", "replan"]),
     lifecycle: z.enum(["queued", "active"]),
+  }),
+)
+
+export const TaskCancellationLifecycleConflictError = NamedError.create(
+  "TaskCancellationLifecycleConflictError",
+  z.object({
+    message: z.string(),
+    taskID: z.string(),
+    lifecycle: z.enum(["completed", "failed"]),
   }),
 )
 
@@ -686,6 +703,105 @@ export interface CancelTaskOptions extends TaskCancellationSettlementOptions {
   origin: TaskCancellationOriginValue
 }
 
+const cancellationOperations = new Map<string, Promise<boolean>>()
+const cancellationConvergenceOwnerID = `cancellation-owner:${randomUUID()}`
+const CANCELLATION_CONVERGENCE_LEASE_MS = 10_000
+const CANCELLATION_CONVERGENCE_HEARTBEAT_MS = 2_000
+
+async function acquireCancellationConvergence(taskID: string) {
+  for (;;) {
+    const task = requireTaskInCurrentProject(taskID)
+    if (isTaskCancelled(task)) return undefined
+    const now = Date.now()
+    const claimed = Database.immediateTransaction((db) => {
+      const authority = db
+        .select()
+        .from(EngineTaskCancellationAuthorityTable)
+        .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
+        .get()
+      if (!authority) throw new Error(`Task ${taskID} has no durable cancellation authority to converge`)
+      if (
+        authority.convergence_owner_id &&
+        authority.convergence_owner_id !== cancellationConvergenceOwnerID &&
+        (authority.convergence_lease_expires_at ?? 0) > now
+      ) {
+        return false
+      }
+      db.update(EngineTaskCancellationAuthorityTable)
+        .set({
+          convergence_owner_id: cancellationConvergenceOwnerID,
+          convergence_owner_process_id: process.pid,
+          convergence_lease_expires_at: now + CANCELLATION_CONVERGENCE_LEASE_MS,
+        })
+        .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
+        .run()
+      return true
+    })
+    if (claimed) {
+      const heartbeat = setInterval(() => {
+        try {
+          Database.immediateTransaction((db) => {
+            db.update(EngineTaskCancellationAuthorityTable)
+              .set({ convergence_lease_expires_at: Date.now() + CANCELLATION_CONVERGENCE_LEASE_MS })
+              .where(
+                and(
+                  eq(EngineTaskCancellationAuthorityTable.task_id, taskID),
+                  eq(EngineTaskCancellationAuthorityTable.convergence_owner_id, cancellationConvergenceOwnerID),
+                ),
+              )
+              .run()
+          })
+        } catch (error) {
+          log.error("Task cancellation convergence heartbeat failed", {
+            taskID,
+            ownerID: cancellationConvergenceOwnerID,
+            error: error instanceof Error ? error.message : String(error),
+          })
+        }
+      }, CANCELLATION_CONVERGENCE_HEARTBEAT_MS)
+      heartbeat.unref?.()
+      return {
+        assertInTransaction(db: Database.TxOrDb) {
+          const authority = db
+            .select({
+              ownerID: EngineTaskCancellationAuthorityTable.convergence_owner_id,
+              leaseExpiresAt: EngineTaskCancellationAuthorityTable.convergence_lease_expires_at,
+            })
+            .from(EngineTaskCancellationAuthorityTable)
+            .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
+            .get()
+          if (
+            authority?.ownerID !== cancellationConvergenceOwnerID ||
+            (authority.leaseExpiresAt ?? 0) <= Date.now()
+          ) {
+            throw new Error(`Task ${taskID} cancellation convergence owner lease is no longer authoritative`)
+          }
+        },
+        close(completed: boolean) {
+          clearInterval(heartbeat)
+          if (completed) return
+          Database.immediateTransaction((db) => {
+            db.update(EngineTaskCancellationAuthorityTable)
+              .set({
+                convergence_owner_id: null,
+                convergence_owner_process_id: null,
+                convergence_lease_expires_at: null,
+              })
+              .where(
+                and(
+                  eq(EngineTaskCancellationAuthorityTable.task_id, taskID),
+                  eq(EngineTaskCancellationAuthorityTable.convergence_owner_id, cancellationConvergenceOwnerID),
+                ),
+              )
+              .run()
+          })
+        },
+      }
+    }
+    await Bun.sleep(100)
+  }
+}
+
 export interface DestructiveTaskOptions extends TaskCancellationSettlementOptions {
   origin?: TaskCancellationOriginValue
 }
@@ -855,10 +971,8 @@ async function appendAndWakeTaskOperatorMessage(input: {
   const task = requireTaskInCurrentProject(input.taskID)
   assertTaskOperatorMessageAccepted(task, input.text, input.attachments ?? [])
 
-  // Persist the task-root message once. The wake carries its exact message ID,
-  // and the Orchestrator reads that content through read_task_message.
   const source = input.source
-  const userMessage = await appendTaskSessionMessage(
+  const bundle = await buildTaskSessionMessageBundle(
     task,
     input.text,
     source,
@@ -866,70 +980,31 @@ async function appendAndWakeTaskOperatorMessage(input: {
     input.attachments ?? [],
     input.metadata,
   )
-  await clearRewindCursor(input.taskID)
-  await EngineProtocol.emit(
-    Event.TaskMessageRecorded,
-    {
-      taskID: input.taskID,
-      source,
-      summary: "Operator message recorded",
-      messageID: userMessage.info.id,
-    },
-    { taskID: input.taskID, source: "service.message" },
-  )
-  const event = {
-    rootMessage: {
-      messageID: userMessage.info.id,
-      kind: "operator" as const,
-    },
-  }
-  let acceptedWakeRecorded = false
-  let dispatchResult: DispatchTaskLoopResult
-  try {
-    dispatchResult = await dispatchTaskLoop({
-      taskID: input.taskID,
-      event,
-      beforeAcceptedWake: async ({ result }) => {
-        recordOperatorMessageWake({
-          taskID: input.taskID,
-          messageID: userMessage.info.id,
-          source,
-          wakeStatus: result,
-        })
-        acceptedWakeRecorded = true
-      },
+  const persisted = await Session.persistMessageWithCommit(bundle, () => {
+    Database.use((db) => {
+      const now = bundle.info.time.created
+      touchEngineTask(db, { taskID: task.id, timeUpdated: now })
+      clearEngineTaskRewindCursor(db, { taskID: task.id, timeUpdated: now })
+      EngineProtocol.emitInTransaction(
+        Event.TaskMessageRecorded,
+        { taskID: task.id, source, summary: "Operator message recorded", messageID: bundle.info.id },
+        { taskID: task.id, source: "service.message" },
+      )
+      persistQueuedRootMessageWakeInTransaction(db, {
+        task,
+        messageID: bundle.info.id,
+        kind: "operator",
+        now,
+      })
     })
-  } catch (error) {
-    recordOperatorMessageWake({
-      taskID: input.taskID,
-      messageID: userMessage.info.id,
-      source,
-      wakeStatus: "failed",
-      error,
-    })
-    throw error
+  })
+  if (persisted.info.role !== "user") {
+    throw new Error(`Task-root message ${persisted.info.id} persisted with role=${persisted.info.role}, expected user`)
   }
+  const userMessage = projectPersistedTaskMessage({ info: persisted.info, parts: persisted.parts }, task.id)
+  const dispatchResult = await dispatchPersistedTaskLoop(input.taskID)
   if (dispatchResult === "ignored") {
-    recordOperatorMessageWake({
-      taskID: input.taskID,
-      messageID: userMessage.info.id,
-      source,
-      wakeStatus: "failed",
-      error: new Error(`dispatchTaskLoop returned ignored for operator message ${userMessage.info.id}`),
-    })
     throw new Error(`Task ${input.taskID} operator message was recorded, but the orchestrator wake was ignored.`)
-  }
-  if (!acceptedWakeRecorded) {
-    recordOperatorMessageWake({
-      taskID: input.taskID,
-      messageID: userMessage.info.id,
-      source,
-      wakeStatus: "failed",
-      error: new Error(`dispatchTaskLoop returned ${dispatchResult} without accepting operator message wake`),
-    })
-    throw new Error(
-      `Task ${input.taskID} operator message ${userMessage.info.id} dispatch returned ${dispatchResult} without wake acceptance.`,
-    )
   }
 
   return {
@@ -938,37 +1013,6 @@ async function appendAndWakeTaskOperatorMessage(input: {
     resumed: dispatchResult === "started",
     wakeStatus: dispatchResult,
   }
-}
-
-function recordOperatorMessageWake(input: {
-  taskID: string
-  messageID: string
-  source: string
-  wakeStatus: OperatorMessageWakeLabel
-  error?: unknown
-}): void {
-  const now = Date.now()
-  const error =
-    input.error instanceof Error
-      ? { name: input.error.name, message: input.error.message }
-      : input.error === undefined
-        ? undefined
-        : { name: "Error", message: String(input.error) }
-  recordEngineArtifact({
-    taskID: input.taskID,
-    kind: "operator_message_wake",
-    label: input.wakeStatus,
-    payload: {
-      task_id: input.taskID,
-      message_id: input.messageID,
-      source: input.source,
-      wake_status: input.wakeStatus,
-      time_recorded: now,
-      recorded_by_process_id: process.pid,
-      ...(error ? { error } : {}),
-    },
-    timeCreated: now,
-  })
 }
 
 function assertTaskOperatorMessageAccepted(task: TaskRow, text: string, attachments: readonly unknown[] = []) {
@@ -1027,28 +1071,6 @@ function deletedMissionNotificationTargetForTerminal(input: {
     )
   }
   return mission.id
-}
-
-async function appendTaskSessionMessage(
-  task: TaskRow,
-  text: string,
-  source: string,
-  kind: TaskRootMessageKind,
-  attachments: AttachmentStore.Reference[] = [],
-  metadata?: Record<string, unknown>,
-): Promise<ProjectedTaskMessage<Message.User>> {
-  const bundle = await buildTaskSessionMessageBundle(task, text, source, kind, attachments, metadata)
-  const persisted = await Session.persistMessage(bundle)
-  if (persisted.info.role !== "user") {
-    throw new Error(`Task-root message ${persisted.info.id} persisted with role=${persisted.info.role}, expected user`)
-  }
-  return projectPersistedTaskMessage(
-    {
-      info: persisted.info,
-      parts: persisted.parts,
-    },
-    task.id,
-  )
 }
 
 async function buildTaskSessionMessageBundle(
@@ -1509,7 +1531,9 @@ export namespace EngineService {
       const existing = findTaskByRequest(Instance.project.id, requestID)
       if (existing) {
         if (existing.product_pillar !== input.productPillar) {
-          throw new Error(`Task request ${requestID} already committed as ${existing.id} with a different product pillar`)
+          throw new Error(
+            `Task request ${requestID} already committed as ${existing.id} with a different product pillar`,
+          )
         }
         const committedImports = importsFromMappings(listCrossTaskArtifactImportMappings(existing.id))
         if (!sameCrossTaskArtifactImportSet(input.artifactImports ?? [], committedImports)) {
@@ -2455,7 +2479,7 @@ export namespace EngineService {
       operatorMessage: input.message,
     })
 
-    let dispatchResult: "started" | "queued"
+    let dispatchResult: "accepted" | "queued"
     try {
       const result = await dispatch({
         taskID: task.id,
@@ -2463,7 +2487,7 @@ export namespace EngineService {
           coordinationRequest: { requestID: request.payload.request_id },
         },
       })
-      dispatchResult = result === "started" ? "started" : "queued"
+      dispatchResult = result === "started" ? "accepted" : "queued"
     } catch (error) {
       const reason = error instanceof Error ? `${error.name}: ${error.message}` : String(error)
       log.error("operator steer wake attempt failed after durable request persistence", {
@@ -2496,7 +2520,7 @@ export namespace EngineService {
         })
       }
       if (directDrainStarted) {
-        dispatchResult = "started"
+        dispatchResult = "accepted"
       } else if (queuedTaskEventStats(task.id).events > 0) {
         dispatchResult = "queued"
       } else {
@@ -2553,7 +2577,79 @@ export namespace EngineService {
     return viewInteraction(requireInteractionInCurrentProject(interactionID))
   }
 
-  export async function cancelTask(taskID: string, options: CancelTaskOptions) {
+  export async function requestTaskCancellation(taskID: string, options: CancelTaskOptions) {
+    const task = requireTaskInCurrentProject(taskID)
+    if (isTaskCancelled(task)) return taskCancellationProjection(taskID)
+    if (isTaskTerminal(task)) {
+      const lifecycle = deriveTaskStatus(task) as "completed" | "failed"
+      throw new TaskCancellationLifecycleConflictError({
+        message: `Task ${taskID} is already ${lifecycle}; cancellation accepts only a nonterminal or cancelled Task.`,
+        taskID,
+        lifecycle,
+      })
+    }
+    const operation = cancelTask(taskID, options)
+    let convergenceFailure: unknown
+    void operation.catch((error) => {
+      convergenceFailure = error
+      log.error("accepted Task cancellation convergence failed", {
+        taskID,
+        error: error instanceof Error ? error.message : String(error),
+        errorName: error instanceof Error ? error.name : undefined,
+      })
+    })
+    const receiptDeadline = Date.now() + 1_000
+    while (Date.now() < receiptDeadline) {
+      if (convergenceFailure) throw convergenceFailure
+      const current = requireTaskInCurrentProject(taskID)
+      if (isTaskCancelled(current)) return taskCancellationProjection(taskID)
+      const pending = pendingTaskCancellationProjection(taskID)
+      if (pending) return pending
+      await Bun.sleep(5)
+    }
+    throw new Error(`Task ${taskID} cancellation did not persist an accepted receipt within 1000ms`)
+  }
+
+  export async function reconcilePendingTaskCancellations(): Promise<number> {
+    const rows = Database.use((db) =>
+      db
+        .select({ id: EngineTaskTable.id })
+        .from(EngineTaskTable)
+        .where(and(eq(EngineTaskTable.project_id, Instance.project.id), isNull(EngineTaskTable.time_completed)))
+        .all(),
+    )
+    let recovered = 0
+    for (const row of rows) {
+      const pending = findPendingTaskCancellationRequestEvent(row.id)
+      if (!pending) continue
+      void cancelTask(row.id, { origin: pending.request.origin }).catch((error) => {
+        log.error("recovered Task cancellation convergence failed", {
+          taskID: row.id,
+          requestEventID: pending.requested.id,
+          error: error instanceof Error ? error.message : String(error),
+        })
+      })
+      recovered += 1
+    }
+    return recovered
+  }
+
+  export function cancelTask(taskID: string, options: CancelTaskOptions): Promise<boolean> {
+    const task = requireTaskInCurrentProject(taskID)
+    if (isTaskCancelled(task)) return Promise.resolve(true)
+    const existing = cancellationOperations.get(taskID)
+    if (existing) return existing
+    const operation = cancelTaskOnce(taskID, options)
+    cancellationOperations.set(taskID, operation)
+    void operation
+      .finally(() => {
+        if (cancellationOperations.get(taskID) === operation) cancellationOperations.delete(taskID)
+      })
+      .catch(() => undefined)
+    return operation
+  }
+
+  async function cancelTaskOnce(taskID: string, options: CancelTaskOptions): Promise<boolean> {
     const task = requireTaskInCurrentProject(taskID)
     if (!task.session_id) throw new Error(`Task ${taskID} has no root Session`)
     const origin = TaskCancellationOrigin.parse(options.origin)
@@ -2563,44 +2659,75 @@ export namespace EngineService {
         projectID: task.project_id,
       })
     }
-    const cancellationRequest = await EngineProtocol.emit(
-      Event.TaskCancellationRequested,
-      {
-        taskID,
-        actor: origin.actor,
-        surface: origin.surface,
-        reason: origin.reason,
-        summary: `Cancellation requested: ${origin.reason}`,
-        ...(origin.messageID ? { messageID: origin.messageID } : {}),
-        ...(origin.toolCallID ? { toolCallID: origin.toolCallID } : {}),
-        ...(origin.toolPartID ? { toolPartID: origin.toolPartID } : {}),
-        ...(origin.missionID ? { missionID: origin.missionID } : {}),
-      },
-      {
-        source: origin.source,
-        sessionID: origin.sessionID,
-        correlationID: origin.requestID,
-      },
-    )
+    const cancellationRequest = Database.immediateTransaction((db) => {
+      const current = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
+      if (!current) throw new NotFoundError({ message: `Task not found: ${taskID}` })
+      if (current.time_completed != null && !isTaskCancelled(current)) {
+        const lifecycle = deriveTaskStatus(current)
+        throw new TaskCancellationLifecycleConflictError({
+          message: `Task ${taskID} is already ${lifecycle}; cancellation accepts only a nonterminal or cancelled Task.`,
+          taskID,
+          lifecycle: lifecycle as "completed" | "failed",
+        })
+      }
+      const existingAuthority = db
+        .select({ requestEventID: EngineTaskCancellationAuthorityTable.request_event_id })
+        .from(EngineTaskCancellationAuthorityTable)
+        .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
+        .get()
+      if (existingAuthority) {
+        return ProtocolStore.requireEvent(existingAuthority.requestEventID)
+      }
+        const requested = EngineProtocol.emitInTransaction(
+          Event.TaskCancellationRequested,
+          {
+            taskID,
+            actor: origin.actor,
+            surface: origin.surface,
+            reason: origin.reason,
+            summary: `Cancellation requested: ${origin.reason}`,
+            ...(origin.messageID ? { messageID: origin.messageID } : {}),
+            ...(origin.toolCallID ? { toolCallID: origin.toolCallID } : {}),
+            ...(origin.toolPartID ? { toolPartID: origin.toolPartID } : {}),
+            ...(origin.missionID ? { missionID: origin.missionID } : {}),
+          },
+          {
+            source: origin.source,
+            sessionID: origin.sessionID,
+            correlationID: origin.requestID,
+          },
+        )
+        db.insert(EngineTaskCancellationAuthorityTable)
+          .values({ task_id: taskID, request_event_id: requested.id })
+          .run()
+        touchEngineTask(db, { taskID, timeUpdated: requested.time.emitted })
+        return requested
+      })
+    const parsedCancellation = findPendingTaskCancellationRequestEvent(taskID)
+    if (!parsedCancellation || parsedCancellation.requested.id !== cancellationRequest.id) {
+      throw new Error(`Task ${taskID} cancellation request ${cancellationRequest.id} is not the durable pending authority`)
+    }
+    const cancellationOrigin = parsedCancellation.request.origin
     const executionCancellationOrigin = createExecutionCancellationOrigin({
-      actor: origin.actor,
-      source: origin.source,
-      surface: origin.surface,
-      requestID: origin.requestID,
-      reason: origin.reason,
+      actor: cancellationOrigin.actor,
+      source: cancellationOrigin.source,
+      surface: cancellationOrigin.surface,
+      requestID: cancellationOrigin.requestID,
+      reason: cancellationOrigin.reason,
       taskID,
-      ...(origin.missionID ? { missionID: origin.missionID } : {}),
-      ...(origin.messageID ? { messageID: origin.messageID } : {}),
-      ...(origin.toolCallID ? { toolCallID: origin.toolCallID } : {}),
-      ...(origin.toolPartID ? { toolPartID: origin.toolPartID } : {}),
+      ...(cancellationOrigin.missionID ? { missionID: cancellationOrigin.missionID } : {}),
+      ...(cancellationOrigin.messageID ? { messageID: cancellationOrigin.messageID } : {}),
+      ...(cancellationOrigin.toolCallID ? { toolCallID: cancellationOrigin.toolCallID } : {}),
+      ...(cancellationOrigin.toolPartID ? { toolPartID: cancellationOrigin.toolPartID } : {}),
       causationEventID: cancellationRequest.id,
     })
+    const convergenceOwner = await acquireCancellationConvergence(taskID)
+    if (!convergenceOwner) return true
     const destructiveScope = SessionPromptState.beginRootSessionDestructiveScope(
       task.session_id,
       executionCancellationOrigin,
     )
     try {
-      discardQueuedTaskEvent(taskID)
       const taskDirectory = taskCwd(taskID)
       const decisions = createDecisionLog(taskID)
       const promptSettleInactivityMs = options.promptSettleInactivityMs ?? CANCEL_PROMPT_SETTLE_INACTIVITY_MS
@@ -2705,18 +2832,28 @@ export namespace EngineService {
       await SessionPromptState.waitForRootWakeQueueIdle(task.session_id, queueSettleInactivityMs).catch((err) =>
         onAbortFailure("root Session wake queue idle before cancellation terminal write", err, {}),
       )
-      const terminalResult = await terminalTask(
-        task,
-        {
-          status: "cancelled",
-          error: "task cancelled",
-          time_completed: Date.now(),
-        },
-        "Task cancelled",
-        {
-          projectDir: taskDirectory,
-          cancellationRequest: { eventID: cancellationRequest.id },
-        },
+      const terminalResult = await ProcessSupervisor.withTaskCancellationBarrier(taskID, () =>
+        terminalTask(
+          task,
+          {
+            status: "cancelled",
+            error: "task cancelled",
+            time_completed: Date.now(),
+          },
+          "Task cancelled",
+          {
+            projectDir: taskDirectory,
+            cancellationRequest: { eventID: cancellationRequest.id },
+            transactionEffect(db) {
+              convergenceOwner.assertInTransaction(db)
+              terminalizeQueuedTaskEventsForCancellationInTransaction(db, {
+                taskID,
+                cancellationRequestEventID: cancellationRequest.id,
+                now: Date.now(),
+              })
+            },
+          },
+        ),
       )
       if (!isTaskCancelled(terminalResult)) {
         decisions.append({
@@ -2742,6 +2879,7 @@ export namespace EngineService {
       return true
     } finally {
       destructiveScope.close()
+      convergenceOwner.close(isTaskCancelled(requireTaskInCurrentProject(taskID)))
     }
   }
 
@@ -3223,16 +3361,40 @@ export namespace EngineService {
       // Natural-language user messages are recorded once as visible task-root
       // user messages, which are the authoritative follow-up conversation.
       const note = await continueTaskMessage(taskID, input.text, input.source, attachmentRefs, input.metadata)
+      const ingressID = Database.use(
+        (db) =>
+          db
+            .select({ id: EngineArtifactTable.id })
+            .from(EngineArtifactTable)
+            .where(
+              and(
+                eq(EngineArtifactTable.task_id, taskID),
+                eq(EngineArtifactTable.kind, "queued_operator_wake"),
+                sql`json_extract(${EngineArtifactTable.payload}, '$.message_id') = ${note.user_message.info.id}`,
+              ),
+            )
+            .get()?.id,
+      )
       const message =
         note.wakeStatus === "started"
-          ? "Operator message recorded. Task wake dispatched."
+          ? "Operator message recorded and accepted for delivery."
           : note.wakeStatus === "queued"
             ? "Operator message recorded. Task wake queued behind an earlier root Session wake."
             : "Operator message recorded."
+      const queueProjection =
+        ingressID && task.session_id
+          ? SessionPromptState.rootWakeQueueProjection(task.session_id, ingressID)
+          : undefined
       return {
         message,
-        wake_status: note.wakeStatus,
-        should_resume: note.resumed,
+        wake_status: note.wakeStatus === "started" ? ("accepted" as const) : note.wakeStatus,
+        ...(ingressID ? { ingress_id: ingressID } : {}),
+        ...(queueProjection
+          ? {
+              queue_position: queueProjection.queuePosition,
+              current_owner_ingress_id: queueProjection.currentOwnerWakeID,
+            }
+          : {}),
         user_message: note.user_message,
       }
     } catch (error) {

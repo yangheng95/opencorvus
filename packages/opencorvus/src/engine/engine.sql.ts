@@ -46,6 +46,8 @@ export const ENGINE_ARTIFACT_KINDS = [
   "operator_message_wake",
   "mission_acceptance_resume_receipt",
   "queued_operator_wake",
+  "task_checkpoint_settlement",
+  "task_auxiliary_settlement",
   "exploration",
   "browser_preview_target",
   "browser_preview_evidence",
@@ -178,6 +180,16 @@ export const EngineTaskTable = sqliteTable(
     uniqueIndex("engine_task_project_request_idx").on(table.project_id, table.request_id),
   ],
 )
+
+export const EngineTaskCancellationAuthorityTable = sqliteTable("engine_task_cancellation_authority", {
+  task_id: text()
+    .primaryKey()
+    .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+  request_event_id: text().notNull(),
+  convergence_owner_id: text(),
+  convergence_owner_process_id: integer(),
+  convergence_lease_expires_at: integer(),
+})
 
 export const EngineGoalTable = sqliteTable(
   "engine_goal",

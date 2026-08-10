@@ -153,12 +153,11 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
     const reason = `Server shutdown source=${request.source} reason=${request.reason}`
     const settlement = (async () => {
       await startedTaskRecovery
-      const { terminateCurrentProcessOwnedExecution } = await import("../../engine/writer")
-      const terminated = await terminateCurrentProcessOwnedExecution({
-        reason,
-      })
+      const terminated = await Server.settleCurrentProcessExecution(reason)
       releaseProcessExecutionHandoff = terminated.releaseHandoff
-      console.log(`[serve] settled process-owned prompts sessions=${terminated.sessions} toolParts=${terminated.toolParts}`)
+      console.log(
+        `[serve] settled process-owned prompts sessions=${terminated.sessions} toolParts=${terminated.toolParts}`,
+      )
     })()
     processExecutionSettlement = settlement
     void settlement.catch(() => {

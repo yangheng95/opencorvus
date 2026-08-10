@@ -2,6 +2,8 @@
 
 Latest Task control responsiveness and cancellation convergence repair plan: [`2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md`](records/2026-08/2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md).
 
+Current Task control-plane architecture: [`task-control-plane.md`](current/architecture/task-control-plane.md).
+
 Latest per-Task runtime directory isolation: [`2026-08-10-task-runtime-directory-isolation.md`](records/2026-08/2026-08-10-task-runtime-directory-isolation.md).
 
 Latest Task structured-file replay recovery and local repackage: [`2026-08-10-task-file-replay-and-recovery-repackage.md`](records/2026-08/2026-08-10-task-file-replay-and-recovery-repackage.md).

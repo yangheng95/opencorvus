@@ -1,24 +1,39 @@
-import { afterEach, describe, expect, test } from "bun:test"
+import { afterEach, describe, expect, spyOn, test } from "bun:test"
+import { unlink } from "node:fs/promises"
 import { persistQueuedTask } from "@/engine/pipeline"
 import {
   configureTaskLoopRunner,
+  dispatchTaskLoop,
   dispatchPersistedTaskLoop,
   persistQueuedTaskIntentInTransaction,
   persistQueuedTaskWaitWakeInTransaction,
+  requeueInterruptedRunningTaskIngresses,
   waitForQueueCompletionHooksForTest,
 } from "@/engine/queue"
-import { EngineArtifactTable } from "@/engine/engine.sql"
+import {
+  EngineArtifactTable,
+  EngineProgressSnapshotTable,
+  EngineTaskCancellationAuthorityTable,
+} from "@/engine/engine.sql"
+import { recordEngineArtifact, updateEngineArtifact } from "@/engine/artifact"
 import { QueuedTaskIngressSchema } from "@/engine/queued-task-ingress"
+import { Event } from "@/engine/model"
+import { TASK_CANCELLED_EVENT_TYPE, TASK_CANCELLATION_REQUESTED_EVENT_TYPE } from "@/engine/cancellation-origin"
+import { pendingTaskCancellationProjection } from "@/engine/cancellation-projection"
+import { EngineProtocol } from "@/engine/protocol"
 import { deriveTaskStatus } from "@/engine/task-status"
+import { reconcilePendingCancelledTaskSettlements } from "@/engine/state"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { requireTask } from "@/engine/store"
 import { Identifier } from "@/id/id"
 import { ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY } from "@/orchestrator/stateful-tool-names"
 import { Instance } from "@/project/instance"
+import { ProtocolStore } from "@/protocol/store"
 import { Session } from "@/session"
 import type { Message } from "@/session/message"
-import { Database, and, desc, eq } from "@/storage/db"
+import { Database, and, desc, eq, sql } from "@/storage/db"
 import { EngineService } from "@/task-api"
+import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 const packageRevision = {
@@ -106,6 +121,27 @@ async function createActiveTask(input: { title: string; request: string }) {
   return { taskID, rootSessionID: root.id }
 }
 
+async function waitForCancelledCheckpoint(taskID: string) {
+  const settlementDeadline = Date.now() + 5_000
+  let settlement: { label: string; payload: { status?: string } } | undefined
+  while (Date.now() < settlementDeadline) {
+    settlement = Database.use(
+      (db) =>
+        db
+          .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+          .from(EngineArtifactTable)
+          .where(
+            and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "task_checkpoint_settlement")),
+          )
+          .get() as typeof settlement,
+    )
+    if ((requireTask(taskID).metadata as any)?.git?.result && settlement?.label === "completed") break
+    await Bun.sleep(20)
+  }
+  expect((requireTask(taskID).metadata as any)?.git?.result?.checkpoint_receipt).toBeDefined()
+  expect(settlement).toMatchObject({ label: "completed", payload: { status: "completed" } })
+}
+
 async function persistFinalAssistantMessage(input: {
   rootSessionID: string
   text: string
@@ -135,7 +171,10 @@ async function persistFinalAssistantMessage(input: {
   }
   await Session.persistMessage({
     info,
-    parts: [completedTextPart({ sessionID: session.id, messageID, text: input.text }), ...(input.parts?.(session.id, messageID) ?? [])],
+    parts: [
+      completedTextPart({ sessionID: session.id, messageID, text: input.text }),
+      ...(input.parts?.(session.id, messageID) ?? []),
+    ],
   })
   return messageID
 }
@@ -255,7 +294,756 @@ function latestQueuedOperatorWake(taskID: string) {
 }
 
 describe("active operator wake settlement", () => {
-  test("records delivery_failed when an active operator wake ends with prose only", async () => {
+  test("joins duplicate cancellation calls and commits one terminal cancellation before checkpoint settlement", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID } = await createActiveTask({
+          title: "Idempotent task cancellation",
+          request: "Cancel this active task once",
+        })
+        const mandatoryProcess = await ProcessSupervisor.spawnTaskCommand(
+          { taskID, cwd: project.path },
+          {
+            executable: process.execPath,
+            args: ["-e", "setInterval(()=>{},1000)"],
+            owner: "cancellation-mandatory-barrier-test",
+          },
+        )
+        let resolveAuxiliaryExit!: (code: number) => void
+        const auxiliaryExited = new Promise<number>((resolve) => (resolveAuxiliaryExit = resolve))
+        const restoreCommandFactory = ProcessSupervisor.setCommandFactoryForTest(async () => ({
+          pid: 41_002,
+          stdin: null,
+          stdout: null,
+          stderr: null,
+          exited: auxiliaryExited,
+          outputSettled: auxiliaryExited.then(() => undefined),
+          async terminate() {},
+          async dispose() {},
+          unref() {},
+        }))
+        const auxiliaryProcess = await ProcessSupervisor.spawnTaskCommand(
+          { taskID, cwd: project.path },
+          {
+            executable: process.execPath,
+            args: ["-e", "setInterval(()=>{},1000)"],
+            owner: "cancellation-auxiliary-settlement-test",
+            taskCancellationRole: "auxiliary",
+          },
+        )
+        restoreCommandFactory()
+        const cancel = (requestID: string) =>
+          EngineService.cancelTask(taskID, {
+            origin: {
+              actor: "user",
+              source: "task.cancel",
+              surface: "api",
+              requestID,
+              reason: "operator requested cancellation",
+            },
+          })
+        const taskUpdatedBeforeCancellation = requireTask(taskID).time_updated
+        await Bun.sleep(2)
+        const requestedAt = performance.now()
+        const receipt = await EngineService.requestTaskCancellation(taskID, {
+          origin: {
+            actor: "user",
+            source: "task.cancel",
+            surface: "api",
+            requestID: "cancel-request-a",
+            reason: "operator requested cancellation",
+          },
+        })
+        expect(["cancelling", "cancelled"]).toContain(receipt.status)
+        expect(performance.now() - requestedAt).toBeLessThan(1_000)
+        expect(requireTask(taskID).time_updated).toBeGreaterThan(taskUpdatedBeforeCancellation)
+        expect(
+          await Promise.race([
+            Promise.all([cancel("cancel-request-a"), cancel("cancel-request-b")]),
+            Bun.sleep(2_000).then(() => ["timed-out"]),
+          ]),
+        ).toEqual([true, true])
+        expect(typeof (await mandatoryProcess.exited)).toBe("number")
+        expect({
+          status: deriveTaskStatus(requireTask(taskID)),
+          auxiliaryProcesses:
+            ProcessSupervisor.metricsSnapshot().owners["cancellation-auxiliary-settlement-test"]?.count,
+        }).toEqual({ status: "cancelled", auxiliaryProcesses: 1 })
+        resolveAuxiliaryExit(0)
+        expect(await auxiliaryProcess.exited).toBe(0)
+
+        const events = ProtocolStore.listTaskEvents(taskID)
+        const cancellationRequestTime = events.find((event) => event.type === TASK_CANCELLATION_REQUESTED_EVENT_TYPE)!
+          .time.emitted
+        expect({
+          status: deriveTaskStatus(requireTask(taskID)),
+          requests: events.filter((event) => event.type === TASK_CANCELLATION_REQUESTED_EVENT_TYPE).length,
+          terminals: events.filter((event) => event.type === TASK_CANCELLED_EVENT_TYPE).length,
+        }).toEqual({ status: "cancelled", requests: 1, terminals: 1 })
+
+        await waitForCancelledCheckpoint(taskID)
+        const settlementDeadline = Date.now() + 5_000
+        while (Date.now() < settlementDeadline) {
+          const active = Database.use((db) =>
+            db
+              .select({ label: EngineArtifactTable.label })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.task_id, taskID),
+                  sql`${EngineArtifactTable.kind} IN ('task_checkpoint_settlement', 'task_auxiliary_settlement')`,
+                  sql`${EngineArtifactTable.label} IN ('pending', 'running')`,
+                ),
+              )
+              .all(),
+          )
+          if (active.length === 0) break
+          await Bun.sleep(20)
+        }
+        const settlements = Database.use((db) =>
+          db
+            .select({
+              kind: EngineArtifactTable.kind,
+              label: EngineArtifactTable.label,
+              payload: EngineArtifactTable.payload,
+            })
+            .from(EngineArtifactTable)
+            .where(
+              and(
+                eq(EngineArtifactTable.task_id, taskID),
+                sql`${EngineArtifactTable.kind} IN ('task_checkpoint_settlement', 'task_auxiliary_settlement')`,
+              ),
+            )
+            .orderBy(EngineArtifactTable.kind)
+            .all(),
+        )
+        expect(
+          settlements.map((item) => ({
+            kind: item.kind,
+            label: item.label,
+            requestEventID: (item.payload as Record<string, unknown>).cancellation_request_event_id,
+            requestedAt: (item.payload as Record<string, unknown>).time_requested,
+          })),
+        ).toEqual([
+          {
+            kind: "task_auxiliary_settlement",
+            label: "completed",
+            requestEventID: receipt.requestEventID,
+            requestedAt: cancellationRequestTime,
+          },
+          {
+            kind: "task_checkpoint_settlement",
+            label: "completed",
+            requestEventID: receipt.requestEventID,
+            requestedAt: cancellationRequestTime,
+          },
+        ])
+        const staleSettlementID = recordEngineArtifact({
+          taskID,
+          kind: "task_auxiliary_settlement",
+          label: "running",
+          payload: {
+            task_id: taskID,
+            cancellation_request_event_id: receipt.requestEventID,
+            status: "running",
+            time_requested: Date.now(),
+            owner_id: "prior-settlement-owner",
+            owner_process_id: process.pid + 10_000,
+            owner_started_at: Date.now(),
+            lease_expires_at: Date.now() + 100,
+          },
+        })
+        expect(reconcilePendingCancelledTaskSettlements()).toBeGreaterThanOrEqual(1)
+        const takeoverDeadline = Date.now() + 3_000
+        let reclaimed: { label: string; payload: Record<string, unknown> } | undefined
+        while (Date.now() < takeoverDeadline) {
+          reclaimed = Database.use(
+            (db) =>
+              db
+                .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+                .from(EngineArtifactTable)
+                .where(eq(EngineArtifactTable.id, staleSettlementID))
+                .get() as typeof reclaimed,
+          )
+          if (reclaimed?.label === "completed") break
+          await Bun.sleep(25)
+        }
+        expect(reclaimed).toMatchObject({
+          label: "completed",
+          payload: {
+            cancellation_request_event_id: receipt.requestEventID,
+            status: "completed",
+            owner_id: expect.stringMatching(/^settlement-owner:/),
+          },
+        })
+
+        const retrySettlementID = recordEngineArtifact({
+          taskID,
+          kind: "task_auxiliary_settlement",
+          label: "pending",
+          payload: {
+            task_id: taskID,
+            cancellation_request_event_id: receipt.requestEventID,
+            status: "pending",
+            time_requested: cancellationRequestTime,
+          },
+        })
+        const immediateTransaction = Database.immediateTransaction
+        let completionWriteFailed = false
+        let transactionCalls = 0
+        const transactionSpy = spyOn(Database, "immediateTransaction").mockImplementation(((callback: never) => {
+          transactionCalls += 1
+          if (transactionCalls === 2) {
+            completionWriteFailed = true
+            throw new Error("injected settlement completion write failure")
+          }
+          return immediateTransaction(callback)
+        }) as typeof Database.immediateTransaction)
+        try {
+          expect(reconcilePendingCancelledTaskSettlements()).toBeGreaterThanOrEqual(1)
+          const failureDeadline = Date.now() + 1_000
+          while (!completionWriteFailed && Date.now() < failureDeadline) await Bun.sleep(10)
+          expect(completionWriteFailed).toBe(true)
+        } finally {
+          transactionSpy.mockRestore()
+        }
+        const retryDeadline = Date.now() + 3_000
+        let retrySettlement: { label: string } | undefined
+        while (Date.now() < retryDeadline) {
+          retrySettlement = Database.use((db) =>
+            db
+              .select({ label: EngineArtifactTable.label })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.id, retrySettlementID))
+              .get(),
+          )
+          if (retrySettlement?.label === "completed") break
+          await Bun.sleep(25)
+        }
+        expect(retrySettlement).toEqual({ label: "completed" })
+      },
+    })
+  }, 0)
+
+  test("reuses a durable pending cancellation occurrence after process-local ownership is absent", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID } = await createActiveTask({
+          title: "Recovered task cancellation",
+          request: "Resume cancellation convergence from its durable request",
+        })
+        const requested = await EngineProtocol.emit(
+          Event.TaskCancellationRequested,
+          {
+            taskID,
+            actor: "user",
+            surface: "api",
+            reason: "operator requested cancellation",
+            summary: "Cancellation requested: operator requested cancellation",
+          },
+          { source: "task.cancel", correlationID: "durable-cancel-request" },
+        )
+        Database.use((db) =>
+          db
+            .insert(EngineTaskCancellationAuthorityTable)
+            .values({
+              task_id: taskID,
+              request_event_id: requested.id,
+              convergence_owner_id: "prior-backend-owner",
+              convergence_owner_process_id: process.pid + 10_000,
+              convergence_lease_expires_at: Date.now() + 50,
+            })
+            .run(),
+        )
+        expect(pendingTaskCancellationProjection(taskID)).toMatchObject({
+          status: "cancelling",
+          requestEventID: requested.id,
+          requestID: "durable-cancel-request",
+        })
+        let interruptedIngressID = ""
+        Database.transaction((db) => {
+          interruptedIngressID = persistQueuedTaskIntentInTransaction(db, {
+            task: requireTask(taskID),
+            intent: "retry",
+            supersededOperatorMessageIDs: [],
+            now: Date.now(),
+          })
+        })
+        const interruptedIngress = Database.use((db) =>
+          db
+            .select({ payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(eq(EngineArtifactTable.id, interruptedIngressID))
+            .get(),
+        )
+        updateEngineArtifact({
+          id: interruptedIngressID,
+          label: "running",
+          payload: {
+            ...QueuedTaskIngressSchema.parse(interruptedIngress?.payload),
+            queued_by_process_id: process.pid + 10_000,
+          },
+        })
+        expect(requeueInterruptedRunningTaskIngresses()).toBe(0)
+
+        expect(
+          await EngineService.cancelTask(taskID, {
+            origin: {
+              actor: "user",
+              source: "task.cancel",
+              surface: "api",
+              requestID: "duplicate-after-restart",
+              reason: "repeat cancellation request",
+            },
+          }),
+        ).toBe(true)
+        const requests = ProtocolStore.listTaskEvents(taskID).filter(
+          (event) => event.type === TASK_CANCELLATION_REQUESTED_EVENT_TYPE,
+        )
+        expect({
+          requestIDs: requests.map((event) => event.id),
+          status: deriveTaskStatus(requireTask(taskID)),
+          convergenceOwner: Database.use(
+            (db) =>
+              db
+                .select({ ownerID: EngineTaskCancellationAuthorityTable.convergence_owner_id })
+                .from(EngineTaskCancellationAuthorityTable)
+                .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
+                .get()?.ownerID,
+          ),
+        }).toEqual({
+          requestIDs: [requested.id],
+          status: "cancelled",
+          convergenceOwner: expect.stringMatching(/^cancellation-owner:/),
+        })
+        expect(
+          Database.use((db) =>
+            db
+              .select({ label: EngineArtifactTable.label })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.id, interruptedIngressID))
+              .get(),
+          ),
+        ).toEqual({ label: "terminal_inapplicable" })
+        await waitForCancelledCheckpoint(taskID)
+      },
+    })
+  }, 0)
+
+  test("commits terminal cancellation before recording a failed post-terminal checkpoint settlement", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID } = await createActiveTask({
+          title: "Cancellation with changed workspace",
+          request: "Cancel even when the immutable checkpoint baseline cannot be prepared",
+        })
+        await Bun.write(`${project.path}/changed-after-task-creation.txt`, "workspace changed")
+
+        expect(
+          await EngineService.cancelTask(taskID, {
+            origin: {
+              actor: "user",
+              source: "task.cancel",
+              surface: "api",
+              requestID: "cancel-with-checkpoint-failure",
+              reason: "operator requested cancellation",
+            },
+          }),
+        ).toBe(true)
+        expect(deriveTaskStatus(requireTask(taskID))).toBe("cancelled")
+
+        const deadline = Date.now() + 15_000
+        let settlement:
+          | { label: string; payload: { status?: string; failures?: Array<{ stage?: string }> } }
+          | undefined
+        while (Date.now() < deadline) {
+          settlement = Database.use(
+            (db) =>
+              db
+                .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+                .from(EngineArtifactTable)
+                .where(
+                  and(
+                    eq(EngineArtifactTable.task_id, taskID),
+                    eq(EngineArtifactTable.kind, "task_checkpoint_settlement"),
+                  ),
+                )
+                .get() as typeof settlement,
+          )
+          if (settlement && !["pending", "running"].includes(settlement.label)) break
+          await Bun.sleep(20)
+        }
+        expect(settlement).toMatchObject({
+          label: "failed",
+          payload: { status: "failed", failures: [{ stage: "baseline" }] },
+        })
+        const allSettlementsDeadline = Date.now() + 5_000
+        while (Date.now() < allSettlementsDeadline) {
+          const active = Database.use((db) =>
+            db
+              .select({ id: EngineArtifactTable.id })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.task_id, taskID),
+                  sql`${EngineArtifactTable.kind} IN ('task_checkpoint_settlement', 'task_auxiliary_settlement')`,
+                  sql`${EngineArtifactTable.label} IN ('pending', 'running')`,
+                ),
+              )
+              .all(),
+          )
+          if (active.length === 0) break
+          await Bun.sleep(20)
+        }
+        expect(
+          Database.use((db) =>
+            db
+              .select({ kind: EngineArtifactTable.kind, label: EngineArtifactTable.label })
+              .from(EngineArtifactTable)
+              .where(
+                and(
+                  eq(EngineArtifactTable.task_id, taskID),
+                  sql`${EngineArtifactTable.kind} IN ('task_checkpoint_settlement', 'task_auxiliary_settlement')`,
+                ),
+              )
+              .orderBy(EngineArtifactTable.kind)
+              .all(),
+          ),
+        ).toEqual([
+          { kind: "task_auxiliary_settlement", label: "completed" },
+          { kind: "task_checkpoint_settlement", label: "failed" },
+        ])
+        await unlink(`${project.path}/changed-after-task-creation.txt`)
+        const settlementID = recordEngineArtifact({
+          taskID,
+          kind: "task_checkpoint_settlement",
+          label: "pending",
+          payload: {
+            task_id: taskID,
+            cancellation_request_event_id: "evt_checkpoint_retry_contract",
+            status: "pending",
+            time_requested: Date.now(),
+          },
+        })
+        const immediateTransaction = Database.immediateTransaction
+        let completionWriteFailed = false
+        let transactionCalls = 0
+        const transactionSpy = spyOn(Database, "immediateTransaction").mockImplementation(((callback: never) => {
+          transactionCalls += 1
+          if (transactionCalls === 2) {
+            completionWriteFailed = true
+            throw new Error("injected checkpoint receipt completion write failure")
+          }
+          return immediateTransaction(callback)
+        }) as typeof Database.immediateTransaction)
+        try {
+          expect(reconcilePendingCancelledTaskSettlements()).toBeGreaterThanOrEqual(1)
+          const failureDeadline = Date.now() + 5_000
+          while (!completionWriteFailed && Date.now() < failureDeadline) await Bun.sleep(20)
+          expect(completionWriteFailed).toBe(true)
+        } finally {
+          transactionSpy.mockRestore()
+        }
+        const retryDeadline = Date.now() + 15_000
+        let label: string | undefined
+        while (Date.now() < retryDeadline) {
+          label = Database.use((db) =>
+            db
+              .select({ label: EngineArtifactTable.label })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.id, settlementID))
+              .get(),
+          )?.label
+          if (label === "completed") break
+          await Bun.sleep(25)
+        }
+        const resultCheckpoints = Database.use((db) =>
+          db
+            .select({ payload: EngineProgressSnapshotTable.payload })
+            .from(EngineProgressSnapshotTable)
+            .where(eq(EngineProgressSnapshotTable.task_id, taskID))
+            .all()
+            .filter((row) => (row.payload as Record<string, unknown>).stage === "result"),
+        )
+        const gitMetadata = (requireTask(taskID).metadata as any).git as Record<string, unknown> | undefined
+        expect({
+          label,
+          resultCheckpoints: resultCheckpoints.length,
+          resultHistory: Array.isArray(gitMetadata?.result_history) ? gitMetadata.result_history.length : undefined,
+        }).toEqual({ label: "completed", resultCheckpoints: 1, resultHistory: 0 })
+      },
+    })
+  }, 0)
+
+  test("holds runtime shutdown admission until an in-flight mandatory spawn is tracked and stopped", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID } = await createActiveTask({
+          title: "Runtime mandatory spawn gate",
+          request: "Do not let a late mandatory spawn escape runtime settlement",
+        })
+        let enterFactory!: () => void
+        const factoryEntered = new Promise<void>((resolve) => (enterFactory = resolve))
+        let releaseFactory!: () => void
+        const factoryReleased = new Promise<void>((resolve) => (releaseFactory = resolve))
+        let resolveExit!: (code: number) => void
+        const exited = new Promise<number>((resolve) => (resolveExit = resolve))
+        const restoreFactory = ProcessSupervisor.setCommandFactoryForTest(async () => {
+          enterFactory()
+          await factoryReleased
+          return {
+            pid: 41_003,
+            stdin: null,
+            stdout: null,
+            stderr: null,
+            exited,
+            outputSettled: exited.then(() => undefined),
+            async terminate() {
+              resolveExit(0)
+            },
+            async dispose() {
+              resolveExit(0)
+            },
+            unref() {},
+          }
+        })
+        try {
+          const spawn = ProcessSupervisor.spawnTaskCommand(
+            { taskID, cwd: project.path },
+            {
+              executable: process.execPath,
+              args: ["-e", "setInterval(()=>{},1000)"],
+              owner: "runtime-mandatory-spawn-gate-test",
+            },
+          )
+          await factoryEntered
+          const gate = ProcessSupervisor.acquireRuntimeMandatorySettlementGate()
+          expect(await Promise.race([gate.then(() => "acquired"), Bun.sleep(25).then(() => "blocked")])).toBe("blocked")
+          releaseFactory()
+          const acquiredGate = await gate
+          try {
+            expect(await (await spawn).exited).toBe(0)
+            expect(ProcessSupervisor.metricsSnapshot().live).toBe(0)
+          } finally {
+            acquiredGate[Symbol.dispose]()
+          }
+        } finally {
+          restoreFactory()
+          releaseFactory()
+        }
+      },
+    })
+  }, 0)
+
+  test("reports a later operator ingress as queued while an earlier root Turn owns delivery", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Contended operator wake",
+          request: "Keep operator messages ordered while work is active",
+        })
+        let releaseFirst!: () => void
+        const firstReleased = new Promise<void>((resolve) => (releaseFirst = resolve))
+        let observeFirstStarted!: () => void
+        const firstStarted = new Promise<void>((resolve) => (observeFirstStarted = resolve))
+        let invocation = 0
+        configureTaskLoopRunner(async ({ event }) => {
+          invocation += 1
+          if (invocation === 1) {
+            observeFirstStarted()
+            await firstReleased
+          }
+          const messageID = event?.rootMessage?.messageID
+          if (!messageID) throw new Error("operator wake contention test expected a rootMessage event")
+          return {
+            finalMessageID: await persistAssistantInvocation({
+              rootSessionID,
+              turns: [
+                {
+                  text: `Read ordered operator ingress ${invocation}.`,
+                  parts: (sessionID, turnMessageID) => [
+                    completedToolPart({
+                      sessionID,
+                      messageID: turnMessageID,
+                      callID: `call_read_ordered_operator_message_${invocation}`,
+                      tool: "read_task_message",
+                      stateInput: {
+                        message_id: messageID,
+                        reason: "Bind this response to the exact queued operator message.",
+                      },
+                    }),
+                  ],
+                },
+              ],
+            }),
+          }
+        })
+
+        try {
+          const acceptedAt = performance.now()
+          const first = await EngineService.handleTaskMessage(taskID, {
+            text: "Report the first current status.",
+            source: "operator.test",
+          })
+          await firstStarted
+          const firstIngress = Database.use((db) =>
+            db
+              .select({ label: EngineArtifactTable.label })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.id, first.ingress_id!))
+              .get(),
+          )
+          expect({ label: firstIngress?.label, runningWithinMs: performance.now() - acceptedAt }).toEqual({
+            label: "running",
+            runningWithinMs: expect.any(Number),
+          })
+          expect(performance.now() - acceptedAt).toBeLessThan(2_000)
+          const second = await EngineService.handleTaskMessage(taskID, {
+            text: "Report the next current status after the first response.",
+            source: "operator.test",
+          })
+          expect({ first: first.wake_status, second: second.wake_status }).toEqual({
+            first: "accepted",
+            second: "queued",
+          })
+        } finally {
+          releaseFirst()
+        }
+        await waitForQueueCompletionHooksForTest()
+      },
+    })
+  })
+
+  test("delivers one lifecycle occurrence once when the same event is accepted concurrently", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Idempotent lifecycle delivery",
+          request: "Deliver an exact worker terminal lifecycle occurrence once",
+        })
+        let release!: () => void
+        const released = new Promise<void>((resolve) => (release = resolve))
+        let started!: () => void
+        const observedStart = new Promise<void>((resolve) => (started = resolve))
+        let invocations = 0
+        configureTaskLoopRunner(async () => {
+          invocations += 1
+          started()
+          await released
+          return {
+            finalMessageID: await persistFinalAssistantMessage({
+              rootSessionID,
+              text: "Observed the exact terminal worker lifecycle occurrence.",
+            }),
+          }
+        })
+        const event = {
+          note: "Deliver terminal worker lifecycle occurrence",
+          agentLifecycleDelivery: {
+            eventID: "evt_worker_terminal_once",
+            sessionID: "ses_worker_terminal_once",
+            dispatchID: "dispatch_worker_terminal_once",
+          },
+        }
+        try {
+          expect(await dispatchTaskLoop({ taskID, event })).toBe("started")
+          await observedStart
+          expect(await dispatchTaskLoop({ taskID, event })).toBe("started")
+        } finally {
+          release()
+        }
+        await waitForQueueCompletionHooksForTest()
+        const rows = Database.use((db) =>
+          db
+            .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+            .all(),
+        )
+        expect({
+          invocations,
+          occurrences: rows.filter(
+            (row) =>
+              QueuedTaskIngressSchema.parse(row.payload).lifecycle_event_id === event.agentLifecycleDelivery.eventID,
+          ).length,
+          label: rows[0]?.label,
+        }).toEqual({ invocations: 1, occurrences: 1, label: "drained" })
+      },
+    })
+  })
+
+  test("requeues a prior-process running ingress and drains its original occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Recovered running ingress",
+          request: "Resume the exact ingress left running by a prior host process",
+        })
+        let artifactID = ""
+        Database.transaction((db) => {
+          artifactID = persistQueuedTaskIntentInTransaction(db, {
+            task: requireTask(taskID),
+            intent: "retry",
+            supersededOperatorMessageIDs: [],
+            now: Date.now(),
+          })
+        })
+        const row = Database.use((db) =>
+          db
+            .select({ payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(eq(EngineArtifactTable.id, artifactID))
+            .get(),
+        )
+        const payload = QueuedTaskIngressSchema.parse(row?.payload)
+        updateEngineArtifact({
+          id: artifactID,
+          label: "running",
+          payload: { ...payload, queued_by_process_id: process.pid + 10_000 },
+        })
+        configureTaskLoopRunner(async () => ({
+          finalMessageID: await persistFinalAssistantMessage({
+            rootSessionID,
+            text: "Recovered and settled the original retry ingress.",
+            parts: (sessionID, messageID) => [
+              completedToolPart({
+                sessionID,
+                messageID,
+                callID: "call_recovered_ingress_decision",
+                tool: "dispatch_agent",
+                stateInput: { dispatch: { target: "base-developer" } },
+                metadata: { [ORCHESTRATOR_DECISION_EFFECT_METADATA_KEY]: "decision" },
+              }),
+            ],
+          }),
+        }))
+
+        expect(requeueInterruptedRunningTaskIngresses()).toBe(1)
+        expect(await dispatchPersistedTaskLoop(taskID)).toBe("started")
+        await waitForQueueCompletionHooksForTest()
+        expect(latestQueuedOperatorWake(taskID)).toMatchObject({
+          label: "drained",
+          payload: { wake_id: expect.any(String) },
+        })
+      },
+    })
+  })
+
+  test("drains a status response after reading the exact active operator message", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -264,30 +1052,40 @@ describe("active operator wake settlement", () => {
           title: "Prose-only operator wake",
           request: "Wait for an operator follow-up",
         })
-        configureTaskLoopRunner(async () => ({
-          finalMessageID: await persistFinalAssistantMessage({
-            rootSessionID,
-            text: "I will continue once runtime recovery is available.",
-          }),
-        }))
+        configureTaskLoopRunner(async ({ event }) => {
+          const messageID = event?.rootMessage?.messageID
+          if (!messageID) throw new Error("operator status wake test expected a rootMessage event")
+          return {
+            finalMessageID: await persistFinalAssistantMessage({
+              rootSessionID,
+              text: "The current worker is still running and has not produced a terminal result.",
+              parts: (sessionID, turnMessageID) => [
+                completedToolPart({
+                  sessionID,
+                  messageID: turnMessageID,
+                  callID: "call_read_status_operator_message",
+                  tool: "read_task_message",
+                  stateInput: {
+                    message_id: messageID,
+                    reason: "Bind the visible status response to the exact operator question.",
+                  },
+                }),
+              ],
+            }),
+          }
+        })
 
         const response = await EngineService.handleTaskMessage(taskID, {
           text: "Read this exact follow-up and dispatch the continuation.",
           source: "operator.test",
         })
-        expect(response.wake_status).toBe("started")
+        expect(response.wake_status).toBe("accepted")
+        expect(requireTask(taskID).time_updated).toBeGreaterThanOrEqual(response.user_message!.info.time.created)
         await waitForQueueCompletionHooksForTest()
 
         const wake = latestQueuedOperatorWake(taskID)
-        expect({
-          label: wake.label,
-          deliveryStatus: wake.payload.delivery_result?.status,
-          errorName: wake.payload.delivery_result?.status === "delivery_failed" ? wake.payload.delivery_result.error_name : undefined,
-          sourceKind: wake.payload.source_kind,
-        }).toEqual({
-          label: "delivery_failed",
-          deliveryStatus: "delivery_failed",
-          errorName: "QueuedWakeSettlementError",
+        expect({ label: wake.label, sourceKind: wake.payload.source_kind }).toEqual({
+          label: "drained",
           sourceKind: "operator_message",
         })
       },
@@ -347,7 +1145,7 @@ describe("active operator wake settlement", () => {
           text: "Read this exact follow-up and dispatch the continuation.",
           source: "operator.test",
         })
-        expect(response.wake_status).toBe("started")
+        expect(response.wake_status).toBe("accepted")
         await waitForQueueCompletionHooksForTest()
 
         const wake = latestQueuedOperatorWake(taskID)
@@ -365,7 +1163,7 @@ describe("active operator wake settlement", () => {
     })
   })
 
-  test("records delivery_failed when read and scheduler decision are emitted in the same assistant turn", async () => {
+  test("drains an operator response that reads the exact message in the same assistant turn", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -409,20 +1207,17 @@ describe("active operator wake settlement", () => {
           text: "Read this exact follow-up before dispatching the continuation.",
           source: "operator.test",
         })
-        expect(response.wake_status).toBe("started")
+        expect(response.wake_status).toBe("accepted")
         await waitForQueueCompletionHooksForTest()
 
         const wake = latestQueuedOperatorWake(taskID)
         expect({
           label: wake.label,
           deliveryStatus: wake.payload.delivery_result?.status,
-          errorName:
-            wake.payload.delivery_result?.status === "delivery_failed" ? wake.payload.delivery_result.error_name : undefined,
           sourceKind: wake.payload.source_kind,
         }).toEqual({
-          label: "delivery_failed",
-          deliveryStatus: "delivery_failed",
-          errorName: "QueuedWakeSettlementError",
+          label: "drained",
+          deliveryStatus: undefined,
           sourceKind: "operator_message",
         })
       },
@@ -485,7 +1280,7 @@ describe("active operator wake settlement", () => {
           text: "Read this exact follow-up and dispatch the continuation.",
           source: "operator.test",
         })
-        expect(response.wake_status).toBe("started")
+        expect(response.wake_status).toBe("accepted")
         await waitForQueueCompletionHooksForTest()
 
         const wake = latestQueuedOperatorWake(taskID)
@@ -502,7 +1297,7 @@ describe("active operator wake settlement", () => {
     })
   })
 
-  test("records delivery_failed when only a prior wake made the scheduler decision", async () => {
+  test("drains a current status response without borrowing or requiring a prior scheduler decision", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -570,20 +1365,17 @@ describe("active operator wake settlement", () => {
           text: "Read this exact follow-up and make a fresh scheduler decision.",
           source: "operator.test",
         })
-        expect(response.wake_status).toBe("started")
+        expect(response.wake_status).toBe("accepted")
         await waitForQueueCompletionHooksForTest()
 
         const wake = latestQueuedOperatorWake(taskID)
         expect({
           label: wake.label,
           deliveryStatus: wake.payload.delivery_result?.status,
-          errorName:
-            wake.payload.delivery_result?.status === "delivery_failed" ? wake.payload.delivery_result.error_name : undefined,
           sourceKind: wake.payload.source_kind,
         }).toEqual({
-          label: "delivery_failed",
-          deliveryStatus: "delivery_failed",
-          errorName: "QueuedWakeSettlementError",
+          label: "drained",
+          deliveryStatus: undefined,
           sourceKind: "operator_message",
         })
       },
@@ -621,7 +1413,9 @@ describe("active operator wake settlement", () => {
           label: wake.label,
           deliveryStatus: wake.payload.delivery_result?.status,
           errorName:
-            wake.payload.delivery_result?.status === "delivery_failed" ? wake.payload.delivery_result.error_name : undefined,
+            wake.payload.delivery_result?.status === "delivery_failed"
+              ? wake.payload.delivery_result.error_name
+              : undefined,
           sourceKind: wake.payload.source_kind,
         }).toEqual({
           label: "delivery_failed",
