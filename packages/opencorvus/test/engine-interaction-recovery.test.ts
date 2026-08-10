@@ -82,7 +82,7 @@ async function waitForTaskInteraction(taskID: string) {
 }
 
 describe("recovered pending interaction ownership", () => {
-  test("abandons ordinary Question and Permission projections after their process waiters are replaced", async () => {
+  test("removes a gracefully abandoned Permission and reconciles an ordinary durable Question after restart", async () => {
     await using project = await memoryProject()
     const created = await Instance.provide({
       directory: project.path,
@@ -115,12 +115,15 @@ describe("recovered pending interaction ownership", () => {
           questionID,
           questionInteractionID: question.id,
           permissionID,
-          permissionInteractionID: permission.id,
         }
       },
     })
 
     await Instance.disposeAll()
+    expect({
+      permission: findInteractionByExternal(created.permissionID)?.status,
+      question: findInteractionByExternal(created.questionID)?.status,
+    }).toEqual({ permission: undefined, question: "pending" })
 
     await Instance.provide({
       directory: project.path,
@@ -147,17 +150,11 @@ describe("recovered pending interaction ownership", () => {
                 externalID: created.questionID,
                 type: "question",
               },
-              {
-                interactionID: created.permissionInteractionID,
-                externalID: created.permissionID,
-                type: "permission",
-              },
             ],
             retainedRecoverableQuestions: [],
           })
           expect(events).toEqual([
             { type: "question", requestID: created.questionID, timeResolved },
-            { type: "permission", requestID: created.permissionID, timeResolved },
           ])
           expect({
             pendingCount: pendingInteractionCounts([created.taskID]).get(created.taskID) ?? 0,

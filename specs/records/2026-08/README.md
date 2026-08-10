@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-10-task-start-e2e-recovery.md](2026-08-10-task-start-e2e-recovery.md) records the active-but-zero-execution Mission Task failure boundary and validates the rebuilt package through a real HTTP Mission-to-Task expert workflow plus packaged restart replay.
+
 - [2026-08-10-task-runtime-directory-isolation.md](2026-08-10-task-runtime-directory-isolation.md) rebuilds `.opencorvus/.r` around one readable root per Task and nests all Task Session, worktree, trace, output, ownership, artifact, evidence, and document state beneath it.
 
 - [2026-08-10-task-file-replay-and-recovery-repackage.md](2026-08-10-task-file-replay-and-recovery-repackage.md) repairs structured-text Artifact replay at the provider boundary, preserves immutable Task recovery authority, and records focused verification plus the local Windows repackage.
