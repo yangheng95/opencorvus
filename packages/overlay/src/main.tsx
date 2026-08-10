@@ -3,9 +3,9 @@
 // Mounts all Solid components and initialises the application.
 // Self-sufficient — no external script dependencies.
 
-import "@fontsource-variable/geist"
-import "@fontsource-variable/noto-sans-sc"
-import "@fontsource-variable/jetbrains-mono"
+import "@fontsource-variable/geist/index.css"
+import "@fontsource-variable/noto-sans-sc/index.css"
+import "@fontsource-variable/jetbrains-mono/index.css"
 import { insert, render } from "solid-js/web"
 import { batch, createEffect, createMemo, createSignal, For, onCleanup, onMount, untrack } from "solid-js"
 import { App } from "./components/App"

@@ -368,7 +368,7 @@ export function McpAppArtifact(props: {
         if (totalBytes > MCP_APP_MAX_DOWNLOAD_BYTES) {
           throw new Error(`MCP App download exceeds ${MCP_APP_MAX_DOWNLOAD_BYTES} bytes`)
         }
-        triggerDownload(new Blob([payload], { type: mimeType }), safeFilename(uri))
+        triggerDownload(new Blob([new Uint8Array(payload).buffer], { type: mimeType }), safeFilename(uri))
       }
     }
   }

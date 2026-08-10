@@ -128,7 +128,7 @@ function useObjectURL(content: () => ConversationArtifactContent): () => string 
       setURL("")
       return
     }
-    const next = URL.createObjectURL(new Blob([value.bytes], { type: value.mediaType }))
+    const next = URL.createObjectURL(new Blob([new Uint8Array(value.bytes).buffer], { type: value.mediaType }))
     setURL(next)
     onCleanup(() => URL.revokeObjectURL(next))
   })

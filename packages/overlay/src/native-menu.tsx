@@ -1,5 +1,5 @@
-import "@fontsource-variable/geist"
-import "@fontsource-variable/noto-sans-sc"
+import "@fontsource-variable/geist/index.css"
+import "@fontsource-variable/noto-sans-sc/index.css"
 import { emitTo, listen } from "@tauri-apps/api/event"
 import { getCurrentWindow } from "@tauri-apps/api/window"
 import { For, Show, createSignal, onMount } from "solid-js"
