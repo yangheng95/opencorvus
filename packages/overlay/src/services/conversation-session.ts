@@ -356,6 +356,7 @@ export async function selectConversationSession(options: SelectConversationSessi
       restoreWorkspace: false,
       preserveSelection: true,
       selectionEpoch,
+      signal: options.signal,
     })
     if (!applied || stale()) throw new DOMException("Coding assistant selection superseded", "AbortError")
     assertNotAborted(options.signal)

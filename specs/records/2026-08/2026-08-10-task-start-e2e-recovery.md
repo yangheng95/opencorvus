@@ -141,3 +141,45 @@
 | Current packaged full Base Task chain | Passed: five terminal occurrences, exact 15-byte deliverable, Task completed, Mission inactive |
 | Current packaged project-read availability | Passed: Session config, Expert Squad, Mission Skill, and chat capability returned HTTP 200 in 3-132 ms |
 | Independent read-only review | Passed: complete diff, current package evidence, and isolated packaged replay reviewed with no unresolved finding |
+
+## Follow-up: Git initialization request settlement during Mission selection
+
+### Recall
+
+| Item | Record |
+| --- | --- |
+| User request | Diagnose why the selected Mission's message panel stayed empty, then correct the behavior after confirming that the UI had abandoned the selection on timeout. |
+| Exact failing Session | Mission Session `ses_-fe60134f5200ffffffffffffNblvG8DlV2Ezdn` in `D:\myhexin-local\demos\long-absa-task`; Chat Debug Info generated at `2026-08-10T17:23:05Z` showed the selected Session identity but no hydrated board fields or cards. |
+| Acceptance | A project Git initialization request uses the existing server-settled mutation contract; a directory switch waits for the authoritative `POST /project/current/init-git` response and can then continue to Session hydration even when settlement exceeds the ordinary request timeout; focused positive service tests and Overlay typecheck pass. |
+| Hard constraints | Do not restart or manipulate the user's running application. Do not add retry, fallback, dual state, synthetic messages, a longer arbitrary timeout, or UI automation. Preserve selection-epoch supersession and the single canonical Git initialization endpoint. Preserve unrelated dirty-worktree changes. |
+| Sources read | `AGENTS.md`; this Task-start recovery record and its non-Git-to-Git refresh follow-up; production sidecar log `2026-08-10T171642-21848-1.log`; read-only runtime DB rows; live read-only Session conversation response; `overlay/services/api.ts`; `host-transport.ts`; `project-git.ts`; `workspace.ts`; `conversation.ts`; `main.tsx`; `server/routes/project.ts`; `project/project.ts`; focused Git initialization and server-settled request tests. |
+| Repository search | `initializeProjectDirectoryGit` is the only Overlay service that calls `POST /project/current/init-git`; startup, directory switching, and the manual Git action all reuse it. `serverSettledRequest` is the existing single contract for mutations whose truthful boundary is the server response. The server route returns only after `Project.initGit` and the required active-project refresh or disposal. |
+| Independent agent feedback | The first review found that the Git initialization service could not accept an explicit caller abort signal and that the initial focused test covered only request metadata. The service and directory-switch option now propagate explicit caller cancellation, Chat selection passes its existing signal, and tests cover an actually pending request plus explicit abort. Two read-only re-reviews found no unresolved issue. |
+
+### Failure analysis
+
+- Observable failure: the selected source was visible, but `chat.title`, `chat.status`, and `chat.directory` were unset and the card tree contained zero cards.
+- Direct trigger: selecting the Mission switched to a non-Git project while automatic Git initialization was enabled. `applyDirectory` awaited `initializeProjectDirectoryGit` before loading the Session conversation.
+- Data and control-flow root cause: the Overlay transport applied its ordinary 15-second timeout to `POST /project/current/init-git`. The server correctly continued the idempotent mutation and project refresh after the client stopped waiting. The selection therefore failed before `loadConversation` could commit the board and message projection.
+- Production evidence: the Git initialization request started at `17:22:43.959Z` and returned HTTP 200 after 38,946 ms. Project-backed reads queued behind the refresh for roughly 24 seconds; the Overlay recorded `work-ledger.select-mission: signal timed out` at `17:23:13.992Z` and again at `17:23:18.466Z`. A later Session conversation request returned HTTP 200 in 23 ms.
+- Data integrity evidence: the Session remained present with 12 Message rows and 61 Part rows, and its conversation route returned a valid 130,893-byte payload. The blank panel was not data loss.
+- Why the old path did not recover: the timeout was only a client-side observation boundary. It neither cancelled nor rolled back the server mutation, and the selection path had no authoritative response from which to continue. Retrying the whole selection would be a second workflow path and is not the root fix.
+- Scope exclusions: conversation projection, persisted Session/Message/Part schemas, server Git initialization semantics, project lock scheduling, and UI rendering are already producing valid results and are not changed. The separate Task Artifact recovery warning in the same log is unrelated.
+
+### Repair design and verification plan
+
+1. Bind `initializeProjectDirectoryGit` to `serverSettledRequest`, so the canonical service waits for the server response while still honoring any future explicit caller signal.
+2. Extend the focused Git initialization service test to assert the server-settled transport contract together with the existing method, route, directory, and response assertions.
+3. Run only the focused non-UI service tests, Overlay typecheck, documentation check required by the repository, and diff hygiene checks.
+4. Obtain mandatory independent read-only review of the complete diff and evidence; resolve every valid finding and rerun affected checks before commit.
+
+### Implementation and verification
+
+- `initializeProjectDirectoryGit` now wraps its canonical POST request with `serverSettledRequest`. The route, explicit directory identity, and response contract remain unchanged; the transport settlement boundary changes from the ordinary 15-second timeout to the authoritative server response or an explicit caller abort.
+- `ApplyDirectoryOptions` now carries an optional caller-owned signal into Git initialization. Coding Chat selection propagates its existing activation signal. Mission, Task, startup, and manual project switching remain server-settled because they do not invent wall-clock or selection-epoch cancellation for a server mutation that has already started.
+- The focused service test verifies that startup and manual Git initialization send `timeoutMilliseconds: null` together with the canonical method, path, and directory, and that direct callers can preserve an explicit abort reason. Existing transport tests verify that a server-settled request stays pending without allocating a timer and settles on explicit caller abort.
+- Focused non-UI tests passed: 9 tests, 41 assertions across `git-init-current.test.ts`, `server-settled-request.test.ts`, and `tauri-transport-error-body.test.ts`.
+- Overlay typecheck passed with `tsc --noEmit`.
+- Documentation check passed with 329 operations across 25 groups.
+- Scoped `git diff --check` passed. No UI source or UI automation was added, modified, or run.
+- Independent read-only review: passed after the explicit-cancellation finding was resolved and the pending-request test was strengthened; final review found no unresolved issue.

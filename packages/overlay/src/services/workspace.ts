@@ -629,6 +629,8 @@ export async function loadDiscoveredProjects(): Promise<ProjectDiscovery> {
 // ── applyDirectory ──
 
 export interface ApplyDirectoryOptions {
+  /** Explicit caller cancellation; ordinary wall-clock time does not cancel project mutations. */
+  signal?: AbortSignal
   /** Shared selection intent that must still own boardStore.selectEpoch. */
   selectionEpoch?: number
   /**
@@ -717,7 +719,7 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
   // changing Git identity after Mission/Chat execution begins would require an
   // exclusive refresh behind their long-lived project lease.
   if (settingsStore.initGit) {
-    await initializeProjectDirectoryGit(next)
+    await initializeProjectDirectoryGit(next, { signal: options.signal })
     if (!ownsWorkspaceSelection(selectionEpoch)) return false
   }
 
