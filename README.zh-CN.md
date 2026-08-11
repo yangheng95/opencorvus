@@ -7,26 +7,48 @@
 </p>
 
 <p align="center">
-  <strong>开源的多 Agent 工作编排工具。</strong>
+  <strong>面向长程任务的开源 Agent 工作台。</strong>
 </p>
 
 <p align="center">
-  <a href="https://opencorvus.ai">官方网站</a> ·
-  <a href="https://opencorvus.ai/docs">产品文档</a> ·
-  <a href="#下载桌面安装包">下载</a> ·
-  <a href="#快速开始">快速开始</a>
+  <a href="https://opencorvus.com/zh-cn/">官方网站</a> ·
+  <a href="https://opencorvus.com/zh-cn/mission/">Mission</a> ·
+  <a href="https://opencorvus.com/zh-cn/use-with-agents/">Agent 接入</a> ·
+  <a href="https://opencorvus.com/zh-cn/market/">专家团</a> ·
+  <a href="https://opencorvus.com/zh-cn/download/">下载</a> ·
+  <a href="https://opencorvus.com/zh-cn/start/quickstart/">快速开始</a>
 </p>
 
-OpenCorvus 可以从桌面应用、超文本传输协议（Hypertext Transfer Protocol，HTTP）
-应用程序编程接口（Application Programming Interface，API）或已连接的频道运行 Agent
-工作。每个 Task 固定使用一个 Expert Squad（专家团）；如果该能力包要求工作流，则同时
-固定一张声明工作流。OpenCorvus 会记录流式执行消息、工具结果、Artifact 与完成证据。
-如果一个目标需要不同专家团或明确的依赖关系，可以由 Mission 协调多个 Task。
+OpenCorvus 让你围绕真实工作定制 Agent 工作台：连接工作区，选择需要的 Skill、工具、
+模型、已连接服务与权限规则，再配置一支可检查的专家团，而不是接受匿名 Agent 池。
+每个 Task 从首次指令到经过复核的交付，始终固定使用同一精确版本的专家团及已选工作流。
+当一个结果需要多个 Task 或专家团时，Mission 会连接它们的依赖，同时保留清晰责任。
+
+你可以从桌面应用、超文本传输协议（Hypertext Transfer Protocol，HTTP）应用程序编程
+接口（Application Programming Interface，API）或已连接的频道运行这些工作。
+OpenCorvus 会流式呈现执行过程，并让消息、工具结果、带类型的 Artifact、宿主观察、
+决策与完成证据始终可见。
 
 > [!IMPORTANT]
 > OpenCorvus 仍在开发。本 README 只描述当前仓库已有能力。输出质量取决于所选模型、
 > 可访问的数据源、已安装能力和本次运行取得的证据。无人值守任务只会在本地或托管的
 > OpenCorvus 运行时在线时执行。
+
+## 从工作台到 Mission
+
+README 与[公开主页](https://opencorvus.com/zh-cn/)描述的是同一条从配置到长程交付的路径：
+
+| 阶段                  | 由你控制                                                                         | OpenCorvus 保持明确的内容                                                  |
+| --------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| **01 · 定制工作台**   | 连接真实工作目录、文件、终端与服务，选择能力和模型，并配置允许、询问或拒绝规则。 | 一套可见的工作环境与审查界面，而不是第二个运行时对象。                     |
+| **02 · 配置专家团**   | 选择或构建可检查用途、具名角色、工作流、Skill、工具、版本与摘要的专家团。        | 一个精确能力包，而不是匿名 Agent 池。                                      |
+| **03 · 推进长程任务** | 为一项项目内交付启动 Task；当结果需要多个 Task 或专家团时使用 Mission。          | 每个 Task 固定的专家团版本、带类型的交接、依赖、生命周期决策与可审查证据。 |
+| **04 · 加入开放社区** | 封装专业知识，用开放 SDK 验证，通过源码仓库讨论和贡献。                          | 社区审查仍是发布路径的一部分；自助上架尚未开放。                           |
+
+可以从[工作台快速开始](https://opencorvus.com/zh-cn/start/quickstart/)，
+[探索专家团](https://opencorvus.com/zh-cn/market/)，了解
+[Mission 如何保留 Task 责任](https://opencorvus.com/zh-cn/mission/)，或接入
+[OpenClaw、Hermes Agent 与其他兼容宿主](https://opencorvus.com/zh-cn/use-with-agents/)。
 
 ## 核心模型
 
@@ -228,7 +250,7 @@ bun ./packages/sdk/js/script/build.ts
 
 ## 文档与贡献
 
-- 产品文档：<https://opencorvus.ai/docs>
+- 产品文档：<https://opencorvus.com/zh-cn/start/quickstart/>
 - 更新日志：[`CHANGELOG.md`](./CHANGELOG.md)
 - GitHub Action：[`github/README.md`](./github/README.md)
 - 贡献指南：[`CONTRIBUTING.md`](./CONTRIBUTING.md)
