@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-11-v0.0.40-beta-release.md](2026-08-11-v0.0.40-beta-release.md) records latest-remote integration, canonical version synchronization, reviewed source/tag publication, native release matrix, public prerelease assets, and beta updater verification for `v0.0.40-beta`.
+
 - [2026-08-11-latest-main-overlay-repackage.md](2026-08-11-latest-main-overlay-repackage.md) records the latest-main merge, Windows Expert Squad snapshot publication repair, and complete `0.0.39-beta` Overlay repackage acceptance.
 
 - [2026-08-11-scheduler-liveness-and-control-convergence.md](2026-08-11-scheduler-liveness-and-control-convergence.md) records the exact lifecycle semantic-orphan incident, three independent scheduler audits, confirmed ownership/liveness defects, shared repair invariants, and executable real-checker acceptance loop.
