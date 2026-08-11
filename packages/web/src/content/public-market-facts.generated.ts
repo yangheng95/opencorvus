@@ -947,6 +947,112 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "anti-money-laundering-compliance",
+      "version": "2026.08.11.1",
+      "digest": "b0d02298ea47ca007286d1701cc61b6517eaa832301b9ecc516f6cc90daa9986"
+    },
+    "name": "Anti-Money Laundering Compliance",
+    "label": "Anti-Money Laundering Compliance",
+    "description": "Institution-specific AML program, customer risk, monitoring, alert/case and independent-testing evidence joined for qualified review.",
+    "selectorSummary": "Use for bounded AML/CFT compliance evidence.",
+    "pillars": [
+      "code",
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "aml-program-risk-assessment-control-analyst",
+        "label": "AML Program Risk Assessment and Control Analyst",
+        "description": "Maps institution-specific applicability, enterprise risk, governance and control evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "customer-beneficial-owner-risk-review-analyst",
+        "label": "Customer and Beneficial Owner Risk Review Analyst",
+        "description": "Traces authorized CDD, beneficial-owner, relationship and ongoing risk-review evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "transaction-monitoring-alert-case-analyst",
+        "label": "Transaction Monitoring, Alert and Case Analyst",
+        "description": "Reconciles source populations, monitoring versions, alerts, cases, facts and human dispositions.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "aml-quality-testing-governance-analyst",
+        "label": "AML Quality, Independent Testing and Governance Analyst",
+        "description": "Examines monitoring quality, false-positive/negative evidence, backlog, overrides, training and independent testing.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "anti-money-laundering-compliance-review-owner",
+        "label": "Anti-Money Laundering Compliance Review Owner",
+        "description": "Joins program, customer, monitoring and testing evidence for qualified AML review.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "anti-money-laundering-compliance-review",
+        "label": "Anti-Money Laundering Compliance Review",
+        "description": "Four independent compliance evidence branches converge into an explicit review owner.",
+        "nodes": [
+          {
+            "id": "aml-program-risk-assessment-control-analyst",
+            "agentID": "aml-program-risk-assessment-control-analyst",
+            "description": "Maps institution-specific applicability, enterprise risk, governance and control evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "customer-beneficial-owner-risk-review-analyst",
+            "agentID": "customer-beneficial-owner-risk-review-analyst",
+            "description": "Traces authorized CDD, beneficial-owner, relationship and ongoing risk-review evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "transaction-monitoring-alert-case-analyst",
+            "agentID": "transaction-monitoring-alert-case-analyst",
+            "description": "Reconciles source populations, monitoring versions, alerts, cases, facts and human dispositions.",
+            "dependsOn": []
+          },
+          {
+            "id": "aml-quality-testing-governance-analyst",
+            "agentID": "aml-quality-testing-governance-analyst",
+            "description": "Examines monitoring quality, false-positive/negative evidence, backlog, overrides, training and independent testing.",
+            "dependsOn": []
+          },
+          {
+            "id": "anti-money-laundering-compliance-review-owner",
+            "agentID": "anti-money-laundering-compliance-review-owner",
+            "description": "Joins program, customer, monitoring and testing evidence for qualified AML review.",
+            "dependsOn": [
+              "aml-program-risk-assessment-control-analyst",
+              "aml-quality-testing-governance-analyst",
+              "customer-beneficial-owner-risk-review-analyst",
+              "transaction-monitoring-alert-case-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "automotive-functional-safety",
       "version": "2026.08.11.1",
       "digest": "d38ef8aae99eaaa002deb1cbde8c00b47637514451db8799283d692bf874a0e3"
@@ -1336,6 +1442,98 @@ export const generatedPublicMarketFacts = [
       "skills": 1,
       "tools": 6,
       "mcp": 17
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "battery-safety-reliability",
+      "version": "2026.08.11.1",
+      "digest": "b82cf7d6d9e3467c96bcafe2e1bd43313b4c8e6e321e4bfd88b9510616191162"
+    },
+    "name": "Battery Safety Reliability",
+    "label": "Battery Safety Reliability",
+    "description": "Cell, module, pack, operating-envelope, abuse-test, thermal-runaway, propagation, barrier, failure and reliability evidence joined for qualified review.",
+    "selectorSummary": "Use for bounded battery safety and reliability evidence without live test, BMS, damaged-battery, emergency, transport, certification, or release authority.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "battery-configuration-operating-envelope-analyst",
+        "label": "Battery Configuration and Operating-envelope Analyst",
+        "description": "Reconciles cell/module/pack genealogy, BMS/protection versions, intended use and controlled operating-envelope evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "battery-abuse-thermal-runaway-evidence-analyst",
+        "label": "Battery Abuse and Thermal-runaway Evidence Analyst",
+        "description": "Reconstructs authorized historical abuse-test conditions, instrumentation, thermal events, propagation and barrier observations.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "battery-reliability-failure-data-analyst",
+        "label": "Battery Reliability and Failure-data Analyst",
+        "description": "Defines comparable populations, exposure, failure and censoring before bounded reliability calculations and uncertainty review.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "battery-safety-reliability-review-owner",
+        "label": "Battery Safety Reliability Review Owner",
+        "description": "Joins configuration, abuse/thermal and reliability branches while preserving application-specific professional authority.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "battery-safety-reliability-review",
+        "label": "Battery Safety Reliability Review",
+        "description": "Three independent configuration, abuse/thermal and failure-reliability branches converge into a bounded review pack.",
+        "nodes": [
+          {
+            "id": "battery-configuration-operating-envelope-analyst",
+            "agentID": "battery-configuration-operating-envelope-analyst",
+            "description": "Reconciles battery genealogy, protection configuration, application and controlled envelope evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "battery-abuse-thermal-runaway-evidence-analyst",
+            "agentID": "battery-abuse-thermal-runaway-evidence-analyst",
+            "description": "Reconstructs already-authorized historical test conditions, measurements, thermal events and propagation evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "battery-reliability-failure-data-analyst",
+            "agentID": "battery-reliability-failure-data-analyst",
+            "description": "Builds comparable populations, exposure, failure/censoring and bounded reliability evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "battery-safety-reliability-review-owner",
+            "agentID": "battery-safety-reliability-review-owner",
+            "description": "Joins all branches, preserves uncertainty and routes safety, test, transport, certification and release decisions.",
+            "dependsOn": [
+              "battery-abuse-thermal-runaway-evidence-analyst",
+              "battery-configuration-operating-envelope-analyst",
+              "battery-reliability-failure-data-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
     },
     "packageOwnedCapabilities": {
       "skills": 1,
@@ -2347,6 +2545,112 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "customs-trade-compliance",
+      "version": "2026.08.11.1",
+      "digest": "ee5582e228079b11a85e706ea5b591f46f03c7ef924f762ca37f183147f6eff1"
+    },
+    "name": "Customs Trade Compliance",
+    "label": "Customs Trade Compliance",
+    "description": "Cross-border transaction, classification, origin, valuation, screening and broker-entry evidence joined for qualified trade review.",
+    "selectorSummary": "Use for bounded customs and trade-compliance evidence.",
+    "pillars": [
+      "code",
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "trade-transaction-jurisdiction-document-analyst",
+        "label": "Trade Transaction, Jurisdiction and Document Analyst",
+        "description": "Freezes cross-border transaction, parties, goods, route, dates, roles and document baseline.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "tariff-classification-product-evidence-analyst",
+        "label": "Tariff Classification and Product Evidence Analyst",
+        "description": "Builds product-fact, candidate nomenclature and ruling trace without assigning a final classification.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "origin-valuation-preference-analyst",
+        "label": "Origin, Valuation and Preference Analyst",
+        "description": "Traces BOM/process/origin evidence and customs-valuation inputs to supplied preference claims.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "restricted-party-license-entry-control-analyst",
+        "label": "Restricted Party, License and Entry Control Analyst",
+        "description": "Examines potential-match, licence/control and broker-entry reconciliation evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "customs-trade-compliance-review-owner",
+        "label": "Customs Trade Compliance Review Owner",
+        "description": "Joins transaction, classification, origin/valuation and screening/entry evidence for qualified review.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "customs-trade-compliance-review",
+        "label": "Customs Trade Compliance Review",
+        "description": "Four independent trade evidence branches converge into an explicit review owner.",
+        "nodes": [
+          {
+            "id": "trade-transaction-jurisdiction-document-analyst",
+            "agentID": "trade-transaction-jurisdiction-document-analyst",
+            "description": "Freezes cross-border transaction, parties, goods, route, dates, roles and document baseline.",
+            "dependsOn": []
+          },
+          {
+            "id": "tariff-classification-product-evidence-analyst",
+            "agentID": "tariff-classification-product-evidence-analyst",
+            "description": "Builds product-fact, candidate nomenclature and ruling trace without assigning a final classification.",
+            "dependsOn": []
+          },
+          {
+            "id": "origin-valuation-preference-analyst",
+            "agentID": "origin-valuation-preference-analyst",
+            "description": "Traces BOM/process/origin evidence and customs-valuation inputs to supplied preference claims.",
+            "dependsOn": []
+          },
+          {
+            "id": "restricted-party-license-entry-control-analyst",
+            "agentID": "restricted-party-license-entry-control-analyst",
+            "description": "Examines potential-match, licence/control and broker-entry reconciliation evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "customs-trade-compliance-review-owner",
+            "agentID": "customs-trade-compliance-review-owner",
+            "description": "Joins transaction, classification, origin/valuation and screening/entry evidence for qualified review.",
+            "dependsOn": [
+              "origin-valuation-preference-analyst",
+              "restricted-party-license-entry-control-analyst",
+              "tariff-classification-product-evidence-analyst",
+              "trade-transaction-jurisdiction-document-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "cybersecurity-assurance",
       "version": "2026.08.10.1",
       "digest": "00c7cef0ffd9cf21cd296af67fd0c6a2484fff3ce237c721cf1e48ba50bccd5e"
@@ -2781,6 +3085,112 @@ export const generatedPublicMarketFacts = [
     },
     "packageOwnedCapabilities": {
       "skills": 2,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "digital-forensics-incident-investigation",
+      "version": "2026.08.11.1",
+      "digest": "b236053e9843e9250c49030addb0c43cbb891a7ad78292f9bf26271941c8f25b"
+    },
+    "name": "Digital Forensics Incident Investigation",
+    "label": "Digital Forensics Incident Investigation",
+    "description": "Authorized digital-evidence preservation, endpoint and cloud artifacts, timeline and hypothesis evidence joined for qualified DFIR review.",
+    "selectorSummary": "Use for bounded digital-forensics incident evidence without live acquisition, containment or attribution.",
+    "pillars": [
+      "code",
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "digital-evidence-authority-preservation-analyst",
+        "label": "Digital Evidence Authority and Preservation Analyst",
+        "description": "Freezes investigation authority, matter scope, legal hold, systems, custodians, permitted methods and evidence custody.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "endpoint-memory-disk-artifact-analyst",
+        "label": "Endpoint, Memory and Disk Artifact Analyst",
+        "description": "Examines supplied endpoint, memory-image and disk-image artifact observations with tool and parser provenance.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "network-cloud-identity-artifact-analyst",
+        "label": "Network, Cloud and Identity Artifact Analyst",
+        "description": "Correlates supplied network, cloud-audit and identity artifacts across accounts, devices, sessions and services.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "incident-timeline-hypothesis-corroboration-analyst",
+        "label": "Incident Timeline, Hypothesis and Corroboration Analyst",
+        "description": "Builds a normalized, source-preserving event timeline and tests competing incident hypotheses.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "digital-forensics-incident-evidence-owner",
+        "label": "Digital Forensics Incident Evidence Owner",
+        "description": "Joins authority, endpoint, distributed artifacts and timeline hypotheses into a contradiction-preserving review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "digital-forensics-incident-review",
+        "label": "Digital Forensics Incident Investigation Review",
+        "description": "Four independent evidence roots converge into an explicit qualified-review owner.",
+        "nodes": [
+          {
+            "id": "digital-evidence-authority-preservation-analyst",
+            "agentID": "digital-evidence-authority-preservation-analyst",
+            "description": "Freezes investigation authority, matter scope, legal hold, systems, custodians, permitted methods and evidence custody.",
+            "dependsOn": []
+          },
+          {
+            "id": "endpoint-memory-disk-artifact-analyst",
+            "agentID": "endpoint-memory-disk-artifact-analyst",
+            "description": "Examines supplied endpoint, memory-image and disk-image artifact observations with tool and parser provenance.",
+            "dependsOn": []
+          },
+          {
+            "id": "network-cloud-identity-artifact-analyst",
+            "agentID": "network-cloud-identity-artifact-analyst",
+            "description": "Correlates supplied network, cloud-audit and identity artifacts across accounts, devices, sessions and services.",
+            "dependsOn": []
+          },
+          {
+            "id": "incident-timeline-hypothesis-corroboration-analyst",
+            "agentID": "incident-timeline-hypothesis-corroboration-analyst",
+            "description": "Builds a normalized, source-preserving event timeline and tests competing incident hypotheses.",
+            "dependsOn": []
+          },
+          {
+            "id": "digital-forensics-incident-evidence-owner",
+            "agentID": "digital-forensics-incident-evidence-owner",
+            "description": "Joins authority, endpoint, distributed artifacts and timeline hypotheses into a contradiction-preserving review pack.",
+            "dependsOn": [
+              "digital-evidence-authority-preservation-analyst",
+              "endpoint-memory-disk-artifact-analyst",
+              "incident-timeline-hypothesis-corroboration-analyst",
+              "network-cloud-identity-artifact-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
       "tools": 0,
       "mcp": 0
     },
@@ -3748,6 +4158,112 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "forestry-wildfire-resource-management",
+      "version": "2026.08.11.1",
+      "digest": "a1705ef94736c093c0e09b0cf236ebd92ad2f8979c2bba1cc271adb9eb813bb1"
+    },
+    "name": "Forestry Wildfire Resource Management",
+    "label": "Forestry Wildfire Resource Management",
+    "description": "Forest inventory, fuels and wildfire risk, treatment scenarios and post-fire resource evidence joined for qualified review.",
+    "selectorSummary": "Use for bounded forestry and wildfire resource-management evidence.",
+    "pillars": [
+      "code",
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "forest-inventory-condition-trend-analyst",
+        "label": "Forest Inventory, Condition and Trend Analyst",
+        "description": "Reconciles forest planning-unit, plot/stand, species, structure, health and change evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "wildfire-hazard-exposure-fuels-analyst",
+        "label": "Wildfire Hazard, Fuel and Exposure Analyst",
+        "description": "Traces supplied vegetation, fuel, topography, weather/climate and exposure datasets to bounded hazard evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "forest-treatment-scenario-tradeoff-analyst",
+        "label": "Forest Treatment Scenario and Tradeoff Analyst",
+        "description": "Compares supplied forest/fuel treatment scenarios across ecological, social, operational and cost objectives.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "wildfire-monitoring-burn-severity-recovery-analyst",
+        "label": "Wildfire Monitoring, Burn Severity and Recovery Analyst",
+        "description": "Organizes non-tactical fire observations, perimeter/burn-severity products and post-fire resource monitoring.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "forestry-wildfire-resource-management-review-owner",
+        "label": "Forestry Wildfire Resource Management Review Owner",
+        "description": "Joins inventory, hazard/exposure, treatment and post-fire evidence for qualified resource-management decisions.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "forestry-wildfire-resource-management-review",
+        "label": "Forestry Wildfire Resource Management Review",
+        "description": "Four independent resource evidence branches converge into an explicit review owner.",
+        "nodes": [
+          {
+            "id": "forest-inventory-condition-trend-analyst",
+            "agentID": "forest-inventory-condition-trend-analyst",
+            "description": "Reconciles forest planning-unit, plot/stand, species, structure, health and change evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "wildfire-hazard-exposure-fuels-analyst",
+            "agentID": "wildfire-hazard-exposure-fuels-analyst",
+            "description": "Traces supplied vegetation, fuel, topography, weather/climate and exposure datasets to bounded hazard evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "forest-treatment-scenario-tradeoff-analyst",
+            "agentID": "forest-treatment-scenario-tradeoff-analyst",
+            "description": "Compares supplied forest/fuel treatment scenarios across ecological, social, operational and cost objectives.",
+            "dependsOn": []
+          },
+          {
+            "id": "wildfire-monitoring-burn-severity-recovery-analyst",
+            "agentID": "wildfire-monitoring-burn-severity-recovery-analyst",
+            "description": "Organizes non-tactical fire observations, perimeter/burn-severity products and post-fire resource monitoring.",
+            "dependsOn": []
+          },
+          {
+            "id": "forestry-wildfire-resource-management-review-owner",
+            "agentID": "forestry-wildfire-resource-management-review-owner",
+            "description": "Joins inventory, hazard/exposure, treatment and post-fire evidence for qualified resource-management decisions.",
+            "dependsOn": [
+              "forest-inventory-condition-trend-analyst",
+              "forest-treatment-scenario-tradeoff-analyst",
+              "wildfire-hazard-exposure-fuels-analyst",
+              "wildfire-monitoring-burn-severity-recovery-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "frontend-innovate",
       "version": "2026.08.07.1",
       "digest": "4d1cd768638f4a2476274af574cc015289d08e5962ab63391f6fddb3cd1558b2"
@@ -4592,6 +5108,98 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "industrial-hygiene-exposure-assessment",
+      "version": "2026.08.11.1",
+      "digest": "160a7b627c5f0f418260ef78466496ea2252a96d441d09136fa5385b5ebb2513"
+    },
+    "name": "Industrial Hygiene Exposure Assessment",
+    "label": "Industrial Hygiene Exposure Assessment",
+    "description": "Worker, agent, similar-exposure-group, sampling, analytical-quality, exposure-limit, and control evidence joined for qualified industrial-hygiene review.",
+    "selectorSummary": "Use for bounded workplace exposure-assessment evidence without site, medical, PPE-selection, compliance, or reporting authority.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "industrial-hygiene-scope-exposure-group-analyst",
+        "label": "Industrial Hygiene Scope and Exposure-group Analyst",
+        "description": "Builds the worker, task, agent, route, shift, and similar-exposure-group evidence spine.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "industrial-hygiene-sampling-analytical-qa-analyst",
+        "label": "Industrial Hygiene Sampling and Analytical QA Analyst",
+        "description": "Reconciles sample identity, method, calibration, blanks, laboratory results, units, censoring, and uncertainty.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "industrial-hygiene-exposure-control-evidence-analyst",
+        "label": "Industrial Hygiene Exposure and Control Evidence Analyst",
+        "description": "Calculates compatible exposure measures and maps engineering, work-practice, administrative, and respiratory-program evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "industrial-hygiene-exposure-assessment-review-owner",
+        "label": "Industrial Hygiene Exposure Assessment Review Owner",
+        "description": "Joins three independent evidence branches and routes all exposure, control, medical, and compliance decisions to qualified humans.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "industrial-hygiene-exposure-assessment-review",
+        "label": "Industrial Hygiene Exposure Assessment Review",
+        "description": "Three independent scope, measurement, and exposure-control branches converge into a bounded qualified-review pack.",
+        "nodes": [
+          {
+            "id": "industrial-hygiene-scope-exposure-group-analyst",
+            "agentID": "industrial-hygiene-scope-exposure-group-analyst",
+            "description": "Builds the agent, task, worker, route, shift, and similar-exposure-group evidence spine.",
+            "dependsOn": []
+          },
+          {
+            "id": "industrial-hygiene-sampling-analytical-qa-analyst",
+            "agentID": "industrial-hygiene-sampling-analytical-qa-analyst",
+            "description": "Reconciles sampling design, custody, calibration, laboratory QA, units, detection limits, and uncertainty.",
+            "dependsOn": []
+          },
+          {
+            "id": "industrial-hygiene-exposure-control-evidence-analyst",
+            "agentID": "industrial-hygiene-exposure-control-evidence-analyst",
+            "description": "Calculates only compatible exposure measures and maps supplied control and respiratory-program evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "industrial-hygiene-exposure-assessment-review-owner",
+            "agentID": "industrial-hygiene-exposure-assessment-review-owner",
+            "description": "Joins all three branches, preserves contradictions and unknowns, and routes professional decisions.",
+            "dependsOn": [
+              "industrial-hygiene-exposure-control-evidence-analyst",
+              "industrial-hygiene-sampling-analytical-qa-analyst",
+              "industrial-hygiene-scope-exposure-group-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "insurance-claims-operations",
       "version": "2026.08.11.1",
       "digest": "aac9706463bf091bf9fd2fa7c1d8ff1d1118fecc102c4e952cd0c86070b77db1"
@@ -5373,6 +5981,98 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "materials-failure-analysis",
+      "version": "2026.08.11.1",
+      "digest": "a5dfe96014ebbf83871af2330f40fe36e342f2ac58232844c1b2a1a29e4777d7"
+    },
+    "name": "Materials Failure Analysis",
+    "label": "Materials Failure Analysis",
+    "description": "Physical-component custody, service history, fracture-surface, material-characterization, load, environment, mechanics and competing-hypothesis evidence joined for qualified review.",
+    "selectorSummary": "Use for bounded physical materials-failure evidence without touching evidence, destructive testing, root-cause, liability, fitness, disposition, recall, or return-to-service authority.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "materials-failure-evidence-custody-history-analyst",
+        "label": "Materials Failure Evidence, Custody and History Analyst",
+        "description": "Freezes failed-component identity, as-received condition, evidence custody, design/manufacturing and service chronology.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "materials-fractography-characterization-analyst",
+        "label": "Materials Fractography and Characterization Analyst",
+        "description": "Maps supplied fracture-origin/morphology, metallography, composition, hardness and mechanical-test evidence with uncertainty.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "materials-load-environment-mechanics-analyst",
+        "label": "Materials Load, Environment and Mechanics Analyst",
+        "description": "Reconciles service loads, geometry, environment and bounded mechanics calculations into competing failure hypotheses.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "materials-failure-analysis-review-owner",
+        "label": "Materials Failure Analysis Review Owner",
+        "description": "Joins custody/history, characterization and mechanics evidence while preserving competing hypotheses and professional authority.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "materials-failure-analysis-review",
+        "label": "Materials Failure Analysis Review",
+        "description": "Three independent custody/history, characterization and mechanics branches converge into a bounded failure-evidence pack.",
+        "nodes": [
+          {
+            "id": "materials-failure-evidence-custody-history-analyst",
+            "agentID": "materials-failure-evidence-custody-history-analyst",
+            "description": "Freezes failed-component identity, as-received evidence, custody and service/design/manufacturing history.",
+            "dependsOn": []
+          },
+          {
+            "id": "materials-fractography-characterization-analyst",
+            "agentID": "materials-fractography-characterization-analyst",
+            "description": "Maps fracture surfaces and material characterization evidence with method and uncertainty.",
+            "dependsOn": []
+          },
+          {
+            "id": "materials-load-environment-mechanics-analyst",
+            "agentID": "materials-load-environment-mechanics-analyst",
+            "description": "Reconciles load, geometry, environment and bounded mechanics into competing hypotheses.",
+            "dependsOn": []
+          },
+          {
+            "id": "materials-failure-analysis-review-owner",
+            "agentID": "materials-failure-analysis-review-owner",
+            "description": "Joins all branches, preserves contradictions and alternative hypotheses, and routes professional decisions.",
+            "dependsOn": [
+              "materials-failure-evidence-custody-history-analyst",
+              "materials-fractography-characterization-analyst",
+              "materials-load-environment-mechanics-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "media-rights-clearance",
       "version": "2026.08.11.1",
       "digest": "599b1dda590616d575144b3111a6c0c3ebd1f18c88c7bb0d9d965756131c2ad6"
@@ -5442,6 +6142,111 @@ export const generatedPublicMarketFacts = [
               "media-asset-rights-inventory-analyst",
               "media-intended-use-risk-analyst",
               "media-license-release-terms-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "medical-imaging-quality-assurance",
+      "version": "2026.08.11.1",
+      "digest": "d1386b21f1921c2d874c418eefdce256978490865380423de0263a83496f9131"
+    },
+    "name": "Medical Imaging Quality Assurance",
+    "label": "Medical Imaging Quality Assurance",
+    "description": "Evidence-bounded imaging equipment, protocol, phantom QC, DICOM workflow, display, dose-index, and nonconformance review without clinical or system-operation authority.",
+    "selectorSummary": "Use for source-bound medical-imaging QA evidence and qualified review preparation.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "imaging-equipment-protocol-configuration-analyst",
+        "label": "Imaging Equipment Protocol Configuration Analyst",
+        "description": "Reconciles device, detector, software, protocol, and approved baseline evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "imaging-phantom-technical-qc-analyst",
+        "label": "Imaging Phantom Technical QC Analyst",
+        "description": "Traces phantom procedures, technical measurements, calculations, tolerances, and uncertainty.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "dicom-data-display-workflow-integrity-analyst",
+        "label": "DICOM Data Display Workflow Integrity Analyst",
+        "description": "Reconciles minimized DICOM identity, transfer, storage, derived-output, and display-chain evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "imaging-dose-nonconformance-trend-analyst",
+        "label": "Imaging Dose Nonconformance Trend Analyst",
+        "description": "Traces modality dose-index context, nonconformance, service, retest, CAPA, and trend evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "medical-imaging-quality-assurance-review-owner",
+        "label": "Medical Imaging Quality Assurance Review Owner",
+        "description": "Joins all four branches into a qualified-review pack while preserving clinical and operational decisions.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "medical-imaging-quality-assurance-review",
+        "label": "Medical Imaging Quality Assurance Review",
+        "description": "Four independent imaging QA evidence branches converge into one controlled review.",
+        "nodes": [
+          {
+            "id": "imaging-equipment-protocol-configuration-analyst",
+            "agentID": "imaging-equipment-protocol-configuration-analyst",
+            "description": "Reconciles equipment, protocol, and configuration baselines.",
+            "dependsOn": []
+          },
+          {
+            "id": "imaging-phantom-technical-qc-analyst",
+            "agentID": "imaging-phantom-technical-qc-analyst",
+            "description": "Traces phantom QC measurements and uncertainty.",
+            "dependsOn": []
+          },
+          {
+            "id": "dicom-data-display-workflow-integrity-analyst",
+            "agentID": "dicom-data-display-workflow-integrity-analyst",
+            "description": "Reconciles DICOM and display-chain integrity evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "imaging-dose-nonconformance-trend-analyst",
+            "agentID": "imaging-dose-nonconformance-trend-analyst",
+            "description": "Traces dose-index, nonconformance, service, CAPA, and trends.",
+            "dependsOn": []
+          },
+          {
+            "id": "medical-imaging-quality-assurance-review-owner",
+            "agentID": "medical-imaging-quality-assurance-review-owner",
+            "description": "Joins all evidence without clinical, operational, return-to-service, or accreditation authority.",
+            "dependsOn": [
+              "dicom-data-display-workflow-integrity-analyst",
+              "imaging-dose-nonconformance-trend-analyst",
+              "imaging-equipment-protocol-configuration-analyst",
+              "imaging-phantom-technical-qc-analyst"
             ]
           }
         ]
@@ -6839,6 +7644,98 @@ export const generatedPublicMarketFacts = [
             "dependsOn": [
               "product-video-narrative-producer",
               "product-video-visual-planner"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "public-health-surveillance",
+      "version": "2026.08.11.1",
+      "digest": "4942f06c8a614eeb176d67e248fa0bd2c09078a86266f8ed122ceeb73b069e8e"
+    },
+    "name": "Public Health Surveillance",
+    "label": "Public Health Surveillance",
+    "description": "Evidence-bounded surveillance-system, case-definition, data-quality, epidemiologic trend, and multi-indicator review without case classification or public-health action authority.",
+    "selectorSummary": "Use for source-bound public-health surveillance evidence and qualified review preparation.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "surveillance-system-case-definition-data-quality-analyst",
+        "label": "Surveillance System Case Definition Data Quality Analyst",
+        "description": "Traces surveillance scope, population, case-definition versions, record lineage, completeness, timeliness, and representativeness evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "surveillance-measure-trend-signal-analyst",
+        "label": "Surveillance Measure Trend Signal Analyst",
+        "description": "Produces reproducible descriptive measures, trends, baselines, and analytic signal questions without declaring clusters or outbreaks.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "laboratory-genomic-indicator-integration-analyst",
+        "label": "Laboratory Genomic Indicator Integration Analyst",
+        "description": "Links laboratory, genomic, syndromic, mortality, and other indicators through compatible definitions, denominators, and reporting lags.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "public-health-surveillance-review-owner",
+        "label": "Public Health Surveillance Review Owner",
+        "description": "Joins system-quality, trend, and indicator branches into a qualified-review pack while preserving unresolved public-health decisions.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "public-health-surveillance-review",
+        "label": "Public Health Surveillance Review",
+        "description": "Three independent surveillance evidence branches converge into one controlled review.",
+        "nodes": [
+          {
+            "id": "surveillance-system-case-definition-data-quality-analyst",
+            "agentID": "surveillance-system-case-definition-data-quality-analyst",
+            "description": "Traces system scope, definitions, record lineage, completeness, timeliness, and representativeness.",
+            "dependsOn": []
+          },
+          {
+            "id": "surveillance-measure-trend-signal-analyst",
+            "agentID": "surveillance-measure-trend-signal-analyst",
+            "description": "Builds descriptive measures, trend comparisons, and analytic signal questions.",
+            "dependsOn": []
+          },
+          {
+            "id": "laboratory-genomic-indicator-integration-analyst",
+            "agentID": "laboratory-genomic-indicator-integration-analyst",
+            "description": "Links source-bound laboratory, genomic, syndromic, and other indicators.",
+            "dependsOn": []
+          },
+          {
+            "id": "public-health-surveillance-review-owner",
+            "agentID": "public-health-surveillance-review-owner",
+            "description": "Joins all branches without case, outbreak, alert, reporting, or intervention authority.",
+            "dependsOn": [
+              "laboratory-genomic-indicator-integration-analyst",
+              "surveillance-measure-trend-signal-analyst",
+              "surveillance-system-case-definition-data-quality-analyst"
             ]
           }
         ]
@@ -8777,6 +9674,111 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "veterinary-care-operations",
+      "version": "2026.08.11.1",
+      "digest": "4a29f61afc3311b0638b2d8459498ce7a7ab75455f8d82b6c27b87fe2e6fa2f1"
+    },
+    "name": "Veterinary Care Operations",
+    "label": "Veterinary Care Operations",
+    "description": "Evidence-bounded veterinary episode, order, medication, procedure, anesthesia, recovery, inventory, biosecurity, and client-follow-up review without clinical authority.",
+    "selectorSummary": "Use for source-bound veterinary care-operations evidence and qualified review.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "veterinary-patient-intake-care-pathway-analyst",
+        "label": "Veterinary Patient Intake Care Pathway Analyst",
+        "description": "Reconciles animal, client authorization, episode, observation, veterinarian-supplied pathway, handoff, and disposition evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "veterinary-order-medication-procedure-trace-analyst",
+        "label": "Veterinary Order Medication Procedure Trace Analyst",
+        "description": "Traces signed diagnostics, medication, dispensing, administration, procedure, specimen, result, and variance evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "veterinary-anesthesia-monitoring-recovery-analyst",
+        "label": "Veterinary Anesthesia Monitoring Recovery Analyst",
+        "description": "Traces approved-plan, consent, equipment, monitoring, intervention-record, recovery, and handoff evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "veterinary-inventory-biosecurity-client-followup-analyst",
+        "label": "Veterinary Inventory Biosecurity Client Followup Analyst",
+        "description": "Reconciles inventory, cold-chain, biosecurity, and signed-instruction client-follow-up evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "veterinary-care-operations-review-owner",
+        "label": "Veterinary Care Operations Review Owner",
+        "description": "Joins four branches into a qualified-review pack while preserving all veterinary and authority decisions.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "veterinary-care-operations-review",
+        "label": "Veterinary Care Operations Review",
+        "description": "Four independent veterinary operations evidence branches converge into one controlled review.",
+        "nodes": [
+          {
+            "id": "veterinary-patient-intake-care-pathway-analyst",
+            "agentID": "veterinary-patient-intake-care-pathway-analyst",
+            "description": "Traces patient, episode, intake, and supplied care-pathway evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "veterinary-order-medication-procedure-trace-analyst",
+            "agentID": "veterinary-order-medication-procedure-trace-analyst",
+            "description": "Traces orders, medication, diagnostics, and procedures.",
+            "dependsOn": []
+          },
+          {
+            "id": "veterinary-anesthesia-monitoring-recovery-analyst",
+            "agentID": "veterinary-anesthesia-monitoring-recovery-analyst",
+            "description": "Traces anesthesia, monitoring, recovery, and handoff.",
+            "dependsOn": []
+          },
+          {
+            "id": "veterinary-inventory-biosecurity-client-followup-analyst",
+            "agentID": "veterinary-inventory-biosecurity-client-followup-analyst",
+            "description": "Traces inventory, cold-chain, biosecurity, and client follow-up.",
+            "dependsOn": []
+          },
+          {
+            "id": "veterinary-care-operations-review-owner",
+            "agentID": "veterinary-care-operations-review-owner",
+            "description": "Joins all evidence without diagnosis, treatment, care, authority, inventory, or communication decisions.",
+            "dependsOn": [
+              "veterinary-anesthesia-monitoring-recovery-analyst",
+              "veterinary-inventory-biosecurity-client-followup-analyst",
+              "veterinary-order-medication-procedure-trace-analyst",
+              "veterinary-patient-intake-care-pathway-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "viral-content",
       "version": "2026.08.10.1",
       "digest": "a9dd1f81c5c0617f34d2117e37b9654975b295495e2950ce62d186c927cd37d4"
@@ -9092,6 +10094,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/anti-money-laundering-compliance",
+    "namespace": "builtin",
+    "id": "anti-money-laundering-compliance",
+    "label": "Anti-Money Laundering Compliance",
+    "version": "2026.08.11.1",
+    "packageDigest": "b0d02298ea47ca007286d1701cc61b6517eaa832301b9ecc516f6cc90daa9986",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "anti-money-laundering-compliance/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/automotive-functional-safety",
     "namespace": "builtin",
     "id": "automotive-functional-safety",
@@ -9141,6 +10160,23 @@ export const generatedShippedSquadFacts = [
     ],
     "agentCount": 6,
     "workflowCount": 3
+  },
+  {
+    "identity": "builtin/battery-safety-reliability",
+    "namespace": "builtin",
+    "id": "battery-safety-reliability",
+    "label": "Battery Safety Reliability",
+    "version": "2026.08.11.1",
+    "packageDigest": "b82cf7d6d9e3467c96bcafe2e1bd43313b4c8e6e321e4bfd88b9510616191162",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "battery-safety-reliability/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
   },
   {
     "identity": "builtin/biopharmaceutical-manufacturing-quality",
@@ -9315,6 +10351,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/customs-trade-compliance",
+    "namespace": "builtin",
+    "id": "customs-trade-compliance",
+    "label": "Customs Trade Compliance",
+    "version": "2026.08.11.1",
+    "packageDigest": "ee5582e228079b11a85e706ea5b591f46f03c7ef924f762ca37f183147f6eff1",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "customs-trade-compliance/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/cybersecurity-assurance",
     "namespace": "builtin",
     "id": "cybersecurity-assurance",
@@ -9384,6 +10437,23 @@ export const generatedShippedSquadFacts = [
       "deep-research/shared/workflow"
     ],
     "agentCount": 6,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/digital-forensics-incident-investigation",
+    "namespace": "builtin",
+    "id": "digital-forensics-incident-investigation",
+    "label": "Digital Forensics Incident Investigation",
+    "version": "2026.08.11.1",
+    "packageDigest": "b236053e9843e9250c49030addb0c43cbb891a7ad78292f9bf26271941c8f25b",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "digital-forensics-incident-investigation/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {
@@ -9542,6 +10612,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/forestry-wildfire-resource-management",
+    "namespace": "builtin",
+    "id": "forestry-wildfire-resource-management",
+    "label": "Forestry Wildfire Resource Management",
+    "version": "2026.08.11.1",
+    "packageDigest": "a1705ef94736c093c0e09b0cf236ebd92ad2f8979c2bba1cc271adb9eb813bb1",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "forestry-wildfire-resource-management/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/frontend-innovate",
     "namespace": "builtin",
     "id": "frontend-innovate",
@@ -9643,6 +10730,23 @@ export const generatedShippedSquadFacts = [
       "hr-operations/shared/workflow"
     ],
     "agentCount": 7,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/industrial-hygiene-exposure-assessment",
+    "namespace": "builtin",
+    "id": "industrial-hygiene-exposure-assessment",
+    "label": "Industrial Hygiene Exposure Assessment",
+    "version": "2026.08.11.1",
+    "packageDigest": "160a7b627c5f0f418260ef78466496ea2252a96d441d09136fa5385b5ebb2513",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "industrial-hygiene-exposure-assessment/shared/method"
+    ],
+    "agentCount": 4,
     "workflowCount": 1
   },
   {
@@ -9784,6 +10888,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/materials-failure-analysis",
+    "namespace": "builtin",
+    "id": "materials-failure-analysis",
+    "label": "Materials Failure Analysis",
+    "version": "2026.08.11.1",
+    "packageDigest": "a5dfe96014ebbf83871af2330f40fe36e342f2ac58232844c1b2a1a29e4777d7",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "materials-failure-analysis/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/media-rights-clearance",
     "namespace": "builtin",
     "id": "media-rights-clearance",
@@ -9798,6 +10919,23 @@ export const generatedShippedSquadFacts = [
       "media-rights-clearance/shared/method"
     ],
     "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/medical-imaging-quality-assurance",
+    "namespace": "builtin",
+    "id": "medical-imaging-quality-assurance",
+    "label": "Medical Imaging Quality Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "d1386b21f1921c2d874c418eefdce256978490865380423de0263a83496f9131",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "medical-imaging-quality-assurance/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {
@@ -10038,6 +11176,23 @@ export const generatedShippedSquadFacts = [
     ],
     "packageSkillRefs": [
       "product-video/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/public-health-surveillance",
+    "namespace": "builtin",
+    "id": "public-health-surveillance",
+    "label": "Public Health Surveillance",
+    "version": "2026.08.11.1",
+    "packageDigest": "4942f06c8a614eeb176d67e248fa0bd2c09078a86266f8ed122ceeb73b069e8e",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "public-health-surveillance/shared/method"
     ],
     "agentCount": 4,
     "workflowCount": 1
@@ -10335,6 +11490,23 @@ export const generatedShippedSquadFacts = [
     ],
     "packageSkillRefs": [
       "urban-mobility-transport-planning/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/veterinary-care-operations",
+    "namespace": "builtin",
+    "id": "veterinary-care-operations",
+    "label": "Veterinary Care Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "4a29f61afc3311b0638b2d8459498ce7a7ab75455f8d82b6c27b87fe2e6fa2f1",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "veterinary-care-operations/shared/method"
     ],
     "agentCount": 5,
     "workflowCount": 1

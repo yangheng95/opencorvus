@@ -39,9 +39,9 @@ test("full production HTTP bootstrap installs every repository-hosted Expert Squ
     }
 
     expect(result).toEqual({
-      payloadCount: 75,
-      installedByDefault: 75,
-      requestCount: 9,
+      payloadCount: 85,
+      installedByDefault: 85,
+      requestCount: 10,
       activeSquadID: "base",
       removedID: "academic-paper-review",
       removedDisposition: "removed",

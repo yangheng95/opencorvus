@@ -491,6 +491,10 @@ button.primary-action {
   border-top: 2px solid var(--ink);
 }
 
+.market-results {
+  counter-reset: market-record;
+}
+
 .featured-squad,
 .market-record {
   position: relative;
@@ -1054,6 +1058,7 @@ button.primary-action {
 }
 
 .market-record {
+  counter-increment: market-record;
   grid-template-columns: 54px 1.04fr minmax(300px, 1fr) 170px;
   gap: 28px;
   min-height: 166px;
@@ -1062,6 +1067,7 @@ button.primary-action {
 }
 
 .market-record::before {
+  content: counter(market-record, decimal-leading-zero);
   align-self: stretch;
   display: grid;
   place-items: center;
@@ -1071,14 +1077,22 @@ button.primary-action {
   font-size: 11px;
 }
 
-.market-record:nth-child(1)::before { content: "01"; }
-.market-record:nth-child(2)::before { content: "02"; }
-.market-record:nth-child(3)::before { content: "03"; }
-.market-record:nth-child(4)::before { content: "04"; }
-.market-record:nth-child(5)::before { content: "05"; }
-
 .market-record[hidden] {
   display: none;
+}
+
+.market-record-copy,
+.market-record > p,
+.market-record > .record-meta {
+  min-width: 0;
+}
+
+.market-record .squad-identity {
+  overflow-wrap: anywhere;
+}
+
+.market-record h2 {
+  overflow-wrap: break-word;
 }
 
 .market-record-copy .selector-line {
