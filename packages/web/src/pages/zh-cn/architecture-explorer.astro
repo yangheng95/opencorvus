@@ -1,5 +1,9 @@
 ---
 import EnterpriseArchitectureExplorer from "../../components/EnterpriseArchitectureExplorer.astro"
+import config from "../../../config.mjs"
+
+const englishUrl = new URL("/architecture-explorer/", config.url).href
+const chineseUrl = new URL("/zh-cn/architecture-explorer/", config.url).href
 ---
 
 <!doctype html>
@@ -7,6 +11,9 @@ import EnterpriseArchitectureExplorer from "../../components/EnterpriseArchitect
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="alternate" hreflang="en" href={englishUrl} />
+    <link rel="alternate" hreflang="zh-CN" href={chineseUrl} />
+    <link rel="alternate" hreflang="x-default" href={englishUrl} />
     <title>OpenCorvus 企业级架构工作台</title>
     <meta
       name="description"

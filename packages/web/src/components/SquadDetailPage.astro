@@ -1,14 +1,17 @@
 ---
 import PublicSiteLayout from "./PublicSiteLayout.astro"
 import WorkflowTopology from "./WorkflowTopology.astro"
-import { publicPath, type PublicLocale, type PublicSquadRecord } from "../content/public-market"
+import { publicPath, segmentPublicMarketText, type PublicLocale, type PublicSquadRecord } from "../content/public-market"
 
 const { locale, record } = Astro.props as { locale: PublicLocale; record: PublicSquadRecord }
 const detailPath = `/market/${record.identity.namespace}/${record.identity.id}/`
+const displayedPillars = record.pillars
+  .map((pillar) => (locale === "zh-cn" ? { code: "代码与产品", work: "知识与业务" }[pillar] : pillar))
+  .join(" + ")
 const copy =
   locale === "zh-cn"
     ? {
-        title: `${record.label} · 专家团市场 · OpenCorvus`,
+        title: `${record.displayLabel[locale]} · 专家团市场 · OpenCorvus`,
         description: record.description[locale],
         languageHref: publicPath("root", detailPath),
         eyebrow: "使用前检查团队",
@@ -29,10 +32,10 @@ const copy =
         overviewTitle: "适合什么工作",
         overviewBody: record.selectorSummary[locale],
         facts: [
-          ["产品支柱", record.pillars.join(" + ")],
+          ["产品支柱", displayedPillars],
           ["Agent 阵容", `${record.agents.length} 个声明角色`],
           ["声明工作流", `${record.workflows.length} 条完整职责与依赖图`],
-          ["完整能力投影", `${record.projectedCapabilities.skills} Skills · ${record.projectedCapabilities.tools} tools · ${record.projectedCapabilities.mcp} MCP refs`],
+          ["完整能力投影", `${record.projectedCapabilities.skills} 项 Skill · ${record.projectedCapabilities.tools} 项工具 · ${record.projectedCapabilities.mcp} 项 MCP 引用`],
         ],
         agentsTitle: "职责在运行前就已经声明",
         agentsBody: "以下阵容来自这一精确能力包。每个 Agent 的身份与基础角色都会进入实际运行；头像、评分或人设不参与选择。",
@@ -65,16 +68,16 @@ const copy =
         ],
         dialogTitle: "安装 handoff 的责任边界",
         dialogBody: "真正的 scope 选择发生在后续执行导入的 OpenCorvus 客户端。这里仅解释 project/global 的不同，不会自行提交安装。",
-        projectScope: "Project scope",
+        projectScope: "项目 scope",
         projectScopeBody: "只在当前项目目录生效；同 ID 的项目安装覆盖 global 版本。",
-        globalScope: "User-global scope",
+        globalScope: "用户全局 scope",
         globalScopeBody: "对当前用户目录可用，但不会自动覆盖项目安装。",
         noBridge: "当前公开网页只完成签名资源包下载，不提供自动批量安装或激活。scope 说明用于解释客户端责任，不是可提交的网页表单。",
         close: "关闭",
         guide: "阅读发布与安装边界",
       }
     : {
-        title: `${record.label} · Expert Squad market · OpenCorvus`,
+        title: `${record.displayLabel[locale]} · Expert Squad market · OpenCorvus`,
         description: record.description[locale],
         languageHref: publicPath("zh-cn", detailPath),
         eyebrow: "Inspect the team before use",
@@ -95,7 +98,7 @@ const copy =
         overviewTitle: "When to choose this team",
         overviewBody: record.selectorSummary[locale],
         facts: [
-          ["Product pillars", record.pillars.join(" + ")],
+          ["Product pillars", displayedPillars],
           ["Agent roster", `${record.agents.length} declared roles`],
           ["Declared workflows", `${record.workflows.length} complete responsibility and dependency graphs`],
           ["Full capability projection", `${record.projectedCapabilities.skills} Skills · ${record.projectedCapabilities.tools} tools · ${record.projectedCapabilities.mcp} MCP refs`],
@@ -170,8 +173,8 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
       <div>
         <p class="eyebrow">{copy.eyebrow}</p>
         <span class="status-label">{copy.currentSource}</span>
-        <h1 id="squad-title">{record.label}</h1>
-        <p class="detail-summary">{copy.summary}</p>
+        <h1 id="squad-title">{segmentPublicMarketText(locale, record.displayLabel[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</h1>
+        <p class="detail-summary">{segmentPublicMarketText(locale, copy.summary).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</p>
         <div class="detail-actions">
           <button class="secondary-action" type="button" data-open-demo>{copy.demonstrate}</button>
           <a class="primary-action" href={publicPath(locale, "/market/#complete-bundle")}>{copy.download}</a>
@@ -204,7 +207,7 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
       <WorkflowTopology {record} {locale} expanded />
     </section>
 
-    <div class="detail-tabs" role="tablist" aria-label={record.label}>
+    <div class="detail-tabs" role="tablist" aria-label={record.displayLabel[locale]}>
       {copy.tabs.map((label, index) => (
         <button
           class="detail-tab"
@@ -223,7 +226,7 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
 
     <section class="detail-panel" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" data-detail-panel>
       <div class="detail-grid">
-        <div><h2>{copy.overviewTitle}</h2><p>{copy.overviewBody}</p></div>
+        <div><h2>{copy.overviewTitle}</h2><p>{segmentPublicMarketText(locale, copy.overviewBody).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</p></div>
         <ul class="fact-list">
           {copy.facts.map(([label, value]) => <li><strong>{label}</strong><span>{value}</span></li>)}
         </ul>
@@ -238,7 +241,11 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
         </div>
         <ul class="agent-roster">
           {record.agents.map((agent) => (
-            <li><strong>{agent.label}</strong><code>{agent.baseRole}</code><span>{agent.description}</span></li>
+            <li>
+              <strong>{segmentPublicMarketText(locale, agent.displayLabel[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</strong>
+              <code lang="en">{agent.baseRole}</code>
+              <span>{agent.localizedDescription[locale] && segmentPublicMarketText(locale, agent.localizedDescription[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</span>
+            </li>
           ))}
         </ul>
         <div class="detail-grid" style="margin: 72px 0 36px;">
@@ -248,15 +255,17 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
         {record.workflows.map((workflow) => (
           <section class="workflow-contract" aria-labelledby={`workflow-${workflow.id}`}>
             <p class="eyebrow"><code>{workflow.id}</code></p>
-            <h3 id={`workflow-${workflow.id}`}>{workflow.label}</h3>
-            <p>{workflow.description}</p>
+            <h3 id={`workflow-${workflow.id}`}>
+              {segmentPublicMarketText(locale, workflow.displayLabel[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}
+            </h3>
+            <p>{segmentPublicMarketText(locale, workflow.localizedDescription[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</p>
             <ol class="workflow-list">
               {workflow.nodes.map((node, index) => (
                 <li>
                   <span class="workflow-index">{String(index + 1).padStart(2, "0")}</span>
-                  <strong>{node.agentID}</strong>
-                  <span>{node.description}</span>
-                  <span>{node.dependsOn.length === 0 ? "depends_on: []" : `depends_on: ${node.dependsOn.join(", ")}`}</span>
+                  <strong lang="en">{node.agentID}</strong>
+                  <span>{segmentPublicMarketText(locale, node.localizedDescription[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</span>
+                  <span lang="en">{node.dependsOn.length === 0 ? "depends_on: []" : `depends_on: ${node.dependsOn.join(", ")}`}</span>
                 </li>
               ))}
             </ol>
@@ -304,7 +313,7 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
     <dialog class="walkthrough-dialog" data-demo-dialog aria-labelledby="demo-dialog-title">
       <div class="dialog-body">
         <p class="eyebrow">{copy.demoPinned}</p>
-        <h2 id="demo-dialog-title">{copy.demoTitle}</h2>
+        <h2 id="demo-dialog-title" tabindex="-1">{copy.demoTitle}</h2>
         <p>{copy.demoBody}</p>
         <div class="walkthrough-revision">
           <code>{record.identity.namespace}/{record.identity.id}@{record.identity.version}</code>
@@ -315,13 +324,15 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
           {record.workflows.map((workflow) => (
             <section aria-labelledby={`demo-workflow-${workflow.id}`}>
               <p class="eyebrow"><code>{workflow.id}</code></p>
-              <h3 id={`demo-workflow-${workflow.id}`}>{workflow.label}</h3>
+              <h3 id={`demo-workflow-${workflow.id}`}>
+                {segmentPublicMarketText(locale, workflow.displayLabel[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}
+              </h3>
               <ol>
                 {workflow.nodes.map((node, index) => (
                   <li>
                     <span>{String(index + 1).padStart(2, "0")}</span>
-                    <strong>{node.agentID}</strong>
-                    <small>{node.dependsOn.length === 0 ? "depends_on: []" : `depends_on: ${node.dependsOn.join(", ")}`}</small>
+                    <strong lang="en">{node.agentID}</strong>
+                    <small lang="en">{node.dependsOn.length === 0 ? "depends_on: []" : `depends_on: ${node.dependsOn.join(", ")}`}</small>
                   </li>
                 ))}
               </ol>
