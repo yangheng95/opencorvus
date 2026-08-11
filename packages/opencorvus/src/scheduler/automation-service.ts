@@ -37,6 +37,7 @@ import { missionProductPillar } from "@/mission/session"
 import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
 import { createHash } from "node:crypto"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
+import { Config } from "@/config/config"
 
 export { AutomationRunOutcomes }
 
@@ -142,7 +143,7 @@ export const AutomationRunningConflictError = NamedError.create(
  * - failed jobs are retried with bounded exponential backoff
  */
 export namespace AutomationService {
-  let wakeSessionForTest: typeof SessionWake.wake | undefined
+  let wakeSessionForTest: typeof SessionWake.wakeWithReceipt | undefined
   const log = Log.create({ service: "automation-service" })
 
   const POLL_INTERVAL_MS = 1_000
@@ -525,7 +526,7 @@ export namespace AutomationService {
         },
       }
     },
-    installWakeExecutor(executor: typeof SessionWake.wake): Disposable {
+    installWakeExecutor(executor: typeof SessionWake.wakeWithReceipt): Disposable {
       if (wakeSessionForTest) throw new Error("Automation wake executor is already installed")
       wakeSessionForTest = executor
       return {
@@ -535,7 +536,8 @@ export namespace AutomationService {
       }
     },
     installFailurePersistenceHook(hook: (phase: "before" | "after") => void | Promise<void>): Disposable {
-      if (failurePersistenceHookForTest) throw new Error("Automation failure persistence test hook is already installed")
+      if (failurePersistenceHookForTest)
+        throw new Error("Automation failure persistence test hook is already installed")
       failurePersistenceHookForTest = hook
       return {
         [Symbol.dispose]() {
@@ -586,6 +588,16 @@ export namespace AutomationService {
     }
     if (!input.model && input.reasoningEffort) {
       throw new Error("Automation reasoning effort requires an explicit model")
+    }
+    if (input.model && input.target.scope === "global") {
+      const modelInput = input.model
+      const config = await Config.getGlobal()
+      const model = await Provider.getModelGlobal(modelInput.providerID, modelInput.modelID, config)
+      if (input.reasoningEffort && !model.variants?.[input.reasoningEffort]) {
+        throw new Error(
+          `Automation reasoning effort ${input.reasoningEffort} is not available for ${modelInput.providerID}/${modelInput.modelID}`,
+        )
+      }
     }
     if (input.model && input.target.scope !== "global") {
       const modelInput = input.model
@@ -1374,12 +1386,18 @@ export namespace AutomationService {
 
   async function resumeAutomationWake(existing: { sessionID: string; messageID: string }): Promise<string> {
     const session = await Session.get(existing.sessionID)
-    SessionWake.resumePersistedWake({
+    const completion = await SessionWake.resumePersistedWake({
       sessionID: existing.sessionID,
       messageID: existing.messageID,
       directory: session.directory,
+      retryFailedReply: true,
     })
+    assertWakeCompleted(completion)
     return existing.sessionID
+  }
+
+  function assertWakeCompleted(completion: SessionWake.WakeCompletion): void {
+    if (!completion.ok) throw new Error(`Scheduled Automation Session wake failed: ${completion.error}`)
   }
 
   function findExactAutomationWake(input: {
@@ -1509,7 +1527,7 @@ export namespace AutomationService {
     if (!scope) throw new Error(`Automation ${job.id} has no execution scope`)
     const messageID = deterministicAutomationID("msg", identityID)
     const textPartID = deterministicAutomationID("prt", identityID)
-    return await (wakeSessionForTest ?? SessionWake.wake)({
+    const receipt = await (wakeSessionForTest ?? SessionWake.wakeWithReceipt)({
       sessionID,
       messageID,
       textPartID,
@@ -1538,6 +1556,9 @@ export namespace AutomationService {
         recurrence: job.recurrence,
       },
     })
+    const completion = await receipt.completion
+    assertWakeCompleted(completion)
+    return receipt.sessionID
   }
 
   function fenceAutomationWakeCommit(input: {

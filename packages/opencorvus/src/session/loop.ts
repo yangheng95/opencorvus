@@ -22,10 +22,7 @@ import { CompactionOverflow } from "./compaction-overflow"
 import { CompactionHandoff } from "./compaction-handoff"
 import { SessionControl } from "./control"
 import { controlPromptProjection, controlToolContext } from "@/control/prompt"
-import {
-  resolveSessionExecutionAuthority,
-  taskIDForSession,
-} from "@/engine/task-session-lineage"
+import { resolveSessionExecutionAuthority, taskIDForSession } from "@/engine/task-session-lineage"
 import { findDispatchLineageByToolExecution } from "@/engine/dispatch-lineage"
 import { ContextBudget } from "./context-budget"
 import { Instance } from "../project/instance"
@@ -116,6 +113,7 @@ import {
 import { createMcpAppToolLifecycle, mcpAppAuthorityForRuntimeTool } from "@/interactive-artifact/mcp-app-lifecycle"
 import { visibleMentionDirectiveRanges } from "@opencorvus-ai/transport-protocol"
 import type { HarnessProjection } from "@/capability/harness-projection"
+import { compareTimelineOrderKeys, timelineMessageOrderKey } from "@/timeline/order"
 
 muteAISdkWarnings()
 
@@ -150,10 +148,7 @@ export namespace SessionLoop {
     })
   }
 
-  export function toolExecutionExtra(input: {
-    messageExtra?: Record<string, unknown>
-    model: Provider.Model
-  }) {
+  export function toolExecutionExtra(input: { messageExtra?: Record<string, unknown>; model: Provider.Model }) {
     const { taskID: _untrustedTaskID, ...messageExtra } = input.messageExtra ?? {}
     return {
       ...messageExtra,
@@ -1063,8 +1058,7 @@ export namespace SessionLoop {
 
   function shouldEnterStandby(input: { lastUser: Message.User; lastAssistant: Message.Assistant | undefined }) {
     return !!(
-      input.lastAssistant &&
-      isCompletedReplyToUserMessage({ info: input.lastAssistant, parts: [] }, input.lastUser.id)
+      input.lastAssistant && isCompletedReplyToUserMessage({ info: input.lastAssistant, parts: [] }, input.lastUser.id)
     )
   }
 
@@ -1145,11 +1139,11 @@ export namespace SessionLoop {
     })
   }
 
-  async function beginStandby(input: { sessionID: string; abort: AbortSignal; afterID: string }) {
+  async function beginStandby(input: { sessionID: string; abort: AbortSignal; afterOrderKey: string }) {
     await SessionCompaction.prune({ sessionID: input.sessionID })
     log.info("entering standby", { sessionID: input.sessionID })
     touch(input.sessionID)
-    const waitForWake = waitForUserMessage(input.sessionID, input.abort, input.afterID)
+    const waitForWake = waitForUserMessage(input.sessionID, input.abort, input.afterOrderKey)
     SessionStatus.set(input.sessionID, { type: "idle" }, { promptGenerationOwner: input.abort })
     return { waitForWake }
   }
@@ -1660,6 +1654,7 @@ export namespace SessionLoop {
     resume_existing: z.boolean().optional(),
     result_mode: z.enum(["reply", "summary"]).optional(),
     reply_to_message_id: Identifier.schema("message").optional(),
+    retry_failed_reply: z.boolean().optional(),
   })
 
   export function structuredOutputToolChoice(
@@ -1874,7 +1869,7 @@ export namespace SessionLoop {
         const persistedReply = await completedReplyToUserMessage(
           sessionID,
           input.reply_to_message_id,
-          startedOwner,
+          startedOwner && input.retry_failed_reply !== true,
         )
         if (persistedReply) {
           flushCallbacks(sessionID, persistedReply, directory, "reply", input.reply_to_message_id)
@@ -1890,13 +1885,7 @@ export namespace SessionLoop {
       if (abort && !resume_existing) {
         await finish(sessionID, abort, directory, error)
       } else {
-        SessionPromptState.rejectAttachedCallbacks(
-          sessionID,
-          error,
-          directory,
-          resultMode,
-          input.reply_to_message_id,
-        )
+        SessionPromptState.rejectAttachedCallbacks(sessionID, error, directory, resultMode, input.reply_to_message_id)
       }
       await firstResult.catch(() => undefined)
       throw error
@@ -1980,7 +1969,11 @@ export namespace SessionLoop {
                 if (!lastAssistant) break
                 const lastResult = msgs.find((m) => m.info.id === lastAssistant.id)
                 if (lastResult) flushCallbacks(sessionID, lastResult, directory, "reply")
-                const { waitForWake } = await beginStandby({ sessionID, abort, afterID: lastAssistant.id })
+                const { waitForWake } = await beginStandby({
+                  sessionID,
+                  abort,
+                  afterOrderKey: timelineMessageOrderKey({ info: lastAssistant }),
+                })
                 return { type: "standby" as const, waitForWake }
               }
 
@@ -2050,7 +2043,8 @@ export namespace SessionLoop {
                           compactionControl.payload.model &&
                           typeof compactionControl.payload.model === "object" &&
                           !Array.isArray(compactionControl.payload.model) &&
-                          typeof (compactionControl.payload.model as { providerID?: unknown }).providerID === "string" &&
+                          typeof (compactionControl.payload.model as { providerID?: unknown }).providerID ===
+                            "string" &&
                           typeof (compactionControl.payload.model as { modelID?: unknown }).modelID === "string"
                             ? {
                                 providerID: (compactionControl.payload.model as { providerID: string }).providerID,
@@ -2238,7 +2232,7 @@ export namespace SessionLoop {
     return firstResult
   })
 
-  function waitForUserMessage(sessionID: string, abort: AbortSignal, afterID: string): Promise<void> {
+  function waitForUserMessage(sessionID: string, abort: AbortSignal, afterOrderKey: string): Promise<void> {
     return new Promise<void>((resolve) => {
       if (abort.aborted) {
         resolve()
@@ -2264,7 +2258,7 @@ export namespace SessionLoop {
         if (
           event.properties.info.role === "user" &&
           event.properties.info.sessionID === sessionID &&
-          event.properties.info.id > afterID
+          compareTimelineOrderKeys(event.properties.info.orderKey, afterOrderKey) > 0
         ) {
           settle()
         }
@@ -2286,7 +2280,7 @@ export namespace SessionLoop {
 
       void (async () => {
         for await (const item of MessageStore.stream(sessionID)) {
-          if (item.info.id <= afterID) break
+          if (compareTimelineOrderKeys(timelineMessageOrderKey(item), afterOrderKey) <= 0) break
           if (item.info.role === "user") {
             settle()
             return
@@ -2586,14 +2580,14 @@ export namespace SessionLoop {
       ConversationCapability.isAgentID(input.agentID)
         ? await ConversationCapability.runtimeMcpTools(input.config, input.agentID, input.session.id)
         : undefined
-    const defaultMcpProcessAuthority = executionAuthority.kind === "task"
-      ? MCP.taskProcessAuthority(executionAuthority.taskID, executionAuthority.directory)
-      : MCP.hostProcessAuthority(executionAuthority.directory)
+    const defaultMcpProcessAuthority =
+      executionAuthority.kind === "task"
+        ? MCP.taskProcessAuthority(executionAuthority.taskID, executionAuthority.directory)
+        : MCP.hostProcessAuthority(executionAuthority.directory)
     const resolvedMcpTools =
       exactRuntimeContractTools || !includeMcpTools
         ? {}
-        : (nativeConversationMcpTools ??
-          (await MCP.tools(defaultMcpProcessAuthority)))
+        : (nativeConversationMcpTools ?? (await MCP.tools(defaultMcpProcessAuthority)))
     for (const [key, item] of Object.entries(resolvedMcpTools)) {
       const execute = item.execute
       if (!execute) continue
@@ -2649,9 +2643,9 @@ export namespace SessionLoop {
                     execute: () => execute(args, opts),
                   })
                 : await (async () => {
-                  await ctx.ask(mcpPermissionPlan(key, args))
-                  return execute(args, opts)
-                })()
+                    await ctx.ask(mcpPermissionPlan(key, args))
+                    return execute(args, opts)
+                  })()
 
             await Plugin.trigger(
               "tool.execute.after",

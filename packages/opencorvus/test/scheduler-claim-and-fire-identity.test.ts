@@ -128,7 +128,12 @@ describe("scheduler atomic identity and progress contracts", () => {
       const secondID = Identifier.ascending("task")
       const createdAt = Date.now()
       insertQueuedTask({ id: firstID, sessionID: setup.firstSessionID, priority: "normal", timeCreated: createdAt })
-      insertQueuedTask({ id: secondID, sessionID: setup.secondSessionID, priority: "normal", timeCreated: createdAt + 1 })
+      insertQueuedTask({
+        id: secondID,
+        sessionID: setup.secondSessionID,
+        priority: "normal",
+        timeCreated: createdAt + 1,
+      })
 
       startClaims()
       await bothValidations
@@ -462,10 +467,11 @@ describe("scheduler atomic identity and progress contracts", () => {
         )
 
         const response = AutomationService.listRuns(automation.id)
-        expect(AutomationRunViewSchema.array().parse(response).map((run) => run.outcome)).toEqual([
-          "retry_wait",
-          "failed",
-        ])
+        expect(
+          AutomationRunViewSchema.array()
+            .parse(response)
+            .map((run) => run.outcome),
+        ).toEqual(["retry_wait", "failed"])
       },
     })
   })
@@ -504,15 +510,9 @@ describe("scheduler atomic identity and progress contracts", () => {
           failurePersistenceEntered()
           await failurePersistenceReleased
         })
-        const execution = AutomationService.TestHooks.executeWithRuntimeSettlement(
-          job,
-          owner,
-          now,
-          true,
-          async () => {
-            throw new Error("injected automation wake failure")
-          },
-        ).catch((error) => error)
+        const execution = AutomationService.TestHooks.executeWithRuntimeSettlement(job, owner, now, true, async () => {
+          throw new Error("injected automation wake failure")
+        }).catch((error) => error)
         await failurePersistenceStarted
         using gate = RuntimeExecutionSettlement.acquireSettlementGate()
         gate.closeAdmission(["scheduler_automation_fire"])
@@ -560,7 +560,10 @@ describe("scheduler atomic identity and progress contracts", () => {
             .run(),
         )
 
-        await using _wakeLoop = SessionWake.TestHooks.installWakeLoopExecutor(async () => {})
+        let retryFailedReply: boolean | undefined
+        await using _wakeLoop = SessionWake.TestHooks.installWakeLoopExecutor(async (input) => {
+          retryFailedReply = input.retryFailedReply
+        })
         let committedWakeCalls = 0
         await using _automationWake = AutomationService.TestHooks.installWakeExecutor(async (input) => {
           const sessionID = input.sessionID!
@@ -651,7 +654,74 @@ describe("scheduler atomic identity and progress contracts", () => {
           expect(settled.parts.map((part) => part.id)).toEqual(interrupted.parts.map((part) => part.id))
           expect(settled.automation?.next_run).toBeGreaterThan(scheduledDue)
           expect(committedWakeCalls).toBe(1)
+          expect(retryFailedReply).toBe(true)
         }
+      },
+    })
+  })
+
+  test("keeps a target run owned until its exact Session reply settles and records the failed outcome", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await createSession("automation exact reply settlement")
+        const automation = await AutomationService.create({
+          name: "automation exact reply settlement",
+          target: { scope: "session", sessionId: session.id },
+          recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          prompt: "wait for the exact assistant reply outcome",
+        })
+        const scheduledDue = Date.now() - 1_000
+        Database.use((db) =>
+          db
+            .update(AutomationTable)
+            .set({ next_run: scheduledDue, lease_owner: null, lease_until: 0 })
+            .where(eq(AutomationTable.id, automation.id))
+            .run(),
+        )
+
+        let wakeStarted!: () => void
+        const started = new Promise<void>((resolve) => (wakeStarted = resolve))
+        let settleWake!: (completion: SessionWake.WakeCompletion) => void
+        const completion = new Promise<SessionWake.WakeCompletion>((resolve) => (settleWake = resolve))
+        await using _wake = AutomationService.TestHooks.installWakeExecutor(async (input) => {
+          wakeStarted()
+          return { sessionID: input.sessionID!, messageID: input.messageID!, completion }
+        })
+
+        const owner = "automation-owner:physical-settlement"
+        const job = AutomationService.TestHooks.claim(automation.id, owner, scheduledDue)
+        expect(job).toBeDefined()
+        const execution = AutomationService.TestHooks.executeClaimedDueOccurrence({
+          job: job!,
+          owner,
+          now: scheduledDue,
+        })
+        await started
+        const running = Database.use((db) =>
+          db.select().from(AutomationRunTable).where(eq(AutomationRunTable.automation_id, automation.id)).get(),
+        )
+        expect(running).toMatchObject({ outcome: "running", owner })
+
+        settleWake({ ok: false, error: "injected streamed provider failure" })
+        const fireID = await execution
+        const settled = Database.use((db) => ({
+          automation: db.select().from(AutomationTable).where(eq(AutomationTable.id, automation.id)).get(),
+          run: db.select().from(AutomationRunTable).where(eq(AutomationRunTable.automation_id, automation.id)).get(),
+        }))
+        expect({ fireID, automation: settled.automation, run: settled.run }).toMatchObject({
+          fireID: settled.run?.fire_id,
+          automation: {
+            next_run: scheduledDue,
+            failure_count: 1,
+            last_error: "Scheduled Automation Session wake failed: injected streamed provider failure",
+          },
+          run: {
+            outcome: "retry_wait",
+            error: "Scheduled Automation Session wake failed: injected streamed provider failure",
+          },
+        })
       },
     })
   })

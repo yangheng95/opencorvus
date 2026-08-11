@@ -12,10 +12,7 @@ import {
 } from "@/orchestrator/protocol/message-bridge"
 import { Scheduler } from "@/scheduler"
 import { AutomationService } from "@/scheduler/automation-service"
-import {
-  RuntimeServerOwnership,
-  RuntimeServerOwnershipConflictError,
-} from "@/server/runtime-server-ownership"
+import { RuntimeServerOwnership, RuntimeServerOwnershipConflictError } from "@/server/runtime-server-ownership"
 import { Server } from "@/server/server"
 import { Database } from "@/storage/db"
 
@@ -171,7 +168,13 @@ describe("runtime startup recovery authority", () => {
     let releaseBridge!: () => void
     const bridgeOperation = new Promise<void>((resolve) => (releaseBridge = resolve))
     const trackedBridge = TaskMessageProtocolBridgeTestHooks.trackLifecycle(bridgeOperation)
-    using _timeout = Server.TestHooks.installRuntimeSettlementInactivityTimeout(50)
+    // This fixture reaches the held Message-bridge effect only after the real
+    // global scheduler has cooperatively cancelled its startup jobs. On
+    // Windows, worktree.gc may need several seconds to abort an in-flight Git
+    // registry probe, so a 50 ms whole-pipeline budget observes the wrong
+    // settlement boundary and leaves the scheduler gate poisoned for later
+    // cases.
+    using _timeout = Server.TestHooks.installRuntimeSettlementInactivityTimeout(15_000)
     const otherDatabase = path.join(root, "other.db")
     try {
       await expect(bootstrap(project, async () => "blocked settlement")).rejects.toBeInstanceOf(
@@ -210,7 +213,10 @@ describe("runtime startup recovery authority", () => {
     let releaseBridge!: () => void
     const bridgeOperation = new Promise<void>((resolve) => (releaseBridge = resolve))
     const trackedBridge = TaskMessageProtocolBridgeTestHooks.trackLifecycle(bridgeOperation)
-    using _timeout = Server.TestHooks.installRuntimeSettlementInactivityTimeout(50)
+    // Keep the production-shaped scheduler cancellation inside this startup
+    // cleanup test; the intentionally held Message bridge remains the first
+    // non-cooperative owner after healthy scheduler settlement.
+    using _timeout = Server.TestHooks.installRuntimeSettlementInactivityTimeout(15_000)
     const otherDatabase = path.join(root, "other.db")
     try {
       await expect(
@@ -237,7 +243,10 @@ describe("runtime startup recovery authority", () => {
       releaseBridge()
       await trackedBridge
       await awaitTaskMessageProtocolBridgeIdle()
-      const recovered = await acquireServerRuntimeAfterRecovery({ recover: async () => {}, disposeInstances: async () => {} })
+      const recovered = await acquireServerRuntimeAfterRecovery({
+        recover: async () => {},
+        disposeInstances: async () => {},
+      })
       const terminated = await Server.settleCurrentProcessExecution("recovered serve startup test completion", {
         disposeInstances: async () => {},
       })

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Scheduled random-isolation end-to-end convergence: [`2026-08-12-scheduled-random-isolation-e2e.md`](records/2026-08/2026-08-12-scheduled-random-isolation-e2e.md).
+
 Latest random Expert Squad self-evolution end-to-end automation: [`2026-08-12-random-expert-squad-self-evolution-e2e.md`](records/2026-08/2026-08-12-random-expert-squad-self-evolution-e2e.md).
 
 Latest main delivery history convergence: [`2026-08-12-main-delivery-history-convergence.md`](records/2026-08/2026-08-12-main-delivery-history-convergence.md).

@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-12-scheduled-random-isolation-e2e.md](2026-08-12-scheduled-random-isolation-e2e.md) defines the random-port, isolated-database, fresh-project Scheduled scenario matrix, depth-first repair boundary, real streaming/background-fire checker, and manual visual acceptance loop.
+
 - [2026-08-12-random-expert-squad-self-evolution-e2e.md](2026-08-12-random-expert-squad-self-evolution-e2e.md) defines the isolated random-port/project/database controller, real Market install, streaming Mission-owned incumbent-challenger campaign, measured evaluation, non-executing recommendation, and independent-review acceptance boundary.
 
 - [2026-08-12-main-delivery-history-convergence.md](2026-08-12-main-delivery-history-convergence.md) freezes the dirty original worktree, classifies diverged local and remote history by exact and semantic coverage, and defines the reviewed fast-forward-only integration and push boundary.
