@@ -6,10 +6,11 @@
 
 - Analyze the complete repository change set, split deliverable work into reviewable pushes, and exclude files that are still being edited.
 - After the initial non-fast-forward stop, continue the authorized integration from the current upstream rather than overwriting remote history.
+- The latest explicit user correction supersedes the earlier exclusion: commit the complete visible repository worktree and merge its history back into the main worktree.
 
 ### Acceptance
 
-- Preserve the original dirty `main` worktree and every active edit in it.
+- Preserve and commit every visible original `main` worktree edit; do not leave the formerly active paths uncommitted.
 - Use `origin/main` as the clean integration baseline and migrate only locally unique, reviewed delivery commits.
 - Treat patch-equivalent or semantically superseded local commits as already delivered instead of replaying them.
 - Keep migrated changes separated by their existing functional commit boundaries.
@@ -20,7 +21,7 @@
 ### Hard constraints
 
 - Repository: `D:\myhexin-local\opencorvus`; upstream: `origin/main`.
-- Original dirty worktree remains the owner of active edits, including the Overlay entry point, transport contract work, website/Mission work, mixed specification indexes, and the equity-research report.
+- The original worktree's formerly active Overlay, transport, website/Mission, specification-index, and equity-research paths are all inside the committed history boundary.
 - Integration worktree: `D:\myhexin-local\opencorvus-delivery-20260812`; branch: `codex/main-delivery-20260812`.
 - Integration baseline: `b435416c11ee23395432b54bdbcce1f1a470723f`.
 - The integration branch is temporary delivery plumbing. The pushed `main` ref is the only remote delivery source.
@@ -55,6 +56,16 @@ At the initial frozen boundary, local `main` was 45 commits behind and 14 commit
 | `4bff1ef70` | Default-workspace OpenRouter key coverage and i18n checker correction close reviewed findings | Migrate as `5f4b30f71` |
 
 Independent agent feedback before implementation: the usage batch has completed repeated independent review; the final fixed nine-path correction had no P0, P1, P2, or unresolved finding. The whole integrated outgoing range has not yet received its required independent review.
+
+### Full-worktree override classification
+
+After the user explicitly changed the boundary to the complete repository, the original worktree was committed in three reviewable units:
+
+- `ce98df372` captures the Overlay formatting and positive transport cancellation fixture.
+- `8a2a9950b` captures the complete visible website/Mission design snapshot, including its binary concept assets and specification indexes. Most of this snapshot is byte-identical to already-published commit `2002f2d114bddbb7e6206a62d53560a20edadbaa`; the few different website shell/spec paths are older than current upstream Iterations 3–5. The commit is retained as historical worktree evidence but must not replace the newer current website tree.
+- `7b5052154` adds the previously untracked equity-research report. This is the only newly committed worktree artifact not already represented or superseded upstream, so it is replayed into the final tree as `984996b17`.
+
+The original worktree is clean after these commits. The final history merge will use the already-integrated current tree as its content result while recording the original `main` tip as a parent. That makes every full-worktree commit part of public history without reintroducing duplicate or superseded implementations, and lets the original `main` worktree fast-forward to the delivered merge.
 
 ## Problem-depth analysis
 
@@ -127,4 +138,4 @@ The repair boundary is therefore a clean worktree at current upstream, semantic 
 
 ### Outgoing and review state
 
-The final delivery commit will add the integrated transport fixture, regenerated Market closure, residual terminology correction, and this evidence record. After that commit, the complete `origin/main..HEAD` range will be frozen for an uninvolved independent read-only review. The review result, final re-fetch, fast-forward proof, push result, and original-worktree synchronization are delivery-time evidence and are reported by the task rather than predeclared here.
+Commit `6320823a2` adds the integrated transport fixture, regenerated Market closure, residual terminology correction, and the first evidence record. The later full-worktree override adds the equity report to the final tree and retains the three original-worktree commits through a content-preserving history merge. After that merge, the complete `origin/main..HEAD` graph and final tree will be frozen for a new uninvolved independent read-only review. The review result, final re-fetch, fast-forward proof, push result, and original-worktree synchronization are delivery-time evidence and are reported by the task rather than predeclared here.
