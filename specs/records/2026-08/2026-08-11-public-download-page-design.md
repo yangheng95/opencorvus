@@ -183,6 +183,7 @@ The generated path is `packages/web/public/downloads/latest.json`, ignored by Gi
 - `.gitignore`: ignore only `packages/web/public/downloads/latest.json`.
 - `.github/workflows/build.yml`: dispatch after the published Release and update the existing workflow contract test.
 - `.github/workflows/deploy-opencorvus-com.yml`: add the trigger, generate and verify the manifest, and extend existing non-UI workflow integration checks only where their current contract owns the changed steps.
+- `packages/web/test/deploy-workflow-integration.ts`: include a valid download manifest in the synthetic deployment candidate so the existing daily, rollback, bootstrap-stage, and bootstrap-verify control-flow rehearsal covers the new public probe.
 - `packages/web/src/components/PublicSiteHeader.astro` and `PublicSiteLayout.astro`: add the localized route and current-page union.
 - `script/github-actions-workflow-contract.test.ts`: positive contract for the dispatch and deployment trigger/generation ordering.
 - `specs/README.md` and `specs/records/2026-08/README.md`: add one link for this record without altering or staging the parallel eighth-batch index additions.
@@ -218,6 +219,7 @@ Static workflow checks, a real current-manifest build, and real local page revie
 - Header-only network acceptance returned `200 application/json` for `/downloads/latest.json` and a `302` GitHub Release redirect for `OpenCorvus_0.0.38-beta_x64-setup.exe`; no installer bytes were downloaded.
 - The current browser exposed Windows only. macOS/Linux foregrounding was therefore validated through the deterministic client branch and complete rendered platform groups, not by claiming an unavailable user-agent override. The future live Release remains the required end-to-end evidence for the external dispatch/deployment chain.
 - First delivery-review verdict: `REJECTED` for pending-run replacement, mobile/unknown platform guessing, mixed-index delivery risk, and incomplete bottom-of-page visual evidence. The implementation added `queue: max`, explicit unknown/mobile and architecture fallback branches, an independently inspected 18-path delivery index, and four top/bottom screenshots. Repeat delivery-review verdict: `APPROVED` with no remaining blocker.
+- The first ordinary-push Actions run reached the real manifest generation, website check/build, and signing rehearsal, then exposed a missing `downloads/latest.json` fixture in `deploy-workflow-integration.ts`. The synthetic candidate now includes a valid manifest, and the local daily, rollback, bootstrap-stage, and bootstrap-verify rehearsal passes. A follow-up ordinary-push run is required before claiming green live deployment evidence.
 
 ## Plan-review gate
 

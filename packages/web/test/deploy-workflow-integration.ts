@@ -41,8 +41,25 @@ async function writeBoundJSON(root: string, section: string, value: unknown) {
 async function createCandidate(root: string) {
   const candidate = path.join(root, "candidate")
   const resources = { total: 3, embeddedAlreadyAvailable: 1, bundledMarketImportable: 2 }
-  await mkdir(path.join(candidate, "expert-squads", "bundles"), { recursive: true })
+  await Promise.all([
+    mkdir(path.join(candidate, "expert-squads", "bundles"), { recursive: true }),
+    mkdir(path.join(candidate, "downloads"), { recursive: true }),
+  ])
   await writeFile(path.join(candidate, "index.html"), "<!doctype html><title>deploy workflow fixture</title>\n")
+  const downloadVersion = "0.0.38-beta"
+  await writeFile(
+    path.join(candidate, "downloads", "latest.json"),
+    `${JSON.stringify({
+      protocol: "opencorvus/website-downloads@1",
+      version: downloadVersion,
+      assets: [
+        {
+          bytes: 1,
+          url: `https://github.com/yangheng95/opencorvus/releases/download/v${downloadVersion}/fixture.tar.gz`,
+        },
+      ],
+    })}\n`,
+  )
   const catalog = await writeBoundJSON(candidate, "catalogs", {
     protocol: "opencorvus/expert-squad-static-catalog@1",
     resources,
