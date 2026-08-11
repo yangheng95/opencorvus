@@ -131,5 +131,8 @@ describe("repository Expert Squad fact and Turn calibration", () => {
     expect(await readFile(path.join(artifactRoot, "authoring-skill/SKILL.md"), "utf8")).toContain(
       "validateExpertSquadPackageDefinition",
     )
+    expect(
+      await readFile(path.join(artifactRoot, "authoring-skill/references/authoring-quality-method.md"), "utf8"),
+    ).toContain("Decide whether to create a Squad")
   })
 })

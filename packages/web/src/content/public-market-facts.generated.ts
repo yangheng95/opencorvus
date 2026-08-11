@@ -1672,8 +1672,8 @@ export const generatedShippedSquadFacts = [
     "namespace": "builtin",
     "id": "squad-sdk",
     "label": "Generate Agent Squads",
-    "version": "2026.08.09.1",
-    "packageDigest": "5b2e226db1e0c2d9852b68afcd9e944f353a073ee59311793405a94a53192461",
+    "version": "2026.08.10.1",
+    "packageDigest": "cca59203ee8392a8a71145fbc203516b3a5afde5dfa1ab3b9d7aa807a6553f75",
     "installSurface": "embedded",
     "packageSkillPaths": [
       "skills/authoring/SKILL.md",

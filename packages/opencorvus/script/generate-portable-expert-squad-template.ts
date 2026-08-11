@@ -16,6 +16,7 @@ import {
 export const PORTABLE_TEMPLATE_NAMESPACE = "template"
 export const PORTABLE_TEMPLATE_ID = "portable-template"
 export const PORTABLE_TEMPLATE_AUTHORING_SKILL_PATH = "authoring-skill/SKILL.md"
+export const PORTABLE_TEMPLATE_AUTHORING_QUALITY_METHOD_PATH = "authoring-skill/references/authoring-quality-method.md"
 export const PORTABLE_TEMPLATE_AUTHORING_CONTRACT_PATH = "authoring-skill/references/definition-contract.json"
 export const PORTABLE_TEMPLATE_RECONCILIATION_POLICY_ARTIFACT_TYPE = `${PORTABLE_TEMPLATE_ID}/reconciliation-policy`
 export const PORTABLE_TEMPLATE_RECONCILIATION_POLICY_ARTIFACT_LABEL = "Invoice ledger reconciliation policy"
@@ -414,6 +415,16 @@ function renderAuthoringSkill(): string {
   ).replace(/\r\n?/g, "\n")
 }
 
+function renderAuthoringQualityMethod(): string {
+  return readFileSync(
+    path.resolve(
+      import.meta.dir,
+      "../../../expert-squads/builtin/squad-sdk/skills/authoring/references/authoring-quality-method.md",
+    ),
+    "utf8",
+  ).replace(/\r\n?/g, "\n")
+}
+
 function renderAuthoringContract(): string {
   return readFileSync(
     path.resolve(
@@ -458,6 +469,7 @@ export function renderPortableExpertSquadTemplateFiles(): Record<string, string>
   return {
     "README.md": renderHumanTutorial(),
     [PORTABLE_TEMPLATE_AUTHORING_SKILL_PATH]: renderAuthoringSkill(),
+    [PORTABLE_TEMPLATE_AUTHORING_QUALITY_METHOD_PATH]: renderAuthoringQualityMethod(),
     [PORTABLE_TEMPLATE_AUTHORING_CONTRACT_PATH]: renderAuthoringContract(),
     ...Object.fromEntries(
       Object.entries(renderExpertSquadPackageFiles(definition)).map(([file, content]) => {
