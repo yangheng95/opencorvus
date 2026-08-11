@@ -5,6 +5,7 @@
 - [2026-08-11-latest-main-overlay-repackage.md](2026-08-11-latest-main-overlay-repackage.md) records the latest-main merge, Windows Expert Squad snapshot publication repair, and complete `0.0.39-beta` Overlay repackage acceptance.
 
 - [2026-08-11-scheduler-liveness-and-control-convergence.md](2026-08-11-scheduler-liveness-and-control-convergence.md) records the exact lifecycle semantic-orphan incident, three independent scheduler audits, confirmed ownership/liveness defects, shared repair invariants, and executable real-checker acceptance loop.
+- [2026-08-11-subagent-dock-running-presentation-convergence.md](2026-08-11-subagent-dock-running-presentation-convergence.md) diagnoses the complete-agent projection leaking into the sub-agent dock, preserves the dedicated `Thinking` pending state, and removes the redundant animated generating tail without regressing Tool activity motion.
 - [2026-08-11-scheduler-systemic-fault-audit-and-repair.md](2026-08-11-scheduler-systemic-fault-audit-and-repair.md) records the independent systemic audit, shared ownership-handoff root model, confirmed scheduler defect register, repair order, and executable acceptance loop.
 
 - [2026-08-10-task-detached-worker-lifecycle-convergence-repair.md](2026-08-10-task-detached-worker-lifecycle-convergence-repair.md) diagnoses and repairs detached worker execution, terminal lifecycle publication, durable delivery, current-runtime reconciliation, provider-error projection, and immutable workflow-selection convergence as one ownership chain.

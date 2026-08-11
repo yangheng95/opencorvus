@@ -40,7 +40,10 @@ function operatorIngressPresentation(messageID: string | undefined): OperatorIng
     const position = Number(artifact.payload?.queue_position)
     const owner = String(artifact.payload?.current_owner_ingress_id ?? "").trim()
     return {
-      label: Number.isInteger(position) && position > 0 ? t("task.ingress.queued_position", { position }) : t("task.ingress.queued"),
+      label:
+        Number.isInteger(position) && position > 0
+          ? t("task.ingress.queued_position", { position })
+          : t("task.ingress.queued"),
       tone: "muted",
       state: "queued",
       title: owner ? t("task.ingress.current_owner", { owner }) : undefined,
@@ -82,21 +85,10 @@ function ChatBubbleIdentity(props: { node: CardNode; compact?: boolean; hideDura
 function ChatBubbleEmptyTurnState(props: { node: CardNode; hasVisibleContent: boolean }) {
   const errorReason = () => props.node.errorReason?.trim() || ""
   return (
-    <Show when={!props.hasVisibleContent}>
-      <Show
-        when={props.node.status === "error" && errorReason()}
-        fallback={
-          <Show when={props.node.status === "running"}>
-            <span class="msg-streaming-status" role="status">
-              正在生成
-            </span>
-          </Show>
-        }
-      >
-        <div class="msg-tool-error" data-agent-error-card-id={props.node.id} role="alert">
-          {errorReason()}
-        </div>
-      </Show>
+    <Show when={!props.hasVisibleContent && props.node.status === "error" && errorReason()}>
+      <div class="msg-tool-error" data-agent-error-card-id={props.node.id} role="alert">
+        {errorReason()}
+      </div>
     </Show>
   )
 }

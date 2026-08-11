@@ -22,6 +22,7 @@ import {
 import { formatErrorDetails } from "../services/diagnostics"
 import { setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
 import { t } from "../utils/i18n"
+import { isSubagentActivityRecord } from "../utils/subagent-presentation"
 import { Avatar } from "./Avatar"
 import { ConversationCard } from "./ConversationCard"
 import { Button } from "./ui/Button"
@@ -105,7 +106,9 @@ export function SubagentConversationPanel(props: {
   sessionID: Accessor<string>
   onSessionSelect: (sessionID: string) => void
 }) {
-  const records = createMemo(() => conversationAgentRecordsForSource(boardStore.selectedSource))
+  const records = createMemo(() =>
+    conversationAgentRecordsForSource(boardStore.selectedSource).filter(isSubagentActivityRecord),
+  )
   const sessionIDs = createMemo(() => records().map((candidate) => candidate.sessionID), [], {
     equals: (previous, next) =>
       previous.length === next.length && previous.every((sessionID, index) => sessionID === next[index]),
