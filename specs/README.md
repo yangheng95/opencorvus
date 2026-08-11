@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest permission-system two-mode calibration plan: [`2026-08-12-permission-two-mode-calibration-plan.md`](records/2026-08/2026-08-12-permission-two-mode-calibration-plan.md).
+
 Latest hollow desktop application-icon convergence: [`2026-08-11-hollow-desktop-app-icons.md`](records/2026-08/2026-08-11-hollow-desktop-app-icons.md).
 
 Latest native platform message-notification convergence: [`2026-08-11-native-platform-message-notifications.md`](records/2026-08/2026-08-11-native-platform-message-notifications.md).
