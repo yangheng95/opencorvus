@@ -190,6 +190,7 @@ import {
 } from "./utils/debug-info"
 import { taskOwningDirectory } from "./services/task-directory"
 import { taskScopedPath } from "./services/task-path"
+import { loadPersistedChatDebugProjection } from "./services/session-debug"
 import { registerReviewPanelPresenter, requestReviewPanel } from "./services/review-focus"
 import { createAnimationFrameScheduler } from "./utils/animation-frame"
 import {
@@ -1133,9 +1134,27 @@ async function copyActiveConversationDebug(): Promise<void> {
   if (selectedSource?.kind !== "session" && !selectedTaskFailure) {
     await loadBoard({ sync: true, requireFresh: true })
   }
+  const debugBoard = selectedSource?.kind === "session" ? { ...boardStore.board } : boardStore.board
+  const debugCardTree =
+    selectedSource?.kind === "session"
+      ? ({ cards: { ...cardTreeStore.cards }, order: [...cardTreeStore.order] } as typeof cardTreeStore)
+      : cardTreeStore
+  const debugBoardSessionID = typeof debugBoard?.sessionID === "string" ? debugBoard.sessionID : ""
+  if (selectedSource?.kind === "session" && debugBoardSessionID && debugBoardSessionID !== selectedSource.id) {
+    throw new Error(
+      `Conversation debug projection mismatch: selected ${selectedSource.id}, board ${debugBoardSessionID}`,
+    )
+  }
+  const persistedChat =
+    selectedSource?.kind === "session"
+      ? await loadPersistedChatDebugProjection({
+          sessionID: selectedSource.id,
+          directory: String(debugBoard?.directory ?? ""),
+        })
+      : undefined
   const blob =
     selectedSource?.kind === "session"
-      ? buildChatDebugBlob(boardStore.board, selectedSource, cardTreeStore)
+      ? buildChatDebugBlob(debugBoard, selectedSource, debugCardTree, persistedChat)
       : selectedTaskFailure
         ? buildTaskSelectionErrorDebugBlob(selectedTaskFailure, appStore.enginePaths)
         : buildTaskDebugBlob(boardStore.board, appStore.enginePaths)

@@ -199,6 +199,12 @@ transport，不实现第二套 runtime schema、writer、loader 或安装路径�
 Mission launch 把当时授权的精确 ID 集合固定为整个 Mission 的 held-Squad authority。Mission 通过
 每次最多二十项的 `capability_search` 检索该 frozen set，再用 `panel.expert_squad_inspect` 读取一个
 精确 held Squad 的一页 planning guidance；完整 held catalog 从不写入 tool result 或 Session frontier。
+Search diagnostics expose only the held count, pillar-filtered visible count, Mission product pillar, catalog revision,
+and bounded result count. A zero result therefore distinguishes held authority, pillar/catalog visibility, and query
+matching without enumerating the held identifiers or broadening the immutable snapshot.
+For a Mission caller the persisted Mission product pillar is canonical even if
+the model supplies a contradictory request filter; diagnostics expose that
+requested pillar separately while search remains inside the canonical pillar.
 Composer 中一个或多个可见
 `@squad("<id>")` 引用只授权这些 ID；没有 Squad 引用时，包括只选择
 `@mission("<name>")`，launch path 把当时全部已安装 Squad 的精确 ID 快照持久化。后续新安装不会

@@ -1043,6 +1043,7 @@ export namespace ProcessSupervisor {
     // Consumers still observe the original rejected promise; this attachment
     // prevents an early process or stream rejection from becoming unhandled.
     void exited.catch(() => undefined)
+    void outputSettled.catch(() => undefined)
 
     let requestCleanupComplete = false
     let requestCleanupAttempt: Promise<void> | undefined
@@ -1132,6 +1133,7 @@ export namespace ProcessSupervisor {
       proc.once("close", () => resolve())
       proc.once("error", reject)
     })
+    void outputSettled.catch(() => undefined)
 
     const terminate = () => {
       if (termination) return termination

@@ -1958,7 +1958,7 @@ export namespace SessionLoop {
               const { lastUser, lastAssistant, lastFinished, compactions } = collectLoopState(msgs)
               const pendingControls = SessionControl.pending(sessionID)
               for (const control of pendingControls) {
-                if (isActionableSessionControl(control)) continue
+                if (isActionableSessionControl(control) || control.kind === "mission_process_recovery") continue
                 SessionControl.fail({
                   id: control.id,
                   sessionID,
@@ -2267,7 +2267,10 @@ export namespace SessionLoop {
       // Re-read both durable wake sources after subscribing so a control
       // committed between the loop's standby decision and this subscription
       // cannot leave the prompt owner asleep.
-      if (shouldRunRuntimeContractTurn(sessionID) || SessionControl.pending(sessionID).length > 0) {
+      if (
+        shouldRunRuntimeContractTurn(sessionID) ||
+        SessionControl.pending(sessionID).some(isActionableSessionControl)
+      ) {
         settle()
         return
       }

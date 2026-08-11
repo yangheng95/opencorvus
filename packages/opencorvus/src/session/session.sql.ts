@@ -178,7 +178,11 @@ export const InteractiveArtifactTable = sqliteTable(
   (table) => [index("interactive_artifact_message_idx").on(table.message_id)],
 )
 
-export type SessionControlKind = "manual_summarize" | "compaction_request" | "wake_reason"
+export type SessionControlKind =
+  | "manual_summarize"
+  | "compaction_request"
+  | "wake_reason"
+  | "mission_process_recovery"
 
 export type SessionControlStatus = "pending" | "consumed" | "failed"
 

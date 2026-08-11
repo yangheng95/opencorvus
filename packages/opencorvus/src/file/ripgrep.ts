@@ -167,6 +167,7 @@ export namespace Ripgrep {
     }
 
     const stderr = readStreamBuffer(proc.stderr)
+    void stderr.catch(() => undefined)
     let buffer = ""
     let sawFile = false
     let completed = false
@@ -192,7 +193,7 @@ export namespace Ripgrep {
         sawFile = true
         yield buffer
       }
-      const [code, stderrBuffer] = await Promise.all([proc.exited, stderr])
+      const [code, stderrBuffer] = await Promise.all([proc.exited, stderr, proc.outputSettled ?? Promise.resolve()])
       if (code === 1 && !sawFile && !stderrBuffer.toString().trim()) {
         completed = true
         return
@@ -207,7 +208,10 @@ export namespace Ripgrep {
       input.signal?.removeEventListener("abort", abort)
       if (!completed) {
         await ProcessSupervisor.terminateAndWaitForExit(proc, "ripgrep files")
-        await stderr.catch(() => undefined)
+        await Promise.all([
+          stderr.catch(() => undefined),
+          proc.outputSettled?.catch(() => undefined) ?? Promise.resolve(),
+        ])
       } else {
         await proc.dispose()
       }

@@ -52,6 +52,14 @@ export namespace SessionWake {
       source: z.literal("mission.operator"),
       missionID: z.string().optional(),
     }),
+    z
+      .object({
+        source: z.literal("mission.process_recovery"),
+        missionID: z.string(),
+        occurrenceID: z.string().min(1),
+        interruptedAssistantMessageIDs: z.array(Identifier.schema("message")).min(1),
+      })
+      .strict(),
     z.object({
       source: z.literal("conversation.handoff"),
       callerSessionID: Identifier.schema("session"),
@@ -104,6 +112,17 @@ export namespace SessionWake {
     surface?: z.infer<typeof PanelSurface>
     /** Canonical right-sidebar conversation identity used only when this wake creates a session. */
     newConversationExperience?: ConversationExperience
+    /** Stable IDs reserved by a durable ingress owner before wake persistence. */
+    messageID?: string
+    textPartID?: string
+    controlID?: string
+  }
+
+  export type WakeCompletion = { ok: true } | { ok: false; error: string }
+  export type WakeReceipt = {
+    sessionID: string
+    messageID: string
+    completion: Promise<WakeCompletion>
   }
 
   export function reasonExtra(reason: WakeReason): { wake_reason: WakeReason } {
@@ -115,6 +134,11 @@ export namespace SessionWake {
    * Returns the session ID (existing or newly created).
    */
   export async function wake(input: WakeInput): Promise<string> {
+    return (await wakeWithReceipt(input)).sessionID
+  }
+
+  /** Persist one wake and expose the detached loop's truthful completion. */
+  export async function wakeWithReceipt(input: WakeInput): Promise<WakeReceipt> {
     if (input.sessionID && input.newConversationExperience) {
       throw new Error("Session wake cannot apply a new conversation identity to an existing session")
     }
@@ -122,6 +146,7 @@ export namespace SessionWake {
     const sessionID = input.sessionID ?? Identifier.ascending("session")
     const authoredPrompt: SessionPrompt.PromptInput = {
       sessionID,
+      messageID: input.messageID,
       author: input.author,
       agent: input.newConversationExperience && !input.agent ? input.newConversationExperience : input.agent,
       model: input.model,
@@ -134,6 +159,7 @@ export namespace SessionWake {
       byteMaterializationProjectID: Instance.project.id,
       parts: [
         {
+          id: input.textPartID,
           type: "text",
           text: input.prompt,
         },
@@ -214,6 +240,7 @@ export namespace SessionWake {
         prepared,
         controls: (info) => [
           {
+            id: input.controlID,
             sessionID,
             kind: "wake_reason",
             status: "consumed",
@@ -243,7 +270,7 @@ export namespace SessionWake {
         directory,
         fn: () => undefined,
       })
-      void runWithInitializedIndependentProject({
+      const completion: Promise<WakeCompletion> = runWithInitializedIndependentProject({
         directory,
         fn: async () => {
           await SessionPrompt.loop({
@@ -253,11 +280,14 @@ export namespace SessionWake {
           })
           await SessionPrompt.waitForFinish(sessionID, directory)
         },
-      }).catch((err) => {
-        log.error("wake loop failed", { sessionID, err })
       })
+        .then(() => ({ ok: true }) as const)
+        .catch((err): WakeCompletion => {
+          log.error("wake loop failed", { sessionID, err })
+          return { ok: false, error: err instanceof Error ? err.message : String(err) }
+        })
 
-      return sessionID
+      return { sessionID, messageID: message.info.id, completion }
     })
   }
 }

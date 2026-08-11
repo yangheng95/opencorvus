@@ -2,8 +2,9 @@ import { Database, NotFoundError, and, desc, eq, isNull, like, or, sql } from ".
 import fs from "node:fs/promises"
 import { Instance } from "@/project/instance"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
+import { Project } from "@/project/project"
 import { Session } from "@/session"
-import { SessionTable } from "@/session/session.sql"
+import { MessageTable, SessionControlRecordTable, SessionTable } from "@/session/session.sql"
 import { Filesystem } from "@/util/filesystem"
 import { MISSION_CONTROL_DEFAULT_TITLE } from "@/session/first-message-title"
 import {
@@ -298,6 +299,67 @@ export async function* listGlobalMissionSessions(input?: {
     if (!missionID) continue
     yield withMissionID(session, missionID)
   }
+}
+
+export type GlobalMissionProcessRecoveryCandidate = {
+  sessionID: string
+  directory: string
+}
+
+/**
+ * Discover standalone Mission Sessions whose process-owned Turn did not
+ * settle, including the post-terminalization/pre-wake crash cut represented
+ * by the durable Mission recovery marker.
+ */
+export function listGlobalMissionProcessRecoveryCandidates(input?: {
+  scopeProjectWorktree?: string
+}): GlobalMissionProcessRecoveryCandidate[] {
+  const rows = Database.use((db) =>
+    db
+      .select({ sessionID: SessionTable.id, directory: SessionTable.directory })
+      .from(SessionTable)
+      .where(
+        and(
+          eq(SessionTable.kind, "mission"),
+          isNull(SessionTable.time_archived),
+          sql`json_extract(${SessionTable.metadata}, '$.mission.id') IS NOT NULL`,
+          sql`(
+            EXISTS (
+              SELECT 1
+              FROM ${SessionControlRecordTable}
+              WHERE ${SessionControlRecordTable.session_id} = ${SessionTable.id}
+                AND ${SessionControlRecordTable.kind} = 'mission_process_recovery'
+                AND ${SessionControlRecordTable.status} = 'pending'
+            )
+            OR EXISTS (
+              SELECT 1
+              FROM ${MessageTable}
+              WHERE ${MessageTable.session_id} = ${SessionTable.id}
+                AND json_extract(${MessageTable.data}, '$.role') = 'assistant'
+                AND json_extract(${MessageTable.data}, '$.time.completed') IS NULL
+                AND NOT EXISTS (
+                  SELECT 1
+                  FROM message AS newer_user
+                  WHERE newer_user.session_id = ${SessionTable.id}
+                    AND json_extract(newer_user.data, '$.role') = 'user'
+                    AND (
+                      newer_user.time_created > ${MessageTable.time_created}
+                      OR (
+                        newer_user.time_created = ${MessageTable.time_created}
+                        AND newer_user.id > ${MessageTable.id}
+                      )
+                    )
+                )
+            )
+          )`,
+        ),
+      )
+      .orderBy(SessionTable.directory, SessionTable.id)
+      .all(),
+  )
+  return rows.filter(
+    (row) => !input?.scopeProjectWorktree || Project.samePath(row.directory, input.scopeProjectWorktree),
+  )
 }
 
 async function ensureMissionSessionInner(input: {

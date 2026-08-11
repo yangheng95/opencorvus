@@ -2,6 +2,8 @@ import { runWithInitializedIndependentProject } from "@/project/independent-proj
 import { Project } from "@/project/project"
 import { findTask, listStartedIncompleteTaskIDs } from "./store"
 import { taskRootDirectory } from "./task-directory"
+import { listGlobalMissionProcessRecoveryCandidates } from "@/mission/session"
+import { recoverMissionProcessSession } from "@/mission/process-recovery"
 
 export type StartedTaskProjectRecoveryFailure = {
   directory: string
@@ -11,6 +13,9 @@ export type StartedTaskProjectRecoveryFailure = {
 export type StartedTaskProjectRecoveryResult = {
   attempted: number
   initialized: number
+  missionAttempted: number
+  missionWoken: number
+  missionCompleted: number
   failures: StartedTaskProjectRecoveryFailure[]
 }
 
@@ -94,6 +99,9 @@ export async function recoverStartedTaskProjects(input: {
   return {
     attempted: input.directories.length,
     initialized,
+    missionAttempted: 0,
+    missionWoken: 0,
+    missionCompleted: 0,
     failures,
   }
 }
@@ -102,19 +110,47 @@ export async function recoverStartedTaskExecutions(input?: {
   scopeProjectWorktree?: string
 }): Promise<StartedTaskProjectRecoveryResult> {
   const discovery = discoverStartedTaskExecutionDirectories(input)
+  const missionCandidates = listGlobalMissionProcessRecoveryCandidates(input)
+  const directories = [...discovery.directories]
+  for (const candidate of missionCandidates) {
+    if (!directories.some((directory) => Project.samePath(directory, candidate.directory))) {
+      directories.push(candidate.directory)
+    }
+  }
+  directories.sort((left, right) => left.localeCompare(right))
+  let missionWoken = 0
+  let missionCompleted = 0
+  const missionFailures: StartedTaskProjectRecoveryFailure[] = []
   const result = await recoverStartedTaskProjects({
-    directories: discovery.directories,
+    directories,
     initializeProject: (directory) =>
       runWithInitializedIndependentProject({
         directory,
-        fn: async () => {},
+        fn: async () => {
+          for (const candidate of missionCandidates.filter((item) => Project.samePath(item.directory, directory))) {
+            try {
+              const recovered = await recoverMissionProcessSession(candidate.sessionID)
+              if (recovered.status === "woken") missionWoken += 1
+              if (recovered.status === "already_completed") missionCompleted += 1
+            } catch (error) {
+              missionFailures.push({
+                directory,
+                error: `Mission Session ${candidate.sessionID}: ${error instanceof Error ? error.message : String(error)}`,
+              })
+            }
+          }
+        },
       }),
   })
   return {
     attempted: result.attempted + discovery.failures.length,
     initialized: result.initialized,
+    missionAttempted: missionCandidates.length,
+    missionWoken,
+    missionCompleted,
     failures: [
       ...discovery.failures.map(({ directory, error }) => ({ directory, error })),
+      ...missionFailures,
       ...result.failures,
     ],
   }
