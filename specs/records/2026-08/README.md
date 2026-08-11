@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-11-public-website-iterative-design-program.md](2026-08-11-public-website-iterative-design-program.md) establishes the research-backed, independently approved website iteration loop and specifies Iteration 1 as a bounded public-versus-documentation typography ownership repair with real bilingual visual acceptance.
+
 - [2026-08-11-sixth-ten-domain-expert-squad-batch.md](2026-08-11-sixth-ten-domain-expert-squad-batch.md) freezes the autonomous sixth fixed-ten batch, five bounded open-source Skill adaptations, five clean-room source decisions, fifty dedicated assets, professional authority boundaries, and the 75/79 runtime acceptance plan.
 
 - [2026-08-11-fifth-ten-domain-expert-squad-batch.md](2026-08-11-fifth-ten-domain-expert-squad-batch.md) freezes the autonomous fifth fixed-ten batch, three bounded open-source Skill adaptations, seven clean-room source decisions, fifty dedicated assets, professional authority boundaries, and 65/69 runtime acceptance.

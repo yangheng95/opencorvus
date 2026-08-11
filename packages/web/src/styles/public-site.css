@@ -48,6 +48,21 @@ a {
   color: inherit;
 }
 
+/* The landing is rendered inside Starlight's splash shell. Keep the public site's fixed light
+   design authoritative without changing documentation or standalone public-page styles. */
+.public-landing a {
+  color: var(--ink) !important;
+}
+
+.public-landing .primary-action,
+.public-landing .start-card-primary {
+  color: white !important;
+}
+
+.public-landing strong {
+  font-weight: 700 !important;
+}
+
 button,
 input {
   font: inherit;
@@ -102,6 +117,19 @@ a {
   opacity: 1 !important;
 }
 
+.public-landing .public-brand,
+.public-landing .public-brand span {
+  border: 0;
+  background: transparent !important;
+  color: var(--ink) !important;
+}
+
+.public-landing .public-brand[aria-current="page"] {
+  border-left: 0;
+  background: transparent !important;
+  font-weight: 760 !important;
+}
+
 .public-brand img {
   box-sizing: content-box;
   padding: 5px;
@@ -144,6 +172,12 @@ a {
   transform: scaleX(1);
 }
 
+.public-landing .public-nav a[aria-current="page"] {
+  border-left: 0;
+  background: transparent !important;
+  font-weight: 680 !important;
+}
+
 .language-switch {
   justify-self: end;
   color: var(--muted) !important;
@@ -183,6 +217,14 @@ a {
   font-weight: 730;
   line-height: 0.96;
   letter-spacing: -0.065em;
+}
+
+.public-landing .section-heading {
+  color: var(--ink) !important;
+  font-size: clamp(44px, 4.1vw, 66px) !important;
+  font-weight: 730 !important;
+  line-height: 0.96 !important;
+  letter-spacing: -0.065em !important;
 }
 
 .section-lead {
@@ -274,12 +316,12 @@ button.primary-action {
   border-bottom: 2px solid var(--ink);
 }
 
-.hero-copy h1 {
+.public-landing .hero-copy h1 {
   max-width: 760px;
   margin: 0;
   font-family: var(--display);
   font-size: clamp(60px, 5.4vw, 78px) !important;
-  font-weight: 760;
+  font-weight: 760 !important;
   line-height: 0.9 !important;
   letter-spacing: -0.075em !important;
   color: var(--ink) !important;

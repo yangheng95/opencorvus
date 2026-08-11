@@ -239,11 +239,13 @@ const downloads = discoverLandingBinaryDownloads().map((download) => ({
     text-transform: uppercase;
   }
 
-  .work-mode-grid h3 {
+  .public-landing .work-mode-grid h3 {
     margin: 8px 0 18px;
     font-family: var(--display);
-    font-size: 42px;
-    line-height: 1;
+    color: var(--ink) !important;
+    font-size: 42px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
     letter-spacing: -0.055em;
   }
 
@@ -285,9 +287,12 @@ const downloads = discoverLandingBinaryDownloads().map((download) => ({
     font-size: 11px;
   }
 
-  .squad-capabilities h3 {
+  .public-landing .squad-capabilities h3 {
     margin: 0 0 7px;
-    font-size: 16px;
+    color: var(--ink) !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    line-height: 1.6 !important;
   }
 
   .squad-capabilities p {
@@ -398,10 +403,6 @@ const downloads = discoverLandingBinaryDownloads().map((download) => ({
     background: var(--paper);
   }
 
-  :root[data-has-hero] .public-landing .hero-copy h1 {
-    color: var(--ink) !important;
-  }
-
   :root[data-has-hero] .public-landing .landing-video video {
     display: block;
     width: 100% !important;
@@ -410,10 +411,4 @@ const downloads = discoverLandingBinaryDownloads().map((download) => ({
     object-position: left top;
   }
 
-  :root[data-has-hero] .public-landing .public-brand,
-  :root[data-has-hero] .public-landing .public-brand span {
-    border: 0;
-    background: transparent !important;
-    color: var(--ink) !important;
-  }
 </style>
