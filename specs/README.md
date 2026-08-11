@@ -23,6 +23,8 @@ Latest Windows glob, Mission process-recovery, and persisted debug convergence: 
 
 Latest debug-bundle truth and runtime-settlement family audit: [`2026-08-11-debug-bundle-truth-and-runtime-settlement-audit.md`](records/2026-08/2026-08-11-debug-bundle-truth-and-runtime-settlement-audit.md).
 
+Latest Expert Squad on-demand installation design: [`2026-08-11-expert-squad-on-demand-installation.md`](records/2026-08/2026-08-11-expert-squad-on-demand-installation.md).
+
 Latest public website iterative design program: [`2026-08-11-public-website-iterative-design-program.md`](records/2026-08/2026-08-11-public-website-iterative-design-program.md).
 
 Latest public download-page and Release synchronization design: [`2026-08-11-public-download-page-design.md`](records/2026-08/2026-08-11-public-download-page-design.md).

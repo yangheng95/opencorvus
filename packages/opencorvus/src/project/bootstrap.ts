@@ -39,7 +39,6 @@ import { installDefaultTaskWakeRuntime } from "@/scheduler/task-wake-composition
 import { ensureSessionProtocolBridge } from "@/protocol/session-mirror"
 import { markConversationCapabilityTransactionalInit } from "@/conversation/capability-transaction"
 import { reconcilePendingCancelledTaskSettlements } from "@/engine/state"
-import { ExpertSquadPackageManager } from "@/expert-squad/manager"
 
 async function validateInstanceConversationCapabilities() {
   const lifecycleContext = {
@@ -47,19 +46,6 @@ async function validateInstanceConversationCapabilities() {
     worktree: Instance.worktree,
     projectID: Instance.project.id,
   }
-  await ProjectOpenLifecycle.stage("expert-squad.provision-default-payload", lifecycleContext, async () => {
-    const result = await ExpertSquadPackageManager.provisionDefaultPayloadPackages({
-      projectDirectory: Instance.project.worktree,
-    })
-    Log.Default.info("reconciled default expert squad payload", {
-      ...lifecycleContext,
-      installed: result.installed.length,
-      updated: result.updated.length,
-      unchanged: result.unchanged.length,
-      removed: result.removed.length,
-      preserved: result.preserved.length,
-    })
-  })
   await ProjectOpenLifecycle.stage("config.validate", lifecycleContext, async () => {
     const { validateConfigCandidate } = await import("@/config/candidate-validation")
     await validateConfigCandidate({

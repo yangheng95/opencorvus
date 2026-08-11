@@ -169,6 +169,7 @@ export interface ChatComposerProps {
   referenceCatalogError?: string
   expertSquads: ExpertSquadOption[]
   onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
+  onInstallMoreExpertSquads?: () => void
   activeExpertSquadID: string
   conversationActive: boolean
   launchReferences: VisibleComposerReferences
@@ -1535,6 +1536,7 @@ export function ChatComposer(props: ChatComposerProps) {
                     missionSkills={props.missionSkills}
                     expertSquads={props.expertSquads}
                     onExpertSquadQuery={props.onExpertSquadQuery}
+                    onInstallMoreExpertSquads={props.onInstallMoreExpertSquads}
                     launchReferences={visibleComposerReferences(text())}
                     readOnly={false}
                     disabled={!props.enabled || props.busy}

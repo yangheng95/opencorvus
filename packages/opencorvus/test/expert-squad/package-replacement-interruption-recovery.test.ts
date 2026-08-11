@@ -3,12 +3,28 @@ import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 
-test("preserves a partial install target and recovers only Manager-owned partial scratch", async () => {
-  const isolatedRoot = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-payload-interruption-"))
+type ProbeMode = "crash-before" | "crash-after" | "recover-before" | "recover-after"
+
+function parseProbeOutput(stdout: string) {
+  const outputLine = stdout
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .at(-1)
+  return JSON.parse(outputLine ?? "null") as {
+    id: string
+    expectedRevision: "before" | "after"
+    packageDigest: string
+    leftovers: string[]
+  }
+}
+
+test("Registry discovery preserves an operator-owned partial target and rolls back Manager-owned partial scratch", async () => {
+  const isolatedRoot = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-package-interruption-before-"))
   const isolatedHome = path.join(isolatedRoot, "home")
   const isolatedProject = path.join(isolatedRoot, "project")
-  const probe = path.join(import.meta.dir, "default-payload-interruption-probe.ts")
-  const spawn = (mode: "crash" | "crash-cleanup" | "recover") =>
+  const probe = path.join(import.meta.dir, "package-replacement-interruption-probe.ts")
+  const spawn = (mode: ProbeMode) =>
     Bun.spawn([process.execPath, probe, mode, isolatedProject], {
       cwd: path.resolve(import.meta.dir, "../../../.."),
       env: { ...Bun.env, OPENCORVUS_HOME: isolatedHome },
@@ -17,7 +33,7 @@ test("preserves a partial install target and recovers only Manager-owned partial
     })
 
   try {
-    const interrupted = spawn("crash")
+    const interrupted = spawn("crash-before")
     const [interruptedExit, interruptedError] = await Promise.all([
       interrupted.exited,
       new Response(interrupted.stderr).text(),
@@ -35,7 +51,7 @@ test("preserves a partial install target and recovers only Manager-owned partial
     )
     await fs.mkdir(partialTarget, { recursive: true })
     await fs.writeFile(path.join(partialTarget, "README.md"), "Operator-owned invalid target bytes.\n")
-    const blocked = spawn("recover")
+    const blocked = spawn("recover-before")
     const [blockedExit, blockedError] = await Promise.all([blocked.exited, new Response(blocked.stderr).text()])
     expect(blockedExit).toBe(1)
     expect(blockedError).toContain("unknown interrupted filesystem state")
@@ -56,32 +72,19 @@ test("preserves a partial install target and recovers only Manager-owned partial
     await fs.mkdir(journal.discard, { recursive: true })
     await fs.writeFile(path.join(journal.discard, "README.md"), "Partial Manager-owned discard cleanup.\n")
 
-    const recovered = spawn("recover")
+    const recovered = spawn("recover-before")
     const [recoveredExit, recoveredOutput, recoveredError] = await Promise.all([
       recovered.exited,
       new Response(recovered.stdout).text(),
       new Response(recovered.stderr).text(),
     ])
     if (recoveredExit !== 0)
-      throw new Error(`Payload interruption recovery failed (${recoveredExit}): ${recoveredError}`)
-    const outputLine = recoveredOutput
-      .split(/\r?\n/)
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .at(-1)
-    const result = JSON.parse(outputLine ?? "null") as {
-      id: string
-      packageDigest: string
-      updated: string[]
-      disposition: string
-      leftovers: string[]
-    }
+      throw new Error(`Package interruption rollback failed (${recoveredExit}): ${recoveredError}`)
 
-    expect(result).toEqual({
+    expect(parseProbeOutput(recoveredOutput)).toEqual({
       id: "cloud-platform-architecture",
+      expectedRevision: "before",
       packageDigest: expect.stringMatching(/^[a-f0-9]{64}$/),
-      updated: ["cloud-platform-architecture"],
-      disposition: "managed",
       leftovers: [],
     })
   } finally {
@@ -89,12 +92,12 @@ test("preserves a partial install target and recovers only Manager-owned partial
   }
 }, 180_000)
 
-test("commits an exact installed payload after interrupted backup cleanup becomes partial", async () => {
-  const isolatedRoot = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-payload-partial-backup-"))
+test("Registry discovery commits an exact replacement after interrupted backup cleanup becomes partial", async () => {
+  const isolatedRoot = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-package-interruption-after-"))
   const isolatedHome = path.join(isolatedRoot, "home")
   const isolatedProject = path.join(isolatedRoot, "project")
-  const probe = path.join(import.meta.dir, "default-payload-interruption-probe.ts")
-  const spawn = (mode: "crash-cleanup" | "recover") =>
+  const probe = path.join(import.meta.dir, "package-replacement-interruption-probe.ts")
+  const spawn = (mode: ProbeMode) =>
     Bun.spawn([process.execPath, probe, mode, isolatedProject], {
       cwd: path.resolve(import.meta.dir, "../../../.."),
       env: { ...Bun.env, OPENCORVUS_HOME: isolatedHome },
@@ -103,7 +106,7 @@ test("commits an exact installed payload after interrupted backup cleanup become
     })
 
   try {
-    const interrupted = spawn("crash-cleanup")
+    const interrupted = spawn("crash-after")
     const [interruptedExit, interruptedError] = await Promise.all([
       interrupted.exited,
       new Response(interrupted.stderr).text(),
@@ -112,39 +115,25 @@ test("commits an exact installed payload after interrupted backup cleanup become
     expect(interruptedError).toContain("PackageMutationAbruptTerminationForTest")
 
     const scratch = path.join(isolatedProject, ".opencorvus", "expert-squad-staging")
-    const interruptedEntries = await fs.readdir(scratch)
-    const backupName = interruptedEntries.find((name) =>
+    const backupName = (await fs.readdir(scratch)).find((name) =>
       name.startsWith(".replace-builtin-cloud-platform-architecture-"),
     )
     if (!backupName) throw new Error("Interrupted replacement did not retain its exact prior-revision backup")
     await fs.rm(path.join(scratch, backupName, "expert-squad.jsonc"))
 
-    const recovered = spawn("recover")
+    const recovered = spawn("recover-after")
     const [recoveredExit, recoveredOutput, recoveredError] = await Promise.all([
       recovered.exited,
       new Response(recovered.stdout).text(),
       new Response(recovered.stderr).text(),
     ])
     if (recoveredExit !== 0)
-      throw new Error(`Partial backup recovery failed (${recoveredExit}): ${recoveredError}`)
-    const outputLine = recoveredOutput
-      .split(/\r?\n/)
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .at(-1)
-    const result = JSON.parse(outputLine ?? "null") as {
-      id: string
-      packageDigest: string
-      updated: string[]
-      disposition: string
-      leftovers: string[]
-    }
+      throw new Error(`Package interruption commit recovery failed (${recoveredExit}): ${recoveredError}`)
 
-    expect(result).toEqual({
+    expect(parseProbeOutput(recoveredOutput)).toEqual({
       id: "cloud-platform-architecture",
+      expectedRevision: "after",
       packageDigest: expect.stringMatching(/^[a-f0-9]{64}$/),
-      updated: [],
-      disposition: "managed",
       leftovers: [],
     })
   } finally {

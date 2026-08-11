@@ -66,10 +66,8 @@ file/folder/ZIP import 和 MCP（Model Context Protocol，模型上下文协议�
 `src/agent/runtime-template-registry.ts` · `src/skill/`
 
 Expert squad 是 OpenCorvus 内部的 scenario / agent capability package，不是外部
-Codex skill。运行时内置 package 只保留默认便捷开发包 `base`、完整通用团队 `advanced`、研究交付团队 `research-studio` 与专家团生成包 `squad-sdk`；其他 squad 的分发形态是
-payload。完整项目 bootstrap 在配置校验前把仓库托管的全部 payload 默认配置到项目目录
-`.opencorvus/expert-squads/<namespace>/<id>/`，随后才通过普通 package discovery / catalog
-进入运行时。分发 payload 由
+Codex skill。运行时内置 package 只保留默认便捷开发包 `base`、完整通用团队 `advanced`、研究交付团队 `research-studio` 与专家团生成包 `squad-sdk`；这四个 embedded package 是无需安装即可使用的完整默认集合。其他 squad 的分发形态是
+payload，只进入 Squad Market，不由项目 bootstrap 写入安装目录。分发 payload 由
 `packages/opencorvus/script/generate-expert-squad-payload.ts` 在构建前从仓库作者源
 `expert-squads/<namespace>/<id>/` 明文包生成，禁止手写平行清单。运行时安装包仍只存在于
 项目或用户全局 `.opencorvus/expert-squads/<namespace>/<id>/`，运行时 resolver 不扫描仓库作者源。
@@ -100,13 +98,11 @@ Manager 的 folder/ZIP 安装协议要求 caller 显式选择 `project | global`
 `.opencorvus/expert-squads/<namespace>/<id>/` 或
 `Global.Path.config/expert-squads/<namespace>/<id>/`；HTTP、OpenAPI、SDK 和 Overlay 使用同一字段，
 不存在默认值、产品名分支或第二入口。普通 folder/ZIP caller 继续显式选择 scope；Generate Agent Squads
-的 SDK authoring 与 Multica import 固定选择 project，bundled payload provisioning 也固定属于项目。
-默认配置使用 `.opencorvus/.r/project/expert-squad-payload-provisioning.json` 作为唯一的原子
-runtime ledger：首次项目 bootstrap 安装全部 payload，新版本补齐新 ID；只有当前安装摘要仍等于
-ledger 记录的上一份 payload 摘要时才以 compare-and-swap（比较并交换）更新。曾经配置后缺失的
-package 记为 operator removal，摘要分歧的 package 记为 operator modification，后续启动均不静默
-重装或覆盖。该 ledger 只记录 disposition 与 payload/installed digest，不复制 manifest、catalog 或
-package bytes；删除或重新安装后的下一次 reconciliation 从真实安装目录收敛其状态。普通 package
+的 SDK authoring 与 Multica import 固定选择 project。Squad Market 使用同一 Manager 安装协议按需安装
+repository-hosted payload；Composer 与 Mission 的 editable Expert Squad picker 只提供打开这个 Market 的动作，
+不会把该动作写成 Squad 选择、激活 profile 或自行安装。旧版本可能留下
+`.opencorvus/.r/project/expert-squad-payload-provisioning.json`，它不再被读取、写入或作为更新/删除权限；
+旧版本已经安装的 package 原样保留，后续只通过普通显式安装、更新与卸载生命周期管理。普通 package
 replacement 在移动旧 target 前保存 `.package-replacement-<id>.json` 持久 intent；进程在任一 rename
 窗口或递归 scratch 清理中终止时，Registry/Manager reconciliation 从精确 before/after digest 与
 `absent | exact package | partial scratch` 状态回滚未完成替换，或确认 backup 已开始清理后的完整新

@@ -420,10 +420,6 @@ export namespace ProjectRuntimePaths {
     return path.join(projectRuntimeRoot(projectDir), "project", "locks", "project-git.lock")
   }
 
-  export function expertSquadPayloadProvisioningState(projectDir: string): string {
-    return path.join(projectRuntimeRoot(projectDir), "project", "expert-squad-payload-provisioning.json")
-  }
-
   export const legacyRuntimeRelativePaths = [
     path.posix.join(".opencorvus", ".r", "t"),
     path.posix.join(".opencorvus", ".r", "s"),
