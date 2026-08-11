@@ -221,6 +221,59 @@ function parseConversationTurnArtifacts(
     if (status !== "completed" && status !== "failed" && status !== "cancelled") {
       throw new Error(`turn artifacts[${index}].task.status invalid: ${JSON.stringify(task.status)}`)
     }
+    const declaredOutputs = requireArray(summary.declaredOutputs, `turn artifacts[${index}].declaredOutputs`).map(
+      (rawOutput, outputIndex) => {
+        const output = requireObject(rawOutput, `turn artifacts[${index}].declaredOutputs[${outputIndex}]`)
+        const label = String(output.label || "").trim()
+        if (!label || !output.declarationLocator || typeof output.declarationLocator !== "object") {
+          throw new Error(`turn artifacts[${index}].declaredOutputs[${outputIndex}] is incomplete`)
+        }
+        const resources = requireArray(
+          output.resources,
+          `turn artifacts[${index}].declaredOutputs[${outputIndex}].resources`,
+        ).map((rawResource, resourceIndex) => {
+          const resource = requireObject(
+            rawResource,
+            `turn artifacts[${index}].declaredOutputs[${outputIndex}].resources[${resourceIndex}]`,
+          )
+          const tree = String(resource.tree || "").trim()
+          const path = String(resource.path || "").trim()
+          const mediaType = String(resource.media_type || "").trim()
+          const sha256 = String(resource.sha256 || "").trim()
+          if (!path || !tree || !mediaType || !sha256) {
+            throw new Error(
+              `turn artifacts[${index}].declaredOutputs[${outputIndex}].resources[${resourceIndex}] is incomplete`,
+            )
+          }
+          return {
+            snapshot: requireObject(
+              resource.snapshot,
+              `turn artifacts[${index}].declaredOutputs[${outputIndex}].resources[${resourceIndex}].snapshot`,
+            ),
+            tree,
+            path,
+            media_type: mediaType,
+            bytes: requireNonnegativeInteger(
+              resource.bytes,
+              `turn artifacts[${index}].declaredOutputs[${outputIndex}].resources[${resourceIndex}].bytes`,
+            ),
+            sha256,
+          }
+        })
+        return {
+          declarationLocator: output.declarationLocator,
+          producer:
+            output.producer === null
+              ? null
+              : requireObject(output.producer, `turn artifacts[${index}].declaredOutputs[${outputIndex}].producer`),
+          label,
+          ...(typeof output.artifactType === "string" && output.artifactType
+            ? { artifactType: output.artifactType }
+            : {}),
+          resources,
+        }
+      },
+    )
     return {
       messageID,
       userMessageID,
@@ -230,6 +283,7 @@ function parseConversationTurnArtifacts(
         status,
         ...(typeof task.reason === "string" && task.reason ? { reason: task.reason } : {}),
       },
+      declaredOutputs,
       entries: requireArray(summary.entries, `turn artifacts[${index}].entries`),
       catalogComplete: summary.catalogComplete === true,
       providerErrors: requireArray(summary.providerErrors, `turn artifacts[${index}].providerErrors`),

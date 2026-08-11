@@ -3,11 +3,14 @@ import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v1
 import {
   ArtifactCatalogEntrySchema,
   ArtifactCatalogProviderErrorSchema,
+  ArtifactProducerSchema,
+  ArtifactReadLocatorSchema,
   CrossTaskArtifactImportListSchema,
   ArtifactReadLocatorListSchema,
   EngineArtifactLocatorSchema,
   EvidenceLocatorListSchema,
 } from "@opencorvus-ai/plugin/artifact-catalog"
+import { TaskArtifactRefSchema } from "@opencorvus-ai/plugin/task-artifact"
 import {
   COMPOSER_FILE_ATTACHMENT_LIMIT,
   COMPOSER_FOLDER_ATTACHMENT_LIMIT,
@@ -1011,6 +1014,17 @@ export const ConversationTurnArtifactSummary = z
         reason: z.string().optional(),
       })
       .strict(),
+    declaredOutputs: z.array(
+      z
+        .object({
+          declarationLocator: ArtifactReadLocatorSchema,
+          producer: ArtifactProducerSchema.nullable(),
+          label: z.string(),
+          artifactType: z.string().optional(),
+          resources: TaskArtifactRefSchema.array(),
+        })
+        .strict(),
+    ),
     entries: ArtifactCatalogEntrySchema.array(),
     catalogComplete: z.boolean(),
     providerErrors: ArtifactCatalogProviderErrorSchema.array(),

@@ -161,6 +161,20 @@ export interface CardNode {
       status: "completed" | "failed" | "cancelled"
       reason?: string
     }
+    declaredOutputs: Array<{
+      declarationLocator: unknown
+      producer: Record<string, unknown> | null
+      label: string
+      artifactType?: string
+      resources: Array<{
+        snapshot: Record<string, unknown>
+        tree: string
+        path: string
+        media_type: string
+        bytes: number
+        sha256: string
+      }>
+    }>
     entries: Array<{
       source: "engine_artifact" | "task_artifact"
       kind: string

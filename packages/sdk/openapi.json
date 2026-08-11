@@ -76651,6 +76651,442 @@
                           "catalogComplete": {
                             "type": "boolean"
                           },
+                          "declaredOutputs": {
+                            "items": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "artifactType": {
+                                  "type": "string"
+                                },
+                                "declarationLocator": {
+                                  "oneOf": [
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "artifact_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "catalog_revision": {
+                                          "exclusiveMinimum": 0,
+                                          "maximum": 9007199254740991,
+                                          "type": "integer"
+                                        },
+                                        "expected_sha256": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "source": {
+                                          "const": "engine_artifact",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source",
+                                        "artifact_id",
+                                        "catalog_revision",
+                                        "expected_sha256"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "snapshot": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "manifest_sha256": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "project_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "schema_version": {
+                                              "const": 2,
+                                              "type": "number"
+                                            },
+                                            "snapshot_id": {
+                                              "format": "uuid",
+                                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                              "type": "string"
+                                            },
+                                            "task_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "schema_version",
+                                            "project_id",
+                                            "task_id",
+                                            "snapshot_id",
+                                            "manifest_sha256"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "source": {
+                                          "const": "task_artifact_snapshot",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source",
+                                        "snapshot"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "ref": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "bytes": {
+                                              "maximum": 9007199254740991,
+                                              "minimum": 0,
+                                              "type": "integer"
+                                            },
+                                            "media_type": {
+                                              "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sha256": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "snapshot": {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "manifest_sha256": {
+                                                  "pattern": "^[a-f0-9]{64}$",
+                                                  "type": "string"
+                                                },
+                                                "project_id": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "schema_version": {
+                                                  "const": 2,
+                                                  "type": "number"
+                                                },
+                                                "snapshot_id": {
+                                                  "format": "uuid",
+                                                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                                  "type": "string"
+                                                },
+                                                "task_id": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "schema_version",
+                                                "project_id",
+                                                "task_id",
+                                                "snapshot_id",
+                                                "manifest_sha256"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "tree": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "snapshot",
+                                            "tree",
+                                            "path",
+                                            "media_type",
+                                            "bytes",
+                                            "sha256"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "source": {
+                                          "const": "task_artifact_resource",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source",
+                                        "ref"
+                                      ],
+                                      "type": "object"
+                                    }
+                                  ]
+                                },
+                                "label": {
+                                  "type": "string"
+                                },
+                                "producer": {
+                                  "anyOf": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "agent_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "expert_squad_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "message_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "owner_kind": {
+                                              "enum": [
+                                                "projected-scheduler",
+                                                "projected-worker"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "package_revision": {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "namespace": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "package_digest": {
+                                                  "pattern": "^[a-f0-9]{64}$",
+                                                  "type": "string"
+                                                },
+                                                "project_id": {
+                                                  "anyOf": [
+                                                    {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    {
+                                                      "type": "null"
+                                                    }
+                                                  ]
+                                                },
+                                                "scope": {
+                                                  "enum": [
+                                                    "built_in",
+                                                    "project",
+                                                    "global"
+                                                  ],
+                                                  "type": "string"
+                                                },
+                                                "version": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "scope",
+                                                "project_id",
+                                                "namespace",
+                                                "id",
+                                                "version",
+                                                "package_digest"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "projection_hash": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "session_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "tool_call_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "owner_kind",
+                                            "expert_squad_id",
+                                            "package_revision",
+                                            "agent_id",
+                                            "projection_hash",
+                                            "session_id",
+                                            "message_id",
+                                            "tool_call_id"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "message_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mission_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "owner_kind": {
+                                              "const": "mission",
+                                              "type": "string"
+                                            },
+                                            "session_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "tool_call_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "owner_kind",
+                                            "mission_id",
+                                            "session_id",
+                                            "message_id",
+                                            "tool_call_id"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "component_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "operation_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "owner_kind": {
+                                              "const": "core",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "owner_kind",
+                                            "component_id",
+                                            "operation_id"
+                                          ],
+                                          "type": "object"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "resources": {
+                                  "items": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "bytes": {
+                                        "maximum": 9007199254740991,
+                                        "minimum": 0,
+                                        "type": "integer"
+                                      },
+                                      "media_type": {
+                                        "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                        "type": "string"
+                                      },
+                                      "path": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "sha256": {
+                                        "pattern": "^[a-f0-9]{64}$",
+                                        "type": "string"
+                                      },
+                                      "snapshot": {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "manifest_sha256": {
+                                            "pattern": "^[a-f0-9]{64}$",
+                                            "type": "string"
+                                          },
+                                          "project_id": {
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "schema_version": {
+                                            "const": 2,
+                                            "type": "number"
+                                          },
+                                          "snapshot_id": {
+                                            "format": "uuid",
+                                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                            "type": "string"
+                                          },
+                                          "task_id": {
+                                            "minLength": 1,
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "schema_version",
+                                          "project_id",
+                                          "task_id",
+                                          "snapshot_id",
+                                          "manifest_sha256"
+                                        ],
+                                        "type": "object"
+                                      },
+                                      "tree": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "snapshot",
+                                      "tree",
+                                      "path",
+                                      "media_type",
+                                      "bytes",
+                                      "sha256"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "type": "array"
+                                }
+                              },
+                              "required": [
+                                "declarationLocator",
+                                "producer",
+                                "label",
+                                "resources"
+                              ],
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
                           "entries": {
                             "items": {
                               "additionalProperties": false,
@@ -77195,6 +77631,7 @@
                           "messageID",
                           "userMessageID",
                           "task",
+                          "declaredOutputs",
                           "entries",
                           "catalogComplete",
                           "providerErrors"
@@ -80875,6 +81312,442 @@
                       "catalogComplete": {
                         "type": "boolean"
                       },
+                      "declaredOutputs": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "artifactType": {
+                              "type": "string"
+                            },
+                            "declarationLocator": {
+                              "oneOf": [
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "artifact_id": {
+                                      "maxLength": 512,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "catalog_revision": {
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 9007199254740991,
+                                      "type": "integer"
+                                    },
+                                    "expected_sha256": {
+                                      "pattern": "^[a-f0-9]{64}$",
+                                      "type": "string"
+                                    },
+                                    "source": {
+                                      "const": "engine_artifact",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "source",
+                                    "artifact_id",
+                                    "catalog_revision",
+                                    "expected_sha256"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "snapshot": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "manifest_sha256": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "project_id": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "schema_version": {
+                                          "const": 2,
+                                          "type": "number"
+                                        },
+                                        "snapshot_id": {
+                                          "format": "uuid",
+                                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                          "type": "string"
+                                        },
+                                        "task_id": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "schema_version",
+                                        "project_id",
+                                        "task_id",
+                                        "snapshot_id",
+                                        "manifest_sha256"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "source": {
+                                      "const": "task_artifact_snapshot",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "source",
+                                    "snapshot"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "ref": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "bytes": {
+                                          "maximum": 9007199254740991,
+                                          "minimum": 0,
+                                          "type": "integer"
+                                        },
+                                        "media_type": {
+                                          "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                          "type": "string"
+                                        },
+                                        "path": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "sha256": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "snapshot": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "manifest_sha256": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "project_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "schema_version": {
+                                              "const": 2,
+                                              "type": "number"
+                                            },
+                                            "snapshot_id": {
+                                              "format": "uuid",
+                                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                              "type": "string"
+                                            },
+                                            "task_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "schema_version",
+                                            "project_id",
+                                            "task_id",
+                                            "snapshot_id",
+                                            "manifest_sha256"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "tree": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "snapshot",
+                                        "tree",
+                                        "path",
+                                        "media_type",
+                                        "bytes",
+                                        "sha256"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "source": {
+                                      "const": "task_artifact_resource",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "source",
+                                    "ref"
+                                  ],
+                                  "type": "object"
+                                }
+                              ]
+                            },
+                            "label": {
+                              "type": "string"
+                            },
+                            "producer": {
+                              "anyOf": [
+                                {
+                                  "oneOf": [
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "agent_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "expert_squad_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "message_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "owner_kind": {
+                                          "enum": [
+                                            "projected-scheduler",
+                                            "projected-worker"
+                                          ],
+                                          "type": "string"
+                                        },
+                                        "package_revision": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "namespace": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "package_digest": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "project_id": {
+                                              "anyOf": [
+                                                {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "type": "null"
+                                                }
+                                              ]
+                                            },
+                                            "scope": {
+                                              "enum": [
+                                                "built_in",
+                                                "project",
+                                                "global"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "version": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "scope",
+                                            "project_id",
+                                            "namespace",
+                                            "id",
+                                            "version",
+                                            "package_digest"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "projection_hash": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "session_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "tool_call_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "owner_kind",
+                                        "expert_squad_id",
+                                        "package_revision",
+                                        "agent_id",
+                                        "projection_hash",
+                                        "session_id",
+                                        "message_id",
+                                        "tool_call_id"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "message_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "mission_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "owner_kind": {
+                                          "const": "mission",
+                                          "type": "string"
+                                        },
+                                        "session_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "tool_call_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "owner_kind",
+                                        "mission_id",
+                                        "session_id",
+                                        "message_id",
+                                        "tool_call_id"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "component_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "operation_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "owner_kind": {
+                                          "const": "core",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "owner_kind",
+                                        "component_id",
+                                        "operation_id"
+                                      ],
+                                      "type": "object"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "resources": {
+                              "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "bytes": {
+                                    "maximum": 9007199254740991,
+                                    "minimum": 0,
+                                    "type": "integer"
+                                  },
+                                  "media_type": {
+                                    "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                    "type": "string"
+                                  },
+                                  "path": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "sha256": {
+                                    "pattern": "^[a-f0-9]{64}$",
+                                    "type": "string"
+                                  },
+                                  "snapshot": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "manifest_sha256": {
+                                        "pattern": "^[a-f0-9]{64}$",
+                                        "type": "string"
+                                      },
+                                      "project_id": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "schema_version": {
+                                        "const": 2,
+                                        "type": "number"
+                                      },
+                                      "snapshot_id": {
+                                        "format": "uuid",
+                                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                        "type": "string"
+                                      },
+                                      "task_id": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "schema_version",
+                                      "project_id",
+                                      "task_id",
+                                      "snapshot_id",
+                                      "manifest_sha256"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "tree": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "snapshot",
+                                  "tree",
+                                  "path",
+                                  "media_type",
+                                  "bytes",
+                                  "sha256"
+                                ],
+                                "type": "object"
+                              },
+                              "type": "array"
+                            }
+                          },
+                          "required": [
+                            "declarationLocator",
+                            "producer",
+                            "label",
+                            "resources"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
                       "entries": {
                         "items": {
                           "additionalProperties": false,
@@ -81419,6 +82292,7 @@
                       "messageID",
                       "userMessageID",
                       "task",
+                      "declaredOutputs",
                       "entries",
                       "catalogComplete",
                       "providerErrors"
@@ -97019,6 +97893,442 @@
                           "catalogComplete": {
                             "type": "boolean"
                           },
+                          "declaredOutputs": {
+                            "items": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "artifactType": {
+                                  "type": "string"
+                                },
+                                "declarationLocator": {
+                                  "oneOf": [
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "artifact_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "catalog_revision": {
+                                          "exclusiveMinimum": 0,
+                                          "maximum": 9007199254740991,
+                                          "type": "integer"
+                                        },
+                                        "expected_sha256": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "source": {
+                                          "const": "engine_artifact",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source",
+                                        "artifact_id",
+                                        "catalog_revision",
+                                        "expected_sha256"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "snapshot": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "manifest_sha256": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "project_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "schema_version": {
+                                              "const": 2,
+                                              "type": "number"
+                                            },
+                                            "snapshot_id": {
+                                              "format": "uuid",
+                                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                              "type": "string"
+                                            },
+                                            "task_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "schema_version",
+                                            "project_id",
+                                            "task_id",
+                                            "snapshot_id",
+                                            "manifest_sha256"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "source": {
+                                          "const": "task_artifact_snapshot",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source",
+                                        "snapshot"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "ref": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "bytes": {
+                                              "maximum": 9007199254740991,
+                                              "minimum": 0,
+                                              "type": "integer"
+                                            },
+                                            "media_type": {
+                                              "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sha256": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "snapshot": {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "manifest_sha256": {
+                                                  "pattern": "^[a-f0-9]{64}$",
+                                                  "type": "string"
+                                                },
+                                                "project_id": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "schema_version": {
+                                                  "const": 2,
+                                                  "type": "number"
+                                                },
+                                                "snapshot_id": {
+                                                  "format": "uuid",
+                                                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                                  "type": "string"
+                                                },
+                                                "task_id": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "schema_version",
+                                                "project_id",
+                                                "task_id",
+                                                "snapshot_id",
+                                                "manifest_sha256"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "tree": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "snapshot",
+                                            "tree",
+                                            "path",
+                                            "media_type",
+                                            "bytes",
+                                            "sha256"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "source": {
+                                          "const": "task_artifact_resource",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source",
+                                        "ref"
+                                      ],
+                                      "type": "object"
+                                    }
+                                  ]
+                                },
+                                "label": {
+                                  "type": "string"
+                                },
+                                "producer": {
+                                  "anyOf": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "agent_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "expert_squad_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "message_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "owner_kind": {
+                                              "enum": [
+                                                "projected-scheduler",
+                                                "projected-worker"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "package_revision": {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "namespace": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "package_digest": {
+                                                  "pattern": "^[a-f0-9]{64}$",
+                                                  "type": "string"
+                                                },
+                                                "project_id": {
+                                                  "anyOf": [
+                                                    {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    {
+                                                      "type": "null"
+                                                    }
+                                                  ]
+                                                },
+                                                "scope": {
+                                                  "enum": [
+                                                    "built_in",
+                                                    "project",
+                                                    "global"
+                                                  ],
+                                                  "type": "string"
+                                                },
+                                                "version": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "scope",
+                                                "project_id",
+                                                "namespace",
+                                                "id",
+                                                "version",
+                                                "package_digest"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "projection_hash": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "session_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "tool_call_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "owner_kind",
+                                            "expert_squad_id",
+                                            "package_revision",
+                                            "agent_id",
+                                            "projection_hash",
+                                            "session_id",
+                                            "message_id",
+                                            "tool_call_id"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "message_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mission_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "owner_kind": {
+                                              "const": "mission",
+                                              "type": "string"
+                                            },
+                                            "session_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "tool_call_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "owner_kind",
+                                            "mission_id",
+                                            "session_id",
+                                            "message_id",
+                                            "tool_call_id"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "component_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "operation_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "owner_kind": {
+                                              "const": "core",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "owner_kind",
+                                            "component_id",
+                                            "operation_id"
+                                          ],
+                                          "type": "object"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "resources": {
+                                  "items": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "bytes": {
+                                        "maximum": 9007199254740991,
+                                        "minimum": 0,
+                                        "type": "integer"
+                                      },
+                                      "media_type": {
+                                        "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                        "type": "string"
+                                      },
+                                      "path": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "sha256": {
+                                        "pattern": "^[a-f0-9]{64}$",
+                                        "type": "string"
+                                      },
+                                      "snapshot": {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "manifest_sha256": {
+                                            "pattern": "^[a-f0-9]{64}$",
+                                            "type": "string"
+                                          },
+                                          "project_id": {
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "schema_version": {
+                                            "const": 2,
+                                            "type": "number"
+                                          },
+                                          "snapshot_id": {
+                                            "format": "uuid",
+                                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                            "type": "string"
+                                          },
+                                          "task_id": {
+                                            "minLength": 1,
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "schema_version",
+                                          "project_id",
+                                          "task_id",
+                                          "snapshot_id",
+                                          "manifest_sha256"
+                                        ],
+                                        "type": "object"
+                                      },
+                                      "tree": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "snapshot",
+                                      "tree",
+                                      "path",
+                                      "media_type",
+                                      "bytes",
+                                      "sha256"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "type": "array"
+                                }
+                              },
+                              "required": [
+                                "declarationLocator",
+                                "producer",
+                                "label",
+                                "resources"
+                              ],
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
                           "entries": {
                             "items": {
                               "additionalProperties": false,
@@ -97563,6 +98873,7 @@
                           "messageID",
                           "userMessageID",
                           "task",
+                          "declaredOutputs",
                           "entries",
                           "catalogComplete",
                           "providerErrors"
@@ -109072,6 +110383,442 @@
                       "catalogComplete": {
                         "type": "boolean"
                       },
+                      "declaredOutputs": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "artifactType": {
+                              "type": "string"
+                            },
+                            "declarationLocator": {
+                              "oneOf": [
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "artifact_id": {
+                                      "maxLength": 512,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "catalog_revision": {
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 9007199254740991,
+                                      "type": "integer"
+                                    },
+                                    "expected_sha256": {
+                                      "pattern": "^[a-f0-9]{64}$",
+                                      "type": "string"
+                                    },
+                                    "source": {
+                                      "const": "engine_artifact",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "source",
+                                    "artifact_id",
+                                    "catalog_revision",
+                                    "expected_sha256"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "snapshot": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "manifest_sha256": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "project_id": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "schema_version": {
+                                          "const": 2,
+                                          "type": "number"
+                                        },
+                                        "snapshot_id": {
+                                          "format": "uuid",
+                                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                          "type": "string"
+                                        },
+                                        "task_id": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "schema_version",
+                                        "project_id",
+                                        "task_id",
+                                        "snapshot_id",
+                                        "manifest_sha256"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "source": {
+                                      "const": "task_artifact_snapshot",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "source",
+                                    "snapshot"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "ref": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "bytes": {
+                                          "maximum": 9007199254740991,
+                                          "minimum": 0,
+                                          "type": "integer"
+                                        },
+                                        "media_type": {
+                                          "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                          "type": "string"
+                                        },
+                                        "path": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "sha256": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "snapshot": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "manifest_sha256": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "project_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "schema_version": {
+                                              "const": 2,
+                                              "type": "number"
+                                            },
+                                            "snapshot_id": {
+                                              "format": "uuid",
+                                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                              "type": "string"
+                                            },
+                                            "task_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "schema_version",
+                                            "project_id",
+                                            "task_id",
+                                            "snapshot_id",
+                                            "manifest_sha256"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "tree": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "snapshot",
+                                        "tree",
+                                        "path",
+                                        "media_type",
+                                        "bytes",
+                                        "sha256"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "source": {
+                                      "const": "task_artifact_resource",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "source",
+                                    "ref"
+                                  ],
+                                  "type": "object"
+                                }
+                              ]
+                            },
+                            "label": {
+                              "type": "string"
+                            },
+                            "producer": {
+                              "anyOf": [
+                                {
+                                  "oneOf": [
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "agent_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "expert_squad_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "message_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "owner_kind": {
+                                          "enum": [
+                                            "projected-scheduler",
+                                            "projected-worker"
+                                          ],
+                                          "type": "string"
+                                        },
+                                        "package_revision": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "namespace": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "package_digest": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "project_id": {
+                                              "anyOf": [
+                                                {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "type": "null"
+                                                }
+                                              ]
+                                            },
+                                            "scope": {
+                                              "enum": [
+                                                "built_in",
+                                                "project",
+                                                "global"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "version": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "scope",
+                                            "project_id",
+                                            "namespace",
+                                            "id",
+                                            "version",
+                                            "package_digest"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "projection_hash": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "session_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "tool_call_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "owner_kind",
+                                        "expert_squad_id",
+                                        "package_revision",
+                                        "agent_id",
+                                        "projection_hash",
+                                        "session_id",
+                                        "message_id",
+                                        "tool_call_id"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "message_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "mission_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "owner_kind": {
+                                          "const": "mission",
+                                          "type": "string"
+                                        },
+                                        "session_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "tool_call_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "owner_kind",
+                                        "mission_id",
+                                        "session_id",
+                                        "message_id",
+                                        "tool_call_id"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "component_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "operation_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "owner_kind": {
+                                          "const": "core",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "owner_kind",
+                                        "component_id",
+                                        "operation_id"
+                                      ],
+                                      "type": "object"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "resources": {
+                              "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "bytes": {
+                                    "maximum": 9007199254740991,
+                                    "minimum": 0,
+                                    "type": "integer"
+                                  },
+                                  "media_type": {
+                                    "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                    "type": "string"
+                                  },
+                                  "path": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "sha256": {
+                                    "pattern": "^[a-f0-9]{64}$",
+                                    "type": "string"
+                                  },
+                                  "snapshot": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "manifest_sha256": {
+                                        "pattern": "^[a-f0-9]{64}$",
+                                        "type": "string"
+                                      },
+                                      "project_id": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "schema_version": {
+                                        "const": 2,
+                                        "type": "number"
+                                      },
+                                      "snapshot_id": {
+                                        "format": "uuid",
+                                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                        "type": "string"
+                                      },
+                                      "task_id": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "schema_version",
+                                      "project_id",
+                                      "task_id",
+                                      "snapshot_id",
+                                      "manifest_sha256"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "tree": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "snapshot",
+                                  "tree",
+                                  "path",
+                                  "media_type",
+                                  "bytes",
+                                  "sha256"
+                                ],
+                                "type": "object"
+                              },
+                              "type": "array"
+                            }
+                          },
+                          "required": [
+                            "declarationLocator",
+                            "producer",
+                            "label",
+                            "resources"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
                       "entries": {
                         "items": {
                           "additionalProperties": false,
@@ -109616,6 +111363,7 @@
                       "messageID",
                       "userMessageID",
                       "task",
+                      "declaredOutputs",
                       "entries",
                       "catalogComplete",
                       "providerErrors"

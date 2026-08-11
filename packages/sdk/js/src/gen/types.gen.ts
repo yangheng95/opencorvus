@@ -23132,6 +23132,89 @@ export type SessionConversationResponses = {
     transcript: Array<VisibleMessageWithParts>
     turnArtifacts: Array<{
       catalogComplete: boolean
+      declaredOutputs: Array<{
+        artifactType?: string
+        declarationLocator:
+          | {
+              artifact_id: string
+              catalog_revision: number
+              expected_sha256: string
+              source: "engine_artifact"
+            }
+          | {
+              snapshot: {
+                manifest_sha256: string
+                project_id: string
+                schema_version: 2
+                snapshot_id: string
+                task_id: string
+              }
+              source: "task_artifact_snapshot"
+            }
+          | {
+              ref: {
+                bytes: number
+                media_type: string
+                path: string
+                sha256: string
+                snapshot: {
+                  manifest_sha256: string
+                  project_id: string
+                  schema_version: 2
+                  snapshot_id: string
+                  task_id: string
+                }
+                tree: string
+              }
+              source: "task_artifact_resource"
+            }
+        label: string
+        producer:
+          | {
+              agent_id: string
+              expert_squad_id: string
+              message_id: string
+              owner_kind: "projected-scheduler" | "projected-worker"
+              package_revision: {
+                id: string
+                namespace: string
+                package_digest: string
+                project_id: string | null
+                scope: "built_in" | "project" | "global"
+                version: string
+              }
+              projection_hash: string
+              session_id: string
+              tool_call_id: string
+            }
+          | {
+              message_id: string
+              mission_id: string
+              owner_kind: "mission"
+              session_id: string
+              tool_call_id: string
+            }
+          | {
+              component_id: string
+              operation_id: string
+              owner_kind: "core"
+            }
+          | null
+        resources: Array<{
+          bytes: number
+          media_type: string
+          path: string
+          sha256: string
+          snapshot: {
+            manifest_sha256: string
+            project_id: string
+            schema_version: 2
+            snapshot_id: string
+            task_id: string
+          }
+          tree: string
+        }>
+      }>
       entries: Array<{
         artifact_type?: string
         bytes: number
@@ -24551,6 +24634,89 @@ export type SessionTurnArtifactsResponses = {
    */
   200: Array<{
     catalogComplete: boolean
+    declaredOutputs: Array<{
+      artifactType?: string
+      declarationLocator:
+        | {
+            artifact_id: string
+            catalog_revision: number
+            expected_sha256: string
+            source: "engine_artifact"
+          }
+        | {
+            snapshot: {
+              manifest_sha256: string
+              project_id: string
+              schema_version: 2
+              snapshot_id: string
+              task_id: string
+            }
+            source: "task_artifact_snapshot"
+          }
+        | {
+            ref: {
+              bytes: number
+              media_type: string
+              path: string
+              sha256: string
+              snapshot: {
+                manifest_sha256: string
+                project_id: string
+                schema_version: 2
+                snapshot_id: string
+                task_id: string
+              }
+              tree: string
+            }
+            source: "task_artifact_resource"
+          }
+      label: string
+      producer:
+        | {
+            agent_id: string
+            expert_squad_id: string
+            message_id: string
+            owner_kind: "projected-scheduler" | "projected-worker"
+            package_revision: {
+              id: string
+              namespace: string
+              package_digest: string
+              project_id: string | null
+              scope: "built_in" | "project" | "global"
+              version: string
+            }
+            projection_hash: string
+            session_id: string
+            tool_call_id: string
+          }
+        | {
+            message_id: string
+            mission_id: string
+            owner_kind: "mission"
+            session_id: string
+            tool_call_id: string
+          }
+        | {
+            component_id: string
+            operation_id: string
+            owner_kind: "core"
+          }
+        | null
+      resources: Array<{
+        bytes: number
+        media_type: string
+        path: string
+        sha256: string
+        snapshot: {
+          manifest_sha256: string
+          project_id: string
+          schema_version: 2
+          snapshot_id: string
+          task_id: string
+        }
+        tree: string
+      }>
+    }>
     entries: Array<{
       artifact_type?: string
       bytes: number
@@ -29225,6 +29391,89 @@ export type TaskConversationResponses = {
     transcript: Array<VisibleMessageWithParts>
     turnArtifacts: Array<{
       catalogComplete: boolean
+      declaredOutputs: Array<{
+        artifactType?: string
+        declarationLocator:
+          | {
+              artifact_id: string
+              catalog_revision: number
+              expected_sha256: string
+              source: "engine_artifact"
+            }
+          | {
+              snapshot: {
+                manifest_sha256: string
+                project_id: string
+                schema_version: 2
+                snapshot_id: string
+                task_id: string
+              }
+              source: "task_artifact_snapshot"
+            }
+          | {
+              ref: {
+                bytes: number
+                media_type: string
+                path: string
+                sha256: string
+                snapshot: {
+                  manifest_sha256: string
+                  project_id: string
+                  schema_version: 2
+                  snapshot_id: string
+                  task_id: string
+                }
+                tree: string
+              }
+              source: "task_artifact_resource"
+            }
+        label: string
+        producer:
+          | {
+              agent_id: string
+              expert_squad_id: string
+              message_id: string
+              owner_kind: "projected-scheduler" | "projected-worker"
+              package_revision: {
+                id: string
+                namespace: string
+                package_digest: string
+                project_id: string | null
+                scope: "built_in" | "project" | "global"
+                version: string
+              }
+              projection_hash: string
+              session_id: string
+              tool_call_id: string
+            }
+          | {
+              message_id: string
+              mission_id: string
+              owner_kind: "mission"
+              session_id: string
+              tool_call_id: string
+            }
+          | {
+              component_id: string
+              operation_id: string
+              owner_kind: "core"
+            }
+          | null
+        resources: Array<{
+          bytes: number
+          media_type: string
+          path: string
+          sha256: string
+          snapshot: {
+            manifest_sha256: string
+            project_id: string
+            schema_version: 2
+            snapshot_id: string
+            task_id: string
+          }
+          tree: string
+        }>
+      }>
       entries: Array<{
         artifact_type?: string
         bytes: number
@@ -32650,6 +32899,89 @@ export type TaskTurnArtifactsResponses = {
    */
   200: Array<{
     catalogComplete: boolean
+    declaredOutputs: Array<{
+      artifactType?: string
+      declarationLocator:
+        | {
+            artifact_id: string
+            catalog_revision: number
+            expected_sha256: string
+            source: "engine_artifact"
+          }
+        | {
+            snapshot: {
+              manifest_sha256: string
+              project_id: string
+              schema_version: 2
+              snapshot_id: string
+              task_id: string
+            }
+            source: "task_artifact_snapshot"
+          }
+        | {
+            ref: {
+              bytes: number
+              media_type: string
+              path: string
+              sha256: string
+              snapshot: {
+                manifest_sha256: string
+                project_id: string
+                schema_version: 2
+                snapshot_id: string
+                task_id: string
+              }
+              tree: string
+            }
+            source: "task_artifact_resource"
+          }
+      label: string
+      producer:
+        | {
+            agent_id: string
+            expert_squad_id: string
+            message_id: string
+            owner_kind: "projected-scheduler" | "projected-worker"
+            package_revision: {
+              id: string
+              namespace: string
+              package_digest: string
+              project_id: string | null
+              scope: "built_in" | "project" | "global"
+              version: string
+            }
+            projection_hash: string
+            session_id: string
+            tool_call_id: string
+          }
+        | {
+            message_id: string
+            mission_id: string
+            owner_kind: "mission"
+            session_id: string
+            tool_call_id: string
+          }
+        | {
+            component_id: string
+            operation_id: string
+            owner_kind: "core"
+          }
+        | null
+      resources: Array<{
+        bytes: number
+        media_type: string
+        path: string
+        sha256: string
+        snapshot: {
+          manifest_sha256: string
+          project_id: string
+          schema_version: 2
+          snapshot_id: string
+          task_id: string
+        }
+        tree: string
+      }>
+    }>
     entries: Array<{
       artifact_type?: string
       bytes: number

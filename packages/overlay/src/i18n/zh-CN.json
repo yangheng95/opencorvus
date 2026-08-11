@@ -765,14 +765,17 @@
     "one": "{{count}} 个文件",
     "other": "{{count}} 个文件"
   },
-  "chat.artifacts.label": "交付结果",
+  "chat.artifacts.label": "Agent 交付",
   "chat.artifacts.count": {
-    "one": "{{count}} 项交付物",
-    "other": "{{count}} 项交付物"
+    "one": "{{count}} 项输出",
+    "other": "{{count}} 项输出"
   },
-  "chat.artifacts.none_title": "没有交付物",
-  "chat.artifacts.none": "本次任务未产出 Artifact 交付物。",
-  "chat.artifacts.outputs": "交付的 Artifacts",
+  "chat.artifacts.none_title": "没有声明的输出",
+  "chat.artifacts.none": "本次任务没有 Agent 声明的交付输出。",
+  "chat.artifacts.declared_outputs": "Agent 声明的输出",
+  "chat.artifacts.delivery_records": "查看交付记录（{{count}}）",
+  "chat.artifacts.producer_unknown": "未标识的产物来源",
+  "chat.artifacts.producer_mission": "Mission",
   "chat.artifacts.files": "变更的文件",
   "chat.artifacts.structured": "结构化数据",
   "chat.artifacts.snapshot": "文件快照",
