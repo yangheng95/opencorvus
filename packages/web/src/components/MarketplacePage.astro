@@ -344,4 +344,72 @@ const copy =
     font-size: 12px;
     line-height: 1.55;
   }
+
+  @media (max-width: 1099px) {
+    :global([data-market-root] .market-intro-grid),
+    .market-selection-guide,
+    :global([data-market-root] .market-workspace) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    :global([data-market-root] .market-intro-grid),
+    .market-selection-guide {
+      gap: 28px;
+    }
+
+    .market-selection-guide > div {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    :global([data-market-root] .market-workspace) {
+      gap: 28px;
+      padding-bottom: 54px;
+    }
+
+    :global([data-market-root] .market-controls) {
+      position: static;
+    }
+
+    :global([data-market-root] .market-record) {
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 14px 18px;
+      min-height: 0;
+      padding: 22px 18px 22px 0;
+    }
+
+    :global([data-market-root] .market-record::before) {
+      grid-column: 1;
+      grid-row: 1 / span 3;
+    }
+
+    :global([data-market-root] .market-record > div) {
+      grid-column: 2;
+    }
+
+    :global([data-market-root] .record-meta) {
+      justify-items: start;
+      text-align: left;
+    }
+
+    :global([data-market-root] .results-toolbar) {
+      gap: 12px;
+      padding: 10px 14px;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .market-selection-guide > div {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    :global([data-market-root] .registry-fact),
+    :global([data-market-root] .market-controls) {
+      padding: 22px;
+    }
+
+    :global([data-market-root] .results-toolbar) {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
 </style>

@@ -83,7 +83,7 @@ const copy =
   description={copy.description}
   languageHref={copy.languageHref}
 >
-  <main id="main-content" class="public-main">
+  <main id="main-content" class="public-main publish-page">
     <section class="utility-intro" aria-labelledby="publish-title">
       <div><p class="eyebrow">{copy.eyebrow}</p><h1 id="publish-title">{copy.heading}</h1></div>
       <p class="section-lead">{copy.lead}</p>
@@ -178,5 +178,45 @@ const copy =
 
   .publication-boundary aside p {
     color: var(--muted);
+  }
+
+  @media (max-width: 1099px) {
+    .publish-page .author-actions {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+
+    .publish-page .author-chain,
+    .publish-page .package-question-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .publish-page .publication-boundary {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .publish-page .author-actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .publish-page .author-actions a {
+      width: 100%;
+    }
+
+    .publish-page .author-chain,
+    .publish-page .package-question-grid,
+    :global(.publish-page .publish-chain li) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    :global(.publish-page .publish-chain li) {
+      gap: 10px;
+      min-height: 0;
+      padding: 22px 18px;
+    }
   }
 </style>

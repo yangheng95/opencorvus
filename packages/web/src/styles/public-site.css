@@ -523,9 +523,15 @@ button.primary-action {
   font-weight: 500;
 }
 
-.featured-squad:nth-child(1)::before { content: "01"; }
-.featured-squad:nth-child(2)::before { content: "02"; }
-.featured-squad:nth-child(3)::before { content: "03"; }
+.featured-squad:nth-child(1)::before {
+  content: "01";
+}
+.featured-squad:nth-child(2)::before {
+  content: "02";
+}
+.featured-squad:nth-child(3)::before {
+  content: "03";
+}
 
 .featured-squad:hover,
 .market-record:hover {
@@ -1658,7 +1664,271 @@ button.primary-action {
     grid-template-columns: 52px 0.95fr 1fr 0.42fr;
     gap: 24px;
   }
+}
 
+@media (max-width: 1099px) {
+  :root {
+    --content: calc(100vw - 32px);
+  }
+
+  body.public-site-body {
+    min-width: 0;
+  }
+
+  .public-header,
+  .public-main,
+  .public-footer {
+    width: var(--content);
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .public-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px 20px;
+    min-height: 0;
+    padding: 14px 0 0;
+  }
+
+  .public-brand {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    min-height: 44px;
+  }
+
+  .language-switch {
+    grid-column: 2;
+    grid-row: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .public-nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    min-width: 0;
+    max-width: 100%;
+    padding: 4px 0 12px;
+  }
+
+  .public-nav a {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    min-width: 44px;
+    min-height: 44px;
+    white-space: nowrap;
+  }
+
+  .public-nav a::after {
+    bottom: 0;
+  }
+
+  .section-heading,
+  .public-landing .section-heading,
+  .detail-grid h2,
+  .utility-section h2 {
+    font-size: clamp(38px, 10vw, 54px) !important;
+    overflow-wrap: anywhere;
+  }
+
+  .market-intro h1,
+  .utility-intro h1,
+  .detail-hero h1 {
+    font-size: clamp(46px, 13vw, 64px);
+    line-height: 0.94;
+    overflow-wrap: anywhere;
+  }
+
+  .landing-band,
+  .utility-section {
+    padding: 54px 0;
+  }
+
+  .landing-band-header,
+  .product-proof,
+  .utility-intro,
+  .detail-hero,
+  .detail-topology,
+  .detail-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .landing-band-header {
+    margin-bottom: 34px;
+  }
+
+  .utility-intro {
+    margin-top: 16px;
+    padding: 42px 28px 54px;
+  }
+
+  .utility-intro::after {
+    right: 18px;
+    bottom: 14px;
+  }
+
+  .detail-hero {
+    padding: 48px 0;
+  }
+
+  .detail-hero .detail-summary {
+    font-size: 18px;
+  }
+
+  .detail-topology {
+    padding: 40px 0;
+  }
+
+  .workflow-topology-expanded .topology-graph {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .workflow-topology-expanded .topology-seal,
+  .workflow-topology-expanded .topology-output {
+    min-height: 72px;
+    border: 0;
+  }
+
+  .workflow-topology-expanded .topology-workflow ol {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .workflow-topology-expanded .topology-workflow ol::before {
+    display: none;
+  }
+
+  .workflow-topology-expanded .topology-node-copy small {
+    display: block;
+  }
+
+  .detail-tabs {
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+  }
+
+  .detail-tab {
+    flex: 0 0 auto;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 16px;
+  }
+
+  .detail-panel {
+    min-height: 0;
+    padding: 42px 0 72px;
+  }
+
+  .fact-list li,
+  .agent-roster li,
+  .workflow-list li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .copy-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .copy-button,
+  .market-filter,
+  .detail-tab,
+  .dialog-actions :is(a, button),
+  .detail-actions :is(a, button),
+  .distribution-download-action {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .install-dialog,
+  .walkthrough-dialog {
+    width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 32px);
+    overflow: auto;
+  }
+
+  .walkthrough-workflows,
+  .scope-options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dialog-body {
+    padding: 24px;
+  }
+
+  .dialog-body h2 {
+    font-size: 34px;
+  }
+
+  .dialog-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dialog-actions :is(a, button) {
+    width: 100%;
+  }
+
+  .state-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .public-footer {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    min-height: 0;
+    padding: 38px 0;
+  }
+
+  .public-footer nav {
+    flex-wrap: wrap;
+    gap: 4px 16px;
+  }
+
+  .public-footer a {
+    display: inline-flex;
+    align-items: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .mono,
+  code,
+  .squad-identity,
+  .revision-card,
+  .record-meta {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero-actions,
+  .detail-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero-actions :is(a, button),
+  .detail-actions :is(a, button) {
+    width: 100%;
+  }
+
+  .state-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

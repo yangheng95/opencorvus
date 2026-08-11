@@ -605,52 +605,6 @@ const copyJson = JSON.stringify(copy)
   }
 
   @media (max-width: 1099px) {
-    :global(body.public-site-body) {
-      min-width: 0;
-    }
-
-    :global(.public-header),
-    .download-page,
-    :global(.public-footer) {
-      width: calc(100% - 32px);
-    }
-
-    :global(.public-header) {
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 12px 20px;
-      min-height: 0;
-      padding: 14px 0 0;
-    }
-
-    :global(.public-brand) {
-      grid-column: 1;
-      grid-row: 1;
-    }
-
-    :global(.language-switch) {
-      grid-column: 2;
-      grid-row: 1;
-    }
-
-    :global(.public-nav) {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      flex-wrap: wrap;
-      gap: 10px 20px;
-      min-width: 0;
-      max-width: 100%;
-      padding: 4px 0 16px;
-    }
-
-    :global(.public-nav a) {
-      flex: 0 0 auto;
-      white-space: nowrap;
-    }
-
-    :global(.public-nav a::after) {
-      bottom: -4px;
-    }
-
     .download-page {
       padding-bottom: 56px;
     }
@@ -766,16 +720,5 @@ const copyJson = JSON.stringify(copy)
       width: 100%;
     }
 
-    :global(.public-footer) {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 20px;
-      min-height: 0;
-      padding: 38px 0;
-    }
-
-    :global(.public-footer nav) {
-      flex-wrap: wrap;
-      gap: 14px 22px;
-    }
   }
 </style>
