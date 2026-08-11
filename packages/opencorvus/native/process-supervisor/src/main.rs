@@ -4,7 +4,6 @@
 mod windows_helper {
     use serde::{Deserialize, Serialize};
     use std::{
-        collections::BTreeMap,
         env,
         ffi::c_void,
         fs,
@@ -15,7 +14,7 @@ mod windows_helper {
     use windows_sys::Win32::{
         Foundation::{
             CloseHandle, GetLastError, ERROR_INVALID_PARAMETER, ERROR_NO_MORE_FILES, HANDLE,
-            INVALID_HANDLE_VALUE, WAIT_OBJECT_0,
+            INVALID_HANDLE_VALUE, WAIT_OBJECT_0, WAIT_TIMEOUT,
         },
         System::{
             Console::{GetStdHandle, STD_ERROR_HANDLE, STD_INPUT_HANDLE, STD_OUTPUT_HANDLE},
@@ -24,18 +23,20 @@ mod windows_helper {
                 TH32CS_SNAPPROCESS,
             },
             JobObjects::{
-                CreateJobObjectW, JobObjectExtendedLimitInformation, SetInformationJobObject,
-                JOBOBJECT_EXTENDED_LIMIT_INFORMATION, JOB_OBJECT_LIMIT_BREAKAWAY_OK,
+                CreateJobObjectW, JobObjectBasicAccountingInformation,
+                JobObjectExtendedLimitInformation, QueryInformationJobObject,
+                SetInformationJobObject, TerminateJobObject,
+                JOBOBJECT_BASIC_ACCOUNTING_INFORMATION, JOBOBJECT_EXTENDED_LIMIT_INFORMATION,
                 JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE,
             },
             Threading::{
                 CreateProcessW, DeleteProcThreadAttributeList, GetCurrentProcessId,
                 GetExitCodeProcess, InitializeProcThreadAttributeList, OpenProcess, ResumeThread,
-                TerminateProcess, UpdateProcThreadAttribute, WaitForSingleObject,
+                Sleep, TerminateProcess, UpdateProcThreadAttribute, WaitForSingleObject,
                 CREATE_BREAKAWAY_FROM_JOB, CREATE_NO_WINDOW, CREATE_SUSPENDED,
-                CREATE_UNICODE_ENVIRONMENT, EXTENDED_STARTUPINFO_PRESENT, INFINITE,
-                PROCESS_INFORMATION, PROCESS_SYNCHRONIZE, PROCESS_TERMINATE,
-                PROC_THREAD_ATTRIBUTE_JOB_LIST, STARTF_USESTDHANDLES, STARTUPINFOEXW,
+                CREATE_UNICODE_ENVIRONMENT, EXTENDED_STARTUPINFO_PRESENT, PROCESS_INFORMATION,
+                PROCESS_SYNCHRONIZE, PROCESS_TERMINATE, PROC_THREAD_ATTRIBUTE_JOB_LIST,
+                STARTF_USESTDHANDLES, STARTUPINFOEXW,
             },
         },
     };
@@ -47,9 +48,13 @@ mod windows_helper {
             command: String,
             shell: String,
             cwd: Option<String>,
-            env: BTreeMap<String, String>,
+            cancel_file: String,
             ready_file: String,
+            settled_file: String,
             request_id: String,
+            owner_pid: u32,
+            owner_process_instance_id: String,
+            runtime_occurrence_id: String,
         },
         Command {
             executable: String,
@@ -57,9 +62,13 @@ mod windows_helper {
             #[serde(default)]
             detached: bool,
             cwd: Option<String>,
-            env: BTreeMap<String, String>,
+            cancel_file: String,
             ready_file: String,
+            settled_file: String,
             request_id: String,
+            owner_pid: u32,
+            owner_process_instance_id: String,
+            runtime_occurrence_id: String,
         },
     }
 
@@ -67,9 +76,13 @@ mod windows_helper {
         application: String,
         command_line: String,
         cwd: Option<String>,
-        env: BTreeMap<String, String>,
+        cancel_file: String,
         ready_file: String,
+        settled_file: String,
         request_id: String,
+        owner_pid: u32,
+        owner_process_instance_id: String,
+        runtime_occurrence_id: String,
         detached: bool,
     }
 
@@ -79,6 +92,17 @@ mod windows_helper {
         request_id: &'a str,
         helper_pid: u32,
         target_pid: u32,
+        runtime_occurrence_id: &'a str,
+    }
+
+    #[derive(Serialize)]
+    struct SettlementMarker<'a> {
+        protocol: u32,
+        request_id: &'a str,
+        helper_pid: u32,
+        target_pid: u32,
+        active_processes: u32,
+        runtime_occurrence_id: &'a str,
     }
 
     #[derive(Clone)]
@@ -168,7 +192,7 @@ mod windows_helper {
     }
 
     struct SuspendedTarget {
-        _job: Option<Handle>,
+        job: Option<Handle>,
         process: Handle,
         thread: Handle,
         pid: u32,
@@ -251,27 +275,13 @@ mod windows_helper {
         }
     }
 
-    fn environment_block(envs: &BTreeMap<String, String>) -> Vec<u16> {
-        let mut block = Vec::new();
-        for (key, value) in envs {
-            if key.contains('=') || key.is_empty() {
-                continue;
-            }
-            block.extend(std::ffi::OsStr::new(&format!("{key}={value}")).encode_wide());
-            block.push(0);
-        }
-        block.push(0);
-        block
-    }
-
     fn create_job() -> Result<Handle, String> {
         let job = unsafe { CreateJobObjectW(null(), null()) };
         if job.is_null() || job == INVALID_HANDLE_VALUE {
             return Err("CreateJobObjectW failed".into());
         }
         let mut info: JOBOBJECT_EXTENDED_LIMIT_INFORMATION = unsafe { std::mem::zeroed() };
-        info.BasicLimitInformation.LimitFlags =
-            JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE | JOB_OBJECT_LIMIT_BREAKAWAY_OK;
+        info.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
         let ok = unsafe {
             SetInformationJobObject(
                 job,
@@ -289,15 +299,76 @@ mod windows_helper {
         Ok(Handle(job))
     }
 
+    fn job_active_process_count(job: HANDLE) -> Result<u32, String> {
+        let mut info: JOBOBJECT_BASIC_ACCOUNTING_INFORMATION = unsafe { std::mem::zeroed() };
+        let queried = unsafe {
+            QueryInformationJobObject(
+                job,
+                JobObjectBasicAccountingInformation,
+                &mut info as *mut _ as *mut c_void,
+                std::mem::size_of::<JOBOBJECT_BASIC_ACCOUNTING_INFORMATION>() as u32,
+                null_mut(),
+            )
+        };
+        if queried == 0 {
+            let error = unsafe { GetLastError() };
+            return Err(format!(
+                "QueryInformationJobObject(active-process-zero) failed (win32={error})"
+            ));
+        }
+        Ok(info.ActiveProcesses)
+    }
+
+    fn cancellation_requested(cancel_file: &str) -> bool {
+        std::path::Path::new(cancel_file).exists()
+    }
+
+    fn terminate_job_once(job: HANDLE, cancellation_applied: &mut bool) -> Result<(), String> {
+        if *cancellation_applied {
+            return Ok(());
+        }
+        let terminated = unsafe { TerminateJobObject(job, 1) };
+        if terminated == 0 {
+            let error = unsafe { GetLastError() };
+            return Err(format!("TerminateJobObject failed (win32={error})"));
+        }
+        *cancellation_applied = true;
+        Ok(())
+    }
+
+    fn wait_for_job_active_process_zero(
+        job: HANDLE,
+        cancel_file: &str,
+        owner: Option<HANDLE>,
+        cancellation_applied: &mut bool,
+    ) -> Result<(), String> {
+        loop {
+            if job_active_process_count(job)? == 0 {
+                return Ok(());
+            }
+            let owner_dead = owner
+                .map(|handle| unsafe { WaitForSingleObject(handle, 0) } == WAIT_OBJECT_0)
+                .unwrap_or(false);
+            if owner_dead || cancellation_requested(cancel_file) {
+                terminate_job_once(job, cancellation_applied)?;
+            }
+            unsafe { Sleep(10) };
+        }
+    }
+
     fn launch_request(request: Request) -> LaunchRequest {
         match request {
             Request::Shell {
                 command,
                 shell,
                 cwd,
-                env,
+                cancel_file,
                 ready_file,
+                settled_file,
                 request_id,
+                owner_pid,
+                owner_process_instance_id,
+                runtime_occurrence_id,
             } => {
                 let args = shell_args(&shell, &command);
                 let command_line = std::iter::once(shell.as_str())
@@ -309,9 +380,13 @@ mod windows_helper {
                     application: shell,
                     command_line,
                     cwd,
-                    env,
+                    cancel_file,
                     ready_file,
+                    settled_file,
                     request_id,
+                    owner_pid,
+                    owner_process_instance_id,
+                    runtime_occurrence_id,
                     detached: false,
                 }
             }
@@ -320,9 +395,13 @@ mod windows_helper {
                 args,
                 detached,
                 cwd,
-                env,
+                cancel_file,
                 ready_file,
+                settled_file,
                 request_id,
+                owner_pid,
+                owner_process_instance_id,
+                runtime_occurrence_id,
             } => {
                 let command_line = std::iter::once(executable.as_str())
                     .chain(args.iter().map(String::as_str))
@@ -333,9 +412,13 @@ mod windows_helper {
                     application: executable,
                     command_line,
                     cwd,
-                    env,
+                    cancel_file,
                     ready_file,
+                    settled_file,
                     request_id,
+                    owner_pid,
+                    owner_process_instance_id,
+                    runtime_occurrence_id,
                     detached,
                 }
             }
@@ -351,15 +434,25 @@ mod windows_helper {
         } else {
             Some(create_job()?)
         };
-        let attributes = job
-            .as_ref()
-            .map(|job| ProcessThreadAttributeList::for_job(job.0))
-            .transpose()?;
+        let (process, thread, pid) =
+            create_suspended_process(request, standard_handles, job.as_ref().map(|job| job.0))?;
+        Ok(SuspendedTarget {
+            job,
+            process,
+            thread,
+            pid,
+        })
+    }
+
+    fn create_suspended_process(
+        request: &LaunchRequest,
+        standard_handles: Option<&StandardHandles>,
+        job: Option<HANDLE>,
+    ) -> Result<(Handle, Handle, u32), String> {
+        let attributes = job.map(ProcessThreadAttributeList::for_job).transpose()?;
         let mut command_line_w = wide_null(&request.command_line);
         let application_w = wide_null(&request.application);
         let cwd_w = request.cwd.as_deref().map(wide_null);
-        let mut env_block = environment_block(&request.env);
-
         let mut startup: STARTUPINFOEXW = unsafe { std::mem::zeroed() };
         startup.StartupInfo.cb = std::mem::size_of::<STARTUPINFOEXW>() as u32;
         if let Some(handles) = standard_handles {
@@ -376,7 +469,7 @@ mod windows_helper {
         let creation_flags = CREATE_SUSPENDED
             | CREATE_NO_WINDOW
             | CREATE_UNICODE_ENVIRONMENT
-            | if request.detached {
+            | if job.is_none() {
                 CREATE_BREAKAWAY_FROM_JOB
             } else {
                 EXTENDED_STARTUPINFO_PRESENT
@@ -391,7 +484,7 @@ mod windows_helper {
                 null(),
                 i32::from(standard_handles.is_some()),
                 creation_flags,
-                env_block.as_mut_ptr() as *mut c_void,
+                null_mut(),
                 cwd_w.as_ref().map(|v| v.as_ptr()).unwrap_or(null()),
                 &startup.StartupInfo,
                 &mut process_info,
@@ -405,55 +498,106 @@ mod windows_helper {
             ));
         }
 
-        Ok(SuspendedTarget {
-            _job: job,
-            process: Handle(process_info.hProcess),
-            thread: Handle(process_info.hThread),
-            pid: process_info.dwProcessId,
-        })
+        Ok((
+            Handle(process_info.hProcess),
+            Handle(process_info.hThread),
+            process_info.dwProcessId,
+        ))
     }
 
     fn run_request(request: Request) -> Result<u32, String> {
         let request = launch_request(request);
+        if request.runtime_occurrence_id.is_empty() || request.owner_process_instance_id.is_empty()
+        {
+            return Err("runtime owner occurrence identity is missing".into());
+        }
+        let helper_pid = unsafe { GetCurrentProcessId() };
+        let helper_parent_pid = snapshot_processes()?
+            .into_iter()
+            .find(|process| process.pid == helper_pid)
+            .map(|process| process.parent_pid)
+            .ok_or_else(|| "Windows supervisor helper parent process is unavailable".to_string())?;
+        if helper_parent_pid != request.owner_pid {
+            return Err(format!(
+                "Windows supervisor owner PID {} does not match helper parent {}",
+                request.owner_pid, helper_parent_pid
+            ));
+        }
+        let owner_handle = unsafe { OpenProcess(PROCESS_SYNCHRONIZE, 0, request.owner_pid) };
+        if owner_handle.is_null() || owner_handle == INVALID_HANDLE_VALUE {
+            let error = unsafe { GetLastError() };
+            return Err(format!(
+                "OpenProcess(runtime owner {}) failed (win32={error})",
+                request.owner_pid
+            ));
+        }
+        let owner = Handle(owner_handle);
         let standard_handles = inherited_standard_handles()?;
         let target = create_suspended_target(&request, Some(&standard_handles))?;
 
-        if let Err(error) =
-            publish_ready_marker(&request.ready_file, &request.request_id, target.pid)
-        {
-            return Err(with_created_process_cleanup(
-                error,
-                target.process.0,
-                target.pid,
-            ));
+        if let Err(error) = publish_ready_marker(
+            &request.ready_file,
+            &request.request_id,
+            &request.runtime_occurrence_id,
+            target.pid,
+        ) {
+            return Err(settle_target_after_failure(error, &request, &target));
         }
 
         let resumed = unsafe { ResumeThread(target.thread.0) };
         if resumed == u32::MAX {
-            return Err(with_created_process_cleanup(
+            return Err(settle_target_after_failure(
                 "ResumeThread failed".into(),
-                target.process.0,
-                target.pid,
+                &request,
+                &target,
             ));
         }
 
-        let waited = unsafe { WaitForSingleObject(target.process.0, INFINITE) };
-        if waited != WAIT_OBJECT_0 {
-            let error = unsafe { GetLastError() };
-            return Err(with_created_process_cleanup(
-                format!("WaitForSingleObject failed for target process (win32={error})"),
-                target.process.0,
-                target.pid,
-            ));
+        let mut cancellation_applied = false;
+        loop {
+            let waited = unsafe { WaitForSingleObject(target.process.0, 20) };
+            if waited == WAIT_OBJECT_0 {
+                break;
+            }
+            if waited != WAIT_TIMEOUT {
+                let error = unsafe { GetLastError() };
+                return Err(settle_target_after_failure(
+                    format!("WaitForSingleObject failed for target process (win32={error})"),
+                    &request,
+                    &target,
+                ));
+            }
+            let owner_dead = unsafe { WaitForSingleObject(owner.0, 0) } == WAIT_OBJECT_0;
+            if owner_dead || cancellation_requested(&request.cancel_file) {
+                if let Some(job) = target.job.as_ref() {
+                    terminate_job_once(job.0, &mut cancellation_applied)?;
+                } else {
+                    terminate_process_handle(target.process.0, target.pid)?;
+                    cancellation_applied = true;
+                }
+            }
         }
         let mut code = 1u32;
         let read_exit_code = unsafe { GetExitCodeProcess(target.process.0, &mut code) };
         if read_exit_code == 0 {
             let error = unsafe { GetLastError() };
-            return Err(format!(
-                "GetExitCodeProcess failed for target process (win32={error})"
+            return Err(settle_target_after_failure(
+                format!("GetExitCodeProcess failed for target process (win32={error})"),
+                &request,
+                &target,
             ));
         }
+        if let Some(job) = target.job.as_ref() {
+            if let Err(error) = wait_for_job_active_process_zero(
+                job.0,
+                &request.cancel_file,
+                Some(owner.0),
+                &mut cancellation_applied,
+            ) {
+                return Err(settle_target_after_failure(error, &request, &target));
+            }
+        }
+        publish_settlement_marker(&request, target.pid)?;
         drop(target);
         Ok(code)
     }
@@ -461,6 +605,7 @@ mod windows_helper {
     fn publish_ready_marker(
         ready_file: &str,
         request_id: &str,
+        runtime_occurrence_id: &str,
         target_pid: u32,
     ) -> Result<(), String> {
         let helper_pid = unsafe { GetCurrentProcessId() };
@@ -470,6 +615,7 @@ mod windows_helper {
             request_id,
             helper_pid,
             target_pid,
+            runtime_occurrence_id,
         };
         let mut file = fs::File::create(&temporary_file)
             .map_err(|error| format!("create ready marker failed: {error}"))?;
@@ -489,10 +635,54 @@ mod windows_helper {
         Ok(())
     }
 
-    fn with_created_process_cleanup(primary: String, process: HANDLE, pid: u32) -> String {
-        match terminate_process_handle(process, pid) {
+    fn publish_settlement_marker(request: &LaunchRequest, target_pid: u32) -> Result<(), String> {
+        let helper_pid = unsafe { GetCurrentProcessId() };
+        let temporary_file = format!("{}.{}.tmp", request.settled_file, helper_pid);
+        let marker = SettlementMarker {
+            protocol: 1,
+            request_id: &request.request_id,
+            helper_pid,
+            target_pid,
+            active_processes: 0,
+            runtime_occurrence_id: &request.runtime_occurrence_id,
+        };
+        let mut file = fs::File::create(&temporary_file)
+            .map_err(|error| format!("create settlement marker failed: {error}"))?;
+        if let Err(error) = serde_json::to_writer(&mut file, &marker) {
+            let _ = fs::remove_file(&temporary_file);
+            return Err(format!("serialize settlement marker failed: {error}"));
+        }
+        if let Err(error) = file.sync_all() {
+            let _ = fs::remove_file(&temporary_file);
+            return Err(format!("flush settlement marker failed: {error}"));
+        }
+        drop(file);
+        if let Err(error) = fs::rename(&temporary_file, &request.settled_file) {
+            let _ = fs::remove_file(&temporary_file);
+            return Err(format!("publish settlement marker failed: {error}"));
+        }
+        Ok(())
+    }
+
+    fn settle_target_after_failure(
+        primary: String,
+        request: &LaunchRequest,
+        target: &SuspendedTarget,
+    ) -> String {
+        let cleanup = if let Some(job) = target.job.as_ref() {
+            let mut cancellation_applied = false;
+            terminate_job_once(job.0, &mut cancellation_applied)
+                .and_then(|()| {
+                    wait_for_job_active_process_zero(job.0, "", None, &mut cancellation_applied)
+                })
+                .and_then(|()| publish_settlement_marker(request, target.pid))
+        } else {
+            terminate_process_handle(target.process.0, target.pid)
+                .and_then(|()| publish_settlement_marker(request, target.pid))
+        };
+        match cleanup {
             Ok(()) => primary,
-            Err(cleanup) => format!("{primary}; created-process cleanup failed: {cleanup}"),
+            Err(cleanup) => format!("{primary}; managed physical settlement failed: {cleanup}"),
         }
     }
 
@@ -618,7 +808,11 @@ mod windows_helper {
     #[cfg(test)]
     mod tests {
         use super::*;
-        use std::{process::Command, thread, time::Duration};
+        use std::{
+            process::Command,
+            thread,
+            time::{Duration, Instant},
+        };
 
         #[test]
         fn dropping_job_terminates_target_before_resume() {
@@ -627,15 +821,19 @@ mod windows_helper {
                 application: executable.to_string_lossy().into_owned(),
                 command_line: quote_arg(&executable.to_string_lossy()),
                 cwd: None,
-                env: env::vars().collect(),
+                cancel_file: String::new(),
                 ready_file: String::new(),
+                settled_file: String::new(),
                 request_id: "native-job-ownership-test".into(),
+                owner_pid: unsafe { GetCurrentProcessId() },
+                owner_process_instance_id: "native-test-owner".into(),
+                runtime_occurrence_id: "native-test-occurrence".into(),
                 detached: false,
             };
             let target = create_suspended_target(&request, None)
                 .expect("create suspended target atomically assigned to job");
             let SuspendedTarget {
-                _job: job,
+                job,
                 process,
                 thread,
                 pid,
@@ -653,16 +851,79 @@ mod windows_helper {
         }
 
         #[test]
+        fn managed_job_settles_only_after_every_assigned_process_exits() {
+            let job = create_job().expect("create managed test job");
+            let command = env::var("COMSPEC").expect("resolve Windows command interpreter");
+            let root_request = LaunchRequest {
+                application: command.clone(),
+                command_line: format!("{} /d /s /c exit 7", quote_arg(&command)),
+                cwd: None,
+                cancel_file: String::new(),
+                ready_file: String::new(),
+                settled_file: String::new(),
+                request_id: "native-job-root-test".into(),
+                owner_pid: unsafe { GetCurrentProcessId() },
+                owner_process_instance_id: "native-test-owner".into(),
+                runtime_occurrence_id: "native-test-occurrence".into(),
+                detached: false,
+            };
+            let descendant_request = LaunchRequest {
+                application: command.clone(),
+                command_line: format!("{} /d /s /c ping 127.0.0.1 -n 2 >NUL", quote_arg(&command)),
+                cwd: None,
+                cancel_file: String::new(),
+                ready_file: String::new(),
+                settled_file: String::new(),
+                request_id: "native-job-descendant-test".into(),
+                owner_pid: unsafe { GetCurrentProcessId() },
+                owner_process_instance_id: "native-test-owner".into(),
+                runtime_occurrence_id: "native-test-occurrence".into(),
+                detached: false,
+            };
+            let (root, root_thread, root_pid) =
+                create_suspended_process(&root_request, None, Some(job.0))
+                    .expect("create managed root");
+            let (descendant, descendant_thread, descendant_pid) =
+                create_suspended_process(&descendant_request, None, Some(job.0))
+                    .expect("create managed descendant");
+            assert_ne!(unsafe { ResumeThread(root_thread.0) }, u32::MAX);
+            assert_ne!(unsafe { ResumeThread(descendant_thread.0) }, u32::MAX);
+            assert_eq!(
+                unsafe { WaitForSingleObject(root.0, 2_000) },
+                WAIT_OBJECT_0,
+                "managed root {root_pid} did not exit"
+            );
+            let active_after_root =
+                job_active_process_count(job.0).expect("query managed Job membership");
+            assert!(
+                active_after_root >= 1,
+                "managed descendant {descendant_pid} must retain the Job after root exit; active={active_after_root}"
+            );
+            let mut cancellation_applied = false;
+            wait_for_job_active_process_zero(job.0, "", None, &mut cancellation_applied)
+                .expect("wait for managed Job active-process-zero");
+            assert_eq!(
+                unsafe { WaitForSingleObject(descendant.0, 0) },
+                WAIT_OBJECT_0
+            );
+        }
+
+        #[test]
         fn terminate_tree_reclaims_owner_and_snapshotted_descendants() {
             let mut owner = Command::new("cmd.exe")
                 .args(["/C", "ping 127.0.0.1 -n 60 >NUL"])
                 .spawn()
                 .expect("spawn process-tree owner");
-            thread::sleep(Duration::from_millis(150));
-
             let owner_pid = owner.id();
-            let processes = snapshot_processes().expect("snapshot spawned process tree");
-            let descendants = descendant_pids(owner_pid, &processes);
+            let deadline = Instant::now() + Duration::from_secs(3);
+            let descendants = loop {
+                let processes = snapshot_processes().expect("snapshot spawned process tree");
+                let descendants = descendant_pids(owner_pid, &processes);
+                if !descendants.is_empty() || Instant::now() >= deadline {
+                    break descendants;
+                }
+                thread::sleep(Duration::from_millis(20));
+            };
             assert!(
                 !descendants.is_empty(),
                 "cmd process-tree owner did not publish a descendant"

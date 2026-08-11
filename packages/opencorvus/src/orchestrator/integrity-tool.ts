@@ -4,11 +4,15 @@ import type { ProjectedAgentWorkScope } from "@/agent/projected-agent-work-scope
 import { DispatchOutcomeSchema, type DispatchOutcome } from "@/agent/dispatch-outcome"
 import { projectedAdapterError } from "./projected-adapter-error"
 
-const integrityReviewSingleflight = new Map<string, Promise<unknown>>()
+const exactIntegrityOccurrenceInflight = new Map<string, Promise<unknown>>()
 
 export function createIntegrityReviewRunner<
   Input,
-  ExecutionContext extends { agentID: string; workScope: ProjectedAgentWorkScope },
+  ExecutionContext extends {
+    agentID: string
+    workScope: ProjectedAgentWorkScope
+    dispatch: { dispatchID: string }
+  },
   Task extends { id: string },
   Result,
 >(input: {
@@ -18,19 +22,16 @@ export function createIntegrityReviewRunner<
 }) {
   return async (toolExecution: ExecutionContext, toolInput: Input): Promise<Result> => {
     const task = input.requireTask()
-    const workScope = toolExecution.workScope
-
-    const singleflightKey = JSON.stringify([toolExecution.agentID, task.id, workScope])
-    const inflight = integrityReviewSingleflight.get(singleflightKey)
-    if (inflight) return (await inflight) as Result
-
-    const reviewPromise = input.runReviewOnce({ toolExecution, toolInput })
-    integrityReviewSingleflight.set(singleflightKey, reviewPromise)
+    const exactOccurrenceKey = `${task.id}:${toolExecution.dispatch.dispatchID}`
+    const existing = exactIntegrityOccurrenceInflight.get(exactOccurrenceKey)
+    if (existing) return (await existing) as Result
+    const execution = input.runReviewOnce({ toolExecution, toolInput })
+    exactIntegrityOccurrenceInflight.set(exactOccurrenceKey, execution)
     try {
-      return await reviewPromise
+      return await execution
     } finally {
-      if (integrityReviewSingleflight.get(singleflightKey) === reviewPromise) {
-        integrityReviewSingleflight.delete(singleflightKey)
+      if (exactIntegrityOccurrenceInflight.get(exactOccurrenceKey) === execution) {
+        exactIntegrityOccurrenceInflight.delete(exactOccurrenceKey)
       }
     }
   }

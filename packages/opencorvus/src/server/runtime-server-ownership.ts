@@ -13,6 +13,17 @@ export interface RuntimeServerOwnerInfo {
   occurrenceID: string
 }
 
+export interface RuntimeProcessOccurrenceInfo {
+  pid: number
+  processInstanceID: string
+  occurrenceID: string
+}
+
+export type RuntimeProcessOccurrenceObservation = "exact_live" | "dead_or_reused" | "unknown_live"
+export type RuntimeProcessOccurrenceObserver = (
+  owner: RuntimeProcessOccurrenceInfo,
+) => RuntimeProcessOccurrenceObservation
+
 type LiveLease = {
   info: RuntimeServerOwnerInfo
   file: string
@@ -33,6 +44,7 @@ let retainedStartupCleanup:
   | undefined
 let releaseFilesystemLockFailuresForTest = 0
 let moveOwnerFileFailuresForTest = 0
+let standaloneProcessOccurrence: RuntimeProcessOccurrenceInfo | undefined
 
 function canonicalDatabasePath(database: string): string {
   const resolved = path.resolve(database)
@@ -228,6 +240,59 @@ export namespace RuntimeServerOwnership {
     retainForRecovery(): void
   }
 
+  /** One physical owner identity for durable runtime-side artifacts. Public
+   * server runtimes reuse their acquired occurrence; isolated control/test
+   * processes use one process-lifetime occurrence. */
+  export function currentProcessOccurrence(): RuntimeProcessOccurrenceInfo {
+    const lease = liveLeases.values().next().value as LiveLease | undefined
+    const owned = lease?.info ?? pendingHandoff?.lease.info
+    if (owned) {
+      return {
+        pid: owned.pid,
+        processInstanceID: owned.processInstanceID,
+        occurrenceID: owned.occurrenceID,
+      }
+    }
+    if (!standaloneProcessOccurrence) {
+      const instanceID = processInstanceID(process.pid)
+      if (!instanceID) throw new Error(`Cannot establish runtime process-instance identity for PID ${process.pid}`)
+      standaloneProcessOccurrence = {
+        pid: process.pid,
+        processInstanceID: instanceID,
+        occurrenceID: randomUUID(),
+      }
+    }
+    return { ...standaloneProcessOccurrence }
+  }
+
+  /** Tri-state observation used by crash recovery. Unknown live ownership is
+   * authoritative and can never be interpreted as an orphan. */
+  export function observeProcessOccurrence(
+    owner: RuntimeProcessOccurrenceInfo,
+  ): RuntimeProcessOccurrenceObservation {
+    const observedInstanceID = processInstanceID(owner.pid)
+    if (observedInstanceID === owner.processInstanceID) return "exact_live"
+    if (observedInstanceID !== undefined) return "dead_or_reused"
+    return isProcessAlive(owner.pid) ? "unknown_live" : "dead_or_reused"
+  }
+
+  /** One recovery transaction observes each physical process identity once.
+   * Occurrence IDs intentionally do not affect the cache key: multiple
+   * durable artifacts may belong to the same physical runtime owner. */
+  export function cachedProcessOccurrenceObserver(
+    observe: RuntimeProcessOccurrenceObserver = observeProcessOccurrence,
+  ): RuntimeProcessOccurrenceObserver {
+    const observations = new Map<string, RuntimeProcessOccurrenceObservation>()
+    return (owner) => {
+      const key = `${owner.pid}\0${owner.processInstanceID}`
+      const cached = observations.get(key)
+      if (cached) return cached
+      const observation = observe(owner)
+      observations.set(key, observation)
+      return observation
+    }
+  }
+
   export function acquire(input: { database: string; pid?: number; now?: number }): Handle {
     const database = path.resolve(input.database)
     const key = canonicalDatabasePath(database)
@@ -417,6 +482,11 @@ export namespace RuntimeServerOwnership {
   }
 
   export function recoverRetained(database: string): Handle | undefined {
+    if (retainedStartupCleanup) {
+      const completion = retainedStartupCleanup.complete()
+      void completion.catch(() => undefined)
+      throw new RuntimeServerStartupCleanupPendingError(retainedStartupCleanup.owner, completion)
+    }
     const key = canonicalDatabasePath(path.resolve(database))
     const lease = liveLeases.get(key)
     if (!lease?.recoverable) return undefined

@@ -18,6 +18,35 @@ async function waitForQueueUpdate(taskID: string, after: number) {
   throw new Error(`Queue ${taskID} did not record child Session progress after ${after}`)
 }
 
+async function createQueueInputMessage(sessionID: string, modelID: string) {
+  return await Session.updateMessage({
+    id: Identifier.ascending("message"),
+    sessionID,
+    role: "user",
+    author: "user",
+    agent: "chat",
+    model: { providerID: "test", modelID },
+    time: { created: Date.now() },
+  })
+}
+
+async function createQueueAssistantMessage(sessionID: string, parentID: string, modelID: string) {
+  return await Session.updateMessage({
+    id: Identifier.ascending("message"),
+    sessionID,
+    parentID,
+    role: "assistant",
+    author: "assistant",
+    time: { created: Date.now() },
+    agent: "chat",
+    providerID: "test",
+    modelID,
+    path: { cwd: Instance.directory, root: Instance.worktree },
+    cost: 0,
+    tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+  })
+}
+
 afterEach(async () => {
   await resetMemoryDatabase()
 })
@@ -139,6 +168,7 @@ describe("Task Queue child Session progress", () => {
           kind: "assistant",
           title: "Task Queue progress root",
         })
+        const queueInput = await createQueueInputMessage(root.id, "task-queue-child-progress")
         await Database.awaitEffectIdle(2_000)
 
         const queueTaskID = Identifier.ascending("task")
@@ -164,15 +194,29 @@ describe("Task Queue child Session progress", () => {
         const stopTracking = TaskQueueService.TestHooks.trackChildSessionProgress({
           taskID: queueTaskID,
           rootSessionID: root.id,
+          inputMessageID: queueInput.id,
           directory: Instance.directory,
           projectID: Instance.project.id,
         })
         try {
+          const queueAssistant = await createQueueAssistantMessage(
+            root.id,
+            queueInput.id,
+            "task-queue-child-progress",
+          )
           const child = await Session.createNext({
             directory: Instance.directory,
             kind: "assistant",
             parentID: root.id,
             title: "Delegated child progress",
+            metadata: {
+              delegation: {
+                kind: "session-local",
+                parentAgent: "chat",
+                parentMessageID: queueAssistant.id,
+                parentToolCallID: "task-queue-child-progress-call",
+              },
+            },
           })
           await Database.awaitEffectIdle(2_000)
           const createdTouchedAt = await waitForQueueUpdate(queueTaskID, startedAt)
@@ -217,6 +261,129 @@ describe("Task Queue child Session progress", () => {
     })
   }, 30_000)
 
+  test("attributes progress to the live queue lineage instead of historical descendants", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const root = await Session.createNext({
+          directory: Instance.directory,
+          kind: "assistant",
+          title: "Task Queue exact progress root",
+        })
+        const historicalChild = await Session.createNext({
+          directory: Instance.directory,
+          kind: "assistant",
+          parentID: root.id,
+          title: "Historical detached child",
+        })
+        const queueInput = await createQueueInputMessage(root.id, "task-queue-exact-progress")
+        await Database.awaitEffectIdle(2_000)
+
+        const queueTaskID = Identifier.ascending("task")
+        const startedAt = Date.now()
+        Database.use((db) =>
+          db
+            .insert(TaskQueueTable)
+            .values({
+              id: queueTaskID,
+              session_id: root.id,
+              prompt: "exact progress lineage",
+              priority: "normal",
+              status: "running",
+              source: "task-queue-exact-progress-positive-contract",
+              metadata: { kind: "session_prompt", input: {} },
+              time_created: startedAt,
+              time_started: startedAt,
+              time_updated: startedAt,
+            })
+            .run(),
+        )
+
+        const stopTracking = TaskQueueService.TestHooks.trackChildSessionProgress({
+          taskID: queueTaskID,
+          rootSessionID: root.id,
+          inputMessageID: queueInput.id,
+          directory: Instance.directory,
+          projectID: Instance.project.id,
+        })
+        try {
+          const historicalMessage = await Session.updateMessage({
+            id: Identifier.ascending("message"),
+            sessionID: historicalChild.id,
+            role: "user",
+            author: "user",
+            agent: "chat",
+            model: { providerID: "test", modelID: "task-queue-exact-progress" },
+            time: { created: Date.now() },
+          })
+          await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: historicalChild.id,
+            messageID: historicalMessage.id,
+            type: "text",
+            text: "historical activity",
+          })
+          await Database.awaitEffectIdle(2_000)
+          const afterHistorical = TaskQueueService.getStatusByID(queueTaskID)
+
+          const parallelChild = await Session.createNext({
+            directory: Instance.directory,
+            kind: "assistant",
+            parentID: root.id,
+            title: "Parallel root child without queue causation",
+          })
+          await Database.awaitEffectIdle(2_000)
+          const parallelMessage = await createQueueInputMessage(parallelChild.id, "task-queue-parallel-progress")
+          await Session.updatePart({
+            id: Identifier.ascending("part"),
+            sessionID: parallelChild.id,
+            messageID: parallelMessage.id,
+            type: "text",
+            text: "parallel activity",
+          })
+          await Database.awaitEffectIdle(2_000)
+          const afterParallel = TaskQueueService.getStatusByID(queueTaskID)
+
+          const queueAssistant = await createQueueAssistantMessage(root.id, queueInput.id, "task-queue-exact-progress")
+          const liveChild = await Session.createNext({
+            directory: Instance.directory,
+            kind: "assistant",
+            parentID: root.id,
+            title: "Current causally delegated child",
+            metadata: {
+              delegation: {
+                kind: "session-local",
+                parentAgent: "chat",
+                parentMessageID: queueAssistant.id,
+                parentToolCallID: "task-queue-exact-progress-call",
+              },
+            },
+          })
+          await Database.awaitEffectIdle(2_000)
+          const liveTouchedAt = await waitForQueueUpdate(queueTaskID, startedAt)
+
+          expect({
+            afterHistorical,
+            afterParallel,
+            beforeLiveProgress: TaskQueueService.getStatusByID(queueTaskID),
+            liveChildSessionID: liveChild.id,
+            liveTouchedAt,
+          }).toMatchObject({
+            afterHistorical: { taskID: queueTaskID, updatedAt: startedAt },
+            afterParallel: { taskID: queueTaskID, updatedAt: startedAt },
+            beforeLiveProgress: { taskID: queueTaskID, updatedAt: liveTouchedAt },
+            liveChildSessionID: expect.stringMatching(/^ses_/),
+            liveTouchedAt: expect.any(Number),
+          })
+          expect(liveTouchedAt).toBeGreaterThan(startedAt)
+        } finally {
+          stopTracking()
+        }
+      },
+    })
+  }, 30_000)
+
   test("coalesces burst progress behind one durable touch and preserves the live execution during recovery", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -227,6 +394,7 @@ describe("Task Queue child Session progress", () => {
           kind: "assistant",
           title: "Task Queue coalesced progress root",
         })
+        const queueInput = await createQueueInputMessage(root.id, "task-queue-progress-coalescing")
         await Database.awaitEffectIdle(2_000)
 
         const queueTaskID = Identifier.ascending("task")
@@ -263,19 +431,16 @@ describe("Task Queue child Session progress", () => {
         const stopTracking = TaskQueueService.TestHooks.trackChildSessionProgress({
           taskID: queueTaskID,
           rootSessionID: root.id,
+          inputMessageID: queueInput.id,
           directory: Instance.directory,
           projectID: Instance.project.id,
         })
         try {
-          const message = await Session.updateMessage({
-            id: Identifier.ascending("message"),
-            sessionID: root.id,
-            role: "user",
-            author: "user",
-            agent: "chat",
-            model: { providerID: "test", modelID: "task-queue-progress-coalescing" },
-            time: { created: Date.now() },
-          })
+          const message = await createQueueAssistantMessage(
+            root.id,
+            queueInput.id,
+            "task-queue-progress-coalescing",
+          )
           const partID = Identifier.ascending("part")
           await Session.updatePart({
             id: partID,

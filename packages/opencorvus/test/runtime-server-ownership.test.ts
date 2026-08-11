@@ -504,7 +504,7 @@ describe("runtime server database ownership", () => {
     }
   }, 60_000)
 
-  test("reuses the retained in-process CLI owner after persistent release failure", async () => {
+  test("preserves the operation failure and reuses the exact CLI owner after persistent release failure", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-cli-release-rollback-"))
     temporaryDirectories.push(root)
     const home = path.join(root, "home")
@@ -515,10 +515,16 @@ describe("runtime server database ownership", () => {
     process.env.OPENCORVUS_TEST_HOME = home
     const retainedDatabase = Database.Path()
     const failure = RuntimeServerOwnership.TestHooks.failNextRelease({ ownerFileMove: 3 })
+    const operationError = new Error("injected CLI operation failure before ownership release")
     try {
-      await expect(bootstrap(project, async () => "first-result")).rejects.toThrow(
-        "injected runtime owner record move failure",
-      )
+      await expect(
+        bootstrap(project, async () => {
+          throw operationError
+        }),
+      ).rejects.toMatchObject({
+        name: "AggregateError",
+        errors: [operationError, expect.objectContaining({ message: "injected runtime owner record move failure" })],
+      })
       failure[Symbol.dispose]()
       const retainedOccurrence = RuntimeServerOwnership.currentOccurrenceID(retainedDatabase)
       const otherDatabase = path.join(root, "other.db")
@@ -532,6 +538,73 @@ describe("runtime server database ownership", () => {
       otherOwner.release()
     } finally {
       failure[Symbol.dispose]()
+      if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
+      else process.env.OPENCORVUS_TEST_HOME = previousHome
+    }
+  }, 60_000)
+
+  test("keeps exact CLI cleanup retryable until a failed ownership rollback completes", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-cli-release-rollback-retry-"))
+    temporaryDirectories.push(root)
+    const home = path.join(root, "home")
+    const project = path.join(root, "project")
+    await import("node:fs/promises").then((fs) => Promise.all([fs.mkdir(home), fs.mkdir(project)]))
+    execFileSync("git", ["init"], { cwd: project, stdio: "ignore" })
+    const previousHome = process.env.OPENCORVUS_TEST_HOME
+    process.env.OPENCORVUS_TEST_HOME = home
+    const releaseFailure = RuntimeServerOwnership.TestHooks.failNextRelease({ ownerFileMove: 3 })
+    const rollbackError = new Error("injected CLI ownership rollback failure")
+    let rollbackAttempts = 0
+    let retryStarted!: () => void
+    const rollbackRetryStarted = new Promise<void>((resolve) => (retryStarted = resolve))
+    let releaseRollbackRetry!: () => void
+    const heldRollbackRetry = new Promise<void>((resolve) => (releaseRollbackRetry = resolve))
+    const settlement = spyOn(Server, "settleCurrentProcessExecution").mockImplementation(async (_reason, options) => {
+      await options?.disposeInstances?.()
+      return {
+        releaseHandoff: async (commit = true) => {
+          if (commit) return
+          rollbackAttempts += 1
+          if (rollbackAttempts === 1) throw rollbackError
+          retryStarted()
+          await heldRollbackRetry
+        },
+      }
+    })
+    try {
+      await expect(bootstrap(project, async () => "first-result")).rejects.toMatchObject({
+        name: "AggregateError",
+        errors: [
+          expect.objectContaining({ message: "injected runtime owner record move failure" }),
+          rollbackError,
+        ],
+      })
+      const retainedOccurrence = RuntimeServerOwnership.currentOccurrenceID(Database.Path())
+      expect(retainedOccurrence).toEqual(expect.any(String))
+      releaseFailure[Symbol.dispose]()
+
+      const successor = bootstrap(project, async () => "recovered-result")
+      await rollbackRetryStarted
+      let pendingCleanup: unknown
+      try {
+        RuntimeServerOwnership.acquire({ database: path.join(root, "contender.db") })
+      } catch (error) {
+        pendingCleanup = error
+      }
+      expect(pendingCleanup).toMatchObject({
+        name: "RuntimeServerStartupCleanupPendingError",
+        owner: { occurrenceID: retainedOccurrence },
+      })
+
+      releaseRollbackRetry()
+      await expect(successor).resolves.toBe("recovered-result")
+      expect(rollbackAttempts).toBe(2)
+      const nextOwner = RuntimeServerOwnership.acquire({ database: path.join(root, "next.db") })
+      nextOwner.release()
+    } finally {
+      releaseRollbackRetry()
+      releaseFailure[Symbol.dispose]()
+      settlement.mockRestore()
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
       else process.env.OPENCORVUS_TEST_HOME = previousHome
     }

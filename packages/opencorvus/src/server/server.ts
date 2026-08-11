@@ -200,7 +200,9 @@ export namespace Server {
     let gitSettlementGate:
       | (Disposable & { waitForIdle(inactivityTimeoutMilliseconds?: number): Promise<void> })
       | undefined
-    let instanceSettlementGate: Disposable | undefined
+    let instanceSettlementGate:
+      | (Disposable & { waitForIdle(inactivityTimeoutMilliseconds: number): Promise<void> })
+      | undefined
     let globalSchedulerSettlementGate: (Disposable & { commit(): void }) | undefined
     let cancelledTaskSettlementGate:
       | (Disposable & {
@@ -328,6 +330,7 @@ export namespace Server {
       await Database.awaitEffectIdle(settlementInactivityTimeoutMilliseconds)
       await awaitTaskMessageProtocolBridgeIdle()
       instanceSettlementGate = Instance.acquireProcessSettlementGate()
+      await instanceSettlementGate.waitForIdle(settlementInactivityTimeoutMilliseconds)
       await options.disposeInstances()
       const databaseEffectGate = await Database.acquireEffectSettlementGate(
         settlementInactivityTimeoutMilliseconds,

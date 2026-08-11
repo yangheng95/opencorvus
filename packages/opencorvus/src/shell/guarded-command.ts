@@ -20,6 +20,7 @@ export type GuardedCommandInput = {
 
 type GuardedCommandRequest = GuardedCommandInput &
   ({ owner: "host" } | { owner: "task"; taskID: string })
+type GuardedExecutionRequest = GuardedCommandRequest & { deadlineAt: number }
 
 export function runGuardedHostCommand(input: GuardedCommandInput): Promise<string> {
   return runGuardedCommand({ ...input, owner: "host" })
@@ -30,24 +31,39 @@ export function runGuardedTaskCommand(input: GuardedCommandInput & { taskID: str
 }
 
 async function runGuardedCommand(input: GuardedCommandRequest): Promise<string> {
-  const isolated = await createIsolatedProjectCheckWorkspace({
-    projectDir: input.projectDir,
-    sourceCwd: input.projectDir,
-    taskID: input.owner === "task" ? input.taskID : undefined,
-  })
-  const scopedInput = { ...input, projectDir: isolated.workspace }
+  const deadlineAt = Date.now() + Math.max(0, input.timeoutMs)
+  const deadline = createGuardedCommandDeadline(deadlineAt, input.signal)
+  let isolated: IsolatedProjectCheckWorkspace
+  try {
+    isolated = await createIsolatedProjectCheckWorkspace({
+      projectDir: input.projectDir,
+      sourceCwd: input.projectDir,
+      taskID: input.owner === "task" ? input.taskID : undefined,
+      signal: deadline.signal,
+    })
+  } catch (error) {
+    deadline.dispose()
+    throw error
+  }
+  const scopedInput = { ...input, projectDir: isolated.workspace, signal: deadline.signal, deadlineAt }
   let cleanupTransferred = false
+  let deadlineTransferred = false
   let foregroundCleanupAttempted = false
   try {
     const backgroundResult = input.background ? await runBackgroundCommand(scopedInput) : undefined
     const parts = backgroundResult ? backgroundResult.parts : await runForegroundCommand(scopedInput)
     parts.unshift(`source_cwd: ${input.projectDir}`, `execution_cwd: ${isolated.workspace}`)
     if (input.background) {
-      scheduleWorkspaceCleanup(isolated, input.timeoutMs, input.signal, backgroundResult!.exited)
+      scheduleWorkspaceCleanup(isolated, deadlineAt, deadline.signal, backgroundResult!.exited, deadline.dispose)
       cleanupTransferred = true
+      deadlineTransferred = true
     } else {
       foregroundCleanupAttempted = true
-      await isolated.dispose()
+      await ProcessSupervisor.awaitWithTimeout(
+        isolated.dispose(),
+        Math.max(1, deadlineAt + ProcessSupervisor.TERMINATION_CLEANUP_TIMEOUT_MS - Date.now()),
+        `guarded command isolated workspace cleanup exceeded its absolute cleanup deadline: ${isolated.root}`,
+      )
       cleanupTransferred = true
     }
     return parts.join("\n") || "exit_code: 0 (no output)"
@@ -58,14 +74,35 @@ async function runGuardedCommand(input: GuardedCommandRequest): Promise<string> 
       error,
       "guarded command execution and cleanup failed",
     )
+  } finally {
+    if (!deadlineTransferred) deadline.dispose()
   }
 }
 
-async function runForegroundCommand(input: GuardedCommandRequest): Promise<string[]> {
+function createGuardedCommandDeadline(deadlineAt: number, parent?: AbortSignal) {
+  const controller = new AbortController()
+  const abortFromParent = () => controller.abort(parent?.reason)
+  if (parent?.aborted) abortFromParent()
+  else parent?.addEventListener("abort", abortFromParent, { once: true })
+  const timer = setTimeout(
+    () => controller.abort(new DOMException("Guarded command deadline exceeded", "TimeoutError")),
+    Math.max(0, deadlineAt - Date.now()),
+  )
+  return {
+    signal: controller.signal,
+    dispose() {
+      clearTimeout(timer)
+      parent?.removeEventListener("abort", abortFromParent)
+    },
+  }
+}
+
+async function runForegroundCommand(input: GuardedExecutionRequest): Promise<string[]> {
   const options = {
     env: input.env,
     timeoutMs: input.timeoutMs,
     abort: input.signal,
+    deadlineAt: input.deadlineAt,
   }
   const result = input.owner === "task"
     ? await Shell.runTask({ taskID: input.taskID, cwd: input.projectDir }, input.command, options)
@@ -79,11 +116,12 @@ async function runForegroundCommand(input: GuardedCommandRequest): Promise<strin
   return parts
 }
 
-async function runBackgroundCommand(input: GuardedCommandRequest): Promise<{ parts: string[]; exited: Promise<void> }> {
+async function runBackgroundCommand(input: GuardedExecutionRequest): Promise<{ parts: string[]; exited: Promise<void> }> {
+  const deadlineAt = input.deadlineAt
   const options = {
     env: input.env,
-    outputSniffMs: Math.min(input.timeoutMs, 10_000),
-    leaseMs: input.timeoutMs,
+    outputSniffMs: Math.min(Math.max(0, (deadlineAt ?? Date.now() + input.timeoutMs) - Date.now()), 10_000),
+    deadlineAt,
     abort: input.signal,
   }
   const result = input.owner === "task"
@@ -103,23 +141,26 @@ async function runBackgroundCommand(input: GuardedCommandRequest): Promise<{ par
 
 function scheduleWorkspaceCleanup(
   workspace: IsolatedProjectCheckWorkspace,
-  leaseMs: number,
+  deadlineAt: number,
   signal: AbortSignal | undefined,
   processExited: Promise<void>,
+  releaseDeadline: () => void,
 ): void {
   let cleaned = false
-  const cleanupDelayMs = Math.max(leaseMs, 1) + 1_000
+  const cleanupDelayMs = Math.max(deadlineAt - Date.now(), 1) + 1_000
   const cleanup = () => {
     if (cleaned) return
     cleaned = true
     clearTimeout(timer)
     signal?.removeEventListener("abort", cleanup)
-    void cleanupBackgroundWorkspace(workspace, processExited).catch((error) => {
-      log.error("failed to clean isolated background command workspace", {
-        workspace: workspace.root,
-        error: error instanceof Error ? error.message : String(error),
+    void cleanupBackgroundWorkspace(workspace, processExited)
+      .catch((error) => {
+        log.error("failed to clean isolated background command workspace", {
+          workspace: workspace.root,
+          error: error instanceof Error ? error.message : String(error),
+        })
       })
-    })
+      .finally(releaseDeadline)
   }
   const timer = setTimeout(cleanup, cleanupDelayMs)
   timer.unref?.()

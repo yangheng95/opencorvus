@@ -22,6 +22,7 @@ import { lifecycleError } from "./lifecycle-error"
 import { provideInstanceLifecycleContext } from "./instance-lifecycle-context"
 import { conversationCapabilityInitPreflight } from "@/conversation/capability-transaction"
 import { Flag } from "@/flag/flag"
+import { waitForRuntimeSettlementIdle } from "@/runtime/execution-settlement"
 
 type LockMode = "read" | "write"
 type LockRelease = () => void
@@ -106,7 +107,7 @@ type InstanceApi = {
   state: StateFactory
   dispose(): Promise<void>
   disposeAll(): Promise<void>
-  acquireProcessSettlementGate(): Disposable
+  acquireProcessSettlementGate(): Disposable & { waitForIdle(inactivityTimeoutMilliseconds: number): Promise<void> }
   converge(input: { maximumRetained: number }): Promise<InstanceCacheConvergence>
   scheduleConvergence(input: { maximumRetained: number }): void
 }
@@ -176,6 +177,20 @@ export class InstanceProcessAdmissionClosedError extends Error {
 
   constructor() {
     super("Instance process admission is closed during runtime settlement")
+  }
+}
+
+export class InstanceSettlementInactivityError extends Error {
+  override readonly name = "InstanceSettlementInactivityError"
+
+  constructor(
+    readonly labels: string[],
+    readonly inactivityTimeoutMilliseconds: number,
+  ) {
+    super(
+      `Instance settlement made no progress for ${inactivityTimeoutMilliseconds}ms; ` +
+        `active authorities: ${labels.join(", ") || "unknown"}`,
+    )
   }
 }
 
@@ -835,11 +850,28 @@ export function reenterActiveInstance<R>(input: { directory: string; fn: () => R
 }
 
 export const Instance: InstanceApi = {
-  acquireProcessSettlementGate(): Disposable {
+  acquireProcessSettlementGate(): Disposable & { waitForIdle(inactivityTimeoutMilliseconds: number): Promise<void> } {
     if (processSettlementGate) throw new Error("Instance process settlement is already in progress")
     const token = Symbol("instance-process-settlement")
     processSettlementGate = token
     return {
+      async waitForIdle(inactivityTimeoutMilliseconds) {
+        if (processSettlementGate !== token) throw new Error("Instance process settlement gate is no longer active")
+        await waitForRuntimeSettlementIdle({
+          snapshot: () =>
+            [...cache.entries()].flatMap(([key, entry]) =>
+              [...entry.activeLeases].map((lease) => ({
+                label:
+                  `instance:${key}:${lease.mode}:` +
+                  `activities=${lease.activities.size}:closing=${String(lease.closing)}`,
+                settled: lease.closedSignal,
+              })),
+            ),
+          inactivityTimeoutMilliseconds,
+          inactivityError: (labels) =>
+            new InstanceSettlementInactivityError(labels, inactivityTimeoutMilliseconds),
+        })
+      },
       [Symbol.dispose]() {
         if (processSettlementGate !== token) return
         processSettlementGate = undefined

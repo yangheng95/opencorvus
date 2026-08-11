@@ -65,6 +65,7 @@ import {
   listDispatchLineage,
   resolveDispatchOccurrenceAuthority,
 } from "./dispatch-lineage"
+import { findDispatchSettlementByDispatchID, recordDispatchSettlement } from "./dispatch-settlement"
 import {
   RuntimeExecutionAdmissionClosedError,
   RuntimeExecutionSettlement,
@@ -118,10 +119,7 @@ export class TaskLoopLaunchHandoffError extends Error {
   }
 }
 
-function recordTaskLoopLaunch(
-  db: Database.TxOrDb,
-  input: { task: TaskRow; cwd: string; now: number },
-): string {
+function recordTaskLoopLaunch(db: Database.TxOrDb, input: { task: TaskRow; cwd: string; now: number }): string {
   const exactWake = db
     .select({ id: EngineArtifactTable.id })
     .from(EngineArtifactTable)
@@ -1331,22 +1329,18 @@ export async function requeueInterruptedRunningTaskIngresses(): Promise<number> 
       requeued += 1
     } catch (error) {
       failures.push(
-        new Error(
-          `Task ingress ${row.id}: ${error instanceof Error ? error.message : String(error)}`,
-          { cause: error },
-        ),
+        new Error(`Task ingress ${row.id}: ${error instanceof Error ? error.message : String(error)}`, {
+          cause: error,
+        }),
       )
     }
   }
-  if (failures.length > 0) throw new AggregateError(failures, `Failed to requeue ${failures.length} running ingress(es)`)
+  if (failures.length > 0)
+    throw new AggregateError(failures, `Failed to requeue ${failures.length} running ingress(es)`)
   return requeued
 }
 
-function markQueuedOperatorWakeDrained(input: {
-  artifactID: string
-  assistantMessageID: string
-  now?: number
-}): void {
+function markQueuedOperatorWakeDrained(input: { artifactID: string; assistantMessageID: string; now?: number }): void {
   const now = input.now ?? Date.now()
   Database.immediateTransaction((db) => {
     const row = db
@@ -1410,12 +1404,7 @@ function markQueuedOperatorWakeDeliveryFailed(input: {
     const row = db
       .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
       .from(EngineArtifactTable)
-      .where(
-        and(
-          eq(EngineArtifactTable.id, input.artifactID),
-          eq(EngineArtifactTable.kind, "queued_operator_wake"),
-        ),
-      )
+      .where(and(eq(EngineArtifactTable.id, input.artifactID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
       .get()
     if (!row) throw new Error(`Queued operator ingress ${input.artifactID} disappeared before failure settlement`)
     if (!["pending", "running", "delivery_failed"].includes(row.label)) return
@@ -1802,19 +1791,19 @@ function attachLoopCompletion(
     const loopPromise = launch()
     completionHook = Database.runOutsideContext(() =>
       runOutsideInstanceContext(() =>
-      loopPromise.then(
-        async () => {
-          // Yield once so `advanceQueue` → `startLoopForTask` → `.finally`
-          // re-entry doesn't stack synchronously, while keeping the async
-          // completion hook observable for tests and diagnostics.
-          await Promise.resolve()
-          await settleTaskLoopCompletion({ taskID, wakeID, launchID, cwd, authority })
-        },
-        async () => {
-          await Promise.resolve()
-          await settleTaskLoopCompletion({ taskID, wakeID, launchID, cwd, authority })
-        },
-      ),
+        loopPromise.then(
+          async () => {
+            // Yield once so `advanceQueue` → `startLoopForTask` → `.finally`
+            // re-entry doesn't stack synchronously, while keeping the async
+            // completion hook observable for tests and diagnostics.
+            await Promise.resolve()
+            await settleTaskLoopCompletion({ taskID, wakeID, launchID, cwd, authority })
+          },
+          async () => {
+            await Promise.resolve()
+            await settleTaskLoopCompletion({ taskID, wakeID, launchID, cwd, authority })
+          },
+        ),
       ),
     )
   } catch (error) {
@@ -2402,12 +2391,36 @@ function attachTerminalIngressCompletion(
               },
             }),
           )
-        .then(async (delivery) => {
-          if (!delivery?.settled) return
-          await runWithIndependentProjectIdentity({
-            directory,
-            fn: async () => {
-              if (delivery.result.status === "delivery_failed") {
+          .then(async (delivery) => {
+            if (!delivery?.settled) return
+            await runWithIndependentProjectIdentity({
+              directory,
+              fn: async () => {
+                if (delivery.result.status === "delivery_failed") {
+                  if (
+                    await retryFailedExactTerminalIngress(task.id, wake.id, {
+                      dispatchAfterReset: false,
+                    })
+                  ) {
+                    retryAfterOwnershipRelease = true
+                    return
+                  }
+                }
+                if (hasQueuedTaskEvent(task.id)) await drainQueuedTaskEvent(task.id)
+              },
+            })
+          })
+          .catch(async (error) => {
+            const normalized = Database.normalizeError(error, "engine.queue.terminalIngressCompletion")
+            log.error("terminal Task ingress remains pending after interrupted delivery", {
+              taskID: task.id,
+              ingressID: wake.id,
+              error: normalized instanceof Error ? normalized.message : String(normalized),
+              errorName: normalized instanceof Error ? normalized.name : undefined,
+            })
+            await runWithIndependentProjectIdentity({
+              directory,
+              fn: async () => {
                 if (
                   await retryFailedExactTerminalIngress(task.id, wake.id, {
                     dispatchAfterReset: false,
@@ -2416,34 +2429,10 @@ function attachTerminalIngressCompletion(
                   retryAfterOwnershipRelease = true
                   return
                 }
-              }
-              if (hasQueuedTaskEvent(task.id)) await drainQueuedTaskEvent(task.id)
-            },
-          })
-        })
-        .catch(async (error) => {
-          const normalized = Database.normalizeError(error, "engine.queue.terminalIngressCompletion")
-          log.error("terminal Task ingress remains pending after interrupted delivery", {
-            taskID: task.id,
-            ingressID: wake.id,
-            error: normalized instanceof Error ? normalized.message : String(normalized),
-            errorName: normalized instanceof Error ? normalized.name : undefined,
-          })
-          await runWithIndependentProjectIdentity({
-            directory,
-            fn: async () => {
-              if (
-                await retryFailedExactTerminalIngress(task.id, wake.id, {
-                  dispatchAfterReset: false,
-                })
-              ) {
-                retryAfterOwnershipRelease = true
-                return
-              }
-              if (hasQueuedTaskEvent(task.id)) await drainQueuedTaskEvent(task.id)
-            },
-          })
-        }),
+                if (hasQueuedTaskEvent(task.id)) await drainQueuedTaskEvent(task.id)
+              },
+            })
+          }),
       ),
     )
   } catch (error) {
@@ -3624,6 +3613,33 @@ export async function reconcileTerminalAgentLifecycleDelivery(input: {
   if (!lifecycle || !status || typeof status !== "object" || (status as Record<string, unknown>).type !== "terminal") {
     return "nonterminal"
   }
+  if (!findDispatchSettlementByDispatchID({ taskID: input.taskID, dispatchID: input.dispatchID })) {
+    const finalMessage = Database.use((db) =>
+      db
+        .select({ id: MessageTable.id })
+        .from(MessageTable)
+        .where(
+          and(
+            eq(MessageTable.session_id, input.sessionID),
+            sql`json_extract(${MessageTable.data}, '$.role') = 'assistant'`,
+            sql`json_extract(${MessageTable.data}, '$.parentID') = ${descriptor.payload.messageAuthority.user_message_id}`,
+            sql`json_extract(${MessageTable.data}, '$.time.completed') IS NOT NULL`,
+          ),
+        )
+        .orderBy(desc(MessageTable.time_created), desc(MessageTable.id))
+        .get(),
+    )
+    if (!finalMessage) return "nonterminal"
+    recordDispatchSettlement({
+      taskID: input.taskID,
+      dispatchID: input.dispatchID,
+      outcome: DispatchOutcome.partial({
+        sessionID: input.sessionID,
+        finalMessageID: finalMessage.id,
+        failedOperation: "recover_dispatch_domain_settlement",
+      }),
+    })
+  }
   const delivered = Database.use((db) =>
     db
       .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label })
@@ -3679,12 +3695,7 @@ export async function reconcileTerminalAgentLifecycleDeliveries(): Promise<numbe
     db
       .select({ id: EngineTaskTable.id })
       .from(EngineTaskTable)
-      .where(
-        and(
-          eq(EngineTaskTable.project_id, Instance.project.id),
-          sql`${EngineTaskTable.time_started} IS NOT NULL`,
-        ),
-      )
+      .where(and(eq(EngineTaskTable.project_id, Instance.project.id), sql`${EngineTaskTable.time_started} IS NOT NULL`))
       .all(),
   )
   let reconciled = 0
@@ -3844,9 +3855,12 @@ export async function reconcileUndeliveredDispatchInfrastructureFacts(): Promise
       }
     } catch (error) {
       failures.push(
-        new Error(`Task ${fact.taskID} infrastructure fact ${fact.id}: ${error instanceof Error ? error.message : String(error)}`, {
-          cause: error,
-        }),
+        new Error(
+          `Task ${fact.taskID} infrastructure fact ${fact.id}: ${error instanceof Error ? error.message : String(error)}`,
+          {
+            cause: error,
+          },
+        ),
       )
     }
   }
@@ -3880,8 +3894,7 @@ async function startLoopForTask(
   reservedAuthority?: RuntimeExecutionReservation,
 ): Promise<boolean> {
   const completionAuthority =
-    reservedAuthority ??
-    RuntimeExecutionSettlement.reserve("engine_queue_completion", `task-loop-launch:${task.id}`)
+    reservedAuthority ?? RuntimeExecutionSettlement.reserve("engine_queue_completion", `task-loop-launch:${task.id}`)
   let wake: NonNullable<ReturnType<typeof findNextPendingQueuedOperatorWake>>
   try {
     const taskDirectory = taskRootDirectory(task)

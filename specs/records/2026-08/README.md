@@ -2,6 +2,8 @@
 
 - [2026-08-12-permission-two-mode-calibration-plan.md](2026-08-12-permission-two-mode-calibration-plan.md) re-audits the current mixed permission/capability system and defines one `Full access` / `Ask me` authority model, central invocation gate, durable approval ledger, restart-safe waiting contract, no-fallback cutover, and real-path acceptance matrix calibrated against current industry practice.
 
+- [2026-08-11-windows-worker-scheduler-liveness-convergence.md](2026-08-11-windows-worker-scheduler-liveness-convergence.md) records the live Windows reviewer deadlock, expands scheduler ownership through physical descendant and output settlement, and defines the independent audit and end-to-end recovery acceptance boundary.
+
 - [2026-08-11-hollow-desktop-app-icons.md](2026-08-11-hollow-desktop-app-icons.md) replaces the filled desktop application mark with one white-backed hollow silhouette generated consistently for macOS ICNS, Windows ICO/Store, and Linux/runtime PNG assets.
 
 - [2026-08-11-native-platform-message-notifications.md](2026-08-11-native-platform-message-notifications.md) replaces in-app, taskbar/Dock-badge, and custom tray-dot message attention with one native system-notification delivery that also requests platform-native user attention.

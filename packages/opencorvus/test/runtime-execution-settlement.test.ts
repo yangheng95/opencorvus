@@ -19,7 +19,7 @@ import {
   TaskMessageProtocolBridgeTestHooks,
 } from "@/orchestrator/protocol/message-bridge"
 import { Identifier } from "@/id/id"
-import { Instance } from "@/project/instance"
+import { Instance, InstanceSettlementInactivityError } from "@/project/instance"
 import { Session } from "@/session"
 import { MessageTable } from "@/session/session.sql"
 import { SessionWake } from "@/session/wake"
@@ -78,6 +78,35 @@ async function prepareTaskQueueProcessRollback(directory: string) {
 }
 
 describe("runtime execution settlement authority", () => {
+  test("reports the exact active Instance authority and converges on the same settlement gate", async () => {
+    await using project = await memoryProject()
+    let reportStarted!: () => void
+    const started = new Promise<void>((resolve) => (reportStarted = resolve))
+    let releaseActivity!: () => void
+    const activityReleased = new Promise<void>((resolve) => (releaseActivity = resolve))
+    const activity = Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        reportStarted()
+        await activityReleased
+      },
+    })
+    await started
+
+    using gate = Instance.acquireProcessSettlementGate()
+    const inactive = await gate.waitForIdle(25).catch((error) => error)
+    expect(inactive).toMatchObject({
+      name: "InstanceSettlementInactivityError",
+      inactivityTimeoutMilliseconds: 25,
+      labels: [expect.stringContaining("activities=0:closing=false")],
+    } satisfies Partial<InstanceSettlementInactivityError>)
+
+    releaseActivity()
+    await activity
+    await gate.waitForIdle(250)
+    expect(Instance.current()).toBeUndefined()
+  })
+
   test("publishes terminal protocol evidence while an owned execution is being terminated", async () => {
     const events: string[] = []
     const execution = RuntimeExecutionSettlement.reserve("session_wake_loop", "terminal-protocol-on-shutdown")

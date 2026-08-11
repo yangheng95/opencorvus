@@ -487,6 +487,7 @@ export function resetWriter(
   pendingPartFirstMessages.clear()
   latestTimelineMessage = undefined
   runningReviews.clear()
+  terminalReviewOrderKeys.clear()
   pendingSessionStatus.clear()
   standaloneQuestionInteractions.clear()
   // Drop every key explicitly — plain assignment on a store merges instead of
@@ -1520,6 +1521,11 @@ function handleSessionStatus(event: any): void {
     "session",
   )
   const projected = projectSessionStatus(event)
+  if (projected.terminalReason) {
+    const reviewID = `integrity:${sessionID}`
+    runningReviews.delete(reviewID)
+    terminalReviewOrderKeys.set(reviewID, lifecycleOrderKey)
+  }
   const info = ensureLifecycleSessionProjection(event, sessionID)
   const occurrenceOwnerCardID = info?.occurrenceCardIDs.get(inputMessageID)
   if (info) advanceActiveOccurrence(info, inputMessageID, lifecycleOrderKey, occurrenceOwnerCardID)
@@ -1819,6 +1825,21 @@ interface RunningReviewPayload {
   summary?: string
 }
 const runningReviews = new Map<string, RunningReviewPayload>()
+/** Canonical Session lifecycle terminal tombstones. They prevent delayed
+ * review-stream events from recreating a running review after its occurrence
+ * has ended; a genuinely later review.started opens the next occurrence. */
+const terminalReviewOrderKeys = new Map<string, string>()
+
+function acceptReviewEvent(reviewID: string, orderKey: string, opensOccurrence = false): boolean {
+  const terminalOrderKey = terminalReviewOrderKeys.get(reviewID)
+  if (terminalOrderKey) {
+    if (!opensOccurrence) return false
+    if (compareTimelineOrderKeys(orderKey, terminalOrderKey, `review ${reviewID} terminal`) <= 0) return false
+    terminalReviewOrderKeys.delete(reviewID)
+  }
+  const active = runningReviews.get(reviewID)
+  return !active || compareTimelineOrderKeys(orderKey, active.orderKey, `review ${reviewID} active`) >= 0
+}
 
 function normalizeReviewPhase(raw: string): ReviewStreamPhase {
   if (raw === "integrity") return raw
@@ -1924,13 +1945,15 @@ function handleReviewStreamStarted(event: any): void {
   const agentID = requireExactReviewAgentID(props.agentID, reviewID)
   if (phase === "integrity" && !sessionID)
     throw new Error(`review.stream.started integrity missing sessionID (taskID=${taskID})`)
+  const orderKey = requireTimelineOrderKey(event?.orderKey, `review.stream.started ${reviewID}`)
+  if (!acceptReviewEvent(reviewID, orderKey, true)) return
   const payload: RunningReviewPayload = {
     taskID,
     reviewID,
     phase,
     sessionID,
     agentID,
-    orderKey: requireTimelineOrderKey(event?.orderKey, `review.stream.started ${reviewID}`),
+    orderKey,
     startedAt: eventEmittedAt(event, `review.stream.started ${reviewID}`),
     attempt: 0,
     elapsedMs: 0,
@@ -1953,6 +1976,8 @@ function handleReviewStreamProgress(event: any): void {
   const attempt = Number(props.attempt || 0)
   const elapsedMs = Number(props.elapsedMs || props.elapsed_ms || 0)
   const agentID = requireExactReviewAgentID(props.agentID, reviewID)
+  const orderKey = requireTimelineOrderKey(event?.orderKey, `review.stream.progress ${reviewID}`)
+  if (!acceptReviewEvent(reviewID, orderKey)) return
   const existing = ensureIntegrityReviewProjection({
     taskID,
     reviewID,
@@ -1970,6 +1995,7 @@ function handleReviewStreamProgress(event: any): void {
     taskID,
     reviewID,
     phase,
+    orderKey,
     startedAt: existing.startedAt,
     attempt,
     elapsedMs,
@@ -1994,6 +2020,8 @@ function handleReviewStreamChunk(event: any): void {
   const delta = String(props.delta || "")
   const attempt = Number(props.attempt || 1)
   const agentID = requireExactReviewAgentID(props.agentID, reviewID)
+  const orderKey = requireTimelineOrderKey(event?.orderKey, `review.stream.chunk ${reviewID}`)
+  if (!acceptReviewEvent(reviewID, orderKey)) return
   if (kind !== "reasoning") {
     throw new Error(`review.stream.chunk unexpected kind: ${kind}`)
   }

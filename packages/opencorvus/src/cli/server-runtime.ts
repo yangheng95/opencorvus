@@ -5,6 +5,8 @@ import {
   RuntimeServerOwnershipHandoffPendingError,
   RuntimeServerStartupCleanupPendingError,
 } from "@/server/runtime-server-ownership"
+import { ProcessSupervisor } from "@/shell/process-supervisor"
+import { recoverOrphanedIsolatedCheckWorkspaces } from "@/project/isolated-check-workspace"
 
 export async function acquireServerRuntimeAfterRecovery(input: {
   recover(): Promise<void>
@@ -18,7 +20,16 @@ export async function acquireServerRuntimeAfterRecovery(input: {
     await error.complete()
     ownership = Server.acquireRuntimeOwnershipForStartup()
   }
-  const recovery = Promise.resolve().then(() => {
+  const recovery = Promise.resolve().then(async () => {
+    const observeProcessOccurrence = RuntimeServerOwnership.cachedProcessOccurrenceObserver()
+    await ProcessSupervisor.recoverOrphanedWindowsRequests({
+      currentOccurrenceID: ownership.owner.occurrenceID,
+      observeProcessOccurrence,
+    })
+    await recoverOrphanedIsolatedCheckWorkspaces({
+      currentOccurrenceID: ownership.owner.occurrenceID,
+      observeProcessOccurrence,
+    })
     AutomationService.initGlobal()
     return input.recover()
   })

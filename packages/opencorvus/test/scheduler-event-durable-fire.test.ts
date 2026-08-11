@@ -11,6 +11,7 @@ import { EngineTaskTable } from "@/engine/engine.sql"
 import { Event } from "@/engine/model"
 import { Instance } from "@/project/instance"
 import { EventService } from "@/scheduler/event-service"
+import { SchedulerExecutionInactivityTestHooks } from "@/scheduler/execution-inactivity"
 import { EventJobFireTable, EventJobTable } from "@/scheduler/event.sql"
 import { Session } from "@/session"
 import { MessageTable } from "@/session/session.sql"
@@ -865,6 +866,54 @@ describe("Event Job durable fire authority", () => {
       owner_process_id: null,
       lease_until: 0,
       attempt: 1,
+    })
+  })
+
+  test("turns real Event fire inactivity into a physically joined retry occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        using _timeout = SchedulerExecutionInactivityTestHooks.installTimeout(25)
+        const trace: string[] = []
+        let runtimeGate: ReturnType<typeof RuntimeExecutionSettlement.acquireSettlementGate> | undefined
+        using _executor = EventService.TestHooks.installWakeExecutor(async ({ signal }) => {
+          trace.push("wake-started")
+          await new Promise<void>((resolve) => {
+            const abort = () => resolve()
+            if (signal.aborted) abort()
+            else signal.addEventListener("abort", abort, { once: true })
+          })
+          trace.push("wake-aborted")
+          runtimeGate = RuntimeExecutionSettlement.acquireSettlementGate()
+          runtimeGate.closeAdmission(["scheduler_event_fire"])
+          throw signal.reason
+        })
+        const job = await EventService.create({
+          name: "event inactivity physical settlement",
+          eventType: SourceEvent.type,
+          prompt: "settle this inactive fire",
+          projectId: Instance.project.id,
+        })
+        EventService.init()
+        await Bus.publish(SourceEvent, { info: { id: "source:event-inactivity" } })
+        await EventService.TestHooks.waitForIdle()
+
+        try {
+          expect({ trace, fire: EventService.TestHooks.fires(Instance.project.id)[0] }).toMatchObject({
+            trace: ["wake-started", "wake-aborted"],
+            fire: {
+              event_job_id: job.id,
+              status: "retry_wait",
+              owner_id: null,
+              owner_process_id: null,
+              error: expect.stringContaining("SchedulerExecutionInactivityError"),
+            },
+          })
+        } finally {
+          runtimeGate?.[Symbol.dispose]()
+        }
+      },
     })
   })
 

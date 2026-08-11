@@ -36,6 +36,7 @@ import { TaskWorkflowBindingConflictError } from "@/engine/workflow-binding-fact
 import { resolveDispatchOccurrenceAuthority } from "@/engine/dispatch-lineage"
 import { Log } from "@/util/log"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
+import { recordDispatchSettlement } from "@/engine/dispatch-settlement"
 
 const log = Log.create({ service: "dispatch-agent-tool" })
 
@@ -54,6 +55,8 @@ export interface DispatchAgentLineageHandle {
   readonly turn: DispatchTurn
   readonly adapterInput: Readonly<Record<string, unknown>>
   readonly continuationGuidance?: string
+  /** Durable result for an exact replay of an already committed parent tool occurrence. */
+  readonly replayOutcome?: DispatchOutcomeResult
   /** Observe the physical Session identity without publishing logical dispatch lineage. */
   observeSession(sessionID: string): void
   /** Commit logical dispatch authority only after the exact Turn descriptor is durable. */
@@ -94,10 +97,7 @@ const detachedDispatchPipelineGenerations = new Map<string, number>()
 let detachedDispatchPipelineGeneration = 0
 let detachedDispatchSettlementGate: symbol | undefined
 
-function reserveDetachedDispatchPipeline(): (input: {
-  pipeline: Promise<void>
-  dispatchLineageID?: string
-}) => void {
+function reserveDetachedDispatchPipeline(): (input: { pipeline: Promise<void>; dispatchLineageID?: string }) => void {
   if (detachedDispatchSettlementGate) {
     throw new Error("Detached dispatch admission is closed for runtime settlement")
   }
@@ -120,19 +120,13 @@ function reserveDetachedDispatchPipeline(): (input: {
     void reservation
       .then(
         () => {
-          if (
-            dispatchLineageID &&
-            detachedDispatchPipelineGenerations.get(dispatchLineageID) === generation
-          ) {
+          if (dispatchLineageID && detachedDispatchPipelineGenerations.get(dispatchLineageID) === generation) {
             detachedDispatchPipelineFailures.delete(dispatchLineageID)
             detachedDispatchPipelineGenerations.delete(dispatchLineageID)
           }
         },
         (error) => {
-          if (
-            dispatchLineageID &&
-            detachedDispatchPipelineGenerations.get(dispatchLineageID) === generation
-          ) {
+          if (dispatchLineageID && detachedDispatchPipelineGenerations.get(dispatchLineageID) === generation) {
             detachedDispatchPipelineFailures.set(dispatchLineageID, { generation, error })
           }
         },
@@ -176,10 +170,7 @@ export function acquireDetachedDispatchSettlementGate(): DetachedDispatchSettlem
               { cause: failure.error },
             ),
         )
-        throw new AggregateError(
-          failures,
-          `Failed to settle ${failures.length} detached dispatch pipeline(s)`,
-        )
+        throw new AggregateError(failures, `Failed to settle ${failures.length} detached dispatch pipeline(s)`)
       }
     },
     [Symbol.dispose]: () => {
@@ -542,6 +533,7 @@ export function createDispatchAgentTool(input: {
           continuationGuidance,
           evidenceLocators: EvidenceLocatorListSchema.parse(continuationEvidenceLocators ?? []),
         })
+        if (dispatch.replayOutcome) return dispatch.replayOutcome
         dispatchID = dispatch.dispatchID
         if (input.signal?.aborted) {
           const origin = isExecutionCancellationError(input.signal.reason)
@@ -618,7 +610,13 @@ export function createDispatchAgentTool(input: {
               toolOptions: optionsWithVisibleOrchestratorToolName(options, "dispatch_agent"),
             }),
           )
-          return DispatchAdapterContractRegistry.outputSchema(projectedAgent.identity.dispatchAdapterID).parse(outcome)
+          const parsed = DispatchAdapterContractRegistry.outputSchema(projectedAgent.identity.dispatchAdapterID).parse(
+            outcome,
+          )
+          if (parsed.kind !== "accepted" && (parsed.kind !== "infrastructure_failure" || parsed.session_id)) {
+            recordDispatchSettlement({ taskID: input.taskID, dispatchID: dispatch.dispatchID, outcome: parsed })
+          }
+          return parsed
         }
         const executeDetached = async () => {
           if (useWorktree && projectedAgent.identity.dispatchAdapterID !== "build") {

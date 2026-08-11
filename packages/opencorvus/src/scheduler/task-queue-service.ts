@@ -14,7 +14,7 @@ import { SessionStatus, executionLifecycleOrderKey, sessionLifecycleOrderKey } f
 import { SessionPrompt } from "@/session/prompt"
 import { SessionPromptReplyError } from "@/session/prompt/state"
 import { SessionContext } from "@/session/context"
-import { SessionTable } from "@/session/session.sql"
+import { MessageTable, SessionTable } from "@/session/session.sql"
 import { Message } from "@/session/message"
 import { Database, and, eq, inArray, sql, type SQL } from "@/storage/db"
 import { Identifier } from "@/id/id"
@@ -170,6 +170,8 @@ export namespace TaskQueueService {
     cancellationOrigin?: ExecutionCancellationOrigin
     promptOwner?: AbortSignal
     progressSessionIDs?: Set<string>
+    progressMessageIDs?: Set<string>
+    progressInputMessageID?: string
   }
 
   type QueueProgressEnvelope = {
@@ -588,6 +590,7 @@ export namespace TaskQueueService {
     trackChildSessionProgress(input: {
       taskID: string
       rootSessionID: string
+      inputMessageID: string
       directory: string
       projectID: string
     }): () => void {
@@ -601,10 +604,19 @@ export namespace TaskQueueService {
         source: "task-queue-child-progress-positive-contract",
         directory: input.directory,
       })
-      inFlight.progressSessionIDs = new Set([input.rootSessionID])
+      const queueTask = Database.use((db) =>
+        db.select({ startedAt: TaskQueueTable.time_started }).from(TaskQueueTable).where(eq(TaskQueueTable.id, input.taskID)).get(),
+      )
+      if (!queueTask?.startedAt) throw new Error(`Task Queue test progress owner requires a started row: ${input.taskID}`)
+      attachProgressTracking({
+        inFlight,
+        rootSessionID: input.rootSessionID,
+        inputMessageID: input.inputMessageID,
+        directory: input.directory,
+        projectID: input.projectID,
+      })
       current.inFlight.set(input.taskID, inFlight)
       processInFlight.set(input.taskID, inFlight)
-      ensureProgressSubscription({ directory: input.directory, projectID: input.projectID })
       return () => {
         if (current.inFlight.get(input.taskID) === inFlight) current.inFlight.delete(input.taskID)
         if (processInFlight.get(input.taskID) === inFlight) processInFlight.delete(input.taskID)
@@ -1466,6 +1478,8 @@ export namespace TaskQueueService {
         }
         for (const [taskID, task] of current.inFlight) {
           if (!task.progressSessionIDs?.has(info.parentID)) continue
+          const parentMessageID = delegatedParentMessageID(info)
+          if (!parentMessageID || !messageBelongsToQueueProgress(task, info.parentID, parentMessageID)) continue
           task.progressSessionIDs.add(info.id)
           observeTaskProgress(taskID, task, input.directory, info.id)
         }
@@ -1480,14 +1494,47 @@ export namespace TaskQueueService {
           typeof properties.part.sessionID === "string" &&
           properties.part.sessionID) ||
         undefined
-      if (!sessionID) return
+      const messageID =
+        (typeof properties.messageID === "string" && properties.messageID) ||
+        (typeof properties.part === "object" &&
+          properties.part &&
+          typeof properties.part.messageID === "string" &&
+          properties.part.messageID) ||
+        undefined
+      if (!sessionID || !messageID) return
       for (const [taskID, task] of current.inFlight) {
         if (!task.progressSessionIDs?.has(sessionID)) continue
+        if (sessionID === task.sessionID && !messageBelongsToQueueProgress(task, sessionID, messageID)) continue
         observeTaskProgress(taskID, task, input.directory)
       }
     }
     current.progressListener = handler
     GlobalBus.on("event", handler)
+  }
+
+  function delegatedParentMessageID(info: { metadata?: Record<string, unknown> }): string | undefined {
+    const delegation = info.metadata?.delegation
+    if (!delegation || typeof delegation !== "object" || Array.isArray(delegation)) return undefined
+    const parentMessageID = (delegation as Record<string, unknown>).parentMessageID
+    return typeof parentMessageID === "string" && parentMessageID.length > 0 ? parentMessageID : undefined
+  }
+
+  function messageBelongsToQueueProgress(task: InFlightTask, sessionID: string, messageID: string): boolean {
+    if (task.progressMessageIDs?.has(messageID)) return true
+    if (!task.progressSessionIDs?.has(sessionID)) return false
+    const row = Database.use((db) =>
+      db
+        .select({ sessionID: MessageTable.session_id, data: MessageTable.data })
+        .from(MessageTable)
+        .where(and(eq(MessageTable.id, messageID), eq(MessageTable.session_id, sessionID)))
+        .get(),
+    )
+    if (!row) return false
+    const assistant = Message.Assistant.safeParse({ ...row.data, id: messageID, sessionID: row.sessionID })
+    if (!assistant.success) return false
+    if (sessionID === task.sessionID && assistant.data.parentID !== task.progressInputMessageID) return false
+    task.progressMessageIDs?.add(messageID)
+    return true
   }
 
   function observeTaskProgress(taskID: string, task: InFlightTask, directory: string, childSessionID?: string) {
@@ -1558,27 +1605,44 @@ export namespace TaskQueueService {
     current.progressListener = undefined
   }
 
+  function attachProgressTracking(input: {
+    inFlight: InFlightTask
+    rootSessionID: string
+    inputMessageID: string
+    directory: string
+    projectID: string
+  }): void {
+    input.inFlight.progressSessionIDs = new Set([input.rootSessionID])
+    input.inFlight.progressMessageIDs = new Set([input.inputMessageID])
+    input.inFlight.progressInputMessageID = input.inputMessageID
+    ensureProgressSubscription({ directory: input.directory, projectID: input.projectID })
+  }
+
   async function execute(task: typeof TaskQueueTable.$inferSelect, inFlight: InFlightTask) {
     const queueDirectory = Instance.directory
     inFlight.promptOwner ??= SessionPrompt.promptOwner(task.session_id)
     await assertSessionLineageInCurrentProject(task.session_id)
     inFlight.promptOwner = SessionPrompt.promptOwner(task.session_id) ?? inFlight.promptOwner
     const queueProjectID = Instance.project.id
-    const progressSessionIDs = new Set(
-      await Session.treeInProject({
-        sessionID: task.session_id,
-        projectID: queueProjectID,
-      }),
-    )
+    // The exact queued input Message owns the root Prompt's progress lineage.
+    // Root output must descend from that Message, and child Sessions enter the
+    // set only through durable delegation metadata that names an already-owned
+    // assistant Message. Seeding from Session.treeInProject(), or accepting a
+    // child by wall-clock creation time, admitted unrelated descendants whose
+    // output could indefinitely refresh this occurrence's inactivity clock.
     const metadata = RawTaskMetadata.safeParse(task.metadata)
     if (!metadata.success) {
       throw new Error("invalid queue metadata")
     }
+    const progressInputMessageID =
+      metadata.data.kind === "session_wake"
+        ? metadata.data.messageID
+        : StoredCompactionInput.parse(metadata.data.input).sourceUserMessageID
     // Chunk-driven heartbeat: touch() only fires when the queued prompt's
-    // durable session tree makes progress (message.part.delta /
-    // message.part.updated). The initial tree comes from Session.treeInProject;
-    // authoritative session.created events extend the task-local membership
-    // while execution is live. This replaces the old exact-root filter, which
+    // durable causal session tree makes progress (message.part.delta /
+    // message.part.updated). Authoritative session.created events extend the
+    // task-local membership while execution is live. This replaces the old
+    // exact-root filter, which
     // cancelled a parent prompt after the inactivity window even while its
     // delegated child Agent was actively streaming. It also preserves the
     // removal of the unconditional setInterval(touch, 15s), which masked a
@@ -1587,10 +1651,17 @@ export namespace TaskQueueService {
     // supported 100-way concurrency does not create 100 EventEmitter
     // listeners. GlobalBus covers worktree Instances too (session lives in
     // one, executor in another).
-    inFlight.progressSessionIDs = progressSessionIDs
-    ensureProgressSubscription({ directory: queueDirectory, projectID: queueProjectID })
+    attachProgressTracking({
+      inFlight,
+      rootSessionID: task.session_id,
+      inputMessageID: progressInputMessageID,
+      directory: queueDirectory,
+      projectID: queueProjectID,
+    })
     const cleanup = () => {
       inFlight.progressSessionIDs = undefined
+      inFlight.progressMessageIDs = undefined
+      inFlight.progressInputMessageID = undefined
     }
     inFlight.cleanup = cleanup
     const beforeLoop = () => enterQueuePromptLoop(task, inFlight, queueDirectory)

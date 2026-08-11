@@ -1,6 +1,7 @@
 import { spawn, spawnSync, type ChildProcess } from "child_process"
-import { randomUUID } from "crypto"
+import { createHash, randomUUID } from "crypto"
 import fs from "fs/promises"
+import { readFileSync } from "node:fs"
 import os from "os"
 import path from "path"
 import { PassThrough } from "node:stream"
@@ -15,6 +16,8 @@ import {
 import { resolveTaskProcessExecution } from "@/engine/task-execution-capsule-binding"
 import { Lock } from "@/util/lock"
 import { awaitWithAbort } from "@/util/abort"
+import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
+import type { RuntimeProcessOccurrenceObserver } from "@/server/runtime-server-ownership"
 
 const SIGKILL_TIMEOUT_MS = 200
 
@@ -51,6 +54,8 @@ export namespace ProcessSupervisor {
     gracefulTerminationMs?: number
     owner?: string
     taskCancellationRole?: TaskCancellationRole
+    signal?: AbortSignal
+    deadlineAt?: number
   }
 
   export interface CommandSpawnOptions {
@@ -62,6 +67,8 @@ export namespace ProcessSupervisor {
     gracefulTerminationMs?: number
     owner?: string
     taskCancellationRole?: TaskCancellationRole
+    signal?: AbortSignal
+    deadlineAt?: number
     /** Launch a replacement process outside the current supervisor's native cleanup job. */
     detached?: boolean
   }
@@ -77,6 +84,9 @@ export namespace ProcessSupervisor {
     exited: Promise<number>
     /** Completion of stdout/stderr delivery after physical exit. */
     outputSettled?: Promise<void>
+    /** One authoritative settlement: physical exit, output closure, and
+     * supervisor-owned request cleanup. */
+    settled?: Promise<void>
     terminate(): Promise<void>
     dispose(): Promise<void>
     unref(): void
@@ -95,6 +105,23 @@ export namespace ProcessSupervisor {
     return new AggregateError(unique, `${message}: ${unique.map(errorMessage).join("; ")}`)
   }
 
+  async function joinPhysicalAndOutputSettlement(handle: Pick<Handle, "exited" | "outputSettled">): Promise<void> {
+    const [physical, output] = await Promise.allSettled([
+      handle.exited.then(() => undefined),
+      handle.outputSettled ?? Promise.resolve(),
+    ])
+    const failures = [
+      ...(physical.status === "rejected" ? [physical.reason] : []),
+      ...(output.status === "rejected" ? [output.reason] : []),
+    ]
+    if (failures.length > 0) throw combineFailures("Process physical/output settlement failed", failures)
+  }
+
+  async function waitForOwnedPhysicalSettlement(handle: Handle): Promise<void> {
+    await handle.exited
+    await Promise.allSettled([handle.settled ?? joinPhysicalAndOutputSettlement(handle)])
+  }
+
   type Factory = (opts: SpawnOptions) => Promise<Handle>
   type CommandFactory = (opts: CommandSpawnOptions) => Promise<Handle>
   type WindowsHelperResolver = () => Promise<string | undefined>
@@ -104,6 +131,7 @@ export namespace ProcessSupervisor {
     resolution?: Promise<string | undefined>
   }
   type WindowsOutputObserver = (stdout: NodeJS.ReadableStream, stderr: NodeJS.ReadableStream) => void
+  type WindowsRequestObserver = (request: Readonly<Record<string, unknown>>) => void
   type PosixProcessSnapshotResult = {
     error?: Error
     status: number | null
@@ -126,6 +154,7 @@ export namespace ProcessSupervisor {
   let commandFactory: CommandFactory | undefined
   let windowsHelperBinding: WindowsHelperBinding = {}
   let windowsOutputObserver: WindowsOutputObserver | undefined
+  let windowsRequestObserver: WindowsRequestObserver | undefined
   let posixProcessSnapshot: PosixProcessSnapshot = defaultPosixProcessSnapshot
   let nextLiveHandleID = 1
   const liveHandles = new Map<number, LiveHandle>()
@@ -185,7 +214,9 @@ export namespace ProcessSupervisor {
           : await (factory ?? defaultSpawnShell)({ ...opts, cwd: identity.cwd })
       const tracked = trackLiveHandle({ ...opts, cwd: identity.cwd }, handle, identity.taskID)
       spawn.finishRegistration()
-      void tracked.exited.finally(() => spawn.lease[Symbol.dispose]()).catch(() => undefined)
+      void waitForOwnedPhysicalSettlement(tracked)
+        .then(() => spawn.lease[Symbol.dispose]())
+        .catch(() => undefined)
       return tracked
     } catch (error) {
       spawn.finishRegistration()
@@ -219,7 +250,9 @@ export namespace ProcessSupervisor {
           : await (commandFactory ?? defaultSpawnCommand)({ ...opts, cwd: identity.cwd })
       const tracked = trackLiveHandle({ ...opts, cwd: identity.cwd }, handle, identity.taskID)
       spawn.finishRegistration()
-      void tracked.exited.finally(() => spawn.lease[Symbol.dispose]()).catch(() => undefined)
+      void waitForOwnedPhysicalSettlement(tracked)
+        .then(() => spawn.lease[Symbol.dispose]())
+        .catch(() => undefined)
       return tracked
     } catch (error) {
       spawn.finishRegistration()
@@ -474,6 +507,194 @@ export namespace ProcessSupervisor {
     }
   }
 
+  export type WindowsOrphanRequestRecoveryResult = {
+    inspected: number
+    removed: number
+    retainedCurrent: number
+    retainedLive: number
+    retainedUnknown: number
+  }
+
+  export class WindowsOrphanRequestArtifactUnknownError extends Error {
+    override readonly name = "WindowsOrphanRequestArtifactUnknownError"
+
+    constructor(
+      readonly requestDirectory: string,
+      cause: unknown,
+    ) {
+      super(`Windows supervisor request artifact cannot be reconciled: ${requestDirectory}: ${errorMessage(cause)}`, {
+        cause,
+      })
+    }
+  }
+
+  export class WindowsOrphanRequestRecoveryBlockedError extends AggregateError {
+    override readonly name = "WindowsOrphanRequestRecoveryBlockedError"
+
+    constructor(
+      errors: WindowsOrphanRequestArtifactUnknownError[],
+      readonly result: WindowsOrphanRequestRecoveryResult,
+    ) {
+      super(errors, `Windows supervisor request recovery retained ${errors.length} unknown artifact occurrence(s)`)
+    }
+  }
+
+  type DurableWindowsRequest = {
+    request_id: string
+    ready_file: string
+    cancel_file: string
+    settled_file: string
+    owner_pid: number
+    owner_process_instance_id: string
+    runtime_occurrence_id: string
+  }
+
+  function parseDurableWindowsRequest(value: unknown, requestDir: string): DurableWindowsRequest {
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+      throw new Error(`Windows supervisor request is not an object: ${requestDir}`)
+    }
+    const request = value as Record<string, unknown>
+    const kind = request.kind
+    const required = [
+      "cancel_file",
+      "cwd",
+      "kind",
+      "owner_pid",
+      "owner_process_instance_id",
+      "ready_file",
+      "request_id",
+      "runtime_occurrence_id",
+      "settled_file",
+      ...(kind === "shell" ? ["command", "shell"] : kind === "command" ? ["args", "detached", "executable"] : []),
+    ].filter((key) => key !== "cwd" || Object.hasOwn(request, "cwd"))
+    const keys = Object.keys(request).sort()
+    required.sort()
+    if (kind !== "shell" && kind !== "command") {
+      throw new Error(`Windows supervisor request has unsupported kind: ${requestDir}`)
+    }
+    if (keys.length !== required.length || keys.some((key, index) => key !== required[index])) {
+      throw new Error(`Windows supervisor request has unexpected fields: ${requestDir}`)
+    }
+    if (
+      typeof request.request_id !== "string" ||
+      request.request_id.length === 0 ||
+      typeof request.owner_process_instance_id !== "string" ||
+      request.owner_process_instance_id.length === 0 ||
+      typeof request.runtime_occurrence_id !== "string" ||
+      request.runtime_occurrence_id.length === 0 ||
+      !Number.isInteger(request.owner_pid) ||
+      Number(request.owner_pid) <= 0
+    ) {
+      throw new Error(`Windows supervisor request has invalid owner identity: ${requestDir}`)
+    }
+    const expectedPaths = {
+      ready_file: path.join(requestDir, "ready.json"),
+      cancel_file: path.join(requestDir, "cancel"),
+      settled_file: path.join(requestDir, "settled.json"),
+    }
+    for (const [field, expected] of Object.entries(expectedPaths)) {
+      const actual = request[field]
+      if (typeof actual !== "string" || normalizeCwd(actual) !== normalizeCwd(expected)) {
+        throw new Error(`Windows supervisor request ${field} is outside its exact request root: ${requestDir}`)
+      }
+    }
+    return request as DurableWindowsRequest
+  }
+
+  async function readJsonFile(file: string): Promise<unknown | undefined> {
+    try {
+      return JSON.parse(await fs.readFile(file, "utf8"))
+    } catch (error) {
+      if (errorCode(error) === "ENOENT") return undefined
+      throw error
+    }
+  }
+
+  /** Reconcile only exact prior/dead Windows request occurrences. Recovery
+   * never targets a numeric PID; it writes the request's own cancel authority
+   * and requires the helper's exact active-zero marker before removal. */
+  export async function recoverOrphanedWindowsRequests(input: {
+    currentOccurrenceID: string
+    timeoutMilliseconds?: number
+    observeProcessOccurrence?: RuntimeProcessOccurrenceObserver
+  }): Promise<WindowsOrphanRequestRecoveryResult> {
+    const result: WindowsOrphanRequestRecoveryResult = {
+      inspected: 0,
+      removed: 0,
+      retainedCurrent: 0,
+      retainedLive: 0,
+      retainedUnknown: 0,
+    }
+    if (process.platform !== "win32") return result
+    const observeProcessOccurrence =
+      input.observeProcessOccurrence ?? RuntimeServerOwnership.cachedProcessOccurrenceObserver()
+    const unknownArtifacts: WindowsOrphanRequestArtifactUnknownError[] = []
+    const entries = await fs.readdir(Global.Path.temporary, { withFileTypes: true }).catch((error) => {
+      if (errorCode(error) === "ENOENT") return []
+      throw error
+    })
+    for (const entry of entries) {
+      if (!entry.isDirectory() || !entry.name.startsWith("supervisor-")) continue
+      const requestDir = path.join(Global.Path.temporary, entry.name)
+      result.inspected += 1
+      try {
+        const raw = await readJsonFile(path.join(requestDir, "request.json"))
+        if (raw === undefined) throw new Error("request.json is missing")
+        const request = parseDurableWindowsRequest(raw, requestDir)
+        if (request.runtime_occurrence_id === input.currentOccurrenceID) {
+          result.retainedCurrent += 1
+          continue
+        }
+        const observation = observeProcessOccurrence({
+          pid: request.owner_pid,
+          processInstanceID: request.owner_process_instance_id,
+          occurrenceID: request.runtime_occurrence_id,
+        })
+        if (observation !== "dead_or_reused") {
+          result.retainedLive += 1
+          continue
+        }
+        await fs.writeFile(request.cancel_file, request.request_id, "utf8")
+        const deadline = Date.now() + (input.timeoutMilliseconds ?? TERMINATION_CLEANUP_TIMEOUT_MS)
+        let ready: WindowsReadyMarker | undefined
+        let settlement: WindowsSettlementMarker | undefined
+        while (Date.now() <= deadline) {
+          const rawReady = await readJsonFile(request.ready_file)
+          if (rawReady) {
+            ready = parseWindowsReadyMarker({
+              text: JSON.stringify(rawReady),
+              requestID: request.request_id,
+              runtimeOccurrenceID: request.runtime_occurrence_id,
+              helperPID: Number((rawReady as Record<string, unknown>).helper_pid),
+            })
+            const rawSettlement = await readJsonFile(request.settled_file)
+            if (rawSettlement) {
+              settlement = parseWindowsSettlementMarker({
+                text: JSON.stringify(rawSettlement),
+                requestID: request.request_id,
+                runtimeOccurrenceID: request.runtime_occurrence_id,
+                helperPID: ready.helper_pid,
+                targetPID: ready.target_pid,
+              })
+              break
+            }
+          }
+          await new Promise((resolve) => setTimeout(resolve, 20))
+        }
+        if (!ready || !settlement) {
+          throw new Error(`prior request did not prove active-process-zero within its recovery deadline`)
+        }
+        await fs.rm(requestDir, { recursive: true, force: true })
+        result.removed += 1
+      } catch (error) {
+        result.retainedUnknown += 1
+        unknownArtifacts.push(new WindowsOrphanRequestArtifactUnknownError(requestDir, error))
+      }
+    }
+    if (unknownArtifacts.length > 0) throw new WindowsOrphanRequestRecoveryBlockedError(unknownArtifacts, result)
+    return result
+  }
+
   export function setFactoryForTest(next: Factory | undefined) {
     const previous = factory
     factory = next
@@ -503,6 +724,14 @@ export namespace ProcessSupervisor {
     windowsOutputObserver = next
     return () => {
       windowsOutputObserver = previous
+    }
+  }
+
+  export function setWindowsRequestObserverForTest(next: WindowsRequestObserver | undefined) {
+    const previous = windowsRequestObserver
+    windowsRequestObserver = next
+    return () => {
+      windowsRequestObserver = previous
     }
   }
 
@@ -556,6 +785,8 @@ export namespace ProcessSupervisor {
       unregistered = true
       liveHandles.delete(id)
     }
+    const settled = handle.settled ?? joinPhysicalAndOutputSettlement(handle)
+    void settled.catch(() => undefined)
     const tracked: Handle = {
       pid: handle.pid,
       stdin: handle.stdin,
@@ -563,10 +794,10 @@ export namespace ProcessSupervisor {
       stderr: handle.stderr,
       exited: handle.exited,
       outputSettled: handle.outputSettled,
+      settled,
       terminate: () => handle.terminate(),
       dispose: async () => {
         await handle.dispose()
-        unregister()
       },
       unref: () => {
         handle.unref()
@@ -582,7 +813,7 @@ export namespace ProcessSupervisor {
       taskCancellationRole: opts.taskCancellationRole ?? "mandatory",
       handle: tracked,
     })
-    void handle.exited.finally(unregister).catch(() => undefined)
+    void waitForOwnedPhysicalSettlement(tracked).then(unregister).catch(() => undefined)
     return tracked
   }
 
@@ -603,10 +834,11 @@ export namespace ProcessSupervisor {
   export async function terminateAndWaitForExit(
     handle: Handle,
     label: string,
-    opts: { cleanupTimeoutMs?: number; exitTimeoutMs?: number } = {},
+    opts: { cleanupTimeoutMs?: number; exitTimeoutMs?: number; deadlineAt?: number } = {},
   ): Promise<number> {
-    const cleanupTimeoutMs = opts.cleanupTimeoutMs ?? TERMINATION_CLEANUP_TIMEOUT_MS
-    const exitTimeoutMs = opts.exitTimeoutMs ?? TERMINATION_EXIT_TIMEOUT_MS
+    const remaining = (fallback: number) =>
+      opts.deadlineAt === undefined ? fallback : Math.max(1, opts.deadlineAt - Date.now())
+    const cleanupTimeoutMs = remaining(opts.cleanupTimeoutMs ?? TERMINATION_CLEANUP_TIMEOUT_MS)
     void handle.exited.catch(() => undefined)
     const cleanup = await Promise.allSettled([
       awaitWithTimeout(
@@ -615,6 +847,7 @@ export namespace ProcessSupervisor {
         `${label} terminate cleanup did not finish within ${cleanupTimeoutMs}ms`,
       ),
     ]).then(([result]) => result!)
+    const exitTimeoutMs = remaining(opts.exitTimeoutMs ?? TERMINATION_EXIT_TIMEOUT_MS)
     const exit = await Promise.allSettled([
       awaitWithTimeout(
         handle.exited,
@@ -635,11 +868,13 @@ export namespace ProcessSupervisor {
   export async function disposeAndWaitForExit(
     handle: Handle,
     label: string,
-    opts: { cleanupTimeoutMs?: number; exitTimeoutMs?: number } = {},
+    opts: { cleanupTimeoutMs?: number; exitTimeoutMs?: number; deadlineAt?: number } = {},
   ): Promise<number> {
-    const cleanupTimeoutMs = opts.cleanupTimeoutMs ?? TERMINATION_CLEANUP_TIMEOUT_MS
-    const exitTimeoutMs = opts.exitTimeoutMs ?? TERMINATION_EXIT_TIMEOUT_MS
-    const [cleanup, exit, output] = await Promise.allSettled([
+    const remaining = (fallback: number) =>
+      opts.deadlineAt === undefined ? fallback : Math.max(1, opts.deadlineAt - Date.now())
+    const cleanupTimeoutMs = remaining(opts.cleanupTimeoutMs ?? TERMINATION_CLEANUP_TIMEOUT_MS)
+    const exitTimeoutMs = remaining(opts.exitTimeoutMs ?? TERMINATION_EXIT_TIMEOUT_MS)
+    const [cleanup, exit, output, settlement] = await Promise.allSettled([
       awaitWithTimeout(
         handle.dispose(),
         cleanupTimeoutMs,
@@ -655,12 +890,23 @@ export namespace ProcessSupervisor {
         exitTimeoutMs,
         `${label} output did not settle within ${exitTimeoutMs}ms after disposal was requested`,
       ),
+      awaitWithTimeout(
+        handle.settled ?? joinPhysicalAndOutputSettlement(handle),
+        cleanupTimeoutMs,
+        `${label} supervisor settlement did not finish within ${cleanupTimeoutMs}ms after disposal was requested`,
+      ),
     ])
-    if (cleanup.status === "rejected" || exit.status === "rejected" || output.status === "rejected") {
+    if (
+      cleanup.status === "rejected" ||
+      exit.status === "rejected" ||
+      output.status === "rejected" ||
+      settlement.status === "rejected"
+    ) {
       throw combineFailures(`${label} disposal failed`, [
         ...(cleanup.status === "rejected" ? [cleanup.reason] : []),
         ...(exit.status === "rejected" ? [exit.reason] : []),
         ...(output.status === "rejected" ? [output.reason] : []),
+        ...(settlement.status === "rejected" ? [settlement.reason] : []),
       ])
     }
     return exit.value
@@ -892,12 +1138,14 @@ export namespace ProcessSupervisor {
     return await spawnWindowsRequest({
       label: opts.command,
       stdin: opts.stdin,
+      env: opts.env ?? process.env,
+      signal: opts.signal,
+      deadlineAt: opts.deadlineAt,
       request: (readyPath, requestID) => ({
         kind: "shell",
         command: opts.command,
         shell: opts.shell,
         cwd: opts.cwd,
-        env: opts.env ?? process.env,
         ready_file: readyPath,
         request_id: requestID,
       }),
@@ -910,13 +1158,15 @@ export namespace ProcessSupervisor {
     return await spawnWindowsRequest({
       label: executable,
       stdin: opts.stdin,
+      env,
+      signal: opts.signal,
+      deadlineAt: opts.deadlineAt,
       request: (readyPath, requestID) => ({
         kind: "command",
         executable,
         args: opts.args,
         detached: opts.detached ?? false,
         cwd: opts.cwd,
-        env,
         ready_file: readyPath,
         request_id: requestID,
       }),
@@ -933,6 +1183,9 @@ export namespace ProcessSupervisor {
   async function spawnWindowsRequest(opts: {
     label: string
     stdin?: "ignore" | "pipe"
+    env: NodeJS.ProcessEnv
+    signal?: AbortSignal
+    deadlineAt?: number
     request: (readyPath: string, requestID: string) => Record<string, unknown>
   }): Promise<Handle> {
     const helper = await resolveWindowsHelper()
@@ -942,9 +1195,21 @@ export namespace ProcessSupervisor {
     const requestDir = await Global.createTemporaryDirectory("supervisor-")
     const requestPath = path.join(requestDir, "request.json")
     const readyPath = path.join(requestDir, "ready.json")
+    const cancelPath = path.join(requestDir, "cancel")
+    const settledPath = path.join(requestDir, "settled.json")
     const requestID = randomUUID()
+    const runtimeOwner = RuntimeServerOwnership.currentProcessOccurrence()
     try {
-      await fs.writeFile(requestPath, JSON.stringify(opts.request(readyPath, requestID)), "utf8")
+      const request = {
+        ...opts.request(readyPath, requestID),
+        cancel_file: cancelPath,
+        settled_file: settledPath,
+        owner_pid: runtimeOwner.pid,
+        owner_process_instance_id: runtimeOwner.processInstanceID,
+        runtime_occurrence_id: runtimeOwner.occurrenceID,
+      }
+      windowsRequestObserver?.(request)
+      await fs.writeFile(requestPath, JSON.stringify(request), "utf8")
     } catch (error) {
       await rethrowWithCleanup(error, "Windows process supervisor request creation and cleanup failed", [
         () => fs.rm(requestDir, { recursive: true, force: true }),
@@ -954,6 +1219,8 @@ export namespace ProcessSupervisor {
     try {
       proc = spawn(helper, ["--request", requestPath], {
         stdio: [opts.stdin ?? "ignore", "pipe", "pipe"],
+        env: opts.env,
+        detached: true,
         windowsHide: true,
       })
     } catch (error) {
@@ -968,13 +1235,55 @@ export namespace ProcessSupervisor {
       ])
     }
     const helperHandle = childHandle(proc, { cleanupProcessGroup: false })
+    let readyTargetPID: number | undefined
+    const validateDurablePhysicalSettlement = async (): Promise<number> => {
+      const ready = parseWindowsReadyMarker({
+        text: await fs.readFile(readyPath, "utf8"),
+        requestID,
+        runtimeOccurrenceID: runtimeOwner.occurrenceID,
+        helperPID: helperHandle.pid,
+      })
+      if (readyTargetPID !== undefined && ready.target_pid !== readyTargetPID) {
+        throw new Error(`Windows process supervisor ready marker target process identity does not match`)
+      }
+      parseWindowsSettlementMarker({
+        text: await fs.readFile(settledPath, "utf8"),
+        requestID,
+        runtimeOccurrenceID: runtimeOwner.occurrenceID,
+        helperPID: helperHandle.pid,
+        targetPID: ready.target_pid,
+      })
+      return ready.target_pid
+    }
+    let cancellationRequest: Promise<void> | undefined
+    const requestCancellation = () => {
+      if (cancellationRequest) return cancellationRequest
+      cancellationRequest = fs.writeFile(cancelPath, requestID, "utf8")
+      void cancellationRequest.catch(() => {
+        cancellationRequest = undefined
+      })
+      return cancellationRequest
+    }
+    const cancelAndSettleHelper = async () => {
+      await requestCancellation()
+      await awaitWithTimeout(
+        helperHandle.exited,
+        TERMINATION_CLEANUP_TIMEOUT_MS,
+        "Windows process supervisor did not publish physical settlement after cancellation",
+      )
+      await helperHandle.dispose()
+    }
     const helperStdout = proc.stdout
     const helperStderr = proc.stderr
     if (!helperStdout || !helperStderr) {
       return await rethrowWithCleanup(
         new Error("Windows process supervisor did not expose stdout/stderr pipes"),
         "Windows process supervisor pipe validation and cleanup failed",
-        [() => helperHandle.dispose(), () => fs.rm(requestDir, { recursive: true, force: true })],
+        [async () => {
+          await cancelAndSettleHelper()
+          await validateDurablePhysicalSettlement()
+          await fs.rm(requestDir, { recursive: true, force: true })
+        }],
       )
     }
     const stdout = new PassThrough()
@@ -1026,22 +1335,25 @@ export namespace ProcessSupervisor {
       pid = await waitForReadyMarker({
         readyPath,
         requestID,
+        runtimeOccurrenceID: runtimeOwner.occurrenceID,
         helperPID: helperHandle.pid,
         helperPath: helper,
         exited: helperHandle.exited,
         command: opts.label,
         startupDetails,
         outputFailures: () => outputFailures,
+        signal: opts.signal,
+        deadlineAt: opts.deadlineAt,
       })
+      readyTargetPID = pid
     } catch (error) {
       try {
         await rethrowWithCleanup(error, "Windows process supervisor startup and cleanup failed", [
-          () =>
-            disposeAndWaitForExit(helperHandle, "Windows process supervisor startup helper", {
-              cleanupTimeoutMs: TERMINATION_CLEANUP_TIMEOUT_MS,
-              exitTimeoutMs: TERMINATION_EXIT_TIMEOUT_MS,
-            }),
-          () => fs.rm(requestDir, { recursive: true, force: true }),
+          async () => {
+            await cancelAndSettleHelper()
+            await validateDurablePhysicalSettlement()
+            await fs.rm(requestDir, { recursive: true, force: true })
+          },
         ])
       } finally {
         detachStartupCapture()
@@ -1061,8 +1373,16 @@ export namespace ProcessSupervisor {
         return { error } as const
       },
     )
-    const exited = helperExitOutcome.then((outcome) => {
+    const exited = helperExitOutcome.then(async (outcome) => {
       if ("error" in outcome) throw outcome.error
+      try {
+        await validateDurablePhysicalSettlement()
+      } catch (error) {
+        throw new Error(
+          `Windows process supervisor exited without a physical settlement marker for request ${requestID}: ${errorMessage(error)}`,
+          { cause: error },
+        )
+      }
       return outcome.code
     })
     const outputSettled = (helperHandle.outputSettled ?? helperHandle.exited.then(() => undefined)).then(() => {
@@ -1081,9 +1401,11 @@ export namespace ProcessSupervisor {
     const cleanupRequestDirectory = () => {
       if (requestCleanupComplete) return Promise.resolve()
       if (requestCleanupAttempt) return requestCleanupAttempt
-      const attempt = fs.rm(requestDir, { recursive: true, force: true }).then(() => {
-        requestCleanupComplete = true
-      })
+      const attempt = validateDurablePhysicalSettlement()
+        .then(() => fs.rm(requestDir, { recursive: true, force: true }))
+        .then(() => {
+          requestCleanupComplete = true
+        })
       requestCleanupAttempt = attempt
       void attempt.catch(() => {
         if (requestCleanupAttempt === attempt) requestCleanupAttempt = undefined
@@ -1096,7 +1418,7 @@ export namespace ProcessSupervisor {
       if (termination) return termination
       const attempt = (async () => {
         if (helperExited) return
-        await helperHandle.terminate()
+        await requestCancellation()
       })()
       termination = attempt
       void attempt.catch(() => {
@@ -1109,13 +1431,16 @@ export namespace ProcessSupervisor {
     const dispose = () => {
       if (disposal) return disposal
       const attempt = (async () => {
-        const helperResult = await Promise.allSettled([helperHandle.dispose()]).then(([result]) => result!)
-        const cleanupResult =
-          helperResult.status === "fulfilled" || helperExited
-            ? await Promise.allSettled([cleanupRequestDirectory()]).then(([result]) => result!)
-            : undefined
+        const helperResult = await Promise.allSettled([
+          helperExited ? helperHandle.dispose() : cancelAndSettleHelper(),
+        ]).then(([result]) => result!)
+        const physicalResult = await Promise.allSettled([exited]).then(([result]) => result!)
+        const cleanupResult = physicalResult.status === "fulfilled"
+          ? await Promise.allSettled([cleanupRequestDirectory()]).then(([result]) => result!)
+          : undefined
         const failures = [
           ...(helperResult.status === "rejected" ? [helperResult.reason] : []),
+          ...(physicalResult.status === "rejected" ? [physicalResult.reason] : []),
           ...(cleanupResult?.status === "rejected" ? [cleanupResult.reason] : []),
         ]
         if (failures.length === 1) throw failures[0]
@@ -1130,6 +1455,20 @@ export namespace ProcessSupervisor {
       return attempt
     }
 
+    const settled = (async () => {
+      const [physical, output] = await Promise.allSettled([exited, outputSettled])
+      const cleanup = physical.status === "fulfilled"
+        ? await Promise.allSettled([cleanupRequestDirectory()]).then(([result]) => result!)
+        : undefined
+      const failures = [
+        ...(physical.status === "rejected" ? [physical.reason] : []),
+        ...(output.status === "rejected" ? [output.reason] : []),
+        ...(cleanup?.status === "rejected" ? [cleanup.reason] : []),
+      ]
+      if (failures.length > 0) throw combineFailures("Windows process supervisor settlement failed", failures)
+    })()
+    void settled.catch(() => undefined)
+
     return {
       ...helperHandle,
       pid,
@@ -1137,6 +1476,7 @@ export namespace ProcessSupervisor {
       stderr,
       exited,
       outputSettled,
+      settled,
       terminate,
       dispose,
     }
@@ -1149,22 +1489,27 @@ export namespace ProcessSupervisor {
     if (!proc.pid) throw new Error("Process supervisor child has no pid")
     let disposal: Promise<void> | undefined
     let termination: Promise<void> | undefined
-    let settled = false
+    let physicallyExited = false
+    const controlFailures: unknown[] = []
     const exited = new Promise<number>((resolve, reject) => {
       proc.once("exit", (code, signal) => {
-        settled = true
+        physicallyExited = true
         resolve(code ?? (signal ? 1 : 0))
       })
       proc.once("error", (error) => {
-        settled = true
-        reject(error)
+        controlFailures.push(error)
       })
     })
     const outputSettled = new Promise<void>((resolve, reject) => {
-      proc.once("close", () => resolve())
-      proc.once("error", reject)
+      proc.once("close", () => {
+        if (controlFailures.length === 1) reject(controlFailures[0])
+        else if (controlFailures.length > 1) reject(new AggregateError(controlFailures, "Child process control failed"))
+        else resolve()
+      })
     })
     void outputSettled.catch(() => undefined)
+    const settled = joinPhysicalAndOutputSettlement({ exited, outputSettled })
+    void settled.catch(() => undefined)
 
     const terminate = () => {
       if (termination) return termination
@@ -1175,10 +1520,10 @@ export namespace ProcessSupervisor {
           })
           return
         }
-        if (!settled && proc.exitCode === null && proc.signalCode === null) {
+        if (!physicallyExited && proc.exitCode === null && proc.signalCode === null) {
           proc.kill("SIGTERM")
           await Bun.sleep(SIGKILL_TIMEOUT_MS)
-          if (!settled && proc.exitCode === null && proc.signalCode === null) {
+          if (!physicallyExited && proc.exitCode === null && proc.signalCode === null) {
             proc.kill("SIGKILL")
           }
         }
@@ -1210,6 +1555,7 @@ export namespace ProcessSupervisor {
       stderr: proc.stderr,
       exited,
       outputSettled,
+      settled,
       terminate,
       dispose,
       unref() {
@@ -1328,9 +1674,17 @@ export namespace ProcessSupervisor {
     request_id: string
     helper_pid: number
     target_pid: number
+    runtime_occurrence_id: string
   }
 
-  function parseWindowsReadyMarker(input: { text: string; requestID: string; helperPID: number }): WindowsReadyMarker {
+  type WindowsSettlementMarker = WindowsReadyMarker & { active_processes: 0 }
+
+  function parseWindowsReadyMarker(input: {
+    text: string
+    requestID: string
+    runtimeOccurrenceID: string
+    helperPID: number
+  }): WindowsReadyMarker {
     let value: unknown
     try {
       value = JSON.parse(input.text)
@@ -1342,13 +1696,16 @@ export namespace ProcessSupervisor {
     }
     const marker = value as Record<string, unknown>
     const keys = Object.keys(marker).sort()
-    const expectedKeys = ["helper_pid", "protocol", "request_id", "target_pid"]
+    const expectedKeys = ["helper_pid", "protocol", "request_id", "runtime_occurrence_id", "target_pid"]
     if (keys.length !== expectedKeys.length || keys.some((key, index) => key !== expectedKeys[index])) {
       throw new Error("Windows process supervisor ready marker has unexpected fields")
     }
     if (marker.protocol !== 1) throw new Error("Windows process supervisor ready marker has invalid protocol")
     if (marker.request_id !== input.requestID) {
       throw new Error("Windows process supervisor ready marker request identity does not match")
+    }
+    if (marker.runtime_occurrence_id !== input.runtimeOccurrenceID) {
+      throw new Error("Windows process supervisor ready marker runtime occurrence does not match")
     }
     if (marker.helper_pid !== input.helperPID) {
       throw new Error("Windows process supervisor ready marker helper process identity does not match")
@@ -1359,17 +1716,64 @@ export namespace ProcessSupervisor {
     return marker as WindowsReadyMarker
   }
 
+  function parseWindowsSettlementMarker(input: {
+    text: string
+    requestID: string
+    runtimeOccurrenceID: string
+    helperPID: number
+    targetPID: number
+  }): WindowsSettlementMarker {
+    let value: unknown
+    try {
+      value = JSON.parse(input.text)
+    } catch (error) {
+      throw new Error(`Windows process supervisor settlement marker is not valid JSON: ${errorMessage(error)}`)
+    }
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+      throw new Error("Windows process supervisor settlement marker must be an object")
+    }
+    const marker = value as Record<string, unknown>
+    const keys = Object.keys(marker).sort()
+    const expectedKeys = [
+      "active_processes",
+      "helper_pid",
+      "protocol",
+      "request_id",
+      "runtime_occurrence_id",
+      "target_pid",
+    ]
+    if (keys.length !== expectedKeys.length || keys.some((key, index) => key !== expectedKeys[index])) {
+      throw new Error("Windows process supervisor settlement marker has unexpected fields")
+    }
+    if (marker.protocol !== 1) throw new Error("Windows process supervisor settlement marker has invalid protocol")
+    if (
+      marker.request_id !== input.requestID ||
+      marker.runtime_occurrence_id !== input.runtimeOccurrenceID ||
+      marker.helper_pid !== input.helperPID ||
+      marker.target_pid !== input.targetPID
+    ) {
+      throw new Error("Windows process supervisor settlement marker identity does not match")
+    }
+    if (marker.active_processes !== 0) {
+      throw new Error("Windows process supervisor settlement marker does not prove active-process-zero")
+    }
+    return marker as WindowsSettlementMarker
+  }
+
   async function waitForReadyMarker(input: {
     readyPath: string
     requestID: string
+    runtimeOccurrenceID: string
     helperPID: number
     helperPath: string
     exited: Promise<number>
     command: string
     startupDetails: () => string
     outputFailures: () => readonly Error[]
+    signal?: AbortSignal
+    deadlineAt?: number
   }): Promise<number> {
-    const deadline = Date.now() + 5_000
+    const deadline = Math.min(input.deadlineAt ?? Number.POSITIVE_INFINITY, Date.now() + 5_000)
     const startupIdentity = `request_id=${input.requestID} helper_pid=${input.helperPID} helper_path=${input.helperPath} ready_path=${input.readyPath}`
     let exitCode: number | undefined
     let exitError: unknown
@@ -1386,7 +1790,12 @@ export namespace ProcessSupervisor {
     const readReadyMarker = async () => {
       try {
         const text = await fs.readFile(input.readyPath, "utf8")
-        return parseWindowsReadyMarker({ text, requestID: input.requestID, helperPID: input.helperPID })
+        return parseWindowsReadyMarker({
+          text,
+          requestID: input.requestID,
+          runtimeOccurrenceID: input.runtimeOccurrenceID,
+          helperPID: input.helperPID,
+        })
       } catch (error) {
         if (errorCode(error) === "ENOENT") return undefined
         throw error
@@ -1400,11 +1809,14 @@ export namespace ProcessSupervisor {
       }
     }
     while (Date.now() < deadline) {
+      input.signal?.throwIfAborted()
       throwStreamFailures()
       const marker = await readReadyMarker()
       if (marker) return marker.target_pid
+      if (exitObserved) break
       await Bun.sleep(20)
     }
+    input.signal?.throwIfAborted()
     throwStreamFailures()
     const finalMarker = await readReadyMarker()
     if (finalMarker) return finalMarker.target_pid
@@ -1457,26 +1869,27 @@ export namespace ProcessSupervisor {
     }
 
     const manifest = path.resolve(import.meta.dir, "../../native/process-supervisor/Cargo.toml")
-    const localCandidates = [
-      path.resolve(import.meta.dir, "../../native/process-supervisor/target/debug", exe),
-      path.resolve(import.meta.dir, "../../native/process-supervisor/target/release", exe),
-    ]
-    for (const candidate of localCandidates) {
-      if (Filesystem.stat(candidate)?.size) return candidate
-    }
-
-    return buildLocalWindowsHelper(manifest)
+    const nativeSource = path.resolve(import.meta.dir, "../../native/process-supervisor/src/main.rs")
+    const sourceIdentity = createHash("sha256")
+      .update(readFileSync(manifest))
+      .update(readFileSync(nativeSource))
+      .digest("hex")
+      .slice(0, 16)
+    const targetDir = path.resolve(import.meta.dir, "../../native/process-supervisor/target", `runtime-${sourceIdentity}`)
+    const candidate = path.join(targetDir, "debug", exe)
+    if (Filesystem.stat(candidate)?.size) return candidate
+    return buildLocalWindowsHelper(manifest, targetDir)
   }
 
   const exe = "opencorvus-process-supervisor.exe"
 
-  function buildLocalWindowsHelper(manifest: string): string {
+  function buildLocalWindowsHelper(manifest: string, targetDir: string): string {
     if (!Filesystem.stat(manifest)?.size) {
       throw new Error(`Windows process supervisor source manifest is missing: ${manifest}`)
     }
     const cargo = which("cargo")
     if (!cargo) throw new Error("Cargo is required to build the Windows process supervisor helper")
-    const result = spawnSync(cargo, ["build", "--manifest-path", manifest], {
+    const result = spawnSync(cargo, ["build", "--manifest-path", manifest, "--target-dir", targetDir], {
       encoding: "utf8",
       stdio: ["ignore", "pipe", "pipe"],
       windowsHide: true,
@@ -1497,7 +1910,7 @@ export namespace ProcessSupervisor {
         }`,
       )
     }
-    const debug = path.resolve(import.meta.dir, "../../native/process-supervisor/target/debug", exe)
+    const debug = path.join(targetDir, "debug", exe)
     if (!Filesystem.stat(debug)?.size) {
       throw new Error(`Cargo completed without producing the Windows process supervisor helper: ${debug}`)
     }

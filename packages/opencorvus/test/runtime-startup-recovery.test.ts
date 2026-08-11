@@ -18,6 +18,8 @@ import {
 } from "@/server/runtime-server-ownership"
 import { Server } from "@/server/server"
 import { Database } from "@/storage/db"
+import { ProcessSupervisor } from "@/shell/process-supervisor"
+import * as IsolatedCheckWorkspace from "@/project/isolated-check-workspace"
 
 const temporaryDirectories: string[] = []
 
@@ -46,9 +48,26 @@ describe("runtime startup recovery authority", () => {
     let releaseRecovery!: () => void
     const recoveryHeld = new Promise<void>((resolve) => (releaseRecovery = resolve))
     const originalListen = Server.listenWithOwnedRuntime
+    let sharedOccurrenceObserver: unknown
     const listen = spyOn(Server, "listenWithOwnedRuntime").mockImplementation((options, ownership) => {
       order.push(`bind:${ownership.owner.occurrenceID}`)
       return originalListen(options, ownership)
+    })
+    const requests = spyOn(ProcessSupervisor, "recoverOrphanedWindowsRequests").mockImplementation(async (input) => {
+      expect(RuntimeServerOwnership.currentOccurrenceID(Database.Path())).toBe(input.currentOccurrenceID)
+      expect(input.observeProcessOccurrence).toBeFunction()
+      sharedOccurrenceObserver = input.observeProcessOccurrence
+      order.push("orphan-requests-recovered")
+      return { inspected: 0, removed: 0, retainedCurrent: 0, retainedLive: 0, retainedUnknown: 0 }
+    })
+    const workspaces = spyOn(
+      IsolatedCheckWorkspace,
+      "recoverOrphanedIsolatedCheckWorkspaces",
+    ).mockImplementation(async (input) => {
+      expect(RuntimeServerOwnership.currentOccurrenceID(Database.Path())).toBe(input.currentOccurrenceID)
+      expect(input.observeProcessOccurrence).toBe(sharedOccurrenceObserver)
+      order.push("orphan-workspaces-recovered")
+      return { inspected: 0, removed: 0, retainedCurrent: 0, retainedLive: 0, retainedUnknown: 0 }
     })
     const starting = listenWithRecoveredServerRuntime({
       options: { hostname: "127.0.0.1", port: 0, randomPort: true },
@@ -65,6 +84,8 @@ describe("runtime startup recovery authority", () => {
       const prepared = await starting
       try {
         expect(order).toEqual([
+          "orphan-requests-recovered",
+          "orphan-workspaces-recovered",
           "recovery-started",
           "recovery-completed",
           `bind:${prepared.ownership.owner.occurrenceID}`,
@@ -75,6 +96,8 @@ describe("runtime startup recovery authority", () => {
     } finally {
       releaseRecovery()
       listen.mockRestore()
+      requests.mockRestore()
+      workspaces.mockRestore()
     }
   }, 60_000)
 
@@ -174,7 +197,10 @@ describe("runtime startup recovery authority", () => {
     using _timeout = Server.TestHooks.installRuntimeSettlementInactivityTimeout(50)
     const otherDatabase = path.join(root, "other.db")
     try {
-      await expect(bootstrap(project, async () => "blocked settlement")).rejects.toBeInstanceOf(
+      await expect(bootstrap(project, async () => {
+        await Scheduler.disposeGlobal()
+        return "blocked settlement"
+      })).rejects.toBeInstanceOf(
         Database.EffectSettlementInactivityError,
       )
       let conflict: unknown
@@ -187,7 +213,11 @@ describe("runtime startup recovery authority", () => {
       releaseBridge()
       await trackedBridge
       await awaitTaskMessageProtocolBridgeIdle()
-      await expect(bootstrap(project, async () => "recovered CLI")).resolves.toBe("recovered CLI")
+      const recoveredCLI = await bootstrap(project, async () => {
+        await Scheduler.disposeGlobal()
+        return "recovered CLI"
+      })
+      expect(recoveredCLI).toBe("recovered CLI")
       const successor = RuntimeServerOwnership.acquire({ database: otherDatabase })
       expect(successor.owner.database).toBe(path.resolve(otherDatabase))
       successor.release()
@@ -195,6 +225,68 @@ describe("runtime startup recovery authority", () => {
       releaseBridge()
       await trackedBridge.catch(() => undefined)
       await awaitTaskMessageProtocolBridgeIdle().catch(() => undefined)
+      const retained = RuntimeServerOwnership.recoverRetained(Database.Path())
+      if (retained) {
+        await Scheduler.disposeGlobal()
+        const terminated = await Server.settleCurrentProcessExecution("CLI settlement test cleanup", {
+          disposeInstances: async () => {},
+        })
+        await RuntimeServerOwnership.releaseWithRetry(retained, () => terminated.releaseHandoff(true))
+      }
+      if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
+      else process.env.OPENCORVUS_TEST_HOME = previousHome
+    }
+  }, 60_000)
+
+  test("preserves the CLI operation error beside settlement failure and releases ownership after exact retry", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-cli-dual-failure-"))
+    temporaryDirectories.push(root)
+    const home = path.join(root, "home")
+    const project = path.join(root, "project")
+    await import("node:fs/promises").then((fs) => Promise.all([fs.mkdir(home), fs.mkdir(project)]))
+    execFileSync("git", ["init"], { cwd: project, stdio: "ignore" })
+    const previousHome = process.env.OPENCORVUS_TEST_HOME
+    process.env.OPENCORVUS_TEST_HOME = home
+    let releaseBridge!: () => void
+    const bridgeOperation = new Promise<void>((resolve) => (releaseBridge = resolve))
+    const trackedBridge = TaskMessageProtocolBridgeTestHooks.trackLifecycle(bridgeOperation)
+    using _timeout = Server.TestHooks.installRuntimeSettlementInactivityTimeout(50)
+    const operationError = new Error("injected CLI operation failure")
+    try {
+      await expect(
+        bootstrap(project, async () => {
+          await Scheduler.disposeGlobal()
+          throw operationError
+        }),
+      ).rejects.toMatchObject({
+        name: "AggregateError",
+        errors: [operationError, expect.any(Database.EffectSettlementInactivityError)],
+      })
+      expect(RuntimeServerOwnership.currentOccurrenceID(Database.Path())).toEqual(expect.any(String))
+
+      releaseBridge()
+      await trackedBridge
+      await awaitTaskMessageProtocolBridgeIdle()
+      await expect(
+        bootstrap(project, async () => {
+          await Scheduler.disposeGlobal()
+          throw operationError
+        }),
+      ).rejects.toBe(operationError)
+      const successor = RuntimeServerOwnership.acquire({ database: path.join(root, "successor.db") })
+      successor.release()
+    } finally {
+      releaseBridge()
+      await trackedBridge.catch(() => undefined)
+      await awaitTaskMessageProtocolBridgeIdle().catch(() => undefined)
+      const retained = RuntimeServerOwnership.recoverRetained(Database.Path())
+      if (retained) {
+        await Scheduler.disposeGlobal()
+        const terminated = await Server.settleCurrentProcessExecution("CLI dual-failure test cleanup", {
+          disposeInstances: async () => {},
+        })
+        await RuntimeServerOwnership.releaseWithRetry(retained, () => terminated.releaseHandoff(true))
+      }
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
       else process.env.OPENCORVUS_TEST_HOME = previousHome
     }
@@ -216,6 +308,7 @@ describe("runtime startup recovery authority", () => {
       await expect(
         acquireServerRuntimeAfterRecovery({
           recover: async () => {
+            await Scheduler.disposeGlobal()
             throw new Error("injected started Task recovery failure")
           },
           disposeInstances: async () => {},
@@ -249,6 +342,11 @@ describe("runtime startup recovery authority", () => {
       releaseBridge()
       await trackedBridge.catch(() => undefined)
       await awaitTaskMessageProtocolBridgeIdle().catch(() => undefined)
+      try {
+        await RuntimeServerOwnership.TestHooks.completeRetainedStartupCleanup()
+      } catch (error) {
+        if (!(error instanceof Error) || error.message !== "No retained runtime startup cleanup authority") throw error
+      }
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
       else process.env.OPENCORVUS_TEST_HOME = previousHome
     }

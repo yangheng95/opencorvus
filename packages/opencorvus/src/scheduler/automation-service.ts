@@ -9,6 +9,7 @@ import { Recurrence } from "./recurrence"
 import { Scheduler } from "./index"
 import { Session } from "@/session"
 import { SessionWake } from "@/session/wake"
+import { createSchedulerExecutionInactivityFence } from "./execution-inactivity"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { persistQueuedTaskWaitWakeInTransaction } from "@/engine/queue"
 import { Log } from "@/util/log"
@@ -1138,11 +1139,17 @@ export namespace AutomationService {
     log.info("executing automation", { jobId: job.id, fireID, name: job.name, prompt: job.prompt.slice(0, 100) })
 
     const leaseFence = createAutomationLeaseFence(job.id, owner, fireID)
-    const executionSignal = AbortSignal.any([leaseFence.signal, runtimeSignal])
+    using inactivityFence = await createSchedulerExecutionInactivityFence({
+      occurrence: `Automation fire ${fireID}`,
+      signals: [leaseFence.signal, runtimeSignal],
+      initialPhase: "claimed",
+    })
+    const executionSignal = inactivityFence.signal
     const leaseRenewTimer = startLeaseRenewTimer(() => leaseFence.renewOrAbort())
 
     try {
       if (job.kind === "delay") {
+        inactivityFence.touch("delayed wake dispatch")
         const outcome = await executeDelayedWake(job, fireID, owner, executionSignal)
         if (!outcome.automationConsumed) {
           const consumed = Database.use((db) =>
@@ -1170,6 +1177,7 @@ export namespace AutomationService {
       }
 
       if (!job.recurrence) throw new Error(`Automation ${job.id} has no recurrence rule`)
+      inactivityFence.touch("target resolution")
       const targets = await executionTargets(job)
       const runIDs = targets.map((target) => deterministicAutomationID("atr", fireID, automationTargetIdentity(target)))
       Database.immediateTransaction((db) => {
@@ -1206,6 +1214,7 @@ export namespace AutomationService {
             .run()
         }
       })
+      inactivityFence.touch("target occurrences reserved")
       const reservedRuns = new Map(
         Database.use((db) =>
           db
@@ -1222,14 +1231,18 @@ export namespace AutomationService {
       let results: PromiseSettledResult<{ sessionID: string }>[] = []
       results = await Promise.allSettled(
         targets.map(async (target, index) => {
-          const reserved = reservedRuns.get(runIDs[index]!)
-          if (reserved?.outcome === "succeeded") {
-            if (!reserved.sessionID) throw new Error(`Succeeded Automation run ${reserved.id} has no Session authority`)
-            return { sessionID: reserved.sessionID }
+          try {
+            const reserved = reservedRuns.get(runIDs[index]!)
+            if (reserved?.outcome === "succeeded") {
+              if (!reserved.sessionID) throw new Error(`Succeeded Automation run ${reserved.id} has no Session authority`)
+              return { sessionID: reserved.sessionID }
+            }
+            const existing = findAutomationWake(job.id, fireID, target)
+            if (existing) return { sessionID: await resumeAutomationWake(existing) }
+            return executePublicWake(job, target, fireID, runIDs[index]!, owner, executionSignal)
+          } finally {
+            inactivityFence.touch(`target ${index + 1}/${targets.length} settled`)
           }
-          const existing = findAutomationWake(job.id, fireID, target)
-          if (existing) return { sessionID: await resumeAutomationWake(existing) }
-          return executePublicWake(job, target, fireID, runIDs[index]!, owner, executionSignal)
         }),
       )
       const committedAt = Date.now()
@@ -1246,6 +1259,7 @@ export namespace AutomationService {
       const error = failures.length > 0 ? failures.map((failure) => failure.message).join("; ") : null
       const retryAt = error ? automationRetryAt(job.failure_count + 1, committedAt) : 0
       const nextRun = error ? job.next_run : reschedule ? Recurrence.nextRun(job.recurrence, committedAt) : job.next_run
+      inactivityFence.touch("durable fire settlement")
       Database.transaction((tx) => {
         const automation = tx
           .update(AutomationTable)

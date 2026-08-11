@@ -10,6 +10,7 @@ import { MessageTable, PartTable } from "../src/session/session.sql"
 import { SessionWake } from "../src/session/wake"
 import { AutomationRunTable, AutomationTable } from "../src/scheduler/automation.sql"
 import { AutomationService } from "../src/scheduler/automation-service"
+import { SchedulerExecutionInactivityTestHooks } from "../src/scheduler/execution-inactivity"
 import { Scheduler, SchedulerDisposalInactivityError } from "../src/scheduler"
 import { TaskQueueTable, type TaskQueuePriority } from "../src/scheduler/task-queue.sql"
 import { TaskQueueService } from "../src/scheduler/task-queue-service"
@@ -693,6 +694,72 @@ describe("scheduler atomic identity and progress contracts", () => {
         expect(fence.signal.reason).toMatchObject({
           name: "AutomationRunningConflictError",
           message: expect.stringContaining("lost its execution lease"),
+        })
+      },
+    })
+  })
+
+  test("settles an inactive Automation target under the exact retry occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await createSession("automation inactivity target")
+        const automation = await AutomationService.create({
+          name: "automation inactivity physical settlement",
+          target: { scope: "session", sessionId: session.id },
+          recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          prompt: "settle this inactive automation target",
+        })
+        const scheduledDue = Date.now() - 1_000
+        Database.use((db) =>
+          db
+            .update(AutomationTable)
+            .set({ next_run: scheduledDue, lease_owner: null, lease_until: 0 })
+            .where(eq(AutomationTable.id, automation.id))
+            .run(),
+        )
+        const owner = "automation-owner:inactivity"
+        const claimed = AutomationService.TestHooks.claim(automation.id, owner, scheduledDue)
+        expect(claimed).toBeDefined()
+        using _timeout = SchedulerExecutionInactivityTestHooks.installTimeout(25)
+        const trace: string[] = []
+        await using _wake = AutomationService.TestHooks.installWakeExecutor(async ({ signal }) => {
+          trace.push("wake-started")
+          await new Promise<void>((resolve) => {
+            const abort = () => resolve()
+            if (signal?.aborted) abort()
+            else signal?.addEventListener("abort", abort, { once: true })
+          })
+          trace.push("wake-aborted")
+          throw signal?.reason
+        })
+
+        const fireID = await AutomationService.TestHooks.executeClaimedDueOccurrence({
+          job: claimed!,
+          owner,
+          now: scheduledDue,
+        })
+        const persisted = Database.use((db) => ({
+          automation: db.select().from(AutomationTable).where(eq(AutomationTable.id, automation.id)).get(),
+          runs: db.select().from(AutomationRunTable).where(eq(AutomationRunTable.fire_id, fireID)).all(),
+        }))
+        expect({ trace, persisted }).toMatchObject({
+          trace: ["wake-started", "wake-aborted"],
+          persisted: {
+            automation: {
+              lease_owner: null,
+              last_error: expect.stringContaining("made no durable execution progress"),
+            },
+            runs: [
+              {
+                fire_id: fireID,
+                outcome: "retry_wait",
+                owner,
+                error: expect.stringContaining("made no durable execution progress"),
+              },
+            ],
+          },
         })
       },
     })

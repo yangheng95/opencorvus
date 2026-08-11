@@ -16,6 +16,7 @@ import {
 } from "@/runtime/execution-settlement"
 import { Project } from "@/project/project"
 import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
+import { createSchedulerExecutionInactivityFence } from "./execution-inactivity"
 
 type Match = Record<string, string | number | boolean>
 type EventEnvelope = Bus.Envelope
@@ -492,13 +493,19 @@ export namespace EventService {
       return
     }
     const leaseFence = createEventFireLeaseFence(claimed.id, s.ownerID)
-    const signal = AbortSignal.any([s.lifecycle.signal, runtimeSignal, leaseFence.signal])
+    using inactivityFence = await createSchedulerExecutionInactivityFence({
+      occurrence: `Event fire ${claimed.id}`,
+      signals: [s.lifecycle.signal, runtimeSignal, leaseFence.signal],
+      initialPhase: "claimed",
+    })
+    const signal = inactivityFence.signal
     const renewTimer = setInterval(() => leaseFence.renewOrAbort(), FIRE_LEASE_RENEW_MS)
     renewTimer.unref()
     let job: EventJob | undefined
     try {
       await afterEventFireClaimForTest?.({ fire: claimed, ownerID: s.ownerID, signal })
       throwIfAborted(signal)
+      inactivityFence.touch("wake reconciliation")
       const existingMessageID = findWakeMessageID(claimed)
       job = Database.use((db) =>
         db
@@ -507,6 +514,7 @@ export namespace EventService {
           .where(and(eq(EventJobTable.id, claimed.event_job_id), eq(EventJobTable.project_id, claimed.project_id)))
           .get(),
       )
+      inactivityFence.touch("job resolved")
       if (existingMessageID) {
         const session = await Session.get(claimed.target_session_id)
         throwIfAborted(signal)
@@ -529,6 +537,7 @@ export namespace EventService {
 
       const activeJob = job
       const causation = causationFromParent(claimed)
+      inactivityFence.touch("wake dispatch")
       const result = await Bus.withCausation(
         {
           source: "scheduler.event",
@@ -541,6 +550,7 @@ export namespace EventService {
         () => (wakeExecutorForTest ?? executeWake)({ fire: claimed, job: activeJob, ownerID: s.ownerID, signal }),
       )
       throwIfAborted(signal)
+      inactivityFence.touch("durable success settlement")
       settleSuccess(claimed, activeJob, s.ownerID, result.sessionID, result.messageID)
     } catch (error) {
       try {

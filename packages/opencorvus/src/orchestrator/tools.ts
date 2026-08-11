@@ -54,8 +54,10 @@ import {
   findDispatchLineageByArtifactID,
   findDispatchLineageByDispatchID,
   findDispatchLineageBySession,
+  findDispatchLineageByToolExecution,
   recordDispatchLineage,
 } from "@/engine/dispatch-lineage"
+import { findDispatchSettlementByDispatchID } from "@/engine/dispatch-settlement"
 import { abortChildExecutionForSession } from "@/engine/execution-abort"
 import { clarificationTranscriptSection } from "@/engine/helpers"
 import { Event as EngineEvent } from "@/engine/model"
@@ -117,7 +119,7 @@ import {
   type DispatchAgentExecute,
   type OpenDispatchAgentLineage,
 } from "./dispatch-agent-tool"
-import { DispatchOutcomeSchema } from "@/agent/dispatch-outcome"
+import { DispatchOutcome, DispatchOutcomeSchema } from "@/agent/dispatch-outcome"
 import { createExploreTool } from "./explore-tool"
 import { createDelegatedWorkerTool } from "./delegated-worker-tool"
 import { createFactCheckTool } from "./fact-check-tool"
@@ -2203,6 +2205,58 @@ export function createOrchestratorTools(input: {
         taskID: ownershipTaskID,
         agentSessionID: input.agentSessionID,
       })
+      const replayLineage = findDispatchLineageByToolExecution({
+        taskID: ownershipTaskID,
+        toolPartID: toolExecution.toolPartID,
+        toolCallID: toolExecution.toolCallID,
+      })
+      if (replayLineage) {
+        if (
+          replayLineage.payload.target_agent_id !== targetAgentID ||
+          !isDeepStrictEqual(replayLineage.payload.work_scope, workScope)
+        ) {
+          throw new Error(
+            `dispatch_agent exact tool occurrence ${toolExecution.toolPartID}/${toolExecution.toolCallID} input drift`,
+          )
+        }
+        const descriptor = WorkerTurnDescriptor.findForDispatch({
+          sessionID: replayLineage.payload.child_session_id,
+          dispatchID: replayLineage.dispatchID,
+        })
+        const turn = descriptor?.payload.dispatchTurn
+        if (!descriptor || !turn) {
+          throw new Error(`dispatch_agent exact tool occurrence ${replayLineage.dispatchID} has no durable Turn`)
+        }
+        const settlement = findDispatchSettlementByDispatchID({
+          taskID: ownershipTaskID,
+          dispatchID: replayLineage.dispatchID,
+        })
+        const replayOutcome =
+          settlement?.payload.outcome ??
+          DispatchOutcome.accepted({
+            sessionID: replayLineage.payload.child_session_id,
+            dispatchLineageID: replayLineage.artifactID,
+          })
+        return {
+          dispatchID: replayLineage.dispatchID,
+          deliverySliceRevisionIDs: [...replayLineage.payload.delivery_slice_revision_ids],
+          existingSessionID: replayLineage.payload.child_session_id,
+          turn,
+          adapterInput: Object.freeze({ ...replayLineage.payload.adapter_input }),
+          replayOutcome,
+          observeSession(sessionID: string) {
+            if (sessionID !== replayLineage.payload.child_session_id) {
+              throw new Error(`dispatch_agent replay Session identity drift for ${replayLineage.dispatchID}`)
+            }
+          },
+          commitSession(sessionID: string) {
+            if (sessionID !== replayLineage.payload.child_session_id) {
+              throw new Error(`dispatch_agent replay Session identity drift for ${replayLineage.dispatchID}`)
+            }
+            return { artifactID: replayLineage.artifactID }
+          },
+        }
+      }
       if (signal?.aborted) {
         throw new Error(`dispatch_agent ${targetAgentID} aborted before lineage preparation`)
       }

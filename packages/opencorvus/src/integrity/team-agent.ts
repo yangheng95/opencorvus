@@ -1,10 +1,6 @@
 import { tool, type ToolSet } from "ai"
 import z from "zod"
-import {
-  agentCoordinationHandoffResult,
-  runAgentSession,
-  type AgentCoordinationHandoffResult,
-} from "@/agent/runner"
+import { agentCoordinationHandoffResult, runAgentSession, type AgentCoordinationHandoffResult } from "@/agent/runner"
 import { createAiSdkToolFromInfo } from "@/tool/ai-sdk-adapter"
 import type { Tool } from "@/tool/tool"
 import type { AcceptanceSpec } from "@/acceptance/types"
@@ -12,12 +8,7 @@ import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolv
 import { FactCheckItemSchema } from "@/fact-check/schema"
 import { renderUserRequestSection } from "@/intent/request-prompt"
 import type { GoalContractFields } from "@/pipeline/types"
-import {
-  createReviewReasoningForwarder,
-  emitReviewStreamProgress,
-  emitReviewStreamStarted,
-  reviewIDForIntegrity,
-} from "@/review/stream"
+import { createReviewReasoningForwarder, emitReviewStreamStarted, reviewIDForIntegrity } from "@/review/stream"
 import type { ParsedRequirement } from "@/requirements/types"
 import { completeArtifactReadLocatorsForSession } from "@/agent/artifact-read-facts"
 import { renderPromptSections, withAttachmentPromptSections } from "@/agent/prompt-projection"
@@ -461,17 +452,13 @@ export async function reviewIntegrity(input: {
   }
   const promptRefs: IntegrityPromptRefs = { ...input, artifactLocators: [] }
   const promptProjection = projectIntegrityPromptFacts(promptRefs)
-  const startedAt = Date.now()
   let activeReviewID: string | undefined
   let activeSessionID: string | undefined
   const currentFactRefs = (): IntegrityPromptRefs => ({
     ...promptRefs,
-    artifactLocators: activeSessionID
-      ? completeArtifactReadLocatorsForSession(activeSessionID)
-      : [],
+    artifactLocators: activeSessionID ? completeArtifactReadLocatorsForSession(activeSessionID) : [],
   })
-  const currentRequirements = () =>
-    projectIntegrityPromptFacts(currentFactRefs()).requirements
+  const currentRequirements = () => projectIntegrityPromptFacts(currentFactRefs()).requirements
 
   const collector = emptyConsensusCollector()
   const out = await runAgentSession<ConsensusCollector>({
@@ -514,25 +501,6 @@ export async function reviewIntegrity(input: {
         agentID: input.agentID,
         source: input.agentID,
       })
-      const ticker = input.taskID
-        ? setInterval(() => {
-            emitReviewStreamProgress({
-              taskID: input.taskID,
-              reviewID: activeReviewID,
-              phase: "integrity",
-              agentID: input.agentID,
-              attempt: reviewNumber,
-              elapsedMs: Date.now() - startedAt,
-              summary: "integrity review running",
-              source: input.agentID,
-            })
-          }, 20_000)
-        : null
-      return {
-        dispose: () => {
-          if (ticker) clearInterval(ticker)
-        },
-      }
     },
     onDispatchAuthorityCommit: input.onDispatchAuthorityCommit
       ? (session, descriptor) => input.onDispatchAuthorityCommit!(session.id, descriptor)
@@ -571,10 +539,7 @@ async function createSingleSessionIntegrityToolKit(input: {
   const previewTools = input.factRefs
     ? await createIntegrityPreviewTools({
         agentID: input.agentID,
-        taskID:
-          typeof input.factRefs === "function"
-            ? input.factRefs().taskID
-            : input.factRefs.taskID,
+        taskID: typeof input.factRefs === "function" ? input.factRefs().taskID : input.factRefs.taskID,
         signal: input.signal,
       })
     : {}
@@ -714,10 +679,7 @@ async function createSingleSessionIntegrityToolKit(input: {
           return `Error: integrity judgment is invalid: ${parsedJudgment.error.message}`
         }
         input.collector.judgment = parsedJudgment.data
-        const requirements =
-          typeof input.requirements === "function"
-            ? input.requirements()
-            : input.requirements
+        const requirements = typeof input.requirements === "function" ? input.requirements() : input.requirements
         const snapshot = snapshotIntegrityReview(input.collector, requirements)
         const findingText =
           snapshot.completenessFindings.length > 0

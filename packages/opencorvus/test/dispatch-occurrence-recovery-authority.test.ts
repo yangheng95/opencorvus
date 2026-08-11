@@ -7,6 +7,7 @@ import {
   resolveDispatchOccurrenceAuthority,
 } from "../src/engine/dispatch-lineage"
 import { describeTask } from "../src/engine/describe"
+import { recordDispatchSettlement } from "../src/engine/dispatch-settlement"
 import { configureTaskLoopRunner, waitForQueueCompletionHooksForTest } from "../src/engine/queue"
 import { requireTask } from "../src/engine/store"
 import { selectedWorkflowBinding } from "../src/engine/workflow-binding"
@@ -111,13 +112,29 @@ describe("dispatch occurrence recovery authority", () => {
           },
         })
 
+        const partialOutcome = DispatchOutcome.partial({
+          sessionID: lineage.payload.child_session_id,
+          finalMessageID: Identifier.ascending("message"),
+          failedOperation: "persist_domain_artifact",
+        })
+        const settlement = recordDispatchSettlement({ taskID, dispatchID, outcome: partialOutcome })
+        expect(recordDispatchSettlement({ taskID, dispatchID, outcome: partialOutcome })).toEqual(settlement)
+
         const snapshot = await describeTask(taskID)
         expect(snapshot.workflow_execution).toMatchObject({
           nodes: [
             {
               node_id: "__direct_task__",
               occurrence_status: "occurrence_committed",
-              dispatches: [{ artifact_id: lineage.artifactID, dispatch_id: dispatchID }],
+              terminal_success: false,
+              dispatches: [
+                {
+                  artifact_id: lineage.artifactID,
+                  dispatch_id: dispatchID,
+                  terminal_success: false,
+                  settlement: { artifact_id: settlement.artifactID, outcome_kind: "partial" },
+                },
+              ],
             },
           ],
         })

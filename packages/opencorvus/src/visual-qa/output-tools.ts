@@ -204,14 +204,6 @@ function visualQaEvidenceRefIssues(report: VisualReview): string[] {
   return issues
 }
 
-function collectorUnknownCheckIDIssues(
-  collector: Pick<VisualQaCollector, "check_items">,
-  rows: Array<{ label: string; id: string; checkIDs: readonly string[] }>,
-): string[] {
-  const known = new Set(collector.check_items.map((item) => item.id))
-  return rows.flatMap((row) => unknownVisualCheckIDs(known, row.label, row.id, row.checkIDs))
-}
-
 async function visualQaLocatorInputIssues(input: {
   taskID?: string
   rows: readonly { label: string; locator: ArtifactReadLocator }[]
@@ -633,12 +625,6 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
       inputSchema: VisualQaCoverageSchema,
       execute: async (raw) => {
         const row = VisualQaCoverageSchema.parse(raw)
-        const checkIDIssues = collectorUnknownCheckIDIssues(collector, [
-          { label: "coverage", id: row.region, checkIDs: row.check_ids },
-        ])
-        if (checkIDIssues.length > 0) {
-          return `Error: visual QA coverage references unregistered check items: ${checkIDIssues.join("; ")}`
-        }
         const locatorIssues = await visualQaLocatorInputIssues({
           taskID: context.taskID,
           rows: pairedLocatorRows({
@@ -660,12 +646,6 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
       inputSchema: VisualQaEvidenceSchema,
       execute: async (raw) => {
         const row = VisualQaEvidenceSchema.parse(raw)
-        const checkIDIssues = collectorUnknownCheckIDIssues(collector, [
-          { label: "evidence", id: formatVisualQaArtifactLocator(row.ref), checkIDs: row.check_ids },
-        ])
-        if (checkIDIssues.length > 0) {
-          return `Error: visual QA evidence references unregistered check items: ${checkIDIssues.join("; ")}`
-        }
         try {
           await assertVisualQaEvidence({
             taskID: context.taskID,
@@ -686,12 +666,6 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
       inputSchema: VisualQaFindingSchema,
       execute: async (raw) => {
         const row = VisualQaFindingSchema.parse(raw)
-        const checkIDIssues = collectorUnknownCheckIDIssues(collector, [
-          { label: "finding", id: row.id, checkIDs: row.check_ids },
-        ])
-        if (checkIDIssues.length > 0) {
-          return `Error: visual QA finding references unregistered check items: ${checkIDIssues.join("; ")}`
-        }
         const locatorIssues = await visualQaLocatorInputIssues({
           taskID: context.taskID,
           rows: pairedLocatorRows({
@@ -713,12 +687,6 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
       inputSchema: VisualQaProductionBlockerSchema,
       execute: async (raw) => {
         const row = VisualQaProductionBlockerSchema.parse(raw)
-        const checkIDIssues = collectorUnknownCheckIDIssues(collector, [
-          { label: "production_blocker", id: row.id, checkIDs: row.check_ids },
-        ])
-        if (checkIDIssues.length > 0) {
-          return `Error: visual QA production_blocker references unregistered check items: ${checkIDIssues.join("; ")}`
-        }
         const locatorIssues = await visualQaLocatorInputIssues({
           taskID: context.taskID,
           rows: pairedLocatorRows({
@@ -739,12 +707,6 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
       inputSchema: VisualQaProblemDomRegionSchema,
       execute: async (raw) => {
         const parsed = VisualQaProblemDomRegionSchema.parse(raw)
-        const checkIDIssues = collectorUnknownCheckIDIssues(collector, [
-          { label: "problem_dom_region", id: parsed.id, checkIDs: parsed.check_ids },
-        ])
-        if (checkIDIssues.length > 0) {
-          return `Error: visual QA problem_dom_region references unregistered check items: ${checkIDIssues.join("; ")}`
-        }
         const locatorIssues = await visualQaLocatorInputIssues({
           taskID: context.taskID,
           rows: pairedLocatorRows({
@@ -786,12 +748,6 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
       inputSchema: VisualQaUnresolvedCodeModuleProblemSchema,
       execute: async (raw) => {
         const row = VisualQaUnresolvedCodeModuleProblemSchema.parse(raw)
-        const checkIDIssues = collectorUnknownCheckIDIssues(collector, [
-          { label: "unresolved_code_module_problem", id: row.id, checkIDs: row.check_ids },
-        ])
-        if (checkIDIssues.length > 0) {
-          return `Error: visual QA unresolved_code_module_problem references unregistered check items: ${checkIDIssues.join("; ")}`
-        }
         const locatorIssues = await visualQaLocatorInputIssues({
           taskID: context.taskID,
           rows: pairedLocatorRows({

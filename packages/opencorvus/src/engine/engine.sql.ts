@@ -43,6 +43,7 @@ export const ENGINE_ARTIFACT_KINDS = [
   "goal_graph_projection",
   "goal_workload",
   "dispatch_lineage",
+  "dispatch_settlement",
   "operator_message_wake",
   "mission_acceptance_resume_receipt",
   "queued_operator_wake",
