@@ -190,4 +190,3 @@ hypotheses, and remaining unknowns before changing code.
 | Live random campaign | exact run result and Artifact closure | pending |
 | Independent review | read-only full-diff and live-evidence review | pending |
 | Commit/push | exact owned paths and outgoing commit audit | pending |
-
