@@ -19,6 +19,8 @@
 
 - [2026-08-11-public-download-page-design.md](2026-08-11-public-download-page-design.md) defines the existing-site download route, same-origin release manifest, platform recommendation, and release-to-production Actions convergence contract.
 
+- [2026-08-11-eighth-ten-domain-expert-squad-batch.md](2026-08-11-eighth-ten-domain-expert-squad-batch.md) freezes the autonomous eighth fixed-ten batch, the One Person Company commercial configuration contract and four examples, six bounded open-source Skill adaptations, four clean-room source decisions, fifty core assets, professional authority boundaries, and the 95/99 runtime acceptance plan.
+
 - [2026-08-11-seventh-ten-domain-expert-squad-batch.md](2026-08-11-seventh-ten-domain-expert-squad-batch.md) freezes the autonomous seventh fixed-ten batch, six bounded open-source Skill adaptations, four clean-room source decisions, fifty dedicated assets, professional authority boundaries, and the 85/89 runtime acceptance plan.
 
 - [2026-08-11-sixth-ten-domain-expert-squad-batch.md](2026-08-11-sixth-ten-domain-expert-squad-batch.md) freezes the autonomous sixth fixed-ten batch, five bounded open-source Skill adaptations, five clean-room source decisions, fifty dedicated assets, professional authority boundaries, and the 75/79 runtime acceptance plan.

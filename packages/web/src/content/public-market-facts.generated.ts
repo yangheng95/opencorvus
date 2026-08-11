@@ -947,6 +947,112 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "air-traffic-management-safety",
+      "version": "2026.08.11.1",
+      "digest": "6917829276bd163fa79d0acba481fdf7203cd80f9b67204cce18eea8d2f2da14"
+    },
+    "name": "Air Traffic Management Safety",
+    "label": "Air Traffic Management Safety",
+    "description": "Airspace configuration, demand/capacity, hazard/control and assurance evidence joined for qualified ATM safety review.",
+    "selectorSummary": "Use for non-operational air traffic management safety evidence.",
+    "pillars": [
+      "code",
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "airspace-facility-procedure-configuration-analyst",
+        "label": "Airspace, Facility and Procedure Configuration Analyst",
+        "description": "Reconciles dated airspace, facility, procedure and system configuration evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "traffic-demand-capacity-performance-analyst",
+        "label": "Traffic Demand, Capacity and Performance Analyst",
+        "description": "Tests supplied traffic, capacity and performance definitions and measures.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "air-traffic-hazard-risk-control-analyst",
+        "label": "Air Traffic Hazard, Risk and Control Analyst",
+        "description": "Builds hazard-consequence-control traceability from supplied safety evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "occurrence-change-safety-assurance-analyst",
+        "label": "Occurrence, Change and Safety Assurance Analyst",
+        "description": "Reviews occurrence, indicator, change and control-effectiveness evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "air-traffic-management-safety-review-owner",
+        "label": "Air Traffic Management Safety Review Owner",
+        "description": "Joins ATM configuration, performance, hazard and assurance evidence without operational authority.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "air-traffic-management-safety-review",
+        "label": "Air Traffic Management Safety Review",
+        "description": "Four independent professional evidence branches converge into Air Traffic Management Safety Review Owner.",
+        "nodes": [
+          {
+            "id": "airspace-facility-procedure-configuration-analyst",
+            "agentID": "airspace-facility-procedure-configuration-analyst",
+            "description": "Reconciles dated airspace, facility, procedure and system configuration evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "traffic-demand-capacity-performance-analyst",
+            "agentID": "traffic-demand-capacity-performance-analyst",
+            "description": "Tests supplied traffic, capacity and performance definitions and measures.",
+            "dependsOn": []
+          },
+          {
+            "id": "air-traffic-hazard-risk-control-analyst",
+            "agentID": "air-traffic-hazard-risk-control-analyst",
+            "description": "Builds hazard-consequence-control traceability from supplied safety evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "occurrence-change-safety-assurance-analyst",
+            "agentID": "occurrence-change-safety-assurance-analyst",
+            "description": "Reviews occurrence, indicator, change and control-effectiveness evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "air-traffic-management-safety-review-owner",
+            "agentID": "air-traffic-management-safety-review-owner",
+            "description": "Joins ATM configuration, performance, hazard and assurance evidence without operational authority.",
+            "dependsOn": [
+              "air-traffic-hazard-risk-control-analyst",
+              "airspace-facility-procedure-configuration-analyst",
+              "occurrence-change-safety-assurance-analyst",
+              "traffic-demand-capacity-performance-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "anti-money-laundering-compliance",
       "version": "2026.08.11.1",
       "digest": "b0d02298ea47ca007286d1701cc61b6517eaa832301b9ecc516f6cc90daa9986"
@@ -2015,6 +2121,111 @@ export const generatedPublicMarketFacts = [
               "trial-enrollment-conduct-analyst",
               "trial-safety-tmf-closeout-analyst",
               "trial-startup-site-readiness-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "cloud-finops-cost-governance",
+      "version": "2026.08.11.1",
+      "digest": "24a1ea9549fd74e50309e8412a6ffe1948643d7826fdc7f06161452eaac48bd2"
+    },
+    "name": "Cloud FinOps Cost Governance",
+    "label": "Cloud FinOps Cost Governance",
+    "description": "Cloud cost, usage, billing quality, allocation, unit economics, forecast, commitment, optimization, anomaly, governance, and value evidence joined into a bounded FinOps review pack.",
+    "selectorSummary": "Use for source-grounded technology cost and usage governance evidence without purchasing commitments, changing resources, booking entries, or setting budgets.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "finops-cost-usage-billing-quality-analyst",
+        "label": "FinOps Cost Usage and Billing Quality Analyst",
+        "description": "Reconciles technology cost, usage, billing, currency, schema, invoice, and source-quality evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "finops-allocation-unit-economics-analyst",
+        "label": "FinOps Allocation and Unit Economics Analyst",
+        "description": "Builds traceable direct, shared, and unallocated cost evidence plus versioned unit-economics calculations.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "finops-forecast-commitment-optimization-analyst",
+        "label": "FinOps Forecast Commitment and Optimization Analyst",
+        "description": "Compares source-grounded budget, forecast, commitment, utilization, and optimization evidence without transactions or changes.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "finops-anomaly-governance-value-analyst",
+        "label": "FinOps Anomaly Governance and Value Analyst",
+        "description": "Reconstructs cost anomalies, control ownership, exceptions, value links, and outcome uncertainty.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "cloud-finops-cost-governance-review-owner",
+        "label": "Cloud FinOps Cost Governance Review Owner",
+        "description": "Joins billing, allocation, forecast, commitment, anomaly, governance, and value evidence while retaining human decision gates.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "cloud-finops-cost-governance-review",
+        "label": "Cloud FinOps Cost Governance Review",
+        "description": "Four independent technology-cost evidence branches converge into one bounded FinOps qualified-review pack.",
+        "nodes": [
+          {
+            "id": "finops-cost-usage-billing-quality-analyst",
+            "agentID": "finops-cost-usage-billing-quality-analyst",
+            "description": "Reconciles cost, usage, billing, currency, invoice, and source-quality evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "finops-allocation-unit-economics-analyst",
+            "agentID": "finops-allocation-unit-economics-analyst",
+            "description": "Builds allocation and unit-economics evidence with formulas, denominators, and unknowns.",
+            "dependsOn": []
+          },
+          {
+            "id": "finops-forecast-commitment-optimization-analyst",
+            "agentID": "finops-forecast-commitment-optimization-analyst",
+            "description": "Builds forecast, commitment, and optimization candidate evidence without purchasing or deployment.",
+            "dependsOn": []
+          },
+          {
+            "id": "finops-anomaly-governance-value-analyst",
+            "agentID": "finops-anomaly-governance-value-analyst",
+            "description": "Reconstructs anomalies, governance controls, exceptions, and value evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "cloud-finops-cost-governance-review-owner",
+            "agentID": "cloud-finops-cost-governance-review-owner",
+            "description": "Joins all four branches, preserves conflicts, and routes every decision or action to authorized humans.",
+            "dependsOn": [
+              "finops-allocation-unit-economics-analyst",
+              "finops-anomaly-governance-value-analyst",
+              "finops-cost-usage-billing-quality-analyst",
+              "finops-forecast-commitment-optimization-analyst"
             ]
           }
         ]
@@ -3583,6 +3794,112 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "enterprise-backup-recovery-assurance",
+      "version": "2026.08.11.1",
+      "digest": "4b1fa3bc875a2f912776d1107023a332b8d0bdd2d7dbc0656603e3d02cb570ae"
+    },
+    "name": "Enterprise Backup Recovery Assurance",
+    "label": "Enterprise Backup Recovery Assurance",
+    "description": "Workload scope, backup-copy, integrity and isolated-restore evidence joined for qualified recovery assurance.",
+    "selectorSummary": "Use for bounded backup recoverability evidence without live backup or restore actions.",
+    "pillars": [
+      "code",
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "workload-recovery-scope-analyst",
+        "label": "Workload and Recovery Scope Analyst",
+        "description": "Freezes workload, data, dependency and human-owned recovery-objective evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "backup-copy-retention-immutability-analyst",
+        "label": "Backup Copy, Retention and Immutability Analyst",
+        "description": "Reconciles backup jobs, copies, retention and supplied immutability evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "backup-catalog-hash-integrity-analyst",
+        "label": "Backup Catalog and Hash Integrity Analyst",
+        "description": "Tests supplied catalog, manifest, checksum and completeness evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "isolated-restore-recovery-validation-analyst",
+        "label": "Isolated Restore and Recovery Validation Analyst",
+        "description": "Reviews authorized isolated restore tests and recovery validation evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "enterprise-backup-recovery-assurance-owner",
+        "label": "Enterprise Backup Recovery Assurance Owner",
+        "description": "Joins scope, copy, integrity and isolated restore evidence without executing recovery.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "enterprise-backup-recovery-assurance-review",
+        "label": "Enterprise Backup Recovery Assurance Review",
+        "description": "Four independent professional evidence branches converge into Enterprise Backup Recovery Assurance Owner.",
+        "nodes": [
+          {
+            "id": "workload-recovery-scope-analyst",
+            "agentID": "workload-recovery-scope-analyst",
+            "description": "Freezes workload, data, dependency and human-owned recovery-objective evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "backup-copy-retention-immutability-analyst",
+            "agentID": "backup-copy-retention-immutability-analyst",
+            "description": "Reconciles backup jobs, copies, retention and supplied immutability evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "backup-catalog-hash-integrity-analyst",
+            "agentID": "backup-catalog-hash-integrity-analyst",
+            "description": "Tests supplied catalog, manifest, checksum and completeness evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "isolated-restore-recovery-validation-analyst",
+            "agentID": "isolated-restore-recovery-validation-analyst",
+            "description": "Reviews authorized isolated restore tests and recovery validation evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "enterprise-backup-recovery-assurance-owner",
+            "agentID": "enterprise-backup-recovery-assurance-owner",
+            "description": "Joins scope, copy, integrity and isolated restore evidence without executing recovery.",
+            "dependsOn": [
+              "backup-catalog-hash-integrity-analyst",
+              "backup-copy-retention-immutability-analyst",
+              "isolated-restore-recovery-validation-analyst",
+              "workload-recovery-scope-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "equity-research",
       "version": "2026.08.11.1",
       "digest": "09fa222ee4d40d6573270aa40fff1fc9540693e27ca90829ab2aa17af036b536"
@@ -4787,6 +5104,98 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "hazardous-waste-compliance-operations",
+      "version": "2026.08.11.1",
+      "digest": "8edf63100a7bac6365c8c6358ac3d401a36c80b3bf49148af801c03fe2965126"
+    },
+    "name": "Hazardous Waste Compliance Operations",
+    "label": "Hazardous Waste Compliance Operations",
+    "description": "Source-bound waste-stream determinations, generator/accumulation evidence, and manifest-to-disposition reconciliation without legal, handling, shipping, or disposal authority.",
+    "selectorSummary": "Use for evidence-controlled hazardous-waste compliance operations.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "hazardous-waste-stream-determination-analyst",
+        "label": "Hazardous Waste Stream Determination Analyst",
+        "description": "Traces generation process, material identity, sampling, analytical, process-knowledge, and source-bound determination evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "generator-accumulation-compliance-analyst",
+        "label": "Generator Accumulation Compliance Analyst",
+        "description": "Reconciles site-and-month generation quantities, category evidence, accumulation-unit identity, inspections, training, and contingency records.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "hazardous-waste-manifest-disposition-analyst",
+        "label": "Hazardous Waste Manifest Disposition Analyst",
+        "description": "Reconciles manifest lines, parties, signatures, amendments, discrepancies, exception evidence, receipt, and final disposition records.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "hazardous-waste-compliance-operations-review-owner",
+        "label": "Hazardous Waste Compliance Operations Review Owner",
+        "description": "Joins determination, generator/accumulation, and manifest/disposition evidence while preserving qualified and regulatory authority.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "hazardous-waste-compliance-operations-review",
+        "label": "Hazardous Waste Compliance Operations Review",
+        "description": "Three independent hazardous-waste evidence branches converge into one controlled review.",
+        "nodes": [
+          {
+            "id": "hazardous-waste-stream-determination-analyst",
+            "agentID": "hazardous-waste-stream-determination-analyst",
+            "description": "Traces process, material, sampling, analysis, and determination evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "generator-accumulation-compliance-analyst",
+            "agentID": "generator-accumulation-compliance-analyst",
+            "description": "Reconciles site/month quantities, category basis, and accumulation controls.",
+            "dependsOn": []
+          },
+          {
+            "id": "hazardous-waste-manifest-disposition-analyst",
+            "agentID": "hazardous-waste-manifest-disposition-analyst",
+            "description": "Reconciles manifest and disposition chain evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "hazardous-waste-compliance-operations-review-owner",
+            "agentID": "hazardous-waste-compliance-operations-review-owner",
+            "description": "Joins all branches without legal, signature, handling, shipment, treatment, or disposal authority.",
+            "dependsOn": [
+              "generator-accumulation-compliance-analyst",
+              "hazardous-waste-manifest-disposition-analyst",
+              "hazardous-waste-stream-determination-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "healthcare-operations",
       "version": "2026.08.10.1",
       "digest": "0ff88183c6d3661c5623598a23f76ddbe57c74e92ad36e8cfbe0ab3a52a94433"
@@ -5098,6 +5507,112 @@ export const generatedPublicMarketFacts = [
     "packageOwnedCapabilities": {
       "skills": 2,
       "tools": 1,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "identity-access-governance",
+      "version": "2026.08.11.1",
+      "digest": "6b7c8a74a4f609201c77bb8182f22b2f09d95947ce4770af8654baae1b37dfa5"
+    },
+    "name": "Identity Access Governance",
+    "label": "Identity Access Governance",
+    "description": "Identity lifecycle, account-entitlement, access-control and certification evidence joined for qualified governance review.",
+    "selectorSummary": "Use for bounded identity-governance evidence without provisioning or access decisions.",
+    "pillars": [
+      "code",
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "authoritative-identity-lifecycle-analyst",
+        "label": "Authoritative Identity Lifecycle Analyst",
+        "description": "Reconciles authoritative identity populations and Joiner-Mover-Leaver events.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "account-entitlement-correlation-analyst",
+        "label": "Account and Entitlement Correlation Analyst",
+        "description": "Correlates identities, accounts, groups, roles and effective entitlements.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "access-request-role-sod-control-analyst",
+        "label": "Access Request, Role and SoD Control Analyst",
+        "description": "Tests access-request, role and segregation-of-duties evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "access-certification-orphan-review-analyst",
+        "label": "Access Certification and Orphan Review Analyst",
+        "description": "Reviews certification populations, dormant and orphaned account evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "identity-access-governance-review-owner",
+        "label": "Identity Access Governance Review Owner",
+        "description": "Joins lifecycle, entitlement, control and certification evidence without deciding access.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "identity-access-governance-review",
+        "label": "Identity Access Governance Review",
+        "description": "Four independent professional evidence branches converge into Identity Access Governance Review Owner.",
+        "nodes": [
+          {
+            "id": "authoritative-identity-lifecycle-analyst",
+            "agentID": "authoritative-identity-lifecycle-analyst",
+            "description": "Reconciles authoritative identity populations and Joiner-Mover-Leaver events.",
+            "dependsOn": []
+          },
+          {
+            "id": "account-entitlement-correlation-analyst",
+            "agentID": "account-entitlement-correlation-analyst",
+            "description": "Correlates identities, accounts, groups, roles and effective entitlements.",
+            "dependsOn": []
+          },
+          {
+            "id": "access-request-role-sod-control-analyst",
+            "agentID": "access-request-role-sod-control-analyst",
+            "description": "Tests access-request, role and segregation-of-duties evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "access-certification-orphan-review-analyst",
+            "agentID": "access-certification-orphan-review-analyst",
+            "description": "Reviews certification populations, dormant and orphaned account evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "identity-access-governance-review-owner",
+            "agentID": "identity-access-governance-review-owner",
+            "description": "Joins lifecycle, entitlement, control and certification evidence without deciding access.",
+            "dependsOn": [
+              "access-certification-orphan-review-analyst",
+              "access-request-role-sod-control-analyst",
+              "account-entitlement-correlation-analyst",
+              "authoritative-identity-lifecycle-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
       "mcp": 0
     },
     "configuration": {
@@ -6363,6 +6878,98 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "meteorological-observation-forecast-assurance",
+      "version": "2026.08.11.1",
+      "digest": "6acf7043ae1982fd2c2f7dd84c5a116229dec9501b8c412ccb6dfb2b9d473c09"
+    },
+    "name": "Meteorological Observation Forecast Assurance",
+    "label": "Meteorological Observation Forecast Assurance",
+    "description": "Station/sensor metadata, observation QC, forecast cycle provenance, alignment, and verification evidence without forecast or warning authority.",
+    "selectorSummary": "Use for source-bound meteorological observation and forecast assurance evidence.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "meteorological-observation-metadata-quality-analyst",
+        "label": "Meteorological Observation Metadata Quality Analyst",
+        "description": "Traces station, platform, sensor, calibration, observation, quality-control, latency, and revision evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "forecast-cycle-provenance-analyst",
+        "label": "Forecast Cycle Provenance Analyst",
+        "description": "Traces producing system, model/product, cycle, issue, valid, lead-time, grid, level, member, post-processing, and revision evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "forecast-verification-evidence-analyst",
+        "label": "Forecast Verification Evidence Analyst",
+        "description": "Aligns eligible observation–forecast pairs and prepares source-defined continuous, categorical, probabilistic, or spatial verification evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "meteorological-observation-forecast-assurance-review-owner",
+        "label": "Meteorological Observation Forecast Assurance Review Owner",
+        "description": "Joins observation, forecast provenance, alignment, and verification evidence while preserving official and operational decisions.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "meteorological-observation-forecast-assurance-review",
+        "label": "Meteorological Observation Forecast Assurance Review",
+        "description": "Three independent meteorological evidence branches converge into one controlled assurance review.",
+        "nodes": [
+          {
+            "id": "meteorological-observation-metadata-quality-analyst",
+            "agentID": "meteorological-observation-metadata-quality-analyst",
+            "description": "Traces station/sensor metadata, observations, and quality control.",
+            "dependsOn": []
+          },
+          {
+            "id": "forecast-cycle-provenance-analyst",
+            "agentID": "forecast-cycle-provenance-analyst",
+            "description": "Traces exact forecast product, cycle, issue, valid, and lead-time provenance.",
+            "dependsOn": []
+          },
+          {
+            "id": "forecast-verification-evidence-analyst",
+            "agentID": "forecast-verification-evidence-analyst",
+            "description": "Builds eligible matched pairs and source-defined verification evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "meteorological-observation-forecast-assurance-review-owner",
+            "agentID": "meteorological-observation-forecast-assurance-review-owner",
+            "description": "Joins all evidence without forecast, warning, operational, or official-service authority.",
+            "dependsOn": [
+              "forecast-cycle-provenance-analyst",
+              "forecast-verification-evidence-analyst",
+              "meteorological-observation-metadata-quality-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "mining-resource-operations",
       "version": "2026.08.11.1",
       "digest": "992808c02eb1b1f8ff61b692bdc8f8899e3137c0a4e046832073cdc55338af43"
@@ -6898,6 +7505,111 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "one-person-company-operating-system",
+      "version": "2026.08.11.1",
+      "digest": "e7bb3c4d093a2df8f6b31d62e42a4b42147e59264e8c1a9496b0bae171c4f4ca"
+    },
+    "name": "One Person Company Operating System",
+    "label": "One Person Company Operating System",
+    "description": "A commercial-grade operating evidence system for an owner-operated company, joining offer and demand, revenue and obligations, delivery capacity, and automation governance without performing external actions.",
+    "selectorSummary": "Run one evidence-grounded operating review across the whole owner-operated company.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "opc-strategy-offer-demand-analyst",
+        "label": "OPC Strategy, Offer, and Demand Analyst",
+        "description": "Reconciles company stage, customer and channel evidence, offer versions, demand signals, experiments, and opportunity cost.",
+        "baseRole": "deep-research"
+      },
+      {
+        "id": "opc-revenue-finance-obligation-analyst",
+        "label": "OPC Revenue, Finance, and Obligation Analyst",
+        "description": "Reconciles source-bound revenue, payment, refund, receivable, cost, cash, and obligation evidence without accounting or tax authority.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "opc-delivery-customer-capacity-analyst",
+        "label": "OPC Delivery, Customer, and Capacity Analyst",
+        "description": "Reconciles fulfillment, customer state, support load, available capacity, commitments, and recovery evidence across business models.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "opc-automation-governance-resilience-analyst",
+        "label": "OPC Automation, Governance, and Resilience Analyst",
+        "description": "Audits data sources, approval classes, secret references, workflow idempotency, external effects, observability, and continuity evidence.",
+        "baseRole": "fact-check"
+      },
+      {
+        "id": "one-person-company-operating-system-review-owner",
+        "label": "OPC Operating Review Owner",
+        "description": "Joins the four independent operating branches into one evidence-bound decision pack while preserving owner and professional approvals.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "one-person-company-operating-review",
+        "label": "One Person Company Operating Review",
+        "description": "Four independent operating evidence branches run concurrently and converge once into a company-level decision pack.",
+        "nodes": [
+          {
+            "id": "opc-strategy-offer-demand-analyst",
+            "agentID": "opc-strategy-offer-demand-analyst",
+            "description": "Produces the offer, channel, demand, and experiment portfolio.",
+            "dependsOn": []
+          },
+          {
+            "id": "opc-revenue-finance-obligation-analyst",
+            "agentID": "opc-revenue-finance-obligation-analyst",
+            "description": "Produces the reconciled revenue, cash, cost, and obligation evidence ledger.",
+            "dependsOn": []
+          },
+          {
+            "id": "opc-delivery-customer-capacity-analyst",
+            "agentID": "opc-delivery-customer-capacity-analyst",
+            "description": "Produces delivery, customer-state, support, and capacity evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "opc-automation-governance-resilience-analyst",
+            "agentID": "opc-automation-governance-resilience-analyst",
+            "description": "Produces workflow, approval, secret-reference, observability, and resilience evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "one-person-company-operating-system-review-owner",
+            "agentID": "one-person-company-operating-system-review-owner",
+            "description": "Joins all four branches into one prioritized and bounded operating review.",
+            "dependsOn": [
+              "opc-automation-governance-resilience-analyst",
+              "opc-delivery-customer-capacity-analyst",
+              "opc-revenue-finance-obligation-analyst",
+              "opc-strategy-offer-demand-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "patent-landscape-prior-art",
       "version": "2026.08.11.1",
       "digest": "bcfc9f63fbfa6a1a13d447faf3d3f66ba55f77ad6d98d709f169fec98138788f"
@@ -7257,6 +7969,98 @@ export const generatedPublicMarketFacts = [
               "pv-aggregate-signal-analyst",
               "pv-case-intake-quality-analyst",
               "pv-risk-management-compliance-trace-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "pipeline-integrity-management",
+      "version": "2026.08.11.1",
+      "digest": "d68c97a7563b9ca7b170a3ce42af730989f5c23c98e09b16cc55ac0a77c99fe0"
+    },
+    "name": "Pipeline Integrity Management",
+    "label": "Pipeline Integrity Management",
+    "description": "Source-bound regulated pipeline segment, threat, assessment, anomaly, excavation, repair, and change evidence for qualified review without operating or regulatory authority.",
+    "selectorSummary": "Use for regulated pipeline integrity evidence and qualified review preparation.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "pipeline-segment-configuration-regulatory-basis-analyst",
+        "label": "Pipeline Segment Configuration Regulatory Basis Analyst",
+        "description": "Freezes segment identity, route/stationing, configuration, consequence/class designations, and controlling regulatory/operator basis.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "pipeline-threat-data-integration-analyst",
+        "label": "Pipeline Threat Data Integration Analyst",
+        "description": "Integrates operator-defined threat and condition evidence with coverage, quality, gaps, counterevidence, and interactions.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "pipeline-assessment-anomaly-remediation-analyst",
+        "label": "Pipeline Assessment Anomaly Remediation Analyst",
+        "description": "Traces assessment runs, indications/anomalies, alignment, excavation, repair, remediation, and management-of-change evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "pipeline-integrity-management-review-owner",
+        "label": "Pipeline Integrity Management Review Owner",
+        "description": "Joins segment, threat, assessment, anomaly, remediation, and change evidence while preserving engineering and regulatory decisions.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "pipeline-integrity-management-review",
+        "label": "Pipeline Integrity Management Review",
+        "description": "Three independent regulated pipeline evidence branches converge into one controlled integrity review.",
+        "nodes": [
+          {
+            "id": "pipeline-segment-configuration-regulatory-basis-analyst",
+            "agentID": "pipeline-segment-configuration-regulatory-basis-analyst",
+            "description": "Freezes segment, configuration, spatial reference, and controlling basis.",
+            "dependsOn": []
+          },
+          {
+            "id": "pipeline-threat-data-integration-analyst",
+            "agentID": "pipeline-threat-data-integration-analyst",
+            "description": "Integrates source-bound operator threat and condition evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "pipeline-assessment-anomaly-remediation-analyst",
+            "agentID": "pipeline-assessment-anomaly-remediation-analyst",
+            "description": "Traces assessments, anomaly correlations, excavations, repairs, and changes.",
+            "dependsOn": []
+          },
+          {
+            "id": "pipeline-integrity-management-review-owner",
+            "agentID": "pipeline-integrity-management-review-owner",
+            "description": "Joins all branches without operational, engineering, emergency, field-work, or regulatory authority.",
+            "dependsOn": [
+              "pipeline-assessment-anomaly-remediation-analyst",
+              "pipeline-segment-configuration-regulatory-basis-analyst",
+              "pipeline-threat-data-integration-analyst"
             ]
           }
         ]
@@ -8818,6 +9622,112 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "securities-post-trade-operations",
+      "version": "2026.08.11.1",
+      "digest": "f6af36408ff5a7fdc4f1fb614e98c7efb780073e2f4d22ba3d5d495c51796afa"
+    },
+    "name": "Securities Post-Trade Operations",
+    "label": "Securities Post-Trade Operations",
+    "description": "Trade capture, clearing, custody, settlement and break evidence joined for qualified post-trade review.",
+    "selectorSummary": "Use for bounded securities post-trade evidence without trading or moving assets.",
+    "pillars": [
+      "code",
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "trade-capture-allocation-confirmation-analyst",
+        "label": "Trade Capture, Allocation and Confirmation Analyst",
+        "description": "Reconciles trade capture, allocation, confirmation and affirmation evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "clearing-netting-obligation-analyst",
+        "label": "Clearing, Netting and Obligation Analyst",
+        "description": "Traces clearing eligibility, matching, netting and resulting obligations.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "custody-dvp-settlement-analyst",
+        "label": "Custody, DVP and Settlement Analyst",
+        "description": "Traces custody instructions, securities/cash legs and settlement evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "settlement-fail-break-control-analyst",
+        "label": "Settlement Fail and Break Control Analyst",
+        "description": "Reviews fails, stock/cash breaks, ageing, exceptions and control evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "securities-post-trade-operations-review-owner",
+        "label": "Securities Post-Trade Operations Review Owner",
+        "description": "Joins lifecycle evidence without instructing, settling or moving securities or cash.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "securities-post-trade-operations-review",
+        "label": "Securities Post-Trade Operations Review",
+        "description": "Four independent professional evidence branches converge into Securities Post-Trade Operations Review Owner.",
+        "nodes": [
+          {
+            "id": "trade-capture-allocation-confirmation-analyst",
+            "agentID": "trade-capture-allocation-confirmation-analyst",
+            "description": "Reconciles trade capture, allocation, confirmation and affirmation evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "clearing-netting-obligation-analyst",
+            "agentID": "clearing-netting-obligation-analyst",
+            "description": "Traces clearing eligibility, matching, netting and resulting obligations.",
+            "dependsOn": []
+          },
+          {
+            "id": "custody-dvp-settlement-analyst",
+            "agentID": "custody-dvp-settlement-analyst",
+            "description": "Traces custody instructions, securities/cash legs and settlement evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "settlement-fail-break-control-analyst",
+            "agentID": "settlement-fail-break-control-analyst",
+            "description": "Reviews fails, stock/cash breaks, ageing, exceptions and control evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "securities-post-trade-operations-review-owner",
+            "agentID": "securities-post-trade-operations-review-owner",
+            "description": "Joins lifecycle evidence without instructing, settling or moving securities or cash.",
+            "dependsOn": [
+              "clearing-netting-obligation-analyst",
+              "custody-dvp-settlement-analyst",
+              "settlement-fail-break-control-analyst",
+              "trade-capture-allocation-confirmation-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "semiconductor-yield-engineering",
       "version": "2026.08.11.1",
       "digest": "59ec2ca64c1521b77bc424eba62e696bbb9a6cfe7e9934b7c995ff2c4be2a62c"
@@ -9037,6 +9947,111 @@ export const generatedPublicMarketFacts = [
     "packageOwnedCapabilities": {
       "skills": 2,
       "tools": 1,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "service-reliability-incident-operations",
+      "version": "2026.08.11.1",
+      "digest": "b3302087fbddc4f1b20152969ab1f0703ec71308ab76a191c87e28af1e138ab4"
+    },
+    "name": "Service Reliability Incident Operations",
+    "label": "Service Reliability Incident Operations",
+    "description": "Service-level, observability, alert-quality, incident coordination, handoff, post-incident learning, and action evidence joined into a bounded reliability review pack.",
+    "selectorSummary": "Use for source-grounded service reliability and incident evidence without production mitigation, severity declaration, paging, or external communication.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "reliability-sli-slo-error-budget-analyst",
+        "label": "Reliability SLI SLO and Error Budget Analyst",
+        "description": "Reconciles service boundaries, service-level indicator/objective definitions, measurements, windows, exclusions, and error-budget evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "reliability-observability-alert-quality-analyst",
+        "label": "Reliability Observability and Alert Quality Analyst",
+        "description": "Maps telemetry, instrumentation, queries, alert states, routing evidence, blind spots, and signal quality.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "reliability-incident-coordination-handoff-analyst",
+        "label": "Reliability Incident Coordination and Handoff Analyst",
+        "description": "Builds an evidence-sourced incident timeline, impact record, role ledger, decision log, and handoff context without command authority.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "reliability-postincident-learning-action-analyst",
+        "label": "Reliability Post-incident Learning and Action Analyst",
+        "description": "Separates observations, contributing factors, hypotheses, counterevidence, learning, and owned action evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "service-reliability-incident-review-owner",
+        "label": "Service Reliability Incident Review Owner",
+        "description": "Joins SLO, observability, incident, handoff, learning, and action evidence while retaining human operational authority.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "service-reliability-incident-review",
+        "label": "Service Reliability Incident Review",
+        "description": "Four independent reliability and incident evidence branches converge into one bounded qualified-review pack.",
+        "nodes": [
+          {
+            "id": "reliability-sli-slo-error-budget-analyst",
+            "agentID": "reliability-sli-slo-error-budget-analyst",
+            "description": "Reconciles service boundaries, SLI/SLO definitions, windows, exclusions, and error-budget evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "reliability-observability-alert-quality-analyst",
+            "agentID": "reliability-observability-alert-quality-analyst",
+            "description": "Maps telemetry, queries, alerts, routing, blind spots, and signal quality.",
+            "dependsOn": []
+          },
+          {
+            "id": "reliability-incident-coordination-handoff-analyst",
+            "agentID": "reliability-incident-coordination-handoff-analyst",
+            "description": "Builds incident timeline, impact, roles, decision, and handoff evidence without operational command.",
+            "dependsOn": []
+          },
+          {
+            "id": "reliability-postincident-learning-action-analyst",
+            "agentID": "reliability-postincident-learning-action-analyst",
+            "description": "Builds blameless contributing-factor, counterevidence, learning, and action records.",
+            "dependsOn": []
+          },
+          {
+            "id": "service-reliability-incident-review-owner",
+            "agentID": "service-reliability-incident-review-owner",
+            "description": "Joins all four branches, preserves conflicts and unknowns, and routes every production decision to authorized responders.",
+            "dependsOn": [
+              "reliability-incident-coordination-handoff-analyst",
+              "reliability-observability-alert-quality-analyst",
+              "reliability-postincident-learning-action-analyst",
+              "reliability-sli-slo-error-budget-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
       "mcp": 0
     },
     "configuration": {
@@ -10094,6 +11109,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/air-traffic-management-safety",
+    "namespace": "builtin",
+    "id": "air-traffic-management-safety",
+    "label": "Air Traffic Management Safety",
+    "version": "2026.08.11.1",
+    "packageDigest": "6917829276bd163fa79d0acba481fdf7203cd80f9b67204cce18eea8d2f2da14",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "air-traffic-management-safety/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/anti-money-laundering-compliance",
     "namespace": "builtin",
     "id": "anti-money-laundering-compliance",
@@ -10259,6 +11291,23 @@ export const generatedShippedSquadFacts = [
     ],
     "packageSkillRefs": [
       "clinical-trial-operations/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/cloud-finops-cost-governance",
+    "namespace": "builtin",
+    "id": "cloud-finops-cost-governance",
+    "label": "Cloud FinOps Cost Governance",
+    "version": "2026.08.11.1",
+    "packageDigest": "24a1ea9549fd74e50309e8412a6ffe1948643d7826fdc7f06161452eaac48bd2",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "cloud-finops-cost-governance/shared/method"
     ],
     "agentCount": 5,
     "workflowCount": 1
@@ -10525,6 +11574,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/enterprise-backup-recovery-assurance",
+    "namespace": "builtin",
+    "id": "enterprise-backup-recovery-assurance",
+    "label": "Enterprise Backup Recovery Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "4b1fa3bc875a2f912776d1107023a332b8d0bdd2d7dbc0656603e3d02cb570ae",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "enterprise-backup-recovery-assurance/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/equity-research",
     "namespace": "builtin",
     "id": "equity-research",
@@ -10680,6 +11746,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/hazardous-waste-compliance-operations",
+    "namespace": "builtin",
+    "id": "hazardous-waste-compliance-operations",
+    "label": "Hazardous Waste Compliance Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "8edf63100a7bac6365c8c6358ac3d401a36c80b3bf49148af801c03fe2965126",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "hazardous-waste-compliance-operations/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/healthcare-operations",
     "namespace": "builtin",
     "id": "healthcare-operations",
@@ -10730,6 +11813,23 @@ export const generatedShippedSquadFacts = [
       "hr-operations/shared/workflow"
     ],
     "agentCount": 7,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/identity-access-governance",
+    "namespace": "builtin",
+    "id": "identity-access-governance",
+    "label": "Identity Access Governance",
+    "version": "2026.08.11.1",
+    "packageDigest": "6b7c8a74a4f609201c77bb8182f22b2f09d95947ce4770af8654baae1b37dfa5",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "identity-access-governance/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {
@@ -10956,6 +12056,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/meteorological-observation-forecast-assurance",
+    "namespace": "builtin",
+    "id": "meteorological-observation-forecast-assurance",
+    "label": "Meteorological Observation Forecast Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "6acf7043ae1982fd2c2f7dd84c5a116229dec9501b8c412ccb6dfb2b9d473c09",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "meteorological-observation-forecast-assurance/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/mining-resource-operations",
     "namespace": "builtin",
     "id": "mining-resource-operations",
@@ -11045,6 +12162,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/one-person-company-operating-system",
+    "namespace": "builtin",
+    "id": "one-person-company-operating-system",
+    "label": "One Person Company Operating System",
+    "version": "2026.08.11.1",
+    "packageDigest": "e7bb3c4d093a2df8f6b31d62e42a4b42147e59264e8c1a9496b0bae171c4f4ca",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "one-person-company-operating-system/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/patent-landscape-prior-art",
     "namespace": "builtin",
     "id": "patent-landscape-prior-art",
@@ -11108,6 +12242,23 @@ export const generatedShippedSquadFacts = [
     ],
     "packageSkillRefs": [
       "pharmacovigilance-drug-safety/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/pipeline-integrity-management",
+    "namespace": "builtin",
+    "id": "pipeline-integrity-management",
+    "label": "Pipeline Integrity Management",
+    "version": "2026.08.11.1",
+    "packageDigest": "d68c97a7563b9ca7b170a3ce42af730989f5c23c98e09b16cc55ac0a77c99fe0",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "pipeline-integrity-management/shared/method"
     ],
     "agentCount": 4,
     "workflowCount": 1
@@ -11353,6 +12504,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/securities-post-trade-operations",
+    "namespace": "builtin",
+    "id": "securities-post-trade-operations",
+    "label": "Securities Post-Trade Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "f6af36408ff5a7fdc4f1fb614e98c7efb780073e2f4d22ba3d5d495c51796afa",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "securities-post-trade-operations/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/semiconductor-yield-engineering",
     "namespace": "builtin",
     "id": "semiconductor-yield-engineering",
@@ -11386,6 +12554,23 @@ export const generatedShippedSquadFacts = [
       "seo-geo/shared/workflow"
     ],
     "agentCount": 7,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/service-reliability-incident-operations",
+    "namespace": "builtin",
+    "id": "service-reliability-incident-operations",
+    "label": "Service Reliability Incident Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "b3302087fbddc4f1b20152969ab1f0703ec71308ab76a191c87e28af1e138ab4",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "service-reliability-incident-operations/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {

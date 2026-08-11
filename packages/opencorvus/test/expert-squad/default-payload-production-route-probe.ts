@@ -12,7 +12,7 @@ declareNativeTaskProcessDeployment()
 await fs.mkdir(projectDirectory, { recursive: true })
 
 const app = Server.App()
-const server = Bun.serve({ hostname: "127.0.0.1", port: 0, idleTimeout: 120, fetch: app.fetch })
+const server = Bun.serve({ hostname: "127.0.0.1", port: 0, idleTimeout: 0, fetch: app.fetch })
 const origin = `http://${server.hostname}:${server.port}`
 let requestCount = 0
 
