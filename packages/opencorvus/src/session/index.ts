@@ -45,11 +45,6 @@ import {
 export namespace Session {
   const log = Log.create({ service: "session" })
 
-  // [observability/phase-0] Dedupe set for the cache_write extraction-miss log
-  // in getUsage(). Keyed by `${providerID}/${modelID}` so we emit one structured
-  // sample per distinct provider+model combination per process lifetime.
-  const cacheWriteMissLogged = new Set<string>()
-
   const parentTitlePrefix = "New session - "
   const childTitlePrefix = "Child session - "
 
@@ -1716,58 +1711,32 @@ export namespace Session {
       metadata: z.custom<ProviderMetadata>().optional(),
     }),
     (input) => {
-      const safe = (value: number) => {
-        if (!Number.isFinite(value)) return 0
-        return value
+      const safe = (value: number | null | undefined) => {
+        if (!Number.isFinite(value) || Number(value) < 0) return 0
+        return Number(value)
       }
-      const inputTokens = safe(input.usage.inputTokens ?? 0)
-      const outputTokens = safe(input.usage.outputTokens ?? 0)
-      const reasoningTokens = safe(input.usage.reasoningTokens ?? 0)
-
-      const cacheReadInputTokens = safe(input.usage.cachedInputTokens ?? 0)
+      const inputTokens = safe(input.usage.inputTokens)
+      const outputTokens = safe(input.usage.outputTokens)
+      const reasoningTokens = safe(
+        input.usage.outputTokenDetails?.reasoningTokens ?? input.usage.reasoningTokens,
+      )
+      const textOutputTokens = safe(input.usage.outputTokenDetails?.textTokens ?? outputTokens - reasoningTokens)
+      const cacheReadInputTokens = safe(
+        input.usage.inputTokenDetails?.cacheReadTokens ?? input.usage.cachedInputTokens,
+      )
       const cacheWriteInputTokens = safe(
-        (input.metadata?.["anthropic"]?.["cacheCreationInputTokens"] ??
+        (input.usage.inputTokenDetails?.cacheWriteTokens ??
+          input.metadata?.["anthropic"]?.["cacheCreationInputTokens"] ??
           (input.metadata?.["bedrock"] as any)?.["usage"]?.["cacheWriteInputTokens"] ??
           (input.metadata?.["venice"] as any)?.["usage"]?.["cacheCreationInputTokens"] ??
           0) as number,
       )
 
-      // [observability/phase-0] When a provider reports cache hits (read>0) but we
-      // extract 0 write tokens, the provider either (a) genuinely doesn't expose
-      // a "creation" field (OpenAI-style servers manage cache server-side and only
-      // surface read), or (b) nests the field under a provider key we haven't
-      // added above. Log the metadata shape once per (provider, model) combo so
-      // the fix (or documented "this provider has no write signal") is
-      // evidence-based — not spammed per request.
-      if (cacheReadInputTokens > 0 && cacheWriteInputTokens === 0 && input.metadata) {
-        const dedupeKey = `${input.model.providerID}/${input.model.id}`
-        if (!cacheWriteMissLogged.has(dedupeKey)) {
-          cacheWriteMissLogged.add(dedupeKey)
-          const providerKeys = Object.keys(input.metadata)
-          const snapshot = providerKeys.reduce<Record<string, unknown>>((acc, key) => {
-            const value = (input.metadata as Record<string, unknown>)[key]
-            acc[key] = value && typeof value === "object" ? { keys: Object.keys(value as object) } : typeof value
-            return acc
-          }, {})
-          log.info("cache_write extraction miss", {
-            providerID: input.model.providerID,
-            modelID: input.model.id,
-            npm: input.model.api.npm,
-            cacheReadInputTokens,
-            metadataProviderKeys: providerKeys,
-            metadataShape: snapshot,
-            usageKeys: Object.keys(input.usage as object),
-          })
-        }
-      }
-
-      // OpenRouter provides inputTokens as the total count of input tokens (including cached).
-      // AFAIK other providers (OpenRouter/OpenAI/Gemini etc.) do it the same way e.g. vercel/ai#8794 (comment)
-      // Anthropic does it differently though - inputTokens doesn't include cached tokens.
-      // It looks like OpenCorvus's cost calculation assumes all providers return inputTokens the same way Anthropic does (I'm guessing getUsage logic was originally implemented with anthropic), so it's causing incorrect cost calculation for OpenRouter and others.
-      const excludesCachedTokens = !!(input.metadata?.["anthropic"] || input.metadata?.["bedrock"])
+      // AI SDK 6 owns the provider-specific input convention and exposes the
+      // normalized non-cache count. Only fall back to subtraction for adapters
+      // that do not supply that detail.
       const adjustedInputTokens = safe(
-        excludesCachedTokens ? inputTokens : inputTokens - cacheReadInputTokens - cacheWriteInputTokens,
+        input.usage.inputTokenDetails?.noCacheTokens ?? inputTokens - cacheReadInputTokens - cacheWriteInputTokens,
       )
 
       const total = iife(() => {
@@ -1778,18 +1747,18 @@ export namespace Session {
           input.model.api.npm === "@ai-sdk/amazon-bedrock" ||
           input.model.api.npm === "@ai-sdk/google-vertex/anthropic"
         ) {
-          return adjustedInputTokens + outputTokens + reasoningTokens + cacheReadInputTokens + cacheWriteInputTokens
+          return adjustedInputTokens + textOutputTokens + reasoningTokens + cacheReadInputTokens + cacheWriteInputTokens
         }
         return safe(
           input.usage.totalTokens ??
-            adjustedInputTokens + outputTokens + reasoningTokens + cacheReadInputTokens + cacheWriteInputTokens,
+            adjustedInputTokens + textOutputTokens + reasoningTokens + cacheReadInputTokens + cacheWriteInputTokens,
         )
       })
 
       const tokens = {
         total,
         input: adjustedInputTokens,
-        output: outputTokens,
+        output: textOutputTokens,
         reasoning: reasoningTokens,
         cache: {
           write: cacheWriteInputTokens,
@@ -1798,19 +1767,23 @@ export namespace Session {
       }
 
       const costInfo =
-        input.model.cost?.experimentalOver200K && tokens.input + tokens.cache.read > 200_000
+        input.model.cost?.experimentalOver200K &&
+        tokens.input + tokens.cache.read + tokens.cache.write > 200_000
           ? input.model.cost.experimentalOver200K
           : input.model.cost
       return {
+        billing: {
+          status: input.model.cost.available === true ? ("priced" as const) : ("unpriced" as const),
+        },
         cost: safe(
           new Decimal(0)
             .add(new Decimal(tokens.input).mul(costInfo?.input ?? 0).div(1_000_000))
-            .add(new Decimal(tokens.output).mul(costInfo?.output ?? 0).div(1_000_000))
-            .add(new Decimal(tokens.cache.read).mul(costInfo?.cache?.read ?? 0).div(1_000_000))
-            .add(new Decimal(tokens.cache.write).mul(costInfo?.cache?.write ?? 0).div(1_000_000))
-            // models.dev does not expose a separate reasoning rate; charge reasoning
-            // tokens at the output rate.
-            .add(new Decimal(tokens.reasoning).mul(costInfo?.output ?? 0).div(1_000_000))
+            .add(new Decimal(tokens.output).mul(costInfo.output).div(1_000_000))
+            .add(new Decimal(tokens.cache.read).mul(costInfo.cache.read).div(1_000_000))
+            .add(new Decimal(tokens.cache.write).mul(costInfo.cache.write).div(1_000_000))
+            // Reasoning is an output-token subset. It is separated from text for
+            // presentation, then charged once at the output rate.
+            .add(new Decimal(tokens.reasoning).mul(costInfo.output).div(1_000_000))
             .toNumber(),
         ),
         tokens,

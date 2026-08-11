@@ -6,6 +6,8 @@ Latest Mission Market Expert Squad recommendation design: [`2026-08-11-mission-m
 
 Latest Conversation Agent-declared output summary repair: [`2026-08-11-conversation-agent-declared-output-summary.md`](records/2026-08/2026-08-11-conversation-agent-declared-output-summary.md).
 
+Latest Provider usage, billing-coverage, natural-cycle API, and statistics dashboard design: [`2026-08-11-provider-usage-natural-cycle-dashboard.md`](records/2026-08/2026-08-11-provider-usage-natural-cycle-dashboard.md).
+
 Latest clipboard API-key Provider prompt design: [`2026-08-11-clipboard-api-key-provider-prompt.md`](records/2026-08/2026-08-11-clipboard-api-key-provider-prompt.md).
 
 Clipboard API-key prompt visual evidence: [`confirmation`](artifacts/2026-08-11-clipboard-api-key-prompt.png) and [`Providers destination`](artifacts/2026-08-11-clipboard-api-key-providers.png).

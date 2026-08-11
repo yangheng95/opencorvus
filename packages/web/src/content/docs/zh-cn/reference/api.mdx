@@ -56,6 +56,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/global/skill/market` | List the global Skill market | `global.skill.market` |
 | GET | `/global/tasks` | List tasks across projects | `task.global.list` |
 | POST | `/global/tasks` | Create a task in an implicit project 请求体: `artifactImports`, `attachments`, `budget`, `channelBinding`, `checks`, `directory`, `expectedPackageDigest`, `metadata`, `model`, `priority`, `productPillar`, `project`, `promptProfile`, `queue`, `request`, `requestID`, `source`, `title`; 错误: `BadRequestError`, `ExternalChildTaskLineageError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCreationIdempotencyConflictError`, `TaskCreatorAuthorityError`, `TaskCreatorSessionError`, `TaskExpectedPackageDigestConflictError`, `TaskPackageRevisionBindingError`. | `task.global.create` |
+| GET | `/global/usage` | Get natural-period Provider usage 错误: `BadRequestError`. | `global.usage` |
 | POST | `/global/work` | Create Work in a temporary project 请求体: `model`; 错误: `BadRequestError`. | `global.work.create` |
 | POST | `/instance/dispose` | Dispose instance 错误: `OwnedPromptControllersError`. | `instance.dispose` |
 | GET | `/log` | Read logs 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `log.read` |

@@ -10,7 +10,7 @@ function openAIStrictModel(): Provider.Model {
     providerID: "openai",
     name: "GPT-5.6 Sol",
     limit: { context: 1_000_000, input: 900_000, output: 4_096 },
-    cost: { input: 0, output: 0, cache: { read: 0, write: 0 } },
+    cost: { available: true, input: 0, output: 0, cache: { read: 0, write: 0 } },
     capabilities: {
       toolcall: true,
       attachment: false,

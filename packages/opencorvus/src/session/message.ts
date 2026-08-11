@@ -430,12 +430,23 @@ export namespace Message {
     })
   export type TokenUsage = z.infer<typeof TokenUsage>
 
+  export const BillingCoverage = z
+    .object({
+      status: z.enum(["priced", "unpriced"]),
+    })
+    .strict()
+    .meta({
+      ref: "BillingCoverage",
+    })
+  export type BillingCoverage = z.infer<typeof BillingCoverage>
+
   export const StepFinishPart = PartBase.extend({
     type: z.literal(VISIBLE_PART_TYPE.stepFinish),
     reason: z.string(),
     snapshot: z.string().optional(),
     cost: z.number(),
     tokens: TokenUsage,
+    billing: BillingCoverage.optional(),
   }).meta({
     ref: "StepFinishPart",
   })
@@ -666,6 +677,7 @@ export namespace Message {
     summary: z.boolean().optional(),
     cost: z.number(),
     tokens: TokenUsage,
+    billing: BillingCoverage.optional(),
     structured: z.any().optional(),
     variant: z.string().optional(),
     finish: z.string().optional(),

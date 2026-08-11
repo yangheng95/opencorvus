@@ -90,6 +90,24 @@ function build(key: string, remote: SelectableItem, url: string, prev?: Model): 
   const prices = remote.billing?.token_prices
   // Copilot prices are AIC per billing batch; OpenCode stores USD per million tokens.
   const usdPerMillion = prices ? 10_000 / prices.batch_size : 0
+  const cost = prices
+    ? {
+        available: true,
+        input: prices.default.input_price * usdPerMillion,
+        output: prices.default.output_price * usdPerMillion,
+        cache: {
+          read: prices.default.cache_price * usdPerMillion,
+          // `/models` exposes cached-input reads only; per-request billing accounts for cache writes.
+          write: 0,
+        },
+        experimentalOver200K: prev?.cost.experimentalOver200K,
+      }
+    : (prev?.cost ?? {
+        available: false,
+        input: 0,
+        output: 0,
+        cache: { read: 0, write: 0 },
+      })
 
   const model: Model = {
     id: key,
@@ -130,15 +148,7 @@ function build(key: string, remote: SelectableItem, url: string, prev?: Model): 
     // existing wins
     family: prev?.family ?? remote.capabilities.family,
     name: prev?.name ?? remote.name,
-    cost: {
-      input: (prices?.default.input_price ?? 0) * usdPerMillion,
-      output: (prices?.default.output_price ?? 0) * usdPerMillion,
-      cache: {
-        read: (prices?.default.cache_price ?? 0) * usdPerMillion,
-        // `/models` exposes cached-input reads only; per-request billing accounts for cache writes.
-        write: 0,
-      },
-    },
+    cost,
     options: prev?.options ?? {},
     headers: prev?.headers ?? {},
     release_date:

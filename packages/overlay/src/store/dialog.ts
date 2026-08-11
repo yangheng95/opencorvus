@@ -15,6 +15,7 @@ export type ConfigDialogTab =
   | "memory"
   | "network"
   | "providers"
+  | "usage"
   | "scheduled"
   | "archive"
   | "about"
@@ -63,6 +64,11 @@ export const CONFIG_SECTIONS: readonly ConfigSection[] = [
   { id: "channel", labelKey: "channel.title" },
   { id: "memory", labelKey: "memory.title" },
   { id: "network", labelKey: "network.title" },
+  {
+    id: "usage",
+    labelKey: "usage.title",
+    searchTerms: ["usage", "tokens", "cost", "billing", "statistics", "用量", "令牌", "计费", "统计"],
+  },
   { id: "archive", labelKey: "archive.title" },
   { id: "about", labelKey: "about.title" },
 ]
