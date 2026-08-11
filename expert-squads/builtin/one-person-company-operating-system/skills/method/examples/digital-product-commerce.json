@@ -1,0 +1,313 @@
+{
+  "schema_version": "2020-12/opc-1",
+  "profile_id": "opc-digital-product-commerce-commercial",
+  "profile_version": "2026.08.11.1",
+  "business_model": "digital_product_commerce",
+  "company": {
+    "legal_name": "OPERATOR_SUPPLIED_LEGAL_NAME",
+    "trading_name": "OPERATOR_SUPPLIED_STORE_NAME",
+    "entity_type": "OPERATOR_AND_COUNSEL_SUPPLIED_ENTITY_TYPE",
+    "registration_jurisdictions": ["OPERATOR_SUPPLIED_REGISTRATION_JURISDICTION"],
+    "tax_jurisdictions": ["OPERATOR_AND_TAX_PROFESSIONAL_SUPPLIED_TAX_JURISDICTION"],
+    "tax_professional_ref": "qualified-review/tax-professional"
+  },
+  "owner": {
+    "owner_id": "owner/primary",
+    "approval_identity_ref": "identity/owner-explicit-approval",
+    "self_review": true,
+    "qualified_reviewer_refs": [
+      "qualified-review/consumer-commerce-legal",
+      "qualified-review/accounting-tax",
+      "qualified-review/privacy-rights"
+    ]
+  },
+  "localization": {
+    "time_zone": "Asia/Shanghai",
+    "tzdb_version": "OPERATOR_SUPPLIED_TZDB_VERSION",
+    "functional_currency": "CNY",
+    "display_currencies": ["CNY", "USD"],
+    "locale": "zh-CN",
+    "fiscal_year_start": "01-01"
+  },
+  "operating_state": "validation",
+  "review_cadence": { "frequency": "weekly", "day": "Monday", "local_time": "10:00", "owner": "owner/primary" },
+  "data_sources": [
+    {
+      "source_id": "catalog-rights",
+      "system_of_record": "catalog-sku-and-rights-ledger",
+      "locator": "operator-controlled/catalog/rights",
+      "connector_or_import": "read-only-versioned-export",
+      "auth_ref": "approval-ref/catalog-export",
+      "refresh_cadence": "daily",
+      "freshness_state": "unknown",
+      "reconciliation_key": "sku_id+offer_version+rights_id",
+      "data_class": "confidential-product-rights",
+      "owner": "owner/primary"
+    },
+    {
+      "source_id": "storefront-orders",
+      "system_of_record": "storefront-order-ledger",
+      "locator": "operator-controlled/commerce/orders",
+      "connector_or_import": "read-only-versioned-export",
+      "auth_ref": "secret-ref/storefront-readonly",
+      "refresh_cadence": "daily",
+      "freshness_state": "unknown",
+      "reconciliation_key": "order_id+customer_id",
+      "data_class": "restricted-customer-commercial",
+      "owner": "owner/primary"
+    },
+    {
+      "source_id": "payment-refund-events",
+      "system_of_record": "payment-provider-event-ledger",
+      "locator": "operator-controlled/commerce/payments",
+      "connector_or_import": "read-only-versioned-export",
+      "auth_ref": "secret-ref/payments-readonly",
+      "refresh_cadence": "daily",
+      "freshness_state": "unknown",
+      "reconciliation_key": "order_id+payment_id+refund_id",
+      "data_class": "highly-restricted-financial",
+      "owner": "owner/primary"
+    },
+    {
+      "source_id": "fulfillment-support",
+      "system_of_record": "entitlement-download-fulfillment-inventory-return-support-ledger",
+      "locator": "operator-controlled/commerce/fulfillment",
+      "connector_or_import": "read-only-snapshot",
+      "auth_ref": "secret-ref/fulfillment-readonly",
+      "refresh_cadence": "daily",
+      "freshness_state": "unknown",
+      "reconciliation_key": "order_id+fulfillment_or_entitlement_id",
+      "data_class": "restricted-customer-operating",
+      "owner": "owner/primary"
+    },
+    {
+      "source_id": "accounting-tax-configuration",
+      "system_of_record": "accounting-export-and-qualified-tax-configuration",
+      "locator": "operator-controlled/finance/tax-configuration",
+      "connector_or_import": "manual-signed-export",
+      "auth_ref": "approval-ref/finance-tax-export",
+      "refresh_cadence": "weekly",
+      "freshness_state": "unknown",
+      "reconciliation_key": "order_id+payment_id+currency",
+      "data_class": "highly-restricted-financial-tax",
+      "owner": "owner/primary"
+    }
+  ],
+  "secret_refs": [
+    {
+      "provider": "operator-secret-manager",
+      "alias": "storefront-readonly",
+      "scope": "orders-export-readonly",
+      "owner": "owner/primary"
+    },
+    {
+      "provider": "operator-secret-manager",
+      "alias": "payments-readonly",
+      "scope": "payment-event-export-readonly",
+      "owner": "owner/primary"
+    },
+    {
+      "provider": "operator-secret-manager",
+      "alias": "fulfillment-readonly",
+      "scope": "fulfillment-support-export-readonly",
+      "owner": "owner/primary"
+    }
+  ],
+  "offer_portfolio": [
+    {
+      "offer_id": "digital-product-primary",
+      "version": "OPERATOR_SUPPLIED_CATALOG_VERSION",
+      "customer_definition": "OPERATOR_SUPPLIED_BUYER_DEFINITION",
+      "channel_ids": ["owned-storefront", "approved-marketplace"],
+      "price_currency": "CNY",
+      "approval_required": true
+    }
+  ],
+  "customer_channels": [
+    {
+      "channel_id": "owned-storefront",
+      "channel_type": "owned-commerce",
+      "system_of_record_ref": "storefront-orders",
+      "owner": "owner/primary"
+    },
+    {
+      "channel_id": "approved-marketplace",
+      "channel_type": "third-party-marketplace",
+      "system_of_record_ref": "storefront-orders",
+      "owner": "owner/primary"
+    }
+  ],
+  "pipeline": {
+    "unit": "reconciled-order",
+    "stage_definitions": [
+      {
+        "stage_id": "placed",
+        "entry_rule": "Order exists in the frozen storefront source with an eligible catalog version",
+        "denominator": "eligible order records in the frozen window"
+      },
+      {
+        "stage_id": "paid",
+        "entry_rule": "Order and payment events reconcile without unresolved dispute or refund",
+        "denominator": "placed orders eligible for payment"
+      },
+      {
+        "stage_id": "fulfilled",
+        "entry_rule": "Paid order and exact entitlement/download/shipment evidence reconcile",
+        "denominator": "paid orders eligible for the configured channel mode"
+      }
+    ],
+    "source_id": "storefront-orders",
+    "owner": "owner/primary"
+  },
+  "delivery_capacity": {
+    "delivery_unit": "reconciled-entitlement-download-or-fulfillment-unit",
+    "available_capacity_formula": "available_digital_or_physical_units minus reserved_and_exception_units with channel_mode recorded",
+    "source_id": "fulfillment-support",
+    "owner": "owner/primary",
+    "uncertainty": "Channel mode, vendor, inventory, download, license-key, return, and support states may differ"
+  },
+  "cash_controls": {
+    "system_of_record_refs": ["storefront-orders", "payment-refund-events", "accounting-tax-configuration"],
+    "reconciliation_key": "order_id+payment_id+refund_id+currency",
+    "functional_currency": "CNY",
+    "owner": "owner/primary",
+    "professional_review_ref": "qualified-review/accounting-tax"
+  },
+  "metric_definitions": [
+    {
+      "metric_id": "reconciled-order-revenue",
+      "business_definition": "Order amount supported by catalog, payment, refund/dispute, fulfillment, currency, and cutoff evidence",
+      "formula_version": "opc-1",
+      "numerator": "sum of reconciled order amounts",
+      "denominator": "one frozen reporting period",
+      "unit": "CNY/period",
+      "source_id": "payment-refund-events",
+      "cutoff": "operator-selected ISO-8601 cutoff",
+      "cadence": "weekly",
+      "owner": "owner/primary",
+      "uncertainty": "Excludes unresolved refunds, disputes, taxes, fees, conversion, and outcome-unknown events"
+    },
+    {
+      "metric_id": "delivery-success",
+      "business_definition": "Eligible paid orders with reconciled entitlement/download/fulfillment evidence",
+      "formula_version": "opc-1",
+      "numerator": "unique reconciled fulfilled orders",
+      "denominator": "unique eligible paid orders",
+      "unit": "ratio",
+      "source_id": "fulfillment-support",
+      "cutoff": "operator-selected ISO-8601 cutoff",
+      "cadence": "weekly",
+      "owner": "owner/primary",
+      "uncertainty": "Depends on channel-mode state definition and reporting lag"
+    },
+    {
+      "metric_id": "support-burden",
+      "business_definition": "Open support/return exceptions per reconciled order population",
+      "formula_version": "opc-1",
+      "numerator": "open deduplicated support and return exceptions",
+      "denominator": "reconciled orders in the same cohort/window",
+      "unit": "exceptions/order",
+      "source_id": "fulfillment-support",
+      "cutoff": "operator-selected ISO-8601 cutoff",
+      "cadence": "weekly",
+      "owner": "owner/primary",
+      "uncertainty": "Contact deduplication and order linkage may be incomplete"
+    }
+  ],
+  "workflows": [
+    {
+      "workflow_id": "catalog-rights-publication-checklist",
+      "version": "1",
+      "automation_mode": "observe_and_draft",
+      "external_write": false,
+      "dry_run": true,
+      "auto_approve": false,
+      "auto_retry": false,
+      "idempotency_evidence": "Local checklist draft only",
+      "budget_limit_ref": "owner-policy/analysis-budget",
+      "approval_action_class": "catalog-publication-promotion-price",
+      "owner": "owner/primary"
+    },
+    {
+      "workflow_id": "order-payment-fulfillment-reconciliation",
+      "version": "1",
+      "automation_mode": "observe_and_draft",
+      "external_write": false,
+      "dry_run": true,
+      "auto_approve": false,
+      "auto_retry": false,
+      "idempotency_evidence": "Read-only three-source reconciliation; no charge, refund, entitlement, download, or shipment",
+      "budget_limit_ref": "owner-policy/analysis-budget",
+      "approval_action_class": "payment-refund-chargeback",
+      "owner": "owner/primary"
+    }
+  ],
+  "approval_policy": [
+    {
+      "action_class": "catalog-publication-promotion-price",
+      "owner_approval_required": true,
+      "qualified_external_review_required": false,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "rights-license-consumer-terms-privacy",
+      "owner_approval_required": true,
+      "qualified_external_review_required": true,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "payment-refund-chargeback",
+      "owner_approval_required": true,
+      "qualified_external_review_required": false,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "vendor-purchase-fulfillment-return-exception",
+      "owner_approval_required": true,
+      "qualified_external_review_required": false,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "tax-configuration-filing-customer-data-action",
+      "owner_approval_required": true,
+      "qualified_external_review_required": true,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    }
+  ],
+  "observability": {
+    "signals": ["logs", "metrics", "traces", "business_events"],
+    "event_schema": "opc-observability-event-v1",
+    "correlation_id_required": true,
+    "input_digest_required": true,
+    "approval_ref_required": true,
+    "external_effect_required": true,
+    "outcome_unknown_supported": true,
+    "owner": "owner/primary"
+  },
+  "retention_policy_ref": "operator-and-qualified-professional-controlled/commerce-customer-finance-retention-policy",
+  "continuity": {
+    "owner": "owner/primary",
+    "critical_source_refs": ["storefront-orders", "payment-refund-events", "fulfillment-support"],
+    "recovery_evidence_ref": "operator-controlled/continuity/commerce-recovery-evidence",
+    "manual_workaround_ref": "operator-controlled/continuity/order-payment-fulfillment-reconciliation",
+    "last_reviewed": "2026-08-11",
+    "uncertainty": "Provider, marketplace, vendor, and fulfillment recovery require current evidence"
+  },
+  "uncertainty": [
+    "Channel mode, provider states, tax configuration, rights, returns, inventory, and fulfillment are source- and jurisdiction-dependent"
+  ],
+  "applicability": [
+    "Owner-operated digital-product or commerce business with controlled catalog, order, payment, fulfillment, support, and finance evidence"
+  ],
+  "stop_conditions": [
+    "Missing catalog, rights, order, payment, fulfillment, customer, or tax-configuration evidence",
+    "Unknown jurisdiction or approval owner",
+    "Unreconciled charge, refund, entitlement, download, shipment, return, or customer-data outcome",
+    "Request for live publication, charge, refund, purchase, fulfillment, deletion, or contact"
+  ]
+}

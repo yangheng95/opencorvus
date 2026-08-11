@@ -1,0 +1,9 @@
+# Service Reliability Incident Operations
+
+Service Reliability Incident Operations prepares a bounded reliability review through four independent views: service-level indicators/objectives and error budget, observability and alert quality, incident coordination and handoff, and post-incident learning and actions. `service-reliability-incident-review-owner` is the explicit join and waits for all four versioned branch reports.
+
+Every service, dependency, service-level indicator, service-level objective, measurement window, telemetry signal, query, alert, incident, event, impact claim, role, handoff, change, contributing factor, hypothesis and action retains stable identifiers, timestamps/time zone, quantity/unit/denominator, source/configuration/query/version/date, cutoff, owner, qualified reviewer, applicability, assumptions, uncertainty, status, `decision_not_made`, `outcome_unknown` and stop conditions. Observation, interpretation, hypothesis, decision and external effect remain separate.
+
+The package is a bounded adaptation of wshobson's MIT-licensed incident runbook, postmortem and on-call handoff Skills. It retains structured incident evidence, prerequisites and verification, explicit roles, handoff context, blameless learning, evidence-backed contributing factors and owned actions. It removes hard-coded severities and time limits, production commands, paging/chat integrations, automatic declaration or mitigation, external messaging and unsupported root-cause claims.
+
+The package never declares incident severity, pages responders, runs production commands, changes infrastructure or code, sends internal or external updates, assigns blame, attributes a security incident, declares root cause, approves action closure, or replaces the incident commander, service owner, security authority or change approver.

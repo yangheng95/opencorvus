@@ -1,0 +1,9 @@
+# Cloud FinOps Cost Governance
+
+Cloud FinOps Cost Governance prepares a bounded technology-cost review through four independent views: cost/usage/billing quality, allocation/unit economics, forecast/commitment/optimization, and anomaly/governance/value. `cloud-finops-cost-governance-review-owner` is the explicit join and waits for all four versioned branch reports.
+
+Every billing source, account, subscription, invoice, charge, usage quantity, allocation rule, business unit, product metric, forecast, commitment, candidate action and anomaly retains stable identity, currency and quantity units, billing/service/usage dates, source/schema/price/contract versions, cutoff, owner, qualified reviewer, applicability, assumptions, uncertainty, status, `decision_not_made`, `outcome_unknown` and stop conditions. Billed, effective, amortized, net and allocated costs remain separate until an authorized rule reconciles them. Unit economics always retain numerator, denominator, cohort, formula version and measurement window.
+
+The package is a bounded adaptation of OptimNow's Cloud FinOps Skill under Creative Commons Attribution-ShareAlike 4.0. It retains visibility before optimization, normalized evidence, allocation, value linkage, unit economics, commitment evidence, anomaly evidence and progressive review. It removes vendor price snapshots, dated product mechanics, maturity percentages, fixed targets, scripts, Model Context Protocol actions, automated optimization and purchase/deployment behavior. See the package-local provenance and exact license.
+
+The package never buys or exchanges commitments, resizes or deletes resources, deploys policy, changes tags, sets a budget, posts an accounting entry, determines tax treatment, submits a vendor request, contacts a provider, approves savings, or represents an estimate as realized value.

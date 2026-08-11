@@ -1,0 +1,287 @@
+{
+  "schema_version": "2020-12/opc-1",
+  "profile_id": "opc-consulting-commercial",
+  "profile_version": "2026.08.11.1",
+  "business_model": "consulting",
+  "company": {
+    "legal_name": "OPERATOR_SUPPLIED_LEGAL_NAME",
+    "trading_name": "OPERATOR_SUPPLIED_STUDIO_NAME",
+    "entity_type": "OPERATOR_AND_COUNSEL_SUPPLIED_ENTITY_TYPE",
+    "registration_jurisdictions": ["OPERATOR_SUPPLIED_REGISTRATION_JURISDICTION"],
+    "tax_jurisdictions": ["OPERATOR_AND_TAX_PROFESSIONAL_SUPPLIED_TAX_JURISDICTION"],
+    "tax_professional_ref": "qualified-review/tax-professional"
+  },
+  "owner": {
+    "owner_id": "owner/primary",
+    "approval_identity_ref": "identity/owner-explicit-approval",
+    "self_review": true,
+    "qualified_reviewer_refs": [
+      "qualified-review/legal-contract",
+      "qualified-review/accounting-tax",
+      "qualified-review/privacy"
+    ]
+  },
+  "localization": {
+    "time_zone": "Asia/Shanghai",
+    "tzdb_version": "OPERATOR_SUPPLIED_TZDB_VERSION",
+    "functional_currency": "CNY",
+    "display_currencies": ["CNY", "USD"],
+    "locale": "zh-CN",
+    "fiscal_year_start": "01-01"
+  },
+  "operating_state": "operating",
+  "review_cadence": { "frequency": "weekly", "day": "Friday", "local_time": "16:00", "owner": "owner/primary" },
+  "data_sources": [
+    {
+      "source_id": "opportunity-register",
+      "system_of_record": "owner-controlled-opportunity-register",
+      "locator": "operator-controlled/sales/opportunities",
+      "connector_or_import": "read-only-versioned-export",
+      "auth_ref": "approval-ref/opportunity-export",
+      "refresh_cadence": "weekly",
+      "freshness_state": "unknown",
+      "reconciliation_key": "client_id+opportunity_id",
+      "data_class": "restricted-commercial",
+      "owner": "owner/primary"
+    },
+    {
+      "source_id": "contract-deliverable-register",
+      "system_of_record": "signed-contract-and-deliverable-store",
+      "locator": "operator-controlled/delivery/contracts",
+      "connector_or_import": "manual-signed-export",
+      "auth_ref": "approval-ref/contract-export",
+      "refresh_cadence": "weekly",
+      "freshness_state": "unknown",
+      "reconciliation_key": "contract_id+deliverable_id",
+      "data_class": "confidential-client",
+      "owner": "owner/primary"
+    },
+    {
+      "source_id": "capacity-time-evidence",
+      "system_of_record": "owner-capacity-and-time-register",
+      "locator": "operator-controlled/delivery/capacity",
+      "connector_or_import": "read-only-snapshot",
+      "auth_ref": "approval-ref/capacity-export",
+      "refresh_cadence": "weekly",
+      "freshness_state": "unknown",
+      "reconciliation_key": "project_id+period",
+      "data_class": "restricted-operating",
+      "owner": "owner/primary"
+    },
+    {
+      "source_id": "invoice-payment-expense",
+      "system_of_record": "invoice-bank-accounting-controlled-exports",
+      "locator": "operator-controlled/finance/reconciliation",
+      "connector_or_import": "manual-signed-export",
+      "auth_ref": "approval-ref/finance-export",
+      "refresh_cadence": "weekly",
+      "freshness_state": "unknown",
+      "reconciliation_key": "invoice_id+payment_id+currency",
+      "data_class": "highly-restricted-financial",
+      "owner": "owner/primary"
+    }
+  ],
+  "secret_refs": [
+    {
+      "provider": "operator-secret-manager",
+      "alias": "client-register-readonly",
+      "scope": "opportunity-and-contract-export-readonly",
+      "owner": "owner/primary"
+    }
+  ],
+  "offer_portfolio": [
+    {
+      "offer_id": "consulting-primary-engagement",
+      "version": "OPERATOR_SUPPLIED_OFFER_VERSION",
+      "customer_definition": "OPERATOR_SUPPLIED_QUALIFIED_CLIENT_PROFILE",
+      "channel_ids": ["referral", "owner-led-discovery"],
+      "price_currency": "CNY",
+      "approval_required": true
+    }
+  ],
+  "customer_channels": [
+    {
+      "channel_id": "referral",
+      "channel_type": "trusted-referral",
+      "system_of_record_ref": "opportunity-register",
+      "owner": "owner/primary"
+    },
+    {
+      "channel_id": "owner-led-discovery",
+      "channel_type": "direct-discovery",
+      "system_of_record_ref": "opportunity-register",
+      "owner": "owner/primary"
+    }
+  ],
+  "pipeline": {
+    "unit": "qualified-engagement",
+    "stage_definitions": [
+      {
+        "stage_id": "qualified",
+        "entry_rule": "Matches operator-controlled fit, authority, timing, and evidence definition",
+        "denominator": "all assessed opportunities in the frozen window"
+      },
+      {
+        "stage_id": "proposal-authorized",
+        "entry_rule": "Owner approved the exact proposal version for release",
+        "denominator": "qualified opportunities with complete scope evidence"
+      },
+      {
+        "stage_id": "signed",
+        "entry_rule": "Controlled signed-contract source contains the exact approved version",
+        "denominator": "authorized proposals with complete decision window"
+      }
+    ],
+    "source_id": "opportunity-register",
+    "owner": "owner/primary"
+  },
+  "delivery_capacity": {
+    "delivery_unit": "owner-delivery-hour",
+    "available_capacity_formula": "review_period_owner_hours minus nonworking_time minus signed_commitments minus reserved_recovery_capacity",
+    "source_id": "capacity-time-evidence",
+    "owner": "owner/primary",
+    "uncertainty": "Knowledge-work estimates and client dependencies produce a range, not a promise"
+  },
+  "cash_controls": {
+    "system_of_record_refs": ["contract-deliverable-register", "invoice-payment-expense"],
+    "reconciliation_key": "contract_id+invoice_id+payment_id+currency",
+    "functional_currency": "CNY",
+    "owner": "owner/primary",
+    "professional_review_ref": "qualified-review/accounting-tax"
+  },
+  "metric_definitions": [
+    {
+      "metric_id": "qualified-pipeline-value",
+      "business_definition": "Owner-supplied proposal value for qualified opportunities with complete scope and probability kept separate",
+      "formula_version": "opc-1",
+      "numerator": "sum of source proposal amounts",
+      "denominator": "one frozen pipeline population",
+      "unit": "CNY",
+      "source_id": "opportunity-register",
+      "cutoff": "operator-selected ISO-8601 cutoff",
+      "cadence": "weekly",
+      "owner": "owner/primary",
+      "uncertainty": "Not revenue and not probability-weighted unless a supplied method is separately shown"
+    },
+    {
+      "metric_id": "booked-capacity",
+      "business_definition": "Approved owner hours reserved by signed active scope",
+      "formula_version": "opc-1",
+      "numerator": "signed-scope reserved owner hours",
+      "denominator": "available owner hours in the same window",
+      "unit": "ratio",
+      "source_id": "capacity-time-evidence",
+      "cutoff": "operator-selected ISO-8601 cutoff",
+      "cadence": "weekly",
+      "owner": "owner/primary",
+      "uncertainty": "Scope change and client dependency timing may alter demand"
+    },
+    {
+      "metric_id": "invoice-aging-evidence",
+      "business_definition": "Open invoice amount grouped by operator-controlled age bands",
+      "formula_version": "opc-1",
+      "numerator": "open reconciled invoice amount",
+      "denominator": "open reconciled invoice population",
+      "unit": "CNY",
+      "source_id": "invoice-payment-expense",
+      "cutoff": "operator-selected ISO-8601 cutoff",
+      "cadence": "weekly",
+      "owner": "owner/primary",
+      "uncertainty": "Disputes, credits, collections, and recognition remain separate"
+    }
+  ],
+  "workflows": [
+    {
+      "workflow_id": "call-brief-and-scope-diff",
+      "version": "1",
+      "automation_mode": "observe_and_draft",
+      "external_write": false,
+      "dry_run": true,
+      "auto_approve": false,
+      "auto_retry": false,
+      "idempotency_evidence": "Versioned local draft only",
+      "budget_limit_ref": "owner-policy/analysis-budget",
+      "approval_action_class": "proposal-release-and-scope-price-change",
+      "owner": "owner/primary"
+    },
+    {
+      "workflow_id": "invoice-exception-draft",
+      "version": "1",
+      "automation_mode": "observe_and_draft",
+      "external_write": false,
+      "dry_run": true,
+      "auto_approve": false,
+      "auto_retry": false,
+      "idempotency_evidence": "Read-only reconciliation and local exception draft",
+      "budget_limit_ref": "owner-policy/analysis-budget",
+      "approval_action_class": "invoice-payment-refund-and-tax-filing",
+      "owner": "owner/primary"
+    }
+  ],
+  "approval_policy": [
+    {
+      "action_class": "proposal-release-and-scope-price-change",
+      "owner_approval_required": true,
+      "qualified_external_review_required": false,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "contract-signature-and-legal-terms",
+      "owner_approval_required": true,
+      "qualified_external_review_required": true,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "subcontractor-engagement",
+      "owner_approval_required": true,
+      "qualified_external_review_required": true,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "deliverable-release-and-client-commitment",
+      "owner_approval_required": true,
+      "qualified_external_review_required": false,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    },
+    {
+      "action_class": "invoice-payment-refund-and-tax-filing",
+      "owner_approval_required": true,
+      "qualified_external_review_required": true,
+      "decision_not_made": true,
+      "owner": "owner/primary"
+    }
+  ],
+  "observability": {
+    "signals": ["logs", "metrics", "business_events"],
+    "event_schema": "opc-observability-event-v1",
+    "correlation_id_required": true,
+    "input_digest_required": true,
+    "approval_ref_required": true,
+    "external_effect_required": true,
+    "outcome_unknown_supported": true,
+    "owner": "owner/primary"
+  },
+  "retention_policy_ref": "operator-and-qualified-professional-controlled/client-record-retention-policy",
+  "continuity": {
+    "owner": "owner/primary",
+    "critical_source_refs": ["contract-deliverable-register", "capacity-time-evidence", "invoice-payment-expense"],
+    "recovery_evidence_ref": "operator-controlled/continuity/client-delivery-recovery-evidence",
+    "manual_workaround_ref": "operator-controlled/continuity/client-handoff-plan",
+    "last_reviewed": "2026-08-11",
+    "uncertainty": "Substitute capacity and client approval dependencies require explicit evidence"
+  },
+  "uncertainty": ["No proposal, capacity, contribution, collection, or delivery threshold is universal"],
+  "applicability": [
+    "Owner-operated consulting or professional-services studio with controlled contract and finance records"
+  ],
+  "stop_conditions": [
+    "Missing signed scope or client authority",
+    "Unknown jurisdiction or professional reviewer",
+    "Unreconciled invoice, payment, refund, deliverable, or client-contact outcome",
+    "Request to send, sign, invoice, promise, release, or contact"
+  ]
+}

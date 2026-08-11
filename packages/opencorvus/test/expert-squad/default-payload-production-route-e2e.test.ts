@@ -39,8 +39,8 @@ test("full production HTTP bootstrap installs every repository-hosted Expert Squ
     }
 
     expect(result).toEqual({
-      payloadCount: 85,
-      installedByDefault: 85,
+      payloadCount: 95,
+      installedByDefault: 95,
       requestCount: 10,
       activeSquadID: "base",
       removedID: "academic-paper-review",
@@ -52,4 +52,4 @@ test("full production HTTP bootstrap installs every repository-hosted Expert Squ
   } finally {
     await fs.rm(isolatedRoot, { recursive: true, force: true })
   }
-}, 180_000)
+}, 240_000)
