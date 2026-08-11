@@ -1,6 +1,4 @@
-import { createMemo, createSignal, For, Show } from "solid-js"
-import type { ProductPillar } from "@opencorvus-ai/transport-protocol"
-import type { ExpertSquadOption } from "../services/expert-squad"
+import { createEffect, createMemo, createSignal, For, Show } from "solid-js"
 import { MISSION_BOARD_LANES, type MissionBoardLane, type MissionRecord } from "../services/mission"
 import { missionBoardStore, reloadMissionBoard } from "../services/mission-board"
 import { projectDirectoryLabel } from "../utils/project-directory"
@@ -22,15 +20,12 @@ type ProjectOption = { value: string; label: string }
 export interface MissionBoardProps {
   projectDirectories: readonly string[]
   defaultProjectDirectory: string
-  productPillar: ProductPillar
-  expertSquads: readonly ExpertSquadOption[]
-  activeExpertSquadID: string
-  onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
   onInstallMoreExpertSquads?: (projectDirectory: string) => void
   onOpenMission: (mission: MissionRecord) => void | Promise<void>
   onCreateManual: (input: MissionManualCreateRequest) => Promise<void>
   onCreateWithAI: (input: MissionCreateRequest) => Promise<void>
   onDispatchMission: (mission: MissionRecord) => Promise<void>
+  onConfirmDeleteMission: (mission: MissionRecord) => Promise<boolean>
   onDeleteMission: (mission: MissionRecord) => Promise<boolean>
 }
 
@@ -67,6 +62,7 @@ function MissionBoardCard(props: {
   mission: MissionRecord
   dispatching: boolean
   deleting: boolean
+  actionBusy: boolean
   onOpen: () => void
   onDispatch: () => void
   onDelete: () => void
@@ -97,7 +93,7 @@ function MissionBoardCard(props: {
           class="mission-board-card__open"
           title={props.mission.title}
           aria-label={t("mission_board.open_mission", { title: props.mission.title })}
-          disabled={props.deleting}
+          disabled={props.actionBusy}
           onClick={props.onOpen}
         >
           <span class="mission-board-card__identity">
@@ -173,7 +169,7 @@ function MissionBoardCard(props: {
               size="sm"
               tone="accent"
               data-ui="mission-board-dispatch"
-              disabled={props.dispatching || props.deleting}
+              disabled={props.actionBusy}
               onClick={props.onDispatch}
             >
               <Icon name={props.dispatching ? "loading" : "send"} size="compact" />
@@ -187,7 +183,7 @@ function MissionBoardCard(props: {
           <ContextMenu.Item
             class="mission-board-card-menu__delete"
             data-ui="mission-board-card-delete"
-            disabled={props.deleting}
+            disabled={props.actionBusy}
             onSelect={props.onDelete}
           >
             <Icon name={props.deleting ? "loading" : "delete"} size="compact" />
@@ -203,8 +199,11 @@ export function MissionBoard(props: MissionBoardProps) {
   const [search, setSearch] = createSignal("")
   const [projectDirectory, setProjectDirectory] = createSignal("")
   const [createOpen, setCreateOpen] = createSignal(false)
-  const [dispatchingMissionID, setDispatchingMissionID] = createSignal("")
-  const [deletingMissionID, setDeletingMissionID] = createSignal("")
+  const [pendingAction, setPendingAction] = createSignal<{ kind: "dispatch" | "delete"; missionID: string } | null>(
+    null,
+  )
+  const [actionError, setActionError] = createSignal("")
+  let actionGeneration = 0
 
   const projectOptions = createMemo<ProjectOption[]>(() => {
     const directories = [...new Set(missionBoardStore.records.map((mission) => mission.directory))].sort(
@@ -221,6 +220,10 @@ export function MissionBoard(props: MissionBoardProps) {
   const selectedProject = createMemo(
     () => projectOptions().find((option) => option.value === projectDirectory()) ?? projectOptions()[0] ?? null,
   )
+  createEffect(() => {
+    const directory = projectDirectory()
+    if (directory && !projectOptions().some((option) => option.value === directory)) setProjectDirectory("")
+  })
   const visibleMissions = createMemo(() => {
     const query = search().trim().toLocaleLowerCase()
     const directory = projectDirectory()
@@ -238,21 +241,41 @@ export function MissionBoard(props: MissionBoardProps) {
   )
 
   async function dispatchMission(mission: MissionRecord): Promise<void> {
-    setDispatchingMissionID(mission.missionID)
+    if (pendingAction()) return
+    const generation = ++actionGeneration
+    setActionError("")
+    setPendingAction({ kind: "dispatch", missionID: mission.missionID })
     try {
       await props.onDispatchMission(mission)
+    } catch (nextError) {
+      if (generation === actionGeneration) {
+        setActionError(nextError instanceof Error ? nextError.message : String(nextError))
+      }
     } finally {
-      setDispatchingMissionID("")
+      if (generation === actionGeneration) setPendingAction(null)
     }
   }
 
   async function deleteMission(mission: MissionRecord): Promise<void> {
-    if (deletingMissionID()) return
-    setDeletingMissionID(mission.missionID)
+    if (pendingAction()) return
+    setActionError("")
+    try {
+      if (!(await props.onConfirmDeleteMission(mission))) return
+    } catch (nextError) {
+      setActionError(nextError instanceof Error ? nextError.message : String(nextError))
+      return
+    }
+    if (pendingAction()) return
+    const generation = ++actionGeneration
+    setPendingAction({ kind: "delete", missionID: mission.missionID })
     try {
       await props.onDeleteMission(mission)
+    } catch (nextError) {
+      if (generation === actionGeneration) {
+        setActionError(nextError instanceof Error ? nextError.message : String(nextError))
+      }
     } finally {
-      setDeletingMissionID("")
+      if (generation === actionGeneration) setPendingAction(null)
     }
   }
 
@@ -264,7 +287,9 @@ export function MissionBoard(props: MissionBoardProps) {
             <Icon name="tasks" size="medium" />
           </span>
           <div>
-            <h1 id="missionBoardTitle">{t("mission_board.title")}</h1>
+            <h1 id="missionBoardTitle" tabIndex={-1}>
+              {t("mission_board.title")}
+            </h1>
             <p>{t("mission_board.subtitle")}</p>
           </div>
         </div>
@@ -275,6 +300,7 @@ export function MissionBoard(props: MissionBoardProps) {
             size="sm"
             tone="accent"
             data-ui="mission-board-create"
+            disabled={Boolean(pendingAction())}
             onClick={() => setCreateOpen(true)}
           >
             <Icon name="plus" size="compact" />
@@ -328,6 +354,18 @@ export function MissionBoard(props: MissionBoardProps) {
         </div>
       </Show>
 
+      <Show when={actionError()}>
+        <div class="mission-board__error" role="alert">
+          <span>
+            <strong>{t("mission_board.action_failed")}</strong>
+            <small>{actionError()}</small>
+          </span>
+          <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => setActionError("")}>
+            {t("common.dismiss")}
+          </Button>
+        </div>
+      </Show>
+
       <Show
         when={!missionBoardStore.loading || missionBoardStore.records.length > 0}
         fallback={
@@ -370,8 +408,13 @@ export function MissionBoard(props: MissionBoardProps) {
                       {(mission) => (
                         <MissionBoardCard
                           mission={mission}
-                          dispatching={dispatchingMissionID() === mission.missionID}
-                          deleting={deletingMissionID() === mission.missionID}
+                          dispatching={
+                            pendingAction()?.kind === "dispatch" && pendingAction()?.missionID === mission.missionID
+                          }
+                          deleting={
+                            pendingAction()?.kind === "delete" && pendingAction()?.missionID === mission.missionID
+                          }
+                          actionBusy={Boolean(pendingAction())}
                           onOpen={() => void props.onOpenMission(mission)}
                           onDispatch={() => void dispatchMission(mission)}
                           onDelete={() => void deleteMission(mission)}
@@ -389,10 +432,6 @@ export function MissionBoard(props: MissionBoardProps) {
         open={createOpen()}
         projectDirectories={props.projectDirectories}
         defaultProjectDirectory={props.defaultProjectDirectory}
-        productPillar={props.productPillar}
-        expertSquads={props.expertSquads}
-        activeExpertSquadID={props.activeExpertSquadID}
-        onExpertSquadQuery={props.onExpertSquadQuery}
         onInstallMoreExpertSquads={props.onInstallMoreExpertSquads}
         onClose={() => setCreateOpen(false)}
         onCreateManual={props.onCreateManual}
