@@ -1,8 +1,11 @@
 ---
 import { Image } from "astro:assets"
 import ConceptFlowEn from "../assets/lander/opencorvus-concept-flow-en.gif"
+import ConceptFlowMobileEn from "../assets/lander/opencorvus-concept-flow-mobile-en.gif"
+import ConceptFlowMobileZh from "../assets/lander/opencorvus-concept-flow-mobile-zh.gif"
 import ConceptFlowZh from "../assets/lander/opencorvus-concept-flow-zh.gif"
 import ConceptMap from "../assets/lander/opencorvus-concept-map.png"
+import ConceptMobile from "../assets/lander/opencorvus-concept-mobile.png"
 import ExpertSquadCatalog from "../assets/lander/expert-squad-catalog.png"
 import ExpertSquadInstalled from "../assets/lander/expert-squad-installed.png"
 import RuntimeDesktopContinuity from "../assets/lander/runtime-desktop-continuity-agent-v2.png"
@@ -17,6 +20,7 @@ const locale: LandingLocale = lang === "zh-CN" ? "zh-cn" : "root"
 const content = landingContent[locale]
 const languageHref = publicPath(locale === "zh-cn" ? "root" : "zh-cn")
 const conceptAnimation = locale === "zh-cn" ? ConceptFlowZh.src : ConceptFlowEn.src
+const conceptMobileAnimation = locale === "zh-cn" ? ConceptFlowMobileZh.src : ConceptFlowMobileEn.src
 ---
 
 <div class="public-landing">
@@ -42,19 +46,24 @@ const conceptAnimation = locale === "zh-cn" ? ConceptFlowZh.src : ConceptFlowEn.
         data-concept-flow
         data-static-src={ConceptMap.src}
         data-animation-src={conceptAnimation}
+        data-mobile-static-src={ConceptMobile.src}
+        data-mobile-animation-src={conceptMobileAnimation}
         data-play-label={content.hero.playAnimation}
         data-stop-label={content.hero.stopAnimation}
       >
         <div class="concept-flow-frame">
-          <img
-            src={ConceptMap.src}
-            width="960"
-            height="540"
-            alt={content.hero.mediaAlt}
-            loading="eager"
-            decoding="async"
-            fetchpriority="high"
-          />
+          <picture>
+            <source data-concept-flow-source media="(max-width: 720px)" srcset={ConceptMobile.src} />
+            <img
+              src={ConceptMap.src}
+              width="960"
+              height="540"
+              alt={content.hero.mediaAlt}
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </picture>
         </div>
         <div class="concept-flow-meta">
           <figcaption>{content.hero.mediaCaption}</figcaption>
@@ -170,17 +179,21 @@ const conceptAnimation = locale === "zh-cn" ? ConceptFlowZh.src : ConceptFlowEn.
 <script>
   for (const figure of document.querySelectorAll<HTMLElement>("[data-concept-flow]")) {
     const image = figure.querySelector<HTMLImageElement>("img")
+    const mobileSource = figure.querySelector<HTMLSourceElement>("[data-concept-flow-source]")
     const button = figure.querySelector<HTMLButtonElement>("button")
     const staticSrc = figure.dataset.staticSrc
     const animationSrc = figure.dataset.animationSrc
+    const mobileStaticSrc = figure.dataset.mobileStaticSrc
+    const mobileAnimationSrc = figure.dataset.mobileAnimationSrc
     const playLabel = figure.dataset.playLabel
     const stopLabel = figure.dataset.stopLabel
 
-    if (!image || !button || !staticSrc || !animationSrc || !playLabel || !stopLabel) continue
+    if (!image || !mobileSource || !button || !staticSrc || !animationSrc || !mobileStaticSrc || !mobileAnimationSrc || !playLabel || !stopLabel) continue
 
     button.addEventListener("click", () => {
       const playing = button.getAttribute("aria-pressed") === "true"
       image.src = playing ? staticSrc : animationSrc
+      mobileSource.srcset = playing ? mobileStaticSrc : mobileAnimationSrc
       button.setAttribute("aria-pressed", String(!playing))
       button.textContent = playing ? playLabel : stopLabel
     })
@@ -213,6 +226,12 @@ const conceptAnimation = locale === "zh-cn" ? ConceptFlowZh.src : ConceptFlowEn.
   .concept-flow-frame {
     aspect-ratio: 16 / 9;
     background: var(--paper);
+  }
+
+  .concept-flow-frame picture {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 
   .concept-flow img,
@@ -429,9 +448,126 @@ const conceptAnimation = locale === "zh-cn" ? ConceptFlowZh.src : ConceptFlowEn.
     color: currentColor;
     opacity: 0.72;
   }
+
+  @media (max-width: 1099px) {
+    .public-landing {
+      min-width: 0;
+      overflow: visible;
+    }
+
+    .public-landing .landing-hero,
+    .public-landing .squad-story-grid,
+    .public-landing .squad-image-stack,
+    .public-landing .runtime-boundary,
+    .public-landing .start-section {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .public-landing .landing-hero {
+      gap: 40px;
+      min-height: 0;
+      padding: 48px 0 56px;
+    }
+
+    .hero-title-line {
+      white-space: normal;
+    }
+
+    .public-landing .proof-strip,
+    .public-landing .work-mode-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .public-landing .proof-strip article,
+    .public-landing .proof-strip article:last-child {
+      min-height: 0;
+      border-right: 0;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .work-mode-grid article {
+      min-height: 0;
+    }
+
+    .work-mode-grid article > p:not(.mode-use),
+    .mode-use {
+      min-height: 0;
+    }
+
+    .mode-use {
+      margin-top: 24px;
+    }
+
+    .public-landing .squad-story-grid,
+    .public-landing .squad-image-stack,
+    .public-landing .start-section {
+      gap: 32px;
+    }
+
+    .squad-image-stack figure:last-child {
+      transform: none;
+    }
+
+    .public-landing .runtime-boundary {
+      gap: 38px;
+    }
+
+    .public-landing .runtime-facts article {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 8px;
+    }
+
+    .start-card {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .start-card span {
+      grid-row: auto;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .public-landing .concept-flow-frame {
+      aspect-ratio: 9 / 16;
+    }
+
+    .public-landing .concept-flow-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .public-landing .concept-flow-meta,
+    .public-landing .hero-actions {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .public-landing .concept-flow-meta {
+      display: grid;
+      align-items: stretch;
+      padding: 14px;
+    }
+
+    .concept-flow-toggle {
+      min-width: 44px;
+      min-height: 44px;
+    }
+
+    .public-landing .hero-actions {
+      display: grid;
+    }
+
+    .public-landing .hero-actions a {
+      width: 100%;
+    }
+  }
 </style>
 
 <style is:global>
+  :root[data-has-hero] .sl-skip-link {
+    display: none;
+  }
+
   :root[data-has-hero] header.header {
     display: none;
   }

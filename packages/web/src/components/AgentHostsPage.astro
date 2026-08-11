@@ -24,6 +24,7 @@ const copy =
           ["安装操作 Skill", "复制完整 Skill 包，确认宿主能发现 opencorvus，然后在新会话中先做只读检查。"],
         ],
         sourceTitle: "经过验证的源码准备路径",
+        sourceCommandsLabel: "OpenCorvus 源码准备命令",
         sourceHint: "如果已安装全局 opencorvus 命令，可以使用同名简写；否则始终保留下面的显式源码入口。",
         download: "下载 OpenCorvus",
         quickstart: "打开快速开始",
@@ -33,10 +34,13 @@ const copy =
         openclawScope: "安装到当前 workspace；只有确实要让所有本地 Agent 共享时才添加 --global。",
         openclawVerify: "列表中应出现 opencorvus 且状态为 ready / eligible。skills check 是更广的依赖就绪摘要，不能代替按名称确认。新会话是最确定的刷新方式。",
         openclawInvoke: "Control UI 使用 $opencorvus；消息频道使用 /opencorvus。",
+        openclawCommandsLabel: "OpenClaw Skill 安装与验证命令",
         openclawPrompt: "Use $opencorvus to check whether OpenCorvus is installed and healthy. Do not change anything.",
         hermesScope: "Hermes 会递归发现 ~/.hermes/skills 下的 Skill；这里用 developer-tools 目录保持分类清晰。",
         hermesVerify: "hermes skills list 应显示 opencorvus。手动复制后启动新会话或执行 /reset；--now 只用于支持该参数的 hermes skills install 流程。",
         hermesInvoke: "在新会话中把 Skill 当作 slash command 使用。",
+        hermesCommandsLabel: "Hermes Agent Skill 安装与验证命令",
+        hermesPowerShellLabel: "Hermes Agent PowerShell 安装命令",
         hermesPrompt: "/opencorvus 检查 OpenCorvus 是否已经安装且健康。不要修改任何内容。",
         powershell: "Windows PowerShell 安装",
         genericTitle: "其他 Agent Skills 兼容宿主",
@@ -48,9 +52,11 @@ const copy =
         oneOffLabel: "一次性",
         oneOffTitle: "run：一次会话，一次结果",
         oneOffBody: "让宿主在目标项目目录执行 opencorvus run，或用 run --attach 连接已运行的 server。它属于 Session 路径，不返回 Task ID，也没有 Task board 或 Task events。",
+        oneOffCommandLabel: "一次性 OpenCorvus Session 命令",
         durableLabel: "持久交付",
         durableTitle: "serve + Task/API：可观察、可跟进",
         durableBody: "启动或连接 opencorvus serve，然后为一个明确的绝对项目目录创建 Task。HTTP 202 返回 task_id；宿主必须保存它，并通过 board、events 与最终证据判断进度和完成状态。",
+        durableCommandLabel: "持久 OpenCorvus server 命令",
         durablePrompt: "为 /absolute/path/to/project 启动或连接 OpenCorvus。为要求的结果创建 code Task，保存返回的 task_id，并报告可观察的 board 与 event 进度。",
         capabilityEyebrow: "Agent 可以做什么",
         capabilities: [
@@ -95,6 +101,7 @@ const copy =
           ["Install the operating Skill", "Copy the complete Skill package, confirm the host discovers opencorvus, then begin with a read-only check in a fresh session."],
         ],
         sourceTitle: "Verified source preparation",
+        sourceCommandsLabel: "OpenCorvus source preparation commands",
         sourceHint: "If a global opencorvus command is installed, the equivalent short commands work. Otherwise keep the explicit source entry point shown below.",
         download: "Download OpenCorvus",
         quickstart: "Open Quickstart",
@@ -104,10 +111,13 @@ const copy =
         openclawScope: "Install into the active workspace. Add --global only when every local Agent should share this Skill.",
         openclawVerify: "The list should show opencorvus as ready / eligible. skills check is a broader dependency-readiness summary; it does not replace the named discovery check. A fresh session is the most certain refresh path.",
         openclawInvoke: "Use $opencorvus in the Control UI and /opencorvus in messaging channels.",
+        openclawCommandsLabel: "OpenClaw Skill installation and verification commands",
         openclawPrompt: "Use $opencorvus to check whether OpenCorvus is installed and healthy. Do not change anything.",
         hermesScope: "Hermes recursively discovers Skills under ~/.hermes/skills; developer-tools keeps this package grouped clearly.",
         hermesVerify: "hermes skills list should show opencorvus. After a manual copy, start a new session or use /reset. Reserve --now for a supported hermes skills install flow.",
         hermesInvoke: "Invoke the Skill as a slash command in the fresh session.",
+        hermesCommandsLabel: "Hermes Agent Skill installation and verification commands",
+        hermesPowerShellLabel: "Hermes Agent PowerShell installation commands",
         hermesPrompt: "/opencorvus Check whether OpenCorvus is installed and healthy. Do not change anything.",
         powershell: "Windows PowerShell install",
         genericTitle: "Other Agent Skills-compatible hosts",
@@ -119,9 +129,11 @@ const copy =
         oneOffLabel: "One-off",
         oneOffTitle: "run: one Session, one result",
         oneOffBody: "Ask the host to execute opencorvus run in the target project, or use run --attach with an existing server. This is a Session path: it does not return a Task ID and has no Task board or Task events.",
+        oneOffCommandLabel: "One-off OpenCorvus Session command",
         durableLabel: "Durable delivery",
         durableTitle: "serve + Task/API: observable and steerable",
         durableBody: "Start or reach opencorvus serve, then create a Task for one exact absolute project directory. HTTP 202 returns task_id. The host must retain it and use the board, events, and final evidence to judge progress and completion.",
+        durableCommandLabel: "Durable OpenCorvus server command",
         durablePrompt: "Start or reach OpenCorvus for /absolute/path/to/project. Create a code Task for the requested outcome, retain the returned task_id, and report observable board and event progress.",
         capabilityEyebrow: "What the Agent can operate",
         capabilities: [
@@ -210,7 +222,7 @@ hermes skills list`
             <a class="secondary-action" href={publicPath(locale, "/start/quickstart/")}>{copy.quickstart}</a>
           </div>
         </div>
-        <pre aria-label={copy.sourceTitle}><code>{sourceCommands}</code></pre>
+        <pre tabindex="0" aria-label={copy.sourceCommandsLabel}><code>{sourceCommands}</code></pre>
       </div>
     </section>
 
@@ -223,15 +235,15 @@ hermes skills list`
         <article class="host-card host-openclaw">
           <header><span>01</span><div><p>HOST</p><h3>OpenClaw</h3></div></header>
           <p>{copy.openclawScope}</p>
-          <pre><code>{openClawCommands}</code></pre>
+          <pre tabindex="0" aria-label={copy.openclawCommandsLabel}><code>{openClawCommands}</code></pre>
           <p class="verification-copy">{copy.openclawVerify}</p>
           <div class="invoke-block"><strong>{copy.openclawInvoke}</strong><code>{copy.openclawPrompt}</code></div>
         </article>
         <article class="host-card host-hermes">
           <header><span>02</span><div><p>HOST</p><h3>Hermes Agent</h3></div></header>
           <p>{copy.hermesScope}</p>
-          <pre><code>{hermesCommands}</code></pre>
-          <details><summary>{copy.powershell}</summary><pre><code>{hermesPowerShell}</code></pre></details>
+          <pre tabindex="0" aria-label={copy.hermesCommandsLabel}><code>{hermesCommands}</code></pre>
+          <details><summary>{copy.powershell}</summary><pre tabindex="0" aria-label={copy.hermesPowerShellLabel}><code>{hermesPowerShell}</code></pre></details>
           <p class="verification-copy">{copy.hermesVerify}</p>
           <div class="invoke-block"><strong>{copy.hermesInvoke}</strong><code>{copy.hermesPrompt}</code></div>
         </article>
@@ -251,11 +263,11 @@ hermes skills list`
       <div class="surface-grid">
         <article>
           <span>{copy.oneOffLabel}</span><h3>{copy.oneOffTitle}</h3><p>{copy.oneOffBody}</p>
-          <pre><code>opencorvus run "Inspect this project and explain the current architecture." --dir /absolute/path/to/project</code></pre>
+          <pre tabindex="0" aria-label={copy.oneOffCommandLabel}><code>opencorvus run "Inspect this project and explain the current architecture." --dir /absolute/path/to/project</code></pre>
         </article>
         <article class="durable-surface">
           <span>{copy.durableLabel}</span><h3>{copy.durableTitle}</h3><p>{copy.durableBody}</p>
-          <pre><code>opencorvus serve --hostname 127.0.0.1 --port 7878 --project-dir /absolute/path/to/project</code></pre>
+          <pre tabindex="0" aria-label={copy.durableCommandLabel}><code>opencorvus serve --hostname 127.0.0.1 --port 7878 --project-dir /absolute/path/to/project</code></pre>
           <div class="invoke-block"><code>{copy.durablePrompt}</code></div>
         </article>
       </div>
@@ -419,6 +431,8 @@ hermes skills list`
   }
 
   pre {
+    box-sizing: border-box;
+    width: 100%;
     max-width: 100%;
     margin: 0;
     padding: 22px;
@@ -430,6 +444,11 @@ hermes skills list`
     font-size: 12px;
     line-height: 1.75;
     white-space: pre;
+  }
+
+  pre:focus-visible {
+    outline: 3px solid var(--cobalt);
+    outline-offset: 3px;
   }
 
   code {
@@ -524,6 +543,10 @@ hermes skills list`
   }
 
   summary {
+    box-sizing: border-box;
+    display: flex;
+    min-height: 44px;
+    align-items: center;
     padding: 12px 14px;
     font-family: var(--mono);
     font-size: 11px;
@@ -744,6 +767,127 @@ hermes skills list`
     .generic-host .secondary-action {
       grid-column: 2;
       justify-self: start;
+    }
+  }
+
+  @media (max-width: 1099px) {
+    .agent-hosts-intro,
+    .source-setup,
+    .boundary-section,
+    .agent-docs,
+    .generic-host {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .agent-hosts-intro > *,
+    .source-setup > *,
+    .host-grid > *,
+    .host-card > *,
+    .generic-host > *,
+    .surface-grid > *,
+    .capability-grid > *,
+    .boundary-section > *,
+    .boundary-list > *,
+    .agent-docs > *,
+    details {
+      min-width: 0;
+    }
+
+    .readiness-flow {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .readiness-flow li,
+    .capability-grid article {
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .capability-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .generic-host .secondary-action {
+      grid-column: auto;
+      justify-self: start;
+    }
+
+    .boundary-section,
+    .agent-docs {
+      padding: 48px 36px;
+    }
+
+    .boundary-title {
+      position: static;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .agent-hosts-page {
+      padding-bottom: 64px;
+    }
+
+    .agent-hosts-intro h1 {
+      font-size: clamp(42px, 13vw, 52px);
+      letter-spacing: -0.045em;
+    }
+
+    .landing-band-header h2,
+    .boundary-title h2,
+    .agent-docs h2 {
+      font-size: clamp(36px, 10vw, 44px) !important;
+    }
+
+    .readiness-flow,
+    .host-grid,
+    .surface-grid,
+    .capability-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .readiness-flow h3,
+    .readiness-flow li,
+    .host-card > p,
+    .host-card .verification-copy,
+    .surface-grid p,
+    .capability-grid article {
+      min-height: 0;
+    }
+
+    .hosts-section {
+      padding-right: 0;
+      padding-left: 0;
+    }
+
+    .source-setup,
+    .host-card,
+    .generic-host,
+    .surface-grid > article,
+    .boundary-section,
+    .agent-docs {
+      padding: 24px;
+    }
+
+    .host-card header {
+      grid-template-columns: 48px minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .host-card header h3,
+    .source-setup h3,
+    .surface-grid h3 {
+      font-size: 32px;
+    }
+
+    .hero-actions,
+    .hero-actions :is(a, button),
+    .generic-host .secondary-action {
+      width: 100%;
+    }
+
+    pre {
+      padding: 16px;
     }
   }
 </style>
