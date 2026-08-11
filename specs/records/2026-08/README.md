@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-12-random-expert-squad-self-evolution-e2e.md](2026-08-12-random-expert-squad-self-evolution-e2e.md) defines the isolated random-port/project/database controller, real Market install, streaming Mission-owned incumbent-challenger campaign, measured evaluation, non-executing recommendation, and independent-review acceptance boundary.
+
 - [2026-08-12-main-delivery-history-convergence.md](2026-08-12-main-delivery-history-convergence.md) freezes the dirty original worktree, classifies diverged local and remote history by exact and semantic coverage, and defines the reviewed fast-forward-only integration and push boundary.
 
 - [2026-08-11-hollow-desktop-app-icons.md](2026-08-11-hollow-desktop-app-icons.md) replaces the filled desktop application mark with one white-backed hollow silhouette generated consistently for macOS ICNS, Windows ICO/Store, and Linux/runtime PNG assets.
