@@ -1295,6 +1295,13 @@
   white-space: nowrap;
 }
 
+.chat-title-usage-tooltip__debug-hint {
+  grid-column: 1 / -1;
+  max-width: calc(320px * var(--ui-scale));
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
 .chat-header-status {
   --px-exact: 1;
   position: absolute;
