@@ -11,10 +11,7 @@ import { generateExpertSquadDistribution } from "./generate-expert-squad-distrib
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..")
 
 function indexedPackageSource(id: string): ExpertSquadRegistry.EmbeddedPackageSource {
-  const root =
-    id === "squad-sdk"
-      ? `expert-squads/builtin/${id}`
-      : `packages/opencorvus/src/expert-squad/builtin/${id}`
+  const root = id === "squad-sdk" ? `expert-squads/builtin/${id}` : `packages/opencorvus/src/expert-squad/builtin/${id}`
   const listed = Bun.spawnSync({
     cmd: ["git", "ls-files", "--cached", "-z", "--", root],
     cwd: repoRoot,
@@ -24,11 +21,7 @@ function indexedPackageSource(id: string): ExpertSquadRegistry.EmbeddedPackageSo
   if (listed.exitCode !== 0) {
     throw new Error(`Could not read indexed embedded package ${id}: ${new TextDecoder().decode(listed.stderr)}`)
   }
-  const trackedPaths = new TextDecoder()
-    .decode(listed.stdout)
-    .split("\0")
-    .filter(Boolean)
-    .sort()
+  const trackedPaths = new TextDecoder().decode(listed.stdout).split("\0").filter(Boolean).sort()
   const files: Record<string, string> = {}
   for (const trackedPath of trackedPaths) {
     const shown = Bun.spawnSync({
@@ -38,37 +31,17 @@ function indexedPackageSource(id: string): ExpertSquadRegistry.EmbeddedPackageSo
       stderr: "pipe",
     })
     if (shown.exitCode !== 0) {
-      throw new Error(`Could not read indexed embedded package file ${trackedPath}: ${new TextDecoder().decode(shown.stderr)}`)
+      throw new Error(
+        `Could not read indexed embedded package file ${trackedPath}: ${new TextDecoder().decode(shown.stderr)}`,
+      )
     }
     files[trackedPath.slice(root.length + 1)] = new TextDecoder("utf-8", { fatal: true }).decode(shown.stdout)
   }
   return { namespace: "builtin", id, files }
 }
 
-const selectedIdentities = [
-  "builtin/frontend-replica",
-  "builtin/frontend-innovate",
-  "builtin/deep-research",
-  "builtin/equity-research",
-  "builtin/review-debug",
-] as const
-
 const market = await ExpertSquadPackageManager.payloadMarket({ projectDirectory: process.cwd() })
 const marketByIdentity = new Map(market.map((item) => [`${item.namespace}/${item.id}`, item]))
-const sourceByIdentity = new Map(payloadPackageSources.map((source) => [`${source.namespace}/${source.id}`, source]))
-
-const facts = selectedIdentities.map((identity) => {
-  const item = marketByIdentity.get(identity)
-  const source = sourceByIdentity.get(identity)
-  if (!item || !source) throw new Error(`Public market selection is not an exact payload package: ${identity}`)
-
-  const loaded = ExpertSquadRegistry.loadEmbeddedPackageDeclaration(source)
-  if (item.packageDigest !== loaded.packageDigest) {
-    throw new Error(`Payload market and embedded declaration disagree for ${identity}`)
-  }
-  return projectExpertSquadFacts(loaded)
-})
-
 const embeddedSources = EMBEDDED_EXPERT_SQUAD_IDS.map(indexedPackageSource)
 const embeddedIDs = new Set(embeddedSources.map((source) => `${source.namespace}/${source.id}`))
 const shippedSources = [...embeddedSources, ...payloadPackageSources]
@@ -77,9 +50,29 @@ if (new Set(shippedIdentities).size !== shippedIdentities.length) {
   throw new Error("Shipped Expert Squad sources must have unique namespace/id identities.")
 }
 
-const shippedFacts = shippedSources
-  .map((source) => {
-    const loaded = ExpertSquadRegistry.loadEmbeddedPackageDeclaration(source)
+const shippedPackages = shippedSources.map((source) => ({
+  source,
+  loaded: ExpertSquadRegistry.loadEmbeddedPackageDeclaration(source),
+}))
+for (const { loaded } of shippedPackages) {
+  const identity = `${loaded.namespace}/${loaded.id}`
+  if (embeddedIDs.has(identity)) continue
+  const item = marketByIdentity.get(identity)
+  if (!item || item.packageDigest !== loaded.packageDigest) {
+    throw new Error(`Payload market and indexed declaration disagree for ${identity}`)
+  }
+}
+
+const facts = shippedPackages
+  .map(({ loaded }) => projectExpertSquadFacts(loaded))
+  .sort((left, right) => {
+    const leftIdentity = `${left.identity.namespace}/${left.identity.id}`
+    const rightIdentity = `${right.identity.namespace}/${right.identity.id}`
+    return leftIdentity.localeCompare(rightIdentity)
+  })
+
+const shippedFacts = shippedPackages
+  .map(({ source, loaded }) => {
     const projections = [
       loaded.manifest.capability_projection.scheduler,
       ...Object.values(loaded.manifest.capability_projection.agents),

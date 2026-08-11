@@ -1,0 +1,3 @@
+Select this Squad when the requested outcome concerns vessel-call event reconciliation, berth-window compatibility, nautical-service dependencies, terminal crane/yard/gate flow, cargo-unit identity, manifest and Verified Gross Mass status, dangerous-goods declaration status, customs/security workflow status, or custody handoffs within a port call.
+
+Do not select it for generic supply-chain purchasing or inventory, open-sea navigation, voyage routing, VTS direction, pilot/tug orders, berth clearance, equipment dispatch, cargo handling, dangerous-goods classification or stowage, customs/security release, port-state inspection, legal interpretation, pollution response, or emergency command. Require the relevant port, vessel, terminal and public authorities.

@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-11-fifth-ten-domain-expert-squad-batch.md](2026-08-11-fifth-ten-domain-expert-squad-batch.md) freezes the autonomous fifth fixed-ten batch, three bounded open-source Skill adaptations, seven clean-room source decisions, fifty dedicated assets, professional authority boundaries, and 65/69 runtime acceptance.
+
 - [2026-08-11-fourth-ten-domain-expert-squad-batch.md](2026-08-11-fourth-ten-domain-expert-squad-batch.md) records the autonomous fourth fixed-ten batch, non-overlap audit, accepted and rejected Skill sources, five-asset obligations, professional authority boundaries, and exact runtime acceptance plan after the checklist feature was withdrawn.
 
 - [2026-08-11-full-worktree-delivery-convergence.md](2026-08-11-full-worktree-delivery-convergence.md) classifies the complete dirty worktree, excludes runtime output, closes ignored specification records, validates the staged boundary, and defines the normal upstream push sequence.

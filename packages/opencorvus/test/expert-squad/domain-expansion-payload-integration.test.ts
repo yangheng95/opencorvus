@@ -34,7 +34,7 @@ describe("Ten-domain generated payload integration", () => {
       .filter((entry) => squadIDs.includes(entry.id as (typeof squadIDs)[number]))
       .map((entry) => ({ id: entry.id, skillCount: entry.skillCount }))
 
-    expect(market).toHaveLength(55)
+    expect(market).toHaveLength(65)
     expect(additions).toEqual([...squadIDs].sort().map((id) => ({ id, skillCount: 1 })))
   })
 
