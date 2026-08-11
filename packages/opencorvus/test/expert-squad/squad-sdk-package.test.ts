@@ -33,7 +33,7 @@ const agentIDs = [
   "squad-sdk-source-analyst",
 ] as const
 
-describe("Generate Agent Squads expert squad", () => {
+describe("Generate Expert Squads expert squad", () => {
   test("loads one self-contained package with exact authoring and import workflows", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(packageRoot)
     const workflows = loaded.manifest.capability_projection.virtual_workflows
@@ -303,7 +303,7 @@ describe("Generate Agent Squads expert squad", () => {
 
     expect(generatedSquads).toMatchObject({
       id: "squad-sdk",
-      name: "Generate Agent Squads",
+      name: "Generate Expert Squads",
       built_in: true,
       editable: false,
       system_role: "expert_squad_generator",
@@ -312,7 +312,7 @@ describe("Generate Agent Squads expert squad", () => {
   })
 
   test(
-    "publishes a traceable generated Agent Squad into the current project catalog",
+    "publishes a traceable generated Expert Squad into the current project catalog",
     { timeout: 30_000 },
     async () => {
       await using authoringProject = await memoryProject()
@@ -329,10 +329,10 @@ describe("Generate Agent Squads expert squad", () => {
               id: generatedID,
               name: "Generated Project Contract",
               label: "Generated Project Contract",
-              description: "Exercises the canonical project-owned Agent Squad generation contract.",
+              description: "Exercises the canonical project-owned Expert Squad generation contract.",
               version: "2026.08.07.1",
               product_pillars: ["work"],
-              readme: "# Generated Project Contract\n\nA generated project-owned Agent Squad contract fixture.\n",
+              readme: "# Generated Project Contract\n\nA generated project-owned Expert Squad contract fixture.\n",
               selector: {
                 summary: "Use for the generated project contract fixture.",
                 selection_guidance: "Select only for the generated project contract fixture.",

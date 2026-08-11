@@ -4,7 +4,7 @@
 
 | Item | Record |
 | --- | --- |
-| User request | End-to-end test the real Generate Agent Squads path and generate one Expert Squad for machine-learning implementation. |
+| Task request summary | End-to-end test the real built-in Squad generator path and generate one Expert Squad for machine-learning implementation. |
 | Acceptance criteria | A real `squad-sdk` Task selects the `sdk-authoring` workflow; the conversation produces one successful canonical authoring receipt; the package is installed beneath this project's `.opencorvus/expert-squads/<namespace>/<id>/`; the installed package is Registry-valid, contains Host-owned Task and scheduler Session generation provenance, appears in the current project catalog, remains inactive, and is visually reviewed in the real Overlay. |
 | Hard constraints | Do not handwrite the generated package; do not create a second writer or catalog; preserve `prompt_profile.active` as the only active Squad source; do not activate or execute the generated Squad; do not add, modify, update, or run User Interface (UI) automation tests; preserve unrelated dirty-worktree changes; use Node.js, not Bun, for Playwright-backed interaction. |
 | Sources read | `AGENTS.md`; `specs/current/architecture/04-extensions.md`; `specs/records/2026-08/2026-08-06-squad-sdk-expert-squad.md`; `specs/records/2026-08/2026-08-07-squad-sdk-project-generation-trace.md`; `expert-squads/builtin/squad-sdk/README.md`; `selector.md`; and the package-local authoring Skill. |
@@ -45,7 +45,7 @@ The end-to-end acceptance did not generate or install the requested package.
 | --- | --- |
 | Queue Task | `tsk_fdf157d03001ICYNyAoTMpBlJr`; source `session.prompt_async`; terminal status `failed`; started `1786154155323`; completed `1786154157232`. |
 | Session | `ses_020ea8406ffe1vauj79PXw4NGu`; ordinary `assistant` Session in `D:\myhexin-local\opencorvus`; no parent Session. |
-| Submitted execution authority | Queue metadata records `agent: "work"` and contains no `squad-sdk` prompt-profile selection. The real Overlay footer likewise shows `Base`, so the Task never held the immutable Generate Agent Squads package revision. |
+| Submitted execution authority | Queue metadata records `agent: "work"` and contains no `squad-sdk` prompt-profile selection. The real Overlay footer likewise shows `Base`, so the Task never held the immutable generator package revision. |
 | Direct terminal trigger | OpenAI returned HTTP 400: `The 'gpt-5.6' model is not supported when using Codex with a ChatGPT account.` The Session ended after about one second, before an Agent response or tool call. |
 | Project identity | Although the development server was launched with this checkout as its default project directory, the visible Overlay retained and submitted the already-selected project `D:\myhexin-local\opencorvus` (`project_id: 4b0ea68d7af9a6031a7ffda7ad66e0cb83315750`). It did not submit against this spec's checkout. |
 | Artifacts and authoring | No Engine Artifact exists for the Session, `expert_squad_author` was never called, and no receipt, package digest, file count, workflow topology, or generation trace exists. |
@@ -61,7 +61,7 @@ These are three separate failed preconditions: exact project identity, immutable
 
 ### Authorized second attempt
 
-The operator subsequently authorized a separate attempt with the instruction `用deepseek测试`. This authorizes one new Task identity using an actually configured DeepSeek model while preserving the failed Task and Session above. Before submission, the second attempt must visibly prove the exact `opencorvus-v0.0.35beta` project, a materialized `Generate Agent Squads` selection, and the DeepSeek model identity. Its outcome and lineage are recorded separately below rather than replacing the first attempt.
+The operator subsequently authorized a separate attempt with the instruction `用deepseek测试`. This authorizes one new Task identity using an actually configured DeepSeek model while preserving the failed Task and Session above. Before submission, the second attempt must visibly prove the exact `opencorvus-v0.0.35beta` project, a materialized `squad-sdk` selection, and the DeepSeek model identity. Its outcome and lineage are recorded separately below rather than replacing the first attempt.
 
 ### DeepSeek attempt result: provider passed, Task creation failed
 
@@ -132,7 +132,7 @@ The original DeepSeek Mission `8cebf475bb23db20` later completed without operato
 | Mission lineage | Source Analysis Task `tsk_fdf431e8e001ZUvf77w5c5jsDj` and Canonical Authoring Task `tsk_fdf685f98001eV6nUwWnwIe1h3` both belong to the original Mission and reached completed terminal status using `squad-sdk` with DeepSeek `deepseek-v4-pro`. |
 | Canonical installation | `expert_squad_author` eventually returned a completed project installation receipt for `local/machine-learning-implementation`, version `2026.08.08.1`, 4 Agents, 8 files, digest `7af4f3edc14b61820dd4e578a7f67e70792120c1259afb01bffe07f8688a2ad4`. |
 | Provenance | `.opencorvus-meta.json` records generator `squad-sdk`, Task `tsk_fdf685f98001eV6nUwWnwIe1h3`, Session `ses_0208fba0dffezGMv0FzGYULNyk`, timestamp `2026-08-08T03:37:26.881Z`, and method `sdk_authoring`. |
-| Catalog and activation | The real Installed Agent Squads page shows `机器学习实施` as a Project package. Project selection and Effective selection both remain `base`; browsing did not activate the generated Squad. |
+| Catalog and activation | The real installed-package settings page shows `机器学习实施` as a Project package. Project selection and Effective selection both remain `base`; browsing did not activate the generated Squad. |
 | Visual review | The real connected Overlay at port 7878 was manually inspected and screenshotted on the installed-package detail. No UI automation test was added or run. |
 
 ### Exact acceptance result: incomplete
@@ -223,7 +223,7 @@ This rerun is a truthful failed acceptance. The root repair must bind the intend
 
 ### Verification evidence
 
-The final targeted command passes 24 tests and 108 positive expectations across the Generate Agent Squads package, Research Studio embedded closure, generic/runtime and Git-selected source-tree snapshots, evolution launcher/mutation, and immutable Task package revision binding. `bun run typecheck` in `packages/opencorvus` also passes on Bun `1.3.14`. The package test includes enabled runtime Skill surfaces for the architect, import analyst, and contract reviewer, source/embedded package-digest identity, a successfully materialized definition contract object, and a successful project-owned authoring receipt.
+The final targeted command passes 24 tests and 108 positive expectations across the built-in generator package, Research Studio embedded closure, generic/runtime and Git-selected source-tree snapshots, evolution launcher/mutation, and immutable Task package revision binding. `bun run typecheck` in `packages/opencorvus` also passes on Bun `1.3.14`. The package test includes enabled runtime Skill surfaces for the architect, import analyst, and contract reviewer, source/embedded package-digest identity, a successfully materialized definition contract object, and a successful project-owned authoring receipt.
 
 ## DeepSeek compaction recovery repair
 
@@ -266,7 +266,7 @@ The final targeted command passes 24 tests and 108 positive expectations across 
 - Checkout: `D:\myhexin-local\opencorvus-v0.0.35beta`.
 - Branch: `main`.
 - Compaction repair commit: `f1f4722f9 fix: complete compaction tool continuations`.
-- Preceding Generate Agent Squads contract repair: `98e7563aa fix: harden expert squad generation contracts`.
+- Preceding generator contract repair: `98e7563aa fix: harden expert squad generation contracts`.
 - Preceding desktop update commit: `5a656ad98 feat: add signed desktop hot updates`.
 - At handoff, `main` was ten commits ahead of `origin/main`; no push was requested or performed.
 - The worktree was clean before this continuation record was added. The final handoff commit is recorded in the operator-facing response after commit creation.
@@ -334,7 +334,7 @@ The previous machine's runtime identities are not portable. Mission `6a88312102b
 
 On the new computer, perform exactly one fresh submission from the clean repository project:
 
-1. Pull `main` and verify it contains `98e7563aa` (Generate Agent Squads contracts), `f1f4722f9` (compaction continuation repair), `502b85b43` (generated OpenAPI and Software Development Kit error projection), and this corrected Handoff commit. Confirm a clean worktree and Bun `1.3.14`.
+1. Pull `main` and verify it contains `98e7563aa` (generator contracts), `f1f4722f9` (compaction continuation repair), `502b85b43` (generated OpenAPI and Software Development Kit error projection), and this corrected Handoff commit. Confirm a clean worktree and Bun `1.3.14`.
 2. Configure DeepSeek authentication on the new machine without copying or committing `auth.json`. Start a clean isolated OpenCorvus runtime whose selected project is the exact new checkout before Mission creation.
 3. Inspect `.opencorvus/expert-squads/local/machine-learning-implementation`. On a normal clone it must be absent because project runtime installations are Git-ignored. Absence means **creation**, not project-authority mismatch and not replacement. Do not pass `expected_current_package_digest`, the old version, or the old digest to the authoring request.
 4. Submit one new Mission with `@squad("squad-sdk")` and model `deepseek/deepseek-reasoner`. Ask for the `sdk-authoring` workflow to create and install a project-scoped, namespace `local`, id `machine-learning-implementation`, version `2026.08.08.2` package. Keep it inactive and do not change `prompt_profile.active`.

@@ -1,9 +1,9 @@
 ---
 name: squad-sdk-authoring
-description: Author one portable, project-owned and traceable OpenCorvus Expert Squad through the Generate Agent Squads workflow and canonical SDK writer.
+description: Author one portable, project-owned and traceable OpenCorvus Expert Squad through the Generate Expert Squads workflow and canonical SDK writer.
 ---
 
-# Generate Agent Squads authoring method
+# Generate Expert Squads authoring method
 
 Define one narrow domain, explicit selection guidance, and only the dynamic agents that perform real work.
 

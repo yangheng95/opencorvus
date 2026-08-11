@@ -3,7 +3,7 @@ name: squad-sdk-heterogeneous-import
 description: Agent-led heterogeneous Squad discovery, evidence review, blocker repair, lossless Skill-directory and portable remote MCP preservation, and canonical import into OpenCorvus.
 ---
 
-# Generate Agent Squads heterogeneous import method
+# Generate Expert Squads heterogeneous import method
 
 Import a Multica agent team through the official local Multica configuration and the strict OpenCorvus adapter. You own source discovery, evidence interpretation, autonomous diagnosis and repair, and the final report. The tools own source validation and package writes.
 

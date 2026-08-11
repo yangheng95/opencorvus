@@ -2,16 +2,16 @@
   "schema_version": 1,
   "namespace": "builtin",
   "id": "squad-sdk",
-  "name": "Generate Agent Squads",
-  "label": "Generate Agent Squads",
-  "description": "Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Agent Squads with independent contract review.",
+  "name": "Generate Expert Squads",
+  "label": "Generate Expert Squads",
+  "description": "Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.",
   "version": "2026.08.10.1",
   "product_pillars": ["code", "work"],
   "system_role": "expert_squad_generator",
   "readme": "README.md",
   "selector": {
     "summary": "Use to import an external heterogeneous agent algorithm or design, validate, and install a new OpenCorvus Expert Squad through the canonical SDK.",
-    "selection_guidance": "Select Generate Agent Squads only when the requested deliverable is a project-owned Expert Squad package or a lossless import of an external agent team. Use the resulting domain Squad, not Generate Agent Squads, for subsequent domain work.",
+    "selection_guidance": "Select Generate Expert Squads only when the requested deliverable is a project-owned Expert Squad package or a lossless import of an external agent team. Use the resulting domain Squad, not Generate Expert Squads, for subsequent domain work.",
     "instructions": "selector.md",
   },
   "capability_projection": {
@@ -43,7 +43,7 @@
     },
     "agents": {
       "squad-sdk-source-analyst": {
-        "label": "Generate Agent Squads Source Analyst",
+        "label": "Generate Expert Squads Source Analyst",
         "description": "Extracts the source algorithm, domain boundary, actors, evidence flow, resources, portability constraints, and acceptance contract.",
         "base_role": "deep-research",
         "prompt": "agents/squad-sdk-source-analyst/system.md",
@@ -63,7 +63,7 @@
         "package_mcp_resource_refs": [],
       },
       "squad-sdk-package-architect": {
-        "label": "Generate Agent Squads Package Architect",
+        "label": "Generate Expert Squads Package Architect",
         "description": "Turns accepted source evidence into the smallest complete SDK blueprint and binding workflow topology.",
         "base_role": "architect",
         "prompt": "agents/squad-sdk-package-architect/system.md",
@@ -83,7 +83,7 @@
         "package_mcp_resource_refs": [],
       },
       "squad-sdk-import-analyst": {
-        "label": "Generate Agent Squads Import Analyst",
+        "label": "Generate Expert Squads Import Analyst",
         "description": "Examines an external Squad's roster, instructions, Skill closures, MCP capabilities, mapping evidence, and portability blockers.",
         "base_role": "deep-research",
         "prompt": "agents/squad-sdk-import-analyst/system.md",
@@ -103,7 +103,7 @@
         "package_mcp_resource_refs": [],
       },
       "squad-sdk-contract-reviewer": {
-        "label": "Generate Agent Squads Contract Reviewer",
+        "label": "Generate Expert Squads Contract Reviewer",
         "description": "Independently validates the complete authoring blueprint or import mapping against source evidence and package invariants.",
         "base_role": "fact-check",
         "prompt": "agents/squad-sdk-contract-reviewer/system.md",
@@ -125,7 +125,7 @@
     },
     "virtual_workflows": {
       "sdk-authoring": {
-        "label": "Generate Agent Squads Authoring",
+        "label": "Generate Expert Squads Authoring",
         "description": "Extract the domain algorithm, design one canonical package blueprint, independently validate it, and then materialize it through the SDK author tool.",
         "nodes": {
           "source-analysis": {

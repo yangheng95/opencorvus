@@ -97,7 +97,7 @@ frontier。一个结果内部的数据、实现、报告、审计、测试、修
 Manager 的 folder/ZIP 安装协议要求 caller 显式选择 `project | global` scope，分别解析到当前项目
 `.opencorvus/expert-squads/<namespace>/<id>/` 或
 `Global.Path.config/expert-squads/<namespace>/<id>/`；HTTP、OpenAPI、SDK 和 Overlay 使用同一字段，
-不存在默认值、产品名分支或第二入口。普通 folder/ZIP caller 继续显式选择 scope；Generate Agent Squads
+不存在默认值、产品名分支或第二入口。普通 folder/ZIP caller 继续显式选择 scope；Generate Expert Squads
 的 SDK authoring 与 Multica import 固定选择 project。Squad Market 使用同一 Manager 安装协议按需安装
 repository-hosted payload；Composer 的 editable Expert Squad picker 提供打开 Market 的动作。Mission 创建入口还会把
 operator 输入的 Expert Squad 查询交给同一 Market 模糊检索；排序输入包括 manifest selector、package-owned Skill 与
@@ -180,7 +180,7 @@ location 校验，项目配置、Task 和 Session 候选则从 global + exact pr
 专家团开发复用现有 `@opencorvus-ai/sdk`，不建立第二套 manifest schema、package loader 或
 archive 实现。`squad-sdk` 是与 `base`、`advanced`、`research-studio` 同级的第四个 embedded system
 package，也是异构算法导入与 SDK 专家团生成的唯一 capability package，显示名称固定为
-`Generate Agent Squads`；干净应用 catalog 无需 payload release 即可选择它。普通 Chat、
+`Generate Expert Squads`；干净应用 catalog 无需 payload release 即可选择它。普通 Chat、
 Base 与 Advanced 不再投影 authoring/import Skill 或写入工具。Task 选择 `squad-sdk` 后必须先选择
 `sdk-authoring` 或 `heterogeneous-import` binding workflow。它的 package-local method Skills 只属于
 该 active package，不是全局可选 capability identity。Composer 只把它作为普通 Expert Squad catalog
@@ -214,7 +214,7 @@ outcome、deliverables、responsibility 与 acceptance boundary 的 Squad。
 
 Mission 不自动生产 Expert Squad，也不能把普通 Expert Squad authoring capability 当成越权路径。
 对话驱动的显式 Squad authoring 仍由获得明确 operator 授权且固定选择 `squad-sdk` 的 Task 使用
-`sdk-authoring` workflow 与唯一 tool 完成。Generate Agent Squads 的 authoring surface 只有一个
+`sdk-authoring` workflow 与唯一 tool 完成。Generate Expert Squads 的 authoring surface 只有一个
 安装结果：Host 显式把生成物导入当前项目 canonical `.opencorvus/expert-squads/<namespace>/<id>/`
 root，使成功 receipt 对应的 manifest ID 随后出现在当前项目 Registry catalog；tool input 不再暴露
 project/global 分支。SDK authoring 与 heterogeneous import 都在同一原子 Manager transaction 的 staging tree 内写入

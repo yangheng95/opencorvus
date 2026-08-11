@@ -254,7 +254,7 @@ export const ExpertSquadAuthorTool = Tool.define("expert_squad_author", {
     })
     const result = await authorProjectExpertSquad(args, { taskID, sessionID: ctx.sessionID })
     return {
-      title: `Authored Agent Squad ${result.id}`,
+      title: `Authored Expert Squad ${result.id}`,
       metadata: result,
       output: JSON.stringify(result, null, 2),
     }
