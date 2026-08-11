@@ -73,11 +73,23 @@ export namespace Identifier {
   const MAX_FIELD_VALUE = (1n << BigInt(FIELD_BYTES * 8)) - 1n
   const ASCENDING_FORMAT_MARKER = "g"
   const DESCENDING_FORMAT_MARKER = "-"
+  const BASE62_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+  const COMPACT_TASK_TIMESTAMP_LENGTH = 9
+  const COMPACT_TASK_SEQUENCE_LENGTH = 2
+  const COMPACT_TASK_RANDOM_LENGTH = 8
+  const COMPACT_TASK_SEQUENCE_SPACE = BigInt(BASE62_ALPHABET.length) ** BigInt(COMPACT_TASK_SEQUENCE_LENGTH)
+  const COMPACT_TASK_SEQUENCE_MAX = COMPACT_TASK_SEQUENCE_SPACE - 1n
+  const COMPACT_TASK_BODY_LENGTH =
+    1 + COMPACT_TASK_TIMESTAMP_LENGTH + COMPACT_TASK_SEQUENCE_LENGTH + COMPACT_TASK_RANDOM_LENGTH
 
   let lastAscendingTimestamp = -1n
   let ascendingSequence = 0n
   let lastDescendingTimestamp = -1n
   let descendingSequence = 0n
+  let lastAscendingTaskTimestamp = -1n
+  let ascendingTaskSequence = 0n
+  let lastDescendingTaskTimestamp = -1n
+  let descendingTaskSequence = 0n
 
   export function ascending(prefix: keyof typeof prefixes, given?: string) {
     return generateID(prefix, false, given)
@@ -112,11 +124,10 @@ export namespace Identifier {
   }
 
   function randomBase62(length: number): string {
-    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     let result = ""
     const bytes = randomBytes(length)
     for (let i = 0; i < length; i++) {
-      result += chars[bytes[i] % 62]
+      result += BASE62_ALPHABET[bytes[i] % BASE62_ALPHABET.length]
     }
     return result
   }
@@ -128,6 +139,7 @@ export namespace Identifier {
     }
     const wallTimestamp = BigInt(currentTimestamp)
     if (wallTimestamp > MAX_FIELD_VALUE) throw new Error(`ID timestamp exceeds the 48-bit field: ${currentTimestamp}`)
+    if (prefix === "task") return createCompactTaskID(descending, wallTimestamp)
 
     let logicalTimestamp: bigint
     let sequence: bigint
@@ -169,6 +181,45 @@ export namespace Identifier {
     )
   }
 
+  function createCompactTaskID(descending: boolean, wallTimestamp: bigint): string {
+    let logicalTimestamp: bigint
+    let sequence: bigint
+    if (descending) {
+      if (wallTimestamp > lastDescendingTaskTimestamp) {
+        lastDescendingTaskTimestamp = wallTimestamp
+        descendingTaskSequence = 0n
+      } else {
+        descendingTaskSequence += 1n
+        if (descendingTaskSequence > COMPACT_TASK_SEQUENCE_MAX) {
+          throw new Error(`Task ID sequence exhausted for timestamp: ${lastDescendingTaskTimestamp}`)
+        }
+      }
+      logicalTimestamp = MAX_FIELD_VALUE - lastDescendingTaskTimestamp
+      sequence = COMPACT_TASK_SEQUENCE_MAX - descendingTaskSequence
+    } else {
+      if (wallTimestamp > lastAscendingTaskTimestamp) {
+        lastAscendingTaskTimestamp = wallTimestamp
+        ascendingTaskSequence = 0n
+      } else {
+        ascendingTaskSequence += 1n
+        if (ascendingTaskSequence > COMPACT_TASK_SEQUENCE_MAX) {
+          throw new Error(`Task ID sequence exhausted for timestamp: ${lastAscendingTaskTimestamp}`)
+        }
+      }
+      logicalTimestamp = lastAscendingTaskTimestamp
+      sequence = ascendingTaskSequence
+    }
+
+    return (
+      prefixes.task +
+      "_" +
+      (descending ? DESCENDING_FORMAT_MARKER : ASCENDING_FORMAT_MARKER) +
+      base62Fixed(logicalTimestamp, COMPACT_TASK_TIMESTAMP_LENGTH) +
+      base62Fixed(sequence, COMPACT_TASK_SEQUENCE_LENGTH) +
+      randomBase62(COMPACT_TASK_RANDOM_LENGTH)
+    )
+  }
+
   function fixedHex(value: bigint): string {
     return value.toString(16).padStart(FIELD_HEX_LENGTH, "0")
   }
@@ -176,7 +227,7 @@ export namespace Identifier {
   export const SHORT_PATH_BODY_LENGTH = 1 + FIELD_HEX_LENGTH * 2
   export const DIRECTORY_KEY_LENGTH = 8
 
-  const DIRECTORY_KEY_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+  const DIRECTORY_KEY_ALPHABET = BASE62_ALPHABET
   const DIRECTORY_KEY_SPACE = BigInt(DIRECTORY_KEY_ALPHABET.length) ** BigInt(DIRECTORY_KEY_LENGTH)
 
   /**
@@ -235,9 +286,25 @@ export namespace Identifier {
     if (id[separator + 1] !== ASCENDING_FORMAT_MARKER) {
       throw new Error(`ID does not use the canonical ascending timestamp encoding: ${id}`)
     }
+    const prefix = id.slice(0, separator)
+    const body = id.slice(separator + 1)
+    if (prefix === prefixes.task && body.length === COMPACT_TASK_BODY_LENGTH) {
+      const encoded = body.slice(1, 1 + COMPACT_TASK_TIMESTAMP_LENGTH)
+      return Number(base62Value(encoded))
+    }
     const hex = id.slice(separator + 2, separator + 2 + FIELD_HEX_LENGTH)
     if (!/^[0-9a-f]{12}$/.test(hex)) throw new Error(`Invalid ID timestamp encoding: ${id}`)
     const encoded = BigInt("0x" + hex)
     return Number(encoded)
+  }
+
+  function base62Value(input: string): bigint {
+    let value = 0n
+    for (const character of input) {
+      const digit = BASE62_ALPHABET.indexOf(character)
+      if (digit < 0) throw new Error(`Invalid Base62 value: ${input}`)
+      value = value * BigInt(BASE62_ALPHABET.length) + BigInt(digit)
+    }
+    return value
   }
 }
