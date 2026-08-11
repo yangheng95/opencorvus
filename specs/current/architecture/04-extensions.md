@@ -105,8 +105,11 @@ Manager 的 folder/ZIP 安装协议要求 caller 显式选择 `project | global`
 自助上架或维护第二套上传状态。网站选择精确
 package 后通过可见 handoff 返回 Overlay，Overlay 校验 archive/package digest、要求操作者明确选择
 `project | global` scope，再使用同一 Manager 安装协议按需安装 repository-hosted payload。Composer 与 Mission
-的 editable Expert Squad picker 只提供打开这个 Market 入口的动作，不会把该动作写成 Squad 选择、激活 profile
-或自行安装。旧版本可能留下
+的 editable Expert Squad picker 提供打开这个 Market 入口的动作；Mission 创建入口还会把
+operator 输入的 Expert Squad 查询交给同一 Market 模糊检索；排序输入包括 manifest selector、package-owned Skill 与
+Agent prompt 的 bounded discovery text，并只返回未安装建议。每条建议提供精确 public Market 页面和显式 project-scope
+安装动作。该建议面不是第二个可浏览目录；安装完成后只刷新 picker catalog，不会把打开或安装动作写成 Squad 选择或
+激活 profile，也不会自动覆盖现有安装。旧版本可能留下
 `.opencorvus/.r/project/expert-squad-payload-provisioning.json`，它不再被读取、写入或作为更新/删除权限；
 旧版本已经安装的 package 原样保留，后续只通过普通显式安装、更新与卸载生命周期管理。普通 package
 replacement 在移动旧 target 前保存 `.package-replacement-<id>.json` 持久 intent；进程在任一 rename

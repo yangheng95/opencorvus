@@ -409,6 +409,7 @@
   gap: var(--ui-gap-lg);
   overflow-y: auto;
   padding: var(--ui-gap-lg);
+  scrollbar-gutter: stable;
 }
 
 .mission-create-form__mode {
@@ -529,6 +530,105 @@
 
 .mission-create-form__option small {
   color: var(--text-muted);
+}
+
+.mission-create-form__market {
+  flex: none;
+  overflow: hidden;
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--accent) 28%, var(--border));
+  border-radius: var(--oc-radius-medium);
+  background: color-mix(in srgb, var(--accent) 5%, var(--surface));
+}
+
+.mission-create-form__market > header,
+.mission-create-form__market-item,
+.mission-create-form__market-actions,
+.mission-create-form__market-state {
+  display: flex;
+  align-items: center;
+}
+
+.mission-create-form__market > header {
+  justify-content: space-between;
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
+  border-bottom: var(--oc-border-width) solid var(--divider-soft);
+}
+
+.mission-create-form__market > header > div,
+.mission-create-form__market-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.mission-create-form__market > header > div {
+  gap: calc(2px * var(--ui-scale));
+}
+
+.mission-create-form__market > header strong {
+  color: var(--text-strong);
+  font-size: var(--ui-font-small);
+}
+
+.mission-create-form__market > header small,
+.mission-create-form__market-copy small,
+.mission-create-form__market-copy p,
+.mission-create-form__market-state {
+  color: var(--text-muted);
+  font-size: var(--ui-font-small);
+}
+
+.mission-create-form__market-item {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: var(--ui-gap-sm);
+  padding: var(--ui-gap-sm) var(--ui-gap-md);
+}
+
+.mission-create-form__market-item + .mission-create-form__market-item {
+  border-top: var(--oc-border-width) solid var(--divider-soft);
+}
+
+.mission-create-form__market-copy {
+  gap: calc(2px * var(--ui-scale));
+}
+
+.mission-create-form__market-copy > strong,
+.mission-create-form__market-copy > small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mission-create-form__market-copy > strong {
+  color: var(--text-strong);
+  font-size: var(--ui-font-body);
+}
+
+.mission-create-form__market-copy p {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: calc(2px * var(--ui-scale)) 0 0;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.4;
+}
+
+.mission-create-form__market-actions {
+  width: 100%;
+  flex: none;
+  justify-content: flex-end;
+  gap: var(--ui-gap-xs);
+}
+
+.mission-create-form__market-state {
+  gap: var(--ui-gap-xs);
+  min-height: calc(28px * var(--ui-scale));
+}
+
+.mission-create-form__market-state.is-success {
+  color: var(--good);
 }
 
 .mission-create-form__error {

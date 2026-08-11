@@ -98,10 +98,15 @@ import {
 import { panelMessage } from "./services/chat"
 import { loadConversationCapability } from "./services/conversation-capability"
 import {
+  expertSquadPublicMarketURL,
   inspectExpertSquad,
+  installExpertSquadMarketPackage,
   loadExpertSquadCatalog,
+  loadExpertSquadMarket,
   searchExpertSquads,
   type ExpertSquadCatalogScope,
+  type ExpertSquadMarketIndexItem,
+  type ExpertSquadOption,
 } from "./services/expert-squad"
 import { loadMissionSkillCatalog } from "./services/mission-skill"
 import {
@@ -1171,6 +1176,31 @@ async function openExpertSquadMarketForProject(projectDirectory?: string): Promi
   await openConfigDialog("expert-squad-install")
 }
 
+async function searchMissionMarketExpertSquads(
+  projectDirectory: string,
+  query: string,
+): Promise<readonly ExpertSquadMarketIndexItem[]> {
+  const page = await loadExpertSquadMarket(projectDirectory, {
+    query: query.trim().slice(0, 500),
+    availability: "available",
+    limit: 3,
+  })
+  return page.entries
+}
+
+async function installMissionMarketExpertSquad(
+  projectDirectory: string,
+  item: ExpertSquadMarketIndexItem,
+): Promise<void> {
+  await installExpertSquadMarketPackage(projectDirectory, item.id, "project")
+}
+
+async function openMissionMarketExpertSquad(item: ExpertSquadMarketIndexItem): Promise<void> {
+  const opened = await nativeOpen(
+    expertSquadPublicMarketURL({ namespace: item.namespace, id: item.id, locale: localeTag() }),
+  )
+  if (!opened) throw new Error(t("mission_board.create.market_open_unavailable"))
+}
 async function copyActiveConversationDebug(): Promise<void> {
   const initialSource = boardStore.selectedSource
   const selectedSource = initialSource ? ({ ...initialSource } as BoardSource) : null
@@ -2002,6 +2032,10 @@ function OverlayRoot() {
           onInstallMoreExpertSquads={(directory) =>
             void runMainAsync("expert-squad.open-market", () => openExpertSquadMarketForProject(directory))
           }
+          onMarketExpertSquadQuery={searchMissionMarketExpertSquads}
+          onInstallMarketExpertSquad={installMissionMarketExpertSquad}
+          onOpenMarketExpertSquad={openMissionMarketExpertSquad}
+          canOpenMarketWebPage={getHostTransport().capabilities.nativeCommands["open-url"]}
           onOpenMission={(mission) =>
             runMainAsync("mission-board.open-mission", () => openMissionBoardMission(mission))
           }

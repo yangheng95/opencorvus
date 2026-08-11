@@ -1,4 +1,5 @@
 import { createEffect, createMemo, createSignal, For, Show } from "solid-js"
+import type { ExpertSquadMarketIndexItem } from "../services/expert-squad"
 import { MISSION_BOARD_LANES, type MissionBoardLane, type MissionRecord } from "../services/mission"
 import { missionBoardStore, reloadMissionBoard } from "../services/mission-board"
 import { projectDirectoryLabel } from "../utils/project-directory"
@@ -21,6 +22,10 @@ export interface MissionBoardProps {
   projectDirectories: readonly string[]
   defaultProjectDirectory: string
   onInstallMoreExpertSquads?: (projectDirectory: string) => void
+  onMarketExpertSquadQuery?: (projectDirectory: string, query: string) => Promise<readonly ExpertSquadMarketIndexItem[]>
+  onInstallMarketExpertSquad?: (projectDirectory: string, item: ExpertSquadMarketIndexItem) => Promise<void>
+  onOpenMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
+  canOpenMarketWebPage?: boolean
   onOpenMission: (mission: MissionRecord) => void | Promise<void>
   onCreateManual: (input: MissionManualCreateRequest) => Promise<void>
   onCreateWithAI: (input: MissionCreateRequest) => Promise<void>
@@ -433,6 +438,10 @@ export function MissionBoard(props: MissionBoardProps) {
         projectDirectories={props.projectDirectories}
         defaultProjectDirectory={props.defaultProjectDirectory}
         onInstallMoreExpertSquads={props.onInstallMoreExpertSquads}
+        onMarketExpertSquadQuery={props.onMarketExpertSquadQuery}
+        onInstallMarketExpertSquad={props.onInstallMarketExpertSquad}
+        onOpenMarketExpertSquad={props.onOpenMarketExpertSquad}
+        canOpenMarketWebPage={props.canOpenMarketWebPage}
         onClose={() => setCreateOpen(false)}
         onCreateManual={props.onCreateManual}
         onCreateWithAI={props.onCreateWithAI}
