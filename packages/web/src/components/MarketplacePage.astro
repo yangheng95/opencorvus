@@ -1,7 +1,7 @@
 ---
 import PublicSiteLayout from "./PublicSiteLayout.astro"
 import WorkflowTopology from "./WorkflowTopology.astro"
-import { publicPath, publicSquadRecords, squadPath, type PublicLocale } from "../content/public-market"
+import { publicPath, publicSquadRecords, segmentPublicMarketText, squadPath, type PublicLocale } from "../content/public-market"
 import { generatedExpertSquadDistribution } from "../content/expert-squad-distribution.generated"
 
 const { locale } = Astro.props as { locale: PublicLocale }
@@ -184,15 +184,15 @@ const copy =
               href={squadPath(locale, record)}
               data-market-record
               data-pillars={record.pillars.join(" ")}
-              data-search={`${record.label} ${record.identity.namespace} ${record.identity.id} ${record.description[locale]} ${record.selectorSummary[locale]}`.toLowerCase()}
+              data-search={`${record.displayLabel[locale]} ${record.label} ${record.identity.namespace} ${record.identity.id} ${record.description[locale]} ${record.selectorSummary[locale]}`.toLowerCase()}
             >
               <div>
                 <span class="squad-identity">{record.identity.namespace}/{record.identity.id}</span>
-                <h2>{record.label}</h2>
+                <h2>{segmentPublicMarketText(locale, record.displayLabel[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</h2>
               </div>
               <div class="market-record-copy">
-                <p>{record.description[locale]}</p>
-                <p class="selector-line">{record.selectorSummary[locale]}</p>
+                <p>{segmentPublicMarketText(locale, record.description[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</p>
+                <p class="selector-line">{segmentPublicMarketText(locale, record.selectorSummary[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</p>
                 <WorkflowTopology {record} {locale} />
               </div>
               <div class="record-meta">

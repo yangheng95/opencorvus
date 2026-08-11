@@ -1,0 +1,22 @@
+record_type,artifact_id,engagement_id,test_id,sample_id,control_id,control_version,test_objective,criteria_source_locator,criteria_version,criteria_date,test_period_start,test_period_end,population_definition,population_source_locator,expected_population_count,obtained_population_count,count_unit,population_reconciliation_state,sampling_unit,selection_method,selection_method_authority,sample_size_authority,original_selection,replacement_reason,evidence_source_locator,evidence_version,evidence_date,performer,control_reviewer,audit_owner,qualified_reviewer,test_procedure,inquiry_context,observation_evidence,inspection_evidence,reperformance_evidence,expected_attribute,observed_attribute,result,exception_id,applicability,assumptions,uncertainty_confidence,privacy_confidentiality_license_state,status,decision_not_made,outcome_unknown,stop_or_escalation_condition
+metadata,IA-TEST-ASSET,,,,,,,,,,,,,,,,,,,,,,,,,,,,internal audit,qualified audit supervisor,,,,,,,,,,,,,engagement-specific,,No overall effectiveness opinion or deficiency severity,true,Stop on missing mandate criteria population authority or source evidence
+population,IA-POP-001,ENGAGEMENT-TBD,IA-TEST-001,,CONTROL-TBD,VERSION-TBD,Test sustained performance against supplied attributes,SOURCE-TBD,VERSION-TBD,DATE-TBD,DATE-TBD,DATE-TBD,Define every eligible occurrence,SOURCE-TBD,,,,unreconciled,occurrence,SUPPLIED-METHOD-TBD,SOURCE-TBD,SOURCE-TBD,,,,,,,,,,,,,,,,,,,,,engagement-specific,No assumptions accepted until recorded,unknown,restricted,not tested,No sample conclusion or extrapolation,true,Population must reconcile before result
+sample,IA-SAMPLE-001,ENGAGEMENT-TBD,IA-TEST-001,IA-SAMPLE-001,CONTROL-TBD,VERSION-TBD,Test supplied attributes,SOURCE-TBD,VERSION-TBD,DATE-TBD,DATE-TBD,DATE-TBD,Same as population row,SOURCE-TBD,,,,unreconciled,occurrence,SUPPLIED-METHOD-TBD,SOURCE-TBD,SOURCE-TBD,ITEM-TBD,,SOURCE-TBD,VERSION-TBD,DATE-TBD,,,,qualified audit reviewer,PROCEDURE-TBD,context only,not performed,not performed,not performed,ATTRIBUTE-TBD,,not tested,,engagement-specific,,unknown,restricted,open,No control-effectiveness or severity decision,true,Stop if original evidence is unavailable or versions conflict
+
+
+## Reusable evidence contract markers
+
+This ledger records operating effectiveness test evidence and never constitutes an audit opinion.
+
+- artifact_id: stable artifact or row identity
+- source_id_locator: exact authoritative source locator
+- source_version_date: immutable source version and applicable date
+- qualified_reviewer: named discipline reviewer with decision authority
+- units_and_denominator: value, unit, currency, population and denominator or not-applicable rationale
+- assumptions_uncertainty: authorized assumptions, unknowns, confidence and reason
+- decision_not_made: explicit professional decisions this artifact does not make
+- outcome_unknown: unresolved outcome stated without inference
+- stop_escalation: exact hold point, reason, escalation owner and required review
+
+# Usage notes
+# Keep metadata, population and sample rows in this single controlled ledger. Never delete an adverse original selection when a replacement is authorized; add a new row and retain the reason. Inquiry alone cannot support a passed result. Missing evidence is an explicit limitation, not automatically a failed control. Do not enter personal data beyond the authorized minimum. Counts require a named unit and cutoff. Every passed, exception, not-applicable, not-tested or inconclusive result must cite the exact criterion and evidence. The qualified engagement supervisor approves sampling, exceptions, extrapolation and any conclusion.

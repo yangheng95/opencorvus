@@ -1,6 +1,11 @@
-import { createMemo, createSignal, on, createEffect, Show } from "solid-js"
+import { createEffect, createMemo, createSignal, For, on, onCleanup, Show } from "solid-js"
 import type { ProductPillar } from "@opencorvus-ai/transport-protocol"
-import { loadExpertSquadCatalog, searchExpertSquads, type ExpertSquadOption } from "../services/expert-squad"
+import {
+  loadExpertSquadCatalog,
+  searchExpertSquads,
+  type ExpertSquadMarketIndexItem,
+  type ExpertSquadOption,
+} from "../services/expert-squad"
 import { projectDirectoryLabel } from "../utils/project-directory"
 import { t } from "../utils/i18n"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
@@ -32,6 +37,10 @@ export interface MissionCreateDialogProps {
   projectDirectories: readonly string[]
   defaultProjectDirectory: string
   onInstallMoreExpertSquads?: (projectDirectory: string) => void
+  onMarketExpertSquadQuery?: (projectDirectory: string, query: string) => Promise<readonly ExpertSquadMarketIndexItem[]>
+  onInstallMarketExpertSquad?: (projectDirectory: string, item: ExpertSquadMarketIndexItem) => Promise<void>
+  onOpenMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
+  canOpenMarketWebPage?: boolean
   onClose: () => void
   onCreateManual: (input: MissionManualCreateRequest) => Promise<void>
   onCreateWithAI: (input: MissionCreateRequest) => Promise<void>
@@ -61,6 +70,11 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const [expertSquadQuery, setExpertSquadQuery] = createSignal("")
   const [expertSquadLoading, setExpertSquadLoading] = createSignal(false)
   const [expertSquadError, setExpertSquadError] = createSignal("")
+  const [marketRecommendations, setMarketRecommendations] = createSignal<readonly ExpertSquadMarketIndexItem[]>([])
+  const [marketLoading, setMarketLoading] = createSignal(false)
+  const [marketError, setMarketError] = createSignal("")
+  const [marketInstallingID, setMarketInstallingID] = createSignal("")
+  const [marketInstalledID, setMarketInstalledID] = createSignal("")
   const [submitting, setSubmitting] = createSignal(false)
   const [error, setError] = createSignal("")
   let requestRef: HTMLTextAreaElement | undefined
@@ -120,6 +134,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
           productPillar() &&
           expertSquadID() &&
           request().trim() &&
+          !marketInstallingID() &&
           !expertSquadLoading() &&
           !expertSquadError(),
       ) && (mode() === "manual" ? Boolean(title().trim()) : true),
@@ -206,6 +221,11 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     setExpertSquadID("")
     setExpertSquadLoading(false)
     setExpertSquadError("")
+    setMarketRecommendations([])
+    setMarketLoading(false)
+    setMarketError("")
+    setMarketInstallingID("")
+    setMarketInstalledID("")
     const pillar = productPillar()
     if (directory && pillar) void loadExpertSquadsForContext(directory, pillar)
   }
@@ -254,6 +274,11 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         setExpertSquadQuery("")
         setExpertSquadLoading(false)
         setExpertSquadError("")
+        setMarketRecommendations([])
+        setMarketLoading(false)
+        setMarketError("")
+        setMarketInstallingID("")
+        setMarketInstalledID("")
         setSubmitting(false)
         setError("")
         queueMicrotask(() => requestRef?.focus())
@@ -275,6 +300,97 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       },
     ),
   )
+
+  let marketSearchSequence = 0
+  createEffect(() => {
+    const open = props.open
+    const directory = projectDirectory().trim()
+    const query = expertSquadQuery().trim().slice(0, 500)
+    const search = props.onMarketExpertSquadQuery
+    const sequence = ++marketSearchSequence
+    if (!open || !directory || query.length < 2 || !search) {
+      setMarketRecommendations([])
+      setMarketLoading(false)
+      setMarketError("")
+      return
+    }
+    setMarketLoading(true)
+    setMarketRecommendations([])
+    setMarketError("")
+    const timer = window.setTimeout(() => {
+      void search(directory, query)
+        .then((items) => {
+          if (sequence !== marketSearchSequence) return
+          setMarketRecommendations(items)
+        })
+        .catch((nextError) => {
+          if (sequence !== marketSearchSequence) return
+          setMarketRecommendations([])
+          setMarketError(nextError instanceof Error ? nextError.message : String(nextError))
+        })
+        .finally(() => {
+          if (sequence === marketSearchSequence) setMarketLoading(false)
+        })
+    }, 280)
+    onCleanup(() => window.clearTimeout(timer))
+  })
+
+  let installLifecycleSequence = 0
+  createEffect(() => {
+    const open = props.open
+    projectDirectory()
+    installLifecycleSequence += 1
+    if (!open) {
+      setMarketInstallingID("")
+      setMarketLoading(false)
+    }
+  })
+
+  async function installMarketExpertSquad(item: ExpertSquadMarketIndexItem): Promise<void> {
+    const install = props.onInstallMarketExpertSquad
+    const directory = projectDirectory().trim()
+    const loadMarket = props.onMarketExpertSquadQuery
+    if (!install || !loadMarket || !directory || marketInstallingID()) return
+    const lifecycle = ++installLifecycleSequence
+    marketSearchSequence += 1
+    setMarketLoading(false)
+    setMarketInstallingID(item.id)
+    setMarketInstalledID("")
+    setMarketError("")
+    try {
+      await install(directory, item)
+      if (lifecycle !== installLifecycleSequence || !props.open || projectDirectory().trim() !== directory) return
+      const query = expertSquadQuery().trim().slice(0, 500)
+      const marketSequence = ++marketSearchSequence
+      const [, market] = await Promise.all([
+        searchSquads(query),
+        query.length >= 2 ? loadMarket(directory, query) : Promise.resolve([]),
+      ])
+      if (lifecycle !== installLifecycleSequence || !props.open || projectDirectory().trim() !== directory) return
+      if (marketSequence === marketSearchSequence) {
+        setMarketRecommendations(market)
+        setMarketLoading(false)
+      }
+      setMarketInstalledID(item.id)
+    } catch (nextError) {
+      if (lifecycle === installLifecycleSequence) {
+        setMarketLoading(false)
+        setMarketError(nextError instanceof Error ? nextError.message : String(nextError))
+      }
+    } finally {
+      if (lifecycle === installLifecycleSequence) setMarketInstallingID("")
+    }
+  }
+
+  async function openMarketExpertSquad(item: ExpertSquadMarketIndexItem): Promise<void> {
+    if (!props.onOpenMarketExpertSquad) return
+    setMarketError("")
+    try {
+      await props.onOpenMarketExpertSquad(item)
+    } catch (nextError) {
+      setMarketError(nextError instanceof Error ? nextError.message : String(nextError))
+    }
+  }
 
   async function submit(): Promise<void> {
     const pillar = productPillar()
@@ -541,10 +657,78 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
           <p class="mission-create-form__model-note">{t("mission_board.create.project_model_note")}</p>
         </fieldset>
 
-        <Show when={error()}>
+        <Show when={marketLoading()}>
+          <div class="mission-create-form__market-state" role="status" aria-live="polite">
+            <Icon name="loading" size="compact" />
+            <span>{t("mission_board.create.market_searching")}</span>
+          </div>
+        </Show>
+        <Show when={marketRecommendations().length > 0}>
+          <section class="mission-create-form__market" aria-labelledby="missionCreateMarketTitle">
+            <header>
+              <div>
+                <strong id="missionCreateMarketTitle">{t("mission_board.create.market_title")}</strong>
+                <small>{t("mission_board.create.market_intro")}</small>
+              </div>
+              <Icon name="config-skill-market" size="medium" />
+            </header>
+            <div class="mission-create-form__market-list">
+              <For each={marketRecommendations()}>
+                {(item) => (
+                  <article class="mission-create-form__market-item" data-market-id={item.id}>
+                    <div class="mission-create-form__market-copy">
+                      <strong>{item.name || item.label}</strong>
+                      <small>
+                        {item.namespace}/{item.id} · {item.version}
+                      </small>
+                      <p>{item.description || item.label}</p>
+                    </div>
+                    <div class="mission-create-form__market-actions">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        tone="neutral"
+                        disabled={!props.canOpenMarketWebPage || Boolean(marketInstallingID())}
+                        onClick={() => void openMarketExpertSquad(item)}
+                      >
+                        <Icon name="web-search" size="compact" />
+                        {t("mission_board.create.market_open")}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        tone="accent"
+                        disabled={submitting() || Boolean(marketInstallingID())}
+                        onClick={() => void installMarketExpertSquad(item)}
+                      >
+                        <Icon
+                          name={marketInstallingID() === item.id ? "loading" : "config-expert-squad-install"}
+                          size="compact"
+                        />
+                        {marketInstallingID() === item.id
+                          ? t("expert_squad.installing")
+                          : t("mission_board.create.market_install")}
+                      </Button>
+                    </div>
+                  </article>
+                )}
+              </For>
+            </div>
+          </section>
+        </Show>
+        <Show when={marketInstalledID()}>
+          <div class="mission-create-form__market-state is-success" role="status" aria-live="polite">
+            <Icon name="status-completed" size="compact" />
+            <span>{t("mission_board.create.market_installed", { id: marketInstalledID() })}</span>
+          </div>
+        </Show>
+
+        <Show when={error() || marketError()}>
           <div class="mission-create-form__error" role="alert">
             <Icon name="error-reason" size="compact" />
-            <span>{error()}</span>
+            <span>{error() || marketError()}</span>
           </div>
         </Show>
       </form>

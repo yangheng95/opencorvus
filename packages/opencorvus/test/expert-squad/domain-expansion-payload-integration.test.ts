@@ -27,14 +27,14 @@ afterAll(async () => {
 })
 
 describe("Ten-domain generated payload integration", () => {
-  test("retains the prior ten additions with one saved Skill in the one-hundred-five-package Market payload", async () => {
+  test("retains the prior ten additions with one saved Skill in the one-hundred-fifteen-package Market payload", async () => {
     await using project = await memoryProject()
     const market = await ExpertSquadPackageManager.payloadMarket({ projectDirectory: project.path })
     const additions = market
       .filter((entry) => squadIDs.includes(entry.id as (typeof squadIDs)[number]))
       .map((entry) => ({ id: entry.id, skillCount: entry.skillCount }))
 
-    expect(market).toHaveLength(105)
+    expect(market).toHaveLength(115)
     expect(additions).toEqual([...squadIDs].sort().map((id) => ({ id, skillCount: 1 })))
   })
 

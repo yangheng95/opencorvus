@@ -112,6 +112,7 @@ export function createMetricJudgeRunnerWithDependencies(
     try {
       const result = dependencies.streamText({
         model: language,
+        usagePurpose: "metric-judge",
         messages: metricJudgeMessages(request),
         abortSignal: activity.signal,
         timeoutMs: false,

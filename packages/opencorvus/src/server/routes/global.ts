@@ -45,6 +45,7 @@ import { MissionSkillCatalog } from "@/mission-skill/catalog"
 import { Skill } from "@/skill/skill"
 import { AutomationRunOutcomes, AutomationService } from "@/scheduler/automation-service"
 import { ProviderAccountUsage } from "@/provider/account-usage"
+import { UsageStats } from "@/usage"
 
 const log = Log.create({ service: "server" })
 
@@ -156,6 +157,24 @@ function errorMessage(error: unknown): string {
 
 export const GlobalRoutes = lazy(() =>
   new Hono()
+    .get(
+      "/usage",
+      describeRoute({
+        summary: "Get natural-period Provider usage",
+        description:
+          "Aggregate persisted streamed Provider calls across all projects by their event time for one IANA calendar period.",
+        operationId: "global.usage",
+        responses: {
+          200: {
+            description: "Natural-period Token, cost, Provider, model, comparison, and time-series statistics",
+            content: { "application/json": { schema: resolver(UsageStats.Response) } },
+          },
+          ...errors(400),
+        },
+      }),
+      validator("query", UsageStats.Query),
+      async (c) => c.json(await UsageStats.read(c.req.valid("query"))),
+    )
     .get(
       "/automations",
       describeRoute({
@@ -309,7 +328,7 @@ export const GlobalRoutes = lazy(() =>
       describeRoute({
         summary: "List global Composer references",
         description:
-          "Return the built-in and user-global Skills, Agent Squads, and Mission Skills available before a project-backed Code or Work conversation exists. This read-only route does not create a Project or Session.",
+          "Return the built-in and user-global Skills, Expert Squads, and Mission Skills available before a project-backed Code or Work conversation exists. This read-only route does not create a Project or Session.",
         operationId: "global.composerReferences",
         responses: {
           200: {

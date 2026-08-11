@@ -6,6 +6,10 @@ Latest permission-system two-mode calibration plan: [`2026-08-12-permission-two-
 
 Latest Windows worker and scheduler liveness convergence: [`2026-08-11-windows-worker-scheduler-liveness-convergence.md`](records/2026-08/2026-08-11-windows-worker-scheduler-liveness-convergence.md).
 
+Latest random Expert Squad self-evolution end-to-end automation: [`2026-08-12-random-expert-squad-self-evolution-e2e.md`](records/2026-08/2026-08-12-random-expert-squad-self-evolution-e2e.md).
+
+Latest main delivery history convergence: [`2026-08-12-main-delivery-history-convergence.md`](records/2026-08/2026-08-12-main-delivery-history-convergence.md).
+
 Latest hollow desktop application-icon convergence: [`2026-08-11-hollow-desktop-app-icons.md`](records/2026-08/2026-08-11-hollow-desktop-app-icons.md).
 
 Latest native platform message-notification convergence: [`2026-08-11-native-platform-message-notifications.md`](records/2026-08/2026-08-11-native-platform-message-notifications.md).
@@ -33,6 +37,18 @@ Latest standalone Session card ingress projection repair: [`2026-08-10-session-c
 Latest `v0.0.39-beta` canonical release trigger: [`2026-08-10-v0.0.39-beta-release-trigger.md`](records/2026-08/2026-08-10-v0.0.39-beta-release-trigger.md).
 
 Latest `v0.0.39-beta` Windows repackage: [`2026-08-10-v0.0.39-beta-windows-repackage.md`](records/2026-08/2026-08-10-v0.0.39-beta-windows-repackage.md).
+
+Latest Expert Squad terminology convergence: [`2026-08-11-expert-squad-terminology-convergence.md`](records/2026-08/2026-08-11-expert-squad-terminology-convergence.md).
+
+Latest Mission Market Expert Squad recommendation design: [`2026-08-11-mission-market-expert-squad-recommendations.md`](records/2026-08/2026-08-11-mission-market-expert-squad-recommendations.md).
+
+Latest Conversation Agent-declared output summary repair: [`2026-08-11-conversation-agent-declared-output-summary.md`](records/2026-08/2026-08-11-conversation-agent-declared-output-summary.md).
+
+Latest Provider usage, billing-coverage, natural-cycle API, and statistics dashboard design: [`2026-08-11-provider-usage-natural-cycle-dashboard.md`](records/2026-08/2026-08-11-provider-usage-natural-cycle-dashboard.md).
+
+Latest clipboard API-key Provider prompt design: [`2026-08-11-clipboard-api-key-provider-prompt.md`](records/2026-08/2026-08-11-clipboard-api-key-provider-prompt.md).
+
+Clipboard API-key prompt visual evidence: [`confirmation`](artifacts/2026-08-11-clipboard-api-key-prompt.png) and [`Providers destination`](artifacts/2026-08-11-clipboard-api-key-providers.png).
 Latest README and homepage alignment: [`2026-08-11-readme-homepage-alignment.md`](records/2026-08/2026-08-11-readme-homepage-alignment.md).
 
 Latest Agent-host website tab: [`2026-08-11-agent-hosts-website-tab.md`](records/2026-08/2026-08-11-agent-hosts-website-tab.md).
@@ -48,6 +64,8 @@ Latest public website iterative design program: [`2026-08-11-public-website-iter
 Latest public download-page and Release synchronization design: [`2026-08-11-public-download-page-design.md`](records/2026-08/2026-08-11-public-download-page-design.md).
 
 Public website Iteration 1 visual evidence: [`English top`](artifacts/2026-08-11-public-website-iteration-1-en-top.png), [`English work modes`](artifacts/2026-08-11-public-website-iteration-1-en-modes-squads.png), [`English Expert Squads`](artifacts/2026-08-11-public-website-iteration-1-en-squads.png), [`English start and footer`](artifacts/2026-08-11-public-website-iteration-1-en-start-footer.png), [`Simplified Chinese top`](artifacts/2026-08-11-public-website-iteration-1-zh-top.png), [`Simplified Chinese work modes`](artifacts/2026-08-11-public-website-iteration-1-zh-modes-squads.png), [`Simplified Chinese Expert Squads`](artifacts/2026-08-11-public-website-iteration-1-zh-squads.png), [`Simplified Chinese start and footer`](artifacts/2026-08-11-public-website-iteration-1-zh-start-footer.png), [`quickstart top`](artifacts/2026-08-11-public-website-iteration-1-docs-top.png), and [`quickstart bottom`](artifacts/2026-08-11-public-website-iteration-1-docs-bottom.png).
+
+Latest tenth fixed-ten Expert Squad batch: [2026-08-11-tenth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-tenth-ten-domain-expert-squad-batch.md).
 
 Latest ninth fixed-ten Expert Squad batch: [2026-08-11-ninth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-ninth-ten-domain-expert-squad-batch.md).
 
@@ -289,7 +307,7 @@ Latest landing alignment and preview-scroll visual evidence: [`Expert Squads ali
 
 Latest ContractGraph and Goal fact-projection system repair plan: [`2026-08-05-contract-graph-and-goal-fact-projection-system-repair-plan.md`](records/2026-08/2026-08-05-contract-graph-and-goal-fact-projection-system-repair-plan.md).
 
-Latest Generate Agent Squads project-generation trace design: [`2026-08-07-squad-sdk-project-generation-trace.md`](records/2026-08/2026-08-07-squad-sdk-project-generation-trace.md).
+Latest Generate Expert Squads project-generation trace design: [`2026-08-07-squad-sdk-project-generation-trace.md`](records/2026-08/2026-08-07-squad-sdk-project-generation-trace.md).
 
 Latest Task resume, queue occurrence, and Overlay recovery repair: [`2026-08-04-task-resume-occurrence-and-overlay-recovery.md`](records/2026-08/2026-08-04-task-resume-occurrence-and-overlay-recovery.md).
 
@@ -607,7 +625,7 @@ Latest default Agent parallelism-five convergence: [`2026-07-30-default-agent-pa
 
 Latest Orchestrator ready-frontier parallel dispatch repair: [`2026-07-30-orchestrator-ready-frontier-parallel-dispatch.md`](records/2026-07/2026-07-30-orchestrator-ready-frontier-parallel-dispatch.md).
 
-Latest Composer Skill / Agent Squad selector and model-search refinement: [`2026-07-30-composer-reference-selector-and-model-search.md`](records/2026-07/2026-07-30-composer-reference-selector-and-model-search.md).
+Latest Composer Skill / Expert Squad selector and model-search refinement: [`2026-07-30-composer-reference-selector-and-model-search.md`](records/2026-07/2026-07-30-composer-reference-selector-and-model-search.md).
 
 Latest Overlay close and Conversation chrome repair: [`2026-07-30-overlay-close-and-conversation-chrome-repair.md`](records/2026-07/2026-07-30-overlay-close-and-conversation-chrome-repair.md).
 

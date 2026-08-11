@@ -98,10 +98,15 @@ import {
 import { panelMessage } from "./services/chat"
 import { loadConversationCapability } from "./services/conversation-capability"
 import {
+  expertSquadPublicMarketURL,
   inspectExpertSquad,
+  installExpertSquadMarketPackage,
   loadExpertSquadCatalog,
+  loadExpertSquadMarket,
   searchExpertSquads,
   type ExpertSquadCatalogScope,
+  type ExpertSquadMarketIndexItem,
+  type ExpertSquadOption,
 } from "./services/expert-squad"
 import { loadMissionSkillCatalog } from "./services/mission-skill"
 import {
@@ -154,13 +159,14 @@ import {
 } from "./services/workspace"
 import { openGoalDialog } from "./services/dialog"
 import { openConfigDialog } from "./services/config-dialog-control"
+import { installClipboardApiKeyPrompt } from "./services/clipboard-api-key-prompt"
 import { cardTreeStore } from "./store/card-tree"
 import { composerDraftKey, composerDraftText, setComposerDraft } from "./services/composer-draft"
 import { normalizeDebugDirectory } from "./utils/debug-text"
 import {
   cancelConversationReplay,
-  conversationSourceDirectory,
   loadConversation,
+  optionalConversationSourceDirectory,
   resetConversationProjection,
 } from "./services/conversation"
 import {
@@ -194,6 +200,7 @@ import {
   buildChatDebugBlob,
   buildTaskDebugBlob,
   buildTaskSelectionErrorDebugBlob,
+  requireNamedDebugProjectDirectory,
   writeDebugClipboard,
 } from "./utils/debug-info"
 import { taskOwningDirectory } from "./services/task-directory"
@@ -1169,6 +1176,31 @@ async function openExpertSquadMarketForProject(projectDirectory?: string): Promi
   await openConfigDialog("expert-squad-install")
 }
 
+async function searchMissionMarketExpertSquads(
+  projectDirectory: string,
+  query: string,
+): Promise<readonly ExpertSquadMarketIndexItem[]> {
+  const page = await loadExpertSquadMarket(projectDirectory, {
+    query: query.trim().slice(0, 500),
+    availability: "available",
+    limit: 3,
+  })
+  return page.entries
+}
+
+async function installMissionMarketExpertSquad(
+  projectDirectory: string,
+  item: ExpertSquadMarketIndexItem,
+): Promise<void> {
+  await installExpertSquadMarketPackage(projectDirectory, item.id, "project")
+}
+
+async function openMissionMarketExpertSquad(item: ExpertSquadMarketIndexItem): Promise<void> {
+  const opened = await nativeOpen(
+    expertSquadPublicMarketURL({ namespace: item.namespace, id: item.id, locale: localeTag() }),
+  )
+  if (!opened) throw new Error(t("mission_board.create.market_open_unavailable"))
+}
 async function copyActiveConversationDebug(): Promise<void> {
   const initialSource = boardStore.selectedSource
   const selectedSource = initialSource ? ({ ...initialSource } as BoardSource) : null
@@ -1176,13 +1208,15 @@ async function copyActiveConversationDebug(): Promise<void> {
   const selectedTaskFailure =
     selectedSource?.kind === "task" && taskSelectionError?.taskID === selectedSource.id ? taskSelectionError : null
   if (!selectedSource) throw new Error("No active Task or Chat")
+  selectedSource.directory = requireNamedDebugProjectDirectory(
+    String(selectedSource.directory ?? "").trim() ||
+      (selectedSource.kind === "session" ? (optionalConversationSourceDirectory(selectedSource) ?? "") : ""),
+    t("chat.debug_copy_named_project_required"),
+  )
   if (selectedSource.kind !== "session" && !selectedTaskFailure) {
     await loadBoard({ sync: true, requireFresh: true })
   }
   assertDebugSelectionCurrent(selectedSource)
-  if (selectedSource.kind === "session" && !String(selectedSource.directory ?? "").trim()) {
-    selectedSource.directory = conversationSourceDirectory(selectedSource)
-  }
   const persistedChat =
     selectedSource.kind === "session"
       ? await loadPersistedChatDebugProjection({
@@ -1998,6 +2032,10 @@ function OverlayRoot() {
           onInstallMoreExpertSquads={(directory) =>
             void runMainAsync("expert-squad.open-market", () => openExpertSquadMarketForProject(directory))
           }
+          onMarketExpertSquadQuery={searchMissionMarketExpertSquads}
+          onInstallMarketExpertSquad={installMissionMarketExpertSquad}
+          onOpenMarketExpertSquad={openMissionMarketExpertSquad}
+          canOpenMarketWebPage={getHostTransport().capabilities.nativeCommands["open-url"]}
           onOpenMission={(mission) =>
             runMainAsync("mission-board.open-mission", () => openMissionBoardMission(mission))
           }
@@ -2553,6 +2591,8 @@ disposers.push(render(() => <OverlayRoot />, overlayAppHost))
 await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
 await showOverlayWindow()
 disposers.push(await installExpertSquadInstallHandoffBridge())
+const clipboardApiKeyPrompt = installClipboardApiKeyPrompt()
+disposers.push(() => clipboardApiKeyPrompt.dispose())
 
 // ── Right dock width resize ──
 // The right dock is resized by dragging `#rightDockResizer`. Width persists to
@@ -2708,6 +2748,7 @@ runMainAsync("initApp", async () => {
       },
       onConnected: async () => {
         await focusInitialRestoredTaskWorkspace()
+        void clipboardApiKeyPrompt.checkNow()
         void checkDesktopUpdate({ background: true })
       },
     })

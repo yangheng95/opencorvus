@@ -40,9 +40,9 @@ test("production HTTP bootstrap exposes embedded defaults and installs one selec
     }
 
     expect(result).toEqual({
-      payloadCount: 105,
+      payloadCount: 115,
       defaultIDs: ["advanced", "base", "research-studio", "squad-sdk"],
-      marketAvailable: 105,
+      marketAvailable: 115,
       installedID: "one-person-company-operating-system",
       installedDigest: expect.stringMatching(/^[a-f0-9]{64}$/),
       installedSkillRefs: ["one-person-company-operating-system/shared/method"],

@@ -1,5 +1,5 @@
 ---
-import type { PublicLocale, PublicSquadRecord } from "../content/public-market"
+import { segmentPublicMarketText, type PublicLocale, type PublicSquadRecord } from "../content/public-market"
 
 type Props = {
   record: PublicSquadRecord
@@ -32,14 +32,16 @@ const copy =
   <div class="topology-graph">
     <div class="topology-seal" title={`${record.identity.namespace}/${record.identity.id}@${record.identity.version}`}>
       <span>{copy.revision}</span>
-      <code>{record.identity.digest.slice(0, 8)}</code>
+      <code lang="en">{record.identity.digest.slice(0, 8)}</code>
     </div>
     <div class="topology-workflows">
       {record.workflows.map((workflow, workflowIndex) => (
         <section class="topology-workflow" aria-labelledby={`topology-${record.identity.id}-${workflow.id}`}>
           <header>
             <span>{String(workflowIndex + 1).padStart(2, "0")}</span>
-            <strong id={`topology-${record.identity.id}-${workflow.id}`}>{workflow.label}</strong>
+            <strong id={`topology-${record.identity.id}-${workflow.id}`}>
+              {segmentPublicMarketText(locale, workflow.displayLabel[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}
+            </strong>
             <code>{workflow.nodes.length} {copy.nodes}</code>
           </header>
           <ol>
@@ -48,9 +50,9 @@ const copy =
                 <span class="topology-node-index">{String(nodeIndex + 1).padStart(2, "0")}</span>
                 <span class="topology-node-mark" aria-hidden="true"></span>
                 <span class="topology-node-copy">
-                  <strong>{node.agentID}</strong>
-                  {expanded && <small>{node.description}</small>}
-                  <code>{node.dependsOn.length === 0 ? copy.root : `← ${node.dependsOn.join(" + ")}`}</code>
+                  <strong lang="en">{node.agentID}</strong>
+                  {expanded && <small>{segmentPublicMarketText(locale, node.localizedDescription[locale]).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</small>}
+                  <code lang={node.dependsOn.length === 0 ? undefined : "en"}>{node.dependsOn.length === 0 ? copy.root : `← ${node.dependsOn.join(" + ")}`}</code>
                 </span>
               </li>
             ))}

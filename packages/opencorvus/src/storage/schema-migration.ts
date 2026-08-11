@@ -540,6 +540,71 @@ FROM "bus_publication_outbox"`,
       `CREATE INDEX "bus_publication_delivery_pending_idx" ON "bus_publication_delivery" ("occurrence_id", "phase", "settled")`,
     ]),
   }),
+  Object.freeze({
+    id: "2026-08-11-provider-usage-ledger",
+    fromFingerprint: "84af4e18ec989a211a7ee4dc574b535fce8cfbb7237eb73feb549a82ace1b058",
+    toFingerprint: "e893d23611486b20a7be7c0c501979691d5bd1bb8369581db89192b5e1afe62d",
+    requiredEmptyTables: Object.freeze([]),
+    statements: Object.freeze([
+      `CREATE TABLE "provider_usage_event" (
+  "id" text PRIMARY KEY NOT NULL,
+  "occurred_at" integer NOT NULL,
+  "provider_id" text NOT NULL,
+  "model_id" text NOT NULL,
+  "purpose" text NOT NULL,
+  "input_tokens" integer NOT NULL,
+  "output_tokens" integer NOT NULL,
+  "reasoning_tokens" integer NOT NULL,
+  "cache_read_tokens" integer NOT NULL,
+  "cache_write_tokens" integer NOT NULL,
+  "total_tokens" integer NOT NULL,
+  "cost_usd" real NOT NULL,
+  "billing_status" text NOT NULL,
+  "source_ref" text
+)`,
+      `CREATE INDEX "provider_usage_event_time_idx" ON "provider_usage_event" ("occurred_at", "id")`,
+      `CREATE INDEX "provider_usage_event_provider_time_idx" ON "provider_usage_event" ("provider_id", "occurred_at", "id")`,
+      `CREATE INDEX "provider_usage_event_model_time_idx" ON "provider_usage_event" ("provider_id", "model_id", "occurred_at", "id")`,
+      `CREATE UNIQUE INDEX "provider_usage_event_source_ref_idx" ON "provider_usage_event" ("source_ref") WHERE "source_ref" IS NOT NULL`,
+      `INSERT INTO "provider_usage_event" (
+  "id", "occurred_at", "provider_id", "model_id", "purpose",
+  "input_tokens", "output_tokens", "reasoning_tokens", "cache_read_tokens", "cache_write_tokens",
+  "total_tokens", "cost_usd", "billing_status", "source_ref"
+)
+SELECT
+  'pvu_legacy_' || "part"."id",
+  "part"."time_created",
+  json_extract("message"."data", '$.providerID'),
+  json_extract("message"."data", '$.modelID'),
+  'session',
+  COALESCE(json_extract("part"."data", '$.tokens.input'), 0),
+  COALESCE(json_extract("part"."data", '$.tokens.output'), 0),
+  COALESCE(json_extract("part"."data", '$.tokens.reasoning'), 0),
+  COALESCE(json_extract("part"."data", '$.tokens.cache.read'), 0),
+  COALESCE(json_extract("part"."data", '$.tokens.cache.write'), 0),
+  COALESCE(
+    json_extract("part"."data", '$.tokens.total'),
+    COALESCE(json_extract("part"."data", '$.tokens.input'), 0) +
+      COALESCE(json_extract("part"."data", '$.tokens.output'), 0) +
+      COALESCE(json_extract("part"."data", '$.tokens.reasoning'), 0)
+  ),
+  COALESCE(json_extract("part"."data", '$.cost'), 0),
+  CASE json_extract("part"."data", '$.billing.status')
+    WHEN 'priced' THEN 'priced'
+    WHEN 'unpriced' THEN 'unpriced'
+    ELSE 'unknown'
+  END,
+  "part"."id"
+FROM "part"
+INNER JOIN "message"
+  ON "message"."id" = "part"."message_id"
+  AND "message"."session_id" = "part"."session_id"
+WHERE json_extract("part"."data", '$.type') = 'step-finish'
+  AND json_extract("message"."data", '$.role') = 'assistant'
+  AND json_type("message"."data", '$.providerID') = 'text'
+  AND json_type("message"."data", '$.modelID') = 'text'`,
+    ]),
+  }),
 ])
 
 function migrationBySourceFingerprint(): ReadonlyMap<string, SchemaMigration> {

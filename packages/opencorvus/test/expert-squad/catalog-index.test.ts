@@ -558,6 +558,29 @@ describe("Expert Squad catalog index", () => {
     })
   }, 0)
 
+  test("ranks Market packages from package-owned Skill and prompt evidence", async () => {
+    await using project = await memoryProject()
+    const skillMatch = await ExpertSquadPackageManager.payloadMarketPage({
+      projectDirectory: project.path,
+      availability: "available",
+      query: "allocated loss adjustment expense",
+      limit: 3,
+    })
+    const promptMatch = await ExpertSquadPackageManager.payloadMarketPage({
+      projectDirectory: project.path,
+      availability: "available",
+      query: "apparent backtest success on changed scope",
+      limit: 3,
+    })
+    expect({
+      skillMatch: skillMatch.entries[0]?.id,
+      promptMatch: promptMatch.entries[0]?.id,
+    }).toEqual({
+      skillMatch: "actuarial-reserving",
+      promptMatch: "actuarial-reserving",
+    })
+  }, 0)
+
   test("keeps Market scope ordering and revision deterministic across Resolver call order", async () => {
     await using project = await catalogProject()
     const id = "review-debug"

@@ -1,0 +1,22 @@
+artifact_id,request_id,document_id,entity,workstream,request_source_version,document_locator,bates_or_stable_id,document_version,source_date,cutoff_effective_date,coverage_status,family_id,owner,qualified_reviewer,applicability_jurisdiction,value,unit,denominator,assumptions,uncertainty_confidence,privacy_license_state,decision_status,decision_not_made,outcome_unknown,stop_escalation
+MADD-VDR-001,REQ-001,DOC-001,TargetCo,finance,RL-v1,VDR snapshot path,BATES-000001,sha256-pending,YYYY-MM-DD,YYYY-MM-DD,received,FAM-001,diligence coordinator,transaction counsel,authorized perimeter only,1,document,one requested item,no inference from filename,medium until provenance reviewed,confidential review only,draft evidence row,no legal sufficiency or materiality decision,completeness remains unknown,stop if identity or authority unclear
+MADD-VDR-002,REQ-002,DOC-MISSING,TargetCo,commercial,RL-v1,not supplied,NOT-SUPPLIED,n-a,not supplied,YYYY-MM-DD,missing,n-a,commercial lead,deal sponsor,authorized perimeter only,0,document,one requested item,absence is snapshot-specific,high only after manifest reconciliation,restricted matter use,open gap,no adverse inference or go-no-go decision,reason for absence unknown,escalate through approved request channel
+MADD-VDR-003,REQ-003,DOC-003,Subsidiary-A,legal,RL-v1,VDR snapshot path,BATES-000200,sha256-pending,YYYY-MM-DD,YYYY-MM-DD,partial,FAM-017,legal owner,transaction counsel,named jurisdiction only,3,pages,expected schedule plus amendments,low pending attachments,potential privilege held for counsel,held for review,no privilege or legal conclusion,attachment effect unknown,stop distribution and route to counsel
+
+
+## Reusable evidence contract markers
+
+- artifact_id: stable artifact or row identity
+- source_id_locator: exact authoritative source locator
+- source_version_date: immutable source version and applicable date
+- qualified_reviewer: named discipline reviewer with decision authority
+- units_and_denominator: value, unit, currency, population and denominator or not-applicable rationale
+- assumptions_uncertainty: authorized assumptions, unknowns, confidence and reason
+- decision_not_made: explicit professional decisions this artifact does not make
+- outcome_unknown: unresolved outcome stated without inference
+- stop_escalation: exact hold point, reason, escalation owner and required review
+
+# One row is one request-to-document assertion, never a conclusion that the request is satisfied.
+# Preserve duplicates, families, missing attachments, redactions, corrupt files, unsupported formats, and superseded versions.
+# Reconcile row counts to the immutable export manifest and baseline digest. Materiality and completeness use only operator-defined vocabularies.
+# Do not open a remote VDR, export files, change permissions, send requests, or contact counterparties.

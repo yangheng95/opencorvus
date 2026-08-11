@@ -37,6 +37,21 @@ import { ProviderTransform } from "./transform"
 import { applyVendorHeaders } from "./vendor-headers"
 
 export namespace ProviderLLM {
+  const modelMetadata = new WeakMap<object, Provider.Model>()
+
+  function retainModelMetadata<T>(language: T, model: Provider.Model): T {
+    if ((typeof language === "object" && language !== null) || typeof language === "function") {
+      modelMetadata.set(language as object, model)
+    }
+    return language
+  }
+
+  /** Resolve the immutable request-time pricing/model identity for a wrapped language model. */
+  export function model(language: unknown): Provider.Model | undefined {
+    if ((typeof language !== "object" || language === null) && typeof language !== "function") return undefined
+    return modelMetadata.get(language as object)
+  }
+
   /**
    * Wrap a LanguageModelV3 with the message-transform middleware that
    * normalizes messages for the target provider (Anthropic empty-content
@@ -47,8 +62,8 @@ export namespace ProviderLLM {
     model: Provider.Model,
     options: Record<string, any>,
   ) {
-    if (!isLanguageModelV3(language)) return language
-    return wrapLanguageModel({
+    if (!isLanguageModelV3(language)) return retainModelMetadata(language, model)
+    return retainModelMetadata(wrapLanguageModel({
       model: language,
       middleware: [
         {
@@ -71,7 +86,7 @@ export namespace ProviderLLM {
           },
         },
       ],
-    })
+    }), model)
   }
 
   function isLanguageModelV3(language: Awaited<ReturnType<typeof Provider.getLanguage>>): language is LanguageModelV3 {

@@ -38,6 +38,7 @@ use tauri::{
     utils::config::Color,
     AppHandle, Emitter, Manager, Runtime, UserAttentionType,
 };
+use tauri_plugin_clipboard_manager::ClipboardExt;
 #[cfg(any(target_os = "macos", windows, target_os = "linux"))]
 use tauri_plugin_deep_link::DeepLinkExt;
 use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
@@ -1730,6 +1731,13 @@ fn write_overlay_settings_text(path: &Path, text: &str) -> Result<(), String> {
 
 fn overlay_settings_path<R: Runtime>(app: &AppHandle<R>) -> Result<PathBuf, String> {
     overlay_runtime_paths(app).map(|paths| paths.config_dir.join(overlay_settings_filename()))
+}
+
+#[tauri::command]
+fn overlay_clipboard_read_text<R: Runtime>(app: AppHandle<R>) -> Result<String, String> {
+    app.clipboard()
+        .read_text()
+        .map_err(|error| format!("cannot read system clipboard text: {error}"))
 }
 
 #[tauri::command]
@@ -5575,6 +5583,7 @@ fn main() {
         .manage(Server::default())
         .manage(PendingExpertSquadInstallHandoff::default())
         .manage(DesktopUpdateCoordinator::default())
+        .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_notification::init())
@@ -5597,6 +5606,7 @@ fn main() {
     let builder = builder.invoke_handler(tauri::generate_handler![
         overlay_settings_load,
         overlay_settings_save,
+        overlay_clipboard_read_text,
         overlay_expert_squad_install_handoff_take,
         overlay_server_info,
         overlay_server_restart,
@@ -5629,6 +5639,7 @@ fn main() {
     let builder = builder.invoke_handler(tauri::generate_handler![
         overlay_settings_load,
         overlay_settings_save,
+        overlay_clipboard_read_text,
         overlay_expert_squad_install_handoff_take,
         overlay_server_info,
         overlay_server_restart,

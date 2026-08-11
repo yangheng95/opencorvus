@@ -749,6 +749,111 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "advertising-measurement-brand-safety",
+      "version": "2026.08.11.1",
+      "digest": "4805b31f8e3cc279394002c1f1838f714ab980577519cf0219c381d38085bfd0"
+    },
+    "name": "Advertising Measurement and Brand Safety",
+    "label": "Advertising Measurement and Brand Safety",
+    "description": "Source-bound campaign measurement, delivery quality, attribution and brand suitability evidence without live platform mutation, spend authority or compliance conclusions.",
+    "selectorSummary": "Use for source-bound advertising measurement and brand-safety assurance prepared for qualified review.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "brand-safety-suitability-verification-analyst",
+        "label": "Brand Safety Suitability Verification Analyst",
+        "description": "Verifies source-bound placement, content, suitability, exclusion and incident evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "campaign-taxonomy-metric-contract-analyst",
+        "label": "Campaign Taxonomy Metric Contract Analyst",
+        "description": "Freezes campaign identity, taxonomy, metric definitions, denominators and event lineage.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "delivery-reconciliation-data-quality-analyst",
+        "label": "Delivery Reconciliation Data Quality Analyst",
+        "description": "Reconciles delivery, viewability, invalid-traffic and source-system data quality evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "outcome-attribution-experiment-analyst",
+        "label": "Outcome Attribution Experiment Analyst",
+        "description": "Tests outcome, attribution, incrementality and experiment evidence against prespecified contracts.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "advertising-measurement-brand-safety-review-owner",
+        "label": "Advertising Measurement Brand Safety Review Owner",
+        "description": "Joins all advertising assurance branches into a conflict-preserving qualified review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Advertising Measurement and Brand Safety Qualified Review",
+        "description": "Four independent advertising-assurance branches converge into one qualified review owner.",
+        "nodes": [
+          {
+            "id": "brand-safety-suitability-verification-analyst",
+            "agentID": "brand-safety-suitability-verification-analyst",
+            "description": "Verifies source-bound placement, content, suitability, exclusion and incident evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "campaign-taxonomy-metric-contract-analyst",
+            "agentID": "campaign-taxonomy-metric-contract-analyst",
+            "description": "Freezes campaign identity, taxonomy, metric definitions, denominators and event lineage.",
+            "dependsOn": []
+          },
+          {
+            "id": "delivery-reconciliation-data-quality-analyst",
+            "agentID": "delivery-reconciliation-data-quality-analyst",
+            "description": "Reconciles delivery, viewability, invalid-traffic and source-system data quality evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "outcome-attribution-experiment-analyst",
+            "agentID": "outcome-attribution-experiment-analyst",
+            "description": "Tests outcome, attribution, incrementality and experiment evidence against prespecified contracts.",
+            "dependsOn": []
+          },
+          {
+            "id": "advertising-measurement-brand-safety-review-owner",
+            "agentID": "advertising-measurement-brand-safety-review-owner",
+            "description": "Joins all advertising assurance branches into a conflict-preserving qualified review pack.",
+            "dependsOn": [
+              "brand-safety-suitability-verification-analyst",
+              "campaign-taxonomy-metric-contract-analyst",
+              "delivery-reconciliation-data-quality-analyst",
+              "outcome-attribution-experiment-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "agriculture-food-systems",
       "version": "2026.08.11.1",
       "digest": "fb1fab33fdfd819ef316175f725db58930664319a66fa5865e5aab21857bddd8"
@@ -2121,6 +2226,111 @@ export const generatedPublicMarketFacts = [
               "adaptation-options-pathways-analyst",
               "climate-hazard-scenario-analyst",
               "exposure-vulnerability-consequence-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "clinical-biostatistics-data-monitoring",
+      "version": "2026.08.11.1",
+      "digest": "fd2a2beed5341f2c53853662eaa832714622dc07a94ee3430cf9dfddd00a823c"
+    },
+    "name": "Clinical Biostatistics and Data Monitoring",
+    "label": "Clinical Biostatistics and Data Monitoring",
+    "description": "Estimand, SAP, analysis-population, SDTM/ADaM traceability, model, missing-data, multiplicity, sensitivity, interim and monitoring evidence without unblinding or stop/continue authority.",
+    "selectorSummary": "Use for source-bound clinical biostatistics and independent data-monitoring evidence preparation.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "clinical-estimand-sap-population-analyst",
+        "label": "Estimand SAP and Population Analyst",
+        "description": "Freezes protocol, estimand, endpoint, intercurrent-event strategy, SAP and analysis-population evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "clinical-analysis-dataset-traceability-analyst",
+        "label": "Source SDTM ADaM Traceability Analyst",
+        "description": "Traces authorized source data through SDTM, ADaM, metadata, derivations and results without changing or locking data.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "clinical-model-missing-data-multiplicity-analyst",
+        "label": "Model Missing Data and Multiplicity Analyst",
+        "description": "Reconciles prespecified models, effect measures, missing-data handling, multiplicity and sensitivity evidence without choosing thresholds.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "clinical-interim-data-monitoring-evidence-analyst",
+        "label": "Interim Blinding and Monitoring Evidence Analyst",
+        "description": "Traces authorized interim snapshots, access separation, DMC charter outputs and communication evidence without unblinding or recommendations.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "clinical-biostatistics-data-monitoring-review-owner",
+        "label": "Clinical Biostatistics Data Monitoring Review Owner",
+        "description": "Joins estimand, derivation, model and interim-monitoring evidence into a controlled qualified-review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Clinical Biostatistics and Data Monitoring Qualified Review",
+        "description": "Four independent clinical-statistical evidence branches converge into one controlled qualified review.",
+        "nodes": [
+          {
+            "id": "clinical-estimand-sap-population-analyst",
+            "agentID": "clinical-estimand-sap-population-analyst",
+            "description": "Freezes estimand, SAP and population evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "clinical-analysis-dataset-traceability-analyst",
+            "agentID": "clinical-analysis-dataset-traceability-analyst",
+            "description": "Traces source, SDTM, ADaM and results.",
+            "dependsOn": []
+          },
+          {
+            "id": "clinical-model-missing-data-multiplicity-analyst",
+            "agentID": "clinical-model-missing-data-multiplicity-analyst",
+            "description": "Reconciles model, missing-data and multiplicity evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "clinical-interim-data-monitoring-evidence-analyst",
+            "agentID": "clinical-interim-data-monitoring-evidence-analyst",
+            "description": "Traces interim, blinding and monitoring evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "clinical-biostatistics-data-monitoring-review-owner",
+            "agentID": "clinical-biostatistics-data-monitoring-review-owner",
+            "description": "Joins every branch without unblinding, signing results or recommending stop/continue.",
+            "dependsOn": [
+              "clinical-analysis-dataset-traceability-analyst",
+              "clinical-estimand-sap-population-analyst",
+              "clinical-interim-data-monitoring-evidence-analyst",
+              "clinical-model-missing-data-multiplicity-analyst"
             ]
           }
         ]
@@ -4907,6 +5117,111 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "fire-protection-engineering-assurance",
+      "version": "2026.08.11.1",
+      "digest": "aefa9026a938082d4ffc6f021941b620a55e2b221224a5cb4a5de08a116532d3"
+    },
+    "name": "Fire Protection Engineering Assurance",
+    "label": "Fire Protection Engineering Assurance",
+    "description": "Source-bound facility fire-protection basis, passive and active systems, modeling, inspection, and impairment evidence for qualified review without design, compliance, emergency, or equipment authority.",
+    "selectorSummary": "Use for bounded fire protection engineering assurance evidence and qualified review preparation.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "fire-protection-basis-occupancy-hazard-analyst",
+        "label": "Fire Protection Basis Occupancy Hazard Analyst",
+        "description": "Freezes facility, area, occupancy/use, hazard inventory, adopted authority basis, design/as-built revisions, and review applicability.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "passive-fire-compartmentation-egress-evidence-analyst",
+        "label": "Passive Fire Compartmentation Egress Evidence Analyst",
+        "description": "Traces rated assemblies, openings, penetrations, smoke/fire compartments, continuity, and source-defined egress evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "active-fire-detection-suppression-water-supply-analyst",
+        "label": "Active Fire Detection Suppression Water Supply Analyst",
+        "description": "Reconciles detection, alarm, notification, suppression, water supply, smoke-control, power, and cause-and-effect evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "fire-modeling-inspection-impairment-evidence-analyst",
+        "label": "Fire Modeling Inspection Impairment Evidence Analyst",
+        "description": "Preserves supplied FDS/model provenance, inspection/test/maintenance findings, impairments, compensatory measures, and restoration evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "fire-protection-engineering-assurance-review-owner",
+        "label": "Fire Protection Engineering Assurance Review Owner",
+        "description": "Joins basis, passive, active, modeling, inspection, and impairment evidence while preserving AHJ and professional authority.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "fire-protection-engineering-assurance-review",
+        "label": "Fire Protection Engineering Assurance Review",
+        "description": "Four independent professional evidence branches converge into one controlled fire protection engineering assurance review.",
+        "nodes": [
+          {
+            "id": "fire-protection-basis-occupancy-hazard-analyst",
+            "agentID": "fire-protection-basis-occupancy-hazard-analyst",
+            "description": "Freezes facility, area, occupancy/use, hazard inventory, adopted authority basis, design/as-built revisions, and review applicability.",
+            "dependsOn": []
+          },
+          {
+            "id": "passive-fire-compartmentation-egress-evidence-analyst",
+            "agentID": "passive-fire-compartmentation-egress-evidence-analyst",
+            "description": "Traces rated assemblies, openings, penetrations, smoke/fire compartments, continuity, and source-defined egress evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "active-fire-detection-suppression-water-supply-analyst",
+            "agentID": "active-fire-detection-suppression-water-supply-analyst",
+            "description": "Reconciles detection, alarm, notification, suppression, water supply, smoke-control, power, and cause-and-effect evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "fire-modeling-inspection-impairment-evidence-analyst",
+            "agentID": "fire-modeling-inspection-impairment-evidence-analyst",
+            "description": "Preserves supplied FDS/model provenance, inspection/test/maintenance findings, impairments, compensatory measures, and restoration evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "fire-protection-engineering-assurance-review-owner",
+            "agentID": "fire-protection-engineering-assurance-review-owner",
+            "description": "Joins basis, passive, active, modeling, inspection, and impairment evidence while preserving AHJ and professional authority.",
+            "dependsOn": [
+              "active-fire-detection-suppression-water-supply-analyst",
+              "fire-modeling-inspection-impairment-evidence-analyst",
+              "fire-protection-basis-occupancy-hazard-analyst",
+              "passive-fire-compartmentation-egress-evidence-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "food-safety-quality",
       "version": "2026.08.11.1",
       "digest": "a7b97db1bc2570aa616bbbbe6a7a41119bdb9dfb2501edf388faddc19eb8fddf"
@@ -6437,6 +6752,111 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "internal-audit-control-assurance",
+      "version": "2026.08.11.1",
+      "digest": "b3473296d4a21335a9013919f65e476952aacc85ba281da79a08ef5ca615fd21"
+    },
+    "name": "Internal Audit Control Assurance",
+    "label": "Internal Audit Control Assurance",
+    "description": "Charter-bound audit-universe, control-design, operating-effectiveness, finding and remediation evidence without opinion, fraud, risk-acceptance or control authority.",
+    "selectorSummary": "Use for source-bound internal-audit and control-assurance evidence prepared for qualified review.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "audit-universe-risk-prioritization-analyst",
+        "label": "Audit Universe Risk Prioritization Analyst",
+        "description": "Freezes mandate, universe, scope and evidence-backed risk prioritization.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "control-design-walkthrough-analyst",
+        "label": "Control Design Walkthrough Analyst",
+        "description": "Traces objectives, risks, control design, implementation and walkthrough evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "control-operating-effectiveness-testing-analyst",
+        "label": "Control Operating Effectiveness Testing Analyst",
+        "description": "Reconciles populations, samples, test procedures, exceptions and coverage limits.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "finding-root-cause-remediation-analyst",
+        "label": "Finding Root Cause Remediation Analyst",
+        "description": "Builds evidence-bound exception, finding, root-cause and remediation-verification records.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "internal-audit-control-assurance-review-owner",
+        "label": "Internal Audit Control Assurance Review Owner",
+        "description": "Joins universe, design, testing and remediation evidence without issuing an audit conclusion.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Internal Audit Control Assurance Qualified Review",
+        "description": "Four independent audit-evidence branches converge into one qualified review owner.",
+        "nodes": [
+          {
+            "id": "audit-universe-risk-prioritization-analyst",
+            "agentID": "audit-universe-risk-prioritization-analyst",
+            "description": "Freezes mandate, universe, scope and evidence-backed risk prioritization.",
+            "dependsOn": []
+          },
+          {
+            "id": "control-design-walkthrough-analyst",
+            "agentID": "control-design-walkthrough-analyst",
+            "description": "Traces objectives, risks, control design, implementation and walkthrough evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "control-operating-effectiveness-testing-analyst",
+            "agentID": "control-operating-effectiveness-testing-analyst",
+            "description": "Reconciles populations, samples, test procedures, exceptions and coverage limits.",
+            "dependsOn": []
+          },
+          {
+            "id": "finding-root-cause-remediation-analyst",
+            "agentID": "finding-root-cause-remediation-analyst",
+            "description": "Builds evidence-bound exception, finding, root-cause and remediation-verification records.",
+            "dependsOn": []
+          },
+          {
+            "id": "internal-audit-control-assurance-review-owner",
+            "agentID": "internal-audit-control-assurance-review-owner",
+            "description": "Joins universe, design, testing and remediation evidence without issuing an audit conclusion.",
+            "dependsOn": [
+              "audit-universe-risk-prioritization-analyst",
+              "control-design-walkthrough-analyst",
+              "control-operating-effectiveness-testing-analyst",
+              "finding-root-cause-remediation-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "knowledge-base-operations",
       "version": "2026.08.10.1",
       "digest": "69c21a25db8472a50cf39b3bf6d7995227a90fc1e8a4ccedcc3b42cb336b4382"
@@ -7520,6 +7940,111 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "medical-device-postmarket-surveillance",
+      "version": "2026.08.11.1",
+      "digest": "b6a0f33be777acca68ef16f4475acd9d6df384daec3a83c34b59abb59e832d5c"
+    },
+    "name": "Medical Device Postmarket Surveillance",
+    "label": "Medical Device Postmarket Surveillance",
+    "description": "Complaint, installed-base, device-event, vigilance, trend, PMCF, RWE, field-action, CAPA and risk-file evidence without reportability, recall or compliance authority.",
+    "selectorSummary": "Use for source-bound medical-device postmarket evidence preparation before qualified review.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "device-installed-base-complaint-intake-quality-analyst",
+        "label": "Installed Base and Complaint Intake Analyst",
+        "description": "Freezes device identity, distribution exposure and complaint-source evidence without closing or recoding complaints.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "device-adverse-event-vigilance-reportability-evidence-analyst",
+        "label": "Adverse Event and Vigilance Evidence Analyst",
+        "description": "Traces event facts, device problems, health effects, investigation and jurisdictional rule sources without reportability decisions.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "device-trend-benefit-risk-pmcf-rwe-analyst",
+        "label": "Trend Benefit-Risk PMCF and RWE Analyst",
+        "description": "Reconciles counts, exposure denominators, PMCF and real-world evidence without declaring a signal or benefit-risk conclusion.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "device-field-action-capa-effectiveness-analyst",
+        "label": "Field Action CAPA and Effectiveness Analyst",
+        "description": "Traces proposed or recorded field actions, CAPA, verification, effectiveness and risk-file links without initiating action.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "medical-device-postmarket-surveillance-review-owner",
+        "label": "Medical Device Postmarket Review Owner",
+        "description": "Joins installed-base, event, trend and CAPA/field-action evidence into a controlled qualified-review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Medical Device Postmarket Surveillance Qualified Review",
+        "description": "Four independent postmarket evidence branches converge into one controlled qualified review.",
+        "nodes": [
+          {
+            "id": "device-installed-base-complaint-intake-quality-analyst",
+            "agentID": "device-installed-base-complaint-intake-quality-analyst",
+            "description": "Freezes installed-base and complaint intake evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "device-adverse-event-vigilance-reportability-evidence-analyst",
+            "agentID": "device-adverse-event-vigilance-reportability-evidence-analyst",
+            "description": "Traces event and vigilance evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "device-trend-benefit-risk-pmcf-rwe-analyst",
+            "agentID": "device-trend-benefit-risk-pmcf-rwe-analyst",
+            "description": "Reconciles trends, PMCF and RWE evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "device-field-action-capa-effectiveness-analyst",
+            "agentID": "device-field-action-capa-effectiveness-analyst",
+            "description": "Traces field-action, CAPA and effectiveness evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "medical-device-postmarket-surveillance-review-owner",
+            "agentID": "medical-device-postmarket-surveillance-review-owner",
+            "description": "Joins every branch without making a reportability, recall or compliance decision.",
+            "dependsOn": [
+              "device-adverse-event-vigilance-reportability-evidence-analyst",
+              "device-field-action-capa-effectiveness-analyst",
+              "device-installed-base-complaint-intake-quality-analyst",
+              "device-trend-benefit-risk-pmcf-rwe-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "medical-imaging-quality-assurance",
       "version": "2026.08.11.1",
       "digest": "d1386b21f1921c2d874c418eefdce256978490865380423de0263a83496f9131"
@@ -7695,6 +8220,111 @@ export const generatedPublicMarketFacts = [
             "description": "Independently reviews the joined publication and records required corrections or withheld material.",
             "dependsOn": [
               "meeting-knowledge-editor"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "mergers-acquisitions-due-diligence",
+      "version": "2026.08.11.1",
+      "digest": "dac9c022e02a2141c1e577ad441ae79501a0e1d1d8b26e5973bf8f91d784e57a"
+    },
+    "name": "Mergers and Acquisitions Due Diligence",
+    "label": "Mergers and Acquisitions Due Diligence",
+    "description": "Authorized M&A perimeter, VDR completeness, financial-quality, commercial, legal, technology and people evidence without valuation, negotiation, legal or go/no-go authority.",
+    "selectorSummary": "Use for source-bound cross-functional M&A due-diligence evidence prepared for qualified review.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "commercial-customer-market-operations-analyst",
+        "label": "Commercial Customer Market Operations Analyst",
+        "description": "Tests source-bound commercial, customer, market, channel and operating evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "deal-scope-vdr-completeness-analyst",
+        "label": "Deal Scope VDR Completeness Analyst",
+        "description": "Freezes deal perimeter and reconciles VDR inventory, request coverage and source provenance.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "financial-quality-working-capital-analyst",
+        "label": "Financial Quality Working Capital Analyst",
+        "description": "Reconciles financial quality, recurring adjustments, working capital, net debt and cash evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "legal-regulatory-technology-people-analyst",
+        "label": "Legal Regulatory Technology People Analyst",
+        "description": "Extracts source-bound legal, regulatory, IP, technology, security and people issues for specialist review.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "mergers-acquisitions-due-diligence-review-owner",
+        "label": "Mergers and Acquisitions Due Diligence Review Owner",
+        "description": "Joins all diligence branches into a conflict-preserving qualified review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Mergers and Acquisitions Due Diligence Qualified Review",
+        "description": "Four independent diligence branches converge into one qualified review owner.",
+        "nodes": [
+          {
+            "id": "commercial-customer-market-operations-analyst",
+            "agentID": "commercial-customer-market-operations-analyst",
+            "description": "Tests source-bound commercial, customer, market, channel and operating evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "deal-scope-vdr-completeness-analyst",
+            "agentID": "deal-scope-vdr-completeness-analyst",
+            "description": "Freezes deal perimeter and reconciles VDR inventory, request coverage and source provenance.",
+            "dependsOn": []
+          },
+          {
+            "id": "financial-quality-working-capital-analyst",
+            "agentID": "financial-quality-working-capital-analyst",
+            "description": "Reconciles financial quality, recurring adjustments, working capital, net debt and cash evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "legal-regulatory-technology-people-analyst",
+            "agentID": "legal-regulatory-technology-people-analyst",
+            "description": "Extracts source-bound legal, regulatory, IP, technology, security and people issues for specialist review.",
+            "dependsOn": []
+          },
+          {
+            "id": "mergers-acquisitions-due-diligence-review-owner",
+            "agentID": "mergers-acquisitions-due-diligence-review-owner",
+            "description": "Joins all diligence branches into a conflict-preserving qualified review pack.",
+            "dependsOn": [
+              "commercial-customer-market-operations-analyst",
+              "deal-scope-vdr-completeness-analyst",
+              "financial-quality-working-capital-analyst",
+              "legal-regulatory-technology-people-analyst"
             ]
           }
         ]
@@ -8076,6 +8706,111 @@ export const generatedPublicMarketFacts = [
               "nuclear-configuration-design-basis-analyst",
               "nuclear-defence-in-depth-barrier-analyst",
               "nuclear-event-operating-experience-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "oceanographic-observation-data-assurance",
+      "version": "2026.08.11.1",
+      "digest": "c1e50b118ee15b6c35f2422e87893c5bb75327a5a92f75a58e674bd4e6db6140"
+    },
+    "name": "Oceanographic Observation Data Assurance",
+    "label": "Oceanographic Observation Data Assurance",
+    "description": "Source-bound ocean platform, instrument, calibration, profile, time-series, QC, coordinate, format, provenance, and cross-platform validation evidence without publication or marine-safety authority.",
+    "selectorSummary": "Use for bounded oceanographic observation data assurance evidence and qualified review preparation.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "ocean-observing-platform-instrument-metadata-analyst",
+        "label": "Ocean Observing Platform Instrument Metadata Analyst",
+        "description": "Freezes mission, platform, station, cruise, deployment, cast/profile, instrument, calibration, sampling, and measurand metadata.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "oceanographic-profile-timeseries-quality-control-analyst",
+        "label": "Oceanographic Profile Timeseries Quality Control Analyst",
+        "description": "Applies only source-defined QARTOD/project QC tests and preserves original, aggregate, and reviewed flag provenance.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "ocean-data-coordinate-format-provenance-analyst",
+        "label": "Ocean Data Coordinate Format Provenance Analyst",
+        "description": "Assures labeled dimensions, coordinates, attributes, encodings, formats, chunking, missing values, and transformation provenance.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "oceanographic-cross-platform-validation-analyst",
+        "label": "Oceanographic Cross Platform Validation Analyst",
+        "description": "Builds source-defined spatial, vertical, temporal, variable, and method collocations with uncertainty and representativeness evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "oceanographic-observation-data-assurance-review-owner",
+        "label": "Oceanographic Observation Data Assurance Review Owner",
+        "description": "Joins platform, QC, multidimensional-format, provenance, and validation evidence while preserving scientific and publication authority.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "oceanographic-observation-data-assurance-review",
+        "label": "Oceanographic Observation Data Assurance Review",
+        "description": "Four independent professional evidence branches converge into one controlled oceanographic observation data assurance review.",
+        "nodes": [
+          {
+            "id": "ocean-observing-platform-instrument-metadata-analyst",
+            "agentID": "ocean-observing-platform-instrument-metadata-analyst",
+            "description": "Freezes mission, platform, station, cruise, deployment, cast/profile, instrument, calibration, sampling, and measurand metadata.",
+            "dependsOn": []
+          },
+          {
+            "id": "oceanographic-profile-timeseries-quality-control-analyst",
+            "agentID": "oceanographic-profile-timeseries-quality-control-analyst",
+            "description": "Applies only source-defined QARTOD/project QC tests and preserves original, aggregate, and reviewed flag provenance.",
+            "dependsOn": []
+          },
+          {
+            "id": "ocean-data-coordinate-format-provenance-analyst",
+            "agentID": "ocean-data-coordinate-format-provenance-analyst",
+            "description": "Assures labeled dimensions, coordinates, attributes, encodings, formats, chunking, missing values, and transformation provenance.",
+            "dependsOn": []
+          },
+          {
+            "id": "oceanographic-cross-platform-validation-analyst",
+            "agentID": "oceanographic-cross-platform-validation-analyst",
+            "description": "Builds source-defined spatial, vertical, temporal, variable, and method collocations with uncertainty and representativeness evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "oceanographic-observation-data-assurance-review-owner",
+            "agentID": "oceanographic-observation-data-assurance-review-owner",
+            "description": "Joins platform, QC, multidimensional-format, provenance, and validation evidence while preserving scientific and publication authority.",
+            "dependsOn": [
+              "ocean-data-coordinate-format-provenance-analyst",
+              "ocean-observing-platform-instrument-metadata-analyst",
+              "oceanographic-cross-platform-validation-analyst",
+              "oceanographic-profile-timeseries-quality-control-analyst"
             ]
           }
         ]
@@ -8924,6 +9659,111 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "power-grid-protection-reliability-assurance",
+      "version": "2026.08.11.1",
+      "digest": "4cd74c85ee28a237386472c16367e0b5973c07de2dbe2df6faebc5fca70203a0"
+    },
+    "name": "Power Grid Protection Reliability Assurance",
+    "label": "Power Grid Protection Reliability Assurance",
+    "description": "Source-bound topology, protection-zone, relay-setting, fault-study, disturbance, misoperation, outage, and reliability-definition evidence for qualified review without grid-control authority.",
+    "selectorSummary": "Use for bounded power grid protection reliability assurance evidence and qualified review preparation.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "power-grid-protection-zone-device-configuration-analyst",
+        "label": "Power Grid Protection Zone Device Configuration Analyst",
+        "description": "Freezes network topology, model case, protection zones, relay/device identities, CT/VT, breaker, DC, trip, and teleprotection configuration.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "power-grid-fault-study-relay-coordination-analyst",
+        "label": "Power Grid Fault Study Relay Coordination Analyst",
+        "description": "Reconciles supplied fault-study cases, instrument-transformer behavior, relay settings, timing, selectivity, sensitivity, and coordination evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "power-grid-disturbance-misoperation-event-analyst",
+        "label": "Power Grid Disturbance Misoperation Event Analyst",
+        "description": "Aligns oscillography, COMTRADE, sequence-of-events, relay targets, breaker, SCADA, communications, and time-quality evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "power-grid-reliability-outage-data-analyst",
+        "label": "Power Grid Reliability Outage Data Analyst",
+        "description": "Traces outage events, affected elements and customers/load, restorations, exclusions, denominators, and source-defined reliability metrics.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "power-grid-protection-reliability-assurance-review-owner",
+        "label": "Power Grid Protection Reliability Assurance Review Owner",
+        "description": "Joins topology, settings, study, event, misoperation, outage, and reliability evidence without operating or approval authority.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "power-grid-protection-reliability-assurance-review",
+        "label": "Power Grid Protection Reliability Assurance Review",
+        "description": "Four independent professional evidence branches converge into one controlled power grid protection reliability assurance review.",
+        "nodes": [
+          {
+            "id": "power-grid-protection-zone-device-configuration-analyst",
+            "agentID": "power-grid-protection-zone-device-configuration-analyst",
+            "description": "Freezes network topology, model case, protection zones, relay/device identities, CT/VT, breaker, DC, trip, and teleprotection configuration.",
+            "dependsOn": []
+          },
+          {
+            "id": "power-grid-fault-study-relay-coordination-analyst",
+            "agentID": "power-grid-fault-study-relay-coordination-analyst",
+            "description": "Reconciles supplied fault-study cases, instrument-transformer behavior, relay settings, timing, selectivity, sensitivity, and coordination evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "power-grid-disturbance-misoperation-event-analyst",
+            "agentID": "power-grid-disturbance-misoperation-event-analyst",
+            "description": "Aligns oscillography, COMTRADE, sequence-of-events, relay targets, breaker, SCADA, communications, and time-quality evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "power-grid-reliability-outage-data-analyst",
+            "agentID": "power-grid-reliability-outage-data-analyst",
+            "description": "Traces outage events, affected elements and customers/load, restorations, exclusions, denominators, and source-defined reliability metrics.",
+            "dependsOn": []
+          },
+          {
+            "id": "power-grid-protection-reliability-assurance-review-owner",
+            "agentID": "power-grid-protection-reliability-assurance-review-owner",
+            "description": "Joins topology, settings, study, event, misoperation, outage, and reliability evidence without operating or approval authority.",
+            "dependsOn": [
+              "power-grid-disturbance-misoperation-event-analyst",
+              "power-grid-fault-study-relay-coordination-analyst",
+              "power-grid-protection-zone-device-configuration-analyst",
+              "power-grid-reliability-outage-data-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "privacy-data-protection-operations",
       "version": "2026.08.11.1",
       "digest": "4fa15fcd4f212ed439ebada223f839f115d9412abf8ab5caea927605cd24035b"
@@ -9495,6 +10335,111 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "radiation-therapy-physics-quality-assurance",
+      "version": "2026.08.11.1",
+      "digest": "6d81a6544849658fc9e94c920666ae5822d6b17413139b02f301171174777f77"
+    },
+    "name": "Radiation Therapy Physics Quality Assurance",
+    "label": "Radiation Therapy Physics Quality Assurance",
+    "description": "Source-bound radiotherapy equipment, dosimetry, treatment-planning-system, patient-specific quality, change, incident and independent-audit evidence without clinical or release authority.",
+    "selectorSummary": "Use for radiotherapy physics quality evidence preparation before qualified medical-physics review.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "radiotherapy-equipment-configuration-commissioning-analyst",
+        "label": "Equipment Configuration and Commissioning Analyst",
+        "description": "Freezes treatment-unit, source, imaging, TPS, OIS and record-and-verify configurations and traces acceptance and commissioning evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "radiotherapy-reference-dosimetry-machine-qa-analyst",
+        "label": "Reference Dosimetry and Machine Quality Analyst",
+        "description": "Reconciles calibration traceability, beam or source identity, instrument conditions and periodic machine-quality evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "radiotherapy-treatment-planning-patient-specific-qa-analyst",
+        "label": "Treatment Planning and Patient-Specific Quality Analyst",
+        "description": "Traces TPS model and calculation evidence, transfer checks and de-identified patient-specific QA without approving a plan.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "radiotherapy-incident-change-independent-audit-analyst",
+        "label": "Incident Change and Independent Audit Analyst",
+        "description": "Builds event chronology, configuration-change trace and independent-audit evidence without classifying an event or releasing equipment.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "radiation-therapy-physics-quality-review-owner",
+        "label": "Radiation Therapy Physics Quality Review Owner",
+        "description": "Joins configuration, dosimetry, planning-system and incident/audit evidence into a controlled qualified-review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Radiation Therapy Physics Quality Assurance Qualified Review",
+        "description": "Four independent radiotherapy-physics evidence branches converge into one controlled qualified review.",
+        "nodes": [
+          {
+            "id": "radiotherapy-equipment-configuration-commissioning-analyst",
+            "agentID": "radiotherapy-equipment-configuration-commissioning-analyst",
+            "description": "Freezes configuration and acceptance or commissioning evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "radiotherapy-reference-dosimetry-machine-qa-analyst",
+            "agentID": "radiotherapy-reference-dosimetry-machine-qa-analyst",
+            "description": "Reconciles reference dosimetry and machine-quality evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "radiotherapy-treatment-planning-patient-specific-qa-analyst",
+            "agentID": "radiotherapy-treatment-planning-patient-specific-qa-analyst",
+            "description": "Traces TPS and patient-specific QA evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "radiotherapy-incident-change-independent-audit-analyst",
+            "agentID": "radiotherapy-incident-change-independent-audit-analyst",
+            "description": "Traces incidents, changes and independent audits.",
+            "dependsOn": []
+          },
+          {
+            "id": "radiation-therapy-physics-quality-review-owner",
+            "agentID": "radiation-therapy-physics-quality-review-owner",
+            "description": "Joins every branch into a qualified-review pack without granting clinical or release authority.",
+            "dependsOn": [
+              "radiotherapy-equipment-configuration-commissioning-analyst",
+              "radiotherapy-incident-change-independent-audit-analyst",
+              "radiotherapy-reference-dosimetry-machine-qa-analyst",
+              "radiotherapy-treatment-planning-patient-specific-qa-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "railway-operations-safety",
       "version": "2026.08.11.1",
       "digest": "0d8a21577e60b77881f318ded78bee79a25e8b564f7baff72dff8ef7ffa41081"
@@ -9656,6 +10601,111 @@ export const generatedPublicMarketFacts = [
               "property-document-analyst",
               "property-market-financial-analyst",
               "property-physical-regulatory-risk-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "records-ediscovery-operations",
+      "version": "2026.08.11.1",
+      "digest": "b746ab3e04da44e188ea69b1cb74582fcbb72efa321e3174ca84b4642d5d81f1"
+    },
+    "name": "Records and E-Discovery Operations",
+    "label": "Records and E-Discovery Operations",
+    "description": "Matter-authorized records, preservation, collection provenance, processing, review and production evidence without live collection, deletion, legal rulings or production authority.",
+    "selectorSummary": "Use for source-bound records and e-discovery operational evidence prepared for counsel and records-owner review.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "custodian-source-collection-provenance-analyst",
+        "label": "Custodian Source Collection Provenance Analyst",
+        "description": "Maps authorized custodians, systems, preservation and collection provenance without live collection.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "processing-dedup-search-review-analyst",
+        "label": "Processing Dedup Search Review Analyst",
+        "description": "Reconciles processing, normalization, deduplication, family, search and review evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "production-privilege-disposition-analyst",
+        "label": "Production Privilege Disposition Analyst",
+        "description": "Builds request, privilege-flag, redaction, production and disposition evidence for counsel review.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "records-authority-retention-hold-analyst",
+        "label": "Records Authority Retention Hold Analyst",
+        "description": "Freezes matter authority, records schedules, retention, hold scope, notices and acknowledgement evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "records-ediscovery-operations-review-owner",
+        "label": "Records Ediscovery Operations Review Owner",
+        "description": "Joins all records and e-discovery branches into a conflict-preserving qualified review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Records and E-Discovery Operations Qualified Review",
+        "description": "Four independent records and e-discovery branches converge into one qualified review owner.",
+        "nodes": [
+          {
+            "id": "custodian-source-collection-provenance-analyst",
+            "agentID": "custodian-source-collection-provenance-analyst",
+            "description": "Maps authorized custodians, systems, preservation and collection provenance without live collection.",
+            "dependsOn": []
+          },
+          {
+            "id": "processing-dedup-search-review-analyst",
+            "agentID": "processing-dedup-search-review-analyst",
+            "description": "Reconciles processing, normalization, deduplication, family, search and review evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "production-privilege-disposition-analyst",
+            "agentID": "production-privilege-disposition-analyst",
+            "description": "Builds request, privilege-flag, redaction, production and disposition evidence for counsel review.",
+            "dependsOn": []
+          },
+          {
+            "id": "records-authority-retention-hold-analyst",
+            "agentID": "records-authority-retention-hold-analyst",
+            "description": "Freezes matter authority, records schedules, retention, hold scope, notices and acknowledgement evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "records-ediscovery-operations-review-owner",
+            "agentID": "records-ediscovery-operations-review-owner",
+            "description": "Joins all records and e-discovery branches into a conflict-preserving qualified review pack.",
+            "dependsOn": [
+              "custodian-source-collection-provenance-analyst",
+              "processing-dedup-search-review-analyst",
+              "production-privilege-disposition-analyst",
+              "records-authority-retention-hold-analyst"
             ]
           }
         ]
@@ -10996,11 +12046,11 @@ export const generatedPublicMarketFacts = [
       "namespace": "builtin",
       "id": "squad-sdk",
       "version": "2026.08.10.1",
-      "digest": "cca59203ee8392a8a71145fbc203516b3a5afde5dfa1ab3b9d7aa807a6553f75"
+      "digest": "c5e01f4f17107100306fc64036d9bd9e02173e60fde91b0189e7188fa9aef394"
     },
-    "name": "Generate Agent Squads",
-    "label": "Generate Agent Squads",
-    "description": "Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Agent Squads with independent contract review.",
+    "name": "Generate Expert Squads",
+    "label": "Generate Expert Squads",
+    "description": "Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.",
     "selectorSummary": "Use to import an external heterogeneous agent algorithm or design, validate, and install a new OpenCorvus Expert Squad through the canonical SDK.",
     "pillars": [
       "code",
@@ -11009,25 +12059,25 @@ export const generatedPublicMarketFacts = [
     "agents": [
       {
         "id": "squad-sdk-source-analyst",
-        "label": "Generate Agent Squads Source Analyst",
+        "label": "Generate Expert Squads Source Analyst",
         "description": "Extracts the source algorithm, domain boundary, actors, evidence flow, resources, portability constraints, and acceptance contract.",
         "baseRole": "deep-research"
       },
       {
         "id": "squad-sdk-package-architect",
-        "label": "Generate Agent Squads Package Architect",
+        "label": "Generate Expert Squads Package Architect",
         "description": "Turns accepted source evidence into the smallest complete SDK blueprint and binding workflow topology.",
         "baseRole": "architect"
       },
       {
         "id": "squad-sdk-import-analyst",
-        "label": "Generate Agent Squads Import Analyst",
+        "label": "Generate Expert Squads Import Analyst",
         "description": "Examines an external Squad's roster, instructions, Skill closures, MCP capabilities, mapping evidence, and portability blockers.",
         "baseRole": "deep-research"
       },
       {
         "id": "squad-sdk-contract-reviewer",
-        "label": "Generate Agent Squads Contract Reviewer",
+        "label": "Generate Expert Squads Contract Reviewer",
         "description": "Independently validates the complete authoring blueprint or import mapping against source evidence and package invariants.",
         "baseRole": "fact-check"
       }
@@ -11035,7 +12085,7 @@ export const generatedPublicMarketFacts = [
     "workflows": [
       {
         "id": "sdk-authoring",
-        "label": "Generate Agent Squads Authoring",
+        "label": "Generate Expert Squads Authoring",
         "description": "Extract the domain algorithm, design one canonical package blueprint, independently validate it, and then materialize it through the SDK author tool.",
         "nodes": [
           {
@@ -12125,6 +13175,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 5
   },
   {
+    "identity": "builtin/advertising-measurement-brand-safety",
+    "namespace": "builtin",
+    "id": "advertising-measurement-brand-safety",
+    "label": "Advertising Measurement and Brand Safety",
+    "version": "2026.08.11.1",
+    "packageDigest": "4805b31f8e3cc279394002c1f1838f714ab980577519cf0219c381d38085bfd0",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "advertising-measurement-brand-safety/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/agriculture-food-systems",
     "namespace": "builtin",
     "id": "agriculture-food-systems",
@@ -12343,6 +13410,23 @@ export const generatedShippedSquadFacts = [
       "climate-risk-adaptation/shared/method"
     ],
     "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/clinical-biostatistics-data-monitoring",
+    "namespace": "builtin",
+    "id": "clinical-biostatistics-data-monitoring",
+    "label": "Clinical Biostatistics and Data Monitoring",
+    "version": "2026.08.11.1",
+    "packageDigest": "fd2a2beed5341f2c53853662eaa832714622dc07a94ee3430cf9dfddd00a823c",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "clinical-biostatistics-data-monitoring/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {
@@ -12796,6 +13880,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/fire-protection-engineering-assurance",
+    "namespace": "builtin",
+    "id": "fire-protection-engineering-assurance",
+    "label": "Fire Protection Engineering Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "aefa9026a938082d4ffc6f021941b620a55e2b221224a5cb4a5de08a116532d3",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "fire-protection-engineering-assurance/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/food-safety-quality",
     "namespace": "builtin",
     "id": "food-safety-quality",
@@ -13019,6 +14120,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/internal-audit-control-assurance",
+    "namespace": "builtin",
+    "id": "internal-audit-control-assurance",
+    "label": "Internal Audit Control Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "b3473296d4a21335a9013919f65e476952aacc85ba281da79a08ef5ca615fd21",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "internal-audit-control-assurance/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/knowledge-base-operations",
     "namespace": "builtin",
     "id": "knowledge-base-operations",
@@ -13208,6 +14326,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/medical-device-postmarket-surveillance",
+    "namespace": "builtin",
+    "id": "medical-device-postmarket-surveillance",
+    "label": "Medical Device Postmarket Surveillance",
+    "version": "2026.08.11.1",
+    "packageDigest": "b6a0f33be777acca68ef16f4475acd9d6df384daec3a83c34b59abb59e832d5c",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "medical-device-postmarket-surveillance/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/medical-imaging-quality-assurance",
     "namespace": "builtin",
     "id": "medical-imaging-quality-assurance",
@@ -13239,6 +14374,23 @@ export const generatedShippedSquadFacts = [
       "meeting-knowledge/shared/method"
     ],
     "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/mergers-acquisitions-due-diligence",
+    "namespace": "builtin",
+    "id": "mergers-acquisitions-due-diligence",
+    "label": "Mergers and Acquisitions Due Diligence",
+    "version": "2026.08.11.1",
+    "packageDigest": "dac9c022e02a2141c1e577ad441ae79501a0e1d1d8b26e5973bf8f91d784e57a",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "mergers-acquisitions-due-diligence/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {
@@ -13307,6 +14459,23 @@ export const generatedShippedSquadFacts = [
       "nuclear-facility-operations-safety/shared/method"
     ],
     "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/oceanographic-observation-data-assurance",
+    "namespace": "builtin",
+    "id": "oceanographic-observation-data-assurance",
+    "label": "Oceanographic Observation Data Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "c1e50b118ee15b6c35f2422e87893c5bb75327a5a92f75a58e674bd4e6db6140",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "oceanographic-observation-data-assurance/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {
@@ -13450,6 +14619,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/power-grid-protection-reliability-assurance",
+    "namespace": "builtin",
+    "id": "power-grid-protection-reliability-assurance",
+    "label": "Power Grid Protection Reliability Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "4cd74c85ee28a237386472c16367e0b5973c07de2dbe2df6faebc5fca70203a0",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "power-grid-protection-reliability-assurance/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/privacy-data-protection-operations",
     "namespace": "builtin",
     "id": "privacy-data-protection-operations",
@@ -13552,6 +14738,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/radiation-therapy-physics-quality-assurance",
+    "namespace": "builtin",
+    "id": "radiation-therapy-physics-quality-assurance",
+    "label": "Radiation Therapy Physics Quality Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "6d81a6544849658fc9e94c920666ae5822d6b17413139b02f301171174777f77",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "radiation-therapy-physics-quality-assurance/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/railway-operations-safety",
     "namespace": "builtin",
     "id": "railway-operations-safety",
@@ -13583,6 +14786,23 @@ export const generatedShippedSquadFacts = [
       "real-estate-due-diligence/shared/method"
     ],
     "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/records-ediscovery-operations",
+    "namespace": "builtin",
+    "id": "records-ediscovery-operations",
+    "label": "Records and E-Discovery Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "b746ab3e04da44e188ea69b1cb74582fcbb72efa321e3174ca84b4642d5d81f1",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "records-ediscovery-operations/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {
@@ -13780,9 +15000,9 @@ export const generatedShippedSquadFacts = [
     "identity": "builtin/squad-sdk",
     "namespace": "builtin",
     "id": "squad-sdk",
-    "label": "Generate Agent Squads",
+    "label": "Generate Expert Squads",
     "version": "2026.08.10.1",
-    "packageDigest": "cca59203ee8392a8a71145fbc203516b3a5afde5dfa1ab3b9d7aa807a6553f75",
+    "packageDigest": "c5e01f4f17107100306fc64036d9bd9e02173e60fde91b0189e7188fa9aef394",
     "installSurface": "embedded",
     "packageSkillPaths": [
       "skills/authoring/SKILL.md",

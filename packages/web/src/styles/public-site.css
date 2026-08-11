@@ -1156,6 +1156,13 @@ button.primary-action {
   border-bottom: 2px solid var(--ink);
 }
 
+.detail-hero > *,
+.detail-topology > *,
+.revision-card,
+.workflow-topology-expanded {
+  min-width: 0;
+}
+
 .detail-hero .detail-summary {
   max-width: 780px;
   margin: 28px 0 0;
@@ -1656,6 +1663,28 @@ button.primary-action {
   .utility-intro,
   .detail-grid {
     gap: 48px;
+  }
+
+  .detail-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  }
+
+  .detail-topology {
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .workflow-topology-expanded .topology-graph {
+    grid-template-columns: 96px minmax(0, 1fr) 62px;
+  }
+
+  .workflow-topology-expanded .topology-workflows {
+    padding-inline: 12px;
+  }
+
+  .workflow-topology-expanded .topology-workflow ol {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
   }
 
   .public-nav {

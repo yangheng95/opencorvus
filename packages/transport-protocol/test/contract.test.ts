@@ -131,6 +131,7 @@ describe("canonical Work Ledger and Project Worktree response contracts", () => 
       pinned: false,
       lifecycleStatus: "active",
       activityStatus: "running",
+      cancellationStatus: "none",
       priority: "normal",
       source: "operator",
       queueOrder: 0,
@@ -298,6 +299,7 @@ describe("native command validation", () => {
           },
         },
       },
+      { kind: "clipboard.readText" },
       { kind: "settings.save", payload: persistedSettings },
       { kind: "workspace.openProjectEditor", editor: "vscode", path: "D:/workspace" },
     ] satisfies NativeCommand[]

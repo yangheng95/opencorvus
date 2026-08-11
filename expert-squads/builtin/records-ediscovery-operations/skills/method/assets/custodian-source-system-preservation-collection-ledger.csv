@@ -1,0 +1,15 @@
+# Reusable evidence contract
+# artifact_id: required stable artifact or row identity
+# source_id_locator: exact authority system and collection-manifest locator
+# source_version_date: immutable source/export version collection date cutoff and time zone
+# qualified_reviewer: collection specialist counsel privacy/security and system owner
+# units_and_denominator: item and byte counts with expected source population
+# assumptions_uncertainty: authorized assumptions gaps confidence and reason
+# decision_not_made: no collection preservation authenticity admissibility or completeness decision
+# outcome_unknown: uncollected dynamic inaccessible and disputed source outcome remains unknown
+# stop_escalation: hold on authority identity hash count transfer privacy or live-action conflict
+artifact_id,row_id,matter_id,custodian_id,source_system_id,collection_id,source_id_locator,source_version_date,scope_period,method_tool_version,start_end_time_zone,item_count,byte_count,units_and_denominator,hash_algorithm_value,container_encryption,chain_event,exception,owner,qualified_reviewer,applicability,assumptions_uncertainty,privacy_privilege_security_license,status,decision_not_made,outcome_unknown,stop_escalation
+REDO-COLL-001,COLL-ROW-001,MAT-001,CUST-001,SYS-001,COL-001,provided-manifest-line-1,sha256-pending-YYYY-MM-DD,operator-period,provided-method-and-version,provided-timestamps,unknown,unknown,items-and-bytes-over-authorized-scope,provided-hash-or-unknown,provided-state,transfer-event-source,none-recorded-not-proof,collection evidence owner,qualified collection specialist and counsel,authorized matter only,no assumptions and medium pending reconciliation,restricted matter evidence,draft,no collection or authenticity decision,completeness unknown,stop on mismatch or missing authority
+REDO-COLL-001,COLL-ROW-002,MAT-001,CUST-002,SYS-002,COL-002,exception-manifest-line,version-and-date-required,operator-period,tool-version-required,time-zone-required,0,unknown,items-and-bytes-over-expected-source,not-acquired,unknown,failed-or-partial-event,inaccessible-or-encrypted,system owner,security privacy and counsel,named source only,dynamic state unknown and low confidence,restricted matter evidence,open exception,no remediation or spoliation decision,availability unknown,escalate without live access
+
+# Reconcile inventory to provided acquisition records without connecting to any source. Preserve partial, failed, corrupt, unsupported, encrypted, deleted-item and cloud-dynamic states. Hash identity does not prove completeness authenticity relevance or admissibility.

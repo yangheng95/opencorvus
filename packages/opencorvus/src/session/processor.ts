@@ -80,6 +80,7 @@ export namespace SessionProcessor {
   type AssistantMessageSnapshot = {
     cost: number
     tokens: Message.Assistant["tokens"]
+    billing?: Message.Assistant["billing"]
     finish?: Message.Assistant["finish"]
     error?: Message.Assistant["error"]
   }
@@ -410,6 +411,7 @@ export namespace SessionProcessor {
                 messageSnapshot: {
                   cost: input.assistantMessage.cost,
                   tokens: cloneTokens(),
+                  billing: input.assistantMessage.billing,
                   finish: input.assistantMessage.finish,
                   error: input.assistantMessage.error,
                 },
@@ -432,6 +434,7 @@ export namespace SessionProcessor {
                 ...snapshot.tokens,
                 cache: { ...snapshot.tokens.cache },
               }
+              input.assistantMessage.billing = snapshot.billing
               input.assistantMessage.finish = snapshot.finish
               input.assistantMessage.error = snapshot.error
               await Session.updateMessage(input.assistantMessage)
@@ -856,6 +859,7 @@ export namespace SessionProcessor {
                       })
                       input.assistantMessage.finish = value.finishReason
                       input.assistantMessage.cost += usage.cost
+                      input.assistantMessage.billing = usage.billing
                       // Accumulate across steps so multi-step messages keep all
                       // tokens (overwrite-only would silently drop earlier steps;
                       // `cost +=` is already cumulative — match it).
@@ -879,6 +883,7 @@ export namespace SessionProcessor {
                           type: "step-finish",
                           tokens: usage.tokens,
                           cost: usage.cost,
+                          billing: usage.billing,
                         })
                         trackCreatedPart(run.attempt, part.id)
                       }

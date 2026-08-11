@@ -18,6 +18,19 @@ const CATALOG_SEARCH_TEXT_MAX_CHARS = 32 * 1024
  * for every transport page. Complete consumers still verify payload_sha256. */
 export const ENGINE_ARTIFACT_PAYLOAD_BLOCK_BYTES = 64 * 1024
 
+const ENGINE_ARTIFACT_TRANSPORT_ENVELOPE_KINDS: ReadonlySet<EngineArtifactKind> = new Set([
+  "expert_output",
+  "browser_preview_evidence",
+  "frontend_research_brief",
+])
+
+/** Single kind-level authority for Engine Artifacts whose payload is a typed
+ * transport envelope rather than a raw Core payload. Kind-specific identity
+ * constraints are enforced by deriveEngineArtifactCatalogMetadata. */
+export function engineArtifactUsesTransportEnvelope(kind: EngineArtifactKind): boolean {
+  return ENGINE_ARTIFACT_TRANSPORT_ENVELOPE_KINDS.has(kind)
+}
+
 export type EngineArtifactDerivedCatalogIndex = Readonly<{
   payload_sha256: string
   payload_bytes: number
@@ -261,7 +274,7 @@ export function deriveEngineArtifactCatalogMetadata(input: { kind: EngineArtifac
       blockSHA256s,
     })
   }
-  if (input.kind !== "expert_output") {
+  if (!engineArtifactUsesTransportEnvelope(input.kind)) {
     const artifactType = `opencorvus/core/${input.kind}`
     const producer: ArtifactProducer = {
       owner_kind: "core",

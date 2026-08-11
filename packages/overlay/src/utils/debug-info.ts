@@ -7,10 +7,25 @@ import type {
   PersistedChatDebugSummary,
 } from "../services/session-debug"
 import { boundedDebugText, normalizeDebugDirectory } from "./debug-text"
+import { isImplicitProjectDirectory } from "./project-directory"
 
 type RuntimeDebugPaths = { database?: string | null } | null | undefined
 
 const DEBUG_BUNDLE_SCHEMA = "opencorvus.debug.v2"
+
+export class DebugNamedProjectRequiredError extends Error {
+  override readonly name = "DebugNamedProjectRequiredError"
+}
+
+export function debugCopyFailureMessage(error: unknown, fallback: string): string {
+  return error instanceof DebugNamedProjectRequiredError ? error.message : fallback
+}
+
+export function requireNamedDebugProjectDirectory(directory: string, errorMessage: string): string {
+  const candidate = directory.trim()
+  if (!candidate || isImplicitProjectDirectory(candidate)) throw new DebugNamedProjectRequiredError(errorMessage)
+  return candidate
+}
 
 function debugText(value: unknown, fallback = "-", limit = 240): string {
   return boundedDebugText(value, limit) || fallback

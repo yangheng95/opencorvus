@@ -1,16 +1,23 @@
+import z from "zod"
 import {
   ArtifactCatalogEntrySchema,
+  ArtifactProducerSchema,
   ArtifactReadLocatorSchema,
   ArtifactSchemaLimits,
+  EngineArtifactEnvelopeSchema,
   type ArtifactCatalogEntry,
   type ArtifactReadLocator,
 } from "@opencorvus-ai/plugin/artifact-catalog"
+import { TaskArtifactRefSchema, type TaskArtifactRef } from "@opencorvus-ai/plugin/task-artifact"
 import { EngineService } from "@/task-api"
 import { conversationMessageHasDisplay, type ConversationView } from "./view"
 import { ConversationTurnArtifactSummary } from "@/engine/model"
 import { requireTaskCompletionDecisionArtifact } from "@/engine/completion-decision"
 import { requireTerminalLifecycleReferenceEvent } from "@/engine/terminal-lifecycle-reference"
 import { SessionWake } from "@/session/wake"
+import { artifactCatalogAuthority, requireEngineArtifactByLocator } from "@/artifact-catalog"
+import { readTaskArtifactSnapshotManifest, taskArtifactSnapshotResourceRefs } from "@/task-artifact/store"
+import { engineArtifactUsesTransportEnvelope } from "@/engine/artifact-catalog-metadata"
 
 function exactString(value: unknown): string | undefined {
   return typeof value === "string" && value.length > 0 ? value : undefined
@@ -42,6 +49,125 @@ function locatorIdentity(value: unknown): string | undefined {
   if (locator.source === "task_artifact_snapshot") return snapshotIdentity(locator.snapshot)
   if (locator.source === "task_artifact_resource") return snapshotIdentity(locator.ref.snapshot)
   return undefined
+}
+
+function resourceIdentity(resource: TaskArtifactRef): string {
+  return [
+    resource.snapshot.schema_version,
+    resource.snapshot.project_id,
+    resource.snapshot.task_id,
+    resource.snapshot.snapshot_id,
+    resource.snapshot.manifest_sha256,
+    resource.tree,
+    resource.path,
+    resource.media_type,
+    resource.bytes,
+    resource.sha256,
+  ].join("\u0000")
+}
+
+type DeclaredTurnOutput = z.infer<typeof ConversationTurnArtifactSummary>["declaredOutputs"][number]
+
+function structuredOutput(input: { locator: ArtifactReadLocator; entry: ArtifactCatalogEntry }): DeclaredTurnOutput {
+  return {
+    declarationLocator: input.locator,
+    producer: input.entry.producer,
+    label: input.entry.label || input.entry.artifact_type || input.entry.kind,
+    ...(input.entry.artifact_type ? { artifactType: input.entry.artifact_type } : {}),
+    resources: [],
+  }
+}
+
+export async function projectDeclaredTurnOutputs(input: {
+  taskID: string
+  locators: readonly ArtifactReadLocator[]
+  entries: readonly ArtifactCatalogEntry[]
+}): Promise<DeclaredTurnOutput[]> {
+  if (input.locators.length === 0) return []
+  const authority = artifactCatalogAuthority(input.taskID)
+  const entryByIdentity = new Map(
+    input.entries.flatMap((entry) => {
+      const identity = locatorIdentity(entry.locator)
+      return identity ? [[identity, entry] as const] : []
+    }),
+  )
+  const outputs: DeclaredTurnOutput[] = []
+
+  const appendResources = (input: {
+    declarationLocator: ArtifactReadLocator
+    label: string
+    producer: z.infer<typeof ArtifactProducerSchema>
+    resources: readonly TaskArtifactRef[]
+  }) => {
+    const resources = input.resources.map((resource) => TaskArtifactRefSchema.parse(resource))
+    if (resources.length === 0) return
+    outputs.push({
+      declarationLocator: input.declarationLocator,
+      producer: input.producer,
+      label: input.label,
+      resources,
+    })
+  }
+
+  for (const locator of input.locators) {
+    const identity = locatorIdentity(locator)
+    const entry = identity ? entryByIdentity.get(identity) : undefined
+    if (!entry) throw new Error(`Task ${input.taskID} declared output is missing from its exact Artifact catalog`)
+
+    if (locator.source === "engine_artifact") {
+      const row = requireEngineArtifactByLocator({ taskID: input.taskID, locator })
+      if (!engineArtifactUsesTransportEnvelope(row.kind)) {
+        outputs.push(structuredOutput({ locator, entry }))
+        continue
+      }
+      const envelope = EngineArtifactEnvelopeSchema.safeParse(row.payload)
+      if (entry.schema_diagnostic || !envelope.success) {
+        const diagnostic =
+          entry.schema_diagnostic ||
+          (envelope.success ? "Artifact catalog rejected the typed envelope identity" : envelope.error.message)
+        throw new Error(
+          `Task ${input.taskID} selected Engine Artifact ${locator.artifact_id} is not a valid current transport envelope: ${diagnostic}`,
+        )
+      }
+      if (envelope.data.resources.length === 0) {
+        outputs.push({
+          ...structuredOutput({ locator, entry }),
+          producer: envelope.data.producer,
+          artifactType: envelope.data.artifact_type,
+        })
+        continue
+      }
+      appendResources({
+        declarationLocator: locator,
+        label: entry.label || entry.artifact_type || entry.kind,
+        producer: envelope.data.producer,
+        resources: envelope.data.resources,
+      })
+      continue
+    }
+
+    const snapshot = locator.source === "task_artifact_snapshot" ? locator.snapshot : locator.ref.snapshot
+    const record = await readTaskArtifactSnapshotManifest({ ...authority, snapshot })
+    const resources = taskArtifactSnapshotResourceRefs(record)
+    const producer = ArtifactProducerSchema.parse(record.manifest.producer)
+    if (locator.source === "task_artifact_resource") {
+      const selectedIdentity = resourceIdentity(locator.ref)
+      const exact = resources.find((resource) => resourceIdentity(resource) === selectedIdentity)
+      if (!exact) {
+        throw new Error(`Task ${input.taskID} declared resource ${locator.ref.tree}/${locator.ref.path} is not exact`)
+      }
+      appendResources({
+        declarationLocator: locator,
+        label: entry.label || locator.ref.path,
+        producer,
+        resources: [exact],
+      })
+      continue
+    }
+    appendResources({ declarationLocator: locator, label: entry.label || entry.kind, producer, resources })
+  }
+
+  return outputs
 }
 
 async function completeTaskCatalog(taskID: string): Promise<{
@@ -83,6 +209,7 @@ async function taskDelivery(taskID: string) {
   if (locators.length === 0) {
     return {
       task,
+      locators,
       entries: [] as ArtifactCatalogEntry[],
       catalogComplete: true,
       providerErrors: [] as Array<{ source: "engine_artifact" | "task_artifact"; message: string }>,
@@ -90,13 +217,10 @@ async function taskDelivery(taskID: string) {
   }
   const catalog = await completeTaskCatalog(taskID)
   const entries = resolveCompletionArtifactEntries(taskID, locators, catalog.entries)
-  return { task, entries, catalogComplete: catalog.catalogComplete, providerErrors: catalog.providerErrors }
+  return { task, locators, entries, catalogComplete: catalog.catalogComplete, providerErrors: catalog.providerErrors }
 }
 
-type MissionChildTaskResultWake = Extract<
-  SessionWake.WakeReason,
-  { source: "mission.child_task_result" }
->
+type MissionChildTaskResultWake = Extract<SessionWake.WakeReason, { source: "mission.child_task_result" }>
 
 async function missionTaskDelivery(wake: MissionChildTaskResultWake) {
   const reference = wake.terminalLifecycleReference
@@ -124,6 +248,7 @@ async function missionTaskDelivery(wake: MissionChildTaskResultWake) {
   if (locators.length === 0) {
     return {
       wake,
+      locators,
       entries: [] as ArtifactCatalogEntry[],
       catalogComplete: true,
       providerErrors: [] as Array<{ source: "engine_artifact" | "task_artifact"; message: string }>,
@@ -131,7 +256,7 @@ async function missionTaskDelivery(wake: MissionChildTaskResultWake) {
   }
   const catalog = await completeTaskCatalog(wake.taskID)
   const entries = resolveCompletionArtifactEntries(wake.taskID, locators, catalog.entries)
-  return { wake, entries, catalogComplete: catalog.catalogComplete, providerErrors: catalog.providerErrors }
+  return { wake, locators, entries, catalogComplete: catalog.catalogComplete, providerErrors: catalog.providerErrors }
 }
 
 export function resolveCompletionArtifactEntries(
@@ -181,28 +306,30 @@ function missionChildResultWake(message: any): MissionChildTaskResultWake | unde
   return SessionWake.MissionChildTaskResultWakeReason.parse(wake)
 }
 
-export async function projectMissionTurnArtifacts(input: {
-  transcript: readonly any[]
-  view: ConversationView
-}) {
+export async function projectMissionTurnArtifacts(input: { transcript: readonly any[]; view: ConversationView }) {
   const summaries = await Promise.all(
     projectMissionTurnArtifactOwners(input).map(async ({ wake, userMessageID, messageID }) => {
       const delivery = await missionTaskDelivery(wake)
       return ConversationTurnArtifactSummary.parse({
-          messageID,
-          userMessageID,
-          task: {
-            id: delivery.wake.taskID,
-            title: delivery.wake.taskTitle,
-            status: delivery.wake.taskStatus,
-            ...(delivery.wake.taskStatus !== "completed" && delivery.wake.terminalLifecycleReference.terminalError
-              ? { reason: delivery.wake.terminalLifecycleReference.terminalError }
-              : {}),
-          },
+        messageID,
+        userMessageID,
+        task: {
+          id: delivery.wake.taskID,
+          title: delivery.wake.taskTitle,
+          status: delivery.wake.taskStatus,
+          ...(delivery.wake.taskStatus !== "completed" && delivery.wake.terminalLifecycleReference.terminalError
+            ? { reason: delivery.wake.terminalLifecycleReference.terminalError }
+            : {}),
+        },
+        declaredOutputs: await projectDeclaredTurnOutputs({
+          taskID: delivery.wake.taskID,
+          locators: delivery.locators,
           entries: delivery.entries,
-          catalogComplete: delivery.catalogComplete,
-          providerErrors: delivery.providerErrors,
-        })
+        }),
+        entries: delivery.entries,
+        catalogComplete: delivery.catalogComplete,
+        providerErrors: delivery.providerErrors,
+      })
     }),
   )
   return summaries
@@ -249,6 +376,11 @@ export async function projectTaskTurnArtifacts(input: {
             ? { reason: delivery.task.cancellation.reason }
             : {}),
       },
+      declaredOutputs: await projectDeclaredTurnOutputs({
+        taskID: delivery.task.id,
+        locators: delivery.locators,
+        entries: delivery.entries,
+      }),
       entries: delivery.entries,
       catalogComplete: delivery.catalogComplete,
       providerErrors: delivery.providerErrors,

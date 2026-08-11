@@ -6,6 +6,10 @@
 
 - [2026-08-11-windows-worker-scheduler-liveness-convergence.md](2026-08-11-windows-worker-scheduler-liveness-convergence.md) records the live Windows reviewer deadlock, expands scheduler ownership through physical descendant and output settlement, and defines the independent audit and end-to-end recovery acceptance boundary.
 
+- [2026-08-12-random-expert-squad-self-evolution-e2e.md](2026-08-12-random-expert-squad-self-evolution-e2e.md) defines the isolated random-port/project/database controller, real Market install, streaming Mission-owned incumbent-challenger campaign, measured evaluation, non-executing recommendation, and independent-review acceptance boundary.
+
+- [2026-08-12-main-delivery-history-convergence.md](2026-08-12-main-delivery-history-convergence.md) freezes the dirty original worktree, classifies diverged local and remote history by exact and semantic coverage, and defines the reviewed fast-forward-only integration and push boundary.
+
 - [2026-08-11-hollow-desktop-app-icons.md](2026-08-11-hollow-desktop-app-icons.md) replaces the filled desktop application mark with one white-backed hollow silhouette generated consistently for macOS ICNS, Windows ICO/Store, and Linux/runtime PNG assets.
 
 - [2026-08-11-native-platform-message-notifications.md](2026-08-11-native-platform-message-notifications.md) replaces in-app, taskbar/Dock-badge, and custom tray-dot message attention with one native system-notification delivery that also requests platform-native user attention.
@@ -32,6 +36,18 @@
 
 - [2026-08-10-v0.0.39-beta-windows-repackage.md](2026-08-10-v0.0.39-beta-windows-repackage.md) advances the canonical release family to `0.0.39-beta` and records the native Windows graphical user interface and command-line interface repackage evidence.
 
+- [2026-08-11-expert-squad-terminology-convergence.md](2026-08-11-expert-squad-terminology-convergence.md) converges every current product-facing name, public contract description, built-in generator label, generated artifact, and maintained record on Expert Squad while preserving the existing runtime identity and member semantics.
+
+- [2026-08-11-mission-market-expert-squad-recommendations.md](2026-08-11-mission-market-expert-squad-recommendations.md) adds query-driven Market discovery to the Mission create entry, ranks package selector, Skill, and prompt evidence, and keeps direct project installation explicit and separate from selection or activation.
+
+- [2026-08-11-provider-usage-natural-cycle-dashboard.md](2026-08-11-provider-usage-natural-cycle-dashboard.md) audits the canonical Provider metering path, defines event-time natural-period usage statistics, preserves pricing coverage, and specifies the unified Usage dashboard and independent visual review boundary.
+
+- [2026-08-11-conversation-agent-declared-output-summary.md](2026-08-11-conversation-agent-declared-output-summary.md) restores the requested completion hierarchy: the Completion Decision selects delivery while the selected Agent Artifact's immutable producer and resource declaration supplies the visible file/result summary.
+
+- [2026-08-11-clipboard-api-key-provider-prompt.md](2026-08-11-clipboard-api-key-provider-prompt.md) adds a secret-safe native clipboard read boundary, local key-candidate classification, one-process prompt deduplication, and explicit navigation to the canonical LLM Provider settings.
+
+  Visual evidence: [confirmation prompt](../../artifacts/2026-08-11-clipboard-api-key-prompt.png) and [Providers destination](../../artifacts/2026-08-11-clipboard-api-key-providers.png).
+
 - [2026-08-11-expert-squad-on-demand-installation.md](2026-08-11-expert-squad-on-demand-installation.md) restores the four embedded Expert Squads as the only automatic defaults, keeps the complete repository-hosted Market available on demand, preserves existing installations, and routes picker actions into the canonical installer.
 
 - [2026-08-11-readme-homepage-alignment.md](2026-08-11-readme-homepage-alignment.md) aligns the bilingual root README position, navigation, Workbench, Expert Squad, Mission, long-horizon delivery, and open-community story with the current public homepage while preserving repository/runtime detail.
@@ -45,6 +61,8 @@
 - [2026-08-11-public-website-iterative-design-program.md](2026-08-11-public-website-iterative-design-program.md) establishes the research-backed, independently approved website iteration loop and specifies Iteration 1 as a bounded public-versus-documentation typography ownership repair with real bilingual visual acceptance.
 
 - [2026-08-11-public-download-page-design.md](2026-08-11-public-download-page-design.md) defines the existing-site download route, same-origin release manifest, platform recommendation, and release-to-production Actions convergence contract.
+
+- [2026-08-11-tenth-ten-domain-expert-squad-batch.md](2026-08-11-tenth-ten-domain-expert-squad-batch.md) freezes the autonomous tenth fixed-ten batch, six bounded open-source Skill adaptations, four clean-room source decisions, fifty dedicated evidence assets, professional authority boundaries, and the 115/119 on-demand Market acceptance plan.
 
 - [2026-08-11-ninth-ten-domain-expert-squad-batch.md](2026-08-11-ninth-ten-domain-expert-squad-batch.md) freezes the autonomous ninth fixed-ten batch, four bounded open-source Skill adaptations, six clean-room source decisions, fifty dedicated evidence assets, professional authority boundaries, and the 105/109 on-demand Market acceptance plan.
 
@@ -124,7 +142,7 @@
 
 - [2026-08-08-algorithm-bug-multiparty-audit.md](2026-08-08-algorithm-bug-multiparty-audit.md) records three independent algorithm-audit lanes, adversarial rotation, primary evidence decisions, and the positive repair contracts for the confirmed pending defects without changing product code.
 
-- [2026-08-08-machine-learning-implementation-squad-e2e.md](2026-08-08-machine-learning-implementation-squad-e2e.md) defines and records the failed real Generate Agent Squads end-to-end attempt for a project-owned machine-learning implementation Expert Squad, including immutable-profile, project-identity, and model-authority evidence.
+- [2026-08-08-machine-learning-implementation-squad-e2e.md](2026-08-08-machine-learning-implementation-squad-e2e.md) defines and records the failed real Generate Expert Squads end-to-end attempt for a project-owned machine-learning implementation Expert Squad, including immutable-profile, project-identity, and model-authority evidence.
 
 - [2026-08-08-ci-clean-runner-and-release-trigger-repair.md](2026-08-08-ci-clean-runner-and-release-trigger-repair.md) traces GitHub Actions run `31218734772` to clean-runner generated dependencies and focused contract failures, then confines distribution packaging to explicit versioned release triggers.
 

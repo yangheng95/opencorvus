@@ -26,6 +26,7 @@ const NATIVE_COMMAND_KINDS: NativeCommandKind[] = [
   "browserPreview.selection.take",
   "browserPreview.currentPage",
   "browserPreview.setZoom",
+  "clipboard.readText",
   "settings.load",
   "settings.save",
   "config.write-file",

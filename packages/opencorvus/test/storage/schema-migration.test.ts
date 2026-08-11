@@ -13,7 +13,7 @@ import {
 } from "../../src/storage/schema-migration"
 
 const PREDECESSOR_FINGERPRINT = "05480e3d530365e768b00218f24c4a8d7bb281538315b600dd70827c90e33212"
-const CURRENT_FINGERPRINT = "84af4e18ec989a211a7ee4dc574b535fce8cfbb7237eb73feb549a82ace1b058"
+const CURRENT_FINGERPRINT = "e893d23611486b20a7be7c0c501979691d5bd1bb8369581db89192b5e1afe62d"
 
 const legacyMemoryFileDDL = /* sql */ `CREATE TABLE "memory_file" (
   "id" text PRIMARY KEY NOT NULL,
@@ -71,6 +71,7 @@ function createPredecessorDatabase(databasePath: string, input: { scratchpadCont
   sqlite.exec(SCHEMA_DDL)
   dropBusPublicationOutbox(sqlite)
   sqlite.run('DROP TABLE "event_job_fire"')
+  sqlite.run('DROP TABLE "provider_usage_event"')
   sqlite.run('DROP TABLE "engine_task_cancellation_authority"')
   const memoryChunkTable = requiredSchemaSQL(sqlite, "table", "memory_chunk")
   const memoryEmbeddingTable = requiredSchemaSQL(sqlite, "table", "memory_embedding")
@@ -155,6 +156,7 @@ describe("transactional schema migration", () => {
       "2026-08-11-event-job-fire-authority",
       "2026-08-11-bus-publication-outbox-authority",
       "2026-08-11-bus-publication-durable-retry-backoff",
+      "2026-08-11-provider-usage-ledger",
     ])
 
     const result = migrateDatabaseFile(databasePath, plan!, preparedBackup)
@@ -169,6 +171,7 @@ describe("transactional schema migration", () => {
         "2026-08-11-event-job-fire-authority",
         "2026-08-11-bus-publication-outbox-authority",
         "2026-08-11-bus-publication-durable-retry-backoff",
+        "2026-08-11-provider-usage-ledger",
       ],
     })
 
@@ -211,6 +214,7 @@ describe("transactional schema migration", () => {
         "2026-08-11-event-job-fire-authority",
         "2026-08-11-bus-publication-outbox-authority",
         "2026-08-11-bus-publication-durable-retry-backoff",
+        "2026-08-11-provider-usage-ledger",
       ],
     })
     expect(result.backupFiles.map((file) => file.name)).toEqual([
@@ -231,6 +235,7 @@ describe("transactional schema migration", () => {
     predecessor.exec(SCHEMA_DDL)
     dropBusPublicationOutbox(predecessor)
     predecessor.run('DROP TABLE "event_job_fire"')
+    predecessor.run('DROP TABLE "provider_usage_event"')
     predecessor.run('DROP TABLE "engine_task_cancellation_authority"')
     predecessor.run('DROP TABLE "engine_workflow_node_occurrence"')
     predecessor.run('DROP TABLE "engine_browser_preview_target_identity"')
@@ -294,6 +299,7 @@ describe("transactional schema migration", () => {
     predecessor.exec(SCHEMA_DDL)
     dropBusPublicationOutbox(predecessor)
     predecessor.run('DROP TABLE "event_job_fire"')
+    predecessor.run('DROP TABLE "provider_usage_event"')
     predecessor.run('DROP TABLE "engine_task_cancellation_authority"')
     predecessor.run('DROP TABLE "engine_workflow_node_occurrence"')
     const artifactInsertGuard = requiredSchemaSQL(predecessor, "trigger", "engine_artifact_catalog_metadata_insert")
@@ -443,6 +449,7 @@ describe("transactional schema migration", () => {
     predecessor.exec(SCHEMA_DDL)
     dropBusPublicationOutbox(predecessor)
     predecessor.run('DROP TABLE "event_job_fire"')
+    predecessor.run('DROP TABLE "provider_usage_event"')
     predecessor.run('DROP TABLE "engine_task_cancellation_authority"')
     predecessor.run(
       `INSERT INTO project (id, worktree, name, time_created, time_updated, sandboxes)
@@ -483,6 +490,7 @@ describe("transactional schema migration", () => {
     predecessor.exec(SCHEMA_DDL)
     dropBusPublicationOutbox(predecessor)
     predecessor.run('DROP TABLE "event_job_fire"')
+    predecessor.run('DROP TABLE "provider_usage_event"')
     predecessor.run(
       `INSERT INTO project (id, worktree, name, time_created, time_updated, sandboxes)
        VALUES ('project-settlement', 'C:/project-settlement', 'Settlement project', 1, 1, '[]')`,
@@ -530,6 +538,7 @@ describe("transactional schema migration", () => {
       "2026-08-11-event-job-fire-authority",
       "2026-08-11-bus-publication-outbox-authority",
       "2026-08-11-bus-publication-durable-retry-backoff",
+      "2026-08-11-provider-usage-ledger",
     ])
     const preparedBackup = createSchemaMigrationBackup(databasePath, plan)
     predecessor.close(true)
@@ -581,6 +590,7 @@ describe("transactional schema migration", () => {
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
     dropBusPublicationOutbox(predecessor)
+    predecessor.run('DROP TABLE "provider_usage_event"')
     predecessor.exec(`CREATE TABLE "bus_publication_outbox" (
   "occurrence_id" text PRIMARY KEY NOT NULL,
   "project_id" text NOT NULL,
@@ -647,6 +657,7 @@ CREATE INDEX "bus_publication_delivery_pending_idx" ON "bus_publication_delivery
     const plan = planSchemaMigration(predecessor)!
     expect(plan.migrations.map((migration) => migration.id)).toEqual([
       "2026-08-11-bus-publication-durable-retry-backoff",
+      "2026-08-11-provider-usage-ledger",
     ])
     const preparedBackup = createSchemaMigrationBackup(databasePath, plan)
     predecessor.close(true)
@@ -697,6 +708,68 @@ CREATE INDEX "bus_publication_delivery_pending_idx" ON "bus_publication_delivery
     ])
     expect(migrated.query("PRAGMA foreign_key_check").all()).toEqual([])
     expect(migrated.query("PRAGMA integrity_check").all()).toEqual([{ integrity_check: "ok" }])
+    migrated.close(true)
+  })
+
+  test("backfills historical Session step usage into the canonical Provider ledger", async () => {
+    const databasePath = await temporaryDatabasePath()
+    const predecessor = new BunDatabase(databasePath, { create: true })
+    predecessor.exec(SCHEMA_DDL)
+    predecessor.run('DROP TABLE "provider_usage_event"')
+    predecessor.run(
+      `INSERT INTO project (id, worktree, name, time_created, time_updated, sandboxes)
+       VALUES ('project-usage', 'C:/project-usage', 'Usage project', 1, 1, '[]')`,
+    )
+    predecessor.run(
+      `INSERT INTO session (
+         id, project_id, slug, directory, title, version, kind, time_created, time_updated
+       ) VALUES (
+         'ses_usage', 'project-usage', 'usage', 'C:/project-usage', 'Usage', '0.0.38-beta', 'assistant', 1, 1
+       )`,
+    )
+    predecessor.run(
+      `INSERT INTO message (id, session_id, time_created, time_updated, data)
+       VALUES (
+         'msg_usage', 'ses_usage', 100, 100,
+         '{"role":"assistant","providerID":"openai","modelID":"gpt-5"}'
+       )`,
+    )
+    predecessor.run(
+      `INSERT INTO part (id, message_id, session_id, time_created, time_updated, data)
+       VALUES (
+         'prt_usage', 'msg_usage', 'ses_usage', 101, 101,
+         '{"type":"step-finish","tokens":{"input":100,"output":30,"reasoning":5,"cache":{"read":20,"write":2},"total":157},"cost":0.0123,"billing":{"status":"priced"}}'
+       )`,
+    )
+    expect(schemaObjectFingerprint(predecessor)).toBe(
+      "84af4e18ec989a211a7ee4dc574b535fce8cfbb7237eb73feb549a82ace1b058",
+    )
+    const plan = planSchemaMigration(predecessor)
+    predecessor.close(true)
+    expect(plan?.migrations.map((migration) => migration.id)).toEqual(["2026-08-11-provider-usage-ledger"])
+
+    const preparedBackup = createSchemaMigrationBackup(databasePath, plan!)
+    const result = migrateDatabaseFile(databasePath, plan!, preparedBackup)
+    const migrated = new BunDatabase(databasePath, { readonly: true })
+    expect(migrated.query("SELECT * FROM provider_usage_event").all()).toEqual([
+      {
+        id: "pvu_legacy_prt_usage",
+        occurred_at: 101,
+        provider_id: "openai",
+        model_id: "gpt-5",
+        purpose: "session",
+        input_tokens: 100,
+        output_tokens: 30,
+        reasoning_tokens: 5,
+        cache_read_tokens: 20,
+        cache_write_tokens: 2,
+        total_tokens: 157,
+        cost_usd: 0.0123,
+        billing_status: "priced",
+        source_ref: "prt_usage",
+      },
+    ])
+    expect(result.toFingerprint).toBe(CURRENT_FINGERPRINT)
     migrated.close(true)
   })
 

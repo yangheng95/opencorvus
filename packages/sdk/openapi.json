@@ -239,6 +239,22 @@
         ],
         "type": "object"
       },
+      "BillingCoverage": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "priced",
+              "unpriced"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "type": "object"
+      },
       "ChannelConfig": {
         "additionalProperties": false,
         "description": "Channel integration configuration",
@@ -11834,6 +11850,9 @@
           },
           "cost": {
             "properties": {
+              "available": {
+                "type": "boolean"
+              },
               "cache": {
                 "properties": {
                   "read": {
@@ -11888,6 +11907,7 @@
               }
             },
             "required": [
+              "available",
               "input",
               "output",
               "cache"
@@ -12322,6 +12342,551 @@
           "refresh",
           "access",
           "expires"
+        ],
+        "type": "object"
+      },
+      "OfficialOpenRouterKeyLedger": {
+        "additionalProperties": false,
+        "properties": {
+          "activeCount": {
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "byokUsageDailyUSD": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "byokUsageMonthlyUSD": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "byokUsageUSD": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "byokUsageWeeklyUSD": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "count": {
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/OfficialOpenRouterKeyUsage"
+            },
+            "type": "array"
+          },
+          "limitedCount": {
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "usageDailyUSD": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "usageMonthlyUSD": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "usageUSD": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "usageWeeklyUSD": {
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "count",
+          "activeCount",
+          "limitedCount",
+          "usageUSD",
+          "usageDailyUSD",
+          "usageWeeklyUSD",
+          "usageMonthlyUSD",
+          "byokUsageUSD",
+          "byokUsageDailyUSD",
+          "byokUsageWeeklyUSD",
+          "byokUsageMonthlyUSD",
+          "items"
+        ],
+        "type": "object"
+      },
+      "OfficialOpenRouterKeyUsage": {
+        "additionalProperties": false,
+        "properties": {
+          "byokUsageDailyUSD": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "byokUsageMonthlyUSD": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "byokUsageUSD": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "byokUsageWeeklyUSD": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "disabled": {
+            "type": "boolean"
+          },
+          "hash": {
+            "type": "string"
+          },
+          "includeByokInLimit": {
+            "type": "boolean"
+          },
+          "limitRemainingUSD": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "limitReset": {
+            "anyOf": [
+              {
+                "enum": [
+                  "daily",
+                  "weekly",
+                  "monthly"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "limitUSD": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "usageDailyUSD": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "usageMonthlyUSD": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "usageUSD": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "usageWeeklyUSD": {
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "hash",
+          "name",
+          "disabled",
+          "limitUSD",
+          "limitRemainingUSD",
+          "limitReset",
+          "includeByokInLimit",
+          "usageUSD",
+          "usageDailyUSD",
+          "usageWeeklyUSD",
+          "usageMonthlyUSD",
+          "byokUsageUSD",
+          "byokUsageDailyUSD",
+          "byokUsageWeeklyUSD",
+          "byokUsageMonthlyUSD",
+          "createdAt",
+          "updatedAt"
+        ],
+        "type": "object"
+      },
+      "OfficialUsageReconciliation": {
+        "additionalProperties": false,
+        "properties": {
+          "additive": {
+            "const": false,
+            "type": "boolean"
+          },
+          "costDeltaUSD": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "localEstimatedCostUSD": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "localTokens": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "officialCostUSD": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "officialTokens": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "tokenDelta": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "localTokens",
+          "officialTokens",
+          "tokenDelta",
+          "localEstimatedCostUSD",
+          "officialCostUSD",
+          "costDeltaUSD",
+          "additive"
+        ],
+        "type": "object"
+      },
+      "OfficialUsageResult": {
+        "additionalProperties": false,
+        "properties": {
+          "fetchedAt": {
+            "maximum": 9007199254740991,
+            "minimum": -9007199254740991,
+            "type": "integer"
+          },
+          "rule": {
+            "const": "compare_never_sum",
+            "type": "string"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/OfficialUsageSource"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "fetchedAt",
+          "sources",
+          "rule"
+        ],
+        "type": "object"
+      },
+      "OfficialUsageSource": {
+        "additionalProperties": false,
+        "properties": {
+          "authorities": {
+            "items": {
+              "enum": [
+                "organization_usage",
+                "financial_ledger",
+                "account_credit",
+                "cloud_control_plane"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "costUSD": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "credentialEnv": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "credits": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "purchasedUSD": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "remainingUSD": {
+                    "type": "number"
+                  },
+                  "usedUSD": {
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "purchasedUSD",
+                  "usedUSD",
+                  "remainingUSD"
+                ],
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "documentationURL": {
+            "format": "uri",
+            "type": "string"
+          },
+          "freshness": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "keyUsage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OfficialOpenRouterKeyLedger"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "label": {
+            "type": "string"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "period": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "end": {
+                    "maximum": 9007199254740991,
+                    "minimum": -9007199254740991,
+                    "type": "integer"
+                  },
+                  "start": {
+                    "maximum": 9007199254740991,
+                    "minimum": -9007199254740991,
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "start",
+                  "end"
+                ],
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "periodAlignment": {
+            "anyOf": [
+              {
+                "enum": [
+                  "exact",
+                  "utc_day_envelope"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "providerID": {
+            "type": "string"
+          },
+          "reconciliation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OfficialUsageReconciliation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "scope": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "available",
+              "partial",
+              "unconfigured",
+              "requires_configuration",
+              "error"
+            ],
+            "type": "string"
+          },
+          "tokens": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OfficialUsageTokens"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "providerID",
+          "label",
+          "status",
+          "authorities",
+          "scope",
+          "freshness",
+          "credentialEnv",
+          "documentationURL",
+          "message",
+          "period",
+          "periodAlignment",
+          "tokens",
+          "costUSD",
+          "credits",
+          "keyUsage",
+          "reconciliation"
+        ],
+        "type": "object"
+      },
+      "OfficialUsageTokens": {
+        "additionalProperties": false,
+        "properties": {
+          "cacheRead": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cacheWrite": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "calls": {
+            "anyOf": [
+              {
+                "maximum": 9007199254740991,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "input": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "inputIncludesCache": {
+            "type": "boolean"
+          },
+          "output": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "reasoning": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "total": {
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "input",
+          "output",
+          "cacheRead",
+          "cacheWrite",
+          "reasoning",
+          "total",
+          "calls",
+          "inputIncludesCache"
         ],
         "type": "object"
       },
@@ -14881,6 +15446,9 @@
       },
       "StepFinishPart": {
         "properties": {
+          "billing": {
+            "$ref": "#/components/schemas/BillingCoverage"
+          },
           "cost": {
             "type": "number"
           },
@@ -15981,6 +16549,345 @@
         ],
         "type": "object"
       },
+      "UsageBillingCoverage": {
+        "additionalProperties": false,
+        "properties": {
+          "percent": {
+            "anyOf": [
+              {
+                "maximum": 100,
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "pricedTokens": {
+            "type": "number"
+          },
+          "unknownTokens": {
+            "type": "number"
+          },
+          "unpricedTokens": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "pricedTokens",
+          "unpricedTokens",
+          "unknownTokens",
+          "percent"
+        ],
+        "type": "object"
+      },
+      "UsageBucket": {
+        "additionalProperties": false,
+        "properties": {
+          "calls": {
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "costUSD": {
+            "type": "number"
+          },
+          "end": {
+            "maximum": 9007199254740991,
+            "minimum": -9007199254740991,
+            "type": "integer"
+          },
+          "start": {
+            "maximum": 9007199254740991,
+            "minimum": -9007199254740991,
+            "type": "integer"
+          },
+          "tokens": {
+            "$ref": "#/components/schemas/UsageTokenTotals"
+          }
+        },
+        "required": [
+          "start",
+          "end",
+          "tokens",
+          "costUSD",
+          "calls"
+        ],
+        "type": "object"
+      },
+      "UsageComparison": {
+        "additionalProperties": false,
+        "properties": {
+          "callsPercent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "costPercent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "tokensPercent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "tokensPercent",
+          "costPercent",
+          "callsPercent"
+        ],
+        "type": "object"
+      },
+      "UsageModelRow": {
+        "additionalProperties": false,
+        "properties": {
+          "modelID": {
+            "type": "string"
+          },
+          "providerID": {
+            "type": "string"
+          },
+          "share": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/UsageSummary"
+          }
+        },
+        "required": [
+          "providerID",
+          "modelID",
+          "share",
+          "summary"
+        ],
+        "type": "object"
+      },
+      "UsagePeriod": {
+        "default": "month",
+        "enum": [
+          "day",
+          "week",
+          "month",
+          "year"
+        ],
+        "type": "string"
+      },
+      "UsageProviderRow": {
+        "additionalProperties": false,
+        "properties": {
+          "modelCount": {
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "providerID": {
+            "type": "string"
+          },
+          "share": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/UsageSummary"
+          }
+        },
+        "required": [
+          "providerID",
+          "modelCount",
+          "share",
+          "summary"
+        ],
+        "type": "object"
+      },
+      "UsageStatistics": {
+        "additionalProperties": false,
+        "properties": {
+          "buckets": {
+            "items": {
+              "$ref": "#/components/schemas/UsageBucket"
+            },
+            "type": "array"
+          },
+          "comparison": {
+            "$ref": "#/components/schemas/UsageComparison"
+          },
+          "current": {
+            "additionalProperties": false,
+            "properties": {
+              "end": {
+                "maximum": 9007199254740991,
+                "minimum": -9007199254740991,
+                "type": "integer"
+              },
+              "start": {
+                "maximum": 9007199254740991,
+                "minimum": -9007199254740991,
+                "type": "integer"
+              },
+              "summary": {
+                "$ref": "#/components/schemas/UsageSummary"
+              }
+            },
+            "required": [
+              "start",
+              "end",
+              "summary"
+            ],
+            "type": "object"
+          },
+          "grain": {
+            "enum": [
+              "hour",
+              "day",
+              "month"
+            ],
+            "type": "string"
+          },
+          "models": {
+            "items": {
+              "$ref": "#/components/schemas/UsageModelRow"
+            },
+            "type": "array"
+          },
+          "official": {
+            "$ref": "#/components/schemas/OfficialUsageResult"
+          },
+          "period": {
+            "$ref": "#/components/schemas/UsagePeriod"
+          },
+          "previous": {
+            "additionalProperties": false,
+            "properties": {
+              "end": {
+                "maximum": 9007199254740991,
+                "minimum": -9007199254740991,
+                "type": "integer"
+              },
+              "start": {
+                "maximum": 9007199254740991,
+                "minimum": -9007199254740991,
+                "type": "integer"
+              },
+              "summary": {
+                "$ref": "#/components/schemas/UsageSummary"
+              }
+            },
+            "required": [
+              "start",
+              "end",
+              "summary"
+            ],
+            "type": "object"
+          },
+          "providers": {
+            "items": {
+              "$ref": "#/components/schemas/UsageProviderRow"
+            },
+            "type": "array"
+          },
+          "timeZone": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "period",
+          "timeZone",
+          "grain",
+          "current",
+          "previous",
+          "comparison",
+          "buckets",
+          "providers",
+          "models",
+          "official"
+        ],
+        "type": "object"
+      },
+      "UsageSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "averageTokensPerCall": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "billing": {
+            "$ref": "#/components/schemas/UsageBillingCoverage"
+          },
+          "calls": {
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "costUSD": {
+            "type": "number"
+          },
+          "tokens": {
+            "$ref": "#/components/schemas/UsageTokenTotals"
+          }
+        },
+        "required": [
+          "tokens",
+          "costUSD",
+          "calls",
+          "averageTokensPerCall",
+          "billing"
+        ],
+        "type": "object"
+      },
+      "UsageTokenTotals": {
+        "additionalProperties": false,
+        "properties": {
+          "cacheRead": {
+            "type": "number"
+          },
+          "cacheWrite": {
+            "type": "number"
+          },
+          "input": {
+            "type": "number"
+          },
+          "output": {
+            "type": "number"
+          },
+          "reasoning": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "input",
+          "output",
+          "reasoning",
+          "cacheRead",
+          "cacheWrite",
+          "total"
+        ],
+        "type": "object"
+      },
       "VcsBranch": {
         "properties": {
           "current": {
@@ -16228,6 +17135,9 @@
               "author": {
                 "minLength": 1,
                 "type": "string"
+              },
+              "billing": {
+                "$ref": "#/components/schemas/BillingCoverage"
               },
               "convergenceFailure": {
                 "additionalProperties": false,
@@ -17018,6 +17928,9 @@
           },
           {
             "properties": {
+              "billing": {
+                "$ref": "#/components/schemas/BillingCoverage"
+              },
               "cost": {
                 "type": "number"
               },
@@ -57514,7 +58427,7 @@
     },
     "/global/composer-references": {
       "get": {
-        "description": "Return the built-in and user-global Skills, Agent Squads, and Mission Skills available before a project-backed Code or Work conversation exists. This read-only route does not create a Project or Session.",
+        "description": "Return the built-in and user-global Skills, Expert Squads, and Mission Skills available before a project-backed Code or Work conversation exists. This read-only route does not create a Project or Session.",
         "operationId": "global.composerReferences",
         "responses": {
           "200": {
@@ -61023,6 +61936,59 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.task.global.create({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/global/usage": {
+      "get": {
+        "description": "Aggregate persisted streamed Provider calls across all projects by their event time for one IANA calendar period.",
+        "operationId": "global.usage",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "period",
+            "schema": {
+              "$ref": "#/components/schemas/UsagePeriod"
+            }
+          },
+          {
+            "in": "query",
+            "name": "timeZone",
+            "schema": {
+              "default": "UTC",
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsageStatistics"
+                }
+              }
+            },
+            "description": "Natural-period Token, cost, Provider, model, comparison, and time-series statistics"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          }
+        },
+        "summary": "Get natural-period Provider usage",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.global.usage({\n  ...\n})"
           }
         ]
       }
@@ -74060,6 +75026,9 @@
                           "minLength": 1,
                           "type": "string"
                         },
+                        "billing": {
+                          "$ref": "#/components/schemas/BillingCoverage"
+                        },
                         "convergenceFailure": {
                           "additionalProperties": false,
                           "properties": {
@@ -76652,6 +77621,442 @@
                           "catalogComplete": {
                             "type": "boolean"
                           },
+                          "declaredOutputs": {
+                            "items": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "artifactType": {
+                                  "type": "string"
+                                },
+                                "declarationLocator": {
+                                  "oneOf": [
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "artifact_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "catalog_revision": {
+                                          "exclusiveMinimum": 0,
+                                          "maximum": 9007199254740991,
+                                          "type": "integer"
+                                        },
+                                        "expected_sha256": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "source": {
+                                          "const": "engine_artifact",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source",
+                                        "artifact_id",
+                                        "catalog_revision",
+                                        "expected_sha256"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "snapshot": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "manifest_sha256": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "project_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "schema_version": {
+                                              "const": 2,
+                                              "type": "number"
+                                            },
+                                            "snapshot_id": {
+                                              "format": "uuid",
+                                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                              "type": "string"
+                                            },
+                                            "task_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "schema_version",
+                                            "project_id",
+                                            "task_id",
+                                            "snapshot_id",
+                                            "manifest_sha256"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "source": {
+                                          "const": "task_artifact_snapshot",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source",
+                                        "snapshot"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "ref": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "bytes": {
+                                              "maximum": 9007199254740991,
+                                              "minimum": 0,
+                                              "type": "integer"
+                                            },
+                                            "media_type": {
+                                              "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sha256": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "snapshot": {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "manifest_sha256": {
+                                                  "pattern": "^[a-f0-9]{64}$",
+                                                  "type": "string"
+                                                },
+                                                "project_id": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "schema_version": {
+                                                  "const": 2,
+                                                  "type": "number"
+                                                },
+                                                "snapshot_id": {
+                                                  "format": "uuid",
+                                                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                                  "type": "string"
+                                                },
+                                                "task_id": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "schema_version",
+                                                "project_id",
+                                                "task_id",
+                                                "snapshot_id",
+                                                "manifest_sha256"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "tree": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "snapshot",
+                                            "tree",
+                                            "path",
+                                            "media_type",
+                                            "bytes",
+                                            "sha256"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "source": {
+                                          "const": "task_artifact_resource",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source",
+                                        "ref"
+                                      ],
+                                      "type": "object"
+                                    }
+                                  ]
+                                },
+                                "label": {
+                                  "type": "string"
+                                },
+                                "producer": {
+                                  "anyOf": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "agent_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "expert_squad_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "message_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "owner_kind": {
+                                              "enum": [
+                                                "projected-scheduler",
+                                                "projected-worker"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "package_revision": {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "namespace": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "package_digest": {
+                                                  "pattern": "^[a-f0-9]{64}$",
+                                                  "type": "string"
+                                                },
+                                                "project_id": {
+                                                  "anyOf": [
+                                                    {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    {
+                                                      "type": "null"
+                                                    }
+                                                  ]
+                                                },
+                                                "scope": {
+                                                  "enum": [
+                                                    "built_in",
+                                                    "project",
+                                                    "global"
+                                                  ],
+                                                  "type": "string"
+                                                },
+                                                "version": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "scope",
+                                                "project_id",
+                                                "namespace",
+                                                "id",
+                                                "version",
+                                                "package_digest"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "projection_hash": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "session_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "tool_call_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "owner_kind",
+                                            "expert_squad_id",
+                                            "package_revision",
+                                            "agent_id",
+                                            "projection_hash",
+                                            "session_id",
+                                            "message_id",
+                                            "tool_call_id"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "message_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mission_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "owner_kind": {
+                                              "const": "mission",
+                                              "type": "string"
+                                            },
+                                            "session_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "tool_call_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "owner_kind",
+                                            "mission_id",
+                                            "session_id",
+                                            "message_id",
+                                            "tool_call_id"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "component_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "operation_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "owner_kind": {
+                                              "const": "core",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "owner_kind",
+                                            "component_id",
+                                            "operation_id"
+                                          ],
+                                          "type": "object"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "resources": {
+                                  "items": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "bytes": {
+                                        "maximum": 9007199254740991,
+                                        "minimum": 0,
+                                        "type": "integer"
+                                      },
+                                      "media_type": {
+                                        "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                        "type": "string"
+                                      },
+                                      "path": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "sha256": {
+                                        "pattern": "^[a-f0-9]{64}$",
+                                        "type": "string"
+                                      },
+                                      "snapshot": {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "manifest_sha256": {
+                                            "pattern": "^[a-f0-9]{64}$",
+                                            "type": "string"
+                                          },
+                                          "project_id": {
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "schema_version": {
+                                            "const": 2,
+                                            "type": "number"
+                                          },
+                                          "snapshot_id": {
+                                            "format": "uuid",
+                                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                            "type": "string"
+                                          },
+                                          "task_id": {
+                                            "minLength": 1,
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "schema_version",
+                                          "project_id",
+                                          "task_id",
+                                          "snapshot_id",
+                                          "manifest_sha256"
+                                        ],
+                                        "type": "object"
+                                      },
+                                      "tree": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "snapshot",
+                                      "tree",
+                                      "path",
+                                      "media_type",
+                                      "bytes",
+                                      "sha256"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "type": "array"
+                                }
+                              },
+                              "required": [
+                                "declarationLocator",
+                                "producer",
+                                "label",
+                                "resources"
+                              ],
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
                           "entries": {
                             "items": {
                               "additionalProperties": false,
@@ -77196,6 +78601,7 @@
                           "messageID",
                           "userMessageID",
                           "task",
+                          "declaredOutputs",
                           "entries",
                           "catalogComplete",
                           "providerErrors"
@@ -78900,6 +80306,9 @@
                           "minLength": 1,
                           "type": "string"
                         },
+                        "billing": {
+                          "$ref": "#/components/schemas/BillingCoverage"
+                        },
                         "convergenceFailure": {
                           "additionalProperties": false,
                           "properties": {
@@ -80164,6 +81573,9 @@
                       "minLength": 1,
                       "type": "string"
                     },
+                    "billing": {
+                      "$ref": "#/components/schemas/BillingCoverage"
+                    },
                     "convergenceFailure": {
                       "additionalProperties": false,
                       "properties": {
@@ -80876,6 +82288,442 @@
                       "catalogComplete": {
                         "type": "boolean"
                       },
+                      "declaredOutputs": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "artifactType": {
+                              "type": "string"
+                            },
+                            "declarationLocator": {
+                              "oneOf": [
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "artifact_id": {
+                                      "maxLength": 512,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "catalog_revision": {
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 9007199254740991,
+                                      "type": "integer"
+                                    },
+                                    "expected_sha256": {
+                                      "pattern": "^[a-f0-9]{64}$",
+                                      "type": "string"
+                                    },
+                                    "source": {
+                                      "const": "engine_artifact",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "source",
+                                    "artifact_id",
+                                    "catalog_revision",
+                                    "expected_sha256"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "snapshot": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "manifest_sha256": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "project_id": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "schema_version": {
+                                          "const": 2,
+                                          "type": "number"
+                                        },
+                                        "snapshot_id": {
+                                          "format": "uuid",
+                                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                          "type": "string"
+                                        },
+                                        "task_id": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "schema_version",
+                                        "project_id",
+                                        "task_id",
+                                        "snapshot_id",
+                                        "manifest_sha256"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "source": {
+                                      "const": "task_artifact_snapshot",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "source",
+                                    "snapshot"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "ref": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "bytes": {
+                                          "maximum": 9007199254740991,
+                                          "minimum": 0,
+                                          "type": "integer"
+                                        },
+                                        "media_type": {
+                                          "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                          "type": "string"
+                                        },
+                                        "path": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "sha256": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "snapshot": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "manifest_sha256": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "project_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "schema_version": {
+                                              "const": 2,
+                                              "type": "number"
+                                            },
+                                            "snapshot_id": {
+                                              "format": "uuid",
+                                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                              "type": "string"
+                                            },
+                                            "task_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "schema_version",
+                                            "project_id",
+                                            "task_id",
+                                            "snapshot_id",
+                                            "manifest_sha256"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "tree": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "snapshot",
+                                        "tree",
+                                        "path",
+                                        "media_type",
+                                        "bytes",
+                                        "sha256"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "source": {
+                                      "const": "task_artifact_resource",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "source",
+                                    "ref"
+                                  ],
+                                  "type": "object"
+                                }
+                              ]
+                            },
+                            "label": {
+                              "type": "string"
+                            },
+                            "producer": {
+                              "anyOf": [
+                                {
+                                  "oneOf": [
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "agent_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "expert_squad_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "message_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "owner_kind": {
+                                          "enum": [
+                                            "projected-scheduler",
+                                            "projected-worker"
+                                          ],
+                                          "type": "string"
+                                        },
+                                        "package_revision": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "namespace": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "package_digest": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "project_id": {
+                                              "anyOf": [
+                                                {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "type": "null"
+                                                }
+                                              ]
+                                            },
+                                            "scope": {
+                                              "enum": [
+                                                "built_in",
+                                                "project",
+                                                "global"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "version": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "scope",
+                                            "project_id",
+                                            "namespace",
+                                            "id",
+                                            "version",
+                                            "package_digest"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "projection_hash": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "session_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "tool_call_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "owner_kind",
+                                        "expert_squad_id",
+                                        "package_revision",
+                                        "agent_id",
+                                        "projection_hash",
+                                        "session_id",
+                                        "message_id",
+                                        "tool_call_id"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "message_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "mission_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "owner_kind": {
+                                          "const": "mission",
+                                          "type": "string"
+                                        },
+                                        "session_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "tool_call_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "owner_kind",
+                                        "mission_id",
+                                        "session_id",
+                                        "message_id",
+                                        "tool_call_id"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "component_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "operation_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "owner_kind": {
+                                          "const": "core",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "owner_kind",
+                                        "component_id",
+                                        "operation_id"
+                                      ],
+                                      "type": "object"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "resources": {
+                              "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "bytes": {
+                                    "maximum": 9007199254740991,
+                                    "minimum": 0,
+                                    "type": "integer"
+                                  },
+                                  "media_type": {
+                                    "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                    "type": "string"
+                                  },
+                                  "path": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "sha256": {
+                                    "pattern": "^[a-f0-9]{64}$",
+                                    "type": "string"
+                                  },
+                                  "snapshot": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "manifest_sha256": {
+                                        "pattern": "^[a-f0-9]{64}$",
+                                        "type": "string"
+                                      },
+                                      "project_id": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "schema_version": {
+                                        "const": 2,
+                                        "type": "number"
+                                      },
+                                      "snapshot_id": {
+                                        "format": "uuid",
+                                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                        "type": "string"
+                                      },
+                                      "task_id": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "schema_version",
+                                      "project_id",
+                                      "task_id",
+                                      "snapshot_id",
+                                      "manifest_sha256"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "tree": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "snapshot",
+                                  "tree",
+                                  "path",
+                                  "media_type",
+                                  "bytes",
+                                  "sha256"
+                                ],
+                                "type": "object"
+                              },
+                              "type": "array"
+                            }
+                          },
+                          "required": [
+                            "declarationLocator",
+                            "producer",
+                            "label",
+                            "resources"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
                       "entries": {
                         "items": {
                           "additionalProperties": false,
@@ -81420,6 +83268,7 @@
                       "messageID",
                       "userMessageID",
                       "task",
+                      "declaredOutputs",
                       "entries",
                       "catalogComplete",
                       "providerErrors"
@@ -97022,6 +98871,442 @@
                           "catalogComplete": {
                             "type": "boolean"
                           },
+                          "declaredOutputs": {
+                            "items": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "artifactType": {
+                                  "type": "string"
+                                },
+                                "declarationLocator": {
+                                  "oneOf": [
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "artifact_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "catalog_revision": {
+                                          "exclusiveMinimum": 0,
+                                          "maximum": 9007199254740991,
+                                          "type": "integer"
+                                        },
+                                        "expected_sha256": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "source": {
+                                          "const": "engine_artifact",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source",
+                                        "artifact_id",
+                                        "catalog_revision",
+                                        "expected_sha256"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "snapshot": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "manifest_sha256": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "project_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "schema_version": {
+                                              "const": 2,
+                                              "type": "number"
+                                            },
+                                            "snapshot_id": {
+                                              "format": "uuid",
+                                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                              "type": "string"
+                                            },
+                                            "task_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "schema_version",
+                                            "project_id",
+                                            "task_id",
+                                            "snapshot_id",
+                                            "manifest_sha256"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "source": {
+                                          "const": "task_artifact_snapshot",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source",
+                                        "snapshot"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "ref": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "bytes": {
+                                              "maximum": 9007199254740991,
+                                              "minimum": 0,
+                                              "type": "integer"
+                                            },
+                                            "media_type": {
+                                              "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                              "type": "string"
+                                            },
+                                            "path": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "sha256": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "snapshot": {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "manifest_sha256": {
+                                                  "pattern": "^[a-f0-9]{64}$",
+                                                  "type": "string"
+                                                },
+                                                "project_id": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "schema_version": {
+                                                  "const": 2,
+                                                  "type": "number"
+                                                },
+                                                "snapshot_id": {
+                                                  "format": "uuid",
+                                                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                                  "type": "string"
+                                                },
+                                                "task_id": {
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "schema_version",
+                                                "project_id",
+                                                "task_id",
+                                                "snapshot_id",
+                                                "manifest_sha256"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "tree": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "snapshot",
+                                            "tree",
+                                            "path",
+                                            "media_type",
+                                            "bytes",
+                                            "sha256"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "source": {
+                                          "const": "task_artifact_resource",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "source",
+                                        "ref"
+                                      ],
+                                      "type": "object"
+                                    }
+                                  ]
+                                },
+                                "label": {
+                                  "type": "string"
+                                },
+                                "producer": {
+                                  "anyOf": [
+                                    {
+                                      "oneOf": [
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "agent_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "expert_squad_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "message_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "owner_kind": {
+                                              "enum": [
+                                                "projected-scheduler",
+                                                "projected-worker"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "package_revision": {
+                                              "additionalProperties": false,
+                                              "properties": {
+                                                "id": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "namespace": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                "package_digest": {
+                                                  "pattern": "^[a-f0-9]{64}$",
+                                                  "type": "string"
+                                                },
+                                                "project_id": {
+                                                  "anyOf": [
+                                                    {
+                                                      "maxLength": 512,
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    {
+                                                      "type": "null"
+                                                    }
+                                                  ]
+                                                },
+                                                "scope": {
+                                                  "enum": [
+                                                    "built_in",
+                                                    "project",
+                                                    "global"
+                                                  ],
+                                                  "type": "string"
+                                                },
+                                                "version": {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "scope",
+                                                "project_id",
+                                                "namespace",
+                                                "id",
+                                                "version",
+                                                "package_digest"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            "projection_hash": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "session_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "tool_call_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "owner_kind",
+                                            "expert_squad_id",
+                                            "package_revision",
+                                            "agent_id",
+                                            "projection_hash",
+                                            "session_id",
+                                            "message_id",
+                                            "tool_call_id"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "message_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "mission_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "owner_kind": {
+                                              "const": "mission",
+                                              "type": "string"
+                                            },
+                                            "session_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "tool_call_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "owner_kind",
+                                            "mission_id",
+                                            "session_id",
+                                            "message_id",
+                                            "tool_call_id"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "component_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "operation_id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "owner_kind": {
+                                              "const": "core",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "owner_kind",
+                                            "component_id",
+                                            "operation_id"
+                                          ],
+                                          "type": "object"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "resources": {
+                                  "items": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "bytes": {
+                                        "maximum": 9007199254740991,
+                                        "minimum": 0,
+                                        "type": "integer"
+                                      },
+                                      "media_type": {
+                                        "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                        "type": "string"
+                                      },
+                                      "path": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "sha256": {
+                                        "pattern": "^[a-f0-9]{64}$",
+                                        "type": "string"
+                                      },
+                                      "snapshot": {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "manifest_sha256": {
+                                            "pattern": "^[a-f0-9]{64}$",
+                                            "type": "string"
+                                          },
+                                          "project_id": {
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "schema_version": {
+                                            "const": 2,
+                                            "type": "number"
+                                          },
+                                          "snapshot_id": {
+                                            "format": "uuid",
+                                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                            "type": "string"
+                                          },
+                                          "task_id": {
+                                            "minLength": 1,
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "schema_version",
+                                          "project_id",
+                                          "task_id",
+                                          "snapshot_id",
+                                          "manifest_sha256"
+                                        ],
+                                        "type": "object"
+                                      },
+                                      "tree": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "snapshot",
+                                      "tree",
+                                      "path",
+                                      "media_type",
+                                      "bytes",
+                                      "sha256"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "type": "array"
+                                }
+                              },
+                              "required": [
+                                "declarationLocator",
+                                "producer",
+                                "label",
+                                "resources"
+                              ],
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
                           "entries": {
                             "items": {
                               "additionalProperties": false,
@@ -97566,6 +99851,7 @@
                           "messageID",
                           "userMessageID",
                           "task",
+                          "declaredOutputs",
                           "entries",
                           "catalogComplete",
                           "providerErrors"
@@ -109075,6 +111361,442 @@
                       "catalogComplete": {
                         "type": "boolean"
                       },
+                      "declaredOutputs": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "artifactType": {
+                              "type": "string"
+                            },
+                            "declarationLocator": {
+                              "oneOf": [
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "artifact_id": {
+                                      "maxLength": 512,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "catalog_revision": {
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 9007199254740991,
+                                      "type": "integer"
+                                    },
+                                    "expected_sha256": {
+                                      "pattern": "^[a-f0-9]{64}$",
+                                      "type": "string"
+                                    },
+                                    "source": {
+                                      "const": "engine_artifact",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "source",
+                                    "artifact_id",
+                                    "catalog_revision",
+                                    "expected_sha256"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "snapshot": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "manifest_sha256": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "project_id": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "schema_version": {
+                                          "const": 2,
+                                          "type": "number"
+                                        },
+                                        "snapshot_id": {
+                                          "format": "uuid",
+                                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                          "type": "string"
+                                        },
+                                        "task_id": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "schema_version",
+                                        "project_id",
+                                        "task_id",
+                                        "snapshot_id",
+                                        "manifest_sha256"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "source": {
+                                      "const": "task_artifact_snapshot",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "source",
+                                    "snapshot"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "ref": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "bytes": {
+                                          "maximum": 9007199254740991,
+                                          "minimum": 0,
+                                          "type": "integer"
+                                        },
+                                        "media_type": {
+                                          "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                          "type": "string"
+                                        },
+                                        "path": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "sha256": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "snapshot": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "manifest_sha256": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "project_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "schema_version": {
+                                              "const": 2,
+                                              "type": "number"
+                                            },
+                                            "snapshot_id": {
+                                              "format": "uuid",
+                                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                              "type": "string"
+                                            },
+                                            "task_id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "schema_version",
+                                            "project_id",
+                                            "task_id",
+                                            "snapshot_id",
+                                            "manifest_sha256"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "tree": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "snapshot",
+                                        "tree",
+                                        "path",
+                                        "media_type",
+                                        "bytes",
+                                        "sha256"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "source": {
+                                      "const": "task_artifact_resource",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "source",
+                                    "ref"
+                                  ],
+                                  "type": "object"
+                                }
+                              ]
+                            },
+                            "label": {
+                              "type": "string"
+                            },
+                            "producer": {
+                              "anyOf": [
+                                {
+                                  "oneOf": [
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "agent_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "expert_squad_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "message_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "owner_kind": {
+                                          "enum": [
+                                            "projected-scheduler",
+                                            "projected-worker"
+                                          ],
+                                          "type": "string"
+                                        },
+                                        "package_revision": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "id": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "namespace": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "package_digest": {
+                                              "pattern": "^[a-f0-9]{64}$",
+                                              "type": "string"
+                                            },
+                                            "project_id": {
+                                              "anyOf": [
+                                                {
+                                                  "maxLength": 512,
+                                                  "minLength": 1,
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "type": "null"
+                                                }
+                                              ]
+                                            },
+                                            "scope": {
+                                              "enum": [
+                                                "built_in",
+                                                "project",
+                                                "global"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "version": {
+                                              "maxLength": 512,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "scope",
+                                            "project_id",
+                                            "namespace",
+                                            "id",
+                                            "version",
+                                            "package_digest"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "projection_hash": {
+                                          "pattern": "^[a-f0-9]{64}$",
+                                          "type": "string"
+                                        },
+                                        "session_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "tool_call_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "owner_kind",
+                                        "expert_squad_id",
+                                        "package_revision",
+                                        "agent_id",
+                                        "projection_hash",
+                                        "session_id",
+                                        "message_id",
+                                        "tool_call_id"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "message_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "mission_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "owner_kind": {
+                                          "const": "mission",
+                                          "type": "string"
+                                        },
+                                        "session_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "tool_call_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "owner_kind",
+                                        "mission_id",
+                                        "session_id",
+                                        "message_id",
+                                        "tool_call_id"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "component_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "operation_id": {
+                                          "maxLength": 512,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "owner_kind": {
+                                          "const": "core",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "owner_kind",
+                                        "component_id",
+                                        "operation_id"
+                                      ],
+                                      "type": "object"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "resources": {
+                              "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "bytes": {
+                                    "maximum": 9007199254740991,
+                                    "minimum": 0,
+                                    "type": "integer"
+                                  },
+                                  "media_type": {
+                                    "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
+                                    "type": "string"
+                                  },
+                                  "path": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "sha256": {
+                                    "pattern": "^[a-f0-9]{64}$",
+                                    "type": "string"
+                                  },
+                                  "snapshot": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "manifest_sha256": {
+                                        "pattern": "^[a-f0-9]{64}$",
+                                        "type": "string"
+                                      },
+                                      "project_id": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "schema_version": {
+                                        "const": 2,
+                                        "type": "number"
+                                      },
+                                      "snapshot_id": {
+                                        "format": "uuid",
+                                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                        "type": "string"
+                                      },
+                                      "task_id": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "schema_version",
+                                      "project_id",
+                                      "task_id",
+                                      "snapshot_id",
+                                      "manifest_sha256"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "tree": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "snapshot",
+                                  "tree",
+                                  "path",
+                                  "media_type",
+                                  "bytes",
+                                  "sha256"
+                                ],
+                                "type": "object"
+                              },
+                              "type": "array"
+                            }
+                          },
+                          "required": [
+                            "declarationLocator",
+                            "producer",
+                            "label",
+                            "resources"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
                       "entries": {
                         "items": {
                           "additionalProperties": false,
@@ -109619,6 +112341,7 @@
                       "messageID",
                       "userMessageID",
                       "task",
+                      "declaredOutputs",
                       "entries",
                       "catalogComplete",
                       "providerErrors"

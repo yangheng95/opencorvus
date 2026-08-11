@@ -255,6 +255,8 @@ import type {
   GlobalSkillInstallErrors,
   GlobalSkillInstallResponses,
   GlobalSkillMarketResponses,
+  GlobalUsageErrors,
+  GlobalUsageResponses,
   GlobalWorkCreateErrors,
   GlobalWorkCreateResponses,
   GoalDeleteErrors,
@@ -574,6 +576,7 @@ import type {
   ToolIdsResponses,
   ToolListErrors,
   ToolListResponses,
+  UsagePeriod,
   VcsBranchesErrors,
   VcsBranchesResponses,
   VcsCommitErrors,
@@ -6394,7 +6397,7 @@ export class Global extends HeyApiClient {
   /**
    * List global Composer references
    *
-   * Return the built-in and user-global Skills, Agent Squads, and Mission Skills available before a project-backed Code or Work conversation exists. This read-only route does not create a Project or Session.
+   * Return the built-in and user-global Skills, Expert Squads, and Mission Skills available before a project-backed Code or Work conversation exists. This read-only route does not create a Project or Session.
    */
   public composerReferences<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
     return (options?.client ?? this.client).get<
@@ -6437,6 +6440,36 @@ export class Global extends HeyApiClient {
     return (options?.client ?? this.client).get<GlobalHealthResponses, unknown, ThrowOnError>({
       url: "/global/health",
       ...options,
+    })
+  }
+
+  /**
+   * Get natural-period Provider usage
+   *
+   * Aggregate persisted streamed Provider calls across all projects by their event time for one IANA calendar period.
+   */
+  public usage<ThrowOnError extends boolean = false>(
+    parameters?: {
+      period?: UsagePeriod
+      timeZone?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "period" },
+            { in: "query", key: "timeZone" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<GlobalUsageResponses, GlobalUsageErrors, ThrowOnError>({
+      url: "/global/usage",
+      ...options,
+      ...params,
     })
   }
 
