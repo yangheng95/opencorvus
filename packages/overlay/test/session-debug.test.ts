@@ -309,7 +309,7 @@ describe("persisted chat debug bundle", () => {
 
   test("redacts and bounds every free-form clipboard failure plane", () => {
     const rawSecret = "sk-proj-abcdefghijklmnop"
-    const githubSecret = "ghp_abcdefghijklmnopqrstuvwxyz123456" // secret-scan: ignore
+    const githubSecret = "ghp_abcdefghijklmnopqrstuvwxyz123456" // secret-scan: ignore -- deliberate redaction fixture
     const root = summarizePersistedChatMessages([])
     const chatBlob = buildChatDebugBlob(
       { sessionID: "session-debug", title: rawSecret, status: "idle", directory: "C:/project" },
