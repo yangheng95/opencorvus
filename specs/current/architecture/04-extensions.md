@@ -106,7 +106,7 @@ repository-hosted payload；Composer 与 Mission 的 editable Expert Squad picke
 replacement 在移动旧 target 前保存 `.package-replacement-<id>.json` 持久 intent；进程在任一 rename
 窗口或递归 scratch 清理中终止时，Registry/Manager reconciliation 从精确 before/after digest 与
 `absent | exact package | partial scratch` 状态回滚未完成替换，或确认 backup 已开始清理后的完整新
-target，再由 payload ledger 收敛。每份 intent 使用一个 UUID v4 operation ID，把 staging、backup 与
+target，并收敛 intent 自有的 scratch 与 journal。每份 intent 使用一个 UUID v4 operation ID，把 staging、backup 与
 discard 精确绑定为同一 namespace/ID 的三个不同 canonical scratch 子目录；任意 scratch root、别包路径
 或路径 alias 在文件状态读取前失败。回滚从不递归删除安装 target：只有 target 仍是精确 after digest 时
 才先原子 rename 到 intent 自有 discard，再原子恢复精确 before backup；partial target 被视为 operator
@@ -129,8 +129,8 @@ location 校验，项目配置、Task 和 Session 候选则从 global + exact pr
 - manifest 的 `configuration.fields` 只声明 `text | boolean | secret` 字段形态，不包含值。值的唯一来源是 `Global.Path.data/expert-squad-configuration.json`，以 installation scope、project ID、namespace 与 manifest ID 组成的精确安装身份索引，并以原子 mode `0600` 写入；HTTP（Hypertext Transfer Protocol，超文本传输协议）和 Overlay 只返回字段声明、非 secret 值与 secret 的 `configured` 布尔状态。Resolver 只把精确 active package 的声明和安装身份带到其 package tool，工具调用时通过 `ToolContext.configuration` 读取；配置不得进入 prompt、隐藏消息、catalog secret、Bash、terminal 或进程环境。未投影 package tool 不存在调用面，因此 inactive package 不获得配置值；
 - `selector.md` 是 Orchestrator-visible selector skill 的完整说明来源；
 - `getLoadedBuiltInPackages()` 是内置 package 的唯一加载面，只返回默认 `base`、完整 `advanced`、`research-studio` 与 `squad-sdk`；不存在
-  flattened built-in profile facade。非通用 squad 即使随应用分发，也先释放为明文项目 package，
-  再通过 package discovery / registry / resolver 进入 catalog；
+  flattened built-in profile facade。非通用 squad 即使随应用分发，也只有经操作者显式选择 `project | global`
+  scope 安装为明文 package 后，才通过 package discovery / registry / resolver 进入 catalog；
 - 默认内置 `base` 是 `advanced` 的便捷复合型版本，投影相互独立的 `base-researcher`、`base-planner`、`base-developer`、`base-tester`、`base-integrity-reviewer` 与 `base-visual-reviewer`；Researcher 使用 Explore，Planner 与 Tester 使用 Delegated Worker，Developer 使用 Build，两个复核身份分别使用 Integrity 与 Visual Quality Assurance runtime template。`composite-delivery` 保留 Researcher → Planner → Developer → Tester 紧凑链；`integrity-verified-delivery` 在 Tester 后追加 Integrity Reviewer；`visual-verified-delivery` 在 Developer 后并行 Tester 与 Visual Reviewer，再由 Integrity Reviewer 汇合两支证据。Orchestrator 在首次领域 dispatch 前精确选择一张 graph，所选 graph 的每个节点都必须执行，不存在 optional node。三张 graph 均按顺序交接 `base/research-report`、`base/implementation-plan`、`base/development-report` 与 `base/test-report`，两个复核身份使用平台 typed VisualReview / IntegrityReview Artifact，不创建或消费 RequirementSet、ContractGraph、Goal 或 Delivery Slice 计划事实；
 - 内置 `advanced` 的 manifest v1 投影完整的十四 Agent 软件开发团队，包括 package-owned 的 Build `implementation-engineer` 与 Delegated Worker `test-engineer`。每张交付图保留 Requirements → Architect 依赖；独立调查、架构后的工作量与交付、实现后的测试与独立复核分别在真实 Artifact 依赖允许时共享 frontier。Agent 身份、职责、依赖图和协作提示全部由 package 拥有，不进入 host Core prompt、Delivery Slice 控制工具或 runtime template；
 - 内置 `research-studio` 投影 Planner、Deep Researcher、Evidence Analyst、Fact Checker 与 Report Writer 五个精确身份，分别以 direct-writing、evidence-synthesis 与 full-research 三张 binding workflow 交付可引用研究报告。其共享 `analysis-report-quality` package Skill 连同固定报告模板和 Draft 2020-12 JavaScript Object Notation (JSON) Schema 完整内化在 package 闭包内，并只投影给 Analyst、Fact Checker 与 Writer；Analyst 先生成可复现计算证据，Fact Checker 独立复算，再由 Writer 从同一结构化模型派生 Markdown 与集成 Hypertext Markup Language (HTML)。浏览器可见报告必须由 Writer 和 Orchestrator 分别读取真实 `browser_preview_capture` 图像完成两次人工视觉复核；它不进入 payload、Market 或项目 provisioning；
@@ -307,9 +307,10 @@ Expert Squad Market 只从严格 bundled declaration 和已安装 package identi
 payload release、folder/ZIP validate/import 是 package provisioning/repair 控制面：它们仍要求精确项目
 directory，但服务端只进入 project identity context，不执行完整 runtime bootstrap。因而旧 manifest 可以继续被
 catalog 严格拒绝，同时用户仍可从 Market 按已安装 scope 显式执行 builtin replacement；catalog、activation、
-export、uninstall 和普通 runtime routes 仍执行完整 bootstrap，并在配置校验前运行上述默认 payload
-reconciliation。这里没有无条件自动覆盖、旧 schema 兼容或 source fallback；默认受管更新和显式替换
-都只走 `ExpertSquadPackageManager` 的严格原子 compare-and-swap 与持久 replacement-intent 恢复实现。
+export、uninstall 和普通 runtime routes 执行完整 bootstrap，但 bootstrap 只发现四个 embedded 默认团、
+已安装 package 与待恢复的 replacement intent，不安装或协调 repository-hosted payload。这里没有无条件
+自动覆盖、默认受管更新、旧 schema 兼容或 source fallback；显式安装与替换只走
+`ExpertSquadPackageManager` 的严格原子 compare-and-swap 与持久 replacement-intent 恢复实现。
 
 ### Built-in Skills —— inventory 与运行投影分离
 
