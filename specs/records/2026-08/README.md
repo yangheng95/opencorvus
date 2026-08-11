@@ -12,8 +12,13 @@
 - [2026-08-10-v0.0.39-beta-release-trigger.md](2026-08-10-v0.0.39-beta-release-trigger.md) records the immutable source, tag trigger, five-platform release matrix, signed updater boundary, and publication verification for the canonical `v0.0.39-beta` prerelease.
 
 - [2026-08-10-v0.0.39-beta-windows-repackage.md](2026-08-10-v0.0.39-beta-windows-repackage.md) advances the canonical release family to `0.0.39-beta` and records the native Windows graphical user interface and command-line interface repackage evidence.
+- [2026-08-11-readme-homepage-alignment.md](2026-08-11-readme-homepage-alignment.md) aligns the bilingual root README position, navigation, Workbench, Expert Squad, Mission, long-horizon delivery, and open-community story with the current public homepage while preserving repository/runtime detail.
+
+- [2026-08-11-agent-hosts-website-tab.md](2026-08-11-agent-hosts-website-tab.md) defines the reciprocal public navigation tab and complete, source-backed OpenClaw, Hermes Agent, generic Agent Skills, CLI, HTTP API, security, and evidence guidance for operating OpenCorvus from another assistant.
 
 - [2026-08-11-windows-glob-mission-recovery-debug-convergence.md](2026-08-11-windows-glob-mission-recovery-debug-convergence.md) identifies the Windows bounded-glob crash regression, adds durable standalone-Mission restart recovery, separates persisted debug facts from rendered cards, and preserves held-Squad capability authority while exposing its diagnostic boundary.
+
+- [2026-08-11-debug-bundle-truth-and-runtime-settlement-audit.md](2026-08-11-debug-bundle-truth-and-runtime-settlement-audit.md) audits same-family process-settlement risks and calibrates copied diagnostics around validated root-Session, Session-tree, and rendered-card scopes with explicit AI handoff instructions.
 
 - [2026-08-11-public-website-iterative-design-program.md](2026-08-11-public-website-iterative-design-program.md) establishes the research-backed, independently approved website iteration loop and specifies Iteration 1 as a bounded public-versus-documentation typography ownership repair with real bilingual visual acceptance.
 

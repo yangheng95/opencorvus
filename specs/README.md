@@ -13,8 +13,13 @@ Latest standalone Session card ingress projection repair: [`2026-08-10-session-c
 Latest `v0.0.39-beta` canonical release trigger: [`2026-08-10-v0.0.39-beta-release-trigger.md`](records/2026-08/2026-08-10-v0.0.39-beta-release-trigger.md).
 
 Latest `v0.0.39-beta` Windows repackage: [`2026-08-10-v0.0.39-beta-windows-repackage.md`](records/2026-08/2026-08-10-v0.0.39-beta-windows-repackage.md).
+Latest README and homepage alignment: [`2026-08-11-readme-homepage-alignment.md`](records/2026-08/2026-08-11-readme-homepage-alignment.md).
+
+Latest Agent-host website tab: [`2026-08-11-agent-hosts-website-tab.md`](records/2026-08/2026-08-11-agent-hosts-website-tab.md).
 
 Latest Windows glob, Mission process-recovery, and persisted debug convergence: [`2026-08-11-windows-glob-mission-recovery-debug-convergence.md`](records/2026-08/2026-08-11-windows-glob-mission-recovery-debug-convergence.md).
+
+Latest debug-bundle truth and runtime-settlement family audit: [`2026-08-11-debug-bundle-truth-and-runtime-settlement-audit.md`](records/2026-08/2026-08-11-debug-bundle-truth-and-runtime-settlement-audit.md).
 
 Latest public website iterative design program: [`2026-08-11-public-website-iterative-design-program.md`](records/2026-08/2026-08-11-public-website-iterative-design-program.md).
 

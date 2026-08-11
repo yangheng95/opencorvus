@@ -92,24 +92,19 @@ function ChatViewTitle(props: {
     copyFeedbackTimer = window.setTimeout(() => {
       setCopyFeedback(null)
       copyFeedbackTimer = undefined
-    }, 1400)
+    }, 4000)
   }
 
   return (
     <div class="chat-title-group">
-      <Tooltip.Root
-        disabled={!usageText()}
-        openDelay={160}
-        closeDelay={80}
-        placement="bottom-start"
-        gutter={8}
-        fitViewport
-      >
+      <Tooltip.Root openDelay={160} closeDelay={80} placement="bottom-start" gutter={8} fitViewport>
         <Tooltip.Trigger
           as="span"
           class="chat-title chat-title-usage-trigger oc-surface-header__title"
           id="chatViewTitle"
-          tabIndex={usageText() ? 0 : undefined}
+          role="button"
+          aria-label={`${props.title()}. ${t("chat.debug_copy_hint")}`}
+          tabIndex={0}
           aria-live="polite"
           data-copy-feedback={copyFeedback() ?? undefined}
           onDblClick={(event) => {
@@ -117,19 +112,28 @@ function ChatViewTitle(props: {
             event.stopPropagation()
             void copyDebugInfo()
           }}
+          onKeyDown={(event) => {
+            if (event.key !== "Enter" && event.key !== " ") return
+            event.preventDefault()
+            event.stopPropagation()
+            void copyDebugInfo()
+          }}
         >
           {copyFeedback() === "copied"
-            ? t("common.copied")
+            ? t("chat.debug_copy_success")
             : copyFeedback() === "failed"
               ? t("markdown.copy_failed")
               : props.title()}
         </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content class="chat-title-usage-tooltip" data-ui="chat-title-usage-tooltip">
-            <span class="chat-title-usage-tooltip__label">{t("chat.usage_aria")}</span>
-            <strong class="chat-title-usage-tooltip__value" id="chatTitleUsage">
-              {usageText()}
-            </strong>
+            <Show when={usageText()}>
+              <span class="chat-title-usage-tooltip__label">{t("chat.usage_aria")}</span>
+              <strong class="chat-title-usage-tooltip__value" id="chatTitleUsage">
+                {usageText()}
+              </strong>
+            </Show>
+            <span class="chat-title-usage-tooltip__debug-hint">{t("chat.debug_copy_hint")}</span>
           </Tooltip.Content>
         </Tooltip.Portal>
       </Tooltip.Root>

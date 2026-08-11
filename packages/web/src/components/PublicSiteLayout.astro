@@ -7,7 +7,7 @@ import type { PublicLocale } from "../content/public-market"
 
 type Props = {
   locale: PublicLocale
-  current: "mission" | "market" | "publish" | "trust" | "download"
+  current: "mission" | "use-with-agents" | "market" | "publish" | "trust" | "download"
   title: string
   description: string
   languageHref: string
@@ -36,7 +36,7 @@ const ogImage = new URL(`${publicBase}/og.png`, config.url).href
     <meta name="twitter:image" content={ogImage} />
     <title>{title}</title>
   </head>
-  <body class="public-site-body">
+  <body class:list={["public-site-body", current === "use-with-agents" && "public-agent-hosts-body"]}>
     <PublicSiteHeader {locale} {current} {languageHref} />
     <slot />
     <PublicSiteFooter {locale} />

@@ -1,9 +1,31 @@
 import { getServerUrl } from "../services/api"
 import type { BoardSource, TaskSelectionError } from "../store/board"
 import type { CardTreeStore } from "../store/card-tree"
-import type { PersistedChatDebugProjection } from "../services/session-debug"
+import type {
+  PersistedChatDebugPlane,
+  PersistedChatDebugProjection,
+  PersistedChatDebugSummary,
+} from "../services/session-debug"
+import { boundedDebugText, normalizeDebugDirectory } from "./debug-text"
 
 type RuntimeDebugPaths = { database?: string | null } | null | undefined
+
+const DEBUG_BUNDLE_SCHEMA = "opencorvus.debug.v2"
+
+function debugText(value: unknown, fallback = "-", limit = 240): string {
+  return boundedDebugText(value, limit) || fallback
+}
+
+function aiAnalysisRequest(scope: "Task" | "Chat"): string[] {
+  return [
+    `AI analysis request:`,
+    `  Paste this entire bundle into an AI assistant. Ask it to:`,
+    `  1. separate observed facts from inference and treat unavailable data as unknown, never zero;`,
+    `  2. reconstruct the ${scope} timeline and identify the direct trigger, likely root cause, and confidence;`,
+    `  3. call out contradictory persisted/runtime/rendered states;`,
+    `  4. propose the smallest read-only checks that would confirm or falsify the diagnosis.`,
+  ]
+}
 
 /** Format a millisecond timestamp for copyable debug blobs. */
 export function formatDebugTime(ms: unknown): string {
@@ -50,9 +72,7 @@ function taskProcessIncidents(board: any): any[] {
 
 function debugProcessIncident(incident: any): string {
   const message =
-    typeof incident?.message === "string" && incident.message.trim()
-      ? `; message=${incident.message.replace(/\s+/g, " ").slice(0, 240)}`
-      : ""
+    typeof incident?.message === "string" && incident.message.trim() ? `; message=${debugText(incident.message)}` : ""
   const affectedExecutions = Array.isArray(incident?.affectedExecutions)
     ? incident.affectedExecutions
         .map(
@@ -76,24 +96,39 @@ function taskAgentActivity(board: any) {
   const occurrences: any[] = Array.isArray(board?.executionProjection?.occurrences)
     ? board.executionProjection.occurrences
     : []
+  const artifacts: any[] = Array.isArray(board?.artifacts) ? board.artifacts : []
+  const incidents = taskProcessIncidents(board)
   const completedAt = Number(board?.task?.time?.completed ?? 0)
   const counts = new Map<string, number>()
   const terminalReasonCounts = new Map<string, number>()
-  let updated = 0
+  let occurrenceUpdated = 0
   for (const occurrence of occurrences) {
     const status = typeof occurrence?.latest?.status?.type === "string" ? occurrence.latest.status.type : "pending"
     counts.set(status, (counts.get(status) ?? 0) + 1)
     if (status === "terminal") {
       const reason =
         typeof occurrence?.latest?.status?.reason === "string" && occurrence.latest.status.reason.trim()
-          ? occurrence.latest.status.reason.trim()
+          ? debugText(occurrence.latest.status.reason, "unspecified")
           : occurrence?.latest?.status?.error
             ? "error"
             : "unspecified"
       terminalReasonCounts.set(reason, (terminalReasonCounts.get(reason) ?? 0) + 1)
     }
-    updated = Math.max(updated, Number(occurrence?.latest?.emittedAt ?? 0))
+    occurrenceUpdated = Math.max(occurrenceUpdated, Number(occurrence?.latest?.emittedAt ?? 0))
   }
+  const topologyUpdated = nodes.reduce(
+    (maximum, node) => Math.max(maximum, Number(node?.time?.updated ?? node?.time?.created ?? 0)),
+    0,
+  )
+  const artifactUpdated = artifacts.reduce(
+    (maximum, artifact) => Math.max(maximum, Number(artifact?.time?.updated ?? artifact?.time?.created ?? 0)),
+    0,
+  )
+  const incidentUpdated = incidents.reduce(
+    (maximum, incident) => Math.max(maximum, Number(incident?.emittedAt ?? 0)),
+    0,
+  )
+  const updated = Math.max(occurrenceUpdated, topologyUpdated, artifactUpdated, incidentUpdated)
   const nonterminal = occurrences.filter((occurrence) => occurrence?.latest?.status?.type !== "terminal")
   const abnormalTerminal = occurrences.filter(
     (occurrence) =>
@@ -120,6 +155,12 @@ function taskAgentActivity(board: any) {
     statusSummary,
     terminalReasonSummary,
     updated,
+    updatedSources: {
+      occurrence: occurrenceUpdated,
+      topology: topologyUpdated,
+      artifact: artifactUpdated,
+      incident: incidentUpdated,
+    },
   }
 }
 
@@ -127,8 +168,8 @@ function debugAgentActivityNode(node: any): string {
   const status = node?.latest?.status
   const terminal =
     status?.type === "terminal"
-      ? `; reason=${String(status?.reason ?? (status?.error ? "error" : "unspecified"))}` +
-        (status?.error ? `; error=${String(status.error).replace(/\s+/g, " ").slice(0, 240)}` : "")
+      ? `; reason=${debugText(status?.reason ?? (status?.error ? "error" : "unspecified"), "unspecified")}` +
+        (status?.error ? `; error=${debugText(status.error)}` : "")
       : ""
   return (
     `inputMessageID=${String(node?.inputMessageID ?? "?")}  session=${String(node?.sessionID ?? "?")}; agent=${String(node?.agent ?? "?")}; ` +
@@ -137,10 +178,15 @@ function debugAgentActivityNode(node: any): string {
   )
 }
 
-export function buildTaskDebugBlob(board: any, runtimePaths?: RuntimeDebugPaths): string {
+export function buildTaskDebugBlob(
+  board: any,
+  source: Extract<BoardSource, { kind: "task" }>,
+  runtimePaths?: RuntimeDebugPaths,
+): string {
   const task = board?.task
   const id = typeof task?.id === "string" ? task.id : ""
   if (!id) return ""
+  if (source.id !== id) throw new Error(`Task debug board belongs to ${id}, expected ${source.id}`)
   const taskDirectory = String(task?.directory ?? "-")
   const cancellation = task?.cancellation
   const projectWorktree = String(board?.project?.worktree ?? "-")
@@ -153,15 +199,19 @@ export function buildTaskDebugBlob(board: any, runtimePaths?: RuntimeDebugPaths)
 
   push(
     `# Task Debug Info (double-click 任务 → clipboard)`,
+    `bundle.schema:  ${DEBUG_BUNDLE_SCHEMA}`,
+    `bundle.scope:   task:${id}`,
     `# Generated: ${formatDebugTime(Date.now())}`,
     ``,
+    ...aiAnalysisRequest("Task"),
+    ``,
+    `selected.source: task:${source.id}`,
+    `selected.directory: ${String(source.directory ?? "-")}`,
     `task.id:        ${id}`,
-    `task.title:     ${String(task?.title ?? "-")}`,
+    `task.title:     ${debugText(task?.title)}`,
     `task.status:    ${String(task?.status ?? "-")}`,
-    `task.terminal:  ${String(task?.terminalReason ?? "-")}`,
-    `task.error:     ${String(task?.error ?? "-")
-      .replace(/\s+/g, " ")
-      .slice(0, 240)}`,
+    `task.terminal:  ${debugText(task?.terminalReason)}`,
+    `task.error:     ${debugText(task?.error)}`,
     `task.cancellation.request_event: ${String(cancellation?.requestEventID ?? "-")}`,
     `task.cancellation.terminal_event: ${String(cancellation?.terminalEventID ?? "-")}`,
     `task.cancellation.requested_at: ${formatDebugTime(cancellation?.requestedAt)}`,
@@ -170,7 +220,7 @@ export function buildTaskDebugBlob(board: any, runtimePaths?: RuntimeDebugPaths)
     `task.cancellation.request: ${String(cancellation?.requestID ?? "-")}`,
     `task.cancellation.actor: ${String(cancellation?.actor ?? "-")}`,
     `task.cancellation.surface: ${String(cancellation?.surface ?? "-")}`,
-    `task.cancellation.reason: ${String(cancellation?.reason ?? "-")}`,
+    `task.cancellation.reason: ${debugText(cancellation?.reason)}`,
     `task.cancellation.session: ${String(cancellation?.sessionID ?? "-")}`,
     `task.cancellation.message: ${String(cancellation?.messageID ?? "-")}`,
     `task.cancellation.tool_call: ${String(cancellation?.toolCallID ?? "-")}`,
@@ -185,6 +235,7 @@ export function buildTaskDebugBlob(board: any, runtimePaths?: RuntimeDebugPaths)
     `task.time.updated: ${formatDebugTime(task?.time?.updated ?? task?.time?.created)}`,
     `task.time.completed: ${formatDebugTime(task?.time?.completed)}`,
     `task.activity.updated: ${formatDebugTime(activity.updated || task?.time?.updated || task?.time?.created)}`,
+    `task.activity.sources: occurrence=${formatDebugTime(activity.updatedSources.occurrence)}; topology=${formatDebugTime(activity.updatedSources.topology)}; artifact=${formatDebugTime(activity.updatedSources.artifact)}; incident=${formatDebugTime(activity.updatedSources.incident)}`,
     `task.activity.after_terminal: ${activity.postTerminalActivity.length}`,
     ``,
     `Agent Session Topology (${activity.nodes.length}) / Execution Occurrences (${activity.occurrences.length}):`,
@@ -225,7 +276,7 @@ export function buildTaskDebugBlob(board: any, runtimePaths?: RuntimeDebugPaths)
       const reviews = Array.isArray(goal?.reviewAssociations) ? goal.reviewAssociations : []
       const accepted = goal?.acceptance?.accepted === true
       push(
-        `  #${n}  ${gid}  ${String(goal?.goalTitle ?? "").slice(0, 80)}`,
+        `  #${n}  ${gid}  ${debugText(goal?.goalTitle, "-", 80)}`,
         `      slice:     ${String(goal?.deliverySliceID ?? gid)}`,
         `      revision:  ${String(goal?.deliverySliceRevisionID ?? gid)}`,
         `      accepted:  ${accepted}`,
@@ -247,29 +298,115 @@ export function buildTaskSelectionErrorDebugBlob(
   if (!taskID) return ""
   return [
     `# Task Load Debug Info (double-click 任务 → clipboard)`,
+    `bundle.schema:  ${DEBUG_BUNDLE_SCHEMA}`,
+    `bundle.scope:   task-load:${taskID}`,
     `# Generated: ${formatDebugTime(Date.now())}`,
     ``,
+    ...aiAnalysisRequest("Task"),
+    ``,
     `task.id:        ${taskID}`,
-    `task.title:     ${failure.title || "-"}`,
+    `task.title:     ${debugText(failure.title)}`,
     `task.directory: ${failure.directory || "-"}`,
     `server.url:     ${getServerUrl()}`,
     `runtime.db:     ${runtimePaths?.database?.trim() || "-"}`,
     ``,
     `Load failure:`,
-    failure.details || "-",
+    debugText(failure.details, "-", 1200),
   ].join("\n")
+}
+
+function debugPersistedSummary(summary: PersistedChatDebugSummary): string[] {
+  const messages = summary.stats.messages
+  const tools = summary.stats.tools
+  const lines = [
+    `  sessions:              ${summary.sessionIDs.join(", ") || "(validated empty)"}`,
+    `  messages.total:        ${messages.total}`,
+    `  messages.user:         ${messages.user}`,
+    `  messages.assistant:    ${messages.assistant}`,
+    `  messages.other:        ${messages.other}`,
+    `  assistant.incomplete:  ${messages.assistantIncomplete}`,
+    `  assistant.completed:   ${messages.assistantCompleted}`,
+    `  assistant.error:       ${messages.assistantError}`,
+    `  tools.total:           ${tools.total}`,
+    `  tools.pending:         ${tools.pending}`,
+    `  tools.running:         ${tools.running}`,
+    `  tools.completed:       ${tools.completed}`,
+    `  tools.error:           ${tools.error}`,
+    `  tools.other:           ${tools.other}`,
+    `  recent messages (${summary.recentMessages.length}; omitted older=${summary.omittedMessages}):`,
+  ]
+  if (summary.recentMessages.length === 0) lines.push(`    (validated empty)`)
+  for (const message of summary.recentMessages) {
+    lines.push(
+      `    ${message.messageID} session=${message.sessionID}; role=${message.role}; created=${formatDebugTime(message.created)}; completed=${formatDebugTime(message.completed)}; finish=${message.finish ?? "-"}; error=${message.errorName ?? "-"}; parts=${message.partCount}; tools=${message.toolCount}`,
+    )
+  }
+  lines.push(`  recent tools (${summary.recentTools.length}; omitted older=${summary.omittedTools}):`)
+  if (summary.recentTools.length === 0) lines.push(`    (validated empty)`)
+  for (const tool of summary.recentTools) {
+    lines.push(
+      `    ${tool.partID} session=${tool.sessionID}; message=${tool.messageID}; call=${tool.callID ?? "-"}; tool=${tool.tool}; status=${tool.status}; start=${formatDebugTime(tool.started)}; end=${formatDebugTime(tool.completed)}; failure.kind=${tool.failureKind ?? "-"}; failure=${tool.failure ?? "-"}`,
+    )
+  }
+  return lines
+}
+
+function debugPersistedPlane(label: string, plane: PersistedChatDebugPlane): string[] {
+  if (plane.status === "unavailable") {
+    return [
+      `${label}:`,
+      `  endpoint: ${plane.endpoint}`,
+      `  collected: ${formatDebugTime(plane.collectedAt)}`,
+      `  status: unavailable`,
+      `  error: ${debugText(plane.error, "unknown persisted Session read failure", 500)}`,
+      `  interpretation: unknown; do not treat this plane as zero`,
+    ]
+  }
+  const board = plane.board
+    ? [
+        `  board.session: ${plane.board.sessionID}`,
+        `  board.title: ${debugText(plane.board.title)}`,
+        `  board.status: ${plane.board.status ?? "-"}`,
+        `  board.directory: ${plane.board.directory ?? "-"}`,
+      ]
+    : []
+  return [
+    `${label}:`,
+    `  endpoint: ${plane.endpoint}`,
+    `  collected: ${formatDebugTime(plane.collectedAt)}`,
+    `  status: available`,
+    ...board,
+    ...debugPersistedSummary(plane.summary),
+  ]
 }
 
 export function buildChatDebugBlob(
   board: any,
   source: BoardSource | null,
   cardTree: CardTreeStore,
-  persisted?: PersistedChatDebugProjection,
+  persisted: PersistedChatDebugProjection,
 ): string {
   if (source?.kind !== "session") return ""
   const boardSessionID = typeof board?.sessionID === "string" ? board.sessionID : ""
   const sessionID = source.id
   if (!sessionID) return ""
+  if (boardSessionID !== sessionID) {
+    throw new Error(`Chat debug board belongs to ${boardSessionID || "-"}, expected ${sessionID}`)
+  }
+  if (persisted.sessionID !== sessionID) {
+    throw new Error(`Chat debug persistence belongs to ${persisted.sessionID}, expected ${sessionID}`)
+  }
+  const sourceDirectory = String(source.directory ?? "").trim()
+  const boardDirectory = String(board?.directory ?? "").trim()
+  if (!sourceDirectory) throw new Error(`Chat debug source ${sessionID} has no project directory`)
+  if (boardDirectory && normalizeDebugDirectory(boardDirectory) !== normalizeDebugDirectory(sourceDirectory)) {
+    throw new Error(`Chat debug board directory ${boardDirectory} does not match selected ${sourceDirectory}`)
+  }
+  if (normalizeDebugDirectory(persisted.directory) !== normalizeDebugDirectory(sourceDirectory)) {
+    throw new Error(
+      `Chat debug persistence directory ${persisted.directory} does not match selected ${sourceDirectory}`,
+    )
+  }
   const cards = Object.values(cardTree.cards)
   const counts = cards.reduce(
     (acc, card) => {
@@ -279,44 +416,32 @@ export function buildChatDebugBlob(
     },
     { total: 0 } as Record<string, number>,
   )
-  const persistedLines =
-    persisted?.status === "available" && persisted.sessionID === sessionID
-      ? [
-          `Persisted Session:`,
-          `  messages.total:     ${persisted.stats.messages.total}`,
-          `  messages.user:      ${persisted.stats.messages.user}`,
-          `  messages.assistant: ${persisted.stats.messages.assistant}`,
-          `  messages.other:     ${persisted.stats.messages.other}`,
-          `  tools.total:        ${persisted.stats.tools.total}`,
-          `  tools.pending:      ${persisted.stats.tools.pending}`,
-          `  tools.running:      ${persisted.stats.tools.running}`,
-          `  tools.completed:    ${persisted.stats.tools.completed}`,
-          `  tools.error:        ${persisted.stats.tools.error}`,
-          `  tools.other:        ${persisted.stats.tools.other}`,
-        ]
-      : [
-          `Persisted Session:`,
-          `  unavailable: ${
-            persisted?.status === "available"
-              ? `statistics belong to ${persisted.sessionID}, expected ${sessionID}`
-              : (persisted?.error ?? "persisted statistics were not requested")
-          }`,
-        ]
+  const generatedAt = Date.now()
   return [
     `# Chat Debug Info (double-click chat → clipboard)`,
-    `# Generated: ${formatDebugTime(Date.now())}`,
+    `bundle.schema:  ${DEBUG_BUNDLE_SCHEMA}`,
+    `bundle.scope:   session:${sessionID}`,
+    `# Generated: ${formatDebugTime(generatedAt)}`,
+    ``,
+    ...aiAnalysisRequest("Chat"),
     ``,
     `chat.session:   ${sessionID}`,
-    `chat.board.session: ${boardSessionID || "-"}`,
-    `chat.title:     ${String(board?.title ?? "-")}`,
-    `chat.status:    ${String(board?.status ?? "-")}`,
-    `chat.directory: ${String(board?.directory ?? "-")}`,
-    `server.url:     ${getServerUrl()}`,
     `selected.source: ${source.kind}:${source.id}`,
+    `selected.directory: ${sourceDirectory}`,
+    `server.url:     ${getServerUrl()}`,
+    `collection.started: ${formatDebugTime(persisted.startedAt)}`,
+    `collection.completed: ${formatDebugTime(persisted.completedAt)}`,
     ``,
-    ...persistedLines,
+    ...debugPersistedPlane(`Persisted root Session (raw messages only)`, persisted.root),
     ``,
-    `Rendered cards:`,
+    ...debugPersistedPlane(`Persisted Session tree (visible conversation transcript)`, persisted.tree),
+    ``,
+    `Rendered Overlay snapshot (local, non-atomic with persisted reads):`,
+    `  captured: ${formatDebugTime(generatedAt)}`,
+    `  board.session: ${boardSessionID}`,
+    `  board.title: ${debugText(board?.title)}`,
+    `  board.status: ${String(board?.status ?? "-")}`,
+    `  board.directory: ${boardDirectory || "-"}`,
     `  top.level: ${cardTree.order.length}`,
     `  total:     ${counts.total}`,
     `  agents:    ${counts.agent ?? 0}`,
