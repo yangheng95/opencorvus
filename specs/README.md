@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest scheduler liveness and control convergence repair: [`2026-08-11-scheduler-liveness-and-control-convergence.md`](records/2026-08/2026-08-11-scheduler-liveness-and-control-convergence.md).
+
 Latest systemic scheduler fault audit and repair: [`2026-08-11-scheduler-systemic-fault-audit-and-repair.md`](records/2026-08/2026-08-11-scheduler-systemic-fault-audit-and-repair.md).
 
 Latest detached worker lifecycle convergence repair: [`2026-08-10-task-detached-worker-lifecycle-convergence-repair.md`](records/2026-08/2026-08-10-task-detached-worker-lifecycle-convergence-repair.md).

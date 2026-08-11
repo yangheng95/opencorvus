@@ -1,5 +1,6 @@
 # August 2026 Records
 
+- [2026-08-11-scheduler-liveness-and-control-convergence.md](2026-08-11-scheduler-liveness-and-control-convergence.md) records the exact lifecycle semantic-orphan incident, three independent scheduler audits, confirmed ownership/liveness defects, shared repair invariants, and executable real-checker acceptance loop.
 - [2026-08-11-scheduler-systemic-fault-audit-and-repair.md](2026-08-11-scheduler-systemic-fault-audit-and-repair.md) records the independent systemic audit, shared ownership-handoff root model, confirmed scheduler defect register, repair order, and executable acceptance loop.
 
 - [2026-08-10-task-detached-worker-lifecycle-convergence-repair.md](2026-08-10-task-detached-worker-lifecycle-convergence-repair.md) diagnoses and repairs detached worker execution, terminal lifecycle publication, durable delivery, current-runtime reconciliation, provider-error projection, and immutable workflow-selection convergence as one ownership chain.
