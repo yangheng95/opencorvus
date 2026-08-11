@@ -31,6 +31,8 @@ Latest public download-page and Release synchronization design: [`2026-08-11-pub
 
 Public website Iteration 1 visual evidence: [`English top`](artifacts/2026-08-11-public-website-iteration-1-en-top.png), [`English work modes`](artifacts/2026-08-11-public-website-iteration-1-en-modes-squads.png), [`English Expert Squads`](artifacts/2026-08-11-public-website-iteration-1-en-squads.png), [`English start and footer`](artifacts/2026-08-11-public-website-iteration-1-en-start-footer.png), [`Simplified Chinese top`](artifacts/2026-08-11-public-website-iteration-1-zh-top.png), [`Simplified Chinese work modes`](artifacts/2026-08-11-public-website-iteration-1-zh-modes-squads.png), [`Simplified Chinese Expert Squads`](artifacts/2026-08-11-public-website-iteration-1-zh-squads.png), [`Simplified Chinese start and footer`](artifacts/2026-08-11-public-website-iteration-1-zh-start-footer.png), [`quickstart top`](artifacts/2026-08-11-public-website-iteration-1-docs-top.png), and [`quickstart bottom`](artifacts/2026-08-11-public-website-iteration-1-docs-bottom.png).
 
+Latest ninth fixed-ten Expert Squad batch: [2026-08-11-ninth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-ninth-ten-domain-expert-squad-batch.md).
+
 Latest eighth fixed-ten Expert Squad batch: [2026-08-11-eighth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-eighth-ten-domain-expert-squad-batch.md).
 
 Latest seventh fixed-ten Expert Squad batch: [2026-08-11-seventh-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-seventh-ten-domain-expert-squad-batch.md).

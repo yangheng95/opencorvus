@@ -40,14 +40,14 @@ test("production HTTP bootstrap exposes embedded defaults and installs one selec
     }
 
     expect(result).toEqual({
-      payloadCount: 95,
+      payloadCount: 105,
       defaultIDs: ["advanced", "base", "research-studio", "squad-sdk"],
-      marketAvailable: 95,
+      marketAvailable: 105,
       installedID: "one-person-company-operating-system",
       installedDigest: expect.stringMatching(/^[a-f0-9]{64}$/),
       installedSkillRefs: ["one-person-company-operating-system/shared/method"],
       activeSquadID: "base",
-      requestCount: 12,
+      requestCount: 13,
     })
   } finally {
     await fs.rm(isolatedRoot, { recursive: true, force: true })
