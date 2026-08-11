@@ -603,4 +603,179 @@ const copyJson = JSON.stringify(copy)
     font-family: var(--display);
     font-size: 28px;
   }
+
+  @media (max-width: 1099px) {
+    :global(body.public-site-body) {
+      min-width: 0;
+    }
+
+    :global(.public-header),
+    .download-page,
+    :global(.public-footer) {
+      width: calc(100% - 32px);
+    }
+
+    :global(.public-header) {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px 20px;
+      min-height: 0;
+      padding: 14px 0 0;
+    }
+
+    :global(.public-brand) {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    :global(.language-switch) {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    :global(.public-nav) {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      min-width: 0;
+      max-width: 100%;
+      padding: 4px 0 16px;
+    }
+
+    :global(.public-nav a) {
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
+
+    :global(.public-nav a::after) {
+      bottom: -4px;
+    }
+
+    .download-page {
+      padding-bottom: 56px;
+    }
+
+    .download-hero {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 36px;
+      min-height: 0;
+      padding: 48px 0 58px;
+    }
+
+    .download-hero h1 {
+      font-size: clamp(46px, 15vw, 64px);
+      line-height: 0.94;
+    }
+
+    .release-identity {
+      min-width: 0;
+      margin-top: 28px;
+    }
+
+    .release-identity strong,
+    .release-identity small {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .recommended-download {
+      min-height: 0;
+      padding: 26px;
+      box-shadow: 8px 8px 0 var(--cobalt-wash);
+    }
+
+    .recommended-download h2 {
+      margin: 38px 0 16px;
+      font-size: 36px;
+    }
+
+    .recommended-actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .recommended-actions :global(a) {
+      width: 100%;
+    }
+
+    .download-section {
+      padding-bottom: 54px;
+    }
+
+    .download-section :global(.landing-band-header) {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+      margin-bottom: 32px;
+    }
+
+    .download-section .landing-band-header h2,
+    .verify-download h2 {
+      font-size: clamp(40px, 12vw, 54px);
+    }
+
+    .download-platform-grid {
+      grid-template-columns: minmax(0, 1fr);
+      margin-top: 30px;
+    }
+
+    .download-platform-grid > article {
+      min-height: 0;
+      padding: 24px;
+    }
+
+    .platform-title {
+      margin-top: 28px;
+    }
+
+    :global(.asset-row) {
+      gap: 12px;
+    }
+
+    :global(.asset-row > span:first-child) {
+      min-width: 0;
+    }
+
+    :global(.asset-row strong),
+    :global(.asset-row small) {
+      overflow-wrap: anywhere;
+    }
+
+    .cli-section {
+      padding-right: 24px;
+      padding-left: 24px;
+    }
+
+    .cli-downloads {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 38px;
+      margin-top: 32px;
+    }
+
+    .verify-download {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 22px;
+      padding: 42px 24px;
+    }
+
+    .verify-download :global(.hero-actions) {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .verify-download :global(.hero-actions a) {
+      width: 100%;
+    }
+
+    :global(.public-footer) {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+      min-height: 0;
+      padding: 38px 0;
+    }
+
+    :global(.public-footer nav) {
+      flex-wrap: wrap;
+      gap: 14px 22px;
+    }
+  }
 </style>
