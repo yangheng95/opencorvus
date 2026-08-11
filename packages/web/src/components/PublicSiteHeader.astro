@@ -1,6 +1,5 @@
 ---
-import { Image } from "astro:assets"
-import BrandMark from "../../../overlay/src/opencorvus-logo-light.svg"
+import BrandMarkUrl from "../../../overlay/src/opencorvus-logo-light.svg?url"
 import { publicPath, type PublicLocale } from "../content/public-market"
 
 type Props = {
@@ -22,7 +21,7 @@ const copy =
 <HeaderTag class="public-header" aria-label={locale === "zh-cn" ? "主导航" : "Primary navigation"}>
   <a class="public-brand" href={publicPath(locale)} aria-label="OpenCorvus home" aria-current={current === "home" ? "page" : undefined}>
     <span class="public-brand-mark">
-      <Image src={BrandMark} width={34} height={34} alt="" loading="eager" />
+      <img src={BrandMarkUrl} width="34" height="34" alt="" loading="eager" decoding="async" />
     </span>
     <span class="public-brand-label">OpenCorvus</span>
   </a>

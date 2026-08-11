@@ -910,8 +910,7 @@ button.primary-action {
   color: white;
 }
 
-.registry-fact::before {
-  content: "EXACT / SOURCE / REVISION";
+.registry-fact-kicker {
   display: block;
   margin-bottom: 20px;
   font-family: var(--mono);
@@ -1203,6 +1202,18 @@ button.primary-action {
   background: var(--ink);
   color: white;
   border-left: 12px solid var(--cobalt);
+}
+
+.revision-card .section-lead {
+  color: #d7dcf5;
+}
+
+.download-status {
+  min-height: 1.5em;
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .revision-card dl {

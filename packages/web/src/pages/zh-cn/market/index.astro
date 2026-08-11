@@ -1,5 +1,11 @@
 ---
 import MarketplacePage from "../../../components/MarketplacePage.astro"
+import { getWebsiteRegistry } from "../../../lib/website-registry"
+
+export const prerender = false
+const registry = await getWebsiteRegistry()
+const records = registry.squads()
+const publication = registry.publication()
 ---
 
-<MarketplacePage locale="zh-cn" />
+<MarketplacePage locale="zh-cn" {records} {publication} />

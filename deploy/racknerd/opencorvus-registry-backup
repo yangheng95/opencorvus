@@ -1,0 +1,51 @@
+#!/bin/bash
+set -euo pipefail
+umask 077
+
+STATE_ROOT=${OPENCORVUS_STATE_ROOT:-/var/lib/opencorvus-web}
+DATABASE="$STATE_ROOT/registry.sqlite3"
+BACKUPS="$STATE_ROOT/backups"
+CONTROL=${OPENCORVUS_REGISTRY_CONTROL:-/srv/opencorvus/current/server/opencorvus-registry-control}
+STAMP=${OPENCORVUS_BACKUP_STAMP:-$(date -u +%Y-%m-%dT%H%M%SZ)}
+WEEK=${OPENCORVUS_BACKUP_WEEK:-$(date -u +%G-W%V)}
+LOCK_FILE="$STATE_ROOT/registry-operation.lock"
+[[ "$STAMP" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{6}Z$ ]]
+[[ "$WEEK" =~ ^[0-9]{4}-W[0-9]{2}$ ]]
+DAILY="$BACKUPS/daily-$STAMP.sqlite3"
+WEEKLY="$BACKUPS/weekly-$WEEK.sqlite3"
+
+test -x "$CONTROL"
+test -f "$DATABASE"
+install -d -m 0700 "$BACKUPS"
+exec 9>>"$LOCK_FILE"
+flock -w 300 9 || { echo "timed out waiting for the Registry operation lock" >&2; exit 1; }
+"$CONTROL" backup --database "$DATABASE" --data "$STATE_ROOT" --target "$DAILY"
+chmod 0600 "$DAILY"
+(cd "$BACKUPS" && sha256sum "$(basename "$DAILY")") > "$DAILY.sha256"
+chmod 0600 "$DAILY.sha256"
+(cd "$STATE_ROOT" && find blobs/sha256 -type f -name '*.zip' -print0 | LC_ALL=C sort -z | xargs -0 sha256sum) > "$DAILY.blobs.sha256"
+test -s "$DAILY.blobs.sha256"
+chmod 0600 "$DAILY.blobs.sha256"
+if [ ! -e "$WEEKLY" ]; then
+  ln "$DAILY" "$WEEKLY"
+  ln "$DAILY.blobs.sha256" "$WEEKLY.blobs.sha256"
+  (cd "$BACKUPS" && sha256sum "$(basename "$WEEKLY")") > "$WEEKLY.sha256"
+  chmod 0600 "$WEEKLY.sha256"
+fi
+
+prune_series() {
+  local prefix=$1 keep=$2 file index=0
+  while IFS= read -r file; do
+    index=$((index + 1))
+    if [ "$index" -le "$keep" ]; then continue; fi
+    case "$(basename "$file")" in
+      "$prefix"-*.sqlite3) ;;
+      *) echo "refusing unexpected backup path: $file" >&2; return 1 ;;
+    esac
+    case "$(realpath "$file")" in "$BACKUPS"/*) ;; *) echo "backup path escaped state root" >&2; return 1 ;; esac
+    rm -f -- "$file" "$file.sha256" "$file.blobs.sha256"
+  done < <(find "$BACKUPS" -maxdepth 1 -type f -name "$prefix-*.sqlite3" -printf '%f\n' | LC_ALL=C sort -r | sed "s#^#$BACKUPS/#")
+}
+
+prune_series daily 7
+prune_series weekly 4

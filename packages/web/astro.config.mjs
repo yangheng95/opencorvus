@@ -2,6 +2,7 @@
 import { defineConfig } from "astro/config"
 import starlight from "@astrojs/starlight"
 import solidJs from "@astrojs/solid-js"
+import node from "@astrojs/node"
 import theme from "toolbeam-docs-theme"
 import config from "./config.mjs"
 import { rehypeHeadingIds } from "@astrojs/markdown-remark"
@@ -19,6 +20,7 @@ export default defineConfig({
   site: config.url,
   base: publicBase,
   output: "static",
+  adapter: node({ mode: "standalone" }),
   devToolbar: {
     enabled: false,
   },

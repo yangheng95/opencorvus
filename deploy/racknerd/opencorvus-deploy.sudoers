@@ -1,0 +1,3 @@
+Defaults:opencorvus-deploy env_reset
+Defaults:opencorvus-deploy secure_path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+opencorvus-deploy ALL=(root) NOPASSWD: NOSETENV: /usr/local/bin/opencorvus-activate-release

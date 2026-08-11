@@ -1,10 +1,9 @@
-import { generatedPublicMarketFacts } from "./public-market-facts.generated"
 import { publicMarketZhTranslations01To35 } from "./public-market-zh-01-35"
 import { publicMarketZhTranslations36To67 } from "./public-market-zh-36-67"
 import { publicMarketZhTranslations68To99 } from "./public-market-zh-68-99"
 import { publicMarketZhTranslationsTenthBatch } from "./public-market-zh-tenth-batch"
 import type { PublicSquadZhTranslationMap } from "./public-market-zh-types"
-
+import type { ExpertSquadFacts } from "../lib/expert-squad-facts"
 export type PublicLocale = "root" | "zh-cn"
 
 export type LocalizedText = Record<PublicLocale, string>
@@ -90,15 +89,12 @@ function requireChineseText(context: string, value: string | undefined) {
   return text
 }
 
-assertExactKeys(
-  "Expert Squad identities",
-  generatedPublicMarketFacts.map((facts) => `${facts.identity.namespace}/${facts.identity.id}`),
-  Object.keys(publicMarketZhTranslations),
-)
+export type PublicSquadFactInput = ExpertSquadFacts
 
-export const publicSquadRecords: PublicSquadRecord[] = generatedPublicMarketFacts.map((facts) => {
+export function projectPublicSquadRecord(facts: PublicSquadFactInput): PublicSquadRecord {
   const identity = `${facts.identity.namespace}/${facts.identity.id}`
-  const localized = publicMarketZhTranslations[identity]!
+  const localized = publicMarketZhTranslations[identity]
+  if (!localized) throw new Error(`[public-market] ${identity} has no complete Chinese translation`)
   assertExactKeys(
     `${identity} Agents`,
     facts.agents.map((agent) => agent.id),
@@ -177,7 +173,7 @@ export const publicSquadRecords: PublicSquadRecord[] = generatedPublicMarketFact
     packageOwnedCapabilities: facts.packageOwnedCapabilities,
     configuration: facts.configuration,
   }
-})
+}
 
 export function publicPath(locale: PublicLocale, path = "") {
   const base = import.meta.env.BASE_URL.replace(/\/$/, "")

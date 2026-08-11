@@ -8,6 +8,8 @@ const detailPath = `/market/${record.identity.namespace}/${record.identity.id}/`
 const displayedPillars = record.pillars
   .map((pillar) => (locale === "zh-cn" ? { code: "代码与产品", work: "知识与业务" }[pillar] : pillar))
   .join(" + ")
+const archiveHref = `/api/registry/v1/squads/${encodeURIComponent(record.identity.namespace)}/${encodeURIComponent(record.identity.id)}/${encodeURIComponent(record.identity.version)}/${record.identity.digest}/archive`
+const archiveFilename = `${record.identity.id}-${record.identity.version}.zip`
 const copy =
   locale === "zh-cn"
     ? {
@@ -15,11 +17,14 @@ const copy =
         description: record.description[locale],
         languageHref: publicPath("root", detailPath),
         eyebrow: "使用前检查团队",
-        currentSource: "当前精选目录条目",
+        currentSource: "当前数据库发布",
         summary: record.description[locale],
         inspect: "理解安装边界",
         demonstrate: "查看角色如何衔接",
-        download: "下载签名完整资源包",
+        download: "下载这一精确 revision",
+        downloadPreparing: "正在校验并接收这一精确 revision…",
+        downloadReady: "精确 ZIP 已完整接收，浏览器下载已创建。",
+        downloadFailed: "未能下载这一精确 revision。请检查网络后重试。",
         trust: "可信机制",
         revision: "精确 revision",
         identity: "身份",
@@ -50,17 +55,17 @@ const copy =
           ["配置要求", `${record.configuration.fields} 个字段 · ${record.configuration.required} 个必填`],
         ],
         provenanceTitle: "一个列表项只绑定一个内容 revision",
-        provenanceBody: "当前 digest 根据仓库中这份能力包的规范化文件树计算。本地 Manager 在安装时会再次验证结构、身份与 digest。",
+        provenanceBody: "网站导入发布时，会从签名目录指向的精确 ZIP 重建规范化文件树与完整展示事实。客户端安装时仍会再次验证结构、身份与 digest。",
         demoTitle: "角色与依赖说明",
         demoBody: "这是绑定当前 package digest 的工作流说明，不是正在执行的 Agent、计时器或语言模型输出。真实执行只发生在 OpenCorvus 客户端中。",
         demoPinned: "演示固定 revision",
         demoEvidence: "每个节点只有在 depends_on 前序证据完成后才具备调度条件；本页面只解释合同，不推进运行状态。",
         proposedTitle: "当前发布状态",
-        proposedBody: "这份条目来自当前仓库源码，并包含在由 OpenCorvus 发布密钥签名的完整资源包中。签名证明目录与下载内容来自 OpenCorvus 且保持完整；第三方发布者身份与独立审核服务尚未开放。",
+        proposedBody: "这份条目属于当前数据库发布；导入器已逐字段核对它与 OpenCorvus 签名目录、精确 ZIP 和内容 digest。签名私钥不会进入生产服务器；第三方发布者身份与独立审核服务尚未开放。",
         installTitle: "安装不是激活",
-        installBody: "当前网页只下载经过签名校验的完整资源包，不会自动打开客户端、批量安装或激活团队。后续导入由 OpenCorvus 客户端重新校验，并要求明确选择 scope。",
+        installBody: "当前网页只流式下载这一精确 revision 的内容寻址 ZIP，不会自动打开客户端、安装或激活团队。后续导入由 OpenCorvus 客户端重新校验，并要求明确选择 scope。",
         installSteps: [
-          ["01", "网页验证签名目录并下载内容寻址完整资源包"],
+          ["01", "网站数据库定位精确 revision，校验 ZIP 字节数与 SHA-256 后开始响应"],
           ["02", "客户端导入时重算 digest 并严格验证具体能力包"],
           ["03", "用户明确选择 project 或 user-global scope"],
           ["04", "Manager 原子导入并返回 mutation receipt"],
@@ -81,11 +86,14 @@ const copy =
         description: record.description[locale],
         languageHref: publicPath("zh-cn", detailPath),
         eyebrow: "Inspect the team before use",
-        currentSource: "Current featured catalog record",
+        currentSource: "Active database publication",
         summary: record.description[locale],
         inspect: "Understand the install boundary",
         demonstrate: "See how responsibilities connect",
-        download: "Download the signed complete bundle",
+        download: "Download this exact revision",
+        downloadPreparing: "Verifying and receiving this exact revision…",
+        downloadReady: "The exact ZIP was received in full and the browser download was created.",
+        downloadFailed: "This exact revision could not be downloaded. Check your connection and try again.",
         trust: "Trust model",
         revision: "Exact revision",
         identity: "Identity",
@@ -120,7 +128,7 @@ const copy =
         ],
         provenanceTitle: "One listing binds one content revision",
         provenanceBody:
-          "The current digest is computed from this repository package's canonical file tree. The local Manager validates shape, identity, topology, and digest again during install.",
+          "During publication import, the website reconstructs the canonical file tree and complete display facts from the exact ZIP referenced by the signed catalog. The local Manager validates shape, identity, topology, and digest again during install.",
         demoTitle: "Role and dependency walkthrough",
         demoBody:
           "This workflow explanation is pinned to the current package digest. It is not a running Agent session, timer, or generated language-model output. Real execution occurs in the OpenCorvus client.",
@@ -129,12 +137,12 @@ const copy =
           "A node becomes schedulable only after its depends_on evidence is terminal. This page explains that contract and does not advance runtime state.",
         proposedTitle: "Current publication status",
         proposedBody:
-          "This record comes from the current repository source and is included in the complete bundle signed by the OpenCorvus publication key. The signature proves OpenCorvus publication and byte integrity; third-party publisher identity and independent review services are not open yet.",
+          "This record belongs to the active database publication. The importer checked it field by field against the OpenCorvus-signed catalog, exact ZIP, and content digest. The signing private key never reaches the production server; third-party publisher identity and independent review services are not open yet.",
         installTitle: "Installation is not activation",
         installBody:
-          "The page currently downloads the verified complete resource bundle. It does not launch the client, batch-install, or activate teams automatically. A later client import repeats validation and requires an explicit scope.",
+          "The page streams the content-addressed ZIP for this exact revision. It does not launch the client, install, or activate a team automatically. A later client import repeats validation and requires an explicit scope.",
         installSteps: [
-          ["01", "Verify the signed catalog and download the content-addressed complete bundle"],
+          ["01", "Resolve the exact revision in the website database, then verify ZIP bytes and SHA-256 before the response starts"],
           ["02", "Recompute the digest and strictly validate the selected package during client import"],
           ["03", "Require the operator to choose project or user-global scope"],
           ["04", "Import atomically through the Manager and return a mutation receipt"],
@@ -168,6 +176,9 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
     class="public-main"
     data-detail-root
     data-copied-text={copy.copied}
+    data-download-preparing={copy.downloadPreparing}
+    data-download-ready={copy.downloadReady}
+    data-download-failed={copy.downloadFailed}
   >
     <section class="detail-hero" aria-labelledby="squad-title">
       <div>
@@ -177,10 +188,11 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
         <p class="detail-summary">{segmentPublicMarketText(locale, copy.summary).map((segment) => <span lang={segment.lang}>{segment.text}</span>)}</p>
         <div class="detail-actions">
           <button class="secondary-action" type="button" data-open-demo>{copy.demonstrate}</button>
-          <a class="primary-action" href={publicPath(locale, "/market/#complete-bundle")}>{copy.download}</a>
+          <a class="primary-action" href={archiveHref} download={archiveFilename} data-exact-download aria-describedby="exact-download-status">{copy.download}</a>
           <a class="secondary-action" href={publicPath(locale, "/trust/")}>{copy.trust}</a>
           <button class="text-button" type="button" data-open-install>{copy.inspect}</button>
         </div>
+        <p id="exact-download-status" class="download-status" role="status" aria-live="polite" data-download-status></p>
       </div>
 
       <aside class="revision-card" aria-label={copy.revision}>
@@ -396,6 +408,34 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
     copyButton.addEventListener("click", async () => {
       await navigator.clipboard.writeText(digest.textContent?.trim() ?? "")
       copyStatus.textContent = detailRoot.dataset.copiedText ?? ""
+    })
+
+    const downloadLink = detailRoot.querySelector<HTMLAnchorElement>("[data-exact-download]")!
+    const downloadStatus = detailRoot.querySelector<HTMLElement>("[data-download-status]")!
+    downloadLink.addEventListener("click", async (event) => {
+      event.preventDefault()
+      if (downloadLink.getAttribute("aria-disabled") === "true") return
+      downloadLink.setAttribute("aria-disabled", "true")
+      downloadStatus.textContent = detailRoot.dataset.downloadPreparing ?? ""
+      try {
+        const response = await fetch(downloadLink.href, { headers: { accept: "application/zip" } })
+        if (!response.ok) throw new Error(`Archive response failed with HTTP ${response.status}`)
+        const archive = await response.blob()
+        const objectURL = URL.createObjectURL(archive)
+        const save = document.createElement("a")
+        save.href = objectURL
+        save.download = downloadLink.download
+        save.hidden = true
+        document.body.append(save)
+        save.click()
+        save.remove()
+        window.setTimeout(() => URL.revokeObjectURL(objectURL), 60_000)
+        downloadStatus.textContent = detailRoot.dataset.downloadReady ?? ""
+      } catch {
+        downloadStatus.textContent = detailRoot.dataset.downloadFailed ?? ""
+      } finally {
+        downloadLink.removeAttribute("aria-disabled")
+      }
     })
 
     const demoDialog = detailRoot.querySelector<HTMLDialogElement>("[data-demo-dialog]")!

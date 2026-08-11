@@ -2,6 +2,8 @@
 
 Latest Orchestrator wake Turn serialization repair: [`2026-08-12-orchestrator-wake-turn-serialization-repair.md`](records/2026-08/2026-08-12-orchestrator-wake-turn-serialization-repair.md).
 
+Latest public website database backend and Expert Squad Registry convergence plan: [`2026-08-12-public-website-database-backend.md`](records/2026-08/2026-08-12-public-website-database-backend.md).
+
 Latest local database rebuild and startup recovery: [`2026-08-12-local-database-rebuild-and-startup-recovery.md`](records/2026-08/2026-08-12-local-database-rebuild-and-startup-recovery.md).
 
 Latest permission-system two-mode calibration plan: [`2026-08-12-permission-two-mode-calibration-plan.md`](records/2026-08/2026-08-12-permission-two-mode-calibration-plan.md).

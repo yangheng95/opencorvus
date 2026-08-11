@@ -1,6 +1,6 @@
 # opencorvus.com RackNerd bootstrap
 
-This directory contains the one-time server bootstrap inputs for the static `opencorvus.com` deployment. It does not expose the local Hosted Registry simulation.
+This directory contains the one-time server bootstrap inputs and the ongoing runbook for `opencorvus.com`. Caddy serves the immutable Astro client and proxies only Market, Registry API, and health routes to the Bun/Astro service backed by SQLite. The removed local filesystem Registry simulation is not a production interface.
 
 ## Documentation and credential source of truth
 
@@ -27,9 +27,9 @@ Restore one key only when recovery requires it:
 
 `Protect` and `Restore` reject an output directory unless its ACL already grants full control only to the current Windows identity and `SYSTEM`. They create an empty output, apply the final private-file ACL, and only then write credential bytes; any create, ACL, or write failure removes the output before returning the error.
 
-## Current production inventory
+## Verified production state before database migration
 
-The committed values below are non-secret facts; `production.env` in the local vault is the complete machine-readable copy.
+These facts combine committed non-secret configuration with read-only public/GitHub checks from 2026-08-12. The documented local vault is absent from this Windows account, so server-only facts remain unverified until inventory runs.
 
 | Boundary | Current value |
 | --- | --- |
@@ -37,15 +37,16 @@ The committed values below are non-secret facts; `production.env` in the local v
 | DNS | GoDaddy; apex A points to the RackNerd IPv4; `www` is a CNAME to the apex |
 | GitHub repository / Environment | `yangheng95/opencorvus` / `production`, restricted to `main` |
 | RackNerd SSH | port `22`, deploy user `opencorvus-deploy` |
-| Web service | Caddy `2.11.4`, public TCP `80`/`443`, readiness only on `127.0.0.1:8080` |
+| Web service | The public site remains the legacy static release; `https://opencorvus.com/health/ready` returned `404`. The target service binds only `127.0.0.1:4321`, with Caddy readiness on `127.0.0.1:8080`. |
 | Release storage | `/srv/opencorvus/releases`, `/srv/opencorvus/current`, `/srv/opencorvus/previous` |
-| Server configuration | `/etc/caddy/Caddyfile`, `/usr/local/bin/opencorvus-activate-release` |
+| Persistent Registry state | Target paths are `/var/lib/opencorvus-web/registry.sqlite3`, content-addressed `blobs/`, `staging/`, and `backups/`; their production existence is not yet verified. |
+| Server configuration | Existing Caddy/activator details require inventory. Database bootstrap adds the reviewed service, daily backup timer, OpenSSL public key, and signed-manifest activator. |
 | Current signing key ID | `expert-squad-ed25519-2026-08-11` |
 | Automatic deployment switch | repository variable `OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED=true` |
 
 Current GitHub Environment variables are `RACKNERD_SSH_PORT`, `RACKNERD_DEPLOY_USER`, `EXPERT_SQUAD_SIGNING_KEY_ID`, `EXPERT_SQUAD_BOOTSTRAP_PUBLICATION_VERSION`, and `EXPERT_SQUAD_BOOTSTRAP_PUBLICATION_EXPIRES_AT`. Current repository variables are `EXPERT_SQUAD_TRUSTED_KEYS_JSON` and `OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED`. Current Environment secrets are `RACKNERD_HOST`, `RACKNERD_KNOWN_HOSTS`, `RACKNERD_SSH_PRIVATE_KEY`, and `EXPERT_SQUAD_SIGNING_PRIVATE_KEY_B64`. The optional secondary signing key/ID must be absent outside a planned rotation overlap.
 
-The local vault maps the two private-key secrets as follows:
+The intended local-vault mapping is below. Because that vault is currently missing, it is not recovery evidence until restored and verified:
 
 | GitHub secret | Local recovery source |
 | --- | --- |
@@ -66,24 +67,41 @@ Routine operations:
 
 - Website/source publication: push a matching path to `main`; the workflow builds all three canonical archive platforms plus the website, signs, validates, uploads, switches the immutable release, probes public HTTPS, and rolls back on failure.
 - Manual renewal: run `deployment_mode=daily`. The monthly schedule is best-effort only; monitor expiry separately because GitHub can disable inactive schedules.
-- Health: check `systemctl status caddy`, `caddy validate --config /etc/caddy/Caddyfile`, `journalctl -u caddy`, the `/srv/opencorvus/current` symlink, public root/market routes, and `/expert-squads/catalog.json`.
+- Health: check `systemctl status caddy opencorvus-web`, `caddy validate --config /etc/caddy/Caddyfile`, both journals, the `/srv/opencorvus/current` symlink, `/health/ready`, both language Market list/detail routes, one exact archive response, and `/expert-squads/catalog.json`.
 - Rollback: invoke the root-owned activator only through the reviewed release contract; never repoint `current` to an unvalidated directory manually.
-- Signing rotation: first add the new public root and secondary key/ID, publish a successful dual-signature `daily` release, then promote the new key, remove the secondary secret/ID and old root, and publish a second successful new-only release.
+- Backups: every activation creates a consistent pre-migration SQLite snapshot with `VACUUM INTO`; activation metadata is bounded to four releases. The hardened timer retains 7 daily and 4 weekly local snapshots plus a SHA-256 inventory of every immutable ZIP blob required by each snapshot. Off-host replication must copy the selected database snapshot, its checksum, its blob inventory, and every `blobs/sha256/**` file named by that inventory. Verify the database manifest from the backup directory (`cd /var/lib/opencorvus-web/backups && sha256sum --check <snapshot>.sqlite3.sha256`) and verify the blob inventory from the state root (`cd /var/lib/opencorvus-web && sha256sum --check backups/<snapshot>.sqlite3.blobs.sha256`), including at the destination. Destination credentials and a successful restore drill remain required production inputs. Copying a live Write-Ahead Logging (WAL) database file is not a valid backup.
+- Signing rotation: first add the new browser root and secondary key/ID and publish a dual-signature release. Before promoting that key as the primary deploy signer, use the manual root boundary to replace `/etc/opencorvus/deploy-signing-public.pem`, verify its fingerprint and a real full-manifest signature, and retain the old PEM. Then promote CI, publish, remove the old browser signer/root, and publish new-only. Browser overlap alone does not rotate the host deployment root.
 - Deploy-key rotation: append and test the new public key, replace the GitHub secret, require one successful real deployment, then converge `authorized_keys` to the new key.
 
 ## Required facts
 
-Before the first deployment, record the RackNerd server IP, SSH port, operating system, existing listeners/services, deploy username, and the exact SSH host-key fingerprint. Inspect the server read-only before changing Caddy or `/srv/opencorvus`.
+Before the first database-backed deployment, record the RackNerd server IP, SSH port, operating system, free disk and memory, existing listeners/services, Bun version/path, systemd availability, OpenSSL version and Ed25519 verification support, deploy username, exact SSH host-key fingerprint, off-host backup destination, and tested restore capacity. Require enough free space for the candidate, immutable blobs, live database, pre-deploy snapshot, and rollback copy (at least three times the measured Registry state plus the normal release reserve). Inspect the server read-only before changing Caddy, systemd, `/srv/opencorvus`, or `/var/lib/opencorvus-web`.
 
 ## Server boundary
 
-- Install Caddy from its official repository plus Python 3, curl, GNU tar, and GNU coreutils; place `Caddyfile` at `/etc/caddy/Caddyfile`.
+- Install Caddy from its official repository plus pinned Bun, pinned OpenSSL with Ed25519 `pkeyutl` support, Python 3, curl, GNU tar, GNU coreutils, and util-linux `flock`; place `Caddyfile` at `/etc/caddy/Caddyfile`.
 - Create a non-root deploy user with no interactive administration authority.
-- Create the dedicated `/srv/opencorvus` tree, including `incoming` and `releases`, owned by that deploy user with mode `0755`; this ownership is required for atomic `current`/`previous` pointer replacement. The account owns no parent directory, `/etc/caddy`, systemd unit, or unrelated site.
-- Install `opencorvus-activate-release` as root-owned mode `0755` at `/usr/local/bin/opencorvus-activate-release`.
-- Validate and reload Caddy once after the configuration is installed. Later content releases switch only the `/srv/opencorvus/current` symlink and do not reload Caddy.
+- Create `/srv/opencorvus`, `releases`, and the `current`/`previous` pointers as root-owned and not group/world writable. Only `/srv/opencorvus/incoming` is writable by the deploy user so CI can stage one release inbox. The root activator alone creates immutable releases and switches pointers; possession of the SSH deploy key cannot bypass the signed manifest by replacing the static root or server entrypoint.
+- Create the locked `opencorvus-web` service account and `/var/lib/opencorvus-web` owned by it with mode `0750`; the database itself is mode `0600`. Create `/var/lib/opencorvus-deploy/rollbacks` separately as root-owned mode `0700`, outside the web unit's `ReadWritePaths`. Database/Caddy/unit/activator rollback copies and state markers live only there. The deploy and web accounts must not be able to read or modify those rollback materials or signing material.
+- Install `opencorvus-activate-release` and `opencorvus-registry-backup` as root-owned mode `0755` under `/usr/local/bin`. Install the web/backup service and timer units as root-owned mode `0644`, and install the reviewed `opencorvus-deploy.sudoers` with `visudo -cf` validation as root-owned mode `0440`, then run `systemctl daemon-reload`.
+- Install the committed `deploy-signing-public.pem` as root-owned, non-writable mode `0644` at `/etc/opencorvus/deploy-signing-public.pem`. Verify its SubjectPublicKeyInfo bytes against the committed PEM and the current public signing root, then verify a real full-manifest signature. Public provenance matched `MCow…XAiM=` on 2026-08-12; production ownership/content still require host inventory.
+- Enable the web service only after candidate import succeeds and the backup timer only after readiness succeeds. Do not broaden either service's `ReadWritePaths`.
+- Grant the deploy account passwordless sudo for the exact root-owned activator command only. The committed rule requires `env_reset`, `NOSETENV`, and a fixed `secure_path`; the activator independently clears every test/path override and fixes `PATH` whenever its effective user is root. It receives no general systemctl, file-copy, shell, database, or Caddy privileges.
+- CI signs the exact `client/` + `server/` deploy manifest after every file is final. The activator verifies it against the root-pinned PEM, proves exact file-set equality and every file digest, and only then may transactionally replace Caddy, the web service unit, or the activator. The backup program/service/timer, sudo rule, and deployment public key are root-bootstrap assets: routine activation requires their candidate bytes to equal the installed root-owned copies and fails closed on a difference. Upgrading any of those four contracts requires an announced manual root change, validation, and retained previous copy before CI can deploy a candidate containing the new bytes.
 - Keep the Caddy loopback readiness listener on `127.0.0.1:8080`; the activator uses it to verify exact served bytes without depending on public DNS or a public certificate. It is not exposed on the server's public interfaces.
 - Keep `current`, `previous`, and the three newest additional immutable releases. After a healthy switch the activation script removes that release's exact validated inbox and prunes only older unreferenced directories whose names match the release-ID contract.
+- Activation, explicit rollback, and the daily backup timer all hold the same state-root `flock`; database snapshot/import/restore and backup retention cannot overlap. The signed activator update is part of the rollback transaction. Inbox and old-retention cleanup happen after the commit point and report warnings without misreporting a healthy switch as failed.
+
+## One-time static-to-database migration
+
+1. Complete the required read-only inventory and take a recoverable snapshot of the current Caddy configuration, activator, release pointers, and host state. Record `openssl version` and prove Ed25519 verification. Do not run the new activator until Bun, OpenSSL, the service account, persistent state directory, root-pinned deploy key, backup timer, systemd boundary, and exact sudo rule are present.
+2. Stage one signed candidate containing `client/` and `server/`. The server artifact contains the single bundled Astro runtime, Registry control executable, import seed, Caddy configuration, systemd unit, and activator. Production never receives a signing private key.
+3. Let the activator copy the deploy-user inbox into a root-only scratch directory, then validate candidate hashes and signed catalog/bundle bindings from that stable copy. It stops the single writer, creates the consistent pre-deploy database snapshot in the root-only rollback store, reconstructs every seed projection from the signed ZIP archives, imports the candidate publication without activating it early, atomically switches the release, installs the reviewed unit/configuration, and starts the service.
+4. Require loopback liveness/readiness, schema checksum, SQLite integrity and foreign-key checks, blob digest/size checks, English and Chinese Market list/detail pages, signed pointer bytes, and one exact archive byte binding before success. The initial import total is read from the signed seed; it is not a hard-coded historical count.
+5. On any failure, the activator restores the previous release pointer, database snapshot, Caddy configuration, systemd unit, and prior service state. Newly copied content-addressed blobs may remain unreferenced for later controlled garbage collection; never recursively delete them in the failure path.
+6. After the first successful switch, reboot once during an announced maintenance window and repeat readiness, bilingual page, archive, and public HTTPS checks. Record the measured recovery time objective (RTO); the target is no more than 30 minutes, with recovery point objective (RPO) no more than 24 hours after daily off-host backup begins.
+
+For a disaster restore, provision an empty state root, restore one daily/weekly snapshot and verify its `.sqlite3.sha256` manifest from the directory containing that snapshot, restore every relative blob path listed in its `.blobs.sha256` inventory, verify the blob inventory from the state root, set ownership/modes, and only then start the old matching release. `/health/ready`, both locale routes, and an exact archive response are the restore acceptance checks. A database-only copy is incomplete and must never be reported as a Registry backup.
 
 ## GitHub production environment
 
@@ -108,7 +126,7 @@ Variables:
 - `EXPERT_SQUAD_BOOTSTRAP_PUBLICATION_EXPIRES_AT` — explicit future UTC timestamp held unchanged across the two bootstrap runs
 - `OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED` — repository-level safety switch; leave unset or `false` during bootstrap, then set exactly `true` only after `bootstrap-verify` succeeds
 
-The signing/deploy job downloads the digest-verified build artifact without checking out the repository. It signs with fixed runner/OpenSSL operations, removes the private key before packaging or SSH, verifies the server host key, uploads an immutable release, and invokes the preinstalled activation command.
+The signing/deploy job downloads the digest-verified `client/` + `server/` build artifact without checking out the repository. It signs with fixed runner/OpenSSL operations, removes the private key before packaging or SSH, verifies the server host key, uploads an immutable release, and invokes the preinstalled activation command through its exact sudo rule. The catalog signature authenticates the desktop publication contract; the separate full deploy-manifest signature authenticates every privileged server/client artifact. If the primary key rotates before the root-pinned host key is updated and verified, deployment must stop rather than use a fallback key.
 
 Daily publication derives its version as `GitHub workflow run number * 1000 + run attempt`, fails if that value is not a JavaScript safe integer, and derives a fresh expiry 90 days from signing time. GitHub defines the workflow run number as incrementing for every new run of this workflow and the attempt as incrementing for each rerun. Matching pushes deploy automatically after the safety switch is enabled, and a monthly scheduled run renews the signed pointer even when the source is unchanged. A manual `daily` run uses the same automatic derivation. Equal-version replay and rollback are rejected on the server. The optional second signer creates an overlap publication with threshold one so pages carrying either trusted root can verify it. Remove the old signer and old public root only after the overlap release has propagated.
 
@@ -120,7 +138,7 @@ The immutable release ID is `<commit SHA>-<publication-pointer SHA-256 prefix>`.
 
 The first release is a deliberate three-stage operation; ordinary pushes use only the later daily path:
 
-1. Manually run `deploy opencorvus.com` with `deployment_mode=bootstrap-stage`. It uploads and activates the immutable candidate, then the server validates the homepage, pointer, catalog, signature envelope, and bundle through the loopback readiness listener. It intentionally does not call the public domain.
+1. Manually run `deploy opencorvus.com` with `deployment_mode=bootstrap-stage`. It uploads and activates the immutable candidate, then validates database readiness, both language Market routes, one exact archive, the homepage, pointer, catalog, signature envelope, and bundle through loopback. It intentionally does not call the public domain.
 2. Only after that run succeeds, replace the GoDaddy apex A record with the RackNerd IPv4 address, keep `www` as a CNAME to the apex, and remove conflicting parked-site A/AAAA records. Wait for public DNS convergence and Caddy's public certificate issuance.
 3. Without changing the source revision, signing keys, bootstrap publication version, or bootstrap expiry, manually rerun the workflow with `deployment_mode=bootstrap-verify`. This mode does not upload or activate a release; it requires the public pointer to be byte-identical to the staged candidate and verifies all content-addressed bytes over public HTTPS.
 

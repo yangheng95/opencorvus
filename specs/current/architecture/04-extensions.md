@@ -546,6 +546,10 @@ update / uninstall 在写成功后直接推进它；Task 内执行的 Multica �
 
 文件：`agent.ts` · `session.ts` · `types.ts`（README 存于目录内）。
 
+## Public Market runtime
+
+公共网站的 Expert Squad Market 已不再由构建期 TypeScript 清单或本地文件系统 simulation 提供运行时数据。生产 Market、详情、Registry API 与健康检查以单一 active SQLite publication 为事实源，ZIP 使用 release 外的不可变内容寻址 blob；签名目录仍只承担桌面批量安装的信任合同。完整服务、签名、部署、回滚和灾备边界见 [public-website.md](public-website.md)。
+
 ## 常见误区
 
 1. **"Codex Provider plugin 会把 Codex 变成 Task runtime 吗？"** — 不会。Provider plugin 只负责

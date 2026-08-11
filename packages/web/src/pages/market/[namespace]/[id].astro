@@ -1,15 +1,16 @@
 ---
 import SquadDetailPage from "../../../components/SquadDetailPage.astro"
-import { publicSquadRecords } from "../../../content/public-market"
+import PublicSiteLayout from "../../../components/PublicSiteLayout.astro"
+import { getWebsiteRegistry } from "../../../lib/website-registry"
 
-export function getStaticPaths() {
-  return publicSquadRecords.map((record) => ({
-    params: { namespace: record.identity.namespace, id: record.identity.id },
-    props: { record },
-  }))
-}
-
-const { record } = Astro.props
+export const prerender = false
+const registry = await getWebsiteRegistry()
+const record = registry.squad(Astro.params.namespace ?? "", Astro.params.id ?? "")
+if (!record) Astro.response.status = 404
 ---
 
-<SquadDetailPage locale="root" {record} />
+{record ? <SquadDetailPage locale="root" {record} /> : (
+  <PublicSiteLayout locale="root" current="market" title="Expert Squad not found · OpenCorvus" description="The requested Expert Squad is not part of the active publication." languageHref="/zh-cn/market/">
+    <main id="main-content" class="public-main"><section class="market-intro"><p class="eyebrow">404</p><h1>Expert Squad not found</h1><p class="section-lead">The requested identity is not part of the active database publication.</p><a class="primary-action" href="/market/">Return to the market</a></section></main>
+  </PublicSiteLayout>
+)}

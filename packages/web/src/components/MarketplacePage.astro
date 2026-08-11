@@ -1,10 +1,15 @@
 ---
 import PublicSiteLayout from "./PublicSiteLayout.astro"
 import WorkflowTopology from "./WorkflowTopology.astro"
-import { publicPath, publicSquadRecords, segmentPublicMarketText, squadPath, type PublicLocale } from "../content/public-market"
+import { publicPath, segmentPublicMarketText, squadPath, type PublicLocale, type PublicSquadRecord } from "../content/public-market"
 import { generatedExpertSquadDistribution } from "../content/expert-squad-distribution.generated"
+import type { WebsitePublicationSummary } from "../lib/website-registry-contract"
 
-const { locale } = Astro.props as { locale: PublicLocale }
+const { locale, records, publication } = Astro.props as {
+  locale: PublicLocale
+  records: PublicSquadRecord[]
+  publication: WebsitePublicationSummary
+}
 const distributionPointer = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/expert-squads/catalog.json`
 const copy =
   locale === "zh-cn"
@@ -14,11 +19,12 @@ const copy =
         languageHref: publicPath("root", "/market/"),
         eyebrow: "全部专家团",
         heading: "先看它能完成什么，再决定要不要把团队带进任务。",
-        lead: `这里展示全部 ${publicSquadRecords.length} 个已发布专家团。每个条目都来自与完整签名资源包相同的库存事实，说明适用场景、角色、工作流与精确版本。`,
-        bundleTitle: `${generatedExpertSquadDistribution.total} 个资源，一份经过验证的完整包`,
+        lead: `这里展示当前数据库发布中的全部 ${records.length} 个专家团。每个条目都从签名资源包的精确 ZIP 内容重建并核对，说明适用场景、角色、工作流与版本。`,
+        bundleKicker: "精确 / 来源 / 修订",
+        bundleTitle: `${publication.total} 个资源，一份经过验证的完整包`,
         bundleBody: "网页会先验证 OpenCorvus 发布签名、发布版本、过期时间与资源计数，再启用下载；ZIP 到达浏览器后还会重算 SHA-256。下载不会安装或激活任何团队。",
-        downloadAll: `下载全部 ${generatedExpertSquadDistribution.total} 个专家团资源`,
-        downloadAllNote: `其中 ${generatedExpertSquadDistribution.embeddedAlreadyAvailable} 个已经内置于客户端，${generatedExpertSquadDistribution.bundledMarketImportable} 个可由客户端导入。`,
+        downloadAll: `下载全部 ${publication.total} 个专家团资源`,
+        downloadAllNote: `其中 ${publication.embeddedAlreadyAvailable} 个已经内置于客户端，${publication.bundledMarketImportable} 个可由客户端导入。`,
         downloadPreparing: "正在读取当前签名发布…",
         downloadVerifying: "正在校验资源包字节与 SHA-256…",
         downloadReady: "签名目录与内容寻址资源包已经匹配。",
@@ -54,12 +60,13 @@ const copy =
         languageHref: publicPath("zh-cn", "/market/"),
         eyebrow: "All Expert Squads",
         heading: "Understand what the team can finish before bringing it into the mission.",
-        lead: `This page presents all ${publicSquadRecords.length} published Expert Squads. Every record comes from the same inventory facts as the complete signed bundle and explains fit, roles, workflow, and exact revision.`,
-        bundleTitle: `${generatedExpertSquadDistribution.total} resources, one verified bundle`,
+        lead: `This page presents all ${records.length} Expert Squads in the active database publication. Every record is reconstructed and checked against its exact ZIP in the signed bundle, then presented with fit, roles, workflow, and version.`,
+        bundleKicker: "Exact / source / revision",
+        bundleTitle: `${publication.total} resources, one verified bundle`,
         bundleBody:
           "The page verifies the OpenCorvus publication signature, publication version, expiry, and resource counts before enabling download. It recomputes SHA-256 after the ZIP reaches the browser. Downloading never installs or activates a team.",
-        downloadAll: `Download all ${generatedExpertSquadDistribution.total} Expert Squad resources`,
-        downloadAllNote: `${generatedExpertSquadDistribution.embeddedAlreadyAvailable} are already embedded in the client and ${generatedExpertSquadDistribution.bundledMarketImportable} can be imported by the client.`,
+        downloadAll: `Download all ${publication.total} Expert Squad resources`,
+        downloadAllNote: `${publication.embeddedAlreadyAvailable} are already embedded in the client and ${publication.bundledMarketImportable} can be imported by the client.`,
         downloadPreparing: "Reading the current signed publication…",
         downloadVerifying: "Verifying bundle bytes and SHA-256…",
         downloadReady: "The signed catalog matches the content-addressed bundle.",
@@ -109,6 +116,7 @@ const copy =
           <p class="section-lead">{copy.lead}</p>
         </div>
         <aside id="complete-bundle" class="registry-fact">
+          <span class="registry-fact-kicker">{copy.bundleKicker}</span>
           <strong>{copy.bundleTitle}</strong>
           <p>{copy.bundleBody}</p>
           <div
@@ -174,11 +182,11 @@ const copy =
             data-market-status
             data-count-suffix={copy.suffix}
             data-empty-status={copy.emptyTitle}
-          >{publicSquadRecords.length} {copy.suffix}</span>
+          >{records.length} {copy.suffix}</span>
           <span>{copy.snapshot}</span>
         </div>
         <div class="market-results">
-          {publicSquadRecords.map((record) => (
+          {records.map((record) => (
             <a
               class="market-record"
               href={squadPath(locale, record)}

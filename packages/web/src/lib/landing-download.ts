@@ -113,7 +113,7 @@ function discoverPlatformDownload(repoRoot: string, definition: LandingArtifactD
     platform: definition.platform,
     version,
     sourceDirectory,
-    destinationDirectory: path.resolve(repoRoot, "packages/web/dist/downloads", definition.platform),
+    destinationDirectory: path.resolve(repoRoot, "packages/web/dist/client/downloads", definition.platform),
     sourceFileName: installer.fileName,
     downloadFileName,
     publicRelativePath: `downloads/${definition.platform}/${downloadFileName}`,

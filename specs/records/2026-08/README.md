@@ -2,6 +2,8 @@
 
 - [2026-08-12-orchestrator-wake-turn-serialization-repair.md](2026-08-12-orchestrator-wake-turn-serialization-repair.md) diagnoses the visible control-Message/runtime-contract standby race, failed-head FIFO overtake, cross-boundary cancellation recognition, and exact physical Turn settlement requirements exposed by a second real stranded Task.
 
+- [2026-08-12-public-website-database-backend.md](2026-08-12-public-website-database-backend.md) replaces the public website's filesystem Registry simulation and static Market data path with one production SQLite publication/query/response-count authority, on-demand Astro Market routes, immutable content-addressed Expert Squad blobs, and transactionally coordinated static/application deployment and rollback.
+
 - [2026-08-12-local-database-rebuild-and-startup-recovery.md](2026-08-12-local-database-rebuild-and-startup-recovery.md) diagnoses healthy current-schema SQLite state plus 65 legacy Windows supervisor artifacts, then plans a strict export/new-database import, verified canonical switch, recoverable artifact archival, and real backend health proof.
 
 - [2026-08-12-permission-two-mode-calibration-plan.md](2026-08-12-permission-two-mode-calibration-plan.md) re-audits the current mixed permission/capability system and defines one `Full access` / `Ask me` authority model, central invocation gate, durable approval ledger, restart-safe waiting contract, no-fallback cutover, and real-path acceptance matrix calibrated against current industry practice.

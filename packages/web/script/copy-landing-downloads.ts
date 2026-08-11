@@ -16,7 +16,7 @@ for (const download of downloads) {
 
 console.log(`Copied ${downloads.length} canonical landing installer${downloads.length === 1 ? "" : "s"}`)
 
-const distributionDestination = path.resolve(import.meta.dir, "../dist/expert-squads")
+const distributionDestination = path.resolve(import.meta.dir, "../dist/client/expert-squads")
 await mkdir(path.dirname(distributionDestination), { recursive: true })
 await cp(distributionOutputRoot, distributionDestination, { recursive: true, force: true })
 console.log("Copied the canonical Expert Squad static distribution")

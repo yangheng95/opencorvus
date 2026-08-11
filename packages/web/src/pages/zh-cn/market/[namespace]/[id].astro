@@ -1,15 +1,16 @@
 ---
 import SquadDetailPage from "../../../../components/SquadDetailPage.astro"
-import { publicSquadRecords } from "../../../../content/public-market"
+import PublicSiteLayout from "../../../../components/PublicSiteLayout.astro"
+import { getWebsiteRegistry } from "../../../../lib/website-registry"
 
-export function getStaticPaths() {
-  return publicSquadRecords.map((record) => ({
-    params: { namespace: record.identity.namespace, id: record.identity.id },
-    props: { record },
-  }))
-}
-
-const { record } = Astro.props
+export const prerender = false
+const registry = await getWebsiteRegistry()
+const record = registry.squad(Astro.params.namespace ?? "", Astro.params.id ?? "")
+if (!record) Astro.response.status = 404
 ---
 
-<SquadDetailPage locale="zh-cn" {record} />
+{record ? <SquadDetailPage locale="zh-cn" {record} /> : (
+  <PublicSiteLayout locale="zh-cn" current="market" title="未找到专家团 · OpenCorvus" description="请求的专家团不在当前发布中。" languageHref="/market/">
+    <main id="main-content" class="public-main"><section class="market-intro"><p class="eyebrow">404</p><h1>未找到专家团</h1><p class="section-lead">请求的精确身份不在当前数据库发布中。</p><a class="primary-action" href="/zh-cn/market/">返回专家团市场</a></section></main>
+  </PublicSiteLayout>
+)}

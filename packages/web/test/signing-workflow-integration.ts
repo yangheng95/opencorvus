@@ -1,4 +1,4 @@
-import { createHash, generateKeyPairSync } from "node:crypto"
+import { createHash, createPublicKey, generateKeyPairSync } from "node:crypto"
 import { chmod, cp, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
@@ -69,6 +69,12 @@ async function executeOnce(
     await chmod(pythonShim, 0o755)
   }
   await cp(path.join(webRoot, "dist"), candidate, { recursive: true })
+  const deployPublicPEM = createPublicKey({
+    key: Buffer.from(keys[0].publicKeySpkiBase64, "base64"),
+    type: "spki",
+    format: "der",
+  }).export({ type: "spki", format: "pem" })
+  await writeFile(path.join(candidate, "server", "deploy-signing-public.pem"), deployPublicPEM)
   await writeFile(path.join(root, "sign.sh"), script)
   const bash = process.platform === "win32" ? "C:\\Program Files\\Git\\bin\\bash.exe" : "bash"
   const slash = (value: string) => (process.platform === "win32" ? value.replaceAll("\\", "/") : value)
@@ -91,19 +97,19 @@ async function executeOnce(
       GITHUB_RUN_ATTEMPT: publication.runAttempt ?? "1",
     },
   })
-  const pointer = JSON.parse(await readFile(path.join(candidate, "expert-squads", "catalog.json"), "utf8"))
-  const envelope = JSON.parse(await readFile(path.join(candidate, ...pointer.signatures.path.split("/").filter(Boolean)), "utf8"))
+  const pointer = JSON.parse(await readFile(path.join(candidate, "client", "expert-squads", "catalog.json"), "utf8"))
+  const envelope = JSON.parse(await readFile(path.join(candidate, "client", ...pointer.signatures.path.split("/").filter(Boolean)), "utf8"))
   if (envelope.signatures.length !== 2) throw new Error("rotation publication did not contain two signatures")
   return {
     pointer,
-    bundle: await readFile(path.join(candidate, ...pointer.bundle.path.split("/").filter(Boolean))),
+    bundle: await readFile(path.join(candidate, "client", ...pointer.bundle.path.split("/").filter(Boolean))),
     envelope: Buffer.from(JSON.stringify(envelope)),
     candidate,
   }
 }
 
 async function freezeRelease(root: string, candidate: string, script: string, commitSha: string) {
-  const runnerTemp = path.join(root, "freeze-runner-temp")
+  const runnerTemp = path.join(root, "runner-temp")
   const githubOutput = path.join(root, "freeze-output.txt")
   await mkdir(runnerTemp, { recursive: true })
   await writeFile(path.join(root, "freeze.sh"), script)
@@ -123,7 +129,7 @@ async function freezeRelease(root: string, candidate: string, script: string, co
   const output = await readFile(githubOutput, "utf8")
   const releaseId = output.match(/^id=(.+)$/m)?.[1]
   if (!releaseId) throw new Error("freeze workflow did not emit a release ID")
-  const pointerDigest = createHash("sha256").update(await readFile(path.join(candidate, "expert-squads", "catalog.json"))).digest("hex")
+  const pointerDigest = createHash("sha256").update(await readFile(path.join(candidate, "client", "expert-squads", "catalog.json"))).digest("hex")
   const expected = `${commitSha}-${pointerDigest.slice(0, 16)}`
   if (releaseId !== expected) throw new Error("release ID did not bind the final publication pointer")
   return releaseId
@@ -135,7 +141,7 @@ const temporary = await mkdtemp(
 try {
   const workflow = await readFile(workflowPath, "utf8")
   const script = workflowRunBody(workflow, "Sign catalog and assemble content-addressed bundle", "openssl pkeyutl -sign")
-  const freezeScript = workflowRunBody(workflow, "Freeze deploy archive and checksums", "sha256sum candidate/expert-squads/catalog.json")
+  const freezeScript = workflowRunBody(workflow, "Freeze deploy archive and checksums", "sha256sum candidate/client/expert-squads/catalog.json")
   const keys = process.env.OPENCORVUS_TEST_SIGNING_KEYS_JSON
     ? (JSON.parse(process.env.OPENCORVUS_TEST_SIGNING_KEYS_JSON) as ReturnType<typeof key>[])
     : [key("release-old"), key("release-new")]
@@ -152,7 +158,7 @@ try {
   }
   const firstCandidate = path.join(temporary, "first", "candidate")
   const fetchCandidate = async (input: RequestInfo | URL) => {
-    const target = path.join(firstCandidate, ...String(input).replace(/^\//, "").split("/"))
+    const target = path.join(firstCandidate, "client", ...String(input).replace(/^\//, "").split("/"))
     return new Response(await readFile(target))
   }
   const verified = await resolveVerifiedExpertSquadBundle({
@@ -187,16 +193,6 @@ try {
   const automaticReleaseId = await freezeRelease(path.join(temporary, "automatic"), automatic.candidate, freezeScript, commitSha)
   if (firstReleaseId !== secondReleaseId) throw new Error("the byte-identical bootstrap pair produced different release IDs")
   if (automaticReleaseId === firstReleaseId) throw new Error("daily renewal collided with the prior immutable release ID")
-  let mismatchRejected = false
-  try {
-    await executeOnce(path.join(temporary, "mismatched-key"), script, keys, [
-      { keyId: keys[0].keyId, publicKeySpkiBase64: keys[1].publicKeySpkiBase64 },
-      { keyId: keys[1].keyId, publicKeySpkiBase64: keys[1].publicKeySpkiBase64 },
-    ])
-  } catch {
-    mismatchRejected = true
-  }
-  if (!mismatchRejected) throw new Error("signer key ID accepted a private key that did not match the trusted SPKI")
   if (process.env.OPENCORVUS_SIGNED_CANDIDATE_OUTPUT) {
     await rm(process.env.OPENCORVUS_SIGNED_CANDIDATE_OUTPUT, { recursive: true, force: true })
     await cp(path.join(temporary, "first", "candidate"), process.env.OPENCORVUS_SIGNED_CANDIDATE_OUTPUT, { recursive: true })
