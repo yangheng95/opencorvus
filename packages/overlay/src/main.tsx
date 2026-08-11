@@ -109,10 +109,7 @@ import {
   type ExpertSquadOption,
 } from "./services/expert-squad"
 import { loadMissionSkillCatalog } from "./services/mission-skill"
-import {
-  loadGlobalComposerReferences,
-  searchGlobalComposerExpertSquads,
-} from "./services/global-composer-references"
+import { loadGlobalComposerReferences, searchGlobalComposerExpertSquads } from "./services/global-composer-references"
 import { resolveComposerSubmitRoute } from "./services/composer-submit-route"
 import {
   VisibleComposerReferences as VisibleComposerReferencesSchema,
@@ -872,9 +869,12 @@ async function deleteMissionBoardMission(mission: MissionRecord): Promise<boolea
   if (!deleted) throw new Error(t("mission_board.delete.failed"))
 
   if (boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === mission.sessionID) {
-    runPostCommitUiEffect({ id: `mission:delete-selection:${mission.missionID}`, title: "Mission deletion committed" }, () => {
-      void selectTask("").catch((error) => reportOverlayRuntimeError("mission-board.delete-selection", error))
-    })
+    runPostCommitUiEffect(
+      { id: `mission:delete-selection:${mission.missionID}`, title: "Mission deletion committed" },
+      () => {
+        void selectTask("").catch((error) => reportOverlayRuntimeError("mission-board.delete-selection", error))
+      },
+    )
   }
   setMissionSharedRefreshToken((value) => value + 1)
   reportSuccess({
@@ -1649,11 +1649,7 @@ document.addEventListener(
   listenerOpts,
 )
 
-window.addEventListener(
-  "acceptance:focus-changes",
-  requestReviewPanel,
-  listenerOpts,
-)
+window.addEventListener("acceptance:focus-changes", requestReviewPanel, listenerOpts)
 
 function installGlobalBridges(): void {
   ;(window as any).renderMarkdown = renderMarkdown
@@ -1762,7 +1758,10 @@ async function refreshExpertSquads(
   await promise
 }
 
-async function searchComposerExpertSquads(query: string, selectedExpertSquadIDs: readonly string[] = []): Promise<void> {
+async function searchComposerExpertSquads(
+  query: string,
+  selectedExpertSquadIDs: readonly string[] = [],
+): Promise<void> {
   const sequence = ++expertSquadSearchSequence
   const requestKey = composerReferenceCatalogRequestKey()
   const scope = composerReferenceCatalogScope()
@@ -2775,7 +2774,6 @@ window.addEventListener("beforeunload", () => {
 installSystemThemeListener(() => applyTheme(settingsStore.theme))
 
 // ── Init ──
-
 ;(window as any).__overlayInitSettled = false
 runMainAsync("initApp", async () => {
   try {
