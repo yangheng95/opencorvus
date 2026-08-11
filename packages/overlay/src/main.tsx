@@ -154,6 +154,7 @@ import {
 } from "./services/workspace"
 import { openGoalDialog } from "./services/dialog"
 import { openConfigDialog } from "./services/config-dialog-control"
+import { installClipboardApiKeyPrompt } from "./services/clipboard-api-key-prompt"
 import { cardTreeStore } from "./store/card-tree"
 import { composerDraftKey, composerDraftText, setComposerDraft } from "./services/composer-draft"
 import { normalizeDebugDirectory } from "./utils/debug-text"
@@ -2556,6 +2557,8 @@ disposers.push(render(() => <OverlayRoot />, overlayAppHost))
 await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
 await showOverlayWindow()
 disposers.push(await installExpertSquadInstallHandoffBridge())
+const clipboardApiKeyPrompt = installClipboardApiKeyPrompt()
+disposers.push(() => clipboardApiKeyPrompt.dispose())
 
 // ── Right dock width resize ──
 // The right dock is resized by dragging `#rightDockResizer`. Width persists to
@@ -2711,6 +2714,7 @@ runMainAsync("initApp", async () => {
       },
       onConnected: async () => {
         await focusInitialRestoredTaskWorkspace()
+        void clipboardApiKeyPrompt.checkNow()
         void checkDesktopUpdate({ background: true })
       },
     })
