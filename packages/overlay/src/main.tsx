@@ -98,10 +98,15 @@ import {
 import { panelMessage } from "./services/chat"
 import { loadConversationCapability } from "./services/conversation-capability"
 import {
+  expertSquadPublicMarketURL,
   inspectExpertSquad,
+  installExpertSquadMarketPackage,
   loadExpertSquadCatalog,
+  loadExpertSquadMarket,
   searchExpertSquads,
   type ExpertSquadCatalogScope,
+  type ExpertSquadMarketIndexItem,
+  type ExpertSquadOption,
 } from "./services/expert-squad"
 import { loadMissionSkillCatalog } from "./services/mission-skill"
 import {
@@ -1150,6 +1155,63 @@ async function openExpertSquadMarketForProject(projectDirectory?: string): Promi
   await openConfigDialog("expert-squad-install")
 }
 
+async function searchMissionMarketExpertSquads(
+  projectDirectory: string,
+  query: string,
+): Promise<readonly ExpertSquadMarketIndexItem[]> {
+  const page = await loadExpertSquadMarket(projectDirectory, {
+    query: query.trim().slice(0, 500),
+    availability: "available",
+    limit: 3,
+  })
+  return page.entries
+}
+
+async function searchMissionProjectExpertSquads(
+  projectDirectory: string,
+  query: string,
+  preservedExpertSquadIDs: readonly string[],
+): Promise<readonly ExpertSquadOption[]> {
+  async function loadAll(searchQuery: string): Promise<ExpertSquadOption[]> {
+    const entries: ExpertSquadOption[] = []
+    let cursor: string | undefined
+    do {
+      const page = await searchExpertSquads({
+        directory: projectDirectory,
+        query: searchQuery.trim().slice(0, 500),
+        productPillar: composerIntent().productPillar,
+        cursor,
+        limit: 20,
+      })
+      entries.push(...page.entries)
+      cursor = page.next_cursor ?? undefined
+    } while (cursor)
+    return entries
+  }
+
+  const entries = await loadAll(query)
+  for (const preservedID of new Set(preservedExpertSquadIDs.map((id) => id.trim()).filter(Boolean))) {
+    if (entries.some((entry) => entry.id === preservedID)) continue
+    const preserved = (await loadAll(preservedID)).find((entry) => entry.id === preservedID)
+    if (preserved) entries.push(preserved)
+  }
+  return entries
+}
+
+async function installMissionMarketExpertSquad(
+  projectDirectory: string,
+  item: ExpertSquadMarketIndexItem,
+): Promise<void> {
+  await installExpertSquadMarketPackage(projectDirectory, item.id, "project")
+}
+
+async function openMissionMarketExpertSquad(item: ExpertSquadMarketIndexItem): Promise<void> {
+  const opened = await nativeOpen(
+    expertSquadPublicMarketURL({ namespace: item.namespace, id: item.id, locale: localeTag() }),
+  )
+  if (!opened) throw new Error(t("mission_board.create.market_open_unavailable"))
+}
+
 function assertDebugSelectionCurrent(source: BoardSource): void {
   const current = boardStore.selectedSource
   if (!current || current.kind !== source.kind || current.id !== source.id) {
@@ -1994,10 +2056,14 @@ function OverlayRoot() {
           defaultProjectDirectory={activeDirectory()}
           productPillar={composerIntent().productPillar}
           expertSquads={composerExpertSquadCatalog().squads}
-          onExpertSquadQuery={(query, selectedIDs) => void searchComposerExpertSquads(query, selectedIDs)}
           onInstallMoreExpertSquads={(directory) =>
             void runMainAsync("expert-squad.open-market", () => openExpertSquadMarketForProject(directory))
           }
+          onProjectExpertSquadQuery={searchMissionProjectExpertSquads}
+          onMarketExpertSquadQuery={searchMissionMarketExpertSquads}
+          onInstallMarketExpertSquad={installMissionMarketExpertSquad}
+          onOpenMarketExpertSquad={openMissionMarketExpertSquad}
+          canOpenMarketWebPage={getHostTransport().capabilities.nativeCommands["open-url"]}
           activeExpertSquadID={composerExpertSquadCatalog().activeID}
           onOpenMission={(mission) =>
             runMainAsync("mission-board.open-mission", () => openMissionBoardMission(mission))

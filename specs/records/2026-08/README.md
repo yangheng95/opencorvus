@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-11-mission-market-expert-squad-recommendations.md](2026-08-11-mission-market-expert-squad-recommendations.md) adds query-driven Market discovery to the Mission create entry, ranks package selector, Skill, and prompt evidence, and keeps direct project installation explicit and separate from selection or activation.
+
 - [2026-08-11-clipboard-api-key-provider-prompt.md](2026-08-11-clipboard-api-key-provider-prompt.md) adds a secret-safe native clipboard read boundary, local key-candidate classification, one-process prompt deduplication, and explicit navigation to the canonical LLM Provider settings.
 
   Visual evidence: [confirmation prompt](../../artifacts/2026-08-11-clipboard-api-key-prompt.png) and [Providers destination](../../artifacts/2026-08-11-clipboard-api-key-providers.png).

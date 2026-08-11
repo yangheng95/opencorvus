@@ -1445,6 +1445,53 @@ export namespace ExpertSquadPackageManager {
   const payloadMarketDeclarations = payloadPackageSources.map((source) =>
     ExpertSquadRegistry.loadEmbeddedCatalogDeclaration(source),
   )
+  const MARKET_SKILL_SEARCH_LIMIT = 8_000
+  const MARKET_PROMPT_SEARCH_LIMIT = 14_000
+
+  function payloadSourceText(file: (typeof payloadPackageSources)[number]["files"][string]): string {
+    if (typeof file === "string") return file
+    if (!file) return ""
+    return file.encoding === "utf8" ? file.content : Buffer.from(file.content, "base64").toString("utf8")
+  }
+
+  function boundedPayloadSearchText(
+    source: (typeof payloadPackageSources)[number],
+    matches: (relativePath: string) => boolean,
+    limit: number,
+    perFileLimit: number,
+  ): string {
+    let remaining = limit
+    const selected: string[] = []
+    for (const relativePath of Object.keys(source.files).sort()) {
+      if (!matches(relativePath) || remaining <= 0) continue
+      const text = payloadSourceText(source.files[relativePath]).trim()
+      if (!text) continue
+      const excerpt = text.slice(0, Math.min(remaining, perFileLimit))
+      selected.push(`${relativePath}\n${excerpt}`)
+      remaining -= excerpt.length
+    }
+    return selected.join("\n")
+  }
+
+  const payloadMarketPackageSearchFields = new Map(
+    payloadPackageSources.map((source) => [
+      `${source.namespace}/${source.id}`,
+      {
+        skills: boundedPayloadSearchText(
+          source,
+          (relativePath) => /^skills\/.+\/SKILL\.md$/u.test(relativePath),
+          MARKET_SKILL_SEARCH_LIMIT,
+          2_000,
+        ),
+        prompts: boundedPayloadSearchText(
+          source,
+          (relativePath) => /^agents\/.+\/system\.md$/u.test(relativePath),
+          MARKET_PROMPT_SEARCH_LIMIT,
+          1_200,
+        ),
+      },
+    ]),
+  )
   const payloadMarketSnapshotCache = new Map<
     string,
     {
@@ -1511,6 +1558,7 @@ export namespace ExpertSquadPackageManager {
         })
         .flatMap((entry) => {
           if (!query) return [{ entry, score: null as number | null }]
+          const packageFields = payloadMarketPackageSearchFields.get(`${entry.namespace}/${entry.id}`)
           const score = scoreDiscoveryFields(query, [
             { text: entry.id, weight: 1 },
             { text: entry.name, weight: 1 },
@@ -1518,6 +1566,8 @@ export namespace ExpertSquadPackageManager {
             { text: entry.description ?? "", weight: 0.9 },
             { text: entry.manifest.selector.summary, weight: 0.82 },
             { text: entry.manifest.selector.selection_guidance, weight: 0.72 },
+            { text: packageFields?.skills ?? "", weight: 0.84 },
+            { text: packageFields?.prompts ?? "", weight: 0.76 },
           ])
           return score === undefined ? [] : [{ entry, score }]
         })

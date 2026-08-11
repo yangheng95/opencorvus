@@ -99,8 +99,11 @@ Manager 的 folder/ZIP 安装协议要求 caller 显式选择 `project | global`
 `Global.Path.config/expert-squads/<namespace>/<id>/`；HTTP、OpenAPI、SDK 和 Overlay 使用同一字段，
 不存在默认值、产品名分支或第二入口。普通 folder/ZIP caller 继续显式选择 scope；Generate Agent Squads
 的 SDK authoring 与 Multica import 固定选择 project。Squad Market 使用同一 Manager 安装协议按需安装
-repository-hosted payload；Composer 与 Mission 的 editable Expert Squad picker 只提供打开这个 Market 的动作，
-不会把该动作写成 Squad 选择、激活 profile 或自行安装。旧版本可能留下
+repository-hosted payload；Composer 的 editable Expert Squad picker 提供打开 Market 的动作。Mission 创建入口还会把
+operator 输入的 Expert Squad 查询交给同一 Market 模糊检索；排序输入包括 manifest selector、package-owned Skill 与
+Agent prompt 的 bounded discovery text，并只返回未安装建议。每条建议提供精确 public Market 页面和显式 project-scope
+安装动作；安装完成后只刷新 picker catalog，不会把该动作写成 Squad 选择或激活 profile，也不会自动覆盖现有安装。
+旧版本可能留下
 `.opencorvus/.r/project/expert-squad-payload-provisioning.json`，它不再被读取、写入或作为更新/删除权限；
 旧版本已经安装的 package 原样保留，后续只通过普通显式安装、更新与卸载生命周期管理。普通 package
 replacement 在移动旧 target 前保存 `.package-replacement-<id>.json` 持久 intent；进程在任一 rename
