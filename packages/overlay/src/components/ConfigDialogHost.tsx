@@ -1,6 +1,7 @@
 import { For, Show, createEffect, createMemo, createSignal, onCleanup } from "solid-js"
 import type { JSX } from "solid-js"
 import ExpertSquadPanel from "./settings/ExpertSquadPanel"
+import ExpertSquadMarketPanel from "./settings/ExpertSquadMarketPanel"
 import ConversationCapabilityPanel from "./settings/ConversationCapabilityPanel"
 import { McpResourceManagementPanel, SkillResourceManagementPanel } from "./settings/SkillMarketPanel"
 import ChannelsPanel from "./settings/ChannelsPanel"
@@ -339,9 +340,9 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
       case "work":
         return <ConversationCapabilityPanel experience="work" directory={activeProjectDirectory} />
       case "expert-squad-install":
-        return <ExpertSquadPanel page="install" />
+        return <ExpertSquadMarketPanel />
       case "expert-squad":
-        return <ExpertSquadPanel page="details" />
+        return <ExpertSquadPanel />
       case "channel":
         return <ChannelsPanel directory={activeProjectDirectory()} />
       case "skill":
