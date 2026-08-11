@@ -1,84 +1,75 @@
-# Hollow Desktop Application Icons
+# Transparent-Background Platform Icons and Website Favicon
 
 ## Recall
 
-- User request: make the application logo hollow on every platform; the initial wording noted that Windows currently presents a white background.
-- User correction on 2026-08-12: a white background or white-filled interior is not a cutout. The deliverable must contain real transparent alpha outside the outline and inside the bird silhouette; any white seen on Windows must come from the operating-system surface beneath the icon, not white pixels baked into the asset.
+- Original request: “把所有平台的logo都扣成空心的，至少windows是白底的”.
+- Final user clarification on 2026-08-12: “最开始的图片icon，只裁外边，别给我扣成空心的”. The intended operation is background removal, not a hollow bird: preserve the original filled, multicolor OpenCorvus bird exactly and make only the canvas outside the bird transparent.
+- Additive request: use this same filled transparent-background bird as the website title favicon; the public website currently appears to have no favicon.
 - Acceptance indicators:
-  - the macOS `icon.icns`, Windows `icon.ico`, Linux/runtime PNG family, and Windows Store square-logo family all show the same hollow OpenCorvus bird silhouette;
-  - the bird interior and canvas outside the blue outline are transparent rather than white-filled at 32, 44, 128, and 1024 pixels;
-  - Windows ICO and Windows square-logo assets preserve that alpha cutout, so a white Windows surface can show through without becoming part of the icon artwork;
-  - the generated family remains the exact set referenced by `tauri.conf.json` and the runtime window/tray icon path;
-  - the regular light/dark brand logos rendered inside the application remain unchanged.
+  - macOS ICNS, Windows ICO and Store assets, Linux/runtime PNGs all retain the original dark-blue, blue, accent-blue, and white-eye artwork;
+  - only pixels outside the original bird are transparent; the bird body remains filled;
+  - all 15 standalone PNGs, all 6 Windows ICO frames, and all 8 modern PNG-backed macOS ICNS frames preserve the same filled artwork and transparent exterior;
+  - the website serves one real `favicon.svg` derived mechanically from the canonical brand SVG, and every website page family emits a favicon link;
+  - no obsolete white-backed or hollow rendering path remains.
 - Hard constraints:
-  - preserve `packages/overlay/src/opencorvus-logo-light.svg` as the single geometry source; do not introduce a manually duplicated bird path;
-  - keep icon generation deterministic and use the repository's existing Tauri and Sharp toolchain;
-  - do not add or run User Interface (UI) automation tests; visually inspect the real generated image artifacts;
-  - preserve unrelated dirty-worktree changes and stage only this task;
-  - obtain an independent read-only delivery review after initial verification and repair every valid finding before commit.
-- Materials read:
-  - repository `AGENTS.md` instructions;
-  - `specs/current/architecture/README.md`; no current architecture document defines a desktop application-icon contract;
-  - `packages/overlay/script/generate-app-icons.ts`, `packages/overlay/package.json`, `packages/overlay/src-tauri/tauri.conf.json`, the runtime window/tray icon loading path in `src-tauri/src/main.rs`, the light/dark SVG brand assets, and every current generated desktop icon;
-  - repository history for the icon generator and generated family;
-  - official Tauri application-icon documentation, which identifies ICNS as the macOS artifact, ICO as the Windows artifact, PNG as the Linux artifact, and `Square*Logo.png` / `StoreLogo.png` as AppX or Microsoft Store assets.
-- Repository-wide searches:
-  - `generate-app-icons.ts` is the only generator and currently flattens the filled light brand logo onto white before one Tauri CLI generation pass;
-  - `tauri.conf.json` bundles `32x32.png`, `128x128.png`, `128x128@2x.png`, `icon.icns`, and `icon.ico`;
-  - `src-tauri/src/main.rs` embeds `icon.png` for runtime window and tray projection;
-  - `packages/web/src/components/PublicSiteHeader.astro` also imported the generated runtime PNG even though the public website is not a desktop packaging surface; it must use the stable SVG brand source instead so application-icon generation cannot mutate the website Header;
-  - there is no separate macOS, Windows, or Linux source logo and no prior hollow-icon implementation;
-  - web favicons and in-app light/dark brand logos are separate presentation surfaces and are excluded because the user asked for platform application logos.
-- Independent agent feedback before implementation: none. The mandatory independent delivery review will occur after implementation and first-pass verification.
+  - `packages/overlay/src/opencorvus-logo-light.svg` remains the only editable geometry/color source;
+  - generated desktop assets and website favicon must be deterministic;
+  - do not add or run UI automation; website acceptance uses a real local page, browser inspection, and a screenshot/manual check;
+  - preserve concurrent worktree changes and exclude unrelated specification-index edits from this task's commit;
+  - obtain an independent read-only review after verification.
+- Materials and repository searches:
+  - `packages/overlay/script/generate-app-icons.ts` is the sole desktop icon generator and feeds Tauri's PNG, ICO, ICNS, and AppX/Store outputs;
+  - `tauri.conf.json` and the Rust runtime continue to consume the same generated filenames;
+  - the hollow distance-transform renderer and its outline constants are only called by the generator and its focused test, so they can be deleted without a compatibility layer;
+  - `packages/web/public/favicon*.{svg,ico,png}` and `apple-touch-icon*.png` are 39–48-byte plain-text pointers to a removed `packages/ui/src/assets/favicon` path, not valid image files;
+  - Starlight references the broken `favicon-v3` family, while `PublicSiteLayout.astro` and both standalone architecture pages emit no favicon link;
+  - the public website Header already imports the canonical filled SVG and remains visually unchanged.
+- Independent agent feedback before this final clarification: prior reviews validated the now-rejected hollow implementations. A new independent review is required for the filled transparent-background contract.
 
 ## Analysis
 
-### Observable behavior
+### Observable behavior and direct triggers
 
-All current desktop assets show a solid, multi-blue OpenCorvus bird on a fully opaque white square. The smallest PNG and Windows Store assets preserve the same filled composition, while the macOS ICNS, Windows ICO, Linux PNG, runtime window icon, and tray icon all originate from those pixels.
+The first implementation flattened the canonical filled bird onto white. Two later interpretations converted the bird itself into a blue contour, first on white and then with alpha. Both changed the bird artwork instead of removing only its outside background. The current distance band also fills narrow body regions, which is why the result still looked solid in places while no longer matching the original icon.
 
-### Direct trigger and data/control flow
+The website favicon failure is separate but related: configured favicon URLs resolve to files whose contents are merely stale relative path strings. Custom public and architecture page heads do not reference any favicon at all.
 
-`bun run icons:generate` renders `opencorvus-logo-light.svg` through Sharp, flattens the image onto white, writes a temporary 1024-pixel PNG, and passes it to `tauri icon`. Tauri generates the complete icon family in `src-tauri/icons`; packaging and runtime code then consume different members of that same family.
+### Root cause and single replacement contract
 
-### Root cause and replacement contract
+The canonical SVG already contains the exact filled multicolor bird and has no background rectangle. The correct desktop master is therefore a direct alpha-preserving rasterization of that SVG; no mask, distance transform, outline color, fill replacement, or white flatten is needed.
 
-The generator has only a filled-logo rasterization step, so every platform necessarily receives the filled mark. The replacement belongs in that one generator: derive a binary silhouette mask from the canonical SVG, produce a bounded outline band around the silhouette, color the band with the canonical dark blue, preserve transparent alpha on both sides of the band, and then let Tauri generate every platform container and size from that single hollow master.
+The website favicon must be generated from that same canonical SVG into one real public `favicon.svg`. All website page families reference that single artifact. Obsolete broken favicon variants are deleted so there is one current fact source and one URL.
 
-This keeps one geometry source and one generation path. It deliberately leaves the in-product brand artwork and web favicon family outside the desktop packaging contract.
+### Impact and risk
 
-### Impact, exclusions, and risk
-
-- Definitions and call sites: only the icon generator and its generated `src-tauri/icons` outputs change; `tauri.conf.json` and Rust runtime icon loaders continue to consume the same filenames.
-- Platform assets: macOS ICNS, Windows ICO and Store logos, and Linux/runtime PNGs change together.
-- Transparency: the master must retain alpha. The corner and bird interior must be transparent; only the blue outline and its antialiased edge may carry opacity. A white Windows tile or shell surface is presentation underneath the icon, not raster content.
-- Small-size risk: a mathematically thin contour can disappear after downsampling. The outline width must be selected at 1024 pixels and accepted visually at the smallest generated 30/32/44-pixel outputs.
-- Shape risk: treating each colored region independently would create noisy internal outlines and duplicate brand geometry. The generator therefore outlines the union silhouette only.
-- Excluded: website favicons, social-share images, and in-app light/dark logos are not OS platform application icons and remain unchanged.
-- Cross-package consumer repair: the public website Header is decoupled from the generated runtime PNG and reads the canonical light SVG directly, preserving the existing filled bird presentation while desktop containers become hollow.
+- Desktop asset filenames and all packaging/runtime consumers stay unchanged.
+- The bird's white eye is intentionally retained because it belongs to the original artwork; only the exterior becomes transparent.
+- Small frame risk is color/shape loss during downsampling. Tests compare each generated frame against a direct canonical raster at the same size and require filled-bird coverage plus brand-color agreement.
+- Website changes affect document head output only; Header/body branding and layout remain outside the change.
+- Browser cache can hide favicon changes, so acceptance must inspect the emitted `<link rel="icon">`, its fetched response type/content, and the visible tab on an isolated local server.
 
 ## Implementation plan
 
-1. Extend `generate-app-icons.ts` with one deterministic hollow-silhouette renderer based on the canonical light SVG alpha channel.
-2. Generate a dark-blue ring mask with a transparent interior/background and feed that 1024-pixel master to the existing Tauri CLI path.
-3. Regenerate the complete desktop icon family, retaining the configured filenames and removing mobile-only outputs as before.
-4. Validate dimensions, transparent corner/interior alpha, and non-empty opaque outline pixels through a focused non-UI artifact checker.
-5. Visually inspect the 1024, 128, 44, 32, ICO, and ICNS representations; adjust outline width only from rendered evidence.
-6. Run package typecheck, icon regeneration idempotence/diff checks, Tauri configuration/build-relevant checks, document checks, and `git diff --check`.
-7. Obtain mandatory independent read-only review, repair all valid findings, rerun affected checks, then commit and perform the upstream push safety audit.
+1. Replace the hollow renderer with direct filled SVG rasterization that preserves alpha.
+2. Regenerate and visually inspect the complete 17-file desktop icon family.
+3. Replace hollow-specific tests with positive original-artwork, filled-interior, transparent-exterior, color-fidelity, and all-frame contracts.
+4. Add a deterministic website brand-asset generator, emit one real `favicon.svg`, delete broken variants, and connect all page families to it.
+5. Run focused tests, icon/favicon idempotence, overlay typecheck, Rust host check, web check/build, docs check, and diff checks.
+6. Start an isolated real website, inspect favicon link/fetch/tab presentation, then obtain independent read-only review.
+7. Commit only task files and audit the complete upstream push set.
 
 ## Verification record
 
-The 2026-08-11 white-backed implementation was rejected by the user's 2026-08-12 correction because every pixel was opaque; visually white negative space did not constitute an alpha cutout. The following evidence supersedes that acceptance record:
+First-pass verification for the clarified filled transparent-background contract:
 
-- `renderHollowDesktopIcon` now writes its RGBA outline buffer directly and does not flatten it onto white. Transparent pixels remain on both sides of the blue contour.
-- `bun run icons:generate` from `packages/overlay`: regenerated the complete 17-file desktop family and removed mobile-only outputs through the existing managed temporary-directory lifecycle.
-- Human visual inspection covered the 512-pixel `icon.png`, 32-pixel PNG, and 50-pixel `StoreLogo.png` at original resolution. The viewer's transparency surface is visible outside the mark and through the bird body, while the blue contour remains smooth and recognizable at the small sizes.
-- `bun run script/run-unit-tests.ts test/app-icon-generation.test.ts`: passed 2 positive tests with 152 assertions. The tests validate alpha-bearing master output, transparent corner and center samples, sufficient transparent and visible-outline pixels, all 15 generated PNGs, all 6 Windows ICO frames, all 8 modern PNG-backed macOS ICNS frames, and canonical ICNS chunk ordering.
-- A repeated SHA-256 before/after regeneration audit passed with byte-identical hashes across all 17 desktop assets.
-- `bun run typecheck` from `packages/overlay`: passed.
-- `cargo check --manifest-path packages/overlay/src-tauri/Cargo.toml`: passed the real Tauri host compilation in the `dev` profile.
-- `bun run docs:check`: passed with 330 operations in 25 groups.
-- `git diff --check`: passed.
-- The website Header remains isolated from generated runtime icons through its canonical filled SVG import; no web UI file changed in the correction.
-- Independent read-only re-review inspected the generator, all 15 PNG assets, all 6 Windows ICO frames, all 8 modern macOS ICNS PNG frames, legacy ICNS masks, small-size visuals, tests, runtime/package consumers, specification, and final task diff, and reported **no unresolved findings**.
+- The hollow distance-transform implementation, outline radius, and monochrome outline color were deleted. `renderTransparentDesktopIcon` directly rasterizes the canonical filled SVG with alpha and no flattening or mask transformation.
+- `bun run icons:generate` regenerated the complete 17-file desktop family. Human inspection of `icon.png`, 128px, 32px, and `StoreLogo.png` at original resolution confirmed the original filled dark-blue/base-alt/accent bird and white eye, with only the exterior transparent.
+- `bun test --timeout 60000 ./test/app-icon-generation.test.ts`: passed 2 positive tests with 257 assertions. The tests verify exact master brand colors, filled-bird coverage, transparent exterior, canonical color agreement, separate positive coverage for the base, base-alt, accent, and white-eye regions at every applicable size, all 15 PNGs, all 6 Windows ICO frames, all 8 modern PNG-backed macOS ICNS frames, and canonical ICNS chunk ordering.
+- A repeated SHA-256 regeneration audit passed with byte-identical hashes across all 17 desktop assets.
+- `cargo check --manifest-path packages/overlay/src-tauri/Cargo.toml`: passed the real Tauri host compilation.
+- `packages/web/script/generate-brand-assets.ts` copies the canonical SVG bytes into the single public `favicon.svg`; the focused Bun artifact test passed and SHA-256 hashes are exactly equal. Repeated generation is byte-identical.
+- Seven obsolete favicon/Apple-touch variants containing stale path text were deleted. Repository search found no remaining `favicon-v3`, `favicon-96x96`, `apple-touch-icon`, `favicon.ico`, hollow-renderer, or outline-constant reference.
+- Real-page browser acceptance used an isolated Astro development server at `http://127.0.0.1:4329/`. The public homepage, `/start/install/` documentation page, and `/architecture-explorer/` each emitted one `image/svg+xml` icon link to `/favicon.svg`; directly opening that resource in the browser displayed the original filled multicolor bird. The homepage screenshot also confirmed unchanged Header/body presentation. The tab and isolated servers were closed after acceptance.
+- `bun run docs:check`: passed with 331 operations in 25 groups. `git diff --check`: passed.
+- Two broad checks are currently blocked by unrelated concurrent work: overlay typecheck reports five missing usage-statistic exports in existing settings/service files, while web check/build reports registry typing/import errors in concurrent registry files. The favicon-focused test, real dev-page path, and Tauri host compile pass; none of the reported broad-check errors references a task file.
+- Independent read-only review found that the initial aggregate color-distance contract could allow a monochrome dark-blue regression. The contract was tightened to verify each canonical color region independently (with a small-sample rule for heavily downsampled frames), and the strengthened 257-assertion suite passed. Final independent re-review reported no unresolved findings.

@@ -1,5 +1,6 @@
 ---
 import "../styles/public-site.css"
+import Favicon from "./Favicon.astro"
 import PublicSiteHeader from "./PublicSiteHeader.astro"
 import PublicSiteFooter from "./PublicSiteFooter.astro"
 import config from "../../config.mjs"
@@ -27,6 +28,7 @@ const ogImage = new URL(socialImage ?? `${publicBase}/og.png`, config.url).href
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#f4f1e8" />
+    <Favicon />
     <link rel="canonical" href={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

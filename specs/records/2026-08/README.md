@@ -10,7 +10,7 @@
 
 - [2026-08-12-main-delivery-history-convergence.md](2026-08-12-main-delivery-history-convergence.md) freezes the dirty original worktree, classifies diverged local and remote history by exact and semantic coverage, and defines the reviewed fast-forward-only integration and push boundary.
 
-- [2026-08-11-hollow-desktop-app-icons.md](2026-08-11-hollow-desktop-app-icons.md) replaces the filled desktop application mark with one white-backed hollow silhouette generated consistently for macOS ICNS, Windows ICO/Store, and Linux/runtime PNG assets.
+- [2026-08-11-hollow-desktop-app-icons.md](2026-08-11-hollow-desktop-app-icons.md) preserves the original filled multicolor bird, removes only its exterior background across macOS, Windows, and Linux assets, and provides the website's canonical favicon.
 
 - [2026-08-11-native-platform-message-notifications.md](2026-08-11-native-platform-message-notifications.md) replaces in-app, taskbar/Dock-badge, and custom tray-dot message attention with one native system-notification delivery that also requests platform-native user attention.
 
