@@ -1746,6 +1746,111 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "bridge-structural-integrity-assurance",
+      "version": "2026.08.11.1",
+      "digest": "1bead5450e048dd6d0d97f03fdf421ded2e8744b8266ffe625762d3290bb1598"
+    },
+    "name": "Bridge Structural Integrity Assurance",
+    "label": "Bridge Structural Integrity Assurance",
+    "description": "Bridge asset configuration, element inspection, defect, load-rating, scour, fatigue, maintenance-action and independent QC/QA evidence assurance without posting, closure or engineering-release authority.",
+    "selectorSummary": "Use for controlled bridge inspection and structural-integrity evidence prepared for qualified owner review.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "bridge-asset-configuration-authority-analyst",
+        "label": "Bridge Asset Configuration Authority Analyst",
+        "description": "Freezes bridge/span/element identity, records, modifications, inspection program and professional authority.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "bridge-inspection-condition-defect-analyst",
+        "label": "Bridge Inspection Condition Defect Analyst",
+        "description": "Maps material and element observations to reproducible locations, dimensions, evidence and limitations.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "bridge-load-rating-scour-fatigue-analyst",
+        "label": "Bridge Load Rating Scour and Fatigue Analyst",
+        "description": "Traces supplied analysis models, loads, scour, fatigue/fracture and controlling evidence without engineering decisions.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "bridge-maintenance-action-qcqa-analyst",
+        "label": "Bridge Maintenance Action QC QA Analyst",
+        "description": "Traces findings, owner actions, restrictions as supplied, repair evidence, verification and independent QC/QA.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "bridge-structural-integrity-review-owner",
+        "label": "Bridge Structural Integrity Review Owner",
+        "description": "Joins asset, inspection, analysis and action/QC-QA evidence into a qualified bridge-owner review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Bridge Structural Integrity Assurance Qualified Review",
+        "description": "Independent professional evidence branches converge into one controlled Bridge Structural Integrity Assurance review.",
+        "nodes": [
+          {
+            "id": "bridge-asset-configuration-authority-analyst",
+            "agentID": "bridge-asset-configuration-authority-analyst",
+            "description": "Freezes bridge/span/element identity, records, modifications, inspection program and professional authority.",
+            "dependsOn": []
+          },
+          {
+            "id": "bridge-inspection-condition-defect-analyst",
+            "agentID": "bridge-inspection-condition-defect-analyst",
+            "description": "Maps material and element observations to reproducible locations, dimensions, evidence and limitations.",
+            "dependsOn": []
+          },
+          {
+            "id": "bridge-load-rating-scour-fatigue-analyst",
+            "agentID": "bridge-load-rating-scour-fatigue-analyst",
+            "description": "Traces supplied analysis models, loads, scour, fatigue/fracture and controlling evidence without engineering decisions.",
+            "dependsOn": []
+          },
+          {
+            "id": "bridge-maintenance-action-qcqa-analyst",
+            "agentID": "bridge-maintenance-action-qcqa-analyst",
+            "description": "Traces findings, owner actions, restrictions as supplied, repair evidence, verification and independent QC/QA.",
+            "dependsOn": []
+          },
+          {
+            "id": "bridge-structural-integrity-review-owner",
+            "agentID": "bridge-structural-integrity-review-owner",
+            "description": "Joins asset, inspection, analysis and action/QC-QA evidence into a qualified bridge-owner review pack.",
+            "dependsOn": [
+              "bridge-asset-configuration-authority-analyst",
+              "bridge-inspection-condition-defect-analyst",
+              "bridge-load-rating-scour-fatigue-analyst",
+              "bridge-maintenance-action-qcqa-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "browser-research-acceptance",
       "version": "2026.08.10.1",
       "digest": "2546937834161b5ba42aefe9a804780fdc33013ce7415ca9fc8efee948174033"
@@ -2016,6 +2121,111 @@ export const generatedPublicMarketFacts = [
               "adaptation-options-pathways-analyst",
               "climate-hazard-scenario-analyst",
               "exposure-vulnerability-consequence-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "clinical-genomics-variant-evidence-review",
+      "version": "2026.08.11.1",
+      "digest": "bd93d81f65cbc796c6b1badfa0cafd77544ebe004b16dbc9215aaccd48465729"
+    },
+    "name": "Clinical Genomics Variant Evidence Review",
+    "label": "Clinical Genomics Variant Evidence Review",
+    "description": "Source-versioned clinical genomics variant evidence review across case identity, population and computational evidence, functional and segregation evidence, and classification provenance without diagnosis or classification authority.",
+    "selectorSummary": "Use for qualified, source-bound review of clinical sequence-variant evidence and unresolved conflicts.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "genomic-case-build-identity-analyst",
+        "label": "Genomic Case and Build Identity Analyst",
+        "description": "Freezes case, specimen, phenotype, gene-disease, build, transcript and normalized variant identity.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "population-computational-evidence-analyst",
+        "label": "Population and Computational Evidence Analyst",
+        "description": "Builds versioned population-frequency and computational-evidence observations without clinical interpretation.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "functional-segregation-evidence-analyst",
+        "label": "Functional and Segregation Evidence Analyst",
+        "description": "Traces assay, case, segregation, de novo, allelic and phenotype evidence with independence and quality limits.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "variant-classification-provenance-analyst",
+        "label": "Variant Classification Provenance Analyst",
+        "description": "Maps existing criteria and classifications to controlled specifications, evidence IDs, dates and conflict questions.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "clinical-genomics-variant-evidence-review-owner",
+        "label": "Clinical Genomics Variant Evidence Review Owner",
+        "description": "Joins identity, population/computational, functional/segregation and criteria-provenance branches into a qualified review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Clinical Genomics Variant Evidence Review Qualified Review",
+        "description": "Independent professional evidence branches converge into one controlled Clinical Genomics Variant Evidence Review review.",
+        "nodes": [
+          {
+            "id": "genomic-case-build-identity-analyst",
+            "agentID": "genomic-case-build-identity-analyst",
+            "description": "Freezes case, specimen, phenotype, gene-disease, build, transcript and normalized variant identity.",
+            "dependsOn": []
+          },
+          {
+            "id": "population-computational-evidence-analyst",
+            "agentID": "population-computational-evidence-analyst",
+            "description": "Builds versioned population-frequency and computational-evidence observations without clinical interpretation.",
+            "dependsOn": []
+          },
+          {
+            "id": "functional-segregation-evidence-analyst",
+            "agentID": "functional-segregation-evidence-analyst",
+            "description": "Traces assay, case, segregation, de novo, allelic and phenotype evidence with independence and quality limits.",
+            "dependsOn": []
+          },
+          {
+            "id": "variant-classification-provenance-analyst",
+            "agentID": "variant-classification-provenance-analyst",
+            "description": "Maps existing criteria and classifications to controlled specifications, evidence IDs, dates and conflict questions.",
+            "dependsOn": []
+          },
+          {
+            "id": "clinical-genomics-variant-evidence-review-owner",
+            "agentID": "clinical-genomics-variant-evidence-review-owner",
+            "description": "Joins identity, population/computational, functional/segregation and criteria-provenance branches into a qualified review pack.",
+            "dependsOn": [
+              "functional-segregation-evidence-analyst",
+              "genomic-case-build-identity-analyst",
+              "population-computational-evidence-analyst",
+              "variant-classification-provenance-analyst"
             ]
           }
         ]
@@ -2571,6 +2781,216 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "corporate-governance-entity-secretariat",
+      "version": "2026.08.11.1",
+      "digest": "42c158f9278ef1b7422a71d63034d3afbfe5394da38414bbd2faf285bfd6ba9c"
+    },
+    "name": "Corporate Governance Entity Secretariat",
+    "label": "Corporate Governance Entity Secretariat",
+    "description": "Source-bound corporate entity, governing-body, meeting, consent, resolution, minutes, action, filing-calendar and register evidence preparation without legal, signature or filing authority.",
+    "selectorSummary": "Use for controlled corporate-governance and entity-secretariat evidence prepared for counsel and authorized secretary review.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "entity-authority-governing-record-analyst",
+        "label": "Entity Authority Governing Record Analyst",
+        "description": "Freezes entity identity, jurisdiction, governing documents, body composition and delegated-authority evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "governing-body-meeting-materials-analyst",
+        "label": "Governing Body Meeting Materials Analyst",
+        "description": "Reconciles meeting purpose, notice, agenda, materials, attendance, conflicts and source chronology.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "resolution-minutes-consent-action-analyst",
+        "label": "Resolution Minutes Consent Action Analyst",
+        "description": "Drafts evidence-bound minutes/consent/resolution records and traces actions without signature or effectiveness claims.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "entity-calendar-filing-register-analyst",
+        "label": "Entity Calendar Filing Register Analyst",
+        "description": "Maps counsel-supplied obligations, dates, filings, registers and evidence of completion.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "corporate-governance-entity-secretariat-review-owner",
+        "label": "Corporate Governance Entity Secretariat Review Owner",
+        "description": "Joins authority, meeting, decision/action and entity-calendar evidence into a counsel-ready secretariat pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Corporate Governance Entity Secretariat Qualified Review",
+        "description": "Independent professional evidence branches converge into one controlled Corporate Governance Entity Secretariat review.",
+        "nodes": [
+          {
+            "id": "entity-authority-governing-record-analyst",
+            "agentID": "entity-authority-governing-record-analyst",
+            "description": "Freezes entity identity, jurisdiction, governing documents, body composition and delegated-authority evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "governing-body-meeting-materials-analyst",
+            "agentID": "governing-body-meeting-materials-analyst",
+            "description": "Reconciles meeting purpose, notice, agenda, materials, attendance, conflicts and source chronology.",
+            "dependsOn": []
+          },
+          {
+            "id": "resolution-minutes-consent-action-analyst",
+            "agentID": "resolution-minutes-consent-action-analyst",
+            "description": "Drafts evidence-bound minutes/consent/resolution records and traces actions without signature or effectiveness claims.",
+            "dependsOn": []
+          },
+          {
+            "id": "entity-calendar-filing-register-analyst",
+            "agentID": "entity-calendar-filing-register-analyst",
+            "description": "Maps counsel-supplied obligations, dates, filings, registers and evidence of completion.",
+            "dependsOn": []
+          },
+          {
+            "id": "corporate-governance-entity-secretariat-review-owner",
+            "agentID": "corporate-governance-entity-secretariat-review-owner",
+            "description": "Joins authority, meeting, decision/action and entity-calendar evidence into a counsel-ready secretariat pack.",
+            "dependsOn": [
+              "entity-authority-governing-record-analyst",
+              "entity-calendar-filing-register-analyst",
+              "governing-body-meeting-materials-analyst",
+              "resolution-minutes-consent-action-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "corporate-treasury-liquidity-operations",
+      "version": "2026.08.11.1",
+      "digest": "433b123541426b0d8c3ac3b55ae355a20c504e8480c2822db89a49bbfa5d158f"
+    },
+    "name": "Corporate Treasury Liquidity Operations",
+    "label": "Corporate Treasury Liquidity Operations",
+    "description": "Corporate cash-position, forecast, funding, payment, settlement, bank-account and reconciliation evidence operations without payment, trade, borrowing, hedge, accounting or investment authority.",
+    "selectorSummary": "Use for source-bound corporate treasury liquidity and control evidence prepared for authorized review.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "treasury-cash-account-authority-analyst",
+        "label": "Treasury Cash Account Authority Analyst",
+        "description": "Freezes entity, bank, account, currency, balance-definition, ownership, signatory and control evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "treasury-cash-position-forecast-analyst",
+        "label": "Treasury Cash Position Forecast Analyst",
+        "description": "Reconciles value-dated positions, forecasts, actuals, scenarios and variance evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "treasury-payment-funding-liquidity-analyst",
+        "label": "Treasury Payment Funding Liquidity Analyst",
+        "description": "Maps payment obligations, funding instruments, maturities, settlement dependencies and supplied limits without execution.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "treasury-bank-reconciliation-control-analyst",
+        "label": "Treasury Bank Reconciliation Control Analyst",
+        "description": "Reconciles bank statement, treasury, ERP and instruction evidence with exceptions and control ownership.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "corporate-treasury-liquidity-review-owner",
+        "label": "Corporate Treasury Liquidity Review Owner",
+        "description": "Joins authority, position/forecast, payment/funding and reconciliation branches into a controlled treasury review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Corporate Treasury Liquidity Operations Qualified Review",
+        "description": "Independent professional evidence branches converge into one controlled Corporate Treasury Liquidity Operations review.",
+        "nodes": [
+          {
+            "id": "treasury-cash-account-authority-analyst",
+            "agentID": "treasury-cash-account-authority-analyst",
+            "description": "Freezes entity, bank, account, currency, balance-definition, ownership, signatory and control evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "treasury-cash-position-forecast-analyst",
+            "agentID": "treasury-cash-position-forecast-analyst",
+            "description": "Reconciles value-dated positions, forecasts, actuals, scenarios and variance evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "treasury-payment-funding-liquidity-analyst",
+            "agentID": "treasury-payment-funding-liquidity-analyst",
+            "description": "Maps payment obligations, funding instruments, maturities, settlement dependencies and supplied limits without execution.",
+            "dependsOn": []
+          },
+          {
+            "id": "treasury-bank-reconciliation-control-analyst",
+            "agentID": "treasury-bank-reconciliation-control-analyst",
+            "description": "Reconciles bank statement, treasury, ERP and instruction evidence with exceptions and control ownership.",
+            "dependsOn": []
+          },
+          {
+            "id": "corporate-treasury-liquidity-review-owner",
+            "agentID": "corporate-treasury-liquidity-review-owner",
+            "description": "Joins authority, position/forecast, payment/funding and reconciliation branches into a controlled treasury review pack.",
+            "dependsOn": [
+              "treasury-bank-reconciliation-control-analyst",
+              "treasury-cash-account-authority-analyst",
+              "treasury-cash-position-forecast-analyst",
+              "treasury-payment-funding-liquidity-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "cultural-heritage-preservation",
       "version": "2026.08.11.1",
       "digest": "a9f6bb483407b6779e68df1670f1d666580cb5941b847316f87f1684734d2cf7"
@@ -2955,6 +3375,111 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "dam-safety-surveillance-assurance",
+      "version": "2026.08.11.1",
+      "digest": "fbc63410da53c0093f0e77353f7ee44f1bbcdc2c4946bcb92455d7b638424a45"
+    },
+    "name": "Dam Safety Surveillance Assurance",
+    "label": "Dam Safety Surveillance Assurance",
+    "description": "Dam facility configuration, inspection, instrumentation, performance, potential-failure-mode and control evidence assurance without operational, engineering-release or emergency authority.",
+    "selectorSummary": "Use for source-bound dam inspection and surveillance evidence prepared for qualified dam-safety review.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "dam-configuration-authority-consequence-analyst",
+        "label": "Dam Configuration Authority and Consequence Analyst",
+        "description": "Freezes dam identity, structures, design/modification authority, loading context and supplied consequence classification.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "dam-inspection-condition-defect-analyst",
+        "label": "Dam Inspection Condition and Defect Analyst",
+        "description": "Maps visual, survey and nondestructive observations to exact locations, dimensions, comparisons and limitations.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "dam-instrumentation-performance-surveillance-analyst",
+        "label": "Dam Instrumentation Performance Surveillance Analyst",
+        "description": "Reconciles instrument health, readings, conversions, environmental/loading covariates and authorized behavior baselines.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "dam-potential-failure-mode-control-analyst",
+        "label": "Dam Potential Failure Mode and Control Analyst",
+        "description": "Traces supplied potential failure modes, evidence, detection controls, actions and verification without risk acceptance.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "dam-safety-surveillance-review-owner",
+        "label": "Dam Safety Surveillance Review Owner",
+        "description": "Joins configuration, inspection, instrumentation and failure-mode/control evidence into a qualified dam-safety review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Dam Safety Surveillance Assurance Qualified Review",
+        "description": "Independent professional evidence branches converge into one controlled Dam Safety Surveillance Assurance review.",
+        "nodes": [
+          {
+            "id": "dam-configuration-authority-consequence-analyst",
+            "agentID": "dam-configuration-authority-consequence-analyst",
+            "description": "Freezes dam identity, structures, design/modification authority, loading context and supplied consequence classification.",
+            "dependsOn": []
+          },
+          {
+            "id": "dam-inspection-condition-defect-analyst",
+            "agentID": "dam-inspection-condition-defect-analyst",
+            "description": "Maps visual, survey and nondestructive observations to exact locations, dimensions, comparisons and limitations.",
+            "dependsOn": []
+          },
+          {
+            "id": "dam-instrumentation-performance-surveillance-analyst",
+            "agentID": "dam-instrumentation-performance-surveillance-analyst",
+            "description": "Reconciles instrument health, readings, conversions, environmental/loading covariates and authorized behavior baselines.",
+            "dependsOn": []
+          },
+          {
+            "id": "dam-potential-failure-mode-control-analyst",
+            "agentID": "dam-potential-failure-mode-control-analyst",
+            "description": "Traces supplied potential failure modes, evidence, detection controls, actions and verification without risk acceptance.",
+            "dependsOn": []
+          },
+          {
+            "id": "dam-safety-surveillance-review-owner",
+            "agentID": "dam-safety-surveillance-review-owner",
+            "description": "Joins configuration, inspection, instrumentation and failure-mode/control evidence into a qualified dam-safety review pack.",
+            "dependsOn": [
+              "dam-configuration-authority-consequence-analyst",
+              "dam-inspection-condition-defect-analyst",
+              "dam-instrumentation-performance-surveillance-analyst",
+              "dam-potential-failure-mode-control-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "data-analysis",
       "version": "2026.08.10.1",
       "digest": "1efa430eecb1e4a42c012bf4c3a9302551201744ce757bb13e93a73c6ca2cba2"
@@ -3296,6 +3821,111 @@ export const generatedPublicMarketFacts = [
     },
     "packageOwnedCapabilities": {
       "skills": 2,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "digital-accessibility-assurance",
+      "version": "2026.08.11.1",
+      "digest": "f239b258d23a1e23192b3a29dde1fabfb310541048960f62cd04cf4d0caf5109"
+    },
+    "name": "Digital Accessibility Assurance",
+    "label": "Digital Accessibility Assurance",
+    "description": "Digital accessibility inventory, WCAG criterion mapping, semantic, keyboard, assistive-technology, visual, media, cognitive, manual and remediation evidence assurance without conformance or legal authority.",
+    "selectorSummary": "Use for reproducible digital-accessibility evidence and remediation verification prepared for qualified review.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "accessibility-scope-inventory-analyst",
+        "label": "Accessibility Scope Inventory Analyst",
+        "description": "Freezes journeys, states, builds, locales, technology, standards/policy sources and test matrix.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "accessibility-semantics-keyboard-assistive-analyst",
+        "label": "Accessibility Semantics Keyboard Assistive Analyst",
+        "description": "Produces semantic, keyboard, focus, form, status and assistive-technology evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "accessibility-visual-media-cognitive-analyst",
+        "label": "Accessibility Visual Media Cognitive Analyst",
+        "description": "Measures contrast, reflow, visual presentation, motion, timing, media alternatives and cognitive consistency evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "accessibility-manual-user-remediation-verification-analyst",
+        "label": "Accessibility Manual User Remediation Verification Analyst",
+        "description": "Traces manual protocols, disabled-user evidence as authorized, remediation versions, retests, regressions and exceptions.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "digital-accessibility-assurance-review-owner",
+        "label": "Digital Accessibility Assurance Review Owner",
+        "description": "Joins scope, semantic/keyboard, visual/media and manual/remediation evidence into a qualified accessibility review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Digital Accessibility Assurance Qualified Review",
+        "description": "Independent professional evidence branches converge into one controlled Digital Accessibility Assurance review.",
+        "nodes": [
+          {
+            "id": "accessibility-scope-inventory-analyst",
+            "agentID": "accessibility-scope-inventory-analyst",
+            "description": "Freezes journeys, states, builds, locales, technology, standards/policy sources and test matrix.",
+            "dependsOn": []
+          },
+          {
+            "id": "accessibility-semantics-keyboard-assistive-analyst",
+            "agentID": "accessibility-semantics-keyboard-assistive-analyst",
+            "description": "Produces semantic, keyboard, focus, form, status and assistive-technology evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "accessibility-visual-media-cognitive-analyst",
+            "agentID": "accessibility-visual-media-cognitive-analyst",
+            "description": "Measures contrast, reflow, visual presentation, motion, timing, media alternatives and cognitive consistency evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "accessibility-manual-user-remediation-verification-analyst",
+            "agentID": "accessibility-manual-user-remediation-verification-analyst",
+            "description": "Traces manual protocols, disabled-user evidence as authorized, remediation versions, retests, regressions and exceptions.",
+            "dependsOn": []
+          },
+          {
+            "id": "digital-accessibility-assurance-review-owner",
+            "agentID": "digital-accessibility-assurance-review-owner",
+            "description": "Joins scope, semantic/keyboard, visual/media and manual/remediation evidence into a qualified accessibility review pack.",
+            "dependsOn": [
+              "accessibility-manual-user-remediation-verification-analyst",
+              "accessibility-scope-inventory-analyst",
+              "accessibility-semantics-keyboard-assistive-analyst",
+              "accessibility-visual-media-cognitive-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
       "tools": 0,
       "mcp": 0
     },
@@ -6267,6 +6897,111 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "marine-vessel-survey-maintenance-assurance",
+      "version": "2026.08.11.1",
+      "digest": "7092fdcb1fe65782d21e1ac5963ba2c37db2204712636510367bfbc8952d8f80"
+    },
+    "name": "Marine Vessel Survey Maintenance Assurance",
+    "label": "Marine Vessel Survey Maintenance Assurance",
+    "description": "Marine vessel identity, statutory/class source, hull survey, machinery/electrical maintenance, defect, repair, nonconformity and verification evidence assurance without seaworthiness or sailing authority.",
+    "selectorSummary": "Use for controlled vessel survey and maintenance evidence prepared for flag, class and owner review.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "vessel-identity-statutory-class-authority-analyst",
+        "label": "Vessel Identity Statutory Class Authority Analyst",
+        "description": "Freezes vessel/configuration identity and separates flag, statutory, class, port-state and company records.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "vessel-hull-structure-condition-survey-analyst",
+        "label": "Vessel Hull Structure Condition Survey Analyst",
+        "description": "Maps hull, tank, deck, member, coating, corrosion, cracking, deformation and thickness evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "vessel-machinery-electrical-maintenance-analyst",
+        "label": "Vessel Machinery Electrical Maintenance Analyst",
+        "description": "Traces critical equipment, redundancy, maintenance, tests, failures, deferments, spares and verification.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "vessel-defect-repair-nonconformity-analyst",
+        "label": "Vessel Defect Repair Nonconformity Analyst",
+        "description": "Traces defect, temporary measure, repair, nonconformity, survey/inspection, verification and closure evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "marine-vessel-survey-maintenance-review-owner",
+        "label": "Marine Vessel Survey Maintenance Review Owner",
+        "description": "Joins vessel authority, hull, machinery and defect/repair evidence into a qualified marine review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Marine Vessel Survey Maintenance Assurance Qualified Review",
+        "description": "Independent professional evidence branches converge into one controlled Marine Vessel Survey Maintenance Assurance review.",
+        "nodes": [
+          {
+            "id": "vessel-identity-statutory-class-authority-analyst",
+            "agentID": "vessel-identity-statutory-class-authority-analyst",
+            "description": "Freezes vessel/configuration identity and separates flag, statutory, class, port-state and company records.",
+            "dependsOn": []
+          },
+          {
+            "id": "vessel-hull-structure-condition-survey-analyst",
+            "agentID": "vessel-hull-structure-condition-survey-analyst",
+            "description": "Maps hull, tank, deck, member, coating, corrosion, cracking, deformation and thickness evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "vessel-machinery-electrical-maintenance-analyst",
+            "agentID": "vessel-machinery-electrical-maintenance-analyst",
+            "description": "Traces critical equipment, redundancy, maintenance, tests, failures, deferments, spares and verification.",
+            "dependsOn": []
+          },
+          {
+            "id": "vessel-defect-repair-nonconformity-analyst",
+            "agentID": "vessel-defect-repair-nonconformity-analyst",
+            "description": "Traces defect, temporary measure, repair, nonconformity, survey/inspection, verification and closure evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "marine-vessel-survey-maintenance-review-owner",
+            "agentID": "marine-vessel-survey-maintenance-review-owner",
+            "description": "Joins vessel authority, hull, machinery and defect/repair evidence into a qualified marine review pack.",
+            "dependsOn": [
+              "vessel-defect-repair-nonconformity-analyst",
+              "vessel-hull-structure-condition-survey-analyst",
+              "vessel-identity-statutory-class-authority-analyst",
+              "vessel-machinery-electrical-maintenance-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "maritime-port-operations",
       "version": "2026.08.11.1",
       "digest": "80983224eb79ede865e24d565b052f9f44cd0d834d13f7d5a4ff1af7dc9b3f43"
@@ -6657,6 +7392,111 @@ export const generatedPublicMarketFacts = [
               "media-asset-rights-inventory-analyst",
               "media-intended-use-risk-analyst",
               "media-license-release-terms-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "medical-device-human-factors-usability-assurance",
+      "version": "2026.08.11.1",
+      "digest": "6667872a1901d1b091f7064e56652dd5b6dd8837f1a5658087213695620011e8"
+    },
+    "name": "Medical Device Human Factors Usability Assurance",
+    "label": "Medical Device Human Factors Usability Assurance",
+    "description": "Medical-device use specification, task and use-related-risk analysis, formative and summative evidence, and usability-engineering traceability without compliance or residual-risk authority.",
+    "selectorSummary": "Use for evidence-bounded medical-device human-factors and usability-engineering review preparation.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "device-use-specification-interface-analyst",
+        "label": "Device Use Specification and Interface Analyst",
+        "description": "Freezes intended users, uses, environments, device/UI versions, labeling, training and interface boundaries.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "critical-task-use-risk-analyst",
+        "label": "Critical Task and Use-Risk Analyst",
+        "description": "Maps task sequences, use difficulties, errors and supplied hazardous situations without risk acceptance.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "formative-usability-evidence-analyst",
+        "label": "Formative Usability Evidence Analyst",
+        "description": "Traces formative study scope, observations, design hypotheses and controlled design responses.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "summative-usability-traceability-analyst",
+        "label": "Summative Usability Traceability Analyst",
+        "description": "Reviews supplied summative protocol/execution/results and critical-task coverage without declaring validation success.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "medical-device-human-factors-usability-review-owner",
+        "label": "Medical Device Human Factors Usability Review Owner",
+        "description": "Joins use specification, use-risk, formative and summative branches into a controlled usability-engineering review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Medical Device Human Factors Usability Assurance Qualified Review",
+        "description": "Independent professional evidence branches converge into one controlled Medical Device Human Factors Usability Assurance review.",
+        "nodes": [
+          {
+            "id": "device-use-specification-interface-analyst",
+            "agentID": "device-use-specification-interface-analyst",
+            "description": "Freezes intended users, uses, environments, device/UI versions, labeling, training and interface boundaries.",
+            "dependsOn": []
+          },
+          {
+            "id": "critical-task-use-risk-analyst",
+            "agentID": "critical-task-use-risk-analyst",
+            "description": "Maps task sequences, use difficulties, errors and supplied hazardous situations without risk acceptance.",
+            "dependsOn": []
+          },
+          {
+            "id": "formative-usability-evidence-analyst",
+            "agentID": "formative-usability-evidence-analyst",
+            "description": "Traces formative study scope, observations, design hypotheses and controlled design responses.",
+            "dependsOn": []
+          },
+          {
+            "id": "summative-usability-traceability-analyst",
+            "agentID": "summative-usability-traceability-analyst",
+            "description": "Reviews supplied summative protocol/execution/results and critical-task coverage without declaring validation success.",
+            "dependsOn": []
+          },
+          {
+            "id": "medical-device-human-factors-usability-review-owner",
+            "agentID": "medical-device-human-factors-usability-review-owner",
+            "description": "Joins use specification, use-risk, formative and summative branches into a controlled usability-engineering review pack.",
+            "dependsOn": [
+              "critical-task-use-risk-analyst",
+              "device-use-specification-interface-analyst",
+              "formative-usability-evidence-analyst",
+              "summative-usability-traceability-analyst"
             ]
           }
         ]
@@ -10262,6 +11102,111 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "student-financial-aid-administration",
+      "version": "2026.08.11.1",
+      "digest": "d0f436e4197e9a521e11d0e67a660a15945392c89de3a0a69fbd37f3e4c3d6cd"
+    },
+    "name": "Student Financial Aid Administration",
+    "label": "Student Financial Aid Administration",
+    "description": "Source-versioned student financial-aid application, verification, academic, cost, packaging, award, disbursement, reconciliation and exception evidence without eligibility or fund-movement authority.",
+    "selectorSummary": "Use for controlled financial-aid administration evidence prepared for authorized institutional review.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "aid-applicant-isir-verification-analyst",
+        "label": "Aid Applicant ISIR Verification Analyst",
+        "description": "Freezes applicant token, aid year, FAFSA/ISIR transaction and supplied verification/conflicting-information evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "aid-academic-cost-packaging-analyst",
+        "label": "Aid Academic Cost Packaging Analyst",
+        "description": "Traces program/calendar/enrollment, cost-of-attendance, need inputs, policy and package calculations as supplied.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "aid-award-disbursement-reconciliation-analyst",
+        "label": "Aid Award Disbursement Reconciliation Analyst",
+        "description": "Reconciles supplied award, origination, disbursement, student-account and program cash records without fund movement.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "aid-sap-return-overaward-exception-analyst",
+        "label": "Aid SAP Return Overaward Exception Analyst",
+        "description": "Builds source-bound chronology for academic-progress, withdrawal/return, overaward and conflicting-information questions.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "student-financial-aid-administration-review-owner",
+        "label": "Student Financial Aid Administration Review Owner",
+        "description": "Joins application, academic/package, disbursement and exception evidence into an authorized aid-administration review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Student Financial Aid Administration Qualified Review",
+        "description": "Independent professional evidence branches converge into one controlled Student Financial Aid Administration review.",
+        "nodes": [
+          {
+            "id": "aid-applicant-isir-verification-analyst",
+            "agentID": "aid-applicant-isir-verification-analyst",
+            "description": "Freezes applicant token, aid year, FAFSA/ISIR transaction and supplied verification/conflicting-information evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "aid-academic-cost-packaging-analyst",
+            "agentID": "aid-academic-cost-packaging-analyst",
+            "description": "Traces program/calendar/enrollment, cost-of-attendance, need inputs, policy and package calculations as supplied.",
+            "dependsOn": []
+          },
+          {
+            "id": "aid-award-disbursement-reconciliation-analyst",
+            "agentID": "aid-award-disbursement-reconciliation-analyst",
+            "description": "Reconciles supplied award, origination, disbursement, student-account and program cash records without fund movement.",
+            "dependsOn": []
+          },
+          {
+            "id": "aid-sap-return-overaward-exception-analyst",
+            "agentID": "aid-sap-return-overaward-exception-analyst",
+            "description": "Builds source-bound chronology for academic-progress, withdrawal/return, overaward and conflicting-information questions.",
+            "dependsOn": []
+          },
+          {
+            "id": "student-financial-aid-administration-review-owner",
+            "agentID": "student-financial-aid-administration-review-owner",
+            "description": "Joins application, academic/package, disbursement and exception evidence into an authorized aid-administration review pack.",
+            "dependsOn": [
+              "aid-academic-cost-packaging-analyst",
+              "aid-applicant-isir-verification-analyst",
+              "aid-award-disbursement-reconciliation-analyst",
+              "aid-sap-return-overaward-exception-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "supply-chain-logistics",
       "version": "2026.08.10.1",
       "digest": "de01cb46926dfa4ff4654110b9e2b9de6eb223aa1a2de6d055f6de7f2f5a26a7"
@@ -10560,6 +11505,111 @@ export const generatedPublicMarketFacts = [
               "telecom-capacity-change-risk-analyst",
               "telecom-demand-topology-analyst",
               "telecom-service-level-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "transfusion-medicine-blood-component-assurance",
+      "version": "2026.08.11.1",
+      "digest": "316a4a23cd66f423e5e1dc42e34644f77ecb9ea03ddbff7fac1e6482f001f113"
+    },
+    "name": "Transfusion Medicine Blood Component Assurance",
+    "label": "Transfusion Medicine Blood Component Assurance",
+    "description": "Evidence continuity for patient, order, specimen, blood component, compatibility, issue, transfusion, reaction and blood-bank quality records without component-selection or clinical authority.",
+    "selectorSummary": "Use for source-bound transfusion and blood-component evidence reconciliation before qualified review.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "transfusion-patient-order-specimen-identity-analyst",
+        "label": "Patient Order Specimen Identity Analyst",
+        "description": "Freezes authorized patient, order, specimen, collection, labeling and chain-of-custody evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "blood-component-inventory-compatibility-evidence-analyst",
+        "label": "Blood Component Inventory Compatibility Evidence Analyst",
+        "description": "Traces component identity, attributes, storage, test and compatibility evidence as supplied.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "component-issue-transfusion-trace-analyst",
+        "label": "Component Issue and Transfusion Trace Analyst",
+        "description": "Reconciles reservation, issue, transport, bedside receipt, transfusion, return and disposition events.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "transfusion-reaction-quality-reconciliation-analyst",
+        "label": "Transfusion Reaction and Quality Reconciliation Analyst",
+        "description": "Assembles reaction chronology, supplied workup observations, notifications and quality-event linkage without diagnosis.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "transfusion-medicine-blood-component-assurance-owner",
+        "label": "Transfusion Medicine Blood Component Assurance Owner",
+        "description": "Joins identity, component, issue/transfusion and reaction/quality evidence into a qualified-review pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "qualified-review",
+        "label": "Transfusion Medicine Blood Component Assurance Qualified Review",
+        "description": "Independent professional evidence branches converge into one controlled Transfusion Medicine Blood Component Assurance review.",
+        "nodes": [
+          {
+            "id": "transfusion-patient-order-specimen-identity-analyst",
+            "agentID": "transfusion-patient-order-specimen-identity-analyst",
+            "description": "Freezes authorized patient, order, specimen, collection, labeling and chain-of-custody evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "blood-component-inventory-compatibility-evidence-analyst",
+            "agentID": "blood-component-inventory-compatibility-evidence-analyst",
+            "description": "Traces component identity, attributes, storage, test and compatibility evidence as supplied.",
+            "dependsOn": []
+          },
+          {
+            "id": "component-issue-transfusion-trace-analyst",
+            "agentID": "component-issue-transfusion-trace-analyst",
+            "description": "Reconciles reservation, issue, transport, bedside receipt, transfusion, return and disposition events.",
+            "dependsOn": []
+          },
+          {
+            "id": "transfusion-reaction-quality-reconciliation-analyst",
+            "agentID": "transfusion-reaction-quality-reconciliation-analyst",
+            "description": "Assembles reaction chronology, supplied workup observations, notifications and quality-event linkage without diagnosis.",
+            "dependsOn": []
+          },
+          {
+            "id": "transfusion-medicine-blood-component-assurance-owner",
+            "agentID": "transfusion-medicine-blood-component-assurance-owner",
+            "description": "Joins identity, component, issue/transfusion and reaction/quality evidence into a qualified-review pack.",
+            "dependsOn": [
+              "blood-component-inventory-compatibility-evidence-analyst",
+              "component-issue-transfusion-trace-analyst",
+              "transfusion-patient-order-specimen-identity-analyst",
+              "transfusion-reaction-quality-reconciliation-analyst"
             ]
           }
         ]
@@ -11228,6 +12278,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/bridge-structural-integrity-assurance",
+    "namespace": "builtin",
+    "id": "bridge-structural-integrity-assurance",
+    "label": "Bridge Structural Integrity Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "1bead5450e048dd6d0d97f03fdf421ded2e8744b8266ffe625762d3290bb1598",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "bridge-structural-integrity-assurance/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/browser-research-acceptance",
     "namespace": "builtin",
     "id": "browser-research-acceptance",
@@ -11276,6 +12343,23 @@ export const generatedShippedSquadFacts = [
       "climate-risk-adaptation/shared/method"
     ],
     "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/clinical-genomics-variant-evidence-review",
+    "namespace": "builtin",
+    "id": "clinical-genomics-variant-evidence-review",
+    "label": "Clinical Genomics Variant Evidence Review",
+    "version": "2026.08.11.1",
+    "packageDigest": "bd93d81f65cbc796c6b1badfa0cafd77544ebe004b16dbc9215aaccd48465729",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "clinical-genomics-variant-evidence-review/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {
@@ -11366,6 +12450,40 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/corporate-governance-entity-secretariat",
+    "namespace": "builtin",
+    "id": "corporate-governance-entity-secretariat",
+    "label": "Corporate Governance Entity Secretariat",
+    "version": "2026.08.11.1",
+    "packageDigest": "42c158f9278ef1b7422a71d63034d3afbfe5394da38414bbd2faf285bfd6ba9c",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "corporate-governance-entity-secretariat/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/corporate-treasury-liquidity-operations",
+    "namespace": "builtin",
+    "id": "corporate-treasury-liquidity-operations",
+    "label": "Corporate Treasury Liquidity Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "433b123541426b0d8c3ac3b55ae355a20c504e8480c2822db89a49bbfa5d158f",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "corporate-treasury-liquidity-operations/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/cultural-heritage-preservation",
     "namespace": "builtin",
     "id": "cultural-heritage-preservation",
@@ -11434,6 +12552,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/dam-safety-surveillance-assurance",
+    "namespace": "builtin",
+    "id": "dam-safety-surveillance-assurance",
+    "label": "Dam Safety Surveillance Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "fbc63410da53c0093f0e77353f7ee44f1bbcdc2c4946bcb92455d7b638424a45",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "dam-safety-surveillance-assurance/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/data-analysis",
     "namespace": "builtin",
     "id": "data-analysis",
@@ -11486,6 +12621,23 @@ export const generatedShippedSquadFacts = [
       "deep-research/shared/workflow"
     ],
     "agentCount": 6,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/digital-accessibility-assurance",
+    "namespace": "builtin",
+    "id": "digital-accessibility-assurance",
+    "label": "Digital Accessibility Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "f239b258d23a1e23192b3a29dde1fabfb310541048960f62cd04cf4d0caf5109",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "digital-accessibility-assurance/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {
@@ -11952,6 +13104,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/marine-vessel-survey-maintenance-assurance",
+    "namespace": "builtin",
+    "id": "marine-vessel-survey-maintenance-assurance",
+    "label": "Marine Vessel Survey Maintenance Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "7092fdcb1fe65782d21e1ac5963ba2c37db2204712636510367bfbc8952d8f80",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "marine-vessel-survey-maintenance-assurance/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/maritime-port-operations",
     "namespace": "builtin",
     "id": "maritime-port-operations",
@@ -12019,6 +13188,23 @@ export const generatedShippedSquadFacts = [
       "media-rights-clearance/shared/method"
     ],
     "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/medical-device-human-factors-usability-assurance",
+    "namespace": "builtin",
+    "id": "medical-device-human-factors-usability-assurance",
+    "label": "Medical Device Human Factors Usability Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "6667872a1901d1b091f7064e56652dd5b6dd8837f1a5658087213695620011e8",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "medical-device-human-factors-usability-assurance/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {
@@ -12610,6 +13796,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 2
   },
   {
+    "identity": "builtin/student-financial-aid-administration",
+    "namespace": "builtin",
+    "id": "student-financial-aid-administration",
+    "label": "Student Financial Aid Administration",
+    "version": "2026.08.11.1",
+    "packageDigest": "d0f436e4197e9a521e11d0e67a660a15945392c89de3a0a69fbd37f3e4c3d6cd",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "student-financial-aid-administration/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/supply-chain-logistics",
     "namespace": "builtin",
     "id": "supply-chain-logistics",
@@ -12660,6 +13863,23 @@ export const generatedShippedSquadFacts = [
       "telecom-network-assurance/shared/method"
     ],
     "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/transfusion-medicine-blood-component-assurance",
+    "namespace": "builtin",
+    "id": "transfusion-medicine-blood-component-assurance",
+    "label": "Transfusion Medicine Blood Component Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "316a4a23cd66f423e5e1dc42e34644f77ecb9ea03ddbff7fac1e6482f001f113",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "transfusion-medicine-blood-component-assurance/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {

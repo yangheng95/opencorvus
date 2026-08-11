@@ -6,6 +6,7 @@ import { Hono, type Context } from "hono"
 import { serveStatic } from "hono/bun"
 import { HTTPException } from "hono/http-exception"
 import { generatedPublicMarketFacts } from "../src/content/public-market-facts.generated"
+import { payloadPackageSources } from "../../opencorvus/generated/expert-squad-payload"
 import {
   HostedMarketRegistrySimulation,
   HostedMarketSimulationError,
@@ -24,6 +25,17 @@ const sessionCookie = "oc_hosted_market_session"
 const multipartOverheadBytes = 1024 * 1024
 
 type Session = { csrfToken: string; createdAt: number }
+
+export function repositoryHostedMarketFacts() {
+  const factsByID = new Map<string, (typeof generatedPublicMarketFacts)[number]>(
+    generatedPublicMarketFacts.map((facts) => [facts.identity.id, facts]),
+  )
+  return payloadPackageSources.map((source) => {
+    const facts = factsByID.get(source.id)
+    if (!facts) throw new Error(`Generated public Market facts omitted payload package ${source.id}`)
+    return facts
+  })
+}
 
 async function publicRecord(registry: HostedMarketRegistrySimulation, record: HostedMarketRecord) {
   return {
@@ -60,7 +72,7 @@ function errorResponse(error: unknown) {
 export async function createHostedMarketSimulationApp(input: { registryRoot?: string; distRoot?: string } = {}) {
   const registry = new HostedMarketRegistrySimulation(input.registryRoot ?? defaultRegistryRoot)
   await registry.initialize()
-  for (const facts of generatedPublicMarketFacts) {
+  for (const facts of repositoryHostedMarketFacts()) {
     await registry.seedPayloadRevision(facts.identity.id, facts.identity.digest)
   }
 
@@ -247,7 +259,9 @@ export async function createHostedMarketSimulationApp(input: { registryRoot?: st
   if (hostedMarketBasePath) {
     app.get(hostedMarketBasePath, (c) => c.redirect(`${hostedMarketBasePath}/`, 308))
   }
-  app.notFound((c) => c.json({ error: { code: "HOSTED_ROUTE_NOT_FOUND", message: "Hosted simulation route not found" } }, 404))
+  app.notFound((c) =>
+    c.json({ error: { code: "HOSTED_ROUTE_NOT_FOUND", message: "Hosted simulation route not found" } }, 404),
+  )
 
   return { app, registry }
 }
