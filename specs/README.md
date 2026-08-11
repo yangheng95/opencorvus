@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest README and homepage alignment: [`2026-08-11-readme-homepage-alignment.md`](records/2026-08/2026-08-11-readme-homepage-alignment.md).
+
 Latest Agent-host website tab: [`2026-08-11-agent-hosts-website-tab.md`](records/2026-08/2026-08-11-agent-hosts-website-tab.md).
 
 Latest Windows glob, Mission process-recovery, and persisted debug convergence: [`2026-08-11-windows-glob-mission-recovery-debug-convergence.md`](records/2026-08/2026-08-11-windows-glob-mission-recovery-debug-convergence.md).

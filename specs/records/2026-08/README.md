@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-11-readme-homepage-alignment.md](2026-08-11-readme-homepage-alignment.md) aligns the bilingual root README position, navigation, Workbench, Expert Squad, Mission, long-horizon delivery, and open-community story with the current public homepage while preserving repository/runtime detail.
+
 - [2026-08-11-agent-hosts-website-tab.md](2026-08-11-agent-hosts-website-tab.md) defines the reciprocal public navigation tab and complete, source-backed OpenClaw, Hermes Agent, generic Agent Skills, CLI, HTTP API, security, and evidence guidance for operating OpenCorvus from another assistant.
 
 - [2026-08-11-windows-glob-mission-recovery-debug-convergence.md](2026-08-11-windows-glob-mission-recovery-debug-convergence.md) identifies the Windows bounded-glob crash regression, adds durable standalone-Mission restart recovery, separates persisted debug facts from rendered cards, and preserves held-Squad capability authority while exposing its diagnostic boundary.
