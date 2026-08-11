@@ -131,6 +131,7 @@ describe("canonical Work Ledger and Project Worktree response contracts", () => 
       pinned: false,
       lifecycleStatus: "active",
       activityStatus: "running",
+      cancellationStatus: "none",
       priority: "normal",
       source: "operator",
       queueOrder: 0,

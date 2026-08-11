@@ -974,30 +974,30 @@ export const publicMarketZhTranslations68To99 = {
     },
   },
   "builtin/squad-sdk": {
-    label: "生成 Agent Squad",
-    description: "以证据为依据导入异构算法，并通过独立契约审查，规范生成项目自有、可追溯的 OpenCorvus Agent Squad。",
+    label: "生成 Expert Squad",
+    description: "以证据为依据导入异构算法，并通过独立契约审查，规范生成项目自有、可追溯的 OpenCorvus Expert Squad。",
     selectorSummary: "适用于导入外部异构 Agent 算法，或通过规范 SDK 设计、验证并安装新的 OpenCorvus Expert Squad。",
     agents: {
       "squad-sdk-source-analyst": {
-        label: "生成 Agent Squad 来源分析员",
+        label: "生成 Expert Squad 来源分析员",
         description: "提取源算法、领域边界、参与者、证据流、资源、可移植性约束和验收契约。",
       },
       "squad-sdk-package-architect": {
-        label: "生成 Agent Squad 包架构师",
+        label: "生成 Expert Squad 包架构师",
         description: "将已接受的来源证据转化为最小而完整的 SDK 蓝图和具有约束力的工作流拓扑。",
       },
       "squad-sdk-import-analyst": {
-        label: "生成 Agent Squad 导入分析员",
+        label: "生成 Expert Squad 导入分析员",
         description: "检查外部 Squad 的成员、指令、Skill 闭包、MCP 能力、映射证据和可移植性阻塞项。",
       },
       "squad-sdk-contract-reviewer": {
-        label: "生成 Agent Squad 契约审查员",
+        label: "生成 Expert Squad 契约审查员",
         description: "依据来源证据和包不变量，独立验证完整的创作蓝图或导入映射。",
       },
     },
     workflows: {
       "sdk-authoring": {
-        label: "生成 Agent Squad 创作",
+        label: "生成 Expert Squad 创作",
         description: "提取领域算法，设计一份规范的包蓝图，独立验证，再通过 SDK 创作工具将其具体化。",
         nodes: {
           "source-analysis": "发布源算法和包边界证据。",

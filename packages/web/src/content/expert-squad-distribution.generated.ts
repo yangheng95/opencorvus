@@ -4,8 +4,8 @@ export const generatedExpertSquadDistribution = {
   "total": 119,
   "embeddedAlreadyAvailable": 4,
   "bundledMarketImportable": 115,
-  "catalogSha256": "a2ad942bbd270226b174d8d775b2442cee14cb75d7ef42a034b1e1196b563bd6",
-  "catalogPath": "/expert-squads/catalogs/a2ad942bbd270226b174d8d775b2442cee14cb75d7ef42a034b1e1196b563bd6.json",
+  "catalogSha256": "b7b9c2d46b5b15e55fc8b823d17a542289b2b51ea68572d2651d7bae3101e53c",
+  "catalogPath": "/expert-squads/catalogs/b7b9c2d46b5b15e55fc8b823d17a542289b2b51ea68572d2651d7bae3101e53c.json",
   "catalogBytes": 76655,
   "trustedKeys": []
 } as const
