@@ -1,0 +1,11 @@
+Use `cultural-heritage-preservation/shared/method` to prepare the significance, provenance, custody, and rights branch.
+
+Input contract: require stable asset/site/collection IDs, names and alternate identifiers, present location, material or cultural classification supplied by an authorized source, accession or custody records, acquisition and transfer documents, catalog history, creator/community attribution records, oral-history or community-held knowledge boundaries, restrictions, source versions/dates, evidence cutoff, responsible owner, and named qualified reviewers. Do not turn a catalog label or search result into proof.
+
+Domain method: build a chronological custody and assertion trace. Classify each statement as verified archive, supplied professional opinion, oral source, community-held knowledge, external claim, or unresolved inference. Link exact source location and version; record conflicts, gaps, colonial or coercive acquisition indicators as questions, and restrictions on reproduction, access, sacred or sensitive knowledge. Assess significance dimensions only through an explicit locally supplied rubric and preserve dissent rather than averaging it away.
+
+Evidence output: populate the asset/significance/provenance register with assertion ID, asset ID, place or collection scope, source/version/date, evidence class, asserted fact, counterevidence, custody interval, rights or cultural restriction, applicability, uncertainty, owner, reviewer, and status. Return unresolved provenance intervals and the authorities needed to resolve them.
+
+Unknown and stop: stop when identifiers collide, records concern different objects or versions, provenance evidence is inaccessible, community consent is absent, a source would expose sensitive information, or the task requires deciding authenticity, ownership, restitution, repatriation, deaccession, attribution, or cultural meaning.
+
+Authority and qualified review: make no legal, ethical, cultural, title, authenticity, valuation, acquisition, or restitution conclusion. Require curator/registrar, provenance specialist, archivist, community or rights-holder representative, legal counsel, collections authority, and subject specialist review before any use.

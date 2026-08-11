@@ -1,1124 +1,377 @@
 ---
 import { Image } from "astro:assets"
-import { Icon } from "@astrojs/starlight/components"
-import BrandMark from "../../../overlay/src-tauri/icons/icon.png"
 import ClientAgentWorkspace from "../assets/lander/client-agent-workspace.png"
-import ClientEnvironmentEvidence from "../assets/lander/client-environment-evidence.png"
-import ClientTaskEvidence from "../assets/lander/client-task-evidence.png"
 import ExpertSquadCatalog from "../assets/lander/expert-squad-catalog.png"
 import ExpertSquadInstalled from "../assets/lander/expert-squad-installed.png"
-import RuntimeChannelReach from "../assets/lander/runtime-channel-reach-agent-v2.png"
 import RuntimeDesktopContinuity from "../assets/lander/runtime-desktop-continuity-agent-v2.png"
-import RuntimeHeadless from "../assets/lander/runtime-headless-agent-v2.png"
-import RuntimeRepositoryAutomation from "../assets/lander/runtime-repository-automation-agent-v2.png"
-import LandingMissionFlow from "./LandingMissionFlow.astro"
-import { landingContent, landingProductName, type LandingLocale } from "../content/landing"
-import { discoverLandingBinaryDownloads, landingWebApplication } from "../lib/landing-download"
+import PublicSiteHeader from "./PublicSiteHeader.astro"
+import PublicSiteFooter from "./PublicSiteFooter.astro"
+import { landingContent, type LandingLocale } from "../content/landing"
+import { publicPath } from "../content/public-market"
+import { discoverLandingBinaryDownloads } from "../lib/landing-download"
+import "../styles/public-site.css"
 
 const { lang } = Astro.locals.starlightRoute
 const locale: LandingLocale = lang === "zh-CN" ? "zh-cn" : "root"
 const content = landingContent[locale]
-const storyImages = [ClientAgentWorkspace, ClientEnvironmentEvidence, ClientTaskEvidence]
-const expertSquadImages = [ExpertSquadCatalog, ExpertSquadInstalled]
-const expertSquadMediaItems = content.expertSquads.media.map((item, index) => ({ item, image: expertSquadImages[index] }))
-const expertSquadMediaOrder = expertSquadMediaItems
-const runtimeImages = [RuntimeDesktopContinuity, RuntimeHeadless, RuntimeChannelReach, RuntimeRepositoryAutomation]
+const languageHref = publicPath(locale === "zh-cn" ? "root" : "zh-cn")
 const publicBase = import.meta.env.BASE_URL.replace(/\/$/, "")
-const landingBinaryDownloads = discoverLandingBinaryDownloads()
-const homeHref = locale === "zh-cn" ? `${publicBase}/zh-cn/` : `${publicBase}/`
 const demoSource = `${publicBase}/media/opencorvus-client-demo.webm`
-const downloadCards = landingBinaryDownloads.map((download) => ({
+const downloads = discoverLandingBinaryDownloads().map((download) => ({
   ...download,
   href: `${publicBase}/${download.publicRelativePath}`,
-  action: content.download.actions[download.platform],
 }))
-const webApplicationCard = {
-  ...landingWebApplication,
-  platformName: content.download.web.platformName,
-  action: content.download.web.action,
-  system: content.download.web.system,
-  architecture: content.download.web.architecture,
-  packageType: content.download.web.packageType,
-}
 ---
 
-<div class="landing-shell">
-  <div class="hero-canvas">
-    <header class="landing-header" aria-label={landingProductName}>
-      <a class="brand" href={homeHref} aria-label={`${landingProductName} home`}>
-        <Image src={BrandMark} width={42} height={42} alt="" loading="eager" decoding="async" />
-        <span>{landingProductName}</span>
-      </a>
-      <nav aria-label="Primary navigation">
-        <a href={locale === "zh-cn" ? `${publicBase}/zh-cn/market/` : `${publicBase}/market/`}>{content.nav.market}</a>
-        <a href={locale === "zh-cn" ? `${publicBase}/zh-cn/publish/` : `${publicBase}/publish/`}>{content.nav.publish}</a>
-        <a href={locale === "zh-cn" ? `${publicBase}/zh-cn/trust/` : `${publicBase}/trust/`}>{content.nav.trust}</a>
-        <a href="#download">{content.nav.download}</a>
-        <a href="#features">{content.nav.features}</a>
-        <a href="#expert-squads">{content.nav.expertSquads}</a>
-      </nav>
-      <div class="header-actions">
-        <a class="language-link" href={content.language.href}>{content.language.label}</a>
-      </div>
-    </header>
+<div class="public-landing">
+  <PublicSiteHeader {locale} current="home" {languageHref} />
 
-    <section class="hero-section" aria-labelledby="landing-title">
+  <main id="main-content" class="public-main">
+    <section class="landing-hero" aria-labelledby="landing-title">
       <div class="hero-copy">
+        <p class="eyebrow">{content.hero.eyebrow}</p>
         <h1 id="landing-title">{content.hero.title}</h1>
-        <p class="hero-description">{content.hero.description}</p>
+        <p>{content.hero.description}</p>
+        <div class="hero-actions">
+          <a class="primary-action" href={publicPath(locale, "/market/")}>{content.hero.primary}</a>
+          <a class="secondary-action" href={publicPath(locale, "/start/quickstart/")}>{content.hero.secondary}</a>
+        </div>
+        <p class="hero-boundary">
+          {locale === "zh-cn"
+            ? "OpenCorvus 负责组织工作与证据；你始终决定任务范围、外部写入和最终接受。"
+            : "OpenCorvus organizes the work and its evidence. You retain control of scope, external writes, and final acceptance."}
+        </p>
       </div>
 
-      <div class="hero-product">
-        <div class="hero-video-frame">
-          <video controls muted playsinline preload="metadata" poster={ClientAgentWorkspace.src} aria-label={content.hero.videoLabel}>
-            <source src={demoSource} type="video/webm" />
-            <a href={demoSource}>{content.hero.videoLabel}</a>
-          </video>
-          <p>{content.hero.videoCaption}</p>
-        </div>
-      </div>
+      <figure class="landing-video">
+        <video controls muted playsinline preload="metadata" poster={ClientAgentWorkspace.src} aria-label={content.hero.videoLabel}>
+          <source src={demoSource} type="video/webm" />
+          <a href={demoSource}>{content.hero.videoLabel}</a>
+        </video>
+        <figcaption>{content.hero.videoCaption}</figcaption>
+      </figure>
     </section>
-  </div>
 
-  <div class="landing-main">
-    <section id="download" class="download-section" aria-labelledby="landing-download-title">
-      <div class="section-wrap download-layout">
-        <div class="download-copy">
-          <p class="section-kicker">{content.download.eyebrow}</p>
-          <h2 id="landing-download-title">{content.download.title}</h2>
-          <p>{content.download.description}</p>
+    <section class="proof-strip" aria-label={locale === "zh-cn" ? "产品原则" : "Product principles"}>
+      {content.proof.map(([title, description]) => (
+        <article><strong>{title}</strong><p>{description}</p></article>
+      ))}
+    </section>
+
+    <section class="landing-band" aria-labelledby="work-modes-title">
+      <div class="landing-band-header">
+        <div>
+          <p class="eyebrow">{content.modes.eyebrow}</p>
+          <h2 id="work-modes-title" class="section-heading">{content.modes.title}</h2>
         </div>
-        <div class="download-card-grid">
-          {downloadCards.map((download) => (
-            <article class="download-card">
-              <div class="download-card-heading">
-                <span class="download-platform">{download.platformName}</span>
-              </div>
-              <dl class="download-facts">
-                <div><dt>{content.download.systemLabel}</dt><dd>{download.system}</dd></div>
-                <div><dt>{content.download.architectureLabel}</dt><dd>{download.architecture}</dd></div>
-                <div><dt>{content.download.packageLabel}</dt><dd>{download.packageType}</dd></div>
-              </dl>
-              <a class="download-button" href={download.href} download>
-                <span>{download.action}</span><Icon name="download" size="1rem" />
-              </a>
-            </article>
-          ))}
-          <article class="download-card download-card-web">
-            <div class="download-card-heading">
-              <span class="download-platform">{webApplicationCard.platformName}</span>
-            </div>
-            <dl class="download-facts">
-              <div><dt>{content.download.systemLabel}</dt><dd>{webApplicationCard.system}</dd></div>
-              <div><dt>{content.download.architectureLabel}</dt><dd>{webApplicationCard.architecture}</dd></div>
-              <div><dt>{content.download.packageLabel}</dt><dd>{webApplicationCard.packageType}</dd></div>
-            </dl>
-            <a
-              class="download-button"
-              href={webApplicationCard.href}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span>{webApplicationCard.action}</span><Icon name="rocket" size="1rem" />
-            </a>
+        <p class="section-lead">{content.modes.description}</p>
+      </div>
+      <div class="work-mode-grid">
+        {content.modes.items.map((item) => (
+          <article>
+            <span class="mode-index">{item.index}</span>
+            <p class="mode-use">{item.use}</p>
+            <h3>{item.name}</h3>
+            <p>{item.description}</p>
+            <strong>{item.output}</strong>
           </article>
-        </div>
+        ))}
       </div>
     </section>
 
-    <section id="features" class="features-section" aria-labelledby="features-title">
-      <div class="section-wrap">
-        <div class="features-heading">
-          <p class="section-kicker">{content.features.eyebrow}</p>
-          <h2 id="features-title">{content.features.title}</h2>
-          <p>{content.features.description}</p>
+    <section class="landing-band" aria-labelledby="expert-squads-title">
+      <div class="landing-band-header">
+        <div>
+          <p class="eyebrow">{content.squads.eyebrow}</p>
+          <h2 id="expert-squads-title" class="section-heading">{content.squads.title}</h2>
         </div>
-        <div class="feature-stories">
-          {content.features.items.map((item, index) => (
-            <article class:list={{ reverse: index % 2 === 1 }}>
-              <div class="story-copy">
-                <span class="story-index">{String(index + 1).padStart(2, "0")} / {item.label}</span>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <ul>
-                  {item.bullets.map((bullet) => (
-                    <li><span aria-hidden="true">✓</span>{bullet}</li>
-                  ))}
-                </ul>
-              </div>
-              <div class="story-media">
-                <div class="story-window-chrome" aria-hidden="true"><span></span><span></span><span></span></div>
-                <button
-                  class="image-preview-trigger"
-                  type="button"
-                  aria-label={`${content.imageViewer.open}: ${item.title}`}
-                  aria-haspopup="dialog"
-                  aria-controls="landing-image-preview"
-                  data-image-preview-trigger
-                  data-preview-src={storyImages[index].src}
-                  data-preview-alt={item.title}
-                >
-                  <Image
-                    src={storyImages[index]}
-                    width={1600}
-                    height={Math.round(1600 * storyImages[index].height / storyImages[index].width)}
-                    alt={item.title}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </button>
-              </div>
+        <div>
+          <p class="section-lead">{content.squads.description}</p>
+          <div class="hero-actions">
+            <a class="primary-action" href={publicPath(locale, "/market/")}>{content.squads.action}</a>
+            <a class="secondary-action" href={publicPath(locale, "/publish/")}>{content.squads.buildAction}</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="squad-story-grid">
+        <div class="squad-capabilities">
+          {content.squads.capabilities.map(([title, description], index) => (
+            <article>
+              <span>0{index + 1}</span>
+              <div><h3>{title}</h3><p>{description}</p></div>
             </article>
           ))}
         </div>
-      </div>
-    </section>
-
-    <section id="expert-squads" class="squad-section" aria-labelledby="squad-title">
-      <div class="section-wrap squad-layout">
-        <div class="squad-copy">
-          <h2 id="squad-title">{content.expertSquads.title}</h2>
-          <p>{content.expertSquads.description}</p>
-        </div>
-
-        <div class="squad-proof">
-          <div class="squad-capability-list">
-            {content.expertSquads.capabilities.map((item, index) => (
-              <article>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <div>
-                  <h3>{item.label}</h3>
-                  <p>{item.description}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-        <div class="squad-media-grid">
-          {expertSquadMediaOrder.map(({ item, image }) => (
-            <button
-              class="squad-media-card image-preview-trigger"
-              type="button"
-              aria-label={`${content.imageViewer.open}: ${item.alt}`}
-              aria-haspopup="dialog"
-              aria-controls="landing-image-preview"
-              data-image-preview-trigger
-              data-preview-src={image.src}
-              data-preview-alt={item.alt}
-            >
-              <Image
-                src={image}
-                width={720}
-                height={Math.round(720 * image.height / image.width)}
-                alt={item.alt}
-                loading="lazy"
-                decoding="async"
-              />
-            </button>
-          ))}
-        </div>
-        <div class="squad-flow">
-          <div class="window-chrome" aria-hidden="true">
-            <span></span><span></span><span></span>
-            <p>{content.expertSquads.flowLabel}</p>
-          </div>
-          <LandingMissionFlow locale={locale} description={content.expertSquads.flowAlt} />
+        <div class="squad-image-stack">
+          <figure>
+            <Image src={ExpertSquadCatalog} width={900} alt={content.squads.catalogAlt} loading="lazy" decoding="async" />
+            <figcaption>{locale === "zh-cn" ? "先比较用途、角色与工作流" : "Compare purpose, roles, and workflow first"}</figcaption>
+          </figure>
+          <figure>
+            <Image src={ExpertSquadInstalled} width={900} alt={content.squads.installedAlt} loading="lazy" decoding="async" />
+            <figcaption>{locale === "zh-cn" ? "安装后仍由你明确选择与激活" : "Selection and activation remain explicit after install"}</figcaption>
+          </figure>
         </div>
       </div>
     </section>
 
-    <section class="surfaces-section" aria-labelledby="surfaces-title">
-      <div class="section-wrap">
-        <div class="surfaces-heading">
-          <div>
-            <p class="section-kicker">{content.surfaces.eyebrow}</p>
-            <h2 id="surfaces-title">{content.surfaces.title}</h2>
-          </div>
-          <p>{content.surfaces.description}</p>
-        </div>
-        <div class="surface-grid">
-          {content.surfaces.items.map((item, index) => (
-            <article class="surface-card">
-              <div class="surface-media">
-                <Image
-                  src={runtimeImages[index]}
-                  width={768}
-                  height={512}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <span class="surface-number">{String(index + 1).padStart(2, "0")}</span>
-              <div class="surface-copy">
-                <strong>{item.title}</strong>
-                <span class="surface-description">{item.description}</span>
-              </div>
-            </article>
-          ))}
-        </div>
+    <section class="landing-band runtime-boundary" aria-labelledby="runtime-title">
+      <div>
+        <p class="eyebrow">{content.continuity.eyebrow}</p>
+        <h2 id="runtime-title" class="section-heading">{content.continuity.title}</h2>
+        <p class="section-lead">{content.continuity.description}</p>
+        <figure class="runtime-image">
+          <Image src={RuntimeDesktopContinuity} width={900} alt={content.continuity.imageAlt} loading="lazy" decoding="async" />
+        </figure>
+      </div>
+      <div class="runtime-facts">
+        {content.continuity.facts.map(([title, description]) => (
+          <article><b>{title}</b><p>{description}</p></article>
+        ))}
       </div>
     </section>
 
-    <section class="cta-section section-wrap" aria-labelledby="cta-title">
-      <div class="cta-mark" aria-hidden="true">
-        <Image src={BrandMark} width={148} height={148} alt="" loading="lazy" decoding="async" />
+    <section class="landing-band start-section" aria-labelledby="start-title">
+      <div>
+        <p class="eyebrow">{content.start.eyebrow}</p>
+        <h2 id="start-title" class="section-heading">{content.start.title}</h2>
+        <p class="section-lead">{content.start.description}</p>
       </div>
-      <div class="cta-copy">
-        <h2 id="cta-title">{content.cta.title}</h2>
-        <p>{content.cta.description}</p>
+      <div class="start-actions">
+        {downloads.map((download) => (
+          <a class="start-card" href={download.href} download>
+            <span>{content.start.installer} {download.platformName}</span>
+            <strong>{download.packageType} · {download.architecture}</strong>
+            <small>{content.start.installerNote}</small>
+          </a>
+        ))}
+        <a class="start-card start-card-primary" href={publicPath(locale, "/start/quickstart/")}>
+          <span>{content.start.quickstart}</span>
+          <strong>{locale === "zh-cn" ? "安装、连接工作区并开始第一个任务" : "Install, connect a workspace, and begin the first task"}</strong>
+          <small>OpenCorvus documentation →</small>
+        </a>
+        <a class="start-card" href="https://github.com/yangheng95/opencorvus">
+          <span>{content.start.source}</span>
+          <strong>{locale === "zh-cn" ? "审查实现与构建流程" : "Review the implementation and build path"}</strong>
+          <small>github.com/yangheng95/opencorvus →</small>
+        </a>
+        <a class="start-card" href="https://github.com/yangheng95/opencorvus/releases">
+          <span>{content.start.releases}</span>
+          <strong>{locale === "zh-cn" ? "获取已发布的原生安装包" : "Get published native installers"}</strong>
+          <small>GitHub Releases →</small>
+        </a>
       </div>
     </section>
-  </div>
+  </main>
 
-  <dialog
-    id="landing-image-preview"
-    class="image-preview-dialog"
-    aria-label={content.imageViewer.dialog}
-    data-landing-image-dialog
-  >
-    <div class="image-preview-surface">
-      <img src="" alt="" data-landing-image-preview />
-      <form method="dialog">
-        <button type="submit" class="image-preview-close" aria-label={content.imageViewer.close}>
-          <span aria-hidden="true">×</span>
-        </button>
-      </form>
-    </div>
-  </dialog>
-
+  <PublicSiteFooter {locale} />
 </div>
 
-<script>
-  const previewDialog = document.querySelector<HTMLDialogElement>("[data-landing-image-dialog]")!
-  const previewImage = previewDialog.querySelector<HTMLImageElement>("[data-landing-image-preview]")!
-  let previewRequest = 0
-
-  document.querySelectorAll<HTMLButtonElement>("[data-image-preview-trigger]").forEach((trigger) => {
-    trigger.addEventListener("click", async () => {
-      const request = ++previewRequest
-      const source = trigger.getAttribute("data-preview-src")!
-      const alternativeText = trigger.getAttribute("data-preview-alt")!
-      previewImage.removeAttribute("src")
-      previewImage.alt = ""
-
-      const candidate = new Image()
-      candidate.decoding = "async"
-      candidate.src = source
-      try {
-        await candidate.decode()
-      } catch {
-        return
-      }
-      if (request !== previewRequest) return
-
-      previewImage.src = source
-      previewImage.alt = alternativeText
-      previewDialog.showModal()
-    })
-  })
-
-  previewDialog.addEventListener("click", (event) => {
-    if (event.target === previewDialog) previewDialog.close()
-  })
-
-  previewDialog.addEventListener("close", () => {
-    previewRequest += 1
-    previewImage.removeAttribute("src")
-    previewImage.alt = ""
-  })
-</script>
-
 <style>
-  .landing-shell {
-    --ink: #0a0a0a;
-    --ink-soft: #1f1f1f;
-    --paper: #f5f5f5;
-    --paper-bright: #ffffff;
-    --muted: #737373;
-    --line: #d4d4d4;
-    --web-card: #eaf7ee;
-    --web-card-border: #9ecfaf;
-    --web-card-line: #b9ddc5;
-    --web-action: #14532d;
-    --web-action-hover: #1f6b3d;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: Inter, "Noto Sans SC", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    min-width: 70rem;
+  .public-landing {
+    min-width: 1100px;
     overflow: hidden;
   }
 
-  .hero-canvas {
-    background: var(--ink);
-    color: white !important;
-    min-height: 52rem;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .landing-header,
-  .hero-section,
-  .section-wrap {
-    margin-inline: auto;
-    max-width: 78rem;
-  }
-
-  .landing-header {
+  .landing-hero {
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    min-height: 5.6rem;
-    position: relative;
-    z-index: 5;
   }
 
-  .brand,
-  .landing-header nav,
-  .header-actions,
-  .story-copy li {
-    align-items: center;
-    display: flex;
-  }
-
-  .brand {
-    color: white !important;
-    font-size: 1.06rem;
-    font-weight: 780;
-    gap: 0.72rem;
-    letter-spacing: -0.03em;
-    text-decoration: none;
-  }
-
-  .brand img,
-  .cta-mark img {
-    border-radius: 23%;
-  }
-
-  .landing-header nav {
-    gap: 2.2rem;
-    justify-self: center;
-  }
-
-  .landing-header a {
-    text-decoration: none;
-  }
-
-  .landing-header nav a,
-  .language-link {
-    font-size: 0.78rem;
-    font-weight: 700;
-  }
-
-  .landing-header nav a,
-  .language-link {
-    color: #a3a3a3 !important;
-  }
-
-  .hero-section {
-    display: grid;
-    gap: 3.75rem;
-    grid-template-columns: minmax(0, 1fr);
-    min-height: 46rem;
-    padding: 6.5rem 0 8rem;
-    position: relative;
-    z-index: 1;
-  }
-
-  .section-kicker {
-    color: var(--ink);
-    font-size: 0.7rem;
-    font-weight: 840;
-    letter-spacing: 0.16em;
+  .landing-video {
     margin: 0;
+    border: 2px solid var(--ink);
+    background: var(--ink);
+    box-shadow: 14px 14px 0 var(--cobalt-wash);
+    overflow: hidden;
+  }
+
+  .landing-video video,
+  .runtime-image img,
+  .squad-image-stack img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .landing-video figcaption,
+  .squad-image-stack figcaption {
+    padding: 12px 16px;
+    border-top: 1px solid #393a3f;
+    color: #d9d9d2;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  .work-mode-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 2px solid var(--ink);
+    border-left: 2px solid var(--ink);
+  }
+
+  .work-mode-grid article {
+    min-height: 330px;
+    padding: 26px;
+    border-right: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    background: var(--paper-raised);
+  }
+
+  .work-mode-grid article:nth-child(2) {
+    background: var(--cobalt-wash);
+  }
+
+  .mode-index,
+  .mode-use {
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  .mode-index {
+    color: var(--cobalt);
+  }
+
+  .mode-use {
+    min-height: 36px;
+    margin: 36px 0 0;
+    color: var(--muted);
     text-transform: uppercase;
   }
 
-  .hero-copy h1 {
-    color: white !important;
-    font-size: 4.65rem !important;
-    font-weight: 800 !important;
-    letter-spacing: -0.075em !important;
-    line-height: 1.04 !important;
-    margin: 0 0 2rem !important;
-    text-wrap: wrap;
-  }
-
-  :global(html[lang="zh-CN"]) .hero-copy h1 {
-    font-size: 3.75rem !important;
-    letter-spacing: -0.045em !important;
-    line-height: 1.1 !important;
-  }
-
-  .hero-description {
-    color: #a3a3a3;
-    font-size: 1.02rem;
-    line-height: 1.72;
-    margin: 0;
-  }
-
-  .hero-product {
-    position: relative;
-  }
-
-  .story-media {
-    background: #111111;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    overflow: hidden;
-  }
-
-  .window-chrome,
-  .story-window-chrome {
-    align-items: center;
-    background: #1f1f1f;
-    display: flex;
-    gap: 0.38rem;
-    height: 2.3rem;
-    padding-inline: 0.8rem;
-  }
-
-  .window-chrome > span,
-  .story-window-chrome > span {
-    background: #737373;
-    border-radius: 50%;
-    height: 0.45rem;
-    width: 0.45rem;
-  }
-
-  .window-chrome p {
-    color: var(--muted);
-    font: 0.58rem ui-monospace, "SFMono-Regular", Consolas, monospace;
-    margin: 0 0 0 0.5rem;
-  }
-
-  .hero-video-frame {
-    background: #111111;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 1.25rem;
-    overflow: hidden;
-  }
-
-  .hero-video-frame video {
-    aspect-ratio: 16 / 9;
-    background: #050505;
-    display: block;
-    object-fit: cover;
-    width: 100%;
-  }
-
-  .hero-video-frame > p {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    color: #8f8f8f;
-    font: 0.62rem ui-monospace, "SFMono-Regular", Consolas, monospace;
-    letter-spacing: 0.02em;
-    margin: 0;
-    padding: 0.9rem 1.15rem;
-  }
-
-  .image-preview-trigger {
-    background: transparent;
-    border: 0;
-    color: inherit;
-    cursor: zoom-in;
-    display: block;
-    overflow: hidden;
-    padding: 0;
-    position: relative;
-    width: 100%;
-  }
-
-  .image-preview-trigger::after {
-    background: rgba(255, 255, 255, 0.1);
-    content: "";
-    inset: 0;
-    opacity: 0;
-    pointer-events: none;
-    position: absolute;
-    transition: opacity 160ms ease;
-  }
-
-  .image-preview-trigger:hover::after,
-  .image-preview-trigger:focus-visible::after {
-    opacity: 1;
-  }
-
-  .image-preview-dialog {
-    background: transparent;
-    border: 0;
-    height: calc(100vh - 4rem);
-    inset: 0;
-    margin: auto;
-    max-height: calc(100vh - 4rem);
-    max-width: calc(100vw - 4rem);
-    overflow: auto;
-    overscroll-behavior: contain;
-    padding: 0;
-    position: fixed;
-    scrollbar-gutter: stable;
-    width: calc(100vw - 4rem);
-  }
-
-  .image-preview-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.88);
-    backdrop-filter: blur(0.5rem);
-  }
-
-  .image-preview-surface {
-    box-sizing: border-box;
-    display: flex;
-    min-height: 100%;
-    padding: 1rem;
-    position: relative;
-    width: 100%;
-  }
-
-  .image-preview-surface > img {
-    background: var(--ink);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 1rem;
-    display: block;
-    height: auto;
-    margin: auto;
-    max-width: 100%;
-    object-fit: contain;
-    width: auto;
-  }
-
-  .image-preview-close {
-    align-items: center;
-    background: rgba(10, 10, 10, 0.86);
-    border: 1px solid rgba(255, 255, 255, 0.24);
-    border-radius: 999px;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    font-size: 1.5rem;
-    height: 2.75rem;
-    justify-content: center;
-    line-height: 1;
-    padding: 0 0 0.12rem;
-    position: fixed;
-    right: 2.9rem;
-    top: 2.9rem;
-    width: 2.75rem;
-    z-index: 1;
-  }
-
-  .image-preview-close:hover {
-    background: var(--ink-soft);
-  }
-
-  .download-section {
-    background: var(--ink);
-    border-top: 1px solid rgba(255, 255, 255, 0.09);
-    color: white;
-    padding-block: 8rem;
-  }
-
-  .download-layout {
-    align-items: center;
-    display: grid;
-    gap: 5rem;
-    grid-template-columns: minmax(0, 0.72fr) minmax(42rem, 1.28fr);
-  }
-
-  .download-copy h2 {
-    color: white !important;
-    font-size: 3.05rem !important;
-    letter-spacing: -0.058em !important;
-    line-height: 1.08 !important;
-    margin: 1.15rem 0 0 !important;
-    max-width: 100%;
-  }
-
-  .download-copy > p:last-child {
-    color: #a3a3a3;
-    font-size: 0.95rem;
-    line-height: 1.75;
-    margin: 1.6rem 0 0;
-    max-width: 35rem;
-  }
-
-  .download-card-grid {
-    display: grid;
-    gap: 1.25rem;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .download-card {
-    background: var(--paper-bright);
-    border: 1px solid var(--line);
-    border-radius: 1.45rem;
-    color: var(--ink);
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    overflow: hidden;
-    min-height: 18.5rem;
-    padding: 1.65rem;
-  }
-
-  .download-card-web {
-    background: var(--web-card);
-    border-color: var(--web-card-border);
-  }
-
-  .download-card-web .download-platform {
-    color: var(--web-action);
-  }
-
-  .download-card-web .download-facts,
-  .download-card-web .download-facts > div {
-    border-color: var(--web-card-line);
-  }
-
-  .download-card-web .download-button {
-    background: var(--web-action);
-  }
-
-  .download-card-web .download-button:hover {
-    background: var(--web-action-hover);
-  }
-
-  .download-card-heading {
-    align-items: center;
-    display: flex;
-  }
-
-  .download-platform {
-    font-size: 1.5rem;
-    font-weight: 820;
-    letter-spacing: -0.04em;
-    line-height: 1.2;
-  }
-
-  .download-facts {
-    border-bottom: 1px solid var(--line);
-    border-top: 1px solid var(--line);
-    display: grid;
-    grid-template-columns: 1fr;
-    margin: 1.35rem 0;
-  }
-
-  .download-facts > div {
-    align-items: baseline;
-    border-bottom: 1px solid var(--line);
-    display: flex;
-    gap: 1rem;
-    justify-content: space-between;
-    padding: 0.85rem 0;
-  }
-
-  .download-facts > div:last-child {
-    border-bottom: 0;
-  }
-
-  .download-facts dt {
-    color: var(--muted);
-    font-size: 0.63rem;
-    font-weight: 760;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .download-facts dd {
-    color: var(--ink);
-    font-size: 0.84rem;
-    font-weight: 750;
-    margin: 0;
-    text-align: right;
-  }
-
-  .download-button {
-    align-items: center;
-    background: var(--ink);
-    border-radius: 0.8rem;
-    color: white !important;
-    display: flex;
-    font-size: 0.84rem;
-    font-weight: 780;
-    justify-content: space-between;
-    min-height: 3.4rem;
-    padding: 0.95rem 1.15rem;
-    text-decoration: none;
-    transition: background-color 160ms ease, transform 160ms ease;
-  }
-
-  .download-button:hover {
-    background: var(--ink-soft);
-  }
-
-  .features-heading {
-    margin-inline: auto;
-    max-width: 56rem;
-    text-align: center;
-  }
-
-  .features-heading h2,
-  .surfaces-heading h2,
-  .cta-copy h2 {
+  .public-landing .work-mode-grid h3 {
+    margin: 8px 0 18px;
+    font-family: var(--display);
     color: var(--ink) !important;
-    font-size: 3.7rem !important;
-    font-weight: 790 !important;
-    letter-spacing: -0.065em !important;
-    line-height: 1.1 !important;
-    margin: 1rem 0 0 !important;
-    text-wrap: balance;
+    font-size: 42px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    letter-spacing: -0.055em;
   }
 
-  .features-heading > p:last-child,
-  .surfaces-heading > p,
-  .cta-copy > p:last-child {
+  .work-mode-grid article > p:not(.mode-use) {
+    min-height: 92px;
+    margin: 0 0 24px;
     color: var(--muted);
-    line-height: 1.72;
-    margin: 1.35rem auto 0;
-    max-width: 47rem;
   }
 
-  .story-index,
-  .surface-number {
-    color: var(--muted);
-    font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
-    font-size: 0.66rem;
-  }
-
-  .features-section {
-    background: var(--paper-bright);
-    padding-block: 9rem;
-  }
-
-  .feature-stories {
-    display: grid;
-    gap: 7.5rem;
-    margin-top: 7rem;
-  }
-
-  .feature-stories article {
-    align-items: center;
-    display: grid;
-    gap: 5.8rem;
-    grid-template-columns: 0.78fr 1.22fr;
-  }
-
-  .feature-stories article.reverse {
-    grid-template-columns: 1.22fr 0.78fr;
-  }
-
-  .feature-stories article.reverse .story-copy {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  .feature-stories article.reverse .story-media {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .story-copy h3 {
-    color: var(--ink) !important;
-    font-size: 2.55rem !important;
-    font-weight: 780 !important;
-    letter-spacing: -0.055em !important;
-    line-height: 1.12 !important;
-    margin: 1.25rem 0 0 !important;
-    text-wrap: balance;
-  }
-
-  .story-copy > p {
-    color: var(--muted);
-    font-size: 0.9rem;
-    line-height: 1.72;
-    margin: 1.2rem 0 0;
-  }
-
-  .story-copy ul {
-    border-top: 1px solid var(--line);
-    list-style: none;
-    margin: 1.6rem 0 0;
-    padding: 0;
-  }
-
-  .story-copy li {
-    border-bottom: 1px solid var(--line);
-    font-size: 0.76rem;
-    font-weight: 680;
-    gap: 0.62rem;
-    padding: 0.82rem 0;
-  }
-
-  .story-copy li span {
-    color: var(--ink);
-  }
-
-  .story-media {
-    border-color: var(--line);
-    border-radius: 1.4rem;
-  }
-
-  .story-window-chrome {
-    background: var(--paper);
-  }
-
-  .story-media img {
+  .work-mode-grid strong {
     display: block;
-    height: auto;
-    width: 100%;
+    padding-top: 16px;
+    border-top: 1px solid var(--ink);
+    font-size: 13px;
   }
 
-  .squad-section {
-    background: var(--ink);
-    color: white;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .squad-layout {
+  .squad-story-grid {
+    display: grid;
+    grid-template-columns: 0.72fr 1.28fr;
+    gap: 56px;
     align-items: start;
-    column-gap: 6rem;
+  }
+
+  .squad-capabilities {
+    border-top: 2px solid var(--ink);
+  }
+
+  .squad-capabilities article {
     display: grid;
-    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
-    padding-block: 11rem;
-    position: relative;
-    row-gap: 1.25rem;
-    z-index: 1;
+    grid-template-columns: 38px 1fr;
+    gap: 18px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--ink);
   }
 
-  .squad-copy h2 {
-    color: white !important;
-    font-size: 3.65rem !important;
-    font-weight: 790 !important;
-    letter-spacing: -0.065em !important;
-    line-height: 1.1 !important;
-    margin: 0 !important;
-    text-wrap: balance;
+  .squad-capabilities span {
+    color: var(--cobalt);
+    font-family: var(--mono);
+    font-size: 11px;
   }
 
-  .squad-copy > p:last-of-type {
-    color: #a3a3a3;
-    line-height: 1.75;
-    margin: 1.5rem 0 0;
-    max-width: 38rem;
+  .public-landing .squad-capabilities h3 {
+    margin: 0 0 7px;
+    color: var(--ink) !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    line-height: 1.6 !important;
   }
 
-  .squad-proof {
-    display: grid;
-    gap: 1.25rem;
-    padding-top: 0.55rem;
-  }
-
-  .squad-capability-list {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .squad-capability-list article {
-    background: rgba(255, 255, 255, 0.055);
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    border-radius: 1.1rem;
-    display: grid;
-    gap: 0.6rem;
-    min-height: 8.5rem;
-    padding: 1.1rem 1.3rem;
-  }
-
-  .squad-capability-list article > span {
-    color: #a3a3a3;
-    font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
-    font-size: 0.64rem;
-  }
-
-  .squad-capability-list article > div {
-    align-self: end;
-  }
-
-  .squad-capability-list h3 {
-    color: white !important;
-    font-size: 1rem !important;
-    line-height: 1.25 !important;
-    margin: 0 !important;
-  }
-
-  .squad-capability-list p {
-    color: #a3a3a3;
-    font-size: 0.7rem;
-    line-height: 1.55;
-    margin: 0.55rem 0 0;
-  }
-
-  .squad-media-grid {
-    display: grid;
-    gap: 1rem;
-    grid-column: 1 / -1;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .squad-media-card {
-    aspect-ratio: 2.02 / 1;
-    background: #f5f5f5;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 0.9rem;
-  }
-
-  .squad-media-card img {
-    display: block;
-    height: 100%;
-    object-fit: contain;
-    object-position: top center;
-    width: 100%;
-  }
-
-  .squad-flow {
-    background: #0b0b0b;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 1.4rem;
-    grid-column: 1 / -1;
-    margin-top: 5.75rem;
-    overflow: hidden;
-  }
-
-  .surfaces-section {
-    background: var(--ink);
-    color: white !important;
-    padding-block: 10.5rem;
-  }
-
-  .surfaces-heading {
-    align-items: end;
-    display: grid;
-    gap: 7rem;
-    grid-template-columns: 1fr 0.66fr;
-  }
-
-  .surfaces-heading .section-kicker {
-    color: white;
-  }
-
-  .surfaces-heading h2 {
-    color: white !important;
-  }
-
-  .surfaces-heading > p {
-    color: #a3a3a3;
+  .squad-capabilities p {
     margin: 0;
+    color: var(--muted);
+    font-size: 14px;
   }
 
-  .surface-grid {
+  .squad-image-stack {
     display: grid;
-    gap: 1.1rem;
-    grid-template-columns: repeat(4, 1fr);
-    margin-top: 5.5rem;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 18px;
+    align-items: end;
   }
 
-  .surface-card {
-    background: rgba(255, 255, 255, 0.045);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 1.2rem;
-    color: white !important;
+  .squad-image-stack figure,
+  .runtime-image {
+    margin: 0;
+    border: 2px solid var(--ink);
+    background: #0d0e12;
+  }
+
+  .squad-image-stack figure:last-child {
+    transform: translateY(32px);
+  }
+
+  .runtime-image {
+    margin-top: 38px;
+  }
+
+  .start-section {
     display: grid;
-    grid-template-rows: auto 1fr;
-    overflow: hidden;
-    position: relative;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 72px;
+    align-items: start;
   }
 
-  .surface-media {
-    aspect-ratio: 3 / 2;
-    background: #0a0a0a;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    overflow: hidden;
+  .start-actions {
+    border-top: 2px solid var(--ink);
   }
 
-  .surface-media img {
-    display: block;
-    height: 100%;
-    object-fit: contain;
-    width: 100%;
+  .start-card {
+    display: grid;
+    grid-template-columns: 0.55fr 1fr;
+    gap: 10px 24px;
+    padding: 24px;
+    border-right: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    border-left: 2px solid var(--ink);
+    text-decoration: none;
   }
 
-  .surface-number {
-    background: #0a0a0a;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 999px;
+  .start-card:hover {
+    background: var(--cobalt-wash);
+  }
+
+  .start-card-primary {
+    background: var(--cobalt);
     color: white;
-    padding: 0.35rem 0.5rem;
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
-    z-index: 1;
   }
 
-  .surface-copy {
-    padding: 0.25rem 1.55rem 1.55rem;
+  .start-card-primary:hover {
+    background: var(--cobalt-deep);
   }
 
-  .surface-card strong {
-    color: white;
-    display: block;
-    font-size: 1.08rem;
-    letter-spacing: -0.025em;
-    line-height: 1.25;
+  .start-card span {
+    grid-row: 1 / span 2;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
   }
 
-  .surface-description {
-    color: #d4d4d4;
-    display: block;
-    font-size: 0.76rem;
-    line-height: 1.58;
-    margin-top: 0.62rem;
+  .start-card strong {
+    line-height: 1.35;
   }
 
-  .cta-section {
-    align-items: center;
-    display: grid;
-    gap: 5rem;
-    grid-template-columns: auto minmax(0, 1fr);
-    min-height: 42rem;
-    padding-block: 11rem;
-  }
-
-  .cta-mark {
-    background: white;
-    border: 1px solid var(--line);
-    border-radius: 2.4rem;
-    display: grid;
-    padding: 0.55rem;
-    place-items: center;
-  }
-
-  .cta-copy {
-    max-width: none;
-  }
-
-  .cta-copy h2 {
-    font-size: 4.5rem !important;
-    max-width: none;
-    text-wrap: wrap;
-  }
-
-  .cta-copy > p:last-child {
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  .landing-header nav a:hover,
-  .language-link:hover {
-    color: white !important;
-  }
-
-  .landing-shell a:focus-visible,
-  .landing-shell video:focus-visible,
-  .landing-shell button:focus-visible {
-    outline: 3px solid #a3a3a3;
-    outline-offset: 4px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .landing-shell *,
-    .landing-shell *::before,
-    .landing-shell *::after {
-      scroll-behavior: auto !important;
-      transition-duration: 0.01ms !important;
-    }
+  .start-card small {
+    color: currentColor;
+    opacity: 0.72;
   }
 </style>
 
@@ -1144,4 +397,18 @@ const webApplicationCard = {
   :root[data-has-hero] .content-panel .sl-markdown-content {
     display: none;
   }
+
+  :root[data-has-hero] body {
+    margin: 0;
+    background: var(--paper);
+  }
+
+  :root[data-has-hero] .public-landing .landing-video video {
+    display: block;
+    width: 100% !important;
+    height: 470px !important;
+    object-fit: cover;
+    object-position: left top;
+  }
+
 </style>

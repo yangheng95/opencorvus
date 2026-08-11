@@ -1,0 +1,3 @@
+Select this Squad when a sport program needs a reviewable evidence pack for training/competition exposure, internal or external load, performance-test protocols and reliability, individual longitudinal change, availability, self-reported wellbeing, travel, or recovery context.
+
+Do not select it for score/news reporting, betting or prediction markets, diagnosis, injury prediction, return-to-play, clinical treatment, live coaching, training prescription, nutrition or supplement advice, anti-doping decisions, team selection, contracts, employment, or discipline. Those decisions require named coaching, sport-science, medical, privacy, safeguarding, and athlete authority.

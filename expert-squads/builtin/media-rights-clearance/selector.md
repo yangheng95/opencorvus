@@ -1,0 +1,3 @@
+Select this Squad when a specific production, campaign, catalog, program, title, cut, or media package needs component-level rights evidence and a reviewable clearance decision pack.
+
+Use it to inventory third-party material, trace chain of title and releases, normalize supplied permissions and restrictions, compare them with intended uses, and expose territory, term, window, platform, edit, credit, fee, reporting, privacy, publicity, trademark, and expiry gaps. Do not select it for broad legal research without media assets, channel-format delivery, live publishing, contract negotiation, or autonomous rights-holder contact.

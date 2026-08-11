@@ -1,341 +1,172 @@
 export type LandingLocale = "root" | "zh-cn"
 
 export const landingProductName = "OpenCorvus"
-const publicBase = import.meta.env.BASE_URL.replace(/\/$/, "")
-
-type LandingLink = {
-  label: string
-  href: string
-}
-
-type LandingSurface = {
-  title: string
-  description: string
-}
-
-type LandingStory = {
-  label: string
-  title: string
-  description: string
-  bullets: string[]
-}
-
-type LandingContent = {
-  language: LandingLink
-  imageViewer: {
-    open: string
-    close: string
-    dialog: string
-  }
-  nav: {
-    market: string
-    publish: string
-    trust: string
-    download: string
-    features: string
-    expertSquads: string
-  }
-  hero: {
-    title: string
-    description: string
-    videoLabel: string
-    videoCaption: string
-  }
-  download: {
-    eyebrow: string
-    title: string
-    description: string
-    systemLabel: string
-    architectureLabel: string
-    packageLabel: string
-    actions: {
-      "windows-x64": string
-      "darwin-arm64": string
-      "linux-x64": string
-    }
-    web: {
-      platformName: string
-      action: string
-      system: string
-      architecture: string
-      packageType: string
-    }
-  }
-  features: {
-    eyebrow: string
-    title: string
-    description: string
-    items: LandingStory[]
-  }
-  expertSquads: {
-    title: string
-    description: string
-    capabilities: Array<{ label: string; description: string }>
-    flowLabel: string
-    flowAlt: string
-    media: Array<{ alt: string }>
-  }
-  surfaces: {
-    eyebrow: string
-    title: string
-    description: string
-    items: LandingSurface[]
-  }
-  cta: {
-    title: string
-    description: string
-  }
-}
 
 export const landingContent = {
   root: {
-    language: { label: "简体中文", href: `${publicBase}/zh-cn/` },
-    imageViewer: {
-      open: "View full-size image",
-      close: "Close image preview",
-      dialog: "Product screenshot preview",
-    },
-    nav: {
-      market: "Marketplace",
-      publish: "Publish",
-      trust: "Trust",
-      download: "Download",
-      features: "Use cases",
-      expertSquads: "Expert Squads",
-    },
+    language: { label: "简体中文", href: "/zh-cn/" },
     hero: {
-      title: "From an idea to a review-ready delivery.",
+      eyebrow: "Open Agent Harness",
+      title: "Bring one outcome. Leave with a review-ready result.",
       description:
-        `${landingProductName} keeps investigation, implementation, evidence, and long-running work in one project context—so you can stay in flow without becoming your own full engineering department.`,
-      videoLabel: "Play the 01:36 local client walkthrough",
-      videoCaption: "Real OpenCorvus client · durable Mission execution with visible evidence · 01:36",
+        "OpenCorvus gives an agent a real workspace, assembles the specialist team the work needs, and keeps decisions, tool results, files, and review evidence attached to the mission.",
+      primary: "Explore Expert Squads",
+      secondary: "Read the quickstart",
+      videoLabel: "OpenCorvus desktop mission walkthrough",
+      videoCaption: "One mission, one visible workspace, one evidence trail.",
     },
-    download: {
-      eyebrow: `${landingProductName} access`,
-      title: `Run ${landingProductName} where you work.`,
+    proof: [
+      ["Real work", "Agents operate on repositories, files, terminals, and connected tools."],
+      ["Right-sized team", "Use one agent for a direct task or an Expert Squad for work that needs specialist review."],
+      ["Reviewable delivery", "The result stays connected to the decisions and evidence that produced it."],
+    ],
+    modes: {
+      eyebrow: "Choose the depth of work",
+      title: "Start with the outcome, then choose the lightest mode that can finish it.",
       description:
-        "Choose a native package for your system or enter the Web application directly. Every path keeps your work attached to one durable project context.",
-      systemLabel: "System",
-      architectureLabel: "Architecture",
-      packageLabel: "Installer",
-      actions: {
-        "windows-x64": "Download Windows x64",
-        "darwin-arm64": "Download for Apple Silicon",
-        "linux-x64": "Download Linux x64",
-      },
-      web: {
-        platformName: "Web",
-        action: "Open Web application",
-        system: "Modern browser",
-        architecture: "Cloud",
-        packageType: "Web application",
-      },
-    },
-    features: {
-      eyebrow: "Built for the way solo developers actually work",
-      title: "One project context. Three practical use cases.",
-      description:
-        "Move from a quick investigation to a complete change or durable delegation without reconstructing the work at every step.",
+        "Chat, Work, and Mission are not three products. They are three levels of coordination inside the same workspace.",
       items: [
         {
-          label: "Investigate & unblock",
-          title: "Find the cause while the code is still in your head.",
-          description:
-            "Use Chat for fast repository exploration, questions, and iterative debugging in a streaming conversation attached to the current project.",
-          bullets: [
-            "Repository context, attachments, Skills, and tools stay together",
-            "Tool activity and reasoning progress remain visible",
-            "Follow-up questions continue from the same evidence",
-          ],
+          index: "01",
+          name: "Chat",
+          use: "Clarify, inspect, and decide",
+          description: "Use a conversation when you need an answer, a diagnosis, or a small decision before any larger execution begins.",
+          output: "A clear answer or next action",
         },
         {
-          label: "Build a complete change",
-          title: "Turn a request into something you can actually review.",
-          description:
-            "Use Work for the deeper production pass: research, implementation, and finished artifacts that stay inspectable beside their source conversation.",
-          bullets: [
-            "Longer research and implementation passes",
-            "Interactive documents, tables, presentations, and sites",
-            "Reviewable output stays connected to its evidence",
-          ],
+          index: "02",
+          name: "Work",
+          use: "Execute one bounded task",
+          description: "Give one agent a concrete change, investigation, or artifact and keep its tools and evidence visible in the same thread.",
+          output: "A finished task with evidence",
         },
         {
-          label: "Delegate durable work",
-          title: "Keep complex work moving after you step away.",
-          description:
-            "Use Mission when an outcome needs decomposition, specialized Agents, Goals, evidence, and resumable progress over a longer execution horizon.",
-          bullets: [
-            "Mission-owned Tasks and Goal-level progress",
-            "Specialists coordinate through visible contracts",
-            "Durable local evidence supports inspection and continuation",
-          ],
+          index: "03",
+          name: "Mission",
+          use: "Coordinate a multi-step outcome",
+          description: "Use a mission when planning, implementation, validation, and independent review need different roles and a shared goal.",
+          output: "A coordinated, review-ready delivery",
         },
       ],
     },
-    expertSquads: {
-      title: "Choose a complete expert team—not a pile of disconnected Agents.",
+    squads: {
+      eyebrow: "Expert Squads",
+      title: "Choose a team by the work it is designed to finish.",
       description:
-        "An Expert Squad is a self-contained capability package. Selecting one projects the right Agent roster, Skills, tools, Model Context Protocol (MCP) access, and binding workflow into the task as one coherent operating contract.",
+        "Each Expert Squad is an inspectable package: its roles, workflow, skills, tools, selection guidance, version, and digest travel together.",
       capabilities: [
-        { label: "Agents", description: "A task-specific roster with explicit responsibilities." },
-        { label: "Skills", description: "Domain instructions travel with the selected team." },
-        { label: "Tools + MCP", description: "Only the required tool and Model Context Protocol access is projected." },
-        { label: "Binding workflows", description: "Evidence dependencies stay visible and reviewable." },
+        ["Selection guidance", "Know when the team fits—and when it does not—before starting."],
+        ["Named responsibilities", "Every specialist has a visible role instead of an anonymous pool of agents."],
+        ["Evidence contract", "The workflow defines what must be inspected, produced, and reviewed."],
       ],
-      flowLabel: "OpenCorvus / complete Mission workflow",
-      flowAlt:
-        "A complete Mission workflow branching through two schedulers, investigators, planners, developers, reviewers, and handoffs.",
-      media: [
-        { alt: "Expert Squad catalog and installation options" },
-        { alt: "Installed Expert Squads overview and selected package details" },
-      ],
+      catalogAlt: "OpenCorvus Expert Squad catalog",
+      installedAlt: "Installed Expert Squad details in OpenCorvus",
+      action: "Browse featured Expert Squads",
+      buildAction: "Build an Expert Squad",
     },
-    surfaces: {
-      eyebrow: "The runtime behind 24/7 operation",
-      title: "Your work does not depend on one open window.",
+    continuity: {
+      eyebrow: "One runtime, several surfaces",
+      title: "Keep the mission continuous when the surface changes.",
       description:
-        "Desktop, headless runtime, messaging channels, and repository automation keep the same project work reachable and resumable.",
-      items: [
-        {
-          title: "Desktop continuity",
-          description: "Chat, Work, Mission, and Scheduled share one project ledger with visible state and evidence.",
-        },
-        {
-          title: "Headless runtime",
-          description:
-            "Keep task APIs, durable state, and event streams available without depending on the desktop interface.",
-        },
-        {
-          title: "Channel reach",
-          description:
-            `Start and follow ${landingProductName} work through supported messaging channels and their permission flow.`,
-        },
-        {
-          title: "Scheduled repository automation",
-          description: "Wake work from recurring schedules, issue or pull-request events, and manual workflows.",
-        },
+        "The desktop client is the visible control surface. Headless and connected-channel runtimes let the same mission continue without inventing a second source of truth.",
+      facts: [
+        ["Desktop", "Inspect the workspace, decisions, tools, and evidence directly."],
+        ["Headless", "Run repository or scheduled work while retaining the same mission identity."],
+        ["Connected channels", "Reach the mission from another surface without splitting its history."],
       ],
+      imageAlt: "OpenCorvus mission continuing across desktop and headless runtime surfaces",
     },
-    cta: {
-      title: "Keep your context. Bring in the right team. Ship the result.",
+    start: {
+      eyebrow: "Start with a path you can verify",
+      title: "Explore the team first. Install OpenCorvus when you are ready to run it.",
       description:
-        `Start with one repository and one request. ${landingProductName} helps you investigate, produce a complete deliverable, and keep complex work moving with visible evidence.`,
+        "The public catalog explains what each Expert Squad contains. The quickstart covers the client and local workflow. Source and release artifacts remain available for inspection.",
+      quickstart: "Open the quickstart",
+      source: "Inspect the source",
+      releases: "View releases",
+      installer: "Download for",
+      installerNote: "Native installer discovered from this release build.",
     },
   },
   "zh-cn": {
-    language: { label: "English", href: `${publicBase}/` },
-    imageViewer: {
-      open: "查看大图",
-      close: "关闭图片预览",
-      dialog: "产品截图预览",
-    },
-    nav: {
-      market: "专家团市场",
-      publish: "发布",
-      trust: "可信机制",
-      download: "下载",
-      features: "使用场景",
-      expertSquads: "专家团",
-    },
+    language: { label: "English", href: "/" },
     hero: {
-      title: "从一个想法，到可审查的完整交付。",
+      eyebrow: "开放式 Agent Harness",
+      title: "带来一个目标，带走一份可审查的交付。",
       description:
-        `${landingProductName} 把调查、实现、证据与长程工作留在同一个项目上下文中，让独立开发者保持专注，也拥有一支完整工程团队的交付能力。`,
-      videoLabel: "播放 01:36 本地客户端实录",
-      videoCaption: "OpenCorvus 真实客户端 · 带可见证据的长程 Mission 执行 · 01:36",
+        "OpenCorvus 为 Agent 提供真实工作区，按任务需要组建专家团队，并让决策、工具结果、文件与审查证据始终归属于同一个任务。",
+      primary: "浏览专家团",
+      secondary: "阅读快速开始",
+      videoLabel: "OpenCorvus 桌面任务演示",
+      videoCaption: "一个任务、一个可见工作区、一条完整证据链。",
     },
-    download: {
-      eyebrow: `${landingProductName} 使用入口`,
-      title: `选择适合你的 ${landingProductName} 运行方式。`,
-      description: "下载适合当前系统的原生安装包，或直接进入网页版。每一种入口都让工作持续留在同一个可回看的项目上下文中。",
-      systemLabel: "系统",
-      architectureLabel: "架构",
-      packageLabel: "安装包",
-      actions: {
-        "windows-x64": "下载 Windows x64 版",
-        "darwin-arm64": "下载 Apple Silicon 版",
-        "linux-x64": "下载 Linux x64 版",
-      },
-      web: {
-        platformName: "网页版",
-        action: "进入网页版",
-        system: "现代浏览器",
-        architecture: "云端",
-        packageType: "Web 应用",
-      },
-    },
-    features: {
-      eyebrow: "为独立开发者的真实工作方式而生",
-      title: "一个项目上下文，覆盖三种高频场景。",
-      description: "从快速调查到完整改动，再到长程委托，无需在每一步重新拼装上下文。",
+    proof: [
+      ["真实工作", "Agent 直接操作代码仓库、文件、终端和已连接工具。"],
+      ["合适的团队", "直接任务使用单个 Agent；需要专业分工与复核时使用专家团。"],
+      ["可审查交付", "结果始终关联产生它的决策过程和证据。"],
+    ],
+    modes: {
+      eyebrow: "选择工作深度",
+      title: "先明确结果，再选择足以完成它的最轻工作方式。",
+      description: "对话、工作和任务不是三个产品，而是同一个工作区里的三种协作深度。",
       items: [
         {
-          label: "快速排障",
-          title: "沿着当前上下文，把问题一次查清。",
-          description: "在与当前项目绑定的流式 Chat 中探索仓库、连续追问并迭代排障。",
-          bullets: [
-            "项目上下文、附件、Skill 与工具保持在同一对话",
-            "工具活动与推进过程持续可见",
-            "后续追问沿用同一份证据",
-          ],
+          index: "01",
+          name: "对话",
+          use: "澄清、检查与决策",
+          description: "当你需要答案、诊断或在执行前做一个小决策时，从对话开始。",
+          output: "清晰的答案或下一步",
         },
         {
-          label: "完整交付",
-          title: "把一个需求变成真正可以审查的成果。",
-          description: "用 Work 完成更深入的研究、实现和成品输出，交付物始终与来源对话和证据保持连接。",
-          bullets: ["更长的研究与实现过程", "交互式文档、表格、演示文稿与网站", "可审查产物与证据保持连接"],
+          index: "02",
+          name: "工作",
+          use: "完成一个边界明确的任务",
+          description: "让一个 Agent 执行具体改动、调查或产物制作，并在同一任务中保留工具与证据。",
+          output: "带证据的已完成任务",
         },
         {
-          label: "长程推进",
-          title: "离开电脑后，复杂工作仍然可以继续。",
-          description: "当目标需要拆解、专业 Agent、Goal、证据与更长执行周期时，把它交给 Mission 持续推进。",
-          bullets: ["Mission 持有 Task 与 Goal 级进度", "专业 Agent 按可见契约协作", "本地持久证据支持检查与续跑"],
+          index: "03",
+          name: "任务",
+          use: "协调多步骤结果",
+          description: "当规划、实现、验收和独立审查需要不同角色共同完成时，使用任务模式。",
+          output: "经过协同和复核的交付",
         },
       ],
     },
-    expertSquads: {
-      title: "选择一支完整专家团队，而不是堆叠更多 Agent。",
-      description:
-        "Expert Squad（专家团）是自包含的能力包。选择专家团后，Agent 阵容、Skill、工具、MCP（Model Context Protocol，模型上下文协议）访问与绑定工作流会作为一份一致的执行契约投影到任务中。",
+    squads: {
+      eyebrow: "专家团",
+      title: "按团队能够完成的工作来选择，而不是按头像和口号。",
+      description: "每个专家团都是可检查的能力包：角色、工作流、Skills、工具、选择说明、版本和摘要一起交付。",
       capabilities: [
-        { label: "Agent 阵容", description: "针对任务配置职责清晰的专业角色。" },
-        { label: "Skill", description: "领域方法与约束随专家团一起生效。" },
-        { label: "工具与 MCP", description: "只投影当前团队需要的工具和协议访问。" },
-        { label: "绑定工作流", description: "证据依赖与协作顺序持续可见、可审查。" },
+        ["选择说明", "开始前就知道团队适合什么，也知道它不适合什么。"],
+        ["明确职责", "每位专家都有可见责任，而不是匿名 Agent 池。"],
+        ["证据契约", "工作流明确必须检查、产出和独立复核的内容。"],
       ],
-      flowLabel: "OpenCorvus / 完整 Mission 工作流",
-      flowAlt: "一条完整 Mission 工作流，分为两条调度链，依次经过调查、规划、开发、审查与交接。",
-      media: [
-        { alt: "专家团目录与安装选项" },
-        { alt: "已安装专家团总览与所选能力包详情" },
-      ],
+      catalogAlt: "OpenCorvus 专家团目录",
+      installedAlt: "OpenCorvus 中已安装专家团的详情",
+      action: "浏览精选专家团",
+      buildAction: "构建专家团",
     },
-    surfaces: {
-      eyebrow: "支撑 7×24 小时运行的基础能力",
-      title: "你的工作不依赖一个始终打开的窗口。",
-      description: "桌面端、无界面运行时、消息通道与仓库自动化让同一个项目持续可达、随时可续跑。",
-      items: [
-        {
-          title: "桌面连续性",
-          description: "Chat、Work、Mission 与定时任务共用一个项目账本，状态和证据始终可见。",
-        },
-        {
-          title: "无界面运行时",
-          description: "无需依赖桌面界面，也能持续提供任务 API、持久状态与事件流。",
-        },
-        {
-          title: "消息通道触达",
-          description: `通过受支持的消息通道发起并跟进 ${landingProductName} 工作，同时保留权限流程。`,
-        },
-        {
-          title: "定时与仓库自动化",
-          description: "通过周期计划、Issue 或合并请求事件以及手动工作流唤醒工作。",
-        },
+    continuity: {
+      eyebrow: "一个运行时，多种工作界面",
+      title: "工作界面变化时，任务仍然连续。",
+      description: "桌面客户端是可见控制面；无头运行和外部频道让同一个任务继续执行，而不会产生第二份事实来源。",
+      facts: [
+        ["桌面端", "直接检查工作区、决策、工具和证据。"],
+        ["无头运行", "执行仓库或计划任务，同时保留同一个任务身份。"],
+        ["外部频道", "从其他界面触达任务，但不拆分它的历史。"],
       ],
+      imageAlt: "OpenCorvus 任务在桌面和无头运行界面之间保持连续",
     },
-    cta: {
-      title: "保留上下文，带上合适的团队，交付最终结果。",
-      description: `从一个仓库和一个需求开始。${landingProductName} 帮你调查问题、完成可审查交付，并用可见证据持续推进复杂工作。`,
+    start: {
+      eyebrow: "从可验证的路径开始",
+      title: "先了解团队；准备实际运行时，再安装 OpenCorvus。",
+      description: "公开目录解释每个专家团包含什么；快速开始说明客户端与本地工作流；源码和发行产物始终可供检查。",
+      quickstart: "打开快速开始",
+      source: "检查源代码",
+      releases: "查看发行版本",
+      installer: "下载",
+      installerNote: "从当前发行构建中发现的原生安装包。",
     },
   },
-} satisfies Record<LandingLocale, LandingContent>
+} as const

@@ -1,0 +1,11 @@
+Use `clinical-trial-operations/shared/method` to prepare the startup and site-readiness evidence branch.
+
+Input contract: require study/protocol/amendment IDs and effective dates, sponsor and site IDs, country/jurisdiction, study stage, approved startup plan and site-specific requirements, ethics/regulatory approval records as supplied, contracts/budget status references, investigator and staff qualifications, role/delegation log, training records, facility/equipment/laboratory/pharmacy and investigational-product dependencies, vendor/system access, essential-document plan, source/version/date, evidence cutoff/time zone, owner, and qualified reviewers. Do not infer approval from document presence.
+
+Domain method: define each readiness requirement from an approved plan or current official source selected by a qualified owner. Trace requirement ID to protocol/site/jurisdiction applicability, artifact ID/version/date, approval/signature/effective status, responsible role, training and delegation evidence, facility/system dependency, open issue, escalation, and activation decision owner. Separate `present`, `current`, `approved`, `effective`, and `applicable`; none implies site activation.
+
+Evidence output: populate the site-readiness matrix with requirement and evidence IDs, protocol/amendment/site/jurisdiction, units where capacity or timing is measured, source/version/date, applicability, uncertainty, audit-trail status, owner, qualified reviewer, dependency, issue, and decision state. Return gaps and the authorized owner needed to resolve them.
+
+Unknown and stop: stop on conflicting approvals or protocol versions, missing delegation, expired/unclear training, unverified facility/system readiness, absent document authority, unauthorized personal data, or any request to sign, submit, contact a site/authority, waive a requirement, or activate enrollment.
+
+Authority and qualified review: do not decide investigator qualification, ethics/regulatory sufficiency, contract/budget acceptance, site activation, investigational-product release, or enrollment start. Require Principal Investigator, sponsor clinical operations, regulatory/ethics, contracts/finance, pharmacy/laboratory, information security/privacy, Quality Assurance, and site owner.

@@ -12,6 +12,7 @@ type WorkflowStep = {
 }
 
 type WorkflowJob = {
+  if?: string
   needs?: string | string[]
   outputs?: Record<string, string>
   strategy?: {
@@ -24,6 +25,7 @@ type WorkflowJob = {
 
 type Workflow = {
   on?: Record<string, unknown>
+  concurrency?: Record<string, unknown>
   jobs?: Record<string, WorkflowJob>
 }
 
@@ -158,6 +160,40 @@ describe("GitHub Actions workflow contract", () => {
       },
       run: 'gh release edit "v${VERSION}" --draft=false --prerelease="${PRERELEASE}" --repo "$GITHUB_REPOSITORY"\nCHANNEL_TAG="desktop-update-${UPDATE_CHANNEL}"\nif ! gh release view "$CHANNEL_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then\n  gh release create "$CHANNEL_TAG" \\\n    --prerelease \\\n    --title "OpenCorvus ${UPDATE_CHANNEL} desktop update channel" \\\n    --notes "Mutable signed desktop update metadata. Installers remain in immutable versioned releases." \\\n    --repo "$GITHUB_REPOSITORY"\nfi\nCHANNEL_DIR="$(mktemp -d)"\ngh release download "v${VERSION}" --pattern latest.json --dir "$CHANNEL_DIR" --repo "$GITHUB_REPOSITORY"\ngh release upload "$CHANNEL_TAG" "$CHANNEL_DIR/latest.json" --clobber --repo "$GITHUB_REPOSITORY"\n',
     })
+    expect(
+      jobs["publish-release"]?.steps?.find(({ name }) => name === "Dispatch public download page deployment"),
+    ).toEqual({
+      name: "Dispatch public download page deployment",
+      env: {
+        GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
+        VERSION: "${{ needs.prepare.outputs.version }}",
+      },
+      run: 'gh api --method POST "repos/$GITHUB_REPOSITORY/dispatches" \\\n  -f event_type=opencorvus-release-published \\\n  -F "client_payload[version]=$VERSION"\n',
+    })
+  })
+
+  test("converges every production trigger on the current release download manifest", async () => {
+    const workflow = await readWorkflow("deploy-opencorvus-com.yml")
+    const jobs = workflow.jobs ?? {}
+    expect(workflow.on?.repository_dispatch).toEqual({ types: ["opencorvus-release-published"] })
+    expect(workflow.concurrency).toEqual({
+      group: "opencorvus-com-production",
+      queue: "max",
+      "cancel-in-progress": false,
+    })
+    expect(jobs["sign-and-deploy"]?.if).toBe(
+      "${{ github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch' || vars.OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED == 'true' }}",
+    )
+
+    const buildSteps = jobs.build?.steps ?? []
+    const manifestStep = buildSteps.find(({ name }) => name === "Generate current public download manifest")
+    expect(manifestStep?.env).toEqual({
+      GH_TOKEN: "${{ github.token }}",
+      DISPATCH_VERSION: "${{ github.event.client_payload.version || '' }}",
+    })
+    expect(manifestStep?.run).toContain('gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100"')
+    expect(manifestStep?.run).toContain("generate-website-download-manifest.ts")
+    expect(buildSteps.indexOf(manifestStep!)).toBeLessThan(buildSteps.findIndex(({ name }) => name === "Check website"))
   })
 
   test("prepares generated dependencies and native runtime tools before push verification", async () => {

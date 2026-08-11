@@ -1,0 +1,3 @@
+Select this Squad when the requested outcome concerns the preservation of museum objects, archives, monuments, built heritage, archaeological material, sites, or digital surrogates and requires significance/provenance evidence, a condition baseline, preventive-risk scenarios, digital fixity, or access restrictions.
+
+Do not select it for general knowledge-base publishing, art search, exhibition copy, physical conservation treatment, emergency command, structural certification, authentication, ownership or restitution decisions, excavation, deaccession, or release of culturally restricted material. Those decisions remain with qualified conservators, custodians, communities, legal authorities, and other named specialists.

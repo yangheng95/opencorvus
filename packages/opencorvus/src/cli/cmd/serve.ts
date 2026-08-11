@@ -397,11 +397,11 @@ export async function handleServeCommand(args: ArgumentsCamelCase<ServeOptions>)
     })
       .then((result) => {
         console.log(
-          `[serve] started Task project recovery attempted=${result.attempted} initialized=${result.initialized} failures=${result.failures.length}`,
+          `[serve] runtime project recovery attempted=${result.attempted} initialized=${result.initialized} mission_attempted=${result.missionAttempted} mission_woken=${result.missionWoken} mission_completed=${result.missionCompleted} failures=${result.failures.length}`,
         )
         for (const failure of result.failures) {
           console.error(
-            `[serve] started Task project recovery failed directory=${failure.directory || "<unresolved>"}: ${failure.error}`,
+            `[serve] runtime project recovery failed directory=${failure.directory || "<unresolved>"}: ${failure.error}`,
           )
         }
         assertStartedTaskProjectRecoverySucceeded(result)

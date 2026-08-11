@@ -30,7 +30,7 @@ import { defaultToolNameFromRef } from "@/expert-squad/provider-names"
 import { createHash } from "node:crypto"
 import { isUtf8 } from "node:buffer"
 import type { Dirent } from "fs"
-import { lstat, mkdir, mkdtemp, readFile, readdir, realpath, rename, rm, writeFile } from "fs/promises"
+import { lstat, mkdir, mkdtemp, readFile, readdir, realpath, rm, writeFile } from "fs/promises"
 import { parse as parseJsonc, type ParseError, printParseErrorCode } from "jsonc-parser"
 import path from "path"
 import z from "zod"
@@ -697,7 +697,7 @@ export namespace ExpertSquadRegistry {
         await writeFile(destination, file.bytes, { flag: "wx" })
       }
       try {
-        await rename(staging, target)
+        await Filesystem.renameAfterTransientContention(staging, target)
       } catch (error) {
         const code = (error as NodeJS.ErrnoException).code
         if (code !== "EEXIST" && code !== "ENOTEMPTY") throw error

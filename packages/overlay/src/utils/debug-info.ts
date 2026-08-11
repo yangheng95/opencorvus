@@ -1,6 +1,7 @@
 import { getServerUrl } from "../services/api"
 import type { BoardSource, TaskSelectionError } from "../store/board"
 import type { CardTreeStore } from "../store/card-tree"
+import type { PersistedChatDebugProjection } from "../services/session-debug"
 
 type RuntimeDebugPaths = { database?: string | null } | null | undefined
 
@@ -259,10 +260,15 @@ export function buildTaskSelectionErrorDebugBlob(
   ].join("\n")
 }
 
-export function buildChatDebugBlob(board: any, source: BoardSource | null, cardTree: CardTreeStore): string {
+export function buildChatDebugBlob(
+  board: any,
+  source: BoardSource | null,
+  cardTree: CardTreeStore,
+  persisted?: PersistedChatDebugProjection,
+): string {
   if (source?.kind !== "session") return ""
   const boardSessionID = typeof board?.sessionID === "string" ? board.sessionID : ""
-  const sessionID = boardSessionID || source.id
+  const sessionID = source.id
   if (!sessionID) return ""
   const cards = Object.values(cardTree.cards)
   const counts = cards.reduce(
@@ -273,18 +279,44 @@ export function buildChatDebugBlob(board: any, source: BoardSource | null, cardT
     },
     { total: 0 } as Record<string, number>,
   )
+  const persistedLines =
+    persisted?.status === "available" && persisted.sessionID === sessionID
+      ? [
+          `Persisted Session:`,
+          `  messages.total:     ${persisted.stats.messages.total}`,
+          `  messages.user:      ${persisted.stats.messages.user}`,
+          `  messages.assistant: ${persisted.stats.messages.assistant}`,
+          `  messages.other:     ${persisted.stats.messages.other}`,
+          `  tools.total:        ${persisted.stats.tools.total}`,
+          `  tools.pending:      ${persisted.stats.tools.pending}`,
+          `  tools.running:      ${persisted.stats.tools.running}`,
+          `  tools.completed:    ${persisted.stats.tools.completed}`,
+          `  tools.error:        ${persisted.stats.tools.error}`,
+          `  tools.other:        ${persisted.stats.tools.other}`,
+        ]
+      : [
+          `Persisted Session:`,
+          `  unavailable: ${
+            persisted?.status === "available"
+              ? `statistics belong to ${persisted.sessionID}, expected ${sessionID}`
+              : (persisted?.error ?? "persisted statistics were not requested")
+          }`,
+        ]
   return [
     `# Chat Debug Info (double-click chat → clipboard)`,
     `# Generated: ${formatDebugTime(Date.now())}`,
     ``,
     `chat.session:   ${sessionID}`,
+    `chat.board.session: ${boardSessionID || "-"}`,
     `chat.title:     ${String(board?.title ?? "-")}`,
     `chat.status:    ${String(board?.status ?? "-")}`,
     `chat.directory: ${String(board?.directory ?? "-")}`,
     `server.url:     ${getServerUrl()}`,
     `selected.source: ${source.kind}:${source.id}`,
     ``,
-    `Cards:`,
+    ...persistedLines,
+    ``,
+    `Rendered cards:`,
     `  top.level: ${cardTree.order.length}`,
     `  total:     ${counts.total}`,
     `  agents:    ${counts.agent ?? 0}`,

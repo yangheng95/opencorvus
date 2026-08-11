@@ -1,0 +1,8 @@
+record_id,payment_rail_instrument,processor_acquirer_network,merchant_account_token_ids,transaction_payment_attempt_id,event_id,event_type,event_status_as_supplied,event_timestamp_time_zone,amount_currency_or_unit,related_event_ids,source_location,source_authority,source_schema_version,effective_date,observation_date,owner,qualified_reviewer,applicability,uncertainty,status,decision_not_made,stop_or_escalation
+PEP-001,unknown,unknown,unknown,unknown,unknown,baseline-gap,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown,unknown,draft,"No transaction account merchant fraud AML dispute refund or funds-movement decision","Stop until tokenized identities event semantics current sources and authority reconcile"
+
+# Data contract
+# Use tokenized or internal references only. Never store raw PAN, CVV, API keys, secrets or unnecessary personal data. Preserve native processor/acquirer/network IDs and each retry, partial, reversal and correction as a separate event.
+# `event_type` may describe authorization, authentication, capture, clearing/settlement, reversal, refund, fraud-label or dispute events only as defined by the cited source/schema version. A status is not a fraud, liability or compliance conclusion.
+# Preserve original amount/currency, semantic timestamp, time zone, source locator/authority/schema version/effective and observation dates. Reconcile currency and event linkage without overwriting conflicting records.
+# Every row includes owner, qualified reviewer, applicability, uncertainty, status, decision-not-made and stop/escalation. Stop for ambiguous IDs, unmatched amount/currency, clock conflict, credentials, unauthorized data, active harm or live action request.

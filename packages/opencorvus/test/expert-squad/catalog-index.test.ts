@@ -275,25 +275,57 @@ describe("Expert Squad catalog index", () => {
           catalog_revision: string
           caller: string
           visible_expert_squad_count: number
+          held_expert_squad_count: number
+          product_pillar: string
+          results: Array<Record<string, unknown>>
+        }
+        const mismatchedPillarResult = await search.execute(
+          { query: "", kinds: ["expert_squad"], product_pillar: "work", limit: 1 },
+          {
+            sessionID: mission.id,
+            messageID: "msg_mismatched_pillar_capability_search",
+            callID: "call_mismatched_pillar_capability_search",
+            agent: "mission",
+            abort: new AbortController().signal,
+            messages: [],
+            executionSurface: Tool.executionSurface(["capability_search"], []),
+            metadata() {},
+            async ask() {},
+          },
+        )
+        const mismatchedPillarOutput = JSON.parse(mismatchedPillarResult.output) as {
+          product_pillar: string
+          requested_product_pillar: string
           results: Array<Record<string, unknown>>
         }
         expect({
           metadata: result.metadata,
           caller: output.caller,
           visibleCount: output.visible_expert_squad_count,
+          heldCount: output.held_expert_squad_count,
+          productPillar: output.product_pillar,
           resultCount: output.results.length,
           resultKeys: [...new Set(output.results.flatMap((entry) => Object.keys(entry)))].sort(),
           outputBytes: Buffer.byteLength(result.output, "utf8") < 50_000,
+          mismatchedPillar: {
+            effective: mismatchedPillarOutput.product_pillar,
+            requested: mismatchedPillarOutput.requested_product_pillar,
+            resultCount: mismatchedPillarOutput.results.length,
+          },
         }).toEqual({
           metadata: {
             catalog_revision: expect.stringMatching(/^[a-f0-9]{64}$/),
             caller: "mission",
             result_count: 20,
             visible_expert_squad_count: 100,
+            held_expert_squad_count: 100,
+            product_pillar: "code",
             truncated: false,
           },
           caller: "mission",
           visibleCount: 100,
+          heldCount: 100,
+          productPillar: "code",
           resultCount: 20,
           resultKeys: [
             "aliases",
@@ -308,6 +340,7 @@ describe("Expert Squad catalog index", () => {
             "score",
           ],
           outputBytes: true,
+          mismatchedPillar: { effective: "code", requested: "work", resultCount: 1 },
         })
       },
     })

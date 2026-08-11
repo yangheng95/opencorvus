@@ -6,6 +6,7 @@ import { sampledSkillSupportingFilePaths } from "../src/tool/skill"
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
+import { PassThrough } from "node:stream"
 
 describe("ProcessSupervisor control-plane authority", () => {
   test("returns strict disposal only after physical exit and output settlement", async () => {
@@ -106,6 +107,105 @@ describe("ProcessSupervisor control-plane authority", () => {
       if (previousDescriptor === undefined) delete process.env.OPENCORVUS_EXECUTION_CAPSULE_DESCRIPTOR
       else process.env.OPENCORVUS_EXECUTION_CAPSULE_DESCRIPTOR = previousDescriptor
       await rm(directory, { recursive: true, force: true })
+    }
+  })
+
+  test("bounds a live Windows ripgrep stream without an unhandled output-settlement rejection", async () => {
+    if (process.platform !== "win32") return
+    const directory = await mkdtemp(path.join(os.tmpdir(), "opencorvus-ripgrep-truncation-"))
+    try {
+      await Promise.all(
+        Array.from({ length: 160 }, (_, index) =>
+          writeFile(path.join(directory, `file-${String(index).padStart(3, "0")}.txt`), `${index}\n`),
+        ),
+      )
+      const files: string[] = []
+      for await (const file of Ripgrep.filesForHost({ cwd: directory })) {
+        files.push(file)
+        if (files.length === 101) break
+      }
+      await new Promise((resolve) => setTimeout(resolve, 50))
+      expect(files).toHaveLength(101)
+    } finally {
+      await rm(directory, { recursive: true, force: true })
+    }
+  })
+
+  test("observes ripgrep stderr rejection before a bounded consumer exits", async () => {
+    const stdout = new PassThrough()
+    const stderr = new PassThrough()
+    let resolveExit!: (code: number) => void
+    const exited = new Promise<number>((resolve) => (resolveExit = resolve))
+    let terminated = false
+    const restore = ProcessSupervisor.setCommandFactoryForTest(async () => {
+      setTimeout(() => {
+        stdout.write("one.txt\n")
+        stderr.destroy(new Error("deterministic ripgrep stderr abort"))
+      }, 0)
+      return {
+        pid: 41_001,
+        stdin: null,
+        stdout,
+        stderr,
+        exited,
+        outputSettled: Promise.resolve(),
+        async terminate() {
+          if (terminated) return
+          terminated = true
+          stdout.end()
+          resolveExit(0)
+        },
+        async dispose() {},
+        unref() {},
+      }
+    })
+    try {
+      const files: string[] = []
+      for await (const file of Ripgrep.filesForHost({ cwd: process.cwd() })) {
+        files.push(file)
+        await Bun.sleep(20)
+        break
+      }
+      expect(files).toEqual(["one.txt"])
+      expect(terminated).toBe(true)
+    } finally {
+      restore()
+    }
+  })
+
+  test("observes a deterministic Windows output-stream rejection at handle creation", async () => {
+    if (process.platform !== "win32") return
+    const unhandled: unknown[] = []
+    const onUnhandled = (error: unknown) => unhandled.push(error)
+    process.on("unhandledRejection", onUnhandled)
+    let injected = false
+    ProcessSupervisor.setWindowsOutputObserverForTest((stdout) => {
+      stdout.once("data", () => {
+        injected = true
+        const failure = Object.assign(new Error("deterministic Windows output abort"), { code: "ABORT_ERR" })
+        stdout.emit("error", failure)
+      })
+    })
+    let handle: ProcessSupervisor.Handle | undefined
+    try {
+      handle = await ProcessSupervisor.spawnHostCommand({
+        executable: process.execPath,
+        args: ["-e", "await Bun.sleep(300); console.log('trigger'); await Bun.sleep(1000)"],
+        owner: "process-supervisor-deterministic-output-failure",
+      })
+      await Bun.sleep(500)
+      expect(injected).toBe(true)
+      await expect(handle.outputSettled).rejects.toThrow("deterministic Windows output abort")
+      await Bun.sleep(20)
+      expect(unhandled).toEqual([])
+    } finally {
+      ProcessSupervisor.setWindowsOutputObserverForTest(undefined)
+      process.off("unhandledRejection", onUnhandled)
+      if (handle) {
+        await ProcessSupervisor.terminateAndWaitForExit(handle, "deterministic output failure test").catch(() => undefined)
+        await handle.outputSettled?.catch(() => undefined)
+        await handle.dispose().catch(() => undefined)
+      }
     }
   })
 })

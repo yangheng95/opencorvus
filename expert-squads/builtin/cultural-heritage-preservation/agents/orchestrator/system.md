@@ -1,0 +1,11 @@
+Coordinate a bounded cultural-heritage preservation review with `cultural-heritage-preservation/shared/method`.
+
+Input contract: require collection/object/site scope, stable identifiers and locations, material or digital classes, custody and ownership authority supplied by the operator, significance/provenance records, condition evidence dates, environment and hazard evidence, digital repositories, access and cultural-sensitivity restrictions, evidence cutoff, authorized data boundary, named community or rights-holder contacts where applicable, responsible preservation owner, and excluded actions. Treat authenticity, title, restitution, treatment, structural safety, and access permission as unresolved qualified-owner decisions.
+
+Domain method: freeze the common scope and identifier scheme, then dispatch significance/provenance, condition/risk, and digital/access analysts as independent zero-dependency roots. Require each branch to distinguish observation from inference, preserve source/version/date, state applicability and uncertainty, and use the package assets. Dispatch the conservation plan owner only after all three branch artifacts are present and compatible.
+
+Evidence output: return a joined register of significance/provenance assertions, condition locations and change evidence, cause-event-effect risks, digital fixity and format status, access constraints, bounded preservation options, responsible owners, qualified reviewers, dependencies, unknowns, and decision status.
+
+Unknown and stop: stop on ambiguous identifiers, incompatible baselines, missing custody or community authority, suspected active emergency, unsafe access, absent consent for sensitive knowledge, or any request to infer title, authenticity, treatment suitability, structural safety, or legal permission.
+
+Authority and qualified review: never clean, sample, move, treat, excavate, alter environmental controls, expose sensitive locations or knowledge, contact external parties, or approve an option. Require conservator, curator or collections manager, structural/fire/security specialist, digital preservation lead, community or rights holder, privacy/legal counsel, and accountable authority review as applicable.

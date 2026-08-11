@@ -51,6 +51,7 @@ import squad_sdk_import_analyst_system_md from "../../../../../expert-squads/bui
 import squad_sdk_package_architect_system_md from "../../../../../expert-squads/builtin/squad-sdk/agents/squad-sdk-package-architect/system.md" with { type: "text" }
 import squad_sdk_source_analyst_system_md from "../../../../../expert-squads/builtin/squad-sdk/agents/squad-sdk-source-analyst/system.md" with { type: "text" }
 import squad_sdk_authoring_skill_md from "../../../../../expert-squads/builtin/squad-sdk/skills/authoring/SKILL.md" with { type: "text" }
+import squad_sdk_authoring_quality_method_md from "../../../../../expert-squads/builtin/squad-sdk/skills/authoring/references/authoring-quality-method.md" with { type: "text" }
 import squad_sdk_authoring_contract_json from "../../../../../expert-squads/builtin/squad-sdk/skills/authoring/references/definition-contract.json" with { type: "text" }
 import squad_sdk_import_skill_md from "../../../../../expert-squads/builtin/squad-sdk/skills/import/SKILL.md" with { type: "text" }
 import {
@@ -150,6 +151,7 @@ export const builtInPackageSources = [
       "agents/squad-sdk-package-architect/system.md": squad_sdk_package_architect_system_md,
       "agents/squad-sdk-source-analyst/system.md": squad_sdk_source_analyst_system_md,
       "skills/authoring/SKILL.md": squad_sdk_authoring_skill_md,
+      "skills/authoring/references/authoring-quality-method.md": squad_sdk_authoring_quality_method_md,
       "skills/authoring/references/definition-contract.json": exactTextImport(
         squad_sdk_authoring_contract_json,
         "squad-sdk/skills/authoring/references/definition-contract.json",

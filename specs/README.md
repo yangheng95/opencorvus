@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest-main merge and `0.0.39-beta` Overlay repackage: [`2026-08-11-latest-main-overlay-repackage.md`](records/2026-08/2026-08-11-latest-main-overlay-repackage.md).
+
 Latest scheduler liveness and control convergence repair: [`2026-08-11-scheduler-liveness-and-control-convergence.md`](records/2026-08/2026-08-11-scheduler-liveness-and-control-convergence.md).
 
 Latest systemic scheduler fault audit and repair: [`2026-08-11-scheduler-systemic-fault-audit-and-repair.md`](records/2026-08/2026-08-11-scheduler-systemic-fault-audit-and-repair.md).
@@ -12,7 +14,31 @@ Latest `v0.0.39-beta` canonical release trigger: [`2026-08-10-v0.0.39-beta-relea
 
 Latest `v0.0.39-beta` Windows repackage: [`2026-08-10-v0.0.39-beta-windows-repackage.md`](records/2026-08/2026-08-10-v0.0.39-beta-windows-repackage.md).
 
+Latest Windows glob, Mission process-recovery, and persisted debug convergence: [`2026-08-11-windows-glob-mission-recovery-debug-convergence.md`](records/2026-08/2026-08-11-windows-glob-mission-recovery-debug-convergence.md).
+
+Latest public website iterative design program: [`2026-08-11-public-website-iterative-design-program.md`](records/2026-08/2026-08-11-public-website-iterative-design-program.md).
+
+Latest public download-page and Release synchronization design: [`2026-08-11-public-download-page-design.md`](records/2026-08/2026-08-11-public-download-page-design.md).
+
+Public website Iteration 1 visual evidence: [`English top`](artifacts/2026-08-11-public-website-iteration-1-en-top.png), [`English work modes`](artifacts/2026-08-11-public-website-iteration-1-en-modes-squads.png), [`English Expert Squads`](artifacts/2026-08-11-public-website-iteration-1-en-squads.png), [`English start and footer`](artifacts/2026-08-11-public-website-iteration-1-en-start-footer.png), [`Simplified Chinese top`](artifacts/2026-08-11-public-website-iteration-1-zh-top.png), [`Simplified Chinese work modes`](artifacts/2026-08-11-public-website-iteration-1-zh-modes-squads.png), [`Simplified Chinese Expert Squads`](artifacts/2026-08-11-public-website-iteration-1-zh-squads.png), [`Simplified Chinese start and footer`](artifacts/2026-08-11-public-website-iteration-1-zh-start-footer.png), [`quickstart top`](artifacts/2026-08-11-public-website-iteration-1-docs-top.png), and [`quickstart bottom`](artifacts/2026-08-11-public-website-iteration-1-docs-bottom.png).
+
+Latest seventh fixed-ten Expert Squad batch: [2026-08-11-seventh-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-seventh-ten-domain-expert-squad-batch.md).
+
+Latest sixth fixed-ten Expert Squad batch: [2026-08-11-sixth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-sixth-ten-domain-expert-squad-batch.md).
+
+Latest fifth fixed-ten Expert Squad batch: [2026-08-11-fifth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-fifth-ten-domain-expert-squad-batch.md).
+
+Latest fourth fixed-ten Expert Squad batch: [2026-08-11-fourth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-fourth-ten-domain-expert-squad-batch.md).
+
+Latest full-worktree non-temporary delivery convergence: [`2026-08-11-full-worktree-delivery-convergence.md`](records/2026-08/2026-08-11-full-worktree-delivery-convergence.md).
+
 Latest GitHub Actions push convergence: [`2026-08-11-github-actions-push-convergence.md`](records/2026-08/2026-08-11-github-actions-push-convergence.md).
+
+Latest Squad SDK authoring Skill research rewrite: [`2026-08-11-squad-sdk-authoring-skill-research-rewrite.md`](records/2026-08/2026-08-11-squad-sdk-authoring-skill-research-rewrite.md).
+
+Latest continuous ten-domain Expert Squad goal: [`2026-08-11-continuous-ten-domain-expert-squad-goal.md`](records/2026-08/2026-08-11-continuous-ten-domain-expert-squad-goal.md).
+
+Latest compact Task identifier design: [`2026-08-10-compact-task-identifiers.md`](records/2026-08/2026-08-10-compact-task-identifiers.md).
 
 Latest ten-domain Expert Squad expansion: [`2026-08-10-ten-domain-expert-squad-expansion.md`](records/2026-08/2026-08-10-ten-domain-expert-squad-expansion.md).
 

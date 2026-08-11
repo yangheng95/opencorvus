@@ -1,6 +1,9 @@
 import { Session } from "./index"
 import { Instance } from "@/project/instance"
-import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
+import {
+  provideInitializedProjectExecution,
+  runWithInitializedIndependentProject,
+} from "@/project/independent-project-owner"
 import { Log } from "@/util/log"
 import { SessionPrompt } from "./prompt"
 import { SessionContext } from "./context"
@@ -58,6 +61,14 @@ export namespace SessionWake {
       source: z.literal("mission.operator"),
       missionID: z.string().optional(),
     }),
+    z
+      .object({
+        source: z.literal("mission.process_recovery"),
+        missionID: z.string(),
+        occurrenceID: z.string().min(1),
+        interruptedAssistantMessageIDs: z.array(Identifier.schema("message")).min(1),
+      })
+      .strict(),
     z.object({
       source: z.literal("conversation.handoff"),
       callerSessionID: Identifier.schema("session"),
@@ -118,6 +129,15 @@ export namespace SessionWake {
     surface?: z.infer<typeof PanelSurface>
     /** Canonical right-sidebar conversation identity used only when this wake creates a session. */
     newConversationExperience?: ConversationExperience
+    /** Stable control ID reserved by a durable ingress owner before wake persistence. */
+    controlID?: string
+  }
+
+  export type WakeCompletion = { ok: true } | { ok: false; error: string }
+  export type WakeReceipt = {
+    sessionID: string
+    messageID: string
+    completion: Promise<WakeCompletion>
   }
 
   export function reasonExtra(reason: WakeReason): { wake_reason: WakeReason } {
@@ -129,6 +149,11 @@ export namespace SessionWake {
    * Returns the session ID (existing or newly created).
    */
   export async function wake(input: WakeInput): Promise<string> {
+    return (await wakeWithReceipt(input)).sessionID
+  }
+
+  /** Persist one wake and expose the detached loop's truthful completion. */
+  export async function wakeWithReceipt(input: WakeInput): Promise<WakeReceipt> {
     if (input.signal?.aborted) throw input.signal.reason
     if (input.sessionID && input.newConversationExperience) {
       throw new Error("Session wake cannot apply a new conversation identity to an existing session")
@@ -234,6 +259,7 @@ export namespace SessionWake {
         commitBundle: input.commitBundle,
         controls: (info) => [
           {
+            id: input.controlID,
             sessionID,
             kind: "wake_reason",
             status: "consumed",
@@ -259,17 +285,26 @@ export namespace SessionWake {
       // function enters the callback path (which resolves when the loop
       // processes our message).
       const directory = session.directory
-      startPersistedWakeLoop({ sessionID, messageID: message.info.id, directory })
+      await provideInitializedProjectExecution({
+        directory,
+        signal: input.signal,
+        fn: () => undefined,
+      })
+      const completion = startPersistedWakeLoop({ sessionID, messageID: message.info.id, directory })
 
-      return sessionID
+      return { sessionID, messageID: message.info.id, completion }
     })
   }
 
   export function resumePersistedWake(input: { sessionID: string; messageID: string; directory: string }): void {
-    startPersistedWakeLoop(input)
+    void startPersistedWakeLoop(input)
   }
 
-  function startPersistedWakeLoop(input: { sessionID: string; messageID: string; directory: string }): void {
+  function startPersistedWakeLoop(input: {
+    sessionID: string
+    messageID: string
+    directory: string
+  }): Promise<WakeCompletion> {
     const reservation = RuntimeExecutionSettlement.reserve(
       "session_wake_loop",
       `session-wake-loop:${input.sessionID}:${input.messageID}`,
@@ -303,9 +338,13 @@ export namespace SessionWake {
       }),
     )
     reservation.settleWith(operation)
-    void operation.catch((err) => {
-      log.error("wake loop failed", { sessionID: input.sessionID, messageID: input.messageID, err })
-    })
+    return operation.then(
+      () => ({ ok: true }) as const,
+      (err): WakeCompletion => {
+        log.error("wake loop failed", { sessionID: input.sessionID, messageID: input.messageID, err })
+        return { ok: false, error: err instanceof Error ? err.message : String(err) }
+      },
+    )
   }
 
   async function executeWakeLoop(input: {

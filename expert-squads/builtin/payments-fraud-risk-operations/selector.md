@@ -1,0 +1,3 @@
+Select this Squad for payment event reconstruction, authentication and transaction signals, account/device evidence, fraud labels and model outcomes, merchant cohorts and ratios, linked-entity evidence, disputes/chargebacks, reason codes, rule deadlines and evidence timelines.
+
+Do not select it for general accounting/close, insurance claim adjudication or cybersecurity control certification. Never use it to approve/decline/block payments, change production rules/models, freeze/close accounts, determine fraud/KYC/KYB/AML/SAR, submit/accept/deny representment, refund/move funds, offboard merchants, contact parties or make legal/compliance claims.

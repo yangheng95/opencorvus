@@ -4,6 +4,7 @@ import { CapabilityCatalog, CapabilitySearchInput, searchCapabilityCatalog } fro
 import { tool as aiTool } from "ai"
 import { createAiSdkToolFromInfo } from "./ai-sdk-adapter"
 import { Tool } from "./tool"
+import { missionVisibleExpertSquadIDs, requireMissionSession } from "@/mission/session"
 
 export const CAPABILITY_SEARCH_TOOL_ID = "capability_search" as const
 export const CAPABILITY_SEARCH_DESCRIPTION =
@@ -23,10 +24,15 @@ export const CapabilitySearchTool = Tool.define(CAPABILITY_SEARCH_TOOL_ID, async
         executionToolIDs: ctx.executionSurface.toolIDs,
         harnessProjection: ctx.executionSurface.harness_projection,
       })
-      const results = searchCapabilityCatalog(snapshot, caller, input)
+      const mission = caller === "mission" ? await requireMissionSession(ctx.sessionID) : undefined
+      const effectiveInput = mission ? { ...input, product_pillar: mission.productPillar } : input
+      const results = searchCapabilityCatalog(snapshot, caller, effectiveInput)
       const visibleExpertSquadCount = snapshot.entries.filter(
         (entry) => entry.ref.kind === "expert_squad" && entry.discoverable_by.includes(caller),
       ).length
+      const heldExpertSquadCount = mission ? missionVisibleExpertSquadIDs(mission).length : undefined
+      const productPillar = mission?.productPillar ?? input.product_pillar
+      const requestedProductPillar = input.product_pillar
       return {
         title: "Capability search",
         metadata: {
@@ -34,12 +40,22 @@ export const CapabilitySearchTool = Tool.define(CAPABILITY_SEARCH_TOOL_ID, async
           caller,
           result_count: results.length,
           visible_expert_squad_count: visibleExpertSquadCount,
+          ...(heldExpertSquadCount !== undefined ? { held_expert_squad_count: heldExpertSquadCount } : {}),
+          ...(productPillar ? { product_pillar: productPillar } : {}),
+          ...(requestedProductPillar && requestedProductPillar !== productPillar
+            ? { requested_product_pillar: requestedProductPillar }
+            : {}),
         },
         output: JSON.stringify(
           {
             catalog_revision: snapshot.catalog_revision,
             caller,
             visible_expert_squad_count: visibleExpertSquadCount,
+            ...(heldExpertSquadCount !== undefined ? { held_expert_squad_count: heldExpertSquadCount } : {}),
+            ...(productPillar ? { product_pillar: productPillar } : {}),
+            ...(requestedProductPillar && requestedProductPillar !== productPillar
+              ? { requested_product_pillar: requestedProductPillar }
+              : {}),
             results,
           },
           null,

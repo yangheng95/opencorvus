@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-11-latest-main-overlay-repackage.md](2026-08-11-latest-main-overlay-repackage.md) records the latest-main merge, Windows Expert Squad snapshot publication repair, and complete `0.0.39-beta` Overlay repackage acceptance.
+
 - [2026-08-11-scheduler-liveness-and-control-convergence.md](2026-08-11-scheduler-liveness-and-control-convergence.md) records the exact lifecycle semantic-orphan incident, three independent scheduler audits, confirmed ownership/liveness defects, shared repair invariants, and executable real-checker acceptance loop.
 - [2026-08-11-scheduler-systemic-fault-audit-and-repair.md](2026-08-11-scheduler-systemic-fault-audit-and-repair.md) records the independent systemic audit, shared ownership-handoff root model, confirmed scheduler defect register, repair order, and executable acceptance loop.
 
@@ -11,7 +13,29 @@
 
 - [2026-08-10-v0.0.39-beta-windows-repackage.md](2026-08-10-v0.0.39-beta-windows-repackage.md) advances the canonical release family to `0.0.39-beta` and records the native Windows graphical user interface and command-line interface repackage evidence.
 
+- [2026-08-11-windows-glob-mission-recovery-debug-convergence.md](2026-08-11-windows-glob-mission-recovery-debug-convergence.md) identifies the Windows bounded-glob crash regression, adds durable standalone-Mission restart recovery, separates persisted debug facts from rendered cards, and preserves held-Squad capability authority while exposing its diagnostic boundary.
+
+- [2026-08-11-public-website-iterative-design-program.md](2026-08-11-public-website-iterative-design-program.md) establishes the research-backed, independently approved website iteration loop and specifies Iteration 1 as a bounded public-versus-documentation typography ownership repair with real bilingual visual acceptance.
+
+- [2026-08-11-public-download-page-design.md](2026-08-11-public-download-page-design.md) defines the existing-site download route, same-origin release manifest, platform recommendation, and release-to-production Actions convergence contract.
+
+- [2026-08-11-seventh-ten-domain-expert-squad-batch.md](2026-08-11-seventh-ten-domain-expert-squad-batch.md) freezes the autonomous seventh fixed-ten batch, six bounded open-source Skill adaptations, four clean-room source decisions, fifty dedicated assets, professional authority boundaries, and the 85/89 runtime acceptance plan.
+
+- [2026-08-11-sixth-ten-domain-expert-squad-batch.md](2026-08-11-sixth-ten-domain-expert-squad-batch.md) freezes the autonomous sixth fixed-ten batch, five bounded open-source Skill adaptations, five clean-room source decisions, fifty dedicated assets, professional authority boundaries, and the 75/79 runtime acceptance plan.
+
+- [2026-08-11-fifth-ten-domain-expert-squad-batch.md](2026-08-11-fifth-ten-domain-expert-squad-batch.md) freezes the autonomous fifth fixed-ten batch, three bounded open-source Skill adaptations, seven clean-room source decisions, fifty dedicated assets, professional authority boundaries, and 65/69 runtime acceptance.
+
+- [2026-08-11-fourth-ten-domain-expert-squad-batch.md](2026-08-11-fourth-ten-domain-expert-squad-batch.md) records the autonomous fourth fixed-ten batch, non-overlap audit, accepted and rejected Skill sources, five-asset obligations, professional authority boundaries, and exact runtime acceptance plan after the checklist feature was withdrawn.
+
+- [2026-08-11-full-worktree-delivery-convergence.md](2026-08-11-full-worktree-delivery-convergence.md) classifies the complete dirty worktree, excludes runtime output, closes ignored specification records, validates the staged boundary, and defines the normal upstream push sequence.
+
 - [2026-08-11-github-actions-push-convergence.md](2026-08-11-github-actions-push-convergence.md) repairs clean-runner SDK bootstrap ordering and preload-owned test execution, and requires a green proof push before deleting older Actions runs.
+
+- [2026-08-11-squad-sdk-authoring-skill-research-rewrite.md](2026-08-11-squad-sdk-authoring-skill-research-rewrite.md) rewrites the sole Squad SDK authoring Skill around source-backed domain decisions, professional-asset provenance, non-generic Agent topology, package closure, rejection rules, and positive production acceptance.
+
+- [2026-08-11-continuous-ten-domain-expert-squad-goal.md](2026-08-11-continuous-ten-domain-expert-squad-goal.md) defines the continuous fixed-ten Expert Squad goal, the operator's later autonomous-batching override after checklist removal, mandatory dedicated Skill and asset closure, delivered-state truth, and the per-batch real acceptance boundary.
+
+- [2026-08-10-compact-task-identifiers.md](2026-08-10-compact-task-identifiers.md) replaces the over-expanded new-Task identifier body with one fixed 24-character, time-sortable, collision-resistant canonical encoding while preserving exact stored and API identity.
 
 - [2026-08-10-ten-domain-expert-squad-expansion.md](2026-08-10-ten-domain-expert-squad-expansion.md) defines ten new domain packages, dedicated Skill and asset ownership, pinned open-source adaptations, clean-room professional boundaries, and package, HTTP, and real-page acceptance.
 

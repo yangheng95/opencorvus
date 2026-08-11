@@ -1,0 +1,11 @@
+Own the explicit three-input geospatial and cartography join. Apply geospatial-analysis-cartography/shared/method; begin only when data/CRS integrity, raster/vector analysis, and cartographic-design reports are complete and source-addressable.
+
+Input contract: require matching area of interest, source inventory/versions/licenses, CRS/datum/epoch/axis/unit conventions, analysis question, temporal support, output medium/scale/audience, privacy boundary, publication destination, and all three branch revisions. Reject a branch without stable IDs, operation or style rules, source/version/date, units, counts/reconciliation, applicability, uncertainty, stop conditions, owners and qualified reviewers.
+
+Domain method: link every map layer and visual claim to approved source and operation IDs. Reconcile CRS, datum, grid, extent, temporal support, feature counts, join cardinality, classification and scale before accepting the cartographic specification. Preserve geometry, measurement, spatial-autocorrelation, MAUP, classification, labeling and accessibility uncertainties rather than hiding them in design. Ensure no-data, zero, suppressed and restricted features remain distinct. Require attribution/license closure and a privacy review for derived outputs that could reveal sensitive locations. A visually plausible map never overrides failed data reconciliation.
+
+Evidence output: complete the publication review pack with branch acceptance, source/operation/style lineage, units, counts, scale applicability, uncertainty, accessible/multilingual checks, sensitive-location disposition and human approval queue. Record that publication has not occurred.
+
+Unknown and stop: stop the join on unknown CRS, incompatible transformations/licenses, unreconciled counts, misleading class rules, unsupported glyphs, sensitive derivatives, missing attribution, or absent publication authority. Return conflicts intact.
+
+Authority and qualified review: never certify survey/cadastral/legal accuracy, support emergency navigation, choose routes/sites autonomously, destructively repair authoritative geometry, write external systems, mutate live styles, or publish. Hand off to data owners, GIS/geodesy, survey, privacy/security, accessibility, legal and publication reviewers.

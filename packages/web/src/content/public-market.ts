@@ -54,8 +54,7 @@ export type PublicSquadRecord = {
 const localizedCopyByIdentity: Record<string, { description: LocalizedText; selectorSummary: LocalizedText }> = {
   "builtin/frontend-replica": {
     description: {
-      root:
-        "Reproduce a source interface from a URL or reference screenshots, with a desktop surface ledger, rendered proof, and independent visual and integrity review.",
+      root: "Reproduce a source interface from a URL or reference screenshots, with a desktop surface ledger, rendered proof, and independent visual and integrity review.",
       "zh-cn": "依据来源网址或参考截图复刻桌面界面，并保留页面清单、真实渲染证据，以及独立的视觉与完整性审查。",
     },
     selectorSummary: {
@@ -65,8 +64,7 @@ const localizedCopyByIdentity: Record<string, { description: LocalizedText; sele
   },
   "builtin/frontend-innovate": {
     description: {
-      root:
-        "Turn a product brief into an original frontend direction, implementation, and rendered proof through a dedicated research, design, build, and review team.",
+      root: "Turn a product brief into an original frontend direction, implementation, and rendered proof through a dedicated research, design, build, and review team.",
       "zh-cn": "把产品需求转化为原创前端方向、实现和真实渲染证据，由调查、设计、开发与审查角色完整协作。",
     },
     selectorSummary: {
@@ -76,8 +74,7 @@ const localizedCopyByIdentity: Record<string, { description: LocalizedText; sele
   },
   "builtin/deep-research": {
     description: {
-      root:
-        "Investigate a broad or contested question through perspective mapping, source curation, grounded outlining, cited drafting, and independent citation review.",
+      root: "Investigate a broad or contested question through perspective mapping, source curation, grounded outlining, cited drafting, and independent citation review.",
       "zh-cn": "面向宽泛或有争议的问题，完成视角拆解、来源整理、证据大纲、带引文写作与独立引文审查。",
     },
     selectorSummary: {
@@ -87,8 +84,7 @@ const localizedCopyByIdentity: Record<string, { description: LocalizedText; sele
   },
   "builtin/equity-research": {
     description: {
-      root:
-        "Build a dated public-company evidence dossier, analyze fundamentals and valuation, reconcile a balanced thesis, and publish an audited investor-ready report.",
+      root: "Build a dated public-company evidence dossier, analyze fundamentals and valuation, reconcile a balanced thesis, and publish an audited investor-ready report.",
       "zh-cn": "围绕上市公司建立有日期边界的证据档案，完成基本面、估值、平衡投资论点与独立数值审查。",
     },
     selectorSummary: {
@@ -98,8 +94,7 @@ const localizedCopyByIdentity: Record<string, { description: LocalizedText; sele
   },
   "builtin/review-debug": {
     description: {
-      root:
-        "Review an existing change or reproduce a concrete defect, prove the causal chain, repair the product source, and independently verify the result.",
+      root: "Review an existing change or reproduce a concrete defect, prove the causal chain, repair the product source, and independently verify the result.",
       "zh-cn": "审查已有改动或复现明确缺陷，证明完整因果链，修复产品源码，并由独立角色复核结果。",
     },
     selectorSummary: {
@@ -112,15 +107,16 @@ const localizedCopyByIdentity: Record<string, { description: LocalizedText; sele
 export const publicSquadRecords: PublicSquadRecord[] = generatedPublicMarketFacts.map((facts) => {
   const identity = `${facts.identity.namespace}/${facts.identity.id}`
   const localized = localizedCopyByIdentity[identity]
-  if (!localized) throw new Error(`Public market facts have no localized editorial copy: ${identity}`)
+  const canonicalDescription = { root: facts.description, "zh-cn": facts.description }
+  const canonicalSelectorSummary = { root: facts.selectorSummary, "zh-cn": facts.selectorSummary }
   return {
     identity: facts.identity,
     name: facts.name,
     label: facts.label,
     canonicalDescription: facts.description,
     canonicalSelectorSummary: facts.selectorSummary,
-    description: localized.description,
-    selectorSummary: localized.selectorSummary,
+    description: localized?.description ?? canonicalDescription,
+    selectorSummary: localized?.selectorSummary ?? canonicalSelectorSummary,
     pillars: facts.pillars,
     agents: facts.agents,
     workflows: facts.workflows,

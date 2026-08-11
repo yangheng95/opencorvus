@@ -1,0 +1,3 @@
+Select this Squad when the requested outcome concerns railway train paths, timetable feasibility, platform or route occupation, approved headway evidence, signalling and interlocking constraints, infrastructure restrictions, possessions, service disruption, delay or cancellation evidence, railway occurrences, or assurance actions.
+
+Do not select it for aviation maintenance, generic freight inventory or purchasing, general emergency-continuity planning, energy-system scenarios, climate projections, public-service eligibility, live railway control, movement authority, route setting, dispatch, maintenance instructions, return to service, statutory occurrence classification, or safety approval. Route those decisions to the named authorized railway and public authorities.
