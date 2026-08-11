@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest main delivery history convergence: [`2026-08-12-main-delivery-history-convergence.md`](records/2026-08/2026-08-12-main-delivery-history-convergence.md).
+
 Latest hollow desktop application-icon convergence: [`2026-08-11-hollow-desktop-app-icons.md`](records/2026-08/2026-08-11-hollow-desktop-app-icons.md).
 
 Latest native platform message-notification convergence: [`2026-08-11-native-platform-message-notifications.md`](records/2026-08/2026-08-11-native-platform-message-notifications.md).
