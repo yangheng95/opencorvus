@@ -417,8 +417,6 @@ const [centerWorkbenchPanels, setCenterWorkbenchPanels] = createSignal<CenterWor
 const [selectedCenterWorkbenchTabID, setSelectedCenterWorkbenchTabID] = createSignal("conversation")
 const [rightDockAddMenuOpen, setRightDockAddMenuOpen] = createSignal(false)
 const [rightDockOverflowMenuOpen, setRightDockOverflowMenuOpen] = createSignal(false)
-const [mailboxAttention, setMailboxAttention] = createSignal(false)
-const [mailboxUnreadCount, setMailboxUnreadCount] = createSignal(0)
 const [browserPreviewPageTitles, setBrowserPreviewPageTitles] = createSignal<Record<string, string>>({})
 let primaryBrowserPreviewController: BrowserPreviewPanelController | undefined
 const [selectedSubagentSessionID, setSelectedSubagentSessionID] = createSignal("")
@@ -512,10 +510,6 @@ function openRightDockAddMenu(): void {
   setRightDockVisible(true)
   setRightDockOverflowMenuOpen(false)
   setRightDockAddMenuOpen(true)
-}
-
-function presentMailboxNotification(): void {
-  setMailboxAttention(true)
 }
 
 function registerPrimaryBrowserPreviewController(controller: BrowserPreviewPanelController): () => void {
@@ -1845,12 +1839,6 @@ function OverlayRoot() {
     return requestKey
   }, "")
 
-  createEffect<string>((previousDirectory) => {
-    const directory = activeDirectory()
-    if (directory !== previousDirectory) setMailboxAttention(false)
-    return directory
-  }, "")
-
   createEffect(() => {
     const open = rightDockOpen()
     if (!open && rightDockAddMenuOpen()) setRightDockAddMenuOpen(false)
@@ -2058,9 +2046,6 @@ function OverlayRoot() {
       onRetryTask={(row) => runMainAsync("task.header-retry", () => retryTerminalTask(row))}
       onReplanTask={(row) => runMainAsync("task.header-replan", () => replanTerminalTask(row))}
       onOpenAutomationSession={openAutomationSession}
-      mailboxAttention={mailboxAttention()}
-      mailboxUnreadCount={mailboxUnreadCount()}
-      onMailboxViewed={() => setMailboxAttention(false)}
       sidebarToggle={
         <Button
           variant="ghost"
@@ -2144,13 +2129,7 @@ function OverlayRoot() {
           onArchiveChat={archiveWorkLedgerChat}
         />
       }
-      mailbox={
-        <MailboxPanel
-          onNotification={presentMailboxNotification}
-          onUnreadCountChange={setMailboxUnreadCount}
-          onSelectTask={selectTaskWithUILifecycle}
-        />
-      }
+      mailbox={<MailboxPanel onSelectTask={selectTaskWithUILifecycle} />}
       conversation={(container) => (
         <Conversation
           container={container}

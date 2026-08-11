@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest native platform message-notification convergence: [`2026-08-11-native-platform-message-notifications.md`](records/2026-08/2026-08-11-native-platform-message-notifications.md).
+
 Latest responsive settings and public Squad Market entry plan: [`2026-08-11-settings-responsive-layout-and-market-entry.md`](records/2026-08/2026-08-11-settings-responsive-layout-and-market-entry.md).
 
 Latest `v0.0.40-beta` release: [`2026-08-11-v0.0.40-beta-release.md`](records/2026-08/2026-08-11-v0.0.40-beta-release.md).

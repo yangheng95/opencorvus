@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-11-native-platform-message-notifications.md](2026-08-11-native-platform-message-notifications.md) replaces in-app, taskbar/Dock-badge, and custom tray-dot message attention with one native system-notification delivery that also requests platform-native user attention.
+
 - [2026-08-11-settings-responsive-layout-and-market-entry.md](2026-08-11-settings-responsive-layout-and-market-entry.md) replaces the fixed-width settings column with one resolution-responsive content contract, repairs the Installed Agent Squads master-detail composition, and makes the public website the concise Squad Market browsing surface while retaining exact desktop handoff installation.
 
 - [2026-08-11-v0.0.40-beta-release.md](2026-08-11-v0.0.40-beta-release.md) records latest-remote integration, canonical version synchronization, reviewed source/tag publication, native release matrix, public prerelease assets, and beta updater verification for `v0.0.40-beta`.

@@ -12,10 +12,7 @@ import {
   type MailboxItem,
   type MailboxView,
 } from "../services/mailbox"
-import {
-  projectMailboxNotificationScopeReplacement,
-  projectMailboxNotifications,
-} from "../services/desktop-notifications"
+import { projectMailboxNotifications } from "../services/desktop-notifications"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { showAppDialog } from "../services/app-dialog"
 import { syncActiveDirectoryApiContext } from "../services/workspace"
@@ -62,8 +59,6 @@ function mergeItems(current: MailboxItem[], next: MailboxItem[]): MailboxItem[] 
 }
 
 export interface MailboxPanelProps {
-  onNotification?: (item: MailboxItem) => void
-  onUnreadCountChange?: (count: number) => void
   onSelectTask: (taskID: string, directory: string) => Promise<void>
 }
 
@@ -227,12 +222,6 @@ export function MailboxPanel(props: MailboxPanelProps) {
           setExpandedMessageIDs(new Set<string>())
         })
       })
-      if (base.scopeChanged) {
-        const notificationRequest = requestOwner.join(requestedScope)
-        void projectMailboxNotificationScopeReplacement({ signal: notificationRequest.signal }).finally(() =>
-          notificationRequest.complete(),
-        )
-      }
       if (!base.scopeChanged) {
         batch(() => {
           setLoadError("")
@@ -258,7 +247,6 @@ export function MailboxPanel(props: MailboxPanelProps) {
         setItems((current) => (append ? mergeItems(current, page.items) : page.items))
         setCursor(page.nextCursor)
         setCounts({ unread: page.unreadCount, active: page.activeCount, archived: page.archivedCount })
-        props.onUnreadCountChange?.(page.unreadCount)
         if (!append) setLoadedDirectory(directory)
       })
       if (!committed) return
@@ -269,7 +257,6 @@ export function MailboxPanel(props: MailboxPanelProps) {
           view: requestView,
           page,
           signal: notificationRequest.signal,
-          onNotification: props.onNotification,
         }).finally(() => notificationRequest.complete())
       }
     } catch (error) {
@@ -448,13 +435,10 @@ export function MailboxPanel(props: MailboxPanelProps) {
       if (!connected || !directory) {
         const emptyScope = { directory: "", view: MAILBOX_VIEW }
         const emptyRequest = requestOwner.beginBase(emptyScope, () => undefined).request
-        void projectMailboxNotificationScopeReplacement({ signal: emptyRequest.signal }).finally(() =>
-          emptyRequest.complete(),
-        )
+        emptyRequest.complete()
         setItems([])
         setCursor(null)
         setCounts({ unread: 0, active: 0, archived: 0 })
-        props.onUnreadCountChange?.(0)
         setLoadError("")
         setLoadedDirectory("")
         setLoading(false)

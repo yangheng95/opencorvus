@@ -36,7 +36,6 @@ const NATIVE_COMMAND_KINDS: NativeCommandKind[] = [
   "desktopUpdate.download",
   "desktopUpdate.install",
   "window.quit",
-  "badge.set",
   "workspace.pickDir",
   "workspace.pickFiles",
   "workspace.openProjectEditor",

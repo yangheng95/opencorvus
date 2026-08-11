@@ -44,17 +44,17 @@ bun run build:overlay   # 保留的开发构建，生成当前主机绑定的可
 
 ## 核心面板
 
-| 面板                    | 作用                                         | 文件                                     |
-| ----------------------- | -------------------------------------------- | ---------------------------------------- |
-| **Board**               | 任务总览：spec/计划/目标/评估/交付各阶段状态 | `src/components/Board.tsx`               |
-| **WorkLedger**          | 左侧 Project、Mission、Task 和 Chat 台账      | `src/components/WorkLedger.tsx`          |
-| **Conversation**        | Agent 对话 / 工具调用 / 推理过程             | `src/components/Conversation.tsx`        |
-| **ChatComposer**        | 输入框，支持发消息 / 附件                    | `src/components/ChatComposer.tsx`        |
-| **InteractionCard**     | 时间线和对话框中的权限、问题回复             | `src/components/InteractionCard.tsx`     |
-| **ChangesPanel**        | 文件变更 diff 预览                           | `src/components/ChangesPanel.tsx`        |
-| **MemoryPanel**         | Agent 记忆 / 上下文                          | `src/components/MemoryPanel.tsx`         |
-| **TracePanel**          | 执行轨迹                                     | `src/components/TracePanel.tsx`          |
-| **LogViewer**           | 原始日志                                     | `src/components/LogViewer.tsx`           |
+| 面板                | 作用                                         | 文件                                 |
+| ------------------- | -------------------------------------------- | ------------------------------------ |
+| **Board**           | 任务总览：spec/计划/目标/评估/交付各阶段状态 | `src/components/Board.tsx`           |
+| **WorkLedger**      | 左侧 Project、Mission、Task 和 Chat 台账     | `src/components/WorkLedger.tsx`      |
+| **Conversation**    | Agent 对话 / 工具调用 / 推理过程             | `src/components/Conversation.tsx`    |
+| **ChatComposer**    | 输入框，支持发消息 / 附件                    | `src/components/ChatComposer.tsx`    |
+| **InteractionCard** | 时间线和对话框中的权限、问题回复             | `src/components/InteractionCard.tsx` |
+| **ChangesPanel**    | 文件变更 diff 预览                           | `src/components/ChangesPanel.tsx`    |
+| **MemoryPanel**     | Agent 记忆 / 上下文                          | `src/components/MemoryPanel.tsx`     |
+| **TracePanel**      | 执行轨迹                                     | `src/components/TracePanel.tsx`      |
+| **LogViewer**       | 原始日志                                     | `src/components/LogViewer.tsx`       |
 
 设置导航由 `src/store/dialog.ts` 的 `CONFIG_SECTIONS` 提供；`ConfigDialogHost.tsx` 将这些标签页归入 Personal、Expert Squad、Chat、Memory & Context、Integrations、Archived 和 About。
 
@@ -95,15 +95,14 @@ bun run build:overlay   # 保留的开发构建，生成当前主机绑定的可
 
 `src-tauri/src/main.rs` 是唯一 Rust 源文件，注册所有 Tauri 命令：
 
-| 命令                                              | 用途                                                                                                  |
-| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `overlay_server_info` / `overlay_server_restart`  | 嵌入的 opencorvus 后端进程管理                                                                        |
-| `overlay_settings_load` / `overlay_settings_save` | 设置以 `overlay.jsonc` 持久化到 Tauri app config 目录                                                 |
-| `overlay_pick_dir` / `overlay_pick_files`         | 目录 / 文件选择对话框                                                                                 |
-| `overlay_open_url` / `overlay_open_path`          | 外部打开                                                                                              |
-| `overlay_attention_set`                           | 托盘闪烁提示                                                                                          |
-| `overlay_badge_set`                               | 持久化 Dock / 任务栏徽标投影（macOS/Linux 使用 `set_badge_count`，Windows 使用警示圆点 overlay icon） |
-| `overlay_toggle_devtools`                         | 开发者工具切换                                                                                        |
+| 命令                                              | 用途                                                                                                      |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `overlay_server_info` / `overlay_server_restart`  | 嵌入的 opencorvus 后端进程管理                                                                            |
+| `overlay_settings_load` / `overlay_settings_save` | 设置以 `overlay.jsonc` 持久化到 Tauri app config 目录                                                     |
+| `overlay_pick_dir` / `overlay_pick_files`         | 目录 / 文件选择对话框                                                                                     |
+| `overlay_open_url` / `overlay_open_path`          | 外部打开                                                                                                  |
+| `overlay_notification_send`                       | 系统通知与原生 informational 注意提示（Dock 弹跳、任务栏闪烁或桌面环境 urgency hint），聚焦后清除注意状态 |
+| `overlay_toggle_devtools`                         | 开发者工具切换                                                                                            |
 
 进程清理：Windows 用 Job Object + `KILL_ON_JOB_CLOSE`；Unix 用 SIGKILL 进程组——确保 overlay 退出时后端进程及子进程全部回收。
 

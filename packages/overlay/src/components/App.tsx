@@ -20,7 +20,6 @@ import { WindowControls } from "./WindowControls"
 import { WorkspaceEditorLaunchers } from "./WorkspaceEditorLaunchers"
 import { ProjectRuntimeToolbarActions } from "./TaskDirBar"
 import { Button } from "./ui/Button"
-import { Badge } from "./ui/Badge"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Tooltip } from "./ui/Tooltip"
 import { StatusIndicator } from "./ui/StatusIndicator"
@@ -36,11 +35,6 @@ import type { AutomationRunSession } from "../services/automations"
 import type { WorkLedgerItemRow, WorkLedgerTaskRow } from "../services/work-ledger"
 
 const MAILBOX_HOVER_OPEN_DELAY_MILLISECONDS = 180
-const MAX_VISIBLE_MAILBOX_UNREAD_COUNT = 99
-
-function formatMailboxUnreadCount(count: number): string {
-  return count > MAX_VISIBLE_MAILBOX_UNREAD_COUNT ? `${MAX_VISIBLE_MAILBOX_UNREAD_COUNT}+` : String(count)
-}
 
 function workLedgerRenameLabel(row: WorkLedgerItemRow): string {
   if (row.kind === "mission") return t("work_ledger.action.rename_mission")
@@ -228,9 +222,6 @@ export interface AppProps {
   homeActive: boolean
   rightDock: JSX.Element
   logViewer: JSX.Element
-  mailboxAttention: boolean
-  mailboxUnreadCount: number
-  onMailboxViewed: () => void
   onOpenRightDockPanel: (panel: RightDockPanel) => void
   onOpenSubagentConversation: (sessionID: string) => void
   onOpenRightDockAddMenu: () => void
@@ -300,7 +291,6 @@ export function App(props: AppProps) {
   function openMailboxHoverPreview(): void {
     cancelMailboxHoverOpen()
     setMailboxHoverPreview(true)
-    props.onMailboxViewed()
   }
 
   onCleanup(() => {
@@ -365,39 +355,14 @@ export function App(props: AppProps) {
                   class="workspace-command-action workspace-command-mailbox"
                   data-chrome="icon-action"
                   data-ui="mailbox-toggle"
-                  data-attention={String(props.mailboxAttention)}
                   data-active={String(mailboxVisible())}
-                  title={
-                    props.mailboxUnreadCount > 0
-                      ? t("mailbox.unread_count", { count: props.mailboxUnreadCount })
-                      : props.mailboxAttention
-                        ? `${t("mailbox.title")}: ${t("mailbox.unread")}`
-                        : t("mailbox.title")
-                  }
-                  aria-label={
-                    props.mailboxUnreadCount > 0
-                      ? `${t("mailbox.title")}: ${t("mailbox.unread_count", { count: props.mailboxUnreadCount })}`
-                      : props.mailboxAttention
-                        ? `${t("mailbox.title")}: ${t("mailbox.unread")}`
-                        : t("mailbox.title")
-                  }
+                  title={t("mailbox.title")}
+                  aria-label={t("mailbox.title")}
                   aria-controls="leftPanelMailbox"
                   aria-expanded={mailboxVisible()}
                   onMouseEnter={scheduleMailboxHoverPreview}
                 >
                   <Icon name="mailbox" size="medium" />
-                  <Show when={props.mailboxUnreadCount > 0}>
-                    <Badge
-                      class="workspace-command-mailbox__count"
-                      tone="accent"
-                      size="sm"
-                      data-ui="mailbox-unread-count"
-                      data-count={String(props.mailboxUnreadCount)}
-                      aria-hidden="true"
-                    >
-                      {formatMailboxUnreadCount(props.mailboxUnreadCount)}
-                    </Badge>
-                  </Show>
                 </Button>
               </div>
             </div>

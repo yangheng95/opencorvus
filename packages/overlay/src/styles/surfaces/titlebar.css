@@ -104,47 +104,6 @@ html[data-native-titlebar="macos"] .titlebar-top-row {
   --oc-button-color: var(--text-strong);
 }
 
-.workspace-contextbar .workspace-command-mailbox.oc-button[data-chrome="icon-action"][data-attention="true"] {
-  --oc-button-color: var(--accent);
-}
-
-.workspace-command-mailbox__count.oc-badge {
-  position: absolute;
-  inset-block-start: calc(-3px * var(--ui-scale));
-  inset-inline-end: calc(-5px * var(--ui-scale));
-  min-width: calc(15px * var(--ui-scale));
-  height: calc(15px * var(--ui-scale));
-  padding: 0 calc(3px * var(--ui-scale));
-  box-sizing: border-box;
-  border: calc(1px * var(--ui-scale)) solid var(--rail-surface);
-  font-size: calc(9px * var(--ui-scale));
-  line-height: 1;
-  pointer-events: none;
-}
-
-.workspace-command-mailbox[data-attention="true"] .oc-icon {
-  animation: workspace-mailbox-attention var(--ui-duration-loop-pulse) var(--ui-timing-standard) infinite;
-}
-
-@keyframes workspace-mailbox-attention {
-  0%,
-  24%,
-  100% {
-    opacity: var(--ui-opacity-full);
-  }
-
-  12%,
-  36% {
-    opacity: var(--ui-opacity-faint);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .workspace-command-mailbox[data-attention="true"] .oc-icon {
-    animation: none;
-  }
-}
-
 .titlebar-context-spacer {
   min-width: 0;
   height: 100%;
