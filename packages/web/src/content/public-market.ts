@@ -2,6 +2,7 @@ import { generatedPublicMarketFacts } from "./public-market-facts.generated"
 import { publicMarketZhTranslations01To35 } from "./public-market-zh-01-35"
 import { publicMarketZhTranslations36To67 } from "./public-market-zh-36-67"
 import { publicMarketZhTranslations68To99 } from "./public-market-zh-68-99"
+import { publicMarketZhTranslationsTenthBatch } from "./public-market-zh-tenth-batch"
 import type { PublicSquadZhTranslationMap } from "./public-market-zh-types"
 
 export type PublicLocale = "root" | "zh-cn"
@@ -65,6 +66,7 @@ const publicMarketZhTranslations: PublicSquadZhTranslationMap = {
   ...publicMarketZhTranslations01To35,
   ...publicMarketZhTranslations36To67,
   ...publicMarketZhTranslations68To99,
+  ...publicMarketZhTranslationsTenthBatch,
 }
 
 function assertExactKeys(context: string, expected: readonly string[], actual: readonly string[]) {

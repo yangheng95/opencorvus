@@ -1,0 +1,20 @@
+artifact_id,row_id,campaign_id,source_locator,source_version,source_date,cutoff_effective_date,time_zone,metric_contract_id,grain,reported_value,recomputed_value,unit,currency,denominator,coverage_population,variance,variance_category,viewability_provider_version,invalid_traffic_provider_version,owner,qualified_reviewer,applicability_jurisdiction,assumptions,uncertainty_confidence,privacy_consent_license_state,decision_status,decision_not_made,outcome_unknown,stop_escalation
+AMBS-DELIVERY-001,DEL-001,CAMP-001,pinned-platform-export,sha256-pending,YYYY-MM-DD,YYYY-MM-DD,operator-zone,METRIC-IMP-001,campaign-day,unknown,unknown,impressions,n-a,eligible events,unknown,unknown,pending definition reconciliation,provider-and-version-required,provider-and-version-required,data-quality owner,media and verification reviewers,authorized campaign and market only,none beyond operator contract,low until population reconciles,restricted permitted-use evidence,draft,no fraud payment underdelivery or compliance determination,true outcome unknown,stop if contract or population differs
+AMBS-DELIVERY-001,DEL-002,CAMP-001,pinned-verification-export,sha256-pending,YYYY-MM-DD,YYYY-MM-DD,operator-zone,METRIC-VIEW-001,placement-day,unknown,unknown,rate,n-a,measurable impressions,unknown,unknown,coverage timing or method candidate,provider-and-version-required,provider-and-version-required,verification owner,measurement and brand-safety reviewers,authorized placements only,no inferred threshold,medium only after lineage review,restricted permitted-use evidence,open,no suitability billing or control decision,comparability unknown,escalate incompatible provider methods
+
+
+## Reusable evidence contract markers
+
+- artifact_id: stable artifact or row identity
+- source_id_locator: exact authoritative source locator
+- source_version_date: immutable source version and applicable date
+- qualified_reviewer: named discipline reviewer with decision authority
+- units_and_denominator: value, unit, currency, population and denominator or not-applicable rationale
+- assumptions_uncertainty: authorized assumptions, unknowns, confidence and reason
+- decision_not_made: explicit professional decisions this artifact does not make
+- outcome_unknown: unresolved outcome stated without inference
+- stop_escalation: exact hold point, reason, escalation owner and required review
+
+# Reconcile the expected and observed entity populations before totals. Decompose differences into definition, identity, coverage, timing, time-zone, currency, sampling, attribution, invalid-traffic treatment, backfill and arithmetic components.
+# Preserve raw source values, independently recomputed values, exclusions and counterevidence. Operator thresholds require a source and owner.
+# Stop on mutable extracts, missing denominators, incomparable contracts, unclear consent, unsafe personal data or requested live-platform query. Never classify fraud, payable status or contractual breach.
