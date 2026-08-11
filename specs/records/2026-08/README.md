@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-12-local-database-rebuild-and-startup-recovery.md](2026-08-12-local-database-rebuild-and-startup-recovery.md) diagnoses healthy current-schema SQLite state plus 65 legacy Windows supervisor artifacts, then plans a strict export/new-database import, verified canonical switch, recoverable artifact archival, and real backend health proof.
+
 - [2026-08-12-permission-two-mode-calibration-plan.md](2026-08-12-permission-two-mode-calibration-plan.md) re-audits the current mixed permission/capability system and defines one `Full access` / `Ask me` authority model, central invocation gate, durable approval ledger, restart-safe waiting contract, no-fallback cutover, and real-path acceptance matrix calibrated against current industry practice.
 
 - [2026-08-11-windows-worker-scheduler-liveness-convergence.md](2026-08-11-windows-worker-scheduler-liveness-convergence.md) records the live Windows reviewer deadlock, expands scheduler ownership through physical descendant and output settlement, and defines the independent audit and end-to-end recovery acceptance boundary.

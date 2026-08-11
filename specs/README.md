@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest local database rebuild and startup recovery: [`2026-08-12-local-database-rebuild-and-startup-recovery.md`](records/2026-08/2026-08-12-local-database-rebuild-and-startup-recovery.md).
+
 Latest permission-system two-mode calibration plan: [`2026-08-12-permission-two-mode-calibration-plan.md`](records/2026-08/2026-08-12-permission-two-mode-calibration-plan.md).
 
 Latest Windows worker and scheduler liveness convergence: [`2026-08-11-windows-worker-scheduler-liveness-convergence.md`](records/2026-08/2026-08-11-windows-worker-scheduler-liveness-convergence.md).
