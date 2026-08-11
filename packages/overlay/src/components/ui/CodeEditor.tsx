@@ -4,7 +4,7 @@ import { javascript } from "@codemirror/lang-javascript"
 import { json } from "@codemirror/lang-json"
 import { markdown } from "@codemirror/lang-markdown"
 import { python } from "@codemirror/lang-python"
-import { Compartment, type Extension } from "@codemirror/state"
+import { Compartment, EditorSelection, type Extension } from "@codemirror/state"
 import { basicSetup, EditorView } from "codemirror"
 import { createEffect, onCleanup, onMount, splitProps, type JSX } from "solid-js"
 
@@ -13,6 +13,8 @@ export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>
   path: string
   ariaLabel: string
   onValueChange: (value: string) => void
+  lineRange?: { startLine: number; endLine: number }
+  lineRangeRevealRevision?: number
   readOnly?: boolean
   class?: string
 }
@@ -33,11 +35,39 @@ export function editorLanguageExtensions(path: string): Extension[] {
 }
 
 export function CodeEditor(props: CodeEditorProps): JSX.Element {
-  const [local, rest] = splitProps(props, ["value", "path", "ariaLabel", "onValueChange", "readOnly", "class"])
+  const [local, rest] = splitProps(props, [
+    "value",
+    "path",
+    "ariaLabel",
+    "onValueChange",
+    "lineRange",
+    "lineRangeRevealRevision",
+    "readOnly",
+    "class",
+  ])
   let host: HTMLDivElement | undefined
   let view: EditorView | undefined
   let applyingExternalValue = false
+  let appliedLineRangeIdentity = ""
   const languageCompartment = new Compartment()
+
+  const applyLineRange = () => {
+    const editor = view
+    const range = local.lineRange
+    if (!editor || !range) return
+    const identity = `${local.path}\u0000${range.startLine}:${range.endLine}\u0000${local.lineRangeRevealRevision ?? 0}`
+    if (identity === appliedLineRangeIdentity) return
+    const startLine = Math.min(range.startLine, editor.state.doc.lines)
+    const endLine = Math.min(range.endLine, editor.state.doc.lines)
+    const anchor = editor.state.doc.line(startLine).from
+    const head = editor.state.doc.line(endLine).to
+    editor.dispatch({
+      selection: EditorSelection.single(anchor, head),
+      effects: EditorView.scrollIntoView(anchor, { y: "center" }),
+    })
+    editor.focus()
+    appliedLineRangeIdentity = identity
+  }
 
   onMount(() => {
     if (!host) return
@@ -57,6 +87,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
         }),
       ],
     })
+    applyLineRange()
   })
 
   createEffect(() => {
@@ -82,6 +113,14 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
       },
     })
     applyingExternalValue = false
+  })
+
+  createEffect(() => {
+    void local.path
+    void local.lineRange?.startLine
+    void local.lineRange?.endLine
+    void local.lineRangeRevealRevision
+    applyLineRange()
   })
 
   onCleanup(() => {

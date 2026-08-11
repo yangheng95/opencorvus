@@ -51590,6 +51590,121 @@
         ]
       }
     },
+    "/file/source-content": {
+      "get": {
+        "description": "Read the exact absolute file represented by a persisted source-file citation.",
+        "operationId": "file.readSource",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileContent"
+                }
+              }
+            },
+            "description": "Read-only source file content"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "FileInvalidPathError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Invalid source file request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "FileNotFoundError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Source file not found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnknownError"
+                }
+              }
+            },
+            "description": "Internal server error"
+          }
+        },
+        "summary": "Read an absolute source file",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.file.readSource({\n  ...\n})"
+          }
+        ]
+      }
+    },
     "/file/status": {
       "get": {
         "description": "Get the git status of all files in the project.",

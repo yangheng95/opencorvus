@@ -2,6 +2,7 @@ import { createEffect, createMemo, createResource, createSignal, onCleanup, Show
 import { apiJson } from "../services/api"
 import {
   closeFileEditor,
+  fileEditorRevealRevision,
   registerFileEditorBeforeNavigate,
   selectedFileTarget,
   shortWorkbenchPath,
@@ -17,10 +18,10 @@ import { Dialog } from "./ui/Dialog"
 
 function fileContentPath(target: FileEditorTarget): string {
   const query = new URLSearchParams({
-    path: target.path,
+    path: target.sourceAbsolutePath || target.path,
     directory: target.directory,
   })
-  return `file/content?${query.toString()}`
+  return `file/${target.sourceAbsolutePath ? "source-content" : "content"}?${query.toString()}`
 }
 
 async function readFileContent(target: FileEditorTarget | null): Promise<FileContent | null> {
@@ -29,6 +30,7 @@ async function readFileContent(target: FileEditorTarget | null): Promise<FileCon
 }
 
 async function writeFileContent(target: FileEditorTarget, content: string): Promise<FileContent> {
+  if (target.sourceAbsolutePath) throw new Error("Absolute source files are read-only")
   return (await apiJson(projectScopedPath("file/content", target.directory), {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
@@ -46,7 +48,19 @@ function errorMessage(error: unknown): string {
 
 function ownsFileTarget(target: FileEditorTarget): boolean {
   const current = selectedFileTarget()
-  return current?.directory === target.directory && current.path === target.path
+  return (
+    current?.directory === target.directory &&
+    current.path === target.path &&
+    current.sourceAbsolutePath === target.sourceAbsolutePath
+  )
+}
+
+function sameFileResourceTarget(left: FileEditorTarget | null, right: FileEditorTarget | null): boolean {
+  return (
+    left?.directory === right?.directory &&
+    left?.path === right?.path &&
+    left?.sourceAbsolutePath === right?.sourceAbsolutePath
+  )
 }
 
 export function FileEditorPane() {
@@ -63,8 +77,23 @@ export function FileEditorPane() {
   let saveGeneration = 0
   let activeTargetIdentity = ""
 
+  const contentTarget = createMemo(
+    () => {
+      const current = selectedFileTarget()
+      return current
+        ? {
+            directory: current.directory,
+            path: current.path,
+            sourceAbsolutePath: current.sourceAbsolutePath,
+          }
+        : null
+    },
+    null,
+    { equals: sameFileResourceTarget },
+  )
+
   const [content] = createResource(
-    () => selectedFileTarget(),
+    contentTarget,
     async (target) => {
       try {
         const next = await readFileContent(target)
@@ -103,12 +132,13 @@ export function FileEditorPane() {
   const target = createMemo(() => selectedFileTarget())
   const path = createMemo(() => target()?.path ?? "")
   const contentLoadError = createMemo(() => loadError())
-  const editable = createMemo(() => canEdit(content()))
-  const dirty = createMemo(() => editable() && draft() !== savedContent())
+  const textContent = createMemo(() => canEdit(content()))
+  const writable = createMemo(() => textContent() && !target()?.sourceAbsolutePath)
+  const dirty = createMemo(() => writable() && draft() !== savedContent())
 
   const save = async (): Promise<boolean> => {
     const file = target()
-    if (!file || !editable() || !dirty() || saving()) return !dirty()
+    if (!file || !writable() || !dirty() || saving()) return !dirty()
     const submittedDraft = draft()
     const submittedRevision = draftRevision
     const requestGeneration = ++saveGeneration
@@ -239,7 +269,7 @@ export function FileEditorPane() {
               }
             >
               <Show
-                when={editable()}
+                when={textContent()}
                 fallback={
                   <div class="file-editor-empty">
                     <Icon name="file-document" size="medium" />
@@ -250,8 +280,11 @@ export function FileEditorPane() {
                 <CodeEditor
                   value={draft()}
                   path={path()}
+                  lineRange={target()?.range}
+                  lineRangeRevealRevision={fileEditorRevealRevision()}
                   ariaLabel={t("file_editor.title")}
                   onValueChange={updateDraft}
+                  readOnly={!!target()?.sourceAbsolutePath}
                 />
               </Show>
             </Show>

@@ -42,7 +42,7 @@ import { FileEditorPane } from "./components/FileEditorPane"
 import { MailboxPanel } from "./components/MailboxPanel"
 import { Button } from "./components/ui/Button"
 import { TabPanel } from "./components/ui/Tabs"
-import { closeFileEditor, fileWorkbenchOpen } from "./services/file-workbench"
+import { closeFileEditor, fileEditorRevealRevision, fileWorkbenchOpen } from "./services/file-workbench"
 import type { DiffTarget } from "./services/diff"
 import { initApp } from "./services/init"
 import {
@@ -1930,6 +1930,7 @@ function OverlayRoot() {
 
   createEffect(() => {
     const open = fileWorkbenchOpen()
+    void fileEditorRevealRevision()
     if (open) {
       setWorkspaceOpen(false)
       openCenterWorkbenchPanel("file")
