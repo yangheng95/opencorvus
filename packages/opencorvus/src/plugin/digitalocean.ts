@@ -233,7 +233,7 @@ function routerModel(router: RouterEntry, providerID: string): Model {
     status: "active",
     headers: {},
     options: {},
-    cost: { input: 0, output: 0, cache: { read: 0, write: 0 } },
+    cost: { available: false, input: 0, output: 0, cache: { read: 0, write: 0 } },
     limit: { context: 128_000, output: 8_192 },
     capabilities: {
       temperature: true,

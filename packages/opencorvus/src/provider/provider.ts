@@ -142,6 +142,24 @@ export namespace Provider {
     )
   }
 
+  export function mergeModelCost(
+    existing: Model["cost"] | undefined,
+    configured:
+      | { input?: number; output?: number; cache_read?: number; cache_write?: number }
+      | undefined,
+  ): Model["cost"] {
+    return {
+      available: configured !== undefined || existing?.available === true,
+      input: configured?.input ?? existing?.input ?? 0,
+      output: configured?.output ?? existing?.output ?? 0,
+      cache: {
+        read: configured?.cache_read ?? existing?.cache.read ?? 0,
+        write: configured?.cache_write ?? existing?.cache.write ?? 0,
+      },
+      experimentalOver200K: existing?.experimentalOver200K,
+    }
+  }
+
   function fromModelsDevModel(provider: ModelsDev.Provider, model: ModelsDev.Model): Model {
     const m: Model = {
       id: model.id,
@@ -157,6 +175,7 @@ export namespace Provider {
       headers: model.headers ?? {},
       options: model.options ?? {},
       cost: {
+        available: model.cost !== undefined,
         input: model.cost?.input ?? 0,
         output: model.cost?.output ?? 0,
         cache: {
@@ -286,6 +305,10 @@ export namespace Provider {
               ...model,
               id: modelID,
               providerID: projection.id,
+              cost: {
+                ...model.cost,
+                available: model.cost.available === true,
+              },
             },
           ]),
         )
@@ -387,14 +410,7 @@ export namespace Provider {
                 },
                 interleaved: model.interleaved ?? false,
               },
-              cost: {
-                input: model?.cost?.input ?? existingModel?.cost?.input ?? 0,
-                output: model?.cost?.output ?? existingModel?.cost?.output ?? 0,
-                cache: {
-                  read: model?.cost?.cache_read ?? existingModel?.cost?.cache.read ?? 0,
-                  write: model?.cost?.cache_write ?? existingModel?.cost?.cache.write ?? 0,
-                },
-              },
+              cost: mergeModelCost(existingModel?.cost, model.cost),
               options: mergeDeep(existingModel?.options ?? {}, model.options ?? {}),
               limit: {
                 context: model.limit?.context ?? existingModel?.limit?.context ?? 0,

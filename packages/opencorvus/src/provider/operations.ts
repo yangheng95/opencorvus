@@ -195,6 +195,7 @@ export async function testProviderConnection(
     const isCodexOauth = providerID === "openai" && auth?.type === "oauth"
     const stream = streamText({
       model: language,
+      usagePurpose: "provider-connectivity",
       timeoutMs: false,
       ...(isCodexOauth ? {} : { maxOutputTokens: 64 }),
       abortSignal: AbortSignal.timeout(30_000),

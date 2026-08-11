@@ -13,6 +13,8 @@ import { Env } from "@/env"
 import { abortableIterable } from "@/util/stream-activity"
 import { createToolCallRepair } from "@/session/repair-hint"
 import { Log } from "@/util/log"
+import { ProviderLLM } from "@/provider/llm"
+import type { UsagePurpose } from "@/usage/usage.sql"
 
 // Single source for tool-call repair across every production streamText
 // caller that registers tools (rule 8). Installing it here makes per-call
@@ -72,9 +74,17 @@ export function streamText<
   input: Parameters<typeof streamTextBase<TOOLS, STRUCTURED_OUTPUT>>[0] & {
     timeoutMs?: number | false
     retries?: number
+    usagePurpose?: UsagePurpose
   },
 ) {
-  const { timeoutMs: timeout, retries: count, abortSignal, ...rest } = input
+  const {
+    timeoutMs: timeout,
+    retries: count,
+    usagePurpose = "other",
+    abortSignal,
+    onStepFinish: callerOnStepFinish,
+    ...rest
+  } = input
   const composed = signal(abortSignal, timeout)
   type StreamTextInput = Parameters<typeof streamTextBase<TOOLS, STRUCTURED_OUTPUT>>[0]
   type StreamTextInputWithRepair = StreamTextInput & {
@@ -84,10 +94,46 @@ export function streamText<
   const repairToolCall =
     restInput.experimental_repairToolCall ??
     createToolCallRepair((restInput.tools ?? {}) as Parameters<typeof createToolCallRepair>[0], repairLog)
+  const trackedModel = ProviderLLM.model(restInput.model)
+  const onStepFinish: StreamTextOnStepFinishCallback<TOOLS> | undefined = trackedModel
+    ? async (event) => {
+        const failures: unknown[] = []
+        try {
+          await callerOnStepFinish?.(event)
+        } catch (error) {
+          failures.push(error)
+        }
+        try {
+          const [{ Session }, { UsageLedger }] = await Promise.all([import("@/session"), import("@/usage")])
+          const normalized = Session.getUsage({
+            model: trackedModel,
+            usage: event.usage,
+            metadata: event.providerMetadata,
+          })
+          UsageLedger.record({
+            providerID: trackedModel.providerID,
+            modelID: trackedModel.id,
+            purpose: usagePurpose,
+            tokens: normalized.tokens,
+            costUSD: normalized.cost,
+            billing: normalized.billing,
+          })
+        } catch (error) {
+          failures.push(error)
+        }
+        if (failures.length === 1) throw failures[0]
+        if (failures.length > 1) {
+          throw new AggregateError(failures, "Provider usage persistence and caller step callback both failed", {
+            cause: failures[0],
+          })
+        }
+      }
+    : callerOnStepFinish
   const result = streamTextBase({
     ...restInput,
     abortSignal: composed,
     maxRetries: retries(count),
+    onStepFinish,
     // Caller-supplied repair wins (none currently); otherwise the single
     // wrapper-level repair covers this call. `tools` is read off the same
     // input so name-normalization keeps working.

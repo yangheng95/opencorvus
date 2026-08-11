@@ -75,6 +75,10 @@ export type BadRequestError = {
   success: false
 }
 
+export type BillingCoverage = {
+  status: "priced" | "unpriced"
+}
+
 /**
  * Channel integration configuration
  */
@@ -3366,6 +3370,7 @@ export type Model = {
     toolcall: boolean
   }
   cost: {
+    available: boolean
     cache: {
       read: number
       write: number
@@ -3569,6 +3574,95 @@ export type OAuth = {
   expires: number
   refresh: string
   type: "oauth"
+}
+
+export type OfficialOpenRouterKeyLedger = {
+  activeCount: number
+  byokUsageDailyUSD: number
+  byokUsageMonthlyUSD: number
+  byokUsageUSD: number
+  byokUsageWeeklyUSD: number
+  count: number
+  items: Array<OfficialOpenRouterKeyUsage>
+  limitedCount: number
+  usageDailyUSD: number
+  usageMonthlyUSD: number
+  usageUSD: number
+  usageWeeklyUSD: number
+}
+
+export type OfficialOpenRouterKeyUsage = {
+  byokUsageDailyUSD: number
+  byokUsageMonthlyUSD: number
+  byokUsageUSD: number
+  byokUsageWeeklyUSD: number
+  createdAt: string
+  disabled: boolean
+  hash: string
+  includeByokInLimit: boolean
+  limitRemainingUSD: number | null
+  limitReset: "daily" | "weekly" | "monthly" | null
+  limitUSD: number | null
+  name: string
+  updatedAt: string | null
+  usageDailyUSD: number
+  usageMonthlyUSD: number
+  usageUSD: number
+  usageWeeklyUSD: number
+}
+
+export type OfficialUsageReconciliation = {
+  additive: false
+  costDeltaUSD: number | null
+  localEstimatedCostUSD: number
+  localTokens: number
+  officialCostUSD: number | null
+  officialTokens: number
+  tokenDelta: number
+}
+
+export type OfficialUsageResult = {
+  fetchedAt: number
+  rule: "compare_never_sum"
+  sources: Array<OfficialUsageSource>
+}
+
+export type OfficialUsageSource = {
+  authorities: Array<"organization_usage" | "financial_ledger" | "account_credit" | "cloud_control_plane">
+  costUSD: number | null
+  credentialEnv: string | null
+  credits: {
+    purchasedUSD: number
+    remainingUSD: number
+    usedUSD: number
+  } | null
+  documentationURL: string
+  freshness: string
+  id: string
+  keyUsage: OfficialOpenRouterKeyLedger | null
+  label: string
+  message: string | null
+  period: {
+    end: number
+    start: number
+  } | null
+  periodAlignment: "exact" | "utc_day_envelope" | null
+  providerID: string
+  reconciliation: OfficialUsageReconciliation | null
+  scope: string
+  status: "available" | "partial" | "unconfigured" | "requires_configuration" | "error"
+  tokens: OfficialUsageTokens | null
+}
+
+export type OfficialUsageTokens = {
+  cacheRead: number | null
+  cacheWrite: number | null
+  calls: number | null
+  input: number
+  inputIncludesCache: boolean
+  output: number
+  reasoning: number | null
+  total: number
 }
 
 export type OutputFormat = OutputFormatText | OutputFormatJsonSchema
@@ -4467,6 +4561,7 @@ export type SourceUrlPart = {
 }
 
 export type StepFinishPart = {
+  billing?: BillingCoverage
   cost: number
   id: string
   messageID: string
@@ -4864,6 +4959,81 @@ export type UnknownError = {
   name: "UnknownError"
 }
 
+export type UsageBillingCoverage = {
+  percent: number | null
+  pricedTokens: number
+  unknownTokens: number
+  unpricedTokens: number
+}
+
+export type UsageBucket = {
+  calls: number
+  costUSD: number
+  end: number
+  start: number
+  tokens: UsageTokenTotals
+}
+
+export type UsageComparison = {
+  callsPercent: number | null
+  costPercent: number | null
+  tokensPercent: number | null
+}
+
+export type UsageModelRow = {
+  modelID: string
+  providerID: string
+  share: number
+  summary: UsageSummary
+}
+
+export type UsagePeriod = "day" | "week" | "month" | "year"
+
+export type UsageProviderRow = {
+  modelCount: number
+  providerID: string
+  share: number
+  summary: UsageSummary
+}
+
+export type UsageStatistics = {
+  buckets: Array<UsageBucket>
+  comparison: UsageComparison
+  current: {
+    end: number
+    start: number
+    summary: UsageSummary
+  }
+  grain: "hour" | "day" | "month"
+  models: Array<UsageModelRow>
+  official: OfficialUsageResult
+  period: UsagePeriod
+  previous: {
+    end: number
+    start: number
+    summary: UsageSummary
+  }
+  providers: Array<UsageProviderRow>
+  timeZone: string
+}
+
+export type UsageSummary = {
+  averageTokensPerCall: number
+  billing: UsageBillingCoverage
+  calls: number
+  costUSD: number
+  tokens: UsageTokenTotals
+}
+
+export type UsageTokenTotals = {
+  cacheRead: number
+  cacheWrite: number
+  input: number
+  output: number
+  reasoning: number
+  total: number
+}
+
 export type VcsBranch = {
   current: boolean
   name: string
@@ -4934,6 +5104,7 @@ export type VisibleMessage =
   | {
       agent: string
       author: string
+      billing?: BillingCoverage
       convergenceFailure?: {
         failure_occurrence: {
           assistant_message_id: string
@@ -5132,6 +5303,7 @@ export type VisibleMessagePart =
       type: "step-start"
     }
   | {
+      billing?: BillingCoverage
       cost: number
       id: string
       messageID: string
@@ -17541,6 +17713,34 @@ export type TaskGlobalCreateResponses = {
 
 export type TaskGlobalCreateResponse = TaskGlobalCreateResponses[keyof TaskGlobalCreateResponses]
 
+export type GlobalUsageData = {
+  body?: never
+  path?: never
+  query?: {
+    period?: UsagePeriod
+    timeZone?: string
+  }
+  url: "/global/usage"
+}
+
+export type GlobalUsageErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
+}
+
+export type GlobalUsageError = GlobalUsageErrors[keyof GlobalUsageErrors]
+
+export type GlobalUsageResponses = {
+  /**
+   * Natural-period Token, cost, Provider, model, comparison, and time-series statistics
+   */
+  200: UsageStatistics
+}
+
+export type GlobalUsageResponse = GlobalUsageResponses[keyof GlobalUsageResponses]
+
 export type GlobalWorkCreateData = {
   body?: {
     model?: string
@@ -22569,6 +22769,7 @@ export type SessionCommandResponses = {
     info: {
       agent: string
       author: string
+      billing?: BillingCoverage
       convergenceFailure?: {
         failure_occurrence: {
           assistant_message_id: string
@@ -23896,6 +24097,7 @@ export type SessionPromptResponses = {
     info: {
       agent: string
       author: string
+      billing?: BillingCoverage
       convergenceFailure?: {
         failure_occurrence: {
           assistant_message_id: string
@@ -24378,6 +24580,7 @@ export type SessionShellResponses = {
   200: {
     agent: string
     author: string
+    billing?: BillingCoverage
     convergenceFailure?: {
       failure_occurrence: {
         assistant_message_id: string

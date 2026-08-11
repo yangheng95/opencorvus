@@ -392,6 +392,7 @@ export async function CodexAuthPlugin(input: PluginInput, options: CodexAuthPlug
               {
                 ...model,
                 cost: {
+                  available: true,
                   input: 0,
                   output: 0,
                   cache: { read: 0, write: 0 },

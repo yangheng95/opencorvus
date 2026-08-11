@@ -14,6 +14,7 @@ import ArchivePanel from "./settings/ArchivePanel"
 import ScheduledAutomationsPanel from "./settings/ScheduledAutomationsPanel"
 import { MemoryContextPanel } from "./settings/MemoryContextPanel"
 import DesktopUpdatePanel from "./settings/DesktopUpdatePanel"
+import UsagePanel from "./settings/UsagePanel"
 import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./settings/layout"
 import { Dialog } from "./ui/Dialog"
 import { Button } from "./ui/Button"
@@ -62,6 +63,7 @@ const SECTION_ICONS: Record<ConfigDialogTab, IconName> = {
   memory: "config-memory",
   network: "config-network",
   providers: "config-providers",
+  usage: "usage-metrics",
   scheduled: "scheduled",
   archive: "archive",
   about: "info-circle",
@@ -108,7 +110,7 @@ const CONFIG_NAV_GROUPS: Array<{ labelKey: string; tabs: ConfigTabDef[] }> = [
   },
   {
     labelKey: "settings.nav.data",
-    tabs: ["archive"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
+    tabs: ["usage", "archive"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
   },
 ]
 const ABOUT_CONFIG_TAB = CONFIG_TABS.find((tab) => tab.id === "about") as ConfigTabDef
@@ -146,6 +148,8 @@ function activePanelBodyID(tab: ConfigDialogTab): string {
       return "networkBody"
     case "providers":
       return "providersConfigBody"
+    case "usage":
+      return "usageBody"
     case "scheduled":
       return "scheduledAutomationsBody"
     case "archive":
@@ -357,6 +361,8 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
         return <NetworkPanel />
       case "providers":
         return <ProvidersPanel />
+      case "usage":
+        return <UsagePanel />
       case "scheduled":
         return <ScheduledAutomationsPanel onOpenSession={props.onOpenAutomationSession} />
       case "archive":

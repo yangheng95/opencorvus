@@ -272,6 +272,7 @@ export namespace LLM {
       // idle/timeout authority and composes its own abort signal into
       // `input.abort`. A second timeout here would race it.
       timeoutMs: false,
+      usagePurpose: "session",
       headers: requestHeaders,
       maxRetries: input.retries ?? 0,
       stopWhen: input.stopWhen,
