@@ -8,6 +8,8 @@
 
 - [2026-08-11-windows-glob-mission-recovery-debug-convergence.md](2026-08-11-windows-glob-mission-recovery-debug-convergence.md) identifies the Windows bounded-glob crash regression, adds durable standalone-Mission restart recovery, separates persisted debug facts from rendered cards, and preserves held-Squad capability authority while exposing its diagnostic boundary.
 
+- [2026-08-11-debug-bundle-truth-and-runtime-settlement-audit.md](2026-08-11-debug-bundle-truth-and-runtime-settlement-audit.md) audits same-family process-settlement risks and calibrates copied diagnostics around validated root-Session, Session-tree, and rendered-card scopes with explicit AI handoff instructions.
+
 - [2026-08-11-public-website-iterative-design-program.md](2026-08-11-public-website-iterative-design-program.md) establishes the research-backed, independently approved website iteration loop and specifies Iteration 1 as a bounded public-versus-documentation typography ownership repair with real bilingual visual acceptance.
 
 - [2026-08-11-public-download-page-design.md](2026-08-11-public-download-page-design.md) defines the existing-site download route, same-origin release manifest, platform recommendation, and release-to-production Actions convergence contract.
