@@ -1,10 +1,21 @@
 # August 2026 Records
 
+- [2026-08-11-hollow-desktop-app-icons.md](2026-08-11-hollow-desktop-app-icons.md) replaces the filled desktop application mark with one white-backed hollow silhouette generated consistently for macOS ICNS, Windows ICO/Store, and Linux/runtime PNG assets.
+
+- [2026-08-11-native-platform-message-notifications.md](2026-08-11-native-platform-message-notifications.md) replaces in-app, taskbar/Dock-badge, and custom tray-dot message attention with one native system-notification delivery that also requests platform-native user attention.
+
+- [2026-08-11-mission-board-create-layout-and-dock-collapse.md](2026-08-11-mission-board-create-layout-and-dock-collapse.md) repairs Mission Board creation ownership, target-project Squad/model resolution, mutation feedback, stale navigation, responsive layout, and the stable dock-closed surface contract.
+
+- [2026-08-11-message-source-navigation.md](2026-08-11-message-source-navigation.md) repairs typed message-source navigation so file citations retain and focus their persisted line ranges while URL citations retain the canonical website-opening path.
+
+- [2026-08-11-settings-responsive-layout-and-market-entry.md](2026-08-11-settings-responsive-layout-and-market-entry.md) replaces the fixed-width settings column with one resolution-responsive content contract, repairs the Installed Agent Squads master-detail composition, and makes the public website the concise Squad Market browsing surface while retaining exact desktop handoff installation.
+
 - [2026-08-11-v0.0.40-beta-release.md](2026-08-11-v0.0.40-beta-release.md) records latest-remote integration, canonical version synchronization, reviewed source/tag publication, native release matrix, public prerelease assets, and beta updater verification for `v0.0.40-beta`.
 
 - [2026-08-11-latest-main-overlay-repackage.md](2026-08-11-latest-main-overlay-repackage.md) records the latest-main merge, Windows Expert Squad snapshot publication repair, and complete `0.0.39-beta` Overlay repackage acceptance.
 
 - [2026-08-11-scheduler-liveness-and-control-convergence.md](2026-08-11-scheduler-liveness-and-control-convergence.md) records the exact lifecycle semantic-orphan incident, three independent scheduler audits, confirmed ownership/liveness defects, shared repair invariants, and executable real-checker acceptance loop.
+- [2026-08-11-subagent-dock-running-presentation-convergence.md](2026-08-11-subagent-dock-running-presentation-convergence.md) diagnoses the complete-agent projection leaking into the sub-agent dock, preserves the dedicated `Thinking` pending state, and removes the redundant animated generating tail without regressing Tool activity motion.
 - [2026-08-11-scheduler-systemic-fault-audit-and-repair.md](2026-08-11-scheduler-systemic-fault-audit-and-repair.md) records the independent systemic audit, shared ownership-handoff root model, confirmed scheduler defect register, repair order, and executable acceptance loop.
 
 - [2026-08-10-task-detached-worker-lifecycle-convergence-repair.md](2026-08-10-task-detached-worker-lifecycle-convergence-repair.md) diagnoses and repairs detached worker execution, terminal lifecycle publication, durable delivery, current-runtime reconciliation, provider-error projection, and immutable workflow-selection convergence as one ownership chain.

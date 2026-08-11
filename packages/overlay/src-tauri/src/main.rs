@@ -10,7 +10,7 @@ use std::{
     process::{Child, Command, Stdio},
     sync::{
         atomic::{AtomicBool, AtomicU64, Ordering},
-        Arc, Condvar, Mutex, Once, OnceLock,
+        Arc, Mutex, Once, OnceLock,
     },
     thread,
     time::{Duration, Instant, SystemTime, UNIX_EPOCH},
@@ -55,7 +55,6 @@ include!(concat!(env!("OUT_DIR"), "/server_defaults.rs"));
 const LOCAL_SERVER_HOST: &str = DEFAULT_SERVER_HOST;
 const TRAY_ID: &str = "main-tray";
 const TRAY_TOOLTIP_DEFAULT: &str = "OpenCorvus";
-const TRAY_TOOLTIP_ALERT: &str = "OpenCorvus - Action required";
 const OVERLAY_STARTUP_SURFACE: Color = Color(244, 244, 244, 255);
 const STARTUP_PROGRESS_EVENT: &str = "overlay:startup-progress";
 const EXPERT_SQUAD_INSTALL_HANDOFF_EVENT: &str = "opencorvus:expert-squad-install";
@@ -1460,17 +1459,6 @@ fn with_prepared_server<C: ?Sized, P, T>(
     let prepared = prepare(context)?;
     let _operation = server.operation.lock().unwrap();
     publish(context, prepared)
-}
-
-#[derive(Default)]
-struct TrayAttentionState {
-    active: bool,
-    flashing: bool,
-}
-
-struct TrayAttention {
-    state: Mutex<TrayAttentionState>,
-    cvar: Condvar,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
@@ -4984,7 +4972,18 @@ fn overlay_notification_send<R: Runtime>(
     title: String,
     body: Option<String>,
 ) -> Result<bool, String> {
-    send_overlay_system_notification(&app, &title, body.as_deref())?;
+    deliver_native_message_notification(
+        || request_native_notification_attention(&app),
+        || send_overlay_system_notification(&app, &title, body.as_deref()),
+    )
+}
+
+fn deliver_native_message_notification(
+    request_attention: impl FnOnce() -> Result<(), String>,
+    send_system_notification: impl FnOnce() -> Result<(), String>,
+) -> Result<bool, String> {
+    request_attention()?;
+    send_system_notification()?;
     Ok(true)
 }
 
@@ -5130,106 +5129,30 @@ fn set_window_icon<R: Runtime>(window: &tauri::WebviewWindow<R>) {
 }
 
 fn show_window<R: Runtime>(window: &tauri::WebviewWindow<R>) {
+    clear_native_notification_attention(|| window.request_user_attention(None));
     let _ = window.unminimize();
     let _ = window.show();
     let _ = window.set_focus();
 }
 
-fn request_attention<R: Runtime>(app: &AppHandle<R>, active: bool) {
-    if let Some(window) = app.get_webview_window("main") {
-        let _ = window.request_user_attention(if active {
-            Some(UserAttentionType::Informational)
-        } else {
-            None
-        });
-    }
+fn native_notification_attention_type() -> UserAttentionType {
+    UserAttentionType::Informational
 }
 
-fn apply_tray_attention<R: Runtime>(app: &AppHandle<R>, active: bool) {
-    if let Some(tray) = app.tray_by_id(TRAY_ID) {
-        let icon = if active {
-            create_attention_tray_icon()
-        } else {
-            create_tray_icon()
-        };
-        let _ = tray.set_icon(Some(icon));
-        let _ = tray.set_tooltip(Some(if active {
-            TRAY_TOOLTIP_ALERT
-        } else {
-            TRAY_TOOLTIP_DEFAULT
-        }));
-    }
+fn request_native_notification_attention<R: Runtime>(app: &AppHandle<R>) -> Result<(), String> {
+    let window = app.get_webview_window("main").ok_or_else(|| {
+        "main window is unavailable for native notification attention".to_string()
+    })?;
+    window
+        .request_user_attention(Some(native_notification_attention_type()))
+        .map_err(|error| format!("cannot request native notification attention: {error}"))
 }
 
-fn clear_tray_attention<R: Runtime>(app: &AppHandle<R>) {
-    let attention = app.state::<TrayAttention>();
-    let mut lock = attention.state.lock().unwrap();
-    lock.active = false;
-    lock.flashing = false;
-    drop(lock);
-    attention.cvar.notify_one();
-    apply_tray_attention(app, false);
-    request_attention(app, false);
-}
-
-#[tauri::command]
-fn overlay_attention_set<R: Runtime>(app: AppHandle<R>, active: bool) -> Result<bool, String> {
-    let attention = app.state::<TrayAttention>();
-    let mut lock = attention.state.lock().unwrap();
-    lock.active = active;
-    if !active {
-        lock.flashing = false;
-    }
-    drop(lock);
-    attention.cvar.notify_one();
-
-    if active {
-        request_attention(&app, true);
-        return Ok(true);
-    }
-
-    apply_tray_attention(&app, false);
-    request_attention(&app, false);
-    Ok(true)
-}
-
-#[cfg(not(windows))]
-fn badge_count_value(count: i64) -> Option<i64> {
-    if count > 0 {
-        Some(count)
-    } else {
-        None
-    }
-}
-
-#[tauri::command]
-#[cfg(windows)]
-fn overlay_badge_set<R: Runtime>(app: AppHandle<R>, count: i64) -> Result<bool, String> {
-    if let Some(window) = app.get_webview_window("main") {
-        let icon = if count > 0 {
-            Some(create_taskbar_badge_icon())
-        } else {
-            None
-        };
-        window
-            .set_overlay_icon(icon)
-            .map_err(|err| err.to_string())?;
-        Ok(true)
-    } else {
-        Ok(false)
-    }
-}
-
-#[tauri::command]
-#[cfg(not(windows))]
-fn overlay_badge_set<R: Runtime>(app: AppHandle<R>, count: i64) -> Result<bool, String> {
-    if let Some(window) = app.get_webview_window("main") {
-        window
-            .set_badge_count(badge_count_value(count))
-            .map_err(|err| err.to_string())?;
-        Ok(true)
-    } else {
-        Ok(false)
+fn clear_native_notification_attention<E: std::fmt::Display>(
+    clear_attention: impl FnOnce() -> Result<(), E>,
+) {
+    if let Err(error) = clear_attention() {
+        eprintln!("overlay: cannot clear native notification attention: {error}");
     }
 }
 
@@ -5652,10 +5575,6 @@ fn main() {
         .manage(Server::default())
         .manage(PendingExpertSquadInstallHandoff::default())
         .manage(DesktopUpdateCoordinator::default())
-        .manage(TrayAttention {
-            state: Mutex::new(TrayAttentionState::default()),
-            cvar: Condvar::new(),
-        })
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_notification::init())
@@ -5698,8 +5617,6 @@ fn main() {
         overlay_browser_preview_set_zoom,
         overlay_pick_dir,
         overlay_pick_files,
-        overlay_attention_set,
-        overlay_badge_set,
         overlay_notification_send,
         overlay_toggle_devtools,
         overlay_desktop_update_check,
@@ -5732,8 +5649,6 @@ fn main() {
         overlay_browser_preview_set_zoom,
         overlay_pick_dir,
         overlay_pick_files,
-        overlay_attention_set,
-        overlay_badge_set,
         overlay_notification_send,
         overlay_desktop_update_check,
         overlay_desktop_update_download,
@@ -5751,10 +5666,6 @@ fn main() {
         })
         .setup(|app| {
             app.manage(Server::default());
-            app.manage(TrayAttention {
-                state: Mutex::new(TrayAttentionState::default()),
-                cvar: Condvar::new(),
-            });
             #[cfg(any(target_os = "macos", windows, target_os = "linux"))]
             {
                 // A first Windows protocol launch reaches the registered executable as a
@@ -5864,7 +5775,6 @@ fn main() {
                     match id {
                         "show" => {
                             if let Some(window) = app.get_webview_window("main") {
-                                clear_tray_attention(app);
                                 show_window(&window);
                             }
                         }
@@ -5878,7 +5788,6 @@ fn main() {
                             if let Some(window) = app.get_webview_window("main") {
                                 // Reload the frontend
                                 let _ = window.eval("location.reload()");
-                                clear_tray_attention(app);
                                 show_window(&window);
                             }
                         }
@@ -5897,39 +5806,18 @@ fn main() {
                     {
                         let app = tray.app_handle();
                         if let Some(window) = app.get_webview_window("main") {
-                            clear_tray_attention(&app);
                             show_window(&window);
                         }
                     }
                 })
                 .build(app)?;
 
-            {
-                let app = app.handle().clone();
-                thread::spawn(move || loop {
-                    let attention = app.state::<TrayAttention>();
-                    // Block until attention becomes active. No polling, no
-                    // wake-ups while idle — set/clear notify the cvar.
-                    let mut lock = attention
-                        .cvar
-                        .wait_while(attention.state.lock().unwrap(), |s| !s.active)
-                        .unwrap();
-                    lock.flashing = !lock.flashing;
-                    let next = lock.active && lock.flashing;
-                    drop(lock);
-                    apply_tray_attention(&app, next);
-                    // Sleep 700ms; set/clear can wake us early via notify_one
-                    // so a clear takes effect on the next iteration without
-                    // waiting out the remainder of this tick.
-                    let lock = attention.state.lock().unwrap();
-                    let _ = attention
-                        .cvar
-                        .wait_timeout(lock, Duration::from_millis(700))
-                        .unwrap();
-                });
-            }
-
             Ok(())
+        })
+        .on_window_event(|window, event| {
+            if window.label() == "main" && matches!(event, tauri::WindowEvent::Focused(true)) {
+                clear_native_notification_attention(|| window.request_user_attention(None));
+            }
         })
         .build(tauri::generate_context!())
         .expect("error while building tauri application")
@@ -5939,10 +5827,8 @@ fn main() {
         })
 }
 
-// Tray icons are decoded once (PNG decode + Lanczos3 resize + flood-fill) and
-// cached for the lifetime of the process. The flasher swaps icons every 700ms
-// while attention is active, so re-running the pipeline each call burned CPU
-// for no reason.
+// The tray icon is decoded once (PNG decode + Lanczos3 resize + flood-fill)
+// and cached for the lifetime of the process.
 
 struct CachedIcon {
     rgba: Vec<u8>,
@@ -5999,105 +5885,39 @@ fn build_normal_tray_icon() -> CachedIcon {
     }
 }
 
-fn build_attention_tray_icon() -> CachedIcon {
-    let base = build_normal_tray_icon();
-    let mut rgba = base.rgba.clone();
-    let width = base.width;
-    let height = base.height;
-    let cx = 24.0_f64;
-    let cy = 8.0_f64;
-    let outer = 6.0_f64;
-    let inner = 3.0_f64;
-
-    for y in 0..height {
-        for x in 0..width {
-            let dx = x as f64 - cx;
-            let dy = y as f64 - cy;
-            let dist = (dx * dx + dy * dy).sqrt();
-            let idx = ((y * width + x) * 4) as usize;
-
-            if dist <= outer {
-                rgba[idx] = 0xf8;
-                rgba[idx + 1] = 0x71;
-                rgba[idx + 2] = 0x71;
-                rgba[idx + 3] = 255;
-            }
-            if dist <= inner {
-                rgba[idx] = 0xff;
-                rgba[idx + 1] = 0xff;
-                rgba[idx + 2] = 0xff;
-                rgba[idx + 3] = 255;
-            }
-        }
-    }
-
-    CachedIcon {
-        rgba,
-        width,
-        height,
-    }
-}
-
-#[cfg(any(windows, test))]
-fn build_taskbar_badge_icon() -> CachedIcon {
-    let size: u32 = 16;
-    let mut rgba = vec![0u8; (size * size * 4) as usize];
-    let center = (size as f64 - 1.0) / 2.0;
-    let outer = 6.0_f64;
-    let inner = 2.6_f64;
-
-    for y in 0..size {
-        for x in 0..size {
-            let dx = x as f64 - center;
-            let dy = y as f64 - center;
-            let dist = (dx * dx + dy * dy).sqrt();
-            let idx = ((y * size + x) * 4) as usize;
-
-            if dist <= outer {
-                rgba[idx] = 0xf8;
-                rgba[idx + 1] = 0x71;
-                rgba[idx + 2] = 0x71;
-                rgba[idx + 3] = if outer - dist >= 1.0 {
-                    255
-                } else {
-                    ((outer - dist).max(0.0) * 255.0) as u8
-                };
-            }
-            if dist <= inner {
-                rgba[idx] = 0xff;
-                rgba[idx + 1] = 0xff;
-                rgba[idx + 2] = 0xff;
-                rgba[idx + 3] = 255;
-            }
-        }
-    }
-
-    CachedIcon {
-        rgba,
-        width: size,
-        height: size,
-    }
-}
-
 fn create_tray_icon() -> tauri::image::Image<'static> {
     static CACHED: OnceLock<CachedIcon> = OnceLock::new();
     cached_icon_image(CACHED.get_or_init(build_normal_tray_icon))
 }
 
-fn create_attention_tray_icon() -> tauri::image::Image<'static> {
-    static CACHED: OnceLock<CachedIcon> = OnceLock::new();
-    cached_icon_image(CACHED.get_or_init(build_attention_tray_icon))
-}
-
-#[cfg(windows)]
-fn create_taskbar_badge_icon() -> tauri::image::Image<'static> {
-    static CACHED: OnceLock<CachedIcon> = OnceLock::new();
-    cached_icon_image(CACHED.get_or_init(build_taskbar_badge_icon))
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn native_message_delivery_requests_attention_before_system_notification() {
+        let effects = std::cell::RefCell::new(Vec::new());
+        let accepted = deliver_native_message_notification(
+            || {
+                effects.borrow_mut().push(format!(
+                    "attention:{:?}",
+                    native_notification_attention_type()
+                ));
+                Ok(())
+            },
+            || {
+                effects.borrow_mut().push("system-notification".to_string());
+                Ok(())
+            },
+        )
+        .expect("native delivery should succeed");
+
+        assert!(accepted);
+        assert_eq!(
+            effects.into_inner(),
+            ["attention:Informational", "system-notification"]
+        );
+    }
 
     #[test]
     fn managed_process_terminal_state_preserves_observed_physical_exit() {

@@ -123,6 +123,8 @@ export namespace TaskQueueService {
   const CONCURRENCY_ENV = "OPENCORVUS_TASK_QUEUE_CONCURRENCY"
   const CONCURRENCY_LIMIT = 100
   const RECOVERY_CONTROL_RETRY_MS = 1_000
+  const EXECUTION_SETTLEMENT_RETRY_BASE_MS = 50
+  const EXECUTION_SETTLEMENT_RETRY_MAX_MS = 1_000
 
   function publishQueueChangedInTransaction(input: {
     queueTaskID: string
@@ -184,6 +186,9 @@ export namespace TaskQueueService {
   let beforeProcessRollbackRecoveryForTest:
     | ((input: { directory: string; taskIDs: readonly string[] }) => void | Promise<void>)
     | undefined
+  let beforeExecutionFailureSettlementForTest:
+    | ((input: { taskID: string; attempt: number }) => void | Promise<void>)
+    | undefined
 
   // Queue execution ownership is process/project-wide. Multiple Instance
   // directories (primary worktree and managed worktrees) can represent the
@@ -205,11 +210,7 @@ export namespace TaskQueueService {
   }
   let processSettlementGate: ProcessRollbackScope | undefined
 
-  function captureProcessRollbackTask(
-    kind: "recovery" | "requeued",
-    directory: string,
-    taskID: string,
-  ): void {
+  function captureProcessRollbackTask(kind: "recovery" | "requeued", directory: string, taskID: string): void {
     const gate = processSettlementGate
     if (!gate) return
     const target = kind === "recovery" ? gate.recoveryTaskIDsByDirectory : gate.requeuedTaskIDsByDirectory
@@ -337,9 +338,7 @@ export namespace TaskQueueService {
       }
       current.inFlight.clear()
       for (const [taskID, owner] of interruptedRecoveryTimers) {
-        const retainedByRollback = processSettlementGate?.recoveryTaskIDsByDirectory
-          .get(owner.directory)
-          ?.has(taskID)
+        const retainedByRollback = processSettlementGate?.recoveryTaskIDsByDirectory.get(owner.directory)?.has(taskID)
         if (owner.directory === Instance.directory && !retainedByRollback) interruptedRecoveryTimers.delete(taskID)
       }
       if (!processSettlementGate?.requeuedTaskIDsByDirectory.has(Instance.directory)) {
@@ -428,7 +427,10 @@ export namespace TaskQueueService {
     await runTaskQueueOwner(Instance.directory, () => drainUntilIdle("runNow"))
   }
 
-  function runtimeCancellationOrigin(task: Pick<InFlightTask, "sessionID">, reason: unknown): ExecutionCancellationOrigin {
+  function runtimeCancellationOrigin(
+    task: Pick<InFlightTask, "sessionID">,
+    reason: unknown,
+  ): ExecutionCancellationOrigin {
     const message = reason instanceof Error ? reason.message : String(reason)
     return createExecutionCancellationOrigin({
       actor: "runtime",
@@ -452,11 +454,7 @@ export namespace TaskQueueService {
     )
   }
 
-  function requestExecutionCancellation(
-    task: InFlightTask,
-    reason: string,
-    origin: ExecutionCancellationOrigin,
-  ): void {
+  function requestExecutionCancellation(task: InFlightTask, reason: string, origin: ExecutionCancellationOrigin): void {
     if (!task.authority.signal.aborted) {
       task.authority.cancel(origin)
       return
@@ -502,6 +500,19 @@ export namespace TaskQueueService {
   }
 
   export const TestHooks = {
+    installBeforeExecutionFailureSettlement(
+      hook: (input: { taskID: string; attempt: number }) => void | Promise<void>,
+    ): Disposable {
+      if (beforeExecutionFailureSettlementForTest) {
+        throw new Error("Task Queue execution-settlement test hook is already installed")
+      }
+      beforeExecutionFailureSettlementForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (beforeExecutionFailureSettlementForTest === hook) beforeExecutionFailureSettlementForTest = undefined
+        },
+      }
+    },
     installBeforeProcessRollbackRecovery(
       hook: (input: { directory: string; taskIDs: readonly string[] }) => void | Promise<void>,
     ): Disposable {
@@ -516,7 +527,8 @@ export namespace TaskQueueService {
       }
     },
     installBeforeQueueClaimReservation(hook: (taskID: string) => void | Promise<void>): Disposable {
-      if (beforeQueueClaimReservationForTest) throw new Error("Task Queue claim-reservation test hook is already installed")
+      if (beforeQueueClaimReservationForTest)
+        throw new Error("Task Queue claim-reservation test hook is already installed")
       beforeQueueClaimReservationForTest = hook
       return {
         [Symbol.dispose]() {
@@ -605,7 +617,9 @@ export namespace TaskQueueService {
       taskID: string
       physicalSettlement: Promise<void>
     }): Promise<RuntimeExecutionHandoffCancellation | undefined> {
-      const task = Database.use((db) => db.select().from(TaskQueueTable).where(eq(TaskQueueTable.id, input.taskID)).get())
+      const task = Database.use((db) =>
+        db.select().from(TaskQueueTable).where(eq(TaskQueueTable.id, input.taskID)).get(),
+      )
       if (!task || task.status !== "running") {
         throw new Error(`Recoverable queue test execution requires running row ${input.taskID}`)
       }
@@ -785,8 +799,7 @@ export namespace TaskQueueService {
       focus: input.focus,
     })
     Database.transaction((db) => {
-      db
-        .insert(TaskQueueTable)
+      db.insert(TaskQueueTable)
         .values({
           id,
           session_id: input.sessionID,
@@ -1337,11 +1350,7 @@ export namespace TaskQueueService {
             AND ${runningCount} < ${capacity}
             AND ${isBestQueuedTaskForSession(now)}`,
         )
-        .orderBy(
-          priorityRank,
-          TaskQueueTable.time_created,
-          TaskQueueTable.id,
-        )
+        .orderBy(priorityRank, TaskQueueTable.time_created, TaskQueueTable.id)
         .limit(limit)
         .all()
       const available = Math.max(0, capacity - Number(rows[0]?.running_count ?? capacity))
@@ -1416,11 +1425,7 @@ export namespace TaskQueueService {
 
   function isBestQueuedTaskForSession(now: number): SQL {
     const betterRank = effectivePriorityRank(sql`better.priority`, sql`better.time_created`, now)
-    const currentRank = effectivePriorityRank(
-      sql`${TaskQueueTable.priority}`,
-      sql`${TaskQueueTable.time_created}`,
-      now,
-    )
+    const currentRank = effectivePriorityRank(sql`${TaskQueueTable.priority}`, sql`${TaskQueueTable.time_created}`, now)
     return sql`NOT EXISTS (
       SELECT 1
       FROM a2a_task_queue better
@@ -1944,15 +1949,39 @@ export namespace TaskQueueService {
     inFlight: InFlightTask,
     error: unknown,
   ): Promise<RuntimeExecutionHandoffCancellation | undefined> {
+    let attempt = 0
+    for (;;) {
+      attempt += 1
+      try {
+        await beforeExecutionFailureSettlementForTest?.({ taskID: task.id, attempt })
+        return await settleExecutionFailureOnce(task, inFlight, error)
+      } catch (settlementError) {
+        const retryMs = Math.min(
+          EXECUTION_SETTLEMENT_RETRY_MAX_MS,
+          EXECUTION_SETTLEMENT_RETRY_BASE_MS * 2 ** Math.min(attempt - 1, 8),
+        )
+        log.warn("Task Queue execution durable settlement failed; retaining exact owner for retry", {
+          id: task.id,
+          sessionID: task.session_id,
+          attempt,
+          retryMs,
+          error: message(settlementError),
+        })
+        await new Promise<void>((resolve) => setTimeout(resolve, retryMs))
+      }
+    }
+  }
+
+  async function settleExecutionFailureOnce(
+    task: QueueTaskRow,
+    inFlight: InFlightTask,
+    error: unknown,
+  ): Promise<RuntimeExecutionHandoffCancellation | undefined> {
     if (inFlight.cancellationOrigin?.source !== "process.shutdown") {
       await fail(task, error)
       return undefined
     }
-    const handoff = new RuntimeExecutionHandoffCancellation(
-      task.id,
-      task.id,
-      inFlight.cancellationOrigin.reason,
-    )
+    const handoff = new RuntimeExecutionHandoffCancellation(task.id, task.id, inFlight.cancellationOrigin.reason)
     const now = Date.now()
     const resumed = Database.transaction((db) => {
       const row = db
@@ -2161,15 +2190,17 @@ export namespace TaskQueueService {
       latest.recoveryTimers.delete(task.id)
       latest.recoveryTimerTokens.delete(task.id)
       if (latest.recoveryAuthorities.get(task.id) === authority) latest.recoveryAuthorities.delete(task.id)
-      const operation = runTaskQueueOwner(directory, () => scheduleRunningRecoveryRetry(task, reason)).catch((error) => {
-        log.error("task inactivity recovery retry owner failed", {
-          id: task.id,
-          directory,
-          reason,
-          error: message(error),
-        })
-        scheduleRecoveryControlRetry(task, directory, reason)
-      })
+      const operation = runTaskQueueOwner(directory, () => scheduleRunningRecoveryRetry(task, reason)).catch(
+        (error) => {
+          log.error("task inactivity recovery retry owner failed", {
+            id: task.id,
+            directory,
+            reason,
+            error: message(error),
+          })
+          scheduleRecoveryControlRetry(task, directory, reason)
+        },
+      )
       authority.settleWith(operation)
     }, RECOVERY_CONTROL_RETRY_MS)
     timer.unref()

@@ -180,6 +180,8 @@ import type {
   FilePartSource,
   FileReadErrors,
   FileReadResponses,
+  FileReadSourceErrors,
+  FileReadSourceResponses,
   FileStatusResponses,
   FileUploadErrors,
   FileUploadResponses,
@@ -4124,6 +4126,36 @@ export class File_ extends HeyApiClient {
         ...options?.headers,
         ...params.headers,
       },
+    })
+  }
+
+  /**
+   * Read an absolute source file
+   *
+   * Read the exact absolute file represented by a persisted source-file citation.
+   */
+  public readSource<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      path: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "query", key: "path" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<FileReadSourceResponses, FileReadSourceErrors, ThrowOnError>({
+      url: "/file/source-content",
+      ...options,
+      ...params,
     })
   }
 

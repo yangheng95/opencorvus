@@ -624,8 +624,6 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
           return invokeTauri("overlay_desktop_update_install", { expectedVersion: command.expectedVersion })
         case "window.quit":
           return invokeTauri("overlay_quit")
-        case "badge.set":
-          return invokeTauri("overlay_badge_set", { count: command.count })
         case "workspace.pickDir":
           return invokeTauri("overlay_pick_dir", { start: command.start || undefined })
         case "workspace.pickFiles":

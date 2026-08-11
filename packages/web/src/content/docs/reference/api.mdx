@@ -442,6 +442,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | PATCH | `/file/item` | Move file item Body: `newPath`, `path`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `file.move` |
 | POST | `/file/item` | Create file item Body: `content`, `path`, `type`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `file.create` |
 | POST | `/file/item/copy` | Copy file item Body: `newPath`, `path`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `file.copy` |
+| GET | `/file/source-content` | Read an absolute source file Errors: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.readSource` |
 | GET | `/file/status` | Get file status | `file.status` |
 | POST | `/file/upload` | Upload files Body: `files`, `targetDir`; Errors: `BadRequestError`, `TaskCancellationIncompleteError`. | `file.upload` |
 | GET | `/find` | Find text Errors: `UnknownError`. | `find.text` |

@@ -118,7 +118,7 @@ a {
 }
 
 .public-landing .public-brand,
-.public-landing .public-brand span {
+.public-landing .public-brand-label {
   border: 0;
   background: transparent !important;
   color: var(--ink) !important;
@@ -130,12 +130,23 @@ a {
   font-weight: 760 !important;
 }
 
-.public-brand img {
+.public-brand-mark {
+  display: inline-grid;
+  place-items: center;
   box-sizing: content-box;
+  width: 34px;
+  height: 34px;
   padding: 5px;
   border: 1px solid var(--ink);
   border-radius: 0;
   background: var(--cobalt-wash);
+}
+
+.public-brand-mark img {
+  display: block;
+  width: 34px;
+  height: 34px;
+  background: #fff;
 }
 
 .public-nav {

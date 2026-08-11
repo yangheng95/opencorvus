@@ -38,6 +38,97 @@ describe("Task Queue child Session progress", () => {
     expect(events).toEqual(["started-settled", "drain-continued"])
   })
 
+  test("retains the exact runtime owner until a failed handoff disposition is durably retried", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const root = await Session.createNext({
+          directory: Instance.directory,
+          kind: "assistant",
+          title: "Task Queue durable handoff settlement",
+        })
+        const queueTaskID = Identifier.ascending("task")
+        const startedAt = Date.now()
+        Database.use((db) =>
+          db
+            .insert(TaskQueueTable)
+            .values({
+              id: queueTaskID,
+              session_id: root.id,
+              prompt: "durable handoff settlement retry",
+              priority: "normal",
+              status: "running",
+              source: "task-queue-durable-handoff-settlement-contract",
+              metadata: { kind: "session_prompt", input: {} },
+              time_created: startedAt,
+              time_started: startedAt,
+              time_updated: startedAt,
+            })
+            .run(),
+        )
+
+        let rejectPhysical!: (error: Error) => void
+        const physicalSettlement = new Promise<void>((_resolve, reject) => {
+          rejectPhysical = reject
+        })
+        let reportFirstAttempt!: () => void
+        const firstAttempt = new Promise<void>((resolve) => {
+          reportFirstAttempt = resolve
+        })
+        let releaseFirstAttempt!: () => void
+        const firstAttemptRelease = new Promise<void>((resolve) => {
+          releaseFirstAttempt = resolve
+        })
+        const attempts: string[] = []
+        using _settlementFailure = TaskQueueService.TestHooks.installBeforeExecutionFailureSettlement(
+          async ({ taskID, attempt }) => {
+            attempts.push(`${taskID}:attempt-${attempt}`)
+            if (attempt !== 1) return
+            reportFirstAttempt()
+            await firstAttemptRelease
+            throw new Error("injected one-time handoff persistence failure")
+          },
+        )
+        const disposition = TaskQueueService.TestHooks.trackRecoverableExecution({
+          taskID: queueTaskID,
+          physicalSettlement,
+        })
+        const gate = RuntimeExecutionSettlement.acquireSettlementGate()
+        try {
+          gate.closeAdmission(["task_queue"])
+          gate.requestCancellation(["task_queue"], new Error("runtime ownership handoff"))
+          rejectPhysical(new Error("physical execution cancelled for handoff"))
+          await firstAttempt
+          const retained = {
+            queue: TaskQueueService.getStatusByID(queueTaskID),
+            runtime: RuntimeExecutionSettlement.snapshot(),
+          }
+          const gateSettlement = gate.waitForIdle(["task_queue"])
+          releaseFirstAttempt()
+          const [handoff] = await Promise.all([disposition, gateSettlement])
+
+          expect({ attempts, retained, handoff, settled: TaskQueueService.getStatusByID(queueTaskID) }).toMatchObject({
+            attempts: [`${queueTaskID}:attempt-1`, `${queueTaskID}:attempt-2`],
+            retained: {
+              queue: { taskID: queueTaskID, status: "running" },
+              runtime: expect.arrayContaining([{ kind: "task_queue", label: `queue-execution:${queueTaskID}` }]),
+            },
+            handoff: {
+              name: "RuntimeExecutionHandoffCancellation",
+              taskID: queueTaskID,
+              queueOccurrenceID: queueTaskID,
+            },
+            settled: { taskID: queueTaskID, status: "queued" },
+          })
+        } finally {
+          releaseFirstAttempt()
+          gate[Symbol.dispose]()
+        }
+      },
+    })
+  }, 30_000)
+
   test("touches the running row on child creation and subsequent child Part progress", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -106,7 +197,12 @@ describe("Task Queue child Session progress", () => {
           await Database.awaitEffectIdle(2_000)
           const touchedAt = await waitForQueueUpdate(queueTaskID, createdTouchedAt)
 
-          expect({ childSessionID: child.id, queue: TaskQueueService.getStatusByID(queueTaskID), createdTouchedAt, touchedAt }).toMatchObject({
+          expect({
+            childSessionID: child.id,
+            queue: TaskQueueService.getStatusByID(queueTaskID),
+            createdTouchedAt,
+            touchedAt,
+          }).toMatchObject({
             childSessionID: expect.stringMatching(/^ses_/),
             queue: { taskID: queueTaskID, sessionID: root.id, status: "running", updatedAt: touchedAt },
             createdTouchedAt: expect.any(Number),
@@ -206,7 +302,12 @@ describe("Task Queue child Session progress", () => {
           releaseTouch()
           const touchedAt = await waitForQueueUpdate(queueTaskID, staleAt)
 
-          expect({ durableTouchOwners, recovered, whileBlocked, settled: TaskQueueService.getStatusByID(queueTaskID) }).toMatchObject({
+          expect({
+            durableTouchOwners,
+            recovered,
+            whileBlocked,
+            settled: TaskQueueService.getStatusByID(queueTaskID),
+          }).toMatchObject({
             durableTouchOwners: 1,
             recovered: 0,
             whileBlocked: { taskID: queueTaskID, status: "running", updatedAt: staleAt },

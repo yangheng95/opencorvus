@@ -1038,7 +1038,6 @@ export type NativeCommand =
   | { kind: "desktopUpdate.download"; expectedVersion: string }
   | { kind: "desktopUpdate.install"; expectedVersion: string }
   | { kind: "window.quit" }
-  | { kind: "badge.set"; count: number }
   | { kind: "workspace.pickDir"; start?: string }
   | { kind: "workspace.pickFiles"; start?: string; multiple?: boolean }
   | { kind: "workspace.openProjectEditor"; editor: ProjectEditorID; path: string }
@@ -1260,8 +1259,6 @@ export function isNativeCommand(value: unknown): value is NativeCommand {
     case "desktopUpdate.download":
     case "desktopUpdate.install":
       return isNonBlankString(obj["expectedVersion"])
-    case "badge.set":
-      return typeof obj["count"] === "number" && Number.isFinite(obj["count"]) && obj["count"] >= 0
     case "workspace.pickDir":
       return obj["start"] === undefined || typeof obj["start"] === "string"
     case "workspace.pickFiles":

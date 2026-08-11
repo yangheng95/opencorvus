@@ -5,50 +5,6 @@
   word-break: break-word;
 }
 
-.msg-streaming-status {
-  display: block;
-  width: max-content;
-  margin-top: calc(8px * var(--ui-scale));
-  color: var(--text-muted);
-  font-size: var(--ui-font-control);
-  font-weight: var(--ui-font-weight-medium);
-  letter-spacing: var(--ui-letter-spacing-loose);
-  line-height: 1.5;
-  background: linear-gradient(
-    90deg,
-    var(--text-muted) 0%,
-    var(--text-muted) 45.5%,
-    color-mix(in srgb, var(--accent) 42%, white) 47.5%,
-    color-mix(in srgb, var(--accent) 76%, white) 49%,
-    var(--accent) 50%,
-    color-mix(in srgb, var(--accent) 76%, white) 51%,
-    color-mix(in srgb, var(--accent) 42%, white) 52.5%,
-    var(--text-muted) 54.5%,
-    var(--text-muted) 100%
-  );
-  background-size: 360% 100%;
-  background-position: 130% 50%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  will-change: background-position;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .msg-streaming-status {
-    animation: msg-terminal-activity-wave calc(5.6s * var(--ui-scale)) linear infinite;
-  }
-}
-
-@keyframes msg-terminal-activity-wave {
-  from {
-    background-position: 130% 50%;
-  }
-  to {
-    background-position: -180% 50%;
-  }
-}
-
 .msg-tool + .msg-text,
 .msg-patch + .msg-text {
   margin-top: calc(8px * var(--ui-scale));
@@ -156,6 +112,15 @@
     -webkit-text-fill-color: transparent;
     will-change: background-position;
     animation: msg-terminal-activity-wave calc(5.6s * var(--ui-scale)) linear infinite;
+  }
+}
+
+@keyframes msg-terminal-activity-wave {
+  from {
+    background-position: 130% 50%;
+  }
+  to {
+    background-position: -180% 50%;
   }
 }
 

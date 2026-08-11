@@ -442,6 +442,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | PATCH | `/file/item` | Move file item 请求体: `newPath`, `path`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `file.move` |
 | POST | `/file/item` | Create file item 请求体: `content`, `path`, `type`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `file.create` |
 | POST | `/file/item/copy` | Copy file item 请求体: `newPath`, `path`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `file.copy` |
+| GET | `/file/source-content` | Read an absolute source file 错误: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.readSource` |
 | GET | `/file/status` | Get file status | `file.status` |
 | POST | `/file/upload` | Upload files 请求体: `files`, `targetDir`; 错误: `BadRequestError`, `TaskCancellationIncompleteError`. | `file.upload` |
 | GET | `/find` | Find text 错误: `UnknownError`. | `find.text` |

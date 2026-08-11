@@ -16,9 +16,6 @@ type Props = {
 
 const { locale, current, title, description, languageHref, socialImage } = Astro.props
 const canonicalUrl = new URL(Astro.url.pathname, config.url).href
-const languageUrl = new URL(languageHref, config.url).href
-const englishAlternateUrl = locale === "zh-cn" ? languageUrl : canonicalUrl
-const chineseAlternateUrl = locale === "zh-cn" ? canonicalUrl : languageUrl
 const publicBase = import.meta.env.BASE_URL.replace(/\/$/, "")
 const ogImage = new URL(socialImage ?? `${publicBase}/og.png`, config.url).href
 ---
@@ -31,9 +28,6 @@ const ogImage = new URL(socialImage ?? `${publicBase}/og.png`, config.url).href
     <meta name="description" content={description} />
     <meta name="theme-color" content="#f4f1e8" />
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="alternate" hreflang="en" href={englishAlternateUrl} />
-    <link rel="alternate" hreflang="zh-CN" href={chineseAlternateUrl} />
-    <link rel="alternate" hreflang="x-default" href={englishAlternateUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />

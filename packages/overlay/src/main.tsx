@@ -42,7 +42,7 @@ import { FileEditorPane } from "./components/FileEditorPane"
 import { MailboxPanel } from "./components/MailboxPanel"
 import { Button } from "./components/ui/Button"
 import { TabPanel } from "./components/ui/Tabs"
-import { closeFileEditor, fileWorkbenchOpen } from "./services/file-workbench"
+import { closeFileEditor, fileEditorRevealRevision, fileWorkbenchOpen } from "./services/file-workbench"
 import type { DiffTarget } from "./services/diff"
 import { initApp } from "./services/init"
 import {
@@ -140,6 +140,7 @@ import {
   browseDirectory,
   resolveGlobalComposerProject,
   resolveGlobalComposerSubmissionContext,
+  supersedePendingWorkspaceSelection,
   deleteProjectState,
   leaveDeletedProject,
   openGlobalChatLauncher,
@@ -417,8 +418,6 @@ const [centerWorkbenchPanels, setCenterWorkbenchPanels] = createSignal<CenterWor
 const [selectedCenterWorkbenchTabID, setSelectedCenterWorkbenchTabID] = createSignal("conversation")
 const [rightDockAddMenuOpen, setRightDockAddMenuOpen] = createSignal(false)
 const [rightDockOverflowMenuOpen, setRightDockOverflowMenuOpen] = createSignal(false)
-const [mailboxAttention, setMailboxAttention] = createSignal(false)
-const [mailboxUnreadCount, setMailboxUnreadCount] = createSignal(0)
 const [browserPreviewPageTitles, setBrowserPreviewPageTitles] = createSignal<Record<string, string>>({})
 let primaryBrowserPreviewController: BrowserPreviewPanelController | undefined
 const [selectedSubagentSessionID, setSelectedSubagentSessionID] = createSignal("")
@@ -492,11 +491,25 @@ function openDiffActivity(): void {
   openCenterWorkbenchPanel("diff")
 }
 
-function openRightDockPanel(panel: RightDockPanel): void {
+function showRightDockForExplicitAction(): void {
+  if (primaryWorkspaceSurface() === "mission-board") setPrimaryWorkspaceSurface("conversation")
   setRightDockVisible(true)
+}
+
+function openRightDockPanel(panel: RightDockPanel): void {
+  showRightDockForExplicitAction()
   if (panel === "diff") {
     openDiffActivity()
     return
+  }
+  openCenterWorkbenchPanel(panel)
+}
+
+function presentRightDockPanel(panel: RightDockPanel): void {
+  if (primaryWorkspaceSurface() !== "conversation") return
+  setRightDockVisible(true)
+  if (panel === "diff") {
+    setFileChangesActiveView("changes")
   }
   openCenterWorkbenchPanel(panel)
 }
@@ -505,17 +518,13 @@ function openSubagentConversation(sessionID: string): void {
   const value = sessionID.trim()
   if (!value) throw new Error("Sub-agent conversation session ID is required")
   setSelectedSubagentSessionID(value)
-  openCenterWorkbenchPanel("subagent")
+  openRightDockPanel("subagent")
 }
 
 function openRightDockAddMenu(): void {
-  setRightDockVisible(true)
+  showRightDockForExplicitAction()
   setRightDockOverflowMenuOpen(false)
   setRightDockAddMenuOpen(true)
-}
-
-function presentMailboxNotification(): void {
-  setMailboxAttention(true)
 }
 
 function registerPrimaryBrowserPreviewController(controller: BrowserPreviewPanelController): () => void {
@@ -793,13 +802,15 @@ async function openWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void> {
 }
 
 function openMissionBoard(): void {
-  beginWorkspaceSelection()
-  setPrimaryWorkspaceSurface("mission-board")
+  supersedePendingWorkspaceSelection()
+  batch(() => {
+    setRightDockVisible(false)
+    setPrimaryWorkspaceSurface("mission-board")
+  })
+  queueMicrotask(() => document.getElementById("missionBoardTitle")?.focus())
 }
 
 async function openMissionBoardMission(row: MissionRecord): Promise<void> {
-  setComposerIntent({ productPillar: row.productPillar, conversationTarget: "mission" })
-  resetCenterWorkbenchToPrimaryPanel("mission")
   await openMissionSession(
     {
       missionID: row.missionID,
@@ -826,35 +837,33 @@ async function createMissionBoardWithAI(input: MissionCreateRequest): Promise<vo
   const result = await wakeMission({
     directory: input.directory,
     text: input.request,
-    model: appStore.composerModel.trim() || undefined,
     productPillar: input.productPillar,
     expertSquadIDs: input.expertSquadIDs,
   })
-  resetCenterWorkbenchToPrimaryPanel("mission")
-  await openMissionSession(result, input.directory, selectionEpoch)
   setMissionSharedRefreshToken((value) => value + 1)
+  if (!ownsWorkspaceSelection(selectionEpoch)) return
+  await openMissionSession(result, input.directory, selectionEpoch)
 }
 
 async function dispatchMissionBoardDraft(mission: MissionRecord): Promise<void> {
   const selectionEpoch = beginWorkspaceSelection()
-  const result = await dispatchMission(
-    { missionID: mission.missionID, directory: mission.directory },
-    appStore.composerModel.trim() || undefined,
-  )
-  resetCenterWorkbenchToPrimaryPanel("mission")
-  await openMissionSession(result, mission.directory, selectionEpoch)
+  const result = await dispatchMission({ missionID: mission.missionID, directory: mission.directory })
   setMissionSharedRefreshToken((value) => value + 1)
+  if (!ownsWorkspaceSelection(selectionEpoch)) return
+  await openMissionSession(result, mission.directory, selectionEpoch)
 }
 
-async function deleteMissionBoardMission(mission: MissionRecord): Promise<boolean> {
+async function confirmDeleteMissionBoardMission(mission: MissionRecord): Promise<boolean> {
   const confirmation = await showAppDialog({
     title: t("mission_board.delete.title"),
     message: t("mission_board.delete.confirm", { title: mission.title || mission.missionID }),
     cancel: true,
     okLabel: t("common.delete"),
   })
-  if (!confirmation.confirmed) return false
+  return confirmation.confirmed
+}
 
+async function deleteMissionBoardMission(mission: MissionRecord): Promise<boolean> {
   const deleted = await deleteMission(
     { missionID: mission.missionID, directory: mission.directory },
     {
@@ -1263,7 +1272,6 @@ async function openMissionSession(
     )
     if (!ownsWorkspaceSelection(selectionEpoch)) return
     setComposerIntent({ productPillar: result.productPillar, conversationTarget: "mission" })
-    resetCenterWorkbenchToPrimaryPanel("mission")
     await loadConversation(source, {
       scrollIntent: "bottom",
       resetCause: "mission-session-hydrate",
@@ -1271,6 +1279,7 @@ async function openMissionSession(
     })
     if (!ownsWorkspaceSelection(selectionEpoch)) return
     startSSE(source, 0, { directory: missionDirectory })
+    resetCenterWorkbenchToPrimaryPanel("mission")
   } catch (error) {
     if (
       ownsWorkspaceSelection(selectionEpoch) &&
@@ -1295,7 +1304,6 @@ function focusInitialRestoredTaskWorkspace(): void {
 }
 
 function openCenterWorkbenchPanel(panel: CenterWorkbenchPanel): void {
-  if (panel !== "conversation") setRightDockVisible(true)
   const tab: CenterWorkbenchTab = {
     id: panel,
     panel,
@@ -1311,8 +1319,7 @@ function openCenterWorkbenchPanel(panel: CenterWorkbenchPanel): void {
 
 disposers.push(
   registerReviewPanelPresenter(() => {
-    setFileChangesActiveView("changes")
-    openCenterWorkbenchPanel("diff")
+    presentRightDockPanel("diff")
   }),
 )
 
@@ -1321,7 +1328,7 @@ function openBlankBrowserTab(tabID: string): void {
     id: tabID,
     panel: "browser",
   }
-  setRightDockVisible(true)
+  showRightDockForExplicitAction()
   setCenterWorkbenchPanels((current) => [...current, tab])
   setSelectedCenterWorkbenchTabID(tab.id)
 }
@@ -1442,6 +1449,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 function openWorkspace(): void {
   setWorkspaceOpen(true)
   setFileChangesActiveView("diff")
+  showRightDockForExplicitAction()
   openCenterWorkbenchPanel("diff")
 }
 
@@ -1845,12 +1853,6 @@ function OverlayRoot() {
     return requestKey
   }, "")
 
-  createEffect<string>((previousDirectory) => {
-    const directory = activeDirectory()
-    if (directory !== previousDirectory) setMailboxAttention(false)
-    return directory
-  }, "")
-
   createEffect(() => {
     const open = rightDockOpen()
     if (!open && rightDockAddMenuOpen()) setRightDockAddMenuOpen(false)
@@ -1868,6 +1870,10 @@ function OverlayRoot() {
       resizer.tabIndex = open ? 0 : -1
     }
     renderRightDockWidth()
+  })
+
+  createEffect(() => {
+    if (primaryWorkspaceSurface() === "mission-board" && rightDockOpen()) setRightDockVisible(false)
   })
 
   // body.dataset.workspace / .connection writes were dead — no CSS or JS in
@@ -1942,9 +1948,10 @@ function OverlayRoot() {
 
   createEffect(() => {
     const open = fileWorkbenchOpen()
+    void fileEditorRevealRevision()
     if (open) {
       setWorkspaceOpen(false)
-      openCenterWorkbenchPanel("file")
+      openRightDockPanel("file")
     } else {
       removeCenterWorkbenchTabs((tab) => tab.panel === "file")
     }
@@ -1988,19 +1995,16 @@ function OverlayRoot() {
         <MissionBoard
           projectDirectories={missionBoardProjectDirectories()}
           defaultProjectDirectory={activeDirectory()}
-          productPillar={composerIntent().productPillar}
-          expertSquads={composerExpertSquadCatalog().squads}
-          onExpertSquadQuery={(query, selectedIDs) => void searchComposerExpertSquads(query, selectedIDs)}
           onInstallMoreExpertSquads={(directory) =>
             void runMainAsync("expert-squad.open-market", () => openExpertSquadMarketForProject(directory))
           }
-          activeExpertSquadID={composerExpertSquadCatalog().activeID}
           onOpenMission={(mission) =>
             runMainAsync("mission-board.open-mission", () => openMissionBoardMission(mission))
           }
           onCreateManual={createMissionBoardDraft}
           onCreateWithAI={createMissionBoardWithAI}
           onDispatchMission={dispatchMissionBoardDraft}
+          onConfirmDeleteMission={confirmDeleteMissionBoardMission}
           onDeleteMission={deleteMissionBoardMission}
         />
       }
@@ -2058,9 +2062,6 @@ function OverlayRoot() {
       onRetryTask={(row) => runMainAsync("task.header-retry", () => retryTerminalTask(row))}
       onReplanTask={(row) => runMainAsync("task.header-replan", () => replanTerminalTask(row))}
       onOpenAutomationSession={openAutomationSession}
-      mailboxAttention={mailboxAttention()}
-      mailboxUnreadCount={mailboxUnreadCount()}
-      onMailboxViewed={() => setMailboxAttention(false)}
       sidebarToggle={
         <Button
           variant="ghost"
@@ -2144,13 +2145,7 @@ function OverlayRoot() {
           onArchiveChat={archiveWorkLedgerChat}
         />
       }
-      mailbox={
-        <MailboxPanel
-          onNotification={presentMailboxNotification}
-          onUnreadCountChange={setMailboxUnreadCount}
-          onSelectTask={selectTaskWithUILifecycle}
-        />
-      }
+      mailbox={<MailboxPanel onSelectTask={selectTaskWithUILifecycle} />}
       conversation={(container) => (
         <Conversation
           container={container}
@@ -2347,7 +2342,7 @@ function OverlayRoot() {
             return selected?.panel === "conversation" ? null : (selected?.id ?? null)
           }}
           onSelect={selectRightDockTab}
-          onOpen={(panel) => openCenterWorkbenchPanel(panel)}
+          onOpen={openRightDockPanel}
           onNewBrowserTab={openBlankBrowserTab}
           onClose={closeRightDockTab}
           onCloseDock={() => setRightDockVisible(false)}
@@ -2415,7 +2410,7 @@ function OverlayRoot() {
                 onPageTitleChange={(title) =>
                   setBrowserPreviewPageTitles((current) => ({ ...current, browser: title }))
                 }
-                onReady={() => openRightDockPanel("browser")}
+                onReady={() => presentRightDockPanel("browser")}
                 onCommentDraft={(text) => {
                   const key = panelComposerDraftKey()
                   const existing = composerDraftText(key)

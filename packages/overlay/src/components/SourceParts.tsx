@@ -1,6 +1,6 @@
 import { For, Match, Switch } from "solid-js"
 import { boardStore, selectedTaskDirectory } from "../store/board"
-import { openFileEditor } from "../services/file-workbench"
+import { openFileEditor, openSourceFileEditor } from "../services/file-workbench"
 import { relativePathFrom, shortRelativePath } from "../utils/tool"
 import { t } from "../utils/i18n"
 import { Icon } from "./ui/Icon"
@@ -56,7 +56,12 @@ async function openSourceFile(source: ConversationSourcePart): Promise<void> {
   const directory = sourceDirectory()
   const path = source.path?.trim() || ""
   if (!directory || !path) return
-  await openFileEditor(relativePathFrom(directory, path) || path, { directory })
+  const projectPath = relativePathFrom(directory, path)
+  if (projectPath) {
+    await openFileEditor(projectPath, { directory }, source.range)
+    return
+  }
+  await openSourceFileEditor(path, { directory }, source.range)
 }
 
 function SourceTooltipContent(props: { source: ConversationSourcePart }) {

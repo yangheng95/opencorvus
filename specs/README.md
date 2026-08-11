@@ -1,10 +1,22 @@
 # Specs Storage Index
 
+Latest hollow desktop application-icon convergence: [`2026-08-11-hollow-desktop-app-icons.md`](records/2026-08/2026-08-11-hollow-desktop-app-icons.md).
+
+Latest native platform message-notification convergence: [`2026-08-11-native-platform-message-notifications.md`](records/2026-08/2026-08-11-native-platform-message-notifications.md).
+
+Latest Mission Board create-flow, target-project ownership, action, and Right Dock repair: [`2026-08-11-mission-board-create-layout-and-dock-collapse.md`](records/2026-08/2026-08-11-mission-board-create-layout-and-dock-collapse.md).
+
+Latest message source navigation repair: [`2026-08-11-message-source-navigation.md`](records/2026-08/2026-08-11-message-source-navigation.md).
+
+Latest responsive settings and public Squad Market entry plan: [`2026-08-11-settings-responsive-layout-and-market-entry.md`](records/2026-08/2026-08-11-settings-responsive-layout-and-market-entry.md).
+
 Latest `v0.0.40-beta` release: [`2026-08-11-v0.0.40-beta-release.md`](records/2026-08/2026-08-11-v0.0.40-beta-release.md).
 
 Latest-main merge and `0.0.39-beta` Overlay repackage: [`2026-08-11-latest-main-overlay-repackage.md`](records/2026-08/2026-08-11-latest-main-overlay-repackage.md).
 
 Latest scheduler liveness and control convergence repair: [`2026-08-11-scheduler-liveness-and-control-convergence.md`](records/2026-08/2026-08-11-scheduler-liveness-and-control-convergence.md).
+
+Latest sub-agent dock and generating-tail presentation repair: [`2026-08-11-subagent-dock-running-presentation-convergence.md`](records/2026-08/2026-08-11-subagent-dock-running-presentation-convergence.md).
 
 Latest systemic scheduler fault audit and repair: [`2026-08-11-scheduler-systemic-fault-audit-and-repair.md`](records/2026-08/2026-08-11-scheduler-systemic-fault-audit-and-repair.md).
 

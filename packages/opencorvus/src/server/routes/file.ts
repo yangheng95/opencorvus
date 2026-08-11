@@ -6,7 +6,7 @@ import { Ripgrep } from "../../file/ripgrep"
 import { LSP } from "../../lsp"
 import { SymbolSchema } from "../../lsp/schema"
 import { Instance } from "../../project/instance"
-import { errors, namedErrorResponse } from "../error"
+import { badRequestOrNamedErrorResponse, errors, namedErrorResponse } from "../error"
 import { lazy } from "../../util/lazy"
 
 export const FileRoutes = lazy(() =>
@@ -172,6 +172,38 @@ export const FileRoutes = lazy(() =>
       async (c) => {
         const path = c.req.valid("query").path
         const content = await File.read(path)
+        return c.json(content)
+      },
+    )
+    .get(
+      "/file/source-content",
+      describeRoute({
+        summary: "Read an absolute source file",
+        description: "Read the exact absolute file represented by a persisted source-file citation.",
+        operationId: "file.readSource",
+        responses: {
+          200: {
+            description: "Read-only source file content",
+            content: {
+              "application/json": {
+                schema: resolver(File.Content),
+              },
+            },
+          },
+          400: badRequestOrNamedErrorResponse("Invalid source file request", "FileInvalidPathError"),
+          404: namedErrorResponse("Source file not found", "FileNotFoundError"),
+          ...errors(500),
+        },
+      }),
+      validator(
+        "query",
+        z.object({
+          path: z.string(),
+        }),
+      ),
+      async (c) => {
+        const path = c.req.valid("query").path
+        const content = await File.readSource(path)
         return c.json(content)
       },
     )

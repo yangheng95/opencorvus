@@ -14296,6 +14296,57 @@ export type FileCopyResponses = {
 
 export type FileCopyResponse = FileCopyResponses[keyof FileCopyResponses]
 
+export type FileReadSourceData = {
+  body?: never
+  path?: never
+  query: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    path: string
+  }
+  url: "/file/source-content"
+}
+
+export type FileReadSourceErrors = {
+  /**
+   * Invalid source file request
+   */
+  400:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "FileInvalidPathError"
+      }
+  /**
+   * Source file not found
+   */
+  404: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "FileNotFoundError"
+  }
+  /**
+   * Internal server error
+   */
+  500: UnknownError
+}
+
+export type FileReadSourceError = FileReadSourceErrors[keyof FileReadSourceErrors]
+
+export type FileReadSourceResponses = {
+  /**
+   * Read-only source file content
+   */
+  200: FileContent
+}
+
+export type FileReadSourceResponse = FileReadSourceResponses[keyof FileReadSourceResponses]
+
 export type FileStatusData = {
   body?: never
   path?: never

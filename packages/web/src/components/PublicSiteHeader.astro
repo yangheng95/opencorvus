@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets"
-import BrandMark from "../../../overlay/src-tauri/icons/icon.png"
+import BrandMark from "../../../overlay/src/opencorvus-logo-light.svg"
 import { publicPath, type PublicLocale } from "../content/public-market"
 
 type Props = {
@@ -20,14 +20,11 @@ const copy =
 
 {!embedded && <a class="skip-link" href="#main-content">{locale === "zh-cn" ? "跳到主要内容" : "Skip to content"}</a>}
 <HeaderTag class="public-header" aria-label={locale === "zh-cn" ? "主导航" : "Primary navigation"}>
-  <a
-    class="public-brand"
-    href={publicPath(locale)}
-    aria-label={locale === "zh-cn" ? "OpenCorvus 首页" : "OpenCorvus home"}
-    aria-current={current === "home" ? "page" : undefined}
-  >
-    <Image src={BrandMark} width={34} height={34} alt="" loading="eager" />
-    <span>OpenCorvus</span>
+  <a class="public-brand" href={publicPath(locale)} aria-label="OpenCorvus home" aria-current={current === "home" ? "page" : undefined}>
+    <span class="public-brand-mark">
+      <Image src={BrandMark} width={34} height={34} alt="" loading="eager" />
+    </span>
+    <span class="public-brand-label">OpenCorvus</span>
   </a>
   <nav class="public-nav" aria-label={locale === "zh-cn" ? "网站" : "Site"}>
     <a href={publicPath(locale, "/mission/")} aria-current={current === "mission" ? "page" : undefined}>{copy.mission}</a>
