@@ -989,6 +989,28 @@
   background: color-mix(in srgb, var(--accent) 10%, var(--surface));
 }
 
+.conversation-artifact-summary__declared-output {
+  min-height: calc(43px * var(--ui-scale));
+}
+
+.conversation-artifact-summary__records {
+  border-block-start: var(--oc-border-width) solid var(--divider-soft);
+  background: color-mix(in srgb, var(--surface-inset) 48%, transparent);
+}
+
+.conversation-artifact-summary__records-disclosure {
+  width: 100%;
+  justify-content: space-between;
+  min-height: calc(34px * var(--ui-scale));
+  padding-inline: calc(12px * var(--ui-scale));
+  border-radius: 0;
+}
+
+.conversation-artifact-summary__record-list {
+  border-block-start: var(--oc-border-width) solid var(--divider-soft);
+  background: var(--surface);
+}
+
 .conversation-artifact-summary__artifact-item {
   min-width: 0;
 }

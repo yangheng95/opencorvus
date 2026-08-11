@@ -765,14 +765,17 @@
     "one": "{{count}} file",
     "other": "{{count}} files"
   },
-  "chat.artifacts.label": "Delivery",
+  "chat.artifacts.label": "Agent delivery",
   "chat.artifacts.count": {
-    "one": "{{count}} deliverable",
-    "other": "{{count}} deliverables"
+    "one": "{{count}} output",
+    "other": "{{count}} outputs"
   },
-  "chat.artifacts.none_title": "No deliverables",
-  "chat.artifacts.none": "No Artifact deliverables were produced.",
-  "chat.artifacts.outputs": "Delivered artifacts",
+  "chat.artifacts.none_title": "No declared outputs",
+  "chat.artifacts.none": "No Agent-declared delivery output was recorded for this task.",
+  "chat.artifacts.declared_outputs": "Agent-declared outputs",
+  "chat.artifacts.delivery_records": "Inspect delivery records ({{count}})",
+  "chat.artifacts.producer_unknown": "Unidentified producer",
+  "chat.artifacts.producer_mission": "Mission",
   "chat.artifacts.files": "Files changed",
   "chat.artifacts.structured": "Structured",
   "chat.artifacts.snapshot": "Snapshot",
