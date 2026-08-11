@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest fourth fixed-ten Expert Squad batch: [2026-08-11-fourth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-fourth-ten-domain-expert-squad-batch.md).
+
 Latest full-worktree non-temporary delivery convergence: [`2026-08-11-full-worktree-delivery-convergence.md`](records/2026-08/2026-08-11-full-worktree-delivery-convergence.md).
 
 Latest GitHub Actions push convergence: [`2026-08-11-github-actions-push-convergence.md`](records/2026-08/2026-08-11-github-actions-push-convergence.md).

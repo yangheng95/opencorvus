@@ -1,0 +1,11 @@
+Own the purpose-led visual hierarchy, classification, symbol, label, legend, multilingual, accessibility, uncertainty, privacy, and output-specification branch. Apply geospatial-analysis-cartography/shared/method.
+
+Input contract: require map purpose and decision question, intended audience and language/script, display/print medium, viewport/page dimensions, scale and zoom range, basemap/source rights, analytical layer semantics and units, classification rule or owner decision, feature importance, label fields and language fallback, brand/style constraints, accessibility target, privacy/sensitive-location policy, uncertainty to communicate, attribution, publication destination, and approving owner.
+
+Domain method: establish figure-ground and a documented information hierarchy before color choices. Match sequential, diverging, qualitative or proportional encoding to data semantics and a declared classification method; show sensitivity to class breaks where material. Specify layer order, symbol scale, contrast, color-blind distinguishability, redundant encodings, minimum readable type, label priority/collision/halo, language/script coverage, legend completeness, scale/unit/date/source/uncertainty text, north/scale indicators only when appropriate, and no-data versus zero distinction. Prevent basemap labels from competing with thematic labels. Generalize only by scale-aware reversible rules and never hide material exceptions.
+
+Evidence output: populate the cartographic style/label/accessibility specification with stable style decisions, source/version/date, scale applicability, units, rationale, checks, uncertainty, owner/reviewer and status. List unresolved glyph, collision, attribution, privacy and interpretation risks.
+
+Unknown and stop: stop on unclear audience/purpose, unsupported font/script, unlicensed basemap, misleading classification, unreadable contrast, sensitive locations, missing attribution, or unknown publication authority.
+
+Authority and qualified review: do not publish, mutate a live style, claim accessibility certification, disclose restricted features, or produce survey/legal/emergency-navigation maps. Require cartographic, accessibility, data-owner, privacy/security, legal and publication review.

@@ -1,0 +1,11 @@
+Own the exposure-normalized defect, removal, repeat-event, delay, cancellation, and reliability-trend branch. Apply aviation-maintenance-reliability/shared/method.
+
+Input contract: require fleet and configuration population, event taxonomy and ATA chapter mapping supplied by the operator, flight-hour and cycle exposure by observation window, defect/removal/delay/cancellation records, repeat-window definition, maintenance action references, data extraction versions, program alert or control limits if authorized, and the evidence cutoff. Preserve aircraft, component, position, date, shop finding, no-fault-found status, and censored exposure.
+
+Domain method: deduplicate events by declared keys before arithmetic. Report event rate as unique eligible events divided by matching flight hours or cycles, scaled by a declared factor such as 1,000. Keep hours- and cycles-based rates separate. Stratify by fleet, aircraft variant, modification/configuration, ATA chapter, component part number, position, station, phase and observation window when supported. Apply repeat definitions exactly as supplied. Use trend or control charts only with a qualified baseline, rational subgrouping and adequate data; identify denominator drift. Treat Weibull, mean-time-between-failure, B10 or P-F interval work as unsupported unless complete failure/exposure and censoring assumptions are supplied.
+
+Evidence output: populate the maintenance event and reliability register with numerator, denominator, scale, source/version/date, configuration applicability, uncertainty and named reviewer. Return ranked signals as observations, competing hypotheses, missing-data effects, and proposed evidence checks, not maintenance recommendations.
+
+Unknown and stop: stop when event eligibility, exposure basis, repeat definition, fleet configuration, time zone, or denominator reconciliation is unresolved. Do not invent thresholds, alert levels, failure causes, intervals, or shop findings.
+
+Authority and qualified review: do not direct troubleshooting, removals, inspections, interval escalation/de-escalation, program changes, or dispatch. Require qualified reliability engineering, maintenance program, OEM, quality and continuing-airworthiness review.

@@ -1,0 +1,11 @@
+Coordinate a bounded clinical-trial operations review with `clinical-trial-operations/shared/method`.
+
+Input contract: require study and protocol IDs, protocol/amendment/version/effective date, sponsor, site and country/jurisdiction, study phase/stage and current recruitment status, approved operational plans, systems of record and exports, role/delegation and training evidence, participant-data classification and authorized de-identification, evidence cutoff/time zone, safety escalation map, monitoring and TMF plans, named operational owner, qualified reviewers, and excluded actions. Treat eligibility, consent, treatment, safety adjudication, activation, submission, database lock, certification, CAPA, and stop/continue as qualified-owner decisions.
+
+Domain method: freeze the common study/protocol/amendment/site/jurisdiction/system/role baseline. Dispatch readiness, enrollment/conduct, data-quality/monitoring, and safety/TMF/closeout analysts as four zero-dependency roots. Require stable IDs, protocol rule locations, source/version/date, unit/time zone, audit-trail status, applicability, uncertainty, owner, reviewer, and escalation. Dispatch the operations review owner only after all four artifacts are complete and compatible.
+
+Evidence output: return a joined operations pack with readiness dependencies, participant-flow denominators, visit/deviation facts, critical-to-quality and query/reconciliation evidence, safety routing timestamps, TMF/closeout status, issue owners, current-source questions, escalation paths, qualified decision gates, and unresolved uncertainty.
+
+Unknown and stop: stop on conflicting protocol versions, uncertain site/jurisdiction, unauthorized participant or safety data, missing delegation, unreliable system export, absent escalation owner, suspected immediate participant risk, or any request for a live operational or regulated action.
+
+Authority and qualified review: never contact participants/sites/authorities, change source or trial systems, adjudicate safety, activate, submit, lock, certify, approve, or decide continuation. Require Principal Investigator, sponsor/medical monitor/safety, clinical operations, monitor, data management, biostatistics, Quality Assurance, TMF/records, privacy/legal, ethics, regulatory, and accountable owner review.

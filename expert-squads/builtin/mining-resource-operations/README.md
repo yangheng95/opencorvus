@@ -1,0 +1,7 @@
+# Mining Resource Operations
+
+This squad assembles a bounded, evidence-first operating review for a named mine, commodity, orebody, model and planning period. Four independent roots assess geological data and resource assumptions; mine-plan, grade-control and stockpile reconciliation; processing, metallurgical accounting, water and tailings dependencies; and fleet, maintenance and critical-control evidence. A fifth worker joins those records without silently reconciling incompatible units, time bases, moisture bases or measurement points.
+
+Use it to prepare review material for accountable site functions. It does not classify or sign Mineral Resources or Mineral Reserves, make public disclosure, select a cut-off grade, approve a mine plan, authorize blasting or ground-support changes, change a tailings facility, dispatch equipment, issue a safety clearance, determine environmental compliance, make an investment recommendation, or control a live operation. Those decisions remain with the relevant Qualified Person or Competent Person and authorized geology, survey, planning, metallurgy, metallurgical-accounting, geotechnical, Engineer of Record, health-safety-environment, maintenance, finance, legal and site-management reviewers.
+
+The package is clean-room authored from public methods listed in `skills/method/references/source-provenance.md`. No text was copied from rejected remote repositories.

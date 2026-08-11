@@ -951,6 +951,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/aviation-maintenance-reliability",
+    "namespace": "builtin",
+    "id": "aviation-maintenance-reliability",
+    "label": "Aviation Maintenance Reliability",
+    "version": "2026.08.11.1",
+    "packageDigest": "42b3a4c958996f2511e12555001d183ba9c8a08643c484a01a5fe39cf2718c48",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "aviation-maintenance-reliability/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/base",
     "namespace": "builtin",
     "id": "base",
@@ -982,6 +999,40 @@ export const generatedShippedSquadFacts = [
       "browser-research-acceptance/shared/browser-evidence-acceptance"
     ],
     "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/climate-risk-adaptation",
+    "namespace": "builtin",
+    "id": "climate-risk-adaptation",
+    "label": "Climate Risk Adaptation",
+    "version": "2026.08.11.1",
+    "packageDigest": "f15fc4cd27a20c92d524ec408387e5dd33b9539c4a8b25d82a06bfde31a39f45",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "climate-risk-adaptation/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/clinical-trial-operations",
+    "namespace": "builtin",
+    "id": "clinical-trial-operations",
+    "label": "Clinical Trial Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "b94ce510e155983c98b59c11cb321fe04216267d90a3794f910be3fb76a43bc3",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "clinical-trial-operations/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {
@@ -1033,6 +1084,23 @@ export const generatedShippedSquadFacts = [
     ],
     "packageSkillRefs": [
       "construction-project-controls/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/cultural-heritage-preservation",
+    "namespace": "builtin",
+    "id": "cultural-heritage-preservation",
+    "label": "Cultural Heritage Preservation",
+    "version": "2026.08.11.1",
+    "packageDigest": "a9f6bb483407b6779e68df1670f1d666580cb5941b847316f87f1684734d2cf7",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "cultural-heritage-preservation/shared/method"
     ],
     "agentCount": 4,
     "workflowCount": 1
@@ -1161,6 +1229,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/emergency-management-continuity",
+    "namespace": "builtin",
+    "id": "emergency-management-continuity",
+    "label": "Emergency Management and Continuity",
+    "version": "2026.08.11.1",
+    "packageDigest": "99a26d58b33bb50023b51fc0af5b8b3895ab3b61c612f6f718c95ebb879c5440",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "emergency-management-continuity/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/energy-utilities-planning",
     "namespace": "builtin",
     "id": "energy-utilities-planning",
@@ -1263,6 +1348,23 @@ export const generatedShippedSquadFacts = [
     ],
     "agentCount": 10,
     "workflowCount": 2
+  },
+  {
+    "identity": "builtin/geospatial-analysis-cartography",
+    "namespace": "builtin",
+    "id": "geospatial-analysis-cartography",
+    "label": "Geospatial Analysis and Cartography",
+    "version": "2026.08.11.1",
+    "packageDigest": "af36c3130eaf7c6b74ab312c2ae156030190382a64e4f4cddd05e749f1b6350c",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "geospatial-analysis-cartography/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
   },
   {
     "identity": "builtin/healthcare-operations",
@@ -1422,6 +1524,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/media-rights-clearance",
+    "namespace": "builtin",
+    "id": "media-rights-clearance",
+    "label": "Media Rights Clearance",
+    "version": "2026.08.11.1",
+    "packageDigest": "599b1dda590616d575144b3111a6c0c3ebd1f18c88c7bb0d9d965756131c2ad6",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "media-rights-clearance/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/meeting-knowledge",
     "namespace": "builtin",
     "id": "meeting-knowledge",
@@ -1436,6 +1555,23 @@ export const generatedShippedSquadFacts = [
       "meeting-knowledge/shared/method"
     ],
     "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/mining-resource-operations",
+    "namespace": "builtin",
+    "id": "mining-resource-operations",
+    "label": "Mining Resource Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "992808c02eb1b1f8ff61b692bdc8f8899e3137c0a4e046832073cdc55338af43",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "mining-resource-operations/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {
@@ -1649,6 +1785,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/semiconductor-yield-engineering",
+    "namespace": "builtin",
+    "id": "semiconductor-yield-engineering",
+    "label": "Semiconductor Yield Engineering",
+    "version": "2026.08.11.1",
+    "packageDigest": "59ec2ca64c1521b77bc424eba62e696bbb9a6cfe7e9934b7c995ff2c4be2a62c",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "semiconductor-yield-engineering/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/seo-geo",
     "namespace": "builtin",
     "id": "seo-geo",
@@ -1665,6 +1818,23 @@ export const generatedShippedSquadFacts = [
       "seo-geo/shared/workflow"
     ],
     "agentCount": 7,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/sports-performance-analysis",
+    "namespace": "builtin",
+    "id": "sports-performance-analysis",
+    "label": "Sports Performance Analysis",
+    "version": "2026.08.11.1",
+    "packageDigest": "0c19b3d136e0ba1b63c29d3ef4679a53424f2ac5c7005b80cc0e806abbd07b44",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "sports-performance-analysis/shared/method"
+    ],
+    "agentCount": 4,
     "workflowCount": 1
   },
   {
