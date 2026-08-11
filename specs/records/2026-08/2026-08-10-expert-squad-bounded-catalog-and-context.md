@@ -196,7 +196,7 @@ they must not be reconstructed from or disclosed through a bulk model catalog.
   passed. The final context-surface Agent rerun found no remaining P0, P1 or P2.
 - Visual review used the actual `0.0.38-beta` main frontend and a live backend.
   It confirmed the `v0.0.38beta` footer, `Mission Board`, Settings navigation,
-  Installed Agent Squads and Squad Market layouts. An initially reused port 5173
+  the installed-package settings and Squad Market layouts. An initially reused port 5173
   was proven to serve a different checkout's `0.0.35beta` frontend and was
   discarded; the accepted review used a dedicated target-tree Vite server whose
   transformed `main.tsx` contained the bounded catalog implementation.

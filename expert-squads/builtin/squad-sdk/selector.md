@@ -1,4 +1,4 @@
-# Generate Agent Squads selection
+# Generate Expert Squads selection
 
 Select `squad-sdk` when the Task's deliverable is one traceable, project-owned OpenCorvus Expert Squad package:
 

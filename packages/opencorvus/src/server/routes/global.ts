@@ -309,7 +309,7 @@ export const GlobalRoutes = lazy(() =>
       describeRoute({
         summary: "List global Composer references",
         description:
-          "Return the built-in and user-global Skills, Agent Squads, and Mission Skills available before a project-backed Code or Work conversation exists. This read-only route does not create a Project or Session.",
+          "Return the built-in and user-global Skills, Expert Squads, and Mission Skills available before a project-backed Code or Work conversation exists. This read-only route does not create a Project or Session.",
         operationId: "global.composerReferences",
         responses: {
           200: {

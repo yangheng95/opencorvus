@@ -28,6 +28,8 @@
 
 - [2026-08-10-v0.0.39-beta-windows-repackage.md](2026-08-10-v0.0.39-beta-windows-repackage.md) advances the canonical release family to `0.0.39-beta` and records the native Windows graphical user interface and command-line interface repackage evidence.
 
+- [2026-08-11-expert-squad-terminology-convergence.md](2026-08-11-expert-squad-terminology-convergence.md) converges every current product-facing name, public contract description, built-in generator label, generated artifact, and maintained record on Expert Squad while preserving the existing runtime identity and member semantics.
+
 - [2026-08-11-mission-market-expert-squad-recommendations.md](2026-08-11-mission-market-expert-squad-recommendations.md) adds query-driven Market discovery to the Mission create entry, ranks package selector, Skill, and prompt evidence, and keeps direct project installation explicit and separate from selection or activation.
 
 - [2026-08-11-conversation-agent-declared-output-summary.md](2026-08-11-conversation-agent-declared-output-summary.md) restores the requested completion hierarchy: the Completion Decision selects delivery while the selected Agent Artifact's immutable producer and resource declaration supplies the visible file/result summary.
@@ -130,7 +132,7 @@
 
 - [2026-08-08-algorithm-bug-multiparty-audit.md](2026-08-08-algorithm-bug-multiparty-audit.md) records three independent algorithm-audit lanes, adversarial rotation, primary evidence decisions, and the positive repair contracts for the confirmed pending defects without changing product code.
 
-- [2026-08-08-machine-learning-implementation-squad-e2e.md](2026-08-08-machine-learning-implementation-squad-e2e.md) defines and records the failed real Generate Agent Squads end-to-end attempt for a project-owned machine-learning implementation Expert Squad, including immutable-profile, project-identity, and model-authority evidence.
+- [2026-08-08-machine-learning-implementation-squad-e2e.md](2026-08-08-machine-learning-implementation-squad-e2e.md) defines and records the failed real Generate Expert Squads end-to-end attempt for a project-owned machine-learning implementation Expert Squad, including immutable-profile, project-identity, and model-authority evidence.
 
 - [2026-08-08-ci-clean-runner-and-release-trigger-repair.md](2026-08-08-ci-clean-runner-and-release-trigger-repair.md) traces GitHub Actions run `31218734772` to clean-runner generated dependencies and focused contract failures, then confines distribution packaging to explicit versioned release triggers.
 

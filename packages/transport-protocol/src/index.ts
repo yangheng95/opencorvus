@@ -98,7 +98,7 @@ export const VisibleComposerReferences = z
   .object({
     skillNames: z.array(z.string()),
     missionSkillNames: z.array(z.string()),
-    /** Agent Squad IDs (Identifiers) preserve first-visible-reference order. */
+    /** Expert Squad IDs (Identifiers) preserve first-visible-reference order. */
     expertSquadIDs: z.array(z.string()),
   })
   .strict()

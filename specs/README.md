@@ -30,6 +30,8 @@ Latest `v0.0.39-beta` canonical release trigger: [`2026-08-10-v0.0.39-beta-relea
 
 Latest `v0.0.39-beta` Windows repackage: [`2026-08-10-v0.0.39-beta-windows-repackage.md`](records/2026-08/2026-08-10-v0.0.39-beta-windows-repackage.md).
 
+Latest Expert Squad terminology convergence: [`2026-08-11-expert-squad-terminology-convergence.md`](records/2026-08/2026-08-11-expert-squad-terminology-convergence.md).
+
 Latest Mission Market Expert Squad recommendation design: [`2026-08-11-mission-market-expert-squad-recommendations.md`](records/2026-08/2026-08-11-mission-market-expert-squad-recommendations.md).
 
 Latest Conversation Agent-declared output summary repair: [`2026-08-11-conversation-agent-declared-output-summary.md`](records/2026-08/2026-08-11-conversation-agent-declared-output-summary.md).
@@ -295,7 +297,7 @@ Latest landing alignment and preview-scroll visual evidence: [`Expert Squads ali
 
 Latest ContractGraph and Goal fact-projection system repair plan: [`2026-08-05-contract-graph-and-goal-fact-projection-system-repair-plan.md`](records/2026-08/2026-08-05-contract-graph-and-goal-fact-projection-system-repair-plan.md).
 
-Latest Generate Agent Squads project-generation trace design: [`2026-08-07-squad-sdk-project-generation-trace.md`](records/2026-08/2026-08-07-squad-sdk-project-generation-trace.md).
+Latest Generate Expert Squads project-generation trace design: [`2026-08-07-squad-sdk-project-generation-trace.md`](records/2026-08/2026-08-07-squad-sdk-project-generation-trace.md).
 
 Latest Task resume, queue occurrence, and Overlay recovery repair: [`2026-08-04-task-resume-occurrence-and-overlay-recovery.md`](records/2026-08/2026-08-04-task-resume-occurrence-and-overlay-recovery.md).
 
@@ -613,7 +615,7 @@ Latest default Agent parallelism-five convergence: [`2026-07-30-default-agent-pa
 
 Latest Orchestrator ready-frontier parallel dispatch repair: [`2026-07-30-orchestrator-ready-frontier-parallel-dispatch.md`](records/2026-07/2026-07-30-orchestrator-ready-frontier-parallel-dispatch.md).
 
-Latest Composer Skill / Agent Squad selector and model-search refinement: [`2026-07-30-composer-reference-selector-and-model-search.md`](records/2026-07/2026-07-30-composer-reference-selector-and-model-search.md).
+Latest Composer Skill / Expert Squad selector and model-search refinement: [`2026-07-30-composer-reference-selector-and-model-search.md`](records/2026-07/2026-07-30-composer-reference-selector-and-model-search.md).
 
 Latest Overlay close and Conversation chrome repair: [`2026-07-30-overlay-close-and-conversation-chrome-repair.md`](records/2026-07/2026-07-30-overlay-close-and-conversation-chrome-repair.md).
 
