@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest sixth fixed-ten Expert Squad batch: [2026-08-11-sixth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-sixth-ten-domain-expert-squad-batch.md).
+
 Latest fifth fixed-ten Expert Squad batch: [2026-08-11-fifth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-fifth-ten-domain-expert-squad-batch.md).
 
 Latest fourth fixed-ten Expert Squad batch: [2026-08-11-fourth-ten-domain-expert-squad-batch.md](records/2026-08/2026-08-11-fourth-ten-domain-expert-squad-batch.md).

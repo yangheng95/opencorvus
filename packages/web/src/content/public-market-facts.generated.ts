@@ -1350,6 +1350,98 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "biopharmaceutical-manufacturing-quality",
+      "version": "2026.08.11.1",
+      "digest": "d91ec7f91145900eff88bf4d37b841789cec0d72457d68f6a1cf2a7d212ba4b5"
+    },
+    "name": "Biopharmaceutical Manufacturing Quality",
+    "label": "Biopharmaceutical Manufacturing Quality",
+    "description": "GMP batch, material/equipment genealogy, deviation, CAPA, process-validation, continued-verification, and data-integrity evidence joined into a bounded quality review pack.",
+    "selectorSummary": "Use for source-grounded biopharmaceutical GMP manufacturing-quality evidence without batch, deviation, CAPA, validation, release, or compliance authority.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "biopharma-batch-record-genealogy-analyst",
+        "label": "Biopharma Batch Record and Genealogy Analyst",
+        "description": "Reconciles master/executed batch records, materials, lots, equipment, personnel entries, yields, status, and audit trails.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "biopharma-deviation-capa-analyst",
+        "label": "Biopharma Deviation and CAPA Analyst",
+        "description": "Builds deviation chronology, impact scope, evidence-backed cause hypotheses, CAPA actions, and effectiveness evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "biopharma-process-validation-analyst",
+        "label": "Biopharma Process Validation Analyst",
+        "description": "Traces lifecycle validation, CQA/CPP/control strategy, qualification, sampling, statistics, and continued verification evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "biopharma-manufacturing-quality-review-owner",
+        "label": "Biopharma Manufacturing Quality Review Owner",
+        "description": "Joins batch, deviation/CAPA, and validation evidence while preserving Quality Unit and batch-release authority.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "biopharma-manufacturing-quality-review",
+        "label": "Biopharma Manufacturing Quality Review",
+        "description": "Three independent batch, deviation/CAPA, and validation branches converge into one bounded GMP review pack.",
+        "nodes": [
+          {
+            "id": "biopharma-batch-record-genealogy-analyst",
+            "agentID": "biopharma-batch-record-genealogy-analyst",
+            "description": "Reconciles batch execution, material/equipment genealogy, yields, status, signatures, and audit trails.",
+            "dependsOn": []
+          },
+          {
+            "id": "biopharma-deviation-capa-analyst",
+            "agentID": "biopharma-deviation-capa-analyst",
+            "description": "Builds deviation, investigation, impact, CAPA, implementation, and effectiveness evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "biopharma-process-validation-analyst",
+            "agentID": "biopharma-process-validation-analyst",
+            "description": "Traces process design, qualification, control strategy, sampling, statistics, and continued verification.",
+            "dependsOn": []
+          },
+          {
+            "id": "biopharma-manufacturing-quality-review-owner",
+            "agentID": "biopharma-manufacturing-quality-review-owner",
+            "description": "Joins all branches, preserves contradictions, and routes Quality Unit and release decisions.",
+            "dependsOn": [
+              "biopharma-batch-record-genealogy-analyst",
+              "biopharma-deviation-capa-analyst",
+              "biopharma-process-validation-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "browser-research-acceptance",
       "version": "2026.08.10.1",
       "digest": "2546937834161b5ba42aefe9a804780fdc33013ce7415ca9fc8efee948174033"
@@ -3458,6 +3550,204 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "food-safety-quality",
+      "version": "2026.08.11.1",
+      "digest": "a7b97db1bc2570aa616bbbbe6a7a41119bdb9dfb2501edf388faddc19eb8fddf"
+    },
+    "name": "Food Safety Quality",
+    "label": "Food Safety Quality",
+    "description": "Evidence-bounded food hazard, control-monitoring, traceability, and recall-readiness review joined without safety, release, recall, or regulatory authority.",
+    "selectorSummary": "Use for source-bound food safety-system and traceability evidence preparation.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "food-process-hazard-haccp-analyst",
+        "label": "Food Process Hazard HACCP Analyst",
+        "description": "Builds product/process and hazard-control evidence without choosing significant hazards, CCPs, or critical limits.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "food-control-monitoring-verification-analyst",
+        "label": "Food Control Monitoring Verification Analyst",
+        "description": "Traces monitoring, calibration, deviation, corrective-action, verification, and validation evidence without product disposition.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "food-traceability-recall-readiness-analyst",
+        "label": "Food Traceability Recall Readiness Analyst",
+        "description": "Reconstructs lot genealogy, quantity reconciliation, distribution scope, and mock-recall readiness without initiating a recall.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "food-safety-quality-review-owner",
+        "label": "Food Safety Quality Review Owner",
+        "description": "Joins hazard, control, and traceability branches into a qualified-review pack without food-safety or disposition decisions.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "food-safety-quality-review",
+        "label": "Food Safety Quality Review",
+        "description": "Three independent food-safety evidence branches converge into a qualified-review pack.",
+        "nodes": [
+          {
+            "id": "food-process-hazard-haccp-analyst",
+            "agentID": "food-process-hazard-haccp-analyst",
+            "description": "Builds process, hazard, and control-point evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "food-control-monitoring-verification-analyst",
+            "agentID": "food-control-monitoring-verification-analyst",
+            "description": "Traces monitoring, calibration, deviation, corrective-action, verification, and validation evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "food-traceability-recall-readiness-analyst",
+            "agentID": "food-traceability-recall-readiness-analyst",
+            "description": "Reconstructs lot genealogy, quantity reconciliation, and mock-recall readiness.",
+            "dependsOn": []
+          },
+          {
+            "id": "food-safety-quality-review-owner",
+            "agentID": "food-safety-quality-review-owner",
+            "description": "Joins all branches without safety, disposition, recall, or regulatory authority.",
+            "dependsOn": [
+              "food-control-monitoring-verification-analyst",
+              "food-process-hazard-haccp-analyst",
+              "food-traceability-recall-readiness-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "forensic-accounting-investigations",
+      "version": "2026.08.11.1",
+      "digest": "28d8ba142c1b9d8c2daf3d6409f38dcd9f0652318110c0dee3a4b0fce7523b92"
+    },
+    "name": "Forensic Accounting Investigations",
+    "label": "Forensic Accounting Investigations",
+    "description": "Authorized transaction evidence, anomalies, funds flow and corroboration joined without fraud or legal determinations.",
+    "selectorSummary": "Use for bounded forensic-accounting investigation evidence.",
+    "pillars": [
+      "code",
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "investigation-scope-evidence-custody-analyst",
+        "label": "Investigation Scope, Authority and Evidence Custody Analyst",
+        "description": "Freeze engagement authority, allegations, period, systems, access limits, preservation obligations and evidence custody.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "transaction-anomaly-population-analyst",
+        "label": "Transaction Population and Anomaly Analyst",
+        "description": "Reconcile the authorized transaction population and evaluate reproducible anomalies as leads rather than proof.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "funds-flow-entity-relationship-analyst",
+        "label": "Funds Flow and Entity Relationship Analyst",
+        "description": "Reconstruct sourced uses, counterparties, beneficiaries and entity relationships from authorized records.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "control-interview-corroboration-analyst",
+        "label": "Control, Interview and Corroboration Analyst",
+        "description": "Compare control design and operation with transaction evidence, interview records, corroboration and contradiction.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "forensic-accounting-investigation-evidence-owner",
+        "label": "Forensic Accounting Investigation Evidence Owner",
+        "description": "Join custody, population, funds-flow and corroboration branches into a reviewable investigation pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "forensic-accounting-investigation-review",
+        "label": "Forensic Accounting Investigation Review",
+        "description": "Four independent evidence branches converge into an explicit investigation evidence owner.",
+        "nodes": [
+          {
+            "id": "investigation-scope-evidence-custody-analyst",
+            "agentID": "investigation-scope-evidence-custody-analyst",
+            "description": "Freeze engagement authority, allegations, period, systems, access limits, preservation obligations and evidence custody.",
+            "dependsOn": []
+          },
+          {
+            "id": "transaction-anomaly-population-analyst",
+            "agentID": "transaction-anomaly-population-analyst",
+            "description": "Reconcile the authorized transaction population and evaluate reproducible anomalies as leads rather than proof.",
+            "dependsOn": []
+          },
+          {
+            "id": "funds-flow-entity-relationship-analyst",
+            "agentID": "funds-flow-entity-relationship-analyst",
+            "description": "Reconstruct sourced uses, counterparties, beneficiaries and entity relationships from authorized records.",
+            "dependsOn": []
+          },
+          {
+            "id": "control-interview-corroboration-analyst",
+            "agentID": "control-interview-corroboration-analyst",
+            "description": "Compare control design and operation with transaction evidence, interview records, corroboration and contradiction.",
+            "dependsOn": []
+          },
+          {
+            "id": "forensic-accounting-investigation-evidence-owner",
+            "agentID": "forensic-accounting-investigation-evidence-owner",
+            "description": "Join custody, population, funds-flow and corroboration branches into a reviewable investigation pack.",
+            "dependsOn": [
+              "control-interview-corroboration-analyst",
+              "funds-flow-entity-relationship-analyst",
+              "investigation-scope-evidence-custody-analyst",
+              "transaction-anomaly-population-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "frontend-innovate",
       "version": "2026.08.07.1",
       "digest": "4d1cd768638f4a2476274af574cc015289d08e5962ab63391f6fddb3cd1558b2"
@@ -5465,6 +5755,98 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "nuclear-facility-operations-safety",
+      "version": "2026.08.11.1",
+      "digest": "c85c616fb8f80cc0d7ee9fd7d91e69c80af13c948b87fa356fa09b63fb8869d2"
+    },
+    "name": "Nuclear Facility Operations Safety",
+    "label": "Nuclear Facility Operations Safety",
+    "description": "Configuration, design-basis, plant-state, defence-in-depth, barrier, event, and operating-experience evidence joined into a bounded nuclear-safety review pack.",
+    "selectorSummary": "Use for source-grounded nuclear-facility configuration and operations-safety evidence without control, operability, reportability, or licensing authority.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "nuclear-configuration-design-basis-analyst",
+        "label": "Nuclear Configuration and Design-basis Analyst",
+        "description": "Reconciles design requirements, physical configuration, facility documents, temporary changes, and work records.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "nuclear-defence-in-depth-barrier-analyst",
+        "label": "Nuclear Defence-in-depth and Barrier Analyst",
+        "description": "Maps supplied safety functions, SSCs, barriers, controls, dependencies, availability evidence, and unknowns.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "nuclear-event-operating-experience-analyst",
+        "label": "Nuclear Event and Operating-experience Analyst",
+        "description": "Reconstructs event chronology, challenged safety functions, notifications, operating experience, and action evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "nuclear-operations-safety-review-owner",
+        "label": "Nuclear Operations Safety Review Owner",
+        "description": "Joins three independent evidence branches and routes every nuclear-safety decision to licensed and qualified authorities.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "nuclear-facility-operations-safety-review",
+        "label": "Nuclear Facility Operations Safety Review",
+        "description": "Three independent configuration, barrier, and event branches converge into a bounded qualified-review pack.",
+        "nodes": [
+          {
+            "id": "nuclear-configuration-design-basis-analyst",
+            "agentID": "nuclear-configuration-design-basis-analyst",
+            "description": "Reconciles design requirements, physical configuration, controlled documents, changes, and work evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "nuclear-defence-in-depth-barrier-analyst",
+            "agentID": "nuclear-defence-in-depth-barrier-analyst",
+            "description": "Maps supplied safety functions, SSCs, defence levels, barriers, controls, dependencies, and evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "nuclear-event-operating-experience-analyst",
+            "agentID": "nuclear-event-operating-experience-analyst",
+            "description": "Reconstructs events, challenged functions, notifications, corrective actions, and operating experience.",
+            "dependsOn": []
+          },
+          {
+            "id": "nuclear-operations-safety-review-owner",
+            "agentID": "nuclear-operations-safety-review-owner",
+            "description": "Joins all branches, preserves contradiction and unknowns, and routes licensed decisions.",
+            "dependsOn": [
+              "nuclear-configuration-design-basis-analyst",
+              "nuclear-defence-in-depth-barrier-analyst",
+              "nuclear-event-operating-experience-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "office-delivery",
       "version": "2026.08.10.1",
       "digest": "7272fd11ed797116f181e939244b6050a5b6013ff86115d824752aee78507b0c"
@@ -5803,6 +6185,204 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "payments-fraud-risk-operations",
+      "version": "2026.08.11.1",
+      "digest": "15a351039dbc16ba1e4fbaae8bc7897122a2d2aa821cdb5cc2ebc35062df9281"
+    },
+    "name": "Payments Fraud Risk Operations",
+    "label": "Payments Fraud Risk Operations",
+    "description": "Transaction, authentication, merchant-cohort, fraud-signal, dispute, chargeback, and control evidence joined into a bounded payments-risk review pack.",
+    "selectorSummary": "Use for source-grounded payment-fraud and dispute evidence without transaction, account, merchant, AML, or adjudication authority.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "payment-transaction-authentication-analyst",
+        "label": "Payment Transaction and Authentication Analyst",
+        "description": "Reconstructs payment event lifecycles and transaction, authentication, device, account, and model evidence.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "payment-merchant-monitoring-analyst",
+        "label": "Merchant Fraud Monitoring Analyst",
+        "description": "Builds comparable merchant cohorts and denominator-aware fraud, dispute, refund, decline, and linkage evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "payment-dispute-evidence-analyst",
+        "label": "Payment Dispute Evidence Analyst",
+        "description": "Reconciles dispute/chargeback reason, rule-version, deadline, transaction, authentication, delivery, refund, and communication evidence.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "payments-fraud-risk-review-owner",
+        "label": "Payments Fraud Risk Review Owner",
+        "description": "Joins independent transaction, merchant, and dispute evidence while retaining human decision gates.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "payments-fraud-risk-review",
+        "label": "Payments Fraud Risk Review",
+        "description": "Three independent payment evidence branches converge into one bounded fraud-risk review pack.",
+        "nodes": [
+          {
+            "id": "payment-transaction-authentication-analyst",
+            "agentID": "payment-transaction-authentication-analyst",
+            "description": "Reconstructs transaction lifecycle, authentication, signal, label, and model evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "payment-merchant-monitoring-analyst",
+            "agentID": "payment-merchant-monitoring-analyst",
+            "description": "Builds comparable merchant cohorts, ratios, trends, link evidence, and unknowns.",
+            "dependsOn": []
+          },
+          {
+            "id": "payment-dispute-evidence-analyst",
+            "agentID": "payment-dispute-evidence-analyst",
+            "description": "Builds rule-versioned dispute/chargeback evidence timelines without adjudication.",
+            "dependsOn": []
+          },
+          {
+            "id": "payments-fraud-risk-review-owner",
+            "agentID": "payments-fraud-risk-review-owner",
+            "description": "Joins all branches, preserves conflicts, and routes every action to authorized humans.",
+            "dependsOn": [
+              "payment-dispute-evidence-analyst",
+              "payment-merchant-monitoring-analyst",
+              "payment-transaction-authentication-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "petroleum-well-integrity-operations",
+      "version": "2026.08.11.1",
+      "digest": "bdd89e44ecea0d761e148d159949f0f7dea7269ef6a3f0fa00090a52713a6a8f"
+    },
+    "name": "Petroleum Well Integrity Operations",
+    "label": "Petroleum Well Integrity Operations",
+    "description": "Well design basis, barriers, drilling/completion verification, production surveillance and intervention evidence joined for qualified review.",
+    "selectorSummary": "Use for bounded petroleum-well integrity operations evidence.",
+    "pillars": [
+      "code",
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "well-basis-design-envelope-analyst",
+        "label": "Well Basis and Design Envelope Analyst",
+        "description": "Freeze well identity, lifecycle state, schematic, formations, pressure/temperature basis, loads, fluids, materials and authorized operating envelope.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "drilling-completion-barrier-verification-analyst",
+        "label": "Drilling and Completion Barrier Verification Analyst",
+        "description": "Trace drilling/completion operations evidence to primary and secondary barrier envelopes and well-barrier elements.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "production-well-integrity-surveillance-analyst",
+        "label": "Production Well Integrity Surveillance Analyst",
+        "description": "Organize operating-envelope, annulus-pressure, corrosion, leak, valve and integrity surveillance evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "well-intervention-change-anomaly-analyst",
+        "label": "Well Intervention, Change and Anomaly Analyst",
+        "description": "Trace interventions, repairs, configuration changes, anomalies and remediation evidence across the well lifecycle.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "petroleum-well-integrity-evidence-owner",
+        "label": "Petroleum Well Integrity Evidence Owner",
+        "description": "Join design-basis, barrier, surveillance and intervention evidence for qualified well-integrity review.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "petroleum-well-integrity-review",
+        "label": "Petroleum Well Integrity Review",
+        "description": "Four independent evidence branches converge into an explicit well-integrity evidence owner.",
+        "nodes": [
+          {
+            "id": "well-basis-design-envelope-analyst",
+            "agentID": "well-basis-design-envelope-analyst",
+            "description": "Freeze well identity, lifecycle state, schematic, formations, pressure/temperature basis, loads, fluids, materials and authorized operating envelope.",
+            "dependsOn": []
+          },
+          {
+            "id": "drilling-completion-barrier-verification-analyst",
+            "agentID": "drilling-completion-barrier-verification-analyst",
+            "description": "Trace drilling/completion operations evidence to primary and secondary barrier envelopes and well-barrier elements.",
+            "dependsOn": []
+          },
+          {
+            "id": "production-well-integrity-surveillance-analyst",
+            "agentID": "production-well-integrity-surveillance-analyst",
+            "description": "Organize operating-envelope, annulus-pressure, corrosion, leak, valve and integrity surveillance evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "well-intervention-change-anomaly-analyst",
+            "agentID": "well-intervention-change-anomaly-analyst",
+            "description": "Trace interventions, repairs, configuration changes, anomalies and remediation evidence across the well lifecycle.",
+            "dependsOn": []
+          },
+          {
+            "id": "petroleum-well-integrity-evidence-owner",
+            "agentID": "petroleum-well-integrity-evidence-owner",
+            "description": "Join design-basis, barrier, surveillance and intervention evidence for qualified well-integrity review.",
+            "dependsOn": [
+              "drilling-completion-barrier-verification-analyst",
+              "production-well-integrity-surveillance-analyst",
+              "well-basis-design-envelope-analyst",
+              "well-intervention-change-anomaly-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "pharmacovigilance-drug-safety",
       "version": "2026.08.11.1",
       "digest": "0ab14b527dfbe245a2f9204d40b3cb7d0c916273baebad7999bfc17c0a04ec44"
@@ -5872,6 +6452,111 @@ export const generatedPublicMarketFacts = [
               "pv-aggregate-signal-analyst",
               "pv-case-intake-quality-analyst",
               "pv-risk-management-compliance-trace-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "privacy-data-protection-operations",
+      "version": "2026.08.11.1",
+      "digest": "4fa15fcd4f212ed439ebada223f839f115d9412abf8ab5caea927605cd24035b"
+    },
+    "name": "Privacy Data Protection Operations",
+    "label": "Privacy Data Protection Operations",
+    "description": "Evidence-bounded data inventory, privacy-impact, data-subject request, retention/deletion, and incident review without legal or production-system authority.",
+    "selectorSummary": "Use for source-bound privacy and data-protection operations evidence.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "personal-data-inventory-flow-analyst",
+        "label": "Personal Data Inventory Flow Analyst",
+        "description": "Maps source-bound processing activities, systems, data categories, recipients, transfers, roles, and retention sources without deciding lawful basis.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "privacy-impact-assessment-analyst",
+        "label": "Privacy Impact Assessment Analyst",
+        "description": "Structures processing, necessity, proportionality, rights-and-freedoms risk, measure, and residual-uncertainty evidence without accepting risk.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "data-subject-request-retention-analyst",
+        "label": "Data Subject Request Retention Analyst",
+        "description": "Traces authorized request intake, evidence search, retention/deletion rules, hold conflicts, and review questions without production action or response.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "personal-data-incident-evidence-analyst",
+        "label": "Personal Data Incident Evidence Analyst",
+        "description": "Reconstructs personal-data incident facts, chronology, affected-data scope, effects, and remedial evidence without breach or notification decisions.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "privacy-data-protection-review-owner",
+        "label": "Privacy Data Protection Review Owner",
+        "description": "Joins inventory, assessment, request/retention, and incident branches into a qualified-review pack without legal or operational decisions.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "privacy-data-protection-operations-review",
+        "label": "Privacy Data Protection Operations Review",
+        "description": "Four independent privacy evidence branches converge into one qualified-review pack.",
+        "nodes": [
+          {
+            "id": "personal-data-inventory-flow-analyst",
+            "agentID": "personal-data-inventory-flow-analyst",
+            "description": "Maps authorized processing inventories and flows.",
+            "dependsOn": []
+          },
+          {
+            "id": "privacy-impact-assessment-analyst",
+            "agentID": "privacy-impact-assessment-analyst",
+            "description": "Structures privacy-impact and risk-measure evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "data-subject-request-retention-analyst",
+            "agentID": "data-subject-request-retention-analyst",
+            "description": "Traces requests, source searches, retention, deletion, and hold conflicts.",
+            "dependsOn": []
+          },
+          {
+            "id": "personal-data-incident-evidence-analyst",
+            "agentID": "personal-data-incident-evidence-analyst",
+            "description": "Reconstructs personal-data incident facts and evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "privacy-data-protection-review-owner",
+            "agentID": "privacy-data-protection-review-owner",
+            "description": "Joins all branches without legal, production, disclosure, deletion, containment, or notification authority.",
+            "dependsOn": [
+              "data-subject-request-retention-analyst",
+              "personal-data-incident-evidence-analyst",
+              "personal-data-inventory-flow-analyst",
+              "privacy-impact-assessment-analyst"
             ]
           }
         ]
@@ -6809,6 +7494,112 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "robotics-safety-validation",
+      "version": "2026.08.11.1",
+      "digest": "0283ceea5e34d4f7a42c3dcdfb95d1e8de7a9863c266ac61172bb8df7015808d"
+    },
+    "name": "Robotics Safety Validation",
+    "label": "Robotics Safety Validation",
+    "description": "Integrated robot application requirements, hazards, safety functions and deterministic validation evidence joined for qualified safety review.",
+    "selectorSummary": "Use for bounded integrated-robot application safety evidence.",
+    "pillars": [
+      "code",
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "robot-system-requirement-interface-analyst",
+        "label": "Robot System Requirement and Interface Analyst",
+        "description": "Freeze the integrated robot application boundary and trace requirements across robot, controller, end effector, sensors, energy, communications, workspace, people and external equipment.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "robot-task-hazard-risk-reduction-analyst",
+        "label": "Robot Task Hazard and Risk Reduction Analyst",
+        "description": "Analyze task, mode and lifecycle hazards and the supplied risk-reduction evidence without accepting residual risk.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "robot-safety-function-control-validation-analyst",
+        "label": "Robot Safety Function and Control Validation Analyst",
+        "description": "Trace safety functions and safety-related parts of control systems to configuration, analysis and test evidence.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "robot-application-test-evidence-analyst",
+        "label": "Robot Application Test Evidence Analyst",
+        "description": "Organize deterministic verification and validation evidence across unit, integration, simulation, hardware-in-the-loop and bounded field layers.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "robotics-safety-validation-case-owner",
+        "label": "Robotics Safety Validation Case Owner",
+        "description": "Join the four independent branches into a contradiction-preserving evidence case for qualified safety review.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "robotics-safety-validation-review",
+        "label": "Robotics Safety Validation Review",
+        "description": "Four independent evidence branches converge into an explicit qualified-review case owner.",
+        "nodes": [
+          {
+            "id": "robot-system-requirement-interface-analyst",
+            "agentID": "robot-system-requirement-interface-analyst",
+            "description": "Freeze the integrated robot application boundary and trace requirements across robot, controller, end effector, sensors, energy, communications, workspace, people and external equipment.",
+            "dependsOn": []
+          },
+          {
+            "id": "robot-task-hazard-risk-reduction-analyst",
+            "agentID": "robot-task-hazard-risk-reduction-analyst",
+            "description": "Analyze task, mode and lifecycle hazards and the supplied risk-reduction evidence without accepting residual risk.",
+            "dependsOn": []
+          },
+          {
+            "id": "robot-safety-function-control-validation-analyst",
+            "agentID": "robot-safety-function-control-validation-analyst",
+            "description": "Trace safety functions and safety-related parts of control systems to configuration, analysis and test evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "robot-application-test-evidence-analyst",
+            "agentID": "robot-application-test-evidence-analyst",
+            "description": "Organize deterministic verification and validation evidence across unit, integration, simulation, hardware-in-the-loop and bounded field layers.",
+            "dependsOn": []
+          },
+          {
+            "id": "robotics-safety-validation-case-owner",
+            "agentID": "robotics-safety-validation-case-owner",
+            "description": "Join the four independent branches into a contradiction-preserving evidence case for qualified safety review.",
+            "dependsOn": [
+              "robot-application-test-evidence-analyst",
+              "robot-safety-function-control-validation-analyst",
+              "robot-system-requirement-interface-analyst",
+              "robot-task-hazard-risk-reduction-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "sales-strategy",
       "version": "2026.08.10.1",
       "digest": "502289dccf0a3a09d826621527f4a1718db1baa82814f36a8251fc5faf1f9e8e"
@@ -6936,6 +7727,98 @@ export const generatedPublicMarketFacts = [
     "packageOwnedCapabilities": {
       "skills": 2,
       "tools": 1,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
+      "id": "satellite-mission-operations",
+      "version": "2026.08.11.1",
+      "digest": "b96158ffb901ef4d7d97fc592d43ce3f67b6b4a41c22a8368d8f70a29569ffde"
+    },
+    "name": "Satellite Mission Operations",
+    "label": "Satellite Mission Operations",
+    "description": "Evidence-bounded spacecraft telemetry, mission-plan, ground-contact, and telecommand-readiness review joined without live flight or ground-system authority.",
+    "selectorSummary": "Use for source-bound satellite mission operations evidence and qualified review preparation.",
+    "pillars": [
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "spacecraft-telemetry-health-state-analyst",
+        "label": "Spacecraft Telemetry Health State Analyst",
+        "description": "Reconstructs source-bound telemetry, mode, limit-set, and event evidence without issuing alerts or operational diagnoses.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "mission-planning-ground-contact-resource-analyst",
+        "label": "Mission Planning Ground Contact Resource Analyst",
+        "description": "Checks source-bound contact windows, data generation, downlink capacity, and resource conflicts without booking passes.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "telecommand-procedure-anomaly-readiness-analyst",
+        "label": "Telecommand Procedure Anomaly Readiness Analyst",
+        "description": "Traces telecommand procedure, authorization, rehearsal, inhibit, verification, and anomaly evidence without creating or sending commands.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "satellite-mission-operations-review-owner",
+        "label": "Satellite Mission Operations Review Owner",
+        "description": "Joins telemetry, plan/contact, and procedure/anomaly branches into a qualified-review pack while preserving unresolved operational decisions.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "satellite-mission-operations-review",
+        "label": "Satellite Mission Operations Review",
+        "description": "Three independent mission-operations evidence branches converge into one controlled review.",
+        "nodes": [
+          {
+            "id": "spacecraft-telemetry-health-state-analyst",
+            "agentID": "spacecraft-telemetry-health-state-analyst",
+            "description": "Reconstructs telemetry, health, mode, and event evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "mission-planning-ground-contact-resource-analyst",
+            "agentID": "mission-planning-ground-contact-resource-analyst",
+            "description": "Checks contact, mission-plan, buffer, and resource evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "telecommand-procedure-anomaly-readiness-analyst",
+            "agentID": "telecommand-procedure-anomaly-readiness-analyst",
+            "description": "Traces procedure, authorization, verification, and anomaly-readiness evidence.",
+            "dependsOn": []
+          },
+          {
+            "id": "satellite-mission-operations-review-owner",
+            "agentID": "satellite-mission-operations-review-owner",
+            "description": "Joins all branches without flight, ground, or safety authority.",
+            "dependsOn": [
+              "mission-planning-ground-contact-resource-analyst",
+              "spacecraft-telemetry-health-state-analyst",
+              "telecommand-procedure-anomaly-readiness-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
       "mcp": 0
     },
     "configuration": {
@@ -7788,6 +8671,112 @@ export const generatedPublicMarketFacts = [
   {
     "identity": {
       "namespace": "builtin",
+      "id": "urban-mobility-transport-planning",
+      "version": "2026.08.11.1",
+      "digest": "c23e53315d1e6a3a6198eecb15eb0b4956e949a58e4f02ba434db019dcc1d62b"
+    },
+    "name": "Urban Mobility Transport Planning",
+    "label": "Urban Mobility Transport Planning",
+    "description": "Multimodal baseline, demand, accessibility, options, equity, safety and engagement evidence joined for public planning review.",
+    "selectorSummary": "Use for bounded urban multimodal mobility planning evidence.",
+    "pillars": [
+      "code",
+      "work"
+    ],
+    "agents": [
+      {
+        "id": "urban-mobility-baseline-network-analyst",
+        "label": "Mobility Baseline, Network and Data Analyst",
+        "description": "Freeze the planning geography, horizon, multimodal network/service baseline and source-data provenance.",
+        "baseRole": "explore"
+      },
+      {
+        "id": "travel-demand-accessibility-analyst",
+        "label": "Travel Demand and Accessibility Model Analyst",
+        "description": "Evaluate supplied demand-model, calibration, scenario and accessibility evidence without inventing parameters or forecasting outcomes.",
+        "baseRole": "integrity"
+      },
+      {
+        "id": "multimodal-options-performance-analyst",
+        "label": "Multimodal Options and Performance Analyst",
+        "description": "Compare multimodal option packages on consistently defined supplied measures and implementation dependencies.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "mobility-equity-safety-engagement-analyst",
+        "label": "Equity, Safety and Engagement Evidence Analyst",
+        "description": "Trace distributional burdens and benefits, safety evidence, accessibility needs and public involvement without making legal or equity determinations.",
+        "baseRole": "delegated-worker"
+      },
+      {
+        "id": "urban-mobility-transport-plan-owner",
+        "label": "Urban Mobility Transport Planning Owner",
+        "description": "Join baseline, demand/accessibility, option-performance and equity/safety/engagement evidence into a decision-ready planning pack.",
+        "baseRole": "delegated-worker"
+      }
+    ],
+    "workflows": [
+      {
+        "id": "urban-mobility-transport-planning-review",
+        "label": "Urban Mobility Transport Planning Review",
+        "description": "Four independent planning evidence branches converge into an explicit planning owner.",
+        "nodes": [
+          {
+            "id": "urban-mobility-baseline-network-analyst",
+            "agentID": "urban-mobility-baseline-network-analyst",
+            "description": "Freeze the planning geography, horizon, multimodal network/service baseline and source-data provenance.",
+            "dependsOn": []
+          },
+          {
+            "id": "travel-demand-accessibility-analyst",
+            "agentID": "travel-demand-accessibility-analyst",
+            "description": "Evaluate supplied demand-model, calibration, scenario and accessibility evidence without inventing parameters or forecasting outcomes.",
+            "dependsOn": []
+          },
+          {
+            "id": "multimodal-options-performance-analyst",
+            "agentID": "multimodal-options-performance-analyst",
+            "description": "Compare multimodal option packages on consistently defined supplied measures and implementation dependencies.",
+            "dependsOn": []
+          },
+          {
+            "id": "mobility-equity-safety-engagement-analyst",
+            "agentID": "mobility-equity-safety-engagement-analyst",
+            "description": "Trace distributional burdens and benefits, safety evidence, accessibility needs and public involvement without making legal or equity determinations.",
+            "dependsOn": []
+          },
+          {
+            "id": "urban-mobility-transport-plan-owner",
+            "agentID": "urban-mobility-transport-plan-owner",
+            "description": "Join baseline, demand/accessibility, option-performance and equity/safety/engagement evidence into a decision-ready planning pack.",
+            "dependsOn": [
+              "mobility-equity-safety-engagement-analyst",
+              "multimodal-options-performance-analyst",
+              "travel-demand-accessibility-analyst",
+              "urban-mobility-baseline-network-analyst"
+            ]
+          }
+        ]
+      }
+    ],
+    "projectedCapabilities": {
+      "skills": 1,
+      "tools": 3,
+      "mcp": 0
+    },
+    "packageOwnedCapabilities": {
+      "skills": 1,
+      "tools": 0,
+      "mcp": 0
+    },
+    "configuration": {
+      "fields": 0,
+      "required": 0
+    }
+  },
+  {
+    "identity": {
+      "namespace": "builtin",
       "id": "viral-content",
       "version": "2026.08.10.1",
       "digest": "a9dd1f81c5c0617f34d2117e37b9654975b295495e2950ce62d186c927cd37d4"
@@ -8154,6 +9143,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 3
   },
   {
+    "identity": "builtin/biopharmaceutical-manufacturing-quality",
+    "namespace": "builtin",
+    "id": "biopharmaceutical-manufacturing-quality",
+    "label": "Biopharmaceutical Manufacturing Quality",
+    "version": "2026.08.11.1",
+    "packageDigest": "d91ec7f91145900eff88bf4d37b841789cec0d72457d68f6a1cf2a7d212ba4b5",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "biopharmaceutical-manufacturing-quality/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/browser-research-acceptance",
     "namespace": "builtin",
     "id": "browser-research-acceptance",
@@ -8502,6 +9508,40 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/food-safety-quality",
+    "namespace": "builtin",
+    "id": "food-safety-quality",
+    "label": "Food Safety Quality",
+    "version": "2026.08.11.1",
+    "packageDigest": "a7b97db1bc2570aa616bbbbe6a7a41119bdb9dfb2501edf388faddc19eb8fddf",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "food-safety-quality/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/forensic-accounting-investigations",
+    "namespace": "builtin",
+    "id": "forensic-accounting-investigations",
+    "label": "Forensic Accounting Investigations",
+    "version": "2026.08.11.1",
+    "packageDigest": "28d8ba142c1b9d8c2daf3d6409f38dcd9f0652318110c0dee3a4b0fce7523b92",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "forensic-accounting-investigations/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/frontend-innovate",
     "namespace": "builtin",
     "id": "frontend-innovate",
@@ -8812,6 +9852,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/nuclear-facility-operations-safety",
+    "namespace": "builtin",
+    "id": "nuclear-facility-operations-safety",
+    "label": "Nuclear Facility Operations Safety",
+    "version": "2026.08.11.1",
+    "packageDigest": "c85c616fb8f80cc0d7ee9fd7d91e69c80af13c948b87fa356fa09b63fb8869d2",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "nuclear-facility-operations-safety/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/office-delivery",
     "namespace": "builtin",
     "id": "office-delivery",
@@ -8867,6 +9924,40 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 1
   },
   {
+    "identity": "builtin/payments-fraud-risk-operations",
+    "namespace": "builtin",
+    "id": "payments-fraud-risk-operations",
+    "label": "Payments Fraud Risk Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "15a351039dbc16ba1e4fbaae8bc7897122a2d2aa821cdb5cc2ebc35062df9281",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "payments-fraud-risk-operations/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/petroleum-well-integrity-operations",
+    "namespace": "builtin",
+    "id": "petroleum-well-integrity-operations",
+    "label": "Petroleum Well Integrity Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "bdd89e44ecea0d761e148d159949f0f7dea7269ef6a3f0fa00090a52713a6a8f",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "petroleum-well-integrity-operations/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/pharmacovigilance-drug-safety",
     "namespace": "builtin",
     "id": "pharmacovigilance-drug-safety",
@@ -8881,6 +9972,23 @@ export const generatedShippedSquadFacts = [
       "pharmacovigilance-drug-safety/shared/method"
     ],
     "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/privacy-data-protection-operations",
+    "namespace": "builtin",
+    "id": "privacy-data-protection-operations",
+    "label": "Privacy Data Protection Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "4fa15fcd4f212ed439ebada223f839f115d9412abf8ab5caea927605cd24035b",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "privacy-data-protection-operations/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {
@@ -9020,6 +10128,23 @@ export const generatedShippedSquadFacts = [
     "workflowCount": 3
   },
   {
+    "identity": "builtin/robotics-safety-validation",
+    "namespace": "builtin",
+    "id": "robotics-safety-validation",
+    "label": "Robotics Safety Validation",
+    "version": "2026.08.11.1",
+    "packageDigest": "0283ceea5e34d4f7a42c3dcdfb95d1e8de7a9863c266ac61172bb8df7015808d",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "robotics-safety-validation/shared/method"
+    ],
+    "agentCount": 5,
+    "workflowCount": 1
+  },
+  {
     "identity": "builtin/sales-strategy",
     "namespace": "builtin",
     "id": "sales-strategy",
@@ -9036,6 +10161,23 @@ export const generatedShippedSquadFacts = [
       "sales-strategy/shared/workflow"
     ],
     "agentCount": 7,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/satellite-mission-operations",
+    "namespace": "builtin",
+    "id": "satellite-mission-operations",
+    "label": "Satellite Mission Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "b96158ffb901ef4d7d97fc592d43ce3f67b6b4a41c22a8368d8f70a29569ffde",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "satellite-mission-operations/shared/method"
+    ],
+    "agentCount": 4,
     "workflowCount": 1
   },
   {
@@ -9178,6 +10320,23 @@ export const generatedShippedSquadFacts = [
       "telecom-network-assurance/shared/method"
     ],
     "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/urban-mobility-transport-planning",
+    "namespace": "builtin",
+    "id": "urban-mobility-transport-planning",
+    "label": "Urban Mobility Transport Planning",
+    "version": "2026.08.11.1",
+    "packageDigest": "c23e53315d1e6a3a6198eecb15eb0b4956e949a58e4f02ba434db019dcc1d62b",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "urban-mobility-transport-planning/shared/method"
+    ],
+    "agentCount": 5,
     "workflowCount": 1
   },
   {
