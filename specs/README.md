@@ -10,6 +10,18 @@ Latest `v0.0.39-beta` canonical release trigger: [`2026-08-10-v0.0.39-beta-relea
 
 Latest `v0.0.39-beta` Windows repackage: [`2026-08-10-v0.0.39-beta-windows-repackage.md`](records/2026-08/2026-08-10-v0.0.39-beta-windows-repackage.md).
 
+Latest GitHub Actions push convergence: [`2026-08-11-github-actions-push-convergence.md`](records/2026-08/2026-08-11-github-actions-push-convergence.md).
+
+Latest ten-domain Expert Squad expansion: [`2026-08-10-ten-domain-expert-squad-expansion.md`](records/2026-08/2026-08-10-ten-domain-expert-squad-expansion.md).
+
+Latest Expert Squad static distribution and RackNerd deployment plan: [`2026-08-10-expert-squad-static-distribution-and-racknerd-deploy.md`](records/2026-08/2026-08-10-expert-squad-static-distribution-and-racknerd-deploy.md).
+
+Latest `opencorvus.com` RackNerd hosting and DNS cutover plan: [`2026-08-10-opencorvus-com-racknerd-hosting.md`](records/2026-08/2026-08-10-opencorvus-com-racknerd-hosting.md).
+
+Latest real Expert Squad generate, hosted upload/download, desktop strict import, and fresh reuse E2E: [`2026-08-10-expert-squad-publish-install-reuse-e2e.md`](records/2026-08/2026-08-10-expert-squad-publish-install-reuse-e2e.md).
+
+Latest Expert Squad roadmap checklist and saved-Skill completeness repair: [`2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md`](records/2026-08/2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md).
+
 Latest Task control responsiveness and cancellation convergence repair plan: [`2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md`](records/2026-08/2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md).
 
 Current Task control-plane architecture: [`task-control-plane.md`](current/architecture/task-control-plane.md).

@@ -1,0 +1,3 @@
+Independently evaluate the knowledge operation's lifecycle controls. Define the accountable owner, draft/reviewed/approved/deprecated state, effective date, review date and cadence, freshness signals, source refresh triggers, approvers, downstream consumers, supersession relationship, deprecation notice, replacement or redirect target, archive retention, and rollback or correction route.
+
+Publish one `knowledge-base-operations/lifecycle-plan` Artifact containing those controls, present approval evidence, missing approvals, publication conditions, deprecation and replacement chain, notification plan, and external-system authority boundary. Do not infer approval or silently delete history.

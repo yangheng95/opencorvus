@@ -10,6 +10,18 @@
 
 - [2026-08-10-v0.0.39-beta-windows-repackage.md](2026-08-10-v0.0.39-beta-windows-repackage.md) advances the canonical release family to `0.0.39-beta` and records the native Windows graphical user interface and command-line interface repackage evidence.
 
+- [2026-08-11-github-actions-push-convergence.md](2026-08-11-github-actions-push-convergence.md) repairs clean-runner SDK bootstrap ordering and preload-owned test execution, and requires a green proof push before deleting older Actions runs.
+
+- [2026-08-10-ten-domain-expert-squad-expansion.md](2026-08-10-ten-domain-expert-squad-expansion.md) defines ten new domain packages, dedicated Skill and asset ownership, pinned open-source adaptations, clean-room professional boundaries, and package, HTTP, and real-page acceptance.
+
+- [2026-08-10-expert-squad-static-distribution-and-racknerd-deploy.md](2026-08-10-expert-squad-static-distribution-and-racknerd-deploy.md) defines deterministic downloads for all 39 shipped Expert Squad resources, signed immutable catalogs, and an isolated least-privilege RackNerd website deployment path.
+
+- [2026-08-10-opencorvus-com-racknerd-hosting.md](2026-08-10-opencorvus-com-racknerd-hosting.md) defines the root-domain Astro identity, RackNerd static-service topology, GoDaddy DNS replacement boundary, managed HTTPS, exact dirty-worktree bundle provenance, and real public acceptance sequence.
+
+- [2026-08-10-expert-squad-publish-install-reuse-e2e.md](2026-08-10-expert-squad-publish-install-reuse-e2e.md) composes real `squad-sdk` generation, a visible post-generation upload decision, hosted ZIP validation and immutable browser download, explicit desktop strict import, and a fresh no-intervention reuse Task.
+
+- [2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md](2026-08-10-expert-squad-roadmap-checklist-and-skill-completeness.md) defines the manifest-derived draggable Expert Squad planning checklist, WorkBuddy and open-source Skill research boundary, and the three-package saved-Skill completeness repair with real-page acceptance.
+
 - [2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md](2026-08-10-task-control-responsiveness-and-cancellation-convergence-plan.md) reconstructs the false-started operator-message stall and non-convergent Cancel incident, identifies the shared root-control/process/checkpoint defects, and defines the single-ingress, asynchronous-dispatch, idempotent-cancellation, Windows/LSP, real-checker, and visual acceptance repair sequence.
 
 - [2026-08-10-task-start-e2e-recovery.md](2026-08-10-task-start-e2e-recovery.md) records the active-but-zero-execution Mission Task failure boundary and validates the rebuilt package through a real HTTP Mission-to-Task expert workflow plus packaged restart replay.

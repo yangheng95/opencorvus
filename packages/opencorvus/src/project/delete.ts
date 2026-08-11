@@ -119,6 +119,7 @@ async function cancelRemainingProjectSessionPrompts(
           session,
           handle: "ProjectDelete.SessionPrompt.cancel",
           origin: { ...executionOrigin, targetSessionID: session.id },
+          settleBeforeReuse: true,
         })
       ) {
         cancelledSessions.push(session)

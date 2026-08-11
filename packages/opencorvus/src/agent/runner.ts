@@ -1351,6 +1351,7 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
         taskID: input.taskID,
         handle: `${kind}.agent.signal`,
         origin: parentSignalOrigin(),
+        settleBeforeReuse: true,
       })
     }
     let errorUnsub: (() => void) | undefined

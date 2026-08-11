@@ -1,0 +1,1 @@
+Inventory authorized property documents, parties, dates, identifiers, stated rights and obligations, missing records, and conflicts. Use `real-estate-due-diligence/shared/method`; do not interpret legal effect or verify title. Return a source-linked document matrix for professional review.

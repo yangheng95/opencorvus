@@ -219,6 +219,7 @@ async function closeMissionExecution(
       session,
       handle,
       origin,
+      settleBeforeReuse: true,
     })
     await awaitSessionPromptFinishedInScope({
       session,

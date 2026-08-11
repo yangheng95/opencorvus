@@ -103,7 +103,7 @@ async function closeRightSidebarConversationSession(
     reason,
     targetSessionID: session.id,
   })
-  cancelSessionPromptInScope({ session, origin })
+  cancelSessionPromptInScope({ session, origin, settleBeforeReuse: true })
   TaskQueueService.cancelSessionPrompts({
     sessionIDs: [session.id],
     reason,

@@ -12,9 +12,11 @@ import {
   hostedMarketDownloadPath,
   type HostedMarketRecord,
 } from "../src/lib/hosted-market-registry"
+import config from "../config.mjs"
 
-export const hostedMarketBasePath = "/opencorvus-dist/dist"
+export const hostedMarketBasePath = config.base === "/" ? "" : config.base.replace(/\/$/, "")
 export const hostedMarketApiBase = `${hostedMarketBasePath}/api/registry`
+const hostedMarketCookiePath = hostedMarketBasePath || "/"
 const packageRoot = fileURLToPath(new URL("..", import.meta.url))
 const defaultRegistryRoot = path.join(packageRoot, ".hosted-market-sim")
 const defaultDistRoot = path.join(packageRoot, "dist")
@@ -116,7 +118,7 @@ export async function createHostedMarketSimulationApp(input: { registryRoot?: st
       httpOnly: true,
       sameSite: "Strict",
       secure: false,
-      path: hostedMarketBasePath,
+      path: hostedMarketCookiePath,
       maxAge: 60 * 60,
     })
     return c.json({ csrfToken })
@@ -130,7 +132,7 @@ export async function createHostedMarketSimulationApp(input: { registryRoot?: st
     const sessionID = getCookie(c, sessionCookie)
     const session = sessionID ? sessions.get(sessionID) : undefined
     if (!session || c.req.header("X-CSRF-Token") !== session.csrfToken) {
-      if (sessionID) deleteCookie(c, sessionCookie, { path: hostedMarketBasePath })
+      if (sessionID) deleteCookie(c, sessionCookie, { path: hostedMarketCookiePath })
       throw new HTTPException(403, { message: "Hosted sandbox session or CSRF token is missing or expired" })
     }
     if (Date.now() - session.createdAt > 60 * 60 * 1000) {
@@ -231,17 +233,20 @@ export async function createHostedMarketSimulationApp(input: { registryRoot?: st
   })
 
   const distRoot = input.distRoot ?? defaultDistRoot
+  const hostedStaticRoute = hostedMarketBasePath ? `${hostedMarketBasePath}/*` : "/*"
   app.use(
-    `${hostedMarketBasePath}/*`,
+    hostedStaticRoute,
     serveStatic({
       root: distRoot,
       rewriteRequestPath(requestPath) {
-        const relative = requestPath.slice(hostedMarketBasePath.length)
+        const relative = hostedMarketBasePath ? requestPath.slice(hostedMarketBasePath.length) : requestPath
         return relative || "/"
       },
     }),
   )
-  app.get(hostedMarketBasePath, (c) => c.redirect(`${hostedMarketBasePath}/`, 308))
+  if (hostedMarketBasePath) {
+    app.get(hostedMarketBasePath, (c) => c.redirect(`${hostedMarketBasePath}/`, 308))
+  }
   app.notFound((c) => c.json({ error: { code: "HOSTED_ROUTE_NOT_FOUND", message: "Hosted simulation route not found" } }, 404))
 
   return { app, registry }
@@ -256,5 +261,5 @@ if (import.meta.main) {
     fetch: app.fetch,
     maxRequestBodySize: registry.maxArchiveBytes + multipartOverheadBytes,
   })
-  console.log(`OpenCorvus hosted market simulation: http://127.0.0.1:${port}${hostedMarketBasePath}/`)
+  console.log(`OpenCorvus hosted market simulation: http://127.0.0.1:${port}${hostedMarketBasePath || ""}/`)
 }

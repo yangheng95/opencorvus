@@ -1,6 +1,7 @@
 
 import { describe, expect, setDefaultTimeout, test } from "bun:test"
 import { rm } from "node:fs/promises"
+import { writeExpertSquadInstallationMetadata } from "../src/expert-squad/installation-metadata"
 import { ExpertSquadPackageManager } from "../src/expert-squad/manager"
 import { Global } from "../src/global"
 
@@ -15,6 +16,18 @@ describe("Expert Squad exact archive handoff", () => {
         projectDirectory,
         id: "frontend-replica",
         installationScope: "project",
+      })
+      const canonicalExport = await ExpertSquadPackageManager.exportArchive({
+        projectDirectory,
+        id: "frontend-replica",
+        installationScope: "project",
+      })
+      await writeExpertSquadInstallationMetadata(installed.after.targetRoot, {
+        generator_expert_squad_id: "squad-sdk",
+        task_id: "tsk_exact_archive_handoff",
+        session_id: "ses_exact_archive_handoff",
+        generated_at: "2026-08-10T00:00:00.000Z",
+        method: "sdk_authoring",
       })
       const exported = await ExpertSquadPackageManager.exportArchive({
         projectDirectory,
@@ -44,7 +57,9 @@ describe("Expert Squad exact archive handoff", () => {
         version: installed.after.version,
         packageDigest: installed.after.packageDigest,
         archiveSha256: expect.stringMatching(/^[a-f0-9]{64}$/),
+        fileCount: canonicalExport.fileCount,
       })
+      expect(exported.bytes).toEqual(canonicalExport.bytes)
 
       await expect(
         ExpertSquadPackageManager.importArchive({

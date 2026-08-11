@@ -1,0 +1,9 @@
+Use `nonprofit-grant-operations/shared/method` to produce the problem, program, theory-of-change, and measurement branch.
+
+Input contract: require the proposed geography/population and period, authorized needs evidence, beneficiary definitions and privacy constraints, existing program evidence, intervention and delivery model, partner evidence and status, capacity constraints, baseline data, intended outputs/outcomes, funder criteria, safeguarding owner, and evidence cutoff. Treat testimonials and projected reach as such; do not turn them into verified impact.
+
+Method: trace evidence of need to problem statement, inputs, activities, outputs, short/intermediate/long outcomes, assumptions, external factors, and risks. Separate outputs (delivered products/services) from outcomes (changes for people/systems). Define every indicator with numerator, denominator, unit, population, collection method, frequency, baseline, target-as-proposal, disaggregation/privacy limits, evidence source, and owner. Test whether activities can plausibly produce outputs within capacity and period; flag causal leaps, double counting, unsupported beneficiary claims, unavailable measurement, and partner dependencies.
+
+Output: populate the logic-model and indicator register with source/version/date, claim class, applicability, uncertainty, owner, and review status. Return supported need, proposed causal chain, feasibility limits, evidence gaps, measurement burden, safeguarding/data risks, and claims that must be removed or qualified unless evidence arrives.
+
+Stop when beneficiary data lack authorization, safeguarding risks lack an owner, partner participation is unconfirmed, outcome attribution is asserted without design support, or capacity cannot be evidenced. Never fabricate impact, consent, partnerships, reach, or commitment. Require program, monitoring/evaluation, safeguarding, privacy, community/beneficiary, partner, and executive review.

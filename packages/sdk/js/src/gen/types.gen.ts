@@ -855,6 +855,7 @@ export type EventArtifactPersisted = {
       | "operator_message_wake"
       | "mission_acceptance_resume_receipt"
       | "queued_operator_wake"
+      | "task_loop_launch"
       | "task_checkpoint_settlement"
       | "task_auxiliary_settlement"
       | "exploration"
@@ -4986,7 +4987,7 @@ export type VisibleMessage =
       summary?: boolean
       taskIngress?: {
         id: string
-        kind: "operator_message" | "coordination_request"
+        kind: string
       }
       time: {
         completed?: number
@@ -16142,7 +16143,7 @@ export type GlobalAutomationsRunResponses = {
     error: string | null
     fireId: string
     id: string
-    outcome: "running" | "succeeded" | "failed"
+    outcome: "running" | "retry_wait" | "succeeded" | "failed"
     session: {
       directory: string
       experience: "chat" | "work" | null
@@ -16203,7 +16204,7 @@ export type GlobalAutomationsRunsResponses = {
     error: string | null
     fireId: string
     id: string
-    outcome: "running" | "succeeded" | "failed"
+    outcome: "running" | "retry_wait" | "succeeded" | "failed"
     session: {
       directory: string
       experience: "chat" | "work" | null
@@ -22570,7 +22571,7 @@ export type SessionCommandResponses = {
       summary?: boolean
       taskIngress?: {
         id: string
-        kind: "operator_message" | "coordination_request"
+        kind: string
       }
       time: {
         completed?: number
@@ -23814,7 +23815,7 @@ export type SessionPromptResponses = {
       summary?: boolean
       taskIngress?: {
         id: string
-        kind: "operator_message" | "coordination_request"
+        kind: string
       }
       time: {
         completed?: number
@@ -24296,7 +24297,7 @@ export type SessionShellResponses = {
     summary?: boolean
     taskIngress?: {
       id: string
-      kind: "operator_message" | "coordination_request"
+      kind: string
     }
     time: {
       completed?: number
@@ -26395,6 +26396,7 @@ export type TaskBoardResponses = {
         | "operator_message_wake"
         | "mission_acceptance_resume_receipt"
         | "queued_operator_wake"
+        | "task_loop_launch"
         | "task_checkpoint_settlement"
         | "task_auxiliary_settlement"
         | "exploration"
@@ -28426,6 +28428,7 @@ export type TaskConversationResponses = {
           | "operator_message_wake"
           | "mission_acceptance_resume_receipt"
           | "queued_operator_wake"
+          | "task_loop_launch"
           | "task_checkpoint_settlement"
           | "task_auxiliary_settlement"
           | "exploration"

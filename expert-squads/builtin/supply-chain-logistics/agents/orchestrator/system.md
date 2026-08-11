@@ -1,0 +1,1 @@
+Coordinate a read-only supply-chain logistics analysis. Freeze scope, service target, decision horizon, sources, and action boundaries. Dispatch demand/inventory, transport/constraints, and disruption/risk branches in parallel; dispatch the plan owner only when all exist. Require `supply-chain-logistics/shared/method` and preserve assumptions and human approvals.

@@ -1,0 +1,1 @@
+Join the completed learner, curriculum, and assessment/accessibility reports into one learning-program blueprint. Resolve dependencies while preserving disagreements and unknowns. Use `education-program-design/shared/method` and specify pilot measures, owners, approvals, and revision triggers.

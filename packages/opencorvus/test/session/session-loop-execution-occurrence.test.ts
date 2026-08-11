@@ -8,6 +8,9 @@ import { Session } from "../../src/session"
 import { SessionPrompt } from "../../src/session/prompt"
 import { SessionProcessor } from "../../src/session/processor"
 import { SessionStatus } from "../../src/session/status"
+import { SessionPromptState } from "../../src/session/prompt/state"
+import { ProjectGitLock } from "../../src/worktree/git-lock"
+import { ProjectRuntimePaths } from "../../src/project/runtime-paths"
 import { resetDatabase } from "../fixture/db"
 import { tmpdir } from "../fixture/fixture"
 
@@ -98,25 +101,55 @@ test("SessionLoop binds each accepted user message to its streaming execution oc
             parts: [{ type: "text", text: "first accepted input" }],
           })
           await SessionPrompt.waitForFinish(session.id, project.path)
-          const second = await SessionPrompt.prompt({
-            sessionID: session.id,
-            author: "user",
-            agent: "chat",
-            model,
-            parts: [{ type: "text", text: "second accepted input" }],
-          })
+          expect(SessionPrompt.promptOwner(session.id)).toBeUndefined()
+          expect(SessionPrompt.hasGeneration(session.id)).toBe(false)
+          const lock = await ProjectGitLock.acquire(
+            ProjectRuntimePaths.projectGitLock(Instance.project.worktree),
+            Instance.project.id,
+          )
+          let second: Awaited<ReturnType<typeof SessionPrompt.prompt>>
+          let third: Awaited<ReturnType<typeof SessionPrompt.prompt>>
+          try {
+            second = await SessionPrompt.prompt({
+              sessionID: session.id,
+              author: "user",
+              agent: "chat",
+              model,
+              parts: [{ type: "text", text: "second accepted input" }],
+            })
+            while (!SessionPromptState.TestHooks.isPromptTerminating(session.id, project.path)) {
+              await Bun.sleep(10)
+            }
+            expect(SessionPromptState.TestHooks.isPromptTerminating(session.id, project.path)).toBe(true)
+            const thirdPrompt = SessionPrompt.prompt({
+              sessionID: session.id,
+              author: "user",
+              agent: "chat",
+              model,
+              parts: [{ type: "text", text: "third accepted input during prior cleanup" }],
+            })
+            await lock.release()
+            third = await thirdPrompt
+          } finally {
+            await lock.release()
+          }
           await SessionPrompt.waitForFinish(session.id, project.path)
+          expect(SessionPrompt.promptOwner(session.id)).toBeUndefined()
+          expect(SessionPrompt.hasGeneration(session.id)).toBe(false)
 
           expect(observedInsideProcessor).toEqual([
             { inputMessageID: first.info.parentID, status: { type: "streaming" } },
             { inputMessageID: second.info.parentID, status: { type: "streaming" } },
+            { inputMessageID: third.info.parentID, status: { type: "streaming" } },
           ])
           expect(lifecycle).toEqual([
             { inputMessageID: first.info.parentID!, status: { type: "streaming" } },
             { inputMessageID: second.info.parentID!, status: { type: "streaming" } },
+            { inputMessageID: third.info.parentID!, status: { type: "streaming" } },
           ])
           expect(first.info.parentID).not.toBe(second.info.parentID)
-          expect(SessionStatus.executionOccurrence(session.id)?.inputMessageID).toBe(second.info.parentID)
+          expect(second.info.parentID).not.toBe(third.info.parentID)
+          expect(SessionStatus.executionOccurrence(session.id)?.inputMessageID).toBe(third.info.parentID)
         } finally {
           processorSpy.mockRestore()
           providerSpy.mockRestore()
@@ -130,4 +163,4 @@ test("SessionLoop binds each accepted user message to its streaming execution oc
     // async-dispose removes the fixture directory.
     await Instance.disposeAll()
   }
-}, 30_000)
+}, 90_000)

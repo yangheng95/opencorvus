@@ -68,7 +68,7 @@ describe("native Task package-tool process authority", () => {
         ])
         expect(concurrentIntrospection).toEqual(introspection)
         expect(introspection.description).toBe(
-          "Validate and publish one strict viral-content Artifact with exact typed predecessors and immutable resources.",
+          "Validate and publish one strict viral-content Artifact with exact typed predecessors and immutable resources. Publish viral-content/delivery before any interactive Artifact and give it exactly the six typed campaign predecessors; never include snapshot, document@1, table@1, or other interactive Artifact locators.",
         )
         expect(introspection.inputSchema.type).toBe("object")
         expect(Object.keys(introspection.inputSchema.properties as Record<string, unknown>)).toEqual([

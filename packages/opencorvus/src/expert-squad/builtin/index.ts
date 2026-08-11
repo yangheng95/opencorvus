@@ -10,6 +10,7 @@ import base_researcher_system_md from "./base/agents/base-researcher/system.md" 
 import base_tester_system_md from "./base/agents/base-tester/system.md" with { type: "text" }
 import base_visual_reviewer_system_md from "./base/agents/base-visual-reviewer/system.md" with { type: "text" }
 import base_orchestrator_system_md from "./base/agents/orchestrator/system.md" with { type: "text" }
+import base_method_skill_md from "./base/skills/method/SKILL.md" with { type: "text" }
 import advanced_expert_squad_jsonc from "./advanced/expert-squad.jsonc" with { type: "text" }
 import advanced_README_md from "./advanced/README.md" with { type: "text" }
 import advanced_selector_md from "./advanced/selector.md" with { type: "text" }
@@ -28,6 +29,7 @@ import advanced_system_integrity_reviewer_system_md from "./advanced/agents/syst
 import advanced_test_engineer_system_md from "./advanced/agents/test-engineer/system.md" with { type: "text" }
 import advanced_visual_reviewer_system_md from "./advanced/agents/visual-reviewer/system.md" with { type: "text" }
 import advanced_workload_reviewer_system_md from "./advanced/agents/workload-reviewer/system.md" with { type: "text" }
+import advanced_method_skill_md from "./advanced/skills/method/SKILL.md" with { type: "text" }
 import research_studio_expert_squad_jsonc from "./research-studio/expert-squad.jsonc" with { type: "text" }
 import research_studio_README_md from "./research-studio/README.md" with { type: "text" }
 import research_studio_selector_md from "./research-studio/selector.md" with { type: "text" }
@@ -85,6 +87,7 @@ export const builtInPackageSources = [
       "agents/base-tester/system.md": base_tester_system_md,
       "agents/base-visual-reviewer/system.md": base_visual_reviewer_system_md,
       "agents/orchestrator/system.md": base_orchestrator_system_md,
+      "skills/method/SKILL.md": base_method_skill_md,
     },
   },
   {
@@ -109,6 +112,7 @@ export const builtInPackageSources = [
       "agents/test-engineer/system.md": advanced_test_engineer_system_md,
       "agents/visual-reviewer/system.md": advanced_visual_reviewer_system_md,
       "agents/workload-reviewer/system.md": advanced_workload_reviewer_system_md,
+      "skills/method/SKILL.md": advanced_method_skill_md,
     },
   },
   {
@@ -127,11 +131,10 @@ export const builtInPackageSources = [
       "skills/analysis-report-quality/SKILL.md": research_studio_analysis_report_quality_skill_md,
       "skills/analysis-report-quality/references/decision-research-report-template.md":
         research_studio_decision_report_template_md,
-      "skills/analysis-report-quality/references/decision-research-report.schema.json":
-        exactTextImport(
-          research_studio_decision_report_schema_json,
-          "research-studio/skills/analysis-report-quality/references/decision-research-report.schema.json",
-        ),
+      "skills/analysis-report-quality/references/decision-research-report.schema.json": exactTextImport(
+        research_studio_decision_report_schema_json,
+        "research-studio/skills/analysis-report-quality/references/decision-research-report.schema.json",
+      ),
     },
   },
   {

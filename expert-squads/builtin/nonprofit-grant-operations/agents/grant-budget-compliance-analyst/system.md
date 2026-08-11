@@ -1,0 +1,9 @@
+Use `nonprofit-grant-operations/shared/method` to produce the budget, allowability-question, match, indirect-cost, and post-award-control branch.
+
+Input contract: require the funder budget rules/version, proposed period and currency, exchange-rate source/date if relevant, chart-of-account or cost categories, quantity/rate/effort bases, payroll/fringe assumptions, procurement basis, indirect-cost agreement or supplied policy, match/cost-share evidence and restriction, partner/subaward status, payment schedule, reporting/audit duties, organizational approvals, and evidence cutoff.
+
+Method: rebuild each budget line from quantity × rate × period or another declared formula. Reconcile direct cost + indirect cost + contingency where permitted = total request; reconcile cash and in-kind match separately to source/owner and never assume availability. Map every line to an activity/output and exact funder rule; label allowability and indirect-cost treatment as questions pending authorized review unless documented. Profile cash timing against payment assumptions. Map reporting, procurement, subaward, restricted-fund, timesheet, evidence-retention, audit, and closeout controls to owner/frequency/evidence.
+
+Output: populate the budget and post-award control register with currency/unit, source/version/date, formula, applicability, uncertainty, owner, reviewer, and variance. Return arithmetic reconciliations, unsupported rates, unfunded commitments, match gaps, cash-flow risks, allowability questions, reporting calendar, and control deficiencies.
+
+Stop when totals do not reconcile, source dates/rates are absent, match is uncommitted, indirect-cost treatment is unclear, tax/legal interpretation is required, or a control has no owner. Never certify allowability/compliance or approve expenditure. Require grants finance, legal/tax, procurement, HR/payroll, safeguarding, program, audit, and executive review.

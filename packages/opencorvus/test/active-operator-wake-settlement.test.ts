@@ -829,6 +829,7 @@ describe("active operator wake settlement", () => {
             payload: { ingress: "successor" },
           }),
         })
+        await waitForCancelledCheckpoint(first.taskID)
       },
     })
   }, 0)
@@ -1566,6 +1567,147 @@ describe("active operator wake settlement", () => {
               status: "delivery_failed",
               error_name: "QueuedWakeSettlementError",
               message: expect.stringContaining("completed without a final assistant message"),
+            },
+          },
+        })
+      },
+    })
+  })
+
+  test("settles the owning lifecycle wake before evaluating its terminal delivery phase", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Lifecycle wake terminal handoff",
+          request: "Complete from this exact worker lifecycle occurrence",
+        })
+        const event = {
+          note: "Complete from terminal worker lifecycle occurrence",
+          agentLifecycleDelivery: {
+            eventID: "evt_worker_terminal_handoff",
+            sessionID: "ses_worker_terminal_handoff",
+            dispatchID: "dispatch_worker_terminal_handoff",
+          },
+        }
+        let duplicateDispatchStatus = ""
+        configureTaskLoopRunner(async ({ event: currentEvent, wakeID }) => {
+          const finalMessageID = await persistFinalAssistantMessage({
+            rootSessionID,
+            taskIngress: { id: wakeID!, kind: "agent_lifecycle_delivery" },
+            text: "Completed the Task from the exact terminal worker lifecycle occurrence.",
+            parts: (sessionID, messageID) => [
+              completedToolPart({
+                sessionID,
+                messageID,
+                callID: "call_complete_from_lifecycle",
+                tool: "manage_task",
+                stateInput: { action: "complete_task" },
+              }),
+            ],
+          })
+          await terminalTask(requireTask(taskID), { status: "completed" }, "Lifecycle handoff completed")
+          duplicateDispatchStatus = await dispatchTaskLoop({ taskID, event: currentEvent })
+          return { finalMessageID }
+        })
+
+        expect(await dispatchTaskLoop({ taskID, event })).toBe("started")
+        await waitForQueueCompletionHooksForTest()
+        const rows = Database.use((db) =>
+          db
+            .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+            .all(),
+        )
+        const occurrence = rows.filter(
+          (row) => QueuedTaskIngressSchema.parse(row.payload).lifecycle_event_id === event.agentLifecycleDelivery.eventID,
+        )
+        expect({
+          taskStatus: deriveTaskStatus(requireTask(taskID)),
+          duplicateDispatchStatus,
+          occurrenceCount: occurrence.length,
+          occurrenceLabel: occurrence[0]?.label,
+          occurrenceDelivery: occurrence[0]
+            ? QueuedTaskIngressSchema.parse(occurrence[0].payload).delivery_result
+            : undefined,
+          rootWakeQueue: SessionPromptState.TestHooks.rootWakeQueueSnapshot(rootSessionID),
+        }).toEqual({
+          taskStatus: "completed",
+          duplicateDispatchStatus: "started",
+          occurrenceCount: 1,
+          occurrenceLabel: "drained",
+          occurrenceDelivery: {
+            status: "completed",
+            assistant_message_id: expect.any(String),
+            time_completed: expect.any(Number),
+          },
+          rootWakeQueue: undefined,
+        })
+      },
+    })
+  })
+
+  test("requeues a prior-process running ingress and drains its original occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Recovered running ingress",
+          request: "Resume the exact ingress left running by a prior host process",
+        })
+        let artifactID = ""
+        Database.transaction((db) => {
+          artifactID = persistQueuedTaskIntentInTransaction(db, {
+            task: requireTask(taskID),
+            intent: "retry",
+            supersededOperatorMessageIDs: [],
+            now: Date.now(),
+          })
+        })
+        const row = Database.use((db) =>
+          db
+            .select({ payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(eq(EngineArtifactTable.id, artifactID))
+            .get(),
+        )
+        const payload = QueuedTaskIngressSchema.parse(row?.payload)
+        updateEngineArtifact({
+          id: artifactID,
+          label: "running",
+          payload: { ...payload, queued_by_process_id: process.pid + 10_000 },
+        })
+        configureTaskLoopRunner(async () => ({
+          finalMessageID: await persistFinalAssistantMessage({
+            rootSessionID,
+            taskIngress: { id: artifactID, kind: "operator_intent" },
+            text: "Recovered and settled the original retry ingress.",
+            parts: (sessionID, messageID) => [
+              completedToolPart({
+                sessionID,
+                messageID,
+                callID: "call_recovered_ingress_decision",
+                tool: "dispatch_agent",
+                stateInput: { dispatch: { target: "base-developer" } },
+              }),
+            ],
+          }),
+        }))
+
+        expect(await requeueInterruptedRunningTaskIngresses()).toBe(1)
+        expect(await dispatchPersistedTaskLoop(taskID)).toBe("started")
+        await waitForQueueCompletionHooksForTest()
+        expect(latestQueuedOperatorWake(taskID)).toMatchObject({
+          label: "drained",
+          payload: {
+            wake_id: expect.any(String),
+            delivery_result: {
+              status: "completed",
+              assistant_message_id: expect.any(String),
+              time_completed: expect.any(Number),
             },
           },
         })

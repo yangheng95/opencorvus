@@ -230,7 +230,7 @@ export const generatedPublicMarketFacts = [
       "namespace": "builtin",
       "id": "frontend-innovate",
       "version": "2026.08.07.1",
-      "digest": "eba3abda6ceda00312b3b1dac08952a39f9436f31c028d9cf39fe26ca78ade9c"
+      "digest": "4d1cd768638f4a2476274af574cc015289d08e5962ab63391f6fddb3cd1558b2"
     },
     "name": "Frontend Innovate",
     "label": "Frontend Innovate",
@@ -418,12 +418,12 @@ export const generatedPublicMarketFacts = [
       }
     ],
     "projectedCapabilities": {
-      "skills": 0,
+      "skills": 1,
       "tools": 9,
       "mcp": 17
     },
     "packageOwnedCapabilities": {
-      "skills": 0,
+      "skills": 1,
       "tools": 1,
       "mcp": 0
     },
@@ -558,8 +558,8 @@ export const generatedPublicMarketFacts = [
     "identity": {
       "namespace": "builtin",
       "id": "equity-research",
-      "version": "2026.08.05.1",
-      "digest": "a580ded3f60a3612f3a49e4d3602878cd789f1973a3d0529e6f22fd1bb719b9a"
+      "version": "2026.08.11.1",
+      "digest": "09fa222ee4d40d6573270aa40fff1fc9540693e27ca90829ab2aa17af036b536"
     },
     "name": "Equity Research",
     "label": "Equity Research",
@@ -895,5 +895,869 @@ export const generatedPublicMarketFacts = [
       "fields": 0,
       "required": 0
     }
+  }
+] as const
+
+export const generatedShippedSquadFacts = [
+  {
+    "identity": "builtin/academic-paper-review",
+    "namespace": "builtin",
+    "id": "academic-paper-review",
+    "label": "Academic Paper Review",
+    "version": "2026.08.11.1",
+    "packageDigest": "8ef4c6b431ecbbddd2a0072f6c920a4d803bfc657032f43bba538243db031fe8",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/academic-paper-review-method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "academic-paper-review/shared/academic-paper-review-method"
+    ],
+    "agentCount": 8,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/advanced",
+    "namespace": "builtin",
+    "id": "advanced",
+    "label": "Advanced",
+    "version": "2026.08.09.1",
+    "packageDigest": "99b4b1d0b0d4f60aa991a5637d2731c1e4dc30551d62954a8e9512796943d274",
+    "installSurface": "embedded",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "advanced/shared/method"
+    ],
+    "agentCount": 14,
+    "workflowCount": 5
+  },
+  {
+    "identity": "builtin/agriculture-food-systems",
+    "namespace": "builtin",
+    "id": "agriculture-food-systems",
+    "label": "Agriculture and Food Systems",
+    "version": "2026.08.11.1",
+    "packageDigest": "fb1fab33fdfd819ef316175f725db58930664319a66fa5865e5aab21857bddd8",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "agriculture-food-systems/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/base",
+    "namespace": "builtin",
+    "id": "base",
+    "label": "Base",
+    "version": "2026.08.09.1",
+    "packageDigest": "3d85d18ace945b01ef9b4851c9d87443ded594f22a8d5368a66720bfe1353880",
+    "installSurface": "embedded",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "base/shared/method"
+    ],
+    "agentCount": 6,
+    "workflowCount": 3
+  },
+  {
+    "identity": "builtin/browser-research-acceptance",
+    "namespace": "builtin",
+    "id": "browser-research-acceptance",
+    "label": "Browser Research & Acceptance",
+    "version": "2026.08.10.1",
+    "packageDigest": "2546937834161b5ba42aefe9a804780fdc33013ce7415ca9fc8efee948174033",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/browser-evidence-acceptance/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "browser-research-acceptance/shared/browser-evidence-acceptance"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/cloud-platform-architecture",
+    "namespace": "builtin",
+    "id": "cloud-platform-architecture",
+    "label": "Cloud Platform Architecture",
+    "version": "2026.08.10.1",
+    "packageDigest": "89f797dffac08c9c469c2fb55f96414af2ea9662bd3f0027950fb5251c87f717",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "cloud-platform-architecture/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/commercial-legal",
+    "namespace": "builtin",
+    "id": "commercial-legal",
+    "label": "Commercial Legal",
+    "version": "2026.08.10.1",
+    "packageDigest": "d01aa5e31e4ea8458482ec76fb253ecf065a18250b123e8eeb05e14136c3c06a",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md",
+      "skills/workflow/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "commercial-legal/shared/method",
+      "commercial-legal/shared/workflow"
+    ],
+    "agentCount": 7,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/construction-project-controls",
+    "namespace": "builtin",
+    "id": "construction-project-controls",
+    "label": "Construction Project Controls",
+    "version": "2026.08.11.1",
+    "packageDigest": "e4889a5be11078e7dd668a4d9f5767131b11f2fb5a82b7eb54c6658426ea5736",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "construction-project-controls/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/customer-success",
+    "namespace": "builtin",
+    "id": "customer-success",
+    "label": "Customer Success Operations",
+    "version": "2026.08.10.1",
+    "packageDigest": "a8e3fe6c434ec7350a1d6a5ae4b89a874b5fa6ac02d6a1532c7a4ebb3d8d0b42",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "customer-success/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/cybersecurity-assurance",
+    "namespace": "builtin",
+    "id": "cybersecurity-assurance",
+    "label": "Cybersecurity Assurance",
+    "version": "2026.08.10.1",
+    "packageDigest": "00c7cef0ffd9cf21cd296af67fd0c6a2484fff3ce237c721cf1e48ba50bccd5e",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "cybersecurity-assurance/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/data-analysis",
+    "namespace": "builtin",
+    "id": "data-analysis",
+    "label": "Data Analysis & Business Insights",
+    "version": "2026.08.10.1",
+    "packageDigest": "1efa430eecb1e4a42c012bf4c3a9302551201744ce757bb13e93a73c6ca2cba2",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md",
+      "skills/workflow/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "data-analysis/shared/method",
+      "data-analysis/shared/workflow"
+    ],
+    "agentCount": 7,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/data-engineering-reliability",
+    "namespace": "builtin",
+    "id": "data-engineering-reliability",
+    "label": "Data Engineering Reliability",
+    "version": "2026.08.10.1",
+    "packageDigest": "f7273e3c27acbb60872e6ab16dbc587618b4cf7c463d27263775b98e803a2b08",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "data-engineering-reliability/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/deep-research",
+    "namespace": "builtin",
+    "id": "deep-research",
+    "label": "Deep Research",
+    "version": "2026.08.05.1",
+    "packageDigest": "989e2d91881e829fb00f321eb413ed58219d350054fb3c2c871f63e8c96fb251",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md",
+      "skills/workflow/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "deep-research/shared/method",
+      "deep-research/shared/workflow"
+    ],
+    "agentCount": 6,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/ecommerce-merchandising",
+    "namespace": "builtin",
+    "id": "ecommerce-merchandising",
+    "label": "Ecommerce Merchandising",
+    "version": "2026.08.10.1",
+    "packageDigest": "c1c2c2800ce2fc9b509393c6edeca75505269165aba4df4c3d99a6e750b5a107",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "ecommerce-merchandising/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/education-program-design",
+    "namespace": "builtin",
+    "id": "education-program-design",
+    "label": "Education Program Design",
+    "version": "2026.08.10.1",
+    "packageDigest": "4cbb0ef9cd9809134c29e4462ef8aaf992cdd18e4a3408ffa16c5fab267dfa0c",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "education-program-design/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/energy-utilities-planning",
+    "namespace": "builtin",
+    "id": "energy-utilities-planning",
+    "label": "Energy and Utilities Planning",
+    "version": "2026.08.11.1",
+    "packageDigest": "7a58a95d67c91420d36a52259ffa7da2e739fe18fb750ac93d53c8cadb142bb6",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "energy-utilities-planning/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/equity-research",
+    "namespace": "builtin",
+    "id": "equity-research",
+    "label": "Equity Research",
+    "version": "2026.08.11.1",
+    "packageDigest": "09fa222ee4d40d6573270aa40fff1fc9540693e27ca90829ab2aa17af036b536",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md",
+      "skills/workflow/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "equity-research/shared/method",
+      "equity-research/shared/workflow"
+    ],
+    "agentCount": 7,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/evolution-lab",
+    "namespace": "builtin",
+    "id": "evolution-lab",
+    "label": "Evolution Lab",
+    "version": "2026.08.06.3",
+    "packageDigest": "129d32df38e5db4d882fa55ebcf8ca191ac9545dd56ab782c397dd9ee45faa04",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/campaign/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "evolution-lab/shared/campaign"
+    ],
+    "agentCount": 7,
+    "workflowCount": 3
+  },
+  {
+    "identity": "builtin/finance-operations",
+    "namespace": "builtin",
+    "id": "finance-operations",
+    "label": "Finance Operations",
+    "version": "2026.08.10.1",
+    "packageDigest": "fe4b5a612de29aecdcb185ee42c5ab9aaad5dbc5622e2eb19e142620a6ff409a",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "finance-operations/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/frontend-innovate",
+    "namespace": "builtin",
+    "id": "frontend-innovate",
+    "label": "Frontend Innovate",
+    "version": "2026.08.07.1",
+    "packageDigest": "4d1cd768638f4a2476274af574cc015289d08e5962ab63391f6fddb3cd1558b2",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "frontend-innovate/shared/method"
+    ],
+    "agentCount": 12,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/frontend-replica",
+    "namespace": "builtin",
+    "id": "frontend-replica",
+    "label": "Frontend Replica",
+    "version": "2026.08.07.1",
+    "packageDigest": "e4ca4ad50570acc15dd2041d14e4766342e6b93ec17d7539f706be666a76ba5a",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/acceptance/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "frontend-replica/shared/acceptance"
+    ],
+    "agentCount": 10,
+    "workflowCount": 2
+  },
+  {
+    "identity": "builtin/healthcare-operations",
+    "namespace": "builtin",
+    "id": "healthcare-operations",
+    "label": "Healthcare Operations",
+    "version": "2026.08.10.1",
+    "packageDigest": "0ff88183c6d3661c5623598a23f76ddbe57c74e92ad36e8cfbe0ab3a52a94433",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "healthcare-operations/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/hospitality-service-operations",
+    "namespace": "builtin",
+    "id": "hospitality-service-operations",
+    "label": "Hospitality Service Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "4651cf9749c0a3df45c028ef18731fe35daabf34de9376edbf46bb732758cb42",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "hospitality-service-operations/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/hr-operations",
+    "namespace": "builtin",
+    "id": "hr-operations",
+    "label": "Human Resources & Organization Operations",
+    "version": "2026.08.10.1",
+    "packageDigest": "75e853720645947d7fffec360dea19258f66b59d7d6d9c920a15f1f87d966255",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md",
+      "skills/workflow/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "hr-operations/shared/method",
+      "hr-operations/shared/workflow"
+    ],
+    "agentCount": 7,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/insurance-claims-operations",
+    "namespace": "builtin",
+    "id": "insurance-claims-operations",
+    "label": "Insurance Claims Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "aac9706463bf091bf9fd2fa7c1d8ff1d1118fecc102c4e952cd0c86070b77db1",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "insurance-claims-operations/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/knowledge-base-operations",
+    "namespace": "builtin",
+    "id": "knowledge-base-operations",
+    "label": "Knowledge Base Operations",
+    "version": "2026.08.10.1",
+    "packageDigest": "69c21a25db8472a50cf39b3bf6d7995227a90fc1e8a4ccedcc3b42cb336b4382",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "knowledge-base-operations/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/life-sciences-regulatory",
+    "namespace": "builtin",
+    "id": "life-sciences-regulatory",
+    "label": "Life Sciences Regulatory Readiness",
+    "version": "2026.08.11.1",
+    "packageDigest": "e1fa7a06072573bdd4600866bac92843adb5f6fca355debf6f4a2804d9aa15d9",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "life-sciences-regulatory/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/localization-adaptation",
+    "namespace": "builtin",
+    "id": "localization-adaptation",
+    "label": "Localization & Adaptation",
+    "version": "2026.08.10.1",
+    "packageDigest": "9d22b5d4d8c49867991316de3982ba87ff6701d4d77ad835b6ef92898ad36d62",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "localization-adaptation/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/manufacturing-quality",
+    "namespace": "builtin",
+    "id": "manufacturing-quality",
+    "label": "Manufacturing Quality",
+    "version": "2026.08.10.1",
+    "packageDigest": "1a655157c2218a9dd6f6694defe1be8182d1c7a77eb95d2d02afb81e6041549b",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "manufacturing-quality/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/marketing-growth",
+    "namespace": "builtin",
+    "id": "marketing-growth",
+    "label": "Marketing & Growth Strategy",
+    "version": "2026.08.10.1",
+    "packageDigest": "766d208226101f439d955a2b432e9927d796a7fd4bc6c44c4820570e01dd54dd",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md",
+      "skills/workflow/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "marketing-growth/shared/method",
+      "marketing-growth/shared/workflow"
+    ],
+    "agentCount": 7,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/meeting-knowledge",
+    "namespace": "builtin",
+    "id": "meeting-knowledge",
+    "label": "Meeting Knowledge Operations",
+    "version": "2026.08.10.1",
+    "packageDigest": "b199d84c41257bd5fd6c9a9bec91501086c620287c0a8d61c90f82d9eb079f59",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "meeting-knowledge/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/nonprofit-grant-operations",
+    "namespace": "builtin",
+    "id": "nonprofit-grant-operations",
+    "label": "Nonprofit Grant Operations",
+    "version": "2026.08.11.1",
+    "packageDigest": "098acec6157dac99b0239222007c9f3f08544dd38c3b51a5ad1282224a703dfc",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "nonprofit-grant-operations/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/office-delivery",
+    "namespace": "builtin",
+    "id": "office-delivery",
+    "label": "Office Delivery",
+    "version": "2026.08.10.1",
+    "packageDigest": "7272fd11ed797116f181e939244b6050a5b6013ff86115d824752aee78507b0c",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/office-delivery-method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "office-delivery/shared/office-delivery-method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/omnichannel-distribution",
+    "namespace": "builtin",
+    "id": "omnichannel-distribution",
+    "label": "Omnichannel Distribution",
+    "version": "2026.08.10.1",
+    "packageDigest": "c21a4e7efe55238126b586ffb0eef33562fa84533ebf883c7f42965896449cb2",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/acceptance/SKILL.md",
+      "skills/method/SKILL.md",
+      "skills/workflow/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "omnichannel-distribution/shared/acceptance",
+      "omnichannel-distribution/shared/method",
+      "omnichannel-distribution/shared/workflow"
+    ],
+    "agentCount": 8,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/procurement-vendor",
+    "namespace": "builtin",
+    "id": "procurement-vendor",
+    "label": "Procurement & Vendor Decision",
+    "version": "2026.08.10.1",
+    "packageDigest": "83e2f99669b62d3fc8e66db6cb6ba059f1a531e60e56500796e741bf9b5c2f9a",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "procurement-vendor/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/product-management",
+    "namespace": "builtin",
+    "id": "product-management",
+    "label": "Product Management",
+    "version": "2026.08.10.1",
+    "packageDigest": "54fd443c094025eb467ba3342ed4c37803789fdb275088217a6873aecebd9a17",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/evidence-backed-product-planning/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "product-management/shared/evidence-backed-product-planning"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/product-video",
+    "namespace": "builtin",
+    "id": "product-video",
+    "label": "Product Video Production",
+    "version": "2026.08.10.1",
+    "packageDigest": "b94ee15a4529792d6e9f18f3883eb5665225f6538fe0a9455f269a6b629537f3",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "product-video/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/public-sector-service-delivery",
+    "namespace": "builtin",
+    "id": "public-sector-service-delivery",
+    "label": "Public Sector Service Delivery",
+    "version": "2026.08.11.1",
+    "packageDigest": "0c81f76f5ce8b713e3d14ba247b9415dfd6dc9514dda07e9bd056f07912f777e",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "public-sector-service-delivery/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/real-estate-due-diligence",
+    "namespace": "builtin",
+    "id": "real-estate-due-diligence",
+    "label": "Real Estate Due Diligence",
+    "version": "2026.08.10.1",
+    "packageDigest": "1b67c9b4b70ffc060660527ed0f567e30d6d584c592d5e85354e4078d301f9e6",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "real-estate-due-diligence/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/research-studio",
+    "namespace": "builtin",
+    "id": "research-studio",
+    "label": "Research Studio",
+    "version": "2026.08.08.1",
+    "packageDigest": "8fe3a75deac10bdac42a32ae7258ff81a7ac61a6d02dd1f4595f32749a3790e9",
+    "installSurface": "embedded",
+    "packageSkillPaths": [
+      "skills/analysis-report-quality/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "research-studio/shared/analysis-report-quality"
+    ],
+    "agentCount": 5,
+    "workflowCount": 3
+  },
+  {
+    "identity": "builtin/review-debug",
+    "namespace": "builtin",
+    "id": "review-debug",
+    "label": "Review & Debug",
+    "version": "2026.08.05.1",
+    "packageDigest": "ae3e4a3c83f9326872238b685c1b1fcd9e67b7e170f0635b819bda481f8f9325",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/workflow/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "review-debug/shared/workflow"
+    ],
+    "agentCount": 7,
+    "workflowCount": 3
+  },
+  {
+    "identity": "builtin/sales-strategy",
+    "namespace": "builtin",
+    "id": "sales-strategy",
+    "label": "Sales Strategy & Customer Research",
+    "version": "2026.08.10.1",
+    "packageDigest": "502289dccf0a3a09d826621527f4a1718db1baa82814f36a8251fc5faf1f9e8e",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md",
+      "skills/workflow/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "sales-strategy/shared/method",
+      "sales-strategy/shared/workflow"
+    ],
+    "agentCount": 7,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/scientific-research-design",
+    "namespace": "builtin",
+    "id": "scientific-research-design",
+    "label": "Scientific Research Design",
+    "version": "2026.08.10.1",
+    "packageDigest": "8dac43b5145ed6e0558c01d8eef72e77a3ad5ca45d9e50df3dfb65915b3c325d",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "scientific-research-design/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/seo-geo",
+    "namespace": "builtin",
+    "id": "seo-geo",
+    "label": "SEO & Generative Engine Optimization",
+    "version": "2026.08.10.1",
+    "packageDigest": "0e0da9b7c4f864177da37fdc815f1ee06ec8ce8c70387b30b942057d1c5b1ad8",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md",
+      "skills/workflow/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "seo-geo/shared/method",
+      "seo-geo/shared/workflow"
+    ],
+    "agentCount": 7,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/squad-sdk",
+    "namespace": "builtin",
+    "id": "squad-sdk",
+    "label": "Generate Agent Squads",
+    "version": "2026.08.09.1",
+    "packageDigest": "5b2e226db1e0c2d9852b68afcd9e944f353a073ee59311793405a94a53192461",
+    "installSurface": "embedded",
+    "packageSkillPaths": [
+      "skills/authoring/SKILL.md",
+      "skills/import/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "squad-sdk/shared/authoring",
+      "squad-sdk/shared/import"
+    ],
+    "agentCount": 4,
+    "workflowCount": 2
+  },
+  {
+    "identity": "builtin/supply-chain-logistics",
+    "namespace": "builtin",
+    "id": "supply-chain-logistics",
+    "label": "Supply Chain Logistics",
+    "version": "2026.08.10.1",
+    "packageDigest": "de01cb46926dfa4ff4654110b9e2b9de6eb223aa1a2de6d055f6de7f2f5a26a7",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "supply-chain-logistics/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/tax-compliance",
+    "namespace": "builtin",
+    "id": "tax-compliance",
+    "label": "Tax Compliance",
+    "version": "2026.08.10.1",
+    "packageDigest": "d6347bf9a9f878b855890237fb002cc68ea17b467da2d9a84596d0d3958d7075",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md",
+      "skills/workflow/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "tax-compliance/shared/method",
+      "tax-compliance/shared/workflow"
+    ],
+    "agentCount": 7,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/telecom-network-assurance",
+    "namespace": "builtin",
+    "id": "telecom-network-assurance",
+    "label": "Telecom Network Assurance",
+    "version": "2026.08.11.1",
+    "packageDigest": "d1e94fcaf5ad6777b02038c50ca07584034d3014cc4c91fac8a2ca6c4c657c97",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/method/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "telecom-network-assurance/shared/method"
+    ],
+    "agentCount": 4,
+    "workflowCount": 1
+  },
+  {
+    "identity": "builtin/viral-content",
+    "namespace": "builtin",
+    "id": "viral-content",
+    "label": "Viral Content",
+    "version": "2026.08.10.1",
+    "packageDigest": "a9dd1f81c5c0617f34d2117e37b9654975b295495e2950ce62d186c927cd37d4",
+    "installSurface": "bundled_market",
+    "packageSkillPaths": [
+      "skills/acceptance/SKILL.md",
+      "skills/method/SKILL.md",
+      "skills/workflow/SKILL.md"
+    ],
+    "packageSkillRefs": [
+      "viral-content/shared/acceptance",
+      "viral-content/shared/method",
+      "viral-content/shared/workflow"
+    ],
+    "agentCount": 7,
+    "workflowCount": 1
   }
 ] as const

@@ -1,0 +1,1 @@
+Coordinate read-only property diligence. Freeze property identity, transaction boundary, dates, sources, intended decision, professional reviewers, and prohibited actions. Dispatch document, market/financial, and physical/regulatory branches in parallel, then dispatch the pack owner only after all reports exist. Require `real-estate-due-diligence/shared/method`.

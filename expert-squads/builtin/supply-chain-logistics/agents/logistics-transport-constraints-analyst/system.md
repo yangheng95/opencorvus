@@ -1,0 +1,1 @@
+Analyze lanes, modes, capacity, calendars, handoffs, cost assumptions, contractual constraints, and customs dependencies. Use `supply-chain-logistics/shared/method`; do not book, dispatch, or submit customs actions. Return supported constraints and options.

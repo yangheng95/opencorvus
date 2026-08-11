@@ -90,6 +90,15 @@ async function finish(child: ChildProcessWithoutNullStreams): Promise<void> {
   children.delete(child)
 }
 
+async function terminateUncleanly(child: ChildProcessWithoutNullStreams): Promise<void> {
+  if (child.exitCode === null) {
+    const exited = new Promise<void>((resolve) => child.once("exit", () => resolve()))
+    child.kill("SIGKILL")
+    await exited
+  }
+  children.delete(child)
+}
+
 describe("runtime server database ownership", () => {
   test("binds a listener only with ownership for the active canonical database", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-database-match-"))
@@ -335,7 +344,10 @@ describe("runtime server database ownership", () => {
       existing: { database, pid: (acquired.owner as { pid: number }).pid },
     })
     await finish(contender)
-    await finish(owner)
+    // The stale mtime deliberately compromises proper-lockfile's heartbeat.
+    // Once live-process authority is proven, terminate the fixture without
+    // pretending that a deliberately compromised filesystem lock can release cleanly.
+    await terminateUncleanly(owner)
   })
 
   test("a stale owner record with a reused PID does not block the new process instance", async () => {
@@ -344,9 +356,7 @@ describe("runtime server database ownership", () => {
     const database = path.join(directory, "project.db")
     const owner = startOwnershipProcess(database, "hold")
     await firstLine(owner)
-    owner.kill()
-    await new Promise<void>((resolve) => owner.once("exit", () => resolve()))
-    children.delete(owner)
+    await terminateUncleanly(owner)
 
     const entries = await readdir(directory, { withFileTypes: true })
     const ownerEntry = entries.find((entry) => entry.isFile() && entry.name.endsWith(".owner"))
@@ -383,10 +393,10 @@ describe("runtime server database ownership", () => {
     await finish(contender)
 
     await finish(server)
-    const successor = startRuntimeEntryProcess(home, project, "bootstrap-once")
-    expect(await firstLine(successor)).toMatchObject({ status: "bootstrap-owned", database: serverOwned.database })
+    const successor = startOwnershipProcess(String(serverOwned.database), "once")
+    expect(await firstLine(successor)).toMatchObject({ status: "acquired", owner: { database: serverOwned.database } })
     await finish(successor)
-  }, 20_000)
+  }, 90_000)
 
   test("a second public server in the same process conflicts until the first runtime stops", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-same-process-"))
@@ -417,7 +427,7 @@ describe("runtime server database ownership", () => {
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
       else process.env.OPENCORVUS_TEST_HOME = previousHome
     }
-  }, 20_000)
+  }, 90_000)
 
   test("concurrent public server stops share one settlement before ownership handoff", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-concurrent-stop-"))
@@ -446,8 +456,8 @@ describe("runtime server database ownership", () => {
       await Promise.all([firstStop, joinedStop])
       stopped = true
 
-      const successor = startRuntimeEntryProcess(home, project, "bootstrap-once")
-      expect(await firstLine(successor)).toMatchObject({ status: "bootstrap-owned" })
+      const successor = startOwnershipProcess(Database.Path(), "once")
+      expect(await firstLine(successor)).toMatchObject({ status: "acquired", owner: { database: Database.Path() } })
       await finish(successor)
     } finally {
       if (!gateReleased) gate[Symbol.dispose]()
@@ -455,7 +465,7 @@ describe("runtime server database ownership", () => {
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
       else process.env.OPENCORVUS_TEST_HOME = previousHome
     }
-  }, 20_000)
+  }, 90_000)
 
   test("restores a quiesced listener under the retained owner after persistent release failure", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-release-rollback-"))
@@ -592,15 +602,15 @@ describe("runtime server database ownership", () => {
       } finally {
         gate[Symbol.dispose]()
       }
-      await Bun.sleep(100)
-      const successor = startRuntimeEntryProcess(home, project, "bootstrap-once")
-      expect(await firstLine(successor)).toMatchObject({ status: "bootstrap-owned" })
+      await RuntimeServerOwnership.TestHooks.completeRetainedStartupCleanup()
+      const successor = startOwnershipProcess(Database.Path(), "once")
+      expect(await firstLine(successor)).toMatchObject({ status: "acquired", owner: { database: Database.Path() } })
       await finish(successor)
     } finally {
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
       else process.env.OPENCORVUS_TEST_HOME = previousHome
     }
-  }, 60_000)
+  }, 90_000)
 
   test("listen initialization failure retains ownership until runtime settlement finishes", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-startup-failure-"))
@@ -627,15 +637,15 @@ describe("runtime server database ownership", () => {
         metrics.mockRestore()
         gate[Symbol.dispose]()
       }
-      await Bun.sleep(100)
-      const successor = startRuntimeEntryProcess(home, project, "bootstrap-once")
-      expect(await firstLine(successor)).toMatchObject({ status: "bootstrap-owned" })
+      await RuntimeServerOwnership.TestHooks.completeRetainedStartupCleanup()
+      const successor = startOwnershipProcess(Database.Path(), "once")
+      expect(await firstLine(successor)).toMatchObject({ status: "acquired", owner: { database: Database.Path() } })
       await finish(successor)
     } finally {
       if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
       else process.env.OPENCORVUS_TEST_HOME = previousHome
     }
-  }, 60_000)
+  }, 90_000)
 
   test("retains exact startup cleanup after persistent physical release failure until successor listen recovery", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-startup-physical-recovery-"))

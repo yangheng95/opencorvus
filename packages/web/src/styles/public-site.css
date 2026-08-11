@@ -869,6 +869,44 @@ button.primary-action {
   font-size: 13px;
 }
 
+.distribution-download {
+  display: grid;
+  gap: 12px;
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid rgb(255 255 255 / 38%);
+}
+
+.distribution-download-action {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 42px;
+  align-items: center;
+  padding: 0 16px;
+  border: 2px solid white;
+  background: white;
+  color: var(--cobalt-deep) !important;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.distribution-download-action:hover:not([aria-disabled="true"]) {
+  transform: translateY(-2px);
+}
+
+.distribution-download-action[aria-disabled="true"] {
+  cursor: wait;
+  opacity: 0.58;
+}
+
+.distribution-download span {
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1.45;
+  opacity: 0.86;
+}
+
 .market-workspace {
   display: grid;
   grid-template-columns: 258px minmax(0, 1fr);

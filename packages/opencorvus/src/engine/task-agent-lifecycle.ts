@@ -67,6 +67,7 @@ export async function requestTaskAgentLifecycleCancellation(input: {
           taskID: input.task.id,
           handle: input.handle ?? "task-agent-lifecycle.cancel",
           origin: { ...input.origin, targetSessionID: session.id },
+          settleBeforeReuse: true,
         })
       ) {
         cancelledSessions.push(session)

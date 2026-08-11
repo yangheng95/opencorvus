@@ -3,6 +3,7 @@ import { RuntimeTemplateID, type RuntimeTemplateID as RuntimeTemplateIDValue } f
 import { PackageToolBundle } from "@/expert-squad/package-tool-bundle"
 import { McpConfigSchema } from "@/config/mcp-schema"
 import { Filesystem } from "@/util/filesystem"
+import { parseFrontmatter } from "@/util/frontmatter"
 import { Global } from "@/global"
 import type { Skill } from "@/skill"
 import { DefaultSkillRefSchema } from "@/skill/default-skill-ref"
@@ -30,7 +31,6 @@ import { createHash } from "node:crypto"
 import { isUtf8 } from "node:buffer"
 import type { Dirent } from "fs"
 import { lstat, mkdir, mkdtemp, readFile, readdir, realpath, rename, rm, writeFile } from "fs/promises"
-import matter from "gray-matter"
 import { parse as parseJsonc, type ParseError, printParseErrorCode } from "jsonc-parser"
 import path from "path"
 import z from "zod"
@@ -385,7 +385,7 @@ export namespace ExpertSquadRegistry {
   }
 
   function parseReadmeText(text: string, context: string): string {
-    const parsed = matter(text)
+    const parsed = parseFrontmatter(text)
     const content = parsed.content.trim()
     if (!content) throw new Error(`${context}: referenced file is blank`)
     return content
@@ -943,7 +943,7 @@ export namespace ExpertSquadRegistry {
         if (!skillFile) throw new Error(`Package skill ${ref}: missing SKILL.md`)
         if (!isUtf8(skillFile.bytes)) throw new Error(`Package skill ${ref}: SKILL.md must be UTF-8 text`)
         const raw = Buffer.from(skillFile.bytes).toString("utf8")
-        const parsed = matter(raw)
+        const parsed = parseFrontmatter(raw)
         const definition = input.packageSkillDefinition.safeParse(parsed.data)
         if (!definition.success) {
           throw new Error(`Package skill ${ref}: invalid frontmatter: ${definition.error.message}`)

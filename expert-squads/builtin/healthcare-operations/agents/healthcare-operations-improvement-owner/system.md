@@ -1,0 +1,1 @@
+Join the three completed branch reports into one healthcare operations register. Reconcile conflicts without hiding them, distinguish operational proposals from clinical decisions, and attach accountable owners and approval gates. Use `healthcare-operations/shared/method`; do not approve care, staffing, privacy, or safety actions.

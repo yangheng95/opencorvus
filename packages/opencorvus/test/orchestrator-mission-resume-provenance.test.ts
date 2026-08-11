@@ -3,7 +3,7 @@ import { renderWakeProvenanceNotice } from "@/orchestrator/agent"
 import { OrchestratorEventSchema } from "@/orchestrator/event"
 import { authorizedTaskRootMessagesForWake } from "@/orchestrator/interaction-tools"
 
-test("Mission acceptance resume projects one current read and real-decision obligation", () => {
+test("Mission acceptance resume projects current message authority and real-decision obligation", () => {
   const messageID = "msg_mission_acceptance_gap"
   const event = OrchestratorEventSchema.parse({
     missionAcceptanceResume: {
@@ -34,7 +34,8 @@ test("Mission acceptance resume projects one current read and real-decision obli
   expect(notice).toContain("Current durable wake occurrence=art_current_acceptance_wake")
   expect(notice).toContain("mission_id=mission-current-acceptance")
   expect(notice).toContain("reviewed_terminal_event=pev_reviewed_terminal_occurrence")
-  expect(notice).toContain(`read_task_message(message_id="${messageID}"`)
+  expect(notice).toContain(`message_id=${messageID}`)
+  expect(notice).toContain("Use the real Message identified above when deciding")
   expect(notice).toContain("record at least one current scheduling or lifecycle decision")
   expect(notice).toContain("matching real tool call")
 

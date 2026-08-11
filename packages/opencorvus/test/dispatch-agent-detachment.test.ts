@@ -2,6 +2,7 @@ import { afterEach, describe, expect, test } from "bun:test"
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { detachDispatchExecution, waitForDetachedDispatchPipelinesForTest } from "@/orchestrator/dispatch-agent-tool"
 import { Instance } from "@/project/instance"
+import { InstanceBootstrap } from "@/project/bootstrap"
 import {
   runWithIndependentProjectIdentity,
   runWithInitializedIndependentProject,
@@ -99,6 +100,7 @@ describe("dispatch_agent detached execution", () => {
 
     await Instance.provide({
       directory: project.path,
+      init: InstanceBootstrap,
       fn: async () => {
         expectedProjectID = Instance.project.id
         const execute = async () => {

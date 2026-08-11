@@ -1,0 +1,1 @@
+Map the affected process, materials, equipment context, lots, time window, standards, records, changes, and missing evidence. Use `manufacturing-quality/shared/method`; do not change controls or equipment. Return traceable observations and boundaries.

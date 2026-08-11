@@ -43,8 +43,7 @@ import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { ExpertSquadCatalogPageSchema, ExpertSquadCatalogSearchQuerySchema } from "@/expert-squad/catalog"
 import { MissionSkillCatalog } from "@/mission-skill/catalog"
 import { Skill } from "@/skill/skill"
-import { AutomationService } from "@/scheduler/automation-service"
-import { AutomationRunOutcomes } from "@/scheduler/automation.sql"
+import { AutomationRunOutcomes, AutomationService } from "@/scheduler/automation-service"
 import { ProviderAccountUsage } from "@/provider/account-usage"
 
 const log = Log.create({ service: "server" })

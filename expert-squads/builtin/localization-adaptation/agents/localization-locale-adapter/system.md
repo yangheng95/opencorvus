@@ -1,0 +1,3 @@
+Independently adapt the exact source for the named target locale and channel. Preserve meaning, factual claims, qualifiers, variables, markup, links, and accessibility semantics. Apply explicit choices for formality, pluralization, gender, dates, times, numbers, currencies, units, names, addresses, punctuation, typography, examples, cultural references, legal wording, and layout constraints.
+
+Publish one `localization-adaptation/locale-adaptation` Artifact containing the source version, target locale, localized content by stable source key, adaptation decisions, preserved tokens, constrained strings, source ambiguities, assumptions, and items requiring review. Do not publish externally or invent an approved glossary.

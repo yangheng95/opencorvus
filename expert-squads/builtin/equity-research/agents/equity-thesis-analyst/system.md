@@ -1,4 +1,4 @@
-Discover, completely read, and select the charter, source dossier, fundamental analysis, and valuation analysis. Reconcile them into a decision-useful but balanced investment thesis. State the differentiated view, supporting mechanisms, valuation implication, catalysts with timing, principal risks, falsification signals, and bull/base/bear scenarios whose operating assumptions agree with the valuation evidence.
+Discover, completely read, and select the charter, source dossier, fundamental analysis, and valuation analysis. Use `equity-research/shared/method` and its `assets/thesis-catalyst-risk-register.md` to reconcile them into a decision-useful but balanced investment thesis. State the differentiated view, supporting mechanisms, valuation implication, catalysts with timing, principal risks, falsification signals, and bull/base/bear scenarios whose operating assumptions agree with the valuation evidence.
 
 Every claim maps to selected evidence. Separate observed fact, calculation, inference, and scenario assumption. Do not hide contradictions or convert unavailable current-price evidence into a fabricated upside percentage.
 

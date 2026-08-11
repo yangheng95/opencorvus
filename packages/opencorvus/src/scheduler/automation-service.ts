@@ -38,6 +38,8 @@ import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
 import { createHash } from "node:crypto"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 
+export { AutomationRunOutcomes }
+
 export type AutomationTarget =
   | { scope: "session"; sessionId: string }
   | { scope: "project"; projectIds: string[] }
@@ -927,7 +929,7 @@ export namespace AutomationService {
       reason: "user message created before scheduled wait due time",
     })
     if (isTaskOperatorMessage(info)) return
-    const taskID = taskIDForSession(info.sessionID)
+    const taskID = await taskIDForDirectSchedulerActivity(info.sessionID)
     if (!taskID) return
     await triggerTaskWaitFromActivity({
       taskId: taskID,
@@ -941,7 +943,7 @@ export namespace AutomationService {
     if (part.type !== "tool") return
     if (part.tool === "wait") return
     if (part.state.status !== "completed" && part.state.status !== "error") return
-    const taskID = taskIDForSession(part.sessionID)
+    const taskID = await taskIDForDirectSchedulerActivity(part.sessionID)
     if (!taskID) return
     await triggerTaskWaitFromActivity({
       taskId: taskID,
@@ -949,6 +951,18 @@ export namespace AutomationService {
       source: "message.part.updated",
       detail: `terminal ${part.tool} tool result ${part.id} arrived in session ${part.sessionID}`,
     })
+  }
+
+  export async function taskIDForDirectSchedulerActivity(sessionID: string): Promise<string | undefined> {
+    const taskID = taskIDForSession(sessionID)
+    if (!taskID) return undefined
+    const projectID = Instance.project.id
+    const [task, session] = await Promise.all([
+      assertTaskRootSessionInProject({ taskId: taskID, projectId: projectID }),
+      Session.getInProject({ sessionID, projectID }),
+    ])
+    if (session.kind !== "orchestrator" || session.parentID !== task.sessionID) return undefined
+    return taskID
   }
 
   function isSchedulerWakeMessage(info: Message.User): boolean {

@@ -161,7 +161,7 @@ export namespace SessionLoop {
     }
   }
 
-  const { log, state, cancel, finish, flushCallbacks, start, resume, attach, touch } = SessionPromptState
+  const { log, state, cancel, finish, flushCallbacks, enterLoop, touch } = SessionPromptState
 
   type StrictAITool = AITool & { strict?: boolean }
   const resolvedToolSkillSurfaces = new WeakMap<Record<string, AITool>, ResolvedSkillSurface>()
@@ -1862,9 +1862,13 @@ export namespace SessionLoop {
     const directory = session.directory
     assertSessionLoopRuntimeContract(SessionRuntimeContractStore.get(sessionID), `SessionLoop session ${sessionID}`)
 
-    const abort = resume_existing ? resume(sessionID, directory) : start(sessionID, directory)
-    const startedOwner = !resume_existing && abort !== undefined
-    const firstResult = attach(sessionID, directory, resultMode, input.reply_to_message_id)
+    const { abort, startedOwner, firstResult } = await enterLoop({
+      sessionID,
+      directory,
+      resumeExisting: resume_existing === true,
+      resultMode,
+      replyToMessageID: input.reply_to_message_id,
+    })
     try {
       if (input.reply_to_message_id) {
         const persistedReply = await completedReplyToUserMessage(

@@ -1,0 +1,1 @@
+Analyze authorized catalog evidence: identifiers, taxonomy, attributes, imagery and copy gaps, availability signals, duplication, and provenance. Use `ecommerce-merchandising/shared/method`; do not edit, publish, or delist products. Return a source-linked catalog opportunity map.

@@ -290,6 +290,7 @@ function acceptTaskLoopLaunch(taskID: string): void {
   })()
   authority.settleWith(acceptance)
 }
+const terminalIngressCompletions = new Map<string, Promise<void>>()
 
 function artifactPayloadRecord(payload: unknown): Record<string, unknown> {
   return payload && typeof payload === "object" && !Array.isArray(payload) ? (payload as Record<string, unknown>) : {}
@@ -2057,7 +2058,11 @@ function settleAbortedTaskLoopCompletionHandoff(input: {
   })
 }
 
-async function retryFailedExactTerminalIngress(taskID: string, wakeID: string): Promise<boolean> {
+async function retryFailedExactTerminalIngress(
+  taskID: string,
+  wakeID: string,
+  options: { dispatchAfterReset?: boolean } = {},
+): Promise<boolean> {
   const row = Database.use((db) =>
     db
       .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
@@ -2144,6 +2149,7 @@ async function retryFailedExactTerminalIngress(taskID: string, wakeID: string): 
     return true
   })
   if (!reset) return false
+  if (options.dispatchAfterReset === false) return true
   const result = await dispatchPersistedTaskLoop(taskID)
   if (result === "started" || result === "queued") return true
   log.warn("exact terminal ingress retry was not accepted", { taskID, wakeID, sourceKind: ingress.source_kind, result })
@@ -2155,30 +2161,57 @@ function attachTerminalIngressCompletion(
   wake: NonNullable<ReturnType<typeof findNextPendingQueuedOperatorWake>>,
   directory: string,
 ): void {
+  if (terminalIngressCompletions.has(wake.id)) return
   const authority = RuntimeExecutionSettlement.reserve(
     "engine_queue_completion",
     `terminal-ingress-completion:${task.id}:${wake.id}`,
   )
-  let completion: Promise<void>
+  let retryAfterOwnershipRelease = false
+  let deliveryCompletion: Promise<void>
   try {
-    completion = Database.runOutsideContext(() =>
+    deliveryCompletion = Database.runOutsideContext(() =>
       runOutsideInstanceContext(() =>
-      runWithIndependentProjectIdentity({
-        directory,
-        fn: () =>
-          deliverTerminalTaskIngress({
-            task,
-            ingressArtifactID: wake.id,
-            ingress: wake.ingress,
-          }),
-      })
+        SessionPromptState.waitForRootWakeSettlement(wake.rootSessionID, wake.id)
+          .then(() =>
+            runWithIndependentProjectIdentity({
+              directory,
+              fn: () => {
+                const currentWake = Database.use((db) =>
+                  db
+                    .select({ label: EngineArtifactTable.label })
+                    .from(EngineArtifactTable)
+                    .where(
+                      and(
+                        eq(EngineArtifactTable.id, wake.id),
+                        eq(EngineArtifactTable.task_id, task.id),
+                        eq(EngineArtifactTable.kind, "queued_operator_wake"),
+                      ),
+                    )
+                    .get(),
+                )
+                if (currentWake?.label !== "pending") return undefined
+                return deliverTerminalTaskIngress({
+                  task,
+                  ingressArtifactID: wake.id,
+                  ingress: wake.ingress,
+                })
+              },
+            }),
+          )
         .then(async (delivery) => {
-          if (!delivery.settled) return
+          if (!delivery?.settled) return
           await runWithIndependentProjectIdentity({
             directory,
             fn: async () => {
               if (delivery.result.status === "delivery_failed") {
-                if (await retryFailedExactTerminalIngress(task.id, wake.id)) return
+                if (
+                  await retryFailedExactTerminalIngress(task.id, wake.id, {
+                    dispatchAfterReset: false,
+                  })
+                ) {
+                  retryAfterOwnershipRelease = true
+                  return
+                }
               }
               if (hasQueuedTaskEvent(task.id)) await drainQueuedTaskEvent(task.id)
             },
@@ -2195,7 +2228,14 @@ function attachTerminalIngressCompletion(
           await runWithIndependentProjectIdentity({
             directory,
             fn: async () => {
-              if (await retryFailedExactTerminalIngress(task.id, wake.id)) return
+              if (
+                await retryFailedExactTerminalIngress(task.id, wake.id, {
+                  dispatchAfterReset: false,
+                })
+              ) {
+                retryAfterOwnershipRelease = true
+                return
+              }
               if (hasQueuedTaskEvent(task.id)) await drainQueuedTaskEvent(task.id)
             },
           })
@@ -2206,9 +2246,26 @@ function attachTerminalIngressCompletion(
     authority.settle()
     throw error
   }
+  let completion: Promise<void>
+  completion = deliveryCompletion
+    .finally(() => {
+      if (terminalIngressCompletions.get(wake.id) === completion) terminalIngressCompletions.delete(wake.id)
+    })
+    .then(async () => {
+      if (!retryAfterOwnershipRelease) return
+      await runWithIndependentProjectIdentity({
+        directory,
+        fn: async () => {
+          if (hasQueuedTaskEvent(task.id)) await drainQueuedTaskEvent(task.id)
+        },
+      })
+    })
+  terminalIngressCompletions.set(wake.id, completion)
   loopCompletionHooksForTest.add(completion)
   authority.settleWith(completion)
-  void completion.finally(() => loopCompletionHooksForTest.delete(completion))
+  void completion.finally(() => {
+    loopCompletionHooksForTest.delete(completion)
+  })
 }
 
 export async function waitForQueueCompletionHooksForTest(): Promise<void> {

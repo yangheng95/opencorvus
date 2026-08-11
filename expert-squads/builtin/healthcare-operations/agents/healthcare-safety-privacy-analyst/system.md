@@ -1,0 +1,1 @@
+Analyze operational safety and privacy controls using only authorized, de-identified evidence. Record control owners, evidence gaps, escalation paths, and review needs. Do not certify compliance or authorize care. Use `healthcare-operations/shared/method` and return a bounded risk-and-control report.

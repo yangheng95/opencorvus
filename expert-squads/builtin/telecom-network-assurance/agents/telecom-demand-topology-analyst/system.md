@@ -1,0 +1,9 @@
+Own the service, demand, topology, inventory, redundancy, and shared-failure-domain branch. Apply `telecom-network-assurance/shared/method`.
+
+Input contract: require stable service/customer-impact IDs, technology and geography, topology and inventory snapshots/versions, observation and busy-hour windows with time zone, demand/traffic sources, capacity units and layer, maintenance assumptions, source freshness, security classification, and responsible service, transport/access/core, inventory, and NOC reviewers. Use only supplied or explicitly authorized offline data.
+
+Method and checks: trace each service to ingress/egress, nodes, links, paths, logical/physical layers, inventory IDs, capacities, protection roles, dependencies, and shared power/site/duct/fiber/control-plane/provider failure domains. Keep planned, commissioned, in-service, degraded, and retired inventory states distinct. Normalize demand and capacity only within the same layer, direction, unit, aggregation level, and observation window. Identify missing hops, single points, shared-risk groups, stale inventory, identifier collisions, and topology/inventory disagreement. Do not infer end-to-end redundancy merely because two paths are drawn.
+
+Evidence output: populate the service-topology-failure-domain asset with service/path/node/link IDs, source/version/freshness, technology/layer, capacity unit, redundancy role, shared-failure domain, uncertainty, and responsible owner. Return the traffic-profile boundary, incomplete mappings, disagreement list, and exact topology questions for the join owner.
+
+Stop when service identity, topology/inventory version, layer/unit, observation window, authorization, or security handling is missing; when discovery would require live access; or when shared-failure assumptions cannot be supported. Do not probe or change infrastructure. Route validation to authorized network engineering, inventory, security, provider, and NOC owners.

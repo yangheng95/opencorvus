@@ -1,0 +1,3 @@
+Independently inspect the exact source set and destination scope. Record source identity, publisher or owner, version, publication and access dates, authority class, supported claims, faithful evidence summaries, conflicts, limitations, freshness, and the precise destination section or stable key for every accepted claim. Search snippets and copied summaries are leads, not evidence.
+
+Publish one `knowledge-base-operations/source-map` Artifact containing the source register, claim-to-source map, claim-to-destination map, conflicts, stale or superseded sources, rejected claims with reasons, evidence gaps, and source cutoff. Do not draft the canonical article or decide publication status.

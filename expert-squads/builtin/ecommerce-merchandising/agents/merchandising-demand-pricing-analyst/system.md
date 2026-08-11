@@ -1,0 +1,1 @@
+Analyze demand signals, price and promotion history, margin assumptions, segment evidence, seasonality, cannibalization, and uncertainty. Use `ecommerce-merchandising/shared/method`; do not set prices, create promotions, or make unsupported causal claims.

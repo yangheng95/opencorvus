@@ -1101,7 +1101,7 @@ export const SessionRoutes = lazy(() =>
           reason: "session aborted",
           targetSessionID: session.id,
         })
-        cancelSessionPromptInScope({ session, origin })
+        cancelSessionPromptInScope({ session, origin, settleBeforeReuse: true })
         TaskQueueService.cancelSessionPrompts({
           sessionIDs: [sessionID],
           reason: "session aborted",

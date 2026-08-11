@@ -1,0 +1,1 @@
+Analyze capacity and access evidence: demand windows, staffing assumptions, resource constraints, wait patterns, equity considerations, and uncertainty. Do not schedule care or make patient decisions. Use `healthcare-operations/shared/method` and return scenarios with explicit assumptions and human review gates.

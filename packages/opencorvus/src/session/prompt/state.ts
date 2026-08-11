@@ -62,6 +62,10 @@ export namespace SessionPromptState {
       }[]
       finished: Promise<void>
       finish(error?: unknown): void
+      reusable: Promise<void>
+      reuse(): void
+      terminating?: boolean
+      cancellationSettlementRequired?: boolean
       timeCreated: number
       timeUpdated: number
       timeCancelled?: number
@@ -93,6 +97,9 @@ export namespace SessionPromptState {
     outcome: "pending" | "succeeded" | "failed"
     retryCleanup?: () => Promise<void>
     settle: (error?: unknown) => void
+    reusable: Promise<void>
+    reuse(): void
+    settlementRequired: boolean
     retryRunning?: boolean
     retryTimer?: ReturnType<typeof setTimeout>
   }
@@ -177,11 +184,17 @@ export namespace SessionPromptState {
   }
 
   export function start(sessionID: string, directory?: string) {
-    if (existingStateEntryBySessionID(sessionID)) return
     if (processSettlementGate) throw new Error("Cannot start a Session prompt during runtime settlement")
     const priorCancellation = cancellationReceipts.get(sessionID)
-    if (priorCancellation?.outcome === "succeeded") cancellationReceipts.delete(sessionID)
+    if (priorCancellation?.outcome === "succeeded" && !priorCancellation.settlementRequired) {
+      priorCancellation.reuse()
+      cancellationReceipts.delete(sessionID)
+    }
     if (priorCancellation && priorCancellation.outcome !== "succeeded") throw new BusyError(sessionID)
+    if (priorCancellation?.settlementRequired) throw new BusyError(sessionID)
+    const existing = existingStateEntryBySessionID(sessionID)?.promptState[sessionID]
+    if (existing?.terminating) throw new BusyError(sessionID)
+    if (existing) return
     if (promptStartReservations.has(sessionID) || promptSettlementReservations.has(sessionID)) {
       throw new BusyError(sessionID)
     }
@@ -189,12 +202,15 @@ export namespace SessionPromptState {
     const directoryOwnership = WorktreeOwnershipCriticalSection.acquire(key)
     const controller = new AbortController()
     const finished = createFinishSignal()
+    const settlement = createFinishSignal()
     const now = Date.now()
     s[sessionID] = {
       abort: controller,
       callbacks: [],
       finished: finished.finished,
       finish: finished.finish,
+      reusable: Promise.all([finished.finished.catch(() => undefined), settlement.finished]).then(() => undefined),
+      reuse: settlement.finish,
       timeCreated: now,
       timeUpdated: now,
       directoryOwnership,
@@ -329,6 +345,7 @@ export namespace SessionPromptState {
     if (!match) {
       return Promise.reject(new Error(`Session ${sessionID} prompt owner missing during attach`))
     }
+    if (match.terminating) return Promise.reject(new BusyError(sessionID))
     promptOwnerCapture.getStore()?.(match.abort.signal)
     if (match.abort.signal.aborted || match.timeCancelled !== undefined) {
       if (!match.cancellation) {
@@ -340,6 +357,35 @@ export namespace SessionPromptState {
     return new Promise<Message.WithParts>((resolve, reject) => {
       match.callbacks.push({ resolve, reject, resultMode, replyToMessageID })
     })
+  }
+
+  export async function enterLoop(input: {
+    sessionID: string
+    directory: string
+    resumeExisting: boolean
+    resultMode: ResultMode
+    replyToMessageID?: string
+  }): Promise<{ abort: AbortSignal | undefined; startedOwner: boolean; firstResult: Promise<Message.WithParts> }> {
+    while (true) {
+      const match = existingStateEntryForSession(input.sessionID, input.directory).promptState?.[input.sessionID]
+      if (match?.terminating) {
+        await match.reusable
+        continue
+      }
+      const receipt = cancellationReceipts.get(input.sessionID)
+      if (receipt?.directory === directoryKey(input.directory)) {
+        await receipt.reusable
+        continue
+      }
+      const abort = input.resumeExisting
+        ? resume(input.sessionID, input.directory)
+        : start(input.sessionID, input.directory)
+      return {
+        abort,
+        startedOwner: !input.resumeExisting && abort !== undefined,
+        firstResult: attach(input.sessionID, input.directory, input.resultMode, input.replyToMessageID),
+      }
+    }
   }
 
   export function hasOwnedPrompt(sessionID: string, directory?: string): boolean {
@@ -384,6 +430,17 @@ export namespace SessionPromptState {
       queuePosition: position + 1,
       currentOwnerWakeID: wakeIDs[0]!,
     }
+  }
+
+  /**
+   * Wait for the current physical owner of one durable wake identity to
+   * settle. Callers may then re-evaluate durable state before deciding
+   * whether the same wake still requires a different delivery phase.
+   */
+  export async function waitForRootWakeSettlement(rootSessionID: string, wakeID: string): Promise<void> {
+    const execution = rootWakeQueues.get(rootSessionID)?.entries.get(wakeID)
+    if (!execution) return
+    await execution.catch(() => undefined)
   }
 
   /**
@@ -606,7 +663,7 @@ export namespace SessionPromptState {
     return cancellationReceipt(sessionID, directory)?.finished ?? Promise.resolve()
   }
 
-  function startCancellationReceiptRetry(receipt: CancellationReceipt): void {
+  function startCancellationReceiptRetry(sessionID: string, receipt: CancellationReceipt): void {
     if (receipt.outcome !== "failed" || !receipt.retryCleanup || receipt.retryRunning || receipt.retryTimer) return
     const retry = receipt.retryCleanup
     receipt.outcome = "pending"
@@ -619,13 +676,17 @@ export namespace SessionPromptState {
           receipt.outcome = "succeeded"
           receipt.retryCleanup = undefined
           receipt.settle()
+          if (!receipt.settlementRequired) {
+            receipt.reuse()
+            if (cancellationReceipts.get(sessionID) === receipt) cancellationReceipts.delete(sessionID)
+          }
         },
         () => {
           receipt.retryRunning = false
           receipt.outcome = "failed"
           const timer = setTimeout(() => {
             if (receipt.retryTimer === timer) receipt.retryTimer = undefined
-            startCancellationReceiptRetry(receipt)
+            startCancellationReceiptRetry(sessionID, receipt)
           }, 250)
           timer.unref()
           receipt.retryTimer = timer
@@ -638,8 +699,30 @@ export namespace SessionPromptState {
     if (!receipt) return undefined
     if (directory !== undefined && receipt.directory !== directoryKey(directory)) return undefined
     if (owner !== undefined && receipt.owner !== owner) return undefined
-    startCancellationReceiptRetry(receipt)
+    startCancellationReceiptRetry(sessionID, receipt)
     return receipt
+  }
+
+  export function joinCancellationSettlement(input: {
+    sessionID: string
+    directory: string
+    owner?: AbortSignal
+    settlementRequired: boolean
+  }) {
+    const receipt = cancellationReceipts.get(input.sessionID)
+    if (!receipt) return { status: "missing" as const }
+    if (receipt.directory !== directoryKey(input.directory) || (input.owner && receipt.owner !== input.owner)) {
+      return { status: "mismatch" as const }
+    }
+    const match = existingStateEntryForSession(input.sessionID, input.directory).promptState?.[input.sessionID]
+    if (match) {
+      if (match.abort.signal !== receipt.owner) return { status: "mismatch" as const }
+      if (input.settlementRequired) {
+        match.cancellationSettlementRequired = true
+        receipt.settlementRequired = true
+      }
+    }
+    return { status: "joined" as const, receipt }
   }
 
   export function clearCancellationReceipt(sessionID: string, owner: AbortSignal): void {
@@ -647,12 +730,16 @@ export namespace SessionPromptState {
     // A failed cleanup is process-local quarantine evidence. It must remain
     // visible to every later cancellation barrier and prevent a new prompt
     // generation from overwriting the owner until the runtime is restarted.
-    if (receipt?.owner === owner && receipt.outcome === "succeeded") cancellationReceipts.delete(sessionID)
+    if (receipt?.owner !== owner || receipt.outcome !== "succeeded") return
+    receipt.reuse()
+    cancellationReceipts.delete(sessionID)
   }
 
   export function resume(sessionID: string, directory?: string) {
+    if (cancellationReceipts.has(sessionID)) throw new BusyError(sessionID)
     const { promptState: s } = existingStateEntryForSession(sessionID, directory)
     if (!s?.[sessionID]) return
+    if (s[sessionID].terminating) throw new BusyError(sessionID)
 
     return s[sessionID].abort.signal
   }
@@ -661,13 +748,17 @@ export namespace SessionPromptState {
     sessionID: string,
     directory: string | undefined,
     match: NonNullable<PromptState[string]>,
-    options: { origin: ExecutionCancellationOrigin },
+    options: { origin: ExecutionCancellationOrigin; settlementRequired?: boolean },
   ): CancellationReceipt {
     log.info("cancel", { sessionID })
     if (match.cancellation) {
       const receipt = cancellationReceipts.get(sessionID)
       if (receipt?.owner === match.abort.signal) {
-        startCancellationReceiptRetry(receipt)
+        if (options.settlementRequired) {
+          match.cancellationSettlementRequired = true
+          receipt.settlementRequired = true
+        }
+        startCancellationReceiptRetry(sessionID, receipt)
         return receipt
       }
       throw new Error(`Session ${sessionID} cancelled prompt owner is missing its settlement receipt`)
@@ -678,9 +769,11 @@ export namespace SessionPromptState {
       message: options.origin.reason,
       origin: options.origin,
     })
+    if (options.settlementRequired) match.cancellationSettlementRequired = true
     SessionStatus.abortActivityMonitor(sessionID, error)
     match.cancellation = error
     const resourceSettlement = createFinishSignal()
+    const reuseSettlement = createFinishSignal()
     const receipt: CancellationReceipt = {
       directory: directoryKey(directory),
       owner: match.abort.signal,
@@ -688,6 +781,14 @@ export namespace SessionPromptState {
       finished: resourceSettlement.finished,
       outcome: "pending",
       settle: resourceSettlement.finish,
+      reusable: Promise.all([resourceSettlement.finished.catch(() => undefined), reuseSettlement.finished]).then(
+        () => undefined,
+      ),
+      reuse() {
+        match.reuse()
+        reuseSettlement.finish()
+      },
+      settlementRequired: options.settlementRequired === true,
     }
     cancellationReceipts.set(sessionID, receipt)
     match.abort.abort(error)
@@ -710,7 +811,7 @@ export namespace SessionPromptState {
   export function cancel(
     sessionID: string,
     directory: string | undefined,
-    options: { origin: ExecutionCancellationOrigin },
+    options: { origin: ExecutionCancellationOrigin; settlementRequired?: boolean },
   ): CancellationReceipt | undefined {
     const match = existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]
     if (!match) return undefined
@@ -721,7 +822,7 @@ export namespace SessionPromptState {
     sessionID: string,
     directory: string,
     owner: AbortSignal,
-    options: { origin: ExecutionCancellationOrigin },
+    options: { origin: ExecutionCancellationOrigin; settlementRequired?: boolean },
   ): CancellationReceipt | undefined {
     const match = existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]
     if (!match || match.abort.signal !== owner) return undefined
@@ -751,6 +852,9 @@ export namespace SessionPromptState {
         cancellationReceipts: cancellationReceipts.has(sessionID) ? 1 : 0,
       }
     },
+    isPromptTerminating(sessionID: string, directory?: string) {
+      return existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]?.terminating === true
+    },
   }
 
   async function terminatePromptResources(input: {
@@ -765,6 +869,11 @@ export namespace SessionPromptState {
     const { key, promptState } = entry
     const match = promptState?.[input.sessionID]
     if (input.abort && match && match.abort.signal !== input.abort) return false
+    if (match?.terminating) {
+      await match.finished
+      return true
+    }
+    if (match) match.terminating = true
     const errors: unknown[] = []
     let worktreeReleaseError: unknown
     try {
@@ -791,14 +900,14 @@ export namespace SessionPromptState {
         } catch (ownershipError) {
           errors.push(ownershipError)
         }
-        delete promptState[input.sessionID]
-        deleteDirectoryIfEmpty(key, promptState)
         try {
           await releaseManagedWorktreeSessionOwner(match.worktreeOwnerAuthority)
         } catch (releaseError) {
           worktreeReleaseError = releaseError
           errors.push(releaseError)
         }
+        delete promptState[input.sessionID]
+        deleteDirectoryIfEmpty(key, promptState)
       }
       messageOwnersBySession.delete(input.sessionID)
       promptStartReservations.delete(input.sessionID)
@@ -816,9 +925,18 @@ export namespace SessionPromptState {
         receipt.retryCleanup = async () => {
           await releaseManagedWorktreeSessionOwner(match.worktreeOwnerAuthority)
         }
-        startCancellationReceiptRetry(receipt)
+        startCancellationReceiptRetry(input.sessionID, receipt)
       } else {
         receipt.settle(terminalError)
+      }
+    }
+    if (!terminalError && match) {
+      if (!receipt || !receipt.settlementRequired) {
+        match.reuse()
+        if (receipt?.owner === match.abort.signal) {
+          receipt.reuse()
+          cancellationReceipts.delete(input.sessionID)
+        }
       }
     }
     match?.finish(terminalError)

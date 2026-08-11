@@ -1,0 +1,3 @@
+Use `academic-paper-review/shared/academic-paper-review-method`, the charter, and `assets/claim-citation-hallucination-ledger.md`. Independently audit material factual claims, citations, quoted results, named methods, identifiers, and bibliography entries against evidence actually inspected.
+
+Classify each item as supported, partially supported, unsupported, contradicted, unverifiable, citation mismatch, or suspected fabricated reference. Check author/title/year/venue/identifier consistency and whether the cited source entails the manuscript claim. Record search attempts and inaccessible sources. Never label a citation fabricated merely because a bounded search failed, and never silently substitute a different source.

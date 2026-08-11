@@ -2370,6 +2370,7 @@
                   "operator_message_wake",
                   "mission_acceptance_resume_receipt",
                   "queued_operator_wake",
+                  "task_loop_launch",
                   "task_checkpoint_settlement",
                   "task_auxiliary_settlement",
                   "exploration",
@@ -16436,10 +16437,7 @@
                     "type": "string"
                   },
                   "kind": {
-                    "enum": [
-                      "operator_message",
-                      "coordination_request"
-                    ],
+                    "minLength": 1,
                     "type": "string"
                   }
                 },
@@ -56805,6 +56803,7 @@
                       "outcome": {
                         "enum": [
                           "running",
+                          "retry_wait",
                           "succeeded",
                           "failed"
                         ],
@@ -57063,6 +57062,7 @@
                       "outcome": {
                         "enum": [
                           "running",
+                          "retry_wait",
                           "succeeded",
                           "failed"
                         ],
@@ -74153,10 +74153,7 @@
                               "type": "string"
                             },
                             "kind": {
-                              "enum": [
-                                "operator_message",
-                                "coordination_request"
-                              ],
+                              "minLength": 1,
                               "type": "string"
                             }
                           },
@@ -78996,10 +78993,7 @@
                               "type": "string"
                             },
                             "kind": {
-                              "enum": [
-                                "operator_message",
-                                "coordination_request"
-                              ],
+                              "minLength": 1,
                               "type": "string"
                             }
                           },
@@ -80263,10 +80257,7 @@
                           "type": "string"
                         },
                         "kind": {
-                          "enum": [
-                            "operator_message",
-                            "coordination_request"
-                          ],
+                          "minLength": 1,
                           "type": "string"
                         }
                       },
@@ -87236,6 +87227,7 @@
                               "operator_message_wake",
                               "mission_acceptance_resume_receipt",
                               "queued_operator_wake",
+                              "task_loop_launch",
                               "task_checkpoint_settlement",
                               "task_auxiliary_settlement",
                               "exploration",
@@ -94136,6 +94128,7 @@
                                   "operator_message_wake",
                                   "mission_acceptance_resume_receipt",
                                   "queued_operator_wake",
+                                  "task_loop_launch",
                                   "task_checkpoint_settlement",
                                   "task_auxiliary_settlement",
                                   "exploration",

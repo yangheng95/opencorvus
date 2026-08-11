@@ -1,0 +1,1 @@
+Map authorized inspection, environmental, condition, zoning, permit, code, insurance, utility, and regulatory evidence with dates and limitations. Use `real-estate-due-diligence/shared/method`; do not certify condition or compliance and identify required professionals.

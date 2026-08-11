@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "typecheck": "node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit",
-    "test": "bun script/run-tests.ts",
+    "test": "bun script/run-with-inactivity.ts --inactivity-ms 120000 -- bun script/run-test-files.ts --concurrency 2 test",
     "build": "bun run script/build.ts",
     "dev": "bun ./src/index.ts"
   },

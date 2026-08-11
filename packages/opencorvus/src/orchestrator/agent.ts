@@ -410,10 +410,6 @@ function renderTaskAttachmentInventory(
   ].join("\n")
 }
 
-// ---------------------------------------------------------------------------
-// Public API
-// ---------------------------------------------------------------------------
-
 export namespace Orchestrator {
   export async function processTask(
     taskID: string,
@@ -655,6 +651,7 @@ export namespace Orchestrator {
                 taskID,
                 handle: "orchestrator.abort-cascade",
                 origin: { ...origin, targetSessionID: descendant.id },
+                settleBeforeReuse: false,
               })
             }
           } catch (err) {
@@ -668,6 +665,7 @@ export namespace Orchestrator {
               taskID,
               handle: "orchestrator.abort-cascade",
               origin: { ...origin, targetSessionID: agentSession.id },
+              settleBeforeReuse: false,
             })
             throw err
           }
@@ -1159,7 +1157,7 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
     lines.push(
       `Current agentLifecycleDelivery: event_id=${delivery.eventID}; session_id=${delivery.sessionID}; ` +
         `dispatch_id=${delivery.dispatchID}. This exact lifecycle delivery occurrence triggered the current wake. ` +
-        "Read the durable agent.execution.lifecycle and dispatch evidence for its outcome; this provenance identifies the current ingress without replacing those durable facts.",
+        "The current visible control Turn is authored by the orchestrator and does not quote or impersonate the worker. Read the durable agent.execution.lifecycle fact, current workflow, dispatch lineage, and Artifact snapshot without replacing those authorities, then record the next scheduling or lifecycle decision with its matching real tool call before this decision pass ends.",
     )
   }
 
