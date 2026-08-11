@@ -108,6 +108,8 @@ export type UserMessagePersistenceHooks = {
     pendingSession?: Readonly<Pick<Session.Info, "id" | "projectID" | "parentID" | "directory">>
   }
   commitBundle?: (message: Message.User, parts: Message.Part[]) => void
+  /** Register post-commit ownership effects before Message visibility effects. */
+  beforeVisibilityEffects?: (message: Message.User, parts: Message.Part[]) => void
 }
 
 export type MaterializedUserMessage = {
@@ -763,8 +765,18 @@ export async function persistMaterializedUserMessage(
     controls: persistence.controls?.(info),
   }
   const persisted = persistence.commitBundle
-    ? await Session.persistMessageWithCommit(bundle, () => persistence.commitBundle!(info, parts))
-    : await Session.persistMessage(bundle)
+    ? await Session.persistMessageWithCommit(
+        bundle,
+        () => persistence.commitBundle!(info, parts),
+        persistence.beforeVisibilityEffects ? () => persistence.beforeVisibilityEffects!(info, parts) : undefined,
+      )
+    : persistence.beforeVisibilityEffects
+      ? await Session.persistMessageWithCommit(
+          bundle,
+          () => undefined,
+          () => persistence.beforeVisibilityEffects!(info, parts),
+        )
+      : await Session.persistMessage(bundle)
   return persistedUserMessageReceipt(materialized, persisted)
 }
 
@@ -798,7 +810,11 @@ export function persistMaterializedUserMessageInTransaction(
     parts,
     controls: persistence.controls?.(info),
   }
-  const persisted = Session.persistMessageWithCommitInTransaction(bundle, () => persistence.commitBundle(info, parts))
+  const persisted = Session.persistMessageWithCommitInTransaction(
+    bundle,
+    () => persistence.commitBundle(info, parts),
+    persistence.beforeVisibilityEffects ? () => persistence.beforeVisibilityEffects!(info, parts) : undefined,
+  )
   return {
     complete: async () => persistedUserMessageReceipt(materialized, await persisted.complete()),
   }

@@ -387,7 +387,7 @@ export function terminalizeQueuedTaskEventsForCancellationInTransaction(
       and(
         eq(EngineArtifactTable.task_id, input.taskID),
         eq(EngineArtifactTable.kind, "queued_operator_wake"),
-        sql`${EngineArtifactTable.label} IN ('pending', 'running')`,
+        sql`${EngineArtifactTable.label} IN ('pending', 'running', 'delivery_failed')`,
       ),
     )
     .all()
@@ -814,6 +814,9 @@ export function persistQueuedTaskWaitWakeInTransaction(
 }
 
 export const TestHooks = {
+  reconcileHistoricalNonTailFailedIngress(taskID: string, wakeID: string): boolean {
+    return reconcileHistoricalNonTailFailedIngress(taskID, wakeID)
+  },
   taskLoopLaunchAcceptanceAttempts(): number {
     return taskLoopLaunchAcceptanceAttemptsForTest
   },
@@ -1080,6 +1083,49 @@ function peekQueuedTaskEvent(taskID: string): OrchestratorEvent | undefined {
   return durable?.event
 }
 
+type QueuedOperatorWakeHead = {
+  id: string
+  label: string
+  timeCreated: number
+  wakeID: string
+  rootSessionID: string
+  ingress: QueuedTaskIngress
+  event: OrchestratorEvent
+}
+
+function findQueuedOperatorWakeHead(taskID: string): QueuedOperatorWakeHead | undefined {
+  const row = Database.use((db) =>
+    db
+      .select({
+        id: EngineArtifactTable.id,
+        label: EngineArtifactTable.label,
+        payload: EngineArtifactTable.payload,
+        timeCreated: EngineArtifactTable.time_created,
+      })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.task_id, taskID),
+          eq(EngineArtifactTable.kind, "queued_operator_wake"),
+          sql`${EngineArtifactTable.label} IN ('pending', 'running', 'delivery_failed')`,
+        ),
+      )
+      .orderBy(EngineArtifactTable.time_created, EngineArtifactTable.id)
+      .get(),
+  )
+  if (!row) return undefined
+  const payload = QueuedTaskIngressSchema.parse(row.payload)
+  return {
+    id: row.id,
+    label: row.label,
+    timeCreated: row.timeCreated,
+    wakeID: payload.wake_id,
+    rootSessionID: payload.root_session_id,
+    ingress: payload,
+    event: payload.event,
+  }
+}
+
 function findNextPendingQueuedOperatorWake(taskID: string):
   | {
       id: string
@@ -1090,68 +1136,9 @@ function findNextPendingQueuedOperatorWake(taskID: string):
       event: OrchestratorEvent
     }
   | undefined {
-  const row = Database.use((db) =>
-    db
-      .select({
-        id: EngineArtifactTable.id,
-        payload: EngineArtifactTable.payload,
-        timeCreated: EngineArtifactTable.time_created,
-      })
-      .from(EngineArtifactTable)
-      .where(
-        and(
-          eq(EngineArtifactTable.task_id, taskID),
-          eq(EngineArtifactTable.kind, "queued_operator_wake"),
-          eq(EngineArtifactTable.label, "pending"),
-        ),
-      )
-      .orderBy(EngineArtifactTable.time_created, EngineArtifactTable.id)
-      .get(),
-  )
-  if (!row) return undefined
-  const payload = QueuedTaskIngressSchema.parse(row.payload)
-  return {
-    id: row.id,
-    timeCreated: row.timeCreated,
-    wakeID: payload.wake_id,
-    rootSessionID: payload.root_session_id,
-    ingress: payload,
-    event: payload.event,
-  }
-}
-
-function findPendingQueuedOperatorWakeByID(
-  taskID: string,
-  artifactID: string,
-): NonNullable<ReturnType<typeof findNextPendingQueuedOperatorWake>> | undefined {
-  const row = Database.use((db) =>
-    db
-      .select({
-        id: EngineArtifactTable.id,
-        payload: EngineArtifactTable.payload,
-        timeCreated: EngineArtifactTable.time_created,
-      })
-      .from(EngineArtifactTable)
-      .where(
-        and(
-          eq(EngineArtifactTable.id, artifactID),
-          eq(EngineArtifactTable.task_id, taskID),
-          eq(EngineArtifactTable.kind, "queued_operator_wake"),
-          eq(EngineArtifactTable.label, "pending"),
-        ),
-      )
-      .get(),
-  )
-  if (!row) return undefined
-  const payload = QueuedTaskIngressSchema.parse(row.payload)
-  return {
-    id: row.id,
-    timeCreated: row.timeCreated,
-    wakeID: payload.wake_id,
-    rootSessionID: payload.root_session_id,
-    ingress: payload,
-    event: payload.event,
-  }
+  const head = findQueuedOperatorWakeHead(taskID)
+  if (!head || head.label !== "pending") return undefined
+  return head
 }
 
 function findQueuedOperatorWakeByID(taskID: string, artifactID: string) {
@@ -1175,6 +1162,124 @@ function findQueuedOperatorWakeByID(taskID: string, artifactID: string) {
   )
   if (!row) return undefined
   return { ...row, ingress: QueuedTaskIngressSchema.parse(row.payload) }
+}
+
+function reconcileHistoricalNonTailFailedIngress(taskID: string, wakeID: string): boolean {
+  const wake = findQueuedOperatorWakeByID(taskID, wakeID)
+  if (
+    wake?.label !== "delivery_failed" ||
+    !["agent_lifecycle_delivery", "dispatch_infrastructure_failure"].includes(wake.ingress.source_kind)
+  ) {
+    return false
+  }
+  const controlMessageID = `msg_orchestrator_control_${wakeID}`
+  const control = Database.use((db) =>
+    db
+      .select({ sessionID: MessageTable.session_id })
+      .from(MessageTable)
+      .where(
+        and(
+          eq(MessageTable.id, controlMessageID),
+          sql`json_extract(${MessageTable.data}, '$.role') = 'user'`,
+          sql`json_extract(${MessageTable.data}, '$.author') = 'orchestrator'`,
+        ),
+      )
+      .get(),
+  )
+  if (!control || SessionPromptState.hasOwnedPromptInAnyDirectory(control.sessionID)) return false
+  const latestUser = Database.use((db) =>
+    db
+      .select({ id: MessageTable.id })
+      .from(MessageTable)
+      .where(
+        and(eq(MessageTable.session_id, control.sessionID), sql`json_extract(${MessageTable.data}, '$.role') = 'user'`),
+      )
+      .orderBy(desc(MessageTable.time_created), desc(MessageTable.id))
+      .get(),
+  )
+  if (!latestUser || latestUser.id === controlMessageID) return false
+  const assistantEvidence = Database.use((db) =>
+    db
+      .select({
+        id: MessageTable.id,
+        parentID: sql<string | null>`json_extract(${MessageTable.data}, '$.parentID')`,
+      })
+      .from(MessageTable)
+      .where(
+        and(
+          eq(MessageTable.session_id, control.sessionID),
+          sql`json_extract(${MessageTable.data}, '$.role') = 'assistant'`,
+          sql`json_extract(${MessageTable.data}, '$.taskIngress.id') = ${wakeID}`,
+        ),
+      )
+      .orderBy(MessageTable.time_created, MessageTable.id)
+      .all(),
+  )
+  const task = findTask(taskID)
+  if (!task) return false
+  return Database.immediateTransaction((db) => {
+    const head = db
+      .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.task_id, taskID),
+          eq(EngineArtifactTable.kind, "queued_operator_wake"),
+          sql`${EngineArtifactTable.label} IN ('pending', 'running', 'delivery_failed')`,
+        ),
+      )
+      .orderBy(EngineArtifactTable.time_created, EngineArtifactTable.id)
+      .get()
+    if (head?.id !== wakeID || head.label !== "delivery_failed") return false
+    const activeDelivery = db
+      .select({ id: EngineArtifactTable.id })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.task_id, taskID),
+          eq(EngineArtifactTable.kind, "queued_operator_wake"),
+          sql`${EngineArtifactTable.label} IN ('pending', 'running')`,
+        ),
+      )
+      .get()
+    if (activeDelivery) return false
+    const ingress = QueuedTaskIngressSchema.parse(head.payload)
+    const now = Date.now()
+    const reason =
+      `Historical scheduler FIFO/provenance conflict: exact control ${controlMessageID} was superseded by ` +
+      `${latestUser.id}; the failed ingress is preserved and will not be replayed against a different input.`
+    patchEngineArtifact(db, {
+      id: wakeID,
+      label: "terminal_inapplicable",
+      payload: QueuedTaskIngressSchema.parse({
+        ...ingress,
+        delivery_result: { status: "terminal_inapplicable", reason, time_completed: now },
+      }),
+      timeUpdated: now,
+    })
+    const recoveryFactID = recordTaskInfrastructureErrorInTransaction(db, {
+      taskID,
+      component: "engine-queue",
+      operation: "reconcile-historical-wake-provenance-conflict",
+      reason,
+      errorName: "HistoricalWakeProvenanceConflictError",
+      sessionID: control.sessionID,
+      context: {
+        historical_wake_id: wakeID,
+        control_message_id: controlMessageID,
+        latest_user_message_id: latestUser.id,
+        assistant_evidence: assistantEvidence,
+      },
+      now,
+    })
+    persistQueuedRecoveryWakeInTransaction(db, {
+      task,
+      recoveryFactID,
+      note: `Recover historical scheduler wake provenance conflict ${wakeID}`,
+      now,
+    })
+    return true
+  })
 }
 
 function findDurableAssistantForLaunchWake(input: {
@@ -1463,6 +1568,19 @@ async function assistantMessagesForWakeSettlement(input: {
   if (!row.parentID) {
     throw new QueuedWakeSettlementError(
       `Task ${input.taskID} wake ${input.wakeID} final message ${input.finalMessageID} has no parent user message`,
+    )
+  }
+  const wake = findQueuedOperatorWakeByID(input.taskID, input.wakeID)
+  if (!wake) {
+    throw new QueuedWakeSettlementError(`Task ${input.taskID} wake ${input.wakeID} disappeared before settlement`)
+  }
+  if (
+    ["agent_lifecycle_delivery", "dispatch_infrastructure_failure"].includes(wake.ingress.source_kind) &&
+    row.parentID !== `msg_orchestrator_control_${input.wakeID}`
+  ) {
+    throw new QueuedWakeSettlementError(
+      `Task ${input.taskID} wake ${input.wakeID} final message ${input.finalMessageID} parent ${row.parentID} ` +
+        `does not match exact control Message msg_orchestrator_control_${input.wakeID}`,
     )
   }
   const messageIDs = Database.use((db) =>
@@ -2098,6 +2216,19 @@ function resetFailedExactTerminalIngress(input: {
       )
       .get()
     if (current?.label !== "delivery_failed") return undefined
+    const head = db
+      .select({ id: EngineArtifactTable.id })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.task_id, input.taskID),
+          eq(EngineArtifactTable.kind, "queued_operator_wake"),
+          sql`${EngineArtifactTable.label} IN ('pending', 'running', 'delivery_failed')`,
+        ),
+      )
+      .orderBy(EngineArtifactTable.time_created, EngineArtifactTable.id)
+      .get()
+    if (head?.id !== input.wakeID) return undefined
     const currentIngress = QueuedTaskIngressSchema.parse(current.payload)
     if (!input.restartRuntimeAttemptWindow && !canRetryTerminalIngressInCurrentRuntime(currentIngress)) {
       return undefined
@@ -2224,11 +2355,15 @@ function scheduleDelayedExactTerminalIngressRetry(input: {
             wakeID: input.wakeID,
             restartRuntimeAttemptWindow: true,
           })
-          if (!failedIngress) return
+          if (!failedIngress) {
+            const current = findQueuedOperatorWakeByID(input.taskID, input.wakeID)
+            if (current?.label === "delivery_failed") retryAfterFailure = true
+            return
+          }
           let result: DispatchTaskLoopResult
           try {
             authority.signal.throwIfAborted()
-            result = await dispatchPersistedTaskLoop(input.taskID)
+            result = await dispatchPersistedTaskLoop(input.taskID, input.wakeID)
           } catch (error) {
             restoreDelayedTerminalIngressFailure({
               taskID: input.taskID,
@@ -2243,6 +2378,10 @@ function scheduleDelayedExactTerminalIngressRetry(input: {
               wakeID: input.wakeID,
               failedIngress,
             })
+            if (result === "ignored") {
+              retryAfterFailure = true
+              return
+            }
             throw new Error(`Delayed exact terminal ingress retry was ${result}`)
           }
           await settleAcceptedExactTerminalIngressRecovery(failedIngress)
@@ -2294,6 +2433,10 @@ async function retryFailedExactTerminalIngress(
   wakeID: string,
   options: { dispatchAfterReset?: boolean } = {},
 ): Promise<boolean> {
+  if (reconcileHistoricalNonTailFailedIngress(taskID, wakeID)) {
+    await drainQueuedTaskEvent(taskID)
+    return true
+  }
   const row = Database.use((db) =>
     db
       .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
@@ -2343,7 +2486,7 @@ async function retryFailedExactTerminalIngress(
   })
   if (!reset) return false
   if (options.dispatchAfterReset === false) return true
-  const result = await dispatchPersistedTaskLoop(taskID)
+  const result = await dispatchPersistedTaskLoop(taskID, wakeID)
   if (result === "started" || result === "queued") return true
   log.warn("exact terminal ingress retry was not accepted", { taskID, wakeID, sourceKind: ingress.source_kind, result })
   return false
@@ -3508,58 +3651,59 @@ export async function dispatchTaskLoop(input: DispatchTaskLoopInput): Promise<Di
     return "queued"
   }
 
-  // Task is already active — enqueue the persisted wake on the root Session.
-  // The new
-  // invocation might be the one that drives the task to terminal, so its
-  // completion must also advance the cwd queue. Fire-and-forget: callers
-  // don't want to block on task completion.
-  const runTaskLoop = requireTaskLoopRunner()
+  // Task is already active. Every re-entry is admitted through the same
+  // durable head selector; a newly persisted wake never bypasses an older
+  // running or delivery-failed occurrence.
   await consumePendingWaitCronForAcceptedWake(task, "task wake accepted as active re-entry")
-  const wake = findPendingQueuedOperatorWakeByID(task.id, persistedWakeID)
-  if (!wake) {
-    const existing = findQueuedOperatorWakeByID(task.id, persistedWakeID)
-    if (!existing) throw new Error(`Task ${task.id} persisted wake disappeared before root Session enqueue`)
-    if (existing.label === "running") {
-      const position = SessionPromptState.rootWakeQueuePosition(existing.ingress.root_session_id, existing.id)
-      const result = position === undefined || position === 0 ? "started" : "queued"
-      await input.beforeAcceptedWake?.({ taskID: task.id, result })
-      return result
-    }
-    if (existing.label === "delivery_failed") return "ignored"
-    if (["drained", "terminal_inapplicable"].includes(existing.label)) {
-      await input.beforeAcceptedWake?.({ taskID: task.id, result: "started" })
-      return "started"
-    }
+  const attachedHead = await drainQueuedTaskEvent(task.id)
+  const existing = findQueuedOperatorWakeByID(task.id, persistedWakeID)
+  if (!existing) throw new Error(`Task ${task.id} persisted wake disappeared before root Session enqueue`)
+  let result: Exclude<DispatchTaskLoopResult, "ignored">
+  if (existing.label === "running") {
+    const position = SessionPromptState.rootWakeQueuePosition(existing.ingress.root_session_id, existing.id)
+    result = position === undefined || position === 0 ? "started" : "queued"
+  } else if (existing.label === "pending") {
+    const position = SessionPromptState.rootWakeQueuePosition(existing.ingress.root_session_id, existing.id)
+    result = attachedHead && position === 0 ? "started" : "queued"
+  } else if (["drained", "terminal_inapplicable"].includes(existing.label)) {
+    result = "started"
+  } else if (existing.label === "delivery_failed") {
+    return "ignored"
+  } else {
     throw new Error(`Task ${task.id} persisted wake ${persistedWakeID} has unsupported state ${existing.label}`)
   }
-  const completionAuthority = RuntimeExecutionSettlement.reserve(
-    "engine_queue_completion",
-    `task-loop-launch:${task.id}:${wake.id}`,
-  )
-  let loop: Promise<void>
-  try {
-    loop = launchTaskLoop(task, wake, cwd, runTaskLoop)
-    attachLoopCompletion(task.id, wake.id, cwd, () => loop, completionAuthority)
-  } catch (error) {
-    completionAuthority.settle()
-    throw error
-  }
-  const position = SessionPromptState.rootWakeQueuePosition(wake.rootSessionID, wake.id)
-  if (position === undefined)
-    throw new Error(`Task ${task.id} wake ${wake.id} was not attached to its root Session queue`)
-  const result = position === 0 ? "started" : "queued"
   await input.beforeAcceptedWake?.({ taskID: task.id, result })
   return result
 }
 
-export async function dispatchPersistedTaskLoop(taskID: string): Promise<DispatchTaskLoopResult> {
+export async function dispatchPersistedTaskLoop(
+  taskID: string,
+  expectedWakeID?: string,
+): Promise<DispatchTaskLoopResult> {
   const task = findTask(taskID)
   if (!task) throw new TaskQueueError(`Task ${taskID} does not exist`, "task_not_found", taskID)
   const { assertTaskExecutionCapsuleRuntime } = await import("@/engine/task-execution-capsule-binding")
   await assertTaskExecutionCapsuleRuntime(task.id)
   const cwd = taskRootDirectory(task)
-  const wake = findNextPendingQueuedOperatorWake(taskID)
-  if (!wake) throw new Error(`Task ${taskID} has no persisted wake to dispatch`)
+  const head = findQueuedOperatorWakeHead(taskID)
+  if (!head) throw new Error(`Task ${taskID} has no persisted wake to dispatch`)
+  if (expectedWakeID && head.id !== expectedWakeID) {
+    const expected = findQueuedOperatorWakeByID(taskID, expectedWakeID)
+    if (expected && ["running", "drained", "terminal_inapplicable"].includes(expected.label)) return "started"
+    if (expected?.label === "pending") return "queued"
+    if (expected?.label === "delivery_failed") return "ignored"
+    throw new Error(`Task ${taskID} durable wake head is ${head.id}, not expected ${expectedWakeID}`)
+  }
+  if (head.label === "running") {
+    const position = SessionPromptState.rootWakeQueuePosition(head.rootSessionID, head.id)
+    return position === undefined || position === 0 ? "started" : "queued"
+  }
+  if (head.label !== "pending") {
+    if (expectedWakeID === head.id && head.label === "delivery_failed") return "ignored"
+    if (!expectedWakeID && head.label === "delivery_failed") return "queued"
+    throw new Error(`Task ${taskID} durable wake head ${head.id} cannot dispatch from ${head.label}`)
+  }
+  const wake = head
   if (isTaskQueued(task)) {
     const claimed = await advanceQueue(cwd)
     return claimed?.id === taskID ? "started" : "queued"
@@ -3756,6 +3900,10 @@ export async function reconcileFailedExactTerminalIngressDeliveries(): Promise<n
   const failures: Error[] = []
   for (const row of rows) {
     try {
+      if (reconcileHistoricalNonTailFailedIngress(row.taskID, row.id)) {
+        reconciled += 1
+        continue
+      }
       if (await retryFailedExactTerminalIngress(row.taskID, row.id)) reconciled += 1
     } catch (error) {
       failures.push(
@@ -3907,6 +4055,12 @@ async function startLoopForTask(
     }
     let pendingWake = findNextPendingQueuedOperatorWake(task.id)
     if (!pendingWake) {
+      const blockedHead = findQueuedOperatorWakeHead(task.id)
+      if (blockedHead) {
+        throw new Error(
+          `Task ${task.id} cannot create a root Session wake while durable head ${blockedHead.id} is ${blockedHead.label}`,
+        )
+      }
       enqueueTaskEvent(task, event ?? { note: "Queued Task start" })
       pendingWake = findNextPendingQueuedOperatorWake(task.id)
     }

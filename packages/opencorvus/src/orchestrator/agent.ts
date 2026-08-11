@@ -76,7 +76,7 @@ import { attachmentPromptSection } from "@/agent/prompt-projection"
 import { renderUserRequestSection } from "@/intent/request-prompt"
 import { readIterationHistory as readHistForPrompt } from "@/metrics/store"
 import { requireTask, terminalTask } from "@/engine"
-import { NotFoundError } from "@/storage/db"
+import { Database, NotFoundError } from "@/storage/db"
 import { recordTaskInfrastructureError } from "@/engine/persist"
 import { queuedTaskIngressSourceKind } from "@/engine/queued-task-ingress"
 import { describeProcessRecoveryFact, describeTask, renderTaskDescription, type TaskDesc } from "@/engine/describe"
@@ -164,6 +164,13 @@ export function recordOrchestratorTurnTraceBestEffort(
 async function latestSessionMessageID(sessionID: string): Promise<string | undefined> {
   for await (const message of MessageStore.stream(sessionID)) {
     return message.info.id
+  }
+  return undefined
+}
+
+async function latestSessionUserMessageID(sessionID: string): Promise<string | undefined> {
+  for await (const message of MessageStore.stream(sessionID)) {
+    if (message.info.role === "user") return message.info.id
   }
   return undefined
 }
@@ -711,43 +718,16 @@ export namespace Orchestrator {
         return owner
       }
       const promptBoundaryMessageID = await latestSessionMessageID(agentSession.id)
+      let installedRuntimeContract: SessionPrompt.SessionRuntimeContract | undefined
+      let runtimeWakeArmed = false
+      let promptInvocationStarted = false
       try {
-        SessionPrompt.setSessionRuntimeContract(agentSession.id, {
-          identity: {
-            identityKind: "projected-scheduler",
-            sessionID: agentSession.id,
-            ...schedulerCapability.identity,
-            expertSquadID: schedulerCapability.expertSquadID,
-            packageRevision: schedulerCapability.packageRevision,
-            taskID,
-            contractKind: "orchestrator-wake",
-            ...(terminalConversation
-              ? {
-                  taskIngressID: terminalConversationAuthority.ingressID,
-                  taskIngressKind: terminalConversationAuthority.ingressKind,
-                }
-              : wakeID && event
-                ? { taskIngressID: wakeID, taskIngressKind: queuedTaskIngressSourceKind(event) }
-                : {}),
-            installedAt: Date.now(),
-          },
-          projectedTools: guard.tools as any,
-          projectedRegistryToolIDs: schedulerCapability.builtInToolIDs,
-          skillProjection,
-          harnessProjection: PromptProfileResolver.schedulerHarnessProjection({
-            taskID,
-            capability: schedulerCapability,
-          }),
-          projectDirectory: schedulerProjectDirectory,
-          includeMcpTools: false,
-          system: resolveRuntimeSystem,
-          systemMode: "complete",
-          runOnce: terminalConversation || !appendCreatorMessage,
-          resources: { mcp: schedulerMcpOwner },
-        })
-        schedulerMcpOwnerTransferred = true
-        promptInFlight = true
         if (materializeCreatorBeforeTypedControl) {
+          if (SessionPrompt.hasGeneration(agentSession.id)) {
+            throw new Error(
+              `Fresh Orchestrator creator Message cannot be materialized while Session ${agentSession.id} has a prompt owner`,
+            )
+          }
           await SessionPrompt.prompt({
             sessionID: agentSession.id,
             author: taskCreator.actor,
@@ -758,12 +738,72 @@ export namespace Orchestrator {
             parts: creatorPartsWithIds,
           })
         }
+        installedRuntimeContract = SessionPrompt.setSessionRuntimeContract(
+          agentSession.id,
+          {
+            identity: {
+              identityKind: "projected-scheduler",
+              sessionID: agentSession.id,
+              ...schedulerCapability.identity,
+              expertSquadID: schedulerCapability.expertSquadID,
+              packageRevision: schedulerCapability.packageRevision,
+              taskID,
+              contractKind: "orchestrator-wake",
+              ...(terminalConversation
+                ? {
+                    taskIngressID: terminalConversationAuthority.ingressID,
+                    taskIngressKind: terminalConversationAuthority.ingressKind,
+                  }
+                : wakeID && event
+                  ? { taskIngressID: wakeID, taskIngressKind: queuedTaskIngressSourceKind(event) }
+                  : {}),
+              ...(currentControlMessage ? { inputMessageID: currentControlMessage.messageID } : {}),
+              installedAt: Date.now(),
+            },
+            projectedTools: guard.tools as any,
+            projectedRegistryToolIDs: schedulerCapability.builtInToolIDs,
+            skillProjection,
+            harnessProjection: PromptProfileResolver.schedulerHarnessProjection({
+              taskID,
+              capability: schedulerCapability,
+            }),
+            projectDirectory: schedulerProjectDirectory,
+            includeMcpTools: false,
+            system: resolveRuntimeSystem,
+            systemMode: "complete",
+            runOnce: terminalConversation || !appendCreatorMessage,
+            resources: { mcp: schedulerMcpOwner },
+          },
+          { armWake: !currentControlMessage, notifyWake: !currentControlMessage },
+        )
+        if (!installedRuntimeContract) {
+          throw new Error(`Orchestrator Session ${agentSession.id} runtime contract was not installed`)
+        }
+        const runtimeContract = installedRuntimeContract
+        schedulerMcpOwnerTransferred = true
+        promptInFlight = true
         if (currentControlMessage) {
-          await materializeOrReuseCurrentOrchestratorControlMessage({
+          const materialized = await materializeOrReuseCurrentOrchestratorControlMessage({
             session: agentSession,
             model: { providerID: model.providerID, modelID: model.api.id },
             control: currentControlMessage,
+            beforeVisibilityEffects: () =>
+              Database.effect(() => {
+                SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
+                runtimeWakeArmed = true
+              }),
           })
+          if (materialized === "reused") {
+            const latestUserMessageID = await latestSessionUserMessageID(agentSession.id)
+            if (latestUserMessageID !== currentControlMessage.messageID) {
+              throw new Error(
+                `Orchestrator control Message ${currentControlMessage.messageID} is not the current visible input for ` +
+                  `${agentSession.id}; latest user Message is ${latestUserMessageID ?? "<none>"}`,
+              )
+            }
+            SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
+            runtimeWakeArmed = true
+          }
         }
         finalMessage = await SessionContext.provide(agentSession, () =>
           provideInitializedProjectExecution({
@@ -772,8 +812,9 @@ export namespace Orchestrator {
               runOrchestratorPromptWithInactivity({
                 taskID,
                 session: agentSession,
-                run: async () =>
-                  appendCreatorMessage
+                run: async () => {
+                  promptInvocationStarted = true
+                  const result = appendCreatorMessage
                     ? ((await SessionPrompt.prompt({
                         sessionID: agentSession.id,
                         author: taskCreator.actor,
@@ -784,10 +825,13 @@ export namespace Orchestrator {
                       })) as Message.WithParts)
                     : ((await SessionPrompt.loop({
                         sessionID: agentSession.id,
-                        ...(currentControlMessage
-                          ? { reply_to_message_id: currentControlMessage.messageID }
-                          : {}),
-                      })) as Message.WithParts),
+                        ...(currentControlMessage ? { reply_to_message_id: currentControlMessage.messageID } : {}),
+                      })) as Message.WithParts)
+                  if (runtimeContract.runOnce) {
+                    await SessionPrompt.waitForSessionRuntimeContractWakeSettlement(agentSession.id, runtimeContract)
+                  }
+                  return result
+                },
               }),
           }),
         )
@@ -795,10 +839,22 @@ export namespace Orchestrator {
       } finally {
         // SessionPrompt cancellation rejects attached callers before its
         // background loop finishes unwinding the active model-turn owner.
-        // Exceptional exits therefore have to settle that owner before the
-        // runtime contract can be cleared. Successful standby exits keep the
-        // loop asleep for the next wake and deliberately skip this wait.
-        if (promptInFlight) await SessionPrompt.waitForFinish(agentSession.id, agentSession.directory)
+        // Exceptional exits therefore have to settle that exact run-once
+        // Turn, or join a failed prompt owner, before the runtime contract can
+        // be cleared. A persistent owner that successfully returned to
+        // standby deliberately remains alive and must not be awaited as a
+        // finished Session.
+        if (promptInFlight) {
+          if (installedRuntimeContract?.runOnce && runtimeWakeArmed && SessionPrompt.hasGeneration(agentSession.id)) {
+            try {
+              await SessionPrompt.waitForSessionRuntimeContractWakeSettlement(agentSession.id, installedRuntimeContract)
+            } catch {
+              await SessionPrompt.waitForFinish(agentSession.id, agentSession.directory)
+            }
+          } else if (promptInvocationStarted) {
+            await SessionPrompt.waitForFinish(agentSession.id, agentSession.directory)
+          }
+        }
         const resources = SessionPrompt.clearSessionRuntimeContract(agentSession.id)
         await resources?.mcp.close()
         errorUnsub()
@@ -1256,34 +1312,40 @@ export async function materializeOrReuseCurrentOrchestratorControlMessage(input:
   session: Session.Info
   model: { providerID: string; modelID: string }
   control: CurrentOrchestratorControlMessage
-}): Promise<void> {
+  beforeVisibilityEffects?: () => void
+}): Promise<"created" | "reused"> {
   let existing: Message.WithParts | undefined
+  let disposition: "created" | "reused" = "reused"
   try {
     existing = await MessageStore.get({ sessionID: input.session.id, messageID: input.control.messageID })
   } catch (error) {
     if (!NotFoundError.isInstance(error as Error)) throw error
   }
   if (!existing) {
-    await SessionPrompt.prompt({
-      sessionID: input.session.id,
-      messageID: input.control.messageID,
-      author: "orchestrator",
-      model: input.model,
-      agent: "orchestrator",
-      byteMaterializationProjectID: input.session.projectID,
-      noReply: true,
-      extra: input.control.extra,
-      parts: [
-        {
-          id: input.control.partID,
-          type: "text",
-          text: input.control.text,
-          kind: "control",
-          source: "system",
-          metadata: input.control.partMetadata,
-        },
-      ],
-    })
+    disposition = "created"
+    await SessionPrompt.prompt(
+      {
+        sessionID: input.session.id,
+        messageID: input.control.messageID,
+        author: "orchestrator",
+        model: input.model,
+        agent: "orchestrator",
+        byteMaterializationProjectID: input.session.projectID,
+        noReply: true,
+        extra: input.control.extra,
+        parts: [
+          {
+            id: input.control.partID,
+            type: "text",
+            text: input.control.text,
+            kind: "control",
+            source: "system",
+            metadata: input.control.partMetadata,
+          },
+        ],
+      },
+      { beforeVisibilityEffects: input.beforeVisibilityEffects },
+    )
     existing = await MessageStore.get({ sessionID: input.session.id, messageID: input.control.messageID })
   }
   const part = existing.parts[0]
@@ -1304,6 +1366,7 @@ export async function materializeOrReuseCurrentOrchestratorControlMessage(input:
       `Orchestrator control Message ${input.control.messageID} does not match exact wake ${input.control.partMetadata.wake_id}`,
     )
   }
+  return disposition
 }
 
 export function isCurrentWakeIngress(event?: OrchestratorEvent): boolean {
@@ -1335,8 +1398,7 @@ function requireCurrentAgentLifecycleFact(
   if (exact.sessionID !== delivery.sessionID || payloadSessionID !== delivery.sessionID) {
     throw new Error(`Agent lifecycle delivery ${delivery.eventID} Session identity drifted`)
   }
-  const inputMessageID =
-    typeof exact.payload?.inputMessageID === "string" ? exact.payload.inputMessageID.trim() : ""
+  const inputMessageID = typeof exact.payload?.inputMessageID === "string" ? exact.payload.inputMessageID.trim() : ""
   if (!inputMessageID) throw new Error(`Agent lifecycle delivery ${delivery.eventID} has no input Message identity`)
   const status = SessionStatus.Info.parse(exact.payload?.status)
   if (status.type !== "terminal") {

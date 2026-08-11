@@ -53,6 +53,7 @@ export type SessionRuntimeContractIdentity =
         taskID: string
         taskIngressID?: string
         taskIngressKind?: string
+        inputMessageID?: string
         workerTurnDescriptorID?: never
         workerTurnDescriptorHash?: never
       })
@@ -141,13 +142,36 @@ type RuntimeContractOwner = {
 
 const runtimeContractOwners = new Map<string, Map<symbol, RuntimeContractOwner>>()
 const messageWriteOwners = new Map<string, symbol>()
+const runtimeWakeSettlementWaiters = new Map<
+  string,
+  Map<SessionRuntimeContract, Set<{ resolve: () => void; reject: (error: Error) => void }>>
+>()
+const consumedRuntimeWakes = new Map<string, SessionRuntimeContract>()
+const settledRuntimeWakes = new WeakSet<SessionRuntimeContract>()
+const failedRuntimeWakes = new WeakMap<SessionRuntimeContract, Error>()
+const armedRuntimeWakes = new WeakSet<SessionRuntimeContract>()
 
 function runtimeContractOwnerOperations(sessionID: string): string[] {
   return [...(runtimeContractOwners.get(sessionID)?.values() ?? [])].map((owner) => owner.operation)
 }
 
 function pendingWake(contract: SessionRuntimeContract | undefined): boolean {
+  return (
+    contract?.identity.contractKind === "orchestrator-wake" &&
+    contract.runOnce === true &&
+    armedRuntimeWakes.has(contract)
+  )
+}
+
+function orchestratorWake(contract: SessionRuntimeContract | undefined): boolean {
   return contract?.identity.contractKind === "orchestrator-wake" && contract.runOnce === true
+}
+
+function sameRuntimeContractOccurrence(
+  left: SessionRuntimeContract | undefined,
+  right: SessionRuntimeContract,
+): boolean {
+  return Boolean(left && JSON.stringify(left.identity) === JSON.stringify(right.identity))
 }
 
 function notifyWake(sessionID: string): void {
@@ -157,7 +181,11 @@ function notifyWake(sessionID: string): void {
 }
 
 export namespace SessionRuntimeContractStore {
-  export function set(sessionID: string, contract: SessionRuntimeContract): void {
+  export function set(
+    sessionID: string,
+    contract: SessionRuntimeContract,
+    options: { armWake?: boolean; notifyWake?: boolean; consumePendingWake?: boolean } = {},
+  ): SessionRuntimeContract {
     const ownerOperations = runtimeContractOwnerOperations(sessionID)
     if (ownerOperations.length > 0) {
       throw new Error(`SessionRuntimeContract cannot change during ${ownerOperations.join(", ")} for ${sessionID}`)
@@ -285,15 +313,30 @@ export namespace SessionRuntimeContractStore {
       ) as PromptProfileResolver.ResolvedProjectedScheduler
       assertProjectedSchedulerToolSurface(owner, contract)
     }
+    const current = contracts.get(sessionID)
+    if (orchestratorWake(current) && options.consumePendingWake !== true) {
+      throw new Error(`SessionRuntimeContract cannot replace staged or pending Orchestrator wake for ${sessionID}`)
+    }
+    if (consumedRuntimeWakes.has(sessionID) && options.consumePendingWake !== true) {
+      throw new Error(`SessionRuntimeContract cannot replace unsettled Orchestrator Turn for ${sessionID}`)
+    }
     const snapshot = snapshotRuntimeContract(contract, packageRevision)
-    const currentResources = contracts.get(sessionID)?.resources
+    const currentResources = current?.resources
     if (currentResources?.mcp && currentResources.mcp !== snapshot.resources?.mcp) {
       throw new Error(
         `SessionRuntimeContract cannot replace owned MCP resources for ${sessionID}; dispose the installed contract first`,
       )
     }
     contracts.set(sessionID, snapshot)
-    if (pendingWake(snapshot)) notifyWake(sessionID)
+    if (
+      snapshot.identity.contractKind === "orchestrator-wake" &&
+      snapshot.runOnce === true &&
+      options.armWake !== false
+    ) {
+      armedRuntimeWakes.add(snapshot)
+    }
+    if (options.notifyWake !== false && pendingWake(snapshot)) notifyWake(sessionID)
+    return snapshot
   }
 
   function assertHarnessProjection(
@@ -480,6 +523,16 @@ export namespace SessionRuntimeContractStore {
     }
     const resources = contracts.get(sessionID)?.resources
     contracts.delete(sessionID)
+    consumedRuntimeWakes.delete(sessionID)
+    const waiters = runtimeWakeSettlementWaiters.get(sessionID)
+    runtimeWakeSettlementWaiters.delete(sessionID)
+    for (const waiting of waiters?.values() ?? []) {
+      for (const waiter of waiting) {
+        waiter.reject(
+          new Error(`SessionRuntimeContract cleared before pending Orchestrator wake settled for ${sessionID}`),
+        )
+      }
+    }
     return resources
   }
 
@@ -579,7 +632,91 @@ export namespace SessionRuntimeContractStore {
   export function consumeWake(sessionID: string): void {
     const contract = contracts.get(sessionID)
     if (!contract?.runOnce) return
-    set(sessionID, { ...contract, runOnce: false })
+    set(sessionID, { ...contract, runOnce: false }, { consumePendingWake: true })
+    consumedRuntimeWakes.set(sessionID, contract)
+  }
+
+  export function settleConsumedWake(sessionID: string): void {
+    const contract = consumedRuntimeWakes.get(sessionID)
+    if (!contract) return
+    consumedRuntimeWakes.delete(sessionID)
+    settledRuntimeWakes.add(contract)
+    const waiters = runtimeWakeSettlementWaiters.get(sessionID)
+    const settled = waiters?.get(contract)
+    if (!settled) return
+    waiters!.delete(contract)
+    if (waiters!.size === 0) runtimeWakeSettlementWaiters.delete(sessionID)
+    for (const waiter of settled) waiter.resolve()
+  }
+
+  export function failConsumedWake(sessionID: string, error: unknown): void {
+    const contract =
+      consumedRuntimeWakes.get(sessionID) ??
+      (orchestratorWake(contracts.get(sessionID)) ? contracts.get(sessionID) : undefined)
+    if (!contract) return
+    consumedRuntimeWakes.delete(sessionID)
+    const failure = error instanceof Error ? error : new Error(String(error))
+    failedRuntimeWakes.set(contract, failure)
+    const waiters = runtimeWakeSettlementWaiters.get(sessionID)
+    const failed = waiters?.get(contract)
+    if (!failed) return
+    waiters!.delete(contract)
+    if (waiters!.size === 0) runtimeWakeSettlementWaiters.delete(sessionID)
+    for (const waiter of failed) waiter.reject(failure)
+  }
+
+  export function armPendingWake(sessionID: string, expected: SessionRuntimeContract): void {
+    if (
+      contracts.get(sessionID) !== expected ||
+      expected.identity.contractKind !== "orchestrator-wake" ||
+      expected.runOnce !== true
+    ) {
+      throw new Error(`SessionRuntimeContract pending wake identity changed before notification for ${sessionID}`)
+    }
+    armedRuntimeWakes.add(expected)
+    notifyWake(sessionID)
+  }
+
+  export function waitForWakeConsumed(sessionID: string, expected: SessionRuntimeContract): Promise<void> {
+    if (settledRuntimeWakes.has(expected)) return Promise.resolve()
+    const priorFailure = failedRuntimeWakes.get(expected)
+    if (priorFailure) return Promise.reject(priorFailure)
+    const current = contracts.get(sessionID)
+    if (current !== expected) {
+      if (!sameRuntimeContractOccurrence(current, expected) || consumedRuntimeWakes.get(sessionID) !== expected) {
+        return Promise.reject(
+          new Error(`SessionRuntimeContract changed before Orchestrator wake settled for ${sessionID}`),
+        )
+      }
+    }
+    return new Promise<void>((resolve, reject) => {
+      let byContract = runtimeWakeSettlementWaiters.get(sessionID)
+      if (!byContract) {
+        byContract = new Map()
+        runtimeWakeSettlementWaiters.set(sessionID, byContract)
+      }
+      let waiters = byContract.get(expected)
+      if (!waiters) {
+        waiters = new Set()
+        byContract.set(expected, waiters)
+      }
+      const waiter = { resolve, reject }
+      waiters.add(waiter)
+      if (
+        !settledRuntimeWakes.has(expected) &&
+        (contracts.get(sessionID) === expected || consumedRuntimeWakes.get(sessionID) === expected)
+      ) {
+        return
+      }
+      waiters.delete(waiter)
+      if (waiters.size === 0) byContract.delete(expected)
+      if (byContract.size === 0) runtimeWakeSettlementWaiters.delete(sessionID)
+      const failure = failedRuntimeWakes.get(expected)
+      if (failure) reject(failure)
+      else if (settledRuntimeWakes.has(expected)) resolve()
+      else
+        reject(new Error(`SessionRuntimeContract changed while awaiting Orchestrator wake settlement for ${sessionID}`))
+    })
   }
 }
 

@@ -22,10 +22,7 @@ import { CompactionOverflow } from "./compaction-overflow"
 import { CompactionHandoff } from "./compaction-handoff"
 import { SessionControl } from "./control"
 import { controlPromptProjection, controlToolContext } from "@/control/prompt"
-import {
-  resolveSessionExecutionAuthority,
-  taskIDForSession,
-} from "@/engine/task-session-lineage"
+import { resolveSessionExecutionAuthority, taskIDForSession } from "@/engine/task-session-lineage"
 import { findDispatchLineageByToolExecution } from "@/engine/dispatch-lineage"
 import { ContextBudget } from "./context-budget"
 import { Instance } from "../project/instance"
@@ -150,10 +147,7 @@ export namespace SessionLoop {
     })
   }
 
-  export function toolExecutionExtra(input: {
-    messageExtra?: Record<string, unknown>
-    model: Provider.Model
-  }) {
+  export function toolExecutionExtra(input: { messageExtra?: Record<string, unknown>; model: Provider.Model }) {
     const { taskID: _untrustedTaskID, ...messageExtra } = input.messageExtra ?? {}
     return {
       ...messageExtra,
@@ -204,12 +198,27 @@ export namespace SessionLoop {
   // only how the next Turn is executed; it never invalidates the Session or
   // prevents a durable operator coordination request from being accepted.
   // ---------------------------------------------------------------------------
-  export function setSessionRuntimeContract(sessionID: string, contract: SessionRuntimeContract | undefined): void {
+  export function setSessionRuntimeContract(
+    sessionID: string,
+    contract: SessionRuntimeContract | undefined,
+    options: { armWake?: boolean; notifyWake?: boolean } = {},
+  ): SessionRuntimeContract | undefined {
     if (!contract) {
       SessionRuntimeContractStore.clear(sessionID)
       return
     }
-    SessionRuntimeContractStore.set(sessionID, contract)
+    return SessionRuntimeContractStore.set(sessionID, contract, options)
+  }
+
+  export function armSessionRuntimeContractWake(sessionID: string, expected: SessionRuntimeContract): void {
+    SessionRuntimeContractStore.armPendingWake(sessionID, expected)
+  }
+
+  export function waitForSessionRuntimeContractWakeSettlement(
+    sessionID: string,
+    expected: SessionRuntimeContract,
+  ): Promise<void> {
+    return SessionRuntimeContractStore.waitForWakeConsumed(sessionID, expected)
   }
 
   export function getSessionRuntimeContract(sessionID: string): SessionRuntimeContract | undefined {
@@ -1063,8 +1072,7 @@ export namespace SessionLoop {
 
   function shouldEnterStandby(input: { lastUser: Message.User; lastAssistant: Message.Assistant | undefined }) {
     return !!(
-      input.lastAssistant &&
-      isCompletedReplyToUserMessage({ info: input.lastAssistant, parts: [] }, input.lastUser.id)
+      input.lastAssistant && isCompletedReplyToUserMessage({ info: input.lastAssistant, parts: [] }, input.lastUser.id)
     )
   }
 
@@ -1150,7 +1158,8 @@ export namespace SessionLoop {
     log.info("entering standby", { sessionID: input.sessionID })
     touch(input.sessionID)
     const waitForWake = waitForUserMessage(input.sessionID, input.abort, input.afterID)
-    SessionStatus.set(input.sessionID, { type: "idle" }, { promptGenerationOwner: input.abort })
+    await SessionStatus.set(input.sessionID, { type: "idle" }, { promptGenerationOwner: input.abort })
+    SessionRuntimeContractStore.settleConsumedWake(input.sessionID)
     return { waitForWake }
   }
 
@@ -1871,15 +1880,13 @@ export namespace SessionLoop {
     })
     try {
       if (input.reply_to_message_id) {
-        const persistedReply = await completedReplyToUserMessage(
-          sessionID,
-          input.reply_to_message_id,
-          startedOwner,
-        )
+        const persistedReply = await completedReplyToUserMessage(sessionID, input.reply_to_message_id, startedOwner)
         if (persistedReply) {
           flushCallbacks(sessionID, persistedReply, directory, "reply", input.reply_to_message_id)
+          consumeRuntimeContractTurn(sessionID)
           if (startedOwner) {
             await finish(sessionID, abort, directory)
+            SessionRuntimeContractStore.settleConsumedWake(sessionID)
             return firstResult
           }
         }
@@ -1887,16 +1894,11 @@ export namespace SessionLoop {
       if (!abort) return firstResult
       if (!resume_existing) await terminalizeRecoveredIncompleteAssistant(sessionID)
     } catch (error) {
+      SessionRuntimeContractStore.failConsumedWake(sessionID, error)
       if (abort && !resume_existing) {
         await finish(sessionID, abort, directory, error)
       } else {
-        SessionPromptState.rejectAttachedCallbacks(
-          sessionID,
-          error,
-          directory,
-          resultMode,
-          input.reply_to_message_id,
-        )
+        SessionPromptState.rejectAttachedCallbacks(sessionID, error, directory, resultMode, input.reply_to_message_id)
       }
       await firstResult.catch(() => undefined)
       throw error
@@ -1976,6 +1978,18 @@ export namespace SessionLoop {
               }
               const controls = pendingControls.filter(isActionableSessionControl)
               const runRuntimeContractTurn = shouldRunRuntimeContractTurn(sessionID)
+              const currentRuntimeContract = SessionRuntimeContractStore.get(sessionID)
+              if (
+                runRuntimeContractTurn &&
+                currentRuntimeContract?.identity.identityKind === "projected-scheduler" &&
+                currentRuntimeContract.identity.inputMessageID &&
+                lastUser.id !== currentRuntimeContract.identity.inputMessageID
+              ) {
+                throw new Error(
+                  `Orchestrator wake ${currentRuntimeContract.identity.taskIngressID ?? "<unknown>"} is bound to input ` +
+                    `${currentRuntimeContract.identity.inputMessageID}, but Session ${sessionID} current input is ${lastUser.id}`,
+                )
+              }
               if (!runRuntimeContractTurn && controls.length === 0 && shouldEnterStandby({ lastUser, lastAssistant })) {
                 if (!lastAssistant) break
                 const lastResult = msgs.find((m) => m.info.id === lastAssistant.id)
@@ -2050,7 +2064,8 @@ export namespace SessionLoop {
                           compactionControl.payload.model &&
                           typeof compactionControl.payload.model === "object" &&
                           !Array.isArray(compactionControl.payload.model) &&
-                          typeof (compactionControl.payload.model as { providerID?: unknown }).providerID === "string" &&
+                          typeof (compactionControl.payload.model as { providerID?: unknown }).providerID ===
+                            "string" &&
                           typeof (compactionControl.payload.model as { modelID?: unknown }).modelID === "string"
                             ? {
                                 providerID: (compactionControl.payload.model as { providerID: string }).providerID,
@@ -2217,6 +2232,7 @@ export namespace SessionLoop {
           step = 0
         }
       } catch (e) {
+        SessionRuntimeContractStore.failConsumedWake(sessionID, e)
         const terminalPublished =
           SessionStatus.get(sessionID).type === "terminal"
             ? true
@@ -2231,7 +2247,17 @@ export namespace SessionLoop {
         }
       } finally {
         const s = state(directory)[sessionID]
-        if (s?.abort.signal === abort) await finish(sessionID, abort, directory)
+        try {
+          if (s?.abort.signal === abort) await finish(sessionID, abort, directory)
+          SessionRuntimeContractStore.settleConsumedWake(sessionID)
+        } catch (error) {
+          SessionRuntimeContractStore.failConsumedWake(sessionID, error)
+          log.error("session prompt resources failed to settle", {
+            sessionID,
+            directory,
+            error: error instanceof Error ? error.message : String(error),
+          })
+        }
       }
     })()
 
@@ -2586,14 +2612,14 @@ export namespace SessionLoop {
       ConversationCapability.isAgentID(input.agentID)
         ? await ConversationCapability.runtimeMcpTools(input.config, input.agentID, input.session.id)
         : undefined
-    const defaultMcpProcessAuthority = executionAuthority.kind === "task"
-      ? MCP.taskProcessAuthority(executionAuthority.taskID, executionAuthority.directory)
-      : MCP.hostProcessAuthority(executionAuthority.directory)
+    const defaultMcpProcessAuthority =
+      executionAuthority.kind === "task"
+        ? MCP.taskProcessAuthority(executionAuthority.taskID, executionAuthority.directory)
+        : MCP.hostProcessAuthority(executionAuthority.directory)
     const resolvedMcpTools =
       exactRuntimeContractTools || !includeMcpTools
         ? {}
-        : (nativeConversationMcpTools ??
-          (await MCP.tools(defaultMcpProcessAuthority)))
+        : (nativeConversationMcpTools ?? (await MCP.tools(defaultMcpProcessAuthority)))
     for (const [key, item] of Object.entries(resolvedMcpTools)) {
       const execute = item.execute
       if (!execute) continue
@@ -2649,9 +2675,9 @@ export namespace SessionLoop {
                     execute: () => execute(args, opts),
                   })
                 : await (async () => {
-                  await ctx.ask(mcpPermissionPlan(key, args))
-                  return execute(args, opts)
-                })()
+                    await ctx.ask(mcpPermissionPlan(key, args))
+                    return execute(args, opts)
+                  })()
 
             await Plugin.trigger(
               "tool.execute.after",

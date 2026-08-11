@@ -1270,7 +1270,11 @@ export namespace Session {
   })
   export type PersistMessageInput = z.infer<typeof PersistMessageInput>
 
-  function persistMessageBundleRows(input: PersistMessageInput, commit?: () => void) {
+  function persistMessageBundleRows(
+    input: PersistMessageInput,
+    commit?: () => void,
+    beforeVisibilityEffects?: () => void,
+  ) {
     for (const control of input.controls ?? []) {
       if (control.sessionID !== input.info.sessionID) {
         throw new Error(
@@ -1283,6 +1287,7 @@ export namespace Session {
     )
     Database.transaction((db) => {
       upsertMessageRow(input.info, { publishCreated: false, publishUpdated: false })
+      beforeVisibilityEffects?.()
       if (!existing) {
         const createdInfo = messageWithPersistedCreated(input.info, input.info.time.created)
         Bus.publishOwnedInTransaction(Message.Event.Created, { info: createdInfo })
@@ -1311,8 +1316,12 @@ export namespace Session {
     }
   }
 
-  async function persistMessageBundle(input: PersistMessageInput, commit?: () => void) {
-    const persisted = persistMessageWithCommitInTransaction(input, commit ?? (() => undefined))
+  async function persistMessageBundle(
+    input: PersistMessageInput,
+    commit?: () => void,
+    beforeVisibilityEffects?: () => void,
+  ) {
+    const persisted = persistMessageWithCommitInTransaction(input, commit ?? (() => undefined), beforeVisibilityEffects)
     return persisted.complete()
   }
 
@@ -1323,15 +1332,25 @@ export namespace Session {
    * SQLite transaction. The callback is for durable facts whose validity is
    * defined by the exact message/Part set, such as a projected-worker Turn
    * descriptor and its dispatch lineage. It must not perform asynchronous
-   * work or publish process-local runtime state.
+   * work or publish process-local runtime state. `beforeVisibilityEffects`
+   * may only register post-commit effects that must run before the Message
+   * publication effects registered by this bundle.
    */
-  export async function persistMessageWithCommit(input: PersistMessageInput, commit: () => void) {
-    return persistMessageBundle(PersistMessageInput.parse(input), commit)
+  export async function persistMessageWithCommit(
+    input: PersistMessageInput,
+    commit: () => void,
+    beforeVisibilityEffects?: () => void,
+  ) {
+    return persistMessageBundle(PersistMessageInput.parse(input), commit, beforeVisibilityEffects)
   }
 
-  export function persistMessageWithCommitInTransaction(input: PersistMessageInput, commit: () => void) {
+  export function persistMessageWithCommitInTransaction(
+    input: PersistMessageInput,
+    commit: () => void,
+    beforeVisibilityEffects?: () => void,
+  ) {
     const parsed = PersistMessageInput.parse(input)
-    persistMessageBundleRows(parsed, commit)
+    persistMessageBundleRows(parsed, commit, beforeVisibilityEffects)
     return {
       complete: () => hydratePersistedMessageBundle(parsed),
     }
@@ -1691,13 +1710,9 @@ export namespace Session {
       }
       const inputTokens = safe(input.usage.inputTokens)
       const outputTokens = safe(input.usage.outputTokens)
-      const reasoningTokens = safe(
-        input.usage.outputTokenDetails?.reasoningTokens ?? input.usage.reasoningTokens,
-      )
+      const reasoningTokens = safe(input.usage.outputTokenDetails?.reasoningTokens ?? input.usage.reasoningTokens)
       const textOutputTokens = safe(input.usage.outputTokenDetails?.textTokens ?? outputTokens - reasoningTokens)
-      const cacheReadInputTokens = safe(
-        input.usage.inputTokenDetails?.cacheReadTokens ?? input.usage.cachedInputTokens,
-      )
+      const cacheReadInputTokens = safe(input.usage.inputTokenDetails?.cacheReadTokens ?? input.usage.cachedInputTokens)
       const cacheWriteInputTokens = safe(
         (input.usage.inputTokenDetails?.cacheWriteTokens ??
           input.metadata?.["anthropic"]?.["cacheCreationInputTokens"] ??
@@ -1741,8 +1756,7 @@ export namespace Session {
       }
 
       const costInfo =
-        input.model.cost?.experimentalOver200K &&
-        tokens.input + tokens.cache.read + tokens.cache.write > 200_000
+        input.model.cost?.experimentalOver200K && tokens.input + tokens.cache.read + tokens.cache.write > 200_000
           ? input.model.cost.experimentalOver200K
           : input.model.cost
       return {

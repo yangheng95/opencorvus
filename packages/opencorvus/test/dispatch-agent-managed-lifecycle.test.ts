@@ -45,10 +45,7 @@ import type { OrchestratorEvent } from "@/orchestrator/event"
 import { ProtocolStore } from "@/protocol/store"
 import { Provider } from "@/provider/provider"
 import type { Provider as ProviderType } from "@/provider/provider"
-import {
-  RuntimeExecutionSettlement,
-  RuntimeExecutionSettlementInactivityError,
-} from "@/runtime/execution-settlement"
+import { RuntimeExecutionSettlement, RuntimeExecutionSettlementInactivityError } from "@/runtime/execution-settlement"
 import { Server } from "@/server/server"
 import { Session } from "@/session"
 import { Message } from "@/session/message"
@@ -282,11 +279,32 @@ async function verifyDetachedDispatchLifecycle(input: {
             title: "Managed lifecycle root delivery",
           })
           const now = Date.now()
+          const controlMessageID = `msg_orchestrator_control_${loopInput.wakeID}`
+          await Session.persistMessage({
+            info: {
+              id: controlMessageID,
+              sessionID: orchestrator.id,
+              role: "user",
+              author: "orchestrator",
+              time: { created: now },
+              agent: "orchestrator",
+              model,
+            },
+            parts: [
+              {
+                id: Identifier.ascending("part"),
+                sessionID: orchestrator.id,
+                messageID: controlMessageID,
+                type: "text",
+                text: "Exact durable root control occurrence",
+              },
+            ],
+          })
           const finalMessageID = Identifier.ascending("message")
           const assistant: Message.Assistant = {
             id: finalMessageID,
             sessionID: orchestrator.id,
-            parentID: Identifier.ascending("message"),
+            parentID: controlMessageID,
             role: "assistant",
             author: "orchestrator",
             time: { created: now, completed: now + 1 },
@@ -576,7 +594,10 @@ async function verifyDetachedDispatchLifecycle(input: {
                   )
                   .get(),
               )!
-              expect({ label: recovered.label, ingress: QueuedTaskIngressSchema.parse(recovered.payload) }).toMatchObject({
+              expect({
+                label: recovered.label,
+                ingress: QueuedTaskIngressSchema.parse(recovered.payload),
+              }).toMatchObject({
                 label: "drained",
                 ingress: { delivery_attempt: 3, delivery_runtime_id: "successor-runtime", delivery_runtime_attempt: 1 },
               })
@@ -598,10 +619,7 @@ async function verifyDetachedDispatchLifecycle(input: {
               db
                 .delete(EngineArtifactTable)
                 .where(
-                  and(
-                    eq(EngineArtifactTable.task_id, taskID),
-                    eq(EngineArtifactTable.kind, "queued_operator_wake"),
-                  ),
+                  and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")),
                 )
                 .run(),
             )
@@ -612,14 +630,14 @@ async function verifyDetachedDispatchLifecycle(input: {
                 .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
                 .from(EngineArtifactTable)
                 .where(
-                  and(
-                    eq(EngineArtifactTable.task_id, taskID),
-                    eq(EngineArtifactTable.kind, "queued_operator_wake"),
-                  ),
+                  and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")),
                 )
                 .get(),
             )!
-            expect({ label: recoveredWake.label, ingress: QueuedTaskIngressSchema.parse(recoveredWake.payload) }).toMatchObject({
+            expect({
+              label: recoveredWake.label,
+              ingress: QueuedTaskIngressSchema.parse(recoveredWake.payload),
+            }).toMatchObject({
               label: "drained",
               ingress: { infrastructure_fact_id: typedError.infrastructureArtifactID },
             })
@@ -723,9 +741,8 @@ async function verifyDetachedDispatchLifecycle(input: {
           ).toBe("ignored")
           expect(rootAttempts).toBe(2)
           if (input.recoverAfterRuntimeRestart) {
-            using _successorRuntime = QueueTestHooks.replaceTerminalIngressDeliveryRuntime(
-              "successor-lifecycle-runtime",
-            )
+            using _successorRuntime =
+              QueueTestHooks.replaceTerminalIngressDeliveryRuntime("successor-lifecycle-runtime")
             expect(await reconcileFailedExactTerminalIngressDeliveries()).toBe(1)
             await waitForQueueCompletionHooksForTest()
             const recovered = Database.use((db) =>
@@ -735,14 +752,16 @@ async function verifyDetachedDispatchLifecycle(input: {
                 .where(eq(EngineArtifactTable.id, lifecycleWake!.id))
                 .get(),
             )!
-            expect({ label: recovered.label, ingress: QueuedTaskIngressSchema.parse(recovered.payload) }).toMatchObject({
-              label: "drained",
-              ingress: {
-                delivery_attempt: 3,
-                delivery_runtime_id: "successor-lifecycle-runtime",
-                delivery_runtime_attempt: 1,
+            expect({ label: recovered.label, ingress: QueuedTaskIngressSchema.parse(recovered.payload) }).toMatchObject(
+              {
+                label: "drained",
+                ingress: {
+                  delivery_attempt: 3,
+                  delivery_runtime_id: "successor-lifecycle-runtime",
+                  delivery_runtime_attempt: 1,
+                },
               },
-            })
+            )
             expect(rootAttempts).toBe(3)
             return
           }
@@ -1031,12 +1050,7 @@ test("startup reconstructs and delivers an accepted infrastructure fact for a te
         db
           .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
           .from(EngineArtifactTable)
-          .where(
-            and(
-              eq(EngineArtifactTable.task_id, taskID),
-              eq(EngineArtifactTable.kind, "queued_operator_wake"),
-            ),
-          )
+          .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
           .get(),
       )!
       expect({ label: exactWake.label, ingress: QueuedTaskIngressSchema.parse(exactWake.payload) }).toMatchObject({
@@ -1114,7 +1128,10 @@ test("holds runtime settlement until an accepted detached delivery pipeline is d
     },
     runDetached: async (run) => await run(),
     runDetachedRecovery: async (run) => await run(),
-    committedLineage: Promise.resolve({ sessionID: "session-detached-barrier", artifactID: "lineage-detached-barrier" }),
+    committedLineage: Promise.resolve({
+      sessionID: "session-detached-barrier",
+      artifactID: "lineage-detached-barrier",
+    }),
     deliver: async () => {
       await deliveryReady
       settlementEvents.push("delivery_completed")
@@ -1144,7 +1161,10 @@ test("bounds Server settlement on a held detached pipeline and succeeds with the
     },
     runDetached: async (run) => await run(),
     runDetachedRecovery: async (run) => await run(),
-    committedLineage: Promise.resolve({ sessionID: "session-detached-timeout", artifactID: "lineage-detached-timeout" }),
+    committedLineage: Promise.resolve({
+      sessionID: "session-detached-timeout",
+      artifactID: "lineage-detached-timeout",
+    }),
     deliver: async () => undefined,
     onDeliveryFailure: async () => undefined,
     onPipelineOwnerCleanupFailure: async () => undefined,

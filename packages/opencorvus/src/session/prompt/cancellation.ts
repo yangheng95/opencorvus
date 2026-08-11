@@ -1,7 +1,8 @@
 import z from "zod"
 import { randomUUID } from "node:crypto"
 
-export type ExecutionCancellationSource = "session_prompt" | "dispatch_preparation"
+export const ExecutionCancellationSource = z.enum(["session_prompt", "dispatch_preparation"])
+export type ExecutionCancellationSource = z.infer<typeof ExecutionCancellationSource>
 
 export const ExecutionCancellationActor = z.enum([
   "user",
@@ -94,5 +95,20 @@ export class ExecutionCancellationError extends Error {
 }
 
 export function isExecutionCancellationError(value: unknown): value is ExecutionCancellationError {
-  return value instanceof ExecutionCancellationError
+  if (value instanceof ExecutionCancellationError) return true
+  if (!value || typeof value !== "object") return false
+  const candidate = value as {
+    name?: unknown
+    message?: unknown
+    source?: unknown
+    sessionID?: unknown
+    origin?: unknown
+  }
+  return Boolean(
+    candidate.name === "ExecutionCancellationError" &&
+      typeof candidate.message === "string" &&
+      ExecutionCancellationSource.safeParse(candidate.source).success &&
+      (candidate.sessionID === undefined || typeof candidate.sessionID === "string") &&
+      ExecutionCancellationOrigin.safeParse(candidate.origin).success,
+  )
 }

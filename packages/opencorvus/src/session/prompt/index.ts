@@ -32,6 +32,8 @@ export namespace SessionPrompt {
     resolveTools,
     createStructuredOutputTool,
     setSessionRuntimeContract,
+    armSessionRuntimeContractWake,
+    waitForSessionRuntimeContractWakeSettlement,
     getSessionRuntimeContract,
     clearSessionRuntimeContract,
     validateSessionRuntimeContractForContinuation,
@@ -39,6 +41,7 @@ export namespace SessionPrompt {
     setStepHook,
     withStepHook,
   } = SessionLoop
+  export type SessionRuntimeContract = SessionLoop.SessionRuntimeContract
   export const { ShellInput, shell } = SessionShell
   export type ShellInput = SessionShell.ShellInput
   export const CommandInput = SessionCommand.CommandInput

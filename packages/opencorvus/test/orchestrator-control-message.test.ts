@@ -3,6 +3,9 @@ import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
 import { SessionPrompt } from "@/session/prompt"
+import { Message } from "@/session/message"
+import { Bus } from "@/bus"
+import { Database } from "@/storage/db"
 import {
   currentOrchestratorControlMessage,
   materializeOrReuseCurrentOrchestratorControlMessage,
@@ -103,6 +106,84 @@ test("exact terminal ingress persists one visible Orchestrator control Message a
         expect(visibleTranscript).toEqual([first])
         expect(prompt).toHaveBeenCalledTimes(1)
       } finally {
+        prompt.mockRestore()
+      }
+    },
+  })
+})
+
+test("publishes the staged control runtime before the visible Message event", async () => {
+  await using project = await tmpdir({ git: true })
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const root = await Session.create({ kind: "root", title: "Atomic control publication root" })
+      const session = await Session.create({
+        kind: "orchestrator",
+        parentID: root.id,
+        title: "Atomic control publication",
+      })
+      const wakeID = "art_atomic_control_publication"
+      const event = OrchestratorEventSchema.parse({
+        dispatchInfrastructureFailure: {
+          infrastructureFactID: "art_atomic_dispatch_failure",
+          outcome: {
+            kind: "infrastructure_failure",
+            operation: "worker_dispatch",
+            message: "worker dispatch lost its physical owner",
+            error_name: "WorkerDispatchUnavailableError",
+            recovery_authority: { occurrence_status: "occurrence_not_committed" },
+            infrastructure_error: {
+              source: "engine_artifact",
+              artifact_id: "art_atomic_dispatch_failure",
+              catalog_revision: 1,
+              expected_sha256: "b".repeat(64),
+            },
+          },
+        },
+      })
+      const control = currentOrchestratorControlMessage(event, "tsk_atomic_control", wakeID)!
+      const order: string[] = []
+      const prompt = spyOn(SessionPrompt, "prompt").mockImplementation(async (input: any, hooks: any) =>
+        Session.persistMessageWithCommit(
+          {
+            info: {
+              id: input.messageID,
+              role: "user",
+              author: input.author,
+              sessionID: input.sessionID,
+              time: { created: Date.now() },
+              agent: input.agent,
+              model: input.model,
+              extra: input.extra,
+            },
+            parts: input.parts.map((part: any) => ({
+              ...part,
+              sessionID: input.sessionID,
+              messageID: input.messageID,
+            })),
+          },
+          () => undefined,
+          hooks?.beforeVisibilityEffects,
+        ),
+      )
+      const unsubscribe = Bus.subscribe(Message.Event.Updated, (messageEvent) => {
+        if (messageEvent.properties.info.id === control.messageID) order.push("visible-message")
+      })
+      try {
+        expect(
+          await materializeOrReuseCurrentOrchestratorControlMessage({
+            session,
+            model,
+            control,
+            beforeVisibilityEffects: () => Database.effect(() => order.push("runtime-armed")),
+          }),
+        ).toBe("created")
+        await Database.awaitEffectIdle(5_000)
+        expect(order).toEqual(["runtime-armed", "visible-message"])
+        expect(await materializeOrReuseCurrentOrchestratorControlMessage({ session, model, control })).toBe("reused")
+      } finally {
+        unsubscribe()
         prompt.mockRestore()
       }
     },
