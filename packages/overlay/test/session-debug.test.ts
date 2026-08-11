@@ -4,7 +4,10 @@ import {
   buildChatDebugBlob,
   buildTaskDebugBlob,
   buildTaskSelectionErrorDebugBlob,
+  debugCopyFailureMessage,
+  DebugNamedProjectRequiredError,
   formatDebugTime,
+  requireNamedDebugProjectDirectory,
 } from "../src/utils/debug-info"
 import { boundedDebugText, normalizeDebugDirectory } from "../src/utils/debug-text"
 
@@ -72,6 +75,27 @@ function projection(input: {
 }
 
 describe("persisted chat debug bundle", () => {
+  test("maps unsupported debug scope to the named-Project requirement", () => {
+    const message = "This feature requires a named project to be open."
+    expect(requireNamedDebugProjectDirectory(" C:/work/opencorvus ", message)).toBe("C:/work/opencorvus")
+    const missingDirectory = () => requireNamedDebugProjectDirectory("", message)
+    const anonymousDirectory = () =>
+      requireNamedDebugProjectDirectory(
+        "C:/Users/test/AppData/Local/opencorvus/projects/2026/08/11/123e4567-e89b-42d3-a456-426614174000",
+        message,
+      )
+    expect(missingDirectory).toThrow(message)
+    expect(missingDirectory).toThrow(DebugNamedProjectRequiredError)
+    expect(anonymousDirectory).toThrow(message)
+    expect(anonymousDirectory).toThrow(DebugNamedProjectRequiredError)
+    try {
+      missingDirectory()
+    } catch (error) {
+      expect(debugCopyFailureMessage(error, "Copy failed")).toBe(message)
+    }
+    expect(debugCopyFailureMessage(new Error("identity mismatch"), "Copy failed")).toBe("Copy failed")
+  })
+
   test("counts validated lifecycle facts and keeps bounded Tool identities", () => {
     const stats = summarizePersistedChatMessages([
       message({ id: "user-1", role: "user", created: 1 }),

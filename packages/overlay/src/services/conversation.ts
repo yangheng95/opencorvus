@@ -388,8 +388,12 @@ export function registerConversationSourceDirectory(source: BoardSource, directo
   return trimmed
 }
 
+export function optionalConversationSourceDirectory(source: BoardSource): string | undefined {
+  return sourceDirectoryByKey.get(sourceKey(source))
+}
+
 export function conversationSourceDirectory(source: BoardSource): string {
-  const directory = sourceDirectoryByKey.get(sourceKey(source))
+  const directory = optionalConversationSourceDirectory(source)
   if (!directory) throw new Error(`conversation source ${sourceKey(source)} has no project directory`)
   return directory
 }

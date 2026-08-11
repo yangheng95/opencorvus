@@ -7,6 +7,12 @@ design gaps after the Windows bounded-`glob` regression, then calibrate copied
 debug information because the current payload is inaccurate and does not tell
 the operator to paste it into an AI assistant for analysis.
 
+The operator subsequently clarified the product boundary: directory-free and
+anonymous temporary-project failures must not expose their varied underlying
+directory symptoms. The debug-copy feature requires an open named Project and
+must describe every unsupported temporary-project entry through that single
+product-level requirement.
+
 Acceptance requires:
 
 - copied Chat diagnostics distinguish root-Session persistence, full
@@ -20,6 +26,8 @@ Acceptance requires:
 - successful copy feedback explicitly tells the operator to paste the bundle
   into an AI assistant, and the copy gesture is discoverable even when usage
   data is absent;
+- directory-free and canonical anonymous Project selections fail before any
+  debug read with the same localized named-Project requirement;
 - focused non-UI tests, type checks, documentation checks, real-page visual
   inspection, and an independent read-only Agent review pass before delivery.
 
@@ -166,6 +174,15 @@ then assert that the active source is still the same before snapshotting and
 formatting the local board/card tree. Task refresh follows the same rule. A
 selection change returns an explicit retryable error rather than a stale blob.
 
+Before those reads, resolve the selected source directory through the existing
+canonical anonymous-Project classifier. A missing directory or dated anonymous
+Project is outside this feature's supported scope and returns one localized
+message: the feature requires an open named Project. Do not expose temporary
+directory layout, trace-directory, or persistence-route details for that
+unsupported scope. Named Projects retain the detailed identity checks below,
+because those errors indicate real state disagreement rather than the product
+scope boundary.
+
 The selected source is canonical. Persisted board identity is validated by the
 service. Local board identity is reported as a renderer observation and must
 match before a Chat bundle is built.
@@ -198,6 +215,8 @@ request and schema metadata as Chat diagnostics.
   semantics, and the AI analysis request.
 - Add a positive Task debug test proving topology/artifact timestamps contribute
   to the activity timestamp.
+- Add a focused non-UI contract test proving a named directory is accepted and
+  directory-free/canonical anonymous input maps to the one named-Project error.
 - Run Overlay typecheck and focused non-UI tests only; do not add or run DOM,
   component, browser-fixture, or screenshot tests.
 - Start the real Overlay page, invoke or expose the title feedback state, and
@@ -218,6 +237,12 @@ Implemented and verified on 2026-08-11:
   affected plane unavailable instead of manufacturing zero;
 - every copied failure/error/title/reason prose field uses the same bounded
   secret redactor; raw message bodies and Tool inputs/outputs remain absent;
+- missing-directory and canonical anonymous Project selections now raise one
+  typed scope error before Task refresh or Session reads, and the Conversation
+  title renders its localized named-Project requirement instead of the generic
+  clipboard failure; the complete result is also available in the wrapping
+  tooltip, dynamic accessible label, and polite live status; other integrity
+  failures keep their detailed diagnostic path and generic UI state;
 - the title is a keyboard-accessible button, its always-available tooltip says
   to paste the bundle into AI, and successful copy feedback repeats that next
   step for four seconds;
@@ -225,7 +250,14 @@ Implemented and verified on 2026-08-11:
   tooltip and copy-success state; its clipboard payload contained one validated
   persisted user message in both root and tree planes, while the renderer plane
   correctly reported its independent local card counts;
-- focused result: 8 tests, 37 assertions, 0 failures; Overlay typecheck, root
-  typecheck, `docs:check`, `api:routes-check`, and `git diff --check` passed;
+- focused result after the named-Project follow-up: 9 tests, 44 assertions,
+  0 failures; production Vite build, formatting, `docs:check`, and
+  `git diff --check` passed;
+- the focused Overlay typecheck passed after the final feedback-accessibility
+  adjustment;
+- visual acceptance for the new anonymous/directory-free failure state remains
+  unresolved: the isolated production page was reachable but its Browser host
+  blocked the local API, while the isolated Vite URL was blocked from Browser
+  navigation. No screenshot is claimed for the new message;
 - the independent read-only Agent's initial P1/P2 findings were repaired and
   sent through a final read-only re-review before delivery.

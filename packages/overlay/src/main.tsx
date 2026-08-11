@@ -159,8 +159,8 @@ import { composerDraftKey, composerDraftText, setComposerDraft } from "./service
 import { normalizeDebugDirectory } from "./utils/debug-text"
 import {
   cancelConversationReplay,
-  conversationSourceDirectory,
   loadConversation,
+  optionalConversationSourceDirectory,
   resetConversationProjection,
 } from "./services/conversation"
 import {
@@ -194,6 +194,7 @@ import {
   buildChatDebugBlob,
   buildTaskDebugBlob,
   buildTaskSelectionErrorDebugBlob,
+  requireNamedDebugProjectDirectory,
   writeDebugClipboard,
 } from "./utils/debug-info"
 import { taskOwningDirectory } from "./services/task-directory"
@@ -1176,13 +1177,15 @@ async function copyActiveConversationDebug(): Promise<void> {
   const selectedTaskFailure =
     selectedSource?.kind === "task" && taskSelectionError?.taskID === selectedSource.id ? taskSelectionError : null
   if (!selectedSource) throw new Error("No active Task or Chat")
+  selectedSource.directory = requireNamedDebugProjectDirectory(
+    String(selectedSource.directory ?? "").trim() ||
+      (selectedSource.kind === "session" ? (optionalConversationSourceDirectory(selectedSource) ?? "") : ""),
+    t("chat.debug_copy_named_project_required"),
+  )
   if (selectedSource.kind !== "session" && !selectedTaskFailure) {
     await loadBoard({ sync: true, requireFresh: true })
   }
   assertDebugSelectionCurrent(selectedSource)
-  if (selectedSource.kind === "session" && !String(selectedSource.directory ?? "").trim()) {
-    selectedSource.directory = conversationSourceDirectory(selectedSource)
-  }
   const persistedChat =
     selectedSource.kind === "session"
       ? await loadPersistedChatDebugProjection({
