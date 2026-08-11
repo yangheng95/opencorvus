@@ -15,6 +15,8 @@ on:
       - "package.json"
   schedule:
     - cron: "17 3 1 * *"
+  repository_dispatch:
+    types: [opencorvus-release-published]
   workflow_dispatch:
     inputs:
       deployment_mode:
@@ -32,6 +34,7 @@ permissions:
 
 concurrency:
   group: opencorvus-com-production
+  queue: max
   cancel-in-progress: false
 
 jobs:
@@ -90,6 +93,24 @@ jobs:
           set -euo pipefail
           python3 -c 'import json,os; value=json.loads(os.environ["EXPERT_SQUAD_TRUSTED_KEYS_JSON"]); assert isinstance(value,list) and len(value) >= 1'
 
+      - name: Generate current public download manifest
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DISPATCH_VERSION: ${{ github.event.client_payload.version || '' }}
+        run: |
+          set -euo pipefail
+          RELEASES_JSON="$(mktemp)"
+          gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '.[]' | jq -s '.' > "$RELEASES_JSON"
+          ARGS=(
+            --releases-json "$RELEASES_JSON"
+            --out packages/web/public/downloads/latest.json
+          )
+          if test -n "$DISPATCH_VERSION"; then
+            ARGS+=(--dispatched-version "$DISPATCH_VERSION")
+          fi
+          bun ./script/generate-website-download-manifest.ts "${ARGS[@]}"
+
       - name: Verify canonical Expert Squad archives
         run: bun test packages/opencorvus/test/expert-squad/static-distribution-archive.test.ts packages/web/test/expert-squad-static-distribution.test.ts packages/web/test/expert-squad-publication.test.ts
 
@@ -118,6 +139,13 @@ jobs:
           fi
           EXPECTED_ARCHIVES="$(jq -er '.resources.total' packages/web/dist/expert-squads/publication-input.json)"
           test "$(find packages/web/dist/expert-squads/archives -type f -name '*.zip' | wc -l)" -eq "$EXPECTED_ARCHIVES"
+          jq -e '
+            .protocol == "opencorvus/website-downloads@1" and
+            (.version | test("^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$")) and
+            (.assets | type == "array" and length > 0) and
+            (all(.assets[]; .bytes > 0 and (.url | contains("/releases/download/v" + $version + "/"))))
+          ' --arg version "$(jq -r '.version' packages/web/dist/downloads/latest.json)" \
+            packages/web/dist/downloads/latest.json >/dev/null
 
       - name: Upload frozen unsigned site
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -130,7 +158,7 @@ jobs:
   sign-and-deploy:
     name: sign and deploy RackNerd release
     needs: [archive-determinism, build]
-    if: ${{ github.event_name == 'workflow_dispatch' || vars.OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED == 'true' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch' || vars.OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -434,6 +462,21 @@ jobs:
             local expected_pointer=${1:-} probe pointer name path digest bytes output
             probe=$(mktemp -d)
             curl --fail --silent --show-error --location --max-redirs 2 "https://opencorvus.com/" > "$probe/index.html" || { rm -rf -- "$probe"; return 1; }
+            curl --fail --silent --show-error --location --max-redirs 2 \
+              "https://opencorvus.com/downloads/latest.json" > "$probe/downloads.json" || { rm -rf -- "$probe"; return 1; }
+            python3 - "$probe/downloads.json" <<'PY' || { rm -rf -- "$probe"; return 1; }
+          import json, re, sys
+          manifest = json.load(open(sys.argv[1], encoding="utf-8"))
+          version = manifest.get("version", "")
+          assets = manifest.get("assets")
+          if manifest.get("protocol") != "opencorvus/website-downloads@1" or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?", version):
+              raise SystemExit("invalid public download manifest identity")
+          if not isinstance(assets, list) or not assets:
+              raise SystemExit("public download manifest has no assets")
+          tag = f"/releases/download/v{version}/"
+          if any(not isinstance(asset, dict) or not isinstance(asset.get("bytes"), int) or asset["bytes"] <= 0 or tag not in str(asset.get("url", "")) for asset in assets):
+              raise SystemExit("invalid public download manifest asset")
+          PY
             curl --fail --silent --show-error --location --max-redirs 2 \
               "https://opencorvus.com/expert-squads/catalog.json" > "$probe/pointer.json" || { rm -rf -- "$probe"; return 1; }
             pointer="$probe/pointer.json"
