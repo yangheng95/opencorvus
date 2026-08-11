@@ -2,11 +2,12 @@
 
 ## Recall
 
-- User request: make the application logo hollow on every platform; Windows must at least retain a white background.
+- User request: make the application logo hollow on every platform; the initial wording noted that Windows currently presents a white background.
+- User correction on 2026-08-12: a white background or white-filled interior is not a cutout. The deliverable must contain real transparent alpha outside the outline and inside the bird silhouette; any white seen on Windows must come from the operating-system surface beneath the icon, not white pixels baked into the asset.
 - Acceptance indicators:
   - the macOS `icon.icns`, Windows `icon.ico`, Linux/runtime PNG family, and Windows Store square-logo family all show the same hollow OpenCorvus bird silhouette;
-  - the bird interior is visibly white rather than a solid blue fill at 32, 44, 128, and 1024 pixels;
-  - Windows ICO and Windows square-logo pixels have a fully opaque white background;
+  - the bird interior and canvas outside the blue outline are transparent rather than white-filled at 32, 44, 128, and 1024 pixels;
+  - Windows ICO and Windows square-logo assets preserve that alpha cutout, so a white Windows surface can show through without becoming part of the icon artwork;
   - the generated family remains the exact set referenced by `tauri.conf.json` and the runtime window/tray icon path;
   - the regular light/dark brand logos rendered inside the application remain unchanged.
 - Hard constraints:
@@ -42,7 +43,7 @@ All current desktop assets show a solid, multi-blue OpenCorvus bird on a fully o
 
 ### Root cause and replacement contract
 
-The generator has only a filled-logo rasterization step, so every platform necessarily receives the filled mark. The replacement belongs in that one generator: derive a binary silhouette mask from the canonical SVG, produce a bounded outline band around the silhouette, color the band with the canonical dark blue, flatten it over opaque white, and then let Tauri generate every platform container and size from that single hollow master.
+The generator has only a filled-logo rasterization step, so every platform necessarily receives the filled mark. The replacement belongs in that one generator: derive a binary silhouette mask from the canonical SVG, produce a bounded outline band around the silhouette, color the band with the canonical dark blue, preserve transparent alpha on both sides of the band, and then let Tauri generate every platform container and size from that single hollow master.
 
 This keeps one geometry source and one generation path. It deliberately leaves the in-product brand artwork and web favicon family outside the desktop packaging contract.
 
@@ -50,7 +51,7 @@ This keeps one geometry source and one generation path. It deliberately leaves t
 
 - Definitions and call sites: only the icon generator and its generated `src-tauri/icons` outputs change; `tauri.conf.json` and Rust runtime icon loaders continue to consume the same filenames.
 - Platform assets: macOS ICNS, Windows ICO and Store logos, and Linux/runtime PNGs change together.
-- Background: the master remains fully opaque white, which directly guarantees the Windows requirement and preserves the existing background behavior on macOS and Linux.
+- Transparency: the master must retain alpha. The corner and bird interior must be transparent; only the blue outline and its antialiased edge may carry opacity. A white Windows tile or shell surface is presentation underneath the icon, not raster content.
 - Small-size risk: a mathematically thin contour can disappear after downsampling. The outline width must be selected at 1024 pixels and accepted visually at the smallest generated 30/32/44-pixel outputs.
 - Shape risk: treating each colored region independently would create noisy internal outlines and duplicate brand geometry. The generator therefore outlines the union silhouette only.
 - Excluded: website favicons, social-share images, and in-app light/dark logos are not OS platform application icons and remain unchanged.
@@ -59,31 +60,25 @@ This keeps one geometry source and one generation path. It deliberately leaves t
 ## Implementation plan
 
 1. Extend `generate-app-icons.ts` with one deterministic hollow-silhouette renderer based on the canonical light SVG alpha channel.
-2. Generate a dark-blue ring mask with a white interior/background and feed that 1024-pixel master to the existing Tauri CLI path.
+2. Generate a dark-blue ring mask with a transparent interior/background and feed that 1024-pixel master to the existing Tauri CLI path.
 3. Regenerate the complete desktop icon family, retaining the configured filenames and removing mobile-only outputs as before.
-4. Validate dimensions, opacity, center whiteness, and non-empty outline pixels through a focused non-UI artifact checker.
+4. Validate dimensions, transparent corner/interior alpha, and non-empty opaque outline pixels through a focused non-UI artifact checker.
 5. Visually inspect the 1024, 128, 44, 32, ICO, and ICNS representations; adjust outline width only from rendered evidence.
 6. Run package typecheck, icon regeneration idempotence/diff checks, Tauri configuration/build-relevant checks, document checks, and `git diff --check`.
 7. Obtain mandatory independent read-only review, repair all valid findings, rerun affected checks, then commit and perform the upstream push safety audit.
 
 ## Verification record
 
-First-pass implementation verification:
+The 2026-08-11 white-backed implementation was rejected by the user's 2026-08-12 correction because every pixel was opaque; visually white negative space did not constitute an alpha cutout. The following evidence supersedes that acceptance record:
 
-- `bun run icons:generate` from `packages/overlay`: generated the complete 17-file desktop family and removed mobile-only outputs through the existing managed temporary-directory lifecycle.
-- The first rendered artifact inspection exposed that treating Sharp's alpha morphology as a conventional bright-mask dilation produced an empty/white result. Direct mask statistics proved the library operation polarity and channel expansion; that version was rejected before acceptance.
-- A second morphology-based result produced a hollow bird but squared feather ends at 1024 pixels. The implementation was replaced with a two-pass squared Euclidean distance transform, producing a smooth, constant-width outline rather than accepting the visibly inferior raster.
-- Human visual inspection covered the 512-pixel `icon.png`, `128x128.png`, `32x32.png`, `Square44x44Logo.png`, `Square30x30Logo.png`, and `StoreLogo.png`. The hollow bird remains legible at the smallest assets, with rounded wing/feather/head/tail contours, a white interior, and a white background.
-- Embedded PNG frames were parsed directly from the Windows ICO and macOS ICNS containers. The 16-pixel Windows frame and largest 256-pixel ICO frame were visually inspected as white-backed, hollow, and legible; the 1024-pixel `ic10` ICNS frame carries the same composition at master fidelity.
-- `bun run script/run-unit-tests.ts test/app-icon-generation.test.ts`: passed 2 positive tests with 326 assertions. The tests render the canonical SVG through the hollow generator and verify dimensions, exact master colors, white center/background, outline pixel population, all 15 generated PNGs, all 6 Windows ICO frames, all 8 modern PNG-backed macOS ICNS frames, full opacity, and canonical ICNS chunk ordering.
+- `renderHollowDesktopIcon` now writes its RGBA outline buffer directly and does not flatten it onto white. Transparent pixels remain on both sides of the blue contour.
+- `bun run icons:generate` from `packages/overlay`: regenerated the complete 17-file desktop family and removed mobile-only outputs through the existing managed temporary-directory lifecycle.
+- Human visual inspection covered the 512-pixel `icon.png`, 32-pixel PNG, and 50-pixel `StoreLogo.png` at original resolution. The viewer's transparency surface is visible outside the mark and through the bird body, while the blue contour remains smooth and recognizable at the small sizes.
+- `bun run script/run-unit-tests.ts test/app-icon-generation.test.ts`: passed 2 positive tests with 152 assertions. The tests validate alpha-bearing master output, transparent corner and center samples, sufficient transparent and visible-outline pixels, all 15 generated PNGs, all 6 Windows ICO frames, all 8 modern PNG-backed macOS ICNS frames, and canonical ICNS chunk ordering.
+- A repeated SHA-256 before/after regeneration audit passed with byte-identical hashes across all 17 desktop assets.
 - `bun run typecheck` from `packages/overlay`: passed.
 - `cargo check --manifest-path packages/overlay/src-tauri/Cargo.toml`: passed the real Tauri host compilation in the `dev` profile.
 - `bun run docs:check`: passed with 330 operations in 25 groups.
 - `git diff --check`: passed.
-- A SHA-256 before/after regeneration audit initially found that Tauri emitted identical ICNS chunks in nondeterministic order. The generator now canonicalizes the complete ICNS container by chunk type after Tauri generation; the repeated audit then passed with byte-identical hashes across all 17 desktop assets.
-- Independent review found that `PublicSiteHeader.astro` was an undeclared cross-package consumer of the generated runtime PNG. It now imports the unchanged canonical filled SVG instead; a dedicated wrapper preserves the previous 34-pixel white image field, 5-pixel cobalt padding, 1-pixel border, and adjacent `OpenCorvus` label while preventing desktop icon regeneration from altering the website.
-- Browser-skill real-page acceptance against an isolated `http://127.0.0.1:4327/` Astro development server: the desktop public homepage Header was captured and inspected after the repair. The mark remains the filled blue bird on white, inside its cobalt padding and border, with unchanged navigation alignment. Read-only computed evidence confirmed a 34 × 34 image, white image background, 5-pixel padding, cobalt wrapper background, and border. The isolated server and preview tab were closed after acceptance.
-- `bun run check` from `packages/web`: passed all 62 checked files with 0 errors, 0 warnings, and one unrelated existing unused-variable hint in `qa/dedupe-lead.cjs`.
-- `bun run build` from `packages/web`: passed the static production build with 335 pages, optimized the canonical SVG Header asset, and retained existing third-party Starlight/toolbeam/top-level-await warnings only.
-
-Independent read-only review found two valid delivery issues: the public website Header's undeclared dependency on the runtime PNG and stale verification counts/dimensions. Both were repaired and the affected UI, tests, checks, build, and evidence were rerun. The second independent read-only review rechecked all 17 assets, every modern ICO/ICNS frame, runtime and packaging consumers, Windows opacity/background, smallest-size readability, ICNS canonicalization, web isolation and real-page evidence, tests, specs, indexes, and the final worktree diff, and reported **no unresolved findings**.
+- The website Header remains isolated from generated runtime icons through its canonical filled SVG import; no web UI file changed in the correction.
+- Independent read-only re-review inspected the generator, all 15 PNG assets, all 6 Windows ICO frames, all 8 modern macOS ICNS PNG frames, legacy ICNS masks, small-size visuals, tests, runtime/package consumers, specification, and final task diff, and reported **no unresolved findings**.

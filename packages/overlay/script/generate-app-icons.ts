@@ -13,7 +13,6 @@ const outputRoot = join(overlayRoot, "src-tauri", "icons")
 export const DESKTOP_ICON_SIZE = 1024
 export const DESKTOP_ICON_OUTLINE_RADIUS = 28
 export const DESKTOP_ICON_OUTLINE_COLOR = { r: 22, g: 58, b: 140 } as const
-export const DESKTOP_ICON_BACKGROUND_COLOR = { r: 255, g: 255, b: 255, alpha: 1 } as const
 const DISTANCE_INFINITY = 1_000_000_000_000
 
 function transformDistanceLine(
@@ -103,7 +102,6 @@ export async function renderHollowDesktopIcon(sourcePath: string, outputPath: st
   await sharp(outline, {
     raw: { width: DESKTOP_ICON_SIZE, height: DESKTOP_ICON_SIZE, channels: 4 },
   })
-    .flatten({ background: DESKTOP_ICON_BACKGROUND_COLOR })
     .png()
     .toFile(outputPath)
 }
@@ -134,7 +132,7 @@ async function generateDesktopIconFamily(): Promise<void> {
   const sourceIconPath = join(temporaryRoot, "opencorvus-app-icon.png")
 
   try {
-    // PNG means Portable Network Graphics. One high-resolution, white-backed
+    // PNG means Portable Network Graphics. One high-resolution, alpha-cutout
     // hollow master feeds every desktop platform container and raster size.
     await renderHollowDesktopIcon(brandLogoPath, sourceIconPath)
 
