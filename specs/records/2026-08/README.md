@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-11-agent-hosts-website-tab.md](2026-08-11-agent-hosts-website-tab.md) defines the reciprocal public navigation tab and complete, source-backed OpenClaw, Hermes Agent, generic Agent Skills, CLI, HTTP API, security, and evidence guidance for operating OpenCorvus from another assistant.
+
 - [2026-08-11-windows-glob-mission-recovery-debug-convergence.md](2026-08-11-windows-glob-mission-recovery-debug-convergence.md) identifies the Windows bounded-glob crash regression, adds durable standalone-Mission restart recovery, separates persisted debug facts from rendered cards, and preserves held-Squad capability authority while exposing its diagnostic boundary.
 
 - [2026-08-11-public-website-iterative-design-program.md](2026-08-11-public-website-iterative-design-program.md) establishes the research-backed, independently approved website iteration loop and specifies Iteration 1 as a bounded public-versus-documentation typography ownership repair with real bilingual visual acceptance.
