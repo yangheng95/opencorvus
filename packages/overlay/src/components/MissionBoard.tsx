@@ -26,6 +26,7 @@ export interface MissionBoardProps {
   expertSquads: readonly ExpertSquadOption[]
   activeExpertSquadID: string
   onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
+  onInstallMoreExpertSquads?: (projectDirectory: string) => void
   onOpenMission: (mission: MissionRecord) => void | Promise<void>
   onCreateManual: (input: MissionManualCreateRequest) => Promise<void>
   onCreateWithAI: (input: MissionCreateRequest) => Promise<void>
@@ -392,6 +393,7 @@ export function MissionBoard(props: MissionBoardProps) {
         expertSquads={props.expertSquads}
         activeExpertSquadID={props.activeExpertSquadID}
         onExpertSquadQuery={props.onExpertSquadQuery}
+        onInstallMoreExpertSquads={props.onInstallMoreExpertSquads}
         onClose={() => setCreateOpen(false)}
         onCreateManual={props.onCreateManual}
         onCreateWithAI={props.onCreateWithAI}

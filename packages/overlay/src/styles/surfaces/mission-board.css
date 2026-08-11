@@ -436,6 +436,17 @@
   white-space: nowrap;
 }
 
+.mission-create-form__option strong {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-xs);
+}
+
+.oc-select-option[data-expert-squad-action="install-more"] {
+  border-top: var(--oc-border-width) solid var(--divider-soft);
+  color: var(--accent);
+}
+
 .mission-create-form__option small {
   color: var(--text-muted);
 }

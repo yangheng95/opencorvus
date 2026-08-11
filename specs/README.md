@@ -6,6 +6,8 @@ Latest Agent-host website tab: [`2026-08-11-agent-hosts-website-tab.md`](records
 
 Latest Windows glob, Mission process-recovery, and persisted debug convergence: [`2026-08-11-windows-glob-mission-recovery-debug-convergence.md`](records/2026-08/2026-08-11-windows-glob-mission-recovery-debug-convergence.md).
 
+Latest Expert Squad on-demand installation design: [`2026-08-11-expert-squad-on-demand-installation.md`](records/2026-08/2026-08-11-expert-squad-on-demand-installation.md).
+
 Latest public website iterative design program: [`2026-08-11-public-website-iterative-design-program.md`](records/2026-08/2026-08-11-public-website-iterative-design-program.md).
 
 Latest public download-page and Release synchronization design: [`2026-08-11-public-download-page-design.md`](records/2026-08/2026-08-11-public-download-page-design.md).

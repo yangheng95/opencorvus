@@ -1126,6 +1126,21 @@ async function setActiveWorkLedgerItemPinned(
   setMissionSharedRefreshToken((value) => value + 1)
 }
 
+async function openExpertSquadMarketForProject(projectDirectory?: string): Promise<void> {
+  const requestedDirectory = projectDirectory?.trim() ?? ""
+  if (requestedDirectory && requestedDirectory !== activeDirectory().trim()) {
+    const applied = await applyDirectory(requestedDirectory, {
+      save: false,
+      persist: false,
+      restoreWorkspace: false,
+    })
+    if (!applied) return
+  } else if (!requestedDirectory) {
+    await resolveGlobalComposerProject()
+  }
+  await openConfigDialog("expert-squad-install")
+}
+
 async function copyActiveConversationDebug(): Promise<void> {
   const selectedSource = boardStore.selectedSource
   const taskSelectionError = boardStore.taskSelectionError
@@ -1956,6 +1971,9 @@ function OverlayRoot() {
           productPillar={composerIntent().productPillar}
           expertSquads={composerExpertSquadCatalog().squads}
           onExpertSquadQuery={(query, selectedIDs) => void searchComposerExpertSquads(query, selectedIDs)}
+          onInstallMoreExpertSquads={(directory) =>
+            void runMainAsync("expert-squad.open-market", () => openExpertSquadMarketForProject(directory))
+          }
           activeExpertSquadID={composerExpertSquadCatalog().activeID}
           onOpenMission={(mission) =>
             runMainAsync("mission-board.open-mission", () => openMissionBoardMission(mission))
@@ -2171,6 +2189,9 @@ function OverlayRoot() {
           referenceCatalogError={composerExpertSquadCatalog().error}
           expertSquads={composerExpertSquadCatalog().squads}
           onExpertSquadQuery={(query, selectedIDs) => void searchComposerExpertSquads(query, selectedIDs)}
+          onInstallMoreExpertSquads={() =>
+            void runMainAsync("expert-squad.open-market", () => openExpertSquadMarketForProject())
+          }
           activeExpertSquadID={composerExpertSquadCatalog().activeID}
           conversationActive={Boolean(activeTaskID() || activeSessionID())}
           launchReferences={composerLaunchReferences()}

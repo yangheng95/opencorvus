@@ -3,11 +3,11 @@ import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 
-test("full production HTTP bootstrap installs every repository-hosted Expert Squad by default", async () => {
-  const isolatedRoot = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-default-payload-http-"))
+test("production HTTP bootstrap exposes embedded defaults and installs one selected Market Squad", async () => {
+  const isolatedRoot = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-on-demand-payload-http-"))
   const isolatedHome = path.join(isolatedRoot, "home")
   const isolatedProject = path.join(isolatedRoot, "project")
-  const probe = path.join(import.meta.dir, "default-payload-production-route-probe.ts")
+  const probe = path.join(import.meta.dir, "on-demand-payload-production-route-probe.ts")
 
   try {
     const child = Bun.spawn([process.execPath, probe, isolatedProject], {
@@ -21,7 +21,7 @@ test("full production HTTP bootstrap installs every repository-hosted Expert Squ
       new Response(child.stdout).text(),
       new Response(child.stderr).text(),
     ])
-    if (exitCode !== 0) throw new Error(`Default payload production-route probe failed (${exitCode}): ${stderr}`)
+    if (exitCode !== 0) throw new Error(`On-demand payload production-route probe failed (${exitCode}): ${stderr}`)
 
     const outputLine = stdout
       .split(/\r?\n/)
@@ -30,24 +30,24 @@ test("full production HTTP bootstrap installs every repository-hosted Expert Squ
       .at(-1)
     const result = JSON.parse(outputLine ?? "null") as {
       payloadCount: number
-      installedByDefault: number
-      requestCount: number
+      defaultIDs: string[]
+      marketAvailable: number
+      installedID: string
+      installedDigest: string
+      installedSkillRefs: string[]
       activeSquadID: string
-      removedDisposition: string
-      modifiedDisposition: string
-      modifiedUpdateAvailable: boolean
+      requestCount: number
     }
 
     expect(result).toEqual({
       payloadCount: 95,
-      installedByDefault: 95,
-      requestCount: 10,
+      defaultIDs: ["advanced", "base", "research-studio", "squad-sdk"],
+      marketAvailable: 95,
+      installedID: "one-person-company-operating-system",
+      installedDigest: expect.stringMatching(/^[a-f0-9]{64}$/),
+      installedSkillRefs: ["one-person-company-operating-system/shared/method"],
       activeSquadID: "base",
-      removedID: "academic-paper-review",
-      removedDisposition: "removed",
-      modifiedID: "actuarial-reserving",
-      modifiedDisposition: "modified",
-      modifiedUpdateAvailable: true,
+      requestCount: 12,
     })
   } finally {
     await fs.rm(isolatedRoot, { recursive: true, force: true })

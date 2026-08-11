@@ -14,7 +14,7 @@ import { SearchField } from "./ui/SearchField"
 import { TextField } from "./ui/TextField"
 
 type MissionCreateMode = "manual" | "ai"
-type SelectOption = { value: string; label: string; description?: string }
+type SelectOption = { value: string; label: string; description?: string; action?: "install-more" }
 
 export interface MissionCreateRequest {
   directory: string
@@ -35,6 +35,7 @@ export interface MissionCreateDialogProps {
   expertSquads: readonly ExpertSquadOption[]
   activeExpertSquadID: string
   onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
+  onInstallMoreExpertSquads?: (projectDirectory: string) => void
   onClose: () => void
   onCreateManual: (input: MissionManualCreateRequest) => Promise<void>
   onCreateWithAI: (input: MissionCreateRequest) => Promise<void>
@@ -66,13 +67,19 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const selectedProject = createMemo(
     () => projectOptions().find((option) => option.value === projectDirectory()) ?? null,
   )
-  const expertSquadOptions = createMemo<SelectOption[]>(() =>
-    props.expertSquads.map((squad) => ({
+  const expertSquadOptions = createMemo<SelectOption[]>(() => [
+    ...props.expertSquads.map((squad) => ({
       value: squad.id,
       label: squad.display_label,
       description: squad.description,
     })),
-  )
+    {
+      value: "__install-more-expert-squads__",
+      label: t("chat.references.install_more"),
+      description: t("chat.references.install_more_description"),
+      action: "install-more",
+    },
+  ])
   const selectedExpertSquad = createMemo(
     () => expertSquadOptions().find((option) => option.value === expertSquadID()) ?? null,
   )
@@ -280,17 +287,33 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             <SelectControl<SelectOption>
               options={expertSquadOptions()}
               value={selectedExpertSquad()}
-              onChange={(option) => setExpertSquadID(option?.value ?? "")}
+              onChange={(option) => {
+                if (option?.action === "install-more") {
+                  props.onClose()
+                  props.onInstallMoreExpertSquads?.(projectDirectory())
+                  return
+                }
+                setExpertSquadID(option?.value ?? "")
+              }}
               optionValue="value"
               optionTextValue="label"
               disallowEmptySelection
               sameWidth
               ariaLabel={t("mission_board.create.expert_squad")}
               triggerDataUI="mission-create-expert-squad"
+              optionData={(option) => ({
+                "data-expert-squad-action": option.action,
+                "data-ui": option.action === "install-more" ? "mission-create-install-more-squads" : undefined,
+              })}
               renderValue={(option) => option?.label ?? t("mission_board.create.expert_squad_placeholder")}
               renderOptionLabel={(option) => (
                 <span class="mission-create-form__option">
-                  <strong>{option.label}</strong>
+                  <strong>
+                    <Show when={option.action === "install-more"}>
+                      <Icon name="config-expert-squad-install" size="compact" />
+                    </Show>
+                    {option.label}
+                  </strong>
                   <Show when={option.description}>
                     <small>{option.description}</small>
                   </Show>

@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-11-expert-squad-on-demand-installation.md](2026-08-11-expert-squad-on-demand-installation.md) restores the four embedded Expert Squads as the only automatic defaults, keeps the complete repository-hosted Market available on demand, preserves existing installations, and routes picker actions into the canonical installer.
+
 - [2026-08-11-readme-homepage-alignment.md](2026-08-11-readme-homepage-alignment.md) aligns the bilingual root README position, navigation, Workbench, Expert Squad, Mission, long-horizon delivery, and open-community story with the current public homepage while preserving repository/runtime detail.
 
 - [2026-08-11-agent-hosts-website-tab.md](2026-08-11-agent-hosts-website-tab.md) defines the reciprocal public navigation tab and complete, source-backed OpenClaw, Hermes Agent, generic Agent Skills, CLI, HTTP API, security, and evidence guidance for operating OpenCorvus from another assistant.
