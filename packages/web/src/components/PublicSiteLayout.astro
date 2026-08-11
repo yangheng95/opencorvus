@@ -7,16 +7,17 @@ import type { PublicLocale } from "../content/public-market"
 
 type Props = {
   locale: PublicLocale
-  current: "mission" | "use-with-agents" | "market" | "publish" | "trust" | "download"
+  current: "home" | "mission" | "use-with-agents" | "market" | "publish" | "trust" | "download"
   title: string
   description: string
   languageHref: string
+  socialImage?: string
 }
 
-const { locale, current, title, description, languageHref } = Astro.props
+const { locale, current, title, description, languageHref, socialImage } = Astro.props
 const canonicalUrl = new URL(Astro.url.pathname, config.url).href
 const publicBase = import.meta.env.BASE_URL.replace(/\/$/, "")
-const ogImage = new URL(`${publicBase}/og.png`, config.url).href
+const ogImage = new URL(socialImage ?? `${publicBase}/og.png`, config.url).href
 ---
 
 <!doctype html>

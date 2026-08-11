@@ -9,24 +9,42 @@ import ConceptMobile from "../assets/lander/opencorvus-concept-mobile.png"
 import ExpertSquadCatalog from "../assets/lander/expert-squad-catalog.png"
 import ExpertSquadInstalled from "../assets/lander/expert-squad-installed.png"
 import RuntimeDesktopContinuity from "../assets/lander/runtime-desktop-continuity-agent-v2.png"
-import PublicSiteHeader from "./PublicSiteHeader.astro"
-import PublicSiteFooter from "./PublicSiteFooter.astro"
+import PublicSiteLayout from "./PublicSiteLayout.astro"
 import { landingContent, type LandingLocale } from "../content/landing"
 import { publicPath } from "../content/public-market"
 import "../styles/public-site.css"
 
-const { lang } = Astro.locals.starlightRoute
-const locale: LandingLocale = lang === "zh-CN" ? "zh-cn" : "root"
+type Props = {
+  locale: LandingLocale
+}
+
+const { locale } = Astro.props
 const content = landingContent[locale]
 const languageHref = publicPath(locale === "zh-cn" ? "root" : "zh-cn")
 const conceptAnimation = locale === "zh-cn" ? ConceptFlowZh.src : ConceptFlowEn.src
 const conceptMobileAnimation = locale === "zh-cn" ? ConceptFlowMobileZh.src : ConceptFlowMobileEn.src
+const metadata =
+  locale === "zh-cn"
+    ? {
+        title: "OpenCorvus | 面向编码智能体的工程基础设施",
+        description: "定制你的 Agent 工作台，配置专家团，让长程任务从首次指令走到可审查交付。",
+      }
+    : {
+        title: "OpenCorvus | Engineering infrastructure for coding agents",
+        description: "Customize your Agent Workbench, configure Expert Squads, and carry long-horizon work from first instruction to reviewable delivery.",
+      }
 ---
 
-<div class="public-landing">
-  <PublicSiteHeader {locale} current="home" {languageHref} />
-
-  <main id="main-content" class="public-main">
+<PublicSiteLayout
+  {locale}
+  current="home"
+  title={metadata.title}
+  description={metadata.description}
+  {languageHref}
+  socialImage="/social-share.png"
+>
+  <div class="public-landing">
+  <main id="main-content" class="public-main" tabindex="-1">
     <section class="landing-hero" aria-labelledby="landing-title">
       <div class="hero-copy">
         <p class="eyebrow">{content.hero.eyebrow}</p>
@@ -172,9 +190,8 @@ const conceptMobileAnimation = locale === "zh-cn" ? ConceptFlowMobileZh.src : Co
       </div>
     </section>
   </main>
-
-  <PublicSiteFooter {locale} />
-</div>
+  </div>
+</PublicSiteLayout>
 
 <script>
   for (const figure of document.querySelectorAll<HTMLElement>("[data-concept-flow]")) {
@@ -560,38 +577,5 @@ const conceptMobileAnimation = locale === "zh-cn" ? ConceptFlowMobileZh.src : Co
     .public-landing .hero-actions a {
       width: 100%;
     }
-  }
-</style>
-
-<style is:global>
-  :root[data-has-hero] .sl-skip-link {
-    display: none;
-  }
-
-  :root[data-has-hero] header.header {
-    display: none;
-  }
-
-  :root[data-has-hero] .main-frame,
-  :root[data-has-hero] .main-pane,
-  :root[data-has-hero] .main-pane > main {
-    padding: 0;
-  }
-
-  :root[data-has-hero] .content-panel,
-  :root[data-has-hero] .content-panel > .sl-container {
-    border: 0;
-    margin: 0;
-    max-width: none;
-    padding: 0 !important;
-  }
-
-  :root[data-has-hero] .content-panel .sl-markdown-content {
-    display: none;
-  }
-
-  :root[data-has-hero] body {
-    margin: 0;
-    background: var(--paper);
   }
 </style>
