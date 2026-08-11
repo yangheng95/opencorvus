@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest hollow desktop application-icon convergence: [`2026-08-11-hollow-desktop-app-icons.md`](records/2026-08/2026-08-11-hollow-desktop-app-icons.md).
+
 Latest native platform message-notification convergence: [`2026-08-11-native-platform-message-notifications.md`](records/2026-08/2026-08-11-native-platform-message-notifications.md).
 
 Latest Mission Board create-flow, target-project ownership, action, and Right Dock repair: [`2026-08-11-mission-board-create-layout-and-dock-collapse.md`](records/2026-08/2026-08-11-mission-board-create-layout-and-dock-collapse.md).

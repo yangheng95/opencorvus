@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-11-hollow-desktop-app-icons.md](2026-08-11-hollow-desktop-app-icons.md) replaces the filled desktop application mark with one white-backed hollow silhouette generated consistently for macOS ICNS, Windows ICO/Store, and Linux/runtime PNG assets.
+
 - [2026-08-11-native-platform-message-notifications.md](2026-08-11-native-platform-message-notifications.md) replaces in-app, taskbar/Dock-badge, and custom tray-dot message attention with one native system-notification delivery that also requests platform-native user attention.
 
 - [2026-08-11-mission-board-create-layout-and-dock-collapse.md](2026-08-11-mission-board-create-layout-and-dock-collapse.md) repairs Mission Board creation ownership, target-project Squad/model resolution, mutation feedback, stale navigation, responsive layout, and the stable dock-closed surface contract.
