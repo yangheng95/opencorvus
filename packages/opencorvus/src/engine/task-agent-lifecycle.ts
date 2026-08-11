@@ -1,5 +1,5 @@
 import { Session } from "@/session"
-import { publishSettledSessionTerminalStatus } from "@/session/status-publication"
+import { publishSettledSessionTerminalStatusInCurrentProject } from "@/session/status-publication"
 import { isAgentInvocationSession, listTaskConversationAgentSessions } from "@/orchestrator/task-event"
 import type { TaskRow } from "./store"
 import { cancelSessionPromptInScope, type TaskAgentPromptSession } from "./cancellation-scope"
@@ -124,7 +124,7 @@ export async function publishTaskAgentCancellationStatusesAfterSettlement(input:
       projectID: input.task.project_id,
     })
     input.signal?.throwIfAborted()
-    await publishSettledSessionTerminalStatus({
+    await publishSettledSessionTerminalStatusInCurrentProject({
       session,
       taskID: input.task.id,
       inputMessageID: row.inputMessageID,

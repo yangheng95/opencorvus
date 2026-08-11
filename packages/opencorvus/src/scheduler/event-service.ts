@@ -61,6 +61,7 @@ type EventWakeExecutor = (input: {
 }) => Promise<{ sessionID: string; messageID: string }>
 type EventFireAcceptedHook = (fire: EventJobFire) => void | Promise<void>
 type BeforeSessionWakeHook = (input: { fire: EventJobFire; ownerID: string; signal: AbortSignal }) => void | Promise<void>
+type AfterEventFireClaimHook = (input: { fire: EventJobFire; ownerID: string; signal: AbortSignal }) => void | Promise<void>
 
 export namespace EventService {
   const log = Log.create({ service: "event-service" })
@@ -72,6 +73,7 @@ export namespace EventService {
   let wakeExecutorForTest: EventWakeExecutor | undefined
   let fireAcceptedHookForTest: EventFireAcceptedHook | undefined
   let beforeSessionWakeForTest: BeforeSessionWakeHook | undefined
+  let afterEventFireClaimForTest: AfterEventFireClaimHook | undefined
   let createFireFailuresForTest = 0
   let beforeProcessRollbackRecoveryForTest: (() => void | Promise<void>) | undefined
   let processSettlementGate: { token: symbol; projectIDs: Set<string> } | undefined
@@ -489,38 +491,43 @@ export namespace EventService {
       scheduleLeaseRecovery(fireID)
       return
     }
-    const existingMessageID = findWakeMessageID(claimed)
-    const job = Database.use((db) =>
-      db
-        .select()
-        .from(EventJobTable)
-        .where(and(eq(EventJobTable.id, claimed.event_job_id), eq(EventJobTable.project_id, claimed.project_id)))
-        .get(),
-    )
-    if (existingMessageID) {
-      const session = await Session.get(claimed.target_session_id)
-      SessionWake.resumePersistedWake({
-        sessionID: claimed.target_session_id,
-        messageID: existingMessageID,
-        directory: session.directory,
-      })
-      settleSuccess(claimed, job, s.ownerID, claimed.target_session_id, existingMessageID)
-      return
-    }
-    if (!job || !job.enabled) {
-      settleDisposition(claimed, s.ownerID, "job_disabled", "Event Job is no longer enabled")
-      return
-    }
-    if (!ready(job, Date.now())) {
-      settleDisposition(claimed, s.ownerID, "cooldown", "Event Job cooldown has not elapsed")
-      return
-    }
-
     const leaseFence = createEventFireLeaseFence(claimed.id, s.ownerID)
     const signal = AbortSignal.any([s.lifecycle.signal, runtimeSignal, leaseFence.signal])
     const renewTimer = setInterval(() => leaseFence.renewOrAbort(), FIRE_LEASE_RENEW_MS)
     renewTimer.unref()
+    let job: EventJob | undefined
     try {
+      await afterEventFireClaimForTest?.({ fire: claimed, ownerID: s.ownerID, signal })
+      throwIfAborted(signal)
+      const existingMessageID = findWakeMessageID(claimed)
+      job = Database.use((db) =>
+        db
+          .select()
+          .from(EventJobTable)
+          .where(and(eq(EventJobTable.id, claimed.event_job_id), eq(EventJobTable.project_id, claimed.project_id)))
+          .get(),
+      )
+      if (existingMessageID) {
+        const session = await Session.get(claimed.target_session_id)
+        throwIfAborted(signal)
+        SessionWake.resumePersistedWake({
+          sessionID: claimed.target_session_id,
+          messageID: existingMessageID,
+          directory: session.directory,
+        })
+        settleSuccess(claimed, job, s.ownerID, claimed.target_session_id, existingMessageID)
+        return
+      }
+      if (!job || !job.enabled) {
+        settleDisposition(claimed, s.ownerID, "job_disabled", "Event Job is no longer enabled")
+        return
+      }
+      if (!ready(job, Date.now())) {
+        settleDisposition(claimed, s.ownerID, "cooldown", "Event Job cooldown has not elapsed")
+        return
+      }
+
+      const activeJob = job
       const causation = causationFromParent(claimed)
       const result = await Bus.withCausation(
         {
@@ -531,28 +538,43 @@ export namespace EventService {
             sourceID: entry.jobID,
           })),
         },
-        () => (wakeExecutorForTest ?? executeWake)({ fire: claimed, job, ownerID: s.ownerID, signal }),
+        () => (wakeExecutorForTest ?? executeWake)({ fire: claimed, job: activeJob, ownerID: s.ownerID, signal }),
       )
-      settleSuccess(claimed, job, s.ownerID, result.sessionID, result.messageID)
+      throwIfAborted(signal)
+      settleSuccess(claimed, activeJob, s.ownerID, result.sessionID, result.messageID)
     } catch (error) {
-      const reconciledMessageID = findWakeMessageID(claimed)
-      if (reconciledMessageID && !leaseFence.lost) {
-        const session = await Session.get(claimed.target_session_id)
-        SessionWake.resumePersistedWake({
-          sessionID: claimed.target_session_id,
-          messageID: reconciledMessageID,
-          directory: session.directory,
+      try {
+        const reconciledMessageID = findWakeMessageID(claimed)
+        if (reconciledMessageID && !leaseFence.lost) {
+          const session = await Session.get(claimed.target_session_id)
+          throwIfAborted(leaseFence.signal)
+          SessionWake.resumePersistedWake({
+            sessionID: claimed.target_session_id,
+            messageID: reconciledMessageID,
+            directory: session.directory,
+          })
+          settleSuccess(claimed, job, s.ownerID, claimed.target_session_id, reconciledMessageID)
+        } else if (leaseFence.lost) {
+          scheduleLeaseRecovery(claimed.id)
+        } else if (s.lifecycle.signal.aborted || runtimeSignal.aborted) {
+          deferFire(claimed, s.ownerID, error)
+        } else {
+          scheduleRetry(claimed, job, s.ownerID, error)
+        }
+      } catch (settlementError) {
+        log.error("event fire failure settlement failed", {
+          fireID: claimed.id,
+          jobID: claimed.event_job_id,
+          error: errorMessage(error),
+          settlementError: errorMessage(settlementError),
         })
-        settleSuccess(claimed, job, s.ownerID, claimed.target_session_id, reconciledMessageID)
-      } else if (leaseFence.lost) {
-        scheduleLeaseRecovery(claimed.id)
-      } else if (s.lifecycle.signal.aborted || runtimeSignal.aborted) {
-        deferFire(claimed, s.ownerID, error)
-      } else {
-        scheduleRetry(claimed, job, s.ownerID, error)
       }
     } finally {
       clearInterval(renewTimer)
+      // Every nonterminal claim exit retains a same-identity recovery owner.
+      // Terminal rows make this a no-op; retry_wait and deferred/lost claims
+      // retain their existing lease as the next attempt's durable schedule.
+      scheduleLeaseRecovery(claimed.id)
     }
   }
 
@@ -630,38 +652,65 @@ export namespace EventService {
   function scheduleLeaseRecovery(fireID: string): void {
     const s = state()
     if (s.lifecycle.signal.aborted || s.recoveryTimers.has(fireID)) return
-    const row = Database.use((db) =>
-      db
-        .select({
-          jobID: EventJobFireTable.event_job_id,
-          status: EventJobFireTable.status,
-          lease: EventJobFireTable.lease_until,
-        })
-        .from(EventJobFireTable)
-        .where(eq(EventJobFireTable.id, fireID))
-        .get(),
-    )
+    let row: { jobID: string; status: EventJobFire["status"]; lease: number } | undefined
+    try {
+      row = Database.use((db) =>
+        db
+          .select({
+            jobID: EventJobFireTable.event_job_id,
+            status: EventJobFireTable.status,
+            lease: EventJobFireTable.lease_until,
+          })
+          .from(EventJobFireTable)
+          .where(eq(EventJobFireTable.id, fireID))
+          .get(),
+      )
+    } catch (error) {
+      log.warn("event fire recovery metadata read failed", { fireID, error: errorMessage(error) })
+      scheduleRecoveryControlRetry(s, fireID)
+      return
+    }
     if (!row || (row.status !== "pending" && row.status !== "running" && row.status !== "retry_wait")) return
     const timer = setTimeout(
       () => {
         s.recoveryTimers.delete(fireID)
-        enqueueFire(fireID, row.jobID)
+        try {
+          enqueueFire(fireID, row.jobID)
+        } catch (error) {
+          if (error instanceof RuntimeExecutionAdmissionClosedError && error.kind === "scheduler_event_fire") {
+            log.info("event fire recovery deferred while runtime admission is closed", { fireID })
+            return
+          }
+          log.error("event fire recovery enqueue failed", { fireID, error: errorMessage(error) })
+          scheduleRecoveryControlRetry(s, fireID)
+        }
       },
       Math.max(1, row.lease - Date.now() + 1),
     )
     s.recoveryTimers.set(fireID, timer)
   }
 
+  function scheduleRecoveryControlRetry(s: ReturnType<typeof state>, fireID: string): void {
+    if (s.lifecycle.signal.aborted || s.recoveryTimers.has(fireID)) return
+    const timer = setTimeout(() => {
+      s.recoveryTimers.delete(fireID)
+      scheduleLeaseRecovery(fireID)
+    }, 250)
+    s.recoveryTimers.set(fireID, timer)
+  }
+
   function renewFireLease(fireID: string, ownerID: string): boolean {
+    const now = Date.now()
     const renewed = Database.use((db) =>
       db
         .update(EventJobFireTable)
-        .set({ lease_until: Date.now() + FIRE_LEASE_MS, time_updated: Date.now() })
+        .set({ lease_until: now + FIRE_LEASE_MS, time_updated: now })
         .where(
           and(
             eq(EventJobFireTable.id, fireID),
             eq(EventJobFireTable.status, "running"),
             eq(EventJobFireTable.owner_id, ownerID),
+            sql`${EventJobFireTable.lease_until} > ${now}`,
           ),
         )
         .returning({ id: EventJobFireTable.id })
@@ -840,6 +889,7 @@ export namespace EventService {
             eq(EventJobFireTable.id, fire.id),
             eq(EventJobFireTable.status, "running"),
             eq(EventJobFireTable.owner_id, ownerID),
+            sql`${EventJobFireTable.lease_until} > ${now}`,
           ),
         )
         .returning({ id: EventJobFireTable.id })
@@ -895,6 +945,7 @@ export namespace EventService {
             eq(EventJobFireTable.id, fire.id),
             eq(EventJobFireTable.status, "running"),
             eq(EventJobFireTable.owner_id, ownerID),
+            sql`${EventJobFireTable.lease_until} > ${now}`,
           ),
         )
         .returning({ id: EventJobFireTable.id })
@@ -921,13 +972,14 @@ export namespace EventService {
             eq(EventJobFireTable.id, fire.id),
             eq(EventJobFireTable.status, "running"),
             eq(EventJobFireTable.owner_id, ownerID),
+            sql`${EventJobFireTable.lease_until} > ${now}`,
           ),
         )
         .run(),
     )
   }
 
-  function scheduleRetry(fire: EventJobFire, job: EventJob, ownerID: string, error: unknown): void {
+  function scheduleRetry(fire: EventJobFire, job: EventJob | undefined, ownerID: string, error: unknown): void {
     const now = Date.now()
     const message = errorMessage(error)
     const retryAt = now + Math.min(FIRE_RETRY_MAX_MS, FIRE_RETRY_BASE_MS * 2 ** Math.min(16, fire.attempt - 1))
@@ -948,15 +1000,18 @@ export namespace EventService {
             eq(EventJobFireTable.id, fire.id),
             eq(EventJobFireTable.status, "running"),
             eq(EventJobFireTable.owner_id, ownerID),
+            sql`${EventJobFireTable.lease_until} > ${now}`,
           ),
         )
         .returning({ id: EventJobFireTable.id })
         .get()
       if (!result) return false
-      db.update(EventJobTable)
-        .set({ failure_count: sql`${EventJobTable.failure_count} + 1`, last_error: message })
-        .where(and(eq(EventJobTable.id, job.id), eq(EventJobTable.project_id, job.project_id)))
-        .run()
+      if (job) {
+        db.update(EventJobTable)
+          .set({ failure_count: sql`${EventJobTable.failure_count} + 1`, last_error: message })
+          .where(and(eq(EventJobTable.id, job.id), eq(EventJobTable.project_id, job.project_id)))
+          .run()
+      }
       return true
     })
     if (settled) scheduleLeaseRecovery(fire.id)
@@ -1040,6 +1095,15 @@ export namespace EventService {
         },
       }
     },
+    installAfterEventFireClaim(hook: AfterEventFireClaimHook): Disposable {
+      if (afterEventFireClaimForTest) throw new Error("EventService after-fire-claim test hook is already installed")
+      afterEventFireClaimForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (afterEventFireClaimForTest === hook) afterEventFireClaimForTest = undefined
+        },
+      }
+    },
     failNextCreateFires(count = 1): Disposable {
       const previous = createFireFailuresForTest
       createFireFailuresForTest = count
@@ -1052,6 +1116,10 @@ export namespace EventService {
     createLeaseFence: createEventFireLeaseFence,
     claimFire,
     recoverProjectFires,
+    scheduleLeaseRecovery,
+    recoveryTimerActive(fireID: string): boolean {
+      return state().recoveryTimers.has(fireID)
+    },
     messageID: (fireID: string) => deterministicEventWakeID("msg", fireID),
     async waitForIdle(): Promise<void> {
       while (state().recoveryOperations.size > 0) {

@@ -458,6 +458,22 @@ export namespace ProcessSupervisor {
     return { live: liveHandles.size, owners }
   }
 
+  export function taskMetricsSnapshot(taskID: string) {
+    const owners: Record<string, { count: number; pids: number[] }> = {}
+    for (const entry of liveHandles.values()) {
+      if (entry.taskID !== taskID) continue
+      const current = owners[entry.owner] ?? { count: 0, pids: [] }
+      current.count++
+      current.pids.push(entry.pid)
+      owners[entry.owner] = current
+    }
+    for (const value of Object.values(owners)) value.pids.sort((a, b) => a - b)
+    return {
+      live: Object.values(owners).reduce((total, owner) => total + owner.count, 0),
+      owners,
+    }
+  }
+
   export function setFactoryForTest(next: Factory | undefined) {
     const previous = factory
     factory = next

@@ -242,7 +242,9 @@ Ask the operator only for external credentials, destructive approval, installati
 DECISION EPOCH AND TOOL EXIT
 ──────────────────────────────────────────────────────────────────────
 
-Every fresh operator input and every just-returned terminal tool result starts a new scheduler decision epoch.
+Every execution-control ingress and every just-returned terminal tool result starts a new scheduler decision epoch. Execution-control ingress includes Task creation, Retry/Replan, Mission acceptance resume, lifecycle delivery, coordination, wait/recovery, and infrastructure failure. A root operator message that only asks for current status or diagnosis is conversation ingress: answer it exactly from current durable facts without mutating Task, worker, wait, or automation state. The Orchestrator judges that visible message meaning; the Host does not classify prose or route around this Turn.
+
+For a lifecycle-delivery epoch, resolve the `CURRENT LIFECYCLE CONTROL FACT` before using any earlier assistant narrative or wait result. Its exact terminal status supersedes every historical claim that the same dispatch is streaming, running, or still awaited. A wait for that dispatch is satisfied by this fact and must not be repeated or rescheduled. Reconcile the current Artifact snapshot and immutable lineage, then either dispatch the next ready frontier or record the current Task lifecycle decision in this response.
 
 Before ending the response, express the current epoch's outcome with one or more real visible decision tools:
 
@@ -252,7 +254,7 @@ Before ending the response, express the current epoch's outcome with one or more
 - `question` for a concrete operator-owned blocker;
 - `wait` once for a named external event when no Task action is dispatchable.
 
-Narrative text, `skill`, `read_context`, and a tool call made before the newest result do not satisfy the new decision. Never end with “next I will dispatch”, a status-only promise, or prose waiting for a worker whose dispatch already returned terminal evidence.
+For an execution-control epoch, narrative text, `skill`, `read_context`, and a tool call made before the newest result do not satisfy the new decision. Never end such an epoch with “next I will dispatch”, a status-only promise, or prose waiting for a worker whose dispatch already returned terminal evidence. A precise visible answer is the complete outcome for conversation-only operator status or diagnosis ingress; do not invent a wait, question, dispatch, or lifecycle mutation merely to end that answer with a tool.
 
 If current closure exposes ready work and no external blocker, dispatch it in this wake. Infrastructure never infers or performs the decision on your behalf.
 

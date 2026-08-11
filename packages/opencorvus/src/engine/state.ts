@@ -310,18 +310,18 @@ function throwSettlementFailures(kind: string, failures: Array<{ stage: string; 
 
 type SettlementOperation = (claimed: Record<string, unknown>, signal: AbortSignal) => Promise<void>
 
-function scheduleSettlementRetry(artifactID: string, run: SettlementOperation): void {
+function scheduleSettlementRetry(artifactID: string, directory: string, run: SettlementOperation): void {
   if (settlementAdmissionGate) return
   if (settlementRetryTimers.has(artifactID)) return
   const timer = setTimeout(() => {
     settlementRetryTimers.delete(artifactID)
-    runSettlementOperation(artifactID, run)
+    runSettlementOperation(artifactID, directory, run)
   }, 1_000)
   timer.unref?.()
   settlementRetryTimers.set(artifactID, timer)
 }
 
-function runSettlementOperation(artifactID: string, run: SettlementOperation): void {
+function runSettlementOperation(artifactID: string, directory: string, run: SettlementOperation): void {
   if (settlementAdmissionGate) return
   const existingOperation = settlementOperations.get(artifactID)
   if (existingOperation) {
@@ -329,7 +329,7 @@ function runSettlementOperation(artifactID: string, run: SettlementOperation): v
     settlementFollowups.add(artifactID)
     const resume = () => {
       settlementFollowups.delete(artifactID)
-      if (!settlementAdmissionGate) runSettlementOperation(artifactID, run)
+      if (!settlementAdmissionGate) runSettlementOperation(artifactID, directory, run)
     }
     void existingOperation.then(resume, resume)
     return
@@ -342,12 +342,12 @@ function runSettlementOperation(artifactID: string, run: SettlementOperation): v
       artifactID,
       error: error instanceof Error ? error.message : String(error),
     })
-    scheduleSettlementRetry(artifactID, run)
+    scheduleSettlementRetry(artifactID, directory, run)
     return
   }
   if (claim.type === "terminal") return
   if (claim.type === "retry") {
-    scheduleSettlementRetry(artifactID, run)
+    scheduleSettlementRetry(artifactID, directory, run)
     return
   }
   const claimed = claim.payload
@@ -355,8 +355,13 @@ function runSettlementOperation(artifactID: string, run: SettlementOperation): v
   settlementLeaseFences.set(artifactID, leaseFence)
   const heartbeat = setInterval(() => renewSettlementLeaseOrAbort(artifactID, leaseFence), SETTLEMENT_HEARTBEAT_MS)
   heartbeat.unref?.()
-  const operation = Promise.resolve()
-    .then(() => run(claimed, leaseFence.signal))
+  // Settlement outlives the request or startup lease that admitted it. Run
+  // every attempt under a fresh project identity so timer retries and
+  // bootstrap-launched work cannot inherit a closed Instance cache lease.
+  const operation = runWithIndependentProjectIdentity({
+    directory,
+    fn: () => run(claimed, leaseFence.signal),
+  })
     .finally(() => {
       clearInterval(heartbeat)
       if (settlementLeaseFences.get(artifactID) === leaseFence) settlementLeaseFences.delete(artifactID)
@@ -368,7 +373,7 @@ function runSettlementOperation(artifactID: string, run: SettlementOperation): v
       artifactID,
       error: error instanceof Error ? error.message : String(error),
     })
-    scheduleSettlementRetry(artifactID, run)
+    scheduleSettlementRetry(artifactID, directory, run)
   })
 }
 
@@ -494,7 +499,8 @@ export function acquireCancelledTaskSettlementGate(): CancelledTaskSettlementGat
 }
 
 function scheduleCancelledTaskAuxiliarySettlement(task: TaskRow, settlementArtifactID: string): void {
-  runSettlementOperation(settlementArtifactID, async (claimed, signal) => {
+  const directory = taskPrimaryProjectRoot(task.id, { activeProjectID: task.project_id })
+  runSettlementOperation(settlementArtifactID, directory, async (claimed, signal) => {
     const failures: Array<{ stage: string; error: string }> = []
     try {
       signal.throwIfAborted()
@@ -524,7 +530,8 @@ function scheduleCancelledTaskAuxiliarySettlement(task: TaskRow, settlementArtif
 }
 
 function scheduleCancelledTaskCheckpointSettlement(task: TaskRow, settlementArtifactID: string): void {
-  runSettlementOperation(settlementArtifactID, async (claimed, signal) => {
+  const directory = taskPrimaryProjectRoot(task.id, { activeProjectID: task.project_id })
+  runSettlementOperation(settlementArtifactID, directory, async (claimed, signal) => {
     const currentTask = requireTask(task.id)
     let checkpoint: Record<string, unknown> | undefined
     const failures: Array<{ stage: string; error: string }> = []

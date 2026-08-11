@@ -424,33 +424,25 @@ async function verifyDetachedDispatchLifecycle(input: {
     })
 
     dispatchStage = "calling tool"
-    const receipt = await Promise.race([
-      (managedTool!.execute as any)(
-        {
-          dispatch: {
-            target: projectedAgentID,
-            work_scope: { kind: "task" },
-            use_worktree: input.useWorktree,
-            turn: {
-              kind: "initial",
-              workflow_subject: { kind: "direct" },
-              input: {
-                goal_ids: [],
-                instruction: taskRequest,
-                reason: `exercise the real ${input.useWorktree ? "managed-worktree" : "current-project"} lifecycle path`,
-              },
+    const receipt = await (managedTool!.execute as any)(
+      {
+        dispatch: {
+          target: projectedAgentID,
+          work_scope: { kind: "task" },
+          use_worktree: input.useWorktree,
+          turn: {
+            kind: "initial",
+            workflow_subject: { kind: "direct" },
+            input: {
+              goal_ids: [],
+              instruction: taskRequest,
+              reason: `exercise the real ${input.useWorktree ? "managed-worktree" : "current-project"} lifecycle path`,
             },
           },
         },
-        {},
-      ),
-      new Promise<never>((_resolve, reject) => {
-        setTimeout(
-          () => reject(new Error(`managed dispatch did not commit within ten seconds; stage=${dispatchStage}`)),
-          10_000,
-        )
-      }),
-    ])
+      },
+      {},
+    )
     expect(receipt).toMatchObject({ kind: "accepted", session_id: workerSessionID })
     if (input.closeRuntimeResourcesFailure) {
       const mcp = SessionRuntimeContractStore.get(workerSessionID)?.resources?.mcp

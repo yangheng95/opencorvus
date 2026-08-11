@@ -1,7 +1,16 @@
-import { expect, test } from "bun:test"
-import { renderWakeProvenanceNotice } from "@/orchestrator/agent"
+import { afterEach, expect, spyOn, test } from "bun:test"
+import {
+  currentOrchestratorControlMessage,
+  isCurrentWakeIngress,
+  renderWakeProvenanceNotice,
+} from "@/orchestrator/agent"
 import { OrchestratorEventSchema } from "@/orchestrator/event"
 import { authorizedTaskRootMessagesForWake } from "@/orchestrator/interaction-tools"
+import { ProtocolStore } from "@/protocol/store"
+
+afterEach(() => {
+  ;(ProtocolStore.requireEvent as { mockRestore?: () => void }).mockRestore?.()
+})
 
 test("Mission acceptance resume projects current message authority and real-decision obligation", () => {
   const messageID = "msg_mission_acceptance_gap"
@@ -38,6 +47,7 @@ test("Mission acceptance resume projects current message authority and real-deci
   expect(notice).toContain("Use the real Message identified above when deciding")
   expect(notice).toContain("record at least one current scheduling or lifecycle decision")
   expect(notice).toContain("matching real tool call")
+  expect(isCurrentWakeIngress(event)).toBe(true)
 
   expect(authorizedTaskRootMessagesForWake(event)).toEqual([
     {
@@ -64,6 +74,25 @@ test("Mission acceptance resume projects current message authority and real-deci
 })
 
 test("agent lifecycle delivery projects its exact current occurrence", () => {
+  const requireEvent = spyOn(ProtocolStore, "requireEvent").mockReturnValue({
+    id: "pev_worker_terminal_delivery",
+    kind: "event",
+    type: "agent.execution.lifecycle",
+    aggregate: "session",
+    aggregateID: "ses_worker_terminal_delivery",
+    taskID: "tsk_lifecycle_delivery",
+    sessionID: "ses_worker_terminal_delivery",
+    source: "session.status",
+    sequence: 1,
+    orderKey: "session:0000000000001:msg_worker_terminal_delivery",
+    summary: "Worker completed exact inspection",
+    payload: {
+      sessionID: "ses_worker_terminal_delivery",
+      inputMessageID: "msg_worker_terminal_delivery",
+      status: { type: "terminal", reason: "completed" },
+    },
+    time: { emitted: 1, created: 1, updated: 1 },
+  } as ReturnType<typeof ProtocolStore.requireEvent>)
   const notice = renderWakeProvenanceNotice(
     OrchestratorEventSchema.parse({
       agentLifecycleDelivery: {
@@ -77,9 +106,38 @@ test("agent lifecycle delivery projects its exact current occurrence", () => {
   )
 
   expect(notice).toContain("Current durable wake occurrence=art_lifecycle_delivery_wake")
-  expect(notice).toContain("Current agentLifecycleDelivery")
+  expect(notice).toContain("CURRENT LIFECYCLE CONTROL FACT")
   expect(notice).toContain("event_id=pev_worker_terminal_delivery")
   expect(notice).toContain("session_id=ses_worker_terminal_delivery")
   expect(notice).toContain("dispatch_id=dispatch_worker_terminal_delivery")
-  expect(notice).toContain("durable agent.execution.lifecycle")
+  expect(notice).toContain("input_message_id=msg_worker_terminal_delivery")
+  expect(notice).toContain("authoritative_status=terminal/completed")
+  expect(notice).toContain("physical_turn_state=settled")
+  expect(notice).toContain("Any earlier assistant text or wait reason")
+  expect(notice).toContain("this terminal fact satisfies that wait")
+  const control = currentOrchestratorControlMessage(
+    OrchestratorEventSchema.parse({
+      agentLifecycleDelivery: {
+        eventID: "pev_worker_terminal_delivery",
+        sessionID: "ses_worker_terminal_delivery",
+        dispatchID: "dispatch_worker_terminal_delivery",
+      },
+    }),
+    "tsk_lifecycle_delivery",
+    "art_lifecycle_delivery_wake",
+  )!
+  expect(control).toMatchObject({
+    messageID: "msg_orchestrator_control_art_lifecycle_delivery_wake",
+    partID: "prt_orchestrator_control_art_lifecycle_delivery_wake",
+    extra: {
+      orchestrator_control_ingress: {
+        wake_id: "art_lifecycle_delivery_wake",
+        source_kind: "agent_lifecycle_delivery",
+        fact_id: "pev_worker_terminal_delivery",
+      },
+    },
+  })
+  expect(control.text).toContain("CURRENT LIFECYCLE CONTROL FACT")
+  expect(control.text).toContain("authoritative_status=terminal/completed")
+  expect(requireEvent).toHaveBeenCalledWith("pev_worker_terminal_delivery")
 })

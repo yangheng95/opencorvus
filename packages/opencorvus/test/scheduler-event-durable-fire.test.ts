@@ -671,6 +671,149 @@ describe("Event Job durable fire authority", () => {
     })
   })
 
+  test("recovers a claimed fire after a preamble failure with one deterministic wake Message", async () => {
+    await using project = await memoryProject()
+    await fs.mkdir(path.join(project.path, ".opencorvus"), { recursive: true })
+    await fs.writeFile(
+      path.join(project.path, ".opencorvus", "opencorvus.jsonc"),
+      JSON.stringify({ model: "test/event-claimed-preamble-recovery" }),
+    )
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "assistant", title: "Event claimed preamble recovery" })
+        const job = await EventService.create({
+          name: "claimed-preamble-recovery",
+          eventType: SourceEvent.type,
+          prompt: "Recover the same claimed fire after its preamble fails",
+          projectId: Instance.project.id,
+          sessionId: session.id,
+        })
+        const loopMessageIDs: string[] = []
+        using _loop = SessionWake.TestHooks.installWakeLoopExecutor(async ({ messageID }) => {
+          loopMessageIDs.push(messageID)
+        })
+        let claimCount = 0
+        const claimedFireIDs: string[] = []
+        let resumed!: () => void
+        const didResume = new Promise<void>((resolve) => {
+          resumed = resolve
+        })
+        using _preambleFailure = EventService.TestHooks.installAfterEventFireClaim(({ fire }) => {
+          claimCount += 1
+          claimedFireIDs.push(fire.id)
+          if (claimCount === 1) throw new Error("injected claimed Event fire preamble failure")
+          resumed()
+        })
+
+        EventService.init()
+        await Bus.publish(SourceEvent, { info: { id: "source:claimed-preamble-recovery" } })
+        await didResume
+        await EventService.TestHooks.waitForIdle()
+
+        const [fire] = EventService.TestHooks.fires(Instance.project.id)
+        const messageID = EventService.TestHooks.messageID(fire!.id)
+        expect({
+          claimCount,
+          claimedFireIDs,
+          fire,
+          messages: Database.use((db) =>
+            db.select({ id: MessageTable.id }).from(MessageTable).where(eq(MessageTable.id, messageID)).all(),
+          ),
+          loopMessageIDs,
+        }).toEqual({
+          claimCount: 2,
+          claimedFireIDs: [fire!.id, fire!.id],
+          fire: expect.objectContaining({
+            id: fire!.id,
+            event_job_id: job.id,
+            status: "succeeded",
+            attempt: 2,
+            message_id: messageID,
+            owner_id: null,
+            lease_until: 0,
+          }),
+          messages: [{ id: messageID }],
+          loopMessageIDs: [messageID],
+        })
+      },
+    })
+  })
+
+  test("defers a due recovery timer while Event fire admission is closed and resumes the same fire", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const job = await EventService.create({
+          name: "recovery-timer-admission-close",
+          eventType: SourceEvent.type,
+          prompt: "Resume the same fire when runtime admission reopens",
+          projectId: Instance.project.id,
+        })
+        EventService.init()
+        const fireID = Identifier.ascending("call")
+        const now = Date.now()
+        Database.use((db) =>
+          db
+            .insert(EventJobFireTable)
+            .values({
+              id: fireID,
+              event_job_id: job.id,
+              project_id: Instance.project.id,
+              event_occurrence_id: "event-occurrence:recovery-timer-admission-close",
+              event_type: SourceEvent.type,
+              causation_ancestry: [],
+              status: "pending",
+              target_session_id: Identifier.ascending("session"),
+              creates_session: true,
+              lease_until: 0,
+              attempt: 0,
+              time_created: now,
+              time_updated: now,
+            })
+            .run(),
+        )
+        let resumed!: () => void
+        const didResume = new Promise<void>((resolve) => {
+          resumed = resolve
+        })
+        using executor = EventService.TestHooks.installWakeExecutor(async ({ fire }) => {
+          resumed()
+          return { sessionID: fire.target_session_id, messageID: `message:${fire.id}` }
+        })
+        using gate = RuntimeExecutionSettlement.acquireSettlementGate()
+        gate.closeAdmission(["scheduler_event_fire"])
+
+        EventService.TestHooks.scheduleLeaseRecovery(fireID)
+        const timerDeadline = Date.now() + 2_000
+        while (EventService.TestHooks.recoveryTimerActive(fireID) && Date.now() < timerDeadline) {
+          await Bun.sleep(10)
+        }
+        expect({
+          recoveryTimerActive: EventService.TestHooks.recoveryTimerActive(fireID),
+          fire: EventService.TestHooks.fires(Instance.project.id)[0],
+        }).toEqual({
+          recoveryTimerActive: false,
+          fire: expect.objectContaining({ id: fireID, status: "pending", attempt: 0 }),
+        })
+
+        gate[Symbol.dispose]()
+        await didResume
+        await EventService.TestHooks.waitForIdle()
+        expect(EventService.TestHooks.fires(Instance.project.id)).toEqual([
+          expect.objectContaining({
+            id: fireID,
+            event_job_id: job.id,
+            status: "succeeded",
+            attempt: 1,
+            message_id: `message:${fireID}`,
+          }),
+        ])
+      },
+    })
+  })
+
   test("Instance disposal aborts and joins the owned fire before returning", async () => {
     await using project = await memoryProject()
     const trace: string[] = []

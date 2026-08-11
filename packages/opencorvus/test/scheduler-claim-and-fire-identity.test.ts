@@ -1,7 +1,10 @@
 import { afterAll, describe, expect, spyOn, test } from "bun:test"
+import fs from "node:fs/promises"
+import path from "node:path"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { InstanceLifecycleContext } from "../src/project/instance-lifecycle-context"
+import { Project } from "../src/project/project"
 import { Session } from "../src/session"
 import { MessageTable, PartTable } from "../src/session/session.sql"
 import { SessionWake } from "../src/session/wake"
@@ -71,6 +74,90 @@ describe("scheduler atomic identity and progress contracts", () => {
       }),
     )
   })
+
+  test("reserves one shared project concurrency slot across two Instance directories", async () => {
+    const previousConcurrency = process.env.OPENCORVUS_TASK_QUEUE_CONCURRENCY
+    process.env.OPENCORVUS_TASK_QUEUE_CONCURRENCY = "1"
+    try {
+      await using project = await memoryProject()
+      const setup = await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const peerDirectory = path.join(project.path, "queue-peer-instance")
+          await fs.mkdir(peerDirectory, { recursive: true })
+          await Project.addSandbox(Instance.project.id, peerDirectory)
+          const firstSession = await createSession("Cross-Instance concurrency first")
+          const secondSession = await createSession("Cross-Instance concurrency second")
+          return { peerDirectory, firstSessionID: firstSession.id, secondSessionID: secondSession.id }
+        },
+      })
+      await Instance.provide({ directory: setup.peerDirectory, fn: () => undefined })
+
+      let readyInstances = 0
+      let reportBothInstancesReady!: () => void
+      const bothInstancesReady = new Promise<void>((resolve) => (reportBothInstancesReady = resolve))
+      let startClaims!: () => void
+      const claimsStarted = new Promise<void>((resolve) => (startClaims = resolve))
+      let releaseValidations!: () => void
+      const validationsReleased = new Promise<void>((resolve) => (releaseValidations = resolve))
+      let reportBothValidations!: () => void
+      const bothValidations = new Promise<void>((resolve) => (reportBothValidations = resolve))
+      let validationCount = 0
+      const claimFrom = (directory: string) =>
+        Instance.provideProjectIdentity({
+          directory,
+          fn: async () => {
+            readyInstances += 1
+            if (readyInstances === 2) reportBothInstancesReady()
+            await claimsStarted
+            return TaskQueueService.TestHooks.claimReadyTaskIDs({
+              limit: 1,
+              beforeValidation: async () => {
+                validationCount += 1
+                if (validationCount === 2) reportBothValidations()
+                await validationsReleased
+              },
+            })
+          },
+        })
+      const primaryClaim = claimFrom(project.path)
+      const peerClaim = claimFrom(setup.peerDirectory)
+      await bothInstancesReady
+
+      const firstID = Identifier.ascending("task")
+      const secondID = Identifier.ascending("task")
+      const createdAt = Date.now()
+      insertQueuedTask({ id: firstID, sessionID: setup.firstSessionID, priority: "normal", timeCreated: createdAt })
+      insertQueuedTask({ id: secondID, sessionID: setup.secondSessionID, priority: "normal", timeCreated: createdAt + 1 })
+
+      startClaims()
+      await bothValidations
+      releaseValidations()
+      const [primaryClaimed, peerClaimed] = await Promise.all([primaryClaim, peerClaim])
+      const rows = Database.use((db) =>
+        db
+          .select({ id: TaskQueueTable.id, status: TaskQueueTable.status })
+          .from(TaskQueueTable)
+          .where(eq(TaskQueueTable.source, "scheduler-positive-contract"))
+          .all()
+          .filter((row) => row.id === firstID || row.id === secondID)
+          .sort((left, right) => left.id.localeCompare(right.id)),
+      )
+
+      expect({
+        validationCount,
+        claimed: [...primaryClaimed, ...peerClaimed],
+        statuses: rows.map((row) => row.status).sort(),
+      }).toEqual({
+        validationCount: 2,
+        claimed: [firstID],
+        statuses: ["queued", "running"],
+      })
+    } finally {
+      if (previousConcurrency === undefined) delete process.env.OPENCORVUS_TASK_QUEUE_CONCURRENCY
+      else process.env.OPENCORVUS_TASK_QUEUE_CONCURRENCY = previousConcurrency
+    }
+  }, 30_000)
 
   test("coalesces overlapping ticks into one ordered successor occurrence", async () => {
     const events: string[] = []

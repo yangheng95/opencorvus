@@ -85,6 +85,7 @@ import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-
 import type { TaskRow } from "@/engine"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
 import { AgentTrace } from "@/trace"
+import { ProtocolStore } from "@/protocol/store"
 import { NamedError } from "@opencorvus-ai/util/error"
 import type { OrchestratorEvent } from "./event"
 import type { TerminalConversationAuthority } from "./terminal-conversation-authority"
@@ -528,8 +529,9 @@ export namespace Orchestrator {
       //    the original task brief once, authored by the durable task creator.
       //    Follow-up operator text remains in its real root message. The wake
       //    projects its exact identity without prescribing a retrieval tool. Typed Retry/Replan and
-      //    Mission resume occurrences stay in the system control projection;
-      //    the Host never fabricates a participant message for them.
+      //    Mission resume occurrences stay in the system control projection. Exact terminal
+      //    occurrences additionally materialize one durable, visible Orchestrator-authored control
+      //    Message so the provider and transcript share the same current input.
       //    A wake can span multiple model turns while dispatch_agent waits for
       //    a child, so the contract resolves DB-backed task context per turn.
       let systemContext = await buildSystemParts(
@@ -540,7 +542,12 @@ export namespace Orchestrator {
         schedulerProjectDirectory,
       )
       const appendUserMessage = !(await sessionHasUserMessage(agentSession.id))
-      const hasTypedControlOccurrence = Boolean(event?.taskIntent || event?.missionAcceptanceResume)
+      const hasTypedControlOccurrence = Boolean(
+        event?.taskIntent ||
+          event?.missionAcceptanceResume ||
+          event?.agentLifecycleDelivery ||
+          event?.dispatchInfrastructureFailure,
+      )
       const materializeCreatorBeforeTypedControl = appendUserMessage && hasTypedControlOccurrence
       const appendCreatorMessage = appendUserMessage && !hasTypedControlOccurrence
       const taskCreator = TaskCreatorMetadata.parse(task.metadata)
@@ -563,16 +570,8 @@ export namespace Orchestrator {
         : ""
       const enrichedUserText = appendCreatorMessage ? userText + inventoryText : ""
       const wakeProvenanceNotice = renderWakeProvenanceNotice(event, taskID, wakeID)
-      const hasCurrentWakeIngress = Boolean(
-        event?.rootMessage ||
-          event?.taskIntent ||
-          event?.coordinationRequest ||
-          event?.taskWaitActivity ||
-          event?.taskWaitWake ||
-          event?.processRecovery ||
-          event?.agentLifecycleDelivery ||
-          event?.dispatchInfrastructureFailure,
-      )
+      const hasCurrentWakeIngress = isCurrentWakeIngress(event)
+      const currentControlMessage = currentOrchestratorControlMessage(event, taskID, wakeID)
       const resolveRuntimeSystem = async () => {
         systemContext = await buildSystemParts(
           requireTask(taskID),
@@ -581,10 +580,13 @@ export namespace Orchestrator {
           schedulerDispatchAgents,
           schedulerProjectDirectory,
         )
+        const currentIngressSystemNotice = currentControlMessage
+          ? "The last visible input Message is the exact current Orchestrator-authored control occurrence. Resolve that Message before using older conversation history; its durable identities and facts are authoritative for this decision pass."
+          : wakeProvenanceNotice
         const runtimeParts =
           appendCreatorMessage && !hasCurrentWakeIngress
             ? systemContext.parts
-            : [...systemContext.parts, wakeProvenanceNotice, ...(inventoryText.trim() ? [inventoryText] : [])]
+            : [...systemContext.parts, currentIngressSystemNotice, ...(inventoryText.trim() ? [inventoryText] : [])]
         return terminalConversation
           ? [
               ...runtimeParts,
@@ -756,6 +758,13 @@ export namespace Orchestrator {
             parts: creatorPartsWithIds,
           })
         }
+        if (currentControlMessage) {
+          await materializeOrReuseCurrentOrchestratorControlMessage({
+            session: agentSession,
+            model: { providerID: model.providerID, modelID: model.api.id },
+            control: currentControlMessage,
+          })
+        }
         finalMessage = await SessionContext.provide(agentSession, () =>
           provideInitializedProjectExecution({
             directory: agentSession.directory,
@@ -775,6 +784,9 @@ export namespace Orchestrator {
                       })) as Message.WithParts)
                     : ((await SessionPrompt.loop({
                         sessionID: agentSession.id,
+                        ...(currentControlMessage
+                          ? { reply_to_message_id: currentControlMessage.messageID }
+                          : {}),
                       })) as Message.WithParts),
               }),
           }),
@@ -1154,10 +1166,17 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
   if (event?.agentLifecycleDelivery) {
     currentIngressCount += 1
     const delivery = event.agentLifecycleDelivery
+    const lifecycle = requireCurrentAgentLifecycleFact(delivery, taskID)
     lines.push(
-      `Current agentLifecycleDelivery: event_id=${delivery.eventID}; session_id=${delivery.sessionID}; ` +
-        `dispatch_id=${delivery.dispatchID}. This exact lifecycle delivery occurrence triggered the current wake. ` +
-        "The current visible control Turn is authored by the orchestrator and does not quote or impersonate the worker. Read the durable agent.execution.lifecycle fact, current workflow, dispatch lineage, and Artifact snapshot without replacing those authorities, then record the next scheduling or lifecycle decision with its matching real tool call before this decision pass ends.",
+      `CURRENT LIFECYCLE CONTROL FACT: event_id=${delivery.eventID}; session_id=${delivery.sessionID}; ` +
+        `dispatch_id=${delivery.dispatchID}; input_message_id=${lifecycle.inputMessageID}; ` +
+        `authoritative_status=${lifecycle.status.type}/${lifecycle.status.reason}; ` +
+        "physical_turn_state=settled; " +
+        `emitted_at=${new Date(lifecycle.emittedAt).toISOString()}; ` +
+        `summary=${JSON.stringify(lifecycle.summary)}; error=${JSON.stringify(lifecycle.status.error ?? null)}. ` +
+        "This exact terminal lifecycle fact triggered the current wake. The referenced worker is not streaming, running, or awaiting completion. " +
+        "Any earlier assistant text or wait reason that described this dispatch as nonterminal is expired historical context; this terminal fact satisfies that wait, so never repeat, extend, or reschedule it for this dispatch. " +
+        "The current visible control Turn is authored by the orchestrator and does not quote or impersonate the worker. Use this canonical fact with the current workflow, dispatch lineage, and Artifact snapshot without replacing those authorities, then record the next scheduling or lifecycle decision with its matching real tool call before this decision pass ends.",
     )
   }
 
@@ -1175,6 +1194,160 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
   }
 
   return lines.join("\n")
+}
+
+export type CurrentOrchestratorControlMessage = {
+  messageID: string
+  partID: string
+  text: string
+  extra: {
+    orchestrator_control_ingress: {
+      wake_id: string
+      source_kind: "agent_lifecycle_delivery" | "dispatch_infrastructure_failure"
+      fact_id: string
+    }
+  }
+  partMetadata: {
+    wake_id: string
+    source_kind: "agent_lifecycle_delivery" | "dispatch_infrastructure_failure"
+    fact_id: string
+  }
+}
+
+/**
+ * Exact terminal control occurrences have no participant-authored source
+ * Message of their own. Persist one visible Orchestrator-authored input so
+ * the provider's current conversation tail and the product transcript carry
+ * the same ingress. The durable queued wake and referenced fact remain the
+ * only scheduler authorities; this Message is their delivery projection.
+ */
+export function currentOrchestratorControlMessage(
+  event?: OrchestratorEvent,
+  taskID?: string,
+  wakeID?: string,
+): CurrentOrchestratorControlMessage | undefined {
+  const sourceKind = event?.agentLifecycleDelivery
+    ? ("agent_lifecycle_delivery" as const)
+    : event?.dispatchInfrastructureFailure
+      ? ("dispatch_infrastructure_failure" as const)
+      : undefined
+  if (!sourceKind) return undefined
+  const exactWakeID = wakeID?.trim()
+  if (!exactWakeID) throw new Error(`${sourceKind} requires exact durable wake identity`)
+  const factID =
+    sourceKind === "agent_lifecycle_delivery"
+      ? event!.agentLifecycleDelivery!.eventID
+      : event!.dispatchInfrastructureFailure!.infrastructureFactID
+  const identity = {
+    wake_id: exactWakeID,
+    source_kind: sourceKind,
+    fact_id: factID,
+  }
+  return {
+    messageID: `msg_orchestrator_control_${exactWakeID}`,
+    partID: `prt_orchestrator_control_${exactWakeID}`,
+    text: ["## Orchestrator Control Occurrence", renderWakeProvenanceNotice(event, taskID, exactWakeID)].join("\n\n"),
+    extra: { orchestrator_control_ingress: identity },
+    partMetadata: identity,
+  }
+}
+
+export async function materializeOrReuseCurrentOrchestratorControlMessage(input: {
+  session: Session.Info
+  model: { providerID: string; modelID: string }
+  control: CurrentOrchestratorControlMessage
+}): Promise<void> {
+  let existing: Message.WithParts | undefined
+  try {
+    existing = await MessageStore.get({ sessionID: input.session.id, messageID: input.control.messageID })
+  } catch (error) {
+    if (!NotFoundError.isInstance(error as Error)) throw error
+  }
+  if (!existing) {
+    await SessionPrompt.prompt({
+      sessionID: input.session.id,
+      messageID: input.control.messageID,
+      author: "orchestrator",
+      model: input.model,
+      agent: "orchestrator",
+      byteMaterializationProjectID: input.session.projectID,
+      noReply: true,
+      extra: input.control.extra,
+      parts: [
+        {
+          id: input.control.partID,
+          type: "text",
+          text: input.control.text,
+          kind: "control",
+          source: "system",
+          metadata: input.control.partMetadata,
+        },
+      ],
+    })
+    existing = await MessageStore.get({ sessionID: input.session.id, messageID: input.control.messageID })
+  }
+  const part = existing.parts[0]
+  const valid =
+    existing.info.role === "user" &&
+    existing.info.author === "orchestrator" &&
+    existing.info.agent === "orchestrator" &&
+    JSON.stringify(existing.info.extra) === JSON.stringify(input.control.extra) &&
+    existing.parts.length === 1 &&
+    part?.id === input.control.partID &&
+    part.type === "text" &&
+    part.text === input.control.text &&
+    part.kind === "control" &&
+    part.source === "system" &&
+    JSON.stringify(part.metadata) === JSON.stringify(input.control.partMetadata)
+  if (!valid) {
+    throw new Error(
+      `Orchestrator control Message ${input.control.messageID} does not match exact wake ${input.control.partMetadata.wake_id}`,
+    )
+  }
+}
+
+export function isCurrentWakeIngress(event?: OrchestratorEvent): boolean {
+  return Boolean(
+    event?.rootMessage ||
+      event?.taskIntent ||
+      event?.missionAcceptanceResume ||
+      event?.coordinationRequest ||
+      event?.taskWaitActivity ||
+      event?.taskWaitWake ||
+      event?.processRecovery ||
+      event?.agentLifecycleDelivery ||
+      event?.dispatchInfrastructureFailure,
+  )
+}
+
+function requireCurrentAgentLifecycleFact(
+  delivery: NonNullable<OrchestratorEvent["agentLifecycleDelivery"]>,
+  taskID?: string,
+) {
+  const exact = ProtocolStore.requireEvent(delivery.eventID)
+  if (exact.type !== SessionStatus.Event.Status.type) {
+    throw new Error(`Agent lifecycle delivery ${delivery.eventID} references ${exact.type}`)
+  }
+  if (taskID && exact.taskID !== taskID) {
+    throw new Error(`Agent lifecycle delivery ${delivery.eventID} belongs to Task ${exact.taskID ?? "<none>"}`)
+  }
+  const payloadSessionID = typeof exact.payload?.sessionID === "string" ? exact.payload.sessionID : undefined
+  if (exact.sessionID !== delivery.sessionID || payloadSessionID !== delivery.sessionID) {
+    throw new Error(`Agent lifecycle delivery ${delivery.eventID} Session identity drifted`)
+  }
+  const inputMessageID =
+    typeof exact.payload?.inputMessageID === "string" ? exact.payload.inputMessageID.trim() : ""
+  if (!inputMessageID) throw new Error(`Agent lifecycle delivery ${delivery.eventID} has no input Message identity`)
+  const status = SessionStatus.Info.parse(exact.payload?.status)
+  if (status.type !== "terminal") {
+    throw new Error(`Agent lifecycle delivery ${delivery.eventID} is not terminal`)
+  }
+  return {
+    inputMessageID,
+    status,
+    emittedAt: exact.time.emitted,
+    summary: exact.summary,
+  }
 }
 
 function renderCurrentOccurrenceDecisionObligation(): string {

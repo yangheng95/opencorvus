@@ -66,6 +66,7 @@ import {
   resolveDispatchOccurrenceAuthority,
 } from "./dispatch-lineage"
 import {
+  RuntimeExecutionAdmissionClosedError,
   RuntimeExecutionSettlement,
   type RuntimeExecutionReservation,
 } from "@/runtime/execution-settlement"
@@ -78,10 +79,14 @@ export { TaskQueueError } from "./task-directory"
 const log = Log.create({ service: "engine.queue" })
 const INTERRUPTED_TASK_WAKE_SETTLE_TIMEOUT_MS = 60_000
 const MAX_CURRENT_RUNTIME_TERMINAL_INGRESS_DELIVERY_ATTEMPTS = 2
+const TERMINAL_INGRESS_DELAYED_RETRY_BASE_MS = 1_000
+const TERMINAL_INGRESS_DELAYED_RETRY_MAX_MS = 60_000
 let terminalIngressDeliveryRuntimeOverrideForTest: string | undefined
+let terminalIngressDelayedRetryDelayOverrideForTest: number | undefined
 const loopCompletionHooksForTest = new Set<Promise<void>>()
 const taskLoopCompletionOperations = new Map<string, Promise<void>>()
 const taskLoopLaunchAuthorities = new Map<string, string>()
+const terminalIngressDelayedRetryOwners = new Map<string, Promise<void>>()
 let taskLoopLaunchAcceptanceFailuresForTest = 0
 let taskLoopLaunchAcceptanceAttemptsForTest = 0
 let taskLoopCompletionAdvanceFailuresForTest = 0
@@ -307,6 +312,20 @@ function canRetryTerminalIngressInCurrentRuntime(ingress: QueuedTaskIngress): bo
     ingress.delivery_runtime_id !== runtimeID ||
     (ingress.delivery_runtime_attempt ?? ingress.delivery_attempt) <
       MAX_CURRENT_RUNTIME_TERMINAL_INGRESS_DELIVERY_ATTEMPTS
+  )
+}
+
+function terminalIngressDelayedRetryDelay(ingress: QueuedTaskIngress): number {
+  if (terminalIngressDelayedRetryDelayOverrideForTest !== undefined) {
+    return terminalIngressDelayedRetryDelayOverrideForTest
+  }
+  const exhaustedWindows = Math.max(
+    0,
+    Math.floor((ingress.delivery_attempt - 1) / MAX_CURRENT_RUNTIME_TERMINAL_INGRESS_DELIVERY_ATTEMPTS),
+  )
+  return Math.min(
+    TERMINAL_INGRESS_DELAYED_RETRY_MAX_MS,
+    TERMINAL_INGRESS_DELAYED_RETRY_BASE_MS * 2 ** Math.min(exhaustedWindows, 6),
   )
 }
 
@@ -828,6 +847,20 @@ export const TestHooks = {
       [Symbol.dispose]() {
         if (terminalIngressDeliveryRuntimeOverrideForTest === runtimeID) {
           terminalIngressDeliveryRuntimeOverrideForTest = previous
+        }
+      },
+    }
+  },
+  replaceTerminalIngressDelayedRetryDelay(delayMilliseconds: number): Disposable {
+    if (!Number.isInteger(delayMilliseconds) || delayMilliseconds <= 0) {
+      throw new Error(`Invalid terminal ingress delayed retry delay ${delayMilliseconds}`)
+    }
+    const previous = terminalIngressDelayedRetryDelayOverrideForTest
+    terminalIngressDelayedRetryDelayOverrideForTest = delayMilliseconds
+    return {
+      [Symbol.dispose]() {
+        if (terminalIngressDelayedRetryDelayOverrideForTest === delayMilliseconds) {
+          terminalIngressDelayedRetryDelayOverrideForTest = previous
         }
       },
     }
@@ -2058,6 +2091,215 @@ function settleAbortedTaskLoopCompletionHandoff(input: {
   })
 }
 
+function resetFailedExactTerminalIngress(input: {
+  taskID: string
+  wakeID: string
+  restartRuntimeAttemptWindow: boolean
+}): QueuedTaskIngress | undefined {
+  return Database.immediateTransaction((db) => {
+    const current = db
+      .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.id, input.wakeID),
+          eq(EngineArtifactTable.task_id, input.taskID),
+          eq(EngineArtifactTable.kind, "queued_operator_wake"),
+        ),
+      )
+      .get()
+    if (current?.label !== "delivery_failed") return undefined
+    const currentIngress = QueuedTaskIngressSchema.parse(current.payload)
+    if (!input.restartRuntimeAttemptWindow && !canRetryTerminalIngressInCurrentRuntime(currentIngress)) {
+      return undefined
+    }
+    const {
+      delivery_result: _failedDelivery,
+      queued_by_instance_directory: _failedInstanceDirectory,
+      queued_by_project_id: _failedProjectID,
+      ...retryIngress
+    } = currentIngress
+    const now = Date.now()
+    patchEngineArtifact(db, {
+      id: input.wakeID,
+      label: "pending",
+      payload: {
+        ...retryIngress,
+        delivery_attempt: currentIngress.delivery_attempt + 1,
+        delivery_runtime_id: terminalIngressDeliveryRuntimeID(),
+        delivery_runtime_attempt: input.restartRuntimeAttemptWindow
+          ? 1
+          : currentIngress.delivery_runtime_id === terminalIngressDeliveryRuntimeID()
+            ? (currentIngress.delivery_runtime_attempt ?? currentIngress.delivery_attempt) + 1
+            : 1,
+        time_queued: now,
+        queued_by_process_id: process.pid,
+        ...(Instance.current()
+          ? {
+              queued_by_instance_directory: Instance.directory,
+              queued_by_project_id: Instance.project.id,
+            }
+          : {}),
+      },
+      timeUpdated: now,
+    })
+    return currentIngress
+  })
+}
+
+function restoreDelayedTerminalIngressFailure(input: {
+  taskID: string
+  wakeID: string
+  failedIngress: QueuedTaskIngress
+}): void {
+  Database.immediateTransaction((db) => {
+    const current = db
+      .select({ label: EngineArtifactTable.label })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.id, input.wakeID),
+          eq(EngineArtifactTable.task_id, input.taskID),
+          eq(EngineArtifactTable.kind, "queued_operator_wake"),
+        ),
+      )
+      .get()
+    if (current?.label !== "pending") return
+    patchEngineArtifact(db, {
+      id: input.wakeID,
+      label: "delivery_failed",
+      payload: input.failedIngress,
+      timeUpdated: Date.now(),
+    })
+  })
+}
+
+async function settleAcceptedExactTerminalIngressRecovery(ingress: QueuedTaskIngress): Promise<void> {
+  if (ingress.source_kind === "agent_lifecycle_delivery") {
+    const lifecycle = ingress.event.agentLifecycleDelivery
+    const lineage = listDispatchLineage(ingress.task_id).find(
+      (candidate) =>
+        candidate.dispatchID === lifecycle.dispatchID && candidate.payload.child_session_id === lifecycle.sessionID,
+    )
+    if (!lineage) throw new Error(`Exact lifecycle ingress ${ingress.wake_id} has no dispatch lineage`)
+    await settleDetachedDispatchRecovery(lineage.artifactID)
+    return
+  }
+  if (ingress.source_kind !== "dispatch_infrastructure_failure") return
+  const authority = ingress.event.dispatchInfrastructureFailure.outcome.recovery_authority
+  if (authority.occurrence_status === "occurrence_committed") {
+    await settleDetachedDispatchRecovery(authority.dispatch_lineage_id)
+  }
+}
+
+function scheduleDelayedExactTerminalIngressRetry(input: {
+  taskID: string
+  wakeID: string
+  ingress: QueuedTaskIngress
+}): void {
+  if (terminalIngressDelayedRetryOwners.has(input.wakeID)) return
+  const task = findTask(input.taskID)
+  if (!task) return
+  const directory = taskRootDirectory(task)
+  let authority: RuntimeExecutionReservation
+  try {
+    authority = RuntimeExecutionSettlement.reserve(
+      "engine_queue_completion",
+      `terminal-ingress-delayed-retry:${input.taskID}:${input.wakeID}`,
+    )
+  } catch (error) {
+    if (error instanceof RuntimeExecutionAdmissionClosedError && error.kind === "engine_queue_completion") return
+    throw error
+  }
+  const delay = terminalIngressDelayedRetryDelay(input.ingress)
+  let operation!: Promise<void>
+  let retryAfterFailure = false
+  operation = new Promise<void>((resolve) => {
+    if (authority.signal.aborted) return resolve()
+    const timer = setTimeout(finish, delay)
+    function finish() {
+      clearTimeout(timer)
+      authority.signal.removeEventListener("abort", finish)
+      resolve()
+    }
+    authority.signal.addEventListener("abort", finish, { once: true })
+  })
+    .then(async () => {
+      if (authority.signal.aborted) return
+      await runWithIndependentProjectIdentity({
+        directory,
+        fn: async () => {
+          authority.signal.throwIfAborted()
+          const failedIngress = resetFailedExactTerminalIngress({
+            taskID: input.taskID,
+            wakeID: input.wakeID,
+            restartRuntimeAttemptWindow: true,
+          })
+          if (!failedIngress) return
+          let result: DispatchTaskLoopResult
+          try {
+            authority.signal.throwIfAborted()
+            result = await dispatchPersistedTaskLoop(input.taskID)
+          } catch (error) {
+            restoreDelayedTerminalIngressFailure({
+              taskID: input.taskID,
+              wakeID: input.wakeID,
+              failedIngress,
+            })
+            throw error
+          }
+          if (result !== "started" && result !== "queued") {
+            restoreDelayedTerminalIngressFailure({
+              taskID: input.taskID,
+              wakeID: input.wakeID,
+              failedIngress,
+            })
+            throw new Error(`Delayed exact terminal ingress retry was ${result}`)
+          }
+          await settleAcceptedExactTerminalIngressRecovery(failedIngress)
+        },
+      })
+    })
+    .catch((error) => {
+      if (authority.signal.aborted) return
+      retryAfterFailure = true
+      log.error("delayed exact terminal ingress retry failed", {
+        taskID: input.taskID,
+        ingressID: input.wakeID,
+        error: error instanceof Error ? error.message : String(error),
+        errorName: error instanceof Error ? error.name : undefined,
+      })
+    })
+    .finally(() => {
+      if (terminalIngressDelayedRetryOwners.get(input.wakeID) === operation) {
+        terminalIngressDelayedRetryOwners.delete(input.wakeID)
+      }
+      if (!retryAfterFailure || authority.signal.aborted) return
+      const failed = Database.use((db) =>
+        db
+          .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+          .from(EngineArtifactTable)
+          .where(
+            and(
+              eq(EngineArtifactTable.id, input.wakeID),
+              eq(EngineArtifactTable.task_id, input.taskID),
+              eq(EngineArtifactTable.kind, "queued_operator_wake"),
+            ),
+          )
+          .get(),
+      )
+      if (failed?.label === "delivery_failed") {
+        scheduleDelayedExactTerminalIngressRetry({
+          taskID: input.taskID,
+          wakeID: input.wakeID,
+          ingress: QueuedTaskIngressSchema.parse(failed.payload),
+        })
+      }
+    })
+  terminalIngressDelayedRetryOwners.set(input.wakeID, operation)
+  authority.settleWith(operation)
+}
+
 async function retryFailedExactTerminalIngress(
   taskID: string,
   wakeID: string,
@@ -2078,7 +2320,10 @@ async function retryFailedExactTerminalIngress(
   )
   if (row?.label !== "delivery_failed") return false
   const ingress = QueuedTaskIngressSchema.parse(row.payload)
-  if (!canRetryTerminalIngressInCurrentRuntime(ingress)) return false
+  if (!canRetryTerminalIngressInCurrentRuntime(ingress)) {
+    scheduleDelayedExactTerminalIngressRetry({ taskID, wakeID, ingress })
+    return false
+  }
   if (ingress.source_kind === "agent_lifecycle_delivery") {
     const lifecycle = ingress.event.agentLifecycleDelivery
     const result = await reconcileTerminalAgentLifecycleDelivery({
@@ -2102,51 +2347,10 @@ async function retryFailedExactTerminalIngress(
     log.warn("exact infrastructure ingress retry was not accepted", { taskID, wakeID, result })
     return false
   }
-  const reset = Database.immediateTransaction((db) => {
-    const current = db
-      .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
-      .from(EngineArtifactTable)
-      .where(
-        and(
-          eq(EngineArtifactTable.id, wakeID),
-          eq(EngineArtifactTable.task_id, taskID),
-          eq(EngineArtifactTable.kind, "queued_operator_wake"),
-        ),
-      )
-      .get()
-    if (current?.label !== "delivery_failed") return false
-    const currentIngress = QueuedTaskIngressSchema.parse(current.payload)
-    if (!canRetryTerminalIngressInCurrentRuntime(currentIngress)) return false
-    const {
-      delivery_result: _failedDelivery,
-      queued_by_instance_directory: _failedInstanceDirectory,
-      queued_by_project_id: _failedProjectID,
-      ...retryIngress
-    } = currentIngress
-    const now = Date.now()
-    patchEngineArtifact(db, {
-      id: wakeID,
-      label: "pending",
-      payload: {
-        ...retryIngress,
-        delivery_attempt: currentIngress.delivery_attempt + 1,
-        delivery_runtime_id: terminalIngressDeliveryRuntimeID(),
-        delivery_runtime_attempt:
-          currentIngress.delivery_runtime_id === terminalIngressDeliveryRuntimeID()
-            ? (currentIngress.delivery_runtime_attempt ?? currentIngress.delivery_attempt) + 1
-            : 1,
-        time_queued: now,
-        queued_by_process_id: process.pid,
-        ...(Instance.current()
-          ? {
-              queued_by_instance_directory: Instance.directory,
-              queued_by_project_id: Instance.project.id,
-            }
-          : {}),
-      },
-      timeUpdated: now,
-    })
-    return true
+  const reset = resetFailedExactTerminalIngress({
+    taskID,
+    wakeID,
+    restartRuntimeAttemptWindow: false,
   })
   if (!reset) return false
   if (options.dispatchAfterReset === false) return true
@@ -3445,9 +3649,12 @@ export async function reconcileTerminalAgentLifecycleDelivery(input: {
         .where(eq(EngineArtifactTable.id, delivered.id))
         .get(),
     )
-    if (
-      ingress && !canRetryTerminalIngressInCurrentRuntime(QueuedTaskIngressSchema.parse(ingress.payload))
-    ) {
+    if (ingress && !canRetryTerminalIngressInCurrentRuntime(QueuedTaskIngressSchema.parse(ingress.payload))) {
+      scheduleDelayedExactTerminalIngressRetry({
+        taskID: input.taskID,
+        wakeID: delivered.id,
+        ingress: QueuedTaskIngressSchema.parse(ingress.payload),
+      })
       return "delivery_exhausted"
     }
   }

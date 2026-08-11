@@ -2860,6 +2860,13 @@ export namespace EngineService {
     })
     const convergenceOwner = await acquireCancellationConvergence(taskID)
     if (!convergenceOwner) return true
+    const logConvergenceStage = (stage: string) =>
+      log.info("Task cancellation convergence stage", {
+        taskID,
+        requestEventID: cancellationRequest.id,
+        stage,
+      })
+    logConvergenceStage("owner_acquired")
     let destructiveScope: ReturnType<typeof SessionPromptState.beginRootSessionDestructiveScope> | undefined
     try {
       convergenceOwner.assertActive()
@@ -2904,6 +2911,7 @@ export namespace EngineService {
         origin: executionCancellationOrigin,
         signal: convergenceOwner.signal,
       })
+      logConvergenceStage("session_cancellation_requested")
       convergenceOwner.assertActive()
       const queueCancelledInCurrentInstance = Boolean(Instance.current())
       const queuedPromptCancellations = TaskQueueService.cancelSessionPrompts({
@@ -2939,6 +2947,7 @@ export namespace EngineService {
           }),
         convergenceOwner.signal,
       )
+      logConvergenceStage("task_queue_idle")
       convergenceOwner.assertActive()
       await assertSessionPromptSubtreeFinished({
         sessions: lifecycle.cancelledSessions,
@@ -2947,6 +2956,7 @@ export namespace EngineService {
         inactivityTimeoutMs: promptSettleInactivityMs,
         signal: convergenceOwner.signal,
       })
+      logConvergenceStage("session_prompts_settled")
       const { SessionLoop } = await import("@/session/loop")
       let interruptedAssistantSessions = 0
       await provideActiveTaskRootSessionInstance(
@@ -2962,18 +2972,21 @@ export namespace EngineService {
         },
         convergenceOwner.signal,
       )
+      logConvergenceStage("incomplete_assistants_terminalized")
       convergenceOwner.assertActive()
       const convergedAgentSessionIDs = await publishTaskAgentCancellationStatusesAfterSettlement({
         task,
         reason: "task cancelled",
         signal: convergenceOwner.signal,
       })
+      logConvergenceStage("agent_lifecycle_published")
       convergenceOwner.assertActive()
       const pendingCoordinationRequestsCancelled = await cancelPendingAgentCoordinationRequestsForTask({
         taskID,
         reason: "task cancelled",
         signal: convergenceOwner.signal,
       })
+      logConvergenceStage("coordination_cancelled")
       decisions.append({
         phase: "cancel",
         key: "agent_lifecycle_report",
@@ -3006,6 +3019,7 @@ export namespace EngineService {
         )
       }
       convergenceOwner.assertActive()
+      logConvergenceStage("root_wake_queue_waiting")
       await SessionPromptState.waitForRootWakeQueueIdle(
         task.session_id,
         queueSettleInactivityMs,
@@ -3013,6 +3027,7 @@ export namespace EngineService {
       ).catch((err) =>
         onAbortFailure("root Session wake queue idle before cancellation terminal write", err, {}),
       )
+      logConvergenceStage("root_wake_queue_idle")
       convergenceOwner.assertActive()
       const terminalResult = await ProcessSupervisor.withTaskCancellationBarrier(
         taskID,
@@ -3041,6 +3056,7 @@ export namespace EngineService {
           ),
         { signal: convergenceOwner.signal },
       )
+      logConvergenceStage("terminal_committed")
       if (!isTaskCancelled(terminalResult)) {
         decisions.append({
           phase: "cancel",

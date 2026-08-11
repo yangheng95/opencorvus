@@ -78,6 +78,32 @@ async function prepareTaskQueueProcessRollback(directory: string) {
 }
 
 describe("runtime execution settlement authority", () => {
+  test("publishes terminal protocol evidence while an owned execution is being terminated", async () => {
+    const events: string[] = []
+    const execution = RuntimeExecutionSettlement.reserve("session_wake_loop", "terminal-protocol-on-shutdown")
+    execution.signal.addEventListener(
+      "abort",
+      () => {
+        const publication = RuntimeExecutionSettlement.reserve(
+          "protocol_publication",
+          "terminal-protocol-on-shutdown",
+        )
+        events.push("terminal:published")
+        publication.settle()
+        execution.settle()
+      },
+      { once: true },
+    )
+
+    const settled = await Server.settleCurrentProcessExecution("terminal protocol shutdown contract", {
+      disposeInstances: async () => events.push("instances:disposed"),
+    })
+    await settled.releaseHandoff(false)
+
+    expect(events).toEqual(["terminal:published", "instances:disposed"])
+    RuntimeExecutionSettlement.reserve("protocol_publication", "post-shutdown-rollback").settle()
+  })
+
   test("bounds cancelled settlement inactivity and converges after the physical operation exits", async () => {
     const events: string[] = []
     let releaseOperation!: () => void

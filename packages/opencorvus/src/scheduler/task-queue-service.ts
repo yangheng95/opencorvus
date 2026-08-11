@@ -178,6 +178,9 @@ export namespace TaskQueueService {
   type QueuePromptStartHook = (signal: AbortSignal) => void | Promise<void>
   let beforeQueuePromptStartForTest: QueuePromptStartHook | undefined
   let beforeQueueClaimReservationForTest: ((taskID: string) => void | Promise<void>) | undefined
+  let beforeProgressTouchForTest:
+    | ((input: { taskID: string; progressEpoch: number }) => void | Promise<void>)
+    | undefined
   let beforeProcessRollbackRecoveryForTest:
     | ((input: { directory: string; taskIDs: readonly string[] }) => void | Promise<void>)
     | undefined
@@ -188,6 +191,10 @@ export namespace TaskQueueService {
   // running claim is ownerless.
   const processInFlight = new Map<string, InFlightTask>()
   const processActiveDrains = new Map<Promise<Promise<void>[]>, { directory: string }>()
+  let progressEpochSequence = 0
+  const observedProgressEpochs = new Map<string, number>()
+  const durableProgressEpochs = new Map<string, number>()
+  const progressTouchOwners = new Map<string, Promise<void>>()
   const interruptedRecoveryTimers = new Map<string, { task: QueueTaskRow; directory: string }>()
   const runtimeRequeuedDirectories = new Set<string>()
   type ProcessRollbackScope = {
@@ -326,6 +333,7 @@ export namespace TaskQueueService {
       ])
       for (const [taskID, task] of current.inFlight) {
         if (processInFlight.get(taskID) === task) processInFlight.delete(taskID)
+        releaseProgressEpochIfIdle(taskID)
       }
       current.inFlight.clear()
       for (const [taskID, owner] of interruptedRecoveryTimers) {
@@ -516,6 +524,17 @@ export namespace TaskQueueService {
         },
       }
     },
+    installBeforeProgressTouch(
+      hook: (input: { taskID: string; progressEpoch: number }) => void | Promise<void>,
+    ): Disposable {
+      if (beforeProgressTouchForTest) throw new Error("Task Queue progress-touch test hook is already installed")
+      beforeProgressTouchForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (beforeProgressTouchForTest === hook) beforeProgressTouchForTest = undefined
+        },
+      }
+    },
     runClaimedPromptStart(input: { taskID: string; sessionID: string; directory: string }): Promise<void> {
       const inFlight = createInFlightTask({
         taskID: input.taskID,
@@ -577,6 +596,7 @@ export namespace TaskQueueService {
       return () => {
         if (current.inFlight.get(input.taskID) === inFlight) current.inFlight.delete(input.taskID)
         if (processInFlight.get(input.taskID) === inFlight) processInFlight.delete(input.taskID)
+        releaseProgressEpochIfIdle(input.taskID)
         inFlight.authority.settle()
         releaseProgressSubscriptionIfIdle(current)
       }
@@ -615,6 +635,7 @@ export namespace TaskQueueService {
         .finally(() => {
           if (current.inFlight.get(task.id)?.promise === running) current.inFlight.delete(task.id)
           if (processInFlight.get(task.id)?.promise === running) processInFlight.delete(task.id)
+          releaseProgressEpochIfIdle(task.id)
           if (Instance.current() && inFlight.cancellationOrigin?.source !== "process.shutdown") {
             requestDrain(`recoverable queue execution ${task.id} settled`)
           }
@@ -1183,6 +1204,7 @@ export namespace TaskQueueService {
         if (current.inFlight.get(task.id)?.promise === running) {
           current.inFlight.delete(task.id)
           if (processInFlight.get(task.id) === inFlight) processInFlight.delete(task.id)
+          releaseProgressEpochIfIdle(task.id)
         }
         releaseProgressSubscriptionIfIdle(current)
         if (Instance.current() && inFlight.cancellationOrigin?.source !== "process.shutdown") {
@@ -1284,16 +1306,19 @@ export namespace TaskQueueService {
 
   function pending(limit: number) {
     const now = Date.now()
+    const capacity = concurrency()
+    const runningCount = projectRunningTaskCount(Instance.project.id)
     const priorityRank = effectivePriorityRank(
       sql`${TaskQueueTable.priority}`,
       sql`${TaskQueueTable.time_created}`,
       now,
     )
-    return Database.use((db) =>
-      db
+    return Database.use((db) => {
+      const rows = db
         .select({
           id: TaskQueueTable.id,
           session_id: TaskQueueTable.session_id,
+          running_count: runningCount,
         })
         .from(TaskQueueTable)
         .where(
@@ -1309,6 +1334,7 @@ export namespace TaskQueueService {
               WHERE running.session_id = ${TaskQueueTable.session_id}
                 AND running.status = 'running'
             )
+            AND ${runningCount} < ${capacity}
             AND ${isBestQueuedTaskForSession(now)}`,
         )
         .orderBy(
@@ -1317,12 +1343,16 @@ export namespace TaskQueueService {
           TaskQueueTable.id,
         )
         .limit(limit)
-        .all(),
-    )
+        .all()
+      const available = Math.max(0, capacity - Number(rows[0]?.running_count ?? capacity))
+      return rows.slice(0, Math.min(limit, available)).map(({ id, session_id }) => ({ id, session_id }))
+    })
   }
 
   function claim(id: string, sessionID: string) {
     const now = Date.now()
+    const capacity = concurrency()
+    const runningCount = projectRunningTaskCount(Instance.project.id)
     const task = Database.use((db) =>
       db
         .update(TaskQueueTable)
@@ -1349,12 +1379,24 @@ export namespace TaskQueueService {
               FROM ${SessionTable}
               WHERE ${SessionTable.project_id} = ${Instance.project.id}
             )
+            AND ${runningCount} < ${capacity}
             AND ${isBestQueuedTaskForSession(now)}`,
         )
         .returning()
         .get(),
     )
     return task
+  }
+
+  function projectRunningTaskCount(projectID: string): SQL {
+    return sql`(
+      SELECT COUNT(*)
+      FROM ${TaskQueueTable} project_running
+      INNER JOIN ${SessionTable} project_running_session
+        ON project_running_session.id = project_running.session_id
+      WHERE project_running.status = 'running'
+        AND project_running_session.project_id = ${projectID}
+    )`
   }
 
   function effectivePriorityRank(priority: SQL, timeCreated: SQL, now: number): SQL {
@@ -1420,14 +1462,7 @@ export namespace TaskQueueService {
         for (const [taskID, task] of current.inFlight) {
           if (!task.progressSessionIDs?.has(info.parentID)) continue
           task.progressSessionIDs.add(info.id)
-          void runTaskQueueOwner(input.directory, async () => touch(taskID)).catch((error) => {
-            log.warn("task child Session creation touch failed", {
-              id: taskID,
-              sessionID: task.sessionID,
-              childSessionID: info.id,
-              error: message(error),
-            })
-          })
+          observeTaskProgress(taskID, task, input.directory, info.id)
         }
         return
       }
@@ -1443,17 +1478,73 @@ export namespace TaskQueueService {
       if (!sessionID) return
       for (const [taskID, task] of current.inFlight) {
         if (!task.progressSessionIDs?.has(sessionID)) continue
-        void runTaskQueueOwner(input.directory, async () => touch(taskID)).catch((error) => {
-          log.warn("task progress touch failed", {
-            id: taskID,
-            sessionID: task.sessionID,
-            error: message(error),
-          })
-        })
+        observeTaskProgress(taskID, task, input.directory)
       }
     }
     current.progressListener = handler
     GlobalBus.on("event", handler)
+  }
+
+  function observeTaskProgress(taskID: string, task: InFlightTask, directory: string, childSessionID?: string) {
+    const progressEpoch = ++progressEpochSequence
+    observedProgressEpochs.set(taskID, progressEpoch)
+    ensureProgressTouchOwner(taskID, task, directory, childSessionID)
+  }
+
+  function ensureProgressTouchOwner(
+    taskID: string,
+    task: InFlightTask,
+    directory: string,
+    childSessionID?: string,
+  ): void {
+    if (progressTouchOwners.has(taskID)) return
+    let owner!: Promise<void>
+    owner = runTaskQueueOwner(directory, async () => {
+      await beforeProgressTouchForTest?.({
+        taskID,
+        progressEpoch: observedProgressEpochs.get(taskID) ?? 0,
+      })
+      const progressEpoch = observedProgressEpochs.get(taskID) ?? 0
+      touch(taskID)
+      durableProgressEpochs.set(taskID, progressEpoch)
+    })
+      .catch((error) => {
+        // A failed durable touch must not become a permanent process-local
+        // liveness shadow. Restore the observed fact to the last epoch that
+        // actually reached storage; the next real progress gets a fresh epoch.
+        observedProgressEpochs.set(taskID, durableProgressEpochs.get(taskID) ?? 0)
+        log.warn(childSessionID ? "task child Session creation touch failed" : "task progress touch failed", {
+          id: taskID,
+          sessionID: task.sessionID,
+          ...(childSessionID ? { childSessionID } : {}),
+          error: message(error),
+        })
+      })
+      .finally(() => {
+        if (progressTouchOwners.get(taskID) !== owner) return
+        progressTouchOwners.delete(taskID)
+        if (
+          processInFlight.has(taskID) &&
+          (observedProgressEpochs.get(taskID) ?? 0) > (durableProgressEpochs.get(taskID) ?? 0)
+        ) {
+          ensureProgressTouchOwner(taskID, task, directory)
+          return
+        }
+        releaseProgressEpochIfIdle(taskID)
+      })
+    progressTouchOwners.set(taskID, owner)
+  }
+
+  function releaseProgressEpochIfIdle(taskID: string): void {
+    if (processInFlight.has(taskID) || progressTouchOwners.has(taskID)) return
+    observedProgressEpochs.delete(taskID)
+    durableProgressEpochs.delete(taskID)
+  }
+
+  function recoveryStillOwnsProgressEpoch(taskID: string, observedEpoch: number): boolean {
+    const current = observedProgressEpochs.get(taskID) ?? 0
+    const durable = durableProgressEpochs.get(taskID) ?? 0
+    return current === observedEpoch && current === durable
   }
 
   function releaseProgressSubscriptionIfIdle(current: ReturnType<typeof state>) {
@@ -1607,16 +1698,23 @@ export namespace TaskQueueService {
               WHERE ${SessionTable.project_id} = ${Instance.project.id}
             )`,
         )
-        .all(),
+        .all()
+        .map((task) => ({
+          task,
+          observedProgressEpoch: observedProgressEpochs.get(task.id) ?? 0,
+        })),
     )
     if (stale.length === 0) return 0
     let recovered = 0
-    for (const task of stale) {
+    for (const candidate of stale) {
+      const { task, observedProgressEpoch } = candidate
+      if (!recoveryStillOwnsProgressEpoch(task.id, observedProgressEpoch)) continue
       const session = await assertSessionLineageInCurrentProject(task.session_id).catch(async (error) => {
         await fail(task, error)
         return undefined
       })
       if (!session) continue
+      if (!recoveryStillOwnsProgressEpoch(task.id, observedProgressEpoch)) continue
       const inFlight = processInFlight.get(task.id)
       const cancellationReason = "task timed out while running"
       const cancellationOrigin = createExecutionCancellationOrigin({

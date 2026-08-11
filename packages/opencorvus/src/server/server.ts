@@ -234,7 +234,6 @@ export namespace Server {
         "session_wake_loop",
         "task_queue",
         "task_cancellation",
-        "protocol_publication",
         "detached_dispatch_pipeline",
       ])
       runtimeExecutionGate.requestCancellation(
@@ -243,7 +242,6 @@ export namespace Server {
           "scheduler_automation_fire",
           "session_wake_loop",
           "task_queue",
-          "protocol_publication",
           "detached_dispatch_pipeline",
         ],
         new Error(reason),
@@ -304,6 +302,10 @@ export namespace Server {
       const { terminateCurrentProcessOwnedExecution } = await import("../engine/writer")
       terminated = await terminateCurrentProcessOwnedExecution({ reason })
       const settledExecution = terminated
+      // Session termination publishes the real terminal lifecycle occurrence.
+      // Keep protocol admission open until every current-process execution owner
+      // has emitted that fact, then fence new publications before the final drain.
+      runtimeExecutionGate.closeAdmission(["protocol_publication"])
       await schedulerSettlement
       await runtimeExecutionGate.waitForIdle([
         "scheduler_event_fire",

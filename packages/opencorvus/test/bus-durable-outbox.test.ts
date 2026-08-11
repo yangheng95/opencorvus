@@ -457,6 +457,57 @@ describe("durable Bus publication outbox", () => {
     })
   })
 
+  test("coalesces concurrent manual retries behind one durable occurrence owner", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        let calls = 0
+        let concurrent = 0
+        let maxConcurrent = 0
+        let release!: () => void
+        const blocked = new Promise<void>((resolve) => (release = resolve))
+        let started!: () => void
+        const observed = new Promise<void>((resolve) => (started = resolve))
+        const unsubscribe = Bus.subscribe(
+          ReceiptEvent,
+          async () => {
+            calls += 1
+            concurrent += 1
+            maxConcurrent = Math.max(maxConcurrent, concurrent)
+            started()
+            await blocked
+            concurrent -= 1
+          },
+          { durableID: "test.receipt.concurrent-manual-retry" },
+        )
+        try {
+          using _interruption = Bus.TestHooks.suppressAutomaticDurableDrain()
+          const accepted = Bus.publishOwned(ReceiptEvent, { value: "single-flight" })
+          const first = accepted.retry()
+          const second = accepted.retry()
+          await observed
+          expect({ sameOwner: first === second, calls, maxConcurrent, owned: Bus.TestHooks.ownedPublications() }).toEqual({
+            sameOwner: true,
+            calls: 1,
+            maxConcurrent: 1,
+            owned: [{ directory: project.path, id: accepted.occurrenceID, pending: true, failed: false }],
+          })
+          release()
+          await Promise.all([first, second])
+          expect({ calls, maxConcurrent, outbox: Bus.TestHooks.outbox() }).toEqual({
+            calls: 1,
+            maxConcurrent: 1,
+            outbox: [],
+          })
+        } finally {
+          release()
+          unsubscribe()
+        }
+      },
+    })
+  })
+
   test("settles durable scheduler acceptance despite a failed transient Global projection", async () => {
     await using project = await memoryProject()
     await Instance.provide({

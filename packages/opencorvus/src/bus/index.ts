@@ -7,7 +7,11 @@ import { DurableBusSubscriptionIdentityConflictError, GlobalBus } from "./global
 import { isBusTraceEnabled, traceBus } from "../util/debug-trace"
 import { randomUUID } from "node:crypto"
 import { Context } from "../util/context"
-import { RuntimeExecutionSettlement, type RuntimeExecutionReservation } from "../runtime/execution-settlement"
+import {
+  RuntimeExecutionAdmissionClosedError,
+  RuntimeExecutionSettlement,
+  type RuntimeExecutionReservation,
+} from "../runtime/execution-settlement"
 import { Database, and, eq } from "../storage/db"
 import { BusPublicationDeliveryTable, BusPublicationOutboxTable } from "./bus.sql"
 import { Instance, runOutsideInstanceContext } from "../project/instance"
@@ -345,6 +349,10 @@ export namespace Bus {
         },
         (error) => {
           entry.error = error
+          if (error instanceof RuntimeExecutionAdmissionClosedError && error.kind === "protocol_publication") {
+            cancelOwnedPublicationRetry(entry)
+            return
+          }
           if (entry.durable) {
             try {
               recordDurablePublicationFailure(entry, error)
@@ -715,7 +723,7 @@ export namespace Bus {
       const complete = Promise.resolve() as Publication
       Object.defineProperties(complete, {
         occurrenceID: { value: id, enumerable: true },
-        retry: { value: () => executeDurableOccurrence(id), enumerable: false },
+        retry: { value: () => retryDurableOccurrence(id), enumerable: false },
       })
       return complete
     }
@@ -750,8 +758,29 @@ export namespace Bus {
     const publication = observePublishPromise(operation, row.event_type) as Publication
     Object.defineProperties(publication, {
       occurrenceID: { value: id, enumerable: true },
-      retry: { value: () => executeDurableOccurrence(id), enumerable: false },
+      retry: { value: () => retryDurableOccurrence(id), enumerable: false },
     })
+    return publication
+  }
+
+  function retryDurableOccurrence(id: string): Publication {
+    const existing = ownedPublicationOwners.get(id)
+    if (existing?.pending) return existing.current
+    if (existing) cancelOwnedPublicationRetry(existing)
+    const publication = executeDurableOccurrence(id)
+    const row = durableRow(id)
+    if (!row && !existing) return publication
+    const entry =
+      existing ??
+      ({
+        occurrenceID: id,
+        directory: row!.directory,
+        current: publication,
+        retryEpoch: 0,
+        durable: true,
+      } satisfies OwnedPublication)
+    ownedPublicationOwners.set(id, entry)
+    trackOwnedPublication(entry, publication)
     return publication
   }
 
@@ -759,7 +788,7 @@ export namespace Bus {
     const publication = Promise.resolve() as Publication
     Object.defineProperties(publication, {
       occurrenceID: { value: id, enumerable: true },
-      retry: { value: () => executeDurableOccurrence(id), enumerable: false },
+      retry: { value: () => retryDurableOccurrence(id), enumerable: false },
     })
     return publication
   }
@@ -816,7 +845,7 @@ export namespace Bus {
     const accepted = Promise.resolve() as Publication
     Object.defineProperties(accepted, {
       occurrenceID: { value: id, enumerable: true },
-      retry: { value: () => executeDurableOccurrence(id), enumerable: false },
+      retry: { value: () => retryDurableOccurrence(id), enumerable: false },
     })
     const now = Date.now()
     Database.use((db) =>

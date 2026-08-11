@@ -127,6 +127,13 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
       timeResolved: Date.now(),
     }),
   )
+  // Restore the prior runtime's exact FIFO head before interrupted worker
+  // recovery can append and drain new process-recovery/lifecycle wakes. If a
+  // stale `running` ingress remains ineligible here, the next `pending` row
+  // can overtake it during recovery and permanently invert operator order.
+  await ProjectOpenLifecycle.stage("engine-queue.requeue-interrupted-running-ingresses", lifecycleContext, () =>
+    requeueInterruptedRunningTaskIngresses().then(() => undefined),
+  )
   await ProjectOpenLifecycle.stage("engine-queue.recover-interrupted-executions", lifecycleContext, async () => {
     try {
       await reconcileInterruptedTaskExecutions()
@@ -156,9 +163,6 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
         })
       }
     }
-    await recover("requeue-interrupted-running-ingresses", () =>
-      requeueInterruptedRunningTaskIngresses().then(() => undefined),
-    )
     await recover("reconcile-terminal-agent-lifecycle-deliveries", () =>
       reconcileTerminalAgentLifecycleDeliveries().then(() => undefined),
     )

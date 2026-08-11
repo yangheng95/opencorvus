@@ -386,6 +386,10 @@ describe("explicit conversation and Task execution authority", () => {
             { taskID, cwd: project.path },
             { executable: process.execPath, args: ["--version"] },
           )
+          expect(ProcessSupervisor.taskMetricsSnapshot(taskID)).toEqual({
+            live: 1,
+            owners: { unclassified: { count: 1, pids: [first.pid] } },
+          })
           let enterFirst!: () => void
           const firstEntered = new Promise<void>((resolve) => (enterFirst = resolve))
           let releaseFirst!: () => void
@@ -406,6 +410,10 @@ describe("explicit conversation and Task execution authority", () => {
           })
           releaseFirst()
           const second = await secondSpawn
+          expect(ProcessSupervisor.taskMetricsSnapshot(taskID)).toEqual({
+            live: 1,
+            owners: { unclassified: { count: 1, pids: [second.pid] } },
+          })
           await Promise.all([checkpointA, checkpointB])
           await second.dispose()
           expect({ order, firstExit: await first.exited, secondExit: await second.exited }).toEqual({

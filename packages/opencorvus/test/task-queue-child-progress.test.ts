@@ -121,6 +121,106 @@ describe("Task Queue child Session progress", () => {
     })
   }, 30_000)
 
+  test("coalesces burst progress behind one durable touch and preserves the live execution during recovery", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const root = await Session.createNext({
+          directory: Instance.directory,
+          kind: "assistant",
+          title: "Task Queue coalesced progress root",
+        })
+        await Database.awaitEffectIdle(2_000)
+
+        const queueTaskID = Identifier.ascending("task")
+        const staleAt = Date.now() - 1_000_000
+        Database.use((db) =>
+          db
+            .insert(TaskQueueTable)
+            .values({
+              id: queueTaskID,
+              session_id: root.id,
+              prompt: "coalesced durable progress touch",
+              priority: "normal",
+              status: "running",
+              source: "task-queue-coalesced-progress-positive-contract",
+              metadata: { kind: "session_prompt", input: {} },
+              time_created: staleAt,
+              time_started: staleAt,
+              time_updated: staleAt,
+            })
+            .run(),
+        )
+
+        let releaseTouch!: () => void
+        const touchRelease = new Promise<void>((resolve) => (releaseTouch = resolve))
+        let reportTouchStarted!: () => void
+        const touchStarted = new Promise<void>((resolve) => (reportTouchStarted = resolve))
+        let durableTouchOwners = 0
+        using _progressTouch = TaskQueueService.TestHooks.installBeforeProgressTouch(async ({ taskID }) => {
+          expect(taskID).toBe(queueTaskID)
+          durableTouchOwners += 1
+          reportTouchStarted()
+          await touchRelease
+        })
+        const stopTracking = TaskQueueService.TestHooks.trackChildSessionProgress({
+          taskID: queueTaskID,
+          rootSessionID: root.id,
+          directory: Instance.directory,
+          projectID: Instance.project.id,
+        })
+        try {
+          const message = await Session.updateMessage({
+            id: Identifier.ascending("message"),
+            sessionID: root.id,
+            role: "user",
+            author: "user",
+            agent: "chat",
+            model: { providerID: "test", modelID: "task-queue-progress-coalescing" },
+            time: { created: Date.now() },
+          })
+          const partID = Identifier.ascending("part")
+          await Session.updatePart({
+            id: partID,
+            sessionID: root.id,
+            messageID: message.id,
+            type: "text",
+            text: "progress-0",
+          })
+          await touchStarted
+
+          for (let index = 1; index <= 8; index += 1) {
+            await Session.updatePart({
+              id: partID,
+              sessionID: root.id,
+              messageID: message.id,
+              type: "text",
+              text: `progress-${index}`,
+            })
+          }
+          await Database.awaitEffectIdle(2_000)
+
+          const recovered = await TaskQueueService.TestHooks.recoverAt(Date.now() + 10_000_000_000)
+          const whileBlocked = TaskQueueService.getStatusByID(queueTaskID)
+          releaseTouch()
+          const touchedAt = await waitForQueueUpdate(queueTaskID, staleAt)
+
+          expect({ durableTouchOwners, recovered, whileBlocked, settled: TaskQueueService.getStatusByID(queueTaskID) }).toMatchObject({
+            durableTouchOwners: 1,
+            recovered: 0,
+            whileBlocked: { taskID: queueTaskID, status: "running", updatedAt: staleAt },
+            settled: { taskID: queueTaskID, status: "running", updatedAt: touchedAt },
+          })
+          expect(touchedAt).toBeGreaterThan(staleAt)
+        } finally {
+          releaseTouch()
+          stopTracking()
+        }
+      },
+    })
+  }, 30_000)
+
   test("retains the Session claim until an inactive executor physically settles", async () => {
     await using project = await memoryProject()
     await Instance.provide({
