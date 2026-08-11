@@ -132,3 +132,28 @@ The task owns the new page component, two route files, exact shared-header/layou
 - English 1100 px continuous sequence: [`01`](../../artifacts/2026-08-11-agent-hosts-page-en-1100-flow-01.png), [`02`](../../artifacts/2026-08-11-agent-hosts-page-en-1100-flow-02.png), [`03`](../../artifacts/2026-08-11-agent-hosts-page-en-1100-flow-03.png), [`04`](../../artifacts/2026-08-11-agent-hosts-page-en-1100-flow-04.png), [`05`](../../artifacts/2026-08-11-agent-hosts-page-en-1100-flow-05.png), [`06`](../../artifacts/2026-08-11-agent-hosts-page-en-1100-flow-06.png), [`07`](../../artifacts/2026-08-11-agent-hosts-page-en-1100-flow-07.png), and [`08`](../../artifacts/2026-08-11-agent-hosts-page-en-1100-flow-08.png). Together with the 1100 top image, these cover scroll positions `0, 650, 1301, 1951, 2602, 3252, 3902, 4553, 5106` over a 710 px content viewport, so every adjacent frame overlaps.
 - [`2026-08-11-agent-hosts-page-zh-1280-top.png`](../../artifacts/2026-08-11-agent-hosts-page-zh-1280-top.png) and [`2026-08-11-agent-hosts-page-zh-1100-top.png`](../../artifacts/2026-08-11-agent-hosts-page-zh-1100-top.png): localized desktop and narrow-desktop header/hero review.
 - Chinese 1100 px continuous sequence: [`01`](../../artifacts/2026-08-11-agent-hosts-page-zh-1100-flow-01.png), [`02`](../../artifacts/2026-08-11-agent-hosts-page-zh-1100-flow-02.png), [`03`](../../artifacts/2026-08-11-agent-hosts-page-zh-1100-flow-03.png), [`04`](../../artifacts/2026-08-11-agent-hosts-page-zh-1100-flow-04.png), [`05`](../../artifacts/2026-08-11-agent-hosts-page-zh-1100-flow-05.png), [`06`](../../artifacts/2026-08-11-agent-hosts-page-zh-1100-flow-06.png), [`07`](../../artifacts/2026-08-11-agent-hosts-page-zh-1100-flow-07.png), and [`08`](../../artifacts/2026-08-11-agent-hosts-page-zh-1100-flow-08.png). Together with the 1100 top image, these cover scroll positions `0, 650, 1301, 1951, 2602, 3252, 3902, 4553, 4850` over the same 710 px content viewport, including readiness cards, both host cards, generic-host instructions, the host-neutral durable prompt, capabilities, real boundaries, final actions, and footer with overlap.
+
+## Follow-up: explicit GitHub navigation link
+
+### Recall
+
+- User request: add the GitHub link to the website.
+- Existing evidence: the public footer already links to the repository under the less explicit `Source` label, while the Agent-host page links directly to the `skills/opencorvus` subtree. The shared top navigation has no repository entry.
+- Acceptance: add one clearly labeled `GitHub` link to the shared public header, preserve the footer and Skill deep link, use `https://github.com/yangheng95/opencorvus`, and keep the complete English and Chinese navigation visible at the supported 1100 px desktop width.
+- Constraints: preserve concurrent Mission and public-site copy changes; do not add or run UI automation tests; validate through the real built page and a reviewed screenshot; commit only the exact GitHub-link hunk and this follow-up evidence.
+
+### Implementation plan
+
+1. Add the repository link after the existing Docs item in `PublicSiteHeader.astro` so every public route and locale receives it from the single shared navigation source.
+2. Run the web checker and production build.
+3. Review the English and Chinese Agent-host pages at 1100 px in the real browser, confirming the GitHub link destination, header fit, active Agent tab, reciprocal language control, focus visibility, and absence of document overflow or console errors.
+4. Request an independent read-only implementation review before isolated commit delivery.
+
+### Follow-up verification evidence
+
+- `bun run --cwd packages/web check`: passed with zero errors and the same pre-existing unused-variable hint.
+- `bun run --cwd packages/web build`: passed and generated 315 pages; existing theme, tolerated top-level-await, and missing `docs -> 404` warnings remain unrelated.
+- English 1100 px review: `clientWidth = scrollWidth = body.scrollWidth = 1085`; Agent tab remained active; the focused `GitHub` link resolved exactly to `https://github.com/yangheng95/opencorvus`; the navigation ended at x=913.2 before the language control at x=1008.4; console error collection was empty.
+- Chinese 1100 px review: the same no-overflow measurements held; `Agent 接入` remained active; the reciprocal English link remained `/use-with-agents/`; the focused GitHub link used the same repository URL; console error collection was empty.
+- Reviewed screenshots: [`English 1100 GitHub focus`](../../artifacts/2026-08-11-agent-hosts-github-nav-en-1100.png) and [`Chinese 1100 GitHub focus`](../../artifacts/2026-08-11-agent-hosts-github-nav-zh-1100.png).
+- Independent read-only implementation review returned `APPROVED`; its only residual requirement is that the final alternate-index patch exclude the concurrent Mission and navigation-copy hunks.
