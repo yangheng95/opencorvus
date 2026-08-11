@@ -55,6 +55,7 @@ import {
   clearBoard,
   rootTaskSessionID,
   setBoardStore,
+  type BoardSource,
 } from "./store/board"
 import { abortChatRequest, messageStore, setChatAttachments } from "./store/messages"
 import { clearConversationUiState } from "./store/conversation-ui"
@@ -154,7 +155,13 @@ import { openGoalDialog } from "./services/dialog"
 import { openConfigDialog } from "./services/config-dialog-control"
 import { cardTreeStore } from "./store/card-tree"
 import { composerDraftKey, composerDraftText, setComposerDraft } from "./services/composer-draft"
-import { cancelConversationReplay, loadConversation, resetConversationProjection } from "./services/conversation"
+import { normalizeDebugDirectory } from "./utils/debug-text"
+import {
+  cancelConversationReplay,
+  loadConversation,
+  optionalConversationSourceDirectory,
+  resetConversationProjection,
+} from "./services/conversation"
 import {
   conversationSourceExperience,
   createConversationSession,
@@ -186,6 +193,7 @@ import {
   buildChatDebugBlob,
   buildTaskDebugBlob,
   buildTaskSelectionErrorDebugBlob,
+  requireNamedDebugProjectDirectory,
   writeDebugClipboard,
 } from "./utils/debug-info"
 import { taskOwningDirectory } from "./services/task-directory"
@@ -1141,40 +1149,55 @@ async function openExpertSquadMarketForProject(projectDirectory?: string): Promi
   await openConfigDialog("expert-squad-install")
 }
 
+function assertDebugSelectionCurrent(source: BoardSource): void {
+  const current = boardStore.selectedSource
+  if (!current || current.kind !== source.kind || current.id !== source.id) {
+    throw new Error(`Conversation selection changed while collecting debug information; retry the copy action`)
+  }
+  const expectedDirectory = normalizeDebugDirectory(source.directory)
+  const currentDirectory = normalizeDebugDirectory(current.directory)
+  if (expectedDirectory && currentDirectory && expectedDirectory !== currentDirectory) {
+    throw new Error(`Conversation directory changed while collecting debug information; retry the copy action`)
+  }
+}
+
 async function copyActiveConversationDebug(): Promise<void> {
-  const selectedSource = boardStore.selectedSource
+  const initialSource = boardStore.selectedSource
+  const selectedSource = initialSource ? ({ ...initialSource } as BoardSource) : null
   const taskSelectionError = boardStore.taskSelectionError
   const selectedTaskFailure =
     selectedSource?.kind === "task" && taskSelectionError?.taskID === selectedSource.id ? taskSelectionError : null
-  if (selectedSource?.kind !== "session" && !selectedTaskFailure) {
+  if (!selectedSource) throw new Error("No active Task or Chat")
+  selectedSource.directory = requireNamedDebugProjectDirectory(
+    String(selectedSource.directory ?? "").trim() ||
+      (selectedSource.kind === "session" ? (optionalConversationSourceDirectory(selectedSource) ?? "") : ""),
+    t("chat.debug_copy_named_project_required"),
+  )
+  if (selectedSource.kind !== "session" && !selectedTaskFailure) {
     await loadBoard({ sync: true, requireFresh: true })
   }
-  const debugBoard = selectedSource?.kind === "session" ? { ...boardStore.board } : boardStore.board
-  const debugCardTree =
-    selectedSource?.kind === "session"
-      ? ({ cards: { ...cardTreeStore.cards }, order: [...cardTreeStore.order] } as typeof cardTreeStore)
-      : cardTreeStore
-  const debugBoardSessionID = typeof debugBoard?.sessionID === "string" ? debugBoard.sessionID : ""
-  if (selectedSource?.kind === "session" && debugBoardSessionID && debugBoardSessionID !== selectedSource.id) {
-    throw new Error(
-      `Conversation debug projection mismatch: selected ${selectedSource.id}, board ${debugBoardSessionID}`,
-    )
-  }
+  assertDebugSelectionCurrent(selectedSource)
   const persistedChat =
-    selectedSource?.kind === "session"
+    selectedSource.kind === "session"
       ? await loadPersistedChatDebugProjection({
           sessionID: selectedSource.id,
-          directory: String(debugBoard?.directory ?? ""),
+          directory: String(selectedSource.directory),
         })
       : undefined
+  assertDebugSelectionCurrent(selectedSource)
+  const debugBoard = selectedSource.kind === "session" ? { ...boardStore.board } : boardStore.board
+  const debugCardTree =
+    selectedSource.kind === "session"
+      ? ({ cards: { ...cardTreeStore.cards }, order: [...cardTreeStore.order] } as typeof cardTreeStore)
+      : cardTreeStore
   const blob =
-    selectedSource?.kind === "session"
-      ? buildChatDebugBlob(debugBoard, selectedSource, debugCardTree, persistedChat)
+    selectedSource.kind === "session"
+      ? buildChatDebugBlob(debugBoard, selectedSource, debugCardTree, persistedChat!)
       : selectedTaskFailure
         ? buildTaskSelectionErrorDebugBlob(selectedTaskFailure, appStore.enginePaths)
-        : buildTaskDebugBlob(boardStore.board, appStore.enginePaths)
+        : buildTaskDebugBlob(debugBoard, selectedSource, appStore.enginePaths)
   if (!blob) {
-    throw new Error(selectedSource?.kind === "session" ? "No active chat session" : "No active task")
+    throw new Error(selectedSource.kind === "session" ? "No active chat session" : "No active task")
   }
   await writeDebugClipboard(blob)
 }

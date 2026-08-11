@@ -1,82 +1,351 @@
 import { describe, expect, test } from "bun:test"
-import { summarizePersistedChatMessages } from "../src/services/session-debug"
-import { buildChatDebugBlob } from "../src/utils/debug-info"
+import { summarizePersistedChatMessages, type PersistedChatDebugProjection } from "../src/services/session-debug"
+import {
+  buildChatDebugBlob,
+  buildTaskDebugBlob,
+  buildTaskSelectionErrorDebugBlob,
+  debugCopyFailureMessage,
+  DebugNamedProjectRequiredError,
+  formatDebugTime,
+  requireNamedDebugProjectDirectory,
+} from "../src/utils/debug-info"
+import { boundedDebugText, normalizeDebugDirectory } from "../src/utils/debug-text"
 
-describe("persisted chat debug statistics", () => {
-  test("counts persisted message roles and every Tool Part state independently from rendered cards", () => {
+function message(input: {
+  id: string
+  sessionID?: string
+  role: "user" | "assistant"
+  created: number
+  completed?: number
+  finish?: string
+  errorName?: string
+  parts?: Array<Record<string, unknown>>
+}) {
+  const sessionID = input.sessionID ?? "session-debug"
+  return {
+    info: {
+      id: input.id,
+      sessionID,
+      role: input.role,
+      time: { created: input.created, ...(input.completed ? { completed: input.completed } : {}) },
+      ...(input.finish ? { finish: input.finish } : {}),
+      ...(input.errorName ? { error: { name: input.errorName } } : {}),
+    },
+    parts: (input.parts ?? []).map((part, index) => ({
+      id: `${input.id}-part-${index}`,
+      sessionID,
+      messageID: input.id,
+      ...part,
+    })),
+  }
+}
+
+function projection(input: {
+  root: ReturnType<typeof summarizePersistedChatMessages>
+  tree?: ReturnType<typeof summarizePersistedChatMessages>
+  rootUnavailable?: string
+}): PersistedChatDebugProjection {
+  return {
+    schema: "opencorvus.chat-debug.v2",
+    sessionID: "session-debug",
+    directory: "C:/project",
+    startedAt: 1_700_000_000_000,
+    completedAt: 1_700_000_000_100,
+    root: input.rootUnavailable
+      ? {
+          status: "unavailable",
+          endpoint: "session/session-debug/message",
+          collectedAt: 1_700_000_000_050,
+          error: input.rootUnavailable,
+        }
+      : {
+          status: "available",
+          endpoint: "session/session-debug/message",
+          collectedAt: 1_700_000_000_050,
+          summary: input.root,
+        },
+    tree: {
+      status: "available",
+      endpoint: "session/session-debug/conversation",
+      collectedAt: 1_700_000_000_090,
+      summary: input.tree ?? input.root,
+      board: { sessionID: "session-debug", title: "Debug", status: "idle", directory: "C:/project" },
+    },
+  }
+}
+
+describe("persisted chat debug bundle", () => {
+  test("maps unsupported debug scope to the named-Project requirement", () => {
+    const message = "This feature requires a named project to be open."
+    expect(requireNamedDebugProjectDirectory(" C:/work/opencorvus ", message)).toBe("C:/work/opencorvus")
+    const missingDirectory = () => requireNamedDebugProjectDirectory("", message)
+    const anonymousDirectory = () =>
+      requireNamedDebugProjectDirectory(
+        "C:/Users/test/AppData/Local/opencorvus/projects/2026/08/11/123e4567-e89b-42d3-a456-426614174000",
+        message,
+      )
+    expect(missingDirectory).toThrow(message)
+    expect(missingDirectory).toThrow(DebugNamedProjectRequiredError)
+    expect(anonymousDirectory).toThrow(message)
+    expect(anonymousDirectory).toThrow(DebugNamedProjectRequiredError)
+    try {
+      missingDirectory()
+    } catch (error) {
+      expect(debugCopyFailureMessage(error, "Copy failed")).toBe(message)
+    }
+    expect(debugCopyFailureMessage(new Error("identity mismatch"), "Copy failed")).toBe("Copy failed")
+  })
+
+  test("counts validated lifecycle facts and keeps bounded Tool identities", () => {
     const stats = summarizePersistedChatMessages([
-      {
-        info: { role: "user" },
-        parts: [{ type: "text", text: "start" }],
-      },
-      {
-        info: { role: "assistant" },
+      message({ id: "user-1", role: "user", created: 1 }),
+      message({
+        id: "assistant-running",
+        role: "assistant",
+        created: 2,
         parts: [
-          { type: "tool", state: { status: "completed" } },
-          { type: "tool", state: { status: "running" } },
-          { type: "tool", state: { status: "pending" } },
+          { type: "tool", tool: "glob", callID: "call-glob", state: { status: "running", time: { start: 3 } } },
+          { type: "tool", tool: "read", callID: "call-read", state: { status: "pending", time: { start: 3 } } },
         ],
-      },
-      {
-        info: { role: "assistant" },
+      }),
+      message({
+        id: "assistant-error",
+        role: "assistant",
+        created: 4,
+        completed: 5,
+        finish: "error",
+        errorName: "UnknownError",
         parts: [
-          { type: "tool", state: { status: "error" } },
-          { type: "tool", state: { status: "future-state" } },
+          {
+            type: "tool",
+            tool: "bash",
+            callID: "call-bash",
+            state: {
+              status: "error",
+              time: { start: 4, end: 5 },
+              failure: { kind: "process-execution-interrupted", message: "token=private diagnostic" },
+            },
+          },
+          {
+            type: "tool",
+            tool: "write",
+            callID: "call-write",
+            state: { status: "completed", time: { start: 4, end: 5 } },
+          },
         ],
-      },
+      }),
     ])
 
-    expect(stats).toEqual({
-      messages: { total: 3, user: 1, assistant: 2, other: 0 },
-      tools: { total: 5, pending: 1, running: 1, completed: 1, error: 1, other: 1 },
+    expect(stats.stats).toEqual({
+      messages: {
+        total: 3,
+        user: 1,
+        assistant: 2,
+        other: 0,
+        assistantIncomplete: 1,
+        assistantCompleted: 1,
+        assistantError: 1,
+      },
+      tools: { total: 4, pending: 1, running: 1, completed: 1, error: 1, other: 0 },
+    })
+    expect(stats.sessionIDs).toEqual(["session-debug"])
+    expect(stats.recentTools[0]).toMatchObject({
+      messageID: "assistant-running",
+      tool: "glob",
+      status: "running",
+    })
+    expect(stats.recentTools[2]).toMatchObject({
+      tool: "bash",
+      failureKind: "process-execution-interrupted",
+      failure: "token=[redacted] diagnostic",
     })
   })
 
-  test("rejects malformed responses instead of reporting a false persisted zero", () => {
-    expect(() => summarizePersistedChatMessages(undefined)).toThrow("Session message response must be an array")
+  test("maps malformed and cross-Session records to explicit contract errors", () => {
+    expect(() => summarizePersistedChatMessages([{}])).toThrow("Session message response[0].info must be an object")
+    expect(() =>
+      summarizePersistedChatMessages([
+        message({ id: "missing-type", role: "assistant", created: 1, parts: [{ tool: "glob", callID: "call" }] }),
+      ]),
+    ).toThrow("part missing-type-part-0.type must be a non-empty string")
+    expect(() =>
+      summarizePersistedChatMessages([
+        message({
+          id: "duplicate-parts",
+          role: "user",
+          created: 1,
+          parts: [
+            { id: "duplicate-part", type: "text" },
+            { id: "duplicate-part", type: "text" },
+          ],
+        }),
+      ]),
+    ).toThrow("contains duplicate part duplicate-part")
+    expect(() =>
+      summarizePersistedChatMessages([
+        message({
+          id: "missing-tool-time",
+          role: "assistant",
+          created: 1,
+          parts: [{ type: "tool", tool: "glob", callID: "call", state: { status: "running" } }],
+        }),
+      ]),
+    ).toThrow("state.time must be an object")
+    expect(() =>
+      summarizePersistedChatMessages([
+        message({
+          id: "future-tool-state",
+          role: "assistant",
+          created: 1,
+          parts: [
+            { type: "tool", tool: "glob", callID: "call", state: { status: "future-state", time: { start: 2 } } },
+          ],
+        }),
+      ]),
+    ).toThrow("has unsupported status future-state")
+    expect(() =>
+      summarizePersistedChatMessages([message({ id: "other", sessionID: "other-session", role: "user", created: 1 })], {
+        expectedSessionID: "session-debug",
+      }),
+    ).toThrow("Session message other belongs to other-session, expected session-debug")
   })
 
-  test("labels persisted facts separately from rendered card counts", () => {
+  test("separates root, Session-tree, and rendered scopes and embeds the AI handoff", () => {
+    const root = summarizePersistedChatMessages([
+      message({ id: "root-user", role: "user", created: 1 }),
+      message({
+        id: "root-assistant",
+        role: "assistant",
+        created: 2,
+        parts: [{ type: "tool", tool: "glob", callID: "root-glob", state: { status: "running", time: { start: 3 } } }],
+      }),
+    ])
+    const tree = summarizePersistedChatMessages([
+      message({ id: "root-user", role: "user", created: 1 }),
+      message({
+        id: "root-assistant",
+        role: "assistant",
+        created: 2,
+        parts: [{ type: "tool", tool: "glob", callID: "child-glob", state: { status: "running", time: { start: 3 } } }],
+      }),
+      message({ id: "child-assistant", sessionID: "child-session", role: "assistant", created: 4 }),
+    ])
     const blob = buildChatDebugBlob(
       { sessionID: "session-debug", title: "Debug", status: "idle", directory: "C:/project" },
-      { kind: "session", id: "session-debug" },
-      {
-        cards: {
-          rendered: { kind: "message" },
-        },
-        order: ["rendered"],
-      } as any,
-      {
-        status: "available",
-        sessionID: "session-debug",
-        stats: {
-          messages: { total: 2, user: 1, assistant: 1, other: 0 },
-          tools: { total: 3, pending: 0, running: 1, completed: 2, error: 0, other: 0 },
-        },
-      },
+      { kind: "session", id: "session-debug", directory: "C:/project" },
+      { cards: { rendered: { kind: "message" } }, order: ["rendered"] } as any,
+      projection({ root, tree }),
     )
-    expect(blob).toContain("Persisted Session:\n  messages.total:     2")
-    expect(blob).toContain("tools.running:      1")
-    expect(blob).toContain("Rendered cards:\n  top.level: 1\n  total:     1")
+
+    expect(blob).toContain("Paste this entire bundle into an AI assistant")
+    expect(blob).toContain("Persisted root Session (raw messages only):")
+    expect(blob).toContain("Persisted Session tree (visible conversation transcript):")
+    expect(blob).toContain("sessions:              child-session, session-debug")
+    expect(blob).toContain("tool=glob; status=running")
+    expect(blob).toContain("Rendered Overlay snapshot (local, non-atomic with persisted reads):")
   })
 
-  test("keeps the selected source canonical and rejects persisted statistics from another Session", () => {
+  test("preserves a successful tree read when the root plane is unavailable", () => {
+    const tree = summarizePersistedChatMessages([
+      message({ id: "tree-user", role: "user", created: 1 }),
+      message({ id: "tree-assistant", role: "assistant", created: 2 }),
+    ])
     const blob = buildChatDebugBlob(
-      { sessionID: "other-session", title: "Other", status: "idle", directory: "C:/other" },
-      { kind: "session", id: "selected-session" },
+      { sessionID: "session-debug", title: "Debug", status: "idle", directory: "C:/project" },
+      { kind: "session", id: "session-debug", directory: "C:/project" },
       { cards: {}, order: [] } as any,
-      {
-        status: "available",
-        sessionID: "other-session",
-        stats: {
-          messages: { total: 9, user: 4, assistant: 5, other: 0 },
-          tools: { total: 7, pending: 0, running: 7, completed: 0, error: 0, other: 0 },
-        },
-      },
+      projection({ root: tree, tree, rootUnavailable: "root read failed" }),
     )
-    expect(blob).toContain("chat.session:   selected-session")
-    expect(blob).toContain("chat.board.session: other-session")
-    expect(blob).toContain("unavailable: statistics belong to other-session, expected selected-session")
-    expect(blob).not.toContain("messages.total:     9")
+
+    expect(blob).toContain("status: unavailable\n  error: root read failed")
+    expect(blob).toContain("interpretation: unknown; do not treat this plane as zero")
+    expect(blob).toContain("Persisted Session tree (visible conversation transcript):")
+    expect(blob).toContain("messages.total:        2")
+  })
+
+  test("rejects a persisted projection owned by another Session", () => {
+    const empty = summarizePersistedChatMessages([])
+    const other = { ...projection({ root: empty }), sessionID: "other-session" } as PersistedChatDebugProjection
+    expect(() =>
+      buildChatDebugBlob(
+        { sessionID: "session-debug", title: "Debug", status: "idle", directory: "C:/project" },
+        { kind: "session", id: "session-debug", directory: "C:/project" },
+        { cards: {}, order: [] } as any,
+        other,
+      ),
+    ).toThrow("Chat debug persistence belongs to other-session, expected session-debug")
+  })
+
+  test("derives Task activity time from topology and persisted artifacts", () => {
+    const artifactUpdated = 1_700_000_004_000
+    const blob = buildTaskDebugBlob(
+      {
+        task: {
+          id: "task-debug",
+          title: "Debug Task",
+          status: "running",
+          directory: "C:/project",
+          time: { created: 1_700_000_000_000, updated: 1_700_000_001_000 },
+        },
+        project: { worktree: "C:/project" },
+        goals: [],
+        sessionInvocationTopology: {
+          nodes: [{ time: { created: 1_700_000_001_000, updated: 1_700_000_002_000 } }],
+        },
+        executionProjection: {
+          occurrences: [{ latest: { status: { type: "running" }, emittedAt: 1_700_000_003_000 } }],
+        },
+        artifacts: [{ time: { updated: artifactUpdated } }],
+        processIncidents: [],
+      },
+      { kind: "task", id: "task-debug", directory: "C:/project" },
+    )
+
+    expect(blob).toContain("Paste this entire bundle into an AI assistant")
+    expect(blob).toContain(`task.activity.updated: ${formatDebugTime(artifactUpdated)}`)
+    expect(blob).toContain(`topology=${formatDebugTime(1_700_000_002_000)}`)
+    expect(blob).toContain(`artifact=${formatDebugTime(artifactUpdated)}`)
+  })
+
+  test("redacts and bounds every free-form clipboard failure plane", () => {
+    const rawSecret = "sk-proj-abcdefghijklmnop"
+    const githubSecret = "ghp_abcdefghijklmnopqrstuvwxyz123456"
+    const root = summarizePersistedChatMessages([])
+    const chatBlob = buildChatDebugBlob(
+      { sessionID: "session-debug", title: rawSecret, status: "idle", directory: "C:/project" },
+      { kind: "session", id: "session-debug", directory: "C:/project" },
+      { cards: {}, order: [] },
+      projection({
+        root,
+        rootUnavailable: `request https://alice:password@example.test failed with ${rawSecret} and ${githubSecret}`,
+      }),
+    )
+    const taskBlob = buildTaskSelectionErrorDebugBlob({
+      taskID: "task-debug",
+      directory: "C:/project",
+      title: rawSecret,
+      details: `${githubSecret} token=plain-secret ${"x".repeat(2_000)}`,
+    })
+
+    expect(chatBlob).not.toContain(rawSecret)
+    expect(chatBlob).not.toContain(githubSecret)
+    expect(chatBlob).not.toContain("alice:password")
+    expect(taskBlob).not.toContain(rawSecret)
+    expect(taskBlob).not.toContain(githubSecret)
+    expect(taskBlob).not.toContain("plain-secret")
+    expect(taskBlob.length).toBeLessThan(3_000)
+  })
+
+  test("redacts authentication edge cases and preserves platform path identity", () => {
+    const text = boundedDebugText(
+      "Authorization: Basic dXNlcjpwYXNz AccountKey=azure-secret -----BEGIN PRIVATE KEY----- truncated-secret",
+      500,
+    )
+
+    expect(text).not.toContain("dXNlcjpwYXNz")
+    expect(text).not.toContain("azure-secret")
+    expect(text).not.toContain("truncated-secret")
+    expect(normalizeDebugDirectory("C:\\Project\\")).toBe(normalizeDebugDirectory("c:/project"))
+    expect(normalizeDebugDirectory("/Project/")).not.toBe(normalizeDebugDirectory("/project"))
   })
 })

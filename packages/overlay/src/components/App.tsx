@@ -25,6 +25,7 @@ import { DropdownMenu } from "./ui/DropdownMenu"
 import { Tooltip } from "./ui/Tooltip"
 import { StatusIndicator } from "./ui/StatusIndicator"
 import { t } from "../utils/i18n"
+import { debugCopyFailureMessage } from "../utils/debug-info"
 import { conversationExperienceIcon } from "../services/conversation-experience"
 import { formatUsageStrip } from "../utils/format-usage"
 import type { RightDockPanel } from "./RightDock"
@@ -73,7 +74,15 @@ function ChatViewTitle(props: {
     const item = props.item()
     return item && isTerminalTaskRow(item) ? item : null
   })
-  const [copyFeedback, setCopyFeedback] = createSignal<"copied" | "failed" | null>(null)
+  const [copyFeedback, setCopyFeedback] = createSignal<
+    { kind: "copied" } | { kind: "failed"; message?: string } | null
+  >(null)
+  const copyFeedbackText = createMemo(() => {
+    const feedback = copyFeedback()
+    if (feedback?.kind === "copied") return t("chat.debug_copy_success")
+    if (feedback?.kind === "failed") return feedback.message || t("markdown.copy_failed")
+    return ""
+  })
   let copyFeedbackTimer: number | undefined
 
   onCleanup(() => {
@@ -84,55 +93,60 @@ function ChatViewTitle(props: {
     if (copyFeedbackTimer !== undefined) window.clearTimeout(copyFeedbackTimer)
     try {
       await props.onCopyDebug()
-      setCopyFeedback("copied")
+      setCopyFeedback({ kind: "copied" })
     } catch (error) {
       console.error("[chat-view-title dblclick] clipboard write failed", error)
-      setCopyFeedback("failed")
+      setCopyFeedback({
+        kind: "failed",
+        message: debugCopyFailureMessage(error, t("markdown.copy_failed")),
+      })
     }
     copyFeedbackTimer = window.setTimeout(() => {
       setCopyFeedback(null)
       copyFeedbackTimer = undefined
-    }, 1400)
+    }, 4000)
   }
 
   return (
     <div class="chat-title-group">
-      <Tooltip.Root
-        disabled={!usageText()}
-        openDelay={160}
-        closeDelay={80}
-        placement="bottom-start"
-        gutter={8}
-        fitViewport
-      >
+      <Tooltip.Root openDelay={160} closeDelay={80} placement="bottom-start" gutter={8} fitViewport>
         <Tooltip.Trigger
           as="span"
           class="chat-title chat-title-usage-trigger oc-surface-header__title"
           id="chatViewTitle"
-          tabIndex={usageText() ? 0 : undefined}
-          aria-live="polite"
-          data-copy-feedback={copyFeedback() ?? undefined}
+          role="button"
+          aria-label={copyFeedbackText() || `${props.title()}. ${t("chat.debug_copy_hint")}`}
+          tabIndex={0}
+          data-copy-feedback={copyFeedback()?.kind}
           onDblClick={(event) => {
             event.preventDefault()
             event.stopPropagation()
             void copyDebugInfo()
           }}
+          onKeyDown={(event) => {
+            if (event.key !== "Enter" && event.key !== " ") return
+            event.preventDefault()
+            event.stopPropagation()
+            void copyDebugInfo()
+          }}
         >
-          {copyFeedback() === "copied"
-            ? t("common.copied")
-            : copyFeedback() === "failed"
-              ? t("markdown.copy_failed")
-              : props.title()}
+          {copyFeedbackText() || props.title()}
         </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content class="chat-title-usage-tooltip" data-ui="chat-title-usage-tooltip">
-            <span class="chat-title-usage-tooltip__label">{t("chat.usage_aria")}</span>
-            <strong class="chat-title-usage-tooltip__value" id="chatTitleUsage">
-              {usageText()}
-            </strong>
+            <Show when={usageText()}>
+              <span class="chat-title-usage-tooltip__label">{t("chat.usage_aria")}</span>
+              <strong class="chat-title-usage-tooltip__value" id="chatTitleUsage">
+                {usageText()}
+              </strong>
+            </Show>
+            <span class="chat-title-usage-tooltip__debug-hint">{copyFeedbackText() || t("chat.debug_copy_hint")}</span>
           </Tooltip.Content>
         </Tooltip.Portal>
       </Tooltip.Root>
+      <span class="chat-title-copy-feedback-a11y" role="status" aria-live="polite" aria-atomic="true">
+        {copyFeedbackText()}
+      </span>
       <Show when={props.item()}>
         {(item) => (
           <DropdownMenu.Root placement="bottom-start" gutter={6} fitViewport>

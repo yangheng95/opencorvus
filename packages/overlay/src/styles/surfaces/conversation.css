@@ -1295,6 +1295,28 @@
   white-space: nowrap;
 }
 
+.chat-title-usage-tooltip__debug-hint {
+  grid-column: 1 / -1;
+  max-width: calc(320px * var(--ui-scale));
+  color: var(--text-muted);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.chat-title-copy-feedback-a11y {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 .chat-header-status {
   --px-exact: 1;
   position: absolute;
