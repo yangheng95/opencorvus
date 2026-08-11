@@ -99,7 +99,6 @@ export default defineConfig({
         replacesTitle: true,
       },
       sidebar: [
-        "",
         {
           label: "Get Started",
           translations: { en: "Get Started", "zh-CN": "快速开始" },
@@ -196,7 +195,6 @@ export default defineConfig({
         },
       ],
       components: {
-        Hero: "./src/components/Hero.astro",
         Head: "./src/components/Head.astro",
         Header: "./src/components/Header.astro",
         Footer: "./src/components/Footer.astro",
