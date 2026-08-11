@@ -305,8 +305,9 @@ export namespace OfficialUsage {
         providerID: "openrouter",
         label: "OpenRouter account credits",
         authorities: ["account_credit"],
-        scope: "Lifetime purchased and used credits for the authenticated OpenRouter account.",
-        freshness: "Live account credit balance; not a natural-period Token ledger.",
+        scope:
+          "Lifetime purchased and used credits for the authenticated OpenRouter account; the key ledger includes disabled keys in its default workspace.",
+        freshness: "Live account credit balance and default-workspace key facts; not a natural-period Token ledger.",
         credentialEnv: "OPENROUTER_MANAGEMENT_KEY",
         documentationURL: "https://openrouter.ai/docs/api/api-reference/credits/get-credits",
       }),
@@ -594,6 +595,7 @@ export namespace OfficialUsage {
         const items: z.infer<typeof OpenRouterKeysResponse>["data"] = []
         for (let page = 0; page < 100; page++) {
           const url = new URL("https://openrouter.ai/api/v1/keys")
+          url.searchParams.set("include_disabled", "true")
           if (page > 0) url.searchParams.set("offset", String(page * 100))
           const result = await requestJSON(dependencies, url, headers, OpenRouterKeysResponse)
           items.push(...result.data)

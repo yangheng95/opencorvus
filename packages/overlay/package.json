@@ -12,6 +12,7 @@
     "build:overlay": "bun run script/build-overlay.ts",
     "build:docker": "bun run script/build-docker.ts",
     "typecheck": "tsc --noEmit",
+    "check:i18n": "bun run script/check-i18n.ts",
     "test": "bun run test:unit",
     "test:unit": "bun run script/run-unit-tests.ts",
     "tauri": "tauri"

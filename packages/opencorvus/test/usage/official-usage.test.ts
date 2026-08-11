@@ -89,6 +89,8 @@ describe("official Provider usage aggregation", () => {
         return json({ data: { total_credits: 0.3, total_usage: 0.2 } })
       }
       if (url.hostname === "openrouter.ai" && url.pathname === "/api/v1/keys") {
+        expect(url.searchParams.get("include_disabled")).toBe("true")
+        expect(url.searchParams.has("workspace_id")).toBe(false)
         const offset = Number(url.searchParams.get("offset") ?? 0)
         return json({
           data: offset === 0 ? Array.from({ length: 100 }, (_, index) => openRouterKey(index)) : [openRouterKey(100)],
@@ -157,13 +159,17 @@ describe("official Provider usage aggregation", () => {
     })
     expect(result.sources.find((source) => source.id === "openrouter-account")!.keyUsage!.items[100]).toMatchObject({
       hash: "hash-100",
+      disabled: true,
+      usageUSD: 0.1,
+      usageMonthlyUSD: 0.03,
+      byokUsageUSD: 0.04,
       updatedAt: null,
     })
     expect(result.sources.filter((source) => source.status === "requires_configuration")).toHaveLength(3)
     expect(requests.filter((url) => url.includes("api.openai.com/v1/organization/usage/completions"))).toHaveLength(2)
     expect(requests.filter((url) => url.includes("openrouter.ai/api/v1/keys"))).toEqual([
-      "https://openrouter.ai/api/v1/keys",
-      "https://openrouter.ai/api/v1/keys?offset=100",
+      "https://openrouter.ai/api/v1/keys?include_disabled=true",
+      "https://openrouter.ai/api/v1/keys?include_disabled=true&offset=100",
     ])
     expect(result.rule).toBe("compare_never_sum")
   })
