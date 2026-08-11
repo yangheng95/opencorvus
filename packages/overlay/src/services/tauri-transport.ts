@@ -604,6 +604,8 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
             scopeKey: command.scopeKey,
             factor: command.factor,
           })
+        case "clipboard.readText":
+          return invokeTauri("overlay_clipboard_read_text")
         case "settings.load":
           return invokeTauri("overlay_settings_load")
         case "settings.save":

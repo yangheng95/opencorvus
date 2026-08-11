@@ -1028,6 +1028,7 @@ export type NativeCommand =
   | { kind: "browserPreview.selection.take"; surfaceID: string; scopeKey: string }
   | { kind: "browserPreview.currentPage"; surfaceID: string; scopeKey: string }
   | { kind: "browserPreview.setZoom"; surfaceID: string; scopeKey: string; factor: number }
+  | { kind: "clipboard.readText" }
   | { kind: "settings.load" }
   | { kind: "settings.save"; payload: OverlayPersistedSettings }
   | { kind: "config.write-file"; path: string; content: string }
@@ -1244,6 +1245,7 @@ export function isNativeCommand(value: unknown): value is NativeCommand {
         obj["factor"] <= 5
       )
     case "settings.load":
+    case "clipboard.readText":
       return true
     case "settings.save":
       return isOverlayPersistedSettings(obj["payload"])

@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+Latest clipboard API-key Provider prompt design: [`2026-08-11-clipboard-api-key-provider-prompt.md`](records/2026-08/2026-08-11-clipboard-api-key-provider-prompt.md).
+
+Clipboard API-key prompt visual evidence: [`confirmation`](artifacts/2026-08-11-clipboard-api-key-prompt.png) and [`Providers destination`](artifacts/2026-08-11-clipboard-api-key-providers.png).
+
 Latest README and homepage alignment: [`2026-08-11-readme-homepage-alignment.md`](records/2026-08/2026-08-11-readme-homepage-alignment.md).
 
 Latest Agent-host website tab: [`2026-08-11-agent-hosts-website-tab.md`](records/2026-08/2026-08-11-agent-hosts-website-tab.md).

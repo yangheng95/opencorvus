@@ -1,5 +1,9 @@
 # August 2026 Records
 
+- [2026-08-11-clipboard-api-key-provider-prompt.md](2026-08-11-clipboard-api-key-provider-prompt.md) adds a secret-safe native clipboard read boundary, local key-candidate classification, one-process prompt deduplication, and explicit navigation to the canonical LLM Provider settings.
+
+  Visual evidence: [confirmation prompt](../../artifacts/2026-08-11-clipboard-api-key-prompt.png) and [Providers destination](../../artifacts/2026-08-11-clipboard-api-key-providers.png).
+
 - [2026-08-11-expert-squad-on-demand-installation.md](2026-08-11-expert-squad-on-demand-installation.md) restores the four embedded Expert Squads as the only automatic defaults, keeps the complete repository-hosted Market available on demand, preserves existing installations, and routes picker actions into the canonical installer.
 
 - [2026-08-11-readme-homepage-alignment.md](2026-08-11-readme-homepage-alignment.md) aligns the bilingual root README position, navigation, Workbench, Expert Squad, Mission, long-horizon delivery, and open-community story with the current public homepage while preserving repository/runtime detail.
