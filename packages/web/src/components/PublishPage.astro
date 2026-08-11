@@ -3,121 +3,76 @@ import PublicSiteLayout from "./PublicSiteLayout.astro"
 import { publicPath, type PublicLocale } from "../content/public-market"
 
 const { locale } = Astro.props as { locale: PublicLocale }
-const hostedApiBase = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/api/registry`
 const copy =
   locale === "zh-cn"
     ? {
-        title: "发布专家团 · OpenCorvus",
-        description: "从自包含能力包到不可变公共 revision 的 OpenCorvus 专家团发布概念。",
+        title: "构建专家团 · OpenCorvus",
+        description: "使用当前 OpenCorvus SDK 构建、验证和冻结一份可检查的专家团能力包。",
         languageHref: publicPath("root", "/publish/"),
-        eyebrow: "能力包作者路径",
-        heading: "把专家团能力包铸成可验证的 revision。",
-        lead: "当前 SDK、Registry 与 Manager 已经能生成、验证和导入自包含能力包。公共发布还需要身份、签名、审核与托管服务；这里把边界完整画清。",
-        chainTitle: "从源码到公共 revision",
+        eyebrow: "专家团作者路径",
+        heading: "构建一支别人能够理解、检查和复现的专家团。",
+        lead: "专家团不是一组提示词。它要说明适用场景、角色责任、协作顺序、所需能力和交付证据，并把这些内容冻结在同一个可验证版本中。",
+        currentEyebrow: "今天就能完成",
+        currentTitle: "从任务边界到精确能力包",
         stages: [
-          ["用 Squad SDK 生成", "形成 manifest、角色指令、Skills、工具与声明工作流的自包含目录。", "当前已有"],
-          ["严格验证", "Registry 检查 schema、身份、路径、引用闭包、工作流拓扑与能力投影。", "当前已有"],
-          ["冻结 archive 与 digest", "把精确文件树打包为不可变 archive，并计算 SHA-256 内容 digest。", "当前已有"],
-          ["保留 namespace 并绑定发布者", "Registry 把唯一 namespace 绑定到个人或组织；包内 namespace 必须与所有权完全一致，再附加许可证、源仓库与签名。", "拟建 registry"],
-          ["审核与撤回策略", "记录自动检查、人工审核、风险披露、撤回原因与 replacement 边界。", "拟建 registry"],
-          ["发布精确 revision", "列表项只引用一个 namespace、id、version 与 digest；客户端下载同一组身份。", "拟建 registry"],
+          ["定义选择边界", "先写清团队适合什么结果、需要哪些输入，以及什么情况不该选择它。"],
+          ["组织角色与工作流", "为每位专家分配可见责任，并声明依赖关系、交付物和独立复核点。"],
+          ["加入 Skills 与工具", "只绑定团队真正需要的能力；所有引用都必须留在自包含包的验证闭包内。"],
+          ["严格验证", "使用 Registry 和 Manager 检查身份、schema、路径、引用闭包、工作流拓扑和能力投影。"],
+          ["冻结精确版本", "导出规范 ZIP，记录 namespace / id / version / digest，并在真实客户端里检查选择与安装结果。"],
         ],
-        current: "当前已有",
-        proposed: "拟建层",
-        boundaryTitle: "公共网站不拥有运行时激活权",
-        boundaryBody: "网站负责发现、发布事实与不可变内容分发。客户端负责本地校验、明确 scope、原子导入和 mutation receipt。安装后，用户还要另行选择专家团，`prompt_profile.active` 才会改变。",
-        sandboxEyebrow: "Local hosted registry simulation",
-        sandboxTitle: "上传一份真实 ZIP，先验证，再决定是否留在沙箱。",
-        sandboxBody: "文件只发送到当前 127.0.0.1 托管进程。服务端把它导入隔离临时项目，由现有 Registry 与 Manager 校验，再重新导出 canonical ZIP。确认保存只产生本机沙箱记录，不是公开发布、审核、安装或激活。",
-        namespaceTitle: "namespace 不是上传表单里的自由文本",
-        namespacePackage: "当前包身份",
-        namespacePackageBody: "由 expert-squad.jsonc 声明 namespace / id / version；canonical validation 读取它，网站不能覆盖。",
-        namespaceRegistry: "拟建所有权",
-        namespaceRegistryBody: "账号或组织先保留唯一 namespace。公共 Registry 只接受包内 namespace 与 owner 绑定完全一致的提交。",
-        namespaceLocal: "本地模拟不提供账号或 namespace 注册，因此只校验包内身份，并保持 publicationAuthority: false。",
-        fileLabel: "Expert Squad ZIP",
-        fileHint: "最大 18 MiB；ZIP 内部仍受 512 entries、4 MiB 单文件和 16 MiB 解包上限约束。文件名与 Content-Type 不参与信任判断。",
-        choose: "选择 ZIP 文件",
-        validate: "上传并严格验证",
-        validating: "正在上传到本机沙箱并执行 canonical validation…",
-        noFile: "ARCHIVE_REQUIRED — 请选择一个非空 Expert Squad ZIP。",
-        previewTitle: "验证通过 · 尚未保存",
-        previewBody: "下列事实来自 canonical Registry/Manager 结果；archive SHA-256 绑定重新导出的 ZIP 字节。此时没有公共 listing。",
-        identity: "Identity",
-        packageDigest: "Package digest",
-        archiveDigest: "Archive SHA-256",
-        archiveSize: "Archive bytes / files",
-        keep: "将验证 revision 留在本地沙箱",
-        keeping: "正在写入不可变本地沙箱记录…",
-        savedTitle: "本地沙箱记录已就绪",
-        savedBody: "这是一份可重复下载的本机验证记录，仍然不是 public publication、publisher verification 或 runtime execution。",
-        deduplicated: "同一精确 revision 已存在；沙箱返回原不可变记录。",
-        downloadExact: "下载刚验证的精确 ZIP",
-        online: "本地托管沙箱在线；上传不会离开这台机器。",
-        offline: "本地托管沙箱未运行。请使用 hosted:simulate 启动同源托管预览后再上传。",
-        start: "查看精确 revision 目录",
-        trust: "阅读可信机制",
+        deliverableTitle: "一份可交付能力包应回答什么？",
+        deliverables: [
+          ["什么时候选择它？", "selector 说明任务边界，而不是只写宣传语。"],
+          ["谁负责什么？", "Agent 角色、输入、输出和复核责任都能被检查。"],
+          ["如何证明完成？", "工作流与 Skills 定义证据、交付物和验收方法。"],
+          ["拿到的是哪一版？", "身份、版本和 digest 共同绑定精确内容。"],
+        ],
+        futureEyebrow: "公开发布边界",
+        futureTitle: "构建能力已经开放，自助上架还没有开放。",
+        futureBody: "当前公共网站可以展示仓库中已选定的专家团，并分发由 OpenCorvus 发布密钥签名的完整资源包；它还不是第三方作者自助 Registry。namespace 注册、发布者身份验证、第三方审核与撤回服务尚未开放，因此作者应先在源码仓库中构建、验证和提交能力包。",
+        activationTitle: "下载、安装和激活是三件事",
+        activationBody: "网站只负责说明与分发；客户端下载后仍会重新校验并要求明确安装范围。安装完成也不会自动选择团队，只有用户明确激活后，运行时行为才会变化。",
+        sdk: "阅读 Squad SDK",
+        template: "查看能力包模板",
+        market: "浏览专家团市场",
+        trust: "理解可信机制",
       }
     : {
-        title: "Publish an Expert Squad · OpenCorvus",
-        description: "The OpenCorvus Expert Squad publication concept from self-contained package to immutable public revision.",
+        title: "Build an Expert Squad · OpenCorvus",
+        description: "Use the current OpenCorvus SDK to build, validate, and freeze an inspectable Expert Squad package.",
         languageHref: publicPath("zh-cn", "/publish/"),
-        eyebrow: "Package author path",
-        heading: "Turn a Squad package into a verifiable revision.",
+        eyebrow: "Expert Squad author path",
+        heading: "Build a team other people can understand, inspect, and reproduce.",
         lead:
-          "The current Software Development Kit, Registry, and Manager can generate, validate, and import self-contained packages. Public publication still needs identity, signing, review, and hosted services; this model keeps every boundary visible.",
-        chainTitle: "From source to public revision",
+          "An Expert Squad is more than a set of prompts. It explains selection fit, role ownership, collaboration order, required capabilities, and delivery evidence—and freezes them in one verifiable revision.",
+        currentEyebrow: "Available today",
+        currentTitle: "From task boundary to exact package",
         stages: [
-          ["Generate with Squad SDK", "Produce a self-contained directory with manifest, role instructions, Skills, tools, and declared workflows.", "Current"],
-          ["Validate strictly", "The Registry checks schema, identity, paths, reference closure, workflow topology, and capability projection.", "Current"],
-          ["Freeze archive and digest", "Package the exact file tree as an immutable archive and compute a SHA-256 content digest.", "Current"],
-          ["Reserve namespace and bind publisher", "The Registry binds one namespace to an account or organization. The package namespace must match that ownership before license, source, and signature are attached.", "Proposed registry"],
-          ["Review and withdrawal policy", "Record automated checks, human review, risk disclosure, withdrawal reason, and replacement boundary.", "Proposed registry"],
-          ["Publish an exact revision", "A listing references one namespace, id, version, and digest; the client fetches that same identity set.", "Proposed registry"],
+          ["Define the selection boundary", "State the outcome the team fits, the inputs it needs, and the conditions where it should not be selected."],
+          ["Shape roles and workflow", "Give every specialist visible ownership and declare dependencies, deliverables, and independent review points."],
+          ["Add Skills and tools", "Bind only the capabilities the team needs; every reference must remain inside the validated self-contained package closure."],
+          ["Validate strictly", "Use the Registry and Manager to check identity, schema, paths, reference closure, workflow topology, and capability projection."],
+          ["Freeze the exact revision", "Export a canonical ZIP, record namespace / id / version / digest, and inspect selection and installation in a real client."],
         ],
-        current: "Current",
-        proposed: "Proposed layer",
-        boundaryTitle: "The public site does not own runtime activation",
-        boundaryBody:
-          "The website owns discovery, publication facts, and immutable content distribution. The client owns local validation, explicit scope, atomic import, and the mutation receipt. After install, the operator selects the Squad separately before `prompt_profile.active` changes.",
-        sandboxEyebrow: "Local hosted registry simulation",
-        sandboxTitle: "Upload a real ZIP, validate it first, then decide whether to keep it.",
-        sandboxBody:
-          "The file goes only to the current 127.0.0.1 hosting process. The server imports it into an isolated temporary project, validates it through the existing Registry and Manager, and exports a canonical ZIP. Confirmation creates only a local sandbox record—not publication, review, installation, activation, or runtime execution.",
-        namespaceTitle: "Namespace is not free text in the upload form",
-        namespacePackage: "Current package identity",
-        namespacePackageBody:
-          "expert-squad.jsonc declares namespace / id / version. Canonical validation reads that identity; the website cannot override it.",
-        namespaceRegistry: "Proposed ownership",
-        namespaceRegistryBody:
-          "An account or organization reserves one unique namespace first. A public Registry accepts only packages whose namespace exactly matches the owner binding.",
-        namespaceLocal:
-          "The local simulation has no accounts or namespace registration. It validates only the package identity and remains publicationAuthority: false.",
-        fileLabel: "Expert Squad ZIP",
-        fileHint:
-          "18 MiB maximum; the ZIP still has 512-entry, 4 MiB per-file, and 16 MiB unpacked limits. Filename and Content-Type are not trusted as package evidence.",
-        choose: "Choose ZIP file",
-        validate: "Upload and validate strictly",
-        validating: "Uploading to the local sandbox and running canonical validation…",
-        noFile: "ARCHIVE_REQUIRED — Choose one non-empty Expert Squad ZIP.",
-        previewTitle: "Validation passed · not kept yet",
-        previewBody:
-          "These facts come from the canonical Registry and Manager result. Archive SHA-256 binds the re-exported ZIP bytes. No public listing exists at this point.",
-        identity: "Identity",
-        packageDigest: "Package digest",
-        archiveDigest: "Archive SHA-256",
-        archiveSize: "Archive bytes / files",
-        keep: "Keep this validated revision in the local sandbox",
-        keeping: "Writing the immutable local sandbox record…",
-        savedTitle: "Local sandbox record is ready",
-        savedBody:
-          "This is a repeatable local validation record. It is still not public publication, publisher verification, or runtime execution.",
-        deduplicated: "The same exact revision already existed; the sandbox returned the original immutable record.",
-        downloadExact: "Download the exact validated ZIP",
-        online: "The local hosted sandbox is online. Uploads do not leave this machine.",
-        offline: "The local hosted sandbox is offline. Start the same-origin hosted simulation before uploading.",
-        start: "Inspect the exact-revision catalog",
-        trust: "Read the trust model",
+        deliverableTitle: "What must a deliverable package answer?",
+        deliverables: [
+          ["When should it be selected?", "The selector defines task fit instead of repeating marketing copy."],
+          ["Who owns what?", "Agent roles, inputs, outputs, and review responsibility are inspectable."],
+          ["How is completion proved?", "The workflow and Skills define evidence, deliverables, and acceptance."],
+          ["Which exact revision is this?", "Identity, version, and digest bind the content together."],
+        ],
+        futureEyebrow: "Public publication boundary",
+        futureTitle: "Package authoring is open. Self-service listing is not open yet.",
+        futureBody:
+          "The public site can showcase repository-selected Squads and distribute a complete bundle signed by the OpenCorvus publication key. It is not yet a third-party self-service Registry. Namespace enrollment, publisher identity, third-party review, and withdrawal services are not open, so authors currently build, validate, and contribute packages through the source repository.",
+        activationTitle: "Download, install, and activate are separate decisions",
+        activationBody:
+          "The website explains and distributes. The client repeats validation after download and requires an explicit install scope. Installation does not select the team; runtime behavior changes only after the user activates it.",
+        sdk: "Read the Squad SDK",
+        template: "Inspect the package template",
+        market: "Browse the Expert Squad market",
+        trust: "Understand the trust model",
       }
 ---
 
@@ -130,226 +85,98 @@ const copy =
 >
   <main id="main-content" class="public-main">
     <section class="utility-intro" aria-labelledby="publish-title">
-      <div>
-        <p class="eyebrow">{copy.eyebrow}</p>
-        <h1 id="publish-title">{copy.heading}</h1>
-      </div>
+      <div><p class="eyebrow">{copy.eyebrow}</p><h1 id="publish-title">{copy.heading}</h1></div>
       <p class="section-lead">{copy.lead}</p>
     </section>
 
-    <section
-      class="utility-section upload-workbench"
-      aria-labelledby="upload-workbench-title"
-      data-upload-workbench
-      data-api={hostedApiBase}
-      data-validating={copy.validating}
-      data-keeping={copy.keeping}
-      data-no-file={copy.noFile}
-      data-online={copy.online}
-      data-offline={copy.offline}
-      data-deduplicated={copy.deduplicated}
-    >
-      <div class="detail-grid">
-        <div>
-          <p class="eyebrow">{copy.sandboxEyebrow}</p>
-          <h2 id="upload-workbench-title">{copy.sandboxTitle}</h2>
-        </div>
-        <p class="section-lead">{copy.sandboxBody}</p>
-      </div>
-
-      <aside class="namespace-contract" aria-labelledby="namespace-contract-title">
-        <div class="namespace-contract-title">
-          <p class="eyebrow">Namespace / ownership</p>
-          <h3 id="namespace-contract-title">{copy.namespaceTitle}</h3>
-        </div>
-        <div>
-          <strong>{copy.namespacePackage}</strong>
-          <p>{copy.namespacePackageBody}</p>
-        </div>
-        <div data-proposed>
-          <strong>{copy.namespaceRegistry}</strong>
-          <p>{copy.namespaceRegistryBody}</p>
-        </div>
-        <p class="namespace-local-note">{copy.namespaceLocal}</p>
-      </aside>
-
-      <div class="upload-grid">
-        <form class="upload-form" data-upload-form novalidate>
-          <label class="upload-label" for="expert-squad-archive">{copy.fileLabel}</label>
-          <div class="file-control">
-            <input id="expert-squad-archive" name="archive" type="file" accept=".zip,application/zip" data-upload-file />
-            <span>{copy.choose}</span>
-          </div>
-          <p class="field-hint" id="archive-hint">{copy.fileHint}</p>
-          <p class="upload-error" role="alert" tabindex="-1" data-upload-error hidden></p>
-          <button class="primary-action" type="submit" data-validate-upload>{copy.validate}</button>
-        </form>
-
-        <div class="upload-receipt-shell">
-          <p class="upload-connection" role="status" aria-live="polite" data-upload-status>{copy.offline}</p>
-          <section class="upload-preview" aria-labelledby="upload-preview-title" data-upload-preview hidden>
-            <p class="eyebrow">Canonical validation receipt</p>
-            <h3 id="upload-preview-title" tabindex="-1">{copy.previewTitle}</h3>
-            <p>{copy.previewBody}</p>
-            <dl>
-              <div><dt>{copy.identity}</dt><dd data-preview-identity></dd></div>
-              <div><dt>{copy.packageDigest}</dt><dd data-preview-package-digest></dd></div>
-              <div><dt>{copy.archiveDigest}</dt><dd data-preview-archive-digest></dd></div>
-              <div><dt>{copy.archiveSize}</dt><dd data-preview-size></dd></div>
-            </dl>
-            <button class="primary-action" type="button" data-commit-upload>{copy.keep}</button>
-          </section>
-
-          <section class="upload-result" aria-labelledby="upload-result-title" data-upload-result hidden>
-            <p class="eyebrow">Local sandbox receipt</p>
-            <h3 id="upload-result-title" tabindex="-1">{copy.savedTitle}</h3>
-            <p>{copy.savedBody}</p>
-            <p class="deduplicated-note" data-deduplicated-note hidden>{copy.deduplicated}</p>
-            <a class="primary-action" href="" download data-upload-download>{copy.downloadExact}</a>
-          </section>
+    <section class="utility-section" aria-labelledby="author-path-title">
+      <div class="landing-band-header">
+        <div><p class="eyebrow">{copy.currentEyebrow}</p><h2 id="author-path-title">{copy.currentTitle}</h2></div>
+        <div class="author-actions">
+          <a class="primary-action" href={publicPath(locale, "/sdk/")}>{copy.sdk}</a>
+          <a class="secondary-action" href="https://github.com/yangheng95/opencorvus/tree/main/templates/portable-expert-squad-template">{copy.template}</a>
         </div>
       </div>
-    </section>
-
-    <section class="utility-section publication-rail" aria-labelledby="publish-chain-title">
-      <p class="eyebrow">{copy.chainTitle}</p>
-      <h2 id="publish-chain-title">{copy.chainTitle}</h2>
-      <ol class="publish-chain" style="margin-top: 44px;">
-        {copy.stages.map(([title, description, status], index) => (
+      <ol class="publish-chain author-chain">
+        {copy.stages.map(([title, description], index) => (
           <li>
             <span class="chain-number">0{index + 1}</span>
             <h3>{title}</h3>
             <p>{description}</p>
-            <span class="status-label" data-tone={status.includes("Proposed") || status.includes("拟建") ? "proposed" : "current"}>{status}</span>
+            <span class="status-label">{copy.currentEyebrow}</span>
           </li>
         ))}
       </ol>
     </section>
 
-    <section class="utility-section detail-grid" aria-labelledby="publish-boundary-title">
-      <div><p class="eyebrow">{copy.current} / {copy.proposed}</p><h2 id="publish-boundary-title">{copy.boundaryTitle}</h2></div>
+    <section class="utility-section" aria-labelledby="package-questions-title">
+      <div class="landing-band-header">
+        <h2 id="package-questions-title">{copy.deliverableTitle}</h2>
+        <p class="section-lead">{locale === "zh-cn" ? "这四个问题把内部实现变成用户能够判断的公开契约。" : "These four questions turn internal implementation into a public contract a user can evaluate."}</p>
+      </div>
+      <div class="state-grid package-question-grid">
+        {copy.deliverables.map(([title, description]) => (
+          <article><h3>{title}</h3><p>{description}</p></article>
+        ))}
+      </div>
+    </section>
+
+    <section class="utility-section publication-boundary" aria-labelledby="publication-boundary-title">
       <div>
-        <p class="section-lead" style="margin: 0;">{copy.boundaryBody}</p>
+        <p class="eyebrow">{copy.futureEyebrow}</p>
+        <h2 id="publication-boundary-title">{copy.futureTitle}</h2>
+        <p class="section-lead">{copy.futureBody}</p>
+      </div>
+      <aside>
+        <h3>{copy.activationTitle}</h3>
+        <p>{copy.activationBody}</p>
         <div class="hero-actions">
-          <a class="primary-action" href={publicPath(locale, "/market/")}>{copy.start}</a>
+          <a class="primary-action" href={publicPath(locale, "/market/")}>{copy.market}</a>
           <a class="secondary-action" href={publicPath(locale, "/trust/")}>{copy.trust}</a>
         </div>
-      </div>
+      </aside>
     </section>
   </main>
 </PublicSiteLayout>
 
-<script>
-  const workbench = document.querySelector<HTMLElement>("[data-upload-workbench]")
-  if (workbench) {
-    const api = workbench.dataset.api ?? ""
-    const form = workbench.querySelector<HTMLFormElement>("[data-upload-form]")!
-    const fileInput = workbench.querySelector<HTMLInputElement>("[data-upload-file]")!
-    const validateButton = workbench.querySelector<HTMLButtonElement>("[data-validate-upload]")!
-    const commitButton = workbench.querySelector<HTMLButtonElement>("[data-commit-upload]")!
-    const status = workbench.querySelector<HTMLElement>("[data-upload-status]")!
-    const error = workbench.querySelector<HTMLElement>("[data-upload-error]")!
-    const preview = workbench.querySelector<HTMLElement>("[data-upload-preview]")!
-    const previewTitle = workbench.querySelector<HTMLElement>("#upload-preview-title")!
-    const result = workbench.querySelector<HTMLElement>("[data-upload-result]")!
-    const resultTitle = workbench.querySelector<HTMLElement>("#upload-result-title")!
-    const download = workbench.querySelector<HTMLAnchorElement>("[data-upload-download]")!
-    const deduplicatedNote = workbench.querySelector<HTMLElement>("[data-deduplicated-note]")!
-    let csrfToken = ""
-    let submissionID = ""
-
-    const showError = (message: string) => {
-      error.textContent = message
-      error.hidden = false
-      error.focus()
-    }
-
-    const requestError = async (response: Response) => {
-      const payload = await response.json().catch(() => null)
-      const code = payload?.error?.code ?? `HTTP_${response.status}`
-      const message = payload?.error?.message ?? response.statusText
-      return `${code} — ${message}`
-    }
-
-    fetch(`${api}/status`, { headers: { Accept: "application/json" } })
-      .then((response) => {
-        if (!response.ok) throw new Error()
-        status.textContent = workbench.dataset.online ?? ""
-      })
-      .catch(() => {
-        status.textContent = workbench.dataset.offline ?? ""
-      })
-
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault()
-      error.hidden = true
-      preview.hidden = true
-      result.hidden = true
-      const file = fileInput.files?.[0]
-      if (!file) {
-        showError(workbench.dataset.noFile ?? "")
-        return
-      }
-      validateButton.disabled = true
-      status.textContent = workbench.dataset.validating ?? ""
-      try {
-        const sessionResponse = await fetch(`${api}/session`, { credentials: "same-origin" })
-        if (!sessionResponse.ok) throw new Error(await requestError(sessionResponse))
-        const session = await sessionResponse.json()
-        csrfToken = session.csrfToken
-        const body = new FormData()
-        body.append("archive", file)
-        const response = await fetch(`${api}/submissions`, {
-          method: "POST",
-          body,
-          credentials: "same-origin",
-          headers: { "X-CSRF-Token": csrfToken },
-        })
-        if (!response.ok) throw new Error(await requestError(response))
-        const payload = await response.json()
-        const submission = payload.submission
-        submissionID = submission.id
-        workbench.querySelector<HTMLElement>("[data-preview-identity]")!.textContent =
-          `${submission.facts.identity.namespace}/${submission.facts.identity.id}@${submission.facts.identity.version}`
-        workbench.querySelector<HTMLElement>("[data-preview-package-digest]")!.textContent = submission.facts.identity.digest
-        workbench.querySelector<HTMLElement>("[data-preview-archive-digest]")!.textContent = submission.archive.sha256
-        workbench.querySelector<HTMLElement>("[data-preview-size]")!.textContent =
-          `${submission.archive.bytes} bytes · ${submission.archive.fileCount} files`
-        status.textContent = workbench.dataset.online ?? ""
-        preview.hidden = false
-        previewTitle.focus()
-      } catch (requestFailure) {
-        status.textContent = workbench.dataset.offline ?? ""
-        showError(requestFailure instanceof Error ? requestFailure.message : String(requestFailure))
-      } finally {
-        validateButton.disabled = false
-      }
-    })
-
-    commitButton.addEventListener("click", async () => {
-      if (!submissionID || !csrfToken) return
-      commitButton.disabled = true
-      status.textContent = workbench.dataset.keeping ?? ""
-      error.hidden = true
-      try {
-        const response = await fetch(`${api}/submissions/${encodeURIComponent(submissionID)}/commit`, {
-          method: "POST",
-          credentials: "same-origin",
-          headers: { "X-CSRF-Token": csrfToken },
-        })
-        if (!response.ok) throw new Error(await requestError(response))
-        const payload = await response.json()
-        download.href = payload.record.downloadPath
-        deduplicatedNote.hidden = !payload.deduplicated
-        preview.hidden = true
-        result.hidden = false
-        status.textContent = workbench.dataset.online ?? ""
-        resultTitle.focus()
-      } catch (requestFailure) {
-        showError(requestFailure instanceof Error ? requestFailure.message : String(requestFailure))
-      } finally {
-        commitButton.disabled = false
-      }
-    })
+<style>
+  .author-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
   }
-</script>
+
+  .author-chain {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .package-question-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .publication-boundary {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 72px;
+    align-items: start;
+    background: var(--cobalt-wash);
+  }
+
+  .publication-boundary aside {
+    padding: 30px;
+    border: 2px solid var(--ink);
+    background: var(--paper-raised);
+  }
+
+  .publication-boundary aside h3 {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 34px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .publication-boundary aside p {
+    color: var(--muted);
+  }
+</style>

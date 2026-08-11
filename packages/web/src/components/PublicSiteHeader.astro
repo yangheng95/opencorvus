@@ -5,7 +5,7 @@ import { publicPath, type PublicLocale } from "../content/public-market"
 
 type Props = {
   locale: PublicLocale
-  current: "market" | "publish" | "trust"
+  current: "home" | "market" | "publish" | "trust"
   languageHref: string
   embedded?: boolean
 }
@@ -14,13 +14,13 @@ const { locale, current, languageHref, embedded = false } = Astro.props
 const HeaderTag = embedded ? "div" : "header"
 const copy =
   locale === "zh-cn"
-    ? { market: "专家团市场", publish: "发布", trust: "可信机制", docs: "文档", language: "English" }
-    : { market: "Expert Squads", publish: "Publish", trust: "Trust", docs: "Docs", language: "简体中文" }
+    ? { market: "专家团市场", publish: "构建专家团", trust: "可信机制", docs: "文档", language: "English" }
+    : { market: "Expert Squads", publish: "Build a Squad", trust: "Trust", docs: "Docs", language: "简体中文" }
 ---
 
 {!embedded && <a class="skip-link" href="#main-content">{locale === "zh-cn" ? "跳到主要内容" : "Skip to content"}</a>}
 <HeaderTag class="public-header" aria-label={locale === "zh-cn" ? "主导航" : "Primary navigation"}>
-  <a class="public-brand" href={publicPath(locale)} aria-label="OpenCorvus home">
+  <a class="public-brand" href={publicPath(locale)} aria-label="OpenCorvus home" aria-current={current === "home" ? "page" : undefined}>
     <Image src={BrandMark} width={34} height={34} alt="" loading="eager" />
     <span>OpenCorvus</span>
   </a>

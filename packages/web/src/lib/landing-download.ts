@@ -131,9 +131,9 @@ export function discoverLandingBinaryDownloads(repoRoot = defaultRepoRoot): Land
       ? [discoverPlatformDownload(repoRoot, definition)]
       : [],
   )
-  // A source checkout and the hosted-market simulation do not necessarily
-  // contain release-matrix installers. In that case the landing still exposes
-  // the honest Web/repository action instead of inventing local binaries.
+  // A source checkout does not necessarily contain release-matrix installers.
+  // The landing renders documentation, source, and release actions when this
+  // list is empty; it never presents the source repository as a web app.
   if (downloads.length === 0) return []
   const versions = new Set(downloads.map((download) => download.version))
   if (versions.size !== 1) {
@@ -141,12 +141,3 @@ export function discoverLandingBinaryDownloads(repoRoot = defaultRepoRoot): Land
   }
   return downloads
 }
-
-export const landingWebApplication = {
-  kind: "web",
-  href: "https://github.com/yangheng95/opencorvus",
-  platformName: "Web",
-  system: "Modern browser",
-  architecture: "Cloud",
-  packageType: "Web application",
-} as const

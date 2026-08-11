@@ -5,28 +5,18 @@ import { publicPath, type PublicLocale, type PublicSquadRecord } from "../conten
 
 const { locale, record } = Astro.props as { locale: PublicLocale; record: PublicSquadRecord }
 const detailPath = `/market/${record.identity.namespace}/${record.identity.id}/`
-const apiBase = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/api/registry`
-const recordApiPath = `${apiBase}/records/${encodeURIComponent(record.identity.namespace)}/${encodeURIComponent(record.identity.id)}/${encodeURIComponent(record.identity.version)}/${record.identity.digest}`
-const downloadPath = `${recordApiPath}/archive`
 const copy =
   locale === "zh-cn"
     ? {
         title: `${record.label} · 专家团市场 · OpenCorvus`,
         description: record.description[locale],
         languageHref: publicPath("root", detailPath),
-        eyebrow: "专家团 revision 记录",
-        currentSource: "当前源码能力包",
+        eyebrow: "使用前检查团队",
+        currentSource: "当前精选目录条目",
         summary: record.description[locale],
-        inspect: "查看安装路径",
-        demonstrate: "演示执行契约",
-        openClient: "打开 OpenCorvus 并安装",
-        download: "下载精确 ZIP",
-        downloadChecking: "正在核对本地托管沙箱中的精确 revision…",
-        downloadReady: "精确 revision 已绑定；可唤起 OpenCorvus 继续选 scope，或直接下载 ZIP。",
-        downloadUnavailable: "本地托管沙箱未运行或此精确 revision 不可用；不会改用其他版本。",
-        archiveDigest: "Archive SHA-256",
-        downloadResponses: "已发出下载响应",
-        archivePending: "由本地托管沙箱提供",
+        inspect: "理解安装边界",
+        demonstrate: "查看角色如何衔接",
+        download: "下载签名完整资源包",
         trust: "可信机制",
         revision: "精确 revision",
         identity: "身份",
@@ -41,13 +31,13 @@ const copy =
         facts: [
           ["产品支柱", record.pillars.join(" + ")],
           ["Agent 阵容", `${record.agents.length} 个声明角色`],
-          ["绑定工作流", `${record.workflows.length} 条完整声明图`],
+          ["声明工作流", `${record.workflows.length} 条完整职责与依赖图`],
           ["完整能力投影", `${record.projectedCapabilities.skills} Skills · ${record.projectedCapabilities.tools} tools · ${record.projectedCapabilities.mcp} MCP refs`],
         ],
         agentsTitle: "职责在运行前就已经声明",
-        agentsBody: "以下完整阵容由构建步骤从 exact manifest revision 生成。Agent 标识与 base role 参与运行投影；头像、评分或人设不参与选择。",
-        workflowTitle: "证据依赖，而不是隐藏状态机",
-        workflowBody: "下方是 manifest capability projection 中的完整 workflow node 与 depends_on 合同。公共市场只能读取并解释它，不能重排或另建一套调度状态。",
+        agentsBody: "以下阵容来自这一精确能力包。每个 Agent 的身份与基础角色都会进入实际运行；头像、评分或人设不参与选择。",
+        workflowTitle: "先看责任如何交接，再决定是否选择",
+        workflowBody: "下图展示每一步由谁负责、依赖哪一步完成。它解释团队的协作契约，不是正在执行的任务进度，也不会在网页上排程 Agent。",
         capabilitiesTitle: "安装前公开能力范围",
         capabilitiesBody: "完整投影包含 built-in、default 与 package-owned 引用；能力包自带子集单独列出，不能拿子集冒充全部权限。",
         capabilityFacts: [
@@ -58,28 +48,28 @@ const copy =
         ],
         provenanceTitle: "一个列表项只绑定一个内容 revision",
         provenanceBody: "当前 digest 根据仓库中这份能力包的规范化文件树计算。本地 Manager 在安装时会再次验证结构、身份与 digest。",
-        demoTitle: "Manifest 执行契约演示",
-        demoBody: "这是绑定当前 package digest 的声明工作流 walkthrough，不是正在执行的 Agent、计时器或语言模型输出。真实执行只发生在在线的 OpenCorvus runtime 中。",
+        demoTitle: "角色与依赖说明",
+        demoBody: "这是绑定当前 package digest 的工作流说明，不是正在执行的 Agent、计时器或语言模型输出。真实执行只发生在 OpenCorvus 客户端中。",
         demoPinned: "演示固定 revision",
         demoEvidence: "每个节点只有在 depends_on 前序证据完成后才具备调度条件；本页面只解释合同，不推进运行状态。",
-        proposedTitle: "拟建 publication envelope",
-        proposedBody: "发布者身份、许可证、源仓库、签名、attestation 与审核状态目前不属于 manifest v1。未来 registry 可以把它们作为绑定 exact digest 的发布 envelope，但不能伪装成当前已经验证。",
+        proposedTitle: "当前发布状态",
+        proposedBody: "这份条目来自当前仓库源码，并包含在由 OpenCorvus 发布密钥签名的完整资源包中。签名证明目录与下载内容来自 OpenCorvus 且保持完整；第三方发布者身份与独立审核服务尚未开放。",
         installTitle: "安装不是激活",
-        installBody: "网页通过 opencorvus:// 把精确 identity、version、package digest、archive SHA 与不可变下载地址交给桌面端。客户端重新核验后，仍要求你明确选择 scope。",
+        installBody: "当前网页只下载经过签名校验的完整资源包，不会自动打开客户端、批量安装或激活团队。后续导入由 OpenCorvus 客户端重新校验，并要求明确选择 scope。",
         installSteps: [
-          ["01", "拉取精确 identity、version 与 digest"],
-          ["02", "本地重算 digest 并执行严格能力包验证"],
+          ["01", "网页验证签名目录并下载内容寻址完整资源包"],
+          ["02", "客户端导入时重算 digest 并严格验证具体能力包"],
           ["03", "用户明确选择 project 或 user-global scope"],
           ["04", "Manager 原子导入并返回 mutation receipt"],
-          ["05", "安装完成后另行选择专家团，才会改变 active profile"],
+          ["05", "安装后另行选择专家团，运行时行为才会变化"],
         ],
         dialogTitle: "安装 handoff 的责任边界",
-        dialogBody: "真正的 scope 选择发生在被唤起的 OpenCorvus 客户端。这里仅解释 project/global 的不同，不会自行提交安装。",
+        dialogBody: "真正的 scope 选择发生在后续执行导入的 OpenCorvus 客户端。这里仅解释 project/global 的不同，不会自行提交安装。",
         projectScope: "Project scope",
         projectScopeBody: "只在当前项目目录生效；同 ID 的项目安装覆盖 global 版本。",
         globalScope: "User-global scope",
         globalScopeBody: "对当前用户目录可用，但不会自动覆盖项目安装。",
-        noBridge: "当前已实现桌面 deep-link 接管与精确摘要绑定；发布者签名、远程 registry 权威与公共审核仍未实现。",
+        noBridge: "当前公开网页只完成签名资源包下载，不提供自动批量安装或激活。scope 说明用于解释客户端责任，不是可提交的网页表单。",
         close: "关闭",
         guide: "阅读发布与安装边界",
       }
@@ -87,19 +77,12 @@ const copy =
         title: `${record.label} · Expert Squad market · OpenCorvus`,
         description: record.description[locale],
         languageHref: publicPath("zh-cn", detailPath),
-        eyebrow: "Expert Squad revision record",
-        currentSource: "Current source package",
+        eyebrow: "Inspect the team before use",
+        currentSource: "Current featured catalog record",
         summary: record.description[locale],
-        inspect: "Inspect install path",
-        demonstrate: "Walk through the contract",
-        openClient: "Open & install in OpenCorvus",
-        download: "Download exact ZIP",
-        downloadChecking: "Checking this exact revision in the local hosted sandbox…",
-        downloadReady: "The exact revision is bound. Open it in OpenCorvus to choose a scope, or download the ZIP directly.",
-        downloadUnavailable: "The local hosted sandbox is offline or this exact revision is unavailable. No other version will be substituted.",
-        archiveDigest: "Archive SHA-256",
-        downloadResponses: "Download responses issued",
-        archivePending: "Provided by the local hosted sandbox",
+        inspect: "Understand the install boundary",
+        demonstrate: "See how responsibilities connect",
+        download: "Download the signed complete bundle",
         trust: "Trust model",
         revision: "Exact revision",
         identity: "Identity",
@@ -114,15 +97,15 @@ const copy =
         facts: [
           ["Product pillars", record.pillars.join(" + ")],
           ["Agent roster", `${record.agents.length} declared roles`],
-          ["Binding workflows", `${record.workflows.length} complete declared graphs`],
+          ["Declared workflows", `${record.workflows.length} complete responsibility and dependency graphs`],
           ["Full capability projection", `${record.projectedCapabilities.skills} Skills · ${record.projectedCapabilities.tools} tools · ${record.projectedCapabilities.mcp} MCP refs`],
         ],
         agentsTitle: "Responsibilities are declared before runtime",
         agentsBody:
-          "This complete roster is generated at build time from the exact manifest revision. Agent identity and base role participate in runtime projection; avatars, ratings, and personas do not.",
-        workflowTitle: "Evidence dependencies, not a hidden state machine",
+          "This roster comes from the exact package. Agent identity and base role participate in the real runtime; avatars, ratings, and personas do not influence selection.",
+        workflowTitle: "Inspect the handoffs before choosing the team",
         workflowBody:
-          "Below are the complete workflow nodes and depends_on contracts from the manifest capability projection. A public market may read and explain them, but cannot reorder them or create a second scheduling state.",
+          "The graph shows who owns each step and which earlier result it depends on. It explains the team's collaboration contract; it is not live task progress and does not schedule Agents from the page.",
         capabilitiesTitle: "Capability scope is visible before install",
         capabilitiesBody:
           "The full projection includes built-in, default, and package-owned references. The package-owned subset is disclosed separately and never presented as the complete permission surface.",
@@ -135,33 +118,34 @@ const copy =
         provenanceTitle: "One listing binds one content revision",
         provenanceBody:
           "The current digest is computed from this repository package's canonical file tree. The local Manager validates shape, identity, topology, and digest again during install.",
-        demoTitle: "Manifest operating-contract walkthrough",
+        demoTitle: "Role and dependency walkthrough",
         demoBody:
-          "This walkthrough is pinned to the current package digest. It is not a running Agent session, timer, or generated language-model output. Real execution requires an online OpenCorvus runtime.",
+          "This workflow explanation is pinned to the current package digest. It is not a running Agent session, timer, or generated language-model output. Real execution occurs in the OpenCorvus client.",
         demoPinned: "Walkthrough pinned revision",
         demoEvidence:
           "A node becomes schedulable only after its depends_on evidence is terminal. This page explains that contract and does not advance runtime state.",
-        proposedTitle: "Proposed publication envelope",
+        proposedTitle: "Current publication status",
         proposedBody:
-          "Publisher identity, license, source repository, signature, attestation, and review status are not manifest v1 fields today. A future registry may bind them to the exact digest in a publication envelope; they cannot appear as already verified.",
+          "This record comes from the current repository source and is included in the complete bundle signed by the OpenCorvus publication key. The signature proves OpenCorvus publication and byte integrity; third-party publisher identity and independent review services are not open yet.",
         installTitle: "Installation is not activation",
         installBody:
-          "The website passes exact identity, version, package digest, archive SHA, and immutable download URL through opencorvus://. The client verifies them again and still requires an explicit scope choice.",
+          "The page currently downloads the verified complete resource bundle. It does not launch the client, batch-install, or activate teams automatically. A later client import repeats validation and requires an explicit scope.",
         installSteps: [
-          ["01", "Fetch the exact identity, version, and digest"],
-          ["02", "Recompute the digest locally and run strict package validation"],
+          ["01", "Verify the signed catalog and download the content-addressed complete bundle"],
+          ["02", "Recompute the digest and strictly validate the selected package during client import"],
           ["03", "Require the operator to choose project or user-global scope"],
           ["04", "Import atomically through the Manager and return a mutation receipt"],
           ["05", "Select the installed Squad separately before the active profile changes"],
         ],
         dialogTitle: "Install handoff boundary",
         dialogBody:
-          "The launched OpenCorvus client owns the real scope choice. This page only explains project and global behavior and does not submit an install itself.",
+          "The OpenCorvus client owns the real scope choice when a later import is performed. This page only explains project and global behavior and does not submit an install itself.",
         projectScope: "Project scope",
         projectScopeBody: "Applies only inside the current project; the same package ID overrides a global installation.",
         globalScope: "User-global scope",
         globalScopeBody: "Available to the current user, but never silently overrides a project installation.",
-        noBridge: "Desktop deep-link handoff and exact digest binding are implemented. Publisher signatures, remote registry authority, and public review remain unbuilt.",
+        noBridge:
+          "The public page currently completes signed bundle download only. It does not submit automatic batch installation or activation. The scope explanation describes client responsibility; it is not a web form that can be submitted.",
         close: "Close",
         guide: "Read publishing and install boundaries",
       }
@@ -181,13 +165,6 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
     class="public-main"
     data-detail-root
     data-copied-text={copy.copied}
-    data-record-api={recordApiPath}
-    data-namespace={record.identity.namespace}
-    data-package-id={record.identity.id}
-    data-version={record.identity.version}
-    data-package-digest={record.identity.digest}
-    data-download-ready={copy.downloadReady}
-    data-download-unavailable={copy.downloadUnavailable}
   >
     <section class="detail-hero" aria-labelledby="squad-title">
       <div>
@@ -197,11 +174,10 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
         <p class="detail-summary">{copy.summary}</p>
         <div class="detail-actions">
           <button class="secondary-action" type="button" data-open-demo>{copy.demonstrate}</button>
-          <a class="primary-action" aria-disabled="true" data-open-opencorvus>{copy.openClient}</a>
-          <a class="secondary-action" href={downloadPath} download data-exact-download>{copy.download}</a>
+          <a class="primary-action" href={publicPath(locale, "/market/#complete-bundle")}>{copy.download}</a>
+          <a class="secondary-action" href={publicPath(locale, "/trust/")}>{copy.trust}</a>
           <button class="text-button" type="button" data-open-install>{copy.inspect}</button>
         </div>
-        <p class="hosted-action-status" role="status" aria-live="polite" data-download-status>{copy.downloadChecking}</p>
       </div>
 
       <aside class="revision-card" aria-label={copy.revision}>
@@ -210,8 +186,6 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
           <div><dt>{copy.identity}</dt><dd>{record.identity.namespace}/{record.identity.id}</dd></div>
           <div><dt>{copy.version}</dt><dd>{record.identity.version}</dd></div>
           <div><dt>{copy.digest}</dt><dd data-full-digest>{record.identity.digest}</dd></div>
-          <div><dt>{copy.archiveDigest}</dt><dd data-archive-digest>{copy.archivePending}</dd></div>
-          <div><dt>{copy.downloadResponses}</dt><dd data-download-responses>—</dd></div>
         </dl>
         <p class="section-lead" style="font-size: 12px; margin-top: 12px;">{copy.digestMeaning}</p>
         <div class="copy-row">
@@ -365,17 +339,11 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
       <div class="dialog-body">
         <h2 id="install-dialog-title">{copy.dialogTitle}</h2>
         <p>{copy.dialogBody}</p>
-        <fieldset class="scope-options">
-          <legend class="eyebrow">{locale === "zh-cn" ? "必须明确选择 scope" : "Explicit scope is required"}</legend>
-          <label class="scope-option">
-            <input type="radio" name="installation-scope" value="project" />
-            <span><b>{copy.projectScope}</b><small>{copy.projectScopeBody}</small></span>
-          </label>
-          <label class="scope-option">
-            <input type="radio" name="installation-scope" value="global" />
-            <span><b>{copy.globalScope}</b><small>{copy.globalScopeBody}</small></span>
-          </label>
-        </fieldset>
+        <div class="scope-options" aria-label={locale === "zh-cn" ? "安装 scope 说明" : "Install scope explanation"}>
+          <p class="eyebrow">{locale === "zh-cn" ? "客户端必须明确选择 scope" : "The client requires an explicit scope"}</p>
+          <article class="scope-option"><span><b>{copy.projectScope}</b><small>{copy.projectScopeBody}</small></span></article>
+          <article class="scope-option"><span><b>{copy.globalScope}</b><small>{copy.globalScopeBody}</small></span></article>
+        </div>
         <p class="concept-notice">{copy.noBridge}</p>
         <div class="dialog-actions">
           <button class="secondary-action" type="button" data-close-install>{copy.close}</button>
@@ -418,43 +386,6 @@ const panelIDs = ["overview", "agents", "capabilities", "provenance", "install"]
       await navigator.clipboard.writeText(digest.textContent?.trim() ?? "")
       copyStatus.textContent = detailRoot.dataset.copiedText ?? ""
     })
-
-    const download = detailRoot.querySelector<HTMLAnchorElement>("[data-exact-download]")!
-    const openInOpenCorvus = detailRoot.querySelector<HTMLAnchorElement>("[data-open-opencorvus]")!
-    const downloadStatus = detailRoot.querySelector<HTMLElement>("[data-download-status]")!
-    const archiveDigest = detailRoot.querySelector<HTMLElement>("[data-archive-digest]")!
-    const downloadResponses = detailRoot.querySelector<HTMLElement>("[data-download-responses]")!
-    fetch(detailRoot.dataset.recordApi ?? "", { headers: { Accept: "application/json" } })
-      .then(async (response) => {
-        if (!response.ok) throw new Error(`Hosted sandbox returned ${response.status}`)
-        const record = await response.json()
-        if (typeof record.downloadPath !== "string" || typeof record.archive?.sha256 !== "string") {
-          throw new Error("Hosted sandbox record is incomplete")
-        }
-        download.href = record.downloadPath
-        download.removeAttribute("aria-disabled")
-        const archiveUrl = new URL(record.downloadPath, window.location.origin).href
-        const handoff = new URL("opencorvus://expert-squad/install")
-        handoff.searchParams.set("namespace", detailRoot.dataset.namespace ?? "")
-        handoff.searchParams.set("id", detailRoot.dataset.packageId ?? "")
-        handoff.searchParams.set("version", detailRoot.dataset.version ?? "")
-        handoff.searchParams.set("packageDigest", detailRoot.dataset.packageDigest ?? "")
-        handoff.searchParams.set("archiveSha256", record.archive.sha256)
-        handoff.searchParams.set("archiveBytes", String(record.archive.bytes))
-        handoff.searchParams.set("archiveUrl", archiveUrl)
-        openInOpenCorvus.href = handoff.href
-        openInOpenCorvus.removeAttribute("aria-disabled")
-        archiveDigest.textContent = record.archive.sha256
-        downloadResponses.textContent = String(Number(record.downloadResponses ?? 0))
-        downloadStatus.textContent = detailRoot.dataset.downloadReady ?? ""
-      })
-      .catch(() => {
-        download.removeAttribute("href")
-        download.setAttribute("aria-disabled", "true")
-        openInOpenCorvus.removeAttribute("href")
-        openInOpenCorvus.setAttribute("aria-disabled", "true")
-        downloadStatus.textContent = detailRoot.dataset.downloadUnavailable ?? ""
-      })
 
     const demoDialog = detailRoot.querySelector<HTMLDialogElement>("[data-demo-dialog]")!
     const demoTrigger = detailRoot.querySelector<HTMLButtonElement>("[data-open-demo]")!

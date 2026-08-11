@@ -5,106 +5,91 @@ import { publicPath, publicSquadRecords, squadPath, type PublicLocale } from "..
 import { generatedExpertSquadDistribution } from "../content/expert-squad-distribution.generated"
 
 const { locale } = Astro.props as { locale: PublicLocale }
-const hostedApiBase = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/api/registry`
 const distributionPointer = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/expert-squads/catalog.json`
 const copy =
   locale === "zh-cn"
     ? {
         title: "专家团市场 · OpenCorvus",
-        description: "查看由精确能力包身份、工作流、能力与版本事实组成的 OpenCorvus 专家团目录概念。",
+        description: "按任务适配度、角色、工作流和精确版本选择 OpenCorvus 专家团，并下载经过签名验证的完整资源包。",
         languageHref: publicPath("root", "/market/"),
-        eyebrow: "公共目录概念 · 精选源码 revision",
-        heading: "按执行契约选团队。",
-        lead: "这里列出的不是头像和口号，而是一份份可检查的执行契约：固定身份、版本、能力、工作流与内容摘要。",
-        registryTitle: "当前显示的是精选源码 revision",
-        registryBody:
-          "事实字段由构建步骤直接读取当前 payload market 与精确 manifest 投影；本页仅负责选择展示身份和本地化说明。远程 registry、发布者身份、签名与审核服务仍属于拟建层。",
-        search: "搜索专家团",
-        placeholder: "名称或用途",
-        filter: "按产品支柱筛选",
+        eyebrow: "精选专家团",
+        heading: "先看它能完成什么，再决定要不要把团队带进任务。",
+        lead: `这里展示 ${publicSquadRecords.length} 个具有完整说明的精选团队。每个条目都解释适用场景、角色、工作流与精确版本；完整签名资源包则包含 ${generatedExpertSquadDistribution.total} 个专家团资源。`,
+        bundleTitle: `${generatedExpertSquadDistribution.total} 个资源，一份经过验证的完整包`,
+        bundleBody: "网页会先验证 OpenCorvus 发布签名、发布版本、过期时间与资源计数，再启用下载；ZIP 到达浏览器后还会重算 SHA-256。下载不会安装或激活任何团队。",
+        downloadAll: `下载全部 ${generatedExpertSquadDistribution.total} 个专家团资源`,
+        downloadAllNote: `其中 ${generatedExpertSquadDistribution.embeddedAlreadyAvailable} 个已经内置于客户端，${generatedExpertSquadDistribution.bundledMarketImportable} 个可由客户端导入。`,
+        downloadPreparing: "正在读取当前签名发布…",
+        downloadVerifying: "正在校验资源包字节与 SHA-256…",
+        downloadReady: "签名目录与内容寻址资源包已经匹配。",
+        downloadUnavailable: "签名、版本、过期时间或资源摘要未通过校验；不会提供未签名替代文件。",
+        chooseTitle: "三步判断一支团队是否适合",
+        chooseSteps: [
+          ["01 · 看选择说明", "先确认当前结果是否落在团队边界内，而不是只看名称。"],
+          ["02 · 看责任与顺序", "检查需要哪些专家、如何交接，以及哪里会独立复核。"],
+          ["03 · 看精确版本", "版本和 digest 共同标识内容；相似名称不能替代同一 revision。"],
+        ],
+        search: "搜索精选专家团",
+        placeholder: "名称或使用场景",
+        filter: "按工作类型筛选",
         all: "全部",
-        code: "代码",
-        work: "工作",
-        multi: "多支柱",
-        states: "目录异常状态",
-        stateBody:
-          "未来 registry 离线、版本撤回或精确 revision 不可用时，客户端必须明确失败，不能静默改用其他来源或旧版本。",
-        snapshot: "精确事实 · 编辑选集",
-        suffix: "条记录",
+        code: "代码与产品",
+        work: "知识与业务",
+        multi: "跨领域",
+        identityTitle: "为什么显示 identity 和 digest？",
+        identityBody: "名称帮助人理解，namespace / id / version / digest 帮助系统确认拿到的是哪一份内容。点击条目可查看完整角色与工作流。",
+        snapshot: "精选条目 · 精确事实",
+        suffix: "个团队",
         agents: "个 Agent",
         workflows: "条工作流",
         skills: "项 Skill",
         tools: "项工具",
         mcpRefs: "项 MCP 引用",
-        emptyTitle: "没有符合条件的专家团。",
-        emptyBody: "清空搜索或选择其他产品支柱。本页不会用相似名称替代精确身份。",
-        hostedTitle: "本地托管沙箱中的不可变 revisions",
-        hostedBody: "这一栏来自当前同源托管进程：仓库快照和已确认的验证提交都绑定完整 identity、package digest 与 archive SHA-256。它不是公共发布目录，不代表发布者审核或真实运行。",
-        hostedLoading: "正在读取本地托管沙箱…",
-        hostedOffline: "本地托管沙箱未运行。上方编辑目录仍可阅读，但上传和精确 ZIP 下载不可用。",
-        hostedCount: "个沙箱 revisions",
-        archiveHash: "archive SHA-256",
-        repositorySnapshot: "仓库快照",
-        validatedSubmission: "验证提交 · 非公共发布",
-        openClient: "打开 OpenCorvus 并安装",
-        download: "仅下载精确 ZIP",
-        downloadResponses: "已发出下载响应",
-        downloadAll: `一键下载全部 ${generatedExpertSquadDistribution.total} 个专家团资源`,
-        downloadAllNote: `完整资源包包含 ${generatedExpertSquadDistribution.embeddedAlreadyAvailable} 个客户端内置专家团和 ${generatedExpertSquadDistribution.bundledMarketImportable} 个可导入资源。下载不会安装或激活专家团。`,
-        downloadPreparing: "正在读取当前签名发布…",
-        downloadVerifying: "正在校验资源包字节与 SHA-256…",
-        downloadReady: "已绑定当前内容寻址资源包。",
-        downloadUnavailable: "当前浏览器无法完成 Ed25519 验签，或签名资源包尚未发布；不会改用未签名文件。",
+        emptyTitle: "没有符合条件的精选团队。",
+        emptyBody: "清空搜索或选择其他工作类型；目录不会用相似名称代替精确身份。",
       }
     : {
         title: "Expert Squad market · OpenCorvus",
-        description: "Explore an OpenCorvus Expert Squad catalog concept built from exact package identity, workflow, capability, and revision facts.",
+        description: "Choose an OpenCorvus Expert Squad by task fit, roles, workflow, and exact revision, then download the verified signed resource bundle.",
         languageHref: publicPath("zh-cn", "/market/"),
-        eyebrow: "Public catalog concept · selected source revisions",
-        heading: "Choose by operating contract.",
-        lead:
-          "These are inspectable operating contracts, not avatars and slogans: fixed identity, revision, capability projection, workflow, and selection guidance.",
-        registryTitle: "You are viewing selected source revisions",
-        registryBody:
-          "A build step reads factual fields from the current payload market and exact manifest projection; this page owns only editorial selection and localized explanation. A remote registry, publisher identity, signatures, and review service remain proposed layers.",
-        search: "Search Expert Squads",
+        eyebrow: "Featured Expert Squads",
+        heading: "Understand what the team can finish before bringing it into the mission.",
+        lead: `This page presents ${publicSquadRecords.length} featured teams with full editorial guidance. Each record explains fit, roles, workflow, and exact revision; the complete signed bundle contains ${generatedExpertSquadDistribution.total} Expert Squad resources.`,
+        bundleTitle: `${generatedExpertSquadDistribution.total} resources, one verified bundle`,
+        bundleBody:
+          "The page verifies the OpenCorvus publication signature, publication version, expiry, and resource counts before enabling download. It recomputes SHA-256 after the ZIP reaches the browser. Downloading never installs or activates a team.",
+        downloadAll: `Download all ${generatedExpertSquadDistribution.total} Expert Squad resources`,
+        downloadAllNote: `${generatedExpertSquadDistribution.embeddedAlreadyAvailable} are already embedded in the client and ${generatedExpertSquadDistribution.bundledMarketImportable} can be imported by the client.`,
+        downloadPreparing: "Reading the current signed publication…",
+        downloadVerifying: "Verifying bundle bytes and SHA-256…",
+        downloadReady: "The signed catalog matches the content-addressed bundle.",
+        downloadUnavailable:
+          "Signature, version, expiry, or resource digest validation failed. No unsigned fallback will be offered.",
+        chooseTitle: "Three checks for choosing the right team",
+        chooseSteps: [
+          ["01 · Read the selector", "Confirm that the requested outcome falls inside the team's boundary instead of choosing by name."],
+          ["02 · Inspect ownership and order", "See which specialists are required, how they hand off work, and where independent review occurs."],
+          ["03 · Check the exact revision", "Version and digest identify the content together. A similar name cannot substitute for the same revision."],
+        ],
+        search: "Search featured Expert Squads",
         placeholder: "Name or use case",
-        filter: "Filter by product pillar",
+        filter: "Filter by work type",
         all: "All",
-        code: "Code",
-        work: "Work",
-        multi: "Multi-pillar",
-        states: "Catalog failure states",
-        stateBody:
-          "If a future registry is offline, a revision is withdrawn, or exact bytes are unavailable, the client must fail visibly. It must not silently choose another source or older package.",
-        snapshot: "Exact facts · editorial selection",
-        suffix: "records",
+        code: "Code and product",
+        work: "Knowledge and operations",
+        multi: "Cross-domain",
+        identityTitle: "Why show identity and digest?",
+        identityBody:
+          "Names help people understand. namespace / id / version / digest let the system prove which content it received. Open a record to inspect the complete roles and workflow.",
+        snapshot: "Featured records · exact facts",
+        suffix: "teams",
         agents: "Agents",
         workflows: "workflows",
         skills: "Skills",
         tools: "tools",
         mcpRefs: "MCP refs",
-        emptyTitle: "No Expert Squads match these conditions.",
-        emptyBody: "Clear the search or choose another product pillar. Similar names never substitute for exact identity.",
-        hostedTitle: "Immutable revisions in the local hosted sandbox",
-        hostedBody:
-          "This section comes from the same-origin hosting process. Repository snapshots and confirmed validation submissions bind complete identity, package digest, and archive SHA-256. It is not a public catalog, publisher review, or live runtime.",
-        hostedLoading: "Reading the local hosted sandbox…",
-        hostedOffline: "The local hosted sandbox is offline. The editorial catalog above remains readable, but upload and exact ZIP download are unavailable.",
-        hostedCount: "sandbox revisions",
-        archiveHash: "archive SHA-256",
-        repositorySnapshot: "Repository snapshot",
-        validatedSubmission: "Validated submission · not public",
-        openClient: "Open & install in OpenCorvus",
-        download: "Download exact ZIP only",
-        downloadResponses: "download responses issued",
-        downloadAll: `Download all ${generatedExpertSquadDistribution.total} Expert Squad resources`,
-        downloadAllNote: `The complete resource bundle contains ${generatedExpertSquadDistribution.embeddedAlreadyAvailable} client-embedded squads and ${generatedExpertSquadDistribution.bundledMarketImportable} importable resources. Downloading does not install or activate a squad.`,
-        downloadPreparing: "Reading the current signed publication…",
-        downloadVerifying: "Verifying bundle bytes and SHA-256…",
-        downloadReady: "The current content-addressed resource bundle is bound.",
-        downloadUnavailable:
-          "This browser cannot complete Ed25519 verification, or the signed resource bundle is not published yet. No unsigned file will be substituted.",
+        emptyTitle: "No featured Expert Squads match these conditions.",
+        emptyBody: "Clear the search or choose another work type. Similar names never substitute for exact identity.",
       }
 ---
 
@@ -123,9 +108,9 @@ const copy =
           <h1 id="market-title">{copy.heading}</h1>
           <p class="section-lead">{copy.lead}</p>
         </div>
-        <aside class="registry-fact">
-          <strong>{copy.registryTitle}</strong>
-          <p>{copy.registryBody}</p>
+        <aside id="complete-bundle" class="registry-fact">
+          <strong>{copy.bundleTitle}</strong>
+          <p>{copy.bundleBody}</p>
           <div
             class="distribution-download"
             data-distribution-download
@@ -144,12 +129,19 @@ const copy =
             data-unavailable={copy.downloadUnavailable}
           >
             <p>{copy.downloadAllNote}</p>
-            <a class="distribution-download-action" aria-disabled="true" data-distribution-action download>
-              {copy.downloadAll} ↓
-            </a>
+            <a class="distribution-download-action" aria-disabled="true" data-distribution-action download>{copy.downloadAll} ↓</a>
             <span role="status" aria-live="polite" data-distribution-status>{copy.downloadPreparing}</span>
           </div>
         </aside>
+      </div>
+    </section>
+
+    <section class="market-selection-guide" aria-labelledby="selection-guide-title">
+      <h2 id="selection-guide-title">{copy.chooseTitle}</h2>
+      <div>
+        {copy.chooseSteps.map(([title, description]) => (
+          <article><h3>{title}</h3><p>{description}</p></article>
+        ))}
       </div>
     </section>
 
@@ -167,8 +159,8 @@ const copy =
         </div>
 
         <details class="state-notes">
-          <summary>{copy.states}</summary>
-          <p>{copy.stateBody}</p>
+          <summary>{copy.identityTitle}</summary>
+          <p>{copy.identityBody}</p>
           <a class="text-action" href={publicPath(locale, "/trust/")}>{locale === "zh-cn" ? "查看可信机制" : "Read the trust model"} →</a>
         </details>
       </aside>
@@ -219,39 +211,12 @@ const copy =
         </div>
       </div>
     </section>
-
-    <section
-      class="hosted-registry-section"
-      aria-labelledby="hosted-registry-title"
-      data-hosted-registry
-      data-api={hostedApiBase}
-      data-offline={copy.hostedOffline}
-      data-count-label={copy.hostedCount}
-      data-archive-label={copy.archiveHash}
-      data-snapshot-label={copy.repositorySnapshot}
-      data-submission-label={copy.validatedSubmission}
-      data-open-client-label={copy.openClient}
-      data-download-label={copy.download}
-      data-download-count-label={copy.downloadResponses}
-    >
-      <div class="detail-grid">
-        <div>
-          <p class="eyebrow">Local hosted registry simulation</p>
-          <h2 id="hosted-registry-title">{copy.hostedTitle}</h2>
-        </div>
-        <p class="section-lead">{copy.hostedBody}</p>
-      </div>
-      <p class="hosted-registry-status" role="status" aria-live="polite" data-hosted-status>{copy.hostedLoading}</p>
-      <div class="hosted-record-list" data-hosted-records></div>
-    </section>
   </main>
 </PublicSiteLayout>
 
 <script>
-  import {
-    fetchVerifiedExpertSquadBundle,
-    resolveVerifiedExpertSquadBundle,
-  } from "../lib/expert-squad-publication"
+  import { fetchVerifiedExpertSquadBundle, resolveVerifiedExpertSquadBundle } from "../lib/expert-squad-publication"
+
   const marketRoot = document.querySelector<HTMLElement>("[data-market-root]")
   if (marketRoot) {
     const search = marketRoot.querySelector<HTMLInputElement>("#market-search")!
@@ -266,9 +231,7 @@ const copy =
       let visible = 0
       for (const record of records) {
         const pillars = record.dataset.pillars?.split(" ") ?? []
-        const pillarMatch =
-          activeFilter === "all" ||
-          (activeFilter === "multi" ? pillars.length > 1 : pillars.includes(activeFilter))
+        const pillarMatch = activeFilter === "all" || (activeFilter === "multi" ? pillars.length > 1 : pillars.includes(activeFilter))
         const searchMatch = !query || record.dataset.search?.includes(query)
         record.hidden = !(pillarMatch && searchMatch)
         if (!record.hidden) visible += 1
@@ -285,92 +248,6 @@ const copy =
         refresh()
       })
     }
-  }
-
-  const hostedRoot = document.querySelector<HTMLElement>("[data-hosted-registry]")
-  if (hostedRoot) {
-    const status = hostedRoot.querySelector<HTMLElement>("[data-hosted-status]")!
-    const list = hostedRoot.querySelector<HTMLElement>("[data-hosted-records]")!
-    fetch(`${hostedRoot.dataset.api}/records`, { headers: { Accept: "application/json" } })
-      .then(async (response) => {
-        if (!response.ok) throw new Error(`Hosted sandbox returned ${response.status}`)
-        return await response.json()
-      })
-      .then((payload) => {
-        const records = Array.isArray(payload.records) ? payload.records : []
-        status.textContent = `${records.length} ${hostedRoot.dataset.countLabel}`
-        for (const record of records) {
-          const article = document.createElement("article")
-          article.className = "hosted-record"
-
-          const title = document.createElement("div")
-          const identity = document.createElement("code")
-          identity.textContent = `${record.facts.identity.namespace}/${record.facts.identity.id}@${record.facts.identity.version}`
-          const heading = document.createElement("h3")
-          heading.textContent = record.facts.label
-          title.append(identity, heading)
-
-          const facts = document.createElement("div")
-          facts.className = "hosted-record-digests"
-          const packageDigest = document.createElement("code")
-          packageDigest.textContent = `package sha256:${record.facts.identity.digest}`
-          const archiveDigest = document.createElement("code")
-          archiveDigest.textContent = `${hostedRoot.dataset.archiveLabel}:${record.archive.sha256}`
-          facts.append(packageDigest, archiveDigest)
-
-          const actions = document.createElement("div")
-          actions.className = "hosted-record-actions"
-          const source = document.createElement("span")
-          source.className = "status-label"
-          source.textContent =
-            record.source === "repository_snapshot"
-              ? hostedRoot.dataset.snapshotLabel ?? ""
-              : hostedRoot.dataset.submissionLabel ?? ""
-          const download = document.createElement("a")
-          download.className = "text-action"
-          download.href = record.downloadPath
-          download.download = ""
-          download.textContent = `${hostedRoot.dataset.downloadLabel} →`
-          const openClient = document.createElement("a")
-          openClient.className = "hosted-open-client"
-          const archiveUrl = new URL(record.downloadPath, window.location.origin).href
-          const handoff = new URL("opencorvus://expert-squad/install")
-          handoff.searchParams.set("namespace", record.facts.identity.namespace)
-          handoff.searchParams.set("id", record.facts.identity.id)
-          handoff.searchParams.set("version", record.facts.identity.version)
-          handoff.searchParams.set("packageDigest", record.facts.identity.digest)
-          handoff.searchParams.set("archiveSha256", record.archive.sha256)
-          handoff.searchParams.set("archiveBytes", String(record.archive.bytes))
-          handoff.searchParams.set("archiveUrl", archiveUrl)
-          openClient.href = handoff.href
-          openClient.textContent = `${hostedRoot.dataset.openClientLabel} ↗`
-          const downloadCount = document.createElement("span")
-          downloadCount.className = "hosted-download-count"
-          downloadCount.textContent = `${Number(record.downloadResponses ?? 0)} ${hostedRoot.dataset.downloadCountLabel}`
-          const refreshDownloadCount = () => {
-            window.setTimeout(async () => {
-              try {
-                const response = await fetch(record.downloadPath.replace(/\/archive$/, ""), {
-                  headers: { Accept: "application/json" },
-                })
-                if (!response.ok) return
-                const refreshed = await response.json()
-                downloadCount.textContent = `${Number(refreshed.downloadResponses ?? 0)} ${hostedRoot.dataset.downloadCountLabel}`
-              } catch {
-                // The existing hosted status already explains the local-only availability boundary.
-              }
-            }, 900)
-          }
-          download.addEventListener("click", refreshDownloadCount)
-          openClient.addEventListener("click", refreshDownloadCount)
-          actions.append(source, downloadCount, openClient, download)
-          article.append(title, facts, actions)
-          list.append(article)
-        }
-      })
-      .catch(() => {
-        status.textContent = hostedRoot.dataset.offline ?? ""
-      })
   }
 
   const distributionRoot = document.querySelector<HTMLElement>("[data-distribution-download]")
@@ -421,3 +298,50 @@ const copy =
       })
   }
 </script>
+
+<style>
+  .market-selection-guide {
+    display: grid;
+    grid-template-columns: 0.72fr 1.28fr;
+    gap: 56px;
+    padding: 42px 0;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .market-selection-guide > div {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--ink);
+    border-left: 1px solid var(--ink);
+  }
+
+  .market-selection-guide h2 {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 38px;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  .market-selection-guide article {
+    padding: 18px;
+    border-right: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .market-selection-guide h3 {
+    margin: 0;
+    color: var(--cobalt);
+    font-family: var(--mono);
+    font-size: 10px;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+
+  .market-selection-guide p {
+    margin: 10px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.55;
+  }
+</style>
