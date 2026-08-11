@@ -1,10 +1,14 @@
-
 import { invoke } from "@tauri-apps/api/core"
 import { listen } from "@tauri-apps/api/event"
 import { createSignal } from "solid-js"
 import { openConfigDialog } from "./config-dialog-control"
 import { apiJson } from "./api"
-import { markExpertSquadCatalogStale, type ExpertSquadImportResult, type ExpertSquadInstallationScope } from "./expert-squad"
+import {
+  markExpertSquadCatalogStale,
+  type ExpertSquadImportResult,
+  type ExpertSquadInstallationScope,
+} from "./expert-squad"
+import { getHostTransport } from "./host-transport-runtime"
 import { showOverlayWindow } from "./window"
 import {
   parseExpertSquadInstallHandoff,
@@ -67,6 +71,7 @@ async function acceptExpertSquadInstallHandoff(raw: string): Promise<void> {
 }
 
 export async function installExpertSquadInstallHandoffBridge(): Promise<() => void> {
+  if (getHostTransport().kind !== "tauri") return () => undefined
   const unlisten = await listen<string>(EXPERT_SQUAD_INSTALL_HANDOFF_EVENT, ({ payload }) => {
     void acceptExpertSquadInstallHandoff(payload).catch((error) => {
       console.error("[expert-squad-install-handoff] rejected", error)

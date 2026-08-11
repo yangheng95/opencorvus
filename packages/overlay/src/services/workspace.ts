@@ -668,22 +668,6 @@ export function beginWorkspaceSelection(): number {
   return epoch
 }
 
-/**
- * Transfer selection ownership to a non-work-item surface. A stable selected
- * work item remains available when the operator returns, while a partially
- * hydrated selection is cleared so its former owner cannot leave a stuck busy
- * projection behind.
- */
-export function supersedePendingWorkspaceSelection(): number {
-  const pending = boardStore.taskSwitching
-  const epoch = beginWorkspaceSelection()
-  if (!pending) return epoch
-  stopSSE()
-  clearComposerModelProjection()
-  clearSelectedWorkItem()
-  return epoch
-}
-
 export function ownsWorkspaceSelection(epoch: number): boolean {
   return boardStore.selectEpoch === epoch
 }

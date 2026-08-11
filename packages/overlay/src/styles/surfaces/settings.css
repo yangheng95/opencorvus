@@ -1909,16 +1909,132 @@ button.s-row:focus-visible {
   line-height: 1.5;
 }
 
-.expert-squad-market-entry-copy > span {
-  color: var(--text-muted);
-  font-size: var(--ui-font-meta);
-  line-height: 1.45;
+.expert-squad-market-facts {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: calc(6px * var(--ui-scale));
+  margin-top: calc(5px * var(--ui-scale));
 }
 
-.expert-squad-market-web-action.oc-button {
-  flex-shrink: 0;
+.expert-squad-market-facts > span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: calc(4px * var(--ui-scale));
+  min-height: calc(25px * var(--ui-scale));
+  padding: calc(3px * var(--ui-scale)) calc(9px * var(--ui-scale));
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--accent) 18%, var(--border));
+  border-radius: var(--oc-radius-pill);
+  background: color-mix(in srgb, var(--accent) 5%, var(--settings-surface-muted));
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  line-height: 1.4;
+}
+
+.expert-squad-market-facts strong {
+  color: var(--text-strong);
+  font-size: var(--ui-font-control);
+  font-variant-numeric: tabular-nums;
+}
+
+.expert-squad-market-entry-actions {
+  display: grid;
+  justify-items: stretch;
+  gap: calc(8px * var(--ui-scale));
+}
+
+.expert-squad-market-entry-actions .oc-button {
+  justify-content: center;
   text-decoration: none;
   white-space: nowrap;
+}
+
+.expert-squad-local-install {
+  overflow: hidden;
+}
+
+.expert-squad-local-install-head {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: center;
+  gap: calc(16px * var(--ui-scale));
+  padding: calc(16px * var(--ui-scale)) calc(18px * var(--ui-scale));
+  border-bottom: var(--oc-border-width) solid var(--divider-soft);
+  background: color-mix(in srgb, var(--accent) 3%, var(--settings-surface-muted));
+}
+
+.expert-squad-local-install-head > div {
+  min-width: 0;
+  display: grid;
+  gap: calc(3px * var(--ui-scale));
+}
+
+.expert-squad-local-install-head span {
+  color: var(--text-strong);
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+.expert-squad-local-install-head small {
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  line-height: 1.4;
+}
+
+.expert-squad-local-install-scope {
+  min-width: calc(170px * var(--ui-scale));
+}
+
+.expert-squad-local-install-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.expert-squad-local-install-option {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: calc(12px * var(--ui-scale));
+  padding: calc(18px * var(--ui-scale));
+}
+
+.expert-squad-local-install-option + .expert-squad-local-install-option {
+  border-left: var(--oc-border-width) solid var(--divider-soft);
+}
+
+.expert-squad-local-install-option > div {
+  min-width: 0;
+  display: grid;
+  gap: calc(3px * var(--ui-scale));
+}
+
+.expert-squad-local-install-option strong {
+  color: var(--text-strong);
+  font-size: var(--ui-font-control);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+.expert-squad-local-install-option > div > span {
+  color: var(--text-muted);
+  font-size: var(--ui-font-meta);
+  line-height: 1.4;
+}
+
+.expert-squad-local-install-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(36px * var(--ui-scale));
+  height: calc(36px * var(--ui-scale));
+  border-radius: var(--oc-radius-soft);
+  background: var(--settings-surface-muted);
+  color: var(--text-soft);
+}
+
+.expert-squad-file-input {
+  display: none;
 }
 
 .expert-squad-layout > .expert-squad-catalog-toolbar,
@@ -3414,8 +3530,50 @@ button.s-row:focus-visible {
     grid-template-columns: auto minmax(0, 1fr);
   }
 
-  .expert-squad-market-web-action.oc-button {
+  .expert-squad-market-entry-actions {
     grid-column: 1 / -1;
-    justify-self: start;
+    display: flex;
+    flex-wrap: wrap;
+    justify-self: stretch;
+  }
+
+  .expert-squad-local-install-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .expert-squad-local-install-option + .expert-squad-local-install-option {
+    border-top: var(--oc-border-width) solid var(--divider-soft);
+    border-left: 0;
+  }
+}
+
+@container settings-content (max-width: 700px) {
+  .expert-squad-market-entry {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .expert-squad-market-entry-icon {
+    display: none;
+  }
+
+  .expert-squad-market-entry-actions {
+    display: grid;
+  }
+
+  .expert-squad-local-install-head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .expert-squad-local-install-scope {
+    width: 100%;
+  }
+
+  .expert-squad-local-install-option {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .expert-squad-local-install-option > .oc-button {
+    grid-column: 1 / -1;
+    justify-self: stretch;
   }
 }

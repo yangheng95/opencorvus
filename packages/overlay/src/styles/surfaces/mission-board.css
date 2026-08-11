@@ -393,21 +393,11 @@
   white-space: nowrap;
 }
 
-#missionCreateDialog .dialog-form {
-  max-height: calc(var(--ui-overlay-shell-height) - calc(32px * var(--ui-scale)));
-  overflow: hidden;
-}
-
-#missionCreateDialog .dialog-actions {
-  flex: 0 0 auto;
-}
-
 .mission-create-form {
   display: flex;
-  min-height: 0;
+  min-height: calc(420px * var(--ui-scale));
   flex-direction: column;
   gap: var(--ui-gap-lg);
-  overflow-y: auto;
   padding: var(--ui-gap-lg);
 }
 
@@ -421,85 +411,15 @@
 }
 
 .mission-create-form__request textarea {
-  min-height: calc(168px * var(--ui-scale));
+  min-height: calc(220px * var(--ui-scale));
   resize: none;
 }
 
-.mission-create-form__context {
-  display: flex;
-  min-width: 0;
-  margin: 0;
-  padding: var(--ui-gap-md);
-  flex-direction: column;
-  gap: var(--ui-gap-md);
-  border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-medium);
-}
-
-.mission-create-form__context > legend {
-  padding: 0 var(--ui-gap-xs);
-  color: var(--text-strong);
-  font-size: var(--ui-font-small);
-  font-weight: var(--ui-font-weight-strong);
-}
-
-.mission-create-form__context-grid {
+.mission-create-form__assignments {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--ui-gap-md);
-}
-
-.mission-create-form__mission-type .oc-segmented {
-  width: 100%;
-}
-
-.mission-create-form__mission-type .oc-segmented__item {
-  flex: 1;
-}
-
-.mission-create-form__expert-squad .oc-text-field__label {
-  display: flex;
-  align-items: center;
-  gap: var(--ui-gap-xs);
-}
-
-.mission-create-form__expert-squad .search-field {
-  margin-bottom: var(--ui-gap-xs);
-}
-
-.mission-create-form__context-status,
-.mission-create-form__required-status,
-.mission-create-form__model-note {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: var(--ui-font-small);
-  line-height: var(--ui-line-height-normal);
-}
-
-.mission-create-form__context-error {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--ui-gap-md);
-  color: var(--bad);
-  font-size: var(--ui-font-small);
-}
-
-.mission-create-form__context-error > span {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: calc(2px * var(--ui-scale));
-}
-
-.mission-create-form__context-error small {
-  overflow-wrap: anywhere;
-  color: var(--text-muted);
-}
-
-.mission-create-form__model-note {
-  padding-top: var(--ui-gap-sm);
-  border-top: var(--oc-border-width) solid var(--divider-soft);
+  margin-top: auto;
 }
 
 .mission-create-form__option {
@@ -541,20 +461,6 @@
   background: var(--bad-dim);
   color: var(--bad);
   font-size: var(--ui-font-small);
-}
-
-@media (max-width: 760px) {
-  .mission-create-form {
-    gap: var(--ui-gap-md);
-  }
-
-  .mission-create-form__request textarea {
-    min-height: calc(150px * var(--ui-scale));
-  }
-
-  .mission-create-form__context-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 
 .mission-board-nav-tooltip {
