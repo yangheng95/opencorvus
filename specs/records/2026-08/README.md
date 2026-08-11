@@ -1,6 +1,14 @@
 # August 2026 Records
 
+- [2026-08-11-full-worktree-delivery-convergence.md](2026-08-11-full-worktree-delivery-convergence.md) classifies the complete dirty worktree, excludes runtime output, closes ignored specification records, validates the staged boundary, and defines the normal upstream push sequence.
+
 - [2026-08-11-github-actions-push-convergence.md](2026-08-11-github-actions-push-convergence.md) repairs clean-runner SDK bootstrap ordering and preload-owned test execution, and requires a green proof push before deleting older Actions runs.
+
+- [2026-08-11-squad-sdk-authoring-skill-research-rewrite.md](2026-08-11-squad-sdk-authoring-skill-research-rewrite.md) rewrites the sole Squad SDK authoring Skill around source-backed domain decisions, professional-asset provenance, non-generic Agent topology, package closure, rejection rules, and positive production acceptance.
+
+- [2026-08-11-continuous-ten-domain-expert-squad-goal.md](2026-08-11-continuous-ten-domain-expert-squad-goal.md) defines the continuous fixed-ten Expert Squad goal, operator-owned drag priority and parallel lanes, mandatory dedicated Skill and asset closure, delivered-state truth, and the per-batch real acceptance boundary.
+
+- [2026-08-10-compact-task-identifiers.md](2026-08-10-compact-task-identifiers.md) replaces the over-expanded new-Task identifier body with one fixed 24-character, time-sortable, collision-resistant canonical encoding while preserving exact stored and API identity.
 
 - [2026-08-10-ten-domain-expert-squad-expansion.md](2026-08-10-ten-domain-expert-squad-expansion.md) defines ten new domain packages, dedicated Skill and asset ownership, pinned open-source adaptations, clean-room professional boundaries, and package, HTTP, and real-page acceptance.
 

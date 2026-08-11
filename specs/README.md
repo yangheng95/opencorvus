@@ -1,6 +1,14 @@
 # Specs Storage Index
 
+Latest full-worktree non-temporary delivery convergence: [`2026-08-11-full-worktree-delivery-convergence.md`](records/2026-08/2026-08-11-full-worktree-delivery-convergence.md).
+
 Latest GitHub Actions push convergence: [`2026-08-11-github-actions-push-convergence.md`](records/2026-08/2026-08-11-github-actions-push-convergence.md).
+
+Latest Squad SDK authoring Skill research rewrite: [`2026-08-11-squad-sdk-authoring-skill-research-rewrite.md`](records/2026-08/2026-08-11-squad-sdk-authoring-skill-research-rewrite.md).
+
+Latest continuous ten-domain Expert Squad goal: [`2026-08-11-continuous-ten-domain-expert-squad-goal.md`](records/2026-08/2026-08-11-continuous-ten-domain-expert-squad-goal.md).
+
+Latest compact Task identifier design: [`2026-08-10-compact-task-identifiers.md`](records/2026-08/2026-08-10-compact-task-identifiers.md).
 
 Latest ten-domain Expert Squad expansion: [`2026-08-10-ten-domain-expert-squad-expansion.md`](records/2026-08/2026-08-10-ten-domain-expert-squad-expansion.md).
 
