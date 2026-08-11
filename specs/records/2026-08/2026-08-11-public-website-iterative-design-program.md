@@ -25,7 +25,7 @@
 - Continue to use the existing public-site stylesheet and Astro components as the website design source; do not create a parallel theme or fallback surface.
 - Keep English and Simplified Chinese information architecture reciprocal.
 - Use one independent, read-only agent for plan approval before implementation and one independent, read-only agent for the final difference review. Review agents must not edit or delegate.
-- Do not publish, deploy, create a release, or modify Domain Name System (DNS) state under this request.
+- Each completed iteration must be committed and pushed so the existing `deploy-opencorvus-com.yml` path updates `opencorvus.com`; do not create a release or tag, manually dispatch a duplicate deployment, or modify Domain Name System (DNS) state.
 
 ### Repository and workspace baseline
 
@@ -101,7 +101,7 @@ The program uses philosophies as decision rules, not visual fashion labels.
 - Iteration 4: strengthen proof, product imagery, and credibility without increasing claim density.
 - Iteration 5: audit responsive behavior, accessibility, and performance as one coherent delivery-quality layer.
 
-Only Iteration 1 is specified below. Each later iteration requires fresh evidence and its own independent approval.
+Iterations 1 and 2 are specified below. Every later iteration still requires fresh evidence and its own independent approval before implementation.
 
 ## Iteration 1: visible hierarchy and theme ownership
 
@@ -241,3 +241,418 @@ Manual review confirms that both landing locales regain a clear heading-to-body-
 - `git diff --check` for the touched tracked files: passed.
 - `bunx prettier --check` for this program record: passed.
 - Repeat post-implementation independent read-only review: passed with no unresolved findings.
+
+## Iteration 1 production delivery
+
+- Commit: `1b6df2f9d93d8e593334911dcbed2522ff5c6e88` (`fix(web): isolate public landing typography`).
+- Push: `main` and `origin/main` both resolve to that exact commit.
+- Production workflow: [`deploy opencorvus.com` run 31461439739](https://github.com/yangheng95/opencorvus/actions/runs/31461439739), triggered by the commit's `packages/web/**` push path, completed successfully. The Ubuntu, Windows, and macOS canonical archive jobs, static build and verification job, signing job, and RackNerd atomic deployment all passed.
+- Live verification used cache-busted English and Simplified Chinese routes after the Action completed. Both returned the new headline and the restored computed styles. English and Chinese hero headings computed to public ink, `69.12px`, weight `760`, and `62.208px` line height at the inspected desktop viewport; section headings computed to public ink, `52.48px`, weight `730`, and `50.3808px` line height. The brand retained a transparent background and no left border. Both live pages reported no browser console errors.
+
+## Iteration 2: first-viewport positioning and bilingual copy
+
+### Fresh evidence and research
+
+- Production baseline screenshots:
+  - English: [`2026-08-11-public-website-iteration-2-baseline-en-top.png`](../../artifacts/2026-08-11-public-website-iteration-2-baseline-en-top.png)
+  - Simplified Chinese: [`2026-08-11-public-website-iteration-2-baseline-zh-top.png`](../../artifacts/2026-08-11-public-website-iteration-2-baseline-zh-top.png)
+- The World Wide Web Consortium (W3C) Web Accessibility Initiative recommends easy-to-understand words, short sentences, short text blocks, unambiguous content, and visible separation so users can understand a page's message and purpose: <https://www.w3.org/WAI/WCAG2/supplemental/objectives/o3-clear-content/>.
+- W3C's writing guidance says page titles and headings should put the unique, relevant information first, link text should be meaningful, and content should be clear and concise: <https://www.w3.org/WAI/tips/writing/>.
+- Nielsen Norman Group's web-writing guidance says visitors scan instead of reading every word; headings should be meaningful rather than clever, the conclusion should come first, and deeper material should be split behind relevant links: <https://www.nngroup.com/articles/be-succinct-writing-for-the-web/>.
+- Repository truth confirms that OpenCorvus is MIT-licensed open source; Task owns the business lifecycle; real worktree, tool, file, decision, Artifact, reviewer, and execution evidence are durable parts of the current architecture; Expert Squads are visible packaged capability projections rather than an anonymous Agent pool.
+
+### Observable phenomenon and user impact
+
+- The repaired hierarchy now makes the hero headline the strongest object, but the headline `Bring one outcome. Leave with a review-ready result.` and Chinese `带来一个目标，带走一份可审查的交付。` do not identify the product category, operating surface, or Agent relationship. The same promise could describe consulting, project management, or document review.
+- The eyebrow `Open Agent Harness` / `开放式 Agent Harness` makes an unfamiliar implementation category the first label. The visitor must understand `Harness` or read the full description before learning that OpenCorvus is an open-source workspace where Agents use real tools and leave reviewable evidence.
+- The English supporting sentence is a 26-word multi-clause mechanism list. At the inspected viewport it occupies about `90px` of height; the authority boundary adds another roughly `80px`. Important meaning is split across both paragraphs and repeats `work`, `evidence`, `mission`, and `review` concepts without a concise category statement.
+- The current primary link says `Explore Expert Squads`, while the destination is a browsable catalog. `Browse Expert Squads` is a more literal destination label. The secondary action `Read the quickstart` describes content consumption rather than the next action.
+- Public copy ownership is split: most hero strings live in `landingContent`, but the authority boundary is a separate locale conditional inside `Lander.astro`; public footer positioning is another local object; homepage metadata descriptions still repeat the `Agent Harness` category. This makes future bilingual changes easy to leave inconsistent.
+
+### Trigger, root cause, and why the prior path does not solve it
+
+- The direct trigger is the content sequence rendered by `Lander.astro`: category eyebrow → metaphorical result headline → mechanism paragraph → two actions → authority paragraph. The visual hierarchy is now correct, so its first and largest words expose the information-order problem rather than hiding it.
+- The root cause is positioning by internal category and desired tone instead of the visitor's first decision. `Agent Harness`, `outcome`, and `review-ready` are meaningful only after the visitor already understands the product. The copy asks users to infer the concrete workspace and evidence model from abstract terms.
+- Iteration 1 deliberately did not change copy. Its style repair was necessary to make this diagnosis reliable, but typography cannot make an ambiguous headline specific.
+- Replacing only the headline would leave the eyebrow, authority sentence, metadata, and footer telling different product stories. Adding more explanatory text would violate the research direction and increase first-viewport load. The bounded repair must simplify and align the existing copy surfaces.
+
+### Definitions, consumers, contracts, and exclusions
+
+- `packages/web/src/content/landing.ts` is the localized landing-content owner consumed only by `Lander.astro` for the English and Simplified Chinese home routes.
+- `Lander.astro` owns layout and destination links. The current inline `hero-boundary` locale conditional is the only first-viewport copy outside `landingContent`; moving it into `landingContent.hero.boundary` removes that split source without changing rendering or routes.
+- `packages/web/src/content/docs/index.mdx` and `zh-cn/index.mdx` own homepage metadata descriptions. Their `hero.tagline` values already describe real workspaces, right-sized Expert Squads, and visible evidence accurately and remain unchanged.
+- `PublicSiteFooter.astro` owns its contextual footer statement. It should use the same category and product nouns while remaining a shorter footer sentence, not duplicate the hero verbatim.
+- `app.head.titleSuffix` is shared by every documentation page, not just the home route. Changing it would broaden this iteration across all document titles, so it is explicitly excluded.
+- Social preview art, navigation labels, lower landing sections, media, page structure, layout, typography, colors, routes, link destinations, download discovery, Expert Squad data, documentation body copy, and responsive breakpoints are excluded.
+- No User Interface automation test, source-text assertion, snapshot, or screenshot baseline is added or run. Acceptance remains real-page inspection, screenshots, and human review.
+
+### Proposed exact copy contract
+
+The first proposed headline was rejected before implementation because its two English clauses were each wider than the live hero column, while the Chinese headline carried the same three-line risk. The revised headline below was calibrated against the live `1280 × 720` page: the hero column is `607.35px`; the current rendered English lines are about `584.27px` and `568.89px`; and the production font stack, `69.12px` size, and `-5.184px` letter spacing estimate the revised English clauses at about `539px` and `498px`. The revised Chinese clauses estimate to about `468px` and `517px`, compared with the current first line's measured `575.42px`. This preserves material margin on both lines without a CSS change; the post-implementation real page remains the final authority.
+
+| Surface | English | Simplified Chinese |
+| --- | --- | --- |
+| Hero eyebrow | `Open-source workspace for Agents` | `面向 Agent 的开源工作区` |
+| Hero headline | `Give Agents a workspace. Keep results reviewable.` | `给 Agent 工作区，让交付可审查。` |
+| Hero description | `Within each Task, OpenCorvus keeps the goal, participating Agents, tools, files, decisions, and evidence together—from first instruction to final acceptance.` | `在每个任务中，OpenCorvus 把目标、参与的 Agent、工具、文件、决策与证据放在一起，从首次指令到最终验收始终保留。` |
+| Primary action | `Browse Expert Squads` | `浏览专家团` |
+| Secondary action | `Open the quickstart` | `打开快速开始` |
+| Authority boundary | `You set the scope and approve changes to external systems. OpenCorvus keeps the work and its evidence visible.` | `你设定任务范围，并批准对外部系统的改动；OpenCorvus 让工作过程与证据始终可见。` |
+| Homepage description | `An open-source workspace that keeps Agent work, Expert Squads, and reviewable evidence together.` | `把 Agent 工作、专家团协作与可审查证据放在一起的开源工作区。` |
+| Footer statement | `An open-source workspace for Agent work, Expert Squads, and reviewable evidence.` | `面向 Agent 工作、专家团协作与可审查证据的开源工作区。` |
+
+Capitalization intentionally treats `Agent` and `Expert Squad` as OpenCorvus product nouns in both locales. `Open-source` is supported by the repository's MIT license and public GitHub remote. `External changes` is plainer than the implementation phrase `external writes` while preserving the same user-authority boundary.
+
+### Bounded implementation plan
+
+1. Add `boundary` to both localized `landingContent.hero` objects and render `content.hero.boundary` from the existing paragraph in `Lander.astro`; delete the inline locale conditional so hero copy has one localized owner.
+2. Replace only the approved hero eyebrow, headline, description, action labels, and boundary strings in `landing.ts`.
+3. Replace only the homepage metadata descriptions in the two index MDX files; keep title, template, tagline, and all body composition unchanged.
+4. Replace only the localized footer statements in `PublicSiteFooter.astro`; keep footer links, labels, markup, and navigation unchanged.
+5. Do not change CSS to force the copy to fit. If the exact copy produces unacceptable wrapping, revise the copy contract and obtain renewed independent approval rather than masking it with layout changes.
+
+### Risks and acceptance
+
+- **Headline wrapping:** both headlines must remain fully visible without collision, clipping, or pushing the action group below the desktop first viewport. Prefer two balanced lines; three lines are a rejection at the current 1280 by 720 evidence viewport.
+- **Bilingual reciprocity:** both locales must communicate the same category, real-workspace promise, reviewability, concrete content model, user authority, and destinations without literal word-for-word awkwardness.
+- **Claim inflation:** no claim may imply autonomous authorization, automatic acceptance, guaranteed quality, permanent uptime, or that every task requires an Expert Squad.
+- **Destination semantics:** action labels must remain accurate for the existing `/market/` and `/start/quickstart/` links; keyboard focus and link behavior remain unchanged.
+- **Visual continuity:** the video, brand, navigation, proof strip, heading hierarchy, colors, and spacing remain unchanged. Real English and Simplified Chinese screenshots cover the entire first viewport after implementation.
+- `bun run --cwd packages/web check`, `bun run --cwd packages/web build`, `bun run docs:check`, targeted Prettier, and `git diff --check` must pass.
+- An independent read-only plan reviewer must report `APPROVED` before source edits. After implementation and real-page inspection, a different independent read-only reviewer must report no unresolved findings.
+- The iteration is complete only after an iteration-owned commit is pushed, the exact push triggers `deploy-opencorvus-com.yml`, the Action succeeds, and cache-busted live English and Simplified Chinese routes visibly contain the approved copy with no browser console errors.
+
+### Iteration 2 plan-review verdict
+
+- First review: `REJECTED`. The reviewer blocked the original headline because it was likely to wrap to three lines, found that `approve external changes` and `确认…改动` did not preserve the same authorization boundary, and found the original English description unnatural and missing the Chinese copy's single-Task container semantics.
+- Revision: shortened and width-calibrated both headlines, made `approve` / `批准` explicit in both locales, and made the Task container and participating-Agent relationship reciprocal.
+- Earlier repeat review: `APPROVED`, but superseded by the fresh independent review below. The earlier reviewer confirmed width and reciprocity but did not compare the proposed authority sentence with the current default permission contract or bind the visual candidate to an isolated Git tree.
+
+### Fresh workspace and exact-candidate boundary
+
+- Final public parent identity after the synchronized Download page landed: public `main` at `480c0ab901809bb2350db97ab4adee2d091125b4`. The shared worktree remains dirty with the separate eighth Expert Squad expansion; therefore delivery uses a detached independent clone at the exact public parent instead of the shared index.
+- The formerly staged seventh Expert Squad expansion is part of older history. A new parallel eighth-batch task owns its staged expert packages, generated payload/market data, tests, and record/index changes, while an unrelated `expert-squads/builtin/equity-research/report.md` remains untracked. All are explicitly excluded from Iteration 2. The separate Download page commit `480c0ab90` is now the parent and remains intact; the Iteration 2 patch adds Mission to the already Download-aware Header/Layout instead of removing that route.
+- Iteration 2 owns only `packages/web/src/assets/lander/opencorvus-concept-map.png`, `packages/web/src/assets/lander/opencorvus-concept-flow-en.gif`, `packages/web/src/assets/lander/opencorvus-concept-flow-zh.gif`, `packages/web/src/assets/lander/client-agent-workspace.png` (deletion after poster removal), `packages/web/public/media/opencorvus-client-demo.webm` (deletion after replacement), `packages/web/qa/build-client-demo.mjs` (deletion with its sole output), `packages/web/src/components/Lander.astro`, `packages/web/src/components/MissionPage.astro`, `packages/web/src/components/PublicSiteHeader.astro`, `packages/web/src/components/PublicSiteFooter.astro`, `packages/web/src/components/PublicSiteLayout.astro`, `packages/web/src/content/docs/index.mdx`, `packages/web/src/content/docs/zh-cn/index.mdx`, `packages/web/src/content/landing.ts`, `packages/web/src/pages/mission/index.astro`, `packages/web/src/pages/zh-cn/mission/index.astro`, and this program record.
+- Local validation and screenshots from the shared worktree are diagnostic only because generated public-market inputs include the other staged expansion. The acceptance candidate must instead be created as an immutable export of the parent commit plus only the Iteration 2 owned-file patch. The export receives its own temporary Git index so repository-aware generators see exactly the candidate files, and it may reuse the existing dependency directory read-only. Check, build, real-page screenshots, independent review, commit, push, Action, and production verification must all resolve to this same owned tree.
+
+### Fresh independent review and user visual finding
+
+- Fresh independent review: `REJECTED`.
+- The proposed authority sentence implied that every external-system change receives explicit user approval, while the current permission contract allows the configured rule to be `allow`, `ask`, or `deny` and defaults to `allow`. The copy must describe user-owned permission rules rather than universal per-action approval.
+- The proposed Chinese headline omitted `一个` in a way that sounded compressed, `打开快速开始` was an unnatural destination label, and only the Chinese description promised that data would `始终保留`. The bilingual contract must be rewritten around reciprocal workspace, connection, and reviewability semantics without a unilateral retention promise.
+- The fresh status showed that the shared-worktree build was not the exact candidate tree. The isolated candidate boundary above is required before delivery.
+- During real-page inspection, the user reported that the hero video was visually squeezed. Browser evidence confirmed the `2880 × 1620` source was rendered into a `557.44 × 470` box with `object-fit: cover`. The source is `16:9`, while the rendered box is about `1.19:1`; about one third of the horizontal composition is cropped. The fixed `470px` height is the direct trigger.
+
+### Revised copy and media contract
+
+The earlier proposed copy table is superseded by this revision.
+
+| Surface | English | Simplified Chinese |
+| --- | --- | --- |
+| Hero eyebrow | `Open-source workspace for Agents` | `面向 Agent 的开源工作区` |
+| Hero headline | `Agents work in a real workspace. Results stay reviewable.` | `Agent 在真实工作区工作，结果可审查。` |
+| Hero description | `Within each Task, OpenCorvus keeps the goal, participating Agents, tools, files, decisions, and evidence connected—from first instruction through final acceptance.` | `在每个任务中，OpenCorvus 把目标、参与的 Agent、工具、文件、决策与证据关联在一起，贯穿首次指令到最终验收。` |
+| Primary action | `Browse Expert Squads` | `浏览专家团` |
+| Secondary action | `Open the quickstart` | `查看快速开始` |
+| Authority boundary | `You set the scope and the permission rules for external changes. OpenCorvus keeps the work and its evidence visible.` | `你设定任务范围和外部改动的权限规则；OpenCorvus 让工作过程与证据保持可见。` |
+| Homepage description | `An open-source workspace that keeps Agent work, Expert Squads, and reviewable evidence together.` | `把 Agent 工作、专家团协作与可审查证据放在一起的开源工作区。` |
+| Footer statement | `An open-source workspace for Agent work, Expert Squads, and reviewable evidence.` | `面向 Agent 工作、专家团协作与可审查证据的开源工作区。` |
+
+The revised headlines describe the same observable relationship without unnatural imperative compression. `Connected` / `关联在一起` describes the Task projection without promising indefinite retention. `Permission rules` / `权限规则` accurately covers `allow`, `ask`, and `deny` while preserving user authority. The Chinese quickstart label is a natural document-navigation action.
+
+This video-ratio repair was the approved fallback before the user requested a comic replacement. It is retained only as diagnosis evidence and is superseded by the final comic contract below; the implementation removes the video instead of restyling it.
+
+### Revised implementation and acceptance delta
+
+1. Obtain fresh independent `APPROVED` on this revised copy, permission boundary, media correction, and exact-candidate process before changing the source again.
+2. Apply the revised strings through the same localized owners and keep the authority boundary in `landingContent.hero.boundary`.
+3. In the existing global landing-video rule, replace the fixed height and cover crop with intrinsic `16:9` presentation. Do not touch the separately staged market-result CSS hunks.
+4. Export `HEAD` plus only the owned-file patch to an isolated candidate directory, create a local temporary Git index there, reuse dependencies without changing them, and run the required checks and build against that exact candidate.
+5. Serve the candidate on an isolated loopback port and visually inspect English and Simplified Chinese at `1280 × 720`. Both headlines must use at most two lines; no copy, action, or comic panel may clip or collide; the comic must render at `16:9` without cropping; and the page must have no horizontal overflow or browser console errors.
+6. A new independent delivery reviewer must inspect the exact candidate patch, screenshots, metrics, validation output, and workspace boundary. Resolve every valid finding and repeat review if source changes.
+7. Commit only the owned files with an exact path-limited commit, confirm the other staged work remains outside the commit, push `main`, wait for the exact `deploy-opencorvus-com.yml` run, and repeat cache-busted live English and Simplified Chinese visual verification.
+
+### Revised plan-review verdict
+
+- Superseded before review by the user's full-story correction below. Implementation and delivery remain blocked until the complete corrected plan receives `APPROVED`.
+
+### User story correction
+
+The user supplied the intended complete narrative after seeing the candidate page:
+
+> 定制自己的 Workdeck + 可配置专家团 + 基于专家团合作的长程任务 + Join us / Contribute your experts / build a community for everyone.
+
+This is a product-story correction, not another line-edit request. It supersedes the earlier hero-only framing and changes the homepage sequence, action hierarchy, and closing destination. The video-ratio and truthful-permission findings remain blockers inside the corrected plan.
+
+### Repository truth for the corrected story
+
+- The user clarified that `Workdeck` was provisional and asked for a more professional name. The selected public term is **Agent Workbench** / **Agent 工作台**. `Workbench` conventionally communicates a configured surface that brings tools and work together, while `Workspace` already identifies a concrete working directory in the product and `Mission` owns long-running organization. Agent Workbench is a public product-story noun, not a new Runtime, Mission, Task, Session, or database authority. Source code and architecture retain their existing canonical object names.
+- The current product allows workspace, Skills, tools, Model Context Protocol access, models, and permission rules to shape execution. Permission rules are configurable as `allow`, `ask`, or `deny`; copy must not imply mandatory approval for every external change.
+- An Expert Squad is a versioned, inspectable package of Agent roles, instructions, Skills, tools, Model Context Protocol access, selector guidance, and any declared workflow. Installation and activation remain explicit.
+- One Task owns one fixed Expert Squad revision and any selected workflow for its lifecycle. Roles can hand off exact typed Artifacts and evidence. A Mission coordinates several Tasks when an outcome needs different Squads or explicit dependencies. This is the factual basis for the long-horizon story.
+- The existing `/publish/` author path lets contributors build, validate, freeze, and contribute Expert Squad packages through the public source repository. Third-party self-service Registry listing is not open. The community call must link to this truthful author path and GitHub Discussions, not promise immediate self-service publication.
+
+### Corrected information architecture
+
+The existing page order `generic work modes → Expert Squads → runtime surfaces → install/source/releases` does not tell the requested story. Replace it with one four-part progression while reusing the existing sections and visual system:
+
+1. **Customize your Agent Workbench** — define the workspace, tools and capabilities, permission rules, and visible control surface.
+2. **Configure your Expert Squad** — choose or build a package by task fit, named roles, workflow, and exact revision.
+3. **Run long-horizon work** — show one fixed Squad carrying a Task through role handoffs, Artifacts, evidence, and review; explain that Mission connects several Tasks when needed.
+4. **Join the community** — set up an Agent Workbench, contribute an Expert Squad through the current source-authoring path, or join GitHub Discussions.
+
+The hero introduces the whole progression. Its primary action begins the Agent Workbench path at quickstart; its secondary action explores the Expert Squad catalog. The final section no longer prioritizes release downloads because that breaks the requested community ending. Releases remain reachable from the quickstart, documentation, source repository, and footer-adjacent navigation elsewhere on the site.
+
+### Corrected bilingual copy contract
+
+| Surface | English | Simplified Chinese |
+| --- | --- | --- |
+| Homepage description | `Customize your Agent Workbench, configure Expert Squads, and carry long-horizon work from first instruction to reviewable delivery.` | `定制你的 Agent 工作台，配置专家团，让长程任务从首次指令走到可审查交付。` |
+| Hero eyebrow | `Open-source Agent Workbench for long-horizon work` | `面向长程任务的开源 Agent 工作台` |
+| Hero headline | `Build your Workbench. Run Missions.` | `定制你的工作台，运行 Mission。` |
+| Hero description | `Connect a real workspace, choose tools and permission rules, configure an Expert Squad, and keep its collaboration, files, decisions, and evidence connected through one Task.` | `连接真实工作区，选择工具与权限规则，配置专家团，并让协作、文件、决策与证据贯穿同一个任务。` |
+| Hero primary action | `Set up your Workbench` | `开始定制工作台` |
+| Hero secondary action | `Explore Expert Squads` | `探索专家团` |
+| Hero authority boundary | `You choose what connects, which Squad runs, and the permission rules. OpenCorvus keeps the Task and its evidence visible.` | `由你决定连接什么、启用哪个专家团以及权限规则；OpenCorvus 让任务与证据保持可见。` |
+| Video caption | `One Workbench, one long-running Task, one visible evidence trail.` | `一个工作台、一项长程任务、一条可见证据链。` |
+| Proof 1 | `Your Agent Workbench` — `Workspace, tools, capabilities, and permission rules shaped around your work.` | `你的 Agent 工作台` — `围绕你的工作组织工作区、工具、能力与权限规则。` |
+| Proof 2 | `Configurable experts` — `Choose or build an inspectable Expert Squad instead of accepting an anonymous Agent pool.` | `可配置专家团` — `选择或构建可检查的专家团，而不是接受匿名 Agent 池。` |
+| Proof 3 | `Long-horizon delivery` — `Keep the team, handoffs, Artifacts, and evidence connected from instruction to acceptance.` | `长程交付` — `让团队、交接、产物与证据从指令到验收始终关联。` |
+| Footer statement | `Customize your Agent Workbench, configure Expert Squads, and help grow an open community for long-horizon Agent work.` | `定制 Agent 工作台、配置专家团，与社区一起拓展 Agent 长程工作的可能。` |
+
+The corrected hero headline is intentionally shorter than the already measured two-line production headline. At the same `607.35px` column, `69.12px` font size, and `-5.184px` letter spacing, the two English clauses `Build your Workbench.` and `Run Missions.` are each materially shorter than the existing measured lines of about `584.27px` and `568.89px`. The Chinese clause pair is also shorter than the existing two-line Chinese headline. This is a conservative two-line contract; the exact candidate page remains the final authority and must reject any unexpected third line rather than adjust typography.
+
+#### Section 01: Customize your Agent Workbench
+
+- Eyebrow: `01 · Make it yours` / `01 · 定制你的工作方式`
+- Title: `Shape an Agent Workbench around the way you work.` / `围绕你的工作方式，定制 Agent 工作台。`
+- Lead: `Your Agent Workbench brings the working directory, capabilities, permission rules, and review surface into one visible setup. It describes the surface you configure, not a second runtime object.` / `Agent 工作台把工作目录、能力、权限规则与审查界面组织在一套可见配置中。它描述的是你定制的工作界面，而不是第二套运行时对象。`
+- Cards:
+  - Use `Ground the work` / `让工作落地`; name `Connect real work` / `连接真实工作`; description `Bring repositories, files, terminals, and connected systems into the same visible working context.` / `把代码仓库、文件、终端与已连接系统带进同一个可见工作环境。`; output `A real working context` / `一个真实工作环境`.
+  - Use `Fit the capability set` / `匹配所需能力`; name `Choose capabilities` / `选择能力`; description `Select the Skills, tools, models, and connected services the work actually needs.` / `选择任务真正需要的 Skills、工具、模型与已连接服务。`; output `Only the capabilities you chose` / `只使用你选择的能力`.
+  - Use `Keep authority explicit` / `明确保留权限`; name `Set the rules` / `设定规则`; description `Configure allow, ask, or deny behavior and keep the review surface visible.` / `配置允许、询问或拒绝规则，并让审查界面保持可见。`; output `Inspectable rules and review` / `可检查的规则与审查`.
+
+#### Section 02: Configure your Expert Squad
+
+- Eyebrow: `02 · Configure your experts` / `02 · 配置你的专家团`
+- Title: `Choose or build the Expert Squad that fits the work.` / `选择或构建真正适合任务的专家团。`
+- Lead: `Each Expert Squad is a configurable, inspectable package: roles, workflow, Skills, tools, selection guidance, version, and digest travel together.` / `每个专家团都是可配置、可检查的能力包：角色、工作流、Skills、工具、选择说明、版本与摘要一起交付。`
+- Capability rows:
+  - `Start from task fit` / `从任务适配开始` — `Choose by the outcome, inputs, and limits the team declares.` / `根据团队声明的目标、输入与边界来选择。`
+  - `Shape roles and workflow` / `配置角色与工作流` — `Give each specialist visible responsibility and connect their handoffs.` / `为每位专家分配可见责任，并明确彼此的交接关系。`
+  - `Freeze an exact revision` / `冻结精确版本` — `Keep roles, capabilities, workflow, version, and digest bound together.` / `把角色、能力、工作流、版本与摘要绑定在同一精确版本中。`
+- Actions: `Explore Expert Squads` / `探索专家团`; `Build your Expert Squad` / `构建你的专家团`.
+- Header author-path label: `Contribute Experts` / `贡献专家团`, still linking to `/publish/`.
+
+#### Section 03: Run the long arc
+
+- Eyebrow: `03 · Run the long arc` / `03 · 推进长程任务`
+- Title: `Let one Expert Squad carry a Task from first instruction to reviewed delivery.` / `让一个专家团把任务从首次指令推进到经过复核的交付。`
+- Lead: `A Task keeps one exact Expert Squad and its workflow fixed through the lifecycle. Named roles hand off typed Artifacts and evidence; when an outcome needs several Tasks or Squads, a Mission connects their dependencies without erasing ownership.` / `一个任务在整个生命周期中固定使用同一精确版本的专家团及其工作流。具名角色通过带类型的产物与证据完成交接；当一个结果需要多个任务或专家团时，Mission 连接它们的依赖，同时保留清晰责任。`
+- Facts:
+  - `One fixed team per Task` / `每个任务固定一支团队` — `A Task resolves one exact Expert Squad revision at creation and cannot silently switch it mid-run.` / `任务创建时解析一个精确版本的专家团，运行中不能静默切换。`
+  - `Typed handoffs` / `带类型的交接` — `Named roles pass exact Artifact references and evidence instead of relying on summaries alone.` / `具名角色传递精确的 Artifact 引用与证据，而不是只依赖文字总结。`
+  - `Mission-scale coordination` / `Mission 级协同` — `When an outcome needs several Tasks or Squads, Mission records dependencies and preserves each Task's owner.` / `当一个结果需要多个任务或专家团时，Mission 记录依赖并保留每个任务的责任归属。`
+
+#### Section 04: Join the community
+
+- Eyebrow: `04 · Join us` / `04 · 加入我们`
+- Title: `Contribute your experts. Expand what everyone can accomplish.` / `贡献你的专家能力，让每个人都能完成更多。`
+- Lead: `Package specialist knowledge as an inspectable Expert Squad, validate it with the open SDK, and contribute it through the source repository. Self-service listing is not open yet; community review remains part of publication.` / `把专业知识封装成可检查的专家团，用开放 SDK 完成验证，再通过源码仓库贡献。自助上架尚未开放，社区审查仍是发布路径的一部分。`
+- Cards:
+  - Quickstart card: label `Set up your Workbench` / `开始定制工作台`; title `Install, connect a workspace, and shape your first Agent setup.` / `安装 OpenCorvus、连接工作区，并完成第一套 Agent 配置。`; note `OpenCorvus quickstart →` / `OpenCorvus 快速开始 →`.
+  - Author card: label `Contribute an Expert Squad` / `贡献一个专家团`; title `Package, validate, and contribute specialist knowledge through the open source path.` / `通过开源路径封装、验证并贡献专业能力。`; note `Expert Squad author path →` / `专家团作者路径 →`.
+  - Discussion card: label `Join the discussion` / `加入讨论`; title `Share use cases, review proposals, and help shape the community.` / `分享使用场景、审查提案，并一起建设社区。`; note `GitHub Discussions →` in both locales.
+
+### Corrected implementation boundary
+
+1. Rename only the homepage-local content groups from `modes`, `continuity`, and `start` to `workbench`, `mission`, and `community`; update the matching `Lander.astro` consumers and heading IDs. This removes old-story naming rather than leaving parallel content owners.
+2. Reverse the hero action destinations so the primary Agent Workbench action links to quickstart and the secondary Expert Squad action links to the market.
+3. Remove homepage-only release download discovery and release/source cards from `Lander.astro`; replace the last cards with the exact community destinations above. Do not delete the download library or change release/documentation pages.
+4. Replace the video with the approved concept comic and remove the video, poster, and sole-purpose generator exactly as specified in the final comic contract. `packages/web/src/styles/public-site.css` remains outside this iteration.
+5. Add the Mission navigation item and current-page state, and change the shared author-path label to `Contribute Experts` / `贡献专家团`; keep all existing destinations and language behavior intact.
+6. Add the reciprocal Mission routes and one localized `MissionPage.astro`, then align homepage metadata and footer positioning with the four-part story. Do not change global documentation title suffixes or non-homepage documentation body copy.
+7. The exact-candidate, real-page, independent delivery-review, commit, push, Action, and live-production contracts above remain mandatory. At `1280 × 720`, the hero headline must use no more than two lines in both locales, the comic must preserve `16:9`, and the complete first viewport must remain unclipped with no horizontal overflow.
+
+### Complete corrected plan-review verdict
+
+- Superseded by the dedicated Mission-page addition below. No source implementation, commit, or push is authorized by the process until the full Agent-Workbench-to-community narrative and Mission page are `APPROVED` together.
+
+### Dedicated Mission navigation and page
+
+The user requires a dedicated top-level tab that explains what Mission is, how it works, and why it can sustain long-horizon work. A homepage section alone is insufficient because Mission is a core product concept with its own durable-object, authority, lifecycle, evidence, and recovery boundaries.
+
+#### Navigation and route contract
+
+- Add a top-level `Mission` item to `PublicSiteHeader.astro` for both locales, placed before Expert Squads so the primary public sequence becomes `Mission → Expert Squads → Contribute Experts → Trust → Docs`.
+- Add reciprocal static routes `/mission/` and `/zh-cn/mission/`, backed by one localized `MissionPage.astro` and the existing `PublicSiteLayout.astro`.
+- Extend the shared layout/header `current` union with `mission`; use `aria-current="page"` on the active Mission route. Keep the brand home link, language switch, skip link, footer, metadata, canonical URL, and all existing routes unchanged.
+
+#### Mission page copy and content contract
+
+- English title / description: `How Missions run long-horizon work · OpenCorvus` / `How OpenCorvus coordinates fixed-squad Tasks, typed handoffs, evidence, and recovery across a long-horizon outcome.`
+- Chinese title / description: `Mission 如何运行长程任务 · OpenCorvus` / `了解 OpenCorvus 如何用固定专家团的 Task、带类型交接、证据与恢复机制协调长程目标。`
+- Hero eyebrow: `Mission` in both locales.
+- Hero heading: `Turn one long-horizon outcome into a chain of owned, reviewable Tasks.` / `把一个长程目标拆成责任清晰、可审查的任务链。`
+- Hero lead: `Mission coordinates the outcome; it is not a larger Agent. Each child Task owns one exact Expert Squad and workflow, while dependencies, messages, Artifacts, evidence, and lifecycle decisions remain visible.` / `Mission 协调结果，但它不是一个更大的 Agent。每个子任务固定拥有一个精确版本的专家团与工作流，任务依赖、消息、产物、证据和生命周期决策都保持可见。`
+
+The body contains four semantic sections with the following frozen localized fields.
+
+1. **What Mission owns**
+   - Eyebrow: `What Mission owns` / `Mission 负责什么`.
+   - Heading: `Coordination stays separate from execution.` / `协调与执行保持分离。`
+   - Lead: `Mission owns the outcome and the dependency graph. The work, capability projection, and evidence remain with their real owners.` / `Mission 负责目标与依赖图；具体工作、能力投影与证据仍归属于各自真实责任方。`
+   - Cards:
+     - `Mission` — `Outcome and dependencies` / `目标与依赖`; `Coordinates the outcome across child Tasks and records their dependency graph.` / `跨子任务协调目标，并记录它们的依赖图。`
+     - `Task` — `One owned delivery` / `一项有明确归属的交付`; `Owns one project-scoped delivery, one fixed Expert Squad revision, any selected workflow, its Sessions, and lifecycle decisions.` / `负责一项项目范围内的交付、一个固定专家团版本、已选工作流、相关 Session 与生命周期决策。`
+     - `Expert Squad` — `Roles and capability projection` / `角色与能力投影`; `Supplies named Agents, instructions, Skills, tools, MCP access, selection guidance, and any declared workflow.` / `提供具名 Agent、指令、Skills、工具、MCP 访问、选择说明与已声明工作流。`
+     - `Artifacts and evidence` — `Exact, reviewable handoffs` / `精确、可审查的交接`; `Typed Artifacts carry provenance and exact references; host observations record file and command facts independently of Agent summaries.` / `带类型的 Artifact 携带来源与精确引用；Host observation 独立于 Agent 总结记录文件与命令事实。`
+2. **How a Mission moves**
+   - Eyebrow: `How it works` / `如何运行`.
+   - Heading: `A Mission advances through owned Tasks, not one endless Agent turn.` / `Mission 通过责任明确的任务推进，而不是依赖一个无限延长的 Agent 回合。`
+   - Lead: `Every transition preserves the Task boundary, selected capability identity, and evidence used for the next decision.` / `每次流转都保留任务边界、已选能力身份，以及下一次决策所依据的证据。`
+   - Ordered stages:
+     1. `Define the outcome` / `定义目标` — `Record the requested outcome, boundaries, and acceptance conditions.` / `记录所需结果、任务边界与验收条件。`
+     2. `Split owned Tasks` / `拆分责任明确的任务` — `Create separate Tasks only where a delivery can be independently owned, accepted, retried, or depended on.` / `只有当交付可以独立负责、验收、重试或被依赖时，才拆成独立任务。`
+     3. `Hold Squad identities` / `持有专家团身份` — `At launch, Mission records the Expert Squad IDs it may use; later installs do not silently widen that set.` / `Mission 启动时记录可使用的专家团 ID；之后新安装的能力不会静默扩大这一集合。`
+     4. `Freeze each Task revision` / `冻结每个任务的版本` — `When a child Task is created, one allowed Squad ID resolves to one exact package revision and any selected workflow for that Task.` / `创建子任务时，一个获准的专家团 ID 会为该任务解析并固定到一个精确能力包版本及已选工作流。`
+     5. `Run Task-local collaboration` / `运行任务内协作` — `Named roles stream messages and tool work, then hand off typed Artifact references and visible evidence.` / `具名角色流式产生消息与工具工作，再交接带类型的 Artifact 引用与可见证据。`
+     6. `Read evidence and decide` / `读取证据并决策` — `Mission reads terminal child outputs and uses explicit acceptance, retry, replan, or dependent-Task paths.` / `Mission 读取已终止子任务的输出，并通过显式验收、重试、重规划或依赖任务路径继续。`
+3. **Why it can run long**
+   - Eyebrow: `Why it can run long` / `为什么能做长程任务`.
+   - Heading: `Long-horizon work comes from durable boundaries and evidence.` / `长程能力来自持久边界与证据。`
+   - Lead: `These mechanisms preserve continuity across many Sessions and Tasks; they do not promise guaranteed autonomy or quality.` / `这些机制让多个 Session 与任务保持连续，但不承诺必然自治或必然高质量。`
+   - Reasons:
+     - `Durable organization` / `持久组织` — `Mission and Task state persist, while versioned goal and acceptance contracts preserve what is being delivered and judged.` / `Mission 与 Task 状态持久保存，版本化目标与验收契约保留正在交付和判断的内容。`
+     - `Fixed Task authority` / `固定任务权限` — `One exact Expert Squad revision and any selected workflow remain fixed for the Task lifecycle.` / `一个精确版本的专家团及已选工作流在任务生命周期内保持固定。`
+     - `Evidence-carrying handoffs` / `带证据的交接` — `Typed Artifact references, provenance, complete reads, and host observations let later work inspect the exact basis for a decision.` / `带类型的 Artifact 引用、来源、完整读取与 Host observation 让后续工作检查决策的精确依据。`
+     - `Explicit recovery` / `显式恢复` — `Retry and replan preserve accepted inputs and execution history instead of hiding failure behind an automatic replay.` / `重试与重规划保留已接受输入和执行历史，而不是用自动重放掩盖失败。`
+4. **The real boundary**
+   - Eyebrow: `The real boundary` / `真实边界`.
+   - Heading: `Long-running does not mean unlimited or unattended forever.` / `长程运行不等于无限执行或永久无人值守。`
+   - Body: `Unattended work runs only while the local or hosted OpenCorvus runtime is online. Output quality depends on selected models, reachable sources, installed capabilities, and available evidence. Permission rules still govern external effects. A Task cannot silently switch Expert Squads mid-lifecycle, and Mission coordination never erases Task or Agent ownership.` / `无人值守工作只会在本地或托管 OpenCorvus 运行时在线期间继续。输出质量取决于所选模型、可访问来源、已安装能力与可用证据。外部影响仍受权限规则约束。任务不能在生命周期中静默切换专家团，Mission 协调也不会抹去 Task 或 Agent 的责任归属。`
+
+The page ends with `Read the Mission and Task reference` / `阅读 Mission 与 Task 参考` linking to `/reference/mission-task/`, and `Explore Expert Squads` / `探索专家团` linking to `/market/`. It adds no interactive state, automation, diagram library, or duplicate runtime documentation.
+
+#### Mission page visual and accessibility contract
+
+- Reuse the public site's existing paper, ink, cobalt, monospace indices, border, grid, action, and utility-section primitives so Mission is recognizably part of the same site.
+- Use native headings, an ordered list for the six-step flow, and card groups whose visible titles remain meaningful without color. Do not use color as the only state indicator.
+- At `1280 × 720`, the hero heading and lead must be fully visible without horizontal overflow. Full-page English and Chinese screenshots must show the four-section rhythm, legible line lengths, and a final boundary/CTA region without clipping.
+- Keyboard navigation must reach Mission in the shared header and both final actions with visible focus inherited from the public-site system. Browser console errors must remain empty.
+
+### Final combined plan-review verdict
+
+- Superseded by the comic-replacement addition below. The independent review must cover the complete combined plan and final image-generation brief.
+
+### Comic replacement addition
+
+The user requires an original comic that explains the OpenCorvus concept chain and replaces the existing hero video:
+
+`platform → Skills / MCP / tools → Agent → Expert Squad → Mission with several Task-owned Squads → long-horizon work → community`.
+
+This supersedes the earlier video-ratio repair. The root cause evidence remains useful, but the final page must not render the old video, poster, controls, or caption.
+
+#### Image generation brief
+
+- Use the built-in image-generation path under the repository-required `imagegen` skill. This is a new project-bound raster asset, not an edit of the current poster.
+- Use case: `illustration-story`.
+- Asset type: OpenCorvus public-homepage hero concept comic.
+- Produce one wide `16:9` editorial technical comic with seven clearly separated panels in a `4 + 3` grid so it remains legible inside the existing desktop hero media column.
+- Narrative beats, in exact order:
+  1. an open platform foundation and visible workspace;
+  2. modular Skill, MCP, and tool capability blocks connecting into the platform;
+  3. one Agent using those capabilities on real files and a terminal;
+  4. several named specialist Agents forming one coordinated Expert Squad;
+  5. a Mission coordinating multiple dependency-linked Tasks, each visibly retaining its own fixed Squad identity;
+  6. a long timeline of planning, execution, handoffs, verification, recovery, and evidence leading to a reviewable delivery;
+  7. an open community contributing new expert capability packages back into the shared catalog.
+- Style: original editorial graphic-novel illustration with crisp geometric panels, bold black ink, warm off-white paper, cobalt-blue primary accents, restrained clay-orange secondary accents, subtle halftone texture, and the same high-contrast utilitarian character as the current public site. It must feel like a serious systems explainer, not a superhero or children's comic.
+- Composition: strong left-to-right / top-to-bottom flow, recurring visual motifs for exact handoffs and visible evidence, large simple silhouettes, generous internal whitespace, no tiny UI screenshots, and no decorative background outside the panels.
+- Embedded text: panel numbers `01` through `07` only. Do not generate prose, logos, brand names, watermarks, pseudo-code, unreadable interface text, speech bubbles, or captions inside the bitmap. Localized HTML supplies the exact narrative caption.
+- Avoid: humanoid robot clichés, photorealism, glossy 3D, neon cyberpunk, generic cloud-network imagery, anonymous swarms, magical autonomy, guaranteed-success symbols, distorted hands, and any implication that one Task switches Squads mid-run.
+
+#### Web integration contract
+
+- Save the selected final image as `packages/web/src/assets/lander/opencorvus-concept-comic.png`; never leave the project reference under the image tool's default generated-image directory.
+- Replace the `<video>` element with Astro's optimized `<Image>` component. Keep the existing bordered figure and cobalt shadow, but remove video-only source construction, controls, preload, poster, and global fixed-height/object-fit rules.
+- Give the image localized alternative text that describes the full seven-step relationship, not `comic` or `illustration` alone.
+- Localized figure caption:
+  - English: `Platform → Skills, MCP, and tools → Agent → Expert Squad → Mission → long-horizon work → open community.`
+  - Chinese: `平台 → Skills、MCP 与工具 → Agent → 专家团 → Mission → 长程任务 → 开放社区。`
+- Delete the now-unreferenced `packages/web/public/media/opencorvus-client-demo.webm` in the same commit so the static site does not continue shipping an unused 11.47 MB asset. A complete repository reference search proves that `packages/web/qa/build-client-demo.mjs` exists only to generate that WebM and that `packages/web/src/assets/lander/client-agent-workspace.png` exists only as the removed video poster; delete both dead assets with the replacement rather than retain a second obsolete media path.
+- At `1280 × 720`, the complete comic must preserve `16:9`, remain fully visible without crop or distortion, and have panels large enough to distinguish the seven beats. The hero copy/actions/boundary must not collide with the figure, and there must be no horizontal overflow.
+- Full-page English and Chinese visual review must confirm that the comic's flow agrees with the homepage story and dedicated Mission page. Alternative text and caption must be reciprocal. Static check/build success cannot substitute for image inspection.
+
+### Final plan-review gate
+
+- The seven-panel static comic was approved, but the user rejected its visual comprehension after the first generated result and replaced the medium with an animated GIF. That material change supersedes this approval only for the hero concept asset and integration. Agent Workbench naming, homepage information architecture, Mission page, exact-candidate isolation, bilingual copy, dead-media cleanup, accessibility, and the delivery contract remain approved and unchanged.
+
+### Animated GIF correction
+
+The rejected first image was a dense, detailed seven-panel comic. At hero-column scale, the people, arrows, and capability badges collapsed into one busy scene and did not explain the concept relationship. A second image-edit call was terminated without output after the user replaced the request. Neither generated image is copied into or referenced by the repository.
+
+#### Clear animation model
+
+- Generate one new wide `16:9` static concept map with seven large, simple stations in an exact `4 + 3` grid. It is the single visual source for both locales and the reduced-motion fallback.
+- Each station uses one large symbol and one relationship only: platform foundation; capability blocks; one Agent; one Expert Squad; Mission with several dependency-linked Tasks and a distinct fixed Squad per Task; long-horizon evidence timeline; open community contribution loop.
+- The master bitmap contains only the exact numbers `01` through `07`. It contains no people-heavy scenes, prose, UI screenshots, pseudo-code, logos, watermarks, or micro-detail.
+- Build two localized GIFs from that same master with deterministic local image processing. Each GIF cycles through seven keyframes. Every frame enlarges exactly one source station into the left `55%` of a `960 × 540` canvas and places its frozen heading and explanation in a high-contrast right-hand caption column; this preserves one concept per frame instead of shrinking seven simultaneous scenes. No model is asked to maintain character or layout consistency across seven independent generations.
+- The animation uses discrete instructional frames rather than decorative motion: each stage holds long enough to read, the final community frame holds longer before the sequence repeats, and there are no flashes, rapid transitions, parallax, or continuous movement.
+
+#### Frozen animation captions
+
+| Step | English heading | English explanation | Chinese heading | Chinese explanation |
+| --- | --- | --- | --- | --- |
+| 01 | `Open platform` | `One visible place for real work.` | `开放平台` | `让真实工作集中在一个可见界面。` |
+| 02 | `Skills, MCP, and tools` | `Connect only the capabilities the work needs.` | `Skills、MCP 与工具` | `只连接任务真正需要的能力。` |
+| 03 | `Agent` | `One Agent uses those capabilities in context.` | `Agent` | `一个 Agent 在真实上下文中使用这些能力。` |
+| 04 | `Expert Squad` | `Named specialists coordinate through explicit handoffs.` | `专家团` | `具名专家通过明确交接协同工作。` |
+| 05 | `Mission` | `Mission links Tasks; each Task keeps one fixed Squad.` | `Mission` | `Mission 连接多个任务；每个任务固定一支专家团。` |
+| 06 | `Long-horizon work` | `State, Artifacts, evidence, and recovery carry work forward.` | `长程任务` | `状态、Artifact、证据与恢复机制让工作持续推进。` |
+| 07 | `Open community` | `Contribute expert packages everyone can inspect and reuse.` | `开放社区` | `贡献人人都能检查和复用的专家能力包。` |
+
+#### Generation and local animation contract
+
+- Use the built-in `imagegen` path once for the new master concept map. Copy the selected result to `packages/web/src/assets/lander/opencorvus-concept-map.png` before integration.
+- Use a checked-in-independent local script under the task's scratch directory, not the repository, to create the two GIFs from the exact master. The script may crop and enlarge an existing station, add the frozen caption column, and apply palette optimization; it must not redraw or reinterpret the seven concepts.
+- Freeze generation to Pillow `12.3.0`. The script must verify and then use `C:\Windows\Fonts\msyhbd.ttc` for headings (`SHA-256 4508821b3dffe01f0ef5e5326a3e60df705a44633858811f67b6982dce3f6ee6`) and `C:\Windows\Fonts\msyh.ttc` for body copy (`SHA-256 d79c55e68b1131eea0cc1c47be4f572d964f28c682e143db2ad09c1e4cb07a3f`). A font or Pillow mismatch must fail generation rather than silently changing layout.
+- Use the existing site's warm paper, black ink, cobalt, and clay palette. At `960 × 540`, headings render at no less than `40px`, explanations at no less than `25px`, and body text wraps inside the caption column without clipping.
+- Freeze each GIF at `960 × 540`, exactly seven frames, and exactly `12,000ms` per loop: frames `01`–`06` hold for `1,500ms` each and frame `07` holds for `3,000ms`. Palette optimization may reduce the palette from `128` to `96` or `64` colors if needed, but may not change dimensions, frame count, duration, text size, or source crops. Each localized GIF must be at most `3,145,728` bytes; the static master must be at most `2,097,152` bytes. Record final dimensions, frame count, durations, byte size, palette choice, and SHA-256.
+- Generated result: Pillow `12.3.0` verified both frozen font hashes. The static `960 × 540` PNG is `594,548` bytes with SHA-256 `5f43ae2afa99cb43ce1d7e7a9f666bd556f739b7ddd5dc221dfae9a1db2edd0b`. The English GIF is `892,773` bytes with SHA-256 `265ca74de1a0fb373eb3601ba6ff5479e60768bf4cb37304e8cb82d0e3c7de64`; after real-page review repaired mixed ASCII/CJK wrapping, the Chinese GIF is `887,084` bytes with SHA-256 `5482c7c0b8461925f73e268f1f426f4ff889ceee6b03eda37dbf54efd6827bb6`. Both GIFs use `128` colors, `960 × 540`, seven frames, the exact `[1500, 1500, 1500, 1500, 1500, 1500, 3000]ms` durations, and a `12,000ms` loop.
+
+#### Web, accessibility, and visual contract
+
+- Replace the video with a shared static master and a visible, localized animation control. Initial HTML renders only the static master. A real `<button type="button" aria-pressed="false">` says `Play concept animation` / `播放概念动画`; activation requests and displays only the current locale's GIF, sets `aria-pressed="true"`, and changes the visible label to `Stop animation` / `停止动画`. Stopping immediately restores the static master and original label. English markup never emits the Chinese GIF URL and Chinese markup never emits the English GIF URL.
+- The GIF URL exists only in the current locale figure's `data-animation-src`; it is absent from initial `src` and `srcset`, so neither GIF is requested before explicit activation. The other locale's GIF URL is absent from the document. This prevents autoplay and keeps the animation pausable without relying on CSS visibility.
+- `prefers-reduced-motion: reduce` keeps the same static initial state and never starts motion automatically. A user may still make the explicit choice to play and stop the discrete instructional animation; the visible control remains available throughout. The localized figure caption and alternative text state the complete sequence even when animation is not played.
+- English alternative text: `Animated OpenCorvus concept flow from the open platform through Skills, MCP, tools, one Agent, an Expert Squad, a Mission of fixed-squad Tasks, long-horizon work, and community contributions.`
+- Chinese alternative text: `OpenCorvus 动画概念流程：从开放平台、Skills、MCP 与工具，到 Agent、专家团、由固定专家团任务组成的 Mission、长程任务和社区贡献。`
+- Localized visible figure caption remains `Platform → Skills, MCP, and tools → Agent → Expert Squad → Mission → long-horizon work → open community.` / `平台 → Skills、MCP 与工具 → Agent → 专家团 → Mission → 长程任务 → 开放社区。`
+- The old WebM, poster, and sole-purpose generator remain deleted as previously approved.
+- Real-page review at `1280 × 720` must confirm through the page's resource timing entries that initial load requests the static master and no `.gif`, activate the control, watch one complete loop in each locale, stop it, and verify the static master returns. It must confirm every caption is readable and localized, step `05` visibly preserves one fixed Squad per Task, the opposite-locale URL is absent, and there is no hero collision, crop, distortion, horizontal overflow, console error, or excessive first-load delay. Reduced-motion emulation must visibly keep the static master until the user explicitly activates the same control.
+
+### Animated GIF plan-review gate
+
+- `APPROVED` by the fresh independent read-only `iteration2_final_plan_gate` reviewer after the GIF delta froze explicit play/stop control, initial no-GIF loading, locale isolation, deterministic Pillow/font hashes, exact dimensions/frame timing, hard byte budgets, and real-page resource/visual acceptance. All previously approved non-image requirements remain mandatory.
+
+### Iteration 2 implementation and exact-candidate acceptance
+
+- The final implementation candidate is a detached independent clone of public parent `480c0ab901809bb2350db97ab4adee2d091125b4` at `D:\myhexin-local\opencorvus-iteration2-final-candidate`, containing only the seventeen owned modified, added, and deleted paths listed above. The concurrently staged eighth Expert Squad expansion, its generated market data, and the untracked equity report are absent. The Download page and its navigation are present as parent content. A first clone under `C:` proved unsuitable because Astro resolved same-repository dependencies through `D:` junctions into a cross-volume non-`file:` URL; same-volume candidates reused the exact dependency bytes without changing them.
+- Exact-candidate validation passed: local Prettier `3.6.2` check on the TypeScript, MDX, and program record; `git diff --check`; `bun run --cwd packages/web check` with `0 errors`, `0 warnings`, and one pre-existing `dedupe-lead.cjs` unused-variable hint; `bun run docs:check` with `329 ops` in `25 groups`; and `bun run --cwd packages/web build` with `291` static pages. Existing Starlight override and tolerated-transform warnings remain non-blocking and unchanged.
+- A Python static server served the exact candidate's built `dist` on loopback, with the request log retained at `C:\Users\hengu\Documents\Codex\2026-08-11\opencorvus-agent-push-github-action-opencorvus\work\candidate-http-4342.stderr.log`. The first English request fetched the static concept PNG and no GIF. Only after the visible play control was activated did the server log `opencorvus-concept-flow-en...gif`. English markup contained no Chinese GIF URL, Chinese markup contained no English GIF URL, and stopping restored the static master and `aria-pressed="false"`.
+- Real-page visual acceptance at `1280 × 720` measured a `1265px` document width in both locales, so neither homepage nor Mission route overflowed horizontally. The homepage title rendered as exactly two explicit visual lines with one complete accessible label in each locale. The English and Chinese static concept map, English frame `05`, Chinese frames `05`, `06`, and `07`, both Mission hero regions, and both final boundary/CTA regions were inspected. Frame `05` visibly retained a different fixed Squad badge on each Task. All four exact-candidate console error logs were empty.
+- The first exact-candidate Chinese frame `05` review found the final CJK phrase clipped because the deterministic wrapper treated mixed ASCII/CJK copy as one long token. The scratch generator was repaired to keep ASCII words intact while allowing Chinese characters to wrap, the GIF was regenerated, the corrected size/hash above was recorded, and frames `05`–`07` were re-inspected without clipping. This repair changed only the generated Chinese GIF and this record.
+- The first ten-image evidence set under `iteration2-evidence` was rejected during independent delivery review because its screenshots predated the final candidate build and visibly lacked the Download navigation already present in parent `480c0ab90`. It is superseded and must not be used as final evidence.
+- A fresh ten-image set was captured from the current candidate `dist` at `C:\Users\hengu\Documents\Codex\2026-08-11\opencorvus-agent-push-github-action-opencorvus\work\iteration2-current-candidate-evidence`. It covers both static homepages, English frame `05`, Chinese frames `05`–`07`, both Mission hero regions, and both final boundary/CTA regions. Every screenshot now includes the candidate's Download navigation where the header is visible. Manual review found no clipping, collision, distortion, or unreadable localized text; frame `05` visibly retains a distinct fixed Squad for each Task.
+- Fresh browser measurements at `1280 × 720` report `1265px` document width for both homepages and both Mission routes. Both localized hero titles remain exactly two explicit visual lines with one complete accessible label. The two homepage animation controls initially reported `aria-pressed="false"` with the static PNG in `src`; English markup contained only the English GIF URL and Chinese markup only the Chinese GIF URL. After explicit activation, the current-locale GIF rendered; stopping restored the PNG, localized play label, and `aria-pressed="false"`. Console error logs were empty for both homepages and both Mission routes.
+- The fresh static-server log at `C:\Users\hengu\AppData\Local\Temp\opencorvus-iteration2-candidate-http.err.log` binds the current capture session to the candidate build. The English and Chinese initial document requests occurred at `22:00:08` and `22:00:09`; no GIF was requested before the explicit English activation at `22:00:18`, and the Chinese GIF was requested only after its explicit activation at `22:00:37`. The static PNG was already cached from the immediately preceding same-build brand probe; the DOM `src`, visible static screenshots, and control state independently confirm the static initial image.
+
+### Iteration 2 delivery state correction
+
+- First independent delivery review: `REJECTED`. The reviewer correctly found that the original screenshots were older than the final build and that the pending direct-push narrative had become stale while another authorized task advanced public `main`.
+- The implementation was already committed and pushed by the concurrent delivery as `2002f2d114bddbb7e6206a62d53560a20edadbaa` (`feat(web): explain Missions with an opt-in concept GIF`), whose actual parent is `be35aeec38c7d70cb1289316f1dde5a12c8782bc`. Its commit diff contains exactly the seventeen owned paths listed in this record. The sixteen implementation paths in the isolated candidate have no difference from that commit; this record alone continues to add the post-delivery evidence and review history.
+- GitHub Actions run [`31472183519`](https://github.com/yangheng95/opencorvus/actions/runs/31472183519) was triggered by the exact `2002f2d11` push and completed successfully. The Ubuntu, Windows, and macOS canonical archive jobs, static build and verification job, and RackNerd signing and atomic deployment job all passed.
+- Current public `origin/main` is `a7b2a010f13eb6c47a01c17ede5ef5248950142e`, and `2002f2d11` is an ancestor. No duplicate Iteration 2 commit or non-fast-forward push is permitted. The current descendant deployment Action [`31494167944`](https://github.com/yangheng95/opencorvus/actions/runs/31494167944) also completed with all five jobs successful.
+- Cache-busted live verification against `a7b2a010f` passed for `/`, `/zh-cn/`, `/mission/`, and `/zh-cn/mission/` at `1280 × 720`. Both homepages display the approved two-line Workbench/Mission headline, static concept master, localized explicit animation control, `1265px` document width, and correct Mission route. Explicit live playback selected only the current locale's GIF and set `aria-pressed="true"`; stopping restored the static PNG and `false`. Both Mission routes expose the approved headline, current-navigation state, and real-boundary copy. All four live console error logs were empty.
+- Repeat independent delivery review: `APPROVED`. The same independent read-only reviewer rechecked the current ten-image candidate evidence, corrected commit and ancestry boundary, both successful deployment Actions, and cache-busted production results, and reported no unresolved finding.

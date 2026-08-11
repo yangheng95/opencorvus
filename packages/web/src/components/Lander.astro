@@ -1,6 +1,8 @@
 ---
 import { Image } from "astro:assets"
-import ClientAgentWorkspace from "../assets/lander/client-agent-workspace.png"
+import ConceptFlowEn from "../assets/lander/opencorvus-concept-flow-en.gif"
+import ConceptFlowZh from "../assets/lander/opencorvus-concept-flow-zh.gif"
+import ConceptMap from "../assets/lander/opencorvus-concept-map.png"
 import ExpertSquadCatalog from "../assets/lander/expert-squad-catalog.png"
 import ExpertSquadInstalled from "../assets/lander/expert-squad-installed.png"
 import RuntimeDesktopContinuity from "../assets/lander/runtime-desktop-continuity-agent-v2.png"
@@ -8,19 +10,13 @@ import PublicSiteHeader from "./PublicSiteHeader.astro"
 import PublicSiteFooter from "./PublicSiteFooter.astro"
 import { landingContent, type LandingLocale } from "../content/landing"
 import { publicPath } from "../content/public-market"
-import { discoverLandingBinaryDownloads } from "../lib/landing-download"
 import "../styles/public-site.css"
 
 const { lang } = Astro.locals.starlightRoute
 const locale: LandingLocale = lang === "zh-CN" ? "zh-cn" : "root"
 const content = landingContent[locale]
 const languageHref = publicPath(locale === "zh-cn" ? "root" : "zh-cn")
-const publicBase = import.meta.env.BASE_URL.replace(/\/$/, "")
-const demoSource = `${publicBase}/media/opencorvus-client-demo.webm`
-const downloads = discoverLandingBinaryDownloads().map((download) => ({
-  ...download,
-  href: `${publicBase}/${download.publicRelativePath}`,
-}))
+const conceptAnimation = locale === "zh-cn" ? ConceptFlowZh.src : ConceptFlowEn.src
 ---
 
 <div class="public-landing">
@@ -30,25 +26,40 @@ const downloads = discoverLandingBinaryDownloads().map((download) => ({
     <section class="landing-hero" aria-labelledby="landing-title">
       <div class="hero-copy">
         <p class="eyebrow">{content.hero.eyebrow}</p>
-        <h1 id="landing-title">{content.hero.title}</h1>
+        <h1 id="landing-title" aria-label={content.hero.titleLines.join(locale === "zh-cn" ? "" : " ")}>
+          {content.hero.titleLines.map((line) => <span class="hero-title-line" aria-hidden="true">{line}</span>)}
+        </h1>
         <p>{content.hero.description}</p>
         <div class="hero-actions">
-          <a class="primary-action" href={publicPath(locale, "/market/")}>{content.hero.primary}</a>
-          <a class="secondary-action" href={publicPath(locale, "/start/quickstart/")}>{content.hero.secondary}</a>
+          <a class="primary-action" href={publicPath(locale, "/start/quickstart/")}>{content.hero.primary}</a>
+          <a class="secondary-action" href={publicPath(locale, "/market/")}>{content.hero.secondary}</a>
         </div>
-        <p class="hero-boundary">
-          {locale === "zh-cn"
-            ? "OpenCorvus 负责组织工作与证据；你始终决定任务范围、外部写入和最终接受。"
-            : "OpenCorvus organizes the work and its evidence. You retain control of scope, external writes, and final acceptance."}
-        </p>
+        <p class="hero-boundary">{content.hero.boundary}</p>
       </div>
 
-      <figure class="landing-video">
-        <video controls muted playsinline preload="metadata" poster={ClientAgentWorkspace.src} aria-label={content.hero.videoLabel}>
-          <source src={demoSource} type="video/webm" />
-          <a href={demoSource}>{content.hero.videoLabel}</a>
-        </video>
-        <figcaption>{content.hero.videoCaption}</figcaption>
+      <figure
+        class="concept-flow"
+        data-concept-flow
+        data-static-src={ConceptMap.src}
+        data-animation-src={conceptAnimation}
+        data-play-label={content.hero.playAnimation}
+        data-stop-label={content.hero.stopAnimation}
+      >
+        <div class="concept-flow-frame">
+          <img
+            src={ConceptMap.src}
+            width="960"
+            height="540"
+            alt={content.hero.mediaAlt}
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </div>
+        <div class="concept-flow-meta">
+          <figcaption>{content.hero.mediaCaption}</figcaption>
+          <button type="button" class="concept-flow-toggle" aria-pressed="false">{content.hero.playAnimation}</button>
+        </div>
       </figure>
     </section>
 
@@ -58,16 +69,16 @@ const downloads = discoverLandingBinaryDownloads().map((download) => ({
       ))}
     </section>
 
-    <section class="landing-band" aria-labelledby="work-modes-title">
+    <section class="landing-band" aria-labelledby="workbench-title">
       <div class="landing-band-header">
         <div>
-          <p class="eyebrow">{content.modes.eyebrow}</p>
-          <h2 id="work-modes-title" class="section-heading">{content.modes.title}</h2>
+          <p class="eyebrow">{content.workbench.eyebrow}</p>
+          <h2 id="workbench-title" class="section-heading">{content.workbench.title}</h2>
         </div>
-        <p class="section-lead">{content.modes.description}</p>
+        <p class="section-lead">{content.workbench.description}</p>
       </div>
       <div class="work-mode-grid">
-        {content.modes.items.map((item) => (
+        {content.workbench.items.map((item) => (
           <article>
             <span class="mode-index">{item.index}</span>
             <p class="mode-use">{item.use}</p>
@@ -116,57 +127,65 @@ const downloads = discoverLandingBinaryDownloads().map((download) => ({
       </div>
     </section>
 
-    <section class="landing-band runtime-boundary" aria-labelledby="runtime-title">
+    <section class="landing-band runtime-boundary" aria-labelledby="mission-title">
       <div>
-        <p class="eyebrow">{content.continuity.eyebrow}</p>
-        <h2 id="runtime-title" class="section-heading">{content.continuity.title}</h2>
-        <p class="section-lead">{content.continuity.description}</p>
+        <p class="eyebrow">{content.mission.eyebrow}</p>
+        <h2 id="mission-title" class="section-heading">{content.mission.title}</h2>
+        <p class="section-lead">{content.mission.description}</p>
         <figure class="runtime-image">
-          <Image src={RuntimeDesktopContinuity} width={900} alt={content.continuity.imageAlt} loading="lazy" decoding="async" />
+          <Image src={RuntimeDesktopContinuity} width={900} alt={content.mission.imageAlt} loading="lazy" decoding="async" />
         </figure>
       </div>
       <div class="runtime-facts">
-        {content.continuity.facts.map(([title, description]) => (
+        {content.mission.facts.map(([title, description]) => (
           <article><b>{title}</b><p>{description}</p></article>
         ))}
       </div>
     </section>
 
-    <section class="landing-band start-section" aria-labelledby="start-title">
+    <section class="landing-band start-section" aria-labelledby="community-title">
       <div>
-        <p class="eyebrow">{content.start.eyebrow}</p>
-        <h2 id="start-title" class="section-heading">{content.start.title}</h2>
-        <p class="section-lead">{content.start.description}</p>
+        <p class="eyebrow">{content.community.eyebrow}</p>
+        <h2 id="community-title" class="section-heading">{content.community.title}</h2>
+        <p class="section-lead">{content.community.description}</p>
       </div>
       <div class="start-actions">
-        {downloads.map((download) => (
-          <a class="start-card" href={download.href} download>
-            <span>{content.start.installer} {download.platformName}</span>
-            <strong>{download.packageType} · {download.architecture}</strong>
-            <small>{content.start.installerNote}</small>
+        {content.community.cards.map((card) => (
+          <a
+            class:list={["start-card", { "start-card-primary": card.primary }]}
+            href={card.href.startsWith("https://") ? card.href : publicPath(locale, card.href)}
+          >
+            <span>{card.label}</span>
+            <strong>{card.title}</strong>
+            <small>{card.note}</small>
           </a>
         ))}
-        <a class="start-card start-card-primary" href={publicPath(locale, "/start/quickstart/")}>
-          <span>{content.start.quickstart}</span>
-          <strong>{locale === "zh-cn" ? "安装、连接工作区并开始第一个任务" : "Install, connect a workspace, and begin the first task"}</strong>
-          <small>OpenCorvus documentation →</small>
-        </a>
-        <a class="start-card" href="https://github.com/yangheng95/opencorvus">
-          <span>{content.start.source}</span>
-          <strong>{locale === "zh-cn" ? "审查实现与构建流程" : "Review the implementation and build path"}</strong>
-          <small>github.com/yangheng95/opencorvus →</small>
-        </a>
-        <a class="start-card" href="https://github.com/yangheng95/opencorvus/releases">
-          <span>{content.start.releases}</span>
-          <strong>{locale === "zh-cn" ? "获取已发布的原生安装包" : "Get published native installers"}</strong>
-          <small>GitHub Releases →</small>
-        </a>
       </div>
     </section>
   </main>
 
   <PublicSiteFooter {locale} />
 </div>
+
+<script>
+  for (const figure of document.querySelectorAll<HTMLElement>("[data-concept-flow]")) {
+    const image = figure.querySelector<HTMLImageElement>("img")
+    const button = figure.querySelector<HTMLButtonElement>("button")
+    const staticSrc = figure.dataset.staticSrc
+    const animationSrc = figure.dataset.animationSrc
+    const playLabel = figure.dataset.playLabel
+    const stopLabel = figure.dataset.stopLabel
+
+    if (!image || !button || !staticSrc || !animationSrc || !playLabel || !stopLabel) continue
+
+    button.addEventListener("click", () => {
+      const playing = button.getAttribute("aria-pressed") === "true"
+      image.src = playing ? staticSrc : animationSrc
+      button.setAttribute("aria-pressed", String(!playing))
+      button.textContent = playing ? playLabel : stopLabel
+    })
+  }
+</script>
 
 <style>
   .public-landing {
@@ -178,7 +197,12 @@ const downloads = discoverLandingBinaryDownloads().map((download) => ({
     align-items: center;
   }
 
-  .landing-video {
+  .hero-title-line {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .concept-flow {
     margin: 0;
     border: 2px solid var(--ink);
     background: var(--ink);
@@ -186,7 +210,12 @@ const downloads = discoverLandingBinaryDownloads().map((download) => ({
     overflow: hidden;
   }
 
-  .landing-video video,
+  .concept-flow-frame {
+    aspect-ratio: 16 / 9;
+    background: var(--paper);
+  }
+
+  .concept-flow img,
   .runtime-image img,
   .squad-image-stack img {
     display: block;
@@ -194,13 +223,35 @@ const downloads = discoverLandingBinaryDownloads().map((download) => ({
     height: auto;
   }
 
-  .landing-video figcaption,
-  .squad-image-stack figcaption {
-    padding: 12px 16px;
+  .concept-flow-meta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 12px 10px 16px;
     border-top: 1px solid #393a3f;
+  }
+
+  .concept-flow figcaption,
+  .squad-image-stack figcaption {
     color: #d9d9d2;
     font-family: var(--mono);
     font-size: 11px;
+  }
+
+  .concept-flow-toggle {
+    min-height: 36px;
+    padding: 8px 12px;
+    border: 1px solid #d9d9d2;
+    background: transparent;
+    color: white;
+    font: 700 11px/1.2 var(--mono);
+    cursor: pointer;
+  }
+
+  .concept-flow-toggle:hover,
+  .concept-flow-toggle[aria-pressed="true"] {
+    background: var(--cobalt);
   }
 
   .work-mode-grid {
@@ -319,6 +370,11 @@ const downloads = discoverLandingBinaryDownloads().map((download) => ({
     transform: translateY(32px);
   }
 
+  .squad-image-stack figcaption {
+    padding: 12px 16px;
+    border-top: 1px solid #393a3f;
+  }
+
   .runtime-image {
     margin-top: 38px;
   }
@@ -402,13 +458,4 @@ const downloads = discoverLandingBinaryDownloads().map((download) => ({
     margin: 0;
     background: var(--paper);
   }
-
-  :root[data-has-hero] .public-landing .landing-video video {
-    display: block;
-    width: 100% !important;
-    height: 470px !important;
-    object-fit: cover;
-    object-position: left top;
-  }
-
 </style>

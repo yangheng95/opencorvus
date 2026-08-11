@@ -4,6 +4,8 @@ Latest Expert Squad terminology convergence: [`2026-08-11-expert-squad-terminolo
 
 Latest Mission Market Expert Squad recommendation design: [`2026-08-11-mission-market-expert-squad-recommendations.md`](records/2026-08/2026-08-11-mission-market-expert-squad-recommendations.md).
 
+Latest public website first-use path: [`2026-08-11-public-website-first-use-path.md`](records/2026-08/2026-08-11-public-website-first-use-path.md).
+
 Latest Conversation Agent-declared output summary repair: [`2026-08-11-conversation-agent-declared-output-summary.md`](records/2026-08/2026-08-11-conversation-agent-declared-output-summary.md).
 
 Latest Provider usage, billing-coverage, natural-cycle API, and statistics dashboard design: [`2026-08-11-provider-usage-natural-cycle-dashboard.md`](records/2026-08/2026-08-11-provider-usage-natural-cycle-dashboard.md).
