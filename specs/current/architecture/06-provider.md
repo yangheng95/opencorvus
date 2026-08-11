@@ -180,8 +180,9 @@ year heatmap 使用真实 weekday offset。
 - `OPENAI_ADMIN_KEY` 只调用 OpenAI Organization Usage + Costs；
 - `ANTHROPIC_ADMIN_KEY` 只调用 Anthropic Messages Usage Report + Cost Report；
 - `OPENROUTER_MANAGEMENT_KEY` 分别调用 OpenRouter Credits 与 Keys List；Keys 以官方每页 100 条、
-  `offset` 递增的契约分页，保留每个 Key 的 lifetime/daily/weekly/monthly usage、BYOK usage、
-  limit、remaining 和 reset，不把不同重置周期的额度相加；
+  `offset` 递增的契约分页并显式设置 `include_disabled=true`，保留默认工作区中每个活动或已禁用
+  Key 的 lifetime/daily/weekly/monthly usage、BYOK usage、limit、remaining 和 reset，不把不同重置
+  周期的额度相加；未配置 `workspace_id` 的接口事实不得声明为跨工作区完整账户账本；
 - AWS Bedrock、Azure OpenAI、Google Vertex AI 声明其 CloudWatch/Azure Monitor/Cloud Monitoring
   与官方账单控制面所需的 account/project/subscription scope，在这些身份尚未配置时保持
   `requires_configuration`，不得复用普通 inference key 或猜测 URL；

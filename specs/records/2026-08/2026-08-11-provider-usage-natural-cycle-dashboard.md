@@ -18,7 +18,7 @@ United States dollars. IANA means Internet Assigned Numbers Authority.
 | Sources read | Root `AGENTS.md`; `specs/current/architecture/06-provider.md`; `specs/records/2026-08/2026-08-06-conversation-turn-control-and-model-usage.md`; `specs/records/2026-08/2026-08-05-composer-personal-model-usage-hover.md`; Provider catalog, bundled adapters, model schema, `Session.getUsage`, Session processor, assistant-message schema, CLI stats command, server routes, generated SDK contract, Config dialog, settings composites, design tokens, turn-usage projection, and usage formatting. |
 | External authority | AI SDK 6 documents `inputTokenDetails.{noCacheTokens,cacheReadTokens,cacheWriteTokens}` and `outputTokenDetails.reasoningTokens` as the current normalized fields while the flat cached/reasoning aliases are deprecated. OpenAI publishes separate organization Usage and Costs APIs and explicitly does not promise perfect reconciliation between them. Anthropic publishes separate organization Messages Usage and Cost Report Admin APIs. OpenRouter publishes management-key credit/key-usage endpoints. AWS Bedrock exposes Token metrics through CloudWatch and cost through Cost Explorer/Cost and Usage Reports at a coarser grain. Azure exposes Azure OpenAI Token metrics through Azure Monitor and invoice truth through Cost Management. Google Cloud exposes time-series metrics through Cloud Monitoring and billing truth through Cloud Billing export. These cloud control planes require project/subscription/account identities and cloud-scoped credentials; a normal model API key is not a substitute. Pricing remains OpenCorvus request-time model metadata sourced from models.dev or explicit Provider config. |
 | Whole-repository search | The 24 bundled adapter packages are registered in `provider/bundled.ts`, while dynamically installed packages also enter the same Provider registry. Session calls flow through `finish-step`, but Provider connectivity, VCS commit-message generation, Metric Judge, and acceptance translation call the shared streaming wrapper without creating Session Parts. Therefore `step-finish` cannot be the complete ledger. All production calls do pass through `src/llm/api.ts`, so its per-step callback is the structural single owner. The CLI statistics command scans Sessions and filters on Session update time, so it can include old messages in recently touched Sessions and omit correct event-time calendar semantics. No official organization-usage aggregator or full usage page existed before this task. |
-| Independent Agent feedback | First read-only review found no P0 and six valid issues: non-Session streams were omitted; Plugin price availability was not normalized; long-context threshold omitted cache-write and config merging discarded the long-context rate; period switching could label stale data as the new period; time-zone validation admitted non-IANA aliases; and the year grid was not weekday aligned. It also warned that generated SDK, i18n, and spec indexes contain unrelated dirty hunks. All findings are accepted and must be fixed before terminal review. |
+| Independent Agent feedback | First read-only review found no P0 and six valid issues: non-Session streams were omitted; Plugin price availability was not normalized; long-context threshold omitted cache-write and config merging discarded the long-context rate; period switching could label stale data as the new period; time-zone validation admitted non-IANA aliases; and the year grid was not weekday aligned. The first terminal review of commit `efc3a8465` found one additional P1: OpenRouter Keys omitted disabled keys and overstated its default-workspace scope as account-complete. It also found that the planned i18n checker did not exist. The repair must request `include_disabled=true`, describe the default-workspace boundary, add a real catalog-structure checker, rerun the full verification set, and pass a fresh independent review. |
 
 ## Problem-Depth Analysis
 
@@ -152,7 +152,7 @@ unambiguous:
 | --- | --- | --- | --- |
 | OpenAI API | Organization Usage API plus Costs API | organization request ledger plus financial ledger | Fetch with a dedicated `OPENAI_ADMIN_KEY`; paginate both APIs; never reuse the inference key. Compare Provider/time bucket totals, but present Costs as financial truth. |
 | Anthropic API | Messages Usage Report plus Cost Report Admin APIs | organization request ledger plus financial ledger | Fetch with a dedicated `ANTHROPIC_ADMIN_KEY`; paginate; normalize uncached/cache-create/cache-read/output components and decimal USD amounts. |
-| OpenRouter | Credits and Keys List management APIs | lifetime credit/spend and per-key usage/limit ledger | Fetch only with `OPENROUTER_MANAGEMENT_KEY`. Paginate Keys List in documented 100-row `offset` pages; preserve every key's lifetime/daily/weekly/monthly and BYOK usage plus limit/reset facts. Present these lifetime/account facts separately because neither source is a natural-period Token ledger. |
+| OpenRouter | Credits and Keys List management APIs | lifetime account credit/spend plus default-workspace per-key usage/limit ledger | Fetch only with `OPENROUTER_MANAGEMENT_KEY`. Paginate Keys List in documented 100-row `offset` pages with `include_disabled=true`; preserve every active or disabled default-workspace key's lifetime/daily/weekly/monthly and BYOK usage plus limit/reset facts. Present these facts separately because neither source is a natural-period Token ledger, and do not claim cross-workspace completeness without explicit workspace enumeration. |
 | AWS Bedrock | CloudWatch metrics plus Cost Explorer/CUR | account/region metrics plus billing ledger | Declare supported-by-official-control-plane but unconfigured until account, region, and AWS credential scope exist. Do not pretend the inference configuration is enough. |
 | Azure OpenAI | Azure Monitor plus Cost Management | subscription/resource metrics plus invoice ledger | Declare supported-by-official-control-plane but unconfigured until subscription/resource identity and Azure credential scope exist. |
 | Google Vertex AI | Cloud Monitoring plus Cloud Billing | project metric plus billing ledger | Declare supported-by-official-control-plane but unconfigured until project identity and Google Cloud credential scope exist. |
@@ -249,8 +249,8 @@ decoration, stock imagery, or fake sample data is permitted.
   price merging retains `experimentalOver200K`; the long-context threshold
   includes cache-write input; reasoning output is charged once.
 - Official sources: OpenAI organization Usage and Costs, Anthropic Messages
-  Usage and Cost Report, and OpenRouter account Credits plus the complete
-  offset-paginated per-key usage/limit ledger use dedicated administrative
+  Usage and Cost Report, and OpenRouter account Credits plus the default-workspace
+  offset-paginated active-and-disabled per-key usage/limit ledger use dedicated administrative
   credentials, bounded pagination, 15-second request timeouts, independently
   retained partial results, decimal cost arithmetic, explicit UTC day envelopes,
   and compare-never-sum reconciliation. AWS Bedrock, Azure
@@ -268,7 +268,7 @@ decoration, stock imagery, or fake sample data is permitted.
   current live response paths therefore remain explicitly unverified; official
   endpoint schemas, pagination, decimal derivations, partial failure, and
   credential boundaries were verified with focused HTTP contract tests only.
-- Contract/tooling verification: OpenCorvus TypeScript typecheck passed; the
+- Contract/tooling verification before the terminal-review repair: OpenCorvus TypeScript typecheck passed; the
   JavaScript SDK regenerated successfully; `api:routes-check` passed across 34
   route files; API documentation regenerated to 330 operations in 25 groups and
   `docs:check` passed; the Overlay production Vite build passed with 7,104
@@ -299,5 +299,20 @@ decoration, stock imagery, or fake sample data is permitted.
 - The service maps a 404 for `/global/usage` to a version-mismatch message that
   asks the user to restart the updated backend; it does not fall back to a second
   data path or keep old-period figures under a new selector.
-- Independent review evidence is recorded in Recall. A terminal review of the
-  final diff and screenshots remains required before commit.
+- The first terminal review is recorded in Recall and found the OpenRouter disabled-key/scope defect plus the
+  missing i18n checker. The repair adds the checker and narrows the documented source boundary. After the full
+  repair verification set passed, a final independent read-only review of the exact nine-path diff found no
+  P0, P1, or P2 and no unresolved findings.
+- Terminal-review repair verification: OpenRouter Keys requests now send `include_disabled=true` on every
+  bounded `offset` page and explicitly omit `workspace_id`, matching the documented default-workspace scope;
+  the disabled-key fixture contributes its lifetime, monthly, and BYOK usage to the aggregate. The six focused
+  non-UI files pass 26 tests and 91 assertions; two additional pure catalog-contract tests prove unordered key
+  parity and typed placeholder-mismatch rejection, for a combined 28 tests and 94 assertions. OpenCorvus and
+  Overlay typechecks pass; the new reproducible `check:i18n` validates two locale catalogs with 1,804 matching
+  top-level keys, recursive value types, and interpolation placeholders; JavaScript SDK generation,
+  `api:routes-check` across 34 route files, `docs:check` across 330 operations and 25 groups, and the 7,104-module
+  Overlay production build pass. An isolated real server and current built Overlay served Settings -> Usage;
+  manual inspection covered the empty month, configured-only source region, natural-year interaction, and
+  screenshots, while the live `/global/usage` inventory reported the narrowed default-workspace scope. The
+  isolated process and database were removed after acceptance. Real OpenRouter credential traffic remains
+  unavailable and is not claimed.
