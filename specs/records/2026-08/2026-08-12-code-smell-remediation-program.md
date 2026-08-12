@@ -65,12 +65,10 @@ Each wave is still split into reviewable batches; it is not one repository-wide 
 | Batch | Findings | State | Plan review | Implementation review | Commit |
 | --- | --- | --- | --- | --- | --- |
 | B01 | `CS-009` | committed; push blocked by unrelated outgoing commits | PASS | PASS | `20f18339` |
-| B02 | `CS-036` | committed; push blocked by unrelated outgoing commits | PASS | PASS after four adversarial rounds | `1d5740d8` |
+| B02 | `CS-036` | implementation and verification complete | PASS | PASS after four adversarial rounds | pending |
 | Parallel B03-B05 | `CS-015`, `CS-040`, `CS-076` | committed; push blocked by unrelated outgoing commits | recorded in focused specs | PASS | `58ef06ca`, `6f59d5b2`, `0336604d` |
-| B06-B07 | `CS-041`, `CS-047` | committed; push blocked by unrelated outgoing commits | recorded in focused specs | PASS after adversarial correction | `96cfd8f6`, `19c5b935` |
-| B08-B09 | `CS-046`, `CS-054` | committed; push blocked by unrelated outgoing commits | recorded in focused specs | PASS after adversarial correction | `270d30f9`, `27c7f517` |
-| B10-B12 | `CS-025`, `CS-053`, `CS-055` | implementation/review correction in progress | recorded in focused specs | pending | pending |
-| B13+ | remaining 65 open findings | queued by Program Strategy | required per batch | required per batch | pending |
+| B06-B07 | `CS-041`, `CS-047` | implementation/review correction in progress | recorded in focused specs | pending | pending |
+| B08+ | remaining 70 open findings | queued by Program Strategy | required per batch | required per batch | pending |
 
 ## Batch B01 — Delete the unrestricted native file writer
 

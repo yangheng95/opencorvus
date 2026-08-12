@@ -253,16 +253,13 @@ export namespace SkillManager {
       return await Promise.all(
         (await Skill.all()).map(async (skill) => {
           const dir = skill.builtin ? undefined : path.dirname(skill.location)
-          const remoteSource = dir ? await Discovery.publishedSnapshotSource(dir) : undefined
           const manifest = !skill.builtin && dir ? await readManifest(dir, root, cache) : undefined
           const sourceType = skill.builtin
             ? "builtin"
-            : remoteSource
-              ? "config_url"
             : dir
               ? sourceTypeFor(dir, configuredPaths, cache, manifest?.kind)
               : "builtin"
-          const trust = trustFor(skill, remoteSource ?? manifest?.source)
+          const trust = trustFor(skill, manifest?.source)
           const risk = skill.builtin
             ? Skill.builtinRisk(skill.name)
             : dir
@@ -284,7 +281,6 @@ export namespace SkillManager {
                   ? ("config_url" as const)
                   : sourceType,
             source:
-              remoteSource ??
               manifest?.source ??
               (sourceType === "config_path"
                 ? configuredPaths.find((item) => Filesystem.contains(item, dir!))
@@ -294,7 +290,7 @@ export namespace SkillManager {
             risk,
             recommended_policy: recommendedPolicy(trust, risk),
             managed: !!dir && Filesystem.contains(root, dir),
-            writable: !remoteSource && !skill.builtin && !!dir && (await Filesystem.isDir(dir)),
+            writable: !skill.builtin && !!dir && (await Filesystem.isDir(dir)),
           }
         }),
       )
@@ -363,6 +359,15 @@ export namespace SkillManager {
         throw new Error(`No skills discovered from ${value}`)
       }
       const definitions = (await Promise.all(pulled.map(validateSkillDirectory))).flat()
+      await Promise.all(
+        pulled.map((dir) =>
+          Filesystem.writeJson(path.join(dir, MANIFEST), {
+            kind: "url",
+            source: value,
+            installed_at: Date.now(),
+          }),
+        ),
+      )
       await patchGlobal((next) => {
         next.skills = next.skills || {}
         next.skills.urls = dedupe([...(next.skills.urls ?? []), value])
@@ -703,10 +708,11 @@ function applyPolicyToConfig(
   next.skill_policy = table
 }
 
-function sourceTypeFor(dir: string, configuredPaths: string[], _cache: string, kind?: string) {
+function sourceTypeFor(dir: string, configuredPaths: string[], cache: string, kind?: string) {
   if (kind === "git") return "managed_git"
   if (kind === "url") return "config_url"
   if (Filesystem.contains(SkillManager.managedRoot(), dir)) return "managed_git"
+  if (Filesystem.contains(cache, dir)) return "config_url"
   if (configuredPaths.some((item) => Filesystem.contains(item, dir))) return "config_path"
   if (
     dir.includes(`${path.sep}.claude${path.sep}`) ||
