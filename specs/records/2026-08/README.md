@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-12-scheduled-random-isolation-e2e.md](2026-08-12-scheduled-random-isolation-e2e.md) defines the random-port, isolated-database, fresh-project Scheduled scenario matrix, depth-first repair boundary, real streaming/background-fire checker, and manual visual acceptance loop.
+
 - [2026-08-12-orchestrator-wake-turn-serialization-repair.md](2026-08-12-orchestrator-wake-turn-serialization-repair.md) diagnoses the visible control-Message/runtime-contract standby race, failed-head FIFO overtake, cross-boundary cancellation recognition, and exact physical Turn settlement requirements exposed by a second real stranded Task.
 
 - [2026-08-12-public-website-database-backend.md](2026-08-12-public-website-database-backend.md) replaces the public website's filesystem Registry simulation and static Market data path with one production SQLite publication/query/response-count authority, on-demand Astro Market routes, immutable content-addressed Expert Squad blobs, and transactionally coordinated static/application deployment and rollback.

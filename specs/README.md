@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Scheduled random-isolation end-to-end convergence: [`2026-08-12-scheduled-random-isolation-e2e.md`](records/2026-08/2026-08-12-scheduled-random-isolation-e2e.md).
+
 Latest Orchestrator wake Turn serialization repair: [`2026-08-12-orchestrator-wake-turn-serialization-repair.md`](records/2026-08/2026-08-12-orchestrator-wake-turn-serialization-repair.md).
 
 Latest public website database backend and Expert Squad Registry convergence plan: [`2026-08-12-public-website-database-backend.md`](records/2026-08/2026-08-12-public-website-database-backend.md).

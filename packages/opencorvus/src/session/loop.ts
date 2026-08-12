@@ -113,6 +113,7 @@ import {
 import { createMcpAppToolLifecycle, mcpAppAuthorityForRuntimeTool } from "@/interactive-artifact/mcp-app-lifecycle"
 import { visibleMentionDirectiveRanges } from "@opencorvus-ai/transport-protocol"
 import type { HarnessProjection } from "@/capability/harness-projection"
+import { compareTimelineOrderKeys, timelineMessageOrderKey } from "@/timeline/order"
 
 muteAISdkWarnings()
 
@@ -1153,11 +1154,11 @@ export namespace SessionLoop {
     })
   }
 
-  async function beginStandby(input: { sessionID: string; abort: AbortSignal; afterID: string }) {
+  async function beginStandby(input: { sessionID: string; abort: AbortSignal; afterOrderKey: string }) {
     await SessionCompaction.prune({ sessionID: input.sessionID })
     log.info("entering standby", { sessionID: input.sessionID })
     touch(input.sessionID)
-    const waitForWake = waitForUserMessage(input.sessionID, input.abort, input.afterID)
+    const waitForWake = waitForUserMessage(input.sessionID, input.abort, input.afterOrderKey)
     await SessionStatus.set(input.sessionID, { type: "idle" }, { promptGenerationOwner: input.abort })
     SessionRuntimeContractStore.settleConsumedWake(input.sessionID)
     return { waitForWake }
@@ -1669,6 +1670,7 @@ export namespace SessionLoop {
     resume_existing: z.boolean().optional(),
     result_mode: z.enum(["reply", "summary"]).optional(),
     reply_to_message_id: Identifier.schema("message").optional(),
+    retry_failed_reply: z.boolean().optional(),
   })
 
   export function structuredOutputToolChoice(
@@ -1880,7 +1882,11 @@ export namespace SessionLoop {
     })
     try {
       if (input.reply_to_message_id) {
-        const persistedReply = await completedReplyToUserMessage(sessionID, input.reply_to_message_id, startedOwner)
+        const persistedReply = await completedReplyToUserMessage(
+          sessionID,
+          input.reply_to_message_id,
+          startedOwner && input.retry_failed_reply !== true,
+        )
         if (persistedReply) {
           flushCallbacks(sessionID, persistedReply, directory, "reply", input.reply_to_message_id)
           consumeRuntimeContractTurn(sessionID)
@@ -1994,7 +2000,11 @@ export namespace SessionLoop {
                 if (!lastAssistant) break
                 const lastResult = msgs.find((m) => m.info.id === lastAssistant.id)
                 if (lastResult) flushCallbacks(sessionID, lastResult, directory, "reply")
-                const { waitForWake } = await beginStandby({ sessionID, abort, afterID: lastAssistant.id })
+                const { waitForWake } = await beginStandby({
+                  sessionID,
+                  abort,
+                  afterOrderKey: timelineMessageOrderKey({ info: lastAssistant }),
+                })
                 return { type: "standby" as const, waitForWake }
               }
 
@@ -2264,7 +2274,7 @@ export namespace SessionLoop {
     return firstResult
   })
 
-  function waitForUserMessage(sessionID: string, abort: AbortSignal, afterID: string): Promise<void> {
+  function waitForUserMessage(sessionID: string, abort: AbortSignal, afterOrderKey: string): Promise<void> {
     return new Promise<void>((resolve) => {
       if (abort.aborted) {
         resolve()
@@ -2290,7 +2300,7 @@ export namespace SessionLoop {
         if (
           event.properties.info.role === "user" &&
           event.properties.info.sessionID === sessionID &&
-          event.properties.info.id > afterID
+          compareTimelineOrderKeys(event.properties.info.orderKey, afterOrderKey) > 0
         ) {
           settle()
         }
@@ -2312,7 +2322,7 @@ export namespace SessionLoop {
 
       void (async () => {
         for await (const item of MessageStore.stream(sessionID)) {
-          if (item.info.id <= afterID) break
+          if (compareTimelineOrderKeys(timelineMessageOrderKey(item), afterOrderKey) <= 0) break
           if (item.info.role === "user") {
             settle()
             return

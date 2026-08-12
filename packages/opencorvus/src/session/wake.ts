@@ -41,6 +41,7 @@ export namespace SessionWake {
     messageID: string
     directory: string
     signal: AbortSignal
+    retryFailedReply?: boolean
   }) => Promise<void>
   let wakeLoopExecutorForTest: WakeLoopExecutor | undefined
 
@@ -137,6 +138,7 @@ export namespace SessionWake {
   export type WakeReceipt = {
     sessionID: string
     messageID: string
+    /** Outcome of the exact assistant reply to this durable wake Message. */
     completion: Promise<WakeCompletion>
   }
 
@@ -152,7 +154,7 @@ export namespace SessionWake {
     return (await wakeWithReceipt(input)).sessionID
   }
 
-  /** Persist one wake and expose the detached loop's truthful completion. */
+  /** Persist one wake and expose the exact assistant reply's truthful completion. */
   export async function wakeWithReceipt(input: WakeInput): Promise<WakeReceipt> {
     if (input.signal?.aborted) throw input.signal.reason
     if (input.sessionID && input.newConversationExperience) {
@@ -296,15 +298,25 @@ export namespace SessionWake {
     })
   }
 
-  export function resumePersistedWake(input: { sessionID: string; messageID: string; directory: string }): void {
-    void startPersistedWakeLoop(input)
+  export function resumePersistedWake(input: {
+    sessionID: string
+    messageID: string
+    directory: string
+    retryFailedReply?: boolean
+  }): Promise<WakeCompletion> {
+    return startPersistedWakeLoop(input)
   }
 
   function startPersistedWakeLoop(input: {
     sessionID: string
     messageID: string
     directory: string
+    retryFailedReply?: boolean
   }): Promise<WakeCompletion> {
+    let settleReply!: (completion: WakeCompletion) => void
+    const reply = new Promise<WakeCompletion>((resolve) => {
+      settleReply = resolve
+    })
     const reservation = RuntimeExecutionSettlement.reserve(
       "session_wake_loop",
       `session-wake-loop:${input.sessionID}:${input.messageID}`,
@@ -335,16 +347,18 @@ export namespace SessionWake {
       (wakeLoopExecutorForTest ?? executeWakeLoop)({
         ...input,
         signal: reservation.signal,
+        replySettled: () => settleReply({ ok: true }),
       }),
     )
     reservation.settleWith(operation)
-    return operation.then(
-      () => ({ ok: true }) as const,
-      (err): WakeCompletion => {
+    void operation.then(
+      () => settleReply({ ok: true }),
+      (err) => {
         log.error("wake loop failed", { sessionID: input.sessionID, messageID: input.messageID, err })
-        return { ok: false, error: err instanceof Error ? err.message : String(err) }
+        settleReply({ ok: false, error: err instanceof Error ? err.message : String(err) })
       },
     )
+    return reply
   }
 
   async function executeWakeLoop(input: {
@@ -352,6 +366,8 @@ export namespace SessionWake {
     messageID: string
     directory: string
     signal: AbortSignal
+    retryFailedReply?: boolean
+    replySettled?: () => void
   }): Promise<void> {
     await runWithInitializedIndependentProject({
       directory: input.directory,
@@ -362,7 +378,9 @@ export namespace SessionWake {
           sessionID: input.sessionID,
           resume_existing: false,
           reply_to_message_id: input.messageID,
+          retry_failed_reply: input.retryFailedReply,
         })
+        input.replySettled?.()
         await SessionPrompt.waitForFinish(input.sessionID, input.directory)
       },
     })

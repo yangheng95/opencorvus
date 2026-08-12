@@ -9,6 +9,9 @@ import { SessionPrompt } from "../../src/session/prompt"
 import { SessionProcessor } from "../../src/session/processor"
 import { SessionStatus } from "../../src/session/status"
 import { SessionPromptState } from "../../src/session/prompt/state"
+import { SessionLoop } from "../../src/session/loop"
+import { Message } from "../../src/session/message"
+import { timelineMessageOrderKey } from "../../src/timeline/order"
 import { ProjectGitLock } from "../../src/worktree/git-lock"
 import { ProjectRuntimePaths } from "../../src/project/runtime-paths"
 import { resetDatabase } from "../fixture/db"
@@ -164,3 +167,60 @@ test("SessionLoop binds each accepted user message to its streaming execution oc
     await Instance.disposeAll()
   }
 }, 90_000)
+
+test("Session standby wakes from a later durable Message whose deterministic ID sorts below the prior assistant", async () => {
+  await using project = await tmpdir({ git: true })
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const session = await Session.create({ kind: "assistant", title: "Deterministic wake ordering" })
+      const before = Date.now()
+      const assistant: Message.Assistant = {
+        id: Identifier.ascending("message"),
+        sessionID: session.id,
+        role: "assistant",
+        author: "chat",
+        parentID: Identifier.ascending("message"),
+        time: { created: before, completed: before + 1 },
+        agent: "chat",
+        providerID: model.providerID,
+        modelID: model.modelID,
+        path: { cwd: project.path, root: project.path },
+        cost: 0,
+        tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        finish: "stop",
+      }
+      await Session.persistMessage({ info: assistant, parts: [] })
+      const afterOrderKey = timelineMessageOrderKey({ info: assistant })
+      const waiting = SessionLoop.TestHooks.waitForUserMessage(session.id, new AbortController().signal, afterOrderKey)
+      const deterministicMessageID = "msg_automation_00000000000000000000000000000000"
+      await Session.persistMessage({
+        info: {
+          id: deterministicMessageID,
+          sessionID: session.id,
+          role: "user",
+          author: "orchestrator",
+          time: { created: before + 2 },
+          agent: "chat",
+          model,
+        },
+        parts: [
+          {
+            id: Identifier.ascending("part"),
+            sessionID: session.id,
+            messageID: deterministicMessageID,
+            type: "text",
+            text: "wake the standby owner by persisted timeline order",
+          },
+        ],
+      })
+      await waiting
+      expect({
+        deterministicIDSortsBeforePriorAssistant: deterministicMessageID < assistant.id,
+        laterTimelineOrder:
+          timelineMessageOrderKey({ info: { id: deterministicMessageID, time: { created: before + 2 } } }) >
+          afterOrderKey,
+      }).toEqual({ deterministicIDSortsBeforePriorAssistant: true, laterTimelineOrder: true })
+    },
+  })
+})
