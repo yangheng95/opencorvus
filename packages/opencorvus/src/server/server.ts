@@ -246,6 +246,7 @@ export namespace Server {
           "session_wake_loop",
           "task_queue",
           "detached_dispatch_pipeline",
+          "protocol_publication",
         ],
         new Error(reason),
       )

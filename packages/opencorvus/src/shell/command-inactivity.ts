@@ -74,6 +74,7 @@ async function runCommandWithInactivity(input: CommandInactivityRequest): Promis
   let inactive = false
   let spawnError: unknown
   let cleanupError: unknown
+  let settlementError: unknown
   let cleanupPromise: Promise<void> | undefined
   let finishProcess: ((code: number | undefined) => void) | undefined
 
@@ -141,6 +142,9 @@ async function runCommandWithInactivity(input: CommandInactivityRequest): Promis
   else await proc.dispose().catch((error) => {
     cleanupError = error
   })
+  await (proc.settled ?? proc.outputSettled ?? proc.exited.then(() => undefined)).catch((error) => {
+    settlementError = error
+  })
 
   const stdoutBytes = Buffer.concat(stdoutChunks)
   const stderrBytes = Buffer.concat(stderrChunks)
@@ -168,6 +172,12 @@ async function runCommandWithInactivity(input: CommandInactivityRequest): Promis
     failure = failure
       ? { ...failure, message: `${failure.message}; ${cleanupMessage}` }
       : { kind: "exit", message: cleanupMessage }
+  }
+  if (settlementError) {
+    const settlementMessage = `Process supervisor settlement failed: ${errorMessage(settlementError)}`
+    failure = failure
+      ? { ...failure, message: `${failure.message}; ${settlementMessage}` }
+      : { kind: "exit", message: settlementMessage }
   }
   return {
     exitCode,

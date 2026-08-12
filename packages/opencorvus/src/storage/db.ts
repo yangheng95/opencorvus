@@ -16,14 +16,10 @@ import { randomUUID } from "crypto"
 import * as schema from "./schema"
 import { SCHEMA_DDL } from "./ddl"
 import {
-  SchemaMigrationError,
-  createSchemaMigrationBackup,
   findSchemaDrift,
   hasApplicationSchema,
-  migrateDatabaseFile,
-  planSchemaMigration,
   schemaObjectFingerprint,
-} from "./schema-migration"
+} from "./schema-contract"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import {
   TASK_CANCELLED_EVENT_TYPE,
@@ -538,28 +534,16 @@ export namespace Database {
     return sqlite
   }
 
-  function schemaMigrationRequired(dbPath: string, reason: string, fingerprint: string) {
+  function schemaResetRequired(dbPath: string, reason: string, fingerprint: string) {
     return new DatabaseUnavailableError({
       message:
-        `OpenCorvus database schema does not match the current DDL at ${dbPath}: ${reason}. ` +
-        `No registered migration starts from schema fingerprint ${fingerprint}. ` +
-        "The database was not modified; add and verify the exact migration before using this version.",
+        `OpenCorvus database schema does not match the pre-0.1.0 canonical DDL at ${dbPath}: ${reason}. ` +
+        `Received schema fingerprint ${fingerprint}. ` +
+        "The database was not modified; reset it because pre-release builds do not patch older schemas.",
       path: dbPath,
       operation: "Database.Client.schemaValidation",
-      code: "SCHEMA_MIGRATION_REQUIRED",
+      code: "SCHEMA_RESET_REQUIRED",
     })
-  }
-
-  function schemaMigrationUnavailable(dbPath: string, error: SchemaMigrationError) {
-    return new DatabaseUnavailableError(
-      {
-        message: error.message,
-        path: dbPath,
-        operation: "Database.Client.schemaMigration",
-        code: error.code,
-      },
-      { cause: error },
-    )
   }
 
   function recordUnavailable(error: unknown, operation: string) {
@@ -646,39 +630,7 @@ export namespace Database {
         const drift = findSchemaDrift(sqlite)
         if (drift) {
           const fingerprint = schemaObjectFingerprint(sqlite)
-          const plan = planSchemaMigration(sqlite)
-          if (!plan || plan.migrations.length === 0) {
-            throw schemaMigrationRequired(dbPath, drift, fingerprint)
-          }
-          let backup
-          try {
-            backup = createSchemaMigrationBackup(dbPath, plan)
-          } catch (error) {
-            if (error instanceof SchemaMigrationError) throw schemaMigrationUnavailable(dbPath, error)
-            throw error
-          }
-          sqlite.close(true)
-          state.sqlite = undefined
-          state.rollbackRequired = false
-          let result
-          try {
-            result = migrateDatabaseFile(dbPath, plan, backup)
-          } catch (error) {
-            if (error instanceof SchemaMigrationError) throw schemaMigrationUnavailable(dbPath, error)
-            throw error
-          }
-          log.info("database schema migrated", {
-            path: dbPath,
-            fromFingerprint: result.fromFingerprint,
-            toFingerprint: result.toFingerprint,
-            migrations: result.migrationIDs,
-            backupDirectory: result.backupDirectory,
-          })
-          sqlite = openOwnedSqlite(dbPath, { configure: false })
-          const migratedDrift = findSchemaDrift(sqlite)
-          if (migratedDrift) {
-            throw schemaMigrationRequired(dbPath, migratedDrift, schemaObjectFingerprint(sqlite))
-          }
+          throw schemaResetRequired(dbPath, drift, fingerprint)
         }
         configureSqlite(sqlite)
         assertCurrentDataIntegrity(sqlite, dbPath)

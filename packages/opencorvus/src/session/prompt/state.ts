@@ -948,8 +948,8 @@ export namespace SessionPromptState {
     await terminatePromptResources({ sessionID, abort, directory, reason })
   }
 
-  export async function release(sessionID: string): Promise<void> {
-    await terminatePromptResources({ sessionID })
+  export async function release(sessionID: string, directory?: string): Promise<void> {
+    await terminatePromptResources({ sessionID, directory })
   }
 
   export function flushCallbacks(

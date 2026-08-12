@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "pretest": "bun ../../opencorvus/script/prepare-test-process-supervisor.ts",
     "test": "bun ../../opencorvus/script/run-with-inactivity.ts --inactivity-ms 120000 -- bun test --timeout=0 test",
     "build": "bun ./script/build.ts",
     "prepack": "bun run build",

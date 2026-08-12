@@ -64,7 +64,9 @@ jobs:
       - name: Install Windows test runtime dependencies
         if: runner.os == 'Windows'
         shell: pwsh
-        run: ./script/install-windows-ripgrep.ps1
+        run: |
+          ./script/install-windows-ripgrep.ps1
+          bun packages/opencorvus/script/prepare-test-process-supervisor.ts
 
       - name: Run unit tests
         run: bunx turbo run test --filter=opencorvus

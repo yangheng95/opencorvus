@@ -10,6 +10,7 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import { FormatError } from "./cli/error"
 import { EOL } from "os"
 import { installProcessErrorLogging } from "./util/process-error-logging"
+import { errorDiagnostic } from "./util/error-diagnostics"
 
 installProcessErrorLogging()
 
@@ -79,12 +80,7 @@ try {
   }
 
   if (e instanceof Error) {
-    Object.assign(data, {
-      name: e.name,
-      message: e.message,
-      cause: e.cause?.toString(),
-      stack: e.stack,
-    })
+    Object.assign(data, errorDiagnostic(e))
   }
 
   if (e instanceof ResolveMessage) {

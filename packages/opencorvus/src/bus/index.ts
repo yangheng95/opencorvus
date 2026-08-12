@@ -931,11 +931,9 @@ export namespace Bus {
 
   export function subscribe<Definition extends BusEvent.Definition>(
     def: Definition,
-    callback: (event: {
-      occurrenceID: string
-      type: Definition["type"]
-      properties: z.infer<Definition["properties"]>
-    }) => unknown | Promise<unknown>,
+    callback: (
+      event: Envelope<z.infer<Definition["properties"]>, Definition["type"]>,
+    ) => unknown | Promise<unknown>,
     options?: { durableID: string },
   ) {
     return raw(def.type, callback, options)
@@ -1025,11 +1023,9 @@ export namespace Bus {
 
   export function once<Definition extends BusEvent.Definition>(
     def: Definition,
-    callback: (event: {
-      occurrenceID: string
-      type: Definition["type"]
-      properties: z.infer<Definition["properties"]>
-    }) => unknown | Promise<unknown>,
+    callback: (
+      event: Envelope<z.infer<Definition["properties"]>, Definition["type"]>,
+    ) => unknown | Promise<unknown>,
   ) {
     const unsub = raw(def.type, async (event) => {
       const result = await callback(event)

@@ -31,6 +31,7 @@ import type { Provider as ProviderType } from "../../src/provider/provider"
 import { EffectiveConfig } from "../../src/config/effective"
 import { LLM } from "../../src/session/llm"
 import { MemoryInjection } from "../../src/memory/injection"
+import { RuntimeExecutionSettlement } from "../../src/runtime/execution-settlement"
 
 const model = { providerID: "test", modelID: "project-memory" }
 const packageRevision = {
@@ -701,6 +702,76 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
           automaticDrain[Symbol.dispose]()
           Bus.resumeDurablePublications()
           await waitFor(() => Bus.TestHooks.outbox().length === 0, "Organizer publication receipt did not settle")
+        } finally {
+          automaticDrain[Symbol.dispose]()
+          baseSpy.mockRestore()
+          configSpy.mockRestore()
+          streamSpy.mockRestore()
+          modelSpy.mockRestore()
+        }
+      },
+    })
+  })
+
+  test("settles a cancelled durable Organizer owner before project shutdown completes", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const automaticDrain = Bus.TestHooks.suppressAutomaticDurableDrain()
+        const session = await Session.create({ kind: "assistant", title: "Organizer shutdown settlement" })
+        await Session.persistMessage(
+          userMessage(
+            session.id,
+            "Retain the exact shutdown settlement contract.",
+            30_001,
+            ProjectMemory.userInputExtra({ surface: "test.organizer.shutdown", literalText: "Retain shutdown settlement" }),
+          ),
+        )
+        const resolvedModel = organizerModel()
+        const modelSpy = spyOn(Provider, "getModel").mockResolvedValue(resolvedModel)
+        let streamStarted!: () => void
+        const started = new Promise<void>((resolve) => {
+          streamStarted = resolve
+        })
+        const streamSpy = spyOn(LLM, "stream").mockImplementation(async (input) => {
+          streamStarted()
+          const text = new Promise<string>((_, reject) => {
+            input.abort.addEventListener("abort", () => reject(input.abort.reason), { once: true })
+          })
+          void text.catch(() => undefined)
+          return {
+            text,
+          } as never
+        })
+        const configSpy = spyOn(EffectiveConfig, "effective").mockResolvedValue({
+          model: `${model.providerID}/${model.modelID}`,
+          experimental: { memory: { enabled: true } },
+        } as never)
+        const baseSpy = spyOn(EffectiveConfig, "base").mockResolvedValue({
+          model: `${model.providerID}/${model.modelID}`,
+        } as never)
+        try {
+          ProjectMemoryOrganizer.init()
+          automaticDrain[Symbol.dispose]()
+          Bus.resumeDurablePublications()
+          await started
+          using runtimeGate = RuntimeExecutionSettlement.acquireSettlementGate()
+          using busGate = Bus.acquireProcessSettlementGate()
+          runtimeGate.closeAdmission(["protocol_publication"])
+          runtimeGate.requestCancellation(["protocol_publication"], new Error("Organizer shutdown settlement"))
+          await runtimeGate.waitForIdle(["protocol_publication"], 5_000)
+
+          const snapshot = ProjectMemory.read(Instance.project.id)
+          expect(snapshot).toMatchObject({
+            revision: 0,
+            pendingCount: 1,
+          })
+          expect(Bus.TestHooks.ownedPublications()).toEqual(expect.arrayContaining([expect.objectContaining({ pending: false })]))
+          busGate.commit()
+          runtimeGate.commit()
+          await Bun.sleep(25)
+          expect(ProjectMemory.read(Instance.project.id)).toEqual(snapshot)
         } finally {
           automaticDrain[Symbol.dispose]()
           baseSpy.mockRestore()

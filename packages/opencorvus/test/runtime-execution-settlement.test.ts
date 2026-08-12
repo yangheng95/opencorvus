@@ -30,6 +30,7 @@ import {
 } from "@/scheduler/task-queue-service"
 import { Database, eq } from "@/storage/db"
 import { ProjectGitLock } from "@/worktree/git-lock"
+import { withKeyedLock } from "@/util/lock"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 async function prepareTaskQueueProcessRollback(directory: string) {
@@ -78,6 +79,31 @@ async function prepareTaskQueueProcessRollback(directory: string) {
 }
 
 describe("runtime execution settlement authority", () => {
+  test("returns shutdown cancellation and admits a successor after owner release", async () => {
+    const locks = new Map<string, Promise<unknown>>()
+    let releaseOwner!: () => void
+    const held = new Promise<void>((resolve) => {
+      releaseOwner = resolve
+    })
+    const owner = withKeyedLock(locks, "project-memory", () => held)
+    await Promise.resolve()
+    const controller = new AbortController()
+    const queued = withKeyedLock(
+      locks,
+      "project-memory",
+      async () => undefined,
+      1_000,
+      controller.signal,
+    )
+
+    controller.abort(new Error("shutdown cancelled queued owner"))
+    await expect(queued).rejects.toThrow("shutdown cancelled queued owner")
+    releaseOwner()
+    await owner
+    const successor = await withKeyedLock(locks, "project-memory", async () => "successor-acquired")
+    expect(successor).toBe("successor-acquired")
+  })
+
   test("reports the exact active Instance authority and converges on the same settlement gate", async () => {
     await using project = await memoryProject()
     let reportStarted!: () => void
@@ -131,6 +157,23 @@ describe("runtime execution settlement authority", () => {
 
     expect(events).toEqual(["terminal:published", "instances:disposed"])
     RuntimeExecutionSettlement.reserve("protocol_publication", "post-shutdown-rollback").settle()
+  })
+
+  test("cancels an active protocol publication before waiting for shutdown settlement", async () => {
+    const publication = RuntimeExecutionSettlement.reserve("protocol_publication", "shutdown-cancelled-publication")
+    let cancelled: unknown
+    publication.onCancel((reason) => {
+      cancelled = reason
+      publication.settle()
+    })
+
+    const settled = await Server.settleCurrentProcessExecution("protocol publication shutdown contract", {
+      disposeInstances: async () => undefined,
+    })
+    await settled.releaseHandoff(false)
+
+    expect(cancelled).toBeInstanceOf(Error)
+    expect((cancelled as Error).message).toBe("protocol publication shutdown contract")
   })
 
   test("bounds cancelled settlement inactivity and converges after the physical operation exits", async () => {

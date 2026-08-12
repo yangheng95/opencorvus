@@ -1,7 +1,11 @@
 #!/usr/bin/env bun
 import path from "node:path"
 import fs from "node:fs"
-import { generateOpenApiSpec } from "../../src/cli/cmd/generate"
+import {
+  bootstrapIsolatedTestRuntime,
+  isolatedTestChildEnvironment,
+  removeIsolatedTestRuntime,
+} from "@opencorvus-ai/util/test-runtime-environment"
 
 type GroupCfg = {
   title_en: string
@@ -294,6 +298,7 @@ function minimalDiff(label: string, a: string, b: string): string {
 }
 
 async function main() {
+  const { generateOpenApiSpec } = await import("../../src/cli/cmd/generate")
   const args = new Set(process.argv.slice(2))
   const mode: "write" | "check" = args.has("--check") ? "check" : "write"
   const spec = await generateOpenApiSpec()
@@ -315,9 +320,18 @@ async function main() {
     if (enRes.diff) console.error(enRes.diff)
     if (zhRes.diff) console.error(zhRes.diff)
     console.error("docs:check failed: regenerated output differs from on-disk markdown")
-    process.exit(1)
+    process.exitCode = 1
+    return
   }
   console.log(`docs:check ok (${ops.length} ops, ${groups.length} groups)`)
 }
 
-if (import.meta.main) await main()
+if (import.meta.main) {
+  const runtime = await bootstrapIsolatedTestRuntime("runner")
+  try {
+    Object.assign(process.env, isolatedTestChildEnvironment(runtime))
+    await main()
+  } finally {
+    await removeIsolatedTestRuntime(runtime)
+  }
+}

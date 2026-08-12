@@ -8,6 +8,7 @@ import { InstanceBootstrap } from "@/project/bootstrap"
 import type { Provider } from "@/provider/provider"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
+import { Scheduler } from "@/scheduler"
 import { Session } from "@/session"
 import { SessionLoop } from "@/session/loop"
 import { SessionProcessor } from "@/session/processor"
@@ -192,6 +193,8 @@ async function exerciseTransportClients(input: {
   const pair = acpByteStreamPair()
   let cli: ReturnType<typeof Bun.spawn> | undefined
   let cliExited = false
+  let acpAgentConnection: AgentSideConnection | undefined
+  let acpClientConnection: ClientSideConnection | undefined
   try {
     const sse = await sdk.session.events(
       { sessionID: input.sessionID, directory: input.projectDirectory },
@@ -226,14 +229,22 @@ async function exerciseTransportClients(input: {
         stderr: "pipe",
       },
     )
-    const cliLine = await readLineUntil(cli.stdout, (line) => {
-      try {
-        const event = JSON.parse(line)
-        return event.type === "permission_requested" && event.permission?.requestID === input.requestID
-      } catch {
-        return false
-      }
-    })
+    let cliLine: string
+    try {
+      cliLine = await readLineUntil(cli.stdout, (line) => {
+        try {
+          const event = JSON.parse(line)
+          return event.type === "permission_requested" && event.permission?.requestID === input.requestID
+        } catch {
+          return false
+        }
+      })
+    } catch (error) {
+      const stderr = await new Response(cli.stderr).text().catch(() => "")
+      throw new Error(`${error instanceof Error ? error.message : String(error)}; CLI stderr: ${stderr.trim()}`, {
+        cause: error,
+      })
+    }
     markActivity("transport:cli")
 
     let acpRequest: RequestPermissionRequest | undefined
@@ -256,8 +267,8 @@ async function exerciseTransportClients(input: {
       },
     } as Client
     const acp = await ACP.init({ sdk })
-    new AgentSideConnection((connection) => acp.create(connection, { sdk }), pair.agent)
-    const acpClient = new ClientSideConnection(() => client, pair.client)
+    acpAgentConnection = new AgentSideConnection((connection) => acp.create(connection, { sdk }), pair.agent)
+    const acpClient = (acpClientConnection = new ClientSideConnection(() => client, pair.client))
     await acpClient.initialize({ protocolVersion: PROTOCOL_VERSION, clientCapabilities: {} })
     await acpClient.loadSession({ cwd: input.projectDirectory, sessionId: input.sessionID, mcpServers: [] })
     markActivity("transport:acp-loaded")
@@ -304,6 +315,12 @@ async function exerciseTransportClients(input: {
       }),
     ])
     markActivity("transport:cli-exited")
+    await SessionPrompt.waitForFinish(input.sessionID, input.projectDirectory)
+    await Instance.provide({
+      directory: input.projectDirectory,
+      fn: () => SessionRuntimeContractStore.dispose(input.sessionID),
+    })
+    markActivity("transport:runtime-disposed")
 
     return {
       sse: (sseEvent as any).payload.id,
@@ -314,13 +331,29 @@ async function exerciseTransportClients(input: {
   } finally {
     sseAbort.abort()
     pair.close()
+    await Promise.all([acpAgentConnection?.closed, acpClientConnection?.closed].filter(Boolean))
+    markActivity("transport:acp-closed")
     if (cli) {
       if (!cliExited) {
         cli.kill()
         await Promise.race([cli.exited.catch(() => undefined), Bun.sleep(1_000)])
       }
     }
-    await server.stop(false)
+    markActivity("transport:mcp-disconnect-start")
+    await Instance.provide({
+      directory: input.projectDirectory,
+      fn: async () => {
+        await Promise.all([
+          MCP.disconnect("permission_check_mcp"),
+          MCP.disconnect("permission_task_check_mcp"),
+          MCP.disconnect(ComputerMCPBuiltin.ServerName),
+        ])
+      },
+    })
+    markActivity("transport:mcp-disconnect-done")
+    markActivity("transport:process-settlement-start")
+    await server.stop(true)
+    markActivity("transport:process-settlement-done")
   }
 }
 
@@ -479,7 +512,7 @@ async function executeTool(
 
 async function main() {
   declareNativeTaskProcessDeployment()
-  const root = await createManagedTemporaryDirectory(os.tmpdir(), "opencorvus-permission-check-")
+  const root = await createManagedTemporaryDirectory(process.env.OPENCORVUS_TEST_PROCESS_ROOT!, "permission-check-")
   const projectDirectory = path.join(root, "project")
   const mcpTaskState = path.join(root, "permission-task-state.json")
   const pluginState = path.join(root, "permission-plugin-state.ndjson")
@@ -487,9 +520,6 @@ async function main() {
   const mcpTaskFixture = path.join(root, "permission-task-check-mcp.mjs")
   const pluginFixture = path.join(root, "permission-check-plugin.mjs")
   const modelServer = openAiCompatibleModelServer()
-  process.env.OPENCORVUS_HOME = path.join(root, "runtime")
-  process.env.OPENCORVUS_TEST_HOME = path.join(root, "home")
-  process.env.OPENCORVUS_TEST_PROCESS_ROOT = root
   await fs.mkdir(projectDirectory, { recursive: true })
   const git = Bun.spawnSync(["git", "init"], { cwd: projectDirectory })
   if (git.exitCode !== 0) throw new Error(git.stderr.toString())
@@ -659,12 +689,12 @@ async function main() {
         if (typeof automationId !== "string") {
           throw new Error(`Schedule Tool did not return its automation identity: ${JSON.stringify(scheduled)}`)
         }
-        const scheduleRun = await executeTool(
-          scheduleTool,
-          { action: "run", automationId },
-          "call_permission_check_schedule_run",
-          mcpRun.abort,
-        )
+    const scheduleRun = await executeTool(
+      scheduleTool,
+      { action: "run", automationId },
+      "call_permission_check_schedule_run",
+      mcpRun.abort,
+    )
         markActivity("matrix:scheduler-run-complete")
         const unscheduled = await executeTool(
           scheduleTool,
@@ -770,6 +800,19 @@ async function main() {
       evidence.transportRecovery.sessionID,
       evidence.mcpTaskRecovery.sessionID,
     ]) {
+      SessionPrompt.cancel(
+        sessionID,
+        projectDirectory,
+        createExecutionCancellationOrigin({
+          actor: "runtime",
+          source: "process.shutdown",
+          surface: "permission-modes-check",
+          reason: "Permission checker phase completed",
+          targetSessionID: sessionID,
+        }),
+      )
+      await SessionPrompt.waitForFinish(sessionID, projectDirectory)
+      await SessionPrompt.release(sessionID, projectDirectory)
       markActivity(`matrix:dispose-runtime:${sessionID}`)
       await Instance.provide({ directory: projectDirectory, fn: () => SessionRuntimeContractStore.dispose(sessionID) })
     }
@@ -837,6 +880,25 @@ async function main() {
         Object.assign(evidence, { mcpTaskResult: result, mcpTaskState: state, events })
       },
     })
+    SessionPrompt.cancel(
+      evidence.mcpTaskRecovery.sessionID,
+      projectDirectory,
+      createExecutionCancellationOrigin({
+        actor: "runtime",
+        source: "process.shutdown",
+        surface: "permission-modes-check",
+        reason: "Permission checker recovered task completed",
+        targetSessionID: evidence.mcpTaskRecovery.sessionID,
+      }),
+    )
+    markActivity("recovery:prompt-cancelled")
+    await SessionPrompt.waitForFinish(evidence.mcpTaskRecovery.sessionID, projectDirectory)
+    await SessionPrompt.release(evidence.mcpTaskRecovery.sessionID, projectDirectory)
+    await Instance.provide({
+      directory: projectDirectory,
+      fn: () => SessionRuntimeContractStore.dispose(evidence.mcpTaskRecovery.sessionID),
+    })
+    markActivity("recovery:runtime-disposed")
     const transports = await exerciseTransportClients({
       projectDirectory,
       ...evidence.transportRecovery,
@@ -855,6 +917,8 @@ async function main() {
     process.stdout.write(`${JSON.stringify({ status: "passed", ...evidence })}\n`)
   } finally {
     modelServer.stop(true)
+    markActivity("cleanup:dispose-global-scheduler")
+    await Scheduler.disposeGlobal({ inactivityTimeoutMilliseconds: INACTIVITY_MS })
     markActivity("cleanup:dispose-instances")
     await Instance.disposeAll()
     markActivity("cleanup:close-database")

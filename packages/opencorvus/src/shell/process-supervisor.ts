@@ -1961,9 +1961,11 @@ export namespace ProcessSupervisor {
     }
 
     const manifest = path.resolve(import.meta.dir, "../../native/process-supervisor/Cargo.toml")
+    const lockfile = path.resolve(import.meta.dir, "../../native/process-supervisor/Cargo.lock")
     const nativeSource = path.resolve(import.meta.dir, "../../native/process-supervisor/src/main.rs")
     const sourceIdentity = createHash("sha256")
       .update(readFileSync(manifest))
+      .update(readFileSync(lockfile))
       .update(readFileSync(nativeSource))
       .digest("hex")
       .slice(0, 16)

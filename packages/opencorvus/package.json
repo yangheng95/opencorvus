@@ -7,9 +7,12 @@
   "private": true,
   "scripts": {
     "typecheck": "node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit",
+    "pretest": "bun script/prepare-test-process-supervisor.ts",
     "test": "bun script/run-tests.ts",
+    "prepare:test-runtime": "bun script/prepare-test-process-supervisor.ts",
     "build": "bun run script/build.ts",
-    "check:permission-modes": "bun run script/permission-modes-check.ts",
+    "precheck:permission-modes": "bun script/prepare-test-process-supervisor.ts",
+    "check:permission-modes": "bun run script/run-with-inactivity.ts --inactivity-ms 120000 -- bun run script/permission-modes-check-worker.ts",
     "check:scheduled-automations-e2e": "bun run script/scheduled-automations-e2e.ts",
     "dev": "bun ./src/index.ts"
   },
