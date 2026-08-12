@@ -24,7 +24,7 @@ export function GoalDialogHost() {
       id="goalDialog"
       open={dialogStore.goal.open}
       title={<span id="goalDialogTitle">{t("goal.title")}</span>}
-      onClose={closeGoalDialog}
+      onClose={() => void closeGoalDialog()}
       footer={
         <>
           <Button

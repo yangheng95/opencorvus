@@ -16,7 +16,7 @@ import { showAppDialog } from "../../services/app-dialog"
 import { Badge, type BadgeTone } from "../ui/Badge"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
-import { SettingsState } from "./layout"
+import { SettingsRow, SettingsState } from "./layout"
 
 interface ExpertSquadEvolutionPanelProps {
   directory: string
@@ -261,7 +261,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
         </Button>
       </header>
 
-      <Show when={error()}>
+      <Show when={error() && Boolean(history())}>
         <SettingsState tone="error" data-ui="expert-squad-evolution-error">{error()}</SettingsState>
       </Show>
 
@@ -285,6 +285,13 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
         )}
       </Show>
 
+      <Show when={!error() || Boolean(history())} fallback={
+        <SettingsState tone="error" actions={
+          <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void refresh()}>
+            <Icon name="refresh" />{t("common.retry")}
+          </Button>
+        }>{error()}</SettingsState>
+      }>
       <Show
         when={!loading() && entries().length > 0}
         fallback={
@@ -298,7 +305,13 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
             <For each={entries()}>
               {(entry) => (
                 <article class="expert-squad-evolution-record" classList={{ "is-selected": selectedKey() === entry.key }}>
-                  <button type="button" class="expert-squad-evolution-record-select" onClick={() => void selectEntry(entry)}>
+                  <SettingsRow
+                    as="button"
+                    customContent
+                    interactive
+                    class="expert-squad-evolution-record-select"
+                    onClick={() => void selectEntry(entry)}
+                  >
                     <div class="expert-squad-evolution-record-title">
                       <strong>{entry.record.campaign.candidate_hypothesis}</strong>
                       <Show
@@ -314,7 +327,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
                       <span>{t("expert_squad.evolution_score")}: {entry.comparison ? number(entry.comparison.aggregate_score) : "—"}</span>
                       <span>{t("expert_squad.evolution_evidence")}: {entry.comparison ? `${entry.comparison.completeness.present_evaluations}/${entry.comparison.completeness.expected_slots}` : `${entry.candidate?.evaluations.length ?? 0}`}</span>
                     </div>
-                  </button>
+                  </SettingsRow>
                   <Show when={entry.comparison}>
                     {(comparison) => (
                       <div class="expert-squad-evolution-actions">
@@ -476,6 +489,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
             </Show>
           </section>
         </div>
+      </Show>
       </Show>
     </div>
   )

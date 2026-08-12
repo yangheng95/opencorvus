@@ -848,7 +848,7 @@
   width: 100%;
   min-height: calc(42px * var(--ui-scale));
   padding: calc(6px * var(--ui-scale)) calc(7px * var(--ui-scale));
-  border-radius: var(--oc-radius-medium);
+  border-radius: var(--oc-radius-large);
 }
 
 .composer-reference-option[data-read-only="true"] {

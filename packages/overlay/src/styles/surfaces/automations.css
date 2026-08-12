@@ -128,7 +128,7 @@
   padding: calc(12px * var(--ui-scale)) calc(42px * var(--ui-scale)) calc(12px * var(--ui-scale))
     calc(12px * var(--ui-scale));
   border: 0;
-  border-radius: var(--oc-radius-control);
+  border-radius: var(--oc-radius-soft);
   box-shadow: none;
   background: transparent;
   color: var(--text);
@@ -214,24 +214,23 @@
   font-weight: var(--ui-font-weight-medium);
 }
 
-.automation-suggestion {
+.automation-suggestion.oc-button {
+  --oc-button-bg: transparent;
+  --oc-button-border: 0 solid transparent;
+
   display: grid;
   grid-template-columns: calc(30px * var(--ui-scale)) minmax(0, 1fr);
   align-items: start;
   width: 100%;
+  height: auto;
   gap: calc(12px * var(--ui-scale));
   padding: calc(12px * var(--ui-scale));
-  border: 0;
-  border-radius: var(--oc-radius-control);
-  background: transparent;
-  color: var(--text);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
+  min-height: 0;
+  justify-content: stretch;
 }
 
-.automation-suggestion:is(:hover, :focus-visible) {
-  background: var(--ui-list-hover-bg);
+.automation-suggestion.oc-button:is(:hover, :focus-visible) {
+  --oc-button-bg: var(--ui-list-hover-bg);
 }
 
 .automation-suggestion > .oc-icon {
@@ -245,7 +244,7 @@
 }
 
 .automation-suggestion:nth-of-type(2) > .oc-icon {
-  color: var(--agent-stage-research, var(--accent));
+  color: var(--oc-stage-default);
 }
 
 .automation-suggestion:nth-of-type(3) > .oc-icon {
@@ -458,6 +457,10 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: calc(16px * var(--ui-scale));
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 
 .automation-field-wide {
@@ -528,7 +531,7 @@
   width: 100%;
   padding: calc(9px * var(--ui-scale));
   border: 0;
-  border-radius: var(--oc-radius-control);
+  border-radius: var(--oc-radius-soft);
   background: transparent;
   color: var(--text);
   text-align: left;

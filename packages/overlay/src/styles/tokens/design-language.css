@@ -1,6 +1,6 @@
 :root {
-  /* Radius scale — 5 tokens, single source. Any value outside this set is
-   * rejected by `radius-token-coverage.test.ts`. The legacy
+  /* Radius scale — 5 tokens, single source. The positive CSS token checker
+   * verifies current token references without restoring retired aliases. The legacy
    * `--oc-radius-panel`, `--oc-radius-card`, `--oc-radius-control`,
    * `--radius`, `--radius-lg`, `--panel-radius`, `--card-radius`,
    * `--section-corner`, `--oc-button-radius`, `--oc-titlebar-status-radius`
@@ -229,7 +229,7 @@
   );
   --ui-right-dock-max-width: calc(960px * var(--ui-scale));
   --ui-right-dock-tab-preferred-width: calc(176px * var(--ui-scale));
-  --ui-right-dock-tab-min-width: calc(72px * var(--ui-scale));
+  --ui-right-dock-tab-min-width: calc(120px * var(--ui-scale));
 
   /* Theme swatch previews: the titlebar theme-picker shows a 12x12 chip
      for each available theme. These previews are metadata about *other*

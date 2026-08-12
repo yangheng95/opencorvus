@@ -26,10 +26,6 @@ export interface SegmentedControlProps<T extends string> {
   renderOption?: (option: SegmentedControlOption<T>) => JSX.Element
 }
 
-function isActivationKey(event: KeyboardEvent): boolean {
-  return event.key === "Enter" || event.key === " " || event.key === "Space" || event.key === "Spacebar"
-}
-
 function classes(...values: Array<string | undefined>): string {
   return values.filter(Boolean).join(" ")
 }
@@ -58,10 +54,6 @@ export function SegmentedControl<T extends string>(props: SegmentedControlProps<
             title={option.title}
             disabled={option.disabled}
             onClick={() => props.onActivate?.(option.value)}
-            onKeyDown={(event) => {
-              if (option.disabled || !props.onActivate) return
-              if (isActivationKey(event)) props.onActivate(option.value)
-            }}
           >
             {props.renderOption ? props.renderOption(option) : option.label}
           </KobalteToggleGroupItem>

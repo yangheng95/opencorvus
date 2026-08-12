@@ -63,7 +63,7 @@
   gap: var(--ui-gap-md);
   width: min(calc(760px * var(--ui-scale)), calc(100vw - 40px));
   padding: var(--ui-gap-md) var(--ui-gap-lg);
-  border-radius: var(--oc-radius-lg);
+  border-radius: var(--oc-radius-large);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--warn) 58%, transparent);
   background: color-mix(in srgb, var(--warn) 16%, var(--surface-strong));
   color: var(--text-strong);
@@ -89,6 +89,11 @@
 .memory-banner__content > span {
   color: var(--text-muted);
   overflow-wrap: anywhere;
+}
+
+.memory-banner__error {
+  color: var(--bad) !important;
+  font-weight: var(--ui-font-weight-medium);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -17,6 +17,7 @@ import { getHostTransport } from "../../services/host-transport-runtime"
 import { pickDirectory } from "../../services/workspace"
 import { Badge } from "../ui/Badge"
 import { Button } from "../ui/Button"
+import { LinkButton } from "../ui/LinkButton"
 import { Icon } from "../ui/Icon"
 import { SelectField } from "../ui/SelectField"
 import { SettingsGroup, SettingsPanel, SettingsState, SettingsSurface } from "./layout"
@@ -231,11 +232,11 @@ export default function ExpertSquadMarketPanel() {
             </div>
           </div>
           <div class="expert-squad-market-entry-actions">
-            <a
-              class="oc-button expert-squad-market-web-action"
-              data-variant="solid"
-              data-size="md"
-              data-tone="accent"
+            <LinkButton
+              class="expert-squad-market-web-action"
+              variant="solid"
+              size="md"
+              tone="accent"
               data-ui="expert-squad-market-web"
               href={EXPERT_SQUAD_MARKET_URL}
               target="_blank"
@@ -243,12 +244,12 @@ export default function ExpertSquadMarketPanel() {
             >
               <Icon name="web-search" size="medium" />
               <span>{t("expert_squad.market_open_web")}</span>
-            </a>
-            <a
-              class="oc-button expert-squad-market-publish-action"
-              data-variant="outline"
-              data-size="md"
-              data-tone="neutral"
+            </LinkButton>
+            <LinkButton
+              class="expert-squad-market-publish-action"
+              variant="outline"
+              size="md"
+              tone="neutral"
               data-ui="expert-squad-market-publish"
               href={EXPERT_SQUAD_PUBLISH_URL}
               target="_blank"
@@ -256,7 +257,7 @@ export default function ExpertSquadMarketPanel() {
             >
               <Icon name="upload" size="medium" />
               <span>{t("expert_squad.market_publish")}</span>
-            </a>
+            </LinkButton>
           </div>
         </SettingsSurface>
       </SettingsGroup>

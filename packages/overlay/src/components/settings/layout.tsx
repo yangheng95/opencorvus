@@ -130,6 +130,8 @@ export interface SettingsRowProps extends Omit<JSX.HTMLAttributes<HTMLDivElement
   align?: "start" | "center"
   /** Opt-in hover wash. Default false — rows are static unless declared interactive. */
   interactive?: boolean
+  /** Native disabled state when the row renders as a button. */
+  disabled?: boolean
   /** Native tooltip title; kept separate from the visual title slot. */
   nativeTitle?: string
   id?: string

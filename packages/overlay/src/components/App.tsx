@@ -109,21 +109,7 @@ function ChatViewTitle(props: {
           as="span"
           class="chat-title chat-title-usage-trigger oc-surface-header__title"
           id="chatViewTitle"
-          role="button"
-          aria-label={copyFeedbackText() || `${props.title()}. ${t("chat.debug_copy_hint")}`}
-          tabIndex={0}
           data-copy-feedback={copyFeedback()?.kind}
-          onDblClick={(event) => {
-            event.preventDefault()
-            event.stopPropagation()
-            void copyDebugInfo()
-          }}
-          onKeyDown={(event) => {
-            if (event.key !== "Enter" && event.key !== " ") return
-            event.preventDefault()
-            event.stopPropagation()
-            void copyDebugInfo()
-          }}
         >
           {copyFeedbackText() || props.title()}
         </Tooltip.Trigger>
@@ -160,6 +146,15 @@ function ChatViewTitle(props: {
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
               <DropdownMenu.Content class="chat-title-menu" data-ui="chat-title-menu">
+                <DropdownMenu.Item
+                  as="button"
+                  type="button"
+                  data-ui="chat-title-copy-debug"
+                  onSelect={() => void copyDebugInfo()}
+                >
+                  <Icon name="copy" size="medium" />
+                  <span>{t("chat.debug_copy_action")}</span>
+                </DropdownMenu.Item>
                 <DropdownMenu.Item
                   as="button"
                   type="button"
@@ -255,7 +250,8 @@ export function App(props: AppProps) {
   let mailboxHoverOpenTimer: number | undefined
   let mailboxHoverCloseTimer: number | undefined
   const [mailboxHoverPreview, setMailboxHoverPreview] = createSignal(false)
-  const mailboxVisible = mailboxHoverPreview
+  const [mailboxPinned, setMailboxPinned] = createSignal(false)
+  const mailboxVisible = () => mailboxPinned() || mailboxHoverPreview()
   const conversationExecutionStatus = createMemo(() => {
     const source = boardStore.selectedSource
     const board = boardStore.board
@@ -302,6 +298,17 @@ export function App(props: AppProps) {
   function openMailboxHoverPreview(): void {
     cancelMailboxHoverOpen()
     setMailboxHoverPreview(true)
+  }
+
+  function toggleMailbox(): void {
+    cancelMailboxHoverOpen()
+    cancelMailboxHoverClose()
+    if (mailboxPinned()) {
+      setMailboxPinned(false)
+      setMailboxHoverPreview(false)
+      return
+    }
+    setMailboxPinned(true)
   }
 
   onCleanup(() => {
@@ -372,6 +379,7 @@ export function App(props: AppProps) {
                   aria-controls="leftPanelMailbox"
                   aria-expanded={mailboxVisible()}
                   onMouseEnter={scheduleMailboxHoverPreview}
+                  onClick={toggleMailbox}
                 >
                   <Icon name="mailbox" size="medium" />
                 </Button>
@@ -414,7 +422,7 @@ export function App(props: AppProps) {
                     {props.mailbox}
                   </div>
                 </div>
-                <footer class="sidebar-footer" aria-label="Author">
+                <footer class="sidebar-footer" aria-label={t("sidebar.author")}>
                   <span class="chat-version">
                     <span id="solidChatVersion">
                       <SidebarVersionLabel />
@@ -432,7 +440,7 @@ export function App(props: AppProps) {
             id="leftPaneResizer"
             role="separator"
             aria-orientation="vertical"
-            aria-label="Resize left panel"
+            aria-label={t("workspace.resize_left_panel")}
             aria-controls="sidebar workspaceMain"
             aria-valuemin="0"
             aria-valuemax="0"
@@ -458,7 +466,7 @@ export function App(props: AppProps) {
                         <div
                           class="task-switch-progress"
                           id="taskSwitchProgress"
-                          aria-label="Loading task"
+                          aria-label={t("workspace.loading_task")}
                           aria-busy="false"
                           data-active="false"
                         />
@@ -574,12 +582,12 @@ export function App(props: AppProps) {
               data-open="false"
               role="separator"
               aria-orientation="vertical"
-              aria-label="Resize right panel"
+              aria-label={t("workspace.resize_right_panel")}
               aria-controls="rightDock"
               aria-hidden="true"
               tabIndex={-1}
             />
-            <aside class="right-dock" id="rightDock" data-open="false" aria-label="Tools panel" aria-hidden="true">
+            <aside class="right-dock" id="rightDock" data-open="false" aria-label={t("right_dock.tools_panel")} aria-hidden="true">
               {props.rightDock}
             </aside>
           </div>

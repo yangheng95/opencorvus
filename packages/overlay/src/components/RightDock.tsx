@@ -1,6 +1,7 @@
 import { For, createEffect, createMemo, createSignal, onCleanup, type Accessor, type JSX } from "solid-js"
 import { t } from "../utils/i18n"
 import { closeNativeMenuSurface, openNativeMenuSurface } from "../services/native-menu-surface"
+import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { Icon, type IconName } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { Tab, TabList, Tabs } from "./ui/Tabs"
@@ -275,7 +276,12 @@ export function RightDock(props: RightDockProps): JSX.Element {
       })
     } catch (error) {
       props.onAddMenuOpenChange(false)
-      console.error("[right-dock.add-menu] failed to open", error)
+      reportError({
+        id: "right-dock:add-menu:open",
+        title: t("common.error"),
+        message: error instanceof Error ? error.message : String(error),
+        details: formatErrorDetails(error),
+      })
     }
   }
 
@@ -309,7 +315,12 @@ export function RightDock(props: RightDockProps): JSX.Element {
       })
     } catch (error) {
       props.onOverflowMenuOpenChange(false)
-      console.error("[right-dock.overflow-menu] failed to open", error)
+      reportError({
+        id: "right-dock:overflow-menu:open",
+        title: t("common.error"),
+        message: error instanceof Error ? error.message : String(error),
+        details: formatErrorDetails(error),
+      })
     }
   }
 

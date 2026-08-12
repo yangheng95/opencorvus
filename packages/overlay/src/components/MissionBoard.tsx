@@ -12,6 +12,7 @@ import { ContextMenu } from "./ui/ContextMenu"
 import { Icon } from "./ui/Icon"
 import { SelectControl } from "./ui/SelectControl"
 import { TextField } from "./ui/TextField"
+import { appStore } from "../store/app"
 
 const MISSION_TASK_PREVIEW_LIMIT = 3
 
@@ -208,6 +209,7 @@ export function MissionBoard(props: MissionBoardProps) {
     null,
   )
   const [actionError, setActionError] = createSignal("")
+  let searchInput: HTMLInputElement | undefined
   let actionGeneration = 0
 
   const projectOptions = createMemo<ProjectOption[]>(() => {
@@ -240,10 +242,13 @@ export function MissionBoard(props: MissionBoardProps) {
       )
     })
   })
+  const filtersActive = createMemo(() => Boolean(search().trim() || projectDirectory()))
+  const resetFilters = (): void => {
+    setSearch("")
+    setProjectDirectory("")
+    queueMicrotask(() => searchInput?.focus())
+  }
   const laneMissions = (lane: MissionBoardLane) => visibleMissions().filter((mission) => mission.boardLane === lane)
-  const visibleLanes = createMemo(() =>
-    MISSION_BOARD_LANES.filter((lane) => lane !== "attention" || laneMissions(lane).length > 0),
-  )
 
   async function dispatchMission(mission: MissionRecord): Promise<void> {
     if (pendingAction()) return
@@ -314,6 +319,9 @@ export function MissionBoard(props: MissionBoardProps) {
           <TextField.Root class="mission-board__search" size="sm" variant="search">
             <Icon name="search" size="compact" />
             <TextField.Input
+              ref={(element) => {
+                searchInput = element
+              }}
               value={search()}
               placeholder={t("mission_board.search_placeholder")}
               aria-label={t("mission_board.search_placeholder")}
@@ -347,18 +355,6 @@ export function MissionBoard(props: MissionBoardProps) {
         </div>
       </header>
 
-      <Show when={missionBoardStore.error}>
-        <div class="mission-board__error" role="alert">
-          <span>
-            <strong>{t("mission_board.load_failed")}</strong>
-            <small>{missionBoardStore.error}</small>
-          </span>
-          <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void reloadMissionBoard()}>
-            {t("common.retry")}
-          </Button>
-        </div>
-      </Show>
-
       <Show when={actionError()}>
         <div class="mission-board__error" role="alert">
           <span>
@@ -381,56 +377,88 @@ export function MissionBoard(props: MissionBoardProps) {
         }
       >
         <Show
-          when={visibleMissions().length > 0}
+          when={!missionBoardStore.error && appStore.connected}
           fallback={
-            <div class="mission-board__state">
-              <Icon name="tasks" size="large" />
-              <strong>{t("mission_board.empty")}</strong>
-              <span>{t("mission_board.empty_description")}</span>
+            <div class="mission-board__state" role="alert">
+              <Icon name="error-reason" size="large" />
+              <strong>{t("mission_board.load_failed")}</strong>
+              <span>{missionBoardStore.error || t("connection.banner_backend_offline")}</span>
+              <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void reloadMissionBoard()}>
+                {t("common.retry")}
+              </Button>
             </div>
           }
         >
-          <div
-            class="mission-board__lanes"
-            data-ui="mission-board-lanes"
-            style={`--mission-board-lane-count: ${visibleLanes().length}`}
+          <Show
+            when={visibleMissions().length > 0}
+            fallback={
+              <div class="mission-board__state">
+                <Icon name="tasks" size="large" />
+                <Show
+                  when={missionBoardStore.records.length > 0 && filtersActive()}
+                  fallback={
+                    <>
+                      <strong>{t("mission_board.empty_true")}</strong>
+                      <span>{t("mission_board.empty_true_description")}</span>
+                      <Button type="button" variant="solid" size="sm" tone="accent" onClick={() => setCreateOpen(true)}>
+                        <Icon name="plus" size="compact" />
+                        {t("mission_board.create.action")}
+                      </Button>
+                    </>
+                  }
+                >
+                  <strong>{t("mission_board.empty_filtered")}</strong>
+                  <span>
+                    {t("mission_board.empty_filtered_description", {
+                      search: search().trim() || t("mission_board.filter_none"),
+                      project: selectedProject()?.label ?? t("mission_board.all_projects"),
+                    })}
+                  </span>
+                  <Button type="button" variant="outline" size="sm" tone="neutral" onClick={resetFilters}>
+                    {t("mission_board.reset_filters")}
+                  </Button>
+                </Show>
+              </div>
+            }
           >
-            <For each={visibleLanes()}>
-              {(lane) => (
-                <section class="mission-board-lane" data-lane={lane} aria-labelledby={`missionBoardLane-${lane}`}>
-                  <header class="mission-board-lane__header">
-                    <span class="mission-board-lane__indicator" aria-hidden="true" />
-                    <h2 id={`missionBoardLane-${lane}`}>{t(`mission_board.lane.${lane}`)}</h2>
-                    <Badge size="sm" tone="muted">
-                      {laneMissions(lane).length}
-                    </Badge>
-                  </header>
-                  <div class="mission-board-lane__cards">
-                    <For
-                      each={laneMissions(lane)}
-                      fallback={<div class="mission-board-lane__empty">{t("mission_board.lane_empty")}</div>}
-                    >
-                      {(mission) => (
-                        <MissionBoardCard
-                          mission={mission}
-                          dispatching={
-                            pendingAction()?.kind === "dispatch" && pendingAction()?.missionID === mission.missionID
-                          }
-                          deleting={
-                            pendingAction()?.kind === "delete" && pendingAction()?.missionID === mission.missionID
-                          }
-                          actionBusy={Boolean(pendingAction())}
-                          onOpen={() => void props.onOpenMission(mission)}
-                          onDispatch={() => void dispatchMission(mission)}
-                          onDelete={() => void deleteMission(mission)}
-                        />
-                      )}
-                    </For>
-                  </div>
-                </section>
-              )}
-            </For>
-          </div>
+            <div class="mission-board__lanes" data-ui="mission-board-lanes">
+              <For each={MISSION_BOARD_LANES}>
+                {(lane) => (
+                  <section class="mission-board-lane" data-lane={lane} aria-labelledby={`missionBoardLane-${lane}`}>
+                    <header class="mission-board-lane__header">
+                      <span class="mission-board-lane__indicator" aria-hidden="true" />
+                      <h2 id={`missionBoardLane-${lane}`}>{t(`mission_board.lane.${lane}`)}</h2>
+                      <Badge size="sm" tone="muted">
+                        {laneMissions(lane).length}
+                      </Badge>
+                    </header>
+                    <div class="mission-board-lane__cards">
+                      <For
+                        each={laneMissions(lane)}
+                        fallback={<div class="mission-board-lane__empty">{t("mission_board.lane_empty")}</div>}
+                      >
+                        {(mission) => (
+                          <MissionBoardCard
+                            mission={mission}
+                            dispatching={
+                              pendingAction()?.kind === "dispatch" && pendingAction()?.missionID === mission.missionID
+                            }
+                            deleting={
+                              pendingAction()?.kind === "delete" && pendingAction()?.missionID === mission.missionID
+                            }
+                            actionBusy={Boolean(pendingAction())}
+                            onOpen={() => void props.onOpenMission(mission)}
+                            onDispatch={() => void dispatchMission(mission)}
+                            onDelete={() => void deleteMission(mission)}
+                          />
+                        )}
+                      </For>
+                    </div>
+                  </section>
+                )}
+              </For>
+            </div>
+          </Show>
         </Show>
       </Show>
       <MissionCreateDialog

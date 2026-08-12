@@ -44,10 +44,11 @@ import { TextField } from "../ui/TextField"
 import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsState, SettingsSurface } from "./layout"
 
 type SelectOption<T extends string> = { value: T; label: string }
-type AutomationError = { message: string; retry?: () => void }
+type AutomationError = { message: string; retry?: () => void; source?: "list-load" }
 type AutomationModelOption = ConnectedModelOption & { defaultModel?: boolean }
 type AutomationFilter = "all" | "active" | "paused"
 type AutomationScopeFilter = "all" | AutomationScope
+type AutomationMutationOwner = { kind: "save"; id: string } | { kind: "action"; id: string }
 
 interface AutomationSuggestion {
   icon: "notifications" | "file-document" | "inspect"
@@ -157,8 +158,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const [selectedID, setSelectedID] = createSignal("")
   const [runs, setRuns] = createSignal<AutomationRunView[]>([])
   const [loading, setLoading] = createSignal(false)
-  const [saving, setSaving] = createSignal(false)
-  const [busyAction, setBusyAction] = createSignal("")
+  const [mutationOwner, setMutationOwner] = createSignal<AutomationMutationOwner | null>(null)
+  const saving = createMemo(() => mutationOwner()?.kind === "save")
+  const busyAction = createMemo(() => mutationOwner()?.id ?? "")
   const [error, setError] = createSignal<AutomationError | null>(null)
   const [editing, setEditing] = createSignal(false)
   const [creating, setCreating] = createSignal(false)
@@ -196,16 +198,28 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       )
     })
   })
+  const filtersActive = createMemo(() => Boolean(search().trim()) || filter() !== "all" || scopeFilter() !== "all")
+  const initialLoadError = createMemo(() => {
+    const problem = error()
+    return automations().length === 0 && !loading() && problem?.source === "list-load" ? problem : null
+  })
+  function clearFilters(): void {
+    setSearch("")
+    setFilter("all")
+    setScopeFilter("all")
+  }
   const filterOptions = createMemo(() =>
     (["all", "active", "paused"] as const).map((value) => ({
       value,
       label: t(`automations.filter.${value}`),
+      disabled: Boolean(busyAction()),
     })),
   )
   const scopeFilterOptions = createMemo(() =>
     (["all", "session", "project", "global"] as const).map((value) => ({
       value,
       label: t(`automations.scope_filter.${value}`),
+      disabled: Boolean(busyAction()),
     })),
   )
   const modelOptions = createMemo<AutomationModelOption[]>(() => [
@@ -284,6 +298,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
         setError({
           message: errorText(cause),
           retry: () => void load(preferredID),
+          source: "list-load",
         })
       }
     } finally {
@@ -313,6 +328,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   }
 
   function selectAutomation(id: string): void {
+    if (busyAction()) return
     setSelectedID(id)
     setCreating(false)
     setEditing(false)
@@ -321,6 +337,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   }
 
   function beginCreate(): void {
+    if (busyAction()) return
     resetForm()
     setSelectedID("")
     setCreating(true)
@@ -328,6 +345,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   }
 
   function beginSuggestion(suggestion: AutomationSuggestion): void {
+    if (busyAction()) return
     resetForm()
     setName(suggestion.name)
     setPrompt(suggestion.prompt)
@@ -339,6 +357,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   }
 
   function returnToList(): void {
+    if (busyAction()) return
     setSelectedID("")
     setRuns([])
     setCreating(false)
@@ -353,6 +372,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   }
 
   function beginEdit(): void {
+    if (busyAction()) return
     const automation = selected()
     if (!automation) return
     resetForm(automation)
@@ -361,6 +381,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   }
 
   function cancelForm(): void {
+    if (busyAction()) return
     if (editing() && selectedID()) {
       setEditing(false)
       setError(null)
@@ -379,6 +400,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
 
   async function submitForm(event: SubmitEvent): Promise<void> {
     event.preventDefault()
+    if (busyAction()) return
     setError(null)
     if (scope() === "session" && !sessionTargetID()) {
       setError({ message: t("automations.error.session_required") })
@@ -402,7 +424,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       return
     }
 
-    setSaving(true)
+    const owner: AutomationMutationOwner = { kind: "save", id: selectedID() || "new" }
+    setMutationOwner(owner)
     try {
       const model =
         providerID() && modelID() ? { providerID: providerID().trim(), modelID: modelID().trim() } : undefined
@@ -446,12 +469,14 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     } catch (cause) {
       setError({ message: errorText(cause) })
     } finally {
-      setSaving(false)
+      if (mutationOwner() === owner) setMutationOwner(null)
     }
   }
 
   async function performAction(id: string, action: () => Promise<unknown>): Promise<void> {
-    setBusyAction(id)
+    if (busyAction()) return
+    const owner: AutomationMutationOwner = { kind: "action", id }
+    setMutationOwner(owner)
     setError(null)
     try {
       await action()
@@ -460,7 +485,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     } catch (cause) {
       setError({ message: errorText(cause) })
     } finally {
-      setBusyAction("")
+      if (mutationOwner() === owner) setMutationOwner(null)
     }
   }
 
@@ -471,16 +496,23 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   }
 
   async function removeAutomation(id: string): Promise<void> {
-    setBusyAction(id)
+    if (busyAction()) return
+    const owner: AutomationMutationOwner = { kind: "action", id }
+    setMutationOwner(owner)
     setError(null)
     try {
       await deleteAutomation(id)
-      if (selectedID() === id) returnToList()
+      if (selectedID() === id) {
+        setSelectedID("")
+        setRuns([])
+        setCreating(false)
+        setEditing(false)
+      }
       await load()
     } catch (cause) {
       setError({ message: errorText(cause) })
     } finally {
-      setBusyAction("")
+      if (mutationOwner() === owner) setMutationOwner(null)
     }
   }
 
@@ -497,9 +529,11 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
         : providerResult.value.map((issue) => issue.message)),
     ]
     if (messages.length > 0) {
+      const listLoadFailed = error()?.source === "list-load"
       setError({
-        message: messages.join("; "),
+        message: [...(listLoadFailed ? [error()!.message] : []), ...messages].join("; "),
         retry: () => void initializeHost(),
+        source: listLoadFailed ? "list-load" : undefined,
       })
     }
   }
@@ -553,31 +587,40 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       <div class="automations-page-intro">
         <p>{t("automations.subtitle")}</p>
         <div class="automations-page-actions">
+          <Show when={!initialLoadError()}>
           <Button
             type="button"
             variant="solid"
             size="sm"
             tone="accent"
             data-ui="automation-create"
-            disabled={loading()}
+            disabled={loading() || Boolean(busyAction())}
             onClick={beginCreate}
           >
             <Icon name="plus" />
             {t("automations.new")}
           </Button>
+          </Show>
         </div>
       </div>
 
       <SettingsGroup>
         <SettingsSurface class="automations-layout" data-drill-in={showForm() || selected() ? "true" : undefined}>
-          <Show when={error()}>
+          <Show when={!initialLoadError() ? error() : null}>
             {(problem) => (
               <SettingsState
                 tone="error"
                 actions={
                   <Show when={problem().retry}>
                     {(retry) => (
-                      <Button type="button" variant="ghost" size="mini" tone="neutral" onClick={() => retry()()}>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="mini"
+                        tone="neutral"
+                        disabled={Boolean(busyAction())}
+                        onClick={() => retry()()}
+                      >
                         <Icon name="refresh" />
                         {t("common.retry")}
                       </Button>
@@ -589,6 +632,22 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
               </SettingsState>
             )}
           </Show>
+          <Show
+            when={!initialLoadError()}
+            fallback={
+              <SettingsState
+                tone="error"
+                actions={
+                  <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => initialLoadError()?.retry?.()}>
+                    <Icon name="refresh" />
+                    {t("common.retry")}
+                  </Button>
+                }
+              >
+                {initialLoadError()?.message}
+              </SettingsState>
+            }
+          >
           <aside class="automations-list" aria-label={t("automations.list")}>
             <SearchField
               class="automations-search"
@@ -597,6 +656,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
               placeholder={t("automations.search_placeholder")}
               onValueChange={setSearch}
               onClear={() => setSearch("")}
+              disabled={Boolean(busyAction())}
             />
             <SegmentedControl
               class="automations-filter"
@@ -616,7 +676,14 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
               <Show
                 when={filteredAutomations().length > 0}
                 fallback={
-                  <SettingsEmpty>{search() ? t("automations.search_empty") : t("automations.empty")}</SettingsEmpty>
+                  <SettingsEmpty>
+                    <span>{filtersActive() ? t("automations.filtered_empty") : t("automations.empty")}</span>
+                    <Show when={filtersActive()}>
+                      <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={clearFilters}>
+                        {t("automations.clear_filters")}
+                      </Button>
+                    </Show>
+                  </SettingsEmpty>
                 }
               >
                 <div class="automations-rows">
@@ -629,6 +696,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                           interactive
                           customContent
                           data-selected={String(selectedID() === automation.id)}
+                          disabled={Boolean(busyAction())}
                           onClick={() => selectAutomation(automation.id)}
                         >
                           <Icon name={automation.status === "active" ? "run" : "scheduled"} />
@@ -653,7 +721,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                           label={t("automations.delete")}
                           armedDescription={t("automations.delete_confirm")}
                           confirmChildren={t("automations.delete_confirm")}
-                          disabled={busyAction() === automation.id}
+                          disabled={Boolean(busyAction())}
                           onConfirm={() => void removeAutomation(automation.id)}
                         >
                           <Icon name="delete" />
@@ -664,12 +732,20 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                 </div>
               </Show>
             </Show>
-            <Show when={!search()}>
+            <Show when={!filtersActive()}>
               <section class="automation-suggestions">
                 <h2>{t("automations.suggestions")}</h2>
                 <For each={automationSuggestions()}>
                   {(suggestion) => (
-                    <button type="button" class="automation-suggestion" onClick={() => beginSuggestion(suggestion)}>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      tone="neutral"
+                      class="automation-suggestion oc-action-tile"
+                      disabled={Boolean(busyAction())}
+                      onClick={() => beginSuggestion(suggestion)}
+                    >
                       <Icon name={suggestion.icon} />
                       <span>
                         <span class="automation-suggestion__title">
@@ -678,7 +754,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         </span>
                         <span class="automation-suggestion__description">{suggestion.description}</span>
                       </span>
-                    </button>
+                    </Button>
                   )}
                 </For>
               </section>
@@ -701,7 +777,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         variant="solid"
                         size="md"
                         tone="accent"
-                        disabled={loading()}
+                        disabled={loading() || Boolean(busyAction())}
                         onClick={beginCreate}
                       >
                         {t("automations.new")}
@@ -717,6 +793,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         variant="ghost"
                         size="sm"
                         tone="neutral"
+                        disabled={Boolean(busyAction())}
                         onClick={returnToList}
                       >
                         <Icon name="nav-back" />
@@ -739,7 +816,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             size="sm"
                             tone="neutral"
                             data-ui="automation-run-now"
-                            disabled={busyAction() === automation().id}
+                            disabled={Boolean(busyAction())}
                             onClick={() => void performAction(automation().id, () => runAutomationNow(automation().id))}
                           >
                             <Icon name="run" />
@@ -751,6 +828,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             size="sm"
                             tone="neutral"
                             data-ui="automation-edit"
+                            disabled={Boolean(busyAction())}
                             onClick={beginEdit}
                           >
                             <Icon name="edit" />
@@ -762,7 +840,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             size="sm"
                             tone="neutral"
                             data-ui="automation-status"
-                            disabled={busyAction() === automation().id}
+                            disabled={Boolean(busyAction())}
                             onClick={() =>
                               void performAction(
                                 automation().id,
@@ -780,7 +858,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             tone="danger"
                             label={t("automations.delete")}
                             armedDescription={t("automations.delete_confirm")}
-                            disabled={busyAction() === automation().id}
+                            disabled={Boolean(busyAction())}
                             onConfirm={() => void removeSelected()}
                             confirmChildren={t("automations.delete_confirm")}
                           >
@@ -847,6 +925,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             variant="ghost"
                             size="mini"
                             tone="neutral"
+                            disabled={Boolean(busyAction())}
                             onClick={() => void loadRuns(automation().id)}
                           >
                             <Icon name="refresh" />
@@ -876,6 +955,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                                         size="mini"
                                         tone="neutral"
                                         data-ui="automation-open-session"
+                                        disabled={Boolean(busyAction())}
                                         onClick={() => void openRunSession(session())}
                                       >
                                         <Icon name="message" />
@@ -904,6 +984,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                   variant="ghost"
                   size="sm"
                   tone="neutral"
+                  disabled={Boolean(busyAction())}
                   onClick={cancelForm}
                 >
                   <Icon name="nav-back" />
@@ -915,7 +996,14 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                     <p>{t("automations.form_help")}</p>
                   </div>
                   <div>
-                    <Button type="button" variant="ghost" size="md" tone="neutral" onClick={cancelForm}>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="md"
+                      tone="neutral"
+                      disabled={Boolean(busyAction())}
+                      onClick={cancelForm}
+                    >
                       {t("common.cancel")}
                     </Button>
                     <Button
@@ -924,7 +1012,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                       size="md"
                       tone="accent"
                       disabled={
-                        saving() ||
+                        Boolean(busyAction()) ||
                         !name().trim() ||
                         !prompt().trim() ||
                         (scope() === "session" && !sessionTargetID()) ||
@@ -936,7 +1024,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                   </div>
                 </div>
 
-                <div class="automation-form-grid">
+                <fieldset class="automation-form-grid" disabled={Boolean(busyAction())}>
                   <TextField.Root as="label" class="automation-field-wide">
                     <TextField.Label>{t("automations.name")}</TextField.Label>
                     <TextField.Input
@@ -1200,10 +1288,11 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                       }}
                     />
                   </TextField.Root>
-                </div>
+                </fieldset>
               </form>
             </Show>
           </section>
+          </Show>
         </SettingsSurface>
       </SettingsGroup>
     </SettingsPanel>

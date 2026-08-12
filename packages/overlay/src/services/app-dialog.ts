@@ -11,6 +11,7 @@ export type AppDialogOptions = {
   message?: string
   kind?: string
   okLabel?: string
+  okTone?: "accent" | "danger"
   cancelLabel?: string
   cancel?: boolean
   input?: boolean
@@ -18,6 +19,9 @@ export type AppDialogOptions = {
   inputLabel?: string
   inputPlaceholder?: string
   inputValue?: string
+  inputRequired?: boolean
+  inputRequiredMessage?: string
+  inputError?: string
   select?: boolean
   selectLabel?: string
   selectValue?: string
@@ -124,6 +128,7 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
           message: options.message || "",
           kind: options.kind || "",
           okLabel: options.okLabel || t("common.ok"),
+          okTone: options.okTone || "accent",
           cancelLabel: options.cancelLabel || t("common.cancel"),
           cancel: options.cancel === true,
           input: options.input === true,
@@ -131,6 +136,9 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
           inputLabel: options.inputLabel || t("dialog.input"),
           inputPlaceholder: options.inputPlaceholder || "",
           inputValue: options.inputValue || "",
+          inputRequired: options.inputRequired === true,
+          inputRequiredMessage: options.inputRequiredMessage || t("dialog.input_required"),
+          inputError: "",
           select: options.select === true,
           selectLabel: options.selectLabel || t("dialog.input"),
           selectValue,
@@ -157,7 +165,11 @@ export async function nativeMessage(
   })
 }
 
-async function finishAppDialog(confirmed: boolean, epoch: number, dialog?: HTMLElement): Promise<void> {
+async function finishAppDialog(confirmed: boolean, epoch: number, dialog?: HTMLElement): Promise<boolean> {
+  if (confirmed && dialogStore.app.input && dialogStore.app.inputRequired && !dialogStore.app.inputValue.trim()) {
+    setDialogStore("app", "inputError", dialogStore.app.inputRequiredMessage || t("dialog.input_required"))
+    return false
+  }
   await runAppDialogTransition(async () => {
     const completion = activeDialog
     if (!completion || completion.epoch !== epoch || epoch !== dialogStore.app.epoch) return
@@ -181,13 +193,14 @@ async function finishAppDialog(confirmed: boolean, epoch: number, dialog?: HTMLE
     completion.resolve({ confirmed, value })
   })
   void dialog
+  return true
 }
 
-export function settleAppDialog(confirmed: boolean, epoch = dialogStore.app.epoch): Promise<void> {
+export function settleAppDialog(confirmed: boolean, epoch = dialogStore.app.epoch): Promise<boolean> {
   return finishAppDialog(confirmed, epoch)
 }
 
-export function dismissAppDialog(dialog?: HTMLElement): Promise<void> {
+export function dismissAppDialog(dialog?: HTMLElement): Promise<boolean> {
   const epoch = Number(dialog?.dataset.dialogEpoch || dialogStore.app.epoch)
   return finishAppDialog(false, epoch, dialog)
 }

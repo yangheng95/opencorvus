@@ -892,6 +892,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       message: t("worktree.delete_confirm", { path: item.directory }),
       cancel: true,
       okLabel: t("common.delete"),
+      okTone: "danger",
     })
     if (!confirmed.confirmed) return
     if (dir().trim() !== projectDirectory || worktreeDirectory() !== projectDirectory) return
@@ -940,6 +941,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       message: t("worktree.delete_all_confirm", { count: targets.length }),
       cancel: true,
       okLabel: t("common.delete"),
+      okTone: "danger",
     })
     if (!confirmed.confirmed) return
     if (dir().trim() !== projectDirectory || worktreeDirectory() !== projectDirectory) return
@@ -1519,7 +1521,14 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         }}
         onClose={() => closeLocalEnvironmentEditor()}
       >
-        <div class="project-runtime-local-environment-dialog" data-ui="project-runtime-local-environment-dialog">
+        <form
+          class="project-runtime-local-environment-dialog"
+          data-ui="project-runtime-local-environment-dialog"
+          onSubmit={(event) => {
+            event.preventDefault()
+            void saveLocalEnvironment()
+          }}
+        >
           <p class="project-runtime-local-environment-description">
             {t("project_runtime.local_environment_description")}
           </p>
@@ -1638,18 +1647,17 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               {t("common.cancel")}
             </Button>
             <Button
-              type="button"
+              type="submit"
               variant="solid"
               size="md"
               tone="accent"
               data-ui="project-runtime-local-environment-save"
               disabled={localEnvironmentBusy()}
-              onClick={() => void saveLocalEnvironment()}
             >
               {localEnvironmentBusy() ? t("common.saving") : t("common.save")}
             </Button>
           </div>
-        </div>
+        </form>
       </Dialog>
       <Dialog
         id="projectRuntimeGitDialog"

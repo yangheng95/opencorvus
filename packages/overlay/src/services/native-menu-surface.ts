@@ -1,20 +1,25 @@
 import { LogicalSize, PhysicalPosition, PhysicalSize } from "@tauri-apps/api/dpi"
-import { emitTo, listen } from "@tauri-apps/api/event"
+import { emitTo, listen, type UnlistenFn } from "@tauri-apps/api/event"
 import { currentMonitor, getCurrentWindow } from "@tauri-apps/api/window"
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow"
 import {
   NATIVE_MENU_SURFACE_ACTION_EVENT,
   NATIVE_MENU_SURFACE_DISMISS_EVENT,
+  NATIVE_MENU_SURFACE_FAILED_EVENT,
   NATIVE_MENU_SURFACE_LABEL,
   NATIVE_MENU_SURFACE_MEASURED_EVENT,
   NATIVE_MENU_SURFACE_MODEL_EVENT,
   NATIVE_MENU_SURFACE_READY_EVENT,
+  NATIVE_MENU_SURFACE_READY_TIMEOUT_MS,
   type NativeMenuSurfaceAction,
   type NativeMenuSurfaceDismiss,
+  type NativeMenuSurfaceFailure,
   type NativeMenuSurfaceGroup,
+  type NativeMenuSurfaceReady,
   type NativeMenuSurfaceMeasured,
   type NativeMenuSurfaceModel,
   type NativeMenuSurfaceVariant,
+  waitForNativeMenuSurfaceReady,
 } from "./native-menu-surface-contract"
 
 interface NativeMenuAnchor {
@@ -50,8 +55,12 @@ let surfaceWindowPromise: Promise<WebviewWindow> | undefined
 let eventBridgePromise: Promise<void> | undefined
 let readyPromise: Promise<void> | undefined
 let resolveReady: (() => void) | undefined
+let rejectReady: ((reason: unknown) => void) | undefined
+let readyWindow: WebviewWindow | undefined
 let nextRequestID = 0
 let activeSurface: ActiveNativeMenuSurface | undefined
+let nextWindowGeneration = 0
+let readyGeneration = 0
 
 function dismissFromParentPointer(event: PointerEvent): void {
   const active = activeSurface
@@ -131,40 +140,64 @@ async function placeMeasuredSurface(measurement: NativeMenuSurfaceMeasured): Pro
 
 async function ensureEventBridge(): Promise<void> {
   if (eventBridgePromise) return eventBridgePromise
-  eventBridgePromise = (async () => {
+  const attempt = (async () => {
+    const unlisteners: UnlistenFn[] = []
     document.addEventListener("pointerdown", dismissFromParentPointer, true)
-    readyPromise = new Promise<void>((resolve) => {
-      resolveReady = resolve
-    })
-    await Promise.all([
-      listen(NATIVE_MENU_SURFACE_READY_EVENT, () => {
+    try {
+      unlisteners.push(await listen<NativeMenuSurfaceReady>(NATIVE_MENU_SURFACE_READY_EVENT, ({ payload }) => {
+        if (payload.generation !== readyGeneration) return
         resolveReady?.()
         resolveReady = undefined
-      }),
-      listen<NativeMenuSurfaceMeasured>(NATIVE_MENU_SURFACE_MEASURED_EVENT, ({ payload }) => {
+        rejectReady = undefined
+      }))
+      unlisteners.push(await listen<NativeMenuSurfaceFailure>(NATIVE_MENU_SURFACE_FAILED_EVENT, ({ payload }) => {
+        if (payload.generation !== readyGeneration) return
+        rejectReady?.(new Error(payload.message))
+        resolveReady = undefined
+        rejectReady = undefined
+      }))
+      unlisteners.push(await listen<NativeMenuSurfaceMeasured>(NATIVE_MENU_SURFACE_MEASURED_EVENT, ({ payload }) => {
         void placeMeasuredSurface(payload).catch((error) => {
           console.error("[native-menu-surface] placement failed", error)
           completeActiveSurface(payload.requestID)
         })
-      }),
-      listen<NativeMenuSurfaceAction>(NATIVE_MENU_SURFACE_ACTION_EVENT, ({ payload }) => {
+      }))
+      unlisteners.push(await listen<NativeMenuSurfaceAction>(NATIVE_MENU_SURFACE_ACTION_EVENT, ({ payload }) => {
         completeActiveSurface(payload.requestID, payload.itemID)
-      }),
-      listen<NativeMenuSurfaceDismiss>(NATIVE_MENU_SURFACE_DISMISS_EVENT, ({ payload }) => {
+      }))
+      unlisteners.push(await listen<NativeMenuSurfaceDismiss>(NATIVE_MENU_SURFACE_DISMISS_EVENT, ({ payload }) => {
         completeActiveSurface(payload.requestID)
-      }),
-    ])
+      }))
+    } catch (error) {
+      document.removeEventListener("pointerdown", dismissFromParentPointer, true)
+      for (const unlisten of unlisteners) unlisten()
+      throw error
+    }
   })()
-  return eventBridgePromise
+  eventBridgePromise = attempt
+  try {
+    await attempt
+  } catch (error) {
+    if (eventBridgePromise === attempt) {
+      eventBridgePromise = undefined
+    }
+    throw error
+  }
 }
 
 async function ensureSurfaceWindow(): Promise<WebviewWindow> {
   if (surfaceWindow) return surfaceWindow
   if (surfaceWindowPromise) return surfaceWindowPromise
-  surfaceWindowPromise = (async () => {
+  const attempt = (async () => {
     await ensureEventBridge()
+    const generation = ++nextWindowGeneration
+    readyGeneration = generation
+    readyPromise = new Promise<void>((resolve, reject) => {
+      resolveReady = resolve
+      rejectReady = reject
+    })
     const popup = new WebviewWindow(NATIVE_MENU_SURFACE_LABEL, {
-      url: "native-menu.html",
+      url: `native-menu.html?generation=${generation}`,
       parent: "main",
       width: 1,
       height: 1,
@@ -178,15 +211,43 @@ async function ensureSurfaceWindow(): Promise<WebviewWindow> {
       skipTaskbar: true,
       backgroundColor: [0, 0, 0, 0],
     })
-    await new Promise<void>((resolve, reject) => {
-      void popup.once("tauri://created", () => resolve())
-      void popup.once("tauri://error", ({ payload }) => reject(payload))
+    readyWindow = popup
+    void popup.once("tauri://destroyed", () => {
+      if (readyWindow === popup) rejectReady?.(new Error("Native menu surface was destroyed before it became ready"))
+      if (surfaceWindow === popup) surfaceWindow = undefined
+      if (activeSurface) completeActiveSurface(activeSurface.requestID)
     })
-    surfaceWindow = popup
-    await readyPromise
-    return popup
+    try {
+      await waitForNativeMenuSurfaceReady(
+        new Promise<void>((resolve, reject) => {
+          void popup.once("tauri://created", () => resolve())
+          void popup.once("tauri://error", ({ payload }) => reject(payload))
+        }),
+        NATIVE_MENU_SURFACE_READY_TIMEOUT_MS,
+      )
+      await waitForNativeMenuSurfaceReady(readyPromise, NATIVE_MENU_SURFACE_READY_TIMEOUT_MS)
+      surfaceWindow = popup
+      return popup
+    } catch (error) {
+      await popup.destroy().catch((destroyError) => {
+        console.error("[native-menu-surface] failed window cleanup", destroyError)
+      })
+      if (surfaceWindow === popup) surfaceWindow = undefined
+      throw error
+    } finally {
+      readyPromise = undefined
+      resolveReady = undefined
+      rejectReady = undefined
+      if (readyGeneration === generation) readyGeneration = 0
+      if (readyWindow === popup) readyWindow = undefined
+    }
   })()
-  return surfaceWindowPromise
+  surfaceWindowPromise = attempt
+  try {
+    return await attempt
+  } finally {
+    if (surfaceWindowPromise === attempt) surfaceWindowPromise = undefined
+  }
 }
 
 export async function openNativeMenuSurface(options: OpenNativeMenuSurfaceOptions): Promise<void> {
@@ -208,7 +269,16 @@ export async function openNativeMenuSurface(options: OpenNativeMenuSurfaceOption
     onDismiss: options.onDismiss,
   }
 
-  const popup = await ensureSurfaceWindow()
+  let popup: WebviewWindow
+  try {
+    popup = await ensureSurfaceWindow()
+  } catch (error) {
+    if (activeSurface?.requestID === requestID) {
+      activeSurface = undefined
+      options.onDismiss()
+    }
+    throw error
+  }
   if (!activeSurface || activeSurface.requestID !== requestID) return
   await popup.hide()
   const model: NativeMenuSurfaceModel = {

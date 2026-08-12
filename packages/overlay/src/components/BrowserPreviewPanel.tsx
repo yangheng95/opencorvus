@@ -1197,21 +1197,18 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     })
   })
 
-  const addressNavigationAvailable = createMemo(
-    () =>
-      browserPreviewNativeSurfaceAvailable() &&
-      browserPreviewNativeUrlNavigationAvailable() &&
-      !addressSubmitting() &&
-      !addressExternalOpening(),
+  const addressNavigationSupported = createMemo(
+    () => browserPreviewNativeSurfaceAvailable() && browserPreviewNativeUrlNavigationAvailable(),
   )
-  const addressExternalOpenAvailable = createMemo(
-    () =>
-      getHostTransport().capabilities.nativeCommands["open-url"] && !addressSubmitting() && !addressExternalOpening(),
+  const addressExternalOpenSupported = createMemo(
+    () => getHostTransport().capabilities.nativeCommands["open-url"],
   )
-
-  // Enter in the address field retargets the live Browser child WebView. The
-  // adjacent arrow is intentionally a separate action that opens the same
-  // draft in the operating system's default browser application.
+  const addressActionBusy = createMemo(() => addressSubmitting() || addressExternalOpening())
+  const addressInputAvailable = createMemo(
+    () => (addressNavigationSupported() || addressExternalOpenSupported()) && !addressActionBusy(),
+  )
+  const addressNavigationAvailable = createMemo(() => addressNavigationSupported() && !addressActionBusy())
+  const addressExternalOpenAvailable = createMemo(() => addressExternalOpenSupported() && !addressActionBusy())
   function requestAddressNavigation(raw: string): void {
     setAddressSubmitError("")
     const url = normalizeBrowserPreviewNativeUrl(raw)
@@ -1634,12 +1631,16 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
             data-ui="browser-preview-address-form"
             onSubmit={(event) => {
               event.preventDefault()
-              if (!addressNavigationAvailable()) return
               const raw = addressDraft().trim()
-              if (raw) requestAddressNavigation(raw)
+              if (!raw || addressActionBusy()) return
+              if (!addressNavigationSupported()) {
+                setAddressSubmitError(t("browser_preview.address.navigation_unavailable"))
+                return
+              }
+              requestAddressNavigation(raw)
             }}
           >
-            <TextField.Root class="browser-preview-address-field" size="sm" disabled={!addressNavigationAvailable()}>
+            <TextField.Root class="browser-preview-address-field" size="sm" disabled={!addressInputAvailable()}>
               <TextField.Input
                 class="browser-preview-address-input"
                 data-ui="browser-preview-address-input"
@@ -1648,7 +1649,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
                 spellcheck={false}
                 autocomplete="off"
                 autocapitalize="off"
-                disabled={!addressNavigationAvailable()}
+                disabled={!addressInputAvailable()}
                 placeholder={t("browser_preview.address.placeholder")}
                 aria-label={t("browser_preview.address.label")}
                 value={addressDraft()}
@@ -1663,23 +1664,37 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
               />
             </TextField.Root>
             <Button
-              type="button"
+              type="submit"
               variant="ghost"
               size="icon"
               tone="neutral"
               data-ui="browser-preview-address-submit"
-              disabled={!addressExternalOpenAvailable() || !addressDraft().trim()}
-              title={t("browser_preview.address.open")}
-              aria-label={t("browser_preview.address.open")}
-              onClick={() => void openAddressInDefaultBrowser()}
+              disabled={!addressNavigationAvailable() || !addressDraft().trim()}
+              title={t("browser_preview.address.navigate")}
+              aria-label={t("browser_preview.address.navigate")}
             >
-              <Show when={!addressExternalOpening()} fallback={<span class="card__spinner" aria-hidden="true" />}>
+              <Show when={!addressSubmitting()} fallback={<span class="card__spinner" aria-hidden="true" />}>
                 <Icon name="nav-forward" />
               </Show>
             </Button>
           </form>
 
           <div class="browser-preview-chrome-actions" data-ui="browser-preview-chrome-actions">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              tone="neutral"
+              data-ui="browser-preview-address-open-external"
+              disabled={!addressExternalOpenAvailable() || !addressDraft().trim()}
+              title={t("browser_preview.address.open")}
+              aria-label={t("browser_preview.address.open")}
+              onClick={() => void openAddressInDefaultBrowser()}
+            >
+              <Show when={!addressExternalOpening()} fallback={<span class="card__spinner" aria-hidden="true" />}>
+                <Icon name="open-external" />
+              </Show>
+            </Button>
             <Button
               type="button"
               variant="ghost"

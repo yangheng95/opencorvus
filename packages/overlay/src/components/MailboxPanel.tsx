@@ -376,6 +376,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
           : t("mailbox.delete_many_confirm", { count: deleteItems.length }),
       kind: "mailbox-delete",
       okLabel: t("common.delete"),
+      okTone: "danger",
       cancel: true,
     })
     if (!result.confirmed) return
@@ -639,10 +640,32 @@ export function MailboxPanel(props: MailboxPanelProps) {
               >
                 <div class="mailbox-panel__empty">
                   <Icon name="notifications" size="large" />
-                  <div class="mailbox-panel__empty-title">
-                    {query() ? t("mailbox.no_search_results") : t("mailbox.empty.active")}
-                  </div>
-                  <div class="mailbox-panel__empty-body">{t("mailbox.empty.active.body")}</div>
+                  <Show
+                    when={query()}
+                    fallback={
+                      <>
+                        <div class="mailbox-panel__empty-title">{t("mailbox.empty.active")}</div>
+                        <div class="mailbox-panel__empty-body">{t("mailbox.empty.active.body")}</div>
+                      </>
+                    }
+                  >
+                    <div class="mailbox-panel__empty-title">{t("mailbox.no_search_results")}</div>
+                    <div class="mailbox-panel__empty-body">
+                      {t("mailbox.no_search_results_body", { query: query().trim() })}
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      tone="neutral"
+                      onClick={() => {
+                        setQuery("")
+                        queueMicrotask(() => searchInput?.focus())
+                      }}
+                    >
+                      {t("mailbox.clear_search")}
+                    </Button>
+                  </Show>
                 </div>
               </Show>
             }

@@ -695,6 +695,7 @@ async function deleteWorkLedgerProject(directory: string): Promise<void> {
     message: t("project.delete_confirm", { directory: projectDirectory }),
     cancel: true,
     okLabel: t("common.delete"),
+    okTone: "danger",
   })
   if (!dialog.confirmed) return
 
@@ -758,6 +759,8 @@ async function renameWorkLedgerProject(directory: string, currentName: string): 
     inputLabel: t("project.rename_input_label"),
     inputValue: currentName.trim(),
     inputPlaceholder: t("project.rename_input_placeholder"),
+    inputRequired: true,
+    inputRequiredMessage: t("project.rename_name_required"),
     cancel: true,
     okLabel: t("project.rename_menu_label"),
   })
@@ -778,6 +781,8 @@ async function promoteWorkLedgerAnonymousProject(directory: string): Promise<voi
     input: true,
     inputLabel: t("project.rename_input_label"),
     inputPlaceholder: t("project.rename_input_placeholder"),
+    inputRequired: true,
+    inputRequiredMessage: t("project.rename_name_required"),
     cancel: true,
     okLabel: t("common.continue"),
   })
@@ -876,6 +881,7 @@ async function confirmDeleteMissionBoardMission(mission: MissionRecord): Promise
     message: t("mission_board.delete.confirm", { title: mission.title || mission.missionID }),
     cancel: true,
     okLabel: t("common.delete"),
+    okTone: "danger",
   })
   return confirmation.confirmed
 }
@@ -933,6 +939,8 @@ async function renameWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void>
     inputLabel: t("work_ledger.action.rename_placeholder"),
     inputPlaceholder: t("work_ledger.action.rename_placeholder"),
     inputValue: row.title || row.missionID,
+    inputRequired: true,
+    inputRequiredMessage: t("explorer.name_required"),
     cancel: true,
     okLabel: t("common.ok"),
   })
@@ -1074,6 +1082,8 @@ async function renameWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
     inputLabel: t("task.rename_placeholder"),
     inputPlaceholder: t("task.rename_placeholder"),
     inputValue: row.title || row.id,
+    inputRequired: true,
+    inputRequiredMessage: t("explorer.name_required"),
     cancel: true,
     okLabel: t("common.ok"),
   })
@@ -1113,6 +1123,8 @@ async function renameWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
     inputLabel: t("work_ledger.action.rename_placeholder"),
     inputPlaceholder: t("work_ledger.action.rename_placeholder"),
     inputValue: row.title || row.sessionID,
+    inputRequired: true,
+    inputRequiredMessage: t("explorer.name_required"),
     cancel: true,
     okLabel: t("common.ok"),
   })
@@ -2147,6 +2159,7 @@ function OverlayRoot() {
       }
       workLedger={
         <WorkLedger
+          primarySurface={primaryWorkspaceSurface()}
           selectedTaskID={activeTaskID()}
           selectedSessionID={activeSessionID()}
           refreshToken={missionSharedRefreshToken()}

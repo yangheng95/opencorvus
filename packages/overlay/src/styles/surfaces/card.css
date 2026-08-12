@@ -369,7 +369,7 @@ body {
 .card-error-reason-tooltip pre {
   margin: 0;
   color: var(--text-strong);
-  font-family: var(--font-mono);
+  font-family: var(--mono);
   font-size: var(--ui-font-tiny);
   line-height: 1.5;
   overflow-wrap: anywhere;

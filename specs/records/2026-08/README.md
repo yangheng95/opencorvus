@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-12-overlay-ui-ux-continuous-audit.md](2026-08-12-overlay-ui-ux-continuous-audit.md) records the multi-agent Overlay UI/UX audit, root-cause repairs, real-page screenshots, positive non-UI checks, and independent delivery reviews.
+
 - [2026-08-12-repository-code-smell-continuous-audit.md](2026-08-12-repository-code-smell-continuous-audit.md) records the multi-agent repository-wide code-smell audit, 68 evidence-backed findings, repeated saturation resets when late valid findings arrived, two final zero-new passes, and the dependency-ordered follow-up refactoring backlog.
 
 - [2026-08-12-v0.0.42-beta-actions-green-release.md](2026-08-12-v0.0.42-beta-actions-green-release.md) records the Actions root-cause repair, canonical version synchronization, all-green source gate, native Release publication, updater promotion, and public website verification for `v0.0.42-beta`.

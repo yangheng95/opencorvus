@@ -7,6 +7,8 @@ import { AppLog } from "../utils/log"
 
 export function ProjectMemoryBanner() {
   const [busy, setBusy] = createSignal(false)
+  const [busyAction, setBusyAction] = createSignal<"organize" | "acknowledge" | null>(null)
+  const [failure, setFailure] = createSignal("")
   const notice = () => {
     const current = appStore.projectMemory?.notice
     return current && !current.acknowledged ? current : undefined
@@ -16,13 +18,17 @@ export function ProjectMemoryBanner() {
     const current = notice()
     if (!current || busy()) return
     setBusy(true)
+    setBusyAction(action)
+    setFailure("")
     try {
       if (action === "organize") await organizeProjectMemory()
       else await acknowledgeProjectMemoryNotice(current.generation)
     } catch (error) {
       AppLog.error("project-memory", "Project MEMORY.MD action failed", { error: String(error) })
+      setFailure(t("memory.banner_action_failed", { error: error instanceof Error ? error.message : String(error) }))
     } finally {
       setBusy(false)
+      setBusyAction(null)
     }
   }
 
@@ -34,12 +40,13 @@ export function ProjectMemoryBanner() {
           <span class="memory-banner__content">
             <strong>{t("memory.banner_title")}</strong>
             <span>{current.message}</span>
+            <Show when={failure()}>{(message) => <span class="memory-banner__error">{message()}</span>}</Show>
           </span>
           <Button type="button" variant="solid" size="sm" tone="neutral" disabled={busy()} onClick={() => void run("organize")}>
-            {t("memory.banner_organize")}
+            {busyAction() === "organize" ? t("memory.banner_organizing") : t("memory.banner_organize")}
           </Button>
           <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={busy()} onClick={() => void run("acknowledge")}>
-            {t("memory.banner_dismiss")}
+            {busyAction() === "acknowledge" ? t("memory.banner_dismissing") : t("memory.banner_dismiss")}
           </Button>
         </div>
       )}
