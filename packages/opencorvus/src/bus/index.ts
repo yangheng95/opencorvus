@@ -14,7 +14,7 @@ import {
 } from "../runtime/execution-settlement"
 import { Database, and, eq } from "../storage/db"
 import { BusPublicationDeliveryTable, BusPublicationOutboxTable } from "./bus.sql"
-import { Instance, runOutsideInstanceContext } from "../project/instance"
+import { Instance, runAsInstanceActivity, runOutsideInstanceContext } from "../project/instance"
 
 export namespace Bus {
   const log = Log.create({ service: "bus" })
@@ -733,7 +733,7 @@ export namespace Bus {
       reservation = RuntimeExecutionSettlement.reserve("protocol_publication", `${row.event_type}:${id}:outbox`)
       operation =
         Instance.current()?.directory === row.directory
-          ? executeDurableRow(row, reservation.signal)
+          ? runAsInstanceActivity(() => executeDurableRow(row, reservation!.signal))
           : (async () => {
               const resumedActive = await Instance.tryProvideActive({
                 directory: row.directory,

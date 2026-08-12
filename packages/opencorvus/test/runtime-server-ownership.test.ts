@@ -21,6 +21,8 @@ import { releaseServeRuntimeOwnership } from "../src/cli/cmd/serve"
 import { acquireServerRuntimeAfterRecovery } from "../src/cli/server-runtime"
 import { bootstrap } from "../src/cli/bootstrap"
 import { restartFailureDisposition } from "../src/server/restart-handoff"
+import { Scheduler } from "../src/scheduler"
+import { SchedulerMessageTestHooks } from "../src/protocol/scheduler-message"
 
 const temporaryDirectories: string[] = []
 const children = new Set<ChildProcessWithoutNullStreams>()
@@ -289,6 +291,10 @@ describe("runtime server database ownership", () => {
     await import("node:fs/promises").then((fs) => fs.mkdir(home))
     const previousHome = process.env.OPENCORVUS_TEST_HOME
     process.env.OPENCORVUS_TEST_HOME = home
+    let schedulerPolls = 0
+    using _schedulerPoll = SchedulerMessageTestHooks.installBeforeGlobalPoll(() => {
+      schedulerPolls += 1
+    })
     try {
       await expect(
         acquireServerRuntimeAfterRecovery({
@@ -298,6 +304,7 @@ describe("runtime server database ownership", () => {
           disposeInstances: () => Promise.resolve(),
         }),
       ).rejects.toThrow("injected started Task recovery failure")
+      expect(schedulerPolls).toBe(0)
 
       const successor = RuntimeServerOwnership.acquire({ database: Database.Path() })
       expect(RuntimeServerOwnership.currentOccurrenceID(Database.Path())).toBe(successor.owner.occurrenceID)
@@ -307,6 +314,77 @@ describe("runtime server database ownership", () => {
       else process.env.OPENCORVUS_TEST_HOME = previousHome
     }
   })
+
+  test("starts scheduler delivery polling only after process recovery completes", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-scheduler-recovery-barrier-"))
+    temporaryDirectories.push(root)
+    const home = path.join(root, "home")
+    await import("node:fs/promises").then((fs) => fs.mkdir(home))
+    const previousHome = process.env.OPENCORVUS_TEST_HOME
+    process.env.OPENCORVUS_TEST_HOME = home
+    let releaseRecovery!: () => void
+    let markRecoveryEntered!: () => void
+    const recoveryEntered = new Promise<void>((resolve) => (markRecoveryEntered = resolve))
+    const recoveryRelease = new Promise<void>((resolve) => (releaseRecovery = resolve))
+    let markPoll!: () => void
+    const pollStarted = new Promise<void>((resolve) => (markPoll = resolve))
+    let schedulerPolls = 0
+    using _schedulerPoll = SchedulerMessageTestHooks.installBeforeGlobalPoll(() => {
+      schedulerPolls += 1
+      markPoll()
+    })
+    try {
+      const runtime = acquireServerRuntimeAfterRecovery({
+        recover: async () => {
+          markRecoveryEntered()
+          await recoveryRelease
+        },
+        disposeInstances: () => Promise.resolve(),
+      })
+      await recoveryEntered
+      await Bun.sleep(25)
+      expect(schedulerPolls).toBe(0)
+      releaseRecovery()
+      const acquired = await runtime
+      await pollStarted
+      expect(schedulerPolls).toBe(1)
+      const server = Server.listenWithOwnedRuntime(
+        { hostname: "127.0.0.1", port: 0, randomPort: true },
+        acquired.ownership,
+      )
+      await Bun.sleep(25)
+      expect({ schedulerPolls, listener: server.url instanceof URL }).toEqual({ schedulerPolls: 1, listener: true })
+      await server.stop(true)
+    } finally {
+      if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
+      else process.env.OPENCORVUS_TEST_HOME = previousHome
+    }
+  })
+
+  test("registers scheduler delivery polling for an ordinary non-retained listener", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-scheduler-direct-listener-"))
+    temporaryDirectories.push(root)
+    const home = path.join(root, "home")
+    await import("node:fs/promises").then((fs) => fs.mkdir(home))
+    const previousHome = process.env.OPENCORVUS_TEST_HOME
+    process.env.OPENCORVUS_TEST_HOME = home
+    let markPoll!: () => void
+    const pollStarted = new Promise<void>((resolve) => (markPoll = resolve))
+    let schedulerPolls = 0
+    using _schedulerPoll = SchedulerMessageTestHooks.installBeforeGlobalPoll(() => {
+      schedulerPolls += 1
+      markPoll()
+    })
+    const server = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
+    try {
+      await pollStarted
+      expect({ schedulerPolls, listener: server.url instanceof URL }).toEqual({ schedulerPolls: 1, listener: true })
+    } finally {
+      await server.stop(true)
+      if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
+      else process.env.OPENCORVUS_TEST_HOME = previousHome
+    }
+  }, 60_000)
 
   test("one backend owns a project database and a successor acquires it after handoff", async () => {
     const directory = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-owner-"))

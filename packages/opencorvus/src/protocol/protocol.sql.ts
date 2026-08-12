@@ -3,7 +3,12 @@ import { sql } from "drizzle-orm"
 import { Identifier } from "@/id/id"
 import { EngineInteractionRequestTable, EngineTaskTable } from "@/engine/engine.sql"
 import { Timestamps } from "@/storage/schema.sql"
-import type { ProtocolAggregate, ProtocolInboxStatus, ProtocolKind } from "./schema"
+import type {
+  ProtocolAggregate,
+  ProtocolInboxDeliveryResult,
+  ProtocolInboxStatus,
+  ProtocolKind,
+} from "./schema"
 
 type ProtocolPayload = Record<string, unknown>
 
@@ -41,6 +46,9 @@ export const ProtocolEventTable = sqliteTable(
     uniqueIndex("protocol_event_mailbox_invocation_idx")
       .on(table.type, table.task_id, table.session_id, table.correlation_id)
       .where(sql`${table.type} = 'mailbox.message'`),
+    uniqueIndex("protocol_event_scheduler_reply_idx")
+      .on(table.reply_to)
+      .where(sql`${table.type} = 'scheduler.message' AND ${table.kind} = 'reply' AND ${table.reply_to} IS NOT NULL`),
     index("protocol_event_task_idx").on(table.task_id, table.seq),
     index("protocol_event_session_idx").on(table.session_id, table.seq),
     index("protocol_event_interaction_idx").on(table.interaction_id, table.seq),
@@ -55,6 +63,16 @@ export const ProtocolEventTable = sqliteTable(
     ),
     index("protocol_event_session_type_status_order_idx").on(table.session_id, table.type, table.emitted_at, table.seq),
   ],
+)
+
+export const ProtocolAggregateSequenceTable = sqliteTable(
+  "protocol_aggregate_sequence",
+  {
+    aggregate_type: text().notNull().$type<ProtocolAggregate>(),
+    aggregate_id: text().notNull(),
+    next_seq: integer().notNull(),
+  },
+  (table) => [uniqueIndex("protocol_aggregate_sequence_identity_idx").on(table.aggregate_type, table.aggregate_id)],
 )
 
 export const ProtocolInboxTable = sqliteTable(
@@ -74,11 +92,13 @@ export const ProtocolInboxTable = sqliteTable(
     attempt: integer().notNull().default(0),
     visible_at: integer().notNull(),
     last_error: text(),
+    delivery_result: text({ mode: "json" }).$type<ProtocolInboxDeliveryResult>(),
+    time_completed: integer(),
     ...Timestamps,
   },
   (table) => [
     uniqueIndex("protocol_inbox_envelope_actor_idx").on(table.envelope_id, table.actor, table.actor_id),
-    index("protocol_inbox_visible_idx").on(table.actor, table.status, table.visible_at),
+    index("protocol_inbox_visible_idx").on(table.actor, table.actor_id, table.status, table.visible_at, table.envelope_id),
     index("protocol_inbox_lease_idx").on(table.actor, table.lease_until),
   ],
 )

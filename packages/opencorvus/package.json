@@ -14,6 +14,7 @@
     "precheck:permission-modes": "bun script/prepare-test-process-supervisor.ts",
     "check:permission-modes": "bun run script/run-with-inactivity.ts --inactivity-ms 120000 -- bun run script/permission-modes-check-worker.ts",
     "check:scheduled-automations-e2e": "bun run script/scheduled-automations-e2e.ts",
+    "check:mission-task-duplex-e2e": "bun run script/check-mission-task-duplex-e2e.ts",
     "dev": "bun ./src/index.ts"
   },
   "bin": {

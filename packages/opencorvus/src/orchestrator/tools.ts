@@ -75,6 +75,8 @@ import { Identifier } from "@/id/id"
 import { publishFailedAgentCoordinationTurnStatus } from "@/orchestrator/agent-coordination-session-lifecycle"
 import { ensureTaskMessageProtocolBridge } from "@/orchestrator/protocol/message-bridge"
 import { Instance } from "@/project/instance"
+import { owningMissionSchedulerEndpoint, taskSchedulerEndpoint } from "@/protocol/delivery"
+import { sendSchedulerMessage } from "@/protocol/scheduler-message"
 import {
   runWithIndependentProjectIdentity,
   runWithInitializedIndependentProject,
@@ -878,7 +880,7 @@ export function createOrchestratorTools(input: {
   dispatchAgents: readonly PromptProfileResolver.ResolvedProjectedAgent[]
   rootMessage?: {
     messageID: string
-    kind: "operator" | "orchestrator"
+    kind: "operator" | "orchestrator" | "mission"
   }
   taskIntent?: {
     kind: "retry" | "replan"
@@ -1071,6 +1073,56 @@ export function createOrchestratorTools(input: {
   })
 
   const tools = {
+    scheduler_message: tool({
+      description:
+        "Send one durable scheduler message. Use request for a question/directive, reply with the exact request event_id, and notification for a one-way update. The target may be this Task's owning Mission or a sibling Task owned by the same Mission. Replies preserve the original route and thread automatically.",
+      inputSchema: z
+        .object({
+          kind: z.enum(["request", "reply", "notification"]),
+          target: z
+            .discriminatedUnion("kind", [
+              z.object({ kind: z.literal("mission") }).strict(),
+              z.object({ kind: z.literal("task"), task_id: z.string().min(1) }).strict(),
+            ])
+            .optional(),
+          reply_to: z.string().startsWith("pev").optional(),
+          subject: z.string().min(1).max(500),
+          message: z.string().min(1),
+        })
+        .strict()
+        .superRefine((value, context) => {
+          if (value.kind === "reply") {
+            if (!value.reply_to) context.addIssue({ code: "custom", message: "reply requires reply_to" })
+            if (value.target) context.addIssue({ code: "custom", message: "reply target is derived from reply_to" })
+          } else {
+            if (!value.target) context.addIssue({ code: "custom", message: `${value.kind} requires target` })
+            if (value.reply_to) context.addIssue({ code: "custom", message: "only reply may set reply_to" })
+          }
+        }),
+      execute: async (messageInput, options) => {
+        const execution = await requireTaskOrchestratorToolExecutionContext(options, "scheduler_message", {
+          taskID,
+          agentSessionID: input.agentSessionID,
+        })
+        const source = taskSchedulerEndpoint(taskID)
+        const target =
+          messageInput.target?.kind === "mission"
+            ? owningMissionSchedulerEndpoint(taskID)
+            : messageInput.target?.kind === "task"
+              ? taskSchedulerEndpoint(messageInput.target.task_id)
+              : undefined
+        return sendSchedulerMessage({
+          invocationID: `scheduler-message:${execution.orchestratorSessionID}:${execution.orchestratorMessageID}:${execution.toolCallID}`,
+          kind: messageInput.kind,
+          source,
+          target,
+          replyTo: messageInput.reply_to,
+          subject: messageInput.subject,
+          sourceMessageID: execution.orchestratorMessageID,
+          sourcePartID: execution.toolPartID,
+        })
+      },
+    }),
     skill: tool({
       description:
         "Search/load surface for production skills granted to the Task's immutable Orchestrator scheduler projection. The session loop replaces this placeholder with the exact turn-scoped scheduler SkillTool before the model can call it.",

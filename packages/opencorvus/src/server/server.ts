@@ -36,6 +36,7 @@ import { installInProcessServerApp } from "./in-process-client"
 import { projectRouteContextKind } from "./project-route-context"
 import { PersistedProjectContext } from "@/server/persisted-project-context"
 import { AutomationService } from "@/scheduler/automation-service"
+import { SchedulerMessageDeliveryService } from "@/protocol/scheduler-message"
 import { Scheduler } from "@/scheduler"
 
 muteAISdkWarnings()
@@ -311,6 +312,7 @@ export namespace Server {
       // has emitted that fact, then fence new publications before the final drain.
       runtimeExecutionGate.closeAdmission(["protocol_publication"])
       await schedulerSettlement
+      runtimeExecutionGate.requestCancellation(["protocol_publication"], new Error(reason))
       await runtimeExecutionGate.waitForIdle([
         "scheduler_event_fire",
         "scheduler_automation_fire",
@@ -895,7 +897,10 @@ export namespace Server {
     let runtimeStopInstalled = false
     try {
       configureCorsOrigins(opts.cors)
-      if (!retainedRuntimeOwnership) AutomationService.initGlobal()
+      if (!retainedRuntimeOwnership) {
+        AutomationService.initGlobal()
+        SchedulerMessageDeliveryService.initGlobal()
+      }
 
       const args = {
         hostname: opts.hostname,

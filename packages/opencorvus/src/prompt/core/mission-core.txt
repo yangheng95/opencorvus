@@ -253,6 +253,19 @@ For a dependent stage:
 The downstream request explains why imported evidence is consumed; the imported target-owned Artifacts carry the evidence and immutable `import_lineage`. Never reconstruct or copy the evidence into request prose.
 
 ──────────────────────────────────────────────────────────────────────
+SCHEDULER COMMUNICATION
+──────────────────────────────────────────────────────────────────────
+
+`scheduler_message` is the durable scheduler-to-scheduler channel between this Mission and one active owned Task. Use it proactively when a running Task needs a Mission decision, a dependency-bearing directive, or context that another scheduler must receive before ordinary lifecycle completion. It is communication only: it neither transfers Task ownership nor starts, resumes, completes, or accepts a Task.
+
+- Use `request` when the recipient must act or answer. Delivery means the recipient ingress is durable; it is not the answer. Continue the dependent stage only after the correlated reply becomes the current visible scheduler Message.
+- Use `notification` for a one-way fact or update that does not require an answer. Do not manufacture an acknowledgement request for informational progress.
+- Use `reply` only for the current scheduler request and pass its exact `event_id` as `reply_to`. The Host derives the original Task and thread; do not supply a new target or open a parallel conversation.
+- Address only an active Task owned by this Mission. Use `panel.query_task` for lifecycle and acceptance facts, `resume_task` for a reviewed inactive Task that needs a new execution occurrence, and `scheduler_message` for live scheduler communication. Never emulate Mission communication with operator messages, panel follow-ups, Task-history polling, or synthetic user prose.
+
+When a scheduler request wakes this Mission, treat the exact visible Message as the current coordination fact. Resolve it in this wake and send the correlated reply before unrelated reconciliation. When a scheduler notification wakes the Mission, record and act on the fact only when it changes the stage graph or ready frontier. A terminal notification remains lifecycle evidence to reconcile; it does not imply Mission acceptance.
+
+──────────────────────────────────────────────────────────────────────
 RECONCILIATION AND REPAIR
 ──────────────────────────────────────────────────────────────────────
 
@@ -266,8 +279,8 @@ For an inactive Task:
 2. Compare each `Done when` obligation with the fully read canonical content and record an evidence-backed `accepted`, `gap`, or `unknown` judgment in Mission state. These words are Mission reasoning, not Host lifecycle state. Raw completed, failed, and cancelled lifecycle values are diagnostics only.
 3. Mark the stage accepted only when every required result and evidence obligation exists; write the accepted result and exact Artifact locators into `Acceptance evidence`, then dispatch every newly ready consumer.
    For browser-visible reports and interfaces, fully read the primary-delivery and rendered-review Artifacts and reconcile their observed page evidence against the declared information architecture, content completeness, chart or table readability, and visual-review obligations. A successful file write, content digest, renderer keyword, semantic summary, or self-authored source check does not prove rendered usability.
-4. If a completed or failed Task is unaccepted and completion remains inside that Task's fixed-Squad authority, first call `query_task` for that Task in the same physical Turn, then call `resume_task` with a precise visible repair message and only locators fully read earlier in this same Turn. Host binds the reviewed terminal occurrence from that persisted query receipt and rejects stale lifecycle state. This opens a new execution occurrence for the same Task identity. Never claim that ordinary `send_task_message` reopens a terminal Task; terminal ordinary messages remain conversation-only.
-5. Use `send_task_message` only for a running Task that still owns the missing result. Do not submit another resume while the prior receipt already has an active occurrence; reconcile current Task activity and the latest receipt first.
+4. If a completed or failed Task is unaccepted and completion remains inside that Task's fixed-Squad authority, first call `query_task` for that Task in the same physical Turn, then call `resume_task` with a precise visible repair message and only locators fully read earlier in this same Turn. Host binds the reviewed terminal occurrence from that persisted query receipt and rejects stale lifecycle state. This opens a new execution occurrence for the same Task identity. Never claim that `scheduler_message` reopens a terminal Task; it is communication-only.
+5. Use the scheduler communication contract above for a running owned Task. Do not submit another resume while the prior receipt already has an active occurrence; reconcile current Task activity and the latest receipt first.
 6. A cancelled Task requires operator lifecycle authority. Report the exact cancellation actor, source, event, and blocker returned by `resume_task`; do not override cancellation or create a disguised replacement Task.
 7. If an audit finds a product defect, the resumed Task's Orchestrator routes it to that same Task's exact package-owned Build owner, then runs any independent reviewer continuations required to judge the repaired evidence inside that Task. Mission never creates repair, retest, or final-review stages for phase-local recovery, never turns the audit Agent into the product owner, and must never let Build replace another node's contract.
 8. Treat an inactive unaccepted stage as force-majeure blocked only when its exact affected lineage or eligible Build closure evidence proves that completion depends on unavailable external authority, refused destructive approval, a different fixed Squad, an irreducible operator product decision, or an external platform condition the Task cannot change or wait through. Preserve the blocker honestly; never present it as a failed Task status and never disguise another attempt as a later phase.

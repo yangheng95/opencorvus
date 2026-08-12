@@ -22,6 +22,9 @@ import { insertEngineArtifact, patchEngineArtifact } from "./artifact"
 import { Project } from "@/project/project"
 import { runWithIndependentProjectIdentity } from "@/project/independent-project-owner"
 import { waitForRuntimeSettlementIdle } from "@/runtime/execution-settlement"
+import { TaskCreatorMetadata } from "@/task-api/task-creator"
+import { enqueueSchedulerMessageInTransaction } from "@/protocol/delivery"
+import { signalSchedulerMessageDrain } from "@/protocol/scheduler-drain-signal"
 
 const log = Log.create({ service: "engine-state" })
 
@@ -818,8 +821,9 @@ export function writeTaskUpdateInTransaction(input: {
         }
       : { source: "state.task" }
   EngineProtocol.emitInTransaction(Event.TaskUpdated, { taskID, status: nextStatus, summary }, cancellationMeta)
+  let terminalEvent: ReturnType<typeof EngineProtocol.emitInTransaction> | undefined
   if (prevStatus !== nextStatus && nextStatus === "completed") {
-    EngineProtocol.emitInTransaction(
+    terminalEvent = EngineProtocol.emitInTransaction(
       Event.TaskCompleted,
       {
         taskID,
@@ -830,7 +834,7 @@ export function writeTaskUpdateInTransaction(input: {
       { source: "state.task" },
     )
   } else if (prevStatus !== nextStatus && nextStatus === "failed") {
-    EngineProtocol.emitInTransaction(
+    terminalEvent = EngineProtocol.emitInTransaction(
       Event.TaskFailed,
       {
         taskID,
@@ -843,7 +847,7 @@ export function writeTaskUpdateInTransaction(input: {
       { source: "state.task" },
     )
   } else if (prevStatus !== nextStatus && nextStatus === "cancelled") {
-    EngineProtocol.emitInTransaction(
+    terminalEvent = EngineProtocol.emitInTransaction(
       Event.TaskCancelled,
       {
         taskID,
@@ -854,6 +858,38 @@ export function writeTaskUpdateInTransaction(input: {
       },
       cancellationMeta,
     )
+  }
+  if (terminalEvent) {
+    const creator = TaskCreatorMetadata.parse(updated.metadata)
+    const cancellationOrigin =
+      cancellationRequest && nextStatus === "cancelled"
+        ? requireTaskCancellationRequestEvent(taskID, cancellationRequest.id).origin
+        : undefined
+    if (creator.actor === "mission" && cancellationOrigin?.source !== "mission.delete") {
+      if (!updated.session_id) throw new Error(`Mission-owned terminal Task ${taskID} has no root Session.`)
+      enqueueSchedulerMessageInTransaction(db, {
+        invocationID: `task-terminal:${terminalEvent.id}`,
+        kind: "notification",
+        source: {
+          kind: "task_scheduler",
+          project_id: updated.project_id,
+          task_id: updated.id,
+          root_session_id: updated.session_id,
+        },
+        target: {
+          kind: "mission_scheduler",
+          project_id: updated.project_id,
+          mission_id: creator.mission.id,
+          session_id: creator.mission.session_id,
+        },
+        subject: `Task ${updated.id} ${nextStatus}`,
+        sourceTerminalEventID: terminalEvent.id,
+        correlationID: terminalEvent.id,
+        threadID: `task:${updated.id}:lifecycle`,
+        now,
+      })
+      Database.effect(() => signalSchedulerMessageDrain())
+    }
   }
   return { kind: "updated", task: updated }
 }

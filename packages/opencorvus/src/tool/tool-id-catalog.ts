@@ -46,6 +46,7 @@ export const GLOBAL_TOOL_IDS = [
   "panel",
   "expert_squad_author",
   "mission_state",
+  "scheduler_message",
   "wait",
   ...WORKER_COMMUNICATION_TOOL_IDS,
   "analytics",

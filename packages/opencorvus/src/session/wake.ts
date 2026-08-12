@@ -24,6 +24,7 @@ import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-re
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { createExecutionCancellationOrigin } from "./prompt/cancellation"
 import { ProjectMemory } from "@/memory/project-memory"
+import { SchedulerEndpoint, SchedulerMessageKind } from "@/protocol/schema"
 
 /**
  * Session wake mechanism.
@@ -46,18 +47,6 @@ export namespace SessionWake {
   }) => Promise<void>
   let wakeLoopExecutorForTest: WakeLoopExecutor | undefined
 
-  export const MissionChildTaskResultWakeReason = z
-    .object({
-      source: z.literal("mission.child_task_result"),
-      missionID: z.string().optional(),
-      taskID: z.string().min(1),
-      taskTitle: z.string().min(1),
-      taskStatus: z.enum(["completed", "failed", "cancelled"]),
-      terminalLifecycleReference: TerminalLifecycleReferenceSchema,
-      completionDecisionArtifactID: z.string().min(1).optional(),
-    })
-    .strict()
-
   export const WakeReason = z.discriminatedUnion("source", [
     z.object({
       source: z.literal("mission.operator"),
@@ -77,7 +66,18 @@ export namespace SessionWake {
       callerMessageID: Identifier.schema("message"),
       targetExperience: z.literal("work"),
     }),
-    MissionChildTaskResultWakeReason,
+    z
+      .object({
+        source: z.literal("scheduler.message"),
+        eventID: Identifier.schema("protocol_event"),
+        inboxID: Identifier.schema("protocol_inbox"),
+        threadID: z.string().min(1),
+        messageKind: SchedulerMessageKind,
+        sourceEndpoint: SchedulerEndpoint,
+        targetEndpoint: SchedulerEndpoint,
+        replyTo: Identifier.schema("protocol_event").optional(),
+      })
+      .strict(),
     z.object({
       source: z.literal("scheduler.automation"),
       jobID: z.string(),

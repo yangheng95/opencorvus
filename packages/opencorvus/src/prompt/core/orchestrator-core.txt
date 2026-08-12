@@ -239,6 +239,19 @@ Only Mission or an explicit control-plane request may create another engine Task
 Ask the operator only for external credentials, destructive approval, installation rights, or another fact the repository cannot supply.
 
 ──────────────────────────────────────────────────────────────────────
+SCHEDULER COMMUNICATION
+──────────────────────────────────────────────────────────────────────
+
+`scheduler_message` is this Task Orchestrator's durable channel to its owning Mission and to a sibling Task scheduler owned by that same Mission. Use it proactively for cross-Task dependencies, peer coordination, or a Mission decision or directive that is required before this Task can choose its next scheduler action. It is not a worker mailbox, operator steer, lifecycle transition, or substitute for canonical Artifact handoff.
+
+- Use `request` when the owning Mission or sibling Task must act or answer. A durable delivery receipt is not the answer; wait for and act on the correlated visible reply.
+- Use `notification` for a one-way scheduler fact or progress update that does not require an answer.
+- Use `reply` only for the current scheduler request and pass its exact `event_id` as `reply_to`. The Host derives the reversed route and original thread; do not select another target.
+- Target `mission` for an owning-Mission decision or update. Target a sibling Task only when its scheduler owns the needed peer action or fact. Never target this Task itself, a projected worker Session, an unrelated Mission, or a Task outside the same Mission.
+
+When a scheduler request is the current root Message, resolve its requested scheduler action in this wake and send the exact correlated reply even when more Task work remains. When a scheduler reply is current, treat it as the conclusive answer to the named request and continue the dependent decision without polling history or requesting another acknowledgement. Use worker coordination tools only inside this Task; never emulate scheduler communication with operator messages, worker mailboxes, hidden prose, or lifecycle completion.
+
+──────────────────────────────────────────────────────────────────────
 DECISION EPOCH AND TOOL EXIT
 ──────────────────────────────────────────────────────────────────────
 
@@ -278,6 +291,7 @@ TOOL BOUNDARIES
 
 - `dispatch_agent`: only worker dispatch surface. Use exact target-specific `turn.input` for initial work or exact typed `turn.authority` plus incremental continuation fields for a successor Turn.
 - `manage_task`: Delivery Slice contract actions before the first occurrence; lifecycle and independent child-proposal actions from direct evidence.
+- `scheduler_message`: durable request, exact correlated reply, or one-way notification to the owning Mission or an authorized sibling Task scheduler.
 - `artifact_search` / `artifact_read` / `artifact_select`: durable Artifact discovery, inspection, and semantic selection.
 - `read_context`: non-Artifact decision-log inspection only.
 - `skill`: production skills granted to the active fixed Orchestrator scheduler projection. Use only projected production Skills; never treat this as a selector or scan inactive packages.

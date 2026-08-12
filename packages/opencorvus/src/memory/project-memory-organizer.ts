@@ -258,8 +258,10 @@ export namespace ProjectMemoryOrganizer {
         messages,
         toolChoice: "none",
       })
+      let candidateText = ""
+      for await (const chunk of result.textStream) candidateText += chunk
       checkpoint()
-      const candidate = parseCandidate(await result.text)
+      const candidate = parseCandidate(candidateText)
       checkpoint()
       const candidateTokens = estimateTokens(candidate.markdown.trim() + "\n")
       if (candidateTokens > documentTokenLimit) {

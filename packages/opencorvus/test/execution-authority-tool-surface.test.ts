@@ -48,7 +48,7 @@ describe("execution authority Tool surfaces", () => {
         private: [],
       },
       mission: {
-        global: [...conversationEffects, "mission_skill", "panel", "wait"],
+        global: [...conversationEffects, "mission_skill", "panel", "scheduler_message", "wait"],
         private: [],
       },
       taskBuild: {
@@ -69,6 +69,16 @@ describe("execution authority Tool surfaces", () => {
           planner: false,
         },
       },
+    })
+  })
+
+  test("projects durable scheduler communication to both scheduler roles", () => {
+    expect({
+      mission: AgentToolPool.assignment("mission").global.includes("scheduler_message"),
+      orchestrator: AgentToolPool.assignment("orchestrator").private.includes("scheduler_message"),
+    }).toEqual({
+      mission: true,
+      orchestrator: true,
     })
   })
 })
