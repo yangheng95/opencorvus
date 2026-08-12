@@ -34,10 +34,9 @@ import { Ownership } from "../engine/ownership"
  *
  * OR it is one of the non-physical residues proven by the 2026-06-27 audit:
  * a registry-only prunable entry whose branch has no in-transit commits, or
- * a database (DB) sandbox-only path that no longer has either a directory or git
- * registry entry. Apply always goes through the project-managed remover so
- * `project.sandboxes` converges only after the physical Git removal step
- * succeeds.
+ * Durable database (DB) sandbox membership remains ownership even when its
+ * path is missing or unavailable. GC reports that preserved authority; only
+ * an explicit release occurrence may remove the binding.
  *
  * Any uncertainty (a git probe fails while `.git` is present) → PRESERVE.
  * We never trade a false delete of in-transit acceptance work for tidiness.
@@ -56,12 +55,16 @@ export namespace WorktreeGC {
     projectID: string
     primaryDir: string
     directory: string
-    reason: "old-clean" | "old-zombie" | "registry-prunable" | "sandbox-missing"
+    reason: "old-clean" | "old-zombie" | "registry-prunable"
   }
   export type Preservation = {
     projectID: string
     primaryDir: string
-    reason: "primary-directory-unavailable" | "managed-state-unavailable" | "registry-unavailable"
+    reason:
+      | "primary-directory-unavailable"
+      | "managed-state-unavailable"
+      | "registry-unavailable"
+      | "durable-sandbox-owner"
     detail: string
   }
   export type Plan = { candidates: Candidate[]; preservations: Preservation[] }
@@ -320,6 +323,19 @@ export namespace WorktreeGC {
         const registeredEntry = registeredByDirectory.get(key)
         const stat = await fs.stat(displayDirectory).catch(() => undefined)
         if (!stat) {
+          // Durable sandbox ownership outranks a lossy physical/registry
+          // observation. A missing directory can simultaneously appear as a
+          // prunable Git registration after a crash or external deletion; it
+          // is still not GC authority while the sandbox binding exists.
+          if (sandboxKeys.has(key)) {
+            preservations.push({
+              projectID: project.id,
+              primaryDir,
+              reason: "durable-sandbox-owner",
+              detail: `Durable sandbox ownership is preserved for ${displayDirectory}`,
+            })
+            continue
+          }
           if (
             registeredEntry?.prunable === true &&
             primaryBranch &&
@@ -333,14 +349,6 @@ export namespace WorktreeGC {
               reason: "registry-prunable",
             })
             continue
-          }
-          if (sandboxKeys.has(key) && !registeredEntry) {
-            candidates.push({
-              projectID: project.id,
-              primaryDir,
-              directory: displayDirectory,
-              reason: "sandbox-missing",
-            })
           }
           continue
         }

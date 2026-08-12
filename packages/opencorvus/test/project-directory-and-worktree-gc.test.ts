@@ -1293,6 +1293,83 @@ describe("Project directory integrity", () => {
 })
 
 describe("Worktree GC uncertainty preservation", () => {
+  test("keeps durable sandbox ownership across missing and restored discovery", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const registered = await Project.fromDirectory(project.path)
+        const worktree = await Worktree.create({ name: `missing-durable-owner-${Date.now()}` })
+        const sandbox = worktree.directory
+        await fs.rm(sandbox, { recursive: true, force: true })
+
+        const missing = await Project.fromDirectory(project.path)
+        const missingRegistryEntry = (await Worktree.listRegisteredWorktrees(project.path)).find(
+          (entry) => path.resolve(entry.path) === path.resolve(sandbox),
+        )
+        const missingPlan = await WorktreeGC.inspect()
+        await fs.mkdir(sandbox, { recursive: true })
+        const restored = await Project.fromDirectory(project.path)
+
+        expect({
+          missing: missing.project.sandboxes,
+          registry: missingRegistryEntry?.prunable,
+          preservation: missingPlan.preservations.map(({ projectID, reason }) => ({ projectID, reason })),
+          restored: restored.project.sandboxes,
+        }).toEqual({
+          missing: [sandbox],
+          registry: true,
+          preservation: expect.arrayContaining([
+            { projectID: registered.project.id, reason: "durable-sandbox-owner" },
+          ]),
+          restored: [sandbox],
+        })
+
+        await Project.removeSandbox(registered.project.id, sandbox)
+        expect(Project.get(registered.project.id)?.sandboxes).toEqual([])
+      },
+    })
+  }, 90_000)
+
+  test("commits discovery against the latest sandbox authority without losing additions or reviving releases", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const registered = await Project.fromDirectory(project.path)
+        const first = await Worktree.create({ name: `discovery-authority-first-${Date.now()}` })
+        const concurrent = await Worktree.create({ name: `discovery-authority-concurrent-${Date.now()}` })
+        const discovered = await Worktree.create({ name: `discovery-authority-new-${Date.now()}` })
+
+        await Project.removeSandbox(registered.project.id, concurrent.directory)
+        await Project.removeSandbox(registered.project.id, discovered.directory)
+
+        {
+          using _commit = Project.TestHooks.installBeforeDiscoveryCommit(async ({ directory }) => {
+            if (!Project.samePath(directory, discovered.directory)) return
+            await Project.addSandbox(registered.project.id, concurrent.directory)
+          })
+          await Project.fromDirectory(discovered.directory)
+        }
+        expect(Project.get(registered.project.id)?.sandboxes).toEqual([
+          first.directory,
+          concurrent.directory,
+          discovered.directory,
+        ])
+
+        await Project.removeSandbox(registered.project.id, discovered.directory)
+        {
+          using _commit = Project.TestHooks.installBeforeDiscoveryCommit(async ({ directory }) => {
+            if (!Project.samePath(directory, discovered.directory)) return
+            await Project.removeSandbox(registered.project.id, first.directory)
+          })
+          await Project.fromDirectory(discovered.directory)
+        }
+        expect(Project.get(registered.project.id)?.sandboxes).toEqual([concurrent.directory, discovered.directory])
+      },
+    })
+  }, 90_000)
+
   test("maps ownership observation failures to the public retryable contract", () => {
     const error = Ownership.observationFailure({
       operation: "scan-worktree-owner",

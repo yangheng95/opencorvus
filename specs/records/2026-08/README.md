@@ -4,7 +4,7 @@
 
 - [2026-08-12-code-smell-remediation-program.md](2026-08-12-code-smell-remediation-program.md) defines the independently reviewed, batch-by-batch remediation program for the final repository code-smell register and records each batch's implementation, verification, review, commit, and delivery status.
 
-- [2026-08-12-cs015-plugin-publication-source-mutation.md](2026-08-12-cs015-plugin-publication-source-mutation.md), [2026-08-12-cs040-mcp-diagnostic-redaction.md](2026-08-12-cs040-mcp-diagnostic-redaction.md), and [2026-08-12-cs076-upgrade-version-verification.md](2026-08-12-cs076-upgrade-version-verification.md) record the focused implementation, positive verification, and independent review for those remediation batches.
+- [2026-08-12-cs015-plugin-publication-source-mutation.md](2026-08-12-cs015-plugin-publication-source-mutation.md), [2026-08-12-cs040-mcp-diagnostic-redaction.md](2026-08-12-cs040-mcp-diagnostic-redaction.md), [2026-08-12-cs046-project-sandbox-discovery-authority.md](2026-08-12-cs046-project-sandbox-discovery-authority.md), and [2026-08-12-cs076-upgrade-version-verification.md](2026-08-12-cs076-upgrade-version-verification.md) record the focused implementation, positive verification, and independent review for those remediation batches.
 
 - [2026-08-12-repository-code-smell-continuous-audit.md](2026-08-12-repository-code-smell-continuous-audit.md) records the multi-agent repository-wide code-smell audit, 78 evidence-backed findings, repeated admissions and false-positive removals, two final zero-new passes, and the dependency-ordered follow-up refactoring backlog.
 

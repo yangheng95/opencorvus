@@ -72185,8 +72185,7 @@
                             "enum": [
                               "old-clean",
                               "old-zombie",
-                              "registry-prunable",
-                              "sandbox-missing"
+                              "registry-prunable"
                             ],
                             "type": "string"
                           }
@@ -72218,7 +72217,8 @@
                             "enum": [
                               "primary-directory-unavailable",
                               "managed-state-unavailable",
-                              "registry-unavailable"
+                              "registry-unavailable",
+                              "durable-sandbox-owner"
                             ],
                             "type": "string"
                           }

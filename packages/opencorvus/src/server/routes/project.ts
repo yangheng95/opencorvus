@@ -34,12 +34,17 @@ const OwnershipCandidate = z.object({
 const WorktreeGCCandidate = z.object({
   projectID: z.string(),
   directory: z.string(),
-  reason: z.enum(["old-clean", "old-zombie", "registry-prunable", "sandbox-missing"]),
+  reason: z.enum(["old-clean", "old-zombie", "registry-prunable"]),
 }).strict()
 
 const WorktreeGCPreservation = z.object({
   projectID: z.string(),
-  reason: z.enum(["primary-directory-unavailable", "managed-state-unavailable", "registry-unavailable"]),
+  reason: z.enum([
+    "primary-directory-unavailable",
+    "managed-state-unavailable",
+    "registry-unavailable",
+    "durable-sandbox-owner",
+  ]),
   operation: z.literal("inspect-worktree-gc"),
   code: z.string(),
 }).strict()

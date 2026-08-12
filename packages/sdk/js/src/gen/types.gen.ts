@@ -21393,13 +21393,17 @@ export type ProjectCurrentCleanupCandidatesResponses = {
     worktreeGCCandidates: Array<{
       directory: string
       projectID: string
-      reason: "old-clean" | "old-zombie" | "registry-prunable" | "sandbox-missing"
+      reason: "old-clean" | "old-zombie" | "registry-prunable"
     }>
     worktreeGCPreservations: Array<{
       code: string
       operation: "inspect-worktree-gc"
       projectID: string
-      reason: "primary-directory-unavailable" | "managed-state-unavailable" | "registry-unavailable"
+      reason:
+        | "primary-directory-unavailable"
+        | "managed-state-unavailable"
+        | "registry-unavailable"
+        | "durable-sandbox-owner"
     }>
     worktreeOrphans: Array<{
       reason: "owner-process-dead" | "target-missing" | "marker-invalid"

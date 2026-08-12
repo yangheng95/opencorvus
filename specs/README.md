@@ -4,7 +4,7 @@ Latest Overlay UI/UX continuous audit and repair: [`2026-08-12-overlay-ui-ux-con
 
 Latest repository code-smell remediation program: [`2026-08-12-code-smell-remediation-program.md`](records/2026-08/2026-08-12-code-smell-remediation-program.md).
 
-Focused remediation records: [`CS-015` Plugin publication](records/2026-08/2026-08-12-cs015-plugin-publication-source-mutation.md), [`CS-040` local MCP diagnostics](records/2026-08/2026-08-12-cs040-mcp-diagnostic-redaction.md), and [`CS-076` native upgrade verification](records/2026-08/2026-08-12-cs076-upgrade-version-verification.md).
+Focused remediation records: [`CS-015` Plugin publication](records/2026-08/2026-08-12-cs015-plugin-publication-source-mutation.md), [`CS-040` local MCP diagnostics](records/2026-08/2026-08-12-cs040-mcp-diagnostic-redaction.md), [`CS-046` Project sandbox discovery authority](records/2026-08/2026-08-12-cs046-project-sandbox-discovery-authority.md), and [`CS-076` native upgrade verification](records/2026-08/2026-08-12-cs076-upgrade-version-verification.md).
 
 Latest repository-wide continuous code-smell audit and refactoring backlog: [`2026-08-12-repository-code-smell-continuous-audit.md`](records/2026-08/2026-08-12-repository-code-smell-continuous-audit.md).
 
