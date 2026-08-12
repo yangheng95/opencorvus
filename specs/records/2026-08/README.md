@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-12-repository-code-smell-continuous-audit.md](2026-08-12-repository-code-smell-continuous-audit.md) records the multi-agent repository-wide code-smell audit, 68 evidence-backed findings, repeated saturation resets when late valid findings arrived, two final zero-new passes, and the dependency-ordered follow-up refactoring backlog.
+
 - [2026-08-12-v0.0.42-beta-actions-green-release.md](2026-08-12-v0.0.42-beta-actions-green-release.md) records the Actions root-cause repair, canonical version synchronization, all-green source gate, native Release publication, updater promotion, and public website verification for `v0.0.42-beta`.
 
 - [2026-08-12-promotion-case-engine-strategy.md](2026-08-12-promotion-case-engine-strategy.md) defines the evidence-led promotion case portfolio, repeatable media factory, distribution system, measurement funnel, and first 30-day execution plan.
