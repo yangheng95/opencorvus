@@ -198,37 +198,10 @@ export namespace SkillManager {
     },
   ]
 
-  /**
-   * 返回市场条目：内置默认 + 从配置的 registry URL 动态拉取。
-   * registry URL 应返回不含 installed 的市场条目 JSON 数组；installed 由服务端根据真实安装来源计算。
-   */
+  /** Returns the built-in market catalog with live installation projection. */
   export async function market() {
     const entries = [...BUILTIN_MARKET]
     const global = await Config.getGlobal()
-    const registries = ((global?.skills as Record<string, unknown> | undefined)?.registries ?? []) as string[]
-    const seenIDs = new Set(entries.map((e) => e.id))
-
-    // 并行拉取所有配置的 registry
-    const fetched = await Promise.all(
-      registries.map(async (url: string) => {
-        try {
-          const resp = await fetch(url, { signal: AbortSignal.timeout(10_000) })
-          if (!resp.ok) return []
-          const data = await resp.json()
-          return MarketListing.array().parse(data)
-        } catch {
-          return []
-        }
-      }),
-    )
-    for (const list of fetched) {
-      for (const entry of list) {
-        if (!seenIDs.has(entry.id)) {
-          entries.push(entry)
-          seenIDs.add(entry.id)
-        }
-      }
-    }
 
     return MarketEntry.array().parse(
       await Promise.all(

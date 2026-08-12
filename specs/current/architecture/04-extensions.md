@@ -54,9 +54,10 @@ Plugin 提供生命周期回调、auth 和 rewrite 能力，不承担 Task 调�
 GitHub Copilot Provider Auth Plugin 把订阅 OAuth（Open Authorization，开放授权）、模型目录和
 流式 Provider 请求投影进 OpenCorvus 的统一 LLM（Large Language Model，大语言模型）链路。
 
-普通 Skill 市场和 git/URL Skill source 安装属于用户全局配置面。桌面首次启动没有活动项目时，
-Overlay 使用 `/global/skill/market` 与 `/global/skill/install`，二者仍调用同一个
-`SkillManager.market/install` owner。项目路由保留给已有项目调用；Skill mount matrix、project-local
+普通 Skill 市场和 git/URL Skill source 安装属于用户全局配置面。`/global/skill/market` 与项目
+`/skill/market` 只投影同一个 `SkillManager.market` 内置 catalog owner；不存在不可配置的远端 registry
+或网络失败 fallback。`/global/skill/install` 与项目安装路由仍调用同一个 `SkillManager.install` owner。
+Skill mount matrix、project-local
 file/folder/ZIP import 和 MCP（Model Context Protocol，模型上下文协议）仍要求明确项目目录，不能因
 市场全局化而变成第二份全局投影。
 

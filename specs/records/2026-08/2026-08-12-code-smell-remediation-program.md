@@ -69,8 +69,10 @@ Each wave is still split into reviewable batches; it is not one repository-wide 
 | Parallel B03-B05 | `CS-015`, `CS-040`, `CS-076` | committed; push blocked by unrelated outgoing commits | recorded in focused specs | PASS | `58ef06ca`, `6f59d5b2`, `0336604d` |
 | B06-B07 | `CS-041`, `CS-047` | committed; push blocked by unrelated outgoing commits | recorded in focused specs | PASS after adversarial correction | `96cfd8f6`, `19c5b935` |
 | B08-B09 | `CS-046`, `CS-054` | committed; push blocked by unrelated outgoing commits | recorded in focused specs | PASS after adversarial correction | `270d30f9`, `27c7f517` |
-| B10-B12 | `CS-025`, `CS-053`, `CS-055` | implementation/review correction in progress | recorded in focused specs | pending | pending |
-| B13+ | remaining 65 open findings | queued by Program Strategy | required per batch | required per batch | pending |
+| B10-B12 | `CS-025`, `CS-053`, `CS-055` | committed; push blocked pending outgoing-set audit | recorded in focused specs | PASS after correction | `948395e6`, `9e4fb07b`, `ddda01ac` |
+| B13-B14 | `CS-029`, `CS-030` | committed and present on upstream | recorded in focused specs | PASS after correction | `e772a3be`, `2e71f070` |
+| B15-B17 | `CS-027`, `CS-031`, `CS-032` | committed; delivery check in progress | PASS in focused specs | PASS after correction | `e8a4b3dd`, `5846e9ee`, `bd302ad0` |
+| B18+ | remaining 60 open findings | queued by Program Strategy | required per batch | required per batch | pending |
 
 ## Batch B01 — Delete the unrestricted native file writer
 
