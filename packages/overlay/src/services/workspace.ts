@@ -233,7 +233,6 @@ export function clearProjectScopeData(): void {
     channels: [],
     skills: [],
     skillMounts: null,
-    skillMarket: [],
     mcp: {},
     memoryFiles: [],
     memorySearchMode: false,

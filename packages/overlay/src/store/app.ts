@@ -103,15 +103,13 @@ export interface AppState {
   providerAuthDismissed: Record<string, boolean>
   /** In-progress provider connectivity test state */
   providerTest: any
-  // ── Extensions (mirrors state.channels / state.skills / state.skillMarket / state.mcp) ──
+  // ── Extensions (mirrors state.channels / state.skills / state.mcp) ──
   /** Configured channel list */
   channels: any[]
   /** Installed skills list */
   skills: any[]
   /** Agent skill mount matrix returned by /skill/mounts */
   skillMounts: SkillMountsResponse | null
-  /** Skill marketplace catalogue */
-  skillMarket: any[]
   /** MCP (Model Control Protocol) config/status map keyed by name */
   mcp: Record<string, any>
   // ── NdjsonLog (mirrors state.ndjsonEvents / state.ndjsonStartMs) ──
@@ -163,7 +161,6 @@ const DEFAULT_APP_STATE: AppState = {
   channels: [],
   skills: [],
   skillMounts: null,
-  skillMarket: [],
   mcp: {},
   ndjsonEvents: [],
   ndjsonStartMs: 0,
@@ -275,10 +272,6 @@ export function setSkills(list: any[]): void {
 
 export function setSkillMounts(value: SkillMountsResponse | null): void {
   setAppStore("skillMounts", reconcile(value, { merge: false }))
-}
-
-export function setSkillMarket(list: any[]): void {
-  setAppStore("skillMarket", Array.isArray(list) ? list : [])
 }
 
 export function setMcp(map: Record<string, any>): void {
