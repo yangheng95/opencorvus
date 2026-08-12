@@ -1,6 +1,6 @@
 # Work Artifact Harness P0 实施记录
 
-Status: focused validation passed; compiled package E2E and final independent review pending after the user-requested commit/push checkpoint
+Status: P0 implemented; focused validation and hermetic compiled Windows x64 package acceptance passed; follow-up commits await safe remote reconciliation
 
 ## Recall
 
@@ -74,7 +74,7 @@ P0 只把当前已生产资格化的 PPTX（PowerPoint Open XML Presentation，P
 - 用户明确要求监督；已启动只读 `p0_work_harness_supervisor`，禁止修改和再次委托。
 - 监督门槛：receipt 必须绑定 source/profile/runtime/renders；不能只重命名工具；PPTX 不得声明空壳 transform；旧入口全仓同步替换；最终 manifest 在权限归一与签名后生成；native magic 只能审计漏登记；mock 不能替代真实包内 OfficeCLI 生命周期。
 - 监督在首批 lock 中阻止了不实 `network: denied`：OfficeCLI 官方只证明可禁自动更新和 resident，没有 no-network 开关；当前仓库也没有跨平台进程网络沙箱。P0 因此在 profile、qualification matrix 与 runtime lock 统一声明 `adapter_inputs_only`，只证明 canonical attachment、无 URL 参数、隔离 HOME/cache 和禁更新。该状态不得冒充操作系统断网；真正的外联拒绝 checker 留作 profile 升级前的明确未完成项。
-- 独立监督完成状态：进行中，最终审查结果待实施和首轮验证后写回。
+- 独立监督完成状态：最终只读交付复核完成，无未解决代码或验收 finding；唯一剩余交付状态是远端分叉与并行待推提交尚未安全收敛，不是实现缺口。
 
 ## 实施切片
 
@@ -121,3 +121,10 @@ P0 只把当前已生产资格化的 PPTX（PowerPoint Open XML Presentation，P
 - 2026-08-12：旧 `office_artifact_*`、`office-artifacts`、Office 专用 lock 装配在 source/script/runtime/test/current architecture 搜索为零；冲突索引为零。最终独立复核进行中。
 - 2026-08-13：不可信 PPTX/image 检查迁入独立受监督 parser 子进程；实际解压字节使用 bounded writer，递归检查 chart embedded XLSX；canonical attachment 在读取前检查上限并对实际快照复算 SHA-256。OfficeCLI LICENSE、NOTICE、THIRD-PARTY-NOTICES 进入同一 lock/manifest/archive closure。
 - 2026-08-13：当前 checkpoint 证据为 Work Artifact 聚焦测试 13 pass / 0 fail、package typecheck 130.3 秒零诊断。按用户明确要求，先创建提交并 push，再执行 compiled `opencorvus.exe` 的真实完整生命周期；因此此前仅源码 Harness + packaged OfficeCLI 的证据不再作为最终 E2E 结论，最终状态保持 pending。
+- 2026-08-13：主 P0 提交 `46c69afc0`、Docker 统一 lock 修复 `3cca3ff03` 及两次授权合并 `54f47b621`、`75828a8f1` 已由普通 hook 成功 push；push hook 的 8 个 package typecheck、API route、docs 与 secret scan 均通过。
+- 2026-08-13：首次 hermetic compiled package 验收发现源码错误地依赖不存在的 `Bun.isStandaloneExecutable`。提交 `875244e65` 改为由 `artifactCompileDefines()` 向 `build.ts` 与 `build.local.ts` 统一注入 compile-time identity，CLI acceptance guard 与 PPTX inspector child 共同消费 `isCompiledBinaryRuntime()`；独立只读复审无未解决 finding。
+- 2026-08-13：真实 pinned OfficeCLI 1.0.143 chart probe 证明 create-only part 为 `ppt/slides/charts/chart1.xml`。提交 `70eb8650d` 将白名单从推测的标准路径收敛到锁定 runtime 的真实 `ppt/slides/charts/**` 闭包，并增加正向 parser 契约；独立只读复审无未解决 finding。
+- 2026-08-13：compiled acceptance 继续揭示内部 checker 错把 assistant 写入 `kind=root` Session。提交 `4958ed243` 改为合法 rootless `kind=orchestrator` conversation，按 user → assistant → validation Tool Part 的真实参与者顺序持久化，execution authority、receipt lookup 与 deliver 继续绑定同一 Session；独立只读复审无未解决 finding。
+- 2026-08-13：最终从精确提交 `4958ed243` 构造隔离快照并重编译 Windows x64 包。产物为 OpenCorvus `0.0.0-main-202608121845`、OfficeCLI `1.0.143`、`phase=final`、target=`win32-x64`、5 个 Work-managed 文件。`check-work-artifact-profile --package-root` 75.1 秒通过，明确返回 `compiled_opencorvus_typed_lifecycle`、`canonical_validation_receipt`、`fresh_delivery_revalidation`；同快照完整 Work qualification 为 15 pass / 0 fail，package typecheck 零诊断。
+- 2026-08-13：最终 compiled package acceptance 是组合的 production-shaped package checker：包内 `opencorvus.exe` 实际运行 typed author/inspect/validate/deliver、canonical Attachment、host-owned Tool Part、receipt 与 fresh revalidation；包内 OfficeCLI 同时执行真实 create/validate/issues/render。它不是面向最终用户的公开 CLI 会话协议测试。
+- 2026-08-13：E2E 之后远端已前进到 `984d94c38`。提交实施记录前，当前分支相对 `origin/main` 为 ahead 5 / behind 7；完整待推集合除本任务 `875244e65`、`70eb8650d`、`4958ed243` 外，还夹有并行任务 `5c4dd566f`、`6ce13a351`。按仓库规则不自动 merge、rebase 或 force push，也不能替其他任务判断可交付性；这些提交与本实施记录 follow-up 提交须在远端和并行任务安全收敛后再 push。
