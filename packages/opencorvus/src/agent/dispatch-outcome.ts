@@ -8,6 +8,7 @@ import {
   DispatchOccurrenceAuthoritySchema,
   type DispatchOccurrenceAuthority,
 } from "@/engine/dispatch-occurrence-authority"
+import { Identifier } from "@/id/id"
 
 const IdentifierSchema = z.string().min(1).max(512)
 const MESSAGE_LIMIT = 4_096
@@ -109,6 +110,21 @@ export const DispatchOutcomeSchema = z.discriminatedUnion("kind", [
     .describe(
       "The worker Turn and its domain Artifact are durable, but the domain's required completion contract is incomplete. This final non-success outcome never opens workflow successors.",
     ),
+  TerminalSessionSchema.extend({
+    kind: z.literal("domain_blocked"),
+    domain: IdentifierSchema,
+    domain_artifact: EngineArtifactLocatorSchema,
+    blocking_question: z
+      .object({
+        request_id: Identifier.schema("question"),
+        status: z.enum(["rejected", "expired"]),
+      })
+      .strict(),
+  })
+    .strict()
+    .describe(
+      "The worker Turn and its domain Artifact are durable, but one exact blocker Question settled without an answer. This final non-success outcome never opens workflow successors.",
+    ),
   z
     .object({
       kind: z.literal("coordination"),
@@ -169,6 +185,27 @@ export namespace DispatchOutcome {
       final_message_id: input.finalMessageID,
       domain: normalizeIdentifier(input.domain, "domain_delivery"),
       domain_artifact: input.domainArtifact,
+    })
+  }
+
+  export function domainBlocked(input: {
+    sessionID: string
+    finalMessageID: string
+    domain: string
+    domainArtifact: EngineArtifactLocator
+    questionID: string
+    questionStatus: "rejected" | "expired"
+  }): DispatchOutcome {
+    return parse({
+      kind: "domain_blocked",
+      session_id: input.sessionID,
+      final_message_id: input.finalMessageID,
+      domain: normalizeIdentifier(input.domain, "domain_delivery"),
+      domain_artifact: input.domainArtifact,
+      blocking_question: {
+        request_id: input.questionID,
+        status: input.questionStatus,
+      },
     })
   }
 

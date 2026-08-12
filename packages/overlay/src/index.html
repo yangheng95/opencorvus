@@ -19,33 +19,70 @@
     <link rel="icon" type="image/svg+xml" href="./opencorvus-logo-light.svg" />
     <style>
       .oc-startup-surface {
+        --oc-startup-progress-width: min(calc(760px * var(--ui-scale)), calc(100vw - calc(96px * var(--ui-scale))));
         align-items: center;
-        background: var(--surface);
+        background:
+          radial-gradient(
+            circle at 50% 36%,
+            color-mix(in srgb, var(--accent) 5%, transparent) 0,
+            transparent min(38vw, calc(430px * var(--ui-scale)))
+          ),
+          var(--surface);
         color: var(--text-strong);
         display: flex;
         flex: 1 1 auto;
         flex-direction: column;
-        font: var(--ui-font-weight-medium) var(--ui-font-body)/1.4 var(--font);
-        gap: 14px;
+        font: var(--ui-font-weight-body) var(--ui-font-body)/1.5 var(--font);
         justify-content: center;
         min-height: 100%;
+        overflow: hidden;
+        padding: calc(48px * var(--ui-scale));
+        position: relative;
+        text-align: center;
       }
 
       .oc-startup-surface__mark {
         align-items: center;
-        background: var(--surface-strong);
-        border: var(--oc-border-width) solid var(--border);
-        border-radius: var(--oc-radius-large);
-        box-shadow: var(--shadow-md);
+        background:
+          radial-gradient(circle at 42% 36%, color-mix(in srgb, var(--accent) 13%, transparent), transparent 62%),
+          color-mix(in srgb, var(--surface-strong) 80%, transparent);
+        border: var(--oc-border-width) solid color-mix(in srgb, var(--accent) 18%, var(--border));
+        border-radius: var(--oc-radius-xl);
+        box-shadow:
+          0 calc(24px * var(--ui-scale)) calc(60px * var(--ui-scale)) color-mix(in srgb, black 22%, transparent),
+          inset 0 var(--oc-border-width) 0 color-mix(in srgb, white 9%, transparent);
         display: flex;
-        height: 52px;
+        height: calc(150px * var(--ui-scale));
         justify-content: center;
-        width: 52px;
+        margin-bottom: calc(34px * var(--ui-scale));
+        position: relative;
+        transform: rotate(-2deg);
+        width: calc(150px * var(--ui-scale));
+      }
+
+      .oc-startup-surface__mark::before,
+      .oc-startup-surface__mark::after {
+        border: var(--oc-border-width) solid color-mix(in srgb, var(--accent) 12%, transparent);
+        border-radius: var(--oc-radius-xl);
+        content: "";
+        inset: calc(-10px * var(--ui-scale));
+        position: absolute;
+        transform: rotate(5deg);
+      }
+
+      .oc-startup-surface__mark::after {
+        border-color: color-mix(in srgb, var(--text-strong) 5%, transparent);
+        inset: calc(-20px * var(--ui-scale));
+        transform: rotate(-4deg);
       }
 
       .oc-startup-surface__mark img {
-        height: 28px;
-        width: 28px;
+        filter: drop-shadow(0 calc(12px * var(--ui-scale)) calc(18px * var(--ui-scale)) color-mix(in srgb, black 34%, transparent));
+        height: calc(98px * var(--ui-scale));
+        position: relative;
+        transform: rotate(2deg);
+        width: calc(98px * var(--ui-scale));
+        z-index: var(--ui-z-decoration);
       }
 
       [data-theme="light"] .oc-startup-surface__logo-dark,
@@ -54,15 +91,25 @@
         display: none;
       }
 
-      .oc-startup-surface__status {
-        color: var(--text-muted);
-        letter-spacing: var(--ui-letter-spacing-normal);
+      .oc-startup-surface__title {
+        font-size: clamp(calc(30px * var(--ui-scale)), 3.25vw, calc(42px * var(--ui-scale)));
+        font-weight: var(--ui-font-weight-strong);
+        letter-spacing: var(--ui-letter-spacing-tight);
+        line-height: 1.14;
         margin: 0;
       }
 
-      .oc-startup-surface[data-failed="true"] .oc-startup-surface__progress,
-      .oc-startup-surface[data-failed="true"] .oc-startup-surface__detail {
-        display: none;
+      .oc-startup-surface__description {
+        color: var(--text-soft);
+        font-size: clamp(var(--ui-font-body), 1.65vw, calc(20px * var(--ui-scale)));
+        font-weight: var(--ui-font-weight-body);
+        margin: calc(14px * var(--ui-scale)) 0 0;
+        max-width: calc(920px * var(--ui-scale));
+      }
+
+      .oc-startup-surface__feedback {
+        margin-top: calc(32px * var(--ui-scale));
+        width: var(--oc-startup-progress-width);
       }
 
       .oc-startup-surface__progress {
@@ -70,35 +117,144 @@
         background: var(--subtle-2);
         border: 0;
         border-radius: var(--oc-radius-pill);
-        height: 6px;
+        display: block;
+        height: calc(6px * var(--ui-scale));
         overflow: hidden;
-        width: min(320px, calc(100vw - 64px));
+        width: 100%;
       }
 
       .oc-startup-surface__progress::-webkit-progress-bar {
         background: transparent;
       }
+
       .oc-startup-surface__progress::-webkit-progress-value,
       .oc-startup-surface__progress::-moz-progress-bar {
-        background: var(--accent);
+        background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 68%, white), var(--accent));
         border-radius: inherit;
+      }
+
+      .oc-startup-surface__progress:not([value]) {
+        background:
+          linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 68%, white), var(--accent))
+            0 0 / 30% 100% no-repeat,
+          var(--subtle-2);
+      }
+
+      .oc-startup-surface__progress-meta {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        margin-top: calc(13px * var(--ui-scale));
+        min-height: calc(20px * var(--ui-scale));
+      }
+
+      .oc-startup-surface__status {
+        color: var(--text-muted);
+        font-size: var(--ui-font-small);
+        grid-column: 2;
+        letter-spacing: var(--ui-letter-spacing-normal);
+        margin: 0;
       }
 
       .oc-startup-surface__detail {
         color: var(--text-soft);
+        display: none;
         font-size: var(--ui-font-small);
+        grid-column: 3;
+        justify-self: end;
         margin: 0;
+      }
+
+      .oc-startup-surface__progress[value] + .oc-startup-surface__progress-meta .oc-startup-surface__detail {
+        display: block;
       }
 
       .oc-startup-surface__actions {
         display: flex;
-        gap: 8px;
+        gap: var(--ui-gap-md);
+        justify-content: center;
+        margin-top: calc(20px * var(--ui-scale));
+      }
+
+      .oc-startup-surface[data-failed="true"] .oc-startup-surface__mark {
+        filter: grayscale(0.55);
+      }
+
+      .oc-startup-surface[data-failed="true"] .oc-startup-surface__description {
+        max-width: calc(780px * var(--ui-scale));
+      }
+
+      .oc-startup-surface[data-failed="true"] .oc-startup-surface__progress,
+      .oc-startup-surface[data-failed="true"] .oc-startup-surface__detail {
+        display: none;
+      }
+
+      .oc-startup-surface[data-failed="true"] .oc-startup-surface__progress-meta {
+        display: block;
+        margin-top: calc(18px * var(--ui-scale));
+      }
+
+      .oc-startup-surface[data-failed="true"] .oc-startup-surface__status {
+        color: var(--bad);
+        display: block;
+        font-size: var(--ui-font-body);
+        line-height: 1.45;
+        max-height: calc(108px * var(--ui-scale));
+        overflow: auto;
+        overflow-wrap: anywhere;
       }
 
       @media (prefers-reduced-motion: no-preference) {
+        .oc-startup-surface__mark {
+          animation: oc-startup-mark-float var(--ui-duration-loop-tool-wave) var(--ui-timing-standard) infinite;
+        }
+
+        .oc-startup-surface__progress:not([value]) {
+          animation: oc-startup-progress var(--ui-duration-loop-progress) var(--ui-timing-standard) infinite;
+        }
+
         .oc-startup-surface__progress::-webkit-progress-value,
         .oc-startup-surface__progress::-moz-progress-bar {
           transition: width var(--ui-duration-slow) var(--ui-timing-standard);
+        }
+      }
+
+      @keyframes oc-startup-mark-float {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-2deg);
+        }
+        50% {
+          transform: translateY(calc(-8px * var(--ui-scale))) rotate(-1deg);
+        }
+      }
+
+      @keyframes oc-startup-progress {
+        from {
+          background-position: -43% 0, 0 0;
+        }
+        to {
+          background-position: 143% 0, 0 0;
+        }
+      }
+
+      @media (max-height: 640px) {
+        .oc-startup-surface {
+          padding-block: calc(28px * var(--ui-scale));
+        }
+
+        .oc-startup-surface__mark {
+          height: calc(118px * var(--ui-scale));
+          margin-bottom: calc(24px * var(--ui-scale));
+          width: calc(118px * var(--ui-scale));
+        }
+
+        .oc-startup-surface__mark img {
+          height: calc(76px * var(--ui-scale));
+          width: calc(76px * var(--ui-scale));
+        }
+
+        .oc-startup-surface__feedback {
+          margin-top: calc(24px * var(--ui-scale));
         }
       }
     </style>
@@ -158,32 +314,48 @@
   </head>
   <body data-page="overlay">
     <div id="overlayAppHost">
-      <main class="oc-startup-surface" aria-busy="true" aria-label="OpenCorvus is loading">
+      <main
+        class="oc-startup-surface"
+        aria-busy="true"
+        aria-describedby="oc-startup-description oc-startup-status"
+        aria-labelledby="oc-startup-title"
+        data-failed="false"
+      >
         <div class="oc-startup-surface__mark" aria-hidden="true">
           <img class="oc-startup-surface__logo-light" src="./opencorvus-logo-light.svg" alt="" />
           <img class="oc-startup-surface__logo-dark" src="./opencorvus-logo-dark.svg" alt="" />
         </div>
-        <p class="oc-startup-surface__status" id="oc-startup-status" role="status">Preparing OpenCorvus</p>
-        <progress class="oc-startup-surface__progress" id="oc-startup-progress" max="100" value="0">0%</progress>
-        <p class="oc-startup-surface__detail" id="oc-startup-detail">0%</p>
-        <div class="oc-startup-surface__actions" id="oc-startup-actions" hidden>
-          <button class="oc-button" data-variant="solid" data-size="md" data-tone="accent" id="oc-startup-retry" type="button">Retry</button>
-          <button
-            class="oc-button"
-            data-variant="outline"
-            data-size="md"
-            data-tone="neutral"
-            id="oc-startup-log"
-            type="button"
-          >
-            View log
-          </button>
+        <h1 class="oc-startup-surface__title" id="oc-startup-title">Preparing Environment</h1>
+        <p class="oc-startup-surface__description" id="oc-startup-description">
+          Preparing the runtime environment. OpenCorvus will open automatically when ready.
+        </p>
+        <div class="oc-startup-surface__feedback">
+          <progress class="oc-startup-surface__progress" id="oc-startup-progress" max="100">Preparing OpenCorvus</progress>
+          <div class="oc-startup-surface__progress-meta">
+            <p class="oc-startup-surface__status" id="oc-startup-status" role="status">Preparing OpenCorvus…</p>
+            <p class="oc-startup-surface__detail" id="oc-startup-detail"></p>
+          </div>
+          <div class="oc-startup-surface__actions" id="oc-startup-actions" hidden>
+            <button class="oc-button" data-variant="solid" data-size="md" data-tone="accent" id="oc-startup-retry" type="button">Retry</button>
+            <button
+              class="oc-button"
+              data-variant="outline"
+              data-size="md"
+              data-tone="neutral"
+              id="oc-startup-log"
+              type="button"
+            >
+              View log
+            </button>
+          </div>
         </div>
       </main>
     </div>
     <script type="module">
       await (async () => {
         const eventName = "overlay:startup-progress"
+        const title = document.getElementById("oc-startup-title")
+        const description = document.getElementById("oc-startup-description")
         const status = document.getElementById("oc-startup-status")
         const startupSurface = status.closest("main")
         const progress = document.getElementById("oc-startup-progress")
@@ -217,14 +389,22 @@
           const total = Number(value.totalBytes) || 0
           const completed = Math.min(Number(value.completedBytes) || 0, total)
           const percent = total > 0 ? Math.round((completed / total) * 100) : 0
-          status.textContent = value.message || "Preparing OpenCorvus"
-          progress.value = percent
-          detail.textContent = `${percent}%`
-          logPath = typeof value.logPath === "string" ? value.logPath : ""
           const failed = value.phase === "failed"
+          title.textContent = failed ? "OpenCorvus could not start" : "Preparing Environment"
+          description.textContent = failed
+            ? "The runtime environment could not be prepared. Review the diagnostic below, then retry."
+            : "Preparing the runtime environment. OpenCorvus will open automatically when ready."
+          status.textContent = value.message || (failed ? "OpenCorvus could not start" : "Preparing OpenCorvus…")
+          if (total > 0) {
+            progress.value = percent
+            detail.textContent = `${percent}%`
+          } else {
+            progress.removeAttribute("value")
+            detail.textContent = ""
+          }
+          logPath = typeof value.logPath === "string" ? value.logPath : ""
           startupSurface.dataset.failed = String(failed)
           startupSurface.setAttribute("aria-busy", String(!failed))
-          startupSurface.setAttribute("aria-label", failed ? status.textContent : "OpenCorvus is loading")
           status.setAttribute("role", failed ? "alert" : "status")
           actions.hidden = !failed
           log.hidden = !logPath
@@ -246,12 +426,13 @@
         retry.addEventListener("click", () => {
           startupSurface.dataset.failed = "false"
           startupSurface.setAttribute("aria-busy", "true")
-          startupSurface.setAttribute("aria-label", "OpenCorvus is loading")
+          title.textContent = "Preparing Environment"
+          description.textContent = "Preparing the runtime environment. OpenCorvus will open automatically when ready."
           status.setAttribute("role", "status")
-          status.textContent = "Preparing OpenCorvus"
+          status.textContent = "Preparing OpenCorvus…"
           actions.hidden = true
-          progress.value = 0
-          detail.textContent = "0%"
+          progress.removeAttribute("value")
+          detail.textContent = ""
           progress.hidden = false
           detail.hidden = false
           Promise.resolve(invoke("overlay_startup_retry")).catch((error) => {
