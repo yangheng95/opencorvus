@@ -83,6 +83,7 @@ print(json.dumps({"status":"ready","publication":{
 PY
     ;;
   /market/|/zh-cn/market/|/market/*|/zh-cn/market/*) printf '<!doctype html><title>database market</title>\n' ;;
+  /api/site/v1/visitors) printf '{"protocol":"opencorvus/site-visitors@1","estimatedParticipatingBrowsers":0,"participating":false,"renewalDue":false,"measuredWindowDays":30}\n' ;;
   /api/registry/v1/squads/*/archive)
     python3 - "$public" <<'PY'
 import json, pathlib, sys
@@ -156,6 +157,9 @@ value() { local key=$1; shift; while [ "$#" -gt 0 ]; do if [ "$1" = "$key" ]; th
 database=$(value --database "$@")
 case "$command" in
   import) seed=$(value --seed "$@"); printf 'database publication %s\n' "$(sha256sum "$seed" | cut -d' ' -f1)" > "$database" ;;
+  schema-state)
+    if grep -q '^legacy-v1$' "$database"; then printf '{"schemaVersion":1,"state":"legacy"}\n'; else printf '{"schemaVersion":1,"state":"current"}\n'; fi ;;
+  reset-v1) seed=$(value --seed "$@"); printf 'database publication %s\n' "$(sha256sum "$seed" | cut -d' ' -f1)" > "$(value --target "$@")" ;;
   backup) cp -- "$database" "$(value --target "$@")" ;;
   health) printf '{"status":"ready"}\n' ;;
   *) exit 2 ;;
@@ -177,6 +181,10 @@ activate() {
 
 R1=1111111111111111111111111111111111111111-1111111111111111
 R2=2222222222222222222222222222222222222222-2222222222222222
+RS=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-aaaaaaaaaaaaaaaa
+RPRE=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb-bbbbbbbbbbbbbbbb
+RPOST=cccccccccccccccccccccccccccccccccccccccc-cccccccccccccccc
+RCURRENT=dddddddddddddddddddddddddddddddddddddddd-dddddddddddddddd
 RF=ffffffffffffffffffffffffffffffffffffffff-ffffffffffffffff
 LEGACY=eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-eeeeeeeeeeeeeeee
 make_release "$RF" 1
@@ -210,18 +218,55 @@ test "$(curl --fail --silent --show-error http://127.0.0.1:8080/)" = '<!doctype 
 make_release "$R1" 2
 activate "$R1" > /dev/null
 
+assert_failed_activation_restored() {
+  local release_id=$1 expected_database=$2
+  test "$(readlink "$OPENCORVUS_DEPLOY_ROOT/current")" = "releases/$R1"
+  test "$(cat "$OPENCORVUS_STATE_ROOT/registry.sqlite3")" = "$expected_database"
+  test "$(tail -n 1 "$OPENCORVUS_STATE_ROOT/systemctl.log")" = "restart opencorvus-web.service"
+  test ! -e "$OPENCORVUS_STATE_ROOT/.registry-$release_id.sqlite3"
+  test ! -e "$OPENCORVUS_STATE_ROOT/.registry-$release_id.sqlite3-wal"
+  test ! -e "$OPENCORVUS_STATE_ROOT/.registry-$release_id.sqlite3-shm"
+}
+
+make_release "$RS" 3
+: > "$OPENCORVUS_STATE_ROOT/test-fail-snapshot-metadata"
+SNAPSHOT_FAILURE=$(activate "$RS" 2>&1 || true)
+test "$SNAPSHOT_FAILURE" = "database snapshot metadata fixture requested rollback"
+assert_failed_activation_restored "$RS" "$R1_DATABASE"
+
+make_release "$RCURRENT" 3
+: > "$OPENCORVUS_STATE_ROOT/test-fail-current-path"
+CURRENT_FAILURE=$(activate "$RCURRENT" 2>&1 || true)
+test "$CURRENT_FAILURE" = "database current-path fixture requested rollback"
+assert_failed_activation_restored "$RCURRENT" "$R1_DATABASE"
+
 make_release "$R2" 3
+printf 'legacy-v1\n' > "$OPENCORVUS_STATE_ROOT/registry.sqlite3"
+
+make_release "$RPRE" 3
+: > "$OPENCORVUS_STATE_ROOT/test-fail-pre-swap"
+PRE_SWAP_FAILURE=$(activate "$RPRE" 2>&1 || true)
+test "$PRE_SWAP_FAILURE" = "database v1 pre-swap fixture requested rollback"
+assert_failed_activation_restored "$RPRE" "legacy-v1"
+
+make_release "$RPOST" 3
+: > "$OPENCORVUS_STATE_ROOT/test-fail-post-swap"
+POST_SWAP_FAILURE=$(activate "$RPOST" 2>&1 || true)
+test "$POST_SWAP_FAILURE" = "database v1 post-swap fixture requested rollback"
+assert_failed_activation_restored "$RPOST" "legacy-v1"
+
 activate "$R2" > /dev/null
 test "$(readlink "$OPENCORVUS_DEPLOY_ROOT/current")" = "releases/$R2"
 test "$(readlink "$OPENCORVUS_DEPLOY_ROOT/previous")" = "releases/$R1"
-test "$(cat "$OPENCORVUS_ROLLBACK_ROOT/rollbacks/pre-$R2.sqlite3")" = "$R1_DATABASE"
+test "$(cat "$OPENCORVUS_ROLLBACK_ROOT/rollbacks/pre-$R2.sqlite3")" = "legacy-v1"
+test "$(cat "$OPENCORVUS_STATE_ROOT/registry.sqlite3")" != "legacy-v1"
 (cd / && sha256sum --check "$OPENCORVUS_ROLLBACK_ROOT/rollbacks/pre-$R2.sqlite3.sha256") > /dev/null
 test "$(stat -c %a "$OPENCORVUS_ROLLBACK_ROOT/rollbacks")" = 700
 
 ROLLBACK_TARGET=$(bash "$ACTIVATOR" --rollback "$R2")
 test "$ROLLBACK_TARGET" = "releases/$R1"
 test "$(readlink "$OPENCORVUS_DEPLOY_ROOT/current")" = "releases/$R1"
-test "$(cat "$OPENCORVUS_STATE_ROOT/registry.sqlite3")" = "$R1_DATABASE"
+test "$(cat "$OPENCORVUS_STATE_ROOT/registry.sqlite3")" = "legacy-v1"
 test "$(tail -n 1 "$OPENCORVUS_STATE_ROOT/systemctl.log")" = "restart opencorvus-web.service"
 
 mkdir -p "$OPENCORVUS_STATE_ROOT/blobs/sha256/aa"

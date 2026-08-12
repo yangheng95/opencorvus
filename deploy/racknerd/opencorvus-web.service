@@ -11,6 +11,7 @@ WorkingDirectory=/srv/opencorvus/current
 Environment=HOST=127.0.0.1
 Environment=PORT=4321
 Environment=NODE_ENV=production
+Environment=OPENCORVUS_WEB_PUBLIC_ORIGIN=https://opencorvus.com
 Environment=OPENCORVUS_WEB_REGISTRY_DB=/var/lib/opencorvus-web/registry.sqlite3
 Environment=OPENCORVUS_WEB_REGISTRY_DATA=/var/lib/opencorvus-web
 ExecStart=/usr/bin/bun /srv/opencorvus/current/server/opencorvus-web.mjs

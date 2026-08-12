@@ -74,7 +74,12 @@ const facts = shippedPackages
     return leftIdentity.localeCompare(rightIdentity)
   })
 
-const distribution = await generateExpertSquadDistribution()
+const distribution = await generateExpertSquadDistribution(
+  undefined,
+  undefined,
+  undefined,
+  { sources: shippedSources, embeddedIdentities: embeddedIDs },
+)
 const archivesByIdentity = new Map<string, (typeof distribution.catalog.packages)[number]>(
   distribution.catalog.packages.map((entry) => [`${entry.namespace}/${entry.id}`, entry] as const),
 )

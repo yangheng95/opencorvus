@@ -145,11 +145,12 @@ probe_live_release() {
   curl --fail --silent --show-error http://127.0.0.1:8080/health/ready > "$probe/ready.json" || { rm -rf -- "$probe"; return 1; }
   curl --fail --silent --show-error http://127.0.0.1:8080/market/ > "$probe/market-en.html" || { rm -rf -- "$probe"; return 1; }
   curl --fail --silent --show-error http://127.0.0.1:8080/zh-cn/market/ > "$probe/market-zh.html" || { rm -rf -- "$probe"; return 1; }
+  curl --fail --silent --show-error http://127.0.0.1:8080/api/site/v1/visitors > "$probe/visitors.json" || { rm -rf -- "$probe"; return 1; }
   curl --fail --silent --show-error http://127.0.0.1:8080/expert-squads/catalog.json > "$probe/pointer.json" || { rm -rf -- "$probe"; return 1; }
   cmp "$probe/pointer.json" "$CURRENT/client/expert-squads/catalog.json" || { rm -rf -- "$probe"; return 1; }
-  python3 - "$probe/ready.json" "$CURRENT/client/expert-squads/catalog.json" "$probe/references.tsv" <<'PY' || { rm -rf -- "$probe"; return 1; }
+  python3 - "$probe/ready.json" "$CURRENT/client/expert-squads/catalog.json" "$probe/visitors.json" "$probe/references.tsv" <<'PY' || { rm -rf -- "$probe"; return 1; }
 import json, sys
-ready, pointer = [json.load(open(item, encoding="utf-8")) for item in sys.argv[1:3]]
+ready, pointer, visitors = [json.load(open(item, encoding="utf-8")) for item in sys.argv[1:4]]
 resources = pointer.get("resources", {})
 expected = {
     "catalogSha256": pointer.get("catalog", {}).get("sha256"),
@@ -159,7 +160,9 @@ expected = {
 }
 publication = ready.get("publication")
 if ready.get("status") != "ready" or not isinstance(publication, dict) or any(publication.get(key) != value for key, value in expected.items()): raise SystemExit("database readiness disagrees with publication")
-with open(sys.argv[3], "w", encoding="utf-8") as output:
+if visitors.get("protocol") != "opencorvus/site-visitors@1" or visitors.get("measuredWindowDays") != 30 or not isinstance(visitors.get("estimatedParticipatingBrowsers"), int) or visitors.get("estimatedParticipatingBrowsers") < 0: raise SystemExit("visitor summary contract is invalid")
+if visitors.get("participating") is not False or visitors.get("renewalDue") is not False: raise SystemExit("cookie-free visitor probe must be read-only")
+with open(sys.argv[4], "w", encoding="utf-8") as output:
     for name in ("catalog", "signatures", "bundle"):
         ref = pointer[name]
         output.write(f"static\t{ref['path']}\t{ref['sha256']}\t{ref['bytes']}\n")
@@ -417,27 +420,12 @@ if "$SYSTEMCTL" is-enabled --quiet "$BACKUP_TIMER"; then
 else
   printf '%s\n' disabled > "$ROLLBACKS/pre-$RELEASE_ID.backup-timer-enabled"
 fi
-service_stop
-if [ -f "$DATABASE" ]; then
-  test -n "$OLD_TARGET"
-  OLD_CONTROL="$ROOT/$OLD_TARGET/server/opencorvus-registry-control"
-  test -x "$OLD_CONTROL"
-  if ! "$OLD_CONTROL" backup --database "$DATABASE" --data "$STATE_ROOT" --target "$SNAPSHOT"; then
-    service_start
-    echo "database snapshot failed; previous service was restarted" >&2
-    exit 1
-  fi
-  chmod 0600 "$SNAPSHOT"
-  sha256sum "$SNAPSHOT" > "$SNAPSHOT.sha256"
-  chmod 0600 "$SNAPSHOT.sha256"
-  rm -f -- "$DATABASE-wal" "$DATABASE-shm"
-  if [ -n "$SERVICE_USER" ]; then chown "$SERVICE_USER:$SERVICE_USER" "$DATABASE"; fi
-  chmod 0600 "$DATABASE"
-else
-  : > "$ROLLBACKS/pre-$RELEASE_ID.database-absent"
-fi
 abort_activation() {
   local message=$1
+  if [ -n "${RESET_DATABASE:-}" ]; then
+    case "$RESET_DATABASE" in "$STATE_ROOT/.registry-$RELEASE_ID.sqlite3") ;; *) echo "invalid reset database cleanup path" >&2; exit 1 ;; esac
+    rm -f -- "$RESET_DATABASE" "$RESET_DATABASE-wal" "$RESET_DATABASE-shm"
+  fi
   rollback_release "$RELEASE_ID" "$OLD_TARGET"
   if [ -n "$OLD_TARGET" ]; then
     probe_restored_release "$OLD_TARGET"
@@ -448,6 +436,73 @@ abort_activation() {
   echo "$message" >&2
   exit 1
 }
+abort_before_database_mutation() {
+  local message=$1
+  service_start || true
+  echo "$message" >&2
+  exit 1
+}
+activation_fault() {
+  local point=$1 marker="$STATE_ROOT/test-fail-$1"
+  if [ "${OPENCORVUS_TEST_HARNESS:-}" = "1" ] && [ -f "$marker" ]; then
+    rm -f -- "$marker"
+    return 0
+  fi
+  return 1
+}
+service_stop || abort_before_database_mutation "previous service could not be stopped"
+RESET_DATABASE=""
+if [ -f "$DATABASE" ]; then
+  test -n "$OLD_TARGET" || abort_before_database_mutation "database exists without a previous release"
+  OLD_CONTROL="$ROOT/$OLD_TARGET/server/opencorvus-registry-control"
+  test -x "$OLD_CONTROL" || abort_before_database_mutation "previous Registry control is unavailable"
+  if ! "$OLD_CONTROL" backup --database "$DATABASE" --data "$STATE_ROOT" --target "$SNAPSHOT"; then
+    abort_before_database_mutation "database snapshot failed; previous service was restarted"
+  fi
+  chmod 0600 "$SNAPSHOT" || abort_before_database_mutation "database snapshot mode failed; previous service was restarted"
+  sha256sum "$SNAPSHOT" > "$SNAPSHOT.sha256" || abort_before_database_mutation "database snapshot checksum failed; previous service was restarted"
+  chmod 0600 "$SNAPSHOT.sha256" || abort_before_database_mutation "database snapshot checksum mode failed; previous service was restarted"
+  if activation_fault snapshot-metadata; then abort_activation "database snapshot metadata fixture requested rollback"; fi
+  if ! SCHEMA_STATE=$(run_as_service "$CANDIDATE/server/opencorvus-registry-control" schema-state --database "$DATABASE" --data "$STATE_ROOT"); then
+    abort_activation "database v1 fingerprint inspection failed; previous release was restored"
+  fi
+  case "$SCHEMA_STATE" in
+    *'"schemaVersion":1,"state":"legacy"'*)
+      RESET_DATABASE="$STATE_ROOT/.registry-$RELEASE_ID.sqlite3"
+      rm -f -- "$RESET_DATABASE" "$RESET_DATABASE-wal" "$RESET_DATABASE-shm" || abort_activation "database v1 reset staging cleanup failed"
+      if ! run_as_service "$CANDIDATE/server/opencorvus-registry-control" reset-v1 \
+        --database "$DATABASE" --data "$STATE_ROOT" --target "$RESET_DATABASE" \
+        --seed "$CANDIDATE/server/website-registry-seed.json" --source "$CANDIDATE/client"; then
+        abort_activation "database v1 reset failed; previous release was restored"
+      fi
+      if [ -e "$RESET_DATABASE-wal" ] || [ -e "$RESET_DATABASE-shm" ]; then abort_activation "database v1 reset left uncheckpointed sidecars"; fi
+      rm -f -- "$DATABASE-wal" "$DATABASE-shm" || abort_activation "database v1 sidecar cleanup failed"
+      if [ -n "$SERVICE_USER" ]; then chown "$SERVICE_USER:$SERVICE_USER" "$RESET_DATABASE" || abort_activation "database v1 reset ownership failed"; fi
+      chmod 0600 "$RESET_DATABASE" || abort_activation "database v1 reset mode failed"
+      if activation_fault pre-swap; then abort_activation "database v1 pre-swap fixture requested rollback"; fi
+      mv -T "$RESET_DATABASE" "$DATABASE" || abort_activation "database v1 atomic swap failed"
+      if activation_fault post-swap; then abort_activation "database v1 post-swap fixture requested rollback"; fi
+      if ! python3 - "$STATE_ROOT" <<'PY'
+import os, sys
+fd = os.open(sys.argv[1], os.O_RDONLY | getattr(os, "O_DIRECTORY", 0))
+try: os.fsync(fd)
+finally: os.close(fd)
+PY
+      then abort_activation "database v1 parent fsync failed"; fi
+      ;;
+    *'"schemaVersion":1,"state":"current"'*)
+      if activation_fault current-path; then abort_activation "database current-path fixture requested rollback"; fi
+      rm -f -- "$DATABASE-wal" "$DATABASE-shm" || abort_activation "database current-fingerprint sidecar cleanup failed"
+      ;;
+    *)
+      abort_activation "database v1 fingerprint is not eligible for activation"
+      ;;
+  esac
+  if [ -n "$SERVICE_USER" ]; then chown "$SERVICE_USER:$SERVICE_USER" "$DATABASE" || abort_activation "database ownership normalization failed"; fi
+  chmod 0600 "$DATABASE" || abort_activation "database mode normalization failed"
+else
+  : > "$ROLLBACKS/pre-$RELEASE_ID.database-absent" || abort_activation "database absence marker creation failed"
+fi
 if ! install -m 0644 "$CANDIDATE/server/opencorvus-web.service" "$SYSTEMD_UNIT"; then abort_activation "service unit installation failed"; fi
 if ! "$SYSTEMCTL" daemon-reload; then abort_activation "systemd reload failed"; fi
 if ! "$SYSTEMCTL" enable "$SERVICE"; then abort_activation "service enablement failed"; fi

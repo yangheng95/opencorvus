@@ -2,7 +2,14 @@
 	root * /srv/opencorvus/current/client
 	encode zstd gzip
 
-	@website_runtime path /market /market/* /zh-cn/market /zh-cn/market/* /api/registry/* /health/live /health/ready
+	@website_runtime path /market /market/* /zh-cn/market /zh-cn/market/* /api/registry/* /api/site/v1/visitors /api/site/v1/visitors/current /health/live /health/ready
+	@visitor_post {
+		path /api/site/v1/visitors
+		method POST
+	}
+	request_body @visitor_post {
+		max_size 1KB
+	}
 	reverse_proxy @website_runtime 127.0.0.1:4321
 
 	@expert_squad_pointer path /expert-squads/catalog.json

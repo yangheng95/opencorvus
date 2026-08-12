@@ -1,5 +1,6 @@
 ---
 import { publicPath, type PublicLocale } from "../content/public-market"
+import VisitorCount from "./VisitorCount.astro"
 
 const { locale } = Astro.props as { locale: PublicLocale }
 const copy =
@@ -16,6 +17,7 @@ const copy =
 <footer class="public-footer">
   <p class="footer-mark">OpenCorvus</p>
   <p>{copy.statement}</p>
+  <VisitorCount {locale} />
   <nav aria-label={locale === "zh-cn" ? "页脚" : "Footer"}>
     <a href={publicPath(locale, "/start/quickstart/")}>{copy.docs}</a>
     <a href="https://github.com/yangheng95/opencorvus">{copy.source}</a>

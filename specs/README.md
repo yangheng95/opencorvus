@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest public navigation hierarchy and privacy-preserving visitor count: [`2026-08-12-public-navigation-and-visitor-count.md`](records/2026-08/2026-08-12-public-navigation-and-visitor-count.md).
+
 Latest opencorvus.com production database bootstrap configuration: [`2026-08-12-opencorvus-production-database-bootstrap-configuration.md`](records/2026-08/2026-08-12-opencorvus-production-database-bootstrap-configuration.md).
 
 Latest running wake and Session control JSON convergence: [`2026-08-12-running-wake-and-session-control-json-convergence.md`](records/2026-08/2026-08-12-running-wake-and-session-control-json-convergence.md).

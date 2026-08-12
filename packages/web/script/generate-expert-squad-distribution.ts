@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url"
 import { mkdir, rm, writeFile } from "node:fs/promises"
 import { builtInPackageSources } from "../../opencorvus/src/expert-squad/builtin"
 import { ExpertSquadArchive } from "../../opencorvus/src/expert-squad/archive"
+import { ExpertSquadRegistry } from "../../opencorvus/src/expert-squad/registry"
 import { payloadPackageSources } from "../../opencorvus/generated/expert-squad-payload"
 
 const webRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
@@ -10,6 +11,7 @@ export const distributionOutputRoot = path.join(webRoot, ".generated", "expert-s
 export const distributionMetadataPath = path.join(webRoot, "src", "content", "expert-squad-distribution.generated.ts")
 
 type TrustedKey = { keyId: string; publicKeySpkiBase64: string }
+type DistributionOptions = { sources?: ExpertSquadRegistry.EmbeddedPackageSource[]; embeddedIdentities?: Set<string> }
 
 function trustedKeysFromEnvironment(): TrustedKey[] {
   const raw = process.env.EXPERT_SQUAD_TRUSTED_KEYS_JSON
@@ -52,9 +54,10 @@ export async function generateExpertSquadDistribution(
   outputRoot = distributionOutputRoot,
   metadataPath = distributionMetadataPath,
   trustedKeys = trustedKeysFromEnvironment(),
+  options: DistributionOptions = {},
 ) {
-  const embeddedIdentities = new Set(builtInPackageSources.map((source) => `${source.namespace}/${source.id}`))
-  const sources = [...builtInPackageSources, ...payloadPackageSources].sort((left, right) =>
+  const embeddedIdentities = options.embeddedIdentities ?? new Set(builtInPackageSources.map((source) => `${source.namespace}/${source.id}`))
+  const sources = [...(options.sources ?? [...builtInPackageSources, ...payloadPackageSources])].sort((left, right) =>
     ExpertSquadArchive.compareUTF8(`${left.namespace}/${left.id}`, `${right.namespace}/${right.id}`),
   )
   const identities = sources.map((source) => `${source.namespace}/${source.id}`)
