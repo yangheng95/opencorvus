@@ -1,4 +1,5 @@
 # August 2026 Records
+- [2026-08-13-scheduled-global-inactivity-config-ownership.md](2026-08-13-scheduled-global-inactivity-config-ownership.md) diagnoses the screenshot's backend transport failure and the isolated checker's project-context crash, then restores the process-wide scheduler's explicit global inactivity configuration owner.
 
 - [2026-08-12-startup-surface-visual-redesign.md](2026-08-12-startup-surface-visual-redesign.md) redesigns the real desktop startup surface around the existing OpenCorvus bird, a strong preparation hierarchy, truthful wide progress feedback, and preserved native failure/retry behavior, with production-page visual evidence and independent review.
 

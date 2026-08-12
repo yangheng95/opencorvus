@@ -10,10 +10,7 @@ import { Wildcard } from "@/util/wildcard"
 import { Identifier } from "@/id/id"
 import { createHash, randomUUID } from "node:crypto"
 import { EventJobFireTable, EventJobTable, type EventJobFireCausationEntry } from "./event.sql"
-import {
-  RuntimeExecutionAdmissionClosedError,
-  RuntimeExecutionSettlement,
-} from "@/runtime/execution-settlement"
+import { RuntimeExecutionAdmissionClosedError, RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { Project } from "@/project/project"
 import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
 import { createSchedulerExecutionInactivityFence } from "./execution-inactivity"
@@ -61,8 +58,16 @@ type EventWakeExecutor = (input: {
   signal: AbortSignal
 }) => Promise<{ sessionID: string; messageID: string }>
 type EventFireAcceptedHook = (fire: EventJobFire) => void | Promise<void>
-type BeforeSessionWakeHook = (input: { fire: EventJobFire; ownerID: string; signal: AbortSignal }) => void | Promise<void>
-type AfterEventFireClaimHook = (input: { fire: EventJobFire; ownerID: string; signal: AbortSignal }) => void | Promise<void>
+type BeforeSessionWakeHook = (input: {
+  fire: EventJobFire
+  ownerID: string
+  signal: AbortSignal
+}) => void | Promise<void>
+type AfterEventFireClaimHook = (input: {
+  fire: EventJobFire
+  ownerID: string
+  signal: AbortSignal
+}) => void | Promise<void>
 
 export namespace EventService {
   const log = Log.create({ service: "event-service" })
@@ -172,14 +177,16 @@ export namespace EventService {
   export function acquireProcessSettlementGate(): ProcessSettlementGate {
     if (processSettlementGate) throw new Error("Event fire process settlement is already in progress")
     const token = Symbol("event-fire-process-settlement")
-    const projectIDs = new Set(Database.use((db) =>
-      db
-        .selectDistinct({ projectID: EventJobFireTable.project_id })
-        .from(EventJobFireTable)
-        .where(sql`${EventJobFireTable.status} IN ('pending', 'running', 'retry_wait')`)
-        .all()
-        .map((row) => row.projectID),
-    ))
+    const projectIDs = new Set(
+      Database.use((db) =>
+        db
+          .selectDistinct({ projectID: EventJobFireTable.project_id })
+          .from(EventJobFireTable)
+          .where(sql`${EventJobFireTable.status} IN ('pending', 'running', 'retry_wait')`)
+          .all()
+          .map((row) => row.projectID),
+      ),
+    )
     processSettlementGate = { token, projectIDs }
     let decision: "pending" | "commit" | "rollback" = "pending"
     let disposed = false
@@ -295,7 +302,13 @@ export namespace EventService {
     processSettlementGate?.projectIDs.add(Instance.project.id)
 
     const causation = resolveCausation(event)
-    const fires = createFires({ jobs: matches, eventType: event.type, occurrenceID: event.occurrenceID, causation, now })
+    const fires = createFires({
+      jobs: matches,
+      eventType: event.type,
+      occurrenceID: event.occurrenceID,
+      causation,
+      now,
+    })
     for (const fire of fires) {
       await fireAcceptedHookForTest?.(fire)
       if (fire.status === "pending") enqueueFire(fire.id, fire.event_job_id)
@@ -317,47 +330,47 @@ export namespace EventService {
       input.jobs.map((job) => {
         const fireID = Identifier.ascending("call")
         const cycle = input.causation.ancestry.some((entry) => entry.jobID === job.id)
-      const inserted = db
-        .insert(EventJobFireTable)
-        .values({
-          id: fireID,
-          event_job_id: job.id,
-          project_id: job.project_id,
-          event_occurrence_id: input.occurrenceID,
-          event_type: input.eventType,
-          causation_fire_id: input.causation.parentFireID,
-          causation_ancestry: input.causation.ancestry,
-          status: cycle ? "disposition" : "pending",
-          disposition: cycle ? "causal_cycle" : null,
-          target_session_id: job.session_id ?? Identifier.ascending("session"),
-          creates_session: job.session_id === null,
-          lease_until: 0,
-          attempt: 0,
-          error: cycle ? `Event Job ${job.id} already occurs in fire causation ancestry` : null,
-          time_completed: cycle ? input.now : null,
-          time_created: input.now,
-          time_updated: input.now,
-        })
-        .onConflictDoNothing({
-          target: [EventJobFireTable.event_job_id, EventJobFireTable.event_occurrence_id],
-        })
-        .returning()
-        .get()
-      if (inserted) return inserted
-      const existing = db
-        .select()
-        .from(EventJobFireTable)
-        .where(
-          and(
-            eq(EventJobFireTable.event_job_id, job.id),
-            eq(EventJobFireTable.event_occurrence_id, input.occurrenceID),
-          ),
-        )
-        .get()
-      if (!existing) {
-        throw new Error(`Event occurrence ${input.occurrenceID} conflict has no durable fire for job ${job.id}`)
-      }
-      return existing
+        const inserted = db
+          .insert(EventJobFireTable)
+          .values({
+            id: fireID,
+            event_job_id: job.id,
+            project_id: job.project_id,
+            event_occurrence_id: input.occurrenceID,
+            event_type: input.eventType,
+            causation_fire_id: input.causation.parentFireID,
+            causation_ancestry: input.causation.ancestry,
+            status: cycle ? "disposition" : "pending",
+            disposition: cycle ? "causal_cycle" : null,
+            target_session_id: job.session_id ?? Identifier.ascending("session"),
+            creates_session: job.session_id === null,
+            lease_until: 0,
+            attempt: 0,
+            error: cycle ? `Event Job ${job.id} already occurs in fire causation ancestry` : null,
+            time_completed: cycle ? input.now : null,
+            time_created: input.now,
+            time_updated: input.now,
+          })
+          .onConflictDoNothing({
+            target: [EventJobFireTable.event_job_id, EventJobFireTable.event_occurrence_id],
+          })
+          .returning()
+          .get()
+        if (inserted) return inserted
+        const existing = db
+          .select()
+          .from(EventJobFireTable)
+          .where(
+            and(
+              eq(EventJobFireTable.event_job_id, job.id),
+              eq(EventJobFireTable.event_occurrence_id, input.occurrenceID),
+            ),
+          )
+          .get()
+        if (!existing) {
+          throw new Error(`Event occurrence ${input.occurrenceID} conflict has no durable fire for job ${job.id}`)
+        }
+        return existing
       }),
     )
   }
@@ -497,6 +510,7 @@ export namespace EventService {
       occurrence: `Event fire ${claimed.id}`,
       signals: [s.lifecycle.signal, runtimeSignal, leaseFence.signal],
       initialPhase: "claimed",
+      configurationOwner: "project",
     })
     const signal = inactivityFence.signal
     const renewTimer = setInterval(() => leaseFence.renewOrAbort(), FIRE_LEASE_RENEW_MS)
