@@ -29,14 +29,18 @@ function NativeMenuSurface() {
     const requestID = model()?.requestID
     if (requestID === undefined) return
     await emitTo("main", NATIVE_MENU_SURFACE_DISMISS_EVENT, { requestID })
-    await getCurrentWindow().hide()
+  }
+
+  function reportIntentFailure(action: Promise<void>): void {
+    void action.catch((error) => {
+      console.error("[native-menu-surface] failed to send menu intent", error)
+    })
   }
 
   async function choose(itemID: string): Promise<void> {
     const requestID = model()?.requestID
     if (requestID === undefined) return
     await emitTo("main", NATIVE_MENU_SURFACE_ACTION_EVENT, { requestID, itemID })
-    await getCurrentWindow().hide()
   }
 
   function moveFocus(delta: number, scope: ParentNode = surfaceElement): void {
@@ -65,12 +69,14 @@ function NativeMenuSurface() {
             requestID: payload.requestID,
             width: Math.ceil(bounds.width),
             height: Math.ceil(bounds.height),
+          }).catch((error) => {
+            console.error("[native-menu-surface] failed to report measurement", error)
           })
           surfaceElement.querySelector<HTMLButtonElement>("button:not(:disabled)")?.focus()
         })
       }))
       unlisteners.push(await getCurrentWindow().onFocusChanged(({ payload: focused }) => {
-        if (!focused && model()) void dismiss()
+        if (!focused && model()) reportIntentFailure(dismiss())
       }))
       await emitTo("main", NATIVE_MENU_SURFACE_READY_EVENT, { generation: surfaceGeneration })
     })().catch((error) => {
@@ -92,12 +98,12 @@ function NativeMenuSurface() {
         "--native-menu-maximum-height": model()?.maxHeight ? `${model()!.maxHeight}px` : undefined,
       }}
       onPointerDown={(event) => {
-        if (event.target === event.currentTarget) void dismiss()
+        if (event.target === event.currentTarget) reportIntentFailure(dismiss())
       }}
       onKeyDown={(event) => {
         if (event.key === "Escape") {
           event.preventDefault()
-          void dismiss()
+          reportIntentFailure(dismiss())
         }
         if (event.key === "ArrowDown") {
           event.preventDefault()
@@ -140,7 +146,7 @@ function NativeMenuSurface() {
                           aria-checked={item.checked === undefined ? undefined : item.checked}
                           disabled={item.enabled === false}
                           title={item.ariaLabel}
-                          onClick={() => void choose(item.id)}
+                          onClick={() => reportIntentFailure(choose(item.id))}
                         >
                           <Show when={item.icon}>{(icon) => <Icon name={icon()} size="standard" />}</Show>
                           <Show when={!item.iconOnly}>

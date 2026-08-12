@@ -1,9 +1,17 @@
 <!doctype html>
-<html lang="en-US" data-theme="light">
+<html lang="en-US">
   <head>
     <script>
       const acceptanceLocale = new URLSearchParams(location.search).get("acceptance-locale")
       if (acceptanceLocale) globalThis.__OPENCORVUS_LOCALE__ = acceptanceLocale
+      const ocStartupThemeQuery = matchMedia("(prefers-color-scheme: light)")
+      const ocStartupTheme = new URLSearchParams(location.search).get("acceptance-startup-theme")
+      const ocNativeStartupTheme = globalThis.__OPENCORVUS_STARTUP_THEME__ || ""
+      const ocRequestedStartupTheme = ocStartupTheme || ocNativeStartupTheme
+      document.documentElement.dataset.theme =
+        ocRequestedStartupTheme === "system" || !ocRequestedStartupTheme
+          ? (ocStartupThemeQuery.matches ? "light" : "dark")
+          : ocRequestedStartupTheme
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,15 +20,12 @@
     <style>
       .oc-startup-surface {
         align-items: center;
-        background: #f4f4f4;
-        color: #1d1d1f;
+        background: var(--surface);
+        color: var(--text-strong);
         display: flex;
         flex: 1 1 auto;
         flex-direction: column;
-        font:
-          500 14px/1.4 Inter,
-          "Segoe UI",
-          sans-serif;
+        font: var(--ui-font-weight-medium) var(--ui-font-body)/1.4 var(--font);
         gap: 14px;
         justify-content: center;
         min-height: 100%;
@@ -28,10 +33,10 @@
 
       .oc-startup-surface__mark {
         align-items: center;
-        background: #ffffff;
-        border: 1px solid rgba(29, 29, 31, 0.1);
-        border-radius: 14px;
-        box-shadow: 0 8px 24px rgba(29, 29, 31, 0.08);
+        background: var(--surface-strong);
+        border: var(--oc-border-width) solid var(--border);
+        border-radius: var(--oc-radius-large);
+        box-shadow: var(--shadow-md);
         display: flex;
         height: 52px;
         justify-content: center;
@@ -43,17 +48,28 @@
         width: 28px;
       }
 
+      [data-theme="light"] .oc-startup-surface__logo-dark,
+      [data-theme="dark"] .oc-startup-surface__logo-light,
+      [data-theme="vscode-dark"] .oc-startup-surface__logo-light {
+        display: none;
+      }
+
       .oc-startup-surface__status {
-        color: #6e6e73;
-        letter-spacing: 0.01em;
+        color: var(--text-muted);
+        letter-spacing: var(--ui-letter-spacing-normal);
         margin: 0;
+      }
+
+      .oc-startup-surface[data-failed="true"] .oc-startup-surface__progress,
+      .oc-startup-surface[data-failed="true"] .oc-startup-surface__detail {
+        display: none;
       }
 
       .oc-startup-surface__progress {
         appearance: none;
-        background: rgba(29, 29, 31, 0.12);
+        background: var(--subtle-2);
         border: 0;
-        border-radius: 999px;
+        border-radius: var(--oc-radius-pill);
         height: 6px;
         overflow: hidden;
         width: min(320px, calc(100vw - 64px));
@@ -64,13 +80,13 @@
       }
       .oc-startup-surface__progress::-webkit-progress-value,
       .oc-startup-surface__progress::-moz-progress-bar {
-        background: #1d1d1f;
+        background: var(--accent);
         border-radius: inherit;
       }
 
       .oc-startup-surface__detail {
-        color: #86868b;
-        font-size: 12px;
+        color: var(--text-soft);
+        font-size: var(--ui-font-small);
         margin: 0;
       }
 
@@ -79,19 +95,11 @@
         gap: 8px;
       }
 
-      .oc-startup-surface__action {
-        background: #1d1d1f;
-        border: 0;
-        border-radius: 8px;
-        color: #fff;
-        cursor: pointer;
-        font: inherit;
-        padding: 8px 12px;
-      }
-
-      .oc-startup-surface__action--secondary {
-        background: rgba(29, 29, 31, 0.1);
-        color: #1d1d1f;
+      @media (prefers-reduced-motion: no-preference) {
+        .oc-startup-surface__progress::-webkit-progress-value,
+        .oc-startup-surface__progress::-moz-progress-bar {
+          transition: width var(--ui-duration-slow) var(--ui-timing-standard);
+        }
       }
     </style>
     <!-- OPENCORVUS_OVERLAY_SIZE_CONTRACT -->
@@ -152,15 +160,19 @@
     <div id="overlayAppHost">
       <main class="oc-startup-surface" aria-busy="true" aria-label="OpenCorvus is loading">
         <div class="oc-startup-surface__mark" aria-hidden="true">
-          <img src="./opencorvus-logo-light.svg" alt="" />
+          <img class="oc-startup-surface__logo-light" src="./opencorvus-logo-light.svg" alt="" />
+          <img class="oc-startup-surface__logo-dark" src="./opencorvus-logo-dark.svg" alt="" />
         </div>
-        <p class="oc-startup-surface__status" id="oc-startup-status">Preparing OpenCorvus</p>
+        <p class="oc-startup-surface__status" id="oc-startup-status" role="status">Preparing OpenCorvus</p>
         <progress class="oc-startup-surface__progress" id="oc-startup-progress" max="100" value="0">0%</progress>
         <p class="oc-startup-surface__detail" id="oc-startup-detail">0%</p>
         <div class="oc-startup-surface__actions" id="oc-startup-actions" hidden>
-          <button class="oc-startup-surface__action" id="oc-startup-retry" type="button">Retry</button>
+          <button class="oc-button" data-variant="solid" data-size="md" data-tone="accent" id="oc-startup-retry" type="button">Retry</button>
           <button
-            class="oc-startup-surface__action oc-startup-surface__action--secondary"
+            class="oc-button"
+            data-variant="outline"
+            data-size="md"
+            data-tone="neutral"
             id="oc-startup-log"
             type="button"
           >
@@ -173,6 +185,7 @@
       await (async () => {
         const eventName = "overlay:startup-progress"
         const status = document.getElementById("oc-startup-status")
+        const startupSurface = status.closest("main")
         const progress = document.getElementById("oc-startup-progress")
         const detail = document.getElementById("oc-startup-detail")
         const actions = document.getElementById("oc-startup-actions")
@@ -181,6 +194,13 @@
         let logPath = ""
         let applicationReady = false
         let resolveApplicationReady
+        const startupThemeQuery = matchMedia("(prefers-color-scheme: light)")
+        let startupThemeOwner = ocRequestedStartupTheme
+        const syncStartupTheme = (event) => {
+          if (startupThemeOwner && startupThemeOwner !== "system") return
+          document.documentElement.dataset.theme = event.matches ? "light" : "dark"
+        }
+        startupThemeQuery.addEventListener("change", syncStartupTheme)
         window.__opencorvusStartupReady = new Promise((resolve) => {
           resolveApplicationReady = resolve
         })
@@ -188,14 +208,10 @@
         const loadApplication = () => {
           if (applicationReady) return
           applicationReady = true
+          startupThemeQuery.removeEventListener("change", syncStartupTheme)
           resolveApplicationReady()
         }
-        const tauri = window.__TAURI__
-        if (!tauri) {
-          loadApplication()
-          return
-        }
-        const invoke = (command, args) => tauri.core.invoke(command, args)
+
         const update = ({ payload }) => {
           const value = payload || {}
           const total = Number(value.totalBytes) || 0
@@ -206,12 +222,42 @@
           detail.textContent = `${percent}%`
           logPath = typeof value.logPath === "string" ? value.logPath : ""
           const failed = value.phase === "failed"
+          startupSurface.dataset.failed = String(failed)
+          startupSurface.setAttribute("aria-busy", String(!failed))
+          startupSurface.setAttribute("aria-label", failed ? status.textContent : "OpenCorvus is loading")
+          status.setAttribute("role", failed ? "alert" : "status")
           actions.hidden = !failed
           log.hidden = !logPath
           if (value.phase === "ready") loadApplication()
         }
+        const tauri = window.__TAURI__
+        const acceptanceStartup = new URLSearchParams(location.search).get("acceptance-startup")
+        if (acceptanceStartup === "failed") {
+          update({ payload: { phase: "failed", message: "OpenCorvus could not start", logPath: "acceptance.log" } })
+          return
+        }
+        if (acceptanceStartup === "loading") return
+        if (!tauri) {
+          loadApplication()
+          return
+        }
+        const invoke = (command, args) => tauri.core.invoke(command, args)
 
-        retry.addEventListener("click", () => invoke("overlay_startup_retry"))
+        retry.addEventListener("click", () => {
+          startupSurface.dataset.failed = "false"
+          startupSurface.setAttribute("aria-busy", "true")
+          startupSurface.setAttribute("aria-label", "OpenCorvus is loading")
+          status.setAttribute("role", "status")
+          status.textContent = "Preparing OpenCorvus"
+          actions.hidden = true
+          progress.value = 0
+          detail.textContent = "0%"
+          progress.hidden = false
+          detail.hidden = false
+          Promise.resolve(invoke("overlay_startup_retry")).catch((error) => {
+            update({ payload: { phase: "failed", message: String(error), logPath } })
+          })
+        })
         log.addEventListener("click", () => invoke("overlay_startup_open_log", { path: logPath }))
         await tauri.event.listen(eventName, update)
       })()

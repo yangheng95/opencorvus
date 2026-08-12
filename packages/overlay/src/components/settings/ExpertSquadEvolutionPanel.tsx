@@ -218,6 +218,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
         intent.operation === "promotion"
           ? t("expert_squad.evolution_promote")
           : t("expert_squad.evolution_restore"),
+      okTone: intent.operation === "restoration" ? "danger" : "accent",
     })
     if (!dialog.confirmed) return
     const busyKey = `${intent.operation}:${entry.key}`

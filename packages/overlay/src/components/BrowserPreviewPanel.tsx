@@ -1338,6 +1338,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
           },
         ],
         onDismiss: () => setBrowserMenuOpen(false),
+        onError: (error) => setBrowserMenuError(browserPreviewErrorMessage(error)),
         onAction: (itemID) => {
           const actions: Record<string, () => void> = {
             "zoom-out": () => adjustZoom(-BROWSER_PREVIEW_ZOOM_STEP),

@@ -38,6 +38,7 @@ export interface OpenNativeMenuSurfaceOptions {
   groups: NativeMenuSurfaceGroup[]
   onAction: (itemID: string) => void | Promise<void>
   onDismiss: () => void
+  onError?: (error: unknown) => void
 }
 
 interface ActiveNativeMenuSurface {
@@ -48,6 +49,13 @@ interface ActiveNativeMenuSurface {
   placement: NonNullable<OpenNativeMenuSurfaceOptions["placement"]>
   onAction: OpenNativeMenuSurfaceOptions["onAction"]
   onDismiss: OpenNativeMenuSurfaceOptions["onDismiss"]
+  onError?: OpenNativeMenuSurfaceOptions["onError"]
+  resolveOpen: () => void
+  rejectOpen: (reason: unknown) => void
+  openSettled: boolean
+  popup?: WebviewWindow
+  closeItemID?: string
+  closePromise?: Promise<void>
 }
 
 let surfaceWindow: WebviewWindow | undefined
@@ -61,14 +69,30 @@ let nextRequestID = 0
 let activeSurface: ActiveNativeMenuSurface | undefined
 let nextWindowGeneration = 0
 let readyGeneration = 0
+let surfaceTransitionTail: Promise<void> = Promise.resolve()
+
+async function runSurfaceTransition<T>(operation: () => Promise<T> | T): Promise<T> {
+  let release!: () => void
+  const turn = new Promise<void>((resolve) => {
+    release = resolve
+  })
+  const predecessor = surfaceTransitionTail
+  surfaceTransitionTail = predecessor.then(() => turn, () => turn)
+  await predecessor.catch(() => undefined)
+  try {
+    return await operation()
+  } finally {
+    release()
+  }
+}
 
 function dismissFromParentPointer(event: PointerEvent): void {
   const active = activeSurface
   const target = event.target
   if (!active || !(target instanceof Node) || active.anchorElement.contains(target)) return
-  activeSurface = undefined
-  active.onDismiss()
-  void surfaceWindow?.hide()
+  void closeOwnedSurface(active).catch((error) => {
+    console.error("[native-menu-surface] pointer close failed", error)
+  })
 }
 
 function currentPresentation(): Pick<NativeMenuSurfaceModel, "theme" | "scale" | "language"> {
@@ -84,12 +108,89 @@ function completeActiveSurface(requestID: number, itemID?: string): void {
   const active = activeSurface
   if (!active || active.requestID !== requestID) return
   activeSurface = undefined
+  if (!active.openSettled) {
+    active.openSettled = true
+    active.resolveOpen()
+  }
   active.onDismiss()
   if (itemID) {
     void Promise.resolve(active.onAction(itemID)).catch((error) => {
       console.error(`[native-menu-surface:${active.owner}] action failed`, error)
     })
   }
+}
+
+function failActiveSurface(requestID: number, error: unknown): void {
+  const active = activeSurface
+  if (!active || active.requestID !== requestID) return
+  if (!active.openSettled) {
+    active.openSettled = true
+    active.rejectOpen(error)
+  }
+  completeActiveSurface(requestID)
+}
+
+function ownsPresentation(requestID: number, popup: WebviewWindow): boolean {
+  return activeSurface?.requestID === requestID && surfaceWindow === popup
+}
+
+async function hidePopupIfUnowned(popup: WebviewWindow): Promise<void> {
+  if (activeSurface && (activeSurface.popup === popup || surfaceWindow === popup)) return
+  await popup.hide()
+}
+
+async function closeOwnedSurface(active: ActiveNativeMenuSurface): Promise<void> {
+  await closeOwnedSurfaceWithAction(active)
+}
+
+async function closeOwnedSurfaceWithAction(active: ActiveNativeMenuSurface, itemID?: string): Promise<void> {
+  if (activeSurface?.requestID !== active.requestID) return
+  if (itemID !== undefined) active.closeItemID = itemID
+  if (active.closePromise) return active.closePromise
+  const closeAttempt = performOwnedSurfaceClose(active)
+  active.closePromise = closeAttempt
+  try {
+    await closeAttempt
+  } finally {
+    if (active.closePromise === closeAttempt) active.closePromise = undefined
+  }
+}
+
+async function performOwnedSurfaceClose(active: ActiveNativeMenuSurface): Promise<void> {
+  if (activeSurface?.requestID !== active.requestID) return
+  const popup = active.popup ?? surfaceWindow
+  if (!popup) {
+    completeActiveSurface(active.requestID, active.closeItemID)
+    return
+  }
+  try {
+    await popup.hide()
+  } catch (hideError) {
+    if (activeSurface?.requestID !== active.requestID) return
+    try {
+      if (surfaceWindow === popup) surfaceWindow = undefined
+      active.popup = undefined
+      await popup.destroy()
+      completeActiveSurface(active.requestID, active.closeItemID)
+      return
+    } catch (destroyError) {
+      const error = new AggregateError([hideError, destroyError], "Native menu surface could not be closed")
+      if (activeSurface?.requestID !== active.requestID || surfaceWindow !== undefined) {
+        console.error("[native-menu-surface] stale close failed", error)
+        return
+      }
+      surfaceWindow = popup
+      active.popup = popup
+      if (!active.openSettled) {
+        active.openSettled = true
+        active.rejectOpen(error)
+      }
+      active.onError?.(error)
+      console.error("[native-menu-surface] close failed", error)
+      throw error
+    }
+  }
+  completeActiveSurface(active.requestID, active.closeItemID)
 }
 
 async function placeMeasuredSurface(measurement: NativeMenuSurfaceMeasured): Promise<void> {
@@ -103,7 +204,7 @@ async function placeMeasuredSurface(measurement: NativeMenuSurfaceMeasured): Pro
     mainWindow.scaleFactor(),
     currentMonitor(),
   ])
-  if (!activeSurface || activeSurface.requestID !== measurement.requestID) return
+  if (!ownsPresentation(measurement.requestID, popup)) return
 
   const logicalSize = new LogicalSize(measurement.width, measurement.height)
   const physicalSize = logicalSize.toPhysical(scaleFactor)
@@ -133,9 +234,21 @@ async function placeMeasuredSurface(measurement: NativeMenuSurfaceMeasured): Pro
   const left = Math.min(Math.max(placedLeft, monitorLeft), Math.max(monitorLeft, monitorRight - popupWidth))
 
   await popup.setSize(new PhysicalSize(popupWidth, popupHeight))
+  if (!ownsPresentation(measurement.requestID, popup)) return
   await popup.setPosition(new PhysicalPosition(left, top))
+  if (!ownsPresentation(measurement.requestID, popup)) return
   await popup.show()
+  if (!ownsPresentation(measurement.requestID, popup)) {
+    await hidePopupIfUnowned(popup)
+    return
+  }
   await popup.setFocus()
+  if (!ownsPresentation(measurement.requestID, popup) || active.openSettled) {
+    if (!ownsPresentation(measurement.requestID, popup)) await hidePopupIfUnowned(popup)
+    return
+  }
+  active.openSettled = true
+  active.resolveOpen()
 }
 
 async function ensureEventBridge(): Promise<void> {
@@ -157,16 +270,30 @@ async function ensureEventBridge(): Promise<void> {
         rejectReady = undefined
       }))
       unlisteners.push(await listen<NativeMenuSurfaceMeasured>(NATIVE_MENU_SURFACE_MEASURED_EVENT, ({ payload }) => {
+        const measuredPopup = surfaceWindow
         void placeMeasuredSurface(payload).catch((error) => {
           console.error("[native-menu-surface] placement failed", error)
-          completeActiveSurface(payload.requestID)
+          failActiveSurface(payload.requestID, error)
+          if (measuredPopup) {
+            void hidePopupIfUnowned(measuredPopup).catch((hideError) => {
+              console.error("[native-menu-surface] failed stale menu cleanup", hideError)
+            })
+          }
         })
       }))
       unlisteners.push(await listen<NativeMenuSurfaceAction>(NATIVE_MENU_SURFACE_ACTION_EVENT, ({ payload }) => {
-        completeActiveSurface(payload.requestID, payload.itemID)
+        const active = activeSurface
+        if (!active || active.requestID !== payload.requestID) return
+        void closeOwnedSurfaceWithAction(active, payload.itemID).catch((error) => {
+          console.error("[native-menu-surface] action close failed", error)
+        })
       }))
       unlisteners.push(await listen<NativeMenuSurfaceDismiss>(NATIVE_MENU_SURFACE_DISMISS_EVENT, ({ payload }) => {
-        completeActiveSurface(payload.requestID)
+        const active = activeSurface
+        if (!active || active.requestID !== payload.requestID) return
+        void closeOwnedSurface(active).catch((error) => {
+          console.error("[native-menu-surface] dismiss close failed", error)
+        })
       }))
     } catch (error) {
       document.removeEventListener("pointerdown", dismissFromParentPointer, true)
@@ -213,9 +340,13 @@ async function ensureSurfaceWindow(): Promise<WebviewWindow> {
     })
     readyWindow = popup
     void popup.once("tauri://destroyed", () => {
-      if (readyWindow === popup) rejectReady?.(new Error("Native menu surface was destroyed before it became ready"))
-      if (surfaceWindow === popup) surfaceWindow = undefined
-      if (activeSurface) completeActiveSurface(activeSurface.requestID)
+      const ownedReadyWindow = readyWindow === popup
+      const ownedSurfaceWindow = surfaceWindow === popup
+      if (ownedReadyWindow) rejectReady?.(new Error("Native menu surface was destroyed before it became ready"))
+      if (ownedSurfaceWindow) surfaceWindow = undefined
+      if (activeSurface?.popup === popup) {
+        failActiveSurface(activeSurface.requestID, new Error("Native menu surface was destroyed before it became visible"))
+      }
     })
     try {
       await waitForNativeMenuSurfaceReady(
@@ -251,36 +382,49 @@ async function ensureSurfaceWindow(): Promise<WebviewWindow> {
 }
 
 export async function openNativeMenuSurface(options: OpenNativeMenuSurfaceOptions): Promise<void> {
-  const previous = activeSurface
-  if (previous) {
-    activeSurface = undefined
-    previous.onDismiss()
-  }
-
-  const requestID = ++nextRequestID
   const bounds = options.anchor.getBoundingClientRect()
-  activeSurface = {
-    requestID,
-    owner: options.owner,
-    anchorElement: options.anchor,
-    anchor: { left: bounds.left, top: bounds.top, right: bounds.right, bottom: bounds.bottom },
-    placement: options.placement ?? "bottom-end",
-    onAction: options.onAction,
-    onDismiss: options.onDismiss,
-  }
-
+  const { requestID, presentation } = await runSurfaceTransition(async () => {
+    const previous = activeSurface
+    if (previous) await closeOwnedSurface(previous)
+    if (activeSurface) throw new Error("Native menu surface predecessor did not close")
+    const requestID = ++nextRequestID
+    let resolveOpen!: () => void
+    let rejectOpen!: (reason: unknown) => void
+    const openPromise = new Promise<void>((resolve, reject) => {
+      resolveOpen = resolve
+      rejectOpen = reject
+    })
+    activeSurface = {
+      requestID,
+      owner: options.owner,
+      anchorElement: options.anchor,
+      anchor: { left: bounds.left, top: bounds.top, right: bounds.right, bottom: bounds.bottom },
+      placement: options.placement ?? "bottom-end",
+      onAction: options.onAction,
+      onDismiss: options.onDismiss,
+      onError: options.onError,
+      resolveOpen,
+      rejectOpen,
+      openSettled: false,
+    }
+    return {
+      requestID,
+      presentation: waitForNativeMenuSurfaceReady(openPromise, NATIVE_MENU_SURFACE_READY_TIMEOUT_MS),
+    }
+  })
   let popup: WebviewWindow
   try {
     popup = await ensureSurfaceWindow()
   } catch (error) {
-    if (activeSurface?.requestID === requestID) {
-      activeSurface = undefined
-      options.onDismiss()
-    }
+    failActiveSurface(requestID, error)
+    await presentation.catch(() => undefined)
     throw error
   }
-  if (!activeSurface || activeSurface.requestID !== requestID) return
-  await popup.hide()
+  if (!activeSurface || activeSurface.requestID !== requestID) {
+    await presentation.catch(() => undefined)
+    return
+  }
+  activeSurface.popup = popup
   const model: NativeMenuSurfaceModel = {
     requestID,
     ...currentPresentation(),
@@ -288,13 +432,39 @@ export async function openNativeMenuSurface(options: OpenNativeMenuSurfaceOption
     ...(options.maxHeight === undefined ? {} : { maxHeight: options.maxHeight }),
     groups: options.groups,
   }
-  await emitTo(NATIVE_MENU_SURFACE_LABEL, NATIVE_MENU_SURFACE_MODEL_EVENT, model)
+  try {
+    await popup.hide()
+    if (!ownsPresentation(requestID, popup)) {
+      await presentation.catch(() => undefined)
+      return
+    }
+    await emitTo(NATIVE_MENU_SURFACE_LABEL, NATIVE_MENU_SURFACE_MODEL_EVENT, model)
+    if (!ownsPresentation(requestID, popup)) {
+      await presentation.catch(() => undefined)
+      return
+    }
+    await presentation
+  } catch (error) {
+    const active = activeSurface
+    if (active?.requestID === requestID) {
+      activeSurface = undefined
+      if (!active.openSettled) {
+        active.openSettled = true
+        active.rejectOpen(error)
+      }
+      active.onDismiss()
+      await surfaceWindow?.hide().catch((hideError) => {
+        console.error("[native-menu-surface] failed menu cleanup", hideError)
+      })
+    }
+    throw error
+  }
 }
 
 export async function closeNativeMenuSurface(owner: string): Promise<void> {
   const active = activeSurface
   if (!active || active.owner !== owner) return
-  activeSurface = undefined
-  active.onDismiss()
-  await surfaceWindow?.hide()
+  await closeOwnedSurface(active).catch((error) => {
+    console.error(`[native-menu-surface:${owner}] close failed`, error)
+  })
 }

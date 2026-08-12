@@ -2058,7 +2058,7 @@
   height: calc(380px * var(--ui-scale));
   padding: calc(10px * var(--ui-scale));
   overflow: hidden;
-  background: #11151b;
+  background: var(--surface);
 }
 
 .msg-artifact-terminal .xterm {

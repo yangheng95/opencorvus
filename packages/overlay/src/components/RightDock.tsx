@@ -264,6 +264,12 @@ export function RightDock(props: RightDockProps): JSX.Element {
         anchor,
         groups: addMenuGroups(),
         onDismiss: () => props.onAddMenuOpenChange(false),
+        onError: (error) => reportError({
+          id: "right-dock:add-menu:close",
+          title: t("common.error"),
+          message: error instanceof Error ? error.message : String(error),
+          details: formatErrorDetails(error),
+        }),
         onAction: (itemID) => {
           const meta = RIGHT_DOCK_CATALOG.find((candidate) => candidate.id === itemID)
           if (!meta) throw new Error(`Right Dock add menu item "${itemID}" is not in the catalog`)
@@ -311,6 +317,12 @@ export function RightDock(props: RightDockProps): JSX.Element {
           },
         ],
         onDismiss: () => props.onOverflowMenuOpenChange(false),
+        onError: (error) => reportError({
+          id: "right-dock:overflow-menu:close",
+          title: t("common.error"),
+          message: error instanceof Error ? error.message : String(error),
+          details: formatErrorDetails(error),
+        }),
         onAction: (tabID) => props.onSelect(tabID),
       })
     } catch (error) {

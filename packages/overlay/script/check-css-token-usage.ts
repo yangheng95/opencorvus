@@ -32,6 +32,13 @@ const RETIRED_DESIGN_TOKENS = new Set([
   "--surface-raised",
   "--border-subtle",
   "--focus-ring",
+  "--oc-disabled-opacity",
+  "--title-weight",
+  "--title-track",
+  "--subhead-weight",
+  "--subhead-track",
+  "--title-size",
+  "--subhead-size",
 ])
 
 // These variables are assigned by a component or generated document at
@@ -79,19 +86,34 @@ function lineNumberAt(source: string, offset: number): number {
   return source.slice(0, offset).split(/\r?\n/).length
 }
 
-function cssFilesForEntry(entry: string): string[] {
+function withoutComments(source: string): string {
+  return source.replaceAll(/\/\*[\s\S]*?\*\//g, (comment) => comment.replaceAll(/[^\r\n]/g, " "))
+}
+
+interface DocumentStyleGraph {
+  files: string[]
+  inlineStyles: Array<{ source: string; startLine: number }>
+}
+
+function stylesForEntry(entry: string): DocumentStyleGraph {
   const documentPath = path.join(SOURCE_ROOT, entry)
   const source = fs.readFileSync(documentPath, "utf8")
-  return Array.from(source.matchAll(/<link\s+[^>]*rel=["']stylesheet["'][^>]*href=["']([^"']+\.css)["'][^>]*>/gi), ({ 1: href }) =>
-    path.resolve(SOURCE_ROOT, href!),
-  )
+  return {
+    files: Array.from(source.matchAll(/<link\s+[^>]*rel=["']stylesheet["'][^>]*href=["']([^"']+\.css)["'][^>]*>/gi), ({ 1: href }) =>
+      path.resolve(SOURCE_ROOT, href!),
+    ),
+    inlineStyles: Array.from(source.matchAll(/<style(?:\s[^>]*)?>([\s\S]*?)<\/style>/gi), (match) => ({
+      source: withoutComments(match[1]!),
+      startLine: lineNumberAt(source, match.index + match[0].indexOf(match[1]!)) - 1,
+    })),
+  }
 }
 
 const sourceByFile = new Map<string, string>()
 function cssSource(file: string): string {
   const cached = sourceByFile.get(file)
   if (cached !== undefined) return cached
-  const source = fs.readFileSync(file, "utf8").replaceAll(/\/\*[\s\S]*?\*\//g, "")
+  const source = withoutComments(fs.readFileSync(file, "utf8"))
   sourceByFile.set(file, source)
   return source
 }
@@ -109,13 +131,35 @@ function usesIn(file: string): TokenUse[] {
   }))
 }
 
+function declarationsInSource(source: string): Set<string> {
+  return new Set(Array.from(source.matchAll(/(?:^|[;{]\s*)(--[A-Za-z0-9_-]+)\s*:/gm), ({ 1: token }) => token!))
+}
+
+function usesInSource(source: string, file: string, startLine = 0): TokenUse[] {
+  return Array.from(source.matchAll(/var\((--[A-Za-z0-9_-]+)/g), (match) => ({
+    token: match[1]!,
+    file,
+    line: startLine + lineNumberAt(source, match.index),
+  }))
+}
+
 const unresolved: Array<TokenUse & { entry: string }> = []
 let referenceCount = 0
 for (const entry of ENTRY_DOCUMENTS) {
-  const files = cssFilesForEntry(entry)
-  const declarations = new Set(files.flatMap((file) => [...declarationsIn(file)]))
+  const { files, inlineStyles } = stylesForEntry(entry)
+  const inlineFile = path.join(SOURCE_ROOT, entry)
+  const declarations = new Set([
+    ...files.flatMap((file) => [...declarationsIn(file)]),
+    ...inlineStyles.flatMap(({ source }) => [...declarationsInSource(source)]),
+  ])
   for (const file of files) {
     for (const use of usesIn(file)) {
+      referenceCount += 1
+      if (!declarations.has(use.token) && !RUNTIME_TOKENS.has(use.token)) unresolved.push({ ...use, entry })
+    }
+  }
+  for (const { source, startLine } of inlineStyles) {
+    for (const use of usesInSource(source, inlineFile, startLine)) {
       referenceCount += 1
       if (!declarations.has(use.token) && !RUNTIME_TOKENS.has(use.token)) unresolved.push({ ...use, entry })
     }
@@ -135,6 +179,21 @@ const globalFiles = GLOBAL_TOKEN_ROOTS.flatMap((directory) =>
   ),
 )
 const globalTokens = new Set(globalFiles.flatMap((file) => [...declarationsIn(file)]))
+function entryUses(entry: string): TokenUse[] {
+  const { files, inlineStyles } = stylesForEntry(entry)
+  const documentPath = path.join(SOURCE_ROOT, entry)
+  return [...files.flatMap(usesIn), ...inlineStyles.flatMap(({ source, startLine }) => usesInSource(source, documentPath, startLine))]
+}
+
+function entryDeclarations(entry: string): Array<{ token: string; file: string }> {
+  const { files, inlineStyles } = stylesForEntry(entry)
+  const documentPath = path.join(SOURCE_ROOT, entry)
+  return [
+    ...files.flatMap((file) => [...declarationsIn(file)].map((token) => ({ token, file }))),
+    ...inlineStyles.flatMap(({ source }) => [...declarationsInSource(source)].map((token) => ({ token, file: documentPath }))),
+  ]
+}
+
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 }
@@ -157,8 +216,7 @@ if (missingRuntimeAssignments.length > 0) {
   throw new Error(`Overlay CSS runtime tokens have no TS/TSX/HTML assignment owner:\n${missingRuntimeAssignments.join("\n")}`)
 }
 const nonCanonicalUses = ENTRY_DOCUMENTS.flatMap((entry) =>
-  cssFilesForEntry(entry).flatMap((file) =>
-    usesIn(file)
+  entryUses(entry)
       .filter(({ token }) => {
         return (
           RETIRED_DESIGN_TOKENS.has(token) ||
@@ -166,14 +224,11 @@ const nonCanonicalUses = ENTRY_DOCUMENTS.flatMap((entry) =>
         )
       })
       .map((use) => ({ ...use, entry })),
-  ),
 )
 const retiredDeclarations = ENTRY_DOCUMENTS.flatMap((entry) =>
-  cssFilesForEntry(entry).flatMap((file) =>
-    [...declarationsIn(file)]
-      .filter((token) => RETIRED_DESIGN_TOKENS.has(token))
-      .map((token) => ({ token, file, entry })),
-  ),
+  entryDeclarations(entry)
+    .filter(({ token }) => RETIRED_DESIGN_TOKENS.has(token))
+    .map(({ token, file }) => ({ token, file, entry })),
 )
 if (nonCanonicalUses.length > 0 || retiredDeclarations.length > 0) {
   const details = nonCanonicalUses

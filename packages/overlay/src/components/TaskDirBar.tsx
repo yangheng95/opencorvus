@@ -691,6 +691,12 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
           },
         ],
         onDismiss: () => setLocalMenuOpen(false),
+        onError: (error) => reportError({
+          id: "project-runtime-local-menu:close",
+          title: t("common.error"),
+          message: errorMessage(error),
+          details: formatErrorDetails(error),
+        }),
         onAction: (itemID) => {
           if (itemID === "local-open") {
             void openDirectory(dir())
@@ -766,6 +772,15 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         maxHeight: document.documentElement.clientHeight * 0.5,
         groups: [{ items }],
         onDismiss: () => setBranchMenuOpen(false),
+        onError: (error) => {
+          setBranchError(errorMessage(error))
+          reportError({
+            id: "project-runtime-branch-menu:close",
+            title: t("common.error"),
+            message: errorMessage(error),
+            details: formatErrorDetails(error),
+          })
+        },
         onAction: (itemID) => {
           if (itemID === "branch-retry") {
             setBranchError("")

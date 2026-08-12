@@ -18,6 +18,7 @@ import UsagePanel from "./settings/UsagePanel"
 import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./settings/layout"
 import { Dialog } from "./ui/Dialog"
 import { Button } from "./ui/Button"
+import { LinkButton } from "./ui/LinkButton"
 import { SearchField } from "./ui/SearchField"
 import { Tab, TabList, TabPanel, Tabs } from "./ui/Tabs"
 import { appStore } from "../store/app"
@@ -379,10 +380,17 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
               <div class="about-links">
                 <For each={ABOUT_LINKS}>
                   {(link) => (
-                    <a class="about-link" href={link.href} target="_blank" rel="noopener">
+                    <LinkButton
+                      variant="outline"
+                      size="md"
+                      tone="neutral"
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener"
+                    >
                       <Icon name={link.icon} />
                       <span>{link.label()}</span>
-                    </a>
+                    </LinkButton>
                   )}
                 </For>
               </div>

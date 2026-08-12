@@ -216,3 +216,31 @@ The second delivery review also found three remaining acceptance gaps, all repai
 - Scheduled filtered-empty clear now reads the same mutation owner both in its handler and disabled state.
 - The CSS checker explicitly rejects declarations and uses of retired aliases (`--ok`, `--warning`, `--danger`, `--radius`, `--text-dim`, `--text-subtle`, `--surface-raised`, `--border-subtle`, `--focus-ring`) even when a surface attempts to declare them locally.
 - The Mission neutral-state screenshot was regenerated from the exact latest-source path and manually inspected; it contains no red content-validation treatment before a content submission attempt.
+
+### Saturation reset rounds 3–5
+
+Three further independent design-system, interaction, and visual/information-architecture passes reset the saturation count and exposed the remaining state owners instead of accepting the prior terminal claim:
+
+- Scheduled Automations now treats initial loading as a mutually exclusive page state. Suggestions and welcome/create affordances no longer remain interactive while the list contract is unresolved.
+- Run history is owned by `{ automationID, status, items, error }`. Switching from automation A to B cannot project A's runs under B; loading, error, content, and true-empty are rendered as one mutually exclusive branch. List/detail/form replacements transfer focus to the new Back control or name field, while return, cancel, and both detail/list deletion paths restore a stable list target.
+- Expert Squad restoration now uses the App Dialog danger action contract because it replaces the current installed revision.
+- Native menu opening now includes measurement, sizing, positioning, display, and focus in the caller-visible Promise. Each asynchronous presentation boundary revalidates the request/window owner; placement, timeout, destruction, hide, and model-delivery failures dismiss the exact owner and reach the existing Right Dock, Task Directory, or Browser Preview diagnostics.
+- The real startup/failure document now uses canonical palette, typography, radius, shadow, and Button primitive CSS; respects the browser-persisted theme before the Solid application loads; and switches failed state from busy/progress semantics to one alert with Retry/View log actions. Evidence: [`2026-08-12-overlay-ui-ux-startup-failure-final.png`](../../artifacts/2026-08-12-overlay-ui-ux-startup-failure-final.png).
+- Terminal artifacts use canonical `--mono`, share the host `--surface`, and derive search decorations from current theme tokens. About links use `LinkButton`; their duplicate `.about-link` button CSS is deleted.
+- The CSS token checker now parses inline document styles with comment-preserving cleanup and rejects the complete retired-token set recorded by the design-language authority.
+
+The latest isolated production page at 1280 × 720 was manually inspected. Scheduled's early snapshot contained only Loading (no Suggestions/welcome), its failed terminal state contained one retryable error surface, About links rendered through `oc-button`, and the dark startup failure showed no progress/0% contradiction with `aria-busy=false` and alert semantics. Native child-window and connected automation data remain unavailable in the isolated browser; those exact paths are supported by ownership analysis, production typecheck/build, and repeated independent read-only review rather than claimed browser-native execution.
+
+### Saturation reset rounds 6–8
+
+Further independent review continued to reset the terminal count whenever a new owner or theme inconsistency was found:
+
+- The startup failure's accessible name, visible status, progress, and retry transition now change together. Retry immediately restores Preparing/0%/busy semantics and a failed retry returns to the single alert state.
+- Startup palette and both logo variants now read the same effective `data-theme`. The Tauri window reads the canonical `overlay.jsonc` setting before constructing the main WebView, injects that theme at document start, and selects a matching native backing color; the browser acceptance query remains an isolated visual-review input, not a second desktop settings store.
+- Terminal search resolves theme tokens through the browser color engine, composites them against the current surface, and gives xterm the required opaque `#RRGGBB` decorations. Incremental search, Next, and theme refresh share this one options builder.
+- Native menu request ownership now starts before window initialization and survives until presentation or closing is actually settled. Stale measurement/presentation work cannot hide or overwrite a successor using the shared popup. Parent close hides first, destroys the exact popup if hide fails, and preserves a diagnosable owner when both operations fail; every current consumer projects that failure through its existing visible diagnostics. Child-window Escape, blur, and item activation only emit an intent—the parent remains the single hide/destroy/complete authority—so a failed child hide cannot leave an ownerless visible menu.
+- The CSS token checker's inline-style model now retains the source document line offset, so its reported `index.html` locations identify the real HTML line while preserving comment-safe parsing.
+
+The final saturation round is accepted only after all three uninvolved design-system, interaction/accessibility, and visual/information-architecture reviewers report no remaining valid finding against this latest source. No reviewer may modify files or run UI automation.
+
+Final result: design-system round 7, visual/information-architecture round 9, and interaction/accessibility round 15 each reported zero remaining valid findings against the latest source. The increasing round numbers record every saturation reset rather than hiding intermediate discoveries.
