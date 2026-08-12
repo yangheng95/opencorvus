@@ -4,6 +4,8 @@ import type { VisualSpec } from "@/frontend-design/types"
 import { recordFrontendDesignArtifact } from "./artifact"
 import { z } from "zod"
 import type { ArtifactReadLocator } from "@opencorvus-ai/plugin/artifact-catalog"
+import { exactEngineArtifactLocator } from "@/artifact-catalog"
+import type { EngineArtifactLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 
 export const FRONTEND_DESIGN_COMPLETION_KEYS = [
   "frontend_template",
@@ -26,8 +28,8 @@ export function recordPartialFrontendDesignFacts(input: {
   visualSpecs: VisualSpec[]
   completenessFindings: string[]
   missing?: string[]
-}): string {
-  return recordFrontendDesignArtifact({
+}): EngineArtifactLocator {
+  const artifactID = recordFrontendDesignArtifact({
     taskID: input.taskID,
     artifact: {
       status: "partial",
@@ -42,4 +44,5 @@ export function recordPartialFrontendDesignFacts(input: {
       completeness_findings: input.completenessFindings,
     },
   })
+  return exactEngineArtifactLocator({ taskID: input.taskID, artifactID })
 }

@@ -100,6 +100,15 @@ export const DispatchOutcomeSchema = z.discriminatedUnion("kind", [
   TerminalSessionSchema.extend({
     kind: z.literal("terminal_success"),
   }).strict(),
+  TerminalSessionSchema.extend({
+    kind: z.literal("domain_incomplete"),
+    domain: IdentifierSchema,
+    domain_artifact: EngineArtifactLocatorSchema,
+  })
+    .strict()
+    .describe(
+      "The worker Turn and its domain Artifact are durable, but the domain's required completion contract is incomplete. This final non-success outcome never opens workflow successors.",
+    ),
   z
     .object({
       kind: z.literal("coordination"),
@@ -145,6 +154,21 @@ export namespace DispatchOutcome {
       kind: "terminal_success",
       session_id: input.sessionID,
       final_message_id: input.finalMessageID,
+    })
+  }
+
+  export function domainIncomplete(input: {
+    sessionID: string
+    finalMessageID: string
+    domain: string
+    domainArtifact: EngineArtifactLocator
+  }): DispatchOutcome {
+    return parse({
+      kind: "domain_incomplete",
+      session_id: input.sessionID,
+      final_message_id: input.finalMessageID,
+      domain: normalizeIdentifier(input.domain, "domain_delivery"),
+      domain_artifact: input.domainArtifact,
     })
   }
 
