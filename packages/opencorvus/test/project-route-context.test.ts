@@ -19,7 +19,17 @@ describe("Project route context authority", () => {
   test("keeps identity-only configuration and full runtime routes distinct", () => {
     expect({
       identity: projectRouteContextKind("/config", "GET"),
+      conversationCapabilities: [
+        projectRouteContextKind("/chat/capability", "GET"),
+        projectRouteContextKind("/chat/capability", "PATCH"),
+        projectRouteContextKind("/work/capability", "GET"),
+        projectRouteContextKind("/work/capability", "PATCH"),
+      ],
       runtime: projectRouteContextKind("/session/ses_1", "GET"),
-    }).toEqual({ identity: "identity", runtime: "runtime" })
+    }).toEqual({
+      identity: "identity",
+      conversationCapabilities: ["identity", "identity", "identity", "identity"],
+      runtime: "runtime",
+    })
   })
 })

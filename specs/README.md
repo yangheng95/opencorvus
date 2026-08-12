@@ -1,4 +1,9 @@
 # Specs Storage Index
+
+Latest Work capability incident diagnosis and route-authority hardening: [`2026-08-13-work-capability-unavailable-repair.md`](records/2026-08/2026-08-13-work-capability-unavailable-repair.md).
+
+Work capability connected-page first-screen evidence: [`2026-08-13-work-capability-connected.png`](artifacts/2026-08-13-work-capability-connected.png).
+
 Latest Scheduled global inactivity configuration ownership repair: [`2026-08-13-scheduled-global-inactivity-config-ownership.md`](records/2026-08/2026-08-13-scheduled-global-inactivity-config-ownership.md).
 
 Latest startup-surface visual redesign: [`2026-08-12-startup-surface-visual-redesign.md`](records/2026-08/2026-08-12-startup-surface-visual-redesign.md).
