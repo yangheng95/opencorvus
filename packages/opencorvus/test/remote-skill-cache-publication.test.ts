@@ -170,7 +170,7 @@ describe.serial("Remote Skill cache publication", () => {
       source: fixture.source,
       location: materialized,
       writable: false,
-      trust: "community",
+      trust: "unknown",
     })
     } })
   }, 30_000)
