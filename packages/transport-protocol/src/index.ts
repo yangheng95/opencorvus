@@ -505,7 +505,27 @@ export const ProjectWorktreeInfo = z
   .strict()
   .meta({ ref: "ProjectWorktree" })
 export const ProjectWorktreeList = ProjectWorktreeInfo.array()
-export const ProjectWorktreeDeleteReceipt = z.object({ ok: z.literal(true) }).strict()
+export const ProjectWorktreeDeleteReceipt = z.discriminatedUnion("status", [
+  z.object({ ok: z.literal(true), status: z.literal("removed") }).strict(),
+  z
+    .object({
+      ok: z.literal(true),
+      status: z.literal("removed_with_preservation"),
+      preservations: z
+        .array(
+          z
+            .object({
+              operation: z.string(),
+              code: z.string(),
+              scope: z.literal("worktree-cleanup"),
+              message: z.string(),
+            })
+            .strict(),
+        )
+        .min(1),
+    })
+    .strict(),
+])
 
 export type ProjectWorktreeInfo = z.infer<typeof ProjectWorktreeInfo>
 export type ProjectWorktreeDeleteReceipt = z.infer<typeof ProjectWorktreeDeleteReceipt>

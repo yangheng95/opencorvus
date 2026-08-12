@@ -1,4 +1,5 @@
 import { Filesystem } from "@/util/filesystem"
+import type { Ownership } from "@/engine/ownership"
 
 type DirectoryOwnership = {
   acquisitions: Set<symbol>
@@ -24,6 +25,24 @@ function discardEmpty(key: string, ownership: DirectoryOwnership): void {
 }
 
 export namespace WorktreeOwnershipCriticalSection {
+  const ownerlessProof = Symbol("worktree-ownerless-proof")
+
+  export type Proof =
+    | { status: "owned" }
+    | {
+        status: "ownerless"
+        [ownerlessProof]: true
+        evidence: Extract<Ownership.Worktree.OwnerProof, { status: "ownerless" }>
+      }
+
+  export function owned(): Proof {
+    return { status: "owned" }
+  }
+
+  export function ownerless(evidence: Extract<Ownership.Worktree.OwnerProof, { status: "ownerless" }>): Proof {
+    return { status: "ownerless", [ownerlessProof]: true, evidence }
+  }
+
   export class ConflictError extends Error {
     constructor(public readonly directory: string) {
       super(`Worktree ownership is changing: ${directory}`)
@@ -50,16 +69,18 @@ export namespace WorktreeOwnershipCriticalSection {
   /** Own the complete proof-and-removal interval for one physical directory. */
   export async function remove<T>(input: {
     directory: string
-    proveOwnerless(): Promise<boolean> | boolean
-    remove(): Promise<T>
+    proveOwnerless(): Promise<Proof> | Proof
+    remove(proof: Extract<Proof, { status: "ownerless" }>): Promise<T>
   }): Promise<{ status: "removed"; value: T } | { status: "owned" }> {
     const { key, ownership } = state(input.directory)
     if (ownership.removing) throw new ConflictError(key)
     if (ownership.acquisitions.size > 0) return { status: "owned" }
     ownership.removing = true
     try {
-      if (!(await input.proveOwnerless())) return { status: "owned" }
-      return { status: "removed", value: await input.remove() }
+      const proof = await input.proveOwnerless()
+      if (proof.status === "owned") return { status: "owned" }
+      if (proof[ownerlessProof] !== true) throw new Error(`Invalid ownerless proof for ${key}`)
+      return { status: "removed", value: await input.remove(proof) }
     } finally {
       ownership.removing = false
       discardEmpty(key, ownership)

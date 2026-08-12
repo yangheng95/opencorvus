@@ -1079,8 +1079,7 @@ export namespace Project {
     return valid
   }
 
-  export async function addSandbox(id: string, directory: string) {
-    const target = Filesystem.resolve(directory)
+  function addSandboxRow(id: string, target: string) {
     const result = Database.transaction((db) => {
       assertRegistryAdmissionOpen(id)
       const rows = db.select().from(ProjectTable).all()
@@ -1106,6 +1105,11 @@ export namespace Project {
       },
     })
     return result
+  }
+
+  export async function addSandbox(id: string, directory: string) {
+    const target = Filesystem.resolve(directory)
+    return addSandboxRow(id, target)
   }
 
   /**
@@ -1157,5 +1161,62 @@ export namespace Project {
       },
     })
     return data
+  }
+
+  export async function removeExactSandboxes(
+    id: string,
+    directories: readonly string[],
+    expected: { sandboxes: readonly string[]; timeUpdated: number },
+  ) {
+    const targets = new Set(directories)
+    if (targets.size === 0) {
+      const project = get(id)
+      if (!project) throw new Error(`Project not found: ${id}`)
+      return project
+    }
+    const result = Database.transaction((db) => {
+      assertRegistryAdmissionOpen(id)
+      const row = db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get()
+      if (!row) throw new Error(`Project not found: ${id}`)
+      if (
+        row.time_updated !== expected.timeUpdated ||
+        row.sandboxes.length !== expected.sandboxes.length ||
+        row.sandboxes.some((sandbox, index) => sandbox !== expected.sandboxes[index])
+      ) {
+        throw new Error(`Project sandbox authority changed during explicit release: ${id}`)
+      }
+      const remainingTargets = new Set(targets)
+      for (const sandbox of row.sandboxes) remainingTargets.delete(sandbox)
+      if (remainingTargets.size > 0) {
+        throw new Error(`Project sandbox authority changed during explicit release: ${id}`)
+      }
+      return db
+        .update(ProjectTable)
+        .set({ sandboxes: row.sandboxes.filter((sandbox) => !targets.has(sandbox)), time_updated: Date.now() })
+        .where(eq(ProjectTable.id, id))
+        .returning()
+        .get()
+    })
+    if (!result) throw new Error(`Project not found: ${id}`)
+    const data = fromRow(result)
+    GlobalBus.emit("event", {
+      payload: {
+        type: Event.Updated.type,
+        properties: data,
+      },
+    })
+    return data
+  }
+
+  export function exactSandboxAuthority(id: string): { sandboxes: string[]; timeUpdated: number } | undefined {
+    const row = Database.use((db) =>
+      db
+        .select({ sandboxes: ProjectTable.sandboxes, timeUpdated: ProjectTable.time_updated })
+        .from(ProjectTable)
+        .where(eq(ProjectTable.id, id))
+        .get(),
+    )
+    if (!row) return undefined
+    return { sandboxes: [...row.sandboxes], timeUpdated: row.timeUpdated }
   }
 }

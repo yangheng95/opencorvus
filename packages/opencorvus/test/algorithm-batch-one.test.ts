@@ -5,7 +5,7 @@ import { SessionPromptState } from "../src/session/prompt/state"
 import { SessionStatus } from "../src/session/status"
 import { ProjectGitLock } from "../src/worktree/git-lock"
 import { Ownership } from "../src/engine/ownership"
-import { mkdir, mkdtemp, rm } from "node:fs/promises"
+import fs, { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import { memoryProject } from "./fixture/memory"
@@ -21,6 +21,24 @@ import {
 } from "../src/engine/cancellation-scope"
 import { ProjectRuntimePaths } from "../src/project/runtime-paths"
 import { Bus } from "../src/bus"
+import { Database, eq } from "../src/storage/db"
+import { ProjectTable } from "../src/project/project.sql"
+import { Project } from "../src/project/project"
+import { EngineService } from "../src/task-api"
+import { configureTaskLoopRunner } from "../src/engine/queue"
+
+async function validWorktreeOwners(primaryWorktreeDir: string) {
+  const snapshot = await Ownership.Worktree.list(primaryWorktreeDir)
+  return snapshot.entries.filter(
+    (entry): entry is Extract<Ownership.SnapshotEntry, { status: "valid" }> => entry.status === "valid",
+  )
+}
+
+async function ownerlessCriticalSectionProof(primaryWorktreeDir: string, worktreeDir: string) {
+  const evidence = await Ownership.Worktree.proveOwnerless({ primaryWorktreeDir, worktreeDir })
+  if (evidence.status !== "ownerless") throw new Error("Expected ownerless worktree evidence")
+  return WorktreeOwnershipCriticalSection.ownerless(evidence)
+}
 
 describe("ascending identifier logical clock", () => {
   test("emits a strict total order across counter overflow and wall-clock rollback", () => {
@@ -66,12 +84,148 @@ describe("ascending identifier logical clock", () => {
 })
 
 describe("worktree ownership critical section", () => {
+  test("classifies process ownership probes without guessing from unknown errors", () => {
+    expect(Ownership.observePid(42, () => undefined)).toEqual({ status: "alive" })
+    expect(
+      Ownership.observePid(42, () => {
+        throw Object.assign(new Error("denied"), { code: "EPERM" })
+      }),
+    ).toEqual({ status: "alive" })
+    expect(
+      Ownership.observePid(42, () => {
+        throw Object.assign(new Error("gone"), { code: "ESRCH" })
+      }),
+    ).toEqual({ status: "dead" })
+    const unknown = Ownership.observePid(42, () => {
+      throw Object.assign(new Error("busy"), { code: "EBUSY" })
+    })
+    expect(unknown.status).toBe("unobservable")
+  })
+
+  test("returns complete absence for a missing root and ignores unrelated Artifact subtrees", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-owner-scope-"))
+    const taskID = Identifier.ascending("task")
+    const sessionID = Identifier.ascending("session")
+    const worktreeDir = path.join(root, "managed-worktree")
+    try {
+      expect(await Ownership.Worktree.snapshot(path.join(root, "missing-root"))).toEqual({
+        entries: [],
+        issues: [],
+        integrity: { status: "complete" },
+      })
+      await mkdir(ProjectRuntimePaths.taskArtifactRoot(root, taskID), { recursive: true })
+      await writeFile(path.join(ProjectRuntimePaths.taskArtifactRoot(root, taskID), "artifact.json"), "{}")
+      await Ownership.Worktree.record({ primaryWorktreeDir: root, worktreeDir, taskID, sessionID })
+      const original = fs.readdir.bind(fs)
+      const readdir = spyOn(fs, "readdir").mockImplementation(async (target, options) => {
+        if (String(target).includes(`${path.sep}artifacts${path.sep}`)) {
+          throw Object.assign(new Error("artifact unreadable"), { code: "EACCES" })
+        }
+        return original(target, options as never) as never
+      })
+      try {
+        const snapshot = await Ownership.Worktree.snapshot(root)
+        expect(snapshot.integrity).toEqual({ status: "complete" })
+        expect(snapshot.entries.flatMap((entry) => (entry.status === "valid" ? [entry.marker.sessionID] : []))).toEqual([
+          sessionID,
+        ])
+      } finally {
+        readdir.mockRestore()
+      }
+    } finally {
+      await rm(root, { recursive: true, force: true })
+    }
+  })
+
+  test("preserves typed integrity when an observed ownership directory becomes unreadable or disappears", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-owner-observation-"))
+    const taskID = Identifier.ascending("task")
+    const sessionID = Identifier.ascending("session")
+    const worktreeDir = path.join(root, "managed-worktree")
+    try {
+      await Ownership.Worktree.record({ primaryWorktreeDir: root, worktreeDir, taskID, sessionID })
+      const markerDir = ProjectRuntimePaths.ownershipPaths(root, taskID, sessionID).worktreeMarkerDir
+      const original = fs.readdir.bind(fs)
+      for (const code of ["EACCES", "ENOENT"] as const) {
+        const readdir = spyOn(fs, "readdir").mockImplementation(async (target, options) => {
+          if (path.resolve(String(target)) === path.resolve(markerDir)) {
+            throw Object.assign(new Error(`marker directory ${code}`), { code })
+          }
+          return original(target, options as never) as never
+        })
+        try {
+          const snapshot = await Ownership.Worktree.snapshot(root)
+          expect(snapshot.integrity.status).toBe("unobservable")
+          if (snapshot.integrity.status === "unobservable") {
+            expect(snapshot.integrity.errors[0]?.data).toMatchObject({ operation: "list-worktree-markers", code })
+          }
+        } finally {
+          readdir.mockRestore()
+        }
+      }
+    } finally {
+      await rm(root, { recursive: true, force: true })
+    }
+  })
+
+  test("releases an exact valid owner and returns preservation for an invalid sibling authority", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-owner-release-"))
+    const taskID = Identifier.ascending("task")
+    const sessionID = Identifier.ascending("session")
+    const worktreeDir = path.join(root, "managed-worktree")
+    try {
+      await Ownership.Worktree.record({ primaryWorktreeDir: root, worktreeDir, taskID, sessionID })
+      const markerDir = ProjectRuntimePaths.ownershipPaths(root, taskID, sessionID).worktreeMarkerDir
+      await writeFile(path.join(markerDir, "corrupt.ownership.json"), "{not-json")
+      const receipt = await Ownership.Worktree.releaseOwner({
+        primaryWorktreeDir: root,
+        worktreeDir,
+        taskID,
+        sessionID,
+      })
+      expect(receipt.released).toEqual([{ taskID, sessionID, worktreeDir }])
+      expect(receipt.integrity.status).toBe("invalid")
+      const remaining = await Ownership.Worktree.snapshot(root)
+      expect(remaining.entries.map((entry) => entry.status)).toEqual(["invalid"])
+    } finally {
+      await rm(root, { recursive: true, force: true })
+    }
+  })
+
+  test("returns a typed observation error when an owned target cannot be inspected", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-owner-target-"))
+    const taskID = Identifier.ascending("task")
+    const sessionID = Identifier.ascending("session")
+    const worktreeDir = path.join(root, "managed-worktree")
+    try {
+      await mkdir(worktreeDir)
+      await Ownership.Worktree.record({ primaryWorktreeDir: root, worktreeDir, taskID, sessionID })
+      const original = fs.lstat.bind(fs)
+      const lstat = spyOn(fs, "lstat").mockImplementation(async (target, options) => {
+        if (path.resolve(String(target)) === path.resolve(worktreeDir)) {
+          throw Object.assign(new Error("target busy"), { code: "EBUSY" })
+        }
+        return original(target, options as never) as never
+      })
+      try {
+        const error = await Ownership.Worktree.orphans({ primaryWorktreeDir: root }).catch((cause) => cause)
+        expect(Ownership.Worktree.ObservationError.isInstance(error)).toBe(true)
+        expect(error.data).toMatchObject({ operation: "stat-owner-target", code: "EBUSY" })
+      } finally {
+        lstat.mockRestore()
+      }
+    } finally {
+      await rm(root, { recursive: true, force: true })
+    }
+  })
+
   test("reports durable ownership while acquisition and proof share the removal boundary", async () => {
     const directory = `${import.meta.dir}/owned-worktree-contract`
+    const ownerlessProof = await ownerlessCriticalSectionProof(directory, directory)
     const acquisition = WorktreeOwnershipCriticalSection.acquire(directory)
     const active = await WorktreeOwnershipCriticalSection.remove({
       directory,
-      proveOwnerless: () => true,
+      proveOwnerless: () => ownerlessProof,
       remove: async () => "removed",
     })
     acquisition[Symbol.dispose]()
@@ -79,14 +233,14 @@ describe("worktree ownership critical section", () => {
 
     const durable = await WorktreeOwnershipCriticalSection.remove({
       directory,
-      proveOwnerless: () => false,
+      proveOwnerless: () => WorktreeOwnershipCriticalSection.owned(),
       remove: async () => "removed",
     })
     expect(durable).toEqual({ status: "owned" })
 
     const ownerless = await WorktreeOwnershipCriticalSection.remove({
       directory,
-      proveOwnerless: () => true,
+      proveOwnerless: () => ownerlessProof,
       remove: async () => "removed",
     })
     expect(ownerless).toEqual({ status: "removed", value: "removed" })
@@ -95,7 +249,10 @@ describe("worktree ownership critical section", () => {
     await expect(
       WorktreeOwnershipCriticalSection.remove({
         directory,
-        proveOwnerless: () => durableOwnerRecorded,
+        proveOwnerless: () =>
+          durableOwnerRecorded
+            ? WorktreeOwnershipCriticalSection.ownerless(ownerlessProof.evidence)
+            : ownerlessProof,
         remove: async () => {
           throw new Error("physical removal failed")
         },
@@ -126,7 +283,9 @@ describe("worktree ownership critical section", () => {
       await createLease.release()
       await removal
       expect(events).toEqual(["create-acquired", "durable-owner-published", "removal-proof"])
-      expect(await Ownership.Worktree.hasLiveOwner({ primaryWorktreeDir: root, worktreeDir })).toBe(true)
+      expect((await Ownership.Worktree.proveOwnerless({ primaryWorktreeDir: root, worktreeDir })).status).toBe(
+        "owned",
+      )
     } finally {
       await rm(root, { recursive: true, force: true })
     }
@@ -169,20 +328,20 @@ describe("worktree ownership critical section", () => {
       expect(
         await Ownership.Worktree.reconcileOrphans({
           primaryWorktreeDir: root,
-          isPidAlive: () => false,
+          observeOwnerPid: () => ({ status: "dead" }),
           canReleaseDeadOwner: () => false,
         }),
-      ).toEqual({ released: 0, preserved: 1 })
-      expect((await Ownership.Worktree.list(root)).map((entry) => entry.marker.sessionID)).toEqual([sessionID])
+      ).toEqual({ released: 0, preserved: 1, integrity: { status: "complete" } })
+      expect((await validWorktreeOwners(root)).map((entry) => entry.marker.sessionID)).toEqual([sessionID])
 
       expect(
         await Ownership.Worktree.reconcileOrphans({
           primaryWorktreeDir: root,
-          isPidAlive: () => false,
+          observeOwnerPid: () => ({ status: "dead" }),
           canReleaseDeadOwner: () => true,
         }),
-      ).toEqual({ released: 1, preserved: 0 })
-      expect(await Ownership.Worktree.list(root)).toEqual([])
+      ).toEqual({ released: 1, preserved: 0, integrity: { status: "complete" } })
+      expect((await Ownership.Worktree.list(root)).entries).toEqual([])
 
       await Ownership.Worktree.record({
         primaryWorktreeDir: root,
@@ -194,11 +353,11 @@ describe("worktree ownership critical section", () => {
       expect(
         await Ownership.Worktree.reconcileOrphans({
           primaryWorktreeDir: root,
-          isPidAlive: () => true,
+          observeOwnerPid: () => ({ status: "alive" }),
           canReleaseDeadOwner: () => false,
         }),
-      ).toEqual({ released: 1, preserved: 0 })
-      expect(await Ownership.Worktree.list(root)).toEqual([])
+      ).toEqual({ released: 1, preserved: 0, integrity: { status: "complete" } })
+      expect((await Ownership.Worktree.list(root)).entries).toEqual([])
     } finally {
       await rm(root, { recursive: true, force: true })
     }
@@ -219,7 +378,7 @@ describe("worktree ownership critical section", () => {
           sessionID: secondSessionID,
         })
         expect(
-          (await Ownership.Worktree.list(Instance.project.worktree))
+          (await validWorktreeOwners(Instance.project.worktree))
             .filter((entry) => entry.marker.cwd === worktree.directory)
             .map((entry) => entry.marker.sessionID)
             .sort(),
@@ -231,13 +390,19 @@ describe("worktree ownership critical section", () => {
           sessionID: firstSessionID,
         })
         expect(
-          (await Ownership.Worktree.list(Instance.project.worktree))
+          (await validWorktreeOwners(Instance.project.worktree))
             .filter((entry) => entry.marker.cwd === worktree.directory)
             .map((entry) => entry.marker.sessionID),
         ).toEqual([secondSessionID])
+        await Worktree.releaseManagedWorktreeSessionOwner({
+          projectID: Instance.project.id,
+          primaryWorktreeDir: Instance.project.worktree,
+          directory: worktree.directory,
+          sessionID: secondSessionID,
+        })
         await Worktree.remove({ directory: worktree.directory })
         expect(
-          (await Ownership.Worktree.list(Instance.project.worktree)).filter(
+          (await validWorktreeOwners(Instance.project.worktree)).filter(
             (entry) => entry.marker.cwd === worktree.directory,
           ),
         ).toEqual([])
@@ -247,15 +412,123 @@ describe("worktree ownership critical section", () => {
           taskID,
           sessionID: secondSessionID,
         })
-        expect(await Worktree.reconcileOrphanWorktreeOwners()).toBe(1)
+        expect(await Worktree.reconcileOrphanWorktreeOwners()).toEqual({
+          released: 1,
+          preserved: 0,
+          integrity: { status: "complete" },
+        })
         expect(
-          (await Ownership.Worktree.list(Instance.project.worktree)).filter(
+          (await validWorktreeOwners(Instance.project.worktree)).filter(
             (entry) => entry.marker.cwd === worktree.directory,
           ),
         ).toEqual([])
       },
     })
   })
+
+  test("returns an exact public receipt after explicit durable sandbox release", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const worktree = await Worktree.create({ name: `delete-receipt-${Date.now()}` })
+        const result = await Worktree.removeProjectWorktree({ directory: worktree.directory })
+        expect(result.receipt).toEqual({ ok: true, status: "removed" })
+      },
+    })
+  })
+
+  test("releases the exact stored sandbox alias authorized by physical identity", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const worktree = await Worktree.create({ name: `delete-alias-${Date.now()}` })
+        const alias = path.join(path.dirname(worktree.directory), `${path.basename(worktree.directory)}-alias`)
+        await fs.symlink(worktree.directory, alias, process.platform === "win32" ? "junction" : "dir")
+        const current = Project.get(Instance.project.id)!
+        Database.use((db) =>
+          db
+            .update(ProjectTable)
+            .set({ sandboxes: [alias], time_updated: Date.now() })
+            .where(eq(ProjectTable.id, current.id))
+            .run(),
+        )
+
+        const result = await Worktree.removeProjectWorktree({ directory: worktree.directory })
+
+        expect({ receipt: result.receipt, sandboxes: Project.get(current.id)?.sandboxes }).toEqual({
+          receipt: { ok: true, status: "removed" },
+          sandboxes: [],
+        })
+      },
+    })
+  })
+
+  test("holds production Task directory admission until its durable process binding exists", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const worktree = await Worktree.create({ name: `delete-admission-${Date.now()}` })
+        configureTaskLoopRunner(async () => {})
+        const originalRegister = Project.registerExecutionDirectory
+        let releaseRegistration!: () => void
+        let registrationOwned!: () => void
+        const registrationStarted = new Promise<void>((resolve) => (registrationOwned = resolve))
+        const registrationRelease = new Promise<void>((resolve) => (releaseRegistration = resolve))
+        const register = spyOn(Project, "registerExecutionDirectory").mockImplementation(async (...args) => {
+          const result = await originalRegister(...args)
+          registrationOwned()
+          await registrationRelease
+          return result
+        })
+        try {
+          const creation = EngineService.createTask(
+            {
+              requestID: `directory-admission-${Identifier.ascending("artifact")}`,
+              request: "Publish the durable external-directory Task process binding",
+              directory: worktree.directory,
+              productPillar: "code",
+              model: "firmware/gpt-5",
+              promptProfile: "base",
+              queue: true,
+            },
+            { actor: "user" },
+          )
+          await registrationStarted
+
+          const deletion = Worktree.removeManagedProjectWorktreeDirectory({
+            projectID: Instance.project.id,
+            directory: worktree.directory,
+            releaseSandboxOwnership: true,
+          })
+          const settledBeforeRelease = await Promise.race([
+            deletion.then(() => "settled" as const),
+            new Promise<"pending">((resolve) => setTimeout(() => resolve("pending"), 25)),
+          ])
+          releaseRegistration()
+          const taskID = await creation
+          const duringRegistration = await deletion
+          const afterBinding = await Worktree.removeManagedProjectWorktreeDirectory({
+            projectID: Instance.project.id,
+            directory: worktree.directory,
+            releaseSandboxOwnership: true,
+          })
+
+          expect({ taskKind: Identifier.schema("task").parse(taskID) === taskID, settledBeforeRelease, duringRegistration, afterBinding }).toEqual({
+            taskKind: true,
+            settledBeforeRelease: "pending",
+            duringRegistration: { directory: worktree.directory, removed: false, proof: "owned" },
+            afterBinding: { directory: worktree.directory, removed: false, proof: "owned" },
+          })
+        } finally {
+          releaseRegistration()
+          register.mockRestore()
+        }
+      },
+    })
+  }, 90_000)
 })
 
 describe("prompt ownership termination", () => {
@@ -278,7 +551,7 @@ describe("prompt ownership termination", () => {
     await SessionPromptState.release(sessionID)
 
     expect(
-      (await Ownership.Worktree.list(primaryWorktreeDir)).filter(
+      (await validWorktreeOwners(primaryWorktreeDir)).filter(
         (entry) => entry.marker.cwd === managedWorktreeDir && entry.marker.sessionID === sessionID,
       ),
     ).toEqual([])

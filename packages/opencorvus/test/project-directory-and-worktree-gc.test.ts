@@ -5,7 +5,7 @@ import { Instance, InstanceTestHooks } from "@/project/instance"
 import { Project } from "@/project/project"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Server } from "@/server/server"
-import { namedErrorStatus } from "@/server/error-handler"
+import { namedErrorStatus, serverErrorResponse } from "@/server/error-handler"
 import { Session } from "@/session"
 import { SessionTable } from "@/session/session.sql"
 import { Database, eq } from "@/storage/db"
@@ -24,9 +24,11 @@ import {
 import { ImplicitProject } from "@/project/implicit-project"
 import { Worktree } from "@/worktree"
 import { WorktreeGC } from "@/worktree/gc"
+import { Ownership } from "@/engine/ownership"
 import { Filesystem } from "@/util/filesystem"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import { insertEngineTask } from "@/engine/task"
+import { insertTaskProcessBinding, prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
 import { DatabaseAuthorityTable } from "@/storage/database.sql"
 
@@ -1291,6 +1293,192 @@ describe("Project directory integrity", () => {
 })
 
 describe("Worktree GC uncertainty preservation", () => {
+  test("maps ownership observation failures to the public retryable contract", () => {
+    const error = Ownership.observationFailure({
+      operation: "scan-worktree-owner",
+      code: "EACCES",
+      scope: "worktree-ownership",
+      diagnosticPath: path.join("private", "runtime", "marker.ownership.json"),
+      cause: Object.assign(new Error("access denied"), { code: "EACCES" }),
+    })
+
+    expect({ status: namedErrorStatus(error), body: { name: error.name, data: error.data } }).toEqual({
+      status: 503,
+      body: {
+        name: "WorktreeOwnershipObservationError",
+        data: {
+          operation: "scan-worktree-owner",
+          code: "EACCES",
+          scope: "worktree-ownership",
+          message: "Worktree ownership could not be observed safely",
+        },
+      },
+    })
+    expect({ diagnosticPath: error.diagnosticPath, cause: error.cause }).toEqual({
+      diagnosticPath: path.resolve("private", "runtime", "marker.ownership.json"),
+      cause: expect.objectContaining({ code: "EACCES" }),
+    })
+  })
+
+  test("projects ownership observation failures through each declared HTTP route contract", async () => {
+    for (const request of [
+      { path: "/project/current/cleanup-candidates", method: "GET" },
+      { path: "/project/current/worktrees", method: "DELETE" },
+      { path: "/experimental/worktree", method: "DELETE" },
+    ]) {
+      const error = Ownership.observationFailure({
+        operation: "observe-worktree-authority",
+        code: "EIO",
+        scope: "worktree-ownership",
+        diagnosticPath: path.join("private", "runtime", "authority"),
+        cause: Object.assign(new Error("device unavailable"), { code: "EIO" }),
+      })
+      const headers = new Headers()
+      const response = await serverErrorResponse(error, {
+        req: { method: request.method, path: request.path, header: () => undefined, raw: {} },
+        res: new Response(),
+        header: (name: string, value: string) => headers.set(name, value),
+        json: (body: unknown, init: { status: number }) => Response.json(body, init),
+      } as never)
+      expect({ route: request.path, status: response.status, body: await response.json() }).toEqual({
+        route: request.path,
+        status: 503,
+        body: {
+          name: "WorktreeOwnershipObservationError",
+          data: {
+            operation: "observe-worktree-authority",
+            code: "EIO",
+            scope: "worktree-ownership",
+            message: "Worktree ownership could not be observed safely",
+          },
+        },
+      })
+    }
+  })
+
+  test("preserves a managed Worktree owned by an active durable process binding", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const taskID = Identifier.ascending("task")
+        const session = await Session.create({ kind: "root", title: "Process binding owner" })
+        const worktree = await Worktree.create({ name: `process-owner-${Date.now()}` })
+        const now = Date.now()
+        const binding = await prepareTaskProcessBinding({
+          mode: "native",
+          taskID,
+          projectID: Instance.project.id,
+          rootDirectory: worktree.directory,
+          packageRevisionSHA256: "a".repeat(64),
+          timeCreated: now,
+        })
+        Database.transaction((db) => {
+          insertEngineTask(db, {
+            taskID,
+            projectID: Instance.project.id,
+            sessionID: session.id,
+            source: "test",
+            productPillar: "code",
+            title: "Process binding owner",
+            request: "Keep the managed Worktree owned.",
+            priority: "normal",
+            queueOrder: 0,
+            metadata: {},
+            timeStarted: now,
+            timeCreated: now,
+            timeUpdated: now,
+          })
+          insertTaskProcessBinding({ db, payload: binding })
+        })
+
+        const result = await Worktree.removeManagedProjectWorktreeDirectory({
+          projectID: Instance.project.id,
+          directory: worktree.directory,
+          releaseSandboxOwnership: true,
+        })
+
+        expect({
+          result,
+          project: Project.get(Instance.project.id),
+          directory: await fs.realpath(worktree.directory),
+        }).toEqual({
+          result: { directory: worktree.directory, removed: false, proof: "owned" },
+          project: expect.objectContaining({ sandboxes: expect.arrayContaining([worktree.directory]) }),
+          directory: worktree.directory,
+        })
+      },
+    })
+  }, 90_000)
+
+  test("returns exact GC preservation settlements after Project ownership reconciliation fails", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const taskID = Identifier.ascending("task")
+    const sessionID = Identifier.ascending("session")
+    const candidateDirectory = ProjectRuntimePaths.worktreeDir(project.path, taskID, sessionID)
+    await fs.mkdir(candidateDirectory, { recursive: true })
+    await Ownership.Worktree.record({
+      primaryWorktreeDir: project.path,
+      worktreeDir: candidateDirectory,
+      taskID,
+      sessionID,
+    })
+    const markerDir = ProjectRuntimePaths.ownershipPaths(project.path, taskID, sessionID).worktreeMarkerDir
+    const original = fs.readdir.bind(fs)
+    const readdir = spyOn(fs, "readdir").mockImplementation(async (target, options) => {
+      if (path.resolve(String(target)) === path.resolve(markerDir)) {
+        throw Object.assign(new Error("ownership unavailable"), { code: "EACCES" })
+      }
+      return original(target, options as never) as never
+    })
+    try {
+      const result = await WorktreeGC.apply({
+        candidates: [
+          {
+            projectID: registered.project.id,
+            primaryDir: project.path,
+            directory: candidateDirectory,
+            reason: "old-zombie",
+          },
+        ],
+        preservations: [],
+      })
+      expect({
+        result,
+        project: Project.get(registered.project.id),
+        directory: await fs.realpath(candidateDirectory),
+      }).toEqual({
+        result: {
+          settlements: [
+            {
+              status: "preserved",
+              scope: "project",
+              projectID: registered.project.id,
+              reason: "ownership-observation",
+              operation: "list-worktree-markers",
+              code: "EACCES",
+            },
+            {
+              status: "preserved",
+              scope: "candidate",
+              projectID: registered.project.id,
+              directory: candidateDirectory,
+              reason: "ownership-observation",
+              operation: "reconcile-worktree-owners",
+              code: "PROJECT_AUTHORITY_PRESERVED",
+            },
+          ],
+          summary: { removed: 0, preserved: 2 },
+        },
+        project: expect.objectContaining({ worktree: project.path }),
+        directory: candidateDirectory,
+      })
+    } finally {
+      readdir.mockRestore()
+    }
+  }, 90_000)
+
   test("contains unavailable Project roots and managed state while classifying a healthy Project's real residue", async () => {
     await using healthy = await memoryProject()
     await using malformed = await memoryProject()

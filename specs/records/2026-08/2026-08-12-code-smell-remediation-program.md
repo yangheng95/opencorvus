@@ -65,8 +65,10 @@ Each wave is still split into reviewable batches; it is not one repository-wide 
 | Batch | Findings | State | Plan review | Implementation review | Commit |
 | --- | --- | --- | --- | --- | --- |
 | B01 | `CS-009` | committed; push blocked by unrelated outgoing commits | PASS | PASS | `20f18339` |
-| B02 | `CS-036` | plan approved; implementation in progress | PASS | pending | pending |
-| B03+ | remaining 75 open findings | queued by Program Strategy | required per batch | required per batch | pending |
+| B02 | `CS-036` | implementation and verification complete | PASS | PASS after four adversarial rounds | pending |
+| Parallel B03-B05 | `CS-015`, `CS-040`, `CS-076` | committed; push blocked by unrelated outgoing commits | recorded in focused specs | PASS | `58ef06ca`, `6f59d5b2`, `0336604d` |
+| B06-B07 | `CS-041`, `CS-047` | implementation/review correction in progress | recorded in focused specs | pending | pending |
+| B08+ | remaining 70 open findings | queued by Program Strategy | required per batch | required per batch | pending |
 
 ## Batch B01 — Delete the unrestricted native file writer
 
@@ -188,7 +190,10 @@ Direct triggers include `EACCES`, `EIO`, Windows `EPERM`/`EBUSY`/sharing failure
 - A malformed marker can now block automated deletion until repaired; that is safer than treating corrupted ownership as absence and is documented as such.
 - The implementation must not stage concurrently dirty runner, preload, Overlay UI, database-recovery spec, or B01-unrelated `main.rs` changes.
 - Pre-implementation review: PASS after three read-only rounds. The first review identified five P1 gaps in absence semantics, owner state, consumer migration, strict sandbox identity, and public/GC receipts. The second found missing real settlement tests and a prohibited field-absence assertion. The final revision covers all findings and passed with no unresolved P0-P3 issue.
-- Implementation/verification/review/commit: pending.
+- Implementation: complete. Ownership scanning now returns typed complete/invalid/unobservable snapshots from only the canonical Task/Session ownership subtree; destructive proof requires one branded complete ownerless receipt. PID, target, primary, Git registry, process-binding, marker, and durable sandbox authorities are fail-closed and converge through one removal occurrence. Explicit sandbox release uses the exact stored rows plus complete authority revision compare-and-swap; external-directory Task creation holds the same strict physical-directory admission through atomic Task/process-binding publication. GC returns exact project/candidate settlements, and public 503 diagnostics exclude internal paths, PIDs, and marker payloads.
+- Verification: `algorithm-batch-one.test.ts` passed 22 tests / 78 expectations; `project-directory-and-worktree-gc.test.ts` passed 37 / 55; runtime isolation plus all migrated settlement contracts passed 24 / 167. OpenCorvus, Transport Protocol, and SDK typechecks passed. Route policy passed 6 rules / 34 files; documentation passed 338 operations / 25 groups; SDK import checking and task-owned diff checks passed. Generated OpenAPI, SDK types, and English/Chinese API references were regenerated from the canonical routes.
+- Independent implementation review: PASS after four adversarial rounds. Round one found exact sandbox-alias release and production GC/route coverage gaps. Round two found non-atomic sandbox proof/release. Round three proved the initial helper did not cover the production Task registration-to-binding interval. The final repair made the real `EngineService.createTask` external-directory occurrence hold strict admission across registration, `Instance.provide`, and the atomic Task/process-binding commit; its controlled production-path race test and the complete diff were re-reviewed with no remaining P0-P3 finding.
+- Commit: pending exact staging.
 
 ## Subsequent Batch Planning Rule
 

@@ -5647,6 +5647,16 @@ export type WorktreeCreateInput = {
   taskID?: string
 }
 
+export type WorktreeOwnershipObservationError = {
+  data: {
+    code: string
+    message: string
+    operation: string
+    scope: string
+  }
+  name: "WorktreeOwnershipObservationError"
+}
+
 export type WorktreeRemoveInput = {
   directory: string
 }
@@ -7978,6 +7988,10 @@ export type WorktreeRemoveErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Required ownership authority could not be observed safely
+   */
+  503: WorktreeOwnershipObservationError
 }
 
 export type WorktreeRemoveError = WorktreeRemoveErrors[keyof WorktreeRemoveErrors]
@@ -7986,7 +8000,21 @@ export type WorktreeRemoveResponses = {
   /**
    * Worktree removed
    */
-  200: boolean
+  200:
+    | {
+        ok: true
+        status: "removed"
+      }
+    | {
+        ok: true
+        preservations: Array<{
+          code: string
+          message: string
+          operation: string
+          scope: "worktree-cleanup"
+        }>
+        status: "removed_with_preservation"
+      }
 }
 
 export type WorktreeRemoveResponse = WorktreeRemoveResponses[keyof WorktreeRemoveResponses]
@@ -21348,6 +21376,10 @@ export type ProjectCurrentCleanupCandidatesErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Required ownership authority could not be observed safely
+   */
+  503: WorktreeOwnershipObservationError
 }
 
 export type ProjectCurrentCleanupCandidatesError =
@@ -21360,26 +21392,19 @@ export type ProjectCurrentCleanupCandidatesResponses = {
   200: {
     worktreeGCCandidates: Array<{
       directory: string
-      primaryDir: string
       projectID: string
+      reason: "old-clean" | "old-zombie" | "registry-prunable" | "sandbox-missing"
     }>
     worktreeGCPreservations: Array<{
-      detail: string
-      primaryDir: string
+      code: string
+      operation: "inspect-worktree-gc"
       projectID: string
-      reason: "registry-unavailable"
+      reason: "primary-directory-unavailable" | "managed-state-unavailable" | "registry-unavailable"
     }>
     worktreeOrphans: Array<{
-      marker: {
-        createdAt: number
-        cwd: string
-        kind: "worktree"
-        ownerPid: number
-        sessionID: string
-        taskID: string
-      }
-      markerPath: string
-      reason: string
+      reason: "owner-process-dead" | "target-missing" | "marker-invalid"
+      sessionID?: string
+      taskID?: string
       worktreeDir?: string
     }>
   }
@@ -21527,6 +21552,10 @@ export type ProjectCurrentWorktreesDeleteErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Required ownership authority could not be observed safely
+   */
+  503: WorktreeOwnershipObservationError
 }
 
 export type ProjectCurrentWorktreesDeleteError =
@@ -21536,9 +21565,21 @@ export type ProjectCurrentWorktreesDeleteResponses = {
   /**
    * Worktree removed
    */
-  200: {
-    ok: true
-  }
+  200:
+    | {
+        ok: true
+        status: "removed"
+      }
+    | {
+        ok: true
+        preservations: Array<{
+          code: string
+          message: string
+          operation: string
+          scope: "worktree-cleanup"
+        }>
+        status: "removed_with_preservation"
+      }
 }
 
 export type ProjectCurrentWorktreesDeleteResponse =

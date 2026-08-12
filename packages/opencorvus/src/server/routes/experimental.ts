@@ -21,6 +21,7 @@ import { assertActiveProjectSession } from "../active-project-session"
 import { Database } from "../../storage/db"
 import { streamProjectSSE } from "../sse"
 import { Bus } from "../../bus"
+import { ProjectWorktreeDeleteReceipt } from "@opencorvus-ai/transport-protocol"
 
 // Workspace shape for the workspace sub-tree (mounted at /workspace)
 const WorkspaceRoutes = lazy(() =>
@@ -255,16 +256,16 @@ export const ExperimentalRoutes = lazy(() =>
         responses: {
           200: {
             description: "Worktree removed",
-            content: { "application/json": { schema: resolver(z.boolean()) } },
+            content: { "application/json": { schema: resolver(ProjectWorktreeDeleteReceipt) } },
           },
-          ...errors(400, 404),
+          ...errors(400, 404, 503),
         },
       }),
       validator("json", Worktree.remove.schema),
       async (c) => {
         const body = c.req.valid("json")
-        await Worktree.removeProjectWorktree(body)
-        return c.json(true)
+        const result = await Worktree.removeProjectWorktree(body)
+        return c.json(ProjectWorktreeDeleteReceipt.parse(result.receipt))
       },
     )
     .post(

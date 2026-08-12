@@ -95,10 +95,10 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | DELETE | `/project/current` | Delete current project 请求体: `reason`, `surface`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `project.current.delete` |
 | GET | `/project/current` | Get current project | `project.current` |
 | PATCH | `/project/current` | Update current project 请求体: `name`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.update` |
-| GET | `/project/current/cleanup-candidates` | Inspect current project cleanup candidates 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.cleanupCandidates` |
+| GET | `/project/current/cleanup-candidates` | Inspect current project cleanup candidates 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `project.current.cleanupCandidates` |
 | POST | `/project/current/init-git` | Initialize git in current directory 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.initGit` |
 | POST | `/project/current/promote-anonymous` | Convert current anonymous project to a named project 请求体: `destinationParent`, `name`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `project.current.promoteAnonymous` |
-| DELETE | `/project/current/worktrees` | Delete a current project worktree 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.worktrees.delete` |
+| DELETE | `/project/current/worktrees` | Delete a current project worktree 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `project.current.worktrees.delete` |
 | GET | `/project/current/worktrees` | List current project worktrees 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.worktrees` |
 | PATCH | `/project/{projectID}` | Update project 请求体: `commands`, `icon`, `name`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.update` |
 | GET | `/vcs` | Get VCS info 错误: `UnknownError`. | `vcs.get` |
@@ -473,7 +473,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/experimental/workspace` | List workspaces | `experimental.workspace.list` |
 | DELETE | `/experimental/workspace/{id}` | Remove workspace 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `experimental.workspace.remove` |
 | POST | `/experimental/workspace/{id}` | Create workspace 错误: `BadRequestError`. | `experimental.workspace.create` |
-| DELETE | `/experimental/worktree` | Remove worktree 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `worktree.remove` |
+| DELETE | `/experimental/worktree` | Remove worktree 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `worktree.remove` |
 | GET | `/experimental/worktree` | List worktrees | `worktree.list` |
 | POST | `/experimental/worktree` | Create worktree 错误: `BadRequestError`. | `worktree.create` |
 | POST | `/experimental/worktree/reset` | Reset worktree 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `worktree.reset` |

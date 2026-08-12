@@ -41,6 +41,7 @@ export function requestID(c: { req: { header(name: string): string | undefined }
 
 export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "NotFoundError") return 404
+  if (err.name === "WorktreeOwnershipObservationError") return 503
   if (err.name === "DatabaseUnavailableError") return 503
   if (err.name === "LogFileNotFoundError") return 404
   if (err.name === "ProviderModelNotFoundError") return 400

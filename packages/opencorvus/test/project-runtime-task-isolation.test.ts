@@ -133,11 +133,17 @@ describe("per-Task runtime directory ownership", () => {
     })
 
     expect(
-      (await Ownership.Worktree.list(project.path)).map(({ marker, markerPath }) => ({
-        taskID: marker.taskID,
-        sessionID: marker.sessionID,
-        markerPath,
-      })),
+      (await Ownership.Worktree.list(project.path)).entries.flatMap((entry) =>
+        entry.status === "valid"
+          ? [
+              {
+                taskID: entry.marker.taskID,
+                sessionID: entry.marker.sessionID,
+                markerPath: entry.markerPath,
+              },
+            ]
+          : [],
+      ),
     ).toEqual([
       {
         taskID,
