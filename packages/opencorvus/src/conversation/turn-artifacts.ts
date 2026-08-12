@@ -14,10 +14,17 @@ import { conversationMessageHasDisplay, type ConversationView } from "./view"
 import { ConversationTurnArtifactSummary } from "@/engine/model"
 import { requireTaskCompletionDecisionArtifact } from "@/engine/completion-decision"
 import { requireTerminalLifecycleReferenceEvent } from "@/engine/terminal-lifecycle-reference"
-import { SessionWake } from "@/session/wake"
 import { artifactCatalogAuthority, requireEngineArtifactByLocator } from "@/artifact-catalog"
 import { readTaskArtifactSnapshotManifest, taskArtifactSnapshotResourceRefs } from "@/task-artifact/store"
 import { engineArtifactUsesTransportEnvelope } from "@/engine/artifact-catalog-metadata"
+import { SchedulerMessagePayload } from "@/protocol/schema"
+import { ProtocolStore } from "@/protocol/store"
+import {
+  TerminalLifecycleReferenceSchema,
+  requireCurrentTerminalLifecycleReference,
+} from "@/engine/terminal-lifecycle-reference"
+import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision"
+import { findTask } from "@/engine/store"
 
 function exactString(value: unknown): string | undefined {
   return typeof value === "string" && value.length > 0 ? value : undefined
@@ -220,7 +227,13 @@ async function taskDelivery(taskID: string) {
   return { task, locators, entries, catalogComplete: catalog.catalogComplete, providerErrors: catalog.providerErrors }
 }
 
-type MissionChildTaskResultWake = Extract<SessionWake.WakeReason, { source: "mission.child_task_result" }>
+type MissionChildTaskResultWake = {
+  taskID: string
+  taskTitle: string
+  taskStatus: "completed" | "failed" | "cancelled"
+  terminalLifecycleReference: ReturnType<typeof requireCurrentTerminalLifecycleReference>
+  completionDecisionArtifactID?: string
+}
 
 async function missionTaskDelivery(wake: MissionChildTaskResultWake) {
   const reference = wake.terminalLifecycleReference
@@ -298,12 +311,45 @@ function finalVisibleAssistantMessageID(
     .at(-1)?.messageID
 }
 
-function missionChildResultWake(message: any): MissionChildTaskResultWake | undefined {
+export function missionChildResultWake(message: any): MissionChildTaskResultWake | undefined {
   if (message?.info?.role !== "user") return undefined
   const wake = message.info.extra?.wake_reason
   if (!wake || typeof wake !== "object" || Array.isArray(wake)) return undefined
-  if (wake.source !== "mission.child_task_result") return undefined
-  return SessionWake.MissionChildTaskResultWakeReason.parse(wake)
+  if (wake.source !== "scheduler.message" || wake.messageKind !== "notification") return undefined
+  const deliveryEvent = ProtocolStore.requireEvent(wake.eventID)
+  const deliveryPayload = SchedulerMessagePayload.parse(deliveryEvent.payload)
+  if (!deliveryPayload.source_terminal_event_id || deliveryEvent.causationID !== deliveryPayload.source_terminal_event_id) {
+    return undefined
+  }
+  const terminalEvent = ProtocolStore.requireEvent(deliveryPayload.source_terminal_event_id)
+  const payload = terminalEvent.payload ?? {}
+  if (!terminalEvent.taskID || payload.taskID !== terminalEvent.taskID) return undefined
+  // The scheduler notification names one immutable terminal occurrence. Never
+  // reinterpret it through the Task's current row: the Task may have resumed
+  // into a later lifecycle or been physically deleted before Mission drain.
+  const reference = TerminalLifecycleReferenceSchema.parse({
+    terminalEventID: terminalEvent.id,
+    terminalStatus: payload.status,
+    timeCompleted: payload.timeCompleted,
+    ...(typeof payload.error === "string" ? { terminalError: payload.error } : {}),
+    ...(payload.terminalReason === "interrupted" ? { terminalReason: "interrupted" } : {}),
+  })
+  requireTerminalLifecycleReferenceEvent(terminalEvent.taskID, reference)
+  const task = findTask(terminalEvent.taskID)
+  const completionDecision =
+    reference.terminalStatus === "completed"
+      ? findTaskCompletionDecisionForTerminalTime({
+          taskID: terminalEvent.taskID,
+          timeCompleted: reference.timeCompleted,
+        })
+      : undefined
+  return {
+    taskID: terminalEvent.taskID,
+    taskTitle: task?.title ?? `Task ${terminalEvent.taskID}`,
+    taskStatus: reference.terminalStatus,
+    terminalLifecycleReference: reference,
+    ...(completionDecision ? { completionDecisionArtifactID: completionDecision.id } : {}),
+  }
 }
 
 export async function projectMissionTurnArtifacts(input: { transcript: readonly any[]; view: ConversationView }) {

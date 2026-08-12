@@ -199,7 +199,6 @@ const MissionPanelCapabilityActions = [
   "view_board",
   "view_plan",
   "view_tasks",
-  "send_task_message",
   "resume_task",
   "cancel_task",
   "reply_interaction",
@@ -429,7 +428,7 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "resume_task",
     description:
-      "Resume the same completed or failed Mission-owned Task from an evidence-backed acceptance gap. This writes one visible Mission message and opens a new execution occurrence; ordinary send_task_message remains conversation-only for terminal Tasks.",
+      "Resume the same completed or failed Mission-owned Task from an evidence-backed acceptance gap. This writes one visible Mission message and opens a new execution occurrence; scheduler_message remains communication-only and never reopens a terminal Task.",
     kind: "mutation",
     surfaces: ["panel"],
     params: {

@@ -8,6 +8,8 @@
 
 - [2026-08-12-public-navigation-and-visitor-count.md](2026-08-12-public-navigation-and-visitor-count.md) defines the calmer public navigation hierarchy and privacy-preserving first-party estimated visitor count backed by the existing website SQLite service.
 
+- [Mission, Task, and scheduler duplex communication convergence](2026-08-12-mission-task-scheduler-duplex-communication.md)
+
 - [2026-08-12-opencorvus-production-database-bootstrap-configuration.md](2026-08-12-opencorvus-production-database-bootstrap-configuration.md) is the secret-free production configuration ledger for the SQLite Registry cutover, covering GitHub values, host paths/permissions, Caddy/systemd, signed activation, backups, rollback, staged execution and required evidence without performing external mutations.
 
 - [2026-08-12-running-wake-and-session-control-json-convergence.md](2026-08-12-running-wake-and-session-control-json-convergence.md) records the ownerless running-wake FIFO starvation and Session-control JSON round-trip conflict, then defines exact same-runtime convergence and real-checker acceptance.

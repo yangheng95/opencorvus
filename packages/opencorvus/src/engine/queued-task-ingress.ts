@@ -93,7 +93,23 @@ const OrchestratorMessage = z
     event: z
       .object({
         ...NoteShape,
-        rootMessage: z.object({ messageID: z.string().min(1), kind: z.literal("orchestrator") }).strict(),
+        rootMessage: OrchestratorEventSchema.shape.rootMessage.unwrap().extend({ kind: z.literal("orchestrator") }),
+      })
+      .strict(),
+  })
+  .strict()
+
+const MissionMessage = z
+  .object({
+    ...CommonShape,
+    source_kind: z.literal("mission_message"),
+    message_id: z.string().min(1),
+    event: z
+      .object({
+        ...NoteShape,
+        rootMessage: OrchestratorEventSchema.shape.rootMessage
+          .unwrap()
+          .extend({ kind: z.literal("mission"), schedulerDelivery: OrchestratorEventSchema.shape.rootMessage.unwrap().shape.schedulerDelivery.unwrap() }),
       })
       .strict(),
   })
@@ -226,6 +242,7 @@ export const QueuedTaskIngressSchema = z
   .discriminatedUnion("source_kind", [
     OperatorMessage,
     OrchestratorMessage,
+    MissionMessage,
     OperatorIntent,
     MissionAcceptanceResume,
     CoordinationRequest,
@@ -237,7 +254,11 @@ export const QueuedTaskIngressSchema = z
     OrchestratorEvent,
   ])
   .superRefine((payload, context) => {
-    if (payload.source_kind === "operator_message" || payload.source_kind === "orchestrator_message") {
+    if (
+      payload.source_kind === "operator_message" ||
+      payload.source_kind === "orchestrator_message" ||
+      payload.source_kind === "mission_message"
+    ) {
       if (payload.message_id !== payload.event.rootMessage.messageID) {
         context.addIssue({ code: "custom", message: "queued message identity does not match rootMessage" })
       }
@@ -288,6 +309,7 @@ export function queuedTaskIngressSourceKind(event: OrchestratorEvent): QueuedTas
   const candidates: QueuedTaskIngressSourceKind[] = []
   if (parsed.rootMessage?.kind === "operator") candidates.push("operator_message")
   if (parsed.rootMessage?.kind === "orchestrator") candidates.push("orchestrator_message")
+  if (parsed.rootMessage?.kind === "mission") candidates.push("mission_message")
   if (parsed.taskIntent) candidates.push("operator_intent")
   if (parsed.missionAcceptanceResume) candidates.push("mission_acceptance_resume")
   if (parsed.coordinationRequest) candidates.push("coordination_request")

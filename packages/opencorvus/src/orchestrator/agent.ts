@@ -84,12 +84,19 @@ import { deriveTaskStatus, isTaskTerminal } from "@/engine/task-status"
 import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
 import type { TaskRow } from "@/engine"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
+import {
+  TaskRootMessageProvenance,
+  deliverTaskRootMessageToOrchestratorSession,
+  getTaskRootMessage,
+} from "@/task-api/task-root-message"
 import { AgentTrace } from "@/trace"
 import { ProtocolStore } from "@/protocol/store"
+import { SchedulerMessagePayload } from "@/protocol/schema"
 import { NamedError } from "@opencorvus-ai/util/error"
 import type { OrchestratorEvent } from "./event"
 import type { TerminalConversationAuthority } from "./terminal-conversation-authority"
 import { ORCHESTRATOR_TASK_ERROR_ENVELOPE_MARKER, type OrchestratorTaskErrorEnvelope } from "./error-envelope"
+import { assertTaskRootSessionLineage, taskOrchestratorSession } from "./task-session"
 
 const log = Log.create({ service: "orchestrator" })
 // The scheduler step budget lives on HostAgentRegistry's orchestrator record;
@@ -374,6 +381,45 @@ async function runOrchestratorPromptWithInactivity<T>(input: {
   }
 }
 
+async function waitForOrchestratorCycleBoundary(session: Session.Info): Promise<void> {
+  const sessionID = session.id
+  const current = SessionStatus.get(sessionID)
+  if (current.type === "idle") return
+  if (current.type === "terminal") {
+    throw new Error(
+      `Orchestrator Session ${sessionID} became terminal before its creator wake reached standby: ${current.reason}`,
+    )
+  }
+  await new Promise<void>((resolve, reject) => {
+    let settled = false
+    const finish = (error?: Error) => {
+      if (settled) return
+      settled = true
+      unsubscribe()
+      if (error) reject(error)
+      else resolve()
+    }
+    const observe = (status: SessionStatus.Info) => {
+      if (status.type === "idle") finish()
+      else if (status.type === "terminal") {
+        finish(
+          new Error(
+            `Orchestrator Session ${sessionID} became terminal before its creator wake reached standby: ${status.reason}`,
+          ),
+        )
+      }
+    }
+    const unsubscribe = Bus.subscribe(SessionStatus.Event.Status, (event) => {
+      if (event.properties.sessionID === sessionID) observe(event.properties.status)
+    })
+    void SessionPrompt.waitForFinish(sessionID, session.directory).then(
+      () => finish(),
+      (error) => finish(error instanceof Error ? error : new Error(String(error))),
+    )
+    observe(SessionStatus.get(sessionID))
+  })
+}
+
 export const OrchestratorTestHooks = {
   runPromptWithInactivity: runOrchestratorPromptWithInactivity,
   renderTaskAttachmentInventory,
@@ -478,9 +524,16 @@ export namespace Orchestrator {
       // Own one durable participant before any scheduler preparation that can
       // fail. This Session is the real lifecycle/audit identity even when no
       // LLM message is ever materialized.
-      const agentSession = await orchestratorSessionForTask(task)
+      const agentSession = await taskOrchestratorSession(task)
       agentSessionID = agentSession.id
       agentSessionInfo = agentSession
+      if (event?.rootMessage?.schedulerDelivery) {
+        await deliverTaskRootMessageToOrchestratorSession({
+          task,
+          messageID: event.rootMessage.messageID,
+          orchestratorSessionID: agentSession.id,
+        })
+      }
       wakeStartMessageID = await latestSessionMessageID(agentSession.id)
 
       const profileScope = task.session_id ? { sessionID: task.session_id } : { taskID: task.id }
@@ -548,7 +601,7 @@ export namespace Orchestrator {
         schedulerDispatchAgents,
         schedulerProjectDirectory,
       )
-      const appendUserMessage = !(await sessionHasUserMessage(agentSession.id))
+      const appendUserMessage = !(await sessionHasCreatorMessage(agentSession.id))
       const hasTypedControlOccurrence = Boolean(
         event?.taskIntent ||
           event?.missionAcceptanceResume ||
@@ -579,6 +632,10 @@ export namespace Orchestrator {
       const wakeProvenanceNotice = renderWakeProvenanceNotice(event, taskID, wakeID)
       const hasCurrentWakeIngress = isCurrentWakeIngress(event)
       const currentControlMessage = currentOrchestratorControlMessage(event, taskID, wakeID)
+      const currentSchedulerInputMessageID = event?.rootMessage?.schedulerDelivery
+        ? event.rootMessage.messageID
+        : undefined
+      const currentVisibleInputMessageID = currentControlMessage?.messageID ?? currentSchedulerInputMessageID
       const resolveRuntimeSystem = async () => {
         systemContext = await buildSystemParts(
           requireTask(taskID),
@@ -589,7 +646,9 @@ export namespace Orchestrator {
         )
         const currentIngressSystemNotice = currentControlMessage
           ? "The last visible input Message is the exact current Orchestrator-authored control occurrence. Resolve that Message before using older conversation history; its durable identities and facts are authoritative for this decision pass."
-          : wakeProvenanceNotice
+          : currentSchedulerInputMessageID
+            ? "The last visible input Message is the exact current Mission/Orchestrator scheduler message. Respond to that real participant Message before using older conversation history."
+            : wakeProvenanceNotice
         const runtimeParts =
           appendCreatorMessage && !hasCurrentWakeIngress
             ? systemContext.parts
@@ -757,7 +816,7 @@ export namespace Orchestrator {
                 : wakeID && event
                   ? { taskIngressID: wakeID, taskIngressKind: queuedTaskIngressSourceKind(event) }
                   : {}),
-              ...(currentControlMessage ? { inputMessageID: currentControlMessage.messageID } : {}),
+              ...(currentVisibleInputMessageID ? { inputMessageID: currentVisibleInputMessageID } : {}),
               installedAt: Date.now(),
             },
             projectedTools: guard.tools as any,
@@ -771,10 +830,14 @@ export namespace Orchestrator {
             includeMcpTools: false,
             system: resolveRuntimeSystem,
             systemMode: "complete",
+            // A follow-up durable ingress is an explicit runtime wake. The
+            // creator occurrence is carried by its real user Message, so it
+            // reaches the same boundary through Session standby instead of
+            // arming a second wake during that Message's commit.
             runOnce: terminalConversation || !appendCreatorMessage,
             resources: { mcp: schedulerMcpOwner },
           },
-          { armWake: !currentControlMessage, notifyWake: !currentControlMessage },
+          { armWake: !currentVisibleInputMessageID, notifyWake: !currentVisibleInputMessageID },
         )
         if (!installedRuntimeContract) {
           throw new Error(`Orchestrator Session ${agentSession.id} runtime contract was not installed`)
@@ -804,6 +867,23 @@ export namespace Orchestrator {
             SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
             runtimeWakeArmed = true
           }
+        } else if (currentSchedulerInputMessageID) {
+          const currentMessage = await MessageStore.get({
+            sessionID: agentSession.id,
+            messageID: currentSchedulerInputMessageID,
+          })
+          if (currentMessage.info.role !== "user") {
+            throw new Error(`Scheduler input Message ${currentSchedulerInputMessageID} must have role=user.`)
+          }
+          const latestUserMessageID = await latestSessionUserMessageID(agentSession.id)
+          if (latestUserMessageID !== currentSchedulerInputMessageID) {
+            throw new Error(
+              `Scheduler input Message ${currentSchedulerInputMessageID} is not the current visible input for ` +
+                `${agentSession.id}; latest user Message is ${latestUserMessageID ?? "<none>"}`,
+            )
+          }
+          SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
+          runtimeWakeArmed = true
         }
         finalMessage = await SessionContext.provide(agentSession, () =>
           provideInitializedProjectExecution({
@@ -825,10 +905,20 @@ export namespace Orchestrator {
                       })) as Message.WithParts)
                     : ((await SessionPrompt.loop({
                         sessionID: agentSession.id,
-                        ...(currentControlMessage ? { reply_to_message_id: currentControlMessage.messageID } : {}),
+                        ...(currentVisibleInputMessageID ? { reply_to_message_id: currentVisibleInputMessageID } : {}),
                       })) as Message.WithParts)
+                  // SessionPrompt.prompt/loop resolves the attached caller at
+                  // the first assistant reply, while one logical Orchestrator
+                  // wake may continue through tool-result turns. Do not
+                  // release the durable root-wake queue until the creator
+                  // cycle reaches standby or the explicit follow-up runtime
+                  // wake is consumed. Otherwise a later Mission/scheduler
+                  // ingress can relabel the previous continuation and be
+                  // falsely settled without ever reaching the model.
                   if (runtimeContract.runOnce) {
                     await SessionPrompt.waitForSessionRuntimeContractWakeSettlement(agentSession.id, runtimeContract)
+                  } else {
+                    await waitForOrchestratorCycleBoundary(agentSession)
                   }
                   return result
                 },
@@ -1069,45 +1159,16 @@ export namespace Orchestrator {
   }
 }
 
-async function assertTaskRootSessionLineage(task: Pick<TaskRow, "id" | "session_id" | "project_id">): Promise<void> {
-  if (!task.session_id) {
-    throw new Error(`Task ${task.id} has no root session`)
-  }
-  await Session.assertLineageInProject({
-    sessionID: task.session_id,
-    projectID: task.project_id,
-  })
-}
-
-async function orchestratorSessionForTask(task: TaskRow): Promise<Session.Info> {
-  if (!task.session_id) {
-    throw new Error(`Task ${task.id} has no root session`)
-  }
-  await assertTaskRootSessionLineage(task)
-  const existing = (await Session.children(task.session_id))
-    .filter((session) => session.kind === "orchestrator")
-    .sort((left, right) => left.time.created - right.time.created)
-
-  // The Orchestrator Session is durable conversation history. Successive
-  // physical Turns reuse that identity; a persisted terminal observation from
-  // an older Turn never invalidates the Session after a backend restart.
-  const latest = existing.at(-1)
-  if (latest) {
-    await Session.touch(latest.id)
-    return latest
-  }
-
-  return Session.createNext({
-    kind: "orchestrator",
-    parentID: task.session_id,
-    title: `Agent: ${task.title}`,
-    directory: Instance.directory,
-  })
-}
-
-async function sessionHasUserMessage(sessionID: string): Promise<boolean> {
+async function sessionHasCreatorMessage(sessionID: string): Promise<boolean> {
   for await (const item of MessageStore.stream(sessionID)) {
-    if (item.info.role === "user") return true
+    if (item.info.role !== "user") continue
+    const extra = item.info.extra as
+      | {
+          task_root_message?: unknown
+          orchestrator_control_ingress?: unknown
+        }
+      | undefined
+    if (!extra?.task_root_message && !extra?.orchestrator_control_ingress) return true
   }
   return false
 }
@@ -1154,8 +1215,13 @@ export function renderWakeProvenanceNotice(event?: OrchestratorEvent, taskID?: s
   if (event?.rootMessage) {
     currentIngressCount += 1
     lines.push(
-      `Current rootMessage=${event.rootMessage.messageID}; kind=${event.rootMessage.kind}. This exact real-participant message is current ingress for this wake. Use its durable identity and visible contents when deciding; the Host does not prescribe a retrieval tool.`,
+      `Current rootMessage=${event.rootMessage.messageID}; kind=${event.rootMessage.kind}. This exact real-participant message is the current input for this wake. ${event.rootMessage.schedulerDelivery ? "It is the visible current input in the Orchestrator conversation; act on it directly." : "Read it through read_task_message before any wait or lifecycle decision."} Do not infer its contents from older conversation history.`,
     )
+    if (event.rootMessage.schedulerDelivery) {
+      lines.push(
+        `Current scheduler delivery event_id=${event.rootMessage.schedulerDelivery.eventID}; inbox_id=${event.rootMessage.schedulerDelivery.inboxID}; thread_id=${event.rootMessage.schedulerDelivery.threadID}. Use that exact event_id as reply_to when the real Message is a scheduler request.`,
+      )
+    }
   }
 
   if (event?.taskIntent) {
@@ -1427,8 +1493,9 @@ const ORCHESTRATOR_INSTRUCTIONS = withObservableWorkNarrative(ORCHESTRATOR_CORE)
  * Build the orchestrator system prompt as a two-part array:
  *   [0] = static instructions (stable, benefits from 1h cache TTL)
  *   [1] = dynamic context — Task, Delivery Slice, budget, metric, review,
- *         Session, and Artifact facts. All are derived from durable storage. A wake may
- *         identify one persisted root message without copying its contents.
+ *         Session, and Artifact facts. All are derived from durable storage. A scheduler
+ *         wake projects its exact source Message body directly from the canonical
+ *         Message/Part rows; no second transport body is persisted.
  */
 async function buildSystemParts(
   task: TaskRow,
@@ -1453,8 +1520,48 @@ async function buildSystemParts(
     ctx.push("## Current Wake Root Message")
     ctx.push(`- message_id=${event.rootMessage.messageID}; kind=${event.rootMessage.kind}`)
     ctx.push(
-      "- This exact real-participant Message is the current ingress. The Host verifies its wake identity and the final assistant receipt, not a particular retrieval tool.",
+      event.rootMessage.schedulerDelivery
+        ? "- This exact real-participant Message is the visible current input in the Orchestrator conversation. Its body remains in this one Message/Part authority."
+        : "- This exact real-participant Message is the current ingress. Its body remains in the original Message/Part authority; read it through read_task_message before acting on this wake.",
     )
+    if (event.rootMessage.schedulerDelivery) {
+      if (!task.session_id) throw new Error(`Task ${task.id} scheduler wake has no root Session.`)
+      const currentMessage = await getTaskRootMessage(task, event.rootMessage.messageID)
+      if (currentMessage.info.role !== "user") {
+        throw new Error(`Task ${task.id} current scheduler Message is not a user-role participant ingress.`)
+      }
+      const expectedAuthor = event.rootMessage.kind === "mission" ? "mission" : "orchestrator"
+      const provenance = TaskRootMessageProvenance.parse(currentMessage.info.extra?.task_root_message)
+      const schedulerEvent = ProtocolStore.requireEvent(event.rootMessage.schedulerDelivery.eventID)
+      const schedulerPayload = SchedulerMessagePayload.parse(schedulerEvent.payload)
+      if (
+        currentMessage.info.author !== expectedAuthor ||
+        schedulerEvent.type !== "scheduler.message" ||
+        provenance.taskID !== task.id ||
+        provenance.kind !== event.rootMessage.kind ||
+        provenance.schedulerDelivery?.eventID !== event.rootMessage.schedulerDelivery.eventID ||
+        provenance.schedulerDelivery.inboxID !== event.rootMessage.schedulerDelivery.inboxID ||
+        schedulerPayload.thread_id !== event.rootMessage.schedulerDelivery.threadID ||
+        schedulerEvent.replyTo !== event.rootMessage.schedulerDelivery.replyTo
+      ) {
+        throw new Error(`Task ${task.id} current scheduler Message provenance does not match its wake occurrence.`)
+      }
+      const body = currentMessage.parts
+        .filter((part): part is Message.TextPart => part.type === "text")
+        .map((part) => part.text)
+        .join("\n")
+        .trim()
+      if (!body) throw new Error(`Task ${task.id} current scheduler Message has no visible text body.`)
+      ctx.push(
+        `- scheduler_event_id=${event.rootMessage.schedulerDelivery.eventID}; scheduler_inbox_id=${event.rootMessage.schedulerDelivery.inboxID}; thread_id=${event.rootMessage.schedulerDelivery.threadID}`,
+      )
+      ctx.push(
+        `- message_kind=${schedulerPayload.message_kind}; subject=${JSON.stringify(schedulerPayload.subject)}; source_endpoint=${schedulerEvent.source}; reply_to=${schedulerEvent.replyTo ?? "<none>"}`,
+      )
+      ctx.push(
+        `- The canonical Message is the visible current user input in the Orchestrator Session (body length ${body.length}). Act on this exact envelope and body now.${schedulerPayload.message_kind === "request" ? ` Reply through scheduler_message with kind=reply and reply_to=${event.rootMessage.schedulerDelivery.eventID}.` : ""}`,
+      )
+    }
     ctx.push("")
   }
   if (event?.missionAcceptanceResume) {

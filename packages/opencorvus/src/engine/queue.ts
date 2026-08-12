@@ -19,7 +19,12 @@ import { isDeepStrictEqual } from "node:util"
 import { ProtocolStore } from "@/protocol/store"
 import { Database, and, desc, eq, isNull, sql } from "@/storage/db"
 import { Log } from "@/util/log"
-import { EngineArtifactTable, EngineTaskCancellationAuthorityTable, EngineTaskTable } from "./engine.sql"
+import {
+  EngineArtifactTable,
+  EngineArtifactVersionTable,
+  EngineTaskCancellationAuthorityTable,
+  EngineTaskTable,
+} from "./engine.sql"
 import {
   insertEngineArtifact,
   patchEngineArtifact,
@@ -74,6 +79,15 @@ import {
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { exactEngineArtifactLocator } from "@/artifact-catalog"
 import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
+
+const immutableArtifactEnqueueOrdinal = sql<number>`coalesce(
+  (
+    SELECT min(${EngineArtifactVersionTable.catalog_revision})
+    FROM ${EngineArtifactVersionTable}
+    WHERE ${EngineArtifactVersionTable.artifact_id} = ${EngineArtifactTable.id}
+  ),
+  ${EngineArtifactTable.catalog_revision}
+)`
 
 export { TaskQueueError } from "./task-directory"
 
@@ -535,7 +549,10 @@ export function reconcilePendingCoordinationRequestWakes(): number {
           sql`json_extract(${EngineArtifactTable.payload}, '$.status') = 'pending'`,
         ),
       )
-      .orderBy(EngineArtifactTable.time_created, EngineArtifactTable.id)
+      .orderBy(
+        immutableArtifactEnqueueOrdinal,
+        EngineArtifactTable.id,
+      )
       .all(),
   )
   let reconciled = 0
@@ -741,14 +758,21 @@ export function persistQueuedRootMessageWakeInTransaction(
   input: {
     task: TaskRow
     messageID: string
-    kind: "operator" | "orchestrator"
+    kind: "operator" | "orchestrator" | "mission"
+    schedulerDelivery?: import("@/task-api/task-root-message").SchedulerDeliveryReference
     now: number
   },
 ): string {
   return persistQueuedOperatorWakeInTransaction(
     db,
     input.task,
-    { rootMessage: { messageID: input.messageID, kind: input.kind } },
+    {
+      rootMessage: {
+        messageID: input.messageID,
+        kind: input.kind,
+        ...(input.schedulerDelivery ? { schedulerDelivery: input.schedulerDelivery } : {}),
+      },
+    },
     { messageID: input.messageID },
     input.now,
   )
@@ -1110,7 +1134,10 @@ function findQueuedOperatorWakeHead(taskID: string): QueuedOperatorWakeHead | un
           sql`${EngineArtifactTable.label} IN ('pending', 'running', 'delivery_failed')`,
         ),
       )
-      .orderBy(EngineArtifactTable.time_created, EngineArtifactTable.id)
+      .orderBy(
+        immutableArtifactEnqueueOrdinal,
+        EngineArtifactTable.id,
+      )
       .get(),
   )
   if (!row) return undefined
@@ -1124,6 +1151,13 @@ function findQueuedOperatorWakeHead(taskID: string): QueuedOperatorWakeHead | un
     ingress: payload,
     event: payload.event,
   }
+}
+
+export const QueueOrderingTestHooks = {
+  head(taskID: string): { id: string; label: string } | undefined {
+    const head = findQueuedOperatorWakeHead(taskID)
+    return head ? { id: head.id, label: head.label } : undefined
+  },
 }
 
 function findNextPendingQueuedOperatorWake(taskID: string):
@@ -1228,7 +1262,10 @@ function reconcileHistoricalNonTailFailedIngress(taskID: string, wakeID: string)
           sql`${EngineArtifactTable.label} IN ('pending', 'running', 'delivery_failed')`,
         ),
       )
-      .orderBy(EngineArtifactTable.time_created, EngineArtifactTable.id)
+      .orderBy(
+        immutableArtifactEnqueueOrdinal,
+        EngineArtifactTable.id,
+      )
       .get()
     if (head?.id !== wakeID || head.label !== "delivery_failed") return false
     const activeDelivery = db

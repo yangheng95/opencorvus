@@ -4,6 +4,8 @@ import { findTask, listStartedIncompleteTaskIDs } from "./store"
 import { taskRootDirectory } from "./task-directory"
 import { listGlobalMissionProcessRecoveryCandidates } from "@/mission/session"
 import { recoverMissionProcessSession } from "@/mission/process-recovery"
+import { listPendingSchedulerProjectIDs } from "@/protocol/delivery"
+import { drainSchedulerMessagesForCurrentProject } from "@/protocol/scheduler-message"
 
 export type StartedTaskProjectRecoveryFailure = {
   directory: string
@@ -124,6 +126,12 @@ export async function recoverStartedTaskExecutions(input?: {
   const discovery = discoverStartedTaskExecutionDirectories(input)
   const missionCandidates = listGlobalMissionProcessRecoveryCandidates(input)
   const directories = [...discovery.directories]
+  for (const projectID of listPendingSchedulerProjectIDs()) {
+    const project = Project.get(projectID)
+    if (!project) continue
+    if (input?.scopeProjectWorktree && !Project.samePath(project.worktree, input.scopeProjectWorktree)) continue
+    if (!directories.some((directory) => Project.samePath(directory, project.worktree))) directories.push(project.worktree)
+  }
   for (const candidate of missionCandidates) {
     if (!directories.some((directory) => Project.samePath(directory, candidate.directory))) {
       directories.push(candidate.directory)
@@ -151,6 +159,7 @@ export async function recoverStartedTaskExecutions(input?: {
               })
             }
           }
+          await drainSchedulerMessagesForCurrentProject()
         },
       }),
   })

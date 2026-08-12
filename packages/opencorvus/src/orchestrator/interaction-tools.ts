@@ -3,10 +3,9 @@ import z from "zod"
 import { Log } from "@/util/log"
 import { Question } from "@/question"
 import { requireTask } from "@/engine/store"
-import { MessageStore } from "@/session/message-store"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
-import { TaskRootMessageProvenance, type TaskRootMessageKind } from "@/task-api/task-root-message"
+import { TaskRootMessageProvenance, getTaskRootMessage, type TaskRootMessageKind } from "@/task-api/task-root-message"
 import { requireTaskOrchestratorToolExecutionContext } from "./tool-execution-context"
 
 const log = Log.create({ service: "task-tools" })
@@ -19,7 +18,7 @@ export const ORCHESTRATOR_QUESTION_DESCRIPTION =
 export function authorizedTaskRootMessagesForWake(input: {
   rootMessage?: {
     messageID: string
-    kind: "operator" | "orchestrator"
+    kind: "operator" | "orchestrator" | "mission"
   }
   taskIntent?: {
     supersededOperatorMessageIDs: readonly string[]
@@ -69,7 +68,7 @@ export function createOrchestratorInteractionTools(input: {
   return {
     read_task_message: tool({
       description:
-        "Read one exact already-recorded task-root message ID explicitly authorized by this wake's Wake Provenance as the current root message, Mission acceptance-resume message, or an ordered superseded Retry/Replan operator message. The initial Task creator request is already the normal User Request and is not eligible for this tool. This tool never grants broad root-Session history access.",
+        "Read the exact real-participant Task-root Message authorized by the current wake. For a current rootMessage, call this before any wait, lifecycle decision, or scheduler response so the new Mission/operator/orchestrator input is not inferred from older conversation history. The initial Task creator request is already the normal User Request and is not eligible for this tool. This tool never grants broad root-Session history access.",
       inputSchema: z
         .object({
           message_id: z.string().min(1).describe("Exact authorized task-root message ID."),
@@ -85,7 +84,7 @@ export function createOrchestratorInteractionTools(input: {
           throw new Error(`Task-root message ${wake.messageID} does not belong to the active project`)
         }
         await Session.assertLineageInProject({ sessionID: task.session_id, projectID: task.project_id })
-        const message = await MessageStore.get({ sessionID: task.session_id, messageID: message_id })
+        const message = await getTaskRootMessage(task, message_id)
         if (message.info.role !== "user") {
           throw new Error(`Task-root message ${message_id} must have role=user, received ${message.info.role}`)
         }
