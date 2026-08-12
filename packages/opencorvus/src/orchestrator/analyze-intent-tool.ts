@@ -31,10 +31,7 @@ export function createAnalyzeIntentTool<TSchema extends z.ZodType<AnalyzeIntentI
   agentSessionID: string
   signal?: AbortSignal
   requireTask: () => TaskRow
-  analyzeIntent?: typeof IntentAnalysisAgent.analyze
-  persistIntentArtifact?: typeof persistIntentAnalysisArtifact
 }) {
-  const persistIntentArtifact = input.persistIntentArtifact ?? persistIntentAnalysisArtifact
   return {
     analyze_intent: tool({
       description:
@@ -50,7 +47,7 @@ export function createAnalyzeIntentTool<TSchema extends z.ZodType<AnalyzeIntentI
         const agentID = execution.agentID
         let output
         try {
-          output = await (input.analyzeIntent ?? IntentAnalysisAgent.analyze)({
+          output = await IntentAnalysisAgent.analyze({
             agentID,
             packageRevision: execution.projectedAgent.packageRevision,
             workScope: execution.workScope,
@@ -98,7 +95,6 @@ export function createAnalyzeIntentTool<TSchema extends z.ZodType<AnalyzeIntentI
             header: string
             answers: string[]
           }> = []
-          let clarificationQuestionID: string | undefined
           let clarifiedUserRequest: string | undefined
           if (blockers.length > 0) {
             const clarification = await Question.askAndFormat({
@@ -111,7 +107,6 @@ export function createAnalyzeIntentTool<TSchema extends z.ZodType<AnalyzeIntentI
             })
             if (clarification.status !== "answered") {
               clarificationStatus = clarification.status
-              clarificationQuestionID = clarification.requestID
             } else {
               const answers = clarification.answers
               const answered = clarificationAnswers({ clarifications: blockers, answers })
@@ -124,7 +119,7 @@ export function createAnalyzeIntentTool<TSchema extends z.ZodType<AnalyzeIntentI
             }
           }
           const locator = Database.transaction((db) =>
-            persistIntentArtifact(db, {
+            persistIntentAnalysisArtifact(db, {
               taskID: input.taskID,
               sessionID: output.sessionID,
               finalMessageID: output.finalMessageID,
@@ -167,19 +162,6 @@ export function createAnalyzeIntentTool<TSchema extends z.ZodType<AnalyzeIntentI
             reason:
               "Canonical Intent Analysis semantics are stored only in the exact Task Artifact locator.",
           })
-          if (clarificationStatus === "rejected" || clarificationStatus === "expired") {
-            if (!clarificationQuestionID) {
-              throw new Error(`Intent blocker ${clarificationStatus} without an exact Question occurrence`)
-            }
-            return DispatchOutcome.domainBlocked({
-              sessionID: output.sessionID,
-              finalMessageID: output.finalMessageID,
-              domain: "intent_analysis",
-              domainArtifact: locator,
-              questionID: clarificationQuestionID,
-              questionStatus: clarificationStatus,
-            })
-          }
           return DispatchOutcome.terminal({
             sessionID: output.sessionID,
             finalMessageID: output.finalMessageID,

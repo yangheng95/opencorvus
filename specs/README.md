@@ -1,9 +1,5 @@
 # Specs Storage Index
 
-Latest startup-surface visual redesign: [`2026-08-12-startup-surface-visual-redesign.md`](records/2026-08/2026-08-12-startup-surface-visual-redesign.md).
-
-Startup-surface production-page visual evidence: [`dark loading`](artifacts/2026-08-12-startup-surface-dark-loading.png), [`dark failure`](artifacts/2026-08-12-startup-surface-dark-failure.png), and [`light loading`](artifacts/2026-08-12-startup-surface-light-loading.png).
-
 Latest Overlay UI/UX continuous audit and repair: [`2026-08-12-overlay-ui-ux-continuous-audit.md`](records/2026-08/2026-08-12-overlay-ui-ux-continuous-audit.md).
 
 Latest repository code-smell remediation program: [`2026-08-12-code-smell-remediation-program.md`](records/2026-08/2026-08-12-code-smell-remediation-program.md).
