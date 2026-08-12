@@ -1,13 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "version": "0.0.40-beta",
+  "version": "0.0.42-beta",
   "name": "opencorvus",
   "type": "module",
   "license": "MIT",
   "private": true,
   "scripts": {
     "typecheck": "node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit",
-    "test": "bun script/run-with-inactivity.ts --inactivity-ms 120000 -- bun script/run-test-files.ts --concurrency 2 test",
+    "test": "bun script/run-tests.ts",
     "build": "bun run script/build.ts",
     "check:permission-modes": "bun run script/permission-modes-check.ts",
     "check:scheduled-automations-e2e": "bun run script/scheduled-automations-e2e.ts",
