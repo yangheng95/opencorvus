@@ -26,7 +26,7 @@ export async function upgrade() {
 
   if (method === "unknown") return
   await Installation.upgrade(method, latest)
-    .then(() => Bus.publish(Installation.Event.Updated, { version: latest }))
+    .then((receipt) => Bus.publish(Installation.Event.Updated, { version: receipt.observedVersion }))
     .catch((err) => {
       log.error("upgrade failed", { method, target: latest, error: String(err) })
     })
