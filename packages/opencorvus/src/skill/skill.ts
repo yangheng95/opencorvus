@@ -379,7 +379,13 @@ export namespace Skill {
 
   export async function materialize(info: Info) {
     if (info.builtin) return materializeBuiltin(info.name)
-    if (!info.bundle) return info.location
+    if (!info.bundle) {
+      const directory = path.dirname(info.location)
+      if (Filesystem.contains(path.resolve(Discovery.dir()), path.resolve(directory))) {
+        await Discovery.requirePublishedSnapshot(directory, { skill: info.name })
+      }
+      return info.location
+    }
     const current = bundleMaterializations.get(info.bundle.key)
     if (current) return current
     const materialized = installBundle(info)

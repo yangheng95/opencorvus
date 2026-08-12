@@ -15,7 +15,7 @@ import {
   type EngineArtifactPublishResult,
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import type { TaskArtifactRef } from "@opencorvus-ai/plugin/task-artifact"
-import { createHash, randomUUID } from "node:crypto"
+import { createHash, createHmac, randomBytes, randomUUID, timingSafeEqual } from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
 import fuzzysort from "fuzzysort"
@@ -104,6 +104,7 @@ const CATALOG_DIAGNOSTIC_PREVIEW_CHARS = 2_048
 const CATALOG_ENTRY_MEDIA_TYPE_LIMIT = 64
 const CATALOG_FACET_VALUE_LIMIT = 100
 const ARTIFACT_SEARCH_ABI_VERSION = 1
+const ARTIFACT_CURSOR_AUTHORITY_KEY = randomBytes(32)
 const ARTIFACT_FUZZY_SCORE_MINIMUM = 0.1
 const CATALOG_SOURCE_ORDER: Record<ArtifactCatalogEntry["source"], number> = {
   engine_artifact: 0,
@@ -135,7 +136,7 @@ type CatalogSourceSnapshot = Readonly<{
 }>
 
 type CatalogCursor = Readonly<{
-  version: 8
+  version: 9
   searchABIVersion: number
   authoritySHA256: string
   filtersSHA256: string
@@ -152,7 +153,7 @@ type CatalogCursor = Readonly<{
 type CatalogSourceCode = 0 | 1
 
 type CatalogCursorPayloadWire = readonly [
-  version: 8,
+  version: 9,
   searchABIVersion: number,
   authoritySHA256: string,
   filtersSHA256: string,
@@ -166,7 +167,7 @@ type CatalogCursorPayloadWire = readonly [
   afterSortTuple: readonly (string | number)[],
 ]
 
-type CatalogCursorWire = readonly [...CatalogCursorPayloadWire, integritySHA256: string]
+type CatalogCursorWire = readonly [...CatalogCursorPayloadWire, authenticityHMACSHA256: string]
 
 export type ArtifactReadResult = Readonly<{
   chunk: ArtifactReadChunk
@@ -264,13 +265,17 @@ function expandCursorDigest(digest: string): string | undefined {
   return bytes.toString("hex")
 }
 
+function cursorAuthenticity(payload: CatalogCursorPayloadWire): Buffer {
+  return createHmac("sha256", ARTIFACT_CURSOR_AUTHORITY_KEY).update(stableJSON(payload)).digest()
+}
+
 function encodeCursor(cursor: CatalogCursor): string {
   const availableSourceMask = cursor.availableSources.reduce(
     (mask, source) => mask | (source === "engine_artifact" ? 1 : 2),
     0,
   )
   const payload: CatalogCursorPayloadWire = [
-    8,
+    9,
     cursor.searchABIVersion,
     compactCursorDigest(cursor.authoritySHA256),
     compactCursorDigest(cursor.filtersSHA256),
@@ -287,7 +292,7 @@ function encodeCursor(cursor: CatalogCursor): string {
     cursor.providerErrors.map((error) => [catalogSourceCode(error.source), error.message]),
     cursor.afterSortTuple,
   ]
-  const wire: CatalogCursorWire = [...payload, compactCursorDigest(sha256(stableJSON(payload)))]
+  const wire: CatalogCursorWire = [...payload, cursorAuthenticity(payload).toString("base64url")]
   return Buffer.from(stableJSON(wire), "utf8").toString("base64url")
 }
 
@@ -300,13 +305,23 @@ function decodeCursor(input: string): CatalogCursor {
   }
   if (!Array.isArray(decoded)) throw new Error("artifact_search cursor must be a compact tuple")
   const value = decoded as unknown as Partial<CatalogCursorWire>
-  const integritySHA256 = typeof value[12] === "string" ? expandCursorDigest(value[12]) : undefined
-  if (value.length !== 13 || value[0] !== 8 || !integritySHA256) {
+  const suppliedAuthenticity =
+    typeof value[12] === "string" && /^[A-Za-z0-9_-]{43}$/.test(value[12])
+      ? Buffer.from(value[12], "base64url")
+      : undefined
+  if (
+    value.length !== 13 ||
+    value[0] !== 9 ||
+    !suppliedAuthenticity ||
+    suppliedAuthenticity.byteLength !== 32 ||
+    suppliedAuthenticity.toString("base64url") !== value[12]
+  ) {
     throw new Error("artifact_search cursor has an invalid shape")
   }
   const payload = value.slice(0, 12) as unknown as CatalogCursorPayloadWire
-  if (sha256(stableJSON(payload)) !== integritySHA256) {
-    throw new Error("artifact_search cursor integrity check failed")
+  const expectedAuthenticity = cursorAuthenticity(payload)
+  if (!timingSafeEqual(suppliedAuthenticity, expectedAuthenticity)) {
+    throw new Error("artifact_search cursor authenticity check failed")
   }
   const sourceSnapshots = value[8]
   const availableSourceMask = value[9]
@@ -364,7 +379,7 @@ function decodeCursor(input: string): CatalogCursor {
     throw new Error("artifact_search cursor has an invalid shape")
   }
   const cursor: CatalogCursor = {
-    version: 8,
+    version: 9,
     searchABIVersion: value[1],
     authoritySHA256,
     filtersSHA256,
@@ -1179,7 +1194,7 @@ export async function searchTaskArtifacts(input: {
     next_cursor:
       hasMore && last
         ? encodeCursor({
-            version: 8,
+            version: 9,
             searchABIVersion: ARTIFACT_SEARCH_ABI_VERSION,
             authoritySHA256: scopeSHA256,
             filtersSHA256: filterSHA256,
