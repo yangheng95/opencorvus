@@ -181,7 +181,7 @@ After implementation and first-pass verification, an Agent that did not implemen
 - [x] Protocol schema/store/delivery implemented.
 - [x] Mission/Task and scheduler tools integrated.
 - [x] Old paths deleted.
-- [x] Focused verification passed: 17 tests, 121 assertions, typecheck, documentation contract, route inventory, and diff check.
-- [x] Real-provider end to end passed on the final repaired tree with `deepseek/deepseek-chat`; final evidence nonce `DUPLEX-9d25a731da` is recorded in `specs/artifacts/mission-task-duplex-e2e-result.json`.
+- [x] Focused protocol/Mission/migration verification passed: 22 tests and 130 assertions. The final repaired tree also passed the 11-test Memory Organizer stream suite, the 19-test runtime settlement suite, the 12-test durable Bus suite, the 3 focused recovery/listener ownership tests, package typecheck, documentation contract, route inventory, and diff check.
+- [x] Real-provider end to end reached every protocol and projection acceptance condition on the final repaired tree with `deepseek/deepseek-chat`; final evidence nonce `DUPLEX-9ef82e64e1` records 11/11 delivered protocol inboxes, nine canonical scheduler Tool occurrences, two terminal notifications, and two hydrated Mission turn artifacts in `specs/artifacts/mission-task-duplex-e2e-result.json`. The checker completed `server.stop`, database cleanup, and exited with code 0.
 - [x] Independent gate passed with no unresolved findings.
-- [ ] Scoped commit and push completed.
+- [x] Scoped commit and push completed.

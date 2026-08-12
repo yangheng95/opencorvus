@@ -66,6 +66,7 @@ for (const key of [
 }
 process.env.OPENCORVUS_HOME = runtimeRoot
 process.env.OPENCORVUS_TEST_HOME = runtimeRoot
+process.env.OPENCORVUS_TEST_PROCESS_ROOT = root
 process.env.OPENCORVUS_CONFIG_CONTENT = JSON.stringify({ permission: "allow", model, small_model: model })
 process.env.OPENCORVUS_TASK_PROCESS_MODE = "native"
 
@@ -80,6 +81,7 @@ const [
   { ProtocolEventTable, ProtocolInboxTable },
   { MessageTable, PartTable },
   { EngineTaskTable },
+  { ProcessSupervisor },
 ] = await Promise.all([
   import("@/cli/server-runtime"),
   import("@/engine/host-recovery"),
@@ -88,6 +90,7 @@ const [
   import("@/protocol/protocol.sql"),
   import("@/session/session.sql"),
   import("@/engine/engine.sql"),
+  import("@/shell/process-supervisor"),
 ])
 
 const prepared = await listenWithRecoveredServerRuntime({
@@ -100,6 +103,8 @@ const base = server.url.toString().replace(/\/$/, "")
 const missionURL = new URL(`${base}/mission/wake`)
 missionURL.searchParams.set("directory", projectDirectory)
 
+let primaryFailure: unknown
+try {
 const missionPrompt = [
   `This is a focused scheduler duplex acceptance run with nonce ${nonce}.`,
   "A visible scheduler reply Message is conclusive delivery evidence for the request named by reply_to. Act on it in that same wake; never query history or continue waiting for that already-delivered reply.",
@@ -109,6 +114,7 @@ const missionPrompt = [
   "After START_PEER arrives, Initiator A sends kind=request to that exact sibling Task B with subject PEER_CONFIRM and the nonce. After B's correlated reply arrives, A sends kind=request to Mission subject DECISION with the nonce. After Mission's correlated reply arrives, A notifies Mission subject A_DONE with the nonce and immediately completes the Task through the normal Task lifecycle.",
   "When both READY_A and READY_B arrive, send scheduler_message kind=request to exact Initiator A, subject START_PEER, with a message containing the exact responder B Task ID and nonce.",
   `When DECISION arrives from A, reply through scheduler_message with the exact request event_id and nonce. When A_DONE arrives, make the next normal Mission response include the exact literal ${nonce} and acknowledge the successful Mission-Task/sibling duplex chain; do not query Tasks or call another tool before that acknowledgement.`,
+  "After that acknowledgement, end the Mission without publishing interactive artifacts or performing unrelated follow-up work.",
   "Do not substitute panel messages, operator messages, polling, or completion for any scheduler_message step.",
 ].join("\n")
 
@@ -127,8 +133,10 @@ function endpoint(value: string | null) {
 }
 
 let lastActivityKey = ""
+let lastAcceptanceKey = ""
 let deadline = Date.now() + INACTIVITY_MS
 let terminal = false
+let lastAcceptanceState: Record<string, unknown> = {}
 let evidence:
   | {
       taskAID: string
@@ -361,6 +369,22 @@ while (Date.now() < deadline) {
             )
           })
         })
+      lastAcceptanceState = {
+        chainLength: exactChain.length,
+        allDelivered,
+        allSourceToolsCompleted,
+        exactTaskTargetAuthors,
+        missionAck: Boolean(missionAck),
+        taskACompleted: taskA.time_completed !== null,
+        taskBCompleted: taskB.time_completed !== null,
+        terminalReceiptsDelivered,
+        terminalWakeRepliesCompleted,
+      }
+      const acceptanceKey = JSON.stringify(lastAcceptanceState)
+      if (acceptanceKey !== lastAcceptanceKey) {
+        lastAcceptanceKey = acceptanceKey
+        process.stdout.write(`[duplex-e2e] acceptance=${acceptanceKey}\n`)
+      }
       if (
         allDelivered &&
         allSourceToolsCompleted &&
@@ -387,12 +411,15 @@ while (Date.now() < deadline) {
   await Bun.sleep(500)
 }
 
-let primaryFailure: unknown
-try {
-  if (!evidence) throw new Error(`Mission/Task scheduler duplex did not converge after activity ${lastActivityKey}`)
+  if (!evidence) {
+    throw new Error(
+      `Mission/Task scheduler duplex did not converge after activity ${lastActivityKey}: ${JSON.stringify(lastAcceptanceState)}`,
+    )
+  }
   const turnArtifactsURL = new URL(`${base}/session/${encodeURIComponent(mission.sessionID)}/turn-artifacts`)
   turnArtifactsURL.searchParams.set("directory", projectDirectory)
-  const turnArtifactsResponse = await fetch(turnArtifactsURL)
+  process.stdout.write(`[duplex-e2e] protocol-evidence-ready nonce=${nonce}\n`)
+  const turnArtifactsResponse = await fetch(turnArtifactsURL, { signal: AbortSignal.timeout(30_000) })
   if (!turnArtifactsResponse.ok) {
     throw new Error(`Mission turn-artifact hydration failed: ${turnArtifactsResponse.status} ${await turnArtifactsResponse.text()}`)
   }
@@ -400,6 +427,7 @@ try {
     messageID?: string
     task?: { id?: string; status?: string }
   }>
+  process.stdout.write(`[duplex-e2e] turn-artifacts=${turnArtifacts.length}\n`)
   for (const taskID of [evidence.taskAID, evidence.taskBID]) {
     if (!turnArtifacts.some((entry) => entry.task?.id === taskID && entry.task.status === "completed")) {
       throw new Error(`Mission turn-artifact hydration is missing completed Task ${taskID}.`)
@@ -441,23 +469,33 @@ try {
   process.stdout.write(`[duplex-e2e] PASS evidence=${resultPath}\n`)
 } catch (error) {
   primaryFailure = error
+  process.stderr.write(`[duplex-e2e] failure=${error instanceof Error ? error.stack ?? error.message : String(error)}\n`)
 } finally {
   const cleanupFailures: unknown[] = []
+  process.stdout.write("[duplex-e2e] cleanup=processes:start\n")
+  try {
+    await ProcessSupervisor.disposeLiveProcessesUnder(projectDirectory)
+  } catch (error) {
+    cleanupFailures.push(error)
+  }
+  process.stdout.write("[duplex-e2e] cleanup=processes:done server:start\n")
   try {
     await server.stop(true)
   } catch (error) {
     cleanupFailures.push(error)
+    try {
+      await Instance.disposeAll()
+    } catch (disposeError) {
+      cleanupFailures.push(disposeError)
+    }
   }
-  try {
-    await Instance.disposeAll()
-  } catch (error) {
-    cleanupFailures.push(error)
-  }
+  process.stdout.write("[duplex-e2e] cleanup=server:done database:start\n")
   try {
     Database.close()
   } catch (error) {
     cleanupFailures.push(error)
   }
+  process.stdout.write("[duplex-e2e] cleanup=database:done\n")
   if (!primaryFailure) {
     try {
       await fs.rm(root, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 })

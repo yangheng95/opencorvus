@@ -5,7 +5,7 @@ import { taskRootDirectory } from "./task-directory"
 import { listGlobalMissionProcessRecoveryCandidates } from "@/mission/session"
 import { recoverMissionProcessSession } from "@/mission/process-recovery"
 import { listPendingSchedulerProjectIDs } from "@/protocol/delivery"
-import { drainSchedulerMessagesForCurrentProject } from "@/protocol/scheduler-message"
+import { drainSchedulerMessagesForProject } from "@/protocol/scheduler-message"
 
 export type StartedTaskProjectRecoveryFailure = {
   directory: string
@@ -159,7 +159,7 @@ export async function recoverStartedTaskExecutions(input?: {
               })
             }
           }
-          await drainSchedulerMessagesForCurrentProject()
+          await drainSchedulerMessagesForProject()
         },
       }),
   })

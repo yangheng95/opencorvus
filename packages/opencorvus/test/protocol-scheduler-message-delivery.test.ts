@@ -4,7 +4,7 @@ import { missionChildResultWake } from "@/conversation/turn-artifacts"
 import { insertEngineArtifact } from "@/engine/artifact"
 import { patchEngineArtifact } from "@/engine/artifact"
 import { Identifier } from "@/id/id"
-import { Instance } from "@/project/instance"
+import { Instance, InstanceProcessAdmissionClosedError } from "@/project/instance"
 import {
   SchedulerMessageAuthorityError,
   SchedulerMessageConflictError,
@@ -25,7 +25,8 @@ import { SchedulerMessagePayload } from "@/protocol/schema"
 import { ProtocolStore } from "@/protocol/store"
 import { Session } from "@/session"
 import { MessageTable, PartTable } from "@/session/session.sql"
-import { Database, asc, eq } from "@/storage/db"
+import { Database, DatabaseEffectAdmissionClosedError, asc, eq } from "@/storage/db"
+import { RuntimeExecutionAdmissionClosedError } from "@/runtime/execution-settlement"
 import { writeTaskUpdateInTransaction } from "@/engine/state"
 import { installSchedulerMessageDrainSignal } from "@/protocol/scheduler-drain-signal"
 import {
@@ -39,11 +40,14 @@ import { MessageStore } from "@/session/message-store"
 import { Message } from "@/session/message"
 import { EngineService } from "@/task-api"
 import {
+  SchedulerMessageDeliveryService,
   SchedulerMessageTestHooks,
+  drainSchedulerMessagesForProject,
   drainSchedulerMessagesForCurrentProject,
   sendSchedulerMessage,
 } from "@/protocol/scheduler-message"
 import { SessionWake } from "@/session/wake"
+import { Scheduler } from "@/scheduler"
 import { persistQueuedTask } from "@/engine/pipeline"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
@@ -139,6 +143,26 @@ async function persistRunnerReply(input: {
 }
 
 describe("durable scheduler.message delivery", () => {
+  test("classifies typed shutdown admission errors and reports a colliding application failure", () => {
+    const reported: unknown[] = []
+    using _reported = SchedulerMessageTestHooks.installSignalDrainFailureReport((error) => reported.push(error))
+    const applicationFailure = new Error("application admission is closed while validating a real delivery")
+
+    const dispositions = [
+      SchedulerMessageTestHooks.handleSignalDrainFailure(new InstanceProcessAdmissionClosedError()),
+      SchedulerMessageTestHooks.handleSignalDrainFailure(new DatabaseEffectAdmissionClosedError("scheduler drain")),
+      SchedulerMessageTestHooks.handleSignalDrainFailure(
+        new RuntimeExecutionAdmissionClosedError("protocol_publication"),
+      ),
+      SchedulerMessageTestHooks.handleSignalDrainFailure(applicationFailure),
+    ]
+
+    expect({ dispositions, reported }).toEqual({
+      dispositions: ["lifecycle_closed", "lifecycle_closed", "lifecycle_closed", "reported"],
+      reported: [applicationFailure],
+    })
+  })
+
   test("parses exactly one canonical source occurrence", () => {
     const base = {
       protocol: "scheduler-message-v1" as const,
@@ -989,6 +1013,465 @@ describe("durable scheduler.message delivery", () => {
       },
     })
   })
+
+  test("coalesces host recovery, global polling, and low-latency signaling behind one Project drain owner", async () => {
+    await using project = await memoryProject()
+    let projectID = ""
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        projectID = Instance.project.id
+        const missionID = "mission-single-drain-owner"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Single drain owner Mission",
+          metadata: { mission: { id: missionID } },
+        })
+        const taskRoot = await Session.create({ kind: "orchestrator", title: "Single owner source Task" })
+        const taskID = Identifier.ascending("task")
+        const now = Date.now()
+        Database.use((db) =>
+          db
+            .insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: projectID,
+              session_id: taskRoot.id,
+              source: "mission",
+              product_pillar: "code",
+              title: "Single owner source Task",
+              request: "Recover one exact Mission wake",
+              metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+              time_started: now,
+              time_created: now,
+              time_updated: now,
+            })
+            .run(),
+        )
+        const sourceMessageID = "msg_single_drain_owner"
+        const sourcePartID = "prt_single_drain_owner"
+        persistSourceOccurrence(taskRoot.id, sourceMessageID, sourcePartID, "Recover this wake once")
+        const receipt = Database.transaction((db) =>
+          enqueueSchedulerMessageInTransaction(db, {
+            invocationID: "single-drain-owner",
+            kind: "notification",
+            source: {
+              kind: "task_scheduler",
+              project_id: projectID,
+              task_id: taskID,
+              root_session_id: taskRoot.id,
+            },
+            target: {
+              kind: "mission_scheduler",
+              project_id: projectID,
+              mission_id: missionID,
+              session_id: mission.id,
+            },
+            subject: "Single drain owner",
+            sourceMessageID,
+            sourcePartID,
+          }),
+        )
+        const ownerID = "single-drain-owner-lease"
+        claimNextSchedulerDelivery({
+          actor: "session",
+          actorID: mission.id,
+          ownerID,
+          leaseMilliseconds: 60_000,
+        })
+        const occurrence = schedulerTargetOccurrenceIdentity(receipt.inboxID)
+        Database.transaction((db) => {
+          db.insert(MessageTable)
+            .values({
+              id: occurrence.messageID,
+              session_id: mission.id,
+              data: {
+                role: "user",
+                author: "orchestrator",
+                extra: {
+                  wake_reason: {
+                    source: "scheduler.message",
+                    eventID: receipt.eventID,
+                    inboxID: receipt.inboxID,
+                  },
+                },
+              } as never,
+              time_created: now + 1,
+              time_updated: now + 1,
+            })
+            .run()
+          settleSchedulerDeliveryInTransaction(db, {
+            inboxID: receipt.inboxID,
+            ownerID,
+            result: { kind: "session_wake", message_id: occurrence.messageID },
+          })
+        })
+      },
+    })
+
+    let release!: () => void
+    const blocked = new Promise<void>((resolve) => (release = resolve))
+    let markEntered!: () => void
+    const entered = new Promise<void>((resolve) => (markEntered = resolve))
+    let executions = 0
+    using _wakeLoop = SessionWake.TestHooks.installWakeLoopExecutor(async () => {
+      executions += 1
+      markEntered()
+      await blocked
+    })
+    const signaled = SchedulerMessageTestHooks.requestProjectDrain(projectID, project.path)
+    await entered
+    const recovered = Instance.provide({ directory: project.path, fn: () => drainSchedulerMessagesForProject() })
+    const polled = SchedulerMessageDeliveryService.runDueNow()
+    await Bun.sleep(25)
+    expect(executions).toBe(1)
+    release()
+    await Promise.all([signaled, recovered, polled])
+    expect(executions).toBe(1)
+  })
+
+  test("drains an independent Project while another Project wake is blocked", async () => {
+    await using first = await memoryProject()
+    await using second = await memoryProject()
+    const seed = async (directory: string, suffix: string) => {
+      let sessionID = ""
+      await Instance.provide({
+        directory,
+        fn: async () => {
+          const projectID = Instance.project.id
+          const missionID = `mission-concurrent-poll-${suffix}`
+          const mission = await Session.create({
+            kind: "mission",
+            title: `Concurrent poll Mission ${suffix}`,
+            metadata: {
+              mission: { id: missionID },
+              configOverlay: { model: "openai/gpt-5.6-sol" },
+            },
+          })
+          sessionID = mission.id
+          const taskRoot = await Session.create({ kind: "orchestrator", title: `Poll source Task ${suffix}` })
+          const taskID = Identifier.ascending("task")
+          const now = Date.now()
+          Database.use((db) =>
+            db
+              .insert(EngineTaskTable)
+              .values({
+                id: taskID,
+                project_id: projectID,
+                session_id: taskRoot.id,
+                source: "mission",
+                product_pillar: "code",
+                title: `Poll source Task ${suffix}`,
+                request: `Recover Project ${suffix}`,
+                metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+                time_started: now,
+                time_created: now,
+                time_updated: now,
+              })
+              .run(),
+          )
+          const sourceMessageID = `msg_concurrent_poll_${suffix}`
+          const sourcePartID = `prt_concurrent_poll_${suffix}`
+          persistSourceOccurrence(taskRoot.id, sourceMessageID, sourcePartID, `Concurrent poll ${suffix}`)
+          Database.transaction((db) =>
+            enqueueSchedulerMessageInTransaction(db, {
+              invocationID: `concurrent-poll-${suffix}`,
+              kind: "notification",
+              source: {
+                kind: "task_scheduler",
+                project_id: projectID,
+                task_id: taskID,
+                root_session_id: taskRoot.id,
+              },
+              target: {
+                kind: "mission_scheduler",
+                project_id: projectID,
+                mission_id: missionID,
+                session_id: mission.id,
+              },
+              subject: `Concurrent poll ${suffix}`,
+              sourceMessageID,
+              sourcePartID,
+            }),
+          )
+        },
+      })
+      return sessionID
+    }
+    const blockedSessionID = await seed(first.path, "blocked")
+    const independentSessionID = await seed(second.path, "independent")
+    let release!: () => void
+    const blocked = new Promise<void>((resolve) => (release = resolve))
+    let markBlockedEntered!: () => void
+    const blockedEntered = new Promise<void>((resolve) => (markBlockedEntered = resolve))
+    let markIndependentCompleted!: () => void
+    const independentCompleted = new Promise<void>((resolve) => (markIndependentCompleted = resolve))
+    const executions: string[] = []
+    using _wakeLoop = SessionWake.TestHooks.installWakeLoopExecutor(async ({ sessionID }) => {
+      executions.push(sessionID)
+      if (sessionID === blockedSessionID) {
+        markBlockedEntered()
+        await blocked
+        return
+      }
+      if (sessionID === independentSessionID) markIndependentCompleted()
+    })
+    const controller = new AbortController()
+    const polling = SchedulerMessageTestHooks.poll(controller.signal)
+    await blockedEntered
+    await independentCompleted
+    expect(executions).toEqual(expect.arrayContaining([blockedSessionID, independentSessionID]))
+    const stopped = new Error("stop concurrent Project polling")
+    controller.abort(stopped)
+    release()
+    await expect(polling).rejects.toBe(stopped)
+  })
+
+  test("globally recovers an expired scheduler lease without a process-local timer", async () => {
+    await using project = await memoryProject()
+    let inboxID = ""
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-global-delivery-recovery"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Global delivery recovery Mission",
+          metadata: {
+            mission: { id: missionID },
+            configOverlay: { model: "openai/gpt-5.6-sol" },
+          },
+        })
+        const taskRoot = await Session.create({ kind: "orchestrator", title: "Expired delivery source Task" })
+        const taskID = Identifier.ascending("task")
+        const now = Date.now()
+        Database.use((db) =>
+          db
+            .insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: Instance.project.id,
+              session_id: taskRoot.id,
+              source: "mission",
+              product_pillar: "code",
+              title: "Expired delivery source Task",
+              request: "Recover one expired scheduler delivery",
+              metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+              time_started: now,
+              time_created: now,
+              time_updated: now,
+            })
+            .run(),
+        )
+        const sourceMessageID = "msg_global_delivery_recovery"
+        const sourcePartID = "prt_global_delivery_recovery"
+        persistSourceOccurrence(taskRoot.id, sourceMessageID, sourcePartID, "Recover this durable delivery")
+        const receipt = Database.transaction((db) =>
+          enqueueSchedulerMessageInTransaction(db, {
+            invocationID: "global-delivery-recovery",
+            kind: "notification",
+            source: {
+              kind: "task_scheduler",
+              project_id: Instance.project.id,
+              task_id: taskID,
+              root_session_id: taskRoot.id,
+            },
+            target: {
+              kind: "mission_scheduler",
+              project_id: Instance.project.id,
+              mission_id: missionID,
+              session_id: mission.id,
+            },
+            subject: "Expired delivery recovery",
+            sourceMessageID,
+            sourcePartID,
+          }),
+        )
+        inboxID = receipt.inboxID
+        Database.use((db) =>
+          db
+            .update(ProtocolInboxTable)
+            .set({
+              status: "leased",
+              lease_owner: "dead-runtime-owner",
+              lease_until: now - 1,
+              attempt: 1,
+              visible_at: now - 1,
+              time_updated: now,
+            })
+            .where(eq(ProtocolInboxTable.id, inboxID))
+            .run(),
+        )
+      },
+    })
+
+    using _wakeLoop = SessionWake.TestHooks.installWakeLoopExecutor(async () => undefined)
+    await SchedulerMessageDeliveryService.runDueNow()
+    expect(requireSchedulerDelivery(inboxID)).toMatchObject({
+      status: "delivered",
+      attempt: 2,
+      deliveryResult: { kind: "session_wake" },
+    })
+  })
+
+  test("global polling delivers future pending and live-lease rows and retries a busy terminal Mission wake", async () => {
+    await using project = await memoryProject()
+    const inboxIDs: string[] = []
+    const missionSessionIDs: string[] = []
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const projectID = Instance.project.id
+        const now = Date.now()
+        for (const suffix of ["future", "leased"] as const) {
+          const missionID = `mission-poll-${suffix}`
+          const mission = await Session.create({
+            kind: "mission",
+            title: `Polling ${suffix} Mission`,
+            metadata: {
+              mission: { id: missionID },
+              configOverlay: { model: "openai/gpt-5.6-sol" },
+            },
+          })
+          missionSessionIDs.push(mission.id)
+          const taskRoot = await Session.create({ kind: "orchestrator", title: `Polling ${suffix} Task` })
+          const taskID = Identifier.ascending("task")
+          Database.use((db) =>
+            db
+              .insert(EngineTaskTable)
+              .values({
+                id: taskID,
+                project_id: projectID,
+                session_id: taskRoot.id,
+                source: "mission",
+                product_pillar: "code",
+                title: `Polling ${suffix} Task`,
+                request: `Recover ${suffix} delivery`,
+                metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+                time_started: now,
+                time_created: now,
+                time_updated: now,
+              })
+              .run(),
+          )
+          let inboxID = ""
+          if (suffix === "future") {
+            const sourceMessageID = `msg_poll_${suffix}`
+            const sourcePartID = `prt_poll_${suffix}`
+            persistSourceOccurrence(taskRoot.id, sourceMessageID, sourcePartID, `Poll ${suffix}`)
+            inboxID = Database.transaction((db) =>
+              enqueueSchedulerMessageInTransaction(db, {
+                invocationID: `poll-${suffix}`,
+                kind: "notification",
+                source: {
+                  kind: "task_scheduler",
+                  project_id: projectID,
+                  task_id: taskID,
+                  root_session_id: taskRoot.id,
+                },
+                target: {
+                  kind: "mission_scheduler",
+                  project_id: projectID,
+                  mission_id: missionID,
+                  session_id: mission.id,
+                },
+                subject: `Poll ${suffix}`,
+                sourceMessageID,
+                sourcePartID,
+              }),
+            ).inboxID
+          } else {
+            inboxID = Database.transaction((db) => {
+              writeTaskUpdateInTransaction({
+                db,
+                taskID,
+                values: { status: "failed", error: "restart terminal notification" },
+                summary: "Terminal notification retained across restart",
+                now: now + 1,
+              })
+              return db
+                .select({ id: ProtocolInboxTable.id })
+                .from(ProtocolInboxTable)
+                .where(eq(ProtocolInboxTable.actor_id, mission.id))
+                .get()!.id
+            })
+          }
+          inboxIDs.push(inboxID)
+          if (suffix === "future") {
+            Database.use((db) =>
+              db
+                .update(ProtocolInboxTable)
+                .set({ visible_at: now + 150, time_updated: now })
+                .where(eq(ProtocolInboxTable.id, inboxID))
+                .run(),
+            )
+          } else {
+            const leased = claimNextSchedulerDelivery({
+              actor: "session",
+              actorID: mission.id,
+              ownerID: "restarted-runtime",
+              leaseMilliseconds: 250,
+              now: Date.now() + 10,
+            })
+            expect(leased).toMatchObject({ id: inboxID, status: "leased", attempt: 1 })
+          }
+        }
+      },
+    })
+
+    const attempts = new Map<string, number>()
+    using _wakeLoop = SessionWake.TestHooks.installWakeLoopExecutor(async ({ sessionID, messageID }) => {
+      const attempt = (attempts.get(sessionID) ?? 0) + 1
+      attempts.set(sessionID, attempt)
+      if (attempt === 1) throw new Error("Mission is busy during recovered scheduler wake")
+      const now = Date.now()
+      Database.use((db) =>
+        db
+          .insert(MessageTable)
+          .values({
+            id: Identifier.ascending("message"),
+            session_id: sessionID,
+            data: {
+              role: "assistant",
+              parentID: messageID,
+              providerID: "test",
+              modelID: "test",
+              time: { completed: now },
+            } as never,
+            time_created: now,
+            time_updated: now,
+          })
+          .run(),
+      )
+    })
+    SchedulerMessageDeliveryService.initGlobal()
+    try {
+      const deadline = Date.now() + 6_000
+      while (
+        Date.now() < deadline &&
+        !inboxIDs.every((id) => requireSchedulerDelivery(id).status === "delivered")
+      )
+        await Bun.sleep(25)
+      while (Date.now() < deadline && !missionSessionIDs.every((id) => (attempts.get(id) ?? 0) >= 2)) {
+        await Bun.sleep(25)
+      }
+      expect({
+        deliveries: inboxIDs.map((id) => requireSchedulerDelivery(id)).map((delivery) => ({
+          status: delivery.status,
+          attempt: delivery.attempt,
+        })),
+        wakeAttempts: missionSessionIDs.map((id) => attempts.get(id)),
+      }).toEqual({
+        deliveries: [
+          { status: "delivered", attempt: 1 },
+          { status: "delivered", attempt: 2 },
+        ],
+        wakeAttempts: [2, 2],
+      })
+    } finally {
+      await Scheduler.disposeGlobal()
+    }
+  }, 15_000)
 
   test("rolls back a Mission occurrence when its canonical source changes before commit", async () => {
     await using project = await memoryProject()

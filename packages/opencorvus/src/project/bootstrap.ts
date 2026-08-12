@@ -41,8 +41,6 @@ import { markConversationCapabilityTransactionalInit } from "@/conversation/capa
 import { reconcilePendingCancelledTaskSettlements } from "@/engine/state"
 import { PermissionAuthority } from "@/permission/authority"
 import { ProjectMemoryOrganizer } from "@/memory/project-memory-organizer"
-import { drainSchedulerMessagesForCurrentProject } from "@/protocol/scheduler-message"
-import { listGlobalMissionProcessRecoveryCandidates } from "@/mission/session"
 
 async function validateInstanceConversationCapabilities() {
   const lifecycleContext = {
@@ -172,14 +170,6 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
     if (failures.length > 0) {
       throw new AggregateError(failures, `Failed ${failures.length} persisted coordination recovery operation(s)`)
     }
-  })
-  await ProjectOpenLifecycle.stage("scheduler-message.drain-persisted-inbox", lifecycleContext, async () => {
-    const interruptedMissions = new Set(
-      listGlobalMissionProcessRecoveryCandidates({ scopeProjectWorktree: Instance.project.worktree }).map(
-        (candidate) => candidate.sessionID,
-      ),
-    )
-    await drainSchedulerMessagesForCurrentProject({ excludeSessionIDs: interruptedMissions })
   })
   await ProjectOpenLifecycle.stage("terminal-profile.ensure-default", lifecycleContext, () =>
     TerminalProfile.ensureProjectDefaultProfile(),

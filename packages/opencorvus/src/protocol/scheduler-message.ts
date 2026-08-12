@@ -1,7 +1,10 @@
 import { createHash, randomUUID } from "node:crypto"
-import { Database } from "@/storage/db"
-import { Instance } from "@/project/instance"
+import { Database, DatabaseEffectAdmissionClosedError } from "@/storage/db"
+import { Instance, InstanceProcessAdmissionClosedError } from "@/project/instance"
+import { Project } from "@/project/project"
 import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
+import { Scheduler } from "@/scheduler"
+import { Log } from "@/util/log"
 import { SessionWake } from "@/session/wake"
 import { EngineService } from "@/task-api"
 import { ProtocolStore } from "./store"
@@ -12,6 +15,7 @@ import {
   encodeSchedulerEndpoint,
   enqueueSchedulerMessageInTransaction,
   findSchedulerDelivery,
+  listPendingSchedulerProjectIDs,
   listPendingSchedulerRecipientIDs,
   listUnansweredSchedulerSessionWakes,
   nextSchedulerDeliveryDueAt,
@@ -25,12 +29,16 @@ import {
 } from "./delivery"
 import { SchedulerEndpoint, SchedulerMessagePayload, type SchedulerMessageKind } from "./schema"
 import { installSchedulerMessageDrainSignal, signalSchedulerMessageDrain } from "./scheduler-drain-signal"
+import { RuntimeExecutionAdmissionClosedError } from "@/runtime/execution-settlement"
 
 const DELIVERY_LEASE_MS = 120_000
 const MAX_DELIVERY_ATTEMPTS = 5
+const DELIVERY_POLL_INTERVAL_MS = 1_000
+const log = Log.create({ service: "scheduler-message-delivery" })
 const drainTails = new Map<string, Promise<void>>()
-const dueTimers = new Map<string, { dueAt: number; timer: ReturnType<typeof setTimeout> }>()
 let beforeMissionMaterializationForTest: (() => void | Promise<void>) | undefined
+let beforeGlobalPollForTest: (() => void | Promise<void>) | undefined
+let signalDrainFailureReportForTest: ((error: unknown) => void) | undefined
 
 function sameEndpoint(left: SchedulerEndpoint, right: SchedulerEndpoint) {
   return encodeSchedulerEndpoint(left) === encodeSchedulerEndpoint(right)
@@ -225,7 +233,6 @@ async function drainMissionRecipient(sessionID: string): Promise<void> {
         error,
         visibleAt: Date.now() + delay,
       })
-      scheduleNextSchedulerMessageDrain()
       return
     }
   }
@@ -268,7 +275,6 @@ async function drainTaskRecipient(taskID: string, awaitedInboxID?: string): Prom
         error,
         visibleAt: Date.now() + delay,
       })
-      scheduleNextSchedulerMessageDrain()
       return awaitedWakeStatus
     }
   }
@@ -295,58 +301,125 @@ export async function drainSchedulerMessagesForCurrentProject(input?: {
   }
   const taskIDs = listPendingSchedulerRecipientIDs({ actor: "task", projectID: current.project.id })
   for (const taskID of taskIDs) await drainTaskRecipient(taskID)
-  scheduleNextSchedulerMessageDrain()
 }
 
-function scheduleNextSchedulerMessageDrain(): void {
-  const current = Instance.current()
-  if (!current) return
-  const projectID = current.project.id
-  const directory = current.project.worktree
-  const dueAt = nextSchedulerDeliveryDueAt(projectID)
-  const existing = dueTimers.get(projectID)
-  if (dueAt === undefined) {
-    if (existing) clearTimeout(existing.timer)
-    dueTimers.delete(projectID)
-    return
+async function pollSchedulerMessageDeliveries(signal: AbortSignal): Promise<void> {
+  await beforeGlobalPollForTest?.()
+  const now = Date.now()
+  const drains: Promise<void>[] = []
+  for (const projectID of listPendingSchedulerProjectIDs()) {
+    if (signal.aborted) throw signal.reason
+    const dueAt = nextSchedulerDeliveryDueAt(projectID)
+    const hasUnansweredWake = listUnansweredSchedulerSessionWakes(projectID).length > 0
+    if (!hasUnansweredWake && (dueAt === undefined || dueAt > now)) continue
+    const project = Project.get(projectID)
+    if (!project) continue
+    drains.push(requestSchedulerMessageDrainForProject(projectID, project.worktree, signal))
   }
-  if (existing?.dueAt === dueAt) return
-  if (existing) clearTimeout(existing.timer)
-  const delay = Math.max(25, Math.min(2_147_000_000, dueAt - Date.now()))
-  const timer = setTimeout(() => {
-    dueTimers.delete(projectID)
-    requestSchedulerMessageDrainForProject(projectID, directory)
-  }, delay)
-  dueTimers.set(projectID, { dueAt, timer })
+  const results = await Promise.allSettled(drains)
+  if (signal.aborted) throw signal.reason
+  const failures = results.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
+  if (failures.length === 1) throw failures[0]
+  if (failures.length > 1) throw new AggregateError(failures, "Scheduler Message Project drains failed")
 }
 
 export function requestSchedulerMessageDrain(): void {
   const current = Instance.current()
   if (!current) return
-  requestSchedulerMessageDrainForProject(current.project.id, current.project.worktree)
+  void requestSchedulerMessageDrainForProject(current.project.id, current.project.worktree).catch((error) => {
+    handleSignalDrainFailure(error)
+  })
 }
 
-function requestSchedulerMessageDrainForProject(key: string, directory: string): void {
-  const previous = drainTails.get(key) ?? Promise.resolve()
-  const next = previous
-    .catch(() => undefined)
-    .then(() =>
-      Database.runOutsideContext(() =>
-        runWithInitializedIndependentProject({
-          directory,
-          fn: () => drainSchedulerMessagesForCurrentProject(),
-        }),
-      ),
-    )
+function handleSignalDrainFailure(error: unknown): "lifecycle_closed" | "reported" {
+  if (
+    error instanceof InstanceProcessAdmissionClosedError ||
+    error instanceof DatabaseEffectAdmissionClosedError ||
+    error instanceof RuntimeExecutionAdmissionClosedError
+  ) {
+    return "lifecycle_closed"
+  }
+  signalDrainFailureReportForTest?.(error)
+  log.error("signal drain failed", { error })
+  return "reported"
+}
+
+export function drainSchedulerMessagesForProject(input?: {
+  excludeSessionIDs?: ReadonlySet<string>
+}): Promise<void> {
+  const current = Instance.current()
+  if (!current) return Promise.resolve()
+  return requestSchedulerMessageDrainForProject(current.project.id, current.project.worktree, undefined, input)
+}
+
+function requestSchedulerMessageDrainForProject(
+  key: string,
+  directory: string,
+  signal?: AbortSignal,
+  input?: { excludeSessionIDs?: ReadonlySet<string> },
+): Promise<void> {
+  const active = drainTails.get(key)
+  if (active) return active
+  const next = Database.runOutsideContext(() =>
+    runWithInitializedIndependentProject({
+      directory,
+      signal,
+      fn: () => drainSchedulerMessagesForCurrentProject(input),
+    }),
+  )
     .finally(() => {
       if (drainTails.get(key) === next) drainTails.delete(key)
     })
   drainTails.set(key, next)
+  return next
 }
 
 installSchedulerMessageDrainSignal(requestSchedulerMessageDrain)
 
+export namespace SchedulerMessageDeliveryService {
+  export function initGlobal(): void {
+    Scheduler.register({
+      id: "scheduler-message-delivery.poll",
+      interval: DELIVERY_POLL_INTERVAL_MS,
+      runAtStart: true,
+      run: pollSchedulerMessageDeliveries,
+      scope: "global",
+    })
+  }
+
+  export async function runDueNow(): Promise<void> {
+    await pollSchedulerMessageDeliveries(new AbortController().signal)
+  }
+}
+
 export const SchedulerMessageTestHooks = {
+  handleSignalDrainFailure(error: unknown): "lifecycle_closed" | "reported" {
+    return handleSignalDrainFailure(error)
+  },
+  installSignalDrainFailureReport(observer: (error: unknown) => void): Disposable {
+    if (signalDrainFailureReportForTest) throw new Error("Scheduler Message signal-drain failure observer is installed")
+    signalDrainFailureReportForTest = observer
+    return {
+      [Symbol.dispose]() {
+        if (signalDrainFailureReportForTest === observer) signalDrainFailureReportForTest = undefined
+      },
+    }
+  },
+  poll(signal: AbortSignal): Promise<void> {
+    return pollSchedulerMessageDeliveries(signal)
+  },
+  requestProjectDrain(projectID: string, directory: string): Promise<void> {
+    return requestSchedulerMessageDrainForProject(projectID, directory)
+  },
+  installBeforeGlobalPoll(hook: () => void | Promise<void>): Disposable {
+    if (beforeGlobalPollForTest) throw new Error("Scheduler Message global poll test hook is already installed")
+    beforeGlobalPollForTest = hook
+    return {
+      [Symbol.dispose]() {
+        if (beforeGlobalPollForTest === hook) beforeGlobalPollForTest = undefined
+      },
+    }
+  },
   installBeforeMissionMaterialization(hook: () => void | Promise<void>): Disposable {
     if (beforeMissionMaterializationForTest) throw new Error("Mission materialization test hook is already installed")
     beforeMissionMaterializationForTest = hook
