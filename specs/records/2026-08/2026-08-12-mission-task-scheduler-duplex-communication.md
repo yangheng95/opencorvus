@@ -65,6 +65,25 @@ The user reported that a Mission could not intervene in a running Task, both com
 
 Three read-only reviews agreed that this is a protocol-boundary defect, not an isolated wake bug. The reviews required typed scheduler addresses, lineage authority, a durable inbox/outbox occurrence, request/reply correlation, database-owned recovery, and removal of the old Mission-as-operator and terminal-subscriber paths. One review specifically confirmed the startup double-wake construction. Another confirmed that `protocol_event + protocol_inbox` is the smallest valid single fact source and that the durable Bus should be used only as an algorithm reference, not as a second scheduler outbox.
 
+### Follow-up Recall: model discovery and spontaneous use
+
+After the protocol delivery, the user required the system-prompt and harness layer to converge as well: a model must discover the available scheduler communication capability and choose it from the collaboration need, rather than succeed only when the operator scripts every Tool call. After acceptance, the completed change must be merged once into the main worktree without continuously following remote changes.
+
+The follow-up repository audit found three coupled gaps:
+
+- Mission and Task Orchestrator Tool projections already expose `scheduler_message`, but their core prompts do not define its scheduler-to-scheduler role, request/reply/notification semantics, valid recipients, or the distinction between a durable delivery receipt and a model answer.
+- The focused execution-authority Tool-surface test still expects the Mission projection without `scheduler_message`, so the harness contract is stale even though production exposes the Tool.
+- The real-provider checker names `scheduler_message`, supplies exact kinds and subjects, and scripts every protocol transition in the operator message. That proves the transport but not model discovery from the system harness.
+
+The follow-up acceptance contract is therefore:
+
+- The canonical Mission system prompt teaches direct communication with active owned Tasks, exact correlated replies, and when ordinary Task polling or lifecycle resume is a different operation.
+- The canonical Task Orchestrator system prompt teaches communication with its owning Mission and authorized sibling Task schedulers, including proactive dependency/decision use and same-wake reply handling.
+- The production Tool projections and focused positive tests expose the same capability to both scheduler roles.
+- The real-provider checker describes only the observable collaboration outcome and forbids operator-message or polling substitutes; its operator request does not name the Tool, its input fields, or the required call sequence. The unchanged protocol assertions must still observe the full Mission-to-Task, Task-to-Mission, sibling request/reply, correlated answer, and terminal-notification chain.
+- No Host gate, prose classifier, hidden message, state machine, or alternate transport is added to force Tool selection. Capability discovery remains a system-prompt and real Tool-schema responsibility.
+- Independent read-only review must re-run after every accepted repair. Final integration into the dirty main worktree must preserve unrelated parallel edits and stop rather than overwrite an unresolved overlap.
+
 ## Current failure chain
 
 ### Mission intervention
@@ -181,7 +200,9 @@ After implementation and first-pass verification, an Agent that did not implemen
 - [x] Protocol schema/store/delivery implemented.
 - [x] Mission/Task and scheduler tools integrated.
 - [x] Old paths deleted.
-- [x] Focused protocol/Mission/migration verification passed: 22 tests and 130 assertions. The final repaired tree also passed the 11-test Memory Organizer stream suite, the 19-test runtime settlement suite, the 12-test durable Bus suite, the 3 focused recovery/listener ownership tests, package typecheck, documentation contract, route inventory, and diff check.
-- [x] Real-provider end to end reached every protocol and projection acceptance condition on the final repaired tree with `deepseek/deepseek-chat`; final evidence nonce `DUPLEX-9ef82e64e1` records 11/11 delivered protocol inboxes, nine canonical scheduler Tool occurrences, two terminal notifications, and two hydrated Mission turn artifacts in `specs/artifacts/mission-task-duplex-e2e-result.json`. The checker completed `server.stop`, database cleanup, and exited with code 0.
-- [x] Independent gate passed with no unresolved findings.
-- [x] Scoped commit and push completed.
+- [x] Focused model-harness, checker contract, Tool-surface, Mission-root, and schema-migration verification passed with `bun test --timeout 0 packages/opencorvus/test/mission-task-duplex-contract.test.ts packages/opencorvus/test/execution-authority-tool-surface.test.ts packages/opencorvus/test/scheduler-message-harness-contract.test.ts packages/opencorvus/test/orchestrator-mission-root-message-read.test.ts packages/opencorvus/test/storage/schema-migration.test.ts`: 15 tests and 66 assertions after the strict cross-recipient-order error contract was added. `bun test --timeout 0 packages/opencorvus/test/protocol-scheduler-message-delivery.test.ts` separately passed 13 tests and 72 assertions after the prompt/harness implementation. Two later diagnostic whole-file runs are not represented as clean acceptance: one observed the global polling recovery row still `pending`/`leased` when the timing assertion expected `delivered`; the current exact case was then executed with `bun test --timeout 0 packages/opencorvus/test/protocol-scheduler-message-delivery.test.ts -t "global polling delivers future pending and live-lease rows and retries a busy terminal Mission wake"` and passed one test with two assertions. A later invocation of the whole-file command reached the final runtime case and failed because the Windows `opencorvus-process-supervisor` exited without its physical `settled.json` marker (`ENOENT`). These two runner diagnostics did not change prompt/checker source, are not used as passing evidence, and remain explicitly separated from the clean focused results.
+- [x] Preliminary real-provider end to end used exact `openai/gpt-5.6-terra` with an outcome-only operator request that did not name the Tool, fields, or call sequence. Evidence nonce `DUPLEX-492429056f` records 12/12 delivered protocol inboxes, ten canonical scheduler Tool occurrences, two terminal notifications with completed Mission replies, two completed Tasks, and two hydrated Mission turn artifacts. This run established model discovery and the production path but preceded the strengthened full-endpoint, correlation/thread, sequence, and terminal-order checker contract, so it is not the final freshness claim.
+- [x] Strengthened real-provider checker rerun and final artifact synchronization completed with exact `openai/gpt-5.6-terra` and nonce `DUPLEX-3d20e2a024`. The final outcome-only run passed with 12 unique events, 12/12 delivered inboxes, ten canonical model Tool occurrences, two terminal notifications, two hydrated Mission turn artifacts, exact Project/Mission/Session/Task-root endpoints, three exact `reply_to + correlation_id + thread_id` reply pairs, recipient FIFO, the required semantic partial order, and both terminal notifications sequenced after their corresponding `B_DONE/A_DONE`. The checker completed process disposal, `server.stop`, database cleanup, and exited with code 0.
+- [x] Original protocol refactor independent gate, scoped commit, and upstream delivery completed at `7713bcdc78751ca6fac91705928a1adb762455e4` before this prompt/harness follow-up.
+- [x] Follow-up independent gate passed with no unresolved findings.
+- [ ] Follow-up scoped commit and semantic merge into the main worktree completed.

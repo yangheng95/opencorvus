@@ -2,6 +2,12 @@ import { randomBytes } from "node:crypto"
 import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
+import {
+  assertMissionTaskDuplexContract,
+  assertMissionTaskTerminalOrder,
+  parseDuplexSchedulerEndpoint,
+  type DuplexOccurrence,
+} from "./mission-task-duplex-contract"
 
 const ALLOW_REAL_PROVIDER = "MISSION_TASK_DUPLEX_E2E_ALLOW_REAL_PROVIDER"
 const AUTH_SOURCE = "MISSION_TASK_DUPLEX_E2E_AUTH_SOURCE"
@@ -50,9 +56,16 @@ async function copyAuthority() {
   const source = path.resolve(authoritySource!)
   const stat = await fs.stat(source)
   if (!stat.isFile()) throw new Error(`${AUTH_SOURCE} is not a file: ${source}`)
-  const target = path.join(runtimeRoot, "data", "auth.json")
-  await fs.mkdir(path.dirname(target), { recursive: true })
-  await fs.copyFile(source, target)
+  const dataDirectory = path.join(runtimeRoot, "data")
+  await fs.mkdir(dataDirectory, { recursive: true })
+  await fs.copyFile(source, path.join(dataDirectory, "auth.json"))
+
+  const catalogSource = path.join(path.dirname(source), "models.json")
+  const catalog = await fs.stat(catalogSource).catch(() => undefined)
+  if (!catalog?.isFile()) {
+    throw new Error(`The isolated real-provider checker requires the model catalog beside ${AUTH_SOURCE}: ${catalogSource}`)
+  }
+  await fs.copyFile(catalogSource, path.join(dataDirectory, "models.json"))
 }
 
 for (const key of [
@@ -106,16 +119,14 @@ missionURL.searchParams.set("directory", projectDirectory)
 let primaryFailure: unknown
 try {
 const missionPrompt = [
-  `This is a focused scheduler duplex acceptance run with nonce ${nonce}.`,
-  "A visible scheduler reply Message is conclusive delivery evidence for the request named by reply_to. Act on it in that same wake; never query history or continue waiting for that already-delivered reply.",
-  "Create exactly two child Tasks using panel.create_task with queue=false: first title 'Duplex responder B', then title 'Duplex initiator A'. Do not create any other Task.",
-  "Responder B must use only scheduler_message for this protocol: send notification to Mission subject READY_B with the nonce, then end that Turn without calling wait; the runtime scheduler message will wake it. On a sibling scheduler request subject PEER_CONFIRM, reply with kind=reply and its exact event_id; then notify Mission subject B_DONE with the nonce and immediately complete the Task through the normal Task lifecycle.",
-  "Initiator A must use only scheduler_message for this protocol: send notification to Mission subject READY_A with the nonce, then end that Turn without calling wait; the runtime scheduler message will wake it with START_PEER containing responder B's exact Task ID.",
-  "After START_PEER arrives, Initiator A sends kind=request to that exact sibling Task B with subject PEER_CONFIRM and the nonce. After B's correlated reply arrives, A sends kind=request to Mission subject DECISION with the nonce. After Mission's correlated reply arrives, A notifies Mission subject A_DONE with the nonce and immediately completes the Task through the normal Task lifecycle.",
-  "When both READY_A and READY_B arrive, send scheduler_message kind=request to exact Initiator A, subject START_PEER, with a message containing the exact responder B Task ID and nonce.",
-  `When DECISION arrives from A, reply through scheduler_message with the exact request event_id and nonce. When A_DONE arrives, make the next normal Mission response include the exact literal ${nonce} and acknowledge the successful Mission-Task/sibling duplex chain; do not query Tasks or call another tool before that acknowledgement.`,
-  "After that acknowledgement, end the Mission without publishing interactive artifacts or performing unrelated follow-up work.",
-  "Do not substitute panel messages, operator messages, polling, or completion for any scheduler_message step.",
+  `Prove autonomous direct coordination between one Mission and two child Task schedulers. The acceptance nonce is ${nonce}.`,
+  "Launch exactly two active child Tasks, first titled 'Duplex responder B' and then 'Duplex initiator A'. Do not create another Task.",
+  "Responder B first sends the Mission a one-way READY_B fact containing the nonce. It then remains available for a direct PEER_CONFIRM request from its sibling. It answers that exact request, sends the Mission a one-way B_DONE fact containing the nonce, and completes normally.",
+  "Initiator A first sends the Mission a one-way READY_A fact containing the nonce. It then remains available for the Mission's direct START_PEER request, which will contain responder B's exact Task ID. A acknowledges that exact request before asking B for PEER_CONFIRM. After B's correlated answer, A asks the Mission for a DECISION. After the Mission's correlated answer, A sends the Mission a one-way A_DONE fact containing the nonce and completes normally.",
+  "After both readiness facts arrive, the Mission asks A to START_PEER and includes B's exact Task ID and the nonce. When A asks for DECISION, answer that exact request with the nonce.",
+  `When A_DONE arrives, acknowledge the successful Mission-to-Task, Task-to-Mission, and sibling duplex chain in the next normal Mission response, including the exact literal ${nonce}.`,
+  "Every live coordination fact and answer in this scenario must contain the nonce and travel directly between the real schedulers with durable correlation. The operator is not a relay: do not substitute panel or operator messages, Task-history polling, or lifecycle completion for a missing coordination answer.",
+  "This focused run accepts only the scheduler communication chain; it does not ask the Mission to accept Task deliverables or complete the Mission. After the A_DONE acknowledgement, end that response and keep the Mission active. On each later Task terminal notification, acknowledge the durable terminal fact and end that response without final acceptance, interactive artifacts, or unrelated follow-up work.",
 ].join("\n")
 
 const wake = await fetch(missionURL, {
@@ -126,11 +137,6 @@ const wake = await fetch(missionURL, {
 if (!wake.ok) throw new Error(`Mission wake failed ${wake.status}: ${await wake.text()}`)
 const mission = (await wake.json()) as { missionID: string; sessionID: string }
 process.stdout.write(`[duplex-e2e] mission=${mission.missionID} session=${mission.sessionID} model=${model}\n`)
-
-function endpoint(value: string | null) {
-  if (!value?.startsWith("scheduler-endpoint:")) return undefined
-  return JSON.parse(value.slice("scheduler-endpoint:".length)) as { kind: string; task_id?: string }
-}
 
 let lastActivityKey = ""
 let lastAcceptanceKey = ""
@@ -145,6 +151,8 @@ let evidence:
       inboxes: Array<typeof ProtocolInboxTable.$inferSelect>
       sourceToolPartIDs: string[]
       missionAckMessageID: string
+      duplexContract: ReturnType<typeof assertMissionTaskDuplexContract>
+      terminalOrder: ReturnType<typeof assertMissionTaskTerminalOrder>
     }
   | undefined
 while (Date.now() < deadline) {
@@ -177,51 +185,63 @@ while (Date.now() < deadline) {
         source_part_id?: string
         source_terminal_event_id?: string
         subject?: string
+        thread_id?: string
       },
-      source: endpoint(event.source),
-      target: endpoint(event.target),
+      source: parseDuplexSchedulerEndpoint(event.source),
+      target: parseDuplexSchedulerEndpoint(event.target),
     }))
+    const taskEndpointID = (value: (typeof messages)[number]["source"]) =>
+      value.kind === "task_scheduler" ? value.task_id : undefined
+    const hasSubject = (item: (typeof messages)[number], semantic: string) =>
+      item.payload.subject === semantic || item.payload.subject?.startsWith(`${semantic} `) === true
     const readyA = messages.find(
       (item) =>
         item.payload.message_kind === "notification" &&
-        item.payload.subject === "READY_A" &&
-        item.source?.task_id === taskA.id &&
+        hasSubject(item, "READY_A") &&
+        taskEndpointID(item.source) === taskA.id &&
         item.source?.kind === "task_scheduler" &&
         item.target?.kind === "mission_scheduler",
     )
     const readyB = messages.find(
       (item) =>
         item.payload.message_kind === "notification" &&
-        item.payload.subject === "READY_B" &&
-        item.source?.task_id === taskB.id &&
+        hasSubject(item, "READY_B") &&
+        taskEndpointID(item.source) === taskB.id &&
         item.target?.kind === "mission_scheduler",
     )
     const startPeer = messages.find(
       (item) =>
         item.payload.message_kind === "request" &&
-        item.payload.subject === "START_PEER" &&
+        hasSubject(item, "START_PEER") &&
         item.source?.kind === "mission_scheduler" &&
-        item.target?.task_id === taskA.id,
+        taskEndpointID(item.target) === taskA.id,
     )
     const peerRequest = messages.find(
       (item) =>
         item.payload.message_kind === "request" &&
-        item.payload.subject === "PEER_CONFIRM" &&
-        item.source?.task_id === taskA.id &&
-        item.target?.task_id === taskB.id,
+        hasSubject(item, "PEER_CONFIRM") &&
+        taskEndpointID(item.source) === taskA.id &&
+        taskEndpointID(item.target) === taskB.id,
     )
     const peerReply = messages.find(
       (item) =>
         item.payload.message_kind === "reply" &&
         item.event.reply_to === peerRequest?.event.id &&
-        item.source?.task_id === taskB.id &&
-        item.target?.task_id === taskA.id,
+        taskEndpointID(item.source) === taskB.id &&
+        taskEndpointID(item.target) === taskA.id,
+    )
+    const startPeerReply = messages.find(
+      (item) =>
+        item.payload.message_kind === "reply" &&
+        item.event.reply_to === startPeer?.event.id &&
+        taskEndpointID(item.source) === taskA.id &&
+        item.target?.kind === "mission_scheduler",
     )
     const decisionRequest = messages.find(
       (item) =>
         item.payload.message_kind === "request" &&
-        item.payload.subject === "DECISION" &&
-        item.source?.task_id === taskA.id &&
+        hasSubject(item, "DECISION") &&
+        taskEndpointID(item.source) === taskA.id &&
         item.target?.kind === "mission_scheduler",
     )
     const decisionReply = messages.find(
@@ -229,25 +249,81 @@ while (Date.now() < deadline) {
         item.payload.message_kind === "reply" &&
         item.event.reply_to === decisionRequest?.event.id &&
         item.source?.kind === "mission_scheduler" &&
-        item.target?.task_id === taskA.id,
+        taskEndpointID(item.target) === taskA.id,
     )
     const bDone = messages.find(
       (item) =>
         item.payload.message_kind === "notification" &&
-        item.payload.subject === "B_DONE" &&
-        item.source?.task_id === taskB.id &&
+        hasSubject(item, "B_DONE") &&
+        taskEndpointID(item.source) === taskB.id &&
         item.target?.kind === "mission_scheduler",
     )
     const aDone = messages.find(
       (item) =>
         item.payload.message_kind === "notification" &&
-        item.payload.subject === "A_DONE" &&
-        item.source?.task_id === taskA.id &&
+        hasSubject(item, "A_DONE") &&
+        taskEndpointID(item.source) === taskA.id &&
         item.target?.kind === "mission_scheduler",
     )
-    const chain = [readyA, readyB, startPeer, peerRequest, peerReply, decisionRequest, decisionReply, bDone, aDone]
+    const chain = [
+      readyA,
+      readyB,
+      startPeer,
+      startPeerReply,
+      peerRequest,
+      peerReply,
+      decisionRequest,
+      decisionReply,
+      bDone,
+      aDone,
+    ]
     if (chain.every((item) => item !== undefined)) {
       const exactChain = chain as Array<NonNullable<(typeof chain)[number]>>
+      const occurrence = (item: (typeof exactChain)[number]): DuplexOccurrence => {
+        const kind = item.payload.message_kind
+        if (kind !== "request" && kind !== "reply" && kind !== "notification") {
+          throw new Error(`Scheduler event ${item.event.id} has invalid message_kind ${String(kind)}.`)
+        }
+        if (!item.payload.subject || !item.payload.thread_id) {
+          throw new Error(`Scheduler event ${item.event.id} is missing subject or thread_id.`)
+        }
+        return {
+          eventID: item.event.id,
+          sequence: item.event.seq,
+          emittedAt: item.event.emitted_at,
+          kind,
+          subject: item.payload.subject,
+          source: item.source,
+          target: item.target,
+          replyTo: item.event.reply_to,
+          correlationID: item.event.correlation_id,
+          threadID: item.payload.thread_id,
+        }
+      }
+      if (!taskA.session_id || !taskB.session_id || taskA.project_id !== taskB.project_id) {
+        throw new Error(`Mission duplex Tasks do not share exact project and root Session authority.`)
+      }
+      const duplexContract = assertMissionTaskDuplexContract({
+        authority: {
+          projectID: taskA.project_id,
+          missionID: mission.missionID,
+          missionSessionID: mission.sessionID,
+          taskA: { id: taskA.id, rootSessionID: taskA.session_id },
+          taskB: { id: taskB.id, rootSessionID: taskB.session_id },
+        },
+        chain: {
+          readyA: occurrence(readyA!),
+          readyB: occurrence(readyB!),
+          startPeer: occurrence(startPeer!),
+          startPeerReply: occurrence(startPeerReply!),
+          peerRequest: occurrence(peerRequest!),
+          peerReply: occurrence(peerReply!),
+          decisionRequest: occurrence(decisionRequest!),
+          decisionReply: occurrence(decisionReply!),
+          bDone: occurrence(bDone!),
+          aDone: occurrence(aDone!),
+        },
+      })
       const protocolInboxes = snapshot.inboxes.filter((row) =>
         snapshot.events.some((event) => event.id === row.envelope_id),
       )
@@ -337,15 +413,33 @@ while (Date.now() < deadline) {
           item.target?.kind === "mission_scheduler",
       )
       const terminalReceiptsDelivered = [taskA.id, taskB.id].every((taskID) => {
-        const notification = terminalNotifications.find((item) => item.source?.task_id === taskID)
+        const notification = terminalNotifications.find((item) => taskEndpointID(item.source) === taskID)
         return (
           notification !== undefined &&
           protocolInboxes.find((row) => row.envelope_id === notification.event.id)?.status === "delivered"
         )
       })
       const taskTerminalNotifications = terminalNotifications.filter((item) =>
-        [taskA.id, taskB.id].includes(item.source?.task_id ?? ""),
+        [taskA.id, taskB.id].includes(taskEndpointID(item.source) ?? ""),
       )
+      const taskATerminal = taskTerminalNotifications.find((item) => taskEndpointID(item.source) === taskA.id)
+      const taskBTerminal = taskTerminalNotifications.find((item) => taskEndpointID(item.source) === taskB.id)
+      const terminalOrder =
+        taskATerminal && taskBTerminal
+          ? assertMissionTaskTerminalOrder({
+              authority: {
+                projectID: taskA.project_id,
+                missionID: mission.missionID,
+                missionSessionID: mission.sessionID,
+                taskA: { id: taskA.id, rootSessionID: taskA.session_id },
+                taskB: { id: taskB.id, rootSessionID: taskB.session_id },
+              },
+              aDone: occurrence(aDone!),
+              bDone: occurrence(bDone!),
+              terminalA: occurrence(taskATerminal),
+              terminalB: occurrence(taskBTerminal),
+            })
+          : undefined
       const terminalWakeRepliesCompleted =
         taskTerminalNotifications.length === 2 &&
         taskTerminalNotifications.every((item) => {
@@ -379,6 +473,8 @@ while (Date.now() < deadline) {
         taskBCompleted: taskB.time_completed !== null,
         terminalReceiptsDelivered,
         terminalWakeRepliesCompleted,
+        duplexContract,
+        terminalOrder,
       }
       const acceptanceKey = JSON.stringify(lastAcceptanceState)
       if (acceptanceKey !== lastAcceptanceKey) {
@@ -393,6 +489,7 @@ while (Date.now() < deadline) {
         taskA.time_completed !== null &&
         taskB.time_completed !== null &&
         terminalReceiptsDelivered &&
+        terminalOrder &&
         terminalWakeRepliesCompleted
       ) {
         terminal = true
@@ -403,6 +500,8 @@ while (Date.now() < deadline) {
           inboxes: protocolInboxes,
           sourceToolPartIDs: sourceToolParts.map((row) => row!.id),
           missionAckMessageID: missionAck.id,
+          duplexContract,
+          terminalOrder,
         }
         break
       }
@@ -435,9 +534,13 @@ while (Date.now() < deadline) {
   }
   const eventSummary = evidence.events.map((event) => ({
     id: event.id,
+    sequence: event.seq,
+    emittedAt: event.emitted_at,
     kind: (event.payload as { message_kind?: string }).message_kind,
-    source: endpoint(event.source),
-    target: endpoint(event.target),
+    subject: (event.payload as { subject?: string }).subject,
+    threadID: (event.payload as { thread_id?: string }).thread_id,
+    source: parseDuplexSchedulerEndpoint(event.source),
+    target: parseDuplexSchedulerEndpoint(event.target),
     replyTo: event.reply_to,
     correlationID: event.correlation_id,
   }))
@@ -445,6 +548,13 @@ while (Date.now() < deadline) {
     ok: true,
     model,
     nonce,
+    harnessDiscovery: {
+      operatorPromptStyle: "outcome_only",
+      schedulerToolSelectedByModels: true,
+      correlatedMissionRequestAcknowledged: true,
+      exactEndpointCorrelationAndOrder: evidence.duplexContract,
+      terminalOrder: evidence.terminalOrder,
+    },
     missionID: mission.missionID,
     missionSessionID: mission.sessionID,
     taskAID: evidence.taskAID,
