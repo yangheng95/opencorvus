@@ -7,6 +7,7 @@ import { isDeepStrictEqual } from "node:util"
 
 export namespace SessionControl {
   const wakeWaiters = new Map<string, Set<() => void>>()
+  const PersistedPayload = z.record(z.string(), z.json())
 
   export const Kind = z.enum(["manual_summarize", "compaction_request", "wake_reason", "mission_process_recovery"])
   export type Kind = z.infer<typeof Kind>
@@ -20,7 +21,7 @@ export namespace SessionControl {
     kind: Kind,
     status: Status,
     owner: z.string().optional(),
-    payload: z.record(z.string(), z.unknown()),
+    payload: PersistedPayload,
     time: z.object({
       created: z.number(),
       updated: z.number(),
@@ -46,7 +47,7 @@ export namespace SessionControl {
       kind: row.kind as SessionControlKind,
       status: row.status as SessionControlStatus,
       owner: row.owner ?? undefined,
-      payload: row.payload,
+      payload: PersistedPayload.parse(row.payload),
       time: {
         created: row.time_created,
         updated: row.time_updated,
@@ -124,13 +125,14 @@ export namespace SessionControl {
   export function updatePendingPayload(input: {
     id: string
     sessionID: string
-    payload: { [key: string]: unknown }
+    payload: z.input<typeof PersistedPayload>
   }): Record | undefined {
     const now = Date.now()
+    const payload = PersistedPayload.parse(input.payload)
     return Database.transaction((db) => {
       const updated = db
         .update(SessionControlRecordTable)
-        .set({ payload: input.payload, time_updated: now })
+        .set({ payload, time_updated: now })
         .where(
           and(
             eq(SessionControlRecordTable.id, input.id),

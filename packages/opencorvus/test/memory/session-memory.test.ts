@@ -113,6 +113,45 @@ afterEach(async () => {
 })
 
 describe("Session MEMORY.MD compaction checkpoint", () => {
+  test("persists automatic compaction control in canonical JSON form", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "root", title: "Canonical compaction control" })
+        const source = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: session.id,
+          role: "user",
+          author: "user",
+          time: { created: Date.now() },
+          agent: "user",
+          model,
+        })
+
+        await SessionCompaction.create({
+          sessionID: session.id,
+          source,
+          auto: true,
+          overflow: true,
+        })
+
+        const controls = SessionControl.pending(session.id)
+        expect(controls).toHaveLength(1)
+        expect(controls[0]).toMatchObject({
+          sessionID: session.id,
+          kind: "compaction_request",
+          status: "pending",
+          payload: {
+            source_user_message_id: source.id,
+            overflow: true,
+          },
+        })
+        expect(controls[0]?.payload).toEqual({ source_user_message_id: source.id, overflow: true })
+      },
+    })
+  })
+
   test("reconstructs, advances, and projects the latest successful compaction exactly once", async () => {
     await using project = await memoryProject()
     await Instance.provide({

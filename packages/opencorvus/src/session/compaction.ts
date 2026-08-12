@@ -1004,9 +1004,9 @@ export namespace SessionCompaction {
       kind: input.auto ? "compaction_request" : "manual_summarize",
       payload: {
         source_user_message_id: input.source.id,
-        model: input.model,
+        ...(input.model !== undefined ? { model: input.model } : {}),
         overflow: input.overflow === true,
-        focus: input.focus,
+        ...(input.focus !== undefined ? { focus: input.focus } : {}),
       },
     })
   }

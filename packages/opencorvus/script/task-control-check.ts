@@ -14,6 +14,16 @@ const INACTIVITY_MS = 180_000
 const POLL_INTERVAL_MS = 200
 const CHECKPOINT_FILE = "task-control-checkpoint.json"
 
+function checkerInlineConfig(): string {
+  const configured = process.env.OPENCORVUS_CONFIG_CONTENT?.trim()
+  if (!configured) return JSON.stringify({ permission_mode: "full_access" })
+  const parsed = JSON.parse(configured) as unknown
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    throw new Error("OPENCORVUS_CONFIG_CONTENT must be a JSON object for the Task-control checker")
+  }
+  return JSON.stringify({ ...(parsed as Record<string, unknown>), permission_mode: "full_access" })
+}
+
 type StreamEvent = {
   type?: string
   sequence?: number
@@ -185,11 +195,14 @@ function assertTemporaryRoot(runtimeRoot: string) {
 }
 
 async function runPhaseProcess(phase: string, runtimeRoot: string): Promise<string> {
+  const openCorvusRuntimeRoot = path.join(runtimeRoot, "runtime")
   const child = Bun.spawn([process.execPath, import.meta.path], {
     env: {
       ...process.env,
-      [OPENCORVUS_HOME]: runtimeRoot,
-      OPENCORVUS_TEST_HOME: runtimeRoot,
+      [OPENCORVUS_HOME]: openCorvusRuntimeRoot,
+      OPENCORVUS_TEST_HOME: openCorvusRuntimeRoot,
+      OPENCORVUS_TEST_PROCESS_ROOT: runtimeRoot,
+      OPENCORVUS_CONFIG_CONTENT: checkerInlineConfig(),
       [TASK_PROCESS_MODE]: "native",
       [RUNTIME_ROOT]: runtimeRoot,
       [PHASE]: phase,
@@ -268,7 +281,7 @@ async function runDriver() {
   let primaryFailure: unknown
   try {
     await initRepository(path.join(runtimeRoot, "project"))
-    await copyAuthorityFile(process.env[AUTH_SOURCE], path.join(runtimeRoot, "data", "auth.json"))
+    await copyAuthorityFile(process.env[AUTH_SOURCE], path.join(runtimeRoot, "runtime", "data", "auth.json"))
     await runPhaseProcess("seed-ingress", runtimeRoot)
     await runPhaseProcess("seed-cancellation", runtimeRoot)
     await runPhaseProcess("verify", runtimeRoot)
@@ -298,8 +311,10 @@ async function runDriver() {
 async function runServerPhase(phase: string, runtimeRoot: string) {
   const projectDirectory = path.join(runtimeRoot, "project")
   const checkpointPath = path.join(runtimeRoot, CHECKPOINT_FILE)
-  process.env[OPENCORVUS_HOME] = runtimeRoot
-  process.env.OPENCORVUS_TEST_HOME = runtimeRoot
+  const openCorvusRuntimeRoot = path.join(runtimeRoot, "runtime")
+  process.env[OPENCORVUS_HOME] = openCorvusRuntimeRoot
+  process.env.OPENCORVUS_TEST_HOME = openCorvusRuntimeRoot
+  process.env.OPENCORVUS_TEST_PROCESS_ROOT = runtimeRoot
   process.env[TASK_PROCESS_MODE] = "native"
   if (process.env[CONFIG_SOURCE]?.trim()) process.env.OPENCORVUS_CONFIG = path.resolve(process.env[CONFIG_SOURCE]!)
 

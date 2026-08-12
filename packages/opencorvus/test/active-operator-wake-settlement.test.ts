@@ -178,6 +178,16 @@ async function createActiveTask(input: {
   return { taskID, rootSessionID: root.id }
 }
 
+function findQueuedWake(wakeID: string) {
+  return Database.use((db) =>
+    db
+      .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+      .from(EngineArtifactTable)
+      .where(and(eq(EngineArtifactTable.id, wakeID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+      .get(),
+  )
+}
+
 async function waitForCancelledCheckpoint(taskID: string) {
   const settlementDeadline = Date.now() + 15_000
   let settlement: { label: string; payload: { status?: string } } | undefined
@@ -2966,6 +2976,225 @@ describe("active operator wake settlement", () => {
             delivery_result: { status: "completed", assistant_message_id: assistantMessageID },
           },
         })
+      },
+    })
+  })
+
+  test("settles an ownerless running head before admitting a younger active wake", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Same-runtime ownerless ingress reconciliation",
+          request: "Settle the committed FIFO head before delivering later work",
+        })
+        const oldWakeID = Database.transaction((db) =>
+          persistQueuedTaskIntentInTransaction(db, {
+            task: requireTask(taskID),
+            intent: "retry",
+            supersededOperatorMessageIDs: [],
+            now: Date.now() - 1_000,
+          }),
+        )
+        const oldAssistantMessageID = await persistFinalAssistantMessage({
+          rootSessionID,
+          taskIngress: { id: oldWakeID, kind: "operator_intent" },
+          text: "The older running ingress already has its exact durable result.",
+        })
+        updateEngineArtifact({ id: oldWakeID, label: "running" })
+
+        const deliveredWakeIDs: string[] = []
+        configureTaskLoopRunner(async ({ wakeID }) => {
+          deliveredWakeIDs.push(wakeID)
+          const row = Database.use((db) =>
+            db
+              .select({ payload: EngineArtifactTable.payload })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.id, wakeID))
+              .get(),
+          )
+          const ingress = QueuedTaskIngressSchema.parse(row?.payload)
+          return {
+            finalMessageID: await persistFinalAssistantMessage({
+              rootSessionID,
+              taskIngress: { id: wakeID, kind: ingress.source_kind },
+              text: "The younger wake ran after the durable head converged.",
+            }),
+          }
+        })
+
+        expect(await dispatchTaskLoop({ taskID, event: { note: "Deliver the younger active wake" } })).toBe("started")
+        await waitForQueueCompletionHooksForTest()
+
+        const wakes = Database.use((db) =>
+          db
+            .select({
+              id: EngineArtifactTable.id,
+              label: EngineArtifactTable.label,
+              payload: EngineArtifactTable.payload,
+            })
+            .from(EngineArtifactTable)
+            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+            .orderBy(EngineArtifactTable.time_created, EngineArtifactTable.id)
+            .all(),
+        )
+        expect(wakes).toHaveLength(2)
+        expect(wakes[0]).toMatchObject({
+          id: oldWakeID,
+          label: "drained",
+          payload: {
+            delivery_result: { status: "completed", assistant_message_id: oldAssistantMessageID },
+          },
+        })
+        expect(wakes[1]).toMatchObject({
+          id: deliveredWakeIDs[0],
+          label: "drained",
+          payload: { delivery_result: { status: "completed" } },
+        })
+        expect(deliveredWakeIDs).toEqual([wakes[1]?.id])
+      },
+    })
+  })
+
+  test("returns an exact persisted running wake after its durable assistant settles the sole head", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Persisted sole running settlement",
+          request: "Return the idempotent result after the durable head converges",
+        })
+        const wakeID = Database.transaction((db) =>
+          persistQueuedTaskIntentInTransaction(db, {
+            task: requireTask(taskID),
+            intent: "retry",
+            supersededOperatorMessageIDs: [],
+            now: Date.now(),
+          }),
+        )
+        const assistantMessageID = await persistFinalAssistantMessage({
+          rootSessionID,
+          taskIngress: { id: wakeID, kind: "operator_intent" },
+          text: "The sole persisted wake has already completed durably.",
+        })
+        updateEngineArtifact({ id: wakeID, label: "running" })
+
+        expect(await dispatchPersistedTaskLoop(taskID, wakeID)).toBe("started")
+        expect(findQueuedWake(wakeID)).toMatchObject({
+          label: "drained",
+          payload: {
+            delivery_result: { status: "completed", assistant_message_id: assistantMessageID },
+          },
+        })
+      },
+    })
+  })
+
+  test("reattaches an older ownerless running wake before a younger persisted dispatch", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Persisted FIFO owner restoration",
+          request: "Restore the physical owner for the older durable head",
+        })
+        const oldWakeID = Database.transaction((db) =>
+          persistQueuedTaskIntentInTransaction(db, {
+            task: requireTask(taskID),
+            intent: "retry",
+            supersededOperatorMessageIDs: [],
+            now: Date.now() - 1_000,
+          }),
+        )
+        updateEngineArtifact({ id: oldWakeID, label: "running" })
+        const youngerWakeID = Database.transaction((db) =>
+          persistQueuedTaskIntentInTransaction(db, {
+            task: requireTask(taskID),
+            intent: "replan",
+            supersededOperatorMessageIDs: [],
+            now: Date.now(),
+          }),
+        )
+        const deliveredWakeIDs: string[] = []
+        configureTaskLoopRunner(async ({ wakeID }) => {
+          deliveredWakeIDs.push(wakeID)
+          const ingress = QueuedTaskIngressSchema.parse(findQueuedWake(wakeID)?.payload)
+          return {
+            finalMessageID: await persistFinalAssistantMessage({
+              rootSessionID,
+              taskIngress: { id: wakeID, kind: ingress.source_kind },
+              text: `Settled persisted FIFO wake ${wakeID}.`,
+            }),
+          }
+        })
+
+        expect(await dispatchPersistedTaskLoop(taskID, youngerWakeID)).toBe("queued")
+        await waitForQueueCompletionHooksForTest()
+
+        expect(deliveredWakeIDs).toEqual([oldWakeID, youngerWakeID])
+        expect([findQueuedWake(oldWakeID)?.label, findQueuedWake(youngerWakeID)?.label]).toEqual(["drained", "drained"])
+      },
+    })
+  })
+
+  test("advances a younger persisted head after exact replay settles an older running wake", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Persisted exact replay queue advance",
+          request: "Advance the next durable wake after exact replay convergence",
+        })
+        const oldWakeID = Database.transaction((db) =>
+          persistQueuedTaskIntentInTransaction(db, {
+            task: requireTask(taskID),
+            intent: "retry",
+            supersededOperatorMessageIDs: [],
+            now: Date.now() - 1_000,
+          }),
+        )
+        const oldAssistantMessageID = await persistFinalAssistantMessage({
+          rootSessionID,
+          taskIngress: { id: oldWakeID, kind: "operator_intent" },
+          text: "The replayed older ingress has already completed.",
+        })
+        updateEngineArtifact({ id: oldWakeID, label: "running" })
+        const youngerWakeID = Database.transaction((db) =>
+          persistQueuedTaskIntentInTransaction(db, {
+            task: requireTask(taskID),
+            intent: "replan",
+            supersededOperatorMessageIDs: [],
+            now: Date.now(),
+          }),
+        )
+        const deliveredWakeIDs: string[] = []
+        configureTaskLoopRunner(async ({ wakeID }) => {
+          deliveredWakeIDs.push(wakeID)
+          const ingress = QueuedTaskIngressSchema.parse(findQueuedWake(wakeID)?.payload)
+          return {
+            finalMessageID: await persistFinalAssistantMessage({
+              rootSessionID,
+              taskIngress: { id: wakeID, kind: ingress.source_kind },
+              text: "The younger persisted wake advanced after exact replay.",
+            }),
+          }
+        })
+
+        expect(await dispatchPersistedTaskLoop(taskID, oldWakeID)).toBe("started")
+        await waitForQueueCompletionHooksForTest()
+
+        expect(findQueuedWake(oldWakeID)).toMatchObject({
+          label: "drained",
+          payload: {
+            delivery_result: { status: "completed", assistant_message_id: oldAssistantMessageID },
+          },
+        })
+        expect(deliveredWakeIDs).toEqual([youngerWakeID])
+        expect(findQueuedWake(youngerWakeID)?.label).toBe("drained")
       },
     })
   })

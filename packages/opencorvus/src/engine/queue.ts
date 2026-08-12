@@ -1309,6 +1309,118 @@ function findDurableAssistantForLaunchWake(input: {
   return Message.Assistant.parse({ ...row.data, id: row.id, sessionID: row.sessionID })
 }
 
+type RunningIngressReconciliation =
+  | "owned"
+  | "pending"
+  | "drained"
+  | "delivery_failed"
+  | "terminal_inapplicable"
+  | "missing"
+
+async function reconcileOwnerlessRunningTaskIngress(input: {
+  id: string
+  taskID: string
+  timeCreated: number
+  ingress: QueuedTaskIngress
+}): Promise<RunningIngressReconciliation> {
+  if (SessionPromptState.rootWakeQueuePosition(input.ingress.root_session_id, input.id) !== undefined) {
+    return "owned"
+  }
+  const durableAssistant = findDurableAssistantForLaunchWake({
+    taskID: input.taskID,
+    wakeID: input.id,
+    ingress: input.ingress,
+  })
+  if (durableAssistant) {
+    if (durableAssistant.error) {
+      markQueuedOperatorWakeDeliveryFailed({
+        artifactID: input.id,
+        ingress: input.ingress,
+        errorName: durableAssistant.error.name,
+        message:
+          typeof durableAssistant.error.data?.message === "string"
+            ? durableAssistant.error.data.message
+            : `Assistant delivery failed with ${durableAssistant.error.name}`,
+        now: durableAssistant.time.completed,
+      })
+    } else {
+      try {
+        await assertQueuedWakeSettlement({
+          taskID: input.taskID,
+          wake: {
+            id: input.id,
+            timeCreated: input.timeCreated,
+            wakeID: input.ingress.wake_id,
+            rootSessionID: input.ingress.root_session_id,
+            ingress: input.ingress,
+            event: input.ingress.event,
+          },
+          result: { finalMessageID: durableAssistant.id },
+        })
+        markQueuedOperatorWakeDrained({
+          artifactID: input.id,
+          assistantMessageID: durableAssistant.id,
+          now: durableAssistant.time.completed,
+        })
+      } catch (error) {
+        markQueuedOperatorWakeDeliveryFailed({
+          artifactID: input.id,
+          ingress: input.ingress,
+          errorName: error instanceof Error ? error.name : "QueuedWakeSettlementError",
+          message: error instanceof Error ? error.message : String(error),
+          now: durableAssistant.time.completed,
+        })
+      }
+    }
+  } else {
+    Database.immediateTransaction((db) => {
+      updateEngineArtifactWhereReturning(db, {
+        where: and(
+          eq(EngineArtifactTable.id, input.id),
+          eq(EngineArtifactTable.task_id, input.taskID),
+          eq(EngineArtifactTable.kind, "queued_operator_wake"),
+          eq(EngineArtifactTable.label, "running"),
+        )!,
+        kind: "queued_operator_wake",
+        label: "pending",
+        timeUpdated: Date.now(),
+      })
+    })
+  }
+  const current = findQueuedOperatorWakeByID(input.taskID, input.id)
+  if (!current) return "missing"
+  if (
+    current.label === "pending" ||
+    current.label === "drained" ||
+    current.label === "delivery_failed" ||
+    current.label === "terminal_inapplicable"
+  ) {
+    return current.label
+  }
+  if (current.label === "running") {
+    if (SessionPromptState.rootWakeQueuePosition(current.ingress.root_session_id, current.id) !== undefined) {
+      return "owned"
+    }
+    throw new Error(
+      `Queued operator ingress ${input.id} remained running without a physical owner after reconciliation`,
+    )
+  }
+  throw new Error(`Queued operator ingress ${input.id} has unsupported reconciliation state ${current.label}`)
+}
+
+async function reconcileOwnerlessRunningTaskIngressHead(
+  taskID: string,
+): Promise<RunningIngressReconciliation | undefined> {
+  const head = findQueuedOperatorWakeHead(taskID)
+  if (!head || head.label !== "running") return undefined
+  return reconcileOwnerlessRunningTaskIngress({
+    id: head.id,
+    taskID,
+    timeCreated: head.timeCreated,
+    ingress: head.ingress,
+  })
+}
+
 export async function requeueInterruptedRunningTaskIngresses(): Promise<number> {
   const cancelledTasks = Database.use((db) =>
     db
@@ -1358,80 +1470,13 @@ export async function requeueInterruptedRunningTaskIngresses(): Promise<number> 
   for (const row of rows) {
     try {
       const ingress = QueuedTaskIngressSchema.parse(row.payload)
-      if (SessionPromptState.rootWakeQueuePosition(ingress.root_session_id, row.id) !== undefined) continue
-      const durableAssistant = Database.use((db) =>
-        db
-          .select({
-            id: MessageTable.id,
-            sessionID: MessageTable.session_id,
-            data: MessageTable.data,
-          })
-          .from(MessageTable)
-          .innerJoin(SessionTable, eq(SessionTable.id, MessageTable.session_id))
-          .where(
-            and(
-              eq(SessionTable.parent_id, ingress.root_session_id),
-              eq(SessionTable.kind, "orchestrator"),
-              sql`json_extract(${MessageTable.data}, '$.role') = 'assistant'`,
-              sql`json_extract(${MessageTable.data}, '$.taskIngress.id') = ${row.id}`,
-              sql`json_extract(${MessageTable.data}, '$.taskIngress.kind') = ${ingress.source_kind}`,
-              sql`json_extract(${MessageTable.data}, '$.time.completed') IS NOT NULL`,
-            ),
-          )
-          .orderBy(desc(MessageTable.time_created), desc(MessageTable.id))
-          .get(),
-      )
-      if (durableAssistant) {
-        const assistant = Message.Assistant.parse({
-          ...durableAssistant.data,
-          id: durableAssistant.id,
-          sessionID: durableAssistant.sessionID,
-        })
-        if (assistant.error) {
-          markQueuedOperatorWakeDeliveryFailed({
-            artifactID: row.id,
-            ingress,
-            errorName: assistant.error.name,
-            message:
-              typeof assistant.error.data?.message === "string"
-                ? assistant.error.data.message
-                : `Assistant delivery failed with ${assistant.error.name}`,
-            now: assistant.time.completed,
-          })
-          continue
-        }
-        try {
-          await assertQueuedWakeSettlement({
-            taskID: row.taskID,
-            wake: {
-              id: row.id,
-              timeCreated: row.timeCreated,
-              wakeID: ingress.wake_id,
-              rootSessionID: ingress.root_session_id,
-              ingress,
-              event: ingress.event,
-            },
-            result: { finalMessageID: assistant.id },
-          })
-          markQueuedOperatorWakeDrained({
-            artifactID: row.id,
-            assistantMessageID: assistant.id,
-            now: assistant.time.completed,
-          })
-          continue
-        } catch (error) {
-          markQueuedOperatorWakeDeliveryFailed({
-            artifactID: row.id,
-            ingress,
-            errorName: error instanceof Error ? error.name : "QueuedWakeSettlementError",
-            message: error instanceof Error ? error.message : String(error),
-            now: assistant.time.completed,
-          })
-          continue
-        }
-      }
-      updateEngineArtifact({ id: row.id, label: "pending", timeUpdated: Date.now() })
-      requeued += 1
+      const disposition = await reconcileOwnerlessRunningTaskIngress({
+        id: row.id,
+        taskID: row.taskID,
+        timeCreated: row.timeCreated,
+        ingress,
+      })
+      if (disposition === "pending") requeued += 1
     } catch (error) {
       failures.push(
         new Error(`Task ingress ${row.id}: ${error instanceof Error ? error.message : String(error)}`, {
@@ -1985,8 +2030,20 @@ async function runTaskLoopCompletionAttempt(input: {
           )
           .get(),
       )
-      if (currentWake?.label === "pending") return "same_task_wake_pending"
-      if (currentWake?.label === "delivery_failed") {
+      if (currentWake?.label === "running") {
+        const wake = findQueuedOperatorWakeByID(input.taskID, input.wakeID)
+        if (wake) {
+          await reconcileOwnerlessRunningTaskIngress({
+            id: wake.id,
+            taskID: input.taskID,
+            timeCreated: wake.timeCreated,
+            ingress: wake.ingress,
+          })
+        }
+      }
+      const reconciledWake = findQueuedOperatorWakeByID(input.taskID, input.wakeID)
+      if (reconciledWake?.label === "pending") return "same_task_wake_pending"
+      if (reconciledWake?.label === "delivery_failed") {
         if (await retryFailedExactTerminalIngress(input.taskID, input.wakeID)) {
           return "exact_ingress_retry_attached"
         }
@@ -2613,6 +2670,7 @@ export async function waitForQueueCompletionHooksForTest(): Promise<void> {
 }
 
 export async function drainQueuedTaskEvent(taskID: string): Promise<boolean> {
+  await reconcileOwnerlessRunningTaskIngressHead(taskID)
   if (!hasQueuedTaskEvent(taskID)) return false
 
   const task = findTask(taskID)
@@ -3685,12 +3743,25 @@ export async function dispatchPersistedTaskLoop(
   const { assertTaskExecutionCapsuleRuntime } = await import("@/engine/task-execution-capsule-binding")
   await assertTaskExecutionCapsuleRuntime(task.id)
   const cwd = taskRootDirectory(task)
+  const reconciliation = await reconcileOwnerlessRunningTaskIngressHead(taskID)
   const head = findQueuedOperatorWakeHead(taskID)
-  if (!head) throw new Error(`Task ${taskID} has no persisted wake to dispatch`)
+  if (!head) {
+    const expected = expectedWakeID ? findQueuedOperatorWakeByID(taskID, expectedWakeID) : undefined
+    if (expected && ["drained", "terminal_inapplicable"].includes(expected.label)) return "started"
+    if (expected?.label === "delivery_failed") return "ignored"
+    if (reconciliation === "drained" || reconciliation === "terminal_inapplicable") return "started"
+    throw new Error(`Task ${taskID} has no persisted wake to dispatch`)
+  }
   if (expectedWakeID && head.id !== expectedWakeID) {
     const expected = findQueuedOperatorWakeByID(taskID, expectedWakeID)
-    if (expected && ["running", "drained", "terminal_inapplicable"].includes(expected.label)) return "started"
-    if (expected?.label === "pending") return "queued"
+    if (expected && ["running", "drained", "terminal_inapplicable"].includes(expected.label)) {
+      if (head.label === "pending") await drainQueuedTaskEvent(taskID)
+      return "started"
+    }
+    if (expected?.label === "pending") {
+      if (head.label === "pending") await drainQueuedTaskEvent(taskID)
+      return "queued"
+    }
     if (expected?.label === "delivery_failed") return "ignored"
     throw new Error(`Task ${taskID} durable wake head is ${head.id}, not expected ${expectedWakeID}`)
   }

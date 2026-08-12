@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-12-running-wake-and-session-control-json-convergence.md](2026-08-12-running-wake-and-session-control-json-convergence.md) records the ownerless running-wake FIFO starvation and Session-control JSON round-trip conflict, then defines exact same-runtime convergence and real-checker acceptance.
+
 - [2026-08-12-v0.0.41-beta-release.md](2026-08-12-v0.0.41-beta-release.md) defines the production database bootstrap prerequisite, canonical version synchronization, source-aligned requested branch/tag flow, five-platform signed native publication, and database-backed website verification for `v0.0.41-beta`.
 
 - [2026-08-12-scheduled-random-isolation-e2e.md](2026-08-12-scheduled-random-isolation-e2e.md) defines the random-port, isolated-database, fresh-project Scheduled scenario matrix, depth-first repair boundary, real streaming/background-fire checker, and manual visual acceptance loop.
