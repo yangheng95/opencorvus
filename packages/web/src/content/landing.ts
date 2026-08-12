@@ -14,12 +14,53 @@ export const landingContent = {
       secondary: "Explore Expert Squads",
       boundary:
         "You choose what connects, which Squad runs, and the permission rules. OpenCorvus keeps the Task and its evidence visible.",
-      mediaAlt:
-        "Animated OpenCorvus concept flow from the open platform through Skills, MCP, tools, one Agent, an Expert Squad, a Mission of fixed-squad Tasks, long-horizon work, and community contributions.",
-      mediaCaption:
-        "Platform → Skills, MCP, and tools → Agent → Expert Squad → Mission → long-horizon work → open community.",
-      playAnimation: "Play concept animation",
-      stopAnimation: "Stop animation",
+      harness: {
+        label: "The OpenCorvus Harness",
+        description:
+          "One visible operating layer binds the workspace, model, tools, Skills, permissions, and evidence to the work at hand.",
+      },
+      gallery: {
+        label: "Inside the Harness",
+        ariaLabel: "OpenCorvus product surfaces",
+        items: [
+          {
+            id: "work",
+            kind: "image",
+            label: "Work",
+            title: "Shape a review-ready deliverable",
+            description:
+              "Set the outcome, select the Work Harness, and keep production and review in one conversation.",
+            alt: "The OpenCorvus Work Harness with the composer, product mode, tools, and suggested long-form tasks visible.",
+          },
+          {
+            id: "code",
+            kind: "image",
+            label: "Code",
+            title: "Stay grounded in the project",
+            description:
+              "Switch the same operating surface to Code for repository work, terminals, files, and engineering evidence.",
+            alt: "The OpenCorvus Code Harness selected in the project-bound composer.",
+          },
+          {
+            id: "mission",
+            kind: "image",
+            label: "Mission",
+            title: "Hand an outcome to a Mission",
+            description:
+              "Move from one conversation to Mission-scale coordination without losing the selected context and controls.",
+            alt: "The OpenCorvus composer switched to Mission with the Expert Squad context boundary visible.",
+          },
+          {
+            id: "squads",
+            kind: "image",
+            label: "Squads",
+            title: "Inspect the capability package",
+            description:
+              "Compare and install Expert Squads explicitly; installation never activates a team on its own.",
+            alt: "The OpenCorvus Expert Squad Market and its explicit local installation controls.",
+          },
+        ],
+      },
     },
     proof: [
       ["Your Agent Workbench", "Workspace, tools, capabilities, and permission rules shaped around your work."],
@@ -57,7 +98,8 @@ export const landingContent = {
           index: "03",
           name: "Set the rules",
           use: "Keep authority explicit",
-          description: "Choose which capabilities are available, then select Full access or Ask me for execution authority.",
+          description:
+            "Choose which capabilities are available, then select Full access or Ask me for execution authority.",
           output: "Inspectable capabilities and authority",
         },
       ],
@@ -137,11 +179,48 @@ export const landingContent = {
       primary: "开始定制工作台",
       secondary: "探索专家团",
       boundary: "由你决定连接什么、启用哪个专家团以及权限规则；OpenCorvus 让任务与证据保持可见。",
-      mediaAlt:
-        "OpenCorvus 动画概念流程：从开放平台、Skills、MCP 与工具，到 Agent、专家团、由固定专家团任务组成的 Mission、长程任务和社区贡献。",
-      mediaCaption: "平台 → Skills、MCP 与工具 → Agent → 专家团 → Mission → 长程任务 → 开放社区。",
-      playAnimation: "播放概念动画",
-      stopAnimation: "停止动画",
+      harness: {
+        label: "OpenCorvus Harness",
+        description: "同一套可见运行层，把工作区、模型、工具、Skills、权限与证据绑定到当前工作。",
+      },
+      gallery: {
+        label: "Harness 内部",
+        ariaLabel: "OpenCorvus 产品界面",
+        items: [
+          {
+            id: "work",
+            kind: "image",
+            label: "Work",
+            title: "把成果推进到可审查状态",
+            description: "明确目标，选择 Work Harness，让生产与复核留在同一段对话里。",
+            alt: "OpenCorvus Work Harness，显示了输入区、产品模式、工具和长程任务建议。",
+          },
+          {
+            id: "code",
+            kind: "image",
+            label: "Code",
+            title: "始终扎根真实项目",
+            description: "在同一运行界面切换到 Code，把代码仓库、终端、文件和工程证据连在一起。",
+            alt: "在项目输入区中选中的 OpenCorvus Code Harness。",
+          },
+          {
+            id: "mission",
+            kind: "image",
+            label: "Mission",
+            title: "把结果交给 Mission 推进",
+            description: "从单段对话进入 Mission 级协同，同时保留已选上下文与控制。",
+            alt: "OpenCorvus 输入区切换至 Mission，并显示专家团上下文边界。",
+          },
+          {
+            id: "squads",
+            kind: "image",
+            label: "专家团",
+            title: "检查完整能力包",
+            description: "显式比较和安装专家团；安装本身绝不会自动激活一支团队。",
+            alt: "OpenCorvus 专家团市场及其显式本地安装控制。",
+          },
+        ],
+      },
     },
     proof: [
       ["你的 Agent 工作台", "围绕你的工作组织工作区、工具、能力与权限规则。"],

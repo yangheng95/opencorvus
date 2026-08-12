@@ -32,6 +32,23 @@ application programming interface (API), or a connected channel. OpenCorvus
 streams execution and keeps messages, tool results, typed Artifacts, host
 observations, decisions, and completion evidence visible.
 
+The **OpenCorvus Harness** is the memorable operating layer beneath that
+journey: it binds the selected workspace, model, tools, Skills, permissions, and
+evidence to the current Chat, Work conversation, Mission, scheduler, or worker.
+It is not a second runtime object or a replacement for the Workbench, Task, or
+Mission model.
+
+<table>
+  <tr>
+    <td width="50%"><img src="packages/web/src/assets/lander/harness-gallery/work-harness.png" alt="OpenCorvus Work Harness" /></td>
+    <td width="50%"><img src="packages/web/src/assets/lander/harness-gallery/mission-composer.png" alt="OpenCorvus Mission composer" /></td>
+  </tr>
+  <tr>
+    <td><strong>Work</strong> keeps a long-form deliverable and its review surface together.</td>
+    <td><strong>Mission</strong> turns the same visible context into owned, coordinated work.</td>
+  </tr>
+</table>
+
 > [!IMPORTANT]
 > OpenCorvus is under active development. This README describes capabilities in
 > the repository today. Output quality depends on the selected models, reachable

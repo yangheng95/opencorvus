@@ -29,6 +29,21 @@ OpenCorvus 让你围绕真实工作定制 Agent 工作台：连接工作区，�
 OpenCorvus 会流式呈现执行过程，并让消息、工具结果、带类型的 Artifact、宿主观察、
 决策与完成证据始终可见。
 
+**OpenCorvus Harness** 是这条路径背后一层容易记住的运行界面：它把已选工作区、模型、
+工具、Skills、权限与证据绑定到当前 Chat、Work 对话、Mission、scheduler 或 worker。
+它不是第二个运行时对象，也不会取代工作台、Task 或 Mission 模型。
+
+<table>
+  <tr>
+    <td width="50%"><img src="packages/web/src/assets/lander/harness-gallery/work-harness.png" alt="OpenCorvus Work Harness" /></td>
+    <td width="50%"><img src="packages/web/src/assets/lander/harness-gallery/mission-composer.png" alt="OpenCorvus Mission 输入区" /></td>
+  </tr>
+  <tr>
+    <td><strong>Work</strong> 把长篇交付与复核界面留在一起。</td>
+    <td><strong>Mission</strong> 把同一份可见上下文变成责任清晰的协同工作。</td>
+  </tr>
+</table>
+
 > [!IMPORTANT]
 > OpenCorvus 仍在开发。本 README 只描述当前仓库已有能力。输出质量取决于所选模型、
 > 可访问的数据源、已安装能力和本次运行取得的证据。无人值守任务只会在本地或托管的
