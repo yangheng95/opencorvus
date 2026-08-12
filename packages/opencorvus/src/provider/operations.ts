@@ -224,6 +224,7 @@ export async function testProviderConnection(
       body: { ok: true, status: "connected", providerID, modelID: selectedModelID, message: "Provider is reachable." },
     }
   } catch (error) {
+    if (Auth.findReadError(error)) throw error
     const cause = error instanceof Error && error.cause instanceof Error ? error.cause : undefined
     const message = ProviderError.redactSensitiveProviderText(
       cause?.message || (error instanceof Error ? error.message : String(error)),

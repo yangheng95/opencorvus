@@ -34,7 +34,7 @@ import { EngineService } from "@/task-api"
 import { Snapshot } from "@/snapshot"
 import { TaskQueueService } from "@/scheduler/task-queue-service"
 import { Log } from "../../util/log"
-import { badRequestBody, errors, namedErrorResponse } from "../error"
+import { AuthReadUnavailableResponse, badRequestBody, errors, namedErrorResponse } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { ProjectMemory } from "@/memory/project-memory"
@@ -498,6 +498,7 @@ export const SessionRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(SessionConfigResponse) } },
           },
           ...errors(400, 404),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(
@@ -528,6 +529,7 @@ export const SessionRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(SessionConfigResponse) } },
           },
           ...errors(400, 404),
+          503: AuthReadUnavailableResponse,
           409: namedErrorResponse(
             "Task creation binding owns the root expert-squad profile",
             "TaskPromptProfileImmutableError",
@@ -1447,6 +1449,7 @@ export const SessionRoutes = lazy(() =>
             },
           },
           ...errors(400, 404),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(
@@ -1491,6 +1494,7 @@ export const SessionRoutes = lazy(() =>
             },
           },
           ...errors(400, 404),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(

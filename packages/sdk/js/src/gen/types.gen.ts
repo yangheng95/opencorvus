@@ -71,6 +71,15 @@ export type ApiAuth = {
 
 export type Auth = OAuth | ApiAuth | WellKnownAuth
 
+export type AuthReadError = {
+  data: {
+    message: string
+    operation: "read_saved_credentials"
+    reason: "io" | "malformed_json" | "invalid_credential"
+  }
+  name: "AuthReadError"
+}
+
 export type BadRequestError = {
   data: unknown
   error: Array<{
@@ -5854,6 +5863,10 @@ export type AuthRemoveErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type AuthRemoveError = AuthRemoveErrors[keyof AuthRemoveErrors]
@@ -5889,6 +5902,10 @@ export type AuthSetErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type AuthSetError = AuthSetErrors[keyof AuthSetErrors]
@@ -6262,6 +6279,15 @@ export type CodingChatSessionCreateData = {
   }
   url: "/coding/chat/session"
 }
+
+export type CodingChatSessionCreateErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type CodingChatSessionCreateError = CodingChatSessionCreateErrors[keyof CodingChatSessionCreateErrors]
 
 export type CodingChatSessionCreateResponses = {
   /**
@@ -6691,6 +6717,15 @@ export type CodingWorkSessionCreateData = {
   }
   url: "/coding/work/session"
 }
+
+export type CodingWorkSessionCreateErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type CodingWorkSessionCreateError = CodingWorkSessionCreateErrors[keyof CodingWorkSessionCreateErrors]
 
 export type CodingWorkSessionCreateResponses = {
   /**
@@ -7235,6 +7270,10 @@ export type ConfigGetErrors = {
     }
     name: "NonCanonicalConfigFileError"
   }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ConfigGetError = ConfigGetErrors[keyof ConfigGetErrors]
@@ -7276,6 +7315,10 @@ export type ConfigUpdateErrors = {
     }
     name: "NonCanonicalConfigFileError"
   }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ConfigUpdateError = ConfigUpdateErrors[keyof ConfigUpdateErrors]
@@ -7305,6 +7348,15 @@ export type ConfigPromptData = {
   url: "/config/prompt"
 }
 
+export type ConfigPromptErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type ConfigPromptError = ConfigPromptErrors[keyof ConfigPromptErrors]
+
 export type ConfigPromptResponses = {
   /**
    * Prompt catalog entries
@@ -7325,6 +7377,15 @@ export type ConfigProvidersData = {
   }
   url: "/config/providers"
 }
+
+export type ConfigProvidersErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type ConfigProvidersError = ConfigProvidersErrors[keyof ConfigProvidersErrors]
 
 export type ConfigProvidersResponses = {
   /**
@@ -8150,6 +8211,10 @@ export type ExpertSquadCatalogErrors = {
    * Internal server error
    */
   500: UnknownError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ExpertSquadCatalogError = ExpertSquadCatalogErrors[keyof ExpertSquadCatalogErrors]
@@ -13980,6 +14045,10 @@ export type ExpertSquadUninstallErrors = {
     }
     name: "ExpertSquadPackageError"
   }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ExpertSquadUninstallError = ExpertSquadUninstallErrors[keyof ExpertSquadUninstallErrors]
@@ -16853,6 +16922,10 @@ export type GlobalConfigUpdateErrors = {
     }
     name: "NonCanonicalConfigFileError"
   }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type GlobalConfigUpdateError = GlobalConfigUpdateErrors[keyof GlobalConfigUpdateErrors]
@@ -17180,6 +17253,10 @@ export type GlobalProvidersDiscoverModelsErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type GlobalProvidersDiscoverModelsError =
@@ -17272,6 +17349,10 @@ export type GlobalProvidersRemoveErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type GlobalProvidersRemoveError = GlobalProvidersRemoveErrors[keyof GlobalProvidersRemoveErrors]
@@ -17293,6 +17374,16 @@ export type GlobalProvidersAccountUsageData = {
   query?: never
   url: "/global/providers/{providerID}/account-usage"
 }
+
+export type GlobalProvidersAccountUsageErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type GlobalProvidersAccountUsageError =
+  GlobalProvidersAccountUsageErrors[keyof GlobalProvidersAccountUsageErrors]
 
 export type GlobalProvidersAccountUsageResponses = {
   /**
@@ -17323,6 +17414,10 @@ export type GlobalProvidersAuthExecuteErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type GlobalProvidersAuthExecuteError = GlobalProvidersAuthExecuteErrors[keyof GlobalProvidersAuthExecuteErrors]
@@ -17429,6 +17524,10 @@ export type GlobalProvidersOauthCallbackErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type GlobalProvidersOauthCallbackError =
@@ -17468,6 +17567,10 @@ export type GlobalProvidersTestErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type GlobalProvidersTestError = GlobalProvidersTestErrors[keyof GlobalProvidersTestErrors]
@@ -19672,6 +19775,10 @@ export type MissionWakeErrors = {
         }
         name: "MissionExpertSquadSnapshotMismatchError"
       }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type MissionWakeError = MissionWakeErrors[keyof MissionWakeErrors]
@@ -20035,6 +20142,10 @@ export type MissionDispatchErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type MissionDispatchError = MissionDispatchErrors[keyof MissionDispatchErrors]
@@ -21783,6 +21894,10 @@ export type ProviderDiscoverModelsErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ProviderDiscoverModelsError = ProviderDiscoverModelsErrors[keyof ProviderDiscoverModelsErrors]
@@ -21887,6 +22002,10 @@ export type ProviderRemoveErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ProviderRemoveError = ProviderRemoveErrors[keyof ProviderRemoveErrors]
@@ -21913,6 +22032,15 @@ export type ProviderAccountUsageData = {
   }
   url: "/provider/{providerID}/account-usage"
 }
+
+export type ProviderAccountUsageErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type ProviderAccountUsageError = ProviderAccountUsageErrors[keyof ProviderAccountUsageErrors]
 
 export type ProviderAccountUsageResponses = {
   /**
@@ -21956,6 +22084,10 @@ export type ProviderAuthExecuteErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ProviderAuthExecuteError = ProviderAuthExecuteErrors[keyof ProviderAuthExecuteErrors]
@@ -22100,6 +22232,10 @@ export type ProviderOauthCallbackErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ProviderOauthCallbackError = ProviderOauthCallbackErrors[keyof ProviderOauthCallbackErrors]
@@ -22145,6 +22281,10 @@ export type ProviderTestErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type ProviderTestError = ProviderTestErrors[keyof ProviderTestErrors]
@@ -23267,6 +23407,10 @@ export type SessionConfigGetErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type SessionConfigGetError = SessionConfigGetErrors[keyof SessionConfigGetErrors]
@@ -23447,6 +23591,10 @@ export type SessionConfigUpdateErrors = {
         }
         name: "TaskPackageRevisionBindingError"
       }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type SessionConfigUpdateError = SessionConfigUpdateErrors[keyof SessionConfigUpdateErrors]
@@ -24476,6 +24624,10 @@ export type SessionPromptErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type SessionPromptError = SessionPromptErrors[keyof SessionPromptErrors]
@@ -24833,6 +24985,10 @@ export type SessionPromptAsyncErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
 }
 
 export type SessionPromptAsyncError = SessionPromptAsyncErrors[keyof SessionPromptAsyncErrors]

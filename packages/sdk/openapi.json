@@ -237,6 +237,46 @@
           }
         ]
       },
+      "AuthReadError": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "operation": {
+                "const": "read_saved_credentials",
+                "type": "string"
+              },
+              "reason": {
+                "enum": [
+                  "io",
+                  "malformed_json",
+                  "invalid_credential"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "operation",
+              "reason",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "AuthReadError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "BadRequestError": {
         "properties": {
           "data": {},
@@ -19505,6 +19545,16 @@
               }
             },
             "description": "Bad request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Remove auth credentials",
@@ -19594,6 +19644,16 @@
               }
             },
             "description": "Bad request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Set auth credentials",
@@ -20559,6 +20619,16 @@
               }
             },
             "description": "Chat session"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Create right sidebar Chat session",
@@ -21556,6 +21626,16 @@
               }
             },
             "description": "Work session"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Create right sidebar Work session",
@@ -22859,6 +22939,16 @@
               }
             },
             "description": "Non-canonical configuration file"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Get configuration",
@@ -22943,6 +23033,16 @@
               }
             },
             "description": "Non-canonical configuration file"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Update configuration (JSON Merge Patch)",
@@ -22988,6 +23088,16 @@
               }
             },
             "description": "Prompt catalog entries"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "List prompt catalog",
@@ -23045,6 +23155,16 @@
               }
             },
             "description": "List of providers"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "List config providers",
@@ -25332,6 +25452,16 @@
               }
             },
             "description": "Internal server error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Resolve the active expert-squad capability projection",
@@ -51027,6 +51157,16 @@
               }
             },
             "description": "Expert squad uninstall rejected"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Uninstall an expert squad package",
@@ -59410,6 +59550,16 @@
               }
             },
             "description": "Non-canonical configuration file"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Update global configuration",
@@ -60253,6 +60403,16 @@
               }
             },
             "description": "Bad request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Discover global Provider models",
@@ -60452,6 +60612,16 @@
               }
             },
             "description": "Bad request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Delete a global provider",
@@ -60488,6 +60658,16 @@
               }
             },
             "description": "Provider account usage lookup result"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Get global Provider account usage",
@@ -60596,6 +60776,16 @@
               }
             },
             "description": "Bad request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Execute global Provider auth",
@@ -60845,6 +61035,16 @@
               }
             },
             "description": "Bad request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Complete global Provider subscription authorization",
@@ -60932,6 +61132,16 @@
               }
             },
             "description": "Bad request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Test a global Provider connection",
@@ -67471,6 +67681,16 @@
               }
             },
             "description": "Mission wake request or immutable Expert Squad snapshot rejected"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Wake the Mission agent",
@@ -68559,6 +68779,16 @@
               }
             },
             "description": "Not found"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Dispatch a Mission draft",
@@ -73248,6 +73478,16 @@
               }
             },
             "description": "Bad request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Discover OpenAI-compatible provider models",
@@ -73478,6 +73718,16 @@
               }
             },
             "description": "Bad request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Delete a project provider",
@@ -73523,6 +73773,16 @@
               }
             },
             "description": "Provider account usage lookup result"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Get Provider account usage",
@@ -73643,6 +73903,16 @@
               }
             },
             "description": "Bad request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Execute auth method",
@@ -73928,6 +74198,16 @@
               }
             },
             "description": "Bad request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "OAuth callback",
@@ -74025,6 +74305,16 @@
               }
             },
             "description": "Bad request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Test provider connection",
@@ -76708,6 +76998,16 @@
               }
             },
             "description": "Not found"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Get session effective configuration",
@@ -77850,6 +78150,16 @@
               }
             },
             "description": "Task creation binding owns the root expert-squad profile"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Update session configuration overlay",
@@ -81882,6 +82192,16 @@
               }
             },
             "description": "Not found"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Send message",
@@ -82539,6 +82859,16 @@
               }
             },
             "description": "Not found"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Send async message",
