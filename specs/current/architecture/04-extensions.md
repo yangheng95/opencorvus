@@ -349,7 +349,10 @@ Skill definition 错误而失败，真正访问 Skill catalog 时仍保留严格
 当前全局内置 inventory 包含 `design-taste-frontend`、`grill-me`、`office-artifacts` 和
 `research-report`。inventory 本身不代表 Agent 可调用：
 
-- `advanced` manifest 的 scheduler `default_skill_refs` 只显式授予 `grill-me`；`squad-sdk` scheduler
+- `advanced` manifest 的 scheduler 与精确 `requirement-engineer` worker 各自通过 `default_skill_refs`
+  显式获得 `grill-me`；Requirements worker 被鼓励用它逐个澄清当前决策 frontier，但问题仍经可见的
+  worker coordination → Orchestrator `ask_user` interaction → 同 lineage continuation 链路返回，最终
+  RequirementSet 仍只由 typed Requirements adapter 注册，不存在按 `base_role`、provider 或模型继承；`squad-sdk` scheduler
   独占 package-local authoring/import method Skills 与 `expert_squad_author | multica_catalog |
   multica_preview | multica_import`，每个 worker 的授权只来自该 worker 的精确动态投影；
 - Prism manifest 只给 `mirror-design-page-designer` 的 `default_skill_refs` 显式授予

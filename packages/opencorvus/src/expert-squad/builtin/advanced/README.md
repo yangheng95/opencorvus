@@ -39,6 +39,8 @@ Independent responsibilities publish non-transferable evidence through their exa
 
 Advanced is used only while `prompt_profile.active` is `advanced`. Selecting another expert squad replaces this package's complete projection; other packages do not inherit or combine with Advanced agents, prompts, skills, tools, mounts, or workflow contracts. The platform-owned `universal-build` capability remains scheduler-only and is not Advanced inheritance.
 
+The scheduler and `requirement-engineer` each receive the platform `grill-me` Skill through their own exact `default_skill_refs` grants. The Requirement Engineer is encouraged to use its one-question decision-frontier method, routes unresolved operator decisions through the visible coordination and user-interaction path, and still persists the final requirements and foundational decisions only through the Requirements typed adapter. The grant does not follow the `requirements` runtime template into any other Agent or Expert Squad.
+
 ## Artifact protocol
 
 The model-facing file protocol uses `artifact_snapshot` to publish current-Task project files and return one exact content-addressed `resource_set` locator. `artifact_publish` accepts the complete evidence value only as strict JSON text in `payload_json`; object keys must be unique, and `resource_set` is required (`null` when there are no files, otherwise the exact locator returned by `artifact_snapshot`). The Host verifies and expands the immutable manifest inside its trusted boundary, then publishes the structured value through the same canonical service used by typed and package tools.

@@ -5,7 +5,7 @@
   "name": "Advanced",
   "label": "Advanced",
   "description": "Built-in advanced software delivery team with retained Requirements-to-Architect traceability and parallel investigation, implementation, testing, interface, and independent-review frontiers.",
-  "version": "2026.08.09.1",
+  "version": "2026.08.12.1",
   "product_pillars": ["code", "work"],
   "readme": "README.md",
   "selector": {
@@ -60,7 +60,7 @@
         "prompt": "agents/requirement-engineer/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
-        "default_skill_refs": [],
+        "default_skill_refs": ["default/skill/grill-me"],
         "package_skill_refs": ["advanced/shared/method"],
         "default_tool_refs": [],
         "package_tool_refs": [],

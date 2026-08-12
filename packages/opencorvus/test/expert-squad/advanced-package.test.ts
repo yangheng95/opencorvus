@@ -1,6 +1,12 @@
 import { describe, expect, test } from "bun:test"
 import path from "node:path"
+import { Config } from "../../src/config/config"
+import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
+import { BrowserMCPBuiltin } from "../../src/mcp/browser/builtin"
+import { Instance } from "../../src/project/instance"
+import { SkillMount } from "../../src/skill/mounts"
+import { memoryProject } from "../fixture/memory"
 
 const advancedPackageRoot = path.resolve(import.meta.dir, "../../src/expert-squad/builtin/advanced")
 const basePackageRoot = path.resolve(import.meta.dir, "../../src/expert-squad/builtin/base")
@@ -20,7 +26,14 @@ describe("built-in interface review workflow authority", () => {
   test("projects autonomous greenfield and explicit independent-visual Advanced workflows", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(advancedPackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.09.1")
+    expect(loaded.manifest.version).toBe("2026.08.12.1")
+    expect(loaded.manifest.capability_projection.scheduler.default_skill_refs).toEqual(["default/skill/grill-me"])
+    expect(loaded.manifest.capability_projection.agents["requirement-engineer"]!.default_skill_refs).toEqual([
+      "default/skill/grill-me",
+    ])
+    expect(loaded.promptProfile.agents["requirement-engineer"]).toContain(
+      "Load and use the mounted `grill-me` Skill as the preferred requirements-discovery method",
+    )
     expect(workflowNodes(loaded, "greenfield-interface-delivery")).toEqual({
       "request-interpreter": [],
       "requirement-engineer": [],
@@ -77,5 +90,41 @@ describe("built-in interface review workflow authority", () => {
     expect(loaded.selectorInstructions).toContain(
       "only when the operator or repository explicitly requires a separate Visual Reviewer judgment",
     )
+  })
+
+  test("resolves grill-me on the exact Advanced Requirement Engineer turn surface", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const config = Config.Info.parse({
+          prompt_profile: { active: "advanced" },
+          mcp: { browser: BrowserMCPBuiltin.localConfig() },
+        })
+        const turn = await PromptProfileResolver.resolveWorkerTurnProjection({
+          projectDirectory: project.path,
+          config,
+          agentID: "requirement-engineer",
+        })
+        const worker = turn.workerCapability
+        const surface = await SkillMount.resolve({
+          identity: { ...worker.identity, expertSquadID: worker.expertSquadID },
+          runtime: worker.runtime,
+          scope: "session",
+          projectDirectory: project.path,
+          skillProjection: turn.skillProjection,
+          availableToolNames: worker.builtInToolIDs,
+        })
+
+        expect(worker.productionSkills.map((skill) => ({ ref: skill.ref, source: skill.source }))).toEqual([
+          { ref: "default/skill/grill-me", source: "default" },
+          { ref: "advanced/shared/method", source: "package" },
+        ])
+        expect(surface.skills.map((skill) => ({ name: skill.name, enabled: skill.enabled }))).toEqual([
+          { name: "advanced-delivery-method", enabled: true },
+          { name: "grill-me", enabled: true },
+        ])
+      },
+    })
   })
 })

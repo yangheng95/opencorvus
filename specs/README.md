@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Advanced Requirements `grill-me` projection and end-to-end trial: [`2026-08-12-advanced-requirements-grill-me-trial.md`](records/2026-08/2026-08-12-advanced-requirements-grill-me-trial.md).
+
 Latest public navigation hierarchy and privacy-preserving visitor count: [`2026-08-12-public-navigation-and-visitor-count.md`](records/2026-08/2026-08-12-public-navigation-and-visitor-count.md).
 
 Latest opencorvus.com production database bootstrap configuration: [`2026-08-12-opencorvus-production-database-bootstrap-configuration.md`](records/2026-08/2026-08-12-opencorvus-production-database-bootstrap-configuration.md).

@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-12-advanced-requirements-grill-me-trial.md](2026-08-12-advanced-requirements-grill-me-trial.md) defines the exact Advanced Requirement Engineer Skill projection and the real coordination, question-interaction, continuation, and RequirementSet benchmark for an encouraged `grill-me` trial.
+
 - [2026-08-12-public-navigation-and-visitor-count.md](2026-08-12-public-navigation-and-visitor-count.md) defines the calmer public navigation hierarchy and privacy-preserving first-party estimated visitor count backed by the existing website SQLite service.
 
 - [2026-08-12-opencorvus-production-database-bootstrap-configuration.md](2026-08-12-opencorvus-production-database-bootstrap-configuration.md) is the secret-free production configuration ledger for the SQLite Registry cutover, covering GitHub values, host paths/permissions, Caddy/systemd, signed activation, backups, rollback, staged execution and required evidence without performing external mutations.
