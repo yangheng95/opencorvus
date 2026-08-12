@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-12-promotion-case-engine-strategy.md](2026-08-12-promotion-case-engine-strategy.md) defines the evidence-led promotion case portfolio, repeatable media factory, distribution system, measurement funnel, and first 30-day execution plan.
+
 - [2026-08-12-advanced-requirements-grill-me-trial.md](2026-08-12-advanced-requirements-grill-me-trial.md) defines the exact Advanced Requirement Engineer Skill projection and the real coordination, question-interaction, continuation, and RequirementSet benchmark for an encouraged `grill-me` trial.
 
 - [2026-08-12-public-navigation-and-visitor-count.md](2026-08-12-public-navigation-and-visitor-count.md) defines the calmer public navigation hierarchy and privacy-preserving first-party estimated visitor count backed by the existing website SQLite service.
