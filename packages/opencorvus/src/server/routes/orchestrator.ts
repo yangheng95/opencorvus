@@ -1033,7 +1033,10 @@ export const EngineRoutes = lazy(() =>
           return c.json([])
         }
         const transcript = await loadFullTaskTranscript(taskID, { scope: "task" })
-        const view = projectConversationView(transcript, [], listTaskConversationAgentSessions(taskID))
+        const view = projectConversationView({
+          transcript,
+          ledgerSessions: listTaskConversationAgentSessions(taskID),
+        })
         return c.json(await projectTaskTurnArtifacts({ taskID, transcript, view }))
       },
     )
@@ -1210,7 +1213,7 @@ export const EngineRoutes = lazy(() =>
           rewindCursor,
           sinceTimestamp: history.hasMore ? history.oldestTimestamp : null,
         })
-        const view = projectConversationView(historyWindow.transcript, eventPage.events, agentSessions)
+        const view = projectConversationView({ transcript: historyWindow.transcript, ledgerSessions: agentSessions })
         const turnArtifacts =
           board.task.status === "completed" || board.task.status === "failed" || board.task.status === "cancelled"
             ? await projectTaskTurnArtifacts({
@@ -1291,11 +1294,10 @@ export const EngineRoutes = lazy(() =>
               liveEpoch,
               transcriptMode: "snapshot",
               events: sessionEvents,
-              view: projectConversationView(
-                sessionTranscript,
-                sessionEvents,
-                listTaskConversationAgentSessions(taskID),
-              ),
+              view: projectConversationView({
+                transcript: sessionTranscript,
+                ledgerSessions: listTaskConversationAgentSessions(taskID),
+              }),
               history: {
                 oldestTimestamp: sessionTranscript[0] ? conversationItemTimestamp(sessionTranscript[0]) : null,
                 oldestOrderKey: sessionTranscript[0]?.info?.orderKey ?? null,
@@ -1333,7 +1335,10 @@ export const EngineRoutes = lazy(() =>
             liveEpoch,
             transcriptMode: "delta",
             events: [],
-            view: projectConversationView(transcript, [], listTaskConversationAgentSessions(taskID)),
+            view: projectConversationView({
+              transcript,
+              ledgerSessions: listTaskConversationAgentSessions(taskID),
+            }),
             history: {
               oldestTimestamp: null,
               oldestOrderKey: null,
@@ -1359,7 +1364,7 @@ export const EngineRoutes = lazy(() =>
           liveEpoch,
           transcriptMode: "snapshot",
           events: sessionEvents,
-          view: projectConversationView(sessionTranscript, sessionEvents, agentSessions),
+          view: projectConversationView({ transcript: sessionTranscript, ledgerSessions: agentSessions }),
           history: {
             oldestTimestamp: oldestTimestamp ?? sessionEvents[0]?.timestamp ?? null,
             oldestOrderKey: sessionTranscript[0]?.info?.orderKey ?? sessionEvents[0]?.orderKey ?? null,
@@ -1426,7 +1431,7 @@ export const EngineRoutes = lazy(() =>
         return c.json({
           transcript: page.transcript,
           events: pageEvents,
-          view: projectConversationView(page.transcript, pageEvents, agentSessions),
+          view: projectConversationView({ transcript: page.transcript, ledgerSessions: agentSessions }),
           history: page.history,
         })
       },
