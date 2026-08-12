@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { EngineArtifactEnvelopeSchema } from "@opencorvus-ai/plugin"
+import { createHash } from "node:crypto"
 import { artifactCatalogAuthority, searchTaskArtifacts } from "../src/artifact-catalog"
 import { recordEngineArtifact } from "../src/engine/artifact"
 import { persistQueuedTask } from "../src/engine/pipeline"
@@ -81,38 +82,12 @@ function publishCursorArtifact(taskID: string, index: number) {
   })
 }
 
-function mutateOneCanonicalCursorCharacter(cursor: string) {
-  const originalWire = JSON.parse(Buffer.from(cursor, "base64url").toString("utf8")) as unknown[]
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
-  for (let index = 0; index < cursor.length; index += 1) {
-    for (const replacement of alphabet) {
-      if (replacement === cursor[index]) continue
-      const candidate = `${cursor.slice(0, index)}${replacement}${cursor.slice(index + 1)}`
-      const bytes = Buffer.from(candidate, "base64url")
-      if (bytes.toString("base64url") !== candidate) continue
-      let candidateWire: unknown
-      try {
-        candidateWire = JSON.parse(bytes.toString("utf8"))
-      } catch {
-        continue
-      }
-      if (!Array.isArray(candidateWire) || candidateWire.length !== originalWire.length) continue
-      if (Buffer.from(JSON.stringify(candidateWire), "utf8").toString("base64url") !== candidate) continue
-      const changedFields = originalWire.flatMap((value, field) =>
-        JSON.stringify(value) === JSON.stringify(candidateWire[field]) ? [] : [field],
-      )
-      if (
-        changedFields.length === 1 &&
-        (changedFields[0] === 6 || changedFields[0] === 7) &&
-        typeof candidateWire[changedFields[0]] === "number" &&
-        Number.isInteger(candidateWire[changedFields[0]]) &&
-        (candidateWire[changedFields[0]] as number) >= 0
-      ) {
-        return candidate
-      }
-    }
-  }
-  throw new Error("Cursor fixture has no one-character canonical total mutation")
+function forgeCursorWithRecomputedPublicDigest(cursor: string) {
+  const wire = JSON.parse(Buffer.from(cursor, "base64url").toString("utf8")) as unknown[]
+  wire[7] = Number(wire[7]) + 1
+  const payload = wire.slice(0, 12)
+  wire[12] = createHash("sha256").update(JSON.stringify(payload)).digest("base64url")
+  return Buffer.from(JSON.stringify(wire), "utf8").toString("base64url")
 }
 
 describe("Artifact catalog cursor", () => {
@@ -173,6 +148,7 @@ describe("Artifact catalog cursor", () => {
 
         expect(second).toMatchObject({ filtered_total: 50, catalog_complete: true, next_cursor: null })
         expect(second.entries).toHaveLength(25)
+        expect(Buffer.byteLength(transportedSecond.output, "utf8")).toBeLessThanOrEqual(40 * 1_024)
         expect(new Set(frozenIDs.map((locator) => JSON.stringify(locator))).size).toBe(50)
 
         const refreshed = await searchTaskArtifacts({
@@ -182,16 +158,28 @@ describe("Artifact catalog cursor", () => {
         expect(refreshed).toMatchObject({ filtered_total: 51, next_cursor: null })
         expect(refreshed.entries).toHaveLength(51)
 
-        const oneCharacterMutation = mutateOneCanonicalCursorCharacter(first.next_cursor!)
-        expect(
-          [...first.next_cursor!].filter((character, index) => character !== oneCharacterMutation[index]),
-        ).toHaveLength(1)
+        const forged = forgeCursorWithRecomputedPublicDigest(first.next_cursor!)
         await expect(
           searchTaskArtifacts({
             authority: artifactCatalogAuthority(taskID),
-            search: { ...search, cursor: oneCharacterMutation },
+            search: { ...search, cursor: forged },
           }),
-        ).rejects.toThrow("artifact_search cursor integrity check failed")
+        ).rejects.toThrow("artifact_search cursor authenticity check failed")
+
+        await expect(
+          searchTaskArtifacts({
+            authority: artifactCatalogAuthority(taskID),
+            search: { ...search, labels: ["different-filter"], cursor: first.next_cursor! },
+          }),
+        ).rejects.toThrow("artifact_search cursor does not belong to the supplied filters")
+
+        const otherTask = await createCatalogTask()
+        await expect(
+          searchTaskArtifacts({
+            authority: artifactCatalogAuthority(otherTask.taskID),
+            search: { ...search, cursor: first.next_cursor! },
+          }),
+        ).rejects.toThrow("artifact_search cursor belongs to another Task authority")
 
         await expect(
           searchTaskArtifacts({
