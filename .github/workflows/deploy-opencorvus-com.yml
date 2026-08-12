@@ -138,6 +138,10 @@ jobs:
       - name: Build SDK dependency
         run: bun run --cwd packages/sdk/js build
 
+      - name: Verify production configuration contract
+        shell: bash
+        run: bash deploy/racknerd/check-production-configuration.sh
+
       - name: Require a browser trust root
         shell: bash
         run: |

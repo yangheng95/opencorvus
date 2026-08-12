@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-12-opencorvus-production-database-bootstrap-configuration.md](2026-08-12-opencorvus-production-database-bootstrap-configuration.md) is the secret-free production configuration ledger for the SQLite Registry cutover, covering GitHub values, host paths/permissions, Caddy/systemd, signed activation, backups, rollback, staged execution and required evidence without performing external mutations.
+
 - [2026-08-12-running-wake-and-session-control-json-convergence.md](2026-08-12-running-wake-and-session-control-json-convergence.md) records the ownerless running-wake FIFO starvation and Session-control JSON round-trip conflict, then defines exact same-runtime convergence and real-checker acceptance.
 
 - [2026-08-12-v0.0.41-beta-release.md](2026-08-12-v0.0.41-beta-release.md) defines the production database bootstrap prerequisite, canonical version synchronization, source-aligned requested branch/tag flow, five-platform signed native publication, and database-backed website verification for `v0.0.41-beta`.

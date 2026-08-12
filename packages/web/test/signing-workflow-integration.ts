@@ -123,7 +123,7 @@ async function freezeRelease(root: string, candidate: string, script: string, co
       ...process.env,
       RUNNER_TEMP: bashPath(runnerTemp),
       GITHUB_OUTPUT: bashPath(githubOutput),
-      GITHUB_SHA: commitSha,
+      WEBSITE_SOURCE_SHA: commitSha,
     },
   })
   const output = await readFile(githubOutput, "utf8")
