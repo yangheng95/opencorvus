@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-12-startup-surface-visual-redesign.md](2026-08-12-startup-surface-visual-redesign.md) redesigns the real desktop startup surface around the existing OpenCorvus bird, a strong preparation hierarchy, truthful wide progress feedback, and preserved native failure/retry behavior, with production-page visual evidence and independent review.
+
 - [2026-08-12-overlay-ui-ux-continuous-audit.md](2026-08-12-overlay-ui-ux-continuous-audit.md) records the multi-agent Overlay UI/UX audit, root-cause repairs, real-page screenshots, positive non-UI checks, and independent delivery reviews.
 
 - [2026-08-12-code-smell-remediation-program.md](2026-08-12-code-smell-remediation-program.md) defines the independently reviewed, batch-by-batch remediation program for the final repository code-smell register and records each batch's implementation, verification, review, commit, and delivery status.
