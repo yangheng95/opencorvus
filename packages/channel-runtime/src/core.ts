@@ -28,8 +28,8 @@ type SessionMessagePart = { id?: string; state?: { attachments?: ScreenAttachmen
 type PermissionAsked = {
   id: string
   sessionID: string
-  permission: string
-  patterns: string[]
+  toolName: string
+  summary: string
 }
 const controlPlatforms: readonly ChannelName[] = ChannelId.options
 type ControlPlatform = ChannelName
@@ -1013,10 +1013,9 @@ export class ChannelRuntime {
       const asked = (event as EventPermissionAsked).properties as PermissionAsked
       this.touchPending(asked.sessionID)
       const sessions = this.findSessions(asked.sessionID)
-      const patterns = asked.patterns.length > 0 ? asked.patterns.join(", ") : "*"
       this.mirrorSessions(
         "system",
-        `Permission requested: ${asked.permission} [${patterns}]`,
+        `Permission requested: ${asked.toolName} — ${asked.summary}`,
         asked.sessionID,
         sessions,
       )
@@ -1025,7 +1024,7 @@ export class ChannelRuntime {
           session.adapter,
           session.channel,
           session.thread,
-          `Permission requested: ${asked.permission} [${patterns}]. Waiting for operator reply.`,
+          `Permission requested: ${asked.toolName} — ${asked.summary}. Waiting for operator reply.`,
         )
       }
       console.log(`[ChannelRuntime] Permission request ${asked.id} is waiting for operator reply`)

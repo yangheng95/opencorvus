@@ -1,8 +1,8 @@
 import z from "zod"
 import { Filesystem } from "../util/filesystem"
 import path from "path"
-import { createHash } from "crypto"
-import { Database, eq, inArray, NotFoundError, sql } from "../storage/db"
+import { createHash, randomUUID } from "crypto"
+import { Database, eq, NotFoundError, sql } from "../storage/db"
 import { ProjectTable } from "./project.sql"
 import { Log } from "../util/log"
 import { Flag } from "@/flag/flag"
@@ -17,8 +17,33 @@ import { Glob } from "../util/glob"
 import { which } from "@/util/which"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { NamedError } from "@opencorvus-ai/util/error"
+import { assertProjectDurableAdmissionOpen } from "./deletion-registry"
 
 export namespace Project {
+  export const DurableAdmissionClosedError = NamedError.create(
+    "ProjectDurableAdmissionClosedError",
+    z.object({
+      projectID: z.string(),
+      message: z.string(),
+    }),
+  )
+
+  export function assertDurableAdmissionOpen(projectID: string): void {
+    if (assertProjectDurableAdmissionOpen(projectID)) return
+    throw new DurableAdmissionClosedError({
+      projectID,
+      message: `Project ${projectID} durable admission is closed during deletion`,
+    })
+  }
+
+  function assertRegistryAdmissionOpen(projectID: string) {
+    if (!assertProjectDurableAdmissionOpen(projectID)) {
+      throw new DurableAdmissionClosedError({
+        projectID,
+        message: `Project ${projectID} registry admission is closed during deletion`,
+      })
+    }
+  }
   const log = Log.create({ service: "project" })
   type Row = typeof ProjectTable.$inferSelect
 
@@ -27,6 +52,15 @@ export namespace Project {
     z.object({
       directory: z.string(),
       reason: z.enum(["missing", "not-directory"]),
+      message: z.string(),
+    }),
+  )
+
+  export const RegisteredDirectoryConflictError = NamedError.create(
+    "ProjectRegisteredDirectoryConflictError",
+    z.object({
+      directory: z.string(),
+      projectIDs: z.array(z.string()).min(2),
       message: z.string(),
     }),
   )
@@ -312,6 +346,7 @@ export namespace Project {
 
     return Database.transaction((db) => {
       const duplicateIDs = duplicateRows.map((row) => row.id)
+      for (const projectID of [input.canonical.id, ...duplicateIDs]) assertRegistryAdmissionOpen(projectID)
       assertNoEmbeddedProjectIDReferences(db, input.worktree, input.canonical.id, duplicateIDs)
       assertNoUniqueProjectConstraintConflict(db, input.worktree, input.canonical.id, duplicateIDs)
       assertNoTaskArtifactProjectIdentityConflict(db, input.worktree, duplicateIDs)
@@ -326,6 +361,15 @@ export namespace Project {
 
       const duplicateSandboxes = duplicateRows.flatMap((row) => row.sandboxes)
       const sandboxes = [...new Set([...input.canonical.sandboxes, ...duplicateSandboxes])]
+      const projects = db
+        .select()
+        .from(ProjectTable)
+        .all()
+        .filter((candidate) => !duplicateIDs.includes(candidate.id))
+        .map((candidate) => fromRow(candidate))
+      for (const directory of [input.worktree, ...sandboxes]) {
+        assertRegisteredDirectoryAvailable(input.canonical.id, directory, projects)
+      }
       const firstWith = <K extends keyof Row>(key: K) =>
         input.canonical[key] ?? duplicateRows.find((row) => row[key] !== null && row[key] !== undefined)?.[key]
       const now = Date.now()
@@ -536,7 +580,7 @@ export namespace Project {
     }
   }
 
-  export async function fromDirectory(directory: string) {
+  export async function fromDirectory(directory: string, options: { blockedProjectIDs?: ReadonlySet<string> } = {}) {
     await assertDirectoryIntegrity(directory)
     log.info("fromDirectory", { directory })
 
@@ -642,10 +686,18 @@ export namespace Project {
         updated: changed ? resolvedAt : existing.time.updated,
       },
     }
+    if (options.blockedProjectIDs?.has(result.id)) {
+      throw new DurableAdmissionClosedError({
+        projectID: result.id,
+        message: `Project ${result.id} discovery was admitted while deletion was in progress`,
+      })
+    }
+    assertRegistryAdmissionOpen(result.id)
     if (!changed) return { project: result, sandbox: data.sandbox }
 
     const insert = {
       id: result.id,
+      generation: randomUUID(),
       worktree: result.worktree,
       name: result.name,
       icon_url: result.icon?.url,
@@ -668,9 +720,18 @@ export namespace Project {
       sandboxes: result.sandboxes,
       commands: result.commands,
     }
-    Database.use((db) =>
-      db.insert(ProjectTable).values(insert).onConflictDoUpdate({ target: ProjectTable.id, set: updateSet }).run(),
-    )
+    Database.transaction((db) => {
+      assertRegistryAdmissionOpen(result.id)
+      const projects = db
+        .select()
+        .from(ProjectTable)
+        .all()
+        .map((candidate) => fromRow(candidate))
+      for (const directory of [result.worktree, ...result.sandboxes]) {
+        assertRegisteredDirectoryAvailable(result.id, directory, projects)
+      }
+      db.insert(ProjectTable).values(insert).onConflictDoUpdate({ target: ProjectTable.id, set: updateSet }).run()
+    })
     GlobalBus.emit("event", {
       payload: {
         type: Event.Updated.type,
@@ -735,6 +796,15 @@ export namespace Project {
     },
     db: Database.TxOrDb,
   ) {
+    assertRegistryAdmissionOpen(input.projectID)
+    const projects = db
+      .select()
+      .from(ProjectTable)
+      .all()
+      .map((candidate) => fromRow(candidate))
+    for (const directory of [input.worktree, ...input.sandboxes]) {
+      assertRegisteredDirectoryAvailable(input.projectID, directory, projects)
+    }
     const row = db
       .update(ProjectTable)
       .set({
@@ -760,21 +830,68 @@ export namespace Project {
     return directories
   }
 
+  function registeredDirectoryMatches(directory: string, projects: Info[]) {
+    const target = path.resolve(directory)
+    const matches = new Map<string, { project: Info; directory: string }>()
+    for (const project of projects) {
+      if (samePath(project.worktree, target)) {
+        matches.set(project.id, { project, directory: project.worktree })
+        continue
+      }
+      const sandbox = project.sandboxes.find((candidate) => samePath(candidate, target))
+      if (sandbox) matches.set(project.id, { project, directory: sandbox })
+    }
+    return [...matches.values()]
+  }
+
+  function assertRegisteredDirectoryAvailable(projectID: string, directory: string, projects: Info[]) {
+    const target = path.resolve(directory)
+    const conflictingProjectIDs = [
+      ...new Set(
+        registeredDirectoryMatches(target, projects)
+          .map((match) => match.project.id)
+          .filter((value) => value !== projectID),
+      ),
+    ]
+    if (conflictingProjectIDs.length === 0) return
+    const projectIDs = [projectID, ...conflictingProjectIDs].sort()
+    throw new RegisteredDirectoryConflictError({
+      directory: target,
+      projectIDs,
+      message: `Cannot register ${target} for Project ${projectID}; it belongs to Project${conflictingProjectIDs.length === 1 ? "" : "s"} ${conflictingProjectIDs.join(", ")}`,
+    })
+  }
+
   export function findByRegisteredDirectory(directory: string) {
     const target = path.resolve(directory)
-    for (const project of list()) {
-      if (samePath(project.worktree, target)) return { project, directory: project.worktree }
-      const sandbox = project.sandboxes.find((candidate) => samePath(candidate, target))
-      if (sandbox) return { project, directory: sandbox }
+    const matches = registeredDirectoryMatches(target, list())
+    if (matches.length > 1) {
+      const projectIDs = matches.map((match) => match.project.id).sort()
+      throw new RegisteredDirectoryConflictError({
+        directory: target,
+        projectIDs,
+        message: `Registered directory ${target} belongs to multiple Projects: ${projectIDs.join(", ")}`,
+      })
     }
+    return matches[0]
   }
 
   function findByRegisteredSandbox(directory: string) {
     const target = path.resolve(directory)
+    const matches: Array<{ project: Info; directory: string }> = []
     for (const project of list()) {
       const sandbox = project.sandboxes.find((candidate) => samePath(candidate, target))
-      if (sandbox) return { project, directory: sandbox }
+      if (sandbox) matches.push({ project, directory: sandbox })
     }
+    if (matches.length > 1) {
+      const projectIDs = matches.map((match) => match.project.id).sort()
+      throw new RegisteredDirectoryConflictError({
+        directory: target,
+        projectIDs,
+        message: `Registered sandbox ${target} belongs to multiple Projects: ${projectIDs.join(", ")}`,
+      })
+    }
+    return matches[0]
   }
 
   function explicitLaunchProjectDirectory() {
@@ -850,16 +967,6 @@ export namespace Project {
     const row = Database.use((db) => db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get())
     if (!row) return undefined
     return fromRow(row)
-  }
-
-  export function deleteRows(ids: string[], db?: Database.TxOrDb): void {
-    if (ids.length === 0) return
-    const write = (target: Database.TxOrDb) => target.delete(ProjectTable).where(inArray(ProjectTable.id, ids)).run()
-    if (db) {
-      write(db)
-      return
-    }
-    Database.use(write)
   }
 
   export async function initGit(directory: string) {
@@ -973,27 +1080,32 @@ export namespace Project {
   }
 
   export async function addSandbox(id: string, directory: string) {
-    const row = Database.use((db) => db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get())
-    if (!row) throw new Error(`Project not found: ${id}`)
-    const sandboxes = [...row.sandboxes]
-    if (!sandboxes.includes(directory)) sandboxes.push(directory)
-    const result = Database.use((db) =>
-      db
-        .update(ProjectTable)
-        .set({ sandboxes, time_updated: Date.now() })
-        .where(eq(ProjectTable.id, id))
-        .returning()
-        .get(),
-    )
-    if (!result) throw new Error(`Project not found: ${id}`)
-    const data = fromRow(result)
+    const target = Filesystem.resolve(directory)
+    const result = Database.transaction((db) => {
+      assertRegistryAdmissionOpen(id)
+      const rows = db.select().from(ProjectTable).all()
+      const row = rows.find((candidate) => candidate.id === id)
+      if (!row) throw new Error(`Project not found: ${id}`)
+      const projects = rows.map((candidate) => fromRow(candidate))
+      assertRegisteredDirectoryAvailable(id, target, projects)
+      const matches = registeredDirectoryMatches(target, projects)
+      if (matches.some((match) => match.project.id === id)) return fromRow(row)
+      return fromRow(
+        db
+          .update(ProjectTable)
+          .set({ sandboxes: [...row.sandboxes, target], time_updated: Date.now() })
+          .where(eq(ProjectTable.id, id))
+          .returning()
+          .get(),
+      )
+    })
     GlobalBus.emit("event", {
       payload: {
         type: Event.Updated.type,
-        properties: data,
+        properties: result,
       },
     })
-    return data
+    return result
   }
 
   /**
@@ -1023,18 +1135,19 @@ export namespace Project {
   }
 
   export async function removeSandbox(id: string, directory: string) {
-    const row = Database.use((db) => db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get())
-    if (!row) throw new Error(`Project not found: ${id}`)
     const target = Filesystem.windowsPath(path.resolve(directory))
-    const sandboxes = row.sandboxes.filter((s) => Filesystem.windowsPath(path.resolve(s)) !== target)
-    const result = Database.use((db) =>
-      db
+    const result = Database.transaction((db) => {
+      assertRegistryAdmissionOpen(id)
+      const row = db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get()
+      if (!row) throw new Error(`Project not found: ${id}`)
+      const sandboxes = row.sandboxes.filter((s) => Filesystem.windowsPath(path.resolve(s)) !== target)
+      return db
         .update(ProjectTable)
         .set({ sandboxes, time_updated: Date.now() })
         .where(eq(ProjectTable.id, id))
         .returning()
-        .get(),
-    )
+        .get()
+    })
     if (!result) throw new Error(`Project not found: ${id}`)
     const data = fromRow(result)
     GlobalBus.emit("event", {

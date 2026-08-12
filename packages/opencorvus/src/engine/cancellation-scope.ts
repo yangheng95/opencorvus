@@ -1,5 +1,4 @@
 import { Session } from "@/session"
-import { Instance } from "@/project/instance"
 import { SessionPromptState } from "@/session/prompt/state"
 import { SessionStatus } from "@/session/status"
 import { publishSessionStatus } from "@/session/status-publication"
@@ -129,16 +128,12 @@ export async function requestSessionPromptSubtreeCancellation(input: {
 
   for (const session of sessions.slice().reverse()) {
     try {
-      const cancelled = await Instance.provide({
-        directory: session.directory,
-        fn: () =>
-          cancelSessionPromptInScope({
-            session,
-            taskID: input.taskID,
-            handle,
-            origin: { ...input.origin, targetSessionID: session.id },
-            settleBeforeReuse: true,
-          }),
+      const cancelled = cancelSessionPromptInScope({
+        session,
+        taskID: input.taskID,
+        handle,
+        origin: { ...input.origin, targetSessionID: session.id },
+        settleBeforeReuse: true,
       })
       if (cancelled) {
         cancelledSessions.push(session)

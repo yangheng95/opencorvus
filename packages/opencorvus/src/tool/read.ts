@@ -63,13 +63,6 @@ export const ReadTool = Tool.define("read", {
       kind: stat?.isDirectory() ? "directory" : "file",
     })
 
-    await ctx.ask({
-      permission: "read",
-      patterns: [filepath],
-      always: ["*"],
-      metadata: {},
-    })
-
     if (!stat) {
       const dir = path.dirname(filepath)
       const base = path.basename(filepath)

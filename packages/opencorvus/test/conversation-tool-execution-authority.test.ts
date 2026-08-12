@@ -171,7 +171,7 @@ describe("conversation Tool execution authority", () => {
           tool.execute({ pattern: "authority-fixture.txt", path: project.path }, context),
         )
         const search = await SearchCodeTool.init().then((tool) =>
-          tool.execute({ pattern: "conversation-authority-value", path: project.path }, context),
+          tool.execute({ pattern: "conversation-authority-value", path: file }, context),
         )
         const listed = await ListTool.init().then((tool) => tool.execute({ path: project.path }, context))
         const executable = JSON.stringify(process.execPath)

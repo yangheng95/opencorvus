@@ -8,6 +8,7 @@ import { ProjectedWorkerIdentitySchema } from "./projected-worker-identity"
 import { ProjectedAgentWorkScope, ProjectedAgentWorkScopeSchema } from "./projected-agent-work-scope"
 import { materializeProjectedWorkerBinding, type ProjectedWorkerBinding } from "./projected-worker-binding"
 import { DispatchTurnSchema, WorkerInputMessageAuthoritySchema } from "@/orchestrator/dispatch-turn-projection"
+import { StageToolMaterializerBindingSchema } from "./stage-tool-materializer"
 
 export class PersistedWorkerTurnDescriptorIncompatibleError extends Error {
   override readonly name = "PersistedWorkerTurnDescriptorIncompatibleError"
@@ -67,6 +68,8 @@ export namespace WorkerTurnDescriptor {
         enabled: z.array(z.string()),
         switches: z.record(z.string(), z.boolean()).optional(),
         coordinationHandoff: z.literal("request_orchestrator_decision").optional(),
+        stageOwned: z.array(z.string()),
+        stageMaterializers: z.record(z.string(), StageToolMaterializerBindingSchema),
       }),
       output: z.object({
         format: z.literal("text"),

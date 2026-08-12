@@ -137,6 +137,9 @@ export function createBatchTool(visibleTools: InitializedTool[]): Tool.Info {
                 toolCallID: partID,
                 toolPartID: partID,
                 providerName: call.tool,
+                providerKind: "builtin",
+                providerID: call.tool,
+                args: validatedParams,
               }, ctx.executionSurface, async (invocationAuthority) => {
                 const childContext: Tool.Context = {
                   ...ctx,

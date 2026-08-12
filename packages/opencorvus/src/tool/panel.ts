@@ -323,9 +323,6 @@ export function createPanelUIRequestToolContext(input: {
     messages: [],
     executionSurface: Tool.executionSurface([], []),
     metadata() {},
-    async ask() {
-      throw new Error("Panel user-interface requests cannot ask interactive tool permissions.")
-    },
   }
 }
 
@@ -1154,10 +1151,13 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         const result = await EngineService.replyInteraction(
           params.interactionID,
           params.reply
-            ? { reply: params.reply, autoReply: false }
+            ? {
+                decision: params.reply === "always" ? ("allow_project" as const) : ("allow_once" as const),
+                autoReply: false,
+              }
             : params.message
               ? { message: params.message, autoReply: false }
-              : { reply: "once", autoReply: false },
+              : { decision: "allow_once", autoReply: false },
         )
         return {
           title: "Interaction replied",

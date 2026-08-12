@@ -1,4 +1,5 @@
 import z from "zod"
+import { InteractionUserInput } from "@/memory/project-memory"
 import { ProductPillarSchema } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
 import {
   ArtifactCatalogEntrySchema,
@@ -27,7 +28,7 @@ import {
 import { ENGINE_ARTIFACT_KINDS } from "@/engine/engine.sql"
 import { Identifier } from "@/id/id"
 import { Message } from "@/session/message"
-import { Reply as PermissionReply } from "@/permission/types"
+import { PermissionAuthority } from "@/permission/authority"
 import { Answer as QuestionAnswer, Request as QuestionRequest } from "@/question/types"
 import { isModelReference } from "@/provider/model-ref"
 import { decodeRawBase64Payload } from "@/session/text-mime"
@@ -471,7 +472,7 @@ export const OwnedPromptSession = z.object({
 })
 
 export const ReplyInteractionInput = z.object({
-  reply: PermissionReply.optional(),
+  decision: PermissionAuthority.Decision.optional(),
   autoReply: z.boolean(),
   message: z.string().optional(),
   answers: z.array(QuestionAnswer).optional(),
@@ -480,6 +481,14 @@ export const ReplyInteractionInput = z.object({
 export const RejectInteractionInput = z.object({
   autoReply: z.boolean(),
   message: z.string().optional(),
+})
+
+export const UserReplyInteractionInput = ReplyInteractionInput.omit({ autoReply: true }).extend({
+  userInput: InteractionUserInput,
+})
+
+export const UserRejectInteractionInput = RejectInteractionInput.omit({ autoReply: true }).extend({
+  userInput: InteractionUserInput,
 })
 
 export const UpdateGoalTitleInput = z

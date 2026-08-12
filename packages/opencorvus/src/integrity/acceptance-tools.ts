@@ -11,6 +11,41 @@ import {
   projectIntegrityEvidenceFacts,
   type IntegrityFactSelection,
 } from "./fact-projection"
+import { bindStageToolMaterializer } from "@/agent/stage-tool-materializer"
+
+const IntegrityRunCommandMaterializerInput = z
+  .object({ taskID: z.string().min(1), projectDirectory: z.string().min(1) })
+  .strict()
+
+export function materializeIntegrityRunCommandTool(raw: Record<string, unknown>, signal?: AbortSignal) {
+  const materializerInput = IntegrityRunCommandMaterializerInput.parse(raw)
+  return bindStageToolMaterializer(
+    tool({
+      description: "Run a verification shell command in an isolated copy of the project and capture its result.",
+      inputSchema: z.object({
+        command: z.string().min(1),
+        timeout_ms: z.number().int().positive().max(DEFAULT_BASH_TIMEOUT_MS).default(DEFAULT_BASH_TIMEOUT_MS),
+        background: z.boolean().default(false),
+      }),
+      execute: async ({ command, timeout_ms, background }) => {
+        try {
+          return await runGuardedTaskCommand({
+            command,
+            timeoutMs: timeout_ms,
+            background,
+            projectDir: materializerInput.projectDirectory,
+            env: process.env,
+            signal,
+            taskID: materializerInput.taskID,
+          })
+        } catch (err) {
+          return `Error running command: ${err instanceof Error ? err.message : String(err)}`
+        }
+      },
+    }),
+    { id: "integrity.run-command", input: materializerInput },
+  )
+}
 
 /**
  * Integrity acceptance tools are scoped to semantic review. They expose
@@ -26,47 +61,37 @@ export function createIntegrityAcceptanceTools(
   const projectDir = Filesystem.resolve(Instance.directory)
   const resolveSelection = () =>
     typeof selection === "function" ? selection() : selection
+  const initialSelection = resolveSelection()
   return {
     ...createCodebaseTools(projectDir),
-    run_command: tool({
-      description:
-        "Run a verification shell command in an isolated copy of the project and capture stdout/stderr/exit code. " +
-        "Use for verification only: builds, tests, smoke checks, or short server startup checks. " +
-        "For dev/preview servers that browser tools must inspect, set background=true instead of shell-backgrounding with `&`; the result returns a PID and detected URL when available. " +
-        "Commands never write to the implementation worktree; output includes source_cwd and execution_cwd so reviewers can cite the isolated verification workspace.",
-      inputSchema: z.object({
-        command: z.string().min(1).describe("Shell command to run in the project root"),
-        timeout_ms: z
-          .number()
-          .int()
-          .positive()
-          .max(DEFAULT_BASH_TIMEOUT_MS)
-          .default(DEFAULT_BASH_TIMEOUT_MS)
-          .describe("Max execution time ms; for background=true this is the process lease"),
-        background: z
-          .boolean()
-          .default(false)
-          .describe("Keep a dev/preview/serve command running after this tool call so browser tools can inspect it."),
-      }),
-      execute: async ({ command, timeout_ms, background }) => {
-        try {
-          const commandInput = {
-            command,
-            timeoutMs: timeout_ms,
-            background,
-            projectDir,
-            env: process.env,
-            signal: options?.signal,
-          }
-          const taskID = resolveSelection()?.taskID
-          return taskID
-            ? await runGuardedTaskCommand({ ...commandInput, taskID })
-            : await runGuardedHostCommand(commandInput)
-        } catch (err) {
-          return `Error running command: ${err instanceof Error ? err.message : String(err)}`
-        }
-      },
-    }),
+    run_command: initialSelection?.taskID
+      ? materializeIntegrityRunCommandTool(
+          { taskID: initialSelection.taskID, projectDirectory: projectDir },
+          options?.signal,
+        )
+      : tool({
+          description:
+            "Run a verification shell command in an isolated copy of the project and capture stdout/stderr/exit code.",
+          inputSchema: z.object({
+            command: z.string().min(1),
+            timeout_ms: z.number().int().positive().max(DEFAULT_BASH_TIMEOUT_MS).default(DEFAULT_BASH_TIMEOUT_MS),
+            background: z.boolean().default(false),
+          }),
+          execute: async ({ command, timeout_ms, background }) => {
+            try {
+              return await runGuardedHostCommand({
+                command,
+                timeoutMs: timeout_ms,
+                background,
+                projectDir,
+                env: process.env,
+                signal: options?.signal,
+              })
+            } catch (err) {
+              return `Error running command: ${err instanceof Error ? err.message : String(err)}`
+            }
+          },
+        }),
     inspect_integrity_evidence: tool({
       description:
         "Inspect scoped integrity evidence on demand. Start from changed_directories, then request exact files or diffs only for directories and files relevant to this review scope.",

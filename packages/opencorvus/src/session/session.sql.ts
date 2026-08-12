@@ -2,7 +2,7 @@ import { sql } from "drizzle-orm"
 import { sqliteTable, text, integer, index, primaryKey, uniqueIndex } from "drizzle-orm/sqlite-core"
 import { ProjectTable } from "../project/project.sql"
 import type { Message } from "./message"
-import type { PermissionNext } from "@/permission/next"
+import type { CapabilityRules } from "@/capability/rules"
 import { Timestamps } from "@/storage/schema.sql"
 import type { InteractiveArtifactPayload } from "@/interactive-artifact/schema"
 
@@ -104,7 +104,7 @@ export const SessionTable = sqliteTable(
     summary_additions: integer(),
     summary_deletions: integer(),
     summary_files: integer(),
-    permission: text({ mode: "json" }).$type<PermissionNext.Ruleset>(),
+    permission: text({ mode: "json" }).$type<CapabilityRules.Ruleset>(),
     /** Free-form per-session metadata. */
     metadata: text({ mode: "json" }).$type<Record<string, unknown>>(),
     ...Timestamps,
@@ -248,12 +248,4 @@ export const TodoSnapshotTable = sqliteTable("todo_snapshot", {
     .primaryKey()
     .references(() => SessionTable.id, { onDelete: "cascade" }),
   revision: integer().notNull(),
-})
-
-export const PermissionTable = sqliteTable("permission", {
-  project_id: text()
-    .primaryKey()
-    .references(() => ProjectTable.id, { onDelete: "cascade" }),
-  ...Timestamps,
-  data: text({ mode: "json" }).notNull().$type<PermissionNext.Ruleset>(),
 })

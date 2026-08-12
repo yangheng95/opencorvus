@@ -21,15 +21,6 @@ export const ExternalCodeSearchTool = Tool.define("external_code_search", {
       ),
   }),
   async execute(params, ctx) {
-    await ctx.ask({
-      permission: "external_code_search",
-      patterns: [params.query],
-      always: ["*"],
-      metadata: {
-        query: params.query,
-        tokensNum: params.tokensNum,
-      },
-    })
 
     const result = await exaMcpCall({
       executionAuthority: Tool.requireExecutionAuthority(ctx),

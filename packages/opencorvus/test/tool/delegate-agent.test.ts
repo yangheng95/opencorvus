@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, mock, spyOn, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
-import { PermissionNext } from "../../src/permission/next"
+import { CapabilityRules } from "../../src/capability/rules"
 import { Instance } from "../../src/project/instance"
 import { Identifier } from "../../src/id/id"
 import { Session } from "../../src/session"
@@ -62,11 +62,7 @@ async function beginChildOccurrence(input: Parameters<typeof SessionPrompt.promp
   SessionStatus.beginExecutionOccurrence(input.sessionID, inputMessage.id, new AbortController().signal)
 }
 
-function context(input: {
-  parentID: string
-  agent?: "coding" | "chat" | "work" | "mission"
-  abort?: AbortSignal
-}) {
+function context(input: { parentID: string; agent?: "coding" | "chat" | "work" | "mission"; abort?: AbortSignal }) {
   return {
     sessionID: input.parentID,
     messageID: "msg_parent",
@@ -121,13 +117,19 @@ describe("delegate_agent", () => {
           const read = await ReadTool.init().then((current) => current.execute({ filePath: evidencePath }, toolContext))
           const bash = await BashTool.init().then((current) =>
             current.execute(
-              { command: `${JSON.stringify(process.execPath)} --version`, description: "Report delegated runtime version" },
+              {
+                command: `${JSON.stringify(process.execPath)} --version`,
+                description: "Report delegated runtime version",
+              },
               toolContext,
             ),
           )
           return childReply(
             input,
-            JSON.stringify({ persisted: read.output.includes("delegated-conversation-evidence"), exit: bash.metadata.exit }),
+            JSON.stringify({
+              persisted: read.output.includes("delegated-conversation-evidence"),
+              exit: bash.metadata.exit,
+            }),
           )
         })
 
@@ -201,7 +203,7 @@ describe("delegate_agent", () => {
         expect((captured!.parts[0] as { text: string }).text).toContain("This is not an engine task")
 
         const persistedChild = await Session.get(child.id)
-        expect(PermissionNext.evaluate("bash", "*", persistedChild.permission).action).toBe("allow")
+        expect(CapabilityRules.evaluate("bash", "*", persistedChild.permission).action).toBe("allow")
         expect(SessionStatus.get(child.id)).toEqual({ type: "terminal", reason: "completed" })
         expect(JSON.parse(result.output)).toEqual({
           kind: "terminal_success",

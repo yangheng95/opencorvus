@@ -240,10 +240,6 @@ export const BashTool = Tool.define("bash", async () => {
         }
       }
 
-      const directories = new Set<string>()
-      if (!Instance.containsPath(cwd)) directories.add(cwd)
-      const patterns = new Set<string>()
-      const always = new Set<string>()
       let shouldAppendForegroundLifecycleHint = false
 
       const tree = await parser().then((p) => p.parse(params.command))
@@ -253,9 +249,6 @@ export const BashTool = Tool.define("bash", async () => {
       try {
         for (const node of tree.rootNode.descendantsOfType("command")) {
           if (!node) continue
-
-          // Get full command text including redirects if present
-          let commandText = node.parent?.type === "redirected_statement" ? node.parent.text : node.text
 
           const command: string[] = []
           for (let i = 0; i < node.childCount; i++) {
@@ -277,55 +270,17 @@ export const BashTool = Tool.define("bash", async () => {
             shouldAppendForegroundLifecycleHint = true
           }
 
-          // not an exhaustive list, but covers most common cases
-          if (["cd", "rm", "cp", "mv", "mkdir", "touch", "chmod", "chown", "cat"].includes(command[0])) {
+          if (command[0] === "cd") {
             for (const arg of command.slice(1)) {
-              if (arg.startsWith("-") || (command[0] === "chmod" && arg.startsWith("+"))) continue
+              if (arg.startsWith("-")) continue
               const resolved = await resolveStaticPathArg(arg, cwd)
               log.info("resolved path", { arg, resolved })
-              if (resolved) {
-                if (command[0] === "cd") {
-                  await assertBuildWriteDirectory(ctx, resolved)
-                }
-                if (!Instance.containsPath(resolved)) {
-                  const dir = (await Filesystem.isDir(resolved)) ? resolved : path.dirname(resolved)
-                  directories.add(dir)
-                }
-              }
+              if (resolved) await assertBuildWriteDirectory(ctx, resolved)
             }
-          }
-
-          // cd covered by above check
-          if (command.length && command[0] !== "cd") {
-            patterns.add(commandText)
-            always.add(BashArity.prefix(command).join(" ") + " *")
           }
         }
       } finally {
         disposeSyntaxTree(tree)
-      }
-
-      if (directories.size > 0) {
-        const globs = Array.from(directories).map((dir) => {
-          // Preserve POSIX-looking paths with /s, even on Windows
-          if (dir.startsWith("/")) return `${dir.replace(/[\\/]+$/, "")}/*`
-          return path.join(dir, "*")
-        })
-        await ctx.ask({
-          permission: "external_directory",
-          patterns: globs,
-          always: globs,
-          metadata: {},
-        })
-      }
-
-      if (patterns.size > 0) {
-        await ctx.ask({
-          permission: "bash",
-          patterns: Array.from(patterns),
-          always: Array.from(always),
-          metadata: {},
-        })
       }
 
       const shellEnv = await Plugin.trigger(

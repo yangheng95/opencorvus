@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import type { RuntimeTemplateContract } from "@/agent/runtime-template-registry"
 import type { RuntimeExecutionOverride } from "@/agent/runtime-override"
 
@@ -32,7 +32,7 @@ export const SessionAgentRuntime = z
     variant: z.string().optional(),
     steps: z.number().int().positive().optional(),
     tools: SessionAgentTools.optional(),
-    permission: PermissionNext.Ruleset.optional(),
+    permission: CapabilityRules.Ruleset.optional(),
   })
   .strict()
   .meta({ ref: "SessionAgentRuntime" })

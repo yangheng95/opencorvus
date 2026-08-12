@@ -13,7 +13,7 @@ import { LLM } from "./llm"
 import { EffectiveConfig } from "@/config/effective"
 import { EngineConfig } from "@/engine/config"
 import { CompactionOverflow } from "./compaction-overflow"
-import { PermissionNext } from "@/permission/next"
+import { PermissionAuthority } from "@/permission/authority"
 import { abortableIterable } from "@/util/stream-activity"
 import {
   withLLMActivity,
@@ -258,6 +258,74 @@ export namespace SessionProcessor {
       for (const draft of drafts) await discardToolInputDraft(draft, reason)
     }
 
+    const completeToolPart = async (
+      value: {
+        toolCallId: string
+        input?: unknown
+        output: {
+          output: string
+          title: string
+          metadata: Record<string, unknown>
+          attachments?: Message.FilePart[]
+          display?: unknown
+          sources?: unknown
+        }
+      },
+      onPartCreated: (partID: string) => void = () => {},
+    ): Promise<void> => {
+      const metadata = value.output.metadata
+      const displayParts = Array.isArray(value.output.display) ? value.output.display : []
+      const sourcePayloads = Array.isArray(value.output.sources)
+        ? value.output.sources.map((source) => Message.SourcePayload.parse(source))
+        : []
+      await withToolPartLock(value.toolCallId, async () => {
+        const match = toolcalls[value.toolCallId] ?? (await priorToolPart(value.toolCallId))
+        if (!match || (match.state.status !== "running" && match.state.status !== "pending")) {
+          throw new Error(`Open ToolPart not found for Tool call ${value.toolCallId}`)
+        }
+        const resolvedInput =
+          value.input === undefined ? match.state.input : cloneToolInputForPersistence(value.input)
+        await Session.updatePart({
+          ...match,
+          state: {
+            status: "completed",
+            input: resolvedInput,
+            output: value.output.output,
+            metadata,
+            title: value.output.title,
+            time: completedToolTime(toolStartTime(match)),
+            attachments: value.output.attachments,
+          },
+        })
+        delete toolcalls[value.toolCallId]
+        if (displayParts.length > 0) {
+          const existingPartIDs = new Set((await MessageStore.parts(input.assistantMessage.id)).map((part) => part.id))
+          for (const candidate of displayParts) {
+            const displayPart = Message.InteractiveArtifactPart.parse(candidate)
+            if (displayPart.sessionID !== input.assistantMessage.sessionID) {
+              throw new Error(`tool result display part ${displayPart.id} belongs to a different session`)
+            }
+            if (displayPart.messageID !== input.assistantMessage.id) {
+              throw new Error(`tool result display part ${displayPart.id} belongs to a different message`)
+            }
+            if (existingPartIDs.has(displayPart.id)) continue
+            await Session.updatePart(displayPart)
+            existingPartIDs.add(displayPart.id)
+            onPartCreated(displayPart.id)
+          }
+        }
+        if (sourcePayloads.length > 0) {
+          const persisted = await persistMessageSources({
+            sessionID: input.assistantMessage.sessionID,
+            messageID: input.assistantMessage.id,
+            sources: sourcePayloads,
+          })
+          for (const part of persisted) onPartCreated(part.id)
+        }
+      })
+      mcpAppCalls.delete(value.toolCallId)
+    }
+
     let snapshot: string | undefined
     let blocked = false
     let needsCompaction = false
@@ -307,6 +375,31 @@ export namespace SessionProcessor {
           })
           toolcalls[toolCallID] = part as Message.ToolPart
           return part as Message.ToolPart
+        })
+      },
+      async completeRecoveredToolPart(input: {
+        toolCallID: string
+        toolInput: unknown
+        output: {
+          output: string
+          title: string
+          metadata: Record<string, unknown>
+          attachments?: Message.FilePart[]
+          display?: unknown
+          sources?: unknown
+        }
+      }) {
+        await completeToolPart({
+          toolCallId: input.toolCallID,
+          input: input.toolInput,
+          output: input.output,
+        })
+      },
+      async failRecoveredToolPart(toolCallID: string, failure: ToolFailureCause) {
+        await withToolPartLock(toolCallID, async () => {
+          const match = toolcalls[toolCallID] ?? (await priorToolPart(toolCallID))
+          if (!match || (match.state.status !== "running" && match.state.status !== "pending")) return
+          await failToolPart(match, failure)
         })
       },
       async process(streamInput: LLM.StreamInput) {
@@ -691,21 +784,9 @@ export namespace SessionProcessor {
                         )
 
                       if (exactMatch) {
-                        await PermissionNext.ask({
-                          permission: "doom_loop",
-                          patterns: [value.toolName],
-                          sessionID: input.assistantMessage.sessionID,
-                          tool: {
-                            messageID: input.assistantMessage.id,
-                            callID: value.toolCallId,
-                          },
-                          metadata: {
-                            tool: value.toolName,
-                            input: value.input,
-                          },
-                          always: [value.toolName],
-                          ruleset: streamInput.agent.permission ?? [],
-                        })
+                        throw new Error(
+                          `Repeated identical Tool call detected for ${value.toolName}; execution stopped before a duplicate effect.`,
+                        )
                       }
                       break
                     }
@@ -716,66 +797,20 @@ export namespace SessionProcessor {
                       // matching tool-call after a recovery), so this is safe to
                       // run unconditionally before the match check.
                       run.resume(toolPauseOwner(value.toolCallId))
-                      const metadata = value.output.metadata
-                      const displayParts = Array.isArray((value.output as { display?: unknown }).display)
-                        ? ((value.output as { display: unknown[] }).display ?? [])
-                        : []
-                      const sourcePayloads = Array.isArray((value.output as { sources?: unknown }).sources)
-                        ? ((value.output as { sources: unknown[] }).sources ?? []).map((source) =>
-                            Message.SourcePayload.parse(source),
-                          )
-                        : []
-                      await withToolPartLock(value.toolCallId, async () => {
-                        const match = toolcalls[value.toolCallId] ?? (await priorToolPart(value.toolCallId))
-                        if (match && (match.state.status === "running" || match.state.status === "pending")) {
-                          const resolvedInput =
-                            value.input === undefined ? match.state.input : cloneToolInputForPersistence(value.input)
-                          await Session.updatePart({
-                            ...match,
-                            state: {
-                              status: "completed",
-                              input: resolvedInput,
-                              output: value.output.output,
-                              metadata,
-                              title: value.output.title,
-                              time: completedToolTime(toolStartTime(match)),
-                              attachments: value.output.attachments,
-                            },
-                          })
-                          delete toolcalls[value.toolCallId]
-                        }
-                        if (displayParts.length > 0) {
-                          const existingPartIDs = new Set(
-                            (await MessageStore.parts(input.assistantMessage.id)).map((part) => part.id),
-                          )
-                          for (const candidate of displayParts) {
-                            const displayPart = Message.InteractiveArtifactPart.parse(candidate)
-                            if (displayPart.sessionID !== input.assistantMessage.sessionID) {
-                              throw new Error(
-                                `tool result display part ${displayPart.id} belongs to a different session`,
-                              )
-                            }
-                            if (displayPart.messageID !== input.assistantMessage.id) {
-                              throw new Error(
-                                `tool result display part ${displayPart.id} belongs to a different message`,
-                              )
-                            }
-                            if (existingPartIDs.has(displayPart.id)) continue
-                            await Session.updatePart(displayPart)
-                            existingPartIDs.add(displayPart.id)
-                          }
-                        }
-                        if (sourcePayloads.length > 0) {
-                          const persisted = await persistMessageSources({
-                            sessionID: input.assistantMessage.sessionID,
-                            messageID: input.assistantMessage.id,
-                            sources: sourcePayloads,
-                          })
-                          for (const part of persisted) trackCreatedPart(run.attempt, part.id)
-                        }
-                      })
+                      const output = value.output as {
+                        output: string
+                        title: string
+                        metadata: Record<string, unknown>
+                        attachments?: Message.FilePart[]
+                        display?: unknown
+                        sources?: unknown
+                      }
+                      const metadata = output.metadata
+                      await completeToolPart(
+                        { toolCallId: value.toolCallId, input: value.input, output },
+                        (partID) => trackCreatedPart(run.attempt, partID),
+                      )
                       const control = toolResultControl(metadata)
-                      mcpAppCalls.delete(value.toolCallId)
                       if (control?.kind === "handoff_drain") {
                         if (
                           coordinationHandoff &&
@@ -825,7 +860,7 @@ export namespace SessionProcessor {
                             },
                           })
 
-                          if (value.error instanceof PermissionNext.RejectedError) {
+                          if (value.error instanceof PermissionAuthority.RejectedError) {
                             blocked = shouldBreak
                           }
                           delete toolcalls[value.toolCallId]

@@ -1,5 +1,5 @@
 import { Provider } from "@/provider/provider"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { mergeDeep } from "remeda"
 import type { Config } from "@/config/config"
 import { AgentRoleContract } from "@/agent/role-contract"
@@ -34,7 +34,7 @@ export function materializeNativeAgentDefinitions(input: {
     item.steps = value.steps ?? item.steps
     item.options = mergeDeep(item.options, value.options ?? {})
     if (item.permission) {
-      item.permission = PermissionNext.merge(item.permission, PermissionNext.fromConfig(value.permission ?? {}))
+      item.permission = CapabilityRules.merge(item.permission, CapabilityRules.fromConfig(value.permission ?? {}))
     }
   }
 

@@ -1,5 +1,7 @@
 import { AsyncLocalStorage } from "node:async_hooks"
 import { createToolExecutionSurface, type ToolExecutionSurface } from "./execution-surface"
+import { PermissionAuthority } from "@/permission/authority"
+import type { PermissionProviderKind } from "@/permission/invocation"
 
 export type TaskToolInvocationIdentity = Readonly<{
   projectID: string
@@ -8,7 +10,15 @@ export type TaskToolInvocationIdentity = Readonly<{
   toolCallID: string
   toolPartID: string
   providerName: string
+  providerKind: PermissionProviderKind
+  providerID: string
+  providerDigest?: string
+  args: unknown
 }>
+export type TaskToolInvocationExpectedIdentity = Pick<
+  TaskToolInvocationIdentity,
+  "projectID" | "sessionID" | "messageID" | "toolCallID" | "toolPartID" | "providerName"
+>
 
 declare const taskToolInvocationAuthorityBrand: unique symbol
 export type TaskToolInvocationAuthority = Readonly<{ [taskToolInvocationAuthorityBrand]: true }>
@@ -41,25 +51,42 @@ export async function withTaskToolInvocation<T>(
     lifetime,
   })
   try {
-    return await activeInvocation.run(invocation, () => execute(authority))
+    return await PermissionAuthority.authorizeAndExecute(
+      {
+        projectID: identity.projectID,
+        sessionID: identity.sessionID,
+        messageID: identity.messageID,
+        toolCallID: identity.toolCallID,
+        toolPartID: identity.toolPartID,
+        providerKind: identity.providerKind,
+        providerID: identity.providerID,
+        providerDigest: identity.providerDigest,
+        toolName: identity.providerName,
+        args: identity.args,
+      },
+      () => activeInvocation.run(invocation, () => execute(authority)),
+    )
   } finally {
     lifetime.active = false
   }
 }
 
-export function assertCurrentTaskToolInvocation(authority: unknown, expected: TaskToolInvocationIdentity): void {
+export function assertCurrentTaskToolInvocation(
+  authority: unknown,
+  expected: TaskToolInvocationExpectedIdentity,
+): void {
   currentTaskToolInvocationSurface(authority, expected)
 }
 
 export function currentTaskToolInvocationSurface(
   authority: unknown,
-  expected: TaskToolInvocationIdentity,
+  expected: TaskToolInvocationExpectedIdentity,
 ): ToolExecutionSurface {
   const current = activeInvocation.getStore()
   if (!current || !current.lifetime.active || current.authority !== authority) {
     throw new Error(`${expected.providerName}: task tool invocation authority is not current.`)
   }
-  for (const key of Object.keys(expected) as (keyof TaskToolInvocationIdentity)[]) {
+  for (const key of Object.keys(expected) as (keyof TaskToolInvocationExpectedIdentity)[]) {
     if (current.identity[key] !== expected[key]) {
       throw new Error(
         `${expected.providerName}: current task tool invocation ${key} does not match execution identity.`,

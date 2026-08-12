@@ -237,4 +237,19 @@ export namespace State {
 
     log.info("state disposal completed", { key })
   }
+
+  /** Isolate a key whose disposer exceeded the Project deletion settlement
+   * budget. Exact-entry checks keep a late disposer from removing a later
+   * replacement state. */
+  export function abandon(key: string): void {
+    const entries = recordsByKey.get(key)
+    if (!entries) return
+    recordsByKey.delete(key)
+    keyDisposals.delete(key)
+    for (const entry of entries.values()) {
+      if (entry.disposal) void entry.disposal.catch(() => undefined)
+      else void Promise.resolve(entry.state).catch(() => undefined)
+    }
+    log.warn("abandoned non-settling state entries after bounded Project disposal", { key })
+  }
 }

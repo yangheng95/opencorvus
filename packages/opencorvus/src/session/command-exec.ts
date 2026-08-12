@@ -16,6 +16,7 @@ import { SessionPromptState } from "./prompt/state"
 import { sessionLifecycleOrderKey } from "./status"
 import { resolvePromptParts } from "./prompt/parts"
 import type { PromptInput } from "./prompt/schema"
+import { ProjectMemory } from "@/memory/project-memory"
 
 export namespace SessionCommand {
   const { log } = SessionPromptState
@@ -161,6 +162,10 @@ export namespace SessionCommand {
       model: taskModel,
       agent: agentName,
       byteMaterializationProjectID: session.projectID,
+      extra: ProjectMemory.userInputExtra({
+        surface: "session.command",
+        literalText: `/${input.command}${input.arguments ? ` ${input.arguments}` : ""}`,
+      }),
       parts,
       variant: input.variant,
     })

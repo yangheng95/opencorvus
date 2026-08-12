@@ -48,6 +48,7 @@ test("successor recovery removes only exact prior/dead request and workspace occ
             shell: "cmd.exe",
             cancel_file: path.join(root, "cancel"),
             ready_file: path.join(root, "ready.json"),
+            launch_failed_file: path.join(root, "launch-failed.json"),
             settled_file: path.join(root, "settled.json"),
             request_id: requestID,
             owner_pid: owner.pid,
@@ -64,22 +65,12 @@ test("successor recovery removes only exact prior/dead request and workspace occ
           occurrenceID: deadOccurrence,
         })
         await fs.writeFile(
-          path.join(dead.root, "ready.json"),
+          path.join(dead.root, "launch-failed.json"),
           JSON.stringify({
             protocol: 1,
             request_id: dead.requestID,
             helper_pid: 41_001,
-            target_pid: 41_002,
-            runtime_occurrence_id: deadOccurrence,
-          }),
-        )
-        await fs.writeFile(
-          path.join(dead.root, "settled.json"),
-          JSON.stringify({
-            protocol: 1,
-            request_id: dead.requestID,
-            helper_pid: 41_001,
-            target_pid: 41_002,
+            stage: "target_not_created",
             active_processes: 0,
             runtime_occurrence_id: deadOccurrence,
           }),
@@ -166,6 +157,96 @@ test("successor recovery removes only exact prior/dead request and workspace occ
       } finally {
         await Promise.all(requestRoots.map((root) => fs.rm(root, { recursive: true, force: true })))
         await RuntimeServerOwnership.releaseWithRetry(ownership)
+      }
+    },
+  })
+}, 60_000)
+
+test("successor recovery rejects conflicting and wrongly identified pre-target settlement evidence", async () => {
+  if (process.platform !== "win32") return
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const cases = [
+        {
+          name: "conflicting-ready",
+          marker: { request_id: "request-conflicting-ready", helper_pid: 41_001, runtime_occurrence_id: "dead" },
+          ready: {
+            protocol: 1,
+            request_id: "request-conflicting-ready",
+            helper_pid: 41_001,
+            target_pid: 41_002,
+            runtime_occurrence_id: "dead",
+          },
+          message: "conflicts with target process markers",
+        },
+        {
+          name: "wrong-request",
+          marker: { request_id: "another-request", helper_pid: 41_001, runtime_occurrence_id: "dead" },
+          message: "identity does not match",
+        },
+        {
+          name: "wrong-runtime",
+          marker: {
+            request_id: "request-wrong-runtime",
+            helper_pid: 41_001,
+            runtime_occurrence_id: "another-runtime",
+          },
+          message: "identity does not match",
+        },
+        {
+          name: "invalid-helper",
+          marker: { request_id: "request-invalid-helper", helper_pid: 0, runtime_occurrence_id: "dead" },
+          message: "invalid helper process id",
+        },
+      ] as const
+
+      for (const item of cases) {
+        const root = path.join(Global.Path.temporary, `supervisor-${item.name}`)
+        const requestID = `request-${item.name}`
+        await fs.mkdir(root, { recursive: true })
+        await fs.writeFile(
+          path.join(root, "request.json"),
+          JSON.stringify({
+            kind: "shell",
+            command: "echo recovery",
+            shell: "cmd.exe",
+            cancel_file: path.join(root, "cancel"),
+            ready_file: path.join(root, "ready.json"),
+            launch_failed_file: path.join(root, "launch-failed.json"),
+            settled_file: path.join(root, "settled.json"),
+            request_id: requestID,
+            owner_pid: 2_000_000_000,
+            owner_process_instance_id: "dead-process-instance",
+            runtime_occurrence_id: "dead",
+          }),
+        )
+        await fs.writeFile(
+          path.join(root, "launch-failed.json"),
+          JSON.stringify({
+            protocol: 1,
+            ...item.marker,
+            stage: "target_not_created",
+            active_processes: 0,
+          }),
+        )
+        if ("ready" in item) await fs.writeFile(path.join(root, "ready.json"), JSON.stringify(item.ready))
+
+        try {
+          const error = await ProcessSupervisor.recoverOrphanedWindowsRequests({
+            currentOccurrenceID: "current",
+            timeoutMilliseconds: 20,
+            observeProcessOccurrence: () => "dead_or_reused",
+          }).catch((cause) => cause)
+          expect(error).toBeInstanceOf(ProcessSupervisor.WindowsOrphanRequestRecoveryBlockedError)
+          expect({ result: error.result, detail: String(error.errors[0]?.cause) }).toEqual({
+            result: { inspected: 1, removed: 0, retainedCurrent: 0, retainedLive: 0, retainedUnknown: 1 },
+            detail: expect.stringContaining(item.message),
+          })
+        } finally {
+          await fs.rm(root, { recursive: true, force: true })
+        }
       }
     },
   })

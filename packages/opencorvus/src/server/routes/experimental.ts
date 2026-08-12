@@ -9,6 +9,8 @@ import { Instance } from "../../project/instance"
 import { Project } from "../../project/project"
 import { TaskPlan } from "../../memory/task-plan"
 import { SessionMemory } from "../../memory/session-memory"
+import { ProjectMemory } from "../../memory/project-memory"
+import { ProjectMemoryOrganizer } from "../../memory/project-memory-organizer"
 import { EventService } from "../../scheduler/event-service"
 import { Session } from "../../session"
 import { zodToJsonSchema } from "zod-to-json-schema"
@@ -16,6 +18,9 @@ import { errors, namedErrorResponse } from "../error"
 import { lazy } from "../../util/lazy"
 import { NotFoundError } from "../../storage/db"
 import { assertActiveProjectSession } from "../active-project-session"
+import { Database } from "../../storage/db"
+import { streamProjectSSE } from "../sse"
+import { Bus } from "../../bus"
 
 // Workspace shape for the workspace sub-tree (mounted at /workspace)
 const WorkspaceRoutes = lazy(() =>
@@ -419,6 +424,122 @@ export const ExperimentalRoutes = lazy(() =>
           timeCreated: document?.timeCreated ?? null,
           timeUpdated: document?.timeUpdated ?? null,
         })
+      },
+    )
+    .get(
+      "/project-memory",
+      describeRoute({
+        summary: "Get the organized Project MEMORY.MD context",
+        operationId: "experimental.projectMemory.get",
+        responses: {
+          200: {
+            description: "Project MEMORY.MD",
+            content: {
+              "application/json": {
+                schema: resolver(
+                  z.object({
+                    filename: z.literal("MEMORY.MD"),
+                    scope: z.literal("project"),
+                    content: z.string(),
+                    revision: z.number().int().nonnegative(),
+                    tokenCount: z.number().int().nonnegative(),
+                    status: z.string(),
+                    pendingCount: z.number().int().nonnegative(),
+                    droppedPendingCount: z.number().int().nonnegative(),
+                    notice: z.unknown().optional(),
+                    timeCreated: z.number(),
+                    timeUpdated: z.number(),
+                  }),
+                ),
+              },
+            },
+          },
+        },
+      }),
+      async (c) => c.json(ProjectMemory.read(Instance.project.id)),
+    )
+    .get(
+      "/project-memory/events",
+      describeRoute({
+        summary: "Subscribe to Project MEMORY.MD notice changes",
+        operationId: "experimental.projectMemory.events",
+        responses: {
+          200: {
+            description: "Project MEMORY.MD notice stream",
+            content: { "text/event-stream": { schema: resolver(z.unknown()) } },
+          },
+        },
+      }),
+      async (c) => {
+        const directory = Instance.directory
+        const projectID = Instance.project.id
+        c.header("X-Accel-Buffering", "no")
+        c.header("X-Content-Type-Options", "nosniff")
+        return streamProjectSSE(c, directory, async (stream, bind) => {
+          let finish = () => {}
+          let closed = false
+          let writes = Promise.resolve()
+          const done = new Promise<void>((resolve) => (finish = resolve))
+          const close = () => {
+            if (closed) return
+            closed = true
+            unsubscribe()
+            finish()
+          }
+          const write = (payload: unknown) => {
+            writes = writes.then(() => (closed ? undefined : stream.writeSSE({ data: JSON.stringify(payload) })))
+            return writes
+          }
+          const unsubscribe = Bus.subscribe(
+            ProjectMemory.Event.NoticeChanged,
+            bind(({ properties }) => {
+              if (properties.projectID !== projectID) return
+              return write({ type: ProjectMemory.Event.NoticeChanged.type, properties })
+            }),
+          )
+          await write({ type: "project.memory.notice.connected", properties: { projectID } })
+          stream.onAbort(close)
+          await done
+          await writes
+        })
+      },
+    )
+    .post(
+      "/project-memory/organize",
+      describeRoute({
+        summary: "Request Project MEMORY.MD organization",
+        operationId: "experimental.projectMemory.organize",
+        responses: {
+          200: {
+            description: "Memory Organizer result",
+            content: { "application/json": { schema: resolver(z.object({ result: z.unknown(), document: z.unknown() })) } },
+          },
+        },
+      }),
+      async (c) => {
+        const result = await ProjectMemoryOrganizer.run({ projectID: Instance.project.id })
+        return c.json({ result, document: ProjectMemory.read(Instance.project.id) })
+      },
+    )
+    .post(
+      "/project-memory/notice/acknowledge",
+      describeRoute({
+        summary: "Acknowledge a Project MEMORY.MD notice",
+        operationId: "experimental.projectMemory.acknowledgeNotice",
+        responses: {
+          200: {
+            description: "Notice acknowledgement",
+            content: { "application/json": { schema: resolver(z.object({ acknowledged: z.boolean() })) } },
+          },
+        },
+      }),
+      validator("json", z.object({ generation: z.string().min(1) })),
+      async (c) => {
+        const { generation } = c.req.valid("json")
+        const acknowledged = Database.transaction((db) =>
+          ProjectMemory.acknowledgeNoticeInTransaction(db, { projectID: Instance.project.id, generation }),
+        )
+        return c.json({ acknowledged })
       },
     )
     // === MCP resources ===

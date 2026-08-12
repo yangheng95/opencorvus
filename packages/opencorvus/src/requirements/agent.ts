@@ -92,6 +92,7 @@ export namespace RequirementsAgent {
       },
     )
     const outputToolKit = createRequirementsOutputTools({
+      taskID: input.taskID,
       decisionLog: createDecisionLog(input.taskID),
     })
 

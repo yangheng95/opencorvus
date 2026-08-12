@@ -94,7 +94,7 @@ describe("interrupted prepared Worker Turn recovery", () => {
             packageRevision,
             model: { selection: "explicit", providerID: "test", modelID: "recovery-model" },
             prompt: { systemMode: "complete", systemSha256: "c".repeat(64) },
-            tools: { enabled: [] },
+            tools: { enabled: [], stageOwned: [], stageMaterializers: {} },
             output: { format: "text", resultMode: "reply" },
             lifecycle: { taskID, workScope: { kind: "task" } },
             messageAuthority: {

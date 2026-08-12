@@ -17,7 +17,7 @@ import { FileTime } from "../../file/time"
 import { ConfigMarkdown } from "../../config/markdown"
 import { EffectiveConfig } from "../../config/effective"
 import type { Config } from "../../config/config"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { Tool } from "@/tool/tool"
 import { iife } from "@/util/iife"
 import { defer } from "../../util/defer"
@@ -590,7 +590,6 @@ export async function materializeUserMessage(
                     executionAuthority,
                     executionSurface: Tool.executionSurface([], []),
                     metadata: async () => {},
-                    ask: async () => {},
                   }
                   const result = await t.execute(args, readCtx)
                   const completedExplicitRange = limit !== undefined && result.metadata.lines === limit
@@ -637,7 +636,6 @@ export async function materializeUserMessage(
                     executionAuthority,
                     executionSurface: Tool.executionSurface([], []),
                     metadata: async () => {},
-                    ask: async () => {},
                   }
                   const result = await ReadTool.init().then((t) => t.execute(args, listCtx))
                   if (result.metadata.truncated === true) {

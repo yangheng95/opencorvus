@@ -15,6 +15,8 @@ import z from "zod"
 import { ArtifactReadLocatorSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 import type { DecisionLog } from "@/decision-log"
 import { RequirementDeclaredIDSchema } from "./types"
+import { bindStageToolMaterializer } from "@/agent/stage-tool-materializer"
+import { createDecisionLog } from "@/decision-log/index"
 
 // ---------------------------------------------------------------------------
 // Collector — accumulates registered items across tool calls
@@ -41,8 +43,30 @@ export interface RegisteredDecision {
 }
 
 export interface RequirementsOutputToolOptions {
+  taskID?: string
   decisionLog?: DecisionLog
   decisionPhase?: string
+}
+
+export function materializeRequirementsRegisterDecisionTool(
+  raw: Record<string, unknown>,
+  options?: { decisionLog?: DecisionLog; onDecision?: (decision: RegisteredDecision) => void },
+) {
+  const input = z.object({ taskID: z.string().min(1), decisionPhase: z.string().min(1) }).strict().parse(raw)
+  const decisionLog = options?.decisionLog ?? createDecisionLog(input.taskID)
+  return bindStageToolMaterializer(
+    tool({
+      description:
+        "Register a foundational technical or scope-calibration decision in the Task Decision Log.",
+      inputSchema: DecisionRegistrationSchema,
+      execute: async ({ key, value, reason }) => {
+        options?.onDecision?.({ key, value, reason })
+        decisionLog.append({ phase: input.decisionPhase, key, value, reason })
+        return `OK: decision "${key}=${value}" registered`
+      },
+    }),
+    { id: "requirements.register-decision", input },
+  )
 }
 
 export const RequirementRegistrationSchema = z
@@ -96,26 +120,22 @@ export function createRequirementsOutputTools(options: RequirementsOutputToolOpt
       },
     }),
 
-    register_decision: tool({
-      description:
-        "Register a foundational technical decision (runtime, backend_framework, " +
-        "test_framework, etc.) or scope-calibration decision (user_workflows, " +
-        "visual_surfaces, interactions_and_states, data_contracts, " +
-        "verification_surfaces, complexity_drivers). These seed the Decision " +
-        "Log under phase='requirements' so projected planning, execution, and review consumers use " +
-        "the same foundation.",
-      inputSchema: DecisionRegistrationSchema,
-      execute: async ({ key, value, reason }) => {
-        collector.decisions.push({ key, value, reason })
-        options.decisionLog?.append({
-          phase: options.decisionPhase ?? "requirements",
-          key,
-          value,
-          reason,
-        })
-        return `OK: decision "${key}=${value}" registered`
-      },
-    }),
+    register_decision: options.taskID
+      ? materializeRequirementsRegisterDecisionTool(
+          { taskID: options.taskID, decisionPhase: options.decisionPhase ?? "requirements" },
+          {
+            decisionLog: options.decisionLog,
+            onDecision: (decision) => collector.decisions.push(decision),
+          },
+        )
+      : tool({
+          description: "Register a foundational technical or scope-calibration decision.",
+          inputSchema: DecisionRegistrationSchema,
+          execute: async ({ key, value, reason }) => {
+            collector.decisions.push({ key, value, reason })
+            return `OK: decision "${key}=${value}" registered`
+          },
+        }),
   }
 
   return {

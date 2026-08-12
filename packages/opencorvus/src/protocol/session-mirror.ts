@@ -1,5 +1,5 @@
 import { Bus } from "@/bus"
-import { PermissionNext } from "@/permission/next"
+import { PermissionAuthority } from "@/permission/authority"
 import { ProtocolStore } from "@/protocol/store"
 import { Question } from "@/question"
 import { Message, Session, SessionStatus } from "@/session"
@@ -25,6 +25,20 @@ export type SessionMirrorEvent = {
   type: string
   summary?: string
   payload?: Record<string, unknown>
+}
+
+export function pendingPermissionSessionEvent(request: PermissionAuthority.Request): SessionMirrorEvent {
+  const mapped = mapSessionBusEvent(
+    {
+      type: PermissionAuthority.Event.Asked.type,
+      properties: request,
+    },
+    { sessionID: request.sessionID },
+  )
+  if (!mapped?.summary || !mapped.payload) {
+    throw new Error(`session-mirror: failed to project pending permission ${request.id}`)
+  }
+  return mapped
 }
 
 export function sessionBusEventSessionID(event: SessionBusEvent): string | undefined {
@@ -250,27 +264,19 @@ export function mapSessionBusEvent(
       payload,
     }
   }
-  if (event.type === PermissionNext.Event.Asked.type) {
+  if (event.type === PermissionAuthority.Event.Asked.type) {
     const payload = stampSessionEventPayload(sessionID, props)
     return {
       type: "permission.asked",
-      summary: `Permission requested: ${String(props.permission ?? "")}`.trim(),
+      summary: `Permission requested: ${String(props.toolName ?? "")}`.trim(),
       payload,
     }
   }
-  if (event.type === PermissionNext.Event.Replied.type) {
+  if (event.type === PermissionAuthority.Event.Replied.type) {
     const payload = stampSessionEventPayload(sessionID, props)
     return {
       type: "permission.replied",
-      summary: `Permission reply: ${String(props.reply ?? "")}`.trim(),
-      payload,
-    }
-  }
-  if (event.type === PermissionNext.Event.Abandoned.type) {
-    const payload = stampSessionEventPayload(sessionID, props, questionResponseOrderKey(props))
-    return {
-      type: "permission.abandoned",
-      summary: "Permission abandoned by infrastructure",
+      summary: `Permission decision: ${String(props.decision ?? "")}`.trim(),
       payload,
     }
   }

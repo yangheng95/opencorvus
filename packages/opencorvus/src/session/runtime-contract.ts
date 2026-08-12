@@ -80,6 +80,7 @@ type ProjectedWorkerRuntimeContractBase = SessionRuntimeContractBase & {
   skillProjection: PromptProfileResolver.ResolvedSkillProjection
   projectDirectory: string
   runtime: SessionAgentRuntimeValue
+  permissionContinuation?: Readonly<{ requestID: string; toolName: string }>
 }
 
 export type ProjectedWorkerSessionLoopRuntimeContract = ProjectedWorkerRuntimeContractBase &

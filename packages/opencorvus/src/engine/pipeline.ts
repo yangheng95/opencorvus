@@ -28,6 +28,7 @@ import {
 } from "./task-execution-capsule-binding"
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { SessionTable } from "@/session/session.sql"
+import { ProjectMemory } from "@/memory/project-memory"
 
 const log = Log.create({ service: "engine-pipeline" })
 
@@ -127,6 +128,19 @@ export function persistQueuedTask(input: {
       timeCreated: input.now,
       timeUpdated: input.now,
     })
+    if (input.metadata.actor === "user") {
+      ProjectMemory.captureOccurrenceInTransaction(db, {
+        occurrenceKind: "task_create",
+        occurrenceID: input.taskID,
+        projectID: input.projectID,
+        sessionID: input.sessionID,
+        taskID: input.taskID,
+        surface: "task.create",
+        timeCreated: input.now,
+        text: input.request,
+        attachments: input.attachments,
+      })
+    }
     insertTaskPackageRevisionBinding({
       db,
       taskID: input.taskID,

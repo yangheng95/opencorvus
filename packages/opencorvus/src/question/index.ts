@@ -4,7 +4,7 @@ import { Config } from "@/config/config"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { createInstanceState } from "@/project/instance-state"
-import { NotFoundError } from "@/storage/db"
+import { Database, NotFoundError } from "@/storage/db"
 import { Log } from "@/util/log"
 import z from "zod"
 import { values as objectValues } from "@/util/object"
@@ -16,8 +16,26 @@ import type {
   Option as _OptionType,
   Request as _RequestType,
 } from "./types"
+import { InteractionUserInput } from "@/memory/project-memory"
 
 export namespace Question {
+  let afterUserOutboxCommitForTest: (() => void) | undefined
+
+  export namespace TestHooks {
+    export function failAfterNextUserOutboxCommit(error = new Error("injected post-commit interruption")): Disposable {
+      if (afterUserOutboxCommitForTest) throw new Error("Question post-commit interruption hook is already installed")
+      afterUserOutboxCommitForTest = () => {
+        afterUserOutboxCommitForTest = undefined
+        throw error
+      }
+      return {
+        [Symbol.dispose]() {
+          afterUserOutboxCommitForTest = undefined
+        },
+      }
+    }
+  }
+
   const log = Log.create({ service: "question" })
 
   export const Option = _Option
@@ -55,6 +73,7 @@ export namespace Question {
         answers: z.array(Answer),
         timeResolved: z.number().int().positive(),
         automatic: z.boolean().optional(),
+        userInput: InteractionUserInput.optional(),
       }),
     ),
     Rejected: BusEvent.define(
@@ -64,6 +83,7 @@ export namespace Question {
         requestID: z.string(),
         origin: z.literal("operator"),
         timeResolved: z.number().int().positive(),
+        userInput: InteractionUserInput.optional(),
       }),
     ),
     Expired: BusEvent.define(
@@ -335,48 +355,91 @@ export namespace Question {
     })
   }
 
-  export async function reply(input: { requestID: string; answers: Answer[] }): Promise<void> {
+  export async function reply(input: {
+    requestID: string
+    answers: Answer[]
+    userInput?: InteractionUserInput
+  }): Promise<void> {
     const s = await state()
-    const existing = takePending(s.pending, input.requestID)
-    if (!existing) {
+    const pending = s.pending[input.requestID]
+    if (!pending) {
       log.warn("reply for unknown request", { requestID: input.requestID })
       throw new NotFoundError({ message: `Question request not found: ${input.requestID}` })
     }
     log.info("replied", { requestID: input.requestID, answers: input.answers })
     const timeResolved = Date.now()
+    let existing: PendingQuestion | undefined
     try {
-      await Bus.publish(Event.Replied, {
-        sessionID: existing.info.sessionID,
-        requestID: existing.info.id,
-        answers: input.answers,
-        timeResolved,
-      })
+      let publication: Bus.Publication | undefined
+      if (input.userInput) {
+        Database.transaction(() => {
+          publication = Bus.publishOwnedInTransaction(Event.Replied, {
+            sessionID: pending.info.sessionID,
+            requestID: pending.info.id,
+            answers: input.answers,
+            timeResolved,
+            userInput: input.userInput,
+          })
+        })
+        afterUserOutboxCommitForTest?.()
+      }
+      // Do not claim the in-memory question until the user-authored terminal
+      // occurrence is durably committed. A failed source transaction therefore
+      // leaves the original waiter, deadline, and retry target intact.
+      existing = takePending(s.pending, input.requestID)
+      if (!existing) throw new Error(`Question request ${input.requestID} changed during reply commit`)
+      if (publication) await publication.retry()
+      else
+        await Bus.publish(Event.Replied, {
+          sessionID: existing.info.sessionID,
+          requestID: existing.info.id,
+          answers: input.answers,
+          timeResolved,
+        })
       for (const waiter of existing.waiters) waiter.resolve(input.answers)
     } catch (error) {
-      rejectWaiters(existing, error)
+      if (existing) rejectWaiters(existing, error)
       throw error
     }
   }
 
-  export async function reject(requestID: string): Promise<void> {
+  export async function reject(requestID: string, userInput?: InteractionUserInput): Promise<void> {
     const s = await state()
-    const existing = takePending(s.pending, requestID)
-    if (!existing) {
+    const pending = s.pending[requestID]
+    if (!pending) {
       log.warn("reject for unknown request", { requestID })
       throw new NotFoundError({ message: `Question request not found: ${requestID}` })
     }
     log.info("rejected", { requestID })
     const timeResolved = Date.now()
+    let existing: PendingQuestion | undefined
     try {
-      await Bus.publish(Event.Rejected, {
-        sessionID: existing.info.sessionID,
-        requestID: existing.info.id,
-        origin: "operator",
-        timeResolved,
-      })
+      let publication: Bus.Publication | undefined
+      if (userInput) {
+        Database.transaction(() => {
+          publication = Bus.publishOwnedInTransaction(Event.Rejected, {
+            sessionID: pending.info.sessionID,
+            requestID: pending.info.id,
+            origin: "operator",
+            timeResolved,
+            userInput,
+          })
+        })
+        afterUserOutboxCommitForTest?.()
+      }
+      existing = takePending(s.pending, requestID)
+      if (!existing) throw new Error(`Question request ${requestID} changed during reject commit`)
+      if (publication) await publication.retry()
+      else
+        await Bus.publish(Event.Rejected, {
+          sessionID: existing.info.sessionID,
+          requestID: existing.info.id,
+          origin: "operator",
+          timeResolved,
+        })
       rejectWaiters(existing, new RejectedError({ requestID: existing.info.id, timeResolved }))
     } catch (error) {
-      rejectWaiters(existing, error)
+      if (existing) rejectWaiters(existing, error)
       throw error
     }
   }

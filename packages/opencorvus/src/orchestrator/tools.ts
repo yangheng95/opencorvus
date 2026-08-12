@@ -844,11 +844,6 @@ function isObjectRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value)
 }
 
-export function assertProjectedSchedulerReadPermission(request: { permission: string }): void {
-  if (request.permission === "read") return
-  throw new Error(`scheduler read rejected permission ${request.permission}`)
-}
-
 const TERMINAL_TASK_TOOL_CAPABILITIES = {
   skill: "read_only",
   read: "read_only",
@@ -1122,9 +1117,6 @@ export function createOrchestratorTools(input: {
           executionSurface: Tool.executionSurface(["read"], []),
           extra: { taskID },
           metadata() {},
-          async ask(request) {
-            assertProjectedSchedulerReadPermission(request)
-          },
         })
       },
     }),

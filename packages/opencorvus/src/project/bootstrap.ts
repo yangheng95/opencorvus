@@ -39,6 +39,8 @@ import { installDefaultTaskWakeRuntime } from "@/scheduler/task-wake-composition
 import { ensureSessionProtocolBridge } from "@/protocol/session-mirror"
 import { markConversationCapabilityTransactionalInit } from "@/conversation/capability-transaction"
 import { reconcilePendingCancelledTaskSettlements } from "@/engine/state"
+import { PermissionAuthority } from "@/permission/authority"
+import { ProjectMemoryOrganizer } from "@/memory/project-memory-organizer"
 
 async function validateInstanceConversationCapabilities() {
   const lifecycleContext = {
@@ -96,6 +98,7 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   Truncate.init()
   AutomationService.init()
   EventService.init()
+  ProjectMemoryOrganizer.init()
   Bus.resumeDurablePublications()
   TaskQueueService.init()
   EngineService.init()
@@ -113,6 +116,9 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
       timeResolved: Date.now(),
     }),
   )
+  await ProjectOpenLifecycle.stage("permission.reconcile-interrupted-attempts", lifecycleContext, async () => {
+    PermissionAuthority.reconcileInterruptedAttempts()
+  })
   // Restore the prior runtime's exact FIFO head before interrupted worker
   // recovery can append and drain new process-recovery/lifecycle wakes. If a
   // stale `running` ingress remains ineligible here, the next `pending` row

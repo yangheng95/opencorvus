@@ -44,26 +44,18 @@ import { defer } from "../util/defer"
 import { ToolRegistry } from "../tool/registry"
 import { Env } from "../env"
 import { MCP } from "../mcp"
-import {
-  browserMcpPermissionKeyOf,
-  browserMcpToolKeyFromRuntimeName,
-  executeBrowserMcpToolWithPermission,
-  mcpPermissionPlan,
-} from "@/mcp/browser/permission-plan"
-import {
-  computerMcpPermissionKeyOf,
-  computerMcpToolKeyFromRuntimeName,
-  executeComputerMcpToolWithPermission,
-} from "@/mcp/computer/permission-plan"
+import { browserMcpPermissionKeyOf, browserMcpToolKeyFromRuntimeName } from "@/mcp/browser/permission-plan"
+import { computerMcpPermissionKeyOf, computerMcpToolKeyFromRuntimeName } from "@/mcp/computer/permission-plan"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { fn } from "@/util/fn"
 import { SessionProcessor } from "./processor"
 import { MissionSkillTool, SkillTool } from "@/tool/skill"
 import { Tool } from "@/tool/tool"
 import { withTaskToolInvocation } from "@/tool/task-tool-invocation"
+import { bindProjectedTaskToolRuntime, projectedTaskToolRuntimeBindingOf } from "@/tool/task-tool-execution-scope"
 import type { ResolvedSkillSurface } from "@/skill/surface"
 import { AgentToolPool } from "@/agent/tool-pool-contract"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { SessionStatus, sessionLifecycleOrderKey } from "./status"
 import { ensureTitle } from "./prompt/title"
 import { Truncate } from "@/tool/truncation"
@@ -114,6 +106,24 @@ import { createMcpAppToolLifecycle, mcpAppAuthorityForRuntimeTool } from "@/inte
 import { visibleMentionDirectiveRanges } from "@opencorvus-ai/transport-protocol"
 import type { HarnessProjection } from "@/capability/harness-projection"
 import { compareTimelineOrderKeys, timelineMessageOrderKey } from "@/timeline/order"
+import { PermissionAuthority } from "@/permission/authority"
+import { composeProjectedWorkerSystemPrompt } from "@/agent/projected-worker-system-prompt"
+import { sessionRuntimeWithResolvedModel } from "@/agent/session-agent-runtime"
+import { textSHA256 } from "@/expert-squad/projection-hash"
+import { sameExpertSquadPackageRevision } from "@/expert-squad/package-revision"
+import { createAgentCoordinationRuntimeTools } from "@/agent/coordination-runtime-tools"
+import { createAgentContextTools } from "@/agent/context-tools"
+import { filterAgentTools } from "@/agent/filter-tools"
+import { MCP as McpRuntime } from "@/mcp"
+import { computerRuntimeScopeIdentity } from "@/mcp/computer/runtime-scope"
+import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
+import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contract"
+import { coordinationHandoffPrompt } from "@/prompt/fragments/coordination-handoff"
+import {
+  materializeBoundStageTool,
+  internalStageToolBindingOf,
+  stageToolMaterializerBindingOf,
+} from "@/agent/stage-tool-materializer"
 
 muteAISdkWarnings()
 
@@ -2347,7 +2357,7 @@ export namespace SessionLoop {
     using _ = log.time("resolveTools")
     const tools: Record<string, AITool> = {}
     const toolSources = new Map<string, ProviderToolSource>()
-    const executionPermission = PermissionNext.merge(input.agent.permission, input.session.permission)
+    const executionPermission = CapabilityRules.merge(input.agent.permission, input.session.permission)
     const runtimeContract = getSessionRuntimeContract(input.session.id)
     assertSessionLoopRuntimeContract(runtimeContract, `SessionLoop tool resolver ${input.session.id}`)
     const executionAuthority = await resolveToolExecutionAuthority({
@@ -2423,14 +2433,6 @@ export namespace SessionLoop {
         metadata(value) {
           metadataSink.update(redactToolDiagnosticValue(value))
         },
-        async ask(req) {
-          await PermissionNext.ask({
-            ...req,
-            sessionID: input.session.id,
-            tool: { messageID: input.processor.message.id, callID: options.toolCallId },
-            ruleset: PermissionNext.merge(input.agent.permission, input.session.permission ?? []),
-          })
-        },
       }
     }
 
@@ -2471,6 +2473,9 @@ export namespace SessionLoop {
             toolCallID,
             toolPartID: toolPart.id,
             providerName: item.id,
+            providerKind: "builtin" as const,
+            providerID: item.id,
+            args: normalizedInput.ok ? normalizedInput.value : {},
           }
           return withTaskToolInvocation(invocationIdentity, executionSurface, async (invocationAuthority) => {
             const ctx = context(args, options, {
@@ -2606,7 +2611,7 @@ export namespace SessionLoop {
         if (projectedRegistryToolIDs && !projectedRegistryToolIDs.has(item.id)) continue
         // Session-level deny rules take precedence over the runtime template.
         if (!projectedWorkerRuntime && input.session.permission?.length) {
-          const rule = PermissionNext.evaluate(item.id, "*", input.session.permission)
+          const rule = CapabilityRules.evaluate(item.id, "*", input.session.permission)
           if (rule.action === "deny") continue
         }
         bindRegistryTool(item)
@@ -2634,6 +2639,11 @@ export namespace SessionLoop {
       const execute = item.execute
       if (!execute) continue
       const mcpAppBinding = MCP.appToolBinding(item)
+      const mcpAuthorityBinding = MCP.toolAuthorityBinding(item)
+      const isBuiltinMcp = Boolean(browserMcpToolKeyFromRuntimeName(key) || computerMcpToolKeyFromRuntimeName(key))
+      if (!isBuiltinMcp && !mcpAuthorityBinding) {
+        throw new Error(`MCP Tool ${key} is missing its immutable authorization binding`)
+      }
       const mcpAppLifecycle = mcpAppBinding
         ? createMcpAppToolLifecycle({
             sessionID: input.session.id,
@@ -2648,105 +2658,107 @@ export namespace SessionLoop {
         ...(item as any),
         async execute(args: any, opts: ToolExecutionOptions) {
           const ctx = context(args, opts)
-          try {
-            await mcpAppLifecycle?.input(opts.toolCallId, args)
-            await Plugin.trigger(
-              "tool.execute.before",
-              {
-                tool: key,
-                sessionID: ctx.sessionID,
-                callID: opts.toolCallId,
-              },
-              {
-                args,
-              },
-            )
-
-            const permissionKey = browserMcpToolKeyFromRuntimeName(key)
-            const computerPermissionKey = computerMcpToolKeyFromRuntimeName(key)
-            const result = permissionKey
-              ? await executeBrowserMcpToolWithPermission({
-                  key: permissionKey,
-                  args,
-                  sessionID: input.session.id,
-                  messageID: input.processor.message.id,
-                  callID: opts.toolCallId,
-                  rulesets: [input.agent.permission, input.session.permission],
-                  execute: () => execute(args, opts),
-                })
+          const normalizedInput = normalizeToolInput(args)
+          const persistedInput = cloneToolInputForPersistence(normalizedInput.ok ? normalizedInput.value : {})
+          const toolPart = await input.processor.ensureToolPart(opts.toolCallId, key, persistedInput)
+          const browserPermissionKey = browserMcpToolKeyFromRuntimeName(key)
+          const computerPermissionKey = computerMcpToolKeyFromRuntimeName(key)
+          const invocationIdentity = {
+            projectID: Instance.project.id,
+            sessionID: input.session.id,
+            messageID: input.processor.message.id,
+            toolCallID: opts.toolCallId,
+            toolPartID: toolPart.id,
+            providerName: key,
+            providerKind: browserPermissionKey
+              ? ("browser" as const)
               : computerPermissionKey
-                ? await executeComputerMcpToolWithPermission({
-                    key: computerPermissionKey,
-                    args,
-                    sessionID: input.session.id,
-                    messageID: input.processor.message.id,
-                    callID: opts.toolCallId,
-                    rulesets: [input.agent.permission, input.session.permission],
-                    execute: () => execute(args, opts),
-                  })
-                : await (async () => {
-                    await ctx.ask(mcpPermissionPlan(key, args))
-                    return execute(args, opts)
-                  })()
-
-            await Plugin.trigger(
-              "tool.execute.after",
-              {
-                tool: key,
-                sessionID: ctx.sessionID,
-                callID: opts.toolCallId,
-                args,
-              },
-              result,
-            )
-            await mcpAppLifecycle?.complete(opts.toolCallId, args, result)
-
-            // MCP tool image / resource content used to inline as
-            // `data:<mime>;base64,...` directly into `attachment.url`,
-            // which (a) blew up `part.data` (see attachment-store DB
-            // forensics) and
-            // (b) now trips Session.updatePart's inline-base64 guard.
-            // Funnel both branches through AttachmentStore so the
-            // persisted url is the canonical `/attachment/<id>/<sha>.<ext>`
-            // ref; bytes only re-inline transiently in toModelOutput when
-            // the AI SDK actually feeds the tool result back to the model.
-            const materialized = await materializeMcpToolResult({
-              projectID: Instance.project.id,
-              result,
-            })
-
-            const truncated = await Truncate.output(
-              materialized.text,
-              { sessionID: ctx.sessionID, executionAuthority },
-              ctx.executionSurface,
-            )
-            const metadata = {
-              ...materialized.metadata,
-              truncated: truncated.truncated,
-              ...(truncated.truncated && { outputPath: truncated.outputPath }),
-            }
-
-            return {
-              title: "",
-              metadata,
-              output: truncated.content,
-              attachments: materializedMcpAttachmentsToFileParts({
-                attachments: materialized.attachments,
-                sessionID: ctx.sessionID,
-                messageID: input.processor.message.id,
-              }),
-              content: result.content,
-            }
-          } catch (error) {
-            if (mcpAppLifecycle) {
-              if (opts.abortSignal?.aborted) {
-                await mcpAppLifecycle.cancel(opts.toolCallId, args, "Tool execution cancelled")
-              } else {
-                await mcpAppLifecycle.fail(opts.toolCallId, args, error)
-              }
-            }
-            throw error
+                ? ("computer" as const)
+                : mcpAppLifecycle
+                  ? ("mcp_app" as const)
+                  : ("mcp" as const),
+            providerID: mcpAuthorityBinding?.serverID ?? key,
+            providerDigest: mcpAuthorityBinding
+              ? `${mcpAuthorityBinding.configDigest}:${mcpAuthorityBinding.toolDigest}`
+              : undefined,
+            args: persistedInput,
           }
+          return withTaskToolInvocation(invocationIdentity, ctx.executionSurface, async () => {
+            try {
+              await mcpAppLifecycle?.input(opts.toolCallId, args)
+              await Plugin.trigger(
+                "tool.execute.before",
+                {
+                  tool: key,
+                  sessionID: ctx.sessionID,
+                  callID: opts.toolCallId,
+                },
+                {
+                  args,
+                },
+              )
+
+              const result = await execute(args, opts)
+
+              await Plugin.trigger(
+                "tool.execute.after",
+                {
+                  tool: key,
+                  sessionID: ctx.sessionID,
+                  callID: opts.toolCallId,
+                  args,
+                },
+                result,
+              )
+              await mcpAppLifecycle?.complete(opts.toolCallId, args, result)
+
+              // MCP tool image / resource content used to inline as
+              // `data:<mime>;base64,...` directly into `attachment.url`,
+              // which (a) blew up `part.data` (see attachment-store DB
+              // forensics) and
+              // (b) now trips Session.updatePart's inline-base64 guard.
+              // Funnel both branches through AttachmentStore so the
+              // persisted url is the canonical `/attachment/<id>/<sha>.<ext>`
+              // ref; bytes only re-inline transiently in toModelOutput when
+              // the AI SDK actually feeds the tool result back to the model.
+              const materialized = await materializeMcpToolResult({
+                projectID: Instance.project.id,
+                result,
+              })
+
+              const truncated = await Truncate.output(
+                materialized.text,
+                { sessionID: ctx.sessionID, executionAuthority },
+                ctx.executionSurface,
+              )
+              const metadata = {
+                ...materialized.metadata,
+                truncated: truncated.truncated,
+                ...(truncated.truncated && { outputPath: truncated.outputPath }),
+              }
+
+              return {
+                title: "",
+                metadata,
+                output: truncated.content,
+                attachments: materializedMcpAttachmentsToFileParts({
+                  attachments: materialized.attachments,
+                  sessionID: ctx.sessionID,
+                  messageID: input.processor.message.id,
+                }),
+                content: result.content,
+              }
+            } catch (error) {
+              if (mcpAppLifecycle) {
+                if (opts.abortSignal?.aborted) {
+                  await mcpAppLifecycle.cancel(opts.toolCallId, args, "Tool execution cancelled")
+                } else {
+                  await mcpAppLifecycle.fail(opts.toolCallId, args, error)
+                }
+              }
+              throw error
+            }
+          })
         },
       } as AITool
       tools[key] = prepareProviderTool({
@@ -2783,7 +2795,6 @@ export namespace SessionLoop {
       const wrapped = wrapExtraTool(name, extraTool, {
         sessionID: sessionIDForExtras,
         messageID: messageIDForExtras,
-        browserPermissionRulesets: [input.agent.permission, input.session.permission],
         executionSurface: () =>
           createToolExecutionSurface({
             toolIDs: Object.keys(tools),
@@ -2945,7 +2956,7 @@ export namespace SessionLoop {
       projectedWorkerVisibleRegistryToolIDs === undefined &&
       projectedRegistryToolIDs?.has(SkillTool.id) &&
       (!input.session.permission?.length ||
-        PermissionNext.evaluate(SkillTool.id, "*", input.session.permission).action !== "deny") &&
+        CapabilityRules.evaluate(SkillTool.id, "*", input.session.permission).action !== "deny") &&
       toolSwitchAllows(SkillTool.id, input.tools)
     if (projectedWorkerAllowsSkill || nonWorkerAllowsSkill) {
       initialToolNames.add(SkillTool.id)
@@ -2956,7 +2967,7 @@ export namespace SessionLoop {
       input.session.kind === "mission" &&
       AgentToolPool.visibleToolIDs(input.agent.tools).has(MissionSkillTool.id) &&
       (!input.session.permission?.length ||
-        PermissionNext.evaluate(MissionSkillTool.id, "*", input.session.permission).action !== "deny") &&
+        CapabilityRules.evaluate(MissionSkillTool.id, "*", input.session.permission).action !== "deny") &&
       toolSwitchAllows(MissionSkillTool.id, input.tools)
     if (missionRoleAllowsSkill) initialToolNames.add(MissionSkillTool.id)
     const nativeConversationAllowsSkill =
@@ -2964,7 +2975,7 @@ export namespace SessionLoop {
       (input.agentID === "chat" || input.agentID === "work") &&
       AgentToolPool.visibleToolIDs(input.agent.tools).has(SkillTool.id) &&
       (!input.session.permission?.length ||
-        PermissionNext.evaluate(SkillTool.id, "*", input.session.permission).action !== "deny") &&
+        CapabilityRules.evaluate(SkillTool.id, "*", input.session.permission).action !== "deny") &&
       toolSwitchAllows(SkillTool.id, input.tools)
     if (nativeConversationAllowsSkill) initialToolNames.add(SkillTool.id)
     await finalizeSkillSurface(initialToolNames)
@@ -2991,6 +3002,315 @@ export namespace SessionLoop {
     }
 
     return tools
+  }
+
+  /**
+   * Resume the exact persisted Tool invocation after an Ask-me decision was
+   * committed in a later process. This deliberately rebuilds the ordinary
+   * SessionLoop Tool surface; it does not call a registry or MCP executor
+   * directly.
+   */
+  export async function resumePermissionContinuation(request: PermissionAuthority.Request): Promise<void> {
+    const session = await Session.get(request.sessionID)
+    const persistedAssistant = await MessageStore.get({
+      sessionID: request.sessionID,
+      messageID: request.messageID,
+    })
+    if (persistedAssistant.info.role !== "assistant") {
+      throw new Error(`Permission continuation ${request.id} message ${request.messageID} is not an assistant message`)
+    }
+    const assistant = persistedAssistant.info
+    const toolPart = persistedAssistant.parts.find(
+      (part): part is Message.ToolPart => part.type === "tool" && part.callID === request.toolCallID,
+    )
+    if (!toolPart) {
+      throw new Error(`Permission continuation ${request.id} has no persisted ToolPart ${request.toolCallID}`)
+    }
+    if (toolPart.tool !== request.toolName) {
+      throw new Error(
+        `Permission continuation ${request.id} Tool changed from ${request.toolName} to ${toolPart.tool}`,
+      )
+    }
+    if (toolPart.state.status === "completed") return
+    if (toolPart.state.status === "error") {
+      throw new Error(`Permission continuation ${request.id} ToolPart is already terminal with an error`)
+    }
+    if (!assistant.parentID) {
+      throw new Error(`Permission continuation ${request.id} assistant has no parent user message`)
+    }
+    const persistedUser = await MessageStore.get({ sessionID: request.sessionID, messageID: assistant.parentID })
+    if (persistedUser.info.role !== "user") {
+      throw new Error(`Permission continuation ${request.id} parent ${assistant.parentID} is not a user message`)
+    }
+    const config = await EffectiveConfig.effective({ sessionID: request.sessionID })
+    const model = await Provider.getModel(assistant.providerID, assistant.modelID, { config })
+    const installedRuntimeContract = SessionRuntimeContractStore.get(request.sessionID)
+    const recoveredRuntimeContract = installedRuntimeContract
+      ? undefined
+      : await reconstructProjectedWorkerPermissionRuntime({ session, request, assistant, config })
+    await using _recoveredRuntime = recoveredRuntimeContract
+    const messageIdentity = await resolveSessionMessageIdentity({
+      session,
+      requestedAgentID: assistant.agent,
+      config,
+    })
+    const abortController = new AbortController()
+    const processor = SessionProcessor.create({
+      assistantMessage: assistant,
+      sessionID: request.sessionID,
+      model,
+      abort: abortController.signal,
+    })
+    const messages = await Session.messages({ sessionID: request.sessionID })
+    const tools = await resolveTools({
+      agent: messageIdentity.runtime,
+      agentID: messageIdentity.agentID,
+      model,
+      session,
+      tools: persistedUser.info.tools,
+      includeMcpTools: persistedUser.info.includeMcpTools,
+      processor,
+      extra: persistedUser.info.extra,
+      messages,
+      config,
+    })
+    const recoveredTool = tools[request.toolName]
+    if (!recoveredTool?.execute) {
+      throw new Error(`Permission continuation ${request.id} Tool ${request.toolName} is no longer projected`)
+    }
+    let raw: unknown
+    try {
+      raw = await recoveredTool.execute(toolPart.state.input, {
+        toolCallId: request.toolCallID,
+        messages: [],
+        abortSignal: abortController.signal,
+      })
+    } catch (error) {
+      const recoveredFailure =
+        error instanceof PermissionAuthority.ExecutionAlreadySucceededError
+          ? toolFailureCauseFromUnknown({
+              error,
+              originSite: "SessionLoop.resumePermissionContinuation",
+              classification: "tool-execution",
+              kind: "recovered-permission-result-unavailable",
+              data: {
+                requestID: request.id,
+                toolCallID: request.toolCallID,
+                attemptID: error.attemptID,
+                effectOutcome: "execution_succeeded",
+              },
+            })
+          : toolFailureCauseFromUnknown({
+              error,
+              originSite: "SessionLoop.resumePermissionContinuation",
+              classification: "tool-execution",
+              kind: "recovered-permission-tool-execution",
+              data: { requestID: request.id, toolCallID: request.toolCallID },
+            })
+      await processor.failRecoveredToolPart(
+        request.toolCallID,
+        recoveredFailure,
+      )
+      throw error
+    }
+    // ToolPart persistence is deliberately outside the execution catch. Once
+    // the authority has recorded execution_succeeded, a local persistence
+    // failure must leave the ToolPart open so startup recovery can replay the
+    // durable result; it must not rewrite the completed effect as a Tool error.
+    const output = normalizeExtraToolResult(raw)
+    await processor.completeRecoveredToolPart({
+      toolCallID: request.toolCallID,
+      toolInput: toolPart.state.input,
+      output: {
+        output: output.output,
+        title: output.title,
+        metadata: output.metadata as Record<string, unknown>,
+        ...(Array.isArray(output.attachments) ? { attachments: output.attachments as Message.FilePart[] } : {}),
+        ...(output.display !== undefined ? { display: output.display } : {}),
+        ...((raw as { sources?: unknown } | undefined)?.sources !== undefined
+          ? { sources: (raw as { sources: unknown }).sources }
+          : {}),
+      },
+    })
+    assistant.finish = "tool-calls"
+    assistant.time.completed = Date.now()
+    await Session.updateMessage(assistant)
+    if (!recoveredRuntimeContract) await loop({ sessionID: request.sessionID })
+  }
+
+  async function reconstructProjectedWorkerPermissionRuntime(input: {
+    session: Session.Info
+    request: PermissionAuthority.Request
+    assistant: Message.Assistant
+    config: Config.Info
+  }): Promise<AsyncDisposable | undefined> {
+    if (!RuntimeTemplateRegistry.isWorkerSessionKind(input.session.kind)) return undefined
+    const descriptor = WorkerTurnDescriptor.latestForSession(input.session.id)
+    if (!descriptor) {
+      throw new Error(`Permission continuation ${input.request.id} has no persisted Worker Turn descriptor`)
+    }
+    const payload = descriptor.payload
+    if (
+      payload.identity.agentID !== input.assistant.agent ||
+      payload.identity.sessionKind !== input.session.kind ||
+      payload.model.selection !== "explicit" ||
+      payload.model.providerID !== input.assistant.providerID ||
+      payload.model.modelID !== input.assistant.modelID
+    ) {
+      throw new PermissionAuthority.StaleContinuationError(
+        input.request.id,
+        "The persisted projected worker identity or model changed after restart",
+      )
+    }
+    const projectDirectory = await EffectiveConfig.directory({ sessionID: input.session.id })
+    const capabilityProjectDirectory = await EffectiveConfig.capabilityProjectDirectory({ sessionID: input.session.id })
+    const projection = await PromptProfileResolver.resolveWorkerTurnProjection({
+      config: input.config,
+      projectDirectory: capabilityProjectDirectory,
+      agentID: payload.identity.agentID,
+      packageRevision: payload.packageRevision,
+    })
+    const capability = projection.workerCapability
+    if (
+      !sameExpertSquadPackageRevision(capability.packageRevision, payload.packageRevision) ||
+      JSON.stringify(capability.identity) !== JSON.stringify(payload.identity)
+    ) {
+      throw new PermissionAuthority.StaleContinuationError(
+        input.request.id,
+        "The projected worker capability changed after restart",
+      )
+    }
+    const model = await Provider.getModel(payload.model.providerID, payload.model.modelID, { config: input.config })
+    const runtime = sessionRuntimeWithResolvedModel(capability.runtime, {
+      providerID: payload.model.providerID,
+      modelID: payload.model.modelID,
+    })
+    const coordinationToolID = DispatchAdapterContractRegistry.coordinationHandoffToolID(
+      payload.identity.dispatchAdapterID,
+    )
+    const system = await composeProjectedWorkerSystemPrompt({
+      taskID: payload.lifecycle.taskID,
+      baseRole: RuntimeTemplateID.get(payload.identity.baseRole),
+      core: coordinationToolID
+        ? `${RuntimeTemplateRegistry.get(payload.identity.baseRole).corePromptSeed}\n\n${coordinationHandoffPrompt(coordinationToolID)}`
+        : RuntimeTemplateRegistry.get(payload.identity.baseRole).corePromptSeed,
+      projectDirectory,
+      capability,
+    })
+    if (textSHA256(system.prompt) !== payload.prompt.systemSha256) {
+      throw new PermissionAuthority.StaleContinuationError(
+        input.request.id,
+        "The projected worker system contract changed after restart",
+      )
+    }
+    const contextTools = await filterAgentTools(
+      {
+        ...createAgentContextTools(),
+        ...(await createAgentCoordinationRuntimeTools({
+          agentID: payload.identity.agentID,
+          taskID: payload.lifecycle.taskID,
+        })),
+      },
+      RuntimeTemplateID.get(payload.identity.baseRole),
+      { taskID: payload.lifecycle.taskID, sessionID: input.session.parentID },
+    )
+    const owner = McpRuntime.createScopedConnectionOwner(
+      computerRuntimeScopeIdentity({ ownerKind: "worker", taskID: payload.lifecycle.taskID, sessionID: input.session.id }),
+    )
+    try {
+      const stageBinding = payload.tools.stageMaterializers[input.request.toolName]
+      const requestedStageTool = stageBinding
+        ? await materializeBoundStageTool({
+            adapterID: payload.identity.dispatchAdapterID,
+            toolName: input.request.toolName,
+            binding: stageBinding,
+            authority: {
+              taskID: payload.lifecycle.taskID,
+              projectDirectory,
+              toolDirectory: input.session.directory,
+            },
+          })
+        : undefined
+      const runtimeTools = await PromptProfileResolver.projectWorkerTools(
+        requestedStageTool ? { ...contextTools, [input.request.toolName]: requestedStageTool } : contextTools,
+        capability,
+        {
+        taskID: payload.lifecycle.taskID,
+        projectDirectory,
+        toolDirectory: input.session.directory,
+        stageOwnedToolIDs: requestedStageTool ? [input.request.toolName] : [],
+        connectionOwner: owner,
+        },
+      )
+      const persistedStageIDs = [...payload.tools.stageOwned].sort()
+      const materializedStageIDs = Object.keys(payload.tools.stageMaterializers).sort()
+      const enabled = new Set(payload.tools.enabled)
+      if (
+        persistedStageIDs.some((toolID) => !enabled.has(toolID)) ||
+        materializedStageIDs.some((toolID) => !persistedStageIDs.includes(toolID))
+      ) {
+        throw new PermissionAuthority.StaleContinuationError(
+          input.request.id,
+          "A persisted stage Tool materializer is outside the enabled Tool surface",
+        )
+      }
+      if (persistedStageIDs.includes(input.request.toolName) && !requestedStageTool) {
+        throw new PermissionAuthority.StaleContinuationError(
+          input.request.id,
+          "The requested private stage Tool has no exact persisted materializer",
+        )
+      }
+      const recoveredProjectedIDs = Object.keys(runtimeTools.projectedTools).sort()
+      const persistedProjectedIDs = payload.tools.enabled
+        .filter((toolID) => !persistedStageIDs.includes(toolID))
+        .sort()
+      if (JSON.stringify(recoveredProjectedIDs) !== JSON.stringify(persistedProjectedIDs)) {
+        throw new PermissionAuthority.StaleContinuationError(
+          input.request.id,
+          "The projected worker Tool surface changed after restart",
+        )
+      }
+      SessionRuntimeContractStore.set(input.session.id, {
+        identity: {
+          identityKind: "projected-worker",
+          sessionID: input.session.id,
+          ...payload.identity,
+          expertSquadID: payload.expertSquadID,
+          packageRevision: payload.packageRevision,
+          workerTurnDescriptorID: descriptor.id,
+          workerTurnDescriptorHash: descriptor.hash,
+          taskID: payload.lifecycle.taskID,
+          workScope: payload.lifecycle.workScope,
+          attemptID: payload.lifecycle.attemptID,
+          contractKind: "stage-attempt",
+          installedAt: Date.now(),
+        },
+        runtime,
+        permissionContinuation: { requestID: input.request.id, toolName: input.request.toolName },
+        projectedTools: runtimeTools.projectedTools,
+        stageTools: runtimeTools.stageTools,
+        system: [system.prompt],
+        systemMode: "complete",
+        includeMcpTools: capability.includeMcpTools,
+        exactTools: RuntimeTemplateRegistry.get(payload.identity.baseRole).exactRuntimeContract,
+        projectedRegistryToolIDs: capability.builtInToolIDs,
+        skillProjection: projection.skillProjection,
+        harnessProjection: PromptProfileResolver.workerHarnessProjection({
+          taskID: payload.lifecycle.taskID,
+          capability,
+        }),
+        projectDirectory,
+        resources: { mcp: owner },
+      })
+      return {
+        async [Symbol.asyncDispose]() {
+          await SessionRuntimeContractStore.dispose(input.session.id)
+        },
+      }
+    } catch (error) {
+      await owner.close()
+      throw error
+    }
   }
 
   export function usesExactRuntimeContractTools(contract: SessionRuntimeContract | undefined): boolean {
@@ -3033,7 +3353,6 @@ export namespace SessionLoop {
     ctx: {
       sessionID: string
       messageID: string
-      browserPermissionRulesets: readonly (PermissionNext.Ruleset | undefined)[]
       executionSurface: () => ToolExecutionSurface
       ensureToolPart: (
         toolCallID: string,
@@ -3048,6 +3367,48 @@ export namespace SessionLoop {
     const execute = original.execute
     const browserPermissionKey = browserMcpPermissionKeyOf(raw)
     const computerPermissionKey = computerMcpPermissionKeyOf(raw)
+    const mcpAuthorityBinding = MCP.toolAuthorityBinding(raw as object)
+    const stageMaterializerBinding = stageToolMaterializerBindingOf(raw as object)
+    const internalStageBinding = internalStageToolBindingOf(raw as object)
+    if (internalStageBinding) {
+      const runtimeIdentity = SessionRuntimeContractStore.get(ctx.sessionID)?.identity
+      const runtimeAdapterID = runtimeIdentity?.identityKind === "projected-worker"
+        ? runtimeIdentity.dispatchAdapterID
+        : undefined
+      if (
+        runtimeAdapterID !== internalStageBinding.adapterID ||
+        internalStageBinding.toolName !== name ||
+        DispatchAdapterContractRegistry.permissionBearingStageToolIDSet(internalStageBinding.adapterID).has(name)
+      ) {
+        throw new Error(`Internal stage Tool ${name} has an invalid dispatch-adapter effect binding`)
+      }
+      return raw
+    }
+    let projectedBinding = projectedTaskToolRuntimeBindingOf(raw as object)
+    const runtimeContract = SessionRuntimeContractStore.get(ctx.sessionID)
+    if (!browserPermissionKey && !computerPermissionKey && !mcpAuthorityBinding && !projectedBinding && runtimeContract) {
+      const records = sessionRuntimeToolRecords(runtimeContract)
+      const record = records.projectedTools[name] ?? records.stageTools[name]
+      if (record) {
+        const bound = bindProjectedTaskToolRuntime({ ...(raw as object) }, {
+          taskID: runtimeContract.identity.taskID,
+          projectDirectory: runtimeContract.projectDirectory,
+          ownerKind: "projected-worker",
+          expertSquadID: runtimeContract.identity.expertSquadID,
+          packageRevision: runtimeContract.identity.packageRevision,
+          agentID: runtimeContract.identity.agentID,
+          projectionHash: runtimeContract.identity.projectionHash,
+          providerKind: "package-tool",
+          toolRef: name,
+          providerName: name,
+          runtimeToolID: name,
+        })
+        projectedBinding = projectedTaskToolRuntimeBindingOf(bound)
+      }
+    }
+    if (!browserPermissionKey && !computerPermissionKey && !mcpAuthorityBinding && !projectedBinding && !stageMaterializerBinding) {
+      throw new Error(`Projected Tool ${name} is missing its immutable authorization binding`)
+    }
     // Mirror the attachment stamping the registry-tools wrapper applies
     // (loop.ts:967-987). Extras (e.g. build/runtime visual
     // tools) build attachments via buildMultimodalToolResult
@@ -3091,6 +3452,22 @@ export namespace SessionLoop {
           toolCallID,
           toolPartID: toolPart.id,
           providerName: name,
+          providerKind: browserPermissionKey
+            ? ("browser" as const)
+            : computerPermissionKey
+              ? ("computer" as const)
+              : ctx.mcpAppLifecycle
+                ? ("mcp_app" as const)
+                : ("projected" as const),
+          providerID: mcpAuthorityBinding?.serverID ?? stageMaterializerBinding?.id ?? projectedBinding?.providerName ?? name,
+          providerDigest: mcpAuthorityBinding
+            ? `${mcpAuthorityBinding.configDigest}:${mcpAuthorityBinding.toolDigest}`
+            : stageMaterializerBinding
+              ? `${stageMaterializerBinding.revision}:${stageMaterializerBinding.inputSha256}`
+            : projectedBinding
+              ? `${projectedBinding.projectionHash}:${projectedBinding.mcpServerConfigSHA256 ?? projectedBinding.packageRevision.packageDigest}`
+              : undefined,
+          args: toolInput,
         }
         const executeProjectedTool = () =>
           withTaskToolInvocation(invocationIdentity, ctx.executionSurface(), (invocationAuthority) =>
@@ -3104,27 +3481,7 @@ export namespace SessionLoop {
           )
         try {
           await ctx.mcpAppLifecycle?.input(toolCallID, toolInput)
-          const result = browserPermissionKey
-            ? await executeBrowserMcpToolWithPermission({
-                key: browserPermissionKey,
-                args,
-                sessionID: ctx.sessionID,
-                messageID: ctx.messageID,
-                callID: toolCallID,
-                rulesets: ctx.browserPermissionRulesets,
-                execute: executeProjectedTool,
-              })
-            : computerPermissionKey
-              ? await executeComputerMcpToolWithPermission({
-                  key: computerPermissionKey,
-                  args,
-                  sessionID: ctx.sessionID,
-                  messageID: ctx.messageID,
-                  callID: toolCallID,
-                  rulesets: ctx.browserPermissionRulesets,
-                  execute: executeProjectedTool,
-                })
-              : await executeProjectedTool()
+          const result = await executeProjectedTool()
           const rawMcpResult = result && typeof result === "object" ? MCP.appToolResult(result as object) : undefined
           if (ctx.mcpAppLifecycle) {
             if (!rawMcpResult) throw new Error(`${name}: scoped MCP App tool did not retain its protocol result`)

@@ -52,6 +52,7 @@ import {
 import { VisualRegionBindingManifestSchema, type VisualRegionBindingManifest } from "./visual-region-binding-schema"
 import { markdownList } from "@/util/markdown"
 import { Filesystem } from "@/util/filesystem"
+import { bindStageToolMaterializer } from "@/agent/stage-tool-materializer"
 
 export type { FrontendDesignPayload } from "./schema"
 
@@ -1760,6 +1761,101 @@ function buildRequirement(category: VisualSpecCategory, input: Record<string, un
 // Tool factory
 // ---------------------------------------------------------------------------
 
+const FrontendCaptureMaterializerInput = z
+  .object({
+    mode: FrontendDesignModeSchema,
+    artifactRoot: z.string().min(1),
+    artifactRootRelative: z.string().min(1).optional(),
+    workspaceRoot: z.string().min(1),
+    taskID: z.string().min(1),
+  })
+  .strict()
+
+export function materializeFrontendCaptureVisualEvidenceTool(
+  raw: Record<string, unknown>,
+  onEvidence?: (evidence: VisualValidationEvidence) => "registered" | "overwritten",
+) {
+  const context = FrontendCaptureMaterializerInput.parse(raw)
+  const mode = context.mode
+  const artifactRoot = path.resolve(context.artifactRoot)
+  const workspaceRoot = path.resolve(context.workspaceRoot)
+  const processIdentity = Object.freeze({ taskID: context.taskID, cwd: workspaceRoot })
+  const execute = async (input: z.infer<typeof FrontendVisualEvidenceCaptureToolInputSchema>): Promise<string> => {
+    if (mode === "greenfield_original" && input.kind !== "render_review") {
+      return "Error: greenfield_original canonical capture accepts only kind=render_review and does not require external visual authority."
+    }
+    if (mode === "reference_parity" && input.kind !== "reference_comparison") {
+      return "Error: reference_parity canonical capture requires kind=reference_comparison with declared source-reference evidence."
+    }
+    const rootInput = { artifactRoot, artifactRootRelative: context.artifactRootRelative }
+    const entrypoint = resolveEvidenceArtifactPath(rootInput, input.rendered_entrypoint, "visual-html-skeleton")
+    const screenshot = resolveEvidenceArtifactPath(rootInput, input.screenshot_artifact, "visual-html-skeleton")
+    if (!entrypoint || !entrypoint.relativePath.endsWith(".html")) {
+      return "Error: rendered_entrypoint must resolve to an HTML file under the task visual-html-skeleton artifact root."
+    }
+    if (!screenshot || !isRenderedVisualSkeletonArtifactRelativePath(screenshot.relativePath)) {
+      return "Error: screenshot_artifact must resolve to a rendered screenshot path under the task visual-html-skeleton artifact root."
+    }
+    const verifiedEntrypoint = verifyEvidenceFile(artifactRoot, entrypoint, "visual-html-skeleton")
+    if (!verifiedEntrypoint) {
+      return "Error: rendered_entrypoint is not a readable file under the real visual-html-skeleton artifact root."
+    }
+    let verifiedSourceReference: string | undefined
+    if (input.kind === "reference_comparison") {
+      const sourceReference = resolveEvidenceArtifactPath(rootInput, input.source_reference_artifact)
+      verifiedSourceReference = sourceReference ? verifyEvidenceFile(artifactRoot, sourceReference) : undefined
+      if (!verifiedSourceReference || !(await isDecodedRasterImageFile(verifiedSourceReference))) {
+        return "Error: source_reference_artifact must resolve to a readable raster image under the real task artifact root."
+      }
+    }
+    const rendered = await renderVisualHtmlSkeletonScreenshotForValidation({
+      processIdentity,
+      entrypointFile: verifiedEntrypoint,
+      viewport: { width: input.viewport.width, height: input.viewport.height },
+      captureMode: input.capture_mode,
+      locationHash: input.location_hash,
+    })
+    await Filesystem.writeAtomic(screenshot.absolutePath, rendered)
+    const screenshotSha256 = createHash("sha256").update(rendered).digest("hex")
+    const base = {
+      id: input.id,
+      render_target: "visual-html-skeleton" as const,
+      rendered_entrypoint: input.rendered_entrypoint,
+      screenshot_artifact: input.screenshot_artifact,
+      renderer: "node_playwright_static_file" as const,
+      viewport: `${input.viewport.width}x${input.viewport.height} ${input.viewport.label}`,
+      location_hash: input.location_hash,
+      capture_mode: input.capture_mode,
+      screenshot_sha256: screenshotSha256,
+      review_status: input.review_status,
+      review_summary: input.review_summary,
+    }
+    const evidence: VisualValidationEvidence = input.kind === "render_review"
+      ? ToolVisualValidationEvidenceSchema.parse({ ...base, kind: input.kind })
+      : ToolVisualValidationEvidenceSchema.parse({
+          ...base,
+          kind: input.kind,
+          source_reference_artifact: input.source_reference_artifact,
+          source_reference_sha256: sha256File(verifiedSourceReference!),
+          diff_artifact: input.diff_artifact,
+        })
+    const updateMode = onEvidence?.(evidence) ?? "registered"
+    return `OK: canonical visual evidence "${input.id}" ${updateMode}; screenshot_artifact=${input.screenshot_artifact}; screenshot_sha256=${screenshotSha256}`
+  }
+  const runtimeTool = mode === "greenfield_original"
+    ? tool({
+        description: "Render a visual-html-skeleton entrypoint with the canonical task-scoped Node/Playwright browser, atomically write the screenshot artifact, derive its SHA-256 digest, and register a greenfield render_review row.",
+        inputSchema: FrontendRenderReviewCaptureToolInputSchema,
+        execute: async (value) => execute(FrontendRenderReviewCaptureToolInputSchema.parse(value)),
+      })
+    : tool({
+        description: "Render a visual-html-skeleton entrypoint with the canonical task-scoped Node/Playwright browser, atomically write the screenshot artifact, derive its SHA-256 digest, and register a reference_comparison row against declared source evidence.",
+        inputSchema: FrontendReferenceComparisonCaptureToolInputSchema,
+        execute: async (value) => execute(FrontendReferenceComparisonCaptureToolInputSchema.parse(value)),
+      })
+  return bindStageToolMaterializer(runtimeTool, { id: "frontend-design.capture-visual-evidence", input: context })
+}
+
 export function createFrontendDesignOutputTools(
   options: {
     mode: FrontendDesignMode
@@ -1808,107 +1904,15 @@ export function createFrontendDesignOutputTools(
     return `OK: ${category} spec "${input.id}" registered (${collector.specs.length} total)`
   }
 
-  async function captureFrontendVisualEvidence(
-    input: z.infer<typeof FrontendVisualEvidenceCaptureToolInputSchema>,
-  ): Promise<string> {
-    if (mode === "greenfield_original" && input.kind !== "render_review") {
-      return "Error: greenfield_original canonical capture accepts only kind=render_review and does not require external visual authority."
-    }
-    if (mode === "reference_parity" && input.kind !== "reference_comparison") {
-      return "Error: reference_parity canonical capture requires kind=reference_comparison with declared source-reference evidence."
-    }
-
-    const entrypoint = resolveEvidenceArtifactPath(
-      { artifactRoot, artifactRootRelative },
-      input.rendered_entrypoint,
-      "visual-html-skeleton",
-    )
-    const screenshot = resolveEvidenceArtifactPath(
-      { artifactRoot, artifactRootRelative },
-      input.screenshot_artifact,
-      "visual-html-skeleton",
-    )
-    if (!entrypoint || !entrypoint.relativePath.endsWith(".html")) {
-      return "Error: rendered_entrypoint must resolve to an HTML file under the task visual-html-skeleton artifact root."
-    }
-    if (!screenshot || !isRenderedVisualSkeletonArtifactRelativePath(screenshot.relativePath)) {
-      return "Error: screenshot_artifact must resolve to a rendered screenshot path under the task visual-html-skeleton artifact root."
-    }
-    const verifiedEntrypoint = verifyEvidenceFile(artifactRoot, entrypoint, "visual-html-skeleton")
-    if (!verifiedEntrypoint) {
-      return "Error: rendered_entrypoint is not a readable file under the real visual-html-skeleton artifact root."
-    }
-    let verifiedSourceReference: string | undefined
-    if (input.kind === "reference_comparison") {
-      const sourceReference = resolveEvidenceArtifactPath(
-        { artifactRoot, artifactRootRelative },
-        input.source_reference_artifact,
-      )
-      verifiedSourceReference = sourceReference ? verifyEvidenceFile(artifactRoot, sourceReference) : undefined
-      if (!verifiedSourceReference || !(await isDecodedRasterImageFile(verifiedSourceReference))) {
-        return "Error: source_reference_artifact must resolve to a readable raster image under the real task artifact root."
-      }
-    }
-
-    const rendered = await renderVisualHtmlSkeletonScreenshotForValidation({
-      processIdentity,
-      entrypointFile: verifiedEntrypoint,
-      viewport: { width: input.viewport.width, height: input.viewport.height },
-      captureMode: input.capture_mode,
-      locationHash: input.location_hash,
-    })
-    await Filesystem.writeAtomic(screenshot.absolutePath, rendered)
-    const screenshotSha256 = createHash("sha256").update(rendered).digest("hex")
-    const viewport = `${input.viewport.width}x${input.viewport.height} ${input.viewport.label}`
-    const base = {
-      id: input.id,
-      render_target: "visual-html-skeleton" as const,
-      rendered_entrypoint: input.rendered_entrypoint,
-      screenshot_artifact: input.screenshot_artifact,
-      renderer: "node_playwright_static_file" as const,
-      viewport,
-      location_hash: input.location_hash,
-      capture_mode: input.capture_mode,
-      screenshot_sha256: screenshotSha256,
-      review_status: input.review_status,
-      review_summary: input.review_summary,
-    }
-
-    let evidence: VisualValidationEvidence
-    if (input.kind === "render_review") {
-      evidence = ToolVisualValidationEvidenceSchema.parse({ ...base, kind: input.kind })
-    } else {
-      evidence = ToolVisualValidationEvidenceSchema.parse({
-        ...base,
-        kind: input.kind,
-        source_reference_artifact: input.source_reference_artifact,
-        source_reference_sha256: sha256File(verifiedSourceReference!),
-        diff_artifact: input.diff_artifact,
-      })
-    }
-
-    const items = arrayField<VisualValidationEvidence>(collector.draft, "visual_validation_evidence")
-    const updateMode = upsertByStringKey(items, evidence, "id")
-    collector.semantic_error = undefined
-    return `OK: canonical visual evidence "${input.id}" ${updateMode}; screenshot_artifact=${input.screenshot_artifact}; screenshot_sha256=${screenshotSha256}`
-  }
-
-  const captureFrontendVisualEvidenceTool =
-    mode === "greenfield_original"
-      ? tool({
-          description:
-            "Render a visual-html-skeleton entrypoint with the canonical task-scoped Node/Playwright browser, atomically write the screenshot artifact, derive its SHA-256 digest, and register a greenfield render_review row.",
-          inputSchema: FrontendRenderReviewCaptureToolInputSchema,
-          execute: async (rawInput) =>
-            captureFrontendVisualEvidence(FrontendRenderReviewCaptureToolInputSchema.parse(rawInput)),
-        })
-      : tool({
-          description:
-            "Render a visual-html-skeleton entrypoint with the canonical task-scoped Node/Playwright browser, atomically write the screenshot artifact, derive its SHA-256 digest, and register a reference_comparison row against declared source evidence.",
-          inputSchema: FrontendReferenceComparisonCaptureToolInputSchema,
-          execute: async (rawInput) =>
-            captureFrontendVisualEvidence(FrontendReferenceComparisonCaptureToolInputSchema.parse(rawInput)),
-        })
+  const captureFrontendVisualEvidenceTool = materializeFrontendCaptureVisualEvidenceTool(
+    { mode, artifactRoot, artifactRootRelative, workspaceRoot, taskID: options.taskID },
+    (evidence) => {
+      const items = arrayField<VisualValidationEvidence>(collector.draft, "visual_validation_evidence")
+      const updateMode = upsertByStringKey(items, evidence, "id")
+      collector.semantic_error = undefined
+      return updateMode
+    },
+  )
 
   const tools = {
     register_color_spec: tool({

@@ -319,8 +319,8 @@ export namespace SkillMount {
               has_references: false,
               has_templates: false,
             }),
-      recommended_policy: candidate.recommended_policy ?? "ask",
-      policy: candidate.policy ?? "ask",
+      recommended_policy: candidate.recommended_policy ?? "deny",
+      policy: candidate.policy ?? "deny",
       managed: candidate.managed ?? false,
       writable: candidate.writable ?? false,
     })

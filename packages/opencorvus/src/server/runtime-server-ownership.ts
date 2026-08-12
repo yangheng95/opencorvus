@@ -267,9 +267,7 @@ export namespace RuntimeServerOwnership {
 
   /** Tri-state observation used by crash recovery. Unknown live ownership is
    * authoritative and can never be interpreted as an orphan. */
-  export function observeProcessOccurrence(
-    owner: RuntimeProcessOccurrenceInfo,
-  ): RuntimeProcessOccurrenceObservation {
+  export function observeProcessOccurrence(owner: RuntimeProcessOccurrenceInfo): RuntimeProcessOccurrenceObservation {
     const observedInstanceID = processInstanceID(owner.pid)
     if (observedInstanceID === owner.processInstanceID) return "exact_live"
     if (observedInstanceID !== undefined) return "dead_or_reused"
@@ -476,9 +474,22 @@ export namespace RuntimeServerOwnership {
     }
   }
 
+  /** Require the exact live runtime lease held by this process. This check
+   * never acquires ownership, so startup recovery remains the sole acquirer. */
+  export function assertCurrentProcessOwnsDatabase(database: string): void {
+    const requestedDatabase = path.resolve(database)
+    const lease = liveLeases.get(canonicalDatabasePath(requestedDatabase))
+    if (!lease || lease.info.pid !== process.pid) {
+      throw new RuntimeServerOwnershipConflictError(requestedDatabase, lease?.info)
+    }
+  }
+
   export function currentOccurrenceID(database: string): string | undefined {
     const key = canonicalDatabasePath(path.resolve(database))
-    return liveLeases.get(key)?.info.occurrenceID ?? (pendingHandoff?.key === key ? pendingHandoff.lease.info.occurrenceID : undefined)
+    return (
+      liveLeases.get(key)?.info.occurrenceID ??
+      (pendingHandoff?.key === key ? pendingHandoff.lease.info.occurrenceID : undefined)
+    )
   }
 
   export function recoverRetained(database: string): Handle | undefined {
@@ -535,10 +546,9 @@ export namespace RuntimeServerOwnership {
     throw lastError
   }
 
-  export function retainStartupCleanup(input: {
-    handle: Handle
+  export function retainStartupCleanup(input: { handle: Handle; complete(): Promise<void> }): {
     complete(): Promise<void>
-  }): { complete(): Promise<void> } {
+  } {
     if (retainedStartupCleanup && retainedStartupCleanup.owner.occurrenceID !== input.handle.owner.occurrenceID) {
       throw new RuntimeServerOwnershipConflictError(input.handle.database, retainedStartupCleanup.owner)
     }

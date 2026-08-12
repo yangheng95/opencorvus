@@ -13,7 +13,7 @@ import {
 } from "../../src/storage/schema-migration"
 
 const PREDECESSOR_FINGERPRINT = "05480e3d530365e768b00218f24c4a8d7bb281538315b600dd70827c90e33212"
-const CURRENT_FINGERPRINT = "e893d23611486b20a7be7c0c501979691d5bd1bb8369581db89192b5e1afe62d"
+const CURRENT_FINGERPRINT = "6239c3eb3d7bc27231b57cc34fe5d93d8613ed4f0d3a11cd20bed1b4e116bbf2"
 
 const legacyMemoryFileDDL = /* sql */ `CREATE TABLE "memory_file" (
   "id" text PRIMARY KEY NOT NULL,
@@ -66,9 +66,46 @@ function dropBusPublicationOutbox(sqlite: BunDatabase) {
   sqlite.run('DROP TABLE "bus_publication_outbox"')
 }
 
+function restoreLegacyPermissionSchema(sqlite: BunDatabase) {
+  sqlite.run('DROP TABLE "permission_execution_result"')
+  sqlite.run('DROP TABLE "permission_ledger"')
+  sqlite.run('DROP TABLE "permission_policy"')
+  sqlite.exec(`CREATE TABLE "permission" (
+  "project_id" text PRIMARY KEY NOT NULL,
+  "time_created" integer NOT NULL,
+  "time_updated" integer NOT NULL,
+  "data" text NOT NULL,
+  FOREIGN KEY ("project_id") REFERENCES "project"("id") ON DELETE CASCADE
+)`)
+}
+
+function restoreLegacyProjectSchema(sqlite: BunDatabase) {
+  sqlite.run("PRAGMA foreign_keys = OFF")
+  sqlite.run('DROP INDEX "project_generation_idx"')
+  sqlite.run('DROP TRIGGER "project_generation_required_insert"')
+  sqlite.run('DROP TRIGGER "project_generation_immutable_update"')
+  sqlite.run('DROP TABLE "project"')
+  sqlite.exec(`CREATE TABLE "project" (
+  "id" text PRIMARY KEY NOT NULL,
+  "worktree" text NOT NULL,
+  "name" text,
+  "icon_url" text,
+  "icon_color" text,
+  "time_created" integer NOT NULL,
+  "time_updated" integer NOT NULL,
+  "time_pinned" integer,
+  "time_initialized" integer,
+  "sandboxes" text NOT NULL,
+  "commands" text
+)`)
+  sqlite.run("PRAGMA foreign_keys = ON")
+}
+
 function createPredecessorDatabase(databasePath: string, input: { scratchpadContent?: string } = {}) {
   const sqlite = new BunDatabase(databasePath, { create: true })
   sqlite.exec(SCHEMA_DDL)
+  restoreLegacyProjectSchema(sqlite)
+  restoreLegacyPermissionSchema(sqlite)
   dropBusPublicationOutbox(sqlite)
   sqlite.run('DROP TABLE "event_job_fire"')
   sqlite.run('DROP TABLE "provider_usage_event"')
@@ -99,6 +136,10 @@ function createPredecessorDatabase(databasePath: string, input: { scratchpadCont
   sqlite.run(
     `INSERT INTO project (id, worktree, name, time_created, time_updated, sandboxes)
      VALUES ('project-a', 'C:/project-a', 'Project A', 1, 1, '[]')`,
+  )
+  sqlite.run(
+    `INSERT INTO project (id, worktree, name, time_created, time_updated, sandboxes)
+     VALUES ('project-b', 'C:/project-b', 'Project B', 1, 1, '[]')`,
   )
   sqlite.run(
     `INSERT INTO database_authority (key, instance_id, time_created)
@@ -157,6 +198,8 @@ describe("transactional schema migration", () => {
       "2026-08-11-bus-publication-outbox-authority",
       "2026-08-11-bus-publication-durable-retry-backoff",
       "2026-08-11-provider-usage-ledger",
+      "2026-08-12-permission-two-mode-authority",
+      "2026-08-12-project-generation-authority",
     ])
 
     const result = migrateDatabaseFile(databasePath, plan!, preparedBackup)
@@ -172,12 +215,19 @@ describe("transactional schema migration", () => {
         "2026-08-11-bus-publication-outbox-authority",
         "2026-08-11-bus-publication-durable-retry-backoff",
         "2026-08-11-provider-usage-ledger",
+        "2026-08-12-permission-two-mode-authority",
+        "2026-08-12-project-generation-authority",
       ],
     })
 
     const migrated = new BunDatabase(databasePath, { readonly: true })
     expect(schemaObjectFingerprint(migrated)).toBe(currentSchemaFingerprint())
     expect(currentSchemaFingerprint()).toBe(CURRENT_FINGERPRINT)
+    const generations = migrated.query<{ generation: string }, []>("SELECT generation FROM project ORDER BY id").all()
+    expect({ count: generations.length, unique: new Set(generations.map((row) => row.generation)).size }).toEqual({
+      count: 2,
+      unique: 2,
+    })
     expect(migrated.query("SELECT * FROM memory_file").all()).toEqual([
       {
         id: "memory-a",
@@ -215,6 +265,8 @@ describe("transactional schema migration", () => {
         "2026-08-11-bus-publication-outbox-authority",
         "2026-08-11-bus-publication-durable-retry-backoff",
         "2026-08-11-provider-usage-ledger",
+        "2026-08-12-permission-two-mode-authority",
+        "2026-08-12-project-generation-authority",
       ],
     })
     expect(result.backupFiles.map((file) => file.name)).toEqual([
@@ -233,6 +285,8 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    restoreLegacyProjectSchema(predecessor)
+    restoreLegacyPermissionSchema(predecessor)
     dropBusPublicationOutbox(predecessor)
     predecessor.run('DROP TABLE "event_job_fire"')
     predecessor.run('DROP TABLE "provider_usage_event"')
@@ -297,6 +351,8 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    restoreLegacyProjectSchema(predecessor)
+    restoreLegacyPermissionSchema(predecessor)
     dropBusPublicationOutbox(predecessor)
     predecessor.run('DROP TABLE "event_job_fire"')
     predecessor.run('DROP TABLE "provider_usage_event"')
@@ -447,6 +503,8 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    restoreLegacyProjectSchema(predecessor)
+    restoreLegacyPermissionSchema(predecessor)
     dropBusPublicationOutbox(predecessor)
     predecessor.run('DROP TABLE "event_job_fire"')
     predecessor.run('DROP TABLE "provider_usage_event"')
@@ -488,6 +546,8 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    restoreLegacyProjectSchema(predecessor)
+    restoreLegacyPermissionSchema(predecessor)
     dropBusPublicationOutbox(predecessor)
     predecessor.run('DROP TABLE "event_job_fire"')
     predecessor.run('DROP TABLE "provider_usage_event"')
@@ -539,6 +599,8 @@ describe("transactional schema migration", () => {
       "2026-08-11-bus-publication-outbox-authority",
       "2026-08-11-bus-publication-durable-retry-backoff",
       "2026-08-11-provider-usage-ledger",
+      "2026-08-12-permission-two-mode-authority",
+      "2026-08-12-project-generation-authority",
     ])
     const preparedBackup = createSchemaMigrationBackup(databasePath, plan)
     predecessor.close(true)
@@ -577,7 +639,9 @@ describe("transactional schema migration", () => {
     })
     expect(
       migrated
-        .query("SELECT label, payload, catalog_revision FROM engine_artifact_version WHERE artifact_id = 'artifact-settlement'")
+        .query(
+          "SELECT label, payload, catalog_revision FROM engine_artifact_version WHERE artifact_id = 'artifact-settlement'",
+        )
         .all(),
     ).toEqual([{ label: "failed", payload: legacyPayload, catalog_revision: 1 }])
     expect(migrated.query("PRAGMA foreign_key_check").all()).toEqual([])
@@ -589,6 +653,8 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    restoreLegacyProjectSchema(predecessor)
+    restoreLegacyPermissionSchema(predecessor)
     dropBusPublicationOutbox(predecessor)
     predecessor.run('DROP TABLE "provider_usage_event"')
     predecessor.exec(`CREATE TABLE "bus_publication_outbox" (
@@ -658,6 +724,8 @@ CREATE INDEX "bus_publication_delivery_pending_idx" ON "bus_publication_delivery
     expect(plan.migrations.map((migration) => migration.id)).toEqual([
       "2026-08-11-bus-publication-durable-retry-backoff",
       "2026-08-11-provider-usage-ledger",
+      "2026-08-12-permission-two-mode-authority",
+      "2026-08-12-project-generation-authority",
     ])
     const preparedBackup = createSchemaMigrationBackup(databasePath, plan)
     predecessor.close(true)
@@ -699,12 +767,60 @@ CREATE INDEX "bus_publication_delivery_pending_idx" ON "bus_publication_delivery
         )
         .all(),
     ).toEqual([
-      { occurrence_id: "bus-occurrence:pending-migration", phase: "exact", subscriber_id: "exact-pending", durable: 1, settled: 0, time_created: 11, time_updated: 21 },
-      { occurrence_id: "bus-occurrence:pending-migration", phase: "exact", subscriber_id: "exact-settled", durable: 1, settled: 1, time_created: 11, time_updated: 21 },
-      { occurrence_id: "bus-occurrence:pending-migration", phase: "global", subscriber_id: "global-pending", durable: 1, settled: 0, time_created: 11, time_updated: 21 },
-      { occurrence_id: "bus-occurrence:pending-migration", phase: "global", subscriber_id: "global-settled", durable: 1, settled: 1, time_created: 11, time_updated: 21 },
-      { occurrence_id: "bus-occurrence:pending-migration", phase: "wildcard", subscriber_id: "wildcard-pending", durable: 1, settled: 0, time_created: 11, time_updated: 21 },
-      { occurrence_id: "bus-occurrence:pending-migration", phase: "wildcard", subscriber_id: "wildcard-settled", durable: 0, settled: 1, time_created: 11, time_updated: 21 },
+      {
+        occurrence_id: "bus-occurrence:pending-migration",
+        phase: "exact",
+        subscriber_id: "exact-pending",
+        durable: 1,
+        settled: 0,
+        time_created: 11,
+        time_updated: 21,
+      },
+      {
+        occurrence_id: "bus-occurrence:pending-migration",
+        phase: "exact",
+        subscriber_id: "exact-settled",
+        durable: 1,
+        settled: 1,
+        time_created: 11,
+        time_updated: 21,
+      },
+      {
+        occurrence_id: "bus-occurrence:pending-migration",
+        phase: "global",
+        subscriber_id: "global-pending",
+        durable: 1,
+        settled: 0,
+        time_created: 11,
+        time_updated: 21,
+      },
+      {
+        occurrence_id: "bus-occurrence:pending-migration",
+        phase: "global",
+        subscriber_id: "global-settled",
+        durable: 1,
+        settled: 1,
+        time_created: 11,
+        time_updated: 21,
+      },
+      {
+        occurrence_id: "bus-occurrence:pending-migration",
+        phase: "wildcard",
+        subscriber_id: "wildcard-pending",
+        durable: 1,
+        settled: 0,
+        time_created: 11,
+        time_updated: 21,
+      },
+      {
+        occurrence_id: "bus-occurrence:pending-migration",
+        phase: "wildcard",
+        subscriber_id: "wildcard-settled",
+        durable: 0,
+        settled: 1,
+        time_created: 11,
+        time_updated: 21,
+      },
     ])
     expect(migrated.query("PRAGMA foreign_key_check").all()).toEqual([])
     expect(migrated.query("PRAGMA integrity_check").all()).toEqual([{ integrity_check: "ok" }])
@@ -715,6 +831,8 @@ CREATE INDEX "bus_publication_delivery_pending_idx" ON "bus_publication_delivery
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    restoreLegacyProjectSchema(predecessor)
+    restoreLegacyPermissionSchema(predecessor)
     predecessor.run('DROP TABLE "provider_usage_event"')
     predecessor.run(
       `INSERT INTO project (id, worktree, name, time_created, time_updated, sandboxes)
@@ -746,7 +864,11 @@ CREATE INDEX "bus_publication_delivery_pending_idx" ON "bus_publication_delivery
     )
     const plan = planSchemaMigration(predecessor)
     predecessor.close(true)
-    expect(plan?.migrations.map((migration) => migration.id)).toEqual(["2026-08-11-provider-usage-ledger"])
+    expect(plan?.migrations.map((migration) => migration.id)).toEqual([
+      "2026-08-11-provider-usage-ledger",
+      "2026-08-12-permission-two-mode-authority",
+      "2026-08-12-project-generation-authority",
+    ])
 
     const preparedBackup = createSchemaMigrationBackup(databasePath, plan!)
     const result = migrateDatabaseFile(databasePath, plan!, preparedBackup)

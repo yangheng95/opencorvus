@@ -33,7 +33,8 @@ import { Filesystem } from "@/util/filesystem"
 import { Worktree } from "@/worktree"
 import { CreateTaskInput } from "@/engine/model"
 import { installInProcessServerApp } from "./in-process-client"
-import { projectRouteUsesIdentityContext } from "./project-route-context"
+import { projectRouteContextKind } from "./project-route-context"
+import { PersistedProjectContext } from "@/server/persisted-project-context"
 import { AutomationService } from "@/scheduler/automation-service"
 import { Scheduler } from "@/scheduler"
 
@@ -839,7 +840,11 @@ export namespace Server {
               initGit: parseTaskCreateInitGit(c.req.query("init-git")),
             })
           }
-          if (projectRouteUsesIdentityContext(c.req.path, c.req.method)) {
+          const projectContext = projectRouteContextKind(c.req.path, c.req.method)
+          if (projectContext === "persisted") {
+            return enterBoundedProjectRuntime(() => PersistedProjectContext.provide({ directory, fn: () => next() }))
+          }
+          if (projectContext === "identity") {
             return enterBoundedProjectRuntime(() => Instance.provideProjectIdentity({ directory, fn: () => next() }))
           }
           return enterBoundedProjectRuntime(() =>

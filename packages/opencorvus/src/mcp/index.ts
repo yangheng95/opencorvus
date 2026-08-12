@@ -17,6 +17,7 @@ import {
   ResourceListChangedNotificationSchema,
   ToolListChangedNotificationSchema,
 } from "@modelcontextprotocol/sdk/types.js"
+import { PermissionAuthority } from "@/permission/authority"
 import { ReadBuffer, serializeMessage } from "@modelcontextprotocol/sdk/shared/stdio.js"
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js"
 import { AsyncLocalStorage } from "node:async_hooks"
@@ -163,7 +164,13 @@ export namespace MCP {
     resourceURI: string
     withClient?: <T>(run: (client: MCPClient, timeout: number) => Promise<T>) => Promise<T>
   }
+  export type ToolAuthorityBinding = {
+    serverID: string
+    configDigest: string
+    toolDigest: string
+  }
   const appToolBindings = new WeakMap<object, AppToolBinding>()
+  const toolAuthorityBindings = new WeakMap<object, ToolAuthorityBinding>()
   const appToolResults = new WeakMap<object, CallToolResult>()
 
   function stableToolUiResourceUri(tool: MCPToolDef): string | undefined {
@@ -316,15 +323,18 @@ export namespace MCP {
       inputSchema: jsonSchema(schema),
       execute: async (args: unknown) => {
         assertMcpCapability(`MCP ${source.serverID}/${mcpTool.name}`, source.type, source.processAuthority)
-        return client.callTool(
-          {
-            name: mcpTool.name,
-            arguments: (args || {}) as Record<string, unknown>,
-          },
-          CallToolResultSchema,
-          mcpRequestOptions(timeout),
-        )
+        return callToolWithTaskRecovery({
+          client,
+          tool: mcpTool,
+          args: (args || {}) as Record<string, unknown>,
+          timeout,
+        })
       },
+    })
+    toolAuthorityBindings.set(tool, {
+      serverID: source.serverID,
+      configDigest: source.configDigest,
+      toolDigest: toolDefinitionDigest(mcpTool),
     })
     const resourceURI = stableToolUiResourceUri(mcpTool)
     if (resourceURI) {
@@ -341,9 +351,19 @@ export namespace MCP {
     return appToolBindings.get(tool)
   }
 
+  export function toolAuthorityBinding(tool: object): ToolAuthorityBinding | undefined {
+    return toolAuthorityBindings.get(tool)
+  }
+
+  export function toolDefinitionDigest(tool: MCPToolDef): string {
+    return createHash("sha256").update(JSON.stringify(canonicalConfigValue(tool))).digest("hex")
+  }
+
   export function copyAppToolBinding(source: object, target: object): void {
     const binding = appToolBindings.get(source)
     if (binding) appToolBindings.set(target, binding)
+    const authority = toolAuthorityBindings.get(source)
+    if (authority) toolAuthorityBindings.set(target, authority)
   }
 
   export function bindAppToolResult<T extends object>(output: T, result: CallToolResult): T {
@@ -644,6 +664,11 @@ export namespace MCP {
           args: (args || {}) as Record<string, unknown>,
         }),
     })
+    toolAuthorityBindings.set(tool, {
+      serverID: input.key,
+      configDigest: mcpConfigDigest(input.mcp),
+      toolDigest: toolDefinitionDigest(mcpTool),
+    })
     const resourceURI = stableToolUiResourceUri(mcpTool)
     if (resourceURI) {
       appToolBindings.set(tool, {
@@ -671,17 +696,11 @@ export namespace MCP {
     assertMcpCapability(`MCP ${input.key}/${input.toolName}`, input.mcp.type, input.processAuthority)
     return withScopedClient(
       input,
-      async (client, timeout) =>
-        CallToolResultSchema.parse(
-          await client.callTool(
-            {
-              name: input.toolName,
-              arguments: input.args,
-            },
-            undefined,
-            mcpRequestOptions(timeout),
-          ),
-        ),
+      async (client, timeout, connection) => {
+        const tool = connection.tools.find((item) => item.name === input.toolName)
+        if (!tool) throw new Error(`Scoped MCP server ${input.key} does not expose tool ${input.toolName}`)
+        return callToolWithTaskRecovery({ client, tool, args: input.args, timeout })
+      },
       { skipToolListVerification: true },
     )
   }
@@ -1103,6 +1122,91 @@ export namespace MCP {
       resetTimeoutOnProgress: true,
       timeout,
     }
+  }
+
+  function terminalTaskStatus(status: PermissionAuthority.McpTask["status"]): boolean {
+    return status === "completed" || status === "failed" || status === "cancelled"
+  }
+
+  async function recoverMcpTask(
+    client: MCPClient,
+    task: PermissionAuthority.McpTask,
+    timeout: number,
+    signal?: AbortSignal,
+  ): Promise<CallToolResult> {
+    let current = task
+    while (!terminalTaskStatus(current.status)) {
+      if (current.status === "input_required") {
+        return CallToolResultSchema.parse(
+          await client.experimental.tasks.getTaskResult(current.taskId, CallToolResultSchema, {
+            ...mcpRequestOptions(timeout),
+            signal,
+          }),
+        )
+      }
+      const pollInterval = current.pollInterval ?? 1_000
+      await new Promise<void>((resolve, reject) => {
+        const finish = () => {
+          if (signal) signal.removeEventListener("abort", aborted)
+          resolve()
+        }
+        const timer = setTimeout(finish, pollInterval)
+        const aborted = () => {
+          clearTimeout(timer)
+          reject(signal?.reason ?? new Error("MCP task recovery was aborted"))
+        }
+        if (signal?.aborted) aborted()
+        else signal?.addEventListener("abort", aborted, { once: true })
+      })
+      current = PermissionAuthority.recordMcpTask(
+        await client.experimental.tasks.getTask(current.taskId, { ...mcpRequestOptions(timeout), signal }),
+      )
+    }
+    if (current.status === "completed") {
+      return CallToolResultSchema.parse(
+        await client.experimental.tasks.getTaskResult(current.taskId, CallToolResultSchema, {
+          ...mcpRequestOptions(timeout),
+          signal,
+        }),
+      )
+    }
+    throw new Error(`MCP task ${current.taskId} ended as ${current.status}: ${current.statusMessage ?? "no status message"}`)
+  }
+
+  /** Execute one MCP Tool only from inside PermissionAuthority, resuming its protocol Task when present. */
+  export async function callToolWithTaskRecovery(input: {
+    client: MCPClient
+    tool: MCPToolDef
+    args: Record<string, unknown>
+    timeout: number
+    signal?: AbortSignal
+  }): Promise<CallToolResult> {
+    const execution = PermissionAuthority.requireMcpExecutionContext()
+    if (execution.task) return recoverMcpTask(input.client, execution.task, input.timeout, input.signal)
+    const params = { name: input.tool.name, arguments: input.args }
+    const taskSupport = input.tool.execution?.taskSupport
+    if (taskSupport !== "optional" && taskSupport !== "required") {
+      return CallToolResultSchema.parse(
+        await input.client.callTool(params, CallToolResultSchema, {
+          ...mcpRequestOptions(input.timeout),
+          signal: input.signal,
+        }),
+      )
+    }
+    const stream = input.client.experimental.tasks.callToolStream(params, CallToolResultSchema, {
+      ...mcpRequestOptions(input.timeout),
+      signal: input.signal,
+      task: {},
+    })
+    for await (const message of stream) {
+      if (message.type === "taskCreated" || message.type === "taskStatus") {
+        PermissionAuthority.recordMcpTask(message.task)
+        continue
+      }
+      if (message.type === "result") return CallToolResultSchema.parse(message.result)
+      throw message.error
+    }
+    throw new Error(`MCP task Tool ${input.tool.name} ended without a result`)
   }
 
   export function mcpFetchRequestInit(timeout: number): RequestInit {
@@ -3745,23 +3849,6 @@ export namespace MCP {
   // Scoped MCP capability projections consumed by package and host tool surfaces.
   // ---------------------------------------------------------------------------
 
-  export async function serverTools() {
-    const toolsMap = await tools({ kind: "host", cwd: Instance.directory })
-    return Object.entries(toolsMap).map(([key, tool]) => ({
-      key,
-      name: key,
-      description: tool.description ?? "",
-      inputSchema: (tool as { inputSchema?: Record<string, unknown> }).inputSchema ?? {
-        type: "object" as const,
-        properties: {},
-      },
-      annotations: (tool as { annotations?: Record<string, unknown> }).annotations,
-      client: key.split("_")[0] ?? key,
-      execute: (tool as { execute?: (args: unknown) => unknown }).execute,
-      _tool: tool,
-    }))
-  }
-
   export async function serverPrompts() {
     const promptsMap = await prompts()
     return Object.entries(promptsMap).map(([key, prompt]) => ({
@@ -3787,12 +3874,4 @@ export namespace MCP {
     }))
   }
 
-  export async function callTool(input: { key: string; args: Record<string, unknown> }) {
-    const toolsMap = await tools({ kind: "host", cwd: Instance.directory })
-    const tool = toolsMap[input.key]
-    if (!tool) throw new Error(`MCP tool not found: ${input.key}`)
-    const execute = (tool as { execute?: (args: unknown) => unknown }).execute
-    if (typeof execute !== "function") throw new Error(`MCP tool ${input.key} is not executable`)
-    return execute(input.args)
-  }
 }

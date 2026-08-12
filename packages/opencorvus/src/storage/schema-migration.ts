@@ -85,7 +85,18 @@ function queryAllFinalized<TResult>(sqlite: BunDatabase, sql: string): TResult[]
 }
 
 function canonicalSchemaSql(value: string): string {
-  return value.trim()
+  return value
+    .trim()
+    .replace(
+      /\s*,\s*"?generation"?\s+text\s+not null\s+default\s+'00000000-0000-0000-0000-000000000000'\s*\)$/i,
+      ", generation text NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000')",
+    )
+}
+
+function schemaShapeFingerprint(shape: SchemaObjectShape): string {
+  return createHash("sha256")
+    .update(JSON.stringify([...shape]))
+    .digest("hex")
 }
 
 export function readSchemaObjectShape(sqlite: BunDatabase): SchemaObjectShape {
@@ -189,9 +200,7 @@ function normalizeLegacySettlementArtifacts(sqlite: BunDatabase): void {
     const payloadText = serializeEngineArtifactPayload(payload)
     const metadata = deriveEngineArtifactCatalogMetadata({ kind: row.kind, payloadText })
     const revision = sqlite
-      .query<{ revision: number }, []>(
-        `INSERT INTO engine_artifact_catalog_revision DEFAULT VALUES RETURNING revision`,
-      )
+      .query<{ revision: number }, []>(`INSERT INTO engine_artifact_catalog_revision DEFAULT VALUES RETURNING revision`)
       .get()
     if (!revision) throw new Error(`Settlement Artifact ${row.id} migration did not allocate a catalog revision`)
     const catalogMetadataSHA256 = engineArtifactCatalogMetadataSHA256({
@@ -604,6 +613,107 @@ WHERE json_extract("part"."data", '$.type') = 'step-finish'
   AND json_type("message"."data", '$.providerID') = 'text'
   AND json_type("message"."data", '$.modelID') = 'text'`,
     ]),
+  }),
+  Object.freeze({
+    id: "2026-08-12-permission-two-mode-authority",
+    fromFingerprint: "e893d23611486b20a7be7c0c501979691d5bd1bb8369581db89192b5e1afe62d",
+    toFingerprint: "499fd106487726f5056ceae8e74d3513d484f75ce21f486101e392c35094b46f",
+    requiredEmptyTables: Object.freeze([]),
+    statements: Object.freeze([
+      `DROP TABLE "permission"`,
+      `CREATE TABLE "permission_policy" (
+  "session_id" text PRIMARY KEY NOT NULL,
+  "project_id" text NOT NULL,
+  "mode" text NOT NULL,
+  "revision" text NOT NULL,
+  "time_created" integer NOT NULL,
+  FOREIGN KEY ("session_id") REFERENCES "session"("id") ON DELETE CASCADE,
+  FOREIGN KEY ("project_id") REFERENCES "project"("id") ON DELETE CASCADE
+)`,
+      `CREATE INDEX "permission_policy_project_idx" ON "permission_policy" ("project_id", "time_created")`,
+      `CREATE TABLE "permission_ledger" (
+  "id" text PRIMARY KEY NOT NULL,
+  "request_id" text NOT NULL,
+  "project_id" text NOT NULL,
+  "session_id" text NOT NULL,
+  "task_id" text,
+  "message_id" text NOT NULL,
+  "tool_call_id" text NOT NULL,
+  "attempt_id" text,
+  "event_type" text NOT NULL,
+  "mode" text NOT NULL,
+  "policy_revision" text NOT NULL,
+  "provider_kind" text NOT NULL,
+  "provider_id" text NOT NULL,
+  "provider_digest" text NOT NULL,
+  "tool_name" text NOT NULL,
+  "effect_class" text NOT NULL,
+  "scope_version" text NOT NULL,
+  "scope" text NOT NULL,
+  "fingerprint" text NOT NULL,
+  "summary" text NOT NULL,
+  "decision_scope" text,
+  "source_event_id" text,
+  "decision_slot" text,
+  "outcome_slot" text,
+  "actor_id" text,
+  "reason" text,
+  "metadata" text,
+  "time_created" integer NOT NULL,
+  FOREIGN KEY ("project_id") REFERENCES "project"("id") ON DELETE CASCADE
+)`,
+      `CREATE INDEX "permission_ledger_project_time_idx" ON "permission_ledger" ("project_id", "time_created")`,
+      `CREATE INDEX "permission_ledger_request_idx" ON "permission_ledger" ("request_id", "time_created")`,
+      `CREATE INDEX "permission_ledger_fingerprint_idx" ON "permission_ledger" ("project_id", "fingerprint", "time_created")`,
+      `CREATE INDEX "permission_ledger_session_idx" ON "permission_ledger" ("session_id", "time_created")`,
+      `CREATE UNIQUE INDEX "permission_ledger_decision_slot_idx" ON "permission_ledger" ("decision_slot")`,
+      `CREATE UNIQUE INDEX "permission_ledger_attempt_start_idx" ON "permission_ledger" ("attempt_id") WHERE "event_type" = 'execution_started'`,
+      `CREATE UNIQUE INDEX "permission_ledger_outcome_slot_idx" ON "permission_ledger" ("outcome_slot")`,
+      `CREATE TABLE "permission_execution_result" (
+  "attempt_id" text PRIMARY KEY NOT NULL,
+  "session_id" text NOT NULL,
+  "tool_part_id" text NOT NULL,
+  "result" text NOT NULL,
+  "result_sha256" text NOT NULL,
+  "time_created" integer NOT NULL,
+  FOREIGN KEY ("session_id") REFERENCES "session"("id") ON DELETE CASCADE
+)`,
+      `CREATE INDEX "permission_execution_result_session_idx" ON "permission_execution_result" ("session_id", "time_created")`,
+    ]),
+  }),
+  Object.freeze({
+    id: "2026-08-12-project-generation-authority",
+    fromFingerprint: "499fd106487726f5056ceae8e74d3513d484f75ce21f486101e392c35094b46f",
+    toFingerprint: "6239c3eb3d7bc27231b57cc34fe5d93d8613ed4f0d3a11cd20bed1b4e116bbf2",
+    requiredEmptyTables: Object.freeze([]),
+    statements: Object.freeze([
+      `ALTER TABLE project ADD COLUMN generation text NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000'`,
+      `CREATE TRIGGER project_generation_required_insert
+BEFORE INSERT ON project
+FOR EACH ROW
+WHEN NEW.generation = '00000000-0000-0000-0000-000000000000'
+BEGIN
+  SELECT RAISE(ABORT, 'project: generation is required');
+END`,
+      `CREATE TRIGGER project_generation_immutable_update
+BEFORE UPDATE OF generation ON project
+FOR EACH ROW
+WHEN OLD.generation != '00000000-0000-0000-0000-000000000000'
+  AND NEW.generation IS NOT OLD.generation
+BEGIN
+  SELECT RAISE(ABORT, 'project: generation is immutable');
+END`,
+    ]),
+    transformData(sqlite: BunDatabase) {
+      const rows = queryAllFinalized<{ id: string }>(sqlite, `SELECT "id" FROM "project" ORDER BY "id"`)
+      const update = sqlite.query<void, [string, string]>(`UPDATE "project" SET "generation" = ? WHERE "id" = ?`)
+      try {
+        for (const row of rows) update.run(randomUUID(), row.id)
+      } finally {
+        update.finalize()
+      }
+      sqlite.run(`CREATE UNIQUE INDEX project_generation_idx ON project(generation)`)
+    },
   }),
 ])
 

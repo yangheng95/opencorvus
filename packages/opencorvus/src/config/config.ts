@@ -80,6 +80,73 @@ export namespace Config {
     projectOwnedSource?: "project" | "non-project"
   }
 
+  export type LegacyPermissionMigration = Readonly<{
+    sourceFields: readonly ("permission" | "tool_permissions")[]
+    permissionMode: "full_access" | "ask"
+    reason: "all_allow" | "restricted_or_mixed" | "explicit_mode"
+  }>
+
+  function legacyPermissionActions(value: unknown, path: string): ("allow" | "ask" | "deny")[] {
+    if (value === undefined) return []
+    if (value === "allow" || value === "ask" || value === "deny") return [value]
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+      throw new Error(`Legacy permission configuration at ${path} is malformed`)
+    }
+    return Object.entries(value as Record<string, unknown>).flatMap(([key, item]) =>
+      legacyPermissionActions(item, `${path}.${key}`),
+    )
+  }
+
+  /** One-time cutover transform. Callers must persist the returned canonical object. */
+  export function migrateLegacyPermissionConfig(input: unknown): {
+    config: unknown
+    migration?: LegacyPermissionMigration
+  } {
+    if (!input || typeof input !== "object" || Array.isArray(input)) return { config: input }
+    const source = input as Record<string, unknown>
+    const sourceFields = (["permission", "tool_permissions"] as const).filter((key) =>
+      Object.prototype.hasOwnProperty.call(source, key),
+    )
+    if (sourceFields.length === 0) return { config: input }
+    const explicit = source.permission_mode
+    if (explicit !== undefined && explicit !== "full_access" && explicit !== "ask") {
+      throw new Error("permission_mode must be either full_access or ask")
+    }
+    const actions = sourceFields.flatMap((field) => legacyPermissionActions(source[field], field))
+    const permissionMode: "full_access" | "ask" =
+      explicit === "full_access" || explicit === "ask"
+        ? explicit
+        : actions.every((action) => action === "allow")
+          ? "full_access"
+          : "ask"
+    const migration: LegacyPermissionMigration = {
+      sourceFields,
+      permissionMode,
+      reason:
+        explicit !== undefined
+          ? ("explicit_mode" as const)
+          : actions.every((action) => action === "allow")
+            ? ("all_allow" as const)
+            : ("restricted_or_mixed" as const),
+    }
+    const config: Record<string, unknown> = {
+      ...source,
+      permission_mode: permissionMode,
+      permission_migration: {
+        version: 1,
+        source_fields: [...sourceFields],
+        permission_mode: permissionMode,
+        reason: migration.reason,
+      },
+    }
+    delete config.permission
+    delete config.tool_permissions
+    return {
+      config,
+      migration,
+    }
+  }
+
   const NonProjectOwnedConfigBoundary = z
     .object({
       skill_mounts: z.never().optional(),
@@ -302,15 +369,6 @@ export namespace Config {
     const managedLoadOptions = { ...loadOptions, writeSchema: false }
     const managedFile = await ConfigPaths.assertCanonicalDirectory(managedDir)
     result = mergeConfigConcatArrays(result, await loadStateFile(managedFile, managedLoadOptions))
-
-    if (Flag.OPENCORVUS_PERMISSION) {
-      // audit-2026-04-29 W2-V22 — descriptive parse error helper
-      // (see parseEnvJson) replaces the bare `JSON.parse` so a typo
-      // in OPENCORVUS_PERMISSION surfaces as an actionable line
-      // instead of "Unexpected token in JSON at position N".
-      const parsed = parseEnvJson("OPENCORVUS_PERMISSION", Flag.OPENCORVUS_PERMISSION)
-      result.permission = mergeDeep((result.permission ?? {}) as object, parsed as object) as Config.Permission
-    }
 
     if (!result.username) result.username = os.userInfo().username
     // Apply flag overrides for compaction settings
@@ -613,7 +671,7 @@ export namespace Config {
   export const Mcp = McpConfigSchema.Mcp
   export type Mcp = McpConfigSchema.Mcp
 
-  export const PermissionAction = z.enum(["ask", "allow", "deny"]).meta({
+  export const PermissionAction = z.enum(["allow", "deny"]).meta({
     ref: "PermissionActionConfig",
   })
   export type PermissionAction = z.infer<typeof PermissionAction>
@@ -1256,6 +1314,7 @@ export namespace Config {
           title: NativeAgentOverride.optional(),
           summary: NativeAgentOverride.optional(),
           compaction: NativeAgentOverride.optional(),
+          memory: NativeAgentOverride.optional(),
           orchestrator: NativeAgentOverride.optional(),
         })
         .strict()
@@ -1339,7 +1398,9 @@ export namespace Config {
             error: "For custom LSP servers, 'extensions' array is required.",
           },
         )
-        .describe("Deprecated compatibility field. Language Server Protocol runtimes are disabled and this value is ignored."),
+        .describe(
+          "Deprecated compatibility field. Language Server Protocol runtimes are disabled and this value is ignored.",
+        ),
       prompt: z
         .record(z.string(), z.string())
         .optional()
@@ -1350,24 +1411,32 @@ export namespace Config {
       skill_mounts: SkillMountProjectConfigSchema.optional().describe(
         "Project-owned operator skill overrides qualified by expert squad, dynamic agent, and default skill ref.",
       ),
+      skill_policy: z
+        .record(z.string(), PermissionAction)
+        .optional()
+        .describe(
+          "Capability projection for installed Skills. Operator invocation authorization is controlled separately.",
+        ),
       primary_assistant_capabilities: PrimaryAssistantCapabilities.optional().describe(
         "Project-owned Skill and MCP server assignments for fixed native primary assistants.",
       ),
       instructions: z.array(z.string()).optional().describe("Additional instruction files or patterns to include"),
-      permission: Permission.optional(),
-      tool_permissions: z
-        .object({
-          websearch: PermissionAction.optional(),
-          webfetch: PermissionAction.optional(),
-          skill: PermissionAction.optional(),
-          external_directory: PermissionAction.optional(),
-          schedule: PermissionAction.optional(),
-        })
-        .optional()
+      permission_mode: z
+        .enum(["full_access", "ask"])
+        .default("full_access")
         .describe(
-          "Default tool permission actions for new tasks. When not set, defaults to 'allow'. " +
-            "Set a tool to 'ask' for confirmation, or 'deny' to block it entirely.",
+          "Operator authorization mode. Full access is the default; Ask me pauses permission-bearing invocations for an operator decision.",
         ),
+      permission_migration: z
+        .object({
+          version: z.literal(1),
+          source_fields: z.array(z.enum(["permission", "tool_permissions"])).min(1),
+          permission_mode: z.enum(["full_access", "ask"]),
+          reason: z.enum(["all_allow", "restricted_or_mixed", "explicit_mode"]),
+        })
+        .strict()
+        .optional()
+        .describe("Durable, idempotent audit record for the one-time legacy permission configuration cutover."),
       terminal: Terminal.optional().describe("Server-owned Overlay terminal configuration."),
       compaction: z
         .object({
@@ -1463,6 +1532,42 @@ export namespace Config {
                 .min(100)
                 .optional()
                 .describe("Max tokens for auto-injected memory context"),
+              document_token_limit: z
+                .number()
+                .int()
+                .min(100)
+                .max(10_000)
+                .optional()
+                .default(10_000)
+                .describe("Fixed maximum estimated token count of Project MEMORY.MD"),
+              organizer_input_token_budget: z
+                .number()
+                .int()
+                .min(12_000)
+                .max(100_000)
+                .optional()
+                .default(32_000)
+                .describe("Maximum estimated input tokens for one Memory Organizer run"),
+              pending_availability_limit: z
+                .number()
+                .int()
+                .min(10)
+                .max(10_000)
+                .optional()
+                .default(500)
+                .describe("Maximum pending occurrences retained while the Memory Organizer is unavailable"),
+            })
+            .superRefine((memory, ctx) => {
+              const documentLimit = memory.document_token_limit ?? 10_000
+              const inputBudget = memory.organizer_input_token_budget ?? 32_000
+              if (inputBudget <= documentLimit + 2_000) {
+                ctx.addIssue({
+                  code: "custom",
+                  path: ["organizer_input_token_budget"],
+                  message:
+                    "organizer_input_token_budget must exceed document_token_limit plus the 2000-token Organizer protocol reserve",
+                })
+              }
             })
             .optional()
             .describe("Persistent memory configuration"),
@@ -1525,13 +1630,45 @@ export namespace Config {
     options: { path: string } | { dir: string; source: string },
     loadOptions?: ConfigLoadOptions,
   ) {
-    const original = text
+    let original = text
     const source = "path" in options ? options.path : options.source
     const isFile = "path" in options
-    const data = await ConfigPaths.parseText(
+    let data = await ConfigPaths.parseText(
       text,
       "path" in options ? options.path : { source: options.source, dir: options.dir },
     )
+
+    const legacy = migrateLegacyPermissionConfig(data)
+    data = legacy.config
+    if (legacy.migration) {
+      log.info("legacy permission configuration migrated", {
+        source,
+        sourceFields: legacy.migration.sourceFields,
+        permissionMode: legacy.migration.permissionMode,
+        reason: legacy.migration.reason,
+      })
+      if (isFile && loadOptions?.writeSchema !== false) {
+        original = applyEdits(
+          original,
+          modify(original, ["permission_mode"], legacy.migration.permissionMode, {
+            formattingOptions: { insertSpaces: true, tabSize: 2 },
+          }),
+        )
+        original = applyEdits(
+          original,
+          modify(original, ["permission_migration"], (data as Record<string, unknown>).permission_migration, {
+            formattingOptions: { insertSpaces: true, tabSize: 2 },
+          }),
+        )
+        for (const field of legacy.migration.sourceFields) {
+          original = applyEdits(
+            original,
+            modify(original, [field], undefined, { formattingOptions: { insertSpaces: true, tabSize: 2 } }),
+          )
+        }
+        await Bun.write(options.path, original)
+      }
+    }
 
     assertProjectOwnedConfigSource(data, source, loadOptions)
 
@@ -1831,7 +1968,8 @@ export namespace Config {
       })
     }
 
-    const parsed = Info.safeParse(data)
+    const migrated = migrateLegacyPermissionConfig(data)
+    const parsed = Info.safeParse(migrated.config)
     if (parsed.success) return parsed.data
 
     throw new InvalidError({

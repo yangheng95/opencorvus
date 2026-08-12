@@ -26,7 +26,7 @@ import { Filesystem } from "@/util/filesystem"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 
 import type { Provider } from "@/provider/provider"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { iife } from "@/util/iife"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
@@ -36,11 +36,13 @@ import { SessionControl } from "./control"
 import { CompactionHandoff } from "./compaction-handoff"
 import { SessionStatus as SessionStatusLifecycle } from "./status"
 import { SessionPromptState } from "./prompt/state"
+import { PermissionAuthority } from "@/permission/authority"
 import {
   TaskPromptProfileImmutableError,
   requireTaskPackageRevisionBinding,
   requireTaskResolvedPackageRevision,
 } from "@/engine/task-package-revision-binding"
+import { ProjectMemory } from "@/memory/project-memory"
 
 export namespace Session {
   const log = Log.create({ service: "session" })
@@ -203,7 +205,7 @@ export namespace Session {
         archived: z.number().optional(),
         pinned: z.number().optional(),
       }),
-      permission: PermissionNext.Ruleset.optional(),
+      permission: CapabilityRules.Ruleset.optional(),
     })
     .meta({
       ref: "Session",
@@ -355,7 +357,7 @@ export namespace Session {
     title?: string
     parentID?: string
     directory: string
-    permission?: PermissionNext.Ruleset
+    permission?: CapabilityRules.Ruleset
     metadata?: Record<string, unknown>
   }) {
     if (input.parentID) {
@@ -387,6 +389,7 @@ export namespace Session {
    * authority bundle never exposes a physical Session to observers. */
   export function persistPreparedNext(result: Info): Info {
     Database.transaction((db) => {
+      Project.assertDurableAdmissionOpen(result.projectID)
       db.insert(SessionTable).values(toRow(result)).run()
       log.info("created", result)
       Bus.publishOwnedInTransaction(Event.Created, { info: result })
@@ -704,7 +707,7 @@ export namespace Session {
   export const setPermission = fn(
     z.object({
       sessionID: Identifier.schema("session"),
-      permission: PermissionNext.Ruleset,
+      permission: CapabilityRules.Ruleset,
     }),
     async (input) => {
       return Database.transaction((db) => {
@@ -1097,6 +1100,7 @@ export namespace Session {
     for (const child of await childrenInProject({ parentID: sessionID, projectID })) {
       await removeSessionTree({ sessionID: child.id, projectID, publishDeleted })
     }
+    await PermissionAuthority.cancelPendingForSession(sessionID, "Session deleted before the Tool invocation ran")
     // CASCADE delete handles messages and parts automatically
     Database.transaction((db) => {
       db.delete(SessionTable).where(eq(SessionTable.id, sessionID)).run()
@@ -1294,6 +1298,7 @@ export namespace Session {
       }
       upsertMessageRow(input.info, { publishCreated: false, publishUpdated: true })
       for (const part of input.parts) updatePartRow(part, { publish: true })
+      ProjectMemory.captureMessageInTransaction(db, { info: input.info, parts: input.parts })
       for (const control of input.controls ?? []) SessionControl.createInTransaction(db, control)
       for (const patch of input.metadataPatches ?? []) mergeMetadataInTransaction(db, patch)
       if (input.touchSessionID) touch(input.touchSessionID)
@@ -1647,6 +1652,7 @@ export namespace Session {
     }),
     async (input) => {
       Database.transaction((db) => {
+        Project.assertDurableAdmissionOpen(input.info.projectID)
         const sessionRow = toRow(input.info)
         const { id: _sessionID, ...sessionSet } = sessionRow
         db.insert(SessionTable)

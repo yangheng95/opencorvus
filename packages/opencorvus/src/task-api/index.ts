@@ -1,5 +1,6 @@
 import z from "zod"
 import { randomUUID } from "node:crypto"
+import { lstat } from "node:fs/promises"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { HostAgentRegistry } from "@/agent/host-agent-registry"
 import { PromptProfile } from "@/agent/prompt-profile"
@@ -18,11 +19,13 @@ import { validateConfigModelReferences } from "@/config/model-reference-validati
 import { EffectiveConfig } from "@/config/effective"
 import { discoverChecks, resolveConfig, resolvedChecks } from "@/acceptance/checks/discovery"
 import { parseAcceptanceSpecs, renderSpecsAsText } from "@/acceptance/types"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
+import { PermissionAuthority } from "@/permission/authority"
 import { ProtocolStore } from "@/protocol/store"
 import { EngineProtocol } from "@/engine/protocol"
 import { ensureGitignore } from "@/engine/git"
 import { Instance } from "@/project/instance"
+import type { ProjectDeletionAdmission } from "@/project/instance"
 import { InstanceBootstrap } from "@/project/bootstrap"
 import { runWithIndependentProjectIdentity } from "@/project/independent-project-owner"
 import { Project } from "@/project/project"
@@ -82,6 +85,8 @@ import {
   AgentSessionOperatorSteerInput,
   RejectInteractionInput,
   ReplyInteractionInput,
+  UserRejectInteractionInput,
+  UserReplyInteractionInput,
   TaskMessageInput,
   TaskBrief,
   CheckConfig,
@@ -140,6 +145,7 @@ import { createExecutionCancellationOrigin, type ExecutionCancellationOrigin } f
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { TaskChannelBindingProjectConflictError, TaskGlobalProjectBindingError } from "@/engine/task-project-error"
 import { TaskRootMessageKind, TaskRootMessageProvenance } from "./task-root-message"
+import { ProjectMemory } from "@/memory/project-memory"
 import {
   assertNoCallerSuppliedTaskCreatorMetadata,
   assertTaskCreatorExpertSquadAuthority,
@@ -429,6 +435,7 @@ async function provideActiveTaskRootSessionInstance<T>(
   task: TaskRow,
   fn: () => Promise<T>,
   signal?: AbortSignal,
+  projectDeletionAdmission?: ProjectDeletionAdmission,
 ): Promise<T | undefined> {
   signal?.throwIfAborted()
   if (!task.session_id) return fn()
@@ -438,6 +445,7 @@ async function provideActiveTaskRootSessionInstance<T>(
     ? fn()
     : Instance.tryProvideActive({
         directory: session.directory,
+        projectDeletionAdmission,
         fn: () => {
           signal?.throwIfAborted()
           return fn()
@@ -512,19 +520,24 @@ async function settleTaskSessionWork(
       handle: input.queueHandle,
     })
   } else {
-    await provideActiveTaskRootSessionInstance(task, async () => {
-      TaskQueueService.cancelSessionPrompts({
-        sessionIDs: lifecycle.sessionIDs,
-        reason: input.reason,
-        origin: input.origin,
-      })
-      await awaitTaskQueuePromptsIdle({
-        sessionIDs: lifecycle.sessionIDs,
-        inactivityTimeoutMs: options?.queueSettleInactivityMs ?? CANCEL_QUEUE_SETTLE_INACTIVITY_MS,
-        taskID: task.id,
-        handle: input.queueHandle,
-      })
-    })
+    await provideActiveTaskRootSessionInstance(
+      task,
+      async () => {
+        TaskQueueService.cancelSessionPrompts({
+          sessionIDs: lifecycle.sessionIDs,
+          reason: input.reason,
+          origin: input.origin,
+        })
+        await awaitTaskQueuePromptsIdle({
+          sessionIDs: lifecycle.sessionIDs,
+          inactivityTimeoutMs: options?.queueSettleInactivityMs ?? CANCEL_QUEUE_SETTLE_INACTIVITY_MS,
+          taskID: task.id,
+          handle: input.queueHandle,
+        })
+      },
+      undefined,
+      (options as DestructiveTaskOptions | undefined)?.projectDeletionAdmission,
+    )
   }
   await assertSessionPromptSubtreeFinished({
     sessions: lifecycle.cancelledSessions,
@@ -549,10 +562,17 @@ function deleteSettledSessionTreeRows(
   Session.deleteExactTreeInProject(tx, input)
 }
 
+async function cancelPendingPermissionsForSessions(sessionIDs: readonly string[], reason: string): Promise<void> {
+  for (const sessionID of sessionIDs) {
+    await PermissionAuthority.cancelPendingForSession(sessionID, reason)
+  }
+}
+
 async function recordTaskPhysicalDeleteBreadcrumb(
   task: TaskRow,
   origin: "EngineService.deleteTask" | "EngineService.deleteSession.deleteTasks",
   detail: Record<string, unknown> = {},
+  projectDiskProjection = true,
 ) {
   const status = deriveTaskStatus(task)
   const value = {
@@ -570,6 +590,19 @@ async function recordTaskPhysicalDeleteBreadcrumb(
     reason:
       "Task row is about to be physically deleted; this breadcrumb distinguishes explicit deletion from cancellation.",
   })
+  if (!projectDiskProjection) return
+  const projectRoot = taskPrimaryProjectRoot(task.id)
+  let projectRootInfo
+  try {
+    projectRootInfo = await lstat(projectRoot)
+  } catch (error) {
+    const code = typeof error === "object" && error && "code" in error ? String(error.code) : ""
+    if (code === "ENOENT" || code === "ENOTDIR") return
+    throw error
+  }
+  if (!projectRootInfo.isDirectory()) {
+    throw new Error(`Cannot project Task deletion breadcrumb into non-directory root: ${projectRoot}`)
+  }
   EngineEventLog.appendPhysicalDeleteBreadcrumb(task.id, {
     origin,
     projectID: task.project_id,
@@ -577,7 +610,7 @@ async function recordTaskPhysicalDeleteBreadcrumb(
     status,
     detail,
   })
-  await DecisionLogBundle.write(taskPrimaryProjectRoot(task.id), task.id)
+  await DecisionLogBundle.write(projectRoot, task.id)
 }
 
 function assertTasksRemainTerminalForPhysicalDelete(db: Database.TxOrDb, tasks: readonly TaskRow[]): void {
@@ -904,6 +937,8 @@ async function acquireCancellationConvergence(taskID: string) {
 
 export interface DestructiveTaskOptions extends TaskCancellationSettlementOptions {
   origin?: TaskCancellationOriginValue
+  projectID?: string
+  projectDeletionAdmission?: ProjectDeletionAdmission
 }
 
 function physicalTaskCancellationOrigin(input: {
@@ -1219,6 +1254,7 @@ async function buildTaskSessionMessageBundle(
         kind,
         source,
       }),
+      ...(kind === "operator" ? ProjectMemory.userInputExtra({ surface: `task.${source}`, literalText: text }) : {}),
     },
   } satisfies Message.User
   const parts: Message.Part[] = []
@@ -1711,22 +1747,9 @@ export namespace EngineService {
     // Sessions, and Artifact evidence from durable rows. Task creation does
     // not persist scheduler topology or synthesize execution steps.
 
-    // Hierarchical permission model (rule 23): built-in tools default to
-    // `allow` (see PermissionNext.evaluate). Agent-scoped overlays
-    // (orchestrator, acceptance, ...) layer on top via setPermission. Operators
-    // restrict via explicit `deny` / `ask` rules under `tool_permissions`
-    // in their config — only those keys appear here. We intentionally do
-    // NOT inject a `*: "ask"` catch-all; that turned the LLM autonomy path
-    // into an indefinite block whenever the agent reached for a tool the
-    // catch-all lookup happened to land on (todoread, planner, panel, …).
-    const cfg = taskConfigSnapshot
-    const tp = cfg.tool_permissions ?? {}
-    const overrides: Array<{ permission: string; pattern: string; action: "allow" | "ask" | "deny" }> = []
-    for (const [key, action] of Object.entries(tp)) {
-      if (!action) continue
-      overrides.push({ permission: key, pattern: "*", action })
-    }
-    // metadata.web_search=true is a per-task override from the chat toggle.
+    // Per-message switches are capability projection only. Operator authority
+    // is frozen separately by PermissionAuthority for the new Session.
+    const overrides: CapabilityRules.Ruleset = []
     if ((metadata as any)?.web_search === true) {
       overrides.push({ permission: "websearch", pattern: "*", action: "allow" })
     }
@@ -2315,8 +2338,12 @@ export namespace EngineService {
     }
   }
 
-  export async function deleteGoal(goalID: string) {
+  export async function deleteGoal(goalID: string, input?: { projectID?: string }) {
     const goal = requireGoalInCurrentProject(goalID)
+    if (input?.projectID) {
+      const task = requireTask(goal.task_id)
+      if (task.project_id !== input.projectID) throw new NotFoundError({ message: `Goal not found: ${goalID}` })
+    }
     const removal = applyOperatorGoalMutation({
       mutation: {
         taskID: goal.task_id,
@@ -2340,6 +2367,9 @@ export namespace EngineService {
 
   export async function deleteTask(taskID: string, options?: DestructiveTaskOptions) {
     let task = requireTaskInCurrentProject(taskID)
+    if (options?.projectID && task.project_id !== options.projectID) {
+      throw new NotFoundError({ message: `Task not found: ${taskID}` })
+    }
     if (!task.session_id) throw new Error(`Task ${taskID} has no root Session`)
     const executionCancellationOrigin = physicalTaskCancellationOrigin({
       origin: options?.origin,
@@ -2360,6 +2390,9 @@ export namespace EngineService {
         }
         await cancelTask(taskID, { ...options, origin: options.origin })
         task = requireTaskInCurrentProject(taskID)
+        if (options.projectID && task.project_id !== options.projectID) {
+          throw new NotFoundError({ message: `Task not found: ${taskID}` })
+        }
       }
       await awaitRootSessionWakeQueueSettled(
         task,
@@ -2375,14 +2408,16 @@ export namespace EngineService {
         },
         options,
       )
-      await recordTaskPhysicalDeleteBreadcrumb(task, "EngineService.deleteTask")
+      await cancelPendingPermissionsForSessions(settledSessionIDs, "Task deleted before the Tool invocation ran")
+      await recordTaskPhysicalDeleteBreadcrumb(task, "EngineService.deleteTask", {}, !options?.projectDeletionAdmission)
+      if (options?.projectDeletionAdmission) return true
       // Delete the settled queue audit rows, session tree, and task row in one
       // transaction. Snapshot disk reclaim is intentionally NOT triggered here:
       // every tree object emitted by this task's `Snapshot.track()` is dangling
       // (no ref), so `git gc --prune=now` would also collect snapshots that other
       // Tasks or Sessions in the same project still reference. Whole-project
       // reclaim is owned by ProjectGC (rm of `snapshot/<id>`).
-      await deleteRowsThenTaskArtifacts([task], () => {
+      const deleteRows = () => {
         Database.transaction((db) => {
           assertTasksRemainTerminalForPhysicalDelete(db, [task])
           if (task.session_id) {
@@ -2395,7 +2430,8 @@ export namespace EngineService {
           deleteEngineTask(db, { taskID })
           Database.effect(() => Database.incrementalVacuum())
         })
-      })
+      }
+      await deleteRowsThenTaskArtifacts([task], deleteRows)
       return true
     } finally {
       destructiveScope.close()
@@ -2662,20 +2698,18 @@ export namespace EngineService {
     const input = ReplyInteractionInput.parse(raw)
     const row = requireInteractionInCurrentProject(interactionID)
     if (row.request_type === "permission") {
-      await PermissionNext.reply({
+      await PermissionAuthority.reply({
         requestID: row.external_id,
-        reply: input.reply ?? "once",
+        decision: input.decision ?? "allow_once",
         autoReply: input.autoReply,
         message: input.message,
+        actorID: "local-operator",
       })
     }
     if (row.request_type === "question") {
       const answers = input.answers ?? answersFromMessage(input.message)
       if (!answers) throw new Error("answers or message are required for question replies")
-      await Question.reply({
-        requestID: row.external_id,
-        answers,
-      })
+      await Question.reply({ requestID: row.external_id, answers })
     }
     return viewInteraction(requireInteractionInCurrentProject(interactionID))
   }
@@ -2684,16 +2718,53 @@ export namespace EngineService {
     const input = RejectInteractionInput.parse(raw)
     const row = requireInteractionInCurrentProject(interactionID)
     if (row.request_type === "permission") {
-      await PermissionNext.reply({
+      await PermissionAuthority.reply({
         requestID: row.external_id,
-        reply: "reject",
+        decision: "deny",
         autoReply: input.autoReply,
         message: input.message,
+        actorID: "local-operator",
       })
     }
     if (row.request_type === "question") {
       await Question.reject(row.external_id)
     }
+    return viewInteraction(requireInteractionInCurrentProject(interactionID))
+  }
+
+  export async function replyUserInteraction(interactionID: string, raw: z.input<typeof UserReplyInteractionInput>) {
+    const input = UserReplyInteractionInput.parse(raw)
+    const row = requireInteractionInCurrentProject(interactionID)
+    if (row.request_type === "permission") {
+      await PermissionAuthority.replyUser({
+        requestID: row.external_id,
+        decision: input.decision ?? "allow_once",
+        message: input.message,
+        actorID: "local-operator",
+        userInput: input.userInput,
+      })
+    }
+    if (row.request_type === "question") {
+      const answers = input.answers ?? answersFromMessage(input.message)
+      if (!answers) throw new Error("answers or message are required for question replies")
+      await Question.reply({ requestID: row.external_id, answers, userInput: input.userInput })
+    }
+    return viewInteraction(requireInteractionInCurrentProject(interactionID))
+  }
+
+  export async function rejectUserInteraction(interactionID: string, raw: z.input<typeof UserRejectInteractionInput>) {
+    const input = UserRejectInteractionInput.parse(raw)
+    const row = requireInteractionInCurrentProject(interactionID)
+    if (row.request_type === "permission") {
+      await PermissionAuthority.replyUser({
+        requestID: row.external_id,
+        decision: "deny",
+        message: input.message,
+        actorID: "local-operator",
+        userInput: input.userInput,
+      })
+    }
+    if (row.request_type === "question") await Question.reject(row.external_id, input.userInput)
     return viewInteraction(requireInteractionInCurrentProject(interactionID))
   }
 
@@ -3191,6 +3262,7 @@ export namespace EngineService {
         })
       }
     }
+    await cancelPendingPermissionsForSessions(ids, "Session tree deleted before the Tool invocation ran")
     await deleteRowsThenTaskArtifacts(tasksForDelete, () => {
       Database.transaction((db) => {
         const currentBoundTasks = readBoundTasks(db)

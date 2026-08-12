@@ -8,6 +8,7 @@ import os from "node:os"
 import path from "node:path"
 import { PassThrough } from "node:stream"
 import { spawn } from "node:child_process"
+import { randomUUID } from "node:crypto"
 import net from "node:net"
 import { pathToFileURL } from "node:url"
 import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
@@ -66,13 +67,14 @@ describe("ProcessSupervisor control-plane authority", () => {
     })
     await ownerReady
     const requestDirectories = await readdir(Global.Path.temporary, { withFileTypes: true })
-    let ownedRequest:
-      | { directory: string; requestID: string; runtimeOccurrenceID: string }
-      | undefined
+    let ownedRequest: { directory: string; requestID: string; runtimeOccurrenceID: string } | undefined
     for (const entry of requestDirectories) {
       if (!entry.isDirectory() || !entry.name.startsWith("supervisor-")) continue
       const directory = path.join(Global.Path.temporary, entry.name)
-      const request = JSON.parse(await readFile(path.join(directory, "request.json"), "utf8")) as Record<string, unknown>
+      const request = JSON.parse(await readFile(path.join(directory, "request.json"), "utf8")) as Record<
+        string,
+        unknown
+      >
       if (request.owner_pid !== owner.pid) continue
       ownedRequest = {
         directory,
@@ -283,6 +285,35 @@ describe("ProcessSupervisor control-plane authority", () => {
     }
   }, 30_000)
 
+  test("settles a Windows command that fails before target creation with explicit active-process-zero evidence", async () => {
+    if (process.platform !== "win32") return
+    let request: Record<string, unknown> | undefined
+    const restore = ProcessSupervisor.setWindowsRequestObserverForTest((value) => {
+      request = value
+    })
+    const missingCwd = path.join(os.tmpdir(), `opencorvus-pre-target-missing-${randomUUID()}`)
+    try {
+      await expect(
+        ProcessSupervisor.spawnHostCommand({
+          executable: process.execPath,
+          args: ["-e", "process.exit(0)"],
+          cwd: missingCwd,
+          owner: "process-supervisor-pre-target-settlement-contract",
+        }),
+      ).rejects.toThrow("CreateProcessW failed")
+      expect(String(request?.launch_failed_file)).toEndWith("launch-failed.json")
+      expect(
+        await ProcessSupervisor.recoverOrphanedWindowsRequests({
+          currentOccurrenceID: "successor-runtime-occurrence",
+          timeoutMilliseconds: 50,
+          observeProcessOccurrence: () => "dead_or_reused",
+        }),
+      ).toEqual({ inspected: 0, removed: 0, retainedCurrent: 0, retainedLive: 0, retainedUnknown: 0 })
+    } finally {
+      restore()
+    }
+  }, 30_000)
+
   test("accepts proven process exit even when auxiliary disposal settlement is delayed", async () => {
     let releaseDisposal!: () => void
     const disposal = new Promise<void>((resolve) => (releaseDisposal = resolve))
@@ -300,9 +331,13 @@ describe("ProcessSupervisor control-plane authority", () => {
     }
     try {
       expect(
-        await ProcessSupervisor.requestDisposeAndWaitForPhysicalExit(handle, "already-exited process with delayed auxiliary cleanup", {
-          exitTimeoutMs: 20,
-        }),
+        await ProcessSupervisor.requestDisposeAndWaitForPhysicalExit(
+          handle,
+          "already-exited process with delayed auxiliary cleanup",
+          {
+            exitTimeoutMs: 20,
+          },
+        ),
       ).toBe(0)
     } finally {
       releaseDisposal()
@@ -348,6 +383,7 @@ describe("ProcessSupervisor control-plane authority", () => {
           "detached",
           "executable",
           "kind",
+          "launch_failed_file",
           "owner_pid",
           "owner_process_instance_id",
           "ready_file",

@@ -5,7 +5,6 @@ import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
 import { sessionRuntimeFromNativeAgent, type SessionAgentRuntime } from "@/agent/session-agent-runtime"
 import type { Config } from "@/config/config"
 import type { Session } from "@/session"
-import { SessionLoop } from "@/session/loop"
 import type { SessionKind } from "@/session/session.sql"
 import {
   SessionRuntimeContractStore,
@@ -13,6 +12,7 @@ import {
   isProjectedWorkerRuntimeContract,
   type SessionRuntimeContract,
 } from "@/session/runtime-contract"
+import { validateSessionRuntimeContractForContinuation } from "@/session/runtime-contract-validation"
 
 export type SessionMessageIdentity = {
   agentID: string
@@ -40,7 +40,7 @@ export async function resolveSessionMessageIdentity(input: {
     if (!input.requestedAgentID) {
       throw new Error(`Session message runtime contract requires explicit agentID ${identity.agentID}`)
     }
-    const validated = SessionLoop.validateSessionRuntimeContractForContinuation({
+    const validated = validateSessionRuntimeContractForContinuation({
       sessionID: input.session.id,
       expectedAgentID: input.requestedAgentID,
       expectedSessionKind: input.session.kind,

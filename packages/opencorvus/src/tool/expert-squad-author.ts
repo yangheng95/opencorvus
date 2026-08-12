@@ -246,12 +246,6 @@ export const ExpertSquadAuthorTool = Tool.define("expert_squad_author", {
   parameters: ExpertSquadAuthorParameters,
   async execute(args, ctx) {
     const taskID = taskExecutionID(ctx, "expert_squad_author")
-    await ctx.ask({
-      permission: "expert_squad_author",
-      patterns: [`project:${Instance.project.id}`],
-      always: [],
-      metadata: { installationScope: "project", projectID: Instance.project.id },
-    })
     const result = await authorProjectExpertSquad(args, { taskID, sessionID: ctx.sessionID })
     return {
       title: `Authored Expert Squad ${result.id}`,

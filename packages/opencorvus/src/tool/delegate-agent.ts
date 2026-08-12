@@ -1,5 +1,5 @@
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { Session } from "@/session"
 import { SessionStatus } from "@/session/status"
 import z from "zod"
@@ -105,12 +105,12 @@ export const DelegateAgentTool = Tool.define(DELEGATE_AGENT_TOOL_ID, {
     }
     const parent = await Session.get(ctx.sessionID)
     const model = requireParentModel(ctx.extra?.model)
-    const deniedPermissions: PermissionNext.Ruleset = LOCAL_DELEGATE_DISABLED_TOOLS.map((permission) => ({
+    const deniedPermissions: CapabilityRules.Ruleset = LOCAL_DELEGATE_DISABLED_TOOLS.map((permission) => ({
       permission,
       pattern: "*",
       action: "deny" as const,
     }))
-    const childPermission = PermissionNext.merge(parent.permission ?? [], deniedPermissions)
+    const childPermission = CapabilityRules.merge(parent.permission ?? [], deniedPermissions)
     const { SessionPrompt } = await import("@/session/prompt")
     const child = await Session.createNext({
       kind: "assistant",

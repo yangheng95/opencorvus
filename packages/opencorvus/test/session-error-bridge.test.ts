@@ -285,7 +285,7 @@ test("persists one projected worker error from its managed worktree with exact r
             packageRevision: projection.workerCapability.packageRevision,
             model: { selection: "explicit", providerID: "test", modelID: "managed-error" },
             prompt: { systemMode: "complete", systemSha256: "c".repeat(64) },
-            tools: { enabled: [] },
+            tools: { enabled: [], stageOwned: [], stageMaterializers: {} },
             output: { format: "text", resultMode: "reply" },
             lifecycle: { taskID, workScope: { kind: "task" } },
             messageAuthority: {

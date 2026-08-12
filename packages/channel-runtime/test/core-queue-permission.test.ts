@@ -72,7 +72,7 @@ describe("channel runtime queue guard", () => {
 describe("channel runtime permission asked", () => {
   test("surfaces permission request without replying", async () => {
     const sent: string[] = []
-    const calls: Array<{ requestID: string; reply: "once" | "always" | "reject" }> = []
+    const calls: Array<{ requestID: string; decision: "allow_once" | "allow_task" | "allow_project" | "deny" }> = []
     const a = adapter(sent)
     const core = new ChannelRuntime() as unknown as {
       session: SessionCoordinator<
@@ -81,7 +81,10 @@ describe("channel runtime permission asked", () => {
       >
       client: {
         permission: {
-          reply(input: { requestID: string; reply: "once" | "always" | "reject" }): Promise<{ error?: unknown }>
+          reply(input: {
+            requestID: string
+            decision: "allow_once" | "allow_task" | "allow_project" | "deny"
+          }): Promise<{ error?: unknown }>
         }
       }
       handleEvent(event: unknown): Promise<void>
@@ -107,12 +110,12 @@ describe("channel runtime permission asked", () => {
       properties: {
         id: "permission_1",
         sessionID: "session_1",
-        permission: "bash",
-        patterns: ["git push"],
+        toolName: "bash",
+        summary: "bash (process)",
       },
     })
 
     expect(calls).toEqual([])
-    expect(sent.at(-1)).toBe("Permission requested: bash [git push]. Waiting for operator reply.")
+    expect(sent.at(-1)).toBe("Permission requested: bash — bash (process). Waiting for operator reply.")
   })
 })

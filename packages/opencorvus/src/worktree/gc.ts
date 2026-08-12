@@ -60,7 +60,7 @@ export namespace WorktreeGC {
   export type Preservation = {
     projectID: string
     primaryDir: string
-    reason: "registry-unavailable"
+    reason: "primary-directory-unavailable" | "managed-state-unavailable" | "registry-unavailable"
     detail: string
   }
   export type Plan = { candidates: Candidate[]; preservations: Preservation[] }
@@ -205,10 +205,50 @@ export namespace WorktreeGC {
       opts?.signal?.throwIfAborted()
       const primaryDir = project.worktree
       if (!primaryDir) continue
+      const primaryProbe = await fs
+        .stat(primaryDir)
+        .then((stat) => ({ stat }))
+        .catch((error: unknown) => ({ error }))
+      if (!("stat" in primaryProbe) || !primaryProbe.stat.isDirectory()) {
+        const detail =
+          "error" in primaryProbe
+            ? `Persisted Project root is unavailable: ${primaryDir}: ${
+                primaryProbe.error instanceof Error ? primaryProbe.error.message : String(primaryProbe.error)
+              }`
+            : `Persisted Project root is not a directory: ${primaryDir}`
+        preservations.push({
+          projectID: project.id,
+          primaryDir,
+          reason: "primary-directory-unavailable",
+          detail,
+        })
+        log.warn("project root is unavailable; preserving the entire project without probing Git", {
+          projectID: project.id,
+          primaryDir,
+          error: detail,
+        })
+        continue
+      }
       const directories = new Map<string, string>()
-      for (const directory of await worktreeDirectories(primaryDir)) {
-        opts?.signal?.throwIfAborted()
-        await addManagedPath({ primaryDir, directory, out: directories })
+      try {
+        for (const directory of await worktreeDirectories(primaryDir)) {
+          opts?.signal?.throwIfAborted()
+          await addManagedPath({ primaryDir, directory, out: directories })
+        }
+      } catch (error) {
+        const detail = error instanceof Error ? error.message : String(error)
+        preservations.push({
+          projectID: project.id,
+          primaryDir,
+          reason: "managed-state-unavailable",
+          detail,
+        })
+        log.warn("failed to inspect managed worktree state; preserving the entire project", {
+          projectID: project.id,
+          primaryDir,
+          error: detail,
+        })
+        continue
       }
 
       const registeredByDirectory = new Map<string, Worktree.RegisteredWorktreeEntry>()

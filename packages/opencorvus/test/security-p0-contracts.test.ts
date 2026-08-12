@@ -6,7 +6,7 @@ import z from "zod"
 import { mcpDebugCredentialStatus } from "../src/cli/cmd/mcp"
 import { orderMetricSpecsForEvaluation } from "../src/metrics/executor"
 import type { MetricSpec } from "../src/metrics/types"
-import { PermissionNext } from "../src/permission/next"
+import { CapabilityRules } from "../src/capability/rules"
 import { LLM } from "../src/session/llm"
 import {
   oauthAuthorizationLogFields,
@@ -20,18 +20,13 @@ import { parseFrontmatter, stringifyFrontmatter } from "../src/util/frontmatter"
 const digest = "a".repeat(64)
 
 describe("P0 security contract repairs", () => {
-  test("current permission rules keep priority over persisted approvals", () => {
-    const approved = [{ permission: "bash", pattern: "*", action: "allow" }] as const
+  test("capability projection uses the latest explicit allow or deny rule", () => {
     const currentDeny = [{ permission: "bash", pattern: "*", action: "deny" }] as const
-    const currentAsk = [{ permission: "bash", pattern: "*", action: "ask" }] as const
+    const currentAllow = [{ permission: "bash", pattern: "npm test", action: "allow" }] as const
 
-    expect(PermissionNext.evaluateRequest("bash", "npm test", currentDeny, approved).action).toBe("deny")
-    expect(PermissionNext.evaluateRequest("bash", "npm test", currentAsk, approved).action).toBe("ask")
-    expect(PermissionNext.evaluateRequest("bash", "npm test", [], approved).action).toBe("allow")
-    expect(
-      PermissionNext.evaluateRequestPatterns({ permission: "bash", patterns: ["npm test"] }, currentAsk, approved)
-        .action,
-    ).toBe("ask")
+    expect(CapabilityRules.evaluate("bash", "npm test", currentDeny, currentAllow).action).toBe("allow")
+    expect(CapabilityRules.evaluate("bash", "npm run build", currentDeny, currentAllow).action).toBe("deny")
+    expect(CapabilityRules.evaluate("read", "src/index.ts", []).action).toBe("allow")
   })
 
   test("LLM telemetry keeps operational metadata without input or output capture", () => {

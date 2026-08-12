@@ -1,5 +1,6 @@
 import PROMPT_COMPACTION from "@/agent/prompt/compaction.txt"
 import PROMPT_TITLE from "@/agent/prompt/title.txt"
+import PROMPT_MEMORY from "@/agent/prompt/memory.txt"
 import { Config } from "@/config/config"
 import { createInstanceState } from "@/project/instance-state"
 import { AgentRoleContract, type AgentRoleID } from "@/agent/role-contract"
@@ -7,7 +8,7 @@ import { nativeAgentPermissionProfiles } from "@/agent/native-agent-permissions"
 import { materializeNativeAgentDefinitions } from "@/agent/native-agent-materializer"
 import type { NativeAgentInfo } from "@/agent/native-agent-info"
 
-export type HelperAgentID = Extract<AgentRoleID, "title" | "summary" | "compaction">
+export type HelperAgentID = Extract<AgentRoleID, "title" | "summary" | "compaction" | "memory">
 
 const definitions = {
   compaction: {
@@ -27,6 +28,13 @@ const definitions = {
   summary: {
     name: "summary",
     hidden: true,
+    options: {},
+  },
+  memory: {
+    name: "memory",
+    hidden: true,
+    steps: 1,
+    prompt: PROMPT_MEMORY,
     options: {},
   },
 } satisfies Record<HelperAgentID, NativeAgentInfo>

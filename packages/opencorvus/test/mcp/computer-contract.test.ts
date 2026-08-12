@@ -9,7 +9,6 @@ import {
   type ComputerBackendObservation,
 } from "../../src/mcp/computer/backend"
 import { ComputerController } from "../../src/mcp/computer/controller"
-import { COMPUTER_MCP_PERMISSION_BASELINE, computerMcpPermissionPlan } from "../../src/mcp/computer/permission-plan"
 import { ConversationCapability } from "../../src/conversation/capability"
 import { Config } from "../../src/config/config"
 import { Instance } from "../../src/project/instance"
@@ -22,7 +21,6 @@ import { MCP } from "../../src/mcp"
 import { computerMcpPermissionKeyOf } from "../../src/mcp/computer/permission-plan"
 import { computerRuntimeScopeIdentity } from "../../src/mcp/computer/runtime-scope"
 import { CapabilityCatalog, searchCapabilityCatalog } from "../../src/capability/catalog"
-import { PermissionNext } from "../../src/permission/next"
 import { ComputerHostRuntimeAuthority } from "../../src/mcp/computer/host-runtime"
 import { HostComputerBackend } from "../../src/mcp/computer/host-client"
 import { EngineService } from "../../src/task-api"
@@ -218,11 +216,8 @@ describe("Computer Use exact control contract", () => {
     )
     const adapter = authority.adapter({ runtimeScope: "conversation:reusable-adapter:computer" })
     const controller = new ComputerController(
-      new HostComputerBackend(
-        adapter.endpoint,
-        adapter.authorization,
-        adapter.runtimeScope,
-        (input, init) => authority.fetch(new Request(input, init)),
+      new HostComputerBackend(adapter.endpoint, adapter.authorization, adapter.runtimeScope, (input, init) =>
+        authority.fetch(new Request(input, init)),
       ),
     )
 
@@ -233,9 +228,12 @@ describe("Computer Use exact control contract", () => {
     })
     const second = await controller.create()
     expect([first.computerId, second.computerId]).toEqual(["computer-generation-1", "computer-generation-2"])
-    expect(
-      await controller.observe({ computerId: second.computerId, displayId: second.displayId }),
-    ).toMatchObject({ computerId: "computer-generation-2", displayId: "display-generation-2", width: 8, height: 6 })
+    expect(await controller.observe({ computerId: second.computerId, displayId: second.displayId })).toMatchObject({
+      computerId: "computer-generation-2",
+      displayId: "display-generation-2",
+      width: 8,
+      height: 6,
+    })
 
     await authority.close()
     expect(backends).toEqual([])
@@ -416,35 +414,6 @@ describe("Computer Use exact control contract", () => {
         keys: ["ENTER"],
       },
     ])
-  })
-
-  test("maps Computer tools onto the canonical permission identities", () => {
-    expect(computerMcpPermissionPlan("computer_session_create", {})).toMatchObject({
-      permission: "computer.session.create",
-      patterns: ["vm-only"],
-    })
-    expect(computerMcpPermissionPlan("computer_observe", { computer_id: "computer-1" })).toMatchObject({
-      permission: "computer.observe",
-      patterns: ["computer-1"],
-    })
-    expect(computerMcpPermissionPlan("computer_drag", { computer_id: "computer-1" })).toMatchObject({
-      permission: "computer.input",
-      patterns: ["computer-1"],
-    })
-    expect(computerMcpPermissionPlan("computer_session_destroy", { computer_id: "computer-1" })).toMatchObject({
-      permission: "computer.session.destroy",
-      patterns: ["computer-1"],
-    })
-    expect(
-      PermissionNext.evaluate("computer.input", "computer-1", COMPUTER_MCP_PERMISSION_BASELINE, [
-        { permission: "computer.input", pattern: "computer-1", action: "ask" },
-      ]),
-    ).toEqual({ permission: "computer.input", pattern: "computer-1", action: "ask" })
-    expect(
-      PermissionNext.evaluate("computer.session.destroy", "computer-1", COMPUTER_MCP_PERMISSION_BASELINE, [
-        { permission: "computer.session.destroy", pattern: "computer-1", action: "deny" },
-      ]),
-    ).toEqual({ permission: "computer.session.destroy", pattern: "computer-1", action: "deny" })
   })
 
   test(
@@ -704,18 +673,10 @@ describe("Computer Use exact control contract", () => {
 describe("embedded CUA Driver contract", () => {
   test("packages the pinned CUA SDK and exact native libraries for Windows and macOS", () => {
     expect(artifactRuntimeNodeModuleNames({ os: "win32", arch: "x64" })).toEqual(
-      expect.arrayContaining([
-        "@trycua/cua-driver",
-        "@trycua/cua-driver-win32-x64-msvc",
-        "@ubjs/node-win32-x64-msvc",
-      ]),
+      expect.arrayContaining(["@trycua/cua-driver", "@trycua/cua-driver-win32-x64-msvc", "@ubjs/node-win32-x64-msvc"]),
     )
     expect(artifactRuntimeNodeModuleNames({ os: "darwin", arch: "arm64" })).toEqual(
-      expect.arrayContaining([
-        "@trycua/cua-driver",
-        "@trycua/cua-driver-darwin-arm64",
-        "@ubjs/node-darwin-arm64",
-      ]),
+      expect.arrayContaining(["@trycua/cua-driver", "@trycua/cua-driver-darwin-arm64", "@ubjs/node-darwin-arm64"]),
     )
   })
 
@@ -786,13 +747,15 @@ describe("embedded CUA Driver contract", () => {
       computerId: created.computerId,
       displayId: "primary",
     })
-    expect(await backend.act({ kind: "click", ...created, x: 2, y: 3, button: "left" })).toMatchObject({ accepted: true })
+    expect(await backend.act({ kind: "click", ...created, x: 2, y: 3, button: "left" })).toMatchObject({
+      accepted: true,
+    })
     expect(await backend.act({ kind: "type_text", ...created, text: "OpenCorvus" })).toMatchObject({ accepted: true })
     expect(await backend.act({ kind: "keypress", ...created, keys: ["ENTER"] })).toMatchObject({ accepted: true })
     expect(await backend.act({ kind: "keypress", ...created, keys: ["CTRL", "L"] })).toMatchObject({ accepted: true })
-    expect(
-      await backend.act({ kind: "scroll", ...created, x: 5, y: 6, direction: "down", amount: 3 }),
-    ).toMatchObject({ accepted: true })
+    expect(await backend.act({ kind: "scroll", ...created, x: 5, y: 6, direction: "down", amount: 3 })).toMatchObject({
+      accepted: true,
+    })
     expect(
       await backend.act({ kind: "drag", ...created, from: { x: 1, y: 2 }, to: { x: 8, y: 7 }, durationMs: 500 }),
     ).toMatchObject({ accepted: true })

@@ -61,7 +61,6 @@ export function createRuntimeRepairTools(input: {
           executionSurface: Tool.executionSurface(["browser_preview"], []),
           extra: { taskID: input.taskID },
           metadata: () => {},
-          ask: async () => {},
         })
         return result.output
       },

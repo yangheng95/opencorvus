@@ -542,6 +542,7 @@ export namespace ProcessSupervisor {
   type DurableWindowsRequest = {
     request_id: string
     ready_file: string
+    launch_failed_file: string
     cancel_file: string
     settled_file: string
     owner_pid: number
@@ -559,6 +560,7 @@ export namespace ProcessSupervisor {
       "cancel_file",
       "cwd",
       "kind",
+      "launch_failed_file",
       "owner_pid",
       "owner_process_instance_id",
       "ready_file",
@@ -589,6 +591,7 @@ export namespace ProcessSupervisor {
     }
     const expectedPaths = {
       ready_file: path.join(requestDir, "ready.json"),
+      launch_failed_file: path.join(requestDir, "launch-failed.json"),
       cancel_file: path.join(requestDir, "cancel"),
       settled_file: path.join(requestDir, "settled.json"),
     }
@@ -658,14 +661,28 @@ export namespace ProcessSupervisor {
         const deadline = Date.now() + (input.timeoutMilliseconds ?? TERMINATION_CLEANUP_TIMEOUT_MS)
         let ready: WindowsReadyMarker | undefined
         let settlement: WindowsSettlementMarker | undefined
+        let preTargetSettlement: WindowsPreTargetSettlementMarker | undefined
         while (Date.now() <= deadline) {
+          const rawPreTargetSettlement = await readJsonFile(request.launch_failed_file)
+          if (rawPreTargetSettlement) {
+            const rawReady = await readJsonFile(request.ready_file)
+            const rawSettlement = await readJsonFile(request.settled_file)
+            if (rawReady || rawSettlement) {
+              throw new Error("pre-target settlement marker conflicts with target process markers")
+            }
+            preTargetSettlement = parseWindowsPreTargetSettlementMarker({
+              text: JSON.stringify(rawPreTargetSettlement),
+              requestID: request.request_id,
+              runtimeOccurrenceID: request.runtime_occurrence_id,
+            })
+            break
+          }
           const rawReady = await readJsonFile(request.ready_file)
           if (rawReady) {
             ready = parseWindowsReadyMarker({
               text: JSON.stringify(rawReady),
               requestID: request.request_id,
               runtimeOccurrenceID: request.runtime_occurrence_id,
-              helperPID: Number((rawReady as Record<string, unknown>).helper_pid),
             })
             const rawSettlement = await readJsonFile(request.settled_file)
             if (rawSettlement) {
@@ -681,7 +698,7 @@ export namespace ProcessSupervisor {
           }
           await new Promise((resolve) => setTimeout(resolve, 20))
         }
-        if (!ready || !settlement) {
+        if (!preTargetSettlement && (!ready || !settlement)) {
           throw new Error(`prior request did not prove active-process-zero within its recovery deadline`)
         }
         await fs.rm(requestDir, { recursive: true, force: true })
@@ -813,7 +830,9 @@ export namespace ProcessSupervisor {
       taskCancellationRole: opts.taskCancellationRole ?? "mandatory",
       handle: tracked,
     })
-    void waitForOwnedPhysicalSettlement(tracked).then(unregister).catch(() => undefined)
+    void waitForOwnedPhysicalSettlement(tracked)
+      .then(unregister)
+      .catch(() => undefined)
     return tracked
   }
 
@@ -1195,6 +1214,7 @@ export namespace ProcessSupervisor {
     const requestDir = await Global.createTemporaryDirectory("supervisor-")
     const requestPath = path.join(requestDir, "request.json")
     const readyPath = path.join(requestDir, "ready.json")
+    const launchFailedPath = path.join(requestDir, "launch-failed.json")
     const cancelPath = path.join(requestDir, "cancel")
     const settledPath = path.join(requestDir, "settled.json")
     const requestID = randomUUID()
@@ -1202,6 +1222,7 @@ export namespace ProcessSupervisor {
     try {
       const request = {
         ...opts.request(readyPath, requestID),
+        launch_failed_file: launchFailedPath,
         cancel_file: cancelPath,
         settled_file: settledPath,
         owner_pid: runtimeOwner.pid,
@@ -1236,7 +1257,21 @@ export namespace ProcessSupervisor {
     }
     const helperHandle = childHandle(proc, { cleanupProcessGroup: false })
     let readyTargetPID: number | undefined
-    const validateDurablePhysicalSettlement = async (): Promise<number> => {
+    const validateDurablePhysicalSettlement = async (): Promise<number | undefined> => {
+      const rawPreTargetSettlement = await readJsonFile(launchFailedPath)
+      if (rawPreTargetSettlement) {
+        const [rawReady, rawSettlement] = await Promise.all([readJsonFile(readyPath), readJsonFile(settledPath)])
+        if (rawReady || rawSettlement) {
+          throw new Error("Windows process supervisor pre-target settlement conflicts with target process markers")
+        }
+        parseWindowsPreTargetSettlementMarker({
+          text: JSON.stringify(rawPreTargetSettlement),
+          requestID,
+          runtimeOccurrenceID: runtimeOwner.occurrenceID,
+          helperPID: helperHandle.pid,
+        })
+        return undefined
+      }
       const ready = parseWindowsReadyMarker({
         text: await fs.readFile(readyPath, "utf8"),
         requestID,
@@ -1279,11 +1314,13 @@ export namespace ProcessSupervisor {
       return await rethrowWithCleanup(
         new Error("Windows process supervisor did not expose stdout/stderr pipes"),
         "Windows process supervisor pipe validation and cleanup failed",
-        [async () => {
-          await cancelAndSettleHelper()
-          await validateDurablePhysicalSettlement()
-          await fs.rm(requestDir, { recursive: true, force: true })
-        }],
+        [
+          async () => {
+            await cancelAndSettleHelper()
+            await validateDurablePhysicalSettlement()
+            await fs.rm(requestDir, { recursive: true, force: true })
+          },
+        ],
       )
     }
     const stdout = new PassThrough()
@@ -1435,9 +1472,10 @@ export namespace ProcessSupervisor {
           helperExited ? helperHandle.dispose() : cancelAndSettleHelper(),
         ]).then(([result]) => result!)
         const physicalResult = await Promise.allSettled([exited]).then(([result]) => result!)
-        const cleanupResult = physicalResult.status === "fulfilled"
-          ? await Promise.allSettled([cleanupRequestDirectory()]).then(([result]) => result!)
-          : undefined
+        const cleanupResult =
+          physicalResult.status === "fulfilled"
+            ? await Promise.allSettled([cleanupRequestDirectory()]).then(([result]) => result!)
+            : undefined
         const failures = [
           ...(helperResult.status === "rejected" ? [helperResult.reason] : []),
           ...(physicalResult.status === "rejected" ? [physicalResult.reason] : []),
@@ -1457,9 +1495,10 @@ export namespace ProcessSupervisor {
 
     const settled = (async () => {
       const [physical, output] = await Promise.allSettled([exited, outputSettled])
-      const cleanup = physical.status === "fulfilled"
-        ? await Promise.allSettled([cleanupRequestDirectory()]).then(([result]) => result!)
-        : undefined
+      const cleanup =
+        physical.status === "fulfilled"
+          ? await Promise.allSettled([cleanupRequestDirectory()]).then(([result]) => result!)
+          : undefined
       const failures = [
         ...(physical.status === "rejected" ? [physical.reason] : []),
         ...(output.status === "rejected" ? [output.reason] : []),
@@ -1679,11 +1718,61 @@ export namespace ProcessSupervisor {
 
   type WindowsSettlementMarker = WindowsReadyMarker & { active_processes: 0 }
 
+  type WindowsPreTargetSettlementMarker = {
+    protocol: 1
+    request_id: string
+    helper_pid: number
+    stage: "target_not_created"
+    active_processes: 0
+    runtime_occurrence_id: string
+  }
+
+  function parseWindowsPreTargetSettlementMarker(input: {
+    text: string
+    requestID: string
+    runtimeOccurrenceID: string
+    helperPID?: number
+  }): WindowsPreTargetSettlementMarker {
+    let value: unknown
+    try {
+      value = JSON.parse(input.text)
+    } catch (error) {
+      throw new Error(
+        `Windows process supervisor pre-target settlement marker is not valid JSON: ${errorMessage(error)}`,
+      )
+    }
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+      throw new Error("Windows process supervisor pre-target settlement marker must be an object")
+    }
+    const marker = value as Record<string, unknown>
+    const keys = Object.keys(marker).sort()
+    const expectedKeys = ["active_processes", "helper_pid", "protocol", "request_id", "runtime_occurrence_id", "stage"]
+    if (keys.length !== expectedKeys.length || keys.some((key, index) => key !== expectedKeys[index])) {
+      throw new Error("Windows process supervisor pre-target settlement marker has unexpected fields")
+    }
+    if (
+      marker.protocol !== 1 ||
+      marker.request_id !== input.requestID ||
+      marker.runtime_occurrence_id !== input.runtimeOccurrenceID ||
+      marker.stage !== "target_not_created" ||
+      marker.active_processes !== 0
+    ) {
+      throw new Error("Windows process supervisor pre-target settlement marker identity does not match")
+    }
+    if (!Number.isInteger(marker.helper_pid) || (marker.helper_pid as number) <= 0) {
+      throw new Error("Windows process supervisor pre-target settlement marker has invalid helper process id")
+    }
+    if (input.helperPID !== undefined && marker.helper_pid !== input.helperPID) {
+      throw new Error("Windows process supervisor pre-target settlement marker helper process identity does not match")
+    }
+    return marker as WindowsPreTargetSettlementMarker
+  }
+
   function parseWindowsReadyMarker(input: {
     text: string
     requestID: string
     runtimeOccurrenceID: string
-    helperPID: number
+    helperPID?: number
   }): WindowsReadyMarker {
     let value: unknown
     try {
@@ -1707,7 +1796,10 @@ export namespace ProcessSupervisor {
     if (marker.runtime_occurrence_id !== input.runtimeOccurrenceID) {
       throw new Error("Windows process supervisor ready marker runtime occurrence does not match")
     }
-    if (marker.helper_pid !== input.helperPID) {
+    if (!Number.isInteger(marker.helper_pid) || (marker.helper_pid as number) <= 0) {
+      throw new Error("Windows process supervisor ready marker has invalid helper process id")
+    }
+    if (input.helperPID !== undefined && marker.helper_pid !== input.helperPID) {
       throw new Error("Windows process supervisor ready marker helper process identity does not match")
     }
     if (!Number.isInteger(marker.target_pid) || (marker.target_pid as number) <= 0) {
@@ -1875,7 +1967,11 @@ export namespace ProcessSupervisor {
       .update(readFileSync(nativeSource))
       .digest("hex")
       .slice(0, 16)
-    const targetDir = path.resolve(import.meta.dir, "../../native/process-supervisor/target", `runtime-${sourceIdentity}`)
+    const targetDir = path.resolve(
+      import.meta.dir,
+      "../../native/process-supervisor/target",
+      `runtime-${sourceIdentity}`,
+    )
     const candidate = path.join(targetDir, "debug", exe)
     if (Filesystem.stat(candidate)?.size) return candidate
     return buildLocalWindowsHelper(manifest, targetDir)

@@ -85,7 +85,6 @@ import { sameExpertSquadPackageRevision } from "@/expert-squad/package-revision"
 import { Provider } from "@/provider/provider"
 import { ProviderTransform } from "@/provider/transform"
 import { EffectiveConfig } from "@/config/effective"
-import { appendScopedProjectSourceBoundary } from "@/prompt/scoped-project-source-boundary"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import type { PromptInput as SessionPromptInput } from "@/session/prompt/schema"
@@ -133,6 +132,8 @@ import {
   type DispatchTurn,
 } from "@/orchestrator/dispatch-turn-projection"
 import { resolvedPackageRevisionFromBinding } from "@/engine/workflow-binding"
+import { composeProjectedWorkerSystemPrompt } from "@/agent/projected-worker-system-prompt"
+import { bindInternalStageTool, stageToolMaterializerBindingOf } from "@/agent/stage-tool-materializer"
 
 const log = Log.create({ service: "agent-runner" })
 
@@ -1120,7 +1121,7 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
   // Task and continuation context belongs to visible user messages. Keeping
   // mutable task state out of the system prompt makes its descriptor hash a
   // stable execution-contract digest rather than a snapshot of workflow data.
-  const composed = await composeSystemPrompt({
+  const composed = await composeProjectedWorkerSystemPrompt({
     taskID: input.taskID,
     baseRole: role,
     core: coordinationHandoffToolID
@@ -1365,6 +1366,26 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
       )
     if (!installedMcpOwner) untransferredMcpOwner = mcpOwner
     // ── 6. Invoke SessionPrompt with the agent's extra tools ─────────────
+    const permissionBearingStageToolIDs = DispatchAdapterContractRegistry.permissionBearingStageToolIDSet(
+      workerCapability.identity.dispatchAdapterID,
+    )
+    for (const toolID of input.toolKit.stageOwnedToolIDs) {
+      const runtimeTool = input.toolKit.tools[toolID]
+      if (!runtimeTool || permissionBearingStageToolIDs.has(toolID)) continue
+      bindInternalStageTool(runtimeTool as object, {
+        adapterID: workerCapability.identity.dispatchAdapterID,
+        toolName: toolID,
+      })
+    }
+    for (const toolID of permissionBearingStageToolIDs) {
+      if (!input.toolKit.stageOwnedToolIDs.includes(toolID)) continue
+      const runtimeTool = input.toolKit.tools[toolID]
+      if (!runtimeTool || !stageToolMaterializerBindingOf(runtimeTool as object)) {
+        throw new Error(
+          `Permission-bearing stage Tool ${workerCapability.identity.dispatchAdapterID}:${toolID} has no persistent materializer binding`,
+        )
+      }
+    }
     const runtimeToolProjection = await PromptProfileResolver.projectWorkerTools(
       input.toolKit.tools,
       workerCapability,
@@ -1543,6 +1564,13 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
                 tools: {
                   enabled: Object.keys(runtimeTools).sort(),
                   switches: enableMap,
+                  stageOwned: Object.keys(runtimeToolProjection.stageTools).sort(),
+                  stageMaterializers: Object.fromEntries(
+                    Object.entries(runtimeToolProjection.stageTools).flatMap(([toolID, runtimeTool]) => {
+                      const binding = stageToolMaterializerBindingOf(runtimeTool as object)
+                      return binding ? [[toolID, binding] as const] : []
+                    }),
+                  ),
                   ...(coordinationHandoffToolID ? { coordinationHandoff: coordinationHandoffToolID } : {}),
                 },
                 output: {
@@ -1751,29 +1779,6 @@ export async function runAgentSession<C>(input: RunAgentSessionInput<C>): Promis
 // Per rule 22 / rule 25 this is the only path. Agents do not roll their
 // own composition.
 // ---------------------------------------------------------------------------
-
-async function composeSystemPrompt(input: {
-  taskID: string
-  baseRole: RuntimeTemplateID
-  core: string
-  projectDirectory: string
-  capability: PromptProfileResolver.ResolvedWorkerCapability
-}): Promise<{ prompt: string }> {
-  const base = [input.core, input.capability.promptLayers.templateAppend]
-    .filter((part): part is string => typeof part === "string" && part.trim().length > 0)
-    .join("\n\n")
-  const prompt = appendScopedProjectSourceBoundary({
-    baseRole: input.baseRole,
-    prompt: await PromptProfileResolver.composeResolvedAgentPrompt({
-      taskID: input.taskID,
-      projectDirectory: input.projectDirectory,
-      base,
-      userAppend: input.capability.promptLayers.projectedAgentAppend,
-      capability: input.capability,
-    }),
-  })
-  return { prompt }
-}
 
 // ---------------------------------------------------------------------------
 // Re-export — agents may need the LanguageModel type when accepting an

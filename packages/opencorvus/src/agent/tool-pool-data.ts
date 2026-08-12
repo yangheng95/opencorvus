@@ -267,6 +267,7 @@ export const roleAssignments = Object.freeze({
   compaction: createToolPool({}),
   title: createToolPool({}),
   summary: createToolPool({}),
+  memory: createToolPool({}),
   control: createToolPool({ global: ["panel"] }),
   orchestrator: createToolPool({
     global: [

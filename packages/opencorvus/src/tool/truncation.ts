@@ -1,7 +1,7 @@
 import fs from "fs/promises"
 import path from "path"
 import { Identifier } from "../id/id"
-import { PermissionNext } from "../permission/next"
+import { CapabilityRules } from "../capability/rules"
 import { Scheduler } from "../scheduler"
 import { Filesystem } from "../util/filesystem"
 import { Glob } from "../util/glob"
@@ -191,7 +191,7 @@ export namespace Truncate {
       ? ProjectRuntimePaths.toolOutputDir(projectRoot, taskID, sessionID)
       : ProjectRuntimePaths.rootSessionToolOutputDir(projectRoot, sessionID)
     const filepath = path.join(outputDir, id)
-    if (PermissionNext.evaluate("read", filepath, surface.permission).action === "deny") {
+    if (CapabilityRules.evaluate("read", filepath, surface.permission).action === "deny") {
       throw new Error(
         `Truncate.output: the active execution surface denies reading the saved output path ${filepath}; ` +
           "truncating here would silently lose data.",

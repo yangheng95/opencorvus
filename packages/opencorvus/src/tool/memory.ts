@@ -1,6 +1,8 @@
 import z from "zod"
 import { Memory } from "@/memory"
 import { SessionMemory } from "@/memory/session-memory"
+import { ProjectMemory } from "@/memory/project-memory"
+import { ProjectMemoryOrganizer } from "@/memory/project-memory-organizer"
 import { Instance } from "@/project/instance"
 import { Tool } from "./tool"
 
@@ -8,7 +10,7 @@ const MemoryKinds = ["note", "episode", "fact", "lesson", "profile"] as const
 
 const DESCRIPTION = `Memory access for the current Session document and reusable project knowledge.
 
-Session memory is exactly one read-only Markdown checkpoint named \`MEMORY.MD\`, generated only by successful conversation compaction. Project semantic memory stores reusable knowledge across Sessions.
+Session memory is a Session-scoped read-only Markdown checkpoint named \`MEMORY.MD\`, generated only by successful conversation compaction. Project \`MEMORY.MD\` is the Project-scoped context maintained exclusively by the dedicated Memory Organizer agent. Project semantic memory stores reusable knowledge across Sessions.
 
 Never store credentials, application programming interface (API) keys, tokens, passwords, private keys, or other secrets in either memory surface. Required behavior belongs in AGENTS.md or checked-in project records, not generated memory.
 
@@ -16,6 +18,8 @@ Before answering about prior work, decisions, dates, or project history, search 
 
 Actions:
 - **session_read**: Read the current Session MEMORY.MD.
+- **project_read**: Read the organized Project MEMORY.MD context and Organizer status.
+- **project_organize**: Ask the dedicated Memory Organizer agent to consolidate pending inputs. The calling agent never edits MEMORY.MD itself.
 - **search**: Search reusable project semantic memory.
 - **get**: Retrieve a project semantic-memory file by ID.
 - **write**: Save reusable project knowledge.
@@ -27,6 +31,12 @@ export const MemoryTool = Tool.define("memory", {
   parameters: z.discriminatedUnion("action", [
     z.object({
       action: z.literal("session_read"),
+    }),
+    z.object({
+      action: z.literal("project_read"),
+    }),
+    z.object({
+      action: z.literal("project_organize"),
     }),
     z.object({
       action: z.literal("search"),
@@ -60,19 +70,34 @@ export const MemoryTool = Tool.define("memory", {
   async execute(params, ctx) {
     const projectId = Instance.project.id
 
-    await ctx.ask({
-      permission: "memory",
-      patterns: ["*"],
-      always: ["*"],
-      metadata: { action: params.action },
-    })
-
     switch (params.action) {
       case "session_read": {
         const document = await SessionMemory.read(ctx.sessionID)
         return {
           title: document ? SessionMemory.filename : "Session memory empty",
-          output: JSON.stringify({ document }),
+          output: JSON.stringify({ scope: "session", document }),
+          metadata: {},
+        }
+      }
+
+      case "project_read": {
+        const document = ProjectMemory.read(projectId)
+        return {
+          title: ProjectMemory.filename,
+          output: JSON.stringify({ scope: "project", document }),
+          metadata: {},
+        }
+      }
+
+      case "project_organize": {
+        const result = await ProjectMemoryOrganizer.run({
+          projectID: projectId,
+          sessionID: ctx.sessionID,
+          abort: ctx.abort,
+        })
+        return {
+          title: "Project MEMORY.MD organization requested",
+          output: JSON.stringify({ scope: "project", result, document: ProjectMemory.read(projectId) }),
           metadata: {},
         }
       }

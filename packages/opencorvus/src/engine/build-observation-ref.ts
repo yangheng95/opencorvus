@@ -1,5 +1,7 @@
 import { Identifier } from "@/id/id"
 import { hostGit as runGit } from "@/util/git"
+import fs from "node:fs/promises"
+import path from "node:path"
 
 export function buildObservationRefName(observationID: string, phase: "base" | "head"): string {
   return `refs/opencorvus/build-observations/${Identifier.schema("artifact").parse(observationID)}/${phase}`
@@ -9,6 +11,13 @@ export async function deleteBuildObservationRefs(input: {
   worktreeDir: string
   observationIDs: readonly string[]
 }): Promise<void> {
+  try {
+    await fs.lstat(path.join(input.worktreeDir, ".git"))
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code
+    if (code === "ENOENT" || code === "ENOTDIR") return
+    throw error
+  }
   for (const observationID of [...new Set(input.observationIDs)].sort()) {
     for (const phase of ["base", "head"] as const) {
       const refName = buildObservationRefName(observationID, phase)
@@ -18,9 +27,7 @@ export async function deleteBuildObservationRefs(input: {
       })
       if (result.exitCode !== 0) {
         throw new Error(
-          `git update-ref -d ${refName} failed with exit code ${result.exitCode}: ${result.stderr
-            .toString()
-            .trim()}`,
+          `git update-ref -d ${refName} failed with exit code ${result.exitCode}: ${result.stderr.toString().trim()}`,
         )
       }
     }

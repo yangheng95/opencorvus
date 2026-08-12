@@ -18,15 +18,6 @@ export const WebSearchTool = Tool.define("websearch", async () => {
       numResults: z.number().int().min(1).max(50).optional().describe("Number of search results to return"),
     }),
     async execute(params, ctx) {
-      await ctx.ask({
-        permission: "websearch",
-        patterns: [params.query],
-        always: ["*"],
-        metadata: {
-          query: params.query,
-          numResults: params.numResults,
-        },
-      })
 
       const response = await WebSearchService.search({
         executionAuthority: Tool.requireExecutionAuthority(ctx),

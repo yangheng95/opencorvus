@@ -66,15 +66,6 @@ export const EditTool = Tool.define("edit", {
         if (existing) throw new Error(`apply_patch verification failed: Add File target already exists: ${filePath}`)
         contentNew = params.newString
         diff = trimDiff(createTwoFilesPatch(filePath, filePath, contentOld, contentNew))
-        await ctx.ask({
-          permission: "edit",
-          patterns: [path.relative(Instance.worktree, filePath)],
-          always: ["*"],
-          metadata: {
-            filepath: filePath,
-            diff,
-          },
-        })
         await files.mkdir(path.dirname(filePath), { recursive: true })
         await files.writeFile(filePath, params.newString, { encoding: "utf-8", flag: "wx" })
         await Bus.publish(File.Event.Edited, {
@@ -102,15 +93,6 @@ export const EditTool = Tool.define("edit", {
       diff = trimDiff(
         createTwoFilesPatch(filePath, filePath, normalizeLineEndings(contentOld), normalizeLineEndings(contentNew)),
       )
-      await ctx.ask({
-        permission: "edit",
-        patterns: [path.relative(Instance.worktree, filePath)],
-        always: ["*"],
-        metadata: {
-          filepath: filePath,
-          diff,
-        },
-      })
 
       await files.writeFile(filePath, contentNew)
       await Bus.publish(File.Event.Edited, {

@@ -14,6 +14,8 @@ export namespace MemorySearch {
     fact: 1.1,
     note: 0.95,
     episode: 0.8,
+    user_message: 0,
+    project_context: 0,
   }
 
   function projectHasMemory(projectId: string): boolean {
@@ -58,7 +60,7 @@ export namespace MemorySearch {
             input.kinds.map((kind) => sql`${kind}`),
             sql`, `,
           )})`
-        : sql``
+        : sql`AND mf.kind <> 'user_message'`
     const sourceFilter =
       input.sources && input.sources.length > 0
         ? sql`AND mf.source IN (${sql.join(

@@ -23,8 +23,8 @@ import {
   Interaction,
   Progress,
   ProjectBoard,
-  RejectInteractionInput,
-  ReplyInteractionInput,
+  UserRejectInteractionInput,
+  UserReplyInteractionInput,
   TaskBoard,
   TaskBrief,
   TaskConversationEventPage,
@@ -64,6 +64,7 @@ import { compileBoard } from "@/workbench/board"
 import { buildTaskProjectArchive, ProjectArchiveUnsupportedProjectError } from "@/engine/task-project-archive"
 import { badRequestOrNamedErrorResponse, errors, namedErrorResponse, operatorSteerRouteErrors } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
+import { PersistedProjectContext } from "@/server/persisted-project-context"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { lazy } from "../../util/lazy"
 import { Log } from "@/util/log"
@@ -1948,9 +1949,23 @@ export const EngineRoutes = lazy(() =>
         },
       }),
       validator("param", z.object({ interactionID: Interaction.shape.id })),
-      validator("json", ReplyInteractionInput),
+      validator("json", UserReplyInteractionInput.omit({ userInput: true })),
       async (c) => {
-        return c.json(await EngineService.replyInteraction(c.req.valid("param").interactionID, c.req.valid("json")))
+        const interactionID = c.req.valid("param").interactionID
+        const input = c.req.valid("json")
+        return c.json(
+          await EngineService.replyUserInteraction(interactionID, {
+            ...input,
+            userInput: {
+              surface: "http.interaction",
+              text: input.message?.trim() || JSON.stringify(input.answers ?? input.decision ?? "allow_once"),
+              structured: {
+                ...(input.decision ? { decision: input.decision } : {}),
+                ...(input.answers ? { answers: input.answers } : {}),
+              },
+            },
+          }),
+        )
       },
     )
     .post(
@@ -1971,9 +1986,19 @@ export const EngineRoutes = lazy(() =>
         },
       }),
       validator("param", z.object({ interactionID: Interaction.shape.id })),
-      validator("json", RejectInteractionInput),
+      validator("json", UserRejectInteractionInput.omit({ userInput: true })),
       async (c) => {
-        return c.json(await EngineService.rejectInteraction(c.req.valid("param").interactionID, c.req.valid("json")))
+        const interactionID = c.req.valid("param").interactionID
+        const input = c.req.valid("json")
+        return c.json(
+          await EngineService.rejectUserInteraction(interactionID, {
+            ...input,
+            userInput: {
+              surface: "http.interaction",
+              text: input.message?.trim() || "Interaction rejected",
+            },
+          }),
+        )
       },
     )
     .patch(
@@ -2010,7 +2035,11 @@ export const EngineRoutes = lazy(() =>
       }),
       validator("param", z.object({ goalID: z.string() })),
       async (c) => {
-        return c.json(await EngineService.deleteGoal(c.req.valid("param").goalID))
+        return c.json(
+          await EngineService.deleteGoal(c.req.valid("param").goalID, {
+            projectID: PersistedProjectContext.currentProject().id,
+          }),
+        )
       },
     )
     .delete(
@@ -2035,6 +2064,7 @@ export const EngineRoutes = lazy(() =>
         const body = c.req.valid("json")
         return c.json(
           await EngineService.deleteTask(c.req.valid("param").taskID, {
+            projectID: PersistedProjectContext.currentProject().id,
             origin: {
               actor: "user",
               source: "task.delete",

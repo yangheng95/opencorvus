@@ -11,6 +11,7 @@ import type {
   MemorySearchResult,
   MemorySource,
 } from "./types"
+import { ProtectedProjectMemoryError } from "./project-memory"
 
 export namespace Memory {
   const log = Log.create({ service: "memory" })
@@ -20,6 +21,8 @@ export namespace Memory {
     fact: 76,
     note: 60,
     episode: 52,
+    user_message: 100,
+    project_context: 100,
   }
   const DEFAULT_CONFIDENCE: Record<Kind, number> = {
     profile: 92,
@@ -27,6 +30,8 @@ export namespace Memory {
     fact: 80,
     note: 72,
     episode: 68,
+    user_message: 100,
+    project_context: 100,
   }
 
   export type Scope = MemoryScope
@@ -138,17 +143,14 @@ export namespace Memory {
     return text.replace(/[.:;,\s]+$/g, "")
   }
 
-  function buildAtomicTitle(kind: Exclude<Kind, "episode" | "note">, raw: string) {
+  type AtomicKind = "profile" | "lesson" | "fact"
+
+  function buildAtomicTitle(kind: AtomicKind, raw: string) {
     const prefix = kind === "lesson" ? "Lesson" : kind === "profile" ? "Profile" : "Fact"
     return `${prefix}: ${summarizeLine(raw, 72)}`
   }
 
-  function buildAtomicContent(input: {
-    kind: Exclude<Kind, "episode" | "note">
-    text: string
-    episodeTitle: string
-    section: string
-  }) {
+  function buildAtomicContent(input: { kind: AtomicKind; text: string; episodeTitle: string; section: string }) {
     return [
       input.kind === "lesson" ? "## Lesson" : input.kind === "profile" ? "## Profile" : "## Fact",
       input.text,
@@ -211,7 +213,7 @@ export namespace Memory {
     return sections
   }
 
-  function atomicConfidence(kind: Exclude<Kind, "episode" | "note">) {
+  function atomicConfidence(kind: AtomicKind) {
     if (kind === "profile") return 92
     if (kind === "lesson") return 86
     return 80
@@ -227,12 +229,12 @@ export namespace Memory {
   function deriveAtomicMemories(input: { title: string; content: string }) {
     const seen = new Set<string>()
     const sections = parseSections(input.content)
-    const kind: Exclude<Kind, "episode" | "note"> = "fact"
+    const kind: AtomicKind = "fact"
     const importance = 80
     const items: Array<{
       title: string
       content: string
-      kind: Exclude<Kind, "episode" | "note">
+      kind: AtomicKind
       key: string
       importance: number
       confidence: number
@@ -277,6 +279,7 @@ export namespace Memory {
     confidence?: number
   }) {
     const kind = input.kind ?? "note"
+    if (isProtectedProjectMemoryKind(kind)) throw new Error(`${kind} memory is host-owned`)
     const key = input.key ? normalizeKey(input.key) : undefined
     const id = Identifier.ascending("memory")
     const now = Date.now()
@@ -327,6 +330,7 @@ export namespace Memory {
     importance?: number
     confidence?: number
   }) {
+    if (isProtectedProjectMemoryKind(input.kind)) throw new Error(`${input.kind} memory is host-owned`)
     const now = Date.now()
     Database.use((db) =>
       db
@@ -352,6 +356,18 @@ export namespace Memory {
     const now = Date.now()
 
     Database.transaction((db) => {
+      const file = db
+        .select({ kind: MemoryFileTable.kind })
+        .from(MemoryFileTable)
+        .where(and(eq(MemoryFileTable.id, fileId), eq(MemoryFileTable.project_id, projectId)))
+        .get()
+      if (file && isProtectedProjectMemoryKind(file.kind)) {
+        throw new ProtectedProjectMemoryError({
+          message: `Project memory ledger file ${fileId} is read-only`,
+          code: "protected_project_memory",
+          fileID: fileId,
+        })
+      }
       ftsDeleteByFileInProject(db, fileId, projectId)
       db.delete(MemoryChunkTable)
         .where(and(eq(MemoryChunkTable.file_id, fileId), eq(MemoryChunkTable.project_id, projectId)))
@@ -401,6 +417,7 @@ export namespace Memory {
   }) {
     return Database.transaction(() => {
       const kind = input.kind ?? "note"
+      if (isProtectedProjectMemoryKind(kind)) throw new Error(`${kind} memory is host-owned`)
       const key = input.key ? normalizeKey(input.key) : undefined
       const existing = key
         ? findByKey({
@@ -594,10 +611,7 @@ export namespace Memory {
     return lines.join("\n")
   }
 
-  export function listFiles(input: {
-    projectId: string
-    kinds?: Kind[]
-  }) {
+  export function listFiles(input: { projectId: string; kinds?: Kind[] }) {
     const rows = Database.use((db) =>
       db
         .select()
@@ -608,13 +622,13 @@ export namespace Memory {
     )
     const files = rows.map(fromFile)
     const kinds = input.kinds
-    if (!kinds || kinds.length === 0) return files
-    return files.filter((row) => kinds.includes(row.kind))
+    if (!kinds || kinds.length === 0) return files.filter((row) => !isProtectedProjectMemoryKind(row.kind))
+    return files.filter((row) => kinds.includes(row.kind) && !isProtectedProjectMemoryKind(row.kind))
   }
 
   export function getFile(fileId: string) {
     const row = Database.use((db) => db.select().from(MemoryFileTable).where(eq(MemoryFileTable.id, fileId)).get())
-    if (!row) return null
+    if (!row || isProtectedProjectMemoryKind(row.kind)) return null
     return fromFile(row)
   }
 
@@ -626,14 +640,20 @@ export namespace Memory {
         .where(and(eq(MemoryFileTable.id, input.fileId), eq(MemoryFileTable.project_id, input.projectId)))
         .get(),
     )
-    if (!row) return null
+    if (!row || isProtectedProjectMemoryKind(row.kind)) return null
     return fromFile(row)
   }
 
   export function getChunks(fileId: string) {
-    const rows = Database.use((db) =>
-      db.select().from(MemoryChunkTable).where(eq(MemoryChunkTable.file_id, fileId)).all(),
-    )
+    const rows = Database.use((db) => {
+      const file = db
+        .select({ kind: MemoryFileTable.kind })
+        .from(MemoryFileTable)
+        .where(eq(MemoryFileTable.id, fileId))
+        .get()
+      if (!file || isProtectedProjectMemoryKind(file.kind)) return []
+      return db.select().from(MemoryChunkTable).where(eq(MemoryChunkTable.file_id, fileId)).all()
+    })
     return rows.map((row) => ({
       id: row.id,
       fileId: row.file_id,
@@ -646,13 +666,19 @@ export namespace Memory {
   }
 
   export function getChunksInProject(input: { fileId: string; projectId: string }) {
-    const rows = Database.use((db) =>
-      db
+    const rows = Database.use((db) => {
+      const file = db
+        .select({ kind: MemoryFileTable.kind })
+        .from(MemoryFileTable)
+        .where(and(eq(MemoryFileTable.id, input.fileId), eq(MemoryFileTable.project_id, input.projectId)))
+        .get()
+      if (!file || isProtectedProjectMemoryKind(file.kind)) return []
+      return db
         .select()
         .from(MemoryChunkTable)
         .where(and(eq(MemoryChunkTable.file_id, input.fileId), eq(MemoryChunkTable.project_id, input.projectId)))
-        .all(),
-    )
+        .all()
+    })
     return rows.map((row) => ({
       id: row.id,
       fileId: row.file_id,
@@ -672,6 +698,13 @@ export namespace Memory {
         .where(and(eq(MemoryFileTable.id, input.fileId), eq(MemoryFileTable.project_id, input.projectId)))
         .get()
       if (!file) return null
+      if (isProtectedProjectMemoryKind(file.kind)) {
+        throw new ProtectedProjectMemoryError({
+          message: `Project memory ledger file ${input.fileId} is read-only`,
+          code: "protected_project_memory",
+          fileID: input.fileId,
+        })
+      }
       ftsDeleteByFileInProject(db, input.fileId, input.projectId)
       db.delete(MemoryChunkTable)
         .where(and(eq(MemoryChunkTable.file_id, input.fileId), eq(MemoryChunkTable.project_id, input.projectId)))
@@ -684,4 +717,8 @@ export namespace Memory {
     if (deletedFile) log.info("deleted memory file", { fileId: input.fileId, projectId: input.projectId })
     return deletedFile
   }
+}
+
+function isProtectedProjectMemoryKind(kind: Memory.Kind) {
+  return kind === "user_message" || kind === "project_context"
 }

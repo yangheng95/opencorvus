@@ -19,15 +19,6 @@ export const GlobTool = Tool.define("glob", {
       ),
   }),
   async execute(params, ctx) {
-    await ctx.ask({
-      permission: "glob",
-      patterns: [params.pattern],
-      always: ["*"],
-      metadata: {
-        pattern: params.pattern,
-        path: params.path,
-      },
-    })
 
     let search = params.path ?? Instance.directory
     // On win32, translate Git Bash / Cygwin / WSL mount paths

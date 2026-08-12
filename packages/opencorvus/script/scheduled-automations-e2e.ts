@@ -177,7 +177,6 @@ for (const key of [
   "OPENCORVUS_MODELS_PATH",
   "OPENCORVUS_MODELS_URL",
   "OPENCORVUS_PACKAGED_PLUGIN_DIR",
-  "OPENCORVUS_PERMISSION",
   "OPENCORVUS_SERVER_PASSWORD",
   "OPENCORVUS_SERVER_USERNAME",
 ]) {
@@ -185,6 +184,7 @@ for (const key of [
 }
 process.env.OPENCORVUS_HOME = home
 process.env.OPENCORVUS_TEST_HOME = home
+process.env.OPENCORVUS_TEST_PROCESS_ROOT = root
 process.env.OPENCORVUS_TEST_MANAGED_CONFIG_DIR = managedConfigDirectory
 const [firstGit, secondGit] = await Promise.all([
   initializeProject(projectOne, "Scheduled E2E project one"),

@@ -23,6 +23,7 @@ import z from "zod"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { createExecutionCancellationOrigin } from "./prompt/cancellation"
+import { ProjectMemory } from "@/memory/project-memory"
 
 /**
  * Session wake mechanism.
@@ -132,6 +133,8 @@ export namespace SessionWake {
     newConversationExperience?: ConversationExperience
     /** Stable control ID reserved by a durable ingress owner before wake persistence. */
     controlID?: string
+    /** Trusted external operator ingress; runtime and scheduler wakes leave this unset. */
+    userAuthored?: boolean
   }
 
   export type WakeCompletion = { ok: true } | { ok: false; error: string }
@@ -173,6 +176,9 @@ export namespace SessionWake {
       extra: {
         ...reasonExtra(reason),
         ...(input.surface ? { surface: PanelSurface.parse(input.surface) } : {}),
+        ...(input.userAuthored
+          ? ProjectMemory.userInputExtra({ surface: reason.source, literalText: input.prompt })
+          : {}),
       },
       byteMaterializationProjectID: Instance.project.id,
       parts: [

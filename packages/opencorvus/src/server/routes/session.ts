@@ -37,10 +37,16 @@ import { Log } from "../../util/log"
 import { badRequestBody, errors, namedErrorResponse } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
+import { ProjectMemory } from "@/memory/project-memory"
 import { NotFoundError } from "../../storage/db"
 import { lazy } from "../../util/lazy"
 import { ProtocolStore } from "@/protocol/store"
-import { enrichStandaloneSessionTranscript, mapSessionBusEvent } from "@/protocol/session-mirror"
+import {
+  enrichStandaloneSessionTranscript,
+  mapSessionBusEvent,
+  pendingPermissionSessionEvent,
+} from "@/protocol/session-mirror"
+import { PermissionAuthority } from "@/permission/authority"
 import { listConversationAgentSessionsForSessionTree, taskExecutionProjectionForTask } from "@/orchestrator/task-event"
 import { BusEvent } from "@/bus/bus-event"
 import { ConversationTurnArtifactSummary, SessionConversationHydration, SessionEvent } from "@/engine/model"
@@ -55,6 +61,7 @@ import { requireTimelineOrderKeyDomain, timelineOrderKey } from "@/timeline/orde
 import { resolveSessionMessageIdentity } from "@/session/message-identity"
 import { resolveSessionActivityStatus, resolveSessionLifecycleSnapshot } from "@/session/lifecycle"
 import { assertActiveProjectSession, getActiveProjectSession } from "../active-project-session"
+import { PersistedProjectContext } from "@/server/persisted-project-context"
 import { applyMissionControlPromptOverlay } from "@/mission/session"
 import { Question } from "@/question"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
@@ -137,6 +144,13 @@ async function preparePublicSessionPrompt(sessionID: string, prompt: SessionProm
   const authoredPrompt: Omit<SessionPrompt.PromptInput, "sessionID"> = {
     ...prompt,
     author: "user",
+    extra: ProjectMemory.userInputExtra({
+      surface: "session.prompt",
+      literalText: prompt.parts
+        .filter((part): part is Extract<(typeof prompt.parts)[number], { type: "text" }> => part.type === "text")
+        .map((part) => part.text)
+        .join("\n\n"),
+    }),
   }
   const overlaidPrompt =
     session.kind === "mission"
@@ -233,6 +247,26 @@ function pendingQuestionSessionEvent(request: Question.Request): z.output<typeof
     sequence: 0,
     summary: mapped.summary,
     payload: mapped.payload,
+  }
+}
+
+function pendingPermissionProtocolSessionEvent(request: PermissionAuthority.Request): z.output<typeof SessionEvent> {
+  const orderKey = timelineOrderKey({
+    domain: "interaction",
+    time: request.timeCreated,
+    id: request.id,
+  })
+  const mapped = pendingPermissionSessionEvent(request)
+  return {
+    event_id: `pending-permission-${request.id}`,
+    session_id: request.sessionID,
+    orderKey,
+    type: mapped.type,
+    emittedAt: request.timeCreated,
+    timestamp: request.timeCreated,
+    sequence: 0,
+    summary: mapped.summary!,
+    payload: { ...mapped.payload!, orderKey },
   }
 }
 
@@ -763,6 +797,9 @@ export const SessionRoutes = lazy(() =>
           for (const request of readPendingQuestions().filter((item) => item.sessionID === sessionID)) {
             await writeData(JSON.stringify(pendingQuestionSessionEvent(request)))
           }
+          for (const request of (await PermissionAuthority.list()).filter((item) => item.sessionID === sessionID)) {
+            await writeData(JSON.stringify(pendingPermissionProtocolSessionEvent(request)))
+          }
           await writeData(
             JSON.stringify({
               event_id: `session-connected-${Date.now()}`,
@@ -956,9 +993,11 @@ export const SessionRoutes = lazy(() =>
       ),
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
-        await assertActiveProjectSession(sessionID)
+        const projectID = PersistedProjectContext.currentProject().id
+        await Session.getInProject({ sessionID, projectID })
         await EngineService.deleteSession(sessionID, {
           deleteTasks: c.req.valid("query").deleteTasks === true,
+          projectID,
           cancellationOrigin: {
             actor: "user",
             source: "session.delete",
@@ -1306,7 +1345,10 @@ export const SessionRoutes = lazy(() =>
       ),
       async (c) => {
         const params = c.req.valid("param")
-        await assertActiveProjectSession(params.sessionID)
+        await Session.getInProject({
+          sessionID: params.sessionID,
+          projectID: PersistedProjectContext.currentProject().id,
+        })
         SessionPrompt.assertNoOwnedPrompt(params.sessionID)
         await Session.removeMessage({ sessionID: params.sessionID, messageID: params.messageID })
         return c.json(true)
@@ -1335,7 +1377,10 @@ export const SessionRoutes = lazy(() =>
       ),
       async (c) => {
         const params = c.req.valid("param")
-        await assertActiveProjectSession(params.sessionID)
+        await Session.getInProject({
+          sessionID: params.sessionID,
+          projectID: PersistedProjectContext.currentProject().id,
+        })
         await Session.removePart({
           sessionID: params.sessionID,
           messageID: params.messageID,

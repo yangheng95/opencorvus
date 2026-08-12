@@ -5,6 +5,8 @@ import { createRightSidebarConversationSession, type ConversationExperience } fr
 import { Config } from "@/config/config"
 import { validateConfigModelReferences } from "@/config/model-reference-validation"
 import { Session } from "@/session"
+import { deleteProject } from "@/project/delete"
+import { randomUUID } from "node:crypto"
 
 export namespace GlobalConversationService {
   export async function create(input: { experience: ConversationExperience; model?: string; sessionID?: string }) {
@@ -32,7 +34,13 @@ export namespace GlobalConversationService {
         },
       })
     } catch (error) {
-      await carryingProject.discard()
+      await deleteProject(carryingProject.project, {
+        actor: "user",
+        source: "project.delete",
+        surface: "api",
+        requestID: randomUUID(),
+        reason: "Discard failed global conversation Project creation",
+      })
       throw error
     }
   }

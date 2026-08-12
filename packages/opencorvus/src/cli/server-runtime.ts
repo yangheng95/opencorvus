@@ -7,6 +7,7 @@ import {
 } from "@/server/runtime-server-ownership"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { recoverOrphanedIsolatedCheckWorkspaces } from "@/project/isolated-check-workspace"
+import { recoverProjectDeletionCleanup } from "@/project/deletion-cleanup"
 
 export async function acquireServerRuntimeAfterRecovery(input: {
   recover(): Promise<void>
@@ -30,6 +31,7 @@ export async function acquireServerRuntimeAfterRecovery(input: {
       currentOccurrenceID: ownership.owner.occurrenceID,
       observeProcessOccurrence,
     })
+    await recoverProjectDeletionCleanup(ownership)
     AutomationService.initGlobal()
     return input.recover()
   })

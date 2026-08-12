@@ -4,6 +4,8 @@ import { InstanceBootstrap } from "@/project/bootstrap"
 import { ImplicitProject } from "@/project/implicit-project"
 import { Instance } from "@/project/instance"
 import { EngineService } from "./index"
+import { deleteProject } from "@/project/delete"
+import { randomUUID } from "node:crypto"
 
 export namespace GlobalTaskService {
   export async function create(raw: z.input<typeof CreateTaskInput>) {
@@ -23,7 +25,13 @@ export namespace GlobalTaskService {
         },
       })
     } catch (error) {
-      await carryingProject.discard()
+      await deleteProject(carryingProject.project, {
+        actor: "user",
+        source: "project.delete",
+        surface: "api",
+        requestID: randomUUID(),
+        reason: "Discard failed global Task Project creation",
+      })
       throw error
     }
   }

@@ -149,6 +149,25 @@ function generatedDeferredIndexDdl() {
 // FTS is Full-Text Search. Drizzle table declarations do not model SQLite FTS5
 // virtual tables, so this remains an explicit storage extension.
 const STORAGE_EXTENSION_DDL = /* sql */ `
+CREATE UNIQUE INDEX IF NOT EXISTS project_generation_idx ON project(generation);
+
+CREATE TRIGGER IF NOT EXISTS project_generation_required_insert
+BEFORE INSERT ON project
+FOR EACH ROW
+WHEN NEW.generation = '00000000-0000-0000-0000-000000000000'
+BEGIN
+  SELECT RAISE(ABORT, 'project: generation is required');
+END;
+
+CREATE TRIGGER IF NOT EXISTS project_generation_immutable_update
+BEFORE UPDATE OF generation ON project
+FOR EACH ROW
+WHEN OLD.generation != '00000000-0000-0000-0000-000000000000'
+  AND NEW.generation IS NOT OLD.generation
+BEGIN
+  SELECT RAISE(ABORT, 'project: generation is immutable');
+END;
+
 CREATE VIRTUAL TABLE IF NOT EXISTS memory_fts USING fts5(
   content,
   chunk_id UNINDEXED,

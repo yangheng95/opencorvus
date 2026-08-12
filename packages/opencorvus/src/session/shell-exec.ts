@@ -20,6 +20,7 @@ import { LocalEnvironment } from "@/config/local-environment"
 import { sanitizeShellEnvironment } from "@/shell/environment"
 import { createExecutionCancellationOrigin } from "./prompt/cancellation"
 import { resolveSessionExecutionAuthority } from "@/engine/task-session-lineage"
+import { ProjectMemory } from "@/memory/project-memory"
 
 type SessionShellResume = (input: { sessionID: string; resume_existing: true }) => Promise<unknown>
 
@@ -126,8 +127,8 @@ export namespace SessionShell {
           providerID: model.providerID,
           modelID: model.modelID,
         },
+        extra: ProjectMemory.userInputExtra({ surface: "session.shell", literalText: input.command }),
       }
-      await Session.updateMessage(userMsg)
       const userPart: Message.Part = {
         type: "text",
         id: Identifier.ascending("part"),
@@ -135,7 +136,7 @@ export namespace SessionShell {
         sessionID: input.sessionID,
         text: "The following tool was executed by the user",
       }
-      await Session.updatePart(userPart)
+      await Session.persistMessage({ info: userMsg, parts: [userPart] })
 
       const msg: Message.Assistant = {
         id: Identifier.ascending("message"),

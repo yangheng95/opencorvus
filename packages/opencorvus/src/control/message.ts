@@ -14,6 +14,7 @@ import { Log } from "@/util/log"
 import { Instance } from "@/project/instance"
 import { ChannelId } from "@/channel/catalog"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
+import { ProjectMemory } from "@/memory/project-memory"
 
 const log = Log.create({ service: "control-message" })
 
@@ -126,6 +127,7 @@ async function run(
           agent,
           model,
           byteMaterializationProjectID: controlSession.info.projectID,
+          extra: ProjectMemory.userInputExtra({ surface: "control.message", literalText: input.text }),
           parts: parts as any,
         }),
       )

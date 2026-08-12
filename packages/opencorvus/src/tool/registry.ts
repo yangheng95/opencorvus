@@ -10,7 +10,7 @@ import { isSkillFamilyToolID } from "./skill"
 import type { RuntimeTemplateID } from "@/agent/runtime-template-id"
 import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
 import type { SessionAgentRuntime } from "@/agent/session-agent-runtime"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { visibleExecutionToolIDs } from "./execution-surface"
 
 export namespace ToolRegistry {
@@ -156,7 +156,7 @@ export namespace ToolRegistry {
     config: Config.Info,
     toolIDs: readonly string[],
     policy: {
-      sessionPermission?: PermissionNext.Ruleset
+      sessionPermission?: CapabilityRules.Ruleset
       toolSwitches?: Readonly<Record<string, boolean>>
       batchTargetExclusions: readonly string[]
     },
@@ -181,7 +181,7 @@ export namespace ToolRegistry {
       }
     }
     assertBuiltInToolProviderClosure(toolIDs, providerEnvironment, `Runtime template ${runtimeTemplateID}`)
-    const permission = PermissionNext.merge(agent.permission, policy.sessionPermission)
+    const permission = CapabilityRules.merge(agent.permission, policy.sessionPermission)
     const policyVisibleToolIDs = new Set(
       visibleExecutionToolIDs({
         toolIDs,

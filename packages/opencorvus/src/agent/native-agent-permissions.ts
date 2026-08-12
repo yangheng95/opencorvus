@@ -1,9 +1,9 @@
 import type { Config } from "@/config/config"
 import { WEBPAGE_EVIDENCE_BLOCKED_TOOL_IDS } from "@/frontend-design/tools/ids"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 
 export function nativeAgentPermissionProfiles(config: Config.Info) {
-  const defaults = PermissionNext.fromConfig({
+  const defaults = CapabilityRules.fromConfig({
     "*": "allow",
     invalid: "allow",
     doom_loop: "allow",
@@ -27,13 +27,12 @@ export function nativeAgentPermissionProfiles(config: Config.Info) {
     question: "allow",
     read: "allow",
   })
-  const user = PermissionNext.fromConfig(config.permission ?? {})
-  const webpageEvidenceDenied = PermissionNext.fromConfig(
+  const webpageEvidenceDenied = CapabilityRules.fromConfig(
     Object.fromEntries(WEBPAGE_EVIDENCE_BLOCKED_TOOL_IDS.map((id) => [id, "deny"])),
   )
   return {
-    nonDesign(...rulesets: PermissionNext.Ruleset[]) {
-      return PermissionNext.merge(defaults, ...rulesets, user, webpageEvidenceDenied)
+    nonDesign(...rulesets: CapabilityRules.Ruleset[]) {
+      return CapabilityRules.merge(defaults, ...rulesets, webpageEvidenceDenied)
     },
   }
 }

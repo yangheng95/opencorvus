@@ -28,6 +28,7 @@ import {
   VisualQaUnresolvedCodeModuleProblemSchema,
   type VisualReview,
 } from "./schema"
+import { bindStageToolMaterializer } from "@/agent/stage-tool-materializer"
 
 function limitSummary(text: string): string {
   const normalized = text.replace(/\s+/g, " ").trim()
@@ -596,6 +597,61 @@ function snapshotVisualQaReview(collector: VisualQaCollector): VisualReview {
   })
 }
 
+const VisualQaProblemDomRegionMaterializerInput = z
+  .object({
+    taskID: z.string().min(1),
+    projectRoot: z.string().min(1),
+    projectID: z.string().min(1).optional(),
+  })
+  .strict()
+
+export function materializeVisualQaProblemDomRegionTool(
+  raw: Record<string, unknown>,
+  onRegion?: (row: VisualReview["problem_dom_regions"][number]) => "registered" | "overwritten",
+) {
+  const context = VisualQaProblemDomRegionMaterializerInput.parse(raw)
+  return bindStageToolMaterializer(
+    tool({
+      description: "Register one DOM-localized visual problem region tied to registered check_ids and blocker_ids.",
+      inputSchema: VisualQaProblemDomRegionSchema,
+      execute: async (rawRegion) => {
+        const parsed = VisualQaProblemDomRegionSchema.parse(rawRegion)
+        const locatorIssues = await visualQaLocatorInputIssues({
+          taskID: context.taskID,
+          rows: pairedLocatorRows({
+            label: `problem_dom_region "${parsed.id}"`,
+            evidenceRefs: parsed.evidence_refs,
+          }),
+        })
+        if (locatorIssues.length > 0) {
+          return `Error: visual QA problem_dom_region evidence is invalid: ${locatorIssues.join("; ")}`
+        }
+        const annotation = await annotateVisualQaProblemDomRegion({
+          taskID: context.taskID,
+          projectRoot: context.projectRoot,
+          projectID: context.projectID,
+          region: { ...parsed, annotated_evidence_refs: [] },
+        })
+        if (annotation.error) {
+          return `Error: ${annotation.error}${
+            annotation.diagnostics.length > 0 ? ` Diagnostics: ${annotation.diagnostics.join("; ")}` : ""
+          }`
+        }
+        const row = { ...parsed, annotated_evidence_refs: annotation.annotatedEvidenceRefs }
+        const status = onRegion?.(row) ?? "registered"
+        const annotationText =
+          row.annotated_evidence_refs.length > 0
+            ? `; annotated_evidence_refs=${row.annotated_evidence_refs.join(", ")}`
+            : annotation.diagnostics.length > 0
+              ? `; annotation_diagnostics=${annotation.diagnostics.join("; ")}`
+              : ""
+        return `OK: visual QA problem_dom_region "${row.id}" ${status}${annotationText}`
+      },
+    }),
+    { id: "visual-qa.problem-dom-region", input: context },
+  )
+}
+
 export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {}) {
   let collector = emptyCollector()
   const tools = {
@@ -702,46 +758,17 @@ export function createVisualQaOutputTools(context: VisualQaOutputToolContext = {
         return `OK: visual QA production_blocker "${row.id}" ${status} (${collector.production_blockers.length} total)`
       },
     }),
-    register_visual_qa_problem_dom_region: tool({
-      description: "Register one DOM-localized visual problem region tied to registered check_ids and blocker_ids.",
-      inputSchema: VisualQaProblemDomRegionSchema,
-      execute: async (raw) => {
-        const parsed = VisualQaProblemDomRegionSchema.parse(raw)
-        const locatorIssues = await visualQaLocatorInputIssues({
-          taskID: context.taskID,
-          rows: pairedLocatorRows({
-            label: `problem_dom_region "${parsed.id}"`,
-            evidenceRefs: parsed.evidence_refs,
+    register_visual_qa_problem_dom_region:
+      context.taskID && context.projectRoot
+        ? materializeVisualQaProblemDomRegionTool(
+            { taskID: context.taskID, projectRoot: context.projectRoot, projectID: context.projectID },
+            (row) => upsertByID(collector.problem_dom_regions, row),
+          )
+        : tool({
+            description: "Register one DOM-localized visual problem region tied to registered check_ids and blocker_ids.",
+            inputSchema: VisualQaProblemDomRegionSchema,
+            execute: async () => "Error: visual QA problem DOM annotation requires taskID and projectRoot.",
           }),
-        })
-        if (locatorIssues.length > 0) {
-          return `Error: visual QA problem_dom_region evidence is invalid: ${locatorIssues.join("; ")}`
-        }
-        const annotation = await annotateVisualQaProblemDomRegion({
-          taskID: context.taskID,
-          projectRoot: context.projectRoot,
-          projectID: context.projectID,
-          region: { ...parsed, annotated_evidence_refs: [] },
-        })
-        if (annotation.error) {
-          return `Error: ${annotation.error}${
-            annotation.diagnostics.length > 0 ? ` Diagnostics: ${annotation.diagnostics.join("; ")}` : ""
-          }`
-        }
-        const row = {
-          ...parsed,
-          annotated_evidence_refs: annotation.annotatedEvidenceRefs,
-        }
-        const status = upsertByID(collector.problem_dom_regions, row)
-        const annotationText =
-          row.annotated_evidence_refs.length > 0
-            ? `; annotated_evidence_refs=${row.annotated_evidence_refs.join(", ")}`
-            : annotation.diagnostics.length > 0
-              ? `; annotation_diagnostics=${annotation.diagnostics.join("; ")}`
-              : ""
-        return `OK: visual QA problem_dom_region "${row.id}" ${status} (${collector.problem_dom_regions.length} total)${annotationText}`
-      },
-    }),
     register_visual_qa_unresolved_code_module_problem: tool({
       description:
         "Register one unresolved code module problem tied to registered check_ids and production blocker IDs.",

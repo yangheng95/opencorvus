@@ -64,7 +64,6 @@ export async function createAiSdkToolFromInfo(input: ToolInfoAiSdkAdapterInput) 
             invocationAuthority: execution.invocationAuthority,
           },
           metadata: () => {},
-          ask: async () => {},
         })
         await input.afterExecute?.(args, result)
         return result

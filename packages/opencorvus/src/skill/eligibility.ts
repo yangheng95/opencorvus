@@ -1,5 +1,5 @@
 import type { SessionAgentRuntime } from "@/agent/session-agent-runtime"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import type { Skill } from "./skill"
 import { SkillPlatform } from "./platform"
 
@@ -17,7 +17,7 @@ export function skillLoaderAvailable(input: {
 }): boolean {
   if (!input.allowedToolIDs.has(input.toolID)) return false
   if (input.availableToolNames && !input.availableToolNames.has(input.toolID)) return false
-  return !PermissionNext.disabled([input.toolID], input.runtime.permission).has(input.toolID)
+  return !CapabilityRules.disabled([input.toolID], input.runtime.permission).has(input.toolID)
 }
 
 export function skillDisabledReason(input: {
@@ -28,7 +28,7 @@ export function skillDisabledReason(input: {
   availableToolNames?: ReadonlySet<string>
 }): SkillDisabledReason | undefined {
   if (!input.toolAvailable) return "skill_tool_unavailable"
-  if (PermissionNext.evaluate("skill", input.skill.name, input.runtime.permission).action === "deny") {
+  if (CapabilityRules.evaluate("skill", input.skill.name, input.runtime.permission).action === "deny") {
     return "permission_denied"
   }
   if (!SkillPlatform.supports(input.skill.platforms)) {
@@ -37,7 +37,7 @@ export function skillDisabledReason(input: {
   for (const toolID of input.skill.required_tools) {
     if (!input.allowedToolIDs.has(toolID)) return "missing_required_tool"
     if (input.availableToolNames && !input.availableToolNames.has(toolID)) return "missing_required_tool"
-    if (PermissionNext.evaluate(toolID, "*", input.runtime.permission).action === "deny") {
+    if (CapabilityRules.evaluate(toolID, "*", input.runtime.permission).action === "deny") {
       return "missing_required_tool"
     }
   }

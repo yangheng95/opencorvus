@@ -13,7 +13,8 @@ import { Vcs } from "../../project/vcs"
 import { Worktree } from "../../worktree"
 import { Ownership } from "../../engine/ownership"
 import { WorktreeGC } from "../../worktree/gc"
-import { deleteCurrentProject, ProjectDeleteResult } from "../../project/delete"
+import { deleteProject, ProjectDeleteResult } from "../../project/delete"
+import { PersistedProjectContext } from "@/server/persisted-project-context"
 import z from "zod"
 import { errors } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
@@ -130,7 +131,7 @@ export const ProjectRoutes = lazy(() =>
       async (c) => {
         const body = c.req.valid("json")
         return c.json(
-          await deleteCurrentProject({
+          await deleteProject(PersistedProjectContext.currentProject(), {
             actor: "user",
             source: "project.delete",
             surface: body.surface,

@@ -50,6 +50,7 @@ mod windows_helper {
             cwd: Option<String>,
             cancel_file: String,
             ready_file: String,
+            launch_failed_file: String,
             settled_file: String,
             request_id: String,
             owner_pid: u32,
@@ -64,6 +65,7 @@ mod windows_helper {
             cwd: Option<String>,
             cancel_file: String,
             ready_file: String,
+            launch_failed_file: String,
             settled_file: String,
             request_id: String,
             owner_pid: u32,
@@ -78,6 +80,7 @@ mod windows_helper {
         cwd: Option<String>,
         cancel_file: String,
         ready_file: String,
+        launch_failed_file: String,
         settled_file: String,
         request_id: String,
         owner_pid: u32,
@@ -101,6 +104,16 @@ mod windows_helper {
         request_id: &'a str,
         helper_pid: u32,
         target_pid: u32,
+        active_processes: u32,
+        runtime_occurrence_id: &'a str,
+    }
+
+    #[derive(Serialize)]
+    struct PreTargetSettlementMarker<'a> {
+        protocol: u32,
+        request_id: &'a str,
+        helper_pid: u32,
+        stage: &'static str,
         active_processes: u32,
         runtime_occurrence_id: &'a str,
     }
@@ -364,6 +377,7 @@ mod windows_helper {
                 cwd,
                 cancel_file,
                 ready_file,
+                launch_failed_file,
                 settled_file,
                 request_id,
                 owner_pid,
@@ -382,6 +396,7 @@ mod windows_helper {
                     cwd,
                     cancel_file,
                     ready_file,
+                    launch_failed_file,
                     settled_file,
                     request_id,
                     owner_pid,
@@ -397,6 +412,7 @@ mod windows_helper {
                 cwd,
                 cancel_file,
                 ready_file,
+                launch_failed_file,
                 settled_file,
                 request_id,
                 owner_pid,
@@ -414,6 +430,7 @@ mod windows_helper {
                     cwd,
                     cancel_file,
                     ready_file,
+                    launch_failed_file,
                     settled_file,
                     request_id,
                     owner_pid,
@@ -533,7 +550,17 @@ mod windows_helper {
         }
         let owner = Handle(owner_handle);
         let standard_handles = inherited_standard_handles()?;
-        let target = create_suspended_target(&request, Some(&standard_handles))?;
+        let target = match create_suspended_target(&request, Some(&standard_handles)) {
+            Ok(target) => target,
+            Err(primary) => {
+                if let Err(marker) = publish_pre_target_settlement_marker(&request) {
+                    return Err(format!(
+                        "{primary}; publish pre-target active-process-zero marker failed: {marker}"
+                    ));
+                }
+                return Err(primary);
+            }
+        };
 
         if let Err(error) = publish_ready_marker(
             &request.ready_file,
@@ -660,6 +687,41 @@ mod windows_helper {
         if let Err(error) = fs::rename(&temporary_file, &request.settled_file) {
             let _ = fs::remove_file(&temporary_file);
             return Err(format!("publish settlement marker failed: {error}"));
+        }
+        Ok(())
+    }
+
+    fn publish_pre_target_settlement_marker(request: &LaunchRequest) -> Result<(), String> {
+        let helper_pid = unsafe { GetCurrentProcessId() };
+        let temporary_file = format!("{}.{}.tmp", request.launch_failed_file, helper_pid);
+        let marker = PreTargetSettlementMarker {
+            protocol: 1,
+            request_id: &request.request_id,
+            helper_pid,
+            stage: "target_not_created",
+            active_processes: 0,
+            runtime_occurrence_id: &request.runtime_occurrence_id,
+        };
+        let mut file = fs::File::create(&temporary_file)
+            .map_err(|error| format!("create pre-target settlement marker failed: {error}"))?;
+        if let Err(error) = serde_json::to_writer(&mut file, &marker) {
+            let _ = fs::remove_file(&temporary_file);
+            return Err(format!(
+                "serialize pre-target settlement marker failed: {error}"
+            ));
+        }
+        if let Err(error) = file.sync_all() {
+            let _ = fs::remove_file(&temporary_file);
+            return Err(format!(
+                "flush pre-target settlement marker failed: {error}"
+            ));
+        }
+        drop(file);
+        if let Err(error) = fs::rename(&temporary_file, &request.launch_failed_file) {
+            let _ = fs::remove_file(&temporary_file);
+            return Err(format!(
+                "publish pre-target settlement marker failed: {error}"
+            ));
         }
         Ok(())
     }

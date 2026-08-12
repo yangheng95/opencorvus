@@ -3,6 +3,7 @@ import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { SessionRuntimeContractMissingError } from "./runtime-contract-error"
 import { AgentRuntimeMetadata } from "./agent-runtime-metadata"
 import {
+  isProjectedWorkerRuntimeContract,
   sessionRuntimeToolRecords,
   SessionRuntimeContractStore,
   type SessionRuntimeContract,
@@ -198,7 +199,17 @@ export function validateSessionRuntimeContractForContinuation(
     }
     const descriptorTools = [...descriptor.payload.tools.enabled].sort()
     const records = sessionRuntimeToolRecords(contract)
-    const contractTools = Object.keys({ ...records.projectedTools, ...records.stageTools }).sort()
+    const contractToolSet = new Set(Object.keys({ ...records.projectedTools, ...records.stageTools }))
+    if (isProjectedWorkerRuntimeContract(contract) && contract.permissionContinuation) {
+      const requestedStageTool = descriptor.payload.tools.stageOwned.includes(contract.permissionContinuation.toolName)
+      if (requestedStageTool && !Object.hasOwn(records.stageTools, contract.permissionContinuation.toolName)) {
+        throw new Error(
+          `SessionRuntimeContract permission continuation Tool ${contract.permissionContinuation.toolName} is not materialized`,
+        )
+      }
+      for (const stageToolID of descriptor.payload.tools.stageOwned) contractToolSet.add(stageToolID)
+    }
+    const contractTools = [...contractToolSet].sort()
     if (JSON.stringify(descriptorTools) !== JSON.stringify(contractTools)) {
       throw new Error(
         `SessionRuntimeContract worker descriptor tools mismatch for ${input.sessionID}: expected ${descriptorTools.join(",") || "<none>"}, found ${contractTools.join(",") || "<none>"}`,

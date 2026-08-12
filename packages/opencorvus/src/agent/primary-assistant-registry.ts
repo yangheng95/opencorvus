@@ -5,7 +5,7 @@ import { AgentToolPool } from "@/agent/tool-pool-contract"
 import { nativeAgentPermissionProfiles } from "@/agent/native-agent-permissions"
 import { materializeNativeAgentDefinitions } from "@/agent/native-agent-materializer"
 import type { NativeAgentInfo } from "@/agent/native-agent-info"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import PROMPT_CODING from "@/agent/prompt/coding.txt"
 import MISSION_CORE from "@/prompt/core/mission-core.txt"
 import { CHAT_INTERACTIVE_ARTIFACT_GUIDANCE } from "@/prompt/fragments/interactive-artifact-guidance"
@@ -107,28 +107,28 @@ async function buildState(config: Config.Info): Promise<PrimaryAssistantState> {
     ...definitions,
     coding: {
       ...definitions.coding,
-      permission: permissions.nonDesign(PermissionNext.fromConfig({ question: "allow", webfetch: "allow" })),
+      permission: permissions.nonDesign(CapabilityRules.fromConfig({ question: "allow", webfetch: "allow" })),
     },
     chat: {
       ...definitions.chat,
       permission: permissions.nonDesign(
-        PermissionNext.fromConfig({ question: "allow", webfetch: "allow", panel: "allow" }),
+        CapabilityRules.fromConfig({ question: "allow", webfetch: "allow", panel: "allow" }),
       ),
     },
     work: {
       ...definitions.work,
       permission: permissions.nonDesign(
-        PermissionNext.fromConfig({ question: "allow", webfetch: "allow", panel: "allow" }),
+        CapabilityRules.fromConfig({ question: "allow", webfetch: "allow", panel: "allow" }),
       ),
     },
     control: {
       ...definitions.control,
-      permission: permissions.nonDesign(PermissionNext.fromConfig({ panel: "allow" })),
+      permission: permissions.nonDesign(CapabilityRules.fromConfig({ panel: "allow" })),
     },
     mission: {
       ...definitions.mission,
       permission: permissions.nonDesign(
-        PermissionNext.fromConfig({
+        CapabilityRules.fromConfig({
           bash: "allow",
           read: "allow",
           glob: "allow",

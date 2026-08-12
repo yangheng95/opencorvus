@@ -16,8 +16,7 @@ import {
 import { Identifier } from "@/id/id"
 import { MCP } from "@/mcp"
 import { materializeMcpToolResult, materializedMcpAttachmentsToFileParts } from "@/mcp/materialize"
-import { mcpPermissionPlan } from "@/mcp/browser/permission-plan"
-import { PermissionNext } from "@/permission/next"
+import { PermissionAuthority } from "@/permission/authority"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { MessageStore } from "@/session/message-store"
@@ -248,7 +247,7 @@ async function callTool(input: {
   client: Parameters<Parameters<typeof MCP.withAppClient>[1]>[0]
   timeout: number
 }): Promise<CallToolResult> {
-  const session = await Session.getInProject({
+  await Session.getInProject({
     sessionID: input.artifact.sessionID,
     projectID: Instance.project.id,
   })
@@ -283,28 +282,32 @@ async function callTool(input: {
   })
 
   try {
-    const permission = mcpPermissionPlan(toolName, args)
-    const destructiveRule: PermissionNext.Ruleset =
-      currentTool.annotations?.destructiveHint === true
-        ? [{ permission: permission.permission, pattern: "*", action: "ask" }]
-        : []
-    await PermissionNext.ask({
-      ...permission,
-      sessionID: input.artifact.sessionID,
-      tool: { messageID: input.artifact.messageID, callID },
-      metadata: {
-        ...permission.metadata,
-        ...source,
-        destructiveHint: currentTool.annotations?.destructiveHint === true,
-      },
-      ruleset: PermissionNext.merge(session.permission, destructiveRule),
-    })
-
     const result = CallToolResultSchema.parse(
-      await input.client.callTool(input.params, CallToolResultSchema, {
-        timeout: input.timeout,
-        signal: input.signal,
-      }),
+      await PermissionAuthority.authorizeAndExecute(
+        {
+          projectID: Instance.project.id,
+          sessionID: input.artifact.sessionID,
+          messageID: input.artifact.messageID,
+          toolCallID: callID,
+          toolPartID: partID,
+          providerKind: "mcp_app",
+          providerID: input.artifact.payload.server.id,
+          providerDigest: `${input.artifact.payload.server.configDigest}:${MCP.toolDefinitionDigest(currentTool)}`,
+          toolName,
+          args: {
+            arguments: args,
+            destructiveHint: currentTool.annotations?.destructiveHint === true,
+          },
+        },
+        () =>
+          MCP.callToolWithTaskRecovery({
+            client: input.client,
+            tool: currentTool,
+            args,
+            timeout: input.timeout,
+            signal: input.signal,
+          }),
+      ),
     )
     const materialized = await materializeMcpToolResult({
       projectID: Instance.project.id,

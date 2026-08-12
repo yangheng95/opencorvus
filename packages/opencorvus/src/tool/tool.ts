@@ -1,6 +1,6 @@
 import z from "zod"
 import type { Message } from "../session/message"
-import type { PermissionNext } from "../permission/next"
+import type { CapabilityRules } from "../capability/rules"
 import type { Config } from "../config/config"
 import type { ResolvedSkillSurface } from "../skill/surface"
 import type { PromptInput } from "../session/prompt/schema"
@@ -29,7 +29,7 @@ function coerceArgs(args: unknown): unknown {
 export namespace Tool {
   export function executionSurface(
     toolIDs: Iterable<string>,
-    permission: PermissionNext.Ruleset,
+    permission: CapabilityRules.Ruleset,
   ): ToolExecutionSurface {
     return createToolExecutionSurface({ toolIDs, permission })
   }
@@ -56,7 +56,6 @@ export namespace Tool {
     executionSurface: ToolExecutionSurface
     prompt?(input: PromptInput): Promise<Message.WithParts>
     metadata(input: { title?: string; metadata?: M }): void
-    ask(input: Omit<PermissionNext.Request, "id" | "sessionID" | "tool">): Promise<void>
   }
 
   export function requireExecutionAuthority(ctx: Pick<Context, "executionAuthority">): SessionExecutionAuthority {

@@ -6,7 +6,7 @@ import { Config } from "@/config/config"
 import { ConfigMarkdown } from "@/config/markdown"
 import { updateGlobalConfigPatchAtomic } from "@/config/update-global"
 import { Global } from "@/global"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { Instance } from "@/project/instance"
 import { Filesystem } from "@/util/filesystem"
 import { Glob } from "@/util/glob"
@@ -25,7 +25,7 @@ import { createInstanceState } from "@/project/instance-state"
 const MANIFEST = ".opencorvus-skill-source.json"
 const log = Log.create({ service: "skill-manager" })
 export namespace SkillManager {
-  export const Policy = PermissionNext.Action
+  export const Policy = CapabilityRules.Action
   export const Trust = z.enum(["builtin", "official", "curated", "community", "local", "external", "unknown"])
   export const Risk = z.object({
     level: z.enum(["low", "medium", "high"]),
@@ -148,7 +148,7 @@ export namespace SkillManager {
       source: "https://github.com/openai/skills.git",
       install_kind: "git",
       trust: "official",
-      recommended_policy: "ask",
+      recommended_policy: "allow",
       notes: "Installable as a Git source; review individual skills before allowing always.",
     },
     {
@@ -160,7 +160,7 @@ export namespace SkillManager {
       source: "https://github.com/anthropics/skills.git",
       install_kind: "git",
       trust: "official",
-      recommended_policy: "ask",
+      recommended_policy: "allow",
       notes: "Official source, but still prefer ask-by-default for script-bearing skills.",
     },
     {
@@ -171,7 +171,7 @@ export namespace SkillManager {
       homepage: "https://skills.sh",
       install_kind: "manual",
       trust: "curated",
-      recommended_policy: "ask",
+      recommended_policy: "allow",
       notes: "Best used to discover repo URLs, then install via Git source in OpenCorvus.",
     },
     {
@@ -182,7 +182,7 @@ export namespace SkillManager {
       homepage: "https://skillstore.io",
       install_kind: "manual",
       trust: "curated",
-      recommended_policy: "ask",
+      recommended_policy: "allow",
       notes: "Useful discovery surface; installation method depends on the linked repository.",
     },
     {
@@ -193,7 +193,7 @@ export namespace SkillManager {
       homepage: "https://skills.pub",
       install_kind: "manual",
       trust: "community",
-      recommended_policy: "ask",
+      recommended_policy: "allow",
       notes: "Community directory only; import the referenced repo or path after review.",
     },
   ]
@@ -306,12 +306,12 @@ export namespace SkillManager {
 
   export async function installed() {
     const global = await Config.getGlobal()
-    const rules = PermissionNext.fromConfig(global.permission ?? {})
+    const rules = CapabilityRules.fromConfig({ skill: global.skill_policy ?? {} })
 
     return Installed.array().parse(
       (await installedInventoryState()).map((skill) => ({
         ...skill,
-        policy: PermissionNext.evaluate("skill", skill.name, rules).action,
+        policy: CapabilityRules.evaluate("skill", skill.name, rules).action,
       })),
     )
   }
@@ -685,7 +685,7 @@ async function patchGlobal(mutator: (next: z.infer<typeof Config.Info>) => void)
     mutator(next)
     return {
       skills: next.skills,
-      permission: next.permission,
+      skill_policy: next.skill_policy,
     }
   })
 }
@@ -701,14 +701,11 @@ function applyPolicyToConfig(
   names: string[],
   policy: z.infer<typeof SkillManager.Policy>,
 ) {
-  if (typeof next.permission !== "object" || !next.permission) next.permission = {}
-  const current = next.permission.skill
-  const table: Record<string, Config.PermissionAction> =
-    typeof current === "string" ? { "*": current } : current && typeof current === "object" ? { ...current } : {}
+  const table: Record<string, Config.PermissionAction> = { ...(next.skill_policy ?? {}) }
   for (const name of new Set(names)) {
     table[name] = policy
   }
-  next.permission.skill = table
+  next.skill_policy = table
 }
 
 function sourceTypeFor(dir: string, configuredPaths: string[], cache: string, kind?: string) {
@@ -793,9 +790,9 @@ async function riskFor(dir: string, trust: z.infer<typeof SkillManager.Trust>) {
 
 function recommendedPolicy(trust: z.infer<typeof SkillManager.Trust>, risk: z.infer<typeof SkillManager.Risk>) {
   if (trust === "builtin") return "allow" as const
-  if (risk.level === "high") return "ask" as const
-  if (trust === "community" || trust === "unknown" || trust === "external") return "ask" as const
-  return "ask" as const
+  if (risk.level === "high") return "deny" as const
+  if (trust === "community" || trust === "unknown" || trust === "external") return "deny" as const
+  return "deny" as const
 }
 
 async function readManifest(dir: string, ...roots: string[]) {

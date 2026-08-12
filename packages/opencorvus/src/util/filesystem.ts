@@ -1,4 +1,4 @@
-import { access, chmod, link, mkdir, readFile, rename, rm, stat as statAsync, writeFile } from "fs/promises"
+import { access, chmod, link, mkdir, open, readFile, rename, rm, stat as statAsync, writeFile } from "fs/promises"
 import { createWriteStream, existsSync, statSync } from "fs"
 import { lookup } from "mime-types"
 import { realpathSync } from "fs"
@@ -10,7 +10,10 @@ import z from "zod"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { Glob } from "./glob"
 import { traceSync } from "./debug-trace"
-import { renameNoReplace as nativeRenameNoReplace } from "./rename-no-replace"
+import {
+  renameNoReplace as nativeRenameNoReplace,
+  renameNoReplaceWriteThrough as nativeRenameNoReplaceWriteThrough,
+} from "./rename-no-replace"
 import { Flag } from "@/flag/flag"
 
 let temporaryFileSequence = 0
@@ -145,6 +148,80 @@ export namespace Filesystem {
     try {
       await writeFile(tmp, content, mode ? { mode } : undefined)
       await link(tmp, p)
+      return true
+    } catch (error) {
+      if (isEexist(error)) return false
+      throw error
+    } finally {
+      await rm(tmp, { force: true }).catch(() => {})
+    }
+  }
+
+  export async function syncDirectoryMetadata(directory: string): Promise<void> {
+    // Windows namespace durability is provided by MOVEFILE_WRITE_THROUGH.
+    // POSIX requires fsync of each directory whose entries changed.
+    if (process.platform === "win32") return
+    const handle = await open(directory, "r")
+    try {
+      await handle.sync()
+    } finally {
+      await handle.close()
+    }
+  }
+
+  export async function renameDurableNoReplace(source: string, target: string): Promise<void> {
+    const sourceParent = dirname(source)
+    const targetParent = dirname(target)
+    await nativeRenameNoReplaceWriteThrough(source, target)
+    await syncDirectoryMetadata(sourceParent)
+    if (pathResolve(targetParent) !== pathResolve(sourceParent)) await syncDirectoryMetadata(targetParent)
+  }
+
+  /** Create every missing directory entry through the same durable rename
+   * primitive used by deletion manifests, including the first parent entry. */
+  export async function mkdirDurable(directory: string): Promise<void> {
+    const target = pathResolve(directory)
+    try {
+      const info = await statAsync(target)
+      if (!info.isDirectory()) throw new Error(`Durable directory target is not a directory: ${target}`)
+      return
+    } catch (error) {
+      if (!isEnoent(error)) throw error
+    }
+    const parent = dirname(target)
+    if (parent === target) throw new Error(`Cannot durably create filesystem root: ${target}`)
+    await mkdirDurable(parent)
+    const tmp = temporaryPath(target, "durable-directory")
+    await mkdir(tmp)
+    try {
+      await renameDurableNoReplace(tmp, target)
+    } catch (error) {
+      if (!isEexist(error)) throw error
+      const info = await statAsync(target)
+      if (!info.isDirectory()) throw new Error(`Durable directory target is not a directory: ${target}`)
+    } finally {
+      await rm(tmp, { recursive: true, force: true }).catch(() => {})
+    }
+  }
+
+  /** Publish complete bytes before a deletion protocol may rename user state. */
+  export async function writeDurableAtomicIfAbsent(
+    p: string,
+    content: string | Buffer | Uint8Array,
+    mode?: number,
+  ): Promise<boolean> {
+    const dir = dirname(p)
+    await mkdirDurable(dir)
+    const tmp = temporaryPath(p, "durable-create")
+    const handle = await open(tmp, "wx", mode)
+    try {
+      await handle.writeFile(content)
+      await handle.sync()
+    } finally {
+      await handle.close()
+    }
+    try {
+      await renameDurableNoReplace(tmp, p)
       return true
     } catch (error) {
       if (isEexist(error)) return false

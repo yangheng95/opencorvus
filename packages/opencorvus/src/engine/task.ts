@@ -1,5 +1,6 @@
 import { Database, and, eq, inArray, isNull, sql } from "@/storage/db"
 import { EngineTaskTable, type EngineMetadata } from "./engine.sql"
+import { Project } from "@/project/project"
 
 type EngineTaskInsert = typeof EngineTaskTable.$inferInsert
 type EngineTaskSelect = typeof EngineTaskTable.$inferSelect
@@ -25,6 +26,7 @@ export function insertEngineTask(
     timeUpdated: number
   },
 ): void {
+  Project.assertDurableAdmissionOpen(input.projectID)
   db.insert(EngineTaskTable)
     .values({
       id: input.taskID,

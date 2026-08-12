@@ -47,6 +47,8 @@ import { badRequestBody, badRequestOrNamedErrorResponse, errors } from "../error
 import { requestID as resolveRequestID } from "../error-handler"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import type { TaskCancellationOrigin } from "@/engine/cancellation-origin"
+import { PersistedProjectContext } from "@/server/persisted-project-context"
+import { NotFoundError } from "@/storage/db"
 import { MissionDurableActivityCursorSchema, readMissionDurableActivity } from "@/engine/durable-activity"
 import { HttpQueryBoolean, HttpQueryLimit } from "../query-schema"
 import {
@@ -521,7 +523,14 @@ export function MissionRoutes() {
       validator("param", MissionParam),
       validator("json", TaskCancellationRequestBody),
       async (c) => {
-        const session = await missionRouteSession(c.req.valid("param").missionID)
+        const missionID = c.req.valid("param").missionID
+        const session = await getMissionSessionByDirectory({
+          missionID,
+          directory: PersistedProjectContext.currentDirectory(),
+        })
+        if (session.projectID !== PersistedProjectContext.currentProject().id) {
+          throw new NotFoundError({ message: `Mission not found: ${missionID}` })
+        }
         const cancellationOrigin = await closeMissionExecution(
           session,
           "mission.delete",
@@ -586,6 +595,7 @@ export function MissionRoutes() {
           author: "user",
           agent: "mission",
           surface: "panel",
+          userAuthored: true,
           reason: {
             source: "mission.operator",
             missionID,
@@ -701,6 +711,7 @@ export function MissionRoutes() {
           author: "user",
           agent: "mission",
           surface: "panel",
+          userAuthored: true,
           parts: await missionWakeAttachmentParts(input.attachments),
           reason: {
             source: "mission.operator",

@@ -11,8 +11,8 @@ export {
   WorkerTurnDescriptorTable,
   TodoTable,
   TodoSnapshotTable,
-  PermissionTable,
 } from "../session/session.sql"
+export { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicyTable } from "../permission/permission.sql"
 export { SessionShareTable } from "../share/share.sql"
 export { ProjectTable } from "../project/project.sql"
 export { WorkspaceTable } from "../workspace/workspace.sql"

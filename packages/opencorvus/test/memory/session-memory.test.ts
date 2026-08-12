@@ -1087,6 +1087,8 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
         }
         expect(toolSchema.oneOf.map((entry) => entry.properties.action.const)).toEqual([
           "session_read",
+          "project_read",
+          "project_organize",
           "search",
           "get",
           "write",
@@ -1096,7 +1098,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
         const result = await tool.execute({ action: "session_read" }, memoryToolContext(session.id))
         expect({ title: result.title, payload: JSON.parse(result.output) }).toEqual({
           title: "Session memory empty",
-          payload: { document: null },
+          payload: { scope: "session", document: null },
         })
       },
     })
@@ -1208,6 +1210,7 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
         expect({ title: result.title, payload: JSON.parse(result.output) }).toEqual({
           title: "MEMORY.MD",
           payload: {
+            scope: "session",
             document: expect.objectContaining({
               filename: "MEMORY.MD",
               sourceMessageID: summary.id,

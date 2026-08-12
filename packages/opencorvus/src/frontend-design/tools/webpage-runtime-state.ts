@@ -44,12 +44,6 @@ Use this after URL evidence exists when a projected source-acquisition worker ne
     const processIdentity = taskExecutionProcessIdentity(ctx, "Webpage runtime state")
     const evidenceDirectory = await resolveWebpageEvidenceOutputDir({ sessionID: ctx.sessionID })
     const outputDir = evidenceDirectory.absolutePath
-    await ctx.ask({
-      permission: "webpage_runtime_state",
-      patterns: [params.url],
-      always: ["*"],
-      metadata: { url: params.url, outputDir },
-    })
 
     const viewport = {
       width: params.viewport_width ?? DEFAULT_WEBPAGE_EVIDENCE_VIEWPORT.width,

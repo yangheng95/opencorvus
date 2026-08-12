@@ -1,5 +1,5 @@
 import { clearRewindCursorForSession } from "@/engine/rewind"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { provideInitializedProjectExecution } from "../../project/independent-project-owner"
 import { Session } from ".."
 import { SessionContext } from "../context"
@@ -46,7 +46,7 @@ async function continueUserMessage(
     })
     await Session.touch(input.sessionID)
 
-    const permissions: PermissionNext.Ruleset = []
+    const permissions: CapabilityRules.Ruleset = []
     for (const [tool, enabled] of Object.entries(input.tools ?? {})) {
       permissions.push({
         permission: tool,

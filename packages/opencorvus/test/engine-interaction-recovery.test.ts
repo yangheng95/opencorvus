@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import { Bus } from "@/bus"
+import { Config } from "@/config/config"
 import { insertEngineArtifact } from "@/engine/artifact"
 import { agentCoordinationQuestionID } from "@/engine/agent-coordination"
 import { EngineInteraction } from "@/engine/interaction"
@@ -10,7 +11,7 @@ import { Identifier } from "@/id/id"
 import { createOrchestratorInteractionTools } from "@/orchestrator/interaction-tools"
 import { createAnalyzeIntentTool } from "@/orchestrator/analyze-intent-tool"
 import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
-import { PermissionNext } from "@/permission/next"
+import { PermissionAuthority } from "@/permission/authority"
 import { Instance } from "@/project/instance"
 import { Question } from "@/question"
 import { Session } from "@/session"
@@ -82,15 +83,15 @@ async function waitForTaskInteraction(taskID: string) {
 }
 
 describe("recovered pending interaction ownership", () => {
-  test("removes a gracefully abandoned Permission and reconciles an ordinary durable Question after restart", async () => {
+  test("retains a durable Permission and reconciles an ordinary durable Question after restart", async () => {
     await using project = await memoryProject()
     const created = await Instance.provide({
       directory: project.path,
       fn: async () => {
         EngineService.init()
+        await Config.updateProjectPatch({ permission_mode: "ask" })
         const { root, taskID } = await createTaskFixture("ordinary recovered waiters")
         const questionID = Identifier.ascending("question")
-        const permissionID = Identifier.ascending("permission")
         void Question.ask({
           sessionID: root.id,
           requestID: questionID,
@@ -98,32 +99,45 @@ describe("recovered pending interaction ownership", () => {
           expireOnDeadline: false,
         })
         const question = await waitForInteraction(questionID)
-        void PermissionNext.ask({
-          id: permissionID,
-          sessionID: root.id,
-          permission: "recovery.write",
-          patterns: ["fixture"],
-          metadata: { source: "interaction-recovery-test" },
-          always: ["fixture"],
-          ruleset: [{ permission: "recovery.write", pattern: "fixture", action: "ask" }],
-        })
-        const permission = await waitForInteraction(permissionID)
+        let resolvePermission!: (request: PermissionAuthority.Request) => void
+        const asked = new Promise<PermissionAuthority.Request>((resolve) => (resolvePermission = resolve))
+        const stopAsked = Bus.subscribe(PermissionAuthority.Event.Asked, ({ properties }) =>
+          resolvePermission(properties),
+        )
+        const pendingExecution = PermissionAuthority.authorizeAndExecute(
+          {
+            projectID: Instance.project.id,
+            sessionID: root.id,
+            messageID: "msg_recovered_permission",
+            toolCallID: "call_recovered_permission",
+            providerKind: "builtin",
+            providerID: "builtin",
+            toolName: "write",
+            args: { filePath: "recovery.txt", content: "fixture" },
+          },
+          async () => undefined,
+        ).catch((error) => error)
+        const request = await asked
+        stopAsked()
+        const permission = await waitForInteraction(request.id)
         expect([question.status, permission.status]).toEqual(["pending", "pending"])
         return {
           projectID: Instance.project.id,
           taskID,
           questionID,
           questionInteractionID: question.id,
-          permissionID,
+          permissionID: request.id,
+          pendingExecution,
         }
       },
     })
 
     await Instance.disposeAll()
+    expect(await created.pendingExecution).toBeInstanceOf(PermissionAuthority.PermissionPausedError)
     expect({
       permission: findInteractionByExternal(created.permissionID)?.status,
       question: findInteractionByExternal(created.questionID)?.status,
-    }).toEqual({ permission: undefined, question: "pending" })
+    }).toEqual({ permission: "pending", question: "pending" })
 
     await Instance.provide({
       directory: project.path,
@@ -132,9 +146,6 @@ describe("recovered pending interaction ownership", () => {
         const events: Array<{ type: string; requestID: string; timeResolved: number }> = []
         const stopQuestion = Bus.subscribe(Question.Event.Abandoned, ({ properties }) => {
           events.push({ type: "question", requestID: properties.requestID, timeResolved: properties.timeResolved })
-        })
-        const stopPermission = Bus.subscribe(PermissionNext.Event.Abandoned, ({ properties }) => {
-          events.push({ type: "permission", requestID: properties.requestID, timeResolved: properties.timeResolved })
         })
         const timeResolved = Date.now()
         try {
@@ -152,10 +163,14 @@ describe("recovered pending interaction ownership", () => {
               },
             ],
             retainedRecoverableQuestions: [],
+            retainedRecoverablePermissions: [
+              {
+                interactionID: findInteractionByExternal(created.permissionID)!.id,
+                externalID: created.permissionID,
+              },
+            ],
           })
-          expect(events).toEqual([
-            { type: "question", requestID: created.questionID, timeResolved },
-          ])
+          expect(events).toEqual([{ type: "question", requestID: created.questionID, timeResolved }])
           expect({
             pendingCount: pendingInteractionCounts([created.taskID]).get(created.taskID) ?? 0,
             secondPass: await EngineInteraction.reconcileRecoveredPendingWaiters({
@@ -163,12 +178,20 @@ describe("recovered pending interaction ownership", () => {
               timeResolved: timeResolved + 1,
             }),
           }).toEqual({
-            pendingCount: 0,
-            secondPass: { abandoned: [], retainedRecoverableQuestions: [] },
+            pendingCount: 1,
+            secondPass: {
+              abandoned: [],
+              retainedRecoverableQuestions: [],
+              retainedRecoverablePermissions: [
+                {
+                  interactionID: findInteractionByExternal(created.permissionID)!.id,
+                  externalID: created.permissionID,
+                },
+              ],
+            },
           })
         } finally {
           stopQuestion()
-          stopPermission()
         }
       },
     })
@@ -290,6 +313,7 @@ describe("recovered pending interaction ownership", () => {
         })
         expect(receipt).toEqual({
           abandoned: [],
+          retainedRecoverablePermissions: [],
           retainedRecoverableQuestions: [
             {
               interactionID: created.interactionID,
@@ -487,28 +511,29 @@ describe("recovered pending interaction ownership", () => {
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
           finish: "stop",
         })
-        const analyze = spyOn(IntentAnalysisAgent, "analyze").mockImplementation(async () =>
-          ({
-            sessionID: analysisSession.id,
-            finalMessageID: analysisFinal.id,
-            facts: {
-              slots: [],
-              missing: ["scope"],
-              clarifications: [
-                {
-                  header: "Scope",
-                  question: "Which scope should the implementation use?",
-                  options: [
-                    { value: "bounded", label: "Bounded", description: "Use the bounded implementation scope." },
-                  ],
-                  multiple: false,
-                  custom: false,
-                  why_needed: "The implementation boundary must be explicit.",
-                  priority: "blocker",
-                },
-              ],
-            },
-          }) as never,
+        const analyze = spyOn(IntentAnalysisAgent, "analyze").mockImplementation(
+          async () =>
+            ({
+              sessionID: analysisSession.id,
+              finalMessageID: analysisFinal.id,
+              facts: {
+                slots: [],
+                missing: ["scope"],
+                clarifications: [
+                  {
+                    header: "Scope",
+                    question: "Which scope should the implementation use?",
+                    options: [
+                      { value: "bounded", label: "Bounded", description: "Use the bounded implementation scope." },
+                    ],
+                    multiple: false,
+                    custom: false,
+                    why_needed: "The implementation boundary must be explicit.",
+                    priority: "blocker",
+                  },
+                ],
+              },
+            }) as never,
         )
         try {
           const analyzeTool = createAnalyzeIntentTool({
@@ -518,64 +543,61 @@ describe("recovered pending interaction ownership", () => {
             requireTask: () => requireTask(taskID),
           }).analyze_intent
           if (!analyzeTool.execute) throw new Error("analyze_intent is missing its executor")
-          const output = analyzeTool.execute(
-            { reason: "Resolve the implementation scope", attachment_refs: [] },
-            {
-              agentID: "intent-fixture",
-              projectedAgent: {
-                identity: { agentID: "intent-fixture" },
-                packageRevision,
-                virtualWorkflows: {},
-                capabilityOwner: "package",
-                label: "Intent fixture",
-                builtInToolIDs: [],
-                projectedToolIDs: [],
-              },
-              workScope: { kind: "task" },
-              dispatch: {
-                dispatchID: "dispatch_intent_fixture",
-                deliverySliceRevisionIDs: [],
-                adapterInput: {},
-                turn: {
-                  kind: "initial",
-                  current_dispatch_id: "dispatch_intent_fixture",
-                  workflow_binding: {
-                    kind: "direct",
-                    package_revision: {
-                      scope: packageRevision.scope,
-                      project_id: packageRevision.projectID,
-                      namespace: packageRevision.namespace,
-                      id: packageRevision.id,
-                      version: packageRevision.version,
-                      package_digest: packageRevision.packageDigest,
-                    },
-                  },
-                  workflow_node_id: null,
-                  workflow_occurrence_id: "occurrence_intent_fixture",
-                  delivery_slice_revision_ids: [],
-                  evidence_locators: [],
-                  task_authority: {
-                    task_id: taskID,
-                    root_session_id: root.id,
-                    request_sha256: taskRequestSHA256(requireTask(taskID).request),
-                    initial_control_text_parts: [],
+          const output = analyzeTool.execute({ reason: "Resolve the implementation scope", attachment_refs: [] }, {
+            agentID: "intent-fixture",
+            projectedAgent: {
+              identity: { agentID: "intent-fixture" },
+              packageRevision,
+              virtualWorkflows: {},
+              capabilityOwner: "package",
+              label: "Intent fixture",
+              builtInToolIDs: [],
+              projectedToolIDs: [],
+            },
+            workScope: { kind: "task" },
+            dispatch: {
+              dispatchID: "dispatch_intent_fixture",
+              deliverySliceRevisionIDs: [],
+              adapterInput: {},
+              turn: {
+                kind: "initial",
+                current_dispatch_id: "dispatch_intent_fixture",
+                workflow_binding: {
+                  kind: "direct",
+                  package_revision: {
+                    scope: packageRevision.scope,
+                    project_id: packageRevision.projectID,
+                    namespace: packageRevision.namespace,
+                    id: packageRevision.id,
+                    version: packageRevision.version,
+                    package_digest: packageRevision.packageDigest,
                   },
                 },
-                observeSession() {},
-                commitSession() {},
-              },
-              toolOptions: {
-                toolCallId: callID,
-                opencorvus: {
-                  sessionID: root.id,
-                  messageID: message.id,
-                  toolCallID: callID,
-                  toolPartID: part.id,
-                  visibleToolName: "dispatch_agent",
+                workflow_node_id: null,
+                workflow_occurrence_id: "occurrence_intent_fixture",
+                delivery_slice_revision_ids: [],
+                evidence_locators: [],
+                task_authority: {
+                  task_id: taskID,
+                  root_session_id: root.id,
+                  request_sha256: taskRequestSHA256(requireTask(taskID).request),
+                  initial_control_text_parts: [],
                 },
               },
-            } as never,
-          )
+              observeSession() {},
+              commitSession() {},
+            },
+            toolOptions: {
+              toolCallId: callID,
+              opencorvus: {
+                sessionID: root.id,
+                messageID: message.id,
+                toolCallID: callID,
+                toolPartID: part.id,
+                visibleToolName: "dispatch_agent",
+              },
+            },
+          } as never)
           const interaction = await waitForTaskInteraction(taskID)
           expect(interaction.payload.tool).toEqual({ messageID: message.id, callID })
           await EngineService.replyInteraction(interaction.id, {

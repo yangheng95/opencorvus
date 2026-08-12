@@ -48,15 +48,6 @@ export const ListTool = Tool.define("list", {
     const searchPath = path.resolve(Instance.directory, params.path || ".")
     await assertExternalDirectory(ctx, searchPath, { kind: "directory" })
 
-    await ctx.ask({
-      permission: "list",
-      patterns: [searchPath],
-      always: ["*"],
-      metadata: {
-        path: searchPath,
-      },
-    })
-
     const ignoreGlobs = IGNORE_PATTERNS.map((p) => `!${p}*`).concat(params.ignore?.map((p) => `!${p}`) || [])
     const files: string[] = []
     const executionAuthority = Tool.requireExecutionAuthority(ctx)

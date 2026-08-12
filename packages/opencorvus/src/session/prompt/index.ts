@@ -7,6 +7,7 @@ import { SessionPromptState } from "./state"
 import { continuePersistedUserMessage, runSessionPrompt, type PromptRuntimeHooks } from "./run"
 import type { PersistedUserMessageReceipt } from "./parts"
 import type { ExecutionCancellationOrigin } from "./cancellation"
+import z from "zod"
 
 export namespace SessionPrompt {
   export const assertNoOwnedPrompt = SessionPromptState.assertNoOwnedPrompt
@@ -26,21 +27,19 @@ export namespace SessionPrompt {
   export const waitForOwnedFinish = SessionPromptState.waitForOwnedFinish
   export const clearCancellationReceipt = SessionPromptState.clearCancellationReceipt
 
-  export const {
-    LoopInput,
-    loop,
-    resolveTools,
-    createStructuredOutputTool,
-    setSessionRuntimeContract,
-    armSessionRuntimeContractWake,
-    waitForSessionRuntimeContractWakeSettlement,
-    getSessionRuntimeContract,
-    clearSessionRuntimeContract,
-    validateSessionRuntimeContractForContinuation,
-    sessionKindRequiresRuntimeContract,
-    setStepHook,
-    withStepHook,
-  } = SessionLoop
+  export const LoopInput = z.lazy(() => SessionLoop.LoopInput)
+  export const loop = (...args: Parameters<typeof SessionLoop.loop>) => SessionLoop.loop(...args)
+  export const resolveTools = (...args: Parameters<typeof SessionLoop.resolveTools>) => SessionLoop.resolveTools(...args)
+  export const createStructuredOutputTool = (...args: Parameters<typeof SessionLoop.createStructuredOutputTool>) => SessionLoop.createStructuredOutputTool(...args)
+  export const setSessionRuntimeContract = (...args: Parameters<typeof SessionLoop.setSessionRuntimeContract>) => SessionLoop.setSessionRuntimeContract(...args)
+  export const armSessionRuntimeContractWake = (...args: Parameters<typeof SessionLoop.armSessionRuntimeContractWake>) => SessionLoop.armSessionRuntimeContractWake(...args)
+  export const waitForSessionRuntimeContractWakeSettlement = (...args: Parameters<typeof SessionLoop.waitForSessionRuntimeContractWakeSettlement>) => SessionLoop.waitForSessionRuntimeContractWakeSettlement(...args)
+  export const getSessionRuntimeContract = (...args: Parameters<typeof SessionLoop.getSessionRuntimeContract>) => SessionLoop.getSessionRuntimeContract(...args)
+  export const clearSessionRuntimeContract = (...args: Parameters<typeof SessionLoop.clearSessionRuntimeContract>) => SessionLoop.clearSessionRuntimeContract(...args)
+  export const validateSessionRuntimeContractForContinuation = (...args: Parameters<typeof SessionLoop.validateSessionRuntimeContractForContinuation>) => SessionLoop.validateSessionRuntimeContractForContinuation(...args)
+  export const sessionKindRequiresRuntimeContract = (...args: Parameters<typeof SessionLoop.sessionKindRequiresRuntimeContract>) => SessionLoop.sessionKindRequiresRuntimeContract(...args)
+  export const setStepHook = (...args: Parameters<typeof SessionLoop.setStepHook>) => SessionLoop.setStepHook(...args)
+  export const withStepHook = <T>(...args: Parameters<typeof SessionLoop.withStepHook<T>>) => SessionLoop.withStepHook<T>(...args)
   export type SessionRuntimeContract = SessionLoop.SessionRuntimeContract
   export const { ShellInput, shell } = SessionShell
   export type ShellInput = SessionShell.ShellInput

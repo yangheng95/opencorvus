@@ -72,7 +72,7 @@ import {
   artifactProvenanceForSession,
 } from "@/agent/artifact-read-facts"
 import { abortableIterable, withStreamActivity } from "@/util/stream-activity"
-import { PermissionNext } from "@/permission/next"
+import { CapabilityRules } from "@/capability/rules"
 import { ToolRegistry } from "@/tool/registry"
 import { SkillTool } from "@/tool/skill"
 import {
@@ -88,6 +88,8 @@ import { Tool } from "@/tool/tool"
 import { Plugin } from "@/plugin"
 import { InstructionPrompt } from "@/session/instruction"
 import { renderBuildPromptOverlays } from "./prompt-context"
+import { createMergeBackSingleFlight, materializeBuildMergeBackTool } from "./merge-back-tool"
+export { createMergeBackSingleFlight, materializeBuildMergeBackTool } from "./merge-back-tool"
 
 const log = Log.create({ service: "build-agent" })
 
@@ -448,23 +450,6 @@ export async function repairManagedBuildSessionStagedFileParts(input: {
   return { checked, repaired }
 }
 
-export function createMergeBackSingleFlight<T extends { status: string }>(execute: () => Promise<T>): () => Promise<T> {
-  let inFlight: Promise<T> | undefined
-  let merged: T | undefined
-  return async () => {
-    if (merged) return merged
-    if (inFlight) return await inFlight
-    inFlight = execute()
-    try {
-      const result = await inFlight
-      if (result.status === "merged") merged = result
-      return result
-    } finally {
-      if (!merged) inFlight = undefined
-    }
-  }
-}
-
 export function currentProjectCommitPublication(input: { baselineHead?: string; terminalHead?: string }): {
   contributionCommitRef?: string
   publishedCommitRef?: string
@@ -740,53 +725,6 @@ export namespace BuildAgent {
       // Tracks the Host-observed primary HEAD returned by merge_back so it can
       // be attached to the single Build Host observation after the Turn.
       let mergedHead: string | undefined
-      const executeMergeBack = createMergeBackSingleFlight(async () => {
-        const outcome = await Worktree.mergeSafely({
-          branch: worktreeBranch!,
-          worktreeDir: worktreeDir!,
-        })
-        if (outcome.status === "merged") {
-          mergedHead = outcome.primaryHead
-          return MergeBackToolOutputSchema.parse({
-            status: "merged" as const,
-            primary_head: outcome.primaryHead,
-            primary_branch: outcome.primaryBranch,
-            ...(outcome.primaryRecoveryCommit ? { primary_recovery_commit: outcome.primaryRecoveryCommit } : {}),
-          })
-        }
-        if (outcome.status === "conflict") {
-          return MergeBackToolOutputSchema.parse({
-            status: "conflict" as const,
-            primary_branch: outcome.primaryBranch,
-            primary_tip: outcome.primaryTip,
-            conflict_paths: outcome.conflictPaths,
-            hint:
-              "Worktree is in MERGING state with conflict markers in " +
-              "the listed paths. Edit each path to resolve the markers, " +
-              "git add <path>, then `git commit` to finalize the merge. " +
-              "Then call merge_back again to ff-publish into " +
-              outcome.primaryBranch +
-              ".",
-          })
-        }
-        if (outcome.status === "blocked") {
-          return MergeBackToolOutputSchema.parse({
-            status: "blocked" as const,
-            reason: outcome.reason,
-            branch: outcome.branch,
-            worktree_dir: outcome.worktreeDir,
-            ...(outcome.dirtyPaths ? { dirty_paths: outcome.dirtyPaths } : {}),
-            ...(outcome.mergeHead ? { merge_head: true } : {}),
-          })
-        }
-        return MergeBackToolOutputSchema.parse({
-          status: "infra_error" as const,
-          reason: outcome.reason,
-          branch: outcome.branch,
-          ...(outcome.worktreeDir ? { worktree_dir: outcome.worktreeDir } : {}),
-          ...(outcome.stderr ? { stderr: outcome.stderr } : {}),
-        })
-      })
 
       type BuildCollector = Record<string, never>
       const buildCollector: BuildCollector = {}
@@ -798,31 +736,12 @@ export namespace BuildAgent {
         ownsWorktree && worktreeBranch && worktreeDir
           ? (() => {
               const stageTools = {
-                merge_back: tool({
-                  description:
-                    "Publish this Task execution Session's commits onto the project's primary " +
-                    "worktree branch. Runs `git merge <primary>` inside this " +
-                    "worktree, then `git merge --ff-only` on the primary worktree, " +
-                    "atomically under a host-side lock so concurrent Task Sessions do not " +
-                    "race each other.\n\n" +
-                    "Call this after you have committed all changes and verification passed. It is the last git-affecting action of the session. " +
-                    "After a merged result, read final deliverables from the exact primary_head, pass that same full object ID to artifact_snapshot.source_commit, publish typed and Interactive Artifacts from those immutable bytes, then give the final visible assistant message. Do not write files or mutate Git after merge.\n\n" +
-                    "Returns one of:\n" +
-                    "  • {status:'merged', primary_head, primary_branch} — published.\n" +
-                    "  • {status:'conflict', primary_branch, primary_tip, " +
-                    "    conflict_paths[]} — the merge hit textual conflicts. Your " +
-                    "    worktree is now IN MERGING state: each path in conflict_paths " +
-                    "    has `<<<<<<<`/`=======`/`>>>>>>>` markers in place. Edit each " +
-                    "    path to remove the markers (keep both intentions where " +
-                    "    possible; respect owned_paths), `git add <path>`, then once " +
-                    "    all paths are resolved `git commit` — that finalizes the " +
-                    "    merge. Call merge_back again to ff-publish into primary.\n" +
-                    "  • {status:'blocked', reason, dirty_paths?, merge_head?} — repository state " +
-                    "    prevents merge from starting; fix that exact state in this worktree.\n" +
-                    "  • {status:'infra_error', reason} — infrastructure problem; explain it in the final message.",
-                  inputSchema: z.object({}),
-                  execute: executeMergeBack,
-                }),
+                merge_back: materializeBuildMergeBackTool(
+                  { taskID: task.id, branch: worktreeBranch, worktreeDir },
+                  (primaryHead) => {
+                    mergedHead = primaryHead
+                  },
+                ),
               }
               return {
                 tools: stageTools,
