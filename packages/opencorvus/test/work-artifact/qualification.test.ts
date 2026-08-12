@@ -247,6 +247,16 @@ test("PPTX parser supervision maps its wall-clock budget to a bounded error", as
   )
 })
 
+test("PPTX inspection accepts the pinned OfficeCLI chart part closure", async () => {
+  const inspection = await inspectPptxPackage(
+    await presentationWithPart(
+      "ppt/slides/charts/chart1.xml",
+      '<c:chartSpace xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"/>',
+    ),
+  )
+  expect(inspection).toEqual({ slideCount: 1, entryCount: 5, uncompressedBytes: expect.any(Number) })
+})
+
 test("PPTX inspection maps corrupt, macro, and external relationship inputs to explicit errors", async () => {
   await expect(inspectPptxPackage(Buffer.from("not-a-zip"))).rejects.toThrow()
   await expect(inspectPptxPackage(await presentationWithPart("ppt/vbaProject.bin", "macro"))).rejects.toThrow(

@@ -816,8 +816,8 @@ function isSupportedCreatedPptxPart(name: string): boolean {
     /^ppt\/slideLayouts\/_rels\/slideLayout[1-9][0-9]*\.xml\.rels$/.test(name) ||
     /^ppt\/slides\/slide[1-9][0-9]*\.xml$/.test(name) ||
     /^ppt\/slides\/_rels\/slide[1-9][0-9]*\.xml\.rels$/.test(name) ||
-    /^ppt\/charts\/(?:chart|style|colors)[1-9][0-9]*\.xml$/.test(name) ||
-    /^ppt\/charts\/_rels\/chart[1-9][0-9]*\.xml\.rels$/.test(name) ||
+    /^ppt\/slides\/charts\/(?:chart|style|colors)[1-9][0-9]*\.xml$/.test(name) ||
+    /^ppt\/slides\/charts\/_rels\/chart[1-9][0-9]*\.xml\.rels$/.test(name) ||
     /^ppt\/embeddings\/[A-Za-z0-9][A-Za-z0-9._-]*\.xlsx$/i.test(name) ||
     /^ppt\/media\/[A-Za-z0-9][A-Za-z0-9._-]*\.(?:png|jpe?g|gif|webp)$/i.test(name)
   )
