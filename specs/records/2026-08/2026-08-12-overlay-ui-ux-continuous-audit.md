@@ -206,3 +206,13 @@ The final local checks and a second independent read-only review are recorded af
 - root `bun run docs:check`: pass, 338 operations and 25 groups.
 - `git diff --check`: pass.
 - No UI automation test, browser fixture, screenshot baseline, or pixel assertion was added, changed, or run.
+
+### Saturation reset and terminal fixes
+
+The next independent discovery pass found one new P1, so the saturation count was reset instead of declaring completion: web-source anchors were always prevented when tagged for Browser Preview, even when the native preview capabilities were unavailable. The global handler now intercepts only when the controller, native surface, and URL-navigation capability all exist. Otherwise it uses the explicit `open-url` capability, or leaves the real anchor's default navigation untouched.
+
+The second delivery review also found three remaining acceptance gaps, all repaired before the terminal review:
+
+- Scheduled filtered-empty clear now reads the same mutation owner both in its handler and disabled state.
+- The CSS checker explicitly rejects declarations and uses of retired aliases (`--ok`, `--warning`, `--danger`, `--radius`, `--text-dim`, `--text-subtle`, `--surface-raised`, `--border-subtle`, `--focus-ring`) even when a surface attempts to declare them locally.
+- The Mission neutral-state screenshot was regenerated from the exact latest-source path and manually inspected; it contains no red content-validation treatment before a content submission attempt.

@@ -13,6 +13,26 @@ const GLOBAL_TOKEN_ROOTS = [
 // selector subtree look correct while the same token remains invalid elsewhere.
 const CANONICAL_TOKEN_NAMESPACE =
   /^--(?:oc-(?:radius|density|border-width|duration|ease|focus-ring|icon-size|header-gap|font|shadow)|ui-(?:font|gap|line-height|btn|list|control|header|row|state|duration|ease)|text-|surface-|divider|border(?:-|$)|accent(?:-|$)|bad(?:-|$)|good(?:-|$)|warn(?:-|$)|font$|mono$|shadow)/
+const RETIRED_DESIGN_TOKENS = new Set([
+  "--ok",
+  "--warning",
+  "--danger",
+  "--radius",
+  "--radius-lg",
+  "--panel-radius",
+  "--card-radius",
+  "--section-corner",
+  "--oc-button-radius",
+  "--oc-titlebar-status-radius",
+  "--oc-radius-panel",
+  "--oc-radius-card",
+  "--oc-radius-control",
+  "--text-dim",
+  "--text-subtle",
+  "--surface-raised",
+  "--border-subtle",
+  "--focus-ring",
+])
 
 // These variables are assigned by a component or generated document at
 // runtime. Every other fallback-free var() must resolve from the CSS graph
@@ -77,7 +97,7 @@ function cssSource(file: string): string {
 }
 
 function declarationsIn(file: string): Set<string> {
-  return new Set(Array.from(cssSource(file).matchAll(/(--[A-Za-z0-9_-]+)\s*:/g), ({ 1: token }) => token!))
+  return new Set(Array.from(cssSource(file).matchAll(/(?:^|[;{]\s*)(--[A-Za-z0-9_-]+)\s*:/gm), ({ 1: token }) => token!))
 }
 
 function usesIn(file: string): TokenUse[] {
@@ -140,15 +160,31 @@ const nonCanonicalUses = ENTRY_DOCUMENTS.flatMap((entry) =>
   cssFilesForEntry(entry).flatMap((file) =>
     usesIn(file)
       .filter(({ token }) => {
-        return CANONICAL_TOKEN_NAMESPACE.test(token) && !globalTokens.has(token) && !RUNTIME_TOKENS.has(token)
+        return (
+          RETIRED_DESIGN_TOKENS.has(token) ||
+          (CANONICAL_TOKEN_NAMESPACE.test(token) && !globalTokens.has(token) && !RUNTIME_TOKENS.has(token))
+        )
       })
       .map((use) => ({ ...use, entry })),
   ),
 )
-if (nonCanonicalUses.length > 0) {
+const retiredDeclarations = ENTRY_DOCUMENTS.flatMap((entry) =>
+  cssFilesForEntry(entry).flatMap((file) =>
+    [...declarationsIn(file)]
+      .filter((token) => RETIRED_DESIGN_TOKENS.has(token))
+      .map((token) => ({ token, file, entry })),
+  ),
+)
+if (nonCanonicalUses.length > 0 || retiredDeclarations.length > 0) {
   const details = nonCanonicalUses
     .map(({ token, file, line, entry }) =>
       `${entry} -> ${path.relative(OVERLAY_ROOT, file)}:${line}: ${token} is outside the canonical token authority`,
+    )
+    .concat(
+      retiredDeclarations.map(
+        ({ token, file, entry }) =>
+          `${entry} -> ${path.relative(OVERLAY_ROOT, file)}: retired declaration ${token} is forbidden`,
+      ),
     )
     .join("\n")
   throw new Error(`Overlay CSS revives design-token aliases outside styles/tokens or styles/cascade:\n${details}`)

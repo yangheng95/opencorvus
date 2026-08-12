@@ -204,6 +204,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     return automations().length === 0 && !loading() && problem?.source === "list-load" ? problem : null
   })
   function clearFilters(): void {
+    if (busyAction()) return
     setSearch("")
     setFilter("all")
     setScopeFilter("all")
@@ -679,7 +680,14 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                   <SettingsEmpty>
                     <span>{filtersActive() ? t("automations.filtered_empty") : t("automations.empty")}</span>
                     <Show when={filtersActive()}>
-                      <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={clearFilters}>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        tone="neutral"
+                        disabled={Boolean(busyAction())}
+                        onClick={clearFilters}
+                      >
                         {t("automations.clear_filters")}
                       </Button>
                     </Show>

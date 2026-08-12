@@ -34,6 +34,10 @@ import { LogViewer } from "./components/LogViewer"
 import { FileExplorerPanel } from "./components/FileExplorerPanel"
 import { FileChangesPanel, type FileChangesActiveView } from "./components/FileChangesPanel"
 import { BrowserPreviewPanel, type BrowserPreviewPanelController } from "./components/BrowserPreviewPanel"
+import {
+  browserPreviewNativeSurfaceAvailable,
+  browserPreviewNativeUrlNavigationAvailable,
+} from "./services/browser-preview-native"
 import { browserPreviewRevision } from "./services/browser-preview"
 import { ScreenshotBrowserPanel } from "./components/ScreenshotBrowserPanel"
 import { SubagentConversationPanel } from "./components/SubagentConversationPanel"
@@ -1578,16 +1582,21 @@ document.addEventListener(
     const href = previewUrl || anchor.getAttribute("href") || ""
     if (!/^https?:\/\//i.test(href)) return
     const canOpenExternalUrl = getHostTransport().capabilities.nativeCommands["open-url"]
-    if (!previewUrl && !canOpenExternalUrl) return
+    const canOpenBrowserPreview =
+      Boolean(previewUrl) &&
+      Boolean(primaryBrowserPreviewController) &&
+      browserPreviewNativeSurfaceAvailable() &&
+      browserPreviewNativeUrlNavigationAvailable()
+    if (!canOpenBrowserPreview && !canOpenExternalUrl) return
     ev.preventDefault()
     runMainAsync("browser-preview.open-url", async () => {
       try {
-        if (previewUrl) {
+        if (canOpenBrowserPreview) {
           openBrowserPreviewFromMessage(previewUrl)
           return
         }
         if (!canOpenExternalUrl) return
-        await nativeOpen(href)
+        await nativeOpen(previewUrl || href)
       } catch (error) {
         console.error("[ui] Failed to open external link", error)
         reportError({
