@@ -211,6 +211,26 @@ jobs:
           OPENCORVUS_CHANNEL: latest
         run: bun run package:binary-matrix
 
+      - name: Verify packaged Work Artifact lifecycle
+        run: |
+          set -euo pipefail
+          verified=0
+          for bundle in \
+            "packages/opencorvus/dist/opencorvus-${{ matrix.platform }}" \
+            "packages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline"; do
+            if [[ ! -d "$bundle" ]]; then
+              continue
+            fi
+            name="$(basename "$bundle")"
+            evidence="packages/opencorvus/dist/work-artifact-qualification-${name}.json"
+            bun packages/opencorvus/script/check-work-artifact-profile.ts \
+              --profile office.presentation@1 \
+              --package-root "$bundle" | tee "$evidence"
+            verified=$((verified + 1))
+          done
+          test "$verified" -gt 0
+          echo "Work Artifact packaged lifecycle passed for $verified ${{ matrix.platform }} bundle(s)." >> "$GITHUB_STEP_SUMMARY"
+
       - name: Upload CLI artifact
         uses: actions/upload-artifact@v7
         with:
@@ -220,6 +240,7 @@ jobs:
             packages/opencorvus/dist/opencorvus-${{ matrix.platform }}.tar.gz
             packages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline
             packages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline.tar.gz
+            packages/opencorvus/dist/work-artifact-qualification-opencorvus-${{ matrix.platform }}*.json
           if-no-files-found: error
           retention-days: 7
 

@@ -69,7 +69,7 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     { SchedulerMessageTool },
     { AnalyticsTool },
     { PublishInteractiveArtifactTool },
-    { OfficeArtifactInspectTool, OfficeArtifactAuthorTool, OfficeArtifactValidateTool, OfficeArtifactDeliverTool },
+    { WorkArtifactInspectTool, WorkArtifactAuthorTool, WorkArtifactValidateTool, WorkArtifactDeliverTool },
     { ArtifactSearchTool, ArtifactReadTool, ArtifactSelectTool, ArtifactSnapshotTool, ArtifactPublishTool },
     { ExpertSquadAuthorTool },
     { CapabilitySearchTool },
@@ -98,7 +98,7 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     import("./scheduler-message"),
     import("./analytics"),
     import("./publish-interactive-artifact"),
-    import("./office-artifact"),
+    import("./work-artifact"),
     import("./artifact-catalog"),
     import("./expert-squad-author"),
     import("./capability-search"),
@@ -151,10 +151,10 @@ async function loadBuiltInGlobalTools(): Promise<readonly Tool.Info[]> {
     ExpertSquadAuthorTool,
     CapabilitySearchTool,
     PublishInteractiveArtifactTool,
-    OfficeArtifactInspectTool,
-    OfficeArtifactAuthorTool,
-    OfficeArtifactValidateTool,
-    OfficeArtifactDeliverTool,
+    WorkArtifactInspectTool,
+    WorkArtifactAuthorTool,
+    WorkArtifactValidateTool,
+    WorkArtifactDeliverTool,
   ])
 }
 

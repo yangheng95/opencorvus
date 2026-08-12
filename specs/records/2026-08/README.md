@@ -2,6 +2,8 @@
 
 - [2026-08-12-v0.0.42-beta-actions-green-release.md](2026-08-12-v0.0.42-beta-actions-green-release.md) records the Actions root-cause repair, canonical version synchronization, all-green source gate, native Release publication, updater promotion, and public website verification for `v0.0.42-beta`.
 
+- [2026-08-12-work-artifact-harness-p0-implementation.md](2026-08-12-work-artifact-harness-p0-implementation.md) implements the qualified PPTX slice on the unified Work Artifact profile, Skill, typed lifecycle, validation-receipt, runtime-manifest, package-permission, and supervised acceptance infrastructure.
+
 - [2026-08-12-work-artifact-harness-and-skill-infrastructure.md](2026-08-12-work-artifact-harness-and-skill-infrastructure.md) audits the current PPTX-only production closure and defines one Skill-first Work Artifact Harness, qualified profile registry, pinned runtime catalog, open-source format roadmap, deterministic binary/data permissions, and real packaged-runtime acceptance boundary.
 
 - [2026-08-12-promotion-case-engine-strategy.md](2026-08-12-promotion-case-engine-strategy.md) defines the evidence-led promotion case portfolio, repeatable media factory, distribution system, measurement funnel, and first 30-day execution plan.

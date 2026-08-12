@@ -7,6 +7,8 @@ import { fileURLToPath } from "url"
 import { copyReleaseFile } from "../../../script/copy-release-file"
 import { desktopUpdateEndpoint } from "../../../script/desktop-update-channel"
 import { runTimedStage } from "../../../script/timed-stage"
+import { writeOverlayPayloadStamp } from "../../opencorvus/script/build-overlay-payload-stamp"
+import { finalizeWorkArtifactPackage } from "../../opencorvus/script/finalize-work-artifact-package"
 
 import {
   overlayArchFromNode,
@@ -130,6 +132,14 @@ await runTimedStage("Embedded backend build", async () => {
 if (!(await exists(distServer))) {
   throw new Error(`Bundled opencorvus binary not found at ${distServer}`)
 }
+await finalizeWorkArtifactPackage({
+  root: distServerDir,
+  target: {
+    os: hostPlatform === "windows" ? "win32" : hostPlatform,
+    arch: hostArch,
+  },
+})
+await writeOverlayPayloadStamp(distServerDir)
 
 await cleanBuildResidue()
 

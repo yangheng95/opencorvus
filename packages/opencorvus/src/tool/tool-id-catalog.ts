@@ -3,9 +3,9 @@ import {
   PLATFORM_ARTIFACT_PUBLISH_TOOL_IDS,
   PLATFORM_ARTIFACT_TOOL_IDS,
 } from "./platform-artifact-tool-ids"
-import { OFFICE_ARTIFACT_TOOL_IDS } from "@/work/harness"
+import { WORK_ARTIFACT_TOOL_IDS } from "@/work/harness"
 
-export { OFFICE_ARTIFACT_TOOL_IDS } from "@/work/harness"
+export { WORK_ARTIFACT_TOOL_IDS } from "@/work/harness"
 
 export const BATCH_TOOL_ID = "batch" as const
 export const PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS = ["capability_search"] as const
@@ -25,7 +25,7 @@ export const GLOBAL_TOOL_IDS = [
   ...PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS,
   ...TASK_ARTIFACT_TOOL_IDS,
   "publish_interactive_artifact",
-  ...OFFICE_ARTIFACT_TOOL_IDS,
+  ...WORK_ARTIFACT_TOOL_IDS,
   "read",
   "glob",
   "search_code",

@@ -108,6 +108,15 @@ describe("GitHub Actions workflow contract", () => {
       prepare_compile_runtimes: "true",
     })
     expect(jobs["package-cli"]?.steps?.map(({ run }) => run)).toContain("bun run package:binary-matrix")
+    const workArtifactQualification = jobs["package-cli"]?.steps?.find(
+      ({ name }) => name === "Verify packaged Work Artifact lifecycle",
+    )
+    expect(workArtifactQualification?.run).toContain(
+      "bun packages/opencorvus/script/check-work-artifact-profile.ts \\",
+    )
+    expect(workArtifactQualification?.run).toContain("--profile office.presentation@1 \\")
+    expect(workArtifactQualification?.run).toContain('--package-root "$bundle" | tee "$evidence"')
+    expect(workArtifactQualification?.run).toContain('test "$verified" -gt 0')
     for (const job of ["package-overlay", "package-cli"]) {
       expect(jobs[job]?.steps?.find(({ name }) => name?.startsWith("Install Windows"))).toEqual({
         name:
@@ -121,7 +130,7 @@ describe("GitHub Actions workflow contract", () => {
     }
     expect(jobs["package-cli"]?.steps?.find(({ uses }) => uses === "actions/upload-artifact@v7")?.with).toEqual({
       name: "cli-${{ matrix.platform }}",
-      path: "packages/opencorvus/dist/opencorvus-${{ matrix.platform }}\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}.tar.gz\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline.tar.gz\n",
+      path: "packages/opencorvus/dist/opencorvus-${{ matrix.platform }}\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}.tar.gz\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline.tar.gz\npackages/opencorvus/dist/work-artifact-qualification-opencorvus-${{ matrix.platform }}*.json\n",
       "if-no-files-found": "error",
       "retention-days": 7,
     })

@@ -24,6 +24,10 @@ export namespace Process {
     nothrow?: boolean
     inactivityTimeoutMs?: number
     inactivityTimeoutMessage?: string
+    /** Hard wall-clock limit independent of stdout/stderr activity. */
+    timeoutMs?: number
+    /** Maximum combined stdout and stderr bytes retained in memory. */
+    maxOutputBytes?: number
     /** Binary standard-input chunks written with backpressure through the owned supervisor handle. */
     input?: AsyncIterable<Uint8Array>
     /** Observes the successful creation of the supervised child process. */
@@ -62,11 +66,17 @@ export namespace Process {
     terminate(): Promise<void>
   }
 
-  function collectOutput(stream: NodeJS.ReadableStream, onActivity: () => void): Promise<Buffer> {
+  function collectOutput(
+    stream: NodeJS.ReadableStream,
+    onActivity: () => void,
+    acceptBytes: (bytes: number) => number,
+  ): Promise<Buffer> {
     const chunks: Buffer[] = []
     return new Promise((resolve, reject) => {
       stream.on("data", (chunk) => {
-        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+        const bytes = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk)
+        const retained = acceptBytes(bytes.byteLength)
+        if (retained > 0) chunks.push(retained === bytes.byteLength ? bytes : bytes.subarray(0, retained))
         onActivity()
       })
       stream.once("end", () => resolve(Buffer.concat(chunks)))
@@ -296,6 +306,8 @@ export namespace Process {
     let stdout: Buffer
     let stderr: Buffer
     let inactivityTimedOut = false
+    let wallClockTimedOut = false
+    let outputLimitExceeded = false
     let inactivityTimer: ReturnType<typeof setTimeout> | undefined
     const inactivityTimeoutMessage =
       opts.inactivityTimeoutMessage ??
@@ -315,8 +327,18 @@ export namespace Process {
       inactivityTimer.unref?.()
     }
     const onProcessActivity = () => refreshInactivityTimer()
-    const stdoutBuffered = collectOutput(handle.stdout, onProcessActivity)
-    const stderrBuffered = collectOutput(handle.stderr, onProcessActivity)
+    let outputBytes = 0
+    const acceptBytes = (bytes: number) => {
+      const retained = opts.maxOutputBytes === undefined ? bytes : Math.max(0, Math.min(bytes, opts.maxOutputBytes - outputBytes))
+      outputBytes += bytes
+      if (opts.maxOutputBytes !== undefined && outputBytes > opts.maxOutputBytes && !outputLimitExceeded) {
+        outputLimitExceeded = true
+        requestTermination()
+      }
+      return retained
+    }
+    const stdoutBuffered = collectOutput(handle.stdout, onProcessActivity, acceptBytes)
+    const stderrBuffered = collectOutput(handle.stderr, onProcessActivity, acceptBytes)
     let inputFailure: unknown
     const inputWritten = opts.input
       ? (handle.stdin
@@ -330,6 +352,13 @@ export namespace Process {
     if (opts.inactivityTimeoutMs !== undefined) {
       refreshInactivityTimer()
     }
+    const wallClockTimer =
+      opts.timeoutMs === undefined
+        ? undefined
+        : setTimeout(() => {
+            wallClockTimedOut = true
+            requestTermination()
+          }, opts.timeoutMs)
     const processCompleted = Promise.all([handle.exited, stdoutBuffered, stderrBuffered, inputWritten])
     const terminationCompleted = terminationRequested.then(async (cleanup) => {
       const terminatedCode = await cleanup
@@ -345,6 +374,7 @@ export namespace Process {
       primaryError = error
       throw error
     } finally {
+      if (wallClockTimer) clearTimeout(wallClockTimer)
       clearInactivityTimer()
       opts.abort?.removeEventListener("abort", abort)
       try {
@@ -361,6 +391,8 @@ export namespace Process {
       const separator = stderr.length > 0 && !stderr.toString().endsWith("\n") ? "\n" : ""
       stderr = Buffer.concat([stderr, Buffer.from(`${separator}${inactivityTimeoutMessage}`)])
     }
+    if (wallClockTimedOut) throw new Error(`Process timed out after ${opts.timeoutMs}ms: ${command.join(" ")}`)
+    if (outputLimitExceeded) throw new Error(`Process output exceeded ${opts.maxOutputBytes} bytes: ${command.join(" ")}`)
     const out = {
       code,
       stdout,

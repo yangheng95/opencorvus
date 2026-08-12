@@ -13,7 +13,7 @@ import {
   WORKER_COMMUNICATION_TOOL_IDS,
 } from "@/tool/tool-id-catalog"
 import { VISUAL_QA_STATIC_TOOL_IDS } from "@/visual-qa/static-tools"
-import { OFFICE_ARTIFACT_TOOL_IDS } from "@/work/harness"
+import { WORK_ARTIFACT_TOOL_IDS } from "@/work/harness"
 import type { AgentRoleID } from "./role-contract"
 import type { RuntimeTemplateID } from "./runtime-template-id"
 
@@ -265,7 +265,7 @@ export const runtimeTemplateAssignments = Object.freeze({
 export const roleAssignments = Object.freeze({
   coding: createToolPool({ global: codingGlobal }),
   chat: createToolPool({ global: [...codingGlobal, "panel"] }),
-  work: createToolPool({ global: [...codingGlobal, "panel", ...OFFICE_ARTIFACT_TOOL_IDS] }),
+  work: createToolPool({ global: [...codingGlobal, "panel", ...WORK_ARTIFACT_TOOL_IDS] }),
   compaction: createToolPool({}),
   title: createToolPool({}),
   summary: createToolPool({}),

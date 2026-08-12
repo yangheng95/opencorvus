@@ -2,6 +2,8 @@
 
 Latest all-green `v0.0.42-beta` release: [`2026-08-12-v0.0.42-beta-actions-green-release.md`](records/2026-08/2026-08-12-v0.0.42-beta-actions-green-release.md).
 
+Latest supervised Work Artifact Harness P0 implementation: [`2026-08-12-work-artifact-harness-p0-implementation.md`](records/2026-08/2026-08-12-work-artifact-harness-p0-implementation.md).
+
 Latest Skill-first Work Artifact Harness and packaged runtime strategy: [`2026-08-12-work-artifact-harness-and-skill-infrastructure.md`](records/2026-08/2026-08-12-work-artifact-harness-and-skill-infrastructure.md).
 
 Latest promotion case engine strategy: [`2026-08-12-promotion-case-engine-strategy.md`](records/2026-08/2026-08-12-promotion-case-engine-strategy.md).

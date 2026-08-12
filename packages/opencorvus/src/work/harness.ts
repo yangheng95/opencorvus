@@ -5,17 +5,14 @@ import PROMPT_SYSTEM from "@/session/prompt/system.txt"
 
 export const WORK_AGENT_ID = "work" as const
 
-export const OFFICE_ARTIFACT_TOOL_IDS = [
-  "office_artifact_inspect",
-  "office_artifact_author",
-  "office_artifact_validate",
-  "office_artifact_deliver",
-] as const
-
-export const WORK_PARENT_ONLY_TOOL_IDS = ["office_artifact_deliver"] as const
+export {
+  WORK_ARTIFACT_TOOL_IDS,
+  WORK_ARTIFACT_PARENT_ONLY_TOOL_IDS as WORK_PARENT_ONLY_TOOL_IDS,
+} from "@/work-artifact/profile-registry"
+import { WORK_ARTIFACT_PARENT_ONLY_TOOL_IDS, WORK_ARTIFACT_TOOL_IDS } from "@/work-artifact/profile-registry"
 
 export const WORK_DEFAULT_CAPABILITY_ASSIGNMENT = Object.freeze({
-  skill_refs: ["office-artifacts"] as readonly string[],
+  skill_refs: ["work-artifacts"] as readonly string[],
   mcp_server_refs: [] as readonly string[],
 })
 
@@ -30,9 +27,9 @@ export const WORK_RUNTIME_PROMPT = [
     "",
     "Use only sources actually available in the current project, attachments, installed Skills, connected Model Context Protocol servers, or web tools. Never imply that a source was read, an app was connected, an approval was granted, or a deliverable was created unless the corresponding tool or session evidence exists.",
     "",
-    "For office deliverables, call `skill` to load the exact mounted Work Skill before authoring. Use only its typed Work production tools; do not invoke an underlying office binary through Bash, install a runtime, or invent a file path. Author, validate, inspect every fresh render, repair if necessary, ask one delegated Work child for independent review when quality materially benefits, and publish the final deliverable only from this parent Work conversation.",
+    "For structured Work deliverables, call `skill` to load the exact mounted `work-artifacts` Skill before authoring. Use only its typed Work Artifact lifecycle tools; do not invoke an underlying binary through Bash, install a runtime, or invent a file path. Author, validate, inspect every fresh render, repair if necessary, ask one delegated Work child for independent review when quality materially benefits, and publish the final deliverable only from this parent Work conversation.",
     "",
-    "When independent research, analysis, or production can materially improve speed or quality, use `delegate_agent` for bounded parallel work. A delegated Work child may inspect and validate but cannot publish the final office deliverable. Keep requirements, decisions, and the assembled deliverable in the main thread; return consolidated findings instead of flooding it with raw logs.",
+    "When independent research, analysis, or production can materially improve speed or quality, use `delegate_agent` for bounded parallel work. A delegated Work child may inspect and validate Work Artifacts but cannot publish the final deliverable. Keep requirements, decisions, and the assembled deliverable in the main thread; return consolidated findings instead of flooding it with raw logs.",
     "",
     "Produce the first usable, review-ready deliverable rather than stopping at advice about how the user could make it. Validate important facts, preserve requested constraints, call out unresolved assumptions, and support follow-up refinement in the same conversation.",
     "",

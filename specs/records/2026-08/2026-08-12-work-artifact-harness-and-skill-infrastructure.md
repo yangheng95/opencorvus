@@ -1,6 +1,23 @@
 # Work Artifact Harness 与 Skill 基建统一方案
 
-Status: design complete; implementation not started
+Status: implementation started; P0 decisions refined below
+
+## P0 implementation decisions (2026-08-12)
+
+- Qualification records an explicit isolation level. `network_denied` remains the release bar for runtimes with a
+  real engine or operating-system enforcement and an external-connectivity checker. The existing OfficeCLI adapter
+  is honestly classified `adapter_inputs_only`: canonical local inputs, isolated user/config/cache/temp roots,
+  disabled updater and resident mode, but no claim of an operating-system network sandbox. This profile may retain
+  the pre-existing PPTX production surface, but its qualification record and Skill must expose that limitation; a
+  boolean `network: denied` without enforcement is forbidden.
+- P0 does not expose `transform` for PPTX because the adapter has no qualified existing-file transform. The shared
+  operation catalog grows only when a profile has a real implementation and checker.
+- The current native release contract uses `tar.gz` on every platform. P0 validates its archive headers and performs
+  an extracted-runtime smoke lifecycle; a later archive-format migration may choose ZIP for Windows only together
+  with release-contract, updater and installer changes. P0 does not silently change the established asset format.
+- Final target manifests record signature evidence. macOS requires verified `codesign` identity; Linux records
+  `not_applicable`; Windows records `policy_not_required` until the release policy actually requires Authenticode.
+  Staging manifests are explicitly marked `staging` and are rejected by the runtime/final package checker.
 
 ## Recall
 
@@ -26,7 +43,7 @@ Status: design complete; implementation not started
 - Skill 负责逐步披露、工作方法、格式知识、质量检查和审阅指导；Harness 负责安全、资源限制、权限、运行时选择和结果真实性。
 - 每项能力只有一个当前实现和一个事实来源；替换 Office 专用面后同步删除旧工具和旧 Skill，不保留兼容层。
 - 所有 LLM 交互继续流式；产物、预览、验证回执和交付消息都由真实参与者产生。
-- 本轮只产出调查与实施方案，不修改运行时代码或 UI（User Interface，用户界面），也不运行 UI 自动化测试。
+- 用户在方案落盘后明确要求“开始实施并用独立 agent 监督”，因此本轮继续实施 P0 运行时代码、Skill、打包和真实 checker；仍不修改 UI（User Interface，用户界面），也不运行 UI 自动化测试。
 
 ### 已读资料与全仓搜索
 
@@ -183,7 +200,7 @@ Profile registry 决定工具 schema、可见能力、Skill reference、运行�
 - 输入必须是当前 Task/Conversation 已授权的资源引用；Harness 自己解析受控路径。
 - 每次调用使用新的任务局部目录、配置目录、缓存目录和临时目录，禁止读取用户主目录配置。
 - Harness 启动运行时前必须用生成的 `target-package-manifest.json` 校验最终包内摘要、目标架构和平台签名；不得在运行时拿已经签名的文件与上游下载摘要比较。
-- 默认无网络、无自动更新、无插件/扩展安装、无常驻服务。`network: denied` 不是描述性标记：每个 runtime adapter 必须声明并执行唯一强制机制，优先顺序是编译时移除网络协议/包解析器、引擎级关闭 external access 与扩展、只传入已打开的受控文件描述符；仍保留网络能力的进程必须进入目标平台可验收的网络沙箱，否则该 profile 不得 qualified。
+- 默认无自动更新、无插件/扩展安装、无常驻服务，并显式记录网络隔离等级。`network_denied` 不是描述性标记：每个声明该等级的 runtime adapter 必须执行唯一强制机制，优先顺序是编译时移除网络协议/包解析器、引擎级关闭 external access 与扩展、只传入已打开的受控文件描述符；仍保留网络能力的进程必须进入目标平台可验收的网络沙箱。仅限制输入、隔离配置并关闭已知更新路径的 adapter 必须标为 `adapter_inputs_only`，不得冒充完全断网。
 - DuckDB 必须关闭 external access、扩展安装/自动加载和用户 init；Typst 禁止 package resolution 与 URL 资源；pdfcpu 禁止远程图片、CRL（Certificate Revocation List，证书吊销列表）和 OCSP（Online Certificate Status Protocol，在线证书状态协议）等外联路径；Tesseract.js 的 worker、core 和语言模型只能从包内摘要锁定路径加载。每个 adapter 的具体开关由实现期 spike 以当前版本官方契约确认，不能在本设计里猜参数。
 - 由 ProcessSupervisor 统一实施超时、输出上限、子进程所有权、取消和结算；不得直接 `spawn` 后遗留进程。
 - 解析不可信压缩包、PDF、媒体或图片时同时限制压缩前字节、解压后字节、条目、页/帧、像素、递归深度、CPU 时间和墙钟时间。
@@ -265,8 +282,8 @@ Skill profile-set
 
 - 名称、版本、上游仓库、tag、commit、许可证表达式和必须随包分发的 LICENSE/NOTICE。
 - 每个目标的 URL、压缩格式、最大下载字节、SHA-256、解包后相对路径、文件类别和 smoke 参数。
-- `network: denied`、`updates: disabled`、`resident: false`、配置/缓存目录策略。
-- 网络策略必须引用对应 runtime adapter 的可执行 enforcement ID 和外联拒绝 checker；只有布尔标记而没有强制实现时构建失败。
+- `network_isolation: network_denied | adapter_inputs_only`、`updates: disabled`、`resident: false`、配置/缓存目录策略。
+- `network_denied` 策略必须引用对应 runtime adapter 的可执行 enforcement ID 和外联拒绝 checker；`adapter_inputs_only` 必须列出精确输入/配置隔离机制和未满足的网络沙箱边界。两者都不能只有无法执行的布尔标签。
 - 构建来源。上游有可信二进制时使用固定上游资产；只有源码时记录可复现构建容器、编译器、配置和源码签名。
 - WASM、字体、模板、OCR 模型进入同一锁的 `dataAssets`，但类别不是 executable。
 
@@ -290,7 +307,7 @@ Skill profile-set
 1. 下载前限制字节；下载后校验上游摘要；安全解包后校验路径和文件类别。
 2. 复制到 staging 后按 manifest 显式归一权限；递归 magic/扩展名识别只做“有无漏登记”的闭包审计，不决定 chmod。
 3. macOS 在权限归一后对可执行程序、共享库和 app 闭包签名，再验证 `codesign --verify --deep --strict`；Windows 若使用 Authenticode，也在来源摘要校验后签名。签名会改变字节，因此上游摘要只留在 runtime lock，签名后 staging 摘要写入生成的 target package manifest，不能混为同一个 hash。
-4. POSIX 命令行发行使用能可靠保存模式的 `tar.gz`；Windows 使用 ZIP。若提供 AppImage、DEB、RPM 或 DMG，其包元数据也必须通过同一权限 checker。
+4. 当前命令行发行沿用能可靠枚举包内 header 的 `tar.gz`，包括 Windows；checker 仍按目标平台解释权限并执行解包后 smoke。若未来把 Windows 迁为 ZIP，必须同批修改 release asset、updater 和 installer 契约。若提供 AppImage、DEB、RPM 或 DMG，其包元数据也必须通过同一权限 checker。
 5. 归档完成后读取归档头，逐项验证 manifest 中 executable 为 `0755`、共享库和数据为 `0644`；解包 smoke 后再运行 `--version` 或等价只读命令。
 6. Windows 不模拟 POSIX chmod。验证目标是普通文件、target package manifest 中的签名后 SHA-256、PE 架构、Authenticode（如发行策略要求）以及能够由打包后的 OpenCorvus 启动。
 7. 运行时只修复 OpenCorvus 自己包目录/临时目录中的模式，绝不递归 chmod 用户输入、项目或主目录。
@@ -305,7 +322,7 @@ Skill profile-set
 
 1. 新增 profile registry、统一 runtime lock schema 和生成的 qualification matrix。
 2. 把现有 OfficeCLI 条目迁入新锁，保持精确版本、许可、摘要和隔离策略。
-3. 实现五个格式无关工具与 Harness；用 `office.presentation@1` 证明完整生命周期。
+3. 实现格式无关的 inspect/author/validate/deliver 工具与 Harness；PPTX 不声明尚未实现的 transform。
 4. 新增 `work-artifacts` Skill 和 PPTX reference；生成内置 Skill payload。
 5. 新增聚焦正向测试：真实 inspect/author/transform（若 profile 声明）/validate/deliver 输出、摘要绑定、逐页预览和目标包 smoke。
 6. 对等通过后同一提交删除 `office_artifact_*`、`office-artifacts` 和 Office 专用运行时装配，不保留别名或 fallback。
@@ -354,7 +371,7 @@ Skill profile-set
 1. 校验 runtime lock 的上游来源摘要、生成的 target package manifest、许可证、权限/ACL、架构和签名，并从签名后的包内路径实际启动 OfficeCLI 等每个 executable。
 2. 从打包路径启动 OpenCorvus，而不是引用源码工作区依赖。
 3. 对每个 qualified profile 跑一个小型真实生命周期，读取新生成预览并验证精确输出。
-4. 正常样例断网运行，并对每个 runtime adapter 注入可观察的外联目标，确认在联网宿主上外联尝试也被强制拒绝；同时确认无用户级配置读取、无扩展安装。
+4. `network_denied` 样例断网运行，并对 runtime adapter 注入可观察的外联目标，确认在联网宿主上外联尝试也被强制拒绝；`adapter_inputs_only` 样例验证 canonical local inputs、用户级配置隔离、禁更新/扩展/常驻，并在报告中保留未提供操作系统断网的精确边界。
 5. 记录包体积增量、冷启动耗时、峰值内存、执行时间和失败类型；超过 profile 预算即不进入 registry。
 
 ## 9. 需要实现前量化的未知项

@@ -346,7 +346,7 @@ Skill definition 错误而失败，真正访问 Skill catalog 时仍保留严格
 `platforms` 是 Hermes 可移植扩展，唯一公开值域是 `windows | macos | linux`；Node.js 的
 `win32 | darwin | linux` 只在 Skill mount eligibility 边界映射一次，不能写入或导出为 Skill metadata。
 
-当前全局内置 inventory 包含 `design-taste-frontend`、`grill-me`、`office-artifacts` 和
+当前全局内置 inventory 包含 `design-taste-frontend`、`grill-me`、`work-artifacts` 和
 `research-report`。inventory 本身不代表 Agent 可调用：
 
 - `advanced` manifest 的 scheduler 与精确 `requirement-engineer` worker 各自通过 `default_skill_refs`
@@ -360,22 +360,26 @@ Skill definition 错误而失败，真正访问 Skill catalog 时仍保留严格
   `base_role` 或 runtime template 自动推断的前端 Skill；
 - native Chat 与 Work 都不继承 `advanced` 的生产投影。各自的
   `primary_assistant_capabilities.<chat|work>.skill_refs` 是唯一持久默认授权；Work harness
-  默认分配 `office-artifacts`，Chat 默认为空，二者通过同一个参数化 capability 实现读写但绝不
+  默认分配 `work-artifacts`，Chat 默认为空，二者通过同一个参数化 capability 实现读写但绝不
   互相覆盖。默认项进入对应 conversation turn 并可由模型自动发现；Chat Composer 的 `@skill` 菜单则读取
   当前项目完整 installed Skill catalog。用户可见文本中的精确 `@skill("<name>")` 由 Overlay 与
   server 共用同一 directive parser，server 只把点名且已安装的 Skill 增挂到该次 Chat turn 的同一个
   `skill` surface。显式点名不会写回项目配置、session overlay 或其他 shadow state；下一 turn 未再次
   点名时仍只保留默认授权，未默认且未点名的 Skill 继续不可搜索、不可加载；
-- `office-artifacts` 是平台唯一办公材料 Skill，只指导同一个 Office Artifact Harness 的
-  `office_artifact_inspect | office_artifact_author | office_artifact_validate |
-office_artifact_deliver` typed tools，不拥有第二套 serializer。当前正向生产面只声明
-  `format: "presentation"` 的新 PPTX authoring；DOCX/XLSX 与 existing-file editing 必须等同一
-  harness 的 corpus qualification 完成后扩展 discriminated schema，禁止增加平行格式 Skill、库或
-  兼容 tool identity。OfficeCLI 固定 runtime、license 与 lock manifest 随每个 native bundle
-  自包含分发；packager 以固定入口加 Portable Executable（PE）、Executable and Linkable Format
-  （ELF）、Mach-O 与原生 module/library magic discovery 构造完整 binary closure。所有发现的 native
-  binary 在类 Unix package boundary 统一规范为 mode `0755`，并在归档前后执行 presence、version、
-  signing 与 archive-mode 验证；
+- `work-artifacts` 是平台唯一结构化工作产物 Skill，只指导同一个 Work Artifact Harness 的
+  `work_artifact_inspect | work_artifact_author | work_artifact_validate |
+work_artifact_deliver` typed tools，不拥有第二套 serializer。profile registry 是格式、操作、Skill
+  resource、runtime、限制和 qualification 的唯一公开目录；当前资格矩阵只声明
+  `office.presentation@1` 的新 PPTX authoring，不声明 transform。DOCX/XLSX/PDF、existing-file
+  editing 与其他格式必须在同一 harness 完成 profile qualification 后扩展 discriminated schema，
+  禁止增加平行格式 Skill、库或兼容 tool identity。`validate` 生成由 canonical Attachment Store
+  持久化、与 source SHA、profile、runtime lock revision、最终 package SHA 和 fresh render SHA
+  绑定的 receipt；`deliver` 只消费该精确 receipt，并在发布前重新执行完整校验和逐页渲染。
+  OfficeCLI 只作为该 profile 的固定 adapter/runtime；统一 runtime lock 声明来源、下载上限、包内
+  路径、file kind、执行策略与 smoke argv，target package manifest 在权限归一与平台签名后生成并
+  校验 SHA、大小、目标 OS/架构和 mode。类 Unix 的 executable 固定为 `0755`，shared library/data
+  固定为 `0644`，工作目录固定为 `0700`、暂存输入固定为 `0600`；magic discovery 只补漏并按 kind
+  审计，不把所有 native 文件递归改成可执行；
 - Work Ledger 的 Multica 导入入口先启动一个可见的 `advanced` Mission。Mission 通过其受限的
   `panel` 协调面读取完整 Multica Squad catalog；adapter 用精确 manifest ID 对 combined Registry
   投影权威 `installed` 状态，并对每个 Squad 读取官方 members endpoint，把完整成员列表归一化为

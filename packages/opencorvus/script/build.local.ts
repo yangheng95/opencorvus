@@ -28,8 +28,9 @@ import {
 } from "./build-artifact"
 import { detectArtifactNodeRuntimeHost } from "./build-host-runtime"
 import { copyRuntimeNodeModules, writePackagedRuntimePackageJson } from "./build-runtime-node-modules"
-import { copyOfficeCliRuntime, copyRipgrepRuntime } from "./build-runtime-binaries"
+import { copyOfficeCliRuntime, copyRipgrepRuntime, WORK_ARTIFACT_RUNTIME_LOCK } from "./build-runtime-binaries"
 import { normalizeArtifactExecutablePermissions } from "./runtime-executable-contract"
+import { writeWorkArtifactTargetPackageManifest } from "../src/work-artifact/runtime/package-manifest"
 import { cleanBuildDist } from "./build-clean"
 import { writeOverlayPayloadStamp } from "./build-overlay-payload-stamp"
 import { generateOpencorvusGeneratedBuildArtifacts } from "./generate-build-artifacts"
@@ -411,6 +412,12 @@ for (const item of targets) {
     await fs.promises.copyFile(helper, path.join(dir, "dist", name, "opencorvus-process-supervisor.exe"))
   }
   await normalizeArtifactExecutablePermissions({ root: path.join(dir, "dist", name), os: item.os })
+  await writeWorkArtifactTargetPackageManifest({
+    root: path.join(dir, "dist", name),
+    target: { os: item.os as "darwin" | "linux" | "win32", arch: item.arch as "arm64" | "x64", ...(item.abi ? { abi: item.abi } : {}) },
+    lock: WORK_ARTIFACT_RUNTIME_LOCK,
+    phase: "staging",
+  })
 
   await installOverlay(item, name)
   if (binaryOnly) {
@@ -434,18 +441,7 @@ for (const item of targets) {
 }
 
 if (Script.release) {
-  for (const key of Object.keys(binaries)) {
-    if (key.includes("linux")) {
-      await $`tar -czf ../${key}.tar.gz *`.cwd(`dist/${key}`)
-    } else {
-      await $`zip -r ../${key}.zip *`.cwd(`dist/${key}`)
-    }
-  }
-  const files = [...new Bun.Glob("dist/*.zip").scanSync("."), ...new Bun.Glob("dist/*.tar.gz").scanSync(".")]
-  if (files.length === 0) {
-    throw new Error("No release archives found in dist/")
-  }
-  await $`gh release upload v${Script.version} ${files} --clobber --repo ${process.env.GH_REPO}`
+  throw new Error("build.local.ts does not publish releases; use the repository package:* release pipeline")
 }
 
 export { binaries }

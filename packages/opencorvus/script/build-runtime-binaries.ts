@@ -4,21 +4,22 @@ import path from "node:path"
 import { currentOpenCorvusRuntimePaths } from "@opencorvus-ai/util/runtime-directories"
 import {
   artifactHostCanProvideNodeRuntime,
-  artifactOfficeCliExecutableName,
   artifactRipgrepExecutableName,
   type ArtifactNodeRuntimeHost,
   type ArtifactNodeRuntimeTarget,
 } from "./build-artifact"
 import {
-  OFFICECLI_RUNTIME_LOCK,
-  OFFICECLI_RUNTIME_LOCK_PATH,
+  WORK_ARTIFACT_RUNTIME_LOCK,
+  WORK_ARTIFACT_RUNTIME_LOCK_PATH,
   OFFICECLI_RUNTIME_VERSION,
-  officeCliLicenseUrl,
   officeCliReleaseAssetUrl,
+  officeCliSourceDataAssetUrl,
   officeCliRuntimeAsset,
-} from "./officecli-runtime-lock"
+} from "./work-artifact-runtime-lock"
+import { officeCliRuntime } from "../src/work-artifact/runtime/runtime-lock"
 
-export { OFFICECLI_RUNTIME_VERSION, officeCliRuntimeAsset } from "./officecli-runtime-lock"
+export { OFFICECLI_RUNTIME_VERSION, officeCliRuntimeAsset } from "./work-artifact-runtime-lock"
+export { WORK_ARTIFACT_RUNTIME_LOCK } from "./work-artifact-runtime-lock"
 
 async function sha256File(filename: string): Promise<string> {
   const hash = createHash("sha256")
@@ -31,7 +32,7 @@ async function sha256File(filename: string): Promise<string> {
   return hash.digest("hex")
 }
 
-async function acquirePinnedDownload(input: {
+export async function acquirePinnedRuntimeDownload(input: {
   cacheDir: string
   filename: string
   maxBytes: number
@@ -50,11 +51,29 @@ async function acquirePinnedDownload(input: {
   if (Number.isFinite(declaredBytes) && declaredBytes > input.maxBytes) {
     throw new Error(`${input.filename} declares ${declaredBytes} bytes, above the ${input.maxBytes} byte limit`)
   }
-  const bytes = Buffer.from(await response.arrayBuffer())
-  if (bytes.byteLength > input.maxBytes) {
-    throw new Error(`${input.filename} contains ${bytes.byteLength} bytes, above the ${input.maxBytes} byte limit`)
+  if (!response.body) throw new Error(`Failed to download ${input.url}: response body is unavailable`)
+  const reader = response.body.getReader()
+  const chunks: Buffer[] = []
+  const hash = createHash("sha256")
+  let receivedBytes = 0
+  try {
+    while (true) {
+      const item = await reader.read()
+      if (item.done) break
+      receivedBytes += item.value.byteLength
+      if (receivedBytes > input.maxBytes) {
+        await reader.cancel(`download exceeded ${input.maxBytes} bytes`).catch(() => undefined)
+        throw new Error(`${input.filename} contains more than ${input.maxBytes} bytes`)
+      }
+      const chunk = Buffer.from(item.value)
+      chunks.push(chunk)
+      hash.update(chunk)
+    }
+  } finally {
+    reader.releaseLock()
   }
-  const actual = createHash("sha256").update(bytes).digest("hex")
+  const bytes = Buffer.concat(chunks, receivedBytes)
+  const actual = hash.digest("hex")
   if (actual !== input.sha256) {
     throw new Error(`SHA-256 mismatch for ${input.filename}: expected ${input.sha256}, received ${actual}`)
   }
@@ -69,42 +88,49 @@ export async function copyOfficeCliRuntime(input: {
   fetcher?: typeof fetch
   outdir: string
   target: ArtifactNodeRuntimeTarget
-}): Promise<{ executable: string; license: string; lock: string }> {
+}): Promise<{ executable: string; data: string[]; lock: string }> {
   const asset = officeCliRuntimeAsset(input.target)
+  const runtime = officeCliRuntime(WORK_ARTIFACT_RUNTIME_LOCK)
   const fetcher = input.fetcher ?? fetch
   const cacheDir =
     input.cacheDir ??
     path.join(currentOpenCorvusRuntimePaths().cache, "build-runtime", `officecli-v${OFFICECLI_RUNTIME_VERSION}`)
-  const source = await acquirePinnedDownload({
+  const source = await acquirePinnedRuntimeDownload({
     cacheDir,
     filename: asset.name,
-    maxBytes: 64 * 1024 * 1024,
+    maxBytes: asset.max_download_bytes,
     sha256: asset.sha256,
     url: officeCliReleaseAssetUrl(asset),
     fetcher,
   })
-  const licenseSource = await acquirePinnedDownload({
-    cacheDir,
-    filename: "OfficeCLI-LICENSE",
-    maxBytes: 1024 * 1024,
-    sha256: OFFICECLI_RUNTIME_LOCK.source.license_sha256,
-    url: officeCliLicenseUrl(),
-    fetcher,
-  })
-  const executable = path.join(input.outdir, "bin", artifactOfficeCliExecutableName(input.target.os))
-  const license = path.join(input.outdir, "licenses", "OfficeCLI-LICENSE")
-  const lock = path.join(input.outdir, "licenses", "OfficeCLI-RUNTIME-LOCK.json")
-  await Promise.all([
-    fs.promises.mkdir(path.dirname(executable), { recursive: true }),
-    fs.promises.mkdir(path.dirname(license), { recursive: true }),
-  ])
+  const dataSources = await Promise.all(runtime.source.data_assets.map(async (data) => ({
+    data,
+    source: await acquirePinnedRuntimeDownload({
+      cacheDir,
+      filename: `OfficeCLI-${data.source_file}`,
+      maxBytes: data.max_download_bytes,
+      sha256: data.sha256,
+      url: officeCliSourceDataAssetUrl(data),
+      fetcher,
+    }),
+  })))
+  const executable = path.join(input.outdir, ...asset.package_path.split("/"))
+  const data = dataSources.map((item) => path.join(input.outdir, ...item.data.package_path.split("/")))
+  const lock = path.join(input.outdir, ...WORK_ARTIFACT_RUNTIME_LOCK.packaged_lock_path.split("/"))
+  await Promise.all([executable, ...data].map((filename) => fs.promises.mkdir(path.dirname(filename), { recursive: true })))
   await Promise.all([
     fs.promises.copyFile(source, executable),
-    fs.promises.copyFile(licenseSource, license),
-    fs.promises.copyFile(OFFICECLI_RUNTIME_LOCK_PATH, lock),
+    ...dataSources.map((item, index) => fs.promises.copyFile(item.source, data[index]!)),
+    fs.promises.copyFile(WORK_ARTIFACT_RUNTIME_LOCK_PATH, lock),
   ])
-  if (input.target.os !== "win32") await fs.promises.chmod(executable, 0o755)
-  return { executable, license, lock }
+  if (input.target.os !== "win32") {
+    await Promise.all([
+      fs.promises.chmod(executable, 0o755),
+      ...data.map((filename) => fs.promises.chmod(filename, 0o644)),
+      fs.promises.chmod(lock, 0o644),
+    ])
+  }
+  return { executable, data, lock }
 }
 
 export function findExecutableOnPath(

@@ -52,6 +52,7 @@ const MIME_EXT: Record<string, string> = {
   "text/markdown": "md",
   "text/csv": "csv",
   "application/json": "json",
+  "application/vnd.opencorvus.work-artifact-validation-receipt+json": "work-artifact-receipt.json",
   "audio/mpeg": "mp3",
   "audio/wav": "wav",
   "audio/webm": "weba",
@@ -558,7 +559,12 @@ export namespace AttachmentStore {
    * URL ownership, metadata, and the underlying blob must all agree before a
    * conversation, Mission, or Task can retain an out-of-band upload ref.
    */
-  export async function requireReference(input: { projectID: string; url: string; mime?: string }): Promise<Reference> {
+  export async function readVerifiedReference(input: {
+    projectID: string
+    url: string
+    mime?: string
+    maxBytes?: number
+  }): Promise<{ reference: Reference; bytes: Buffer }> {
     const located = nameFromUrl(input.url)
     if (!located) throw new Error(`attachment URL is not canonical: ${input.url}`)
     if (located.projectID !== input.projectID) {
@@ -567,14 +573,36 @@ export namespace AttachmentStore {
     const reference = await readReference(located.projectID, located.name)
     const abs = resolveAbsolute(located.projectID, located.name)
     if (!abs) throw new Error(`attachment ${located.projectID}/${located.name} is not resolvable`)
-    const info = await fs.stat(abs)
-    if (!info.isFile() || info.size !== reference.size) {
-      throw new Error(`attachment blob does not match canonical metadata: ${input.url}`)
+    const handle = await fs.open(abs, "r")
+    let bytes: Buffer
+    try {
+      const before = await handle.stat()
+      if (!before.isFile() || before.size !== reference.size) {
+        throw new Error(`attachment blob does not match canonical metadata: ${input.url}`)
+      }
+      if (input.maxBytes !== undefined && before.size > input.maxBytes) {
+        throw new Error(`attachment blob exceeds ${input.maxBytes} bytes: ${input.url}`)
+      }
+      bytes = await handle.readFile()
+      const after = await handle.stat()
+      if (after.size !== before.size || after.mtimeMs !== before.mtimeMs || after.ctimeMs !== before.ctimeMs) {
+        throw new Error(`attachment blob changed while being read: ${input.url}`)
+      }
+    } finally {
+      await handle.close()
+    }
+    const digest = crypto.createHash("sha256").update(bytes).digest("hex")
+    if (digest !== reference.sha) {
+      throw new Error(`attachment blob digest does not match canonical metadata: ${input.url}`)
     }
     if (input.mime !== undefined && input.mime !== reference.mime) {
       throw new Error(`attachment MIME does not match canonical metadata: ${input.url}`)
     }
-    return reference
+    return { reference, bytes }
+  }
+
+  export async function requireReference(input: { projectID: string; url: string; mime?: string; maxBytes?: number }): Promise<Reference> {
+    return (await readVerifiedReference(input)).reference
   }
 
   export interface DerivedAttachment {

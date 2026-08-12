@@ -1,28 +1,33 @@
 import fs from "node:fs"
 import path from "node:path"
 import {
-  parseOfficeCliRuntimeLock,
+  officeCliRuntime,
+  parseWorkArtifactRuntimeLock,
   type OfficeCliRuntimeAsset,
-  type OfficeCliRuntimeLock,
-} from "../src/office-artifact/runtime/runtime-lock"
+  type WorkArtifactRuntimeLock,
+} from "../src/work-artifact/runtime/runtime-lock"
 import type { ArtifactNodeRuntimeTarget } from "./build-artifact"
 
-export type { OfficeCliRuntimeAsset, OfficeCliRuntimeLock }
+export type { OfficeCliRuntimeAsset, WorkArtifactRuntimeLock }
 
-export const OFFICECLI_RUNTIME_LOCK_PATH = path.resolve(import.meta.dir, "../runtime/officecli.lock.json")
-
-export const OFFICECLI_RUNTIME_LOCK = Object.freeze(
-  parseOfficeCliRuntimeLock(JSON.parse(fs.readFileSync(OFFICECLI_RUNTIME_LOCK_PATH, "utf8"))),
+export const WORK_ARTIFACT_RUNTIME_LOCK_PATH = path.resolve(
+  import.meta.dir,
+  "../runtime/work-artifact-runtimes.lock.json",
 )
 
-export const OFFICECLI_RUNTIME_VERSION = OFFICECLI_RUNTIME_LOCK.version
+export const WORK_ARTIFACT_RUNTIME_LOCK = Object.freeze(
+  parseWorkArtifactRuntimeLock(JSON.parse(fs.readFileSync(WORK_ARTIFACT_RUNTIME_LOCK_PATH, "utf8"))),
+)
+
+const officeCli = officeCliRuntime(WORK_ARTIFACT_RUNTIME_LOCK)
+export const OFFICECLI_RUNTIME_VERSION = officeCli.version
 
 function targetKey(target: Pick<ArtifactNodeRuntimeTarget, "os" | "arch" | "abi">): string {
   return `${target.os}-${target.arch}${target.abi ? `-${target.abi}` : ""}`
 }
 
 const assetsByTarget = new Map<string, OfficeCliRuntimeAsset>()
-for (const asset of OFFICECLI_RUNTIME_LOCK.assets) {
+for (const asset of officeCli.assets) {
   const key = targetKey(asset)
   if (assetsByTarget.has(key)) throw new Error(`OfficeCLI runtime lock repeats target ${key}`)
   assetsByTarget.set(key, Object.freeze({ ...asset }))
@@ -36,9 +41,9 @@ export function officeCliRuntimeAsset(target: ArtifactNodeRuntimeTarget): Office
 }
 
 export function officeCliReleaseAssetUrl(asset: OfficeCliRuntimeAsset): string {
-  return `${OFFICECLI_RUNTIME_LOCK.source.repository}/releases/download/${OFFICECLI_RUNTIME_LOCK.source.tag}/${asset.name}`
+  return `${officeCli.source.repository}/releases/download/${officeCli.source.tag}/${asset.name}`
 }
 
-export function officeCliLicenseUrl(): string {
-  return `${OFFICECLI_RUNTIME_LOCK.source.repository}/raw/${OFFICECLI_RUNTIME_LOCK.source.tag}/${OFFICECLI_RUNTIME_LOCK.source.license_file}`
+export function officeCliSourceDataAssetUrl(asset: (typeof officeCli.source.data_assets)[number]): string {
+  return `${officeCli.source.repository}/raw/${officeCli.source.commit}/${asset.source_file}`
 }
