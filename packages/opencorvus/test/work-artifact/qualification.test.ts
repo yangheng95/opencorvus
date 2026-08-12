@@ -406,6 +406,16 @@ test("target package manifest binds binary architecture, digests, and determinis
   }
 })
 
+test("container package smoke checks the unified Work Artifact lock and complete OfficeCLI notices", async () => {
+  const dockerfile = await fs.readFile(path.resolve(import.meta.dir, "../../Dockerfile"), "utf8")
+  for (const filename of [
+    "WORK-ARTIFACT-RUNTIMES-LOCK.json",
+    "OfficeCLI-LICENSE",
+    "OfficeCLI-NOTICE",
+    "OfficeCLI-THIRD-PARTY-NOTICES.txt",
+  ]) expect(dockerfile).toContain(`test -f /opt/opencorvus/licenses/${filename}`)
+})
+
 test("POSIX manifest and archive contracts preserve executable 0755 and data 0644", () => {
   const manifest = WorkArtifactTargetPackageManifestSchema.parse({
     schema_version: 1,
