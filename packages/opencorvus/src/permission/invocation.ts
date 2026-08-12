@@ -78,6 +78,7 @@ const BUILTIN_EFFECTS = new Map<string, PermissionEffectClass>([
   ["mission_skill", "external_effect"],
   ["memory", "write_local"],
   ["schedule", "external_effect"],
+  ["scheduler_message", "external_effect"],
   ["expert_squad_author", "write_local"],
   ["send_mailbox_message", "external_effect"],
 ])

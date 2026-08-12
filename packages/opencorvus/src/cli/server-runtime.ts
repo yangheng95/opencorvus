@@ -1,4 +1,5 @@
 import { AutomationService } from "@/scheduler/automation-service"
+import { SchedulerMessageDeliveryService } from "@/protocol/scheduler-message"
 import { Server } from "@/server/server"
 import {
   RuntimeServerOwnership,
@@ -33,7 +34,8 @@ export async function acquireServerRuntimeAfterRecovery(input: {
     })
     await recoverProjectDeletionCleanup(ownership)
     AutomationService.initGlobal()
-    return input.recover()
+    await input.recover()
+    SchedulerMessageDeliveryService.initGlobal()
   })
   try {
     await recovery

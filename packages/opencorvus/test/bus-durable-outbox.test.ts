@@ -12,6 +12,7 @@ import { Session } from "@/session"
 import { Message } from "@/session/message"
 import { MessageTable } from "@/session/session.sql"
 import { SessionStatus } from "@/session/status"
+import { Server } from "@/server/server"
 import { Database, eq } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
@@ -65,6 +66,121 @@ describe("durable Bus publication outbox", () => {
       stopFirst()
       stopSecond()
     }
+  })
+
+  test("retains the Project lease until an asynchronous durable subscriber settles", async () => {
+    await using project = await memoryProject()
+    let release!: () => void
+    const blocked = new Promise<void>((resolve) => (release = resolve))
+    let markStarted!: () => void
+    const started = new Promise<void>((resolve) => (markStarted = resolve))
+    let expectedProjectID = ""
+    let observedProjectID = ""
+    let unsubscribe!: () => void
+    const provision = Instance.provide({
+      directory: project.path,
+      fn: () => {
+        expectedProjectID = Instance.project.id
+        unsubscribe = Bus.subscribe(
+          ReceiptEvent,
+          async () => {
+            markStarted()
+            await blocked
+            observedProjectID = Instance.project.id
+          },
+          { durableID: "test.async-project-lease" },
+        )
+        Bus.publishOwned(ReceiptEvent, { value: "retain-lease" })
+      },
+    })
+    await started
+    unsubscribe()
+    let disposed = false
+    const disposal = Instance.disposeAll().then(() => {
+      disposed = true
+    })
+    await Bun.sleep(25)
+    expect(disposed).toBe(false)
+    release()
+    await provision
+    await disposal
+    expect({ observedProjectID, outbox: Bus.TestHooks.outbox() }).toEqual({
+      observedProjectID: expectedProjectID,
+      outbox: [],
+    })
+  })
+
+  test("cancels a real durable subscriber at shutdown and replays its retained receipt in a successor", async () => {
+    await using project = await memoryProject()
+    let publication!: Bus.Publication
+    let markStarted!: () => void
+    const started = new Promise<void>((resolve) => (markStarted = resolve))
+    let observedAbort = ""
+    const provision = Instance.provide({
+      directory: project.path,
+      fn: () => {
+        Bus.subscribe(
+          ReceiptEvent,
+          async ({ signal }) => {
+            markStarted()
+            await new Promise<void>((_resolve, reject) => {
+              if (!signal) return reject(new Error("Durable subscriber requires its physical publication signal"))
+              signal.addEventListener(
+                "abort",
+                () => {
+                  observedAbort = signal.reason instanceof Error ? signal.reason.message : String(signal.reason)
+                  reject(signal.reason)
+                },
+                { once: true },
+              )
+            })
+          },
+          { durableID: "test.shutdown-replay" },
+        )
+        publication = Bus.publishOwned(ReceiptEvent, { value: "shutdown-replay" })
+      },
+    })
+    await started
+
+    const settled = await Server.settleCurrentProcessExecution("durable Bus subscriber handoff", {
+      disposeInstances: () => Instance.disposeAll(),
+    })
+    await provision
+    await settled.releaseHandoff(true)
+    expect({
+      observedAbort,
+      outbox: Bus.TestHooks.outbox().map((row) => row.occurrence_id),
+      deliveries: Bus.TestHooks.deliveries(publication.occurrenceID).map((row) => ({
+        subscriberID: row.subscriber_id,
+        settled: row.settled,
+      })),
+    }).toEqual({
+      observedAbort: "durable Bus subscriber handoff",
+      outbox: [publication.occurrenceID],
+      deliveries: expect.arrayContaining([
+        { subscriberID: "test.shutdown-replay", settled: false },
+      ]),
+    })
+
+    let replayed = ""
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const unsubscribe = Bus.subscribe(
+          ReceiptEvent,
+          ({ properties }) => {
+            replayed = properties.value
+          },
+          { durableID: "test.shutdown-replay" },
+        )
+        try {
+          await publication.retry()
+        } finally {
+          unsubscribe()
+        }
+      },
+    })
+    expect({ replayed, outbox: Bus.TestHooks.outbox() }).toEqual({ replayed: "shutdown-replay", outbox: [] })
   })
 
   test("recovers a Message source commit with the same occurrence after a successor runtime starts", async () => {

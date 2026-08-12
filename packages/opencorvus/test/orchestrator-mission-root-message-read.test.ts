@@ -2,12 +2,13 @@ import { afterEach, expect, test } from "bun:test"
 import { persistQueuedTask } from "@/engine/pipeline"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { Identifier } from "@/id/id"
-import {
-  authorizedTaskRootMessagesForWake,
-  createOrchestratorInteractionTools,
-} from "@/orchestrator/interaction-tools"
+import { authorizedTaskRootMessagesForWake, createOrchestratorInteractionTools } from "@/orchestrator/interaction-tools"
 import { Instance } from "@/project/instance"
 import { Session } from "@/session"
+import { MessageStore } from "@/session/message-store"
+import { MessageTable, PartTable } from "@/session/session.sql"
+import { Database, eq } from "@/storage/db"
+import { deliverTaskRootMessageToOrchestratorSession } from "@/task-api/task-root-message"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 const packageRevision = {
@@ -105,6 +106,55 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
       expect(output).toContain(`Task-root message ${messageID} (mission) is already recorded.`)
       expect(output).toContain("source=mission.acceptance_resume")
       expect(output).toContain("Update the report snapshot, then run the independent reviewer continuation.")
+
+      const orchestrator = await Session.create({
+        kind: "orchestrator",
+        parentID: root.id,
+        title: "Task Orchestrator",
+      })
+      await deliverTaskRootMessageToOrchestratorSession({
+        task: { id: taskID, session_id: root.id, project_id: Instance.project.id },
+        messageID,
+        orchestratorSessionID: orchestrator.id,
+      })
+      const delivered = await MessageStore.get({ sessionID: orchestrator.id, messageID })
+      const persistedPartSessions = Database.use((db) =>
+        db.select({ sessionID: PartTable.session_id }).from(PartTable).where(eq(PartTable.message_id, messageID)).all(),
+      )
+      expect({
+        delivered,
+        messageCount: Database.use(
+          (db) => db.select().from(MessageTable).where(eq(MessageTable.id, messageID)).all().length,
+        ),
+        persistedPartSessions,
+      }).toMatchObject({
+        delivered: {
+          info: { id: messageID, sessionID: orchestrator.id, role: "user", author: "mission" },
+          parts: [
+            {
+              messageID,
+              sessionID: orchestrator.id,
+              type: "text",
+              text: "Update the report snapshot, then run the independent reviewer continuation.",
+            },
+          ],
+        },
+        messageCount: 1,
+        persistedPartSessions: [{ sessionID: orchestrator.id }],
+      })
+
+      const deliveredOutput = await readTool.execute(
+        {
+          message_id: messageID,
+          reason: "Consume the same durable Mission Message from the Orchestrator conversation.",
+        },
+        {
+          toolCallId: "call_delivered_mission_root_message",
+          messages: [],
+          abortSignal: new AbortController().signal,
+        },
+      )
+      expect(deliveredOutput).toContain("Update the report snapshot, then run the independent reviewer continuation.")
 
       const wrongSourceMessageID = Identifier.ascending("message")
       await Session.updateMessage({

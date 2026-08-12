@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-12-v0.0.42-beta-actions-green-release.md](2026-08-12-v0.0.42-beta-actions-green-release.md) records the Actions root-cause repair, canonical version synchronization, all-green source gate, native Release publication, updater promotion, and public website verification for `v0.0.42-beta`.
+
 - [2026-08-12-work-artifact-harness-and-skill-infrastructure.md](2026-08-12-work-artifact-harness-and-skill-infrastructure.md) audits the current PPTX-only production closure and defines one Skill-first Work Artifact Harness, qualified profile registry, pinned runtime catalog, open-source format roadmap, deterministic binary/data permissions, and real packaged-runtime acceptance boundary.
 
 - [2026-08-12-promotion-case-engine-strategy.md](2026-08-12-promotion-case-engine-strategy.md) defines the evidence-led promotion case portfolio, repeatable media factory, distribution system, measurement funnel, and first 30-day execution plan.
@@ -9,6 +11,8 @@
 - [2026-08-12-advanced-requirements-grill-me-trial.md](2026-08-12-advanced-requirements-grill-me-trial.md) defines the exact Advanced Requirement Engineer Skill projection and the real coordination, question-interaction, continuation, and RequirementSet benchmark for an encouraged `grill-me` trial.
 
 - [2026-08-12-public-navigation-and-visitor-count.md](2026-08-12-public-navigation-and-visitor-count.md) defines the calmer public navigation hierarchy and privacy-preserving first-party estimated visitor count backed by the existing website SQLite service.
+
+- [Mission, Task, and scheduler duplex communication convergence](2026-08-12-mission-task-scheduler-duplex-communication.md)
 
 - [2026-08-12-opencorvus-production-database-bootstrap-configuration.md](2026-08-12-opencorvus-production-database-bootstrap-configuration.md) is the secret-free production configuration ledger for the SQLite Registry cutover, covering GitHub values, host paths/permissions, Caddy/systemd, signed activation, backups, rollback, staged execution and required evidence without performing external mutations.
 

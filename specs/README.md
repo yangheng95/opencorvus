@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest all-green `v0.0.42-beta` release: [`2026-08-12-v0.0.42-beta-actions-green-release.md`](records/2026-08/2026-08-12-v0.0.42-beta-actions-green-release.md).
+
 Latest Skill-first Work Artifact Harness and packaged runtime strategy: [`2026-08-12-work-artifact-harness-and-skill-infrastructure.md`](records/2026-08/2026-08-12-work-artifact-harness-and-skill-infrastructure.md).
 
 Latest promotion case engine strategy: [`2026-08-12-promotion-case-engine-strategy.md`](records/2026-08/2026-08-12-promotion-case-engine-strategy.md).
@@ -9,6 +11,8 @@ Latest Project `MEMORY.MD` autonomous context-memory plan: [`2026-08-12-project-
 Latest Advanced Requirements `grill-me` projection and end-to-end trial: [`2026-08-12-advanced-requirements-grill-me-trial.md`](records/2026-08/2026-08-12-advanced-requirements-grill-me-trial.md).
 
 Latest public navigation hierarchy and privacy-preserving visitor count: [`2026-08-12-public-navigation-and-visitor-count.md`](records/2026-08/2026-08-12-public-navigation-and-visitor-count.md).
+
+Latest Mission, Task, and scheduler duplex communication convergence: [`2026-08-12-mission-task-scheduler-duplex-communication.md`](records/2026-08/2026-08-12-mission-task-scheduler-duplex-communication.md).
 
 Latest opencorvus.com production database bootstrap configuration: [`2026-08-12-opencorvus-production-database-bootstrap-configuration.md`](records/2026-08/2026-08-12-opencorvus-production-database-bootstrap-configuration.md).
 

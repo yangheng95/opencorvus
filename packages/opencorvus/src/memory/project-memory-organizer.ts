@@ -246,7 +246,9 @@ export namespace ProjectMemoryOrganizer {
         messages,
         toolChoice: "none",
       })
-      const candidate = parseCandidate(await result.text)
+      let candidateText = ""
+      for await (const chunk of result.textStream) candidateText += chunk
+      const candidate = parseCandidate(candidateText)
       const candidateTokens = estimateTokens(candidate.markdown.trim() + "\n")
       if (candidateTokens > documentTokenLimit) {
         const applied = Database.transaction((db) =>
@@ -287,7 +289,8 @@ export namespace ProjectMemoryOrganizer {
     if (state.unsub) return
     state.unsub = Bus.subscribe(
       ProjectMemory.Event.OrganizationRequested,
-      ({ properties }) => run({ projectID: properties.projectID, sessionID: properties.sessionID }),
+      ({ properties, signal }) =>
+        run({ projectID: properties.projectID, sessionID: properties.sessionID, abort: signal }),
       { durableID: "project-memory.organizer" },
     )
     const configUnsub = Bus.subscribe(Session.Event.ConfigChanged, ({ properties }) =>

@@ -281,8 +281,6 @@ describe("GitHub Actions workflow contract", () => {
     const packageDefinition = await Bun.file(
       path.join(import.meta.dir, "..", "packages", "opencorvus", "package.json"),
     ).json()
-    expect(packageDefinition.scripts.test).toBe(
-      "bun script/run-with-inactivity.ts --inactivity-ms 120000 -- bun script/run-test-files.ts --concurrency 2 test",
-    )
+    expect(packageDefinition.scripts.test).toBe("bun script/run-tests.ts")
   })
 })

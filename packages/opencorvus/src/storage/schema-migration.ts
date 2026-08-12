@@ -715,6 +715,54 @@ END`,
       sqlite.run(`CREATE UNIQUE INDEX project_generation_idx ON project(generation)`)
     },
   }),
+  Object.freeze({
+    id: "2026-08-12-scheduler-message-delivery",
+    fromFingerprint: "6239c3eb3d7bc27231b57cc34fe5d93d8613ed4f0d3a11cd20bed1b4e116bbf2",
+    toFingerprint: "e95f145c39fc59ca739807847193c4b3460b51df7308b8239d8ea0bc98933b2d",
+    requiredEmptyTables: Object.freeze([]),
+    statements: Object.freeze([
+      `CREATE TABLE "protocol_aggregate_sequence" (
+  "aggregate_type" text NOT NULL,
+  "aggregate_id" text NOT NULL,
+  "next_seq" integer NOT NULL
+)`,
+      `CREATE UNIQUE INDEX "protocol_aggregate_sequence_identity_idx" ON "protocol_aggregate_sequence" ("aggregate_type", "aggregate_id")`,
+      `INSERT INTO "protocol_aggregate_sequence" ("aggregate_type", "aggregate_id", "next_seq")
+SELECT "aggregate_type", "aggregate_id", MAX("seq")
+FROM "protocol_event"
+GROUP BY "aggregate_type", "aggregate_id"`,
+      `CREATE TABLE "protocol_inbox_scheduler_next" (
+  "id" text PRIMARY KEY NOT NULL,
+  "envelope_id" text NOT NULL,
+  "actor" text NOT NULL,
+  "actor_id" text NOT NULL,
+  "status" text NOT NULL DEFAULT 'pending',
+  "lease_owner" text,
+  "lease_until" integer,
+  "attempt" integer NOT NULL DEFAULT 0,
+  "visible_at" integer NOT NULL,
+  "last_error" text,
+  "delivery_result" text,
+  "time_completed" integer,
+  "time_created" integer NOT NULL,
+  "time_updated" integer NOT NULL,
+  FOREIGN KEY ("envelope_id") REFERENCES "protocol_event"("id") ON DELETE CASCADE
+)`,
+      `INSERT INTO "protocol_inbox_scheduler_next" (
+  "id", "envelope_id", "actor", "actor_id", "status", "lease_owner", "lease_until",
+  "attempt", "visible_at", "last_error", "time_created", "time_updated"
+) SELECT
+  "id", "envelope_id", "actor", "actor_id", "status", "lease_owner", "lease_until",
+  "attempt", "visible_at", "last_error", "time_created", "time_updated"
+FROM "protocol_inbox"`,
+      `DROP TABLE "protocol_inbox"`,
+      `ALTER TABLE "protocol_inbox_scheduler_next" RENAME TO "protocol_inbox"`,
+      `CREATE UNIQUE INDEX "protocol_inbox_envelope_actor_idx" ON "protocol_inbox" ("envelope_id", "actor", "actor_id")`,
+      `CREATE INDEX "protocol_inbox_visible_idx" ON "protocol_inbox" ("actor", "actor_id", "status", "visible_at", "envelope_id")`,
+      `CREATE INDEX "protocol_inbox_lease_idx" ON "protocol_inbox" ("actor", "lease_until")`,
+      `CREATE UNIQUE INDEX "protocol_event_scheduler_reply_idx" ON "protocol_event" ("reply_to") WHERE "type" = 'scheduler.message' AND "kind" = 'reply' AND "reply_to" IS NOT NULL`,
+    ]),
+  }),
 ])
 
 function migrationBySourceFingerprint(): ReadonlyMap<string, SchemaMigration> {

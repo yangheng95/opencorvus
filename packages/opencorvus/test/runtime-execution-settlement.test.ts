@@ -133,6 +133,34 @@ describe("runtime execution settlement authority", () => {
     RuntimeExecutionSettlement.reserve("protocol_publication", "post-shutdown-rollback").settle()
   })
 
+  test("cancels an unfinished protocol subscriber after terminal facts are fenced", async () => {
+    let observedReason = ""
+    const publication = RuntimeExecutionSettlement.reserve(
+      "protocol_publication",
+      "blocked-durable-subscriber",
+    )
+    const operation = new Promise<void>((_resolve, reject) => {
+      publication.signal.addEventListener(
+        "abort",
+        () => {
+          observedReason = publication.signal.reason instanceof Error
+            ? publication.signal.reason.message
+            : String(publication.signal.reason)
+          reject(publication.signal.reason)
+        },
+        { once: true },
+      )
+    })
+    publication.settleWith(operation)
+
+    const settled = await Server.settleCurrentProcessExecution("durable subscriber runtime handoff", {
+      disposeInstances: async () => undefined,
+    })
+    await settled.releaseHandoff(false)
+
+    expect(observedReason).toBe("durable subscriber runtime handoff")
+  })
+
   test("bounds cancelled settlement inactivity and converges after the physical operation exits", async () => {
     const events: string[] = []
     let releaseOperation!: () => void
@@ -409,7 +437,7 @@ describe("runtime execution settlement authority", () => {
       }).toMatchObject({
         appendError: {
           name: "DatabaseEffectAdmissionClosedError",
-          operation: "Database.use",
+          operation: "Database.transaction",
         },
         appended: { aggregateID, sequence: 1, type: input.type },
       })

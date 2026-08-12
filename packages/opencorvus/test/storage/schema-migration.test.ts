@@ -13,7 +13,7 @@ import {
 } from "../../src/storage/schema-migration"
 
 const PREDECESSOR_FINGERPRINT = "05480e3d530365e768b00218f24c4a8d7bb281538315b600dd70827c90e33212"
-const CURRENT_FINGERPRINT = "6239c3eb3d7bc27231b57cc34fe5d93d8613ed4f0d3a11cd20bed1b4e116bbf2"
+const CURRENT_FINGERPRINT = "e95f145c39fc59ca739807847193c4b3460b51df7308b8239d8ea0bc98933b2d"
 
 const legacyMemoryFileDDL = /* sql */ `CREATE TABLE "memory_file" (
   "id" text PRIMARY KEY NOT NULL,
@@ -66,6 +66,17 @@ function dropBusPublicationOutbox(sqlite: BunDatabase) {
   sqlite.run('DROP TABLE "bus_publication_outbox"')
 }
 
+function dropSchedulerMessageDelivery(sqlite: BunDatabase) {
+  sqlite.run('DROP INDEX "protocol_event_scheduler_reply_idx"')
+  sqlite.run('DROP TABLE "protocol_aggregate_sequence"')
+  sqlite.run('DROP INDEX "protocol_inbox_visible_idx"')
+  sqlite.run('ALTER TABLE "protocol_inbox" DROP COLUMN "time_completed"')
+  sqlite.run('ALTER TABLE "protocol_inbox" DROP COLUMN "delivery_result"')
+  sqlite.run(
+    'CREATE INDEX "protocol_inbox_visible_idx" ON "protocol_inbox" ("actor", "status", "visible_at")',
+  )
+}
+
 function restoreLegacyPermissionSchema(sqlite: BunDatabase) {
   sqlite.run('DROP TABLE "permission_execution_result"')
   sqlite.run('DROP TABLE "permission_ledger"')
@@ -104,6 +115,7 @@ function restoreLegacyProjectSchema(sqlite: BunDatabase) {
 function createPredecessorDatabase(databasePath: string, input: { scratchpadContent?: string } = {}) {
   const sqlite = new BunDatabase(databasePath, { create: true })
   sqlite.exec(SCHEMA_DDL)
+  dropSchedulerMessageDelivery(sqlite)
   restoreLegacyProjectSchema(sqlite)
   restoreLegacyPermissionSchema(sqlite)
   dropBusPublicationOutbox(sqlite)
@@ -200,6 +212,7 @@ describe("transactional schema migration", () => {
       "2026-08-11-provider-usage-ledger",
       "2026-08-12-permission-two-mode-authority",
       "2026-08-12-project-generation-authority",
+      "2026-08-12-scheduler-message-delivery",
     ])
 
     const result = migrateDatabaseFile(databasePath, plan!, preparedBackup)
@@ -217,6 +230,7 @@ describe("transactional schema migration", () => {
         "2026-08-11-provider-usage-ledger",
         "2026-08-12-permission-two-mode-authority",
         "2026-08-12-project-generation-authority",
+        "2026-08-12-scheduler-message-delivery",
       ],
     })
 
@@ -267,6 +281,7 @@ describe("transactional schema migration", () => {
         "2026-08-11-provider-usage-ledger",
         "2026-08-12-permission-two-mode-authority",
         "2026-08-12-project-generation-authority",
+        "2026-08-12-scheduler-message-delivery",
       ],
     })
     expect(result.backupFiles.map((file) => file.name)).toEqual([
@@ -285,6 +300,7 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    dropSchedulerMessageDelivery(predecessor)
     restoreLegacyProjectSchema(predecessor)
     restoreLegacyPermissionSchema(predecessor)
     dropBusPublicationOutbox(predecessor)
@@ -351,6 +367,7 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    dropSchedulerMessageDelivery(predecessor)
     restoreLegacyProjectSchema(predecessor)
     restoreLegacyPermissionSchema(predecessor)
     dropBusPublicationOutbox(predecessor)
@@ -503,6 +520,7 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    dropSchedulerMessageDelivery(predecessor)
     restoreLegacyProjectSchema(predecessor)
     restoreLegacyPermissionSchema(predecessor)
     dropBusPublicationOutbox(predecessor)
@@ -546,6 +564,7 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    dropSchedulerMessageDelivery(predecessor)
     restoreLegacyProjectSchema(predecessor)
     restoreLegacyPermissionSchema(predecessor)
     dropBusPublicationOutbox(predecessor)
@@ -601,6 +620,7 @@ describe("transactional schema migration", () => {
       "2026-08-11-provider-usage-ledger",
       "2026-08-12-permission-two-mode-authority",
       "2026-08-12-project-generation-authority",
+      "2026-08-12-scheduler-message-delivery",
     ])
     const preparedBackup = createSchemaMigrationBackup(databasePath, plan)
     predecessor.close(true)
@@ -653,6 +673,7 @@ describe("transactional schema migration", () => {
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    dropSchedulerMessageDelivery(predecessor)
     restoreLegacyProjectSchema(predecessor)
     restoreLegacyPermissionSchema(predecessor)
     dropBusPublicationOutbox(predecessor)
@@ -726,6 +747,7 @@ CREATE INDEX "bus_publication_delivery_pending_idx" ON "bus_publication_delivery
       "2026-08-11-provider-usage-ledger",
       "2026-08-12-permission-two-mode-authority",
       "2026-08-12-project-generation-authority",
+      "2026-08-12-scheduler-message-delivery",
     ])
     const preparedBackup = createSchemaMigrationBackup(databasePath, plan)
     predecessor.close(true)
@@ -831,6 +853,7 @@ CREATE INDEX "bus_publication_delivery_pending_idx" ON "bus_publication_delivery
     const databasePath = await temporaryDatabasePath()
     const predecessor = new BunDatabase(databasePath, { create: true })
     predecessor.exec(SCHEMA_DDL)
+    dropSchedulerMessageDelivery(predecessor)
     restoreLegacyProjectSchema(predecessor)
     restoreLegacyPermissionSchema(predecessor)
     predecessor.run('DROP TABLE "provider_usage_event"')
@@ -868,6 +891,7 @@ CREATE INDEX "bus_publication_delivery_pending_idx" ON "bus_publication_delivery
       "2026-08-11-provider-usage-ledger",
       "2026-08-12-permission-two-mode-authority",
       "2026-08-12-project-generation-authority",
+      "2026-08-12-scheduler-message-delivery",
     ])
 
     const preparedBackup = createSchemaMigrationBackup(databasePath, plan!)

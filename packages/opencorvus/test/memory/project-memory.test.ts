@@ -633,7 +633,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
     })
   })
 
-  test("streams the fixed memory agent and commits its semantic replacement envelope", async () => {
+  test("consumes the abortable memory-agent text stream and commits its semantic replacement envelope", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -666,7 +666,14 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         const streamCalls: Parameters<typeof LLM.stream>[0][] = []
         const streamSpy = spyOn(LLM, "stream").mockImplementation(async (input) => {
           streamCalls.push(input)
-          return { text: Promise.resolve(candidate) } as never
+          return {
+            text: new Promise<string>(() => undefined),
+            textStream: (async function* () {
+              const split = Math.floor(candidate.length / 2)
+              yield candidate.slice(0, split)
+              yield candidate.slice(split)
+            })(),
+          } as never
         })
         const configSpy = spyOn(EffectiveConfig, "effective").mockResolvedValue({
           model: `${model.providerID}/${model.modelID}`,

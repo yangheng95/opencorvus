@@ -2,6 +2,7 @@ import z from "zod"
 import { ArtifactReadLocatorSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
 import { DispatchInfrastructureFailureOutcomeSchema } from "@/agent/dispatch-outcome"
+import { SchedulerDeliveryReference } from "@/task-api/task-root-message"
 
 export const TaskIntentSchema = z
   .object({
@@ -34,7 +35,8 @@ export const OrchestratorEventSchema = z
     rootMessage: z
       .object({
         messageID: z.string().min(1),
-        kind: z.enum(["operator", "orchestrator"]),
+        kind: z.enum(["operator", "orchestrator", "mission"]),
+        schedulerDelivery: SchedulerDeliveryReference.optional(),
       })
       .strict()
       .optional(),
