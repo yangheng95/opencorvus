@@ -1865,20 +1865,6 @@ fn overlay_open_project_editor<R: Runtime>(
         .map_err(|err| format!("{}: {}", editor.label(), err))
 }
 
-#[tauri::command]
-fn overlay_write_file(path: String, content: String) -> Result<bool, String> {
-    let path = path.trim();
-    if path.is_empty() {
-        return Ok(false);
-    }
-    let p = std::path::Path::new(path);
-    if let Some(parent) = p.parent() {
-        fs::create_dir_all(parent).map_err(|err| err.to_string())?;
-    }
-    fs::write(p, content).map_err(|err| err.to_string())?;
-    Ok(true)
-}
-
 #[derive(Debug, Clone, Copy, Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct BrowserPreviewBounds {
@@ -5615,7 +5601,6 @@ fn main() {
         overlay_open_path,
         overlay_open_url,
         overlay_open_project_editor,
-        overlay_write_file,
         overlay_browser_preview_sync,
         overlay_browser_preview_navigate,
         overlay_browser_preview_navigate_url,
@@ -5648,7 +5633,6 @@ fn main() {
         overlay_open_path,
         overlay_open_url,
         overlay_open_project_editor,
-        overlay_write_file,
         overlay_browser_preview_sync,
         overlay_browser_preview_navigate,
         overlay_browser_preview_navigate_url,

@@ -610,8 +610,6 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
           return invokeTauri("overlay_settings_load")
         case "settings.save":
           return invokeTauri("overlay_settings_save", { settings: command.payload })
-        case "config.write-file":
-          return invokeTauri("overlay_write_file", { path: command.path, content: command.content })
         case "server.info":
           return invokeTauri("overlay_server_info")
         case "server.restart":

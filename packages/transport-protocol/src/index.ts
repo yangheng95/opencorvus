@@ -1029,7 +1029,6 @@ export type NativeCommand =
   | { kind: "clipboard.readText" }
   | { kind: "settings.load" }
   | { kind: "settings.save"; payload: OverlayPersistedSettings }
-  | { kind: "config.write-file"; path: string; content: string }
   | { kind: "server.info" }
   | { kind: "server.restart" }
   | { kind: "devtools.toggle" }
@@ -1246,8 +1245,6 @@ export function isNativeCommand(value: unknown): value is NativeCommand {
       return true
     case "settings.save":
       return isOverlayPersistedSettings(obj["payload"])
-    case "config.write-file":
-      return typeof obj["path"] === "string" && typeof obj["content"] === "string"
     case "server.info":
     case "server.restart":
     case "devtools.toggle":
