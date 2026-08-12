@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-12-work-artifact-harness-and-skill-infrastructure.md](2026-08-12-work-artifact-harness-and-skill-infrastructure.md) audits the current PPTX-only production closure and defines one Skill-first Work Artifact Harness, qualified profile registry, pinned runtime catalog, open-source format roadmap, deterministic binary/data permissions, and real packaged-runtime acceptance boundary.
+
 - [2026-08-12-promotion-case-engine-strategy.md](2026-08-12-promotion-case-engine-strategy.md) defines the evidence-led promotion case portfolio, repeatable media factory, distribution system, measurement funnel, and first 30-day execution plan.
 
 - [2026-08-12-project-memory-user-message-ledger.md](2026-08-12-project-memory-user-message-ledger.md) defines transactional pending capture for every explicit user input, a separate streaming Memory Organizer agent, one bounded Project `MEMORY.MD`, visible capacity notices, unavailable-only pending FIFO, and independent plan/implementation review gates.

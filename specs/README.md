@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Skill-first Work Artifact Harness and packaged runtime strategy: [`2026-08-12-work-artifact-harness-and-skill-infrastructure.md`](records/2026-08/2026-08-12-work-artifact-harness-and-skill-infrastructure.md).
+
 Latest promotion case engine strategy: [`2026-08-12-promotion-case-engine-strategy.md`](records/2026-08/2026-08-12-promotion-case-engine-strategy.md).
 
 Latest Project `MEMORY.MD` autonomous context-memory plan: [`2026-08-12-project-memory-user-message-ledger.md`](records/2026-08/2026-08-12-project-memory-user-message-ledger.md).
