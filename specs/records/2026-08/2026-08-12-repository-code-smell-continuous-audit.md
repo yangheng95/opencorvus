@@ -43,14 +43,14 @@ The user stated that the repository was written by Artificial Intelligence (AI) 
 
 ### Independent agent feedback
 
-Three independent agents completed complementary core-runtime, backend/infrastructure, and surface/tooling scans, then cross-surface and repeated-pattern challenges. Their accepted and rejected leads were independently traced by the primary agent before entry. All three reported zero new admitted findings in two saturation rounds, but two late concurrent findings were then admitted and reset the saturation count. A separate final delivery reviewer remains required after the restarted saturation passes and documentation verification.
+Three independent agents completed complementary core-runtime, backend/infrastructure, and surface/tooling scans, then repeatedly rotated across cross-surface and same-pattern challenges. Late admissions and successful false-positive challenges repeatedly reset the counter; the final corrected `CS-001..078` register then survived Rounds 23 and 24 with zero new findings across all three surfaces. A separate final delivery reviewer remains required after documentation verification.
 
 ## Executive Snapshot
 
-- Accepted register: 68 uniquely identified findings, `CS-001` through `CS-068`.
-- Severity distribution: 1 P0, 36 P1, 25 P2, and 6 P3.
-- Status distribution: 61 new open findings, 6 reproduced open findings from the prior debt plan, and 1 fixed-during-audit finding. The follow-up refactoring backlog therefore contains 67 open items.
-- Saturation: achieved provisionally after Rounds 16 and 17 both completed with zero new findings against the stable `CS-001..068` register; independent final delivery review remains required.
+- Accepted register: 78 uniquely identified findings, `CS-001` through `CS-078`.
+- Severity distribution: 1 P0, 45 P1, 26 P2, and 6 P3.
+- Status distribution: 71 new open findings, 6 reproduced open findings from the prior debt plan, and 1 fixed-during-audit finding. The follow-up refactoring backlog therefore contains 77 open items.
+- Saturation: achieved after Rounds 23 and 24 both completed with zero new findings and no unresolved false-positive or severity challenge against `CS-001..078`.
 - Immediate cleanup required by repository rules: the prohibited pixel-based Overlay icon test and the negative LSP-disabled runtime test were deleted; no UI automation test was run.
 
 ## Audit Method
@@ -228,15 +228,59 @@ This is repository-state saturation, not a claim that future changes cannot intr
 
 ### Round 16 — request-occurrence saturation pass A
 
-- Result: complete, zero new accepted findings across all three independent audit surfaces. This is the first consecutive zero-new pass after `CS-068`.
-- Provider adapters, Scheduler/Session persistence, updater/deploy, Templates/Skills, and every explicit public stable request identity were sampled. Durable fire/run/interaction authorities and deterministic Message identities rejected adjacent candidates; existing failures remain covered by the stable register.
-- Coverage gaps retained: no real provider/OAuth, scheduler kill/restart, updater/deploy host, package-manager kill point, or UI automation execution.
+- Result: complete, three new findings admitted: `CS-069` through `CS-071`.
+- Surface/tooling proved operator-steer hides its existing durable replay identity from public callers; core/runtime proved Gateway structured actions use a per-request correlation UUID instead of a caller-owned occurrence; backend/infrastructure proved MCP OAuth persists PKCE material but keeps flow ownership and terminal replay only in process memory.
+- Consequence: this round cannot count toward saturation. The register changed from 68 to 71 findings, the open backlog changed from 67 to 70, and the consecutive-zero count reset again.
 
-### Round 17 — final saturation confirmation
+### Round 17 — public-mutation occurrence saturation pass A
 
-- Result: complete, zero new accepted findings across all three independent audit surfaces. Together with Round 16, this satisfies the two-consecutive-zero saturation rule against the stable `CS-001..068` register.
-- Cross-domain challenges sampled public stable identities, Scheduler and Session persistence, Provider adapters/OAuth, updater/deploy/release, Templates/Skills, package readiness, multi-artifact generation, terminal outcomes, and destructive observation. Similar findings retained distinct mutation owners, triggers, and repair boundaries; no severity change or false-positive removal was supported.
-- Remaining gaps are explicitly dynamic: process kill/replay, OAuth/browser concurrency, real Provider streams, GitHub Release fixture behavior, updater/deploy hosts, and UI runtime. They are future verification inputs rather than newly evidenced static findings.
+- Result: complete, two new findings admitted: `CS-072` and `CS-073`.
+- Backend/infrastructure proved runtime Provider refresh can rotate a remote refresh token before the new credential is durable. Surface/tooling proved direct Question replay rejects an already-committed terminal result.
+- A proposed generic direct Session create/fork replay item was rejected because no stable request identity or concrete production retry contract was shown; admitting every non-idempotent create merely because a manual POST can repeat would not meet the observable-trigger rule. Fork partial-publication remains `CS-044`.
+- A proposed Task retry/replan false-success item was also rejected after adversarial review traced the returned Promise: the route awaits the serialized wake execution, so a second distinct request receives its lifecycle conflict synchronously rather than being falsely accepted.
+- Consequence: this round cannot count toward saturation. The register changed from 71 to 73 findings, the open backlog changed from 70 to 72, and the consecutive-zero count reset again.
+
+### Round 18 — adjacent occurrence saturation pass A
+
+- Result: complete, one new finding admitted as `CS-073` after final renumbering.
+- Backend/infrastructure proved the MCP SDK's production 401 refresh path has the same external token-rotation/local-publication split as Provider refresh, but with an independent transport, store, and recovery owner. Core/runtime found no other public `enqueueRootWake` sibling; surface/tooling confirmed the direct Question finding (now `CS-072`), disproved the former Task retry/replan candidate, and found no further caller-chain issue.
+- Consequence: this round cannot count toward saturation. The register changed from 73 to 74 findings, the open backlog changed from 72 to 73, and the consecutive-zero count reset again.
+
+### Round 19 — credential-and-replay saturation pass A
+
+- Result: complete, one new finding admitted as the corrected `CS-074`, while one prior candidate was removed.
+- Core/runtime proved stable `complete_task` replay can rewrite a committed terminal success as an already-terminal rejection. Surface/tooling found the Gateway structured-action item lacked a repository caller or concrete retry contract and was only a generic non-idempotent POST hypothesis, so that item was removed and later findings were renumbered. Backend/infrastructure found no additional credential/publication chain.
+- Consequence: this round cannot count toward saturation even though the total remains 74. The accepted set changed, and the consecutive-zero count reset again.
+
+### Round 20 — corrected-register saturation pass A
+
+- Result: complete, zero new accepted findings across all three audit surfaces. This is the first consecutive zero-new pass against the corrected `CS-001..074` register.
+- Core/runtime expanded `CS-074` within the same `manage_task` owner to cover complete, fail, and cancel terminal actions; backend/infrastructure closed the remaining credential-refresh siblings; surface/tooling confirmed concrete repository callers and visible projections for `CS-069`, `CS-072`, and `CS-074` while rejecting generic SDK POST wrappers.
+- No new mutation owner or independent repair boundary was admitted. Dynamic OAuth/kill-point and UI runtime execution remain explicit coverage gaps.
+
+### Round 21 — final adversarial saturation confirmation
+
+- Result: complete, two new findings admitted: `CS-075` and `CS-076`.
+- Core/runtime proved Fact Check can omit its workflow-required review Artifact yet settle terminal success and open Writer. Backend/infrastructure proved native upgrade discards the exact-version probe and publishes success. Surface/tooling found no additional projection/SDK/check-inventory item and calibrated `CS-017` to current CI coverage.
+- Consequence: this round cannot count toward saturation. The register changed from 74 to 76 findings, the open backlog changed from 73 to 75, and the consecutive-zero count reset again.
+
+### Round 22 — domain-artifact and result-probe saturation pass A
+
+- Result: complete, two new findings admitted: `CS-077` and `CS-078`.
+- Core/runtime exhausted the private domain-output adapters and proved Requirements accepts an empty canonical set while Workload Review accepts zero per-Slice briefs. Backend/infrastructure found no second discarded result probe; surface/tooling confirmed `CS-075/076` and their public projections.
+- Consequence: this round cannot count toward saturation. The register changed from 76 to 78 findings, the open backlog changed from 75 to 77, and the consecutive-zero count reset again.
+
+### Round 23 — collector-cardinality saturation pass A
+
+- Result: complete, zero new accepted findings across all three audit surfaces. This is the first consecutive zero-new pass against `CS-001..078`.
+- Core/runtime exhausted remaining collector/output-tool adapters; backend/infrastructure confirmed frontier has no downstream completeness repair; surface/tooling traced public projections and rejected adjacent duplicate items.
+- The repair boundary was calibrated to mechanically observable structure and selected input identities, not host-side natural-language quality gates.
+
+### Round 24 — final cross-pattern saturation confirmation
+
+- Result: complete, zero new accepted findings across all three audit surfaces. Together with Round 23, this satisfies the consecutive-zero saturation rule against `CS-001..078`.
+- Core/runtime rotated through stable-call replay, frontier, Task/Session authority, and event projection; backend/infrastructure rotated through transactions, readiness, external mutation, updater, and deploy; surface/tooling rotated through Overlay/SDK/Channel/Web projection, generation topology, and current CI inventory.
+- No new complete chain or surviving false-positive challenge remained. Dynamic process kill, OAuth/provider, installer/deploy, and UI runtime behavior remain explicit future verification inputs rather than silently claimed coverage.
 
 ## Accepted Issue Register
 
@@ -1192,6 +1236,146 @@ This is repository-state saturation, not a claim that future changes cannot intr
 - Required positive verification for a future repair: terminate after user Message, tool mutation, assistant Message, terminal persistence, and response-delivery boundaries; replay creates one Control Turn, one tool-call set, and one terminal result, including exactly one Task message. A changed payload with the same ID returns the stable typed conflict.
 - Deduplication / relationship: `CS-059` is Channel interaction-to-Control branch drift after a late Channel receipt; `CS-042` and `CS-052` are local Task create/message atomicity. This finding owns direct Panel/Gateway whole-Control-Turn request replay.
 
+### `CS-069` — Operator steer hides its durable replay identity from callers
+
+- Severity / status / confidence: `P1` / `new` / high.
+- Owners and affected surfaces: public Task operator-steer route, generated SDK, Overlay steer controls, durable agent-coordination request, and Orchestrator wake.
+- Observable surface: a steer can be durably queued and wake the Orchestrator, but if its 202 response is lost the UI-preserved retry creates a second coordination request and a second wake. The same human instruction may be consumed twice after the first changed agent state.
+- Direct trigger: the coordination request/wake transaction commits, the response fails before the caller learns the generated request ID, and Overlay or an SDK caller resubmits the same message.
+- Root cause and control/data flow: the public input contains only `message`. The service omits `operatorSteerID`, so the lower layer generates a fresh Artifact ID on every call. That lower layer already supports replay lookup, payload conflict checking, and request-plus-wake atomicity by `(taskID, operatorSteerID)`, but the public contract returns the ID only after success and never lets callers present it.
+- Why the current structure does not cure it: Overlay's live `sending` guard covers only one Promise. Its failure path intentionally preserves the text for retry, exactly when the original server-generated identity is unavailable. Durable lower-level replay cannot be reached.
+- Evidence: public model and route `packages/opencorvus/src/engine/model.ts:1139-1149` and `packages/opencorvus/src/server/routes/orchestrator.ts:1653-1678`; generated SDK/type `packages/sdk/js/src/gen/sdk.gen.ts:7150-7187` and `packages/sdk/js/src/gen/types.gen.ts:32638-32652`; service omission `packages/opencorvus/src/task-api/index.ts:2621-2636`; ID generation and durable replay primitive `packages/opencorvus/src/engine/agent-coordination.ts:716-800`; Overlay retry behavior `packages/overlay/src/components/OperatorSteerBox.tsx:80-113` and `packages/overlay/src/services/task.ts:884-897`.
+- Contract, data, test, documentation, delivery, and risk impact: public request identity, coordination Artifact, wake, agent consumption, and UI retry semantics disagree. Duplicate instructions can repeat downstream actions. No route-to-transaction response-loss test exercises the existing replay primitive.
+- Bounded refactoring direction: require callers to allocate and send one stable operator-steer occurrence ID before first submission; SDK and Overlay retain it across retry and pass it directly to the existing transactional replay authority. Delete server-generated fallback so the public path has one identity semantics.
+- Required positive verification for a future repair: cut the response after request/wake commit; same ID and message return the original request with one Artifact, one pending wake, and one consumption. Same ID with changed target or message returns a typed conflict, including through Overlay retry.
+- Deduplication / relationship: unlike `CS-068`, this path bypasses ControlMessage and already has a lower-level durable replay primitive. `CS-052` owns Task root-message acceptance, not a child-worker coordination request.
+
+### `CS-070` — MCP OAuth persists PKCE data but not its flow occurrence
+
+- Severity / status / confidence: `P1` / `new` / high.
+- Owners and affected surfaces: public Model Context Protocol (MCP) OAuth start/callback, Proof Key for Code Exchange (PKCE) state/verifier, external code exchange, token store, connection state, and generated SDK result.
+- Observable surface: restart after publishing an authorization URL makes its callback fail even though state/verifier are persisted. If token exchange or persistence succeeds but the callback response is lost, replay cannot return the existing success; an external one-time code may already be consumed without a recoverable terminal receipt.
+- Direct trigger: restart between start and callback; lose the start response and start again; or terminate/disconnect after code exchange, token persistence, or connection establishment but before callback delivery.
+- Root cause and control/data flow: the auth file can persist OAuth state, verifier, and tokens, but the actual `{state, revision, correlationID}` flow owner and revision live in module-level Maps. Callback requires that in-memory owner before using persisted PKCE data, then clears owner/state in `finally`; success is returned only as an ephemeral status and has no durable callback occurrence or terminal result.
+- Why the current structure does not cure it: atomic auth-file writes protect each snapshot but do not coordinate external code consumption, token saving, connection, and HTTP delivery. Persisted state cannot restore a flow because the process-local Map is an earlier mandatory gate.
+- Evidence: public routes `packages/opencorvus/src/server/routes/mcp.ts:112-178`; in-memory owner `packages/opencorvus/src/mcp/index.ts:1056-1062`; start publication `packages/opencorvus/src/mcp/index.ts:3461-3486,3537-3548,3618-3621`; callback gate/cleanup/exchange/return `packages/opencorvus/src/mcp/index.ts:3691-3803`; persisted OAuth fields `packages/opencorvus/src/mcp/oauth-provider.ts:132-193`; durable entry and in-memory revision boundaries `packages/opencorvus/src/mcp/auth.ts:29-49,112-124,250-287`.
+- Contract, data, test, documentation, delivery, and risk impact: authorization URL, PKCE secret, external authorization code, token revision, live connection, and public callback status can disagree. Callers may see failure after credentials are active or be forced through a second authorization. No restart/callback replay kill-point test covers the chain.
+- Bounded refactoring direction: create one durable `(project, MCP name, flow ID/state)` OAuth occurrence containing PKCE identity, credential/config revision, stages, and terminal result. Start replays the same occurrence; callback compare-and-consumes it, resumes after restart, and returns persisted success without exchanging twice. Explicit replacement/cancel terminalizes the old occurrence. Delete process-local Maps as correctness authority.
+- Required positive verification for a future repair: terminate at state persistence, URL publication, code exchange, token save, reconnect, terminal save, and response delivery; restart/replay converges on one flow, one effective exchange/token revision, and one terminal result. Mismatched payload returns typed conflict and every resource is released once.
+- Deduplication / relationship: `CS-039` is MCP configuration/static-credential atomicity and `CS-067` is Provider OAuth's overwriteable method slot. This item owns the independent MCP OAuth external-exchange and restart-recovery protocol.
+
+### `CS-071` — Provider token refresh can strand a rotated remote credential
+
+- Severity / status / confidence: `P1` / `new` / high.
+- Owners and affected surfaces: OpenAI Codex, xAI, and Snowflake Cortex runtime OAuth refresh; model requests; account usage; shared Provider auth store.
+- Observable surface: a remote refresh succeeds and rotates the refresh token, but termination or local write failure leaves the old token in `auth.json`. Restart submits that now-invalid token again and the Provider can remain unusable until the user authorizes afresh.
+- Direct trigger: an access token reaches refresh time, the remote token endpoint returns new credentials, and the process exits or `Auth.set` fails before publishing them locally.
+- Root cause and control/data flow: the remote endpoint is the first mutation authority and the local credential file is the second. Each implementation calls remote refresh first, then writes credentials. Process-local single-flight Promises merge only live calls and cannot identify or recover the remote occurrence after restart; the atomic file writer protects one snapshot but records no refresh stage or terminal revision.
+- Why the current structure does not cure it: falling back to the old refresh token when a response omits a replacement helps non-rotating issuers only. It cannot recover a replacement that was returned and accepted remotely but never became durable locally.
+- Evidence: OpenAI refresh/write and production callers `packages/opencorvus/src/plugin/openai/codex.ts:136-181,420-440` and `packages/opencorvus/src/provider/account-usage.ts:121-144`; xAI rotation and write `packages/opencorvus/src/plugin/xai.ts:169-184,508-559`; Snowflake load/request refresh `packages/opencorvus/src/plugin/snowflake-cortex.ts:129-150,294-324,338-370`; auth writer `packages/opencorvus/src/auth/index.ts:107-119`.
+- Contract, data, test, documentation, delivery, and risk impact: remote and local credential revisions permanently diverge across three duplicated implementations, blocking model and usage calls. No kill-point or local-write-failure test proves a recoverable outcome.
+- Bounded refactoring direction: one shared durable Provider credential-refresh occurrence binds provider/account/issuer, old revision, stages, and final new revision. Admit before remote exchange, publish new credentials and terminal receipt under its revision owner, and recover it before another refresh. For issuers without idempotent exchange/result lookup, surface an explicit reauthorization-required terminal state rather than silently retrying the old token. Delete the three Promise-plus-direct-write correctness protocols.
+- Required positive verification for a future repair: terminate before/after exchange, credential write, and terminal receipt for rotating and access-only issuers; restart yields one explicit credential revision or reauthorization state, never silently loops the old rotated token, and successful recovery serves model/account-usage requests.
+- Deduplication / relationship: `CS-067` covers initial Provider authorization flow identity, `CS-070` covers MCP PKCE callback recovery, and `CS-048` covers Provider removal. This is production Provider refresh-token rotation.
+
+### `CS-072` — Question replay rejects its already-committed terminal result
+
+- Severity / status / confidence: `P2` / `new` / high.
+- Owners and affected surfaces: public Question reply/reject routes, process-local pending waiter, durable interaction terminal event, generated SDK, and Overlay Interaction card.
+- Observable surface: a reply or rejection is durably committed, but if its HTTP response is lost the same request replay returns 404 “Question request not found.” The caller cannot distinguish success from absence or retrieve the canonical terminal result; Overlay keeps the card available for a retry that then appears to fail.
+- Direct trigger: Question publishes its user-owned terminal event, removes the pending waiter, and the connection fails before the 200 response arrives; the same request ID/payload is resubmitted, including after restart.
+- Root cause and control/data flow: the public route calls `Question.reply/reject`, whose first correctness gate is the module's pending Map. The successful path commits a durable event then consumes that Map entry. Replay never queries the durable Engine interaction terminal projection, although that layer already has terminal replay semantics.
+- Why the current structure does not cure it: a stable target ID is not a receipt when the only HTTP authority is an already-consumed in-memory waiter. Overlay's live in-flight lock ends with the Promise and intentionally leaves failed UI state actionable.
+- Evidence: public routes `packages/opencorvus/src/server/routes/question.ts:34-100`; pending-map and durable-publication ordering `packages/opencorvus/src/question/index.ts:358-445`; existing durable interaction replay `packages/opencorvus/src/engine/interaction.ts:323-425`; generated SDK `packages/sdk/js/src/gen/sdk.gen.ts:11184-11238`; Overlay submission/card behavior `packages/overlay/src/services/interaction-reply.ts:33-63,92-107` and `packages/overlay/src/components/InteractionCard.tsx:142-175`.
+- Contract, data, test, documentation, delivery, and risk impact: durable terminal state, HTTP result, SDK boolean contract, and UI state disagree. It does not repeat a second domain mutation like `CS-059`, but false failure encourages conflicting manual recovery and makes restart-safe reply semantics impossible.
+- Bounded refactoring direction: make the durable interaction terminal authority own direct Question reply/reject by request ID plus normalized payload fingerprint. First commit stores the typed result; identical replay returns it and mismatched answers/decision return typed conflict. Delete the pending Map as the public correctness gate.
+- Required positive verification for a future repair: cut delivery after terminal commit and replay before/after restart; identical reply/reject returns the same typed terminal result and one Memory/event occurrence, while changed payload returns conflict.
+- Deduplication / relationship: `CS-059` reinterprets a Channel replay as a different Control mutation; this item stays on the direct Question route and falsely rejects its existing result. Permission already uses a durable winner ledger.
+
+### `CS-073` — MCP runtime refresh can strand a rotated remote credential
+
+- Severity / status / confidence: `P1` / `new` / high.
+- Owners and affected surfaces: remote Model Context Protocol (MCP) Server-Sent Events and Streamable HTTP transports, third-party MCP SDK OAuth refresh, `mcp-auth.json`, connection status, and reconnect.
+- Observable surface: after a 401, the SDK can successfully rotate a remote refresh token, but termination or local persistence failure leaves the old token in `mcp-auth.json`. Restart/reconnect submits that invalid token and the configured MCP can fall into persistent `needs_auth` or failure despite a newer remote credential having existed.
+- Direct trigger: an authenticated MCP connection receives 401, SDK refresh returns replacement tokens, and the process exits or application `saveTokens` fails before publishing them locally.
+- Root cause and control/data flow: production transports inject `McpOAuthProvider`. The SDK's `auth()` implementation calls remote `refreshAuthorization` first and only then invokes the provider's `saveTokens`; application persistence is a separate atomic JSON update with no refresh occurrence, old/new revision stages, or restart owner. The SDK's error flow can proceed toward a new authorization path even when the ambiguous failure was local token saving.
+- Why the current structure does not cure it: local atomic write protects one file snapshot but cannot coordinate remote rotation. In-memory expected revisions disappear on crash and do not identify whether exchange occurred. Automatic reconnect is another attempt, not recovery of the first external occurrence.
+- Evidence: production provider injection/connect `packages/opencorvus/src/mcp/index.ts:1249-1270,2692-2764`; SDK 401 auth paths `node_modules/.bun/@modelcontextprotocol+sdk@1.26.0/node_modules/@modelcontextprotocol/sdk/dist/esm/client/streamableHttp.js:36-56,94-99,314-323` and `node_modules/.bun/@modelcontextprotocol+sdk@1.26.0/node_modules/@modelcontextprotocol/sdk/dist/esm/client/sse.js:175-190`; SDK refresh/save and replacement-token logic `node_modules/.bun/@modelcontextprotocol+sdk@1.26.0/node_modules/@modelcontextprotocol/sdk/dist/esm/client/auth.js:229-268,717-742`; application reader/writer `packages/opencorvus/src/mcp/oauth-provider.ts:116-146` and `packages/opencorvus/src/mcp/auth.ts:112-124,180-197`.
+- Contract, data, test, documentation, delivery, and risk impact: remote token revision, local durable credential, transport connection, and status diverge; ordinary requests can unexpectedly require reauthorization. No rotating-token, write-failure, or refresh kill-point test covers either MCP transport.
+- Bounded refactoring direction: integrate one durable MCP credential-refresh occurrence at the application auth-provider/transport boundary, binding auth key/server identity, old revision, stages, and new revision or explicit reauthorization terminal state. Admit before remote refresh and recover it before reconnecting with the old token. Do not fork the SDK into a second correctness source; delete direct `saveTokens`-means-complete semantics.
+- Required positive verification for a future repair: use a rotating-token test server and terminate before/after remote response, save, and terminal receipt; restart yields one new revision or stable reauthorization state, never silently loops the old token, across both SSE and Streamable HTTP. Concurrent 401s share one durable occurrence.
+- Deduplication / relationship: `CS-070` is MCP initial PKCE/code callback recovery and `CS-071` is Provider runtime refresh using `auth.json`. This item owns the independent MCP SDK-driven production refresh and `mcp-auth.json` authority.
+
+### `CS-074` — Terminal manage-task replay rewrites committed success as rejection
+
+- Severity / status / confidence: `P1` / `new` / high.
+- Owners and affected surfaces: public Orchestrator `manage_task` complete/fail/cancel actions, Task terminal transaction, Completion Decision or cancellation receipt, stable provider tool-call identity, Session processor, and visible ToolPart result.
+- Observable surface: canonical Task lifecycle can durably record that one tool call completed, failed, or cancelled the Task, while the visible result for that same call ultimately says `manage_task` was not executed because the Task was already terminal.
+- Direct trigger: a terminal lifecycle mutation commits, but streaming stops or ToolPart result persistence fails before recording its success text; the provider/tool stream replays the same call ID.
+- Root cause and control/data flow: `manage_task` delegates complete/fail/cancel to internal lifecycle actions and wraps them with a current-state terminal gate. Each action terminalizes or cancels first and constructs its success result only afterwards; Session processing persists that result in a later step. Replay reuses the stable ToolPart/call ID but re-enters the wrapper against current lifecycle, takes the generic terminal refusal, and stores it on the same occurrence.
+- Why the current structure does not cure it: the Completion Decision already contains the exact tool-call identity, but the tool does not query it before interpreting current Task state. Stable ToolPart identity prevents a second part, not a contradictory output overwrite/recovery.
+- Evidence: public action delegation and wrapper `packages/opencorvus/src/orchestrator/tools.ts:419-426,928-1041,2567-2619`; fail/complete/cancel mutation-before-result paths `packages/opencorvus/src/orchestrator/task-lifecycle-tools.ts:68-86,113-218`; transaction effect and winning terminal commit `packages/opencorvus/src/engine/state.ts:61-64,90-95,793-808`; provider replay/ToolPart reuse and later result persistence `packages/opencorvus/src/session/processor.ts:129-148,261-303,355-377,725-766,801-813`.
+- Contract, data, test, documentation, delivery, and risk impact: canonical lifecycle/decision or cancellation receipt, provider call identity, conversation ToolPart, and user-visible result conflict. Downstream reasoning sees a real participant result that denies the successful terminal mutation. No interruption/replay test covers all three actions.
+- Bounded refactoring direction: make `(taskID, toolCallID, action)` the terminal lifecycle occurrence and query its canonical decision/receipt before current-state rejection. Identical replay returns the persisted action-specific success; changed payload conflicts; only a new tool-call ID against a terminal Task receives current-state refusal. ToolPart settlement restores from the occurrence rather than rerunning lifecycle interpretation.
+- Required positive verification for a future repair: terminate each complete/fail/cancel action after terminal commit but before ToolPart success persistence; same call ID/action/payload returns the original success with one transition/receipt. Changed payload conflicts, while a new call ID receives the terminal refusal.
+- Deduplication / relationship: `CS-001` is Build terminal-fact fail-open and `CS-034`/`CS-047`/`CS-054` are domain outcome promotion. This item is a committed terminal success whose visible result is rewritten during stable-call replay.
+
+### `CS-075` — Fact Check succeeds without its workflow-required review
+
+- Severity / status / confidence: `P1` / `new` / high.
+- Owners and affected surfaces: Fact Check Agent, `record_fact_check_review`, FactCheckReview Artifact, dispatch settlement, Research Studio workflows, and Writer frontier.
+- Observable surface: Fact Checker can finish without publishing any FactCheckReview, yet its node settles `terminal_success` and opens Writer, which is documented to consume that exact Artifact.
+- Direct trigger: the model Turn ends normally without calling `record_fact_check_review`, so the process-local collector has no review.
+- Root cause and control/data flow: the domain output tool is labelled optional and writes only to an in-process collector. The runner returns a normal Session result without a review, and the adapter maps `!result.review` directly to `DispatchOutcome.terminal`. Workflow frontier consumes generic terminal success rather than requiring the domain Artifact.
+- Why the current structure does not cure it: the built-in Research Studio workflows make Fact Checker a required Writer predecessor, and its system prompt says to record the complete typed review for Writer. A runtime-local “optional” annotation contradicts that domain completion contract; natural Turn termination is not evidence of delivery.
+- Evidence: optional tool/collector `packages/opencorvus/src/fact-check/tools.ts:12-29`; no-review result `packages/opencorvus/src/fact-check/index.ts:243-259`; fail-open adapter `packages/opencorvus/src/orchestrator/fact-check-tool.ts:149-157`; declared domain output `packages/opencorvus/src/agent/dispatch-adapter-contract.ts:177-184`; required workflow dependencies `packages/opencorvus/src/expert-squad/builtin/research-studio/expert-squad.jsonc:153-166,184-197`; Fact Checker/Writer contract `packages/opencorvus/src/expert-squad/builtin/research-studio/agents/research-studio-fact-checker/system.md:10-15`.
+- Contract, data, test, documentation, delivery, and risk impact: workflow terminal projection, FactCheckReview Catalog state, and Writer prerequisite disagree. Reports can proceed without independent review/corrections while the graph claims the check succeeded. No missing-review frontier test exists.
+- Bounded refactoring direction: define a Fact Check domain terminal union such as `review_published(locator)`, `coordination_handoff`, or `domain_incomplete(reason)`. Missing review closes successors and remains non-success; delete `!review -> terminal`. Do not host-gate the model into calling a tool—settle its real output honestly.
+- Required positive verification for a future repair: a natural Turn without review returns domain-incomplete and keeps Writer closed; a valid published review creates one Artifact and opens Writer; semantic validation failure preserves the real tool result without success; handoff retains its distinct settlement.
+- Deduplication / relationship: `CS-034`, `CS-047`, and `CS-054` own Architect, Frontend Design, and Research producers. This item owns a separate FactCheckReview producer and required workflow edge.
+
+### `CS-076` — Native upgrade discards its exact-version verification result
+
+- Severity / status / confidence: `P1` / `new` / high.
+- Owners and affected surfaces: native installer, manual/automatic upgrade, executable version probe, `installation.updated` event, CLI and user-visible upgrade state.
+- Observable surface: an installer exits zero but leaves the old, missing, corrupt, or non-executable binary; the command still displays `Upgrade complete`, and automatic upgrade publishes the requested target version as installed.
+- Direct trigger: remote native install returns exit code zero, but `${process.execPath} --version` fails or reports a version different from `target`.
+- Root cause and control/data flow: installer exit is the only checked success condition. Code then runs a post-install version command with `.nothrow()` but ignores both its exit status and output, returns normally, and callers synthesize success/event data from the requested target rather than an observed executable receipt.
+- Why the current structure does not cure it: `UpgradeFailedError` covers installer nonzero only. The repository already has the right observation point, but treats it as a discarded side effect instead of settlement evidence.
+- Evidence: install and ignored probe `packages/opencorvus/src/installation/index.ts:68-95`; manual success projection `packages/opencorvus/src/cli/cmd/upgrade.ts:6-49`; automatic success event `packages/opencorvus/src/cli/upgrade.ts:9-32`; event contract `packages/opencorvus/src/installation/index.ts:19-32`.
+- Contract, data, test, documentation, delivery, and risk impact: physical installation, current executable revision, CLI output, Bus event, updater/UI state, rollback, and support diagnostics can disagree. No exact-version positive fixture covers the success boundary.
+- Bounded refactoring direction: have the installer identify the candidate executable and verify it through a supervised machine-readable version command. Only exit zero plus normalized exact target produces a typed upgrade receipt; manual output and `installation.updated` consume the observed receipt. Delete installer-exit-zero fallback and discarded probe.
+- Required positive verification for a future repair: isolated fixtures cover installer nonzero, missing executable, version command nonzero, old version, and target version; only the last publishes one receipt/event and success output, using one shared version normalizer.
+- Deduplication / relationship: `CS-045` is server lifecycle acceptance and `CS-063` is immutable Release asset overwrite. This item is client-side physical installation result verification.
+
+### `CS-077` — Requirements publishes an empty set as domain success
+
+- Severity / status / confidence: `P1` / `new` / high.
+- Owners and affected surfaces: Requirements Agent collectors, RequirementSet Artifact, dispatch settlement, Advanced workflow, and Solution Architect frontier.
+- Observable surface: a Requirements Turn can register no requirements or decisions, yet persist a canonical empty RequirementSet and settle success; Solution Architect opens with none of the requested obligations or decisions.
+- Direct trigger: the model naturally ends without calling `register_requirement` or `register_decision`.
+- Root cause and control/data flow: collector arrays start empty; conversion maps them directly into an output whose TypeScript schema allows arbitrary array length. The adapter unconditionally persists and terminalizes that output. Neither producer settlement nor workflow edge checks non-emptiness, request coverage, or unresolved decisions.
+- Why the current structure does not cure it: the Advanced workflow makes Requirement Engineer a required Architect predecessor, and its system contract requires the typed register protocol for downstream exact consumption. A syntactically valid empty Artifact hides total domain omission rather than representing it as incomplete.
+- Evidence: empty collector `packages/opencorvus/src/requirements/output-tools.ts:99-111`; unchecked conversion `packages/opencorvus/src/requirements/agent.ts:131-191`; permissive type `packages/opencorvus/src/requirements/types.ts:61-70`; unconditional persist/success `packages/opencorvus/src/orchestrator/requirements-stage.ts:82-112,139-149`; workflow and agent contract `packages/opencorvus/src/expert-squad/builtin/advanced/expert-squad.jsonc:360-376` and `packages/opencorvus/src/expert-squad/builtin/advanced/agents/requirement-engineer/system.md:1-7`.
+- Contract, data, test, documentation, delivery, and risk impact: user request obligations, RequirementSet, workflow state, and Architect inputs diverge. Rejection/acceptance criteria can disappear while the graph claims Requirements succeeded. No zero/partial coverage frontier test exists.
+- Bounded refactoring direction: Requirements settlement distinguishes `requirement_set_published(locator)` from `domain_incomplete`; for a non-empty Task, reject a structurally empty RequirementSet and persist explicit unresolved/coverage receipts before success. Do not add a host-side natural-language sufficiency gate. Empty output remains non-success and closes Architect.
+- Required positive verification for a future repair: zero registrations and decisions-only settle incomplete and keep Architect closed; one non-empty canonical RequirementSet with explicit unresolved/coverage state opens it.
+- Deduplication / relationship: `CS-075` has no FactCheckReview at all. This item persists a real but domain-empty RequirementSet for a different required edge.
+
+### `CS-078` — Workload Review succeeds with no Delivery Slice briefs
+
+- Severity / status / confidence: `P1` / `new` / high.
+- Owners and affected surfaces: Goal Workload Analyst collector, workload Artifact, Delivery Slice revisions, Advanced/interface workflows, and System Integrity Review frontier.
+- Observable surface: Workload Reviewer can register zero briefs, yet publish `briefs: []` and settle success; the required Integrity Review successor opens without workload, omission, or verification-cost evidence for any current Delivery Slice.
+- Direct trigger: the model ends without calling `register_workload_brief` for one or all current Slices.
+- Root cause and control/data flow: collector starts with an empty briefs array; the prompt says to call once per current Slice, but the agent returns the array without comparing it to the known Slice revision set. The schema permits any length and the adapter persists/terminalizes the result unconditionally.
+- Why the current structure does not cure it: prompt-only cardinality is not settlement. Workflow edges declare Workload Reviewer required and Integrity consumes its evidence; an empty Artifact looks like an authoritative review rather than missing per-Slice work.
+- Evidence: empty collector `packages/opencorvus/src/goal-workload-analyst/output-tools.ts:16-27`; per-Slice obligation `packages/opencorvus/src/prompt/core/goal-workload-analyst-core.txt:34`; unchecked return `packages/opencorvus/src/goal-workload-analyst/agent.ts:107-121`; permissive schema `packages/opencorvus/src/goal-workload-analyst/types.ts:58-66`; unconditional success `packages/opencorvus/src/orchestrator/workload-analysis-tool.ts:69-83`; required workflow edges `packages/opencorvus/src/expert-squad/builtin/advanced/expert-squad.jsonc:373-396`.
+- Contract, data, test, documentation, delivery, and risk impact: current Slice set, workload Artifact, workflow completion, Integrity inputs, and final delivery evidence disagree. A mandatory independent evidence branch can vanish. No 0/N, N-1/N, stale, or duplicate revision coverage test exists.
+- Bounded refactoring direction: bind the exact selected goal IDs and revisions resolved for this Workload occurrence and require exactly one current brief per selected identity before terminal success. Missing, extra, duplicate, or stale coverage produces typed incomplete/conflict and keeps successors closed.
+- Required positive verification for a future repair: for the selected input set, 0/N, N-1/N, stale, extra, and duplicate coverage settle incomplete/conflict; N/N produces one canonical workload Artifact and opens Integrity Review.
+- Deduplication / relationship: `CS-077` is request-obligation coverage in RequirementSet; this item is a per-Slice cardinality/revision invariant with a different producer, Artifact, and consumer.
+
 ## Needs-Proof Queue
 
 - Restart handoff classifies bind failures with `Error.message.includes("port" | "address")` at `packages/opencorvus/src/server/restart-handoff.ts:107-120`. The human-text protocol is structurally fragile, but no supported Bun/platform error variant or stable structured alternative was proven, so it is not admitted.
@@ -1212,11 +1396,11 @@ This is repository-state saturation, not a claim that future changes cannot intr
 The backlog should be implemented by authority dependency, with each item retaining its own positive acceptance contract:
 
 1. **Privilege and irreversible-data boundaries:** `CS-009`, `CS-036`, `CS-040`, `CS-046`, then trust/integrity hardening in `CS-025` and `CS-029`.
-2. **Durable mutation and terminal settlement:** `CS-001`, `CS-002`, `CS-003`, `CS-024`, `CS-034`, `CS-035`, `CS-039`, `CS-042`, `CS-044`, `CS-047`, `CS-048`, `CS-050`, `CS-052`, `CS-054`, `CS-055`, `CS-057`, `CS-058`, `CS-059`, `CS-060`, `CS-062`, and `CS-068`. Establish shared occurrence/receipt and domain-settlement primitives before changing consumers; do not introduce dual readers or fallback migrations.
+2. **Durable mutation and terminal settlement:** `CS-001`, `CS-002`, `CS-003`, `CS-024`, `CS-034`, `CS-035`, `CS-039`, `CS-042`, `CS-044`, `CS-047`, `CS-048`, `CS-050`, `CS-052`, `CS-054`, `CS-055`, `CS-057`, `CS-058`, `CS-059`, `CS-060`, `CS-062`, `CS-068`, `CS-069`, `CS-070`, `CS-071`, `CS-072`, `CS-073`, `CS-074`, `CS-075`, `CS-077`, and `CS-078`. Establish shared occurrence/receipt and domain-settlement primitives before changing consumers; do not introduce dual readers or fallback migrations.
 3. **Process and runtime ownership:** `CS-011`, `CS-013`, `CS-021`, `CS-022`, `CS-023`, `CS-032`, `CS-041`, `CS-043`, `CS-045`, `CS-051`, `CS-056`, and `CS-067`. Machine readiness and exact lifecycle/process occurrences should precede SDK, Browser MCP, provider refresh/auth, Channel, native sidecar, public restart/shutdown, and Worktree reuse rewrites.
 4. **Single protocol and projection authorities:** `CS-004`, `CS-005`, `CS-010`, `CS-020`, `CS-033`, `CS-037`, `CS-038`, and `CS-049`. Move each policy to one typed runtime-neutral owner and delete the old reader/writer in the same change.
 5. **Registry, composition, and package topology:** `CS-006`, `CS-012`, `CS-014`, `CS-016`, `CS-019`, `CS-027`, `CS-028`, `CS-031`, `CS-053`, `CS-061`, `CS-064`, `CS-065`, and `CS-066`.
-6. **Dead systems and delivery truthfulness:** `CS-007`, `CS-008`, `CS-015`, `CS-017`, `CS-026`, `CS-030`, and `CS-063`. The prohibited pixel-checker finding is already fixed during this audit; keep it closed while rebuilding the non-UI required-check inventory.
+6. **Dead systems and delivery truthfulness:** `CS-007`, `CS-008`, `CS-015`, `CS-017`, `CS-026`, `CS-030`, `CS-063`, and `CS-076`. The prohibited pixel-checker finding is already fixed during this audit; keep it closed while rebuilding the non-UI required-check inventory.
 
 Items within a wave are not one oversized refactor. Each future change should select one bounded issue, re-read its definitions/callers/contracts, add the listed positive verification, delete superseded paths, and undergo independent review before closure.
 
@@ -1224,10 +1408,10 @@ Items within a wave are not one oversized refactor. Each future change should se
 
 - `git status --short`: captured before investigation; unrelated dirty changes listed in Recall.
 - `bun run docs:check`: passed (`docs:check ok`, 338 operations, 25 groups).
-- Register identity check after saturation: passed for 68 headings, 68 unique identities, continuous `CS-001..068`; severity counts are 1 P0, 36 P1, 25 P2, and 6 P3, and status counts are 61 new, 6 existing-reproduced, and 1 fixed-during-audit.
+- Register identity check after saturation: passed for 78 headings, 78 unique identities, continuous `CS-001..078`; severity counts are 1 P0, 45 P1, 26 P2, and 6 P3, and status counts are 71 new, 6 existing-reproduced, and 1 fixed-during-audit.
 - `git diff --check` on task-owned tracked paths: passed.
 - UI automation: not run. `packages/overlay/test/app-icon-generation.test.ts` was deleted after static inspection because repository rules prohibit retaining the pixel/alpha/color UI test.
 - Negative-contract test: `packages/opencorvus/test/lsp-disabled-runtime.test.ts` was deleted because its core assertions require LSP absence/unavailability; the LSP implementation backlog remains `CS-026`.
-- Independent final review: passed after one P2 documentation-consistency correction to Round 8. The reviewer independently confirmed Recall coverage, all 68 identities/counts, Rounds 16/17 saturation, all 67 open items appearing exactly once in Refactoring Order, and code evidence samples for `CS-001`, `CS-009`, `CS-018`, `CS-034`, `CS-040`, `CS-042`, `CS-043`, `CS-052`, `CS-058`, `CS-063`, `CS-067`, and `CS-068`; the post-correction re-review returned PASS with no unresolved finding.
-- Final `git status --short`: captured; the worktree contains extensive unrelated concurrent Overlay changes, two test deletions, and untracked UI scripts/tests. This audit owns only its record and the exact repository-audit index lines.
-- Commit and push safety audit: current `main` tracks `origin/main` but already contains two unrelated outgoing commits (`64098480`, `cbe173fa`). This audit may create a precise documentation commit, but automatic push is blocked until those existing commits are explicitly authorized as part of the push set.
+- Independent final review: passed against the final `CS-001..078` register after correcting two stale Git-delivery log lines. The independent re-review confirmed all identities/counts, Rounds 23/24 saturation, exactly-once refactoring-wave coverage, both required deletions, task/unrelated-file separation, and the push blocker with no unresolved finding. Earlier review passes correctly rejected stale 41- and 68-item snapshots after late admissions; they are historical evidence, not final approval.
+- Final `git status --short`: captured; the worktree contains unrelated concurrent Overlay changes. This audit owns its record, the exact repository-audit index lines, deletion of `packages/overlay/test/app-icon-generation.test.ts`, and deletion of `packages/opencorvus/test/lsp-disabled-runtime.test.ts`; all other dirty paths are preserved as unrelated.
+- Commit and push safety audit: `main` tracks `origin/main`; after committing this record, the task-owned outgoing set consists of seed commit `6897c59c` and the current commit carrying the final register, review corrections, and two required deletions. The same `origin/main..HEAD` set also contains unrelated Overlay commits `fcddb8f3` and `ba81149a`. Automatic push remains blocked because pushing the current branch would publish those unrelated commits without this task's authorization or review; the current record commit is intentionally identified by Git metadata rather than a self-referential hash.
