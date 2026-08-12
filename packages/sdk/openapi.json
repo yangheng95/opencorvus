@@ -19025,6 +19025,44 @@
         },
         "type": "object"
       },
+      "WorktreeOwnershipObservationError": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "operation": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "operation",
+              "code",
+              "scope",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "WorktreeOwnershipObservationError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "WorktreeRemoveInput": {
         "properties": {
           "directory": {
@@ -24419,7 +24457,74 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "oneOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "ok": {
+                          "const": true,
+                          "type": "boolean"
+                        },
+                        "status": {
+                          "const": "removed",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "ok",
+                        "status"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "ok": {
+                          "const": true,
+                          "type": "boolean"
+                        },
+                        "preservations": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "code": {
+                                "type": "string"
+                              },
+                              "message": {
+                                "type": "string"
+                              },
+                              "operation": {
+                                "type": "string"
+                              },
+                              "scope": {
+                                "const": "worktree-cleanup",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "operation",
+                              "code",
+                              "scope",
+                              "message"
+                            ],
+                            "type": "object"
+                          },
+                          "minItems": 1,
+                          "type": "array"
+                        },
+                        "status": {
+                          "const": "removed_with_preservation",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "ok",
+                        "status",
+                        "preservations"
+                      ],
+                      "type": "object"
+                    }
+                  ]
                 }
               }
             },
@@ -24485,6 +24590,16 @@
               }
             },
             "description": "Not found"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorktreeOwnershipObservationError"
+                }
+              }
+            },
+            "description": "Required ownership authority could not be observed safely"
           }
         },
         "summary": "Remove worktree",
@@ -72058,21 +72173,27 @@
                   "properties": {
                     "worktreeGCCandidates": {
                       "items": {
+                        "additionalProperties": false,
                         "properties": {
                           "directory": {
                             "type": "string"
                           },
-                          "primaryDir": {
+                          "projectID": {
                             "type": "string"
                           },
-                          "projectID": {
+                          "reason": {
+                            "enum": [
+                              "old-clean",
+                              "old-zombie",
+                              "registry-prunable"
+                            ],
                             "type": "string"
                           }
                         },
                         "required": [
                           "projectID",
-                          "primaryDir",
-                          "directory"
+                          "directory",
+                          "reason"
                         ],
                         "type": "object"
                       },
@@ -72080,26 +72201,33 @@
                     },
                     "worktreeGCPreservations": {
                       "items": {
+                        "additionalProperties": false,
                         "properties": {
-                          "detail": {
+                          "code": {
                             "type": "string"
                           },
-                          "primaryDir": {
+                          "operation": {
+                            "const": "inspect-worktree-gc",
                             "type": "string"
                           },
                           "projectID": {
                             "type": "string"
                           },
                           "reason": {
-                            "const": "registry-unavailable",
+                            "enum": [
+                              "primary-directory-unavailable",
+                              "managed-state-unavailable",
+                              "registry-unavailable",
+                              "durable-sandbox-owner"
+                            ],
                             "type": "string"
                           }
                         },
                         "required": [
                           "projectID",
-                          "primaryDir",
                           "reason",
-                          "detail"
+                          "operation",
+                          "code"
                         ],
                         "type": "object"
                       },
@@ -72107,43 +72235,20 @@
                     },
                     "worktreeOrphans": {
                       "items": {
+                        "additionalProperties": false,
                         "properties": {
-                          "marker": {
-                            "properties": {
-                              "createdAt": {
-                                "type": "number"
-                              },
-                              "cwd": {
-                                "type": "string"
-                              },
-                              "kind": {
-                                "const": "worktree",
-                                "type": "string"
-                              },
-                              "ownerPid": {
-                                "type": "number"
-                              },
-                              "sessionID": {
-                                "type": "string"
-                              },
-                              "taskID": {
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "taskID",
-                              "sessionID",
-                              "cwd",
-                              "ownerPid",
-                              "createdAt",
-                              "kind"
+                          "reason": {
+                            "enum": [
+                              "owner-process-dead",
+                              "target-missing",
+                              "marker-invalid"
                             ],
-                            "type": "object"
-                          },
-                          "markerPath": {
                             "type": "string"
                           },
-                          "reason": {
+                          "sessionID": {
+                            "type": "string"
+                          },
+                          "taskID": {
                             "type": "string"
                           },
                           "worktreeDir": {
@@ -72151,8 +72256,6 @@
                           }
                         },
                         "required": [
-                          "marker",
-                          "markerPath",
                           "reason"
                         ],
                         "type": "object"
@@ -72231,6 +72334,16 @@
               }
             },
             "description": "Not found"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorktreeOwnershipObservationError"
+                }
+              }
+            },
+            "description": "Required ownership authority could not be observed safely"
           }
         },
         "summary": "Inspect current project cleanup candidates",
@@ -72517,17 +72630,74 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "ok": {
-                      "const": true,
-                      "type": "boolean"
+                  "oneOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "ok": {
+                          "const": true,
+                          "type": "boolean"
+                        },
+                        "status": {
+                          "const": "removed",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "ok",
+                        "status"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "ok": {
+                          "const": true,
+                          "type": "boolean"
+                        },
+                        "preservations": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "code": {
+                                "type": "string"
+                              },
+                              "message": {
+                                "type": "string"
+                              },
+                              "operation": {
+                                "type": "string"
+                              },
+                              "scope": {
+                                "const": "worktree-cleanup",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "operation",
+                              "code",
+                              "scope",
+                              "message"
+                            ],
+                            "type": "object"
+                          },
+                          "minItems": 1,
+                          "type": "array"
+                        },
+                        "status": {
+                          "const": "removed_with_preservation",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "ok",
+                        "status",
+                        "preservations"
+                      ],
+                      "type": "object"
                     }
-                  },
-                  "required": [
-                    "ok"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
@@ -72593,6 +72763,16 @@
               }
             },
             "description": "Not found"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorktreeOwnershipObservationError"
+                }
+              }
+            },
+            "description": "Required ownership authority could not be observed safely"
           }
         },
         "summary": "Delete a current project worktree",

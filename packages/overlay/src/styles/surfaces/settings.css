@@ -152,6 +152,11 @@ button.s-row {
   cursor: pointer;
 }
 
+button.s-row:disabled {
+  cursor: default;
+  opacity: var(--ui-opacity-disabled);
+}
+
 button.s-row:focus-visible {
   outline: var(--oc-border-width) solid var(--accent);
   outline-offset: calc(1px * var(--ui-scale));
@@ -164,8 +169,8 @@ button.s-row:focus-visible {
 /* Hover wash is opt-in via `data-interactive="true"` so static info rows
  * (e.g. About panel runtime grid lines) do not pick up a hover glow on
  * an inert region. */
-.s-row[data-interactive="true"]:hover,
-.s-row[data-interactive="true"]:focus-within {
+.s-row[data-interactive="true"]:not(:disabled):hover,
+.s-row[data-interactive="true"]:not(:disabled):focus-within {
   background: var(--ui-list-hover-bg);
 }
 
@@ -1076,10 +1081,10 @@ button.s-row:focus-visible {
 .log-copy-feedback {
   flex: 0 0 auto;
   padding: calc(7px * var(--ui-scale)) calc(10px * var(--ui-scale));
-  border: var(--oc-border-width) solid color-mix(in srgb, var(--ok) 42%, transparent);
+  border: var(--oc-border-width) solid color-mix(in srgb, var(--good) 42%, transparent);
   border-radius: var(--oc-radius-soft);
-  background: color-mix(in srgb, var(--ok) 9%, var(--surface));
-  color: var(--ok);
+  background: color-mix(in srgb, var(--good) 9%, var(--surface));
+  color: var(--good);
   font-size: var(--ui-font-control);
   line-height: 1.35;
 }
@@ -1618,8 +1623,8 @@ button.s-row:focus-visible {
   box-shadow: inset 0 calc(1px * var(--ui-scale)) 0 0 color-mix(in srgb, var(--divider-soft) 76%, transparent);
 }
 
-#configDialog .s-row[data-interactive="true"]:hover,
-#configDialog .s-row[data-interactive="true"]:focus-within {
+#configDialog .s-row[data-interactive="true"]:not(:disabled):hover,
+#configDialog .s-row[data-interactive="true"]:not(:disabled):focus-within {
   background: color-mix(in srgb, var(--surface-hover) 64%, transparent);
 }
 
@@ -1739,37 +1744,6 @@ button.s-row:focus-visible {
   display: flex;
   gap: calc(10px * var(--ui-scale));
   flex-wrap: wrap;
-}
-
-.about-link {
-  display: inline-flex;
-  align-items: center;
-  gap: calc(6px * var(--ui-scale));
-  padding: calc(6px * var(--ui-scale)) calc(14px * var(--ui-scale));
-  border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-large);
-  background: var(--settings-surface-base);
-  color: var(--text-soft);
-  font-size: var(--ui-font-control);
-  text-decoration: none;
-  transition:
-    background var(--ui-duration-base),
-    border-color var(--ui-duration-base),
-    color var(--ui-duration-base);
-}
-
-.about-link:hover {
-  background: var(--settings-surface-muted);
-  border-color: var(--border-hover);
-  color: var(--text-strong);
-}
-
-.about-link:focus-visible {
-  background: var(--settings-surface-muted);
-  border-color: var(--border-hover);
-  color: var(--text-strong);
-  outline: var(--oc-border-width) solid var(--accent);
-  outline-offset: calc(2px * var(--ui-scale));
 }
 
 .about-shortcut-grid {
@@ -2413,7 +2387,7 @@ button.s-row:focus-visible {
   min-width: 0;
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 68%, transparent);
   border-radius: var(--oc-radius-soft);
-  background: var(--surface-primary);
+  background: var(--surface);
 }
 
 .expert-squad-evolution-record.is-selected {
@@ -2426,21 +2400,7 @@ button.s-row:focus-visible {
   display: grid;
   gap: calc(7px * var(--ui-scale));
   padding: calc(11px * var(--ui-scale));
-  border: 0;
   border-radius: inherit;
-  background: transparent;
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-
-.expert-squad-evolution-record-select:hover {
-  background: color-mix(in srgb, var(--accent) 4%, transparent);
-}
-
-.expert-squad-evolution-record-select:focus-visible {
-  outline: calc(2px * var(--ui-scale)) solid color-mix(in srgb, var(--accent) 60%, transparent);
-  outline-offset: calc(-2px * var(--ui-scale));
 }
 
 .expert-squad-evolution-record-title strong {
@@ -2513,7 +2473,7 @@ button.s-row:focus-visible {
   gap: calc(4px * var(--ui-scale));
   min-width: 0;
   padding: calc(9px * var(--ui-scale));
-  border-radius: var(--oc-radius-compact);
+  border-radius: var(--oc-radius-soft);
   background: var(--surface-inset);
 }
 
@@ -2527,7 +2487,7 @@ button.s-row:focus-visible {
   min-width: 0;
   padding: calc(9px * var(--ui-scale));
   border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 34%, var(--border));
-  border-radius: var(--oc-radius-compact);
+  border-radius: var(--oc-radius-soft);
   background: color-mix(in srgb, var(--bad) 5%, var(--surface-inset));
 }
 
@@ -2552,7 +2512,7 @@ button.s-row:focus-visible {
   gap: calc(5px * var(--ui-scale)) calc(8px * var(--ui-scale));
   align-items: center;
   padding: calc(9px * var(--ui-scale));
-  border-radius: var(--oc-radius-compact);
+  border-radius: var(--oc-radius-soft);
   background: var(--surface-inset);
 }
 

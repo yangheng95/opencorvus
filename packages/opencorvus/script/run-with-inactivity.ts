@@ -1,4 +1,9 @@
-import { runHostCommandWithInactivity } from "../src/shell/command-inactivity"
+import {
+  bootstrapIsolatedTestRuntime,
+  isolatedTestChildEnvironment,
+  removeIsolatedTestRuntime,
+} from "@opencorvus-ai/util/test-runtime-environment"
+import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 
 function parsePositiveInteger(value: string | undefined, name: string): number {
   if (!value || !/^\d+$/.test(value)) throw new Error(`${name} requires a positive integer`)
@@ -19,19 +24,30 @@ function parseCommand(argv: string[]): { inactivityMs: number; executable: strin
 }
 
 const command = parseCommand(process.argv.slice(2))
-const result = await runHostCommandWithInactivity({
-  executable: command.executable,
-  args: command.args,
-  cwd: process.cwd(),
-  env: process.env,
-  inactivityTimeoutMs: command.inactivityMs,
-  onStdout: (chunk) => process.stdout.write(chunk),
-  onStderr: (chunk) => process.stderr.write(chunk),
-})
+const testProcessSupervisor = prepareTestProcessSupervisor()
+const runnerRuntime = await bootstrapIsolatedTestRuntime("runner")
+if (testProcessSupervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = testProcessSupervisor
 
-if (result.exitCode === undefined) {
-  if (!result.failure) throw new Error("Inactivity runner returned no exit code or failure diagnostic")
-  process.stderr.write(`${result.failure.message}\n`)
-  process.exit(1)
+try {
+  const { runHostCommandWithInactivity } = await import("../src/shell/command-inactivity")
+  const result = await runHostCommandWithInactivity({
+    executable: command.executable,
+    args: command.args,
+    cwd: process.cwd(),
+    env: isolatedTestChildEnvironment(runnerRuntime),
+    inactivityTimeoutMs: command.inactivityMs,
+    onStdout: (chunk) => process.stdout.write(chunk),
+    onStderr: (chunk) => process.stderr.write(chunk),
+  })
+
+  if (result.failure) {
+    process.stderr.write(`${result.failure.message}\n`)
+    process.exitCode = 1
+  } else if (result.exitCode === undefined) {
+    throw new Error("Inactivity runner returned no exit code or failure diagnostic")
+  } else {
+    process.exitCode = result.exitCode
+  }
+} finally {
+  await removeIsolatedTestRuntime(runnerRuntime)
 }
-process.exit(result.exitCode)

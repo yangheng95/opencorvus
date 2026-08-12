@@ -29,9 +29,22 @@ const BAD_REQUEST_SCHEMA = z
     error: z.array(z.record(z.string(), z.any())),
     success: z.literal(false),
   })
-  .meta({
-    ref: "BadRequestError",
+  .meta({ ref: "BadRequestError" })
+
+const WORKTREE_OWNERSHIP_OBSERVATION_SCHEMA = z
+  .object({
+    name: z.literal("WorktreeOwnershipObservationError"),
+    data: z
+      .object({
+        operation: z.string(),
+        code: z.string(),
+        scope: z.string(),
+        message: z.string(),
+      })
+      .strict(),
   })
+  .strict()
+  .meta({ ref: "WorktreeOwnershipObservationError" })
 
 export const ERRORS = {
   400: {
@@ -71,6 +84,14 @@ export const ERRORS = {
     content: {
       "application/json": {
         schema: namedErrorSchema("UnknownError"),
+      },
+    },
+  },
+  503: {
+    description: "Required ownership authority could not be observed safely",
+    content: {
+      "application/json": {
+        schema: resolver(WORKTREE_OWNERSHIP_OBSERVATION_SCHEMA),
       },
     },
   },

@@ -10,7 +10,7 @@ const log = Log.create({ service: "channel.supervisor" })
 
 type RuntimeStatus = "disabled" | "unavailable" | "starting" | "running" | "stopped" | "error"
 
-type InProcessRuntime = { stop(): Promise<void> }
+type InProcessRuntime = { channels: readonly string[]; stop(): Promise<void> }
 
 type State = {
   runtime?: InProcessRuntime
@@ -189,12 +189,13 @@ async function syncRuntime(current: State, next: ReturnType<typeof desired>, for
   current.status = "starting"
   current.detail = force ? `Restarting managed runtime for ${next.channels.join(", ")}.` : next.detail
   current.signature = next.signature
-  current.channels = next.channels
+  current.channels = []
 
   try {
     current.runtime = await startInProcess(next.env, current, next.channelProtocol)
+    current.channels = [...current.runtime.channels]
     current.status = "running"
-    current.detail = `Managed runtime active for ${next.channels.join(", ")}.`
+    current.detail = `Managed runtime active for ${current.channels.join(", ")}.`
   } catch (error) {
     const detail = `Channel runtime failed: ${String(error)}`
     current.status = "error"
@@ -301,13 +302,15 @@ async function startInProcess(
     appendLog(current, `Registered: ${name}`)
   }
 
+  const owner: { channels: readonly string[]; stop(): Promise<void> } = { channels: [], stop: () => runtime.stop() }
+  let receipt: Awaited<ReturnType<typeof runtime.start>>
   try {
-    await runtime.start()
+    receipt = await runtime.start()
   } catch (startupError) {
     try {
       await runtime.stop()
     } catch (cleanupError) {
-      current.cleanupPending.add(runtime)
+      current.cleanupPending.add(owner)
       throw new AggregateError(
         [startupError, cleanupError],
         `Channel runtime startup and rollback failed for ${adapters.names.join(", ")}`,
@@ -315,10 +318,11 @@ async function startInProcess(
     }
     throw startupError
   }
-  log.info("channel runtime started", { channels: adapters.names })
-  appendLog(current, `Channel runtime active: ${adapters.names.join(", ")}`)
+  owner.channels = [...receipt.channels]
+  log.info("channel runtime started", { channels: receipt.channels, failedChannels: receipt.failedChannels })
+  appendLog(current, `Channel runtime active: ${receipt.channels.join(", ")}`)
 
-  return { stop: () => runtime.stop() }
+  return owner
 }
 
 function appendLog(current: State, text: string) {

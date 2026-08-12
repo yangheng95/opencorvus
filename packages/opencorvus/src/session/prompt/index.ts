@@ -17,6 +17,7 @@ export namespace SessionPrompt {
   export const hasOwnedPrompt = SessionPromptState.hasOwnedPrompt
   export const hasOwnedPromptInAnyDirectory = SessionPromptState.hasOwnedPromptInAnyDirectory
   export const waitForFinish = SessionPromptState.waitForFinish
+  export const release = SessionPromptState.release
   export const ownerActivity = SessionPromptState.activity
   export const messageOwner = SessionPromptState.messageOwner
   export const promptOwner = SessionPromptState.promptOwner

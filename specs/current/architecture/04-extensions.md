@@ -524,6 +524,9 @@ consumer 必须先完整精确读取，再对 typed output 的每个语义来源
 `observed_artifact_locators`，成功选择的来源进入 `source_artifact_locators`，且 source 必须是 observed 的子集；
 零选择与缺省可选字段均合法。即时 `artifact_publish` 显式提交本次发布专属的
 `source_artifact_locators`，Host 只接受同一物理 Turn 中更早的完整读取和语义选择，因此一个 Turn 的多次发布不会互相污染。
+`artifact_search` 的 opaque pagination cursor 由当前 runtime 使用进程随机 HMAC-SHA-256 authority 签发；cursor
+携带的 frozen revision、membership、provider state、total 与 position 在验证前均不可信。runtime restart 会使旧 cursor
+明确失效，caller 必须从第一页重新开始；不保留 unkeyed checksum decoder 或跨 runtime fallback。
 `artifact_snapshot` / `artifact_publish` 只投影给 worker；Multica mapping、manifest、prompt 和 Skill 不声明、遮蔽或复制这些
 平台工具及 Artifact body。`artifact_snapshot` 只返回内容寻址的 `resource_set` locator，完整 refs 由
 `TaskArtifactHost.resources` 在可信 Host 边界内验证并按 UTF-8 字节路径顺序展开，禁止通过模型上下文传输清单展开值。面向模型的

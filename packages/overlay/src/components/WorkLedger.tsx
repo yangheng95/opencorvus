@@ -83,6 +83,7 @@ type RenderWorkLedgerTopLevelItemRow = RenderWorkLedgerMissionRow | RenderWorkLe
 type RenderWorkLedgerRow = RenderWorkLedgerProjectRow | RenderWorkLedgerTopLevelItemRow
 
 export interface WorkLedgerProps {
+  primarySurface: "conversation" | "mission-board"
   selectedTaskID?: string
   selectedSessionID?: string
   refreshToken?: number
@@ -274,6 +275,7 @@ function WorkLedgerNavigationAction(props: {
   trailing?: JSX.Element
   tooltipContent?: JSX.Element
   disabled?: boolean
+  active?: boolean
   onClick: () => void
 }) {
   return (
@@ -286,6 +288,8 @@ function WorkLedgerNavigationAction(props: {
         tone="neutral"
         class="sidebar-codex-action oc-navigation-row"
         data-ui={props["data-ui"]}
+        data-active={props.active ? "true" : undefined}
+        aria-current={props.active ? "page" : undefined}
         aria-label={props.label}
         disabled={props.disabled}
         onClick={props.onClick}
@@ -478,16 +482,6 @@ function WorkLedgerRowView(props: {
               aria-keyshortcuts={hasActions() ? "ArrowRight" : undefined}
               onKeyDown={rowActions.openActionsFromKeyboard}
               onClick={() => props.onSelect(row())}
-              onDblClick={(event) => {
-                event.preventDefault()
-                event.stopPropagation()
-                void runAction("rename", () => {
-                  const current = row()
-                  if (current.kind === "mission") return props.onRenameMission(current)
-                  if (current.kind === "chat") return props.onRenameChat(current)
-                  return props.onRenameTask(current)
-                })
-              }}
             >
               <div class="task-row-head work-row-head">
                 <Show when={hasMissionTasks()}>
@@ -1054,6 +1048,7 @@ export function WorkLedger(props: WorkLedgerProps) {
   const unpinnedGroups = createMemo(() => groups.filter((group) => !isPinnedProjectGroup(group)))
 
   function selected(row: WorkLedgerItemRow): boolean {
+    if (props.primarySurface !== "conversation") return false
     if (row.kind === "task") return props.selectedTaskID === row.id
     return props.selectedSessionID === row.id || ("sessionID" in row && props.selectedSessionID === row.sessionID)
   }
@@ -1174,6 +1169,7 @@ export function WorkLedger(props: WorkLedgerProps) {
           icon="tasks"
           label={t("mission_board.navigation")}
           description={t("mission_board.navigation_description")}
+          active={props.primarySurface === "mission-board"}
           trailing={
             <Badge class="mission-board-nav-count" size="sm" tone={missionCounts().running > 0 ? "accent" : "muted"}>
               {missionCounts().running}
@@ -1210,7 +1206,7 @@ export function WorkLedger(props: WorkLedgerProps) {
           icon="expert-squad"
           label={t("expert_squad.title")}
           description={t("work_ledger.tooltip.expert_squads")}
-          onClick={() => openConfigDialog("expert-squad")}
+          onClick={() => openConfigDialog("expert-squad-install")}
         />
         <WorkLedgerNavigationAction
           data-ui="work-ledger-multica-import"

@@ -964,6 +964,7 @@ export default function ExpertSquadPanel() {
       message: t("expert_squad.uninstall_confirm_replace", { id }),
       cancel: true,
       okLabel: t("expert_squad.uninstall"),
+      okTone: "danger",
     })
     if (!dialog.confirmed || currentScopeIdentity() !== captured.identity) return
     const action = async () => {

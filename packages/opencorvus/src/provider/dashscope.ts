@@ -1,8 +1,17 @@
 import path from "path"
 import { Global } from "../global"
 import { Filesystem } from "../util/filesystem"
+import { sha256Text } from "../util/canonical-digest"
+import z from "zod"
 
 const stateFile = path.join(Global.Path.state, "dashscope-embedded.json")
+const State = z
+  .object({
+    schema_version: z.literal(2),
+    credential_sha256: z.string().regex(/^[a-f0-9]{64}$/),
+    first: z.number().finite(),
+  })
+  .strict()
 
 function ttlMs() {
   const raw = Number(process.env.OPENCORVUS_EMBEDDED_DASHSCOPE_TTL_HOURS ?? "24")
@@ -18,22 +27,17 @@ export async function dashscopeKey(env: Record<string, string | undefined>) {
   if (!key) return
 
   const now = Date.now()
-  const hash = Bun.hash.xxHash32(key)
-  const saved = await Filesystem.readJson<{ hash?: number; first?: number }>(stateFile).catch(() => ({
-    hash: undefined,
-    first: undefined,
-  }))
-  const firstSaved = typeof saved.first === "number" && Number.isFinite(saved.first) ? saved.first : undefined
-  const same = saved.hash === hash && firstSaved !== undefined
-  const first = firstSaved ?? now
+  const credentialSHA256 = sha256Text("opencorvus.provider.dashscope-credential.v2", key)
+  const saved = await Filesystem.readJson(stateFile)
+    .then((value) => State.safeParse(value).data)
+    .catch(() => undefined)
+  const same = saved?.credential_sha256 === credentialSHA256
+  const first = same ? saved.first : now
 
   if (!same) {
-    await Filesystem.writeJson(
+    await Filesystem.writeAtomic(
       stateFile,
-      {
-        hash,
-        first,
-      },
+      JSON.stringify({ schema_version: 2, credential_sha256: credentialSHA256, first }),
       0o600,
     )
   }

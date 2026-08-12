@@ -1,6 +1,11 @@
 import fs from "node:fs/promises"
-import os from "node:os"
 import path from "node:path"
+import {
+  applyIsolatedTestUserEnvironment,
+  bootstrapIsolatedTestRuntime,
+  removeIsolatedTestRuntime,
+} from "@opencorvus-ai/util/test-runtime-environment"
+import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 
 const INACTIVITY_MS = 120_000
 const POLL_MS = 500
@@ -8,7 +13,11 @@ const MODEL = process.env.OPENCORVUS_GRILL_BENCHMARK_MODEL?.trim() || "deepseek/
 if (process.argv[2]) {
   throw new Error("Advanced Requirements grill benchmark owns its temporary project and accepts no directory argument")
 }
-const benchmarkRoot = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-advanced-grill-"))
+const testProcessSupervisor = prepareTestProcessSupervisor()
+const isolatedRuntime = await bootstrapIsolatedTestRuntime("runner")
+applyIsolatedTestUserEnvironment(isolatedRuntime)
+if (testProcessSupervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = testProcessSupervisor
+const benchmarkRoot = await fs.mkdtemp(path.join(isolatedRuntime.processRoot, "advanced-grill-"))
 const projectDirectory = path.join(benchmarkRoot, "project")
 process.env.OPENCORVUS_HOME = path.join(benchmarkRoot, "home")
 const { Database } = await import("@/storage/db")
@@ -632,8 +641,29 @@ try {
   const result = { model: MODEL, benchmarkRoot, ambiguous, concrete }
   process.stdout.write(JSON.stringify({ event: "result", ...result }) + "\n")
 } finally {
-  await Promise.race([waitForQueueCompletionHooksForTest().catch(() => undefined), Bun.sleep(10_000)])
-  if (backend) await Promise.race([backend.stop(true).catch(() => undefined), Bun.sleep(10_000)])
-  Database.close()
+  const cleanupFailures: unknown[] = []
+  try {
+    await waitForQueueCompletionHooksForTest()
+  } catch (error) {
+    cleanupFailures.push(error)
+  }
+  if (backend) {
+    try {
+      await backend.stop(true)
+    } catch (error) {
+      cleanupFailures.push(error)
+    }
+  }
+  try {
+    Database.close()
+  } catch (error) {
+    cleanupFailures.push(error)
+  }
+  try {
+    await removeIsolatedTestRuntime(isolatedRuntime)
+  } catch (error) {
+    cleanupFailures.push(error)
+  }
+  if (cleanupFailures.length === 1) throw cleanupFailures[0]
+  if (cleanupFailures.length > 1) throw new AggregateError(cleanupFailures, "Advanced requirements cleanup failed")
 }
-process.exit(0)

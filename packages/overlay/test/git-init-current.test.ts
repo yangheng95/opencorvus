@@ -20,7 +20,6 @@ mock.module("../src/services/config", () => ({
   getTaskOperatorModelContext: async () => ({}),
   syncAgentPromptLocale: async () => {},
   updateConfig: async () => ({}),
-  scaffoldProjectConfig: async () => {},
   reloadProjectScope: async () => {
     reloadCalls += 1
   },

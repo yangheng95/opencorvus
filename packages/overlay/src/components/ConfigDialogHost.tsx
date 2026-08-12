@@ -18,6 +18,7 @@ import UsagePanel from "./settings/UsagePanel"
 import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./settings/layout"
 import { Dialog } from "./ui/Dialog"
 import { Button } from "./ui/Button"
+import { LinkButton } from "./ui/LinkButton"
 import { SearchField } from "./ui/SearchField"
 import { Tab, TabList, TabPanel, Tabs } from "./ui/Tabs"
 import { appStore } from "../store/app"
@@ -290,7 +291,6 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
     return rows
   })
   const activeConfigTab = createMemo(() => dialogStore.config.activeTab)
-  const [renderedConfigTab, setRenderedConfigTab] = createSignal<ConfigDialogTab | null>(null)
   const [settingsSearch, setSettingsSearch] = createSignal("")
   let settingsSearchInput: HTMLInputElement | undefined
   const normalizedSettingsSearch = createMemo(() => settingsSearch().trim().toLowerCase())
@@ -321,17 +321,6 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
     setSettingsSearch("")
     return closeConfigDialog()
   }
-
-  createEffect(() => {
-    const tab = effectiveActiveTab()
-    if (!dialogStore.config.open) {
-      setRenderedConfigTab(null)
-      return
-    }
-    setRenderedConfigTab(null)
-    const frameID = window.requestAnimationFrame(() => setRenderedConfigTab(tab))
-    onCleanup(() => window.cancelAnimationFrame(frameID))
-  })
 
   const renderActivePanel = (tab: ConfigDialogTab) => {
     switch (tab) {
@@ -391,10 +380,17 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
               <div class="about-links">
                 <For each={ABOUT_LINKS}>
                   {(link) => (
-                    <a class="about-link" href={link.href} target="_blank" rel="noopener">
+                    <LinkButton
+                      variant="outline"
+                      size="md"
+                      tone="neutral"
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener"
+                    >
                       <Icon name={link.icon} />
                       <span>{link.label()}</span>
-                    </a>
+                    </LinkButton>
                   )}
                 </For>
               </div>
@@ -566,16 +562,12 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
                   id={configPanelID(active())}
                   aria-labelledby={configTabID(active())}
                 >
-                  <Show when={renderedConfigTab()}>
-                    {(tab) => (
-                      <div
-                        classList={{ "config-section-body": true, "about-body": tab() === "about" }}
-                        id={activePanelBodyID(tab())}
-                      >
-                        {renderActivePanel(tab())}
-                      </div>
-                    )}
-                  </Show>
+                  <div
+                    classList={{ "config-section-body": true, "about-body": active() === "about" }}
+                    id={activePanelBodyID(active())}
+                  >
+                    {renderActivePanel(active())}
+                  </div>
                 </TabPanel>
               )}
             </Show>

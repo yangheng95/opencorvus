@@ -16,6 +16,22 @@ function plainTerminalOutput(value: string): string {
   return value.replace(/\u001B(?:[@-_][0-?]*[ -/]*[@-~]|\][^\u0007]*(?:\u0007|\u001B\\))/g, "")
 }
 
+function opaqueHexColor(host: HTMLElement, value: string, fallback: string): string {
+  const canvas = document.createElement("canvas")
+  canvas.width = 1
+  canvas.height = 1
+  const context = canvas.getContext("2d", { willReadFrequently: true })
+  if (!context) return fallback
+  context.fillStyle = getComputedStyle(host).getPropertyValue("--surface")
+  context.fillRect(0, 0, 1, 1)
+  context.fillStyle = value
+  context.fillRect(0, 0, 1, 1)
+  const [red, green, blue] = context.getImageData(0, 0, 1, 1).data
+  return `#${[red, green, blue]
+    .map((part) => part.toString(16).padStart(2, "0"))
+    .join("")}`
+}
+
 export function TerminalArtifact(props: { payload: TerminalPayload }) {
   let host: HTMLDivElement | undefined
   let terminal: Terminal | undefined
@@ -26,16 +42,26 @@ export function TerminalArtifact(props: { payload: TerminalPayload }) {
   const [query, setQuery] = createSignal("")
   const plain = plainTerminalOutput(props.payload.output)
 
+  const searchOptions = (incremental = false) => {
+    if (!host) return { incremental }
+    const style = getComputedStyle(host)
+    const accent = opaqueHexColor(host, style.getPropertyValue("--accent").trim(), "#2f7ed8")
+    const textMuted = opaqueHexColor(host, style.getPropertyValue("--text-muted").trim(), "#6f7782")
+    const matchBackground = opaqueHexColor(host, style.getPropertyValue("--subtle-3").trim(), "#d7e3f8")
+    return {
+      incremental,
+      decorations: {
+        matchOverviewRuler: textMuted,
+        activeMatchColorOverviewRuler: accent,
+        matchBackground,
+        activeMatchBackground: accent,
+      },
+    }
+  }
+
   const findNext = () => {
     if (!query()) return
-    search?.findNext(query(), {
-      decorations: {
-        matchOverviewRuler: "#6f7782",
-        activeMatchColorOverviewRuler: "#2f7ed8",
-        matchBackground: "#3b4654",
-        activeMatchBackground: "#2f7ed8",
-      },
-    })
+    search?.findNext(query(), searchOptions())
   }
 
   const copy = async () => {
@@ -45,10 +71,15 @@ export function TerminalArtifact(props: { payload: TerminalPayload }) {
   const applyTheme = () => {
     if (!terminal || !host) return
     const style = getComputedStyle(host)
+    terminal.options.fontFamily = style.getPropertyValue("--mono").trim()
     terminal.options.theme = {
       background: style.getPropertyValue("--surface").trim() || "#ffffff",
       foreground: style.getPropertyValue("--text").trim() || "#242424",
       selectionBackground: style.getPropertyValue("--accent").trim() || "#2f7ed8",
+    }
+    if (query()) {
+      search?.clearDecorations()
+      search?.findNext(query(), searchOptions(true))
     }
   }
 
@@ -63,7 +94,6 @@ export function TerminalArtifact(props: { payload: TerminalPayload }) {
       cursorBlink: false,
       screenReaderMode: true,
       scrollback: 20_000,
-      fontFamily: "var(--font-mono)",
       fontSize: 12,
     })
     fit = new FitAddon()
@@ -106,7 +136,11 @@ export function TerminalArtifact(props: { payload: TerminalPayload }) {
           size="sm"
           onValueChange={(value) => {
             setQuery(value)
-            if (value) search?.findNext(value, { incremental: true })
+            if (value) {
+              search?.findNext(value, searchOptions(true))
+            } else {
+              search?.clearDecorations()
+            }
           }}
           onClear={() => {
             setQuery("")

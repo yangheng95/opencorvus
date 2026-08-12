@@ -1,6 +1,7 @@
 import { For, createEffect, createMemo, createSignal, onCleanup, type Accessor, type JSX } from "solid-js"
 import { t } from "../utils/i18n"
 import { closeNativeMenuSurface, openNativeMenuSurface } from "../services/native-menu-surface"
+import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { Icon, type IconName } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { Tab, TabList, Tabs } from "./ui/Tabs"
@@ -263,6 +264,12 @@ export function RightDock(props: RightDockProps): JSX.Element {
         anchor,
         groups: addMenuGroups(),
         onDismiss: () => props.onAddMenuOpenChange(false),
+        onError: (error) => reportError({
+          id: "right-dock:add-menu:close",
+          title: t("common.error"),
+          message: error instanceof Error ? error.message : String(error),
+          details: formatErrorDetails(error),
+        }),
         onAction: (itemID) => {
           const meta = RIGHT_DOCK_CATALOG.find((candidate) => candidate.id === itemID)
           if (!meta) throw new Error(`Right Dock add menu item "${itemID}" is not in the catalog`)
@@ -275,7 +282,12 @@ export function RightDock(props: RightDockProps): JSX.Element {
       })
     } catch (error) {
       props.onAddMenuOpenChange(false)
-      console.error("[right-dock.add-menu] failed to open", error)
+      reportError({
+        id: "right-dock:add-menu:open",
+        title: t("common.error"),
+        message: error instanceof Error ? error.message : String(error),
+        details: formatErrorDetails(error),
+      })
     }
   }
 
@@ -305,11 +317,22 @@ export function RightDock(props: RightDockProps): JSX.Element {
           },
         ],
         onDismiss: () => props.onOverflowMenuOpenChange(false),
+        onError: (error) => reportError({
+          id: "right-dock:overflow-menu:close",
+          title: t("common.error"),
+          message: error instanceof Error ? error.message : String(error),
+          details: formatErrorDetails(error),
+        }),
         onAction: (tabID) => props.onSelect(tabID),
       })
     } catch (error) {
       props.onOverflowMenuOpenChange(false)
-      console.error("[right-dock.overflow-menu] failed to open", error)
+      reportError({
+        id: "right-dock:overflow-menu:open",
+        title: t("common.error"),
+        message: error instanceof Error ? error.message : String(error),
+        details: formatErrorDetails(error),
+      })
     }
   }
 

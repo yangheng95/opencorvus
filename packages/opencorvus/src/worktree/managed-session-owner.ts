@@ -10,14 +10,16 @@ export type ManagedWorktreeSessionOwnerAuthority = Readonly<{
 
 export async function releaseManagedWorktreeSessionOwner(
   authority: ManagedWorktreeSessionOwnerAuthority,
-): Promise<void> {
-  await ProjectGitLock.withLease(
+): Promise<Ownership.ReleaseReceipt> {
+  return ProjectGitLock.withLease(
     { projectID: authority.projectID, primaryWorktreeDir: authority.primaryWorktreeDir },
-    () =>
-      Ownership.Worktree.releaseSessionOwner({
-        primaryWorktreeDir: authority.primaryWorktreeDir,
-        worktreeDir: authority.directory,
-        sessionID: authority.sessionID,
-      }),
+    async () =>
+      Ownership.Worktree.requireCompleteRelease(
+        await Ownership.Worktree.releaseSessionOwner({
+          primaryWorktreeDir: authority.primaryWorktreeDir,
+          worktreeDir: authority.directory,
+          sessionID: authority.sessionID,
+        }),
+      ),
   )
 }

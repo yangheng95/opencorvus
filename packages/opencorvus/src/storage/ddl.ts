@@ -7,7 +7,6 @@ type Column = ReturnType<typeof getTableConfig>["columns"][number]
 type IndexColumn = ReturnType<typeof getTableConfig>["indexes"][number]["config"]["columns"][number]
 
 const dialect = new SQLiteSyncDialect()
-const deferredIndexNames = new Set(["engine_channel_binding_thread_idx"])
 
 function quoteIdentifier(name: string) {
   return `"${name.replaceAll('"', '""')}"`
@@ -108,9 +107,7 @@ function renderTable(table: unknown) {
     ");",
   ].join("\n")
 
-  const indexSql = config.indexes
-    .filter((index) => !deferredIndexNames.has(index.config.name))
-    .map((index) => renderIndex(config, index))
+  const indexSql = config.indexes.map((index) => renderIndex(config, index))
 
   return [tableSql, ...indexSql].join("\n")
 }
@@ -135,35 +132,41 @@ function generatedSchemaDdl() {
   return collectTables().map(renderTable).join("\n\n")
 }
 
-function generatedDeferredIndexDdl() {
-  const indexSql: string[] = []
-  for (const table of collectTables()) {
-    const config = getTableConfig(table as never)
-    for (const index of config.indexes) {
-      if (deferredIndexNames.has(index.config.name)) indexSql.push(renderIndex(config, index))
-    }
-  }
-  return indexSql.join("\n")
-}
-
 // FTS is Full-Text Search. Drizzle table declarations do not model SQLite FTS5
 // virtual tables, so this remains an explicit storage extension.
 const STORAGE_EXTENSION_DDL = /* sql */ `
-CREATE UNIQUE INDEX IF NOT EXISTS project_generation_idx ON project(generation);
-
 CREATE TRIGGER IF NOT EXISTS project_generation_required_insert
 BEFORE INSERT ON project
 FOR EACH ROW
-WHEN NEW.generation = '00000000-0000-0000-0000-000000000000'
+WHEN length(NEW.generation) != 36
+  OR length(replace(NEW.generation, '-', '')) != 32
+  OR substr(NEW.generation, 9, 1) != '-'
+  OR substr(NEW.generation, 14, 1) != '-'
+  OR substr(NEW.generation, 19, 1) != '-'
+  OR substr(NEW.generation, 24, 1) != '-'
+  OR lower(replace(NEW.generation, '-', '')) GLOB '*[^0-9a-f]*'
+  OR (
+    NEW.generation NOT IN (
+      '00000000-0000-0000-0000-000000000000',
+      'ffffffff-ffff-ffff-ffff-ffffffffffff'
+    )
+    AND substr(lower(NEW.generation), 15, 1) NOT BETWEEN '1' AND '8'
+  )
+  OR (
+    NEW.generation NOT IN (
+      '00000000-0000-0000-0000-000000000000',
+      'ffffffff-ffff-ffff-ffff-ffffffffffff'
+    )
+    AND instr('89ab', substr(lower(NEW.generation), 20, 1)) = 0
+  )
 BEGIN
-  SELECT RAISE(ABORT, 'project: generation is required');
+  SELECT RAISE(ABORT, 'project: generation must be a UUID');
 END;
 
 CREATE TRIGGER IF NOT EXISTS project_generation_immutable_update
 BEFORE UPDATE OF generation ON project
 FOR EACH ROW
-WHEN OLD.generation != '00000000-0000-0000-0000-000000000000'
-  AND NEW.generation IS NOT OLD.generation
+WHEN NEW.generation IS NOT OLD.generation
 BEGIN
   SELECT RAISE(ABORT, 'project: generation is immutable');
 END;
@@ -173,14 +176,6 @@ CREATE VIRTUAL TABLE IF NOT EXISTS memory_fts USING fts5(
   chunk_id UNINDEXED,
   project_id UNINDEXED
 );
-
-DELETE FROM engine_channel_binding
-WHERE rowid NOT IN (
-  SELECT MIN(rowid)
-  FROM engine_channel_binding
-  GROUP BY platform, channel, thread
-);
-${generatedDeferredIndexDdl()}
 
 -- Dispatch lineage is immutable physical-execution authority. Adapter input
 -- must be present as an exact JSON (JavaScript Object Notation) object because

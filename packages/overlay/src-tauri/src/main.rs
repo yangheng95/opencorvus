@@ -56,7 +56,9 @@ include!(concat!(env!("OUT_DIR"), "/server_defaults.rs"));
 const LOCAL_SERVER_HOST: &str = DEFAULT_SERVER_HOST;
 const TRAY_ID: &str = "main-tray";
 const TRAY_TOOLTIP_DEFAULT: &str = "OpenCorvus";
-const OVERLAY_STARTUP_SURFACE: Color = Color(244, 244, 244, 255);
+const OVERLAY_STARTUP_SURFACE_LIGHT: Color = Color(255, 255, 255, 255);
+const OVERLAY_STARTUP_SURFACE_DARK: Color = Color(38, 40, 44, 255);
+const OVERLAY_STARTUP_SURFACE_VSCODE_DARK: Color = Color(37, 37, 38, 255);
 const STARTUP_PROGRESS_EVENT: &str = "overlay:startup-progress";
 const EXPERT_SQUAD_INSTALL_HANDOFF_EVENT: &str = "opencorvus:expert-squad-install";
 const SERVER_HEALTH_READINESS_TIMEOUT: Duration = Duration::from_secs(30);
@@ -1863,20 +1865,6 @@ fn overlay_open_project_editor<R: Runtime>(
         .open_path(path, Some(editor.opener_application()))
         .map(|_| true)
         .map_err(|err| format!("{}: {}", editor.label(), err))
-}
-
-#[tauri::command]
-fn overlay_write_file(path: String, content: String) -> Result<bool, String> {
-    let path = path.trim();
-    if path.is_empty() {
-        return Ok(false);
-    }
-    let p = std::path::Path::new(path);
-    if let Some(parent) = p.parent() {
-        fs::create_dir_all(parent).map_err(|err| err.to_string())?;
-    }
-    fs::write(p, content).map_err(|err| err.to_string())?;
-    Ok(true)
 }
 
 #[derive(Debug, Clone, Copy, Deserialize)]
@@ -5615,7 +5603,6 @@ fn main() {
         overlay_open_path,
         overlay_open_url,
         overlay_open_project_editor,
-        overlay_write_file,
         overlay_browser_preview_sync,
         overlay_browser_preview_navigate,
         overlay_browser_preview_navigate_url,
@@ -5648,7 +5635,6 @@ fn main() {
         overlay_open_path,
         overlay_open_url,
         overlay_open_project_editor,
-        overlay_write_file,
         overlay_browser_preview_sync,
         overlay_browser_preview_navigate,
         overlay_browser_preview_navigate_url,
@@ -5719,7 +5705,16 @@ fn main() {
             let constraints = overlay_main_size_constraints(app.config());
             let placement =
                 overlay_main_window_placement(app, constraints).map_err(std::io::Error::other)?;
+            let startup_theme = overlay_settings_load(app.handle().clone())
+                .ok()
+                .flatten()
+                .map(|settings| settings.theme)
+                .unwrap_or_else(|| "system".to_string());
+            let startup_theme_json = serde_json::to_string(&startup_theme)?;
             tauri::WebviewWindowBuilder::from_config(app.handle(), main_window_config)?
+                .initialization_script(format!(
+                    "globalThis.__OPENCORVUS_STARTUP_THEME__ = {startup_theme_json};"
+                ))
                 .inner_size(placement.size.width, placement.size.height)
                 .position(placement.position.x, placement.position.y)
                 .data_directory(runtime_paths.webview_dir)
@@ -5741,7 +5736,16 @@ fn main() {
                 window.set_decorations(false)?;
                 #[cfg(not(target_os = "macos"))]
                 let _ = window.remove_menu();
-                window.set_background_color(Some(OVERLAY_STARTUP_SURFACE))?;
+                let startup_surface = match startup_theme.as_str() {
+                    "dark" => OVERLAY_STARTUP_SURFACE_DARK,
+                    "vscode-dark" => OVERLAY_STARTUP_SURFACE_VSCODE_DARK,
+                    "light" => OVERLAY_STARTUP_SURFACE_LIGHT,
+                    _ if window.theme().is_ok_and(|theme| theme == tauri::Theme::Dark) => {
+                        OVERLAY_STARTUP_SURFACE_DARK
+                    }
+                    _ => OVERLAY_STARTUP_SURFACE_LIGHT,
+                };
+                window.set_background_color(Some(startup_surface))?;
 
                 // Keep the WebView2 controller at its configured construction
                 // size. Resizing the native parent before its first document

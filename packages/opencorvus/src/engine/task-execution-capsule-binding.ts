@@ -3,6 +3,7 @@ import { and, eq } from "drizzle-orm"
 import { realpath } from "node:fs/promises"
 import { Database } from "@/storage/db"
 import { Filesystem } from "@/util/filesystem"
+import { Ownership } from "@/engine/ownership"
 import { TASK_PROCESS_MODE_ENV } from "@/runtime/task-process-deployment"
 import {
   activeExecutionCapsuleRuntimeFact,
@@ -177,8 +178,11 @@ export function readTaskProcessBinding(taskID: string): TaskProcessBindingPayloa
 
 /** Durable physical-directory authority across dispatch recovery and prompt
  *  handoff gaps. A Task process binding is immutable for the Task lifetime. */
-export function taskProcessBindingOwnsDirectory(input: { projectID: string; directory: string }): boolean {
-  const target = Filesystem.normalizePath(input.directory)
+export function activeTaskProcessBindingRoots(input: {
+  projectID: string
+  diagnosticRoot: string
+}): Array<{ taskID: string; directory: string }> {
+  const roots: Array<{ taskID: string; directory: string }> = []
   const { rows, activeTaskIDs } = Database.use((db) => ({
     rows: db
       .select({ payload: EngineArtifactTable.payload })
@@ -195,13 +199,24 @@ export function taskProcessBindingOwnsDirectory(input: { projectID: string; dire
     ),
   }))
   for (const row of rows) {
-    const binding = TaskProcessBindingPayloadSchema.parse(row.payload)
+    const parsed = TaskProcessBindingPayloadSchema.safeParse(row.payload)
+    if (!parsed.success) {
+      throw Ownership.observationFailure({
+        operation: "read-process-binding-authority",
+        code: "INVALID_AUTHORITY",
+        scope: "worktree-ownership",
+        diagnosticPath: input.diagnosticRoot,
+        cause: parsed.error,
+        message: "Worktree ownership authority is invalid",
+      })
+    }
+    const binding = parsed.data
     if (binding.project_id !== input.projectID || !activeTaskIDs.has(binding.task_id)) continue
     const root =
       binding.protocol === TASK_NATIVE_PROCESS_BINDING_PROTOCOL ? binding.workspace_root : binding.workspace.root
-    if (Filesystem.normalizePath(root) === target) return true
+    roots.push({ taskID: binding.task_id, directory: root })
   }
-  return false
+  return roots
 }
 
 export function readTaskExecutionCapsuleBinding(taskID: string): TaskExecutionCapsuleBindingPayload | undefined {

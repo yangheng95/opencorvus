@@ -1636,18 +1636,20 @@ export namespace EngineService {
     }
 
     const projectID = Instance.project.id
-    await Project.registerExecutionDirectory(projectID, directory)
-    return Instance.provide({
-      directory,
-      init: InstanceBootstrap,
-      fn: async () => {
-        if (Instance.project.id !== projectID) {
-          throw new Error(
-            `Task execution directory ${directory} resolved project ${Instance.project.id}, expected ${projectID}`,
-          )
-        }
-        return createTaskInner(input, { ...creationContext, artifactImporter })
-      },
+    return Worktree.withSandboxAdmission(directory, async () => {
+      await Project.registerExecutionDirectory(projectID, directory)
+      return Instance.provide({
+        directory,
+        init: InstanceBootstrap,
+        fn: async () => {
+          if (Instance.project.id !== projectID) {
+            throw new Error(
+              `Task execution directory ${directory} resolved project ${Instance.project.id}, expected ${projectID}`,
+            )
+          }
+          return createTaskInner(input, { ...creationContext, artifactImporter })
+        },
+      })
     })
   }
 

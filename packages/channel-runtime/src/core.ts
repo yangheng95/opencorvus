@@ -67,9 +67,17 @@ export interface ChannelRuntimeOptions {
   sharedFile?: string
 }
 
+export type ChannelRuntimeStartReceipt = {
+  readonly channels: readonly string[]
+  readonly failedChannels: readonly string[]
+}
+
 export class ChannelRuntime {
+  private static readonly STARTUP_MESSAGE_LIMIT = 1_000
   private session = new SessionCoordinator<SessionEntry, IncomingMessage>()
+  private candidates: ChannelAdapter[] = []
   private adapters: ChannelAdapter[] = []
+  private cleanupPending = new Set<ChannelAdapter>()
   private client!: OpenCorvusClient
   private server?: { url: string; close(): void }
   /** Buffer assistant text per messageID until message.updated signals completion */
@@ -115,7 +123,7 @@ export class ChannelRuntime {
   }
 
   register(adapter: ChannelAdapter): this {
-    this.adapters.push(adapter)
+    this.candidates.push(adapter)
     return this
   }
 
@@ -141,19 +149,19 @@ export class ChannelRuntime {
    * single startup; subsequent calls after a successful start are
    * a no-op. This mirrors the start-once contract in Server.listen.
    */
-  private startPromise: Promise<void> | undefined
+  private startPromise: Promise<ChannelRuntimeStartReceipt> | undefined
+  private startReceipt: ChannelRuntimeStartReceipt | undefined
 
-  async start(): Promise<void> {
-    if (this.running) return
+  async start(): Promise<ChannelRuntimeStartReceipt> {
+    if (this.startReceipt) return this.startReceipt
     if (this.startPromise) return this.startPromise
     this.startPromise = this._doStart()
+      .then((receipt) => {
+        this.startReceipt = receipt
+        return receipt
+      })
       .catch((err) => {
-        // Roll back the running flag so a failure (createOpenCorvus
-        // throwing, adapter rejection, etc.) doesn't block a
-        // legitimate retry. The throw still propagates to the
-        // caller so the failure is loud (CLAUDE.md §一-7).
-        this.running = false
-        throw err
+        return this.rollbackStart(err)
       })
       .finally(() => {
         this.startPromise = undefined
@@ -161,7 +169,7 @@ export class ChannelRuntime {
     return this.startPromise
   }
 
-  private async _doStart(): Promise<void> {
+  private async _doStart(): Promise<ChannelRuntimeStartReceipt> {
     this.running = true
     this.directory = this.requireDirectory()
 
@@ -190,28 +198,107 @@ export class ChannelRuntime {
     this.subscribeEvents()
     this.startPendingWatch()
 
-    const started = await Promise.allSettled(
-      this.adapters.map(async (adapter) => {
-        adapter.onMessage((msg) => this.handleMessage(msg))
-        await adapter.start()
-        return adapter
+    // Standalone and managed bootstraps reject an empty configuration before
+    // calling start. Keeping an empty runtime valid preserves the core's
+    // server-only embedding contract used by direct consumers and tests.
+    if (this.candidates.length === 0) return { channels: [], failedChannels: [] }
+
+    const startupOwners = this.candidates.map((adapter) => {
+      const owner = {
+        adapter,
+        admitted: false,
+        settled: false,
+        buffer: [] as IncomingMessage[],
+        delivery: Promise.resolve(),
+        failure: undefined as Error | undefined,
+      }
+      adapter.onMessage((msg) => {
+        if (!owner.admitted) {
+          if (owner.failure) return Promise.reject(owner.failure)
+          if (!owner.settled) {
+            if (owner.buffer.length >= ChannelRuntime.STARTUP_MESSAGE_LIMIT) {
+              owner.failure = new Error(
+                `${adapter.platform} adapter exceeded ${ChannelRuntime.STARTUP_MESSAGE_LIMIT} buffered startup messages before readiness`,
+              )
+              return Promise.reject(owner.failure)
+            } else {
+              owner.buffer.push(msg)
+            }
+          }
+          return Promise.resolve()
+        }
+        owner.delivery = owner.delivery.then(() => this.handleMessage(msg))
+        return owner.delivery
+      })
+      return owner
+    })
+    const publishActiveAdapters = () => {
+      this.adapters = startupOwners.flatMap((owner) => (owner.admitted ? [owner.adapter] : []))
+    }
+    const started = await Promise.all(
+      startupOwners.map(async (owner) => {
+        const { adapter } = owner
+        try {
+          await adapter.start()
+          if (owner.failure) throw owner.failure
+          for (const msg of owner.buffer) {
+            owner.delivery = owner.delivery.then(() => this.handleMessage(msg))
+          }
+          owner.buffer.length = 0
+          owner.admitted = true
+          publishActiveAdapters()
+          await owner.delivery
+          owner.settled = true
+          return { status: "fulfilled" as const, adapter }
+        } catch (error) {
+          owner.admitted = false
+          owner.settled = true
+          owner.buffer.length = 0
+          publishActiveAdapters()
+          console.error(`[ChannelRuntime] ${adapter.platform} adapter start failed:`, error)
+          try {
+            await adapter.stop()
+          } catch (cleanupError) {
+            this.cleanupPending.add(adapter)
+            console.error(`[ChannelRuntime] ${adapter.platform} adapter rollback failed:`, cleanupError)
+          }
+          return { status: "rejected" as const, adapter, error }
+        }
       }),
     )
-    this.adapters = started.flatMap((item) => (item.status === "fulfilled" ? [item.value] : []))
-    started
-      .filter((item) => item.status === "rejected")
-      .forEach((item) => {
-        console.error("[ChannelRuntime] adapter start failed:", item.reason)
-      })
+    const rejected = started.flatMap((item) => (item.status === "rejected" ? [item] : []))
+    if (this.cleanupPending.size > 0) {
+      throw new AggregateError(
+        rejected.map((item) => item.error),
+        `Channel runtime could not settle ${this.cleanupPending.size} rejected adapter owner(s)`,
+      )
+    }
     if (this.adapters.length === 0) {
-      console.warn("[ChannelRuntime] No chat adapter started successfully.")
+      throw new AggregateError(
+        rejected.map((item) => item.error),
+        "Channel runtime did not start any configured adapter",
+      )
     }
 
     // Overlay is managed by OpenCorvus's overlay-client.ts (spawned on first tool use)
+    return Object.freeze({
+      channels: Object.freeze(this.adapters.map((adapter) => adapter.platform)),
+      failedChannels: Object.freeze(rejected.map((item) => item.adapter.platform)),
+    })
+  }
+
+  private async rollbackStart(startupError: unknown): Promise<never> {
+    try {
+      await this.stop()
+    } catch (cleanupError) {
+      throw new AggregateError([startupError, cleanupError], "Channel runtime startup rollback failed")
+    }
+    throw startupError
   }
 
   async stop(): Promise<void> {
     this.running = false
+    this.startReceipt = undefined
     this.stopPendingWatch()
     this.pending.clear()
     this.taskBindings.clear()
@@ -221,7 +308,7 @@ export class ChannelRuntime {
     this.pendingPartTexts.clear()
     this.releasing.clear()
     this.session.clear()
-    const adapters = [...this.adapters]
+    const adapters = [...new Set([...this.adapters, ...this.cleanupPending])]
     const server = this.server
     const results = await Promise.allSettled([
       ...adapters.map((adapter) => adapter.stop()),
@@ -232,6 +319,7 @@ export class ChannelRuntime {
       const adapter = adapters[index]
       if (adapter) {
         this.adapters = this.adapters.filter((candidate) => candidate !== adapter)
+        this.cleanupPending.delete(adapter)
         continue
       }
       if (this.server === server) this.server = undefined

@@ -1,8 +1,54 @@
 # Local database rebuild and startup recovery
 
-Status: migration, canonical switch, and systemic Project deletion remediation complete; ninth frozen-diff independent review found no unresolved P0/P1/P2 issue.
+Status: complete. The recurrence code remediation and pre-`0.1.0` canonical-schema consolidation are implemented, the predecessor-schema database was archived rather than patched, and a fresh production database passed real startup and graceful-shutdown verification.
+
+## 2026-08-12 recurrence: test-runner supervisor leakage
+
+### Recall
+
+| Item | Record |
+| --- | --- |
+| User request | Diagnose why the desktop application still cannot start after the database was deleted, restore local startup, and prevent the same failure from recurring. |
+| Acceptance | Preserve the newly created canonical database; reconcile only the two proven-dead supervisor request occurrences without targeting a reused numeric process identifier (PID); make the package test runner bind its own supervisor requests to an isolated runtime root before importing the process runtime; add a focused positive non-UI contract; prove the active supervisor scan is empty and the canonical database is healthy. |
+| Hard constraints | Do not stop or restart the user-owned Overlay process; do not delete evidence; archive exact request roots with hashes; preserve unrelated dirty-worktree changes; use the canonical package test runner for verification; obtain an uninvolved read-only review after implementation. |
+| Sources read | `AGENTS.md`; this record; `specs/current/architecture/task-control-plane.md`; `packages/opencorvus/script/run-tests.ts`; `packages/opencorvus/test/preload.ts`; `packages/opencorvus/test/isolated-test-entry.test.ts`; `packages/opencorvus/src/shell/command-inactivity.ts`; `packages/opencorvus/src/shell/process-supervisor.ts`; `packages/opencorvus/src/runtime/process-occurrence.ts`; current Overlay, sidecar, backend, request, and process-occurrence logs/artifacts. |
+| Whole-repository search | Searched the supervisor recovery error and caller, all supervisor/process-occurrence sources and focused tests, all `isolated-test-entry.test.ts`, package test-runner, preload, and `OPENCORVUS_TEST_PROCESS_ROOT` references, current architecture/incident decisions, current processes, listeners, and both retained request roots. |
+| Independent agent feedback | Three independent read-only agents cross-checked the database consolidation, supervisor/runtime blast radius, and test/checker isolation. Their P0/P1 findings were incorporated, including complete host-path sanitization and Windows helper identity coverage; final focused verification and the real production reset/startup evidence are recorded below. |
+
+The user subsequently set the pre-release database policy: before version `0.1.0`, schema changes are folded directly into the one canonical Data Definition Language (DDL); runtime database patches/migrations and their predecessor fixtures are not supported.
+This policy is scoped to the desktop canonical `opencorvus.db`. The separately deployed public website registry's operator-driven rebuild/switch contract is a different database and is explicitly excluded.
+Folding the schema also changes the strict MySQL-transfer fingerprint; pre-`0.1.0` snapshots from an older desktop schema are intentionally rejected and must be regenerated from the current canonical writer.
+
+### Analysis
+
+- Observable phenomenon: the current Overlay remains alive, but its managed backend exits before listener bind. The backend log first opens the newly recreated canonical database and reports `schema applied`, then throws `WindowsOrphanRequestRecoveryBlockedError` for two unknown request occurrences. Deleting the database therefore cannot change the failure.
+- Direct trigger: `%LOCALAPPDATA%\opencorvus\tmp` contains exactly `supervisor-AG8mVA` and `supervisor-uI02Xl`. Both have current strict request and ready markers plus cancel markers, but no active-zero settlement marker. Their owner PIDs and helper PIDs are dead. One target PID is absent; the other numeric target PID is now a Codex Node REPL created hours after the request, so recovery correctly refuses to act on that reused number.
+- Data/control-flow root cause: `script/run-tests.ts` statically imports `src/shell/command-inactivity.ts`, which statically reaches `ProcessSupervisor` and `Global` before any test preload establishes `OPENCORVUS_HOME`. The child test process is isolated, but the outer runner's Windows supervisor request is consequently created in the real user runtime temporary root. If the runner is interrupted after the helper publishes `ready.json` but before it publishes an exact active-zero `settled.json`, the next public runtime retains the request as physically unproved and blocks startup.
+- Why the prior repair did not root-cause it: the previous isolation repair protected database fixtures and the internal child test host. It restored `script/run-tests.ts` as the single runner but did not inspect the runner's own pre-child process imports and filesystem effects. The strict startup scanner is behaving according to its fail-closed contract; weakening it or treating a numeric PID as proof would reintroduce unsafe process targeting.
+- Impact: the immediate startup trigger is outside SQLite, but the newly stated pre-release policy also reaches the database initialization branch, schema drift error contract, migration module/tests, architecture wording, and the older-schema Copy database. Consolidation makes the current definitions the sole schema authority, removes patch-only fields and defaults, and intentionally changes the fresh-database fingerprint. The old Copy database remains evidence only and cannot be opened or copied into the canonical path under this policy.
+
+### Plan
+
+1. Archive the two exact, proven-dead request roots outside the active temporary scan root with a metadata-only hash manifest; do not delete or target any process.
+2. Introduce one runner bootstrap authority that creates an isolated runner root and sets `OPENCORVUS_HOME`, test ownership, and temporary-directory environment before dynamically importing the command runner.
+3. Add a focused positive runtime contract proving the runner-side OpenCorvus temporary root and supervisor request root are strict descendants of the isolated ownership root.
+4. Run the focused contract through `script/run-tests.ts`, the relevant existing Windows supervisor recovery tests, typecheck, documentation checks, and diff checks.
+5. Prove the canonical database integrity/foreign keys and empty active supervisor scan, obtain an uninvolved read-only review, repair valid findings, commit only task files, inspect the complete push set, and push when safe.
+6. Move current-schema validation beside the canonical DDL, make startup accept only an empty file or that exact current schema, delete runtime schema migration/backup code and predecessor migration tests, add a positive fresh-schema contract, and update architecture/incident wording so no pre-`0.1.0` patch path remains documented as current behavior.
+
+### Recurrence execution outcome
+
+- The two proven-dead Windows supervisor request roots were moved out of the active production scan root to `data/maintenance-backups/startup-recovery-20260812T191900+0800/supervisor-requests`; the metadata manifest SHA-256 is `E0F1C0B252871A3806DB207DCFA00AD8D86D9A0CC56E99689F2A7066578C765`. No process was targeted, and the active production temporary root now has zero direct `supervisor-*` request roots.
+- After the user-owned Overlay exited independently, the empty predecessor-schema `opencorvus.db`, write-ahead log, and shared-memory sidecar were moved on the same volume to `data/maintenance-backups/pre-0.1-canonical-reset-20260812T210100+0800`. Its `manifest.json` SHA-256 is `FB8E1B92FA9AE0B2927A65A0824354A5C42DDE2E39E0C681427A3CD82FBD3DFA`; the archived database SHA-256 is `72DDA1BF6FF9F48ED757771D962071E320BB6EA63034023984628E35D67E13AD`. No `ALTER`, `DROP`, or other patch was applied.
+- A verification-owned backend created the fresh production database from the one canonical DDL and listened on isolated port `17878`. `/global/health` returned `healthy: true` with the exact canonical database and data paths. Startup recovery reported zero attempted, initialized, mission-recovery, and failed Tasks. The backend then accepted `/shutdown`, exited gracefully, and left ports `17878`, `7878`, and `7879` without listeners.
+- Offline verification returned `PRAGMA integrity_check = ok`, zero foreign-key violations, zero business rows, and an actual schema fingerprint exactly equal to the canonical fingerprint `204dd0a6b47e2e08d8da4475dfb4cf5b6bf294566dee267e105c078c8cfdafb8`.
+- The focused schema contracts, isolated test-runner contract, command-settlement and structured-error contracts, TypeScript check, workflow contract, documentation/API checks, and the real permission-mode checker all passed. The permission checker exercised its permission matrix, durable Model Context Protocol task recovery, Server-Sent Events, command-line, and Agent Client Protocol transports, then disposed its isolated instances and database.
+- The permission checker initially reached its complete evidence and cleanup boundary but timed out with one owned `project.memory.organize.requested` protocol publication still active. The shutdown primitive closed new protocol-publication admission but did not cancel publications that were already executing. `Server.settleCurrentProcessExecution` now requests cancellation for those existing owners before waiting, the durable Bus envelope exposes the same abort signal to subscribers, and the Memory Organizer fences its lock, model stream, and result wait with that signal. A focused settlement contract and the repeated real checker both pass; the latter exits `0` after `transport:process-settlement-done` and final database cleanup.
+- Transparency note: a final Bun SQLite read-only verification created a zero-byte WAL and a 32 KiB SHM beside the new canonical database before its close reported `database is locked`; the main database remained unchanged and all integrity, foreign-key, row-count, and fingerprint queries had already completed successfully. Those sidecars were retained rather than silently deleted.
 
 ## Recall
+
+> Historical record boundary: everything from this second Recall through the original rollback section records the earlier rebuild and migration-era implementation as observed at that time. It is superseded for current behavior by the recurrence section above. In particular, its fingerprints are historical observations; its backup-first runtime schema migration and migration-suite claims are no longer supported before `0.1.0`.
 
 | Item | Record |
 | --- | --- |
@@ -27,7 +73,7 @@ The runtime scans 65 `supervisor-*` directories under the canonical temporary ro
 
 The current startup contract intentionally treats missing, malformed, or foreign-layout process artifacts as unknown and refuses listener bind. It cannot infer death from a reused numeric PID and has no compatibility reader for the legacy layout. These artifacts are filesystem state, not database rows, so copying the database alone would preserve the startup failure whenever the canonical temporary root remains unchanged.
 
-The database itself is healthy: its schema fingerprint equals the current DDL fingerprint `84af4e18ec989a211a7ee4dc574b535fce8cfbb7237eb73feb549a82ace1b058`, `PRAGMA integrity_check` returns `ok`, and `PRAGMA foreign_key_check` returns no violations. Therefore the user's export/import/switch request is a preservation and clean-materialization operation, while startup recovery additionally requires explicit operator reconciliation of the legacy temporary artifacts.
+At that historical investigation boundary, the database was healthy and its schema fingerprint equaled the then-current DDL fingerprint `84af4e18ec989a211a7ee4dc574b535fce8cfbb7237eb73feb549a82ace1b058`; `PRAGMA integrity_check` returned `ok`, and `PRAGMA foreign_key_check` returned no violations. That fingerprint is not the current pre-`0.1.0` canonical fingerprint. The user's export/import/switch request was therefore a preservation and clean-materialization operation at that boundary, while startup recovery additionally required explicit operator reconciliation of the legacy temporary artifacts.
 
 ### Process-safety evidence
 
@@ -35,7 +81,7 @@ No OpenCorvus or Bun process is running and no listener owns ports 7878/7879. Th
 
 ### Impact surface
 
-- Database definitions and public schema contracts remain unchanged.
+- At that historical delivery boundary, database definitions and public schema contracts were unchanged by the transfer operation itself. The later pre-`0.1.0` consolidation above intentionally changes the canonical schema and fingerprint.
 - Portable business data is exported and imported through `opencorvus.mysql-transfer.v1`; `database_authority` remains local physical identity and is regenerated by the destination.
 - The canonical database filename remains the one runtime source of truth. Switching is an offline file replacement, with the original database and sidecars archived together.
 - Legacy supervisor artifact directories are archived outside the active temporary scan root. Their serialized contents are not copied into repository files or printed.
@@ -92,14 +138,14 @@ Two test-isolation incidents occurred during the investigation and are part of t
 ### Project deletion remediation verification
 
 - The isolated `project-directory-and-worktree-gc` suite passes `33/33` with 48 assertions. Its positive contracts cover missing repositories without path recreation, terminal Task and Session cleanup, ambiguous directory rejection, initialized and identity-only cache eviction, stale caller snapshot/current-row deletion, access-error preservation, active lease/write-lock/State inactivity, process-settlement precedence, live runtime ownership, durable Task/Session admission with real HTTP 409, retained and committed cleanup recovery, same-ID Project recreation, database-identity mismatch, exact target containment, completed-ledger recovery after database identity replacement, database-commit rollback, anonymous promotion conflict, and Worktree garbage-collection uncertainty.
-- OpenCorvus TypeScript checking passed with no diagnostics on the current candidate. The isolated schema migration suite passes 8 tests / 52 assertions and proves multiple legacy Projects receive distinct immutable UUID generations while existing related rows survive the backup-first backfill. `docs:check` passes with 335 operations across 25 groups. `git diff --check` passes.
+- At that historical delivery boundary, OpenCorvus TypeScript checking passed with no diagnostics. The then-current isolated migration suite passed 8 tests / 52 assertions and exercised the now-removed backup-first backfill. That suite and runtime migration path are superseded by the pre-`0.1.0` exact-current-or-reset contract. `docs:check` then passed with 335 operations across 25 groups, and `git diff --check` passed.
 - Recovery now requires an exact live `RuntimeServerOwnership.Handle` for `Database.Path()`. Startup acquires that ownership before scanning. Thus another process cannot remove a just-published live deletion manifest; direct recovery without the canonical runtime owner is rejected.
 
 ## Independent review
 
 The uninvolved read-only reviewer reproduced the transfer package hash, all archive manifest hashes/counts, source-backup 45-table/6,800-row import baseline, current schema fingerprint, integrity `ok`, zero foreign-key violations, and one canonical database authority. It confirmed the check-workspace archive is outside both task-scoped and taskless active scan roots. During review the user had independently started the ordinary backend on port 7878; `/global/health` returned `healthy: true` with the exact canonical database/data paths, and the seven active supervisor requests all belonged to that live owner occurrence rather than being archived artifacts returned to the scan root.
 
-The migration reviewer found the ignored-spec/staging boundary and the time-unstable row-count wording described in Recall. Those findings were corrected. Eight deletion reviews then found deeper cross-authority, race, durability, identity, and bounded-settlement defects. The latest finding—completed Windows cleanup ledgers being scanned only for the current database identity—was corrected by enumerating every UUID-scoped completed directory, validating each manifest against that directory identity, and idempotently cleaning committed residue under the live canonical owner. The ninth frozen-diff independent review verified that protocol, its identity-switch test, the UUID backup-first migration, both evidence records, and the task-scoped diff, and reported no unresolved P0/P1/P2 issue.
+At that historical boundary, the migration reviewer found the ignored-spec/staging boundary and the time-unstable row-count wording described in Recall, and those findings were corrected. Eight deletion reviews then found deeper cross-authority, race, durability, identity, and bounded-settlement defects. The latest finding—completed Windows cleanup ledgers being scanned only for the current database identity—was corrected by enumerating every UUID-scoped completed directory, validating each manifest against that directory identity, and idempotently cleaning committed residue under the live canonical owner. The ninth frozen-diff review verified that delivery, including the then-current UUID backup-first migration. The recurrence policy above subsequently deleted that migration path; this paragraph is evidence history, not a current contract.
 
 ## Rollback
 

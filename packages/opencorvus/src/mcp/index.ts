@@ -48,6 +48,7 @@ import { Env } from "@/runtime/env"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { createHash } from "node:crypto"
 import { isToolVisibilityAppOnly } from "@modelcontextprotocol/ext-apps/app-bridge"
+import { createLocalMcpProcessDiagnostics, type LocalMcpProcessDiagnostics } from "./local-process-diagnostics"
 import {
   assertTaskNetworkCapability,
   readTaskProcessBinding,
@@ -2688,6 +2689,8 @@ export namespace MCP {
     let mcpTransport: ClosableTransport | undefined
     let connectionCwd: string | undefined
     let status: Status | undefined = undefined
+    let localDiagnostics: LocalMcpProcessDiagnostics | undefined
+    let localFailure: ((error: unknown) => Extract<Status, { status: "failed" }>) | undefined
 
     if (mcp.type === "remote") {
       // OAuth is enabled by default for remote servers unless explicitly disabled with oauth: false
@@ -2824,38 +2827,62 @@ export namespace MCP {
     if (mcp.type === "local") {
       const [configuredCommand, ...configuredArgs] = mcp.command
       const baseEnvironment = localMcpBaseEnvironment(configuredCommand, mcp)
-      const processPlan = builtinBrowser
-        ? await BrowserMCPBuiltin.resolveStdioProcess({
-            env: await browserMcpBridgeEnvironment(baseEnvironment),
+      const diagnosticID = crypto.randomUUID()
+      const initializeLocalDiagnostics = (environment: Readonly<Record<string, string>>) => {
+        const diagnostics = createLocalMcpProcessDiagnostics({
+          environment,
+          onDiagnostic: (diagnostic) => log.info("local mcp stderr", { key, diagnostic }),
+        })
+        const failure = (error: unknown): Extract<Status, { status: "failed" }> => {
+          diagnostics.finish()
+          const safeError = diagnostics.sanitize(errorMessage(error))
+          log.error("local mcp startup failed", {
+            key,
+            diagnosticID,
+            cwd: directory,
+            error: safeError,
+            stderr: diagnostics.tail(),
           })
-        : {
-            executable: configuredCommand,
-            args: configuredArgs,
-            env: baseEnvironment,
+          return {
+            status: "failed",
+            error: `Local MCP startup failed (diagnostic ID: ${diagnosticID})`,
           }
-      const cmd = processPlan.executable
-      const args = processPlan.args
-      const cwd = directory
-      connectionCwd = cwd
-      const env = Object.fromEntries(
-        Object.entries(processPlan.env).filter((entry): entry is [string, string] => typeof entry[1] === "string"),
-      )
-      const transport = new SupervisedStdioClientTransport({
-        stderr: "pipe",
-        command: cmd,
-        args,
-        cwd,
-        env,
-      }, options.processAuthority)
-      let stderrText = ""
-      transport.stderr?.on("data", (chunk: Buffer) => {
-        const text = chunk.toString()
-        stderrText = (stderrText + text).slice(-4_000)
-        log.info(`mcp stderr: ${text}`, { key })
-      })
-
+        }
+        return { diagnostics, failure }
+      }
+      let transport: SupervisedStdioClientTransport | undefined
       let client: Client | undefined
       try {
+        const processPlan = builtinBrowser
+          ? await BrowserMCPBuiltin.resolveStdioProcess({
+              env: await browserMcpBridgeEnvironment(baseEnvironment),
+            })
+          : {
+              executable: configuredCommand,
+              args: configuredArgs,
+              env: baseEnvironment,
+            }
+        const cwd = directory
+        connectionCwd = cwd
+        const env = Object.fromEntries(
+          Object.entries(processPlan.env).filter((entry): entry is [string, string] => typeof entry[1] === "string"),
+        )
+        const initialized = initializeLocalDiagnostics(env)
+        localDiagnostics = initialized.diagnostics
+        localFailure = initialized.failure
+        const diagnostics = initialized.diagnostics
+        transport = new SupervisedStdioClientTransport(
+          {
+            stderr: "pipe",
+            command: processPlan.executable,
+            args: processPlan.args,
+            cwd,
+            env,
+          },
+          options.processAuthority,
+        )
+        transport.stderr?.on("data", (chunk: Buffer) => diagnostics.write(chunk))
+        transport.stderr?.once("end", () => diagnostics.finish())
         client = new Client({
           name: "opencorvus",
           version: Installation.VERSION,
@@ -2868,26 +2895,33 @@ export namespace MCP {
           status: "connected",
         }
       } catch (error) {
-        log.error("local mcp startup failed", {
-          key,
-          command: mcp.command,
-          cwd,
-          error: error instanceof Error ? error.message : String(error),
-          stderr: stderrText,
-        })
-        const message = error instanceof Error ? error.message : String(error)
-        const detail = stderrText.trim()
-        status = {
-          status: "failed" as const,
-          error: detail ? `${message}\n${detail}` : message,
+        let diagnostics = localDiagnostics
+        let failure = localFailure
+        if (!diagnostics || !failure) {
+          const initialized = initializeLocalDiagnostics(
+            Object.fromEntries(
+              Object.entries(baseEnvironment).filter(
+                (entry): entry is [string, string] => typeof entry[1] === "string",
+              ),
+            ),
+          )
+          diagnostics = initialized.diagnostics
+          failure = initialized.failure
+          localDiagnostics = diagnostics
+          localFailure = failure
         }
+        let cleanupError: unknown
         try {
           await closeClientAndTransport(key, client, transport)
-        } catch (cleanupError) {
+        } catch (error) {
+          cleanupError = error
+        }
+        status = failure(error)
+        if (cleanupError) {
           throw new McpCreateCleanupError(
             cleanupConnection(key, mcp, client, transport, connectionCwd),
             status,
-            cleanupError,
+            new Error(diagnostics.sanitize(errorMessage(cleanupError))),
           )
         }
       }
@@ -2914,31 +2948,31 @@ export namespace MCP {
       try {
         result = await mcpClient.listTools(undefined, mcpRequestOptions(requestTimeout))
       } catch (err) {
-        listToolsError = errorMessage(err)
+        listToolsError = localDiagnostics?.sanitize(errorMessage(err)) ?? errorMessage(err)
         log.error("failed to get tools from client", { key, error: listToolsError })
       }
     }
     if (!result && !options.skipToolListVerification) {
       const failureMessage = listToolsError || "MCP listTools returned no result"
-      status = {
-        status: "failed",
-        error: failureMessage,
-      }
+      let cleanupError: unknown
       try {
         await closeClientAndTransport(key, mcpClient, mcpTransport)
-      } catch (cleanupError) {
+      } catch (error) {
+        cleanupError = error
+      }
+      status = localFailure ? localFailure(failureMessage) : { status: "failed", error: failureMessage }
+      if (cleanupError) {
         throw new McpCreateCleanupError(
           cleanupConnection(key, mcp, mcpClient, mcpTransport, connectionCwd),
           status,
-          cleanupError,
+          localDiagnostics ? new Error(localDiagnostics.sanitize(errorMessage(cleanupError))) : cleanupError,
         )
       }
       return {
         mcpClient: undefined,
         mcpConnection: undefined,
         status: {
-          status: "failed" as const,
-          error: failureMessage,
+          ...status,
         },
       }
     }

@@ -549,7 +549,7 @@ export namespace Question {
     }
   }): Promise<
     | { status: "answered"; output: string; answers: Answer[] }
-    | { status: "rejected"; output: string; answers: null }
+    | { status: "rejected"; output: string; answers: null; requestID: string }
     | {
         status: "expired"
         output: string
@@ -577,10 +577,12 @@ export namespace Question {
       return { status: "answered", output: `User answered:\n${lines}`, answers }
     } catch (err) {
       if (err instanceof RejectedError) {
+        if (!err.requestID) throw err
         return {
           status: "rejected",
           output: "User dismissed the questions without answering. Decide how to proceed based on available context.",
           answers: null,
+          requestID: err.requestID,
         }
       }
       if (err instanceof ExpiredError) {

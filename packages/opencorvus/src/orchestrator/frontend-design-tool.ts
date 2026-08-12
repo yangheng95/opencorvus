@@ -30,6 +30,7 @@ import {
 import type { TaskWithRootSession } from "./tool-execution-context"
 import { artifactProvenanceForAgentTurn } from "@/agent/artifact-read-facts"
 import { recordTaskInfrastructureErrorBestEffort } from "./infrastructure-observation"
+import type { EngineArtifactLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 
 const log = Log.create({ service: "frontend-design-tool" })
 
@@ -39,6 +40,31 @@ type FrontendDesignToolInput = {
   reason: string
   attachment_bindings?: Array<{ attachment_url: string; intent: DesignResourceIntent }>
   materials?: Array<{ path: string; intent: DesignResourceIntent }>
+}
+
+function frontendDesignDispatchOutcome(input:
+  | {
+      status: "partial"
+      sessionID: string
+      finalMessageID: string
+      artifact: EngineArtifactLocator
+    }
+  | {
+      status: "complete"
+      sessionID: string
+      finalMessageID: string
+    }) {
+  return input.status === "partial"
+    ? DispatchOutcome.domainIncomplete({
+        sessionID: input.sessionID,
+        finalMessageID: input.finalMessageID,
+        domain: "frontend_design",
+        domainArtifact: input.artifact,
+      })
+    : DispatchOutcome.terminal({
+        sessionID: input.sessionID,
+        finalMessageID: input.finalMessageID,
+      })
 }
 
 async function resolveAttachmentBindings(input: {
@@ -82,12 +108,16 @@ type FrontendDesignToolDependencies = {
   parentSessionID: string
   signal?: AbortSignal
   requireCurrentTaskAndAgentSessionLineage: () => Promise<TaskWithRootSession>
+  analyzeFrontendDesign?: typeof FrontendDesignAgent.analyze
+  recordPartialFrontendDesign?: typeof recordPartialFrontendDesignFacts
 }
 
 export function createFrontendDesignTool(dependencies: FrontendDesignToolDependencies) {
   const taskID = dependencies.taskID
   const input = { agentSessionID: dependencies.parentSessionID, signal: dependencies.signal }
   const requireCurrentTaskAndAgentSessionLineage = dependencies.requireCurrentTaskAndAgentSessionLineage
+  const analyzeFrontendDesign = dependencies.analyzeFrontendDesign ?? FrontendDesignAgent.analyze
+  const recordPartialFrontendDesign = dependencies.recordPartialFrontendDesign ?? recordPartialFrontendDesignFacts
 
   return {
     frontend_design: tool({
@@ -233,7 +263,7 @@ export function createFrontendDesignTool(dependencies: FrontendDesignToolDepende
         // its id via onSessionCreated for downstream emit attribution.
         let completedTurn: { sessionID: string; finalMessageID: string } | undefined
         try {
-          const analysis = await FrontendDesignAgent.analyze({
+          const analysis = await analyzeFrontendDesign({
             mode,
             instruction: [
               reason,
@@ -276,7 +306,7 @@ export function createFrontendDesignTool(dependencies: FrontendDesignToolDepende
           const completenessFindings = [...materializationFindings, ...analysis.completenessFindings]
           const provenance = artifactProvenanceForAgentTurn(analysis.sessionID, analysis.finalMessageID)
           if (analysis.outcome === "partial") {
-            recordPartialFrontendDesignFacts({
+            const artifact = recordPartialFrontendDesign({
               taskID,
               mode,
               sessionID: analysis.sessionID,
@@ -288,9 +318,11 @@ export function createFrontendDesignTool(dependencies: FrontendDesignToolDepende
               missing: analysis.missing,
               completenessFindings,
             })
-            return DispatchOutcome.terminal({
+            return frontendDesignDispatchOutcome({
+              status: "partial",
               sessionID: analysis.sessionID,
               finalMessageID: analysis.finalMessageID,
+              artifact,
             })
           }
 
@@ -322,7 +354,8 @@ export function createFrontendDesignTool(dependencies: FrontendDesignToolDepende
           // Card terminal status flows through agent.execution.lifecycle; counts on
           // the Panel come from boardStore. No phase-completed bus event.
 
-          return DispatchOutcome.terminal({
+          return frontendDesignDispatchOutcome({
+            status: "complete",
             sessionID: analysis.sessionID,
             finalMessageID: analysis.finalMessageID,
           })

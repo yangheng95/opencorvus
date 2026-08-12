@@ -30,6 +30,7 @@ import { SessionCommand } from "./cli/cmd/session"
 import { DbCommand } from "./cli/cmd/db"
 import { Capability } from "./platform/capability"
 import { installProcessErrorLogging } from "./util/process-error-logging"
+import { errorDiagnostic } from "./util/error-diagnostics"
 
 installProcessErrorLogging()
 
@@ -134,12 +135,7 @@ try {
   }
 
   if (e instanceof Error) {
-    Object.assign(data, {
-      name: e.name,
-      message: e.message,
-      cause: e.cause?.toString(),
-      stack: e.stack,
-    })
+    Object.assign(data, errorDiagnostic(e))
   }
 
   if (e instanceof ResolveMessage) {

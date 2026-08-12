@@ -253,13 +253,16 @@ export namespace SkillManager {
       return await Promise.all(
         (await Skill.all()).map(async (skill) => {
           const dir = skill.builtin ? undefined : path.dirname(skill.location)
+          const remoteSource = dir ? await Discovery.publishedSnapshotSource(dir) : undefined
           const manifest = !skill.builtin && dir ? await readManifest(dir, root, cache) : undefined
           const sourceType = skill.builtin
             ? "builtin"
+            : remoteSource
+              ? "config_url"
             : dir
               ? sourceTypeFor(dir, configuredPaths, cache, manifest?.kind)
               : "builtin"
-          const trust = trustFor(skill, manifest?.source)
+          const trust = trustFor(skill, remoteSource ?? manifest?.source)
           const risk = skill.builtin
             ? Skill.builtinRisk(skill.name)
             : dir
@@ -281,6 +284,7 @@ export namespace SkillManager {
                   ? ("config_url" as const)
                   : sourceType,
             source:
+              remoteSource ??
               manifest?.source ??
               (sourceType === "config_path"
                 ? configuredPaths.find((item) => Filesystem.contains(item, dir!))
@@ -290,7 +294,7 @@ export namespace SkillManager {
             risk,
             recommended_policy: recommendedPolicy(trust, risk),
             managed: !!dir && Filesystem.contains(root, dir),
-            writable: !skill.builtin && !!dir && (await Filesystem.isDir(dir)),
+            writable: !remoteSource && !skill.builtin && !!dir && (await Filesystem.isDir(dir)),
           }
         }),
       )
@@ -359,15 +363,6 @@ export namespace SkillManager {
         throw new Error(`No skills discovered from ${value}`)
       }
       const definitions = (await Promise.all(pulled.map(validateSkillDirectory))).flat()
-      await Promise.all(
-        pulled.map((dir) =>
-          Filesystem.writeJson(path.join(dir, MANIFEST), {
-            kind: "url",
-            source: value,
-            installed_at: Date.now(),
-          }),
-        ),
-      )
       await patchGlobal((next) => {
         next.skills = next.skills || {}
         next.skills.urls = dedupe([...(next.skills.urls ?? []), value])
@@ -708,11 +703,10 @@ function applyPolicyToConfig(
   next.skill_policy = table
 }
 
-function sourceTypeFor(dir: string, configuredPaths: string[], cache: string, kind?: string) {
+function sourceTypeFor(dir: string, configuredPaths: string[], _cache: string, kind?: string) {
   if (kind === "git") return "managed_git"
   if (kind === "url") return "config_url"
   if (Filesystem.contains(SkillManager.managedRoot(), dir)) return "managed_git"
-  if (Filesystem.contains(cache, dir)) return "config_url"
   if (configuredPaths.some((item) => Filesystem.contains(item, dir))) return "config_path"
   if (
     dir.includes(`${path.sep}.claude${path.sep}`) ||
@@ -727,11 +721,7 @@ function sourceTypeFor(dir: string, configuredPaths: string[], cache: string, ki
 
 function trustFor(skill: Skill.Info, source?: string) {
   if (skill.builtin) return "builtin" as const
-  if (source?.includes("github.com/openai/skills")) return "official" as const
-  if (source?.includes("github.com/anthropics/skills")) return "official" as const
-  if (source?.includes("skills.sh")) return "curated" as const
-  if (source?.includes("skillstore.io")) return "curated" as const
-  if (source?.includes("skills.pub")) return "community" as const
+  if (source !== undefined) return trustForSource(source)
   if (
     skill.location.includes(`${path.sep}.claude${path.sep}`) ||
     skill.location.includes(`${path.sep}.agents${path.sep}`) ||
@@ -743,6 +733,74 @@ function trustFor(skill: Skill.Info, source?: string) {
   }
   if (skill.location !== "builtin") return "local" as const
   return "unknown" as const
+}
+
+const TRUSTED_GITHUB_REPOSITORIES: ReadonlyMap<string, "official"> = new Map([
+  ["openai/skills", "official"],
+  ["anthropics/skills", "official"],
+] as const)
+
+const TRUSTED_HTTPS_HOSTS: ReadonlyMap<string, "curated" | "community"> = new Map([
+  ["skills.sh", "curated"],
+  ["skillstore.io", "curated"],
+  ["skills.pub", "community"],
+] as const)
+
+function trustForSource(source: string): z.infer<typeof SkillManager.Trust> {
+  if (source !== source.trim()) return "unknown"
+
+  const scp = /^git@github\.com:([a-z0-9_.-]+)\/([a-z0-9_.-]+?)(?:\.git)?\/?$/i.exec(source)
+  if (scp) return trustForGitHubRepository(scp[1]!, scp[2]!)
+
+  const authorityStart = source.indexOf("://") + 3
+  const authorityEnd = [source.indexOf("/", authorityStart), source.indexOf("?", authorityStart), source.indexOf("#", authorityStart)]
+    .filter((index) => index !== -1)
+    .sort((left, right) => left - right)[0]
+  const authority = source.slice(authorityStart, authorityEnd)
+  const exactGitHubSshAuthority = /^git@github\.com(?::22)?$/i.test(authority)
+  if (source.includes("?") || source.includes("#") || (authority.includes("@") && !exactGitHubSshAuthority)) {
+    return "unknown"
+  }
+  const rawPath = authorityEnd === undefined ? "" : source.slice(authorityEnd).split(/[?#]/, 1)[0]!
+  try {
+    if (rawPath.split("/").some((segment) => [".", ".."].includes(decodeURIComponent(segment)))) return "unknown"
+  } catch {
+    return "unknown"
+  }
+
+  let url: URL
+  try {
+    url = new URL(source)
+  } catch {
+    return "unknown"
+  }
+  if (url.password || url.search || url.hash) return "unknown"
+
+  if (url.protocol === "ssh:") {
+    if (url.username !== "git" || url.hostname.toLowerCase() !== "github.com" || (url.port && url.port !== "22")) {
+      return "unknown"
+    }
+    const repository = githubRepositoryFromPath(url.pathname)
+    return repository ? trustForGitHubRepository(repository.owner, repository.repo) : "unknown"
+  }
+
+  if (url.protocol !== "https:" || url.username || url.port) return "unknown"
+  const hostname = url.hostname.toLowerCase()
+  if (hostname === "github.com") {
+    const repository = githubRepositoryFromPath(url.pathname)
+    return repository ? trustForGitHubRepository(repository.owner, repository.repo) : "unknown"
+  }
+  return TRUSTED_HTTPS_HOSTS.get(hostname) ?? "unknown"
+}
+
+function githubRepositoryFromPath(pathname: string) {
+  const match = /^\/([a-z0-9_.-]+)\/([a-z0-9_.-]+?)(?:\.git)?\/?$/i.exec(pathname)
+  if (!match) return undefined
+  return { owner: match[1]!, repo: match[2]! }
+}
+
+function trustForGitHubRepository(owner: string, repo: string): z.infer<typeof SkillManager.Trust> {
+  return TRUSTED_GITHUB_REPOSITORIES.get(`${owner.toLowerCase()}/${repo.toLowerCase()}`) ?? "unknown"
 }
 
 async function riskFor(dir: string, trust: z.infer<typeof SkillManager.Trust>) {

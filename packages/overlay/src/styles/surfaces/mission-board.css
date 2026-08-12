@@ -104,14 +104,14 @@
   justify-content: center;
   flex-direction: column;
   gap: var(--ui-gap-sm);
-  padding: var(--ui-gap-xl);
+  padding: calc(2 * var(--ui-gap-lg));
   color: var(--text-muted);
   text-align: center;
 }
 
 .mission-board__state strong {
   color: var(--text-strong);
-  font-size: var(--ui-font-subtitle);
+  font-size: var(--ui-font-title);
 }
 
 .mission-board__state .oc-icon-loading,
@@ -124,7 +124,7 @@
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
-  grid-template-columns: repeat(var(--mission-board-lane-count), minmax(calc(276px * var(--ui-scale)), 1fr));
+  grid-template-columns: repeat(5, minmax(calc(276px * var(--ui-scale)), 1fr));
   gap: var(--ui-gap-md);
   overflow: auto;
   padding: var(--ui-gap-md) var(--ui-gap-lg) var(--ui-gap-lg);
@@ -217,7 +217,7 @@
   border: var(--oc-border-width) solid var(--border);
   border-radius: var(--oc-radius-large);
   background: var(--surface-strong);
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow);
   transition:
     border-color var(--ui-duration-fast) ease,
     background var(--ui-duration-fast) ease;
@@ -287,7 +287,7 @@
   justify-content: space-between;
   gap: var(--ui-gap-sm);
   color: var(--text-muted);
-  font-size: var(--ui-font-caption);
+  font-size: var(--ui-font-meta);
   font-variant-numeric: tabular-nums;
 }
 
@@ -434,7 +434,7 @@
   flex-direction: column;
   gap: var(--ui-gap-md);
   border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-medium);
+  border-radius: var(--oc-radius-large);
 }
 
 .mission-create-form__context > legend {
@@ -474,7 +474,7 @@
   margin: 0;
   color: var(--text-muted);
   font-size: var(--ui-font-small);
-  line-height: var(--ui-line-height-normal);
+  line-height: 1.5;
 }
 
 .mission-create-form__context-error {
@@ -536,7 +536,7 @@
   flex: none;
   overflow: hidden;
   border: var(--oc-border-width) solid color-mix(in srgb, var(--accent) 28%, var(--border));
-  border-radius: var(--oc-radius-medium);
+  border-radius: var(--oc-radius-large);
   background: color-mix(in srgb, var(--accent) 5%, var(--surface));
 }
 
@@ -637,7 +637,7 @@
   gap: var(--ui-gap-sm);
   padding: var(--ui-gap-sm) var(--ui-gap-md);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 34%, var(--border));
-  border-radius: var(--oc-radius-medium);
+  border-radius: var(--oc-radius-large);
   background: var(--bad-dim);
   color: var(--bad);
   font-size: var(--ui-font-small);
@@ -692,7 +692,7 @@
 .mission-board-nav-summary__description {
   color: var(--text-muted);
   font-size: var(--ui-font-small);
-  line-height: var(--ui-line-height-normal);
+  line-height: 1.5;
 }
 
 .mission-board-nav-summary__lanes {

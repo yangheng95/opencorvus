@@ -30,6 +30,7 @@ import {
 } from "@/scheduler/task-queue-service"
 import { Database, eq } from "@/storage/db"
 import { ProjectGitLock } from "@/worktree/git-lock"
+import { withKeyedLock } from "@/util/lock"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 async function prepareTaskQueueProcessRollback(directory: string) {
@@ -78,6 +79,31 @@ async function prepareTaskQueueProcessRollback(directory: string) {
 }
 
 describe("runtime execution settlement authority", () => {
+  test("returns shutdown cancellation and admits a successor after owner release", async () => {
+    const locks = new Map<string, Promise<unknown>>()
+    let releaseOwner!: () => void
+    const held = new Promise<void>((resolve) => {
+      releaseOwner = resolve
+    })
+    const owner = withKeyedLock(locks, "project-memory", () => held)
+    await Promise.resolve()
+    const controller = new AbortController()
+    const queued = withKeyedLock(
+      locks,
+      "project-memory",
+      async () => undefined,
+      1_000,
+      controller.signal,
+    )
+
+    controller.abort(new Error("shutdown cancelled queued owner"))
+    await expect(queued).rejects.toThrow("shutdown cancelled queued owner")
+    releaseOwner()
+    await owner
+    const successor = await withKeyedLock(locks, "project-memory", async () => "successor-acquired")
+    expect(successor).toBe("successor-acquired")
+  })
+
   test("reports the exact active Instance authority and converges on the same settlement gate", async () => {
     await using project = await memoryProject()
     let reportStarted!: () => void

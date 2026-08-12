@@ -8,6 +8,7 @@ import { Log } from "../util/log"
 import { Scheduler } from "../scheduler"
 import { hostGit as runGit } from "../util/git"
 import { Worktree } from "./index"
+import { Ownership } from "../engine/ownership"
 
 /**
  * Orphan worktree garbage collection.
@@ -33,10 +34,9 @@ import { Worktree } from "./index"
  *
  * OR it is one of the non-physical residues proven by the 2026-06-27 audit:
  * a registry-only prunable entry whose branch has no in-transit commits, or
- * a database (DB) sandbox-only path that no longer has either a directory or git
- * registry entry. Apply always goes through the project-managed remover so
- * `project.sandboxes` converges only after the physical Git removal step
- * succeeds.
+ * Durable database (DB) sandbox membership remains ownership even when its
+ * path is missing or unavailable. GC reports that preserved authority; only
+ * an explicit release occurrence may remove the binding.
  *
  * Any uncertainty (a git probe fails while `.git` is present) → PRESERVE.
  * We never trade a false delete of in-transit acceptance work for tidiness.
@@ -55,16 +55,45 @@ export namespace WorktreeGC {
     projectID: string
     primaryDir: string
     directory: string
-    reason: "old-clean" | "old-zombie" | "registry-prunable" | "sandbox-missing"
+    reason: "old-clean" | "old-zombie" | "registry-prunable"
   }
   export type Preservation = {
     projectID: string
     primaryDir: string
-    reason: "primary-directory-unavailable" | "managed-state-unavailable" | "registry-unavailable"
+    reason:
+      | "primary-directory-unavailable"
+      | "managed-state-unavailable"
+      | "registry-unavailable"
+      | "durable-sandbox-owner"
     detail: string
   }
   export type Plan = { candidates: Candidate[]; preservations: Preservation[] }
-  export type ApplyResult = { removed: number; failed: number }
+  export type ApplySettlement =
+    | {
+        status: "removed"
+        projectID: string
+        directory: string
+        reason: Candidate["reason"]
+        cleanupPreservations: Array<{
+          operation: string
+          code: string
+          scope: "worktree-cleanup"
+          message: string
+        }>
+      }
+    | {
+        status: "preserved"
+        scope: "project" | "candidate"
+        projectID: string
+        directory?: string
+        reason: "ownership-observation" | "active-owner" | "removal-failed"
+        operation: string
+        code: string
+      }
+  export type ApplyResult = {
+    settlements: ApplySettlement[]
+    summary: { removed: number; preserved: number }
+  }
 
   export function init() {
     Scheduler.register({
@@ -294,6 +323,19 @@ export namespace WorktreeGC {
         const registeredEntry = registeredByDirectory.get(key)
         const stat = await fs.stat(displayDirectory).catch(() => undefined)
         if (!stat) {
+          // Durable sandbox ownership outranks a lossy physical/registry
+          // observation. A missing directory can simultaneously appear as a
+          // prunable Git registration after a crash or external deletion; it
+          // is still not GC authority while the sandbox binding exists.
+          if (sandboxKeys.has(key)) {
+            preservations.push({
+              projectID: project.id,
+              primaryDir,
+              reason: "durable-sandbox-owner",
+              detail: `Durable sandbox ownership is preserved for ${displayDirectory}`,
+            })
+            continue
+          }
           if (
             registeredEntry?.prunable === true &&
             primaryBranch &&
@@ -307,14 +349,6 @@ export namespace WorktreeGC {
               reason: "registry-prunable",
             })
             continue
-          }
-          if (sandboxKeys.has(key) && !registeredEntry) {
-            candidates.push({
-              projectID: project.id,
-              primaryDir,
-              directory: displayDirectory,
-              reason: "sandbox-missing",
-            })
           }
           continue
         }
@@ -350,26 +384,63 @@ export namespace WorktreeGC {
 
   export async function apply(plan: Plan, options?: { signal?: AbortSignal }): Promise<ApplyResult> {
     options?.signal?.throwIfAborted()
-    let removed = 0
-    let failed = 0
-    const projects = Database.use((db) => db.select({ worktree: ProjectTable.worktree }).from(ProjectTable).all())
+    const settlements: ApplySettlement[] = []
+    const preservedProjects = new Set<string>()
+    const projects = Database.use((db) =>
+      db.select({ id: ProjectTable.id, worktree: ProjectTable.worktree }).from(ProjectTable).all(),
+    )
     for (const project of projects) {
       options?.signal?.throwIfAborted()
       if (!project.worktree) continue
-      await Instance.provide({
-        directory: project.worktree,
-        fn: () => Worktree.reconcileOrphanWorktreeOwners(),
-      }).catch((error) => {
+      try {
+        const receipt = await Instance.provide({
+          directory: project.worktree,
+          fn: () => Worktree.reconcileOrphanWorktreeOwners(),
+        })
+        if (receipt.integrity.status !== "complete") {
+          const error = receipt.integrity.errors[0]
+          preservedProjects.add(project.id)
+          settlements.push({
+            status: "preserved",
+            scope: "project",
+            projectID: project.id,
+            reason: "ownership-observation",
+            operation: error.data.operation,
+            code: error.data.code,
+          })
+        }
+      } catch (error) {
         options?.signal?.throwIfAborted()
-        failed += 1
+        preservedProjects.add(project.id)
+        const observed = Ownership.Worktree.ObservationError.isInstance(error)
+        settlements.push({
+          status: "preserved",
+          scope: "project",
+          projectID: project.id,
+          reason: observed ? "ownership-observation" : "removal-failed",
+          operation: observed ? error.data.operation : "reconcile-worktree-owners",
+          code: observed ? error.data.code : "UNKNOWN",
+        })
         log.warn("orphan worktree owner reconciliation failed", {
           primaryDir: project.worktree,
           error: error instanceof Error ? error.message : String(error),
         })
-      })
+      }
     }
     for (const c of plan.candidates) {
       options?.signal?.throwIfAborted()
+      if (preservedProjects.has(c.projectID)) {
+        settlements.push({
+          status: "preserved",
+          scope: "candidate",
+          projectID: c.projectID,
+          directory: c.directory,
+          reason: "ownership-observation",
+          operation: "reconcile-worktree-owners",
+          code: "PROJECT_AUTHORITY_PRESERVED",
+        })
+        continue
+      }
       try {
         const result = await Instance.provide({
           directory: c.primaryDir,
@@ -380,15 +451,42 @@ export namespace WorktreeGC {
             }),
         })
         options?.signal?.throwIfAborted()
-        if (!result.removed) continue
-        removed++
+        if (!result.removed || result.proof !== "ownerless") {
+          settlements.push({
+            status: "preserved",
+            scope: "candidate",
+            projectID: c.projectID,
+            directory: c.directory,
+            reason: "active-owner",
+            operation: "prove-worktree-ownerless",
+            code: "ACTIVE_OWNER",
+          })
+          continue
+        }
+        settlements.push({
+          status: "removed",
+          projectID: c.projectID,
+          directory: c.directory,
+          reason: c.reason,
+          cleanupPreservations:
+            result.receipt?.status === "removed_with_preservation" ? result.receipt.preservations : [],
+        })
         log.info("orphan worktree removed", {
           projectID: c.projectID,
           directory: c.directory,
           reason: c.reason,
         })
       } catch (err) {
-        failed++
+        const observed = Ownership.Worktree.ObservationError.isInstance(err)
+        settlements.push({
+          status: "preserved",
+          scope: "candidate",
+          projectID: c.projectID,
+          directory: c.directory,
+          reason: observed ? "ownership-observation" : "removal-failed",
+          operation: observed ? err.data.operation : "remove-worktree",
+          code: observed ? err.data.code : "UNKNOWN",
+        })
         log.warn("orphan worktree removal failed", {
           projectID: c.projectID,
           directory: c.directory,
@@ -396,7 +494,11 @@ export namespace WorktreeGC {
         })
       }
     }
-    if (removed > 0 || failed > 0) log.info("applied", { removed, failed })
-    return { removed, failed }
+    const summary = {
+      removed: settlements.filter((settlement) => settlement.status === "removed").length,
+      preserved: settlements.filter((settlement) => settlement.status === "preserved").length,
+    }
+    if (summary.removed > 0 || summary.preserved > 0) log.info("applied", summary)
+    return { settlements, summary }
   }
 }

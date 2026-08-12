@@ -2,6 +2,12 @@ import { randomBytes } from "node:crypto"
 import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
+import {
+  applyIsolatedTestUserEnvironment,
+  bootstrapIsolatedTestRuntime,
+  removeIsolatedTestRuntime,
+} from "@opencorvus-ai/util/test-runtime-environment"
+import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 
 type Target = { scope: "session"; sessionId: string } | { scope: "project"; projectIds: string[] } | { scope: "global" }
 type Automation = { id: string; name: string; target: Target; status: "active" | "paused"; nextRun: number }
@@ -23,6 +29,10 @@ const runID = `scheduled-e2e-${new Date()
   .replace(/[-:.TZ]/g, "")
   .slice(0, 14)}-${randomBytes(4).toString("hex")}`
 const root = path.join(os.tmpdir(), `opencorvus-${runID}`)
+const testProcessSupervisor = prepareTestProcessSupervisor()
+const isolatedRuntime = await bootstrapIsolatedTestRuntime("runner")
+applyIsolatedTestUserEnvironment(isolatedRuntime)
+if (testProcessSupervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = testProcessSupervisor
 const home = path.join(root, "home")
 const projectOne = path.join(root, "project-one")
 const projectTwo = path.join(root, "project-two")
@@ -493,8 +503,30 @@ try {
   console.error(`SCHEDULED_E2E_FAILURE ${JSON.stringify({ root, resultPath, error: message(error) })}`)
   process.exitCode = 1
 } finally {
-  if (backend) await backend.stop(true).catch((error) => console.error(`backend cleanup: ${message(error)}`))
-  provider.server.stop(true)
+  const cleanupFailures: unknown[] = []
+  if (backend) {
+    try {
+      await backend.stop(true)
+    } catch (error) {
+      cleanupFailures.push(error)
+    }
+  }
+  try {
+    provider.server.stop(true)
+  } catch (error) {
+    cleanupFailures.push(error)
+  }
   const { Database } = await import("../src/storage/db")
-  Database.close()
+  try {
+    Database.close()
+  } catch (error) {
+    cleanupFailures.push(error)
+  }
+  try {
+    await removeIsolatedTestRuntime(isolatedRuntime)
+  } catch (error) {
+    cleanupFailures.push(error)
+  }
+  if (cleanupFailures.length === 1) throw cleanupFailures[0]
+  if (cleanupFailures.length > 1) throw new AggregateError(cleanupFailures, "Scheduled automations cleanup failed")
 }

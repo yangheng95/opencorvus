@@ -77,6 +77,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const [marketInstalledID, setMarketInstalledID] = createSignal("")
   const [submitting, setSubmitting] = createSignal(false)
   const [error, setError] = createSignal("")
+  const [submitAttempted, setSubmitAttempted] = createSignal(false)
   let requestRef: HTMLTextAreaElement | undefined
   let titleRef: HTMLInputElement | undefined
   let dialogGeneration = 0
@@ -147,12 +148,8 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     if (!expertSquadID()) return t("mission_board.create.no_compatible_squad")
     return ""
   })
-  const contentRequirementMessage = createMemo(() => {
-    if (mode() === "manual" && !title().trim()) return t("mission_board.create.enter_title")
-    if (!request().trim()) return t("mission_board.create.enter_request")
-    return ""
-  })
-  const submitDisabledReason = createMemo(() => contentRequirementMessage() || prerequisiteMessage())
+  const titleInvalid = createMemo(() => mode() === "manual" && submitAttempted() && !title().trim())
+  const requestInvalid = createMemo(() => submitAttempted() && !request().trim())
 
   function ownsSquadRequest(generation: number, sequence: number, directory: string, pillar: ProductPillar): boolean {
     return (
@@ -281,6 +278,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         setMarketInstalledID("")
         setSubmitting(false)
         setError("")
+        setSubmitAttempted(false)
         queueMicrotask(() => requestRef?.focus())
       },
     ),
@@ -394,7 +392,17 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
 
   async function submit(): Promise<void> {
     const pillar = productPillar()
-    if (!canSubmit() || submitting() || !pillar) return
+    setSubmitAttempted(true)
+    if (!canSubmit() || submitting() || !pillar) {
+      queueMicrotask(() => {
+        if (mode() === "manual" && !title().trim()) {
+          titleRef?.focus()
+          return
+        }
+        if (!request().trim()) requestRef?.focus()
+      })
+      return
+    }
     setSubmitting(true)
     setError("")
     const common = {
@@ -454,8 +462,8 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             size="md"
             tone="accent"
             data-ui="mission-create-submit"
-            disabled={!canSubmit() || submitting()}
-            title={!canSubmit() ? submitDisabledReason() : undefined}
+            disabled={Boolean(prerequisiteMessage()) || submitting()}
+            title={prerequisiteMessage() || undefined}
           >
             <Show when={submitting()}>
               <Icon name="loading" size="compact" />
@@ -487,12 +495,16 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             if (submitting()) return
             setMode(nextMode)
             setError("")
-            queueMicrotask(() => (nextMode === "manual" ? titleRef?.focus() : requestRef?.focus()))
+            setSubmitAttempted(false)
           }}
         />
 
         <Show when={mode() === "manual"}>
-          <TextField.Root as="label" class="mission-create-form__title">
+          <TextField.Root
+            as="label"
+            class="mission-create-form__title"
+            invalid={titleInvalid()}
+          >
             <TextField.Label>{t("mission_board.create.title")}</TextField.Label>
             <TextField.Input
               ref={(element) => {
@@ -507,10 +519,13 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               data-ui="mission-create-title"
               onInput={(event) => setTitle(event.currentTarget.value)}
             />
+            <Show when={titleInvalid()}>
+              <TextField.ErrorMessage>{t("mission_board.create.enter_title")}</TextField.ErrorMessage>
+            </Show>
           </TextField.Root>
         </Show>
 
-        <TextField.Root as="label" class="mission-create-form__request">
+        <TextField.Root as="label" class="mission-create-form__request" invalid={requestInvalid()}>
           <TextField.Label>
             {mode() === "manual" ? t("mission_board.create.description") : t("mission_board.create.ai_prompt")}
           </TextField.Label>
@@ -533,13 +548,10 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             data-ui="mission-create-request"
             onInput={(event) => setRequest(event.currentTarget.value)}
           />
+          <Show when={requestInvalid()}>
+            <TextField.ErrorMessage>{t("mission_board.create.enter_request")}</TextField.ErrorMessage>
+          </Show>
         </TextField.Root>
-
-        <Show when={contentRequirementMessage()}>
-          <p id="missionCreateContentRequirement" class="mission-create-form__required-status" role="status">
-            {contentRequirementMessage()}
-          </p>
-        </Show>
 
         <fieldset class="mission-create-form__context" disabled={submitting()}>
           <legend>{t("mission_board.create.execution_context")}</legend>
@@ -613,6 +625,9 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               sameWidth
               disabled={!projectDirectory() || !productPillar() || expertSquadLoading()}
               ariaLabel={t("mission_board.create.expert_squad")}
+              ariaDescribedBy={expertSquadError() ? "missionCreateExpertSquadError" : undefined}
+              invalid={Boolean(expertSquadError())}
+              errorMessageID="missionCreateExpertSquadError"
               triggerDataUI="mission-create-expert-squad"
               optionData={(option) => ({
                 "data-expert-squad-action": option.action,
@@ -644,7 +659,12 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               </Show>
             }
           >
-            <div class="mission-create-form__context-error" role="alert">
+            <div
+              id="missionCreateExpertSquadError"
+              class="mission-create-form__context-error"
+              role="alert"
+              tabIndex={-1}
+            >
               <span>
                 <strong>{t("mission_board.create.context_load_failed")}</strong>
                 <small>{expertSquadError()}</small>
@@ -726,7 +746,11 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         </Show>
 
         <Show when={error() || marketError()}>
-          <div class="mission-create-form__error" role="alert">
+          <div
+            class="mission-create-form__error"
+            role="alert"
+            tabIndex={-1}
+          >
             <Icon name="error-reason" size="compact" />
             <span>{error() || marketError()}</span>
           </div>

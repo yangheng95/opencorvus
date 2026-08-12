@@ -1,6 +1,14 @@
 import fs from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
+import {
+  applyIsolatedTestUserEnvironment,
+  bootstrapIsolatedTestRuntime,
+  isolatedTestChildEnvironment,
+  removeIsolatedTestRuntime,
+  type IsolatedTestRuntime,
+} from "@opencorvus-ai/util/test-runtime-environment"
+import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 
 const ALLOW_REAL_PROVIDER = "TASK_CONTROL_CHECK_ALLOW_REAL_PROVIDER"
 const AUTH_SOURCE = "TASK_CONTROL_CHECK_AUTH_SOURCE"
@@ -194,11 +202,15 @@ function assertTemporaryRoot(runtimeRoot: string) {
   return resolvedRoot
 }
 
-async function runPhaseProcess(phase: string, runtimeRoot: string): Promise<string> {
+async function runPhaseProcess(
+  phase: string,
+  runtimeRoot: string,
+  isolatedRuntime: IsolatedTestRuntime,
+): Promise<string> {
   const openCorvusRuntimeRoot = path.join(runtimeRoot, "runtime")
   const child = Bun.spawn([process.execPath, import.meta.path], {
     env: {
-      ...process.env,
+      ...isolatedTestChildEnvironment(isolatedRuntime),
       [OPENCORVUS_HOME]: openCorvusRuntimeRoot,
       OPENCORVUS_TEST_HOME: openCorvusRuntimeRoot,
       OPENCORVUS_TEST_PROCESS_ROOT: runtimeRoot,
@@ -277,14 +289,18 @@ async function runPhaseProcess(phase: string, runtimeRoot: string): Promise<stri
 }
 
 async function runDriver() {
+  const testProcessSupervisor = prepareTestProcessSupervisor()
+  const isolatedRuntime = await bootstrapIsolatedTestRuntime("runner")
+  applyIsolatedTestUserEnvironment(isolatedRuntime)
+  if (testProcessSupervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = testProcessSupervisor
   const runtimeRoot = await fs.mkdtemp(path.join(os.tmpdir(), "opencorvus-task-control-"))
   let primaryFailure: unknown
   try {
     await initRepository(path.join(runtimeRoot, "project"))
     await copyAuthorityFile(process.env[AUTH_SOURCE], path.join(runtimeRoot, "runtime", "data", "auth.json"))
-    await runPhaseProcess("seed-ingress", runtimeRoot)
-    await runPhaseProcess("seed-cancellation", runtimeRoot)
-    await runPhaseProcess("verify", runtimeRoot)
+    await runPhaseProcess("seed-ingress", runtimeRoot, isolatedRuntime)
+    await runPhaseProcess("seed-cancellation", runtimeRoot, isolatedRuntime)
+    await runPhaseProcess("verify", runtimeRoot, isolatedRuntime)
   } catch (error) {
     primaryFailure = error
   } finally {
@@ -300,11 +316,19 @@ async function runDriver() {
         if (attempt < 5) await Bun.sleep(attempt * 100)
       }
     }
-    if (primaryFailure && cleanupFailure) {
-      throw new AggregateError([primaryFailure, cleanupFailure], "Task-control checker failed and cleanup left residue")
+    let isolationCleanupFailure: unknown
+    try {
+      await removeIsolatedTestRuntime(isolatedRuntime)
+    } catch (error) {
+      isolationCleanupFailure = error
+    }
+    const cleanupFailures = [cleanupFailure, isolationCleanupFailure].filter((value) => value !== undefined)
+    if (primaryFailure && cleanupFailures.length > 0) {
+      throw new AggregateError([primaryFailure, ...cleanupFailures], "Task-control checker failed and cleanup left residue")
     }
     if (primaryFailure) throw primaryFailure
-    if (cleanupFailure) throw cleanupFailure
+    if (cleanupFailures.length === 1) throw cleanupFailures[0]
+    if (cleanupFailures.length > 1) throw new AggregateError(cleanupFailures, "Task-control checker cleanup left residue")
   }
 }
 

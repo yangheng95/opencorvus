@@ -95,10 +95,10 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | DELETE | `/project/current` | Delete current project Body: `reason`, `surface`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `project.current.delete` |
 | GET | `/project/current` | Get current project | `project.current` |
 | PATCH | `/project/current` | Update current project Body: `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.update` |
-| GET | `/project/current/cleanup-candidates` | Inspect current project cleanup candidates Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.cleanupCandidates` |
+| GET | `/project/current/cleanup-candidates` | Inspect current project cleanup candidates Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `project.current.cleanupCandidates` |
 | POST | `/project/current/init-git` | Initialize git in current directory Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.initGit` |
 | POST | `/project/current/promote-anonymous` | Convert current anonymous project to a named project Body: `destinationParent`, `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `project.current.promoteAnonymous` |
-| DELETE | `/project/current/worktrees` | Delete a current project worktree Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.worktrees.delete` |
+| DELETE | `/project/current/worktrees` | Delete a current project worktree Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `project.current.worktrees.delete` |
 | GET | `/project/current/worktrees` | List current project worktrees Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.current.worktrees` |
 | PATCH | `/project/{projectID}` | Update project Body: `commands`, `icon`, `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `project.update` |
 | GET | `/vcs` | Get VCS info Errors: `UnknownError`. | `vcs.get` |
@@ -473,7 +473,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/experimental/workspace` | List workspaces | `experimental.workspace.list` |
 | DELETE | `/experimental/workspace/{id}` | Remove workspace Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `experimental.workspace.remove` |
 | POST | `/experimental/workspace/{id}` | Create workspace Errors: `BadRequestError`. | `experimental.workspace.create` |
-| DELETE | `/experimental/worktree` | Remove worktree Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `worktree.remove` |
+| DELETE | `/experimental/worktree` | Remove worktree Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `WorktreeOwnershipObservationError`. | `worktree.remove` |
 | GET | `/experimental/worktree` | List worktrees | `worktree.list` |
 | POST | `/experimental/worktree` | Create worktree Errors: `BadRequestError`. | `worktree.create` |
 | POST | `/experimental/worktree/reset` | Reset worktree Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `worktree.reset` |

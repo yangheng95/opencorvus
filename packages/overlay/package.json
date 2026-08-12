@@ -13,7 +13,10 @@
     "build:docker": "bun run script/build-docker.ts",
     "typecheck": "tsc --noEmit",
     "check:i18n": "bun run script/check-i18n.ts",
+    "check:css-tokens": "bun run script/check-css-token-usage.ts",
+    "pretest": "bun ../opencorvus/script/prepare-test-process-supervisor.ts",
     "test": "bun run test:unit",
+    "pretest:unit": "bun ../opencorvus/script/prepare-test-process-supervisor.ts",
     "test:unit": "bun run script/run-unit-tests.ts",
     "tauri": "tauri"
   },

@@ -10,7 +10,7 @@ import { fn } from "@opencorvus-ai/util/fn"
 import { BusEvent } from "@/bus/bus-event"
 import { iife } from "@/util/iife"
 import { GlobalBus } from "@/bus/global"
-import { existsSync, lstatSync } from "fs"
+import { lstatSync } from "fs"
 import { readFile, realpath, readdir, stat } from "fs/promises"
 import { hostGit as git } from "../util/git"
 import { Glob } from "../util/glob"
@@ -46,6 +46,24 @@ export namespace Project {
   }
   const log = Log.create({ service: "project" })
   type Row = typeof ProjectTable.$inferSelect
+  type DiscoveryCommitHook = (input: {
+    projectID: string
+    directory: string
+    proposedSandbox?: string
+  }) => void | Promise<void>
+  let beforeDiscoveryCommit: DiscoveryCommitHook | undefined
+
+  export namespace TestHooks {
+    export function installBeforeDiscoveryCommit(hook: DiscoveryCommitHook) {
+      const previous = beforeDiscoveryCommit
+      beforeDiscoveryCommit = hook
+      return {
+        [Symbol.dispose]() {
+          if (beforeDiscoveryCommit === hook) beforeDiscoveryCommit = previous
+        },
+      }
+    }
+  }
 
   export const DirectoryIntegrityError = NamedError.create(
     "ProjectDirectoryIntegrityError",
@@ -644,84 +662,48 @@ export namespace Project {
         nextWorktree: data.worktree,
       })
     }
-    const resolvedAt = Date.now()
-    const existing = await iife(async () => {
-      if (row) return fromRow(row)
-      const fresh: Info = {
-        id: data.id,
-        worktree: data.worktree,
-        sandboxes: [],
-        time: {
-          created: resolvedAt,
-          updated: resolvedAt,
-        },
-      }
-      return fresh
-    })
-
-    if (Flag.OPENCORVUS_EXPERIMENTAL_ICON_DISCOVERY) discover(existing)
-
-    const sandboxes = [...existing.sandboxes]
-    if (data.sandbox !== data.worktree && !sandboxes.includes(data.sandbox)) sandboxes.push(data.sandbox)
-    const resolvedSandboxes = (
-      await Promise.all(
-        sandboxes
-          .filter((candidate) => existsSync(candidate))
-          .map(async (candidate) => ({
-            path: candidate,
-            isProjectRoot: await sameFilesystemLocation(candidate, data.worktree),
-          })),
-      )
-    )
-      .filter((candidate) => !candidate.isProjectRoot)
-      .map((candidate) => candidate.path)
-    const changed =
-      !row || existing.worktree !== data.worktree || !sameDirectoryList(existing.sandboxes, resolvedSandboxes)
-    const result: Info = {
-      ...existing,
-      worktree: data.worktree,
-      sandboxes: resolvedSandboxes,
-      time: {
-        ...existing.time,
-        updated: changed ? resolvedAt : existing.time.updated,
-      },
-    }
-    if (options.blockedProjectIDs?.has(result.id)) {
+    // Durable sandbox membership is ownership, not a reachability cache.
+    // Resolve only the candidate introduced by this request outside the DB
+    // transaction. The transaction re-reads the current authority and unions
+    // this candidate into that latest row; it never writes a stale snapshot.
+    const proposedSandbox =
+      data.sandbox !== data.worktree &&
+      !(await sameFilesystemLocation(data.sandbox, data.worktree))
+        ? data.sandbox
+        : undefined
+    if (options.blockedProjectIDs?.has(data.id)) {
       throw new DurableAdmissionClosedError({
-        projectID: result.id,
-        message: `Project ${result.id} discovery was admitted while deletion was in progress`,
+        projectID: data.id,
+        message: `Project ${data.id} discovery was admitted while deletion was in progress`,
       })
     }
-    assertRegistryAdmissionOpen(result.id)
-    if (!changed) return { project: result, sandbox: data.sandbox }
+    assertRegistryAdmissionOpen(data.id)
+    await beforeDiscoveryCommit?.({ projectID: data.id, directory, proposedSandbox })
 
-    const insert = {
-      id: result.id,
-      generation: randomUUID(),
-      worktree: result.worktree,
-      name: result.name,
-      icon_url: result.icon?.url,
-      icon_color: result.icon?.color,
-      time_created: result.time.created,
-      time_updated: result.time.updated,
-      time_pinned: result.time.pinned,
-      time_initialized: result.time.initialized,
-      sandboxes: result.sandboxes,
-      commands: result.commands,
-    }
-    const updateSet = {
-      worktree: result.worktree,
-      name: result.name,
-      icon_url: result.icon?.url,
-      icon_color: result.icon?.color,
-      time_updated: result.time.updated,
-      time_pinned: result.time.pinned,
-      time_initialized: result.time.initialized,
-      sandboxes: result.sandboxes,
-      commands: result.commands,
-    }
-    Database.transaction((db) => {
-      assertRegistryAdmissionOpen(result.id)
+    const committed = Database.transaction((db) => {
+      assertRegistryAdmissionOpen(data.id)
+      const currentRow = db.select().from(ProjectTable).where(eq(ProjectTable.id, data.id)).get()
+      const resolvedAt = Date.now()
+      const current: Info = currentRow
+        ? fromRow(currentRow)
+        : {
+            id: data.id,
+            worktree: data.worktree,
+            sandboxes: [],
+            time: { created: resolvedAt, updated: resolvedAt },
+          }
+      const sandboxes = [...current.sandboxes]
+      if (proposedSandbox && !sandboxes.includes(proposedSandbox)) sandboxes.push(proposedSandbox)
+      const changed =
+        !currentRow || current.worktree !== data.worktree || !sameDirectoryList(current.sandboxes, sandboxes)
+      const result: Info = {
+        ...current,
+        worktree: data.worktree,
+        sandboxes,
+        time: { ...current.time, updated: changed ? resolvedAt : current.time.updated },
+      }
+      if (!changed) return { result, changed }
+
       const projects = db
         .select()
         .from(ProjectTable)
@@ -730,8 +712,34 @@ export namespace Project {
       for (const directory of [result.worktree, ...result.sandboxes]) {
         assertRegisteredDirectoryAvailable(result.id, directory, projects)
       }
-      db.insert(ProjectTable).values(insert).onConflictDoUpdate({ target: ProjectTable.id, set: updateSet }).run()
+      if (currentRow) {
+        db.update(ProjectTable)
+          .set({ worktree: result.worktree, time_updated: result.time.updated, sandboxes: result.sandboxes })
+          .where(eq(ProjectTable.id, result.id))
+          .run()
+      } else {
+        db.insert(ProjectTable)
+          .values({
+            id: result.id,
+            generation: randomUUID(),
+            worktree: result.worktree,
+            name: result.name,
+            icon_url: result.icon?.url,
+            icon_color: result.icon?.color,
+            time_created: result.time.created,
+            time_updated: result.time.updated,
+            time_pinned: result.time.pinned,
+            time_initialized: result.time.initialized,
+            sandboxes: result.sandboxes,
+            commands: result.commands,
+          })
+          .run()
+      }
+      return { result, changed }
     })
+    const result = committed.result
+    if (Flag.OPENCORVUS_EXPERIMENTAL_ICON_DISCOVERY) discover(result)
+    if (!committed.changed) return { project: result, sandbox: data.sandbox }
     GlobalBus.emit("event", {
       payload: {
         type: Event.Updated.type,
@@ -1079,8 +1087,7 @@ export namespace Project {
     return valid
   }
 
-  export async function addSandbox(id: string, directory: string) {
-    const target = Filesystem.resolve(directory)
+  function addSandboxRow(id: string, target: string) {
     const result = Database.transaction((db) => {
       assertRegistryAdmissionOpen(id)
       const rows = db.select().from(ProjectTable).all()
@@ -1106,6 +1113,11 @@ export namespace Project {
       },
     })
     return result
+  }
+
+  export async function addSandbox(id: string, directory: string) {
+    const target = Filesystem.resolve(directory)
+    return addSandboxRow(id, target)
   }
 
   /**
@@ -1157,5 +1169,62 @@ export namespace Project {
       },
     })
     return data
+  }
+
+  export async function removeExactSandboxes(
+    id: string,
+    directories: readonly string[],
+    expected: { sandboxes: readonly string[]; timeUpdated: number },
+  ) {
+    const targets = new Set(directories)
+    if (targets.size === 0) {
+      const project = get(id)
+      if (!project) throw new Error(`Project not found: ${id}`)
+      return project
+    }
+    const result = Database.transaction((db) => {
+      assertRegistryAdmissionOpen(id)
+      const row = db.select().from(ProjectTable).where(eq(ProjectTable.id, id)).get()
+      if (!row) throw new Error(`Project not found: ${id}`)
+      if (
+        row.time_updated !== expected.timeUpdated ||
+        row.sandboxes.length !== expected.sandboxes.length ||
+        row.sandboxes.some((sandbox, index) => sandbox !== expected.sandboxes[index])
+      ) {
+        throw new Error(`Project sandbox authority changed during explicit release: ${id}`)
+      }
+      const remainingTargets = new Set(targets)
+      for (const sandbox of row.sandboxes) remainingTargets.delete(sandbox)
+      if (remainingTargets.size > 0) {
+        throw new Error(`Project sandbox authority changed during explicit release: ${id}`)
+      }
+      return db
+        .update(ProjectTable)
+        .set({ sandboxes: row.sandboxes.filter((sandbox) => !targets.has(sandbox)), time_updated: Date.now() })
+        .where(eq(ProjectTable.id, id))
+        .returning()
+        .get()
+    })
+    if (!result) throw new Error(`Project not found: ${id}`)
+    const data = fromRow(result)
+    GlobalBus.emit("event", {
+      payload: {
+        type: Event.Updated.type,
+        properties: data,
+      },
+    })
+    return data
+  }
+
+  export function exactSandboxAuthority(id: string): { sandboxes: string[]; timeUpdated: number } | undefined {
+    const row = Database.use((db) =>
+      db
+        .select({ sandboxes: ProjectTable.sandboxes, timeUpdated: ProjectTable.time_updated })
+        .from(ProjectTable)
+        .where(eq(ProjectTable.id, id))
+        .get(),
+    )
+    if (!row) return undefined
+    return { sandboxes: [...row.sandboxes], timeUpdated: row.timeUpdated }
   }
 }

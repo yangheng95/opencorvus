@@ -34,6 +34,10 @@ import { LogViewer } from "./components/LogViewer"
 import { FileExplorerPanel } from "./components/FileExplorerPanel"
 import { FileChangesPanel, type FileChangesActiveView } from "./components/FileChangesPanel"
 import { BrowserPreviewPanel, type BrowserPreviewPanelController } from "./components/BrowserPreviewPanel"
+import {
+  browserPreviewNativeSurfaceAvailable,
+  browserPreviewNativeUrlNavigationAvailable,
+} from "./services/browser-preview-native"
 import { browserPreviewRevision } from "./services/browser-preview"
 import { ScreenshotBrowserPanel } from "./components/ScreenshotBrowserPanel"
 import { SubagentConversationPanel } from "./components/SubagentConversationPanel"
@@ -695,6 +699,7 @@ async function deleteWorkLedgerProject(directory: string): Promise<void> {
     message: t("project.delete_confirm", { directory: projectDirectory }),
     cancel: true,
     okLabel: t("common.delete"),
+    okTone: "danger",
   })
   if (!dialog.confirmed) return
 
@@ -758,6 +763,8 @@ async function renameWorkLedgerProject(directory: string, currentName: string): 
     inputLabel: t("project.rename_input_label"),
     inputValue: currentName.trim(),
     inputPlaceholder: t("project.rename_input_placeholder"),
+    inputRequired: true,
+    inputRequiredMessage: t("project.rename_name_required"),
     cancel: true,
     okLabel: t("project.rename_menu_label"),
   })
@@ -778,6 +785,8 @@ async function promoteWorkLedgerAnonymousProject(directory: string): Promise<voi
     input: true,
     inputLabel: t("project.rename_input_label"),
     inputPlaceholder: t("project.rename_input_placeholder"),
+    inputRequired: true,
+    inputRequiredMessage: t("project.rename_name_required"),
     cancel: true,
     okLabel: t("common.continue"),
   })
@@ -876,6 +885,7 @@ async function confirmDeleteMissionBoardMission(mission: MissionRecord): Promise
     message: t("mission_board.delete.confirm", { title: mission.title || mission.missionID }),
     cancel: true,
     okLabel: t("common.delete"),
+    okTone: "danger",
   })
   return confirmation.confirmed
 }
@@ -933,6 +943,8 @@ async function renameWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void>
     inputLabel: t("work_ledger.action.rename_placeholder"),
     inputPlaceholder: t("work_ledger.action.rename_placeholder"),
     inputValue: row.title || row.missionID,
+    inputRequired: true,
+    inputRequiredMessage: t("explorer.name_required"),
     cancel: true,
     okLabel: t("common.ok"),
   })
@@ -1074,6 +1086,8 @@ async function renameWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
     inputLabel: t("task.rename_placeholder"),
     inputPlaceholder: t("task.rename_placeholder"),
     inputValue: row.title || row.id,
+    inputRequired: true,
+    inputRequiredMessage: t("explorer.name_required"),
     cancel: true,
     okLabel: t("common.ok"),
   })
@@ -1113,6 +1127,8 @@ async function renameWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
     inputLabel: t("work_ledger.action.rename_placeholder"),
     inputPlaceholder: t("work_ledger.action.rename_placeholder"),
     inputValue: row.title || row.sessionID,
+    inputRequired: true,
+    inputRequiredMessage: t("explorer.name_required"),
     cancel: true,
     okLabel: t("common.ok"),
   })
@@ -1566,16 +1582,21 @@ document.addEventListener(
     const href = previewUrl || anchor.getAttribute("href") || ""
     if (!/^https?:\/\//i.test(href)) return
     const canOpenExternalUrl = getHostTransport().capabilities.nativeCommands["open-url"]
-    if (!previewUrl && !canOpenExternalUrl) return
+    const canOpenBrowserPreview =
+      Boolean(previewUrl) &&
+      Boolean(primaryBrowserPreviewController) &&
+      browserPreviewNativeSurfaceAvailable() &&
+      browserPreviewNativeUrlNavigationAvailable()
+    if (!canOpenBrowserPreview && !canOpenExternalUrl) return
     ev.preventDefault()
     runMainAsync("browser-preview.open-url", async () => {
       try {
-        if (previewUrl) {
+        if (canOpenBrowserPreview) {
           openBrowserPreviewFromMessage(previewUrl)
           return
         }
         if (!canOpenExternalUrl) return
-        await nativeOpen(href)
+        await nativeOpen(previewUrl || href)
       } catch (error) {
         console.error("[ui] Failed to open external link", error)
         reportError({
@@ -2147,6 +2168,7 @@ function OverlayRoot() {
       }
       workLedger={
         <WorkLedger
+          primarySurface={primaryWorkspaceSurface()}
           selectedTaskID={activeTaskID()}
           selectedSessionID={activeSessionID()}
           refreshToken={missionSharedRefreshToken()}

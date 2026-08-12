@@ -17,6 +17,7 @@ export async function nativeConfirm(
     kind?: string
     okLabel?: string
     cancelLabel?: string
+    okTone?: "accent" | "danger"
   },
 ): Promise<boolean> {
   const result = await showAppDialog({
@@ -25,6 +26,7 @@ export async function nativeConfirm(
     kind: options?.kind || "warning",
     okLabel: options?.okLabel,
     cancelLabel: options?.cancelLabel,
+    okTone: options?.okTone,
     cancel: true,
   })
   return !!result?.confirmed
@@ -44,6 +46,8 @@ export async function nativePrompt(
     inputPlaceholder?: string
     inputValue?: string
     inputType?: "text" | "password"
+    inputRequired?: boolean
+    inputRequiredMessage?: string
   },
 ): Promise<string | null> {
   const result = await showAppDialog({
@@ -58,6 +62,8 @@ export async function nativePrompt(
     inputLabel: options?.inputLabel,
     inputPlaceholder: options?.inputPlaceholder || "",
     inputValue: options?.inputValue || "",
+    inputRequired: options?.inputRequired === true,
+    inputRequiredMessage: options?.inputRequiredMessage,
   })
   return result?.confirmed ? (result.value ?? null) : null
 }

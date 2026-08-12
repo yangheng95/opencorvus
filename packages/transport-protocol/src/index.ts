@@ -505,7 +505,27 @@ export const ProjectWorktreeInfo = z
   .strict()
   .meta({ ref: "ProjectWorktree" })
 export const ProjectWorktreeList = ProjectWorktreeInfo.array()
-export const ProjectWorktreeDeleteReceipt = z.object({ ok: z.literal(true) }).strict()
+export const ProjectWorktreeDeleteReceipt = z.discriminatedUnion("status", [
+  z.object({ ok: z.literal(true), status: z.literal("removed") }).strict(),
+  z
+    .object({
+      ok: z.literal(true),
+      status: z.literal("removed_with_preservation"),
+      preservations: z
+        .array(
+          z
+            .object({
+              operation: z.string(),
+              code: z.string(),
+              scope: z.literal("worktree-cleanup"),
+              message: z.string(),
+            })
+            .strict(),
+        )
+        .min(1),
+    })
+    .strict(),
+])
 
 export type ProjectWorktreeInfo = z.infer<typeof ProjectWorktreeInfo>
 export type ProjectWorktreeDeleteReceipt = z.infer<typeof ProjectWorktreeDeleteReceipt>
@@ -1029,7 +1049,6 @@ export type NativeCommand =
   | { kind: "clipboard.readText" }
   | { kind: "settings.load" }
   | { kind: "settings.save"; payload: OverlayPersistedSettings }
-  | { kind: "config.write-file"; path: string; content: string }
   | { kind: "server.info" }
   | { kind: "server.restart" }
   | { kind: "devtools.toggle" }
@@ -1246,8 +1265,6 @@ export function isNativeCommand(value: unknown): value is NativeCommand {
       return true
     case "settings.save":
       return isOverlayPersistedSettings(obj["payload"])
-    case "config.write-file":
-      return typeof obj["path"] === "string" && typeof obj["content"] === "string"
     case "server.info":
     case "server.restart":
     case "devtools.toggle":

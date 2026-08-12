@@ -273,7 +273,8 @@ describe("GitHub Actions workflow contract", () => {
         name: "Install Windows test runtime dependencies",
         if: "runner.os == 'Windows'",
         shell: "pwsh",
-        run: "./script/install-windows-ripgrep.ps1",
+        run:
+          "./script/install-windows-ripgrep.ps1\nbun packages/opencorvus/script/prepare-test-process-supervisor.ts\n",
       },
     ])
   })

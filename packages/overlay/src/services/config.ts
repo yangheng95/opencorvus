@@ -1,5 +1,5 @@
 // ── Config Service ──
-// Check config accessors, config update helpers, and project scaffold.
+// Check config accessors and config update helpers.
 
 import { ApiError, apiJson, configure as configureApi } from "./api"
 import { appStore, setAppStore, type ProjectLoadIssue } from "../store/app"
@@ -10,7 +10,6 @@ import { loadExtensions } from "./extensions"
 import { loadMeta } from "./meta"
 import { activeProjectDirectory, restoreWorkspaceDirectory } from "./project-directory"
 import { loadTasks, clearTasksForMissingDirectory } from "../store/board"
-import { getHostTransport } from "./host-transport-runtime"
 import { sanitizeLocale } from "../utils/i18n"
 import { createSignal } from "solid-js"
 import { AppLog } from "../utils/log"
@@ -463,50 +462,6 @@ async function updateConfigPath(
   }
   if (ownsResponse()) setAppStore("config", saved)
   return saved
-}
-
-// ── Project Config Scaffold ──
-
-/**
- * Write a default `opencorvus.jsonc` file into `dir/.opencorvus/` via the
- * Tauri `overlay_write_file` command. Silently no-ops when `dir` is empty.
- */
-export async function scaffoldProjectConfig(dir: string): Promise<void> {
-  if (!dir) return
-  const base = dir.replace(/[\\/]+$/, "")
-  const configFile = base + "/.opencorvus/opencorvus.jsonc"
-  const username = settingsStore.username || ""
-  // Scaffold intentionally leaves `assistant` empty so the server's
-  // EngineConfig.DEFAULTS is the single source of truth. Writing explicit
-  // values here would shadow DEFAULTS via the `??` merge in
-  // packages/opencorvus/src/orchestrator/config.ts and silently drift over time.
-  // Project authors who want to customize agent behavior should add fields
-  // explicitly — the empty `{}` is just a discoverability hint.
-  const config = {
-    $schema: "https://opencorvus.ai/config.json",
-    lsp: {
-      biome: { disabled: true },
-      eslint: { disabled: true },
-    },
-    assistant: {},
-    compaction: {
-      auto: true,
-      prune: true,
-    },
-    agent: {},
-    plugin: [],
-    command: {},
-    username,
-  }
-  try {
-    await getHostTransport().native({
-      kind: "config.write-file",
-      path: configFile,
-      content: JSON.stringify(config, null, 2),
-    })
-  } catch (e) {
-    console.warn("[scaffold] Failed to scaffold project config", e)
-  }
 }
 
 // ── Project Scope Reload ──

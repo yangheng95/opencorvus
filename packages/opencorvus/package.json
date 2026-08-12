@@ -7,9 +7,12 @@
   "private": true,
   "scripts": {
     "typecheck": "node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit",
+    "pretest": "bun script/prepare-test-process-supervisor.ts",
     "test": "bun script/run-tests.ts",
+    "prepare:test-runtime": "bun script/prepare-test-process-supervisor.ts",
     "build": "bun run script/build.ts",
-    "check:permission-modes": "bun run script/permission-modes-check.ts",
+    "precheck:permission-modes": "bun script/prepare-test-process-supervisor.ts",
+    "check:permission-modes": "bun run script/run-with-inactivity.ts --inactivity-ms 120000 -- bun run script/permission-modes-check-worker.ts",
     "check:work-artifact-profile": "bun run script/generate-work-artifact-qualification-matrix.ts --check && bun run script/check-work-artifact-profile.ts --profile office.presentation@1",
     "check:scheduled-automations-e2e": "bun run script/scheduled-automations-e2e.ts",
     "check:mission-task-duplex-e2e": "bun run script/check-mission-task-duplex-e2e.ts",

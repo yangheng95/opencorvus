@@ -26,6 +26,8 @@ import { proxiedFetchInit, resolveNetworkProxy } from "../util/network-proxy"
 import { Plugin } from "../plugin"
 import { BUNDLED_PROVIDERS } from "./bundled"
 import { dashscopeKey } from "./dashscope"
+import { canonicalDigestSource, containsRuntimeCapability } from "@/util/canonical-digest"
+import { CanonicalCache } from "./canonical-cache"
 
 export namespace Provider {
   const log = Log.create({ service: "provider" })
@@ -244,11 +246,12 @@ export namespace Provider {
   }
 
   type ProviderState = {
+    config: Config.Info
     models: Map<string, LanguageModel>
     providers: { [providerID: string]: Info }
     database: { [providerID: string]: Info }
     issues: LoadIssue[]
-    sdk: Map<number, LanguageModelProvider>
+    sdk: CanonicalCache<LanguageModelProvider>
     modelLoaders: {
       [providerID: string]: CustomModelLoader
     }
@@ -330,7 +333,7 @@ export namespace Provider {
     const modelLoaders: {
       [providerID: string]: CustomModelLoader
     } = {}
-    const sdk = new Map<number, LanguageModelProvider>()
+    const sdk = new CanonicalCache<LanguageModelProvider>()
 
     log.info("init")
 
@@ -612,6 +615,7 @@ export namespace Provider {
     }
 
     return {
+      config,
       models: languages,
       providers,
       database,
@@ -621,43 +625,56 @@ export namespace Provider {
     }
   }
 
-  const state = createInstanceState(async () => buildState(await Config.get()), undefined, "provider")
-  const scopedStates = new Map<string, Promise<ProviderState>>()
-  const globalScopedStates = new Map<string, Promise<ProviderState>>()
+  const state = createInstanceState(async () => buildState(Config.Info.parse(await Config.get())), undefined, "provider")
+  const scopedStates = new Map<string, CanonicalCache<Promise<ProviderState>>>()
+  const globalScopedStates = new CanonicalCache<Promise<ProviderState>>()
 
-  function configStateKey(config: Config.Info): string {
-    return String(Bun.hash.xxHash64(JSON.stringify(config)))
-  }
-
-  function projectConfigStateKey(config: Config.Info): string {
-    return `${currentProjectDirectory()}\u0000${configStateKey(config)}`
+  function configStateSource(config: Config.Info) {
+    const snapshot = Config.Info.parse(config)
+    return {
+      snapshot,
+      source: canonicalDigestSource("opencorvus.provider.config-state.v1", snapshot),
+    }
   }
 
   function cachedState(
-    states: Map<string, Promise<ProviderState>>,
-    key: string,
+    states: CanonicalCache<Promise<ProviderState>>,
+    source: ReturnType<typeof canonicalDigestSource>,
     init: () => Promise<ProviderState>,
   ): Promise<ProviderState> {
-    const existing = states.get(key)
+    const existing = states.get(source)
     if (existing) return existing
     const next = init().catch((error) => {
-      if (states.get(key) === next) states.delete(key)
+      states.delete(source, next)
       throw error
     })
-    states.set(key, next)
+    states.set(source, next)
     return next
   }
 
   function stateFor(config?: Config.Info): Promise<ProviderState> {
     if (!config) return state()
-    const key = projectConfigStateKey(config)
-    return cachedState(scopedStates, key, () => buildState(config))
+    const snapshot = Config.Info.parse(config)
+    if (containsRuntimeCapability(snapshot)) return buildState(snapshot)
+    const { source } = configStateSource(snapshot)
+    const directory = currentProjectDirectory()
+    const states = scopedStates.get(directory) ?? new CanonicalCache<Promise<ProviderState>>()
+    scopedStates.set(directory, states)
+    return cachedState(states, source, () => buildState(snapshot))
   }
 
   function globalStateFor(config: Config.Info): Promise<ProviderState> {
-    const key = configStateKey(config)
-    return cachedState(globalScopedStates, key, () =>
-      buildState(config, {
+    const snapshot = Config.Info.parse(config)
+    if (containsRuntimeCapability(snapshot)) {
+      return buildState(snapshot, {
+        environment: { ...process.env },
+        pluginHooks: Plugin.listGlobalProviderHooks,
+        includeCustomLoaders: false,
+      })
+    }
+    const { source } = configStateSource(snapshot)
+    return cachedState(globalScopedStates, source, () =>
+      buildState(snapshot, {
         environment: { ...process.env },
         pluginHooks: Plugin.listGlobalProviderHooks,
         includeCustomLoaders: false,
@@ -666,10 +683,7 @@ export namespace Provider {
   }
 
   export async function reset(): Promise<void> {
-    const prefix = `${currentProjectDirectory()}\u0000`
-    for (const key of scopedStates.keys()) {
-      if (key.startsWith(prefix)) scopedStates.delete(key)
-    }
+    scopedStates.delete(currentProjectDirectory())
     await state.reset()
   }
 
@@ -744,7 +758,7 @@ export namespace Provider {
         providerID: model.providerID,
       })
       const s = await (opts?.state ?? stateFor(opts?.config))
-      const config = opts?.config ?? (await Config.get())
+      const config = s.config
       const provider = s.providers[model.providerID]
       const options = { ...provider.options }
       if (options["apiKey"] === undefined && provider.key) options["apiKey"] = provider.key
@@ -766,12 +780,19 @@ export namespace Provider {
           ...model.headers,
         }
 
-      const key = Bun.hash.xxHash32(JSON.stringify({ providerID: model.providerID, npm: model.api.npm, options }))
-      const existing = s.sdk.get(key)
-      if (existing) return existing
-
       const customFetch = options["fetch"]
       const proxyUrl = customFetch ? undefined : resolveFetchProxy(config)
+      const declarativeOptions = { ...options }
+      delete declarativeOptions["fetch"]
+      const sdkSource = customFetch || containsRuntimeCapability(declarativeOptions)
+        ? undefined
+        : canonicalDigestSource("opencorvus.provider.sdk-instance.v1", {
+            providerID: model.providerID,
+            npm: model.api.npm,
+            options: declarativeOptions,
+          })
+      const existing = sdkSource ? s.sdk.get(sdkSource) : undefined
+      if (existing) return existing
 
       options["fetch"] = async (input: any, init?: BunFetchRequestInit) => {
         // Preserve custom fetch if it exists, wrap it with timeout logic
@@ -934,7 +955,7 @@ export namespace Provider {
           name: model.providerID,
           ...options,
         })
-        s.sdk.set(key, loaded)
+        if (sdkSource) s.sdk.set(sdkSource, loaded)
         return loaded as LanguageModelProvider
       }
 
@@ -950,7 +971,7 @@ export namespace Provider {
         name: model.providerID,
         ...options,
       })
-      s.sdk.set(key, loaded)
+      if (sdkSource) s.sdk.set(sdkSource, loaded)
       return loaded as LanguageModelProvider
     } catch (e) {
       throw new InitError({ providerID: model.providerID }, { cause: e })

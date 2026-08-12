@@ -3,16 +3,15 @@ import path from "path"
 import fs from "fs/promises"
 import { afterAll } from "bun:test"
 import {
-  createManagedTemporaryDirectory,
-  currentOpenCorvusRuntimePaths,
-  removeManagedDirectoryTree,
-  removeManagedDirectoryTreeSync,
-} from "@opencorvus-ai/util/runtime-directories"
+  bootstrapIsolatedTestRuntime,
+  removeIsolatedTestRuntime,
+} from "@opencorvus-ai/util/test-runtime-environment"
 
 let setupPromise: Promise<void> | undefined
 let testRuntimeDirectory: string | undefined
 let cleanupRegistered = false
 let terminalIngressRuntimeOverride: Disposable | undefined
+let isolatedRuntime: Awaited<ReturnType<typeof bootstrapIsolatedTestRuntime>> | undefined
 
 export function registerTestRuntimeCleanup(): void {
   if (cleanupRegistered) return
@@ -24,8 +23,20 @@ export function registerTestRuntimeCleanup(): void {
       const failures: unknown[] = []
       const { Database } = await import("../src/storage/db")
       const { Log } = await import("../src/util/log")
+      const { Instance } = await import("../src/project/instance")
+      const { Scheduler } = await import("../src/scheduler")
       terminalIngressRuntimeOverride?.[Symbol.dispose]()
       terminalIngressRuntimeOverride = undefined
+      try {
+        await Scheduler.disposeGlobal({ inactivityTimeoutMilliseconds: 60_000 })
+      } catch (error) {
+        failures.push(error)
+      }
+      try {
+        await Instance.disposeAll()
+      } catch (error) {
+        failures.push(error)
+      }
       try {
         await Database.awaitEffectIdle(60_000)
       } catch (error) {
@@ -42,7 +53,8 @@ export function registerTestRuntimeCleanup(): void {
         failures.push(error)
       }
       try {
-        await removeManagedDirectoryTree(dir)
+        if (!isolatedRuntime) throw new Error("Test preload isolated runtime is missing")
+        await removeIsolatedTestRuntime(isolatedRuntime)
       } catch (error) {
         failures.push(error)
       }
@@ -58,34 +70,18 @@ export function setupTestRuntime(): Promise<void> {
     ;(globalThis as typeof globalThis & { __OPENCORVUS_OVERLAY_VERSION__?: string }).__OPENCORVUS_OVERLAY_VERSION__ =
       "test"
 
-const testRunsRoot = path.join(currentOpenCorvusRuntimePaths().temporary, "tests")
-const dir = await createManagedTemporaryDirectory(testRunsRoot, `${process.pid}-`)
+const runtime = await bootstrapIsolatedTestRuntime("test")
+isolatedRuntime = runtime
+const dir = runtime.processRoot
 testRuntimeDirectory = dir
-const runtimeRoot = path.join(dir, "runtime-root")
-const temporaryDirectory = path.join(runtimeRoot, "tmp")
-await fs.mkdir(temporaryDirectory, { recursive: true })
-process.env["OPENCORVUS_TEST_PROCESS_ROOT"] = dir
-process.env["OPENCORVUS_TEST_RUNS_ROOT"] = testRunsRoot
-process.env["TEMP"] = temporaryDirectory
-process.env["TMP"] = temporaryDirectory
-process.env["TMPDIR"] = temporaryDirectory
+const runtimeRoot = runtime.runtimeRoot
+process.env["OPENCORVUS_TEST_RUNS_ROOT"] = runtime.ownerRoot
 
-process.once("exit", () => {
-  removeManagedDirectoryTreeSync(dir)
-})
-
-process.env["XDG_DATA_HOME"] = path.join(dir, "cross-desktop-group-data")
-process.env["XDG_CACHE_HOME"] = path.join(dir, "cross-desktop-group-cache")
-process.env["XDG_CONFIG_HOME"] = path.join(dir, "cross-desktop-group-config")
-process.env["XDG_STATE_HOME"] = path.join(dir, "cross-desktop-group-state")
-process.env["OPENCORVUS_HOME"] = runtimeRoot
 process.env["OPENCORVUS_MODELS_PATH"] = path.join(dir, "models.json")
 
 // Set test home directory to isolate tests from user's actual home directory
 // This prevents tests from picking up real user configs/skills from ~/.claude/skills
-const testHome = path.join(dir, "home")
-await fs.mkdir(testHome, { recursive: true })
-process.env["OPENCORVUS_TEST_HOME"] = testHome
+const testHome = process.env.OPENCORVUS_TEST_HOME!
 
 // Set test managed config directory to isolate tests from system managed settings
 const testManagedConfigDir = path.join(dir, "managed")
@@ -140,3 +136,5 @@ terminalIngressRuntimeOverride = QueueTestHooks.replaceTerminalIngressDeliveryRu
   })()
   return setupPromise
 }
+
+await setupTestRuntime()

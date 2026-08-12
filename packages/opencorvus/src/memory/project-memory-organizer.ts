@@ -139,21 +139,31 @@ export namespace ProjectMemoryOrganizer {
 
   export async function run(input?: { projectID?: string; sessionID?: string; abort?: AbortSignal }) {
     const projectID = input?.projectID ?? Instance.project.id
-    return withKeyedLock(organizerLocks, projectID, () => runUnlocked({ ...input, projectID }), 10 * 60_000)
+    return withKeyedLock(
+      organizerLocks,
+      projectID,
+      () => runUnlocked({ ...input, projectID }),
+      10 * 60_000,
+      input?.abort,
+    )
   }
 
   async function runUnlocked(input: { projectID: string; sessionID?: string; abort?: AbortSignal }) {
+    const checkpoint = () => input.abort?.throwIfAborted()
+    checkpoint()
     const projectID = input.projectID
     const snapshot = ProjectMemory.read(projectID)
     const pending = ProjectMemory.pending(projectID)
     if (pending.length === 0) return { status: "idle" as const, revision: snapshot.revision }
 
     const config = await EffectiveConfig.effective(input?.sessionID ? { sessionID: input.sessionID } : undefined)
+    checkpoint()
     const memoryConfig = config.experimental?.memory
     const documentTokenLimit = memoryConfig?.document_token_limit ?? ProjectMemory.documentTokenLimit
     const configuredInputBudget = memoryConfig?.organizer_input_token_budget ?? 32_000
     const pendingAvailabilityLimit = memoryConfig?.pending_availability_limit ?? 500
     const leaseID = randomUUID()
+    checkpoint()
     const lease = Database.transaction((db) =>
       ProjectMemory.beginOrganizerAttemptInTransaction(db, {
         projectID,
@@ -178,6 +188,7 @@ export namespace ProjectMemoryOrganizer {
           config,
         })
         const expectedOccurrenceIDs = pending.map((entry) => entry.occurrenceID)
+        checkpoint()
         const unavailable = Database.transaction((db) =>
           ProjectMemory.markUnavailableAndTrimInTransaction(db, {
             projectID,
@@ -208,6 +219,7 @@ export namespace ProjectMemoryOrganizer {
           selected.kind === "model_context_incompatible"
             ? "The configured Memory Organizer model cannot fit the complete current MEMORY.MD plus one pending input. Configure a model with a larger context window or organize MEMORY.MD."
             : "The oldest pending input cannot fit the Memory Organizer input budget. Organize MEMORY.MD or increase the configured Organizer input budget."
+        checkpoint()
         const applied = Database.transaction((db) =>
           ProjectMemory.setStatusInTransaction(db, {
             projectID,
@@ -248,9 +260,12 @@ export namespace ProjectMemoryOrganizer {
       })
       let candidateText = ""
       for await (const chunk of result.textStream) candidateText += chunk
+      checkpoint()
       const candidate = parseCandidate(candidateText)
+      checkpoint()
       const candidateTokens = estimateTokens(candidate.markdown.trim() + "\n")
       if (candidateTokens > documentTokenLimit) {
+        checkpoint()
         const applied = Database.transaction((db) =>
           ProjectMemory.setStatusInTransaction(db, {
             projectID,
@@ -266,6 +281,7 @@ export namespace ProjectMemoryOrganizer {
         if (!applied) throw new Error("Project MEMORY.MD Organizer lost its lease before capacity settlement")
         return { status: "capacity_reached" as const, revision: snapshot.revision, tokenCount: candidateTokens }
       }
+      checkpoint()
       const committed = Database.transaction((db) =>
         ProjectMemory.commitOrganizationInTransaction(db, {
           projectID,

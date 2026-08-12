@@ -3,6 +3,7 @@ import path from "path"
 import { $ } from "bun"
 import z from "zod"
 import { NamedError } from "@opencorvus-ai/util/error"
+import { valid as validSemver } from "semver"
 import { Log } from "../util/log"
 import { Flag } from "../flag/flag"
 
@@ -68,30 +69,213 @@ export namespace Installation {
   export const UpgradeFailedError = NamedError.create(
     "UpgradeFailedError",
     z.object({
+      stage: z.enum(["installer", "executable_probe", "version_mismatch"]),
+      message: z.string(),
+      target: z.string(),
+      executable: z.string().optional(),
+      exitCode: z.number().nullable(),
+      stdout: z.string(),
       stderr: z.string(),
+      observedVersion: z.string().optional(),
     }),
   )
 
-  export async function upgrade(method: Method, target: string) {
+  export interface UpgradeReceipt {
+    method: "native"
+    requestedVersion: string
+    observedVersion: string
+    executable: string
+  }
+
+  interface UpgradeCommandObservation {
+    exitCode: number
+    stdout: string
+    stderr: string
+  }
+
+  type UpgradeCommandRunner = (input: {
+    stage: "installer_download" | "installer" | "executable_probe"
+    target: string
+    executable: string
+    stdin?: string
+  }) => Promise<UpgradeCommandObservation>
+
+  export function normalizeUpgradeVersion(value: string): string | undefined {
+    const normalized = value.trim().replace(/^v/, "")
+    return validSemver(normalized) ?? undefined
+  }
+
+  async function productionUpgradeCommand(input: {
+    stage: "installer_download" | "installer" | "executable_probe"
+    target: string
+    executable: string
+    stdin?: string
+  }): Promise<UpgradeCommandObservation> {
+    if (input.stage === "installer_download") {
+      const result = await $`curl -fsSL https://opencorvus.ai/install`.quiet().throws(false)
+      return {
+        exitCode: result.exitCode,
+        stdout: result.stdout.toString("utf8"),
+        stderr: result.stderr.toString("utf8"),
+      }
+    }
+    if (input.stage === "installer") {
+      if (input.stdin === undefined) throw new Error("Native installer script is missing")
+      const process = Bun.spawn(["bash"], {
+        env: { ...globalThis.process.env, VERSION: input.target },
+        stdin: new TextEncoder().encode(input.stdin),
+        stdout: "pipe",
+        stderr: "pipe",
+      })
+      const [exitCode, stdout, stderr] = await Promise.all([
+        process.exited,
+        new Response(process.stdout).text(),
+        new Response(process.stderr).text(),
+      ])
+      return { exitCode, stdout, stderr }
+    }
+    const result = await $`${input.executable} --version`.quiet().throws(false)
+    return {
+      exitCode: result.exitCode,
+      stdout: result.stdout.toString("utf8"),
+      stderr: result.stderr.toString("utf8"),
+    }
+  }
+
+  function upgradeFailure(input: {
+    stage: "installer" | "executable_probe" | "version_mismatch"
+    message: string
+    target: string
+    executable?: string
+    observation?: UpgradeCommandObservation
+    observedVersion?: string
+  }) {
+    return new UpgradeFailedError({
+      stage: input.stage,
+      message: input.message,
+      target: input.target,
+      ...(input.executable ? { executable: input.executable } : {}),
+      exitCode: input.observation?.exitCode ?? null,
+      stdout: input.observation?.stdout ?? "",
+      stderr: input.observation?.stderr ?? "",
+      ...(input.observedVersion ? { observedVersion: input.observedVersion } : {}),
+    })
+  }
+
+  async function observeUpgradeCommand(
+    runner: UpgradeCommandRunner,
+    input: Parameters<UpgradeCommandRunner>[0],
+  ): Promise<UpgradeCommandObservation> {
+    try {
+      return await runner(input)
+    } catch (error) {
+      throw upgradeFailure({
+        stage: input.stage === "executable_probe" ? "executable_probe" : "installer",
+        message: `${input.stage === "installer_download" ? "Native installer download" : input.stage === "installer" ? "Native installer" : "Installed executable version probe"} could not start: ${error instanceof Error ? error.message : String(error)}`,
+        target: input.target,
+        ...(input.stage === "executable_probe" ? { executable: input.executable } : {}),
+      })
+    }
+  }
+
+  async function upgradeWithRunner(
+    method: Method,
+    target: string,
+    runner: UpgradeCommandRunner,
+  ): Promise<UpgradeReceipt> {
     if (method !== "native")
       throw new Error(`OpenCorvus is not running from a native installation: ${process.execPath}`)
-    const cmd = $`curl -fsSL https://opencorvus.ai/install | bash`.env({
-      ...process.env,
-      VERSION: target,
+    const requestedVersion = normalizeUpgradeVersion(target)
+    if (!requestedVersion) {
+      throw upgradeFailure({
+        stage: "version_mismatch",
+        message: `Invalid requested OpenCorvus version: ${target}`,
+        target,
+      })
+    }
+    const executable = process.execPath
+    const installerDownload = await observeUpgradeCommand(runner, {
+      stage: "installer_download",
+      target: requestedVersion,
+      executable,
     })
-    const result = await cmd.quiet().throws(false)
-    if (result.exitCode !== 0) {
-      throw new UpgradeFailedError({
-        stderr: result.stderr.toString("utf8"),
+    if (installerDownload.exitCode !== 0) {
+      throw upgradeFailure({
+        stage: "installer",
+        message: `Native installer download exited with code ${installerDownload.exitCode}`,
+        target: requestedVersion,
+        observation: installerDownload,
+      })
+    }
+    const installer = await observeUpgradeCommand(runner, {
+      stage: "installer",
+      target: requestedVersion,
+      executable,
+      stdin: installerDownload.stdout,
+    })
+    if (installer.exitCode !== 0) {
+      throw upgradeFailure({
+        stage: "installer",
+        message: `Native installer exited with code ${installer.exitCode}`,
+        target: requestedVersion,
+        observation: installer,
+      })
+    }
+    const probe = await observeUpgradeCommand(runner, {
+      stage: "executable_probe",
+      target: requestedVersion,
+      executable,
+    })
+    if (probe.exitCode !== 0) {
+      throw upgradeFailure({
+        stage: "executable_probe",
+        message: `Installed executable version probe exited with code ${probe.exitCode}`,
+        target: requestedVersion,
+        executable,
+        observation: probe,
+      })
+    }
+    const observedVersion = normalizeUpgradeVersion(probe.stdout)
+    if (!observedVersion) {
+      throw upgradeFailure({
+        stage: "executable_probe",
+        message: "Installed executable returned an invalid version",
+        target: requestedVersion,
+        executable,
+        observation: probe,
+      })
+    }
+    if (observedVersion !== requestedVersion) {
+      throw upgradeFailure({
+        stage: "version_mismatch",
+        message: `Installed executable reports ${observedVersion}, expected ${requestedVersion}`,
+        target: requestedVersion,
+        executable,
+        observation: probe,
+        observedVersion,
       })
     }
     log.info("upgraded", {
       method,
-      target,
-      stdout: result.stdout.toString(),
-      stderr: result.stderr.toString(),
+      requestedVersion,
+      observedVersion,
+      executable,
+      stdout: installer.stdout,
+      stderr: installer.stderr,
     })
-    await $`${process.execPath} --version`.nothrow().quiet().text()
+    return { method, requestedVersion, observedVersion, executable }
+  }
+
+  export async function upgrade(method: Method, target: string): Promise<UpgradeReceipt> {
+    return upgradeWithRunner(method, target, productionUpgradeCommand)
+  }
+
+  export async function upgradeWithRunnerForTest(
+    method: Method,
+    target: string,
+    runner: UpgradeCommandRunner,
+  ): Promise<UpgradeReceipt> {
+    return upgradeWithRunner(method, target, runner)
   }
 
   export const VERSION =

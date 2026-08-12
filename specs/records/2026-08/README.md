@@ -1,5 +1,15 @@
 # August 2026 Records
 
+- [2026-08-12-startup-surface-visual-redesign.md](2026-08-12-startup-surface-visual-redesign.md) redesigns the real desktop startup surface around the existing OpenCorvus bird, a strong preparation hierarchy, truthful wide progress feedback, and preserved native failure/retry behavior, with production-page visual evidence and independent review.
+
+- [2026-08-12-overlay-ui-ux-continuous-audit.md](2026-08-12-overlay-ui-ux-continuous-audit.md) records the multi-agent Overlay UI/UX audit, root-cause repairs, real-page screenshots, positive non-UI checks, and independent delivery reviews.
+
+- [2026-08-12-code-smell-remediation-program.md](2026-08-12-code-smell-remediation-program.md) defines the independently reviewed, batch-by-batch remediation program for the final repository code-smell register and records each batch's implementation, verification, review, commit, and delivery status.
+
+- Focused code-smell remediation records: [CS-015 Plugin publication](2026-08-12-cs015-plugin-publication-source-mutation.md), [CS-025 Artifact cursor authenticity](2026-08-12-cs025-artifact-cursor-authenticity.md), [CS-029 Skill source trust identity](2026-08-12-cs029-skill-source-trust-identity.md), [CS-030 dead JSON storage removal](2026-08-12-cs030-delete-dead-json-storage.md), [CS-031 Provider cache identity](2026-08-12-cs031-provider-cache-identity.md), [CS-040 MCP diagnostic redaction](2026-08-12-cs040-mcp-diagnostic-redaction.md), [CS-041 Channel adapter start settlement](2026-08-12-cs041-channel-adapter-start-settlement.md), [CS-046 Project sandbox discovery authority](2026-08-12-cs046-project-sandbox-discovery-authority.md), [CS-047 Frontend Design domain-incomplete settlement](2026-08-12-cs047-frontend-design-domain-incomplete-settlement.md), [CS-053 remote Skill cache publication](2026-08-12-cs053-remote-skill-cache-publication.md), [CS-054 Research domain-incomplete settlement](2026-08-12-cs054-research-domain-incomplete-settlement.md), [CS-055 Intent blocker settlement](2026-08-12-cs055-intent-blocker-question-settlement.md), and [CS-076 native upgrade verification](2026-08-12-cs076-upgrade-version-verification.md).
+
+- [2026-08-12-repository-code-smell-continuous-audit.md](2026-08-12-repository-code-smell-continuous-audit.md) records the multi-agent repository-wide code-smell audit, 78 evidence-backed findings, repeated admissions and false-positive removals, two final zero-new passes, and the dependency-ordered follow-up refactoring backlog.
+
 - [2026-08-12-v0.0.42-beta-actions-green-release.md](2026-08-12-v0.0.42-beta-actions-green-release.md) records the Actions root-cause repair, canonical version synchronization, all-green source gate, native Release publication, updater promotion, and public website verification for `v0.0.42-beta`.
 
 - [2026-08-12-work-artifact-harness-p0-implementation.md](2026-08-12-work-artifact-harness-p0-implementation.md) implements the qualified PPTX slice on the unified Work Artifact profile, Skill, typed lifecycle, validation-receipt, runtime-manifest, package-permission, and supervised acceptance infrastructure.

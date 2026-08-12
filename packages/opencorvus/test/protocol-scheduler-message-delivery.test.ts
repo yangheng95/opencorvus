@@ -28,7 +28,7 @@ import { MessageTable, PartTable } from "@/session/session.sql"
 import { Database, DatabaseEffectAdmissionClosedError, asc, eq } from "@/storage/db"
 import { RuntimeExecutionAdmissionClosedError } from "@/runtime/execution-settlement"
 import { writeTaskUpdateInTransaction } from "@/engine/state"
-import { installSchedulerMessageDrainSignal } from "@/protocol/scheduler-drain-signal"
+import { installSchedulerMessageDrainSignal, observeSchedulerMessageDrainSignal } from "@/protocol/scheduler-drain-signal"
 import {
   QueueOrderingTestHooks,
   configureTaskLoopRunner,
@@ -783,7 +783,7 @@ describe("durable scheduler.message delivery", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        installSchedulerMessageDrainSignal(() => undefined)
+        using _drainSignal = installSchedulerMessageDrainSignal(() => undefined)
         const mission = await Session.create({
           kind: "mission",
           title: "Terminal Mission",
@@ -1010,6 +1010,71 @@ describe("durable scheduler.message delivery", () => {
         })
         await drainSchedulerMessagesForCurrentProject()
         expect(resumed).toEqual(deliveries.map((delivery) => delivery.messageID))
+      },
+    })
+  })
+
+  test("signals a Mission scheduler notification through the persisted send path", async () => {
+    await using project = await memoryProject()
+    const signals: string[] = []
+    using _signalObserver = observeSchedulerMessageDrainSignal(() => signals.push("scheduler-message-drain"))
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-signaled-delivery"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Signaled delivery Mission",
+          metadata: { mission: { id: missionID } },
+        })
+        const taskRoot = await Session.create({ kind: "orchestrator", title: "Signaled delivery source Task" })
+        const taskID = Identifier.ascending("task")
+        const now = Date.now()
+        Database.use((db) =>
+          db
+            .insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: Instance.project.id,
+              session_id: taskRoot.id,
+              source: "mission",
+              product_pillar: "code",
+              title: "Signal a Mission delivery",
+              request: "Deliver through the persisted scheduler signal",
+              metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+              time_started: now,
+              time_created: now,
+              time_updated: now,
+            })
+            .run(),
+        )
+        const sourceMessageID = "msg_signaled_mission_delivery"
+        const sourcePartID = "prt_signaled_mission_delivery"
+        persistSourceOccurrence(taskRoot.id, sourceMessageID, sourcePartID, "Deliver this Mission notification")
+
+        const receipt = await sendSchedulerMessage({
+          invocationID: "signaled-mission-delivery",
+          kind: "notification",
+          source: {
+            kind: "task_scheduler",
+            project_id: Instance.project.id,
+            task_id: taskID,
+            root_session_id: taskRoot.id,
+          },
+          target: {
+            kind: "mission_scheduler",
+            project_id: Instance.project.id,
+            mission_id: missionID,
+            session_id: mission.id,
+          },
+          subject: "Signaled Mission delivery",
+          sourceMessageID,
+          sourcePartID,
+        })
+        expect({ signals, receipt }).toMatchObject({
+          signals: ["scheduler-message-drain"],
+          receipt: { status: "pending" },
+        })
       },
     })
   })
