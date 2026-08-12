@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-12-v0.0.42-beta-actions-green-release.md](2026-08-12-v0.0.42-beta-actions-green-release.md) records the Actions root-cause repair, canonical version synchronization, all-green source gate, native Release publication, updater promotion, and public website verification for `v0.0.42-beta`.
+
 - [2026-08-12-promotion-case-engine-strategy.md](2026-08-12-promotion-case-engine-strategy.md) defines the evidence-led promotion case portfolio, repeatable media factory, distribution system, measurement funnel, and first 30-day execution plan.
 
 - [2026-08-12-project-memory-user-message-ledger.md](2026-08-12-project-memory-user-message-ledger.md) defines transactional pending capture for every explicit user input, a separate streaming Memory Organizer agent, one bounded Project `MEMORY.MD`, visible capacity notices, unavailable-only pending FIFO, and independent plan/implementation review gates.
