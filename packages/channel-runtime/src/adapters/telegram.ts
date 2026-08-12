@@ -87,8 +87,19 @@ export class TelegramAdapter implements ChannelAdapter {
       })
     })
 
-    // bot.start() blocks (long polling), so we don't await it
-    this.bot.start()
+    await new Promise<void>((resolve, reject) => {
+      let ready = false
+      const polling = this.bot.start({
+        onStart: () => {
+          ready = true
+          resolve()
+        },
+      })
+      polling.catch((error) => {
+        if (!ready) reject(error)
+        else console.error("[Telegram] Long polling stopped:", error)
+      })
+    })
     console.log(`[Telegram] Bot started (long polling)`)
   }
 
@@ -127,7 +138,7 @@ export class TelegramAdapter implements ChannelAdapter {
   }
 
   async stop(): Promise<void> {
-    this.bot.stop()
+    if (this.bot.isRunning()) await this.bot.stop()
   }
 
   async sendMessage(channel: string, thread: string, text: string): Promise<void> {

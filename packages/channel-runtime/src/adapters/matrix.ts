@@ -50,9 +50,8 @@ export class MatrixAdapter implements ChannelAdapter {
 
   async start(): Promise<void> {
     if (this.running) return
+    this.userId = await this.whoami()
     this.running = true
-    // whoami may fail if token is invalid — userId stays undefined (messages still processed)
-    this.userId = await this.whoami().catch(() => undefined)
     this.loop = this.syncLoop()
     console.log("[Matrix] Sync loop started")
   }

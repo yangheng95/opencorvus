@@ -51,7 +51,9 @@ export class SignalAdapter implements ChannelAdapter {
 
   async start(): Promise<void> {
     if (this.running) return
+    const initial = await this.receive()
     this.running = true
+    await this.dispatch(initial)
     this.loop = this.pull()
     console.log("[Signal] Receive loop started")
   }
@@ -111,17 +113,26 @@ export class SignalAdapter implements ChannelAdapter {
 
   private async pull() {
     while (this.running) {
-      const res = await fetch(`${this.service}/v1/receive/${encodeURIComponent(this.account)}?timeout=5`, {
-        signal: AbortSignal.timeout(20_000),
-      }).catch(() => undefined) // Network failure → retry after sleep below
-      if (!res || !res.ok) {
+      const data = await this.receive().catch(() => undefined)
+      if (!data) {
         await Bun.sleep(1000)
         continue
       }
+      await this.dispatch(data)
+    }
+  }
 
-      const data = (await res.json().catch(() => [])) as Envelope[]
-      if (!this.handler || data.length === 0) continue
-      for (const item of data) {
+  private async receive(): Promise<Envelope[]> {
+    const res = await fetch(`${this.service}/v1/receive/${encodeURIComponent(this.account)}?timeout=5`, {
+      signal: AbortSignal.timeout(20_000),
+    })
+    if (!res.ok) throw new Error(`Signal receive failed: ${res.status} ${await res.text()}`)
+    return (await res.json().catch(() => [])) as Envelope[]
+  }
+
+  private async dispatch(data: Envelope[]) {
+    if (!this.handler || data.length === 0) return
+    for (const item of data) {
         const envelope = item.envelope ?? item
         const source = envelope.source ?? envelope.sourceNumber ?? envelope.sourceUuid
         const text = (envelope.dataMessage?.message ?? "").trim()
@@ -136,7 +147,6 @@ export class SignalAdapter implements ChannelAdapter {
           user: source,
           text,
         })
-      }
     }
   }
 }

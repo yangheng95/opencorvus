@@ -2,10 +2,12 @@ import { beforeEach, describe, expect, mock, test } from "bun:test"
 import { DEFAULT_STT_MAX_FILE_SIZE_BYTES } from "../src/stt/limits"
 
 let lastBot: FakeTelegramBot | undefined
+let startFailure: Error | undefined
 
 class FakeTelegramBot {
   handlers = new Map<string, (ctx: any) => Promise<void> | void>()
   botInfo = { id: 99 }
+  running = false
   getFileCalls = 0
   api = {
     getFile: async (_fileId: string) => {
@@ -24,9 +26,19 @@ class FakeTelegramBot {
     this.handlers.set(name, handler)
   }
 
-  start() {}
+  async start(options?: { onStart?: (botInfo: { id: number }) => void | Promise<void> }) {
+    if (startFailure) throw startFailure
+    this.running = true
+    await options?.onStart?.(this.botInfo)
+  }
 
-  stop() {}
+  isRunning() {
+    return this.running
+  }
+
+  async stop() {
+    this.running = false
+  }
 
   async emit(name: string, ctx: any) {
     await this.handlers.get(name)?.(ctx)
@@ -48,10 +60,19 @@ const originalFetch = globalThis.fetch
 
 beforeEach(() => {
   lastBot = undefined
+  startFailure = undefined
   globalThis.fetch = originalFetch
 })
 
 describe("telegram adapter audio source", () => {
+  test("settles authentication failure through the start receipt", async () => {
+    startFailure = new Error("telegram authentication failed")
+    const adapter = new TelegramAdapter({ token: "invalid-token" })
+
+    await expect(adapter.start()).rejects.toThrow("telegram authentication failed")
+    expect(lastBot?.running).toBe(false)
+  })
+
   test("emits voice metadata without getFile or file download before STT reads", async () => {
     const fetchCalls = { count: 0 }
     globalThis.fetch = mock(async () => {
