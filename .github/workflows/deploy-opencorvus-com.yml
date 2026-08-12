@@ -38,8 +38,56 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  resolve-source:
+    name: resolve immutable website source
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      source-sha: ${{ steps.source.outputs.source-sha }}
+    steps:
+      - name: Resolve and verify website source
+        id: source
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_SHA: ${{ github.sha }}
+          DISPATCH_VERSION: ${{ github.event.client_payload.version || '' }}
+          DISPATCH_TAG: ${{ github.event.client_payload.tag || '' }}
+          DISPATCH_SOURCE_SHA: ${{ github.event.client_payload.source_sha || '' }}
+        run: |
+          set -euo pipefail
+          SOURCE_SHA="$EVENT_SHA"
+          if [ "$EVENT_NAME" = "repository_dispatch" ]; then
+            python3 - "$DISPATCH_VERSION" "$DISPATCH_TAG" "$DISPATCH_SOURCE_SHA" <<'PY'
+          import re, sys
+          version, tag, source = sys.argv[1:]
+          if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?", version):
+              raise SystemExit("release dispatch version is invalid")
+          if tag != f"v{version}":
+              raise SystemExit("release dispatch tag does not match its version")
+          if not re.fullmatch(r"[a-f0-9]{40}", source):
+              raise SystemExit("release dispatch source SHA is invalid")
+          PY
+            OBJECT="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$DISPATCH_TAG" --jq '.object.type + " " + .object.sha')"
+            read -r OBJECT_TYPE OBJECT_SHA <<< "$OBJECT"
+            for _ in 1 2 3 4; do
+              if [ "$OBJECT_TYPE" != "tag" ]; then break; fi
+              OBJECT="$(gh api "repos/$GITHUB_REPOSITORY/git/tags/$OBJECT_SHA" --jq '.object.type + " " + .object.sha')"
+              read -r OBJECT_TYPE OBJECT_SHA <<< "$OBJECT"
+            done
+            test "$OBJECT_TYPE" = "commit"
+            test "$OBJECT_SHA" = "$DISPATCH_SOURCE_SHA"
+            SOURCE_SHA="$DISPATCH_SOURCE_SHA"
+          fi
+          [[ "$SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]]
+          echo "source-sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
+          echo "Resolved immutable website source $SOURCE_SHA"
+
   archive-determinism:
     name: canonical archive (${{ matrix.os }})
+    needs: resolve-source
     strategy:
       fail-fast: false
       matrix:
@@ -49,6 +97,7 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
+          ref: ${{ needs.resolve-source.outputs.source-sha }}
 
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
@@ -67,6 +116,7 @@ jobs:
 
   build:
     name: build and verify database-backed release
+    needs: resolve-source
     runs-on: ubuntu-latest
     env:
       EXPERT_SQUAD_TRUSTED_KEYS_JSON: ${{ vars.EXPERT_SQUAD_TRUSTED_KEYS_JSON }}
@@ -74,6 +124,7 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
+          ref: ${{ needs.resolve-source.outputs.source-sha }}
 
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
@@ -158,14 +209,14 @@ jobs:
       - name: Upload frozen unsigned site
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: opencorvus-com-unsigned-${{ github.sha }}
+          name: opencorvus-com-unsigned-${{ needs.resolve-source.outputs.source-sha }}
           path: packages/web/dist
           if-no-files-found: error
           include-hidden-files: true
 
   sign-and-deploy:
     name: sign and deploy RackNerd release
-    needs: [archive-determinism, build]
+    needs: [resolve-source, archive-determinism, build]
     if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch' || vars.OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     environment: production
@@ -173,7 +224,7 @@ jobs:
       - name: Download frozen unsigned site
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
-          name: opencorvus-com-unsigned-${{ github.sha }}
+          name: opencorvus-com-unsigned-${{ needs.resolve-source.outputs.source-sha }}
           path: candidate
 
       - name: Verify artifact tree before signing
@@ -474,9 +525,11 @@ jobs:
       - name: Freeze deploy archive and checksums
         id: release
         shell: bash
+        env:
+          WEBSITE_SOURCE_SHA: ${{ needs.resolve-source.outputs.source-sha }}
         run: |
           set -euo pipefail
-          RELEASE_ID="${GITHUB_SHA}-$(sha256sum candidate/client/expert-squads/catalog.json | cut -c1-16)"
+          RELEASE_ID="${WEBSITE_SOURCE_SHA}-$(sha256sum candidate/client/expert-squads/catalog.json | cut -c1-16)"
           echo "id=$RELEASE_ID" >> "$GITHUB_OUTPUT"
           (cd candidate && sha256sum --check "$RUNNER_TEMP/DEPLOY_SHA256SUMS")
           openssl pkeyutl -verify -pubin -inkey candidate/server/deploy-signing-public.pem -rawin \

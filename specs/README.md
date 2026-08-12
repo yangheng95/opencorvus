@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest v0.0.41-beta database-backed release: [`2026-08-12-v0.0.41-beta-release.md`](records/2026-08/2026-08-12-v0.0.41-beta-release.md).
+
 Latest Scheduled random-isolation end-to-end convergence: [`2026-08-12-scheduled-random-isolation-e2e.md`](records/2026-08/2026-08-12-scheduled-random-isolation-e2e.md).
 
 Latest Orchestrator wake Turn serialization repair: [`2026-08-12-orchestrator-wake-turn-serialization-repair.md`](records/2026-08/2026-08-12-orchestrator-wake-turn-serialization-repair.md).

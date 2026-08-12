@@ -20,6 +20,7 @@ jobs:
       version: ${{ steps.meta.outputs.version }}
       prerelease: ${{ steps.meta.outputs.prerelease }}
       update-channel: ${{ steps.meta.outputs.update-channel }}
+      source-sha: ${{ steps.meta.outputs.source-sha }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -41,9 +42,11 @@ jobs:
           fi
           PRERELEASE="$(bun -e 'import { releaseVersionMetadata } from "./script/sync-version.ts"; console.log(releaseVersionMetadata(Bun.argv.at(-1)).prerelease)' "$VERSION")"
           UPDATE_CHANNEL="$(bun -e 'import { desktopUpdateChannel } from "./script/desktop-update-channel.ts"; console.log(desktopUpdateChannel(Bun.argv.at(-1)))' "$VERSION")"
+          SOURCE_SHA="$(git rev-parse 'HEAD^{commit}')"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "prerelease=$PRERELEASE" >> "$GITHUB_OUTPUT"
           echo "update-channel=$UPDATE_CHANNEL" >> "$GITHUB_OUTPUT"
+          echo "source-sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
 
       - name: Sync repo versions
         shell: bash
@@ -309,7 +312,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ needs.prepare.outputs.version }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
         run: |
+          TAG="v${VERSION}"
           gh api --method POST "repos/$GITHUB_REPOSITORY/dispatches" \
             -f event_type=opencorvus-release-published \
-            -F "client_payload[version]=$VERSION"
+            -f "client_payload[version]=$VERSION" \
+            -f "client_payload[tag]=$TAG" \
+            -f "client_payload[source_sha]=$SOURCE_SHA"

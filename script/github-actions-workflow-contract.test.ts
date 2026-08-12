@@ -131,9 +131,13 @@ describe("GitHub Actions workflow contract", () => {
       version: "${{ steps.meta.outputs.version }}",
       prerelease: "${{ steps.meta.outputs.prerelease }}",
       "update-channel": "${{ steps.meta.outputs.update-channel }}",
+      "source-sha": "${{ steps.meta.outputs.source-sha }}",
     })
     expect(jobs.prepare?.steps?.find(({ name }) => name === "Resolve release version")?.run).toContain(
       "releaseVersionMetadata(Bun.argv.at(-1)).prerelease",
+    )
+    expect(jobs.prepare?.steps?.find(({ name }) => name === "Resolve release version")?.run).toContain(
+      "git rev-parse 'HEAD^{commit}'",
     )
     expect(
       jobs["publish-release-assets"]?.steps?.find(({ name }) => name === "Upload release assets to GitHub Release")
@@ -167,8 +171,9 @@ describe("GitHub Actions workflow contract", () => {
       env: {
         GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
         VERSION: "${{ needs.prepare.outputs.version }}",
+        SOURCE_SHA: "${{ needs.prepare.outputs.source-sha }}",
       },
-      run: 'gh api --method POST "repos/$GITHUB_REPOSITORY/dispatches" \\\n  -f event_type=opencorvus-release-published \\\n  -F "client_payload[version]=$VERSION"\n',
+      run: 'TAG="v${VERSION}"\ngh api --method POST "repos/$GITHUB_REPOSITORY/dispatches" \\\n  -f event_type=opencorvus-release-published \\\n  -f "client_payload[version]=$VERSION" \\\n  -f "client_payload[tag]=$TAG" \\\n  -f "client_payload[source_sha]=$SOURCE_SHA"\n',
     })
   })
 
@@ -181,9 +186,42 @@ describe("GitHub Actions workflow contract", () => {
       queue: "max",
       "cancel-in-progress": false,
     })
+    expect(jobs["resolve-source"]?.outputs).toEqual({
+      "source-sha": "${{ steps.source.outputs.source-sha }}",
+    })
+    const sourceStep = jobs["resolve-source"]?.steps?.find(({ name }) => name === "Resolve and verify website source")
+    expect(sourceStep?.env).toEqual({
+      GH_TOKEN: "${{ github.token }}",
+      EVENT_NAME: "${{ github.event_name }}",
+      EVENT_SHA: "${{ github.sha }}",
+      DISPATCH_VERSION: "${{ github.event.client_payload.version || '' }}",
+      DISPATCH_TAG: "${{ github.event.client_payload.tag || '' }}",
+      DISPATCH_SOURCE_SHA: "${{ github.event.client_payload.source_sha || '' }}",
+    })
+    expect(sourceStep?.run).toContain('gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$DISPATCH_TAG"')
+    expect(sourceStep?.run).toContain('gh api "repos/$GITHUB_REPOSITORY/git/tags/$OBJECT_SHA"')
+    expect(sourceStep?.run).toContain('test "$OBJECT_TYPE" = "commit"')
+    expect(sourceStep?.run).toContain('test "$OBJECT_SHA" = "$DISPATCH_SOURCE_SHA"')
+    expect(sourceStep?.run).toContain('echo "source-sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"')
+    for (const job of ["archive-determinism", "build"]) {
+      expect(jobs[job]?.needs).toBe("resolve-source")
+      expect(jobs[job]?.steps?.find(({ uses }) => uses?.startsWith("actions/checkout@"))?.with?.ref).toBe(
+        "${{ needs.resolve-source.outputs.source-sha }}",
+      )
+    }
     expect(jobs["sign-and-deploy"]?.if).toBe(
       "${{ github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch' || vars.OPENCORVUS_AUTOMATIC_DEPLOYMENT_ENABLED == 'true' }}",
     )
+    expect(jobs["sign-and-deploy"]?.needs).toEqual(["resolve-source", "archive-determinism", "build"])
+    expect(
+      jobs.build?.steps?.find(({ name }) => name === "Upload frozen unsigned site")?.with?.name,
+    ).toBe("opencorvus-com-unsigned-${{ needs.resolve-source.outputs.source-sha }}")
+    expect(
+      jobs["sign-and-deploy"]?.steps?.find(({ name }) => name === "Download frozen unsigned site")?.with?.name,
+    ).toBe("opencorvus-com-unsigned-${{ needs.resolve-source.outputs.source-sha }}")
+    const freezeStep = jobs["sign-and-deploy"]?.steps?.find(({ name }) => name === "Freeze deploy archive and checksums")
+    expect(freezeStep?.env).toEqual({ WEBSITE_SOURCE_SHA: "${{ needs.resolve-source.outputs.source-sha }}" })
+    expect(freezeStep?.run).toContain('RELEASE_ID="${WEBSITE_SOURCE_SHA}-')
 
     const buildSteps = jobs.build?.steps ?? []
     const manifestStep = buildSteps.find(({ name }) => name === "Generate current public download manifest")
