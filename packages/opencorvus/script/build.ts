@@ -21,6 +21,7 @@ import {
   buildArtifactBrowserMcpNodeBundle,
   artifactBrowserMcpNodeRuntimeModules,
   artifactBrowserMcpNodeExecutableName,
+  artifactCompileDefines,
   artifactEntrypoints,
   artifactExecutableName,
   artifactExternalModules,
@@ -346,12 +347,12 @@ for (const item of targets) {
       compile: compile as any,
       entrypoints: artifactEntrypoints(buildFlavor),
       plugins: embeddedOverlayUi ? [embeddedOverlayUi.plugin] : [],
-      define: {
-        OPENCORVUS_VERSION: `'${Script.version}'`,
-        OPENCORVUS_CHANNEL: `'${Script.channel}'`,
-        OPENCORVUS_LIBC: item.os === "linux" ? `'${item.abi ?? "glibc"}'` : "",
-        OPENCORVUS_EMBEDDED_ENV: embeddedEnvDefine,
-      },
+      define: artifactCompileDefines({
+        version: Script.version,
+        channel: Script.channel,
+        libc: item.os === "linux" ? `'${item.abi ?? "glibc"}'` : "",
+        embeddedEnv: embeddedEnvDefine,
+      }),
     })
   })
 

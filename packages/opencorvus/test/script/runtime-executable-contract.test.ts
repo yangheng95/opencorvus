@@ -9,7 +9,33 @@ import {
   inspectArtifactExecutableClosure,
   normalizeArtifactExecutablePermissions,
 } from "../../script/runtime-executable-contract"
-import { artifactEntrypoints } from "../../script/build-artifact"
+import { artifactCompileDefines, artifactEntrypoints } from "../../script/build-artifact"
+import { isCompiledBinaryRuntime } from "../../src/runtime/compiled-binary"
+
+test("source runtime reports the non-compiled execution identity", () => {
+  expect(isCompiledBinaryRuntime()).toBe(false)
+})
+
+test("artifact builds project one shared compiled execution identity", async () => {
+  expect(
+    artifactCompileDefines({
+      version: "1.2.3",
+      channel: "test",
+      libc: "'glibc'",
+      embeddedEnv: "undefined",
+    }),
+  ).toEqual({
+    OPENCORVUS_COMPILED_BINARY: "true",
+    OPENCORVUS_VERSION: "'1.2.3'",
+    OPENCORVUS_CHANNEL: "'test'",
+    OPENCORVUS_LIBC: "'glibc'",
+    OPENCORVUS_EMBEDDED_ENV: "undefined",
+  })
+  for (const buildScript of ["build.ts", "build.local.ts"]) {
+    const source = await fs.readFile(path.resolve(import.meta.dir, "../../script", buildScript), "utf8")
+    expect(source).toContain("define: artifactCompileDefines({")
+  }
+})
 
 test("standalone build owns one launcher entrypoint with its inspector child path bundled by import", () => {
   expect({

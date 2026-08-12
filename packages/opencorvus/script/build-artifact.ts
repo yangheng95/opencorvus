@@ -4,6 +4,21 @@ import { nodeBinaryPackageName, nodeExecutableName } from "@opencorvus-ai/util/n
 
 export type BuildFlavor = "cli" | "overlay-server"
 
+export function artifactCompileDefines(input: {
+  channel: string
+  embeddedEnv: string
+  libc: string
+  version: string
+}): Record<string, string> {
+  return {
+    OPENCORVUS_COMPILED_BINARY: "true",
+    OPENCORVUS_VERSION: `'${input.version}'`,
+    OPENCORVUS_CHANNEL: `'${input.channel}'`,
+    OPENCORVUS_LIBC: input.libc,
+    OPENCORVUS_EMBEDDED_ENV: input.embeddedEnv,
+  }
+}
+
 export function parseBuildFlavor(argv: string[]): BuildFlavor {
   return argv.includes("--overlay-server") ? "overlay-server" : "cli"
 }

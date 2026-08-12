@@ -6,6 +6,7 @@ import { sessionBelongsToTask, type SessionExecutionAuthority } from "@/engine/t
 import { Session } from "@/session"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { Process } from "@/util/process"
+import { isCompiledBinaryRuntime } from "@/runtime/compiled-binary"
 import { requireRuntimePackage } from "@/runtime/package-require"
 import { OFFICE_PRESENTATION_PROFILE_LIMITS, WorkArtifactProfileRegistry } from "@/work-artifact/profile-registry"
 import { Uint8ArrayReader, ZipReader } from "@zip.js/zip.js"
@@ -1001,8 +1002,7 @@ export async function inspectPptxPackage(
     OFFICE_PRESENTATION_PROFILE_LIMITS.parserWallClockMs,
   )
   if (options.abort?.aborted) throw new Error("Work Artifact PPTX inspection was cancelled")
-  const standalone = (Bun as unknown as { isStandaloneExecutable?: boolean }).isStandaloneExecutable === true
-  const command = standalone
+  const command = isCompiledBinaryRuntime()
     ? [process.execPath]
     : [process.execPath, fileURLToPath(new URL("./presentation-inspector-process.ts", import.meta.url))]
   const result = await Process.runHost(command, {
