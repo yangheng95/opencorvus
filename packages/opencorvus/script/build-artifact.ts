@@ -14,8 +14,7 @@ export function artifactPackageBaseName(pkgName: string, flavor: BuildFlavor): s
 }
 
 export function artifactEntrypoints(flavor: BuildFlavor): string[] {
-  if (flavor === "overlay-server") return ["./src/overlay-launcher.ts"]
-  return ["./src/launcher.ts"]
+  return [flavor === "overlay-server" ? "./src/overlay-launcher.ts" : "./src/launcher.ts"]
 }
 
 export function artifactExternalModules(): string[] {

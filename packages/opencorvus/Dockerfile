@@ -41,7 +41,9 @@ RUN rm -rf /opt/opencorvus \
   && test -x /opt/opencorvus/bin/officecli \
   && /opt/opencorvus/bin/officecli --version \
   && test -f /opt/opencorvus/licenses/OfficeCLI-LICENSE \
-  && test -f /opt/opencorvus/licenses/OfficeCLI-RUNTIME-LOCK.json \
+  && test -f /opt/opencorvus/licenses/OfficeCLI-NOTICE \
+  && test -f /opt/opencorvus/licenses/OfficeCLI-THIRD-PARTY-NOTICES.txt \
+  && test -f /opt/opencorvus/licenses/WORK-ARTIFACT-RUNTIMES-LOCK.json \
   && test -x /opt/opencorvus/browser-mcp-node/node \
   && /opt/opencorvus/browser-mcp-node/node --version \
   && test -f /opt/opencorvus/browser-mcp-node/browser.mjs \

@@ -12,7 +12,11 @@ export function prepareCompiledBinaryRuntime() {
 export async function runCompiledBinaryEntrypoint(loadEntrypoint: () => Promise<unknown>) {
   prepareCompiledBinaryRuntime()
   try {
-    await loadEntrypoint()
+    if (process.env.OPENCORVUS_INTERNAL_WORK_ARTIFACT_INSPECTOR === "1") {
+      await import("../work-artifact/presentation-inspector-process")
+    } else {
+      await loadEntrypoint()
+    }
   } catch (error) {
     process.exitCode = 1
     process.stderr.write(formatEntrypointError(error))

@@ -72,8 +72,9 @@ export async function writeOverlayPayloadStamp(outdir: string) {
     hash.update("\0")
   }
 
+  const stampPath = path.join(outdir, OVERLAY_PAYLOAD_STAMP_FILE)
   await fs.promises.writeFile(
-    path.join(outdir, OVERLAY_PAYLOAD_STAMP_FILE),
+    stampPath,
     `${JSON.stringify(
       {
         version: 2,
@@ -84,5 +85,7 @@ export async function writeOverlayPayloadStamp(outdir: string) {
       null,
       2,
     )}\n`,
+    { mode: 0o644 },
   )
+  if (process.platform !== "win32") await fs.promises.chmod(stampPath, 0o644)
 }

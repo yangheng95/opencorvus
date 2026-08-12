@@ -51,8 +51,7 @@ const OBSERVATION_ONLY_BUILTINS = new Set<string>([
   "mission_state",
   "wait",
   "analytics",
-  "office_artifact_inspect",
-  "office_artifact_validate",
+  "work_artifact_inspect",
   "request_orchestrator_decision",
   "batch",
 ])
@@ -66,8 +65,9 @@ const BUILTIN_EFFECTS = new Map<string, PermissionEffectClass>([
   ["artifact_snapshot", "write_local"],
   ["artifact_publish", "external_effect"],
   ["publish_interactive_artifact", "external_effect"],
-  ["office_artifact_author", "write_local"],
-  ["office_artifact_deliver", "external_effect"],
+  ["work_artifact_author", "write_local"],
+  ["work_artifact_validate", "write_local"],
+  ["work_artifact_deliver", "external_effect"],
   ["edit", "write_local"],
   ["write", "write_local"],
   ["apply_patch", "write_local"],
@@ -202,7 +202,7 @@ function filesystemScope(toolName: string, args: unknown): Record<string, unknow
       : single
         ? [single]
         : []
-  if (paths.length === 0 && !["memory", "expert_squad_author", "office_artifact_author", "artifact_snapshot"].includes(toolName)) {
+  if (paths.length === 0 && !["memory", "expert_squad_author", "work_artifact_author", "artifact_snapshot"].includes(toolName)) {
     return undefined
   }
   return {

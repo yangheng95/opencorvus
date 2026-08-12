@@ -14,6 +14,8 @@ import path from "path"
 import { fileURLToPath } from "url"
 
 import { overlayPackageName, overlayServerDistName, overlayServerFileName } from "./artifact-names"
+import { writeOverlayPayloadStamp } from "../../opencorvus/script/build-overlay-payload-stamp"
+import { finalizeWorkArtifactPackage } from "../../opencorvus/script/finalize-work-artifact-package"
 
 const dir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const repo = path.resolve(dir, "../..")
@@ -89,6 +91,8 @@ for (const target of targets) {
     console.error("Run first: cd packages/opencorvus && bun run build --overlay-server --all")
     process.exit(1)
   }
+  await finalizeWorkArtifactPackage({ root: serverDir, target: { os: "linux", arch } })
+  await writeOverlayPayloadStamp(serverDir)
 
   // Enable QEMU for arm64 if needed
   if (arch === "arm64") {

@@ -1,6 +1,13 @@
-import { describe, expect, test } from "bun:test"
+import { afterAll, describe, expect, test } from "bun:test"
 import { AgentToolPool } from "../src/agent/tool-pool-contract"
-import { OFFICE_ARTIFACT_TOOL_IDS } from "../src/tool/tool-id-catalog"
+import { WORK_ARTIFACT_TOOL_IDS } from "../src/tool/tool-id-catalog"
+import { permissionDescriptor } from "../src/permission/invocation"
+import { Instance } from "../src/project/instance"
+import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+
+afterAll(async () => {
+  await resetMemoryDatabase()
+})
 
 const conversationEffects = [
   "capability_search",
@@ -44,7 +51,7 @@ describe("execution authority Tool surfaces", () => {
         private: [],
       },
       work: {
-        global: ["delegate_agent", ...conversationEffects, "panel", ...OFFICE_ARTIFACT_TOOL_IDS],
+        global: ["delegate_agent", ...conversationEffects, "panel", ...WORK_ARTIFACT_TOOL_IDS],
         private: [],
       },
       mission: {
@@ -79,6 +86,30 @@ describe("execution authority Tool surfaces", () => {
     }).toEqual({
       mission: true,
       orchestrator: true,
+    })
+  })
+
+  test("classifies validation as a local-write lifecycle because it persists renders and a receipt", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const descriptor = await permissionDescriptor({
+          providerKind: "builtin",
+          providerID: "builtin",
+          toolName: "work_artifact_validate",
+          args: { profile: "office.presentation@1", source_url: "attachment://project/source.pptx" },
+        })
+        expect({ effectClass: descriptor?.effectClass, resource: descriptor?.scope.resource }).toEqual({
+          effectClass: "write_local",
+          resource: {
+            scope_type: "filesystem",
+            operation: "work_artifact_validate",
+            working_directory: project.path,
+            payload_sha256: expect.any(String),
+          },
+        })
+      },
     })
   })
 })

@@ -2,21 +2,31 @@
 
 import { $ } from "bun"
 import fs from "node:fs"
+import os from "node:os"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import {
   artifactBrowserMcpNodeExecutableName,
   artifactExecutableName,
-  artifactOfficeCliExecutableName,
   artifactRipgrepExecutableName,
 } from "../packages/opencorvus/script/build-artifact"
 import {
   ARTIFACT_EXECUTABLE_MODE,
+  ARTIFACT_SHARED_LIBRARY_MODE,
   artifactEmbeddedExecutablePaths,
   inspectArtifactExecutableClosure,
   normalizeArtifactExecutablePermissions,
 } from "../packages/opencorvus/script/runtime-executable-contract"
 import { preparePackageBuildEnvironment } from "./package-build-environment"
+import { writeOverlayPayloadStamp } from "../packages/opencorvus/script/build-overlay-payload-stamp"
+import { WORK_ARTIFACT_RUNTIME_LOCK } from "../packages/opencorvus/script/work-artifact-runtime-lock"
+import { officeCliRuntime } from "../packages/opencorvus/src/work-artifact/runtime/runtime-lock"
+import {
+  WORK_ARTIFACT_TARGET_PACKAGE_MANIFEST,
+  verifyWorkArtifactTargetPackageManifest,
+  workArtifactManagedPackageFiles,
+  writeWorkArtifactTargetPackageManifest,
+} from "../packages/opencorvus/src/work-artifact/runtime/package-manifest"
 
 export type NativeBinaryPlatform = "linux" | "darwin" | "windows"
 
@@ -163,12 +173,20 @@ async function stageOverlayUi(repoRoot: string, artifact: NativeBinaryArtifact):
   await fs.promises.cp(source, destination, { recursive: true, force: true })
 }
 
-export function requiredNativeBundleFiles(artifact: NativeBinaryArtifact, platform: NodeJS.Platform): string[] {
+export function requiredNativeBundleFiles(
+  artifact: NativeBinaryArtifact,
+  platform: NodeJS.Platform,
+  arch: NodeJS.Architecture,
+): string[] {
+  const workArtifactFiles = workArtifactManagedPackageFiles({
+    lock: WORK_ARTIFACT_RUNTIME_LOCK,
+    target: { os: platform as "darwin" | "linux" | "win32", arch: arch as "arm64" | "x64" },
+  })
   return [
     ...artifactEmbeddedExecutablePaths(artifact.bundleDir, platform),
     path.join(artifact.bundleDir, "package.json"),
-    path.join(artifact.bundleDir, "licenses", "OfficeCLI-LICENSE"),
-    path.join(artifact.bundleDir, "licenses", "OfficeCLI-RUNTIME-LOCK.json"),
+    ...workArtifactFiles.map((file) => path.join(artifact.bundleDir, ...file.path.split("/"))),
+    path.join(artifact.bundleDir, WORK_ARTIFACT_TARGET_PACKAGE_MANIFEST),
     path.join(artifact.bundleDir, "browser-mcp-node", "browser.mjs"),
     path.join(artifact.bundleDir, "browser-mcp-node", "node_modules", "playwright", "package.json"),
     path.join(artifact.bundleDir, "ui", "index.html"),
@@ -178,8 +196,15 @@ export function requiredNativeBundleFiles(artifact: NativeBinaryArtifact, platfo
 export function nativeBinarySmokeCommands(
   artifact: NativeBinaryArtifact,
   platform: NodeJS.Platform,
+  arch: NodeJS.Architecture,
 ): NativeBinarySmokeCommand[] {
   const targetPlatform = nativeBinaryPlatform(platform)
+  const runtime = officeCliRuntime(WORK_ARTIFACT_RUNTIME_LOCK)
+  const runtimeFile = workArtifactManagedPackageFiles({
+    lock: WORK_ARTIFACT_RUNTIME_LOCK,
+    target: { os: platform as "darwin" | "linux" | "win32", arch: arch as "arm64" | "x64" },
+  }).find((file) => file.kind === "executable")
+  if (!runtimeFile) throw new Error(`Work Artifact runtime has no executable for ${platform}-${arch}`)
   return [
     { label: "OpenCorvus", argv: [artifact.executable, "--version"] },
     {
@@ -187,8 +212,8 @@ export function nativeBinarySmokeCommands(
       argv: [path.join(artifact.bundleDir, "bin", artifactRipgrepExecutableName(targetPlatform)), "--version"],
     },
     {
-      label: "OfficeCLI",
-      argv: [path.join(artifact.bundleDir, "bin", artifactOfficeCliExecutableName(targetPlatform)), "--version"],
+      label: runtime.id,
+      argv: [path.join(artifact.bundleDir, ...runtimeFile.path.split("/")), ...runtime.smoke_argv],
     },
     {
       label: "Browser MCP Node.js",
@@ -211,23 +236,30 @@ export function nativeBinarySmokeCommands(
 export async function verifyNativeBinaryArtifact(
   artifact: NativeBinaryArtifact,
   platform: NodeJS.Platform,
+  arch: NodeJS.Architecture,
   expectedVersion: string,
 ): Promise<void> {
-  const missing = requiredNativeBundleFiles(artifact, platform).filter((file) => !fs.existsSync(file))
+  const missing = requiredNativeBundleFiles(artifact, platform, arch).filter((file) => !fs.existsSync(file))
   if (missing.length > 0) {
     throw new Error(`Native bundle ${artifact.id} is incomplete: ${missing.join(", ")}`)
   }
   const executableClosure = await inspectArtifactExecutableClosure({ root: artifact.bundleDir, os: platform })
+  await verifyWorkArtifactTargetPackageManifest({
+    root: artifact.bundleDir,
+    target: { os: platform as "darwin" | "linux" | "win32", arch: arch as "arm64" | "x64" },
+    lock: WORK_ARTIFACT_RUNTIME_LOCK,
+  })
   if (platform !== "win32") {
     for (const executable of executableClosure) {
-      if (executable.mode !== ARTIFACT_EXECUTABLE_MODE) {
+      const expectedMode = executable.kind === "executable" ? ARTIFACT_EXECUTABLE_MODE : ARTIFACT_SHARED_LIBRARY_MODE
+      if (executable.mode !== expectedMode) {
         throw new Error(
-          `Native bundle ${artifact.id} executable mode is ${executable.mode.toString(8)}, expected ${ARTIFACT_EXECUTABLE_MODE.toString(8)}: ${executable.path}`,
+          `Native bundle ${artifact.id} ${executable.kind} mode is ${executable.mode.toString(8)}, expected ${expectedMode.toString(8)}: ${executable.path}`,
         )
       }
     }
   }
-  const smokeCommands = nativeBinarySmokeCommands(artifact, platform)
+  const smokeCommands = nativeBinarySmokeCommands(artifact, platform, arch)
   const [openCorvus, ...runtimeCommands] = smokeCommands
   const actualVersion = (await $`${openCorvus.argv}`.text()).trim()
   if (actualVersion !== expectedVersion) {
@@ -272,22 +304,119 @@ export function nativeBinaryArchiveListingCommand(archive: string): NativeBinary
   }
 }
 
+export function assertNativeArchiveEntry(input: {
+  archive: string
+  listing: string
+  path: string
+  kind: "executable" | "shared_library" | "data"
+  platform: NodeJS.Platform
+}): void {
+  const normalized = input.path.replaceAll("\\", "/")
+  const line = input.listing
+    .replaceAll("\\", "/")
+    .split(/\r?\n/)
+    .find((candidate) => candidate.endsWith(`./${normalized}`) || candidate.endsWith(` ${normalized}`))
+  if (!line) throw new Error(`Native archive ${input.archive} is missing ${input.kind} ${normalized}`)
+  const expectedPrefix = input.kind === "executable" ? "-rwxr-xr-x" : "-rw-r--r--"
+  if (input.platform !== "win32" && !line.startsWith(expectedPrefix)) {
+    throw new Error(
+      `Native archive ${input.archive} did not preserve the ${input.kind} mode for ${normalized}: ${line}`,
+    )
+  }
+}
+
+export function assertNativeArchiveClosure(input: {
+  archive: string
+  listing: string
+  platform: NodeJS.Platform
+}): void {
+  const normalizedPaths = new Set<string>()
+  for (const rawLine of input.listing.replaceAll("\\", "/").split(/\r?\n/)) {
+    const line = rawLine.trimEnd()
+    if (!line) continue
+    const type = line[0]
+    if (type !== "-" && type !== "d") {
+      throw new Error(`Native archive ${input.archive} contains an unsupported entry type: ${line}`)
+    }
+    const marker = line.indexOf("./")
+    if (marker < 0) throw new Error(`Native archive ${input.archive} has an unreadable entry path: ${line}`)
+    const entryPath = line.slice(marker + 2).replace(/\/$/, "")
+    if (!entryPath && type === "d") continue
+    if (
+      path.posix.isAbsolute(entryPath) ||
+      entryPath.split("/").some((segment) => !segment || segment === "." || segment === "..")
+    ) {
+      throw new Error(`Native archive ${input.archive} contains an unsafe entry path: ${entryPath}`)
+    }
+    const collisionKey = entryPath.normalize("NFC").toLowerCase()
+    if (normalizedPaths.has(collisionKey)) {
+      throw new Error(`Native archive ${input.archive} contains a normalized path collision: ${entryPath}`)
+    }
+    normalizedPaths.add(collisionKey)
+    if (input.platform === "win32") {
+      for (const segment of entryPath.split("/")) {
+        const stem = segment.split(".", 1)[0]!.toUpperCase()
+        if (
+          /[\x00-\x1f<>:"|?*]/.test(segment) ||
+          /[ .]$/.test(segment) ||
+          /^(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])$/.test(stem)
+        ) {
+          throw new Error(`Native archive ${input.archive} contains an unsafe Windows entry path: ${entryPath}`)
+        }
+      }
+    }
+    if (input.platform !== "win32") {
+      const expected = type === "d" ? "drwxr-xr-x" : undefined
+      if (expected && !line.startsWith(expected)) {
+        throw new Error(`Native archive ${input.archive} directory mode is not 0755: ${line}`)
+      }
+      if (type === "-" && !line.startsWith("-rw-r--r--") && !line.startsWith("-rwxr-xr-x")) {
+        throw new Error(`Native archive ${input.archive} file mode is not 0644 or 0755: ${line}`)
+      }
+    }
+  }
+}
+
 export async function verifyNativeBinaryArchive(
   artifact: NativeBinaryArtifact,
   platform: NodeJS.Platform,
+  arch: NodeJS.Architecture,
 ): Promise<void> {
+  const profileChecker = path.join(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "..",
+    "packages",
+    "opencorvus",
+    "script",
+    "check-work-artifact-profile.ts",
+  )
+  await $`${process.execPath} ${profileChecker} --profile office.presentation@1 --package-root ${artifact.bundleDir}`
   const command = nativeBinaryArchiveListingCommand(artifact.archive)
   const listing = (await $`${command.argv}`.cwd(command.cwd).text()).replaceAll("\\", "/")
+  assertNativeArchiveClosure({ archive: artifact.archive, listing, platform })
   const executableClosure = await inspectArtifactExecutableClosure({ root: artifact.bundleDir, os: platform })
-  for (const executable of executableClosure) {
-    const normalized = path.relative(artifact.bundleDir, executable.path).replaceAll("\\", "/")
-    const line = listing
-      .split(/\r?\n/)
-      .find((candidate) => candidate.endsWith(`./${normalized}`) || candidate.endsWith(` ${normalized}`))
-    if (!line) throw new Error(`Native archive ${artifact.archive} is missing executable ${normalized}`)
-    if (platform !== "win32" && !line.startsWith("-rwxr-xr-x")) {
-      throw new Error(`Native archive ${artifact.archive} did not preserve mode 755 for ${normalized}: ${line}`)
-    }
+  const manifest = await verifyWorkArtifactTargetPackageManifest({
+    root: artifact.bundleDir,
+    target: { os: platform as "darwin" | "linux" | "win32", arch: arch as "arm64" | "x64" },
+    lock: WORK_ARTIFACT_RUNTIME_LOCK,
+  })
+  const entries = [
+    ...executableClosure.map((file) => ({
+      path: path.relative(artifact.bundleDir, file.path).replaceAll("\\", "/"),
+      kind: file.kind,
+    })),
+    ...manifest.files.map((file) => ({ path: file.path, kind: file.kind })),
+    { path: WORK_ARTIFACT_TARGET_PACKAGE_MANIFEST, kind: "data" as const },
+  ].filter((entry, index, all) => all.findIndex((candidate) => candidate.path === entry.path) === index)
+  for (const entry of entries) {
+    assertNativeArchiveEntry({ archive: artifact.archive, listing, path: entry.path, kind: entry.kind, platform })
+  }
+  const extracted = await fs.promises.mkdtemp(path.join(os.tmpdir(), "opencorvus-native-archive-check-"))
+  try {
+    await $`tar -xzf ${artifact.archive} -C ${extracted}`
+    await $`${process.execPath} ${profileChecker} --profile office.presentation@1 --package-root ${extracted}`
+  } finally {
+    await fs.promises.rm(extracted, { recursive: true, force: true })
   }
 }
 
@@ -311,9 +440,16 @@ export async function packageNativeBinary(
     await stageOverlayUi(repoRoot, artifact)
     await normalizeArtifactExecutablePermissions({ root: artifact.bundleDir, os: platform })
     await signNativeBinaryArtifact(artifact, platform)
-    await verifyNativeBinaryArtifact(artifact, platform, env.OPENCORVUS_VERSION!)
+    await writeWorkArtifactTargetPackageManifest({
+      root: artifact.bundleDir,
+      target: { os: platform as "darwin" | "linux" | "win32", arch: arch as "arm64" | "x64" },
+      lock: WORK_ARTIFACT_RUNTIME_LOCK,
+      phase: "final",
+    })
+    await writeOverlayPayloadStamp(artifact.bundleDir)
+    await verifyNativeBinaryArtifact(artifact, platform, arch, env.OPENCORVUS_VERSION!)
     await archiveNativeBinaryArtifact(artifact, platform)
-    await verifyNativeBinaryArchive(artifact, platform)
+    await verifyNativeBinaryArchive(artifact, platform, arch)
   }
   return artifacts
 }

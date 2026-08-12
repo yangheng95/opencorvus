@@ -32,8 +32,9 @@ import {
 } from "./build-artifact"
 import { detectArtifactNodeRuntimeHost } from "./build-host-runtime"
 import { copyRuntimeNodeModules, writePackagedRuntimePackageJson } from "./build-runtime-node-modules"
-import { copyOfficeCliRuntime, copyRipgrepRuntime } from "./build-runtime-binaries"
+import { copyOfficeCliRuntime, copyRipgrepRuntime, WORK_ARTIFACT_RUNTIME_LOCK } from "./build-runtime-binaries"
 import { normalizeArtifactExecutablePermissions } from "./runtime-executable-contract"
+import { writeWorkArtifactTargetPackageManifest } from "../src/work-artifact/runtime/package-manifest"
 import { cleanBuildDist } from "./build-clean"
 import { writeOverlayPayloadStamp } from "./build-overlay-payload-stamp"
 import { generateOpencorvusGeneratedBuildArtifacts } from "./generate-build-artifacts"
@@ -386,6 +387,12 @@ for (const item of targets) {
       await fs.promises.copyFile(helper, path.join(dir, "dist", name, "opencorvus-process-supervisor.exe"))
     }
     await normalizeArtifactExecutablePermissions({ root: path.join(dir, "dist", name), os: item.os })
+    await writeWorkArtifactTargetPackageManifest({
+      root: path.join(dir, "dist", name),
+      target: { os: item.os as "darwin" | "linux" | "win32", arch: item.arch as "arm64" | "x64", ...(item.abi ? { abi: item.abi } : {}) },
+      lock: WORK_ARTIFACT_RUNTIME_LOCK,
+      phase: "staging",
+    })
 
     if (binaryOnly) {
       const files = await fs.promises.readdir(path.join(dir, "dist", name))

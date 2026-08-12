@@ -8,6 +8,7 @@ import { ScrapCommand } from "./scrap"
 import { SkillCommand } from "./skill"
 import { SnapshotCommand } from "./snapshot"
 import { GcCommand } from "./gc"
+import { WorkArtifactLifecycleCommand } from "./work-artifact"
 
 export const DebugCommand = cmd({
   command: "debug",
@@ -21,6 +22,7 @@ export const DebugCommand = cmd({
       .command(SkillCommand)
       .command(SnapshotCommand)
       .command(GcCommand)
+      .command(WorkArtifactLifecycleCommand)
       .command(PathsCommand)
       .command({
         command: "wait",
