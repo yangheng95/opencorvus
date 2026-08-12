@@ -42,7 +42,7 @@ export function isolatedTestChildEnvironment(
   base: NodeJS.ProcessEnv = process.env,
 ): NodeJS.ProcessEnv {
   const homeRoot = path.join(runtime.processRoot, "home")
-  const child = {
+  const child: NodeJS.ProcessEnv = {
     ...base,
     HOME: homeRoot,
     USERPROFILE: homeRoot,
