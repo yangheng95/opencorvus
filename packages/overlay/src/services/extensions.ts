@@ -268,7 +268,7 @@ export async function removeSkillSource(
 export async function installSkill(
   kind: string,
   value: string,
-  policy?: string,
+  policy?: "allow" | "deny",
   options: DirectoryOwnedRequestOptions = {},
 ): Promise<void> {
   const directory = String(options.directory || "").trim()
@@ -299,7 +299,7 @@ export async function updateSkill(
 export async function importSkillFile(
   filename: string,
   content: string,
-  policy?: string,
+  policy?: "allow" | "deny",
   options: DirectoryOwnedRequestOptions = {},
 ): Promise<{ name: string; source: string; kind: "path"; names?: string[]; sources?: string[] }> {
   return await apiJson(directoryOwnedPath("skill/import-file", options), {
@@ -317,7 +317,7 @@ export interface SkillImportPackageFile {
 export async function importSkillPackage(
   sourceName: string,
   files: SkillImportPackageFile[],
-  policy?: string,
+  policy?: "allow" | "deny",
   options: DirectoryOwnedRequestOptions = {},
 ): Promise<{ name: string; source: string; kind: "path"; names?: string[]; sources?: string[] }> {
   return await apiJson(directoryOwnedPath("skill/import-file", options), {
@@ -330,7 +330,7 @@ export async function importSkillPackage(
 export async function importSkillArchive(
   filename: string,
   archiveBase64: string,
-  policy?: string,
+  policy?: "allow" | "deny",
   options: DirectoryOwnedRequestOptions = {},
 ): Promise<{ name: string; source: string; kind: "path"; names?: string[]; sources?: string[] }> {
   return await apiJson(directoryOwnedPath("skill/import-file", options), {

@@ -95,7 +95,7 @@ See [Permissions](../permissions/).
 
 ### `experimental.auto_question`
 
-Fine-grained switch for stale clarification questions. When enabled, a stale question interaction is rejected after the question timeout. Permission prompts are controlled by permission rules and `OPENCORVUS_PERMISSION_TIMEOUT_MS`.
+Fine-grained switch for stale clarification questions. When enabled, a stale question interaction is rejected after the question timeout. Permission requests use the task's frozen `permission_mode`; unanswered requests stay pending until an operator decides.
 
 ### `assistant`
 

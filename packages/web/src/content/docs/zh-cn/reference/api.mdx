@@ -115,8 +115,8 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 |---|---|---|---|
 | DELETE | `/goal/{goalID}` | Delete goal 错误: `LogFileNotFoundError`, `NotFoundError`. | `goal.delete` |
 | PATCH | `/goal/{goalID}` | Update goal title 请求体: `title`; 错误: `LogFileNotFoundError`, `NotFoundError`. | `goal.updateTitle` |
-| POST | `/interaction/{interactionID}/reject` | Reject interaction 请求体: `autoReply`, `message`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interaction.reject` |
-| POST | `/interaction/{interactionID}/reply` | Reply to interaction 请求体: `answers`, `autoReply`, `message`, `reply`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interaction.reply` |
+| POST | `/interaction/{interactionID}/reject` | Reject interaction 请求体: `message`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interaction.reject` |
+| POST | `/interaction/{interactionID}/reply` | Reply to interaction 请求体: `answers`, `decision`, `message`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interaction.reply` |
 | DELETE | `/mailbox` | Delete selected mailbox items 请求体: `messageIDs`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `mailbox.deleteMany` |
 | GET | `/mailbox` | List the global mailbox 错误: `BadRequestError`. | `mailbox.list` |
 | GET | `/mailbox/events` | Subscribe to global mailbox changes | `mailbox.events` |
@@ -390,8 +390,11 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 
 | Method | 路径 | 说明 | operationId |
 |---|---|---|---|
-| GET | `/permission` | List pending permissions | `permission.list` |
-| POST | `/permission/{requestID}/reply` | Respond to permission request 请求体: `autoReply`, `message`, `reply`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `permission.reply` |
+| GET | `/permission` | List durable pending permission requests | `permission.list` |
+| GET | `/permission/grants` | List active permission grants | `permission.grants` |
+| POST | `/permission/grants/{grantID}/revoke` | Revoke an active permission grant 错误: `LogFileNotFoundError`, `NotFoundError`. | `permission.revoke` |
+| GET | `/permission/history` | List permission ledger history | `permission.history` |
+| POST | `/permission/{requestID}/reply` | Decide a pending permission request 请求体: `actorID`, `decision`, `message`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `permission.reply` |
 
 ### Provider
 
@@ -459,6 +462,10 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/experimental/event-schedule` | Create event-triggered task 请求体: `cooldownMs`, `eventType`, `match`, `name`, `oneShot`, `prompt`, `sessionId`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `experimental.eventschedule.create` |
 | DELETE | `/experimental/event-schedule/{id}` | Cancel event-triggered task 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `experimental.eventschedule.delete` |
 | GET | `/experimental/memory` | Get the Session MEMORY.MD document 错误: `LogFileNotFoundError`, `NotFoundError`. | `experimental.memory.get` |
+| GET | `/experimental/project-memory` | Get the organized Project MEMORY.MD context | `experimental.projectMemory.get` |
+| GET | `/experimental/project-memory/events` | Subscribe to Project MEMORY.MD notice changes | `experimental.projectMemory.events` |
+| POST | `/experimental/project-memory/notice/acknowledge` | Acknowledge a Project MEMORY.MD notice 请求体: `generation`. | `experimental.projectMemory.acknowledgeNotice` |
+| POST | `/experimental/project-memory/organize` | Request Project MEMORY.MD organization | `experimental.projectMemory.organize` |
 | GET | `/experimental/resource` | Get MCP resources 错误: `UnknownError`. | `experimental.resource.list` |
 | GET | `/experimental/task-plan` | List tasks for a session 错误: `LogFileNotFoundError`, `NotFoundError`. | `experimental.taskplan.list` |
 | GET | `/experimental/tool` | List tools 错误: `BadRequestError`. | `tool.list` |

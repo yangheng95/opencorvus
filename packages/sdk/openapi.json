@@ -91,7 +91,30 @@
             "type": "object"
           },
           "permission": {
-            "$ref": "#/components/schemas/PermissionRuleset"
+            "items": {
+              "properties": {
+                "action": {
+                  "enum": [
+                    "allow",
+                    "deny"
+                  ],
+                  "type": "string"
+                },
+                "pattern": {
+                  "type": "string"
+                },
+                "permission": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "permission",
+                "pattern",
+                "action"
+              ],
+              "type": "object"
+            },
+            "type": "array"
           },
           "prompt": {
             "type": "string"
@@ -561,14 +584,22 @@
                       "type": "array"
                     },
                     "policy": {
-                      "$ref": "#/components/schemas/PermissionAction"
+                      "enum": [
+                        "allow",
+                        "deny"
+                      ],
+                      "type": "string"
                     },
                     "priority": {
                       "default": 0,
                       "type": "number"
                     },
                     "recommended_policy": {
-                      "$ref": "#/components/schemas/PermissionAction"
+                      "enum": [
+                        "allow",
+                        "deny"
+                      ],
+                      "type": "string"
                     },
                     "required_tools": {
                       "default": [],
@@ -907,6 +938,9 @@
               "control": {
                 "$ref": "#/components/schemas/NativeAgentOverride"
               },
+              "memory": {
+                "$ref": "#/components/schemas/NativeAgentOverride"
+              },
               "mission": {
                 "$ref": "#/components/schemas/NativeAgentOverride"
               },
@@ -1093,9 +1127,30 @@
                     "description": "Auto-inject relevant memories into system prompt",
                     "type": "boolean"
                   },
+                  "document_token_limit": {
+                    "default": 10000,
+                    "description": "Fixed maximum estimated token count of Project MEMORY.MD",
+                    "maximum": 10000,
+                    "minimum": 100,
+                    "type": "integer"
+                  },
                   "enabled": {
                     "description": "Enable persistent memory store",
                     "type": "boolean"
+                  },
+                  "organizer_input_token_budget": {
+                    "default": 32000,
+                    "description": "Maximum estimated input tokens for one Memory Organizer run",
+                    "maximum": 100000,
+                    "minimum": 12000,
+                    "type": "integer"
+                  },
+                  "pending_availability_limit": {
+                    "default": 500,
+                    "description": "Maximum pending occurrences retained while the Memory Organizer is unavailable",
+                    "maximum": 10000,
+                    "minimum": 10,
+                    "type": "integer"
                   },
                   "token_budget": {
                     "description": "Max tokens for auto-injected memory context",
@@ -1386,8 +1441,57 @@
             ],
             "type": "object"
           },
-          "permission": {
-            "$ref": "#/components/schemas/PermissionConfig"
+          "permission_migration": {
+            "additionalProperties": false,
+            "description": "Durable, idempotent audit record for the one-time legacy permission configuration cutover.",
+            "properties": {
+              "permission_mode": {
+                "enum": [
+                  "full_access",
+                  "ask"
+                ],
+                "type": "string"
+              },
+              "reason": {
+                "enum": [
+                  "all_allow",
+                  "restricted_or_mixed",
+                  "explicit_mode"
+                ],
+                "type": "string"
+              },
+              "source_fields": {
+                "items": {
+                  "enum": [
+                    "permission",
+                    "tool_permissions"
+                  ],
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "version": {
+                "const": 1,
+                "type": "number"
+              }
+            },
+            "required": [
+              "version",
+              "source_fields",
+              "permission_mode",
+              "reason"
+            ],
+            "type": "object"
+          },
+          "permission_mode": {
+            "default": "full_access",
+            "description": "Operator authorization mode. Full access is the default; Ask me pauses permission-bearing invocations for an operator decision.",
+            "enum": [
+              "full_access",
+              "ask"
+            ],
+            "type": "string"
           },
           "plugin": {
             "items": {
@@ -1578,6 +1682,16 @@
             },
             "type": "object"
           },
+          "skill_policy": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PermissionActionConfig"
+            },
+            "description": "Capability projection for installed Skills. Operator invocation authorization is controlled separately.",
+            "propertyNames": {
+              "type": "string"
+            },
+            "type": "object"
+          },
           "skills": {
             "description": "Additional skill folder paths",
             "properties": {
@@ -1608,27 +1722,6 @@
           },
           "terminal": {
             "$ref": "#/components/schemas/TerminalConfig"
-          },
-          "tool_permissions": {
-            "description": "Default tool permission actions for new tasks. When not set, defaults to 'allow'. Set a tool to 'ask' for confirmation, or 'deny' to block it entirely.",
-            "properties": {
-              "external_directory": {
-                "$ref": "#/components/schemas/PermissionActionConfig"
-              },
-              "schedule": {
-                "$ref": "#/components/schemas/PermissionActionConfig"
-              },
-              "skill": {
-                "$ref": "#/components/schemas/PermissionActionConfig"
-              },
-              "webfetch": {
-                "$ref": "#/components/schemas/PermissionActionConfig"
-              },
-              "websearch": {
-                "$ref": "#/components/schemas/PermissionActionConfig"
-              }
-            },
-            "type": "object"
           },
           "username": {
             "description": "Custom username to display in conversations instead of system username",
@@ -1950,13 +2043,16 @@
             "$ref": "#/components/schemas/Event.mission.handoff"
           },
           {
-            "$ref": "#/components/schemas/Event.permission.abandoned"
-          },
-          {
             "$ref": "#/components/schemas/Event.permission.asked"
           },
           {
             "$ref": "#/components/schemas/Event.permission.replied"
+          },
+          {
+            "$ref": "#/components/schemas/Event.project.memory.notice.changed"
+          },
+          {
+            "$ref": "#/components/schemas/Event.project.memory.organize.requested"
           },
           {
             "$ref": "#/components/schemas/Event.project.updated"
@@ -3693,45 +3789,6 @@
         ],
         "type": "object"
       },
-      "Event.permission.abandoned": {
-        "properties": {
-          "properties": {
-            "properties": {
-              "origin": {
-                "const": "infrastructure",
-                "type": "string"
-              },
-              "requestID": {
-                "type": "string"
-              },
-              "sessionID": {
-                "type": "string"
-              },
-              "timeResolved": {
-                "exclusiveMinimum": 0,
-                "maximum": 9007199254740991,
-                "type": "integer"
-              }
-            },
-            "required": [
-              "sessionID",
-              "requestID",
-              "origin",
-              "timeResolved"
-            ],
-            "type": "object"
-          },
-          "type": {
-            "const": "permission.abandoned",
-            "type": "string"
-          }
-        },
-        "required": [
-          "type",
-          "properties"
-        ],
-        "type": "object"
-      },
       "Event.permission.asked": {
         "properties": {
           "properties": {
@@ -3752,18 +3809,124 @@
         "properties": {
           "properties": {
             "properties": {
+              "actorID": {
+                "type": "string"
+              },
               "autoReply": {
                 "type": "boolean"
               },
-              "reply": {
-                "enum": [
-                  "once",
-                  "always",
-                  "reject"
-                ],
-                "type": "string"
+              "decision": {
+                "$ref": "#/components/schemas/PermissionDecision"
               },
               "requestID": {
+                "type": "string"
+              },
+              "sessionID": {
+                "type": "string"
+              },
+              "userInput": {
+                "additionalProperties": false,
+                "properties": {
+                  "structured": {
+                    "additionalProperties": {},
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "type": "object"
+                  },
+                  "surface": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "surface",
+                  "text"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "sessionID",
+              "requestID",
+              "decision",
+              "actorID",
+              "autoReply"
+            ],
+            "type": "object"
+          },
+          "type": {
+            "const": "permission.replied",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "properties"
+        ],
+        "type": "object"
+      },
+      "Event.project.memory.notice.changed": {
+        "properties": {
+          "properties": {
+            "properties": {
+              "acknowledged": {
+                "type": "boolean"
+              },
+              "generation": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "message": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "projectID": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "status": {
+                "enum": [
+                  "idle",
+                  "organizing",
+                  "capacity_reached",
+                  "evidence_too_large",
+                  "model_context_incompatible",
+                  "unavailable",
+                  "retry_wait"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "projectID",
+              "status",
+              "message",
+              "generation",
+              "acknowledged"
+            ],
+            "type": "object"
+          },
+          "type": {
+            "const": "project.memory.notice.changed",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "properties"
+        ],
+        "type": "object"
+      },
+      "Event.project.memory.organize.requested": {
+        "properties": {
+          "properties": {
+            "properties": {
+              "projectID": {
+                "minLength": 1,
                 "type": "string"
               },
               "sessionID": {
@@ -3771,15 +3934,12 @@
               }
             },
             "required": [
-              "sessionID",
-              "requestID",
-              "reply",
-              "autoReply"
+              "projectID"
             ],
             "type": "object"
           },
           "type": {
-            "const": "permission.replied",
+            "const": "project.memory.organize.requested",
             "type": "string"
           }
         },
@@ -4032,6 +4192,30 @@
                 "exclusiveMinimum": 0,
                 "maximum": 9007199254740991,
                 "type": "integer"
+              },
+              "userInput": {
+                "additionalProperties": false,
+                "properties": {
+                  "structured": {
+                    "additionalProperties": {},
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "type": "object"
+                  },
+                  "surface": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "surface",
+                  "text"
+                ],
+                "type": "object"
               }
             },
             "required": [
@@ -4076,6 +4260,30 @@
                 "exclusiveMinimum": 0,
                 "maximum": 9007199254740991,
                 "type": "integer"
+              },
+              "userInput": {
+                "additionalProperties": false,
+                "properties": {
+                  "structured": {
+                    "additionalProperties": {},
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "type": "object"
+                  },
+                  "surface": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "surface",
+                  "text"
+                ],
+                "type": "object"
               }
             },
             "required": [
@@ -7413,7 +7621,30 @@
             "type": "string"
           },
           "permission": {
-            "$ref": "#/components/schemas/PermissionRuleset"
+            "items": {
+              "properties": {
+                "action": {
+                  "enum": [
+                    "allow",
+                    "deny"
+                  ],
+                  "type": "string"
+                },
+                "pattern": {
+                  "type": "string"
+                },
+                "permission": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "permission",
+                "pattern",
+                "action"
+              ],
+              "type": "object"
+            },
+            "type": "array"
           },
           "project": {
             "anyOf": [
@@ -13111,17 +13342,8 @@
         ],
         "type": "object"
       },
-      "PermissionAction": {
-        "enum": [
-          "allow",
-          "deny",
-          "ask"
-        ],
-        "type": "string"
-      },
       "PermissionActionConfig": {
         "enum": [
-          "ask",
           "allow",
           "deny"
         ],
@@ -13193,6 +13415,22 @@
           }
         ]
       },
+      "PermissionDecision": {
+        "enum": [
+          "allow_once",
+          "allow_task",
+          "allow_project",
+          "deny"
+        ],
+        "type": "string"
+      },
+      "PermissionMode": {
+        "enum": [
+          "full_access",
+          "ask"
+        ],
+        "type": "string"
+      },
       "PermissionObjectConfig": {
         "additionalProperties": {
           "$ref": "#/components/schemas/PermissionActionConfig"
@@ -13204,78 +13442,122 @@
       },
       "PermissionRequest": {
         "properties": {
-          "always": {
+          "choices": {
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/PermissionDecision"
             },
             "type": "array"
           },
-          "id": {
-            "pattern": "^per.*",
+          "effectClass": {
+            "minLength": 1,
             "type": "string"
           },
-          "metadata": {
+          "fingerprint": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "messageID": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "mode": {
+            "$ref": "#/components/schemas/PermissionMode"
+          },
+          "policyRevision": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "projectGrantEligible": {
+            "type": "boolean"
+          },
+          "projectID": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "providerDigest": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "providerID": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "providerKind": {
+            "enum": [
+              "builtin",
+              "plugin",
+              "skill",
+              "mcp",
+              "mcp_app",
+              "browser",
+              "computer",
+              "projected",
+              "schedule",
+              "external"
+            ],
+            "type": "string"
+          },
+          "scope": {
             "additionalProperties": {},
             "propertyNames": {
               "type": "string"
             },
             "type": "object"
           },
-          "patterns": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "permission": {
+          "scopeVersion": {
+            "minLength": 1,
             "type": "string"
           },
           "sessionID": {
-            "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+            "minLength": 1,
             "type": "string"
           },
-          "tool": {
-            "properties": {
-              "callID": {
-                "type": "string"
-              },
-              "messageID": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "messageID",
-              "callID"
-            ],
-            "type": "object"
+          "summary": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "taskID": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "timeCreated": {
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991,
+            "type": "integer"
+          },
+          "toolCallID": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "toolName": {
+            "minLength": 1,
+            "type": "string"
           }
         },
         "required": [
           "id",
+          "projectID",
           "sessionID",
-          "permission",
-          "patterns",
-          "metadata",
-          "always"
-        ],
-        "type": "object"
-      },
-      "PermissionRule": {
-        "properties": {
-          "action": {
-            "$ref": "#/components/schemas/PermissionAction"
-          },
-          "pattern": {
-            "type": "string"
-          },
-          "permission": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "permission",
-          "pattern",
-          "action"
+          "messageID",
+          "toolCallID",
+          "mode",
+          "policyRevision",
+          "providerKind",
+          "providerID",
+          "providerDigest",
+          "toolName",
+          "effectClass",
+          "scopeVersion",
+          "scope",
+          "fingerprint",
+          "summary",
+          "projectGrantEligible",
+          "choices",
+          "timeCreated"
         ],
         "type": "object"
       },
@@ -13288,12 +13570,6 @@
             "$ref": "#/components/schemas/PermissionObjectConfig"
           }
         ]
-      },
-      "PermissionRuleset": {
-        "items": {
-          "$ref": "#/components/schemas/PermissionRule"
-        },
-        "type": "array"
       },
       "Project": {
         "properties": {
@@ -13380,13 +13656,40 @@
           },
           "projectID": {
             "type": "string"
+          },
+          "residue": {
+            "items": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "message"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "status": {
+            "enum": [
+              "committed",
+              "committed_with_residue"
+            ],
+            "type": "string"
           }
         },
         "required": [
           "ok",
+          "status",
           "projectID",
           "directory",
-          "deletedTaskCount"
+          "deletedTaskCount",
+          "residue"
         ],
         "type": "object"
       },
@@ -14903,7 +15206,30 @@
             "type": "string"
           },
           "permission": {
-            "$ref": "#/components/schemas/PermissionRuleset"
+            "items": {
+              "properties": {
+                "action": {
+                  "enum": [
+                    "allow",
+                    "deny"
+                  ],
+                  "type": "string"
+                },
+                "pattern": {
+                  "type": "string"
+                },
+                "permission": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "permission",
+                "pattern",
+                "action"
+              ],
+              "type": "object"
+            },
+            "type": "array"
           },
           "projectID": {
             "type": "string"
@@ -18478,14 +18804,22 @@
                       "type": "array"
                     },
                     "policy": {
-                      "$ref": "#/components/schemas/PermissionAction"
+                      "enum": [
+                        "allow",
+                        "deny"
+                      ],
+                      "type": "string"
                     },
                     "priority": {
                       "default": 0,
                       "type": "number"
                     },
                     "recommended_policy": {
-                      "$ref": "#/components/schemas/PermissionAction"
+                      "enum": [
+                        "allow",
+                        "deny"
+                      ],
+                      "type": "string"
                     },
                     "required_tools": {
                       "default": [],
@@ -23309,6 +23643,234 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.experimental.memory.get({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/experimental/project-memory": {
+      "get": {
+        "operationId": "experimental.projectMemory.get",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "content": {
+                      "type": "string"
+                    },
+                    "droppedPendingCount": {
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "filename": {
+                      "const": "MEMORY.MD",
+                      "type": "string"
+                    },
+                    "notice": {},
+                    "pendingCount": {
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "revision": {
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "scope": {
+                      "const": "project",
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "timeCreated": {
+                      "type": "number"
+                    },
+                    "timeUpdated": {
+                      "type": "number"
+                    },
+                    "tokenCount": {
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "filename",
+                    "scope",
+                    "content",
+                    "revision",
+                    "tokenCount",
+                    "status",
+                    "pendingCount",
+                    "droppedPendingCount",
+                    "timeCreated",
+                    "timeUpdated"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Project MEMORY.MD"
+          }
+        },
+        "summary": "Get the organized Project MEMORY.MD context",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.experimental.projectMemory.get({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/experimental/project-memory/events": {
+      "get": {
+        "operationId": "experimental.projectMemory.events",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/event-stream": {
+                "schema": {}
+              }
+            },
+            "description": "Project MEMORY.MD notice stream"
+          }
+        },
+        "summary": "Subscribe to Project MEMORY.MD notice changes",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.experimental.projectMemory.events({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/experimental/project-memory/notice/acknowledge": {
+      "post": {
+        "operationId": "experimental.projectMemory.acknowledgeNotice",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "generation": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "generation"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "acknowledged": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "acknowledged"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Notice acknowledgement"
+          }
+        },
+        "summary": "Acknowledge a Project MEMORY.MD notice",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.experimental.projectMemory.acknowledgeNotice({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/experimental/project-memory/organize": {
+      "post": {
+        "operationId": "experimental.projectMemory.organize",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "document": {},
+                    "result": {}
+                  },
+                  "required": [
+                    "result",
+                    "document"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Memory Organizer result"
+          }
+        },
+        "summary": "Request Project MEMORY.MD organization",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.experimental.projectMemory.organize({\n  ...\n})"
           }
         ]
       }
@@ -60283,7 +60845,11 @@
                     "type": "string"
                   },
                   "policy": {
-                    "$ref": "#/components/schemas/PermissionAction"
+                    "enum": [
+                      "allow",
+                      "deny"
+                    ],
+                    "type": "string"
                   },
                   "value": {
                     "minLength": 1,
@@ -60392,7 +60958,11 @@
                         "type": "string"
                       },
                       "recommended_policy": {
-                        "$ref": "#/components/schemas/PermissionAction"
+                        "enum": [
+                          "allow",
+                          "deny"
+                        ],
+                        "type": "string"
                       },
                       "source": {
                         "type": "string"
@@ -62438,21 +63008,14 @@
             "application/json": {
               "schema": {
                 "properties": {
-                  "autoReply": {
-                    "type": "boolean"
-                  },
                   "message": {
                     "type": "string"
                   }
                 },
-                "required": [
-                  "autoReply"
-                ],
                 "type": "object"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -62667,29 +63230,17 @@
                     },
                     "type": "array"
                   },
-                  "autoReply": {
-                    "type": "boolean"
+                  "decision": {
+                    "$ref": "#/components/schemas/PermissionDecision"
                   },
                   "message": {
                     "type": "string"
-                  },
-                  "reply": {
-                    "enum": [
-                      "once",
-                      "always",
-                      "reject"
-                    ],
-                    "type": "string"
                   }
                 },
-                "required": [
-                  "autoReply"
-                ],
                 "type": "object"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -70482,7 +71033,6 @@
     },
     "/permission": {
       "get": {
-        "description": "Get all pending permission requests across all sessions.",
         "operationId": "permission.list",
         "parameters": [
           {
@@ -70507,10 +71057,10 @@
                 }
               }
             },
-            "description": "List of pending permissions"
+            "description": "Pending permission requests"
           }
         },
-        "summary": "List pending permissions",
+        "summary": "List durable pending permission requests",
         "x-codeSamples": [
           {
             "lang": "js",
@@ -70519,9 +71069,481 @@
         ]
       }
     },
+    "/permission/grants": {
+      "get": {
+        "operationId": "permission.grants",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": {},
+                    "properties": {
+                      "actor_id": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "attempt_id": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "decision_scope": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "effect_class": {
+                        "type": "string"
+                      },
+                      "event_type": {
+                        "type": "string"
+                      },
+                      "fingerprint": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "message_id": {
+                        "type": "string"
+                      },
+                      "mode": {
+                        "$ref": "#/components/schemas/PermissionMode"
+                      },
+                      "policy_revision": {
+                        "type": "string"
+                      },
+                      "project_id": {
+                        "type": "string"
+                      },
+                      "provider_digest": {
+                        "type": "string"
+                      },
+                      "provider_id": {
+                        "type": "string"
+                      },
+                      "provider_kind": {
+                        "type": "string"
+                      },
+                      "reason": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "request_id": {
+                        "type": "string"
+                      },
+                      "scope": {
+                        "additionalProperties": {},
+                        "propertyNames": {
+                          "type": "string"
+                        },
+                        "type": "object"
+                      },
+                      "scope_version": {
+                        "type": "string"
+                      },
+                      "session_id": {
+                        "type": "string"
+                      },
+                      "source_event_id": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "summary": {
+                        "type": "string"
+                      },
+                      "task_id": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "time_created": {
+                        "type": "number"
+                      },
+                      "tool_call_id": {
+                        "type": "string"
+                      },
+                      "tool_name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "request_id",
+                      "project_id",
+                      "session_id",
+                      "task_id",
+                      "message_id",
+                      "tool_call_id",
+                      "attempt_id",
+                      "event_type",
+                      "mode",
+                      "policy_revision",
+                      "provider_kind",
+                      "provider_id",
+                      "provider_digest",
+                      "tool_name",
+                      "effect_class",
+                      "scope_version",
+                      "scope",
+                      "fingerprint",
+                      "summary",
+                      "decision_scope",
+                      "source_event_id",
+                      "actor_id",
+                      "reason",
+                      "time_created"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Active exact-scope grants"
+          }
+        },
+        "summary": "List active permission grants",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.permission.grants({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/permission/grants/{grantID}/revoke": {
+      "post": {
+        "operationId": "permission.revoke",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "grantID",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "description": "Grant revoked"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "NotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "LogFileNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Not found"
+          }
+        },
+        "summary": "Revoke an active permission grant",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.permission.revoke({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/permission/history": {
+      "get": {
+        "operationId": "permission.history",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": {},
+                    "properties": {
+                      "actor_id": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "attempt_id": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "decision_scope": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "effect_class": {
+                        "type": "string"
+                      },
+                      "event_type": {
+                        "type": "string"
+                      },
+                      "fingerprint": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "message_id": {
+                        "type": "string"
+                      },
+                      "mode": {
+                        "$ref": "#/components/schemas/PermissionMode"
+                      },
+                      "policy_revision": {
+                        "type": "string"
+                      },
+                      "project_id": {
+                        "type": "string"
+                      },
+                      "provider_digest": {
+                        "type": "string"
+                      },
+                      "provider_id": {
+                        "type": "string"
+                      },
+                      "provider_kind": {
+                        "type": "string"
+                      },
+                      "reason": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "request_id": {
+                        "type": "string"
+                      },
+                      "scope": {
+                        "additionalProperties": {},
+                        "propertyNames": {
+                          "type": "string"
+                        },
+                        "type": "object"
+                      },
+                      "scope_version": {
+                        "type": "string"
+                      },
+                      "session_id": {
+                        "type": "string"
+                      },
+                      "source_event_id": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "summary": {
+                        "type": "string"
+                      },
+                      "task_id": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "time_created": {
+                        "type": "number"
+                      },
+                      "tool_call_id": {
+                        "type": "string"
+                      },
+                      "tool_name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "request_id",
+                      "project_id",
+                      "session_id",
+                      "task_id",
+                      "message_id",
+                      "tool_call_id",
+                      "attempt_id",
+                      "event_type",
+                      "mode",
+                      "policy_revision",
+                      "provider_kind",
+                      "provider_id",
+                      "provider_digest",
+                      "tool_name",
+                      "effect_class",
+                      "scope_version",
+                      "scope",
+                      "fingerprint",
+                      "summary",
+                      "decision_scope",
+                      "source_event_id",
+                      "actor_id",
+                      "reason",
+                      "time_created"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Append-only permission ledger"
+          }
+        },
+        "summary": "List permission ledger history",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.permission.history({\n  ...\n})"
+          }
+        ]
+      }
+    },
     "/permission/{requestID}/reply": {
       "post": {
-        "description": "Approve or deny a permission request from the AI assistant.",
         "operationId": "permission.reply",
         "parameters": [
           {
@@ -70538,6 +71560,7 @@
             "name": "requestID",
             "required": true,
             "schema": {
+              "minLength": 1,
               "type": "string"
             }
           }
@@ -70547,24 +71570,20 @@
             "application/json": {
               "schema": {
                 "properties": {
-                  "autoReply": {
-                    "type": "boolean"
-                  },
-                  "message": {
+                  "actorID": {
+                    "default": "local-operator",
+                    "minLength": 1,
                     "type": "string"
                   },
-                  "reply": {
-                    "enum": [
-                      "once",
-                      "always",
-                      "reject"
-                    ],
+                  "decision": {
+                    "$ref": "#/components/schemas/PermissionDecision"
+                  },
+                  "message": {
                     "type": "string"
                   }
                 },
                 "required": [
-                  "reply",
-                  "autoReply"
+                  "decision"
                 ],
                 "type": "object"
               }
@@ -70577,11 +71596,28 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "properties": {
+                    "decision": {
+                      "$ref": "#/components/schemas/PermissionDecision"
+                    },
+                    "eventID": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "request": {
+                      "$ref": "#/components/schemas/PermissionRequest"
+                    }
+                  },
+                  "required": [
+                    "request",
+                    "decision",
+                    "eventID"
+                  ],
+                  "type": "object"
                 }
               }
             },
-            "description": "Permission processed successfully"
+            "description": "Committed permission decision"
           },
           "400": {
             "content": {
@@ -70645,7 +71681,7 @@
             "description": "Not found"
           }
         },
-        "summary": "Respond to permission request",
+        "summary": "Decide a pending permission request",
         "x-codeSamples": [
           {
             "lang": "js",
@@ -73979,7 +75015,30 @@
                     "type": "string"
                   },
                   "permission": {
-                    "$ref": "#/components/schemas/PermissionRuleset"
+                    "items": {
+                      "properties": {
+                        "action": {
+                          "enum": [
+                            "allow",
+                            "deny"
+                          ],
+                          "type": "string"
+                        },
+                        "pattern": {
+                          "type": "string"
+                        },
+                        "permission": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "permission",
+                        "pattern",
+                        "action"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
                   },
                   "title": {
                     "type": "string"
@@ -83726,7 +84785,11 @@
                     "type": "array"
                   },
                   "policy": {
-                    "$ref": "#/components/schemas/PermissionAction"
+                    "enum": [
+                      "allow",
+                      "deny"
+                    ],
+                    "type": "string"
                   },
                   "sourceName": {
                     "minLength": 1,
@@ -83817,7 +84880,11 @@
                     "type": "string"
                   },
                   "policy": {
-                    "$ref": "#/components/schemas/PermissionAction"
+                    "enum": [
+                      "allow",
+                      "deny"
+                    ],
+                    "type": "string"
                   },
                   "value": {
                     "minLength": 1,
@@ -84057,14 +85124,22 @@
                         "type": "array"
                       },
                       "policy": {
-                        "$ref": "#/components/schemas/PermissionAction"
+                        "enum": [
+                          "allow",
+                          "deny"
+                        ],
+                        "type": "string"
                       },
                       "priority": {
                         "default": 0,
                         "type": "number"
                       },
                       "recommended_policy": {
-                        "$ref": "#/components/schemas/PermissionAction"
+                        "enum": [
+                          "allow",
+                          "deny"
+                        ],
+                        "type": "string"
                       },
                       "required_tools": {
                         "default": [],
@@ -84286,7 +85361,11 @@
                         "type": "string"
                       },
                       "recommended_policy": {
-                        "$ref": "#/components/schemas/PermissionAction"
+                        "enum": [
+                          "allow",
+                          "deny"
+                        ],
+                        "type": "string"
                       },
                       "source": {
                         "type": "string"
@@ -84800,7 +85879,11 @@
                             "type": "array"
                           },
                           "policy": {
-                            "$ref": "#/components/schemas/PermissionAction"
+                            "enum": [
+                              "allow",
+                              "deny"
+                            ],
+                            "type": "string"
                           },
                           "priority": {
                             "default": 0,
@@ -84814,7 +85897,11 @@
                             "type": "string"
                           },
                           "recommended_policy": {
-                            "$ref": "#/components/schemas/PermissionAction"
+                            "enum": [
+                              "allow",
+                              "deny"
+                            ],
+                            "type": "string"
                           },
                           "ref": {
                             "type": "string"
@@ -85413,7 +86500,11 @@
                             "type": "array"
                           },
                           "policy": {
-                            "$ref": "#/components/schemas/PermissionAction"
+                            "enum": [
+                              "allow",
+                              "deny"
+                            ],
+                            "type": "string"
                           },
                           "priority": {
                             "default": 0,
@@ -85427,7 +86518,11 @@
                             "type": "string"
                           },
                           "recommended_policy": {
-                            "$ref": "#/components/schemas/PermissionAction"
+                            "enum": [
+                              "allow",
+                              "deny"
+                            ],
+                            "type": "string"
                           },
                           "ref": {
                             "type": "string"
@@ -85626,7 +86721,7 @@
     },
     "/skill/policy": {
       "post": {
-        "description": "Set the global allow, ask, or deny policy for a named skill.",
+        "description": "Set the global allow or deny capability policy for a named skill.",
         "operationId": "skill.policy",
         "parameters": [
           {
@@ -85645,7 +86740,11 @@
               "schema": {
                 "properties": {
                   "action": {
-                    "$ref": "#/components/schemas/PermissionAction"
+                    "enum": [
+                      "allow",
+                      "deny"
+                    ],
+                    "type": "string"
                   },
                   "name": {
                     "minLength": 1,
@@ -87064,6 +88163,15 @@
       "delete": {
         "operationId": "task.delete",
         "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "in": "path",
             "name": "taskID",

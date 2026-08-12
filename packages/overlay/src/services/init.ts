@@ -32,6 +32,7 @@ import { CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS, loadConfigInfo } from "./config-
 import { initializeActiveDirectoryGit } from "../utils/git"
 import { setAppStore, type ProjectLoadIssue } from "../store/app"
 import { AppLog } from "../utils/log"
+import { startProjectMemoryEvents, stopProjectMemoryEvents } from "./project-memory"
 
 // ── Types ──
 
@@ -230,6 +231,7 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
     await onConnected?.()
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
     if (initialData.loaded) startTaskListSSE()
+    if (initialData.loaded) startProjectMemoryEvents()
   }
 
   if (!isCurrentInitLifecycle(lifecycleGeneration)) return
@@ -248,6 +250,7 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
     await onReconnect?.()
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
     if (initialData.loaded) startTaskListSSE()
+    if (initialData.loaded) startProjectMemoryEvents()
   }, reconnectInterval)
 }
 
@@ -276,6 +279,7 @@ export function teardownApp(): void {
   stopSSE()
   stopTaskListSSE()
   stopWorkLedgerSSE()
+  stopProjectMemoryEvents()
 }
 
 /**

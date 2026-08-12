@@ -722,12 +722,22 @@ async function deleteWorkLedgerProject(directory: string): Promise<void> {
     setMissionSharedRefreshToken((value) => value + 1)
   })
   runPostCommitUiEffect({ id: `${diagnosticID}:notification`, title: "Project deletion committed" }, () => {
+    const directory = outcome.status === "deleted" ? outcome.result.directory : outcome.directory
+    if (outcome.status === "deleted" && outcome.result.status === "committed_with_residue") {
+      reportWarning({
+        id: diagnosticID,
+        title: t("project.delete_cleanup_pending_title"),
+        message: t("project.delete_cleanup_pending", {
+          directory,
+          reason: outcome.result.residue.map((item) => `${item.path}: ${item.message}`).join("; "),
+        }),
+      })
+      return
+    }
     reportSuccess({
       id: diagnosticID,
       title: t("project.delete_success_title"),
-      message: t("project.delete_success", {
-        directory: outcome.status === "deleted" ? outcome.result.directory : outcome.directory,
-      }),
+      message: t("project.delete_success", { directory }),
     })
   })
 }

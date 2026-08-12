@@ -7,3 +7,4 @@ This directory contains current architecture authority for live subsystem contra
 - [Task control plane](task-control-plane.md)
 - [Task runtime directory ownership](task-runtime-directory.md)
 - [Public website and Registry](public-website.md)
+- [Project memory](project-memory.md)

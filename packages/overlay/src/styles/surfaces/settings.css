@@ -226,6 +226,17 @@ button.s-row:focus-visible {
   justify-content: flex-end;
 }
 
+/* Permission copy can contain long canonical paths and commands. Keep the
+   mode selector visible and let the explanatory column wrap before it can
+   push actions outside the settings viewport. */
+.permissions-settings-group .s-row {
+  flex-wrap: wrap;
+}
+
+.permissions-settings-group .s-row-actions {
+  margin-inline-start: auto;
+}
+
 /* Toolbar — search + filter strip above a list. */
 .s-toolbar {
   display: flex;

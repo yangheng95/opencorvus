@@ -32,7 +32,11 @@ export type Agent = {
   options: {
     [key: string]: unknown
   }
-  permission?: PermissionRuleset
+  permission?: Array<{
+    action: "allow" | "deny"
+    pattern: string
+    permission: string
+  }>
   prompt?: string
   promptAppend?: string
   steps?: number
@@ -174,9 +178,9 @@ export type ChatCapabilitySettings = {
       }
       name: string
       platforms?: Array<"windows" | "macos" | "linux">
-      policy: PermissionAction
+      policy: "allow" | "deny"
       priority?: number
-      recommended_policy: PermissionAction
+      recommended_policy: "allow" | "deny"
       required_tools?: Array<string>
       risk: {
         has_agents: boolean
@@ -274,6 +278,7 @@ export type Config = {
     coding?: NativeAgentOverride
     compaction?: NativeAgentOverride
     control?: NativeAgentOverride
+    memory?: NativeAgentOverride
     mission?: NativeAgentOverride
     orchestrator?: NativeAgentOverride
     summary?: NativeAgentOverride
@@ -382,9 +387,21 @@ export type Config = {
        */
       auto_inject?: boolean
       /**
+       * Fixed maximum estimated token count of Project MEMORY.MD
+       */
+      document_token_limit?: number
+      /**
        * Enable persistent memory store
        */
       enabled?: boolean
+      /**
+       * Maximum estimated input tokens for one Memory Organizer run
+       */
+      organizer_input_token_budget?: number
+      /**
+       * Maximum pending occurrences retained while the Memory Organizer is unavailable
+       */
+      pending_availability_limit?: number
       /**
        * Max tokens for auto-injected memory context
        */
@@ -494,7 +511,19 @@ export type Config = {
      */
     server_url: string
   }
-  permission?: PermissionConfig
+  /**
+   * Durable, idempotent audit record for the one-time legacy permission configuration cutover.
+   */
+  permission_migration?: {
+    permission_mode: "full_access" | "ask"
+    reason: "all_allow" | "restricted_or_mixed" | "explicit_mode"
+    source_fields: Array<"permission" | "tool_permissions">
+    version: 1
+  }
+  /**
+   * Operator authorization mode. Full access is the default; Ask me pauses permission-bearing invocations for an operator decision.
+   */
+  permission_mode?: "full_access" | "ask"
   plugin?: Array<string>
   /**
    * Project-owned Skill and MCP server assignments for fixed native primary assistants.
@@ -559,6 +588,12 @@ export type Config = {
     }
   }
   /**
+   * Capability projection for installed Skills. Operator invocation authorization is controlled separately.
+   */
+  skill_policy?: {
+    [key: string]: PermissionActionConfig
+  }
+  /**
    * Additional skill folder paths
    */
   skills?: {
@@ -580,16 +615,6 @@ export type Config = {
    */
   snapshot?: boolean
   terminal?: TerminalConfig
-  /**
-   * Default tool permission actions for new tasks. When not set, defaults to 'allow'. Set a tool to 'ask' for confirmation, or 'deny' to block it entirely.
-   */
-  tool_permissions?: {
-    external_directory?: PermissionActionConfig
-    schedule?: PermissionActionConfig
-    skill?: PermissionActionConfig
-    webfetch?: PermissionActionConfig
-    websearch?: PermissionActionConfig
-  }
   /**
    * Custom username to display in conversations instead of system username
    */
@@ -724,9 +749,10 @@ export type Event =
   | EventMessageRemoved
   | EventMessageUpdated
   | EventMissionHandoff
-  | EventPermissionAbandoned
   | EventPermissionAsked
   | EventPermissionReplied
+  | EventProjectMemoryNoticeChanged
+  | EventProjectMemoryOrganizeRequested
   | EventProjectUpdated
   | EventPtyCreated
   | EventPtyDeleted
@@ -1203,16 +1229,6 @@ export type EventMissionHandoff = {
   type: "mission.handoff"
 }
 
-export type EventPermissionAbandoned = {
-  properties: {
-    origin: "infrastructure"
-    requestID: string
-    sessionID: string
-    timeResolved: number
-  }
-  type: "permission.abandoned"
-}
-
 export type EventPermissionAsked = {
   properties: PermissionRequest
   type: "permission.asked"
@@ -1220,12 +1236,46 @@ export type EventPermissionAsked = {
 
 export type EventPermissionReplied = {
   properties: {
+    actorID: string
     autoReply: boolean
-    reply: "once" | "always" | "reject"
+    decision: PermissionDecision
     requestID: string
     sessionID: string
+    userInput?: {
+      structured?: {
+        [key: string]: unknown
+      }
+      surface: string
+      text: string
+    }
   }
   type: "permission.replied"
+}
+
+export type EventProjectMemoryNoticeChanged = {
+  properties: {
+    acknowledged: boolean
+    generation: string
+    message: string
+    projectID: string
+    status:
+      | "idle"
+      | "organizing"
+      | "capacity_reached"
+      | "evidence_too_large"
+      | "model_context_incompatible"
+      | "unavailable"
+      | "retry_wait"
+  }
+  type: "project.memory.notice.changed"
+}
+
+export type EventProjectMemoryOrganizeRequested = {
+  properties: {
+    projectID: string
+    sessionID?: string
+  }
+  type: "project.memory.organize.requested"
 }
 
 export type EventProjectUpdated = {
@@ -1294,6 +1344,13 @@ export type EventQuestionRejected = {
     requestID: string
     sessionID: string
     timeResolved: number
+    userInput?: {
+      structured?: {
+        [key: string]: unknown
+      }
+      surface: string
+      text: string
+    }
   }
   type: "question.rejected"
 }
@@ -1305,6 +1362,13 @@ export type EventQuestionReplied = {
     requestID: string
     sessionID: string
     timeResolved: number
+    userInput?: {
+      structured?: {
+        [key: string]: unknown
+      }
+      surface: string
+      text: string
+    }
   }
   type: "question.replied"
 }
@@ -2131,7 +2195,11 @@ export type GlobalSession = {
     [key: string]: unknown
   }
   parentID?: string
-  permission?: PermissionRuleset
+  permission?: Array<{
+    action: "allow" | "deny"
+    pattern: string
+    permission: string
+  }>
   project: ProjectSummary | null
   projectID: string
   share?: {
@@ -3731,9 +3799,7 @@ export type Path = {
   worktree: string
 }
 
-export type PermissionAction = "allow" | "deny" | "ask"
-
-export type PermissionActionConfig = "ask" | "allow" | "deny"
+export type PermissionActionConfig = "allow" | "deny"
 
 export type PermissionConfig =
   | {
@@ -3758,34 +3824,50 @@ export type PermissionConfig =
     }
   | PermissionActionConfig
 
+export type PermissionDecision = "allow_once" | "allow_task" | "allow_project" | "deny"
+
+export type PermissionMode = "full_access" | "ask"
+
 export type PermissionObjectConfig = {
   [key: string]: PermissionActionConfig
 }
 
 export type PermissionRequest = {
-  always: Array<string>
+  choices: Array<PermissionDecision>
+  effectClass: string
+  fingerprint: string
   id: string
-  metadata: {
+  messageID: string
+  mode: PermissionMode
+  policyRevision: string
+  projectGrantEligible: boolean
+  projectID: string
+  providerDigest: string
+  providerID: string
+  providerKind:
+    | "builtin"
+    | "plugin"
+    | "skill"
+    | "mcp"
+    | "mcp_app"
+    | "browser"
+    | "computer"
+    | "projected"
+    | "schedule"
+    | "external"
+  scope: {
     [key: string]: unknown
   }
-  patterns: Array<string>
-  permission: string
+  scopeVersion: string
   sessionID: string
-  tool?: {
-    callID: string
-    messageID: string
-  }
-}
-
-export type PermissionRule = {
-  action: PermissionAction
-  pattern: string
-  permission: string
+  summary: string
+  taskID?: string
+  timeCreated: number
+  toolCallID: string
+  toolName: string
 }
 
 export type PermissionRuleConfig = PermissionActionConfig | PermissionObjectConfig
-
-export type PermissionRuleset = Array<PermissionRule>
 
 export type Project = {
   commands?: {
@@ -3816,6 +3898,11 @@ export type ProjectDeleteResult = {
   directory: string
   ok: boolean
   projectID: string
+  residue: Array<{
+    message: string
+    path: string
+  }>
+  status: "committed" | "committed_with_residue"
 }
 
 export type ProjectDiscovery = {
@@ -4385,7 +4472,11 @@ export type Session = {
     [key: string]: unknown
   }
   parentID?: string
-  permission?: PermissionRuleset
+  permission?: Array<{
+    action: "allow" | "deny"
+    pattern: string
+    permission: string
+  }>
   projectID: string
   share?: {
     url: string
@@ -5504,9 +5595,9 @@ export type WorkCapabilitySettings = {
       }
       name: string
       platforms?: Array<"windows" | "macos" | "linux">
-      policy: PermissionAction
+      policy: "allow" | "deny"
       priority?: number
-      recommended_policy: PermissionAction
+      recommended_policy: "allow" | "deny"
       required_tools?: Array<string>
       risk: {
         has_agents: boolean
@@ -7491,6 +7582,110 @@ export type ExperimentalMemoryGetResponses = {
 }
 
 export type ExperimentalMemoryGetResponse = ExperimentalMemoryGetResponses[keyof ExperimentalMemoryGetResponses]
+
+export type ExperimentalProjectMemoryGetData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/experimental/project-memory"
+}
+
+export type ExperimentalProjectMemoryGetResponses = {
+  /**
+   * Project MEMORY.MD
+   */
+  200: {
+    content: string
+    droppedPendingCount: number
+    filename: "MEMORY.MD"
+    notice?: unknown
+    pendingCount: number
+    revision: number
+    scope: "project"
+    status: string
+    timeCreated: number
+    timeUpdated: number
+    tokenCount: number
+  }
+}
+
+export type ExperimentalProjectMemoryGetResponse =
+  ExperimentalProjectMemoryGetResponses[keyof ExperimentalProjectMemoryGetResponses]
+
+export type ExperimentalProjectMemoryEventsData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/experimental/project-memory/events"
+}
+
+export type ExperimentalProjectMemoryEventsResponses = {
+  /**
+   * Project MEMORY.MD notice stream
+   */
+  200: unknown
+}
+
+export type ExperimentalProjectMemoryAcknowledgeNoticeData = {
+  body: {
+    generation: string
+  }
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/experimental/project-memory/notice/acknowledge"
+}
+
+export type ExperimentalProjectMemoryAcknowledgeNoticeResponses = {
+  /**
+   * Notice acknowledgement
+   */
+  200: {
+    acknowledged: boolean
+  }
+}
+
+export type ExperimentalProjectMemoryAcknowledgeNoticeResponse =
+  ExperimentalProjectMemoryAcknowledgeNoticeResponses[keyof ExperimentalProjectMemoryAcknowledgeNoticeResponses]
+
+export type ExperimentalProjectMemoryOrganizeData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/experimental/project-memory/organize"
+}
+
+export type ExperimentalProjectMemoryOrganizeResponses = {
+  /**
+   * Memory Organizer result
+   */
+  200: {
+    document: unknown
+    result: unknown
+  }
+}
+
+export type ExperimentalProjectMemoryOrganizeResponse =
+  ExperimentalProjectMemoryOrganizeResponses[keyof ExperimentalProjectMemoryOrganizeResponses]
 
 export type ExperimentalResourceListData = {
   body?: never
@@ -17267,7 +17462,7 @@ export type GlobalProvidersTestResponse = GlobalProvidersTestResponses[keyof Glo
 export type GlobalSkillInstallData = {
   body: {
     kind: "url" | "git"
-    policy?: PermissionAction
+    policy?: "allow" | "deny"
     value: string
   }
   path?: never
@@ -17317,7 +17512,7 @@ export type GlobalSkillMarketResponses = {
     name: string
     notes?: string
     provider: string
-    recommended_policy: PermissionAction
+    recommended_policy: "allow" | "deny"
     source?: string
     trust: "official" | "curated" | "community"
   }>
@@ -17915,8 +18110,7 @@ export type InstanceDisposeResponses = {
 export type InstanceDisposeResponse = InstanceDisposeResponses[keyof InstanceDisposeResponses]
 
 export type InteractionRejectData = {
-  body: {
-    autoReply: boolean
+  body?: {
     message?: string
   }
   path: {
@@ -17988,11 +18182,10 @@ export type InteractionRejectResponses = {
 export type InteractionRejectResponse = InteractionRejectResponses[keyof InteractionRejectResponses]
 
 export type InteractionReplyData = {
-  body: {
+  body?: {
     answers?: Array<QuestionAnswer>
-    autoReply: boolean
+    decision?: PermissionDecision
     message?: string
-    reply?: "once" | "always" | "reject"
   }
   path: {
     interactionID: string
@@ -20760,18 +20953,162 @@ export type PermissionListData = {
 
 export type PermissionListResponses = {
   /**
-   * List of pending permissions
+   * Pending permission requests
    */
   200: Array<PermissionRequest>
 }
 
 export type PermissionListResponse = PermissionListResponses[keyof PermissionListResponses]
 
+export type PermissionGrantsData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/permission/grants"
+}
+
+export type PermissionGrantsResponses = {
+  /**
+   * Active exact-scope grants
+   */
+  200: Array<{
+    actor_id: string | null
+    attempt_id: string | null
+    decision_scope: string | null
+    effect_class: string
+    event_type: string
+    fingerprint: string
+    id: string
+    message_id: string
+    mode: PermissionMode
+    policy_revision: string
+    project_id: string
+    provider_digest: string
+    provider_id: string
+    provider_kind: string
+    reason: string | null
+    request_id: string
+    scope: {
+      [key: string]: unknown
+    }
+    scope_version: string
+    session_id: string
+    source_event_id: string | null
+    summary: string
+    task_id: string | null
+    time_created: number
+    tool_call_id: string
+    tool_name: string
+    [key: string]: unknown
+  }>
+}
+
+export type PermissionGrantsResponse = PermissionGrantsResponses[keyof PermissionGrantsResponses]
+
+export type PermissionRevokeData = {
+  body?: never
+  path: {
+    grantID: string
+  }
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/permission/grants/{grantID}/revoke"
+}
+
+export type PermissionRevokeErrors = {
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type PermissionRevokeError = PermissionRevokeErrors[keyof PermissionRevokeErrors]
+
+export type PermissionRevokeResponses = {
+  /**
+   * Grant revoked
+   */
+  200: boolean
+}
+
+export type PermissionRevokeResponse = PermissionRevokeResponses[keyof PermissionRevokeResponses]
+
+export type PermissionHistoryData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/permission/history"
+}
+
+export type PermissionHistoryResponses = {
+  /**
+   * Append-only permission ledger
+   */
+  200: Array<{
+    actor_id: string | null
+    attempt_id: string | null
+    decision_scope: string | null
+    effect_class: string
+    event_type: string
+    fingerprint: string
+    id: string
+    message_id: string
+    mode: PermissionMode
+    policy_revision: string
+    project_id: string
+    provider_digest: string
+    provider_id: string
+    provider_kind: string
+    reason: string | null
+    request_id: string
+    scope: {
+      [key: string]: unknown
+    }
+    scope_version: string
+    session_id: string
+    source_event_id: string | null
+    summary: string
+    task_id: string | null
+    time_created: number
+    tool_call_id: string
+    tool_name: string
+    [key: string]: unknown
+  }>
+}
+
+export type PermissionHistoryResponse = PermissionHistoryResponses[keyof PermissionHistoryResponses]
+
 export type PermissionReplyData = {
   body: {
-    autoReply: boolean
+    actorID?: string
+    decision: PermissionDecision
     message?: string
-    reply: "once" | "always" | "reject"
   }
   path: {
     requestID: string
@@ -20812,9 +21149,13 @@ export type PermissionReplyError = PermissionReplyErrors[keyof PermissionReplyEr
 
 export type PermissionReplyResponses = {
   /**
-   * Permission processed successfully
+   * Committed permission decision
    */
-  200: boolean
+  200: {
+    decision: PermissionDecision
+    eventID: string
+    request: PermissionRequest
+  }
 }
 
 export type PermissionReplyResponse = PermissionReplyResponses[keyof PermissionReplyResponses]
@@ -22292,7 +22633,11 @@ export type SessionCreateData = {
       [key: string]: unknown
     }
     parentID?: string
-    permission?: PermissionRuleset
+    permission?: Array<{
+      action: "allow" | "deny"
+      pattern: string
+      permission: string
+    }>
     title?: string
   }
   path?: never
@@ -25171,7 +25516,7 @@ export type SkillImportFileData = {
       contentBase64?: string
       path: string
     }>
-    policy?: PermissionAction
+    policy?: "allow" | "deny"
     sourceName?: string
   }
   path?: never
@@ -25202,7 +25547,7 @@ export type SkillImportFileResponse = SkillImportFileResponses[keyof SkillImport
 export type SkillInstallData = {
   body: {
     kind: "path" | "url" | "git"
-    policy?: PermissionAction
+    policy?: "allow" | "deny"
     value: string
   }
   path?: never
@@ -25294,9 +25639,9 @@ export type SkillInstalledResponses = {
     }
     name: string
     platforms?: Array<"windows" | "macos" | "linux">
-    policy: PermissionAction
+    policy: "allow" | "deny"
     priority?: number
-    recommended_policy: PermissionAction
+    recommended_policy: "allow" | "deny"
     required_tools?: Array<string>
     risk: {
       has_agents: boolean
@@ -25373,7 +25718,7 @@ export type SkillMarketResponses = {
     name: string
     notes?: string
     provider: string
-    recommended_policy: PermissionAction
+    recommended_policy: "allow" | "deny"
     source?: string
     trust: "official" | "curated" | "community"
   }>
@@ -25498,10 +25843,10 @@ export type SkillSetMountOverrideResponses = {
       }
       name: string
       platforms?: Array<"windows" | "macos" | "linux">
-      policy: PermissionAction
+      policy: "allow" | "deny"
       priority?: number
       projection_source: "default" | "package"
-      recommended_policy: PermissionAction
+      recommended_policy: "allow" | "deny"
       ref: string
       required_tools?: Array<string>
       risk: {
@@ -25640,10 +25985,10 @@ export type SkillMountsResponses = {
       }
       name: string
       platforms?: Array<"windows" | "macos" | "linux">
-      policy: PermissionAction
+      policy: "allow" | "deny"
       priority?: number
       projection_source: "default" | "package"
-      recommended_policy: PermissionAction
+      recommended_policy: "allow" | "deny"
       ref: string
       required_tools?: Array<string>
       risk: {
@@ -25679,7 +26024,7 @@ export type SkillMountsResponse = SkillMountsResponses[keyof SkillMountsResponse
 
 export type SkillPolicyData = {
   body: {
-    action: PermissionAction
+    action: "allow" | "deny"
     name: string
   }
   path?: never
@@ -26129,7 +26474,12 @@ export type TaskDeleteData = {
   path: {
     taskID: string
   }
-  query?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
   url: "/task/{taskID}"
 }
 

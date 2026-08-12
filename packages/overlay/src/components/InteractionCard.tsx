@@ -16,7 +16,12 @@ import { createEffect, createMemo, createSignal, createUniqueId, For, onCleanup,
 import { t } from "../utils/i18n"
 import { renderMarkdown } from "../utils/markdown"
 import { loadBoard } from "../store/board"
-import { type InteractionReplyEndpoint, replyInteraction, rejectInteraction } from "../services/interaction-reply"
+import {
+  type InteractionReplyEndpoint,
+  type PermissionDecision,
+  replyInteraction,
+  rejectInteraction,
+} from "../services/interaction-reply"
 import { currentTraceDirectory } from "../services/trace-directory"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
 import { Checkbox } from "./ui/Checkbox"
@@ -39,6 +44,7 @@ export interface InteractionData {
   body?: string
   status: string
   payload?: {
+    choices?: Array<PermissionDecision | "deny">
     questions?: InteractionQuestion[]
     automatic?: {
       answers?: string[][]
@@ -74,6 +80,14 @@ export function InteractionCard(props: InteractionCardProps) {
   const questions = createMemo<InteractionQuestion[]>(() => {
     const q = props.interaction?.payload?.questions
     return Array.isArray(q) ? q : []
+  })
+  const permissionChoices = createMemo<PermissionDecision[]>(() => {
+    const choices = props.interaction?.payload?.choices
+    if (!Array.isArray(choices)) return []
+    return choices.filter(
+      (choice): choice is PermissionDecision =>
+        choice === "allow_once" || choice === "allow_task" || choice === "allow_project",
+    )
   })
   const automatic = createMemo(() => {
     const value = props.interaction?.payload?.automatic
@@ -148,7 +162,7 @@ export function InteractionCard(props: InteractionCardProps) {
     }
   }
 
-  const resolvePermission = (action: "once" | "always") =>
+  const resolvePermission = (action: PermissionDecision) =>
     runAction(() => replyInteraction(replyTarget(), action, false, {}, replyEndpoint()))
   const reject = () => runAction(() => rejectInteraction(replyTarget(), false, replyEndpoint()))
   const submitAnswers = () =>
@@ -345,30 +359,22 @@ export function InteractionCard(props: InteractionCardProps) {
             </>
           }
         >
-          <Button
-            type="button"
-            variant="solid"
-            size="md"
-            tone="accent"
-            data-action="always"
-            disabled={busy()}
-            title={t("interaction.always_allow_title")}
-            onClick={() => resolvePermission("always")}
-          >
-            {t("interaction.always_allow")}
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="md"
-            tone="neutral"
-            data-action="once"
-            disabled={busy()}
-            title={t("interaction.allow_once_title")}
-            onClick={() => resolvePermission("once")}
-          >
-            {t("interaction.allow_once")}
-          </Button>
+          <For each={permissionChoices()}>
+            {(decision, index) => (
+              <Button
+                type="button"
+                variant={index() === 0 ? "solid" : "ghost"}
+                size="md"
+                tone={index() === 0 ? "accent" : "neutral"}
+                data-action={decision}
+                disabled={busy()}
+                title={t(`interaction.${decision}_title`)}
+                onClick={() => resolvePermission(decision)}
+              >
+                {t(`interaction.${decision}`)}
+              </Button>
+            )}
+          </For>
           <Button
             type="button"
             variant="ghost"

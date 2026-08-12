@@ -60,10 +60,10 @@ Use persisted Task, workflow binding, and Delivery Slice evidence. Check:
 
 ### Permission ask never resolves
 
-| Check                              | Detail                                                                                                                  |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| Does config explicitly set `ask`   | Built-in agent permissions default to `allow`; only explicit `ask` rules wait for an operator reply.                    |
-| `OPENCORVUS_PERMISSION_TIMEOUT_MS` | Reject timeout for unanswered asks, default `300000` ms (`src/permission/next.ts`). Minimum honored value is `1000` ms. |
+| Check | Detail |
+| --- | --- |
+| Task mode | `ask` pauses risk-bearing invocations; `full_access` executes them without prompting. The mode is frozen when the task starts. |
+| Pending request | Permission requests do not time out. Reply with Allow once, Allow for task, Allow for project, or Deny. |
 
 See [Permissions](../permissions/).
 

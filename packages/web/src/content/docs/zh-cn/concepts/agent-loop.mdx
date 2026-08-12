@@ -16,7 +16,7 @@ Worker session 内部是一个**标准的 agentic loop**：LLM 产生 tool-call 
 LLM 返回的每个 tool-call 由 `SessionLoop.resolveTools` 路由：
 
 1. **过滤**：`resolveTools()` 按 `input.tools` 白名单过滤，避免一次向 DashScope 发送 30 多个工具。
-2. **权限检查**：走 `PermissionNext.ask()`（见 [Permissions](../../permissions/)）。
+2. **权限检查**：中央调用授权器应用会话冻结的 `Full access` 或 `Ask me` 策略（见 [Permissions](../../permissions/)）。
 3. **执行**：调对应 tool handler。
 4. **结果回填**：以 `tool-result` part 写回 session messages。
 

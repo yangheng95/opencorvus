@@ -78,6 +78,6 @@ At-mention the bot's first message in any channel to create a task; later messag
 
 1. **Stuck in spec phase** — LLM provider is unreachable. Run `opencorvus doctor`.
 2. **Integrity review keeps failing** — repo has no executable build/test commands. Build / integrity walks up from `owned_paths` to find the nearest `package.json`.
-3. **Permission request never resolves** — built-in permissions default to `allow`; check whether project config explicitly sets `ask`, then either reply in the UI or change that rule to `allow`.
+3. **Permission request never resolves** — `Full access` is the default. If the project explicitly selects `Ask me`, reply in an operator UI or switch the project to `Full access`.
 
 Next: [Architecture](../concepts/architecture.md).

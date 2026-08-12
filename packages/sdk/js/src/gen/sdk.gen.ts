@@ -106,6 +106,10 @@ import type {
   ExperimentalEventscheduleListResponses,
   ExperimentalMemoryGetErrors,
   ExperimentalMemoryGetResponses,
+  ExperimentalProjectMemoryAcknowledgeNoticeResponses,
+  ExperimentalProjectMemoryEventsResponses,
+  ExperimentalProjectMemoryGetResponses,
+  ExperimentalProjectMemoryOrganizeResponses,
   ExperimentalResourceListErrors,
   ExperimentalResourceListResponses,
   ExperimentalTaskplanListErrors,
@@ -361,11 +365,14 @@ import type {
   PartUpdateErrors,
   PartUpdateResponses,
   PathGetResponses,
-  PermissionAction,
+  PermissionDecision,
+  PermissionGrantsResponses,
+  PermissionHistoryResponses,
   PermissionListResponses,
   PermissionReplyErrors,
   PermissionReplyResponses,
-  PermissionRuleset,
+  PermissionRevokeErrors,
+  PermissionRevokeResponses,
   ProjectCurrentCleanupCandidatesErrors,
   ProjectCurrentCleanupCandidatesResponses,
   ProjectCurrentDeleteErrors,
@@ -2394,6 +2401,96 @@ export class Memory extends HeyApiClient {
   }
 }
 
+export class ProjectMemory extends HeyApiClient {
+  /**
+   * Get the organized Project MEMORY.MD context
+   */
+  public get<ThrowOnError extends boolean = false>(
+    parameters?: {
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
+    return (options?.client ?? this.client).get<ExperimentalProjectMemoryGetResponses, unknown, ThrowOnError>({
+      url: "/experimental/project-memory",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Subscribe to Project MEMORY.MD notice changes
+   */
+  public events<ThrowOnError extends boolean = false>(
+    parameters?: {
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError, unknown>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
+    return (options?.client ?? this.client).sse.get<ExperimentalProjectMemoryEventsResponses, unknown, ThrowOnError>({
+      url: "/experimental/project-memory/events",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Acknowledge a Project MEMORY.MD notice
+   */
+  public acknowledgeNotice<ThrowOnError extends boolean = false>(
+    parameters: {
+      directory?: string
+      generation: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "body", key: "generation" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<
+      ExperimentalProjectMemoryAcknowledgeNoticeResponses,
+      unknown,
+      ThrowOnError
+    >({
+      url: "/experimental/project-memory/notice/acknowledge",
+      ...options,
+      ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
+    })
+  }
+
+  /**
+   * Request Project MEMORY.MD organization
+   */
+  public organize<ThrowOnError extends boolean = false>(
+    parameters?: {
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
+    return (options?.client ?? this.client).post<ExperimentalProjectMemoryOrganizeResponses, unknown, ThrowOnError>({
+      url: "/experimental/project-memory/organize",
+      ...options,
+      ...params,
+    })
+  }
+}
+
 export class Resource extends HeyApiClient {
   /**
    * Get MCP resources
@@ -2560,6 +2657,11 @@ export class Experimental extends HeyApiClient {
   private _memory?: Memory
   get memory(): Memory {
     return (this._memory ??= new Memory({ client: this.client }))
+  }
+
+  private _projectMemory?: ProjectMemory
+  get projectMemory(): ProjectMemory {
+    return (this._projectMemory ??= new ProjectMemory({ client: this.client }))
   }
 
   private _resource?: Resource
@@ -6285,7 +6387,7 @@ export class Skill extends HeyApiClient {
   public install<ThrowOnError extends boolean = false>(
     parameters: {
       kind: "url" | "git"
-      policy?: PermissionAction
+      policy?: "allow" | "deny"
       value: string
     },
     options?: Options<never, ThrowOnError>,
@@ -7350,6 +7452,7 @@ export class Task extends HeyApiClient {
   public delete<ThrowOnError extends boolean = false>(
     parameters: {
       taskID: string
+      directory?: string
       reason: string
       surface:
         | "api"
@@ -7368,6 +7471,7 @@ export class Task extends HeyApiClient {
         {
           args: [
             { in: "path", key: "taskID" },
+            { in: "query", key: "directory" },
             { in: "body", key: "reason" },
             { in: "body", key: "surface" },
           ],
@@ -8355,7 +8459,6 @@ export class Interaction extends HeyApiClient {
     parameters: {
       interactionID: string
       directory?: string
-      autoReply: boolean
       message?: string
     },
     options?: Options<never, ThrowOnError>,
@@ -8367,7 +8470,6 @@ export class Interaction extends HeyApiClient {
           args: [
             { in: "path", key: "interactionID" },
             { in: "query", key: "directory" },
-            { in: "body", key: "autoReply" },
             { in: "body", key: "message" },
           ],
         },
@@ -8393,9 +8495,8 @@ export class Interaction extends HeyApiClient {
       interactionID: string
       directory?: string
       answers?: Array<QuestionAnswer>
-      autoReply: boolean
+      decision?: PermissionDecision
       message?: string
-      reply?: "once" | "always" | "reject"
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -8407,9 +8508,8 @@ export class Interaction extends HeyApiClient {
             { in: "path", key: "interactionID" },
             { in: "query", key: "directory" },
             { in: "body", key: "answers" },
-            { in: "body", key: "autoReply" },
+            { in: "body", key: "decision" },
             { in: "body", key: "message" },
-            { in: "body", key: "reply" },
           ],
         },
       ],
@@ -9938,9 +10038,7 @@ export class Path extends HeyApiClient {
 
 export class Permission extends HeyApiClient {
   /**
-   * List pending permissions
-   *
-   * Get all pending permission requests across all sessions.
+   * List durable pending permission requests
    */
   public list<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -9957,17 +10055,77 @@ export class Permission extends HeyApiClient {
   }
 
   /**
-   * Respond to permission request
-   *
-   * Approve or deny a permission request from the AI assistant.
+   * List active permission grants
+   */
+  public grants<ThrowOnError extends boolean = false>(
+    parameters?: {
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
+    return (options?.client ?? this.client).get<PermissionGrantsResponses, unknown, ThrowOnError>({
+      url: "/permission/grants",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Revoke an active permission grant
+   */
+  public revoke<ThrowOnError extends boolean = false>(
+    parameters: {
+      grantID: string
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "grantID" },
+            { in: "query", key: "directory" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).post<PermissionRevokeResponses, PermissionRevokeErrors, ThrowOnError>({
+      url: "/permission/grants/{grantID}/revoke",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * List permission ledger history
+   */
+  public history<ThrowOnError extends boolean = false>(
+    parameters?: {
+      directory?: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
+    return (options?.client ?? this.client).get<PermissionHistoryResponses, unknown, ThrowOnError>({
+      url: "/permission/history",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Decide a pending permission request
    */
   public reply<ThrowOnError extends boolean = false>(
     parameters: {
       requestID: string
       directory?: string
-      autoReply: boolean
+      actorID?: string
+      decision: PermissionDecision
       message?: string
-      reply: "once" | "always" | "reject"
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -9978,9 +10136,9 @@ export class Permission extends HeyApiClient {
           args: [
             { in: "path", key: "requestID" },
             { in: "query", key: "directory" },
-            { in: "body", key: "autoReply" },
+            { in: "body", key: "actorID" },
+            { in: "body", key: "decision" },
             { in: "body", key: "message" },
-            { in: "body", key: "reply" },
           ],
         },
       ],
@@ -11368,7 +11526,11 @@ export class Session4 extends HeyApiClient {
         [key: string]: unknown
       }
       parentID?: string
-      permission?: PermissionRuleset
+      permission?: Array<{
+        action: "allow" | "deny"
+        pattern: string
+        permission: string
+      }>
       title?: string
     },
     options?: Options<never, ThrowOnError>,
@@ -12495,7 +12657,7 @@ export class Skill2 extends HeyApiClient {
         contentBase64?: string
         path: string
       }>
-      policy?: PermissionAction
+      policy?: "allow" | "deny"
       sourceName?: string
     },
     options?: Options<never, ThrowOnError>,
@@ -12537,7 +12699,7 @@ export class Skill2 extends HeyApiClient {
     parameters: {
       directory?: string
       kind: "path" | "url" | "git"
-      policy?: PermissionAction
+      policy?: "allow" | "deny"
       value: string
     },
     options?: Options<never, ThrowOnError>,
@@ -12711,12 +12873,12 @@ export class Skill2 extends HeyApiClient {
   /**
    * Set skill permission policy
    *
-   * Set the global allow, ask, or deny policy for a named skill.
+   * Set the global allow or deny capability policy for a named skill.
    */
   public policy<ThrowOnError extends boolean = false>(
     parameters: {
       directory?: string
-      action: PermissionAction
+      action: "allow" | "deny"
       name: string
     },
     options?: Options<never, ThrowOnError>,

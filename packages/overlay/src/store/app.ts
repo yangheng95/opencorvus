@@ -124,6 +124,12 @@ export interface AppState {
   memoryFiles: any[]
   /** Whether the memory panel is in search mode */
   memorySearchMode: boolean
+  projectMemory: {
+    status: string
+    pendingCount: number
+    tokenCount: number
+    notice?: { status: string; message: string; generation: string; acknowledged: boolean }
+  } | null
   // ── Criteria ──
   criteriaSpecs: any[]
 }
@@ -163,6 +169,7 @@ const DEFAULT_APP_STATE: AppState = {
   ndjsonStartMs: 0,
   memoryFiles: [],
   memorySearchMode: false,
+  projectMemory: null,
   criteriaSpecs: [],
 }
 

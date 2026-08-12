@@ -1,5 +1,5 @@
 import { appStore, setAppStore, type ConfigLoadIssue, type ProviderLoadIssue } from "../store/app"
-import { DEFAULT_SETTINGS, settingsStore, setSettingsStore, type ToolPermissions } from "../store/settings"
+import { settingsStore } from "../store/settings"
 import { ApiError, apiJsonWithTimeout } from "./api"
 
 export const CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS = 20_000
@@ -154,18 +154,6 @@ export async function loadConfigInfo(
     configLoadIssues: issues,
   })
 
-  const remoteToolPermissions = (config as any)?.tool_permissions
-  if (remoteToolPermissions && typeof remoteToolPermissions === "object") {
-    const defaults = DEFAULT_SETTINGS.toolPermissions
-    const merged: ToolPermissions = {
-      websearch: remoteToolPermissions.websearch ?? defaults.websearch,
-      webfetch: remoteToolPermissions.webfetch ?? defaults.webfetch,
-      skill: remoteToolPermissions.skill ?? defaults.skill,
-      external_directory: remoteToolPermissions.external_directory ?? defaults.external_directory,
-      schedule: remoteToolPermissions.schedule ?? defaults.schedule,
-    }
-    setSettingsStore("toolPermissions", merged)
-  }
   return issues
 }
 

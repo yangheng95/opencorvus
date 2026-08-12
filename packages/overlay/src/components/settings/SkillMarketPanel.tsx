@@ -248,7 +248,6 @@ function SharedResourceManagementPanel(props: {
     { value: "git", label: t("skill.source.git") },
   ]
   const skillPolicyOptions = (): FormSelectOption[] => [
-    { value: "ask", label: t("skill.policy.ask") },
     { value: "allow", label: t("skill.policy.allow") },
     { value: "deny", label: t("skill.policy.deny") },
   ]
@@ -416,7 +415,7 @@ function SharedResourceManagementPanel(props: {
   const [skillForm, setSkillForm] = createStore({
     type: "path" as "path" | "url" | "git",
     value: "",
-    policy: "ask" as "ask" | "allow" | "deny",
+    policy: "allow" as "allow" | "deny",
   })
 
   async function handleAddSkill() {
@@ -433,7 +432,7 @@ function SharedResourceManagementPanel(props: {
         isCurrentDirectory: sourceMatchesDirectory,
       })
       if (!sourceMatchesDirectory(directory)) return
-      setSkillForm({ type: "path", value: "", policy: "ask" })
+      setSkillForm({ type: "path", value: "", policy: "allow" })
       setShowAddSkill(false)
       await reloadCurrentPanel({ directory })
       notifyResourceChange()

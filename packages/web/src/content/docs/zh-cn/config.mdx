@@ -94,7 +94,7 @@ HTTP(S) 代理设置。`llmProvider: true` 会让模型 provider 流量走代理
 
 ### `experimental.auto_question`
 
-悬置澄清提问的细粒度开关。开启时，过期 question interaction 会在 question timeout 后被拒绝。权限提示由 permission 规则和 `OPENCORVUS_PERMISSION_TIMEOUT_MS` 控制。
+悬置澄清提问的细粒度开关。开启时，过期 question interaction 会在 question timeout 后被拒绝。权限请求使用任务启动时冻结的 `permission_mode`；未回复的请求会保持待处理，直到操作员作出决定。
 
 ### `assistant`
 

@@ -13,16 +13,6 @@ import { runtimeLocale, sanitizeLocale } from "../utils/i18n"
 
 // ── Types ──
 
-export type ToolPermAction = "allow" | "ask" | "deny"
-
-export interface ToolPermissions {
-  websearch: ToolPermAction
-  webfetch: ToolPermAction
-  skill: ToolPermAction
-  external_directory: ToolPermAction
-  schedule: ToolPermAction
-}
-
 export interface OverlaySettings {
   serverUrl: string
   autoServer: boolean
@@ -52,8 +42,6 @@ export interface OverlaySettings {
   workspaceEpoch: number
   /** Incremented each time the working directory changes */
   directoryEpoch: number
-  /** Default tool permission actions; synced from server config */
-  toolPermissions: ToolPermissions
   /** Whether task lifecycle events may be delivered through the host OS notification surface. */
   desktopNotifications: boolean
 }
@@ -139,13 +127,6 @@ export const DEFAULT_SETTINGS: OverlaySettings = {
   preferredProjectEditor: "vscode",
   workspaceEpoch: 0,
   directoryEpoch: 0,
-  toolPermissions: {
-    websearch: "allow",
-    webfetch: "allow",
-    skill: "allow",
-    external_directory: "allow",
-    schedule: "allow",
-  },
   desktopNotifications: true,
 }
 

@@ -26,6 +26,7 @@ import { nativeOpen } from "../utils/native"
 import { checkConnection } from "./connection"
 import { reloadProjectScope } from "./config"
 import { startTaskListSSE, stopSSE, stopTaskListSSE } from "./sse"
+import { startProjectMemoryEvents, stopProjectMemoryEvents } from "./project-memory"
 import { activeProjectDirectory, restoreWorkspaceDirectory, setProjectDirectoryContext } from "./project-directory"
 import { directoryScopedPath } from "./task-path"
 import { cancelConversationReplay, resetConversationProjection } from "./conversation"
@@ -236,6 +237,7 @@ export function clearProjectScopeData(): void {
     mcp: {},
     memoryFiles: [],
     memorySearchMode: false,
+    projectMemory: null,
     criteriaSpecs: [],
   })
 }
@@ -247,6 +249,7 @@ function enterDirectoryFreeWorkspace(savedDirectory: string): number {
   clearComposerModelProjection()
   stopSSE()
   stopTaskListSSE()
+  stopProjectMemoryEvents()
   setSettingsStore("directoryEpoch", (n: number) => n + 1)
   setSettingsStore({
     directory: "",
@@ -342,9 +345,11 @@ export async function resolveGlobalComposerSubmissionContext(): Promise<GlobalCo
 
 export interface ProjectDeleteResult {
   ok: true
+  status: "committed" | "committed_with_residue"
   projectID: string
   directory: string
   deletedTaskCount: number
+  residue: Array<{ path: string; message: string }>
 }
 
 export type ProjectDeleteOutcome =
@@ -452,6 +457,20 @@ export async function deleteProjectState(
     (result as Record<string, unknown>).ok !== true ||
     typeof (result as Record<string, unknown>).projectID !== "string" ||
     typeof (result as Record<string, unknown>).directory !== "string" ||
+    !["committed", "committed_with_residue"].includes(String((result as Record<string, unknown>).status)) ||
+    (() => {
+      const residue = (result as Record<string, unknown>).residue
+      return (
+        !Array.isArray(residue) ||
+        residue.some(
+          (item) =>
+            !item ||
+            typeof item !== "object" ||
+            typeof (item as Record<string, unknown>).path !== "string" ||
+            typeof (item as Record<string, unknown>).message !== "string",
+        )
+      )
+    })() ||
     !Number.isInteger((result as Record<string, unknown>).deletedTaskCount) ||
     Number((result as Record<string, unknown>).deletedTaskCount) < 0
   ) {
@@ -717,6 +736,7 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
 
   stopSSE()
   stopTaskListSSE()
+  stopProjectMemoryEvents()
   if (options.preserveSelection !== true) {
     clearSelectedWorkItem()
   }
@@ -780,6 +800,7 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
     return false
   }
   startTaskListSSE()
+  startProjectMemoryEvents()
   console.log("[applyDir] done, tasks=", boardStore.tasks.length)
   return true
 }

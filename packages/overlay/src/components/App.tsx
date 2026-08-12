@@ -4,6 +4,7 @@ import { CommandPalette } from "./CommandPalette"
 import { ConnectionBadge } from "./ConnectionBadge"
 import { ConfigDialogHost } from "./ConfigDialogHost"
 import { ConnectionBanner } from "./ConnectionBanner"
+import { ProjectMemoryBanner } from "./ProjectMemoryBanner"
 import { ChatHeaderRightDockToggle } from "./ChatHeaderRightDockToggle"
 import { ConversationAgentRail } from "./ConversationAgentRail"
 import { GoalDialogHost } from "./GoalDialogHost"
@@ -588,6 +589,7 @@ export function App(props: AppProps) {
       <div id="connectionBannerHost">
         <ConnectionBanner />
       </div>
+      <ProjectMemoryBanner />
       <div id="commandPaletteHost">
         <CommandPalette onSelectTask={props.onSelectTask} onSelectChat={props.onSelectChat} />
       </div>

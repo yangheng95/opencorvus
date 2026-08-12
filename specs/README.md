@@ -2,6 +2,8 @@
 
 Latest promotion case engine strategy: [`2026-08-12-promotion-case-engine-strategy.md`](records/2026-08/2026-08-12-promotion-case-engine-strategy.md).
 
+Latest Project `MEMORY.MD` autonomous context-memory plan: [`2026-08-12-project-memory-user-message-ledger.md`](records/2026-08/2026-08-12-project-memory-user-message-ledger.md).
+
 Latest Advanced Requirements `grill-me` projection and end-to-end trial: [`2026-08-12-advanced-requirements-grill-me-trial.md`](records/2026-08/2026-08-12-advanced-requirements-grill-me-trial.md).
 
 Latest public navigation hierarchy and privacy-preserving visitor count: [`2026-08-12-public-navigation-and-visitor-count.md`](records/2026-08/2026-08-12-public-navigation-and-visitor-count.md).
@@ -16,11 +18,15 @@ Latest Scheduled random-isolation end-to-end convergence: [`2026-08-12-scheduled
 
 Latest Orchestrator wake Turn serialization repair: [`2026-08-12-orchestrator-wake-turn-serialization-repair.md`](records/2026-08/2026-08-12-orchestrator-wake-turn-serialization-repair.md).
 
+Latest missing-Project deletion and test-isolation repair: [`2026-08-12-missing-project-deletion-and-test-isolation-repair.md`](records/2026-08/2026-08-12-missing-project-deletion-and-test-isolation-repair.md).
+
 Latest public website database backend and Expert Squad Registry convergence plan: [`2026-08-12-public-website-database-backend.md`](records/2026-08/2026-08-12-public-website-database-backend.md).
 
 Latest local database rebuild and startup recovery: [`2026-08-12-local-database-rebuild-and-startup-recovery.md`](records/2026-08/2026-08-12-local-database-rebuild-and-startup-recovery.md).
 
 Latest permission-system two-mode calibration plan: [`2026-08-12-permission-two-mode-calibration-plan.md`](records/2026-08/2026-08-12-permission-two-mode-calibration-plan.md).
+
+Permission-system two-mode visual evidence: [`permission-two-mode/README.md`](artifacts/permission-two-mode/README.md).
 
 Latest Windows worker and scheduler liveness convergence: [`2026-08-11-windows-worker-scheduler-liveness-convergence.md`](records/2026-08/2026-08-11-windows-worker-scheduler-liveness-convergence.md).
 

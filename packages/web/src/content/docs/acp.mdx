@@ -93,7 +93,7 @@ Via `connection.sessionUpdate()`:
 
 ## Permission handling
 
-ACP forwards internal `permission.asked` events to the client via `connection.requestPermission()`: `once` / `always` / `reject`.
+ACP forwards durable `permission.asked` events through `connection.requestPermission()`. Eligible choices map to `allow_once`, `allow_task`, `allow_project`, or `deny` on the canonical permission request.
 
 For `edit` permissions, after client approval, ACP calls `connection.writeTextFile()` to push the patched content to the editor (`src/acp/agent.ts`).
 

@@ -2,7 +2,47 @@
 
 ## Status
 
-This is the implementation-ready calibration proposal requested on 2026-08-12. It does not change the current runtime contract by itself. The current authority remains `specs/current/architecture/security-permission.md` until the cutover is implemented, verified, independently reviewed, and reflected there.
+Implementation and acceptance are complete. The first implementation gate failed with eight findings and the second gate failed with nine findings; both sets were retained as evidence and remediated rather than relabeled as passing. The final independent read-only gate reviewed the current diff, real checker, focused tests, and visual evidence and reported zero unresolved permission findings.
+
+Verified evidence so far:
+
+- 27 focused authority, recovery, SessionLoop continuation, stage-materializer, and transport-hydration contracts pass with 93 assertions, including a fresh operating-system-process recovery of one effectful private stage Tool;
+- the real temporary-project checker exits successfully after driving default `Full access`, `Ask me`, built-in write, batch child, plugin hooks, controlled stdio MCP, MCP App, Browser, Computer, schedule create/run/delete, protocol-task restart, real Session Server-Sent Events (SSE), a real CLI subprocess, and the official ACP client;
+- OpenCorvus typecheck and `git diff --check` pass in the current shared worktree;
+- the isolated real Overlay page was manually inspected in English and Simplified Chinese: `Full access` is selected by default, `Ask me` is the only alternate mode, the broad-authority warning is visible, the old five-row matrix is absent, and the layout remains legible without UI automation;
+- real Task-owned Ask prompts were captured in English and Simplified Chinese with typed provider/Tool/effect/endpoint scope, redacted query digest, all four decisions, long-value wrapping, and visible keyboard focus; a real Chinese `Allow once` reply succeeded and the resolved conversation state was captured;
+- the broader schema-migration test file is currently blocked by a concurrent Project-generation authority change whose predecessor fixtures omit its new required `generation`; the permission-focused suite is separated and passing rather than treating those unrelated failures as permission evidence.
+
+Independent implementation gate findings:
+
+1. restart recovery retains the request but does not reconstruct and execute the original Tool continuation;
+2. the checker invokes the authority directly rather than the actual SessionLoop/MCP/transport families required by the acceptance matrix;
+3. typed filesystem, shell, network, and schedule canonical scopes remain incomplete;
+4. expiry, stale-input, execution reconciliation, and MCP task recovery lifecycles remain incomplete;
+5. legacy operator configuration migration and its visible migration record remain incomplete;
+6. ACP, CLI, and protocol mirror do not hydrate durable pending requests after restart;
+7. MCP binding loss must fail closed everywhere and revision-change tests are still required;
+8. a public direct MCP execution helper bypassed the central authority.
+
+Remediation completed after the failed gate:
+
+- fixed the reply-during-publication lost-wake race and added a positive synchronous-reply contract;
+- aligned config, authority, Overlay, tests, and current docs on the operator-selected `Full access` default;
+- bound normal and scoped MCP Tools to canonical config/Tool digests, passed those digests through default/projected/MCP App wrappers, and made missing external/projected bindings fail closed;
+- removed the unused public `MCP.callTool` and `MCP.serverTools` execution bypasses;
+- expanded URL and composite secret-field redaction, recorded the working directory for local/process scopes, and disallowed project grants for write/process/external/destructive effects;
+- separated successful effect execution from success-ledger persistence so a ledger write failure becomes recoverable `outcome_unknown`, not a false `execution_failed` fact;
+- retained permission ledger rows after Session deletion and added a typed cancelled settlement for pending Session-owned requests.
+- reconstructed approved Ask-me invocations through the ordinary persisted SessionLoop Tool surface after process restart; the recovery binds the original Session, assistant message, Tool call ID, ToolPart input, provider digest, and permission request ID, marks changed bindings stale, and uses the existing unique execution attempt as the at-most-once authority;
+- persisted successful Tool return values in the execution outcome so a crash after the effect but before ToolPart completion can finish the original ToolPart from durable evidence without executing the effect again; project bootstrap scans approved, unstarted continuations;
+- added a focused real SessionLoop file-write test that releases the first instance with a pending request, commits approval in a second instance whose recovery fails before execution, then recovers in a third instance and proves one execution start, one success, one file effect, and one completed original ToolPart.
+- rebuilt an approved post-restart invocation from its persisted Session, assistant message, ToolPart, user message, model, agent, configuration, and ordinary resolved Tool surface; changed identities settle stale, durable completed results replay without repeating effects, and the real cross-Instance test records one start and one success despite a repeated reply;
+- added typed filesystem, shell, normalized network-endpoint, and schedule resource scopes; fail-closed external provider binding; narrow reusable-grant eligibility; expiry, stale, and explicit unknown-outcome reconciliation lifecycles;
+- added one-time legacy config migration: all-allow becomes `full_access`, restricted or mixed rules become `ask`, old fields are deleted, and the canonical choice is persisted with a structured migration record;
+- replaced the direct-authority checker with a repository-owned `check:permission-modes` path that boots a real temporary project, resolves the real SessionLoop Tool adapters, executes real built-in file writes in both modes, and executes a harmless Tool through a controlled local stdio MCP server;
+- hydrated the canonical durable pending-request snapshot into ACP load/fork/resume, CLI reconnect, and the Session protocol stream, with request-ID de-duplication and a positive process-release/reopen transport contract.
+
+The second gate additionally found incomplete private-stage cold recovery, missing MCP protocol-task recovery, Tool-result leakage into the ledger, incomplete symlink/shell scope binding, cancellation races, incomplete provider/transport checker coverage, and migration/documentation drift. The implementation now uses revisioned private-stage materializers, a Session-owned result table, canonical real-path and parsed-command scopes, single-winner decision/outcome slots, task-ID polling through `tasks/get`/`tasks/result`, and real transport/provider checker paths. The fresh final gate judged the complete current diff and validation evidence and closed with zero unresolved permission findings; no earlier failed gate is being presented as zero findings.
 
 ## Decision summary
 
@@ -13,13 +53,15 @@ OpenCorvus should expose exactly two operator permission modes:
 | `Full access` | Every legitimately projected built-in Tool, plugin Tool, Skill-owned Tool, Model Context Protocol (MCP) Tool, MCP App Tool, Browser/Computer Tool, shell operation, filesystem operation, network operation, schedule operation, and external-system operation is authorized without an OpenCorvus permission prompt. The action and the fact that it was authorized by `Full access` remain visible in durable evidence. |
 | `Ask me` | Every invocation that crosses an operator-controlled trust boundary must pass through one central authorization decision. A matching, active, narrowly scoped grant may authorize it; otherwise OpenCorvus durably asks the operator before execution. The request, decision, grant scope, subsequent grant use, and revocation are durable records. |
 
-`Ask me` is the recommended default. `Full access` is an intentional trust choice and must be labeled as giving the agent the same effective local and connected-service authority as the running OpenCorvus process.
+`Full access` is the product default. `Ask me` remains an explicit operator choice for pausing permission-bearing invocations. `Full access` must be labeled as giving the agent the same effective local and connected-service authority as the running OpenCorvus process.
 
 The two modes govern authorization, not capability discovery. A Tool that is not installed, assigned, projected, authenticated, or supported does not become available in `Full access`. Operating-system consent, service authentication, OAuth, credentials, CAPTCHA, organization policy, and protocol-mandated user interaction are external prerequisites rather than a third OpenCorvus permission mode.
 
 ## Recall
 
 - User request: re-audit the permission system; replace it with two modes named `Full access` and `Ask me`; make `Full access` allow all Tools, MCP Tools, and equivalent execution surfaces; make every permission issue in `Ask me` ask the user and save approval records; research current industry practice and provide a calibrated plan.
+- Implementation continuation: the operator subsequently requested that the plan be implemented and that an independent agent perform the delivery gate review.
+- Default-mode correction: the operator explicitly selected `Full access` as the default; omitted configuration, runtime fallback, settings projection, generated API schema, and documentation must all resolve to that single value.
 - Acceptance indicators for this planning round:
   - the existing implementation, configuration, data flow, UI, persistence, tests, and architecture records are inspected;
   - observable behavior, direct triggers, root causes, reasons the old path was not corrected, and affected surfaces are recorded;
@@ -51,7 +93,17 @@ The two modes govern authorization, not capability discovery. A Tool that is not
   - pending permission waiters are process-local, time out to rejection, and are abandoned after runtime recovery even when an Engine interaction row exists;
   - Agent Client Protocol (ACP) sessions create ordinary assistant Sessions, translate `permission.asked` into their own once/always/reject request, and keep their permission queue in process memory; the command-line interface (CLI) only reports that a reply is required, while the protocol mirror republishes request/reply/abandon events;
   - the current UI edits five Tool keys only: `websearch`, `webfetch`, `skill`, `external_directory`, and `schedule`, while the runtime exposes many more built-in, plugin, Browser/Computer, MCP, MCP App, and projected Tool identities.
-- Independent agent feedback: the first read-only review found four issues in the draft: the ignored plan file needed explicit staging; ledger lifecycle and crash semantics were incomplete; standalone Session, ACP, CLI, and protocol-mirror paths were missing from the inventory/checker; and the cited MCP specification was obsolete. This revision incorporates those findings. The second read-only review checked the complete revised delivery and reported zero unresolved findings.
+- Independent agent feedback: the planning review found four draft issues; the first implementation gate then failed with eight findings and the second implementation gate failed with nine findings. Their valid findings drove the recovery, immutable binding, typed scope, lifecycle, transport hydration, MCP protocol-task, stage-materializer, checker, and documentation work summarized above. The final independent gate is intentionally still pending at this point.
+
+## Implementation benchmark
+
+- Task: replace the current mixed permission authority with the exact two-mode contract in this record, delete the old operator ruleset authority, and prove the real execution and recovery paths.
+- Input: a temporary real Git project, actual OpenCorvus configuration with `permission_mode` set to each supported value, representative built-in/projected/MCP invocations, and typed operator decisions.
+- Required output: `Full access` executes every representative invocation without an OpenCorvus prompt and records its authority; `Ask me` durably pauses each permission-bearing invocation, accepts one typed decision, records exact-scope grant use/revocation and execution outcome, and never duplicates an uncertain external effect.
+- Environment: the repository's pinned Bun/Node runtimes and SQLite database under a temporary `OPENCORVUS_HOME`; a controlled local MCP server supplies harmless protocol effects. No production credential or external write is part of the checker.
+- Timeout: repository test/checker processes use the existing activity-aware runner and fail after 120 seconds without output or state progress; pending operator decisions are a successful durable state and have no wall-clock auto-rejection timeout.
+- Passing threshold: every focused positive contract and the real checker passes; typecheck, build, route/schema/docs checks pass; real-page desktop screenshots confirm both modes and the pending/history/grant states; whole-repository searches find no old operator `tool_permissions`, old reply enum, mutable permission authority, independent Tool-local authorization decision, or unclassified executable provider; the independent gate reviewer reports zero unresolved findings.
+- Current baseline failure: operator authority is distributed between `PermissionNext`, five `tool_permissions`, Tool-local `ctx.ask`, MCP-specific wrappers, a mutable project row, and process-local waiters. Default MCP and projected execution do not share one durable invocation ledger, and recovered permissions are abandoned rather than retained.
 
 ## Existing-system diagnosis
 
@@ -117,11 +169,11 @@ Add one canonical config field:
 
 ```json
 {
-  "permission_mode": "ask"
+  "permission_mode": "full_access"
 }
 ```
 
-Allowed values are exactly `full_access` and `ask`. New installations and configurations with no explicit choice use `ask`. The settings UI labels are exactly `Full access` and `Ask me`.
+Allowed values are exactly `full_access` and `ask`. New installations and configurations with no explicit choice use `full_access`, per the operator's explicit product decision. The settings UI labels are exactly `Full access` and `Ask me`.
 
 The effective mode is frozen into a Task or standalone Session policy revision before execution. Changing the setting affects new work. Applying another mode to active work is an explicit operator action that creates a new policy revision and a visible audit record; a background config reload must not silently change authority mid-invocation.
 
@@ -281,7 +333,7 @@ Headless or scheduled work in `Ask me` pauses visibly until an authorized operat
 
 ### Phase 4 — one-time migration, then deletion
 
-1. Explicit `allow` for every current operator Tool setting maps to `full_access`; any `ask`, `deny`, mixed, absent, or unverifiable state maps to the safer `ask` default. The migration emits one visible policy-migration record.
+1. Explicit `ask`, `deny`, or mixed legacy operator settings map to `ask`; explicit all-`allow` and absent legacy configuration map to the `full_access` product default. Unverifiable malformed state fails typed configuration validation instead of silently choosing a mode. The migration emits one visible policy-migration record.
 2. Existing mutable persistent grants are not silently trusted because they lack per-decision actor, scope version, Tool/provider digest, and exact request provenance. Start `Ask me` with no active legacy grant and retain only a non-authoritative migration summary if audit retention is required.
 3. In-flight Tasks/Sessions receive one deterministic policy revision before resumption. Old session rules are classified into capability projection or discarded as obsolete operator authorization.
 4. Delete `tool_permissions`, operator uses of top-level `permission`, `PermissionTable`, `PermissionNext` authorization evaluation, the old reply enum/routes, Browser/Computer allow baselines, MCP App special destructive-rule merge, and all compatibility readers/writers in the same cutover.
