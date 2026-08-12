@@ -44,7 +44,7 @@
                            ↓
 ┌─ Layer 2 · SDK Router ─────────────────────────────────────┐
 │  BUNDLED_PROVIDERS (24 package) + 动态 npm install         │
-│  + xxHash 实例缓存                                          │
+│  + canonical SHA-256 索引与 exact-source equality 缓存      │
 └─────────────────────────────────────────────────────────────┘
                            ↓
 ┌─ Layer 3 · Auth ───────────────────────────────────────────┐
