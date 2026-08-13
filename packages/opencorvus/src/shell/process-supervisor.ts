@@ -1290,6 +1290,21 @@ export namespace ProcessSupervisor {
       })
       return ready.target_pid
     }
+    const waitForDurablePhysicalSettlement = async (): Promise<number | undefined> => {
+      const deadline = Date.now() + TERMINATION_CLEANUP_TIMEOUT_MS
+      for (;;) {
+        try {
+          return await validateDurablePhysicalSettlement()
+        } catch (error) {
+          // A Windows child exit notification can become observable before
+          // the helper's atomically renamed settlement marker is visible to
+          // this process under filesystem pressure. Only absence is
+          // retryable: malformed or conflicting proof still fails at once.
+          if (errorCode(error) !== "ENOENT" || Date.now() >= deadline) throw error
+          await Bun.sleep(20)
+        }
+      }
+    }
     let cancellationRequest: Promise<void> | undefined
     const requestCancellation = () => {
       if (cancellationRequest) return cancellationRequest
@@ -1413,7 +1428,7 @@ export namespace ProcessSupervisor {
     const exited = helperExitOutcome.then(async (outcome) => {
       if ("error" in outcome) throw outcome.error
       try {
-        await validateDurablePhysicalSettlement()
+        await waitForDurablePhysicalSettlement()
       } catch (error) {
         throw new Error(
           `Windows process supervisor exited without a physical settlement marker for request ${requestID}: ${errorMessage(error)}`,

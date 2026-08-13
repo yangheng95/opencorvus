@@ -1819,22 +1819,40 @@ function attachLoopCompletion(taskID: string, wakeID: string, cwd: string, launc
   let completionHook: Promise<void>
   try {
     const loopPromise = launch()
-    completionHook = Database.runOutsideContext(() =>
+    const settlementHook = Database.runOutsideContext(() =>
       runOutsideInstanceContext(() =>
         loopPromise.then(
           async () => {
             // Yield once so same-Session FIFO re-entry does not stack
             // synchronously while the completion remains observable.
             await Promise.resolve()
-            await settleTaskLoopCompletion({ taskID, wakeID, cwd, authority })
+            return await settleTaskLoopCompletion({ taskID, wakeID, cwd, authority })
           },
           async () => {
             await Promise.resolve()
-            await settleTaskLoopCompletion({ taskID, wakeID, cwd, authority })
+            return await settleTaskLoopCompletion({ taskID, wakeID, cwd, authority })
           },
         ),
       ),
     )
+    completionHook = settlementHook.then(async (disposition) => {
+      if (disposition !== "exact_ingress_retry_attached" && disposition !== "same_task_wake_pending") return
+      // The retry is durably pending, but it could not acquire physical
+      // ownership while this exact wake's previous completion was still in
+      // taskLoopCompletionOperations. This includes a retry admitted by a
+      // concurrent publisher before completion reconciliation observes the
+      // failed row. Release that owner before draining the accepted retry so
+      // its next attempt receives a fresh completion hook.
+      if (taskLoopCompletionOperations.get(completionKey) === completionHook) {
+        taskLoopCompletionOperations.delete(completionKey)
+      }
+      await runWithInitializedIndependentProject({
+        directory: cwd,
+        fn: async () => {
+          if (hasQueuedTaskEvent(taskID)) await drainQueuedTaskEvent(taskID)
+        },
+      })
+    })
   } catch (error) {
     authority.settle()
     throw error
@@ -1924,19 +1942,18 @@ async function settleTaskLoopCompletion(input: {
   wakeID: string
   cwd: string
   authority: RuntimeExecutionReservation
-}): Promise<void> {
+}): Promise<TaskLoopCompletionDisposition> {
   let attempt = 0
   for (;;) {
     attempt += 1
     try {
-      if (settleAbortedTaskLoopCompletionHandoff({ ...input, attempt })) return
-      await runTaskLoopCompletionAttempt(input)
-      return
+      if (settleAbortedTaskLoopCompletionHandoff({ ...input, attempt })) return "runtime_handoff"
+      return await runTaskLoopCompletionAttempt(input)
     } catch (cause) {
       let error = Database.normalizeError(cause, "engine.queue.loopCompletion")
       if (input.authority.signal.aborted) {
         try {
-          if (settleAbortedTaskLoopCompletionHandoff({ ...input, attempt })) return
+          if (settleAbortedTaskLoopCompletionHandoff({ ...input, attempt })) return "runtime_handoff"
         } catch (handoffCause) {
           const handoffError = Database.normalizeError(handoffCause, "engine.queue.loopCompletionHandoff")
           error = new AggregateError(
