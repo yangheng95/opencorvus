@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-13-compact-identities-and-host-references.md](2026-08-13-compact-identities-and-host-references.md) caps newly issued OpenCorvus identities and model/UI control references at 24 characters while keeping full cryptographic digests inside the Host integrity boundary.
+
 - [2026-08-13-evolution-attribution-source-integrity.md](2026-08-13-evolution-attribution-source-integrity.md) makes a failure attribution's exact selected opportunity predecessor a typed publication invariant so Campaign provenance cannot depend on repair redispatch.
 
 - [2026-08-13-cross-task-engine-resource-catalog-visibility.md](2026-08-13-cross-task-engine-resource-catalog-visibility.md) freezes the exact-Luna cross-Task resource discovery failure and defines referenced-only `engine_resource` Catalog projection, positive cursor coverage, and fresh render-E2E acceptance.

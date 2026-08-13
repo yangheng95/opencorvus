@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest compact identity and Host-reference architecture: [`2026-08-13-compact-identities-and-host-references.md`](records/2026-08/2026-08-13-compact-identities-and-host-references.md).
+
 Latest Evolution failure-attribution source-integrity repair: [`2026-08-13-evolution-attribution-source-integrity.md`](records/2026-08/2026-08-13-evolution-attribution-source-integrity.md).
 
 Latest cross-Task Engine resource Catalog visibility repair: [`2026-08-13-cross-task-engine-resource-catalog-visibility.md`](records/2026-08/2026-08-13-cross-task-engine-resource-catalog-visibility.md).
