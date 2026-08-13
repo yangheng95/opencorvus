@@ -58,17 +58,30 @@ const metadata =
           <a class="primary-action" href={publicPath(locale, "/start/quickstart/")}>{content.hero.primary}</a>
           <a class="secondary-action" href={publicPath(locale, "/market/")}>{content.hero.secondary}</a>
         </div>
-        <aside class="harness-memory" aria-label={content.hero.harness.label}>
-          <strong>{content.hero.harness.label}</strong>
-          <p>{content.hero.harness.description}</p>
-        </aside>
-        <p class="hero-boundary">{content.hero.boundary}</p>
       </div>
 
-      <figure
-        class="harness-gallery"
-        data-harness-gallery
-      >
+      <aside class="hero-principles" aria-label={content.proof.label}>
+        <p class="eyebrow">{content.proof.eyebrow}</p>
+        <div class="hero-principle-list">
+          {content.proof.items.map(([title, description], index) => (
+            <article>
+              <span>0{index + 1}</span>
+              <div><h2>{title}</h2><p>{description}</p></div>
+            </article>
+          ))}
+        </div>
+      </aside>
+
+      <p class="hero-boundary">{content.hero.boundary}</p>
+    </section>
+
+    <section class="harness-showcase" aria-labelledby="harness-showcase-title">
+      <div class="harness-showcase-intro">
+        <p class="eyebrow">{content.hero.gallery.label}</p>
+        <h2 id="harness-showcase-title">{content.hero.harness.label}</h2>
+        <p>{content.hero.harness.description}</p>
+      </div>
+      <figure class="harness-gallery" data-harness-gallery>
         <div class="harness-gallery-heading">
           <span>{content.hero.gallery.label}</span>
           <span aria-hidden="true">UI / INTERACTION</span>
@@ -110,12 +123,6 @@ const metadata =
           </div>
         ))}
       </figure>
-    </section>
-
-    <section class="proof-strip" aria-label={locale === "zh-cn" ? "产品原则" : "Product principles"}>
-      {content.proof.map(([title, description]) => (
-        <article><strong>{title}</strong><p>{description}</p></article>
-      ))}
     </section>
 
     <section class="landing-band" aria-labelledby="workbench-title">
@@ -252,7 +259,8 @@ const metadata =
   }
 
   .landing-hero {
-    align-items: center;
+    grid-template-rows: auto auto;
+    align-items: stretch;
   }
 
   .hero-title-line {
@@ -260,30 +268,103 @@ const metadata =
     white-space: nowrap;
   }
 
-  .harness-memory {
+  .hero-copy {
+    align-self: center;
+  }
+
+  .hero-principles {
+    align-self: stretch;
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    padding: 28px 30px 30px;
+    border: 2px solid var(--ink);
+    border-top: 10px solid var(--cobalt);
+    background: var(--paper-raised);
+  }
+
+  .hero-principles > .eyebrow {
+    margin-bottom: 18px;
+  }
+
+  .hero-principle-list {
+    display: grid;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--ink);
+  }
+
+  .hero-principle-list article {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
     gap: 16px;
-    align-items: start;
-    margin-top: 28px;
-    padding: 14px 16px;
-    border-left: 4px solid var(--cobalt);
-    background: var(--cobalt-wash);
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--ink);
   }
 
-  .harness-memory strong {
-    color: var(--cobalt-deep);
-    font: 700 11px/1.4 var(--mono);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    white-space: nowrap;
+  .hero-principle-list article > span {
+    align-self: start;
+    color: var(--cobalt);
+    font: 500 10px/1.4 var(--mono);
   }
 
-  .harness-memory p {
+  .public-landing .hero-principle-list h2 {
+    margin: 0 0 5px;
+    color: var(--ink) !important;
+    font-family: var(--display);
+    font-size: 29px !important;
+    font-weight: 760 !important;
+    line-height: 1 !important;
+    letter-spacing: -0.045em;
+  }
+
+  .hero-principle-list p {
     margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .hero-boundary {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 18px 22px;
+    border: 0;
+    border-left: 8px solid var(--cobalt);
+    background: var(--cobalt-wash);
     color: #353b56;
     font-size: 13px;
-    line-height: 1.48;
+    line-height: 1.5;
+  }
+
+  .harness-showcase {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.48fr) minmax(0, 1.52fr);
+    gap: 56px;
+    align-items: start;
+    padding: 72px 0;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .harness-showcase-intro {
+    position: sticky;
+    top: 28px;
+  }
+
+  .public-landing .harness-showcase-intro h2 {
+    margin: 0;
+    color: var(--ink) !important;
+    font-family: var(--display);
+    font-size: clamp(42px, 4vw, 60px) !important;
+    font-weight: 760 !important;
+    line-height: 0.95 !important;
+    letter-spacing: -0.06em;
+  }
+
+  .harness-showcase-intro > p:last-child {
+    margin: 24px 0 0;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.65;
   }
 
   .harness-gallery {
@@ -567,6 +648,7 @@ const metadata =
     }
 
     .public-landing .landing-hero,
+    .public-landing .harness-showcase,
     .public-landing .squad-story-grid,
     .public-landing .squad-image-stack,
     .public-landing .runtime-boundary,
@@ -578,6 +660,15 @@ const metadata =
       gap: 40px;
       min-height: 0;
       padding: 48px 0 56px;
+    }
+
+    .public-landing .harness-showcase {
+      gap: 32px;
+      padding: 54px 0;
+    }
+
+    .harness-showcase-intro {
+      position: static;
     }
 
     .hero-title-line {
@@ -642,13 +733,8 @@ const metadata =
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .harness-memory,
     .harness-gallery-caption {
       grid-template-columns: minmax(0, 1fr);
-    }
-
-    .harness-memory strong {
-      white-space: normal;
     }
 
     .public-landing .hero-actions {

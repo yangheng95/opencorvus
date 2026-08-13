@@ -22,7 +22,12 @@ const ogImage = new URL(socialImage ?? `${publicBase}/og.png`, config.url).href
 ---
 
 <!doctype html>
-<html lang={locale === "zh-cn" ? "zh-CN" : "en"}>
+<html
+  lang={locale === "zh-cn" ? "zh-CN" : "en"}
+  data-public-locale={locale}
+  data-public-surface={current}
+  data-public-language-href={languageHref}
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -38,6 +43,59 @@ const ogImage = new URL(socialImage ?? `${publicBase}/og.png`, config.url).href
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={ogImage} />
     <title>{title}</title>
+    <script is:inline>
+      (() => {
+        const root = document.documentElement
+        const locale = root.dataset.publicLocale
+        const surface = root.dataset.publicSurface
+        const languageHref = root.dataset.publicLanguageHref
+        const preferenceKey = "opencorvus.public-locale"
+        const readPreference = () => {
+          try {
+            const value = localStorage.getItem(preferenceKey)
+            return value === "root" || value === "zh-cn" ? value : null
+          } catch {
+            return null
+          }
+        }
+        const writePreference = (value) => {
+          try {
+            localStorage.setItem(preferenceKey, value)
+          } catch {
+            // The URL locale remains authoritative when storage is unavailable.
+          }
+        }
+
+        document.addEventListener(
+          "click",
+          (event) => {
+            const target = event.target instanceof Element ? event.target.closest("[data-public-locale-switch]") : null
+            const targetLocale = target?.dataset.targetLocale
+            if (targetLocale === "root" || targetLocale === "zh-cn") writePreference(targetLocale)
+          },
+          { capture: true },
+        )
+
+        if (locale === "zh-cn") {
+          writePreference("zh-cn")
+          return
+        }
+        if (surface !== "home") {
+          writePreference("root")
+          return
+        }
+
+        const preference = readPreference()
+        const preferredSupportedLanguage = (
+          navigator.languages?.length ? navigator.languages : [navigator.language]
+        ).find((language) => /^(?:en|zh)(?:-|$)/i.test(language))
+        const browserPrefersChinese = /^zh(?:-|$)/i.test(preferredSupportedLanguage ?? "")
+        if ((preference === "zh-cn" || (preference === null && browserPrefersChinese)) && languageHref) {
+          const target = new URL(languageHref, window.location.href)
+          if (target.pathname !== window.location.pathname) window.location.replace(target.href)
+        }
+      })()
+    </script>
   </head>
   <body class:list={["public-site-body", current === "use-with-agents" && "public-agent-hosts-body"]}>
     <PublicSiteHeader {locale} {current} {languageHref} />

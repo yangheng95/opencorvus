@@ -62,17 +62,24 @@ export const landingContent = {
         ],
       },
     },
-    proof: [
-      ["Your Agent Workbench", "Workspace, tools, capabilities, and permission rules shaped around your work."],
-      [
-        "Configurable experts",
-        "Choose or build an inspectable Expert Squad instead of accepting an anonymous Agent pool.",
+    proof: {
+      eyebrow: "Built around your authority",
+      label: "Product priorities",
+      items: [
+        [
+          "Security",
+          "Keep trust boundaries explicit with permission rules, inspectable Squad revisions, and visible evidence.",
+        ],
+        [
+          "Control",
+          "You decide what connects, which capabilities are available, which Squad runs, and how execution is authorized.",
+        ],
+        [
+          "Customization",
+          "Shape the Workbench around your environment, then configure roles, workflows, Skills, tools, and models for the work.",
+        ],
       ],
-      [
-        "Long-horizon delivery",
-        "Keep the team, handoffs, Artifacts, and evidence connected from instruction to acceptance.",
-      ],
-    ],
+    },
     workbench: {
       eyebrow: "01 · Make it yours",
       title: "Shape an Agent Workbench around the way you work.",
@@ -222,11 +229,15 @@ export const landingContent = {
         ],
       },
     },
-    proof: [
-      ["你的 Agent 工作台", "围绕你的工作组织工作区、工具、能力与权限规则。"],
-      ["可配置专家团", "选择或构建可检查的专家团，而不是接受匿名 Agent 池。"],
-      ["长程交付", "让团队、交接、产物与证据从指令到验收始终关联。"],
-    ],
+    proof: {
+      eyebrow: "围绕你的权限制定",
+      label: "产品核心价值",
+      items: [
+        ["安全", "通过权限规则、可检查的专家团版本与可见证据，明确每一道信任边界。"],
+        ["控制", "由你决定连接什么、开放哪些能力、启用哪个专家团，以及如何授予执行权限。"],
+        ["定制", "围绕你的环境组织工作台，再按任务配置角色、工作流、Skills、工具与模型。"],
+      ],
+    },
     workbench: {
       eyebrow: "01 · 定制你的工作方式",
       title: "围绕你的工作方式，定制 Agent 工作台。",

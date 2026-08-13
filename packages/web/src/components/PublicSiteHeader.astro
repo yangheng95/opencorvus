@@ -11,6 +11,7 @@ type Props = {
 
 const { locale, current, languageHref, embedded = false } = Astro.props
 const HeaderTag = embedded ? "div" : "header"
+const targetLocale = locale === "zh-cn" ? "root" : "zh-cn"
 const copy =
   locale === "zh-cn"
     ? { mission: "Mission", agents: "Agent 接入", market: "专家团", publish: "贡献专家团", trust: "可信机制", download: "下载", docs: "文档", more: "更多", language: "English" }
@@ -41,7 +42,14 @@ const moreSelected = current === "publish" || current === "trust"
       </div>
     </details>
   </nav>
-  <a class="language-switch" href={languageHref}>{copy.language}</a>
+  <a
+    class="language-switch"
+    href={languageHref}
+    lang={targetLocale === "zh-cn" ? "zh-CN" : "en"}
+    hreflang={targetLocale === "zh-cn" ? "zh-CN" : "en"}
+    data-public-locale-switch
+    data-target-locale={targetLocale}
+  >{copy.language}</a>
 </HeaderTag>
 
 <script>
