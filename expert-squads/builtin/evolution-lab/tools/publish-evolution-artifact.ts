@@ -146,7 +146,11 @@ function exactResourceByPath(
   return matches[0]!
 }
 
-async function readEngineArtifactEnvelope(locator: EngineArtifactLocator, context: ToolContext) {
+async function readEngineArtifactEnvelope(
+  locator: EngineArtifactLocator,
+  context: ToolContext,
+  purpose = "Exact Evolution Artifact predecessor",
+) {
   let offset = 0
   let text = ""
   for (;;) {
@@ -164,7 +168,7 @@ async function readEngineArtifactEnvelope(locator: EngineArtifactLocator, contex
       throw new EvolutionArtifactIntegrityError("Evolution predecessor Artifact ended before completion")
     offset = result.chunk.next_offset
   }
-  await context.host.engineArtifacts.select({ locator, purpose: "Exact candidate development campaign" })
+  await context.host.engineArtifacts.select({ locator, purpose })
   return EngineArtifactEnvelopeSchema.parse(JSON.parse(text))
 }
 
@@ -233,7 +237,37 @@ export default tool({
     }
     let resources = args.resource_set ? await context.host.taskArtifacts.resources(args.resource_set) : []
     const payload =
-      artifact_type === "evolution-lab/campaign-spec"
+      artifact_type === "evolution-lab/failure-attribution"
+        ? await (async () => {
+            const attribution = EvolutionArtifactSchemas["evolution-lab/failure-attribution"].parse(
+              args.artifact.payload,
+            )
+            if (
+              args.source_artifact_locators.length !== 1 ||
+              args.source_artifact_locators[0]?.source !== "engine_artifact"
+            )
+              throw new EvolutionArtifactIntegrityError(
+                "failure-attribution requires exactly one opportunity Engine Artifact source",
+              )
+            const opportunityLocator = args.source_artifact_locators[0]
+            const opportunityEnvelope = await readEngineArtifactEnvelope(
+              opportunityLocator,
+              context,
+              "Exact opportunity predecessor for causal attribution",
+            )
+            if (opportunityEnvelope.artifact_type !== "evolution-lab/opportunity")
+              throw new EvolutionArtifactIntegrityError(
+                "failure-attribution source must identify an evolution-lab/opportunity Artifact",
+              )
+            requireEvolutionWorkerProducer(opportunityEnvelope, "evolution-observer")
+            EvolutionArtifactSchemas["evolution-lab/opportunity"].parse(opportunityEnvelope.payload)
+            if (!attribution.owner_evidence.some((locator) => sameJSON(locator, opportunityLocator)))
+              throw new EvolutionArtifactIntegrityError(
+                "failure-attribution owner evidence must identify its exact opportunity source",
+              )
+            return attribution
+          })()
+        : artifact_type === "evolution-lab/campaign-spec"
         ? await (async () => {
             const campaignInput = EvolutionCampaignPublishInputSchema.parse(args.artifact.payload)
             if (args.source_artifact_locators.some((locator) => locator.source !== "engine_artifact"))

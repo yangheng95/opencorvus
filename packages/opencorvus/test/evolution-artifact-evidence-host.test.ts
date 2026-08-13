@@ -834,22 +834,64 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             purpose: "Exact opportunity predecessor for causal attribution",
           })
           ;(scope.owner as { agentID: string }).agentID = "evolution-failure-analyst"
+          const attributionPayload = {
+            symptom: "Incomplete delivery",
+            direct_trigger: "Missing source selection",
+            root_cause: "Prompt omitted exact evidence requirement",
+            causal_chain: ["The prompt omitted selection", "The worker completed with partial evidence"],
+            owner_evidence: [opportunityReceipt.locator],
+            prior_path_failure: "Earlier edits changed narration only",
+            competing_hypotheses: ["Provider variance"],
+            disproved_hypotheses: ["Workspace corruption"],
+            affected_surface: ["agents/worker/system.md"],
+            unknowns: ["holdout behavior"],
+          }
+          const attributionCountBefore = Database.use(
+            (db) =>
+              db
+                .select({ id: EngineArtifactTable.id })
+                .from(EngineArtifactTable)
+                .where(
+                  eq(
+                    EngineArtifactTable.catalog_artifact_type,
+                    "evolution-lab/failure-attribution",
+                  ),
+                )
+                .all().length,
+          )
+          await expect(
+            executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/failure-attribution",
+                payload: attributionPayload,
+                resource_set: null,
+                source_artifact_locators: [],
+              },
+              { host } as never,
+            ),
+          ).rejects.toThrow(
+            "failure-attribution requires exactly one opportunity Engine Artifact source",
+          )
+          expect(
+            Database.use(
+              (db) =>
+                db
+                  .select({ id: EngineArtifactTable.id })
+                  .from(EngineArtifactTable)
+                  .where(
+                    eq(
+                      EngineArtifactTable.catalog_artifact_type,
+                      "evolution-lab/failure-attribution",
+                    ),
+                  )
+                  .all().length,
+            ),
+          ).toBe(attributionCountBefore)
           const attributionReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/failure-attribution",
-                payload: {
-                  symptom: "Incomplete delivery",
-                  direct_trigger: "Missing source selection",
-                  root_cause: "Prompt omitted exact evidence requirement",
-                  causal_chain: ["The prompt omitted selection", "The worker completed with partial evidence"],
-                  owner_evidence: [opportunityReceipt.locator],
-                  prior_path_failure: "Earlier edits changed narration only",
-                  competing_hypotheses: ["Provider variance"],
-                  disproved_hypotheses: ["Workspace corruption"],
-                  affected_surface: ["agents/worker/system.md"],
-                  unknowns: ["holdout behavior"],
-                },
+                payload: attributionPayload,
                 resource_set: null,
                 source_artifact_locators: [opportunityReceipt.locator],
               },
@@ -857,16 +899,17 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ),
           ) as { artifact_type: string; locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
           expect(attributionReceipt.artifact_type).toBe("evolution-lab/failure-attribution")
+          const attributionRead = await host.engineArtifacts.read({
+            locator: attributionReceipt.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
+          expect(attributionRead.chunk.complete).toBe(true)
           expect(
-            (
-              await host.engineArtifacts.read({
-                locator: attributionReceipt.locator,
-                byte_offset: 0,
-                max_bytes: 65_536,
-                delivery: "inline",
-              })
-            ).chunk.complete,
-          ).toBe(true)
+            EngineArtifactEnvelopeSchema.parse(JSON.parse(attributionRead.chunk.text!))
+              .source_artifact_locators,
+          ).toEqual([opportunityReceipt.locator])
           await host.engineArtifacts.select({
             locator: attributionReceipt.locator,
             purpose: "Exact causal attribution for the frozen campaign specification",
