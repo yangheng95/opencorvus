@@ -4,6 +4,14 @@ Status: implementation and live campaign validation in progress; the first explo
 rooted candidate-publication authority and repository package-root integrity defects and is not counted as one of
 the three required passing runs.
 
+The 2026-08-13 R18 fresh browser-driven run is also not counted. It selected and installed
+`builtin/supply-chain-logistics@2026.08.13.1` plus Evolution Lab through the real Mission creation surface on random
+port 49671, used exact `openai/gpt-5.6-terra`, completed the target diagnostic and opportunity/causal Tasks, and then
+failed closed before Campaign publication. R18 exposed two shared product defects: a Work Ledger terminal-timestamp
+cross-snapshot race and a cross-Task Evolution lineage comparison that compared a source Artifact identity with its
+target-Task import alias. The Mission was aborted through the public project-scoped route after both roots were
+proven; no Campaign, candidate, Trial, installation, promotion, restoration, or external side effect occurred.
+
 ## Recall
 
 ### User request
@@ -129,6 +137,15 @@ Therefore the repair must change authoritative manifests/prompts and SDK authori
 payload/OpenAPI/public facts, and add a repository built-in policy checker. A bulk `base_role` rename is explicitly
 insufficient because it leaves the Agent, prompt, workflow occurrence, and review ownership intact.
 
+R18 received two additional read-only independent audits. The first proved that terminal Task persistence was
+correct (`time_completed` plus `task.updated` and `task.completed` existed) and that the visible error came from
+combining Work Ledger lifecycle with a separately refreshed Board timestamp. The second proved that the source
+opportunity -> failure-attribution edge and the Host-owned `import_lineage` both remained intact, while the Campaign
+validator compared the original opportunity locator to the receiving Task's import alias. A separate horizontal
+scheduler audit was requested immediately after the operator classified scheduling defects as cross-scenario risks;
+its scope covers scheduler-message delivery, root-Session ingress FIFO, terminal occurrence reopening, duplicate
+delivery, cross-Task concurrency, restart recovery, and ready-frontier dispatch rather than only this campaign.
+
 ### Expanded topology impact and design
 
 The preferred authoring graph for new or formerly serial non-Advanced workflows is a two-wave Task contract:
@@ -197,6 +214,81 @@ bindings, streaming scheduler/worker execution, cross-Task Artifact import, Evol
 runtime, durable activity/status projection, cancellation/settlement, and SQLite/runtime cleanup. Public API or
 schema changes are not planned; if investigation proves one is necessary, the route inventory, OpenAPI, generated
 SDK, bilingual docs, and callers become part of the repair boundary.
+
+### R18 cross-scenario defects discovered on 2026-08-13
+
+R18 used a fresh project, home, SQLite database, random port 49671, copied canonical auth and model catalog, and
+exact `openai/gpt-5.6-terra`. The browser installed Supply Chain Logistics and Evolution Lab through the real hosted
+Market flow and submitted a Mission holding exactly those two packages. Supply Chain Logistics ran three workers in
+parallel and one evidence-consuming owner; the Mission then created sequential Evolution opportunity and candidate
+preparation Tasks. The run is not a pass because the candidate-preparation Campaign publisher rejected a valid
+cross-Task predecessor pair.
+
+The first observed error was `task-status:missing-completion-time` immediately after each Task became terminal.
+Readonly SQLite and protocol events proved `time_completed`, `task.updated`, and `task.completed` were present. The
+direct trigger was Work Ledger refreshing before the independently debounced selected-Board projection. The deeper
+root was a public contract split: `WorkLedgerTaskRow` carried lifecycle and start time but omitted completion, while
+`TaskStatusHeader` read lifecycle from Work Ledger and completion from Board/Task list. This can affect every
+completed, failed, or cancelled Mission Task, pollutes E2E/runtime logs, and prevents API/SDK consumers from
+validating terminal duration from one snapshot. It does not corrupt Task, Artifact, or completion facts. The root
+repair is one execution snapshot: Work Ledger owns lifecycle, start, and optional completion; both live Mission and
+archived Task projections carry it; Overlay reads all Task timing from that row. Transport positive tests cover
+active and terminal rows, backend projection tests cover terminal and archived Tasks, and OpenAPI/SDK are regenerated.
+Changing refresh delays, suppressing the diagnostic, or patching Board from terminal events is excluded because it
+retains the two-source race.
+
+The blocking Campaign error was `campaign failure-attribution must directly identify its exact opportunity source`.
+Source-Task evidence disproved an upstream publication omission: the failure-attribution payload owner evidence,
+envelope sources, and observations all identified the exact opportunity. The Host import also preserved that edge
+in immutable `import_lineage`. The direct trigger was the Campaign validator comparing the original opportunity
+locator stored in imported attribution provenance with the receiving Task's target-owned opportunity alias. Those
+identities are intentionally different even though their canonical origin is identical. This defect blocks every
+standard Evolution flow which follows the documented stage-per-Task and Mission exact-import protocol; Campaign,
+candidate, Trial, evaluation, review, and recommendation cannot proceed. It fails closed and produced no invalid
+Artifact or side effect. The root repair adds one immutable Evolution predecessor resolver: direct Artifacts use
+their current locator and envelope provenance, imports use Host-owned `import_lineage.source_locator` and
+`source_provenance`; Campaign requires an exact singleton attribution source and owner evidence equal to the
+opportunity canonical origin, while recording current Task aliases as its own selected publication sources. Rewriting
+imports, translating locators into aliases, re-publishing upstream evidence, prompt workarounds, and weaker relation
+checks are excluded.
+
+The production-shaped regression publishes opportunity and attribution in a source Task, completes it, imports the
+exact pair through the real cross-Task importer, and publishes Campaign in a new Task using the aliases and a real
+resource snapshot. It must prove the Campaign sources remain the aliases while their canonical correlation resolves
+to the original opportunity. An unrelated imported pair must produce the typed integrity error. Existing same-Task
+direct publication remains covered.
+
+The candidate Task's scheduler request travelled through a durable scheduler message, woke the Mission, and caused
+the completed opportunity Task to reopen as a new active occurrence while candidate preparation remained active;
+both same-directory Tasks ran concurrently. This proves the in-process delivery/reopen/concurrency path and confirms
+the blocking root is not Host business queuing. It does not by itself prove duplicate delivery, restart recovery,
+old-occurrence rejection, or every ready-frontier path, so those remain in the independent horizontal scheduler audit
+and focused test matrix rather than being inferred from one successful trace.
+
+The completed horizontal audit found no R18 wake loss or hidden Task serialization: all sixteen
+`queued_operator_wake` rows drained, all nine scheduler inbox rows delivered on attempt one, and the resumed
+opportunity and candidate Tasks were concurrently active. It did find a separate cross-scenario P1. A Task-target
+scheduler envelope previously froze only Task and root Session identity; a delayed inbox accepted during active
+occurrence A could therefore materialize after A terminalized and the same Task reopened as occurrence B. The repair
+freezes every Task source and target's active `time_started` occurrence identity in each new `scheduler-message-v2`
+envelope, makes reopen start times monotonic, derives a Task-source Message's occurrence from its real assistant
+`taskIngress` receipt, and requires replies to reverse both occurrence identities before comparing the target again
+inside the Message/ingress commit transaction. The materialized root ingress keeps the same occurrence and verifies
+it again during the atomic `pending -> running` claim, so the fence survives the commit/dispatch gap and process
+restart. A terminal conversation remains valid while its occurrence is unchanged; an ingress from A becomes
+`terminal_inapplicable` after reopen B. A stale inbox receives the typed `SchedulerTargetOccurrenceStaleError`
+dead-letter and writes no Message or ingress into B; a late A-request/B-reply is rejected with the same explicit
+occurrence error before it creates a new inbox. Startup returns typed `DATA_RESET_REQUIRED` for legacy scheduler-v1
+or occurrence-less ingress rows because their identities cannot be reconstructed without a fallback. This is an
+occurrence-integrity fence shared by every Squad, not a Host decision about serial or parallel Tasks. The canonical
+scheduler delivery file constructs the delayed A-to-B and post-materialization claim races and proves both stale
+dispositions while retaining Mission wake, root FIFO, peer/reply, terminal conversation, lease and replay contracts.
+
+R18 abort also exposed one non-scheduling projection gap: `mission.execution.closure` reached the conversation SSE
+without a declared Overlay owner and produced `conversation event has no projection owner`. Durable Mission close,
+Task cancellation and resource cleanup all succeeded, so this was not a closure failure. The event now has the Board
+as its sole projection owner because it changes Mission interruptibility/closure state; real-page acceptance must
+confirm the close transition without that diagnostic. No UI automation test is added or run.
 
 ### Exploratory campaign defects discovered on 2026-08-12
 
@@ -2776,3 +2868,171 @@ The final focused Panel acceptance is `9 pass / 43 assertions` across the strict
 read reconstruction and terminal-authority file. OpenCorvus and JavaScript SDK typechecks, `docs:check`,
 `api:routes-check`, generated OpenAPI/SDK output and the staged whitespace check pass. No UI automation test was
 added, modified or run.
+
+### Exact-Terra R17: Host Task serialization contradicts model-owned scheduling
+
+#### Recall
+
+- User requirement: diagnose the visibly stuck R17 run to its real control-flow root, remove Host ownership of Task
+  serial-versus-parallel scheduling, preserve random project/home/database/port isolation and exact
+  `openai/gpt-5.6-terra`, use an uninvolved independent reviewer, deliver the repair as its own phase commit, and
+  obtain three later clean real-page evolution successes. R17 is a failed diagnostic run and never counts toward
+  those successes.
+- Acceptance for this phase: every created or reopened Task is immediately active. Mission and Orchestrator decide
+  ordering by creating independent Tasks together for parallel work and by creating a dependent Task only when its
+  predecessor evidence is ready for serial work. Core neither accepts nor projects a Task queue policy, queue order,
+  manual start, reorder operation, or directory-level active-Task admission gate.
+- Hard constraints: retain `queued_operator_wake` as the exact durable first-in-first-out ingress for one root Session;
+  retain the scheduler's physical provider execution queue and projected-worker per-Session Turn exclusion. These are
+  execution integrity mechanisms, not Task scheduling policy. Do not add a replacement Host gate, hidden workflow
+  state, synthesized messages, concurrent execution of two Turns in the same Session, or UI automation tests.
+- Sources read: R17 controller receipts and isolated SQLite facts; Engine Task schema/status/pipeline/queue/store and
+  every create/resume/retry/replan caller; Panel and Server route schemas; Overlay Work Ledger queue interactions;
+  generated OpenAPI/JavaScript SDK surfaces; root Session ingress/recovery; scheduler physical queue; current Task
+  control-plane, data, Panel, extension and communication architecture.
+- Repository search: every `queue` Task input, `queue_order`, queued Task claim/advance/launch, directory snapshot,
+  manual start/reorder API, Work Ledger drag/start affordance, Mission projection, prompt/example and generated SDK
+  occurrence was classified separately from root-wake FIFO, worker Turn exclusion, provider execution capacity and
+  generic utility queues.
+- Independent agent: one uninvolved read-only reviewer reconstructed R17 and found the logical-active admission cycle,
+  terminal-only capability overexposure and cancelled-before-start projection defect. A second uninvolved read-only
+  reviewer is auditing the complete Task queue deletion boundary and generated/public closure before implementation.
+
+R17 was not waiting on an OpenAI stream when progress stopped. Candidate Task
+`tsk_g00VSA1ZRz0001wF1po5` remained logically active on a pending coordination request and depended on a repaired
+Opportunity Task. Mission durably wrote the Opportunity resume wake
+`art_g019ffa1e0647000000000000cb8brvaWiTXqH6`, but the Engine queue rejected it solely because Candidate was active
+in the same directory. Candidate could not continue until Opportunity ran, while Opportunity could not run until
+Candidate became terminal. Later Candidate wakes drained successfully, excluding wake loss and Session prompt
+starvation. Cancellation correctly settled the stranded wake as `terminal_inapplicable`; it could not repair the
+admission cycle.
+
+The database gives the decisive policy evidence: both Opportunity and Candidate were created with `queue:false`.
+They were intended as independent Tasks and had already run concurrently. `resume_task` nevertheless reopened every
+terminal Task as queued, silently replacing its earlier execution semantics; the same unconditional rewrite exists
+for operator Retry/Replan. A persisted `queue_mode` would preserve that boolean but still leave Host as scheduling
+authority, contrary to the user's explicit architecture. A directory lease, priority bypass or worker-wide serial
+queue would likewise preserve the wrong owner and would reduce valid parallel Expert Squad execution.
+
+The replacement has no Host Task queue state. Task creation and every continuation open set the Task active and
+durably enqueue only the real root Session ingress that caused execution. The existing root-wake first-in-first-out
+owner continues to prevent one Session's visible messages from overwriting each other; it does not order different
+Tasks. `task_loop_launch` remains a claim-to-local-loop recovery receipt only if still required after removal, and
+must be deleted if it has no non-queue caller. The scheduler `a2a_task_queue` remains the physical Provider execution
+capacity and crash-recovery owner; it is not exposed as Mission Task scheduling policy.
+
+The direct incident also exposed a contextual capability defect. Ordinary active Turns advertised
+`respond_agent_coordination(decision="acknowledge_terminal")`, Terra selected it, and the execution guard correctly
+rejected it because no exact terminal-conversation authority existed. The Tool schema now includes that decision only
+when the Host has supplied the exact terminal authority; the execution-time occurrence check remains the
+time-of-check/time-of-use integrity boundary.
+
+Focused positive acceptance must prove independently created Tasks start without directory admission, a Mission or
+operator continuation becomes active and consumes its exact persisted wake while another Task remains active, root
+Session ingress still preserves causal FIFO, and the terminal conversation schema admits exact acknowledgement while
+ordinary coordination exposes only executable decisions. All removed route/schema/UI/generated/spec references and
+tests must converge on the current contract. Non-UI focused tests, typecheck, docs/API generation and checks, real UI
+manual review for the Work Ledger change, and a fresh uninvolved read-only review are mandatory before a phase commit.
+
+#### Delivery and real-page acceptance
+
+The implementation removes `queue`, `queue_order`, queued Task lifecycle, same-directory claim/advance, manual start
+and reorder routes, `task_loop_launch`, and the corresponding Overlay controls. Task priority remains user-facing Work
+Ledger metadata. The scheduler's `a2a_task_queue`, root Session `queued_operator_wake` FIFO, and projected-worker
+single-Turn authority remain intact. Task creation now commits the active Task, non-null `time_started`, package and
+process bindings, imports, progress fact, and one identity-bound `task_creation` ingress in a single SQLite
+transaction. Request and channel replay dispatch that exact persisted ingress. Root Session capability permission is
+frozen at Session creation before the Task transaction, removing a post-commit crash window.
+
+The first independent delivery review found that the authorized worktree's temporary dependency junctions still
+resolved internal packages from the main checkout. That made the first generated SDK/OpenAPI and Overlay bundle stale
+and invalidated their evidence. The dependency overlay was rebuilt so every `@opencorvus-ai/*` workspace import
+resolves to this worktree, then the complete payload/OpenAPI/JavaScript SDK/API-doc closure and Overlay were rebuilt.
+The same review found and closed a strict transport fixture, current plugin evidence, bilingual guide, canonical
+Artifact-fixture settlement, Session permission atomicity, and retired UI text/test closure. No touched UI automation
+test was retained or run; five obsolete touched Overlay test files were deleted under the repository UI-test policy.
+
+Correct-dependency positive verification is `34 pass / 1233 assertions` across Task package binding and idempotent
+creation replay, Artifact cursor, interrupted Session recovery, terminal coordination schema, current SQLite schema
+reset, and transport contracts. OpenCorvus, Overlay, plugin, transport-protocol and JavaScript SDK package typechecks
+pass. `docs:check` reports 334 operations in 25 groups, `api:routes-check` reports 6 clean rules across 34 route files,
+the generated closure completes, `git diff --check` passes, and the final Overlay build transforms 7106 modules.
+The aggregate root typecheck was also attempted under unrelated sustained machine load and exceeded its 240-second
+outer command deadline without an error; the five directly affected package typechecks are the bounded authoritative
+result for this phase.
+
+The final review rejected relying on the historical monolithic active-operator test because that file hangs after its
+fourteenth case. The current durable FIFO contract was therefore moved into a self-contained non-UI focused test:
+the first exact operator ingress is advanced to `running`, a second exact root message is persisted through the
+production writer, and the canonical head remains the first occurrence while the second remains `pending`. It exits
+cleanly with `1 pass / 4 assertions`. The DDL-level non-null `time_started` invariant is also reflected in derived Task
+types and projections; impossible null fallbacks were removed while the unrelated scheduler provider queue retains
+its nullable physical-start field.
+
+The final invariant review found that several public Task projections still described `started` as optional or
+nullable after the database and current writers made it mandatory. Task board, status snapshot, Mission, Work Ledger
+and Panel schemas now expose one required numeric start fact; the Work Ledger no longer synthesizes null, and the
+OpenAPI/JavaScript SDK closure was regenerated. The same review reproduced a focused-suite cleanup failure: its empty
+test runner intentionally returned no assistant settlement for the newly real creation ingress, leaving detached
+recovery work to reopen the isolated database during teardown. The test runner now persists an exact assistant
+settlement and waits for completion only after releasing the project Instance lease. The complete package-revision
+file exits cleanly with `6 pass / 52 assertions`; waiting inside the Instance lease is intentionally forbidden because
+the completion owner must reacquire that same project identity. Post-regeneration checks pass for OpenCorvus,
+transport-protocol, JavaScript SDK and Overlay typechecks, the transport contract (`19 pass / 1121 assertions`), SDK
+imports, 334-operation API docs and the 34-file route inventory.
+
+Before delivery, `origin/main` advanced by 20 commits covering Project/Mission identity, Provider model refresh, build
+and requirements settlement, Artifact visibility and Evolution attribution. The phase commit was made first, then the
+remote tip was merged without rebasing or choosing either side wholesale. Regeneration from the merged canonical
+sources produced no additional diff. Several semantic intersections were nevertheless found by focused verification:
+the combined DDL needed its own transfer fingerprint, and complete Evolution run evidence now includes both current
+and historical versions of the atomic creation-ingress Artifact. The combined fingerprint and positive evidence
+expectation were updated. Post-merge focused acceptance is clean for root FIFO (`1 / 4`), Task package and replay
+(`6 / 52`), terminal capability (`1 / 1`), schema/reset/transfer (`6 / 35`), Mission atomic identity (`3 / 30`),
+Evolution evidence (`8 / 67`) and Architect settlement (`4 / 4`).
+
+The merged remote also added Build, Fact Check and Requirements domain-settlement tests whose setup still called the
+deleted queued-Task fixture. They now use the canonical established-Task fixture, which retires the atomic creation
+ingress through the production Artifact writer instead of deleting or bypassing it. Build setup was aligned to the
+current `planner-parallel-delivery` workflow and one exact creation timestamp. That test exposed a production recovery
+race rather than harmless fixture noise: a projected worker owns its Session from persisted descriptor admission
+until terminal publication, but interruption reconciliation previously recognized only the shorter prompt-owner
+interval. It could therefore publish false prior-process recovery evidence before prompt acquisition or after prompt
+return. The projected-worker Turn queue now exposes its existing full-lifetime ownership fact, and both interruption
+enumeration paths exclude only Sessions owned by that current process. The map is empty after restart, so actual
+interrupted prepared Turns remain recoverable. Positive acceptance is Build `8 pass / 23 assertions` plus the
+independent prepared-Turn recovery file `1 pass / 5 assertions`.
+
+The Requirements test also revealed that its old evidence helper bypassed the current provider transport by passing a
+raw locator directly to `artifact_read` and `artifact_select`. Its positive path now executes and persists the real
+`artifact_search` result, reads with that earlier `al_` reference, persists the returned `ar_` reference, and selects
+with that reference before the final Requirements message. There is no minted test reference or raw-locator fallback.
+The Requirements file exits cleanly with `9 pass / 13 assertions`; the companion Fact Check file exits with
+`5 pass / 5 assertions`.
+
+After those fixes were committed, `origin/main` advanced again with compact default identity issuance. It was merged
+without rebase. The shared algorithm test retained this phase's removal of business Task admission while adopting the
+new per-identity compact logical clock and 24-character contract. The merged algorithm file exits with
+`22 pass / 77 assertions`; the dedicated compact-identity file exits with `3 pass / 473 assertions`.
+
+`origin/main` then advanced with Evolution package-publication correlation and was merged a second time without
+rebase. Its overlap with the atomic creation-ingress evidence remained semantic: the merged Evolution file now proves
+both the correlated package source and the current plus historical creation-ingress Artifacts, and exits with
+`8 pass / 72 assertions`. The affected native package-tool process authority exits with `1 pass / 10 assertions`.
+An independent rerun also exposed that one real Windows managed-worktree test inherited Bun's five-second default
+despite taking between five and six seconds in its production Git path. That test now has an explicit 60-second
+budget matching its real external work; no assertion or product behavior changed. The complete algorithm file exits
+cleanly with `22 pass / 77 assertions` under that bounded checker.
+
+Real acceptance used dev source on random port `54859`, random isolated project
+`.scratch/ui-queue-9cb5529ca75d/project`, and isolated SQLite runtime under the same scratch occurrence. Global
+`auth.json` and `models.json` were copied into the isolated runtime and separately verified by hash equality; the Web
+UI model catalog visibly exposed and selected exact `openai/gpt-5.6-terra`. Through the real Mission composer, the
+operator required two independent Tasks in one round. Terra created alpha Task `tsk_g00VSAniAr00FsZ03x1b` and beta
+Task `tsk_g00VSAniKZ007QCVYQJB`; both were visible as Running concurrently and SQLite recorded non-null start times
+`1786618633640` and `1786618634243`, only 603 milliseconds apart. They completed at `1786619057734` and
+`1786619112255` with no error. The Mission then completely read and independently accepted `alpha.txt = ALPHA_OK`
+and `beta.txt = BETA_OK`; direct filesystem reads agreed exactly. The final real page showed both terminal Task IDs,
+start/completion facts, immutable read references and the completed Mission. This proves model-owned parallel creation
+without recreating Host directory admission. It is a control-plane acceptance run, not one of the three still-required
+Expert Squad evolution successes.

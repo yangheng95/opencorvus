@@ -8,7 +8,7 @@ import {
 } from "@opencorvus-ai/plugin"
 import { Config } from "../../src/config/config"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
-import { persistQueuedTask } from "../../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "../fixture/engine-task"
 import { ExpertSquadPackageManager } from "../../src/expert-squad/manager"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
@@ -196,7 +196,7 @@ describe("Human Resources Operations expert squad package", () => {
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         await ensureGitProjectMetadata()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started,
@@ -207,7 +207,6 @@ describe("Human Resources Operations expert squad package", () => {
           priority: "normal",
           metadata: { actor: "user" },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "project",
             projectID: Instance.project.id,
@@ -343,16 +342,12 @@ describe("Human Resources Operations expert squad package", () => {
               ),
             ) as { locator: EngineArtifactLocator; artifact_sha256: string }
           }
-          const performanceReceipt = await publish(
-            "hr-operations/workforce-analysis",
-            "workforce-analyst",
-            [dossierReceipt.locator],
-          )
-          const segmentReceipt = await publish(
-            "hr-operations/process-analysis",
-            "people-process-analyst",
-            [dossierReceipt.locator],
-          )
+          const performanceReceipt = await publish("hr-operations/workforce-analysis", "workforce-analyst", [
+            dossierReceipt.locator,
+          ])
+          const segmentReceipt = await publish("hr-operations/process-analysis", "people-process-analyst", [
+            dossierReceipt.locator,
+          ])
           const insightReceipt = await publish(
             "hr-operations/operating-plan-draft",
             "organization-operations-synthesizer",

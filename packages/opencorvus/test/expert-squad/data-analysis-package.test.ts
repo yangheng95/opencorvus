@@ -8,7 +8,7 @@ import {
 } from "@opencorvus-ai/plugin"
 import { Config } from "../../src/config/config"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
-import { persistQueuedTask } from "../../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "../fixture/engine-task"
 import { ExpertSquadPackageManager } from "../../src/expert-squad/manager"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
@@ -197,7 +197,7 @@ describe("Data Analysis expert squad package", () => {
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         await ensureGitProjectMetadata()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started,
@@ -208,7 +208,6 @@ describe("Data Analysis expert squad package", () => {
           priority: "normal",
           metadata: { actor: "user" },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "project",
             projectID: Instance.project.id,
@@ -349,16 +348,13 @@ describe("Data Analysis expert squad package", () => {
             "data-analysis-performance-analyst",
             [dossierReceipt.locator],
           )
-          const segmentReceipt = await publish(
-            "data-analysis/segment-analysis",
-            "data-analysis-segment-analyst",
-            [dossierReceipt.locator],
-          )
-          const insightReceipt = await publish(
-            "data-analysis/insight-brief",
-            "data-analysis-insight-synthesizer",
-            [performanceReceipt.locator, segmentReceipt.locator],
-          )
+          const segmentReceipt = await publish("data-analysis/segment-analysis", "data-analysis-segment-analyst", [
+            dossierReceipt.locator,
+          ])
+          const insightReceipt = await publish("data-analysis/insight-brief", "data-analysis-insight-synthesizer", [
+            performanceReceipt.locator,
+            segmentReceipt.locator,
+          ])
           const auditReceipt = await publish("data-analysis/audit", "data-analysis-fact-checker", [
             insightReceipt.locator,
           ])

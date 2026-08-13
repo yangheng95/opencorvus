@@ -1359,10 +1359,6 @@ div:has(> .composer-model-selector-popover) {
   opacity: var(--ui-opacity-full);
 }
 
-.chat-empty--task[data-status="queued"] {
-  color: var(--warn);
-}
-
 .chat-empty--task[data-status="failed"],
 .chat-empty--task[data-status="cancelled"] {
   color: var(--bad);

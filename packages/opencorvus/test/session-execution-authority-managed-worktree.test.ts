@@ -3,7 +3,7 @@ import fs from "node:fs/promises"
 import { afterEach, expect, test } from "bun:test"
 import { sessionRuntimeFromNativeAgent } from "@/agent/session-agent-runtime"
 import { Config } from "@/config/config"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { resolveSessionExecutionAuthority } from "@/engine/task-session-lineage"
 import { Identifier } from "@/id/id"
@@ -48,7 +48,7 @@ test("uses the exact managed-worktree Session directory for pending, durable, an
         title: "Managed authority Orchestrator",
       })
       const now = Date.now()
-      persistQueuedTask({
+      persistTask({
         taskID,
         sessionID: root.id,
         now,
@@ -57,7 +57,6 @@ test("uses the exact managed-worktree Session directory for pending, durable, an
         productPillar: "code",
         metadata: {},
         projectID,
-        queue: false,
         packageRevision,
         executionCapsuleBinding: await prepareTaskProcessBinding({
           mode: "native",

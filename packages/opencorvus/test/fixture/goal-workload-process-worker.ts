@@ -6,7 +6,6 @@ import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { createDispatchLineageOrigin, findDispatchLineageByDispatchID, recordDispatchLineage } from "@/engine/dispatch-lineage"
 import { findDispatchSettlementByDispatchID, settleDispatchOrReturnExisting } from "@/engine/dispatch-settlement"
 import { describeTask } from "@/engine/describe"
-import { persistQueuedTask } from "@/engine/pipeline"
 import { persistArchitectGoalProjection } from "@/engine/persist"
 import { reconcileTerminalAgentLifecycleDelivery, TestHooks as QueueTestHooks } from "@/engine/queue"
 import { listGoalWorkloadArtifacts } from "@/engine/store"
@@ -28,6 +27,7 @@ import { Database, count, eq } from "@/storage/db"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
 import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
+import { persistEstablishedTask } from "./engine-task"
 import { installDefaultTaskWakeRuntime } from "@/scheduler/task-wake-composition"
 
 type Fixture = Awaited<ReturnType<typeof createFixture>>
@@ -135,7 +135,7 @@ async function createFixture(label: string, publish = false) {
     title: label,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
-  persistQueuedTask({
+  persistEstablishedTask({
     taskID,
     sessionID: root.id,
     now,
@@ -146,7 +146,6 @@ async function createFixture(label: string, publish = false) {
     priority: "normal",
     metadata: {},
     projectID: Instance.project.id,
-    queue: false,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",
@@ -604,9 +603,7 @@ async function result() {
     directory: projectDirectory,
     runner: async () => {},
   })
-  const runtimeOwnership = mode === "recover" || mode === "continue"
-    ? RuntimeServerOwnership.acquire({ database: Database.Path() })
-    : undefined
+  const runtimeOwnership = RuntimeServerOwnership.acquire({ database: Database.Path() })
   try {
     return await Instance.provide({
       directory: projectDirectory,

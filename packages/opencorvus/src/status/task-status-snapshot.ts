@@ -28,7 +28,7 @@ export const TaskStatusDetail = z.object({
   taskID: z.string(),
   title: z.string(),
   status: TaskActivityState,
-  lifecycleStatus: z.enum(["queued", "active", "completed", "failed", "cancelled"]),
+  lifecycleStatus: z.enum(["active", "completed", "failed", "cancelled"]),
   source: z.string(),
   productPillar: ProductPillarSchema,
   priority: z.enum(["critical", "high", "normal", "low"]),
@@ -42,7 +42,7 @@ export const TaskStatusDetail = z.object({
   time: z.object({
     created: z.number(),
     updated: z.number(),
-    started: z.number().optional(),
+    started: z.number(),
     completed: z.number().optional(),
   }),
 })
@@ -81,7 +81,7 @@ const TaskStatusBoardProjection = z
   .passthrough()
 
 export function activityFromTaskLifecycle(
-  rawStatus: "queued" | "active" | "completed" | "failed" | "cancelled",
+  rawStatus: "active" | "completed" | "failed" | "cancelled",
 ): TaskActivityState {
   return rawStatus === "active" ? "running" : "inactive"
 }

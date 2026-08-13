@@ -2,8 +2,9 @@ import { afterAll, describe, expect, test } from "bun:test"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
-import { Database } from "../src/storage/db"
-import { persistQueuedTask } from "../src/engine/pipeline"
+import { Database, eq } from "../src/storage/db"
+import { EngineArtifactTable } from "../src/engine/engine.sql"
+import { persistTask } from "../src/engine/pipeline"
 import {
   TaskCreationIdempotencyConflictError,
   TaskExpectedPackageDigestConflictError,
@@ -19,7 +20,12 @@ import { EffectiveConfig } from "../src/config/effective"
 import { Config } from "../src/config/config"
 import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolver"
 import { EngineService } from "../src/task-api"
-import { configureTaskLoopRunner, startQueuedTaskInCwd } from "../src/engine/queue"
+import {
+  configureTaskLoopRunner,
+  requireTaskCreationIngressID,
+  waitForQueueCompletionHooksForTest,
+} from "../src/engine/queue"
+import { QueuedTaskIngressSchema } from "../src/engine/queued-task-ingress"
 import {
   resolvePinnedTaskSchedulerTurnProjection,
   taskPackageRevisionForSession,
@@ -31,13 +37,13 @@ import { cp, mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { ExpertSquadPackageManager } from "../src/expert-squad/manager"
 import { ExpertSquadRegistry } from "../src/expert-squad/registry"
-import { ExecutionCapsuleRuntimeUnavailableError } from "../src/execution-capsule/runtime"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { materializeMirrorPrismPackage } from "./fixture/expert-squad"
 import { ensureMissionSession } from "../src/mission/session"
 import { MissionExpertSquadAuthorityError } from "../src/task-api/task-creator"
 import { SkillMount } from "../src/skill/mounts"
 import { PromptProfile } from "../src/agent/prompt-profile"
+import { Message } from "../src/session/message"
 import { parse as parseJsonc } from "jsonc-parser"
 
 const packageRevision = {
@@ -63,7 +69,7 @@ async function createBoundTask() {
       configOverlay: { prompt_profile: { active: packageRevision.id } },
     },
   })
-  persistQueuedTask({
+  persistTask({
     taskID,
     sessionID: session.id,
     now,
@@ -74,7 +80,6 @@ async function createBoundTask() {
     priority: "normal",
     metadata: {},
     projectID: Instance.project.id,
-    queue: true,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",
@@ -88,13 +93,54 @@ async function createBoundTask() {
   return { taskID, session }
 }
 
+async function settleTaskCreationIngress(input: { taskID: string; wakeID?: string }) {
+  if (!input.wakeID) throw new Error(`Task ${input.taskID} creation runner requires its exact ingress ID`)
+  const rootSessionID = requireTask(input.taskID).session_id
+  const session = await Session.create({
+    kind: "orchestrator",
+    parentID: rootSessionID,
+    title: "Package revision creation settlement",
+  })
+  const now = Date.now()
+  const messageID = Identifier.ascending("message")
+  const info: Message.Assistant = {
+    id: messageID,
+    sessionID: session.id,
+    parentID: Identifier.ascending("message"),
+    role: "assistant",
+    author: "orchestrator",
+    time: { created: now, completed: now + 1 },
+    agent: "orchestrator",
+    providerID: "test",
+    modelID: "package-revision-settlement",
+    path: { cwd: Instance.directory, root: Instance.directory },
+    cost: 0,
+    tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+    finish: "stop",
+    taskIngress: { id: input.wakeID, kind: "task_creation" },
+  }
+  await Session.persistMessage({
+    info,
+    parts: [
+      {
+        id: Identifier.ascending("part"),
+        sessionID: session.id,
+        messageID,
+        type: "text",
+        text: "Settled the exact Task creation ingress for the package revision contract.",
+      },
+    ],
+  })
+  return { finalMessageID: messageID }
+}
+
 describe("Task package revision binding", () => {
   test("enforces the immutable Mission held-Squad authority at Task creation", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        configureTaskLoopRunner(async () => {})
+        configureTaskLoopRunner(settleTaskCreationIngress)
         const mission = await ensureMissionSession({
           missionID: "mission-authority-held",
           defaultCwd: project.path,
@@ -109,7 +155,6 @@ describe("Task package revision binding", () => {
             productPillar: "code",
             model: "firmware/gpt-5",
             promptProfile: "base",
-            queue: true,
           },
           { actor: "mission", sessionID: mission.id },
         )
@@ -124,7 +169,6 @@ describe("Task package revision binding", () => {
               productPillar: "code",
               model: "firmware/gpt-5",
               promptProfile: "advanced",
-              queue: true,
             },
             { actor: "mission", sessionID: mission.id },
           )
@@ -147,7 +191,6 @@ describe("Task package revision binding", () => {
               request: "Attempt a Mission Task without an explicit Expert Squad",
               productPillar: "code",
               model: "firmware/gpt-5",
-              queue: true,
             },
             { actor: "mission", sessionID: mission.id },
           )
@@ -162,6 +205,7 @@ describe("Task package revision binding", () => {
         }
       },
     })
+    await waitForQueueCompletionHooksForTest()
   }, 0)
 
   test("commits one exact package revision with the Task and projects it through Task reads", async () => {
@@ -183,7 +227,10 @@ describe("Task package revision binding", () => {
         expect(viewTask(requireTask(taskID)).packageRevisionBinding).toEqual(expectedBinding)
         expect(viewTaskListTask(requireTask(taskID)).packageRevisionBinding).toEqual(expectedBinding)
         expect(
-          taskRootOwnsPackageRevisionBinding({ projectID: Instance.project.id, sessionID: requireTask(taskID).session_id }),
+          taskRootOwnsPackageRevisionBinding({
+            projectID: Instance.project.id,
+            sessionID: requireTask(taskID).session_id,
+          }),
         ).toBe(true)
 
         const workflowBinding = selectedWorkflowBinding({
@@ -248,7 +295,7 @@ describe("Task package revision binding", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        configureTaskLoopRunner(async () => {})
+        configureTaskLoopRunner(settleTaskCreationIngress)
         const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
           prompt_profile: { active: "base" },
         })
@@ -259,16 +306,42 @@ describe("Task package revision binding", () => {
         const requestID = `package-pin-${Identifier.ascending("artifact")}`
         const input = {
           requestID,
-          request: "Create an exact package-pinned queued Task",
+          request: "Create an exact package-pinned Task",
           productPillar: "code",
           model: "firmware/gpt-5",
           promptProfile: "base",
           expectedPackageDigest: resolved.packageDigest,
-          queue: true,
+          metadata: { web_search: true },
         }
         const firstTaskID = await EngineService.createTask(input, { actor: "user" })
+        const firstCreationIngressID = requireTaskCreationIngressID(firstTaskID)
         const replayTaskID = await EngineService.createTask(input, { actor: "user" })
         expect(replayTaskID).toBe(firstTaskID)
+        expect(requireTaskCreationIngressID(replayTaskID)).toBe(firstCreationIngressID)
+        const firstTask = requireTask(firstTaskID)
+        expect((await Session.get(firstTask.session_id)).permission).toEqual([
+          { permission: "websearch", pattern: "*", action: "allow" },
+        ])
+        const firstCreationIngress = Database.use((db) =>
+          db
+            .select({ payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(eq(EngineArtifactTable.id, firstCreationIngressID))
+            .get(),
+        )
+        expect({
+          status: viewTask(firstTask).status,
+          timeStarted: firstTask.time_started,
+          ingress: QueuedTaskIngressSchema.parse(firstCreationIngress?.payload),
+        }).toMatchObject({
+          status: "active",
+          timeStarted: expect.any(Number),
+          ingress: {
+            source_kind: "task_creation",
+            task_creation_id: firstTaskID,
+            event: { taskCreation: { taskID: firstTaskID, requestID } },
+          },
+        })
         expect(requireTaskPackageRevisionBinding(firstTaskID).package_digest).toBe(resolved.packageDigest)
         for (const conflictingInput of [
           { ...input, promptProfile: "advanced" },
@@ -279,9 +352,7 @@ describe("Task package revision binding", () => {
             throw new Error("Expected immutable request replay contract")
           } catch (error) {
             expect(error).toBeInstanceOf(TaskCreationIdempotencyConflictError)
-            expect(
-              (error as InstanceType<typeof TaskCreationIdempotencyConflictError>).toObject().data,
-            ).toMatchObject({
+            expect((error as InstanceType<typeof TaskCreationIdempotencyConflictError>).toObject().data).toMatchObject({
               taskID: firstTaskID,
               identityKind: "request",
               identity: requestID,
@@ -310,9 +381,7 @@ describe("Task package revision binding", () => {
           throw new Error("Expected package digest compare-and-swap conflict")
         } catch (error) {
           expect(error).toBeInstanceOf(TaskExpectedPackageDigestConflictError)
-          expect(
-            (error as InstanceType<typeof TaskExpectedPackageDigestConflictError>).toObject().data,
-          ).toMatchObject({
+          expect((error as InstanceType<typeof TaskExpectedPackageDigestConflictError>).toObject().data).toMatchObject({
             profileID: "base",
             expectedPackageDigest: "b".repeat(64),
             actualPackageDigest: resolved.packageDigest,
@@ -332,6 +401,9 @@ describe("Task package revision binding", () => {
         const channelInput = { ...input, requestID: undefined, channelBinding }
         const channelTaskID = await EngineService.createTask(channelInput, { actor: "user" })
         expect(await EngineService.createTask(channelInput, { actor: "user" })).toBe(channelTaskID)
+        expect([firstTaskID, acceptedRetryTaskID, channelTaskID].map((id) => viewTask(requireTask(id)).status)).toEqual(
+          ["active", "active", "active"],
+        )
         for (const conflictingInput of [
           { ...channelInput, promptProfile: "advanced" },
           { ...channelInput, expectedPackageDigest: "b".repeat(64) },
@@ -341,9 +413,7 @@ describe("Task package revision binding", () => {
             throw new Error("Expected immutable channel replay contract")
           } catch (error) {
             expect(error).toBeInstanceOf(TaskCreationIdempotencyConflictError)
-            expect(
-              (error as InstanceType<typeof TaskCreationIdempotencyConflictError>).toObject().data,
-            ).toMatchObject({
+            expect((error as InstanceType<typeof TaskCreationIdempotencyConflictError>).toObject().data).toMatchObject({
               taskID: channelTaskID,
               identityKind: "channel",
               pinnedPackageRevision: requireTaskPackageRevisionBinding(channelTaskID),
@@ -371,15 +441,15 @@ describe("Task package revision binding", () => {
         ).toBe(resolved.packageDigest)
       },
     })
+    await waitForQueueCompletionHooksForTest()
   }, 0)
-
   test("reopens a persisted Task against the same package revision after Project runtime disposal", async () => {
     const project = await memoryProject()
     try {
       const created = await Instance.provide({
         directory: project.path,
         fn: async () => {
-          configureTaskLoopRunner(async () => {})
+          configureTaskLoopRunner(settleTaskCreationIngress)
           const config = Config.mergeOverlay(await EffectiveConfig.snapshotCurrent(), {
             prompt_profile: { active: "base" },
           })
@@ -395,7 +465,6 @@ describe("Task package revision binding", () => {
               model: "firmware/gpt-5",
               promptProfile: "base",
               expectedPackageDigest: resolved.packageDigest,
-              queue: true,
             },
             { actor: "user" },
           )
@@ -403,6 +472,7 @@ describe("Task package revision binding", () => {
         },
       })
 
+      await waitForQueueCompletionHooksForTest()
       await Instance.disposeAll()
       expect(ProcessSupervisor.metricsSnapshot()).toEqual({ live: 0, owners: {} })
 
@@ -437,43 +507,12 @@ describe("Task package revision binding", () => {
     }
     expect(ProcessSupervisor.metricsSnapshot()).toEqual({ live: 0, owners: {} })
   }, 0)
-
-  test("keeps a queued Task durable when its required Execution Capsule binding is unavailable", async () => {
-    await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const { taskID } = await createBoundTask()
-        configureTaskLoopRunner(async () => {})
-        const previousDescriptor = process.env.OPENCORVUS_EXECUTION_CAPSULE_DESCRIPTOR
-        const previousProcessMode = process.env.OPENCORVUS_TASK_PROCESS_MODE
-        process.env.OPENCORVUS_EXECUTION_CAPSULE_DESCRIPTOR = path.join(project.path, "runtime-descriptor.json")
-        process.env.OPENCORVUS_TASK_PROCESS_MODE = "capsule"
-        try {
-          await startQueuedTaskInCwd(taskID, project.path)
-          throw new Error("Expected the immutable Execution Capsule binding error")
-        } catch (error) {
-          expect(error).toBeInstanceOf(ExecutionCapsuleRuntimeUnavailableError)
-          expect({ code: (error as ExecutionCapsuleRuntimeUnavailableError).code, status: viewTask(requireTask(taskID)).status }).toEqual({
-            code: "EXECUTION_CAPSULE_RUNTIME_UNAVAILABLE",
-            status: "queued",
-          })
-        } finally {
-          if (previousDescriptor === undefined) delete process.env.OPENCORVUS_EXECUTION_CAPSULE_DESCRIPTOR
-          else process.env.OPENCORVUS_EXECUTION_CAPSULE_DESCRIPTOR = previousDescriptor
-          if (previousProcessMode === undefined) delete process.env.OPENCORVUS_TASK_PROCESS_MODE
-          else process.env.OPENCORVUS_TASK_PROCESS_MODE = previousProcessMode
-        }
-      },
-    })
-  }, 0)
-
   test("binds an external Task to an exact materialized candidate without changing the installed revision", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        configureTaskLoopRunner(async () => {})
+        configureTaskLoopRunner(settleTaskCreationIngress)
         const sourcePackage = await materializeMirrorPrismPackage(path.join(project.path, "source-prism"))
         const baseline = await ExpertSquadPackageManager.importDirectory({
           projectDirectory: project.path,
@@ -486,6 +525,7 @@ describe("Task package revision binding", () => {
         const manifest = await readFile(manifestPath, "utf8")
         const candidateManifest = parseJsonc(manifest) as {
           version: string
+          product_pillars: Array<"code" | "work" | "research">
           capability_projection: {
             agents: Record<string, { base_role?: unknown; prompt?: unknown; [key: string]: unknown }>
           }
@@ -522,11 +562,10 @@ describe("Task package revision binding", () => {
           {
             requestID: `candidate-pin-${Identifier.ascending("artifact")}`,
             request: "Execute against the exact materialized candidate revision",
-            productPillar: "code",
+            productPillar: candidateManifest.product_pillars[0]!,
             model: "firmware/gpt-5",
             promptProfile: "prism",
             expectedPackageDigest: candidate.packageDigest,
-            queue: true,
           },
           { actor: "user" },
         )
@@ -592,5 +631,6 @@ describe("Task package revision binding", () => {
         ).toMatchObject({ session_override: false, manifest_grant: true, effective: true })
       },
     })
+    await waitForQueueCompletionHooksForTest()
   }, 0)
 })

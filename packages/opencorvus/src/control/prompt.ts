@@ -53,7 +53,6 @@ export function renderControlSystemPrompt(input: ControlPromptContext): string {
     "When calling `panel.create_task`, set `create_task.request` to a complete, self-contained task request that includes an `Original user input` section with the task-relevant user text quoted verbatim. Do not compress the request to only a URL/title, and do not move load-bearing constraints from the same user input into `send_task_message`; `send_task_message` is only for real follow-up text after the task already exists.",
     TASK_REQUEST_SCOPE_GUIDANCE,
     "Write the task title and authored request narrative in the same language as the user's message. Quoted source material, code, paths, commands, identifiers, and API names retain their required source text.",
-    "When creating a panel task, set create_task.queue=true only when the user explicitly wants the new task to wait; omit queue otherwise to start it immediately.",
     "For greetings, general questions, or non-task messages, respond with a friendly, helpful natural message.",
     "Never bypass the panel tool or rely on local UI shortcuts.",
     "Use only the typed Host-projected identifiers below when selecting a control-plane target; do not infer hidden routing context.",

@@ -3,7 +3,6 @@ import { sessionRuntimeFromNativeAgent } from "@/agent/session-agent-runtime"
 import { HostAgentRegistry } from "@/agent/host-agent-registry"
 import { Bus } from "@/bus"
 import { Config } from "@/config/config"
-import { persistQueuedTask } from "@/engine/pipeline"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Identifier } from "@/id/id"
@@ -26,6 +25,8 @@ import { SessionRuntimeContractStore } from "@/session/runtime-contract"
 import { toolResultControl } from "@/session/tool-result-control"
 import { Database, eq } from "@/storage/db"
 import { installDefaultControlPlaneToolLoaders } from "@/tool/control-plane-tool-composition"
+import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
+import { persistEstablishedTask } from "./engine-task"
 
 type State = {
   request: PermissionAuthority.Request
@@ -129,7 +130,7 @@ async function initializeCut(): Promise<never> {
         metadata: { configOverlay: { prompt_profile: { active: schedulerCapability.expertSquadID } } },
       })
       const now = Date.now()
-      persistQueuedTask({
+      persistEstablishedTask({
         taskID,
         sessionID: root.id,
         now,
@@ -138,7 +139,6 @@ async function initializeCut(): Promise<never> {
         productPillar: "code",
         metadata: { actor: "user" },
         projectID: Instance.project.id,
-        queue: false,
         packageRevision: schedulerCapability.packageRevision,
         executionCapsuleBinding: await prepareTaskProcessBinding({
           mode: "native",
@@ -302,6 +302,7 @@ async function recover(state: State) {
   })
 }
 
+const runtimeOwnership = RuntimeServerOwnership.acquire({ database: Database.Path() })
 try {
   if (mode === "init") await initializeCut()
   const state = JSON.parse(await fs.readFile(stateFile, "utf8")) as State
@@ -310,6 +311,7 @@ try {
   if (mode !== "recover") throw new Error(`Unknown Tool-result permission process mode ${mode}`)
   const output = await recover(state)
   await Instance.disposeAll()
+  await RuntimeServerOwnership.releaseWithRetry(runtimeOwnership)
   Database.close()
   process.stdout.write(JSON.stringify(output))
 } catch (error) {

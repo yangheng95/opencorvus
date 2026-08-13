@@ -12,7 +12,7 @@ export type EngineBudget = {
 
 export type EngineMetadata = Record<string, unknown>
 
-export type EngineTaskStatus = "queued" | "active" | "completed" | "failed" | "cancelled"
+export type EngineTaskStatus = "active" | "completed" | "failed" | "cancelled"
 
 export type EngineTaskPriority = "critical" | "high" | "normal" | "low"
 export type EngineGoalPriority = "blocking" | "advisory"
@@ -48,7 +48,6 @@ export const ENGINE_ARTIFACT_KINDS = [
   "operator_message_wake",
   "mission_acceptance_resume_receipt",
   "queued_operator_wake",
-  "task_loop_launch",
   "task_checkpoint_settlement",
   "task_auxiliary_settlement",
   "exploration",
@@ -136,16 +135,12 @@ export const EngineTaskTable = sqliteTable(
      *  `engine/task-status.ts::deriveTaskStatus` from
      *  (time_started, time_completed, error, metadata.cancelled). */
     priority: text().notNull().$type<EngineTaskPriority>().default("normal"),
-    /** Directory-scoped runnable queue order. Active tasks are excluded from
-     *  reordering and queued siblings are claimed by this value. Priority only
-     *  seeds initial placement; user drag order rewrites this field directly. */
-    queue_order: integer().notNull().default(0),
     /** The former task-wide blocker cache is removed. Current blockers are
      *  explicit interaction or evidence facts, never an execution status. */
     error: text(),
     budget: text({ mode: "json" }).$type<EngineBudget>(),
     metadata: text({ mode: "json" }).$type<EngineMetadata>(),
-    time_started: integer(),
+    time_started: integer().notNull(),
     time_completed: integer(),
     /** User-facing archive timestamp. Archived Tasks remain durable and may be
      *  restored or permanently deleted from Settings. */
@@ -179,7 +174,6 @@ export const EngineTaskTable = sqliteTable(
     index("engine_task_time_completed_idx").on(table.time_completed),
     index("engine_task_time_archived_idx").on(table.time_archived),
     index("engine_task_time_pinned_idx").on(table.time_pinned),
-    index("engine_task_queue_order_idx").on(table.queue_order),
     uniqueIndex("engine_task_project_request_idx").on(table.project_id, table.request_id),
   ],
 )

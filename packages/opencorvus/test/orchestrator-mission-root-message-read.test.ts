@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test"
 import { Hono } from "hono"
 import { Bus } from "@/bus"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { Identifier } from "@/id/id"
 import { authorizedTaskRootMessagesForWake, createOrchestratorInteractionTools } from "@/orchestrator/interaction-tools"
@@ -43,7 +43,7 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
       const taskID = Identifier.ascending("task")
       const root = await Session.create({ kind: "root", title: "Mission acceptance root message" })
       const now = Date.now()
-      persistQueuedTask({
+      persistTask({
         taskID,
         sessionID: root.id,
         now,
@@ -54,7 +54,6 @@ test("Mission acceptance wake reads its exact Mission-authored Task-root message
         priority: "normal",
         metadata: {},
         projectID: Instance.project.id,
-        queue: false,
         packageRevision,
         executionCapsuleBinding: await prepareTaskProcessBinding({
           mode: "native",
@@ -374,7 +373,7 @@ test("successor runtime replays one atomic Task-root Message move after register
       const root = await Session.create({ kind: "root", title: "Recover atomic Task-root Message move" })
       rootSessionID = root.id
       const now = Date.now()
-      persistQueuedTask({
+      persistTask({
         taskID,
         sessionID: root.id,
         now,
@@ -385,7 +384,6 @@ test("successor runtime replays one atomic Task-root Message move after register
         priority: "normal",
         metadata: {},
         projectID: Instance.project.id,
-        queue: true,
         packageRevision,
         executionCapsuleBinding: await prepareTaskProcessBinding({
           mode: "native",
@@ -522,9 +520,7 @@ test("idempotent Task-root Message delivery validates every target-owned Part", 
           messageID,
           orchestratorSessionID: orchestrator.id,
         }),
-      ).rejects.toThrow(
-        `Task-root Message ${messageID} is delivered but Part ${partID} remains on Session ${root.id}.`,
-      )
+      ).rejects.toThrow(`Task-root Message ${messageID} is delivered but Part ${partID} remains on Session ${root.id}.`)
     },
   })
 })

@@ -5,7 +5,7 @@ import { recordDispatchSettlement } from "@/engine/dispatch-settlement"
 import { describeTask } from "@/engine/describe"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { recordEngineArtifact } from "@/engine/artifact"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import {
   listRequirementSetArtifacts,
@@ -19,7 +19,7 @@ import { Instance } from "@/project/instance"
 import type { RequirementCoverageDeclaration, RequirementSet } from "@/requirements/types"
 import { Session } from "@/session"
 import { exactEngineArtifactLocator } from "@/artifact-catalog"
-import { createArtifactReadAiTool, createArtifactSelectAiTool } from "@/tool/artifact-catalog"
+import { createArtifactReadAiTool, createArtifactSearchAiTool, createArtifactSelectAiTool } from "@/tool/artifact-catalog"
 import { createRequirementsOutputTools } from "@/requirements/output-tools"
 import { EngineArtifactEnvelopeSchema } from "@opencorvus-ai/plugin"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
@@ -74,7 +74,7 @@ async function fixture(title: string) {
     title,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
-  persistQueuedTask({
+  persistTask({
     taskID,
     sessionID: root.id,
     now,
@@ -85,7 +85,6 @@ async function fixture(title: string) {
     priority: "normal",
     metadata: {},
     projectID: Instance.project.id,
-    queue: true,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",
@@ -119,7 +118,7 @@ async function fixture(title: string) {
     role: "assistant",
     author: identity.agentID,
     parentID: input.id,
-    time: { created: now + 2, completed: now + 3 },
+    time: { created: now + 8, completed: now + 9 },
     agent: identity.agentID,
     providerID: "test",
     modelID: "test-model",
@@ -236,17 +235,63 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
     tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
     finish: "stop" as const,
   })
+  const searchMessage = await Session.updateMessage(
+    assistantMessage(
+      Identifier.ascending("message"),
+      task.final.time.created - 6,
+      task.final.time.created - 5,
+    ),
+  )
+  const searchTool = createArtifactSearchAiTool(task.taskID)
+  if (!searchTool.execute) throw new Error("artifact_search is missing its production execution boundary")
+  const searchInput = {
+    artifact_types: ["requirements-test/source"],
+    version_scope: "current" as const,
+    limit: 10,
+  }
+  const searchOutput = await searchTool.execute(searchInput, {
+    toolCallId: "requirements-search",
+    messages: [],
+    abortSignal: new AbortController().signal,
+    opencorvus: { sessionID: task.worker.id, messageID: searchMessage.id },
+  } as never)
+  await Session.updatePart({
+    id: Identifier.ascending("part"),
+    sessionID: task.worker.id,
+    messageID: searchMessage.id,
+    type: "tool",
+    callID: "requirements-search",
+    tool: "artifact_search",
+    state: {
+      status: "completed",
+      input: searchInput,
+      output: searchOutput.output,
+      title: searchOutput.title,
+      metadata: searchOutput.metadata,
+      time: { start: task.final.time.created - 6, end: task.final.time.created - 5 },
+    },
+  })
+  const searchPage = JSON.parse(searchOutput.output) as { entries: Array<{ artifact_locator_ref: string }> }
+  const artifactLocatorRef = searchPage.entries[0]?.artifact_locator_ref
+  if (!artifactLocatorRef) throw new Error("artifact_search did not return the persisted requirements evidence")
   const readMessage = await Session.updateMessage({
     ...assistantMessage(
       Identifier.ascending("message"),
-      task.final.time.created - 2,
-      task.final.time.created - 1,
+      task.final.time.created - 4,
+      task.final.time.created - 3,
     ),
   })
   const readTool = createArtifactReadAiTool(task.taskID)
   if (!readTool.execute) throw new Error("artifact_read is missing its production execution boundary")
+  const readInput = {
+    artifact_transport_version: 2 as const,
+    artifact_locator_ref: artifactLocatorRef,
+    byte_offset: 0,
+    max_bytes: 16_384,
+    delivery: "inline" as const,
+  }
   const readOutput = await readTool.execute(
-    { locator, byte_offset: 0, max_bytes: 16_384, delivery: "inline" },
+    readInput,
     {
       toolCallId: "requirements-read",
       messages: [],
@@ -263,23 +308,29 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
     tool: "artifact_read",
     state: {
       status: "completed",
-      input: { locator, byte_offset: 0, max_bytes: 16_384, delivery: "inline" },
+      input: readInput,
       output: readOutput.output,
       title: readOutput.title,
       metadata: readOutput.metadata,
-      time: { start: task.final.time.created - 2, end: task.final.time.created - 1 },
+      time: { start: task.final.time.created - 4, end: task.final.time.created - 3 },
     },
   })
+  const readResult = JSON.parse(readOutput.output) as { artifact_read_ref?: string }
+  if (!readResult.artifact_read_ref) throw new Error("artifact_read did not return a persisted read reference")
   const selectMessage = await Session.updateMessage(
     assistantMessage(
       Identifier.ascending("message"),
+      task.final.time.created - 2,
       task.final.time.created - 1,
-      task.final.time.created,
     ),
   )
   const selectTool = createArtifactSelectAiTool(task.taskID)
   if (!selectTool.execute) throw new Error("artifact_select is missing its production execution boundary")
-  const selectInput = { locator, purpose: "Supports REQ-1" }
+  const selectInput = {
+    artifact_transport_version: 2 as const,
+    artifact_read_ref: readResult.artifact_read_ref,
+    purpose: "Supports REQ-1",
+  }
   const selectOutput = await selectTool.execute(selectInput, {
     toolCallId: "requirements-select",
     messages: [],
@@ -299,7 +350,7 @@ async function addSelectedEvidence(task: Awaited<ReturnType<typeof fixture>>) {
       output: selectOutput.output,
       title: selectOutput.title,
       metadata: selectOutput.metadata,
-      time: { start: task.final.time.created - 1, end: task.final.time.created },
+      time: { start: task.final.time.created - 2, end: task.final.time.created - 1 },
     },
   })
   return locator

@@ -2,7 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test"
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
 import { Config } from "../../src/config/config"
-import { persistQueuedTask } from "../../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "../fixture/engine-task"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
 import {
   EngineArtifactEnvelopeSchema,
@@ -28,11 +28,7 @@ import {
 import publishViralContentArtifact from "../../../../expert-squads/builtin/viral-content/tools/publish-viral-content-artifact"
 
 const packageRoot = path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", "viral-content")
-const skillRefs = [
-  "viral-content/shared/acceptance",
-  "viral-content/shared/method",
-  "viral-content/shared/workflow",
-]
+const skillRefs = ["viral-content/shared/acceptance", "viral-content/shared/method", "viral-content/shared/workflow"]
 const publisherRef = "viral-content/shared/publish-viral-content-artifact"
 const dependencies = {
   "viral-brief-strategist": [],
@@ -62,14 +58,22 @@ const samples = {
   },
   "viral-content/audience-dossier": {
     workflow_id: VIRAL_CONTENT_WORKFLOW_ID,
-    segments: [{ name: "Independent developers", need: "Reviewable agent work", evidence_urls: ["https://opencorvus.org/"] }],
+    segments: [
+      { name: "Independent developers", need: "Reviewable agent work", evidence_urls: ["https://opencorvus.org/"] },
+    ],
     tensions: ["Delegation speed versus evidence quality"],
     language_patterns: ["Show the work"],
     unknowns: ["Channel-specific baseline engagement"],
   },
   "viral-content/trend-dossier": {
     workflow_id: VIRAL_CONTENT_WORKFLOW_ID,
-    observed_patterns: [{ pattern: "Evidence-led product demonstrations", evidence_urls: ["https://opencorvus.org/"], observed_at: "2026-08-10" }],
+    observed_patterns: [
+      {
+        pattern: "Evidence-led product demonstrations",
+        evidence_urls: ["https://opencorvus.org/"],
+        observed_at: "2026-08-10",
+      },
+    ],
     lifecycle_assessment: "Current but requires product-specific proof",
     imitation_risks: ["Generic agent montage"],
     unknowns: ["Sustained channel performance"],
@@ -77,8 +81,22 @@ const samples = {
   "viral-content/concept-set": {
     workflow_id: VIRAL_CONTENT_WORKFLOW_ID,
     concepts: [
-      { id: "show-the-chain", hook: "Agents are easy; evidence is hard", promise: "Trace one Task to delivery", proof_points: ["Typed Artifacts"], distribution_hypothesis: "Concrete evidence earns saves", why_now: "Agent workflows are crowded" },
-      { id: "parallel-with-proof", hook: "Parallel work without invisible handoffs", promise: "See explicit dependency joins", proof_points: ["Binding workflow"], distribution_hypothesis: "Architecture clarity earns qualified clicks", why_now: "Teams need reliable coordination" },
+      {
+        id: "show-the-chain",
+        hook: "Agents are easy; evidence is hard",
+        promise: "Trace one Task to delivery",
+        proof_points: ["Typed Artifacts"],
+        distribution_hypothesis: "Concrete evidence earns saves",
+        why_now: "Agent workflows are crowded",
+      },
+      {
+        id: "parallel-with-proof",
+        hook: "Parallel work without invisible handoffs",
+        promise: "See explicit dependency joins",
+        proof_points: ["Binding workflow"],
+        distribution_hypothesis: "Architecture clarity earns qualified clicks",
+        why_now: "Teams need reliable coordination",
+      },
     ],
     selected_id: "show-the-chain",
     selection_rationale: "It maps directly to observable product evidence",
@@ -88,7 +106,9 @@ const samples = {
     concept_id: "show-the-chain",
     title: "Agents are easy; evidence is hard",
     long_form_markdown: "# Agents are easy; evidence is hard\n\nOpenCorvus binds work to typed evidence.",
-    short_variants: [{ channel: "linkedin", copy: "Trace the work, not just the answer.", call_to_action: "Inspect OpenCorvus" }],
+    short_variants: [
+      { channel: "linkedin", copy: "Trace the work, not just the answer.", call_to_action: "Inspect OpenCorvus" },
+    ],
     claim_source_map: [{ claim: "OpenCorvus uses Expert Squads", source_urls: ["https://opencorvus.org/"] }],
     disclosed_inferences: ["Evidence-led framing may improve qualified attention"],
     unresolved_claims: ["No engagement lift has been measured"],
@@ -96,7 +116,9 @@ const samples = {
   "viral-content/review": {
     workflow_id: VIRAL_CONTENT_WORKFLOW_ID,
     verdict: "approved" as const,
-    checks: [{ area: "claim support", result: "pass" as const, finding: "The product claim has a source", correction: null }],
+    checks: [
+      { area: "claim support", result: "pass" as const, finding: "The product claim has a source", correction: null },
+    ],
     required_corrections: [],
     accepted_limitations: ["Engagement is unmeasured"],
     publication_guidance: "Publish as a hypothesis-led campaign",
@@ -128,7 +150,9 @@ describe("Viral Content Expert Squad package", () => {
     expect([...loaded.packageSkills.keys()]).toEqual(skillRefs)
     expect([...loaded.packageToolBundles.keys()]).toEqual([publisherRef])
     const workflow = loaded.manifest.capability_projection.virtual_workflows["evidence-backed-content-campaign"]!
-    expect(Object.fromEntries(Object.entries(workflow.nodes).map(([id, node]) => [id, node.depends_on]))).toEqual(dependencies)
+    expect(Object.fromEntries(Object.entries(workflow.nodes).map(([id, node]) => [id, node.depends_on]))).toEqual(
+      dependencies,
+    )
     expect(workflow.nodes["viral-content-reviewer"]!.depends_on).toEqual(["viral-copy-producer"])
     expect(loaded.manifest.capability_projection.agents["viral-delivery-owner"]!.base_role).toBe("build")
 
@@ -149,12 +173,24 @@ describe("Viral Content Expert Squad package", () => {
       directory: project.path,
       fn: async () => {
         const config = Config.Info.parse({ prompt_profile: { active: "viral-content" } })
-        const revision = await PromptProfileResolver.resolveActivePackageRevision({ projectDirectory: project.path, config })
-        const schedulerCapability = await PromptProfileResolver.resolveSchedulerCapability({ projectDirectory: project.path, config, packageRevision: revision })
+        const revision = await PromptProfileResolver.resolveActivePackageRevision({
+          projectDirectory: project.path,
+          config,
+        })
+        const schedulerCapability = await PromptProfileResolver.resolveSchedulerCapability({
+          projectDirectory: project.path,
+          config,
+          packageRevision: revision,
+        })
         expect(schedulerCapability.productionSkills.map((skill) => skill.ref)).toEqual(skillRefs)
         expect(Object.keys(schedulerCapability.virtualWorkflows)).toEqual(["evidence-backed-content-campaign"])
         for (const agentID of Object.keys(dependencies)) {
-          const worker = await PromptProfileResolver.resolveWorkerCapability({ projectDirectory: project.path, config, packageRevision: revision, agentID })
+          const worker = await PromptProfileResolver.resolveWorkerCapability({
+            projectDirectory: project.path,
+            config,
+            packageRevision: revision,
+            agentID,
+          })
           expect(worker.productionSkills.map((skill) => skill.ref)).toEqual(skillRefs)
           expect(worker.packageTools.map((tool) => tool.ref)).toEqual([publisherRef])
         }
@@ -171,7 +207,7 @@ describe("Viral Content Expert Squad package", () => {
           packageRevisionSHA256: revision.packageDigest,
           timeCreated: started,
         })
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started,
@@ -180,9 +216,11 @@ describe("Viral Content Expert Squad package", () => {
           productPillar: "work",
           source: "test",
           priority: "normal",
-          metadata: { actor: "mission", mission: { id: Identifier.ascending("mission"), session_id: Identifier.ascending("session") } },
+          metadata: {
+            actor: "mission",
+            mission: { id: Identifier.ascending("mission"), session_id: Identifier.ascending("session") },
+          },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: revision,
           executionCapsuleBinding: binding,
         })
@@ -253,11 +291,9 @@ describe("Viral Content Expert Squad package", () => {
           }
 
           const briefReceipt = await publish("viral-content/campaign-brief", "viral-brief-strategist")
-          const audienceReceipt = await publish(
-            "viral-content/audience-dossier",
-            "viral-audience-researcher",
-            [briefReceipt.locator],
-          )
+          const audienceReceipt = await publish("viral-content/audience-dossier", "viral-audience-researcher", [
+            briefReceipt.locator,
+          ])
           const trendReceipt = await publish("viral-content/trend-dossier", "viral-trend-researcher", [
             briefReceipt.locator,
           ])
@@ -268,7 +304,12 @@ describe("Viral Content Expert Squad package", () => {
           const copyReceipt = await publish("viral-content/copy-pack", "viral-copy-producer", [conceptReceipt.locator])
           const reviewReceipt = await publish("viral-content/review", "viral-content-reviewer", [copyReceipt.locator])
 
-          const audienceRead = await host.engineArtifacts.read({ locator: audienceReceipt.locator, byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
+          const audienceRead = await host.engineArtifacts.read({
+            locator: audienceReceipt.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
           const envelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(audienceRead.chunk.text!))
           expect(envelope).toMatchObject({
             artifact_type: "viral-content/audience-dossier",
@@ -280,7 +321,10 @@ describe("Viral Content Expert Squad package", () => {
 
           const stage = await host.taskArtifacts.stage({ trees: ["viral-delivery"] })
           await writeFile(path.join(stage.treeDirectories["viral-delivery"]!, "campaign.md"), "# OpenCorvus launch\n")
-          await writeFile(path.join(stage.treeDirectories["viral-delivery"]!, "campaign.json"), JSON.stringify(samples["viral-content/delivery"]))
+          await writeFile(
+            path.join(stage.treeDirectories["viral-delivery"]!, "campaign.json"),
+            JSON.stringify(samples["viral-content/delivery"]),
+          )
           const publication = await host.taskArtifacts.publish(stage, {
             snapshot_kind: "catalog",
             files: [
@@ -288,16 +332,29 @@ describe("Viral Content Expert Squad package", () => {
               { tree: "viral-delivery", path: "campaign.md", media_type: "text/markdown" },
             ],
           })
-          const resourceSet = TaskArtifactResourceSetLocatorSchema.parse({ snapshot: publication.snapshot, tree: "viral-delivery" })
-          const deliveryReceipt = await publish("viral-content/delivery", "viral-delivery-owner", [
-            briefReceipt.locator,
-            audienceReceipt.locator,
-            trendReceipt.locator,
-            conceptReceipt.locator,
-            copyReceipt.locator,
-            reviewReceipt.locator,
-          ], resourceSet)
-          const deliveryRead = await host.engineArtifacts.read({ locator: deliveryReceipt.locator, byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
+          const resourceSet = TaskArtifactResourceSetLocatorSchema.parse({
+            snapshot: publication.snapshot,
+            tree: "viral-delivery",
+          })
+          const deliveryReceipt = await publish(
+            "viral-content/delivery",
+            "viral-delivery-owner",
+            [
+              briefReceipt.locator,
+              audienceReceipt.locator,
+              trendReceipt.locator,
+              conceptReceipt.locator,
+              copyReceipt.locator,
+              reviewReceipt.locator,
+            ],
+            resourceSet,
+          )
+          const deliveryRead = await host.engineArtifacts.read({
+            locator: deliveryReceipt.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
           const deliveryEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(deliveryRead.chunk.text!))
           expect(deliveryReceipt.artifact_sha256).toMatch(/^[a-f0-9]{64}$/)
           expect(deliveryEnvelope.resources.map((resource) => resource.path)).toEqual(["campaign.json", "campaign.md"])
@@ -309,7 +366,11 @@ describe("Viral Content Expert Squad package", () => {
             copyReceipt.locator,
             reviewReceipt.locator,
           ]
-          expect([...deliveryEnvelope.source_artifact_locators].sort((left, right) => left.artifact_id.localeCompare(right.artifact_id))).toEqual(
+          expect(
+            [...deliveryEnvelope.source_artifact_locators].sort((left, right) =>
+              left.artifact_id.localeCompare(right.artifact_id),
+            ),
+          ).toEqual(
             [...expectedDeliverySources].sort((left, right) => left.artifact_id.localeCompare(right.artifact_id)),
           )
         })

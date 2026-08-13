@@ -91,7 +91,7 @@ export namespace BrowserMCPNodeLauncher {
     let stdinCloseOperation: Promise<void> | undefined
     const stdinClosed = () => {
       if (stdinCloseOperation) return
-      process.stdin.unpipe(child.stdin)
+      process.stdin.unpipe(child.stdin ?? undefined)
       stdinCloseOperation = closeChildAfterHostStdin({
         endStdin: () => child.stdin?.end(),
         exited: child.exited,

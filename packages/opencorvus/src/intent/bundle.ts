@@ -22,7 +22,7 @@
 // — NOT Instance.directory, which can drift) so writers and readers always
 // agree on the location.
 //
-// Bundle is written before `persistQueuedTask` runs so it is on disk by the
+// Bundle is written before `persistTask` runs so it is on disk by the
 // time the orchestrator wakes the pipeline agents. The contents are deterministic
 // from {request, attachments}; rerunning is idempotent.
 

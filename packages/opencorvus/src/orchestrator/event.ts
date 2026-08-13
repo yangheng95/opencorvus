@@ -16,6 +16,13 @@ export const OrchestratorEventSchema = z
   .object({
     /** Diagnostic wake label only. It is never persisted as a conversation message. */
     note: z.string().optional(),
+    taskCreation: z
+      .object({
+        taskID: z.string().min(1),
+        requestID: z.string().min(1).optional(),
+      })
+      .strict()
+      .optional(),
     taskWaitActivity: z
       .object({
         source: z.string(),

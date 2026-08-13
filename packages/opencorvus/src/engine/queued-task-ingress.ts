@@ -62,6 +62,8 @@ const CommonShape = {
   delivery_runtime_attempt: z.number().int().positive().optional(),
   task_id: z.string().min(1),
   root_session_id: z.string().min(1),
+  /** Immutable active Task occurrence that admitted this root ingress. */
+  task_occurrence_started_at: z.number().int().positive(),
   time_queued: z.number().int().nonnegative(),
   queued_by_process_id: z.number().int().nonnegative(),
   queued_by_instance_directory: z.string().optional(),
@@ -70,6 +72,20 @@ const CommonShape = {
 }
 
 const NoteShape = { note: z.string().optional() }
+
+const TaskCreation = z
+  .object({
+    ...CommonShape,
+    source_kind: z.literal("task_creation"),
+    task_creation_id: z.string().min(1),
+    event: z
+      .object({
+        ...NoteShape,
+        taskCreation: OrchestratorEventSchema.shape.taskCreation.unwrap(),
+      })
+      .strict(),
+  })
+  .strict()
 
 const OperatorMessage = z
   .object({
@@ -107,9 +123,10 @@ const MissionMessage = z
     event: z
       .object({
         ...NoteShape,
-        rootMessage: OrchestratorEventSchema.shape.rootMessage
-          .unwrap()
-          .extend({ kind: z.literal("mission"), schedulerDelivery: OrchestratorEventSchema.shape.rootMessage.unwrap().shape.schedulerDelivery.unwrap() }),
+        rootMessage: OrchestratorEventSchema.shape.rootMessage.unwrap().extend({
+          kind: z.literal("mission"),
+          schedulerDelivery: OrchestratorEventSchema.shape.rootMessage.unwrap().shape.schedulerDelivery.unwrap(),
+        }),
       })
       .strict(),
   })
@@ -240,6 +257,7 @@ const OrchestratorEvent = z
 
 export const QueuedTaskIngressSchema = z
   .discriminatedUnion("source_kind", [
+    TaskCreation,
     OperatorMessage,
     OrchestratorMessage,
     MissionMessage,
@@ -254,6 +272,9 @@ export const QueuedTaskIngressSchema = z
     OrchestratorEvent,
   ])
   .superRefine((payload, context) => {
+    if (payload.source_kind === "task_creation" && payload.task_creation_id !== payload.event.taskCreation.taskID) {
+      context.addIssue({ code: "custom", message: "Task creation ingress identity does not match event" })
+    }
     if (
       payload.source_kind === "operator_message" ||
       payload.source_kind === "orchestrator_message" ||
@@ -294,10 +315,10 @@ export const QueuedTaskIngressSchema = z
       payload.source_kind === "agent_lifecycle_delivery" &&
       payload.lifecycle_event_id !== payload.event.agentLifecycleDelivery.eventID
     ) {
-      context.addIssue({ code: "custom", message: "queued lifecycle delivery identity does not match event" })
+      context.addIssue({ code: "custom", message: "lifecycle delivery identity does not match event" })
     }
     if (payload.source_kind === "task_wait_wake" && payload.wait_job_id !== payload.event.taskWaitWake.jobID) {
-      context.addIssue({ code: "custom", message: "queued task wait identity does not match taskWaitWake" })
+      context.addIssue({ code: "custom", message: "Task wait delivery identity does not match taskWaitWake" })
     }
   })
 
@@ -307,6 +328,7 @@ export type QueuedTaskIngressSourceKind = QueuedTaskIngress["source_kind"]
 export function queuedTaskIngressSourceKind(event: OrchestratorEvent): QueuedTaskIngressSourceKind {
   const parsed = OrchestratorEventSchema.parse(event)
   const candidates: QueuedTaskIngressSourceKind[] = []
+  if (parsed.taskCreation) candidates.push("task_creation")
   if (parsed.rootMessage?.kind === "operator") candidates.push("operator_message")
   if (parsed.rootMessage?.kind === "orchestrator") candidates.push("orchestrator_message")
   if (parsed.rootMessage?.kind === "mission") candidates.push("mission_message")

@@ -32,6 +32,23 @@ Git template、子进程和第三方临时写入均在该树内嵌套，结束�
 
 ## engine 域
 
+### 业务身份与完整性摘要
+
+`src/id/id.ts` 的默认新签发路径为每个 canonical identity family 生成总长度不超过 24 个字符的
+标识；读取或重放历史 caller-supplied 标识仍保持原值。需要稳定重放的业务身份只能在它的存储
+迁移或明确 epoch 边界内切换到紧凑派生键。完整 SHA-256 继续保存在其所属 payload、目录或完整性
+列中，作为字节相等和防冲突事实；紧凑业务 ID 不是截断后冒充的密码学摘要。Project ID 由完整
+normalized repository identity material 经 `Identifier.deterministic("project", material)` 生成不超过
+24 字符的 `prj_*` 身份；包含旧 expanded Project primary key 的 pre-release Database 在 bootstrap
+返回 `DATA_RESET_REQUIRED`，不创建第二个 Project。延迟 Task wait 的 fire identity 由完整 Automation
+job identity 确定性派生为不超过 24 字符的 `cal_*`；pending delay 尚未签发 fire identity，而签发与
+queued ingress 持久化、delay 消费处于同一事务，因此 restart 只重放一个 durable ingress。其他手工或
+caller-supplied 新落盘身份尚未迁入该默认签发面，属于后续迁移契约。Project Memory 的 pending
+user-input file/chunk 与 Project `MEMORY.MD` envelope file/chunk 分别使用 domain-separated 的 compact
+`memory` / `memchunk` identity；完整 Project、occurrence、content 和 provenance 仍在关系与 payload 中。
+包含 expanded Project Memory file 或 chunk primary key 的 pre-release Database 返回 `DATA_RESET_REQUIRED`，不
+双读或原位改写其外键图。
+
 所有表定义在 `src/engine/engine.sql.ts`，命名前缀 `engine_`（历史文档里的
 `orchestrator_*` 已全部重命名为 `engine_*`）。旧的多张过程表已合并为单一
 `engine_artifact`，按 `kind` 区分语义。
@@ -106,7 +123,13 @@ Completion Decision 的 evidence 或 deliverable 集合；缺少任一项时返�
 替代不可变 `TaskCompletionDecision`。
 
 Expert output publication 在同一个 Artifact 写事务中读取 Task terminal 状态；终态之后只允许内容和
-identity 完全相同的 idempotent replay，拒绝新的不同产物。Mission 创建下游 Task 时只提交一个
+identity 完全相同的 idempotent replay，拒绝新的不同产物。
+idempotent expert output 的业务 ID 由 canonical publication material 经统一 deterministic Identifier
+生成且总长不超过 24；完整 payload SHA-256 继续独立存储并进入 exact locator。若短 ID 已被不同
+canonical material 占用，writer 返回 typed identity-collision error，不得 alias。包含旧
+`art_idempotent_<64hex>` 身份的 pre-release Database 属于不兼容持久化 epoch，bootstrap 在业务读取前
+返回 `DATA_RESET_REQUIRED`；不得同时发行旧、新两套确定性身份或猜测重写 immutable provenance。
+Mission 创建下游 Task 时只提交一个
 discriminated `artifact_sources` 权威集合：completed source 只携带 source Task ID，由 Host 读取当前
 `TaskCompletionDecision` 并原子展开其完整 `deliverable_artifact_locators`；模型不再复制任何 completed
 source locator。failed/cancelled source 没有 CompletionDecision，继续由当前 typed terminal lifecycle
@@ -139,6 +162,28 @@ Artifact/resource consumer 明确报告；project bootstrap 的 retention scan �
 VCS、Task events 或 Session events 不可用。严格读取继续验证 manifest、路径、媒体
 类型、字节数与 SHA-256，禁止 fallback、伪造字节或自动修复。无法证明安全的回收不
 得创建第二条删除路径。
+
+Artifact Catalog 对 TaskArtifact 的可发现性同样由持久权威决定。`catalog` snapshot
+投影一个 immutable parent 和它的全部 resource entries；`engine_resource` snapshot
+只是 Engine receipt 的物理资源依赖，不单独投影 parent。只有被当前搜索
+Engine catalog revision/version scope 内至少一个 exact Engine Artifact envelope 引用的
+`engine_resource` identity，才把它的 resource entries 投影为当前 Task 的
+`task_artifact_resource`。准备期、失败清理前或其他未引用物理 snapshot 不进入 Catalog。
+该引用集合与 Engine catalog revision upper bound、TaskArtifact publication sequence
+共同冻结在 cursor membership 中；后续 Engine receipt 只能由 fresh search 观察，不能改变
+既有分页结果。Agent 不得从 wrapper payload 手抄 resource locator，也不存在另一个资源发现路径。
+
+Evolution Lab 的 typed Artifact publisher 在写入前验证直接语义前驱，而不是把先前的
+`artifact_select` 当成隐式 publication provenance。`failure-attribution` 必须直接绑定且完整读取
+唯一的 `opportunity` Engine Artifact，验证其 Evolution observer producer，并让 payload
+`owner_evidence` 引用同一 exact locator；缺失、额外、错误类型、错误 producer 或 payload 不一致
+都返回 typed integrity error，不能持久化为可供 Campaign 消费的成功 Artifact。
+当 completed source Task 同时把已关联的 opportunity 与 failure-attribution 导入下游 Task 时，
+import writer 保留两者的 immutable source locator 与 source provenance，但不伪造新的 direct source。
+Campaign publisher 只在两份 import lineage 属于同一 source Task、opportunity 的 source locator 同时匹配
+attribution 的唯一 source provenance 与 payload owner evidence 时，把两份当前 Task locator 认定为同一
+canonical predecessor pair；Campaign 自身仍只持久化当前 Task locator。错配 pair 返回同一 typed
+integrity error，不允许模型引用 source-Task locator、改写 imported payload 或重发 attribution。
 
 Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 metrics store：
 `engine_metric_spec`、`engine_metric_result` 和 `engine_iteration` 的唯一直接表写入文件

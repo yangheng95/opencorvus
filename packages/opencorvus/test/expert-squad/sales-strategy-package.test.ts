@@ -8,7 +8,7 @@ import {
 } from "@opencorvus-ai/plugin"
 import { Config } from "../../src/config/config"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
-import { persistQueuedTask } from "../../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "../fixture/engine-task"
 import { ExpertSquadPackageManager } from "../../src/expert-squad/manager"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
@@ -196,7 +196,7 @@ describe("Sales Strategy expert squad package", () => {
         const taskID = Identifier.ascending("task")
         const started = Date.now()
         await ensureGitProjectMetadata()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started,
@@ -207,7 +207,6 @@ describe("Sales Strategy expert squad package", () => {
           priority: "normal",
           metadata: { actor: "user" },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "project",
             projectID: Instance.project.id,
@@ -343,21 +342,16 @@ describe("Sales Strategy expert squad package", () => {
               ),
             ) as { locator: EngineArtifactLocator; artifact_sha256: string }
           }
-          const performanceReceipt = await publish(
-            "sales-strategy/opportunity-analysis",
-            "sales-opportunity-analyst",
-            [dossierReceipt.locator],
-          )
-          const segmentReceipt = await publish(
-            "sales-strategy/positioning-analysis",
-            "sales-positioning-analyst",
-            [dossierReceipt.locator],
-          )
-          const insightReceipt = await publish(
-            "sales-strategy/strategy-brief",
-            "sales-strategy-synthesizer",
-            [performanceReceipt.locator, segmentReceipt.locator],
-          )
+          const performanceReceipt = await publish("sales-strategy/opportunity-analysis", "sales-opportunity-analyst", [
+            dossierReceipt.locator,
+          ])
+          const segmentReceipt = await publish("sales-strategy/positioning-analysis", "sales-positioning-analyst", [
+            dossierReceipt.locator,
+          ])
+          const insightReceipt = await publish("sales-strategy/strategy-brief", "sales-strategy-synthesizer", [
+            performanceReceipt.locator,
+            segmentReceipt.locator,
+          ])
           const auditReceipt = await publish("sales-strategy/audit", "sales-strategy-fact-checker", [
             insightReceipt.locator,
           ])

@@ -1001,7 +1001,7 @@
             "description": "Shared assistant runtime activity and parallelism configuration",
             "properties": {
               "activity": {
-                "description": "Chunk-driven inactivity thresholds for session LLM streams and task queue work.",
+                "description": "Chunk-driven inactivity thresholds for session LLM streams and provider execution work.",
                 "properties": {
                   "session_llm_idle_ms": {
                     "description": "Max idle (no stream chunk) window for session LLM streams, ms",
@@ -2527,7 +2527,6 @@
                   "operator_message_wake",
                   "mission_acceptance_resume_receipt",
                   "queued_operator_wake",
-                  "task_loop_launch",
                   "task_checkpoint_settlement",
                   "task_auxiliary_settlement",
                   "exploration",
@@ -5205,7 +5204,6 @@
             "properties": {
               "status": {
                 "enum": [
-                  "queued",
                   "active",
                   "completed",
                   "failed",
@@ -5688,7 +5686,6 @@
             "properties": {
               "status": {
                 "enum": [
-                  "queued",
                   "active",
                   "completed",
                   "failed",
@@ -55477,10 +55474,6 @@
                         "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
                         "type": "string"
                       },
-                      "queue": {
-                        "description": "Whether to queue this task behind other work in the same directory.",
-                        "type": "boolean"
-                      },
                       "request": {
                         "description": "Full user request to execute in the new task.",
                         "type": "string"
@@ -55711,7 +55704,7 @@
                         "type": "string"
                       },
                       "taskID": {
-                        "description": "Task ID to queue for retry.",
+                        "description": "Task ID for the retry request.",
                         "type": "string"
                       }
                     },
@@ -55729,7 +55722,7 @@
                         "type": "string"
                       },
                       "taskID": {
-                        "description": "Task ID to queue for replanning.",
+                        "description": "Task ID for the replan request.",
                         "type": "string"
                       }
                     },
@@ -61265,20 +61258,6 @@
                               "projectID": {
                                 "type": "string"
                               },
-                              "queue": {
-                                "properties": {
-                                  "order": {
-                                    "type": "number"
-                                  },
-                                  "revision": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "order"
-                                ],
-                                "type": "object"
-                              },
                               "requestID": {
                                 "type": "string"
                               },
@@ -61298,7 +61277,6 @@
                               },
                               "status": {
                                 "enum": [
-                                  "queued",
                                   "active",
                                   "completed",
                                   "failed",
@@ -61335,7 +61313,8 @@
                                 },
                                 "required": [
                                   "created",
-                                  "updated"
+                                  "updated",
+                                  "started"
                                 ],
                                 "type": "object"
                               },
@@ -62187,10 +62166,6 @@
                   "promptProfile": {
                     "minLength": 1,
                     "type": "string"
-                  },
-                  "queue": {
-                    "default": false,
-                    "type": "boolean"
                   },
                   "request": {
                     "type": "string"
@@ -66028,7 +66003,6 @@
                             },
                             "lifecycleStatus": {
                               "enum": [
-                                "queued",
                                 "active",
                                 "completed",
                                 "failed",
@@ -66054,9 +66028,6 @@
                                 "work"
                               ],
                               "type": "string"
-                            },
-                            "queueOrder": {
-                              "type": "number"
                             },
                             "source": {
                               "type": "string"
@@ -66085,7 +66056,7 @@
                             "created",
                             "updated",
                             "pinned",
-                            "queueOrder"
+                            "started"
                           ],
                           "type": "object"
                         },
@@ -66894,7 +66865,6 @@
                           },
                           "lifecycleStatus": {
                             "enum": [
-                              "queued",
                               "active",
                               "completed",
                               "failed",
@@ -66920,9 +66890,6 @@
                               "work"
                             ],
                             "type": "string"
-                          },
-                          "queueOrder": {
-                            "type": "number"
                           },
                           "source": {
                             "type": "string"
@@ -66951,7 +66918,7 @@
                           "created",
                           "updated",
                           "pinned",
-                          "queueOrder"
+                          "started"
                         ],
                         "type": "object"
                       },
@@ -67983,7 +67950,6 @@
                           },
                           "lifecycleStatus": {
                             "enum": [
-                              "queued",
                               "active",
                               "completed",
                               "failed",
@@ -68009,9 +67975,6 @@
                               "work"
                             ],
                             "type": "string"
-                          },
-                          "queueOrder": {
-                            "type": "number"
                           },
                           "source": {
                             "type": "string"
@@ -68040,7 +68003,7 @@
                           "created",
                           "updated",
                           "pinned",
-                          "queueOrder"
+                          "started"
                         ],
                         "type": "object"
                       },
@@ -68476,7 +68439,7 @@
     },
     "/mission/{missionID}/status": {
       "get": {
-        "description": "Collect current Mission and Task activity with each Task's diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. Mission and Task `status` fields are normalized to \"running\" or \"inactive\"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw queued, active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.",
+        "description": "Collect current Mission and Task activity with each Task's diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. Mission and Task `status` fields are normalized to \"running\" or \"inactive\"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.",
         "operationId": "mission.status",
         "parameters": [
           {
@@ -68902,7 +68865,6 @@
                           },
                           "lifecycleStatus": {
                             "enum": [
-                              "queued",
                               "active",
                               "completed",
                               "failed",
@@ -69148,7 +69110,8 @@
                             },
                             "required": [
                               "created",
-                              "updated"
+                              "updated",
+                              "started"
                             ],
                             "type": "object"
                           },
@@ -69452,7 +69415,6 @@
                           },
                           "lifecycleStatus": {
                             "enum": [
-                              "queued",
                               "active",
                               "completed",
                               "failed",
@@ -69478,9 +69440,6 @@
                               "work"
                             ],
                             "type": "string"
-                          },
-                          "queueOrder": {
-                            "type": "number"
                           },
                           "source": {
                             "type": "string"
@@ -69509,7 +69468,7 @@
                           "created",
                           "updated",
                           "pinned",
-                          "queueOrder"
+                          "started"
                         ],
                         "type": "object"
                       },
@@ -88902,10 +88861,6 @@
                     "minLength": 1,
                     "type": "string"
                   },
-                  "queue": {
-                    "default": false,
-                    "type": "boolean"
-                  },
                   "request": {
                     "type": "string"
                   },
@@ -89161,95 +89116,6 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.task.create({\n  ...\n})"
-          }
-        ]
-      }
-    },
-    "/task-queue/reorder": {
-      "patch": {
-        "operationId": "task.queue.reorder",
-        "parameters": [
-          {
-            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
-            "in": "query",
-            "name": "directory",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "properties": {
-                  "directory": {
-                    "minLength": 1,
-                    "type": "string"
-                  },
-                  "orderedTaskIDs": {
-                    "default": [],
-                    "items": {
-                      "type": "string"
-                    },
-                    "type": "array"
-                  },
-                  "revision": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "directory"
-                ],
-                "type": "object"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "directory": {
-                      "type": "string"
-                    },
-                    "queuedTaskIDs": {
-                      "items": {
-                        "type": "string"
-                      },
-                      "type": "array"
-                    },
-                    "revision": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "directory",
-                    "revision",
-                    "queuedTaskIDs"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Updated directory queue order"
-          },
-          "409": {
-            "description": "Queue revision conflict"
-          },
-          "422": {
-            "description": "Invalid queued task ordering"
-          }
-        },
-        "summary": "Reorder queued tasks in a directory",
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.task.queue.reorder({\n  ...\n})"
           }
         ]
       }
@@ -90555,20 +90421,6 @@
                     "projectID": {
                       "type": "string"
                     },
-                    "queue": {
-                      "properties": {
-                        "order": {
-                          "type": "number"
-                        },
-                        "revision": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "order"
-                      ],
-                      "type": "object"
-                    },
                     "request": {
                       "type": "string"
                     },
@@ -90591,7 +90443,6 @@
                     },
                     "status": {
                       "enum": [
-                        "queued",
                         "active",
                         "completed",
                         "failed",
@@ -90628,7 +90479,8 @@
                       },
                       "required": [
                         "created",
-                        "updated"
+                        "updated",
+                        "started"
                       ],
                       "type": "object"
                     },
@@ -91397,7 +91249,6 @@
                               "operator_message_wake",
                               "mission_acceptance_resume_receipt",
                               "queued_operator_wake",
-                              "task_loop_launch",
                               "task_checkpoint_settlement",
                               "task_auxiliary_settlement",
                               "exploration",
@@ -93841,20 +93692,6 @@
                         "projectID": {
                           "type": "string"
                         },
-                        "queue": {
-                          "properties": {
-                            "order": {
-                              "type": "number"
-                            },
-                            "revision": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "order"
-                          ],
-                          "type": "object"
-                        },
                         "request": {
                           "type": "string"
                         },
@@ -93877,7 +93714,6 @@
                         },
                         "status": {
                           "enum": [
-                            "queued",
                             "active",
                             "completed",
                             "failed",
@@ -93914,7 +93750,8 @@
                           },
                           "required": [
                             "created",
-                            "updated"
+                            "updated",
+                            "started"
                           ],
                           "type": "object"
                         },
@@ -98300,7 +98137,6 @@
                                   "operator_message_wake",
                                   "mission_acceptance_resume_receipt",
                                   "queued_operator_wake",
-                                  "task_loop_launch",
                                   "task_checkpoint_settlement",
                                   "task_auxiliary_settlement",
                                   "exploration",
@@ -100744,20 +100580,6 @@
                             "projectID": {
                               "type": "string"
                             },
-                            "queue": {
-                              "properties": {
-                                "order": {
-                                  "type": "number"
-                                },
-                                "revision": {
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "order"
-                              ],
-                              "type": "object"
-                            },
                             "request": {
                               "type": "string"
                             },
@@ -100780,7 +100602,6 @@
                             },
                             "status": {
                               "enum": [
-                                "queued",
                                 "active",
                                 "completed",
                                 "failed",
@@ -100817,7 +100638,8 @@
                               },
                               "required": [
                                 "created",
-                                "updated"
+                                "updated",
+                                "started"
                               ],
                               "type": "object"
                             },
@@ -107767,20 +107589,6 @@
                         "projectID": {
                           "type": "string"
                         },
-                        "queue": {
-                          "properties": {
-                            "order": {
-                              "type": "number"
-                            },
-                            "revision": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "order"
-                          ],
-                          "type": "object"
-                        },
                         "request": {
                           "type": "string"
                         },
@@ -107803,7 +107611,6 @@
                         },
                         "status": {
                           "enum": [
-                            "queued",
                             "active",
                             "completed",
                             "failed",
@@ -107840,7 +107647,8 @@
                           },
                           "required": [
                             "created",
-                            "updated"
+                            "updated",
+                            "started"
                           ],
                           "type": "object"
                         },
@@ -109154,20 +108962,6 @@
                     "projectID": {
                       "type": "string"
                     },
-                    "queue": {
-                      "properties": {
-                        "order": {
-                          "type": "number"
-                        },
-                        "revision": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "order"
-                      ],
-                      "type": "object"
-                    },
                     "request": {
                       "type": "string"
                     },
@@ -109190,7 +108984,6 @@
                     },
                     "status": {
                       "enum": [
-                        "queued",
                         "active",
                         "completed",
                         "failed",
@@ -109227,7 +109020,8 @@
                       },
                       "required": [
                         "created",
-                        "updated"
+                        "updated",
+                        "started"
                       ],
                       "type": "object"
                     },
@@ -109252,7 +109046,7 @@
                 }
               }
             },
-            "description": "Task replan queued"
+            "description": "Task replan accepted"
           },
           "404": {
             "content": {
@@ -110444,20 +110238,6 @@
                     "projectID": {
                       "type": "string"
                     },
-                    "queue": {
-                      "properties": {
-                        "order": {
-                          "type": "number"
-                        },
-                        "revision": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "order"
-                      ],
-                      "type": "object"
-                    },
                     "request": {
                       "type": "string"
                     },
@@ -110480,7 +110260,6 @@
                     },
                     "status": {
                       "enum": [
-                        "queued",
                         "active",
                         "completed",
                         "failed",
@@ -110517,7 +110296,8 @@
                       },
                       "required": [
                         "created",
-                        "updated"
+                        "updated",
+                        "started"
                       ],
                       "type": "object"
                     },
@@ -110542,7 +110322,7 @@
                 }
               }
             },
-            "description": "Task retry queued"
+            "description": "Task retry accepted"
           },
           "404": {
             "content": {
@@ -111288,1305 +111068,9 @@
         ]
       }
     },
-    "/task/{taskID}/start-now": {
-      "post": {
-        "operationId": "task.queue.startNow",
-        "parameters": [
-          {
-            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
-            "in": "query",
-            "name": "directory",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "taskID",
-            "required": true,
-            "schema": {
-              "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "directory": {
-                      "type": "string"
-                    },
-                    "queuedTaskIDs": {
-                      "items": {
-                        "type": "string"
-                      },
-                      "type": "array"
-                    },
-                    "started": {
-                      "type": "boolean"
-                    },
-                    "status": {
-                      "type": "string"
-                    },
-                    "task": {
-                      "properties": {
-                        "attachments": {
-                          "items": {
-                            "properties": {
-                              "filename": {
-                                "type": "string"
-                              },
-                              "intent": {
-                                "const": "task_input",
-                                "type": "string"
-                              },
-                              "mime": {
-                                "type": "string"
-                              },
-                              "sha": {
-                                "type": "string"
-                              },
-                              "size": {
-                                "maximum": 9007199254740991,
-                                "minimum": 0,
-                                "type": "integer"
-                              },
-                              "source": {
-                                "const": "user-upload",
-                                "type": "string"
-                              },
-                              "url": {
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "sha",
-                              "url",
-                              "mime",
-                              "size",
-                              "intent",
-                              "source"
-                            ],
-                            "type": "object"
-                          },
-                          "type": "array"
-                        },
-                        "blockingReason": {
-                          "type": "string"
-                        },
-                        "budget": {
-                          "properties": {
-                            "maxExecutorGroups": {
-                              "exclusiveMinimum": 0,
-                              "maximum": 9007199254740991,
-                              "type": "integer"
-                            }
-                          },
-                          "type": "object"
-                        },
-                        "cancellation": {
-                          "oneOf": [
-                            {
-                              "additionalProperties": false,
-                              "properties": {
-                                "actor": {
-                                  "enum": [
-                                    "user",
-                                    "control_agent",
-                                    "mission",
-                                    "right_sidebar_conversation",
-                                    "orchestrator"
-                                  ],
-                                  "type": "string"
-                                },
-                                "messageID": {
-                                  "pattern": "^msg.*",
-                                  "type": "string"
-                                },
-                                "missionID": {
-                                  "maxLength": 64,
-                                  "minLength": 1,
-                                  "pattern": "^[a-z0-9-]+$",
-                                  "type": "string"
-                                },
-                                "reason": {
-                                  "maxLength": 2000,
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "requestEventID": {
-                                  "pattern": "^pev.*",
-                                  "type": "string"
-                                },
-                                "requestID": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "requestedAt": {
-                                  "exclusiveMinimum": 0,
-                                  "maximum": 9007199254740991,
-                                  "type": "integer"
-                                },
-                                "sessionID": {
-                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                                  "type": "string"
-                                },
-                                "source": {
-                                  "enum": [
-                                    "task.cancel",
-                                    "task.delete",
-                                    "task.archive",
-                                    "mission.abort",
-                                    "mission.archive",
-                                    "mission.delete",
-                                    "panel.cancel_task",
-                                    "orchestrator.cancel_task",
-                                    "session.delete",
-                                    "project.delete"
-                                  ],
-                                  "type": "string"
-                                },
-                                "status": {
-                                  "const": "cancelling",
-                                  "type": "string"
-                                },
-                                "surface": {
-                                  "enum": [
-                                    "api",
-                                    "overlay.work_ledger",
-                                    "overlay.selected_task",
-                                    "overlay.composer_stop",
-                                    "overlay.chat_request_stop",
-                                    "overlay.interrupt_task",
-                                    "overlay.archive_panel",
-                                    "panel",
-                                    "gateway",
-                                    "slack",
-                                    "telegram",
-                                    "discord",
-                                    "feishu",
-                                    "whatsapp",
-                                    "googlechat",
-                                    "msteams",
-                                    "line",
-                                    "matrix",
-                                    "mattermost",
-                                    "signal",
-                                    "wecom",
-                                    "dingtalk",
-                                    "clickclack",
-                                    "imessage",
-                                    "irc",
-                                    "nextcloud-talk",
-                                    "nostr",
-                                    "qqbot",
-                                    "raft",
-                                    "reef",
-                                    "sms",
-                                    "synology-chat",
-                                    "tlon",
-                                    "twitch",
-                                    "zalo",
-                                    "zalouser",
-                                    "right-sidebar",
-                                    "orchestrator"
-                                  ],
-                                  "type": "string"
-                                },
-                                "toolCallID": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "toolPartID": {
-                                  "pattern": "^prt.*",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "requestEventID",
-                                "requestedAt",
-                                "source",
-                                "requestID",
-                                "actor",
-                                "surface",
-                                "reason",
-                                "status"
-                              ],
-                              "type": "object"
-                            },
-                            {
-                              "additionalProperties": false,
-                              "properties": {
-                                "actor": {
-                                  "enum": [
-                                    "user",
-                                    "control_agent",
-                                    "mission",
-                                    "right_sidebar_conversation",
-                                    "orchestrator"
-                                  ],
-                                  "type": "string"
-                                },
-                                "messageID": {
-                                  "pattern": "^msg.*",
-                                  "type": "string"
-                                },
-                                "missionID": {
-                                  "maxLength": 64,
-                                  "minLength": 1,
-                                  "pattern": "^[a-z0-9-]+$",
-                                  "type": "string"
-                                },
-                                "reason": {
-                                  "maxLength": 2000,
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "requestEventID": {
-                                  "pattern": "^pev.*",
-                                  "type": "string"
-                                },
-                                "requestID": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "requestedAt": {
-                                  "exclusiveMinimum": 0,
-                                  "maximum": 9007199254740991,
-                                  "type": "integer"
-                                },
-                                "sessionID": {
-                                  "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                                  "type": "string"
-                                },
-                                "source": {
-                                  "enum": [
-                                    "task.cancel",
-                                    "task.delete",
-                                    "task.archive",
-                                    "mission.abort",
-                                    "mission.archive",
-                                    "mission.delete",
-                                    "panel.cancel_task",
-                                    "orchestrator.cancel_task",
-                                    "session.delete",
-                                    "project.delete"
-                                  ],
-                                  "type": "string"
-                                },
-                                "status": {
-                                  "const": "cancelled",
-                                  "type": "string"
-                                },
-                                "surface": {
-                                  "enum": [
-                                    "api",
-                                    "overlay.work_ledger",
-                                    "overlay.selected_task",
-                                    "overlay.composer_stop",
-                                    "overlay.chat_request_stop",
-                                    "overlay.interrupt_task",
-                                    "overlay.archive_panel",
-                                    "panel",
-                                    "gateway",
-                                    "slack",
-                                    "telegram",
-                                    "discord",
-                                    "feishu",
-                                    "whatsapp",
-                                    "googlechat",
-                                    "msteams",
-                                    "line",
-                                    "matrix",
-                                    "mattermost",
-                                    "signal",
-                                    "wecom",
-                                    "dingtalk",
-                                    "clickclack",
-                                    "imessage",
-                                    "irc",
-                                    "nextcloud-talk",
-                                    "nostr",
-                                    "qqbot",
-                                    "raft",
-                                    "reef",
-                                    "sms",
-                                    "synology-chat",
-                                    "tlon",
-                                    "twitch",
-                                    "zalo",
-                                    "zalouser",
-                                    "right-sidebar",
-                                    "orchestrator"
-                                  ],
-                                  "type": "string"
-                                },
-                                "terminalAt": {
-                                  "exclusiveMinimum": 0,
-                                  "maximum": 9007199254740991,
-                                  "type": "integer"
-                                },
-                                "terminalEventID": {
-                                  "pattern": "^pev.*",
-                                  "type": "string"
-                                },
-                                "toolCallID": {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "toolPartID": {
-                                  "pattern": "^prt.*",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "requestEventID",
-                                "requestedAt",
-                                "source",
-                                "requestID",
-                                "actor",
-                                "surface",
-                                "reason",
-                                "status",
-                                "terminalEventID",
-                                "terminalAt"
-                              ],
-                              "type": "object"
-                            }
-                          ]
-                        },
-                        "completionDecision": {
-                          "properties": {
-                            "acceptedDeliverySliceRevisionIDs": {
-                              "items": {
-                                "pattern": "^gol.*",
-                                "type": "string"
-                              },
-                              "type": "array"
-                            },
-                            "artifactLocator": {
-                              "additionalProperties": false,
-                              "properties": {
-                                "artifact_id": {
-                                  "maxLength": 512,
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "catalog_revision": {
-                                  "exclusiveMinimum": 0,
-                                  "maximum": 9007199254740991,
-                                  "type": "integer"
-                                },
-                                "expected_sha256": {
-                                  "pattern": "^[a-f0-9]{64}$",
-                                  "type": "string"
-                                },
-                                "source": {
-                                  "const": "engine_artifact",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "source",
-                                "artifact_id",
-                                "catalog_revision",
-                                "expected_sha256"
-                              ],
-                              "type": "object"
-                            },
-                            "deliverableArtifactLocators": {
-                              "items": {
-                                "oneOf": [
-                                  {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "artifact_id": {
-                                        "maxLength": 512,
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "catalog_revision": {
-                                        "exclusiveMinimum": 0,
-                                        "maximum": 9007199254740991,
-                                        "type": "integer"
-                                      },
-                                      "expected_sha256": {
-                                        "pattern": "^[a-f0-9]{64}$",
-                                        "type": "string"
-                                      },
-                                      "source": {
-                                        "const": "engine_artifact",
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "source",
-                                      "artifact_id",
-                                      "catalog_revision",
-                                      "expected_sha256"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "snapshot": {
-                                        "additionalProperties": false,
-                                        "properties": {
-                                          "manifest_sha256": {
-                                            "pattern": "^[a-f0-9]{64}$",
-                                            "type": "string"
-                                          },
-                                          "project_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          },
-                                          "schema_version": {
-                                            "const": 2,
-                                            "type": "number"
-                                          },
-                                          "snapshot_id": {
-                                            "format": "uuid",
-                                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                            "type": "string"
-                                          },
-                                          "task_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [
-                                          "schema_version",
-                                          "project_id",
-                                          "task_id",
-                                          "snapshot_id",
-                                          "manifest_sha256"
-                                        ],
-                                        "type": "object"
-                                      },
-                                      "source": {
-                                        "const": "task_artifact_snapshot",
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "source",
-                                      "snapshot"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "ref": {
-                                        "additionalProperties": false,
-                                        "properties": {
-                                          "bytes": {
-                                            "maximum": 9007199254740991,
-                                            "minimum": 0,
-                                            "type": "integer"
-                                          },
-                                          "media_type": {
-                                            "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
-                                            "type": "string"
-                                          },
-                                          "path": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          },
-                                          "sha256": {
-                                            "pattern": "^[a-f0-9]{64}$",
-                                            "type": "string"
-                                          },
-                                          "snapshot": {
-                                            "additionalProperties": false,
-                                            "properties": {
-                                              "manifest_sha256": {
-                                                "pattern": "^[a-f0-9]{64}$",
-                                                "type": "string"
-                                              },
-                                              "project_id": {
-                                                "minLength": 1,
-                                                "type": "string"
-                                              },
-                                              "schema_version": {
-                                                "const": 2,
-                                                "type": "number"
-                                              },
-                                              "snapshot_id": {
-                                                "format": "uuid",
-                                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                                "type": "string"
-                                              },
-                                              "task_id": {
-                                                "minLength": 1,
-                                                "type": "string"
-                                              }
-                                            },
-                                            "required": [
-                                              "schema_version",
-                                              "project_id",
-                                              "task_id",
-                                              "snapshot_id",
-                                              "manifest_sha256"
-                                            ],
-                                            "type": "object"
-                                          },
-                                          "tree": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [
-                                          "snapshot",
-                                          "tree",
-                                          "path",
-                                          "media_type",
-                                          "bytes",
-                                          "sha256"
-                                        ],
-                                        "type": "object"
-                                      },
-                                      "source": {
-                                        "const": "task_artifact_resource",
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "source",
-                                      "ref"
-                                    ],
-                                    "type": "object"
-                                  }
-                                ]
-                              },
-                              "type": "array"
-                            },
-                            "evidenceLocators": {
-                              "items": {
-                                "oneOf": [
-                                  {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "artifact_id": {
-                                        "maxLength": 512,
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "catalog_revision": {
-                                        "exclusiveMinimum": 0,
-                                        "maximum": 9007199254740991,
-                                        "type": "integer"
-                                      },
-                                      "expected_sha256": {
-                                        "pattern": "^[a-f0-9]{64}$",
-                                        "type": "string"
-                                      },
-                                      "source": {
-                                        "const": "engine_artifact",
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "source",
-                                      "artifact_id",
-                                      "catalog_revision",
-                                      "expected_sha256"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "snapshot": {
-                                        "additionalProperties": false,
-                                        "properties": {
-                                          "manifest_sha256": {
-                                            "pattern": "^[a-f0-9]{64}$",
-                                            "type": "string"
-                                          },
-                                          "project_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          },
-                                          "schema_version": {
-                                            "const": 2,
-                                            "type": "number"
-                                          },
-                                          "snapshot_id": {
-                                            "format": "uuid",
-                                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                            "type": "string"
-                                          },
-                                          "task_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [
-                                          "schema_version",
-                                          "project_id",
-                                          "task_id",
-                                          "snapshot_id",
-                                          "manifest_sha256"
-                                        ],
-                                        "type": "object"
-                                      },
-                                      "source": {
-                                        "const": "task_artifact_snapshot",
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "source",
-                                      "snapshot"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "ref": {
-                                        "additionalProperties": false,
-                                        "properties": {
-                                          "bytes": {
-                                            "maximum": 9007199254740991,
-                                            "minimum": 0,
-                                            "type": "integer"
-                                          },
-                                          "media_type": {
-                                            "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
-                                            "type": "string"
-                                          },
-                                          "path": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          },
-                                          "sha256": {
-                                            "pattern": "^[a-f0-9]{64}$",
-                                            "type": "string"
-                                          },
-                                          "snapshot": {
-                                            "additionalProperties": false,
-                                            "properties": {
-                                              "manifest_sha256": {
-                                                "pattern": "^[a-f0-9]{64}$",
-                                                "type": "string"
-                                              },
-                                              "project_id": {
-                                                "minLength": 1,
-                                                "type": "string"
-                                              },
-                                              "schema_version": {
-                                                "const": 2,
-                                                "type": "number"
-                                              },
-                                              "snapshot_id": {
-                                                "format": "uuid",
-                                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                                "type": "string"
-                                              },
-                                              "task_id": {
-                                                "minLength": 1,
-                                                "type": "string"
-                                              }
-                                            },
-                                            "required": [
-                                              "schema_version",
-                                              "project_id",
-                                              "task_id",
-                                              "snapshot_id",
-                                              "manifest_sha256"
-                                            ],
-                                            "type": "object"
-                                          },
-                                          "tree": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [
-                                          "snapshot",
-                                          "tree",
-                                          "path",
-                                          "media_type",
-                                          "bytes",
-                                          "sha256"
-                                        ],
-                                        "type": "object"
-                                      },
-                                      "source": {
-                                        "const": "task_artifact_resource",
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "source",
-                                      "ref"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "session_id": {
-                                        "maxLength": 512,
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "source": {
-                                        "const": "session",
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "source",
-                                      "session_id"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "message_id": {
-                                        "description": "Exact Message ID stored in the paired session_id.",
-                                        "maxLength": 512,
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "session_id": {
-                                        "description": "Exact producing Session ID for message_id; do not substitute the current caller Session unless it produced that Message.",
-                                        "maxLength": 512,
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "source": {
-                                        "const": "session_message",
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "source",
-                                      "session_id",
-                                      "message_id"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "goal_id": {
-                                        "maxLength": 512,
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "source": {
-                                        "const": "goal_revision",
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "source",
-                                      "goal_id"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "request_id": {
-                                        "maxLength": 512,
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "source": {
-                                        "const": "coordination_request",
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "source",
-                                      "request_id"
-                                    ],
-                                    "type": "object"
-                                  }
-                                ]
-                              },
-                              "type": "array"
-                            },
-                            "orchestratorMessageID": {
-                              "pattern": "^msg.*",
-                              "type": "string"
-                            },
-                            "orchestratorSessionID": {
-                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                              "type": "string"
-                            },
-                            "timeRecorded": {
-                              "type": "number"
-                            },
-                            "toolCallID": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "toolPartID": {
-                              "pattern": "^prt.*",
-                              "type": "string"
-                            },
-                            "workflowBinding": {
-                              "oneOf": [
-                                {
-                                  "additionalProperties": false,
-                                  "properties": {
-                                    "kind": {
-                                      "const": "direct",
-                                      "type": "string"
-                                    },
-                                    "package_revision": {
-                                      "additionalProperties": false,
-                                      "properties": {
-                                        "id": {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        },
-                                        "namespace": {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        },
-                                        "package_digest": {
-                                          "pattern": "^[a-f0-9]{64}$",
-                                          "type": "string"
-                                        },
-                                        "project_id": {
-                                          "anyOf": [
-                                            {
-                                              "minLength": 1,
-                                              "type": "string"
-                                            },
-                                            {
-                                              "type": "null"
-                                            }
-                                          ]
-                                        },
-                                        "scope": {
-                                          "enum": [
-                                            "built_in",
-                                            "project",
-                                            "global"
-                                          ],
-                                          "type": "string"
-                                        },
-                                        "version": {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        }
-                                      },
-                                      "required": [
-                                        "scope",
-                                        "project_id",
-                                        "namespace",
-                                        "id",
-                                        "version",
-                                        "package_digest"
-                                      ],
-                                      "type": "object"
-                                    }
-                                  },
-                                  "required": [
-                                    "kind",
-                                    "package_revision"
-                                  ],
-                                  "type": "object"
-                                },
-                                {
-                                  "additionalProperties": false,
-                                  "properties": {
-                                    "kind": {
-                                      "const": "virtual_workflow",
-                                      "type": "string"
-                                    },
-                                    "nodes": {
-                                      "items": {
-                                        "additionalProperties": false,
-                                        "properties": {
-                                          "agent_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          },
-                                          "depends_on": {
-                                            "items": {
-                                              "minLength": 1,
-                                              "type": "string"
-                                            },
-                                            "type": "array"
-                                          },
-                                          "node_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [
-                                          "node_id",
-                                          "agent_id",
-                                          "depends_on"
-                                        ],
-                                        "type": "object"
-                                      },
-                                      "minItems": 1,
-                                      "type": "array"
-                                    },
-                                    "package_revision": {
-                                      "additionalProperties": false,
-                                      "properties": {
-                                        "id": {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        },
-                                        "namespace": {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        },
-                                        "package_digest": {
-                                          "pattern": "^[a-f0-9]{64}$",
-                                          "type": "string"
-                                        },
-                                        "project_id": {
-                                          "anyOf": [
-                                            {
-                                              "minLength": 1,
-                                              "type": "string"
-                                            },
-                                            {
-                                              "type": "null"
-                                            }
-                                          ]
-                                        },
-                                        "scope": {
-                                          "enum": [
-                                            "built_in",
-                                            "project",
-                                            "global"
-                                          ],
-                                          "type": "string"
-                                        },
-                                        "version": {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        }
-                                      },
-                                      "required": [
-                                        "scope",
-                                        "project_id",
-                                        "namespace",
-                                        "id",
-                                        "version",
-                                        "package_digest"
-                                      ],
-                                      "type": "object"
-                                    },
-                                    "workflow_id": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "kind",
-                                    "workflow_id",
-                                    "package_revision",
-                                    "nodes"
-                                  ],
-                                  "type": "object"
-                                }
-                              ]
-                            }
-                          },
-                          "required": [
-                            "artifactLocator",
-                            "orchestratorSessionID",
-                            "orchestratorMessageID",
-                            "toolCallID",
-                            "toolPartID",
-                            "evidenceLocators",
-                            "deliverableArtifactLocators",
-                            "acceptedDeliverySliceRevisionIDs",
-                            "workflowBinding",
-                            "timeRecorded"
-                          ],
-                          "type": "object"
-                        },
-                        "directory": {
-                          "type": "string"
-                        },
-                        "error": {
-                          "type": "string"
-                        },
-                        "id": {
-                          "pattern": "^tsk_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                          "type": "string"
-                        },
-                        "metadata": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "orderKey": {
-                          "minLength": 1,
-                          "type": "string"
-                        },
-                        "packageRevisionBinding": {
-                          "additionalProperties": false,
-                          "properties": {
-                            "id": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "namespace": {
-                              "minLength": 1,
-                              "type": "string"
-                            },
-                            "package_digest": {
-                              "pattern": "^[a-f0-9]{64}$",
-                              "type": "string"
-                            },
-                            "project_id": {
-                              "anyOf": [
-                                {
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                {
-                                  "type": "null"
-                                }
-                              ]
-                            },
-                            "scope": {
-                              "enum": [
-                                "built_in",
-                                "project",
-                                "global"
-                              ],
-                              "type": "string"
-                            },
-                            "version": {
-                              "minLength": 1,
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "scope",
-                            "project_id",
-                            "namespace",
-                            "id",
-                            "version",
-                            "package_digest"
-                          ],
-                          "type": "object"
-                        },
-                        "priority": {
-                          "enum": [
-                            "critical",
-                            "high",
-                            "normal",
-                            "low"
-                          ],
-                          "type": "string"
-                        },
-                        "productPillar": {
-                          "enum": [
-                            "code",
-                            "work"
-                          ],
-                          "type": "string"
-                        },
-                        "projectID": {
-                          "type": "string"
-                        },
-                        "queue": {
-                          "properties": {
-                            "order": {
-                              "type": "number"
-                            },
-                            "revision": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "order"
-                          ],
-                          "type": "object"
-                        },
-                        "request": {
-                          "type": "string"
-                        },
-                        "requestID": {
-                          "type": "string"
-                        },
-                        "sessionID": {
-                          "anyOf": [
-                            {
-                              "pattern": "^ses_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
-                              "type": "string"
-                            },
-                            {
-                              "type": "null"
-                            }
-                          ]
-                        },
-                        "source": {
-                          "type": "string"
-                        },
-                        "status": {
-                          "enum": [
-                            "queued",
-                            "active",
-                            "completed",
-                            "failed",
-                            "cancelled"
-                          ],
-                          "type": "string"
-                        },
-                        "terminalReason": {
-                          "enum": [
-                            "completed",
-                            "failed",
-                            "cancelled",
-                            "interrupted"
-                          ],
-                          "type": "string"
-                        },
-                        "time": {
-                          "properties": {
-                            "archived": {
-                              "type": "number"
-                            },
-                            "completed": {
-                              "type": "number"
-                            },
-                            "created": {
-                              "type": "number"
-                            },
-                            "started": {
-                              "type": "number"
-                            },
-                            "updated": {
-                              "type": "number"
-                            }
-                          },
-                          "required": [
-                            "created",
-                            "updated"
-                          ],
-                          "type": "object"
-                        },
-                        "title": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "orderKey",
-                        "projectID",
-                        "source",
-                        "productPillar",
-                        "title",
-                        "request",
-                        "status",
-                        "priority",
-                        "packageRevisionBinding",
-                        "time"
-                      ],
-                      "type": "object"
-                    }
-                  },
-                  "required": [
-                    "task",
-                    "directory",
-                    "status",
-                    "started",
-                    "queuedTaskIDs"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Queued task started and scheduler invoked"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "NotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
-                    },
-                    {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "LogFileNotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
-                    }
-                  ]
-                }
-              }
-            },
-            "description": "Not found"
-          },
-          "409": {
-            "description": "Task is not queued"
-          },
-          "422": {
-            "description": "Task has no working directory"
-          }
-        },
-        "summary": "Start a queued task immediately",
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.task.queue.startNow({\n  ...\n})"
-          }
-        ]
-      }
-    },
     "/task/{taskID}/status": {
       "get": {
-        "description": "Collect current Task activity from the Task Board projection, including diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. The Task `status` field is normalized to \"running\" or \"inactive\"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw queued, active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.",
+        "description": "Collect current Task activity from the Task Board projection, including diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. The Task `status` field is normalized to \"running\" or \"inactive\"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.",
         "operationId": "task.status",
         "parameters": [
           {
@@ -112922,7 +111406,6 @@
                     },
                     "lifecycleStatus": {
                       "enum": [
-                        "queued",
                         "active",
                         "completed",
                         "failed",
@@ -113168,7 +111651,8 @@
                       },
                       "required": [
                         "created",
-                        "updated"
+                        "updated",
+                        "started"
                       ],
                       "type": "object"
                     },
@@ -115141,20 +113625,6 @@
                               "projectID": {
                                 "type": "string"
                               },
-                              "queue": {
-                                "properties": {
-                                  "order": {
-                                    "type": "number"
-                                  },
-                                  "revision": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "order"
-                                ],
-                                "type": "object"
-                              },
                               "requestID": {
                                 "type": "string"
                               },
@@ -115174,7 +113644,6 @@
                               },
                               "status": {
                                 "enum": [
-                                  "queued",
                                   "active",
                                   "completed",
                                   "failed",
@@ -115211,7 +113680,8 @@
                                 },
                                 "required": [
                                   "created",
-                                  "updated"
+                                  "updated",
+                                  "started"
                                 ],
                                 "type": "object"
                               },
@@ -116199,6 +114669,9 @@
                                       ],
                                       "type": "string"
                                     },
+                                    "completed": {
+                                      "type": "number"
+                                    },
                                     "created": {
                                       "type": "number"
                                     },
@@ -116217,7 +114690,6 @@
                                     },
                                     "lifecycleStatus": {
                                       "enum": [
-                                        "queued",
                                         "active",
                                         "completed",
                                         "failed",
@@ -116258,21 +114730,11 @@
                                       ],
                                       "type": "string"
                                     },
-                                    "queueOrder": {
-                                      "type": "number"
-                                    },
                                     "source": {
                                       "type": "string"
                                     },
                                     "started": {
-                                      "anyOf": [
-                                        {
-                                          "type": "number"
-                                        },
-                                        {
-                                          "type": "null"
-                                        }
-                                      ]
+                                      "type": "number"
                                     },
                                     "title": {
                                       "type": "string"
@@ -116297,7 +114759,6 @@
                                     "priority",
                                     "source",
                                     "productPillar",
-                                    "queueOrder",
                                     "pendingInteractions",
                                     "missionID",
                                     "missionSessionID"
@@ -116617,6 +115078,9 @@
                                       ],
                                       "type": "string"
                                     },
+                                    "completed": {
+                                      "type": "number"
+                                    },
                                     "created": {
                                       "type": "number"
                                     },
@@ -116635,7 +115099,6 @@
                                     },
                                     "lifecycleStatus": {
                                       "enum": [
-                                        "queued",
                                         "active",
                                         "completed",
                                         "failed",
@@ -116676,21 +115139,11 @@
                                       ],
                                       "type": "string"
                                     },
-                                    "queueOrder": {
-                                      "type": "number"
-                                    },
                                     "source": {
                                       "type": "string"
                                     },
                                     "started": {
-                                      "anyOf": [
-                                        {
-                                          "type": "number"
-                                        },
-                                        {
-                                          "type": "null"
-                                        }
-                                      ]
+                                      "type": "number"
                                     },
                                     "title": {
                                       "type": "string"
@@ -116715,7 +115168,6 @@
                                     "priority",
                                     "source",
                                     "productPillar",
-                                    "queueOrder",
                                     "pendingInteractions",
                                     "missionID",
                                     "missionSessionID"
@@ -116771,6 +115223,9 @@
                                 ],
                                 "type": "string"
                               },
+                              "completed": {
+                                "type": "number"
+                              },
                               "created": {
                                 "type": "number"
                               },
@@ -116789,7 +115244,6 @@
                               },
                               "lifecycleStatus": {
                                 "enum": [
-                                  "queued",
                                   "active",
                                   "completed",
                                   "failed",
@@ -116830,21 +115284,11 @@
                                 ],
                                 "type": "string"
                               },
-                              "queueOrder": {
-                                "type": "number"
-                              },
                               "source": {
                                 "type": "string"
                               },
                               "started": {
-                                "anyOf": [
-                                  {
-                                    "type": "number"
-                                  },
-                                  {
-                                    "type": "null"
-                                  }
-                                ]
+                                "type": "number"
                               },
                               "title": {
                                 "type": "string"
@@ -116869,7 +115313,6 @@
                               "priority",
                               "source",
                               "productPillar",
-                              "queueOrder",
                               "pendingInteractions"
                             ],
                             "type": "object"

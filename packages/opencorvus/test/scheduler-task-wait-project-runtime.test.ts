@@ -8,6 +8,7 @@ import { PromptProfileResolver } from "../src/expert-squad/prompt-profile-resolv
 import { Instance } from "../src/project/instance"
 import { AutomationTable } from "../src/scheduler/automation.sql"
 import { AutomationService } from "../src/scheduler/automation-service"
+import { taskWaitFireID } from "../src/scheduler/task-wait-fire-identity"
 import { QueuedTaskIngressSchema } from "../src/engine/queued-task-ingress"
 import { Database, and, eq, sql } from "../src/storage/db"
 import { EngineService } from "../src/task-api"
@@ -40,7 +41,6 @@ describe("scheduled Task wait project runtime", () => {
             model: "firmware/gpt-5",
             promptProfile: "base",
             expectedPackageDigest: capability.packageRevision.packageDigest,
-            queue: true,
           },
           { actor: "user" },
         )
@@ -95,7 +95,6 @@ describe("scheduled Task wait project runtime", () => {
             model: "firmware/gpt-5",
             promptProfile: "base",
             expectedPackageDigest: capability.packageRevision.packageDigest,
-            queue: true,
           },
           { actor: "user" },
         )
@@ -157,7 +156,7 @@ describe("scheduled Task wait project runtime", () => {
       sourceKind: "task_wait_wake",
       taskID,
       jobID: waitID,
-      fireID: `cal_task_wait_${waitID}`,
+      fireID: taskWaitFireID(waitID),
       dueAt,
       deliveryStatus: "terminal_inapplicable",
     })

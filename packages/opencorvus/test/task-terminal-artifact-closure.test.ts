@@ -1,6 +1,17 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
-import { publishExpertArtifact, TaskArtifactPublicationClosedError } from "@/artifact-catalog"
+import fs from "node:fs/promises"
+import path from "node:path"
+import { randomUUID } from "node:crypto"
+import {
+  artifactCatalogAuthority,
+  EngineArtifactIdentityCollisionError,
+  publishExpertArtifact,
+  readTaskArtifact,
+  searchTaskArtifacts,
+  TaskArtifactPublicationClosedError,
+} from "@/artifact-catalog"
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
+import { recordEngineArtifact, updateEngineArtifact } from "@/engine/artifact"
 import { createDispatchLineageOrigin, listDispatchLineage, recordDispatchLineage } from "@/engine/dispatch-lineage"
 import { assertTaskDispatchesSettledInTransaction, recordDispatchSettlement } from "@/engine/dispatch-settlement"
 import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
@@ -29,14 +40,20 @@ import { Identifier } from "@/id/id"
 import { ensureMissionSession } from "@/mission/session"
 import { Instance } from "@/project/instance"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
+import { ProjectTable } from "@/project/project.sql"
+import { Project } from "@/project/project"
 import { Session } from "@/session"
-import { Database, and, eq } from "@/storage/db"
+import { Database, DatabaseUnavailableError, and, eq } from "@/storage/db"
 import { createToolExecutionSurface } from "@/tool/execution-surface"
 import type { TaskToolExecutionScope } from "@/tool/task-tool-execution-scope"
 import { createTaskLifecycleTools } from "@/orchestrator/task-lifecycle-tools"
 import { terminalTask } from "@/engine/state"
 import { requireTask } from "@/engine/store"
 import { openTaskForOperatorIntentInTransaction } from "@/engine/task-intent-open"
+import {
+  publishImportedTaskArtifactResources,
+  publishTaskArtifactProjectFiles,
+} from "@/task-artifact/store"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(async () => {
@@ -263,6 +280,8 @@ test("keeps the exact terminal expert Artifact immutable while preserving an ide
         idempotent: true as const,
       }
       const accepted = await publishExpertArtifact({ scope: task.scope, artifact: publication })
+      expect(accepted.locator.artifact_id).toHaveLength(Identifier.MAX_LENGTH)
+      expect(accepted.locator.expected_sha256).toHaveLength(64)
       const completedAt = Date.now()
       Database.use((db) =>
         db
@@ -297,6 +316,154 @@ test("keeps the exact terminal expert Artifact immutable while preserving an ide
             .all(),
         ),
       ).toEqual([{ id: accepted.locator.artifact_id }])
+    },
+  })
+}, 60_000)
+
+test("returns the typed compact Artifact identity collision contract", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const task = await taskFixture(project.path)
+      const publication = {
+        artifact_type: "base/terminal-result",
+        schema_version: 1,
+        label: "Canonical terminal result",
+        payload: { result: "accepted" },
+        resources: [],
+        source_artifact_locators: [],
+        idempotent: true as const,
+      }
+      const accepted = await publishExpertArtifact({ scope: task.scope, artifact: publication })
+      const row = Database.use((db) =>
+        db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, accepted.locator.artifact_id)).get(),
+      )
+      if (!row || !row.payload || typeof row.payload !== "object") throw new Error("Published Artifact fixture is absent")
+      Database.use((db) =>
+        db.delete(EngineArtifactTable).where(eq(EngineArtifactTable.id, accepted.locator.artifact_id)).run(),
+      )
+      recordEngineArtifact({
+        id: accepted.locator.artifact_id,
+        taskID: task.taskID,
+        kind: "log",
+        label: "Foreign compact identity partition",
+        payload: { occupied: true },
+      })
+
+      let observed: unknown
+      try {
+        await publishExpertArtifact({ scope: task.scope, artifact: publication })
+      } catch (error) {
+        observed = error
+      }
+      expect(observed).toMatchObject({
+        name: EngineArtifactIdentityCollisionError.name,
+        code: "ENGINE_ARTIFACT_IDENTITY_COLLISION",
+        artifactID: accepted.locator.artifact_id,
+      })
+    },
+  })
+}, 60_000)
+
+test("requires a pre-release reset for the legacy expanded idempotent Artifact epoch", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const task = await taskFixture(project.path)
+      const legacyID = `art_idempotent_${"a".repeat(64)}`
+      const accepted = await publishExpertArtifact({
+        scope: task.scope,
+        artifact: {
+          artifact_type: "base/legacy-terminal-result",
+          schema_version: 1,
+          label: "Legacy deterministic Artifact",
+          payload: { result: "legacy" },
+          resources: [],
+          source_artifact_locators: [],
+          idempotent: true,
+        },
+      })
+      const current = Database.use((db) =>
+        db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, accepted.locator.artifact_id)).get(),
+      )
+      if (!current) throw new Error("Compact Artifact fixture is absent")
+      recordEngineArtifact({
+        id: legacyID,
+        taskID: task.taskID,
+        kind: "expert_output",
+        label: "Legacy deterministic Artifact",
+        payload: current.payload,
+      })
+      await Database.awaitEffectIdle(30_000)
+      Database.close()
+
+      let observed: unknown
+      try {
+        Database.Client()
+      } catch (error) {
+        observed = error
+      }
+      expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
+        code: "DATA_RESET_REQUIRED",
+        operation: "Database.Client.dataIntegrity.compactArtifactIdentity",
+      })
+      await Database.resetFiles(Database.Path())
+      Database.Client()
+    },
+  })
+}, 60_000)
+
+test("requires a pre-release reset for the legacy expanded Project identity epoch", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const legacyID = "a".repeat(40)
+      const markerPath = path.join(project.path, ".git", "opencorvus")
+      await fs.writeFile(markerPath, legacyID, "utf8")
+      Database.use((db) =>
+        db
+          .insert(ProjectTable)
+          .values({
+            id: legacyID,
+            worktree: path.join(project.path, "legacy-project"),
+            sandboxes: [],
+            generation: randomUUID(),
+          })
+          .run(),
+      )
+      await Database.awaitEffectIdle(30_000)
+      Database.close()
+
+      let observed: unknown
+      try {
+        Database.Client()
+      } catch (error) {
+        observed = error
+      }
+      expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
+        code: "DATA_RESET_REQUIRED",
+        operation: "Database.Client.dataIntegrity.compactProjectIdentity",
+      })
+      await Database.resetFiles(Database.Path())
+      Database.Client()
+      const discovered = await Project.fromDirectory(project.path)
+      expect(discovered.project.id).toHaveLength(Identifier.MAX_LENGTH)
+      expect(Identifier.isCanonical("project", discovered.project.id)).toBe(true)
+      expect(await fs.readFile(markerPath, "utf8")).toBe(discovered.project.id)
+      expect(
+        Database.use((db) =>
+          db
+            .select({ id: ProjectTable.id })
+            .from(ProjectTable)
+            .where(eq(ProjectTable.id, discovered.project.id))
+            .get(),
+        ),
+      ).toEqual({ id: discovered.project.id })
+      Database.close()
+      expect(() => Database.Client()).not.toThrow()
     },
   })
 }, 60_000)
@@ -680,6 +847,236 @@ test("closes continuation admission before the real completion checkpoint and im
         lineage.dispatchID,
         reopenedLineage.dispatchID,
       ])
+    },
+  })
+}, 60_000)
+
+test("projects exact referenced cross-Task resources through frozen Catalog membership", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const sourceFiles = Array.from({ length: 32 }, (_, index) => ({
+        path: `cross-task-catalog/resource-${String(index).padStart(2, "0")}.md`,
+        mediaType: "text/markdown",
+        text: `resource ${index}\n`,
+      }))
+      await Promise.all(
+        sourceFiles.map(async (file) => {
+          const target = path.join(project.path, ...file.path.split("/"))
+          await fs.mkdir(path.dirname(target), { recursive: true })
+          await fs.writeFile(target, file.text, "utf8")
+        }),
+      )
+      const source = await taskFixture(project.path)
+      const sourcePublication = await publishTaskArtifactProjectFiles({
+        scope: source.scope,
+        source: { kind: "current_task_project" },
+        files: sourceFiles.map(({ path: filePath, mediaType }) => ({ path: filePath, mediaType })),
+      })
+      const declaredSourceResources = sourcePublication.artifacts.slice(0, 30)
+      const sourceArtifact = await publishExpertArtifact({
+        scope: source.scope,
+        artifact: {
+          artifact_type: "base/cross-task-resource-set",
+          schema_version: 1,
+          label: "Cross-Task resource set",
+          payload: { resource_count: declaredSourceResources.length },
+          resources: declaredSourceResources,
+          source_artifact_locators: [],
+          idempotent: true,
+        },
+      })
+      await completeFixtureTask(source, project.path, [sourceArtifact.locator], "cross-task-resource-source")
+
+      const importer = {
+        missionID: source.missionID,
+        sessionID: source.missionSessionID,
+        messageID: Identifier.ascending("message"),
+        toolCallID: "call_import_cross_task_resource_catalog",
+      }
+      const resolved = resolveCrossTaskArtifactSources({
+        sources: [{ authority: "completion_decision", source_task_id: source.taskID }],
+        projectID: Instance.project.id,
+        importer,
+      })
+      const target = await taskFixture(project.path)
+      const prepared = await prepareCrossTaskArtifactSourceImports({
+        resolved,
+        projectID: Instance.project.id,
+        targetProjectDirectory: project.path,
+        targetTaskID: target.taskID,
+        importer,
+      })
+      Database.transaction((db) =>
+        persistPreparedCrossTaskArtifactImports(db, {
+          targetTaskID: target.taskID,
+          prepared: prepared.imports,
+          authorities: prepared.authorities,
+          timeCreated: Date.now(),
+        }),
+      )
+      const importedResources = prepared.imports.flatMap((item) => item.importedEnvelope.resources)
+      expect(importedResources).toHaveLength(30)
+
+      await publishImportedTaskArtifactResources({
+        sourceAuthority: {
+          projectID: Instance.project.id,
+          projectDirectory: project.path,
+          taskID: source.taskID,
+        },
+        targetProjectID: Instance.project.id,
+        targetProjectDirectory: project.path,
+        targetTaskID: target.taskID,
+        producer: {
+          owner_kind: "mission",
+          mission_id: importer.missionID,
+          session_id: importer.sessionID,
+          message_id: importer.messageID,
+          tool_call_id: "call_prepare_unreferenced_cross_task_resource",
+        },
+        resources: [sourcePublication.artifacts[31]!],
+      })
+
+      const authority = artifactCatalogAuthority(target.taskID)
+      const search = {
+        sources: ["task_artifact" as const],
+        kinds: ["task_artifact_resource" as const],
+        version_scope: "current" as const,
+        sort: "oldest" as const,
+        limit: 7,
+      }
+      const first = await searchTaskArtifacts({ authority, search })
+      expect(first).toMatchObject({ filtered_total: 30, catalog_complete: true })
+      expect(first.entries).toHaveLength(7)
+      expect(first.next_cursor).toEqual(expect.any(String))
+
+      updateEngineArtifact({
+        id: prepared.imports[0]!.importedArtifactID,
+        payload: { ...prepared.imports[0]!.importedEnvelope, resources: [] },
+      })
+
+      const extraPublication = await publishImportedTaskArtifactResources({
+        sourceAuthority: {
+          projectID: Instance.project.id,
+          projectDirectory: project.path,
+          taskID: source.taskID,
+        },
+        targetProjectID: Instance.project.id,
+        targetProjectDirectory: project.path,
+        targetTaskID: target.taskID,
+        producer: {
+          owner_kind: "mission",
+          mission_id: importer.missionID,
+          session_id: importer.sessionID,
+          message_id: importer.messageID,
+          tool_call_id: "call_prepare_later_cross_task_resource",
+        },
+        resources: [sourcePublication.artifacts[30]!],
+      })
+      await publishExpertArtifact({
+        scope: target.scope,
+        artifact: {
+          artifact_type: "base/later-cross-task-resource",
+          schema_version: 1,
+          label: "Later cross-Task resource",
+          payload: { resource_count: 1 },
+          resources: extraPublication.artifacts,
+          source_artifact_locators: [],
+          idempotent: true,
+        },
+      })
+
+      const frozenEntries = [...first.entries]
+      let cursor = first.next_cursor
+      while (cursor) {
+        const page = await searchTaskArtifacts({ authority, search: { ...search, cursor } })
+        expect(page.filtered_total).toBe(30)
+        frozenEntries.push(...page.entries)
+        cursor = page.next_cursor
+      }
+      const frozenRefs = frozenEntries.map((entry) => {
+        if (entry.locator.source !== "task_artifact_resource") {
+          throw new Error("Referenced Engine resource projected a non-resource locator")
+        }
+        return entry.locator.ref
+      })
+      expect(frozenRefs).toEqual(importedResources)
+
+      const exact = await readTaskArtifact({
+        authority,
+        read: {
+          locator: { source: "task_artifact_resource", ref: frozenRefs[0]! },
+          byte_offset: 0,
+          max_bytes: 65_536,
+          delivery: "inline",
+        },
+      })
+      expect(exact.chunk).toMatchObject({
+        complete: true,
+        total_bytes: Buffer.byteLength(sourceFiles[0]!.text),
+        sha256: frozenRefs[0]!.sha256,
+        text: sourceFiles[0]!.text,
+      })
+
+      const refreshed = await searchTaskArtifacts({
+        authority,
+        search: { ...search, limit: 100 },
+      })
+      expect(refreshed).toMatchObject({ filtered_total: 1, next_cursor: null })
+      const refreshedRefs = refreshed.entries.map((entry) => {
+        if (entry.locator.source !== "task_artifact_resource") {
+          throw new Error("Referenced Engine resource projected a non-resource locator")
+        }
+        return entry.locator.ref
+      })
+      expect(refreshedRefs).toEqual(extraPublication.artifacts)
+
+      const allAfterRevision = await searchTaskArtifacts({
+        authority,
+        search: { ...search, version_scope: "all", limit: 100 },
+      })
+      expect(allAfterRevision.entries.map((entry) => entry.locator)).toEqual(
+        [...importedResources, extraPublication.artifacts[0]!].map((ref) => ({
+          source: "task_artifact_resource",
+          ref,
+        })),
+      )
+      const historicalAfterRevision = await searchTaskArtifacts({
+        authority,
+        search: { ...search, version_scope: "historical", limit: 100 },
+      })
+      expect(historicalAfterRevision.entries.map((entry) => entry.locator)).toEqual(
+        importedResources.map((ref) => ({ source: "task_artifact_resource", ref })),
+      )
+
+      await fs.rm(
+        path.join(
+          ProjectRuntimePaths.taskArtifactSnapshotRoot(
+            project.path,
+            target.taskID,
+            extraPublication.snapshot.snapshot_id,
+          ),
+          "manifest.json",
+        ),
+      )
+      const incomplete = await searchTaskArtifacts({
+        authority,
+        search: { ...search, limit: 100 },
+      })
+      expect(incomplete).toMatchObject({
+        catalog_complete: false,
+        provider_errors: [
+          {
+            source: "task_artifact",
+            message: expect.any(String),
+          },
+        ],
+        resolution: {
+          status: "incomplete_catalog",
+          limitations: ["provider_error"],
+        },
+      })
     },
   })
 }, 60_000)

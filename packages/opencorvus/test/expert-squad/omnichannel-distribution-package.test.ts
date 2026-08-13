@@ -2,7 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test"
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
 import { Config } from "../../src/config/config"
-import { persistQueuedTask } from "../../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "../fixture/engine-task"
 import { ensureGitProjectMetadata } from "../../src/engine/git"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
 import {
@@ -63,14 +63,32 @@ const samples = {
     workflow_id: OMNICHANNEL_WORKFLOW_ID,
     captured_at: "2026-08-10",
     channels: [
-      { channel: "blog", format: "Markdown article", character_limit: null, required_fields: ["title", "body"], evidence_urls: ["https://www.markdownguide.org/basic-syntax/"] },
-      { channel: "linkedin", format: "Professional post", character_limit: 3000, required_fields: ["body"], evidence_urls: ["https://www.linkedin.com/help/linkedin/"] },
+      {
+        channel: "blog",
+        format: "Markdown article",
+        character_limit: null,
+        required_fields: ["title", "body"],
+        evidence_urls: ["https://www.markdownguide.org/basic-syntax/"],
+      },
+      {
+        channel: "linkedin",
+        format: "Professional post",
+        character_limit: 3000,
+        required_fields: ["body"],
+        evidence_urls: ["https://www.linkedin.com/help/linkedin/"],
+      },
     ],
     unknowns: ["Future platform format changes"],
   },
   "omnichannel-distribution/rights-compliance-matrix": {
     workflow_id: OMNICHANNEL_WORKFLOW_ID,
-    rights_status: [{ asset_or_claim: "OpenCorvus product description", status: "cleared" as const, rationale: "Use the project's own public description" }],
+    rights_status: [
+      {
+        asset_or_claim: "OpenCorvus product description",
+        status: "cleared" as const,
+        rationale: "Use the project's own public description",
+      },
+    ],
     required_disclosures: ["No guaranteed productivity outcome"],
     approval_requirements: ["Confirm final brand wording"],
     jurisdiction_notes: ["No regulated offer is included"],
@@ -78,8 +96,22 @@ const samples = {
   "omnichannel-distribution/channel-pack": {
     workflow_id: OMNICHANNEL_WORKFLOW_ID,
     versions: [
-      { channel: "blog", headline: "Evidence-backed agent work", body: "A complete article body", call_to_action: "Inspect the workflow", asset_roles: ["product screenshot"], disclosures: ["No guaranteed outcome"] },
-      { channel: "linkedin", headline: "Trace the work", body: "A concise professional post", call_to_action: "Read the evidence", asset_roles: ["product screenshot"], disclosures: ["No guaranteed outcome"] },
+      {
+        channel: "blog",
+        headline: "Evidence-backed agent work",
+        body: "A complete article body",
+        call_to_action: "Inspect the workflow",
+        asset_roles: ["product screenshot"],
+        disclosures: ["No guaranteed outcome"],
+      },
+      {
+        channel: "linkedin",
+        headline: "Trace the work",
+        body: "A concise professional post",
+        call_to_action: "Read the evidence",
+        asset_roles: ["product screenshot"],
+        disclosures: ["No guaranteed outcome"],
+      },
     ],
     source_claim_map: [{ claim: "OpenCorvus has Expert Squads", source_urls: ["https://opencorvus.org/"] }],
     adaptation_notes: ["The same campaign truth is preserved"],
@@ -87,8 +119,18 @@ const samples = {
   "omnichannel-distribution/measurement-plan": {
     workflow_id: OMNICHANNEL_WORKFLOW_ID,
     channel_metrics: [
-      { channel: "blog", primary_metric: "qualified reads", supporting_metrics: ["time on page"], observation_window: "14 days" },
-      { channel: "linkedin", primary_metric: "qualified clicks", supporting_metrics: ["saves"], observation_window: "7 days" },
+      {
+        channel: "blog",
+        primary_metric: "qualified reads",
+        supporting_metrics: ["time on page"],
+        observation_window: "14 days",
+      },
+      {
+        channel: "linkedin",
+        primary_metric: "qualified clicks",
+        supporting_metrics: ["saves"],
+        observation_window: "7 days",
+      },
     ],
     utm_naming: "utm_source=<channel>&utm_campaign=opencorvus-evidence",
     attribution_caveats: ["Cross-device journeys may not join"],
@@ -109,7 +151,14 @@ const samples = {
   "omnichannel-distribution/readiness-review": {
     workflow_id: OMNICHANNEL_WORKFLOW_ID,
     verdict: "ready" as const,
-    checks: [{ area: "channel coverage", result: "pass" as const, finding: "Both requested channels have complete packages", correction: null }],
+    checks: [
+      {
+        area: "channel coverage",
+        result: "pass" as const,
+        finding: "Both requested channels have complete packages",
+        correction: null,
+      },
+    ],
     required_corrections: [],
     accepted_limitations: ["External posting is out of scope"],
     external_posting_boundary: "prepared-and-validated-only" as const,
@@ -141,7 +190,9 @@ describe("Omnichannel Distribution Expert Squad package", () => {
     expect([...loaded.packageSkills.keys()]).toEqual(skillRefs)
     expect([...loaded.packageToolBundles.keys()]).toEqual([publisherRef])
     const workflow = loaded.manifest.capability_projection.virtual_workflows["omnichannel-delivery-pack"]!
-    expect(Object.fromEntries(Object.entries(workflow.nodes).map(([id, node]) => [id, node.depends_on]))).toEqual(dependencies)
+    expect(Object.fromEntries(Object.entries(workflow.nodes).map(([id, node]) => [id, node.depends_on]))).toEqual(
+      dependencies,
+    )
     expect(workflow.nodes["distribution-readiness-reviewer"]!.depends_on).toEqual(["distribution-plan-synthesizer"])
     expect(loaded.manifest.capability_projection.agents["omnichannel-delivery-owner"]!.base_role).toBe("build")
 
@@ -162,12 +213,24 @@ describe("Omnichannel Distribution Expert Squad package", () => {
       directory: project.path,
       fn: async () => {
         const config = Config.Info.parse({ prompt_profile: { active: "omnichannel-distribution" } })
-        const revision = await PromptProfileResolver.resolveActivePackageRevision({ projectDirectory: project.path, config })
-        const schedulerCapability = await PromptProfileResolver.resolveSchedulerCapability({ projectDirectory: project.path, config, packageRevision: revision })
+        const revision = await PromptProfileResolver.resolveActivePackageRevision({
+          projectDirectory: project.path,
+          config,
+        })
+        const schedulerCapability = await PromptProfileResolver.resolveSchedulerCapability({
+          projectDirectory: project.path,
+          config,
+          packageRevision: revision,
+        })
         expect(schedulerCapability.productionSkills.map((skill) => skill.ref)).toEqual(skillRefs)
         expect(Object.keys(schedulerCapability.virtualWorkflows)).toEqual(["omnichannel-delivery-pack"])
         for (const agentID of Object.keys(dependencies)) {
-          const worker = await PromptProfileResolver.resolveWorkerCapability({ projectDirectory: project.path, config, packageRevision: revision, agentID })
+          const worker = await PromptProfileResolver.resolveWorkerCapability({
+            projectDirectory: project.path,
+            config,
+            packageRevision: revision,
+            agentID,
+          })
           expect(worker.productionSkills.map((skill) => skill.ref)).toEqual(skillRefs)
           expect(worker.packageTools.map((tool) => tool.ref)).toEqual([publisherRef])
         }
@@ -184,7 +247,7 @@ describe("Omnichannel Distribution Expert Squad package", () => {
           packageRevisionSHA256: revision.packageDigest,
           timeCreated: started,
         })
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started,
@@ -193,9 +256,11 @@ describe("Omnichannel Distribution Expert Squad package", () => {
           productPillar: "work",
           source: "test",
           priority: "normal",
-          metadata: { actor: "mission", mission: { id: Identifier.ascending("mission"), session_id: Identifier.ascending("session") } },
+          metadata: {
+            actor: "mission",
+            mission: { id: Identifier.ascending("mission"), session_id: Identifier.ascending("session") },
+          },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: revision,
           executionCapsuleBinding: binding,
         })
@@ -253,21 +318,55 @@ describe("Omnichannel Distribution Expert Squad package", () => {
             resourceSet: ReturnType<typeof TaskArtifactResourceSetLocatorSchema.parse> | null = null,
           ) => {
             ;(scope.owner as { agentID: string }).agentID = producer
-            return JSON.parse(await publishOmnichannelArtifact.execute({
-              artifact: { artifact_type: artifactType, payload: samples[artifactType] } as never,
-              resource_set: resourceSet,
-              source_artifact_locators: sources,
-            }, { host, metadata: () => {} } as never)) as { locator: EngineArtifactLocator; artifact_sha256: string }
+            return JSON.parse(
+              await publishOmnichannelArtifact.execute(
+                {
+                  artifact: { artifact_type: artifactType, payload: samples[artifactType] } as never,
+                  resource_set: resourceSet,
+                  source_artifact_locators: sources,
+                },
+                { host, metadata: () => {} } as never,
+              ),
+            ) as { locator: EngineArtifactLocator; artifact_sha256: string }
           }
 
           const briefReceipt = await publish("omnichannel-distribution/campaign-brief", "distribution-brief-planner")
-          const channelReceipt = await publish("omnichannel-distribution/channel-spec-dossier", "channel-spec-researcher", [briefReceipt.locator])
-          const complianceReceipt = await publish("omnichannel-distribution/rights-compliance-matrix", "rights-compliance-analyst", [briefReceipt.locator])
-          const channelPackReceipt = await publish("omnichannel-distribution/channel-pack", "channel-adaptation-producer", [channelReceipt.locator, complianceReceipt.locator])
-          const measurementReceipt = await publish("omnichannel-distribution/measurement-plan", "distribution-measurement-planner", [channelReceipt.locator, complianceReceipt.locator])
-          const planReceipt = await publish("omnichannel-distribution/distribution-plan", "distribution-plan-synthesizer", [channelPackReceipt.locator, measurementReceipt.locator])
-          const reviewReceipt = await publish("omnichannel-distribution/readiness-review", "distribution-readiness-reviewer", [planReceipt.locator])
-          const channelRead = await host.engineArtifacts.read({ locator: channelReceipt.locator, byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
+          const channelReceipt = await publish(
+            "omnichannel-distribution/channel-spec-dossier",
+            "channel-spec-researcher",
+            [briefReceipt.locator],
+          )
+          const complianceReceipt = await publish(
+            "omnichannel-distribution/rights-compliance-matrix",
+            "rights-compliance-analyst",
+            [briefReceipt.locator],
+          )
+          const channelPackReceipt = await publish(
+            "omnichannel-distribution/channel-pack",
+            "channel-adaptation-producer",
+            [channelReceipt.locator, complianceReceipt.locator],
+          )
+          const measurementReceipt = await publish(
+            "omnichannel-distribution/measurement-plan",
+            "distribution-measurement-planner",
+            [channelReceipt.locator, complianceReceipt.locator],
+          )
+          const planReceipt = await publish(
+            "omnichannel-distribution/distribution-plan",
+            "distribution-plan-synthesizer",
+            [channelPackReceipt.locator, measurementReceipt.locator],
+          )
+          const reviewReceipt = await publish(
+            "omnichannel-distribution/readiness-review",
+            "distribution-readiness-reviewer",
+            [planReceipt.locator],
+          )
+          const channelRead = await host.engineArtifacts.read({
+            locator: channelReceipt.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
           const envelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(channelRead.chunk.text!))
           expect(envelope).toMatchObject({
             artifact_type: "omnichannel-distribution/channel-spec-dossier",
@@ -278,9 +377,18 @@ describe("Omnichannel Distribution Expert Squad package", () => {
           expect(channelReceipt.artifact_sha256).toMatch(/^[a-f0-9]{64}$/)
 
           const stage = await host.taskArtifacts.stage({ trees: ["omnichannel-delivery"] })
-          await writeFile(path.join(stage.treeDirectories["omnichannel-delivery"]!, "README.md"), "# Prepared distribution bundle\n")
-          await writeFile(path.join(stage.treeDirectories["omnichannel-delivery"]!, "manifest.json"), JSON.stringify(samples["omnichannel-distribution/delivery"]))
-          await writeFile(path.join(stage.treeDirectories["omnichannel-delivery"]!, "schedule.csv"), "channel,timing\nblog,Day 1\nlinkedin,Day 2\n")
+          await writeFile(
+            path.join(stage.treeDirectories["omnichannel-delivery"]!, "README.md"),
+            "# Prepared distribution bundle\n",
+          )
+          await writeFile(
+            path.join(stage.treeDirectories["omnichannel-delivery"]!, "manifest.json"),
+            JSON.stringify(samples["omnichannel-distribution/delivery"]),
+          )
+          await writeFile(
+            path.join(stage.treeDirectories["omnichannel-delivery"]!, "schedule.csv"),
+            "channel,timing\nblog,Day 1\nlinkedin,Day 2\n",
+          )
           const publication = await host.taskArtifacts.publish(stage, {
             snapshot_kind: "catalog",
             files: [
@@ -289,7 +397,10 @@ describe("Omnichannel Distribution Expert Squad package", () => {
               { tree: "omnichannel-delivery", path: "schedule.csv", media_type: "text/csv" },
             ],
           })
-          const resourceSet = TaskArtifactResourceSetLocatorSchema.parse({ snapshot: publication.snapshot, tree: "omnichannel-delivery" })
+          const resourceSet = TaskArtifactResourceSetLocatorSchema.parse({
+            snapshot: publication.snapshot,
+            tree: "omnichannel-delivery",
+          })
           const deliverySources = [
             briefReceipt.locator,
             channelReceipt.locator,
@@ -299,14 +410,30 @@ describe("Omnichannel Distribution Expert Squad package", () => {
             planReceipt.locator,
             reviewReceipt.locator,
           ]
-          const deliveryReceipt = await publish("omnichannel-distribution/delivery", "omnichannel-delivery-owner", deliverySources, resourceSet)
-          const deliveryRead = await host.engineArtifacts.read({ locator: deliveryReceipt.locator, byte_offset: 0, max_bytes: 65_536, delivery: "inline" })
+          const deliveryReceipt = await publish(
+            "omnichannel-distribution/delivery",
+            "omnichannel-delivery-owner",
+            deliverySources,
+            resourceSet,
+          )
+          const deliveryRead = await host.engineArtifacts.read({
+            locator: deliveryReceipt.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
           const deliveryEnvelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(deliveryRead.chunk.text!))
           expect(deliveryReceipt.artifact_sha256).toMatch(/^[a-f0-9]{64}$/)
-          expect(deliveryEnvelope.resources.map((resource) => resource.path)).toEqual(["README.md", "manifest.json", "schedule.csv"])
-          expect([...deliveryEnvelope.source_artifact_locators].sort((left, right) => left.artifact_id.localeCompare(right.artifact_id))).toEqual(
-            [...deliverySources].sort((left, right) => left.artifact_id.localeCompare(right.artifact_id)),
-          )
+          expect(deliveryEnvelope.resources.map((resource) => resource.path)).toEqual([
+            "README.md",
+            "manifest.json",
+            "schedule.csv",
+          ])
+          expect(
+            [...deliveryEnvelope.source_artifact_locators].sort((left, right) =>
+              left.artifact_id.localeCompare(right.artifact_id),
+            ),
+          ).toEqual([...deliverySources].sort((left, right) => left.artifact_id.localeCompare(right.artifact_id)))
         })
       },
     })

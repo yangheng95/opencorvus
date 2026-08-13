@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { listInterruptedSessionEvidence } from "@/engine/queue"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { findTask } from "@/engine/store"
 import { publishTaskAgentCancellationStatusesAfterSettlement } from "@/engine/task-agent-lifecycle"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
@@ -40,7 +40,7 @@ describe("interrupted prepared Worker Turn recovery", () => {
         })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: root.id,
           now,
@@ -51,7 +51,6 @@ describe("interrupted prepared Worker Turn recovery", () => {
           priority: "normal",
           metadata: {},
           projectID: Instance.project.id,
-          queue: true,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",
@@ -104,9 +103,7 @@ describe("interrupted prepared Worker Turn recovery", () => {
           },
         })
 
-        expect(
-          listInterruptedSessionEvidence({ taskID, rootSessionID: root.id, ownedSessionIDs: new Set() }),
-        ).toEqual([
+        expect(listInterruptedSessionEvidence({ taskID, rootSessionID: root.id, ownedSessionIDs: new Set() })).toEqual([
           {
             session_id: worker.id,
             agent_id: "recovery-worker",
@@ -128,16 +125,16 @@ describe("interrupted prepared Worker Turn recovery", () => {
             reason: "Previous backend process ended before the first lifecycle event",
           }),
         ).toEqual([worker.id])
-        expect(listTaskConversationAgentSessions(taskID).find((session) => session.sessionID === worker.id)).toMatchObject(
-          {
-            latestStatus: {
-              type: "terminal",
-              reason: "aborted",
-              error: "Previous backend process ended before the first lifecycle event",
-            },
-            latestInputMessageID: message.id,
+        expect(
+          listTaskConversationAgentSessions(taskID).find((session) => session.sessionID === worker.id),
+        ).toMatchObject({
+          latestStatus: {
+            type: "terminal",
+            reason: "aborted",
+            error: "Previous backend process ended before the first lifecycle event",
           },
-        )
+          latestInputMessageID: message.id,
+        })
 
         const continuationMessage = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -173,16 +170,16 @@ describe("interrupted prepared Worker Turn recovery", () => {
             reason: "Cancel the exact continuation occurrence",
           }),
         ).toEqual([worker.id])
-        expect(listTaskConversationAgentSessions(taskID).find((session) => session.sessionID === worker.id)).toMatchObject(
-          {
-            latestStatus: {
-              type: "terminal",
-              reason: "aborted",
-              error: "Cancel the exact continuation occurrence",
-            },
-            latestInputMessageID: continuationMessage.id,
+        expect(
+          listTaskConversationAgentSessions(taskID).find((session) => session.sessionID === worker.id),
+        ).toMatchObject({
+          latestStatus: {
+            type: "terminal",
+            reason: "aborted",
+            error: "Cancel the exact continuation occurrence",
           },
-        )
+          latestInputMessageID: continuationMessage.id,
+        })
       },
     })
   }, 30_000)

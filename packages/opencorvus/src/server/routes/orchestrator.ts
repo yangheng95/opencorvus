@@ -47,8 +47,7 @@ import { TaskStatusDetail, taskStatusDetailFromBoard } from "@/status/task-statu
 import { RewindTaskInput, taskRewindCursor } from "@/engine/rewind"
 import { requireTask } from "@/engine/store"
 import { abortChildExecutionForSession } from "@/engine/execution-abort"
-import { TaskQueueError, TaskQueueReorderError } from "@/engine/queue"
-import { EngineService, PlannerFailureError, TaskQueueStartError } from "@/task-api"
+import { EngineService, PlannerFailureError } from "@/task-api"
 import { GlobalTaskService } from "@/task-api/global-task-service"
 import { ProtocolStore } from "@/protocol/store"
 import { ChannelIngress } from "@/channel/ingress"
@@ -129,7 +128,6 @@ const TASK_LIST_PROJECTION_EVENT_TYPES = new Set([
   "task.failed",
   "task.cancelled",
   "task.blocked",
-  "task.requeued",
   "task.rewound",
   "task.deleted",
   "task.archived",
@@ -173,26 +171,6 @@ const ConversationHistoryQuery = z.object({
   before_order_key: z.string().min(1),
   before_id: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(1000).default(CONVERSATION_HISTORY_PAGE_LIMIT),
-})
-
-const ReorderTaskQueueInput = z.object({
-  directory: z.string().min(1),
-  orderedTaskIDs: z.array(z.string()).default([]),
-  revision: z.string().optional(),
-})
-
-const ReorderTaskQueueResult = z.object({
-  directory: z.string(),
-  revision: z.string(),
-  queuedTaskIDs: z.array(z.string()),
-})
-
-const StartQueuedTaskNowResult = z.object({
-  task: Task,
-  directory: z.string(),
-  status: z.string(),
-  started: z.boolean(),
-  queuedTaskIDs: z.array(z.string()),
 })
 
 const TaskBindingList = z.array(
@@ -375,70 +353,6 @@ export const EngineRoutes = lazy(() =>
         )
       },
     )
-    .patch(
-      "/task-queue/reorder",
-      describeRoute({
-        summary: "Reorder queued tasks in a directory",
-        operationId: "task.queue.reorder",
-        responses: {
-          200: {
-            description: "Updated directory queue order",
-            content: {
-              "application/json": {
-                schema: resolver(ReorderTaskQueueResult),
-              },
-            },
-          },
-          409: { description: "Queue revision conflict" },
-          422: { description: "Invalid queued task ordering" },
-        },
-      }),
-      validator("json", ReorderTaskQueueInput),
-      async (c) => {
-        try {
-          return c.json(await EngineService.reorderTaskQueue(c.req.valid("json")))
-        } catch (error) {
-          if (error instanceof TaskQueueReorderError) {
-            throw new HTTPException(error.code === "conflict" ? 409 : 422, { message: error.message })
-          }
-          throw error
-        }
-      },
-    )
-    .post(
-      "/task/:taskID/start-now",
-      describeRoute({
-        summary: "Start a queued task immediately",
-        operationId: "task.queue.startNow",
-        responses: {
-          200: {
-            description: "Queued task started and scheduler invoked",
-            content: {
-              "application/json": {
-                schema: resolver(StartQueuedTaskNowResult),
-              },
-            },
-          },
-          409: { description: "Task is not queued" },
-          422: { description: "Task has no working directory" },
-          ...errors(404),
-        },
-      }),
-      validator("param", z.object({ taskID: Task.shape.id })),
-      async (c) => {
-        try {
-          return c.json(await EngineService.startQueuedTaskNow(c.req.valid("param").taskID))
-        } catch (error) {
-          if (error instanceof TaskQueueStartError) {
-            throw new HTTPException(409, { message: error.message })
-          }
-          if (error instanceof TaskQueueError) {
-            throw new HTTPException(422, { message: error.message })
-          }
-          throw error
-        }
-      },
-    )
     .get(
       "/task/:taskID",
       describeRoute({
@@ -467,7 +381,7 @@ export const EngineRoutes = lazy(() =>
         summary: "Get task status",
         description:
           "Collect current Task activity from the Task Board projection, including diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. " +
-          'The Task `status` field is normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw queued, active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.',
+          'The Task `status` field is normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.',
         operationId: "task.status",
         responses: {
           200: {
@@ -1737,7 +1651,7 @@ export const EngineRoutes = lazy(() =>
         operationId: "task.retry",
         responses: {
           200: {
-            description: "Task retry queued",
+            description: "Task retry accepted",
             content: {
               "application/json": {
                 schema: resolver(Task),
@@ -1763,7 +1677,7 @@ export const EngineRoutes = lazy(() =>
         operationId: "task.replan",
         responses: {
           200: {
-            description: "Task replan queued",
+            description: "Task replan accepted",
             content: {
               "application/json": {
                 schema: resolver(Task),

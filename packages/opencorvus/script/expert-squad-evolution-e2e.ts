@@ -113,7 +113,7 @@ type MissionStatus = {
   tasks: Array<{
     taskID: string
     title: string
-    lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+    lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
     error?: string
   }>
 }
@@ -1415,9 +1415,7 @@ try {
       failureAbortSettlement = { status: abortStatus, ...(abortError ? { error: abortError } : {}) }
       failureStatusObservation = {
         status: observation.status,
-        ...(observation.status === "timed_out" || observation.status === "failed"
-          ? { error: observation.error }
-          : {}),
+        ...(observation.status === "timed_out" || observation.status === "failed" ? { error: observation.error } : {}),
       }
       if (observation.status === "settled") postAbortStatus = observation.value
       if (abortStatus === "timed_out" || abortStatus === "failed") {

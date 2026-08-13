@@ -4,6 +4,8 @@ import z from "zod"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { deriveTaskStatus, isTaskActive } from "@/engine/task-status"
+import { QueuedTaskIngressSchema } from "@/engine/queued-task-ingress"
+import { Identifier } from "@/id/id"
 import { MessageTable, PartTable, SessionTable } from "@/session/session.sql"
 import { and, asc, Database, eq, inArray, lte, or, sql } from "@/storage/db"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
@@ -40,6 +42,16 @@ export const SchedulerMessageConflictError = NamedError.create(
   z.object({ message: z.string().min(1), eventID: z.string().min(1).optional() }),
 )
 
+export const SchedulerTargetOccurrenceStaleError = NamedError.create(
+  "SchedulerTargetOccurrenceStaleError",
+  z.object({
+    message: z.string().min(1),
+    taskID: Identifier.schema("task"),
+    expectedStartedAt: z.number().int().positive(),
+    currentStartedAt: z.number().int().positive(),
+  }),
+)
+
 export type SchedulerDeliveryReceipt = {
   eventID: string
   inboxID: string
@@ -58,6 +70,7 @@ function requireTaskTargetActive(
       message: `Scheduler message requires active Task ${task.id} (status=${deriveTaskStatus(task)}).`,
     })
   }
+  return task
 }
 
 function digestID(prefix: "protocol_event" | "protocol_inbox", material: string): string {
@@ -120,9 +133,7 @@ export function renderSchedulerParticipantMessage(input: {
     throw new SchedulerMessageConflictError({ message: `Scheduler reply participant Message requires reply_to.` })
   }
   const sourceLabel =
-    source.kind === "task_scheduler"
-      ? `Task scheduler ${source.task_id}`
-      : `Mission scheduler ${source.mission_id}`
+    source.kind === "task_scheduler" ? `Task scheduler ${source.task_id}` : `Mission scheduler ${source.mission_id}`
   return [
     `Scheduler ${kind} from ${sourceLabel}.`,
     `event_id: ${input.eventID}`,
@@ -134,8 +145,10 @@ export function renderSchedulerParticipantMessage(input: {
     ...(kind === "request"
       ? [`Reply through scheduler_message with kind=reply and reply_to=${input.eventID}.`]
       : kind === "reply"
-        ? [`This correlated reply resolves request ${input.replyTo}; process it now and do not keep waiting for that request.`]
-      : []),
+        ? [
+            `This correlated reply resolves request ${input.replyTo}; process it now and do not keep waiting for that request.`,
+          ]
+        : []),
   ].join("\n")
 }
 
@@ -280,6 +293,8 @@ function requireReplyAuthority(input: {
   replyTo?: string
   correlationID: string
   threadID: string
+  sourceTaskOccurrenceStartedAt: number | null
+  targetTaskOccurrenceStartedAt: number | null
 }) {
   if (input.kind !== "reply") {
     if (input.replyTo) throw new SchedulerMessageConflictError({ message: `Only a reply may carry reply_to.` })
@@ -306,6 +321,35 @@ function requireReplyAuthority(input: {
       eventID: requestRow.id,
     })
   }
+  const staleReversedTaskOccurrence = (
+    endpoint: z.infer<typeof SchedulerEndpoint>,
+    expectedStartedAt: number | null,
+    currentStartedAt: number | null,
+  ) => {
+    if (endpoint.kind !== "task_scheduler" || expectedStartedAt === currentStartedAt) return
+    if (expectedStartedAt === null || currentStartedAt === null) {
+      throw new SchedulerMessageConflictError({
+        message: `Scheduler reply does not preserve the Task occurrence of request ${requestRow.id}.`,
+        eventID: requestRow.id,
+      })
+    }
+    throw new SchedulerTargetOccurrenceStaleError({
+      message: `Scheduler reply to ${requestRow.id} targets stale Task ${endpoint.task_id} occurrence ${expectedStartedAt}; current occurrence is ${currentStartedAt}.`,
+      taskID: endpoint.task_id,
+      expectedStartedAt,
+      currentStartedAt,
+    })
+  }
+  staleReversedTaskOccurrence(
+    input.source,
+    requestPayload.target_task_occurrence_started_at,
+    input.sourceTaskOccurrenceStartedAt,
+  )
+  staleReversedTaskOccurrence(
+    input.target,
+    requestPayload.source_task_occurrence_started_at,
+    input.targetTaskOccurrenceStartedAt,
+  )
   const existingReply = input.db
     .select({ id: ProtocolEventTable.id })
     .from(ProtocolEventTable)
@@ -434,20 +478,74 @@ function requireSourceOccurrence(
   }
 }
 
+function requireTaskSourceMessageOccurrence(
+  db: Database.TxOrDb,
+  input: { source: Extract<SchedulerEndpoint, { kind: "task_scheduler" }>; sourceMessageID: string },
+): number {
+  const message = db
+    .select({ data: MessageTable.data })
+    .from(MessageTable)
+    .where(eq(MessageTable.id, input.sourceMessageID))
+    .get()
+  const taskIngress = z
+    .object({
+      role: z.literal("assistant"),
+      taskIngress: z.object({ id: Identifier.schema("artifact"), kind: z.string().min(1) }).strict(),
+    })
+    .passthrough()
+    .safeParse(message?.data)
+  if (!taskIngress.success) {
+    throw new SchedulerMessageAuthorityError({
+      message: `Task scheduler source Message ${input.sourceMessageID} has no exact Task ingress occurrence.`,
+    })
+  }
+  const artifact = db
+    .select({ taskID: EngineArtifactTable.task_id, payload: EngineArtifactTable.payload })
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.id, taskIngress.data.taskIngress.id),
+        eq(EngineArtifactTable.kind, "queued_operator_wake"),
+      ),
+    )
+    .get()
+  if (!artifact || artifact.taskID !== input.source.task_id) {
+    throw new SchedulerMessageAuthorityError({
+      message: `Task scheduler source Message ${input.sourceMessageID} names an ingress outside Task ${input.source.task_id}.`,
+    })
+  }
+  const ingress = QueuedTaskIngressSchema.parse(artifact.payload)
+  if (
+    ingress.root_session_id !== input.source.root_session_id ||
+    ingress.source_kind !== taskIngress.data.taskIngress.kind
+  ) {
+    throw new SchedulerMessageAuthorityError({
+      message: `Task scheduler source Message ${input.sourceMessageID} does not match its persisted Task ingress provenance.`,
+    })
+  }
+  return ingress.task_occurrence_started_at
+}
+
 export function schedulerSourceBodyInTransaction(
   db: Database.TxOrDb,
   input: { source: SchedulerEndpoint; sourceMessageID?: string; sourcePartID?: string; sourceTerminalEventID?: string },
 ): string {
   requireSourceOccurrence(db, input)
   if (input.sourceTerminalEventID) {
-    const event = db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.id, input.sourceTerminalEventID)).get()
+    const event = db
+      .select()
+      .from(ProtocolEventTable)
+      .where(eq(ProtocolEventTable.id, input.sourceTerminalEventID))
+      .get()
     if (!event) throw new SchedulerMessageAuthorityError({ message: `Scheduler terminal source is missing.` })
     return JSON.stringify(event.payload ?? {})
   }
   const part = db.select({ data: PartTable.data }).from(PartTable).where(eq(PartTable.id, input.sourcePartID!)).get()
   const body = sourceBodyFromPartData(part?.data)
   if (!body?.trim()) {
-    throw new SchedulerMessageAuthorityError({ message: `Scheduler source Part ${input.sourcePartID} has no message body.` })
+    throw new SchedulerMessageAuthorityError({
+      message: `Scheduler source Part ${input.sourcePartID} has no message body.`,
+    })
   }
   return body
 }
@@ -651,18 +749,50 @@ export function enqueueSchedulerMessageInTransaction(
       replayed: true,
     }
   }
-  if (target.kind === "task_scheduler") requireTaskTargetActive(db, target)
-  requireReplyAuthority({ db, kind, source, target, replyTo: input.replyTo, correlationID, threadID })
+  let sourceTaskOccurrenceStartedAt: number | null = null
+  if (source.kind === "task_scheduler") {
+    const sourceTask = requireTaskEndpoint(db, source)
+    if (input.sourceMessageID && !isTaskActive(sourceTask)) {
+      throw new SchedulerMessageAuthorityError({
+        message: `Scheduler Message source requires active Task ${sourceTask.id} (status=${deriveTaskStatus(sourceTask)}).`,
+      })
+    }
+    sourceTaskOccurrenceStartedAt = input.sourceMessageID
+      ? requireTaskSourceMessageOccurrence(db, { source, sourceMessageID: input.sourceMessageID })
+      : sourceTask.time_started
+    if (input.sourceMessageID && sourceTaskOccurrenceStartedAt !== sourceTask.time_started) {
+      throw new SchedulerMessageAuthorityError({
+        message:
+          `Scheduler source Message ${input.sourceMessageID} belongs to Task ${sourceTask.id} occurrence ` +
+          `${sourceTaskOccurrenceStartedAt}, not current occurrence ${sourceTask.time_started}.`,
+      })
+    }
+  }
+  const targetTask = target.kind === "task_scheduler" ? requireTaskTargetActive(db, target) : undefined
+  const targetTaskOccurrenceStartedAt = targetTask?.time_started ?? null
+  requireReplyAuthority({
+    db,
+    kind,
+    source,
+    target,
+    replyTo: input.replyTo,
+    correlationID,
+    threadID,
+    sourceTaskOccurrenceStartedAt,
+    targetTaskOccurrenceStartedAt,
+  })
 
   const recipient = endpointRecipient(target)
   const now = input.now ?? Date.now()
   const payload = SchedulerMessagePayload.parse({
-    protocol: "scheduler-message-v1",
+    protocol: "scheduler-message-v2",
     message_kind: kind,
     thread_id: threadID,
     source_message_id: input.sourceMessageID,
     source_part_id: input.sourcePartID,
     source_terminal_event_id: input.sourceTerminalEventID,
+    source_task_occurrence_started_at: sourceTaskOccurrenceStartedAt,
+    target_task_occurrence_started_at: targetTaskOccurrenceStartedAt,
     source_body_sha256: sourceBodySHA256,
     subject: input.subject,
   })

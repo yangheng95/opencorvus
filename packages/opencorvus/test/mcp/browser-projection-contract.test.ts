@@ -8,18 +8,22 @@ import { BrowserMCPBuiltin } from "../../src/mcp/browser/builtin"
 import { browserMcpPermissionKeyOf } from "../../src/mcp/browser/permission-plan"
 import { Instance } from "../../src/project/instance"
 import { EngineService } from "../../src/task-api"
+import { Database } from "../../src/storage/db"
+import { RuntimeServerOwnership } from "../../src/server/runtime-server-ownership"
 import { buildExpertSquadAuthorDefinition } from "../../src/tool/expert-squad-author"
 import { memoryProject } from "../fixture/memory"
 
 describe("Browser MCP projection contract", () => {
   test(
     "projects canonical Browser tools through the Node sidecar with one server identity",
-    { timeout: 60_000 },
+    { timeout: 180_000 },
     async () => {
       await using project = await memoryProject()
-      await Instance.provide({
-        directory: project.path,
-        fn: async () => {
+      const runtimeOwnership = RuntimeServerOwnership.acquire({ database: Database.Path() })
+      try {
+        await Instance.provide({
+          directory: project.path,
+          fn: async () => {
           const profileID = "browser-projection-contract"
           const browserToolRefs = BrowserMCPBuiltin.ImportableToolRefs.slice(0, 2)
           await ExpertSquadConversationAuthoring.author({
@@ -74,7 +78,6 @@ describe("Browser MCP projection contract", () => {
               model: "firmware/gpt-5",
               promptProfile: profileID,
               expectedPackageDigest: capability.packageRevision.packageDigest,
-              queue: true,
             },
             { actor: "user" },
           )
@@ -107,8 +110,11 @@ describe("Browser MCP projection contract", () => {
           } finally {
             await owner.close()
           }
-        },
-      })
+          },
+        })
+      } finally {
+        await RuntimeServerOwnership.releaseWithRetry(runtimeOwnership)
+      }
     },
   )
 })

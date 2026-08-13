@@ -18,6 +18,7 @@ export const SchedulerDeliveryReference = z
     inboxID: Identifier.schema("protocol_inbox"),
     sequence: z.number().int().positive(),
     threadID: z.string().min(1),
+    targetTaskOccurrenceStartedAt: z.number().int().positive(),
     replyTo: Identifier.schema("protocol_event").optional(),
   })
   .strict()

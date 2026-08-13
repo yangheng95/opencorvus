@@ -117,6 +117,7 @@ const BOARD_INVALIDATING_EXACT_TYPES = new Set([
   "task.infrastructure.failed",
   "task.cancelled",
   "task.blocked",
+  "mission.execution.closure",
   "artifact.persisted",
   "agent.execution.lifecycle",
   "session.error",

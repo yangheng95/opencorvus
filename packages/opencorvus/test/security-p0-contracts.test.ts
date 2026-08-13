@@ -135,8 +135,6 @@ describe("P0 security contract repairs", () => {
 
     for (const [status, message] of [
       [403, "Gateway action is not allowed"],
-      [409, "Queue revision conflict"],
-      [422, "Invalid queued task ordering"],
       [503, "Task runtime is unavailable"],
     ] as const) {
       const response = serverErrorResponse(new HTTPException(status, { message }), context as never)

@@ -13,7 +13,6 @@ import {
   recordDispatchSettlement,
   settleDispatchOrReturnExisting,
 } from "@/engine/dispatch-settlement"
-import { persistQueuedTask } from "@/engine/pipeline"
 import { persistArchitectGoalProjection, persistArchitectUnprojectableGoalGraphCandidate } from "@/engine/persist"
 import { deriveEngineArtifactCatalogMetadata, serializeEngineArtifactPayload } from "@/engine/artifact-catalog-metadata"
 import { expertSquadPackageRevisionBinding } from "@/engine/expert-squad-package-revision-binding"
@@ -46,6 +45,7 @@ import { Database, DatabaseUnavailableError } from "@/storage/db"
 import type { EngineArtifactLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import z from "zod"
 import { memoryProject } from "./fixture/memory"
+import { persistEstablishedTask } from "./fixture/engine-task"
 
 const goalA = Identifier.ascending("goal")
 const goalB = Identifier.ascending("goal")
@@ -136,7 +136,7 @@ async function createTaskFixture(title: string) {
     title,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
-  persistQueuedTask({
+  persistEstablishedTask({
     taskID,
     sessionID: root.id,
     now,
@@ -147,7 +147,6 @@ async function createTaskFixture(title: string) {
     priority: "normal",
     metadata: {},
     projectID: Instance.project.id,
-    queue: false,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",
@@ -1025,7 +1024,7 @@ describe("Goal Workload coverage contract", () => {
           title: "Empty Workload coverage",
           metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
         })
-        persistQueuedTask({
+        persistEstablishedTask({
           taskID,
           sessionID: root.id,
           now,
@@ -1036,7 +1035,6 @@ describe("Goal Workload coverage contract", () => {
           priority: "normal",
           metadata: {},
           projectID: Instance.project.id,
-          queue: false,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",
@@ -1738,7 +1736,7 @@ describe("Goal Workload coverage contract", () => {
           metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
         })
         const child = await Session.create({ kind: "goal-workload-analyst", parentID: root.id, title: "Workload" })
-        persistQueuedTask({
+        persistEstablishedTask({
           taskID,
           sessionID: root.id,
           now,
@@ -1749,7 +1747,6 @@ describe("Goal Workload coverage contract", () => {
           priority: "normal",
           metadata: {},
           projectID: Instance.project.id,
-          queue: false,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",

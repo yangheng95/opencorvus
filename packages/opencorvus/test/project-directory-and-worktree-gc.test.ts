@@ -127,7 +127,6 @@ describe("Project directory integrity", () => {
           productPillar: "work",
           request: "Persist one queued positive directory-integrity contract Task.",
           model: "openai/gpt-5.6-luna",
-          queue: true,
         }),
       })
 
@@ -787,8 +786,8 @@ describe("Project directory integrity", () => {
             title: "Rejected during deletion",
             request: "Durable admission is authoritative.",
             priority: 0,
-            queueOrder: 0,
             metadata: {},
+            timeStarted: now,
             timeCreated: now,
             timeUpdated: now,
           }),
@@ -958,7 +957,9 @@ describe("Project directory integrity", () => {
 
     expect({
       databaseInstanceID: Database.Identity(),
-      oldCompletedLedger: await fs.readdir(ProjectDeletionCleanupTestHooks.completedRoot(plan.manifest.databaseInstanceID)),
+      oldCompletedLedger: await fs.readdir(
+        ProjectDeletionCleanupTestHooks.completedRoot(plan.manifest.databaseInstanceID),
+      ),
       quarantine: await fs.stat(quarantine).then(
         () => "present" as const,
         (error: NodeJS.ErrnoException) => (error.code === "ENOENT" ? ("missing" as const) : Promise.reject(error)),
@@ -1319,9 +1320,7 @@ describe("Worktree GC uncertainty preservation", () => {
         }).toEqual({
           missing: [sandbox],
           registry: true,
-          preservation: expect.arrayContaining([
-            { projectID: registered.project.id, reason: "durable-sandbox-owner" },
-          ]),
+          preservation: expect.arrayContaining([{ projectID: registered.project.id, reason: "durable-sandbox-owner" }]),
           restored: [sandbox],
         })
 
@@ -1460,7 +1459,6 @@ describe("Worktree GC uncertainty preservation", () => {
             title: "Process binding owner",
             request: "Keep the managed Worktree owned.",
             priority: "normal",
-            queueOrder: 0,
             metadata: {},
             timeStarted: now,
             timeCreated: now,

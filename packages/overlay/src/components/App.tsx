@@ -23,7 +23,6 @@ import { ProjectRuntimeToolbarActions } from "./TaskDirBar"
 import { Button } from "./ui/Button"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Tooltip } from "./ui/Tooltip"
-import { StatusIndicator } from "./ui/StatusIndicator"
 import { t } from "../utils/i18n"
 import { debugCopyFailureMessage } from "../utils/debug-info"
 import { conversationExperienceIcon } from "../services/conversation-experience"
@@ -263,10 +262,6 @@ export function App(props: AppProps) {
     }
     return ""
   })
-  const selectedTaskQueued = createMemo(
-    () =>
-      appStore.i18nReady && boardStore.selectedSource?.kind === "task" && conversationExecutionStatus() === "queued",
-  )
 
   function cancelMailboxHoverOpen(): void {
     if (mailboxHoverOpenTimer !== undefined) window.clearTimeout(mailboxHoverOpenTimer)
@@ -536,25 +531,7 @@ export function App(props: AppProps) {
                                 </div>
                                 <div class="chat-home-composition" id="chatHomeComposition">
                                   <div id="solidChatHomePromptMount" />
-                                  <div id="solidChatComposer">
-                                    <Show when={selectedTaskQueued()}>
-                                      <div
-                                        class="task-queue-notice"
-                                        data-ui="task-queue-notice"
-                                        role="status"
-                                        aria-live="polite"
-                                      >
-                                        <StatusIndicator
-                                          status="queued"
-                                          label={t("chat.task_queue_notice")}
-                                          size="medium"
-                                          aria-hidden="true"
-                                        />
-                                        <span>{t("chat.task_queue_notice")}</span>
-                                      </div>
-                                    </Show>
-                                    {props.composer}
-                                  </div>
+                                  <div id="solidChatComposer">{props.composer}</div>
                                   <div id="solidChatHomeAfterMount" />
                                 </div>
                               </div>
@@ -587,7 +564,13 @@ export function App(props: AppProps) {
               aria-hidden="true"
               tabIndex={-1}
             />
-            <aside class="right-dock" id="rightDock" data-open="false" aria-label={t("right_dock.tools_panel")} aria-hidden="true">
+            <aside
+              class="right-dock"
+              id="rightDock"
+              data-open="false"
+              aria-label={t("right_dock.tools_panel")}
+              aria-hidden="true"
+            >
               {props.rightDock}
             </aside>
           </div>

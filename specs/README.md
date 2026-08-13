@@ -4,6 +4,12 @@ Latest Browser MCP visible-browser and same-session Live View delivery: [`2026-0
 
 Browser MCP same-session Live View visual evidence: [`2026-08-13-browser-mcp-live-view.png`](artifacts/2026-08-13-browser-mcp-live-view.png).
 
+Latest compact identity and Host-reference architecture: [`2026-08-13-compact-identities-and-host-references.md`](records/2026-08/2026-08-13-compact-identities-and-host-references.md).
+
+Latest Evolution failure-attribution source-integrity repair: [`2026-08-13-evolution-attribution-source-integrity.md`](records/2026-08/2026-08-13-evolution-attribution-source-integrity.md).
+
+Latest cross-Task Engine resource Catalog visibility repair: [`2026-08-13-cross-task-engine-resource-catalog-visibility.md`](records/2026-08/2026-08-13-cross-task-engine-resource-catalog-visibility.md).
+
 Latest Expert Squad real-GUI zero-intervention sampling program: [`2026-08-13-expert-squad-gui-zero-intervention-sampling.md`](records/2026-08/2026-08-13-expert-squad-gui-zero-intervention-sampling.md).
 
 Latest Work capability incident diagnosis and route-authority hardening: [`2026-08-13-work-capability-unavailable-repair.md`](records/2026-08/2026-08-13-work-capability-unavailable-repair.md).

@@ -21,10 +21,7 @@ export const AnalyticsTool = Tool.define("analytics", {
     z.object({
       action: z.literal("search"),
       query: z.string().optional().describe("Text to search in task title or request"),
-      status: z
-        .enum(["queued", "active", "completed", "failed", "cancelled"])
-        .optional()
-        .describe("Filter by task status"),
+      status: z.enum(["active", "completed", "failed", "cancelled"]).optional().describe("Filter by task status"),
       limit: z
         .number()
         .int()
@@ -51,8 +48,8 @@ export const AnalyticsTool = Tool.define("analytics", {
 
       // 计算完成时间中位数
       const durations = tasks
-        .filter((t) => t.time_started && t.time_completed)
-        .map((t) => (t.time_completed ?? 0) - (t.time_started ?? 0))
+        .filter((t) => t.time_completed != null)
+        .map((t) => t.time_completed! - t.time_started)
         .filter((d) => d > 0)
         .sort((a, b) => a - b)
       const median = durations.length > 0 ? durations[Math.floor((durations.length - 1) / 2)] : null
@@ -84,12 +81,7 @@ export const AnalyticsTool = Tool.define("analytics", {
         // Phase-6-f-2: status column gone; translate to fact conditions.
         const cancelledMark = sql`json_extract(${EngineTaskTable.metadata}, '$.cancelled') = 1`
         switch (args.status) {
-          case "queued":
-            conditions.push(isNull(EngineTaskTable.time_started))
-            conditions.push(isNull(EngineTaskTable.time_completed))
-            break
           case "active":
-            conditions.push(isNotNull(EngineTaskTable.time_started))
             conditions.push(isNull(EngineTaskTable.time_completed))
             break
           case "completed":
@@ -126,7 +118,7 @@ export const AnalyticsTool = Tool.define("analytics", {
         priority: t.priority,
         created: new Date(t.time_created).toISOString(),
         updated: new Date(t.time_updated).toISOString(),
-        duration_ms: t.time_started && t.time_completed ? t.time_completed - t.time_started : null,
+        duration_ms: t.time_completed != null ? t.time_completed - t.time_started : null,
       }))
 
       return {

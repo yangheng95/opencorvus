@@ -1483,7 +1483,7 @@ export namespace Config {
                 .describe("Max idle window without queue task progress, ms"),
             })
             .optional()
-            .describe("Chunk-driven inactivity thresholds for session LLM streams and task queue work."),
+            .describe("Chunk-driven inactivity thresholds for session LLM streams and provider execution work."),
           max_executor_groups: z.number().int().min(1).optional().describe("Maximum parallel projected agent sessions"),
         })
         .strict()

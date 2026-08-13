@@ -1,15 +1,9 @@
 /**
- * Task serialization queue — single source of truth for queue=true task
- * admission in a working directory.
+ * Durable Task root-Session ingress.
  *
- * Lock key: the task root session's required `session.directory`.
- *
- * queue=true tasks in the same cwd are serialized. queue=false creation
- * intentionally starts immediately so same-project tasks can run in parallel;
- * runtime isolation is provided by task/session-scoped runtime paths.
- *
- * All queued scheduling requests must go through this module so queued-task
- * claiming and active-task re-entry share one coordinator.
+ * Task scheduling belongs to the Mission/Orchestrator model. This module owns
+ * only causal first-in-first-out delivery inside one Task root Session,
+ * terminal ingress settlement, and interrupted physical-execution recovery.
  */
 
 import { MessageTable, SessionTable } from "@/session/session.sql"
@@ -32,14 +26,10 @@ import {
   updateEngineArtifactsWhere,
   updateEngineArtifactWhereReturning,
 } from "./artifact"
-import { insertEngineProgressSnapshot } from "./progress"
-import { claimNextEngineTaskForCwd, claimQueuedEngineTaskForCwd, setEngineTaskQueueOrder } from "./task"
 import { findTask, listOwnedPromptSessionsForTask, listStartedIncompleteTaskIDs, type TaskRow } from "./store"
-import { deriveTaskStatus, isTaskActive, isTaskQueued, isTaskTerminal } from "./task-status"
+import { deriveTaskStatus, isTaskActive, isTaskTerminal } from "./task-status"
 import { OrchestratorEventSchema, type OrchestratorEvent } from "@/orchestrator/event"
 import { Identifier } from "@/id/id"
-import { Event } from "./model"
-import { EngineProtocol } from "./protocol"
 import { QueuedTaskIngressSchema, queuedTaskIngressSourceKind, type QueuedTaskIngress } from "./queued-task-ingress"
 import { Instance, runOutsideInstanceContext } from "@/project/instance"
 import {
@@ -53,12 +43,13 @@ import { createExecutionCancellationOrigin, isExecutionCancellationError } from 
 import { TaskQueueError, taskRootDirectory } from "./task-directory"
 import { isAgentInvocationSession, listTaskConversationAgentSessions } from "@/orchestrator/task-event"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
+import { hasProjectedWorkerTurnOwnership } from "@/agent/projected-worker-turn-queue"
 import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
 import { recordTaskInfrastructureError, recordTaskInfrastructureErrorInTransaction } from "./persist"
 import { Session } from "@/session"
 import { publishSettledSessionTerminalStatusInCurrentProject } from "@/session/status-publication"
 import { SessionStatus } from "@/session/status"
-import { terminalTask, writeTaskUpdateInTransaction } from "./state"
+import { terminalTask } from "./state"
 import { deliverTerminalTaskIngress } from "./terminal-task-conversation-runner"
 import { TaskRootMessageProvenance } from "@/task-api/task-root-message"
 import { listTaskSessionIDs } from "./task-session-lineage"
@@ -104,11 +95,7 @@ let terminalIngressDeliveryRuntimeOverrideForTest: string | undefined
 let terminalIngressDelayedRetryDelayOverrideForTest: number | undefined
 const loopCompletionHooksForTest = new Set<Promise<void>>()
 const taskLoopCompletionOperations = new Map<string, Promise<void>>()
-const taskLoopLaunchAuthorities = new Map<string, string>()
 const terminalIngressDelayedRetryOwners = new Map<string, Promise<void>>()
-let taskLoopLaunchAcceptanceFailuresForTest = 0
-let taskLoopLaunchAcceptanceAttemptsForTest = 0
-let taskLoopCompletionAdvanceFailuresForTest = 0
 
 function terminalIngressDeliveryRuntimeID(): string {
   const occurrenceID = RuntimeServerOwnership.currentOccurrenceID(Database.Path())
@@ -125,192 +112,6 @@ export class RuntimeServerOwnershipRequiredError extends Error {
   }
 }
 
-export class TaskLoopLaunchHandoffError extends Error {
-  override readonly name = "TaskLoopLaunchHandoffError"
-
-  constructor(
-    public readonly taskID: string,
-    public readonly launchID: string,
-    cause: unknown,
-  ) {
-    super(`Task ${taskID} failed before its claimed queue launch was attached`, { cause })
-  }
-}
-
-function recordTaskLoopLaunch(db: Database.TxOrDb, input: { task: TaskRow; cwd: string; now: number }): string {
-  const exactWake = db
-    .select({ id: EngineArtifactTable.id })
-    .from(EngineArtifactTable)
-    .where(
-      and(
-        eq(EngineArtifactTable.task_id, input.task.id),
-        eq(EngineArtifactTable.kind, "queued_operator_wake"),
-        eq(EngineArtifactTable.label, "pending"),
-      ),
-    )
-    .orderBy(EngineArtifactTable.time_created, EngineArtifactTable.id)
-    .get()
-  return insertEngineArtifact(db, {
-    taskID: input.task.id,
-    kind: "task_loop_launch",
-    label: "pending",
-    payload: {
-      task_id: input.task.id,
-      cwd: input.cwd,
-      status: "claimed",
-      ...(exactWake ? { wake_id: exactWake.id, time_wake_bound: input.now } : {}),
-      owner_process_id: process.pid,
-      time_claimed: input.now,
-    },
-    timeCreated: input.now,
-  })
-}
-
-function bindTaskLoopLaunchWake(taskID: string, wakeID: string): void {
-  const launchID = taskLoopLaunchAuthorities.get(taskID)
-  if (!launchID) return
-  Database.immediateTransaction((db) => {
-    const row = db
-      .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
-      .from(EngineArtifactTable)
-      .where(
-        and(
-          eq(EngineArtifactTable.id, launchID),
-          eq(EngineArtifactTable.task_id, taskID),
-          eq(EngineArtifactTable.kind, "task_loop_launch"),
-        ),
-      )
-      .get()
-    if (!row) throw new Error(`Task loop launch ${launchID} disappeared before exact wake binding`)
-    const payload = artifactPayloadRecord(row.payload)
-    const boundWakeID = typeof payload.wake_id === "string" ? payload.wake_id : undefined
-    if (boundWakeID && boundWakeID !== wakeID) {
-      throw new Error(`Task loop launch ${launchID} is bound to wake ${boundWakeID}, not ${wakeID}`)
-    }
-    if (boundWakeID === wakeID) return
-    if (row.label !== "pending") {
-      throw new Error(`Task loop launch ${launchID} cannot bind wake ${wakeID} from ${row.label}`)
-    }
-    patchEngineArtifact(db, {
-      id: launchID,
-      payload: {
-        ...payload,
-        wake_id: wakeID,
-        time_wake_bound: Date.now(),
-      },
-    })
-  })
-}
-
-async function returnClaimedTaskToQueue(task: TaskRow, cause: unknown): Promise<TaskLoopLaunchHandoffError> {
-  const launchID = taskLoopLaunchAuthorities.get(task.id)
-  if (!launchID) {
-    return new TaskLoopLaunchHandoffError(task.id, "missing-launch-authority", cause)
-  }
-  const now = Date.now()
-  try {
-    Database.transaction((db) => {
-      writeTaskUpdateInTransaction({
-        db,
-        taskID: task.id,
-        values: { status: "queued" },
-        summary: "Task launch handoff returned to queue",
-        now,
-      })
-      patchEngineArtifact(db, {
-        id: launchID,
-        label: "completed",
-        payload: {
-          task_id: task.id,
-          status: "returned_to_queue",
-          owner_process_id: process.pid,
-          reason: cause instanceof Error ? `${cause.name}: ${cause.message}` : String(cause),
-          time_settled: now,
-        },
-      })
-    })
-  } catch (settlementError) {
-    return new TaskLoopLaunchHandoffError(
-      task.id,
-      launchID,
-      new AggregateError([cause, settlementError], "Task launch failure and durable rollback both failed"),
-    )
-  }
-  taskLoopLaunchAuthorities.delete(task.id)
-  return new TaskLoopLaunchHandoffError(task.id, launchID, cause)
-}
-
-function acceptTaskLoopLaunch(taskID: string): void {
-  const launchID = taskLoopLaunchAuthorities.get(taskID)
-  if (!launchID) return
-  const authority = RuntimeExecutionSettlement.reserve(
-    "engine_queue_completion",
-    `task-loop-launch-acceptance:${taskID}:${launchID}`,
-  )
-  const acceptance = (async () => {
-    let attempt = 0
-    while (!authority.signal.aborted) {
-      attempt += 1
-      taskLoopLaunchAcceptanceAttemptsForTest += 1
-      try {
-        if (taskLoopLaunchAcceptanceFailuresForTest > 0) {
-          taskLoopLaunchAcceptanceFailuresForTest -= 1
-          throw new Error("injected task loop launch acceptance persistence failure")
-        }
-        const launch = Database.use((db) =>
-          db
-            .select({ payload: EngineArtifactTable.payload })
-            .from(EngineArtifactTable)
-            .where(
-              and(
-                eq(EngineArtifactTable.id, launchID),
-                eq(EngineArtifactTable.task_id, taskID),
-                eq(EngineArtifactTable.kind, "task_loop_launch"),
-              ),
-            )
-            .get(),
-        )
-        if (!launch) throw new Error(`Task loop launch ${launchID} disappeared before acceptance`)
-        updateEngineArtifact({
-          id: launchID,
-          label: "completed",
-          payload: {
-            ...artifactPayloadRecord(launch.payload),
-            task_id: taskID,
-            status: "loop_attached",
-            owner_process_id: process.pid,
-            acceptance_attempt: attempt,
-            time_settled: Date.now(),
-          },
-        })
-        if (taskLoopLaunchAuthorities.get(taskID) === launchID) taskLoopLaunchAuthorities.delete(taskID)
-        return
-      } catch (error) {
-        if (attempt === 1 || (attempt & (attempt - 1)) === 0) {
-          log.warn("Task loop launch acceptance persistence will retry", {
-            taskID,
-            launchID,
-            attempt,
-            error: error instanceof Error ? error.message : String(error),
-          })
-        }
-        const delay = Math.min(1_000, 25 * 2 ** Math.min(attempt - 1, 6))
-        await new Promise<void>((resolve) => {
-          if (authority.signal.aborted) return resolve()
-          const timer = setTimeout(finish, delay)
-          function finish() {
-            clearTimeout(timer)
-            authority.signal.removeEventListener("abort", finish)
-            resolve()
-          }
-          authority.signal.addEventListener("abort", finish, { once: true })
-        })
-      }
-    }
-    if (taskLoopLaunchAuthorities.get(taskID) === launchID) taskLoopLaunchAuthorities.delete(taskID)
-  })()
-  authority.settleWith(acceptance)
-}
 const terminalIngressCompletions = new Map<string, Promise<void>>()
 
 function artifactPayloadRecord(payload: unknown): Record<string, unknown> {
@@ -618,7 +419,7 @@ function enqueueTaskEvent(task: TaskRow, event: OrchestratorEvent): string {
   })
 }
 
-function persistQueuedOperatorWakeInTransaction(
+export function persistQueuedOperatorWakeInTransaction(
   db: Database.TxOrDb,
   task: TaskRow,
   event: OrchestratorEvent,
@@ -629,6 +430,7 @@ function persistQueuedOperatorWakeInTransaction(
     infrastructureFactID?: string
     waitJobID?: string
     lifecycleEventID?: string
+    taskCreationID?: string
   },
   now = Date.now(),
 ): string {
@@ -639,13 +441,22 @@ function persistQueuedOperatorWakeInTransaction(
   const infrastructureFactID = identity.infrastructureFactID
   const waitJobID = identity.waitJobID
   const lifecycleEventID = identity.lifecycleEventID
+  const taskCreationID = identity.taskCreationID
   const cancellationAuthority = db
     .select({ requestEventID: EngineTaskCancellationAuthorityTable.request_event_id })
     .from(EngineTaskCancellationAuthorityTable)
     .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, EngineTaskCancellationAuthorityTable.task_id))
     .where(and(eq(EngineTaskCancellationAuthorityTable.task_id, task.id), isNull(EngineTaskTable.time_completed)))
     .get()
-  if (messageID || requestID || recoveryFactID || infrastructureFactID || waitJobID || lifecycleEventID) {
+  if (
+    messageID ||
+    requestID ||
+    recoveryFactID ||
+    infrastructureFactID ||
+    waitJobID ||
+    lifecycleEventID ||
+    taskCreationID
+  ) {
     const exists = db
       .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
       .from(EngineArtifactTable)
@@ -663,7 +474,9 @@ function persistQueuedOperatorWakeInTransaction(
                   ? sql`json_extract(${EngineArtifactTable.payload}, '$.infrastructure_fact_id') = ${infrastructureFactID}`
                   : waitJobID
                     ? sql`json_extract(${EngineArtifactTable.payload}, '$.wait_job_id') = ${waitJobID}`
-                    : sql`json_extract(${EngineArtifactTable.payload}, '$.lifecycle_event_id') = ${lifecycleEventID}`,
+                    : lifecycleEventID
+                      ? sql`json_extract(${EngineArtifactTable.payload}, '$.lifecycle_event_id') = ${lifecycleEventID}`
+                      : sql`json_extract(${EngineArtifactTable.payload}, '$.task_creation_id') = ${taskCreationID}`,
         ),
       )
       .get()
@@ -736,18 +549,22 @@ function persistQueuedOperatorWakeInTransaction(
               ? event.taskWaitWake?.fireID
               : lifecycleEventID
                 ? lifecycleEventID
-                : Identifier.ascending("artifact")),
+                : taskCreationID
+                  ? taskCreationID
+                  : Identifier.ascending("artifact")),
     delivery_attempt: 1,
     delivery_runtime_id: terminalIngressDeliveryRuntimeID(),
     delivery_runtime_attempt: 1,
     task_id: task.id,
     root_session_id: task.session_id,
+    task_occurrence_started_at: task.time_started,
     ...(messageID ? { message_id: messageID } : {}),
     ...(requestID ? { request_id: requestID } : {}),
     ...(recoveryFactID ? { recovery_fact_id: recoveryFactID } : {}),
     ...(infrastructureFactID ? { infrastructure_fact_id: infrastructureFactID } : {}),
     ...(waitJobID ? { wait_job_id: waitJobID } : {}),
     ...(lifecycleEventID ? { lifecycle_event_id: lifecycleEventID } : {}),
+    ...(taskCreationID ? { task_creation_id: taskCreationID } : {}),
     source_kind: sourceKind,
     event: OrchestratorEventSchema.parse(event),
     time_queued: now,
@@ -798,6 +615,25 @@ export function persistQueuedTaskIntentInTransaction(
   )
 }
 
+export function requireTaskCreationIngressID(taskID: string): string {
+  const row = Database.use((db) =>
+    db
+      .select({ id: EngineArtifactTable.id })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.task_id, taskID),
+          eq(EngineArtifactTable.kind, "queued_operator_wake"),
+          sql`json_extract(${EngineArtifactTable.payload}, '$.source_kind') = 'task_creation'`,
+          sql`json_extract(${EngineArtifactTable.payload}, '$.task_creation_id') = ${taskID}`,
+        ),
+      )
+      .get(),
+  )
+  if (!row) throw new Error(`Task ${taskID} has no durable creation ingress`)
+  return row.id
+}
+
 export function persistQueuedRootMessageWakeInTransaction(
   db: Database.TxOrDb,
   input: {
@@ -846,6 +682,7 @@ function persistQueuedOperatorWake(
     infrastructureFactID?: string
     waitJobID?: string
     lifecycleEventID?: string
+    taskCreationID?: string
   },
 ): string {
   return Database.transaction((db) => persistQueuedOperatorWakeInTransaction(db, task, event, identity))
@@ -920,30 +757,6 @@ export const TestHooks = {
   },
   completeQueuedWake(wakeID: string, assistantMessageID: string): void {
     markQueuedOperatorWakeDrained({ artifactID: wakeID, assistantMessageID })
-  },
-  taskLoopLaunchAcceptanceAttempts(): number {
-    return taskLoopLaunchAcceptanceAttemptsForTest
-  },
-  taskLoopCompletionAdvanceFailuresRemaining(): number {
-    return taskLoopCompletionAdvanceFailuresForTest
-  },
-  failNextTaskLoopCompletionAdvances(count = 1): Disposable {
-    const previous = taskLoopCompletionAdvanceFailuresForTest
-    taskLoopCompletionAdvanceFailuresForTest = count
-    return {
-      [Symbol.dispose]() {
-        taskLoopCompletionAdvanceFailuresForTest = previous
-      },
-    }
-  },
-  failNextTaskLoopLaunchAcceptanceWrites(count = 1): Disposable {
-    const previous = taskLoopLaunchAcceptanceFailuresForTest
-    taskLoopLaunchAcceptanceFailuresForTest = count
-    return {
-      [Symbol.dispose]() {
-        taskLoopLaunchAcceptanceFailuresForTest = previous
-      },
-    }
   },
   replaceTerminalIngressDeliveryRuntime(runtimeID: string): Disposable {
     const previous = terminalIngressDeliveryRuntimeOverrideForTest
@@ -1669,6 +1482,44 @@ function markQueuedOperatorWakeDrained(input: { artifactID: string; assistantMes
 
 function markQueuedOperatorWakeRunning(artifactID: string): boolean {
   return Database.immediateTransaction((db) => {
+    const row = db
+      .select({
+        label: EngineArtifactTable.label,
+        payload: EngineArtifactTable.payload,
+        taskID: EngineArtifactTable.task_id,
+      })
+      .from(EngineArtifactTable)
+      .where(and(eq(EngineArtifactTable.id, artifactID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+      .get()
+    if (!row) throw new Error(`Queued operator ingress ${artifactID} disappeared before execution`)
+    if (row.label === "running") return true
+    if (row.label === "terminal_inapplicable") return false
+    if (row.label !== "pending") {
+      throw new Error(`Queued operator ingress ${artifactID} cannot start from ${row.label}`)
+    }
+    const ingress = QueuedTaskIngressSchema.parse(row.payload)
+    const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, row.taskID)).get()
+    if (
+      !task ||
+      task.session_id !== ingress.root_session_id ||
+      task.time_started !== ingress.task_occurrence_started_at
+    ) {
+      const currentOccurrence = task?.time_started
+      const reason =
+        `TaskIngressOccurrenceStaleError: ingress ${artifactID} belongs to Task ${row.taskID} occurrence ` +
+        `${ingress.task_occurrence_started_at}, but the current occurrence is ${currentOccurrence ?? "missing"}.`
+      const now = Date.now()
+      patchEngineArtifact(db, {
+        id: artifactID,
+        label: "terminal_inapplicable",
+        payload: QueuedTaskIngressSchema.parse({
+          ...ingress,
+          delivery_result: { status: "terminal_inapplicable", reason, time_completed: now },
+        }),
+        timeUpdated: now,
+      })
+      return false
+    }
     const updated = updateEngineArtifactWhereReturning(db, {
       where: and(
         eq(EngineArtifactTable.id, artifactID),
@@ -1679,15 +1530,7 @@ function markQueuedOperatorWakeRunning(artifactID: string): boolean {
       label: "running",
     })
     if (updated) return true
-    const current = db
-      .select({ label: EngineArtifactTable.label })
-      .from(EngineArtifactTable)
-      .where(and(eq(EngineArtifactTable.id, artifactID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
-      .get()
-    if (!current) throw new Error(`Queued operator ingress ${artifactID} disappeared before execution`)
-    if (current.label === "running") return true
-    if (current.label === "terminal_inapplicable") return false
-    throw new Error(`Queued operator ingress ${artifactID} cannot start from ${current.label}`)
+    throw new Error(`Queued operator ingress ${artifactID} lost its pending claim before execution`)
   })
 }
 
@@ -1851,142 +1694,6 @@ function hasQueuedTaskEvent(taskID: string): boolean {
   return findNextPendingQueuedOperatorWake(taskID) !== undefined
 }
 
-type QueuedTask = {
-  id: string
-  priority: string
-  queueOrder: number
-  timeCreated: number
-  timeUpdated: number
-}
-
-export class TaskQueueReorderError extends Error {
-  constructor(
-    message: string,
-    readonly code: "not_found" | "conflict" | "invalid_order",
-  ) {
-    super(message)
-    this.name = "TaskQueueReorderError"
-  }
-}
-
-function queueRevision(tasks: Array<Pick<QueuedTask, "id" | "queueOrder" | "timeUpdated">>) {
-  return tasks.map((task) => `${task.id}:${task.queueOrder}:${task.timeUpdated}`).join("|")
-}
-
-function queuedTasksForCwd(cwd: string, input: { projectID?: string } = {}): QueuedTask[] {
-  if (!cwd) return []
-  return Database.use((db) => {
-    const where = [
-      sql`${EngineTaskTable.time_started} IS NULL`,
-      sql`${EngineTaskTable.time_completed} IS NULL`,
-      eq(SessionTable.directory, cwd),
-    ]
-    if (input.projectID) where.push(eq(EngineTaskTable.project_id, input.projectID))
-    return db
-      .select({
-        id: EngineTaskTable.id,
-        priority: EngineTaskTable.priority,
-        queueOrder: EngineTaskTable.queue_order,
-        timeCreated: EngineTaskTable.time_created,
-        timeUpdated: EngineTaskTable.time_updated,
-      })
-      .from(EngineTaskTable)
-      .innerJoin(SessionTable, eq(SessionTable.id, EngineTaskTable.session_id))
-      .where(and(...where))
-      .orderBy(
-        sql`CASE ${EngineTaskTable.priority} WHEN 'critical' THEN 0 ELSE 1 END`,
-        EngineTaskTable.queue_order,
-        EngineTaskTable.time_created,
-        EngineTaskTable.id,
-      )
-      .all()
-  })
-}
-
-function nextQueuedTaskForCwd(cwd: string): TaskRow | undefined {
-  if (!cwd) return undefined
-  const row = Database.use((db) =>
-    db
-      .select({ task: EngineTaskTable })
-      .from(EngineTaskTable)
-      .innerJoin(SessionTable, eq(SessionTable.id, EngineTaskTable.session_id))
-      .where(
-        and(
-          sql`${EngineTaskTable.time_started} IS NULL`,
-          sql`${EngineTaskTable.time_completed} IS NULL`,
-          eq(SessionTable.directory, cwd),
-          sql`NOT EXISTS (
-            SELECT 1
-            FROM engine_task t2
-            JOIN session s2 ON s2.id = t2.session_id
-            WHERE t2.time_started IS NOT NULL AND t2.time_completed IS NULL
-              AND COALESCE(json_extract(t2.metadata, '$.interrupted'), 0) != 1
-              AND s2.directory = ${cwd}
-          )`,
-        ),
-      )
-      .orderBy(
-        sql`CASE ${EngineTaskTable.priority} WHEN 'critical' THEN 0 ELSE 1 END`,
-        EngineTaskTable.queue_order,
-        EngineTaskTable.time_created,
-        EngineTaskTable.id,
-      )
-      .get(),
-  )
-  return row?.task
-}
-
-export function directoryQueueSnapshot(cwd: string) {
-  const queued = queuedTasksForCwd(cwd)
-  return {
-    directory: cwd,
-    revision: queueRevision(queued),
-    queuedTaskIDs: queued.map((task) => task.id),
-  }
-}
-
-export function reorderQueuedTasksForCwd(input: {
-  cwd: string
-  projectID: string
-  orderedTaskIDs: string[]
-  revision?: string
-  now?: number
-}) {
-  const cwd = input.cwd.trim()
-  if (!cwd) throw new TaskQueueReorderError("directory is required", "invalid_order")
-  const orderedTaskIDs = [...input.orderedTaskIDs]
-  if (orderedTaskIDs.length !== new Set(orderedTaskIDs).size) {
-    throw new TaskQueueReorderError("orderedTaskIDs contains duplicate task IDs", "invalid_order")
-  }
-
-  const now = input.now ?? Date.now()
-  return Database.transaction((db) => {
-    const queued = queuedTasksForCwd(cwd, { projectID: input.projectID })
-    const currentRevision = queueRevision(queued)
-    if (input.revision !== undefined && input.revision !== currentRevision) {
-      throw new TaskQueueReorderError("directory queue changed; reload before reordering", "conflict")
-    }
-    const currentIDs = queued.map((task) => task.id)
-    const currentSet = new Set(currentIDs)
-    if (orderedTaskIDs.length !== currentIDs.length || !orderedTaskIDs.every((id) => currentSet.has(id))) {
-      throw new TaskQueueReorderError(
-        "orderedTaskIDs must contain every queued task in the directory and no active/completed tasks",
-        "invalid_order",
-      )
-    }
-
-    for (const [index, taskID] of orderedTaskIDs.entries()) {
-      setEngineTaskQueueOrder(db, { taskID, queueOrder: index, timeUpdated: now })
-    }
-    const next = orderedTaskIDs.map((id, index) => ({ id, queueOrder: index, timeUpdated: now }))
-    return {
-      directory: cwd,
-      revision: queueRevision(next),
-      queuedTaskIDs: orderedTaskIDs,
-    }
-  })
-}
-
 function launchTaskLoop(
   task: TaskRow,
   wake: NonNullable<ReturnType<typeof findNextPendingQueuedOperatorWake>>,
@@ -2000,7 +1707,7 @@ function launchTaskLoop(
   // the inner promise and resolved after mere scheduling — any `.finally`
   // attached by the caller fired before the loop had done anything, so the
   // queue-advance hook never fired on real task termination and sibling
-  // queued tasks in the same cwd stayed stuck forever.
+  // pending root Session ingress for a Task must remain independently drainable.
   return SessionPromptState.enqueueRootWake({
     rootSessionID: wake.rootSessionID,
     wakeID: wake.id,
@@ -2092,28 +1799,17 @@ function classifyTaskLoopExit(
 }
 
 /**
- * Bind the cwd queue-advance hook to an in-flight loop promise.
+ * Bind same-Task ingress settlement to an in-flight root-Session Turn.
  *
- * Single authoritative bind point between per-invocation loop lifecycle
- * and serial-queue progression. All paths that start a loop (initial
- * claim, operator retrigger on already-active task) route through here so
- * the "loop exited → advance siblings" contract is written exactly once.
+ * All physical starts route through this point so the exact wake is settled
+ * and the next ingress for this same root Session can be attached.
  *
  * Idempotent against overlapping invocations for the same task: the Set
  * add/delete and the claim SQL both treat repeated calls as no-ops.
  */
-function attachLoopCompletion(
-  taskID: string,
-  wakeID: string,
-  cwd: string,
-  launch: () => Promise<void>,
-  reservedAuthority?: RuntimeExecutionReservation,
-): void {
-  const authority =
-    reservedAuthority ??
-    RuntimeExecutionSettlement.reserve("engine_queue_completion", `task-loop-completion:${taskID}:${wakeID}`)
-  const launchID = taskLoopLaunchAuthorities.get(taskID)
-  const completionKey = launchID ? `launch:${launchID}:wake:${wakeID}` : `wake:${wakeID}`
+function attachLoopCompletion(taskID: string, wakeID: string, cwd: string, launch: () => Promise<void>): void {
+  const authority = RuntimeExecutionSettlement.reserve("engine_queue_completion", `root-ingress:${taskID}:${wakeID}`)
+  const completionKey = `wake:${wakeID}`
   const existingCompletion = taskLoopCompletionOperations.get(completionKey)
   if (existingCompletion) {
     authority.settleWith(existingCompletion)
@@ -2126,15 +1822,14 @@ function attachLoopCompletion(
       runOutsideInstanceContext(() =>
         loopPromise.then(
           async () => {
-            // Yield once so `advanceQueue` → `startLoopForTask` → `.finally`
-            // re-entry doesn't stack synchronously, while keeping the async
-            // completion hook observable for tests and diagnostics.
+            // Yield once so same-Session FIFO re-entry does not stack
+            // synchronously while the completion remains observable.
             await Promise.resolve()
-            await settleTaskLoopCompletion({ taskID, wakeID, launchID, cwd, authority })
+            await settleTaskLoopCompletion({ taskID, wakeID, cwd, authority })
           },
           async () => {
             await Promise.resolve()
-            await settleTaskLoopCompletion({ taskID, wakeID, launchID, cwd, authority })
+            await settleTaskLoopCompletion({ taskID, wakeID, cwd, authority })
           },
         ),
       ),
@@ -2158,7 +1853,6 @@ type TaskLoopCompletionDisposition =
   | "same_task_wake_pending"
   | "exact_ingress_retry_attached"
   | "same_task_wake_attached"
-  | "cwd_queue_observed"
   | "runtime_handoff"
 
 async function runTaskLoopCompletionAttempt(input: {
@@ -2219,60 +1913,14 @@ async function runTaskLoopCompletionAttempt(input: {
         }
       }
       if (await drainQueuedTaskEvent(input.taskID)) return "same_task_wake_attached"
-      if (taskLoopCompletionAdvanceFailuresForTest > 0) {
-        taskLoopCompletionAdvanceFailuresForTest -= 1
-        throw new Error("injected Task loop completion advanceQueue failure")
-      }
-      await advanceQueue(input.cwd)
-      return "cwd_queue_observed"
+      return "runtime_handoff"
     },
-  })
-}
-
-function persistTaskLoopCompletionReceipt(input: {
-  launchID: string
-  taskID: string
-  wakeID: string
-  disposition: TaskLoopCompletionDisposition
-  attempt: number
-}): "recorded" | "launch_pending" {
-  return Database.immediateTransaction((db) => {
-    const row = db
-      .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
-      .from(EngineArtifactTable)
-      .where(
-        and(
-          eq(EngineArtifactTable.id, input.launchID),
-          eq(EngineArtifactTable.task_id, input.taskID),
-          eq(EngineArtifactTable.kind, "task_loop_launch"),
-        ),
-      )
-      .get()
-    if (!row) throw new Error(`Task loop launch ${input.launchID} disappeared before completion settlement`)
-    if (row.label === "pending") return "launch_pending"
-    const payload = artifactPayloadRecord(row.payload)
-    patchEngineArtifact(db, {
-      id: input.launchID,
-      payload: {
-        ...payload,
-        completion_receipt: {
-          status: "completed",
-          wake_id: input.wakeID,
-          disposition: input.disposition,
-          attempt: input.attempt,
-          owner_process_id: process.pid,
-          time_completed: Date.now(),
-        },
-      },
-    })
-    return "recorded"
   })
 }
 
 async function settleTaskLoopCompletion(input: {
   taskID: string
   wakeID: string
-  launchID?: string
   cwd: string
   authority: RuntimeExecutionReservation
 }): Promise<void> {
@@ -2281,20 +1929,7 @@ async function settleTaskLoopCompletion(input: {
     attempt += 1
     try {
       if (settleAbortedTaskLoopCompletionHandoff({ ...input, attempt })) return
-      const disposition = await runTaskLoopCompletionAttempt(input)
-      if (input.launchID) {
-        const receipt = persistTaskLoopCompletionReceipt({
-          launchID: input.launchID,
-          taskID: input.taskID,
-          wakeID: input.wakeID,
-          disposition,
-          attempt,
-        })
-        if (receipt === "launch_pending") {
-          if (settleAbortedTaskLoopCompletionHandoff({ ...input, attempt })) return
-          throw new Error(`Task loop launch ${input.launchID} has not accepted its attached loop yet`)
-        }
-      }
+      await runTaskLoopCompletionAttempt(input)
       return
     } catch (cause) {
       let error = Database.normalizeError(cause, "engine.queue.loopCompletion")
@@ -2313,7 +1948,6 @@ async function settleTaskLoopCompletion(input: {
         log.warn("Task loop completion will retry under its exact runtime authority", {
           taskID: input.taskID,
           wakeID: input.wakeID,
-          launchID: input.launchID,
           cwd: input.cwd,
           attempt,
           error: error instanceof Error ? error.message : String(error),
@@ -2341,88 +1975,25 @@ async function settleTaskLoopCompletion(input: {
 function settleAbortedTaskLoopCompletionHandoff(input: {
   taskID: string
   wakeID: string
-  launchID?: string
   authority: RuntimeExecutionReservation
   attempt: number
 }): boolean {
   if (!input.authority.signal.aborted) return false
-  const launchID = input.launchID
-  if (!launchID) {
-    const wake = Database.use((db) =>
-      db
-        .select({ id: EngineArtifactTable.id })
-        .from(EngineArtifactTable)
-        .where(
-          and(
-            eq(EngineArtifactTable.id, input.wakeID),
-            eq(EngineArtifactTable.task_id, input.taskID),
-            eq(EngineArtifactTable.kind, "queued_operator_wake"),
-          ),
-        )
-        .get(),
-    )
-    if (!wake) throw new Error(`Task loop wake ${input.wakeID} disappeared before runtime handoff`)
-    return true
-  }
-  return Database.immediateTransaction((db) => {
-    const row = db
-      .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+  const wake = Database.use((db) =>
+    db
+      .select({ id: EngineArtifactTable.id })
       .from(EngineArtifactTable)
       .where(
         and(
-          eq(EngineArtifactTable.id, launchID),
+          eq(EngineArtifactTable.id, input.wakeID),
           eq(EngineArtifactTable.task_id, input.taskID),
-          eq(EngineArtifactTable.kind, "task_loop_launch"),
+          eq(EngineArtifactTable.kind, "queued_operator_wake"),
         ),
       )
-      .get()
-    if (!row) throw new Error(`Task loop launch ${launchID} disappeared before runtime handoff`)
-    if (row.label === "pending") {
-      const payload = artifactPayloadRecord(row.payload)
-      const handedOff = updateEngineArtifactWhereReturning(db, {
-        where: and(
-          eq(EngineArtifactTable.id, launchID),
-          eq(EngineArtifactTable.task_id, input.taskID),
-          eq(EngineArtifactTable.kind, "task_loop_launch"),
-          eq(EngineArtifactTable.label, "pending"),
-        )!,
-        kind: "task_loop_launch",
-        label: "pending",
-        payload: {
-          ...payload,
-          status: "runtime_handoff_pending",
-          wake_id: input.wakeID,
-          handoff_process_id: process.pid,
-          handoff_attempt: Math.max(1, input.attempt),
-          time_handed_off: Date.now(),
-        },
-      })
-      if (handedOff) return true
-    }
-    const current = db
-      .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
-      .from(EngineArtifactTable)
-      .where(eq(EngineArtifactTable.id, launchID))
-      .get()
-    if (!current) throw new Error(`Task loop launch ${launchID} disappeared during runtime handoff`)
-    if (current.label === "pending") return true
-    const payload = artifactPayloadRecord(current.payload)
-    patchEngineArtifact(db, {
-      id: launchID,
-      payload: {
-        ...payload,
-        completion_receipt: {
-          status: "completed",
-          wake_id: input.wakeID,
-          disposition: "runtime_handoff",
-          attempt: Math.max(1, input.attempt),
-          owner_process_id: process.pid,
-          time_completed: Date.now(),
-        },
-      },
-    })
-    return true
-  })
+      .get(),
+  )
+  if (!wake) throw new Error(`Task root ingress ${input.wakeID} disappeared before runtime handoff`)
+  return true
 }
 
 function resetFailedExactTerminalIngress(input: {
@@ -2887,11 +2458,6 @@ export async function drainQueuedTaskEvent(taskID: string): Promise<boolean> {
     return true
   }
 
-  if (isTaskQueued(task)) {
-    await advanceQueue(cwd)
-    return !hasQueuedTaskEvent(taskID)
-  }
-
   const runTaskLoop = requireTaskLoopRunner()
   const queuedWake = findNextPendingQueuedOperatorWake(taskID)
   if (!queuedWake) return false
@@ -2992,6 +2558,7 @@ export function listInterruptedSessionEvidence(input: {
     if (
       session.sessionID === input.rootSessionID ||
       input.ownedSessionIDs.has(session.sessionID) ||
+      hasProjectedWorkerTurnOwnership(session.sessionID) ||
       !isAgentInvocationSession(session) ||
       (session.latestStatus !== undefined &&
         session.latestStatus.type !== "streaming" &&
@@ -3095,6 +2662,7 @@ export function listInterruptedSessionEvidence(input: {
       row.id === input.rootSessionID ||
       projectedIDs.has(row.id) ||
       input.ownedSessionIDs.has(row.id) ||
+      hasProjectedWorkerTurnOwnership(row.id) ||
       !belongsToTaskRoot(row.id) ||
       !RuntimeTemplateRegistry.isWorkerSessionKind(row.kind) ||
       latestSessionStatusEvent(row.id) ||
@@ -3131,165 +2699,9 @@ export function listInterruptedSessionEvidence(input: {
  * lost provider stream.
  */
 export async function reconcileInterruptedTaskExecutions(): Promise<number> {
-  const interruptedLaunches = Database.use((db) =>
-    db
-      .select({ task: EngineTaskTable, launchID: EngineArtifactTable.id, launchPayload: EngineArtifactTable.payload })
-      .from(EngineArtifactTable)
-      .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, EngineArtifactTable.task_id))
-      .where(
-        and(
-          eq(EngineArtifactTable.kind, "task_loop_launch"),
-          eq(EngineArtifactTable.label, "pending"),
-          eq(EngineTaskTable.project_id, Instance.project.id),
-        ),
-      )
-      .all(),
-  )
-  let recoveredLaunches = 0
-  const failures: string[] = []
-  for (const row of interruptedLaunches) {
-    if (taskLoopLaunchAuthorities.has(row.task.id)) continue
-    if (listOwnedPromptSessionsForTask(row.task.id).length > 0) continue
-    try {
-      const now = Date.now()
-      if (row.task.time_completed != null) {
-        Database.transaction((db) =>
-          patchEngineArtifact(db, {
-            id: row.launchID,
-            label: "completed",
-            payload: {
-              task_id: row.task.id,
-              status: "terminal_inapplicable",
-              terminal_status: deriveTaskStatus(row.task),
-              recovery_process_id: process.pid,
-              time_settled: now,
-            },
-          }),
-        )
-        recoveredLaunches += 1
-        continue
-      }
-      const launchPayload = artifactPayloadRecord(row.launchPayload)
-      const wakeID = typeof launchPayload.wake_id === "string" ? launchPayload.wake_id : undefined
-      if (wakeID) {
-        const exactWake = Database.use((db) =>
-          db
-            .select({
-              label: EngineArtifactTable.label,
-              payload: EngineArtifactTable.payload,
-              timeCreated: EngineArtifactTable.time_created,
-            })
-            .from(EngineArtifactTable)
-            .where(
-              and(
-                eq(EngineArtifactTable.id, wakeID),
-                eq(EngineArtifactTable.task_id, row.task.id),
-                eq(EngineArtifactTable.kind, "queued_operator_wake"),
-              ),
-            )
-            .get(),
-        )
-        if (!exactWake) {
-          throw new Error(`Task loop launch ${row.launchID} is bound to missing wake ${wakeID}`)
-        }
-        const ingress = QueuedTaskIngressSchema.parse(exactWake.payload)
-        const assistant = findDurableAssistantForLaunchWake({ taskID: row.task.id, wakeID, ingress })
-        if ((exactWake.label === "drained" || exactWake.label === "running") && assistant) {
-          if (assistant.error) {
-            throw new Error(
-              `Task loop launch ${row.launchID} wake ${wakeID} has failed assistant ${assistant.id}: ${assistant.error.name}`,
-            )
-          }
-          if (exactWake.label === "running") {
-            await assertQueuedWakeSettlement({
-              taskID: row.task.id,
-              wake: {
-                id: wakeID,
-                timeCreated: exactWake.timeCreated,
-                wakeID: ingress.wake_id,
-                rootSessionID: ingress.root_session_id,
-                ingress,
-                event: ingress.event,
-              },
-              result: { finalMessageID: assistant.id },
-            })
-            markQueuedOperatorWakeDrained({ artifactID: wakeID, assistantMessageID: assistant.id })
-          }
-          Database.transaction((db) =>
-            patchEngineArtifact(db, {
-              id: row.launchID,
-              label: "completed",
-              payload: {
-                task_id: row.task.id,
-                wake_id: wakeID,
-                status: "recovered_exact_wake_completion",
-                assistant_message_id: assistant.id,
-                recovery_process_id: process.pid,
-                time_settled: now,
-              },
-            }),
-          )
-          recoveredLaunches += 1
-          continue
-        }
-        if (exactWake.label === "drained") {
-          throw new Error(`Task loop launch ${row.launchID} wake ${wakeID} is drained without an assistant anchor`)
-        }
-        if (["delivery_failed", "terminal_inapplicable"].includes(exactWake.label)) {
-          Database.transaction((db) =>
-            patchEngineArtifact(db, {
-              id: row.launchID,
-              label: "completed",
-              payload: {
-                task_id: row.task.id,
-                wake_id: wakeID,
-                status: "recovered_exact_wake_settlement",
-                wake_status: exactWake.label,
-                recovery_process_id: process.pid,
-                time_settled: now,
-              },
-            }),
-          )
-          recoveredLaunches += 1
-          continue
-        }
-        if (exactWake.label === "running") {
-          updateEngineArtifact({ id: wakeID, label: "pending", timeUpdated: now })
-        }
-      }
-      Database.transaction((db) => {
-        writeTaskUpdateInTransaction({
-          db,
-          taskID: row.task.id,
-          values: { status: "queued" },
-          summary: "Recovered interrupted Task launch handoff",
-          now,
-        })
-        patchEngineArtifact(db, {
-          id: row.launchID,
-          label: "completed",
-          payload: {
-            task_id: row.task.id,
-            status: "recovered_to_queue",
-            recovery_process_id: process.pid,
-            time_settled: now,
-          },
-        })
-      })
-      recoveredLaunches += 1
-    } catch (cause) {
-      const message = cause instanceof Error ? cause.message : String(cause)
-      failures.push(`Task ${row.task.id} launch ${row.launchID}: ${message}`)
-      log.error("interrupted Task launch recovery failed", {
-        taskID: row.task.id,
-        launchID: row.launchID,
-        error: message,
-        errorName: cause instanceof Error ? cause.name : undefined,
-      })
-    }
-  }
   const taskIDs = listStartedIncompleteTaskIDs({ projectID: Instance.project.id })
-  let recovered = recoveredLaunches
+  let recovered = 0
+  const failures: string[] = []
 
   for (const taskID of taskIDs) {
     try {
@@ -3380,7 +2792,7 @@ export async function reconcileInterruptedTaskExecutions(): Promise<number> {
             {
               status: "failed",
               error: reason,
-              time_started: current.time_started ?? Math.min(current.time_created, now - 1),
+              time_started: current.time_started,
               time_completed: now,
             },
             "Interrupted Task cannot resume its exact persisted worker runtime contract",
@@ -3483,7 +2895,6 @@ export async function reconcileInterruptedTaskExecutions(): Promise<number> {
               and(
                 eq(EngineTaskTable.id, taskID),
                 eq(EngineTaskTable.project_id, Instance.project.id),
-                sql`${EngineTaskTable.time_started} IS NOT NULL`,
                 sql`${EngineTaskTable.time_completed} IS NULL`,
               ),
             )
@@ -3603,195 +3014,6 @@ export function taskCwd(taskID: string): string {
   return taskRootDirectory(task)
 }
 
-/**
- * Atomically claim the next queued task for the given cwd.
- *
- * Semantics:
- *   - If another task is already `active` in this cwd → return undefined.
- *   - Otherwise → pick the highest-priority queued task (FIFO within priority),
- *     flip its status `queued → active`, and return the updated row.
- *
- * Atomicity is provided by SQLite's statement-level write serialization:
- * the subquery + UPDATE run as a single statement, so two concurrent calls
- * cannot both observe the same "no active task" state.
- *
- * Returns undefined when nothing was claimed (active task present, or no
- * queued tasks).
- */
-export function claimNextForCwd(cwd: string, now = Date.now()): TaskRow | undefined {
-  if (!cwd) return undefined
-  // Phase-6-f-2: no status column. Queued = time_started IS NULL (never
-  // picked up). Active = time_started IS NOT NULL AND time_completed IS NULL.
-  // Terminal = time_completed IS NOT NULL.
-  let result: TaskRow | undefined
-  let launchID: string | undefined
-  Database.transaction((db) => {
-    result = claimNextEngineTaskForCwd(db, { cwd, timeStarted: now })
-    if (!result) return
-    launchID = recordTaskLoopLaunch(db, { task: result, cwd, now })
-    insertEngineProgressSnapshot(db, {
-      taskID: result.id,
-      status: "active",
-      summary: "Task started",
-      payload: { status: "active" },
-      timeCreated: now,
-    })
-    Database.effect(() =>
-      EngineProtocol.emit(
-        Event.TaskUpdated,
-        { taskID: result!.id, status: "active", summary: "Task started" },
-        { source: "engine.queue" },
-      ),
-    )
-  })
-  if (result && launchID) taskLoopLaunchAuthorities.set(result.id, launchID)
-  return result ?? undefined
-}
-
-export function claimQueuedTaskForCwd(taskID: string, cwd: string, now = Date.now()): TaskRow | undefined {
-  if (!taskID || !cwd) return undefined
-  let result: TaskRow | undefined
-  let launchID: string | undefined
-  Database.transaction((db) => {
-    result = claimQueuedEngineTaskForCwd(db, { taskID, cwd, timeStarted: now })
-    if (!result) return
-    launchID = recordTaskLoopLaunch(db, { task: result, cwd, now })
-    insertEngineProgressSnapshot(db, {
-      taskID: result.id,
-      status: "active",
-      summary: "Task started",
-      payload: { status: "active" },
-      timeCreated: now,
-    })
-    Database.effect(() =>
-      EngineProtocol.emit(
-        Event.TaskUpdated,
-        { taskID: result!.id, status: "active", summary: "Task started" },
-        { source: "engine.queue" },
-      ),
-    )
-  })
-  if (result && launchID) taskLoopLaunchAuthorities.set(result.id, launchID)
-  return result ?? undefined
-}
-
-export async function startQueuedTaskInCwd(taskID: string, cwd: string): Promise<TaskRow | undefined> {
-  const task = findTask(taskID)
-  if (!task) throw new TaskQueueError(`Task ${taskID} does not exist`, "task_not_found", taskID)
-  const taskDirectory = taskRootDirectory(task)
-  if (taskDirectory !== cwd) {
-    throw new TaskQueueError(
-      `Task ${taskID} directory ${taskDirectory} does not match requested queue directory ${cwd}`,
-      "directory_mismatch",
-      taskID,
-    )
-  }
-  const runTaskLoop = requireTaskLoopRunner()
-  const { assertTaskExecutionCapsuleRuntime } = await import("@/engine/task-execution-capsule-binding")
-  await assertTaskExecutionCapsuleRuntime(task.id)
-  const completionAuthority = RuntimeExecutionSettlement.reserve(
-    "engine_queue_completion",
-    `task-loop-launch:${task.id}`,
-  )
-  const claimed = claimQueuedTaskForCwd(taskID, cwd)
-  if (!claimed) {
-    completionAuthority.settle()
-    return undefined
-  }
-  await startLoopForTask(claimed, undefined, cwd, runTaskLoop, completionAuthority)
-  return claimed
-}
-
-/**
- * List active tasks for a cwd.
- */
-export function listActiveForCwd(cwd: string): TaskRow[] {
-  if (!cwd) return []
-  return Database.use((db) =>
-    db
-      .select({ task: EngineTaskTable })
-      .from(EngineTaskTable)
-      .innerJoin(SessionTable, eq(SessionTable.id, EngineTaskTable.session_id))
-      .where(
-        and(
-          sql`${EngineTaskTable.time_started} IS NOT NULL`,
-          sql`${EngineTaskTable.time_completed} IS NULL`,
-          eq(SessionTable.directory, cwd),
-        ),
-      )
-      .orderBy(desc(EngineTaskTable.time_updated))
-      .all(),
-  ).map((r) => r.task)
-}
-
-/**
- * List distinct cwds that have any queued tasks for the given project.
- */
-export function listQueuedCwdsInProject(projectID: string): string[] {
-  const rows = Database.use((db) =>
-    db
-      .select({
-        cwd: SessionTable.directory,
-      })
-      .from(EngineTaskTable)
-      .innerJoin(SessionTable, eq(SessionTable.id, EngineTaskTable.session_id))
-      .where(
-        and(
-          eq(EngineTaskTable.project_id, projectID),
-          sql`${EngineTaskTable.time_started} IS NULL`,
-          sql`${EngineTaskTable.time_completed} IS NULL`,
-        ),
-      )
-      .all(),
-  )
-  return [...new Set(rows.map((r) => r.cwd).filter((x): x is string => !!x))]
-}
-
-/**
- * Advance the queue for a cwd: if the cwd is idle, claim the next queued
- * task and start its loop. Called from every dispatch site (createTask,
- * retryTask, operator message, loop exit).
- *
- * Idempotent: calling advanceQueue multiple times for the same cwd is safe.
- * The atomic claim ensures only one call will actually start a loop.
- */
-export async function advanceQueue(
-  cwd: string,
-  options?: {
-    beforeStart?: (input: { task: TaskRow; event?: OrchestratorEvent }) => void | Promise<void>
-  },
-): Promise<TaskRow | undefined> {
-  if (!cwd) return undefined
-  const candidate = nextQueuedTaskForCwd(cwd)
-  if (!candidate) return undefined
-  if (candidate.session_id && SessionPromptState.isRootSessionProcessShutdownHandoffActive(candidate.session_id)) {
-    return undefined
-  }
-  taskRootDirectory(candidate)
-  const runTaskLoop = requireTaskLoopRunner()
-  const { assertTaskExecutionCapsuleRuntime } = await import("@/engine/task-execution-capsule-binding")
-  await assertTaskExecutionCapsuleRuntime(candidate.id)
-  const completionAuthority = RuntimeExecutionSettlement.reserve(
-    "engine_queue_completion",
-    `task-loop-launch:${candidate.id}`,
-  )
-  const claimed = claimQueuedTaskForCwd(candidate.id, cwd)
-  if (!claimed) {
-    completionAuthority.settle()
-    return undefined
-  }
-  const queuedWake = findNextPendingQueuedOperatorWake(claimed.id)
-  const event = queuedWake?.event
-  try {
-    await options?.beforeStart?.({ task: claimed, event })
-  } catch (error) {
-    completionAuthority.settle()
-    throw await returnClaimedTaskToQueue(claimed, error)
-  }
-  await startLoopForTask(claimed, event, cwd, runTaskLoop, completionAuthority)
-  return claimed
-}
-
 export type DispatchTaskLoopResult = "started" | "queued" | "ignored"
 export type DispatchTaskLoopAcceptedWake = {
   taskID: string
@@ -3867,21 +3089,6 @@ export async function dispatchTaskLoop(input: DispatchTaskLoopInput): Promise<Di
     await input.beforeAcceptedWake?.({ taskID: task.id, result: "queued" })
     return "queued"
   }
-  if (isTaskQueued(task)) {
-    const claimed = await advanceQueue(cwd, {
-      beforeStart: async ({ task: claimedTask }) => {
-        if (claimedTask.id === task.id) {
-          await consumePendingWaitCronForAcceptedWake(task, "task wake accepted as started")
-          await input.beforeAcceptedWake?.({ taskID: task.id, result: "started" })
-        }
-      },
-    })
-    if (claimed?.id === task.id) return "started"
-    await consumePendingWaitCronForAcceptedWake(task, "task wake accepted as queued")
-    await input.beforeAcceptedWake?.({ taskID: task.id, result: "queued" })
-    return "queued"
-  }
-
   // Task is already active. Every re-entry is admitted through the same
   // durable head selector; a newly persisted wake never bypasses an older
   // running or delivery-failed occurrence.
@@ -3948,10 +3155,6 @@ export async function dispatchPersistedTaskLoop(
     throw new Error(`Task ${taskID} durable wake head ${head.id} cannot dispatch from ${head.label}`)
   }
   const wake = head
-  if (isTaskQueued(task)) {
-    const claimed = await advanceQueue(cwd)
-    return claimed?.id === taskID ? "started" : "queued"
-  }
   if (isTaskActive(task)) {
     if (!(await drainQueuedTaskEvent(taskID))) {
       throw new Error(`Task ${taskID} persisted wake could not be attached to its active root Session`)
@@ -4083,7 +3286,7 @@ export async function reconcileTerminalAgentLifecycleDeliveries(): Promise<numbe
     db
       .select({ id: EngineTaskTable.id })
       .from(EngineTaskTable)
-      .where(and(eq(EngineTaskTable.project_id, Instance.project.id), sql`${EngineTaskTable.time_started} IS NOT NULL`))
+      .where(eq(EngineTaskTable.project_id, Instance.project.id))
       .all(),
   )
   let reconciled = 0
@@ -4268,59 +3471,4 @@ async function consumePendingWaitCronForAcceptedWake(task: TaskRow, reason: stri
     projectId: task.project_id,
     reason,
   })
-}
-
-/**
- * Internal: actually start the loop for a claimed or operator-dispatched task.
- * Serial dispatch is guaranteed by the DB claim SQL, not by blocking the
- * caller; advance-on-exit is wired via `attachLoopCompletion`.
- *
- * Dynamic import of task-loop avoids a circular dependency
- * (task-loop → queue → task-loop).
- */
-async function startLoopForTask(
-  task: TaskRow,
-  event: OrchestratorEvent | undefined,
-  cwd: string,
-  runTaskLoop: TaskLoopRunner,
-  reservedAuthority?: RuntimeExecutionReservation,
-): Promise<boolean> {
-  const completionAuthority =
-    reservedAuthority ?? RuntimeExecutionSettlement.reserve("engine_queue_completion", `task-loop-launch:${task.id}`)
-  let wake: NonNullable<ReturnType<typeof findNextPendingQueuedOperatorWake>>
-  try {
-    const taskDirectory = taskRootDirectory(task)
-    if (taskDirectory !== cwd) {
-      throw new TaskQueueError(
-        `Task ${task.id} directory ${taskDirectory} does not match loop directory ${cwd}`,
-        "directory_mismatch",
-        task.id,
-      )
-    }
-    let pendingWake = findNextPendingQueuedOperatorWake(task.id)
-    if (!pendingWake) {
-      const blockedHead = findQueuedOperatorWakeHead(task.id)
-      if (blockedHead) {
-        throw new Error(
-          `Task ${task.id} cannot create a root Session wake while durable head ${blockedHead.id} is ${blockedHead.label}`,
-        )
-      }
-      enqueueTaskEvent(task, event ?? { note: "Queued Task start" })
-      pendingWake = findNextPendingQueuedOperatorWake(task.id)
-    }
-    if (!pendingWake) throw new Error(`Task ${task.id} has no persisted root Session wake`)
-    wake = pendingWake
-    bindTaskLoopLaunchWake(task.id, wake.id)
-  } catch (error) {
-    completionAuthority.settle()
-    throw await returnClaimedTaskToQueue(task, error)
-  }
-  try {
-    attachLoopCompletion(task.id, wake.id, cwd, () => launchTaskLoop(task, wake, cwd, runTaskLoop), completionAuthority)
-  } catch (error) {
-    completionAuthority.settle()
-    throw await returnClaimedTaskToQueue(task, error)
-  }
-  acceptTaskLoopLaunch(task.id)
-  return true
 }

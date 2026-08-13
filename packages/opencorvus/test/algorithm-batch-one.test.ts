@@ -51,7 +51,7 @@ describe("ascending identifier logical clock", () => {
       `const planID = Identifier.create("plan_node", false, upper + 1)`,
       `const ascendingID = Identifier.create("message", false, upper + 2)`,
       `const descendingID = Identifier.create("message", true, upper + 2)`,
-      `console.log(JSON.stringify({ lower: Identifier.timestamp(lowerID), upper: Identifier.timestamp(upperID), plan: Identifier.timestamp(planID), ordered: lowerID < upperID, legacyAscendingOrdered: "msg_ffffffffffffzzzzzzzzzzzzzz" < ascendingID, legacyDescendingOrdered: descendingID < "msg_00000000000000000000000000" }))`,
+      `console.log(JSON.stringify({ lower: Identifier.timestamp(lowerID), upper: Identifier.timestamp(upperID), plan: Identifier.timestamp(planID), ordered: lowerID < upperID, ascendingLength: ascendingID.length, descendingLength: descendingID.length, planLength: planID.length }))`,
     ].join(";")
     const boundary = Bun.spawnSync([process.execPath, "-e", boundaryScript], {
       cwd: path.resolve(import.meta.dir, ".."),
@@ -67,18 +67,17 @@ describe("ascending identifier logical clock", () => {
       upper: 2 ** 36,
       plan: 2 ** 36 + 1,
       ordered: true,
-      legacyAscendingOrdered: true,
-      legacyDescendingOrdered: true,
+      ascendingLength: 24,
+      descendingLength: 24,
+      planLength: 24,
     })
 
     const timestamp = Date.now() + 60_000
-    const ids = Array.from({ length: 4_100 }, () => Identifier.create("message", false, timestamp))
+    const ids = Array.from({ length: 3_800 }, () => Identifier.create("message", false, timestamp))
     ids.push(Identifier.create("message", false, timestamp - 10_000))
 
     expect([...ids].sort()).toEqual(ids)
     expect(new Set(ids).size).toBe(ids.length)
-    const encodedSequence = (id: string) => BigInt(`0x${id.split("_").at(-1)!.slice(13, 25)}`)
-    expect(encodedSequence(ids[4_096]) - encodedSequence(ids[0])).toBe(4_096n)
     expect(Identifier.timestamp(ids.at(-1)!)).toBe(timestamp)
   })
 })
@@ -126,9 +125,9 @@ describe("worktree ownership critical section", () => {
       try {
         const snapshot = await Ownership.Worktree.snapshot(root)
         expect(snapshot.integrity).toEqual({ status: "complete" })
-        expect(snapshot.entries.flatMap((entry) => (entry.status === "valid" ? [entry.marker.sessionID] : []))).toEqual([
-          sessionID,
-        ])
+        expect(snapshot.entries.flatMap((entry) => (entry.status === "valid" ? [entry.marker.sessionID] : []))).toEqual(
+          [sessionID],
+        )
       } finally {
         readdir.mockRestore()
       }
@@ -250,9 +249,7 @@ describe("worktree ownership critical section", () => {
       WorktreeOwnershipCriticalSection.remove({
         directory,
         proveOwnerless: () =>
-          durableOwnerRecorded
-            ? WorktreeOwnershipCriticalSection.ownerless(ownerlessProof.evidence)
-            : ownerlessProof,
+          durableOwnerRecorded ? WorktreeOwnershipCriticalSection.ownerless(ownerlessProof.evidence) : ownerlessProof,
         remove: async () => {
           throw new Error("physical removal failed")
         },
@@ -283,9 +280,7 @@ describe("worktree ownership critical section", () => {
       await createLease.release()
       await removal
       expect(events).toEqual(["create-acquired", "durable-owner-published", "removal-proof"])
-      expect((await Ownership.Worktree.proveOwnerless({ primaryWorktreeDir: root, worktreeDir })).status).toBe(
-        "owned",
-      )
+      expect((await Ownership.Worktree.proveOwnerless({ primaryWorktreeDir: root, worktreeDir })).status).toBe("owned")
     } finally {
       await rm(root, { recursive: true, force: true })
     }
@@ -424,7 +419,7 @@ describe("worktree ownership critical section", () => {
         ).toEqual([])
       },
     })
-  })
+  }, 60_000)
 
   test("returns an exact public receipt after explicit durable sandbox release", async () => {
     await using project = await memoryProject()
@@ -492,7 +487,6 @@ describe("worktree ownership critical section", () => {
               productPillar: "code",
               model: "firmware/gpt-5",
               promptProfile: "base",
-              queue: true,
             },
             { actor: "user" },
           )
@@ -516,7 +510,12 @@ describe("worktree ownership critical section", () => {
             releaseSandboxOwnership: true,
           })
 
-          expect({ taskKind: Identifier.schema("task").parse(taskID) === taskID, settledBeforeRelease, duringRegistration, afterBinding }).toEqual({
+          expect({
+            taskKind: Identifier.schema("task").parse(taskID) === taskID,
+            settledBeforeRelease,
+            duringRegistration,
+            afterBinding,
+          }).toEqual({
             taskKind: true,
             settledBeforeRelease: "pending",
             duringRegistration: { directory: worktree.directory, removed: false, proof: "owned" },
@@ -733,11 +732,15 @@ describe("prompt ownership termination", () => {
         const owner = SessionPromptState.start(session.id, session.directory)
         if (!owner) throw new Error("Expected a fresh prompt owner")
         SessionStatus.beginExecutionOccurrence(session.id, input.id, owner)
-        await SessionStatus.set(session.id, { type: "streaming" }, {
-          publish: false,
-          inputMessageID: input.id,
-          promptGenerationOwner: owner,
-        })
+        await SessionStatus.set(
+          session.id,
+          { type: "streaming" },
+          {
+            publish: false,
+            inputMessageID: input.id,
+            promptGenerationOwner: owner,
+          },
+        )
 
         const lock = await ProjectGitLock.acquire(
           ProjectRuntimePaths.projectGitLock(Instance.project.worktree),

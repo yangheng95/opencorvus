@@ -122,7 +122,6 @@ const result = await client.task.create({
   ].join("\n"),
   promptProfile: "advanced",
   priority: "high",
-  queue: true,
   metadata: {
     externalTicket: "CRM-1234",
   },
@@ -137,7 +136,6 @@ const result = await client.task.create({
 | `title`         | 否       | UI 里显示的标题。不传时系统会生成。                                        |
 | `promptProfile` | 否       | 本 Task 激活的精确专家团 package ID；不传则使用当前配置的 active package。 |
 | `priority`      | 否       | `critical`、`high`、`normal`、`low`。                                      |
-| `queue`         | 否       | `true` 表示进入项目队列；`false` 表示立即尝试启动。                        |
 | `attachments`   | 否       | 图片、PDF、文本等附件。                                                    |
 | `checks`        | 否       | 让任务完成前跑构建、测试、视觉检查等验收。                                 |
 | `metadata`      | 否       | 你的系统自己的业务字段。                                                   |
@@ -214,14 +212,14 @@ curl "http://127.0.0.1:7878/task/task_.../status"
 
 你主要看这些字段：
 
-| 字段                 | 例子      | 说明                                                                                  |
-| -------------------- | --------- | ------------------------------------------------------------------------------------- |
-| `status`             | `running` | 二态活动状态：`running` 或 `inactive`。                                                |
-| `lifecycleStatus`    | `active`  | 诊断生命周期事实：`queued`、`active`、`completed`、`failed`、`cancelled`。            |
-| `progress.percent`   | `100`     | 当前 Task 的进行中比例；进行中为 100，非进行中为 0。                                  |
-| `goals`              | `[]`      | 稳定 Delivery Slice 身份、当前 revision 合同与只读 execution/evidence/review/settlement 进度。 |
-| `sessionInvocationTopology` | `{...}`   | 可见父子 worker Session 调用拓扑。                                             |
-| `error`              | `"..."`   | 失败原因。                                                                            |
+| 字段                        | 例子      | 说明                                                                                           |
+| --------------------------- | --------- | ---------------------------------------------------------------------------------------------- |
+| `status`                    | `running` | 二态活动状态：`running` 或 `inactive`。                                                        |
+| `lifecycleStatus`           | `active`  | 诊断生命周期事实：`active`、`completed`、`failed`、`cancelled`。                               |
+| `progress.percent`          | `100`     | 当前 Task 的进行中比例；进行中为 100，非进行中为 0。                                           |
+| `goals`                     | `[]`      | 稳定 Delivery Slice 身份、当前 revision 合同与只读 execution/evidence/review/settlement 进度。 |
+| `sessionInvocationTopology` | `{...}`   | 可见父子 worker Session 调用拓扑。                                                             |
+| `error`                     | `"..."`   | 失败原因。                                                                                     |
 
 一个典型响应长这样：
 
@@ -460,12 +458,12 @@ curl "http://127.0.0.1:7878/mission/a1b2c3d4/status" \
 
 你主要看：
 
-| 字段               | 说明                                                 |
-| ------------------ | ---------------------------------------------------- |
-| `status`           | Mission 聚合活动状态：`running` 或 `inactive`。 |
+| 字段               | 说明                                                |
+| ------------------ | --------------------------------------------------- |
+| `status`           | Mission 聚合活动状态：`running` 或 `inactive`。     |
 | `taskCounts`       | 这个 Mission 下 Task 的总数、进行中和非进行中数量。 |
-| `progress.percent` | 进行中 Task 占比。                             |
-| `tasks`            | Mission 派发出的每个 Task 的活动与诊断明细。   |
+| `progress.percent` | 进行中 Task 占比。                                  |
+| `tasks`            | Mission 派发出的每个 Task 的活动与诊断明细。        |
 
 ## 管理 Mission
 

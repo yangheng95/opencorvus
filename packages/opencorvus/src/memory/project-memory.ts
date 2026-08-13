@@ -1,4 +1,3 @@
-import { createHash } from "node:crypto"
 import z from "zod"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { Database, and, asc, desc, eq, inArray, lt, or } from "@/storage/db"
@@ -12,6 +11,7 @@ import { ProviderError } from "@/provider/error"
 import { deriveTitle } from "@/title/derive"
 import { Bus } from "@/bus"
 import { BusEvent } from "@/bus/bus-event"
+import { Identifier } from "@/id/id"
 
 const EXTRA_KEY = "project_memory_user_input"
 const SEMANTIC_VERSION = 1 as const
@@ -151,24 +151,20 @@ export const ProtectedProjectMemoryError = NamedError.create(
   }),
 )
 
-function digest(input: string) {
-  return createHash("sha256").update(input).digest("hex")
-}
-
 function fileID(projectID: string, kind: Entry["occurrenceKind"], occurrenceID: string) {
-  return `mem_user_${digest(`${projectID}:${kind}:${occurrenceID}`)}`
+  return Identifier.deterministic("memory", `project-user-input\0${projectID}\0${kind}\0${occurrenceID}`)
 }
 
 function chunkID(id: string) {
-  return `mck_user_${digest(id)}`
+  return Identifier.deterministic("memchunk", `project-user-input\0${id}`)
 }
 
 function documentFileID(projectID: string) {
-  return `mem_project_context_${digest(projectID)}`
+  return Identifier.deterministic("memory", `project-context\0${projectID}`)
 }
 
 function documentChunkID(projectID: string) {
-  return `mck_project_context_${digest(projectID)}`
+  return Identifier.deterministic("memchunk", `project-context\0${projectID}`)
 }
 
 function estimateTokens(text: string) {
@@ -204,9 +200,59 @@ function initialEnvelope(now = Date.now()): DocumentEnvelope {
   })
 }
 
+function assertFileOwnership(
+  row: typeof MemoryFileTable.$inferSelect | undefined,
+  expected: {
+    id: string
+    projectID: string
+    source: "user" | "reflection"
+    kind: "user_message" | "project_context"
+    key: string
+    occurrenceID: string
+  },
+) {
+  if (
+    row &&
+    (row.project_id !== expected.projectID ||
+      row.source !== expected.source ||
+      row.kind !== expected.kind ||
+      row.key !== expected.key)
+  ) {
+    throw new ProjectMemoryInvariantError({
+      message: `Project memory identity ${expected.id} is owned by incompatible file metadata`,
+      occurrenceID: expected.occurrenceID,
+      fileID: expected.id,
+    })
+  }
+}
+
+function assertChunkOwnership(
+  row: typeof MemoryChunkTable.$inferSelect | undefined,
+  expected: { id: string; fileID: string; projectID: string; occurrenceID: string },
+) {
+  if (row && (row.file_id !== expected.fileID || row.project_id !== expected.projectID)) {
+    throw new ProjectMemoryInvariantError({
+      message: `Project memory chunk identity ${expected.id} is owned by an incompatible file`,
+      occurrenceID: expected.occurrenceID,
+      fileID: expected.fileID,
+    })
+  }
+}
+
 function envelopeInTransaction(db: Database.TxOrDb, projectID: string): DocumentEnvelope {
   const id = documentFileID(projectID)
   const cid = documentChunkID(projectID)
+  const file = db.select().from(MemoryFileTable).where(eq(MemoryFileTable.id, id)).get()
+  const chunk = db.select().from(MemoryChunkTable).where(eq(MemoryChunkTable.id, cid)).get()
+  assertFileOwnership(file, {
+    id,
+    projectID,
+    source: "reflection",
+    kind: "project_context",
+    key: "project-memory-document",
+    occurrenceID: "project-context",
+  })
+  assertChunkOwnership(chunk, { id: cid, fileID: id, projectID, occurrenceID: "project-context" })
   const existing = db
     .select({ content: MemoryChunkTable.content })
     .from(MemoryChunkTable)
@@ -445,9 +491,18 @@ function insert(db: Database.TxOrDb, entry: Entry) {
   const payload = canonical(entry)
   const id = fileID(entry.projectID, entry.occurrenceKind, entry.occurrenceID)
   const cid = chunkID(id)
-  const existed = Boolean(
-    db.select({ id: MemoryFileTable.id }).from(MemoryFileTable).where(eq(MemoryFileTable.id, id)).get(),
-  )
+  const existingFile = db.select().from(MemoryFileTable).where(eq(MemoryFileTable.id, id)).get()
+  const existingChunk = db.select().from(MemoryChunkTable).where(eq(MemoryChunkTable.id, cid)).get()
+  assertFileOwnership(existingFile, {
+    id,
+    projectID: entry.projectID,
+    source: "user",
+    kind: "user_message",
+    key: `${entry.occurrenceKind}:${entry.occurrenceID}`,
+    occurrenceID: entry.occurrenceID,
+  })
+  assertChunkOwnership(existingChunk, { id: cid, fileID: id, projectID: entry.projectID, occurrenceID: entry.occurrenceID })
+  const existed = Boolean(existingFile)
   db.insert(MemoryFileTable)
     .values({
       id,
@@ -506,6 +561,13 @@ export namespace ProjectMemory {
   export const filename = "MEMORY.MD" as const
   export const scope = "project" as const
   export const documentTokenLimit = DEFAULT_DOCUMENT_TOKEN_LIMIT
+  export const TestHooks = {
+    userFile: fileID,
+    userChunk: (projectID: string, kind: Entry["occurrenceKind"], occurrenceID: string) =>
+      chunkID(fileID(projectID, kind, occurrenceID)),
+    documentFile: documentFileID,
+    documentChunk: documentChunkID,
+  }
 
   export function userInputExtra(input: { surface: string; literalText: string }) {
     return { [EXTRA_KEY]: Provenance.parse({ version: SEMANTIC_VERSION, ...input }) }

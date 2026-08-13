@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import path from "node:path"
-import { persistQueuedTask } from "../../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "../fixture/engine-task"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
 import {
   executePackageToolInCapsule,
@@ -33,7 +33,7 @@ describe("native Task package-tool process authority", () => {
         const session = await Session.create({ kind: "root", title: "Native package-tool authority" })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now,
@@ -44,7 +44,6 @@ describe("native Task package-tool process authority", () => {
           priority: "normal",
           metadata: {},
           projectID: Instance.project.id,
-          queue: false,
           packageRevision: {
             scope: "project",
             projectID: Instance.project.id,
@@ -64,9 +63,7 @@ describe("native Task package-tool process authority", () => {
         })
 
         const introspections = await Promise.all(
-          Array.from({ length: 8 }, () =>
-            introspectPackageToolInCapsule({ prepared, taskID, cwd: project.path }),
-          ),
+          Array.from({ length: 8 }, () => introspectPackageToolInCapsule({ prepared, taskID, cwd: project.path })),
         )
         const introspection = introspections[0]!
         expect(introspections).toEqual(Array.from({ length: 8 }, () => introspection))
@@ -79,11 +76,7 @@ describe("native Task package-tool process authority", () => {
           "resource_set",
           "source_artifact_locators",
         ])
-        expect(introspection.inputSchema.required).toEqual([
-          "artifact",
-          "resource_set",
-          "source_artifact_locators",
-        ])
+        expect(introspection.inputSchema.required).toEqual(["artifact", "resource_set", "source_artifact_locators"])
         const artifactBranches = (
           introspection.inputSchema.properties as Record<
             string,
@@ -184,6 +177,35 @@ describe("native Task package-tool process authority", () => {
             abort: new AbortController().signal,
           }),
         ).rejects.toThrow(/workflow_id/)
+
+        await expect(
+          executePackageToolInCapsule({
+            prepared,
+            taskID,
+            cwd: project.path,
+            host,
+            context: { ...context, messageID: Identifier.ascending("message") },
+            args: {
+              artifact: {
+                artifact_type: "viral-content/campaign-brief",
+                payload: {
+                  workflow_id: "evidence-backed-content-campaign",
+                  campaign_name: "Malformed publication boundary",
+                  goal: "Prove schema validation precedes package execution",
+                  audience_hypotheses: ["Maintainers need exact input validation"],
+                  offer: "One typed package-tool error",
+                  channels: ["repository test"],
+                  constraints: ["No external side effects"],
+                  evidence_questions: ["Was the frozen input schema applied?"],
+                  success_hypotheses: ["Malformed sibling controls are rejected before execution"],
+                },
+                resource_set: null,
+                source_artifact_locators: [],
+              },
+            },
+            abort: new AbortController().signal,
+          }),
+        ).rejects.toThrow(/resource_set|Unrecognized key/)
       },
     })
   }, 0)

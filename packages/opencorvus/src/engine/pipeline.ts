@@ -15,6 +15,7 @@ import { EngineProtocol } from "./protocol"
 import { insertEngineChannelBinding } from "./channel-binding"
 import { insertEngineProgressSnapshot } from "./progress"
 import { insertEngineTask } from "./task"
+import { EngineTaskTable } from "./engine.sql"
 import { TaskGlobalProjectBindingError } from "./task-project-error"
 import {
   persistPreparedCrossTaskArtifactImports,
@@ -30,6 +31,7 @@ import {
 import type { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { SessionTable } from "@/session/session.sql"
 import { ProjectMemory } from "@/memory/project-memory"
+import { persistQueuedOperatorWakeInTransaction } from "./queue"
 
 const log = Log.create({ service: "engine-pipeline" })
 
@@ -41,24 +43,13 @@ type BudgetInput = z.infer<typeof CreateTaskInput>["budget"]
 type PriorityInput = z.infer<typeof CreateTaskInput>["priority"]
 type ChannelBindingInput = z.infer<typeof CreateTaskInput>["channelBinding"]
 
-const QUEUE_PRIORITY_BUCKET = {
-  critical: 0,
-  high: 1_000_000_000_000_000,
-  normal: 2_000_000_000_000_000,
-  low: 3_000_000_000_000_000,
-} satisfies Record<NonNullable<PriorityInput>, number>
-
-function initialQueueOrder(priority: PriorityInput | undefined, now: number) {
-  return QUEUE_PRIORITY_BUCKET[priority ?? "normal"] + now
-}
-
 // ---------------------------------------------------------------------------
-// persistQueuedTask — fast-path for POST /task (<10ms)
-// queue=true persists a queued task; queue=false persists an already-active
-// task so same-project work can start in parallel when the caller requests it.
+// persistTask — fast-path for POST /task (<10ms)
+// The active Task occurrence and its first durable root-Session ingress commit
+// together. Host does not serialize Tasks; the model owns Task creation order.
 // ---------------------------------------------------------------------------
 
-export function persistQueuedTask(input: {
+export function persistTask(input: {
   taskID: string
   sessionID: string
   now: number
@@ -81,7 +72,6 @@ export function persistQueuedTask(input: {
   metadata: Record<string, unknown>
   channelBinding?: ChannelBindingInput
   projectID: string
-  queue: boolean
   artifactImports?: readonly PreparedCrossTaskArtifactImport[]
   artifactImportAuthorities?: readonly CrossTaskArtifactSourceAuthorityReceipt[]
   packageRevision: PromptProfileResolver.ResolvedPackageRevision
@@ -95,11 +85,10 @@ export function persistQueuedTask(input: {
       projectID: input.projectID,
     })
   }
-  const taskStatus = input.queue ? "queued" : "active"
-  const progressStatus = input.queue ? "created" : "active"
-  const summary = input.queue ? "Task queued" : "Task started"
-  const source = input.queue ? "pipeline.queued" : "pipeline.direct"
-  Database.transaction((db) => {
+  const taskStatus = "active" as const
+  const summary = "Task started"
+  const source = "pipeline.active"
+  return Database.transaction((db) => {
     const rootSession = db.select().from(SessionTable).where(eq(SessionTable.id, input.sessionID)).get()
     if (!rootSession || rootSession.project_id !== input.projectID) {
       throw new Error(`Task ${input.taskID} root Session conflicts with its creation Project`)
@@ -123,10 +112,9 @@ export function persistQueuedTask(input: {
       request: input.request,
       attachments: input.attachments?.length ? input.attachments : undefined,
       priority: input.priority ?? "normal",
-      queueOrder: initialQueueOrder(input.priority, input.now),
       budget: budgetRow(input.budget),
       metadata: input.metadata,
-      timeStarted: input.queue ? null : input.now,
+      timeStarted: input.now,
       timeCreated: input.now,
       timeUpdated: input.now,
     })
@@ -169,11 +157,23 @@ export function persistQueuedTask(input: {
     }
     insertEngineProgressSnapshot(db, {
       taskID: input.taskID,
-      status: progressStatus,
+      status: "active",
       summary,
-      payload: { sessionID: input.sessionID, queue: input.queue },
+      payload: { sessionID: input.sessionID },
       timeCreated: input.now,
     })
+    const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, input.taskID)).get()
+    if (!task) throw new Error(`Task ${input.taskID} disappeared during active occurrence creation`)
+    const initialIngressID = persistQueuedOperatorWakeInTransaction(
+      db,
+      task,
+      {
+        note: "Task created",
+        taskCreation: { taskID: input.taskID, ...(input.requestID ? { requestID: input.requestID } : {}) },
+      },
+      { taskCreationID: input.taskID },
+      input.now,
+    )
     Database.effect(() =>
       EngineProtocol.emit(
         Event.TaskCreated,
@@ -185,18 +185,17 @@ export function persistQueuedTask(input: {
         { source },
       ),
     )
-    if (!input.queue) {
-      Database.effect(() =>
-        EngineProtocol.emit(
-          Event.TaskUpdated,
-          {
-            taskID: input.taskID,
-            status: taskStatus,
-            summary,
-          },
-          { source },
-        ),
-      )
-    }
+    Database.effect(() =>
+      EngineProtocol.emit(
+        Event.TaskUpdated,
+        {
+          taskID: input.taskID,
+          status: taskStatus,
+          summary,
+        },
+        { source },
+      ),
+    )
+    return initialIngressID
   })
 }

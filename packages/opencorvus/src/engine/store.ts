@@ -68,15 +68,10 @@ import {
 import type { ArchitectFidelityState } from "@/architect/fidelity"
 import { emptyArchitectFidelityState } from "@/architect/fidelity"
 import { assertEngineArtifactPayloadIdentity } from "./artifact-catalog-metadata"
-import {
-  type ArchitectContractGraph,
-} from "@/architect/contract-graph"
+import { type ArchitectContractGraph } from "@/architect/contract-graph"
 import { requireTaskPackageRevisionBinding } from "./task-package-revision-binding"
 import { parseFrontendResearchBriefArtifactEnvelope } from "@/research/frontend-research-artifact"
-import {
-  resolveDeliverySliceRevisionIdentity,
-  type DeliverySliceRevisionIdentity,
-} from "./delivery-slice"
+import { resolveDeliverySliceRevisionIdentity, type DeliverySliceRevisionIdentity } from "./delivery-slice"
 
 export type TaskRow = typeof EngineTaskTable.$inferSelect
 export type GoalRow = typeof EngineGoalTable.$inferSelect
@@ -131,9 +126,7 @@ function exactGoalArtifactLocator(input: {
 }): EngineArtifactLocator | undefined {
   if (input.id === null && input.revision === null && input.sha256 === null) return undefined
   if (!input.id || !input.revision || !input.sha256) {
-    throw new Error(
-      `Goal ${input.goal.id} has an incomplete ${input.field} Artifact locator`,
-    )
+    throw new Error(`Goal ${input.goal.id} has an incomplete ${input.field} Artifact locator`)
   }
   return {
     source: "engine_artifact",
@@ -282,9 +275,7 @@ export function parseContractGraphArtifact(row: ArtifactRow): ContractGraphArtif
   }
 }
 
-export function parseGoalGraphProjectionArtifact(
-  row: ArtifactRow,
-): GoalGraphProjectionArtifactRow {
+export function parseGoalGraphProjectionArtifact(row: ArtifactRow): GoalGraphProjectionArtifactRow {
   if (row.kind !== "goal_graph_projection") {
     throw new Error(`Artifact ${row.id} is ${row.kind}, not goal_graph_projection`)
   }
@@ -375,19 +366,12 @@ export function findArchitectContractGraphArtifact(input: {
   return row ? parseContractGraphArtifact(row) : undefined
 }
 
-export function listGoalGraphProjectionArtifacts(
-  taskID: string,
-): GoalGraphProjectionArtifactRow[] {
+export function listGoalGraphProjectionArtifacts(taskID: string): GoalGraphProjectionArtifactRow[] {
   return Database.use((db) =>
     db
       .select()
       .from(EngineArtifactTable)
-      .where(
-        and(
-          eq(EngineArtifactTable.task_id, taskID),
-          eq(EngineArtifactTable.kind, "goal_graph_projection"),
-        ),
-      )
+      .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "goal_graph_projection")))
       .orderBy(EngineArtifactTable.time_created, EngineArtifactTable.id)
       .all(),
   ).map(parseGoalGraphProjectionArtifact)
@@ -636,7 +620,7 @@ function toIntegrityReviewArtifactRow(row: ArtifactRow): IntegrityReviewArtifact
  *
  * Filtered by `time_created >= sinceMs` so a long-running task's old
  * incidents don't follow it forever; the bench / orchestrator pass
- * `task.time_started ?? task.time_created` as the floor.
+ * `task.time_started` as the floor.
  */
 export function listOrchestratorStreamErrorArtifacts(taskID: string, sinceMs: number, limit: number) {
   return Database.use((db) =>
@@ -745,9 +729,7 @@ function resolveGoalMembershipContext(input: {
   const memberGoals = projection.goal_revision_ids.map((goalID) => {
     const goal = goalsByID.get(goalID)
     if (!goal) {
-      throw new Error(
-        `GoalGraph projection ${projectionArtifact.id} references missing Goal revision ${goalID}`,
-      )
+      throw new Error(`GoalGraph projection ${projectionArtifact.id} references missing Goal revision ${goalID}`)
     }
     return goal
   })
@@ -791,24 +773,21 @@ function resolveGoalMembershipContext(input: {
       ...resolveDeliverySliceRevisionIdentity(goal, goals),
       goal,
       membershipIndex,
-      birthRequirementSetArtifactLocator:
-        goalBirthRequirementSetArtifactLocator(goal),
-      birthContractGraphArtifactLocator:
-        goalBirthContractGraphArtifactLocator(goal),
+      birthRequirementSetArtifactLocator: goalBirthRequirementSetArtifactLocator(goal),
+      birthContractGraphArtifactLocator: goalBirthContractGraphArtifactLocator(goal),
     }
   })
   const graphLocator = projectionArtifact.payload.contract_graph_artifact_locator
-  const graphArtifact = graphLocator && input.resolveContractGraph !== false
-    ? parseContractGraphArtifact(
-        requireEngineArtifactByLocator({
-          taskID: input.taskID,
-          locator: graphLocator,
-        }),
-      )
-    : undefined
-  const fidelity = graphArtifact
-    ? graphArtifact.payload.fidelity
-    : emptyArchitectFidelityState()
+  const graphArtifact =
+    graphLocator && input.resolveContractGraph !== false
+      ? parseContractGraphArtifact(
+          requireEngineArtifactByLocator({
+            taskID: input.taskID,
+            locator: graphLocator,
+          }),
+        )
+      : undefined
+  const fidelity = graphArtifact ? graphArtifact.payload.fidelity : emptyArchitectFidelityState()
   return {
     taskID: input.taskID,
     goalGraphProjectionArtifactLocator: {
@@ -818,8 +797,7 @@ function resolveGoalMembershipContext(input: {
       expected_sha256: projectionArtifact.payload_sha256,
     },
     contractGraphArtifactLocator: graphLocator ?? undefined,
-    requirementSetArtifactLocator:
-      graphArtifact?.payload.requirement_set_artifact_locator ?? undefined,
+    requirementSetArtifactLocator: graphArtifact?.payload.requirement_set_artifact_locator ?? undefined,
     producer: projectionArtifact.payload.producer,
     fidelity,
     contractGraphArtifact: graphArtifact,
@@ -836,27 +814,18 @@ function resolveGoalMembershipContext(input: {
  * `projection:null` facts remain history and never create a second current
  * source.
  */
-export function resolveCurrentGoalMembershipContext(
-  taskID: string,
-): CurrentGoalMembershipContext {
+export function resolveCurrentGoalMembershipContext(taskID: string): CurrentGoalMembershipContext {
   return resolveGoalMembershipContext({
     taskID,
     projectionArtifact: resolveCurrentGoalGraphProjectionArtifact(taskID),
   })
 }
 
-export function resolveCurrentGoalGraphProjectionArtifact(
-  taskID: string,
-): GoalGraphProjectionArtifactRow | undefined {
-  return resolveGoalGraphProjectionTip(
-    taskID,
-    listGoalGraphProjectionArtifacts(taskID),
-  )
+export function resolveCurrentGoalGraphProjectionArtifact(taskID: string): GoalGraphProjectionArtifactRow | undefined {
+  return resolveGoalGraphProjectionTip(taskID, listGoalGraphProjectionArtifacts(taskID))
 }
 
-export function resolveCurrentGoalGraphProjectionArtifactLocator(
-  taskID: string,
-): EngineArtifactLocator | undefined {
+export function resolveCurrentGoalGraphProjectionArtifactLocator(taskID: string): EngineArtifactLocator | undefined {
   const artifact = resolveCurrentGoalGraphProjectionArtifact(taskID)
   return artifact
     ? {
@@ -872,8 +841,7 @@ export function resolveTaskGoalProjection(taskID: string) {
   const context = resolveCurrentGoalMembershipContext(taskID)
   return {
     currentContractGraphArtifactID: context.contractGraphArtifactLocator?.artifact_id,
-    currentGoalGraphProjectionArtifactLocator:
-      context.goalGraphProjectionArtifactLocator,
+    currentGoalGraphProjectionArtifactLocator: context.goalGraphProjectionArtifactLocator,
     currentContractGraphArtifactLocator: context.contractGraphArtifactLocator,
     currentGoals: context.goals.map(({ goal, membershipIndex }) => ({
       ...goal,
@@ -925,19 +893,14 @@ export function resolveGoalMembershipForProjectionArtifact(input: {
   })
 }
 
-export function requireCurrentGoalContext(input: {
-  taskID: string
-  goalID: string
-}): {
+export function requireCurrentGoalContext(input: { taskID: string; goalID: string }): {
   membership: CurrentGoalMembershipContext
   goal: CurrentGoalContext
 } {
   const membership = resolveCurrentGoalMembershipContext(input.taskID)
   const goal = membership.goals.find((candidate) => candidate.goal.id === input.goalID)
   if (!goal) {
-    throw new Error(
-      `Goal ${input.goalID} is not a member of the current GoalGraph for Task ${input.taskID}`,
-    )
+    throw new Error(`Goal ${input.goalID} is not a member of the current GoalGraph for Task ${input.taskID}`)
   }
   return { membership, goal }
 }
@@ -952,12 +915,8 @@ export function assertCurrentDeliverySliceRevisionIDs(input: {
   subject: string
 }): string[] {
   const membership = resolveCurrentGoalMembershipContext(input.taskID)
-  const currentRevisionIDs = new Set(
-    membership.goals.map((candidate) => candidate.deliverySliceRevisionID),
-  )
-  const missing = input.deliverySliceRevisionIDs.filter(
-    (revisionID) => !currentRevisionIDs.has(revisionID),
-  )
+  const currentRevisionIDs = new Set(membership.goals.map((candidate) => candidate.deliverySliceRevisionID))
+  const missing = input.deliverySliceRevisionIDs.filter((revisionID) => !currentRevisionIDs.has(revisionID))
   if (missing.length > 0) {
     throw new Error(
       `${input.subject} Delivery Slice revisions are not current members of Task ${input.taskID}: ${[
@@ -1055,11 +1014,7 @@ export function listProjectTasks(projectID: string, limit = 50) {
 }
 
 export function listStartedIncompleteTaskIDs(input?: { projectID?: string }): string[] {
-  const conditions: SQL[] = [
-    isNull(EngineTaskTable.time_archived),
-    isNotNull(EngineTaskTable.time_started),
-    isNull(EngineTaskTable.time_completed),
-  ]
+  const conditions: SQL[] = [isNull(EngineTaskTable.time_archived), isNull(EngineTaskTable.time_completed)]
   if (input?.projectID) conditions.unshift(eq(EngineTaskTable.project_id, input.projectID))
   return Database.use((db) =>
     db
@@ -1092,18 +1047,16 @@ export function searchProjectTasks(projectID: string, opts: { query?: string; st
 }
 
 /**
- * Translate a logical task-status filter (queued / active / completed /
- * failed / cancelled) into a fact-field SQL condition now that the status
+ * Translate a logical task-status filter (active / completed / failed /
+ * cancelled) into a fact-field SQL condition now that the status
  * column is gone. Unknown statuses resolve to `1=0` so a caller's typo
  * returns zero rows rather than all rows.
  */
 function taskStatusCondition(status: string): SQL {
   const cancelledMark = sql`json_extract(${EngineTaskTable.metadata}, '$.cancelled') = 1`
   switch (status) {
-    case "queued":
-      return and(isNull(EngineTaskTable.time_started), isNull(EngineTaskTable.time_completed))!
     case "active":
-      return and(isNotNull(EngineTaskTable.time_started), isNull(EngineTaskTable.time_completed))!
+      return isNull(EngineTaskTable.time_completed)
     case "completed":
       return and(
         isNotNull(EngineTaskTable.time_completed),
@@ -1234,10 +1187,6 @@ export function viewTask(row: TaskRow, input?: { directory?: string }) {
       status === "cancelled" ? taskCancellationProjection(row.id) : pendingTaskCancellationProjection(row.id),
     priority: row.priority,
     packageRevisionBinding: requireTaskPackageRevisionBinding(row.id),
-    queue: {
-      order: row.queue_order,
-      revision: undefined as string | undefined,
-    },
     error: row.error ?? undefined,
     completionDecision: completionDecision
       ? {
@@ -1259,14 +1208,14 @@ export function viewTask(row: TaskRow, input?: { directory?: string }) {
     time: {
       created: row.time_created,
       updated: row.time_updated,
-      started: row.time_started ?? undefined,
+      started: row.time_started,
       completed: row.time_completed ?? undefined,
       archived: row.time_archived ?? undefined,
     },
   }
 }
 
-export function viewTaskListTask(row: TaskRow, input?: { directory?: string; queueRevision?: string }) {
+export function viewTaskListTask(row: TaskRow, input?: { directory?: string }) {
   return {
     id: row.id,
     orderKey: timelineOrderKey({
@@ -1285,14 +1234,10 @@ export function viewTaskListTask(row: TaskRow, input?: { directory?: string; que
     terminalReason: taskTerminalReason(row),
     priority: row.priority,
     packageRevisionBinding: requireTaskPackageRevisionBinding(row.id),
-    queue: {
-      order: row.queue_order,
-      revision: input?.queueRevision,
-    },
     time: {
       created: row.time_created,
       updated: row.time_updated,
-      started: row.time_started ?? undefined,
+      started: row.time_started,
       completed: row.time_completed ?? undefined,
       archived: row.time_archived ?? undefined,
     },
@@ -1429,8 +1374,7 @@ export function viewBuildHostObservationArtifact(
     task_id: payload.task_id ?? row.task_id,
     session_id: payload.session_id ?? null,
     final_message_id: payload.final_message_id ?? null,
-    execution_mode:
-      payload.execution_mode === "managed_worktree" ? "managed_worktree" : "current_project",
+    execution_mode: payload.execution_mode === "managed_worktree" ? "managed_worktree" : "current_project",
     commit_ref:
       typeof payload.contribution_commit_ref === "string" && payload.contribution_commit_ref.trim()
         ? payload.contribution_commit_ref
@@ -1444,12 +1388,8 @@ export function viewBuildHostObservationArtifact(
     diff_head_ref: typeof payload.diff_head_ref === "string" ? payload.diff_head_ref : null,
     diffs,
     changed_files: changedFiles,
-    observed_artifact_locators: ArtifactReadLocatorSchema.array().parse(
-      payload.observed_artifact_locators ?? [],
-    ),
-    source_artifact_locators: ArtifactReadLocatorSchema.array().parse(
-      payload.source_artifact_locators ?? [],
-    ),
+    observed_artifact_locators: ArtifactReadLocatorSchema.array().parse(payload.observed_artifact_locators ?? []),
+    source_artifact_locators: ArtifactReadLocatorSchema.array().parse(payload.source_artifact_locators ?? []),
     time_created: row.time_created,
     time_updated: row.time_updated,
   }

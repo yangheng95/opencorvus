@@ -12,7 +12,6 @@ import { filterAgentTools } from "../src/agent/filter-tools"
 import { HostAgentRegistry } from "../src/agent/host-agent-registry"
 import { Bus } from "../src/bus"
 import { Config } from "../src/config/config"
-import { persistQueuedTask } from "../src/engine/pipeline"
 import { requireTask } from "../src/engine/store"
 import { deriveTaskStatus } from "../src/engine/task-status"
 import { terminalTask } from "../src/engine/state"
@@ -61,6 +60,7 @@ import { textSHA256 } from "../src/expert-squad/projection-hash"
 import { AutomationTable } from "../src/scheduler/automation.sql"
 import { Database, DatabaseUnavailableError, eq } from "../src/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { persistEstablishedTask } from "./fixture/engine-task"
 
 const model = {
   id: "tool-result-control-model",
@@ -103,7 +103,7 @@ async function projectedSchedulerSurface(input: {
     metadata: { configOverlay: { prompt_profile: { active: schedulerCapability.expertSquadID } } },
   })
   const now = Date.now()
-  persistQueuedTask({
+  persistEstablishedTask({
     taskID,
     sessionID: root.id,
     now,
@@ -112,7 +112,6 @@ async function projectedSchedulerSurface(input: {
     productPillar: "code",
     metadata: { actor: "user" },
     projectID: Instance.project.id,
-    queue: false,
     packageRevision: schedulerCapability.packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",
@@ -232,7 +231,7 @@ async function projectedWorkerDecisionSurface(input: { projectPath: string }) {
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
   const now = Date.now()
-  persistQueuedTask({
+  persistEstablishedTask({
     taskID,
     sessionID: root.id,
     now,
@@ -241,7 +240,6 @@ async function projectedWorkerDecisionSurface(input: { projectPath: string }) {
     productPillar: "code",
     metadata: { actor: "user" },
     projectID: Instance.project.id,
-    queue: false,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",

@@ -3,7 +3,7 @@ import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dis
 import { recordDispatchSettlement } from "@/engine/dispatch-settlement"
 import { describeTask } from "@/engine/describe"
 import { EngineArtifactTable } from "@/engine/engine.sql"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { requireTask } from "@/engine/store"
 import type { SelectedWorkflowBinding } from "@/engine/workflow-binding"
@@ -57,12 +57,8 @@ function workflow(mode: Mode): SelectedWorkflowBinding {
 function projectedIdentity(mode: Mode) {
   return {
     agentID: agentID(mode),
-    baseRole: (mode === "deep" ? "deep-research" : "frontend-research") as
-      | "deep-research"
-      | "frontend-research",
-    sessionKind: (mode === "deep" ? "deep-research" : "frontend-research") as
-      | "deep-research"
-      | "frontend-research",
+    baseRole: (mode === "deep" ? "deep-research" : "frontend-research") as "deep-research" | "frontend-research",
+    sessionKind: (mode === "deep" ? "deep-research" : "frontend-research") as "deep-research" | "frontend-research",
     dispatchAdapterID: (mode === "deep" ? "deep_research" : "frontend_research") as
       | "deep_research"
       | "frontend_research",
@@ -84,7 +80,7 @@ async function createTask(mode: Mode) {
     title: `${mode} Research settlement`,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
-  persistQueuedTask({
+  persistTask({
     taskID,
     sessionID: root.id,
     now,
@@ -95,7 +91,6 @@ async function createTask(mode: Mode) {
     priority: "normal",
     metadata: {},
     projectID: Instance.project.id,
-    queue: true,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",
@@ -272,9 +267,16 @@ function completeResult(task: Awaited<ReturnType<typeof createTask>>) {
         full_markdown_sections: [
           { title: "Evidence", evidence_ids: ["evidence-1"], points: ["Research is a prerequisite."] },
         ],
-        evidence_notes: [{ evidence_id: "evidence-1", observations: ["The request requires research."], artifact_refs: [] }],
+        evidence_notes: [
+          { evidence_id: "evidence-1", observations: ["The request requires research."], artifact_refs: [] },
+        ],
         citation_map: [
-          { claim_id: "fact-1", evidence_ids: ["evidence-1"], pointer: "task-request", usage: "Supports the prerequisite." },
+          {
+            claim_id: "fact-1",
+            evidence_ids: ["evidence-1"],
+            pointer: "task-request",
+            usage: "Supports the prerequisite.",
+          },
         ],
       },
     },
@@ -302,7 +304,12 @@ function completeResult(task: Awaited<ReturnType<typeof createTask>>) {
 function artifactByID(taskID: string, artifactID: string) {
   return Database.use((db) =>
     db
-      .select({ id: EngineArtifactTable.id, kind: EngineArtifactTable.kind, label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+      .select({
+        id: EngineArtifactTable.id,
+        kind: EngineArtifactTable.kind,
+        label: EngineArtifactTable.label,
+        payload: EngineArtifactTable.payload,
+      })
       .from(EngineArtifactTable)
       .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.id, artifactID)))
       .get(),

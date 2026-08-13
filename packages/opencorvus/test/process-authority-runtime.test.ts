@@ -4,7 +4,7 @@ import path from "node:path"
 import { PassThrough } from "node:stream"
 import { TextReader, Uint8ArrayWriter, ZipWriter } from "@zip.js/zip.js"
 import { runHostBrowserNodeSidecar, runTaskBrowserNodeSidecar } from "../src/browser/runtime/node-executor"
-import { persistQueuedTask } from "../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../src/id/id"
 import { MCP } from "../src/mcp"
@@ -45,8 +45,8 @@ async function minimalPresentationBytes() {
   const zip = new ZipWriter(output)
   await zip.add("[Content_Types].xml", new TextReader("<Types/>"))
   await zip.add("_rels/.rels", new TextReader("<Relationships/>"))
-  await zip.add("ppt/presentation.xml", new TextReader("<p:presentation xmlns:p=\"urn:p\"/>"))
-  await zip.add("ppt/slides/slide1.xml", new TextReader("<p:sld xmlns:p=\"urn:p\"/>"))
+  await zip.add("ppt/presentation.xml", new TextReader('<p:presentation xmlns:p="urn:p"/>'))
+  await zip.add("ppt/slides/slide1.xml", new TextReader('<p:sld xmlns:p="urn:p"/>'))
   await zip.close()
   return Buffer.from(output.getData())
 }
@@ -73,7 +73,7 @@ describe("explicit conversation and Task execution authority", () => {
         const session = await Session.create({ kind: "root", title: "Process authority contract" })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now,
@@ -82,7 +82,6 @@ describe("explicit conversation and Task execution authority", () => {
           productPillar: "code",
           metadata: {},
           projectID: Instance.project.id,
-          queue: false,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",
@@ -156,11 +155,7 @@ describe("explicit conversation and Task execution authority", () => {
         const largeOutput = "authority-output\n".repeat(4_000)
         const recoverySurface = Tool.executionSurface(["read"], [])
         const [taskTruncation, conversationTruncation] = await Promise.all([
-          Truncate.output(
-            largeOutput,
-            { sessionID: session.id, executionAuthority: taskAuthority },
-            recoverySurface,
-          ),
+          Truncate.output(largeOutput, { sessionID: session.id, executionAuthority: taskAuthority }, recoverySurface),
           Truncate.output(
             largeOutput,
             { sessionID: hostSession.id, executionAuthority: conversationAuthority },
@@ -185,14 +180,16 @@ describe("explicit conversation and Task execution authority", () => {
         const conversationProcessAuthority = { kind: "host" as const, cwd: hostDirectory }
 
         const formatterScript = "process.stdout.write(process.cwd())"
-        const taskFormatter = await runFormatterProcess(
-          taskProcessAuthority,
-          { command: [process.execPath, "-e", formatterScript], timeoutMs: 10_000, captureOutput: true },
-        )
-        const hostFormatter = await runFormatterProcess(
-          conversationProcessAuthority,
-          { command: [process.execPath, "-e", formatterScript], timeoutMs: 10_000, captureOutput: true },
-        )
+        const taskFormatter = await runFormatterProcess(taskProcessAuthority, {
+          command: [process.execPath, "-e", formatterScript],
+          timeoutMs: 10_000,
+          captureOutput: true,
+        })
+        const hostFormatter = await runFormatterProcess(conversationProcessAuthority, {
+          command: [process.execPath, "-e", formatterScript],
+          timeoutMs: 10_000,
+          captureOutput: true,
+        })
         expect([taskFormatter, hostFormatter]).toEqual([
           { exitCode: 0, stdout: project.path, stderr: "" },
           { exitCode: 0, stdout: hostDirectory, stderr: "" },
@@ -200,11 +197,16 @@ describe("explicit conversation and Task execution authority", () => {
 
         const browserInput = {
           runtime: {
-            nodeExecutable: which("node") ?? (() => { throw new Error("Node runtime is required") })(),
+            nodeExecutable:
+              which("node") ??
+              (() => {
+                throw new Error("Node runtime is required")
+              })(),
             playwrightRequirePath: process.execPath,
             packaged: false,
           },
-          script: "const value=JSON.parse(Buffer.from(process.argv[2],'base64').toString('utf8'));process.stdout.write(JSON.stringify({cwd:process.cwd(),value}));",
+          script:
+            "const value=JSON.parse(Buffer.from(process.argv[2],'base64').toString('utf8'));process.stdout.write(JSON.stringify({cwd:process.cwd(),value}));",
           payload: { authority: "exact" },
           inactivityTimeoutMs: 10_000,
           label: "process authority browser protocol",
@@ -236,26 +238,30 @@ describe("explicit conversation and Task execution authority", () => {
             processAuthority: MCP.taskProcessAuthority(taskAuthority.taskID, taskAuthority.directory),
             toolName: "authority_echo",
           })
-          const taskResult = await PermissionAuthority.authorizeAndExecute({
-            projectID: Instance.project.id,
-            sessionID: session.id,
-            messageID: "msg_task_mcp_authority",
-            toolCallID: "call_task_mcp_authority",
-            providerKind: "mcp",
-            providerID: "authority-fixture",
-            providerDigest: "a".repeat(64),
-            toolName: "authority_echo",
-            args: {},
-          }, () => MCP.callScopedTool({
-            key: "authority-fixture",
-            mcp,
-            cwd: project.path,
-            connectionOwner: owner,
-            connectionIdentity: "shared-logical-server",
-            processAuthority: MCP.taskProcessAuthority(taskAuthority.taskID, taskAuthority.directory),
-            toolName: "authority_echo",
-            args: {},
-          }))
+          const taskResult = await PermissionAuthority.authorizeAndExecute(
+            {
+              projectID: Instance.project.id,
+              sessionID: session.id,
+              messageID: "msg_task_mcp_authority",
+              toolCallID: "call_task_mcp_authority",
+              providerKind: "mcp",
+              providerID: "authority-fixture",
+              providerDigest: "a".repeat(64),
+              toolName: "authority_echo",
+              args: {},
+            },
+            () =>
+              MCP.callScopedTool({
+                key: "authority-fixture",
+                mcp,
+                cwd: project.path,
+                connectionOwner: owner,
+                connectionIdentity: "shared-logical-server",
+                processAuthority: MCP.taskProcessAuthority(taskAuthority.taskID, taskAuthority.directory),
+                toolName: "authority_echo",
+                args: {},
+              }),
+          )
           await MCP.scopedToolInfo({
             key: "authority-fixture",
             mcp,
@@ -265,26 +271,30 @@ describe("explicit conversation and Task execution authority", () => {
             processAuthority: MCP.hostProcessAuthority(conversationProcessAuthority.cwd),
             toolName: "authority_echo",
           })
-          const hostResult = await PermissionAuthority.authorizeAndExecute({
-            projectID: Instance.project.id,
-            sessionID: hostSession.id,
-            messageID: "msg_host_mcp_authority",
-            toolCallID: "call_host_mcp_authority",
-            providerKind: "mcp",
-            providerID: "authority-fixture",
-            providerDigest: "a".repeat(64),
-            toolName: "authority_echo",
-            args: {},
-          }, () => MCP.callScopedTool({
-            key: "authority-fixture",
-            mcp,
-            cwd: hostDirectory,
-            connectionOwner: owner,
-            connectionIdentity: "shared-logical-server",
-            processAuthority: MCP.hostProcessAuthority(conversationProcessAuthority.cwd),
-            toolName: "authority_echo",
-            args: {},
-          }))
+          const hostResult = await PermissionAuthority.authorizeAndExecute(
+            {
+              projectID: Instance.project.id,
+              sessionID: hostSession.id,
+              messageID: "msg_host_mcp_authority",
+              toolCallID: "call_host_mcp_authority",
+              providerKind: "mcp",
+              providerID: "authority-fixture",
+              providerDigest: "a".repeat(64),
+              toolName: "authority_echo",
+              args: {},
+            },
+            () =>
+              MCP.callScopedTool({
+                key: "authority-fixture",
+                mcp,
+                cwd: hostDirectory,
+                connectionOwner: owner,
+                connectionIdentity: "shared-logical-server",
+                processAuthority: MCP.hostProcessAuthority(conversationProcessAuthority.cwd),
+                toolName: "authority_echo",
+                args: {},
+              }),
+          )
           expect([taskResult.content, hostResult.content]).toEqual([
             [{ type: "text", text: project.path }],
             [{ type: "text", text: hostDirectory }],
@@ -303,9 +313,10 @@ describe("explicit conversation and Task execution authority", () => {
           },
           async runOfficeCli(input) {
             officeCalls.push({
-              owner: input.executionAuthority.kind === "task"
-                ? `task:${input.executionAuthority.taskID}`
-                : `conversation:${input.executionAuthority.sessionID}`,
+              owner:
+                input.executionAuthority.kind === "task"
+                  ? `task:${input.executionAuthority.taskID}`
+                  : `conversation:${input.executionAuthority.sessionID}`,
               cwd: input.cwd,
               operation: input.args[0]!,
             })
@@ -387,11 +398,13 @@ describe("explicit conversation and Task execution authority", () => {
           }).toEqual({
             exitCode: 0,
             payload: { success: true, data: { authority: "task" } },
-            spawns: [{
-              cwd: project.path,
-              executable: officeCliExecutable,
-              args: ["validate", "authority.pptx", "--json"],
-            }],
+            spawns: [
+              {
+                cwd: project.path,
+                executable: officeCliExecutable,
+                args: ["validate", "authority.pptx", "--json"],
+              },
+            ],
           })
         } finally {
           defaultWorkArtifactPresentationDependencies.officeCliPath = originalOfficeCliPath

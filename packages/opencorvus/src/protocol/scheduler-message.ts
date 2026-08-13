@@ -24,16 +24,14 @@ import {
   rescheduleSchedulerDelivery,
   schedulerTargetOccurrenceIdentity,
   schedulerSourceBodyInTransaction,
+  SchedulerTargetOccurrenceStaleError,
   settleSchedulerDeliveryInTransaction,
   type SchedulerDeliveryReceipt,
 } from "./delivery"
 import { SchedulerEndpoint, SchedulerMessagePayload, type SchedulerMessageKind } from "./schema"
 import { installSchedulerMessageDrainSignal, signalSchedulerMessageDrain } from "./scheduler-drain-signal"
 import { RuntimeExecutionAdmissionClosedError } from "@/runtime/execution-settlement"
-import {
-  currentMissionExecutionClosure,
-  withMissionExecutionAdmission,
-} from "@/mission/execution-closure"
+import { currentMissionExecutionClosure, withMissionExecutionAdmission } from "@/mission/execution-closure"
 
 const DELIVERY_LEASE_MS = 120_000
 const MAX_DELIVERY_ATTEMPTS = 5
@@ -224,7 +222,9 @@ async function drainMissionRecipient(sessionID: string): Promise<void> {
               })
               const currentDigest = createHash("sha256").update(currentBody).digest("hex")
               if (currentDigest !== delivery.message.source_body_sha256 || currentBody !== message) {
-                throw new Error(`Scheduler event ${delivery.event.id} source body changed before Mission materialization.`)
+                throw new Error(
+                  `Scheduler event ${delivery.event.id} source body changed before Mission materialization.`,
+                )
               }
               settleSchedulerDeliveryInTransaction(db, {
                 inboxID: delivery.id,
@@ -282,7 +282,11 @@ async function drainTaskRecipient(taskID: string, awaitedInboxID?: string): Prom
     } catch (error) {
       const current = requireSchedulerDelivery(claimed.id)
       if (current.status !== "leased" || current.leaseOwner !== ownerID) continue
-      if (current.attempt >= MAX_DELIVERY_ATTEMPTS || /after its active root changed/.test(String(error))) {
+      if (
+        current.attempt >= MAX_DELIVERY_ATTEMPTS ||
+        /after its active root changed/.test(String(error)) ||
+        SchedulerTargetOccurrenceStaleError.isInstance(error)
+      ) {
         deadLetterSchedulerDelivery({ inboxID: current.id, ownerID, error })
         continue
       }
@@ -362,9 +366,7 @@ function handleSignalDrainFailure(error: unknown): "lifecycle_closed" | "reporte
   return "reported"
 }
 
-export function drainSchedulerMessagesForProject(input?: {
-  excludeSessionIDs?: ReadonlySet<string>
-}): Promise<void> {
+export function drainSchedulerMessagesForProject(input?: { excludeSessionIDs?: ReadonlySet<string> }): Promise<void> {
   const current = Instance.current()
   if (!current) return Promise.resolve()
   return requestSchedulerMessageDrainForProject(current.project.id, current.project.worktree, undefined, input)
@@ -384,10 +386,9 @@ function requestSchedulerMessageDrainForProject(
       signal,
       fn: () => drainSchedulerMessagesForCurrentProject(input),
     }),
-  )
-    .finally(() => {
-      if (drainTails.get(key) === next) drainTails.delete(key)
-    })
+  ).finally(() => {
+    if (drainTails.get(key) === next) drainTails.delete(key)
+  })
   drainTails.set(key, next)
   return next
 }

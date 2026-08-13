@@ -6,7 +6,7 @@
 // that updates only the affected text/attribute when boardStore changes.
 
 import { createEffect, createMemo, Show } from "solid-js"
-import { boardStore, activeTaskID } from "../store/board"
+import { boardStore } from "../store/board"
 import { formatDuration } from "../utils/time"
 import { AppLog } from "../utils/log"
 import { selectedTaskSseActiveElapsedMs, taskRuntimeActivityKey } from "../services/task-runtime-activity"
@@ -20,9 +20,9 @@ import {
 
 const ACTIVE_STATUS = "active"
 const TERMINAL_STATUSES = new Set(["completed", "failed", "cancelled"])
-const loggedRuntimeTimeErrors = new Set<string>()
 
 export function TaskStatusHeader() {
+  let loggedRuntimeTimeError = ""
   const execution = createMemo(() => {
     const source = boardStore.selectedSource
     if (!source) return null
@@ -30,19 +30,16 @@ export function TaskStatusHeader() {
   })
   const task = createMemo(() => {
     const current = execution()
-    if (current?.kind !== "task") return null
-    const boardTask = (boardStore.board as any)?.task
-    if (boardTask?.id === current.id) return boardTask
-    return boardStore.tasks.find((item: any) => item?.task?.id === current.id)?.task ?? null
+    return current?.kind === "task" ? current : null
   })
   const status = createMemo(() => {
     const current = execution()
     return current ? workLedgerPresentationStatus(current) : ""
   })
   const startedTime = createMemo<number>(() => {
-    return Number(task()?.time?.started || 0)
+    return Number(task()?.started || 0)
   })
-  const completedTime = createMemo<number>(() => task()?.time?.completed || 0)
+  const completedTime = createMemo<number>(() => task()?.completed || 0)
   const isActive = createMemo(() => status() === ACTIVE_STATUS)
   const lifecycleStatus = createMemo(() => {
     const current = execution()
@@ -51,18 +48,18 @@ export function TaskStatusHeader() {
   const visible = createMemo(() => Boolean(execution()) && workLedgerStatusVisible(status()))
   const timedTaskVisible = createMemo(() => execution()?.kind === "task")
   const elapsedKey = createMemo(() => {
-    const taskID = String(task()?.id || activeTaskID() || "")
+    const taskID = String(task()?.id || "")
     if (!taskID || !startedTime()) return ""
     return taskRuntimeActivityKey({ taskID, startedAt: startedTime() })
   })
   const missingStartedTime = createMemo(() => {
-    const taskID = String(task()?.id || activeTaskID() || "")
+    const taskID = String(task()?.id || "")
     return Boolean(
       visible() && taskID && (isActive() || TERMINAL_STATUSES.has(lifecycleStatus())) && !(startedTime() > 0),
     )
   })
   const missingCompletionTime = createMemo(() => {
-    const taskID = String(task()?.id || activeTaskID() || "")
+    const taskID = String(task()?.id || "")
     return Boolean(
       visible() &&
         taskID &&
@@ -72,14 +69,14 @@ export function TaskStatusHeader() {
     )
   })
   const invalidCompletionTime = createMemo(() => {
-    const taskID = String(task()?.id || activeTaskID() || "")
+    const taskID = String(task()?.id || "")
     return Boolean(
       visible() &&
         taskID &&
         startedTime() > 0 &&
         TERMINAL_STATUSES.has(lifecycleStatus()) &&
         completedTime() > 0 &&
-        completedTime() <= startedTime(),
+        completedTime() < startedTime(),
     )
   })
   const runtimeTimeError = createMemo(() => {
@@ -101,11 +98,14 @@ export function TaskStatusHeader() {
 
   createEffect(() => {
     const timeError = runtimeTimeError()
-    if (!timeError) return
-    const taskID = String(task()?.id || activeTaskID() || "")
+    if (!timeError) {
+      loggedRuntimeTimeError = ""
+      return
+    }
+    const taskID = String(task()?.id || "")
     const key = `${taskID}:${status()}:${startedTime()}:${completedTime()}:${timeError}`
-    if (loggedRuntimeTimeErrors.has(key)) return
-    loggedRuntimeTimeErrors.add(key)
+    if (loggedRuntimeTimeError === key) return
+    loggedRuntimeTimeError = key
     AppLog.error("ui", `Task status ${timeError}`, {
       taskID,
       status: status(),
@@ -117,10 +117,10 @@ export function TaskStatusHeader() {
       diagnosticMessage: `Task ${taskID} has an invalid runtime timestamp.`,
       diagnosticDetails:
         timeError === "missing start time"
-          ? `task.time.started is required for task lifecycle ${lifecycleStatus() || status()}.`
+          ? `work-ledger task started is required for task lifecycle ${lifecycleStatus() || status()}.`
           : timeError === "missing completion time"
-            ? `task.time.completed is required for terminal task lifecycle ${lifecycleStatus()}.`
-            : `task.time.completed must be greater than task.time.started for terminal task lifecycle ${lifecycleStatus()}.`,
+            ? `work-ledger task completed is required for terminal task lifecycle ${lifecycleStatus()}.`
+            : `work-ledger task completed must not precede started for terminal task lifecycle ${lifecycleStatus()}.`,
     })
   })
 

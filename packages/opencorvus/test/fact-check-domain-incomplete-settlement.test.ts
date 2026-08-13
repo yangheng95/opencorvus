@@ -5,7 +5,7 @@ import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { recordDispatchSettlement } from "@/engine/dispatch-settlement"
 import { describeTask } from "@/engine/describe"
 import { EngineArtifactTable } from "@/engine/engine.sql"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { requireTask } from "@/engine/store"
 import type { SelectedWorkflowBinding } from "@/engine/workflow-binding"
@@ -83,7 +83,7 @@ async function createFixture(title: string) {
     title,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
-  persistQueuedTask({
+  persistTask({
     taskID,
     sessionID: root.id,
     now,
@@ -94,7 +94,6 @@ async function createFixture(title: string) {
     priority: "normal",
     metadata: {},
     projectID: Instance.project.id,
-    queue: true,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",
@@ -191,9 +190,7 @@ async function createFixture(title: string) {
       lifecycle: { taskID, workScope: { kind: "task" } },
       messageAuthority: {
         user_message_id: workerUser.id,
-        control_text_parts: [
-          { part_id: workerControl.id, text_sha256: taskRequestSHA256(workerControl.text) },
-        ],
+        control_text_parts: [{ part_id: workerControl.id, text_sha256: taskRequestSHA256(workerControl.text) }],
       },
     },
   })
@@ -493,7 +490,11 @@ describe("Fact Check domain-incomplete settlement", () => {
           }),
         })
         const persisted = await MessageStore.get({ sessionID: fixture.worker.id, messageID: fixture.workerFinal.id })
-        expect({ toolResult, result: result.outcome, toolPart: persisted.parts.find((part) => part.type === "tool") }).toMatchObject({
+        expect({
+          toolResult,
+          result: result.outcome,
+          toolPart: persisted.parts.find((part) => part.type === "tool"),
+        }).toMatchObject({
           toolResult: expect.stringContaining("failed semantic validation"),
           result: { kind: "domain_incomplete", domain: "fact_check" },
           toolPart: {

@@ -35,12 +35,19 @@ export type SchedulerMessageKind = z.infer<typeof SchedulerMessageKind>
 
 export const SchedulerMessagePayload = z
   .object({
-    protocol: z.literal("scheduler-message-v1"),
+    protocol: z.literal("scheduler-message-v2"),
     message_kind: SchedulerMessageKind,
     thread_id: z.string().min(1),
     source_message_id: Identifier.schema("message").optional(),
     source_part_id: Identifier.schema("part").optional(),
     source_terminal_event_id: Identifier.schema("protocol_event").optional(),
+    /** Immutable execution occurrence of a Task sender. Mission senders use
+     * null. Replies must reverse both source and target occurrence identities. */
+    source_task_occurrence_started_at: z.number().int().positive().nullable(),
+    /** Immutable execution occurrence of a Task recipient. Mission recipients
+     * use null. The Host compares this with the current Task row before
+     * materializing any Message or root ingress. */
+    target_task_occurrence_started_at: z.number().int().positive().nullable(),
     source_body_sha256: z.string().regex(/^[a-f0-9]{64}$/),
     subject: z.string().min(1).max(500),
   })

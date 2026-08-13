@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
+import { Database as BunDatabase } from "bun:sqlite"
 import { EngineArtifactTable, EngineArtifactVersionTable, EngineTaskTable } from "@/engine/engine.sql"
 import { missionChildResultWake } from "@/conversation/turn-artifacts"
 import { insertEngineArtifact } from "@/engine/artifact"
@@ -8,6 +9,7 @@ import { Instance, InstanceProcessAdmissionClosedError } from "@/project/instanc
 import {
   SchedulerMessageAuthorityError,
   SchedulerMessageConflictError,
+  SchedulerTargetOccurrenceStaleError,
   claimNextSchedulerDelivery,
   deadLetterSchedulerTaskDeliveriesInTransaction,
   deadLetterSchedulerSessionDeliveriesInTransaction,
@@ -24,8 +26,8 @@ import { ProtocolEventTable, ProtocolInboxTable } from "@/protocol/protocol.sql"
 import { SchedulerMessagePayload } from "@/protocol/schema"
 import { ProtocolStore } from "@/protocol/store"
 import { Session } from "@/session"
-import { MessageTable, PartTable } from "@/session/session.sql"
-import { Database, DatabaseEffectAdmissionClosedError, asc, eq } from "@/storage/db"
+import { MessageTable, PartTable, SessionTable } from "@/session/session.sql"
+import { Database, DatabaseEffectAdmissionClosedError, DatabaseUnavailableError, asc, eq } from "@/storage/db"
 import { RuntimeExecutionAdmissionClosedError } from "@/runtime/execution-settlement"
 import { writeTaskUpdateInTransaction } from "@/engine/state"
 import {
@@ -36,6 +38,7 @@ import {
   QueueOrderingTestHooks,
   TestHooks as QueueTestHooks,
   configureTaskLoopRunner,
+  persistQueuedOperatorWakeInTransaction,
   persistQueuedRootMessageWakeInTransaction,
   waitForQueueCompletionHooksForTest,
 } from "@/engine/queue"
@@ -52,7 +55,7 @@ import {
 } from "@/protocol/scheduler-message"
 import { SessionWake } from "@/session/wake"
 import { Scheduler } from "@/scheduler"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import {
@@ -85,12 +88,38 @@ function persistSourceOccurrence(sessionID: string, messageID: string, partID: s
         .at(-1)?.value,
   )
   const now = Math.max(Date.now(), (newestMessageTime ?? 0) + 1)
+  const task = Database.use((db) => {
+    let cursor: string | null | undefined = sessionID
+    const visited = new Set<string>()
+    while (cursor && !visited.has(cursor)) {
+      visited.add(cursor)
+      const owner = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.session_id, cursor)).get()
+      if (owner) return owner
+      cursor = db
+        .select({ parentID: SessionTable.parent_id })
+        .from(SessionTable)
+        .where(eq(SessionTable.id, cursor))
+        .get()?.parentID
+    }
+    return undefined
+  })
+  const taskIngressID = task
+    ? Database.transaction((db) =>
+        persistQueuedOperatorWakeInTransaction(db, task, { note: "Scheduler source occurrence" }, {}, now),
+      )
+    : undefined
   Database.transaction((db) => {
     db.insert(MessageTable)
       .values({
         id: messageID,
         session_id: sessionID,
-        data: { role: "assistant", parentID: "msg_parent", providerID: "test", modelID: "test" } as never,
+        data: {
+          role: "assistant",
+          parentID: "msg_parent",
+          providerID: "test",
+          modelID: "test",
+          ...(taskIngressID ? { taskIngress: { id: taskIngressID, kind: "orchestrator_event" } } : {}),
+        } as never,
         time_created: now,
         time_updated: now,
       })
@@ -111,6 +140,12 @@ function persistSourceOccurrence(sessionID: string, messageID: string, partID: s
       })
       .run()
   })
+  if (taskIngressID) {
+    if (!QueueTestHooks.startQueuedWake(taskIngressID)) {
+      throw new Error(`Scheduler source ingress ${taskIngressID} did not enter running state`)
+    }
+    QueueTestHooks.completeQueuedWake(taskIngressID, messageID)
+  }
 }
 
 async function persistRunnerReply(input: {
@@ -187,9 +222,11 @@ describe("durable scheduler.message delivery", () => {
 
   test("parses exactly one canonical source occurrence", () => {
     const base = {
-      protocol: "scheduler-message-v1" as const,
+      protocol: "scheduler-message-v2" as const,
       message_kind: "request" as const,
       thread_id: "thread-source-contract",
+      source_task_occurrence_started_at: null,
+      target_task_occurrence_started_at: null,
       source_body_sha256: "a".repeat(64),
       subject: "Source contract",
     }
@@ -220,6 +257,314 @@ describe("durable scheduler.message delivery", () => {
       expect(SchedulerMessagePayload.safeParse(invalid).success).toBe(false)
     }
   })
+
+  test("requires a pre-release reset for the scheduler Message occurrence epoch", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-legacy-scheduler-epoch"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Legacy scheduler epoch",
+          metadata: { mission: missionLaunchMetadata(missionID, project.path) },
+        })
+        Database.transaction(() =>
+          ProtocolStore.appendEventInTransaction({
+            kind: "command",
+            type: "scheduler.message",
+            aggregate: "session",
+            aggregate_id: mission.id,
+            session_id: mission.id,
+            source: "scheduler-endpoint:legacy-source",
+            target: "scheduler-endpoint:legacy-target",
+            payload: {
+              protocol: "scheduler-message-v1",
+              message_kind: "request",
+              thread_id: "legacy-thread",
+              source_message_id: Identifier.ascending("message"),
+              source_part_id: Identifier.ascending("part"),
+              source_body_sha256: "a".repeat(64),
+              subject: "Legacy scheduler payload",
+            },
+          }),
+        )
+        await Database.awaitEffectIdle(30_000)
+        Database.close()
+        let observed: unknown
+        try {
+          Database.Client()
+        } catch (error) {
+          observed = error
+        }
+        expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
+          code: "DATA_RESET_REQUIRED",
+          operation: "Database.Client.dataIntegrity.schedulerMessageOccurrenceEpoch",
+        })
+        await Database.resetFiles(Database.Path())
+        Database.Client()
+      },
+    })
+  }, 60_000)
+
+  test("requires a pre-release reset for the root ingress occurrence epoch", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const root = await Session.create({ kind: "root", title: "Legacy ingress epoch" })
+        const now = Date.now()
+        const taskID = Identifier.ascending("task")
+        const task = Database.use((db) => {
+          db.insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: Instance.project.id,
+              session_id: root.id,
+              source: "test",
+              product_pillar: "code",
+              title: "Legacy ingress epoch",
+              request: "Reject an ingress without an execution occurrence",
+              time_started: now,
+              time_created: now,
+              time_updated: now,
+            })
+            .run()
+          return db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()!
+        })
+        const ingressID = Database.transaction((db) =>
+          persistQueuedOperatorWakeInTransaction(db, task, { note: "Legacy ingress" }, {}, now),
+        )
+        await Database.awaitEffectIdle(30_000)
+        Database.close()
+        const sqlite = new BunDatabase(Database.Path())
+        try {
+          const triggers = sqlite
+            .query<
+              { name: string; sql: string },
+              []
+            >("SELECT name, sql FROM sqlite_schema WHERE type = 'trigger' AND tbl_name IN ('engine_artifact', 'engine_artifact_version') ORDER BY name")
+            .all()
+          if (triggers.length === 0 || triggers.some((trigger) => !trigger.sql)) {
+            throw new Error("artifact integrity trigger fixture is incomplete")
+          }
+          for (const trigger of triggers) sqlite.run(`DROP TRIGGER "${trigger.name}"`)
+          const row = sqlite
+            .query<{ payload: string }, [string]>("SELECT payload FROM engine_artifact WHERE id = ?")
+            .get(ingressID)!
+          const parsed = JSON.parse(row.payload) as Record<string, unknown>
+          delete parsed.task_occurrence_started_at
+          sqlite.query("UPDATE engine_artifact SET payload = ? WHERE id = ?").run(JSON.stringify(parsed), ingressID)
+          for (const trigger of triggers) sqlite.run(trigger.sql)
+        } finally {
+          sqlite.close(true)
+        }
+        let observed: unknown
+        try {
+          Database.Client()
+        } catch (error) {
+          observed = error
+        }
+        expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
+          code: "DATA_RESET_REQUIRED",
+          operation: "Database.Client.dataIntegrity.taskIngressOccurrenceEpoch",
+        })
+        await Database.resetFiles(Database.Path())
+        Database.Client()
+      },
+    })
+  }, 60_000)
+
+  test("dead-letters a delayed Task delivery when the active occurrence has changed", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        using _drainSignal = installSchedulerMessageDrainSignal(() => undefined)
+        const missionID = "mission-stale-task-occurrence"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Stale occurrence source",
+          metadata: { mission: missionLaunchMetadata(missionID, project.path) },
+        })
+        const root = await Session.create({
+          kind: "root",
+          title: "Stale occurrence target",
+          metadata: { configOverlay: { model: "openai/gpt-5.6-terra" } },
+        })
+        const taskID = Identifier.ascending("task")
+        const started = Date.now()
+        Database.use((db) =>
+          db
+            .insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: Instance.project.id,
+              session_id: root.id,
+              product_pillar: "code",
+              title: "Stale occurrence target",
+              request: "Reject input addressed to a prior execution occurrence",
+              source: "mission",
+              metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+              time_started: started,
+              time_created: started,
+              time_updated: started,
+            })
+            .run(),
+        )
+        const sourceMessageID = Identifier.ascending("message")
+        const sourcePartID = Identifier.ascending("part")
+        persistSourceOccurrence(mission.id, sourceMessageID, sourcePartID, "Deliver only to the addressed occurrence")
+        const receipt = Database.transaction((db) =>
+          enqueueSchedulerMessageInTransaction(db, {
+            invocationID: "stale-task-occurrence-request",
+            kind: "request",
+            source: {
+              kind: "mission_scheduler",
+              project_id: Instance.project.id,
+              mission_id: missionID,
+              session_id: mission.id,
+            },
+            target: {
+              kind: "task_scheduler",
+              project_id: Instance.project.id,
+              task_id: taskID,
+              root_session_id: root.id,
+            },
+            subject: "Occurrence-bound request",
+            sourceMessageID,
+            sourcePartID,
+          }),
+        )
+        expect(requireSchedulerDelivery(receipt.inboxID).message.target_task_occurrence_started_at).toBe(started)
+
+        Database.use((db) =>
+          db
+            .update(EngineTaskTable)
+            .set({ time_started: started + 2, time_updated: started + 2 })
+            .where(eq(EngineTaskTable.id, taskID))
+            .run(),
+        )
+        const lateReplyMessageID = Identifier.ascending("message")
+        const lateReplyPartID = Identifier.ascending("part")
+        const reopenedOrchestrator = await Session.create({
+          kind: "orchestrator",
+          parentID: root.id,
+          title: "Reopened Task scheduler",
+        })
+        persistSourceOccurrence(
+          reopenedOrchestrator.id,
+          lateReplyMessageID,
+          lateReplyPartID,
+          "Late reply from the reopened Task",
+        )
+        expect(() =>
+          Database.transaction((db) =>
+            enqueueSchedulerMessageInTransaction(db, {
+              invocationID: "stale-task-occurrence-reply",
+              kind: "reply",
+              source: {
+                kind: "task_scheduler",
+                project_id: Instance.project.id,
+                task_id: taskID,
+                root_session_id: root.id,
+              },
+              target: {
+                kind: "mission_scheduler",
+                project_id: Instance.project.id,
+                mission_id: missionID,
+                session_id: mission.id,
+              },
+              subject: "Late occurrence reply",
+              sourceMessageID: lateReplyMessageID,
+              sourcePartID: lateReplyPartID,
+              correlationID: receipt.threadID,
+              threadID: receipt.threadID,
+              replyTo: receipt.eventID,
+            }),
+          ),
+        ).toThrow(SchedulerTargetOccurrenceStaleError)
+        await drainSchedulerMessagesForCurrentProject()
+        const occurrence = schedulerTargetOccurrenceIdentity(receipt.inboxID)
+        expect({
+          delivery: requireSchedulerDelivery(receipt.inboxID),
+          materializedMessage: Database.use((db) =>
+            db
+              .select({ id: MessageTable.id })
+              .from(MessageTable)
+              .where(eq(MessageTable.id, occurrence.messageID))
+              .get(),
+          ),
+        }).toMatchObject({
+          delivery: {
+            status: "dead_letter",
+            deliveryResult: { kind: "dead_letter", error_name: "SchedulerTargetOccurrenceStaleError" },
+          },
+          materializedMessage: undefined,
+        })
+      },
+    })
+  }, 60_000)
+
+  test("settles a materialized root ingress when its admitted Task occurrence is stale", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const root = await Session.create({ kind: "root", title: "Stale materialized ingress" })
+        const taskID = Identifier.ascending("task")
+        const started = Date.now()
+        const task = Database.use((db) => {
+          db.insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: Instance.project.id,
+              session_id: root.id,
+              source: "mission",
+              product_pillar: "code",
+              title: "Stale materialized ingress",
+              request: "Do not execute a root ingress from the prior occurrence",
+              time_started: started,
+              time_created: started,
+              time_updated: started,
+            })
+            .run()
+          return db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()!
+        })
+        const ingressID = Database.transaction((db) =>
+          persistQueuedOperatorWakeInTransaction(db, task, { note: "Materialized scheduler ingress" }, {}, started),
+        )
+        Database.use((db) =>
+          db
+            .update(EngineTaskTable)
+            .set({ time_started: started + 2, time_updated: started + 2 })
+            .where(eq(EngineTaskTable.id, taskID))
+            .run(),
+        )
+        let startResult: boolean
+        try {
+          startResult = QueueTestHooks.startQueuedWake(ingressID)
+        } catch (error) {
+          throw new Error(`Stale ingress claim failed: ${error instanceof Error ? error.stack : String(error)}`)
+        }
+        expect(startResult).toBe(false)
+        const persisted = Database.use((db) => {
+          const current = db
+            .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(eq(EngineArtifactTable.id, ingressID))
+            .get()
+          if (!current) throw new Error(`Stale ingress ${ingressID} disappeared`)
+          return current
+        })
+        expect(persisted?.label).toBe("terminal_inapplicable")
+        expect(QueuedTaskIngressSchema.parse(persisted?.payload).delivery_result).toMatchObject({
+          status: "terminal_inapplicable",
+          reason: expect.stringContaining("TaskIngressOccurrenceStaleError"),
+        })
+      },
+    })
+  }, 60_000)
 
   test("orders mixed root ingress by immutable enqueue ordinal across state patches", async () => {
     await using project = await memoryProject()
@@ -263,6 +608,7 @@ describe("durable scheduler.message delivery", () => {
                         inboxID: `pib_mixed_${task.id}_${index}`,
                         sequence: index,
                         threadID: `mixed-${task.id}`,
+                        targetTaskOccurrenceStartedAt: task.time_started,
                       },
                     }
                   : {}),
@@ -867,7 +1213,7 @@ describe("durable scheduler.message delivery", () => {
                 task_id: null,
                 causation_id: terminal!.id,
                 payload: {
-                  protocol: "scheduler-message-v1",
+                  protocol: "scheduler-message-v2",
                   message_kind: "notification",
                   source_terminal_event_id: terminal!.id,
                 },
@@ -1974,7 +2320,7 @@ describe("durable scheduler.message delivery", () => {
             version: "2026.08.12.1",
             packageDigest: "a".repeat(64),
           }
-          persistQueuedTask({
+          persistTask({
             taskID,
             sessionID: root.id,
             now,
@@ -1985,7 +2331,6 @@ describe("durable scheduler.message delivery", () => {
             priority: "normal",
             metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
             projectID: Instance.project.id,
-            queue: false,
             packageRevision,
             executionCapsuleBinding: await prepareTaskProcessBinding({
               mode: "native",
@@ -2036,7 +2381,13 @@ describe("durable scheduler.message delivery", () => {
               taskID: string
               kind: string
               source: string
-              schedulerDelivery: { eventID: string; inboxID: string; sequence: number; threadID: string }
+              schedulerDelivery: {
+                eventID: string
+                inboxID: string
+                sequence: number
+                threadID: string
+                targetTaskOccurrenceStartedAt: number
+              }
             }
             const visibleText = visible.parts.find((part) => part.type === "text")
             const ingressRootMessage = parsedIngress.event.rootMessage!
@@ -2053,6 +2404,9 @@ describe("durable scheduler.message delivery", () => {
             expect(visibleRootMessage.schedulerDelivery.inboxID).toBe(receipt.inboxID)
             expect(visibleRootMessage.schedulerDelivery.sequence).toBe(deliverySequence)
             expect(visibleRootMessage.schedulerDelivery.threadID).toBe(receipt.threadID)
+            expect(visibleRootMessage.schedulerDelivery.targetTaskOccurrenceStartedAt).toBe(
+              parsedIngress.task_occurrence_started_at,
+            )
             expect(visibleText?.type === "text" ? visibleText.text : undefined).toBe(
               [
                 `Scheduler request from Mission scheduler ${missionID}.`,

@@ -7,7 +7,7 @@ import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { Database, eq } from "../src/storage/db"
 import { EngineArtifactTable, EngineInteractionRequestTable, EngineTaskTable } from "../src/engine/engine.sql"
-import { persistQueuedTask } from "../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { terminalTask } from "../src/engine/state"
 import { requireTask } from "../src/engine/store"
 import { requireCurrentTerminalLifecycleReference } from "../src/engine/terminal-lifecycle-reference"
@@ -37,6 +37,7 @@ import {
   EvolutionArtifactIntegrityError,
   EvolutionMetricIdentityError,
   EvolutionArtifactSchemas,
+  EvolutionPackagePublishableArtifactInputSchema,
 } from "../../../expert-squads/builtin/evolution-lab/lib/evolution-lab/artifacts"
 import collectRunEvidenceTool from "../../../expert-squads/builtin/evolution-lab/tools/collect-run-evidence"
 import expertSquadPackageTool from "../../../expert-squads/builtin/evolution-lab/tools/expert-squad-package"
@@ -74,7 +75,7 @@ function executePublishEvolutionArtifact(
     "evolution-lab/comparison-recommendation": "evolution-recommendation-owner",
   } as const
   return publishEvolutionArtifactTool.execute(
-    { ...publication, artifact: { artifact_type, payload } } as Parameters<
+    { artifact: { artifact_type, payload, ...publication } } as Parameters<
       typeof publishEvolutionArtifactTool.execute
     >[0],
     { ...context, agent: artifactOwner[artifact_type as keyof typeof artifactOwner] },
@@ -187,12 +188,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
       "evolution-lab/evaluation-result": "evolution-safety-auditor",
       "evolution-lab/comparison-recommendation": "evolution-recommendation-owner",
     })
-    expect(() =>
-      assertEvolutionArtifactOwner("evolution-lab/opportunity", "evolution-observer"),
-    ).not.toThrow()
-    expect(() =>
-      assertEvolutionArtifactOwner("evolution-lab/opportunity", "evolution-failure-analyst"),
-    ).toThrow(
+    expect(() => assertEvolutionArtifactOwner("evolution-lab/opportunity", "evolution-observer")).not.toThrow()
+    expect(() => assertEvolutionArtifactOwner("evolution-lab/opportunity", "evolution-failure-analyst")).toThrow(
       new EvolutionArtifactIntegrityError(
         "evolution-lab/opportunity must be published by Evolution Lab worker evolution-observer",
       ),
@@ -695,12 +692,37 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         const loaded = await ExpertSquadRegistry.loadSourcePackage(
           path.resolve(import.meta.dir, "../../../expert-squads/builtin/evolution-lab"),
         )
+        const publisherSchema = publishEvolutionArtifactTool.introspect().inputSchema as {
+          required?: string[]
+          properties?: Record<string, {
+            oneOf?: Array<{ properties?: Record<string, { const?: string }>; required?: string[] }>
+          }>
+        }
+        expect(Object.keys(publisherSchema.properties ?? {})).toEqual(["artifact"])
+        expect(publisherSchema.required).toEqual(["artifact"])
+        const publicationBranches = publisherSchema.properties?.artifact?.oneOf ?? []
+        expect(publicationBranches.map((branch) => branch.properties?.artifact_type?.const)).toEqual(
+          EvolutionPackagePublishableArtifactInputSchema.options.map(
+            (branch) => branch.shape.artifact_type.value,
+          ),
+        )
+        expect(publicationBranches.every((branch) => branch.required?.join("|") ===
+          "artifact_type|payload|resource_set|source_artifact_locators")).toBe(true)
+        const attributionBranch = publicationBranches.find(
+          (branch) => branch.properties?.artifact_type?.const === "evolution-lab/failure-attribution",
+        )
+        expect(attributionBranch?.required).toEqual([
+          "artifact_type",
+          "payload",
+          "resource_set",
+          "source_artifact_locators",
+        ])
         const session = await Session.create({ kind: "root", title: "Evolution typed ABI chain" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
-        const missionID = Identifier.ascending("mission")
+        const missionID = "evolution-abi-chain"
         const missionSessionID = Identifier.ascending("session")
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started,
@@ -711,7 +733,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "mission", mission: { id: missionID, session_id: missionSessionID } },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "project",
             projectID: Instance.project.id,
@@ -791,8 +812,12 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           },
         }
 
+        let sourceOpportunityLocator!: EngineArtifactLocator
+        let sourceAttributionLocator!: EngineArtifactLocator
         let sourceCampaignLocator!: EngineArtifactLocator
         let sourceRunLocator!: EngineArtifactLocator
+        let sourceOpportunityInput!: Record<string, unknown>
+        let sourceCampaignInput!: Record<string, unknown>
         await withTaskScopedPluginToolHost(scope, async (host) => {
           ;(scope.owner as { agentID: string }).agentID = "evolution-observer"
           const opportunityReceipt = JSON.parse(
@@ -822,6 +847,24 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               { host } as never,
             ),
           ) as { locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
+          sourceOpportunityLocator = opportunityReceipt.locator as EngineArtifactLocator
+          sourceOpportunityInput = {
+            target,
+            current_revision: revision,
+            trigger: { type: "user", identity: "message-user-authority" },
+            evidence: [],
+            observable_symptom: "Repeated incomplete delivery",
+            impact_scope: "target workflow",
+            frequency: "3 of 5 runs",
+            data_window: {
+              started_at: "2026-08-01T00:00:00.000Z",
+              ended_at: "2026-08-06T00:00:00.000Z",
+            },
+            owner_hypothesis: "Target prompt contract",
+            unknowns: ["provider variance"],
+            sensitivity: "internal",
+            suggested_budget: { runs: 4, max_cost: 12 },
+          }
           const read = await host.engineArtifacts.read({
             locator: opportunityReceipt.locator,
             byte_offset: 0,
@@ -834,22 +877,64 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             purpose: "Exact opportunity predecessor for causal attribution",
           })
           ;(scope.owner as { agentID: string }).agentID = "evolution-failure-analyst"
+          const attributionPayload = {
+            symptom: "Incomplete delivery",
+            direct_trigger: "Missing source selection",
+            root_cause: "Prompt omitted exact evidence requirement",
+            causal_chain: ["The prompt omitted selection", "The worker completed with partial evidence"],
+            owner_evidence: [opportunityReceipt.locator],
+            prior_path_failure: "Earlier edits changed narration only",
+            competing_hypotheses: ["Provider variance"],
+            disproved_hypotheses: ["Workspace corruption"],
+            affected_surface: ["agents/worker/system.md"],
+            unknowns: ["holdout behavior"],
+          }
+          const attributionCountBefore = Database.use(
+            (db) =>
+              db
+                .select({ id: EngineArtifactTable.id })
+                .from(EngineArtifactTable)
+                .where(
+                  eq(
+                    EngineArtifactTable.catalog_artifact_type,
+                    "evolution-lab/failure-attribution",
+                  ),
+                )
+                .all().length,
+          )
+          await expect(
+            executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/failure-attribution",
+                payload: attributionPayload,
+                resource_set: null,
+                source_artifact_locators: [],
+              },
+              { host } as never,
+            ),
+          ).rejects.toThrow(
+            "failure-attribution requires exactly one opportunity Engine Artifact source",
+          )
+          expect(
+            Database.use(
+              (db) =>
+                db
+                  .select({ id: EngineArtifactTable.id })
+                  .from(EngineArtifactTable)
+                  .where(
+                    eq(
+                      EngineArtifactTable.catalog_artifact_type,
+                      "evolution-lab/failure-attribution",
+                    ),
+                  )
+                  .all().length,
+            ),
+          ).toBe(attributionCountBefore)
           const attributionReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
               {
                 artifact_type: "evolution-lab/failure-attribution",
-                payload: {
-                  symptom: "Incomplete delivery",
-                  direct_trigger: "Missing source selection",
-                  root_cause: "Prompt omitted exact evidence requirement",
-                  causal_chain: ["The prompt omitted selection", "The worker completed with partial evidence"],
-                  owner_evidence: [opportunityReceipt.locator],
-                  prior_path_failure: "Earlier edits changed narration only",
-                  competing_hypotheses: ["Provider variance"],
-                  disproved_hypotheses: ["Workspace corruption"],
-                  affected_surface: ["agents/worker/system.md"],
-                  unknowns: ["holdout behavior"],
-                },
+                payload: attributionPayload,
                 resource_set: null,
                 source_artifact_locators: [opportunityReceipt.locator],
               },
@@ -857,16 +942,18 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ),
           ) as { artifact_type: string; locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
           expect(attributionReceipt.artifact_type).toBe("evolution-lab/failure-attribution")
+          sourceAttributionLocator = attributionReceipt.locator as EngineArtifactLocator
+          const attributionRead = await host.engineArtifacts.read({
+            locator: attributionReceipt.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
+          expect(attributionRead.chunk.complete).toBe(true)
           expect(
-            (
-              await host.engineArtifacts.read({
-                locator: attributionReceipt.locator,
-                byte_offset: 0,
-                max_bytes: 65_536,
-                delivery: "inline",
-              })
-            ).chunk.complete,
-          ).toBe(true)
+            EngineArtifactEnvelopeSchema.parse(JSON.parse(attributionRead.chunk.text!))
+              .source_artifact_locators,
+          ).toEqual([opportunityReceipt.locator])
           await host.engineArtifacts.select({
             locator: attributionReceipt.locator,
             purpose: "Exact causal attribution for the frozen campaign specification",
@@ -924,10 +1011,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ],
           ])
           for (const name of campaignInputNames)
-            await writeFile(
-              path.join(project.path, "campaign-inputs", name),
-              campaignInputContents.get(name)!,
-            )
+            await writeFile(path.join(project.path, "campaign-inputs", name), campaignInputContents.get(name)!)
           const campaignInputPublication = await publishTaskArtifactProjectFiles({
             scope,
             source: { kind: "current_task_project" },
@@ -971,6 +1055,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             budget: { max_runs: 2, max_cost: 12 },
             mutable_paths: ["README.md"],
           }
+          sourceCampaignInput = campaignDraft
           const campaignReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
               {
@@ -1150,7 +1235,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               const trialTaskID = Identifier.ascending("task")
               const trialStarted = started + 10
               const trialCompleted = trialStarted + 1
-              persistQueuedTask({
+              persistTask({
                 taskID: trialTaskID,
                 sessionID: trialSession.id,
                 now: trialStarted - 1,
@@ -1161,7 +1246,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 priority: "normal",
                 metadata: { actor: "user" },
                 projectID: Instance.project.id,
-                queue: true,
                 packageRevision: {
                   scope: "project",
                   projectID: Instance.project.id,
@@ -1646,13 +1730,20 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         await completeFixtureTaskWithDeliverables({
           taskID,
           sessionID: session.id,
-          deliverableArtifactLocators: [sourceCampaignLocator, sourceRunLocator],
+          deliverableArtifactLocators: [
+            sourceOpportunityLocator,
+            sourceAttributionLocator,
+            sourceCampaignLocator,
+            sourceRunLocator,
+          ],
           completedAt: sourceCompleted,
         })
         const importedTaskID = Identifier.ascending("task")
         const importedSession = await Session.create({ kind: "root", title: "Imported campaign evaluation" })
         const preparedImports = await prepareCrossTaskArtifactImports({
           imports: [
+            { source_task_id: taskID, locator: sourceOpportunityLocator },
+            { source_task_id: taskID, locator: sourceAttributionLocator },
             { source_task_id: taskID, locator: sourceCampaignLocator },
             { source_task_id: taskID, locator: sourceRunLocator },
           ],
@@ -1666,7 +1757,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             toolCallID: "call-campaign-import",
           },
         })
-        persistQueuedTask({
+        persistTask({
           taskID: importedTaskID,
           sessionID: importedSession.id,
           now: sourceCompleted + 1,
@@ -1677,7 +1768,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "mission", mission: { id: missionID, session_id: missionSessionID } },
           projectID: Instance.project.id,
-          queue: true,
           artifactImports: preparedImports,
           packageRevision: {
             scope: "project",
@@ -1712,6 +1802,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         }
         const importedCampaignLocator = importedLocators.get("evolution-lab/campaign-spec")!
         const importedRunLocator = importedLocators.get("evolution-lab/run-evidence-bundle")!
+        const importedOpportunityLocator = importedLocators.get("evolution-lab/opportunity")!
+        const importedAttributionLocator = importedLocators.get("evolution-lab/failure-attribution")!
         const importedUser = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: importedSession.id,
@@ -1770,7 +1862,10 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               { artifact_locator: importedCampaignLocator, resource_role: "campaign_inputs" },
               { host } as never,
             ),
-          ) as { role_resources: Array<{ role: string }> }
+          ) as {
+            resource_set: Parameters<typeof TaskArtifactResourceSetLocatorSchema.parse>[0]
+            role_resources: Array<{ role: string; resource: { path: string } }>
+          }
           expect(rehydrated.role_resources.map((item) => item.role).sort()).toEqual([
             "case:case-1",
             "dataset",
@@ -1780,6 +1875,103 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             "scorer:correctness",
             "workspace_template",
           ])
+          const resourcePathByRole = new Map(
+            rehydrated.role_resources.map((item) => [item.role, item.resource.path]),
+          )
+          const importedCampaignInput = {
+            ...sourceCampaignInput,
+            resource_roles: {
+              dataset_path: resourcePathByRole.get("dataset")!,
+              cases: [{ case_id: "case-1", resource_path: resourcePathByRole.get("case:case-1")! }],
+              model_configuration_path: resourcePathByRole.get("model_configuration")!,
+              environment_path: resourcePathByRole.get("environment")!,
+              workspace_template_path: resourcePathByRole.get("workspace_template")!,
+              permission_snapshot_path: resourcePathByRole.get("permission_snapshot")!,
+              scorer_assets: [
+                { scorer_id: "correctness", resource_path: resourcePathByRole.get("scorer:correctness")! },
+              ],
+            },
+          }
+          for (const [locator, purpose] of [
+            [importedOpportunityLocator, "Exact imported opportunity for Campaign correlation"],
+            [importedAttributionLocator, "Exact imported attribution for Campaign correlation"],
+          ] as const) {
+            const read = await host.engineArtifacts.read({
+              locator,
+              byte_offset: 0,
+              max_bytes: 65_536,
+              delivery: "inline",
+            })
+            expect(read.chunk.complete).toBe(true)
+            await host.engineArtifacts.select({ locator, purpose })
+          }
+          ;(importedScope.owner as { agentID: string }).agentID = "evolution-observer"
+          const unrelatedOpportunity = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/opportunity",
+                payload: { ...sourceOpportunityInput, observable_symptom: "Unrelated imported-task opportunity" },
+                resource_set: null,
+                source_artifact_locators: [],
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
+          await host.engineArtifacts.read({
+            locator: unrelatedOpportunity.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
+          await host.engineArtifacts.select({
+            locator: unrelatedOpportunity.locator,
+            purpose: "Different current opportunity for imported correlation mismatch",
+          })
+          ;(importedScope.owner as { agentID: string }).agentID = "evolution-experiment-planner"
+          let mismatchedPairError: unknown
+          try {
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/campaign-spec",
+                payload: importedCampaignInput,
+                resource_set: rehydrated.resource_set,
+                source_artifact_locators: [unrelatedOpportunity.locator, importedAttributionLocator],
+              },
+              { host } as never,
+            )
+          } catch (error) {
+            mismatchedPairError = error
+          }
+          expect(mismatchedPairError).toBeInstanceOf(EvolutionArtifactIntegrityError)
+          expect((mismatchedPairError as Error).message).toBe(
+            "campaign failure-attribution must directly identify its exact opportunity source",
+          )
+          const importedPairCampaign = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/campaign-spec",
+                payload: importedCampaignInput,
+                resource_set: rehydrated.resource_set,
+                source_artifact_locators: [importedOpportunityLocator, importedAttributionLocator],
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
+          const importedPairCampaignRead = await host.engineArtifacts.read({
+            locator: importedPairCampaign.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
+          expect(
+            EngineArtifactEnvelopeSchema.parse(JSON.parse(importedPairCampaignRead.chunk.text!))
+              .source_artifact_locators.map((locator) => JSON.stringify(locator)).toSorted(),
+          ).toEqual(
+            [importedOpportunityLocator, importedAttributionLocator]
+              .map((locator) => JSON.stringify(locator))
+              .toSorted(),
+          )
+          ;(importedScope.owner as { agentID: string }).agentID = "evolution-evaluator"
           const importedMetricOutcome = JSON.parse(
             await executeEvolutionMetricsTool.execute(
               {
@@ -1820,10 +2012,10 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
       fn: async () => {
         const session = await Session.create({ kind: "root", title: "Evolution package fixture" })
         const taskID = Identifier.ascending("task")
-        const missionID = Identifier.ascending("mission")
+        const missionID = "evolution-candidate-chain"
         const missionSessionID = Identifier.ascending("session")
         const timeCreated = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: timeCreated,
@@ -1834,7 +2026,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "mission", mission: { id: missionID, session_id: missionSessionID } },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "built_in",
             projectID: null,
@@ -2293,7 +2484,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             toolCallID: "call-candidate-import",
           },
         })
-        persistQueuedTask({
+        persistTask({
           taskID: importedTaskID,
           sessionID: importedSession.id,
           now: sourceCompleted + 1,
@@ -2304,7 +2495,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "mission", mission: { id: missionID, session_id: missionSessionID } },
           projectID: Instance.project.id,
-          queue: true,
           artifactImports: preparedImports,
           packageRevision: {
             scope: "built_in",
@@ -2435,7 +2625,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         const session = await Session.create({ kind: "root", title: "Evolution evidence fixture" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started - 1,
@@ -2446,7 +2636,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "user" },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "built_in",
             projectID: null,
@@ -2621,6 +2810,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         expect(evidence.engine_artifacts.map((artifact) => artifact.kind)).toEqual([
           "task_package_revision_binding",
           "task_execution_capsule_binding",
+          "queued_operator_wake",
+          "queued_operator_wake",
           "dispatch_lineage",
         ])
         expect(evidence.revision_facts).toEqual({
@@ -2656,7 +2847,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
 
         const evidenceOwnerSession = await Session.create({ kind: "root", title: "Evolution evidence owner" })
         const evidenceOwnerTaskID = Identifier.ascending("task")
-        persistQueuedTask({
+        persistTask({
           taskID: evidenceOwnerTaskID,
           sessionID: evidenceOwnerSession.id,
           now: completed + 1,
@@ -2667,7 +2858,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "user" },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "built_in",
             projectID: null,
@@ -2952,7 +3142,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         const session = await Session.create({ kind: "root", title: "Nonterminal Trial evidence fixture" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started,
@@ -2963,7 +3153,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "user" },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "built_in",
             projectID: null,

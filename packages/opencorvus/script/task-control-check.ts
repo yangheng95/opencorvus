@@ -248,7 +248,11 @@ async function runPhaseProcess(
   }
   const readers = [
     collect(child.stdout, (text) => (stdout += text), mirrorTaskControlLines),
-    collect(child.stderr, (text) => (stderr += text), () => undefined),
+    collect(
+      child.stderr,
+      (text) => (stderr += text),
+      () => undefined,
+    ),
   ]
   let exitCode: number | undefined
   void child.exited.then((code) => (exitCode = code))
@@ -324,11 +328,15 @@ async function runDriver() {
     }
     const cleanupFailures = [cleanupFailure, isolationCleanupFailure].filter((value) => value !== undefined)
     if (primaryFailure && cleanupFailures.length > 0) {
-      throw new AggregateError([primaryFailure, ...cleanupFailures], "Task-control checker failed and cleanup left residue")
+      throw new AggregateError(
+        [primaryFailure, ...cleanupFailures],
+        "Task-control checker failed and cleanup left residue",
+      )
     }
     if (primaryFailure) throw primaryFailure
     if (cleanupFailures.length === 1) throw cleanupFailures[0]
-    if (cleanupFailures.length > 1) throw new AggregateError(cleanupFailures, "Task-control checker cleanup left residue")
+    if (cleanupFailures.length > 1)
+      throw new AggregateError(cleanupFailures, "Task-control checker cleanup left residue")
   }
 }
 
@@ -436,7 +444,6 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
         title: input.title,
         request: input.request,
         ...(process.env[MODEL]?.trim() ? { model: process.env[MODEL]!.trim() } : {}),
-        queue: false,
       }),
     })
   }
@@ -453,63 +460,65 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
       })
       taskID = lifecycleAccepted.task_id
       const lifecycleStream = await openStream()
-      const lifecycleConvergence = await lifecycleStream.waitFor("terminal worker lifecycle control convergence", async () => {
-        const current = await board()
-        const lineage = current.artifacts.find((artifact) => artifact.kind === "dispatch_lineage")
-        const childSessionID =
-          typeof lineage?.payload?.child_session_id === "string" ? lineage.payload.child_session_id : undefined
-        if (!childSessionID) return undefined
-        const lifecycle = ProtocolStore.listTaskEvents(taskID).find(
-          (event) =>
-            event.type === "agent.execution.lifecycle" &&
-            event.sessionID === childSessionID &&
-            event.payload?.status &&
-            typeof event.payload.status === "object" &&
-            (event.payload.status as { type?: unknown; reason?: unknown }).type === "terminal" &&
-            (event.payload.status as { type?: unknown; reason?: unknown }).reason === "completed",
-        )
-        if (!lifecycle) return undefined
-        const wake = current.artifacts.find(
-          (artifact) =>
-            artifact.kind === "queued_operator_wake" &&
-            artifact.label === "drained" &&
-            artifact.payload?.lifecycle_event_id === lifecycle.id,
-        )
-        if (!wake) return undefined
-        if (current.task.status !== "completed") {
-          const root = current.executionProjection.occurrences.find(
-            (occurrence) => occurrence.sessionID !== childSessionID && occurrence.kind === "orchestrator",
+      const lifecycleConvergence = await lifecycleStream.waitFor(
+        "terminal worker lifecycle control convergence",
+        async () => {
+          const current = await board()
+          const lineage = current.artifacts.find((artifact) => artifact.kind === "dispatch_lineage")
+          const childSessionID =
+            typeof lineage?.payload?.child_session_id === "string" ? lineage.payload.child_session_id : undefined
+          if (!childSessionID) return undefined
+          const lifecycle = ProtocolStore.listTaskEvents(taskID).find(
+            (event) =>
+              event.type === "agent.execution.lifecycle" &&
+              event.sessionID === childSessionID &&
+              event.payload?.status &&
+              typeof event.payload.status === "object" &&
+              (event.payload.status as { type?: unknown; reason?: unknown }).type === "terminal" &&
+              (event.payload.status as { type?: unknown; reason?: unknown }).reason === "completed",
           )
-          const pendingWake = current.artifacts.some(
+          if (!lifecycle) return undefined
+          const wake = current.artifacts.find(
             (artifact) =>
-              artifact.kind === "queued_operator_wake" && ["pending", "running"].includes(artifact.label),
+              artifact.kind === "queued_operator_wake" &&
+              artifact.label === "drained" &&
+              artifact.payload?.lifecycle_event_id === lifecycle.id,
           )
-          const allWorkersTerminal = current.executionProjection.occurrences
-            .filter((occurrence) => occurrence.kind !== "orchestrator")
-            .every((occurrence) => occurrence.latest?.status?.type === "terminal")
-          if (
-            current.task.status === "active" &&
-            root?.latest?.status?.type === "idle" &&
-            allWorkersTerminal &&
-            !pendingWake
-          ) {
-            throw new Error(
-              `Terminal lifecycle wake ${wake.id} drained while Task ${taskID} remained active with an idle Orchestrator`,
+          if (!wake) return undefined
+          if (current.task.status !== "completed") {
+            const root = current.executionProjection.occurrences.find(
+              (occurrence) => occurrence.sessionID !== childSessionID && occurrence.kind === "orchestrator",
             )
+            const pendingWake = current.artifacts.some(
+              (artifact) => artifact.kind === "queued_operator_wake" && ["pending", "running"].includes(artifact.label),
+            )
+            const allWorkersTerminal = current.executionProjection.occurrences
+              .filter((occurrence) => occurrence.kind !== "orchestrator")
+              .every((occurrence) => occurrence.latest?.status?.type === "terminal")
+            if (
+              current.task.status === "active" &&
+              root?.latest?.status?.type === "idle" &&
+              allWorkersTerminal &&
+              !pendingWake
+            ) {
+              throw new Error(
+                `Terminal lifecycle wake ${wake.id} drained while Task ${taskID} remained active with an idle Orchestrator`,
+              )
+            }
+            return undefined
           }
-          return undefined
-        }
-        const completed = ProtocolStore.listTaskEvents(taskID).find((event) => event.type === "task.completed")
-        if (!completed || completed.time.emitted < lifecycle.time.emitted) return undefined
-        return {
-          taskID,
-          childSessionID,
-          lifecycleEventID: lifecycle.id,
-          wakeID: wake.id,
-          lifecycleEmittedAt: lifecycle.time.emitted,
-          taskCompletedAt: completed.time.emitted,
-        }
-      })
+          const completed = ProtocolStore.listTaskEvents(taskID).find((event) => event.type === "task.completed")
+          if (!completed || completed.time.emitted < lifecycle.time.emitted) return undefined
+          return {
+            taskID,
+            childSessionID,
+            lifecycleEventID: lifecycle.id,
+            wakeID: wake.id,
+            lifecycleEmittedAt: lifecycle.time.emitted,
+            taskCompletedAt: completed.time.emitted,
+          }
+        },
+      )
 
       const accepted = await createTask({
         title: "Real task control convergence",
@@ -684,8 +693,9 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
           ["task_checkpoint_settlement", "task_auxiliary_settlement"].includes(artifact.kind),
         )
         settlementActivityKey = artifacts
-          .map((artifact) =>
-            `${artifact.id}:${["completed", "failed"].includes(artifact.label) ? artifact.label : "active"}`,
+          .map(
+            (artifact) =>
+              `${artifact.id}:${["completed", "failed"].includes(artifact.label) ? artifact.label : "active"}`,
           )
           .sort()
           .join("|")
@@ -748,107 +758,108 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     }
     process.stdout.write(
       `[task-control result] ${JSON.stringify({
-          status: "passed",
-          taskID,
-          lifecycleConvergence: checkpoint.lifecycleConvergence,
-          progressIngressID: checkpoint.progressIngressID,
-          recoveryIngressIDs: checkpoint.recoveryIngressIDs,
-          recoveryCompletionTimes: checkpoint.recoveryCompletionTimes,
-          childSessionID: checkpoint.childSessionID,
-          progressRunningWithinMs: checkpoint.progressRunningWithinMs,
-          workerProcess: checkpoint.workerProcess,
-          cancellationWorkerProcess: checkpoint.cancellationWorkerProcess,
-          inheritedProcessPIDs: checkpoint.inheritedProcessPIDs,
-          survivingOldPIDs,
-          workerRemainedLiveThroughProgress: true,
-          cancellationRequestEventID: checkpoint.cancellationRequestEventID,
-          cancellationRequestEventEmittedAt: checkpoint.cancellationRequestEventEmittedAt,
-          cancellationAcceptedWithinMs: checkpoint.cancellationAcceptedWithinMs,
-          cancellationTerminalWithinMs,
-          cancellationTerminalEvents: terminalEvents.length,
-          ingressDispositions,
-          checkpointSettlement: settlements.find((artifact) => artifact.kind === "task_checkpoint_settlement"),
-          auxiliarySettlement: settlements.find((artifact) => artifact.kind === "task_auxiliary_settlement"),
-          processMetrics,
-          restartPhases: ["pending_ingress", "pending_cancellation"],
-        })}\n`,
+        status: "passed",
+        taskID,
+        lifecycleConvergence: checkpoint.lifecycleConvergence,
+        progressIngressID: checkpoint.progressIngressID,
+        recoveryIngressIDs: checkpoint.recoveryIngressIDs,
+        recoveryCompletionTimes: checkpoint.recoveryCompletionTimes,
+        childSessionID: checkpoint.childSessionID,
+        progressRunningWithinMs: checkpoint.progressRunningWithinMs,
+        workerProcess: checkpoint.workerProcess,
+        cancellationWorkerProcess: checkpoint.cancellationWorkerProcess,
+        inheritedProcessPIDs: checkpoint.inheritedProcessPIDs,
+        survivingOldPIDs,
+        workerRemainedLiveThroughProgress: true,
+        cancellationRequestEventID: checkpoint.cancellationRequestEventID,
+        cancellationRequestEventEmittedAt: checkpoint.cancellationRequestEventEmittedAt,
+        cancellationAcceptedWithinMs: checkpoint.cancellationAcceptedWithinMs,
+        cancellationTerminalWithinMs,
+        cancellationTerminalEvents: terminalEvents.length,
+        ingressDispositions,
+        checkpointSettlement: settlements.find((artifact) => artifact.kind === "task_checkpoint_settlement"),
+        auxiliarySettlement: settlements.find((artifact) => artifact.kind === "task_auxiliary_settlement"),
+        processMetrics,
+        restartPhases: ["pending_ingress", "pending_cancellation"],
+      })}\n`,
     )
   } catch (error) {
     primaryFailure = error
     if (taskID) {
       try {
-        await Instance.provide({ directory: projectDirectory, fn: async () => {
-        const current = await board()
-        const assistantMessages = (
-          await Promise.all(
-            current.executionProjection.occurrences.map(async (occurrence) => ({
-              sessionID: occurrence.sessionID,
-              messages: (await Session.messages({ sessionID: occurrence.sessionID }))
-                .filter((message) => message.info.role === "assistant")
-                .slice(-3)
-                .map((message) => ({
-                  id: message.info.id,
-                  parts: message.parts.map((part) => {
-                    if (part.type === "text" || part.type === "reasoning") {
-                      return { type: part.type, characterCount: part.text.length }
-                    }
-                    if (part.type === "tool") {
-                      return {
-                        type: part.type,
-                        tool: part.tool,
-                        callID: part.callID,
-                        status: part.state.status,
-                      }
-                    }
-                    return { type: part.type }
-                  }),
+        await Instance.provide({
+          directory: projectDirectory,
+          fn: async () => {
+            const current = await board()
+            const assistantMessages = (
+              await Promise.all(
+                current.executionProjection.occurrences.map(async (occurrence) => ({
+                  sessionID: occurrence.sessionID,
+                  messages: (await Session.messages({ sessionID: occurrence.sessionID }))
+                    .filter((message) => message.info.role === "assistant")
+                    .slice(-3)
+                    .map((message) => ({
+                      id: message.info.id,
+                      parts: message.parts.map((part) => {
+                        if (part.type === "text" || part.type === "reasoning") {
+                          return { type: part.type, characterCount: part.text.length }
+                        }
+                        if (part.type === "tool") {
+                          return {
+                            type: part.type,
+                            tool: part.tool,
+                            callID: part.callID,
+                            status: part.state.status,
+                          }
+                        }
+                        return { type: part.type }
+                      }),
+                    })),
                 })),
-            })),
-          )
-        ).filter((session) => session.messages.length > 0)
-        const rootSessionID = current.artifacts
-          .filter((artifact) => artifact.kind === "queued_operator_wake")
-          .map((artifact) => artifact.payload?.root_session_id)
-          .find((value): value is string => typeof value === "string")
-        const ownedPromptSessions = listOwnedPromptSessionsForTask(taskID)
-        const evidence = {
-          phase,
-          taskID,
-          currentProjectID: Instance.project.id,
-          taskStatus: current.task.status,
-          startedIncompleteTaskIDs: listStartedIncompleteTaskIDs({ projectID: Instance.project.id }),
-          ownedPromptSessions,
-          interruptedSessionEvidence: rootSessionID
-            ? listInterruptedSessionEvidence({
-                taskID,
-                rootSessionID,
-                ownedSessionIDs: new Set(ownedPromptSessions.map((owner) => owner.sessionID)),
-              }).map((entry) => ({ sessionID: entry.session_id, inputMessageID: entry.input_message_id }))
-            : [],
-          wakes: current.artifacts
-            .filter((artifact) => artifact.kind === "queued_operator_wake")
-            .map((artifact) => ({ id: artifact.id, status: artifact.label })),
-          lineages: current.artifacts
-            .filter((artifact) => artifact.kind === "dispatch_lineage")
-            .map((artifact) => ({ id: artifact.id, status: artifact.label })),
-          recoveryArtifacts: current.artifacts
-            .filter((artifact) =>
-              ["task-infrastructure-error", "task_loop_launch", "task_wait_job"].includes(artifact.kind),
-            )
-            .map((artifact) => ({ id: artifact.id, kind: artifact.kind, status: artifact.label })),
-          executionCount: current.executionProjection.occurrences.length,
-          assistantMessages,
-          recentProtocolEvents: ProtocolStore.listTaskEvents(taskID)
-            .slice(-20)
-            .map((event) => ({
-              id: event.id,
-              type: event.type,
-              sessionID: event.sessionID,
-              emittedAt: event.time.emitted,
-            })),
-        }
-        process.stderr.write(`[task-control failure evidence] ${JSON.stringify(evidence)}\n`)
-        } })
+              )
+            ).filter((session) => session.messages.length > 0)
+            const rootSessionID = current.artifacts
+              .filter((artifact) => artifact.kind === "queued_operator_wake")
+              .map((artifact) => artifact.payload?.root_session_id)
+              .find((value): value is string => typeof value === "string")
+            const ownedPromptSessions = listOwnedPromptSessionsForTask(taskID)
+            const evidence = {
+              phase,
+              taskID,
+              currentProjectID: Instance.project.id,
+              taskStatus: current.task.status,
+              startedIncompleteTaskIDs: listStartedIncompleteTaskIDs({ projectID: Instance.project.id }),
+              ownedPromptSessions,
+              interruptedSessionEvidence: rootSessionID
+                ? listInterruptedSessionEvidence({
+                    taskID,
+                    rootSessionID,
+                    ownedSessionIDs: new Set(ownedPromptSessions.map((owner) => owner.sessionID)),
+                  }).map((entry) => ({ sessionID: entry.session_id, inputMessageID: entry.input_message_id }))
+                : [],
+              wakes: current.artifacts
+                .filter((artifact) => artifact.kind === "queued_operator_wake")
+                .map((artifact) => ({ id: artifact.id, status: artifact.label })),
+              lineages: current.artifacts
+                .filter((artifact) => artifact.kind === "dispatch_lineage")
+                .map((artifact) => ({ id: artifact.id, status: artifact.label })),
+              recoveryArtifacts: current.artifacts
+                .filter((artifact) => ["task-infrastructure-error", "task_wait_job"].includes(artifact.kind))
+                .map((artifact) => ({ id: artifact.id, kind: artifact.kind, status: artifact.label })),
+              executionCount: current.executionProjection.occurrences.length,
+              assistantMessages,
+              recentProtocolEvents: ProtocolStore.listTaskEvents(taskID)
+                .slice(-20)
+                .map((event) => ({
+                  id: event.id,
+                  type: event.type,
+                  sessionID: event.sessionID,
+                  emittedAt: event.time.emitted,
+                })),
+            }
+            process.stderr.write(`[task-control failure evidence] ${JSON.stringify(evidence)}\n`)
+          },
+        })
       } catch (diagnosticError) {
         process.stderr.write(
           `[task-control failure evidence unavailable] ${
