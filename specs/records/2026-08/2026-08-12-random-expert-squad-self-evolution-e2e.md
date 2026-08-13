@@ -2918,6 +2918,11 @@ with that reference before the final Requirements message. There is no minted te
 The Requirements file exits cleanly with `9 pass / 13 assertions`; the companion Fact Check file exits with
 `5 pass / 5 assertions`.
 
+After those fixes were committed, `origin/main` advanced again with compact default identity issuance. It was merged
+without rebase. The shared algorithm test retained this phase's removal of business Task admission while adopting the
+new per-identity compact logical clock and 24-character contract. The merged algorithm file exits with
+`22 pass / 77 assertions`; the dedicated compact-identity file exits with `3 pass / 473 assertions`.
+
 Real acceptance used dev source on random port `54859`, random isolated project
 `.scratch/ui-queue-9cb5529ca75d/project`, and isolated SQLite runtime under the same scratch occurrence. Global
 `auth.json` and `models.json` were copied into the isolated runtime and separately verified by hash equality; the Web
