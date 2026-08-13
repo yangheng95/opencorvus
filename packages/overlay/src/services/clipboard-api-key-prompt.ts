@@ -205,15 +205,17 @@ export function installClipboardApiKeyPrompt(): ClipboardApiKeyPromptController 
     }, CLIPBOARD_CHECK_DELAY_MILLISECONDS)
   }
 
-  void getCurrentWindow()
-    .onFocusChanged(({ payload: focused }) => {
-      if (focused) scheduleCheck()
-    })
-    .then((unlisten) => {
-      if (disposed) unlisten()
-      else removeFocusListener = unlisten
-    })
-    .catch(() => undefined)
+  if (transport.capabilities.nativeCommands["clipboard.readText"]) {
+    void getCurrentWindow()
+      .onFocusChanged(({ payload: focused }) => {
+        if (focused) scheduleCheck()
+      })
+      .then((unlisten) => {
+        if (disposed) unlisten()
+        else removeFocusListener = unlisten
+      })
+      .catch(() => undefined)
+  }
 
   return {
     checkNow,

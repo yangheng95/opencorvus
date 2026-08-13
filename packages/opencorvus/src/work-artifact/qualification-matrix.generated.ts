@@ -12,7 +12,7 @@ export const GENERATED_WORK_ARTIFACT_QUALIFICATION_MATRIX = {
     },
     {
       "id": "work_artifact_author",
-      "schema_sha256": "371e731e97f9390b8469ffdbd748cf636e1d0fec3777328c35d4a56fce1d5e79"
+      "schema_sha256": "25677298ab60d66e047effdc98bcdb2a0d4e20c694f0c57711d61314488d7090"
     },
     {
       "id": "work_artifact_validate",
@@ -44,7 +44,7 @@ export const GENERATED_WORK_ARTIFACT_QUALIFICATION_MATRIX = {
     "outputBytes": 83886080,
     "pagesOrFrames": 40,
     "wallClockMs": 120000,
-    "parserWallClockMs": 10000
+    "parserWallClockMs": 30000
   },
   "targets": [
     {

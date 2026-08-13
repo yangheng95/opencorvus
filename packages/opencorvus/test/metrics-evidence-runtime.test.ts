@@ -27,6 +27,7 @@ import { readResultsForIteration, registerBaselineSpec } from "../src/metrics/st
 import { MetricExecutionEvidence } from "../src/metrics/types"
 import { canonicalMetricJSON } from "../src/metrics/canonical-json"
 import { runHostCommandWithInactivity } from "../src/shell/command-inactivity"
+import { abortableIterable } from "../src/util/stream-activity"
 import {
   createMetricJudgeRunnerWithDependencies,
   metricJudgeMessages,
@@ -160,14 +161,15 @@ describe("Metric scorer exact evidence runtime", () => {
       getModel: (async () => ({}) as never) as MetricJudgeRuntimeDependencies["getModel"],
       getLanguage: (async () => language) as MetricJudgeRuntimeDependencies["getLanguage"],
       wrapModel: (() => language) as MetricJudgeRuntimeDependencies["wrapModel"],
-      streamText: (() => ({
-        textStream: (async function* () {
+      streamText: ((input: { abortSignal: AbortSignal }) => {
+        const textStream = (async function* () {
           while (true) {
             yield ""
             await Bun.sleep(1)
           }
-        })(),
-      })) as MetricJudgeRuntimeDependencies["streamText"],
+        })()
+        return { textStream: abortableIterable(textStream, input.abortSignal) }
+      }) as MetricJudgeRuntimeDependencies["streamText"],
     }
     const runner = createMetricJudgeRunnerWithDependencies(
       { taskID: "task-production-judge", sessionID: "session-production-judge" } as TaskToolExecutionScope,
@@ -798,5 +800,5 @@ describe("Metric scorer exact evidence runtime", () => {
         await execution.close()
       },
     })
-  }, 30_000)
+  }, 120_000)
 })

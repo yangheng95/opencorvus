@@ -70,7 +70,7 @@ describe("Expert Squad implementation swimlanes 07-09", () => {
         id: definition.id,
         name: definition.name,
         label: definition.name,
-        version: "2026.08.10.1",
+        version: "2026.08.13.1",
         product_pillars: ["work"],
       })
       expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(agentIDs)
@@ -121,7 +121,7 @@ describe("Expert Squad implementation swimlanes 07-09", () => {
           })
           expect(scheduler).toMatchObject({
             expertSquadID: definition.id,
-            packageRevision: { id: definition.id, version: "2026.08.10.1" },
+            packageRevision: { id: definition.id, version: "2026.08.13.1" },
           })
           expect(scheduler.productionSkills).toMatchObject([
             {
@@ -143,7 +143,7 @@ describe("Expert Squad implementation swimlanes 07-09", () => {
             })
             expect(worker).toMatchObject({
               expertSquadID: definition.id,
-              packageRevision: { id: definition.id, version: "2026.08.10.1" },
+              packageRevision: { id: definition.id, version: "2026.08.13.1" },
               productionSkills: [
                 {
                   authority: "manifest",

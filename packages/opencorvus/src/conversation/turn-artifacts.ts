@@ -54,7 +54,9 @@ function locatorIdentity(value: unknown): string | undefined {
     return `engine_artifact:${locator.artifact_id}:${locator.catalog_revision}:${locator.expected_sha256}`
   }
   if (locator.source === "task_artifact_snapshot") return snapshotIdentity(locator.snapshot)
-  if (locator.source === "task_artifact_resource") return snapshotIdentity(locator.ref.snapshot)
+  if (locator.source === "task_artifact_resource") {
+    return `task_artifact_resource:${resourceIdentity(locator.ref)}`
+  }
   return undefined
 }
 

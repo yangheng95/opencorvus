@@ -31,4 +31,14 @@ export const OmnichannelArtifactSchemas = {
 
 export const OmnichannelArtifactTypeSchema = tool.schema.enum(Object.keys(OmnichannelArtifactSchemas) as [keyof typeof OmnichannelArtifactSchemas, ...(keyof typeof OmnichannelArtifactSchemas)[]])
 export type OmnichannelArtifactType = tool.schema.infer<typeof OmnichannelArtifactTypeSchema>
+export const OmnichannelPublishableArtifactInputSchema = tool.schema.discriminatedUnion("artifact_type", [
+  tool.schema.object({ artifact_type: tool.schema.literal("omnichannel-distribution/campaign-brief"), payload: OmnichannelArtifactSchemas["omnichannel-distribution/campaign-brief"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("omnichannel-distribution/channel-spec-dossier"), payload: OmnichannelArtifactSchemas["omnichannel-distribution/channel-spec-dossier"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("omnichannel-distribution/rights-compliance-matrix"), payload: OmnichannelArtifactSchemas["omnichannel-distribution/rights-compliance-matrix"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("omnichannel-distribution/channel-pack"), payload: OmnichannelArtifactSchemas["omnichannel-distribution/channel-pack"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("omnichannel-distribution/measurement-plan"), payload: OmnichannelArtifactSchemas["omnichannel-distribution/measurement-plan"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("omnichannel-distribution/distribution-plan"), payload: OmnichannelArtifactSchemas["omnichannel-distribution/distribution-plan"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("omnichannel-distribution/readiness-review"), payload: OmnichannelArtifactSchemas["omnichannel-distribution/readiness-review"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("omnichannel-distribution/delivery"), payload: OmnichannelArtifactSchemas["omnichannel-distribution/delivery"] }).strict(),
+])
 export function parseOmnichannelArtifact(type: OmnichannelArtifactType, payload: unknown) { return OmnichannelArtifactSchemas[type].parse(payload) }

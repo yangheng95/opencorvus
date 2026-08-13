@@ -18,6 +18,7 @@
     "check:dead-code": "bunx knip@6.27.0 --config knip.config.js --no-progress --production --include files,dependencies,unlisted,binaries --workspace packages/channel-config --workspace packages/channel-runtime --workspace packages/opencorvus --workspace packages/overlay --workspace packages/plugin --workspace packages/script --workspace packages/sdk/js --workspace packages/util",
     "check:sdk-imports": "bun run ./script/check-sdk-imports.ts",
     "check:ai-runtime": "bun run ./script/check-ai-runtime.ts",
+    "check:expert-squad-topology": "bun run ./packages/opencorvus/script/check-builtin-expert-squad-topology.ts",
     "typecheck": "bun run check:sdk-imports && bun run check:ai-runtime && bunx turbo run typecheck",
     "typecheck:fresh": "bun run ./script/clean-cache.ts && bun run typecheck",
     "docs:api": "bun run ./packages/opencorvus/script/docs/render-api-md.ts",

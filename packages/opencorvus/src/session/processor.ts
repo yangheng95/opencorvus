@@ -14,7 +14,6 @@ import { EffectiveConfig } from "@/config/effective"
 import { EngineConfig } from "@/engine/config"
 import { CompactionOverflow } from "./compaction-overflow"
 import { PermissionAuthority } from "@/permission/authority"
-import { abortableIterable } from "@/util/stream-activity"
 import {
   withLLMActivity,
   chunkHeartbeatKind,
@@ -42,6 +41,7 @@ import {
 } from "@/tool/result-attachment-materialization"
 import { Instance } from "@/project/instance"
 import { persistMessageSources } from "./source-persistence"
+import { normalizeToolResult } from "./tool-result-normalization"
 
 export namespace SessionProcessor {
   const DOOM_LOOP_THRESHOLD = 3
@@ -434,6 +434,7 @@ export namespace SessionProcessor {
         }
         {
           let currentText: Message.TextPart | undefined
+          let currentTextStreamID: string | undefined
           let reasoningMap: Record<string, Message.ReasoningPart> = {}
           const flushReasoningDeltas = async () => {
             const buffered = [...reasoningDeltaBuf]
@@ -565,7 +566,10 @@ export namespace SessionProcessor {
               for (const toolCallID of scope.toolCallIDs) {
                 delete toolcalls[toolCallID]
               }
-              if (currentText && scope.createdPartIDs.has(currentText.id)) currentText = undefined
+              if (currentText && scope.createdPartIDs.has(currentText.id)) {
+                currentText = undefined
+                currentTextStreamID = undefined
+              }
               for (const [reasoningID, part] of Object.entries(reasoningMap)) {
                 if (scope.createdPartIDs.has(part.id)) delete reasoningMap[reasoningID]
               }
@@ -583,11 +587,11 @@ export namespace SessionProcessor {
               async (run) => {
                 const stream = await LLM.stream({ ...streamInput, abort: run.signal })
 
-                for await (const value of abortableIterable(stream.fullStream, run.signal)) {
+                // LLM.stream returns the canonical @/llm/api wrapped stream.
+                for await (const value of stream.fullStream) {
                   run.bump("first-byte")
                   await streamInput.stream?.onChunk?.({ chunk: value } as never)
-                  const heartbeatKind = chunkHeartbeatKind(value as unknown as Record<string, unknown>)
-                  if (heartbeatKind) run.bump(heartbeatKind)
+                  let semanticChunkAccepted = false
                   run.signal.throwIfAborted()
                   switch (value.type) {
                     case "start":
@@ -612,6 +616,7 @@ export namespace SessionProcessor {
                       reasoningMap[value.id] = reasoningPart
                       await Session.updatePart(reasoningPart)
                       trackCreatedPart(run.attempt, reasoningPart.id)
+                      semanticChunkAccepted = true
                       break
 
                     case "reasoning-delta":
@@ -625,6 +630,7 @@ export namespace SessionProcessor {
                         const prev = reasoningDeltaBuf.get(bufKey) || ""
                         reasoningDeltaBuf.set(bufKey, prev + value.text)
                         scheduleReasoningFlush()
+                        semanticChunkAccepted = true
                       }
                       break
 
@@ -643,6 +649,7 @@ export namespace SessionProcessor {
                         if (value.providerMetadata) part.metadata = value.providerMetadata
                         await Session.updatePart(part)
                         delete reasoningMap[value.id]
+                        semanticChunkAccepted = true
                       }
                       break
 
@@ -681,6 +688,7 @@ export namespace SessionProcessor {
                         return part
                       })
                       toolcalls[toolCallID] = part as Message.ToolPart
+                      semanticChunkAccepted = true
                       break
                     }
 
@@ -715,6 +723,7 @@ export namespace SessionProcessor {
                             await lifecycle.partial(toolCallID, partial.value as Record<string, unknown>)
                           }
                         }
+                        semanticChunkAccepted = true
                       }
                       break
                     }
@@ -788,6 +797,7 @@ export namespace SessionProcessor {
                           `Repeated identical Tool call detected for ${value.toolName}; execution stopped before a duplicate effect.`,
                         )
                       }
+                      semanticChunkAccepted = true
                       break
                     }
                     case "tool-result": {
@@ -797,17 +807,23 @@ export namespace SessionProcessor {
                       // matching tool-call after a recovery), so this is safe to
                       // run unconditionally before the match check.
                       run.resume(toolPauseOwner(value.toolCallId))
-                      const output = value.output as {
-                        output: string
-                        title: string
-                        metadata: Record<string, unknown>
-                        attachments?: Message.FilePart[]
-                        display?: unknown
-                        sources?: unknown
-                      }
+                      const output = normalizeToolResult(value.output)
                       const metadata = output.metadata
                       await completeToolPart(
-                        { toolCallId: value.toolCallId, input: value.input, output },
+                        {
+                          toolCallId: value.toolCallId,
+                          input: value.input,
+                          output: {
+                            output: output.output,
+                            title: output.title,
+                            metadata: output.metadata,
+                            ...(Array.isArray(output.attachments)
+                              ? { attachments: output.attachments as Message.FilePart[] }
+                              : {}),
+                            ...(output.display !== undefined ? { display: output.display } : {}),
+                            ...(output.sources !== undefined ? { sources: output.sources } : {}),
+                          },
+                        },
                         (partID) => trackCreatedPart(run.attempt, partID),
                       )
                       const control = toolResultControl(metadata)
@@ -825,6 +841,7 @@ export namespace SessionProcessor {
                         input.assistantMessage.finish = "tool-calls"
                         parkAfterToolResult = true
                       }
+                      semanticChunkAccepted = true
                       break
                     }
 
@@ -833,6 +850,7 @@ export namespace SessionProcessor {
                       // Pair with the exact call-owned pause from tool-call (errors close the
                       // tool-call window just like results).
                       run.resume(toolPauseOwner(value.toolCallId))
+                      let toolErrorAccepted = false
                       await withToolPartLock(value.toolCallId, async () => {
                         const match = toolcalls[value.toolCallId] ?? (await priorToolPart(value.toolCallId))
                         if (match && (match.state.status === "running" || match.state.status === "pending")) {
@@ -864,9 +882,11 @@ export namespace SessionProcessor {
                             blocked = shouldBreak
                           }
                           delete toolcalls[value.toolCallId]
+                          toolErrorAccepted = true
                         }
                       })
                       mcpAppCalls.delete(value.toolCallId)
+                      semanticChunkAccepted = toolErrorAccepted
                       break
                     }
                     case "error":
@@ -884,6 +904,7 @@ export namespace SessionProcessor {
                         })
                         trackCreatedPart(run.attempt, part.id)
                       }
+                      semanticChunkAccepted = true
                       break
 
                     case "finish-step":
@@ -952,9 +973,11 @@ export namespace SessionProcessor {
                       ) {
                         needsCompaction = true
                       }
+                      semanticChunkAccepted = true
                       break
 
                     case "text-start":
+                      currentTextStreamID = value.id
                       currentText = {
                         id: Identifier.ascending("part"),
                         messageID: input.assistantMessage.id,
@@ -968,10 +991,11 @@ export namespace SessionProcessor {
                       }
                       await Session.updatePart(currentText)
                       trackCreatedPart(run.attempt, currentText.id)
+                      semanticChunkAccepted = true
                       break
 
                     case "text-delta":
-                      if (currentText) {
+                      if (currentText && value.id === currentTextStreamID) {
                         currentText.text += value.text
                         if (value.providerMetadata) currentText.metadata = value.providerMetadata
                         await Session.updatePartDelta({
@@ -981,11 +1005,12 @@ export namespace SessionProcessor {
                           field: "text",
                           delta: value.text,
                         })
+                        semanticChunkAccepted = true
                       }
                       break
 
                     case "text-end":
-                      if (currentText) {
+                      if (currentText && value.id === currentTextStreamID) {
                         currentText.text = currentText.text.trimEnd()
                         const textOutput = await Plugin.trigger(
                           "experimental.text.complete",
@@ -1004,8 +1029,10 @@ export namespace SessionProcessor {
                         if (value.providerMetadata) currentText.metadata = value.providerMetadata
 
                         await Session.updatePart(currentText)
+                        semanticChunkAccepted = true
+                        currentText = undefined
+                        currentTextStreamID = undefined
                       }
-                      currentText = undefined
                       break
 
                     case "source": {
@@ -1041,11 +1068,15 @@ export namespace SessionProcessor {
                       await streamInput.stream?.onFinish?.(value as never)
                       break
 
-                    default:
+                  default:
                       log.info("unhandled", {
                         ...value,
                       })
                       continue
+                  }
+                  if (semanticChunkAccepted) {
+                    const heartbeatKind = chunkHeartbeatKind(value as unknown as Record<string, unknown>)
+                    if (heartbeatKind) run.bump(heartbeatKind)
                   }
                   if (needsCompaction) break
                   if (parkAfterToolResult) break

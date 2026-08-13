@@ -1,5 +1,13 @@
 # Specs Storage Index
 
+Latest Expert Squad real-GUI zero-intervention sampling program: [`2026-08-13-expert-squad-gui-zero-intervention-sampling.md`](records/2026-08/2026-08-13-expert-squad-gui-zero-intervention-sampling.md).
+
+Latest Work capability incident diagnosis and route-authority hardening: [`2026-08-13-work-capability-unavailable-repair.md`](records/2026-08/2026-08-13-work-capability-unavailable-repair.md).
+
+Work capability connected-page first-screen evidence: [`2026-08-13-work-capability-connected.png`](artifacts/2026-08-13-work-capability-connected.png).
+
+Latest Scheduled global inactivity configuration ownership repair: [`2026-08-13-scheduled-global-inactivity-config-ownership.md`](records/2026-08/2026-08-13-scheduled-global-inactivity-config-ownership.md).
+
 Latest homepage OpenCorvus Harness memory point, first-viewport UI gallery, and bilingual README alignment: [`2026-08-13-homepage-harness-gallery-and-readme.md`](records/2026-08/2026-08-13-homepage-harness-gallery-and-readme.md).
 
 Latest startup-surface visual redesign: [`2026-08-12-startup-surface-visual-redesign.md`](records/2026-08/2026-08-12-startup-surface-visual-redesign.md).

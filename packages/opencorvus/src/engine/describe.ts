@@ -1210,7 +1210,7 @@ export function renderTaskDescription(desc: TaskDesc): string {
   }
   lines.push("## Durable evidence")
   lines.push(
-    "The Task Artifact Catalog is the only durable evidence inventory. Use artifact_search to enumerate it, artifact_read with an exact locator to inspect every byte, and artifact_select to declare each semantic source of a typed output. Complete but unselected reads remain observations; zero selections are valid. This Task description does not copy Artifact IDs, payload summaries, paths, or domain inventories.",
+    "The Task Artifact Catalog is the only durable evidence inventory. Use artifact_search to enumerate it, pass artifact_locator_ref to artifact_read until complete, and pass artifact_read_ref to artifact_select for each semantic source of a typed output. Complete but unselected reads remain observations; zero selections are valid. This Task description does not copy Artifact IDs, payload summaries, paths, or domain inventories.",
   )
   if (desc.error) lines.push(`Error: ${desc.error}`)
   lines.push(

@@ -3,6 +3,7 @@ import path from "node:path"
 import { persistQueuedTask } from "../../src/engine/pipeline"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
 import {
+  executePackageToolInCapsule,
   introspectPackageToolInCapsule,
   nativePackageToolEnvironment,
 } from "../../src/expert-squad/package-tool-capsule"
@@ -62,41 +63,127 @@ describe("native Task package-tool process authority", () => {
           }),
         })
 
-        const [introspection, concurrentIntrospection] = await Promise.all([
-          introspectPackageToolInCapsule({ prepared, taskID, cwd: project.path }),
-          introspectPackageToolInCapsule({ prepared, taskID, cwd: project.path }),
-        ])
-        expect(concurrentIntrospection).toEqual(introspection)
+        const introspections = await Promise.all(
+          Array.from({ length: 8 }, () =>
+            introspectPackageToolInCapsule({ prepared, taskID, cwd: project.path }),
+          ),
+        )
+        const introspection = introspections[0]!
+        expect(introspections).toEqual(Array.from({ length: 8 }, () => introspection))
         expect(introspection.description).toBe(
           "Validate and publish one strict viral-content Artifact with exact typed predecessors and immutable resources. Publish viral-content/delivery before any interactive Artifact and give it exactly the six typed campaign predecessors; never include snapshot, document@1, table@1, or other interactive Artifact locators.",
         )
         expect(introspection.inputSchema.type).toBe("object")
         expect(Object.keys(introspection.inputSchema.properties as Record<string, unknown>)).toEqual([
-          "artifact_type",
-          "payload",
+          "artifact",
           "resource_set",
           "source_artifact_locators",
         ])
         expect(introspection.inputSchema.required).toEqual([
-          "artifact_type",
-          "payload",
+          "artifact",
           "resource_set",
           "source_artifact_locators",
         ])
+        const artifactBranches = (
+          introspection.inputSchema.properties as Record<
+            string,
+            { oneOf?: Array<{ properties: { artifact_type: { const: string }; payload: { type: string } } }> }
+          >
+        ).artifact?.oneOf
         expect(
-          (introspection.inputSchema.properties as Record<string, { enum?: string[] }>).artifact_type?.enum,
+          artifactBranches?.map((branch) => ({
+            artifactType: branch.properties.artifact_type.const,
+            payloadType: branch.properties.payload.type,
+          })),
         ).toEqual([
-          "viral-content/campaign-brief",
-          "viral-content/audience-dossier",
-          "viral-content/trend-dossier",
-          "viral-content/concept-set",
-          "viral-content/copy-pack",
-          "viral-content/review",
-          "viral-content/delivery",
+          { artifactType: "viral-content/campaign-brief", payloadType: "object" },
+          { artifactType: "viral-content/audience-dossier", payloadType: "object" },
+          { artifactType: "viral-content/trend-dossier", payloadType: "object" },
+          { artifactType: "viral-content/concept-set", payloadType: "object" },
+          { artifactType: "viral-content/copy-pack", payloadType: "object" },
+          { artifactType: "viral-content/review", payloadType: "object" },
+          { artifactType: "viral-content/delivery", payloadType: "object" },
         ])
         expect(nativePackageToolEnvironment()).toEqual(
           process.platform === "win32" ? { SystemRoot: process.env.SystemRoot ?? process.env.SYSTEMROOT } : {},
         )
+
+        const published = {
+          locator: {
+            artifact_id: "art_package_tool_native_runtime",
+            task_id: taskID,
+            catalog_revision: 1,
+            payload_sha256: "b".repeat(64),
+          },
+          sha256: "b".repeat(64),
+        }
+        const host = {
+          kind: "task",
+          managedRuntimeDirectory: project.path,
+          engineArtifacts: {
+            publish: async () => published,
+          },
+        } as any
+        const context = {
+          sessionID: session.id,
+          messageID: Identifier.ascending("message"),
+          agent: "viral-brief-strategist",
+          directory: project.path,
+          worktree: project.path,
+          configuration: {},
+        }
+        const execution = await executePackageToolInCapsule({
+          prepared,
+          taskID,
+          cwd: project.path,
+          host,
+          context,
+          args: {
+            artifact: {
+              artifact_type: "viral-content/campaign-brief",
+              payload: {
+                workflow_id: "evidence-backed-content-campaign",
+                campaign_name: "Native package-tool lifecycle",
+                goal: "Prove terminal process settlement",
+                audience_hypotheses: ["Maintainers need deterministic cleanup evidence"],
+                offer: "One exact terminal worker result",
+                channels: ["repository test"],
+                constraints: ["No external side effects"],
+                evidence_questions: ["Did the worker return and naturally exit?"],
+                success_hypotheses: ["The exact publication receipt returns before the cleanup deadline"],
+              },
+            },
+            resource_set: null,
+            source_artifact_locators: [],
+          },
+          abort: new AbortController().signal,
+        })
+        expect(execution).toEqual({
+          output: JSON.stringify({
+            artifact_type: "viral-content/campaign-brief",
+            schema_version: 1,
+            locator: published.locator,
+            artifact_sha256: published.sha256,
+          }),
+          title: "Viral Content: campaign-brief",
+          metadata: {},
+        })
+
+        await expect(
+          executePackageToolInCapsule({
+            prepared,
+            taskID,
+            cwd: project.path,
+            host,
+            context: { ...context, messageID: Identifier.ascending("message") },
+            args: {
+              artifact: { artifact_type: "viral-content/campaign-brief", payload: {} },
+              resource_set: null,
+              source_artifact_locators: [],
+            },
+            abort: new AbortController().signal,
+          }),
+        ).rejects.toThrow(/workflow_id/)
       },
     })
   }, 0)

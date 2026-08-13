@@ -538,9 +538,9 @@ export const publicMarketZhTranslations68To99 = {
       "通过持久的目录事实和可见的叙事型 Turn 摘要，完成有证据支持的产品审查、根因调试、产品源码修复和独立修复验证。",
     selectorSummary: "适用于现有产品变更审查、可复现缺陷调查、根因调试、产品修复和修复验证。",
     agents: {
-      "review-debug-evidence-investigator": {
-        label: "审查与调试证据调查员",
-        description: "复现已观察症状，盘点运行时和代码仓库证据，并界定受影响的产品范围。",
+      "review-debug-planner": {
+        label: "审查与调试规划师",
+        description: "发布复现边界、因果调查范围、路径所有权和验收分配。",
       },
       "review-debug-code-reviewer": {
         label: "审查与调试代码审查员",
@@ -554,50 +554,35 @@ export const publicMarketZhTranslations68To99 = {
         label: "审查与调试修复实施员",
         description: "修复已证明的产品根因，移除被取代路径，添加回归测试并验证变更范围。",
       },
-      "review-debug-integrity-reviewer": {
-        label: "审查与调试完整性审查员",
-        description: "独立审查修复差异，并重新运行原始复现和聚焦回归检查。",
-      },
-      "review-debug-visual-investigator": {
-        label: "审查与调试视觉调查员",
-        description: "在真实、Task 范围内的预览中复现图形缺陷，并捕获受影响状态、交互、截图和诊断信息。",
-      },
-      "review-debug-visual-reviewer": {
-        label: "审查与调试视觉审查员",
-        description: "使用全新的浏览器截图、交互、焦点路径和诊断信息，独立验证修复后的图形状态。",
-      },
     },
     workflows: {
       "review-only": {
         label: "有证据支持的审查",
         description: "确立确切需求、审查目标、差异和调用图证据，再给出有证据支持的代码审查，不暗示已修复产品。",
         nodes: {
-          "review-debug-evidence-investigator": "确立确切需求、审查目标、差异、检查和受影响的调用图。",
+          "review-debug-planner": "发布审查目标、证据边界、路径所有权和验收分配。",
           "review-debug-code-reviewer": "依据已确立证据审查变更及周边调用图。",
+          "review-debug-root-cause-investigator": "独立检查潜在因果链与旧路径未根治原因。",
         },
       },
       "debug-repair": {
         label: "产品调试与修复",
         description: "复现缺陷、独立审查代码并证明根因、修复产品，再独立验证修复。",
         nodes: {
-          "review-debug-evidence-investigator": "复现缺陷并确立准确证据和受影响范围。",
+          "review-debug-planner": "发布复现边界、因果调查范围、路径所有权和验收分配。",
           "review-debug-code-reviewer": "审查受影响调用图及现有变更的正确性和回归风险。",
           "review-debug-root-cause-investigator": "证明因果链，并说明先前路径为何未能消除缺陷。",
           "review-debug-repair-implementer": "修复已证明的根因并添加聚焦回归覆盖。",
-          "review-debug-integrity-reviewer": "独立审查差异并重新运行复现和回归检查。",
         },
       },
       "visual-debug-repair": {
         label: "图形产品调试与修复",
         description: "复现图形缺陷、证明代码与视觉成因、完成修复，并独立核验新的浏览器和代码仓库证据。",
         nodes: {
-          "review-debug-evidence-investigator": "确立所报告的症状、产品边界、代码仓库证据和预览目标。",
+          "review-debug-planner": "发布图形复现、因果调查、路径所有权和真实页面验收分配。",
           "review-debug-code-reviewer": "审查图形实现调用图和回归风险。",
           "review-debug-root-cause-investigator": "证明产品数据、事件、渲染或样式的因果链。",
-          "review-debug-visual-investigator": "在真实、Task 范围内的预览中捕获损坏的图形状态和交互证据。",
           "review-debug-repair-implementer": "修复已证明的图形产品根因并添加回归覆盖。",
-          "review-debug-integrity-reviewer": "独立审查修复差异和代码仓库回归证据。",
-          "review-debug-visual-reviewer": "使用新截图、交互、焦点路径和诊断信息验证修复后的状态。",
         },
       },
     },
@@ -982,9 +967,9 @@ export const publicMarketZhTranslations68To99 = {
         label: "生成 Expert Squad 来源分析员",
         description: "提取源算法、领域边界、参与者、证据流、资源、可移植性约束和验收契约。",
       },
-      "squad-sdk-package-architect": {
-        label: "生成 Expert Squad 包架构师",
-        description: "将已接受的来源证据转化为最小而完整的 SDK 蓝图和具有约束力的工作流拓扑。",
+      "squad-sdk-planner": {
+        label: "生成 Expert Squad 规划师",
+        description: "发布包边界、优先扁平的 Planner/并行 worker 拓扑、资源闭包和验收分配。",
       },
       "squad-sdk-import-analyst": {
         label: "生成 Expert Squad 导入分析员",
@@ -1000,8 +985,8 @@ export const publicMarketZhTranslations68To99 = {
         label: "生成 Expert Squad 创作",
         description: "提取领域算法，设计一份规范的包蓝图，独立验证，再通过 SDK 创作工具将其具体化。",
         nodes: {
+          "squad-sdk-planner": "发布规范包蓝图、并行 worker 分区与验收分配。",
           "source-analysis": "发布源算法和包边界证据。",
-          "package-architecture": "发布完整的 SDK 创作蓝图。",
           "contract-review": "发布对准确蓝图的独立正向验证。",
         },
       },
@@ -1009,6 +994,7 @@ export const publicMarketZhTranslations68To99 = {
         label: "异构 Squad 导入",
         description: "检查外部 Squad 和预览证据，修复映射，独立验证准确 digest，再执行一次导入。",
         nodes: {
+          "squad-sdk-planner": "发布导入边界、映射责任和验收分配。",
           "import-analysis": "发布所选外部 Squad 的来源、可移植性和映射分析。",
           "contract-review": "发布对无阻塞预览和准确映射的独立正向验证。",
         },

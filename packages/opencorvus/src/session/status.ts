@@ -163,6 +163,40 @@ export namespace SessionStatus {
     return executionOccurrences[sessionID]
   }
 
+  /** Wait for one exact input-message generation to leave streaming/retry. */
+  export async function waitForExecutionSettlement(input: {
+    sessionID: string
+    inputMessageID: string
+    owner: AbortSignal
+  }): Promise<void> {
+    const settled = () => {
+      const occurrence = executionOccurrences[input.sessionID]
+      if (!occurrence || occurrence.inputMessageID !== input.inputMessageID || occurrence.owner !== input.owner) {
+        return true
+      }
+      return !isExecuting(getExecution(input.sessionID, input.inputMessageID))
+    }
+    if (settled()) return
+    await new Promise<void>((resolve) => {
+      const unsubscribe = Bus.subscribe(Event.Status, (event) => {
+        if (event.properties.sessionID !== input.sessionID || !settled()) return
+        unsubscribe()
+        resolve()
+      })
+      if (settled()) {
+        unsubscribe()
+        resolve()
+      }
+    })
+  }
+
+  /** Publish the accepted boundary of this prompt owner's exact execution occurrence. */
+  export function settleAcceptedExecutionOccurrence(sessionID: string, owner: AbortSignal): Promise<void> {
+    const occurrence = executionOccurrences[sessionID]
+    if (!occurrence || occurrence.owner !== owner) return Promise.resolve()
+    return set(sessionID, { type: "idle" }, { promptGenerationOwner: owner, inputMessageID: occurrence.inputMessageID })
+  }
+
   export function finishPromptGeneration(sessionID: string, owner: AbortSignal): void {
     if (promptGenerationOwners[sessionID] !== owner) return
     delete promptGenerationOwners[sessionID]

@@ -5,22 +5,30 @@
   "name": "Food Safety Quality",
   "label": "Food Safety Quality",
   "description": "Evidence-bounded food hazard, control-monitoring, traceability, and recall-readiness review joined without safety, release, recall, or regulatory authority.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for source-bound food safety-system and traceability evidence preparation.",
     "selection_guidance": "Select for process-flow hazard evidence, HACCP control records, monitoring and verification, lot genealogy, mass balance, or mock-recall readiness. Do not select for food-safety declarations, critical-limit decisions, product disposition, or actual recalls.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["food-safety-quality/shared/method"],
+      "package_skill_refs": [
+        "food-safety-quality/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "food-process-hazard-haccp-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["food-safety-quality/shared/method"],
+        "package_skill_refs": [
+          "food-safety-quality/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "food-control-monitoring-verification-analyst": {
         "label": "Food Control Monitoring Verification Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["food-safety-quality/shared/method"],
+        "package_skill_refs": [
+          "food-safety-quality/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,17 +83,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "food-traceability-recall-readiness-analyst": {
         "label": "Food Traceability Recall Readiness Analyst",
         "description": "Reconstructs lot genealogy, quantity reconciliation, distribution scope, and mock-recall readiness without initiating a recall.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/food-traceability-recall-readiness-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["food-safety-quality/shared/method"],
+        "package_skill_refs": [
+          "food-safety-quality/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "food-safety-quality-review-owner": {
         "label": "Food Safety Quality Review Owner",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["food-safety-quality/shared/method"],
+        "package_skill_refs": [
+          "food-safety-quality/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "food-safety-quality-review": {
@@ -122,17 +138,17 @@
           "food-process-hazard-haccp-analyst": {
             "agent_id": "food-process-hazard-haccp-analyst",
             "description": "Builds process, hazard, and control-point evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "food-control-monitoring-verification-analyst": {
             "agent_id": "food-control-monitoring-verification-analyst",
             "description": "Traces monitoring, calibration, deviation, corrective-action, verification, and validation evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "food-traceability-recall-readiness-analyst": {
             "agent_id": "food-traceability-recall-readiness-analyst",
             "description": "Reconstructs lot genealogy, quantity reconciliation, and mock-recall readiness.",
-            "depends_on": [],
+            "depends_on": []
           },
           "food-safety-quality-review-owner": {
             "agent_id": "food-safety-quality-review-owner",
@@ -140,11 +156,11 @@
             "depends_on": [
               "food-control-monitoring-verification-analyst",
               "food-process-hazard-haccp-analyst",
-              "food-traceability-recall-readiness-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "food-traceability-recall-readiness-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

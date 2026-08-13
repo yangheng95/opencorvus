@@ -6,7 +6,7 @@ import {
   ArtifactCatalogProviderErrorSchema,
   ArtifactProducerSchema,
   ArtifactReadLocatorSchema,
-  CrossTaskArtifactImportListSchema,
+  CrossTaskArtifactSourceListSchema,
   ArtifactReadLocatorListSchema,
   EngineArtifactLocatorSchema,
   EvidenceLocatorListSchema,
@@ -291,7 +291,7 @@ export const CreateTaskInput = z
      */
     directory: z.string().trim().min(1).optional(),
     requestID: z.string().optional(),
-    artifactImports: CrossTaskArtifactImportListSchema.optional(),
+    artifactSources: CrossTaskArtifactSourceListSchema.optional(),
     source: z.string().optional(),
     productPillar: ProductPillarSchema,
     model: z
@@ -1115,6 +1115,13 @@ export const SessionConversationHydration = z.object({
   agentView: TaskConversationAgentView,
   view: TaskConversationView,
   turnArtifacts: ConversationTurnArtifactSummary.array(),
+})
+
+export const SessionConversationHistoryPage = z.object({
+  transcript: MessageVisibleWithPartsArray,
+  events: SessionEvent.array(),
+  view: TaskConversationView,
+  history: TaskConversationHistoryState,
 })
 
 export const TaskConversationEventPage = z.object({

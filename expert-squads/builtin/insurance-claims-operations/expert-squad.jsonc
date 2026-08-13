@@ -5,22 +5,30 @@
   "name": "Insurance Claims Operations",
   "label": "Insurance Claims Operations",
   "description": "Claim evidence, policy traceability, and control analysis joined into a reviewable claims evidence pack without adjudication authority.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for bounded insurance-claims evidence and process analysis.",
     "selection_guidance": "Select for claim intake, evidence completeness, policy traceability, handoff, fraud-indicator, reserve-governance, or process-improvement analysis without approving, denying, pricing, reserving, or paying a claim.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["insurance-claims-operations/shared/method"],
+      "package_skill_refs": [
+        "insurance-claims-operations/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "claims-evidence-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["insurance-claims-operations/shared/method"],
+        "package_skill_refs": [
+          "insurance-claims-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "claims-policy-traceability-analyst": {
         "label": "Policy Traceability Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["insurance-claims-operations/shared/method"],
+        "package_skill_refs": [
+          "insurance-claims-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,17 +83,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "claims-control-risk-analyst": {
         "label": "Claims Control and Risk Analyst",
         "description": "Reviews handoffs, fraud indicators, reserve governance, privacy, and process controls.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/claims-control-risk-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["insurance-claims-operations/shared/method"],
+        "package_skill_refs": [
+          "insurance-claims-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "claims-evidence-pack-owner": {
         "label": "Claims Evidence Pack Owner",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["insurance-claims-operations/shared/method"],
+        "package_skill_refs": [
+          "insurance-claims-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "claims-evidence-pack": {
@@ -122,17 +138,17 @@
           "claims-evidence-analyst": {
             "agent_id": "claims-evidence-analyst",
             "description": "Maps claim chronology, documents, parties, damage evidence, and missing facts.",
-            "depends_on": [],
+            "depends_on": []
           },
           "claims-policy-traceability-analyst": {
             "agent_id": "claims-policy-traceability-analyst",
             "description": "Maps supplied policy language, endorsements, exclusions, and unresolved interpretation questions.",
-            "depends_on": [],
+            "depends_on": []
           },
           "claims-control-risk-analyst": {
             "agent_id": "claims-control-risk-analyst",
             "description": "Reviews handoffs, fraud indicators, reserve governance, privacy, and process controls.",
-            "depends_on": [],
+            "depends_on": []
           },
           "claims-evidence-pack-owner": {
             "agent_id": "claims-evidence-pack-owner",
@@ -140,11 +156,11 @@
             "depends_on": [
               "claims-control-risk-analyst",
               "claims-evidence-analyst",
-              "claims-policy-traceability-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "claims-policy-traceability-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

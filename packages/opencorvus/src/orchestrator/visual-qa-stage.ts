@@ -47,7 +47,7 @@ export function createVisualQaStageDispatcher(dependencies: VisualQaStageDepende
       [
         "## Durable Artifact discovery",
         "- Search the Task Artifact catalog yourself for current and historical design, build, research, and review evidence.",
-        "- Choose by exact name/kind, recency, and fuzzy relevance, completely read every candidate you inspect with `artifact_read`, then call `artifact_select` for every Artifact that semantically supports the VisualReview. Complete but unselected reads remain observations; zero selections are valid.",
+        "- Choose by exact name/kind, recency, and fuzzy relevance, pass each candidate's `artifact_locator_ref` to `artifact_read` until complete, then pass `artifact_read_ref` to `artifact_select` for every Artifact that semantically supports the VisualReview. Complete but unselected reads remain observations; zero selections are valid.",
         "- No upstream participant selected or copied Artifact bodies into this prompt; missing evidence must remain visible.",
       ].join("\n"),
     ]

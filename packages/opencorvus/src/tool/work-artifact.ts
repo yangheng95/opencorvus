@@ -130,7 +130,7 @@ export function createWorkArtifactTools(
 
   const deliver = Tool.define("work_artifact_deliver", {
     description:
-      "Consume the exact validation receipt, revalidate and freshly render the final Work Artifact, then publish authoritative results on the current parent Work message. For office.presentation@1 this returns the PPTX attachment and presentation review Interactive Artifact.",
+      "Consume the exact validation receipt, revalidate and freshly render the final Work Artifact, then publish authoritative results on the current authorized Work or Task message. For office.presentation@1 this returns the PPTX attachment and presentation review Interactive Artifact.",
     parameters: DeliverWorkArtifactInput,
     async execute(args, ctx) {
       const limits = WorkArtifactProfileRegistry.require(args.profile).limits

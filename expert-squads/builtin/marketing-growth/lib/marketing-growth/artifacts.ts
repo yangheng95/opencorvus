@@ -3,6 +3,7 @@ import { tool } from "@opencorvus-ai/plugin"
 // ABI means Application Binary Interface. URL means Uniform Resource Locator.
 export const MarketingGrowthArtifactTypes = ["marketing-growth/growth-brief","marketing-growth/evidence-dossier","marketing-growth/audience-analysis","marketing-growth/channel-analysis","marketing-growth/growth-strategy","marketing-growth/audit","marketing-growth/campaign-plan"] as const
 export const MarketingGrowthArtifactTypeSchema = tool.schema.enum(MarketingGrowthArtifactTypes)
+export type MarketingGrowthArtifactType = tool.schema.infer<typeof MarketingGrowthArtifactTypeSchema>
 
 const EvidenceSchema = tool.schema.object({
   statement: tool.schema.string().trim().min(1),
@@ -27,6 +28,22 @@ export const MarketingGrowthArtifactPayloadSchema = tool.schema.object({
   unknowns: tool.schema.array(tool.schema.string().trim().min(1)),
   resource_roles: tool.schema.array(tool.schema.object({ role: tool.schema.string().trim().min(1), path: tool.schema.string().trim().min(1) }).strict()),
 }).strict()
+
+const marketingGrowthPublishInput = <T extends MarketingGrowthArtifactType>(artifactType: T) =>
+  tool.schema.object({
+    artifact_type: tool.schema.literal(artifactType),
+    payload: MarketingGrowthArtifactPayloadSchema,
+  }).strict()
+
+export const MarketingGrowthPublishableArtifactInputSchema = tool.schema.discriminatedUnion("artifact_type", [
+  marketingGrowthPublishInput("marketing-growth/growth-brief"),
+  marketingGrowthPublishInput("marketing-growth/evidence-dossier"),
+  marketingGrowthPublishInput("marketing-growth/audience-analysis"),
+  marketingGrowthPublishInput("marketing-growth/channel-analysis"),
+  marketingGrowthPublishInput("marketing-growth/growth-strategy"),
+  marketingGrowthPublishInput("marketing-growth/audit"),
+  marketingGrowthPublishInput("marketing-growth/campaign-plan"),
+])
 
 export const marketingGrowthArtifactDependencies = {
   "marketing-growth/growth-brief": [],

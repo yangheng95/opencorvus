@@ -1,7 +1,9 @@
 export {
   EvolutionArtifactSchemas,
   EvolutionArtifactTypeSchema,
+  EvolutionCampaignPublishInputSchema,
   EvolutionMetricReceiptSchema,
+  EvolutionPackagePublishableArtifactInputSchema,
   EvolutionPackagePublishableArtifactTypeSchema,
   parseEvolutionArtifact,
   type EvolutionArtifactType,

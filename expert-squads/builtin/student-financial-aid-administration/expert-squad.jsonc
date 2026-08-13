@@ -5,22 +5,30 @@
   "name": "Student Financial Aid Administration",
   "label": "Student Financial Aid Administration",
   "description": "Source-versioned student financial-aid application, verification, academic, cost, packaging, award, disbursement, reconciliation and exception evidence without eligibility or fund-movement authority.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for controlled financial-aid administration evidence prepared for authorized institutional review.",
     "selection_guidance": "Select for FAFSA/ISIR data provenance, verification documents, academic/program/calendar inputs, cost of attendance, packaging, award, disbursement, reconciliation, satisfactory academic progress, return/withdrawal or overaward evidence. Do not select to determine eligibility, change records, originate/disburse/return funds, contact students or make compliance conclusions.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["student-financial-aid-administration/shared/method"],
+      "package_skill_refs": [
+        "student-financial-aid-administration/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "aid-applicant-isir-verification-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["student-financial-aid-administration/shared/method"],
+        "package_skill_refs": [
+          "student-financial-aid-administration/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "aid-academic-cost-packaging-analyst": {
         "label": "Aid Academic Cost Packaging Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["student-financial-aid-administration/shared/method"],
+        "package_skill_refs": [
+          "student-financial-aid-administration/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +83,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "aid-award-disbursement-reconciliation-analyst": {
         "label": "Aid Award Disbursement Reconciliation Analyst",
@@ -81,7 +93,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["student-financial-aid-administration/shared/method"],
+        "package_skill_refs": [
+          "student-financial-aid-administration/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "aid-sap-return-overaward-exception-analyst": {
         "label": "Aid SAP Return Overaward Exception Analyst",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["student-financial-aid-administration/shared/method"],
+        "package_skill_refs": [
+          "student-financial-aid-administration/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,7 +127,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "student-financial-aid-administration-review-owner": {
         "label": "Student Financial Aid Administration Review Owner",
@@ -121,7 +137,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["student-financial-aid-administration/shared/method"],
+        "package_skill_refs": [
+          "student-financial-aid-administration/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -131,8 +149,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "qualified-review": {
@@ -142,22 +160,22 @@
           "aid-applicant-isir-verification-analyst": {
             "agent_id": "aid-applicant-isir-verification-analyst",
             "description": "Freezes applicant token, aid year, FAFSA/ISIR transaction and supplied verification/conflicting-information evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "aid-academic-cost-packaging-analyst": {
             "agent_id": "aid-academic-cost-packaging-analyst",
             "description": "Traces program/calendar/enrollment, cost-of-attendance, need inputs, policy and package calculations as supplied.",
-            "depends_on": [],
+            "depends_on": []
           },
           "aid-award-disbursement-reconciliation-analyst": {
             "agent_id": "aid-award-disbursement-reconciliation-analyst",
             "description": "Reconciles supplied award, origination, disbursement, student-account and program cash records without fund movement.",
-            "depends_on": [],
+            "depends_on": []
           },
           "aid-sap-return-overaward-exception-analyst": {
             "agent_id": "aid-sap-return-overaward-exception-analyst",
             "description": "Builds source-bound chronology for academic-progress, withdrawal/return, overaward and conflicting-information questions.",
-            "depends_on": [],
+            "depends_on": []
           },
           "student-financial-aid-administration-review-owner": {
             "agent_id": "student-financial-aid-administration-review-owner",
@@ -166,11 +184,11 @@
               "aid-academic-cost-packaging-analyst",
               "aid-applicant-isir-verification-analyst",
               "aid-award-disbursement-reconciliation-analyst",
-              "aid-sap-return-overaward-exception-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "aid-sap-return-overaward-exception-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

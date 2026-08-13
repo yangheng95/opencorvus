@@ -62,6 +62,15 @@ export const SalesStrategyArtifactLabels = {
 
 export const SalesStrategyArtifactTypeSchema = tool.schema.enum(["sales-strategy/research-charter", "sales-strategy/customer-dossier", "sales-strategy/opportunity-analysis", "sales-strategy/positioning-analysis", "sales-strategy/strategy-brief", "sales-strategy/audit", "sales-strategy/playbook"])
 export type SalesStrategyArtifactType = tool.schema.infer<typeof SalesStrategyArtifactTypeSchema>
+export const SalesStrategyPublishableArtifactInputSchema = tool.schema.discriminatedUnion("artifact_type", [
+  tool.schema.object({ artifact_type: tool.schema.literal("sales-strategy/research-charter"), payload: SalesStrategyArtifactSchemas["sales-strategy/research-charter"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("sales-strategy/customer-dossier"), payload: SalesStrategyArtifactSchemas["sales-strategy/customer-dossier"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("sales-strategy/opportunity-analysis"), payload: SalesStrategyArtifactSchemas["sales-strategy/opportunity-analysis"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("sales-strategy/positioning-analysis"), payload: SalesStrategyArtifactSchemas["sales-strategy/positioning-analysis"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("sales-strategy/strategy-brief"), payload: SalesStrategyArtifactSchemas["sales-strategy/strategy-brief"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("sales-strategy/audit"), payload: SalesStrategyArtifactSchemas["sales-strategy/audit"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("sales-strategy/playbook"), payload: SalesStrategyArtifactSchemas["sales-strategy/playbook"] }).strict(),
+])
 export const SALESSTRATEGY_TERMINAL_ARTIFACT_TYPE = "sales-strategy/playbook"
 
 export function parseSalesStrategyArtifact(type: SalesStrategyArtifactType, payload: unknown) {

@@ -10,11 +10,14 @@ import {
   ArtifactReadInputSchema,
   ArtifactReadLocatorSchema,
   ArtifactSearchWithoutLimitSchema,
-  CrossTaskArtifactImportListSchema,
+  CrossTaskArtifactSourceListSchema,
   refineArtifactSearchInput,
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import { MissionCompletionInput } from "@/mission/completion"
 import { TaskCancellationReason } from "@opencorvus-ai/transport-protocol"
+import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
+
+const { cursor: _genericArtifactCursor, ...PanelArtifactSearchShape } = ArtifactSearchWithoutLimitSchema.shape
 
 export const RIGHT_SIDEBAR_SURFACE = "right-sidebar"
 export const PanelSurface = z.enum([...SharedChannelSurface.options, RIGHT_SIDEBAR_SURFACE])
@@ -180,7 +183,7 @@ function agentSchemas<const T extends readonly Capability[]>(
 
 function panelUISchema(item: Capability) {
   return item.action === "create_task"
-    ? unrefinedCapabilitySchema(item).omit({ artifact_imports: true }).superRefine(refineCreateTaskChannelBinding)
+    ? unrefinedCapabilitySchema(item).omit({ artifact_sources: true }).superRefine(refineCreateTaskChannelBinding)
     : item.schema
 }
 
@@ -286,12 +289,21 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "query_task_artifacts",
     description:
-      "Enumerate one Task's canonical Artifact catalog through a bounded cursor page. Repeat with next_cursor until null; empty entries are a valid result. The response returns exact ArtifactReadLocator values and never writes oversized output to a path side channel.",
+      "Enumerate one terminal Task occurrence's canonical Artifact catalog through a bounded numbered page. Start with page_number 1 and repeat with next_page_number until null; the Host retains and authenticates opaque catalog cursors internally. Empty entries are a valid result. The response returns exact ArtifactReadLocator values and never writes oversized output to a path side channel.",
     kind: "query",
     surfaces: allProjectSurfaces,
     params: {
       taskID: z.string().min(1).describe("Source Task whose Artifact catalog should be enumerated."),
-      ...ArtifactSearchWithoutLimitSchema.shape,
+      terminal_lifecycle_reference: TerminalLifecycleReferenceSchema.describe(
+        "Exact current terminal occurrence returned by panel.query_task for this source Task.",
+      ),
+      page_number: z
+        .number()
+        .int()
+        .min(1)
+        .max(1_000)
+        .describe("One-based page number. Start at 1, then use the preceding response's next_page_number."),
+      ...PanelArtifactSearchShape,
     },
     refine: refineArtifactSearchInput,
   }),
@@ -335,8 +347,8 @@ export const PanelCapabilityRegistry = list(
           "Absolute execution repository for the new Task. Sessions, tools, artifacts, and git operations use this directory while Task storage remains in the caller project.",
         ),
       request_id: z.string().optional().describe("External request ID used for idempotent task creation."),
-      artifact_imports: CrossTaskArtifactImportListSchema.optional().describe(
-        "Exact predecessor ArtifactReadLocator values selected from every panel.query_task_artifacts cursor page and imported through the target-owned publication protocol. Mission-only; payload bodies never belong in request text.",
+      artifact_sources: CrossTaskArtifactSourceListSchema.optional().describe(
+        "Mission-only cross-Task delivery authorities. For a completed source, provide only {authority:'completion_decision',source_task_id}; the Host imports the complete current deliverable set without copied locator IDs. For failed/cancelled recovery, provide {authority:'terminal_lifecycle',source_task_id,locator}.",
       ),
       model: z
         .string()

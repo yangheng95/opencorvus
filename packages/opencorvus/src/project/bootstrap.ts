@@ -42,6 +42,7 @@ import { reconcilePendingCancelledTaskSettlements } from "@/engine/state"
 import { PermissionAuthority } from "@/permission/authority"
 import { ProjectMemoryOrganizer } from "@/memory/project-memory-organizer"
 import { reconcileBuildObservationCleanups } from "@/engine/build-observation-cleanup"
+import { recoverAbandonedTaskCompletionClosures } from "@/engine/task-completion-closure"
 
 async function validateInstanceConversationCapabilities() {
   const lifecycleContext = {
@@ -100,7 +101,17 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   AutomationService.init()
   EventService.init()
   ProjectMemoryOrganizer.init()
+  // Durable subscribers must exist before any persisted outbox occurrence is
+  // resumed. In particular, message.moved is the single source/target
+  // projection fact; draining it before its durable bridge registers would
+  // permanently discard the only live-replay recovery occurrence.
+  ensureTaskMessageProtocolBridge()
+  ensureSessionProtocolBridge()
+  ensureMissionCallerReceiptBridge()
   Bus.resumeDurablePublications()
+  await ProjectOpenLifecycle.stage("engine-task.recover-completion-closures", lifecycleContext, async () => {
+    recoverAbandonedTaskCompletionClosures(Instance.project.id)
+  })
   TaskQueueService.init()
   EngineService.init()
   await ProjectOpenLifecycle.stage("build-observation.reconcile-cleanup", lifecycleContext, () =>
@@ -111,9 +122,6 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
     reconcilePendingCancelledTaskSettlements()
   })
   EngineEventLog.init()
-  ensureTaskMessageProtocolBridge()
-  ensureSessionProtocolBridge()
-  ensureMissionCallerReceiptBridge()
   await ProjectOpenLifecycle.stage("engine-interaction.reconcile-recovered-waiters", lifecycleContext, () =>
     EngineInteraction.reconcileRecoveredPendingWaiters({
       projectID: Instance.project.id,

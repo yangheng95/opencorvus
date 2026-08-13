@@ -1,5 +1,13 @@
 # August 2026 Records
 
+- [2026-08-13-r17b-luna-tool-input-stream-stall.md](2026-08-13-r17b-luna-tool-input-stream-stall.md) freezes the isolated exact-Luna R17b failure, identifies pre-acceptance semantic heartbeat credit as the first focused reproduction candidate, and defines the staged repair and fresh-E2E boundary.
+
+- [2026-08-13-expert-squad-gui-zero-intervention-sampling.md](2026-08-13-expert-squad-gui-zero-intervention-sampling.md) defines the immutable-source, random-port, isolated-runtime real-GUI sampling matrix and three-way evidence required to prove Base, Data Analysis, and Office Delivery Expert Squads finish without post-submission operator intervention.
+
+- [2026-08-13-work-capability-unavailable-repair.md](2026-08-13-work-capability-unavailable-repair.md) records the Work capability incident evidence boundary, marks the original request-level error unknown without contemporaneous logs, and hardens capability settings onto the identity route authority with production-route plus real-page acceptance.
+
+- [2026-08-13-scheduled-global-inactivity-config-ownership.md](2026-08-13-scheduled-global-inactivity-config-ownership.md) diagnoses the screenshot's backend transport failure and the isolated checker's project-context crash, then restores the process-wide scheduler's explicit global inactivity configuration owner.
+
 - [2026-08-13-homepage-harness-gallery-and-readme.md](2026-08-13-homepage-harness-gallery-and-readme.md) defines the restrained OpenCorvus Harness memory point, current-source first-viewport UI gallery, future video media boundary, reciprocal README update, and real bilingual visual acceptance.
 
 - [2026-08-12-startup-surface-visual-redesign.md](2026-08-12-startup-surface-visual-redesign.md) redesigns the real desktop startup surface around the existing OpenCorvus bird, a strong preparation hierarchy, truthful wide progress feedback, and preserved native failure/retry behavior, with production-page visual evidence and independent review.

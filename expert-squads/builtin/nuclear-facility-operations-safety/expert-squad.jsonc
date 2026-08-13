@@ -5,22 +5,30 @@
   "name": "Nuclear Facility Operations Safety",
   "label": "Nuclear Facility Operations Safety",
   "description": "Configuration, design-basis, plant-state, defence-in-depth, barrier, event, and operating-experience evidence joined into a bounded nuclear-safety review pack.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for source-grounded nuclear-facility configuration and operations-safety evidence without control, operability, reportability, or licensing authority.",
     "selection_guidance": "Select for nuclear facility design/licensing basis, physical-document-requirement configuration alignment, plant-state evidence, safety functions, defence in depth, barriers, surveillance/test records, events, corrective actions, and operating experience. Do not select for reactor operation, reactivity or setpoint change, operability or Technical Specification determination, event classification/reportability, radiation-dose decision, emergency command, maintenance instruction, modification approval, startup, shutdown, or safety acceptance.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["nuclear-facility-operations-safety/shared/method"],
+      "package_skill_refs": [
+        "nuclear-facility-operations-safety/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "nuclear-configuration-design-basis-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["nuclear-facility-operations-safety/shared/method"],
+        "package_skill_refs": [
+          "nuclear-facility-operations-safety/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,17 +61,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "nuclear-defence-in-depth-barrier-analyst": {
         "label": "Nuclear Defence-in-depth and Barrier Analyst",
         "description": "Maps supplied safety functions, SSCs, barriers, controls, dependencies, availability evidence, and unknowns.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/nuclear-defence-in-depth-barrier-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["nuclear-facility-operations-safety/shared/method"],
+        "package_skill_refs": [
+          "nuclear-facility-operations-safety/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +83,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "nuclear-event-operating-experience-analyst": {
         "label": "Nuclear Event and Operating-experience Analyst",
@@ -81,7 +93,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["nuclear-facility-operations-safety/shared/method"],
+        "package_skill_refs": [
+          "nuclear-facility-operations-safety/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "nuclear-operations-safety-review-owner": {
         "label": "Nuclear Operations Safety Review Owner",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["nuclear-facility-operations-safety/shared/method"],
+        "package_skill_refs": [
+          "nuclear-facility-operations-safety/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "nuclear-facility-operations-safety-review": {
@@ -122,17 +138,17 @@
           "nuclear-configuration-design-basis-analyst": {
             "agent_id": "nuclear-configuration-design-basis-analyst",
             "description": "Reconciles design requirements, physical configuration, controlled documents, changes, and work evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "nuclear-defence-in-depth-barrier-analyst": {
             "agent_id": "nuclear-defence-in-depth-barrier-analyst",
             "description": "Maps supplied safety functions, SSCs, defence levels, barriers, controls, dependencies, and evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "nuclear-event-operating-experience-analyst": {
             "agent_id": "nuclear-event-operating-experience-analyst",
             "description": "Reconstructs events, challenged functions, notifications, corrective actions, and operating experience.",
-            "depends_on": [],
+            "depends_on": []
           },
           "nuclear-operations-safety-review-owner": {
             "agent_id": "nuclear-operations-safety-review-owner",
@@ -140,11 +156,11 @@
             "depends_on": [
               "nuclear-configuration-design-basis-analyst",
               "nuclear-defence-in-depth-barrier-analyst",
-              "nuclear-event-operating-experience-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "nuclear-event-operating-experience-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

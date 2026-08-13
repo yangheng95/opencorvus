@@ -69,11 +69,9 @@ test("canonical validation receipt authorizes a fresh delivery revalidation", as
       }
       const operations: string[] = []
       const operationBudgets: Array<{ timeoutMs?: number; maxOutputBytes?: number }> = []
-      const renderPng = await sharp({
-        create: { width: 1280, height: 720, channels: 4, background: "#ffffff" },
-      })
-        .png()
-        .toBuffer()
+      const renderSvg = Buffer.from(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080"><rect width="1920" height="1080" fill="#fff"/><text x="80" y="140">Qualified</text></svg>',
+      )
       const dependencies: WorkArtifactPresentationDependencies = {
         async officeCliPath() {
           return process.execPath
@@ -93,14 +91,8 @@ test("canonical validation receipt authorizes a fresh delivery revalidation", as
           if (input.args[0] === "create") {
             await fs.writeFile(input.args[1]!, await minimalPresentationBytes(), { mode: 0o600 })
           }
-          const outputIndex = input.args.indexOf("--out")
-          if (outputIndex >= 0) {
-            await fs.writeFile(
-              input.args[outputIndex + 1]!,
-              renderPng,
-              { mode: 0o600 },
-            )
-            return { code: 0, stdout: Buffer.alloc(0), stderr: Buffer.alloc(0) }
+          if (input.args[0] === "view" && input.args[2] === "svg") {
+            return { code: 0, stdout: renderSvg, stderr: Buffer.alloc(0) }
           }
           return {
             code: 0,
@@ -159,7 +151,13 @@ test("canonical validation receipt authorizes a fresh delivery revalidation", as
       const validated = JSON.parse(validation.output) as {
         validation_receipt: { url: string; sha: string }
         validation_receipt_payload: Record<string, unknown>
+        renders: Array<{ url: string; sha: string }>
       }
+      const validatedRender = await AttachmentStore.read(
+        Instance.project.id,
+        AttachmentStore.nameFromUrl(validated.renders[0]!.url)!.name,
+      )
+      const validatedRenderMetadata = await sharp(validatedRender).metadata()
       const receiptBytes = await AttachmentStore.read(
         Instance.project.id,
         AttachmentStore.nameFromUrl(validated.validation_receipt.url)!.name,
@@ -208,6 +206,7 @@ test("canonical validation receipt authorizes a fresh delivery revalidation", as
         renderCount: deliveredOutput.renders.length,
         attachmentCount: delivered.attachments?.length,
         interactiveArtifact: delivered.display?.[0]?.type,
+        validatedRenderSize: [validatedRenderMetadata.width, validatedRenderMetadata.height],
         boundedOperations: operationBudgets.every(
           (budget) =>
             typeof budget.timeoutMs === "number" &&
@@ -225,16 +224,17 @@ test("canonical validation receipt authorizes a fresh delivery revalidation", as
         renderCount: 1,
         attachmentCount: 3,
         interactiveArtifact: "interactive-artifact",
+        validatedRenderSize: [1280, 720],
         boundedOperations: true,
         operations: [
           "create qualification.pptx --type",
           "batch qualification.pptx --input",
           "validate qualification.pptx --json",
           "view qualification.pptx issues",
-          "view qualification.pptx screenshot",
+          "view qualification.pptx svg",
           "validate qualification.pptx --json",
           "view qualification.pptx issues",
-          "view qualification.pptx screenshot",
+          "view qualification.pptx svg",
         ],
       })
     },
@@ -245,6 +245,16 @@ test("PPTX parser supervision maps its wall-clock budget to a bounded error", as
   await expect(inspectPptxPackage(await minimalPresentationBytes(), { timeoutMs: 1 })).rejects.toThrow(
     "Work Artifact PPTX inspection exceeded 1ms",
   )
+})
+
+test("PPTX inspection accepts the pinned OfficeCLI chart part closure", async () => {
+  const inspection = await inspectPptxPackage(
+    await presentationWithPart(
+      "ppt/slides/charts/chart1.xml",
+      '<c:chartSpace xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"/>',
+    ),
+  )
+  expect(inspection).toEqual({ slideCount: 1, entryCount: 5, uncompressedBytes: expect.any(Number) })
 })
 
 test("PPTX inspection maps corrupt, macro, and external relationship inputs to explicit errors", async () => {

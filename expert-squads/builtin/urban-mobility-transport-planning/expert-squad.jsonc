@@ -5,22 +5,31 @@
   "name": "Urban Mobility Transport Planning",
   "label": "Urban Mobility Transport Planning",
   "description": "Multimodal baseline, demand, accessibility, options, equity, safety and engagement evidence joined for public planning review.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["code", "work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for bounded urban multimodal mobility planning evidence.",
     "selection_guidance": "Select for city network/service baselines, demand and accessibility models, option comparison, equity, safety and engagement without adopting plans or committing funds.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["urban-mobility-transport-planning/shared/method"],
+      "package_skill_refs": [
+        "urban-mobility-transport-planning/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +39,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "urban-mobility-baseline-network-analyst": {
@@ -41,7 +50,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["urban-mobility-transport-planning/shared/method"],
+        "package_skill_refs": [
+          "urban-mobility-transport-planning/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,17 +62,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "travel-demand-accessibility-analyst": {
         "label": "Travel Demand and Accessibility Model Analyst",
         "description": "Evaluate supplied demand-model, calibration, scenario and accessibility evidence without inventing parameters or forecasting outcomes.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/travel-demand-accessibility-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["urban-mobility-transport-planning/shared/method"],
+        "package_skill_refs": [
+          "urban-mobility-transport-planning/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +84,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "multimodal-options-performance-analyst": {
         "label": "Multimodal Options and Performance Analyst",
@@ -81,7 +94,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["urban-mobility-transport-planning/shared/method"],
+        "package_skill_refs": [
+          "urban-mobility-transport-planning/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +106,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "mobility-equity-safety-engagement-analyst": {
         "label": "Equity, Safety and Engagement Evidence Analyst",
@@ -101,7 +116,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["urban-mobility-transport-planning/shared/method"],
+        "package_skill_refs": [
+          "urban-mobility-transport-planning/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,7 +128,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "urban-mobility-transport-plan-owner": {
         "label": "Urban Mobility Transport Planning Owner",
@@ -121,7 +138,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["urban-mobility-transport-planning/shared/method"],
+        "package_skill_refs": [
+          "urban-mobility-transport-planning/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -131,8 +150,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "urban-mobility-transport-planning-review": {
@@ -142,22 +161,22 @@
           "urban-mobility-baseline-network-analyst": {
             "agent_id": "urban-mobility-baseline-network-analyst",
             "description": "Freeze the planning geography, horizon, multimodal network/service baseline and source-data provenance.",
-            "depends_on": [],
+            "depends_on": []
           },
           "travel-demand-accessibility-analyst": {
             "agent_id": "travel-demand-accessibility-analyst",
             "description": "Evaluate supplied demand-model, calibration, scenario and accessibility evidence without inventing parameters or forecasting outcomes.",
-            "depends_on": [],
+            "depends_on": []
           },
           "multimodal-options-performance-analyst": {
             "agent_id": "multimodal-options-performance-analyst",
             "description": "Compare multimodal option packages on consistently defined supplied measures and implementation dependencies.",
-            "depends_on": [],
+            "depends_on": []
           },
           "mobility-equity-safety-engagement-analyst": {
             "agent_id": "mobility-equity-safety-engagement-analyst",
             "description": "Trace distributional burdens and benefits, safety evidence, accessibility needs and public involvement without making legal or equity determinations.",
-            "depends_on": [],
+            "depends_on": []
           },
           "urban-mobility-transport-plan-owner": {
             "agent_id": "urban-mobility-transport-plan-owner",
@@ -166,11 +185,11 @@
               "mobility-equity-safety-engagement-analyst",
               "multimodal-options-performance-analyst",
               "travel-demand-accessibility-analyst",
-              "urban-mobility-baseline-network-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "urban-mobility-baseline-network-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

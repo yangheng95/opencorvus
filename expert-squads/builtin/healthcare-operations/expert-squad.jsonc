@@ -5,22 +5,30 @@
   "name": "Healthcare Operations",
   "label": "Healthcare Operations",
   "description": "De-identified service-flow, capacity, access, safety, and privacy analysis joined into an accountable operations-improvement pack.",
-  "version": "2026.08.10.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for bounded healthcare operations improvement analysis.",
     "selection_guidance": "Select for de-identified service-flow, capacity, access, safety, or privacy decision support without clinical advice or patient-specific action.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["healthcare-operations/shared/method"],
+      "package_skill_refs": [
+        "healthcare-operations/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "healthcare-service-flow-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["healthcare-operations/shared/method"],
+        "package_skill_refs": [
+          "healthcare-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "healthcare-capacity-access-analyst": {
         "label": "Capacity and Access Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["healthcare-operations/shared/method"],
+        "package_skill_refs": [
+          "healthcare-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,17 +83,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "healthcare-safety-privacy-analyst": {
         "label": "Safety and Privacy Analyst",
         "description": "Maps operational safety and privacy evidence and gaps.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/healthcare-safety-privacy-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["healthcare-operations/shared/method"],
+        "package_skill_refs": [
+          "healthcare-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "healthcare-operations-improvement-owner": {
         "label": "Operations Improvement Owner",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["healthcare-operations/shared/method"],
+        "package_skill_refs": [
+          "healthcare-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "healthcare-operations-improvement-pack": {
@@ -122,17 +138,17 @@
           "healthcare-service-flow-analyst": {
             "agent_id": "healthcare-service-flow-analyst",
             "description": "Maps service-flow evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "healthcare-capacity-access-analyst": {
             "agent_id": "healthcare-capacity-access-analyst",
             "description": "Maps capacity and access evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "healthcare-safety-privacy-analyst": {
             "agent_id": "healthcare-safety-privacy-analyst",
             "description": "Maps safety and privacy evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "healthcare-operations-improvement-owner": {
             "agent_id": "healthcare-operations-improvement-owner",
@@ -140,11 +156,11 @@
             "depends_on": [
               "healthcare-capacity-access-analyst",
               "healthcare-safety-privacy-analyst",
-              "healthcare-service-flow-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "healthcare-service-flow-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

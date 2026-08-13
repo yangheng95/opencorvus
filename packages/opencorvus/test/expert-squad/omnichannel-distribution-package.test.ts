@@ -3,7 +3,7 @@ import { writeFile } from "node:fs/promises"
 import path from "node:path"
 import { Config } from "../../src/config/config"
 import { persistQueuedTask } from "../../src/engine/pipeline"
-import { ensureGitignore } from "../../src/engine/git"
+import { ensureGitProjectMetadata } from "../../src/engine/git"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
 import {
   EngineArtifactEnvelopeSchema,
@@ -134,7 +134,7 @@ describe("Omnichannel Distribution Expert Squad package", () => {
       namespace: "builtin",
       id: "omnichannel-distribution",
       name: "Omnichannel Distribution",
-      version: "2026.08.10.1",
+      version: "2026.08.13.1",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))
@@ -172,7 +172,7 @@ describe("Omnichannel Distribution Expert Squad package", () => {
           expect(worker.packageTools.map((tool) => tool.ref)).toEqual([publisherRef])
         }
 
-        await ensureGitignore()
+        await ensureGitProjectMetadata()
         const session = await Session.create({ kind: "root", title: "Omnichannel typed chain" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
@@ -254,8 +254,7 @@ describe("Omnichannel Distribution Expert Squad package", () => {
           ) => {
             ;(scope.owner as { agentID: string }).agentID = producer
             return JSON.parse(await publishOmnichannelArtifact.execute({
-              artifact_type: artifactType,
-              payload: samples[artifactType],
+              artifact: { artifact_type: artifactType, payload: samples[artifactType] } as never,
               resource_set: resourceSet,
               source_artifact_locators: sources,
             }, { host, metadata: () => {} } as never)) as { locator: EngineArtifactLocator; artifact_sha256: string }

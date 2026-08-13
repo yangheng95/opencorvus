@@ -1,5 +1,7 @@
 # Office Delivery selection
 
-Select this package when the user needs a finished office artifact, not only advice or raw analysis. Preserve the requested formats, editable-source requirement, audience, decision, source inputs, brand or layout constraints, formulas, accessibility needs, output language, and delivery deadline.
+Select this package when the user needs a new finished PPTX presentation, not only advice or raw analysis. Preserve the editable-source requirement, audience, decision, source inputs, brand or layout constraints, chart data, accessibility needs, output language, and delivery deadline.
 
-Use `verified-office-delivery` exactly as declared. Require both root branches even when one appears simple, because content authority and presentation design have separate owners. Accept the deliverable only after opening or rendering every applicable page, slide, and populated sheet region; parsing, type checking, or file existence alone is not visual acceptance.
+Do not select this package for DOCX, XLSX, PDF, existing-presentation editing, templates, or coordinated multi-format packs. Those surfaces are not qualified by the current Work Artifact profile.
+
+Use `planned-office-delivery` exactly as declared. The Planner runs first; Source Analyst and Builder then execute independent partitions. Accept the deliverable only after the Builder uses the typed Work Artifact lifecycle and inspects every fresh slide render; parsing, type checking, file existence, or self-authored validation JSON is not visual acceptance.

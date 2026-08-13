@@ -199,6 +199,7 @@ import {
 } from "./services/mission"
 import type { WorkLedgerChatRow, WorkLedgerMissionRow, WorkLedgerTaskRow } from "./services/work-ledger"
 import { setWorkLedgerChangeHandler, startSSE, stopSSE, type WorkLedgerStreamEvent } from "./services/sse"
+import { refreshProjectMemory } from "./services/project-memory"
 import { openImagePreview } from "./services/image-preview"
 import {
   buildChatDebugBlob,
@@ -558,6 +559,11 @@ function isMissionSessionSource(): boolean {
 
 function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
   setMissionSharedRefreshToken((value) => value + 1)
+  if (event.type === "work-ledger.changed" && event.sourceType === "project.memory.notice.changed") {
+    void refreshProjectMemory().catch((error) =>
+      AppLog.warn("project-memory", "Project MEMORY.MD notice refresh failed", { error: String(error) }),
+    )
+  }
   const selectedSource = boardStore.selectedSource
   const missionHandoff = activeMissionHandoff(event, selectedSource)
   if (missionHandoff) {
@@ -815,13 +821,13 @@ async function promoteWorkLedgerAnonymousProject(directory: string): Promise<voi
 
 async function openWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void> {
   setComposerIntent({ productPillar: row.productPillar, conversationTarget: "mission" })
-  resetCenterWorkbenchToPrimaryPanel("mission")
   await openMissionSession(
     {
       missionID: row.missionID,
       sessionID: row.sessionID,
       created: false,
       productPillar: row.productPillar,
+      title: row.title,
     },
     row.directory,
   )
@@ -1285,7 +1291,13 @@ async function archiveActiveWorkLedgerItem(
 }
 
 async function openMissionSession(
-  result: { sessionID: string; missionID?: string; created?: boolean; productPillar: "code" | "work" },
+  result: {
+    sessionID: string
+    missionID?: string
+    created?: boolean
+    productPillar: "code" | "work"
+    title?: string
+  },
   directory: string,
   expectedSelectionEpoch?: number,
 ): Promise<void> {
@@ -1347,9 +1359,9 @@ async function openMissionSession(
       boardStore.selectedSource.id === result.sessionID
     ) {
       batch(() => {
-        setBoardStore("selectedSource", null)
         resetConversationProjection({ scrollIntent: "bottom", cause: "mission-session-switch-failed" })
         clearBoard()
+        resetCenterWorkbenchToPrimaryPanel("mission")
       })
     }
     throw error
@@ -1829,7 +1841,7 @@ function missionSubmitActive(): boolean {
 }
 
 function conversationSubmitActive(): boolean {
-  return composerIntent().conversationTarget === "chat" && !isConversationSource()
+  return composerIntent().conversationTarget === "chat" && !activeTaskID() && !isConversationSource()
 }
 
 function resolvedActiveComposerIntent(): ComposerIntent | undefined {

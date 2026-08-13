@@ -134,6 +134,7 @@ import {
 import { resolvedPackageRevisionFromBinding } from "@/engine/workflow-binding"
 import { composeProjectedWorkerSystemPrompt } from "@/agent/projected-worker-system-prompt"
 import { bindInternalStageTool, stageToolMaterializerBindingOf } from "@/agent/stage-tool-materializer"
+import { runProjectedWorkerTurnExclusive } from "./projected-worker-turn-queue"
 
 const log = Log.create({ service: "agent-runner" })
 
@@ -1684,6 +1685,7 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
         throw new AgentRunError(kind, "aborted before prompt")
       }
       finalMessage = (await SessionPrompt.withPromptOwnerCapture(
+        session.id,
         (owner) => {
           if (promptGenerationOwner && promptGenerationOwner !== owner) {
             throw new Error(`Session ${session.id} worker Turn captured multiple prompt generation owners`)
@@ -1764,7 +1766,19 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
 }
 
 export async function runAgentSession<C>(input: RunAgentSessionInput<C>): Promise<RunAgentSessionOutput<C>> {
-  return await runAgentSessionInner(input)
+  if (input.existingSessionID && input.newSessionID) {
+    throw new Error("existingSessionID and newSessionID are mutually exclusive")
+  }
+  const sessionID = input.existingSessionID ?? input.newSessionID ?? Identifier.descending("session")
+  return await runProjectedWorkerTurnExclusive({
+    sessionID,
+    signal: input.signal,
+    run: () =>
+      runAgentSessionInner({
+        ...input,
+        ...(input.existingSessionID ? {} : { newSessionID: sessionID }),
+      }),
+  })
 }
 
 // ---------------------------------------------------------------------------

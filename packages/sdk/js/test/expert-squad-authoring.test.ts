@@ -20,6 +20,7 @@ import {
   type ExpertSquadPackageFile,
 } from "../src/expert-squad-authoring"
 import { createOpenCorvusClient } from "../src/client"
+import { ExpertSquadManifestV1Schema } from "../src/expert-squad-manifest-v1"
 
 function emptyResources() {
   return {
@@ -246,11 +247,28 @@ describe("expert squad authoring SDK", () => {
     ])
   })
 
-  test("accepts Task-scoped Integrity as a package-owned workflow choice", () => {
+  test("accepts Task-scoped Integrity with its explicit platform review execution contract", () => {
     const taskOnlyIntegrity = manifest()
     taskOnlyIntegrity.capability_projection.agents["example-builder"]!.base_role = "integrity"
+    taskOnlyIntegrity.capability_projection.agents["example-builder"]!.execution_contract =
+      "platform_integrity_review"
 
     expect(validateExpertSquadManifestDispatchTopology(taskOnlyIntegrity)).toBe(taskOnlyIntegrity)
+  })
+
+  test("reports the exact execution-contract mapping required by the Integrity runtime", () => {
+    const ambiguousIntegrity = manifest()
+    ambiguousIntegrity.capability_projection.agents["example-builder"]!.base_role = "integrity"
+    expect(() => ExpertSquadManifestV1Schema.parse(ambiguousIntegrity)).toThrow(
+      /integrity base_role requires the explicit platform_integrity_review execution contract/,
+    )
+
+    const misplacedContract = manifest()
+    misplacedContract.capability_projection.agents["example-builder"]!.execution_contract =
+      "platform_integrity_review"
+    expect(() => ExpertSquadManifestV1Schema.parse(misplacedContract)).toThrow(
+      /platform_integrity_review execution contract requires integrity base_role/,
+    )
   })
 
   test("rejects invalid workflow references, dependency cycles, and reserved agents", () => {

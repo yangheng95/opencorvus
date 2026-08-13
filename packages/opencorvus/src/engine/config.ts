@@ -81,6 +81,12 @@ export namespace EngineConfig {
     return merge(cfg.assistant)
   }
 
+  /** Load the project-independent assistant runtime configuration. */
+  export async function getGlobal(): Promise<EngineConfigType> {
+    const cfg = await Config.getGlobal()
+    return merge(cfg.assistant)
+  }
+
   export function fromAssistantConfig(user?: Config.Info["assistant"]): EngineConfigType {
     return merge(user)
   }

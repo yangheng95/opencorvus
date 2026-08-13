@@ -5,22 +5,30 @@
   "name": "Service Reliability Incident Operations",
   "label": "Service Reliability Incident Operations",
   "description": "Service-level, observability, alert-quality, incident coordination, handoff, post-incident learning, and action evidence joined into a bounded reliability review pack.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for source-grounded service reliability and incident evidence without production mitigation, severity declaration, paging, or external communication.",
     "selection_guidance": "Select for service and dependency identity, service-level indicator/objective and error-budget evidence, telemetry and alert quality, incident timeline and impact evidence, role and handoff context, post-incident contributing factors, learning, and owned follow-up actions. Do not select to declare severity, page responders, run production commands, change infrastructure or code, issue status updates, attribute a security incident, declare root cause, or approve closure.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["service-reliability-incident-operations/shared/method"],
+      "package_skill_refs": [
+        "service-reliability-incident-operations/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,18 +38,20 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "reliability-sli-slo-error-budget-analyst": {
         "label": "Reliability SLI SLO and Error Budget Analyst",
         "description": "Reconciles service boundaries, service-level indicator/objective definitions, measurements, windows, exclusions, and error-budget evidence.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/reliability-sli-slo-error-budget-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["service-reliability-incident-operations/shared/method"],
+        "package_skill_refs": [
+          "service-reliability-incident-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "reliability-observability-alert-quality-analyst": {
         "label": "Reliability Observability and Alert Quality Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["service-reliability-incident-operations/shared/method"],
+        "package_skill_refs": [
+          "service-reliability-incident-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +83,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "reliability-incident-coordination-handoff-analyst": {
         "label": "Reliability Incident Coordination and Handoff Analyst",
@@ -81,7 +93,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["service-reliability-incident-operations/shared/method"],
+        "package_skill_refs": [
+          "service-reliability-incident-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "reliability-postincident-learning-action-analyst": {
         "label": "Reliability Post-incident Learning and Action Analyst",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["service-reliability-incident-operations/shared/method"],
+        "package_skill_refs": [
+          "service-reliability-incident-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,7 +127,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "service-reliability-incident-review-owner": {
         "label": "Service Reliability Incident Review Owner",
@@ -121,7 +137,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["service-reliability-incident-operations/shared/method"],
+        "package_skill_refs": [
+          "service-reliability-incident-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -131,8 +149,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "service-reliability-incident-review": {
@@ -142,22 +160,22 @@
           "reliability-sli-slo-error-budget-analyst": {
             "agent_id": "reliability-sli-slo-error-budget-analyst",
             "description": "Reconciles service boundaries, SLI/SLO definitions, windows, exclusions, and error-budget evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "reliability-observability-alert-quality-analyst": {
             "agent_id": "reliability-observability-alert-quality-analyst",
             "description": "Maps telemetry, queries, alerts, routing, blind spots, and signal quality.",
-            "depends_on": [],
+            "depends_on": []
           },
           "reliability-incident-coordination-handoff-analyst": {
             "agent_id": "reliability-incident-coordination-handoff-analyst",
             "description": "Builds incident timeline, impact, roles, decision, and handoff evidence without operational command.",
-            "depends_on": [],
+            "depends_on": []
           },
           "reliability-postincident-learning-action-analyst": {
             "agent_id": "reliability-postincident-learning-action-analyst",
             "description": "Builds blameless contributing-factor, counterevidence, learning, and action records.",
-            "depends_on": [],
+            "depends_on": []
           },
           "service-reliability-incident-review-owner": {
             "agent_id": "service-reliability-incident-review-owner",
@@ -166,11 +184,11 @@
               "reliability-incident-coordination-handoff-analyst",
               "reliability-observability-alert-quality-analyst",
               "reliability-postincident-learning-action-analyst",
-              "reliability-sli-slo-error-budget-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "reliability-sli-slo-error-budget-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

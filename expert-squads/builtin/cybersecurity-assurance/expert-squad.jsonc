@@ -5,22 +5,31 @@
   "name": "Cybersecurity Assurance",
   "label": "Cybersecurity Assurance",
   "description": "Read-only threat, control, and incident-readiness analysis joined into an evidence-backed security assurance register.",
-  "version": "2026.08.10.1",
-  "product_pillars": ["code", "work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for bounded security posture, control evidence, and incident-readiness assurance.",
     "selection_guidance": "Select when a decision owner needs a source-grounded security assurance pack without exploitation, credential access, production mutation, or compliance certification.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["cybersecurity-assurance/shared/method"],
+      "package_skill_refs": [
+        "cybersecurity-assurance/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +39,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "security-threat-evidence-analyst": {
@@ -41,7 +50,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["cybersecurity-assurance/shared/method"],
+        "package_skill_refs": [
+          "cybersecurity-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +62,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "security-control-coverage-analyst": {
         "label": "Control Coverage Analyst",
@@ -61,7 +72,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["cybersecurity-assurance/shared/method"],
+        "package_skill_refs": [
+          "cybersecurity-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +84,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "security-incident-readiness-analyst": {
         "label": "Incident Readiness Analyst",
@@ -81,7 +94,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["cybersecurity-assurance/shared/method"],
+        "package_skill_refs": [
+          "cybersecurity-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,17 +106,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "security-assurance-integrator": {
         "label": "Security Assurance Integrator",
         "description": "Joins all security evidence into one reviewable assurance register.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/security-assurance-integrator/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["cybersecurity-assurance/shared/method"],
+        "package_skill_refs": [
+          "cybersecurity-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +128,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "security-assurance-pack": {
@@ -122,17 +139,17 @@
           "security-threat-evidence-analyst": {
             "agent_id": "security-threat-evidence-analyst",
             "description": "Maps threats and observed evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "security-control-coverage-analyst": {
             "agent_id": "security-control-coverage-analyst",
             "description": "Maps control coverage and gaps.",
-            "depends_on": [],
+            "depends_on": []
           },
           "security-incident-readiness-analyst": {
             "agent_id": "security-incident-readiness-analyst",
             "description": "Maps incident readiness evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "security-assurance-integrator": {
             "agent_id": "security-assurance-integrator",
@@ -140,11 +157,11 @@
             "depends_on": [
               "security-control-coverage-analyst",
               "security-incident-readiness-analyst",
-              "security-threat-evidence-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "security-threat-evidence-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

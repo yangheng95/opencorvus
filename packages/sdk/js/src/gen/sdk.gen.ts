@@ -111,7 +111,6 @@ import type {
   ExperimentalMemoryGetErrors,
   ExperimentalMemoryGetResponses,
   ExperimentalProjectMemoryAcknowledgeNoticeResponses,
-  ExperimentalProjectMemoryEventsResponses,
   ExperimentalProjectMemoryGetResponses,
   ExperimentalProjectMemoryOrganizeResponses,
   ExperimentalResourceListErrors,
@@ -299,8 +298,6 @@ import type {
   MailboxDeleteManyErrors,
   MailboxDeleteManyResponses,
   MailboxDeleteResponses,
-  MailboxEventsResponse,
-  MailboxEventsResponses,
   MailboxListErrors,
   MailboxListResponses,
   MailboxReadAllResponses,
@@ -455,6 +452,8 @@ import type {
   SessionConfigUpdateErrors,
   SessionConfigUpdateResponses,
   SessionConversationErrors,
+  SessionConversationHistoryErrors,
+  SessionConversationHistoryResponses,
   SessionConversationResponses,
   SessionCreateErrors,
   SessionCreateResponses,
@@ -541,8 +540,6 @@ import type {
   TaskInjectResponses,
   TaskInteractionsErrors,
   TaskInteractionsResponses,
-  TaskListEventsResponse,
-  TaskListEventsResponses,
   TaskListResponses,
   TaskMessageErrors,
   TaskMessageResponses,
@@ -698,34 +695,36 @@ export class App extends HeyApiClient {
   }
 
   /**
-   * Write log
+   * Write log batch
    *
-   * Write a log entry to the server logs with specified level and metadata.
+   * Write one bounded ordered batch of log entries to the server logs.
    */
   public log<ThrowOnError extends boolean = false>(
     parameters: {
-      extra?: {
-        [key: string]: unknown
-      }
-      level: "debug" | "info" | "error" | "warn"
-      message: string
-      service: string
+      entries: Array<{
+        /**
+         * Additional metadata for the log entry
+         */
+        extra?: {
+          [key: string]: unknown
+        }
+        /**
+         * Log level
+         */
+        level: "debug" | "info" | "error" | "warn"
+        /**
+         * Log message
+         */
+        message: string
+        /**
+         * Service name for the log entry
+         */
+        service: string
+      }>
     },
     options?: Options<never, ThrowOnError>,
   ) {
-    const params = buildClientParams(
-      [parameters],
-      [
-        {
-          args: [
-            { in: "body", key: "extra" },
-            { in: "body", key: "level" },
-            { in: "body", key: "message" },
-            { in: "body", key: "service" },
-          ],
-        },
-      ],
-    )
+    const params = buildClientParams([parameters], [{ args: [{ in: "body", key: "entries" }] }])
     return (options?.client ?? this.client).post<AppLogResponses, AppLogErrors, ThrowOnError>({
       url: "/log",
       ...options,
@@ -2430,23 +2429,6 @@ export class ProjectMemory extends HeyApiClient {
     const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
     return (options?.client ?? this.client).get<ExperimentalProjectMemoryGetResponses, unknown, ThrowOnError>({
       url: "/experimental/project-memory",
-      ...options,
-      ...params,
-    })
-  }
-
-  /**
-   * Subscribe to Project MEMORY.MD notice changes
-   */
-  public events<ThrowOnError extends boolean = false>(
-    parameters?: {
-      directory?: string
-    },
-    options?: Options<never, ThrowOnError, unknown>,
-  ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
-    return (options?.client ?? this.client).sse.get<ExperimentalProjectMemoryEventsResponses, unknown, ThrowOnError>({
-      url: "/experimental/project-memory/events",
       ...options,
       ...params,
     })
@@ -4630,10 +4612,6 @@ export class Control extends HeyApiClient {
              */
             created_before_ms?: number
             /**
-             * Opaque cursor returned by the preceding page; omit it for the first page.
-             */
-            cursor?: string
-            /**
              * Optional exact logical Goal-subject filter.
              */
             goal_ids?: Array<string>
@@ -4653,6 +4631,10 @@ export class Control extends HeyApiClient {
              * Optional exact resource media-type filter.
              */
             media_types?: Array<string>
+            /**
+             * One-based page number. Start at 1, then use the preceding response's next_page_number.
+             */
+            page_number: number
             /**
              * Optional exact projected producer Agent-identity filter. Core-owned typed projections never match this filter; select those by label, kind, artifact type, or Goal.
              */
@@ -4684,6 +4666,16 @@ export class Control extends HeyApiClient {
              * Source Task whose Artifact catalog should be enumerated.
              */
             taskID: string
+            /**
+             * Exact current terminal occurrence returned by panel.query_task for this source Task.
+             */
+            terminal_lifecycle_reference: {
+              terminalError?: string
+              terminalEventID: string
+              terminalReason?: "interrupted"
+              terminalStatus: "completed" | "failed" | "cancelled"
+              timeCompleted: number
+            }
             /**
              * Engine version scope at the frozen catalog revision. Task Artifact snapshots are immutable.
              */
@@ -6686,43 +6678,50 @@ export class Global2 extends HeyApiClient {
    */
   public create<ThrowOnError extends boolean = false>(
     parameters: {
-      artifactImports?: Array<{
-        locator:
-          | {
-              artifact_id: string
-              catalog_revision: number
-              expected_sha256: string
-              source: "engine_artifact"
-            }
-          | {
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              source: "task_artifact_snapshot"
-            }
-          | {
-              ref: {
-                bytes: number
-                media_type: string
-                path: string
-                sha256: string
-                snapshot: {
-                  manifest_sha256: string
-                  project_id: string
-                  schema_version: 2
-                  snapshot_id: string
-                  task_id: string
+      artifactSources?: Array<
+        | {
+            authority: "completion_decision"
+            source_task_id: string
+          }
+        | {
+            authority: "terminal_lifecycle"
+            locator:
+              | {
+                  artifact_id: string
+                  catalog_revision: number
+                  expected_sha256: string
+                  source: "engine_artifact"
                 }
-                tree: string
-              }
-              source: "task_artifact_resource"
-            }
-        source_task_id: string
-      }>
+              | {
+                  snapshot: {
+                    manifest_sha256: string
+                    project_id: string
+                    schema_version: 2
+                    snapshot_id: string
+                    task_id: string
+                  }
+                  source: "task_artifact_snapshot"
+                }
+              | {
+                  ref: {
+                    bytes: number
+                    media_type: string
+                    path: string
+                    sha256: string
+                    snapshot: {
+                      manifest_sha256: string
+                      project_id: string
+                      schema_version: 2
+                      snapshot_id: string
+                      task_id: string
+                    }
+                    tree: string
+                  }
+                  source: "task_artifact_resource"
+                }
+            source_task_id: string
+          }
+      >
       attachments?: Array<
         | {
             filename?: string
@@ -6892,7 +6891,7 @@ export class Global2 extends HeyApiClient {
       [
         {
           args: [
-            { in: "body", key: "artifactImports" },
+            { in: "body", key: "artifactSources" },
             { in: "body", key: "attachments" },
             { in: "body", key: "budget" },
             { in: "body", key: "channelBinding" },
@@ -6998,20 +6997,6 @@ export class Queue extends HeyApiClient {
       url: "/task/{taskID}/start-now",
       ...options,
       ...params,
-    })
-  }
-}
-
-export class List extends HeyApiClient {
-  /**
-   * Subscribe to global task-list change notifications
-   *
-   * Pure change-notification SSE for the task list sidebar. Emits `{type, taskID, sequence}` when a persisted task aggregate event changes the task-list projection. Conversation stream/status chunks belong to /task/:taskID/events and are intentionally not sent here. Notify-worthy events also carry `notificationDetails` for copyable diagnostics. No replay — clients call /task separately to fetch the refreshed list.
-   */
-  public events<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError, TaskListEventsResponse>) {
-    return (options?.client ?? this.client).sse.get<TaskListEventsResponses, unknown, ThrowOnError>({
-      url: "/task/events",
-      ...options,
     })
   }
 }
@@ -7217,43 +7202,50 @@ export class Task extends HeyApiClient {
     parameters: {
       query_directory?: string
       "init-git"?: boolean
-      artifactImports?: Array<{
-        locator:
-          | {
-              artifact_id: string
-              catalog_revision: number
-              expected_sha256: string
-              source: "engine_artifact"
-            }
-          | {
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              source: "task_artifact_snapshot"
-            }
-          | {
-              ref: {
-                bytes: number
-                media_type: string
-                path: string
-                sha256: string
-                snapshot: {
-                  manifest_sha256: string
-                  project_id: string
-                  schema_version: 2
-                  snapshot_id: string
-                  task_id: string
+      artifactSources?: Array<
+        | {
+            authority: "completion_decision"
+            source_task_id: string
+          }
+        | {
+            authority: "terminal_lifecycle"
+            locator:
+              | {
+                  artifact_id: string
+                  catalog_revision: number
+                  expected_sha256: string
+                  source: "engine_artifact"
                 }
-                tree: string
-              }
-              source: "task_artifact_resource"
-            }
-        source_task_id: string
-      }>
+              | {
+                  snapshot: {
+                    manifest_sha256: string
+                    project_id: string
+                    schema_version: 2
+                    snapshot_id: string
+                    task_id: string
+                  }
+                  source: "task_artifact_snapshot"
+                }
+              | {
+                  ref: {
+                    bytes: number
+                    media_type: string
+                    path: string
+                    sha256: string
+                    snapshot: {
+                      manifest_sha256: string
+                      project_id: string
+                      schema_version: 2
+                      snapshot_id: string
+                      task_id: string
+                    }
+                    tree: string
+                  }
+                  source: "task_artifact_resource"
+                }
+            source_task_id: string
+          }
+      >
       attachments?: Array<
         | {
             filename?: string
@@ -7429,7 +7421,7 @@ export class Task extends HeyApiClient {
               map: "directory",
             },
             { in: "query", key: "init-git" },
-            { in: "body", key: "artifactImports" },
+            { in: "body", key: "artifactSources" },
             { in: "body", key: "attachments" },
             { in: "body", key: "budget" },
             { in: "body", key: "channelBinding" },
@@ -8370,11 +8362,6 @@ export class Task extends HeyApiClient {
     return (this._queue ??= new Queue({ client: this.client }))
   }
 
-  private _list?: List
-  get list2(): List {
-    return (this._list ??= new List({ client: this.client }))
-  }
-
   private _conversation?: Conversation
   get conversation2(): Conversation {
     return (this._conversation ??= new Conversation({ client: this.client }))
@@ -8700,18 +8687,6 @@ export class Mailbox extends HeyApiClient {
       url: "/mailbox",
       ...options,
       ...params,
-    })
-  }
-
-  /**
-   * Subscribe to global mailbox changes
-   *
-   * Pure change-notification Server-Sent Events stream. Clients refetch /mailbox for the canonical projection.
-   */
-  public events<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError, MailboxEventsResponse>) {
-    return (options?.client ?? this.client).sse.get<MailboxEventsResponses, unknown, ThrowOnError>({
-      url: "/mailbox/events",
-      ...options,
     })
   }
 
@@ -11487,6 +11462,50 @@ export class Config3 extends HeyApiClient {
   }
 }
 
+export class Conversation2 extends HeyApiClient {
+  /**
+   * Page older session conversation transcript
+   *
+   * Return a bounded Mission or conversation transcript slice older than the current hydrate tail.
+   */
+  public history<ThrowOnError extends boolean = false>(
+    parameters: {
+      sessionID: string
+      directory?: string
+      before: number
+      before_order_key: string
+      before_id?: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "sessionID" },
+            { in: "query", key: "directory" },
+            { in: "query", key: "before" },
+            { in: "query", key: "before_order_key" },
+            { in: "query", key: "before_id" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      SessionConversationHistoryResponses,
+      SessionConversationHistoryErrors,
+      ThrowOnError
+    >({
+      url: "/session/{sessionID}/conversation/history",
+      ...options,
+      ...params,
+    })
+  }
+}
+
 export class Session4 extends HeyApiClient {
   /**
    * List sessions
@@ -11882,6 +11901,7 @@ export class Session4 extends HeyApiClient {
     parameters: {
       sessionID: string
       directory?: string
+      tail_limit?: number
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -11892,6 +11912,7 @@ export class Session4 extends HeyApiClient {
           args: [
             { in: "path", key: "sessionID" },
             { in: "query", key: "directory" },
+            { in: "query", key: "tail_limit" },
           ],
         },
       ],
@@ -12457,6 +12478,11 @@ export class Session4 extends HeyApiClient {
   private _config?: Config3
   get config(): Config3 {
     return (this._config ??= new Config3({ client: this.client }))
+  }
+
+  private _conversation?: Conversation2
+  get conversation2(): Conversation2 {
+    return (this._conversation ??= new Conversation2({ client: this.client }))
   }
 }
 

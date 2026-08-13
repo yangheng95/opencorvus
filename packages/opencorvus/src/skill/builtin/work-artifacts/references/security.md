@@ -4,6 +4,9 @@
   POTX, macro-enabled file, or existing template.
 - Never request a local filesystem path or run an underlying runtime through
   Bash. The typed Harness accepts canonical project attachments only.
+- Do not install or invoke LibreOffice, Chrome, Playwright, or another external
+  renderer. The qualified Harness owns its pinned Office runtime and fresh PNG
+  rendering path on every supported release target.
 - Do not embed OLE, ActiveX, macros, executables, external package
   relationships, remote images, scripts, video, audio, or arbitrary XML.
 - Treat links and citations as displayed text unless a qualified typed schema

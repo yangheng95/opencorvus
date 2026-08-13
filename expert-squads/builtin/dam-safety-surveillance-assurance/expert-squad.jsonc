@@ -5,22 +5,30 @@
   "name": "Dam Safety Surveillance Assurance",
   "label": "Dam Safety Surveillance Assurance",
   "description": "Dam facility configuration, inspection, instrumentation, performance, potential-failure-mode and control evidence assurance without operational, engineering-release or emergency authority.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for source-bound dam inspection and surveillance evidence prepared for qualified dam-safety review.",
     "selection_guidance": "Select for dam configuration/design-authority trace, consequence context, inspection findings, instrumentation data, behavior trends, potential failure modes, controls or action verification. Do not select to operate gates, set alarm levels, declare safety, warn the public, order evacuation or approve engineering work.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["dam-safety-surveillance-assurance/shared/method"],
+      "package_skill_refs": [
+        "dam-safety-surveillance-assurance/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "dam-configuration-authority-consequence-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["dam-safety-surveillance-assurance/shared/method"],
+        "package_skill_refs": [
+          "dam-safety-surveillance-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "dam-inspection-condition-defect-analyst": {
         "label": "Dam Inspection Condition and Defect Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["dam-safety-surveillance-assurance/shared/method"],
+        "package_skill_refs": [
+          "dam-safety-surveillance-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +83,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "dam-instrumentation-performance-surveillance-analyst": {
         "label": "Dam Instrumentation Performance Surveillance Analyst",
@@ -81,7 +93,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["dam-safety-surveillance-assurance/shared/method"],
+        "package_skill_refs": [
+          "dam-safety-surveillance-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "dam-potential-failure-mode-control-analyst": {
         "label": "Dam Potential Failure Mode and Control Analyst",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["dam-safety-surveillance-assurance/shared/method"],
+        "package_skill_refs": [
+          "dam-safety-surveillance-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,7 +127,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "dam-safety-surveillance-review-owner": {
         "label": "Dam Safety Surveillance Review Owner",
@@ -121,7 +137,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["dam-safety-surveillance-assurance/shared/method"],
+        "package_skill_refs": [
+          "dam-safety-surveillance-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -131,8 +149,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "qualified-review": {
@@ -142,22 +160,22 @@
           "dam-configuration-authority-consequence-analyst": {
             "agent_id": "dam-configuration-authority-consequence-analyst",
             "description": "Freezes dam identity, structures, design/modification authority, loading context and supplied consequence classification.",
-            "depends_on": [],
+            "depends_on": []
           },
           "dam-inspection-condition-defect-analyst": {
             "agent_id": "dam-inspection-condition-defect-analyst",
             "description": "Maps visual, survey and nondestructive observations to exact locations, dimensions, comparisons and limitations.",
-            "depends_on": [],
+            "depends_on": []
           },
           "dam-instrumentation-performance-surveillance-analyst": {
             "agent_id": "dam-instrumentation-performance-surveillance-analyst",
             "description": "Reconciles instrument health, readings, conversions, environmental/loading covariates and authorized behavior baselines.",
-            "depends_on": [],
+            "depends_on": []
           },
           "dam-potential-failure-mode-control-analyst": {
             "agent_id": "dam-potential-failure-mode-control-analyst",
             "description": "Traces supplied potential failure modes, evidence, detection controls, actions and verification without risk acceptance.",
-            "depends_on": [],
+            "depends_on": []
           },
           "dam-safety-surveillance-review-owner": {
             "agent_id": "dam-safety-surveillance-review-owner",
@@ -166,11 +184,11 @@
               "dam-configuration-authority-consequence-analyst",
               "dam-inspection-condition-defect-analyst",
               "dam-instrumentation-performance-surveillance-analyst",
-              "dam-potential-failure-mode-control-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "dam-potential-failure-mode-control-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

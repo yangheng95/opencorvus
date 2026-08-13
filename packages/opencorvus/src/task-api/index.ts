@@ -39,7 +39,7 @@ import {
 } from "@/protocol/delivery"
 import type { SchedulerEndpoint, SchedulerMessageKind } from "@/protocol/schema"
 import { EngineProtocol } from "@/engine/protocol"
-import { ensureGitignore } from "@/engine/git"
+import { ensureGitProjectMetadata } from "@/engine/git-project-metadata"
 import { Instance } from "@/project/instance"
 import type { ProjectDeletionAdmission } from "@/project/instance"
 import { InstanceBootstrap } from "@/project/bootstrap"
@@ -248,8 +248,10 @@ import {
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import {
   importsFromMappings,
+  importsFromResolvedCrossTaskArtifactSources,
   listCrossTaskArtifactImportMappings,
-  prepareCrossTaskArtifactImports,
+  prepareCrossTaskArtifactSourceImports,
+  resolveCrossTaskArtifactSources,
   requireMissionArtifactSourceAuthority,
   requireMissionTaskLineageAuthority,
   sameCrossTaskArtifactImportSet,
@@ -1315,8 +1317,8 @@ async function prepareProject(project?: string) {
       message: `Cannot create a task in ${Instance.directory}: the directory is not a git repository. Initialize it via POST /project/current/init-git or pick a different working directory.`,
     })
   }
-  // Commit the single OpenCorvus runtime ignore rule before executor work begins.
-  await ensureGitignore()
+  // Commit the canonical ignore and binary checkout policies before executor work begins.
+  await ensureGitProjectMetadata()
   if (!project) return
   if (project === Instance.project.id) return
   throw new Error(`project mismatch: expected ${Instance.project.id}, got ${project}`)
@@ -1605,7 +1607,7 @@ export namespace EngineService {
       metadata: projectTaskCreatorMetadata(parsed.metadata, creator),
     })
     const artifactImporter: CrossTaskArtifactImporter | undefined =
-      input.artifactImports && input.artifactImports.length > 0
+      input.artifactSources && input.artifactSources.length > 0
         ? (() => {
             if (creator.actor !== "mission" || !creator.messageID || !creator.toolCallID) {
               throw new Error("Cross-Task Artifact imports require a real Mission panel.create_task tool execution")
@@ -1664,6 +1666,15 @@ export namespace EngineService {
     },
   ) {
     await prepareProject(input.project)
+    const resolvedArtifactSources =
+      input.artifactSources && input.artifactSources.length > 0
+        ? resolveCrossTaskArtifactSources({
+            sources: input.artifactSources,
+            projectID: Instance.project.id,
+            importer: creationContext.artifactImporter!,
+          })
+        : { imports: [], authorities: [] }
+    const artifactImports = importsFromResolvedCrossTaskArtifactSources(resolvedArtifactSources)
     const taskConfigSnapshot = creationContext.taskConfigSnapshot
     const selectedProfileID = selectedTaskProfileID(input, taskConfigSnapshot)
     const existingBindingTask = existingTaskByChannelBinding(input.channelBinding)
@@ -1673,7 +1684,7 @@ export namespace EngineService {
         throw new Error(`Channel-bound Task ${existingBindingTask} already exists with a different product pillar`)
       }
       const committedImports = importsFromMappings(listCrossTaskArtifactImportMappings(existingBindingTask))
-      if (!sameCrossTaskArtifactImportSet(input.artifactImports ?? [], committedImports)) {
+      if (!sameCrossTaskArtifactImportSet(artifactImports, committedImports)) {
         throw new Error(
           `Channel-bound Task ${existingBindingTask} already exists with a different exact Artifact import set`,
         )
@@ -1697,7 +1708,7 @@ export namespace EngineService {
           )
         }
         const committedImports = importsFromMappings(listCrossTaskArtifactImportMappings(existing.id))
-        if (!sameCrossTaskArtifactImportSet(input.artifactImports ?? [], committedImports)) {
+        if (!sameCrossTaskArtifactImportSet(artifactImports, committedImports)) {
           throw new TaskArtifactImportIdempotencyConflictError({
             message: `Task request ${requestID} already committed as ${existing.id} with a different exact Artifact import set`,
             requestID,
@@ -1788,16 +1799,16 @@ export namespace EngineService {
     // `src/intent/bundle.ts` header for the full rationale.
     let session!: Awaited<ReturnType<typeof Session.create>>
     try {
-      const preparedArtifactImports =
-        input.artifactImports && input.artifactImports.length > 0
-          ? await prepareCrossTaskArtifactImports({
-              imports: input.artifactImports,
+      const preparedArtifactSources =
+        resolvedArtifactSources.authorities.length > 0
+          ? await prepareCrossTaskArtifactSourceImports({
+              resolved: resolvedArtifactSources,
               projectID: Instance.project.id,
               targetProjectDirectory: Instance.directory,
               targetTaskID: taskID,
               importer: creationContext.artifactImporter!,
             })
-          : []
+          : { imports: [], authorities: [] }
       const { IntentBundle } = await import("@/intent/bundle")
       await IntentBundle.write({
         projectID: Instance.project.id,
@@ -1852,13 +1863,14 @@ export namespace EngineService {
         channelBinding: input.channelBinding,
         projectID: Instance.project.id,
         queue: input.queue,
-        artifactImports: preparedArtifactImports,
+        artifactImports: preparedArtifactSources.imports,
+        artifactImportAuthorities: preparedArtifactSources.authorities,
         packageRevision,
         creationExpectedPackageDigest: input.expectedPackageDigest,
         executionCapsuleBinding,
       })
     } catch (error) {
-      if (input.artifactImports && input.artifactImports.length > 0) {
+      if (artifactImports.length > 0) {
         await removeTaskArtifactRoot({
           projectDirectory: Instance.directory,
           taskID,
@@ -1867,7 +1879,7 @@ export namespace EngineService {
       const existing = requestID ? recoverTaskByRequest(requestID, error) : undefined
       if (existing) {
         const committedImports = importsFromMappings(listCrossTaskArtifactImportMappings(existing))
-        if (!sameCrossTaskArtifactImportSet(input.artifactImports ?? [], committedImports)) {
+        if (!sameCrossTaskArtifactImportSet(artifactImports, committedImports)) {
           throw new TaskArtifactImportIdempotencyConflictError({
             message: `Task request ${requestID} already committed as ${existing} with a different exact Artifact import set`,
             requestID: requestID!,
@@ -2864,6 +2876,13 @@ export namespace EngineService {
         .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
         .get()
       if (existingAuthority) {
+        if (current.time_completed == null) {
+          terminalizeQueuedTaskEventsForCancellationInTransaction(db, {
+            taskID,
+            cancellationRequestEventID: existingAuthority.requestEventID,
+            now: Date.now(),
+          })
+        }
         return ProtocolStore.requireEvent(existingAuthority.requestEventID)
       }
       const requested = EngineProtocol.emitInTransaction(
@@ -2886,6 +2905,11 @@ export namespace EngineService {
         },
       )
       db.insert(EngineTaskCancellationAuthorityTable).values({ task_id: taskID, request_event_id: requested.id }).run()
+      terminalizeQueuedTaskEventsForCancellationInTransaction(db, {
+        taskID,
+        cancellationRequestEventID: requested.id,
+        now: requested.time.emitted,
+      })
       touchEngineTask(db, { taskID, timeUpdated: requested.time.emitted })
       return requested
     })

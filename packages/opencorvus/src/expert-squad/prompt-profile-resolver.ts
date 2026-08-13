@@ -79,7 +79,7 @@ import {
   compareCanonicalStrings,
   textSHA256,
 } from "./projection-hash"
-import { TASK_ARTIFACT_DISCOVERY_TOOL_IDS, TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
+import { TASK_ARTIFACT_SCHEDULER_TOOL_IDS, TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
 import { ExpertSquadRegistry } from "./registry"
 import { runtimeOverrideLayers } from "@/agent/runtime-override"
 import { sessionRuntimeFromProjectedTemplate, type SessionAgentRuntime } from "@/agent/session-agent-runtime"
@@ -1173,7 +1173,7 @@ export namespace PromptProfileResolver {
     return expandedProjectedBuiltInToolIDs({
       inheritedToolIDs: [
         ...(projection.inherit_base_tools ? AgentToolPool.orchestratorSchedulerRoleBaseToolIDs() : []),
-        ...TASK_ARTIFACT_DISCOVERY_TOOL_IDS,
+        ...TASK_ARTIFACT_SCHEDULER_TOOL_IDS,
         "publish_interactive_artifact",
       ],
       explicitToolIDs: projection.built_in_tool_ids,
@@ -3545,14 +3545,29 @@ export namespace PromptProfileResolver {
       input.capability.builtInToolIDs.includes("artifact_select")
         ? [
             "<task_artifact_catalog>",
-            "Durable inter-Agent evidence is discovered through the current Task's artifact catalog by each consumer itself; dispatches never transport Artifact locators or bodies. Use artifact_search without a text query to enumerate the complete catalog and follow every cursor while checking catalog_complete and provider_errors. Select current, historical, or all revisions explicitly with version_scope; select exact stable names with labels; use query mode substring for deterministic partial-name discovery or fuzzy for ranked typo-tolerant discovery; and choose relevance, newest, oldest, or name ordering explicitly. A fuzzy result is only a candidate list. Read each chosen immutable locator completely, then call artifact_select for every completely read Artifact that semantically supports the typed output. Use bounded inline byte windows for ordinary text. For a large task_artifact_resource, use artifact_read delivery=materialized_file once and inspect the returned immutable local cache path with mature command-line or library tooling instead of streaming the whole resource repeatedly through model context. Completely read but unselected Artifacts remain observed audit facts and do not become semantic sources; zero selections are valid. An immediate artifact_publish call declares its publication-specific source_artifact_locators explicitly, each drawn from complete reads earlier in the same physical Turn, so multiple publications cannot contaminate one another. Core-owned typed projections such as Intent, RequirementSet, ContractGraph, and Goal projection are selected by kind, artifact type, label, Goal, and time; projected-Agent producer filters do not match those Core publication facts. Missing selected locators, foreign-Task locators, corrupt manifests or bytes, wrong paths, digest mismatches, and invalid text are explicit evidence errors and must remain visible. Artifact tools expose facts only: they do not dispatch, retry, accept, or complete Goals.",
+            "Durable inter-Agent evidence is discovered through the current Task's artifact catalog by each consumer itself; dispatches never transport Artifact locators or bodies. Use artifact_search without a text query to enumerate the complete catalog and follow every cursor while checking catalog_complete and provider_errors. Select current, historical, or all revisions explicitly with version_scope; select exact stable names with labels; use query mode substring for deterministic partial-name discovery or fuzzy for ranked typo-tolerant discovery; and choose relevance, newest, oldest, or name ordering explicitly. A fuzzy result is only a candidate list. Pass the returned artifact_locator_ref to artifact_read and continue with its next_offset until complete; then pass artifact_read_ref to artifact_select for every Artifact that semantically supports the typed output. Use bounded inline byte windows for ordinary text. For a large task_artifact_resource, use artifact_read delivery=materialized_file once and inspect the returned immutable local cache path with mature command-line or library tooling instead of streaming the whole resource repeatedly through model context. Completely read but unselected Artifacts remain observed audit facts and do not become semantic sources; zero selections are valid. An immediate artifact_publish call declares its publication-specific source_selection_refs explicitly from prior artifact_select results in the same physical Turn, so multiple publications cannot contaminate one another. The Host resolves these short references to the persisted complete canonical locators; never reconstruct snapshot IDs, paths, byte counts, or digests. Core-owned typed projections such as Intent, RequirementSet, ContractGraph, and Goal projection are selected by kind, artifact type, label, Goal, and time; projected-Agent producer filters do not match those Core publication facts. Missing selected references, foreign-Task locators, corrupt manifests or bytes, wrong paths, digest mismatches, and invalid text are explicit evidence errors and must remain visible. Artifact tools expose facts only: they do not dispatch, retry, accept, or complete Goals.",
             "</task_artifact_catalog>",
+          ].join("\n")
+        : undefined
+    const installedPackageBoundary = [
+      "<installed_expert_squad_package_boundary>",
+      "Project-installed Expert Squad directories under .opencorvus/expert-squads are immutable runtime dependencies, not Task deliverable directories. Read their prompts, Skills, references, examples, assets, and tools as package inputs. Write generated domain deliverables to ordinary project output paths outside the installed package tree. A request to populate or complete a package-provided template authorizes a copied deliverable, not an in-place package edit. Only a Task that explicitly authorizes Expert Squad package authoring or evolution may modify a package, and it must use the exact authoring workspace and publication contract supplied by that Task.",
+      "</installed_expert_squad_package_boundary>",
+    ].join("\n")
+    const schedulerSnapshotProtocol =
+      "scheduler" in input.capability && input.capability.builtInToolIDs.includes("artifact_snapshot")
+        ? [
+            "<task_input_snapshot_authority>",
+            "You own the read-only Task input evidence boundary. Before dispatching workflow workers that require current-project files, call artifact_snapshot with the complete exact input file set, then use each returned resource artifact_locator_ref to read the exact resource completely and pass its artifact_read_ref to artifact_select. Never reconstruct snapshot IDs, paths, byte counts, or digests. artifact_snapshot does not edit project files or publish a domain conclusion. Workers remain the only owners of generic artifact_publish and typed domain outputs.",
+            "</task_input_snapshot_authority>",
           ].join("\n")
         : undefined
     return [
       projectedIdentity,
       input.base,
+      installedPackageBoundary,
       artifactCatalogProtocol,
+      schedulerSnapshotProtocol,
       readme,
       virtualWorkflows,
       input.capability.promptOverlay,

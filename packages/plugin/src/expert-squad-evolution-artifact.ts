@@ -93,6 +93,78 @@ const frozenCampaignInputs = z
   })
   .strict()
 
+const evolutionCampaignPublishInputShape = {
+  target: exactTarget,
+  baseline_revision: exactRevision,
+  candidate_version_policy: z.string().min(1),
+  candidate_hypothesis: z.string().min(1),
+  dataset_partition: z.enum(["development", "holdout", "certification"]),
+  dataset_digest: sha256,
+  cases: z.array(portableIdentity).min(1),
+  scorer_digests: z.array(sha256).min(1),
+  scorers: z.array(MetricScorerSpecSchema).min(1),
+  frozen_inputs: frozenCampaignInputs,
+  model: z.string().min(1),
+  model_configuration_digest: sha256,
+  environment_digest: sha256,
+  permission_snapshot_digest: sha256,
+  external_side_effect_policy: z.string().min(1),
+  repetitions: z.number().int().positive(),
+  arm_order: z.array(z.enum(["baseline", "candidate"])).min(2),
+  statistics: z.string().min(1),
+  budget: z.object({ max_runs: z.number().int().positive(), max_cost: z.number().nonnegative() }).strict(),
+  inactivity_timeout_ms: z.number().int().positive(),
+  ui_rubric_digest: sha256.nullable(),
+  mutable_paths: z.array(z.string().min(1)),
+  trial_execution: z.discriminatedUnion("status", [
+    z.object({ status: z.literal("available"), installation_scope: z.enum(["project", "global"]) }).strict(),
+    z.object({ status: z.literal("unavailable"), reason_code: z.literal("product_release_required") }).strict(),
+  ]),
+} as const
+
+export const EvolutionCampaignPublishInputSchema = z
+  .object({
+    candidate_version_policy: z.string().min(1),
+    candidate_hypothesis: z.string().min(1),
+    dataset_partition: z.enum(["development", "holdout", "certification"]),
+    resource_roles: z
+      .object({
+        dataset_path: TaskArtifactRelativePathSchema,
+        cases: z
+          .array(
+            z
+              .object({
+                case_id: portableIdentity,
+                resource_path: TaskArtifactRelativePathSchema,
+              })
+              .strict(),
+          )
+          .min(1),
+        model_configuration_path: TaskArtifactRelativePathSchema,
+        environment_path: TaskArtifactRelativePathSchema,
+        workspace_template_path: TaskArtifactRelativePathSchema,
+        permission_snapshot_path: TaskArtifactRelativePathSchema,
+        scorer_assets: z
+          .array(
+            z
+              .object({
+                scorer_id: portableIdentity,
+                resource_path: TaskArtifactRelativePathSchema,
+              })
+              .strict(),
+          )
+          .min(1),
+      })
+      .strict(),
+    external_side_effect_policy: z.string().min(1),
+    repetitions: z.number().int().positive(),
+    arm_order: z.array(z.enum(["baseline", "candidate"])).min(2),
+    statistics: z.string().min(1),
+    budget: z.object({ max_runs: z.number().int().positive(), max_cost: z.number().nonnegative() }).strict(),
+    mutable_paths: z.array(z.string().min(1)),
+  })
+  .strict()
+
 export const EvolutionMetricReceiptSchema = z
   .object({
     campaign_spec_locator: ArtifactReadLocatorSchema,
@@ -126,33 +198,8 @@ export const EvolutionArtifactSchemas = {
     .strict(),
   "evolution-lab/campaign-spec": z
     .object({
-      target: exactTarget,
-      baseline_revision: exactRevision,
-      candidate_version_policy: z.string().min(1),
-      candidate_hypothesis: z.string().min(1),
-      dataset_partition: z.enum(["development", "holdout", "certification"]),
-      dataset_digest: sha256,
-      cases: z.array(portableIdentity).min(1),
-      scorer_digests: z.array(sha256).min(1),
-      scorers: z.array(MetricScorerSpecSchema).min(1),
-      frozen_inputs: frozenCampaignInputs,
-      model: z.string().min(1),
-      model_configuration_digest: sha256,
-      environment_digest: sha256,
+      ...evolutionCampaignPublishInputShape,
       workspace_digest: sha256,
-      permission_snapshot_digest: sha256,
-      external_side_effect_policy: z.string().min(1),
-      repetitions: z.number().int().positive(),
-      arm_order: z.array(z.enum(["baseline", "candidate"])).min(2),
-      statistics: z.string().min(1),
-      budget: z.object({ max_runs: z.number().int().positive(), max_cost: z.number().nonnegative() }).strict(),
-      inactivity_timeout_ms: z.number().int().positive(),
-      ui_rubric_digest: sha256.nullable(),
-      mutable_paths: z.array(z.string().min(1)),
-      trial_execution: z.discriminatedUnion("status", [
-        z.object({ status: z.literal("available"), installation_scope: z.enum(["project", "global"]) }).strict(),
-        z.object({ status: z.literal("unavailable"), reason_code: z.literal("product_release_required") }).strict(),
-      ]),
     })
     .strict()
     .superRefine((value, context) => {
@@ -178,6 +225,13 @@ export const EvolutionArtifactSchemas = {
           code: "custom",
           path: ["arm_order"],
           message: "campaign arm order must contain baseline and candidate exactly once",
+        })
+      const requiredRuns = value.cases.length * value.repetitions * 2
+      if (value.budget.max_runs < requiredRuns)
+        context.addIssue({
+          code: "custom",
+          path: ["budget", "max_runs"],
+          message: `campaign run budget must cover the complete two-arm matrix (${requiredRuns} runs)`,
         })
       if (new Set(value.frozen_inputs.cases.map((item) => item.case_id)).size !== value.frozen_inputs.cases.length)
         context.addIssue({
@@ -243,7 +297,8 @@ export const EvolutionArtifactSchemas = {
         context.addIssue({
           code: "custom",
           path: ["trial_execution"],
-          message: "built-in candidates require product release and installable targets require their exact scope",
+          message:
+            'target.scope === "built_in" requires product release; target.scope === "project" or "global" requires available execution in that exact scope',
         })
     }),
   "evolution-lab/failure-attribution": z
@@ -457,6 +512,37 @@ export const EvolutionPackagePublishableArtifactTypeSchema = z.enum(
     ...Array<Exclude<EvolutionArtifactType, "evolution-lab/promotion-receipt">>,
   ],
 )
+
+export const EvolutionPackagePublishableArtifactInputSchema = z.discriminatedUnion("artifact_type", [
+  z.object({
+    artifact_type: z.literal("evolution-lab/opportunity"),
+    payload: EvolutionArtifactSchemas["evolution-lab/opportunity"],
+  }),
+  z.object({
+    artifact_type: z.literal("evolution-lab/failure-attribution"),
+    payload: EvolutionArtifactSchemas["evolution-lab/failure-attribution"],
+  }),
+  z.object({
+    artifact_type: z.literal("evolution-lab/campaign-spec"),
+    payload: EvolutionCampaignPublishInputSchema,
+  }),
+  z.object({
+    artifact_type: z.literal("evolution-lab/candidate-revision"),
+    payload: EvolutionArtifactSchemas["evolution-lab/candidate-revision"],
+  }),
+  z.object({
+    artifact_type: z.literal("evolution-lab/run-evidence-bundle"),
+    payload: EvolutionArtifactSchemas["evolution-lab/run-evidence-bundle"],
+  }),
+  z.object({
+    artifact_type: z.literal("evolution-lab/evaluation-result"),
+    payload: EvolutionArtifactSchemas["evolution-lab/evaluation-result"],
+  }),
+  z.object({
+    artifact_type: z.literal("evolution-lab/comparison-recommendation"),
+    payload: EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"],
+  }),
+])
 
 export function parseEvolutionArtifact(type: EvolutionArtifactType, payload: unknown) {
   return EvolutionArtifactSchemas[type].parse(payload)

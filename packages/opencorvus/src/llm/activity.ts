@@ -319,7 +319,11 @@ function classify(err: unknown, ctx: ClassifyContext): ErrorClass {
   if (/Unexpected end|Unterminated|invalid SSE|tool_use missing|malformed stream|invalid frame/i.test(message)) {
     return "stream_protocol"
   }
-  if (/ECONNRESET|ETIMEDOUT|EAI_AGAIN|fetch failed|ENOTFOUND|ECONNREFUSED|getaddrinfo/i.test(message)) {
+  if (
+    /ECONNRESET|ETIMEDOUT|EAI_AGAIN|fetch failed|ENOTFOUND|ECONNREFUSED|getaddrinfo|socket connection was closed unexpectedly/i.test(
+      message,
+    )
+  ) {
     return "network"
   }
   return "unknown"

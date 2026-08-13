@@ -5,22 +5,30 @@
   "name": "Real Estate Due Diligence",
   "label": "Real Estate Due Diligence",
   "description": "Property documents, market and financial evidence, and physical and regulatory risks joined into a professional-review diligence pack.",
-  "version": "2026.08.10.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for bounded, source-linked property diligence.",
     "selection_guidance": "Select when property documents, market and financial assumptions, and physical or regulatory evidence need parallel review without transaction advice.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["real-estate-due-diligence/shared/method"],
+      "package_skill_refs": [
+        "real-estate-due-diligence/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "property-document-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["real-estate-due-diligence/shared/method"],
+        "package_skill_refs": [
+          "real-estate-due-diligence/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "property-market-financial-analyst": {
         "label": "Market and Financial Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["real-estate-due-diligence/shared/method"],
+        "package_skill_refs": [
+          "real-estate-due-diligence/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,17 +83,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "property-physical-regulatory-risk-analyst": {
         "label": "Physical and Regulatory Risk Analyst",
         "description": "Maps condition, environmental, zoning, permit, utility, and insurance evidence.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/property-physical-regulatory-risk-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["real-estate-due-diligence/shared/method"],
+        "package_skill_refs": [
+          "real-estate-due-diligence/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "property-diligence-pack-owner": {
         "label": "Property Diligence Pack Owner",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["real-estate-due-diligence/shared/method"],
+        "package_skill_refs": [
+          "real-estate-due-diligence/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "property-due-diligence-pack": {
@@ -122,17 +138,17 @@
           "property-document-analyst": {
             "agent_id": "property-document-analyst",
             "description": "Maps property documents.",
-            "depends_on": [],
+            "depends_on": []
           },
           "property-market-financial-analyst": {
             "agent_id": "property-market-financial-analyst",
             "description": "Tests market and financial assumptions.",
-            "depends_on": [],
+            "depends_on": []
           },
           "property-physical-regulatory-risk-analyst": {
             "agent_id": "property-physical-regulatory-risk-analyst",
             "description": "Maps physical and regulatory risks.",
-            "depends_on": [],
+            "depends_on": []
           },
           "property-diligence-pack-owner": {
             "agent_id": "property-diligence-pack-owner",
@@ -140,11 +156,11 @@
             "depends_on": [
               "property-document-analyst",
               "property-market-financial-analyst",
-              "property-physical-regulatory-risk-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "property-physical-regulatory-risk-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

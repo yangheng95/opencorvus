@@ -29,7 +29,7 @@ const packageSkills = ["squad-sdk/shared/authoring", "squad-sdk/shared/import"] 
 const agentIDs = [
   "squad-sdk-contract-reviewer",
   "squad-sdk-import-analyst",
-  "squad-sdk-package-architect",
+  "squad-sdk-planner",
   "squad-sdk-source-analyst",
 ] as const
 
@@ -42,7 +42,7 @@ describe("Generate Expert Squads expert squad", () => {
       schema_version: 1,
       namespace: "builtin",
       id: "squad-sdk",
-      version: "2026.08.10.1",
+      version: "2026.08.13.1",
       system_role: "expert_squad_generator",
     })
     expect(loaded.manifest.capability_projection.scheduler.built_in_tool_ids).toEqual([...schedulerTools])
@@ -50,32 +50,37 @@ describe("Generate Expert Squads expert squad", () => {
     expect([...loaded.packageSkills.keys()]).toEqual([...packageSkills])
     expect(Object.keys(workflows)).toEqual(["sdk-authoring", "heterogeneous-import"])
     expect(workflows["sdk-authoring"]!.nodes).toEqual({
-      "source-analysis": {
-        agent_id: "squad-sdk-source-analyst",
-        description: "Publishes the source algorithm and package-boundary evidence.",
+      "squad-sdk-planner": {
+        agent_id: "squad-sdk-planner",
+        description: "Publishes the canonical package blueprint and flat Planner/parallel-worker topology.",
         depends_on: [],
       },
-      "package-architecture": {
-        agent_id: "squad-sdk-package-architect",
-        description: "Publishes the complete SDK authoring blueprint.",
-        depends_on: ["source-analysis"],
+      "source-analysis": {
+        agent_id: "squad-sdk-source-analyst",
+        description: "Validates source algorithm, actors, evidence flow, resources, and portability constraints.",
+        depends_on: ["squad-sdk-planner"],
       },
       "contract-review": {
         agent_id: "squad-sdk-contract-reviewer",
-        description: "Publishes the independent positive validation of the exact blueprint.",
-        depends_on: ["package-architecture"],
+        description: "Independently validates the exact blueprint and closure against SDK invariants.",
+        depends_on: ["squad-sdk-planner"],
       },
     })
     expect(workflows["heterogeneous-import"]!.nodes).toEqual({
+      "squad-sdk-planner": {
+        agent_id: "squad-sdk-planner",
+        description: "Publishes the import boundary, mapping responsibilities, and acceptance allocation.",
+        depends_on: [],
+      },
       "import-analysis": {
         agent_id: "squad-sdk-import-analyst",
-        description: "Publishes source, portability, and mapping analysis for the selected external Squad.",
-        depends_on: [],
+        description: "Validates source roster, instructions, Skill closure, MCP capabilities, and portability blockers.",
+        depends_on: ["squad-sdk-planner"],
       },
       "contract-review": {
         agent_id: "squad-sdk-contract-reviewer",
-        description: "Publishes independent positive validation of the blocker-free preview and exact mapping.",
-        depends_on: ["import-analysis"],
+        description: "Independently validates the exact preview, mapping, and source digests.",
+        depends_on: ["squad-sdk-planner"],
       },
     })
   })
@@ -100,7 +105,7 @@ describe("Generate Expert Squads expert squad", () => {
           const architectTurn = await PromptProfileResolver.resolveWorkerTurnProjection({
             projectDirectory: project.path,
             config,
-            agentID: "squad-sdk-package-architect",
+            agentID: "squad-sdk-planner",
           })
           const importerTurn = await PromptProfileResolver.resolveWorkerTurnProjection({
             projectDirectory: project.path,
@@ -164,7 +169,7 @@ describe("Generate Expert Squads expert squad", () => {
             orchestrator: scheduler.builtInToolIDs,
             "squad-sdk-contract-reviewer": reviewer.builtInToolIDs,
             "squad-sdk-import-analyst": importer.builtInToolIDs,
-            "squad-sdk-package-architect": architect.builtInToolIDs,
+            "squad-sdk-planner": architect.builtInToolIDs,
             "squad-sdk-source-analyst": source.builtInToolIDs,
           }
           expect(
@@ -206,18 +211,28 @@ describe("Generate Expert Squads expert squad", () => {
             tool_input: {
               schema_version: 1,
               agents: {
+                "briefing-planner": { base_role: "delegated-worker" },
                 "evidence-researcher": { base_role: "deep-research" },
                 "briefing-writer": { base_role: "build" },
+                "claim-checker": { base_role: "fact-check" },
               },
               virtual_workflows: {
                 "verified-briefing": {
                   nodes: {
+                    "briefing-planner": {
+                      description: "Freeze the evidence boundary, briefing structure, and worker acceptance allocation.",
+                    },
                     "evidence-researcher": {
                       description: "Collect public evidence and record contradictions and unknowns.",
+                      depends_on: ["briefing-planner"],
                     },
                     "briefing-writer": {
-                      description: "Verify the evidence and deliver the source-backed briefing.",
-                      depends_on: ["evidence-researcher"],
+                      description: "Build the source-backed briefing from the Planner contract.",
+                      depends_on: ["briefing-planner"],
+                    },
+                    "claim-checker": {
+                      description: "Independently check load-bearing claims and explicit unknowns.",
+                      depends_on: ["briefing-planner"],
                     },
                   },
                 },

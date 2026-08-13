@@ -21,12 +21,12 @@ import { t } from "../utils/i18n"
 import { apiJson, ApiError, configure as configureApi, serverSettledRequest } from "./api"
 import { getHostTransport } from "./host-transport-runtime"
 import type { ProjectEditorID } from "./host-transport"
-import { nativeMessage } from "./app-dialog"
+import { nativeMessage, showAppDialog } from "./app-dialog"
 import { nativeOpen } from "../utils/native"
 import { checkConnection } from "./connection"
 import { reloadProjectScope } from "./config"
-import { startTaskListSSE, stopSSE, stopTaskListSSE } from "./sse"
-import { startProjectMemoryEvents, stopProjectMemoryEvents } from "./project-memory"
+import { stopSSE } from "./sse"
+import { refreshProjectMemory } from "./project-memory"
 import { activeProjectDirectory, restoreWorkspaceDirectory, setProjectDirectoryContext } from "./project-directory"
 import { directoryScopedPath } from "./task-path"
 import { cancelConversationReplay, resetConversationProjection } from "./conversation"
@@ -247,8 +247,6 @@ function enterDirectoryFreeWorkspace(savedDirectory: string): number {
   const selectionEpoch = beginWorkspaceSelection()
   clearComposerModelProjection()
   stopSSE()
-  stopTaskListSSE()
-  stopProjectMemoryEvents()
   setSettingsStore("directoryEpoch", (n: number) => n + 1)
   setSettingsStore({
     directory: "",
@@ -734,8 +732,6 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
   console.log("[applyDir] switching", { from: curDir, to: next, save })
 
   stopSSE()
-  stopTaskListSSE()
-  stopProjectMemoryEvents()
   if (options.preserveSelection !== true) {
     clearSelectedWorkItem()
   }
@@ -798,8 +794,9 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
     console.log("[applyDir] superseded after reload, discarding")
     return false
   }
-  startTaskListSSE()
-  startProjectMemoryEvents()
+  void refreshProjectMemory().catch((error) =>
+    AppLog.warn("project-memory", "Project MEMORY.MD status refresh failed", { error: String(error) }),
+  )
   console.log("[applyDir] done, tasks=", boardStore.tasks.length)
   return true
 }
@@ -823,7 +820,21 @@ export async function setActiveDirectory(value: string, options: ApplyDirectoryO
  */
 export async function browseDirectory(): Promise<void> {
   try {
-    const selected = await pickDirectory(activeDirectory())
+    const host = getHostTransport()
+    const selected = host.capabilities.ui.manualWorkspacePathEntry
+      ? await showAppDialog({
+          title: t("cwd.title"),
+          message: t("work_ledger.tooltip.create.existing_folder"),
+          input: true,
+          inputLabel: t("cwd.path_label"),
+          inputPlaceholder: t("cwd.path_placeholder"),
+          inputValue: activeDirectory(),
+          inputRequired: true,
+          inputRequiredMessage: t("cwd.path_required"),
+          cancel: true,
+          okLabel: t("cwd.choose_level"),
+        }).then((result) => (result.confirmed ? String(result.value || "").trim() : ""))
+      : await pickDirectory(activeDirectory())
     if (!selected) return
     await setDirectory(selected)
   } catch (e) {
@@ -906,6 +917,10 @@ export async function openPathInSelectedEditor(target: string): Promise<void> {
     }
     return
   }
+  if (!getHostTransport().capabilities.nativeCommands["workspace.openProjectEditor"]) {
+    await openProjectPathInWorkbench(target)
+    return
+  }
   await openDirectoryInEditor(settingsStore.projectEditor, path)
 }
 
@@ -920,7 +935,23 @@ export async function openProjectFile(target: string): Promise<void> {
     }
     return
   }
+  if (!getHostTransport().capabilities.nativeCommands["open-path"]) {
+    await openProjectPathInWorkbench(target)
+    return
+  }
   await nativeOpen(path)
+}
+
+async function openProjectPathInWorkbench(target: string): Promise<void> {
+  const directory = activeDirectory().trim()
+  const rawTarget = typeof target === "string" ? target.trim() : ""
+  if (!directory || !rawTarget) return
+  const { openFileEditor, openSourceFileEditor } = await import("./file-workbench")
+  if (isAbsoluteEditorPath(rawTarget)) {
+    await openSourceFileEditor(rawTarget, { directory })
+    return
+  }
+  await openFileEditor(rawTarget, { directory })
 }
 
 function isAbsoluteEditorPath(path: string): boolean {

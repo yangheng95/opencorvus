@@ -175,13 +175,9 @@ export const publicMarketZhTranslations36To67 = {
         label: "前端创新意图分析师",
         description: "归类产品意图、设计追求、证据需求和约束。",
       },
-      "frontend-innovate-requirements-analyst": {
-        label: "前端创新需求分析师",
-        description: "定义可观察的产品、组件、数据、交互和验证要求。",
-      },
-      "frontend-innovate-solution-architect": {
-        label: "前端创新解决方案架构师",
-        description: "将选定方向分解为一致的产品与实现契约。",
+      "frontend-innovate-planner": {
+        label: "前端创新规划师",
+        description: "发布资源边界、用户任务、方向契约、路径所有权和真实页面验收分配。",
       },
       "frontend-innovate-experience-designer": {
         label: "前端创新体验设计师",
@@ -195,10 +191,6 @@ export const publicMarketZhTranslations36To67 = {
         label: "前端创新实现工程师",
         description: "实现选定的渲染设计方向，不另造平行结构。",
       },
-      "frontend-innovate-visual-reviewer": {
-        label: "前端创新视觉审查员",
-        description: "依据选定的设计草稿和证据审查渲染后的产品。",
-      },
       "frontend-innovate-deep-researcher": {
         label: "前端创新研究员",
         description: "收集竞品、行业和设计参考证据。",
@@ -211,10 +203,6 @@ export const publicMarketZhTranslations36To67 = {
         label: "前端创新工作量分析师",
         description: "估算设计、实现、证据和验证工作量。",
       },
-      "frontend-innovate-integrity-reviewer": {
-        label: "前端创新完整性审查员",
-        description: "拒绝泛化、缺乏证据或结构偏离的设计交付。",
-      },
     },
     workflows: {
       delivery: {
@@ -223,16 +211,13 @@ export const publicMarketZhTranslations36To67 = {
         nodes: {
           "frontend-innovate-explorer": "定位当前产品界面、可复用资产和实现约束。",
           "frontend-innovate-intent-analyst": "归类产品意图、设计追求、证据需求和约束。",
-          "frontend-innovate-requirements-analyst": "定义可观察的产品、组件、数据、交互和验证要求。",
-          "frontend-innovate-solution-architect": "将选定方向分解为一致的产品与实现契约。",
+          "frontend-innovate-planner": "发布资源边界、方向契约、路径所有权和真实页面验收分配。",
           "frontend-innovate-experience-designer": "产出有证据支持的设计方向和可渲染、可编辑源文件的设计草稿。",
           "frontend-innovate-source-researcher": "调查源页面、交互状态、信息架构和视觉证据。",
           "frontend-innovate-implementer": "实现选定的渲染设计方向，不另造平行结构。",
-          "frontend-innovate-visual-reviewer": "依据选定的设计草稿和证据审查渲染后的产品。",
           "frontend-innovate-deep-researcher": "收集竞品、行业和设计参考证据。",
           "frontend-innovate-fact-checker": "依据证据核验参考资料和产品主张。",
           "frontend-innovate-workload-analyst": "估算设计、实现、证据和验证工作量。",
-          "frontend-innovate-integrity-reviewer": "拒绝泛化、缺乏证据或结构偏离的设计交付。",
         },
       },
     },
@@ -251,13 +236,9 @@ export const publicMarketZhTranslations36To67 = {
         label: "前端复刻意图分析师",
         description: "归类来源、目标、桌面端范围、证据缺口和一致性义务。",
       },
-      "frontend-replica-requirements-analyst": {
-        label: "前端复刻需求分析师",
-        description: "定义受来源约束的界面、交互、内容、资产和渲染一致性要求。",
-      },
-      "frontend-replica-solution-architect": {
-        label: "前端复刻解决方案架构师",
-        description: "将来源证据映射至目标组件、契约和验证区域。",
+      "frontend-replica-planner": {
+        label: "前端复刻规划师",
+        description: "发布精确来源、目标表面、交互、路径所有权和渲染验收分配。",
       },
       "frontend-replica-interface-modeler": {
         label: "前端复刻界面建模师",
@@ -275,14 +256,6 @@ export const publicMarketZhTranslations36To67 = {
         label: "前端复刻实现工程师",
         description: "在目标项目中实现同一个受来源约束的界面。",
       },
-      "frontend-replica-visual-reviewer": {
-        label: "前端复刻视觉审查员",
-        description: "将目标渲染证据与来源区域和交互状态进行比较。",
-      },
-      "frontend-replica-integrity-reviewer": {
-        label: "前端复刻完整性审查员",
-        description: "拒绝区域缺失、交互故障、无依据的差异和薄弱证据。",
-      },
     },
     workflows: {
       "interface-modeling": {
@@ -291,8 +264,7 @@ export const publicMarketZhTranslations36To67 = {
         nodes: {
           "frontend-replica-intent-analyst": "归类来源、目标、桌面端范围、证据缺口和一致性义务。",
           "frontend-replica-source-researcher": "采集源页面结构、状态、内容、交互和截图证据。",
-          "frontend-replica-requirements-analyst": "定义受来源约束的界面、交互、内容、资产和渲染一致性要求。",
-          "frontend-replica-solution-architect": "将来源证据映射至目标组件、契约和验证区域。",
+          "frontend-replica-planner": "发布精确来源、目标表面、交互、路径所有权和渲染验收分配。",
           "frontend-replica-interface-modeler": "生成唯一的受来源约束项目模型与实现契约，供 Delivery Slice 对象使用。",
         },
       },
@@ -304,13 +276,10 @@ export const publicMarketZhTranslations36To67 = {
           "frontend-replica-explorer": "定位目标实现界面、资产、基础组件和集成约束。",
           "frontend-replica-intent-analyst": "归类来源、目标、桌面端范围、证据缺口和一致性义务。",
           "frontend-replica-source-researcher": "采集源页面结构、状态、内容、交互和截图证据。",
-          "frontend-replica-requirements-analyst": "定义受来源约束的界面、交互、内容、资产和渲染一致性要求。",
-          "frontend-replica-solution-architect": "将来源证据映射至目标组件、契约和验证区域。",
+          "frontend-replica-planner": "发布精确来源、目标表面、交互、路径所有权和渲染验收分配。",
           "frontend-replica-interface-modeler": "生成唯一的受来源约束项目模型与实现契约，供 Delivery Slice 对象使用。",
           "frontend-replica-workload-analyst": "估算来源证据、界面实现、交互和视觉验证工作量。",
           "frontend-replica-implementer": "在目标项目中实现同一个受来源约束的界面。",
-          "frontend-replica-integrity-reviewer": "拒绝区域缺失、交互故障、无依据的差异和薄弱证据。",
-          "frontend-replica-visual-reviewer": "将目标渲染证据与来源区域和交互状态进行比较。",
         },
       },
     },
@@ -1283,28 +1252,23 @@ export const publicMarketZhTranslations36To67 = {
         label: "Office 来源分析师",
         description: "构建注明日期的来源、主张、计算、引用、术语和缺失输入模型。",
       },
-      "office-format-designer": {
-        label: "Office 格式设计师",
-        description: "定义受众旅程、信息层级、格式结构、视觉语义和渲染检查。",
+      "office-delivery-planner": {
+        label: "Office 交付规划师",
+        description: "发布来源边界、文档结构、格式系统、worker 分区和验收分配。",
       },
       "office-delivery-builder": {
         label: "Office 交付构建员",
         description: "将内容模型与格式计划整合为可编辑交付物及其规范导出文件。",
       },
-      "office-quality-reviewer": {
-        label: "Office 质量审查员",
-        description: "审查实际渲染的交付物，检查数据完整性、可追溯性、视觉质量、导航和格式覆盖。",
-      },
     },
     workflows: {
-      "verified-office-delivery": {
+      "planned-office-delivery": {
         label: "经验证的 Office 交付",
         description: "并行分析来源和设计格式，在可编辑构建中整合二者，再审查渲染结果。",
         nodes: {
-          "office-source-analyst": "发布规范的来源与内容模型。",
-          "office-format-designer": "发布受众、结构、视觉和渲染计划。",
-          "office-delivery-builder": "根据两项计划发布可编辑交付物和规范导出文件。",
-          "office-quality-reviewer": "发布渲染内容与视觉验收报告。",
+          "office-delivery-planner": "发布来源边界、格式系统、worker 分区和验收分配。",
+          "office-source-analyst": "独立验证计划中的来源、数据与计算。",
+          "office-delivery-builder": "依据计划构建、渲染并人工检查可编辑交付物和规范导出。",
         },
       },
     },

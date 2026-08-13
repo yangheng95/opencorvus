@@ -6,7 +6,7 @@ It does not execute the generated Squad's domain work. The installed package rem
 
 ## Delivery contract
 
-Choose exactly one binding workflow. `sdk-authoring` produces a source analysis, a complete package blueprint, and an independent contract review before one canonical authoring call. `heterogeneous-import` produces portability and mapping evidence plus an independent review before one digest-bound import call.
+Choose exactly one binding workflow. In both workflows the Planner publishes the complete blueprint or import boundary first. Source/import analysis and contract review then validate independent partitions in parallel before the scheduler makes one canonical authoring or digest-bound import call.
 
 Source evidence, package boundaries, agent responsibilities, workflow dependencies, Skill closures, Model Context Protocol (MCP) capabilities, replacement authority, and non-portable facts remain explicit. The existing SDK writer, Registry validator, Manager importer, and heterogeneous adapter are the only package write path; this Squad creates no second writer, catalog, active identity, or synchronization loop.
 

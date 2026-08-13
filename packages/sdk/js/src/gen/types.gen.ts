@@ -752,6 +752,7 @@ export type Event =
   | EventMcpToolsChanged
   | EventMessageCreated
   | EventMessageInjected
+  | EventMessageMoved
   | EventMessagePartDelta
   | EventMessagePartRemoved
   | EventMessagePartUpdated
@@ -1180,6 +1181,15 @@ export type EventMessageInjected = {
     text: string
   }
   type: "message.injected"
+}
+
+export type EventMessageMoved = {
+  properties: {
+    info: VisibleMessage
+    parts: Array<VisibleMessagePart>
+    sourceSessionID: string
+  }
+  type: "message.moved"
 }
 
 export type EventMessagePartDelta = {
@@ -1875,6 +1885,7 @@ export type ExpertSquadCatalogSummary = {
         default_skill_refs: Array<string>
         default_tool_refs: Array<string>
         description?: string
+        execution_contract?: "platform_integrity_review"
         inherit_base_tools: boolean
         label: string
         package_mcp_prompt_refs: Array<string>
@@ -7688,25 +7699,6 @@ export type ExperimentalProjectMemoryGetResponses = {
 
 export type ExperimentalProjectMemoryGetResponse =
   ExperimentalProjectMemoryGetResponses[keyof ExperimentalProjectMemoryGetResponses]
-
-export type ExperimentalProjectMemoryEventsData = {
-  body?: never
-  path?: never
-  query?: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-  }
-  url: "/experimental/project-memory/events"
-}
-
-export type ExperimentalProjectMemoryEventsResponses = {
-  /**
-   * Project MEMORY.MD notice stream
-   */
-  200: unknown
-}
 
 export type ExperimentalProjectMemoryAcknowledgeNoticeData = {
   body: {
@@ -14289,6 +14281,7 @@ export type ExpertSquadValidateFolderResponses = {
           default_skill_refs: Array<string>
           default_tool_refs: Array<string>
           description?: string
+          execution_contract?: "platform_integrity_review"
           inherit_base_tools: boolean
           label: string
           package_mcp_prompt_refs: Array<string>
@@ -15303,10 +15296,6 @@ export type GatewayControlActionData = {
          */
         created_before_ms?: number
         /**
-         * Opaque cursor returned by the preceding page; omit it for the first page.
-         */
-        cursor?: string
-        /**
          * Optional exact logical Goal-subject filter.
          */
         goal_ids?: Array<string>
@@ -15326,6 +15315,10 @@ export type GatewayControlActionData = {
          * Optional exact resource media-type filter.
          */
         media_types?: Array<string>
+        /**
+         * One-based page number. Start at 1, then use the preceding response's next_page_number.
+         */
+        page_number: number
         /**
          * Optional exact projected producer Agent-identity filter. Core-owned typed projections never match this filter; select those by label, kind, artifact type, or Goal.
          */
@@ -15357,6 +15350,16 @@ export type GatewayControlActionData = {
          * Source Task whose Artifact catalog should be enumerated.
          */
         taskID: string
+        /**
+         * Exact current terminal occurrence returned by panel.query_task for this source Task.
+         */
+        terminal_lifecycle_reference: {
+          terminalError?: string
+          terminalEventID: string
+          terminalReason?: "interrupted"
+          terminalStatus: "completed" | "failed" | "cancelled"
+          timeCompleted: number
+        }
         /**
          * Engine version scope at the frozen catalog revision. Task Artifact snapshots are immutable.
          */
@@ -17768,43 +17771,50 @@ export type TaskGlobalListResponse = TaskGlobalListResponses[keyof TaskGlobalLis
 
 export type TaskGlobalCreateData = {
   body: {
-    artifactImports?: Array<{
-      locator:
-        | {
-            artifact_id: string
-            catalog_revision: number
-            expected_sha256: string
-            source: "engine_artifact"
-          }
-        | {
-            snapshot: {
-              manifest_sha256: string
-              project_id: string
-              schema_version: 2
-              snapshot_id: string
-              task_id: string
-            }
-            source: "task_artifact_snapshot"
-          }
-        | {
-            ref: {
-              bytes: number
-              media_type: string
-              path: string
-              sha256: string
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
+    artifactSources?: Array<
+      | {
+          authority: "completion_decision"
+          source_task_id: string
+        }
+      | {
+          authority: "terminal_lifecycle"
+          locator:
+            | {
+                artifact_id: string
+                catalog_revision: number
+                expected_sha256: string
+                source: "engine_artifact"
               }
-              tree: string
-            }
-            source: "task_artifact_resource"
-          }
-      source_task_id: string
-    }>
+            | {
+                snapshot: {
+                  manifest_sha256: string
+                  project_id: string
+                  schema_version: 2
+                  snapshot_id: string
+                  task_id: string
+                }
+                source: "task_artifact_snapshot"
+              }
+            | {
+                ref: {
+                  bytes: number
+                  media_type: string
+                  path: string
+                  sha256: string
+                  snapshot: {
+                    manifest_sha256: string
+                    project_id: string
+                    schema_version: 2
+                    snapshot_id: string
+                    task_id: string
+                  }
+                  tree: string
+                }
+                source: "task_artifact_resource"
+              }
+          source_task_id: string
+        }
+    >
     attachments?: Array<
       | {
           filename?: string
@@ -18448,24 +18458,26 @@ export type LogReadResponse = LogReadResponses[keyof LogReadResponses]
 
 export type AppLogData = {
   body: {
-    /**
-     * Additional metadata for the log entry
-     */
-    extra?: {
-      [key: string]: unknown
-    }
-    /**
-     * Log level
-     */
-    level: "debug" | "info" | "error" | "warn"
-    /**
-     * Log message
-     */
-    message: string
-    /**
-     * Service name for the log entry
-     */
-    service: string
+    entries: Array<{
+      /**
+       * Additional metadata for the log entry
+       */
+      extra?: {
+        [key: string]: unknown
+      }
+      /**
+       * Log level
+       */
+      level: "debug" | "info" | "error" | "warn"
+      /**
+       * Log message
+       */
+      message: string
+      /**
+       * Service name for the log entry
+       */
+      service: string
+    }>
   }
   path?: never
   query?: never
@@ -18772,43 +18784,6 @@ export type MailboxListResponses = {
 }
 
 export type MailboxListResponse = MailboxListResponses[keyof MailboxListResponses]
-
-export type MailboxEventsData = {
-  body?: never
-  path?: never
-  query?: never
-  url: "/mailbox/events"
-}
-
-export type MailboxEventsResponses = {
-  /**
-   * Mailbox change stream
-   */
-  200:
-    | {
-        messageID: null
-        sequence: 0
-        sourceType: "mailbox.connected"
-        taskID: null
-        type: "mailbox.connected"
-      }
-    | {
-        messageID: null
-        sequence: 0
-        sourceType: "mailbox.heartbeat"
-        taskID: null
-        type: "mailbox.heartbeat"
-      }
-    | {
-        messageID: string
-        sequence: number
-        sourceType: string
-        taskID: string | null
-        type: "mailbox.changed"
-      }
-}
-
-export type MailboxEventsResponse = MailboxEventsResponses[keyof MailboxEventsResponses]
 
 export type MailboxReadAllData = {
   body?: never
@@ -19787,6 +19762,15 @@ export type MissionWakeErrors = {
         name: "MissionExpertSquadSnapshotMismatchError"
       }
   /**
+   * Mission execution is still completing its durable close operation
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionExecutionClosingError"
+  }
+  /**
    * Saved Provider credentials could not be observed safely
    */
   503: AuthReadError
@@ -20153,6 +20137,15 @@ export type MissionDispatchErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * Mission execution is still completing its durable close operation
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionExecutionClosingError"
+  }
   /**
    * Saved Provider credentials could not be observed safely
    */
@@ -23641,6 +23634,7 @@ export type SessionConversationData = {
      * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
      */
     directory?: string
+    tail_limit?: number
   }
   url: "/session/{sessionID}/conversation"
 }
@@ -24001,6 +23995,23 @@ export type SessionConversationResponses = {
               }
               source: "task_artifact_snapshot"
             }
+          | {
+              ref: {
+                bytes: number
+                media_type: string
+                path: string
+                sha256: string
+                snapshot: {
+                  manifest_sha256: string
+                  project_id: string
+                  schema_version: 2
+                  snapshot_id: string
+                  task_id: string
+                }
+                tree: string
+              }
+              source: "task_artifact_resource"
+            }
         match?: {
           matched_fields: Array<string>
           score?: number
@@ -24225,6 +24236,222 @@ export type SessionConversationResponses = {
 }
 
 export type SessionConversationResponse = SessionConversationResponses[keyof SessionConversationResponses]
+
+export type SessionConversationHistoryData = {
+  body?: never
+  path: {
+    sessionID: string
+  }
+  query: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    before: number
+    before_order_key: string
+    before_id?: string
+    limit?: number
+  }
+  url: "/session/{sessionID}/conversation/history"
+}
+
+export type SessionConversationHistoryErrors = {
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type SessionConversationHistoryError = SessionConversationHistoryErrors[keyof SessionConversationHistoryErrors]
+
+export type SessionConversationHistoryResponses = {
+  /**
+   * Session conversation history page
+   */
+  200: {
+    events: Array<{
+      emittedAt: number
+      event_id: string
+      notify?: {
+        badge?: boolean
+        tier: 1 | 2 | 3
+      }
+      orderKey: string
+      payload: {
+        [key: string]: unknown
+      }
+      sequence?: number
+      session_id: string
+      summary: string
+      timestamp: number
+      type: string
+    }>
+    history: {
+      hasMore: boolean
+      limit: number
+      oldestMessageID?: string | null
+      oldestOrderKey: string | null
+      oldestTimestamp: number | null
+    }
+    transcript: Array<VisibleMessageWithParts>
+    view: {
+      messages: Array<{
+        agentID: string
+        inputMessageID: string
+        messageID: string
+        orderKey: string
+        parentSessionID?: string
+        placement: "top_level"
+        sessionAgentID: string
+        sessionID: string
+        stage: string
+        time: number
+      }>
+      sessions: Array<
+        | {
+            activity: Array<
+              | {
+                  id: string
+                  orderKey: string
+                  text: string
+                  type: "text"
+                }
+              | {
+                  callID?: string
+                  id: string
+                  orderKey: string
+                  state: {
+                    [key: string]: unknown
+                  }
+                  tool: string
+                  type: "tool"
+                }
+              | {
+                  files: Array<unknown>
+                  id: string
+                  orderKey: string
+                  type: "patch"
+                }
+              | {
+                  filename: string
+                  id: string
+                  orderKey: string
+                  type: "file"
+                }
+              | {
+                  id: string
+                  message: string
+                  orderKey: string
+                  title?: string
+                  type: "part-error"
+                }
+            >
+            agentID: string
+            errorReason?: string
+            executionID: string
+            firstMessageTime: number
+            firstObservedAt?: number
+            inputMessageID: string
+            inputPreview?: {
+              messageID: string
+              observedAt: number
+              source: "user_message"
+              text: string
+            }
+            lastDisplayMessageID?: string
+            lastMessageTime: number
+            lastObservedAt?: number
+            messageIDs: Array<string>
+            orderKey: string
+            parentSessionID?: string
+            placement: "top_level"
+            sessionID: string
+            stage: string
+            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            todoUpdatedAt: number
+            todos: Array<Todo>
+          }
+        | {
+            activity: Array<
+              | {
+                  id: string
+                  orderKey: string
+                  text: string
+                  type: "text"
+                }
+              | {
+                  callID?: string
+                  id: string
+                  orderKey: string
+                  state: {
+                    [key: string]: unknown
+                  }
+                  tool: string
+                  type: "tool"
+                }
+              | {
+                  files: Array<unknown>
+                  id: string
+                  orderKey: string
+                  type: "patch"
+                }
+              | {
+                  filename: string
+                  id: string
+                  orderKey: string
+                  type: "file"
+                }
+              | {
+                  id: string
+                  message: string
+                  orderKey: string
+                  title?: string
+                  type: "part-error"
+                }
+            >
+            agentID: string
+            errorReason?: string
+            firstMessageTime: number
+            firstObservedAt?: number
+            inputPreview?: {
+              messageID: string
+              observedAt: number
+              source: "user_message"
+              text: string
+            }
+            lastDisplayMessageID?: string
+            lastMessageTime: number
+            lastObservedAt?: number
+            messageIDs: Array<string>
+            orderKey: string
+            parentSessionID?: string
+            placement: "top_level"
+            sessionID: string
+            stage: string
+            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            todoUpdatedAt: number
+            todos: Array<Todo>
+          }
+      >
+      topLevelSessionIDs: Array<string>
+    }
+  }
+}
+
+export type SessionConversationHistoryResponse =
+  SessionConversationHistoryResponses[keyof SessionConversationHistoryResponses]
 
 export type SessionDiffData = {
   body?: never
@@ -25513,6 +25740,23 @@ export type SessionTurnArtifactsResponses = {
             }
             source: "task_artifact_snapshot"
           }
+        | {
+            ref: {
+              bytes: number
+              media_type: string
+              path: string
+              sha256: string
+              snapshot: {
+                manifest_sha256: string
+                project_id: string
+                schema_version: 2
+                snapshot_id: string
+                task_id: string
+              }
+              tree: string
+            }
+            source: "task_artifact_resource"
+          }
       match?: {
         matched_fields: Array<string>
         score?: number
@@ -26322,43 +26566,50 @@ export type SkillUpdateResponse = SkillUpdateResponses[keyof SkillUpdateResponse
 
 export type TaskCreateData = {
   body: {
-    artifactImports?: Array<{
-      locator:
-        | {
-            artifact_id: string
-            catalog_revision: number
-            expected_sha256: string
-            source: "engine_artifact"
-          }
-        | {
-            snapshot: {
-              manifest_sha256: string
-              project_id: string
-              schema_version: 2
-              snapshot_id: string
-              task_id: string
-            }
-            source: "task_artifact_snapshot"
-          }
-        | {
-            ref: {
-              bytes: number
-              media_type: string
-              path: string
-              sha256: string
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
+    artifactSources?: Array<
+      | {
+          authority: "completion_decision"
+          source_task_id: string
+        }
+      | {
+          authority: "terminal_lifecycle"
+          locator:
+            | {
+                artifact_id: string
+                catalog_revision: number
+                expected_sha256: string
+                source: "engine_artifact"
               }
-              tree: string
-            }
-            source: "task_artifact_resource"
-          }
-      source_task_id: string
-    }>
+            | {
+                snapshot: {
+                  manifest_sha256: string
+                  project_id: string
+                  schema_version: 2
+                  snapshot_id: string
+                  task_id: string
+                }
+                source: "task_artifact_snapshot"
+              }
+            | {
+                ref: {
+                  bytes: number
+                  media_type: string
+                  path: string
+                  sha256: string
+                  snapshot: {
+                    manifest_sha256: string
+                    project_id: string
+                    schema_version: 2
+                    snapshot_id: string
+                    task_id: string
+                  }
+                  tree: string
+                }
+                source: "task_artifact_resource"
+              }
+          source_task_id: string
+        }
+    >
     attachments?: Array<
       | {
           filename?: string
@@ -26653,32 +26904,6 @@ export type TaskQueueReorderResponses = {
 }
 
 export type TaskQueueReorderResponse = TaskQueueReorderResponses[keyof TaskQueueReorderResponses]
-
-export type TaskListEventsData = {
-  body?: never
-  path?: never
-  query?: never
-  url: "/task/events"
-}
-
-export type TaskListEventsResponses = {
-  /**
-   * Task-list change stream
-   */
-  200: {
-    notificationDetails?: string
-    notify?: {
-      badge?: boolean
-      tier: 1 | 2 | 3
-    }
-    sequence: number
-    source?: string
-    taskID: string | null
-    type: string
-  }
-}
-
-export type TaskListEventsResponse = TaskListEventsResponses[keyof TaskListEventsResponses]
 
 export type TaskDeleteData = {
   body: {
@@ -30279,6 +30504,23 @@ export type TaskConversationResponses = {
               }
               source: "task_artifact_snapshot"
             }
+          | {
+              ref: {
+                bytes: number
+                media_type: string
+                path: string
+                sha256: string
+                snapshot: {
+                  manifest_sha256: string
+                  project_id: string
+                  schema_version: 2
+                  snapshot_id: string
+                  task_id: string
+                }
+                tree: string
+              }
+              source: "task_artifact_resource"
+            }
         match?: {
           matched_fields: Array<string>
           score?: number
@@ -33787,6 +34029,23 @@ export type TaskTurnArtifactsResponses = {
             }
             source: "task_artifact_snapshot"
           }
+        | {
+            ref: {
+              bytes: number
+              media_type: string
+              path: string
+              sha256: string
+              snapshot: {
+                manifest_sha256: string
+                project_id: string
+                schema_version: 2
+                snapshot_id: string
+                task_id: string
+              }
+              tree: string
+            }
+            source: "task_artifact_resource"
+          }
       match?: {
         matched_fields: Array<string>
         score?: number
@@ -34595,6 +34854,13 @@ export type WorkLedgerEventsResponses = {
         sessionID: string
         sourceType: "conversation.handoff"
         type: "work-ledger.conversation-handoff"
+      }
+    | {
+        messageID: string
+        sequence: number
+        sourceType: string
+        taskID: string | null
+        type: "mailbox.changed"
       }
 }
 

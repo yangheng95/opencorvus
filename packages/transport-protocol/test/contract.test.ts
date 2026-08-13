@@ -39,22 +39,7 @@ describe("canonical Server-Sent Events payload contracts", () => {
     })
   })
 
-  test("parses each canonical mailbox event branch", () => {
-    expect(
-      MailboxChangeStreamEvent.parse({
-        type: "mailbox.connected",
-        sourceType: "mailbox.connected",
-        messageID: null,
-        taskID: null,
-        sequence: 0,
-      }),
-    ).toEqual({
-      type: "mailbox.connected",
-      sourceType: "mailbox.connected",
-      messageID: null,
-      taskID: null,
-      sequence: 0,
-    })
+  test("parses the canonical mailbox notification branch", () => {
     expect(
       MailboxChangeStreamEvent.parse({
         type: "mailbox.changed",
@@ -114,6 +99,21 @@ describe("canonical Server-Sent Events payload contracts", () => {
         sequence: 0,
       }),
     ).toEqual({ type: "work-ledger.heartbeat", sourceType: "work-ledger.heartbeat", sequence: 0 })
+    expect(
+      WorkLedgerEvent.parse({
+        type: "mailbox.changed",
+        sourceType: "task.completed",
+        messageID: "message-1",
+        taskID: "task-1",
+        sequence: 20,
+      }),
+    ).toEqual({
+      type: "mailbox.changed",
+      sourceType: "task.completed",
+      messageID: "message-1",
+      taskID: "task-1",
+      sequence: 20,
+    })
   })
 })
 
@@ -170,7 +170,10 @@ describe("canonical Work Ledger and Project Worktree response contracts", () => 
       removable: true,
     }
     expect(ProjectWorktreeList.parse([worktree])).toEqual([worktree])
-    expect(ProjectWorktreeDeleteReceipt.parse({ ok: true })).toEqual({ ok: true })
+    expect(ProjectWorktreeDeleteReceipt.parse({ ok: true, status: "removed" })).toEqual({
+      ok: true,
+      status: "removed",
+    })
   })
 })
 
@@ -249,6 +252,10 @@ describe("native command validation", () => {
     preferredProjectEditor: "vscode",
     desktopNotifications: true,
   }
+
+  test("accepts an explicit empty username for a server without Basic Auth", () => {
+    expect(isOverlayPersistedSettings({ ...persistedSettings, username: "" })).toBe(true)
+  })
 
   test("accepts every canonical native command payload", () => {
     const valid = [

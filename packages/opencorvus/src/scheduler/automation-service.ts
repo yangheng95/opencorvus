@@ -1155,6 +1155,7 @@ export namespace AutomationService {
       occurrence: `Automation fire ${fireID}`,
       signals: [leaseFence.signal, runtimeSignal],
       initialPhase: "claimed",
+      configurationOwner: "global",
     })
     const executionSignal = inactivityFence.signal
     const leaseRenewTimer = startLeaseRenewTimer(() => leaseFence.renewOrAbort())
@@ -1246,7 +1247,8 @@ export namespace AutomationService {
           try {
             const reserved = reservedRuns.get(runIDs[index]!)
             if (reserved?.outcome === "succeeded") {
-              if (!reserved.sessionID) throw new Error(`Succeeded Automation run ${reserved.id} has no Session authority`)
+              if (!reserved.sessionID)
+                throw new Error(`Succeeded Automation run ${reserved.id} has no Session authority`)
               return { sessionID: reserved.sessionID }
             }
             const existing = findAutomationWake(job.id, fireID, target)

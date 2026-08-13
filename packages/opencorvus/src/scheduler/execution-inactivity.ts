@@ -9,8 +9,7 @@ export class SchedulerExecutionInactivityError extends Error {
     readonly inactivityTimeoutMilliseconds: number,
   ) {
     super(
-      `${occurrence} made no durable execution progress in phase ${phase} for ` +
-        `${inactivityTimeoutMilliseconds}ms`,
+      `${occurrence} made no durable execution progress in phase ${phase} for ` + `${inactivityTimeoutMilliseconds}ms`,
     )
   }
 }
@@ -21,8 +20,12 @@ export async function createSchedulerExecutionInactivityFence(input: {
   occurrence: string
   signals: readonly AbortSignal[]
   initialPhase: string
+  configurationOwner: "global" | "project"
 }) {
-  const configured = timeoutForTest ?? (await EngineConfig.get()).activity.task_queue_run_timeout_ms
+  const configured =
+    timeoutForTest ??
+    (await (input.configurationOwner === "global" ? EngineConfig.getGlobal() : EngineConfig.get())).activity
+      .task_queue_run_timeout_ms
   if (!Number.isInteger(configured) || configured <= 0) {
     throw new Error(`Invalid scheduler execution inactivity timeout ${configured}`)
   }
@@ -55,7 +58,8 @@ export const SchedulerExecutionInactivityTestHooks = {
     if (!Number.isInteger(milliseconds) || milliseconds <= 0) {
       throw new Error(`Invalid scheduler execution inactivity test timeout ${milliseconds}`)
     }
-    if (timeoutForTest !== undefined) throw new Error("Scheduler execution inactivity test timeout is already installed")
+    if (timeoutForTest !== undefined)
+      throw new Error("Scheduler execution inactivity test timeout is already installed")
     timeoutForTest = milliseconds
     return {
       [Symbol.dispose]() {

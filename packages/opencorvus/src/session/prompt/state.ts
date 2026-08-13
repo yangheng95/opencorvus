@@ -120,14 +120,26 @@ export namespace SessionPromptState {
   const rootSessionProcessShutdownHandoffs = new Map<string, Set<symbol>>()
   const promptStartReservations = new Map<string, symbol>()
   const promptSettlementReservations = new Map<string, { token: symbol; owner?: AbortSignal }>()
-  const promptOwnerCapture = new AsyncLocalStorage<(owner: AbortSignal) => void>()
+  const promptOwnerCapture = new AsyncLocalStorage<{
+    sessionID: string
+    capture(owner: AbortSignal): void
+  }>()
 
   function rootSessionDestructiveOrigin(rootSessionID: string): RootSessionDestructiveOrigin | undefined {
     return rootSessionDestructiveScopes.get(rootSessionID)?.values().next().value
   }
 
-  export function withPromptOwnerCapture<Result>(capture: (owner: AbortSignal) => void, run: () => Result): Result {
-    return promptOwnerCapture.run(capture, run)
+  export function withPromptOwnerCapture<Result>(
+    sessionID: string,
+    capture: (owner: AbortSignal) => void,
+    run: () => Result,
+  ): Result {
+    return promptOwnerCapture.run({ sessionID, capture }, run)
+  }
+
+  function publishPromptOwnerCapture(sessionID: string, owner: AbortSignal): void {
+    const target = promptOwnerCapture.getStore()
+    if (target?.sessionID === sessionID) target.capture(owner)
   }
 
   function directoryKey(directory?: string) {
@@ -231,7 +243,7 @@ export namespace SessionPromptState {
       deleteDirectoryIfEmpty(key, s)
       throw error
     }
-    promptOwnerCapture.getStore()?.(controller.signal)
+    publishPromptOwnerCapture(sessionID, controller.signal)
     return controller.signal
   }
 
@@ -346,7 +358,7 @@ export namespace SessionPromptState {
       return Promise.reject(new Error(`Session ${sessionID} prompt owner missing during attach`))
     }
     if (match.terminating) return Promise.reject(new BusyError(sessionID))
-    promptOwnerCapture.getStore()?.(match.abort.signal)
+    publishPromptOwnerCapture(sessionID, match.abort.signal)
     if (match.abort.signal.aborted || match.timeCancelled !== undefined) {
       if (!match.cancellation) {
         return Promise.reject(new Error(`Session ${sessionID} has an aborted prompt owner without typed cancellation`))
@@ -649,7 +661,7 @@ export namespace SessionPromptState {
 
   export function capturePromptOwner(sessionID: string, directory?: string): AbortSignal | undefined {
     const owner = existingStateEntryForSession(sessionID, directory).promptState?.[sessionID]?.abort.signal
-    if (owner) promptOwnerCapture.getStore()?.(owner)
+    if (owner) publishPromptOwnerCapture(sessionID, owner)
     return owner
   }
 

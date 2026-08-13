@@ -7,6 +7,7 @@ import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Instance } from "../../src/project/instance"
 import { payloadPackageSources } from "../../generated/expert-squad-payload"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { analyzeExpertSquadWorkflowTopology } from "@opencorvus-ai/sdk/expert-squad-authoring"
 
 const newSquadIDs = [
   "browser-research-acceptance",
@@ -99,9 +100,12 @@ describe("Ten-swimlane generated payload integration", () => {
           expect(scheduler.productionSkills.map((skill) => skill.ref)).toEqual(schedulerProjection.package_skill_refs)
           expect(Object.keys(scheduler.virtualWorkflows)).toEqual(workflowIDs)
 
-          const workflows = Object.values(source.manifest.capability_projection.virtual_workflows)
+          const topology = analyzeExpertSquadWorkflowTopology(source.manifest)
+          expect(topology.length).toBeGreaterThan(0)
           expect(
-            workflows.some((workflow) => Object.values(workflow.nodes).some((node) => node.depends_on.length >= 2)),
+            topology.every(
+              (workflow) => workflow.maximum_parallel_width >= 2,
+            ),
           ).toBe(true)
 
           for (const [agentID, projection] of Object.entries(source.manifest.capability_projection.agents)) {

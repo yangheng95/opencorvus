@@ -3,6 +3,7 @@ import Ajv2020 from "ajv/dist/2020"
 import type { AnySchema, ErrorObject } from "ajv"
 import { Identifier } from "../id/id"
 import { Message } from "./message"
+import { normalizeToolResult } from "./tool-result-normalization"
 import { MessageStore } from "./message-store"
 import { NotFoundError } from "@/storage/db"
 import { Session } from "."
@@ -32,8 +33,8 @@ import { materializeMcpToolResult, materializedMcpAttachmentsToFileParts } from 
 import { Bus } from "../bus"
 import { ProviderTransform } from "../provider/transform"
 import { ProviderSchema } from "../provider/schema"
+import { artifactSnapshotSourceForRuntimeContract } from "@/build/merge-back-publication-authority"
 import { requiresOpenAIStrictToolSchema } from "../provider/strict-tool-schema"
-import { materializeToolExecutionInput } from "../provider/tool-execution-input"
 import { SystemPrompt } from "./system"
 import { EffectiveConfig } from "@/config/effective"
 import { resolveAgentModel, resolveProjectedWorkerModel } from "@/agent/model"
@@ -65,7 +66,7 @@ import {
   toolSwitchAllows as executionToolSwitchAllows,
   type ToolExecutionSurface,
 } from "@/tool/execution-surface"
-import { TASK_ARTIFACT_DISCOVERY_TOOL_IDS, TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
+import { TASK_ARTIFACT_SCHEDULER_TOOL_IDS, TASK_ARTIFACT_TOOL_IDS } from "@/tool/tool-id-catalog"
 import { MemoryInjection } from "@/memory/injection"
 import { resolveSessionMessageIdentity } from "./message-identity"
 import type { SessionAgentRuntime } from "@/agent/session-agent-runtime"
@@ -770,9 +771,7 @@ export namespace SessionLoop {
     const schema = asSchema(input.inputSchema as never) as {
       validate?: (args: unknown) => Promise<ValidationResult>
     }
-    const args = requiresOpenAIStrictToolSchema(input.model)
-      ? materializeOpenAIStrictToolInput(input.name, input.inputSchema, input.args)
-      : input.args
+    const args = materializeProviderToolInput(input.name, input.model, input.inputSchema, input.args)
     if (typeof schema.validate !== "function") return args
 
     let result: ValidationResult
@@ -785,9 +784,14 @@ export namespace SessionLoop {
     throw invalidProviderToolInput(input.name, args, result.error)
   }
 
-  function materializeOpenAIStrictToolInput(toolName: string, inputSchema: unknown, args: unknown): unknown {
+  function materializeProviderToolInput(
+    toolName: string,
+    model: Provider.Model,
+    inputSchema: unknown,
+    args: unknown,
+  ): unknown {
     try {
-      return materializeToolExecutionInput(inputSchema, args)
+      return ProviderSchema.materializeInput(model, inputSchema, args)
     } catch (err) {
       throw invalidProviderToolInput(toolName, args, err)
     }
@@ -964,39 +968,6 @@ export namespace SessionLoop {
     )
 
     return { messagePayloadChars, mediaCounts, mediaTokensEst }
-  }
-
-  export function normalizeExtraToolResult(input: unknown): {
-    output: string
-    title: string
-    metadata: object
-    attachments?: unknown
-    display?: unknown
-  } {
-    if (typeof input === "string") return { output: input, title: "", metadata: {} }
-
-    if (input && typeof input === "object") {
-      const r = input as Record<string, unknown>
-      const output = (() => {
-        if (typeof r.output === "string") return r.output
-        if (typeof r.text === "string") return r.text
-        if (r.output !== undefined) return JSON.stringify(r.output)
-        if (r.attachments !== undefined) {
-          throw new Error("Extra tool returned attachments without string output/text")
-        }
-        return JSON.stringify(r)
-      })()
-      return {
-        ...r,
-        output,
-        title: typeof r.title === "string" ? r.title : "",
-        metadata: r.metadata && typeof r.metadata === "object" ? r.metadata : {},
-        ...(r.attachments !== undefined ? { attachments: r.attachments } : {}),
-        ...(r.display !== undefined ? { display: r.display } : {}),
-      }
-    }
-
-    return { output: String(input ?? ""), title: "", metadata: {} }
   }
 
   export async function materializeToolResultAttachments(attachments: unknown): Promise<unknown> {
@@ -1935,6 +1906,7 @@ export namespace SessionLoop {
 
     const finalizePrompt = async () => {
       await SessionCompaction.prune({ sessionID })
+      await SessionStatus.settleAcceptedExecutionOccurrence(sessionID, abort)
       await flushPromptFinalMessage({ sessionID, abort, resultMode, directory })
     }
 
@@ -2593,6 +2565,7 @@ export namespace SessionLoop {
               sessionPermission: input.session.permission,
               toolSwitches: input.tools,
               batchTargetExclusions: Object.keys(extras),
+              artifactSnapshotSource: artifactSnapshotSourceForRuntimeContract(runtimeContract),
             },
           )
         : undefined
@@ -2824,7 +2797,7 @@ export namespace SessionLoop {
       switches: input.tools,
       requiredToolIDs:
         runtimeContract?.identity.identityKind === "projected-scheduler"
-          ? TASK_ARTIFACT_DISCOVERY_TOOL_IDS
+          ? TASK_ARTIFACT_SCHEDULER_TOOL_IDS
           : runtimeContract?.identity.identityKind === "projected-worker"
             ? TASK_ARTIFACT_TOOL_IDS
             : undefined,
@@ -3027,9 +3000,7 @@ export namespace SessionLoop {
       throw new Error(`Permission continuation ${request.id} has no persisted ToolPart ${request.toolCallID}`)
     }
     if (toolPart.tool !== request.toolName) {
-      throw new Error(
-        `Permission continuation ${request.id} Tool changed from ${request.toolName} to ${toolPart.tool}`,
-      )
+      throw new Error(`Permission continuation ${request.id} Tool changed from ${request.toolName} to ${toolPart.tool}`)
     }
     if (toolPart.state.status === "completed") return
     if (toolPart.state.status === "error") {
@@ -3107,17 +3078,14 @@ export namespace SessionLoop {
               kind: "recovered-permission-tool-execution",
               data: { requestID: request.id, toolCallID: request.toolCallID },
             })
-      await processor.failRecoveredToolPart(
-        request.toolCallID,
-        recoveredFailure,
-      )
+      await processor.failRecoveredToolPart(request.toolCallID, recoveredFailure)
       throw error
     }
     // ToolPart persistence is deliberately outside the execution catch. Once
     // the authority has recorded execution_succeeded, a local persistence
     // failure must leave the ToolPart open so startup recovery can replay the
     // durable result; it must not rewrite the completed effect as a Tool error.
-    const output = normalizeExtraToolResult(raw)
+    const output = normalizeToolResult(raw)
     await processor.completeRecoveredToolPart({
       toolCallID: request.toolCallID,
       toolInput: toolPart.state.input,
@@ -3215,7 +3183,11 @@ export namespace SessionLoop {
       { taskID: payload.lifecycle.taskID, sessionID: input.session.parentID },
     )
     const owner = McpRuntime.createScopedConnectionOwner(
-      computerRuntimeScopeIdentity({ ownerKind: "worker", taskID: payload.lifecycle.taskID, sessionID: input.session.id }),
+      computerRuntimeScopeIdentity({
+        ownerKind: "worker",
+        taskID: payload.lifecycle.taskID,
+        sessionID: input.session.id,
+      }),
     )
     try {
       const stageBinding = payload.tools.stageMaterializers[input.request.toolName]
@@ -3235,11 +3207,11 @@ export namespace SessionLoop {
         requestedStageTool ? { ...contextTools, [input.request.toolName]: requestedStageTool } : contextTools,
         capability,
         {
-        taskID: payload.lifecycle.taskID,
-        projectDirectory,
-        toolDirectory: input.session.directory,
-        stageOwnedToolIDs: requestedStageTool ? [input.request.toolName] : [],
-        connectionOwner: owner,
+          taskID: payload.lifecycle.taskID,
+          projectDirectory,
+          toolDirectory: input.session.directory,
+          stageOwnedToolIDs: requestedStageTool ? [input.request.toolName] : [],
+          connectionOwner: owner,
         },
       )
       const persistedStageIDs = [...payload.tools.stageOwned].sort()
@@ -3261,9 +3233,7 @@ export namespace SessionLoop {
         )
       }
       const recoveredProjectedIDs = Object.keys(runtimeTools.projectedTools).sort()
-      const persistedProjectedIDs = payload.tools.enabled
-        .filter((toolID) => !persistedStageIDs.includes(toolID))
-        .sort()
+      const persistedProjectedIDs = payload.tools.enabled.filter((toolID) => !persistedStageIDs.includes(toolID)).sort()
       if (JSON.stringify(recoveredProjectedIDs) !== JSON.stringify(persistedProjectedIDs)) {
         throw new PermissionAuthority.StaleContinuationError(
           input.request.id,
@@ -3372,9 +3342,8 @@ export namespace SessionLoop {
     const internalStageBinding = internalStageToolBindingOf(raw as object)
     if (internalStageBinding) {
       const runtimeIdentity = SessionRuntimeContractStore.get(ctx.sessionID)?.identity
-      const runtimeAdapterID = runtimeIdentity?.identityKind === "projected-worker"
-        ? runtimeIdentity.dispatchAdapterID
-        : undefined
+      const runtimeAdapterID =
+        runtimeIdentity?.identityKind === "projected-worker" ? runtimeIdentity.dispatchAdapterID : undefined
       if (
         runtimeAdapterID !== internalStageBinding.adapterID ||
         internalStageBinding.toolName !== name ||
@@ -3386,27 +3355,42 @@ export namespace SessionLoop {
     }
     let projectedBinding = projectedTaskToolRuntimeBindingOf(raw as object)
     const runtimeContract = SessionRuntimeContractStore.get(ctx.sessionID)
-    if (!browserPermissionKey && !computerPermissionKey && !mcpAuthorityBinding && !projectedBinding && runtimeContract) {
+    if (
+      !browserPermissionKey &&
+      !computerPermissionKey &&
+      !mcpAuthorityBinding &&
+      !projectedBinding &&
+      runtimeContract
+    ) {
       const records = sessionRuntimeToolRecords(runtimeContract)
       const record = records.projectedTools[name] ?? records.stageTools[name]
       if (record) {
-        const bound = bindProjectedTaskToolRuntime({ ...(raw as object) }, {
-          taskID: runtimeContract.identity.taskID,
-          projectDirectory: runtimeContract.projectDirectory,
-          ownerKind: "projected-worker",
-          expertSquadID: runtimeContract.identity.expertSquadID,
-          packageRevision: runtimeContract.identity.packageRevision,
-          agentID: runtimeContract.identity.agentID,
-          projectionHash: runtimeContract.identity.projectionHash,
-          providerKind: "package-tool",
-          toolRef: name,
-          providerName: name,
-          runtimeToolID: name,
-        })
+        const bound = bindProjectedTaskToolRuntime(
+          { ...(raw as object) },
+          {
+            taskID: runtimeContract.identity.taskID,
+            projectDirectory: runtimeContract.projectDirectory,
+            ownerKind: "projected-worker",
+            expertSquadID: runtimeContract.identity.expertSquadID,
+            packageRevision: runtimeContract.identity.packageRevision,
+            agentID: runtimeContract.identity.agentID,
+            projectionHash: runtimeContract.identity.projectionHash,
+            providerKind: "package-tool",
+            toolRef: name,
+            providerName: name,
+            runtimeToolID: name,
+          },
+        )
         projectedBinding = projectedTaskToolRuntimeBindingOf(bound)
       }
     }
-    if (!browserPermissionKey && !computerPermissionKey && !mcpAuthorityBinding && !projectedBinding && !stageMaterializerBinding) {
+    if (
+      !browserPermissionKey &&
+      !computerPermissionKey &&
+      !mcpAuthorityBinding &&
+      !projectedBinding &&
+      !stageMaterializerBinding
+    ) {
       throw new Error(`Projected Tool ${name} is missing its immutable authorization binding`)
     }
     // Mirror the attachment stamping the registry-tools wrapper applies
@@ -3459,14 +3443,15 @@ export namespace SessionLoop {
               : ctx.mcpAppLifecycle
                 ? ("mcp_app" as const)
                 : ("projected" as const),
-          providerID: mcpAuthorityBinding?.serverID ?? stageMaterializerBinding?.id ?? projectedBinding?.providerName ?? name,
+          providerID:
+            mcpAuthorityBinding?.serverID ?? stageMaterializerBinding?.id ?? projectedBinding?.providerName ?? name,
           providerDigest: mcpAuthorityBinding
             ? `${mcpAuthorityBinding.configDigest}:${mcpAuthorityBinding.toolDigest}`
             : stageMaterializerBinding
               ? `${stageMaterializerBinding.revision}:${stageMaterializerBinding.inputSha256}`
-            : projectedBinding
-              ? `${projectedBinding.projectionHash}:${projectedBinding.mcpServerConfigSHA256 ?? projectedBinding.packageRevision.packageDigest}`
-              : undefined,
+              : projectedBinding
+                ? `${projectedBinding.projectionHash}:${projectedBinding.mcpServerConfigSHA256 ?? projectedBinding.packageRevision.packageDigest}`
+                : undefined,
           args: toolInput,
         }
         const executeProjectedTool = () =>
@@ -3489,7 +3474,7 @@ export namespace SessionLoop {
           }
           const normalized = await materializeToolResultInlineAttachments({
             projectID: invocationIdentity.projectID,
-            value: normalizeExtraToolResult(result),
+            value: normalizeToolResult(result),
           })
           const materializedAttachments = await materializeToolResultAttachments(normalized.attachments)
           return {

@@ -481,10 +481,8 @@ export const publicMarketZhTranslations01To35 = {
   },
   "builtin/base": {
     label: "Base",
-    description:
-      "Base 是 Advanced 中便捷的复合 Expert Squad，面向非 Goal 交付：研究员、规划师、开发工程师和测试工程师构成精简路径，包自带的完整性与视觉审查员可通过固定的验证交付 workflow 使用。",
-    selectorSummary:
-      "使用 Advanced 的便捷复合版本 Base，通过研究、规划、实现、测试以及选定的验证审查闭环，完成一项完整的非 Goal Task 交付。",
+    description: "Base 是 Advanced 的紧凑替代：一个规划师先划分任务，研究、实现与测试 worker 随后并行执行互不重叠的分区。",
+    selectorSummary: "适用于可由一个 Planner 划分为独立调查、产品实现和测试/checker 工作的一项完整 Task。",
     agents: {
       "base-researcher": {
         label: "Base 研究员",
@@ -492,60 +490,26 @@ export const publicMarketZhTranslations01To35 = {
       },
       "base-planner": {
         label: "Base 规划师",
-        description: "审查规范研究报告并发布一份完整的 Task 实施计划，而无需编辑产品文件或创建源自 Goal 的计划事实。",
+        description: "调查当前边界并发布完整 Task 计划，为三个 worker 分配互不重叠的路径、输入和验收责任。",
       },
       "base-developer": {
         label: "Base 开发工程师",
-        description: "采用选定的 Base 实施计划修改代码库，执行由实现方负责的检查，并发布开发报告。",
+        description: "只消费 Base 计划，完成产品与生成输出分区、实现方检查和适用的真实页面证据。",
       },
       "base-tester": {
         label: "Base 测试工程师",
-        description: "依据研究、计划、开发报告、最终 diff、可执行检查和渲染证据独立测试实现，并发布规范的测试报告。",
-      },
-      "base-integrity-reviewer": {
-        label: "Base 完整性审查员",
-        description: "独立审查所选上游 Artifacts 的完整基础交付、实施行为、测试、runtime 证据和未解决的风险。",
-      },
-      "base-visual-reviewer": {
-        label: "Base 视觉审查员",
-        description: "独立审查真实渲染的交付、交互状态和视觉验收证据，不以源代码或自动化 UI 断言替代真实页面证据。",
+        description: "只消费 Base 计划，完成分配的正向测试、checker 与独立验证并发布规范报告。",
       },
     },
     workflows: {
-      "composite-delivery": {
-        label: "复合交付",
-        description:
-          "一条 Task 范围的类型研究、规划、实施和测试链，无需 RequirementSet、ContractGraph、Goal 或交付切片规划。",
+      "planner-parallel-delivery": {
+        label: "规划师与并行 Worker",
+        description: "一个 Planner 先固定任务分区，研究、实现与测试 worker 随后在同一 frontier 并行工作。",
         nodes: {
-          "base-researcher": "研究具体任务并发布规范的 Base 研究报告。",
-          "base-planner": "读取并选用 Base 研究报告，发布规范的非 Goal 实施计划。",
-          "base-developer": "读取并选用 Base 计划，实现完整的 Task 交付，运行由实现方负责的检查，并发布开发报告。",
-          "base-tester": "读取并选用完整的 Base 交接材料，独立验证交付并发布规范的测试报告。",
-        },
-      },
-      "integrity-verified-delivery": {
-        label: "完整性验证交付",
-        description: "运行精简的非 Goal 交付链，再依据由测试证据支撑的完整交接材料开展独立的系统级完整性审查。",
-        nodes: {
-          "base-researcher": "研究具体任务并发布规范的 Base 研究报告。",
-          "base-planner": "读取并选用 Base 研究报告，发布规范的非 Goal 实施计划。",
-          "base-developer": "读取并选用 Base 计划，实现完整的 Task 交付，运行由实现方负责的检查，并发布开发报告。",
-          "base-tester": "读取并选用完整的 Base 交接材料，独立验证交付并发布规范的测试报告。",
-          "base-integrity-reviewer":
-            "根据完整的研究、计划、开发、测试、差异、命令和 runtime 证据执行独立的系统级完整性审查。",
-        },
-      },
-      "visual-verified-delivery": {
-        label: "视觉验证交付",
-        description:
-          "运行精简的非 Goal 交付链，并行测试和视觉审查真实渲染的实现，再综合两个证据分支开展独立完整性审查。",
-        nodes: {
-          "base-researcher": "研究具体任务并发布规范的 Base 研究报告。",
-          "base-planner": "读取并选用 Base 研究报告，发布规范的非 Goal 实施计划。",
-          "base-developer": "读取并选用 Base 计划，实现完整的 Task 交付，运行由实现方负责的检查，并发布开发报告。",
-          "base-tester": "读取并选用完整的 Base 交接材料，独立验证交付并发布规范的测试报告。",
-          "base-visual-reviewer": "实际操作并审查真实渲染的实现、交互状态、诊断结果和新鲜视觉证据。",
-          "base-integrity-reviewer": "在测试和真实呈现的视觉证据完成后，执行独立的系统级完整性审查。",
+          "base-planner": "发布完整 Task 分区、共享输入、路径所有权与验收分配。",
+          "base-researcher": "执行计划中的只读证据调查分区。",
+          "base-developer": "执行计划中的产品与生成输出分区。",
+          "base-tester": "执行计划中的测试与 checker 分区。",
         },
       },
     },
@@ -681,10 +645,6 @@ export const publicMarketZhTranslations01To35 = {
         label: "浏览器证据观察者",
         description: "依据研究矩阵检查真实页面，并记录注明日期的主张、可见状态、来源定位信息和截图。",
       },
-      "browser-interaction-auditor": {
-        label: "浏览器交互审核器",
-        description: "实际执行声明的交互场景，并记录可见结果、状态转换和未解决阻塞项。",
-      },
       "browser-acceptance-reviewer": {
         label: "浏览器验收审核员",
         description: "将研究和交互证据结合到标准级别的通过、失败、阻止或未经验证的决策中。",
@@ -697,8 +657,7 @@ export const publicMarketZhTranslations01To35 = {
         nodes: {
           "browser-research-planner": "发布可观察的目标、证据矩阵、场景和停止条件。",
           "browser-evidence-observer": "发布真实页面内容和视觉证据档案。",
-          "browser-interaction-auditor": "发布交互结果和可见状态审计。",
-          "browser-acceptance-reviewer": "发布联合标准级验收报告。",
+          "browser-acceptance-reviewer": "独立执行计划中的验收场景并发布标准级报告。",
         },
       },
     },
@@ -1793,8 +1752,8 @@ export const publicMarketZhTranslations01To35 = {
         label: "演进评估员",
         description: "收集精确的双组运行证据，仅执行已固化的评分器契约，并保留结果不可用的状态。",
       },
-      "evolution-security-integrity-reviewer": {
-        label: "演进安全与完整性审查员",
+      "evolution-safety-auditor": {
+        label: "演进安全审计员",
         description: "独立审计权限、泄露、奖励操纵、证据沿袭、已固化文件和实验漂移。",
       },
       "evolution-recommendation-owner": {
@@ -1804,8 +1763,8 @@ export const publicMarketZhTranslations01To35 = {
     },
     workflows: {
       "evolution-opportunity-analysis": {
-        label: "演进机会及原因分析",
-        description: "在任何活动获准前，用于明确选定的现有生产证据；发布边界明确的改进机会和已证实的因果归属。",
+        label: "顺序演进机会及原因分析",
+        description: "机会观察先消费已固化诊断边界，因果分析再消费该精确 typed opportunity；Campaign 规划仍由候选准备阶段负责。",
         nodes: {
           "evolution-observer": "根据明确选定的证据发布边界明确的演进机会。",
           "evolution-failure-analyst": "发布故障因果归属和明确的未知项。",
@@ -1818,6 +1777,7 @@ export const publicMarketZhTranslations01To35 = {
         nodes: {
           "evolution-experiment-planner": "发布已固化的活动规范和精确的父级 revision，但不包含尚未创建的候选 digest。",
           "evolution-candidate-author": "发布一个完整的经过验证的候选 revision。",
+          "evolution-observer": "独立核对候选准备阶段的目标证据和边界。",
         },
       },
       "evolution-campaign-evaluation": {
@@ -1825,8 +1785,9 @@ export const publicMarketZhTranslations01To35 = {
         description:
           "仅在 Mission 已运行相互独立、profile 精确一致的基线与候选 Tasks，并将其终态证据连同活动和候选 Artifacts 一并导入后使用。",
         nodes: {
+          "evolution-experiment-planner": "发布已固化的评估边界、输入和双组验收分配。",
           "evolution-evaluator": "发布已导入且固化的基线与候选 Tasks 的精确运行证据和评分器结果。",
-          "evolution-security-integrity-reviewer": "审计候选方案完整性、权限、证据、实验漂移和奖励操纵。",
+          "evolution-safety-auditor": "审计候选方案完整性、权限、证据、实验漂移和奖励操纵。",
           "evolution-recommendation-owner": "发布范围明确的比较与建议，但不具备候选方案晋级权限。",
         },
       },

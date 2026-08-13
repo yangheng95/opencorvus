@@ -5,22 +5,30 @@
   "name": "Advertising Measurement and Brand Safety",
   "label": "Advertising Measurement and Brand Safety",
   "description": "Source-bound campaign measurement, delivery quality, attribution and brand suitability evidence without live platform mutation, spend authority or compliance conclusions.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for source-bound advertising measurement and brand-safety assurance prepared for qualified review.",
     "selection_guidance": "Select for campaign taxonomy, metric contracts, event lineage, delivery, viewability, invalid traffic, suitability, attribution, incrementality and experiment evidence. Do not select for live buying, budget, bid, creative, targeting, blocklist, publication or legal/compliance decisions.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["advertising-measurement-brand-safety/shared/method"],
+      "package_skill_refs": [
+        "advertising-measurement-brand-safety/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,18 +38,20 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "brand-safety-suitability-verification-analyst": {
         "label": "Brand Safety Suitability Verification Analyst",
         "description": "Verifies source-bound placement, content, suitability, exclusion and incident evidence.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/brand-safety-suitability-verification-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advertising-measurement-brand-safety/shared/method"],
+        "package_skill_refs": [
+          "advertising-measurement-brand-safety/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "campaign-taxonomy-metric-contract-analyst": {
         "label": "Campaign Taxonomy Metric Contract Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advertising-measurement-brand-safety/shared/method"],
+        "package_skill_refs": [
+          "advertising-measurement-brand-safety/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +83,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "delivery-reconciliation-data-quality-analyst": {
         "label": "Delivery Reconciliation Data Quality Analyst",
@@ -81,7 +93,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advertising-measurement-brand-safety/shared/method"],
+        "package_skill_refs": [
+          "advertising-measurement-brand-safety/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "outcome-attribution-experiment-analyst": {
         "label": "Outcome Attribution Experiment Analyst",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advertising-measurement-brand-safety/shared/method"],
+        "package_skill_refs": [
+          "advertising-measurement-brand-safety/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,7 +127,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "advertising-measurement-brand-safety-review-owner": {
         "label": "Advertising Measurement Brand Safety Review Owner",
@@ -121,7 +137,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advertising-measurement-brand-safety/shared/method"],
+        "package_skill_refs": [
+          "advertising-measurement-brand-safety/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -131,8 +149,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "qualified-review": {
@@ -142,22 +160,22 @@
           "brand-safety-suitability-verification-analyst": {
             "agent_id": "brand-safety-suitability-verification-analyst",
             "description": "Verifies source-bound placement, content, suitability, exclusion and incident evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "campaign-taxonomy-metric-contract-analyst": {
             "agent_id": "campaign-taxonomy-metric-contract-analyst",
             "description": "Freezes campaign identity, taxonomy, metric definitions, denominators and event lineage.",
-            "depends_on": [],
+            "depends_on": []
           },
           "delivery-reconciliation-data-quality-analyst": {
             "agent_id": "delivery-reconciliation-data-quality-analyst",
             "description": "Reconciles delivery, viewability, invalid-traffic and source-system data quality evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "outcome-attribution-experiment-analyst": {
             "agent_id": "outcome-attribution-experiment-analyst",
             "description": "Tests outcome, attribution, incrementality and experiment evidence against prespecified contracts.",
-            "depends_on": [],
+            "depends_on": []
           },
           "advertising-measurement-brand-safety-review-owner": {
             "agent_id": "advertising-measurement-brand-safety-review-owner",
@@ -166,11 +184,11 @@
               "brand-safety-suitability-verification-analyst",
               "campaign-taxonomy-metric-contract-analyst",
               "delivery-reconciliation-data-quality-analyst",
-              "outcome-attribution-experiment-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "outcome-attribution-experiment-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

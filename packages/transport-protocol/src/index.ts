@@ -244,35 +244,15 @@ export type PtyOutputStreamEvent = z.infer<typeof PtyOutputStreamEvent>
 
 // ── Mailbox change stream ──
 
-export const MailboxChangeStreamEvent = z.discriminatedUnion("type", [
-  z
-    .object({
-      type: z.literal("mailbox.connected"),
-      sourceType: z.literal("mailbox.connected"),
-      messageID: z.null(),
-      taskID: z.null(),
-      sequence: z.literal(0),
-    })
-    .strict(),
-  z
-    .object({
-      type: z.literal("mailbox.heartbeat"),
-      sourceType: z.literal("mailbox.heartbeat"),
-      messageID: z.null(),
-      taskID: z.null(),
-      sequence: z.literal(0),
-    })
-    .strict(),
-  z
-    .object({
-      type: z.literal("mailbox.changed"),
-      sourceType: z.string().min(1),
-      messageID: z.string().min(1),
-      taskID: z.string().min(1).nullable(),
-      sequence: z.number(),
-    })
-    .strict(),
-])
+export const MailboxChangeStreamEvent = z
+  .object({
+    type: z.literal("mailbox.changed"),
+    sourceType: z.string().min(1),
+    messageID: z.string().min(1),
+    taskID: z.string().min(1).nullable(),
+    sequence: z.number(),
+  })
+  .strict()
 export type MailboxChangeStreamEvent = z.infer<typeof MailboxChangeStreamEvent>
 
 // ── Work Ledger projection and change stream ──
@@ -488,6 +468,7 @@ export const WorkLedgerEvent = z.discriminatedUnion("type", [
   WorkLedgerChangedEvent,
   WorkLedgerMissionHandoffEvent,
   WorkLedgerConversationHandoffEvent,
+  MailboxChangeStreamEvent,
 ])
 export type WorkLedgerActionEvent = z.infer<typeof WorkLedgerActionEvent>
 export type WorkLedgerEvent = z.infer<typeof WorkLedgerEvent>
@@ -1188,7 +1169,7 @@ export function isOverlayPersistedSettings(value: unknown): value is OverlayPers
     isNonBlankString(settings.serverUrl) &&
     typeof settings.autoServer === "boolean" &&
     typeof settings.password === "string" &&
-    isNonBlankString(settings.username) &&
+    typeof settings.username === "string" &&
     (PROJECT_EDITOR_IDS as readonly unknown[]).includes(settings.projectEditor) &&
     typeof settings.initGit === "boolean" &&
     typeof settings.sidebarCollapsed === "boolean" &&

@@ -836,10 +836,11 @@ function needsProjectRefresh(ctx: Context) {
 
 async function bootstrapContext(ctx: Context, entry: CacheEntry, inits: readonly InstanceInit[]) {
   const lifecycleContext = { directory: ctx.directory, worktree: ctx.worktree, projectID: ctx.project.id }
-  // .gitignore upkeep runs inside the established project context because
-  // ensureGitignore reads the current project directory from that context.
-  const { ensureGitignore } = await import("@/engine/git")
-  await ProjectOpenLifecycle.stage("engine.git.ensure-gitignore", lifecycleContext, () => ensureGitignore())
+  // Project metadata upkeep runs inside the established project context.
+  const { ensureGitProjectMetadata } = await import("@/engine/git-project-metadata")
+  await ProjectOpenLifecycle.stage("engine.git.ensure-project-metadata", lifecycleContext, () =>
+    ensureGitProjectMetadata(),
+  )
   const { ExpertSquadRegistry } = await import("@/expert-squad/registry")
   await ProjectOpenLifecycle.stage("expert-squad.discover", lifecycleContext, async () => {
     const result = await ExpertSquadRegistry.discoverAvailable(ctx.project.worktree)

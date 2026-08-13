@@ -7,6 +7,7 @@ import {
   type ToolContext,
 } from "@opencorvus-ai/plugin"
 import {
+  SeoGeoPublishableArtifactInputSchema,
   SeoGeoArtifactTypeSchema,
   seoGeoArtifactDependencies,
   parseSeoGeoArtifact,
@@ -40,13 +41,12 @@ async function readSource(locator: EngineArtifactLocator, context: ToolContext) 
 export default tool({
   description: "Validate and publish one strict seo-geo Artifact ABI value with exact selected predecessors and immutable resources.",
   args: {
-    artifact_type: SeoGeoArtifactTypeSchema,
-    payload: tool.schema.unknown(),
+    artifact: SeoGeoPublishableArtifactInputSchema,
     resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),
     source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema),
   },
   async execute(args, context) {
-    const parsed = parseSeoGeoArtifact(args.artifact_type, args.payload)
+    const parsed = parseSeoGeoArtifact(args.artifact.artifact_type, args.artifact.payload)
     if (context.agent !== producerByType[parsed.artifactType])
       throw new Error("SEO & Generative Engine Optimization " + parsed.artifactType + " must be published by " + producerByType[parsed.artifactType])
     const sources = await Promise.all(args.source_artifact_locators.map((locator) => readSource(locator, context)))

@@ -55,7 +55,9 @@ import { MissionCompletionReceipt, MissionCompletionTaskAcceptance } from "@/mis
 import {
   requireCurrentTerminalLifecycleReference,
   sameTerminalLifecycleReference,
+  type TerminalLifecycleReference,
 } from "@/engine/terminal-lifecycle-reference"
+import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
 import {
   PanelQueryTaskErrorRow,
   PanelQueryTaskOutput,
@@ -70,8 +72,11 @@ const localOnly = (ctx: Tool.Context) => {
   return surface === "panel" || surface === "right-sidebar"
 }
 
-const PanelTaskArtifactPage = ArtifactSearchTransportPageSchema.extend({
+const PanelTaskArtifactPage = ArtifactSearchTransportPageSchema.omit({ next_cursor: true }).extend({
   taskID: z.string().min(1),
+  terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
+  page_number: z.number().int().min(1),
+  next_page_number: z.number().int().min(2).nullable(),
 })
 
 const PANEL_ARTIFACT_PAGE_INITIAL_LIMIT = 16
@@ -230,34 +235,76 @@ function panelStructuredOutput(value: unknown, context: string): string {
 
 async function panelTaskArtifactPage(
   taskID: string,
-  input: Omit<z.input<typeof ArtifactSearchInputSchema>, "limit">,
+  input: Omit<z.input<typeof ArtifactSearchInputSchema>, "limit" | "cursor"> & {
+    terminal_lifecycle_reference: TerminalLifecycleReference
+    page_number: number
+  },
 ): Promise<string> {
-  let limit = PANEL_ARTIFACT_PAGE_INITIAL_LIMIT
-  for (;;) {
-    const page = await EngineService.searchArtifactCatalog(taskID, {
-      ...input,
-      limit,
-    })
-    const projected = PanelTaskArtifactPage.parse({
-      taskID,
-      entries: page.entries,
-      next_cursor: page.next_cursor,
-      catalog_total: page.catalog_total,
-      filtered_total: page.filtered_total,
-      catalog_complete: page.catalog_complete,
-      metadata_truncated: page.metadata_truncated,
-      provider_errors: page.provider_errors,
-      resolution: page.resolution,
-    })
-    const output = JSON.stringify(projected)
-    if (Buffer.byteLength(output, "utf8") <= ArtifactSchemaLimits.structuredOutputBytes) return output
-    if (limit === 1) {
+  const {
+    terminal_lifecycle_reference: expectedTerminalReference,
+    page_number: requestedPageNumber,
+    ...search
+  } = input
+  const assertCurrentTerminalOccurrence = () => {
+    const current = requireCurrentTerminalLifecycleReference(taskID)
+    if (!sameTerminalLifecycleReference(current, expectedTerminalReference)) {
       throw new Error(
-        `panel.query_task_artifacts cannot encode one catalog page within the ${ArtifactSchemaLimits.structuredOutputBytes}-byte structured-output boundary`,
+        `panel.query_task_artifacts terminal occurrence changed for Task ${taskID}; query the current Task before enumerating its Artifact catalog`,
       )
     }
-    limit = Math.max(1, Math.floor(limit / 2))
+    return current
   }
+
+  assertCurrentTerminalOccurrence()
+  let cursor: string | undefined
+  for (let pageNumber = 1; pageNumber <= requestedPageNumber; pageNumber += 1) {
+    let limit = PANEL_ARTIFACT_PAGE_INITIAL_LIMIT
+    for (;;) {
+      assertCurrentTerminalOccurrence()
+      const page = await EngineService.searchArtifactCatalog(taskID, {
+        ...search,
+        limit,
+        ...(cursor ? { cursor } : {}),
+      })
+      const terminalReference = assertCurrentTerminalOccurrence()
+      const projected = PanelTaskArtifactPage.parse({
+        taskID,
+        terminal_lifecycle_reference: terminalReference,
+        page_number: pageNumber,
+        next_page_number: page.next_cursor ? pageNumber + 1 : null,
+        entries: page.entries,
+        catalog_total: page.catalog_total,
+        filtered_total: page.filtered_total,
+        catalog_complete: page.catalog_complete,
+        metadata_truncated: page.metadata_truncated,
+        provider_errors: page.provider_errors,
+        resolution: page.resolution,
+      })
+      const output = JSON.stringify(projected)
+      if (Buffer.byteLength(output, "utf8") <= ArtifactSchemaLimits.structuredOutputBytes) {
+        if (pageNumber === requestedPageNumber) return output
+        if (pageNumber === 1 && requestedPageNumber > Math.max(1, page.filtered_total)) {
+          throw new Error(
+            `panel.query_task_artifacts page ${requestedPageNumber} exceeds the catalog's ${page.filtered_total} matching entries for Task ${taskID}`,
+          )
+        }
+        if (!page.next_cursor) {
+          throw new Error(
+            `panel.query_task_artifacts page ${requestedPageNumber} is beyond the complete ${pageNumber}-page catalog for Task ${taskID}`,
+          )
+        }
+        cursor = page.next_cursor
+        break
+      }
+      if (limit === 1) {
+        throw new Error(
+          `panel.query_task_artifacts cannot encode one catalog page within the ${ArtifactSchemaLimits.structuredOutputBytes}-byte structured-output boundary`,
+        )
+      }
+      limit = Math.max(1, Math.floor(limit / 2))
+    }
+  }
+  throw new Error(`panel.query_task_artifacts failed to resolve requested page ${requestedPageNumber}`)
 }
 
 async function panelTaskSummaryRow(board: PanelTaskBoard): Promise<z.infer<typeof PanelQueryTaskSummaryRow>> {
@@ -799,8 +846,8 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         if (actor === "mission") {
           requireMissionTaskSemanticTitle(params.title)
         }
-        if (params.artifact_imports && params.artifact_imports.length > 0 && actor !== "mission") {
-          throw new Error("panel.create_task artifact_imports is only available to a real Mission")
+        if (params.artifact_sources && params.artifact_sources.length > 0 && actor !== "mission") {
+          throw new Error("panel.create_task artifact_sources is only available to a real Mission")
         }
         const taskCreator = resolvePanelTaskCreator(actor, ctx)
         const taskChannelBinding = resolveCreateTaskChannelBinding(params, ctx)
@@ -840,7 +887,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               ? params.request_id
               : (params.request_id ??
                 (actor === "control_agent" ? controlContext(ctx).requestID : ctx.extra?.requestID)),
-            artifactImports: params.artifact_imports,
+            artifactSources: params.artifact_sources,
             directory: params.directory,
             title: params.title,
             request: params.request,
@@ -871,7 +918,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
           output: JSON.stringify({
             kind: "created",
             task_id: taskID,
-            artifact_imports: EngineService.getCrossTaskArtifactImportMappings(taskID),
+            artifact_import_mappings: EngineService.getCrossTaskArtifactImportMappings(taskID),
             message: `Task accepted: \`${taskID}\``,
           }),
           metadata: {},

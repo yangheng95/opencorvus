@@ -30,6 +30,7 @@ import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { EvidenceLocatorListSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 import type { EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import { WorkerTurnSettlementError } from "@/agent/runner"
+import { taskCancellationAuthorityExecutionError } from "@/engine/cancellation-projection"
 import { exactEngineArtifactLocator } from "@/artifact-catalog"
 import { WorkflowNodeOccurrenceConflictError } from "@/engine/workflow-node-occurrence"
 import { TaskWorkflowBindingConflictError } from "@/engine/workflow-binding-facts"
@@ -459,7 +460,7 @@ export function createDispatchAgentTool(input: {
       "Single scheduler agent dispatch tool. In dispatch, use target to select an exact projected worker identity. Use turn.kind=initial with workflow_subject and target-specific turn.input for a first node occurrence. Use turn.kind=continuation with one explicit lineage authority, guidance, and evidence_locators only for a successor Turn. " +
       "A Task has one immutable workflow binding: after the first virtual-workflow initial dispatch commits, every later initial dispatch must use a node from that same workflow; never switch to direct. Direct initial dispatches are only for a Task that has not selected a virtual workflow. " +
       "Every call must declare use_worktree. Concurrent write-capable Task dispatches use managed worktrees when repository ownership requires isolation; read-only or proven-disjoint dispatches may use false. " +
-      "A newly started worker returns accepted as soon as its durable lineage and Session exist; continue the root control Turn without waiting for that worker. A fast worker may instead return terminal_success, domain_incomplete, domain_blocked, partial, infrastructure_failure, or a coordination request. domain_incomplete carries the exact durable but incomplete domain Artifact and never opens workflow successors. domain_blocked carries the exact domain Artifact and unanswered blocker Question occurrence and also keeps successors closed. terminal_success is already terminal: never call wait for it; discover persisted domain facts through artifact_search, exact artifact_read, and artifact_select for semantic sources. " +
+      "A newly started worker returns accepted as soon as its durable lineage and Session exist; continue the root control Turn without waiting for that worker. A fast worker may instead return terminal_success, domain_incomplete, domain_blocked, partial, infrastructure_failure, or a coordination request. domain_incomplete carries the exact durable but incomplete domain Artifact and never opens workflow successors. domain_blocked carries the exact domain Artifact and unanswered blocker Question occurrence and also keeps successors closed. terminal_success is already terminal: never call wait for it; discover persisted domain facts through artifact_search, read each artifact_locator_ref completely, and select semantic sources with artifact_read_ref. " +
       "This replaces separate visible worker-stage tools such as requirements, architect, build, visual_qa, integrity, fact_check, research, workload, intent analysis, and explore.",
     inputSchema,
     outputSchema: DispatchOutcomeSchema,
@@ -501,6 +502,8 @@ export function createDispatchAgentTool(input: {
       if (!projectedAgent || !execute) {
         throw new Error(`dispatch_agent target ${target} lost its construction-validated runtime binding`)
       }
+      const cancellation = taskCancellationAuthorityExecutionError(input.taskID, `dispatch_agent ${target} preparation`)
+      if (cancellation) throw cancellation
       const exactWorkScope = ProjectedAgentWorkScopeSchema.parse(workScope)
       const exactWorkflow =
         coordinationActionID || continuationDispatchID
@@ -746,7 +749,16 @@ export function createDispatchAgentTool(input: {
                 },
               })
               if (result === "started" || result === "queued") return
-              throw new Error(`Detached dispatch infrastructure ingress is ${result} for ${completedSessionID}`)
+              const { dispatchInfrastructureFailureWakeDisposition } = await import("@/engine/queue")
+              const disposition = dispatchInfrastructureFailureWakeDisposition({
+                taskID: input.taskID,
+                infrastructureFactID,
+              })
+              // Task cancellation is an exact durable disposition, not a
+              // delivery failure. A delivery_failed receipt remains a failed
+              // detached pipeline and must stay visible to runtime settlement.
+              if (disposition === "terminal_inapplicable") return
+              throw new Error(`Detached dispatch infrastructure ingress is ${disposition} for ${completedSessionID}`)
             }
             const { reconcileTerminalAgentLifecycleDelivery } = await import("@/engine/queue")
             const result = await reconcileTerminalAgentLifecycleDelivery({

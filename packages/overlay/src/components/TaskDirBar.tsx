@@ -54,6 +54,7 @@ import { rightDockOpen } from "../store/right-dock"
 import { layoutTokenPx } from "../utils/layout-tokens"
 
 const directoryMemo = () => activeDirectory()
+const WORKTREE_PROJECTION_RETRY_MS = 3_000
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
@@ -179,6 +180,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const [deletingWorktrees, setDeletingWorktrees] = createSignal(new Set<string>())
   const [bulkDeleteOperationDirectory, setBulkDeleteOperationDirectory] = createSignal("")
   const [refreshingWorktreeDirectory, setRefreshingWorktreeDirectory] = createSignal("")
+  let worktreeProjectionRetryTimer: ReturnType<typeof setTimeout> | undefined
+  let worktreeProjectionGeneration = 0
   const visibleWorktrees = createMemo(() => worktrees().filter((item) => item.status !== "primary"))
   const removableWorktrees = createMemo(() => visibleWorktrees().filter((item) => item.removable))
   const bulkDeleteBusy = createMemo(() => bulkDeleteBusyFor(worktreeDirectory()))
@@ -835,28 +838,66 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   async function syncWorktrees(options: { requireFresh?: boolean } = {}): Promise<void> {
     const projectDirectory = dir().trim()
     if (!appStore.connected || !projectDirectory) {
+      invalidateWorktreeProjection()
       setWorktrees([])
       setWorktreeDirectory("")
       setError("")
       return
     }
+    clearWorktreeProjectionRetry()
+    const requestGeneration = ++worktreeProjectionGeneration
     try {
       const items = await loadProjectWorktrees(projectDirectory)
-      if (dir().trim() !== projectDirectory) return
+      if (!ownsWorktreeProjection(requestGeneration, projectDirectory)) return
       setWorktrees(items)
       setWorktreeDirectory(projectDirectory)
+      if (error()) {
+        AppLog.info("ui", "Project worktree projection recovered", { directory: projectDirectory })
+      }
       setError("")
     } catch (err) {
-      if (dir().trim() !== projectDirectory) return
+      if (!ownsWorktreeProjection(requestGeneration, projectDirectory)) return
       const message = err instanceof Error ? err.message : String(err)
       if (worktreeDirectory() !== projectDirectory) {
         setWorktrees([])
         setWorktreeDirectory("")
       }
-      setError(message)
-      AppLog.warn("ui", "Failed to load project worktrees", { error: message })
+      if (error() !== message) {
+        setError(message)
+        AppLog.warn("ui", "Failed to load project worktrees", { directory: projectDirectory, error: message })
+      }
+      scheduleWorktreeProjectionRetry(requestGeneration, projectDirectory)
       if (options.requireFresh) throw err
     }
+  }
+
+  function clearWorktreeProjectionRetry(): void {
+    if (worktreeProjectionRetryTimer === undefined) return
+    clearTimeout(worktreeProjectionRetryTimer)
+    worktreeProjectionRetryTimer = undefined
+  }
+
+  function invalidateWorktreeProjection(): void {
+    worktreeProjectionGeneration += 1
+    clearWorktreeProjectionRetry()
+  }
+
+  function ownsWorktreeProjection(generation: number, projectDirectory: string): boolean {
+    return (
+      generation === worktreeProjectionGeneration &&
+      appStore.connected &&
+      dir().trim() === projectDirectory
+    )
+  }
+
+  function scheduleWorktreeProjectionRetry(generation: number, projectDirectory: string): void {
+    if (!ownsWorktreeProjection(generation, projectDirectory)) return
+    if (worktreeProjectionRetryTimer !== undefined) return
+    worktreeProjectionRetryTimer = setTimeout(() => {
+      worktreeProjectionRetryTimer = undefined
+      if (!ownsWorktreeProjection(generation, projectDirectory)) return
+      void syncWorktrees()
+    }, WORKTREE_PROJECTION_RETRY_MS)
   }
 
   function ownsWorktreeOperation(projectDirectory: string): boolean {
@@ -1010,6 +1051,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   createEffect(() => {
     const connected = appStore.connected
     dir()
+    invalidateWorktreeProjection()
     setLocalMenuOpen(false)
     setBranchMenuOpen(false)
     setBranches([])
@@ -1028,6 +1070,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       setError("")
     }
   })
+
+  onCleanup(invalidateWorktreeProjection)
 
   createEffect(() => {
     if (!props.anchorVisible) closeRuntimePanel()

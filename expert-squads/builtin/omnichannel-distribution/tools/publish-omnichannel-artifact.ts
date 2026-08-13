@@ -10,6 +10,7 @@ import {
 } from "@opencorvus-ai/plugin"
 import {
   OMNICHANNEL_SCHEMA_VERSION,
+  OmnichannelPublishableArtifactInputSchema,
   OmnichannelArtifactTypeSchema,
   parseOmnichannelArtifact,
   type OmnichannelArtifactType,
@@ -68,16 +69,16 @@ const labels: Readonly<Record<OmnichannelArtifactType, string>> = {
 export default tool({
   description: "Validate and publish one strict omnichannel-distribution Artifact with exact typed predecessors and immutable resources.",
   args: {
-    artifact_type: OmnichannelArtifactTypeSchema,
-    payload: tool.schema.unknown(),
+    artifact: OmnichannelPublishableArtifactInputSchema,
     resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),
     source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema),
   },
   async execute(args, context) {
-    const payload = parseOmnichannelArtifact(args.artifact_type, args.payload)
-    const expected = expectedSources[args.artifact_type]
+    const artifactType = args.artifact.artifact_type
+    const payload = parseOmnichannelArtifact(artifactType, args.artifact.payload)
+    const expected = expectedSources[artifactType]
     if (args.source_artifact_locators.length !== expected.length) {
-      throw new Error(`${args.artifact_type} requires ${expected.length} exact source Artifact locator(s)`)
+      throw new Error(`${artifactType} requires ${expected.length} exact source Artifact locator(s)`)
     }
     const batch = await readExactArtifactsSettled(context.host.engineArtifacts, args.source_artifact_locators)
     if (batch.diagnostics.length > 0) {
@@ -91,7 +92,7 @@ export default tool({
       const envelope = inspectEngineArtifactEnvelope(read, { schemaVersion: OMNICHANNEL_SCHEMA_VERSION })
       const sourceType = OmnichannelArtifactTypeSchema.parse(envelope.artifact_type)
       if (!expected.includes(sourceType) || observedTypes.has(sourceType)) {
-        throw new Error(`${args.artifact_type} received an unexpected or duplicate source ${sourceType}`)
+        throw new Error(`${artifactType} received an unexpected or duplicate source ${sourceType}`)
       }
       inspectEngineArtifactEnvelope(read, {
         artifactType: sourceType,
@@ -106,9 +107,9 @@ export default tool({
       observedTypes.add(sourceType)
     }
     if (expected.some((sourceType) => !observedTypes.has(sourceType))) {
-      throw new Error(`${args.artifact_type} is missing a required typed predecessor`)
+      throw new Error(`${artifactType} is missing a required typed predecessor`)
     }
-    const deliveryPublication = args.artifact_type === "omnichannel-distribution/delivery"
+    const deliveryPublication = artifactType === "omnichannel-distribution/delivery"
     if (deliveryPublication !== Boolean(args.resource_set)) {
       throw new Error(
         deliveryPublication
@@ -119,20 +120,20 @@ export default tool({
     await selectExactArtifactSources(
       context.host.engineArtifacts,
       batch.reads,
-      `Typed predecessors for ${args.artifact_type}`,
+      `Typed predecessors for ${artifactType}`,
     )
     const resources = args.resource_set ? await context.host.taskArtifacts.resources(args.resource_set) : []
-    context.metadata({ title: `Omnichannel Distribution: ${args.artifact_type.split("/")[1]}` })
+    context.metadata({ title: `Omnichannel Distribution: ${artifactType.split("/")[1]}` })
     const publication = await context.host.engineArtifacts.publish({
-      artifact_type: args.artifact_type,
+      artifact_type: artifactType,
       schema_version: OMNICHANNEL_SCHEMA_VERSION,
-      label: labels[args.artifact_type],
+      label: labels[artifactType],
       payload,
       resources,
       source_artifact_locators: batch.reads.map((read) => read.locator),
     })
     return JSON.stringify({
-      artifact_type: args.artifact_type,
+      artifact_type: artifactType,
       schema_version: OMNICHANNEL_SCHEMA_VERSION,
       locator: publication.locator,
       artifact_sha256: publication.sha256,

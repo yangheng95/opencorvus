@@ -71,6 +71,7 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "TaskGlobalProjectBindingError") return 409
   if (err.name === "TaskChannelBindingProjectConflictError") return 409
   if (err.name === "TaskCancellationIncompleteError") return 409
+  if (err.name === "MissionExecutionClosingError") return 409
   if (err.name === "TaskBoundSessionDeletionError") return 409
   if (err.name === "TaskPackageRevisionBindingError") return 409
   if (err.name === "TaskExpectedPackageDigestConflictError") return 409

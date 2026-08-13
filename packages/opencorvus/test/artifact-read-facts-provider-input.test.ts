@@ -44,7 +44,7 @@ describe("Artifact read facts from provider Tool input", () => {
           author: "user",
           time: { created: now },
           agent: "mission",
-          model: { providerID: "openai", modelID: "gpt-5.6-sol" },
+          model: { providerID: "openai", modelID: "gpt-5.6-terra" },
         })
         const readMessage = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -55,7 +55,7 @@ describe("Artifact read facts from provider Tool input", () => {
           time: { created: now + 1, completed: now + 2 },
           agent: "mission",
           providerID: "openai",
-          modelID: "gpt-5.6-sol",
+          modelID: "gpt-5.6-terra",
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
@@ -87,15 +87,14 @@ describe("Artifact read facts from provider Tool input", () => {
           state: {
             status: "completed",
             input: {
-              action: "read_task_artifact",
-              taskID,
-              locator,
-              byte_offset: 0,
-              max_bytes: 65_536,
-              delivery: "inline",
-              model: null,
-              text: null,
-              evidence_locators: null,
+              operation: {
+                action: "read_task_artifact",
+                taskID,
+                locator,
+                byte_offset: 0,
+                max_bytes: 65_536,
+                delivery: "inline",
+              },
             },
             output: JSON.stringify({
               locator,
@@ -123,7 +122,7 @@ describe("Artifact read facts from provider Tool input", () => {
           time: { created: now + 3, completed: now + 4 },
           agent: "mission",
           providerID: "openai",
-          modelID: "gpt-5.6-sol",
+          modelID: "gpt-5.6-terra",
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },

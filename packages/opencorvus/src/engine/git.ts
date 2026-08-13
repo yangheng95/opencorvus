@@ -23,6 +23,9 @@ import { Filesystem } from "@/util/filesystem"
 import { taskRootDirectory } from "./task-directory"
 import { executionCapsuleSourceTreeDigest } from "@/execution-capsule/tree-digest"
 import type { Stats } from "node:fs"
+import { captureProjectMetadataRollback, ensureGitProjectMetadata } from "./git-project-metadata"
+
+export { ensureGitProjectMetadata } from "./git-project-metadata"
 
 const log = Log.create({ service: "engine-git" })
 
@@ -428,36 +431,23 @@ async function checkpointWithGitMaintenanceOperation(input: CheckpointMaintenanc
         if (input.expectedRepositories) {
           return checkpointRepositoryTree({ ...input, gitLease, registerFinalizedTransaction })
         }
-        const gitignorePath = path.join(input.root, ".gitignore")
-        const originalGitignore = await fs.readFile(gitignorePath).then(
-          (bytes) => ({ existed: true as const, bytes }),
-          (error: NodeJS.ErrnoException) => {
-            if (error.code === "ENOENT") return { existed: false as const }
-            throw error
-          },
-        )
-        const restoreOriginalGitignore = async () => {
-          try {
-            if (originalGitignore.existed) await fs.writeFile(gitignorePath, originalGitignore.bytes)
-            else await fs.rm(gitignorePath, { force: true })
-            return []
-          } catch (error) {
-            return [`restore maintenance .gitignore failed: ${String(error)}`]
-          }
-        }
+        const restoreOriginalProjectMetadata = await captureProjectMetadataRollback(input.root)
         try {
-          await ensureGitignore(input.root)
+          await ensureGitProjectMetadata(input.root)
           const result = await checkpointRepositoryTree({
             ...input,
             gitLease,
             registerFinalizedTransaction: (transaction) =>
               registerFinalizedTransaction({
-                rollback: async () => [...(await transaction.rollback()), ...(await restoreOriginalGitignore())],
+                rollback: async () => [
+                  ...(await transaction.rollback()),
+                  ...(await restoreOriginalProjectMetadata()),
+                ],
                 cleanup: transaction.cleanup,
               }),
           })
           if (!("error" in result)) return result
-          const maintenanceErrors = await restoreOriginalGitignore()
+          const maintenanceErrors = await restoreOriginalProjectMetadata()
           const priorRecovery = "recovery" in result ? result.recovery : undefined
           const errors = [...(priorRecovery?.errors ?? []), ...maintenanceErrors]
           return {
@@ -472,7 +462,7 @@ async function checkpointWithGitMaintenanceOperation(input: CheckpointMaintenanc
             },
           }
         } catch (error) {
-          const maintenanceErrors = await restoreOriginalGitignore()
+          const maintenanceErrors = await restoreOriginalProjectMetadata()
           return {
             error: `Repository-tree checkpoint maintenance failed: ${String(error)}${
               maintenanceErrors.length > 0 ? ` Recovery failed: ${maintenanceErrors.join("; ")}` : ""
@@ -1333,26 +1323,6 @@ async function checkpointRepositoryTree(input: {
         backupRoot: transactionSet.backupRoot,
       })
     }
-  }
-}
-
-// OpenCorvus owns exactly one project ignore rule, derived from the canonical
-// runtime root. Static `.opencorvus/` project inputs remain versionable.
-const OPENCORVUS_GITIGNORE_RULE = `${ProjectRuntimePaths.relativeRuntimeRoot()}/`
-
-/** Ensure the canonical raw-byte checkpoint includes the OpenCorvus runtime exclusion. */
-export async function ensureGitignore(dir = currentProjectDirectory()) {
-  const file = Bun.file(`${dir}/.gitignore`)
-  if (await file.exists()) {
-    // Preserve user policy verbatim and append only OpenCorvus's own rule.
-    const existing = await file.text()
-    const lines = new Set(existing.split(/\r?\n/).map((l) => l.trim()))
-    if (!lines.has(OPENCORVUS_GITIGNORE_RULE)) {
-      const separator = existing.length === 0 || existing.endsWith("\n") ? "" : "\n"
-      await Bun.write(`${dir}/.gitignore`, `${existing}${separator}${OPENCORVUS_GITIGNORE_RULE}\n`)
-    }
-  } else {
-    await Bun.write(`${dir}/.gitignore`, `${OPENCORVUS_GITIGNORE_RULE}\n`)
   }
 }
 

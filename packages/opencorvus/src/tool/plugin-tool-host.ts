@@ -367,7 +367,7 @@ export async function withTaskScopedPluginToolHost<T>(
           }),
         ),
     }),
-    expertSquadPackages: createExpertSquadPackageHost(execution),
+    expertSquadPackages: createExpertSquadPackageHost(execution, scope),
     metrics: createMetricEvaluationHost(scope, execution),
   })
   let output: T | undefined

@@ -67,7 +67,7 @@ export function createBuildTool(dependencies: BuildToolDependencies) {
         "Build runtime create a Task-owned worktree and expose its merge contract. The adapter waits for the child Session to " +
         "finish and returns one terminal typed outcome with the exact child Session/final-message references. It does not own " +
         "execution-attempt state, acceptance, review routing, or Task completion. Workers discover durable evidence through " +
-        "artifact_search and artifact_read, then declare semantic sources through artifact_select.",
+        "artifact_search, artifact_locator_ref reads, and artifact_read_ref selections.",
       inputSchema: dependencies.inputSchema,
       execute: async ({ goal_ids, request = "", reason, worktreeUsage = "current_project" }, executionInput) => {
         const execution = requireDispatchAdapterExecutionContext(executionInput)

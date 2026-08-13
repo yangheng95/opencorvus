@@ -5,22 +5,30 @@
   "name": "Education Program Design",
   "label": "Education Program Design",
   "description": "Learner evidence, curriculum structure, assessment, and accessibility analysis joined into a measurable learning-program blueprint.",
-  "version": "2026.08.10.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for evidence-backed curriculum and learning-program design.",
     "selection_guidance": "Select when learner context, curriculum, assessment, and accessibility need independent analysis and an accountable join.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["education-program-design/shared/method"],
+      "package_skill_refs": [
+        "education-program-design/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "education-learner-evidence-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["education-program-design/shared/method"],
+        "package_skill_refs": [
+          "education-program-design/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "education-curriculum-architect": {
         "label": "Curriculum Architect",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["education-program-design/shared/method"],
+        "package_skill_refs": [
+          "education-program-design/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,17 +83,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "education-assessment-accessibility-analyst": {
         "label": "Assessment and Accessibility Analyst",
         "description": "Aligns assessment, feedback, accommodations, and accessibility.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/education-assessment-accessibility-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["education-program-design/shared/method"],
+        "package_skill_refs": [
+          "education-program-design/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "education-program-integrator": {
         "label": "Learning Program Integrator",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["education-program-design/shared/method"],
+        "package_skill_refs": [
+          "education-program-design/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "learning-program-blueprint": {
@@ -122,17 +138,17 @@
           "education-learner-evidence-analyst": {
             "agent_id": "education-learner-evidence-analyst",
             "description": "Maps learner evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "education-curriculum-architect": {
             "agent_id": "education-curriculum-architect",
             "description": "Designs curriculum structure.",
-            "depends_on": [],
+            "depends_on": []
           },
           "education-assessment-accessibility-analyst": {
             "agent_id": "education-assessment-accessibility-analyst",
             "description": "Designs assessment and accessibility.",
-            "depends_on": [],
+            "depends_on": []
           },
           "education-program-integrator": {
             "agent_id": "education-program-integrator",
@@ -140,11 +156,11 @@
             "depends_on": [
               "education-assessment-accessibility-analyst",
               "education-curriculum-architect",
-              "education-learner-evidence-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "education-learner-evidence-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

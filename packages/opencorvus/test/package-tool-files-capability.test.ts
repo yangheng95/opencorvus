@@ -9,11 +9,12 @@ import {
 } from "../src/expert-squad/package-tool-bundle"
 
 describe("Package tool filesystem capability", () => {
-  test("freezes bundled filesystem imports into the ToolHost RPC closure", async () => {
+  test("freezes one plugin runtime ABI across separately prepared package tools", async () => {
     const packageRoot = await Global.createTemporaryDirectory("package-tool-files-")
     try {
       const toolsRoot = path.join(packageRoot, "tools")
       const sourcePath = path.join(toolsRoot, "files-probe.ts")
+      const secondSourcePath = path.join(toolsRoot, "second-probe.ts")
       await nativeFiles.mkdir(toolsRoot, { recursive: true })
       await nativeFiles.writeFile(
         sourcePath,
@@ -31,7 +32,21 @@ export default tool({
 })
 `,
       )
+      await nativeFiles.writeFile(
+        secondSourcePath,
+        `import { tool } from "@opencorvus-ai/plugin"
 
+export default tool({
+  description: "Exercise the same process plugin runtime from another package tool.",
+  args: { value: tool.schema.string() },
+  async execute(args) {
+    return args.value
+  },
+})
+`,
+      )
+
+      const compilationCountBefore = PackageToolBundle.processPluginRuntimeCompilationCountForTest()
       const prepared = await PackageToolBundle.prepare({
         packageID: "files-probe",
         packageRoot,
@@ -39,9 +54,25 @@ export default tool({
         owner: "shared",
         sourcePath,
       })
+      const compilationCountAfterFirstPreparation = PackageToolBundle.processPluginRuntimeCompilationCountForTest()
+      const secondPrepared = await PackageToolBundle.prepare({
+        packageID: "files-probe",
+        packageRoot,
+        ref: "files-probe/shared/second-probe",
+        owner: "shared",
+        sourcePath: secondSourcePath,
+      })
+      expect(compilationCountAfterFirstPreparation).toBeGreaterThanOrEqual(compilationCountBefore)
+      expect(compilationCountAfterFirstPreparation).toBeLessThanOrEqual(compilationCountBefore + 1)
+      expect(PackageToolBundle.processPluginRuntimeCompilationCountForTest()).toBe(
+        compilationCountAfterFirstPreparation,
+      )
       expect(prepared.snapshot.coreImports).toEqual([
         { specifier: "@opencorvus-ai/plugin", sha256: expect.stringMatching(/^[a-f0-9]{64}$/) },
         { specifier: PACKAGE_TOOL_FILES_FACADE_IMPORT, sha256: expect.stringMatching(/^[a-f0-9]{64}$/) },
+      ])
+      expect(secondPrepared.snapshot.coreImports).toEqual([
+        prepared.snapshot.coreImports.find((entry) => entry.specifier === "@opencorvus-ai/plugin")!,
       ])
       expect(prepared.snapshot.files).toEqual([
         {
@@ -51,6 +82,8 @@ export default tool({
         },
       ])
       expect(prepared.snapshot.compiledBundleSHA256).toMatch(/^[a-f0-9]{64}$/)
+      expect(secondPrepared.snapshot.compiledBundleSHA256).toMatch(/^[a-f0-9]{64}$/)
+      expect(secondPrepared.snapshot.compiledBundleSHA256).not.toBe(prepared.snapshot.compiledBundleSHA256)
     } finally {
       await nativeFiles.rm(packageRoot, { recursive: true, force: true })
     }

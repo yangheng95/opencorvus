@@ -5,22 +5,30 @@
   "name": "Customer Success Operations",
   "label": "Customer Success Operations",
   "description": "Evidence-led customer health, lifecycle, retention, handoff, and operating-plan analysis with explicit source and human-decision boundaries.",
-  "version": "2026.08.10.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Turn customer evidence and operating facts into an auditable customer-success plan.",
     "selection_guidance": "Use for customer health, onboarding, adoption, renewal, escalation, churn-signal, voice-of-customer, or revenue-team handoff work. Do not use to invent customer evidence or automatically change a CRM, contract, price, entitlement, or account status.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["customer-success/shared/method"],
+      "package_skill_refs": [
+        "customer-success/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "customer-success-evidence-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["customer-success/shared/method"],
+        "package_skill_refs": [
+          "customer-success/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "customer-success-lifecycle-analyst": {
         "label": "Customer Lifecycle Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["customer-success/shared/method"],
+        "package_skill_refs": [
+          "customer-success/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +83,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "customer-success-operations-designer": {
         "label": "Customer Success Operations Designer",
@@ -81,7 +93,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["customer-success/shared/method"],
+        "package_skill_refs": [
+          "customer-success/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "customer-success-plan-reviewer": {
         "label": "Customer Success Plan Reviewer",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["customer-success/shared/method"],
+        "package_skill_refs": [
+          "customer-success/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "customer-success-operating-plan": {
@@ -122,25 +138,30 @@
           "customer-success-evidence-analyst": {
             "agent_id": "customer-success-evidence-analyst",
             "description": "Produces the dated and segmented customer evidence ledger.",
-            "depends_on": [],
+            "depends_on": []
           },
           "customer-success-lifecycle-analyst": {
             "agent_id": "customer-success-lifecycle-analyst",
             "description": "Produces the lifecycle, ownership, handoff, and control map.",
-            "depends_on": [],
+            "depends_on": []
           },
           "customer-success-operations-designer": {
             "agent_id": "customer-success-operations-designer",
             "description": "Joins both analyses into the single customer-success operating plan.",
-            "depends_on": ["customer-success-evidence-analyst", "customer-success-lifecycle-analyst"],
+            "depends_on": [
+              "customer-success-evidence-analyst",
+              "customer-success-lifecycle-analyst"
+            ]
           },
           "customer-success-plan-reviewer": {
             "agent_id": "customer-success-plan-reviewer",
             "description": "Independently reviews the joined operating plan and records required corrections.",
-            "depends_on": ["customer-success-operations-designer"],
-          },
-        },
-      },
-    },
-  },
+            "depends_on": [
+              "customer-success-operations-designer"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

@@ -6,6 +6,7 @@ import { sessionBelongsToTask, type SessionExecutionAuthority } from "@/engine/t
 import { Session } from "@/session"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { Process } from "@/util/process"
+import { isCompiledBinaryRuntime } from "@/runtime/compiled-binary"
 import { requireRuntimePackage } from "@/runtime/package-require"
 import { OFFICE_PRESENTATION_PROFILE_LIMITS, WorkArtifactProfileRegistry } from "@/work-artifact/profile-registry"
 import { Uint8ArrayReader, ZipReader } from "@zip.js/zip.js"
@@ -13,7 +14,6 @@ import { createHash } from "node:crypto"
 import { execFile } from "node:child_process"
 import fs from "node:fs/promises"
 import path from "node:path"
-import os from "node:os"
 import { fileURLToPath } from "node:url"
 import z from "zod"
 import { promisify } from "node:util"
@@ -32,6 +32,7 @@ import {
 export const PPTX_MIME = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
 const MAX_PRESENTATION_BYTES = OFFICE_PRESENTATION_PROFILE_LIMITS.inputBytes
 const MAX_IMAGE_BYTES = 20 * 1024 * 1024
+const MAX_RENDER_SVG_BYTES = 20 * 1024 * 1024
 const MAX_RECEIPT_BYTES = 1024 * 1024
 const MAX_ZIP_ENTRIES = 2_000
 const MAX_UNCOMPRESSED_BYTES = 120 * 1024 * 1024
@@ -104,10 +105,10 @@ const NonEmptySafeText = z
 const Position = z.number().finite().nonnegative()
 const Dimension = z.number().finite().positive()
 const BaseElement = z.object({
-  x: Position,
-  y: Position,
-  width: Dimension,
-  height: Dimension,
+  x: Position.describe(`Horizontal position in centimeters from the left edge of the ${SLIDE_WIDTH_CM}cm slide`),
+  y: Position.describe(`Vertical position in centimeters from the top edge of the ${SLIDE_HEIGHT_CM}cm slide`),
+  width: Dimension.describe(`Element width in centimeters within the ${SLIDE_WIDTH_CM}cm slide`),
+  height: Dimension.describe(`Element height in centimeters within the ${SLIDE_HEIGHT_CM}cm slide`),
 })
 
 const TextElement = BaseElement.extend({
@@ -485,6 +486,15 @@ function projectID(ctxExtra?: Record<string, unknown>): string {
   return typeof ctxExtra?.projectID === "string" ? ctxExtra.projectID : Instance.project.id
 }
 
+export function workArtifactWorkspaceRoot(input: {
+  executionAuthority: SessionExecutionAuthority
+  projectRoot: string
+}): string {
+  return input.executionAuthority.kind === "task"
+    ? ProjectRuntimePaths.taskWorkArtifactRuntimeRoot(input.projectRoot, input.executionAuthority.taskID)
+    : ProjectRuntimePaths.rootSessionWorkArtifactRuntimeRoot(input.projectRoot, input.executionAuthority.sessionID)
+}
+
 async function withOfficeWorkspace<T>(
   input: { executionAuthority: SessionExecutionAuthority; projectID: string },
   fn: (directory: string) => Promise<T>,
@@ -506,14 +516,7 @@ async function withOfficeWorkspace<T>(
       throw new Error(`Work Artifact conversation ${authority.sessionID} execution identity is inconsistent`)
     }
   }
-  const root =
-    process.platform === "win32"
-      ? path.join(
-          os.tmpdir(),
-          "opencorvus-work-artifact",
-          createHash("sha256").update(`${input.projectID}\0${authority.sessionID}`).digest("hex").slice(0, 20),
-        )
-      : ProjectRuntimePaths.rootSessionToolOutputDir(projectRoot, authority.sessionID)
+  const root = workArtifactWorkspaceRoot({ executionAuthority: authority, projectRoot })
   await fs.mkdir(root, { recursive: true, mode: 0o700 })
   await secureWorkArtifactPrivateDirectory(root)
   const directory = await fs.mkdtemp(path.join(root, ".work-artifact-"))
@@ -728,7 +731,10 @@ function parseJsonResult(result: Process.Result, label: string): Record<string, 
 export function assertZeroWorkArtifactRuntimeIssueCount(result: Record<string, unknown>, label: string): void {
   const data = result.data
   if (!data || typeof data !== "object" || Array.isArray(data) || (data as Record<string, unknown>).count !== 0) {
-    throw new Error(`${label} reported presentation issues`)
+    const evidence = JSON.stringify(data ?? null)
+    throw new Error(
+      `${label} reported presentation issues: ${evidence.length > 4096 ? `${evidence.slice(0, 4096)}…` : evidence}`,
+    )
   }
 }
 
@@ -815,8 +821,8 @@ function isSupportedCreatedPptxPart(name: string): boolean {
     /^ppt\/slideLayouts\/_rels\/slideLayout[1-9][0-9]*\.xml\.rels$/.test(name) ||
     /^ppt\/slides\/slide[1-9][0-9]*\.xml$/.test(name) ||
     /^ppt\/slides\/_rels\/slide[1-9][0-9]*\.xml\.rels$/.test(name) ||
-    /^ppt\/charts\/(?:chart|style|colors)[1-9][0-9]*\.xml$/.test(name) ||
-    /^ppt\/charts\/_rels\/chart[1-9][0-9]*\.xml\.rels$/.test(name) ||
+    /^ppt\/slides\/charts\/(?:chart|style|colors)[1-9][0-9]*\.xml$/.test(name) ||
+    /^ppt\/slides\/charts\/_rels\/chart[1-9][0-9]*\.xml\.rels$/.test(name) ||
     /^ppt\/embeddings\/[A-Za-z0-9][A-Za-z0-9._-]*\.xlsx$/i.test(name) ||
     /^ppt\/media\/[A-Za-z0-9][A-Za-z0-9._-]*\.(?:png|jpe?g|gif|webp)$/i.test(name)
   )
@@ -1001,8 +1007,7 @@ export async function inspectPptxPackage(
     OFFICE_PRESENTATION_PROFILE_LIMITS.parserWallClockMs,
   )
   if (options.abort?.aborted) throw new Error("Work Artifact PPTX inspection was cancelled")
-  const standalone = (Bun as unknown as { isStandaloneExecutable?: boolean }).isStandaloneExecutable === true
-  const command = standalone
+  const command = isCompiledBinaryRuntime()
     ? [process.execPath]
     : [process.execPath, fileURLToPath(new URL("./presentation-inspector-process.ts", import.meta.url))]
   const result = await Process.runHost(command, {
@@ -1024,6 +1029,37 @@ export async function inspectPptxPackage(
   }).parse(JSON.parse(result.stdout.toString("utf8")))
   if (!response.ok || !response.value) throw new Error(response.error ?? "PPTX inspection failed")
   return response.value
+}
+
+export async function renderWorkArtifactSvgToPng(input: {
+  svg: Buffer
+  abort?: AbortSignal
+  timeoutMs: number
+}): Promise<Buffer> {
+  if (input.svg.byteLength < 1 || input.svg.byteLength > MAX_RENDER_SVG_BYTES) {
+    throw new Error(
+      `Work Artifact SVG must be between 1 and ${MAX_RENDER_SVG_BYTES} bytes, received ${input.svg.byteLength}`,
+    )
+  }
+  const command = isCompiledBinaryRuntime()
+    ? [process.execPath]
+    : [process.execPath, fileURLToPath(new URL("./presentation-render-process.ts", import.meta.url))]
+  const result = await Process.runHost(command, {
+    abort: input.abort,
+    env: { OPENCORVUS_INTERNAL_WORK_ARTIFACT_RENDERER: "1" },
+    timeoutMs: input.timeoutMs,
+    maxOutputBytes: MAX_IMAGE_BYTES,
+    input: (async function* () {
+      yield input.svg
+    })(),
+  }).catch((error) => {
+    if (error instanceof Error && error.message.includes(`timed out after ${input.timeoutMs}ms`)) {
+      throw new Error(`Work Artifact SVG rendering exceeded ${input.timeoutMs}ms`, { cause: error })
+    }
+    throw new Error("Work Artifact SVG could not be converted safely", { cause: error })
+  })
+  await assertWorkArtifactRenderPng(result.stdout, "Work Artifact SVG render")
+  return result.stdout
 }
 
 export async function inspectWorkArtifactPresentation(input: {
@@ -1154,23 +1190,25 @@ export async function validateWorkArtifactPresentation(input: {
     assertZeroWorkArtifactRuntimeIssueCount(issues, "OfficeCLI issue inspection")
     const renders: z.output<typeof RenderReference>[] = []
     for (let slide = 1; slide <= inspection.slideCount; slide++) {
-      const renderPath = path.join(directory, `slide-${slide}.png`)
-      await run([
+      const rendered = await run([
         "view",
         sourcePath,
-        "screenshot",
-        "--out",
-        renderPath,
-        "--page",
+        "svg",
+        "--start",
         String(slide),
-        "--render",
-        "html",
-        "--screenshot-width",
-        "1280",
-        "--screenshot-height",
-        "720",
+        "--end",
+        String(slide),
       ])
-      const bytes = await readBoundedFile(renderPath, MAX_IMAGE_BYTES, `OfficeCLI rendered slide ${slide}`)
+      if (rendered.stdout.byteLength < 1 || rendered.stdout.byteLength > MAX_RENDER_SVG_BYTES) {
+        throw new Error(
+          `OfficeCLI rendered slide ${slide} SVG must be between 1 and ${MAX_RENDER_SVG_BYTES} bytes, received ${rendered.stdout.byteLength}`,
+        )
+      }
+      const bytes = await renderWorkArtifactSvgToPng({
+        svg: rendered.stdout,
+        abort: input.abort,
+        timeoutMs: requireOperationBudget(deadline, limits.wallClockMs, input.abort),
+      })
       requireOperationBudget(deadline, limits.wallClockMs, input.abort)
       renderBytes += bytes.byteLength
       if (runtimeOutputBytes + renderBytes > limits.outputBytes) {

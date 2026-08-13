@@ -132,11 +132,15 @@ async function run(
         }),
       )
     const result = await (streamOptions
-      ? SessionPrompt.withPromptOwnerCapture((owner) => {
-          if (promptOwner) return
-          promptOwner = owner
-          if (streamOptions.signal.aborted) settleOwnedPrompt()
-        }, executePrompt)
+      ? SessionPrompt.withPromptOwnerCapture(
+          controlSession.info.id,
+          (owner) => {
+            if (promptOwner) return
+            promptOwner = owner
+            if (streamOptions.signal.aborted) settleOwnedPrompt()
+          },
+          executePrompt,
+        )
       : executePrompt())
 
     if (result.info.role !== "assistant") {

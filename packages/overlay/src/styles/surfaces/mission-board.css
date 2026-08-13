@@ -468,6 +468,26 @@
   margin-bottom: var(--ui-gap-xs);
 }
 
+.mission-create-form__expert-squad-list {
+  display: flex;
+  max-height: calc(240px * var(--ui-scale));
+  flex-direction: column;
+  gap: var(--ui-gap-xs);
+  overflow-y: auto;
+  padding: var(--ui-gap-sm);
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-medium);
+  background: var(--surface);
+}
+
+.mission-create-form__expert-squad-list .oc-checkbox {
+  align-items: flex-start;
+}
+
+.mission-create-form__expert-squad-list .oc-button {
+  justify-content: flex-start;
+}
+
 .mission-create-form__context-status,
 .mission-create-form__required-status,
 .mission-create-form__model-note {

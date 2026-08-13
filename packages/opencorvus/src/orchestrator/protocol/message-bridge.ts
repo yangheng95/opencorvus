@@ -1000,6 +1000,23 @@ async function bridgeEvent(type: string, properties: Record<string, unknown>) {
   }
 }
 
+async function bridgeMovedEvent(properties: Record<string, unknown>) {
+  const sessionID = sessionFromProperties(properties)
+  if (!sessionID) throw new Error("bridge: message.moved has no target Session identity")
+  const taskID = taskIDForSession(sessionID)
+  if (!taskID) throw new Error(`bridge: message.moved target Session ${sessionID} has no owning Task`)
+  const enriched = enrichMessageEventProperties(Message.Event.Moved.type, properties, sessionID, taskID)
+  ProtocolStore.dispatchEphemeral({
+    type: Message.Event.Moved.type,
+    aggregate: "task",
+    taskID,
+    sessionID,
+    source: "session.bridge",
+    orderKey: ephemeralEnvelopeOrderKey(Message.Event.Moved.type, enriched),
+    payload: enriched,
+  })
+}
+
 async function bridgeTodoUpdated(properties: Record<string, unknown>) {
   try {
     const sessionID = sessionFromProperties(properties)
@@ -1141,6 +1158,14 @@ export function ensureTaskMessageProtocolBridge() {
   if (!initializedLocalDirectories.has(localDirectory)) {
     initializedLocalDirectories.add(localDirectory)
 
+    Bus.subscribe(
+      Message.Event.Moved,
+      async (event) => {
+        cacheMessageInfo(event.properties)
+        await bridgeMovedEvent(event.properties)
+      },
+      { durableID: "task-message-protocol-bridge.message-moved" },
+    )
     Bus.subscribe(Message.Event.Updated, async (event) => {
       cacheMessageInfo(event.properties)
       await bridgeEvent(Message.Event.Updated.type, event.properties)

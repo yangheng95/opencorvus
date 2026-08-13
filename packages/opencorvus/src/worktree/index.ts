@@ -1813,8 +1813,8 @@ export namespace Worktree {
       // All git operations serialized to prevent concurrent corruption
       await Worktree.withGitLock(async () => {
         if (base) info = await reclaimInfo(intendedInfo)
-        // CONTRACT: project opening always commits the baseline .gitignore
-        // first (see engine/git.ts ensureGitignore), so HEAD is non-empty by
+        // CONTRACT: project opening always commits the baseline Git metadata
+        // first (see engine/git-project-metadata.ts), so HEAD is non-empty by
         // the time any worktree is requested. If we still see no HEAD here,
         // bootstrap broke earlier — fail loud rather than paper over with a
         // `git add -A` "initial scaffold" empty commit that historically
@@ -1830,9 +1830,9 @@ export namespace Worktree {
           throw new CreateFailedError({
             message:
               `Worktree create requires HEAD to exist on the primary repo (${primaryDir}). ` +
-              `The project bootstrap path (Instance.provide → Project.initGit → ensureGitignore) ` +
-              `must seed the baseline .gitignore commit before any worktree dispatch — investigate ` +
-              `why ensureGitignore did not land a first commit instead of patching here.`,
+              `The project bootstrap path (Instance.provide → Project.initGit → ensureGitProjectMetadata) ` +
+              `must seed the baseline metadata commit before any worktree dispatch — investigate ` +
+              `why project metadata did not land a first commit instead of patching here.`,
           })
         }
 

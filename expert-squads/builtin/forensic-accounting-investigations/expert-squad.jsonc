@@ -5,22 +5,31 @@
   "name": "Forensic Accounting Investigations",
   "label": "Forensic Accounting Investigations",
   "description": "Authorized transaction evidence, anomalies, funds flow and corroboration joined without fraud or legal determinations.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["code", "work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for bounded forensic-accounting investigation evidence.",
     "selection_guidance": "Select for authorized evidence custody, population reconciliation, anomaly leads, funds flow and corroboration without accusations or external actions.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["forensic-accounting-investigations/shared/method"],
+      "package_skill_refs": [
+        "forensic-accounting-investigations/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +39,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "investigation-scope-evidence-custody-analyst": {
@@ -41,7 +50,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["forensic-accounting-investigations/shared/method"],
+        "package_skill_refs": [
+          "forensic-accounting-investigations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,17 +62,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "transaction-anomaly-population-analyst": {
         "label": "Transaction Population and Anomaly Analyst",
         "description": "Reconcile the authorized transaction population and evaluate reproducible anomalies as leads rather than proof.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/transaction-anomaly-population-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["forensic-accounting-investigations/shared/method"],
+        "package_skill_refs": [
+          "forensic-accounting-investigations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +84,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "funds-flow-entity-relationship-analyst": {
         "label": "Funds Flow and Entity Relationship Analyst",
@@ -81,7 +94,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["forensic-accounting-investigations/shared/method"],
+        "package_skill_refs": [
+          "forensic-accounting-investigations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +106,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "control-interview-corroboration-analyst": {
         "label": "Control, Interview and Corroboration Analyst",
@@ -101,7 +116,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["forensic-accounting-investigations/shared/method"],
+        "package_skill_refs": [
+          "forensic-accounting-investigations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,7 +128,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "forensic-accounting-investigation-evidence-owner": {
         "label": "Forensic Accounting Investigation Evidence Owner",
@@ -121,7 +138,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["forensic-accounting-investigations/shared/method"],
+        "package_skill_refs": [
+          "forensic-accounting-investigations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -131,8 +150,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "forensic-accounting-investigation-review": {
@@ -142,22 +161,22 @@
           "investigation-scope-evidence-custody-analyst": {
             "agent_id": "investigation-scope-evidence-custody-analyst",
             "description": "Freeze engagement authority, allegations, period, systems, access limits, preservation obligations and evidence custody.",
-            "depends_on": [],
+            "depends_on": []
           },
           "transaction-anomaly-population-analyst": {
             "agent_id": "transaction-anomaly-population-analyst",
             "description": "Reconcile the authorized transaction population and evaluate reproducible anomalies as leads rather than proof.",
-            "depends_on": [],
+            "depends_on": []
           },
           "funds-flow-entity-relationship-analyst": {
             "agent_id": "funds-flow-entity-relationship-analyst",
             "description": "Reconstruct sourced uses, counterparties, beneficiaries and entity relationships from authorized records.",
-            "depends_on": [],
+            "depends_on": []
           },
           "control-interview-corroboration-analyst": {
             "agent_id": "control-interview-corroboration-analyst",
             "description": "Compare control design and operation with transaction evidence, interview records, corroboration and contradiction.",
-            "depends_on": [],
+            "depends_on": []
           },
           "forensic-accounting-investigation-evidence-owner": {
             "agent_id": "forensic-accounting-investigation-evidence-owner",
@@ -166,11 +185,11 @@
               "control-interview-corroboration-analyst",
               "funds-flow-entity-relationship-analyst",
               "investigation-scope-evidence-custody-analyst",
-              "transaction-anomaly-population-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "transaction-anomaly-population-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

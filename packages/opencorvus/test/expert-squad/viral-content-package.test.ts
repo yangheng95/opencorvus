@@ -16,7 +16,7 @@ import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
 import { ProjectRuntimePaths } from "../../src/project/runtime-paths"
 import { Session } from "../../src/session"
-import { ensureGitignore } from "../../src/engine/git"
+import { ensureGitProjectMetadata } from "../../src/engine/git"
 import { withTaskScopedPluginToolHost } from "../../src/tool/plugin-tool-host"
 import type { TaskToolExecutionScope } from "../../src/tool/task-tool-execution-scope"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
@@ -121,7 +121,7 @@ describe("Viral Content Expert Squad package", () => {
       namespace: "builtin",
       id: "viral-content",
       name: "Viral Content",
-      version: "2026.08.10.1",
+      version: "2026.08.13.1",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))
@@ -159,7 +159,7 @@ describe("Viral Content Expert Squad package", () => {
           expect(worker.packageTools.map((tool) => tool.ref)).toEqual([publisherRef])
         }
 
-        await ensureGitignore()
+        await ensureGitProjectMetadata()
         const session = await Session.create({ kind: "root", title: "Viral content typed chain" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
@@ -243,8 +243,7 @@ describe("Viral Content Expert Squad package", () => {
             return JSON.parse(
               await publishViralContentArtifact.execute(
                 {
-                  artifact_type: artifactType,
-                  payload: samples[artifactType],
+                  artifact: { artifact_type: artifactType, payload: samples[artifactType] } as never,
                   resource_set: resourceSet,
                   source_artifact_locators: sources,
                 },

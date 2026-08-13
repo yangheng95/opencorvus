@@ -5,22 +5,30 @@
   "name": "Finance Operations",
   "label": "Finance Operations",
   "description": "Source-grounded finance operations reconciliation, control review, close planning, and independent review with explicit non-advisory and human-approval boundaries.",
-  "version": "2026.08.10.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Reconcile operational finance evidence and produce a human-reviewed close or control plan.",
     "selection_guidance": "Use for operational reconciliation, management reporting support, close checklists, variance investigation, receivables or payables process review, and finance-control design. This package does not provide financial, investment, accounting, audit, or tax advice and does not approve, file, pay, post, or transact.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["finance-operations/shared/method"],
+      "package_skill_refs": [
+        "finance-operations/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "finance-operations-record-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["finance-operations/shared/method"],
+        "package_skill_refs": [
+          "finance-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "finance-operations-controls-analyst": {
         "label": "Finance Controls Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["finance-operations/shared/method"],
+        "package_skill_refs": [
+          "finance-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +83,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "finance-operations-close-planner": {
         "label": "Finance Close and Operations Planner",
@@ -81,7 +93,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["finance-operations/shared/method"],
+        "package_skill_refs": [
+          "finance-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "finance-operations-reviewer": {
         "label": "Finance Operations Reviewer",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["finance-operations/shared/method"],
+        "package_skill_refs": [
+          "finance-operations/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "finance-operations-close-plan": {
@@ -122,25 +138,30 @@
           "finance-operations-record-analyst": {
             "agent_id": "finance-operations-record-analyst",
             "description": "Produces the source-bound reconciliation and variance table.",
-            "depends_on": [],
+            "depends_on": []
           },
           "finance-operations-controls-analyst": {
             "agent_id": "finance-operations-controls-analyst",
             "description": "Produces the ownership, approval, evidence, and control-gap map.",
-            "depends_on": [],
+            "depends_on": []
           },
           "finance-operations-close-planner": {
             "agent_id": "finance-operations-close-planner",
             "description": "Joins both analyses into the single close or remediation plan.",
-            "depends_on": ["finance-operations-controls-analyst", "finance-operations-record-analyst"],
+            "depends_on": [
+              "finance-operations-controls-analyst",
+              "finance-operations-record-analyst"
+            ]
           },
           "finance-operations-reviewer": {
             "agent_id": "finance-operations-reviewer",
             "description": "Independently reviews the joined plan and records unresolved exceptions and required human approvals.",
-            "depends_on": ["finance-operations-close-planner"],
-          },
-        },
-      },
-    },
-  },
+            "depends_on": [
+              "finance-operations-close-planner"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

@@ -223,6 +223,14 @@ export function mapSessionBusEvent(
       payload,
     }
   }
+  if (event.type === Message.Event.Moved.type) {
+    const payload = enrichMessageEventProperties(event.type, props, sessionID)
+    return {
+      type: "message.moved",
+      summary: "Message moved",
+      payload,
+    }
+  }
   if (event.type === Message.Event.PartUpdated.type) {
     const payload = enrichMessageEventProperties(event.type, props, sessionID)
     const part = payload.part as Record<string, unknown>

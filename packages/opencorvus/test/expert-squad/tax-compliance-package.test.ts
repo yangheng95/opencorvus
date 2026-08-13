@@ -6,7 +6,7 @@ import {
   type EngineArtifactLocator,
 } from "@opencorvus-ai/plugin"
 import { Config } from "../../src/config/config"
-import { ensureGitignore } from "../../src/engine/git"
+import { ensureGitProjectMetadata } from "../../src/engine/git"
 import { persistQueuedTask } from "../../src/engine/pipeline"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
 import { ExpertSquadPackageManager } from "../../src/expert-squad/manager"
@@ -238,7 +238,7 @@ const values: Record<TaxComplianceArtifactType, unknown> = {
 }
 
 async function taskProcessBinding(taskID: string, packageDigest: string, timeCreated: number) {
-  await ensureGitignore()
+  await ensureGitProjectMetadata()
   return prepareTaskProcessBinding({
     mode: "native",
     taskID,
@@ -261,7 +261,7 @@ describe("Tax Compliance Expert Squad", () => {
       namespace: "builtin",
       id: "tax-compliance",
       name: "Tax Compliance",
-      version: "2026.08.10.1",
+      version: "2026.08.13.1",
       product_pillars: ["work"],
     })
     expect([...source.packageSkills.keys()].sort()).toEqual([...skillRefs].sort())
@@ -437,8 +437,7 @@ describe("Tax Compliance Expert Squad", () => {
           const receipt = JSON.parse(
             await publishTaxComplianceArtifact.execute(
               {
-                artifact_type: "tax-compliance/engagement-charter",
-                payload: charter,
+                artifact: { artifact_type: "tax-compliance/engagement-charter", payload: charter },
                 resource_set: null,
                 source_artifact_locators: [],
               },
@@ -454,8 +453,7 @@ describe("Tax Compliance Expert Squad", () => {
             const receipt = JSON.parse(
               await publishTaxComplianceArtifact.execute(
                 {
-                  artifact_type: "tax-compliance/evidence-dossier",
-                  payload: dossier,
+                  artifact: { artifact_type: "tax-compliance/evidence-dossier", payload: dossier },
                   resource_set: null,
                   source_artifact_locators: [charterLocator],
                 },

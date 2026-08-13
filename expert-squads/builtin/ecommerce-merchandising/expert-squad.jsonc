@@ -5,22 +5,30 @@
   "name": "Ecommerce Merchandising",
   "label": "Ecommerce Merchandising",
   "description": "Catalog, demand and pricing, and experience and operations evidence joined into a reversible merchandising test plan.",
-  "version": "2026.08.10.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for evidence-backed ecommerce merchandising experiments.",
     "selection_guidance": "Select for catalog, assortment, pricing-hypothesis, placement, promotion, or conversion planning without storefront mutation.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["ecommerce-merchandising/shared/method"],
+      "package_skill_refs": [
+        "ecommerce-merchandising/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "merchandising-catalog-evidence-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["ecommerce-merchandising/shared/method"],
+        "package_skill_refs": [
+          "ecommerce-merchandising/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "merchandising-demand-pricing-analyst": {
         "label": "Demand and Pricing Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["ecommerce-merchandising/shared/method"],
+        "package_skill_refs": [
+          "ecommerce-merchandising/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,17 +83,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "merchandising-experience-operations-analyst": {
         "label": "Experience and Operations Analyst",
         "description": "Maps journey, fulfillment, returns, inventory, accessibility, and customer safeguards.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/merchandising-experience-operations-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["ecommerce-merchandising/shared/method"],
+        "package_skill_refs": [
+          "ecommerce-merchandising/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "merchandising-plan-owner": {
         "label": "Merchandising Plan Owner",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["ecommerce-merchandising/shared/method"],
+        "package_skill_refs": [
+          "ecommerce-merchandising/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "merchandising-test-plan": {
@@ -122,17 +138,17 @@
           "merchandising-catalog-evidence-analyst": {
             "agent_id": "merchandising-catalog-evidence-analyst",
             "description": "Maps catalog evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "merchandising-demand-pricing-analyst": {
             "agent_id": "merchandising-demand-pricing-analyst",
             "description": "Tests demand and pricing assumptions.",
-            "depends_on": [],
+            "depends_on": []
           },
           "merchandising-experience-operations-analyst": {
             "agent_id": "merchandising-experience-operations-analyst",
             "description": "Maps experience and operations constraints.",
-            "depends_on": [],
+            "depends_on": []
           },
           "merchandising-plan-owner": {
             "agent_id": "merchandising-plan-owner",
@@ -140,11 +156,11 @@
             "depends_on": [
               "merchandising-catalog-evidence-analyst",
               "merchandising-demand-pricing-analyst",
-              "merchandising-experience-operations-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "merchandising-experience-operations-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

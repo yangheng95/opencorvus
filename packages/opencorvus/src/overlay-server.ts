@@ -18,6 +18,10 @@ const [{ McpCommand }, { DefaultServeCommand, ServeCommand }] = await Promise.al
   import("./cli/cmd/mcp"),
   import("./cli/cmd/serve"),
 ])
+const WorkArtifactAcceptanceDebugCommand =
+  process.argv[2] === "debug"
+    ? (await import("./cli/cmd/debug/work-artifact")).WorkArtifactAcceptanceDebugCommand
+    : undefined
 
 const cli = yargs(hideBin(process.argv))
   .parserConfiguration({ "populate--": true })
@@ -52,6 +56,7 @@ const cli = yargs(hideBin(process.argv))
     })
   })
 cli.command(DefaultServeCommand).command(ServeCommand).command(McpCommand)
+if (WorkArtifactAcceptanceDebugCommand) cli.command(WorkArtifactAcceptanceDebugCommand)
 
 cli
   .fail((msg, err) => {

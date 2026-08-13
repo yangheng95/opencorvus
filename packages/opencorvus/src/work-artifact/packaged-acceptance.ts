@@ -1,11 +1,13 @@
 import { createHash } from "node:crypto"
-import sharp from "sharp"
 import { Identifier } from "../id/id"
 import { Instance } from "../project/instance"
+import { requireRuntimePackage } from "../runtime/package-require"
 import { Session } from "../session"
 import { AttachmentStore } from "../storage/attachment-store"
 import { Tool } from "../tool/tool"
 import { createWorkArtifactTools } from "../tool/work-artifact"
+
+const sharp = requireRuntimePackage<typeof import("sharp")>("sharp")
 
 export async function runPackagedWorkArtifactAcceptance(): Promise<{
   source_sha: string
@@ -13,15 +15,20 @@ export async function runPackagedWorkArtifactAcceptance(): Promise<{
   delivered_sha: string
   display: string | undefined
 }> {
-  const session = await Session.create({ kind: "root", title: "Packaged Work Artifact acceptance" })
+  const session = await Session.create({ kind: "orchestrator", title: "Packaged Work Artifact acceptance" })
   const authority = {
     kind: "conversation" as const,
     sessionID: session.id,
     projectID: Instance.project.id,
     directory: Instance.project.worktree,
   }
+  const user = await Session.updateMessage({
+    id: Identifier.ascending("message"), sessionID: session.id,
+    role: "user", author: "user", time: { created: Date.now() }, agent: "orchestrator",
+    model: { providerID: "qualification", modelID: "qualification" },
+  })
   const assistant = await Session.updateMessage({
-    id: Identifier.ascending("message"), sessionID: session.id, parentID: "msg_packaged_work_artifact_acceptance_user",
+    id: Identifier.ascending("message"), sessionID: session.id, parentID: user.id,
     role: "assistant", author: "orchestrator", time: { created: Date.now(), completed: Date.now() },
     agent: "orchestrator", providerID: "qualification", modelID: "qualification",
     path: { cwd: Instance.project.worktree, root: Instance.project.worktree }, cost: 0,

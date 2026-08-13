@@ -10,6 +10,7 @@ import { projectDirectoryLabel } from "../utils/project-directory"
 import { t } from "../utils/i18n"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
 import { Button } from "./ui/Button"
+import { Checkbox } from "./ui/Checkbox"
 import { Dialog } from "./ui/Dialog"
 import { Icon } from "./ui/Icon"
 import { SegmentedControl, type SegmentedControlOption } from "./ui/SegmentedControl"
@@ -49,10 +50,10 @@ export interface MissionCreateDialogProps {
 function mergeSquadOptions(
   incoming: readonly ExpertSquadOption[],
   current: readonly ExpertSquadOption[],
-  selectedID: string,
+  selectedIDs: readonly string[],
 ): ExpertSquadOption[] {
   const merged = new Map(incoming.map((option) => [option.id, option]))
-  if (selectedID) {
+  for (const selectedID of selectedIDs) {
     const selected = current.find((option) => option.id === selectedID)
     if (selected && !merged.has(selected.id)) merged.set(selected.id, selected)
   }
@@ -66,7 +67,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const [projectDirectory, setProjectDirectory] = createSignal("")
   const [productPillar, setProductPillar] = createSignal<MissionTypeSelection>("")
   const [expertSquads, setExpertSquads] = createSignal<ExpertSquadOption[]>([])
-  const [expertSquadID, setExpertSquadID] = createSignal("")
+  const [expertSquadIDs, setExpertSquadIDs] = createSignal<string[]>([])
   const [expertSquadQuery, setExpertSquadQuery] = createSignal("")
   const [expertSquadLoading, setExpertSquadLoading] = createSignal(false)
   const [expertSquadError, setExpertSquadError] = createSignal("")
@@ -125,15 +126,13 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       },
     ]
   })
-  const selectedExpertSquad = createMemo(
-    () => expertSquadOptions().find((option) => option.value === expertSquadID()) ?? null,
-  )
+  const selectedExpertSquadCount = createMemo(() => expertSquadIDs().length)
   const canSubmit = createMemo(
     () =>
       Boolean(
         projectDirectory() &&
           productPillar() &&
-          expertSquadID() &&
+          selectedExpertSquadCount() > 0 &&
           request().trim() &&
           !marketInstallingID() &&
           !expertSquadLoading() &&
@@ -145,7 +144,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     if (!productPillar()) return t("mission_board.create.select_mission_type")
     if (expertSquadLoading()) return t("mission_board.create.loading_context")
     if (expertSquadError()) return t("mission_board.create.context_load_failed")
-    if (!expertSquadID()) return t("mission_board.create.no_compatible_squad")
+    if (selectedExpertSquadCount() === 0) return t("mission_board.create.no_compatible_squad")
     return ""
   })
   const titleInvalid = createMemo(() => mode() === "manual" && submitAttempted() && !title().trim())
@@ -164,7 +163,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   async function loadExpertSquadsForContext(directory: string, pillar: ProductPillar): Promise<void> {
     const generation = dialogGeneration
     const sequence = ++expertSquadRequestSequence
-    setExpertSquadID("")
+    setExpertSquadIDs([])
     setExpertSquads([])
     setExpertSquadLoading(true)
     setExpertSquadError("")
@@ -179,7 +178,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         ? catalog.active.effective
         : (squads[0]?.id ?? "")
       setExpertSquads(squads)
-      setExpertSquadID(activeID)
+      setExpertSquadIDs(activeID ? [activeID] : [])
     } catch (nextError) {
       if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
       setExpertSquadError(nextError instanceof Error ? nextError.message : String(nextError))
@@ -199,9 +198,9 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     try {
       const page = await searchExpertSquads({ directory, productPillar: pillar, query, limit: 20 })
       if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
-      const squads = mergeSquadOptions(page.entries, expertSquads(), expertSquadID())
+      const squads = mergeSquadOptions(page.entries, expertSquads(), expertSquadIDs())
       setExpertSquads(squads)
-      if (!expertSquadID()) setExpertSquadID(squads[0]?.id ?? "")
+      if (expertSquadIDs().length === 0 && squads[0]?.id) setExpertSquadIDs([squads[0].id])
     } catch (nextError) {
       if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
       setExpertSquadError(nextError instanceof Error ? nextError.message : String(nextError))
@@ -215,7 +214,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     setProjectDirectory(directory)
     setExpertSquadQuery("")
     setExpertSquads([])
-    setExpertSquadID("")
+    setExpertSquadIDs([])
     setExpertSquadLoading(false)
     setExpertSquadError("")
     setMarketRecommendations([])
@@ -267,7 +266,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         setProjectDirectory(preferredDirectory)
         setProductPillar("")
         setExpertSquads([])
-        setExpertSquadID("")
+        setExpertSquadIDs([])
         setExpertSquadQuery("")
         setExpertSquadLoading(false)
         setExpertSquadError("")
@@ -409,7 +408,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       directory: projectDirectory(),
       request: request().trim(),
       productPillar: pillar,
-      expertSquadIDs: [expertSquadID()],
+      expertSquadIDs: [...expertSquadIDs()],
     }
     try {
       if (mode() === "manual") {
@@ -607,47 +606,58 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               placeholder={t("chat.references.search_placeholder")}
               size="sm"
             />
-            <SelectControl<SelectOption>
-              options={expertSquadOptions()}
-              value={selectedExpertSquad()}
-              onChange={(option) => {
-                if (submitting()) return
-                if (option?.action === "install-more") {
-                  props.onClose()
-                  props.onInstallMoreExpertSquads?.(projectDirectory())
-                  return
-                }
-                setExpertSquadID(option?.value ?? "")
-              }}
-              optionValue="value"
-              optionTextValue="label"
-              disallowEmptySelection
-              sameWidth
-              disabled={!projectDirectory() || !productPillar() || expertSquadLoading()}
-              ariaLabel={t("mission_board.create.expert_squad")}
-              ariaDescribedBy={expertSquadError() ? "missionCreateExpertSquadError" : undefined}
-              invalid={Boolean(expertSquadError())}
-              errorMessageID="missionCreateExpertSquadError"
-              triggerDataUI="mission-create-expert-squad"
-              optionData={(option) => ({
-                "data-expert-squad-action": option.action,
-                "data-ui": option.action === "install-more" ? "mission-create-install-more-squads" : undefined,
-              })}
-              renderValue={(option) => option?.label ?? t("mission_board.create.expert_squad_placeholder")}
-              renderOptionLabel={(option) => (
-                <span class="mission-create-form__option">
-                  <strong>
-                    <Show when={option.action === "install-more"}>
-                      <Icon name="config-expert-squad-install" size="compact" />
-                    </Show>
-                    {option.label}
-                  </strong>
-                  <Show when={option.description}>
-                    <small>{option.description}</small>
+            <div
+              class="mission-create-form__expert-squad-list"
+              role="group"
+              aria-label={t("mission_board.create.expert_squad")}
+              data-ui="mission-create-expert-squads"
+            >
+              <For each={expertSquadOptions()}>
+                {(option) => (
+                  <Show
+                    when={option.action !== "install-more"}
+                    fallback={
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        tone="accent"
+                        data-ui="mission-create-install-more-squads"
+                        disabled={submitting() || expertSquadLoading()}
+                        onClick={() => {
+                          props.onClose()
+                          props.onInstallMoreExpertSquads?.(projectDirectory())
+                        }}
+                      >
+                        <Icon name="config-expert-squad-install" size="compact" />
+                        {option.label}
+                      </Button>
+                    }
+                  >
+                    <Checkbox
+                      checked={expertSquadIDs().includes(option.value)}
+                      disabled={submitting() || expertSquadLoading()}
+                      onChange={(checked) => {
+                        setExpertSquadIDs((current) =>
+                          checked
+                            ? current.includes(option.value)
+                              ? current
+                              : [...current, option.value]
+                            : current.filter((id) => id !== option.value),
+                        )
+                      }}
+                    >
+                      <span class="mission-create-form__option">
+                        <strong>{option.label}</strong>
+                        <Show when={option.description}>
+                          <small>{option.description}</small>
+                        </Show>
+                      </span>
+                    </Checkbox>
                   </Show>
-                </span>
-              )}
-            />
+                )}
+              </For>
+            </div>
           </TextField.Root>
           <Show
             when={expertSquadError()}

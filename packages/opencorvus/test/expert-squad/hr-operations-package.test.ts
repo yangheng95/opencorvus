@@ -12,7 +12,7 @@ import { persistQueuedTask } from "../../src/engine/pipeline"
 import { ExpertSquadPackageManager } from "../../src/expert-squad/manager"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
-import { ensureGitignore } from "../../src/engine/git"
+import { ensureGitProjectMetadata } from "../../src/engine/git"
 import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
 import { ProjectRuntimePaths } from "../../src/project/runtime-paths"
@@ -133,7 +133,7 @@ describe("Human Resources Operations expert squad package", () => {
       namespace: "builtin",
       id: "hr-operations",
       name: "Human Resources & Organization Operations",
-      version: "2026.08.10.1",
+      version: "2026.08.13.1",
       product_pillars: ["work"],
     })
     expect(Object.keys(loaded.manifest.capability_projection.agents)).toEqual(Object.keys(dependencies))
@@ -195,7 +195,7 @@ describe("Human Resources Operations expert squad package", () => {
         const session = await Session.create({ kind: "root", title: "Human Resources Operations typed Artifact chain" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
-        await ensureGitignore()
+        await ensureGitProjectMetadata()
         persistQueuedTask({
           taskID,
           sessionID: session.id,
@@ -281,8 +281,10 @@ describe("Human Resources Operations expert squad package", () => {
           const charterReceipt = JSON.parse(
             await publishHrOperationsArtifact.execute(
               {
-                artifact_type: "hr-operations/operating-charter",
-                payload: samples["hr-operations/operating-charter"],
+                artifact: {
+                  artifact_type: "hr-operations/operating-charter",
+                  payload: samples["hr-operations/operating-charter"],
+                },
                 resource_set: null,
                 source_artifact_locators: [],
               },
@@ -293,8 +295,10 @@ describe("Human Resources Operations expert squad package", () => {
           const dossierReceipt = JSON.parse(
             await publishHrOperationsArtifact.execute(
               {
-                artifact_type: "hr-operations/evidence-dossier",
-                payload: samples["hr-operations/evidence-dossier"],
+                artifact: {
+                  artifact_type: "hr-operations/evidence-dossier",
+                  payload: samples["hr-operations/evidence-dossier"],
+                },
                 resource_set: null,
                 source_artifact_locators: [charterReceipt.locator],
               },
@@ -331,8 +335,7 @@ describe("Human Resources Operations expert squad package", () => {
             return JSON.parse(
               await publishHrOperationsArtifact.execute(
                 {
-                  artifact_type: artifactType,
-                  payload: samples[artifactType],
+                  artifact: { artifact_type: artifactType, payload: samples[artifactType] } as never,
                   resource_set: resourceSet,
                   source_artifact_locators: sources,
                 },

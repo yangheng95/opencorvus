@@ -5,22 +5,31 @@
   "name": "Cloud Platform Architecture",
   "label": "Cloud Platform Architecture",
   "description": "Provider-neutral cloud workload, reliability, and cost/operations analysis joined into an architecture decision pack.",
-  "version": "2026.08.10.1",
-  "product_pillars": ["code", "work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for evidence-backed cloud or hybrid platform architecture decisions.",
     "selection_guidance": "Select when workload requirements, resilience, cost, operations, alternatives, and approval gates must converge before implementation.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["cloud-platform-architecture/shared/method"],
+      "package_skill_refs": [
+        "cloud-platform-architecture/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +39,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "cloud-workload-requirements-analyst": {
@@ -41,7 +50,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["cloud-platform-architecture/shared/method"],
+        "package_skill_refs": [
+          "cloud-platform-architecture/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +62,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "cloud-reliability-analyst": {
         "label": "Cloud Reliability Analyst",
@@ -61,7 +72,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["cloud-platform-architecture/shared/method"],
+        "package_skill_refs": [
+          "cloud-platform-architecture/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +84,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "cloud-cost-operations-analyst": {
         "label": "Cloud Cost and Operations Analyst",
@@ -81,7 +94,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["cloud-platform-architecture/shared/method"],
+        "package_skill_refs": [
+          "cloud-platform-architecture/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +106,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "cloud-architecture-decision-owner": {
         "label": "Cloud Architecture Decision Owner",
@@ -101,7 +116,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["cloud-platform-architecture/shared/method"],
+        "package_skill_refs": [
+          "cloud-platform-architecture/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +128,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "cloud-architecture-decision-pack": {
@@ -122,17 +139,17 @@
           "cloud-workload-requirements-analyst": {
             "agent_id": "cloud-workload-requirements-analyst",
             "description": "Defines measurable workload requirements.",
-            "depends_on": [],
+            "depends_on": []
           },
           "cloud-reliability-analyst": {
             "agent_id": "cloud-reliability-analyst",
             "description": "Analyzes failure and recovery behavior.",
-            "depends_on": [],
+            "depends_on": []
           },
           "cloud-cost-operations-analyst": {
             "agent_id": "cloud-cost-operations-analyst",
             "description": "Analyzes cost and operational ownership.",
-            "depends_on": [],
+            "depends_on": []
           },
           "cloud-architecture-decision-owner": {
             "agent_id": "cloud-architecture-decision-owner",
@@ -140,11 +157,11 @@
             "depends_on": [
               "cloud-cost-operations-analyst",
               "cloud-reliability-analyst",
-              "cloud-workload-requirements-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "cloud-workload-requirements-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

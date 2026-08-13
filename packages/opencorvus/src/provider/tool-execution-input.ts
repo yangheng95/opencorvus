@@ -2,7 +2,16 @@ import { asSchema } from "ai"
 
 export function materializeToolExecutionInput(inputSchema: unknown, args: unknown): unknown {
   const rawJsonSchema = asSchema(inputSchema as never).jsonSchema
-  return materializeFromJsonSchema(rawJsonSchema, args)
+  return materializeFromJsonSchema(rawJsonSchema, unwrapRootUnionEnvelope(rawJsonSchema, args))
+}
+
+function unwrapRootUnionEnvelope(schema: unknown, value: unknown): unknown {
+  if (!schema || typeof schema !== "object" || Array.isArray(schema)) return value
+  const record = schema as Record<string, unknown>
+  if (record.type !== undefined || (!Array.isArray(record.anyOf) && !Array.isArray(record.oneOf))) return value
+  if (!value || typeof value !== "object" || Array.isArray(value)) return value
+  const entries = Object.entries(value as Record<string, unknown>)
+  return entries.length === 1 && entries[0]?.[0] === "operation" ? entries[0][1] : value
 }
 
 function materializeFromJsonSchema(

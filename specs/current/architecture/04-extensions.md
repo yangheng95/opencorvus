@@ -143,7 +143,7 @@ location 校验，项目配置、Task 和 Session 候选则从 global + exact pr
 - `getLoadedBuiltInPackages()` 是内置 package 的唯一加载面，只返回默认 `base`、完整 `advanced`、`research-studio` 与 `squad-sdk`；不存在
   flattened built-in profile facade。非通用 squad 即使随应用分发，也只有经操作者显式选择 `project | global`
   scope 安装为明文 package 后，才通过 package discovery / registry / resolver 进入 catalog；
-- 默认内置 `base` 是 `advanced` 的便捷复合型版本，投影相互独立的 `base-researcher`、`base-planner`、`base-developer`、`base-tester`、`base-integrity-reviewer` 与 `base-visual-reviewer`；Researcher 使用 Explore，Planner 与 Tester 使用 Delegated Worker，Developer 使用 Build，两个复核身份分别使用 Integrity 与 Visual Quality Assurance runtime template。`composite-delivery` 保留 Researcher → Planner → Developer → Tester 紧凑链；`integrity-verified-delivery` 在 Tester 后追加 Integrity Reviewer；`visual-verified-delivery` 在 Developer 后并行 Tester 与 Visual Reviewer，再由 Integrity Reviewer 汇合两支证据。Orchestrator 在首次领域 dispatch 前精确选择一张 graph，所选 graph 的每个节点都必须执行，不存在 optional node。三张 graph 均按顺序交接 `base/research-report`、`base/implementation-plan`、`base/development-report` 与 `base/test-report`，两个复核身份使用平台 typed VisualReview / IntegrityReview Artifact，不创建或消费 RequirementSet、ContractGraph、Goal 或 Delivery Slice 计划事实；
+- 默认内置 `base` 是 `advanced` 的紧凑替代，投影相互独立的 `base-planner`、`base-researcher`、`base-developer` 与 `base-tester`。`planner-parallel-delivery` 以 Planner 为唯一根节点，随后让 Researcher、Developer 与 Tester 同时进入 dependency-ready frontier；三者只消费计划，分别拥有互不重叠的调查、产品/生成输出与测试/checker 分区。Base 不投影 Integrity 或 Visual Quality Assurance 身份；真实页面证据仍由计划指定的实现或测试分区负责。它不创建或消费 RequirementSet、ContractGraph、Goal 或 Delivery Slice 计划事实；
 - 内置 `advanced` 的 manifest v1 投影完整的十四 Agent 软件开发团队，包括 package-owned 的 Build `implementation-engineer` 与 Delegated Worker `test-engineer`。每张交付图保留 Requirements → Architect 依赖；独立调查、架构后的工作量与交付、实现后的测试与独立复核分别在真实 Artifact 依赖允许时共享 frontier。Agent 身份、职责、依赖图和协作提示全部由 package 拥有，不进入 host Core prompt、Delivery Slice 控制工具或 runtime template；
 - 内置 `research-studio` 投影 Planner、Deep Researcher、Evidence Analyst、Fact Checker 与 Report Writer 五个精确身份，分别以 direct-writing、evidence-synthesis 与 full-research 三张 binding workflow 交付可引用研究报告。其共享 `analysis-report-quality` package Skill 连同固定报告模板和 Draft 2020-12 JavaScript Object Notation (JSON) Schema 完整内化在 package 闭包内，并只投影给 Analyst、Fact Checker 与 Writer；Analyst 先生成可复现计算证据，Fact Checker 独立复算，再由 Writer 从同一结构化模型派生 Markdown 与集成 Hypertext Markup Language (HTML)。浏览器可见报告必须由 Writer 和 Orchestrator 分别读取真实 `browser_preview_capture` 图像完成两次人工视觉复核；它不进入 payload、Market 或项目 provisioning；
 - `universal-build` 是平台唯一通用实现/修复身份：明确的有限改动与已规划交付均按 Task workflow node 调度，并可携带精确 Slice revision refs；它由 Resolver 只投影到 scheduler dispatch inventory，不属于 Advanced 或任何外置 package；同一个 `build` runtime template 只提供 typed adapter Application Binary Interface (ABI) 种子，不构成运行身份；
@@ -182,7 +182,7 @@ location 校验，项目配置、Task 和 Session 候选则从 global + exact pr
 - 每个 worker 的 canonical resource root 是 `agents/<agentID>/`。Prompt、skills、tools 和 MCP refs 必须由同一个 projection 显式声明；未知 owner、orphan directory 和未投影资源直接失败；
 - manifest 不存在 top-level `agents`、`virtual_agents`、`team` 或 dispatch identity 面，也不存在 `virtual-agents/**` resource root；动态身份只来自 `capability_projection.agents.<agentID>`；
 - `capability_projection.virtual_workflows` 是 package 声明的不可变 scheduler contract；显式 `{}` 表示普通 direct-dispatch Squad 没有 binding workflow，禁止为它虚构阶段。非空记录只包含 workflow label/description 以及 node 的动态 `agent_id`、description 和 `depends_on`。Orchestrator 在首次 domain dispatch 前记录一次不可变、可见的 workflow-selection decision，绑定 Task、workflow、精确 package revision/digest 和真实 scheduler message/tool identity。每个 node 在该 Task 中只实例化一次；dispatch lineage 可引用精确 Delivery Slice revisions 作为输入与证据 subject。图没有 dispatch scope、active/default workflow、current node、step status、auto-advance、session binding 或 persisted workflow state；
-- 对话驱动创建 Squad 时，简单 direct-dispatch Squad 写 `virtual_workflows: {}`；确有不可省略的多 Agent 依赖顺序时声明 binding workflow。Requirements、Architect、Integrity 与 Slice 组合属于具体 package 的 authoring/prompt contract，不是平台通用合法性；SDK 和 Registry 只校验 manifest v1 数据形态、workflow identity、引用、依赖排序与无环图，不把某一种角色拓扑变成 Host gate。所有新建 source package 都必须先经过 `validateExpertSquadPackageDefinition()`，再由唯一 `@opencorvus-ai/sdk/expert-squad-authoring` writer 通过同父目录 staging 和 rename 原子物化，并继续走 Registry validation 与显式 Manager import；禁止手写第二套 package writer；
+- 对话驱动创建 Squad 时，简单 direct-dispatch Squad 写 `virtual_workflows: {}`。需要协作图时，authoring 默认优先一个 Planner 根节点加至少两个只依赖 Planner 的并行 worker；只有消费者确实需要生产者 Artifact 时才声明更丰富的 binding DAG。Requirements、Architect、Integrity 与 Slice 组合属于具体 package 的 authoring/prompt contract，不是平台通用合法性；SDK 和 Registry 的通用 validator 只校验 manifest v1 数据形态、workflow identity、引用、依赖排序与无环图，内置包另走 `validateBuiltInExpertSquadTopologyPolicy()` 防止非 Advanced 回归到平台 Visual/Integrity 角色或 Requirements → Architect → Build 串行链。所有新建 source package 都必须先经过 `validateExpertSquadPackageDefinition()`，再由唯一 `@opencorvus-ai/sdk/expert-squad-authoring` writer 通过同父目录 staging 和 rename 原子物化，并继续走 Registry validation 与显式 Manager import；禁止手写第二套 package writer；
 - 任务推进由 scheduler scope 的 Orchestrator 通过自然判断和真实工具调用决定。Virtual workflow 的 dependency 不自动 dispatch、不形成 host hard gate，也不创建第二套 workflow engine、dispatch、context packet 或 broad task-manipulation tool；它通过模型必须遵守的 prompt contract 防止无效越序工作。
 - 用户界面的 Goal 是 versioned Delivery Slice contract，只提供目标、验收、owned paths、priority、kind 和精确需求/契约引用；它没有 execution、status、retry、workspace、`depends_on` 或 readiness ancestry。Task 是唯一 business lifecycle；Session/dispatch 是 physical execution；panel 分别读取 current revision、独立 activity/evidence/review association 与 Task Completion Decision acceptance，禁止合成为 Goal progress 或 lifecycle。ContractGraph 只保存 producer/consumer interface contracts，不能推导调度顺序；未发布项目只有这一种严格结构，不声明协议代际。
 
@@ -532,13 +532,22 @@ Artifact 的 `artifact_search` / `artifact_read` / `artifact_select` 由 runtime
 consumer 必须先完整精确读取，再对 typed output 的每个语义来源调用 `artifact_select`。完整但未选择的读取只进入
 `observed_artifact_locators`，成功选择的来源进入 `source_artifact_locators`，且 source 必须是 observed 的子集；
 零选择与缺省可选字段均合法。即时 `artifact_publish` 显式提交本次发布专属的
-`source_artifact_locators`，Host 只接受同一物理 Turn 中更早的完整读取和语义选择，因此一个 Turn 的多次发布不会互相污染。
+`source_selection_refs`；Host 只从同一 Session、同一物理 Turn 中更早的持久化选择恢复完整 canonical
+`source_artifact_locators`，因此一个 Turn 的多次发布不会互相污染。模型 transport 不重复提交 locator 结构。
 `artifact_search` 的 opaque pagination cursor 由当前 runtime 使用进程随机 HMAC-SHA-256 authority 签发；cursor
 携带的 frozen revision、membership、provider state、total 与 position 在验证前均不可信。runtime restart 会使旧 cursor
 明确失效，caller 必须从第一页重新开始；不保留 unkeyed checksum decoder 或跨 runtime fallback。
-`artifact_snapshot` / `artifact_publish` 只投影给 worker；Multica mapping、manifest、prompt 和 Skill 不声明、遮蔽或复制这些
-平台工具及 Artifact body。`artifact_snapshot` 只返回内容寻址的 `resource_set` locator，完整 refs 由
-`TaskArtifactHost.resources` 在可信 Host 边界内验证并按 UTF-8 字节路径顺序展开，禁止通过模型上下文传输清单展开值。面向模型的
+`artifact_snapshot` 投影给 scheduler 与 worker，`artifact_publish` 只投影给 worker；Multica mapping、manifest、prompt 和 Skill
+不声明、遮蔽或复制这些平台工具及 Artifact body。`artifact_snapshot` 返回内容寻址的 `resource_set`，并为 snapshot 与每个 resource
+返回 Host-minted `artifact_locator_ref`。其模型输入由冻结 runtime contract 投影：scheduler 与没有精确 Build `merge_back` 私有 stage surface 的普通
+worker 只获得当前主项目 `files`；只有该 managed Build surface 获得必填 `source_commit`，且 Host 再次校验它等于最近完成 merge 的
+`primary_head`。schema 收窄不替代执行权限校验。
+后续 Session 的 `artifact_search` 从同一个已验证 snapshot record 确定性投影一个 parent snapshot entry 和逐资源
+分页的 `task_artifact_resource` entries。consumer 把 search/snapshot 返回的 `artifact_locator_ref` 交给 `artifact_read`，再把完整读取返回的
+`artifact_read_ref` 交给 `artifact_select`；Host 从同 Turn 持久化 Tool facts 恢复 canonical locator，不按 path、label 或当前 catalog 猜测，
+模型也不手工重构 path、bytes 或 SHA-256。publisher 仍只接收
+紧凑 `resource_set`；完整 refs 由 `TaskArtifactHost.resources` 在可信 Host 边界内验证并按 UTF-8 字节路径顺序展开，不把整组 refs 作为发布
+输入重复传输。面向模型的
 `artifact_publish` 应用二进制接口（Application Binary Interface，ABI）只接受对象键唯一的严格 JSON 文本
 `payload_json`，并要求无文件时显式传 `resource_set: null`，避免 provider schema 暴露递归动态 record 或
 随资源数量增长的结构化输出；

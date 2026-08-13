@@ -26,7 +26,7 @@ describe("built-in interface review workflow authority", () => {
   test("projects autonomous greenfield and explicit independent-visual Advanced workflows", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(advancedPackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.12.1")
+    expect(loaded.manifest.version).toBe("2026.08.13.1")
     expect(loaded.manifest.capability_projection.scheduler.default_skill_refs).toEqual(["default/skill/grill-me"])
     expect(loaded.manifest.capability_projection.agents["requirement-engineer"]!.default_skill_refs).toEqual([
       "default/skill/grill-me",
@@ -69,26 +69,18 @@ describe("built-in interface review workflow authority", () => {
     )
   })
 
-  test("keeps Base review depth as an explicit workflow choice", async () => {
+  test("keeps Base as one Planner-first parallel worker workflow", async () => {
     const loaded = await ExpertSquadRegistry.loadSourcePackage(basePackageRoot)
 
-    expect(loaded.manifest.version).toBe("2026.08.09.1")
-    expect(workflowNodes(loaded, "composite-delivery")).toEqual({
-      "base-researcher": [],
-      "base-planner": ["base-researcher"],
+    expect(loaded.manifest.version).toBe("2026.08.13.1")
+    expect(workflowNodes(loaded, "planner-parallel-delivery")).toEqual({
+      "base-planner": [],
+      "base-researcher": ["base-planner"],
       "base-developer": ["base-planner"],
-      "base-tester": ["base-developer"],
-    })
-    expect(workflowNodes(loaded, "visual-verified-delivery")).toEqual({
-      "base-researcher": [],
-      "base-planner": ["base-researcher"],
-      "base-developer": ["base-planner"],
-      "base-tester": ["base-developer"],
-      "base-visual-reviewer": ["base-developer"],
-      "base-integrity-reviewer": ["base-tester", "base-visual-reviewer"],
+      "base-tester": ["base-planner"],
     })
     expect(loaded.selectorInstructions).toContain(
-      "only when the operator or repository explicitly requires a separate Visual Reviewer judgment",
+      "Planner runs first; Researcher, Developer, and Tester then become dependency-ready together",
     )
   })
 

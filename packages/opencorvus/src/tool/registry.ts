@@ -26,7 +26,12 @@ export namespace ToolRegistry {
 
   type ToolVisibility =
     | { kind: "agent-template" }
-    | { kind: "projected-worker"; toolIDs: readonly string[]; batchTargetExclusions: readonly string[] }
+    | {
+        kind: "projected-worker"
+        toolIDs: readonly string[]
+        batchTargetExclusions: readonly string[]
+        artifactSnapshotSource: "current_task_project" | "merged_primary_commit"
+      }
 
   async function materialize(
     model: {
@@ -73,7 +78,12 @@ export namespace ToolRegistry {
         })
         .map(async (t) => {
           using _ = log.timeDebug(t.id)
-          const tool = await t.init({ agentID, config })
+          const tool = await t.init({
+            agentID,
+            config,
+            artifactSnapshotSource:
+              visibility.kind === "projected-worker" ? visibility.artifactSnapshotSource : undefined,
+          })
           const output = {
             description: tool.description,
             parameters: tool.parameters,
@@ -159,6 +169,7 @@ export namespace ToolRegistry {
       sessionPermission?: CapabilityRules.Ruleset
       toolSwitches?: Readonly<Record<string, boolean>>
       batchTargetExclusions: readonly string[]
+      artifactSnapshotSource: "current_task_project" | "merged_primary_commit"
     },
   ) {
     RuntimeTemplateRegistry.get(runtimeTemplateID)
@@ -209,6 +220,7 @@ export namespace ToolRegistry {
       kind: "projected-worker",
       toolIDs: visibleToolIDs,
       batchTargetExclusions: policy.batchTargetExclusions,
+      artifactSnapshotSource: policy.artifactSnapshotSource,
     })
     return {
       tools,
