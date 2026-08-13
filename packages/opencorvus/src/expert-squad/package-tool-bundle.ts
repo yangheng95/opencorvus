@@ -262,6 +262,21 @@ export namespace PackageToolBundle {
     return { source: bytes.toString("utf8"), sha256: sha256(bytes), zodEntry }
   }
 
+  let processPluginRuntimeClosure: Promise<PluginRuntimeClosure> | undefined
+  let processPluginRuntimeCompilationCount = 0
+
+  function frozenProcessPluginRuntimeClosure(): Promise<PluginRuntimeClosure> {
+    processPluginRuntimeClosure ??= (async () => {
+      processPluginRuntimeCompilationCount += 1
+      return compilePluginRuntimeClosure()
+    })()
+    return processPluginRuntimeClosure
+  }
+
+  export function processPluginRuntimeCompilationCountForTest(): number {
+    return processPluginRuntimeCompilationCount
+  }
+
   async function externalImportFingerprint(
     specifier: string,
     pluginRuntime: PluginRuntimeClosure,
@@ -292,13 +307,13 @@ export namespace PackageToolBundle {
 
   export async function prepare(input: PrepareInput): Promise<Prepared> {
     assertBunRuntime(input.ref)
-    return prepareWithPluginRuntime(input, await compilePluginRuntimeClosure())
+    return prepareWithPluginRuntime(input, await frozenProcessPluginRuntimeClosure())
   }
 
   export async function prepareMany(inputs: readonly PrepareInput[]): Promise<readonly Prepared[]> {
     if (inputs.length === 0) return []
     assertBunRuntime(inputs[0]!.ref)
-    const pluginRuntime = await compilePluginRuntimeClosure()
+    const pluginRuntime = await frozenProcessPluginRuntimeClosure()
     return Promise.all(inputs.map((input) => prepareWithPluginRuntime(input, pluginRuntime)))
   }
 

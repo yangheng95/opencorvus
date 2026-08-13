@@ -227,6 +227,24 @@ process.stdout.write = process.stderr.write.bind(process.stderr);
 const send = (message) => rpcWrite(prefix + JSON.stringify(message) + "\n");
 const pending = new Map();
 let callSequence = 0;
+let terminalSent = false;
+
+function releaseTerminalInput() {
+  lines.close();
+  process.stdin.pause();
+  if (typeof process.stdin.unref === "function") process.stdin.unref();
+}
+function sendTerminal(message) {
+  if (terminalSent) return Promise.resolve();
+  terminalSent = true;
+  return new Promise((resolve, reject) => {
+    rpcWrite(prefix + JSON.stringify(message) + "\n", (error) => {
+      releaseTerminalInput();
+      if (error) reject(error);
+      else resolve();
+    });
+  });
+}
 
 function fileTypes(types) {
   return Object.fromEntries(Object.entries(types).map(([name, value]) => [name, () => value === true]));
@@ -340,7 +358,7 @@ async function main(start) {
     if (!result || typeof result.description !== "string" || !result.inputSchema || typeof result.inputSchema !== "object") {
       throw new Error("Package tool introspection returned an invalid description or JSON Schema");
     }
-    send({ kind: "result", value: await encode(result) });
+    await sendTerminal({ kind: "result", value: await encode(result) });
     return;
   }
   let title = "";
@@ -355,16 +373,22 @@ async function main(start) {
   };
   const output = await definition.execute(decode(start.args), context);
   if (typeof output !== "string") throw new Error("Package tool returned non-string output");
-  send({ kind: "result", value: await encode({ output, title, metadata }) });
+  await sendTerminal({ kind: "result", value: await encode({ output, title, metadata }) });
 }
 const lines = readline.createInterface({ input: process.stdin, crlfDelay: Infinity });
 let started = false;
 lines.on("line", (line) => {
   let message;
-  try { message = JSON.parse(line); } catch (error) { send({ kind: "failure", error: { name: error.name, message: error.message } }); return; }
+  try { message = JSON.parse(line); } catch (error) {
+    void sendTerminal({ kind: "failure", error: { name: error.name, message: error.message } }).catch(() => { process.exitCode = 1; });
+    return;
+  }
   if (!started) {
     started = true;
-    void main(message).catch((error) => send({ kind: "failure", error: { name: error && error.name, message: error && error.message || String(error), code: error && error.code, path: error && error.path, syscall: error && error.syscall } }));
+    void main(message).catch((error) =>
+      sendTerminal({ kind: "failure", error: { name: error && error.name, message: error && error.message || String(error), code: error && error.code, path: error && error.path, syscall: error && error.syscall } })
+        .catch(() => { process.exitCode = 1; })
+    );
     return;
   }
   if (message.kind === "host_result" || message.kind === "host_failure") {
