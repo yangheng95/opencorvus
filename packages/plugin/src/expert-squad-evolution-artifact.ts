@@ -1,9 +1,6 @@
 // ABI means Application Binary Interface. ID means Identifier.
 import { z } from "zod"
-import {
-  ArtifactReadLocatorSchema,
-  EngineArtifactLocatorSchema,
-} from "./artifact-catalog"
+import { ArtifactReadLocatorSchema, EngineArtifactLocatorSchema } from "./artifact-catalog"
 import { EvolutionExactRevisionSchema, EvolutionPromotionReceiptSchema } from "./expert-squad-evolution"
 import { MetricScorerSpecSchema } from "./metric-evaluation"
 import {
@@ -161,7 +158,6 @@ export const EvolutionCampaignPublishInputSchema = z
     arm_order: z.array(z.enum(["baseline", "candidate"])).min(2),
     statistics: z.string().min(1),
     budget: z.object({ max_runs: z.number().int().positive(), max_cost: z.number().nonnegative() }).strict(),
-    mutable_paths: z.array(z.string().min(1)),
   })
   .strict()
 

@@ -6,6 +6,7 @@ import {
   ExpertSquadPackageCommitSubtreeSchema,
   MaterializedExpertSquadPackageSchema,
   PreparedExpertSquadCandidateSchema,
+  InspectedExpertSquadPackageSchema,
   TaskArtifactResourceSetLocatorSchema,
   ValidatedExpertSquadPackageSchema,
   type ExpertSquadPackageHost,
@@ -59,31 +60,37 @@ export function createExpertSquadPackageHost(
   taskArtifacts: TaskArtifactHost,
   scope?: TaskToolExecutionScope,
 ): ExpertSquadPackageHost {
-  async function validateResourceSet(input: { resource_set: unknown }) {
-    const resourceSet = TaskArtifactResourceSetLocatorSchema.parse(input.resource_set)
-    const materialized = await taskArtifacts.materialize({ snapshot: resourceSet.snapshot, tree: resourceSet.tree })
-    const loaded = await ExpertSquadRegistry.loadSourcePackage(materialized.directory)
-    const files = await packageFiles(materialized.directory)
-    return ValidatedExpertSquadPackageSchema.parse({
-      resource_set: resourceSet,
-      package_digest: loaded.packageDigest,
-      namespace: loaded.namespace,
-      id: loaded.id,
-      version: loaded.manifest.version,
-      manifest: loaded.manifest,
-      skill_closures: [...loaded.packageSkills.values()]
+  function inspectPackage(input: {
+    loaded: Awaited<ReturnType<typeof ExpertSquadRegistry.loadPackageRevisionSnapshot>>
+    files: PackageFile[]
+  }) {
+    return InspectedExpertSquadPackageSchema.parse({
+      package_digest: input.loaded.packageDigest,
+      namespace: input.loaded.namespace,
+      id: input.loaded.id,
+      version: input.loaded.manifest.version,
+      manifest: input.loaded.manifest,
+      skill_closures: [...input.loaded.packageSkills.values()]
         .map((skill) => ({
           source: skill.snapshot.source,
           files: skill.snapshot.files.map((file) => file.path),
         }))
         .sort((left, right) => (left.source < right.source ? -1 : left.source > right.source ? 1 : 0)),
-      files: files.map((file) => ({
+      files: input.files.map((file) => ({
         path: file.path,
         sha256: file.sha256,
         bytes: file.bytes.byteLength,
         utf8_text: file.utf8Text,
       })),
     })
+  }
+
+  async function validateResourceSet(input: { resource_set: unknown }) {
+    const resourceSet = TaskArtifactResourceSetLocatorSchema.parse(input.resource_set)
+    const materialized = await taskArtifacts.materialize({ snapshot: resourceSet.snapshot, tree: resourceSet.tree })
+    const loaded = await ExpertSquadRegistry.loadSourcePackage(materialized.directory)
+    const files = await packageFiles(materialized.directory)
+    return ValidatedExpertSquadPackageSchema.parse({ ...inspectPackage({ loaded, files }), resource_set: resourceSet })
   }
 
   async function prepareCandidateWorkspace(input: {
@@ -125,7 +132,8 @@ export function createExpertSquadPackageHost(
       throw error
     })
     if (existing) {
-      if (!existing.isDirectory()) throw new Error(`Expert Squad candidate workspace is not a directory: ${packageRoot}`)
+      if (!existing.isDirectory())
+        throw new Error(`Expert Squad candidate workspace is not a directory: ${packageRoot}`)
       const loaded = await ExpertSquadRegistry.loadSourcePackage(destination)
       if (loaded.packageDigest !== input.loaded.packageDigest) {
         throw new Error(`Expert Squad candidate workspace already diverged from its frozen parent: ${packageRoot}`)
@@ -154,6 +162,12 @@ export function createExpertSquadPackageHost(
   }
 
   return Object.freeze({
+    async inspectRevision(input) {
+      const revision = ExpertSquadPackageRevisionSchema.parse(input.revision)
+      const loaded = await ExpertSquadRegistry.loadPackageRevisionSnapshot(revision.package_digest)
+      const files = await packageFiles(loaded.root)
+      return inspectPackage({ loaded, files })
+    },
     async prepareCandidate(input) {
       const revision = ExpertSquadPackageRevisionSchema.parse(input.revision)
       const loaded = await ExpertSquadRegistry.loadPackageRevisionSnapshot(revision.package_digest)
@@ -183,7 +197,7 @@ export function createExpertSquadPackageHost(
       }
       const packageRoot = await prepareCandidateWorkspace({ loaded, files })
       return PreparedExpertSquadCandidateSchema.parse({
-        resource_set: resourceSet,
+        resource_set: validated.resource_set,
         package_digest: validated.package_digest,
         namespace: validated.namespace,
         id: validated.id,

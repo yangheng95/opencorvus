@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import path from "node:path"
-import { cp, mkdir, readFile, writeFile } from "node:fs/promises"
+import { cp, mkdir, readFile, stat, writeFile } from "node:fs/promises"
 import { ExpertSquadRegistry } from "../src/expert-squad/registry"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
@@ -694,20 +694,24 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         )
         const publisherSchema = publishEvolutionArtifactTool.introspect().inputSchema as {
           required?: string[]
-          properties?: Record<string, {
-            oneOf?: Array<{ properties?: Record<string, { const?: string }>; required?: string[] }>
-          }>
+          properties?: Record<
+            string,
+            {
+              oneOf?: Array<{ properties?: Record<string, { const?: string }>; required?: string[] }>
+            }
+          >
         }
         expect(Object.keys(publisherSchema.properties ?? {})).toEqual(["artifact"])
         expect(publisherSchema.required).toEqual(["artifact"])
         const publicationBranches = publisherSchema.properties?.artifact?.oneOf ?? []
         expect(publicationBranches.map((branch) => branch.properties?.artifact_type?.const)).toEqual(
-          EvolutionPackagePublishableArtifactInputSchema.options.map(
-            (branch) => branch.shape.artifact_type.value,
-          ),
+          EvolutionPackagePublishableArtifactInputSchema.options.map((branch) => branch.shape.artifact_type.value),
         )
-        expect(publicationBranches.every((branch) => branch.required?.join("|") ===
-          "artifact_type|payload|resource_set|source_artifact_locators")).toBe(true)
+        expect(
+          publicationBranches.every(
+            (branch) => branch.required?.join("|") === "artifact_type|payload|resource_set|source_artifact_locators",
+          ),
+        ).toBe(true)
         const attributionBranch = publicationBranches.find(
           (branch) => branch.properties?.artifact_type?.const === "evolution-lab/failure-attribution",
         )
@@ -743,7 +747,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           },
           executionCapsuleBinding: await taskProcessBinding(taskID, loaded.packageDigest, started),
         })
-        const digest = "f".repeat(64)
         const userMessage = await Session.updateMessage({
           id: "message-user-authority",
           sessionID: session.id,
@@ -779,10 +782,15 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           scope: "project" as const,
           project_id: Instance.project.id,
           project_directory: project.path,
-          namespace: "acme",
-          id: "target",
+          namespace: loaded.namespace,
+          id: loaded.id,
         }
-        const revision = { namespace: "acme", id: "target", version: "2026.08.06.1", package_digest: digest }
+        const revision = {
+          namespace: loaded.namespace,
+          id: loaded.id,
+          version: loaded.manifest.version,
+          package_digest: loaded.packageDigest,
+        }
         const scope: TaskToolExecutionScope = {
           kind: "task" as const,
           projectID: Instance.project.id,
@@ -894,12 +902,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               db
                 .select({ id: EngineArtifactTable.id })
                 .from(EngineArtifactTable)
-                .where(
-                  eq(
-                    EngineArtifactTable.catalog_artifact_type,
-                    "evolution-lab/failure-attribution",
-                  ),
-                )
+                .where(eq(EngineArtifactTable.catalog_artifact_type, "evolution-lab/failure-attribution"))
                 .all().length,
           )
           await expect(
@@ -912,21 +915,14 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               },
               { host } as never,
             ),
-          ).rejects.toThrow(
-            "failure-attribution requires exactly one opportunity Engine Artifact source",
-          )
+          ).rejects.toThrow("failure-attribution requires exactly one opportunity Engine Artifact source")
           expect(
             Database.use(
               (db) =>
                 db
                   .select({ id: EngineArtifactTable.id })
                   .from(EngineArtifactTable)
-                  .where(
-                    eq(
-                      EngineArtifactTable.catalog_artifact_type,
-                      "evolution-lab/failure-attribution",
-                    ),
-                  )
+                  .where(eq(EngineArtifactTable.catalog_artifact_type, "evolution-lab/failure-attribution"))
                   .all().length,
             ),
           ).toBe(attributionCountBefore)
@@ -951,8 +947,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           })
           expect(attributionRead.chunk.complete).toBe(true)
           expect(
-            EngineArtifactEnvelopeSchema.parse(JSON.parse(attributionRead.chunk.text!))
-              .source_artifact_locators,
+            EngineArtifactEnvelopeSchema.parse(JSON.parse(attributionRead.chunk.text!)).source_artifact_locators,
           ).toEqual([opportunityReceipt.locator])
           await host.engineArtifacts.select({
             locator: attributionReceipt.locator,
@@ -960,6 +955,11 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           })
           const trialWorktree = await Worktree.create({ name: `evolution-trial-${taskID}` })
           await ensureGitProjectMetadata(trialWorktree.directory)
+          await mkdir(path.join(trialWorktree.directory, "subject"), { recursive: true })
+          await writeFile(
+            path.join(trialWorktree.directory, "subject", "decision-ledger.mjs"),
+            "export const decision = 'trial-workspace-only'\n",
+          )
           const campaignWorkspaceSnapshot = canonicalWorkspaceTreeJSON(
             await executionCapsuleSourceTreeSnapshot(trialWorktree.directory),
           )
@@ -1053,7 +1053,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             arm_order: ["baseline", "candidate"] as const,
             statistics: "paired mean and variance",
             budget: { max_runs: 2, max_cost: 12 },
-            mutable_paths: ["README.md"],
           }
           sourceCampaignInput = campaignDraft
           const campaignReceipt = JSON.parse(
@@ -1092,6 +1091,13 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ui_rubric_digest: null,
             trial_execution: { status: "available", installation_scope: "project" },
           })
+          expect(persistedCampaign.mutable_paths).toEqual(
+            candidateMutableTextPaths(
+              await host.expertSquadPackages.inspectRevision({
+                revision: { package_digest: revision.package_digest },
+              }),
+            ),
+          )
           expect(persistedCampaign.scorers[0]).toMatchObject({
             scorer_id: "correctness",
             scorer_revision: scorerResource.sha256,
@@ -1146,14 +1152,14 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                     scope: "built_in",
                     project_id: null,
                     project_directory: null,
-                    namespace: "builtin",
-                    id: "base",
+                    namespace: loaded.namespace,
+                    id: loaded.id,
                   },
                   current_revision: {
-                    namespace: "builtin",
-                    id: "base",
-                    version: "2026.08.13.1",
-                    package_digest: "e".repeat(64),
+                    namespace: loaded.namespace,
+                    id: loaded.id,
+                    version: loaded.manifest.version,
+                    package_digest: loaded.packageDigest,
                   },
                 },
                 resource_set: null,
@@ -1875,9 +1881,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             "scorer:correctness",
             "workspace_template",
           ])
-          const resourcePathByRole = new Map(
-            rehydrated.role_resources.map((item) => [item.role, item.resource.path]),
-          )
+          const resourcePathByRole = new Map(rehydrated.role_resources.map((item) => [item.role, item.resource.path]))
           const importedCampaignInput = {
             ...sourceCampaignInput,
             resource_roles: {
@@ -1965,7 +1969,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           })
           expect(
             EngineArtifactEnvelopeSchema.parse(JSON.parse(importedPairCampaignRead.chunk.text!))
-              .source_artifact_locators.map((locator) => JSON.stringify(locator)).toSorted(),
+              .source_artifact_locators.map((locator) => JSON.stringify(locator))
+              .toSorted(),
           ).toEqual(
             [importedOpportunityLocator, importedAttributionLocator]
               .map((locator) => JSON.stringify(locator))
@@ -2072,7 +2077,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           session.id,
           "worktree",
         )
-        await mkdir(candidateWorktree, { recursive: true })
         const preparationScope = {
           taskID,
           projectDirectory: project.path,
@@ -2080,13 +2084,54 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           executionDirectory: candidateWorktree,
           owner: { kind: "projected-worker" },
         } as TaskToolExecutionScope
+        const packageHost = createExpertSquadPackageHost(materializeExecution, preparationScope)
+        const artifactsBeforeInspection = Database.use(
+          (db) =>
+            db
+              .select({ id: EngineArtifactTable.id })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.task_id, taskID))
+              .all().length,
+        )
+        const inspected = await packageHost.inspectRevision({
+          revision: { package_digest: loaded.packageDigest },
+        })
+        expect(inspected).toMatchObject({
+          package_digest: loaded.packageDigest,
+          namespace: loaded.namespace,
+          id: loaded.id,
+          version: loaded.manifest.version,
+        })
+        expect(
+          Database.use(
+            (db) =>
+              db
+                .select({ id: EngineArtifactTable.id })
+                .from(EngineArtifactTable)
+                .where(eq(EngineArtifactTable.task_id, taskID))
+                .all().length,
+          ),
+        ).toBe(artifactsBeforeInspection)
+        const inspectedCandidateRoot = path.join(
+          candidateWorktree,
+          "expert-squad-evolution-candidates",
+          taskID,
+          loaded.namespace,
+          loaded.id,
+        )
+        expect(
+          await stat(inspectedCandidateRoot).catch((error: NodeJS.ErrnoException) =>
+            error.code === "ENOENT" ? undefined : Promise.reject(error),
+          ),
+        ).toBeUndefined()
+        await mkdir(candidateWorktree, { recursive: true })
         const materialized = PreparedExpertSquadCandidateSchema.parse(
           JSON.parse(
             await expertSquadPackageTool.execute(
               { action: "prepare_candidate", package_digest: loaded.packageDigest },
               {
                 host: {
-                  expertSquadPackages: createExpertSquadPackageHost(materializeExecution, preparationScope),
+                  expertSquadPackages: packageHost,
                 },
               } as never,
             ),
@@ -2367,7 +2412,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               budget: { max_runs: 2, max_cost: 1 },
               inactivity_timeout_ms: 60_000,
               ui_rubric_digest: null,
-              mutable_paths: ["README.md"],
+              mutable_paths: comparison.mutable_paths,
               trial_execution: { status: "unavailable", reason_code: "product_release_required" },
             },
             resources: [],
@@ -2387,6 +2432,14 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             schema_version: 1,
             label: "Holdout campaign fixture",
             payload: { ...developmentCampaignEnvelope.payload, dataset_partition: "holdout" },
+            resources: [],
+            source_artifact_locators: [],
+          })
+          const incompatibleCampaign = await host.engineArtifacts.publish({
+            artifact_type: "evolution-lab/campaign-spec",
+            schema_version: 1,
+            label: "Incompatible mutable closure fixture",
+            payload: { ...developmentCampaignEnvelope.payload, mutable_paths: ["README.md"] },
             resources: [],
             source_artifact_locators: [],
           })
@@ -2419,6 +2472,29 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             },
             provenance: [developmentCampaign.locator],
           }
+          let incompatibleCampaignError: unknown
+          try {
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/candidate-revision",
+                payload: {
+                  ...candidatePayload,
+                  development_campaign_locator: incompatibleCampaign.locator,
+                  provenance: [incompatibleCampaign.locator],
+                },
+                resource_set: candidateResourceSet,
+                parent_resource_set: materialized.resource_set,
+                source_artifact_locators: [incompatibleCampaign.locator],
+              },
+              { host } as never,
+            )
+          } catch (error) {
+            incompatibleCampaignError = error
+          }
+          expect(incompatibleCampaignError).toBeInstanceOf(EvolutionArtifactIntegrityError)
+          expect((incompatibleCampaignError as Error).message).toBe(
+            "candidate parent mutable path closure must equal its exact development campaign",
+          )
           await expect(
             executePublishEvolutionArtifact(
               {

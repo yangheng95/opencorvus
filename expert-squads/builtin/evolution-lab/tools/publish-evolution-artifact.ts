@@ -23,7 +23,7 @@ import {
   EvolutionPackagePublishableArtifactInputSchema,
   parseEvolutionArtifact,
 } from "../lib/evolution-lab/artifacts"
-import { compareCandidateIntegrity } from "../lib/evolution-lab/candidate-integrity"
+import { candidateMutableTextPaths, compareCandidateIntegrity } from "../lib/evolution-lab/candidate-integrity"
 import { deriveComparisonRecommendation } from "../lib/evolution-lab/comparison"
 
 function sameJSON(left: unknown, right: unknown) {
@@ -119,10 +119,7 @@ const CampaignScorerAssetSchema = tool.schema.discriminatedUnion("evaluator_kind
   CampaignQueryScorerAssetSchema,
 ])
 
-async function readJSONResource(
-  resource: TaskArtifactRef,
-  context: ToolContext,
-) {
+async function readJSONResource(resource: TaskArtifactRef, context: ToolContext) {
   if (resource.media_type !== "application/json")
     throw new EvolutionArtifactIntegrityError(`Campaign resource ${resource.path} must be application/json`)
   const bytes = await context.host.taskArtifacts.read(resource)
@@ -134,11 +131,7 @@ async function readJSONResource(
   }
 }
 
-function exactResourceByPath(
-  resources: readonly TaskArtifactRef[],
-  resourcePath: string,
-  role: string,
-) {
+function exactResourceByPath(resources: readonly TaskArtifactRef[], resourcePath: string, role: string) {
   const matches = resources.filter((resource) => resource.path === resourcePath)
   if (matches.length !== 1)
     throw new EvolutionArtifactIntegrityError(
@@ -223,10 +216,7 @@ export const evolutionArtifactOwner = {
   "evolution-lab/comparison-recommendation": "evolution-recommendation-owner",
 } as const
 
-export function assertEvolutionArtifactOwner(
-  artifactType: keyof typeof evolutionArtifactOwner,
-  agentID: string,
-) {
+export function assertEvolutionArtifactOwner(artifactType: keyof typeof evolutionArtifactOwner, agentID: string) {
   const expectedAgent = evolutionArtifactOwner[artifactType]
   if (agentID !== expectedAgent)
     throw new EvolutionArtifactIntegrityError(
@@ -270,15 +260,11 @@ export default tool({
         "run-evidence-bundle requires the exact immutable collector resource set",
       )
     }
-    let resources = publication.resource_set
-      ? await context.host.taskArtifacts.resources(publication.resource_set)
-      : []
+    let resources = publication.resource_set ? await context.host.taskArtifacts.resources(publication.resource_set) : []
     const payload =
       artifact_type === "evolution-lab/failure-attribution"
         ? await (async () => {
-            const attribution = EvolutionArtifactSchemas["evolution-lab/failure-attribution"].parse(
-              publication.payload,
-            )
+            const attribution = EvolutionArtifactSchemas["evolution-lab/failure-attribution"].parse(publication.payload)
             if (
               publication.source_artifact_locators.length !== 1 ||
               publication.source_artifact_locators[0]?.source !== "engine_artifact"
@@ -305,190 +291,191 @@ export default tool({
             return attribution
           })()
         : artifact_type === "evolution-lab/campaign-spec"
-        ? await (async () => {
-            const campaignInput = EvolutionCampaignPublishInputSchema.parse(publication.payload)
-            if (publication.source_artifact_locators.some((locator) => locator.source !== "engine_artifact"))
-              throw new EvolutionArtifactIntegrityError(
-                "campaign-spec sources must be exact Engine Artifact locators",
+          ? await (async () => {
+              const campaignInput = EvolutionCampaignPublishInputSchema.parse(publication.payload)
+              if (publication.source_artifact_locators.some((locator) => locator.source !== "engine_artifact"))
+                throw new EvolutionArtifactIntegrityError(
+                  "campaign-spec sources must be exact Engine Artifact locators",
+                )
+              const sources = await Promise.all(
+                publication.source_artifact_locators
+                  .filter((locator): locator is EngineArtifactLocator => locator.source === "engine_artifact")
+                  .map(async (locator) => ({ locator, envelope: await readEngineArtifactEnvelope(locator, context) })),
               )
-            const sources = await Promise.all(
-              publication.source_artifact_locators
-                .filter((locator): locator is EngineArtifactLocator => locator.source === "engine_artifact")
-                .map(async (locator) => ({ locator, envelope: await readEngineArtifactEnvelope(locator, context) })),
-            )
-            const opportunities = sources.filter(
-              (item) => item.envelope.artifact_type === "evolution-lab/opportunity",
-            )
-            const attributions = sources.filter(
-              (item) => item.envelope.artifact_type === "evolution-lab/failure-attribution",
-            )
-            if (sources.length !== 2 || opportunities.length !== 1 || attributions.length !== 1)
-              throw new EvolutionArtifactIntegrityError(
-                "campaign-spec requires exactly one opportunity and one failure-attribution source",
+              const opportunities = sources.filter(
+                (item) => item.envelope.artifact_type === "evolution-lab/opportunity",
               )
-            requireEvolutionWorkerProducer(opportunities[0]!.envelope, "evolution-observer")
-            requireEvolutionWorkerProducer(attributions[0]!.envelope, "evolution-failure-analyst")
-            const opportunity = EvolutionArtifactSchemas["evolution-lab/opportunity"].parse(
-              opportunities[0]!.envelope.payload,
-            )
-            const attribution = EvolutionArtifactSchemas["evolution-lab/failure-attribution"].parse(
-              attributions[0]!.envelope.payload,
-            )
-            if (
-              !attributionIdentifiesOpportunity({
-                attribution,
-                attributionEnvelope: attributions[0]!.envelope,
-                opportunityEnvelope: opportunities[0]!.envelope,
-                opportunityLocator: opportunities[0]!.locator,
-              })
-            )
-              throw new EvolutionArtifactIntegrityError(
-                "campaign failure-attribution must directly identify its exact opportunity source",
+              const attributions = sources.filter(
+                (item) => item.envelope.artifact_type === "evolution-lab/failure-attribution",
               )
+              if (sources.length !== 2 || opportunities.length !== 1 || attributions.length !== 1)
+                throw new EvolutionArtifactIntegrityError(
+                  "campaign-spec requires exactly one opportunity and one failure-attribution source",
+                )
+              requireEvolutionWorkerProducer(opportunities[0]!.envelope, "evolution-observer")
+              requireEvolutionWorkerProducer(attributions[0]!.envelope, "evolution-failure-analyst")
+              const opportunity = EvolutionArtifactSchemas["evolution-lab/opportunity"].parse(
+                opportunities[0]!.envelope.payload,
+              )
+              const attribution = EvolutionArtifactSchemas["evolution-lab/failure-attribution"].parse(
+                attributions[0]!.envelope.payload,
+              )
+              if (
+                !attributionIdentifiesOpportunity({
+                  attribution,
+                  attributionEnvelope: attributions[0]!.envelope,
+                  opportunityEnvelope: opportunities[0]!.envelope,
+                  opportunityLocator: opportunities[0]!.locator,
+                })
+              )
+                throw new EvolutionArtifactIntegrityError(
+                  "campaign failure-attribution must directly identify its exact opportunity source",
+                )
 
-            const roles = campaignInput.resource_roles
-            const dataset = exactResourceByPath(resources, roles.dataset_path, "dataset")
-            const cases = roles.cases.map((item) => ({
-              case_id: item.case_id,
-              resource: exactResourceByPath(resources, item.resource_path, `case ${item.case_id}`),
-            }))
-            const modelConfiguration = exactResourceByPath(
-              resources,
-              roles.model_configuration_path,
-              "model configuration",
-            )
-            const environment = exactResourceByPath(resources, roles.environment_path, "environment")
-            const workspaceTemplate = exactResourceByPath(
-              resources,
-              roles.workspace_template_path,
-              "workspace template",
-            )
-            const permissionSnapshot = exactResourceByPath(
-              resources,
-              roles.permission_snapshot_path,
-              "permission snapshot",
-            )
-            const scorerAssets = await Promise.all(
-              roles.scorer_assets.map(async (item) => {
-                const resource = exactResourceByPath(resources, item.resource_path, `scorer ${item.scorer_id}`)
-                const asset = CampaignScorerAssetSchema.parse(await readJSONResource(resource, context))
-                if (asset.scorer_id !== item.scorer_id)
-                  throw new EvolutionArtifactIntegrityError(
-                    `Campaign scorer role ${item.scorer_id} does not match asset ${asset.scorer_id}`,
-                  )
-                return { scorer_id: item.scorer_id, resource, asset }
-              }),
-            )
-            const expectedResources = [
-              dataset,
-              ...cases.map((item) => item.resource),
-              modelConfiguration,
-              environment,
-              workspaceTemplate,
-              permissionSnapshot,
-              ...scorerAssets.map((item) => item.resource),
-            ]
-            if (!sameJSON(canonicalResourceIdentitySet(resources), canonicalResourceIdentitySet(expectedResources)))
-              throw new EvolutionArtifactIntegrityError(
-                "campaign-spec resource set must equal every exact frozen campaign input",
-              )
-            const workspaceText = new TextDecoder("utf-8", { fatal: true }).decode(
-              await context.host.taskArtifacts.read(workspaceTemplate),
-            )
-            const workspaceSnapshot = WorkspaceTreeSnapshotSchema.parse(JSON.parse(workspaceText))
-            if (canonicalWorkspaceTreeJSON(workspaceSnapshot) !== workspaceText) {
-              throw new EvolutionArtifactIntegrityError("campaign workspace snapshot is not canonical JSON")
-            }
-            const model = CampaignModelConfigurationSchema.parse(
-              await readJSONResource(modelConfiguration, context),
-            )
-            const scorers = scorerAssets.map(({ resource, asset }) => {
-              const identity = {
-                scorer_id: asset.scorer_id,
-                scorer_revision: resource.sha256,
-                scope: "global" as const,
-                goal_id: null,
-                description: asset.evaluator_kind === "judge" ? asset.criteria : asset.description,
-                unit: asset.unit,
-                direction: asset.direction,
-                target: asset.target,
-                floor: asset.floor,
-                weight: asset.weight,
-                observation_class: asset.observation_class,
-              }
-              return asset.evaluator_kind === "judge"
-                ? {
-                    ...identity,
-                    evaluator_kind: "judge" as const,
-                    evaluator_config: {
-                      scorer_revision: resource.sha256,
-                      provider_id: asset.provider_id,
-                      model_id: asset.model_id,
-                      inactivity_timeout_ms: asset.inactivity_timeout_ms,
-                      max_evidence_bytes: asset.max_evidence_bytes,
-                      criteria: asset.criteria,
-                      rubric: asset.rubric,
-                    },
-                  }
-                : {
-                    ...identity,
-                    evaluator_kind: "query" as const,
-                    evaluator_config: {
-                      scorer_revision: resource.sha256,
-                      query: asset.query,
-                      value: asset.value,
-                    },
-                  }
-            })
-            const frozen = {
-              dataset: resourceIdentity(dataset),
-              cases: cases.map((item) => ({
+              const roles = campaignInput.resource_roles
+              const dataset = exactResourceByPath(resources, roles.dataset_path, "dataset")
+              const cases = roles.cases.map((item) => ({
                 case_id: item.case_id,
-                resource: resourceIdentity(item.resource),
-              })),
-              model_configuration: resourceIdentity(modelConfiguration),
-              environment: resourceIdentity(environment),
-              workspace_template: resourceIdentity(workspaceTemplate),
-              permission_snapshot: resourceIdentity(permissionSnapshot),
-              scorer_assets: scorerAssets.map((item) => ({
-                scorer_id: item.scorer_id,
-                scorer_revision: item.resource.sha256,
-                resource: resourceIdentity(item.resource),
-              })),
-            }
-            const trialExecution =
-              opportunity.target.scope === "built_in"
-                ? ({ status: "unavailable", reason_code: "product_release_required" } as const)
-                : ({ status: "available", installation_scope: opportunity.target.scope } as const)
-            return EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse({
-              target: opportunity.target,
-              baseline_revision: opportunity.current_revision,
-              candidate_version_policy: campaignInput.candidate_version_policy,
-              candidate_hypothesis: campaignInput.candidate_hypothesis,
-              dataset_partition: campaignInput.dataset_partition,
-              dataset_digest: dataset.sha256,
-              cases: cases.map((item) => item.case_id),
-              scorer_digests: scorerAssets.map((item) => item.resource.sha256),
-              scorers,
-              frozen_inputs: frozen,
-              model: `${model.provider_id}/${model.model_id}`,
-              model_configuration_digest: modelConfiguration.sha256,
-              environment_digest: environment.sha256,
-              workspace_digest: workspaceTreeDigest(workspaceSnapshot),
-              permission_snapshot_digest: permissionSnapshot.sha256,
-              external_side_effect_policy: campaignInput.external_side_effect_policy,
-              repetitions: campaignInput.repetitions,
-              arm_order: campaignInput.arm_order,
-              statistics: campaignInput.statistics,
-              budget: campaignInput.budget,
-              inactivity_timeout_ms: model.inactivity_timeout_ms,
-              ui_rubric_digest:
-                scorerAssets.find((item) => item.asset.evaluator_kind === "judge")?.resource.sha256 ?? null,
-              mutable_paths: campaignInput.mutable_paths,
-              trial_execution: trialExecution,
-            })
-          })()
-        : parseEvolutionArtifact(artifact_type, publication.payload)
+                resource: exactResourceByPath(resources, item.resource_path, `case ${item.case_id}`),
+              }))
+              const modelConfiguration = exactResourceByPath(
+                resources,
+                roles.model_configuration_path,
+                "model configuration",
+              )
+              const environment = exactResourceByPath(resources, roles.environment_path, "environment")
+              const workspaceTemplate = exactResourceByPath(
+                resources,
+                roles.workspace_template_path,
+                "workspace template",
+              )
+              const permissionSnapshot = exactResourceByPath(
+                resources,
+                roles.permission_snapshot_path,
+                "permission snapshot",
+              )
+              const scorerAssets = await Promise.all(
+                roles.scorer_assets.map(async (item) => {
+                  const resource = exactResourceByPath(resources, item.resource_path, `scorer ${item.scorer_id}`)
+                  const asset = CampaignScorerAssetSchema.parse(await readJSONResource(resource, context))
+                  if (asset.scorer_id !== item.scorer_id)
+                    throw new EvolutionArtifactIntegrityError(
+                      `Campaign scorer role ${item.scorer_id} does not match asset ${asset.scorer_id}`,
+                    )
+                  return { scorer_id: item.scorer_id, resource, asset }
+                }),
+              )
+              const expectedResources = [
+                dataset,
+                ...cases.map((item) => item.resource),
+                modelConfiguration,
+                environment,
+                workspaceTemplate,
+                permissionSnapshot,
+                ...scorerAssets.map((item) => item.resource),
+              ]
+              if (!sameJSON(canonicalResourceIdentitySet(resources), canonicalResourceIdentitySet(expectedResources)))
+                throw new EvolutionArtifactIntegrityError(
+                  "campaign-spec resource set must equal every exact frozen campaign input",
+                )
+              const workspaceText = new TextDecoder("utf-8", { fatal: true }).decode(
+                await context.host.taskArtifacts.read(workspaceTemplate),
+              )
+              const workspaceSnapshot = WorkspaceTreeSnapshotSchema.parse(JSON.parse(workspaceText))
+              if (canonicalWorkspaceTreeJSON(workspaceSnapshot) !== workspaceText) {
+                throw new EvolutionArtifactIntegrityError("campaign workspace snapshot is not canonical JSON")
+              }
+              const model = CampaignModelConfigurationSchema.parse(await readJSONResource(modelConfiguration, context))
+              const scorers = scorerAssets.map(({ resource, asset }) => {
+                const identity = {
+                  scorer_id: asset.scorer_id,
+                  scorer_revision: resource.sha256,
+                  scope: "global" as const,
+                  goal_id: null,
+                  description: asset.evaluator_kind === "judge" ? asset.criteria : asset.description,
+                  unit: asset.unit,
+                  direction: asset.direction,
+                  target: asset.target,
+                  floor: asset.floor,
+                  weight: asset.weight,
+                  observation_class: asset.observation_class,
+                }
+                return asset.evaluator_kind === "judge"
+                  ? {
+                      ...identity,
+                      evaluator_kind: "judge" as const,
+                      evaluator_config: {
+                        scorer_revision: resource.sha256,
+                        provider_id: asset.provider_id,
+                        model_id: asset.model_id,
+                        inactivity_timeout_ms: asset.inactivity_timeout_ms,
+                        max_evidence_bytes: asset.max_evidence_bytes,
+                        criteria: asset.criteria,
+                        rubric: asset.rubric,
+                      },
+                    }
+                  : {
+                      ...identity,
+                      evaluator_kind: "query" as const,
+                      evaluator_config: {
+                        scorer_revision: resource.sha256,
+                        query: asset.query,
+                        value: asset.value,
+                      },
+                    }
+              })
+              const frozen = {
+                dataset: resourceIdentity(dataset),
+                cases: cases.map((item) => ({
+                  case_id: item.case_id,
+                  resource: resourceIdentity(item.resource),
+                })),
+                model_configuration: resourceIdentity(modelConfiguration),
+                environment: resourceIdentity(environment),
+                workspace_template: resourceIdentity(workspaceTemplate),
+                permission_snapshot: resourceIdentity(permissionSnapshot),
+                scorer_assets: scorerAssets.map((item) => ({
+                  scorer_id: item.scorer_id,
+                  scorer_revision: item.resource.sha256,
+                  resource: resourceIdentity(item.resource),
+                })),
+              }
+              const trialExecution =
+                opportunity.target.scope === "built_in"
+                  ? ({ status: "unavailable", reason_code: "product_release_required" } as const)
+                  : ({ status: "available", installation_scope: opportunity.target.scope } as const)
+              const baselinePackage = await context.host.expertSquadPackages.inspectRevision({
+                revision: { package_digest: opportunity.current_revision.package_digest },
+              })
+              return EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse({
+                target: opportunity.target,
+                baseline_revision: opportunity.current_revision,
+                candidate_version_policy: campaignInput.candidate_version_policy,
+                candidate_hypothesis: campaignInput.candidate_hypothesis,
+                dataset_partition: campaignInput.dataset_partition,
+                dataset_digest: dataset.sha256,
+                cases: cases.map((item) => item.case_id),
+                scorer_digests: scorerAssets.map((item) => item.resource.sha256),
+                scorers,
+                frozen_inputs: frozen,
+                model: `${model.provider_id}/${model.model_id}`,
+                model_configuration_digest: modelConfiguration.sha256,
+                environment_digest: environment.sha256,
+                workspace_digest: workspaceTreeDigest(workspaceSnapshot),
+                permission_snapshot_digest: permissionSnapshot.sha256,
+                external_side_effect_policy: campaignInput.external_side_effect_policy,
+                repetitions: campaignInput.repetitions,
+                arm_order: campaignInput.arm_order,
+                statistics: campaignInput.statistics,
+                budget: campaignInput.budget,
+                inactivity_timeout_ms: model.inactivity_timeout_ms,
+                ui_rubric_digest:
+                  scorerAssets.find((item) => item.asset.evaluator_kind === "judge")?.resource.sha256 ?? null,
+                mutable_paths: candidateMutableTextPaths(baselinePackage),
+                trial_execution: trialExecution,
+              })
+            })()
+          : parseEvolutionArtifact(artifact_type, publication.payload)
     if (artifact_type === "evolution-lab/candidate-revision") {
       const candidatePayload = EvolutionArtifactSchemas["evolution-lab/candidate-revision"].parse(payload)
       if (
@@ -527,6 +514,10 @@ export default tool({
         resource_set: publication.resource_set!,
       })
       const comparison = compareCandidateIntegrity(parent, candidate)
+      if (!sameJSON(developmentCampaign.mutable_paths, comparison.mutable_paths))
+        throw new EvolutionArtifactIntegrityError(
+          "candidate parent mutable path closure must equal its exact development campaign",
+        )
       const exactCandidateFacts = {
         parent_revision: {
           namespace: parent.namespace,

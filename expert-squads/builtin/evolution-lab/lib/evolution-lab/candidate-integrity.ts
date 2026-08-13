@@ -1,8 +1,9 @@
 // V1 means Version 1. SHA-256 means Secure Hash Algorithm 256-bit.
 import { createHash } from "node:crypto"
-import { tool, ValidatedExpertSquadPackageSchema } from "@opencorvus-ai/plugin"
+import { InspectedExpertSquadPackageSchema, tool, ValidatedExpertSquadPackageSchema } from "@opencorvus-ai/plugin"
 
 type ValidatedPackage = ReturnType<typeof ValidatedExpertSquadPackageSchema.parse>
+type InspectedPackage = ReturnType<typeof InspectedExpertSquadPackageSchema.parse>
 type Manifest = Record<string, unknown>
 
 function canonicalJSON(value: unknown): string {
@@ -25,7 +26,7 @@ function manifestRecord(value: unknown): Manifest {
   return value as Manifest
 }
 
-export function candidateMutableTextPaths(pkg: ValidatedPackage): string[] {
+export function candidateMutableTextPaths(pkg: InspectedPackage): string[] {
   const manifest = manifestRecord(pkg.manifest)
   const selector = manifestRecord(manifest.selector)
   const capability = manifestRecord(manifest.capability_projection)

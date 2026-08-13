@@ -3036,3 +3036,106 @@ and `beta.txt = BETA_OK`; direct filesystem reads agreed exactly. The final real
 start/completion facts, immutable read references and the completed Mission. This proves model-owned parallel creation
 without recreating Host directory admission. It is a control-plane acceptance run, not one of the three still-required
 Expert Squad evolution successes.
+
+### Exact-Terra R19: Campaign mutation authority and failure-settlement ownership
+
+#### Recall
+
+- User requirement: continue the real browser-driven random Expert Squad evolution campaign in an isolated dev
+  backend, treat every apparent scheduling stall as a potential shared control-plane defect, use exact
+  `openai/gpt-5.6-terra`, preserve Base as the active Squad, and investigate every failure to its complete data,
+  control, contract, test, documentation and delivery impact before changing code. Serial versus parallel Task
+  creation remains model-owned; the Host may validate immutable facts but must not choose the workflow order.
+- Acceptance for this phase: one frozen development Campaign derives its candidate mutation surface from the exact
+  immutable baseline package rather than model-authored path guesses; Candidate Author consumes that same authority;
+  a failed run settles the live runtime before deleting its isolated Provider credential; every retained global
+  listener uses the Instance identity that registered it; and all fixes have positive non-UI contracts plus an
+  uninvolved read-only review before another fresh run.
+- Hard constraints: do not weaken the candidate package-integrity comparison, synthesize a candidate, mutate the
+  installed package, rewrite a frozen Campaign after authoring begins, add a Host workflow gate, add a legacy reader
+  or fallback, expose credentials, run UI automation, restart a user process, or count R19 as a success.
+- Sources read: R19 `controller.ndjson`, `result.json`, isolated SQLite facts, Task/Session/Artifact projections and
+  complete server stderr; Evolution Lab Planner and Candidate Author prompts, Campaign and package Tool schemas,
+  candidate package integrity code, package revision snapshot/materialization Host, Mission abort/closure path,
+  controller cleanup helper, OpenAI OAuth resolver, Project Memory organizer and GlobalBus lifecycle, public Market
+  catalog/bundle and deployment workflow, current SDK manifest schema and generation chain.
+- Repository search: every producer and consumer of `mutable_paths`, `EvolutionCampaignPublishInputSchema`,
+  `PreparedExpertSquadCandidateSchema`, `ExpertSquadPackageHost`, failure abort settlement, isolated auth removal,
+  Project Memory global subscriptions, public Expert Squad distribution and deploy admission was classified.
+- Independent agents: one uninvolved reviewer is reconstructing the Campaign/package path-authority failure and one
+  is reconstructing abort/credential settlement. Earlier uninvolved reviewers established the cross-Instance
+  Project Memory listener defect and the stale public Expert Squad publication. Their conclusions are recorded below;
+  implementation review remains pending.
+
+R19 used random port `56661`, random run root
+`.scratch/evolution-r19-68baa85aeb164854a936712cab419562`, a project and `OPENCORVUS_HOME` below that root,
+and its own SQLite database. The controller separately copied and hashed the canonical model catalog and copied the
+global auth store without logging its contents. Provider preflight succeeded for exact `openai/gpt-5.6-terra`.
+Unbiased `sha256-rejection-v1` selection used seed
+`e1d3d0a1e0685bbb209d967a4442932c94e1bfacd4575bfd559a88b565623f22`, a 114-entry pool with digest
+`2fc09fb98b021b7621cb52024c9dbf6296892c94543fe8284ee69602d71d040c`, and selected index 18,
+`builtin/cloud-finops-cost-governance@2026.08.13.1`. Real Web UI interaction installed that exact project revision
+and Evolution Lab while Base remained active, then submitted Mission `48239cda2d119bf6` with only those two held
+Squads.
+
+The diagnostic Task completed through four parallel FinOps workers and its package review owner. The opportunity and
+causal-attribution Task completed. Candidate preparation published a valid correlated Campaign, then the model
+parallel-dispatched the Candidate Author and an independent observer after the Planner completed. The observer and
+Candidate Author both reached terminal-success worker occurrences, proving that neither the removed Host Task queue
+nor provider scheduling was stuck. The parent Orchestrator then failed the Task because no valid candidate could be
+published. No Trial, evaluation, recommendation, installation mutation, promotion, restoration or external side
+effect occurred.
+
+The direct failure was a split mutation authority. The persisted Campaign froze the single path
+`subject/decision-ledger.mjs`, but the exact incumbent FinOps package does not contain that file. Creating the path
+would change the package file set and modifying another path would violate the frozen Campaign. The Candidate Author
+therefore correctly refused to create a digest proxy or fake `candidate-revision`. The current provider-facing
+`EvolutionCampaignPublishInputSchema` lets the Planner freely write `mutable_paths`; the Campaign publisher copies
+that array unchanged. Only later, candidate comparison derives the real mutation closure from the exact validated
+parent manifest, agent prompts, scheduler/selector instructions and Skill reference/example closure. Those are two
+owners for one fact, and every randomly selected package can fail whenever the Planner invents, misspells or omits a
+path. Prompt emphasis cannot make an unavailable parent package inventory authoritative.
+
+The single-source repair removes `mutable_paths` from model-authored Campaign input. The trusted Campaign publisher
+uses the opportunity's exact baseline package digest to load and validate that immutable package revision through
+the existing package Host, derives the V1 mutable text closure with the same candidate-integrity primitive, and writes
+that exact array into the persisted Campaign. Candidate preparation and candidate publication continue to validate
+the same closure. The integrity gate, fixed package file set, frozen non-text resources and version-only manifest
+change remain unchanged. A production-shaped positive test must publish a Campaign for a package whose allowed paths
+are known, prove the stored paths equal the Host-derived parent closure despite no provider path input, prepare and
+publish a candidate changing one of those paths, and retain a typed integrity error when the candidate changes a
+frozen file.
+
+R19 failure settlement exposed a separate controller ownership race. The authoritative Mission abort request did not
+settle within the controller's 15-second budget. The controller correctly stopped waiting and observed the Mission as
+inactive, but its resource cleanup started runtime disposal and isolated `auth.json` deletion concurrently while the
+server-side abort handler still owned a late Mission wake. That wake retried six times and read the already removed
+auth store, producing `OpenAI Codex OAuth credential is required`; the server abort finally returned 200 after about
+90 seconds. This does not invalidate earlier Provider requests or prove bad copied credentials: preflight and every
+prior exact-Terra stream succeeded. It is a teardown ordering defect. Runtime disposal must settle all live request,
+Session and Instance owners first; only then may the run-owned isolated credential be removed. The bounded abort
+receipt remains truthful and must not wait indefinitely. Positive acceptance must hold a late Provider read behind a
+barrier, trigger bounded failure cleanup, and prove credential removal occurs after runtime disposal even when abort
+times out; a cleanup failure still records a typed partial receipt.
+
+The same run produced two Project Memory GlobalBus warnings. Read-only reconstruction tied them to retained organizer
+listeners from earlier worker Instances, not Task ingress, scheduler delivery or Mission closure. Each listener read
+ambient publisher `Instance.directory/project.id` instead of the directory and project that registered it; a
+capability preflight temporarily released the publisher lease, making the wrong ambient read visibly fail. Ordinary
+windows are more dangerous because the wrong identity can duplicate or permanently miss non-durable
+`config.changed` availability invalidation for any multi-Instance project. The organizer must capture one valid
+directory and project ID at initialization and use them in its local listener, global listener and initial request.
+The Bus settlement policy and lease guard remain unchanged.
+
+Finally, public Expert Squad distribution is not current even though R19's in-client Market was current. The signed
+public pointer remains publication 35001 from commit `7bcba8806`: all 119 public package revisions and digests differ
+from the current catalog, and 81 manifests fail the current SDK because an Integrity role now requires an explicit
+platform review contract while the manifest still calls itself schema v1. The current source/generated 119-package
+closure is valid; a later build succeeded but production sign/deploy was skipped by workflow admission. This is a
+public protocol cutover and release-gate defect, not corrupt ZIP bytes. It requires one explicit current manifest
+generation, synchronized SDK/package/catalog output, a browser-to-app install handoff, and an authorized signed
+deployment whose live bundle is parsed by the current SDK. No legacy role inference or schema fallback is allowed,
+and production dispatch remains outside an ordinary push unless separately authorized.
+
+R19 ended with `outcome=failed`, PID 24200 absent, listener stopped, Instances and database settled, isolated auth
+removed, and the exact failure/result receipts retained. It does not count toward the three required successes.
