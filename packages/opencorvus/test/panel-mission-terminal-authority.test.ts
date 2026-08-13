@@ -53,6 +53,7 @@ describe("Mission terminal Task authority", () => {
           missionID: "mission-numbered-artifact-pages",
           defaultCwd: project.path,
           productPillar: "work",
+          heldExpertSquadIDs: ["base"],
         })
         const taskSession = await Session.create({ kind: "root", title: "Paged terminal child" })
         const taskID = Identifier.ascending("task")
@@ -288,6 +289,7 @@ describe("Mission terminal Task authority", () => {
           missionID: "mission-terminal-authority",
           defaultCwd: project.path,
           productPillar: "work",
+          heldExpertSquadIDs: ["base"],
         })
         const taskSession = await Session.create({ kind: "root", title: "Terminal child" })
         const taskID = Identifier.ascending("task")
