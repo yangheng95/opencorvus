@@ -2,6 +2,8 @@ import type { Argv } from "yargs"
 import { Database } from "../../storage/db"
 import { Database as BunDatabase } from "bun:sqlite"
 import { Instance } from "../../project/instance"
+import { ProjectIdentityConvergence } from "../../project/identity-convergence"
+import { RuntimeServerOwnership } from "../../server/runtime-server-ownership"
 import { UI } from "../ui"
 import { cmd } from "./cmd"
 
@@ -120,11 +122,58 @@ export const ResetCommand = cmd({
   },
 })
 
+const ConvergeProjectIdentitiesCommand = cmd({
+  command: "converge-project-identities <worktree> <canonical-project-id>",
+  describe: "atomically converge duplicate Project rows for one physical worktree",
+  builder: (yargs: Argv) => {
+    return yargs
+      .positional("worktree", {
+        type: "string",
+        demandOption: true,
+        describe: "Physical worktree shared by the duplicate Project rows",
+      })
+      .positional("canonical-project-id", {
+        type: "string",
+        demandOption: true,
+        describe: "Existing Project ID that will remain authoritative",
+      })
+      .option("force", {
+        type: "boolean",
+        default: false,
+        describe: "confirm the durable identity mutation",
+      })
+  },
+  handler: async (args: { worktree: string; canonicalProjectId: string; force: boolean }) => {
+    if (!args.force) {
+      UI.error("Project identity convergence is a durable repair operation.")
+      UI.error("Re-run with --force after reviewing the duplicate Project identities.")
+      process.exitCode = 1
+      return
+    }
+    const ownership = RuntimeServerOwnership.acquire({ database: Database.Path() })
+    try {
+      await Instance.disposeAll()
+      const receipt = await ProjectIdentityConvergence.converge({
+        worktree: args.worktree,
+        canonicalProjectID: args.canonicalProjectId,
+      })
+      console.log(JSON.stringify(receipt, null, 2))
+    } finally {
+      await RuntimeServerOwnership.releaseWithRetry(ownership)
+    }
+  },
+})
+
 export const DbCommand = cmd({
   command: "db",
   describe: "database tools",
   builder: (yargs: Argv) => {
-    return yargs.command(QueryCommand).command(PathCommand).command(ResetCommand).demandCommand()
+    return yargs
+      .command(QueryCommand)
+      .command(PathCommand)
+      .command(ResetCommand)
+      .command(ConvergeProjectIdentitiesCommand)
+      .demandCommand()
   },
   handler: () => {},
 })

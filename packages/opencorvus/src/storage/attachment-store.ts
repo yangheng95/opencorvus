@@ -204,6 +204,26 @@ export namespace AttachmentStore {
     return actual
   }
 
+  /** Observe an existing attachment authority without claiming or rewriting it. */
+  export async function observeAuthority(projectDir: string): Promise<Authority | undefined> {
+    const filePath = authorityPath(projectDir)
+    try {
+      return parseAuthority(await fs.readFile(filePath, "utf8"), filePath)
+    } catch (error) {
+      if (hasNodeErrorCode(error, "ENOENT")) return undefined
+      throw error
+    }
+  }
+
+  /**
+   * Fail closed when durable JSON/text facts still name a Project occurrence.
+   * This is the same retain-surface authority used by attachment garbage
+   * collection; Project repair does not maintain a parallel column registry.
+   */
+  export function hasProjectIdentityReference(projectID: string): boolean {
+    return collectReferencedShas().has(projectID)
+  }
+
   async function storeOwnedByDatabase(projectID: string): Promise<boolean> {
     const files = await listOnDisk(projectID)
     const referenced = collectReferencedShas(projectID).get(projectID) ?? new Set<string>()

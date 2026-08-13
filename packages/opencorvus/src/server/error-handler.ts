@@ -54,6 +54,7 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "InvalidDirectoryError") return 400
   if (err.name === "ProjectDirectoryIntegrityError") return 400
   if (err.name === "ProjectRegisteredDirectoryConflictError") return 409
+  if (err.name === "ProjectDuplicateWorktreeIdentityError") return 409
   if (err.name === "ProjectDurableAdmissionClosedError") return 409
   if (err.name === "ProjectDeletePendingError") return 409
   if (err.name === "ProjectDeletionCleanupDatabaseMismatchError") return 409

@@ -33,6 +33,27 @@ A project-wide resource must not be assigned to an arbitrary Task. In particular
 
 The former type-first roots (`t`, `s`, `sx`, `b`, `m`, `w`, `o`, `c`, `l`, `a`) are invalid runtime layouts. Project initialization fails closed when any are present; there is no fallback reader or dual writer.
 
+Ordinary directory resolution is observational. If more than one durable
+`project` row names the same physical worktree, `Project.fromDirectory`
+returns `ProjectDuplicateWorktreeIdentityError` before writing a marker or a
+domain row. Lookup never chooses a winner and never migrates data.
+
+Historical duplicate rows are repaired only by the explicit
+`opencorvus db converge-project-identities <worktree> <canonical-project-id>
+--force` authority. That operation disposes live Instances, validates one
+reviewed canonical occurrence, and atomically rewrites the statically
+enumerated domain tables that own a `project_id` column. It merges sandbox and
+Project metadata ownership, deletes duplicate Project rows, and returns an
+exact per-table receipt. Compound-key, directory-authority, embedded identity,
+or immutable Artifact conflicts fail the transaction; runtime schema discovery
+never expands the mutation surface.
+
+The repair process must hold the exact cross-process Runtime Server ownership
+for the database. Mutable foreign-key owners use explicit domain mappings;
+append-only permission evidence, durable publication outbox rows, immutable
+Task process bindings, and an attachment-store authority owned by a duplicate
+Project are preservation conflicts, never rewritten in place.
+
 ## Lifecycle consequences
 
 - Task inspection and deletion can operate on one physical ownership root.

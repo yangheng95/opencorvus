@@ -10,6 +10,8 @@
 
 - [CS-028 explicit Storage table registry](2026-08-13-cs028-explicit-storage-table-registry.md) makes one typed application-table registry the shared ORM, DDL, schema-fingerprint, and MySQL-transfer authority while preserving the existing transfer fingerprint.
 
+- [CS-002 explicit Project identity convergence](2026-08-13-cs002-explicit-project-identity-convergence.md) removes hidden schema-discovered Project migrations from ordinary lookup and gives physical duplicate repair one explicit, runtime-owned, domain-mapped transaction with preservation blockers for immutable facts.
+
 - [CS-033 Conversation projector ownership](2026-08-13-cs033-conversation-projector-ownership.md) removes the false lifecycle input from the base Conversation projector and leaves execution lifecycle projection with the Agent view authority.
 
 - [CS-035 saved-auth/Config read authority](2026-08-13-cs035-auth-config-read-authority.md) distinguishes missing saved credentials from corrupt or unobservable authority, preserves the Provider catalog's explicit partial-success issue contract, and exposes safe typed errors to direct Config/Auth consumers.
