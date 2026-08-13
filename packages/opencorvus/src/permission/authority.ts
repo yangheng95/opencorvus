@@ -7,10 +7,11 @@ import { createInstanceState } from "@/project/instance-state"
 import { Database, and, asc, desc, eq, inArray, isNotNull, sql } from "@/storage/db"
 import { fn } from "@/util/fn"
 import { Log } from "@/util/log"
-import { createHash, randomUUID } from "node:crypto"
+import { createHash } from "node:crypto"
 import { AsyncLocalStorage } from "node:async_hooks"
 import z from "zod"
 import { InteractionUserInput } from "@/memory/project-memory"
+import { Identifier } from "@/id/id"
 import {
   permissionDescriptor,
   permissionProjectGrantEligible,
@@ -21,6 +22,11 @@ import { PermissionExecutionResultTable, PermissionLedgerTable, PermissionPolicy
 
 export namespace PermissionAuthority {
   const log = Log.create({ service: "permission-authority" })
+  export const Identity = z
+    .string()
+    .max(Identifier.MAX_LENGTH)
+    .regex(Identifier.canonicalPattern("permission"), { message: "Invalid canonical permission identifier" })
+    .meta({ ref: "PermissionIdentity" })
 
   export const Mode = z.enum(["full_access", "ask"]).meta({ ref: "PermissionMode" })
   export type Mode = z.infer<typeof Mode>
@@ -32,7 +38,7 @@ export namespace PermissionAuthority {
 
   export const Request = z
     .object({
-      id: z.string().min(1),
+      id: Identity,
       projectID: z.string().min(1),
       taskID: z.string().min(1).optional(),
       sessionID: z.string().min(1),
@@ -58,14 +64,14 @@ export namespace PermissionAuthority {
 
   export const LedgerEvent = z
     .object({
-      id: z.string(),
-      request_id: z.string(),
+      id: Identity,
+      request_id: Identity,
       project_id: z.string(),
       session_id: z.string(),
       task_id: z.string().nullable(),
       message_id: z.string(),
       tool_call_id: z.string(),
-      attempt_id: z.string().nullable(),
+      attempt_id: Identity.nullable(),
       event_type: z.string(),
       mode: Mode,
       policy_revision: z.string(),
@@ -79,7 +85,9 @@ export namespace PermissionAuthority {
       fingerprint: z.string(),
       summary: z.string(),
       decision_scope: z.string().nullable(),
-      source_event_id: z.string().nullable(),
+      source_event_id: Identity.nullable(),
+      decision_slot: Identity.nullable(),
+      outcome_slot: Identity.nullable(),
       actor_id: z.string().nullable(),
       reason: z.string().nullable(),
       time_created: z.number(),
@@ -88,7 +96,7 @@ export namespace PermissionAuthority {
 
   export const Reply = z
     .object({
-      requestID: z.string().min(1),
+      requestID: Identity,
       decision: Decision,
       actorID: z.string().min(1).default("local-operator"),
       message: z.string().optional(),
@@ -103,13 +111,13 @@ export namespace PermissionAuthority {
   export const Resolution = z.object({
     request: Request,
     decision: Decision,
-    eventID: z.string().min(1),
+    eventID: Identity,
   })
   export type Resolution = z.infer<typeof Resolution>
 
   export const Reconciliation = z
     .object({
-      attemptID: z.string().min(1),
+      attemptID: Identity,
       outcome: z.enum(["execution_succeeded", "execution_failed"]),
       actorID: z.string().min(1).default("local-operator"),
       reason: z.string().min(1),
@@ -123,7 +131,7 @@ export namespace PermissionAuthority {
       "permission.replied",
       z.object({
         sessionID: z.string(),
-        requestID: z.string(),
+        requestID: Identity,
         decision: Decision,
         actorID: z.string(),
         autoReply: z.boolean(),
@@ -159,18 +167,69 @@ export namespace PermissionAuthority {
     return createHash("sha256").update(JSON.stringify(value)).digest("hex")
   }
 
+  function requestIdentity(input: {
+    projectID: string
+    sessionID: string
+    messageID: string
+    toolCallID: string
+    fingerprint: string
+  }): string {
+    return Identifier.deterministic(
+      "permission",
+      `request\0${JSON.stringify({
+        projectID: input.projectID,
+        sessionID: input.sessionID,
+        messageID: input.messageID,
+        toolCallID: input.toolCallID,
+        fingerprint: input.fingerprint,
+      })}`,
+    )
+  }
+
   function requestID(input: InvocationIdentity, descriptor: InvocationPermissionDescriptor): string {
-    return `prm_${digest({
-      projectID: input.projectID,
-      sessionID: input.sessionID,
-      messageID: input.messageID,
-      toolCallID: input.toolCallID,
-      fingerprint: descriptor.fingerprint,
-    }).slice(0, 40)}`
+    return requestIdentity({ ...input, fingerprint: descriptor.fingerprint })
   }
 
   function attemptID(requestIDValue: string): string {
-    return `pat_${digest(requestIDValue).slice(0, 40)}`
+    return Identifier.deterministic("permission", `attempt\0${requestIDValue}`)
+  }
+
+  function ledgerEventID(): string {
+    return Identifier.ascending("permission")
+  }
+
+  function migrationRequestID(projectID: string, migration: NonNullable<Awaited<ReturnType<typeof Config.get>>["permission_migration"]>): string {
+    return Identifier.deterministic("permission", `migration\0${projectID}\0${JSON.stringify(migration)}`)
+  }
+
+  function assertMigrationIdentity(
+    identity: string,
+    projectID: string,
+    migration: NonNullable<Awaited<ReturnType<typeof Config.get>>["permission_migration"]>,
+  ): void {
+    const existing = decisionFor(identity)
+    if (!existing) return
+    const existingMigration = existing.scope?.migration
+    const parsedMigration = z
+      .object({
+        version: z.literal(1),
+        source_fields: z.array(z.enum(["permission", "tool_permissions"])).min(1),
+        permission_mode: Mode,
+        reason: z.enum(["all_allow", "restricted_or_mixed", "explicit_mode"]),
+      })
+      .strict()
+      .safeParse(existingMigration)
+    if (
+      existing.event_type !== "policy_migrated" ||
+      existing.project_id !== projectID ||
+      existing.request_id !== identity ||
+      existing.decision_slot !== identity ||
+      existing.mode !== migration.permission_mode ||
+      !parsedMigration.success ||
+      JSON.stringify(parsedMigration.data) !== JSON.stringify(migration) ||
+      migrationRequestID(existing.project_id, parsedMigration.data) !== identity
+    )
+      throw new PermissionIdentityCollisionError(identity, "request")
   }
 
   function policyRevision(projectID: string, sessionID: string, mode: Mode): string {
@@ -186,22 +245,23 @@ export namespace PermissionAuthority {
     const mode = Mode.parse(config.permission_mode)
     const migration = config.permission_migration
     if (migration) {
-      const slot = `permission-migration:${input.projectID}:v${migration.version}`
+      const slot = migrationRequestID(input.projectID, migration)
       const scope = { migration }
+      assertMigrationIdentity(slot, input.projectID, migration)
       try {
         Database.transaction((db) =>
           db
             .insert(PermissionLedgerTable)
             .values({
-              id: `ple_${randomUUID()}`,
+              id: ledgerEventID(),
               request_id: slot,
               project_id: input.projectID,
               session_id: input.sessionID,
               message_id: input.messageID,
               tool_call_id: input.toolCallID,
               event_type: "policy_migrated",
-              mode,
-              policy_revision: digest({ slot, mode }),
+              mode: migration.permission_mode,
+              policy_revision: digest({ slot, mode: migration.permission_mode }),
               provider_kind: "builtin",
               provider_id: "config",
               provider_digest: digest(scope),
@@ -210,7 +270,7 @@ export namespace PermissionAuthority {
               scope_version: "2",
               scope,
               fingerprint: digest({ slot, scope }),
-              summary: `Legacy permission configuration migrated to ${mode}`,
+              summary: `Legacy permission configuration migrated to ${migration.permission_mode}`,
               decision_slot: slot,
               actor_id: "config-migration",
               reason: migration.reason,
@@ -280,7 +340,7 @@ export namespace PermissionAuthority {
     extra: Partial<typeof PermissionLedgerTable.$inferInsert> = {},
   ): LedgerRow {
     const row: typeof PermissionLedgerTable.$inferInsert = {
-      id: `ple_${randomUUID()}`,
+      id: ledgerEventID(),
       ...rowBase(request),
       event_type: eventType,
       time_created: Date.now(),
@@ -325,7 +385,7 @@ export namespace PermissionAuthority {
   }): T {
     const durable = durableExecutionResult(input.result)
     const event: typeof PermissionLedgerTable.$inferInsert = {
-      id: `ple_${randomUUID()}`,
+      id: ledgerEventID(),
       ...rowBase(input.request),
       event_type: "execution_succeeded",
       attempt_id: input.attempt,
@@ -408,6 +468,48 @@ export namespace PermissionAuthority {
     )
   }
 
+  function assertRequestIdentity(request: Request): void {
+    const existing = Database.use((db) =>
+      db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.request_id, request.id)).get(),
+    )
+    if (!existing) return
+    const existingID = requestIdentity({
+      projectID: existing.project_id,
+      sessionID: existing.session_id,
+      messageID: existing.message_id,
+      toolCallID: existing.tool_call_id,
+      fingerprint: existing.fingerprint,
+    })
+    if (existingID !== request.id) throw new PermissionIdentityCollisionError(request.id, "request")
+    if (
+      existing.project_id !== request.projectID ||
+      existing.session_id !== request.sessionID ||
+      existing.message_id !== request.messageID ||
+      existing.tool_call_id !== request.toolCallID ||
+      existing.fingerprint !== request.fingerprint
+    )
+      throw new PermissionIdentityCollisionError(request.id, "request")
+  }
+
+  function assertAttemptIdentity(request: Request, attempt: string, toolPartID: string): void {
+    const existing = Database.use((db) =>
+      db.select().from(PermissionLedgerTable).where(eq(PermissionLedgerTable.attempt_id, attempt)).all(),
+    )
+    if (existing.some((row) => row.request_id !== request.id)) {
+      throw new PermissionIdentityCollisionError(attempt, "attempt")
+    }
+    const storedResult = Database.use((db) =>
+      db.select().from(PermissionExecutionResultTable).where(eq(PermissionExecutionResultTable.attempt_id, attempt)).get(),
+    )
+    if (!storedResult) return
+    const succeeded = existing.find(
+      (row) => row.event_type === "execution_succeeded" && row.outcome_slot === attempt,
+    )
+    if (!succeeded || storedResult.session_id !== request.sessionID || storedResult.tool_part_id !== toolPartID) {
+      throw new PermissionIdentityCollisionError(attempt, "attempt")
+    }
+  }
+
   function staleFor(requestIDValue: string): LedgerRow | undefined {
     return Database.use((db) =>
       db
@@ -452,7 +554,7 @@ export namespace PermissionAuthority {
     extra: Partial<typeof PermissionLedgerTable.$inferInsert>,
   ): { settled: LedgerRow; won: boolean } {
     const row = {
-      id: `ple_${randomUUID()}`,
+      id: ledgerEventID(),
       ...rowBase(request),
       event_type: eventType,
       time_created: Date.now(),
@@ -579,6 +681,7 @@ export namespace PermissionAuthority {
   }
 
   async function authorize(request: Request): Promise<LedgerRow> {
+    assertRequestIdentity(request)
     if (request.mode === "full_access") return appendEvent(request, "full_access")
     const stale = staleFor(request.id)
     if (stale) throw new StaleContinuationError(request.id, stale.reason ?? undefined)
@@ -735,8 +838,9 @@ export namespace PermissionAuthority {
       }
       throw new StaleContinuationError(expectedRequestID, "The Tool identity or input changed after restart")
     }
-    const authority = await authorize(request)
     const attempt = attemptID(request.id)
+    assertAttemptIdentity(request, attempt, input.toolPartID ?? request.toolCallID)
+    const authority = await authorize(request)
     const existingStart = Database.use((db) =>
       db
         .select()
@@ -1161,6 +1265,18 @@ export namespace PermissionAuthority {
       message?: string,
     ) {
       super(message ? `The operator denied this Tool call: ${message}` : "The operator denied this Tool call.")
+    }
+  }
+
+  export class PermissionIdentityCollisionError extends Error {
+    override readonly name = "PermissionIdentityCollisionError"
+    readonly code = "PERMISSION_IDENTITY_COLLISION"
+
+    constructor(
+      readonly identity: string,
+      readonly family: "request" | "attempt",
+    ) {
+      super(`Compact Permission ${family} identity ${identity} is already bound to different canonical material`)
     }
   }
 

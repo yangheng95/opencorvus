@@ -20,7 +20,7 @@ export const PermissionRoutes = lazy(() =>
           ...errors(400, 404),
         },
       }),
-      validator("param", z.object({ requestID: z.string().min(1) })),
+      validator("param", z.object({ requestID: PermissionAuthority.Identity })),
       validator("json", PermissionAuthority.UserReply.omit({ requestID: true, userInput: true })),
       async (c) => {
         const requestID = c.req.valid("param").requestID
@@ -90,7 +90,7 @@ export const PermissionRoutes = lazy(() =>
           ...errors(404),
         },
       }),
-      validator("param", z.object({ grantID: z.string().min(1) })),
+      validator("param", z.object({ grantID: PermissionAuthority.Identity })),
       async (c) => {
         await PermissionAuthority.revoke(c.req.valid("param").grantID)
         return c.json(true)

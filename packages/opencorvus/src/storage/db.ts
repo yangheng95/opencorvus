@@ -378,6 +378,41 @@ function assertCurrentDataIntegrity(
     })
   }
 
+  const legacyPermissionIdentity = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id FROM permission_ledger WHERE length(id) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT request_id AS id FROM permission_ledger WHERE length(request_id) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT attempt_id AS id FROM permission_ledger
+     WHERE attempt_id IS NOT NULL AND length(attempt_id) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT source_event_id AS id FROM permission_ledger
+     WHERE source_event_id IS NOT NULL AND length(source_event_id) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT decision_slot AS id FROM permission_ledger
+     WHERE decision_slot IS NOT NULL AND length(decision_slot) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT outcome_slot AS id FROM permission_ledger
+     WHERE outcome_slot IS NOT NULL AND length(outcome_slot) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT attempt_id AS id
+     FROM permission_execution_result
+     WHERE length(attempt_id) > ${Identifier.MAX_LENGTH}
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyPermissionIdentity) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains legacy expanded Permission identity ${legacyPermissionIdentity.id} at ${dbPath}. ` +
+        "Its authorization and execution references belong to the prior identity epoch; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.compactPermissionIdentity",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
   const legacyRequirementSet = queryAllFinalized<{ id: string }>(
     sqlite,
     `SELECT id

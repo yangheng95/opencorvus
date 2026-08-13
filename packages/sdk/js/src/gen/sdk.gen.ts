@@ -371,6 +371,7 @@ import type {
   PermissionDecision,
   PermissionGrantsResponses,
   PermissionHistoryResponses,
+  PermissionIdentity,
   PermissionListResponses,
   PermissionReplyErrors,
   PermissionReplyResponses,
@@ -9880,7 +9881,7 @@ export class Permission extends HeyApiClient {
    */
   public revoke<ThrowOnError extends boolean = false>(
     parameters: {
-      grantID: string
+      grantID: PermissionIdentity
       directory?: string
     },
     options?: Options<never, ThrowOnError>,
@@ -9925,7 +9926,7 @@ export class Permission extends HeyApiClient {
    */
   public reply<ThrowOnError extends boolean = false>(
     parameters: {
-      requestID: string
+      requestID: PermissionIdentity
       directory?: string
       actorID?: string
       decision: PermissionDecision
