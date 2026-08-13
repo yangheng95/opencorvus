@@ -371,7 +371,8 @@ async function main(start) {
       if (update && update.metadata !== undefined) metadata = { ...metadata, ...update.metadata };
     },
   };
-  const output = await definition.execute(decode(start.args), context);
+  const args = definition.inputSchema.parse(decode(start.args));
+  const output = await definition.execute(args, context);
   if (typeof output !== "string") throw new Error("Package tool returned non-string output");
   await sendTerminal({ kind: "result", value: await encode({ output, title, metadata }) });
 }
