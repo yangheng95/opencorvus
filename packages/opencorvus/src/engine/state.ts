@@ -701,7 +701,7 @@ function resolveTaskUpdateValues(
     case "active":
       clearTerminalReasonFlags()
       if (resolved.time_started === undefined && current.time_completed != null) {
-        resolved.time_started = now
+        resolved.time_started = Math.max(now, current.time_started + 1)
       }
       if (resolved.time_completed === undefined && current.time_completed != null) {
         resolved.time_completed = null

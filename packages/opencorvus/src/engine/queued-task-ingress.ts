@@ -62,6 +62,8 @@ const CommonShape = {
   delivery_runtime_attempt: z.number().int().positive().optional(),
   task_id: z.string().min(1),
   root_session_id: z.string().min(1),
+  /** Immutable active Task occurrence that admitted this root ingress. */
+  task_occurrence_started_at: z.number().int().positive(),
   time_queued: z.number().int().nonnegative(),
   queued_by_process_id: z.number().int().nonnegative(),
   queued_by_instance_directory: z.string().optional(),
@@ -121,12 +123,10 @@ const MissionMessage = z
     event: z
       .object({
         ...NoteShape,
-        rootMessage: OrchestratorEventSchema.shape.rootMessage
-          .unwrap()
-          .extend({
-            kind: z.literal("mission"),
-            schedulerDelivery: OrchestratorEventSchema.shape.rootMessage.unwrap().shape.schedulerDelivery.unwrap(),
-          }),
+        rootMessage: OrchestratorEventSchema.shape.rootMessage.unwrap().extend({
+          kind: z.literal("mission"),
+          schedulerDelivery: OrchestratorEventSchema.shape.rootMessage.unwrap().shape.schedulerDelivery.unwrap(),
+        }),
       })
       .strict(),
   })

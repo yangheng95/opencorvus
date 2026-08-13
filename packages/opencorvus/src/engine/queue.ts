@@ -557,6 +557,7 @@ export function persistQueuedOperatorWakeInTransaction(
     delivery_runtime_attempt: 1,
     task_id: task.id,
     root_session_id: task.session_id,
+    task_occurrence_started_at: task.time_started,
     ...(messageID ? { message_id: messageID } : {}),
     ...(requestID ? { request_id: requestID } : {}),
     ...(recoveryFactID ? { recovery_fact_id: recoveryFactID } : {}),
@@ -1481,6 +1482,44 @@ function markQueuedOperatorWakeDrained(input: { artifactID: string; assistantMes
 
 function markQueuedOperatorWakeRunning(artifactID: string): boolean {
   return Database.immediateTransaction((db) => {
+    const row = db
+      .select({
+        label: EngineArtifactTable.label,
+        payload: EngineArtifactTable.payload,
+        taskID: EngineArtifactTable.task_id,
+      })
+      .from(EngineArtifactTable)
+      .where(and(eq(EngineArtifactTable.id, artifactID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+      .get()
+    if (!row) throw new Error(`Queued operator ingress ${artifactID} disappeared before execution`)
+    if (row.label === "running") return true
+    if (row.label === "terminal_inapplicable") return false
+    if (row.label !== "pending") {
+      throw new Error(`Queued operator ingress ${artifactID} cannot start from ${row.label}`)
+    }
+    const ingress = QueuedTaskIngressSchema.parse(row.payload)
+    const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, row.taskID)).get()
+    if (
+      !task ||
+      task.session_id !== ingress.root_session_id ||
+      task.time_started !== ingress.task_occurrence_started_at
+    ) {
+      const currentOccurrence = task?.time_started
+      const reason =
+        `TaskIngressOccurrenceStaleError: ingress ${artifactID} belongs to Task ${row.taskID} occurrence ` +
+        `${ingress.task_occurrence_started_at}, but the current occurrence is ${currentOccurrence ?? "missing"}.`
+      const now = Date.now()
+      patchEngineArtifact(db, {
+        id: artifactID,
+        label: "terminal_inapplicable",
+        payload: QueuedTaskIngressSchema.parse({
+          ...ingress,
+          delivery_result: { status: "terminal_inapplicable", reason, time_completed: now },
+        }),
+        timeUpdated: now,
+      })
+      return false
+    }
     const updated = updateEngineArtifactWhereReturning(db, {
       where: and(
         eq(EngineArtifactTable.id, artifactID),
@@ -1491,15 +1530,7 @@ function markQueuedOperatorWakeRunning(artifactID: string): boolean {
       label: "running",
     })
     if (updated) return true
-    const current = db
-      .select({ label: EngineArtifactTable.label })
-      .from(EngineArtifactTable)
-      .where(and(eq(EngineArtifactTable.id, artifactID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
-      .get()
-    if (!current) throw new Error(`Queued operator ingress ${artifactID} disappeared before execution`)
-    if (current.label === "running") return true
-    if (current.label === "terminal_inapplicable") return false
-    throw new Error(`Queued operator ingress ${artifactID} cannot start from ${current.label}`)
+    throw new Error(`Queued operator ingress ${artifactID} lost its pending claim before execution`)
   })
 }
 

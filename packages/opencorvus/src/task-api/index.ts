@@ -33,6 +33,7 @@ import {
   requireSchedulerDelivery,
   schedulerDeliveryIdentity,
   schedulerTargetOccurrenceIdentity,
+  SchedulerTargetOccurrenceStaleError,
   schedulerSourceBodyInTransaction,
   settleSchedulerDeliveryInTransaction,
   type SchedulerDeliveryReceipt,
@@ -69,10 +70,7 @@ import {
   type EngineMetadata,
 } from "@/engine/engine.sql"
 import { insertEngineArtifact } from "@/engine/artifact"
-import {
-  buildObservationCleanupRowsForTask,
-  settleBuildObservationCleanup,
-} from "@/engine/build-observation-cleanup"
+import { buildObservationCleanupRowsForTask, settleBuildObservationCleanup } from "@/engine/build-observation-cleanup"
 import {
   TaskCreationIdempotencyConflictError,
   TaskExpectedPackageDigestConflictError,
@@ -1481,11 +1479,16 @@ export namespace EngineService {
     const task = requireTaskInCurrentProject(target.task_id)
     const occurrenceIDs = schedulerTargetOccurrenceIdentity(delivery.id)
     const rootKind = delivery.source.kind === "mission_scheduler" ? "mission" : "orchestrator"
+    const expectedStartedAt = delivery.message.target_task_occurrence_started_at
+    if (expectedStartedAt === null) {
+      throw new Error(`Scheduler Task delivery ${delivery.id} has no target Task occurrence.`)
+    }
     const deliveryReference = SchedulerDeliveryReference.parse({
       eventID: delivery.event.id,
       inboxID: delivery.id,
       sequence: delivery.event.sequence,
       threadID: delivery.message.thread_id,
+      targetTaskOccurrenceStartedAt: expectedStartedAt,
       ...(delivery.event.replyTo ? { replyTo: delivery.event.replyTo } : {}),
     })
     const bundle = await buildTaskSessionMessageBundle(
@@ -1514,6 +1517,14 @@ export namespace EngineService {
           throw new Error(
             `Scheduler delivery ${delivery.id} cannot materialize into Task ${task.id} after its active root changed.`,
           )
+        }
+        if (currentTask.time_started !== expectedStartedAt) {
+          throw new SchedulerTargetOccurrenceStaleError({
+            message: `Scheduler delivery ${delivery.id} targets stale Task ${task.id} occurrence ${expectedStartedAt}; current occurrence is ${currentTask.time_started}.`,
+            taskID: task.id,
+            expectedStartedAt,
+            currentStartedAt: currentTask.time_started,
+          })
         }
         const currentBody = schedulerSourceBodyInTransaction(db, {
           source: delivery.source,

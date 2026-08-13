@@ -15,11 +15,7 @@ import * as fsPromises from "fs/promises"
 import { randomUUID } from "crypto"
 import { ApplicationSchema, DatabaseAuthorityTable } from "./schema"
 import { SCHEMA_DDL } from "./ddl"
-import {
-  findSchemaDrift,
-  hasApplicationSchema,
-  schemaObjectFingerprint,
-} from "./schema-contract"
+import { findSchemaDrift, hasApplicationSchema, schemaObjectFingerprint } from "./schema-contract"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Identifier } from "@/id/id"
 import {
@@ -304,6 +300,56 @@ function assertCurrentDataIntegrity(sqlite: BunDatabase, dbPath: string): void {
         "Its immutable producer and coverage receipt cannot be reconstructed; reset this pre-release database.",
       path: dbPath,
       operation: "Database.Client.dataIntegrity.requirementSetCoverage",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
+  const legacySchedulerMessage = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id
+     FROM protocol_event
+     WHERE type = 'scheduler.message'
+       AND CASE
+         WHEN json_valid(payload) = 0 THEN 1
+         WHEN json_extract(payload, '$.protocol') IS NOT 'scheduler-message-v2' THEN 1
+         WHEN json_type(payload, '$.source_task_occurrence_started_at') IS NULL THEN 1
+         WHEN json_type(payload, '$.target_task_occurrence_started_at') IS NULL THEN 1
+         ELSE 0
+       END = 1
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacySchedulerMessage) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains scheduler Message ${legacySchedulerMessage.id} from the prior Task occurrence epoch at ${dbPath}. ` +
+        "Its source and target execution occurrences cannot be reconstructed; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.schedulerMessageOccurrenceEpoch",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
+  const legacyTaskIngress = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id
+     FROM engine_artifact
+     WHERE kind = 'queued_operator_wake'
+       AND CASE
+         WHEN json_valid(payload) = 0 THEN 1
+         WHEN json_type(payload, '$.task_occurrence_started_at') IS NULL THEN 1
+         ELSE 0
+       END = 1
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyTaskIngress) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains root ingress ${legacyTaskIngress.id} from the prior Task occurrence epoch at ${dbPath}. ` +
+        "Its admitted execution occurrence cannot be reconstructed; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.taskIngressOccurrenceEpoch",
       code: "DATA_RESET_REQUIRED",
     })
   }
@@ -1353,10 +1399,8 @@ export namespace Database {
       throwIfUnavailable()
       const effects: (() => void | Promise<void>)[] = []
       const result = Client().transaction((tx) => {
-        return provideDatabaseContext(
-          { tx, effects, closed: false, transactionDepth: 1 },
-          "Database.transaction",
-          () => callback(tx),
+        return provideDatabaseContext({ tx, effects, closed: false, transactionDepth: 1 }, "Database.transaction", () =>
+          callback(tx),
         )
       })
       drainEffects(effects)

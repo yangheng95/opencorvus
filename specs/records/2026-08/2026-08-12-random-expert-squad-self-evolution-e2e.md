@@ -4,6 +4,14 @@ Status: implementation and live campaign validation in progress; the first explo
 rooted candidate-publication authority and repository package-root integrity defects and is not counted as one of
 the three required passing runs.
 
+The 2026-08-13 R18 fresh browser-driven run is also not counted. It selected and installed
+`builtin/supply-chain-logistics@2026.08.13.1` plus Evolution Lab through the real Mission creation surface on random
+port 49671, used exact `openai/gpt-5.6-terra`, completed the target diagnostic and opportunity/causal Tasks, and then
+failed closed before Campaign publication. R18 exposed two shared product defects: a Work Ledger terminal-timestamp
+cross-snapshot race and a cross-Task Evolution lineage comparison that compared a source Artifact identity with its
+target-Task import alias. The Mission was aborted through the public project-scoped route after both roots were
+proven; no Campaign, candidate, Trial, installation, promotion, restoration, or external side effect occurred.
+
 ## Recall
 
 ### User request
@@ -129,6 +137,15 @@ Therefore the repair must change authoritative manifests/prompts and SDK authori
 payload/OpenAPI/public facts, and add a repository built-in policy checker. A bulk `base_role` rename is explicitly
 insufficient because it leaves the Agent, prompt, workflow occurrence, and review ownership intact.
 
+R18 received two additional read-only independent audits. The first proved that terminal Task persistence was
+correct (`time_completed` plus `task.updated` and `task.completed` existed) and that the visible error came from
+combining Work Ledger lifecycle with a separately refreshed Board timestamp. The second proved that the source
+opportunity -> failure-attribution edge and the Host-owned `import_lineage` both remained intact, while the Campaign
+validator compared the original opportunity locator to the receiving Task's import alias. A separate horizontal
+scheduler audit was requested immediately after the operator classified scheduling defects as cross-scenario risks;
+its scope covers scheduler-message delivery, root-Session ingress FIFO, terminal occurrence reopening, duplicate
+delivery, cross-Task concurrency, restart recovery, and ready-frontier dispatch rather than only this campaign.
+
 ### Expanded topology impact and design
 
 The preferred authoring graph for new or formerly serial non-Advanced workflows is a two-wave Task contract:
@@ -197,6 +214,81 @@ bindings, streaming scheduler/worker execution, cross-Task Artifact import, Evol
 runtime, durable activity/status projection, cancellation/settlement, and SQLite/runtime cleanup. Public API or
 schema changes are not planned; if investigation proves one is necessary, the route inventory, OpenAPI, generated
 SDK, bilingual docs, and callers become part of the repair boundary.
+
+### R18 cross-scenario defects discovered on 2026-08-13
+
+R18 used a fresh project, home, SQLite database, random port 49671, copied canonical auth and model catalog, and
+exact `openai/gpt-5.6-terra`. The browser installed Supply Chain Logistics and Evolution Lab through the real hosted
+Market flow and submitted a Mission holding exactly those two packages. Supply Chain Logistics ran three workers in
+parallel and one evidence-consuming owner; the Mission then created sequential Evolution opportunity and candidate
+preparation Tasks. The run is not a pass because the candidate-preparation Campaign publisher rejected a valid
+cross-Task predecessor pair.
+
+The first observed error was `task-status:missing-completion-time` immediately after each Task became terminal.
+Readonly SQLite and protocol events proved `time_completed`, `task.updated`, and `task.completed` were present. The
+direct trigger was Work Ledger refreshing before the independently debounced selected-Board projection. The deeper
+root was a public contract split: `WorkLedgerTaskRow` carried lifecycle and start time but omitted completion, while
+`TaskStatusHeader` read lifecycle from Work Ledger and completion from Board/Task list. This can affect every
+completed, failed, or cancelled Mission Task, pollutes E2E/runtime logs, and prevents API/SDK consumers from
+validating terminal duration from one snapshot. It does not corrupt Task, Artifact, or completion facts. The root
+repair is one execution snapshot: Work Ledger owns lifecycle, start, and optional completion; both live Mission and
+archived Task projections carry it; Overlay reads all Task timing from that row. Transport positive tests cover
+active and terminal rows, backend projection tests cover terminal and archived Tasks, and OpenAPI/SDK are regenerated.
+Changing refresh delays, suppressing the diagnostic, or patching Board from terminal events is excluded because it
+retains the two-source race.
+
+The blocking Campaign error was `campaign failure-attribution must directly identify its exact opportunity source`.
+Source-Task evidence disproved an upstream publication omission: the failure-attribution payload owner evidence,
+envelope sources, and observations all identified the exact opportunity. The Host import also preserved that edge
+in immutable `import_lineage`. The direct trigger was the Campaign validator comparing the original opportunity
+locator stored in imported attribution provenance with the receiving Task's target-owned opportunity alias. Those
+identities are intentionally different even though their canonical origin is identical. This defect blocks every
+standard Evolution flow which follows the documented stage-per-Task and Mission exact-import protocol; Campaign,
+candidate, Trial, evaluation, review, and recommendation cannot proceed. It fails closed and produced no invalid
+Artifact or side effect. The root repair adds one immutable Evolution predecessor resolver: direct Artifacts use
+their current locator and envelope provenance, imports use Host-owned `import_lineage.source_locator` and
+`source_provenance`; Campaign requires an exact singleton attribution source and owner evidence equal to the
+opportunity canonical origin, while recording current Task aliases as its own selected publication sources. Rewriting
+imports, translating locators into aliases, re-publishing upstream evidence, prompt workarounds, and weaker relation
+checks are excluded.
+
+The production-shaped regression publishes opportunity and attribution in a source Task, completes it, imports the
+exact pair through the real cross-Task importer, and publishes Campaign in a new Task using the aliases and a real
+resource snapshot. It must prove the Campaign sources remain the aliases while their canonical correlation resolves
+to the original opportunity. An unrelated imported pair must produce the typed integrity error. Existing same-Task
+direct publication remains covered.
+
+The candidate Task's scheduler request travelled through a durable scheduler message, woke the Mission, and caused
+the completed opportunity Task to reopen as a new active occurrence while candidate preparation remained active;
+both same-directory Tasks ran concurrently. This proves the in-process delivery/reopen/concurrency path and confirms
+the blocking root is not Host business queuing. It does not by itself prove duplicate delivery, restart recovery,
+old-occurrence rejection, or every ready-frontier path, so those remain in the independent horizontal scheduler audit
+and focused test matrix rather than being inferred from one successful trace.
+
+The completed horizontal audit found no R18 wake loss or hidden Task serialization: all sixteen
+`queued_operator_wake` rows drained, all nine scheduler inbox rows delivered on attempt one, and the resumed
+opportunity and candidate Tasks were concurrently active. It did find a separate cross-scenario P1. A Task-target
+scheduler envelope previously froze only Task and root Session identity; a delayed inbox accepted during active
+occurrence A could therefore materialize after A terminalized and the same Task reopened as occurrence B. The repair
+freezes every Task source and target's active `time_started` occurrence identity in each new `scheduler-message-v2`
+envelope, makes reopen start times monotonic, derives a Task-source Message's occurrence from its real assistant
+`taskIngress` receipt, and requires replies to reverse both occurrence identities before comparing the target again
+inside the Message/ingress commit transaction. The materialized root ingress keeps the same occurrence and verifies
+it again during the atomic `pending -> running` claim, so the fence survives the commit/dispatch gap and process
+restart. A terminal conversation remains valid while its occurrence is unchanged; an ingress from A becomes
+`terminal_inapplicable` after reopen B. A stale inbox receives the typed `SchedulerTargetOccurrenceStaleError`
+dead-letter and writes no Message or ingress into B; a late A-request/B-reply is rejected with the same explicit
+occurrence error before it creates a new inbox. Startup returns typed `DATA_RESET_REQUIRED` for legacy scheduler-v1
+or occurrence-less ingress rows because their identities cannot be reconstructed without a fallback. This is an
+occurrence-integrity fence shared by every Squad, not a Host decision about serial or parallel Tasks. The canonical
+scheduler delivery file constructs the delayed A-to-B and post-materialization claim races and proves both stale
+dispositions while retaining Mission wake, root FIFO, peer/reply, terminal conversation, lease and replay contracts.
+
+R18 abort also exposed one non-scheduling projection gap: `mission.execution.closure` reached the conversation SSE
+without a declared Overlay owner and produced `conversation event has no projection owner`. Durable Mission close,
+Task cancellation and resource cleanup all succeeded, so this was not a closure failure. The event now has the Board
+as its sole projection owner because it changes Mission interruptibility/closure state; real-page acceptance must
+confirm the close transition without that diagnostic. No UI automation test is added or run.
 
 ### Exploratory campaign defects discovered on 2026-08-12
 
