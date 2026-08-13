@@ -1,11 +1,21 @@
 $ErrorActionPreference = 'Stop'
 
-choco install ripgrep --yes --no-progress
+$version = '15.2.0'
+$archiveName = "ripgrep-$version-x86_64-pc-windows-msvc.zip"
+$expectedSha256 = '71b2fef860abe467217a538ff31de02f5258807c0129f771846f87bd029aafc5'
+$archive = Join-Path $env:RUNNER_TEMP $archiveName
+$expanded = Join-Path $env:RUNNER_TEMP "opencorvus-ripgrep-$version"
+$uri = "https://github.com/BurntSushi/ripgrep/releases/download/$version/$archiveName"
 
-$packageTools = Join-Path $env:ChocolateyInstall 'lib\ripgrep\tools'
-$executables = @(Get-ChildItem -LiteralPath $packageTools -Filter 'rg.exe' -File -Recurse)
+Invoke-WebRequest -UseBasicParsing -Uri $uri -OutFile $archive
+$actualSha256 = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+if ($actualSha256 -ne $expectedSha256) {
+  throw "ripgrep archive SHA256 mismatch: expected $expectedSha256, received $actualSha256."
+}
+Expand-Archive -LiteralPath $archive -DestinationPath $expanded -Force
+$executables = @(Get-ChildItem -LiteralPath $expanded -Filter 'rg.exe' -File -Recurse)
 if ($executables.Count -ne 1) {
-  throw "Expected one distributable ripgrep executable in $packageTools, found $($executables.Count)."
+  throw "Expected one distributable ripgrep executable in $archiveName, found $($executables.Count)."
 }
 
 $runtimeTools = Join-Path $env:RUNNER_TEMP 'opencorvus-runtime-tools'

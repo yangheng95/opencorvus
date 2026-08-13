@@ -128,6 +128,15 @@ describe("GitHub Actions workflow contract", () => {
         run: "./script/install-windows-ripgrep.ps1",
       })
     }
+    const overlayWorkflow = await readWorkflow("build-overlays.yml")
+    expect(
+      overlayWorkflow.jobs?.["build-overlay"]?.steps?.find(({ name }) => name === "Install Windows runtime dependencies"),
+    ).toEqual({
+      name: "Install Windows runtime dependencies",
+      if: "runner.os == 'Windows'",
+      shell: "pwsh",
+      run: "./script/install-windows-ripgrep.ps1",
+    })
     expect(jobs["package-cli"]?.steps?.find(({ uses }) => uses === "actions/upload-artifact@v7")?.with).toEqual({
       name: "cli-${{ matrix.platform }}",
       path: "packages/opencorvus/dist/opencorvus-${{ matrix.platform }}\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}.tar.gz\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline\npackages/opencorvus/dist/opencorvus-${{ matrix.platform }}-baseline.tar.gz\npackages/opencorvus/dist/work-artifact-qualification-opencorvus-${{ matrix.platform }}*.json\n",
