@@ -3898,7 +3898,7 @@
                 "$ref": "#/components/schemas/PermissionDecision"
               },
               "requestID": {
-                "type": "string"
+                "$ref": "#/components/schemas/PermissionIdentity"
               },
               "sessionID": {
                 "type": "string"
@@ -13505,6 +13505,11 @@
         ],
         "type": "string"
       },
+      "PermissionIdentity": {
+        "maxLength": 24,
+        "pattern": "^per_(?:[A-Za-z0-9]|[A-Za-z0-9-][A-Za-z0-9._-]*[A-Za-z0-9])$",
+        "type": "string"
+      },
       "PermissionMode": {
         "enum": [
           "full_access",
@@ -13538,8 +13543,7 @@
             "type": "string"
           },
           "id": {
-            "minLength": 1,
-            "type": "string"
+            "$ref": "#/components/schemas/PermissionIdentity"
           },
           "messageID": {
             "minLength": 1,
@@ -70966,7 +70970,7 @@
                       "attempt_id": {
                         "anyOf": [
                           {
-                            "type": "string"
+                            "$ref": "#/components/schemas/PermissionIdentity"
                           },
                           {
                             "type": "null"
@@ -70983,6 +70987,16 @@
                           }
                         ]
                       },
+                      "decision_slot": {
+                        "anyOf": [
+                          {
+                            "$ref": "#/components/schemas/PermissionIdentity"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
                       "effect_class": {
                         "type": "string"
                       },
@@ -70993,13 +71007,23 @@
                         "type": "string"
                       },
                       "id": {
-                        "type": "string"
+                        "$ref": "#/components/schemas/PermissionIdentity"
                       },
                       "message_id": {
                         "type": "string"
                       },
                       "mode": {
                         "$ref": "#/components/schemas/PermissionMode"
+                      },
+                      "outcome_slot": {
+                        "anyOf": [
+                          {
+                            "$ref": "#/components/schemas/PermissionIdentity"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "policy_revision": {
                         "type": "string"
@@ -71027,7 +71051,7 @@
                         ]
                       },
                       "request_id": {
-                        "type": "string"
+                        "$ref": "#/components/schemas/PermissionIdentity"
                       },
                       "scope": {
                         "additionalProperties": {},
@@ -71045,7 +71069,7 @@
                       "source_event_id": {
                         "anyOf": [
                           {
-                            "type": "string"
+                            "$ref": "#/components/schemas/PermissionIdentity"
                           },
                           {
                             "type": "null"
@@ -71098,6 +71122,8 @@
                       "summary",
                       "decision_scope",
                       "source_event_id",
+                      "decision_slot",
+                      "outcome_slot",
                       "actor_id",
                       "reason",
                       "time_created"
@@ -71138,8 +71164,7 @@
             "name": "grantID",
             "required": true,
             "schema": {
-              "minLength": 1,
-              "type": "string"
+              "$ref": "#/components/schemas/PermissionIdentity"
             }
           }
         ],
@@ -71250,7 +71275,7 @@
                       "attempt_id": {
                         "anyOf": [
                           {
-                            "type": "string"
+                            "$ref": "#/components/schemas/PermissionIdentity"
                           },
                           {
                             "type": "null"
@@ -71267,6 +71292,16 @@
                           }
                         ]
                       },
+                      "decision_slot": {
+                        "anyOf": [
+                          {
+                            "$ref": "#/components/schemas/PermissionIdentity"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
                       "effect_class": {
                         "type": "string"
                       },
@@ -71277,13 +71312,23 @@
                         "type": "string"
                       },
                       "id": {
-                        "type": "string"
+                        "$ref": "#/components/schemas/PermissionIdentity"
                       },
                       "message_id": {
                         "type": "string"
                       },
                       "mode": {
                         "$ref": "#/components/schemas/PermissionMode"
+                      },
+                      "outcome_slot": {
+                        "anyOf": [
+                          {
+                            "$ref": "#/components/schemas/PermissionIdentity"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "policy_revision": {
                         "type": "string"
@@ -71311,7 +71356,7 @@
                         ]
                       },
                       "request_id": {
-                        "type": "string"
+                        "$ref": "#/components/schemas/PermissionIdentity"
                       },
                       "scope": {
                         "additionalProperties": {},
@@ -71329,7 +71374,7 @@
                       "source_event_id": {
                         "anyOf": [
                           {
-                            "type": "string"
+                            "$ref": "#/components/schemas/PermissionIdentity"
                           },
                           {
                             "type": "null"
@@ -71382,6 +71427,8 @@
                       "summary",
                       "decision_scope",
                       "source_event_id",
+                      "decision_slot",
+                      "outcome_slot",
                       "actor_id",
                       "reason",
                       "time_created"
@@ -71422,8 +71469,7 @@
             "name": "requestID",
             "required": true,
             "schema": {
-              "minLength": 1,
-              "type": "string"
+              "$ref": "#/components/schemas/PermissionIdentity"
             }
           }
         ],
@@ -71463,8 +71509,7 @@
                       "$ref": "#/components/schemas/PermissionDecision"
                     },
                     "eventID": {
-                      "minLength": 1,
-                      "type": "string"
+                      "$ref": "#/components/schemas/PermissionIdentity"
                     },
                     "request": {
                       "$ref": "#/components/schemas/PermissionRequest"

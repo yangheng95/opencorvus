@@ -1258,7 +1258,7 @@ export type EventPermissionReplied = {
     actorID: string
     autoReply: boolean
     decision: PermissionDecision
-    requestID: string
+    requestID: PermissionIdentity
     sessionID: string
     userInput?: {
       structured?: {
@@ -3846,6 +3846,8 @@ export type PermissionConfig =
 
 export type PermissionDecision = "allow_once" | "allow_task" | "allow_project" | "deny"
 
+export type PermissionIdentity = string
+
 export type PermissionMode = "full_access" | "ask"
 
 export type PermissionObjectConfig = {
@@ -3856,7 +3858,7 @@ export type PermissionRequest = {
   choices: Array<PermissionDecision>
   effectClass: string
   fingerprint: string
-  id: string
+  id: PermissionIdentity
   messageID: string
   mode: PermissionMode
   policyRevision: string
@@ -21007,27 +21009,29 @@ export type PermissionGrantsResponses = {
    */
   200: Array<{
     actor_id: string | null
-    attempt_id: string | null
+    attempt_id: PermissionIdentity | null
     decision_scope: string | null
+    decision_slot: PermissionIdentity | null
     effect_class: string
     event_type: string
     fingerprint: string
-    id: string
+    id: PermissionIdentity
     message_id: string
     mode: PermissionMode
+    outcome_slot: PermissionIdentity | null
     policy_revision: string
     project_id: string
     provider_digest: string
     provider_id: string
     provider_kind: string
     reason: string | null
-    request_id: string
+    request_id: PermissionIdentity
     scope: {
       [key: string]: unknown
     }
     scope_version: string
     session_id: string
-    source_event_id: string | null
+    source_event_id: PermissionIdentity | null
     summary: string
     task_id: string | null
     time_created: number
@@ -21042,7 +21046,7 @@ export type PermissionGrantsResponse = PermissionGrantsResponses[keyof Permissio
 export type PermissionRevokeData = {
   body?: never
   path: {
-    grantID: string
+    grantID: PermissionIdentity
   }
   query?: {
     /**
@@ -21101,27 +21105,29 @@ export type PermissionHistoryResponses = {
    */
   200: Array<{
     actor_id: string | null
-    attempt_id: string | null
+    attempt_id: PermissionIdentity | null
     decision_scope: string | null
+    decision_slot: PermissionIdentity | null
     effect_class: string
     event_type: string
     fingerprint: string
-    id: string
+    id: PermissionIdentity
     message_id: string
     mode: PermissionMode
+    outcome_slot: PermissionIdentity | null
     policy_revision: string
     project_id: string
     provider_digest: string
     provider_id: string
     provider_kind: string
     reason: string | null
-    request_id: string
+    request_id: PermissionIdentity
     scope: {
       [key: string]: unknown
     }
     scope_version: string
     session_id: string
-    source_event_id: string | null
+    source_event_id: PermissionIdentity | null
     summary: string
     task_id: string | null
     time_created: number
@@ -21140,7 +21146,7 @@ export type PermissionReplyData = {
     message?: string
   }
   path: {
-    requestID: string
+    requestID: PermissionIdentity
   }
   query?: {
     /**
@@ -21182,7 +21188,7 @@ export type PermissionReplyResponses = {
    */
   200: {
     decision: PermissionDecision
-    eventID: string
+    eventID: PermissionIdentity
     request: PermissionRequest
   }
 }

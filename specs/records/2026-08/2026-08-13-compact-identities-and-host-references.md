@@ -5,7 +5,7 @@
 - User request: every hash-like value exposed by the product must be at most 24 characters, explicitly including Task and Artifact identifiers; continue through staged, reviewable commits instead of mixing unrelated repairs.
 - Acceptance: every newly issued OpenCorvus runtime/business identifier is at most 24 characters; deterministic Artifact identity is also at most 24 characters; language-model tools and ordinary UI never require copying a longer digest; full cryptographic SHA-256, Git object identity, package digest and byte-integrity facts remain complete inside Host-owned storage and verification.
 - Hard constraints: never truncate a cryptographic digest and call it verified; retain one identifier generator and one Host reference system; no fallback, dual protocol or model-taught workflow gate; schema/storage changes require an explicit migration boundary; positive non-UI tests only; real-page UI evidence only; preserve unrelated work and deliver each phase through its own reviewed commit and push.
-- Sources read: `packages/opencorvus/src/id/id.ts`, the compact Task identifier record, Engine Artifact publication and idempotent identity, Artifact Catalog locator/read/selection references, `panel.create_task`, Task package binding, Evolution Artifact schemas and the fresh exact-Luna controller/SQLite/tool-call evidence.
+- Sources read: `packages/opencorvus/src/id/id.ts`, the compact Task identifier record, Engine Artifact publication and idempotent identity, Artifact Catalog locator/read/selection references, `panel.create_task`, Task package binding, Permission request/attempt/ledger issuance and recovery, Evolution Artifact schemas and the fresh exact-Luna controller/SQLite/tool-call evidence.
 - Whole-repository search: `Identifier.create/ascending/descending`, every identifier prefix, `art_idempotent`, SHA-256/package/Git digest schemas, Artifact locator/read/selection references, `expectedPackageDigest`, public transport schemas, persistence columns, generated package payload and identifier tests were searched across core, plugin, transport, Overlay, expert packages, tests and architecture records.
 - Independent feedback: the read-only live reviewer confirmed that the fresh Luna Mission twice shortened the exact 64-character installed package digest to 63 characters in `panel.create_task`; Host validation rejected both calls and the third minimal retry recovered. A later fresh run proved ordinary Task, Session and core Artifact issuance is 24 characters, while every package `artifact_publish` idempotent output still persisted the 79-character `art_idempotent_<64hex>` form. The same run proved the new correlated Evolution publisher succeeds, then failed later at an independent cross-Task predecessor-correlation boundary. During Project-ID review, the reviewer found that resetting only the DB would let an old `.git/opencorvus` marker resurrect the expanded ID, and that Windows case-equivalent path spellings must share the same canonical material; both cases are now part of the positive Project identity contract.
 
@@ -85,6 +85,17 @@ Project-context material for its compact file and chunk identities. Existing exp
 belong to the prior pre-release epoch and cause `DATA_RESET_REQUIRED` before any memory read; no dual lookup or
 in-place rewrite is retained. Memory content, occurrence provenance and Project ownership remain complete persisted
 facts rather than being encoded into the business identifier.
+
+The fifth Phase 1B delivery owns Permission request, execution-attempt and append-only ledger-event identities only.
+Request identity remains deterministic over the complete Project, Session, Message, Tool call and permission
+fingerprint tuple; attempt identity remains deterministic over that exact request; ledger events use the canonical
+ordered Permission occurrence issuer. Legacy configuration migration uses a separate domain-separated compact
+Permission request/decision identity. Full policy revisions, provider digests, scope fingerprints and durable result
+SHA-256 remain complete integrity facts. Existing expanded `prm_*`, `pat_*`, `ple_*`, migration decision slots and
+their relational mirrors belong to the prior pre-release epoch and cause `DATA_RESET_REQUIRED` before Permission
+recovery or replay; no dual lookup or in-place rewrite is retained. A compact deterministic request identity occupied
+by different canonical invocation material returns a typed identity-collision error instead of reusing another Tool
+call's decision or execution.
 
 ### Phase 2 — remaining model-facing digests
 
