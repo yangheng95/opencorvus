@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Evolution failure-attribution source-integrity repair: [`2026-08-13-evolution-attribution-source-integrity.md`](records/2026-08/2026-08-13-evolution-attribution-source-integrity.md).
+
 Latest cross-Task Engine resource Catalog visibility repair: [`2026-08-13-cross-task-engine-resource-catalog-visibility.md`](records/2026-08/2026-08-13-cross-task-engine-resource-catalog-visibility.md).
 
 Latest Expert Squad real-GUI zero-intervention sampling program: [`2026-08-13-expert-squad-gui-zero-intervention-sampling.md`](records/2026-08/2026-08-13-expert-squad-gui-zero-intervention-sampling.md).
