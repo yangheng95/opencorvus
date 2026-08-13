@@ -9,7 +9,7 @@ import {
   type JudgeRequest,
   type JudgeRunner,
 } from "@/metrics/executor"
-import { abortableIterable, withStreamActivity } from "@/util/stream-activity"
+import { withStreamActivity } from "@/util/stream-activity"
 import { JudgeMetricEvaluatorConfigSchema } from "@opencorvus-ai/plugin"
 import type { TaskToolExecutionScope } from "./task-tool-execution-scope"
 
@@ -118,7 +118,8 @@ export function createMetricJudgeRunnerWithDependencies(
         timeoutMs: false,
         retries: 0,
       })
-      for await (const delta of abortableIterable(result.textStream, activity.signal)) {
+      // The shared streamText wrapper owns cancellation and event-loop fairness.
+      for await (const delta of result.textStream) {
         if (!delta) continue
         activity.observe()
         output += delta

@@ -37,6 +37,43 @@ afterEach(async () => {
 })
 
 describe("shared streamed-call usage ledger", () => {
+  test("returns the exact cancellation outcome from the canonical wrapper around a parked provider stream", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const controller = new AbortController()
+        const reason = new DOMException("stop parked canonical provider stream", "AbortError")
+        const language = new MockLanguageModelV3({
+          provider: model.providerID,
+          modelId: model.id,
+          async doStream() {
+            return { stream: new ReadableStream() }
+          },
+        })
+        const result = streamText({
+          model: ProviderLLM.wrapModel(language, model, {}),
+          usagePurpose: "metric-judge",
+          prompt: "park this stream",
+          abortSignal: controller.signal,
+          timeoutMs: false,
+        })
+        const outcome = (async () => {
+          try {
+            for await (const _part of result.fullStream) {
+              // Provider deliberately never emits its first chunk.
+            }
+          } catch (error) {
+            return { kind: "aborted" as const, error }
+          }
+          return { kind: "completed" as const, error: undefined }
+        })()
+        controller.abort(reason)
+        expect(await outcome).toEqual({ kind: "aborted", error: reason })
+      },
+    })
+  })
+
   test("records a non-Session helper stream exactly once at the common wrapper", async () => {
     await using project = await memoryProject()
     await Instance.provide({
