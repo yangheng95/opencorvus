@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Mission wake activation fence P0: [`2026-08-14-mission-wake-activation-fence-p0.md`](records/2026-08/2026-08-14-mission-wake-activation-fence-p0.md).
+
 Latest Mission closure/recovery P0 convergence: [`2026-08-14-mission-closure-recovery-convergence-p0.md`](records/2026-08/2026-08-14-mission-closure-recovery-convergence-p0.md).
 
 Latest Browser MCP visible-browser and same-session Live View delivery: [`2026-08-13-browser-mcp-live-view.md`](records/2026-08/2026-08-13-browser-mcp-live-view.md).

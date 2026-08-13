@@ -189,7 +189,7 @@ async function drainMissionRecipient(sessionID: string): Promise<void> {
           )
           return undefined
         }
-        return SessionWake.wakeWithReceipt({
+        const receipt = await SessionWake.wakeWithReceipt({
           sessionID,
           messageID: ids.messageID,
           textPartID: ids.textPartID,
@@ -258,6 +258,8 @@ async function drainMissionRecipient(sessionID: string): Promise<void> {
             )
           },
         })
+        await receipt.activation
+        return receipt
       })
       if (!receipt) continue
       await receipt.completion
@@ -340,14 +342,14 @@ export async function drainSchedulerMessagesForCurrentProject(input?: {
         return undefined
       }
       if (!schedulerSessionWakeNeedsRecovery(wake)) return undefined
-      return {
-        completion: SessionWake.resumePersistedWake({
-          sessionID: wake.sessionID,
-          messageID: wake.messageID,
-          directory: current.project.worktree,
-          retryFailedReply: true,
-        }),
-      }
+      const receipt = SessionWake.resumePersistedWakeWithReceipt({
+        sessionID: wake.sessionID,
+        messageID: wake.messageID,
+        directory: current.project.worktree,
+        retryFailedReply: true,
+      })
+      await receipt.activation
+      return { completion: receipt.completion }
     })
     if (reconciliation) await reconciliation.completion
   }

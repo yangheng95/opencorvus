@@ -35,7 +35,8 @@ import { GlobalConversationService } from "@/chat/global-chat-service"
 import { ProjectInstanceContext } from "@/project/instance-context"
 import { Filesystem } from "@/util/filesystem"
 import z from "zod"
-import { missionProductPillar } from "@/mission/session"
+import { missionProductPillar, requireMissionSession } from "@/mission/session"
+import { admitMissionExecutionWake } from "@/mission/execution-closure"
 import type { ProductPillar } from "@opencorvus-ai/sdk/expert-squad-manifest-v1"
 import { createHash } from "node:crypto"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
@@ -1401,14 +1402,26 @@ export namespace AutomationService {
     return findExactAutomationWake({ jobID, fireID, sessionID, messageID })
   }
 
+  async function admitAutomationSessionWake<Receipt extends { activation: Promise<unknown> }>(
+    session: Session.Info,
+    wake: () => Receipt | Promise<Receipt>,
+  ): Promise<Receipt> {
+    if (session.kind !== "mission") return wake()
+    const mission = await requireMissionSession(session.id)
+    return admitMissionExecutionWake({ missionID: mission.missionID, sessionID: mission.id, wake })
+  }
+
   async function resumeAutomationWake(existing: { sessionID: string; messageID: string }): Promise<string> {
     const session = await Session.get(existing.sessionID)
-    const completion = await SessionWake.resumePersistedWake({
-      sessionID: existing.sessionID,
-      messageID: existing.messageID,
-      directory: session.directory,
-      retryFailedReply: true,
-    })
+    const receipt = await admitAutomationSessionWake(session, () =>
+      SessionWake.resumePersistedWakeWithReceipt({
+        sessionID: existing.sessionID,
+        messageID: existing.messageID,
+        directory: session.directory,
+        retryFailedReply: true,
+      }),
+    )
+    const completion = await receipt.completion
     assertWakeCompleted(completion)
     return existing.sessionID
   }
@@ -1544,35 +1557,38 @@ export namespace AutomationService {
     if (!scope) throw new Error(`Automation ${job.id} has no execution scope`)
     const messageID = deterministicAutomationID("msg", identityID)
     const textPartID = deterministicAutomationID("prt", identityID)
-    const receipt = await (wakeSessionForTest ?? SessionWake.wakeWithReceipt)({
-      sessionID,
-      messageID,
-      textPartID,
-      signal,
-      prompt: job.prompt,
-      author: "orchestrator",
-      agent: job.agent === "default" ? undefined : job.agent,
-      model:
-        job.model_provider_id && job.model_id
-          ? { providerID: job.model_provider_id, modelID: job.model_id }
-          : undefined,
-      variant: job.reasoning_effort ?? undefined,
-      surface: persistedSurface(job.surface),
-      commitBundle: (message, parts) => {
-        if (message.id !== messageID || !parts.some((part) => part.id === textPartID)) {
-          throw new Error(`Automation ${job.id} wake materialized identities outside fire ${fireID}`)
-        }
-        fenceAutomationWakeCommit({ automationID: job.id, runID, owner, sessionID: message.sessionID })
-      },
-      reason: {
-        source: "scheduler.automation",
-        jobID: job.id,
-        jobName: job.name,
-        fireID,
-        scope,
-        recurrence: job.recurrence,
-      },
-    })
+    const session = await Session.get(sessionID)
+    const receipt = await admitAutomationSessionWake(session, () =>
+      (wakeSessionForTest ?? SessionWake.wakeWithReceipt)({
+        sessionID,
+        messageID,
+        textPartID,
+        signal,
+        prompt: job.prompt,
+        author: "orchestrator",
+        agent: job.agent === "default" ? undefined : job.agent,
+        model:
+          job.model_provider_id && job.model_id
+            ? { providerID: job.model_provider_id, modelID: job.model_id }
+            : undefined,
+        variant: job.reasoning_effort ?? undefined,
+        surface: persistedSurface(job.surface),
+        commitBundle: (message, parts) => {
+          if (message.id !== messageID || !parts.some((part) => part.id === textPartID)) {
+            throw new Error(`Automation ${job.id} wake materialized identities outside fire ${fireID}`)
+          }
+          fenceAutomationWakeCommit({ automationID: job.id, runID, owner, sessionID: message.sessionID })
+        },
+        reason: {
+          source: "scheduler.automation",
+          jobID: job.id,
+          jobName: job.name,
+          fireID,
+          scope,
+          recurrence: job.recurrence,
+        },
+      }),
+    )
     const completion = await receipt.completion
     assertWakeCompleted(completion)
     return receipt.sessionID
