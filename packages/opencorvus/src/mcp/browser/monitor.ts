@@ -5,6 +5,9 @@ import { BrowserMcpScreenshotTimeoutError, captureBrowserMcpViewportScreenshot }
 const escHtml = (s: string) =>
   s.replace(/[<>&"']/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;", "'": "&#39;" })[c]!)
 
+export const browserMcpMonitorSelectionJson = (sessionId: string): string =>
+  JSON.stringify(sessionId).replace(/[<>&\u2028\u2029]/g, (char) => `\\u${char.charCodeAt(0).toString(16).padStart(4, "0")}`)
+
 // 截图端点：/monitor/screenshot/:sessionId
 // 每个 session 同时只允许一个 CDP captureScreenshot，并发请求返回明确错误
 const screenshotInFlight = new Map<string, boolean>()
@@ -40,7 +43,7 @@ const handleScreenshot = async (sessionId: string, res: ServerResponse) => {
 }
 
 // 主监控页面
-const handleMonitorPage = (res: ServerResponse) => {
+const handleMonitorPage = (res: ServerResponse, selectedSessionId?: string) => {
   const now = Date.now()
   const stats = getSessionStats()
   const list = getSessions().map((s) => ({
@@ -53,11 +56,11 @@ const handleMonitorPage = (res: ServerResponse) => {
   const sessionItems = list
     .map(
       (s) => `
-    <div class="sess-item" data-id="${s.id}" onclick="selectSession('${s.id}', '${escHtml(s.url)}', ${s.createdAt})">
+    <button class="sess-item" type="button" data-id="${s.id}" data-created-at="${s.createdAt}">
       <div class="sess-id"><span class="sess-dot"></span>${s.id}</div>
       <div class="sess-url" title="${escHtml(s.url)}">${escHtml(s.url || "(blank)")}</div>
       <div class="sess-meta ${s.idleSec > 60 ? "idle-warn" : ""}">age ${s.ageSec}s · idle ${s.idleSec}s</div>
-    </div>`,
+    </button>`,
     )
     .join("")
 
@@ -110,7 +113,7 @@ const handleMonitorPage = (res: ServerResponse) => {
   .sidebar { width: 260px; flex-shrink: 0; border-right: 1px solid var(--border); overflow-y: auto; background: var(--bg1); display: flex; flex-direction: column }
   .sidebar-header { padding: 9px 12px; font-size: 10px; color: var(--text2); letter-spacing: 0.06em; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg1); z-index: 1; display: flex; align-items: center; justify-content: space-between }
   .sidebar-header-count { color: var(--text3) }
-  .sess-item { padding: 10px 12px; border-bottom: 1px solid var(--border); cursor: pointer }
+  .sess-item { width: 100%; padding: 10px 12px; border: 0; border-bottom: 1px solid var(--border); background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer }
   .sess-item:hover { background: var(--bg2) }
   .sess-item.active { background: var(--bg2); border-left: 2px solid var(--accent); padding-left: 10px }
   .sess-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-right: 7px; flex-shrink: 0 }
@@ -234,18 +237,21 @@ const handleMonitorPage = (res: ServerResponse) => {
   let activeSessionStart = 0
   let screenshotBusy = false
 
-  function selectSession(id, url, createdAt) {
+  function selectSession(id, createdAt) {
     document.querySelectorAll('.sess-item').forEach(el => el.classList.remove('active'))
     const item = document.querySelector('.sess-item[data-id="' + id + '"]')
     if (item) item.classList.add('active')
 
     activeId = id
-    activeSessionStart = createdAt || 0
+    activeSessionStart = Number(createdAt) || 0
+    const itemUrl = item ? item.querySelector('.sess-url').textContent : ''
 
     document.getElementById('preview-header').innerHTML =
       '<span class="preview-session-id">' + id + '</span>' +
-      '<span class="preview-url">' + (url || '(blank)') + '</span>' +
-      '<button class="preview-refresh-btn" onclick="refresh()">↺ refresh</button>'
+      '<span class="preview-url"></span>' +
+      '<button class="preview-refresh-btn">↺ refresh</button>'
+    document.querySelector('#preview-header .preview-url').textContent = itemUrl || '(blank)'
+    document.querySelector('#preview-header .preview-refresh-btn').addEventListener('click', refresh)
 
     document.getElementById('toollog-pane').style.display = 'flex'
     document.getElementById('toollog-pane').style.flexDirection = 'column'
@@ -253,7 +259,7 @@ const handleMonitorPage = (res: ServerResponse) => {
     refresh()
 
     clearInterval(refreshTimer)
-    refreshTimer = setInterval(refresh, 5000)
+    refreshTimer = setInterval(refresh, 1000)
   }
 
   function refresh() {
@@ -331,6 +337,16 @@ const handleMonitorPage = (res: ServerResponse) => {
   setInterval(() => {
     document.getElementById('ts').textContent = new Date().toISOString()
   }, 1000)
+
+  document.querySelectorAll('.sess-item').forEach(item => {
+    item.addEventListener('click', () => selectSession(item.dataset.id, item.dataset.createdAt))
+  })
+
+  const requestedSession = ${browserMcpMonitorSelectionJson(selectedSessionId ?? "")}
+  if (requestedSession) {
+    const selected = document.querySelector('.sess-item[data-id="' + requestedSession + '"]')
+    if (selected) selected.click()
+  }
 </script>
 </body></html>`
 
@@ -340,30 +356,30 @@ const handleMonitorPage = (res: ServerResponse) => {
 
 // 统一 HTTP 请求分发入口
 export const handleMonitorRequest = async (req: IncomingMessage, res: ServerResponse): Promise<boolean> => {
-  const url = req.url ?? ""
+  const url = new URL(req.url ?? "/", "http://127.0.0.1")
 
-  if (req.method === "GET" && url === "/health") {
+  if (req.method === "GET" && url.pathname === "/health") {
     res.writeHead(200, { "Content-Type": "application/json" })
     res.end(JSON.stringify({ ok: true }))
     return true
   }
 
-  if (req.method === "GET" && url.startsWith("/monitor/toolcalls/")) {
-    const sessionId = url.slice("/monitor/toolcalls/".length).split("?")[0]
+  if (req.method === "GET" && url.pathname.startsWith("/monitor/toolcalls/")) {
+    const sessionId = decodeURIComponent(url.pathname.slice("/monitor/toolcalls/".length))
     const calls = getToolCalls(sessionId)
     res.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store" })
     res.end(JSON.stringify(calls))
     return true
   }
 
-  if (req.method === "GET" && url.startsWith("/monitor/screenshot/")) {
-    const sessionId = url.slice("/monitor/screenshot/".length).split("?")[0]
+  if (req.method === "GET" && url.pathname.startsWith("/monitor/screenshot/")) {
+    const sessionId = decodeURIComponent(url.pathname.slice("/monitor/screenshot/".length))
     await handleScreenshot(sessionId, res)
     return true
   }
 
-  if (req.method === "GET" && url === "/monitor") {
-    handleMonitorPage(res)
+  if (req.method === "GET" && url.pathname === "/monitor") {
+    handleMonitorPage(res, url.searchParams.get("session") ?? undefined)
     return true
   }
 

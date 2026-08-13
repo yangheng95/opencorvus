@@ -3,7 +3,7 @@ import { Log } from "@/util/log"
 import { createDecisionLog } from "@/decision-log"
 import { AutomationService } from "@/scheduler/automation-service"
 import { Instance } from "@/project/instance"
-import { TOOL_RESULT_PARK_METADATA_KEY } from "@/session/tool-result-control"
+import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
 import { WaitToolDescription, WaitToolParameters } from "./wait-contract"
 export { WAIT_MAX_MS, WAIT_MIN_MS, WaitToolDescription, WaitToolParameters } from "./wait-contract"
 
@@ -84,6 +84,7 @@ export async function executeWait(input: {
 export const WaitTool = Tool.define("wait", {
   description: WaitToolDescription,
   parameters: WaitToolParameters,
+  executionMode: "turn_control_exclusive",
   async execute(params, ctx) {
     const executionAuthority = Tool.requireExecutionAuthority(ctx)
     const taskID = executionAuthority.kind === "task" ? executionAuthority.taskID : undefined
@@ -99,15 +100,21 @@ export const WaitTool = Tool.define("wait", {
     return {
       title: result.aborted ? "Wait Not Scheduled" : "Wait Scheduled",
       output: result.output,
-      metadata: {
+      metadata: result.aborted ? {
         requestedMs: params.duration_ms,
         aborted: result.aborted,
         jobID: result.jobID,
         nextRun: result.nextRun,
         mode: result.mode,
         nonblocking: true,
-        ...(result.aborted ? {} : { [TOOL_RESULT_PARK_METADATA_KEY]: true }),
-      },
+      } : withImmediateParkToolResultControl({
+        requestedMs: params.duration_ms,
+        aborted: result.aborted,
+        jobID: result.jobID,
+        nextRun: result.nextRun,
+        mode: result.mode,
+        nonblocking: true,
+      }),
     }
   },
 })

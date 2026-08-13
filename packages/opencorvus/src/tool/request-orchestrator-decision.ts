@@ -6,7 +6,7 @@ import { Session } from "@/session"
 import { validateSessionRuntimeContractForContinuation } from "@/session/runtime-contract-validation"
 import { materializeProjectedWorkerBinding } from "@/agent/projected-worker-binding"
 import { Tool } from "./tool"
-import { TOOL_RESULT_CONTROL_METADATA_KEY } from "@/session/tool-result-control"
+import { withHandoffDrainToolResultControl } from "@/session/tool-result-control"
 
 const RequestOrchestratorDecisionInput = z
   .object({
@@ -97,16 +97,11 @@ export async function executeRequestOrchestratorDecision(params: RequestOrchestr
         message:
           "Existing coordination request returned for this message replay. No duplicate orchestrator wake emitted.",
       }),
-      metadata: {
+      metadata: withHandoffDrainToolResultControl({
         requestID: row.payload.request_id,
         taskID,
         sessionID: ctx.sessionID,
-        [TOOL_RESULT_CONTROL_METADATA_KEY]: {
-          kind: "handoff_drain",
-          request_id: row.payload.request_id,
-          dispatch_lineage_id: dispatchLineageID,
-        },
-      },
+      }, { requestID: row.payload.request_id, dispatchLineageID }),
     }
   }
 
@@ -124,16 +119,11 @@ export async function executeRequestOrchestratorDecision(params: RequestOrchestr
       message:
         "Coordination request recorded. This worker turn is handing control back through its immutable dispatch lineage.",
     }),
-    metadata: {
+    metadata: withHandoffDrainToolResultControl({
       requestID: row.payload.request_id,
       taskID,
       sessionID: ctx.sessionID,
-      [TOOL_RESULT_CONTROL_METADATA_KEY]: {
-        kind: "handoff_drain",
-        request_id: row.payload.request_id,
-        dispatch_lineage_id: dispatchLineageID,
-      },
-    },
+    }, { requestID: row.payload.request_id, dispatchLineageID }),
   }
 }
 
@@ -144,6 +134,7 @@ Use this when you need the orchestrator to choose scheduling, scope, retry, canc
 
 Do not use task messages, hidden notes, or a new subtask chat to ask the orchestrator for a decision.`,
   parameters: RequestOrchestratorDecisionInput,
+  executionMode: "turn_control_exclusive",
   async execute(params, ctx) {
     return executeRequestOrchestratorDecision(params, ctx)
   },

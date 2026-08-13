@@ -9,6 +9,7 @@ import { createToolExecutionSurface, type ToolExecutionSurface } from "./executi
 import { materializeToolResultInlineAttachments } from "./result-attachment-materialization"
 import { Instance } from "@/project/instance"
 import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
+import type { ToolExecutionMode } from "./execution-mode"
 
 /**
  * Coerce string values that LLMs sometimes produce for non-string fields.
@@ -70,6 +71,7 @@ export namespace Tool {
     init: (ctx?: InitContext) => Promise<{
       description: string
       parameters: Parameters
+      executionMode?: ToolExecutionMode
       execute(
         args: z.infer<Parameters>,
         ctx: Context,

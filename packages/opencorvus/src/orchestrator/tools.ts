@@ -94,7 +94,8 @@ import {
   type ProjectedWorkerRuntimeContract,
 } from "@/session/runtime-contract"
 import { sessionLifecycleOrderKey, SessionStatus } from "@/session/status"
-import { TOOL_RESULT_PARK_METADATA_KEY } from "@/session/tool-result-control"
+import { withImmediateParkToolResultControl } from "@/session/tool-result-control"
+import { bindToolExecutionMode, toolExecutionModeOf } from "@/tool/execution-mode"
 import { and, Database, eq, NotFoundError } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { timelineOrderKey } from "@/timeline/order"
@@ -1022,7 +1023,7 @@ export function createOrchestratorTools(input: {
     const toolDef = raw as { execute?: (args: unknown, options: unknown) => Promise<unknown> }
     if (typeof toolDef.execute !== "function") return raw
     const execute = toolDef.execute
-    return {
+    return bindToolExecutionMode({
       ...(raw as object),
       execute: async (args: unknown, options: unknown) => {
         const currentTask = requireTask(taskID)
@@ -1043,7 +1044,7 @@ export function createOrchestratorTools(input: {
         }
         return execute(args, options)
       },
-    }
+    }, toolExecutionModeOf(raw as object))
   }
 
   const dispatchArchitectStage = createArchitectStageDispatcher({
@@ -1486,7 +1487,7 @@ export function createOrchestratorTools(input: {
     ...createReadContextTool({ taskID }),
     ...createReadAgentMessageTool({ taskID }),
 
-    respond_agent_coordination: tool({
+    respond_agent_coordination: bindToolExecutionMode(tool({
       description:
         "Answer one pending worker/operator-to-orchestrator coordination request. This is the only orchestrator path for scheduler guidance that continues/cancels a worker, asks the user through a real interaction, fails the task through a terminal lifecycle event, or acknowledges an exact terminal occurrence during a host-authorized terminal conversation; it requires request_id and writes visible request/response/action artifacts before executing the bound side effect.",
       inputSchema: z
@@ -1605,7 +1606,14 @@ export function createOrchestratorTools(input: {
             ...(guidance ? { message: guidance } : {}),
           })
           const replayResult = replayedAgentCoordinationActionResult({ taskID, response })
-          if (replayResult) return replayResult
+          if (replayResult) {
+            if (decision !== "fail_task") return replayResult
+            return {
+              title: "Task Failure Replayed",
+              output: replayResult,
+              metadata: withImmediateParkToolResultControl({}),
+            }
+          }
         }
 
         if (decision === "redispatch") {
@@ -2093,7 +2101,13 @@ export function createOrchestratorTools(input: {
             ...(guidance ? { message: guidance } : {}),
           })
           const replayResult = replayedAgentCoordinationActionResult({ taskID, response })
-          if (replayResult) return replayResult
+          if (replayResult) {
+            return {
+              title: "Task Failure Replayed",
+              output: replayResult,
+              metadata: withImmediateParkToolResultControl({}),
+            }
+          }
           const errorText = guidance && guidance.length > 0 ? guidance : reason
           const errorMessage = `A2A request ${request.payload.request_id}: ${errorText}`
           try {
@@ -2134,7 +2148,7 @@ export function createOrchestratorTools(input: {
                 `Responded to coordination request ${request.payload.request_id} with fail_task. ` +
                 `response=${response.payload.response_id}; action=${response.payload.action_id}; task=${taskID} failed.` +
                 `${recoveredTerminalFailure ? " Recovered existing terminal task failure." : ""}`,
-              metadata: { [TOOL_RESULT_PARK_METADATA_KEY]: true },
+              metadata: withImmediateParkToolResultControl({}),
             }
           } catch (error) {
             await failAgentCoordinationAction({
@@ -2148,7 +2162,7 @@ export function createOrchestratorTools(input: {
           }
         }
       },
-    }),
+    }), "turn_control_exclusive"),
 
     ...createBuildTool({
       inputSchema: BuildInputSchema,
@@ -2621,7 +2635,7 @@ export function createOrchestratorTools(input: {
     }) satisfies OpenDispatchAgentLineage,
   })
 
-  const manageTaskTool = tool({
+  const manageTaskTool = bindToolExecutionMode(tool({
     description:
       "Single scheduler task-management tool. Use action to select Task lifecycle or Delivery Slice contract behavior, then provide action-specific fields. Slice mutations never create, retry, cancel, or complete workers, worktrees, workflow nodes, or lifecycle. " +
       `Exact action fields: ${MANAGE_TASK_ACTION_NAMES.map(
@@ -2644,7 +2658,7 @@ export function createOrchestratorTools(input: {
       )
       return result
     },
-  })
+  }), "turn_control_exclusive")
 
   const publicTools: Record<string, unknown> = {
     ...tools,

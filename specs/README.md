@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+Latest Browser MCP visible-browser and same-session Live View delivery: [`2026-08-13-browser-mcp-live-view.md`](records/2026-08/2026-08-13-browser-mcp-live-view.md).
+
+Browser MCP same-session Live View visual evidence: [`2026-08-13-browser-mcp-live-view.png`](artifacts/2026-08-13-browser-mcp-live-view.png).
+
 Latest compact identity and Host-reference architecture: [`2026-08-13-compact-identities-and-host-references.md`](records/2026-08/2026-08-13-compact-identities-and-host-references.md).
 
 Latest Evolution failure-attribution source-integrity repair: [`2026-08-13-evolution-attribution-source-integrity.md`](records/2026-08/2026-08-13-evolution-attribution-source-integrity.md).
