@@ -251,6 +251,7 @@ import type {
   GlobalProvidersDiscoverModelsErrors,
   GlobalProvidersDiscoverModelsResponses,
   GlobalProvidersListResponses,
+  GlobalProvidersModelsRefreshErrors,
   GlobalProvidersModelsRefreshResponses,
   GlobalProvidersOauthAuthorizeErrors,
   GlobalProvidersOauthAuthorizeResponses,
@@ -406,6 +407,7 @@ import type {
   ProviderDiscoverModelsErrors,
   ProviderDiscoverModelsResponses,
   ProviderListResponses,
+  ProviderModelsRefreshErrors,
   ProviderModelsRefreshResponses,
   ProviderOauthAuthorizeErrors,
   ProviderOauthAuthorizeResponses,
@@ -6067,10 +6069,11 @@ export class Models extends HeyApiClient {
    * Refresh live model identities from saved global provider credentials without requiring an active project or refreshing the provider registry declaration.
    */
   public refresh<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
-    return (options?.client ?? this.client).post<GlobalProvidersModelsRefreshResponses, unknown, ThrowOnError>({
-      url: "/global/providers/models/refresh",
-      ...options,
-    })
+    return (options?.client ?? this.client).post<
+      GlobalProvidersModelsRefreshResponses,
+      GlobalProvidersModelsRefreshErrors,
+      ThrowOnError
+    >({ url: "/global/providers/models/refresh", ...options })
   }
 }
 
@@ -10572,7 +10575,11 @@ export class Models2 extends HeyApiClient {
     options?: Options<never, ThrowOnError>,
   ) {
     const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
-    return (options?.client ?? this.client).post<ProviderModelsRefreshResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).post<
+      ProviderModelsRefreshResponses,
+      ProviderModelsRefreshErrors,
+      ThrowOnError
+    >({
       url: "/provider/models/refresh",
       ...options,
       ...params,

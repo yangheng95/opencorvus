@@ -199,6 +199,7 @@ export const ProviderRoutes = lazy(() =>
               },
             },
           },
+          503: AuthReadUnavailableResponse,
         },
       }),
       async (c) => {

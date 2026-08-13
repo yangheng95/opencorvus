@@ -14,6 +14,8 @@ Current storage-registry remediation: [`CS-028` explicit Storage table registry]
 
 Current Project identity remediation: [`CS-002` explicit identity convergence](records/2026-08/2026-08-13-cs002-explicit-project-identity-convergence.md).
 
+Current Provider model remediation: [`CS-021` live model refresh](records/2026-08/2026-08-13-cs021-provider-live-model-refresh.md).
+
 Current Conversation ownership remediation: [`CS-033` projector ownership](records/2026-08/2026-08-13-cs033-conversation-projector-ownership.md).
 
 Current saved-auth/config remediation: [`CS-035` read authority](records/2026-08/2026-08-13-cs035-auth-config-read-authority.md).

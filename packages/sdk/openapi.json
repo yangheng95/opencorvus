@@ -60503,6 +60503,16 @@
               }
             },
             "description": "Refresh result"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Refresh global configured provider model lists",
@@ -73589,6 +73599,16 @@
               }
             },
             "description": "Refresh result"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthReadError"
+                }
+              }
+            },
+            "description": "Saved Provider credentials could not be observed safely"
           }
         },
         "summary": "Refresh configured provider model lists",

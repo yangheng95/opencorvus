@@ -17285,6 +17285,16 @@ export type GlobalProvidersModelsRefreshData = {
   url: "/global/providers/models/refresh"
 }
 
+export type GlobalProvidersModelsRefreshErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type GlobalProvidersModelsRefreshError =
+  GlobalProvidersModelsRefreshErrors[keyof GlobalProvidersModelsRefreshErrors]
+
 export type GlobalProvidersModelsRefreshResponses = {
   /**
    * Refresh result
@@ -21928,6 +21938,15 @@ export type ProviderModelsRefreshData = {
   }
   url: "/provider/models/refresh"
 }
+
+export type ProviderModelsRefreshErrors = {
+  /**
+   * Saved Provider credentials could not be observed safely
+   */
+  503: AuthReadError
+}
+
+export type ProviderModelsRefreshError = ProviderModelsRefreshErrors[keyof ProviderModelsRefreshErrors]
 
 export type ProviderModelsRefreshResponses = {
   /**

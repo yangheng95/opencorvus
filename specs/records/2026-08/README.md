@@ -12,6 +12,8 @@
 
 - [CS-002 explicit Project identity convergence](2026-08-13-cs002-explicit-project-identity-convergence.md) removes hidden schema-discovered Project migrations from ordinary lookup and gives physical duplicate repair one explicit, runtime-owned, domain-mapped transaction with preservation blockers for immutable facts.
 
+- [CS-021 Provider live model refresh](2026-08-13-cs021-provider-live-model-refresh.md) replaces two public no-op successes with one scoped, strict live identity/metadata observation and one atomic canonical catalog transaction, including upgrade migration and typed saved-auth failure.
+
 - [CS-033 Conversation projector ownership](2026-08-13-cs033-conversation-projector-ownership.md) removes the false lifecycle input from the base Conversation projector and leaves execution lifecycle projection with the Agent view authority.
 
 - [CS-035 saved-auth/Config read authority](2026-08-13-cs035-auth-config-read-authority.md) distinguishes missing saved credentials from corrupt or unobservable authority, preserves the Provider catalog's explicit partial-success issue contract, and exposes safe typed errors to direct Config/Auth consumers.

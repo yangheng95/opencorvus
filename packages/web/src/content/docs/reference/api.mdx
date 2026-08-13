@@ -43,7 +43,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/global/providers` | List providers for a new global task | `global.providers.list` |
 | GET | `/global/providers/auth` | Get global Provider auth methods | `global.providers.auth` |
 | POST | `/global/providers/discover-models` | Discover global Provider models Body: `api`, `apiKey`, `providerID`; Errors: `AuthReadError`, `BadRequestError`. | `global.providers.discover.models` |
-| POST | `/global/providers/models/refresh` | Refresh global configured provider model lists | `global.providers.models.refresh` |
+| POST | `/global/providers/models/refresh` | Refresh global configured provider model lists Errors: `AuthReadError`. | `global.providers.models.refresh` |
 | POST | `/global/providers/refresh` | Refresh the global provider registry | `global.providers.refresh` |
 | DELETE | `/global/providers/{providerID}` | Delete a global provider Errors: `AuthReadError`, `BadRequestError`. | `global.providers.remove` |
 | GET | `/global/providers/{providerID}/account-usage` | Get global Provider account usage Errors: `AuthReadError`. | `global.providers.account.usage` |
@@ -403,7 +403,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/provider` | List providers | `provider.list` |
 | GET | `/provider/auth` | Get provider auth methods | `provider.auth` |
 | POST | `/provider/discover-models` | Discover OpenAI-compatible provider models Body: `api`, `apiKey`, `providerID`; Errors: `AuthReadError`, `BadRequestError`. | `provider.discover.models` |
-| POST | `/provider/models/refresh` | Refresh configured provider model lists | `provider.models.refresh` |
+| POST | `/provider/models/refresh` | Refresh configured provider model lists Errors: `AuthReadError`. | `provider.models.refresh` |
 | POST | `/provider/refresh` | Refresh the provider registry | `provider.refresh` |
 | DELETE | `/provider/{providerID}` | Delete a project provider Errors: `AuthReadError`, `BadRequestError`. | `provider.remove` |
 | GET | `/provider/{providerID}/account-usage` | Get Provider account usage Errors: `AuthReadError`. | `provider.account.usage` |

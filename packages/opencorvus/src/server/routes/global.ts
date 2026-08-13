@@ -854,16 +854,11 @@ export const GlobalRoutes = lazy(() =>
               },
             },
           },
+          503: AuthReadUnavailableResponse,
         },
       }),
       async (c) => {
-        const result = await Config.getGlobal().then(
-          (config) => Provider.refreshModels(config),
-          (error) => ({
-            ok: false as const,
-            error: errorMessage(error),
-          }),
-        )
+        const result = await Provider.refreshModels(await Config.getGlobal())
         if (result.ok) {
           const issues = await settleCanonicalProviderCatalogInvalidation()
           return c.json({ ...result, ...(issues.length > 0 ? { issues } : {}) })

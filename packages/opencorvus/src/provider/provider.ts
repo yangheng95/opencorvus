@@ -708,9 +708,83 @@ export namespace Provider {
       }
     | { ok: false; error: string }
 
+  const LiveModelsResponse = z
+    .object({
+      data: z.array(
+        z
+          .object({
+            id: z.string().trim().min(1),
+          })
+          .passthrough(),
+      ),
+    })
+    .passthrough()
+
+  const LiveModelInfoResponse = z
+    .object({
+      data: z.array(ModelsDev.LiveModelInfo),
+    })
+    .strict()
+
   /** Refresh configured live model identities without refreshing the provider registry declaration. */
-  export async function refreshModels(_config?: Config.Info): Promise<RefreshModelsResult> {
-    return { ok: true, fetchedAt: Date.now(), providers: [] }
+  export async function refreshModels(config?: Config.Info): Promise<RefreshModelsResult> {
+    try {
+      await Auth.all()
+      const snapshot = Config.Info.parse(config ?? (await Config.get()))
+      const provider = config
+        ? await getProviderGlobal("opencorvus", snapshot)
+        : await getProvider("opencorvus", { config: snapshot })
+      if (!provider?.key) throw new Error("OpenCorvus Provider credentials are not configured")
+      const catalog = await ModelsDev.get()
+      const declaration = catalog.opencorvus
+      if (!declaration) throw new Error("Model catalog is missing provider opencorvus")
+      const endpoint = (snapshot.provider?.opencorvus?.api ?? declaration.api)?.trim().replace(/\/+$/, "")
+      if (!endpoint) throw new Error("OpenCorvus Provider is missing its live models endpoint")
+      const request = async (pathname: "/models" | "/model/info") => {
+        const response = await fetch(
+          `${endpoint}${pathname}`,
+          providerFetchInit(
+            {
+              headers: { Authorization: `Bearer ${provider.key}` },
+              signal: AbortSignal.timeout(15_000),
+            },
+            resolveFetchProxy(snapshot),
+          ),
+        )
+        if (!response.ok) throw new Error(`GET ${endpoint}${pathname} returned HTTP ${response.status}`)
+        return response.json()
+      }
+      const [identityInput, infoInput] = await Promise.all([request("/models"), request("/model/info")])
+      const payload = LiveModelsResponse.parse(identityInput)
+      const ids = payload.data.map((item) => item.id)
+      if (ids.length === 0) throw new Error(`GET ${endpoint}/models returned no model ids`)
+      if (new Set(ids).size !== ids.length) throw new Error(`GET ${endpoint}/models returned duplicate model ids`)
+      ids.sort((a, b) => a.localeCompare(b))
+
+      const infoRows = LiveModelInfoResponse.parse(infoInput).data
+      const infoByID = new Map<string, ModelsDev.Model>()
+      for (const model of infoRows) {
+        if (infoByID.has(model.id)) throw new Error(`GET ${endpoint}/model/info returned duplicate model metadata`)
+        infoByID.set(model.id, model)
+      }
+      const models = Object.fromEntries(
+        ids.map((id) => {
+          const model = infoByID.get(id) ?? declaration.models[id]
+          if (!model) throw new Error(`GET ${endpoint}/model/info is missing metadata for model ${id}`)
+          return [id, { ...model, id }]
+        }),
+      )
+      await ModelsDev.replaceProviderModels("opencorvus", models)
+      return {
+        ok: true,
+        fetchedAt: Date.now(),
+        providers: [{ providerID: "opencorvus", count: ids.length, ids }],
+      }
+    } catch (error) {
+      const authError = Auth.findReadError(error)
+      if (authError) throw authError
+      return { ok: false, error: error instanceof Error ? error.message : String(error) }
+    }
   }
 
   export async function list(opts?: { config?: Config.Info }) {
