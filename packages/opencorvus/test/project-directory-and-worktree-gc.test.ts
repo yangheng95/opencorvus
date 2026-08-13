@@ -1275,10 +1275,11 @@ describe("Project directory integrity", () => {
 
   test("rolls back anonymous promotion when its missing destination is registered to another Project", async () => {
     const carrying = await ImplicitProject.create()
-    const destinationParent = path.join(path.dirname(carrying.directory), "promotion-targets")
-    const destination = path.join(destinationParent, "claimed-project")
+    const destinationParentInput = path.join(path.dirname(carrying.directory), "promotion-targets")
     const conflictingProjectID = "project_claiming_missing_promotion_destination"
-    await fs.mkdir(destinationParent)
+    await fs.mkdir(destinationParentInput)
+    const destinationParent = await fs.realpath(destinationParentInput)
+    const destination = path.join(destinationParent, "claimed-project")
     const now = Date.now()
     Database.use((db) =>
       db

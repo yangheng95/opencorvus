@@ -95,7 +95,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
           packageRevision,
           virtualWorkflows: scheduler.virtualWorkflows,
         },
-        workflowID: "composite-delivery",
+        workflowID: "planner-parallel-delivery",
       })
       const taskID = Identifier.ascending("task")
       const taskRequest = "Publish the bounded research charter"
