@@ -12,6 +12,8 @@ const OUTPUT_HEIGHT = 720
 const MAX_FOREIGN_OBJECTS = 512
 const MAX_TEXT_BLOCKS = 1024
 const MAX_TEXT_CHARACTERS = 200_000
+const MAX_TEXT_RASTER_HEIGHT = 100_000
+const MAX_TEXT_RASTER_PIXELS = 40_000_000
 const MAX_OVERLAY_PIXELS = OUTPUT_WIDTH * OUTPUT_HEIGHT * 16
 const MAX_INTERMEDIATE_PNG_BYTES = 32 * 1024 * 1024
 const sharp = requireRuntimePackage<typeof import("sharp")>("sharp")
@@ -51,6 +53,7 @@ type TextOverlay = {
     align: "left" | "center" | "right"
     font: string
     dpi: number
+    estimatedHeight: number
     spacing: number
   }>
   justify: "start" | "center" | "end"
@@ -103,7 +106,7 @@ function markupForBlock(block: ParsedNode): { markup: string; font: string; font
   const spans = (block.childNodes ?? []).filter((candidate) => candidate.tagName === "span")
   const source = spans.length > 0 ? spans : [block]
   let fallbackFont = "sans"
-  let fallbackSize = 12
+  let maximumFontSize = 12
   const markup = source
     .map((span) => {
       const style = styleMap(attribute(span, "style"))
@@ -113,11 +116,11 @@ function markupForBlock(block: ParsedNode): { markup: string; font: string; font
       const bold = weight === "bold" || (weight !== undefined && Number(weight) >= 600)
       const italic = style.get("font-style") === "italic"
       fallbackFont = font
-      fallbackSize = fontSize
+      maximumFontSize = Math.max(maximumFontSize, fontSize)
       return `<span foreground="${safeColor(style.get("color"))}" font_family="${pangoEscape(font)}" font_size="${fontSize}pt"${bold ? ' font_weight="bold"' : ""}${italic ? ' font_style="italic"' : ""}>${pangoEscape(textContent(span))}</span>`
     })
     .join("")
-  return { markup, font: fallbackFont, fontSize: fallbackSize }
+  return { markup, font: fallbackFont, fontSize: maximumFontSize }
 }
 
 function parseTranslate(value: string | undefined): { x: number; y: number } {
@@ -168,12 +171,18 @@ function collectTextOverlays(svgBytes: Buffer): TextOverlay[] {
           const align: TextOverlay["blocks"][number]["align"] =
             alignValue === "center" || alignValue === "right" ? alignValue : "left"
           const lineHeight = Number(style.get("line-height"))
+          const dpi = Math.max(36, Math.round(96 * Math.min(scaleX, scaleY)))
+          const spacing =
+            Number.isFinite(lineHeight) && lineHeight > 1 ? Math.round(text.fontSize * (lineHeight - 1)) : 0
+          const estimatedHeight =
+            Math.max(1, textContent(block).length) * Math.ceil((text.fontSize * dpi * 4) / 72 + spacing)
           return {
             markup: text.markup,
             align,
             font: `${text.font} ${text.fontSize}`,
-            dpi: Math.max(36, Math.round(96 * Math.min(scaleX, scaleY))),
-            spacing: Number.isFinite(lineHeight) && lineHeight > 1 ? Math.round(text.fontSize * (lineHeight - 1)) : 0,
+            dpi,
+            estimatedHeight,
+            spacing,
           }
         })
         .filter((block) => block.markup.length > 0)
@@ -207,6 +216,14 @@ function collectTextOverlays(svgBytes: Buffer): TextOverlay[] {
       if (totalOverlayPixels > MAX_OVERLAY_PIXELS) {
         throw new Error(`Work Artifact SVG text overlays exceed ${MAX_OVERLAY_PIXELS} pixels`)
       }
+      for (const block of blocks) {
+        if (
+          block.estimatedHeight > MAX_TEXT_RASTER_HEIGHT ||
+          overlay.width * block.estimatedHeight > MAX_TEXT_RASTER_PIXELS
+        ) {
+          throw new Error("Work Artifact SVG text raster exceeds its bounded pixel budget")
+        }
+      }
       overlays.push(overlay)
       return
     }
@@ -228,7 +245,6 @@ async function renderOverlay(
         text: block.markup,
         font: block.font,
         width: overlay.width,
-        height: overlay.height,
         align: block.align,
         justify: false,
         dpi: block.dpi,
