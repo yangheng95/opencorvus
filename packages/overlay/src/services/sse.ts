@@ -17,7 +17,7 @@ import {
   type WorkLedgerActionEvent as WorkLedgerStreamEvent,
 } from "@opencorvus-ai/transport-protocol"
 import { messageStore, setSseConnected, setSseExpected } from "../store/messages"
-import { boardStore, loadTasks, activeTaskID, type BoardSource } from "../store/board"
+import { boardStore, activeTaskID, type BoardSource } from "../store/board"
 import { routeSSEEvent, handleEventStreamEvent, handleTaskListNotification } from "./events"
 import { createSelectedTaskRecoveryScheduler } from "./selected-task-recovery"
 import { formatErrorDetails } from "./diagnostics"
@@ -30,7 +30,6 @@ import {
   recordConversationRecoverySucceeded,
 } from "./refresh-diagnostics"
 import { settingsStore } from "../store/settings"
-import { createVisibilityInterval, type VisibilityInterval } from "../utils/visibility-interval"
 import {
   conversationSourceDirectory,
   mergeLatestConversationTail,
@@ -508,17 +507,7 @@ export function stopSSE() {
   setSseExpected(false)
 }
 
-// ── Global task-list change stream ──
-// One long-lived stream connected to GET /task/events. On every persisted
-// task aggregate event the server emits a tiny {type, taskID, sequence,
-// notify?} notification; we translate that into a debounced loadTasks(). This
-// closes the gap where status changes on non-selected tasks (or new
-// tasks created by other clients) would otherwise only arrive via
-// manual refresh.
-
-let taskListHandle: StreamHandle | null = null
-let taskListRetryTimer: any = null
-let taskListRefreshTimer: VisibilityInterval | null = null
+// ── Unified Work Ledger change stream ──
 let workLedgerHandle: StreamHandle | null = null
 let workLedgerRetryTimer: any = null
 export type { WorkLedgerStreamEvent }
@@ -529,31 +518,9 @@ export function parseWorkLedgerStreamEvent(value: unknown): WorkLedgerStreamEven
 
 let workLedgerChangeHandler: ((event: WorkLedgerStreamEvent) => void) | null = null
 
-export const TASK_LIST_REFRESH_INTERVAL_MS = 30_000
-
 export function setWorkLedgerChangeHandler(handler: ((event: WorkLedgerStreamEvent) => void) | null): void {
   workLedgerChangeHandler = handler
   if (!handler) stopWorkLedgerSSE()
-}
-
-function taskListDirectory(): string {
-  return (settingsStore.directory || "").trim()
-}
-
-function startTaskListRefreshTimer() {
-  stopTaskListRefreshTimer()
-  taskListRefreshTimer = createVisibilityInterval(() => {
-    void loadTasks().catch((err) => {
-      console.error("[task-list-sse] periodic task refresh failed", err)
-    })
-  }, TASK_LIST_REFRESH_INTERVAL_MS)
-  taskListRefreshTimer.start()
-}
-
-function stopTaskListRefreshTimer() {
-  if (!taskListRefreshTimer) return
-  taskListRefreshTimer.dispose()
-  taskListRefreshTimer = null
 }
 
 export function startWorkLedgerSSE() {
@@ -580,6 +547,17 @@ export function startWorkLedgerSSE() {
         if (parsed.data.type === "work-ledger.heartbeat" || parsed.data.type === "work-ledger.connected") return
         const workLedgerEvent: WorkLedgerStreamEvent = parsed.data
         try {
+          if (workLedgerEvent.type === "work-ledger.changed" && workLedgerEvent.taskID) {
+            handleTaskListNotification(
+              {
+                type: workLedgerEvent.sourceType,
+                taskID: workLedgerEvent.taskID,
+                sequence: workLedgerEvent.sequence,
+              },
+              { directory: workLedgerEvent.directory || settingsStore.directory },
+              selectedTaskRecoveryScheduler,
+            )
+          }
           workLedgerChangeHandler?.(workLedgerEvent)
         } catch (err) {
           const errorDetails = boundedErrorDetails(err)
@@ -619,80 +597,5 @@ export function stopWorkLedgerSSE() {
   }
   const handle = workLedgerHandle
   workLedgerHandle = null
-  if (handle) handle.close("consumer-dispose")
-}
-
-export function startTaskListSSE() {
-  stopTaskListSSE()
-  startTaskListRefreshTimer()
-  const directory = taskListDirectory()
-  if (!directory) return
-  const transport = getHostTransport()
-  const handle = transport.openStream(
-    { path: "task/events", query: { directory } },
-    {
-      onOpen: () => undefined,
-      onEvent: (data) => {
-        // Same split as startSSE above: parse errors and dispatch errors
-        // are both surfaced.
-        let event: any
-        try {
-          event = JSON.parse(data)
-        } catch (error) {
-          logMalformedSsePayload({ stream: "task-list", directory, data, error })
-          return
-        }
-        if (event.type === "task-list.heartbeat" || event.type === "task-list.connected") return
-        try {
-          // Task-list stream emits only `{type, taskID, sequence, notify?}` — not
-          // the full task-scope event shape. Route to the notification
-          // handler, NOT handleEventStreamEvent (which feeds tree-writer
-          // and would throw on every missing payload).
-          handleTaskListNotification(event, { directory }, selectedTaskRecoveryScheduler)
-        } catch (err) {
-          const diagnostic = dispatchEventDiagnostic(event)
-          const errorDetails = boundedErrorDetails(err)
-          AppLog.error("sse", `task-list dispatch error for event ${event?.type || "<unknown>"}`, {
-            eventType: event?.type || "<unknown>",
-            error: errorDetails,
-            event: diagnostic,
-            diagnosticID: "task-list-sse:dispatch-error",
-            diagnosticTitle: "Task list event failed to render",
-            diagnosticMessage: `Event type ${event?.type || "<unknown>"} threw while updating the task list.`,
-            diagnosticDetails: dispatchNotificationDetails(errorDetails, event),
-          })
-        }
-      },
-      onClose: (_reason) => {
-        if (handle !== taskListHandle) return
-        taskListHandle = null
-        if (taskListRetryTimer) clearTimeout(taskListRetryTimer)
-        taskListRetryTimer = setTimeout(() => {
-          taskListRetryTimer = null
-          startTaskListSSE()
-        }, 3000)
-      },
-      onError: () => {
-        // Keep the global task-list stream on the same business reconnect
-        // contract as the selected-task stream. If the transport surfaces an
-        // error without a close, the sidebar refresh stream would otherwise
-        // stay pinned to a dead handle and non-selected task changes would
-        // only appear after a manual reload.
-        if (handle !== taskListHandle) return
-        handle.close("transport-error")
-      },
-    },
-  )
-  taskListHandle = handle
-}
-
-export function stopTaskListSSE() {
-  stopTaskListRefreshTimer()
-  if (taskListRetryTimer) {
-    clearTimeout(taskListRetryTimer)
-    taskListRetryTimer = null
-  }
-  const handle = taskListHandle
-  taskListHandle = null
   if (handle) handle.close("consumer-dispose")
 }

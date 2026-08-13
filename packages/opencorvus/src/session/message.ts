@@ -764,6 +764,15 @@ export namespace Message {
       }),
       { tier: 3 },
     ),
+    Moved: BusEvent.define(
+      "message.moved",
+      z.object({
+        sourceSessionID: z.string().min(1),
+        info: VisibleInfo,
+        parts: z.array(VisiblePart),
+      }),
+      { tier: 3 },
+    ),
     PartUpdated: BusEvent.define(
       "message.part.updated",
       z.object({

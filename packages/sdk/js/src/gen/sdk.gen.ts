@@ -107,7 +107,6 @@ import type {
   ExperimentalMemoryGetErrors,
   ExperimentalMemoryGetResponses,
   ExperimentalProjectMemoryAcknowledgeNoticeResponses,
-  ExperimentalProjectMemoryEventsResponses,
   ExperimentalProjectMemoryGetResponses,
   ExperimentalProjectMemoryOrganizeResponses,
   ExperimentalResourceListErrors,
@@ -447,6 +446,8 @@ import type {
   SessionConfigUpdateErrors,
   SessionConfigUpdateResponses,
   SessionConversationErrors,
+  SessionConversationHistoryErrors,
+  SessionConversationHistoryResponses,
   SessionConversationResponses,
   SessionCreateErrors,
   SessionCreateResponses,
@@ -533,8 +534,6 @@ import type {
   TaskInjectResponses,
   TaskInteractionsErrors,
   TaskInteractionsResponses,
-  TaskListEventsResponse,
-  TaskListEventsResponses,
   TaskListResponses,
   TaskMessageErrors,
   TaskMessageResponses,
@@ -2414,23 +2413,6 @@ export class ProjectMemory extends HeyApiClient {
     const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
     return (options?.client ?? this.client).get<ExperimentalProjectMemoryGetResponses, unknown, ThrowOnError>({
       url: "/experimental/project-memory",
-      ...options,
-      ...params,
-    })
-  }
-
-  /**
-   * Subscribe to Project MEMORY.MD notice changes
-   */
-  public events<ThrowOnError extends boolean = false>(
-    parameters?: {
-      directory?: string
-    },
-    options?: Options<never, ThrowOnError, unknown>,
-  ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
-    return (options?.client ?? this.client).sse.get<ExperimentalProjectMemoryEventsResponses, unknown, ThrowOnError>({
-      url: "/experimental/project-memory/events",
       ...options,
       ...params,
     })
@@ -6981,20 +6963,6 @@ export class Queue extends HeyApiClient {
   }
 }
 
-export class List extends HeyApiClient {
-  /**
-   * Subscribe to global task-list change notifications
-   *
-   * Pure change-notification SSE for the task list sidebar. Emits `{type, taskID, sequence}` when a persisted task aggregate event changes the task-list projection. Conversation stream/status chunks belong to /task/:taskID/events and are intentionally not sent here. Notify-worthy events also carry `notificationDetails` for copyable diagnostics. No replay — clients call /task separately to fetch the refreshed list.
-   */
-  public events<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError, TaskListEventsResponse>) {
-    return (options?.client ?? this.client).sse.get<TaskListEventsResponses, unknown, ThrowOnError>({
-      url: "/task/events",
-      ...options,
-    })
-  }
-}
-
 export class Conversation extends HeyApiClient {
   /**
    * Page task conversation replay events
@@ -8347,11 +8315,6 @@ export class Task extends HeyApiClient {
   private _queue?: Queue
   get queue(): Queue {
     return (this._queue ??= new Queue({ client: this.client }))
-  }
-
-  private _list?: List
-  get list2(): List {
-    return (this._list ??= new List({ client: this.client }))
   }
 
   private _conversation?: Conversation
@@ -11458,6 +11421,50 @@ export class Config3 extends HeyApiClient {
   }
 }
 
+export class Conversation2 extends HeyApiClient {
+  /**
+   * Page older session conversation transcript
+   *
+   * Return a bounded Mission or conversation transcript slice older than the current hydrate tail.
+   */
+  public history<ThrowOnError extends boolean = false>(
+    parameters: {
+      sessionID: string
+      directory?: string
+      before: number
+      before_order_key: string
+      before_id?: string
+      limit?: number
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "sessionID" },
+            { in: "query", key: "directory" },
+            { in: "query", key: "before" },
+            { in: "query", key: "before_order_key" },
+            { in: "query", key: "before_id" },
+            { in: "query", key: "limit" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<
+      SessionConversationHistoryResponses,
+      SessionConversationHistoryErrors,
+      ThrowOnError
+    >({
+      url: "/session/{sessionID}/conversation/history",
+      ...options,
+      ...params,
+    })
+  }
+}
+
 export class Session4 extends HeyApiClient {
   /**
    * List sessions
@@ -11853,6 +11860,7 @@ export class Session4 extends HeyApiClient {
     parameters: {
       sessionID: string
       directory?: string
+      tail_limit?: number
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -11863,6 +11871,7 @@ export class Session4 extends HeyApiClient {
           args: [
             { in: "path", key: "sessionID" },
             { in: "query", key: "directory" },
+            { in: "query", key: "tail_limit" },
           ],
         },
       ],
@@ -12428,6 +12437,11 @@ export class Session4 extends HeyApiClient {
   private _config?: Config3
   get config(): Config3 {
     return (this._config ??= new Config3({ client: this.client }))
+  }
+
+  private _conversation?: Conversation2
+  get conversation2(): Conversation2 {
+    return (this._conversation ??= new Conversation2({ client: this.client }))
   }
 }
 

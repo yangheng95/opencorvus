@@ -136,7 +136,6 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | PATCH | `/mission/{missionID}/title` | Rename a Mission 请求体: `title`; 错误: `LogFileNotFoundError`, `NotFoundError`. | `mission.rename` |
 | POST | `/task` | Create task 请求体: `artifactImports`, `attachments`, `budget`, `channelBinding`, `checks`, `directory`, `expectedPackageDigest`, `metadata`, `model`, `priority`, `productPillar`, `project`, `promptProfile`, `queue`, `request`, `requestID`, `source`, `title`; 错误: `BadRequestError`, `ExternalChildTaskLineageError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCreationIdempotencyConflictError`, `TaskCreatorAuthorityError`, `TaskCreatorSessionError`, `TaskExpectedPackageDigestConflictError`, `TaskPackageRevisionBindingError`. | `task.create` |
 | PATCH | `/task-queue/reorder` | Reorder queued tasks in a directory 请求体: `directory`, `orderedTaskIDs`, `revision`. | `task.queue.reorder` |
-| GET | `/task/events` | Subscribe to global task-list change notifications | `task.list.events` |
 | DELETE | `/task/{taskID}` | Delete task 请求体: `reason`, `surface`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskArtifactDeletionCommittedError`, `TaskCancellationIncompleteError`, `UnknownError`. | `task.delete` |
 | GET | `/task/{taskID}` | Get task 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.get` |
 | PATCH | `/task/{taskID}/archive` | Archive or restore task 请求体: `archived`, `reason`, `surface`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `task.setArchived` |
@@ -201,6 +200,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/session/{sessionID}/config` | Get session effective configuration 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.config.get` |
 | PATCH | `/session/{sessionID}/config` | Update session configuration overlay 请求体: `agent`, `expert_squads`, `model`, `prompt`, `prompt_profile`, `runtime_templates`, `skill_mounts`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskPackageRevisionBindingError`, `TaskPromptProfileImmutableError`. | `session.config.update` |
 | GET | `/session/{sessionID}/conversation` | Hydrate session conversation state 错误: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation` |
+| GET | `/session/{sessionID}/conversation/history` | Page older session conversation transcript 错误: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation.history` |
 | GET | `/session/{sessionID}/diff` | Get message diff | `session.diff` |
 | GET | `/session/{sessionID}/events` | Subscribe to session events | `session.events` |
 | POST | `/session/{sessionID}/fork` | Fork session 请求体: `messageID`. | `session.fork` |
@@ -463,7 +463,6 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | DELETE | `/experimental/event-schedule/{id}` | Cancel event-triggered task 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `experimental.eventschedule.delete` |
 | GET | `/experimental/memory` | Get the Session MEMORY.MD document 错误: `LogFileNotFoundError`, `NotFoundError`. | `experimental.memory.get` |
 | GET | `/experimental/project-memory` | Get the organized Project MEMORY.MD context | `experimental.projectMemory.get` |
-| GET | `/experimental/project-memory/events` | Subscribe to Project MEMORY.MD notice changes | `experimental.projectMemory.events` |
 | POST | `/experimental/project-memory/notice/acknowledge` | Acknowledge a Project MEMORY.MD notice 请求体: `generation`. | `experimental.projectMemory.acknowledgeNotice` |
 | POST | `/experimental/project-memory/organize` | Request Project MEMORY.MD organization | `experimental.projectMemory.organize` |
 | GET | `/experimental/resource` | Get MCP resources 错误: `UnknownError`. | `experimental.resource.list` |

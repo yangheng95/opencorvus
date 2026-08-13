@@ -19,8 +19,6 @@ import { lazy } from "../../util/lazy"
 import { NotFoundError } from "../../storage/db"
 import { assertActiveProjectSession } from "../active-project-session"
 import { Database } from "../../storage/db"
-import { streamProjectSSE } from "../sse"
-import { Bus } from "../../bus"
 import { ProjectWorktreeDeleteReceipt } from "@opencorvus-ai/transport-protocol"
 
 // Workspace shape for the workspace sub-tree (mounted at /workspace)
@@ -458,52 +456,6 @@ export const ExperimentalRoutes = lazy(() =>
         },
       }),
       async (c) => c.json(ProjectMemory.read(Instance.project.id)),
-    )
-    .get(
-      "/project-memory/events",
-      describeRoute({
-        summary: "Subscribe to Project MEMORY.MD notice changes",
-        operationId: "experimental.projectMemory.events",
-        responses: {
-          200: {
-            description: "Project MEMORY.MD notice stream",
-            content: { "text/event-stream": { schema: resolver(z.unknown()) } },
-          },
-        },
-      }),
-      async (c) => {
-        const directory = Instance.directory
-        const projectID = Instance.project.id
-        c.header("X-Accel-Buffering", "no")
-        c.header("X-Content-Type-Options", "nosniff")
-        return streamProjectSSE(c, directory, async (stream, bind) => {
-          let finish = () => {}
-          let closed = false
-          let writes = Promise.resolve()
-          const done = new Promise<void>((resolve) => (finish = resolve))
-          const close = () => {
-            if (closed) return
-            closed = true
-            unsubscribe()
-            finish()
-          }
-          const write = (payload: unknown) => {
-            writes = writes.then(() => (closed ? undefined : stream.writeSSE({ data: JSON.stringify(payload) })))
-            return writes
-          }
-          const unsubscribe = Bus.subscribe(
-            ProjectMemory.Event.NoticeChanged,
-            bind(({ properties }) => {
-              if (properties.projectID !== projectID) return
-              return write({ type: ProjectMemory.Event.NoticeChanged.type, properties })
-            }),
-          )
-          await write({ type: "project.memory.notice.connected", properties: { projectID } })
-          stream.onAbort(close)
-          await done
-          await writes
-        })
-      },
     )
     .post(
       "/project-memory/organize",

@@ -1865,6 +1865,7 @@ export type ExpertSquadCatalogSummary = {
         default_skill_refs: Array<string>
         default_tool_refs: Array<string>
         description?: string
+        execution_contract?: "platform_integrity_review"
         inherit_base_tools: boolean
         label: string
         package_mcp_prompt_refs: Array<string>
@@ -7626,25 +7627,6 @@ export type ExperimentalProjectMemoryGetResponses = {
 
 export type ExperimentalProjectMemoryGetResponse =
   ExperimentalProjectMemoryGetResponses[keyof ExperimentalProjectMemoryGetResponses]
-
-export type ExperimentalProjectMemoryEventsData = {
-  body?: never
-  path?: never
-  query?: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-  }
-  url: "/experimental/project-memory/events"
-}
-
-export type ExperimentalProjectMemoryEventsResponses = {
-  /**
-   * Project MEMORY.MD notice stream
-   */
-  200: unknown
-}
 
 export type ExperimentalProjectMemoryAcknowledgeNoticeData = {
   body: {
@@ -14219,6 +14201,7 @@ export type ExpertSquadValidateFolderResponses = {
           default_skill_refs: Array<string>
           default_tool_refs: Array<string>
           description?: string
+          execution_contract?: "platform_integrity_review"
           inherit_base_tools: boolean
           label: string
           package_mcp_prompt_refs: Array<string>
@@ -23473,6 +23456,7 @@ export type SessionConversationData = {
      * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
      */
     directory?: string
+    tail_limit?: number
   }
   url: "/session/{sessionID}/conversation"
 }
@@ -24057,6 +24041,222 @@ export type SessionConversationResponses = {
 }
 
 export type SessionConversationResponse = SessionConversationResponses[keyof SessionConversationResponses]
+
+export type SessionConversationHistoryData = {
+  body?: never
+  path: {
+    sessionID: string
+  }
+  query: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+    before: number
+    before_order_key: string
+    before_id?: string
+    limit?: number
+  }
+  url: "/session/{sessionID}/conversation/history"
+}
+
+export type SessionConversationHistoryErrors = {
+  /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+}
+
+export type SessionConversationHistoryError = SessionConversationHistoryErrors[keyof SessionConversationHistoryErrors]
+
+export type SessionConversationHistoryResponses = {
+  /**
+   * Session conversation history page
+   */
+  200: {
+    events: Array<{
+      emittedAt: number
+      event_id: string
+      notify?: {
+        badge?: boolean
+        tier: 1 | 2 | 3
+      }
+      orderKey: string
+      payload: {
+        [key: string]: unknown
+      }
+      sequence?: number
+      session_id: string
+      summary: string
+      timestamp: number
+      type: string
+    }>
+    history: {
+      hasMore: boolean
+      limit: number
+      oldestMessageID?: string | null
+      oldestOrderKey: string | null
+      oldestTimestamp: number | null
+    }
+    transcript: Array<VisibleMessageWithParts>
+    view: {
+      messages: Array<{
+        agentID: string
+        inputMessageID: string
+        messageID: string
+        orderKey: string
+        parentSessionID?: string
+        placement: "top_level"
+        sessionAgentID: string
+        sessionID: string
+        stage: string
+        time: number
+      }>
+      sessions: Array<
+        | {
+            activity: Array<
+              | {
+                  id: string
+                  orderKey: string
+                  text: string
+                  type: "text"
+                }
+              | {
+                  callID?: string
+                  id: string
+                  orderKey: string
+                  state: {
+                    [key: string]: unknown
+                  }
+                  tool: string
+                  type: "tool"
+                }
+              | {
+                  files: Array<unknown>
+                  id: string
+                  orderKey: string
+                  type: "patch"
+                }
+              | {
+                  filename: string
+                  id: string
+                  orderKey: string
+                  type: "file"
+                }
+              | {
+                  id: string
+                  message: string
+                  orderKey: string
+                  title?: string
+                  type: "part-error"
+                }
+            >
+            agentID: string
+            errorReason?: string
+            executionID: string
+            firstMessageTime: number
+            firstObservedAt?: number
+            inputMessageID: string
+            inputPreview?: {
+              messageID: string
+              observedAt: number
+              source: "user_message"
+              text: string
+            }
+            lastDisplayMessageID?: string
+            lastMessageTime: number
+            lastObservedAt?: number
+            messageIDs: Array<string>
+            orderKey: string
+            parentSessionID?: string
+            placement: "top_level"
+            sessionID: string
+            stage: string
+            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            todoUpdatedAt: number
+            todos: Array<Todo>
+          }
+        | {
+            activity: Array<
+              | {
+                  id: string
+                  orderKey: string
+                  text: string
+                  type: "text"
+                }
+              | {
+                  callID?: string
+                  id: string
+                  orderKey: string
+                  state: {
+                    [key: string]: unknown
+                  }
+                  tool: string
+                  type: "tool"
+                }
+              | {
+                  files: Array<unknown>
+                  id: string
+                  orderKey: string
+                  type: "patch"
+                }
+              | {
+                  filename: string
+                  id: string
+                  orderKey: string
+                  type: "file"
+                }
+              | {
+                  id: string
+                  message: string
+                  orderKey: string
+                  title?: string
+                  type: "part-error"
+                }
+            >
+            agentID: string
+            errorReason?: string
+            firstMessageTime: number
+            firstObservedAt?: number
+            inputPreview?: {
+              messageID: string
+              observedAt: number
+              source: "user_message"
+              text: string
+            }
+            lastDisplayMessageID?: string
+            lastMessageTime: number
+            lastObservedAt?: number
+            messageIDs: Array<string>
+            orderKey: string
+            parentSessionID?: string
+            placement: "top_level"
+            sessionID: string
+            stage: string
+            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            todoUpdatedAt: number
+            todos: Array<Todo>
+          }
+      >
+      topLevelSessionIDs: Array<string>
+    }
+  }
+}
+
+export type SessionConversationHistoryResponse =
+  SessionConversationHistoryResponses[keyof SessionConversationHistoryResponses]
 
 export type SessionDiffData = {
   body?: never
@@ -26477,32 +26677,6 @@ export type TaskQueueReorderResponses = {
 }
 
 export type TaskQueueReorderResponse = TaskQueueReorderResponses[keyof TaskQueueReorderResponses]
-
-export type TaskListEventsData = {
-  body?: never
-  path?: never
-  query?: never
-  url: "/task/events"
-}
-
-export type TaskListEventsResponses = {
-  /**
-   * Task-list change stream
-   */
-  200: {
-    notificationDetails?: string
-    notify?: {
-      badge?: boolean
-      tier: 1 | 2 | 3
-    }
-    sequence: number
-    source?: string
-    taskID: string | null
-    type: string
-  }
-}
-
-export type TaskListEventsResponse = TaskListEventsResponses[keyof TaskListEventsResponses]
 
 export type TaskDeleteData = {
   body: {

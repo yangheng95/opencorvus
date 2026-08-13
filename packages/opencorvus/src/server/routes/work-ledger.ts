@@ -19,6 +19,7 @@ import { ProtocolStore } from "@/protocol/store"
 import { Session, SessionStatus } from "@/session"
 import { EngineService } from "@/task-api"
 import { TaskQueueEvent } from "@/scheduler/task-queue-service"
+import { ProjectMemory } from "@/memory/project-memory"
 import { listArchivedWorkLedger, listWorkLedger } from "@/work-ledger/projection"
 import { errors } from "../error"
 import { streamGlobalSSE } from "../sse"
@@ -157,8 +158,25 @@ function workLedgerGlobalBusQueueEvent(input: {
   }
 }
 
+function workLedgerGlobalBusProjectMemoryEvent(input: {
+  payload?: unknown
+}): { sourceType: string; projectID: string; sequence: number } | null {
+  const payload = input.payload
+  if (!payload || typeof payload !== "object") return null
+  const envelope = payload as { type?: unknown; properties?: unknown }
+  if (envelope.type !== ProjectMemory.Event.NoticeChanged.type) return null
+  const parsed = ProjectMemory.Event.NoticeChanged.properties.safeParse(envelope.properties)
+  if (!parsed.success) return null
+  return {
+    sourceType: ProjectMemory.Event.NoticeChanged.type,
+    projectID: parsed.data.projectID,
+    sequence: Date.now(),
+  }
+}
+
 export const WorkLedgerRouteTestHooks = {
   workLedgerGlobalBusQueueEvent,
+  workLedgerGlobalBusProjectMemoryEvent,
   workLedgerSessionChangedEvent,
 }
 
@@ -347,6 +365,16 @@ export function WorkLedgerRoutes() {
                   if (changed) writeWorkLedgerEventData(writeData, changed)
                 })
                 .catch(() => undefined)
+              return
+            }
+            const projectMemoryEvent = workLedgerGlobalBusProjectMemoryEvent(event)
+            if (projectMemoryEvent) {
+              writeWorkLedgerEventData(writeData, {
+                type: "work-ledger.changed",
+                sourceType: projectMemoryEvent.sourceType,
+                projectID: projectMemoryEvent.projectID,
+                sequence: projectMemoryEvent.sequence,
+              })
               return
             }
             const statusEvent = workLedgerGlobalBusStatusEvent(event)

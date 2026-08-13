@@ -71,6 +71,31 @@ function errorMessage(error: unknown): string {
   return String(error)
 }
 
+type ProjectEventSSEInput = {
+  directory?: string
+  payload?: { type?: string }
+}
+
+export function createProjectEventSSEListener(input: {
+  directory: string
+  write(data: string): Promise<unknown>
+  closeAfterDelivery(): void
+}): (event: ProjectEventSSEInput) =>
+  | { status: "ignored" }
+  | { status: "accepted"; eventType: string } {
+  let writes: Promise<unknown> | undefined
+  return (event) => {
+    if (event.directory !== input.directory || !event.payload) return { status: "ignored" }
+    const eventType = typeof event.payload.type === "string" ? event.payload.type : ""
+    const data = JSON.stringify(event.payload)
+    writes = writes ? writes.then(() => input.write(data)) : Promise.resolve(input.write(data))
+    if (eventType === Bus.InstanceDisposed.type) {
+      void writes.then(() => input.closeAfterDelivery())
+    }
+    return { status: "accepted", eventType }
+  }
+}
+
 const LogReadResponse = z.object({
   directory: z.string(),
   path: z.string(),
@@ -823,13 +848,13 @@ export function AppRoutes(root: Hono) {
               })
             return writes
           }
-          const listener = bind(async (event: { directory?: string; payload?: { type?: string } }) => {
-            if (event.directory !== directory || !event.payload) return
-            await writeData(JSON.stringify(event.payload))
-            if (event.payload.type === Bus.InstanceDisposed.type) {
-              cleanup({ closeStream: true })
-            }
-          })
+          const listener = bind(
+            createProjectEventSSEListener({
+              directory,
+              write: writeData,
+              closeAfterDelivery: () => cleanup({ closeStream: true }),
+            }),
+          )
           GlobalBus.on("event", listener)
           unsub = () => GlobalBus.off("event", listener)
 

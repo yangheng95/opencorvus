@@ -650,6 +650,7 @@ export function applyEvent(event: any): void {
   flushBufferedPartDeltas()
 
   // ── Message stream ──
+  if (type === "message.moved") return applyVisibleCardTreeEvent(() => handleMessageMoved(event))
   if (type === "message.updated") return applyVisibleCardTreeEvent(() => handleMessageUpdated(event))
   if (type === "message.part.updated") return applyVisibleCardTreeEvent(() => handlePartUpdated(event))
   if (type === "message.removed") return applyVisibleCardTreeEvent(() => handleMessageRemoved(event))
@@ -1394,6 +1395,42 @@ function handleMessageRemoved(event: any): void {
   }
   regroupTimelineSegments()
   syncSessionTopLevelVisibility(session)
+}
+
+function handleMessageMoved(event: any): void {
+  const p = propsOf(event)
+  const sourceSessionID = String(p.sourceSessionID || "")
+  const info = p.info
+  const parts = Array.isArray(p.parts) ? p.parts : undefined
+  const messageID = String(info?.id || "")
+  const targetSessionID = String(info?.sessionID || "")
+  if (!sourceSessionID || !messageID || !targetSessionID || !parts) {
+    throw new Error("message.moved missing sourceSessionID, target info, or parts")
+  }
+  if (sourceSessionID === targetSessionID) {
+    throw new Error(`message.moved ${messageID} source and target Session must differ`)
+  }
+
+  const existing = messages.get(messageID)
+  if (existing?.sessionID === sourceSessionID) {
+    handleMessageRemoved({
+      type: "message.removed",
+      properties: { sessionID: sourceSessionID, messageID },
+    })
+  } else if (existing && existing.sessionID !== targetSessionID) {
+    throw new Error(
+      `message.moved ${messageID} existing owner ${existing.sessionID} is neither source ${sourceSessionID} nor target ${targetSessionID}`,
+    )
+  }
+
+  handleMessageUpdated({ ...event, type: "message.updated", properties: { ...p, info } })
+  for (const part of parts) {
+    handlePartUpdated({
+      ...event,
+      type: "message.part.updated",
+      properties: { ...p, orderKey: info.orderKey, part },
+    })
+  }
 }
 
 function handlePartRemoved(event: any): void {

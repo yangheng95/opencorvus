@@ -25,8 +25,8 @@ import { nativeMessage } from "./app-dialog"
 import { nativeOpen } from "../utils/native"
 import { checkConnection } from "./connection"
 import { reloadProjectScope } from "./config"
-import { startTaskListSSE, stopSSE, stopTaskListSSE } from "./sse"
-import { startProjectMemoryEvents, stopProjectMemoryEvents } from "./project-memory"
+import { stopSSE } from "./sse"
+import { refreshProjectMemory } from "./project-memory"
 import { activeProjectDirectory, restoreWorkspaceDirectory, setProjectDirectoryContext } from "./project-directory"
 import { directoryScopedPath } from "./task-path"
 import { cancelConversationReplay, resetConversationProjection } from "./conversation"
@@ -247,8 +247,6 @@ function enterDirectoryFreeWorkspace(savedDirectory: string): number {
   const selectionEpoch = beginWorkspaceSelection()
   clearComposerModelProjection()
   stopSSE()
-  stopTaskListSSE()
-  stopProjectMemoryEvents()
   setSettingsStore("directoryEpoch", (n: number) => n + 1)
   setSettingsStore({
     directory: "",
@@ -734,8 +732,6 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
   console.log("[applyDir] switching", { from: curDir, to: next, save })
 
   stopSSE()
-  stopTaskListSSE()
-  stopProjectMemoryEvents()
   if (options.preserveSelection !== true) {
     clearSelectedWorkItem()
   }
@@ -798,8 +794,9 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
     console.log("[applyDir] superseded after reload, discarding")
     return false
   }
-  startTaskListSSE()
-  startProjectMemoryEvents()
+  void refreshProjectMemory().catch((error) =>
+    AppLog.warn("project-memory", "Project MEMORY.MD status refresh failed", { error: String(error) }),
+  )
   console.log("[applyDir] done, tasks=", boardStore.tasks.length)
   return true
 }

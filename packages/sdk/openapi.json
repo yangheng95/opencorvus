@@ -6241,6 +6241,10 @@
                       "minLength": 1,
                       "type": "string"
                     },
+                    "execution_contract": {
+                      "const": "platform_integrity_review",
+                      "type": "string"
+                    },
                     "inherit_base_tools": {
                       "type": "boolean"
                     },
@@ -23771,39 +23775,6 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.experimental.projectMemory.get({\n  ...\n})"
-          }
-        ]
-      }
-    },
-    "/experimental/project-memory/events": {
-      "get": {
-        "operationId": "experimental.projectMemory.events",
-        "parameters": [
-          {
-            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
-            "in": "query",
-            "name": "directory",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "text/event-stream": {
-                "schema": {}
-              }
-            },
-            "description": "Project MEMORY.MD notice stream"
-          }
-        },
-        "summary": "Subscribe to Project MEMORY.MD notice changes",
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.experimental.projectMemory.events({\n  ...\n})"
           }
         ]
       }
@@ -51755,6 +51726,10 @@
                                 "minLength": 1,
                                 "type": "string"
                               },
+                              "execution_contract": {
+                                "const": "platform_integrity_review",
+                                "type": "string"
+                              },
                               "inherit_base_tools": {
                                 "type": "boolean"
                               },
@@ -77883,6 +77858,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "tail_limit",
+            "schema": {
+              "maximum": 2000,
+              "minimum": 1,
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -80544,6 +80528,902 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.session.conversation({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/session/{sessionID}/conversation/history": {
+      "get": {
+        "description": "Return a bounded Mission or conversation transcript slice older than the current hydrate tail.",
+        "operationId": "session.conversation.history",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "sessionID",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "before",
+            "required": true,
+            "schema": {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "before_order_key",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "before_id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 160,
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "events": {
+                      "items": {
+                        "properties": {
+                          "emittedAt": {
+                            "exclusiveMinimum": 0,
+                            "maximum": 9007199254740991,
+                            "type": "integer"
+                          },
+                          "event_id": {
+                            "type": "string"
+                          },
+                          "notify": {
+                            "properties": {
+                              "badge": {
+                                "type": "boolean"
+                              },
+                              "tier": {
+                                "anyOf": [
+                                  {
+                                    "const": 1,
+                                    "type": "number"
+                                  },
+                                  {
+                                    "const": 2,
+                                    "type": "number"
+                                  },
+                                  {
+                                    "const": 3,
+                                    "type": "number"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "tier"
+                            ],
+                            "type": "object"
+                          },
+                          "orderKey": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "payload": {
+                            "additionalProperties": {},
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "sequence": {
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "session_id": {
+                            "type": "string"
+                          },
+                          "summary": {
+                            "type": "string"
+                          },
+                          "timestamp": {
+                            "type": "number"
+                          },
+                          "type": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "event_id",
+                          "session_id",
+                          "orderKey",
+                          "type",
+                          "emittedAt",
+                          "timestamp",
+                          "summary",
+                          "payload"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "history": {
+                      "properties": {
+                        "hasMore": {
+                          "type": "boolean"
+                        },
+                        "limit": {
+                          "exclusiveMinimum": 0,
+                          "maximum": 9007199254740991,
+                          "type": "integer"
+                        },
+                        "oldestMessageID": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "oldestOrderKey": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "oldestTimestamp": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "oldestTimestamp",
+                        "oldestOrderKey",
+                        "hasMore",
+                        "limit"
+                      ],
+                      "type": "object"
+                    },
+                    "transcript": {
+                      "items": {
+                        "$ref": "#/components/schemas/VisibleMessageWithParts"
+                      },
+                      "type": "array"
+                    },
+                    "view": {
+                      "properties": {
+                        "messages": {
+                          "items": {
+                            "properties": {
+                              "agentID": {
+                                "type": "string"
+                              },
+                              "inputMessageID": {
+                                "pattern": "^msg.*",
+                                "type": "string"
+                              },
+                              "messageID": {
+                                "type": "string"
+                              },
+                              "orderKey": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "parentSessionID": {
+                                "type": "string"
+                              },
+                              "placement": {
+                                "const": "top_level",
+                                "type": "string"
+                              },
+                              "sessionAgentID": {
+                                "type": "string"
+                              },
+                              "sessionID": {
+                                "type": "string"
+                              },
+                              "stage": {
+                                "type": "string"
+                              },
+                              "time": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "messageID",
+                              "inputMessageID",
+                              "orderKey",
+                              "sessionID",
+                              "sessionAgentID",
+                              "agentID",
+                              "stage",
+                              "time",
+                              "placement"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "sessions": {
+                          "items": {
+                            "anyOf": [
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "activity": {
+                                    "items": {
+                                      "oneOf": [
+                                        {
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "text": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "text",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "orderKey",
+                                            "type",
+                                            "text"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "properties": {
+                                            "callID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "state": {
+                                              "additionalProperties": {},
+                                              "propertyNames": {
+                                                "type": "string"
+                                              },
+                                              "type": "object"
+                                            },
+                                            "tool": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "tool",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "orderKey",
+                                            "type",
+                                            "tool",
+                                            "state"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "properties": {
+                                            "files": {
+                                              "items": {},
+                                              "type": "array"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "patch",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "orderKey",
+                                            "type",
+                                            "files"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "orderKey",
+                                            "type",
+                                            "filename"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "part-error",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "orderKey",
+                                            "type",
+                                            "message"
+                                          ],
+                                          "type": "object"
+                                        }
+                                      ]
+                                    },
+                                    "type": "array"
+                                  },
+                                  "agentID": {
+                                    "type": "string"
+                                  },
+                                  "errorReason": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "executionID": {
+                                    "pattern": "^msg.*",
+                                    "type": "string"
+                                  },
+                                  "firstMessageTime": {
+                                    "type": "number"
+                                  },
+                                  "firstObservedAt": {
+                                    "type": "number"
+                                  },
+                                  "inputMessageID": {
+                                    "pattern": "^msg.*",
+                                    "type": "string"
+                                  },
+                                  "inputPreview": {
+                                    "properties": {
+                                      "messageID": {
+                                        "type": "string"
+                                      },
+                                      "observedAt": {
+                                        "type": "number"
+                                      },
+                                      "source": {
+                                        "const": "user_message",
+                                        "type": "string"
+                                      },
+                                      "text": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "text",
+                                      "messageID",
+                                      "observedAt",
+                                      "source"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "lastDisplayMessageID": {
+                                    "type": "string"
+                                  },
+                                  "lastMessageTime": {
+                                    "type": "number"
+                                  },
+                                  "lastObservedAt": {
+                                    "type": "number"
+                                  },
+                                  "messageIDs": {
+                                    "items": {
+                                      "type": "string"
+                                    },
+                                    "type": "array"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "parentSessionID": {
+                                    "type": "string"
+                                  },
+                                  "placement": {
+                                    "const": "top_level",
+                                    "type": "string"
+                                  },
+                                  "sessionID": {
+                                    "type": "string"
+                                  },
+                                  "stage": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "enum": [
+                                      "pending",
+                                      "running",
+                                      "idle",
+                                      "completed",
+                                      "error",
+                                      "skipped"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "todoUpdatedAt": {
+                                    "maximum": 9007199254740991,
+                                    "minimum": 0,
+                                    "type": "integer"
+                                  },
+                                  "todos": {
+                                    "items": {
+                                      "$ref": "#/components/schemas/Todo"
+                                    },
+                                    "type": "array"
+                                  }
+                                },
+                                "required": [
+                                  "sessionID",
+                                  "agentID",
+                                  "orderKey",
+                                  "stage",
+                                  "messageIDs",
+                                  "firstMessageTime",
+                                  "lastMessageTime",
+                                  "activity",
+                                  "todos",
+                                  "todoUpdatedAt",
+                                  "placement",
+                                  "executionID",
+                                  "inputMessageID"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "activity": {
+                                    "items": {
+                                      "oneOf": [
+                                        {
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "text": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "text",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "orderKey",
+                                            "type",
+                                            "text"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "properties": {
+                                            "callID": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "state": {
+                                              "additionalProperties": {},
+                                              "propertyNames": {
+                                                "type": "string"
+                                              },
+                                              "type": "object"
+                                            },
+                                            "tool": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "tool",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "orderKey",
+                                            "type",
+                                            "tool",
+                                            "state"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "properties": {
+                                            "files": {
+                                              "items": {},
+                                              "type": "array"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "patch",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "orderKey",
+                                            "type",
+                                            "files"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "properties": {
+                                            "filename": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "file",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "orderKey",
+                                            "type",
+                                            "filename"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "properties": {
+                                            "id": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "message": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "orderKey": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "title": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "const": "part-error",
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "id",
+                                            "orderKey",
+                                            "type",
+                                            "message"
+                                          ],
+                                          "type": "object"
+                                        }
+                                      ]
+                                    },
+                                    "type": "array"
+                                  },
+                                  "agentID": {
+                                    "type": "string"
+                                  },
+                                  "errorReason": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "firstMessageTime": {
+                                    "type": "number"
+                                  },
+                                  "firstObservedAt": {
+                                    "type": "number"
+                                  },
+                                  "inputPreview": {
+                                    "properties": {
+                                      "messageID": {
+                                        "type": "string"
+                                      },
+                                      "observedAt": {
+                                        "type": "number"
+                                      },
+                                      "source": {
+                                        "const": "user_message",
+                                        "type": "string"
+                                      },
+                                      "text": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "text",
+                                      "messageID",
+                                      "observedAt",
+                                      "source"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "lastDisplayMessageID": {
+                                    "type": "string"
+                                  },
+                                  "lastMessageTime": {
+                                    "type": "number"
+                                  },
+                                  "lastObservedAt": {
+                                    "type": "number"
+                                  },
+                                  "messageIDs": {
+                                    "items": {
+                                      "type": "string"
+                                    },
+                                    "type": "array"
+                                  },
+                                  "orderKey": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  "parentSessionID": {
+                                    "type": "string"
+                                  },
+                                  "placement": {
+                                    "const": "top_level",
+                                    "type": "string"
+                                  },
+                                  "sessionID": {
+                                    "type": "string"
+                                  },
+                                  "stage": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "enum": [
+                                      "pending",
+                                      "running",
+                                      "idle",
+                                      "completed",
+                                      "error",
+                                      "skipped"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "todoUpdatedAt": {
+                                    "maximum": 9007199254740991,
+                                    "minimum": 0,
+                                    "type": "integer"
+                                  },
+                                  "todos": {
+                                    "items": {
+                                      "$ref": "#/components/schemas/Todo"
+                                    },
+                                    "type": "array"
+                                  }
+                                },
+                                "required": [
+                                  "sessionID",
+                                  "agentID",
+                                  "orderKey",
+                                  "stage",
+                                  "messageIDs",
+                                  "firstMessageTime",
+                                  "lastMessageTime",
+                                  "activity",
+                                  "todos",
+                                  "todoUpdatedAt",
+                                  "placement"
+                                ],
+                                "type": "object"
+                              }
+                            ]
+                          },
+                          "type": "array"
+                        },
+                        "topLevelSessionIDs": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "required": [
+                        "topLevelSessionIDs",
+                        "sessions",
+                        "messages"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "transcript",
+                    "events",
+                    "view",
+                    "history"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Session conversation history page"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "NotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "LogFileNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Not found"
+          }
+        },
+        "summary": "Page older session conversation transcript",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.session.conversation2.history({\n  ...\n})"
           }
         ]
       }
@@ -88253,88 +89133,6 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.task.queue.reorder({\n  ...\n})"
-          }
-        ]
-      }
-    },
-    "/task/events": {
-      "get": {
-        "description": "Pure change-notification SSE for the task list sidebar. Emits `{type, taskID, sequence}` when a persisted task aggregate event changes the task-list projection. Conversation stream/status chunks belong to /task/:taskID/events and are intentionally not sent here. Notify-worthy events also carry `notificationDetails` for copyable diagnostics. No replay — clients call /task separately to fetch the refreshed list.",
-        "operationId": "task.list.events",
-        "responses": {
-          "200": {
-            "content": {
-              "text/event-stream": {
-                "schema": {
-                  "properties": {
-                    "notificationDetails": {
-                      "type": "string"
-                    },
-                    "notify": {
-                      "properties": {
-                        "badge": {
-                          "type": "boolean"
-                        },
-                        "tier": {
-                          "anyOf": [
-                            {
-                              "const": 1,
-                              "type": "number"
-                            },
-                            {
-                              "const": 2,
-                              "type": "number"
-                            },
-                            {
-                              "const": 3,
-                              "type": "number"
-                            }
-                          ]
-                        }
-                      },
-                      "required": [
-                        "tier"
-                      ],
-                      "type": "object"
-                    },
-                    "sequence": {
-                      "type": "number"
-                    },
-                    "source": {
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "taskID": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    },
-                    "type": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "type",
-                    "taskID",
-                    "sequence"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Task-list change stream"
-          }
-        },
-        "summary": "Subscribe to global task-list change notifications",
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.task.list2.events({\n  ...\n})"
           }
         ]
       }

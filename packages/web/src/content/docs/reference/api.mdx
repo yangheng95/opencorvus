@@ -136,7 +136,6 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | PATCH | `/mission/{missionID}/title` | Rename a Mission Body: `title`; Errors: `LogFileNotFoundError`, `NotFoundError`. | `mission.rename` |
 | POST | `/task` | Create task Body: `artifactImports`, `attachments`, `budget`, `channelBinding`, `checks`, `directory`, `expectedPackageDigest`, `metadata`, `model`, `priority`, `productPillar`, `project`, `promptProfile`, `queue`, `request`, `requestID`, `source`, `title`; Errors: `BadRequestError`, `ExternalChildTaskLineageError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCreationIdempotencyConflictError`, `TaskCreatorAuthorityError`, `TaskCreatorSessionError`, `TaskExpectedPackageDigestConflictError`, `TaskPackageRevisionBindingError`. | `task.create` |
 | PATCH | `/task-queue/reorder` | Reorder queued tasks in a directory Body: `directory`, `orderedTaskIDs`, `revision`. | `task.queue.reorder` |
-| GET | `/task/events` | Subscribe to global task-list change notifications | `task.list.events` |
 | DELETE | `/task/{taskID}` | Delete task Body: `reason`, `surface`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskArtifactDeletionCommittedError`, `TaskCancellationIncompleteError`, `UnknownError`. | `task.delete` |
 | GET | `/task/{taskID}` | Get task Errors: `LogFileNotFoundError`, `NotFoundError`. | `task.get` |
 | PATCH | `/task/{taskID}/archive` | Archive or restore task Body: `archived`, `reason`, `surface`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `task.setArchived` |
@@ -201,6 +200,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/session/{sessionID}/config` | Get session effective configuration Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.config.get` |
 | PATCH | `/session/{sessionID}/config` | Update session configuration overlay Body: `agent`, `expert_squads`, `model`, `prompt`, `prompt_profile`, `runtime_templates`, `skill_mounts`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskPackageRevisionBindingError`, `TaskPromptProfileImmutableError`. | `session.config.update` |
 | GET | `/session/{sessionID}/conversation` | Hydrate session conversation state Errors: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation` |
+| GET | `/session/{sessionID}/conversation/history` | Page older session conversation transcript Errors: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation.history` |
 | GET | `/session/{sessionID}/diff` | Get message diff | `session.diff` |
 | GET | `/session/{sessionID}/events` | Subscribe to session events | `session.events` |
 | POST | `/session/{sessionID}/fork` | Fork session Body: `messageID`. | `session.fork` |
@@ -463,7 +463,6 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | DELETE | `/experimental/event-schedule/{id}` | Cancel event-triggered task Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `experimental.eventschedule.delete` |
 | GET | `/experimental/memory` | Get the Session MEMORY.MD document Errors: `LogFileNotFoundError`, `NotFoundError`. | `experimental.memory.get` |
 | GET | `/experimental/project-memory` | Get the organized Project MEMORY.MD context | `experimental.projectMemory.get` |
-| GET | `/experimental/project-memory/events` | Subscribe to Project MEMORY.MD notice changes | `experimental.projectMemory.events` |
 | POST | `/experimental/project-memory/notice/acknowledge` | Acknowledge a Project MEMORY.MD notice Body: `generation`. | `experimental.projectMemory.acknowledgeNotice` |
 | POST | `/experimental/project-memory/organize` | Request Project MEMORY.MD organization | `experimental.projectMemory.organize` |
 | GET | `/experimental/resource` | Get MCP resources Errors: `UnknownError`. | `experimental.resource.list` |

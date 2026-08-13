@@ -144,33 +144,6 @@ export function isTaskListProjectionEventType(type: string) {
   )
 }
 
-export const TaskListEvent = z
-  .object({
-    type: z.string(),
-    taskID: z.string().nullable(),
-    sequence: z.number(),
-    source: z.string().min(1).optional(),
-    notify: BusEvent.NotifyDescriptorSchema.optional(),
-    notificationDetails: z.string().optional(),
-  })
-  .superRefine((event, ctx) => {
-    const hasDetails = typeof event.notificationDetails === "string" && event.notificationDetails.trim().length > 0
-    if (event.notify && !hasDetails) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["notificationDetails"],
-        message: "Task-list events with notify metadata must include copyable notificationDetails",
-      })
-    }
-    if (!event.notify && event.notificationDetails !== undefined) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["notificationDetails"],
-        message: "Task-list events without notify metadata must not include notificationDetails",
-      })
-    }
-  })
-
 const TaskListQuery = z.object({
   q: z.string().optional(),
   status: z.string().optional(),
@@ -464,90 +437,6 @@ export const EngineRoutes = lazy(() =>
           }
           throw error
         }
-      },
-    )
-    .get(
-      "/task/events",
-      describeRoute({
-        summary: "Subscribe to global task-list change notifications",
-        description:
-          "Pure change-notification SSE for the task list sidebar. Emits " +
-          "`{type, taskID, sequence}` when a persisted task aggregate event " +
-          "changes the task-list projection. Conversation stream/status chunks " +
-          "belong to /task/:taskID/events and are intentionally not sent here. Notify-worthy " +
-          "events also carry `notificationDetails` for copyable diagnostics. No " +
-          "replay — clients call /task separately to fetch the refreshed list.",
-        operationId: "task.list.events",
-        responses: {
-          200: {
-            description: "Task-list change stream",
-            content: {
-              "text/event-stream": {
-                schema: resolver(TaskListEvent),
-              },
-            },
-          },
-        },
-      }),
-      async (c) => {
-        c.header("X-Accel-Buffering", "no")
-        c.header("X-Content-Type-Options", "nosniff")
-        return streamGlobalSSE(c, async (stream, bind) => {
-          let heartbeat: ReturnType<typeof setInterval> | undefined
-          let stop = () => {}
-          let finishStream = () => {}
-          let closed = false
-          const cleanup = (input?: { closeStream?: boolean; error?: unknown }) => {
-            if (closed) return
-            closed = true
-            if (heartbeat) clearInterval(heartbeat)
-            stop()
-            if (input?.error) {
-              log.warn("task-list event stream write failed", { error: errorMessage(input.error) })
-            }
-            if (input?.closeStream) stream.close()
-            finishStream()
-          }
-          const finished = new Promise<void>((resolve) => {
-            finishStream = resolve
-          })
-          let writes = Promise.resolve()
-          const writeData = (data: string) => {
-            writes = writes
-              .then(() => {
-                if (closed) return
-                return stream.writeSSE({ data })
-              })
-              .catch((error) => {
-                cleanup({ closeStream: true, error })
-              })
-            return writes
-          }
-          stop = ProtocolStore.subscribeEvents(
-            bind((event) => {
-              if (!isTaskListProjectionEventType(event.type)) return
-              const payload = JSON.stringify(taskListProtocolEvent(event))
-              void writeData(payload)
-            }),
-            { aggregate: "task" },
-          )
-          await writeData(JSON.stringify({ type: "task-list.connected", taskID: null, sequence: 0 }))
-          if (closed) {
-            await writes
-            return
-          }
-          heartbeat = setInterval(
-            bind(() => {
-              void writeData(JSON.stringify({ type: "task-list.heartbeat", taskID: null, sequence: 0 }))
-            }),
-            10_000,
-          )
-          stream.onAbort(() => {
-            cleanup()
-          })
-          await finished
-          await writes
-        })
       },
     )
     .get(
@@ -1307,8 +1196,17 @@ export const EngineRoutes = lazy(() =>
           }
           const changedMessageIDs = new Set<string>()
           for (const event of replay.events) {
-            if (event.sessionID !== sessionID || !isPersistedMessageTaskEvent(event.type)) continue
             const payload = event.payload && typeof event.payload === "object" ? event.payload : {}
+            const movedFromRequestedSession =
+              event.type === Message.Event.Moved.type &&
+              "sourceSessionID" in payload &&
+              payload.sourceSessionID === sessionID
+            if (
+              (event.sessionID !== sessionID && !movedFromRequestedSession) ||
+              !isPersistedMessageTaskEvent(event.type)
+            ) {
+              continue
+            }
             const info =
               payload.info && typeof payload.info === "object" ? (payload.info as Record<string, unknown>) : {}
             const part =
@@ -2220,6 +2118,7 @@ function taskEvent(taskID: string, event: { type: string; properties: Record<str
 
 function isMessageTaskEvent(type: string): boolean {
   return (
+    type === "message.moved" ||
     type === "message.updated" ||
     type === "message.part.updated" ||
     type === "message.part.delta" ||
@@ -2230,6 +2129,7 @@ function isMessageTaskEvent(type: string): boolean {
 
 function isPersistedMessageTaskEvent(type: string): boolean {
   return (
+    type === "message.moved" ||
     type === "message.updated" ||
     type === "message.part.updated" ||
     type === "message.removed" ||

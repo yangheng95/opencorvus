@@ -49,7 +49,12 @@ import {
 import { PermissionAuthority } from "@/permission/authority"
 import { listConversationAgentSessionsForSessionTree, taskExecutionProjectionForTask } from "@/orchestrator/task-event"
 import { BusEvent } from "@/bus/bus-event"
-import { ConversationTurnArtifactSummary, SessionConversationHydration, SessionEvent } from "@/engine/model"
+import {
+  ConversationTurnArtifactSummary,
+  SessionConversationHistoryPage,
+  SessionConversationHydration,
+  SessionEvent,
+} from "@/engine/model"
 import {
   applyRightSidebarConversationPromptOverlay,
   isRightSidebarConversationSession,
@@ -67,6 +72,13 @@ import { Question } from "@/question"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { HttpQueryBoolean, HttpQueryLimit } from "../query-schema"
 import { visibleComposerReferences } from "@opencorvus-ai/transport-protocol"
+import {
+  CONVERSATION_HISTORY_PAGE_LIMIT,
+  CONVERSATION_TAIL_MESSAGE_LIMIT,
+  ConversationHistoryQuery,
+  ConversationHydrationQuery,
+  conversationHistoryWindow,
+} from "@/conversation/history-window"
 
 const log = Log.create({ service: "server" })
 
@@ -633,14 +645,22 @@ export const SessionRoutes = lazy(() =>
           sessionID: z.string().meta({ description: "Session ID" }),
         }),
       ),
+      validator("query", ConversationHydrationQuery),
       async (c) => {
         const sessionID = c.req.valid("param").sessionID
+        const query = c.req.valid("query")
         const session = await getActiveProjectSession(sessionID)
         const sessionIDs = await Session.treeInProject({ sessionID, projectID: Instance.project.id })
-        const messages = (await Promise.all(sessionIDs.map((id) => Session.messages({ sessionID: id }))))
-          .flat()
+        const tailLimit = query.tail_limit ?? CONVERSATION_TAIL_MESSAGE_LIMIT
+        const latestMessages = await MessageStore.latestAcrossSessions({ sessionIDs, limit: tailLimit + 1 })
+        const truncated = latestMessages.length > tailLimit
+        const visibleMessages = truncated ? latestMessages.slice(latestMessages.length - tailLimit) : latestMessages
+        const transcript = enrichStandaloneSessionTranscript(visibleMessages)
+          .filter(conversationMessageHasDisplay)
           .sort(conversationTranscriptMessageOrder)
-        const transcript = enrichStandaloneSessionTranscript(messages).filter(conversationMessageHasDisplay)
+        const historyWindow = conversationHistoryWindow(transcript, { tailLimit })
+        const history = { ...historyWindow.history, hasMore: truncated || historyWindow.history.hasMore }
+        const rootMessages = await MessageStore.earliestInSession({ sessionID, limit: 20 })
         const sessionIDSet = new Set(sessionIDs)
         const pendingQuestions = (await Question.list())
           .filter((request) => sessionIDSet.has(request.sessionID))
@@ -656,7 +676,7 @@ export const SessionRoutes = lazy(() =>
           kind: "session" as const,
           sessionID,
           status: session.time.archived ? "archived" : resolveSessionActivityStatus(sessionID),
-          composerReferences: conversationLaunchReferences(messages),
+          composerReferences: conversationLaunchReferences(rootMessages),
           title: session.title ?? null,
           directory: session.directory ?? null,
           changes: await SessionSummary.diff({ sessionID }),
@@ -681,11 +701,11 @@ export const SessionRoutes = lazy(() =>
               }
             : entry,
         )
-        const view = projectConversationView(transcript, [], hydratedAgentSessions)
+        const view = projectConversationView(historyWindow.transcript, [], hydratedAgentSessions)
         const turnArtifacts =
           session.kind === "mission"
             ? await projectMissionTurnArtifacts({
-                transcript,
+                transcript: historyWindow.transcript,
                 view,
               })
             : []
@@ -694,7 +714,7 @@ export const SessionRoutes = lazy(() =>
             ? taskExecutionProjectionForTask(board.selectedTaskID)
             : undefined
         const agentView = projectConversationAgentView(
-          transcript,
+          historyWindow.transcript,
           executionProjection ? executionProjectionLifecycleEvents(executionProjection) : [],
           hydratedAgentSessions,
           new Map(),
@@ -704,18 +724,58 @@ export const SessionRoutes = lazy(() =>
         return c.json({
           board,
           pendingQuestions,
-          transcript,
+          transcript: historyWindow.transcript,
           events: [],
           view,
           turnArtifacts,
           agentView,
-          history: {
-            oldestTimestamp: transcript[0]?.info?.time?.created ?? null,
-            oldestOrderKey: transcript[0]?.info?.orderKey ?? null,
-            oldestMessageID: transcript[0]?.info?.id ?? null,
-            hasMore: false,
-            limit: Math.max(1, transcript.length),
+          history,
+        })
+      },
+    )
+    .get(
+      "/:sessionID/conversation/history",
+      describeRoute({
+        summary: "Page older session conversation transcript",
+        description: "Return a bounded Mission or conversation transcript slice older than the current hydrate tail.",
+        operationId: "session.conversation.history",
+        responses: {
+          200: {
+            description: "Session conversation history page",
+            content: { "application/json": { schema: resolver(SessionConversationHistoryPage) } },
           },
+          ...errors(404),
+        },
+      }),
+      validator("param", z.object({ sessionID: z.string().min(1) })),
+      validator("query", ConversationHistoryQuery),
+      async (c) => {
+        const sessionID = c.req.valid("param").sessionID
+        const query = c.req.valid("query")
+        await getActiveProjectSession(sessionID)
+        const sessionIDs = await Session.treeInProject({ sessionID, projectID: Instance.project.id })
+        const messages = await MessageStore.latestAcrossSessionsBefore({
+          sessionIDs,
+          before: query.before,
+          beforeID: query.before_id,
+          limit: query.limit + 1,
+        })
+        const truncated = messages.length > query.limit
+        const visibleMessages = truncated ? messages.slice(messages.length - query.limit) : messages
+        const transcript = enrichStandaloneSessionTranscript(visibleMessages)
+          .filter(conversationMessageHasDisplay)
+          .sort(conversationTranscriptMessageOrder)
+        const historyWindow = conversationHistoryWindow(transcript, { tailLimit: query.limit })
+        const history = { ...historyWindow.history, hasMore: truncated || historyWindow.history.hasMore }
+        const agentSessions = listConversationAgentSessionsForSessionTree({
+          sessionID,
+          projectID: Instance.project.id,
+        })
+        return c.json({
+          transcript: historyWindow.transcript,
+          events: [],
+          view: projectConversationView(historyWindow.transcript, [], agentSessions),
+          history,
         })
       },
     )

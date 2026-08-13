@@ -199,6 +199,7 @@ import {
 } from "./services/mission"
 import type { WorkLedgerChatRow, WorkLedgerMissionRow, WorkLedgerTaskRow } from "./services/work-ledger"
 import { setWorkLedgerChangeHandler, startSSE, stopSSE, type WorkLedgerStreamEvent } from "./services/sse"
+import { refreshProjectMemory } from "./services/project-memory"
 import { openImagePreview } from "./services/image-preview"
 import {
   buildChatDebugBlob,
@@ -558,6 +559,11 @@ function isMissionSessionSource(): boolean {
 
 function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
   setMissionSharedRefreshToken((value) => value + 1)
+  if (event.type === "work-ledger.changed" && event.sourceType === "project.memory.notice.changed") {
+    void refreshProjectMemory().catch((error) =>
+      AppLog.warn("project-memory", "Project MEMORY.MD notice refresh failed", { error: String(error) }),
+    )
+  }
   const selectedSource = boardStore.selectedSource
   const missionHandoff = activeMissionHandoff(event, selectedSource)
   if (missionHandoff) {

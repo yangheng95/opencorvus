@@ -58,6 +58,7 @@ function writeSelectedMessageToTree(event: any, sourceEvent: any = event): void 
 
 function isMessageStreamEvent(type: string): boolean {
   return (
+    type === "message.moved" ||
     type === "message.updated" ||
     type === "message.part.updated" ||
     type === "message.part.delta" ||

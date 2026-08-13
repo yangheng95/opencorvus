@@ -1117,6 +1117,13 @@ export const SessionConversationHydration = z.object({
   turnArtifacts: ConversationTurnArtifactSummary.array(),
 })
 
+export const SessionConversationHistoryPage = z.object({
+  transcript: MessageVisibleWithPartsArray,
+  events: SessionEvent.array(),
+  view: TaskConversationView,
+  history: TaskConversationHistoryState,
+})
+
 export const TaskConversationEventPage = z.object({
   events: TaskEvent.array(),
   eventReplay: TaskConversationEventReplay,

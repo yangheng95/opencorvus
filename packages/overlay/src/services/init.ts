@@ -10,7 +10,7 @@
 
 import { configure as configureApi, apiJsonWithTimeout } from "./api"
 import { checkConnection as checkServerConnection, startConnectionMonitor, stopConnectionMonitor } from "./connection"
-import { startTaskListSSE, startWorkLedgerSSE, stopSSE, stopTaskListSSE, stopWorkLedgerSSE } from "./sse"
+import { startWorkLedgerSSE, stopSSE, stopWorkLedgerSSE } from "./sse"
 import { loadAllLocales, setLocale } from "../utils/i18n"
 import {
   loadSettings,
@@ -32,7 +32,7 @@ import { CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS, loadConfigInfo } from "./config-
 import { initializeActiveDirectoryGit } from "../utils/git"
 import { setAppStore, type ProjectLoadIssue } from "../store/app"
 import { AppLog } from "../utils/log"
-import { startProjectMemoryEvents, stopProjectMemoryEvents } from "./project-memory"
+import { refreshProjectMemory } from "./project-memory"
 
 // ── Types ──
 
@@ -115,6 +115,9 @@ async function loadInitialData(
     }),
   ])
   const [tasksResult, metaResult] = await Promise.allSettled([loadTasks(), loadMeta()])
+  void refreshProjectMemory().catch((error) =>
+    AppLog.warn("project-memory", "Project MEMORY.MD status refresh failed", { error: String(error) }),
+  )
   if (settingsStore.directory.trim() !== directory) return { loaded: false }
   const issues: ProjectLoadIssue[] = []
   const appendFailure = (resource: ProjectLoadIssue["resource"], result: PromiseSettledResult<unknown>) => {
@@ -230,8 +233,6 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
     void initialData.reconcileCapabilities?.()
     await onConnected?.()
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    if (initialData.loaded) startTaskListSSE()
-    if (initialData.loaded) startProjectMemoryEvents()
   }
 
   if (!isCurrentInitLifecycle(lifecycleGeneration)) return
@@ -249,8 +250,6 @@ export async function initApp(options: InitOptions = {}): Promise<void> {
     void initialData.reconcileCapabilities?.()
     await onReconnect?.()
     if (!isCurrentInitLifecycle(lifecycleGeneration)) return
-    if (initialData.loaded) startTaskListSSE()
-    if (initialData.loaded) startProjectMemoryEvents()
   }, reconnectInterval)
 }
 
@@ -277,9 +276,7 @@ export function teardownApp(): void {
   initLifecycleGeneration += 1
   stopConnectionMonitor()
   stopSSE()
-  stopTaskListSSE()
   stopWorkLedgerSSE()
-  stopProjectMemoryEvents()
 }
 
 /**
