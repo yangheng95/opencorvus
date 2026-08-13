@@ -282,7 +282,27 @@ export function findDispatchLineageByDispatchID(input: {
   taskID: string
   dispatchID: string
 }): DispatchLineageRow | undefined {
-  const matches = listDispatchLineage(input.taskID).filter((lineage) => lineage.dispatchID === input.dispatchID)
+  return Database.use((db) => findDispatchLineageByDispatchIDInTransaction({ db, ...input }))
+}
+
+export function findDispatchLineageByDispatchIDInTransaction(input: {
+  db: Database.TxOrDb
+  taskID: string
+  dispatchID: string
+}): DispatchLineageRow | undefined {
+  const matches = input.db
+    .select()
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.task_id, input.taskID),
+        eq(EngineArtifactTable.kind, "dispatch_lineage"),
+        sql`json_extract(${EngineArtifactTable.payload}, '$.dispatch_id') = ${input.dispatchID}`,
+      ),
+    )
+    .orderBy(asc(EngineArtifactTable.time_created), asc(EngineArtifactTable.id))
+    .all()
+    .map(dispatchLineageRow)
   if (matches.length > 1) {
     throw new Error(`Dispatch identity ${input.dispatchID} has ${matches.length} lineages in Task ${input.taskID}`)
   }
@@ -375,7 +395,7 @@ export function parseDispatchLineagePayload(payload: unknown, artifactID: string
   }) as DispatchLineagePayload
 }
 
-function dispatchLineageRow(row: typeof EngineArtifactTable.$inferSelect): DispatchLineageRow {
+export function dispatchLineageRow(row: typeof EngineArtifactTable.$inferSelect): DispatchLineageRow {
   const payload = parseDispatchLineagePayload(row.payload, row.id)
   return {
     artifactID: row.id,

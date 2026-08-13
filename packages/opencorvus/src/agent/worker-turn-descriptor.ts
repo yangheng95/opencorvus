@@ -229,8 +229,14 @@ export namespace WorkerTurnDescriptor {
   }
 
   export function findForDispatch(input: { sessionID: string; dispatchID: string }): Info | undefined {
-    const rows = Database.use((db) =>
-      db
+    return Database.use((db) => findForDispatchInDatabase(db, input))
+  }
+
+  export function findForDispatchInDatabase(
+    db: Database.TxOrDb,
+    input: { sessionID: string; dispatchID: string },
+  ): Info | undefined {
+    const rows = db
         .select()
         .from(WorkerTurnDescriptorTable)
         .where(
@@ -239,8 +245,7 @@ export namespace WorkerTurnDescriptor {
             sql`json_extract(${WorkerTurnDescriptorTable.payload}, '$.dispatchTurn.current_dispatch_id') = ${input.dispatchID}`,
           ),
         )
-        .all(),
-    )
+        .all()
     if (rows.length > 1) {
       throw new Error(
         `Session ${input.sessionID} dispatch ${input.dispatchID} has ${rows.length} Worker Turn descriptors`,

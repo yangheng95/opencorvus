@@ -34,6 +34,7 @@ import {
 import { deriveTaskStatus, taskTerminalReason } from "./task-status"
 import { pendingTaskCancellationProjection, taskCancellationProjection } from "./cancellation-projection"
 import { GoalWorkloadArtifactSchema, type GoalWorkloadArtifact } from "@/goal-workload-analyst/types"
+import { validateGoalWorkloadArtifactRelationalIntegrity } from "@/goal-workload-analyst/publication"
 import { RequirementSetArtifactPayloadSchema, type RequirementSet } from "@/requirements/types"
 import {
   ResearchBriefSchema,
@@ -419,20 +420,25 @@ export function listGoalWorkloadArtifacts(taskID: string): GoalWorkloadArtifactR
       .from(EngineArtifactTable)
       .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "goal_workload")))
       .orderBy(EngineArtifactTable.time_created, EngineArtifactTable.id)
-      .all(),
-  ).map((row) => ({
-    ...row,
-    kind: "goal_workload" as const,
-    payload: GoalWorkloadArtifactSchema.parse(row.payload),
-  }))
+      .all()
+      .map((row) => ({
+        ...row,
+        kind: "goal_workload" as const,
+        payload: validateGoalWorkloadArtifactRelationalIntegrity({
+          db,
+          row,
+          payload: GoalWorkloadArtifactSchema.parse(row.payload),
+        }),
+      })),
+  )
 }
 
 export function findGoalWorkloadArtifact(input: {
   taskID: string
   artifactID: string
 }): GoalWorkloadArtifactRow | undefined {
-  const row = Database.use((db) =>
-    db
+  return Database.use((db) => {
+    const row = db
       .select()
       .from(EngineArtifactTable)
       .where(
@@ -442,15 +448,19 @@ export function findGoalWorkloadArtifact(input: {
           eq(EngineArtifactTable.kind, "goal_workload"),
         ),
       )
-      .get(),
-  )
-  return row
-    ? {
-        ...row,
-        kind: "goal_workload",
-        payload: GoalWorkloadArtifactSchema.parse(row.payload),
-      }
-    : undefined
+      .get()
+    return row
+      ? {
+          ...row,
+          kind: "goal_workload",
+          payload: validateGoalWorkloadArtifactRelationalIntegrity({
+            db,
+            row,
+            payload: GoalWorkloadArtifactSchema.parse(row.payload),
+          }),
+        }
+      : undefined
+  })
 }
 
 export function listResearchBriefArtifacts(taskID: string): ResearchBriefArtifactRow[] {

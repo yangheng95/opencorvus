@@ -652,9 +652,9 @@ END;
 CREATE TRIGGER IF NOT EXISTS engine_goal_graph_artifact_immutable
 BEFORE UPDATE ON engine_artifact
 FOR EACH ROW
-WHEN OLD.kind IN ('architect_contract_graph', 'goal_graph_projection')
+WHEN OLD.kind IN ('architect_contract_graph', 'goal_graph_projection', 'goal_workload')
 BEGIN
-  SELECT RAISE(ABORT, 'engine_artifact: Architect ContractGraph and GoalGraphProjection facts are immutable');
+  SELECT RAISE(ABORT, 'engine_artifact: domain publication facts are immutable');
 END;
 
 CREATE TRIGGER IF NOT EXISTS engine_goal_exact_artifact_binding_insert

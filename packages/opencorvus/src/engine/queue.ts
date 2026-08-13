@@ -73,7 +73,7 @@ import {
   listDispatchLineage,
   resolveDispatchOccurrenceAuthority,
 } from "./dispatch-lineage"
-import { findDispatchSettlementByDispatchID, recordDispatchSettlement } from "./dispatch-settlement"
+import { findDispatchSettlementByDispatchID, settleDispatchOrReturnExisting } from "./dispatch-settlement"
 import {
   RuntimeExecutionAdmissionClosedError,
   RuntimeExecutionSettlement,
@@ -4018,7 +4018,7 @@ export async function reconcileTerminalAgentLifecycleDelivery(input: {
         .get(),
     )
     if (!finalMessage) return "nonterminal"
-    recordDispatchSettlement({
+    settleDispatchOrReturnExisting({
       taskID: input.taskID,
       dispatchID: input.dispatchID,
       outcome: DispatchOutcome.partial({

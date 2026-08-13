@@ -26,6 +26,10 @@ import {
   projectTaskCancellationEventChain,
   type TaskCancellationProtocolEvent,
 } from "@/engine/cancellation-origin"
+import { EngineArtifactTable } from "@/engine/engine.sql"
+import { assertEngineArtifactPayloadIdentity } from "@/engine/artifact-catalog-metadata"
+import { GoalWorkloadArtifactSchema } from "@/goal-workload-analyst/types"
+import { validateGoalWorkloadArtifactRelationalIntegrity } from "@/goal-workload-analyst/publication"
 
 export const NotFoundError = NamedError.create(
   "NotFoundError",
@@ -243,7 +247,43 @@ function cancellationEventView(
  * exact same pure event-chain projection used by normal Task reads before the
  * database becomes available to any route.
  */
-function assertCurrentDataIntegrity(sqlite: BunDatabase, dbPath: string): void {
+function assertGoalWorkloadCoverageIntegrity(
+  db: SQLiteBunDatabase<typeof ApplicationSchema>,
+  dbPath: string,
+): void {
+  const rows = db
+    .select()
+    .from(EngineArtifactTable)
+    .where(eq(EngineArtifactTable.kind, "goal_workload"))
+    .orderBy(EngineArtifactTable.catalog_revision, EngineArtifactTable.id)
+    .all()
+  for (const row of rows) {
+    try {
+      assertEngineArtifactPayloadIdentity({
+        id: row.id,
+        kind: row.kind,
+        payload: row.payload,
+        payloadSHA256: row.payload_sha256,
+        payloadBytes: row.payload_bytes,
+      })
+      const payload = GoalWorkloadArtifactSchema.parse(row.payload)
+      validateGoalWorkloadArtifactRelationalIntegrity({ db, row, payload })
+    } catch (cause) {
+      throw new DatabaseUnavailableError({
+        message: `OpenCorvus database contains an invalid Goal Workload coverage Artifact ${row.id} at ${dbPath}; reset this pre-release database. ${cause instanceof Error ? cause.message : String(cause)}`,
+        path: dbPath,
+        operation: "Database.Client.dataIntegrity.goalWorkloadCoverage",
+        code: "DATA_RESET_REQUIRED",
+      })
+    }
+  }
+}
+
+function assertCurrentDataIntegrity(
+  sqlite: BunDatabase,
+  db: SQLiteBunDatabase<typeof ApplicationSchema>,
+  dbPath: string,
+): void {
   const legacyRequirementSet = queryAllFinalized<{ id: string }>(
     sqlite,
     `SELECT id
@@ -267,6 +307,28 @@ function assertCurrentDataIntegrity(sqlite: BunDatabase, dbPath: string): void {
       code: "DATA_RESET_REQUIRED",
     })
   }
+
+  const malformedGoalWorkload = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id
+     FROM engine_artifact
+     WHERE kind = 'goal_workload'
+       AND json_valid(payload) = 0
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (malformedGoalWorkload) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains malformed Goal Workload Artifact ${malformedGoalWorkload.id} at ${dbPath}. ` +
+        "Its immutable coverage receipt cannot be validated; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.goalWorkloadCoverage",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
+  assertGoalWorkloadCoverageIntegrity(db, dbPath)
 
   const tasks = queryAllFinalized<{ id: string }>(
     sqlite,
@@ -394,6 +456,14 @@ export namespace Database {
   export type Transaction = SQLiteTransaction<"sync", void, Schema>
 
   type Client = SQLiteBunDatabase<Schema>
+  export type TxOrDb = Transaction | Client
+
+  const ctx = Context.create<{
+    tx: TxOrDb
+    effects: (() => void | Promise<void>)[]
+    closed: boolean
+    transactionDepth: number
+  }>("database")
 
   const state = {
     sqlite: undefined as BunDatabase | undefined,
@@ -657,7 +727,12 @@ export namespace Database {
           throw schemaResetRequired(dbPath, drift, fingerprint)
         }
         configureSqlite(sqlite)
-        assertCurrentDataIntegrity(sqlite, dbPath)
+        const integrityDB = drizzle({ client: sqlite, schema: ApplicationSchema })
+        provideDatabaseContext(
+          { effects: [], tx: integrityDB, closed: false, transactionDepth: 0 },
+          "Database.Client.dataIntegrity",
+          () => assertCurrentDataIntegrity(sqlite, integrityDB, dbPath),
+        )
       } else {
         configureSqlite(sqlite)
         createCurrentSchema(sqlite, dbPath)
@@ -957,15 +1032,6 @@ export namespace Database {
       throwNormalized(error, "Database.incrementalVacuum")
     }
   }
-
-  export type TxOrDb = Transaction | Client
-
-  const ctx = Context.create<{
-    tx: TxOrDb
-    effects: (() => void | Promise<void>)[]
-    closed: boolean
-    transactionDepth: number
-  }>("database")
 
   export class ActiveDatabaseTransactionRequiredError extends Error {
     override readonly name = "ActiveDatabaseTransactionRequiredError"

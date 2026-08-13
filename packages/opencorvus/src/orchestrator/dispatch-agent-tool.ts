@@ -37,7 +37,7 @@ import { TaskWorkflowBindingConflictError } from "@/engine/workflow-binding-fact
 import { resolveDispatchOccurrenceAuthority } from "@/engine/dispatch-lineage"
 import { Log } from "@/util/log"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
-import { recordDispatchSettlement } from "@/engine/dispatch-settlement"
+import { settleDispatchOrReturnExisting } from "@/engine/dispatch-settlement"
 
 const log = Log.create({ service: "dispatch-agent-tool" })
 
@@ -617,7 +617,11 @@ export function createDispatchAgentTool(input: {
             outcome,
           )
           if (parsed.kind !== "accepted" && (parsed.kind !== "infrastructure_failure" || parsed.session_id)) {
-            recordDispatchSettlement({ taskID: input.taskID, dispatchID: dispatch.dispatchID, outcome: parsed })
+            return settleDispatchOrReturnExisting({
+              taskID: input.taskID,
+              dispatchID: dispatch.dispatchID,
+              outcome: parsed,
+            }).payload.outcome
           }
           return parsed
         }
