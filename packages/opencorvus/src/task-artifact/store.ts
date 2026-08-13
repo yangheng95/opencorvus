@@ -82,6 +82,11 @@ export type TaskArtifactProjectFile = Readonly<{
   mediaType: string
 }>
 
+export type TaskArtifactCommitSubtreePublication = Readonly<{
+  resourceSet: TaskArtifactResourceSetLocator
+  publication: TaskArtifactPublication
+}>
+
 const EXACT_GIT_COMMIT_PATTERN = /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/
 
 async function readTaskArtifactGitCommitFile(input: {
@@ -144,6 +149,77 @@ async function readTaskArtifactGitCommitFile(input: {
   return blob.stdout
 }
 
+async function committedSubtreeFiles(input: {
+  scope: TaskToolExecutionScope
+  sourceCommit: string
+  sourceRoot: string
+}) {
+  if (!EXACT_GIT_COMMIT_PATTERN.test(input.sourceCommit)) {
+    throw new Error(`TaskArtifactStore source commit is not an exact Git object ID: ${input.sourceCommit}`)
+  }
+  const sourceRoot = ProjectRelativePathSchema.parse(input.sourceRoot)
+  const identity = { taskID: input.scope.taskID, cwd: input.scope.projectDirectory }
+  const objectType = await taskGit(identity, ["cat-file", "-t", input.sourceCommit], { timeoutProfile: "fast" })
+  if (objectType.exitCode !== 0 || objectType.stdout.toString("utf8").trim() !== "commit") {
+    throw new Error(`TaskArtifactStore source object is not an exact Git commit: ${input.sourceCommit}`)
+  }
+  const listing = await taskGit(
+    identity,
+    [
+      "--literal-pathspecs",
+      "-c",
+      "core.quotepath=false",
+      "ls-tree",
+      "-r",
+      "-z",
+      "--full-tree",
+      "-l",
+      input.sourceCommit,
+      "--",
+      sourceRoot,
+    ],
+    { timeoutProfile: "fast" },
+  )
+  if (listing.exitCode !== 0) {
+    throw new Error(
+      `TaskArtifactStore failed to enumerate ${sourceRoot} at ${input.sourceCommit}: ${listing.stderr.toString().trim()}`,
+    )
+  }
+  const prefix = `${sourceRoot}/`
+  const files = listing.stdout
+    .toString("utf8")
+    .split("\0")
+    .filter(Boolean)
+    .map((row) => {
+      const match = /^(\d{6}) (\S+) ([0-9a-f]+)\s+(\d+|-)\t(.+)$/.exec(row)
+      if (!match) throw new Error(`TaskArtifactStore unexpected committed subtree entry: ${row}`)
+      if ((match[1] !== "100644" && match[1] !== "100755") || match[2] !== "blob" || match[4] === "-") {
+        throw new Error(`TaskArtifactStore committed subtree contains a non-regular entry: ${match[5]}`)
+      }
+      const sourcePath = ProjectRelativePathSchema.parse(match[5])
+      if (!sourcePath.startsWith(prefix)) {
+        throw new Error(`TaskArtifactStore committed subtree entry escapes ${sourceRoot}: ${sourcePath}`)
+      }
+      return {
+        sourcePath,
+        path: ProjectRelativePathSchema.parse(sourcePath.slice(prefix.length)),
+        size: Number(match[4]),
+      }
+    })
+    .sort((left, right) => compareTaskArtifactPathsByUTF8(left.path, right.path))
+  if (files.length === 0) {
+    throw new Error(`TaskArtifactStore committed subtree ${sourceRoot} has no regular files at ${input.sourceCommit}`)
+  }
+  const foldedPaths = new Map<string, string>()
+  for (const file of files) {
+    const folded = file.path.toLowerCase()
+    const prior = foldedPaths.get(folded)
+    if (prior) throw new Error(`TaskArtifactStore committed subtree path case-collides: ${prior} and ${file.path}`)
+    foldedPaths.set(folded, file.path)
+  }
+  return files
+}
+
 export function taskArtifactSnapshotResourceRefs(record: TaskArtifactSnapshotRecord): readonly TaskArtifactRef[] {
   return Object.freeze(
     Object.entries(record.manifest.trees).flatMap(([tree, inventory]) =>
@@ -183,6 +259,16 @@ function catalogLockKey(scope: TaskArtifactReadAuthority): string {
 
 function sha256(bytes: Uint8Array): string {
   return createHash("sha256").update(bytes).digest("hex")
+}
+
+function committedPackageMediaType(bytes: Uint8Array): string {
+  try {
+    return new TextDecoder("utf-8", { fatal: true }).decode(bytes).includes("\u0000")
+      ? "application/octet-stream"
+      : "text/plain"
+  } catch {
+    return "application/octet-stream"
+  }
 }
 
 function contentUUID(canonical: string): string {
@@ -1564,8 +1650,8 @@ export async function publishTaskArtifactProjectFiles(input: {
     | Readonly<{ kind: "merged_primary_commit"; commit: string }>
     | Readonly<{ kind: "current_task_project" }>
 }): Promise<TaskArtifactPublication> {
-  if (input.scope.owner.kind !== "projected-worker") {
-    throw new Error("TaskArtifactStore project-file publication requires a projected worker owner")
+  if (input.scope.owner.kind !== "projected-scheduler" && input.scope.owner.kind !== "projected-worker") {
+    throw new Error("TaskArtifactStore project-file publication requires a projected Task owner")
   }
   if (input.files.length === 0) {
     throw new Error("TaskArtifactStore project-file publication requires at least one file")
@@ -1578,9 +1664,15 @@ export async function publishTaskArtifactProjectFiles(input: {
     const realProjectRoot =
       input.source.kind === "current_task_project" ? await fs.realpath(input.scope.projectDirectory) : undefined
     const inventory: TaskArtifactPublicationFile[] = []
+    const canonicalFiles = input.files
+      .map((file) => ({
+        path: ProjectRelativePathSchema.parse(file.path),
+        mediaType: file.mediaType,
+      }))
+      .toSorted((left, right) => compareTaskArtifactPathsByUTF8(left.path, right.path))
     const seen = new Set<string>()
-    for (const [index, file] of input.files.entries()) {
-      const sourceRelativePath = ProjectRelativePathSchema.parse(file.path)
+    for (const file of canonicalFiles) {
+      const sourceRelativePath = file.path
       const folded = sourceRelativePath.toLowerCase()
       if (seen.has(folded)) {
         throw new Error(`TaskArtifactStore project-file publication repeats path ${sourceRelativePath}`)
@@ -1613,7 +1705,10 @@ export async function publishTaskArtifactProjectFiles(input: {
           `TaskArtifactStore project-file source ${sourceRelativePath}`,
         )
       }
-      const resourcePath = `${String(index).padStart(4, "0")}/${sourceRelativePath}`
+      // The immutable ref keeps the authoritative project-relative identity.
+      // Prefixing an ordinal here made a frozen Campaign resource set differ
+      // from the exact paths it was required to attest.
+      const resourcePath = sourceRelativePath
       const targetPath = path.join(stage.treeDirectories.resources!, ...resourcePath.split("/"))
       await fs.mkdir(path.dirname(targetPath), { recursive: true })
       await writeSyncedExclusiveFile(
@@ -1653,6 +1748,67 @@ export async function publishTaskArtifactProjectFiles(input: {
     throw new Error("TaskArtifactStore project-file publication completed without a snapshot")
   }
   return publication
+}
+
+/** Publish one exact committed package subtree as a package-root resource set. */
+export async function publishTaskArtifactGitCommitSubtree(input: {
+  scope: TaskToolExecutionScope
+  sourceCommit: string
+  sourceRoot: string
+}): Promise<TaskArtifactCommitSubtreePublication> {
+  if (input.scope.owner.kind !== "projected-worker") {
+    throw new Error("TaskArtifactStore committed subtree publication requires a projected worker owner")
+  }
+  const files = await committedSubtreeFiles(input)
+  const execution = createTaskArtifactStoreExecution(input.scope)
+  let publication: TaskArtifactPublication | undefined
+  let primaryFailure: unknown
+  try {
+    const stage = await execution.stage({ trees: ["package"] })
+    const inventory: TaskArtifactPublicationFile[] = []
+    for (const file of files) {
+      const bytes = await readTaskArtifactGitCommitFile({
+        scope: input.scope,
+        sourceCommit: input.sourceCommit,
+        sourceRelativePath: file.sourcePath,
+      })
+      if (bytes.byteLength !== file.size) {
+        throw new Error(
+          `TaskArtifactStore committed subtree size mismatch for ${file.sourcePath}: expected ${file.size}, received ${bytes.byteLength}`,
+        )
+      }
+      const target = path.join(stage.treeDirectories.package!, ...file.path.split("/"))
+      await fs.mkdir(path.dirname(target), { recursive: true })
+      await writeSyncedExclusiveFile(target, bytes, `TaskArtifactStore committed subtree stage ${file.path}`)
+      inventory.push({ tree: "package", path: file.path, media_type: committedPackageMediaType(bytes) })
+    }
+    publication = await execution.publish(stage, {
+      snapshot_kind: "catalog",
+      idempotent: true,
+      files: inventory,
+    })
+  } catch (cause) {
+    primaryFailure = cause
+  }
+  let cleanupFailure: unknown
+  try {
+    await execution.close()
+  } catch (cause) {
+    cleanupFailure = cause
+  }
+  if (primaryFailure && cleanupFailure) {
+    throw new AggregateError(
+      [primaryFailure, cleanupFailure],
+      "TaskArtifactStore committed subtree publication and cleanup both failed",
+    )
+  }
+  if (primaryFailure) throw primaryFailure
+  if (cleanupFailure) throw cleanupFailure
+  if (!publication) throw new Error("TaskArtifactStore committed subtree publication completed without a snapshot")
+  return Object.freeze({
+    publication,
+    resourceSet: TaskArtifactResourceSetLocatorSchema.parse({ snapshot: publication.snapshot, tree: "package" }),
+  })
 }
 
 function missing(error: unknown): boolean {
