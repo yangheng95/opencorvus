@@ -137,6 +137,19 @@ export const FactCheckReviewArtifactSchema = ArtifactConsumptionProvenanceSchema
 })
 export type FactCheckReviewArtifact = z.infer<typeof FactCheckReviewArtifactSchema>
 
+/** Durable evidence that a physical Fact Check Turn did not publish its required review. */
+export const FactCheckIncompleteArtifactSchema = ArtifactConsumptionProvenanceSchema.safeExtend({
+  target_session_id: z.string(),
+  target_agent: z.string(),
+  target_message_id: z.string(),
+  target_message_content_hash: z.string(),
+  invoked_by_orchestrator_session_id: z.string(),
+  fact_check_session_id: z.string(),
+  final_message_id: z.string(),
+  reason: z.enum(["review_not_published", "review_scope_mismatch"]),
+})
+export type FactCheckIncompleteArtifact = z.infer<typeof FactCheckIncompleteArtifactSchema>
+
 /**
  * Apply the verdict decision tree from spec §3.3 to a partial report.
  * Pure function; lives here so worker code, fact-check tooling, and tests

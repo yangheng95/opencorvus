@@ -32,6 +32,7 @@ export const ENGINE_ARTIFACT_KINDS = [
   "build_host_observation",
   "integrity_review",
   "fact_check_review",
+  "fact_check_incomplete",
   "visual_review",
   "intent_analysis",
   "requirement_set",
