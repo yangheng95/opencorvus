@@ -2545,12 +2545,23 @@ Trials, evaluation, comparison, metrics, `document@1` or `chart@1`. Read-only SQ
 `integrity_check=ok`, zero foreign-key violations, and zero rows for interactive Artifacts, iterations, metric specs
 and metric results. The controller recorded the exact failure and then a complete disposal receipt:
 listener stopped, Instances settled, database closed, renderer stopped and isolated Auth removed.
+The bounded public Mission abort itself did not settle within 15 seconds, and `result.json` therefore retained the
+last observed Mission projection as `running` even though all three child Tasks were inactive. This is not a resource
+leak—the subsequent disposal receipt is complete—but it is not a successful Mission lifecycle convergence receipt.
 
 Real-page evidence exists at `screenshots/main-final-running.png`, `screenshots/main-final-diagnostic.png`,
 `independent-audit/01-live-running.png` and `independent-audit/02-mission-running.png` under the run root. Those
 screenshots prove the real Work/Mission surface, random installed Squad, exact Luna model and running diagnostic
 projection. No document or chart detail screenshot exists because those Artifacts were never created. This run is a
 terminal **FAIL**, not a rendering pass; it closes the bounded acceptance attempt without starting another run.
+
+Independent final review confirmed two additional P1 boundaries. First, Completion Decision accepted a semantically
+incomplete terminal-owner output set. Virtual-workflow completion now enumerates every current `expert_output` from
+terminal sink agents and requires every locator in evidence or deliverables; omission returns the typed
+`TASK_COMPLETION_EVIDENCE_INCOMPLETE` contract while the Task remains active. Second, a cross-Task import correctly
+changes the outer producer to Mission but preserves the original worker in immutable `import_lineage`. Evolution
+publisher predecessor validation now follows that lineage for Mission imports and still rejects a different original
+worker. Focused positive tests cover both contracts; neither change retroactively turns this failed run into a pass.
 
 ### Post-R16 verification gate: queue completion lost executable project initialization
 

@@ -93,6 +93,11 @@ Session/message/tool part/Slice revision/artifact 事实中验证，调用方不
 重新打开 Task 不删除历史决策；只有 artifact `time_created` 与当前
 `engine_task.time_completed` 精确相等的决策才投影为当前 `completionDecision`。
 叙事 summary 留在真实 assistant message 和 progress 事实中，不复制进完成决策 artifact。
+对绑定 virtual workflow 的 Task，完成前还要从当前 Artifact catalog 枚举没有下游消费者的
+terminal node agent 所发布的全部 current `expert_output`。这些精确 locator 必须全部出现在
+Completion Decision 的 evidence 或 deliverable 集合；缺少任一项时返回
+`TASK_COMPLETION_EVIDENCE_INCOMPLETE`，Task 保持非终态。direct Task 与仍被下游消费的中间 node
+不适用这一 terminal-output 完整性规则，避免把过程证据误投影为用户交付。
 在完成 checkpoint 之前，`complete_task` 还会在同一个 `engine_task.metadata` 权威面取得
 `task-completion-closure-v1` 执行收敛租约；取得事务同时要求既有 dispatch 全部结算，
 `dispatch_lineage` 唯一 writer 则在其写入事务中拒绝 closure 后的新 lineage。失败或被其他终态
