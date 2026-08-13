@@ -24,7 +24,7 @@ import {
 import { markSessionConfigStale } from "./config"
 import { refreshActiveComposerModelFromSession } from "./composer-model"
 import { markExpertSquadCatalogStale } from "./expert-squad"
-import { applyEvent as applyTreeWriterEvent } from "./tree-writer"
+import { applyEvent as applyTreeWriterEvent, isProjectionPrerequisiteError } from "./tree-writer"
 import { refreshConversationTurnArtifacts, scheduleLatestConversationTailMerge } from "./conversation"
 import {
   isBrowserPreviewUpdateEvent,
@@ -150,20 +150,8 @@ function selectedConversationAgentSourceKey(event: any): string {
   return selectedSessionID ? `session:${selectedSessionID}` : ""
 }
 
-function isMessageWriterPrerequisiteError(error: unknown): boolean {
-  const message = error instanceof Error ? error.message : String(error || "")
-  return (
-    message.startsWith("message.part.delta: unknown session ") ||
-    message.startsWith("message.part.delta: unknown part ") ||
-    message.startsWith("message.removed: unknown session ") ||
-    message.startsWith("message.removed: unknown message ") ||
-    message.startsWith("message.part.removed: unknown session ") ||
-    message.startsWith("message.part.removed: unknown part ")
-  )
-}
-
 function messageWriterRecoveryOptions(error: unknown): SelectedTaskRecoveryOptions | null {
-  if (isMessageWriterPrerequisiteError(error)) return {}
+  if (isProjectionPrerequisiteError(error)) return {}
   return null
 }
 
