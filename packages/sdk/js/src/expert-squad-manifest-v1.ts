@@ -142,8 +142,26 @@ export const ExpertSquadAgentProjectionSchema = ExpertSquadProjectionResourcesSc
   label: NonBlankStringSchema,
   description: NonBlankStringSchema.optional(),
   base_role: NonEmptyStringSchema,
+  execution_contract: z.literal("platform_integrity_review").optional(),
   prompt: NonEmptyStringSchema.optional(),
-}).strict()
+})
+  .strict()
+  .superRefine((projection, context) => {
+    if (projection.base_role === "integrity" && projection.execution_contract !== "platform_integrity_review") {
+      context.addIssue({
+        code: "custom",
+        path: ["execution_contract"],
+        message: "integrity base_role requires the explicit platform_integrity_review execution contract",
+      })
+    }
+    if (projection.base_role !== "integrity" && projection.execution_contract !== undefined) {
+      context.addIssue({
+        code: "custom",
+        path: ["execution_contract"],
+        message: "platform_integrity_review execution contract requires integrity base_role",
+      })
+    }
+  })
 
 export const ExpertSquadVirtualWorkflowNodeSchema = z
   .object({

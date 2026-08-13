@@ -109,17 +109,13 @@ describe("Expert Squad catalog index", () => {
     const inspection = await PromptProfileResolver.catalogInspection({ projectDirectory: project.path, id: "base" })
     expect(inspection).toMatchObject({
       id: "base",
-      version: "2026.08.09.1",
+      version: "2026.08.13.1",
       selector: {
         summary: expect.any(String),
         selection_guidance: expect.any(String),
       },
-      workflows: [
-        { id: "composite-delivery", node_count: 4 },
-        { id: "integrity-verified-delivery", node_count: 5 },
-        { id: "visual-verified-delivery", node_count: 6 },
-      ],
-      workflow_count: 3,
+      workflows: [{ id: "planner-parallel-delivery", node_count: 4 }],
+      workflow_count: 1,
       next_workflow_cursor: null,
     })
   }, 0)
@@ -147,11 +143,9 @@ describe("Expert Squad catalog index", () => {
       ),
     ).toEqual({
       "base-developer": "build",
-      "base-integrity-reviewer": "integrity",
       "base-planner": "delegated-worker",
       "base-researcher": "explore",
       "base-tester": "delegated-worker",
-      "base-visual-reviewer": "visual-qa",
     })
   }, 0)
 
@@ -554,7 +548,7 @@ describe("Expert Squad catalog index", () => {
     })
     expect(detail).toMatchObject({
       id: "evolution-lab",
-      installations: [{ installationScope: "project", installedVersion: "2026.08.06.3" }],
+      installations: [{ installationScope: "project", installedVersion: "2026.08.13.1" }],
     })
   }, 0)
 
@@ -636,7 +630,7 @@ describe("Expert Squad catalog index", () => {
         const marketDetail = await request("market/detail?id=deep-research")
         expect(active).toMatchObject({ active: { effective: "base" }, default: "base" })
         expect(page).toMatchObject({ entries: expect.any(Array) })
-        expect(inspection).toMatchObject({ id: "base", workflow_count: 3, next_workflow_cursor: null })
+        expect(inspection).toMatchObject({ id: "base", workflow_count: 1, next_workflow_cursor: null })
         expect(status).toMatchObject({
           effective_count: (page as { total_count: number }).total_count,
           issue_count: 0,

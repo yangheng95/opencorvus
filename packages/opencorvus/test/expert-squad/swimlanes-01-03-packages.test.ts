@@ -10,6 +10,7 @@ import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 const packages = [
   {
     id: "browser-research-acceptance",
+    version: "2026.08.13.1",
     name: "Browser Research & Acceptance",
     productPillars: ["code", "work"],
     skillName: "browser-evidence-acceptance",
@@ -18,14 +19,12 @@ const packages = [
     agentIDs: [
       "browser-research-planner",
       "browser-evidence-observer",
-      "browser-interaction-auditor",
       "browser-acceptance-reviewer",
     ],
     dependencies: {
       "browser-research-planner": [],
       "browser-evidence-observer": ["browser-research-planner"],
-      "browser-interaction-auditor": ["browser-research-planner"],
-      "browser-acceptance-reviewer": ["browser-evidence-observer", "browser-interaction-auditor"],
+      "browser-acceptance-reviewer": ["browser-research-planner"],
     },
     skillFiles: ["SKILL.md", "references/upstream.md", "references/upstream-license.txt"],
     skillEvidence: [
@@ -36,23 +35,24 @@ const packages = [
   },
   {
     id: "office-delivery",
+    version: "2026.08.13.3",
     name: "Office Delivery",
     productPillars: ["work"],
     skillName: "office-delivery-method",
     skillRef: "office-delivery/shared/office-delivery-method",
-    workflowID: "verified-office-delivery",
-    agentIDs: ["office-source-analyst", "office-format-designer", "office-delivery-builder", "office-quality-reviewer"],
+    workflowID: "planned-office-delivery",
+    agentIDs: ["office-source-analyst", "office-delivery-builder", "office-delivery-planner"],
     dependencies: {
-      "office-source-analyst": [],
-      "office-format-designer": [],
-      "office-delivery-builder": ["office-format-designer", "office-source-analyst"],
-      "office-quality-reviewer": ["office-delivery-builder"],
+      "office-delivery-planner": [],
+      "office-source-analyst": ["office-delivery-planner"],
+      "office-delivery-builder": ["office-delivery-planner"],
     },
     skillFiles: ["SKILL.md"],
     skillEvidence: ["clean-room OpenCorvus method", "Source and data branch", "Review the actual deliverables"],
   },
   {
     id: "product-management",
+    version: "2026.08.13.1",
     name: "Product Management",
     productPillars: ["work"],
     skillName: "evidence-backed-product-planning",
@@ -116,7 +116,7 @@ describe("Expert Squad swimlanes 01-03 packages", () => {
         id: definition.id,
         name: definition.name,
         label: definition.name,
-        version: "2026.08.10.1",
+        version: definition.version,
         product_pillars: definition.productPillars,
       })
       expect([...loaded.packageSkills.keys()]).toEqual([definition.skillRef])
@@ -169,7 +169,7 @@ describe("Expert Squad swimlanes 01-03 packages", () => {
 
           expect(scheduler).toMatchObject({
             expertSquadID: definition.id,
-            packageRevision: { id: definition.id, version: "2026.08.10.1" },
+            packageRevision: { id: definition.id, version: definition.version },
             productionSkills: [
               {
                 authority: "manifest",
@@ -205,6 +205,15 @@ describe("Expert Squad swimlanes 01-03 packages", () => {
             definition.agentIDs.map((agentID) => ({
               id: agentID,
               skills: [
+                ...(definition.id === "office-delivery" && agentID === "office-delivery-builder"
+                  ? [
+                      {
+                        authority: "manifest" as const,
+                        source: "default" as const,
+                        ref: "default/skill/work-artifacts",
+                      },
+                    ]
+                  : []),
                 {
                   authority: "manifest" as const,
                   source: "package" as const,

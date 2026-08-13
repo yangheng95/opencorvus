@@ -10,7 +10,7 @@ import { persistQueuedTask } from "../../src/engine/pipeline"
 import { ExpertSquadPackageManager } from "../../src/expert-squad/manager"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
-import { ensureGitignore } from "../../src/engine/git"
+import { ensureGitProjectMetadata } from "../../src/engine/git"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
@@ -209,7 +209,7 @@ const values: Record<CommercialLegalArtifactType, unknown> = {
 }
 
 async function taskProcessBinding(taskID: string, packageDigest: string, timeCreated: number) {
-  await ensureGitignore()
+  await ensureGitProjectMetadata()
   return prepareTaskProcessBinding({
     mode: "native",
     taskID,
@@ -232,7 +232,7 @@ describe("Commercial Legal Expert Squad", () => {
       namespace: "builtin",
       id: "commercial-legal",
       name: "Commercial Legal",
-      version: "2026.08.10.1",
+      version: "2026.08.13.1",
       product_pillars: ["work"],
     })
     expect([...source.packageSkills.keys()].sort()).toEqual([...skillRefs].sort())
@@ -408,8 +408,7 @@ describe("Commercial Legal Expert Squad", () => {
           const receipt = JSON.parse(
             await publishCommercialLegalArtifact.execute(
               {
-                artifact_type: "commercial-legal/matter-charter",
-                payload: charter,
+                artifact: { artifact_type: "commercial-legal/matter-charter", payload: charter },
                 resource_set: null,
                 source_artifact_locators: [],
               },
@@ -425,8 +424,7 @@ describe("Commercial Legal Expert Squad", () => {
             const receipt = JSON.parse(
               await publishCommercialLegalArtifact.execute(
                 {
-                  artifact_type: "commercial-legal/authority-dossier",
-                  payload: dossier,
+                  artifact: { artifact_type: "commercial-legal/authority-dossier", payload: dossier },
                   resource_set: null,
                   source_artifact_locators: [charterLocator],
                 },

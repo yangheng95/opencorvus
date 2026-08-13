@@ -348,6 +348,9 @@ export interface ExpertSquadWorkflowTopologyAnalysis {
   readonly join_node_ids: readonly string[]
   readonly critical_path_node_count: number
   readonly maximum_parallel_width: number
+  readonly structure: "flat_planner_parallel_workers" | "parallel_workers_join" | "dependency_dag"
+  readonly planner_node_id: string | null
+  readonly parallel_worker_node_ids: readonly string[]
 }
 
 /**
@@ -381,10 +384,28 @@ export function analyzeExpertSquadWorkflowTopology(
       const waves = [...waveMap.entries()]
         .sort(([left], [right]) => left - right)
         .map(([depth, nodeIDs]) => ({ depth, node_ids: nodeIDs }))
+      const initialFrontier = waves[0]?.node_ids ?? []
+      const secondFrontier = waves[1]?.node_ids ?? []
+      const plannerNodeID =
+        waves.length === 2 &&
+        initialFrontier.length === 1 &&
+        secondFrontier.length >= 2 &&
+        secondFrontier.every((nodeID) => {
+          const dependencies = workflow.nodes[nodeID]!.depends_on
+          return dependencies.length === 1 && dependencies[0] === initialFrontier[0]
+        })
+          ? initialFrontier[0]!
+          : null
+      const parallelJoin =
+        waves.length === 2 &&
+        initialFrontier.length >= 2 &&
+        secondFrontier.length === 1 &&
+        workflow.nodes[secondFrontier[0]!]!.depends_on.length === initialFrontier.length &&
+        initialFrontier.every((nodeID) => workflow.nodes[secondFrontier[0]!]!.depends_on.includes(nodeID))
       return {
         workflow_id: workflowID,
         node_count: Object.keys(workflow.nodes).length,
-        initial_frontier_node_ids: waves[0]?.node_ids ?? [],
+        initial_frontier_node_ids: initialFrontier,
         waves,
         join_node_ids: Object.entries(workflow.nodes)
           .filter(([, node]) => node.depends_on.length > 1)
@@ -392,8 +413,78 @@ export function analyzeExpertSquadWorkflowTopology(
           .sort(),
         critical_path_node_count: waves.length,
         maximum_parallel_width: Math.max(...waves.map((wave) => wave.node_ids.length)),
+        structure: plannerNodeID
+          ? "flat_planner_parallel_workers"
+          : parallelJoin
+            ? "parallel_workers_join"
+            : "dependency_dag",
+        planner_node_id: plannerNodeID,
+        parallel_worker_node_ids: plannerNodeID ? secondFrontier : [],
       }
     })
+}
+
+/**
+ * Repository-shipped Expert Squads follow a stronger product policy than the
+ * public manifest ABI. Third-party packages may retain any valid acyclic
+ * evidence graph. Shipped non-Advanced packages may not project the platform
+ * Visual QA or Integrity review runtimes, and may not recreate the retired
+ * Requirements -> Architect -> Implementer delivery chain. Advanced is the
+ * explicit product exception because that package owns those specialist ABIs.
+ */
+export function validateBuiltInExpertSquadTopologyPolicy(input: unknown): ExpertSquadManifestV1 {
+  const manifest = validateExpertSquadManifestDispatchTopology(input)
+  if (manifest.id === "advanced") return manifest
+
+  const diagnostics: ExpertSquadValidationDiagnostic[] = []
+  for (const [agentID, agent] of Object.entries(manifest.capability_projection.agents)) {
+    if (agent.base_role === "visual-qa" || agent.base_role === "integrity") {
+      diagnostics.push({
+        path: `manifest.capability_projection.agents.${agentID}.base_role`,
+        message: `shipped non-Advanced Expert Squads use Planner/worker ownership instead of ${agent.base_role} review runtime`,
+      })
+    }
+  }
+
+  for (const [workflowID, workflow] of Object.entries(manifest.capability_projection.virtual_workflows)) {
+    const requirementNodes = Object.entries(workflow.nodes)
+      .filter(([, node]) => manifest.capability_projection.agents[node.agent_id]?.base_role === "requirements")
+      .map(([nodeID]) => nodeID)
+    const architectNodes = Object.entries(workflow.nodes)
+      .filter(([, node]) => manifest.capability_projection.agents[node.agent_id]?.base_role === "architect")
+      .map(([nodeID]) => nodeID)
+    const buildNodes = Object.entries(workflow.nodes)
+      .filter(([, node]) => manifest.capability_projection.agents[node.agent_id]?.base_role === "build")
+      .map(([nodeID]) => nodeID)
+    const ancestors = (nodeID: string): Set<string> => {
+      const result = new Set<string>()
+      const visit = (current: string) => {
+        for (const dependency of workflow.nodes[current]?.depends_on ?? []) {
+          if (result.has(dependency)) continue
+          result.add(dependency)
+          visit(dependency)
+        }
+      }
+      visit(nodeID)
+      return result
+    }
+    const retiredChain = buildNodes.some((buildNodeID) => {
+      const buildAncestors = ancestors(buildNodeID)
+      return architectNodes.some((architectNodeID) => {
+        if (!buildAncestors.has(architectNodeID)) return false
+        const architectAncestors = ancestors(architectNodeID)
+        return requirementNodes.some((requirementNodeID) => architectAncestors.has(requirementNodeID))
+      })
+    })
+    if (retiredChain) {
+      diagnostics.push({
+        path: `manifest.capability_projection.virtual_workflows.${workflowID}.nodes`,
+        message: "shipped non-Advanced Expert Squads must replace Requirements -> Architect -> Implementer serialization with Planner and parallel workers",
+      })
+    }
+  }
+  throwValidationDiagnostics(diagnostics)
+  return manifest
 }
 
 function assertNonEmptyStrings(values: readonly string[], field: string): void {

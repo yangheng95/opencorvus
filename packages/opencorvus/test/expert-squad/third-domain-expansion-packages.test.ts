@@ -215,7 +215,7 @@ describe("Third ten-domain Expert Squad package expansion", () => {
         schema_version: 1,
         namespace: "builtin",
         id: definition.id,
-        version: "2026.08.11.1",
+        version: "2026.08.13.1",
       })
       expect([...loaded.packageSkills.keys()]).toEqual([definition.skillRef])
       expect(method.definition.name).toBe(definition.skillName)

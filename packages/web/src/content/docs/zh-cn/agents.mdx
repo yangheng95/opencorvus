@@ -148,7 +148,7 @@ OpenCorvus 会在加载 package tool 前校验精确编译字节、声明依赖 
 
 ## 内置 Base、Advanced 与 Research Studio
 
-`base` 是默认内置专家团 package，也是 Advanced 的便捷复合型版本。紧凑的 `composite-delivery` workflow 依次调度 Explore `base-researcher`、Delegated Worker `base-planner`、Build `base-developer` 与 Delegated Worker `base-tester`，使每个身份继承与职责一致的 runtime ownership。固定的 `integrity-verified-delivery` 变体在测试后追加 package-owned Integrity `base-integrity-reviewer`；固定的 `visual-verified-delivery` 变体在开发后并行运行 Tester 与 Visual Quality Assurance `base-visual-reviewer`，再由 Integrity Reviewer 汇合两支证据。Orchestrator 精确选择一张 graph，所选 graph 的每个节点都必须执行。四个核心身份依次发布并选择 canonical `base/research-report`、`base/implementation-plan`、`base/development-report` 与 `base/test-report` 交接 Artifact，两个复核身份使用 typed VisualReview 与 IntegrityReview 证据。Base 不创建或消费 RequirementSet、ContractGraph、Goal 或 Delivery Slice 计划事实。
+`base` 是默认内置专家团 package，也是 Advanced 的紧凑替代。唯一的 `planner-parallel-delivery` workflow 先运行 Delegated Worker `base-planner`，随后让 Explore `base-researcher`、Build `base-developer` 与 Delegated Worker `base-tester` 同时进入 dependency-ready frontier。三个 worker 都只消费计划，并分别拥有互不重叠的调查、产品/生成输出和测试/checker 分区，不制造串行报告交接。UI 验收仍由实现 worker 通过真实页面证据负责，而不是独立 Visual Reviewer 节点。Base 不投影 Integrity 或 Visual Quality Assurance 身份，也不创建 RequirementSet、ContractGraph、Goal 或 Delivery Slice 计划事实。
 
 `advanced` 是可独立选择的完整内置软件开发团队，覆盖需求理解、需求工程、架构、工作量复核、源码与外部调查、界面调查与设计、实现、测试、视觉复核、系统完整性复核和事实核验。每张交付图都保留 Requirements → Architect 可追溯关系；独立调查从同一 frontier 启动，架构完成后工作量复核与交付并行，实作完成后测试与独立复核在 Artifact 输入允许时并行。这些都是 package 拥有的动态身份，不是 Core role。
 
