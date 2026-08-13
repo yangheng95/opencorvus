@@ -46,6 +46,7 @@ export namespace SessionWake {
     retryFailedReply?: boolean
   }) => Promise<void>
   let wakeLoopExecutorForTest: WakeLoopExecutor | undefined
+  let beforeWakeLoopActivationForTest: (() => void | Promise<void>) | undefined
 
   export const WakeReason = z.discriminatedUnion("source", [
     z.object({
@@ -140,9 +141,12 @@ export namespace SessionWake {
   }
 
   export type WakeCompletion = { ok: true } | { ok: false; error: string }
+  export type WakeActivation = { owner: AbortSignal }
   export type WakeReceipt = {
     sessionID: string
     messageID: string
+    /** Exact physical prompt owner admitted for this wake attempt. */
+    activation: Promise<WakeActivation>
     /** Outcome of the exact assistant reply to this durable wake Message. */
     completion: Promise<WakeCompletion>
   }
@@ -301,9 +305,9 @@ export namespace SessionWake {
         signal: input.signal,
         fn: () => undefined,
       })
-      const completion = startPersistedWakeLoop({ sessionID, messageID: message.info.id, directory })
+      const started = startPersistedWakeLoop({ sessionID, messageID: message.info.id, directory })
 
-      return { sessionID, messageID: message.info.id, completion }
+      return { sessionID, messageID: message.info.id, ...started }
     })
   }
 
@@ -313,6 +317,15 @@ export namespace SessionWake {
     directory: string
     retryFailedReply?: boolean
   }): Promise<WakeCompletion> {
+    return startPersistedWakeLoop(input).completion
+  }
+
+  export function resumePersistedWakeWithReceipt(input: {
+    sessionID: string
+    messageID: string
+    directory: string
+    retryFailedReply?: boolean
+  }): Pick<WakeReceipt, "activation" | "completion"> {
     return startPersistedWakeLoop(input)
   }
 
@@ -321,7 +334,7 @@ export namespace SessionWake {
     messageID: string
     directory: string
     retryFailedReply?: boolean
-  }): Promise<WakeCompletion> {
+  }): Pick<WakeReceipt, "activation" | "completion"> {
     let settleReply!: (completion: WakeCompletion) => void
     const reply = new Promise<WakeCompletion>((resolve) => {
       settleReply = resolve
@@ -352,22 +365,49 @@ export namespace SessionWake {
         })
       }
     })
-    const operation = Promise.resolve().then(() =>
-      (wakeLoopExecutorForTest ?? executeWakeLoop)({
+    let resolveActivation!: (activation: WakeActivation) => void
+    let rejectActivation!: (error: unknown) => void
+    let activationSettled = false
+    const activation = new Promise<WakeActivation>((resolve, reject) => {
+      resolveActivation = resolve
+      rejectActivation = reject
+    })
+    void activation.catch(() => undefined)
+    const activated = (owner: AbortSignal) => {
+      if (activationSettled) return
+      activationSettled = true
+      resolveActivation({ owner })
+    }
+    const operation = Promise.resolve().then(() => {
+      if (wakeLoopExecutorForTest) {
+        return Promise.resolve(beforeWakeLoopActivationForTest?.()).then(() => {
+          activated(reservation.signal)
+          return wakeLoopExecutorForTest!({
+            ...input,
+            signal: reservation.signal,
+          })
+        })
+      }
+      return executeWakeLoop({
         ...input,
         signal: reservation.signal,
+        activated,
         replySettled: () => settleReply({ ok: true }),
-      }),
-    )
+      })
+    })
     reservation.settleWith(operation)
     void operation.then(
       () => settleReply({ ok: true }),
       (err) => {
+        if (!activationSettled) {
+          activationSettled = true
+          rejectActivation(err)
+        }
         log.error("wake loop failed", { sessionID: input.sessionID, messageID: input.messageID, err })
         settleReply({ ok: false, error: err instanceof Error ? err.message : String(err) })
       },
     )
-    return reply
+    return { activation, completion: reply }
   }
 
   async function executeWakeLoop(input: {
@@ -376,6 +416,7 @@ export namespace SessionWake {
     directory: string
     signal: AbortSignal
     retryFailedReply?: boolean
+    activated: (owner: AbortSignal) => void
     replySettled?: () => void
   }): Promise<void> {
     await runWithInitializedIndependentProject({
@@ -383,12 +424,14 @@ export namespace SessionWake {
       signal: input.signal,
       fn: async () => {
         input.signal.throwIfAborted()
-        await SessionPrompt.loop({
-          sessionID: input.sessionID,
-          resume_existing: false,
-          reply_to_message_id: input.messageID,
-          retry_failed_reply: input.retryFailedReply,
-        })
+        await SessionPrompt.withPromptOwnerCapture(input.sessionID, input.activated, () =>
+          SessionPrompt.loop({
+            sessionID: input.sessionID,
+            resume_existing: false,
+            reply_to_message_id: input.messageID,
+            retry_failed_reply: input.retryFailedReply,
+          }),
+        )
         input.replySettled?.()
         await SessionPrompt.waitForFinish(input.sessionID, input.directory)
       },
@@ -402,6 +445,15 @@ export namespace SessionWake {
       return {
         [Symbol.dispose]() {
           if (wakeLoopExecutorForTest === executor) wakeLoopExecutorForTest = undefined
+        },
+      }
+    },
+    installBeforeWakeLoopActivation(hook: () => void | Promise<void>): Disposable {
+      if (beforeWakeLoopActivationForTest) throw new Error("SessionWake activation test hook is already installed")
+      beforeWakeLoopActivationForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (beforeWakeLoopActivationForTest === hook) beforeWakeLoopActivationForTest = undefined
         },
       }
     },

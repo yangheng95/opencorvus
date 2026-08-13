@@ -42,6 +42,31 @@ export const MissionExecutionClosingError = NamedError.create(
     .strict(),
 )
 
+export const MissionExecutionWakeClosedError = NamedError.create(
+  "MissionExecutionWakeClosedError",
+  z
+    .object({
+      message: z.string(),
+      missionID: z.string().min(1),
+      sessionID: z.string().min(1),
+      state: z.enum(["closing", "closed"]),
+      operationID: z.string().uuid(),
+      closureEventID: z.string().min(1),
+    })
+    .strict(),
+)
+
+export const MissionExecutionWakeNotOpenedError = NamedError.create(
+  "MissionExecutionWakeNotOpenedError",
+  z
+    .object({
+      message: z.string(),
+      missionID: z.string().min(1),
+      sessionID: z.string().min(1),
+    })
+    .strict(),
+)
+
 const missionExecutionAdmissionLocks = new Map<string, Promise<unknown>>()
 
 export function withMissionExecutionAdmission<T>(sessionID: string, operation: () => Promise<T>): Promise<T> {
@@ -179,6 +204,32 @@ export function settleMissionSchedulerWakesForClosure(closure: MissionExecutionC
   return Database.immediateTransaction((db) => settleMissionSchedulerWakesForClosureInTransaction(db, closure))
 }
 
+async function openMissionExecutionUnderAdmission(input: {
+  missionID: string
+  sessionID: string
+  source: "mission.dispatch" | "mission.wake"
+  requestID: string
+}): Promise<MissionExecutionClosure> {
+  const current = currentMissionExecutionClosure(input.sessionID)
+  if (current && current.missionID !== input.missionID) {
+    throw new Error(`Mission execution closure for Session ${input.sessionID} belongs to Mission ${current.missionID}`)
+  }
+  if (current?.state === "closing") {
+    throw new MissionExecutionClosingError({
+      message: `Mission ${input.missionID} execution is still closing; retry or complete the durable close operation before reopening it.`,
+      missionID: input.missionID,
+      sessionID: input.sessionID,
+      operationID: current.operationID,
+      closureEventID: current.eventID,
+    })
+  }
+  return appendMissionExecutionClosure({
+    ...input,
+    operationID: randomUUID(),
+    state: "opened",
+  })
+}
+
 export async function openMissionExecution(input: {
   missionID: string
   sessionID: string
@@ -187,27 +238,68 @@ export async function openMissionExecution(input: {
 }): Promise<MissionExecutionClosure> {
   const closing = activeCloseOperations.get(input.sessionID)
   if (closing) await closing
+  return withMissionExecutionAdmission(input.sessionID, () => openMissionExecutionUnderAdmission(input))
+}
+
+export async function openMissionExecutionWithWake<Receipt extends { activation: Promise<unknown> }>(input: {
+  missionID: string
+  sessionID: string
+  source: "mission.dispatch" | "mission.wake"
+  requestID: string
+  wake: () => Promise<Receipt>
+}): Promise<Receipt> {
+  const closing = activeCloseOperations.get(input.sessionID)
+  if (closing) await closing
+  return withMissionExecutionAdmission(input.sessionID, async () => {
+    await openMissionExecutionUnderAdmission({
+      missionID: input.missionID,
+      sessionID: input.sessionID,
+      source: input.source,
+      requestID: input.requestID,
+    })
+    const receipt = await input.wake()
+    await receipt.activation
+    return receipt
+  })
+}
+
+/**
+ * Admit a non-operator wake only while the current Mission occurrence remains
+ * active. This never opens or reopens an occurrence; explicit operator ingress
+ * is the sole authority for that transition.
+ */
+export function admitMissionExecutionWake<Receipt extends { activation: Promise<unknown> }>(input: {
+  missionID: string
+  sessionID: string
+  wake: () => Receipt | Promise<Receipt>
+}): Promise<Receipt> {
   return withMissionExecutionAdmission(input.sessionID, async () => {
     const current = currentMissionExecutionClosure(input.sessionID)
-    if (current && current.missionID !== input.missionID) {
+    if (!current) {
+      throw new MissionExecutionWakeNotOpenedError({
+        message: `Mission ${input.missionID} has no opened execution occurrence for non-operator wake activation.`,
+        missionID: input.missionID,
+        sessionID: input.sessionID,
+      })
+    }
+    if (current.missionID !== input.missionID) {
       throw new Error(
         `Mission execution closure for Session ${input.sessionID} belongs to Mission ${current.missionID}`,
       )
     }
-    if (current?.state === "closing") {
-      throw new MissionExecutionClosingError({
-        message: `Mission ${input.missionID} execution is still closing; retry or complete the durable close operation before reopening it.`,
+    if (current.state === "closing" || current.state === "closed") {
+      throw new MissionExecutionWakeClosedError({
+        message: `Mission ${input.missionID} ${current.state} occurrence rejects non-operator wake activation under closure event ${current.eventID}.`,
         missionID: input.missionID,
         sessionID: input.sessionID,
+        state: current.state,
         operationID: current.operationID,
         closureEventID: current.eventID,
       })
     }
-    return appendMissionExecutionClosure({
-      ...input,
-      operationID: randomUUID(),
-      state: "opened",
-    })
+    const receipt = await input.wake()
+    await receipt.activation
+    return receipt
   })
 }
 

@@ -21,6 +21,12 @@ import { AutomationRunViewSchema } from "../src/server/routes/global"
 import { RuntimeServerOwnership } from "../src/server/runtime-server-ownership"
 import { Server } from "../src/server/server"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { ensureMissionSession } from "../src/mission/session"
+import {
+  closeMissionExecutionOperation,
+  currentMissionExecutionClosure,
+  openMissionExecution,
+} from "../src/mission/execution-closure"
 
 afterAll(async () => {
   await resetMemoryDatabase()
@@ -535,6 +541,108 @@ describe("scheduler atomic identity and progress contracts", () => {
           events: ["failure-before", "failure-after", "runtime-settled"],
           error: { message: "injected automation wake failure" },
           persisted: { lastError: "injected automation wake failure", leaseOwner: null },
+        })
+      },
+    })
+  })
+
+  test("persists the exact Mission closure authority when a Session automation targets a closed occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "automation-closed-mission"
+        const mission = await ensureMissionSession({
+          missionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        await openMissionExecution({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.wake",
+          requestID: "automation-closed-open",
+        })
+        const closure = await closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.abort",
+          requestID: "automation-closed-close",
+          close: async () => undefined,
+        })
+        const automation = await AutomationService.create({
+          name: "closed Mission automation",
+          target: { scope: "session", sessionId: mission.id },
+          recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          prompt: "Do not reopen the closed Mission occurrence",
+        })
+        const due = Date.now() - 1_000
+        Database.use((db) =>
+          db
+            .update(AutomationTable)
+            .set({ next_run: due, lease_owner: null, lease_until: 0 })
+            .where(eq(AutomationTable.id, automation.id))
+            .run(),
+        )
+        const owner = "automation-owner:closed-mission"
+        const job = AutomationService.TestHooks.claim(automation.id, owner, due)
+        if (!job) throw new Error("Closed Mission automation fixture could not claim its due occurrence")
+        const fireID = await AutomationService.TestHooks.executeClaimedDueOccurrence({ job, owner, now: due })
+        const persisted = Database.use((db) => ({
+          automation: db.select().from(AutomationTable).where(eq(AutomationTable.id, automation.id)).get(),
+          run: db.select().from(AutomationRunTable).where(eq(AutomationRunTable.fire_id, fireID)).get(),
+        }))
+        expect({ closure: currentMissionExecutionClosure(mission.id), persisted }).toMatchObject({
+          closure: { eventID: closure.eventID, operationID: closure.operationID, state: "closed" },
+          persisted: {
+            automation: { failure_count: 1, last_error: expect.stringContaining(closure.eventID) },
+            run: { outcome: "retry_wait", error: expect.stringContaining(closure.eventID) },
+          },
+        })
+      },
+    })
+  })
+
+  test("persists a typed inactive-occurrence result when a Session automation targets a draft Mission", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "automation-draft-mission"
+        const mission = await ensureMissionSession({
+          missionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        const automation = await AutomationService.create({
+          name: "draft Mission automation",
+          target: { scope: "session", sessionId: mission.id },
+          recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+          prompt: "Report the inactive Mission occurrence",
+        })
+        const due = Date.now() - 1_000
+        Database.use((db) =>
+          db
+            .update(AutomationTable)
+            .set({ next_run: due, lease_owner: null, lease_until: 0 })
+            .where(eq(AutomationTable.id, automation.id))
+            .run(),
+        )
+        const owner = "automation-owner:draft-mission"
+        const job = AutomationService.TestHooks.claim(automation.id, owner, due)
+        if (!job) throw new Error("Draft Mission automation fixture could not claim its due occurrence")
+        const fireID = await AutomationService.TestHooks.executeClaimedDueOccurrence({ job, owner, now: due })
+        const expectedError =
+          `MissionExecutionWakeNotOpenedError: Mission ${missionID} has no opened execution occurrence for non-operator wake activation.`
+        const persisted = Database.use((db) => ({
+          automation: db.select().from(AutomationTable).where(eq(AutomationTable.id, automation.id)).get(),
+          run: db.select().from(AutomationRunTable).where(eq(AutomationRunTable.fire_id, fireID)).get(),
+        }))
+        expect(persisted).toMatchObject({
+          automation: { failure_count: 1, last_error: expectedError },
+          run: { outcome: "retry_wait", error: expectedError },
         })
       },
     })

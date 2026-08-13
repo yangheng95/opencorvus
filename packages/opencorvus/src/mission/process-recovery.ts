@@ -30,6 +30,7 @@ export type MissionProcessRecoveryMarker = z.infer<typeof MissionProcessRecovery
 type WakeRecovery = (input: SessionWake.WakeInput) => Promise<{
   sessionID: string
   messageID: string
+  activation: Promise<SessionWake.WakeActivation>
   completion?: Promise<SessionWake.WakeCompletion>
 }>
 
@@ -198,6 +199,7 @@ export async function recoverMissionProcessSession(
     if (receipt.messageID !== marker.wakeMessageID) {
       throw new Error(`Mission process recovery wake identity changed for ${sessionID}`)
     }
+    await receipt.activation
     if (receipt.completion) {
       void receipt.completion.then((outcome) => {
         if (!outcome.ok) return

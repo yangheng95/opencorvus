@@ -63,7 +63,7 @@ import {
   TaskCancellationRequestBody,
   type TaskCancellationRequestBody as TaskCancellationRequestBodyValue,
 } from "@opencorvus-ai/transport-protocol"
-import { closeMissionExecutionOperation, openMissionExecution } from "@/mission/execution-closure"
+import { closeMissionExecutionOperation, openMissionExecutionWithWake } from "@/mission/execution-closure"
 import { drainSchedulerMessagesForProject } from "@/protocol/scheduler-message"
 
 function newMissionID(): string {
@@ -619,26 +619,28 @@ export function MissionRoutes() {
           sessionID: session.id,
           explicitModel: input.model ? Provider.parseModel(input.model) : undefined,
         })
-        await openMissionExecution({
+        await openMissionExecutionWithWake({
           missionID,
           sessionID: session.id,
           source: "mission.dispatch",
           requestID: resolveRequestID(c),
-        })
-        await Session.mergeConfigOverlay({
-          sessionID: session.id,
-          patch: configPatch,
-        })
-        await SessionWake.wake({
-          sessionID: session.id,
-          prompt: pendingPrompt.text,
-          author: "user",
-          agent: "mission",
-          surface: "panel",
-          userAuthored: true,
-          reason: {
-            source: "mission.operator",
-            missionID,
+          wake: async () => {
+            await Session.mergeConfigOverlay({
+              sessionID: session.id,
+              patch: configPatch,
+            })
+            return SessionWake.wakeWithReceipt({
+              sessionID: session.id,
+              prompt: pendingPrompt.text,
+              author: "user",
+              agent: "mission",
+              surface: "panel",
+              userAuthored: true,
+              reason: {
+                source: "mission.operator",
+                missionID,
+              },
+            })
           },
         })
         await setMissionPendingPrompt({
@@ -748,27 +750,30 @@ export function MissionRoutes() {
           if (error instanceof MissionExpertSquadSnapshotMismatchError) return c.json(error.toObject(), 400)
           throw error
         }
-        await openMissionExecution({
+        const attachmentParts = await missionWakeAttachmentParts(input.attachments)
+        await openMissionExecutionWithWake({
           missionID,
           sessionID: session.id,
           source: "mission.wake",
           requestID: resolveRequestID(c),
-        })
-        await Session.mergeConfigOverlay({
-          sessionID: session.id,
-          patch: configPatch,
-        })
-        await SessionWake.wake({
-          sessionID: session.id,
-          prompt: input.text,
-          author: "user",
-          agent: "mission",
-          surface: "panel",
-          userAuthored: true,
-          parts: await missionWakeAttachmentParts(input.attachments),
-          reason: {
-            source: "mission.operator",
-            missionID,
+          wake: async () => {
+            await Session.mergeConfigOverlay({
+              sessionID: session.id,
+              patch: configPatch,
+            })
+            return SessionWake.wakeWithReceipt({
+              sessionID: session.id,
+              prompt: input.text,
+              author: "user",
+              agent: "mission",
+              surface: "panel",
+              userAuthored: true,
+              parts: attachmentParts,
+              reason: {
+                source: "mission.operator",
+                missionID,
+              },
+            })
           },
         })
         return c.json(

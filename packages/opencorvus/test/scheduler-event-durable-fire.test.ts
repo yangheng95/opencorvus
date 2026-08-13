@@ -20,6 +20,12 @@ import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { Database, eq } from "@/storage/db"
 import { EngineService } from "@/task-api"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { ensureMissionSession } from "@/mission/session"
+import {
+  closeMissionExecutionOperation,
+  currentMissionExecutionClosure,
+  openMissionExecution,
+} from "@/mission/execution-closure"
 
 const SourceEvent = BusEvent.define(
   "test.scheduler.event.durable-fire",
@@ -39,6 +45,180 @@ afterEach(async () => {
 })
 
 describe("Event Job durable fire authority", () => {
+  test("persists the exact Mission closure authority when an Event targets a closed occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "event-closed-mission"
+        const mission = await ensureMissionSession({
+          missionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        await openMissionExecution({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.wake",
+          requestID: "event-closed-open",
+        })
+        const closure = await closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.abort",
+          requestID: "event-closed-close",
+          close: async () => undefined,
+        })
+        const job = await EventService.create({
+          name: "closed Mission Event",
+          eventType: SourceEvent.type,
+          prompt: "Do not reopen the closed Mission occurrence",
+          projectId: Instance.project.id,
+          sessionId: mission.id,
+        })
+        EventService.init()
+        await Bus.publish(SourceEvent, { info: { id: "source:event-closed-mission" } })
+        await EventService.TestHooks.waitForIdle()
+        expect({
+          closure: currentMissionExecutionClosure(mission.id),
+          fire: EventService.TestHooks.fires(Instance.project.id)[0],
+          job: Database.use((db) => db.select().from(EventJobTable).where(eq(EventJobTable.id, job.id)).get()),
+        }).toMatchObject({
+          closure: { eventID: closure.eventID, operationID: closure.operationID, state: "closed" },
+          fire: { status: "retry_wait", error: expect.stringContaining(closure.eventID) },
+          job: { failure_count: 1, last_error: expect.stringContaining(closure.eventID) },
+        })
+      },
+    })
+  })
+
+  test("persists a typed inactive-occurrence result when an Event targets a draft Mission", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "event-draft-mission"
+        const mission = await ensureMissionSession({
+          missionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        const job = await EventService.create({
+          name: "draft Mission Event",
+          eventType: SourceEvent.type,
+          prompt: "Report the inactive Mission occurrence",
+          projectId: Instance.project.id,
+          sessionId: mission.id,
+        })
+        EventService.init()
+        await Bus.publish(SourceEvent, { info: { id: "source:event-draft-mission" } })
+        await EventService.TestHooks.waitForIdle()
+        const expectedError =
+          `MissionExecutionWakeNotOpenedError: Mission ${missionID} has no opened execution occurrence for non-operator wake activation.`
+        expect({
+          fire: EventService.TestHooks.fires(Instance.project.id)[0],
+          job: Database.use((db) => db.select().from(EventJobTable).where(eq(EventJobTable.id, job.id)).get()),
+        }).toMatchObject({
+          fire: { status: "retry_wait", error: expectedError },
+          job: { failure_count: 1, last_error: expectedError },
+        })
+      },
+    })
+  })
+
+  test("settles persisted Event wake recovery against the exact closed Mission occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "event-recovery-closed-mission"
+        const mission = await ensureMissionSession({
+          missionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        await openMissionExecution({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.wake",
+          requestID: "event-recovery-closed-open",
+        })
+        const job = await EventService.create({
+          name: "closed Mission Event recovery",
+          eventType: SourceEvent.type,
+          prompt: "Do not recover into the closed Mission occurrence",
+          projectId: Instance.project.id,
+          sessionId: mission.id,
+          oneShot: true,
+        })
+        const fireID = Identifier.ascending("call")
+        const messageID = EventService.TestHooks.messageID(fireID)
+        const now = Date.now()
+        Database.use((db) =>
+          db
+            .insert(EventJobFireTable)
+            .values({
+              id: fireID,
+              event_job_id: job.id,
+              project_id: Instance.project.id,
+              event_occurrence_id: "event-occurrence:closed-mission-recovery",
+              event_type: SourceEvent.type,
+              causation_ancestry: [],
+              status: "running",
+              target_session_id: mission.id,
+              creates_session: false,
+              owner_id: "expired-event-owner",
+              owner_process_id: 999_999,
+              lease_until: now - 1,
+              attempt: 1,
+              time_started: now - 10,
+              time_created: now - 10,
+              time_updated: now - 1,
+            })
+            .run(),
+        )
+        await Session.updateMessage({
+          id: messageID,
+          sessionID: mission.id,
+          role: "user",
+          author: "orchestrator",
+          time: { created: now },
+          agent: "mission",
+          model: { providerID: "test", modelID: "event-recovery" },
+          extra: {
+            wake_reason: {
+              source: "scheduler.event",
+              jobID: job.id,
+              jobName: job.name,
+              fireID,
+              eventType: SourceEvent.type,
+              oneShot: true,
+            },
+          },
+        })
+        const closure = await closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.abort",
+          requestID: "event-recovery-closed-close",
+          close: async () => undefined,
+        })
+        EventService.init()
+        await EventService.TestHooks.waitForIdle()
+        expect({
+          closure: currentMissionExecutionClosure(mission.id),
+          fire: EventService.TestHooks.fires(Instance.project.id)[0],
+        }).toMatchObject({
+          closure: { eventID: closure.eventID, operationID: closure.operationID, state: "closed" },
+          fire: { id: fireID, status: "retry_wait", error: expect.stringContaining(closure.eventID) },
+        })
+      },
+    })
+  })
+
   test("durably accepts an occurrence and aggregates exact, wildcard, and strict Global relay failures", async () => {
     await using project = await memoryProject()
     await Instance.provide({

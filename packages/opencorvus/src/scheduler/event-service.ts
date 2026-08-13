@@ -14,6 +14,12 @@ import { RuntimeExecutionAdmissionClosedError, RuntimeExecutionSettlement } from
 import { Project } from "@/project/project"
 import { runWithInitializedIndependentProject } from "@/project/independent-project-owner"
 import { createSchedulerExecutionInactivityFence } from "./execution-inactivity"
+import { requireMissionSession } from "@/mission/session"
+import {
+  admitMissionExecutionWake,
+  MissionExecutionWakeClosedError,
+  MissionExecutionWakeNotOpenedError,
+} from "@/mission/execution-closure"
 
 type Match = Record<string, string | number | boolean>
 type EventEnvelope = Bus.Envelope
@@ -498,6 +504,25 @@ export namespace EventService {
     runtimeReservation.settleWith(current)
   }
 
+  async function admitEventSessionWake<Receipt extends { activation: Promise<unknown> }>(
+    session: Session.Info,
+    wake: () => Receipt | Promise<Receipt>,
+  ): Promise<Receipt> {
+    if (session.kind !== "mission") return wake()
+    const mission = await requireMissionSession(session.id)
+    return admitMissionExecutionWake({ missionID: mission.missionID, sessionID: mission.id, wake })
+  }
+
+  async function resumeEventWake(input: { session: Session.Info; messageID: string }): Promise<void> {
+    await admitEventSessionWake(input.session, () =>
+      SessionWake.resumePersistedWakeWithReceipt({
+        sessionID: input.session.id,
+        messageID: input.messageID,
+        directory: input.session.directory,
+      }),
+    )
+  }
+
   async function processFire(fireID: string, runtimeSignal: AbortSignal): Promise<void> {
     const s = state()
     const claimed = claimFire(fireID, s.ownerID)
@@ -532,11 +557,7 @@ export namespace EventService {
       if (existingMessageID) {
         const session = await Session.get(claimed.target_session_id)
         throwIfAborted(signal)
-        SessionWake.resumePersistedWake({
-          sessionID: claimed.target_session_id,
-          messageID: existingMessageID,
-          directory: session.directory,
-        })
+        await resumeEventWake({ session, messageID: existingMessageID })
         settleSuccess(claimed, job, s.ownerID, claimed.target_session_id, existingMessageID)
         return
       }
@@ -569,14 +590,14 @@ export namespace EventService {
     } catch (error) {
       try {
         const reconciledMessageID = findWakeMessageID(claimed)
-        if (reconciledMessageID && !leaseFence.lost) {
+        const missionAdmissionRejected =
+          MissionExecutionWakeClosedError.isInstance(error) || MissionExecutionWakeNotOpenedError.isInstance(error)
+        if (missionAdmissionRejected && !leaseFence.lost) {
+          scheduleRetry(claimed, job, s.ownerID, error)
+        } else if (reconciledMessageID && !leaseFence.lost) {
           const session = await Session.get(claimed.target_session_id)
           throwIfAborted(leaseFence.signal)
-          SessionWake.resumePersistedWake({
-            sessionID: claimed.target_session_id,
-            messageID: reconciledMessageID,
-            directory: session.directory,
-          })
+          await resumeEventWake({ session, messageID: reconciledMessageID })
           settleSuccess(claimed, job, s.ownerID, claimed.target_session_id, reconciledMessageID)
         } else if (leaseFence.lost) {
           scheduleLeaseRecovery(claimed.id)
@@ -803,33 +824,37 @@ export namespace EventService {
     const textPartID = deterministicEventWakeID("prt", input.fire.id)
     await beforeSessionWakeForTest?.({ fire: input.fire, ownerID: input.ownerID, signal: input.signal })
     throwIfAborted(input.signal)
-    const sessionID = await SessionWake.wake({
-      sessionID: input.fire.target_session_id,
-      messageID,
-      textPartID,
-      signal: input.signal,
-      prompt: input.job.prompt,
-      author: "orchestrator",
-      agent: input.job.agent === "default" ? undefined : input.job.agent,
-      reason: {
-        source: "scheduler.event",
-        jobID: input.job.id,
-        jobName: input.job.name,
-        fireID: input.fire.id,
-        eventType: input.fire.event_type,
-        oneShot: input.job.one_shot,
-      },
-      commitBundle: (message, parts) => {
-        if (message.id !== messageID || !parts.some((part) => part.id === textPartID)) {
-          throw new Error(`Event fire ${input.fire.id} wake materialized identities outside its durable authority`)
-        }
-        fenceEventWakeCommit({
+    const session = await Session.get(input.fire.target_session_id)
+    const receipt = await admitEventSessionWake(session, () =>
+      SessionWake.wakeWithReceipt({
+        sessionID: input.fire.target_session_id,
+        messageID,
+        textPartID,
+        signal: input.signal,
+        prompt: input.job.prompt,
+        author: "orchestrator",
+        agent: input.job.agent === "default" ? undefined : input.job.agent,
+        reason: {
+          source: "scheduler.event",
+          jobID: input.job.id,
+          jobName: input.job.name,
           fireID: input.fire.id,
-          ownerID: input.ownerID,
-          sessionID: message.sessionID,
-        })
-      },
-    })
+          eventType: input.fire.event_type,
+          oneShot: input.job.one_shot,
+        },
+        commitBundle: (message, parts) => {
+          if (message.id !== messageID || !parts.some((part) => part.id === textPartID)) {
+            throw new Error(`Event fire ${input.fire.id} wake materialized identities outside its durable authority`)
+          }
+          fenceEventWakeCommit({
+            fireID: input.fire.id,
+            ownerID: input.ownerID,
+            sessionID: message.sessionID,
+          })
+        },
+      }),
+    )
+    const sessionID = receipt.sessionID
     const persistedMessageID = findWakeMessageID(input.fire)
     if (persistedMessageID !== messageID) {
       throw new Error(`Event fire ${input.fire.id} wake returned outside its deterministic Message identity`)
@@ -1074,7 +1099,9 @@ export namespace EventService {
   }
 
   function errorMessage(error: unknown): string {
-    return error instanceof Error ? `${error.name}: ${error.message}` : String(error)
+    if (!(error instanceof Error)) return String(error)
+    const prefix = `${error.name}: `
+    return error.message.startsWith(prefix) ? error.message : `${prefix}${error.message}`
   }
 
   export const TestHooks = {
