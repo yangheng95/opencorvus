@@ -16,15 +16,16 @@ import { publishGoalWorkload } from "@/goal-workload-analyst/publication"
 import { WorkloadBriefSchema, type WorkloadBrief } from "@/goal-workload-analyst/types"
 import { Identifier } from "@/id/id"
 import { createDispatchAgentTool, type DispatchAdapterExecutors } from "@/orchestrator/dispatch-agent-tool"
+import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
 import { createWorkloadAnalysisTool } from "@/orchestrator/workload-analysis-tool"
 import { Instance } from "@/project/instance"
 import { InstanceBootstrap } from "@/project/bootstrap"
 import { ProtocolStore } from "@/protocol/store"
-import { Session } from "@/session"
+import { Session, type Message } from "@/session"
 import { executionLifecycleOrderKey } from "@/session/status"
 import { Database, count, eq } from "@/storage/db"
-import { EngineArtifactTable } from "@/engine/engine.sql"
+import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
 import { declareNativeTaskProcessDeployment } from "@/runtime/task-process-deployment"
 import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
 import { persistEstablishedTask } from "./engine-task"
@@ -79,6 +80,76 @@ const virtualWorkflows = {
       },
     },
   },
+}
+
+async function settleQueuedLifecycleWake(input: { taskID: string; wakeID?: string }) {
+  if (!input.wakeID) throw new Error(`Task ${input.taskID} lifecycle delivery has no durable ingress identity`)
+  const task = Database.use((db) =>
+    db
+      .select({ rootSessionID: EngineTaskTable.session_id })
+      .from(EngineTaskTable)
+      .where(eq(EngineTaskTable.id, input.taskID))
+      .get(),
+  )
+  if (!task) throw new Error(`Task ${input.taskID} disappeared before lifecycle delivery`)
+  const orchestrator = await Session.create({
+    kind: "orchestrator",
+    parentID: task.rootSessionID,
+    title: "Goal Workload lifecycle recovery",
+  })
+  const now = Date.now()
+  const controlMessageID = orchestratorControlOccurrenceIdentity(input.wakeID).messageID
+  await Session.persistMessage({
+    info: {
+      id: controlMessageID,
+      sessionID: orchestrator.id,
+      role: "user",
+      author: "orchestrator",
+      time: { created: now },
+      agent: "orchestrator",
+      model: { providerID: "test", modelID: "goal-workload-process-worker" },
+    },
+    parts: [
+      {
+        id: Identifier.ascending("part"),
+        sessionID: orchestrator.id,
+        messageID: controlMessageID,
+        type: "text",
+        text: "Recover the exact terminal Workload dispatch.",
+      },
+    ],
+  })
+  const finalMessageID = Identifier.ascending("message")
+  const assistant: Message.Assistant = {
+    id: finalMessageID,
+    sessionID: orchestrator.id,
+    parentID: controlMessageID,
+    role: "assistant",
+    author: "orchestrator",
+    time: { created: now, completed: now + 1 },
+    agent: "orchestrator",
+    providerID: "test",
+    modelID: "goal-workload-process-worker",
+    path: { cwd: Instance.directory, root: Instance.directory },
+    cost: 0,
+    tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+    finish: "stop",
+    taskIngress: { id: input.wakeID, kind: "agent_lifecycle_delivery" },
+  }
+  await Session.persistMessage({
+    info: assistant,
+    parts: [
+      {
+        id: Identifier.ascending("part"),
+        sessionID: orchestrator.id,
+        messageID: finalMessageID,
+        type: "text",
+        text: "Recovered terminal Workload delivery.",
+        time: { start: now, end: now + 1 },
+      },
+    ],
+  })
+  return { finalMessageID }
 }
 
 const projectedWorkloadAgent = {
@@ -601,7 +672,7 @@ async function result() {
   }
   using _taskLoopRunner = QueueTestHooks.replaceTaskLoopRunner({
     directory: projectDirectory,
-    runner: async () => {},
+    runner: settleQueuedLifecycleWake,
   })
   const runtimeOwnership = RuntimeServerOwnership.acquire({ database: Database.Path() })
   try {
