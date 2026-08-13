@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-13-cross-task-engine-resource-catalog-visibility.md](2026-08-13-cross-task-engine-resource-catalog-visibility.md) freezes the exact-Luna cross-Task resource discovery failure and defines referenced-only `engine_resource` Catalog projection, positive cursor coverage, and fresh render-E2E acceptance.
+
 - [2026-08-13-r17b-luna-tool-input-stream-stall.md](2026-08-13-r17b-luna-tool-input-stream-stall.md) freezes the isolated exact-Luna R17b failure, identifies pre-acceptance semantic heartbeat credit as the first focused reproduction candidate, and defines the staged repair and fresh-E2E boundary.
 
 - [2026-08-13-expert-squad-gui-zero-intervention-sampling.md](2026-08-13-expert-squad-gui-zero-intervention-sampling.md) defines the immutable-source, random-port, isolated-runtime real-GUI sampling matrix and three-way evidence required to prove Base, Data Analysis, and Office Delivery Expert Squads finish without post-submission operator intervention.
