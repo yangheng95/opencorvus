@@ -329,7 +329,6 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
         expect(
           await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
         ).toBe("delivered")
-        await waitForQueueCompletionHooksForTest()
         expect(
           await reconcileTerminalAgentLifecycleDelivery({ taskID, sessionID: committedSessionID!, dispatchID }),
         ).toBe("already_delivered")
@@ -344,8 +343,9 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
           .filter((row) => row.ingress.lifecycle_event_id === lifecycle!.id)
         expect(lifecycleWakes).toMatchObject([
           {
-            label: "pending",
+            label: "running",
             ingress: {
+              delivery_attempt: 1,
               lifecycle_event_id: lifecycle!.id,
               event: {
                 agentLifecycleDelivery: {
@@ -433,4 +433,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
       }
     },
   })
+  // The accepted lifecycle delivery owns an independent project lease. Join
+  // it only after the setup/contract assertion lease has been released.
+  await waitForQueueCompletionHooksForTest()
 }, 60_000)
