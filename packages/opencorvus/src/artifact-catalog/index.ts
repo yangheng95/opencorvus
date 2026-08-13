@@ -14,7 +14,7 @@ import {
   type EngineArtifactPublishRequest,
   type EngineArtifactPublishResult,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import type { TaskArtifactRef } from "@opencorvus-ai/plugin/task-artifact"
+import { TaskArtifactRefSchema, type TaskArtifactRef } from "@opencorvus-ai/plugin/task-artifact"
 import { createHash, createHmac, randomBytes, randomUUID, timingSafeEqual } from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
@@ -70,6 +70,7 @@ type EngineCatalogRow = Readonly<{
   importSourceTaskID: string | null
   resourceCount: number
   resourceMediaTypes: string[]
+  resourceRefsJSON: string | null
   catalogSearchText: string
   catalogSearchTextTruncated: boolean
   catalogMetadataSHA256: string
@@ -456,6 +457,11 @@ const currentEngineCatalogSelection = {
   importSourceTaskID: EngineArtifactTable.catalog_import_source_task_id,
   resourceCount: EngineArtifactTable.catalog_resource_count,
   resourceMediaTypes: EngineArtifactTable.catalog_resource_media_types,
+  resourceRefsJSON: sql<string | null>`CASE
+    WHEN json_valid(${EngineArtifactTable.payload})
+    THEN json_extract(${EngineArtifactTable.payload}, '$.resources')
+    ELSE NULL
+  END`,
   catalogSearchText: EngineArtifactTable.catalog_search_text,
   catalogSearchTextTruncated: EngineArtifactTable.catalog_search_text_truncated,
   catalogMetadataSHA256: EngineArtifactTable.catalog_metadata_sha256,
@@ -484,6 +490,11 @@ const priorEngineCatalogSelection = {
   importSourceTaskID: EngineArtifactVersionTable.catalog_import_source_task_id,
   resourceCount: EngineArtifactVersionTable.catalog_resource_count,
   resourceMediaTypes: EngineArtifactVersionTable.catalog_resource_media_types,
+  resourceRefsJSON: sql<string | null>`CASE
+    WHEN json_valid(${EngineArtifactVersionTable.payload})
+    THEN json_extract(${EngineArtifactVersionTable.payload}, '$.resources')
+    ELSE NULL
+  END`,
   catalogSearchText: EngineArtifactVersionTable.catalog_search_text,
   catalogSearchTextTruncated: EngineArtifactVersionTable.catalog_search_text_truncated,
   catalogMetadataSHA256: EngineArtifactVersionTable.catalog_metadata_sha256,
@@ -611,6 +622,51 @@ function engineCandidate(row: EngineCatalogRow): CatalogCandidate {
   }
 }
 
+function engineCatalogResourceRefs(row: EngineCatalogRow): readonly TaskArtifactRef[] {
+  if (row.resourceCount === 0) return []
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(row.resourceRefsJSON ?? "null")
+  } catch (cause) {
+    throw new Error(
+      `Engine Artifact ${row.id} revision ${row.catalogRevision} has invalid catalog resource identity JSON`,
+      { cause },
+    )
+  }
+  const resources = TaskArtifactRefSchema.array().parse(parsed)
+  if (resources.length !== row.resourceCount) {
+    throw new Error(
+      `Engine Artifact ${row.id} revision ${row.catalogRevision} catalog resource identity count is corrupt`,
+    )
+  }
+  const mediaTypes = sortedMediaTypes(resources)
+  if (
+    mediaTypes.length !== row.resourceMediaTypes.length ||
+    mediaTypes.some((mediaType, index) => mediaType !== row.resourceMediaTypes[index])
+  ) {
+    throw new Error(
+      `Engine Artifact ${row.id} revision ${row.catalogRevision} catalog resource media types are corrupt`,
+    )
+  }
+  return resources
+}
+
+function snapshotIdentityKey(identity: TaskArtifactRef["snapshot"]): string {
+  return [
+    identity.schema_version,
+    identity.project_id,
+    identity.task_id,
+    identity.snapshot_id,
+    identity.manifest_sha256,
+  ].join("\u0000")
+}
+
+function referencedEngineResourceSnapshotKeys(rows: readonly EngineCatalogRow[]): ReadonlySet<string> {
+  return new Set(
+    rows.flatMap((row) => engineCatalogResourceRefs(row).map((resource) => snapshotIdentityKey(resource.snapshot))),
+  )
+}
+
 function boundedCatalogText(value: string, maxChars: number): { value: string; truncated: boolean } {
   if (value.length <= maxChars) return { value, truncated: false }
   return { value: value.slice(0, maxChars), truncated: true }
@@ -731,10 +787,8 @@ function resourceCandidate(record: TaskArtifactSnapshotRecord, resource: TaskArt
 }
 
 function snapshotCandidates(record: TaskArtifactSnapshotRecord): CatalogCandidate[] {
-  return [
-    snapshotCandidate(record),
-    ...taskArtifactSnapshotResourceRefs(record).map((resource) => resourceCandidate(record, resource)),
-  ]
+  const resources = taskArtifactSnapshotResourceRefs(record).map((resource) => resourceCandidate(record, resource))
+  return record.manifest.snapshot_kind === "catalog" ? [snapshotCandidate(record), ...resources] : resources
 }
 
 const MATCH_MODE_RANK: Record<NonNullable<ArtifactCatalogEntry["match"]>["tier"], number> = {
@@ -1135,19 +1189,32 @@ export async function searchTaskArtifacts(input: {
   const previousProviderErrors = cursor?.providerErrors ?? []
   const activeSources = cursor?.availableSources ?? requestedSources
   const engineCatalogRevisionUpper = cursor?.engineCatalogRevisionUpper ?? latestEngineCatalogRevision()
+  let catalogEngineRows: readonly EngineCatalogRow[] | undefined
+  const loadCatalogEngineRows = () =>
+    (catalogEngineRows ??= engineRows(input.authority.taskID, engineCatalogRevisionUpper, parsed.version_scope))
+  let resourceReferenceRows: readonly EngineCatalogRow[] | undefined
+  const loadResourceReferenceRows = () =>
+    (resourceReferenceRows ??= loadCatalogEngineRows().filter((row) => row.resourceCount > 0))
   const providerResults = await Promise.all(
     activeSources.map(async (source) => {
       try {
         return source === "engine_artifact"
           ? ({
               source,
-              engine: engineRows(input.authority.taskID, engineCatalogRevisionUpper, parsed.version_scope),
+              engine: loadCatalogEngineRows(),
               snapshots: [],
             } as const)
           : ({
               source,
               engine: [],
-              snapshots: parsed.version_scope === "historical" ? [] : await listTaskArtifactSnapshots(input.authority),
+              snapshots: await listTaskArtifactSnapshots(input.authority).then((records) => {
+                const referenced = referencedEngineResourceSnapshotKeys(loadResourceReferenceRows())
+                return records.filter((record) =>
+                  record.manifest.snapshot_kind === "catalog"
+                    ? parsed.version_scope !== "historical"
+                    : referenced.has(snapshotIdentityKey(record.identity)),
+                )
+              }),
             } as const)
       } catch (cause) {
         const rawMessage = cause instanceof Error ? cause.message : String(cause)
@@ -1165,7 +1232,7 @@ export async function searchTaskArtifacts(input: {
   for (const result of providerResults) {
     if ("error" in result) continue
     engine.push(...result.engine)
-    snapshots.push(...result.snapshots.filter((record) => record.manifest.snapshot_kind === "catalog"))
+    snapshots.push(...result.snapshots)
   }
   const allCandidates = [...engine.map(engineCandidate), ...snapshots.flatMap(snapshotCandidates)]
   const snapshotSequenceUpper =

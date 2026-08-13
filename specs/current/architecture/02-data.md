@@ -140,6 +140,16 @@ VCS、Task events 或 Session events 不可用。严格读取继续验证 manife
 类型、字节数与 SHA-256，禁止 fallback、伪造字节或自动修复。无法证明安全的回收不
 得创建第二条删除路径。
 
+Artifact Catalog 对 TaskArtifact 的可发现性同样由持久权威决定。`catalog` snapshot
+投影一个 immutable parent 和它的全部 resource entries；`engine_resource` snapshot
+只是 Engine receipt 的物理资源依赖，不单独投影 parent。只有被当前搜索
+Engine catalog revision/version scope 内至少一个 exact Engine Artifact envelope 引用的
+`engine_resource` identity，才把它的 resource entries 投影为当前 Task 的
+`task_artifact_resource`。准备期、失败清理前或其他未引用物理 snapshot 不进入 Catalog。
+该引用集合与 Engine catalog revision upper bound、TaskArtifact publication sequence
+共同冻结在 cursor membership 中；后续 Engine receipt 只能由 fresh search 观察，不能改变
+既有分页结果。Agent 不得从 wrapper payload 手抄 resource locator，也不存在另一个资源发现路径。
+
 Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 metrics store：
 `engine_metric_spec`、`engine_metric_result` 和 `engine_iteration` 的唯一直接表写入文件
 是 `metrics/store.ts`。任务、agent、engine 或 UI 层不得直接写这些 metrics 表。
