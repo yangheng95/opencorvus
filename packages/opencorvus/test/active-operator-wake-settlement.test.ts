@@ -2125,6 +2125,9 @@ describe.serial("active operator wake settlement", () => {
             wake_id: wakeID,
             task_id: taskID,
             root_session_id: rootSessionID,
+            task_occurrence_started_at: Database.use(
+              (db) => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()!.time_started,
+            ),
             source_kind: "agent_lifecycle_delivery",
             lifecycle_event_id: "evt_historical_terminal_lifecycle",
             event: {
@@ -2431,6 +2434,9 @@ describe.serial("active operator wake settlement", () => {
           delivery_attempt: 1,
           task_id: taskID,
           root_session_id: rootSessionID,
+          task_occurrence_started_at: Database.use(
+            (db) => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()!.time_started,
+          ),
           time_queued: Date.now(),
           queued_by_process_id: process.pid,
           source_kind: "operator_message",
