@@ -43,7 +43,7 @@ import { UserUploadInput, UserUploadList } from "@/engine/model"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { awaitSessionPromptFinishedInScope, cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { createTaskCancellationIncomplete } from "@/engine/cancellation-error"
-import { badRequestBody, badRequestOrNamedErrorResponse, errors } from "../error"
+import { badRequestBody, badRequestOrNamedErrorResponse, errors, namedErrorResponse } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import type { TaskCancellationOrigin } from "@/engine/cancellation-origin"
@@ -56,6 +56,8 @@ import {
   TaskCancellationRequestBody,
   type TaskCancellationRequestBody as TaskCancellationRequestBodyValue,
 } from "@opencorvus-ai/transport-protocol"
+import { closeMissionExecutionOperation, openMissionExecution } from "@/mission/execution-closure"
+import { drainSchedulerMessagesForProject } from "@/protocol/scheduler-message"
 
 function newMissionID(): string {
   return randomBytes(8).toString("hex")
@@ -189,53 +191,72 @@ async function closeMissionExecution(
     sessionID: session.id,
     missionID: session.missionID,
   } satisfies TaskCancellationOrigin
-  const childTasks = listMissionTasks({
-    projectID: session.projectID,
+  await closeMissionExecutionOperation({
     missionID: session.missionID,
     sessionID: session.id,
-  }).filter((task) => {
-    const status = deriveTaskStatus(task)
-    return status === "queued" || status === "active"
-  })
-  const failures: string[] = []
-  for (const task of childTasks) {
-    try {
-      await EngineService.cancelTask(task.id, {
-        origin: cancellationOrigin,
+    source: handle,
+    requestID,
+    close: async () => {
+      const failures: string[] = []
+      try {
+        const origin = createExecutionCancellationOrigin({
+          actor: cancellationOrigin.actor,
+          source: cancellationOrigin.source,
+          surface: cancellationOrigin.surface,
+          requestID: cancellationOrigin.requestID,
+          reason: cancellationOrigin.reason,
+          targetSessionID: session.id,
+          missionID: cancellationOrigin.missionID,
+        })
+        cancelSessionPromptInScope({
+          session,
+          handle,
+          origin,
+          settleBeforeReuse: true,
+        })
+      } catch (error) {
+        failures.push(`mission ${session.missionID}: ${error instanceof Error ? error.message : String(error)}`)
+      }
+      const childTasks = listMissionTasks({
+        projectID: session.projectID,
+        missionID: session.missionID,
+        sessionID: session.id,
+      }).filter((task) => {
+        const status = deriveTaskStatus(task)
+        return status === "queued" || status === "active"
       })
-    } catch (error) {
-      failures.push(`task ${task.id}: ${error instanceof Error ? error.message : String(error)}`)
-    }
-  }
-  try {
-    const origin = createExecutionCancellationOrigin({
-      actor: cancellationOrigin.actor,
-      source: cancellationOrigin.source,
-      surface: cancellationOrigin.surface,
-      requestID: cancellationOrigin.requestID,
-      reason: cancellationOrigin.reason,
-      targetSessionID: session.id,
-      missionID: cancellationOrigin.missionID,
-    })
-    cancelSessionPromptInScope({
-      session,
-      handle,
-      origin,
-      settleBeforeReuse: true,
-    })
-    await awaitSessionPromptFinishedInScope({
-      session,
-      handle,
-    })
-  } catch (error) {
-    failures.push(`mission ${session.missionID}: ${error instanceof Error ? error.message : String(error)}`)
-  }
-  if (failures.length > 0) {
-    throw createTaskCancellationIncomplete({
-      handle,
-      cause: new Error(failures.join("; ")),
-    })
-  }
+      for (const task of childTasks) {
+        try {
+          await EngineService.cancelTask(task.id, {
+            origin: cancellationOrigin,
+          })
+        } catch (error) {
+          failures.push(`task ${task.id}: ${error instanceof Error ? error.message : String(error)}`)
+        }
+      }
+      try {
+        await awaitSessionPromptFinishedInScope({
+          session,
+          handle,
+        })
+      } catch (error) {
+        failures.push(`mission ${session.missionID}: ${error instanceof Error ? error.message : String(error)}`)
+      }
+      try {
+        await drainSchedulerMessagesForProject()
+      } catch (error) {
+        failures.push(
+          `mission ${session.missionID} scheduler inbox: ${error instanceof Error ? error.message : String(error)}`,
+        )
+      }
+      if (failures.length > 0) {
+        throw createTaskCancellationIncomplete({
+          handle,
+          cause: new Error(failures.join("; ")),
+        })
+      }
+    },
+  })
   return cancellationOrigin
 }
 
@@ -557,6 +578,10 @@ export function MissionRoutes() {
             content: { "application/json": { schema: resolver(MissionWakeResult) } },
           },
           ...errors(400, 404),
+          409: namedErrorResponse(
+            "Mission execution is still completing its durable close operation",
+            "MissionExecutionClosingError",
+          ),
         },
       }),
       validator("param", MissionParam),
@@ -584,6 +609,12 @@ export function MissionRoutes() {
         await resolveAgentModel("mission", {
           sessionID: session.id,
           explicitModel: input.model ? Provider.parseModel(input.model) : undefined,
+        })
+        await openMissionExecution({
+          missionID,
+          sessionID: session.id,
+          source: "mission.dispatch",
+          requestID: resolveRequestID(c),
         })
         await Session.mergeConfigOverlay({
           sessionID: session.id,
@@ -632,6 +663,10 @@ export function MissionRoutes() {
           400: badRequestOrNamedErrorResponse(
             "Mission wake request or immutable Expert Squad snapshot rejected",
             "MissionExpertSquadSnapshotMismatchError",
+          ),
+          409: namedErrorResponse(
+            "Mission execution is still completing its durable close operation",
+            "MissionExecutionClosingError",
           ),
         },
       }),
@@ -701,6 +736,12 @@ export function MissionRoutes() {
           if (error instanceof MissionExpertSquadSnapshotMismatchError) return c.json(error.toObject(), 400)
           throw error
         }
+        await openMissionExecution({
+          missionID,
+          sessionID: session.id,
+          source: "mission.wake",
+          requestID: resolveRequestID(c),
+        })
         await Session.mergeConfigOverlay({
           sessionID: session.id,
           patch: configPatch,
