@@ -164,6 +164,7 @@ function collectTextOverlays(svgBytes: Buffer): TextOverlay[] {
       const containerStyle = styleMap(attribute(container, "style"))
       const blocks = (container.childNodes ?? [])
         .filter((candidate) => candidate.tagName === "div")
+        .filter((block) => textContent(block).trim().length > 0)
         .map((block) => {
           const style = styleMap(attribute(block, "style"))
           const text = markupForBlock(block)
@@ -185,7 +186,6 @@ function collectTextOverlays(svgBytes: Buffer): TextOverlay[] {
             spacing,
           }
         })
-        .filter((block) => block.markup.length > 0)
       totalTextCharacters += textContent(container).length
       if (totalTextCharacters > MAX_TEXT_CHARACTERS) {
         throw new Error(`Work Artifact SVG exceeds ${MAX_TEXT_CHARACTERS} text characters`)

@@ -8,6 +8,7 @@ test("OfficeCLI XHTML text is rasterized into the presentation review image", as
       <rect width="1920" height="1080" fill="#ffffff"/>
       <foreignObject x="120" y="120" width="1200" height="240">
         <div xmlns="http://www.w3.org/1999/xhtml" style="display:flex;height:100%;justify-content:center">
+          <div style="text-align:center"><span style="font-family:Arial;font-size:12pt;color:#000000"></span></div>
           <div style="text-align:center"><span style="font-family:Arial;font-size:32pt;color:#000000;font-weight:bold">Qualified evidence</span></div>
         </div>
       </foreignObject>
