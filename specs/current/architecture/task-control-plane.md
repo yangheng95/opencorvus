@@ -22,6 +22,8 @@ Both recipient kinds claim the database-sequenced FIFO inbox head before materia
 
 The root wake queue releases one durable occurrence only after its exact Session runtime wake has been consumed through all tool-result continuation turns and reached standby. The first assistant callback is not a settlement boundary. This prevents a later Mission or scheduler ingress from replacing the prior runtime contract and falsely inheriting its assistant continuation.
 
+Queue launch, loop completion, terminal-ingress delivery and delayed terminal retry are executable project lifecycles. Their detached owners re-enter through a fully initialized Project Instance so cache reconstruction restores the canonical Task runner and project capabilities before another durable ingress is attached. Identity-only owners remain limited to persistence and publication callbacks that do not execute a Task, prompt, terminal conversation or queue advance.
+
 ## Detached agent execution
 
 `dispatch_agent` returns an accepted receipt only after the worker Session descriptor and dispatch-lineage artifact are committed. The receipt carries that artifact's identity, not the logical dispatch ID. The root Orchestrator does not await the worker's terminal result. Worker execution continues under its own Session and cancellation ownership, with a fresh initialized project Instance lease that does not inherit the closing root-Turn lease. Current-project and managed-worktree dispatches share this detached ownership boundary.

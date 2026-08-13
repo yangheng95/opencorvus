@@ -42,7 +42,10 @@ import { Event } from "./model"
 import { EngineProtocol } from "./protocol"
 import { QueuedTaskIngressSchema, queuedTaskIngressSourceKind, type QueuedTaskIngress } from "./queued-task-ingress"
 import { Instance, runOutsideInstanceContext } from "@/project/instance"
-import { runWithIndependentProjectIdentity } from "@/project/independent-project-owner"
+import {
+  runWithIndependentProjectIdentity,
+  runWithInitializedIndependentProject,
+} from "@/project/independent-project-owner"
 import { createInstanceState } from "@/project/instance-state"
 import { requireTaskWakeRuntime } from "@/scheduler/task-wake-runtime"
 import { SessionPromptState } from "@/session/prompt/state"
@@ -79,6 +82,7 @@ import {
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { exactEngineArtifactLocator } from "@/artifact-catalog"
 import { RuntimeServerOwnership } from "@/server/runtime-server-ownership"
+import { Filesystem } from "@/util/filesystem"
 
 const immutableArtifactEnqueueOrdinal = sql<number>`coalesce(
   (
@@ -362,13 +366,20 @@ const taskLoopRuntime = createInstanceState(
   undefined,
   "engine-queue-task-loop-runner",
 )
+const taskLoopRunnerOverridesForTest = new Map<string, { token: symbol; runner: TaskLoopRunner }>()
+
+function taskLoopRunnerOverrideKey(directory: string): string {
+  const resolved = Filesystem.resolve(directory)
+  return process.platform === "win32" ? resolved.toLowerCase() : resolved
+}
 
 export function configureTaskLoopRunner(runner: TaskLoopRunner): void {
   const runtime = taskLoopRuntime()
-  if (runtime.runner && runtime.runner !== runner) {
+  const configured = taskLoopRunnerOverridesForTest.get(taskLoopRunnerOverrideKey(Instance.directory))?.runner ?? runner
+  if (runtime.runner && runtime.runner !== configured) {
     throw new Error("Engine queue task-loop runner is already configured for this instance")
   }
-  runtime.runner = runner
+  runtime.runner = configured
 }
 
 function requireTaskLoopRunner(): TaskLoopRunner {
@@ -867,6 +878,19 @@ export function persistQueuedTaskWaitWakeInTransaction(
 }
 
 export const TestHooks = {
+  replaceTaskLoopRunner(input: { directory: string; runner: TaskLoopRunner }): Disposable {
+    const key = taskLoopRunnerOverrideKey(input.directory)
+    if (taskLoopRunnerOverridesForTest.has(key)) {
+      throw new Error(`Engine queue Task-loop test runner is already overridden for ${input.directory}`)
+    }
+    const token = Symbol(key)
+    taskLoopRunnerOverridesForTest.set(key, { token, runner: input.runner })
+    return {
+      [Symbol.dispose]() {
+        if (taskLoopRunnerOverridesForTest.get(key)?.token === token) taskLoopRunnerOverridesForTest.delete(key)
+      },
+    }
+  },
   reconcileHistoricalNonTailFailedIngress(taskID: string, wakeID: string): boolean {
     return reconcileHistoricalNonTailFailedIngress(taskID, wakeID)
   },
@@ -1971,7 +1995,7 @@ function launchTaskLoop(
     wakeID: wake.id,
     run: async (signal) => {
       if (!markQueuedOperatorWakeRunning(wake.id)) return
-      const result = await runWithIndependentProjectIdentity({
+      const result = await runWithInitializedIndependentProject({
         directory,
         fn: async () => {
           if (signal.aborted) {
@@ -2131,7 +2155,7 @@ async function runTaskLoopCompletionAttempt(input: {
   wakeID: string
   cwd: string
 }): Promise<TaskLoopCompletionDisposition> {
-  return runWithIndependentProjectIdentity({
+  return runWithInitializedIndependentProject({
     directory: input.cwd,
     fn: async () => {
       const task = findTask(input.taskID)
@@ -2538,7 +2562,7 @@ function scheduleDelayedExactTerminalIngressRetry(input: {
   })
     .then(async () => {
       if (authority.signal.aborted) return
-      await runWithIndependentProjectIdentity({
+      await runWithInitializedIndependentProject({
         directory,
         fn: async () => {
           authority.signal.throwIfAborted()
@@ -2701,7 +2725,7 @@ function attachTerminalIngressCompletion(
       runOutsideInstanceContext(() =>
         SessionPromptState.waitForRootWakeSettlement(wake.rootSessionID, wake.id)
           .then(() =>
-            runWithIndependentProjectIdentity({
+            runWithInitializedIndependentProject({
               directory,
               fn: () => {
                 const currentWake = Database.use((db) =>
@@ -2728,7 +2752,7 @@ function attachTerminalIngressCompletion(
           )
           .then(async (delivery) => {
             if (!delivery?.settled) return
-            await runWithIndependentProjectIdentity({
+            await runWithInitializedIndependentProject({
               directory,
               fn: async () => {
                 if (delivery.result.status === "delivery_failed") {
@@ -2753,7 +2777,7 @@ function attachTerminalIngressCompletion(
               error: normalized instanceof Error ? normalized.message : String(normalized),
               errorName: normalized instanceof Error ? normalized.name : undefined,
             })
-            await runWithIndependentProjectIdentity({
+            await runWithInitializedIndependentProject({
               directory,
               fn: async () => {
                 if (
@@ -2781,7 +2805,7 @@ function attachTerminalIngressCompletion(
     })
     .then(async () => {
       if (!retryAfterOwnershipRelease) return
-      await runWithIndependentProjectIdentity({
+      await runWithInitializedIndependentProject({
         directory,
         fn: async () => {
           if (hasQueuedTaskEvent(task.id)) await drainQueuedTaskEvent(task.id)

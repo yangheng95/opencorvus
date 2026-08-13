@@ -28,9 +28,13 @@ import { MessageTable, PartTable } from "@/session/session.sql"
 import { Database, DatabaseEffectAdmissionClosedError, asc, eq } from "@/storage/db"
 import { RuntimeExecutionAdmissionClosedError } from "@/runtime/execution-settlement"
 import { writeTaskUpdateInTransaction } from "@/engine/state"
-import { installSchedulerMessageDrainSignal, observeSchedulerMessageDrainSignal } from "@/protocol/scheduler-drain-signal"
+import {
+  installSchedulerMessageDrainSignal,
+  observeSchedulerMessageDrainSignal,
+} from "@/protocol/scheduler-drain-signal"
 import {
   QueueOrderingTestHooks,
+  TestHooks as QueueTestHooks,
   configureTaskLoopRunner,
   persistQueuedRootMessageWakeInTransaction,
   waitForQueueCompletionHooksForTest,
@@ -61,13 +65,14 @@ import {
 afterEach(resetMemoryDatabase)
 
 function persistSourceOccurrence(sessionID: string, messageID: string, partID: string, text: string) {
-  const newestMessageTime = Database.use((db) =>
-    db
-      .select({ value: MessageTable.time_created })
-      .from(MessageTable)
-      .orderBy(asc(MessageTable.time_created))
-      .all()
-      .at(-1)?.value,
+  const newestMessageTime = Database.use(
+    (db) =>
+      db
+        .select({ value: MessageTable.time_created })
+        .from(MessageTable)
+        .orderBy(asc(MessageTable.time_created))
+        .all()
+        .at(-1)?.value,
   )
   const now = Math.max(Date.now(), (newestMessageTime ?? 0) + 1)
   Database.transaction((db) => {
@@ -108,13 +113,14 @@ async function persistRunnerReply(input: {
     parentID: input.rootSessionID,
     title: "Scheduler FIFO runner",
   })
-  const newestMessageTime = Database.use((db) =>
-    db
-      .select({ value: MessageTable.time_created })
-      .from(MessageTable)
-      .orderBy(asc(MessageTable.time_created))
-      .all()
-      .at(-1)?.value,
+  const newestMessageTime = Database.use(
+    (db) =>
+      db
+        .select({ value: MessageTable.time_created })
+        .from(MessageTable)
+        .orderBy(asc(MessageTable.time_created))
+        .all()
+        .at(-1)?.value,
   )
   const now = Math.max(Date.now(), (newestMessageTime ?? 0) + 1)
   const messageID = Identifier.ascending("message")
@@ -893,7 +899,9 @@ describe("durable scheduler.message delivery", () => {
         )
         expect(await EngineService.deleteTask(taskID)).toBe(true)
         expect(
-          Database.use((db) => db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.id, terminalEventID)).get()),
+          Database.use((db) =>
+            db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.id, terminalEventID)).get(),
+          ),
         ).toMatchObject({ aggregate_type: "task", aggregate_id: taskID, task_id: null })
         expect(missionChildResultWake(terminalWakeMessage)).toMatchObject({
           taskID,
@@ -1518,19 +1526,18 @@ describe("durable scheduler.message delivery", () => {
     SchedulerMessageDeliveryService.initGlobal()
     try {
       const deadline = Date.now() + 6_000
-      while (
-        Date.now() < deadline &&
-        !inboxIDs.every((id) => requireSchedulerDelivery(id).status === "delivered")
-      )
+      while (Date.now() < deadline && !inboxIDs.every((id) => requireSchedulerDelivery(id).status === "delivered"))
         await Bun.sleep(25)
       while (Date.now() < deadline && !missionSessionIDs.every((id) => (attempts.get(id) ?? 0) >= 2)) {
         await Bun.sleep(25)
       }
       expect({
-        deliveries: inboxIDs.map((id) => requireSchedulerDelivery(id)).map((delivery) => ({
-          status: delivery.status,
-          attempt: delivery.attempt,
-        })),
+        deliveries: inboxIDs
+          .map((id) => requireSchedulerDelivery(id))
+          .map((delivery) => ({
+            status: delivery.status,
+            attempt: delivery.attempt,
+          })),
         wakeAttempts: missionSessionIDs.map((id) => attempts.get(id)),
       }).toEqual({
         deliveries: [
@@ -1896,259 +1903,91 @@ describe("durable scheduler.message delivery", () => {
           },
           event: { id: queued.eventID },
         })
-        expect(Database.use((db) => db.select().from(MessageTable).where(eq(MessageTable.id, sourceMessageID)).get())).toBeUndefined()
+        expect(
+          Database.use((db) => db.select().from(MessageTable).where(eq(MessageTable.id, sourceMessageID)).get()),
+        ).toBeUndefined()
       },
     })
   })
 
   test("materializes Mission identity as one real Task root Message and exact queued ingress", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
-      directory: project.path,
-      fn: async () => {
-        const missionID = "mission-materialized"
-        const mission = await Session.create({
-          kind: "mission",
-          title: "Materialization Mission",
-          metadata: { mission: { id: missionID } },
-        })
-        const root = await Session.create({
-          kind: "root",
-          title: "Materialization Task",
-          metadata: { configOverlay: { model: "openai/gpt-5.6-sol" } },
-        })
-        const taskID = Identifier.ascending("task")
-        const now = Date.now()
-        const packageRevision = {
-          scope: "built_in" as const,
-          projectID: null,
-          namespace: "builtin",
-          id: "base",
-          version: "2026.08.12.1",
-          packageDigest: "a".repeat(64),
-        }
-        persistQueuedTask({
-          taskID,
-          sessionID: root.id,
-          now,
-          title: "Materialization Task",
-          request: "Read a real Mission-authored root Message",
-          productPillar: "code",
-          source: "mission",
-          priority: "normal",
-          metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
-          projectID: Instance.project.id,
-          queue: false,
-          packageRevision,
-          executionCapsuleBinding: await prepareTaskProcessBinding({
-            mode: "native",
-            taskID,
-            projectID: Instance.project.id,
-            rootDirectory: Instance.directory,
-            packageRevisionSHA256: packageRevision.packageDigest,
-            timeCreated: now,
-          }),
-        })
-        const sourceMessageID = "msg_scheduler_materialize_source"
-        const sourcePartID = "prt_scheduler_materialize_source"
-        persistSourceOccurrence(mission.id, sourceMessageID, sourcePartID, "Materialize nonce M-1")
-        let release!: () => void
-        const released = new Promise<void>((resolve) => (release = resolve))
-        const observedEvents: unknown[] = []
-        const observedWakeIDs: string[] = []
-        configureTaskLoopRunner(async ({ event, wakeID }) => {
-          observedEvents.push(event)
-          if (wakeID) observedWakeIDs.push(wakeID)
-          await released
-          if (!wakeID || !event?.rootMessage) throw new Error("FIFO runner requires an exact root ingress")
-          const ingressKind =
-            event.rootMessage.kind === "operator"
-              ? "operator_message"
-              : event.rootMessage.kind === "mission"
-                ? "mission_message"
-                : "orchestrator_message"
-          return {
-            finalMessageID: await persistRunnerReply({ rootSessionID: root.id, wakeID, ingressKind }),
+    let release!: () => void
+    const released = new Promise<void>((resolve) => (release = resolve))
+    let rootSessionID = ""
+    const observedEvents: unknown[] = []
+    const observedWakeIDs: string[] = []
+    const taskLoopRunner = async ({
+      event,
+      wakeID,
+    }: Parameters<Parameters<typeof QueueTestHooks.replaceTaskLoopRunner>[0]["runner"]>[0]) => {
+      observedEvents.push(event)
+      if (wakeID) observedWakeIDs.push(wakeID)
+      await released
+      if (!wakeID || !event?.rootMessage) throw new Error("FIFO runner requires an exact root ingress")
+      const ingressKind =
+        event.rootMessage.kind === "operator"
+          ? "operator_message"
+          : event.rootMessage.kind === "mission"
+            ? "mission_message"
+            : "orchestrator_message"
+      return { finalMessageID: await persistRunnerReply({ rootSessionID, wakeID, ingressKind }) }
+    }
+    using _taskLoopRunner = QueueTestHooks.replaceTaskLoopRunner({ directory: project.path, runner: taskLoopRunner })
+    try {
+      const materialized = await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          configureTaskLoopRunner(taskLoopRunner)
+          const missionID = "mission-materialized"
+          const mission = await Session.create({
+            kind: "mission",
+            title: "Materialization Mission",
+            metadata: { mission: { id: missionID } },
+          })
+          const root = await Session.create({
+            kind: "root",
+            title: "Materialization Task",
+            metadata: { configOverlay: { model: "openai/gpt-5.6-sol" } },
+          })
+          rootSessionID = root.id
+          const taskID = Identifier.ascending("task")
+          const now = Date.now()
+          const packageRevision = {
+            scope: "built_in" as const,
+            projectID: null,
+            namespace: "builtin",
+            id: "base",
+            version: "2026.08.12.1",
+            packageDigest: "a".repeat(64),
           }
-        })
-        try {
-          const receipt = await sendSchedulerMessage({
-            invocationID: "materialize-mission-request",
-            kind: "request",
-            source: {
-              kind: "mission_scheduler",
-              project_id: Instance.project.id,
-              mission_id: missionID,
-              session_id: mission.id,
-            },
-            target: {
-              kind: "task_scheduler",
-              project_id: Instance.project.id,
-              task_id: taskID,
-              root_session_id: root.id,
-            },
-            subject: "Materialize identity",
-            sourceMessageID,
-            sourcePartID,
-            correlationID: "materialize-mission-request",
-            threadID: "materialize-mission-request",
-          })
-          const deliverySequence = requireSchedulerDelivery(receipt.inboxID).event.sequence
-          const visible = await MessageStore.get({ sessionID: root.id, messageID: receipt.messageID })
-          const ingress = Database.use((db) =>
-            db
-              .select({ payload: EngineArtifactTable.payload })
-              .from(EngineArtifactTable)
-              .where(eq(EngineArtifactTable.id, receipt.ingressID))
-              .get(),
-          )
-          expect({
-            receipt,
-            visible,
-            ingress: QueuedTaskIngressSchema.parse(ingress?.payload),
-            observedEvent: observedEvents[0],
-          }).toMatchObject({
-            receipt: { status: "delivered", replayed: false, wakeStatus: "started" },
-            visible: {
-              info: {
-                role: "user",
-                author: "mission",
-                extra: {
-                  task_root_message: {
-                    kind: "mission",
-                    source: `scheduler.message:${receipt.eventID}`,
-                    schedulerDelivery: {
-                      eventID: receipt.eventID,
-                      inboxID: receipt.inboxID,
-                      sequence: deliverySequence,
-                      threadID: receipt.threadID,
-                    },
-                  },
-                },
-              },
-              parts: [
-                {
-                  type: "text",
-                  text: [
-                    `Scheduler request from Mission scheduler ${missionID}.`,
-                    `event_id: ${receipt.eventID}`,
-                    "thread_id: materialize-mission-request",
-                    "subject: Materialize identity",
-                    "message:",
-                    "Materialize nonce M-1",
-                    `Reply through scheduler_message with kind=reply and reply_to=${receipt.eventID}.`,
-                  ].join("\n"),
-                },
-              ],
-            },
-            ingress: {
-              source_kind: "mission_message",
-              message_id: receipt.messageID,
-              event: {
-                rootMessage: {
-                  messageID: receipt.messageID,
-                  kind: "mission",
-                  schedulerDelivery: {
-                    eventID: receipt.eventID,
-                    inboxID: receipt.inboxID,
-                    sequence: deliverySequence,
-                  },
-                },
-              },
-            },
-            observedEvent: {
-              rootMessage: { messageID: receipt.messageID, kind: "mission" },
-            },
-          })
-          const operator = await EngineService.handleTaskMessage(taskID, {
-            text: "Operator message between scheduler deliveries",
-            source: "test.operator",
-          })
-          const secondSourceMessageID = "msg_scheduler_materialize_source_2"
-          const secondSourcePartID = "prt_scheduler_materialize_source_2"
-          persistSourceOccurrence(mission.id, secondSourceMessageID, secondSourcePartID, "Materialize nonce M-2")
-          const secondInvocationID = Array.from({ length: 10_000 }, (_, index) => `materialize-fifo-${index}`).find(
-            (invocationID) =>
-              schedulerDeliveryIdentity({
-                invocationID,
-                kind: "notification",
-                source: {
-                  kind: "mission_scheduler",
-                  project_id: Instance.project.id,
-                  mission_id: missionID,
-                  session_id: mission.id,
-                },
-                target: {
-                  kind: "task_scheduler",
-                  project_id: Instance.project.id,
-                  task_id: taskID,
-                  root_session_id: root.id,
-                },
-              }).eventID.localeCompare(receipt.eventID) < 0,
-          )!
-          const second = await sendSchedulerMessage({
-            invocationID: secondInvocationID,
-            kind: "notification",
-            source: {
-              kind: "mission_scheduler",
-              project_id: Instance.project.id,
-              mission_id: missionID,
-              session_id: mission.id,
-            },
-            target: {
-              kind: "task_scheduler",
-              project_id: Instance.project.id,
-              task_id: taskID,
-              root_session_id: root.id,
-            },
-            subject: "Materialize FIFO 2",
-            sourceMessageID: secondSourceMessageID,
-            sourcePartID: secondSourcePartID,
-          })
-          const ingressIDs = [receipt.ingressID!, operator.ingress_id!, second.ingressID!]
-          const ingressOrdinals = Database.use((db) =>
-            ingressIDs.map((id) => {
-              const current = db
-                .select({ ordinal: EngineArtifactTable.catalog_revision })
-                .from(EngineArtifactTable)
-                .where(eq(EngineArtifactTable.id, id))
-                .get()!
-              const first = db
-                .select({ ordinal: EngineArtifactVersionTable.catalog_revision })
-                .from(EngineArtifactVersionTable)
-                .where(eq(EngineArtifactVersionTable.artifact_id, id))
-                .orderBy(asc(EngineArtifactVersionTable.catalog_revision))
-                .get()
-              return { id, ordinal: first?.ordinal ?? current.ordinal }
+          persistQueuedTask({
+            taskID,
+            sessionID: root.id,
+            now,
+            title: "Materialization Task",
+            request: "Read a real Mission-authored root Message",
+            productPillar: "code",
+            source: "mission",
+            priority: "normal",
+            metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+            projectID: Instance.project.id,
+            queue: false,
+            packageRevision,
+            executionCapsuleBinding: await prepareTaskProcessBinding({
+              mode: "native",
+              taskID,
+              projectID: Instance.project.id,
+              rootDirectory: Instance.directory,
+              packageRevisionSHA256: packageRevision.packageDigest,
+              timeCreated: now,
             }),
-          )
-          expect(second).toMatchObject({ status: "delivered", wakeStatus: "queued" })
-          expect(second.eventID.localeCompare(receipt.eventID)).toBeLessThan(0)
-          expect(operator).toMatchObject({ wake_status: "queued" })
-          expect(
-            ingressOrdinals
-              .slice()
-              .sort((left, right) => left.ordinal - right.ordinal)
-              .map((row) => row.id),
-          ).toEqual([receipt.ingressID, operator.ingress_id, second.ingressID])
-          release()
-          await waitForQueueCompletionHooksForTest()
-          expect(observedWakeIDs).toEqual([receipt.ingressID, operator.ingress_id, second.ingressID])
-          expect(
-            observedEvents.map((event) => {
-              const rootMessage = (event as {
-                rootMessage?: { kind?: string; schedulerDelivery?: { eventID?: string } }
-              }).rootMessage
-              return { kind: rootMessage?.kind, eventID: rootMessage?.schedulerDelivery?.eventID }
-            }),
-          ).toEqual([
-            { kind: "mission", eventID: receipt.eventID },
-            { kind: "operator", eventID: undefined },
-            { kind: "mission", eventID: second.eventID },
-          ])
-
-          await expect(
-            sendSchedulerMessage({
+          })
+          const sourceMessageID = "msg_scheduler_materialize_source"
+          const sourcePartID = "prt_scheduler_materialize_source"
+          persistSourceOccurrence(mission.id, sourceMessageID, sourcePartID, "Materialize nonce M-1")
+          try {
+            const receipt = await sendSchedulerMessage({
               invocationID: "materialize-mission-request",
               kind: "request",
               source: {
@@ -2163,16 +2002,214 @@ describe("durable scheduler.message delivery", () => {
                 task_id: taskID,
                 root_session_id: root.id,
               },
-              subject: "Conflicting replay",
+              subject: "Materialize identity",
               sourceMessageID,
               sourcePartID,
+              correlationID: "materialize-mission-request",
+              threadID: "materialize-mission-request",
+            })
+            const deliverySequence = requireSchedulerDelivery(receipt.inboxID).event.sequence
+            const visible = await MessageStore.get({ sessionID: root.id, messageID: receipt.messageID })
+            const ingress = Database.use((db) =>
+              db
+                .select({ payload: EngineArtifactTable.payload })
+                .from(EngineArtifactTable)
+                .where(eq(EngineArtifactTable.id, receipt.ingressID))
+                .get(),
+            )
+            const parsedIngress = QueuedTaskIngressSchema.parse(ingress?.payload)
+            const visibleRootMessage = visible.info.extra?.task_root_message as {
+              protocol: string
+              taskID: string
+              kind: string
+              source: string
+              schedulerDelivery: { eventID: string; inboxID: string; sequence: number; threadID: string }
+            }
+            const visibleText = visible.parts.find((part) => part.type === "text")
+            const ingressRootMessage = parsedIngress.event.rootMessage!
+            expect(receipt.status).toBe("delivered")
+            expect(receipt.replayed).toBe(false)
+            expect(receipt.wakeStatus).toBe("started")
+            expect(visible.info.role).toBe("user")
+            expect(visible.info.author).toBe("mission")
+            expect(visibleRootMessage.protocol).toBe("task-root-message")
+            expect(visibleRootMessage.taskID).toBe(taskID)
+            expect(visibleRootMessage.kind).toBe("mission")
+            expect(visibleRootMessage.source).toBe(`scheduler.message:${receipt.eventID}`)
+            expect(visibleRootMessage.schedulerDelivery.eventID).toBe(receipt.eventID)
+            expect(visibleRootMessage.schedulerDelivery.inboxID).toBe(receipt.inboxID)
+            expect(visibleRootMessage.schedulerDelivery.sequence).toBe(deliverySequence)
+            expect(visibleRootMessage.schedulerDelivery.threadID).toBe(receipt.threadID)
+            expect(visibleText?.type === "text" ? visibleText.text : undefined).toBe(
+              [
+                `Scheduler request from Mission scheduler ${missionID}.`,
+                `event_id: ${receipt.eventID}`,
+                "thread_id: materialize-mission-request",
+                "subject: Materialize identity",
+                "message:",
+                "Materialize nonce M-1",
+                `Reply through scheduler_message with kind=reply and reply_to=${receipt.eventID}.`,
+              ].join("\n"),
+            )
+            expect(parsedIngress.source_kind).toBe("mission_message")
+            expect(parsedIngress.message_id).toBe(receipt.messageID)
+            expect(ingressRootMessage.messageID).toBe(receipt.messageID)
+            expect(ingressRootMessage.kind).toBe("mission")
+            expect(ingressRootMessage.schedulerDelivery?.eventID).toBe(receipt.eventID)
+            expect(ingressRootMessage.schedulerDelivery?.inboxID).toBe(receipt.inboxID)
+            expect(ingressRootMessage.schedulerDelivery?.sequence).toBe(deliverySequence)
+            expect(ingressRootMessage.schedulerDelivery?.threadID).toBe(receipt.threadID)
+            const operator = await EngineService.handleTaskMessage(taskID, {
+              text: "Operator message between scheduler deliveries",
+              source: "test.operator",
+            })
+            const secondSourceMessageID = "msg_scheduler_materialize_source_2"
+            const secondSourcePartID = "prt_scheduler_materialize_source_2"
+            persistSourceOccurrence(mission.id, secondSourceMessageID, secondSourcePartID, "Materialize nonce M-2")
+            const secondInvocationID = Array.from({ length: 10_000 }, (_, index) => `materialize-fifo-${index}`).find(
+              (invocationID) =>
+                schedulerDeliveryIdentity({
+                  invocationID,
+                  kind: "notification",
+                  source: {
+                    kind: "mission_scheduler",
+                    project_id: Instance.project.id,
+                    mission_id: missionID,
+                    session_id: mission.id,
+                  },
+                  target: {
+                    kind: "task_scheduler",
+                    project_id: Instance.project.id,
+                    task_id: taskID,
+                    root_session_id: root.id,
+                  },
+                }).eventID.localeCompare(receipt.eventID) < 0,
+            )!
+            const second = await sendSchedulerMessage({
+              invocationID: secondInvocationID,
+              kind: "notification",
+              source: {
+                kind: "mission_scheduler",
+                project_id: Instance.project.id,
+                mission_id: missionID,
+                session_id: mission.id,
+              },
+              target: {
+                kind: "task_scheduler",
+                project_id: Instance.project.id,
+                task_id: taskID,
+                root_session_id: root.id,
+              },
+              subject: "Materialize FIFO 2",
+              sourceMessageID: secondSourceMessageID,
+              sourcePartID: secondSourcePartID,
+            })
+            const ingressIDs = [receipt.ingressID!, operator.ingress_id!, second.ingressID!]
+            const ingressOrdinals = Database.use((db) =>
+              ingressIDs.map((id) => {
+                const current = db
+                  .select({ ordinal: EngineArtifactTable.catalog_revision })
+                  .from(EngineArtifactTable)
+                  .where(eq(EngineArtifactTable.id, id))
+                  .get()!
+                const first = db
+                  .select({ ordinal: EngineArtifactVersionTable.catalog_revision })
+                  .from(EngineArtifactVersionTable)
+                  .where(eq(EngineArtifactVersionTable.artifact_id, id))
+                  .orderBy(asc(EngineArtifactVersionTable.catalog_revision))
+                  .get()
+                return { id, ordinal: first?.ordinal ?? current.ordinal }
+              }),
+            )
+            expect(second).toMatchObject({ status: "delivered", wakeStatus: "queued" })
+            expect(second.eventID.localeCompare(receipt.eventID)).toBeLessThan(0)
+            expect(operator).toMatchObject({ wake_status: "queued" })
+            expect(
+              ingressOrdinals
+                .slice()
+                .sort((left, right) => left.ordinal - right.ordinal)
+                .map((row) => row.id),
+            ).toEqual([receipt.ingressID, operator.ingress_id, second.ingressID])
+            release()
+            return {
+              missionID,
+              missionSessionID: mission.id,
+              rootSessionID: root.id,
+              taskID,
+              sourceMessageID,
+              sourcePartID,
+              receipt,
+              operator,
+              second,
+              deliverySequence,
+            }
+          } catch (error) {
+            release()
+            throw error
+          }
+        },
+      })
+
+      await waitForQueueCompletionHooksForTest()
+      expect(observedWakeIDs).toEqual([
+        materialized.receipt.ingressID,
+        materialized.operator.ingress_id,
+        materialized.second.ingressID,
+      ])
+      const observedRootMessages = observedEvents.map(
+        (event) =>
+          (
+            event as {
+              rootMessage?: {
+                messageID?: string
+                kind?: string
+                schedulerDelivery?: { eventID?: string; inboxID?: string; sequence?: number; threadID?: string }
+              }
+            }
+          ).rootMessage,
+      )
+      expect(observedRootMessages[0]?.messageID).toBe(materialized.receipt.messageID)
+      expect(observedRootMessages[0]?.kind).toBe("mission")
+      expect(observedRootMessages[0]?.schedulerDelivery?.eventID).toBe(materialized.receipt.eventID)
+      expect(observedRootMessages[0]?.schedulerDelivery?.inboxID).toBe(materialized.receipt.inboxID)
+      expect(observedRootMessages[0]?.schedulerDelivery?.sequence).toBe(materialized.deliverySequence)
+      expect(observedRootMessages[0]?.schedulerDelivery?.threadID).toBe(materialized.receipt.threadID)
+      expect(observedRootMessages.map((rootMessage) => rootMessage?.kind)).toEqual(["mission", "operator", "mission"])
+      expect(observedRootMessages.map((rootMessage) => rootMessage?.schedulerDelivery?.eventID)).toEqual([
+        materialized.receipt.eventID,
+        undefined,
+        materialized.second.eventID,
+      ])
+
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          await expect(
+            sendSchedulerMessage({
+              invocationID: "materialize-mission-request",
+              kind: "request",
+              source: {
+                kind: "mission_scheduler",
+                project_id: Instance.project.id,
+                mission_id: materialized.missionID,
+                session_id: materialized.missionSessionID,
+              },
+              target: {
+                kind: "task_scheduler",
+                project_id: Instance.project.id,
+                task_id: materialized.taskID,
+                root_session_id: materialized.rootSessionID,
+              },
+              subject: "Conflicting replay",
+              sourceMessageID: materialized.sourceMessageID,
+              sourcePartID: materialized.sourcePartID,
             }),
           ).rejects.toBeInstanceOf(SchedulerMessageConflictError)
 
           Database.transaction((db) => {
             db.update(EngineTaskTable)
               .set({ time_completed: Date.now(), time_updated: Date.now() })
-              .where(eq(EngineTaskTable.id, taskID))
+              .where(eq(EngineTaskTable.id, materialized.taskID))
               .run()
           })
           const terminalReplay = await sendSchedulerMessage({
@@ -2181,30 +2218,28 @@ describe("durable scheduler.message delivery", () => {
             source: {
               kind: "mission_scheduler",
               project_id: Instance.project.id,
-              mission_id: missionID,
-              session_id: mission.id,
+              mission_id: materialized.missionID,
+              session_id: materialized.missionSessionID,
             },
             target: {
               kind: "task_scheduler",
               project_id: Instance.project.id,
-              task_id: taskID,
-              root_session_id: root.id,
+              task_id: materialized.taskID,
+              root_session_id: materialized.rootSessionID,
             },
             subject: "Materialize identity",
-            sourceMessageID,
-            sourcePartID,
+            sourceMessageID: materialized.sourceMessageID,
+            sourcePartID: materialized.sourcePartID,
           })
-          expect(terminalReplay).toMatchObject({
-            eventID: receipt.eventID,
-            inboxID: receipt.inboxID,
-            status: "delivered",
-            replayed: true,
-          })
-        } finally {
-          release()
-          await waitForQueueCompletionHooksForTest()
-        }
-      },
-    })
+          expect(terminalReplay.eventID).toBe(materialized.receipt.eventID)
+          expect(terminalReplay.inboxID).toBe(materialized.receipt.inboxID)
+          expect(terminalReplay.status).toBe("delivered")
+          expect(terminalReplay.replayed).toBe(true)
+        },
+      })
+    } finally {
+      release()
+      await waitForQueueCompletionHooksForTest()
+    }
   }, 30_000)
 })

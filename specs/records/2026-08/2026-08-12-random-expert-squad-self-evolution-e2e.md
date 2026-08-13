@@ -2551,3 +2551,31 @@ Real-page evidence exists at `screenshots/main-final-running.png`, `screenshots/
 screenshots prove the real Work/Mission surface, random installed Squad, exact Luna model and running diagnostic
 projection. No document or chart detail screenshot exists because those Artifacts were never created. This run is a
 terminal **FAIL**, not a rendering pass; it closes the bounded acceptance attempt without starting another run.
+
+### Post-R16 verification gate: queue completion lost executable project initialization
+
+The current acceptance target is the operator's explicit exact `openai/gpt-5.6-luna` model. Before a fresh R17,
+the complete changed scheduler delivery test file was run through the repository's isolated runner. Sixteen cases
+passed, while the real Mission-to-Task materialization/FIFO case made no progress for 120 seconds. The initial
+aggregate Bun matcher and immediate `observedEvents[0]` read obscured the first transition; scalar probes proved the
+first scheduler receipt, Task-root Message, durable ingress, physical runner entry and assistant settlement all
+completed. The completion owner then retried forever with `Engine queue task-loop runner is not configured for this
+instance` while attempting to attach the next durable ingress.
+
+The exact chain is `attachLoopCompletion -> runTaskLoopCompletionAttempt -> runWithIndependentProjectIdentity ->
+drainQueuedTaskEvent -> requireTaskLoopRunner`. A project-cache convergence write was already queued behind the
+request's read lease. Once the request lease released, convergence legitimately disposed the old per-project State;
+the completion owner re-entered through an identity-only lease, recreated an empty Task-loop runtime and could not
+advance the next wake. The retry loop retained the exact completion authority, so no data was falsified, but the
+Task remained permanently unable to consume subsequent operator or scheduler ingress. Cache eviction, runtime
+restart and any delayed completion owner can trigger the same defect; it is not specific to the test or one Squad.
+
+The root repair must preserve the existing owner split: persistence/publication-only callbacks continue to use
+`runWithIndependentProjectIdentity`, while completion paths that can execute `drainQueuedTaskEvent`, `advanceQueue`,
+Task prompts or terminal delivery use `runWithInitializedIndependentProject`. That owner runs the one canonical
+`InstanceBootstrap`, which installs the Task loop runner and other project capabilities after cache reconstruction.
+No fallback runner or second queue implementation is allowed. The focused test must force the runner through a
+cache-reconstruction-safe test override, prove all three FIFO root occurrences execute in durable ordinal order,
+and prove replay/terminal receipts after the completion hook settles. All temporary probes must be absent before
+commit. The independent reviewer initially classified the hang as a Bun matcher issue; the subsequent per-boundary
+runtime trace disproved that narrow conclusion and established the executable-owner defect above.
