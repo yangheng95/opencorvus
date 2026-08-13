@@ -119,6 +119,9 @@ export const SessionTable = sqliteTable(
     index("session_parent_idx").on(table.parent_id),
     index("session_kind_idx").on(table.kind),
     index("session_time_pinned_idx").on(table.time_pinned),
+    uniqueIndex("session_mission_identity_idx")
+      .on(table.project_id, table.directory, sql<string>`json_extract(${table.metadata}, '$.mission.id')`)
+      .where(sql`${table.kind} = 'mission'`),
   ],
 )
 

@@ -27,7 +27,7 @@ const contracts = {
     abiVersion: 1,
     inputSchema: DispatchAdapterInputSchemas.requirements,
     sessionKind: "requirements",
-    privateStageToolIDs: ["register_requirement", "register_decision"],
+    privateStageToolIDs: ["register_requirement", "register_decision", "finalize_requirements"],
     permissionBearingStageToolIDs: ["register_decision"],
     coordinationHandoffToolID: "request_orchestrator_decision",
   },

@@ -1,7 +1,6 @@
 import { Identifier } from "@/id/id"
 import { hostGit as runGit } from "@/util/git"
-import fs from "node:fs/promises"
-import path from "node:path"
+import { resolveBuildObservationGitDir } from "./build-observation-cleanup"
 
 export function buildObservationRefName(observationID: string, phase: "base" | "head"): string {
   return `refs/opencorvus/build-observations/${Identifier.schema("artifact").parse(observationID)}/${phase}`
@@ -11,17 +10,11 @@ export async function deleteBuildObservationRefs(input: {
   worktreeDir: string
   observationIDs: readonly string[]
 }): Promise<void> {
-  try {
-    await fs.lstat(path.join(input.worktreeDir, ".git"))
-  } catch (error) {
-    const code = (error as NodeJS.ErrnoException).code
-    if (code === "ENOENT" || code === "ENOTDIR") return
-    throw error
-  }
+  const gitDir = await resolveBuildObservationGitDir(input.worktreeDir)
   for (const observationID of [...new Set(input.observationIDs)].sort()) {
     for (const phase of ["base", "head"] as const) {
       const refName = buildObservationRefName(observationID, phase)
-      const result = await runGit(["update-ref", "-d", refName], {
+      const result = await runGit(["--git-dir", gitDir, "update-ref", "-d", refName], {
         cwd: input.worktreeDir,
         timeoutProfile: "fast",
       })

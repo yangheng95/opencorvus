@@ -31,7 +31,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/global/composer-expert-squads` | Search global Composer expert squads 错误: `BadRequestError`, `UnknownError`. | `global.composerExpertSquads` |
 | GET | `/global/composer-references` | List global Composer references 错误: `UnknownError`. | `global.composerReferences` |
 | GET | `/global/config` | Get global configuration 错误: `NonCanonicalConfigFileError`. | `global.config.get` |
-| PATCH | `/global/config` | Update global configuration 错误: `BadRequestError`, `NonCanonicalConfigFileError`. | `global.config.update` |
+| PATCH | `/global/config` | Update global configuration 错误: `AuthReadError`, `BadRequestError`, `NonCanonicalConfigFileError`. | `global.config.update` |
 | GET | `/global/db/mysql/export` | Export MySQL transfer snapshot | `global.db.mysql.export` |
 | POST | `/global/db/mysql/import` | Import MySQL transfer snapshot 请求体: `snapshot`; 错误: `BadRequestError`, `OwnedPromptControllersError`. | `global.db.mysql.import` |
 | GET | `/global/db/mysql/schema` | Export MySQL staging schema | `global.db.mysql.schema` |
@@ -42,16 +42,16 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/global/projects/discover` | Discover local OpenCorvus projects 错误: `BadRequestError`, `UnknownError`. | `global.projects.discover` |
 | GET | `/global/providers` | List providers for a new global task | `global.providers.list` |
 | GET | `/global/providers/auth` | Get global Provider auth methods | `global.providers.auth` |
-| POST | `/global/providers/discover-models` | Discover global Provider models 请求体: `api`, `apiKey`, `providerID`; 错误: `BadRequestError`. | `global.providers.discover.models` |
-| POST | `/global/providers/models/refresh` | Refresh global configured provider model lists | `global.providers.models.refresh` |
+| POST | `/global/providers/discover-models` | Discover global Provider models 请求体: `api`, `apiKey`, `providerID`; 错误: `AuthReadError`, `BadRequestError`. | `global.providers.discover.models` |
+| POST | `/global/providers/models/refresh` | Refresh global configured provider model lists 错误: `AuthReadError`. | `global.providers.models.refresh` |
 | POST | `/global/providers/refresh` | Refresh the global provider registry | `global.providers.refresh` |
-| DELETE | `/global/providers/{providerID}` | Delete a global provider 错误: `BadRequestError`. | `global.providers.remove` |
-| GET | `/global/providers/{providerID}/account-usage` | Get global Provider account usage | `global.providers.account.usage` |
-| POST | `/global/providers/{providerID}/auth/execute` | Execute global Provider auth 请求体: `inputs`, `method`; 错误: `BadRequestError`. | `global.providers.auth.execute` |
+| DELETE | `/global/providers/{providerID}` | Delete a global provider 错误: `AuthReadError`, `BadRequestError`. | `global.providers.remove` |
+| GET | `/global/providers/{providerID}/account-usage` | Get global Provider account usage 错误: `AuthReadError`. | `global.providers.account.usage` |
+| POST | `/global/providers/{providerID}/auth/execute` | Execute global Provider auth 请求体: `inputs`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `global.providers.auth.execute` |
 | POST | `/global/providers/{providerID}/auth/prompts` | Get global Provider auth prompts 请求体: `inputs`, `method`; 错误: `BadRequestError`. | `global.providers.auth.prompts` |
 | POST | `/global/providers/{providerID}/oauth/authorize` | Authorize a global Provider subscription 请求体: `inputs`, `method`; 错误: `BadRequestError`. | `global.providers.oauth.authorize` |
-| POST | `/global/providers/{providerID}/oauth/callback` | Complete global Provider subscription authorization 请求体: `code`, `method`; 错误: `BadRequestError`. | `global.providers.oauth.callback` |
-| POST | `/global/providers/{providerID}/test` | Test a global Provider connection 请求体: `modelID`; 错误: `BadRequestError`. | `global.providers.test` |
+| POST | `/global/providers/{providerID}/oauth/callback` | Complete global Provider subscription authorization 请求体: `code`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `global.providers.oauth.callback` |
+| POST | `/global/providers/{providerID}/test` | Test a global Provider connection 请求体: `modelID`; 错误: `AuthReadError`, `BadRequestError`. | `global.providers.test` |
 | POST | `/global/skill/install` | Install a global Skill market source 请求体: `kind`, `policy`, `value`; 错误: `BadRequestError`. | `global.skill.install` |
 | GET | `/global/skill/market` | List the global Skill market | `global.skill.market` |
 | GET | `/global/tasks` | List tasks across projects | `task.global.list` |
@@ -71,18 +71,18 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 
 | Method | 路径 | 说明 | operationId |
 |---|---|---|---|
-| DELETE | `/auth/{providerID}` | Remove auth credentials 错误: `BadRequestError`. | `auth.remove` |
-| PUT | `/auth/{providerID}` | Set auth credentials 错误: `BadRequestError`. | `auth.set` |
+| DELETE | `/auth/{providerID}` | Remove auth credentials 错误: `AuthReadError`, `BadRequestError`. | `auth.remove` |
+| PUT | `/auth/{providerID}` | Set auth credentials 错误: `AuthReadError`, `BadRequestError`. | `auth.set` |
 
 ### Configuration
 
 | Method | 路径 | 说明 | operationId |
 |---|---|---|---|
 | GET | `/command` | List commands 错误: `UnknownError`. | `command.list` |
-| GET | `/config` | Get configuration 错误: `NonCanonicalConfigFileError`. | `config.get` |
-| PATCH | `/config` | Update configuration (JSON Merge Patch) 错误: `BadRequestError`, `NonCanonicalConfigFileError`. | `config.update` |
-| GET | `/config/prompt` | List prompt catalog | `config.prompt` |
-| GET | `/config/providers` | List config providers | `config.providers` |
+| GET | `/config` | Get configuration 错误: `AuthReadError`, `NonCanonicalConfigFileError`. | `config.get` |
+| PATCH | `/config` | Update configuration (JSON Merge Patch) 错误: `AuthReadError`, `BadRequestError`, `NonCanonicalConfigFileError`. | `config.update` |
+| GET | `/config/prompt` | List prompt catalog 错误: `AuthReadError`. | `config.prompt` |
+| GET | `/config/providers` | List config providers 错误: `AuthReadError`. | `config.providers` |
 | POST | `/config/proxy/test` | Test network proxy 错误: `NetworkProxyTestResponse`. | `config.proxy.test` |
 | GET | `/formatter` | Get formatter status | `formatter.status` |
 | GET | `/path` | Get paths | `path.get` |
@@ -124,12 +124,12 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | PATCH | `/mailbox/{messageID}` | Update a mailbox item 请求体: `action`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `mailbox.acknowledge` |
 | GET | `/mission` | List Missions | `mission.list` |
 | POST | `/mission/draft` | Create a Mission draft 请求体: `expertSquadIDs`, `productPillar`, `request`, `title`; 错误: `BadRequestError`. | `mission.createDraft` |
-| POST | `/mission/wake` | Wake the Mission agent 请求体: `attachments`, `expertSquadIDs`, `missionID`, `model`, `productPillar`, `text`; 错误: `BadRequestError`, `MissionExecutionClosingError`, `MissionExpertSquadSnapshotMismatchError`. | `mission.wake` |
+| POST | `/mission/wake` | Wake the Mission agent 请求体: `attachments`, `expertSquadIDs`, `missionID`, `model`, `productPillar`, `text`; 错误: `AuthReadError`, `BadRequestError`, `MissionExecutionClosingError`, `MissionExpertSquadSnapshotMismatchError`. | `mission.wake` |
 | DELETE | `/mission/{missionID}` | Delete a Mission 请求体: `reason`, `surface`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.delete` |
 | POST | `/mission/{missionID}/abort` | Abort a Mission 请求体: `reason`, `surface`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.abort` |
 | GET | `/mission/{missionID}/activity-cursor` | Get Mission durable activity cursor 错误: `LogFileNotFoundError`, `NotFoundError`. | `mission.activityCursor` |
 | PATCH | `/mission/{missionID}/archive` | Archive or restore a Mission 请求体: `archived`, `reason`, `surface`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `mission.setArchived` |
-| POST | `/mission/{missionID}/dispatch` | Dispatch a Mission draft 请求体: `model`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MissionExecutionClosingError`, `NotFoundError`. | `mission.dispatch` |
+| POST | `/mission/{missionID}/dispatch` | Dispatch a Mission draft 请求体: `model`; 错误: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `MissionExecutionClosingError`, `NotFoundError`. | `mission.dispatch` |
 | GET | `/mission/{missionID}/project-archive` | Download Mission project archive 错误: `LogFileNotFoundError`, `NotFoundError`. | `mission.projectArchive` |
 | GET | `/mission/{missionID}/status` | Get Mission status 错误: `LogFileNotFoundError`, `NotFoundError`. | `mission.status` |
 | PATCH | `/mission/{missionID}/title` | Rename a Mission 请求体: `title`; 错误: `LogFileNotFoundError`, `NotFoundError`. | `mission.rename` |
@@ -194,8 +194,8 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/session/{sessionID}/abort` | Abort session 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `session.abort` |
 | GET | `/session/{sessionID}/children` | Get session children 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.children` |
 | POST | `/session/{sessionID}/command` | Send command 请求体: `agent`, `arguments`, `command`, `messageID`, `model`, `parts`, `variant`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.command` |
-| GET | `/session/{sessionID}/config` | Get session effective configuration 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.config.get` |
-| PATCH | `/session/{sessionID}/config` | Update session configuration overlay 请求体: `agent`, `expert_squads`, `model`, `prompt`, `prompt_profile`, `runtime_templates`, `skill_mounts`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskPackageRevisionBindingError`, `TaskPromptProfileImmutableError`. | `session.config.update` |
+| GET | `/session/{sessionID}/config` | Get session effective configuration 错误: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.config.get` |
+| PATCH | `/session/{sessionID}/config` | Update session configuration overlay 请求体: `agent`, `expert_squads`, `model`, `prompt`, `prompt_profile`, `runtime_templates`, `skill_mounts`; 错误: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskPackageRevisionBindingError`, `TaskPromptProfileImmutableError`. | `session.config.update` |
 | GET | `/session/{sessionID}/conversation` | Hydrate session conversation state 错误: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation` |
 | GET | `/session/{sessionID}/conversation/history` | Page older session conversation transcript 错误: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation.history` |
 | GET | `/session/{sessionID}/diff` | Get message diff | `session.diff` |
@@ -206,12 +206,12 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/session/{sessionID}/interactive-artifact/{artifactID}/mcp-app/events` | Subscribe to MCP App capability changes 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `interactiveArtifact.eventsMcpApp` |
 | POST | `/session/{sessionID}/interactive-artifact/{artifactID}/mcp-app/request` | Forward an MCP App request 错误: `BadRequestError`, `LogFileNotFoundError`, `McpAppHostForbiddenError`, `NotFoundError`, `UnknownError`. | `interactiveArtifact.requestMcpApp` |
 | GET | `/session/{sessionID}/message` | Get session messages 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.messages` |
-| POST | `/session/{sessionID}/message` | Send message 请求体: `agent`, `format`, `messageID`, `model`, `parts`, `variant`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.prompt` |
+| POST | `/session/{sessionID}/message` | Send message 请求体: `agent`, `format`, `messageID`, `model`, `parts`, `variant`; 错误: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.prompt` |
 | DELETE | `/session/{sessionID}/message/{messageID}` | Delete message 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.deleteMessage` |
 | GET | `/session/{sessionID}/message/{messageID}` | Get message 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.message` |
 | DELETE | `/session/{sessionID}/message/{messageID}/part/{partID}` | （无说明） 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.delete` |
 | PATCH | `/session/{sessionID}/message/{messageID}/part/{partID}` | （无说明） 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `part.update` |
-| POST | `/session/{sessionID}/prompt_async` | Send async message 请求体: `agent`, `format`, `messageID`, `model`, `parts`, `variant`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.prompt_async` |
+| POST | `/session/{sessionID}/prompt_async` | Send async message 请求体: `agent`, `format`, `messageID`, `model`, `parts`, `variant`; 错误: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.prompt_async` |
 | GET | `/session/{sessionID}/prompt_async/{taskID}` | Get async prompt task status 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.prompt_async_status` |
 | POST | `/session/{sessionID}/shell` | Run shell command 请求体: `agent`, `command`, `model`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.shell` |
 | POST | `/session/{sessionID}/summarize` | Summarize session 请求体: `auto`, `focus`, `modelID`, `providerID`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.summarize` |
@@ -223,7 +223,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 
 | Method | 路径 | 说明 | operationId |
 |---|---|---|---|
-| POST | `/coding/chat/session` | Create right sidebar Chat session 请求体: `model`. | `coding.chat.session.create` |
+| POST | `/coding/chat/session` | Create right sidebar Chat session 请求体: `model`; 错误: `AuthReadError`. | `coding.chat.session.create` |
 | DELETE | `/coding/chat/session/{sessionID}` | Delete right sidebar Chat session 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.chat.session.delete` |
 | GET | `/coding/chat/session/{sessionID}` | Claim right sidebar Chat session 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.chat.session.get` |
 | PATCH | `/coding/chat/session/{sessionID}` | Update right sidebar Chat session 请求体: `title`; 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.chat.session.update` |
@@ -233,7 +233,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/coding/chat/sessions` | List right sidebar Chat sessions 错误: `BadRequestError`. | `coding.chat.sessions.list` |
 | POST | `/coding/cli/open` | Open coding CLI 请求体: `cliID`, `cwd`, `terminalProfileID`; 错误: `BadRequestError`. | `coding.cli.open` |
 | GET | `/coding/cli/profiles` | List installed coding CLIs 错误: `BadRequestError`. | `coding.cli.profiles` |
-| POST | `/coding/work/session` | Create right sidebar Work session 请求体: `model`. | `coding.work.session.create` |
+| POST | `/coding/work/session` | Create right sidebar Work session 请求体: `model`; 错误: `AuthReadError`. | `coding.work.session.create` |
 | DELETE | `/coding/work/session/{sessionID}` | Delete right sidebar Work session 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.work.session.delete` |
 | GET | `/coding/work/session/{sessionID}` | Claim right sidebar Work session 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.work.session.get` |
 | PATCH | `/coding/work/session/{sessionID}` | Update right sidebar Work session 请求体: `title`; 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.work.session.update` |
@@ -287,7 +287,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 
 | Method | 路径 | 说明 | operationId |
 |---|---|---|---|
-| GET | `/expert-squad/catalog` | Resolve the active expert-squad capability projection 错误: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.catalog` |
+| GET | `/expert-squad/catalog` | Resolve the active expert-squad capability projection 错误: `AuthReadError`, `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.catalog` |
 | GET | `/expert-squad/configuration` | Get expert squad configuration 错误: `ExpertSquadPackageError`. | `expertSquad.configuration.get` |
 | PUT | `/expert-squad/configuration` | Update expert squad configuration 请求体: `id`, `installationScope`, `updates`; 错误: `ExpertSquadPackageError`. | `expertSquad.configuration.update` |
 | GET | `/expert-squad/diagnostics` | Page Expert Squad discovery diagnostics 错误: `BadRequestError`, `UnknownError`. | `expertSquad.diagnostics` |
@@ -309,7 +309,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/expert-squad/release-payload` | Release bundled expert-squad packages 错误: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.releasePayload` |
 | GET | `/expert-squad/search` | Search expert-squad declarations 错误: `BadRequestError`, `UnknownError`. | `expertSquad.search` |
 | GET | `/expert-squad/settings/detail` | Load one full expert-squad settings declaration 错误: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.settingsDetail` |
-| POST | `/expert-squad/uninstall` | Uninstall an expert squad package 请求体: `id`, `installationScope`, `replacementID`; 错误: `ExpertSquadPackageError`. | `expertSquad.uninstall` |
+| POST | `/expert-squad/uninstall` | Uninstall an expert squad package 请求体: `id`, `installationScope`, `replacementID`; 错误: `AuthReadError`, `ExpertSquadPackageError`. | `expertSquad.uninstall` |
 | POST | `/expert-squad/update` | Update an installed expert squad 请求体: `expectedCurrentPackageDigest`, `id`, `installationScope`, `source`; 错误: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.update` |
 | POST | `/expert-squad/validate-folder` | Validate an expert squad source folder 请求体: `sourceDirectory`; 错误: `ExpertSquadPackageError`. | `expertSquad.validateFolder` |
 
@@ -399,16 +399,16 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 |---|---|---|---|
 | GET | `/provider` | List providers | `provider.list` |
 | GET | `/provider/auth` | Get provider auth methods | `provider.auth` |
-| POST | `/provider/discover-models` | Discover OpenAI-compatible provider models 请求体: `api`, `apiKey`, `providerID`; 错误: `BadRequestError`. | `provider.discover.models` |
-| POST | `/provider/models/refresh` | Refresh configured provider model lists | `provider.models.refresh` |
+| POST | `/provider/discover-models` | Discover OpenAI-compatible provider models 请求体: `api`, `apiKey`, `providerID`; 错误: `AuthReadError`, `BadRequestError`. | `provider.discover.models` |
+| POST | `/provider/models/refresh` | Refresh configured provider model lists 错误: `AuthReadError`. | `provider.models.refresh` |
 | POST | `/provider/refresh` | Refresh the provider registry | `provider.refresh` |
-| DELETE | `/provider/{providerID}` | Delete a project provider 错误: `BadRequestError`. | `provider.remove` |
-| GET | `/provider/{providerID}/account-usage` | Get Provider account usage | `provider.account.usage` |
-| POST | `/provider/{providerID}/auth/execute` | Execute auth method 请求体: `inputs`, `method`; 错误: `BadRequestError`. | `provider.auth.execute` |
+| DELETE | `/provider/{providerID}` | Delete a project provider 错误: `AuthReadError`, `BadRequestError`. | `provider.remove` |
+| GET | `/provider/{providerID}/account-usage` | Get Provider account usage 错误: `AuthReadError`. | `provider.account.usage` |
+| POST | `/provider/{providerID}/auth/execute` | Execute auth method 请求体: `inputs`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `provider.auth.execute` |
 | POST | `/provider/{providerID}/auth/prompts` | Get auth prompts 请求体: `inputs`, `method`; 错误: `BadRequestError`. | `provider.auth.prompts` |
 | POST | `/provider/{providerID}/oauth/authorize` | OAuth authorize 请求体: `inputs`, `method`; 错误: `BadRequestError`. | `provider.oauth.authorize` |
-| POST | `/provider/{providerID}/oauth/callback` | OAuth callback 请求体: `code`, `method`; 错误: `BadRequestError`. | `provider.oauth.callback` |
-| POST | `/provider/{providerID}/test` | Test provider connection 请求体: `modelID`; 错误: `BadRequestError`. | `provider.test` |
+| POST | `/provider/{providerID}/oauth/callback` | OAuth callback 请求体: `code`, `method`; 错误: `AuthReadError`, `BadRequestError`. | `provider.oauth.callback` |
+| POST | `/provider/{providerID}/test` | Test provider connection 请求体: `modelID`; 错误: `AuthReadError`, `BadRequestError`. | `provider.test` |
 
 ### Question
 

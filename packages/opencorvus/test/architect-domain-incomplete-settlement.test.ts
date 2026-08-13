@@ -153,10 +153,24 @@ function requirementSetLocator(taskID: string) {
     kind: "requirement_set",
     label: "RequirementSet",
     payload: {
+      schema_version: 2,
       requirements: [],
       decisions: [],
       observed_artifact_locators: [],
       source_artifact_locators: [],
+      producer: {
+        session_id: Identifier.ascending("session"),
+        final_message_id: Identifier.ascending("message"),
+      },
+      coverage_receipt: {
+        status: "incomplete",
+        request_sha256: taskRequestSHA256(requireTask(taskID).request),
+        requirement_ids: [],
+        source_artifact_locators: [],
+        unresolved: [],
+        issues: ["no_requirements_registered"],
+        declaration: null,
+      },
     },
   })
   return exactEngineArtifactLocator({ taskID, artifactID })

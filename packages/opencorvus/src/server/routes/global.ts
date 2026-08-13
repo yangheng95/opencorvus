@@ -21,7 +21,13 @@ import { updateGlobalConfigPatch } from "../../config/update-global"
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
 import { NativeAgentInfoSchema } from "@/agent/native-agent-info"
 import { Database } from "../../storage/db"
-import { OwnedPromptControllersResponse, badRequestBody, errors, namedErrorResponse } from "../error"
+import {
+  AuthReadUnavailableResponse,
+  OwnedPromptControllersResponse,
+  badRequestBody,
+  errors,
+  namedErrorResponse,
+} from "../error"
 import { canRestartServer, startServerRestart } from "../restart"
 import { GlobalConversationService } from "@/chat/global-chat-service"
 import { RightSidebarConversationSessionResponse } from "@/chat/session"
@@ -531,6 +537,7 @@ export const GlobalRoutes = lazy(() =>
             description: "Provider account usage lookup result",
             content: { "application/json": { schema: resolver(ProviderAccountUsage.Response) } },
           },
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("param", z.object({ providerID: z.string().trim().min(1) })),
@@ -593,6 +600,7 @@ export const GlobalRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(GlobalProviderAuthMutationResponse) } },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("param", z.object({ providerID: z.string() })),
@@ -654,6 +662,7 @@ export const GlobalRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(GlobalProviderAuthMutationResponse) } },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("param", z.object({ providerID: z.string() })),
@@ -698,6 +707,7 @@ export const GlobalRoutes = lazy(() =>
             },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(
@@ -740,6 +750,7 @@ export const GlobalRoutes = lazy(() =>
             },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("param", z.object({ providerID: z.string() })),
@@ -799,6 +810,7 @@ export const GlobalRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(ProviderRemovalReceipt) } },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("param", z.object({ providerID: z.string().trim().min(1) })),
@@ -842,16 +854,11 @@ export const GlobalRoutes = lazy(() =>
               },
             },
           },
+          503: AuthReadUnavailableResponse,
         },
       }),
       async (c) => {
-        const result = await Config.getGlobal().then(
-          (config) => Provider.refreshModels(config),
-          (error) => ({
-            ok: false as const,
-            error: errorMessage(error),
-          }),
-        )
+        const result = await Provider.refreshModels(await Config.getGlobal())
         if (result.ok) {
           const issues = await settleCanonicalProviderCatalogInvalidation()
           return c.json({ ...result, ...(issues.length > 0 ? { issues } : {}) })
@@ -1064,6 +1071,7 @@ export const GlobalRoutes = lazy(() =>
           },
           ...errors(400),
           409: namedErrorResponse("Non-canonical configuration file", "NonCanonicalConfigFileError"),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("json", z.record(z.string(), z.unknown())),

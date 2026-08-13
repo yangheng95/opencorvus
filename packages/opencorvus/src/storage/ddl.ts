@@ -200,6 +200,104 @@ BEGIN
   SELECT RAISE(ABORT, 'project: generation is immutable');
 END;
 
+-- A Mission Session is a complete durable domain identity at its first
+-- observable commit. Mutable Mission state may be added later, but the launch
+-- identity cannot be manufactured or rewritten afterward. cwd may move only
+-- together with session.directory so Project relocation remains one atomic
+-- identity-preserving operation.
+CREATE TRIGGER IF NOT EXISTS session_mission_identity_required_insert
+BEFORE INSERT ON session
+FOR EACH ROW
+WHEN NEW.kind = 'mission'
+  AND (
+    json_type(NEW.metadata, '$.mission') IS NOT 'object'
+    OR json_type(NEW.metadata, '$.mission.id') IS NOT 'text'
+    OR length(json_extract(NEW.metadata, '$.mission.id')) NOT BETWEEN 1 AND 64
+    OR json_extract(NEW.metadata, '$.mission.id') GLOB '*[^a-z0-9-]*'
+    OR json_type(NEW.metadata, '$.mission.channelKey') IS NOT 'text'
+    OR json_extract(NEW.metadata, '$.mission.channelKey') IS NOT 'mission:' || json_extract(NEW.metadata, '$.mission.id')
+    OR json_type(NEW.metadata, '$.mission.cwd') IS NOT 'text'
+    OR length(json_extract(NEW.metadata, '$.mission.cwd')) < 1
+    OR json_extract(NEW.metadata, '$.mission.cwd') IS NOT NEW.directory
+    OR json_type(NEW.metadata, '$.mission.productPillar') IS NOT 'text'
+    OR json_extract(NEW.metadata, '$.mission.productPillar') NOT IN ('code', 'work')
+    OR json_type(NEW.metadata, '$.mission.visibleExpertSquadIDs') IS NOT 'array'
+    OR json_array_length(NEW.metadata, '$.mission.visibleExpertSquadIDs') < 1
+    OR EXISTS (
+      SELECT 1 FROM json_each(NEW.metadata, '$.mission.visibleExpertSquadIDs') AS squad
+      WHERE squad.type IS NOT 'text'
+        OR length(squad.value) NOT BETWEEN 1 AND 64
+        OR squad.value NOT GLOB '[a-z]*'
+        OR squad.value GLOB '*[^a-z0-9-]*'
+        OR squad.value GLOB '*--*'
+        OR substr(squad.value, -1) = '-'
+    )
+    OR (
+      SELECT count(*) FROM json_each(NEW.metadata, '$.mission.visibleExpertSquadIDs')
+    ) IS NOT (
+      SELECT count(DISTINCT value) FROM json_each(NEW.metadata, '$.mission.visibleExpertSquadIDs')
+    )
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'session: mission identity metadata is incomplete');
+END;
+
+CREATE TRIGGER IF NOT EXISTS session_mission_identity_required_update
+BEFORE UPDATE ON session
+FOR EACH ROW
+WHEN NEW.kind = 'mission'
+  AND (
+    json_type(NEW.metadata, '$.mission') IS NOT 'object'
+    OR json_type(NEW.metadata, '$.mission.id') IS NOT 'text'
+    OR length(json_extract(NEW.metadata, '$.mission.id')) NOT BETWEEN 1 AND 64
+    OR json_extract(NEW.metadata, '$.mission.id') GLOB '*[^a-z0-9-]*'
+    OR json_type(NEW.metadata, '$.mission.channelKey') IS NOT 'text'
+    OR json_extract(NEW.metadata, '$.mission.channelKey') IS NOT 'mission:' || json_extract(NEW.metadata, '$.mission.id')
+    OR json_type(NEW.metadata, '$.mission.cwd') IS NOT 'text'
+    OR length(json_extract(NEW.metadata, '$.mission.cwd')) < 1
+    OR json_extract(NEW.metadata, '$.mission.cwd') IS NOT NEW.directory
+    OR json_type(NEW.metadata, '$.mission.productPillar') IS NOT 'text'
+    OR json_extract(NEW.metadata, '$.mission.productPillar') NOT IN ('code', 'work')
+    OR json_type(NEW.metadata, '$.mission.visibleExpertSquadIDs') IS NOT 'array'
+    OR json_array_length(NEW.metadata, '$.mission.visibleExpertSquadIDs') < 1
+    OR EXISTS (
+      SELECT 1 FROM json_each(NEW.metadata, '$.mission.visibleExpertSquadIDs') AS squad
+      WHERE squad.type IS NOT 'text'
+        OR length(squad.value) NOT BETWEEN 1 AND 64
+        OR squad.value NOT GLOB '[a-z]*'
+        OR squad.value GLOB '*[^a-z0-9-]*'
+        OR squad.value GLOB '*--*'
+        OR substr(squad.value, -1) = '-'
+    )
+    OR (
+      SELECT count(*) FROM json_each(NEW.metadata, '$.mission.visibleExpertSquadIDs')
+    ) IS NOT (
+      SELECT count(DISTINCT value) FROM json_each(NEW.metadata, '$.mission.visibleExpertSquadIDs')
+    )
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'session: mission identity metadata is incomplete');
+END;
+
+CREATE TRIGGER IF NOT EXISTS session_mission_identity_immutable_update
+BEFORE UPDATE ON session
+FOR EACH ROW
+WHEN (OLD.kind = 'mission' OR NEW.kind = 'mission')
+  AND (
+    NEW.kind IS NOT OLD.kind
+    OR json_extract(NEW.metadata, '$.mission.id') IS NOT json_extract(OLD.metadata, '$.mission.id')
+    OR json_extract(NEW.metadata, '$.mission.channelKey') IS NOT json_extract(OLD.metadata, '$.mission.channelKey')
+    OR json_extract(NEW.metadata, '$.mission.productPillar') IS NOT json_extract(OLD.metadata, '$.mission.productPillar')
+    OR json_extract(NEW.metadata, '$.mission.visibleExpertSquadIDs') IS NOT json_extract(OLD.metadata, '$.mission.visibleExpertSquadIDs')
+    OR (
+      json_extract(NEW.metadata, '$.mission.cwd') IS NOT json_extract(OLD.metadata, '$.mission.cwd')
+      AND NEW.directory IS OLD.directory
+    )
+  )
+BEGIN
+  SELECT RAISE(ABORT, 'session: mission identity metadata is immutable');
+END;
+
 CREATE VIRTUAL TABLE IF NOT EXISTS memory_fts USING fts5(
   content,
   chunk_id UNINDEXED,

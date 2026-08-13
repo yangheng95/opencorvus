@@ -34,7 +34,7 @@ import {
 import { deriveTaskStatus, taskTerminalReason } from "./task-status"
 import { pendingTaskCancellationProjection, taskCancellationProjection } from "./cancellation-projection"
 import { GoalWorkloadArtifactSchema, type GoalWorkloadArtifact } from "@/goal-workload-analyst/types"
-import type { RequirementSet } from "@/requirements/types"
+import { RequirementSetArtifactPayloadSchema, type RequirementSet } from "@/requirements/types"
 import {
   ResearchBriefSchema,
   validateResearchBriefIntegrity,
@@ -299,7 +299,7 @@ export function parseRequirementSetArtifact(row: ArtifactRow): RequirementSetArt
   return {
     ...row,
     kind: "requirement_set",
-    payload: row.payload as unknown as import("@/requirements/types").RequirementSetArtifactPayload,
+    payload: RequirementSetArtifactPayloadSchema.parse(row.payload),
   }
 }
 

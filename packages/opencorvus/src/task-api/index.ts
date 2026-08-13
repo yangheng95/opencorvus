@@ -69,7 +69,10 @@ import {
   type EngineMetadata,
 } from "@/engine/engine.sql"
 import { insertEngineArtifact } from "@/engine/artifact"
-import { deleteBuildObservationRefs } from "@/engine/build-observation-ref"
+import {
+  buildObservationCleanupRowsForTask,
+  settleBuildObservationCleanup,
+} from "@/engine/build-observation-cleanup"
 import {
   TaskCreationIdempotencyConflictError,
   TaskExpectedPackageDigestConflictError,
@@ -655,25 +658,24 @@ async function deleteRowsThenTaskArtifacts(tasks: readonly TaskRow[], deleteRows
     .map((task) => ({
       taskID: task.id,
       projectDirectory: taskPrimaryProjectRoot(task.id, { activeProjectID: task.project_id }),
-      buildObservationIDs: Database.use((db) =>
-        db
-          .select({ id: EngineArtifactTable.id })
-          .from(EngineArtifactTable)
-          .where(and(eq(EngineArtifactTable.task_id, task.id), eq(EngineArtifactTable.kind, "build_host_observation")))
-          .all()
-          .map((row) => row.id),
-      ),
+      cleanupOwners: buildObservationCleanupRowsForTask(task.id),
     }))
     .sort((left, right) => left.taskID.localeCompare(right.taskID))
+  // Cleanup owners are durable only while their Task row exists. Resolve all
+  // pending/retained ref ownership before the cascading physical delete.
+  for (const target of cleanupTargets) {
+    for (const owner of target.cleanupOwners) {
+      await settleBuildObservationCleanup({
+        observationID: owner.observation_id,
+        releaseRetained: true,
+      })
+    }
+  }
   deleteRows()
   const cleanupFailures: unknown[] = []
   const residuePaths: string[] = []
   for (const target of cleanupTargets) {
     try {
-      await deleteBuildObservationRefs({
-        worktreeDir: target.projectDirectory,
-        observationIDs: target.buildObservationIDs,
-      })
       await removeTaskArtifactRoot(target)
     } catch (cause) {
       cleanupFailures.push(cause)

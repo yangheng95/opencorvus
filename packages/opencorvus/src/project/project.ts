@@ -2,7 +2,7 @@ import z from "zod"
 import { Filesystem } from "../util/filesystem"
 import path from "path"
 import { createHash, randomUUID } from "crypto"
-import { Database, eq, NotFoundError, sql } from "../storage/db"
+import { Database, eq, NotFoundError } from "../storage/db"
 import { ProjectTable } from "./project.sql"
 import { Log } from "../util/log"
 import { Flag } from "@/flag/flag"
@@ -10,12 +10,10 @@ import { fn } from "@opencorvus-ai/util/fn"
 import { BusEvent } from "@/bus/bus-event"
 import { iife } from "@/util/iife"
 import { GlobalBus } from "@/bus/global"
-import { lstatSync } from "fs"
 import { readFile, realpath, readdir, stat } from "fs/promises"
 import { hostGit as git } from "../util/git"
 import { Glob } from "../util/glob"
 import { which } from "@/util/which"
-import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { assertProjectDurableAdmissionOpen } from "./deletion-registry"
 
@@ -83,6 +81,15 @@ export namespace Project {
     }),
   )
 
+  export const DuplicateWorktreeIdentityError = NamedError.create(
+    "ProjectDuplicateWorktreeIdentityError",
+    z.object({
+      worktree: z.string(),
+      projectIDs: z.array(z.string()).min(2),
+      message: z.string(),
+    }),
+  )
+
   function gitpath(cwd: string, name: string) {
     if (!name) return cwd
     // git output includes trailing newlines; keep path whitespace intact.
@@ -99,10 +106,6 @@ export namespace Project {
 
   function generated(seed: string) {
     return createHash("sha1").update(Filesystem.windowsPath(seed)).digest("hex")
-  }
-
-  function sqliteIdentifier(name: string) {
-    return `"${name.replaceAll('"', '""')}"`
   }
 
   export function directoryProjectID(directory: string) {
@@ -209,230 +212,18 @@ export namespace Project {
     return Filesystem.resolve(path.isAbsolute(gitdir) ? gitdir : path.join(worktree, gitdir))
   }
 
-  function projectIDTables(db: Database.TxOrDb) {
-    const rows = db.all<{ name: string }>(sql`
-      SELECT name
-      FROM sqlite_schema
-      WHERE type = 'table'
-        AND name NOT LIKE 'sqlite_%'
-      ORDER BY name
-    `)
-    return rows
-      .filter((row) =>
-        db
-          .all<{ name: string }>(sql.raw(`PRAGMA table_info(${sqliteIdentifier(row.name)})`))
-          .some((column) => column.name === "project_id"),
-      )
-      .map((row) => row.name)
-  }
-
-  function projectReferenceCount(db: Database.TxOrDb, table: string, projectID: string) {
-    const row = db.get<{ count: number }>(
-      sql`SELECT count(*) as count FROM ${sql.raw(sqliteIdentifier(table))} WHERE project_id = ${projectID}`,
-    )
-    return row?.count ?? 0
-  }
-
-  function chooseCanonicalExactWorktreeRow(input: { rows: Row[]; preferredIDs: string[] }) {
-    for (const id of input.preferredIDs) {
-      const row = input.rows.find((candidate) => candidate.id === id)
-      if (row) return row
-    }
-  }
-
-  function assertNoEmbeddedProjectIDReferences(
-    db: Database.TxOrDb,
-    worktree: string,
-    canonicalID: string,
-    duplicateIDs: string[],
-  ) {
-    const rows = db.all<{ tableName: string }>(sql`
-      SELECT name as tableName
-      FROM sqlite_schema
-      WHERE type = 'table'
-        AND name NOT LIKE 'sqlite_%'
-        AND sql LIKE 'CREATE TABLE%'
-      ORDER BY name
-    `)
-    for (const duplicateID of duplicateIDs) {
-      const needle = `/attachment/${duplicateID}/`
-      for (const row of rows) {
-        const columns = db.all<{ name: string; type: string }>(
-          sql.raw(`PRAGMA table_info(${sqliteIdentifier(row.tableName)})`),
-        )
-        const textColumns = columns.filter((column) => column.type.toUpperCase().includes("TEXT"))
-        for (const column of textColumns) {
-          const match = db.get<{ count: number }>(
-            sql`SELECT count(*) as count FROM ${sql.raw(sqliteIdentifier(row.tableName))} WHERE instr(${sql.raw(sqliteIdentifier(column.name))}, ${needle}) > 0`,
-          )
-          if ((match?.count ?? 0) > 0) {
-            throw new WorktreeIdentityConflictError({
-              projectID: [canonicalID, ...duplicateIDs].join(","),
-              existingWorktree: worktree,
-              nextWorktree: `${worktree} blocked by embedded attachment reference ${needle} in ${row.tableName}.${column.name}`,
-            })
-          }
-        }
-      }
-    }
-  }
-
-  function assertNoUniqueProjectConstraintConflict(
-    db: Database.TxOrDb,
-    worktree: string,
-    canonicalID: string,
-    duplicateIDs: string[],
-  ) {
-    const convergenceIDs = [canonicalID, ...duplicateIDs]
-    const permissionOwners = convergenceIDs.filter((id) => projectReferenceCount(db, "permission", id) > 0)
-    if (permissionOwners.length > 1) {
-      throw new WorktreeIdentityConflictError({
-        projectID: permissionOwners.join(","),
-        existingWorktree: worktree,
-        nextWorktree: `${worktree} blocked by duplicate permission rows that cannot be converged`,
-      })
-    }
-
-    const rows = db.all<{ requestID: string; projectID: string; count: number }>(sql`
-      SELECT request_id as requestID, project_id as projectID, count(*) as count
-      FROM engine_task
-      WHERE request_id IS NOT NULL
-        AND project_id IN (${sql.join([canonicalID, ...duplicateIDs], sql`, `)})
-      GROUP BY request_id, project_id
-    `)
-    const byRequest = new Map<string, Set<string>>()
-    for (const row of rows) {
-      if (row.count <= 0) continue
-      const owners = byRequest.get(row.requestID) ?? new Set<string>()
-      owners.add(row.projectID)
-      byRequest.set(row.requestID, owners)
-    }
-    for (const [requestID, owners] of byRequest) {
-      if (owners.size > 1) {
-        throw new WorktreeIdentityConflictError({
-          projectID: [...owners].join(","),
-          existingWorktree: worktree,
-          nextWorktree: `${worktree} blocked by duplicate request_id ${requestID} that cannot be converged`,
-        })
-      }
-    }
-  }
-
-  function assertNoTaskArtifactProjectIdentityConflict(
-    db: Database.TxOrDb,
-    worktree: string,
-    duplicateIDs: string[],
-  ): void {
-    const tasks = db.all<{ id: string; projectID: string }>(sql`
-      SELECT id, project_id as projectID
-      FROM engine_task
-      WHERE project_id IN (${sql.join(duplicateIDs, sql`, `)})
-    `)
-    for (const task of tasks) {
-      const artifactPaths = [ProjectRuntimePaths.taskArtifactRoot(worktree, task.id)]
-      let found = false
-      for (const artifactPath of artifactPaths) {
-        try {
-          lstatSync(artifactPath)
-          found = true
-          break
-        } catch (cause) {
-          if ((cause as NodeJS.ErrnoException | undefined)?.code === "ENOENT") continue
-          throw new WorktreeIdentityConflictError({
-            projectID: task.projectID,
-            existingWorktree: worktree,
-            nextWorktree:
-              `${worktree} blocked because TaskArtifact identity could not be inspected for Task ${task.id}: ` +
-              (cause instanceof Error ? cause.message : String(cause)),
-          })
-        }
-      }
-      if (!found) continue
-      throw new WorktreeIdentityConflictError({
-        projectID: task.projectID,
-        existingWorktree: worktree,
-        nextWorktree:
-          `${worktree} blocked by immutable TaskArtifact identity for Task ${task.id}; ` +
-          "Project identity convergence must complete before TaskArtifact publication",
-      })
-    }
-  }
-
-  function mergeExactWorktreeRows(input: { worktree: string; rows: Row[]; canonical: Row }) {
-    const duplicateRows = input.rows.filter((row) => row.id !== input.canonical.id)
-    if (duplicateRows.length === 0) return input.canonical
-
-    return Database.transaction((db) => {
-      const duplicateIDs = duplicateRows.map((row) => row.id)
-      for (const projectID of [input.canonical.id, ...duplicateIDs]) assertRegistryAdmissionOpen(projectID)
-      assertNoEmbeddedProjectIDReferences(db, input.worktree, input.canonical.id, duplicateIDs)
-      assertNoUniqueProjectConstraintConflict(db, input.worktree, input.canonical.id, duplicateIDs)
-      assertNoTaskArtifactProjectIdentityConflict(db, input.worktree, duplicateIDs)
-      const projectScopedTables = projectIDTables(db)
-      for (const duplicate of duplicateRows) {
-        for (const table of projectScopedTables) {
-          db.run(
-            sql`UPDATE ${sql.raw(sqliteIdentifier(table))} SET project_id = ${input.canonical.id} WHERE project_id = ${duplicate.id}`,
-          )
-        }
-      }
-
-      const duplicateSandboxes = duplicateRows.flatMap((row) => row.sandboxes)
-      const sandboxes = [...new Set([...input.canonical.sandboxes, ...duplicateSandboxes])]
-      const projects = db
-        .select()
-        .from(ProjectTable)
-        .all()
-        .filter((candidate) => !duplicateIDs.includes(candidate.id))
-        .map((candidate) => fromRow(candidate))
-      for (const directory of [input.worktree, ...sandboxes]) {
-        assertRegisteredDirectoryAvailable(input.canonical.id, directory, projects)
-      }
-      const firstWith = <K extends keyof Row>(key: K) =>
-        input.canonical[key] ?? duplicateRows.find((row) => row[key] !== null && row[key] !== undefined)?.[key]
-      const now = Date.now()
-      db.update(ProjectTable)
-        .set({
-          name: firstWith("name") as string | null,
-          icon_url: firstWith("icon_url") as string | null,
-          icon_color: firstWith("icon_color") as string | null,
-          time_updated: now,
-          time_initialized: firstWith("time_initialized") as number | null,
-          sandboxes,
-          commands: firstWith("commands") as { start?: string } | null,
-        })
-        .where(eq(ProjectTable.id, input.canonical.id))
-        .run()
-
-      for (const duplicate of duplicateRows) {
-        db.delete(ProjectTable).where(eq(ProjectTable.id, duplicate.id)).run()
-      }
-
-      log.warn("converged duplicate exact project worktree rows", {
-        worktree: input.worktree,
-        canonicalProjectID: input.canonical.id,
-        duplicateProjectIDs: duplicateRows.map((row) => row.id).join(","),
-      })
-
-      return db.select().from(ProjectTable).where(eq(ProjectTable.id, input.canonical.id)).get() ?? input.canonical
-    })
-  }
-
-  function findExactWorktreeRow(worktree: string, preferredIDs: string[] = []) {
+  async function findExactWorktreeRow(worktree: string) {
     const rows = Database.use((db) => db.select().from(ProjectTable).all())
-    const matches = rows.filter((row) => samePath(row.worktree, worktree))
+    const matches: Row[] = []
+    for (const row of rows) {
+      if (await sameFilesystemLocation(row.worktree, worktree)) matches.push(row)
+    }
     if (matches.length <= 1) return matches[0]
-    const canonical = Database.use((db) =>
-      chooseCanonicalExactWorktreeRow({
-        rows: matches,
-        preferredIDs: preferredIDs.filter(Boolean),
-      }),
-    )
-    if (canonical) return mergeExactWorktreeRows({ worktree, rows: matches, canonical })
-    throw new WorktreeIdentityConflictError({
-      projectID: matches.map((row) => row.id).join(","),
-      existingWorktree: matches[0].worktree,
-      nextWorktree: worktree,
+    const projectIDs = matches.map((row) => row.id).sort()
+    throw new DuplicateWorktreeIdentityError({
+      worktree: path.resolve(worktree),
+      projectIDs,
+      message: `Worktree ${path.resolve(worktree)} belongs to multiple Projects: ${projectIDs.join(", ")}`,
     })
   }
 
@@ -446,7 +237,7 @@ export namespace Project {
     const cached = await Filesystem.readText(marker(common))
       .then((x) => x.trim())
       .catch(() => undefined)
-    const selectedRow = findExactWorktreeRow(worktree, [cached ?? "", localID])
+    const selectedRow = await findExactWorktreeRow(worktree)
     if (!cached || cached === "global") {
       const id = selectedRow?.id ?? localID
       await Filesystem.write(markerPath, id).catch(() => undefined)
@@ -483,7 +274,7 @@ export namespace Project {
     const cached = await Filesystem.readText(markerPath)
       .then((x) => x.trim())
       .catch(() => undefined)
-    const selectedRow = findExactWorktreeRow(input.directory, [cached ?? "", localID])
+    const selectedRow = await findExactWorktreeRow(input.directory)
     const id = selectedRow?.id ?? (cached && cached !== "global" ? cached : localID)
     if (input.local && id !== cached) await Filesystem.write(markerPath, id).catch(() => undefined)
     return {
@@ -605,6 +396,7 @@ export namespace Project {
     const data = await iife(async () => {
       const registered = findByRegisteredSandbox(directory)
       if (registered) {
+        await findExactWorktreeRow(registered.project.worktree)
         return {
           id: registered.project.id,
           sandbox: registered.directory,
