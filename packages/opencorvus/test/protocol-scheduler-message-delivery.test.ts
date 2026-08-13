@@ -1933,7 +1933,10 @@ describe("durable scheduler.message delivery", () => {
             : "orchestrator_message"
       return { finalMessageID: await persistRunnerReply({ rootSessionID, wakeID, ingressKind }) }
     }
-    using _taskLoopRunner = QueueTestHooks.replaceTaskLoopRunner({ directory: project.path, runner: taskLoopRunner })
+    using taskLoopRunnerOverride = QueueTestHooks.replaceTaskLoopRunner({
+      directory: project.path,
+      runner: taskLoopRunner,
+    })
     try {
       const materialized = await Instance.provide({
         directory: project.path,
@@ -2151,6 +2154,7 @@ describe("durable scheduler.message delivery", () => {
       })
 
       await waitForQueueCompletionHooksForTest()
+      expect(taskLoopRunnerOverride.configurationCount()).toBeGreaterThanOrEqual(2)
       expect(observedWakeIDs).toEqual([
         materialized.receipt.ingressID,
         materialized.operator.ingress_id,

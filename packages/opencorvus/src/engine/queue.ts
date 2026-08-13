@@ -366,7 +366,10 @@ const taskLoopRuntime = createInstanceState(
   undefined,
   "engine-queue-task-loop-runner",
 )
-const taskLoopRunnerOverridesForTest = new Map<string, { token: symbol; runner: TaskLoopRunner }>()
+const taskLoopRunnerOverridesForTest = new Map<
+  string,
+  { token: symbol; runner: TaskLoopRunner; configurationCount: number }
+>()
 
 function taskLoopRunnerOverrideKey(directory: string): string {
   const resolved = Filesystem.resolve(directory)
@@ -375,7 +378,9 @@ function taskLoopRunnerOverrideKey(directory: string): string {
 
 export function configureTaskLoopRunner(runner: TaskLoopRunner): void {
   const runtime = taskLoopRuntime()
-  const configured = taskLoopRunnerOverridesForTest.get(taskLoopRunnerOverrideKey(Instance.directory))?.runner ?? runner
+  const override = taskLoopRunnerOverridesForTest.get(taskLoopRunnerOverrideKey(Instance.directory))
+  if (override) override.configurationCount += 1
+  const configured = override?.runner ?? runner
   if (runtime.runner && runtime.runner !== configured) {
     throw new Error("Engine queue task-loop runner is already configured for this instance")
   }
@@ -878,14 +883,20 @@ export function persistQueuedTaskWaitWakeInTransaction(
 }
 
 export const TestHooks = {
-  replaceTaskLoopRunner(input: { directory: string; runner: TaskLoopRunner }): Disposable {
+  replaceTaskLoopRunner(input: { directory: string; runner: TaskLoopRunner }): Disposable & {
+    configurationCount(): number
+  } {
     const key = taskLoopRunnerOverrideKey(input.directory)
     if (taskLoopRunnerOverridesForTest.has(key)) {
       throw new Error(`Engine queue Task-loop test runner is already overridden for ${input.directory}`)
     }
     const token = Symbol(key)
-    taskLoopRunnerOverridesForTest.set(key, { token, runner: input.runner })
+    const entry = { token, runner: input.runner, configurationCount: 0 }
+    taskLoopRunnerOverridesForTest.set(key, entry)
     return {
+      configurationCount() {
+        return entry.configurationCount
+      },
       [Symbol.dispose]() {
         if (taskLoopRunnerOverridesForTest.get(key)?.token === token) taskLoopRunnerOverridesForTest.delete(key)
       },
