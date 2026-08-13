@@ -60,6 +60,10 @@ export type PreserveProfile = "30s" | "30min" | "2h" | "1d" | undefined
 
 type Profile = {
   context: BrowserContext
+  ownership: "managed" | "attached"
+  browserMode: BrowserMcpConnectionMode
+  browserProduct: string
+  onContextClose: () => void
   createdAt: number
   lastActive: number
   sessionIds: Set<string>
@@ -103,13 +107,101 @@ export type TabInfo = {
 
 const sessions = new Map<string, Session>()
 const profiles = new Map<string, Profile>()
+export const BROWSER_MCP_ATTACHED_PROFILE_ID = "prof_cdp_attached"
 const profileLocks = new Map<string, Promise<void>>()
 const sessionOperationLocks = new Map<string, Promise<void>>()
 const terminatedSessions = new Map<string, SessionTermination>()
 const intentionalSessionClose = new Set<string>()
 let browser: Browser | null = null
-let browserLaunch: Promise<Browser> | null = null
+let browserConnection: BrowserMcpConnection | null = null
+let browserLaunch: Promise<BrowserMcpConnection> | null = null
 let browserShutdownGeneration = 0
+
+export const createBrowserMcpOperationGate = () => {
+  let accepting = true
+  let active = 0
+  const waiters = new Set<() => void>()
+  const enter = () => {
+    if (!accepting) throw new Error("BROWSER_MCP_SHUTTING_DOWN: Browser MCP is shutting down")
+    active += 1
+    let released = false
+    return () => {
+      if (released) return
+      released = true
+      active -= 1
+      if (active === 0) {
+        for (const resolve of waiters) resolve()
+        waiters.clear()
+      }
+    }
+  }
+  const stop = () => {
+    accepting = false
+  }
+  const assertAccepting = () => {
+    if (!accepting) throw new Error("BROWSER_MCP_SHUTTING_DOWN: Browser MCP is shutting down")
+  }
+  const isAccepting = () => accepting
+  const wait = async () => {
+    if (active === 0) return
+    await new Promise<void>((resolve) => waiters.add(resolve))
+  }
+  return { enter, assertAccepting, isAccepting, stop, wait }
+}
+
+const browserMcpOperationGate = createBrowserMcpOperationGate()
+
+export const withBrowserMcpOperation = async <T>(operation: () => Promise<T>): Promise<T> => {
+  const release = browserMcpOperationGate.enter()
+  try {
+    return await operation()
+  } finally {
+    release()
+  }
+}
+
+const pendingOwnedPages = new Set<Page>()
+
+export const trackPendingBrowserMcpPageWithGate = (
+  page: Pick<Page, "close">,
+  gate: Pick<ReturnType<typeof createBrowserMcpOperationGate>, "isAccepting">,
+  ownedPages: Set<Pick<Page, "close">> = pendingOwnedPages,
+): (() => void) => {
+  if (!gate.isAccepting()) {
+    void page.close().catch(() => {})
+    return () => {}
+  }
+  ownedPages.add(page)
+  return () => ownedPages.delete(page)
+}
+
+export const trackPendingBrowserMcpPage = (page: Page): (() => void) =>
+  trackPendingBrowserMcpPageWithGate(page, browserMcpOperationGate)
+
+export const cancelAndDrainBrowserMcpOperations = async (
+  closeActivePages: () => Promise<void>,
+  gate = browserMcpOperationGate,
+): Promise<void> => {
+  gate.stop()
+  await closeActivePages()
+  await gate.wait()
+}
+
+export const runBrowserMcpShutdownSequence = async (input: {
+  stop: () => void
+  closeCurrentPages: () => Promise<void>
+  waitForOperations: () => Promise<void>
+  closeLatePages: () => Promise<void>
+  closeProfiles: () => Promise<void>
+  disconnect: () => Promise<void>
+}): Promise<void> => {
+  input.stop()
+  await input.closeCurrentPages()
+  await input.waitForOperations()
+  await input.closeLatePages()
+  await input.closeProfiles()
+  await input.disconnect()
+}
 
 const log = (msg: string) => console.error(`[browser-mcp] ${new Date().toISOString()} ${msg}`)
 
@@ -123,29 +215,101 @@ export const resolveBrowserMcpHeadless = (
   return platform === "linux" && !env.DISPLAY?.trim() && !env.WAYLAND_DISPLAY?.trim()
 }
 
-const HEADLESS = resolveBrowserMcpHeadless()
+export type BrowserMcpConnectionMode = "cdp" | "isolated"
+
+export type BrowserMcpConnectionConfig =
+  | { mode: "cdp"; endpointURL: string }
+  | { mode: "cdp"; channel: "chrome" }
+  | { mode: "isolated"; headless: boolean }
+
+type BrowserMcpConnection = {
+  browser: Browser
+  mode: BrowserMcpConnectionMode
+  product: string
+  close: () => Promise<void>
+}
+
+export const resolveBrowserMcpConnectionConfig = (
+  env: NodeJS.ProcessEnv = process.env,
+  platform: NodeJS.Platform = process.platform,
+): BrowserMcpConnectionConfig => {
+  const endpointURL = env.OPENCORVUS_BROWSER_CDP_ENDPOINT?.trim()
+  if (endpointURL) return { mode: "cdp", endpointURL }
+  const mode = env.OPENCORVUS_BROWSER_MODE?.trim().toLowerCase()
+  if (mode === "isolated") return { mode: "isolated", headless: resolveBrowserMcpHeadless(env, platform) }
+  if (mode && mode !== "chrome") {
+    throw new Error(`Invalid OPENCORVUS_BROWSER_MODE: ${mode}. Expected chrome or isolated.`)
+  }
+  return { mode: "cdp", channel: "chrome" }
+}
+
+export const browserMcpProductFromExecutable = (executablePath: string): string => {
+  const normalized = executablePath.replaceAll("\\", "/").toLowerCase()
+  if (
+    normalized.includes("google/chrome") ||
+    normalized.includes("google chrome") ||
+    /(^|\/)chrome(?:\.exe)?$/.test(normalized)
+  ) {
+    return "Google Chrome"
+  }
+  if (normalized.includes("microsoft/edge") || /(^|\/)msedge(?:\.exe)?$/.test(normalized)) {
+    return "Microsoft Edge"
+  }
+  return "Chromium"
+}
+
+export const browserMcpIsolatedLaunchArgs = (): string[] => BrowserRuntime.defaultLaunchArgs({ env: {} })
+
+const CONNECTION_CONFIG = resolveBrowserMcpConnectionConfig()
 const SESSION_TIMEOUT_MS = Number(process.env.SESSION_TIMEOUT_MIN ?? 30) * 60 * 1000
 
-const acquireBrowser = async (): Promise<Browser> => {
-  if (browser?.isConnected()) return browser
+const acquireBrowser = async (): Promise<BrowserMcpConnection> => {
+  if (browserConnection?.browser.isConnected()) return browserConnection
   browser = null
+  browserConnection = null
   if (!browserLaunch) {
     const launchGeneration = browserShutdownGeneration
-    browserLaunch = BrowserRuntime.launchPlaywrightBrowserInNodeProcess({
-      headless: HEADLESS,
-      args: BrowserRuntime.defaultLaunchArgs({ env: {} }),
-    })
-      .then(async (launched) => {
+    browserLaunch = (async (): Promise<BrowserMcpConnection> => {
+      if (CONNECTION_CONFIG.mode === "cdp") {
+        const attached =
+          "endpointURL" in CONNECTION_CONFIG
+            ? await BrowserRuntime.connectPlaywrightBrowserOverCdpInNodeProcess({
+                endpointURL: CONNECTION_CONFIG.endpointURL,
+              })
+            : await BrowserRuntime.connectPlaywrightBrowserToChromeChannelInNodeProcess()
+        return {
+          browser: attached,
+          mode: "cdp",
+          product: "endpointURL" in CONNECTION_CONFIG ? "Chromium-family browser (CDP)" : "Google Chrome",
+          close: () => attached.close(),
+        }
+      }
+      const launched = await BrowserRuntime.launchPlaywrightBrowserInNodeProcess({
+        headless: CONNECTION_CONFIG.headless,
+        args: browserMcpIsolatedLaunchArgs(),
+      })
+      return {
+        browser: launched,
+        mode: "isolated",
+        product: browserMcpProductFromExecutable(await BrowserRuntime.findBrowserExecutable()),
+        close: () => launched.close(),
+      }
+    })()
+      .then(async (connection) => {
+        const launched = connection.browser
         if (launchGeneration !== browserShutdownGeneration) {
-          await launched.close().catch(() => {})
+          await connection.close().catch(() => {})
           throw new Error("Browser launch cancelled by shutdown")
         }
         browser = launched
+        browserConnection = connection
         launched.on("disconnected", () => {
           if (browser === launched) browser = null
+          if (browserConnection?.browser === launched) browserConnection = null
           markAllSessionsTerminated("browser_disconnected", "Browser process disconnected")
         })
-        return launched
+        log(`browser connected mode=${connection.mode} product=${connection.product}`)
+        return connection
       })
       .finally(() => {
         browserLaunch = null
@@ -213,7 +377,21 @@ export const withSessionOperationLock = async <T>(sessionId: string, fn: () => P
 const closeProfileLocked = async (profileId: string, expectedProfile?: Profile) => {
   const profile = profiles.get(profileId)
   if (!profile || (expectedProfile && profile !== expectedProfile)) return false
-  await profile.context.close()
+  profile.context.off("close", profile.onContextClose)
+  if (profile.ownership === "managed") {
+    await profile.context.close()
+  } else {
+    await Promise.allSettled(
+      [...profile.sessionIds].map(async (sessionId) => {
+        const session = sessions.get(sessionId)
+        if (!session) return
+        intentionalSessionClose.add(sessionId)
+        await session.page.close().catch(() => {
+          intentionalSessionClose.delete(sessionId)
+        })
+      }),
+    )
+  }
   for (const sessionId of [...profile.sessionIds]) {
     sessions.delete(sessionId)
     sessionOperationLocks.delete(sessionId)
@@ -234,12 +412,7 @@ const closeEmptyProfile = (profileId: string, expectedProfile: Profile) =>
 const closeExpiredProfile = (profileId: string, expectedProfile: Profile, now: number) =>
   withProfileLock(profileId, async () => {
     const profile = profiles.get(profileId)
-    if (
-      profile !== expectedProfile ||
-      profile.sessionIds.size !== 0 ||
-      !profile.expiresAt ||
-      profile.expiresAt > now
-    ) {
+    if (profile !== expectedProfile || profile.sessionIds.size !== 0 || !profile.expiresAt || profile.expiresAt > now) {
       return false
     }
     return closeProfileLocked(profileId, expectedProfile)
@@ -258,45 +431,89 @@ const getReusableProfile = async (profileId: string) => {
 }
 
 const createProfile = async (opts: SessionCreateOpts, now: number) => {
-  const b = await acquireBrowser()
-  const proxy = opts.proxy
-  const profileId = "prof_" + crypto.randomUUID().replace(/-/g, "").slice(0, 12)
+  browserMcpOperationGate.assertAccepting()
+  const connection = await acquireBrowser()
+  browserMcpOperationGate.assertAccepting()
+  const b = connection.browser
   const viewport = opts.viewport ?? { width: 1280, height: 720 }
-  const context = await b.newContext({
-    viewport,
-    userAgent: opts.userAgent,
-    baseURL: opts.baseURL,
-    storageState: opts.storageState,
-    acceptDownloads: true,
-    ...(proxy ? { proxy } : {}),
-  })
-  if (opts.hosts) {
-    const entries = Object.entries(opts.hosts)
-    await context.route("**/*", (route) => {
-      const url = new URL(route.request().url())
-      const mapped = entries.find(([hostname]) => hostname === url.hostname)
-      if (!mapped) return route.continue()
-      url.hostname = mapped[1]
-      route.continue({ url: url.toString() })
-    })
+  if (connection.mode === "cdp" && (opts.userAgent || opts.baseURL || opts.storageState || opts.proxy || opts.hosts)) {
+    throw new Error(
+      "CDP sessions cannot apply userAgent, baseURL, storageState, proxy, or hosts to the existing Chrome context",
+    )
   }
-  profiles.set(profileId, {
-    context,
-    createdAt: now,
-    lastActive: now,
-    sessionIds: new Set(),
-    viewport,
-    baseURL: opts.baseURL,
-  })
-  context.on("close", () => {
+  if (connection.mode === "isolated") {
+    const profileId = "prof_" + crypto.randomUUID().replace(/-/g, "").slice(0, 12)
+    const context = await b.newContext({
+      viewport,
+      userAgent: opts.userAgent,
+      baseURL: opts.baseURL,
+      storageState: opts.storageState,
+      acceptDownloads: true,
+      ...(opts.proxy ? { proxy: opts.proxy } : {}),
+    })
+    if (opts.hosts) {
+      const entries = Object.entries(opts.hosts)
+      await context.route("**/*", (route: any) => {
+        const url = new URL(route.request().url())
+        const mapped = entries.find(([hostname]) => hostname === url.hostname)
+        if (!mapped) return route.continue()
+        url.hostname = mapped[1]
+        route.continue({ url: url.toString() })
+      })
+    }
+    const onContextClose = () => {
+      const profile = profiles.get(profileId)
+      if (!profile) return
+      for (const sessionId of [...profile.sessionIds]) {
+        detachSession(sessionId, "context_closed", "Browser context closed")
+      }
+      profiles.delete(profileId)
+    }
+    profiles.set(profileId, {
+      context,
+      ownership: "managed",
+      browserMode: connection.mode,
+      browserProduct: connection.product,
+      onContextClose,
+      createdAt: now,
+      lastActive: now,
+      sessionIds: new Set(),
+      viewport,
+      baseURL: opts.baseURL,
+    })
+    context.on("close", onContextClose)
+    return { profileId, profile: profiles.get(profileId)!, createdProfile: true }
+  }
+  const profileId = BROWSER_MCP_ATTACHED_PROFILE_ID
+  const attachedProfile = profiles.get(BROWSER_MCP_ATTACHED_PROFILE_ID)
+  if (attachedProfile) {
+    attachedProfile.lastActive = now
+    return { profileId: BROWSER_MCP_ATTACHED_PROFILE_ID, profile: attachedProfile, createdProfile: false }
+  }
+  const context = b.contexts()[0]
+  if (!context) throw new Error("CDP-attached browser did not expose a default Chrome context")
+  const onContextClose = () => {
     const profile = profiles.get(profileId)
     if (!profile) return
     for (const sessionId of [...profile.sessionIds]) {
       detachSession(sessionId, "context_closed", "Browser context closed")
     }
     profiles.delete(profileId)
+  }
+  profiles.set(profileId, {
+    context,
+    ownership: "attached",
+    browserMode: connection.mode,
+    browserProduct: connection.product,
+    onContextClose,
+    createdAt: now,
+    lastActive: now,
+    sessionIds: new Set(),
+    viewport,
+    baseURL: opts.baseURL,
   })
-  return { profileId, profile: profiles.get(profileId)! }
+  context.on("close", onContextClose)
+  return { profileId, profile: profiles.get(profileId)!, createdProfile: true }
 }
 
 const setupPage = async (page: Page, opts: PageSessionOpts) => {
@@ -481,8 +698,14 @@ export const createSession = async (opts: SessionCreateOpts) => {
       return createSessionForProfile(opts, now, { profileId: opts.profileId!, profile }, false)
     })
   }
-  const target = await createProfile(opts, now)
-  return createSessionForProfile(opts, now, target, true)
+  if (CONNECTION_CONFIG.mode === "isolated") {
+    const target = await createProfile(opts, now)
+    return createSessionForProfile(opts, now, target, true)
+  }
+  return withProfileLock(BROWSER_MCP_ATTACHED_PROFILE_ID, async () => {
+    const target = await createProfile(opts, now)
+    return createSessionForProfile(opts, now, target, target.createdProfile, true)
+  })
 }
 
 const createSessionForProfile = async (
@@ -490,10 +713,16 @@ const createSessionForProfile = async (
   now: number,
   target: { profileId: string; profile: Profile },
   createdProfile: boolean,
+  profileLockHeld = false,
 ) => {
   let page: Page | undefined
+  let releasePendingPage: (() => void) | undefined
   try {
+    browserMcpOperationGate.assertAccepting()
     page = await target.profile.context.newPage()
+    releasePendingPage = trackPendingBrowserMcpPage(page)
+    browserMcpOperationGate.assertAccepting()
+    if (target.profile.ownership === "attached" && opts.viewport) await page.setViewportSize(opts.viewport)
     const virtualCursor = opts.virtualCursor ?? true
     const sessionId = "sess_" + crypto.randomUUID().replace(/-/g, "").slice(0, 12)
     const perfMode = opts.perf ?? "close"
@@ -516,6 +745,8 @@ const createSessionForProfile = async (
       downloads: [],
       baseURL: target.profile.baseURL,
     })
+    releasePendingPage()
+    releasePendingPage = undefined
     attachDiagnostics(sessionId, page)
     page.on("close", () => {
       const intentional = intentionalSessionClose.delete(sessionId)
@@ -529,11 +760,24 @@ const createSessionForProfile = async (
     log(
       `session created  ${sessionId}  profile=${target.profileId}  viewport=${JSON.stringify(target.profile.viewport)}  perf=${perfMode}`,
     )
-    return { sessionId, profileId: target.profileId }
+    return {
+      sessionId,
+      profileId: target.profileId,
+      browserMode: target.profile.browserMode,
+      browserProduct: target.profile.browserProduct,
+    }
   } catch (e) {
     await page?.close().catch(() => {})
-    if (createdProfile) await closeProfile(target.profileId)
+    if (createdProfile) {
+      if (profileLockHeld) {
+        await closeProfileLocked(target.profileId, target.profile)
+      } else {
+        await closeProfile(target.profileId)
+      }
+    }
     throw e
+  } finally {
+    releasePendingPage?.()
   }
 }
 
@@ -632,8 +876,9 @@ export const getSessionStatus = (sessionId: string) => {
 export const getTabInfo = async (sessionId: string, activeSessionId: string): Promise<TabInfo> => {
   const session = getSession(sessionId)
   const profile = profiles.get(session.profileId)
+  const ownedSessionIds = profile ? [...profile.sessionIds].filter((candidate) => sessions.has(candidate)) : []
   return {
-    index: profile ? profile.context.pages().indexOf(session.page) : -1,
+    index: ownedSessionIds.indexOf(sessionId),
     sessionId,
     profileId: session.profileId,
     url: session.page.url(),
@@ -646,28 +891,18 @@ export const listTabs = async (sessionId: string) => {
   const session = getSession(sessionId)
   const profile = profiles.get(session.profileId)
   if (!profile) throw new Error(`Profile not found or expired: ${session.profileId}`)
-  return Promise.all(
-    profile.context
-      .pages()
-      .flatMap((page, index) => {
-        const entry = [...sessions.entries()].find(([, candidate]) => candidate.page === page)
-        return entry ? [{ sessionId: entry[0], index }] : []
-      })
-      .map(async (tab) => ({
-        ...(await getTabInfo(tab.sessionId, sessionId)),
-        index: tab.index,
-      })),
-  )
+  const ownedSessionIds = [...profile.sessionIds].filter((candidate) => sessions.has(candidate))
+  return Promise.all(ownedSessionIds.map((ownedSessionId) => getTabInfo(ownedSessionId, sessionId)))
 }
 
 export const getTabByIndex = (sessionId: string, index: number) => {
   const session = getSession(sessionId)
   const profile = profiles.get(session.profileId)
   if (!profile) throw new Error(`Profile not found or expired: ${session.profileId}`)
-  const page = profile.context.pages()[index]
-  const entry = page ? [...sessions.entries()].find(([, candidate]) => candidate.page === page) : undefined
-  if (!entry) throw new Error(`Tab not found: ${index}`)
-  return entry[0]
+  const ownedSessionIds = [...profile.sessionIds].filter((candidate) => sessions.has(candidate))
+  const ownedSessionId = ownedSessionIds[index]
+  if (!ownedSessionId) throw new Error(`Tab not found: ${index}`)
+  return ownedSessionId
 }
 
 export const recordToolCall = (sessionId: string, entry: ToolCallEntry) => {
@@ -742,6 +977,11 @@ export const exportStorageState = async (sessionId: string) => {
   const session = getSession(sessionId)
   const profile = profiles.get(session.profileId)
   if (!profile) throw new Error(`Profile not found or expired: ${session.profileId}`)
+  if (profile.ownership === "attached") {
+    throw new Error(
+      "STORAGE_STATE_EXPORT_UNAVAILABLE: Chrome CDP sessions use the existing signed-in context and do not expose its cookies or localStorage. Set OPENCORVUS_BROWSER_MODE=isolated to export an MCP-owned profile.",
+    )
+  }
   return {
     sessionId,
     profileId: session.profileId,
@@ -868,15 +1108,32 @@ setInterval(() => {
 export const shutdownBrowserSessions = async () => {
   browserShutdownGeneration++
   const pendingLaunch = browserLaunch
-  await Promise.all([...profiles.keys()].map(closeProfile))
-  const launched = await pendingLaunch?.catch(() => undefined)
-  if (launched && launched !== browser) await launched.close()
-  if (browser) await browser.close()
+  await runBrowserMcpShutdownSequence({
+    stop: browserMcpOperationGate.stop,
+    closeCurrentPages: async () => {
+      const pages = new Set<Page>([...pendingOwnedPages, ...[...sessions.values()].map((session) => session.page)])
+      await Promise.allSettled([...pages].map((page) => page.close()))
+    },
+    waitForOperations: browserMcpOperationGate.wait,
+    closeLatePages: async () => {
+      await Promise.allSettled([...pendingOwnedPages].map((page) => page.close()))
+      pendingOwnedPages.clear()
+    },
+    closeProfiles: async () => {
+      await Promise.all([...profiles.keys()].map(closeProfile))
+    },
+    disconnect: async () => {
+      const launched = await pendingLaunch?.catch(() => undefined)
+      if (launched && launched !== browserConnection) await launched.close()
+      if (browserConnection) await browserConnection.close()
+    },
+  })
   browser = null
+  browserConnection = null
   browserLaunch = null
 }
 process.on("exit", () => {
-  void browser?.close().catch(() => {})
+  void browserConnection?.close().catch(() => {})
 })
 process.on("SIGINT", async () => {
   await shutdownBrowserSessions().catch((error) => {

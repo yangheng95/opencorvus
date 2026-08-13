@@ -1,4 +1,5 @@
 import fs from "node:fs/promises"
+import os from "node:os"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
 
@@ -13,10 +14,15 @@ export namespace BrowserRuntime {
   type PlaywrightModule = {
     chromium: {
       launch(input: { executablePath: string; headless: boolean; args: string[]; timeout: number }): Promise<any>
+      connectOverCDP(endpointURL: string, input: { timeout: number }): Promise<any>
     }
   }
 
-  export type ErrorCode = "browser_executable_not_found" | "browser_missing" | "browser_launch_failed"
+  export type ErrorCode =
+    | "browser_executable_not_found"
+    | "browser_missing"
+    | "browser_launch_failed"
+    | "browser_connect_failed"
 
   export type Diagnostic = {
     code: ErrorCode
@@ -31,7 +37,7 @@ export namespace BrowserRuntime {
     readonly diagnostic: Diagnostic
 
     constructor(diagnostic: Diagnostic, options?: ErrorOptions) {
-      super(`${diagnostic.code}: ${diagnostic.message}`, options)
+      super(`${diagnostic.code}: ${diagnostic.message} Recovery: ${diagnostic.recoveryCommand}`, options)
       this.name = "BrowserRuntimeError"
       this.code = diagnostic.code
       this.diagnostic = diagnostic
@@ -61,7 +67,70 @@ export namespace BrowserRuntime {
 
   export const RECOVERY_COMMAND =
     "Install Chrome/Edge or set OPENCORVUS_BROWSER_EXECUTABLE to the browser executable path."
+  export const CDP_ENDPOINT_RECOVERY_COMMAND =
+    "Start Chrome with a remote debugging endpoint and a non-default --user-data-dir, then set OPENCORVUS_BROWSER_CDP_ENDPOINT."
+  export const CHROME_CHANNEL_RECOVERY_COMMAND =
+    'Enable "Allow remote debugging for this browser instance" at chrome://inspect/#remote-debugging, or set OPENCORVUS_BROWSER_MODE=isolated for a separate signed-out browser.'
   export const DEFAULT_BROWSER_LAUNCH_TIMEOUT_MS = 300_000
+
+  export function cdpConnectionDiagnostic(target: "endpoint" | "chrome" = "endpoint"): Diagnostic {
+    return {
+      code: "browser_connect_failed",
+      message:
+        target === "chrome"
+          ? "BrowserRuntime could not connect to the running Google Chrome instance."
+          : "BrowserRuntime could not connect to the configured CDP endpoint.",
+      checkedCandidates: [],
+      recoveryCommand:
+        target === "chrome" ? CHROME_CHANNEL_RECOVERY_COMMAND : CDP_ENDPOINT_RECOVERY_COMMAND,
+    }
+  }
+
+  export function resolveChromeUserDataDir(input?: {
+    platform?: NodeJS.Platform
+    env?: NodeJS.ProcessEnv
+    homeDir?: string
+  }): string {
+    const platform = input?.platform ?? process.platform
+    const env = input?.env ?? process.env
+    const homeDir = input?.homeDir ?? os.homedir()
+    const platformPath = platform === "win32" ? path.win32 : path.posix
+    if (platform === "win32") {
+      return platformPath.join(
+        env.LOCALAPPDATA || platformPath.join(homeDir, "AppData", "Local"),
+        "Google",
+        "Chrome",
+        "User Data",
+      )
+    }
+    if (platform === "darwin") {
+      return platformPath.join(homeDir, "Library", "Application Support", "Google", "Chrome")
+    }
+    if (platform === "linux") return platformPath.join(homeDir, ".config", "google-chrome")
+    throw new RuntimeError(cdpConnectionDiagnostic("chrome"))
+  }
+
+  export async function resolveChromeCdpEndpoint(input?: {
+    userDataDir?: string
+    platform?: NodeJS.Platform
+    env?: NodeJS.ProcessEnv
+    homeDir?: string
+  }): Promise<string> {
+    const userDataDir = input?.userDataDir ?? resolveChromeUserDataDir(input)
+    const activePort = await fs.readFile(path.join(userDataDir, "DevToolsActivePort"), "utf8").catch(() => "")
+    const [portLine, browserPath, ...unexpected] = activePort.trim().split(/\r?\n/)
+    const port = Number(portLine)
+    if (
+      !Number.isInteger(port) ||
+      port <= 0 ||
+      port > 65_535 ||
+      unexpected.length > 0 ||
+      !/^\/devtools\/browser\/[A-Za-z0-9-]+$/.test(browserPath ?? "")
+    ) {
+      throw new RuntimeError(cdpConnectionDiagnostic("chrome"))
+    }
+    return `ws://127.0.0.1:${port}${browserPath}`
+  }
 
   export function resolveBrowserLaunchTimeoutMs(explicit?: number): number {
     if (typeof explicit === "number" && Number.isFinite(explicit) && explicit > 0) return explicit
@@ -135,6 +204,42 @@ export namespace BrowserRuntime {
         { cause: error },
       )
     }
+  }
+
+  export async function connectPlaywrightBrowserOverCdpInNodeProcess(input: {
+    endpointURL: string
+    timeoutMs?: number
+    target?: "endpoint" | "chrome"
+  }): Promise<any> {
+    if (typeof Bun !== "undefined") {
+      throw new RuntimeError({
+        code: "browser_connect_failed",
+        message: "Playwright CDP connection must run in the Browser Node sidecar, not in a Bun process.",
+        checkedCandidates: [],
+        recoveryCommand: "Start browser work through the Browser Node sidecar runtime.",
+      })
+    }
+    try {
+      const { chromium } = await loadPlaywright()
+      return await chromium.connectOverCDP(input.endpointURL, {
+        timeout: resolveBrowserLaunchTimeoutMs(input.timeoutMs),
+      })
+    } catch (error) {
+      void error
+      throw new RuntimeError(cdpConnectionDiagnostic(input.target))
+    }
+  }
+
+  export async function connectPlaywrightBrowserToChromeChannelInNodeProcess(input?: {
+    timeoutMs?: number
+    userDataDir?: string
+  }): Promise<any> {
+    const endpointURL = await resolveChromeCdpEndpoint({ userDataDir: input?.userDataDir })
+    return connectPlaywrightBrowserOverCdpInNodeProcess({
+      endpointURL,
+      timeoutMs: input?.timeoutMs,
+      target: "chrome",
+    })
   }
 
   export function defaultLaunchArgs(input?: {

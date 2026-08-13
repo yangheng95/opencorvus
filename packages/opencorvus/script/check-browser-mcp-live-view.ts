@@ -3,9 +3,14 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 import { createServer } from "node:http"
 import path from "node:path"
 import readline from "node:readline"
+import { Readable } from "node:stream"
 
 const bundle = process.argv[2]
-if (!bundle) throw new Error("Usage: bun script/check-browser-mcp-live-view.ts <browser-mcp-stdio-bundle>")
+if (!bundle) {
+  throw new Error(
+    "Usage: bun script/check-browser-mcp-live-view.ts <browser-mcp-stdio-bundle> [click|popup|tabs|exit ...]",
+  )
+}
 
 const pageServer = createServer((_req, res) => {
   res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" })
@@ -49,6 +54,7 @@ const transport = new StdioClientTransport({
   env: {
     ...process.env,
     BROWSER_HEADLESS: "false",
+    OPENCORVUS_BROWSER_MODE: process.env.OPENCORVUS_BROWSER_MODE ?? "isolated",
     OPENCORVUS_BROWSER_MCP_SOURCE_PACKAGE_DIR: path.resolve("packages/opencorvus"),
   } as Record<string, string>,
   stderr: "inherit",
@@ -62,9 +68,32 @@ const close = async () => {
 
 try {
   await client.connect(transport)
+  if (process.env.OPENCORVUS_BROWSER_MCP_CHECK_PROFILE_RECOVERY === "1") {
+    const rejected = await client.callTool({
+      name: "session_create",
+      arguments: { viewport: { width: -1, height: 720 } },
+    })
+    if (!rejected.isError) {
+      throw new Error(`invalid viewport unexpectedly created a session: ${JSON.stringify(rejected)}`)
+    }
+    process.stdout.write(`${JSON.stringify({ status: "profile_recovered_after_setup_failure" })}\n`)
+  }
   const created = await client.callTool({ name: "session_create", arguments: { viewport: { width: 1100, height: 720 } } })
-  const output = created.structuredContent as { sessionId?: unknown; liveViewUrl?: unknown } | undefined
-  if (typeof output?.sessionId !== "string" || typeof output.liveViewUrl !== "string") {
+  const output = created.structuredContent as
+    | {
+        sessionId?: unknown
+        profileId?: unknown
+        liveViewUrl?: unknown
+        browserMode?: unknown
+        browserProduct?: unknown
+      }
+    | undefined
+  if (
+    typeof output?.sessionId !== "string" ||
+    typeof output.liveViewUrl !== "string" ||
+    !["cdp", "isolated"].includes(String(output.browserMode)) ||
+    typeof output.browserProduct !== "string"
+  ) {
     throw new Error(`session_create did not publish the Live View contract: ${JSON.stringify(created)}`)
   }
   const sessionId = output.sessionId
@@ -80,11 +109,22 @@ try {
   }
 
   process.stdout.write(
-    `${JSON.stringify({ status: "ready", sessionId, liveViewUrl, pageUrl: `http://127.0.0.1:${address.port}/` })}\n`,
+    `${JSON.stringify({
+      status: "ready",
+      sessionId,
+      liveViewUrl,
+      pageUrl: `http://127.0.0.1:${address.port}/`,
+      browserMode: output.browserMode,
+      browserProduct: output.browserProduct,
+    })}\n`,
   )
   process.stdout.write('Enter "click" or "popup" to drive an MCP action, or "exit" to finish.\n')
 
-  const input = readline.createInterface({ input: process.stdin, terminal: false })
+  const scriptedCommands = process.argv.slice(3)
+  const input =
+    scriptedCommands.length > 0
+      ? Readable.from(scriptedCommands)
+      : readline.createInterface({ input: process.stdin, terminal: false })
   for await (const line of input) {
     const command = line.trim().toLowerCase()
     if (command === "click") {
@@ -99,12 +139,92 @@ try {
     if (command === "popup") {
       const opened = await client.callTool({ name: "click", arguments: { sessionId, selector: "#popup" } })
       const openedPage = (opened.structuredContent as { openedPage?: unknown } | undefined)?.openedPage as
-        | { sessionId?: unknown; liveViewUrl?: unknown }
+        | { sessionId?: unknown; liveViewUrl?: unknown; profileId?: unknown }
         | undefined
-      if (typeof openedPage?.sessionId !== "string" || typeof openedPage.liveViewUrl !== "string") {
+      if (
+        typeof openedPage?.sessionId !== "string" ||
+        typeof openedPage.liveViewUrl !== "string" ||
+        openedPage.profileId !== output.profileId
+      ) {
         throw new Error(`popup did not publish its session-selected Live View URL: ${JSON.stringify(opened)}`)
       }
+      if (
+        process.env.OPENCORVUS_BROWSER_MCP_CHECK_EXTERNAL_OWNERSHIP === "1" &&
+        process.env.OPENCORVUS_BROWSER_CDP_ENDPOINT
+      ) {
+        const externalURL = "data:text/html,<title>External ownership sentinel</title>"
+        await fetch(`${process.env.OPENCORVUS_BROWSER_CDP_ENDPOINT}/json/new?${encodeURIComponent(externalURL)}`, {
+          method: "PUT",
+        })
+        const listed = await client.callTool({ name: "tabs", arguments: { sessionId, action: "list" } })
+        const ownedTabs = (
+          listed.structuredContent as
+            | { tabs?: Array<{ index?: unknown; sessionId?: unknown; title?: unknown }> }
+            | undefined
+        )?.tabs
+        if (
+          JSON.stringify(listed.structuredContent).includes("External ownership sentinel") ||
+          ownedTabs?.length !== 2 ||
+          ownedTabs[0]?.index !== 0 ||
+          ownedTabs[0]?.sessionId !== sessionId ||
+          ownedTabs[1]?.index !== 1 ||
+          ownedTabs[1]?.sessionId !== openedPage.sessionId
+        ) {
+          throw new Error(`CDP external page was incorrectly adopted: ${JSON.stringify(listed)}`)
+        }
+        const selectedPrimary = await client.callTool({
+          name: "tabs",
+          arguments: { sessionId, action: "select", index: 0 },
+        })
+        const selectedPopup = await client.callTool({
+          name: "tabs",
+          arguments: { sessionId, action: "select", index: 1 },
+        })
+        if (
+          (selectedPrimary.structuredContent as { selectedSessionId?: unknown } | undefined)?.selectedSessionId !==
+            sessionId ||
+          (selectedPopup.structuredContent as { selectedSessionId?: unknown } | undefined)?.selectedSessionId !==
+            openedPage.sessionId
+        ) {
+          throw new Error(
+            `CDP external page affected MCP-owned tab selection: ${JSON.stringify({ selectedPrimary, selectedPopup })}`,
+          )
+        }
+        const storageExport = await client.callTool({
+          name: "storage_state_export",
+          arguments: { sessionId },
+        })
+        if (!storageExport.isError || !JSON.stringify(storageExport.content).includes("STORAGE_STATE_EXPORT_UNAVAILABLE")) {
+          throw new Error(`CDP storage export did not return its safe typed error: ${JSON.stringify(storageExport)}`)
+        }
+        process.stdout.write(`${JSON.stringify({ status: "external_page_not_adopted" })}\n`)
+      }
       process.stdout.write(`${JSON.stringify({ status: "popup", openedPage })}\n`)
+      continue
+    }
+    if (command === "tabs") {
+      const initial = await client.callTool({ name: "tabs", arguments: { sessionId, action: "list" } })
+      const initialTabs = (initial.structuredContent as { tabs?: Array<{ index?: unknown; sessionId?: unknown }> } | undefined)
+        ?.tabs
+      if (initialTabs?.length !== 1 || initialTabs[0]?.index !== 0 || initialTabs[0]?.sessionId !== sessionId) {
+        throw new Error(`tabs list did not expose one continuous MCP-owned index: ${JSON.stringify(initial)}`)
+      }
+      const createdTab = await client.callTool({ name: "tabs", arguments: { sessionId, action: "new" } })
+      const newTab = (createdTab.structuredContent as { tab?: { index?: unknown; sessionId?: unknown } } | undefined)?.tab
+      if (newTab?.index !== 1 || typeof newTab.sessionId !== "string") {
+        throw new Error(`tabs new did not append an MCP-owned index: ${JSON.stringify(createdTab)}`)
+      }
+      const selected = await client.callTool({ name: "tabs", arguments: { sessionId, action: "select", index: 0 } })
+      if ((selected.structuredContent as { selectedSessionId?: unknown } | undefined)?.selectedSessionId !== sessionId) {
+        throw new Error(`tabs select did not resolve the listed MCP-owned index: ${JSON.stringify(selected)}`)
+      }
+      const closed = await client.callTool({ name: "tabs", arguments: { sessionId, action: "close", index: 1 } })
+      const remaining = (closed.structuredContent as { tabs?: Array<{ index?: unknown; sessionId?: unknown }> } | undefined)
+        ?.tabs
+      if (remaining?.length !== 1 || remaining[0]?.index !== 0 || remaining[0]?.sessionId !== sessionId) {
+        throw new Error(`tabs close did not preserve continuous MCP-owned indexes: ${JSON.stringify(closed)}`)
+      }
+      process.stdout.write(`${JSON.stringify({ status: "owned_tabs_indexed", count: remaining.length })}\n`)
       continue
     }
     if (command === "exit") break

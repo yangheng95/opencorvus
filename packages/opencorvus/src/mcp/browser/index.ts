@@ -193,9 +193,16 @@ export namespace BrowserMCP {
     const server = createMcpServer({ liveViewOrigin })
     const transport = new StdioServerTransport()
     let closing: Promise<void> | undefined
+    let resolveClosed!: () => void
+    let rejectClosed!: (error: unknown) => void
+    const closed = new Promise<void>((resolve, reject) => {
+      resolveClosed = resolve
+      rejectClosed = reject
+    })
     const close = () => {
       if (closing) return closing
       const operation = Promise.resolve().then(async () => {
+        process.stdin.off("end", onStdinEnd)
         transport.onclose = undefined
         const results = await Promise.allSettled([
           shutdownBrowserSessions(),
@@ -210,13 +217,18 @@ export namespace BrowserMCP {
       closing = operation
       return operation
     }
-    transport.onclose = () => {
-      void close().catch((error) => {
+    const settleClose = () => {
+      void close().then(resolveClosed, (error) => {
         console.error(`[browser-mcp] close failed: ${error instanceof Error ? error.message : String(error)}`)
+        rejectClosed(error)
       })
     }
+    const onStdinEnd = () => settleClose()
+    process.stdin.once("end", onStdinEnd)
+    transport.onclose = settleClose
     try {
       await server.connect(transport)
+      await closed
     } catch (error) {
       await Promise.allSettled([
         shutdownBrowserSessions(),
