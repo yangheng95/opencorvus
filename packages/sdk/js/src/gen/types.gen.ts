@@ -34082,6 +34082,7 @@ export type WorkLedgerListResponses = {
             activityStatus: "running" | "inactive"
             archived?: number
             cancellationStatus: "none" | "cancelling" | "cancelled"
+            completed?: number
             created: number
             description: string
             directory: string
@@ -34178,6 +34179,7 @@ export type WorkLedgerListArchivedResponses = {
             activityStatus: "running" | "inactive"
             archived?: number
             cancellationStatus: "none" | "cancelling" | "cancelled"
+            completed?: number
             created: number
             description: string
             directory: string
@@ -34202,6 +34204,7 @@ export type WorkLedgerListArchivedResponses = {
           activityStatus: "running" | "inactive"
           archived?: number
           cancellationStatus: "none" | "cancelling" | "cancelled"
+          completed?: number
           created: number
           description: string
           directory: string

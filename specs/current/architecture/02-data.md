@@ -169,6 +169,12 @@ Evolution Lab 的 typed Artifact publisher 在写入前验证直接语义前驱�
 唯一的 `opportunity` Engine Artifact，验证其 Evolution observer producer，并让 payload
 `owner_evidence` 引用同一 exact locator；缺失、额外、错误类型、错误 producer 或 payload 不一致
 都返回 typed integrity error，不能持久化为可供 Campaign 消费的成功 Artifact。
+当 completed source Task 同时把已关联的 opportunity 与 failure-attribution 导入下游 Task 时，
+import writer 保留两者的 immutable source locator 与 source provenance，但不伪造新的 direct source。
+Campaign publisher 只在两份 import lineage 属于同一 source Task、opportunity 的 source locator 同时匹配
+attribution 的唯一 source provenance 与 payload owner evidence 时，把两份当前 Task locator 认定为同一
+canonical predecessor pair；Campaign 自身仍只持久化当前 Task locator。错配 pair 返回同一 typed
+integrity error，不允许模型引用 source-Task locator、改写 imported payload 或重发 attribution。
 
 Metrics 域沿用 `engine_*` 表名承载评分流水，但写入边界归属 metrics store：
 `engine_metric_spec`、`engine_metric_result` 和 `engine_iteration` 的唯一直接表写入文件

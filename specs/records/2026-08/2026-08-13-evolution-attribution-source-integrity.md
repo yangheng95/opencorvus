@@ -31,6 +31,21 @@ not preserve after repeated explicit prompt repair. The deeper runtime defect is
 passes decoded arguments directly to `definition.execute` instead of parsing `definition.inputSchema`; provider-side
 schema projection is not a trusted runtime validation boundary. Prompt repetition did not cure either defect.
 
+### Fresh verification failure after correlated publication succeeded
+
+Fresh isolated exact-Luna run `opencorvus-luna-correlated-publish-7f8c4d2a` proved the single correlated publisher
+shape end to end: the opportunity and failure attribution both persisted through the real package tool, and the
+attribution directly named its source-Task opportunity. The completed Task then declared both Artifacts. The next
+Task imported them as current Task-owned Engine Artifacts, preserving each source locator and source provenance in
+`import_lineage` while intentionally clearing the imported envelope's direct source arrays.
+
+Campaign publication with the exact imported opportunity and attribution was then rejected four times because the
+validator compared the attribution payload's immutable source-Task owner evidence directly with the imported
+current-Task opportunity locator. The first bad transition is this cross-Task identity-domain comparison, not model
+selection, missing bytes, or an invalid source publication. A planner cannot legally repair it: referencing the
+source-Task locator would bypass current Task read authority, while republishing the attribution would create a
+second semantic fact.
+
 ## Repair boundary
 
 1. The typed Evolution publisher must require exactly one Engine Artifact source for `evolution-lab/failure-attribution`.
@@ -44,6 +59,12 @@ schema projection is not a trusted runtime validation boundary. Prompt repetitio
    for the model to reassemble.
 8. The native package-tool worker parses the decoded call through its frozen Zod `inputSchema` before execution, so
    malformed input produces the schema's typed error and can never reach package business code as `undefined`.
+9. Campaign predecessor correlation accepts either an exact direct owner-evidence match in the current Task or one
+   canonical imported pair. For an imported pair, both envelopes must carry immutable import lineage from the same
+   source Task, the imported opportunity's `source_locator` must equal both the attribution's original
+   `source_provenance.source_artifact_locators` entry and its payload `owner_evidence`, and both current imported
+   locators remain the Campaign's direct persisted sources. The Host does not rewrite imported payloads or expose a
+   source-Task bypass.
 
 ## Positive verification
 
@@ -52,5 +73,9 @@ schema projection is not a trusted runtime validation boundary. Prompt repetitio
 - Introspect the frozen publisher and prove it exposes exactly one top-level `artifact` argument whose attribution
   branch requires `resource_set` and `source_artifact_locators`; execute a malformed call through the real native
   package-tool process and prove schema validation happens before publisher code.
+- Complete one source Task with an opportunity and its exact failure attribution, import both through the production
+  cross-Task writer, and publish a Campaign from the two current Task locators. Prove a different current opportunity
+  paired with that imported attribution returns the typed integrity error, while the exact imported pair succeeds and
+  persists only the current Task locators as direct Campaign sources.
 - Run the focused Evolution Artifact test, package projection/generation checks, relevant typechecks, docs check, and diff check.
 - Obtain independent read-only review after implementation, then commit and push this repair as its own stage before the next fresh Luna run.

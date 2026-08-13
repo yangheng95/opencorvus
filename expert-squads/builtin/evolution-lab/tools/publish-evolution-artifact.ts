@@ -10,6 +10,7 @@ import {
   WorkspaceTreeSnapshotSchema,
   workspaceTreeDigest,
   tool,
+  type ArtifactReadLocator,
   type EngineArtifactLocator,
   type TaskArtifactRef,
   type ToolContext,
@@ -189,6 +190,29 @@ export function requireEvolutionWorkerProducer(
     )
 }
 
+function attributionIdentifiesOpportunity(input: {
+  attribution: { owner_evidence: readonly ArtifactReadLocator[] }
+  attributionEnvelope: ReturnType<typeof EngineArtifactEnvelopeSchema.parse>
+  opportunityEnvelope: ReturnType<typeof EngineArtifactEnvelopeSchema.parse>
+  opportunityLocator: EngineArtifactLocator
+}) {
+  if (input.attribution.owner_evidence.some((locator) => sameJSON(locator, input.opportunityLocator))) return true
+  const opportunityLineage = input.opportunityEnvelope.import_lineage
+  const attributionLineage = input.attributionEnvelope.import_lineage
+  if (
+    !opportunityLineage ||
+    !attributionLineage ||
+    opportunityLineage.source_task_id !== attributionLineage.source_task_id
+  )
+    return false
+  const originalOpportunityLocator = opportunityLineage.source_locator
+  return (
+    attributionLineage.source_provenance.source_artifact_locators.length === 1 &&
+    sameJSON(attributionLineage.source_provenance.source_artifact_locators[0], originalOpportunityLocator) &&
+    input.attribution.owner_evidence.some((locator) => sameJSON(locator, originalOpportunityLocator))
+  )
+}
+
 export const evolutionArtifactOwner = {
   "evolution-lab/opportunity": "evolution-observer",
   "evolution-lab/failure-attribution": "evolution-failure-analyst",
@@ -310,7 +334,14 @@ export default tool({
             const attribution = EvolutionArtifactSchemas["evolution-lab/failure-attribution"].parse(
               attributions[0]!.envelope.payload,
             )
-            if (!attribution.owner_evidence.some((locator) => sameJSON(locator, opportunities[0]!.locator)))
+            if (
+              !attributionIdentifiesOpportunity({
+                attribution,
+                attributionEnvelope: attributions[0]!.envelope,
+                opportunityEnvelope: opportunities[0]!.envelope,
+                opportunityLocator: opportunities[0]!.locator,
+              })
+            )
               throw new EvolutionArtifactIntegrityError(
                 "campaign failure-attribution must directly identify its exact opportunity source",
               )

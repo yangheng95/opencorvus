@@ -812,8 +812,12 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           },
         }
 
+        let sourceOpportunityLocator!: EngineArtifactLocator
+        let sourceAttributionLocator!: EngineArtifactLocator
         let sourceCampaignLocator!: EngineArtifactLocator
         let sourceRunLocator!: EngineArtifactLocator
+        let sourceOpportunityInput!: Record<string, unknown>
+        let sourceCampaignInput!: Record<string, unknown>
         await withTaskScopedPluginToolHost(scope, async (host) => {
           ;(scope.owner as { agentID: string }).agentID = "evolution-observer"
           const opportunityReceipt = JSON.parse(
@@ -843,6 +847,24 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               { host } as never,
             ),
           ) as { locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
+          sourceOpportunityLocator = opportunityReceipt.locator as EngineArtifactLocator
+          sourceOpportunityInput = {
+            target,
+            current_revision: revision,
+            trigger: { type: "user", identity: "message-user-authority" },
+            evidence: [],
+            observable_symptom: "Repeated incomplete delivery",
+            impact_scope: "target workflow",
+            frequency: "3 of 5 runs",
+            data_window: {
+              started_at: "2026-08-01T00:00:00.000Z",
+              ended_at: "2026-08-06T00:00:00.000Z",
+            },
+            owner_hypothesis: "Target prompt contract",
+            unknowns: ["provider variance"],
+            sensitivity: "internal",
+            suggested_budget: { runs: 4, max_cost: 12 },
+          }
           const read = await host.engineArtifacts.read({
             locator: opportunityReceipt.locator,
             byte_offset: 0,
@@ -920,6 +942,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ),
           ) as { artifact_type: string; locator: Parameters<typeof host.engineArtifacts.read>[0]["locator"] }
           expect(attributionReceipt.artifact_type).toBe("evolution-lab/failure-attribution")
+          sourceAttributionLocator = attributionReceipt.locator as EngineArtifactLocator
           const attributionRead = await host.engineArtifacts.read({
             locator: attributionReceipt.locator,
             byte_offset: 0,
@@ -1032,6 +1055,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             budget: { max_runs: 2, max_cost: 12 },
             mutable_paths: ["README.md"],
           }
+          sourceCampaignInput = campaignDraft
           const campaignReceipt = JSON.parse(
             await executePublishEvolutionArtifact(
               {
@@ -1706,13 +1730,20 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         await completeFixtureTaskWithDeliverables({
           taskID,
           sessionID: session.id,
-          deliverableArtifactLocators: [sourceCampaignLocator, sourceRunLocator],
+          deliverableArtifactLocators: [
+            sourceOpportunityLocator,
+            sourceAttributionLocator,
+            sourceCampaignLocator,
+            sourceRunLocator,
+          ],
           completedAt: sourceCompleted,
         })
         const importedTaskID = Identifier.ascending("task")
         const importedSession = await Session.create({ kind: "root", title: "Imported campaign evaluation" })
         const preparedImports = await prepareCrossTaskArtifactImports({
           imports: [
+            { source_task_id: taskID, locator: sourceOpportunityLocator },
+            { source_task_id: taskID, locator: sourceAttributionLocator },
             { source_task_id: taskID, locator: sourceCampaignLocator },
             { source_task_id: taskID, locator: sourceRunLocator },
           ],
@@ -1771,6 +1802,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         }
         const importedCampaignLocator = importedLocators.get("evolution-lab/campaign-spec")!
         const importedRunLocator = importedLocators.get("evolution-lab/run-evidence-bundle")!
+        const importedOpportunityLocator = importedLocators.get("evolution-lab/opportunity")!
+        const importedAttributionLocator = importedLocators.get("evolution-lab/failure-attribution")!
         const importedUser = await Session.updateMessage({
           id: Identifier.ascending("message"),
           sessionID: importedSession.id,
@@ -1829,7 +1862,10 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               { artifact_locator: importedCampaignLocator, resource_role: "campaign_inputs" },
               { host } as never,
             ),
-          ) as { role_resources: Array<{ role: string }> }
+          ) as {
+            resource_set: Parameters<typeof TaskArtifactResourceSetLocatorSchema.parse>[0]
+            role_resources: Array<{ role: string; resource: { path: string } }>
+          }
           expect(rehydrated.role_resources.map((item) => item.role).sort()).toEqual([
             "case:case-1",
             "dataset",
@@ -1839,6 +1875,103 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             "scorer:correctness",
             "workspace_template",
           ])
+          const resourcePathByRole = new Map(
+            rehydrated.role_resources.map((item) => [item.role, item.resource.path]),
+          )
+          const importedCampaignInput = {
+            ...sourceCampaignInput,
+            resource_roles: {
+              dataset_path: resourcePathByRole.get("dataset")!,
+              cases: [{ case_id: "case-1", resource_path: resourcePathByRole.get("case:case-1")! }],
+              model_configuration_path: resourcePathByRole.get("model_configuration")!,
+              environment_path: resourcePathByRole.get("environment")!,
+              workspace_template_path: resourcePathByRole.get("workspace_template")!,
+              permission_snapshot_path: resourcePathByRole.get("permission_snapshot")!,
+              scorer_assets: [
+                { scorer_id: "correctness", resource_path: resourcePathByRole.get("scorer:correctness")! },
+              ],
+            },
+          }
+          for (const [locator, purpose] of [
+            [importedOpportunityLocator, "Exact imported opportunity for Campaign correlation"],
+            [importedAttributionLocator, "Exact imported attribution for Campaign correlation"],
+          ] as const) {
+            const read = await host.engineArtifacts.read({
+              locator,
+              byte_offset: 0,
+              max_bytes: 65_536,
+              delivery: "inline",
+            })
+            expect(read.chunk.complete).toBe(true)
+            await host.engineArtifacts.select({ locator, purpose })
+          }
+          ;(importedScope.owner as { agentID: string }).agentID = "evolution-observer"
+          const unrelatedOpportunity = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/opportunity",
+                payload: { ...sourceOpportunityInput, observable_symptom: "Unrelated imported-task opportunity" },
+                resource_set: null,
+                source_artifact_locators: [],
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
+          await host.engineArtifacts.read({
+            locator: unrelatedOpportunity.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
+          await host.engineArtifacts.select({
+            locator: unrelatedOpportunity.locator,
+            purpose: "Different current opportunity for imported correlation mismatch",
+          })
+          ;(importedScope.owner as { agentID: string }).agentID = "evolution-experiment-planner"
+          let mismatchedPairError: unknown
+          try {
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/campaign-spec",
+                payload: importedCampaignInput,
+                resource_set: rehydrated.resource_set,
+                source_artifact_locators: [unrelatedOpportunity.locator, importedAttributionLocator],
+              },
+              { host } as never,
+            )
+          } catch (error) {
+            mismatchedPairError = error
+          }
+          expect(mismatchedPairError).toBeInstanceOf(EvolutionArtifactIntegrityError)
+          expect((mismatchedPairError as Error).message).toBe(
+            "campaign failure-attribution must directly identify its exact opportunity source",
+          )
+          const importedPairCampaign = JSON.parse(
+            await executePublishEvolutionArtifact(
+              {
+                artifact_type: "evolution-lab/campaign-spec",
+                payload: importedCampaignInput,
+                resource_set: rehydrated.resource_set,
+                source_artifact_locators: [importedOpportunityLocator, importedAttributionLocator],
+              },
+              { host } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
+          const importedPairCampaignRead = await host.engineArtifacts.read({
+            locator: importedPairCampaign.locator,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          })
+          expect(
+            EngineArtifactEnvelopeSchema.parse(JSON.parse(importedPairCampaignRead.chunk.text!))
+              .source_artifact_locators.map((locator) => JSON.stringify(locator)).toSorted(),
+          ).toEqual(
+            [importedOpportunityLocator, importedAttributionLocator]
+              .map((locator) => JSON.stringify(locator))
+              .toSorted(),
+          )
+          ;(importedScope.owner as { agentID: string }).agentID = "evolution-evaluator"
           const importedMetricOutcome = JSON.parse(
             await executeEvolutionMetricsTool.execute(
               {
