@@ -523,6 +523,57 @@ function assertCurrentDataIntegrity(
     })
   }
 
+  const legacyMissionCallerReceiptIdentity = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT message.id AS id
+     FROM message
+     INNER JOIN part
+       ON part.message_id = message.id
+      AND part.session_id = message.session_id
+     INNER JOIN session AS mission_session
+       ON mission_session.id = json_extract(part.data, '$.metadata.mission_session_id')
+     WHERE length(message.id) > ${Identifier.MAX_LENGTH}
+       AND message.id GLOB 'msg_mission_receipt_*'
+       AND json_extract(message.data, '$.role') = 'assistant'
+       AND json_extract(message.data, '$.author') = 'mission'
+       AND json_extract(message.data, '$.agent') = 'mission'
+       AND json_extract(part.data, '$.type') = 'text'
+       AND json_extract(part.data, '$.source') = 'system'
+       AND json_extract(part.data, '$.metadata.source') = 'right-sidebar-conversation'
+       AND json_extract(mission_session.metadata, '$.mission.receipt.message_id') = message.id
+       AND json_extract(mission_session.metadata, '$.mission.receipt.part_id') = part.id
+     UNION ALL
+     SELECT part.id AS id
+     FROM part
+     INNER JOIN message
+       ON message.id = part.message_id
+      AND message.session_id = part.session_id
+     INNER JOIN session AS mission_session
+       ON mission_session.id = json_extract(part.data, '$.metadata.mission_session_id')
+     WHERE length(part.id) > ${Identifier.MAX_LENGTH}
+       AND part.id GLOB 'prt_mission_receipt_*'
+       AND json_extract(message.data, '$.role') = 'assistant'
+       AND json_extract(message.data, '$.author') = 'mission'
+       AND json_extract(message.data, '$.agent') = 'mission'
+       AND json_extract(part.data, '$.type') = 'text'
+       AND json_extract(part.data, '$.source') = 'system'
+       AND json_extract(part.data, '$.metadata.source') = 'right-sidebar-conversation'
+       AND json_extract(mission_session.metadata, '$.mission.receipt.message_id') = message.id
+       AND json_extract(mission_session.metadata, '$.mission.receipt.part_id') = part.id
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyMissionCallerReceiptIdentity) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains legacy expanded Mission caller receipt identity ${legacyMissionCallerReceiptIdentity.id} at ${dbPath}. ` +
+        "Its terminal conversation occurrence belongs to the prior identity epoch; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.compactMissionCallerReceiptIdentity",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
   const legacyRequirementSet = queryAllFinalized<{ id: string }>(
     sqlite,
     `SELECT id

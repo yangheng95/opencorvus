@@ -59,6 +59,9 @@ prior-epoch expanded scheduler occurrence graph 会在 bootstrap 返回 `DATA_RE
 Orchestrator 的 terminal lifecycle/infrastructure wake 使用同一 wake identity 分别 domain-separate 派生 compact
 Message/Part identity；完整 wake/fact provenance 保留在 Message extra 与 Part metadata。旧 expanded control
 Message/Part graph 在 bootstrap 返回 `DATA_RESET_REQUIRED`，compact identity 被不同语义占用时返回 typed conflict。
+Mission terminal caller receipt 使用 Mission Session identity 分别 domain-separate 派生 compact Message/Part；caller、
+Mission、terminal reason 与正式 receipt pointer 继续在同一事务持久化。旧 expanded receipt graph 在 bootstrap 返回
+`DATA_RESET_REQUIRED`，不同语义占用 compact Message/Part 时在通用 Session upsert 前返回 typed conflict。
 
 所有表定义在 `src/engine/engine.sql.ts`，命名前缀 `engine_`（历史文档里的
 `orchestrator_*` 已全部重命名为 `engine_*`）。旧的多张过程表已合并为单一

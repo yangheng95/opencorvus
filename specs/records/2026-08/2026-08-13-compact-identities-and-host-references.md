@@ -112,6 +112,13 @@ different compact-ID occupancy returns a typed control identity conflict before 
 expanded `msg_orchestrator_control_*` and `prt_orchestrator_control_*` rows with matching control provenance belong to
 the prior pre-release epoch and cause `DATA_RESET_REQUIRED` rather than dual lookup or in-place rewrite.
 
+The eighth Phase 1B delivery owns the Mission caller-receipt Message/Part occurrence only. One terminal Mission derives
+separate compact deterministic Message and Part identities from its exact Session identity while caller lineage,
+Mission identity, terminal reason and the formal receipt pointer remain complete persisted facts. The receipt bundle
+and Mission metadata pointer stay in one transaction; different compact-ID occupancy returns a typed conflict before
+generic Session upsert. Existing expanded `msg_mission_receipt_*` / `prt_mission_receipt_*` graphs with exact Mission
+receipt provenance belong to the prior pre-release epoch and cause `DATA_RESET_REQUIRED`, never dual lookup or rewrite.
+
 ### Phase 2 — remaining model-facing digests
 
 Inventory each plugin/package tool field that currently asks the model to repeat a package, resource, workspace, scorer, Git or payload digest. Replace it with a short Host reference derived from a prior authoritative response, then delete the raw model-input field in the same change. This includes replacing `panel.create_task.expectedPackageDigest` with a Host reference that can bind both installed incumbents and uninstalled candidate revisions; removing the digest without that replacement would break candidate Trial creation. Regenerate schemas, SDKs and embedded package payload from canonical sources.
