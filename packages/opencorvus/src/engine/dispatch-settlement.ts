@@ -36,9 +36,65 @@ export interface DispatchSettlementRow {
   payload: DispatchSettlementPayload
 }
 
+export type UnsettledDispatchLineage = Readonly<{
+  artifactID: string
+  dispatchID: string
+  sessionID: string
+}>
+
+export class TaskDispatchSettlementPendingError extends Error {
+  override readonly name = "TaskDispatchSettlementPendingError"
+  readonly code = "TASK_DISPATCH_SETTLEMENT_PENDING"
+
+  constructor(
+    readonly taskID: string,
+    readonly unsettled: readonly UnsettledDispatchLineage[],
+  ) {
+    super(
+      `Task ${taskID} has ${unsettled.length} committed dispatch(es) without a terminal settlement: ` +
+        unsettled.map((item) => `${item.artifactID}/${item.dispatchID}/${item.sessionID}`).join(", "),
+    )
+  }
+}
+
 function parsePayload(value: unknown, _artifactID: string): DispatchSettlementPayload {
   const parsed = DispatchSettlementPayloadSchema.parse(value)
   return parsed as DispatchSettlementPayload
+}
+
+/**
+ * Assert that every committed dispatch lineage in a Task has one durable final
+ * settlement. Task completion calls this inside its winning terminal
+ * transaction, so a continuation lineage and the terminal Task row cannot win
+ * on opposite sides of a time-of-check/time-of-use race.
+ */
+export function assertTaskDispatchesSettledInTransaction(db: Database.TxOrDb, taskID: string): void {
+  const lineages = db
+    .select({ id: EngineArtifactTable.id, payload: EngineArtifactTable.payload })
+    .from(EngineArtifactTable)
+    .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "dispatch_lineage")))
+    .orderBy(asc(EngineArtifactTable.time_created), asc(EngineArtifactTable.id))
+    .all()
+    .map((row): UnsettledDispatchLineage => {
+      const payload = row.payload as Record<string, unknown>
+      const dispatchID = payload.dispatch_id
+      const sessionID = payload.child_session_id
+      if (typeof dispatchID !== "string" || typeof sessionID !== "string") {
+        throw new Error(`Dispatch lineage ${row.id} has invalid settlement identity`)
+      }
+      return { artifactID: row.id, dispatchID, sessionID }
+    })
+  if (lineages.length === 0) return
+  const settledDispatchIDs = new Set(
+    db
+      .select({ payload: EngineArtifactTable.payload })
+      .from(EngineArtifactTable)
+      .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "dispatch_settlement")))
+      .all()
+      .map((row) => parsePayload(row.payload, taskID).dispatch_id),
+  )
+  const unsettled = lineages.filter((lineage) => !settledDispatchIDs.has(lineage.dispatchID))
+  if (unsettled.length > 0) throw new TaskDispatchSettlementPendingError(taskID, unsettled)
 }
 
 export function findDispatchSettlementByDispatchID(input: {

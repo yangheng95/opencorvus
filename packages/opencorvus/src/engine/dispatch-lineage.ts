@@ -1,7 +1,7 @@
 import { ProjectedAgentWorkScopeSchema, type ProjectedAgentWorkScope } from "@/agent/projected-agent-work-scope"
 import { ProjectedWorkerIdentitySchema, type ProjectedWorkerIdentity } from "@/agent/projected-worker-identity"
 import { insertEngineArtifact } from "@/engine/artifact"
-import { EngineArtifactTable, type EngineMetadata } from "@/engine/engine.sql"
+import { EngineArtifactTable, EngineTaskTable, type EngineMetadata } from "@/engine/engine.sql"
 import { Identifier } from "@/id/id"
 import { and, asc, desc, eq, sql, Database } from "@/storage/db"
 import z from "zod"
@@ -14,6 +14,8 @@ import {
   assertWorkflowNodeOccurrenceLineageInTransaction,
   bindWorkflowNodeOccurrenceLineageInTransaction,
 } from "./workflow-node-occurrence"
+import { taskCancellationAuthorityExecutionErrorInTransaction } from "./cancellation-projection"
+import { taskCompletionClosureInTransaction, TaskCompletionClosureConflictError } from "./task-completion-closure"
 
 export interface DispatchLineagePayload extends EngineMetadata {
   dispatch_id: string
@@ -43,6 +45,19 @@ export interface DispatchLineageRow {
   dispatchID: string
   payload: DispatchLineagePayload
   timeCreated: number
+}
+
+export class TaskDispatchAdmissionClosedError extends Error {
+  override readonly name = "TaskDispatchAdmissionClosedError"
+  readonly code = "TASK_DISPATCH_ADMISSION_CLOSED"
+
+  constructor(
+    readonly taskID: string,
+    readonly timeCompleted: number,
+    readonly dispatchID: string,
+  ) {
+    super(`Task ${taskID} completed at ${timeCompleted}; dispatch ${dispatchID} admission is closed`)
+  }
 }
 
 export interface DispatchLineageOrigin {
@@ -178,6 +193,25 @@ export function recordDispatchLineage(input: {
     artifactID,
   )
   Database.transaction((db) => {
+    const cancellation = taskCancellationAuthorityExecutionErrorInTransaction(
+      db,
+      input.origin.taskID,
+      `dispatch_agent ${input.origin.targetAgentID} lineage commit`,
+    )
+    if (cancellation) throw cancellation
+    const task = db
+      .select({ timeCompleted: EngineTaskTable.time_completed })
+      .from(EngineTaskTable)
+      .where(eq(EngineTaskTable.id, input.origin.taskID))
+      .get()
+    if (!task) throw new Error(`Dispatch Task ${input.origin.taskID} does not exist`)
+    if (task.timeCompleted !== null) {
+      throw new TaskDispatchAdmissionClosedError(input.origin.taskID, task.timeCompleted, input.origin.dispatchID)
+    }
+    const completionClosure = taskCompletionClosureInTransaction(db, input.origin.taskID)
+    if (completionClosure) {
+      throw new TaskCompletionClosureConflictError(input.origin.taskID, completionClosure.owner_id)
+    }
     assertTaskWorkflowBindingInTransaction({
       db,
       taskID: input.origin.taskID,

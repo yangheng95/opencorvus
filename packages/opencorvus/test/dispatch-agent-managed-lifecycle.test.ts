@@ -7,9 +7,11 @@ import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { Config } from "@/config/config"
 import { EffectiveConfig } from "@/config/effective"
 import { DelegatedWorkerAgent } from "@/delegated-worker/agent"
-import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dispatch-lineage"
+import { createDispatchLineageOrigin, listDispatchLineage, recordDispatchLineage } from "@/engine/dispatch-lineage"
 import { expertSquadPackageRevisionBinding } from "@/engine/expert-squad-package-revision-binding"
-import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
+import { EngineArtifactTable, EngineTaskCancellationAuthorityTable, EngineTaskTable } from "@/engine/engine.sql"
+import { Event } from "@/engine/model"
+import { EngineProtocol } from "@/engine/protocol"
 import { recordTaskInfrastructureError } from "@/engine/persist"
 import { persistQueuedTask } from "@/engine/pipeline"
 import { QueuedTaskIngressSchema } from "@/engine/queued-task-ingress"
@@ -50,6 +52,7 @@ import { Server } from "@/server/server"
 import { Session } from "@/session"
 import { Message } from "@/session/message"
 import { SessionPromptState } from "@/session/prompt/state"
+import { isExecutionCancellationError } from "@/session/prompt/cancellation"
 import { SessionProcessor } from "@/session/processor"
 import { SessionRuntimeContractStore } from "@/session/runtime-contract"
 import { Database, and, eq } from "@/storage/db"
@@ -89,9 +92,228 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
+test("projects durable Task cancellation as the dispatch_agent preparation result", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const packageRevision = {
+        scope: "built_in" as const,
+        projectID: null,
+        namespace: "builtin",
+        id: "base",
+        version: "2026.08.09.1",
+        packageDigest: "a".repeat(64),
+      }
+      const root = await Session.create({
+        kind: "root",
+        title: "Cancelled dispatch authority",
+        metadata: { configOverlay: { model: "openai/gpt-5.6-sol" } },
+      })
+      const taskID = Identifier.ascending("task")
+      const now = Date.now()
+      persistQueuedTask({
+        taskID,
+        sessionID: root.id,
+        now,
+        title: "Cancelled dispatch authority",
+        request: "Converge cancellation before any later worker dispatch",
+        productPillar: "code",
+        source: "test",
+        priority: "normal",
+        metadata: { actor: "user" },
+        projectID: Instance.project.id,
+        queue: false,
+        packageRevision,
+        executionCapsuleBinding: await prepareTaskProcessBinding({
+          mode: "native",
+          taskID,
+          projectID: Instance.project.id,
+          rootDirectory: Instance.directory,
+          packageRevisionSHA256: packageRevision.packageDigest,
+          timeCreated: now,
+        }),
+      })
+      const requested = await EngineProtocol.emit(
+        Event.TaskCancellationRequested,
+        {
+          taskID,
+          actor: "user",
+          surface: "overlay.work_ledger",
+          reason: "Stop the exact Task before another worker dispatch",
+          summary: "Cancellation requested before dispatch",
+        },
+        { source: "task.cancel", correlationID: "cancel-before-dispatch" },
+      )
+      const projectedWorkerIdentity = {
+        agentID: "base-developer",
+        baseRole: "build",
+        sessionKind: "build",
+        dispatchAdapterID: "build",
+        runtimeTemplateABIVersion: 1,
+        dispatchAdapterABIVersion: 1,
+        projectionHash: "b".repeat(64),
+      } as const
+      const preparedBeforeCancellation = createDispatchLineageOrigin({
+        taskID,
+        orchestratorSessionID: root.id,
+        orchestratorMessageID: Identifier.ascending("message"),
+        toolPartID: Identifier.ascending("part"),
+        toolCallID: "call_racing_cancelled_dispatch",
+        targetAgentID: projectedWorkerIdentity.agentID,
+        projectedWorkerIdentity,
+        workScope: { kind: "task" },
+        workflowBinding: {
+          kind: "direct",
+          package_revision: expertSquadPackageRevisionBinding(packageRevision),
+        },
+        workflowNodeID: null,
+        adapterInput: {
+          goal_ids: [],
+          request: "Do not commit after cancellation wins the race",
+          reason: "Exercise the durable lineage transaction fence.",
+        },
+      })
+      Database.use((db) =>
+        db
+          .insert(EngineTaskCancellationAuthorityTable)
+          .values({ task_id: taskID, request_event_id: requested.id })
+          .run(),
+      )
+      let racedLineageFailure: unknown
+      try {
+        recordDispatchLineage({
+          origin: preparedBeforeCancellation,
+          childSessionID: Identifier.ascending("session"),
+        })
+      } catch (error) {
+        racedLineageFailure = error
+      }
+      if (!isExecutionCancellationError(racedLineageFailure)) throw racedLineageFailure
+      expect({
+        failure: racedLineageFailure,
+        lineages: listDispatchLineage(taskID),
+      }).toMatchObject({
+        failure: {
+          source: "dispatch_preparation",
+          origin: {
+            requestID: "cancel-before-dispatch",
+            causationEventID: requested.id,
+          },
+        },
+        lineages: [],
+      })
+      const targetAgentID = "base-developer"
+      const projectedAgent = {
+        identity: projectedWorkerIdentity,
+        packageRevision,
+        virtualWorkflows: {},
+        capabilityOwner: "platform",
+        label: "cancelled-dispatch-test",
+        builtInToolIDs: [],
+        projectedToolIDs: [],
+      } as never
+      const executors = Object.fromEntries(
+        DispatchAdapterContractRegistry.ids.map((id) => [
+          id,
+          async () => {
+            throw new Error(`unexpected ${id} execution`)
+          },
+        ]),
+      ) as Record<AgentDispatchAdapterID, DispatchAdapterExecutors[AgentDispatchAdapterID]>
+      const dispatchTool = createDispatchAgentTool({
+        taskID,
+        projectedAgents: [projectedAgent],
+        executors,
+        runDetached: async (run) => await run(),
+        runDetachedRecovery: async (run) => await run(),
+        runInWorktree: async ({ run }) => await run(),
+        openLineage() {
+          throw new Error("dispatch lineage opened after cancellation authority")
+        },
+      })
+      let failure: unknown
+      try {
+        await (dispatchTool.execute as any)(
+          {
+            dispatch: {
+              target: targetAgentID,
+              work_scope: { kind: "task" },
+              use_worktree: false,
+              turn: {
+                kind: "initial",
+                workflow_subject: { kind: "direct" },
+                input: {
+                  goal_ids: [],
+                  request: "Do not start after cancellation",
+                  reason: "The durable cancellation authority is the expected dispatch result.",
+                },
+              },
+            },
+          },
+          { toolCallId: "call_cancelled_dispatch", messages: [] },
+        )
+      } catch (error) {
+        failure = error
+      }
+      if (!isExecutionCancellationError(failure)) throw failure
+      expect(failure).toMatchObject({
+        name: "ExecutionCancellationError",
+        source: "dispatch_preparation",
+        origin: {
+          source: "task.cancel",
+          requestID: "cancel-before-dispatch",
+          causationEventID: requested.id,
+          taskID,
+        },
+      })
+      await terminalTask(
+        requireTask(taskID),
+        { status: "cancelled", error: "task cancelled", time_completed: Date.now() },
+        "Commit the exact cancellation before a later dispatch attempt",
+        { cancellationRequest: { eventID: requested.id } },
+      )
+      let terminalFailure: unknown
+      try {
+        await (dispatchTool.execute as any)(
+          {
+            dispatch: {
+              target: targetAgentID,
+              work_scope: { kind: "task" },
+              use_worktree: false,
+              turn: {
+                kind: "initial",
+                workflow_subject: { kind: "direct" },
+                input: {
+                  goal_ids: [],
+                  request: "Do not start after terminal cancellation",
+                  reason: "The completed cancellation authority remains the dispatch result.",
+                },
+              },
+            },
+          },
+          { toolCallId: "call_terminal_cancelled_dispatch", messages: [] },
+        )
+      } catch (error) {
+        terminalFailure = error
+      }
+      if (!isExecutionCancellationError(terminalFailure)) throw terminalFailure
+      expect(terminalFailure).toMatchObject({
+        source: "dispatch_preparation",
+        origin: {
+          requestID: "cancel-before-dispatch",
+          causationEventID: requested.id,
+          taskID,
+        },
+      })
+    },
+  })
+}, 0)
+
 async function verifyDetachedDispatchLifecycle(input: {
   useWorktree: boolean
   retryRootFailure: boolean
+  workerFailureUnderCancellation?: boolean
   closeRuntimeResourcesFailure?: boolean
   exhaustRootFailure?: boolean
   pipelineOwnerCleanupFailure?: boolean
@@ -357,6 +579,9 @@ async function verifyDetachedDispatchLifecycle(input: {
                         workerSessionID = sessionID
                       },
                     })
+                    if (input.workerFailureUnderCancellation) {
+                      throw new Error("injected worker abort under durable Task cancellation")
+                    }
                     resolveWorkerSettlement()
                     if ("coordinationRequest" in outcome) {
                       throw new Error("Managed lifecycle fixture unexpectedly requested coordination")
@@ -462,12 +687,71 @@ async function verifyDetachedDispatchLifecycle(input: {
       {},
     )
     expect(receipt).toMatchObject({ kind: "accepted", session_id: workerSessionID })
+    if (input.workerFailureUnderCancellation) {
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const requested = await EngineProtocol.emit(
+            Event.TaskCancellationRequested,
+            {
+              taskID,
+              actor: "user",
+              surface: "overlay.work_ledger",
+              reason: "Cancel the accepted detached worker",
+              summary: "Cancellation requested while detached worker execution is accepted",
+            },
+            { source: "task.cancel", correlationID: "cancel-accepted-detached-worker" },
+          )
+          Database.use((db) =>
+            db
+              .insert(EngineTaskCancellationAuthorityTable)
+              .values({ task_id: taskID, request_event_id: requested.id })
+              .run(),
+          )
+        },
+      })
+    }
     if (input.closeRuntimeResourcesFailure) {
       const mcp = SessionRuntimeContractStore.get(workerSessionID)?.resources?.mcp
       if (!mcp) throw new Error(`Worker Session ${workerSessionID} has no MCP runtime resource`)
       mcpCloseSpy = spyOn(mcp, "close").mockRejectedValueOnce(new Error("injected worker MCP close failure"))
     }
     releaseWorker()
+    if (input.workerFailureUnderCancellation) {
+      let workerFailure: unknown
+      try {
+        await workerSettlement
+      } catch (error) {
+        workerFailure = error
+      }
+      expect(workerFailure).toMatchObject({ message: "injected worker abort under durable Task cancellation" })
+      await awaitDetachedRuns()
+      const gate = acquireDetachedDispatchSettlementGate()
+      try {
+        await expect(gate.waitForIdle()).resolves.toBeUndefined()
+      } finally {
+        gate[Symbol.dispose]()
+      }
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const artifacts = Database.use((db) =>
+            db
+              .select({ kind: EngineArtifactTable.kind, label: EngineArtifactTable.label })
+              .from(EngineArtifactTable)
+              .where(eq(EngineArtifactTable.task_id, taskID))
+              .all(),
+          )
+          expect(artifacts.filter((artifact) => artifact.kind === "task-infrastructure-error")).toHaveLength(1)
+          expect(
+            artifacts.filter(
+              (artifact) => artifact.kind === "queued_operator_wake" && artifact.label === "terminal_inapplicable",
+            ),
+          ).toHaveLength(1)
+        },
+      })
+      return
+    }
     if (input.closeRuntimeResourcesFailure) {
       let settlementError: unknown
       try {
@@ -524,7 +808,7 @@ async function verifyDetachedDispatchLifecycle(input: {
               "agent.execution.lifecycle",
               descriptor.payload.messageAuthority.user_message_id,
             ),
-          ).toMatchObject({ payload: { status: { type: "streaming" } } })
+          ).toMatchObject({ payload: { status: { type: "idle" } } })
           expect(
             Database.use((db) =>
               db
@@ -1110,6 +1394,17 @@ test(
       useWorktree: false,
       retryRootFailure: false,
       pipelineOwnerCleanupFailure: true,
+    }),
+  60_000,
+)
+
+test(
+  "settles a cancelled accepted detached worker through its terminal-inapplicable ingress",
+  () =>
+    verifyDetachedDispatchLifecycle({
+      useWorktree: false,
+      retryRootFailure: false,
+      workerFailureUnderCancellation: true,
     }),
   60_000,
 )

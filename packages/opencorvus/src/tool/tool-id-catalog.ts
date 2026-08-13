@@ -13,6 +13,10 @@ export const PLATFORM_CAPABILITY_DISCOVERY_TOOL_IDS = ["capability_search"] as c
 export const WORKER_COMMUNICATION_TOOL_IDS = ["request_orchestrator_decision", "send_mailbox_message"] as const
 export const TASK_ARTIFACT_DISCOVERY_TOOL_IDS = PLATFORM_ARTIFACT_DISCOVERY_TOOL_IDS
 export const TASK_ARTIFACT_PUBLISH_TOOL_IDS = PLATFORM_ARTIFACT_PUBLISH_TOOL_IDS
+export const TASK_ARTIFACT_SCHEDULER_TOOL_IDS = [
+  ...TASK_ARTIFACT_DISCOVERY_TOOL_IDS,
+  "artifact_snapshot",
+] as const
 export const TASK_ARTIFACT_TOOL_IDS = PLATFORM_ARTIFACT_TOOL_IDS
 
 export const GLOBAL_TOOL_IDS = [

@@ -11,6 +11,49 @@ import {
   projectTaskCancellationEventChain,
   taskCancellationRequestEventID,
 } from "./cancellation-origin"
+import {
+  ExecutionCancellationError,
+  createExecutionCancellationOrigin,
+} from "@/session/prompt/cancellation"
+
+export function taskCancellationAuthorityExecutionError(
+  taskID: string,
+  operation: string,
+): ExecutionCancellationError | undefined {
+  return Database.use((db) => taskCancellationAuthorityExecutionErrorInTransaction(db, taskID, operation))
+}
+
+export function taskCancellationAuthorityExecutionErrorInTransaction(
+  db: Database.TxOrDb,
+  taskID: string,
+  operation: string,
+): ExecutionCancellationError | undefined {
+  const authority = db
+    .select({ requestEventID: EngineTaskCancellationAuthorityTable.request_event_id })
+    .from(EngineTaskCancellationAuthorityTable)
+    .where(eq(EngineTaskCancellationAuthorityTable.task_id, taskID))
+    .get()
+  if (!authority) return undefined
+  const request = requireTaskCancellationRequestEvent(taskID, authority.requestEventID)
+  const origin = request.origin
+  return new ExecutionCancellationError({
+    source: "dispatch_preparation",
+    message: `${operation} is inapplicable under Task ${taskID} cancellation ${authority.requestEventID}`,
+    origin: createExecutionCancellationOrigin({
+      actor: origin.actor,
+      source: origin.source,
+      surface: origin.surface,
+      requestID: origin.requestID,
+      reason: origin.reason,
+      taskID,
+      ...(origin.missionID ? { missionID: origin.missionID } : {}),
+      ...(origin.messageID ? { messageID: origin.messageID } : {}),
+      ...(origin.toolCallID ? { toolCallID: origin.toolCallID } : {}),
+      ...(origin.toolPartID ? { toolPartID: origin.toolPartID } : {}),
+      causationEventID: authority.requestEventID,
+    }),
+  })
+}
 
 export function requireTaskCancellationRequestEvent(taskID: string, eventID: string) {
   const parsedEventID = Identifier.schema("protocol_event").parse(eventID)

@@ -1668,6 +1668,7 @@ export namespace TaskQueueService {
     try {
       assertInFlightNotCancelled(task, inFlight)
       await SessionPrompt.withPromptOwnerCapture(
+        task.session_id,
         (owner) => {
           inFlight.promptOwner = owner
           if (inFlight.cancellationReason && inFlight.cancellationOrigin) {

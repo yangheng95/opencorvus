@@ -51,6 +51,12 @@ import { Scheduler } from "@/scheduler"
 import { persistQueuedTask } from "@/engine/pipeline"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import {
+  closeMissionExecutionOperation,
+  currentMissionExecutionClosure,
+  MissionExecutionClosingError,
+  openMissionExecution,
+} from "@/mission/execution-closure"
 
 afterEach(resetMemoryDatabase)
 
@@ -1621,6 +1627,210 @@ describe("durable scheduler.message delivery", () => {
     })
   })
 
+  test("settles a claimed Mission delivery against its durable execution closure", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-closed-recipient"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Closed recipient Mission",
+          metadata: { mission: { id: missionID } },
+        })
+        const taskRoot = await Session.create({ kind: "orchestrator", title: "Closing source Task" })
+        const taskID = Identifier.ascending("task")
+        const now = Date.now()
+        Database.use((db) =>
+          db
+            .insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: Instance.project.id,
+              session_id: taskRoot.id,
+              source: "mission",
+              product_pillar: "work",
+              title: "Close the recipient before materialization",
+              request: "Publish one lifecycle notification",
+              metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+              time_started: now,
+              time_created: now,
+              time_updated: now,
+            })
+            .run(),
+        )
+        const sourceMessageID = "msg_closed_recipient_source"
+        const sourcePartID = "prt_closed_recipient_source"
+        persistSourceOccurrence(taskRoot.id, sourceMessageID, sourcePartID, "Terminal evidence is ready")
+        const queued = Database.transaction((db) =>
+          enqueueSchedulerMessageInTransaction(db, {
+            invocationID: "closed-recipient",
+            kind: "notification",
+            source: {
+              kind: "task_scheduler",
+              project_id: Instance.project.id,
+              task_id: taskID,
+              root_session_id: taskRoot.id,
+            },
+            target: {
+              kind: "mission_scheduler",
+              project_id: Instance.project.id,
+              mission_id: missionID,
+              session_id: mission.id,
+            },
+            subject: "Terminal evidence",
+            sourceMessageID,
+            sourcePartID,
+          }),
+        )
+        using _closeAtAdmission = SchedulerMessageTestHooks.installBeforeMissionMaterialization(() =>
+          closeMissionExecutionOperation({
+            missionID,
+            sessionID: mission.id,
+            source: "mission.abort",
+            requestID: "request-close-recipient",
+            close: async () => undefined,
+          }),
+        )
+        await drainSchedulerMessagesForCurrentProject()
+        const closure = currentMissionExecutionClosure(mission.id)!
+        expect(closure).toMatchObject({ missionID, sessionID: mission.id, state: "closed" })
+        expect(requireSchedulerDelivery(queued.inboxID)).toMatchObject({
+          status: "delivered",
+          deliveryResult: { kind: "mission_closed", closure_event_id: closure.eventID },
+          timeCompleted: expect.any(Number),
+        })
+        expect(listPendingSchedulerProjectIDs()).toEqual([])
+      },
+    })
+  })
+
+  test("joins concurrent Mission close callers on one durable operation", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-concurrent-close"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Concurrent close Mission",
+          metadata: { mission: { id: missionID } },
+        })
+        let releaseClose!: () => void
+        let markStarted!: () => void
+        const started = new Promise<void>((resolve) => {
+          markStarted = resolve
+        })
+        const closeGate = new Promise<void>((resolve) => {
+          releaseClose = resolve
+        })
+        const first = closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.abort",
+          requestID: "request-concurrent-close-a",
+          close: async () => {
+            markStarted()
+            await closeGate
+          },
+        })
+        await started
+        const second = closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.abort",
+          requestID: "request-concurrent-close-b",
+          close: async () => undefined,
+        })
+        const reopened = openMissionExecution({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.wake",
+          requestID: "request-reopen-after-close",
+        })
+        releaseClose()
+        const [left, right, opened] = await Promise.all([first, second, reopened])
+        expect({ left, right }).toEqual({
+          left: expect.objectContaining({ missionID, sessionID: mission.id, state: "closed" }),
+          right: left,
+        })
+        expect({ opened, current: currentMissionExecutionClosure(mission.id) }).toEqual({
+          opened: expect.objectContaining({ missionID, sessionID: mission.id, state: "opened" }),
+          current: opened,
+        })
+      },
+    })
+  })
+
+  test("requires a failed durable Mission close to resume before the Mission can reopen", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-resume-durable-close"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Resume durable close Mission",
+          metadata: { mission: { id: missionID } },
+        })
+        await expect(
+          closeMissionExecutionOperation({
+            missionID,
+            sessionID: mission.id,
+            source: "mission.abort",
+            requestID: "request-failed-close",
+            close: async () => {
+              throw new Error("injected physical settlement interruption")
+            },
+          }),
+        ).rejects.toThrow("injected physical settlement interruption")
+        const closing = currentMissionExecutionClosure(mission.id)!
+        expect(closing).toMatchObject({ missionID, sessionID: mission.id, state: "closing" })
+
+        await expect(
+          openMissionExecution({
+            missionID,
+            sessionID: mission.id,
+            source: "mission.wake",
+            requestID: "request-reopen-during-persisted-close",
+          }),
+        ).rejects.toMatchObject({
+          name: MissionExecutionClosingError.name,
+          data: expect.objectContaining({
+            missionID,
+            sessionID: mission.id,
+            operationID: closing.operationID,
+            closureEventID: closing.eventID,
+          }),
+        })
+
+        const resumed = await closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.abort",
+          requestID: "request-resume-close",
+          close: async () => undefined,
+        })
+        const reopened = await openMissionExecution({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.wake",
+          requestID: "request-reopen-after-resumed-close",
+        })
+        expect({ resumed, reopened, current: currentMissionExecutionClosure(mission.id) }).toEqual({
+          resumed: expect.objectContaining({
+            missionID,
+            sessionID: mission.id,
+            operationID: closing.operationID,
+            state: "closed",
+          }),
+          reopened: expect.objectContaining({ missionID, sessionID: mission.id, state: "opened" }),
+          current: reopened,
+        })
+      },
+    })
+  })
+
   test("dead-letters an outgoing delivery atomically when its real source Session is deleted", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -1996,5 +2206,5 @@ describe("durable scheduler.message delivery", () => {
         }
       },
     })
-  })
+  }, 30_000)
 })

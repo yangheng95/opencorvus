@@ -42,6 +42,7 @@ export namespace Tool {
     agentID?: string
     config?: Config.Info
     skillSurface?: ResolvedSkillSurface
+    artifactSnapshotSource?: "current_task_project" | "merged_primary_commit"
   }
 
   export type Context<M extends Metadata = Metadata> = {
@@ -120,8 +121,7 @@ export namespace Tool {
             // The AI SDK may pass strings for numbers (e.g. x: "500" instead of x: 500);
             // Zod preprocess/coerce transforms fix these, but only in the parse result.
             result = await materializeToolResultInlineAttachments({
-              projectID: () =>
-                typeof ctx.extra?.projectID === "string" ? ctx.extra.projectID : Instance.project.id,
+              projectID: () => (typeof ctx.extra?.projectID === "string" ? ctx.extra.projectID : Instance.project.id),
               value: await execute(parsed, ctx),
             })
           } catch (e) {

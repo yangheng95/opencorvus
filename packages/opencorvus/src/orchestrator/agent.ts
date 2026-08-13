@@ -381,45 +381,6 @@ async function runOrchestratorPromptWithInactivity<T>(input: {
   }
 }
 
-async function waitForOrchestratorCycleBoundary(session: Session.Info): Promise<void> {
-  const sessionID = session.id
-  const current = SessionStatus.get(sessionID)
-  if (current.type === "idle") return
-  if (current.type === "terminal") {
-    throw new Error(
-      `Orchestrator Session ${sessionID} became terminal before its creator wake reached standby: ${current.reason}`,
-    )
-  }
-  await new Promise<void>((resolve, reject) => {
-    let settled = false
-    const finish = (error?: Error) => {
-      if (settled) return
-      settled = true
-      unsubscribe()
-      if (error) reject(error)
-      else resolve()
-    }
-    const observe = (status: SessionStatus.Info) => {
-      if (status.type === "idle") finish()
-      else if (status.type === "terminal") {
-        finish(
-          new Error(
-            `Orchestrator Session ${sessionID} became terminal before its creator wake reached standby: ${status.reason}`,
-          ),
-        )
-      }
-    }
-    const unsubscribe = Bus.subscribe(SessionStatus.Event.Status, (event) => {
-      if (event.properties.sessionID === sessionID) observe(event.properties.status)
-    })
-    void SessionPrompt.waitForFinish(sessionID, session.directory).then(
-      () => finish(),
-      (error) => finish(error instanceof Error ? error : new Error(String(error))),
-    )
-    observe(SessionStatus.get(sessionID))
-  })
-}
-
 export const OrchestratorTestHooks = {
   runPromptWithInactivity: runOrchestratorPromptWithInactivity,
   renderTaskAttachmentInventory,
@@ -766,6 +727,7 @@ export namespace Orchestrator {
       // 5. Run the orchestrator session — tools via SessionRuntimeContract.
       //    Step limit lives on agent.orchestrator.steps.
       let finalMessage: Message.WithParts | undefined
+      let promptGenerationOwner: AbortSignal | undefined
       const finalMessagePromptOwner = () => {
         if (!finalMessage) return undefined
         const owner = SessionPrompt.messageOwner(agentSession.id, finalMessage.info.id)
@@ -885,46 +847,58 @@ export namespace Orchestrator {
           SessionPrompt.armSessionRuntimeContractWake(agentSession.id, runtimeContract)
           runtimeWakeArmed = true
         }
-        finalMessage = await SessionContext.provide(agentSession, () =>
-          provideInitializedProjectExecution({
-            directory: agentSession.directory,
-            fn: () =>
-              runOrchestratorPromptWithInactivity({
-                taskID,
-                session: agentSession,
-                run: async () => {
-                  promptInvocationStarted = true
-                  const result = appendCreatorMessage
-                    ? ((await SessionPrompt.prompt({
-                        sessionID: agentSession.id,
-                        author: taskCreator.actor,
-                        model: { providerID: model.providerID, modelID: model.api.id },
-                        agent: "orchestrator",
-                        byteMaterializationProjectID: agentSession.projectID,
-                        parts: partsWithIds,
-                      })) as Message.WithParts)
-                    : ((await SessionPrompt.loop({
-                        sessionID: agentSession.id,
-                        ...(currentVisibleInputMessageID ? { reply_to_message_id: currentVisibleInputMessageID } : {}),
-                      })) as Message.WithParts)
-                  // SessionPrompt.prompt/loop resolves the attached caller at
-                  // the first assistant reply, while one logical Orchestrator
-                  // wake may continue through tool-result turns. Do not
-                  // release the durable root-wake queue until the creator
-                  // cycle reaches standby or the explicit follow-up runtime
-                  // wake is consumed. Otherwise a later Mission/scheduler
-                  // ingress can relabel the previous continuation and be
-                  // falsely settled without ever reaching the model.
-                  if (runtimeContract.runOnce) {
-                    await SessionPrompt.waitForSessionRuntimeContractWakeSettlement(agentSession.id, runtimeContract)
-                  } else {
-                    await waitForOrchestratorCycleBoundary(agentSession)
-                  }
-                  return result
-                },
+        finalMessage = await SessionPrompt.withPromptOwnerCapture(
+          agentSession.id,
+          (owner) => {
+            if (promptGenerationOwner && promptGenerationOwner !== owner) {
+              throw new Error(`Session ${agentSession.id} orchestrator Turn captured multiple prompt generation owners`)
+            }
+            promptGenerationOwner = owner
+          },
+          () =>
+            SessionContext.provide(agentSession, () =>
+              provideInitializedProjectExecution({
+                directory: agentSession.directory,
+                fn: () =>
+                  runOrchestratorPromptWithInactivity({
+                    taskID,
+                    session: agentSession,
+                    run: async () => {
+                      promptInvocationStarted = true
+                      const result = appendCreatorMessage
+                        ? ((await SessionPrompt.prompt({
+                            sessionID: agentSession.id,
+                            author: taskCreator.actor,
+                            model: { providerID: model.providerID, modelID: model.api.id },
+                            agent: "orchestrator",
+                            byteMaterializationProjectID: agentSession.projectID,
+                            parts: partsWithIds,
+                          })) as Message.WithParts)
+                        : ((await SessionPrompt.loop({
+                            sessionID: agentSession.id,
+                            ...(currentVisibleInputMessageID
+                              ? { reply_to_message_id: currentVisibleInputMessageID }
+                              : {}),
+                          })) as Message.WithParts)
+                      if (runtimeContract.runOnce) {
+                        await SessionPrompt.waitForSessionRuntimeContractWakeSettlement(
+                          agentSession.id,
+                          runtimeContract,
+                        )
+                      }
+                      return result
+                    },
+                  }),
               }),
-          }),
+            ),
         )
+        if (promptGenerationOwner && finalMessage?.info.role === "assistant" && finalMessage.info.parentID) {
+          await SessionStatus.waitForExecutionSettlement({
+            sessionID: agentSession.id,
+            inputMessageID: finalMessage.info.parentID,
+            owner: promptGenerationOwner,
+          })
+        }
         promptInFlight = false
       } finally {
         // SessionPrompt cancellation rejects attached callers before its
@@ -1449,6 +1423,10 @@ export function isCurrentWakeIngress(event?: OrchestratorEvent): boolean {
   )
 }
 
+export function renderInitialDispatchContractInstruction(): string {
+  return "- Call `dispatch_agent` with one target-discriminated `dispatch` object. For a first node occurrence, set `turn.kind=initial`, put the exact workflow subject in `turn.workflow_subject`, and put only the selected row's `target_fields` in `turn.input`; `target`, `work_scope`, and `use_worktree` remain dispatch-level fields. Supply every field required by that target schema. When `instruction` is listed, it carries the complete bounded work the worker must perform. When `reason` is listed, it separately explains why that work is needed now and never substitutes for `instruction`. Never copy fields from another target. For a successor Turn, set `turn.kind=continuation`, choose exactly one typed `turn.authority` (`coordination_action` or `prior_dispatch`), and provide only incremental `turn.guidance` plus exact `turn.evidence_locators`; never invent placeholder guidance or a lineage identity."
+}
+
 function requireCurrentAgentLifecycleFact(
   delivery: NonNullable<OrchestratorEvent["agentLifecycleDelivery"]>,
   taskID?: string,
@@ -1586,9 +1564,7 @@ async function buildSystemParts(
       `- target=${projectedAgent.identity.agentID}; label=${JSON.stringify(projectedAgent.label)}; description=${JSON.stringify(projectedAgent.description ?? "")}; base_role=${projectedAgent.identity.baseRole}; dispatch_adapter_id=${projectedAgent.identity.dispatchAdapterID}; target_fields=${adapterFields.join(",")}`,
     )
   }
-  ctx.push(
-    "- Call `dispatch_agent` with one target-discriminated `dispatch` object. For a first node occurrence, set `turn.kind=initial`, put the exact workflow subject in `turn.workflow_subject`, and put only the selected row's `target_fields` in `turn.input`; `target`, `work_scope`, and `use_worktree` remain dispatch-level fields. Put the complete bounded worker instruction in `turn.input.reason` when that row lists `reason`; never copy fields from another target. For a successor Turn, set `turn.kind=continuation`, choose exactly one typed `turn.authority` (`coordination_action` or `prior_dispatch`), and provide only incremental `turn.guidance` plus exact `turn.evidence_locators`; never invent placeholder guidance or a lineage identity.",
-  )
+  ctx.push(renderInitialDispatchContractInstruction())
   ctx.push("")
   // ── Recovery discipline ──
   // Rendered as one invariant instead of a configuration mode: the orchestrator

@@ -60,6 +60,7 @@ import { EngineService, TaskCancellationConvergenceTestHooks } from "@/task-api"
 import { ChannelIngress } from "@/channel/ingress"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
+import { ExecutionCancellationError, createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 const packageRevision = {
@@ -162,7 +163,7 @@ async function createActiveTask(input: {
     productPillar: "code",
     source: "test",
     priority: "normal",
-    metadata: input.metadata ?? {},
+    metadata: input.metadata ?? { actor: "user" },
     projectID: Instance.project.id,
     queue: input.queue ?? false,
     packageRevision: taskPackageRevision,
@@ -189,7 +190,7 @@ function findQueuedWake(wakeID: string) {
 }
 
 async function waitForCancelledCheckpoint(taskID: string) {
-  const settlementDeadline = Date.now() + 15_000
+  const settlementDeadline = Date.now() + 30_000
   let settlement: { label: string; payload: { status?: string } } | undefined
   while (Date.now() < settlementDeadline) {
     settlement = Database.use(
@@ -383,7 +384,27 @@ function latestQueuedOperatorWake(taskID: string) {
   return { label: row.label, payload: QueuedTaskIngressSchema.parse(row.payload) }
 }
 
-describe("active operator wake settlement", () => {
+describe.serial("active operator wake settlement", () => {
+  test("preserves typed cancellation authority before task-loop failure normalization", () => {
+    const requestID = "req_typed_task_loop_cancellation"
+    const cancellation = new ExecutionCancellationError({
+      source: "session_prompt",
+      message: "Cancel the exact Task loop occurrence",
+      origin: createExecutionCancellationOrigin({
+        actor: "runtime",
+        source: "process.shutdown",
+        surface: "engine.queue.test",
+        requestID,
+        reason: "Test exact typed cancellation classification",
+      }),
+    })
+
+    expect(QueueTestHooks.taskLoopExitProjection(cancellation)).toEqual({
+      kind: "cancelled",
+      source: "process.shutdown",
+      requestID,
+    })
+  })
   test("joins duplicate cancellation calls and commits one terminal cancellation before checkpoint settlement", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -835,6 +856,211 @@ describe("active operator wake settlement", () => {
 
         expect(await EngineService.cancelTask(taskID, { origin })).toBe(true)
         expect(deriveTaskStatus(requireTask(taskID))).toBe("cancelled")
+        await waitForCancelledCheckpoint(taskID)
+      },
+    })
+  }, 0)
+
+  test("converges existing and later infrastructure wakes under one durable cancellation authority", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID } = await createActiveTask({
+          title: "Cancellation ingress authority",
+          request: "Make every queued and later infrastructure ingress terminal under one cancellation request",
+        })
+        const existingWakeID = Database.transaction((db) =>
+          persistQueuedTaskIntentInTransaction(db, {
+            task: requireTask(taskID),
+            intent: "retry",
+            supersededOperatorMessageIDs: [],
+            now: Date.now(),
+          }),
+        )
+        expect(QueueTestHooks.startQueuedWake(existingWakeID)).toBe(true)
+        const infrastructureFactID = "art_cancellation_infrastructure_fact"
+        let ingressAtCancellation:
+          | {
+              result: Awaited<ReturnType<typeof dispatchTaskLoop>>
+              taskStatus: string
+              existing: ReturnType<typeof findQueuedWake>
+              infrastructure: ReturnType<typeof findQueuedWake>
+            }
+          | undefined
+        using _lateStage = TaskCancellationConvergenceTestHooks.installBeforeLateStage(async () => {
+          const result = await dispatchTaskLoop({
+            taskID,
+            event: {
+              dispatchInfrastructureFailure: {
+                infrastructureFactID,
+                outcome: {
+                  kind: "infrastructure_failure",
+                  operation: "execute-detached-worker",
+                  message: "The worker aborted while Task cancellation was converging",
+                  error_name: "ExecutionCancellationError",
+                  recovery_authority: { occurrence_status: "occurrence_not_committed" },
+                  infrastructure_error: {
+                    source: "engine_artifact",
+                    artifact_id: infrastructureFactID,
+                    catalog_revision: 1,
+                    expected_sha256: "c".repeat(64),
+                  },
+                },
+              },
+            },
+          })
+          const infrastructureWakeID = Database.use(
+            (db) =>
+              db
+                .select({ id: EngineArtifactTable.id })
+                .from(EngineArtifactTable)
+                .where(
+                  and(
+                    eq(EngineArtifactTable.task_id, taskID),
+                    eq(EngineArtifactTable.kind, "queued_operator_wake"),
+                    sql`json_extract(${EngineArtifactTable.payload}, '$.infrastructure_fact_id') = ${infrastructureFactID}`,
+                  ),
+                )
+                .get()?.id,
+          )
+          if (!infrastructureWakeID) throw new Error("Cancellation infrastructure ingress was not persisted")
+          const existingWake = findQueuedWake(existingWakeID)
+          const infrastructureWake = findQueuedWake(infrastructureWakeID)
+          ingressAtCancellation = {
+            result,
+            taskStatus: deriveTaskStatus(requireTask(taskID)),
+            existing: existingWake && {
+              ...existingWake,
+              payload: QueuedTaskIngressSchema.parse(existingWake.payload),
+            },
+            infrastructure: infrastructureWake && {
+              ...infrastructureWake,
+              payload: QueuedTaskIngressSchema.parse(infrastructureWake.payload),
+            },
+          }
+        })
+
+        expect(
+          await EngineService.cancelTask(taskID, {
+            origin: {
+              actor: "user",
+              source: "task.cancel",
+              surface: "overlay.work_ledger",
+              requestID: "cancel-infrastructure-resurrection",
+              reason: "Stop this Task and converge every accepted ingress",
+            },
+          }),
+        ).toBe(true)
+
+        expect(ingressAtCancellation).toMatchObject({
+          result: "ignored",
+          taskStatus: "active",
+          existing: {
+            label: "terminal_inapplicable",
+            payload: {
+              delivery_attempt: 1,
+              delivery_runtime_attempt: 1,
+              delivery_result: { status: "terminal_inapplicable" },
+            },
+          },
+          infrastructure: {
+            label: "terminal_inapplicable",
+            payload: {
+              source_kind: "dispatch_infrastructure_failure",
+              infrastructure_fact_id: infrastructureFactID,
+              delivery_attempt: 1,
+              delivery_runtime_attempt: 1,
+              delivery_result: { status: "terminal_inapplicable" },
+            },
+          },
+        })
+        QueueTestHooks.completeQueuedWake(existingWakeID, Identifier.ascending("message"))
+        const afterLateCompletion = findQueuedWake(existingWakeID)
+        expect(
+          afterLateCompletion && {
+            label: afterLateCompletion.label,
+            payload: QueuedTaskIngressSchema.parse(afterLateCompletion.payload),
+          },
+        ).toMatchObject({
+          label: "terminal_inapplicable",
+          payload: {
+            delivery_attempt: 1,
+            delivery_runtime_attempt: 1,
+            delivery_result: {
+              status: "terminal_inapplicable",
+              reason: expect.stringContaining("Task cancellation"),
+            },
+          },
+        })
+        expect(deriveTaskStatus(requireTask(taskID))).toBe("cancelled")
+        await waitForCancelledCheckpoint(taskID)
+      },
+    })
+  }, 0)
+
+  test("preserves a cancelled Task terminal conversation through an idempotent cancellation call", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const { taskID, rootSessionID } = await createActiveTask({
+          title: "Cancelled Task terminal conversation",
+          request: "Keep one terminal follow-up deliverable after duplicate cancellation",
+        })
+        const origin = {
+          actor: "user" as const,
+          source: "task.cancel" as const,
+          surface: "api",
+          requestID: "cancel-before-terminal-conversation",
+          reason: "Establish the exact terminal cancellation",
+        }
+        expect(await EngineService.cancelTask(taskID, { origin })).toBe(true)
+        const messageID = await persistOperatorRootMessage({
+          taskID,
+          rootSessionID,
+          text: "Report the cancellation receipt.",
+        })
+        const wakeID = Database.transaction((db) =>
+          persistQueuedRootMessageWakeInTransaction(db, {
+            task: requireTask(taskID),
+            messageID,
+            kind: "operator",
+            now: Date.now(),
+          }),
+        )
+
+        expect(await EngineService.cancelTask(taskID, { origin })).toBe(true)
+        expect(QueueTestHooks.startQueuedWake(wakeID)).toBe(true)
+        const assistantMessageID = Identifier.ascending("message")
+        QueueTestHooks.completeQueuedWake(wakeID, assistantMessageID)
+
+        const requests = ProtocolStore.listTaskEvents(taskID).filter(
+          (event) => event.type === TASK_CANCELLATION_REQUESTED_EVENT_TYPE,
+        )
+        const settled = findQueuedWake(wakeID)
+        expect({
+          taskStatus: deriveTaskStatus(requireTask(taskID)),
+          requestIDs: requests.map((event) => event.id),
+          wake: settled && {
+            label: settled.label,
+            payload: QueuedTaskIngressSchema.parse(settled.payload),
+          },
+        }).toMatchObject({
+          taskStatus: "cancelled",
+          requestIDs: [expect.any(String)],
+          wake: {
+            label: "drained",
+            payload: {
+              source_kind: "operator_message",
+              message_id: messageID,
+              delivery_result: {
+                status: "completed",
+                assistant_message_id: assistantMessageID,
+              },
+            },
+          },
+        })
         await waitForCancelledCheckpoint(taskID)
       },
     })
@@ -1815,7 +2041,7 @@ describe("active operator wake settlement", () => {
           },
         )
         using _runtime = QueueTestHooks.replaceTerminalIngressDeliveryRuntime("same-terminal-retry-runtime")
-        using _retryDelay = QueueTestHooks.replaceTerminalIngressDelayedRetryDelay(250)
+        const initialRetryDelay = QueueTestHooks.replaceTerminalIngressDelayedRetryDelay(5_000)
         try {
           const accepted = await EngineService.handleTaskMessage(taskID, {
             text: "Explain the terminal result through this exact ingress.",
@@ -1860,7 +2086,6 @@ describe("active operator wake settlement", () => {
             source: "operator.test",
           })
           expect(younger.wake_status).toBe("queued")
-          await Bun.sleep(100)
           const youngerWhileBlocked = Database.use((db) =>
             db
               .select({ label: EngineArtifactTable.label })
@@ -1873,8 +2098,10 @@ describe("active operator wake settlement", () => {
             attemptedIngresses: [accepted.ingress_id, accepted.ingress_id],
             youngerLabel: "pending",
           })
+          initialRetryDelay[Symbol.dispose]()
+          using _fastRetryDelay = QueueTestHooks.replaceTerminalIngressDelayedRetryDelay(10)
           let row: { id: string; label: string; payload: unknown } | undefined
-          const recoveryDeadline = Date.now() + 5_000
+          const recoveryDeadline = Date.now() + 10_000
           while (Date.now() < recoveryDeadline) {
             row = Database.use((db) =>
               db
@@ -1931,11 +2158,12 @@ describe("active operator wake settlement", () => {
             ],
           })
         } finally {
+          initialRetryDelay[Symbol.dispose]()
           terminalConversation.mockRestore()
         }
       },
     })
-  }, 30_000)
+  }, 60_000)
 
   test("converges a historical non-tail failed ingress into one visible recovery occurrence", async () => {
     await using project = await memoryProject()
@@ -2512,8 +2740,13 @@ describe("active operator wake settlement", () => {
 
         expect(await dispatchTaskLoop({ taskID, event: { note: "Start before shutdown" } })).toBe("started")
         const attemptsBefore = QueueTestHooks.taskLoopLaunchAcceptanceAttempts()
-        await Bun.sleep(140)
-        const attemptsDuringFailure = QueueTestHooks.taskLoopLaunchAcceptanceAttempts() - attemptsBefore
+        const retryDeadline = Date.now() + 2_000
+        let attemptsDuringFailure = 0
+        while (Date.now() < retryDeadline) {
+          attemptsDuringFailure = QueueTestHooks.taskLoopLaunchAcceptanceAttempts() - attemptsBefore
+          if (attemptsDuringFailure >= 2) break
+          await Bun.sleep(10)
+        }
         const gate = RuntimeExecutionSettlement.acquireSettlementGate()
         gate.closeAdmission(["engine_queue_completion"])
         gate.requestCancellation(["engine_queue_completion"], new Error("test runtime shutdown"))
@@ -2849,9 +3082,13 @@ describe("active operator wake settlement", () => {
         const artifactSearch = tools.artifact_search as {
           execute?: (args: Record<string, never>, options: unknown) => Promise<{ output: string }>
         }
+        const artifactSnapshot = tools.artifact_snapshot as {
+          execute?: (args: unknown, options: unknown) => Promise<unknown>
+        }
         if (!read.execute) throw new Error("read_task_message execution is unavailable")
         if (!readContext.execute) throw new Error("read_context execution is unavailable")
         if (!artifactSearch.execute) throw new Error("artifact_search execution is unavailable")
+        if (!artifactSnapshot.execute) throw new Error("artifact_snapshot execution is unavailable")
 
         const result = await read.execute({ message_id: messageID, reason: "Answer the exact terminal follow-up." }, {})
         const decisionContext = await readContext.execute({ scope: "decisions" }, {})

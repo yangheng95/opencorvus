@@ -45,6 +45,10 @@ export type TaskToolExecutionScope = Readonly<{
   kind: "task"
   projectID: string
   projectDirectory: string
+  /** Persisted Session working directory. Projected Build workers execute in
+   * their managed worktree while projectDirectory remains the primary Task
+   * root used by lifecycle and publication authority. */
+  executionDirectory?: string
   taskID: string
   taskRuntimeDirectory: string
   sessionID: string
@@ -285,6 +289,7 @@ export async function resolveProjectedTaskToolExecutionScope(input: {
     kind: "task",
     projectID: execution.projectID,
     projectDirectory,
+    executionDirectory: canonicalDirectory(execution.session.directory),
     taskID: owningTaskID,
     taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(projectDirectory, owningTaskID),
     sessionID: execution.sessionID,
@@ -297,36 +302,39 @@ export async function resolveProjectedTaskToolExecutionScope(input: {
 }
 
 /**
- * Resolve one Core-owned projected-worker tool from the current immutable
+ * Resolve one Core-owned projected Task tool from the current immutable
  * runtime contract. Unlike package tools, the Core tool has no package bundle
- * binding; its persisted call identity and the exact worker descriptor are
- * the authority.
+ * binding; its persisted call identity and exact projected owner are the authority.
  */
-export async function resolveCoreProjectedWorkerToolExecutionScope(input: {
+export async function resolveCoreProjectedTaskToolExecutionScope(input: {
   options: unknown
   toolName: string
 }): Promise<TaskToolExecutionScope> {
   const execution = await resolvePersistedTaskToolCall(input.options, input.toolName)
   const contract = SessionRuntimeContractStore.get(execution.sessionID)
-  if (!contract || contract.identity.identityKind !== "projected-worker") {
-    throw new Error(`${input.toolName}: current Session is not a projected Task worker.`)
+  if (
+    !contract ||
+    (contract.identity.identityKind !== "projected-worker" &&
+      contract.identity.identityKind !== "projected-scheduler")
+  ) {
+    throw new Error(`${input.toolName}: current Session is not a projected Task scheduler or worker.`)
   }
   const identity = contract.identity
   if (identity.taskID !== execution.taskID || identity.sessionID !== execution.sessionID) {
-    throw new Error(`${input.toolName}: projected worker identity does not match the persisted Task call.`)
+    throw new Error(`${input.toolName}: projected Task identity does not match the persisted Task call.`)
   }
   if (execution.session.kind !== identity.sessionKind) {
-    throw new Error(`${input.toolName}: execution Session kind does not match the projected worker.`)
+    throw new Error(`${input.toolName}: execution Session kind does not match the projected Task owner.`)
   }
   if (execution.message.agent !== identity.agentID || execution.message.author !== identity.agentID) {
-    throw new Error(`${input.toolName}: assistant message owner does not match the projected worker.`)
+    throw new Error(`${input.toolName}: assistant message owner does not match the projected Task owner.`)
   }
   if (execution.message.time.completed !== undefined || execution.part.state.status !== "running") {
     throw new Error(`${input.toolName}: persisted tool call is no longer the current running invocation.`)
   }
-  assertWorkerDescriptor(identity)
+  if (identity.identityKind === "projected-worker") assertWorkerDescriptor(identity)
   if (!contract.projectedRegistryToolIDs?.includes(input.toolName)) {
-    throw new Error(`${input.toolName}: tool is not present in the projected worker registry contract.`)
+    throw new Error(`${input.toolName}: tool is not present in the projected Task registry contract.`)
   }
   const projectDirectory = taskPrimaryProjectRoot(execution.taskID, { activeProjectID: execution.projectID })
   if (canonicalDirectory(contract.projectDirectory) !== canonicalDirectory(projectDirectory)) {
@@ -336,6 +344,7 @@ export async function resolveCoreProjectedWorkerToolExecutionScope(input: {
     kind: "task",
     projectID: execution.projectID,
     projectDirectory,
+    executionDirectory: canonicalDirectory(execution.session.directory),
     taskID: execution.taskID,
     taskRuntimeDirectory: ProjectRuntimePaths.taskRoot(projectDirectory, execution.taskID),
     sessionID: execution.sessionID,
@@ -343,16 +352,36 @@ export async function resolveCoreProjectedWorkerToolExecutionScope(input: {
     toolCallID: execution.toolCallID,
     toolPartID: execution.toolPartID,
     executionSurface: execution.executionSurface,
-    owner: Object.freeze({
-      kind: "projected-worker" as const,
-      expertSquadID: identity.expertSquadID,
-      packageRevision: identity.packageRevision,
-      agentID: identity.agentID,
-      projectionHash: identity.projectionHash,
-      workerTurnDescriptorID: identity.workerTurnDescriptorID,
-      workerTurnDescriptorHash: identity.workerTurnDescriptorHash,
-    }),
+    owner:
+      identity.identityKind === "projected-scheduler"
+        ? Object.freeze({
+            kind: "projected-scheduler" as const,
+            expertSquadID: identity.expertSquadID,
+            packageRevision: identity.packageRevision,
+            agentID: identity.agentID,
+            projectionHash: identity.projectionHash,
+          })
+        : Object.freeze({
+            kind: "projected-worker" as const,
+            expertSquadID: identity.expertSquadID,
+            packageRevision: identity.packageRevision,
+            agentID: identity.agentID,
+            projectionHash: identity.projectionHash,
+            workerTurnDescriptorID: identity.workerTurnDescriptorID,
+            workerTurnDescriptorHash: identity.workerTurnDescriptorHash,
+          }),
   })
+}
+
+export async function resolveCoreProjectedWorkerToolExecutionScope(input: {
+  options: unknown
+  toolName: string
+}): Promise<TaskToolExecutionScope> {
+  const scope = await resolveCoreProjectedTaskToolExecutionScope(input)
+  if (scope.owner.kind !== "projected-worker") {
+    throw new Error(`${input.toolName}: current Session is not a projected Task worker.`)
+  }
+  return scope
 }
 
 export async function resolvePackageTaskToolExecutionScope(input: {

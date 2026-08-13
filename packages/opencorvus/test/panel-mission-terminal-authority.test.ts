@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { reviewedTerminalLifecycleReferenceBeforePanelAction } from "@/agent/task-review-facts"
+import { recordEngineArtifact } from "@/engine/artifact"
 import { requireCurrentTerminalLifecycleReference, sameTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
 import { persistQueuedTask } from "@/engine/pipeline"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
@@ -15,6 +16,7 @@ import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { Tool } from "@/tool/tool"
 import { PanelTool } from "@/tool/panel"
+import { ArtifactSchemaLimits } from "@opencorvus-ai/plugin/artifact-catalog"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 const packageRevision = {
@@ -38,6 +40,136 @@ afterEach(async () => {
 })
 
 describe("Mission terminal Task authority", () => {
+  test("enumerates a terminal child catalog through Host-backed numbered pages", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const mission = await ensureMissionSession({
+          missionID: "mission-numbered-artifact-pages",
+          defaultCwd: project.path,
+          productPillar: "work",
+        })
+        const taskSession = await Session.create({ kind: "root", title: "Paged terminal child" })
+        const taskID = Identifier.ascending("task")
+        const now = Date.now()
+        persistQueuedTask({
+          taskID,
+          sessionID: taskSession.id,
+          now,
+          title: "Paged terminal child",
+          request: "Publish a multi-page evidence catalog",
+          productPillar: "work",
+          metadata: { actor: "mission", mission: { id: mission.missionID, session_id: mission.id } },
+          projectID: Instance.project.id,
+          queue: false,
+          packageRevision,
+          executionCapsuleBinding: await prepareTaskProcessBinding({
+            mode: "native",
+            taskID,
+            projectID: Instance.project.id,
+            rootDirectory: Instance.directory,
+            packageRevisionSHA256: packageRevision.packageDigest,
+            timeCreated: now,
+          }),
+        })
+        for (let index = 0; index < 33; index += 1) {
+          recordEngineArtifact({
+            taskID,
+            kind: "expert_output",
+            label: `Paged evidence ${index.toString().padStart(2, "0")}`,
+            payload: { index, accepted: true },
+            timeCreated: now + index,
+          })
+        }
+        await terminalTask(
+          requireTask(taskID),
+          { status: "completed", time_started: now, time_completed: now + 34 },
+          "Paged evidence published",
+        )
+        const terminalReference = requireCurrentTerminalLifecycleReference(taskID)
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "user",
+          author: "user",
+          time: { created: now + 35 },
+          agent: "mission",
+          model: { providerID: "openai", modelID: "gpt-5.6-terra" },
+        })
+        const caller = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "assistant",
+          author: "mission",
+          parentID: user.id,
+          time: { created: now + 36 },
+          agent: "mission",
+          providerID: "openai",
+          modelID: "gpt-5.6-terra",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        const panel = await PanelTool.init({ agentID: "mission" })
+        const context = {
+          sessionID: mission.id,
+          messageID: caller.id,
+          agent: "mission",
+          abort: new AbortController().signal,
+          messages: [],
+          executionSurface: Tool.executionSurface(["panel"], []),
+          extra: { surface: "panel" },
+          metadata() {},
+          async ask() {},
+        }
+        const entries: Array<{ locator: unknown }> = []
+        const visitedPageNumbers: number[] = []
+        let pageNumber: number | null = 1
+        while (pageNumber !== null) {
+          const result = await panel.execute(
+            {
+              action: "query_task_artifacts",
+              taskID,
+              terminal_lifecycle_reference: terminalReference,
+              page_number: pageNumber,
+              kinds: ["expert_output"],
+              sort: "oldest",
+            },
+            context,
+          )
+          expect(Buffer.byteLength(result.output, "utf8")).toBeLessThanOrEqual(
+            ArtifactSchemaLimits.structuredOutputBytes,
+          )
+          const page = JSON.parse(result.output) as {
+            taskID: string
+            terminal_lifecycle_reference: typeof terminalReference
+            page_number: number
+            next_page_number: number | null
+            entries: Array<{ locator: unknown }>
+            filtered_total: number
+            catalog_complete: boolean
+          }
+          expect(page).toEqual(
+            expect.objectContaining({
+              taskID,
+              terminal_lifecycle_reference: terminalReference,
+              page_number: pageNumber,
+              filtered_total: 33,
+              catalog_complete: true,
+            }),
+          )
+          visitedPageNumbers.push(page.page_number)
+          entries.push(...page.entries)
+          pageNumber = page.next_page_number
+        }
+        expect(visitedPageNumbers).toEqual([1, 2, 3])
+        expect(entries).toHaveLength(33)
+        expect(new Set(entries.map((entry) => JSON.stringify(entry.locator))).size).toBe(33)
+      },
+    })
+  }, 30_000)
+
   test("binds resume and completion authority from the canonical same-Turn query receipt", async () => {
     await using project = await memoryProject()
     await Instance.provide({
@@ -258,5 +390,5 @@ describe("Mission terminal Task authority", () => {
         }).toEqual({ reviewed: initialReference, current: currentReference, sameOccurrence: false })
       },
     })
-  }, 0)
+  }, 30_000)
 })

@@ -16,6 +16,7 @@ import {
   type ProtocolAggregate,
 } from "./schema"
 import { ProtocolStore } from "./store"
+import { requireMissionExecutionClosureEvent } from "@/mission/execution-closure"
 
 const SCHEDULER_MESSAGE_EVENT_TYPE = "scheduler.message"
 const ENDPOINT_PREFIX = "scheduler-endpoint:"
@@ -474,6 +475,20 @@ function requireDeliveryResultOccurrence(
   result: z.infer<typeof ProtocolInboxDeliveryResult>,
 ) {
   if (result.kind === "dead_letter") return
+  if (result.kind === "mission_closed") {
+    const closure = requireMissionExecutionClosureEvent(result.closure_event_id)
+    if (
+      inbox.actor !== "session" ||
+      closure.sessionID !== inbox.actor_id ||
+      (closure.state !== "closing" && closure.state !== "closed")
+    ) {
+      throw new SchedulerMessageConflictError({
+        message: `Scheduler inbox ${inbox.id} mission_closed result does not name an active closure for its recipient Mission Session.`,
+        eventID: inbox.envelope_id,
+      })
+    }
+    return
+  }
   if (result.kind === "session_wake") {
     const message = db
       .select({ id: MessageTable.id, data: MessageTable.data })

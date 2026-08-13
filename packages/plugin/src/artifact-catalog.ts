@@ -182,6 +182,42 @@ export const CrossTaskArtifactImportListSchema = z
     }
   })
 
+export const CrossTaskArtifactSourceSchema = z.discriminatedUnion("authority", [
+  z
+    .object({
+      authority: z.literal("completion_decision"),
+      source_task_id: ArtifactIdentifierSchema,
+    })
+    .strict(),
+  z
+    .object({
+      authority: z.literal("terminal_lifecycle"),
+      source_task_id: ArtifactIdentifierSchema,
+      locator: ArtifactReadLocatorSchema,
+    })
+    .strict(),
+])
+
+export const CrossTaskArtifactSourceListSchema = z
+  .array(CrossTaskArtifactSourceSchema)
+  .max(ArtifactSchemaLimits.filterValues)
+  .superRefine((sources, context) => {
+    const identities = new Set<string>()
+    for (const [index, source] of sources.entries()) {
+      const identity = `${source.authority}\u0000${source.source_task_id}\u0000${
+        source.authority === "terminal_lifecycle" ? JSON.stringify(source.locator) : ""
+      }`
+      if (identities.has(identity)) {
+        context.addIssue({
+          code: "custom",
+          path: [index],
+          message: "cross-Task Artifact sources must be unique exact authorities",
+        })
+      }
+      identities.add(identity)
+    }
+  })
+
 export const EngineArtifactImportLineageSchema = z
   .object({
     source_task_id: ArtifactIdentifierSchema,
@@ -285,7 +321,7 @@ export const ArtifactCatalogVersionSchema = z.discriminatedUnion("state", [
 export const ArtifactCatalogEntrySchema = z
   .object({
     source: ArtifactCatalogSourceSchema,
-    locator: ArtifactLocatorSchema,
+    locator: ArtifactReadLocatorSchema,
     kind: ArtifactCatalogValueSchema,
     artifact_type: EngineArtifactTypeSchema.optional(),
     schema_diagnostic: z.string().min(1).max(ArtifactSchemaLimits.schemaDiagnosticLength).optional(),
@@ -313,6 +349,15 @@ export const ArtifactCatalogEntrySchema = z
         code: "custom",
         path: ["version"],
         message: "Engine entries must be current/historical and Task Artifact entries must be immutable",
+      })
+    }
+    if (
+      (entry.source === "engine_artifact") !== (entry.locator.source === "engine_artifact")
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["locator", "source"],
+        message: "Catalog entry source must match its exact locator authority",
       })
     }
     if (
@@ -742,6 +787,7 @@ export const EngineArtifactPublishResultSchema = z
 export type { ArtifactProducer } from "./artifact-producer"
 export type EngineArtifactLocator = z.infer<typeof EngineArtifactLocatorSchema>
 export type CrossTaskArtifactImport = z.infer<typeof CrossTaskArtifactImportSchema>
+export type CrossTaskArtifactSource = z.infer<typeof CrossTaskArtifactSourceSchema>
 export type EngineArtifactImportLineage = z.infer<typeof EngineArtifactImportLineageSchema>
 export type CrossTaskArtifactImportMapping = z.infer<typeof CrossTaskArtifactImportMappingSchema>
 export type TaskArtifactSnapshotLocator = z.infer<typeof TaskArtifactSnapshotLocatorSchema>

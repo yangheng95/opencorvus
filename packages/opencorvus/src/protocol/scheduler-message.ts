@@ -30,6 +30,10 @@ import {
 import { SchedulerEndpoint, SchedulerMessagePayload, type SchedulerMessageKind } from "./schema"
 import { installSchedulerMessageDrainSignal, signalSchedulerMessageDrain } from "./scheduler-drain-signal"
 import { RuntimeExecutionAdmissionClosedError } from "@/runtime/execution-settlement"
+import {
+  currentMissionExecutionClosure,
+  withMissionExecutionAdmission,
+} from "@/mission/execution-closure"
 
 const DELIVERY_LEASE_MS = 120_000
 const MAX_DELIVERY_ATTEMPTS = 5
@@ -168,56 +172,70 @@ async function drainMissionRecipient(sessionID: string): Promise<void> {
       const message = await sourceMessageText(delivery)
       const ids = schedulerTargetOccurrenceIdentity(delivery.id)
       await beforeMissionMaterializationForTest?.()
-      const receipt = await SessionWake.wakeWithReceipt({
-        sessionID,
-        messageID: ids.messageID,
-        textPartID: ids.textPartID,
-        controlID: ids.controlID,
-        author: "orchestrator",
-        agent: "mission",
-        surface: "panel",
-        reason: {
-          source: "scheduler.message",
-          eventID: delivery.event.id,
-          inboxID: delivery.id,
-          threadID: delivery.message.thread_id,
-          messageKind: delivery.message.message_kind,
-          sourceEndpoint: delivery.source,
-          targetEndpoint: delivery.target,
-          ...(delivery.event.replyTo ? { replyTo: delivery.event.replyTo } : {}),
-        },
-        prompt: renderSchedulerParticipantMessage({
-          eventID: delivery.event.id,
-          kind: delivery.message.message_kind,
-          source: delivery.source,
-          threadID: delivery.message.thread_id,
-          replyTo: delivery.event.replyTo,
-          subject: delivery.message.subject,
-          message,
-        }),
-        commitBundle: (userMessage) => {
-          if (userMessage.id !== ids.messageID) {
-            throw new Error(`Scheduler inbox ${delivery.id} materialized an unexpected Mission Message.`)
-          }
-          Database.use((db) => {
-            const currentBody = schedulerSourceBodyInTransaction(db, {
-              source: delivery.source,
-              sourceMessageID: delivery.message.source_message_id,
-              sourcePartID: delivery.message.source_part_id,
-              sourceTerminalEventID: delivery.message.source_terminal_event_id,
-            })
-            const currentDigest = createHash("sha256").update(currentBody).digest("hex")
-            if (currentDigest !== delivery.message.source_body_sha256 || currentBody !== message) {
-              throw new Error(`Scheduler event ${delivery.event.id} source body changed before Mission materialization.`)
-            }
+      const receipt = await withMissionExecutionAdmission(sessionID, async () => {
+        const closure = currentMissionExecutionClosure(sessionID)
+        if (closure?.state === "closing" || closure?.state === "closed") {
+          Database.immediateTransaction((db) =>
             settleSchedulerDeliveryInTransaction(db, {
               inboxID: delivery.id,
               ownerID,
-              result: { kind: "session_wake", message_id: userMessage.id },
+              result: { kind: "mission_closed", closure_event_id: closure.eventID },
+            }),
+          )
+          return undefined
+        }
+        return SessionWake.wakeWithReceipt({
+          sessionID,
+          messageID: ids.messageID,
+          textPartID: ids.textPartID,
+          controlID: ids.controlID,
+          author: "orchestrator",
+          agent: "mission",
+          surface: "panel",
+          reason: {
+            source: "scheduler.message",
+            eventID: delivery.event.id,
+            inboxID: delivery.id,
+            threadID: delivery.message.thread_id,
+            messageKind: delivery.message.message_kind,
+            sourceEndpoint: delivery.source,
+            targetEndpoint: delivery.target,
+            ...(delivery.event.replyTo ? { replyTo: delivery.event.replyTo } : {}),
+          },
+          prompt: renderSchedulerParticipantMessage({
+            eventID: delivery.event.id,
+            kind: delivery.message.message_kind,
+            source: delivery.source,
+            threadID: delivery.message.thread_id,
+            replyTo: delivery.event.replyTo,
+            subject: delivery.message.subject,
+            message,
+          }),
+          commitBundle: (userMessage) => {
+            if (userMessage.id !== ids.messageID) {
+              throw new Error(`Scheduler inbox ${delivery.id} materialized an unexpected Mission Message.`)
+            }
+            Database.use((db) => {
+              const currentBody = schedulerSourceBodyInTransaction(db, {
+                source: delivery.source,
+                sourceMessageID: delivery.message.source_message_id,
+                sourcePartID: delivery.message.source_part_id,
+                sourceTerminalEventID: delivery.message.source_terminal_event_id,
+              })
+              const currentDigest = createHash("sha256").update(currentBody).digest("hex")
+              if (currentDigest !== delivery.message.source_body_sha256 || currentBody !== message) {
+                throw new Error(`Scheduler event ${delivery.event.id} source body changed before Mission materialization.`)
+              }
+              settleSchedulerDeliveryInTransaction(db, {
+                inboxID: delivery.id,
+                ownerID,
+                result: { kind: "session_wake", message_id: userMessage.id },
+              })
             })
-          })
-        },
+          },
+        })
       })
+      if (!receipt) continue
       await receipt.completion
     } catch (error) {
       const current = requireSchedulerDelivery(claimed.id)

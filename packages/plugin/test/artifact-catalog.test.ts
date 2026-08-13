@@ -17,6 +17,7 @@ import {
   ArtifactSearchPageSchema,
   ArtifactSearchTransportPageSchema,
   ArtifactSearchWithoutLimitSchema,
+  CrossTaskArtifactSourceListSchema,
   EngineArtifactEnvelopeSchema,
   EngineArtifactLocatorSchema,
   EngineArtifactPublishInputSchema,
@@ -182,6 +183,20 @@ describe("EvidenceLocator", () => {
     expect(schema.properties?.session_id?.description).toContain("Exact producing Session ID")
     expect(schema.properties?.session_id?.description).toContain("do not substitute the current caller Session")
     expect(schema.properties?.message_id?.description).toContain("stored in the paired session_id")
+  })
+})
+
+describe("CrossTaskArtifactSource", () => {
+  test("parses completed delivery authority without copied locators and terminal recovery with one exact locator", () => {
+    expect(
+      CrossTaskArtifactSourceListSchema.parse([
+        { authority: "completion_decision", source_task_id: "completed-task" },
+        { authority: "terminal_lifecycle", source_task_id: "failed-task", locator: engineLocator },
+      ]),
+    ).toEqual([
+      { authority: "completion_decision", source_task_id: "completed-task" },
+      { authority: "terminal_lifecycle", source_task_id: "failed-task", locator: engineLocator },
+    ])
   })
 })
 
@@ -398,6 +413,14 @@ describe("Artifact schema upper bounds", () => {
       label: maximumLabel,
       schema_diagnostic: maximumDiagnostic,
       import_source_task_id: maximumIdentifier,
+    })
+    accepts(ArtifactCatalogEntrySchema, {
+      ...catalogEntry,
+      source: "task_artifact",
+      locator: { source: "task_artifact_resource", ref: resource },
+      kind: "task_artifact_resource",
+      artifact_type: undefined,
+      version: { state: "immutable", publication_sequence: 1 },
     })
     rejects(ArtifactCatalogEntrySchema, { ...catalogEntry, kind: `${maximumCatalogValue}k` })
     rejects(ArtifactCatalogEntrySchema, { ...catalogEntry, label: `${maximumLabel}l` })

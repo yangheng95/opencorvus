@@ -84,22 +84,39 @@ export interface StreamActivityOptions {
  * park `return()` on the same network read as `next()`, and awaiting it would
  * turn a completed cancellation back into an indefinitely pending one.
  */
+const STREAM_EVENT_LOOP_YIELD_INTERVAL = 256
+
+function yieldToEventLoop(): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, 0))
+}
+
 export async function* abortableIterable<T>(source: AsyncIterable<T>, signal: AbortSignal): AsyncGenerator<T> {
   const iter = source[Symbol.asyncIterator]()
+  let chunksSinceEventLoopYield = 0
   try {
     while (true) {
       if (signal.aborted) throw signal.reason
       let onAbort: (() => void) | null = null
+      let result: IteratorResult<T>
       const abortPromise = new Promise<never>((_, reject) => {
         onAbort = () => reject(signal.reason)
         signal.addEventListener("abort", onAbort, { once: true })
       })
       try {
-        const result = await Promise.race([iter.next(), abortPromise])
-        if (result.done) return
-        yield result.value
+        result = await Promise.race([iter.next(), abortPromise])
       } finally {
         if (onAbort) signal.removeEventListener("abort", onAbort)
+      }
+      if (result.done) return
+      yield result.value
+
+      chunksSinceEventLoopYield += 1
+      if (chunksSinceEventLoopYield >= STREAM_EVENT_LOOP_YIELD_INTERVAL) {
+        chunksSinceEventLoopYield = 0
+        // Some provider/SDK iterators can resolve next() immediately forever
+        // while emitting only non-semantic chunks. Promise/microtask fairness
+        // alone cannot let timer-backed idle and cancellation authorities run.
+        await yieldToEventLoop()
       }
     }
   } finally {

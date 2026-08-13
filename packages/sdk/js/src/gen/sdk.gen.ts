@@ -292,8 +292,6 @@ import type {
   MailboxDeleteManyErrors,
   MailboxDeleteManyResponses,
   MailboxDeleteResponses,
-  MailboxEventsResponse,
-  MailboxEventsResponses,
   MailboxListErrors,
   MailboxListResponses,
   MailboxReadAllResponses,
@@ -689,34 +687,36 @@ export class App extends HeyApiClient {
   }
 
   /**
-   * Write log
+   * Write log batch
    *
-   * Write a log entry to the server logs with specified level and metadata.
+   * Write one bounded ordered batch of log entries to the server logs.
    */
   public log<ThrowOnError extends boolean = false>(
     parameters: {
-      extra?: {
-        [key: string]: unknown
-      }
-      level: "debug" | "info" | "error" | "warn"
-      message: string
-      service: string
+      entries: Array<{
+        /**
+         * Additional metadata for the log entry
+         */
+        extra?: {
+          [key: string]: unknown
+        }
+        /**
+         * Log level
+         */
+        level: "debug" | "info" | "error" | "warn"
+        /**
+         * Log message
+         */
+        message: string
+        /**
+         * Service name for the log entry
+         */
+        service: string
+      }>
     },
     options?: Options<never, ThrowOnError>,
   ) {
-    const params = buildClientParams(
-      [parameters],
-      [
-        {
-          args: [
-            { in: "body", key: "extra" },
-            { in: "body", key: "level" },
-            { in: "body", key: "message" },
-            { in: "body", key: "service" },
-          ],
-        },
-      ],
-    )
+    const params = buildClientParams([parameters], [{ args: [{ in: "body", key: "entries" }] }])
     return (options?.client ?? this.client).post<AppLogResponses, AppLogErrors, ThrowOnError>({
       url: "/log",
       ...options,
@@ -4596,10 +4596,6 @@ export class Control extends HeyApiClient {
              */
             created_before_ms?: number
             /**
-             * Opaque cursor returned by the preceding page; omit it for the first page.
-             */
-            cursor?: string
-            /**
              * Optional exact logical Goal-subject filter.
              */
             goal_ids?: Array<string>
@@ -4619,6 +4615,10 @@ export class Control extends HeyApiClient {
              * Optional exact resource media-type filter.
              */
             media_types?: Array<string>
+            /**
+             * One-based page number. Start at 1, then use the preceding response's next_page_number.
+             */
+            page_number: number
             /**
              * Optional exact projected producer Agent-identity filter. Core-owned typed projections never match this filter; select those by label, kind, artifact type, or Goal.
              */
@@ -4650,6 +4650,16 @@ export class Control extends HeyApiClient {
              * Source Task whose Artifact catalog should be enumerated.
              */
             taskID: string
+            /**
+             * Exact current terminal occurrence returned by panel.query_task for this source Task.
+             */
+            terminal_lifecycle_reference: {
+              terminalError?: string
+              terminalEventID: string
+              terminalReason?: "interrupted"
+              terminalStatus: "completed" | "failed" | "cancelled"
+              timeCompleted: number
+            }
             /**
              * Engine version scope at the frozen catalog revision. Task Artifact snapshots are immutable.
              */
@@ -6647,43 +6657,50 @@ export class Global2 extends HeyApiClient {
    */
   public create<ThrowOnError extends boolean = false>(
     parameters: {
-      artifactImports?: Array<{
-        locator:
-          | {
-              artifact_id: string
-              catalog_revision: number
-              expected_sha256: string
-              source: "engine_artifact"
-            }
-          | {
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              source: "task_artifact_snapshot"
-            }
-          | {
-              ref: {
-                bytes: number
-                media_type: string
-                path: string
-                sha256: string
-                snapshot: {
-                  manifest_sha256: string
-                  project_id: string
-                  schema_version: 2
-                  snapshot_id: string
-                  task_id: string
+      artifactSources?: Array<
+        | {
+            authority: "completion_decision"
+            source_task_id: string
+          }
+        | {
+            authority: "terminal_lifecycle"
+            locator:
+              | {
+                  artifact_id: string
+                  catalog_revision: number
+                  expected_sha256: string
+                  source: "engine_artifact"
                 }
-                tree: string
-              }
-              source: "task_artifact_resource"
-            }
-        source_task_id: string
-      }>
+              | {
+                  snapshot: {
+                    manifest_sha256: string
+                    project_id: string
+                    schema_version: 2
+                    snapshot_id: string
+                    task_id: string
+                  }
+                  source: "task_artifact_snapshot"
+                }
+              | {
+                  ref: {
+                    bytes: number
+                    media_type: string
+                    path: string
+                    sha256: string
+                    snapshot: {
+                      manifest_sha256: string
+                      project_id: string
+                      schema_version: 2
+                      snapshot_id: string
+                      task_id: string
+                    }
+                    tree: string
+                  }
+                  source: "task_artifact_resource"
+                }
+            source_task_id: string
+          }
+      >
       attachments?: Array<
         | {
             filename?: string
@@ -6853,7 +6870,7 @@ export class Global2 extends HeyApiClient {
       [
         {
           args: [
-            { in: "body", key: "artifactImports" },
+            { in: "body", key: "artifactSources" },
             { in: "body", key: "attachments" },
             { in: "body", key: "budget" },
             { in: "body", key: "channelBinding" },
@@ -7164,43 +7181,50 @@ export class Task extends HeyApiClient {
     parameters: {
       query_directory?: string
       "init-git"?: boolean
-      artifactImports?: Array<{
-        locator:
-          | {
-              artifact_id: string
-              catalog_revision: number
-              expected_sha256: string
-              source: "engine_artifact"
-            }
-          | {
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              source: "task_artifact_snapshot"
-            }
-          | {
-              ref: {
-                bytes: number
-                media_type: string
-                path: string
-                sha256: string
-                snapshot: {
-                  manifest_sha256: string
-                  project_id: string
-                  schema_version: 2
-                  snapshot_id: string
-                  task_id: string
+      artifactSources?: Array<
+        | {
+            authority: "completion_decision"
+            source_task_id: string
+          }
+        | {
+            authority: "terminal_lifecycle"
+            locator:
+              | {
+                  artifact_id: string
+                  catalog_revision: number
+                  expected_sha256: string
+                  source: "engine_artifact"
                 }
-                tree: string
-              }
-              source: "task_artifact_resource"
-            }
-        source_task_id: string
-      }>
+              | {
+                  snapshot: {
+                    manifest_sha256: string
+                    project_id: string
+                    schema_version: 2
+                    snapshot_id: string
+                    task_id: string
+                  }
+                  source: "task_artifact_snapshot"
+                }
+              | {
+                  ref: {
+                    bytes: number
+                    media_type: string
+                    path: string
+                    sha256: string
+                    snapshot: {
+                      manifest_sha256: string
+                      project_id: string
+                      schema_version: 2
+                      snapshot_id: string
+                      task_id: string
+                    }
+                    tree: string
+                  }
+                  source: "task_artifact_resource"
+                }
+            source_task_id: string
+          }
+      >
       attachments?: Array<
         | {
             filename?: string
@@ -7376,7 +7400,7 @@ export class Task extends HeyApiClient {
               map: "directory",
             },
             { in: "query", key: "init-git" },
-            { in: "body", key: "artifactImports" },
+            { in: "body", key: "artifactSources" },
             { in: "body", key: "attachments" },
             { in: "body", key: "budget" },
             { in: "body", key: "channelBinding" },
@@ -8642,18 +8666,6 @@ export class Mailbox extends HeyApiClient {
       url: "/mailbox",
       ...options,
       ...params,
-    })
-  }
-
-  /**
-   * Subscribe to global mailbox changes
-   *
-   * Pure change-notification Server-Sent Events stream. Clients refetch /mailbox for the canonical projection.
-   */
-  public events<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError, MailboxEventsResponse>) {
-    return (options?.client ?? this.client).sse.get<MailboxEventsResponses, unknown, ThrowOnError>({
-      url: "/mailbox/events",
-      ...options,
     })
   }
 

@@ -1,5 +1,6 @@
 import {
   CrossTaskArtifactImportListSchema,
+  CrossTaskArtifactSourceListSchema,
   ArtifactConsumptionProvenanceSchema,
   ArtifactJSONValueSchema,
   EngineArtifactEnvelopeSchema,
@@ -8,6 +9,7 @@ import {
   type ArtifactJSONValue,
   type ArtifactReadLocator,
   type CrossTaskArtifactImport,
+  type CrossTaskArtifactSource,
   type CrossTaskArtifactImportMapping,
   type EngineArtifactLocator,
 } from "@opencorvus-ai/plugin/artifact-catalog"
@@ -25,9 +27,20 @@ import {
 } from "@/task-artifact/store"
 import { insertEngineArtifact } from "./artifact"
 import { deriveEngineArtifactCatalogMetadata, serializeEngineArtifactPayload } from "./artifact-catalog-metadata"
-import { EngineArtifactTable, type EngineArtifactKind, type EngineMetadata } from "./engine.sql"
+import { EngineArtifactTable, EngineTaskTable, type EngineArtifactKind, type EngineMetadata } from "./engine.sql"
 import { isTaskTerminal } from "./task-status"
 import { requireTask } from "./store"
+import { deriveTaskStatus } from "./task-status"
+import {
+  findTaskCompletionDecisionForTerminalTime,
+  findTaskCompletionDecisionForTerminalTimeInTransaction,
+} from "./completion-decision"
+import {
+  requireCurrentTerminalLifecycleReference,
+  sameTerminalLifecycleReference,
+  terminalLifecycleReferenceMatchesTaskRow,
+  type TerminalLifecycleReference,
+} from "./terminal-lifecycle-reference"
 
 export const CROSS_TASK_PLAIN_ENGINE_ARTIFACT_TYPE = "opencorvus/imported-engine-artifact"
 export const CROSS_TASK_TASK_ARTIFACT_SNAPSHOT_TYPE = "opencorvus/imported-task-artifact-snapshot"
@@ -45,7 +58,67 @@ export type PreparedCrossTaskArtifactImport = Readonly<{
   importedEnvelope: EngineMetadata
   sourceTaskID: string
   sourceLocator: CrossTaskArtifactImport["locator"]
+  sourceAuthority: CrossTaskArtifactSourceAuthority
 }>
+
+type CrossTaskArtifactSourceAuthority =
+  | Readonly<{
+      kind: "completion_decision"
+      timeCompleted: number
+      completionDecisionArtifactID: string
+    }>
+  | Readonly<{
+      kind: "terminal_lifecycle"
+      reference: TerminalLifecycleReference
+    }>
+
+export type ResolvedCrossTaskArtifactImport = CrossTaskArtifactImport &
+  Readonly<{ sourceAuthority: CrossTaskArtifactSourceAuthority }>
+
+export type CrossTaskArtifactSourceAuthorityReceipt = Readonly<{
+  sourceTaskID: string
+  sourceAuthority: CrossTaskArtifactSourceAuthority
+}>
+
+export type ResolvedCrossTaskArtifactSourceSet = Readonly<{
+  imports: readonly ResolvedCrossTaskArtifactImport[]
+  authorities: readonly CrossTaskArtifactSourceAuthorityReceipt[]
+}>
+
+export type PreparedCrossTaskArtifactSourceSet = Readonly<{
+  imports: readonly PreparedCrossTaskArtifactImport[]
+  authorities: readonly CrossTaskArtifactSourceAuthorityReceipt[]
+}>
+
+export class CrossTaskArtifactDeliveryAuthorityError extends Error {
+  override readonly name = "CrossTaskArtifactDeliveryAuthorityError"
+  readonly code = "CROSS_TASK_ARTIFACT_DELIVERY_AUTHORITY_REQUIRED"
+
+  constructor(
+    readonly sourceTaskID: string,
+    readonly requestedLocator: ArtifactReadLocator | null,
+    readonly allowedLocators: readonly ArtifactReadLocator[],
+  ) {
+    super(
+      `Cross-Task Artifact source ${sourceTaskID} is not the exact completion decision or one of its declared deliverables`,
+    )
+  }
+}
+
+export class CrossTaskArtifactSourceAuthorityError extends Error {
+  override readonly name = "CrossTaskArtifactSourceAuthorityError"
+  readonly code = "CROSS_TASK_ARTIFACT_SOURCE_AUTHORITY_INVALID"
+
+  constructor(
+    readonly sourceTaskID: string,
+    readonly requestedAuthority: CrossTaskArtifactSource["authority"],
+    readonly taskStatus: string,
+  ) {
+    super(
+      `Cross-Task Artifact source ${sourceTaskID} is ${taskStatus}; authority ${requestedAuthority} does not match its terminal lifecycle`,
+    )
+  }
+}
 
 type ExactSourceArtifact = Readonly<{
   sourceKind: string
@@ -140,6 +213,152 @@ export function requireMissionArtifactSourceAuthority(input: {
   if (!isTaskTerminal(sourceTask)) {
     throw new Error(`Cross-Task Artifact source ${input.sourceTaskID} is not terminal`)
   }
+}
+
+export function resolveCrossTaskArtifactSources(input: {
+  sources: readonly CrossTaskArtifactSource[]
+  projectID: string
+  importer: Pick<CrossTaskArtifactImporter, "missionID" | "sessionID">
+}): ResolvedCrossTaskArtifactSourceSet {
+  const sources = CrossTaskArtifactSourceListSchema.parse(input.sources)
+  const imports: ResolvedCrossTaskArtifactImport[] = []
+  const authorities: CrossTaskArtifactSourceAuthorityReceipt[] = []
+  for (const source of sources) {
+    const task = requireMissionTaskLineageAuthority({
+      sourceTaskID: source.source_task_id,
+      projectID: input.projectID,
+      importer: input.importer,
+    })
+    const status = deriveTaskStatus(task)
+    if (source.authority === "completion_decision") {
+      if (status !== "completed" || task.time_completed === null) {
+        throw new CrossTaskArtifactSourceAuthorityError(source.source_task_id, source.authority, status)
+      }
+      const decision = findTaskCompletionDecisionForTerminalTime({
+        taskID: source.source_task_id,
+        timeCompleted: task.time_completed,
+      })
+      if (!decision) {
+        throw new CrossTaskArtifactSourceAuthorityError(source.source_task_id, source.authority, status)
+      }
+      const sourceAuthority: CrossTaskArtifactSourceAuthority = {
+        kind: "completion_decision",
+        timeCompleted: task.time_completed,
+        completionDecisionArtifactID: decision.id,
+      }
+      authorities.push({ sourceTaskID: source.source_task_id, sourceAuthority })
+      imports.push(
+        ...decision.payload.deliverable_artifact_locators.map((locator) => ({
+          source_task_id: source.source_task_id,
+          locator,
+          sourceAuthority,
+        })),
+      )
+      continue
+    }
+    if (status !== "failed" && status !== "cancelled") {
+      throw new CrossTaskArtifactSourceAuthorityError(source.source_task_id, source.authority, status)
+    }
+    const sourceAuthority: CrossTaskArtifactSourceAuthority = {
+      kind: "terminal_lifecycle",
+      reference: requireCurrentTerminalLifecycleReference(source.source_task_id),
+    }
+    authorities.push({ sourceTaskID: source.source_task_id, sourceAuthority })
+    imports.push({
+      source_task_id: source.source_task_id,
+      locator: source.locator,
+      sourceAuthority,
+    })
+  }
+  CrossTaskArtifactImportListSchema.parse(
+    imports.map(({ source_task_id, locator }) => ({ source_task_id, locator })),
+  )
+  return Object.freeze({
+    imports: Object.freeze(
+      imports.toSorted(
+        (left, right) =>
+          left.source_task_id.localeCompare(right.source_task_id) ||
+          stableJSON(left.locator).localeCompare(stableJSON(right.locator)),
+      ),
+    ),
+    authorities: Object.freeze(authorities),
+  })
+}
+
+export function assertCrossTaskArtifactDeliveryAuthority(input: {
+  sourceTaskID: string
+  locator: ArtifactReadLocator
+}): CrossTaskArtifactSourceAuthority {
+  const sourceTask = requireTask(input.sourceTaskID)
+  const status = deriveTaskStatus(sourceTask)
+  if (status !== "completed") {
+    // Failed and cancelled Tasks intentionally have no CompletionDecision.
+    // Their current terminal lifecycle event plus the caller's exact immutable
+    // locator remain the recovery authority; the exact source read below still
+    // rejects missing, mutable, or mismatched revisions.
+    return {
+      kind: "terminal_lifecycle",
+      reference: requireCurrentTerminalLifecycleReference(input.sourceTaskID),
+    }
+  }
+  if (sourceTask.time_completed === null) {
+    throw new CrossTaskArtifactDeliveryAuthorityError(input.sourceTaskID, input.locator, [])
+  }
+  const decision = findTaskCompletionDecisionForTerminalTime({
+    taskID: input.sourceTaskID,
+    timeCompleted: sourceTask.time_completed,
+  })
+  if (!decision) {
+    throw new CrossTaskArtifactDeliveryAuthorityError(input.sourceTaskID, input.locator, [])
+  }
+  const allowedLocators: ArtifactReadLocator[] = [decision.locator, ...decision.payload.deliverable_artifact_locators]
+  if (!allowedLocators.some((locator) => stableJSON(locator) === stableJSON(input.locator))) {
+    throw new CrossTaskArtifactDeliveryAuthorityError(input.sourceTaskID, input.locator, allowedLocators)
+  }
+  return {
+    kind: "completion_decision",
+    timeCompleted: sourceTask.time_completed,
+    completionDecisionArtifactID: decision.id,
+  }
+}
+
+function assertCrossTaskArtifactSourceAuthorityCurrent(
+  db: Database.TxOrDb,
+  item: Readonly<{
+    sourceTaskID: string
+    sourceLocator: ArtifactReadLocator | null
+    sourceAuthority: CrossTaskArtifactSourceAuthority
+  }>,
+): void {
+  const task = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, item.sourceTaskID)).get()
+  if (!task) {
+    throw new CrossTaskArtifactDeliveryAuthorityError(item.sourceTaskID, item.sourceLocator, [])
+  }
+  if (item.sourceAuthority.kind === "completion_decision") {
+    const decision =
+      deriveTaskStatus(task) === "completed" && task.time_completed === item.sourceAuthority.timeCompleted
+        ? findTaskCompletionDecisionForTerminalTimeInTransaction(db, {
+            taskID: item.sourceTaskID,
+            timeCompleted: item.sourceAuthority.timeCompleted,
+          })
+        : undefined
+    if (decision?.id !== item.sourceAuthority.completionDecisionArtifactID) {
+      throw new CrossTaskArtifactDeliveryAuthorityError(item.sourceTaskID, item.sourceLocator, [])
+    }
+    return
+  }
+  const currentReference = terminalLifecycleReferenceMatchesTaskRow(item.sourceAuthority.reference, task)
+    ? requireCurrentTerminalLifecycleReference(item.sourceTaskID)
+    : undefined
+  if (!currentReference || !sameTerminalLifecycleReference(currentReference, item.sourceAuthority.reference)) {
+    throw new CrossTaskArtifactDeliveryAuthorityError(item.sourceTaskID, item.sourceLocator, [])
+  }
+}
+
+export function importsFromResolvedCrossTaskArtifactSources(
+  resolved: ResolvedCrossTaskArtifactSourceSet,
+): CrossTaskArtifactImport[] {
+  return resolved.imports.map(({ source_task_id, locator }) => ({ source_task_id, locator }))
 }
 
 function readExactEngineSourceArtifact(input: { sourceTaskID: string; locator: EngineArtifactLocator }): Readonly<{
@@ -276,14 +495,18 @@ function missionProducer(importer: CrossTaskArtifactImporter): ArtifactProducer 
   }
 }
 
-export async function prepareCrossTaskArtifactImports(input: {
-  imports: readonly CrossTaskArtifactImport[]
+async function prepareResolvedCrossTaskArtifactImports(input: {
+  imports: readonly ResolvedCrossTaskArtifactImport[]
   projectID: string
   targetProjectDirectory: string
   targetTaskID: string
   importer: CrossTaskArtifactImporter
 }): Promise<readonly PreparedCrossTaskArtifactImport[]> {
-  const imports = normalizedImportSet(input.imports)
+  const imports = input.imports.toSorted(
+    (left, right) =>
+      left.source_task_id.localeCompare(right.source_task_id) ||
+      stableJSON(left.locator).localeCompare(stableJSON(right.locator)),
+  )
   const prepared: PreparedCrossTaskArtifactImport[] = []
   for (const item of imports) {
     requireMissionArtifactSourceAuthority({
@@ -291,12 +514,20 @@ export async function prepareCrossTaskArtifactImports(input: {
       projectID: input.projectID,
       importer: input.importer,
     })
+    const sourceAuthority = item.sourceAuthority
+    Database.use((db) =>
+      assertCrossTaskArtifactSourceAuthorityCurrent(db, {
+        sourceTaskID: item.source_task_id,
+        sourceLocator: item.locator,
+        sourceAuthority,
+      }),
+    )
     const source = await readExactSourceArtifact({
       projectID: input.projectID,
       sourceTaskID: item.source_task_id,
       locator: item.locator,
     })
-    const sourceAuthority: TaskArtifactReadAuthority = {
+    const sourceReadAuthority: TaskArtifactReadAuthority = {
       projectID: input.projectID,
       projectDirectory: taskPrimaryProjectRoot(item.source_task_id, { activeProjectID: input.projectID }),
       taskID: item.source_task_id,
@@ -304,7 +535,7 @@ export async function prepareCrossTaskArtifactImports(input: {
     const publication =
       source.resources.length > 0
         ? await publishImportedTaskArtifactResources({
-            sourceAuthority,
+            sourceAuthority: sourceReadAuthority,
             targetProjectID: input.projectID,
             targetProjectDirectory: input.targetProjectDirectory,
             targetTaskID: input.targetTaskID,
@@ -335,10 +566,48 @@ export async function prepareCrossTaskArtifactImports(input: {
         importedEnvelope,
         sourceTaskID: item.source_task_id,
         sourceLocator: item.locator,
+        sourceAuthority,
       }),
     )
   }
   return Object.freeze(prepared)
+}
+
+export async function prepareCrossTaskArtifactImports(input: {
+  imports: readonly CrossTaskArtifactImport[]
+  projectID: string
+  targetProjectDirectory: string
+  targetTaskID: string
+  importer: CrossTaskArtifactImporter
+}): Promise<readonly PreparedCrossTaskArtifactImport[]> {
+  const imports = normalizedImportSet(input.imports).map((item) => ({
+    ...item,
+    sourceAuthority: assertCrossTaskArtifactDeliveryAuthority({
+      sourceTaskID: item.source_task_id,
+      locator: item.locator,
+    }),
+  }))
+  return prepareResolvedCrossTaskArtifactImports({ ...input, imports })
+}
+
+export async function prepareCrossTaskArtifactSourceImports(input: {
+  resolved: ResolvedCrossTaskArtifactSourceSet
+  projectID: string
+  targetProjectDirectory: string
+  targetTaskID: string
+  importer: CrossTaskArtifactImporter
+}): Promise<PreparedCrossTaskArtifactSourceSet> {
+  Database.use((db) => {
+    for (const authority of input.resolved.authorities) {
+      assertCrossTaskArtifactSourceAuthorityCurrent(db, {
+        sourceTaskID: authority.sourceTaskID,
+        sourceLocator: null,
+        sourceAuthority: authority.sourceAuthority,
+      })
+    }
+  })
+  const imports = await prepareResolvedCrossTaskArtifactImports({ ...input, imports: input.resolved.imports })
+  return Object.freeze({ imports, authorities: input.resolved.authorities })
 }
 
 export function persistPreparedCrossTaskArtifactImports(
@@ -346,10 +615,19 @@ export function persistPreparedCrossTaskArtifactImports(
   input: {
     targetTaskID: string
     prepared: readonly PreparedCrossTaskArtifactImport[]
+    authorities?: readonly CrossTaskArtifactSourceAuthorityReceipt[]
     timeCreated: number
   },
 ): void {
+  for (const authority of input.authorities ?? []) {
+    assertCrossTaskArtifactSourceAuthorityCurrent(db, {
+      sourceTaskID: authority.sourceTaskID,
+      sourceLocator: null,
+      sourceAuthority: authority.sourceAuthority,
+    })
+  }
   for (const item of input.prepared) {
+    assertCrossTaskArtifactSourceAuthorityCurrent(db, item)
     const id = insertEngineArtifact(db, {
       id: item.importedArtifactID,
       taskID: input.targetTaskID,

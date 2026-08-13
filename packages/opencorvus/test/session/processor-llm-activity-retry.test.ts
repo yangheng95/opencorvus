@@ -13,6 +13,7 @@ import { LLM } from "../../src/session/llm"
 import { MessageStore } from "../../src/session/message-store"
 import { Message } from "../../src/session/message"
 import { SessionProcessor } from "../../src/session/processor"
+import { abortableIterable } from "../../src/util/stream-activity"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 function providerModel(): Provider.Model {
@@ -84,15 +85,15 @@ describe("SessionProcessor semantic LLM activity retry", () => {
         const streamSpy = spyOn(LLM, "stream").mockImplementation(async (streamInput) => {
           attempts += 1
           if (attempts === 1) {
-            return {
-              fullStream: (async function* () {
+            const fullStream = (async function* () {
                 yield { type: "start" }
                 yield { type: "tool-input-start", id: "call_abandoned", toolName: "write" }
                 while (!streamInput.abort.aborted) {
-                  await new Promise((resolve) => setTimeout(resolve, 5))
                   yield { type: "tool-input-delta", id: "call_abandoned", delta: "" }
                 }
-              })(),
+              })()
+            return {
+              fullStream: abortableIterable(fullStream, streamInput.abort),
             } as Awaited<ReturnType<typeof LLM.stream>>
           }
           return {

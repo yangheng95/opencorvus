@@ -192,19 +192,24 @@ export function findTaskCompletionDecisionForTerminalTime(input: {
   taskID: string
   timeCompleted: number
 }): TaskCompletionDecisionArtifact | undefined {
-  const rows = Database.use((db) =>
-    db
-      .select()
-      .from(EngineArtifactTable)
-      .where(
-        and(
-          eq(EngineArtifactTable.task_id, input.taskID),
-          eq(EngineArtifactTable.kind, "task_completion_decision"),
-          eq(EngineArtifactTable.time_created, input.timeCompleted),
-        ),
-      )
-      .all(),
-  )
+  return Database.use((db) => findTaskCompletionDecisionForTerminalTimeInTransaction(db, input))
+}
+
+export function findTaskCompletionDecisionForTerminalTimeInTransaction(
+  db: Database.TxOrDb,
+  input: { taskID: string; timeCompleted: number },
+): TaskCompletionDecisionArtifact | undefined {
+  const rows = db
+    .select()
+    .from(EngineArtifactTable)
+    .where(
+      and(
+        eq(EngineArtifactTable.task_id, input.taskID),
+        eq(EngineArtifactTable.kind, "task_completion_decision"),
+        eq(EngineArtifactTable.time_created, input.timeCompleted),
+      ),
+    )
+    .all()
   if (rows.length > 1) {
     throw new Error(
       `Task ${input.taskID} has ${rows.length} completion decisions at terminal time ${input.timeCompleted}`,

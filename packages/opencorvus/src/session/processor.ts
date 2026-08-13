@@ -14,7 +14,6 @@ import { EffectiveConfig } from "@/config/effective"
 import { EngineConfig } from "@/engine/config"
 import { CompactionOverflow } from "./compaction-overflow"
 import { PermissionAuthority } from "@/permission/authority"
-import { abortableIterable } from "@/util/stream-activity"
 import {
   withLLMActivity,
   chunkHeartbeatKind,
@@ -42,6 +41,7 @@ import {
 } from "@/tool/result-attachment-materialization"
 import { Instance } from "@/project/instance"
 import { persistMessageSources } from "./source-persistence"
+import { normalizeToolResult } from "./tool-result-normalization"
 
 export namespace SessionProcessor {
   const DOOM_LOOP_THRESHOLD = 3
@@ -583,7 +583,8 @@ export namespace SessionProcessor {
               async (run) => {
                 const stream = await LLM.stream({ ...streamInput, abort: run.signal })
 
-                for await (const value of abortableIterable(stream.fullStream, run.signal)) {
+                // LLM.stream returns the canonical @/llm/api wrapped stream.
+                for await (const value of stream.fullStream) {
                   run.bump("first-byte")
                   await streamInput.stream?.onChunk?.({ chunk: value } as never)
                   const heartbeatKind = chunkHeartbeatKind(value as unknown as Record<string, unknown>)
@@ -797,17 +798,23 @@ export namespace SessionProcessor {
                       // matching tool-call after a recovery), so this is safe to
                       // run unconditionally before the match check.
                       run.resume(toolPauseOwner(value.toolCallId))
-                      const output = value.output as {
-                        output: string
-                        title: string
-                        metadata: Record<string, unknown>
-                        attachments?: Message.FilePart[]
-                        display?: unknown
-                        sources?: unknown
-                      }
+                      const output = normalizeToolResult(value.output)
                       const metadata = output.metadata
                       await completeToolPart(
-                        { toolCallId: value.toolCallId, input: value.input, output },
+                        {
+                          toolCallId: value.toolCallId,
+                          input: value.input,
+                          output: {
+                            output: output.output,
+                            title: output.title,
+                            metadata: output.metadata,
+                            ...(Array.isArray(output.attachments)
+                              ? { attachments: output.attachments as Message.FilePart[] }
+                              : {}),
+                            ...(output.display !== undefined ? { display: output.display } : {}),
+                            ...(output.sources !== undefined ? { sources: output.sources } : {}),
+                          },
+                        },
                         (partID) => trackCreatedPart(run.attempt, partID),
                       )
                       const control = toolResultControl(metadata)

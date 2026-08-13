@@ -549,10 +549,7 @@ export function reconcilePendingCoordinationRequestWakes(): number {
           sql`json_extract(${EngineArtifactTable.payload}, '$.status') = 'pending'`,
         ),
       )
-      .orderBy(
-        immutableArtifactEnqueueOrdinal,
-        EngineArtifactTable.id,
-      )
+      .orderBy(immutableArtifactEnqueueOrdinal, EngineArtifactTable.id)
       .all(),
   )
   let reconciled = 0
@@ -626,6 +623,12 @@ function persistQueuedOperatorWakeInTransaction(
   const infrastructureFactID = identity.infrastructureFactID
   const waitJobID = identity.waitJobID
   const lifecycleEventID = identity.lifecycleEventID
+  const cancellationAuthority = db
+    .select({ requestEventID: EngineTaskCancellationAuthorityTable.request_event_id })
+    .from(EngineTaskCancellationAuthorityTable)
+    .innerJoin(EngineTaskTable, eq(EngineTaskTable.id, EngineTaskCancellationAuthorityTable.task_id))
+    .where(and(eq(EngineTaskCancellationAuthorityTable.task_id, task.id), isNull(EngineTaskTable.time_completed)))
+    .get()
   if (messageID || requestID || recoveryFactID || infrastructureFactID || waitJobID || lifecycleEventID) {
     const exists = db
       .select({ id: EngineArtifactTable.id, label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
@@ -649,6 +652,23 @@ function persistQueuedOperatorWakeInTransaction(
       )
       .get()
     if (exists) {
+      if (cancellationAuthority && ["pending", "running", "delivery_failed"].includes(exists.label)) {
+        const ingress = QueuedTaskIngressSchema.parse(exists.payload)
+        patchEngineArtifact(db, {
+          id: exists.id,
+          label: "terminal_inapplicable",
+          payload: QueuedTaskIngressSchema.parse({
+            ...ingress,
+            delivery_result: {
+              status: "terminal_inapplicable",
+              reason: `Task cancellation ${cancellationAuthority.requestEventID} made this ingress inapplicable.`,
+              time_completed: now,
+            },
+          }),
+          timeUpdated: now,
+        })
+        return exists.id
+      }
       if (exists.label === "delivery_failed") {
         const ingress = QueuedTaskIngressSchema.parse(exists.payload)
         if (canRetryTerminalIngressInCurrentRuntime(ingress)) {
@@ -719,11 +739,20 @@ function persistQueuedOperatorWakeInTransaction(
     ...(instance
       ? { queued_by_instance_directory: instance.directory, queued_by_project_id: instance.project.id }
       : {}),
+    ...(cancellationAuthority
+      ? {
+          delivery_result: {
+            status: "terminal_inapplicable",
+            reason: `Task cancellation ${cancellationAuthority.requestEventID} made this ingress inapplicable.`,
+            time_completed: now,
+          },
+        }
+      : {}),
   })
   return insertEngineArtifact(db, {
     taskID: task.id,
     kind: "queued_operator_wake",
-    label: "pending",
+    label: cancellationAuthority ? "terminal_inapplicable" : "pending",
     payload,
     timeCreated: now,
   })
@@ -840,6 +869,22 @@ export function persistQueuedTaskWaitWakeInTransaction(
 export const TestHooks = {
   reconcileHistoricalNonTailFailedIngress(taskID: string, wakeID: string): boolean {
     return reconcileHistoricalNonTailFailedIngress(taskID, wakeID)
+  },
+  taskLoopExitProjection(error: unknown) {
+    const exit = classifyTaskLoopExit(error)
+    return exit.kind === "cancelled"
+      ? {
+          kind: exit.kind,
+          source: exit.error.origin.source,
+          requestID: exit.error.origin.requestID,
+        }
+      : { kind: exit.kind, errorName: exit.error.name, message: exit.error.message }
+  },
+  startQueuedWake(wakeID: string): boolean {
+    return markQueuedOperatorWakeRunning(wakeID)
+  },
+  completeQueuedWake(wakeID: string, assistantMessageID: string): void {
+    markQueuedOperatorWakeDrained({ artifactID: wakeID, assistantMessageID })
   },
   taskLoopLaunchAcceptanceAttempts(): number {
     return taskLoopLaunchAcceptanceAttemptsForTest
@@ -1134,10 +1179,7 @@ function findQueuedOperatorWakeHead(taskID: string): QueuedOperatorWakeHead | un
           sql`${EngineArtifactTable.label} IN ('pending', 'running', 'delivery_failed')`,
         ),
       )
-      .orderBy(
-        immutableArtifactEnqueueOrdinal,
-        EngineArtifactTable.id,
-      )
+      .orderBy(immutableArtifactEnqueueOrdinal, EngineArtifactTable.id)
       .get(),
   )
   if (!row) return undefined
@@ -1196,6 +1238,43 @@ function findQueuedOperatorWakeByID(taskID: string, artifactID: string) {
   )
   if (!row) return undefined
   return { ...row, ingress: QueuedTaskIngressSchema.parse(row.payload) }
+}
+
+export function dispatchInfrastructureFailureWakeDisposition(input: {
+  taskID: string
+  infrastructureFactID: string
+}): "pending" | "running" | "drained" | "delivery_failed" | "terminal_inapplicable" {
+  const rows = Database.use((db) =>
+    db
+      .select({ label: EngineArtifactTable.label })
+      .from(EngineArtifactTable)
+      .where(
+        and(
+          eq(EngineArtifactTable.task_id, input.taskID),
+          eq(EngineArtifactTable.kind, "queued_operator_wake"),
+          sql`json_extract(${EngineArtifactTable.payload}, '$.infrastructure_fact_id') = ${input.infrastructureFactID}`,
+        ),
+      )
+      .all(),
+  )
+  if (rows.length !== 1) {
+    throw new Error(
+      `Task ${input.taskID} infrastructure fact ${input.infrastructureFactID} has ${rows.length} durable wake receipts`,
+    )
+  }
+  const label = rows[0]!.label
+  if (
+    label !== "pending" &&
+    label !== "running" &&
+    label !== "drained" &&
+    label !== "delivery_failed" &&
+    label !== "terminal_inapplicable"
+  ) {
+    throw new Error(
+      `Task ${input.taskID} infrastructure fact ${input.infrastructureFactID} has unsupported wake disposition ${label}`,
+    )
+  }
+  return label
 }
 
 function reconcileHistoricalNonTailFailedIngress(taskID: string, wakeID: string): boolean {
@@ -1262,10 +1341,7 @@ function reconcileHistoricalNonTailFailedIngress(taskID: string, wakeID: string)
           sql`${EngineArtifactTable.label} IN ('pending', 'running', 'delivery_failed')`,
         ),
       )
-      .orderBy(
-        immutableArtifactEnqueueOrdinal,
-        EngineArtifactTable.id,
-      )
+      .orderBy(immutableArtifactEnqueueOrdinal, EngineArtifactTable.id)
       .get()
     if (head?.id !== wakeID || head.label !== "delivery_failed") return false
     const activeDelivery = db
@@ -1536,7 +1612,7 @@ function markQueuedOperatorWakeDrained(input: { artifactID: string; assistantMes
       .where(and(eq(EngineArtifactTable.id, input.artifactID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
       .get()
     if (!row) throw new Error(`Queued operator ingress ${input.artifactID} disappeared before settlement`)
-    if (row.label === "drained") return
+    if (["drained", "terminal_inapplicable"].includes(row.label)) return
     if (row.label !== "running") {
       throw new Error(`Queued operator ingress ${input.artifactID} cannot settle from ${row.label}`)
     }
@@ -1556,8 +1632,8 @@ function markQueuedOperatorWakeDrained(input: { artifactID: string; assistantMes
   })
 }
 
-function markQueuedOperatorWakeRunning(artifactID: string): void {
-  Database.immediateTransaction((db) => {
+function markQueuedOperatorWakeRunning(artifactID: string): boolean {
+  return Database.immediateTransaction((db) => {
     const updated = updateEngineArtifactWhereReturning(db, {
       where: and(
         eq(EngineArtifactTable.id, artifactID),
@@ -1567,14 +1643,15 @@ function markQueuedOperatorWakeRunning(artifactID: string): void {
       kind: "queued_operator_wake",
       label: "running",
     })
-    if (updated) return
+    if (updated) return true
     const current = db
       .select({ label: EngineArtifactTable.label })
       .from(EngineArtifactTable)
       .where(and(eq(EngineArtifactTable.id, artifactID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
       .get()
     if (!current) throw new Error(`Queued operator ingress ${artifactID} disappeared before execution`)
-    if (current.label === "running") return
+    if (current.label === "running") return true
+    if (current.label === "terminal_inapplicable") return false
     throw new Error(`Queued operator ingress ${artifactID} cannot start from ${current.label}`)
   })
 }
@@ -1893,7 +1970,7 @@ function launchTaskLoop(
     rootSessionID: wake.rootSessionID,
     wakeID: wake.id,
     run: async (signal) => {
-      markQueuedOperatorWakeRunning(wake.id)
+      if (!markQueuedOperatorWakeRunning(wake.id)) return
       const result = await runWithIndependentProjectIdentity({
         directory,
         fn: async () => {
@@ -1922,13 +1999,24 @@ function launchTaskLoop(
       markQueuedOperatorWakeDrained({ artifactID: wake.id, assistantMessageID: finalMessageID })
     },
   }).catch(async (err) => {
-    const error = Database.normalizeError(err, "engine.queue.launchTaskLoop")
+    // Preserve the typed destructive-operation authority before database
+    // normalization rebuilds unknown failures as plain Error instances.
+    const exit = classifyTaskLoopExit(err)
+    if (exit.kind === "cancelled") {
+      log.info("task loop cancelled by typed execution authority", {
+        taskID: task.id,
+        wakeID: wake.id,
+        source: exit.error.origin.source,
+        requestID: exit.error.origin.requestID,
+      })
+      return
+    }
+    const error = exit.error
     log.error("task loop failed", {
       taskID: task.id,
       error: error instanceof Error ? error.message : String(error),
       errorName: error instanceof Error ? error.name : undefined,
     })
-    if (isExecutionCancellationError(error)) return
     // The delivery attempt is physically over. Persist the exact failure
     // before the completion hook applies the bounded retry reserved for
     // exact terminal-lifecycle or dispatch-infrastructure delivery identities.
@@ -1956,6 +2044,16 @@ function launchTaskLoop(
       },
     })
   })
+}
+
+function classifyTaskLoopExit(
+  error: unknown,
+):
+  | { kind: "cancelled"; error: import("@/session/prompt/cancellation").ExecutionCancellationError }
+  | { kind: "failed"; error: Error } {
+  if (isExecutionCancellationError(error)) return { kind: "cancelled", error }
+  const normalized = Database.normalizeError(error, "engine.queue.launchTaskLoop")
+  return { kind: "failed", error: normalized instanceof Error ? normalized : new Error(String(normalized)) }
 }
 
 /**
@@ -3687,6 +3785,9 @@ export async function dispatchTaskLoop(input: DispatchTaskLoopInput): Promise<Di
   const task = findTask(input.taskID)
   if (!task) throw new TaskQueueError(`Task ${input.taskID} does not exist`, "task_not_found", input.taskID)
   const persistedWakeID = enqueueTaskEvent(task, OrchestratorEventSchema.parse(input.event ?? { note: "Task wake" }))
+  if (findQueuedOperatorWakeByID(task.id, persistedWakeID)?.label === "terminal_inapplicable") {
+    return "ignored"
+  }
   if (isTaskTerminal(task) && findQueuedOperatorWakeByID(task.id, persistedWakeID)?.label === "delivery_failed") {
     return "ignored"
   }

@@ -30,6 +30,7 @@ import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { EvidenceLocatorListSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 import type { EvidenceLocator } from "@opencorvus-ai/plugin/artifact-catalog"
 import { WorkerTurnSettlementError } from "@/agent/runner"
+import { taskCancellationAuthorityExecutionError } from "@/engine/cancellation-projection"
 import { exactEngineArtifactLocator } from "@/artifact-catalog"
 import { WorkflowNodeOccurrenceConflictError } from "@/engine/workflow-node-occurrence"
 import { TaskWorkflowBindingConflictError } from "@/engine/workflow-binding-facts"
@@ -501,6 +502,8 @@ export function createDispatchAgentTool(input: {
       if (!projectedAgent || !execute) {
         throw new Error(`dispatch_agent target ${target} lost its construction-validated runtime binding`)
       }
+      const cancellation = taskCancellationAuthorityExecutionError(input.taskID, `dispatch_agent ${target} preparation`)
+      if (cancellation) throw cancellation
       const exactWorkScope = ProjectedAgentWorkScopeSchema.parse(workScope)
       const exactWorkflow =
         coordinationActionID || continuationDispatchID
@@ -746,7 +749,16 @@ export function createDispatchAgentTool(input: {
                 },
               })
               if (result === "started" || result === "queued") return
-              throw new Error(`Detached dispatch infrastructure ingress is ${result} for ${completedSessionID}`)
+              const { dispatchInfrastructureFailureWakeDisposition } = await import("@/engine/queue")
+              const disposition = dispatchInfrastructureFailureWakeDisposition({
+                taskID: input.taskID,
+                infrastructureFactID,
+              })
+              // Task cancellation is an exact durable disposition, not a
+              // delivery failure. A delivery_failed receipt remains a failed
+              // detached pipeline and must stay visible to runtime settlement.
+              if (disposition === "terminal_inapplicable") return
+              throw new Error(`Detached dispatch infrastructure ingress is ${disposition} for ${completedSessionID}`)
             }
             const { reconcileTerminalAgentLifecycleDelivery } = await import("@/engine/queue")
             const result = await reconcileTerminalAgentLifecycleDelivery({

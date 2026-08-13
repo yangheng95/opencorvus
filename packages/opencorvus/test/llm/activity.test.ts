@@ -5,6 +5,7 @@ import {
   withLLMActivity,
   type LLMActivityEvent,
 } from "@/llm/activity"
+import { abortableIterable } from "@/util/stream-activity"
 
 const policy = {
   ...DefaultLLMActivityPolicy,
@@ -24,6 +25,41 @@ function waitForAbort(signal: AbortSignal): Promise<never> {
 }
 
 describe("LLM semantic activity", () => {
+  test("lets the idle authority preempt an immediately resolving no-op provider stream", async () => {
+    const events: LLMActivityEvent[] = []
+    let attempts = 0
+    const result = await withLLMActivity(
+      { sessionID: "session-hot-semantic-idle", provider: "test", model: "hot-semantic-idle" },
+      policy,
+      new AbortController().signal,
+      async (run) => {
+        attempts += 1
+        if (run.attempt > 0) {
+          run.bump("text-delta")
+          return "recovered"
+        }
+        run.bump("first-byte")
+        const immediatelyResolvingNoOpStream = (async function* () {
+          while (true) yield { type: "unknown-provider-keepalive" }
+        })()
+        for await (const _chunk of abortableIterable(immediatelyResolvingNoOpStream, run.signal)) {
+          // No semantic heartbeat: the idle authority must win.
+        }
+        throw new Error("hot provider stream ended without the idle authority")
+      },
+      (event) => events.push(event),
+    )
+
+    expect({ result, attempts }).toEqual({ result: "recovered", attempts: 2 })
+    expect(events.find((event) => event.type === "retry")).toMatchObject({
+      type: "retry",
+      attempt: 1,
+      cls: "idle",
+      lastHeartbeat: { kind: "first-byte" },
+    })
+    expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "done" })
+  })
+
   test("retries an attempt whose transport emits only repeated no-op first-byte observations", async () => {
     const events: LLMActivityEvent[] = []
     let attempts = 0

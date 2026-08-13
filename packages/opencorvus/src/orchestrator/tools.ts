@@ -28,6 +28,7 @@ import {
   createArtifactReadAiTool,
   createArtifactSearchAiTool,
   createArtifactSelectAiTool,
+  createArtifactSnapshotAiTool,
 } from "@/tool/artifact-catalog"
 import type { DecisionEntry } from "@/decision-log"
 import { assertTaskEvidenceLocators } from "@/engine/evidence-locator"
@@ -2655,6 +2656,7 @@ export function createOrchestratorTools(input: {
     artifact_search: createArtifactSearchAiTool(input.taskID),
     artifact_read: createArtifactReadAiTool(input.taskID),
     artifact_select: createArtifactSelectAiTool(input.taskID),
+    artifact_snapshot: createArtifactSnapshotAiTool(input.taskID),
     publish_interactive_artifact: createPublishInteractiveArtifactAiTool(),
     dispatch_agent: dispatchAgentTool,
     manage_task: manageTaskTool,

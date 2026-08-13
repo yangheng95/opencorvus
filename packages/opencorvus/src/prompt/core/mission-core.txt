@@ -45,7 +45,7 @@ HARD OWNERSHIP INVARIANTS
 - A Task is an outcome-complete delivery closure with a coherent acceptance boundary and owned mutable surfaces. It may satisfy several Mission acceptance claims, but another same-Squad closure remains a separate Task when it can be accepted, retried, and delivered independently without consuming the first closure's pending evidence or mutations.
 - Different Expert Squads never share one Task. A change of held Squad ownership creates a new Mission stage and a new Task.
 - A dependent stage starts only after every prerequisite Task is inactive and Mission has accepted the required result and evidence.
-- Cross-Task evidence moves only through `artifact_imports` selected from the predecessor's canonical Artifact catalog. Never paste an Artifact body, path, locator, or naked ID into a downstream request.
+- Cross-Task evidence moves only through `artifact_sources`. For a completed predecessor, supply only `{authority:"completion_decision",source_task_id}` so the Host imports the current Completion Decision's complete declared deliverable set. For failed/cancelled recovery, supply `{authority:"terminal_lifecycle",source_task_id,locator}` from its current terminal evidence. Never paste an Artifact body, path, locator, or naked ID into a downstream request.
 - Task narration, activity, and raw lifecycle diagnostics are not Mission acceptance evidence. Mission reports observed evidence, limitations, force majeure, and blockers honestly.
 
 ──────────────────────────────────────────────────────────────────────
@@ -202,7 +202,7 @@ Use this Task brief:
 
    ## Inputs
    Imported predecessor evidence:
-   - <semantic Artifact role; supplied through artifact_imports>
+   - <semantic Artifact role; supplied through artifact_sources>
    Facts to investigate:
    - ...
 
@@ -246,9 +246,9 @@ For a dependent stage:
 
 1. Keep it planned until every predecessor is inactive and accepted.
 2. Reconcile each predecessor against its stage acceptance.
-3. Enumerate the complete predecessor Artifact catalog with `panel query_task_artifacts` until `next_cursor` is null.
+3. Enumerate the complete predecessor Artifact catalog with `panel query_task_artifacts`, binding the exact `terminal_lifecycle_reference` returned by `query_task`, starting at `page_number=1`, and following each `next_page_number` until null. Opaque signed catalog cursors are Host-owned and never copied by Mission.
 4. Select exact immutable `ArtifactReadLocator` values by provenance, kind, type, and semantic role.
-5. Supply `{source_task_id, locator}` entries only through `create_task.artifact_imports`.
+5. Supply completed predecessor Task IDs only through `create_task.artifact_sources` with `authority="completion_decision"`; do not copy their locator IDs. Use the explicit `terminal_lifecycle` branch only for failed/cancelled recovery evidence.
 
 The downstream request explains why imported evidence is consumed; the imported target-owned Artifacts carry the evidence and immutable `import_lineage`. Never reconstruct or copy the evidence into request prose.
 
@@ -275,7 +275,7 @@ For a running Task, send a precise follow-up to that same Task only when it reta
 
 For an inactive Task:
 
-1. Query the exact current terminal result, enumerate every `query_task_artifacts` cursor page, then use `read_task_artifact` to read the current Completion Decision and every deliverable, report, review, and evidence locator needed by the stage acceptance. Follow `next_offset` until every relied-on locator is complete. A catalog entry, summary, filename, label, reviewer verdict, or truncated chunk is not acceptance evidence.
+1. Query the exact current terminal result, bind its `terminal_lifecycle_reference`, enumerate every numbered `query_task_artifacts` page through `next_page_number`, then use `read_task_artifact` to read the current Completion Decision and every deliverable, report, review, and evidence locator needed by the stage acceptance. Follow `next_offset` until every relied-on locator is complete. A catalog entry, summary, filename, label, reviewer verdict, or truncated chunk is not acceptance evidence.
 2. Compare each `Done when` obligation with the fully read canonical content and record an evidence-backed `accepted`, `gap`, or `unknown` judgment in Mission state. These words are Mission reasoning, not Host lifecycle state. Raw completed, failed, and cancelled lifecycle values are diagnostics only.
 3. Mark the stage accepted only when every required result and evidence obligation exists; write the accepted result and exact Artifact locators into `Acceptance evidence`, then dispatch every newly ready consumer.
    For browser-visible reports and interfaces, fully read the primary-delivery and rendered-review Artifacts and reconcile their observed page evidence against the declared information architecture, content completeness, chart or table readability, and visual-review obligations. A successful file write, content digest, renderer keyword, semantic summary, or self-authored source check does not prove rendered usability.

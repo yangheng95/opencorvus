@@ -18,6 +18,7 @@ import { insertEngineTask } from "./task"
 import { TaskGlobalProjectBindingError } from "./task-project-error"
 import {
   persistPreparedCrossTaskArtifactImports,
+  type CrossTaskArtifactSourceAuthorityReceipt,
   type PreparedCrossTaskArtifactImport,
 } from "./cross-task-artifact-import"
 import { insertTaskPackageRevisionBinding } from "./task-package-revision-binding"
@@ -82,6 +83,7 @@ export function persistQueuedTask(input: {
   projectID: string
   queue: boolean
   artifactImports?: readonly PreparedCrossTaskArtifactImport[]
+  artifactImportAuthorities?: readonly CrossTaskArtifactSourceAuthorityReceipt[]
   packageRevision: PromptProfileResolver.ResolvedPackageRevision
   creationExpectedPackageDigest?: string
   executionCapsuleBinding: TaskProcessBindingPayload
@@ -152,6 +154,7 @@ export function persistQueuedTask(input: {
     persistPreparedCrossTaskArtifactImports(db, {
       targetTaskID: input.taskID,
       prepared: input.artifactImports ?? [],
+      authorities: input.artifactImportAuthorities,
       timeCreated: input.now,
     })
     if (input.channelBinding) {

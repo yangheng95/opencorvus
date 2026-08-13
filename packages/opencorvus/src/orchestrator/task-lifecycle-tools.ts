@@ -13,17 +13,18 @@ import {
   insertPreparedTaskCompletionDecision,
   prepareTaskCompletionDecision,
 } from "@/engine/completion-decision"
-import {
-  ArtifactReadLocatorListSchema,
-  EvidenceLocatorListSchema,
-} from "@opencorvus-ai/plugin/artifact-catalog"
+import { ArtifactReadLocatorListSchema, EvidenceLocatorListSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 import { TaskCancellationReason } from "@opencorvus-ai/transport-protocol"
 import { Identifier } from "@/id/id"
-import {
-  selectedWorkflowBinding,
-  type WorkflowProjection,
-} from "@/engine/workflow-binding"
+import { selectedWorkflowBinding, type WorkflowProjection } from "@/engine/workflow-binding"
 import { TaskLifecycleRuntime } from "./task-lifecycle-runtime"
+import { assertTaskDispatchesSettledInTransaction } from "@/engine/dispatch-settlement"
+import { Database } from "@/storage/db"
+import {
+  acquireTaskCompletionClosureInTransaction,
+  assertTaskCompletionClosureOwnerInTransaction,
+  releaseTaskCompletionClosureInTransaction,
+} from "@/engine/task-completion-closure"
 
 export const CompleteTaskInputSchema = z
   .object({
@@ -33,16 +34,12 @@ export const CompleteTaskInputSchema = z
       .describe(
         "Orchestrator-owned task decision summary. Cite the evidence you used, including IntegrityReview or VisualReview artifacts when relevant.",
       ),
-    evidence_locators: EvidenceLocatorListSchema
-      .default([])
-      .describe(
-        "Exact typed durable evidence locators used for this completion decision. Empty is explicit and remains visible; it is not a host-side completion gate. Raw IDs and artifact:<id> display strings are invalid.",
-      ),
-    deliverable_artifact_locators: ArtifactReadLocatorListSchema
-      .default([])
-      .describe(
-        "Exact Artifact locators intentionally delivered to the user. Include every user-consumable report, document, screenshot set, structured result, or other published Artifact; use an empty list only when the Task produced no Artifact deliverable. Completion evidence belongs in evidence_locators instead.",
-      ),
+    evidence_locators: EvidenceLocatorListSchema.default([]).describe(
+      "Exact typed durable evidence locators used for this completion decision. Empty is explicit and remains visible; it is not a host-side completion gate. Raw IDs and artifact:<id> display strings are invalid.",
+    ),
+    deliverable_artifact_locators: ArtifactReadLocatorListSchema.default([]).describe(
+      "Exact Artifact locators intentionally delivered to the user. Include every user-consumable report, document, screenshot set, structured result, or other published Artifact; use an empty list only when the Task produced no Artifact deliverable. Completion evidence belongs in evidence_locators instead.",
+    ),
     accepted_delivery_slice_revision_ids: z
       .array(Identifier.schema("goal"))
       .default([])
@@ -118,59 +115,90 @@ export function createTaskLifecycleTools(input: {
         }
         const terminalSummary = summary.trim()
         if (!terminalSummary) return "complete_task rejected: summary is required."
-        const completedAt = allocateTaskCompletionDecisionTime(input.taskID)
-        const preparedDecision = await prepareTaskCompletionDecision({
-          taskID: input.taskID,
-          payload: {
-            orchestrator_session_id: execution.orchestratorSessionID,
-            orchestrator_message_id: execution.orchestratorMessageID,
-            tool_call_id: execution.toolCallID,
-            tool_part_id: execution.toolPartID,
-            evidence_locators,
-            deliverable_artifact_locators,
-            accepted_delivery_slice_revision_ids,
-            workflow_binding: selectedWorkflowBinding({
-              projection: input.workflowProjection,
-              workflowID: workflow_id,
-            }),
-            time_recorded: completedAt,
-          },
-          visibleToolName: execution.visibleToolName,
-        })
-        const terminalResult = await terminalTask(
-          task,
-          {
-            status: "completed",
-            error: null,
-            time_completed: completedAt,
-          },
-          terminalSummary,
-          {
-            projectDir: taskPrimaryProjectRoot(input.taskID, { activeProjectID: Instance.project.id }),
-            transactionEffect: (db, terminalTask) => {
-              insertPreparedTaskCompletionDecision(db, preparedDecision, terminalTask)
-            },
-          },
+        const closureOwnerID = `complete-task:${execution.toolPartID}`
+        Database.transaction((db) =>
+          acquireTaskCompletionClosureInTransaction(db, {
+            taskID: input.taskID,
+            ownerID: closureOwnerID,
+            orchestratorSessionID: execution.orchestratorSessionID,
+            orchestratorMessageID: execution.orchestratorMessageID,
+            toolCallID: execution.toolCallID,
+            toolPartID: execution.toolPartID,
+            timeAcquired: Date.now(),
+          }),
         )
-        const actualStatus = deriveTaskStatus(terminalResult)
-        const matchingDecision =
-          actualStatus === "completed" && terminalResult.time_completed === completedAt
-            ? findTaskCompletionDecisionForTerminalTime({
+        let completionCommitted = false
+        try {
+          const closureTask = requireTask(input.taskID)
+          const completedAt = allocateTaskCompletionDecisionTime(input.taskID)
+          const preparedDecision = await prepareTaskCompletionDecision({
+            taskID: input.taskID,
+            payload: {
+              orchestrator_session_id: execution.orchestratorSessionID,
+              orchestrator_message_id: execution.orchestratorMessageID,
+              tool_call_id: execution.toolCallID,
+              tool_part_id: execution.toolPartID,
+              evidence_locators,
+              deliverable_artifact_locators,
+              accepted_delivery_slice_revision_ids,
+              workflow_binding: selectedWorkflowBinding({
+                projection: input.workflowProjection,
+                workflowID: workflow_id,
+              }),
+              time_recorded: completedAt,
+            },
+            visibleToolName: execution.visibleToolName,
+          })
+          const terminalResult = await terminalTask(
+            closureTask,
+            {
+              status: "completed",
+              error: null,
+              time_completed: completedAt,
+            },
+            terminalSummary,
+            {
+              projectDir: taskPrimaryProjectRoot(input.taskID, { activeProjectID: Instance.project.id }),
+              transactionEffect: (db, terminalTask) => {
+                assertTaskCompletionClosureOwnerInTransaction(db, {
+                  taskID: input.taskID,
+                  ownerID: closureOwnerID,
+                })
+                assertTaskDispatchesSettledInTransaction(db, input.taskID)
+                insertPreparedTaskCompletionDecision(db, preparedDecision, terminalTask)
+              },
+            },
+          )
+          const actualStatus = deriveTaskStatus(terminalResult)
+          const matchingDecision =
+            actualStatus === "completed" && terminalResult.time_completed === completedAt
+              ? findTaskCompletionDecisionForTerminalTime({
+                  taskID: input.taskID,
+                  timeCompleted: completedAt,
+                })
+              : undefined
+          if (
+            actualStatus !== "completed" ||
+            terminalResult.time_completed !== completedAt ||
+            matchingDecision?.id !== preparedDecision.artifactID
+          ) {
+            return `complete_task rejected: task ${input.taskID} became terminal with status=${actualStatus}; this call recorded no completion decision.`
+          }
+          completionCommitted = true
+          return {
+            title: "Task Completed",
+            output: `Task ${input.taskID} completed: ${terminalSummary}.`,
+            metadata: { [TOOL_RESULT_PARK_METADATA_KEY]: true },
+          }
+        } finally {
+          if (!completionCommitted) {
+            Database.transaction((db) =>
+              releaseTaskCompletionClosureInTransaction(db, {
                 taskID: input.taskID,
-                timeCompleted: completedAt,
-              })
-            : undefined
-        if (
-          actualStatus !== "completed" ||
-          terminalResult.time_completed !== completedAt ||
-          matchingDecision?.id !== preparedDecision.artifactID
-        ) {
-          return `complete_task rejected: task ${input.taskID} became terminal with status=${actualStatus}; this call recorded no completion decision.`
-        }
-        return {
-          title: "Task Completed",
-          output: `Task ${input.taskID} completed: ${terminalSummary}.`,
-          metadata: { [TOOL_RESULT_PARK_METADATA_KEY]: true },
+                ownerID: closureOwnerID,
+              }),
+            )
+          }
         }
       },
     }),
