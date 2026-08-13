@@ -3,7 +3,13 @@ import { isDeepStrictEqual } from "node:util"
 import { Database, and, desc, eq, inArray, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { Event } from "./model"
-import { EngineArtifactTable, EngineGoalTable, EngineTaskTable, type EngineArtifactKind } from "./engine.sql"
+import {
+  EngineArtifactTable,
+  EngineBuildObservationCleanupTable,
+  EngineGoalTable,
+  EngineTaskTable,
+  type EngineArtifactKind,
+} from "./engine.sql"
 import type { ToolFailureCause } from "@/session/tool-failure-cause"
 import { createIntegrityReviewArtifactPayload } from "@/integrity/review-artifact"
 import type { IntegrityReview } from "@/integrity/team-schema"
@@ -1711,6 +1717,30 @@ export function persistTaskResearchPartial(input: {
   })
 }
 
+function insertOrReuseExactEngineArtifact(
+  db: Database.TxOrDb,
+  input: Parameters<typeof insertEngineArtifact>[1] & { id: string },
+): { id: string; inserted: boolean } {
+  const existing = db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, input.id)).get()
+  if (!existing) return { id: insertEngineArtifact(db, input), inserted: true }
+  assertEngineArtifactPayloadIdentity({
+    id: existing.id,
+    kind: existing.kind,
+    payload: existing.payload,
+    payloadSHA256: existing.payload_sha256,
+    payloadBytes: existing.payload_bytes,
+  })
+  if (
+    existing.task_id !== input.taskID ||
+    existing.kind !== input.kind ||
+    existing.label !== input.label ||
+    !isDeepStrictEqual(existing.payload, input.payload)
+  ) {
+    throw new Error(`Engine Artifact ${input.id} exact publication identity drift`)
+  }
+  return { id: existing.id, inserted: false }
+}
+
 export function recordTaskLevelBuildHostObservation(input: {
   id: string
   taskID: string
@@ -1748,12 +1778,7 @@ export function recordTaskLevelBuildHostObservation(input: {
     input.executionMode === "current_project" ? input.contributionCommitRef : input.publishedCommitRef
   const observationID = Identifier.schema("artifact").parse(input.id)
   const provenance = artifactConsumptionProvenance(input)
-  recordEngineArtifact({
-    id: observationID,
-    taskID: input.taskID,
-    kind: "build_host_observation",
-    label: "git-workspace",
-    payload: {
+  const payload = {
       task_id: input.taskID,
       session_id: input.sessionID ?? null,
       final_message_id: input.finalMessageID ?? null,
@@ -1766,8 +1791,35 @@ export function recordTaskLevelBuildHostObservation(input: {
       diff_head_ref: input.diffHeadRef ?? null,
       diffs: input.diffs ?? [],
       ...provenance,
-    },
-    timeCreated: now,
+    }
+  Database.transaction((db) => {
+    insertOrReuseExactEngineArtifact(db, {
+      id: observationID,
+      taskID: input.taskID,
+      kind: "build_host_observation",
+      label: "git-workspace",
+      payload,
+      timeCreated: now,
+    })
+    db
+      .update(EngineBuildObservationCleanupTable)
+      .set({ status: "retained", last_error: null, time_updated: now })
+      .where(
+        and(
+          eq(EngineBuildObservationCleanupTable.observation_id, observationID),
+          eq(EngineBuildObservationCleanupTable.task_id, input.taskID),
+          eq(EngineBuildObservationCleanupTable.status, "active"),
+        ),
+      )
+      .run()
+    const cleanup = db
+      .select({ status: EngineBuildObservationCleanupTable.status })
+      .from(EngineBuildObservationCleanupTable)
+      .where(eq(EngineBuildObservationCleanupTable.observation_id, observationID))
+      .get()
+    if (cleanup?.status !== "retained") {
+      throw new Error(`Build observation cleanup owner ${observationID} is missing for durable observation publication`)
+    }
   })
   return observationID
 }
@@ -1925,6 +1977,7 @@ export function recordOrchestratorStreamError(input: {
 /** Persist a Host/runtime/tooling failure without converting it into an
  * expert, Session, Goal, or Task business conclusion. */
 export type TaskInfrastructureErrorInput = {
+  id?: string
   taskID: string
   component: string
   operation: string
@@ -1937,7 +1990,9 @@ export type TaskInfrastructureErrorInput = {
 
 export function recordTaskInfrastructureErrorInTransaction(db: Database.TxOrDb, input: TaskInfrastructureErrorInput) {
   const now = input.now ?? Date.now()
-  const artifactID = insertEngineArtifact(db, {
+  const artifactID = input.id ?? Identifier.ascending("artifact")
+  const publication = insertOrReuseExactEngineArtifact(db, {
+    id: artifactID,
     taskID: input.taskID,
     kind: "task-infrastructure-error",
     label: input.component,
@@ -1960,33 +2015,35 @@ export function recordTaskInfrastructureErrorInTransaction(db: Database.TxOrDb, 
     .where(eq(EngineArtifactTable.id, artifactID))
     .get()
   if (!artifact) throw new Error(`Task infrastructure error Artifact ${artifactID} was not persisted`)
-  EngineProtocol.emitInTransaction(
-    Event.TaskInfrastructureFailed,
-    {
-      taskID: input.taskID,
-      component: input.component,
-      operation: input.operation,
-      summary: `${input.component} infrastructure failure`,
-      details: input.reason,
-      errorName: input.errorName,
-      evidenceLocators: [
-        {
-          source: "engine_artifact",
-          artifact_id: artifactID,
-          catalog_revision: artifact.catalogRevision,
-          expected_sha256: artifact.digest,
-        },
-      ],
-    },
-    {
-      taskID: input.taskID,
-      sessionID: input.sessionID,
-      source: "host",
-      target: "operator",
-      causationID: artifactID,
-      correlationID: artifactID,
-    },
-  )
+  if (publication.inserted) {
+    EngineProtocol.emitInTransaction(
+      Event.TaskInfrastructureFailed,
+      {
+        taskID: input.taskID,
+        component: input.component,
+        operation: input.operation,
+        summary: `${input.component} infrastructure failure`,
+        details: input.reason,
+        errorName: input.errorName,
+        evidenceLocators: [
+          {
+            source: "engine_artifact",
+            artifact_id: artifactID,
+            catalog_revision: artifact.catalogRevision,
+            expected_sha256: artifact.digest,
+          },
+        ],
+      },
+      {
+        taskID: input.taskID,
+        sessionID: input.sessionID,
+        source: "host",
+        target: "operator",
+        causationID: artifactID,
+        correlationID: artifactID,
+      },
+    )
+  }
   return artifactID
 }
 

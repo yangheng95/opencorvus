@@ -26,6 +26,7 @@ import { WorkbenchBriefSnapshotTable } from "../workbench/workbench.sql"
 import {
   EngineTaskTable,
   EngineTaskCancellationAuthorityTable,
+  EngineBuildObservationCleanupTable,
   EngineGoalTable,
   EngineInteractionRequestTable,
   EngineArtifactTable,
@@ -75,6 +76,7 @@ export {
   WorkbenchBriefSnapshotTable,
   EngineTaskTable,
   EngineTaskCancellationAuthorityTable,
+  EngineBuildObservationCleanupTable,
   EngineGoalTable,
   EngineInteractionRequestTable,
   EngineArtifactTable,
@@ -128,6 +130,7 @@ export const ApplicationSchema = {
   WorkbenchBriefSnapshotTable,
   EngineTaskTable,
   EngineTaskCancellationAuthorityTable,
+  EngineBuildObservationCleanupTable,
   EngineGoalTable,
   EngineInteractionRequestTable,
   EngineArtifactTable,

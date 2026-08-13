@@ -3,6 +3,9 @@ import type z from "zod"
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
 import { isAgentCoordinationHandoffResult } from "@/agent/runner"
 import { BuildAgent, buildUserPrompt } from "@/build/agent"
+import type { BuildTerminalFactWriter } from "@/build/terminal-fact-publication"
+import type { settleBuildObservationCleanup } from "@/engine/build-observation-cleanup"
+import type { artifactProvenanceForSession } from "@/agent/artifact-read-facts"
 import { requireTask } from "@/engine/store"
 import { Instance } from "@/project/instance"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
@@ -35,7 +38,7 @@ type BuildToolInput = {
   worktreeUsage?: "managed_worktree" | "current_project"
 }
 
-type BuildToolDependencies = {
+export type BuildToolDependencies = {
   inputSchema: z.ZodType<BuildToolInput>
   taskID: string
   parentSessionID: string
@@ -46,6 +49,10 @@ type BuildToolDependencies = {
       body: string | undefined
     }>,
   ) => string[]
+  /** Test-only physical writer seam; the canonical BuildAgent publication/recovery path remains active. */
+  terminalFactWriter?: BuildTerminalFactWriter
+  terminalFactCleanup?: typeof settleBuildObservationCleanup
+  terminalFactProvenance?: typeof artifactProvenanceForSession
 }
 
 export function createBuildTool(dependencies: BuildToolDependencies) {
@@ -140,20 +147,28 @@ export function createBuildTool(dependencies: BuildToolDependencies) {
               }
             },
             onDispatchAuthorityCommit: (sessionID, descriptor) => execution.dispatch.commitSession(sessionID, descriptor),
+            terminalFactWriter: dependencies.terminalFactWriter,
+            terminalFactCleanup: dependencies.terminalFactCleanup,
+            terminalFactProvenance: dependencies.terminalFactProvenance,
           })
 
           if (isAgentCoordinationHandoffResult(result)) {
             return DispatchOutcome.coordination(result)
           }
-          const { sessionID, finalMessageID, infrastructureObservationLocators } = result
-          return infrastructureObservationLocators?.length
-            ? DispatchOutcome.partial({
-                sessionID,
-                finalMessageID,
-                failedOperation: "persist-build-terminal-facts",
-                infrastructureError: infrastructureObservationLocators[0],
-              })
-            : DispatchOutcome.terminal({ sessionID, finalMessageID })
+          const { sessionID, finalMessageID, terminalFactPublication } = result
+          if (terminalFactPublication.kind === "terminal_success") {
+            return DispatchOutcome.terminal({ sessionID, finalMessageID })
+          }
+          return DispatchOutcome.partial({
+            sessionID,
+            finalMessageID,
+            failedOperation: terminalFactPublication.kind === "publication_failed"
+              ? terminalFactPublication.operation
+              : "collect-git-workspace",
+            ...(terminalFactPublication.kind === "partial"
+              ? { infrastructureError: terminalFactPublication.artifactLocator }
+              : {}),
+          })
         } catch (failure) {
           return failBuildAdapterExecution({ taskID, agentID, failure })
         }

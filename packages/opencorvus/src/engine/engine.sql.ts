@@ -194,6 +194,26 @@ export const EngineTaskCancellationAuthorityTable = sqliteTable("engine_task_can
   convergence_lease_expires_at: integer(),
 })
 
+/** Durable owner for private Git refs created while materializing one Build
+ * terminal observation. A row exists before the first ref write, so a crash,
+ * publication failure, or vanished linked worktree cannot orphan the refs. */
+export const EngineBuildObservationCleanupTable = sqliteTable(
+  "engine_build_observation_cleanup",
+  {
+    observation_id: text().primaryKey(),
+    task_id: text()
+      .notNull()
+      .references(() => EngineTaskTable.id, { onDelete: "cascade" }),
+    git_dir: text().notNull(),
+    status: text({ enum: ["active", "pending", "retained", "complete"] }).notNull(),
+    owner_runtime_id: text().notNull(),
+    attempts: integer().notNull().default(0),
+    last_error: text(),
+    ...Timestamps,
+  },
+  (table) => [index("engine_build_observation_cleanup_task_status_idx").on(table.task_id, table.status)],
+)
+
 export const EngineGoalTable = sqliteTable(
   "engine_goal",
   {

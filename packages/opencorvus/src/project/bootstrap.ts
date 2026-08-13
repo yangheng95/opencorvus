@@ -41,6 +41,7 @@ import { markConversationCapabilityTransactionalInit } from "@/conversation/capa
 import { reconcilePendingCancelledTaskSettlements } from "@/engine/state"
 import { PermissionAuthority } from "@/permission/authority"
 import { ProjectMemoryOrganizer } from "@/memory/project-memory-organizer"
+import { reconcileBuildObservationCleanups } from "@/engine/build-observation-cleanup"
 
 async function validateInstanceConversationCapabilities() {
   const lifecycleContext = {
@@ -102,6 +103,9 @@ export const InstanceBootstrap = markConversationCapabilityTransactionalInit(asy
   Bus.resumeDurablePublications()
   TaskQueueService.init()
   EngineService.init()
+  await ProjectOpenLifecycle.stage("build-observation.reconcile-cleanup", lifecycleContext, () =>
+    reconcileBuildObservationCleanups({ projectID: Instance.project.id }),
+  )
   await ProjectOpenLifecycle.stage("engine-task.reconcile-pending-cancellations", lifecycleContext, async () => {
     await EngineService.reconcilePendingTaskCancellations()
     reconcilePendingCancelledTaskSettlements()
