@@ -533,21 +533,73 @@ export function hasProjectedPart(sessionID: string, partID: string): boolean {
   return sessions.get(sessionID)?.partIndex.has(partID) === true
 }
 
+export type ProjectionPrerequisiteEntity = "session" | "message" | "part"
+
+export class ProjectionPrerequisiteError extends Error {
+  readonly code = "projection_prerequisite_missing" as const
+  readonly eventType: string
+  readonly missingEntity: ProjectionPrerequisiteEntity
+  readonly missingID: string
+  readonly sessionID?: string
+
+  constructor(input: {
+    eventType: string
+    missingEntity: ProjectionPrerequisiteEntity
+    missingID: string
+    sessionID?: string
+  }) {
+    super(
+      `${input.eventType}: missing ${input.missingEntity} projection ${input.missingID}` +
+        (input.sessionID ? ` in session ${input.sessionID}` : ""),
+    )
+    this.name = "ProjectionPrerequisiteError"
+    this.eventType = input.eventType
+    this.missingEntity = input.missingEntity
+    this.missingID = input.missingID
+    this.sessionID = input.sessionID
+  }
+}
+
+export function isProjectionPrerequisiteError(error: unknown): error is ProjectionPrerequisiteError {
+  return error instanceof ProjectionPrerequisiteError && error.code === "projection_prerequisite_missing"
+}
+
 function requireSessionProjection(sessionID: string, eventType: string): SessionInfo {
   const session = sessions.get(sessionID)
-  if (!session) throw new Error(`${eventType}: unknown session ${sessionID}`)
+  if (!session) {
+    throw new ProjectionPrerequisiteError({
+      eventType,
+      missingEntity: "session",
+      missingID: sessionID,
+      sessionID,
+    })
+  }
   return session
 }
 
 function requirePartProjection(session: SessionInfo, partID: string, eventType: string): PartTarget {
   const target = session.partIndex.get(partID)
-  if (!target) throw new Error(`${eventType}: unknown part ${partID} in session ${session.sessionID}`)
+  if (!target) {
+    throw new ProjectionPrerequisiteError({
+      eventType,
+      missingEntity: "part",
+      missingID: partID,
+      sessionID: session.sessionID,
+    })
+  }
   return target
 }
 
 function requireMessageCardProjection(session: SessionInfo, messageID: string, eventType: string): string {
   const cardID = session.messageCardIDs.get(messageID)
-  if (!cardID) throw new Error(`${eventType}: unknown message ${messageID} in session ${session.sessionID}`)
+  if (!cardID) {
+    throw new ProjectionPrerequisiteError({
+      eventType,
+      missingEntity: "message",
+      missingID: messageID,
+      sessionID: session.sessionID,
+    })
+  }
   return cardID
 }
 

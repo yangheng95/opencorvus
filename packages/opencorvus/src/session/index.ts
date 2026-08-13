@@ -348,7 +348,7 @@ export namespace Session {
     })
   })
 
-  export async function prepareNext(input: {
+  type PrepareNextInput = {
     /** Required. The session's role/purpose — see SessionKind in session.sql.ts.
      *  Authoritative for UI channel routing. There is NO default: every
      *  caller must state what the session is for. */
@@ -359,13 +359,10 @@ export namespace Session {
     directory: string
     permission?: CapabilityRules.Ruleset
     metadata?: Record<string, unknown>
-  }) {
-    if (input.parentID) {
-      const lineage = await lineageInProject({ sessionID: input.parentID, projectID: Instance.project.id })
-      const { SessionPromptState } = await import("./prompt/state")
-      SessionPromptState.assertSessionCreationAllowed(lineage.map((session) => session.id))
-    }
-    const result: Info = {
+  }
+
+  function preparedNextInfo(input: PrepareNextInput): Info {
+    return {
       id: Identifier.descending("session", input.id),
       slug: Slug.create(),
       version: Installation.VERSION,
@@ -381,21 +378,40 @@ export namespace Session {
         updated: Date.now(),
       },
     }
+  }
+
+  /** Prepare a root Session synchronously for an enclosing domain identity
+   * transaction. Child creation must use `prepareNext` so lineage admission
+   * is checked before persistence. */
+  export function prepareRootNext(input: Omit<PrepareNextInput, "parentID"> & { parentID?: never }): Info {
+    return preparedNextInfo(input)
+  }
+
+  export async function prepareNext(input: PrepareNextInput) {
+    if (input.parentID) {
+      const lineage = await lineageInProject({ sessionID: input.parentID, projectID: Instance.project.id })
+      const { SessionPromptState } = await import("./prompt/state")
+      SessionPromptState.assertSessionCreationAllowed(lineage.map((session) => session.id))
+    }
+    return preparedNextInfo(input)
+  }
+
+  /** Persist one exact prepared Session in the caller's active transaction.
+   * This is the sole physical insert/event authority; domain find-or-create
+   * operations may reserve a writer and call it without opening a second
+   * transaction around their identity read. */
+  export function persistPreparedNextInTransaction(db: Database.TxOrDb, result: Info): Info {
+    Project.assertDurableAdmissionOpen(result.projectID)
+    db.insert(SessionTable).values(toRow(result)).run()
+    log.info("created", result)
+    Bus.publishOwnedInTransaction(Event.Created, { info: result })
+    Bus.publishOwnedInTransaction(Event.Updated, { info: result })
     return result
   }
 
-  /** Persist one exact prepared Session inside the caller's active transaction.
-   * Creation and update events are post-commit effects, so a rolled-back
-   * authority bundle never exposes a physical Session to observers. */
+  /** Persist one exact prepared Session in its own transaction. */
   export function persistPreparedNext(result: Info): Info {
-    Database.transaction((db) => {
-      Project.assertDurableAdmissionOpen(result.projectID)
-      db.insert(SessionTable).values(toRow(result)).run()
-      log.info("created", result)
-      Bus.publishOwnedInTransaction(Event.Created, { info: result })
-      Bus.publishOwnedInTransaction(Event.Updated, { info: result })
-    })
-    return result
+    return Database.transaction((db) => persistPreparedNextInTransaction(db, result))
   }
 
   export async function createNext(input: Parameters<typeof prepareNext>[0]) {

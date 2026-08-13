@@ -8,7 +8,7 @@ import { discoverProviderModels, testProviderConnection } from "../../provider/o
 import { NativeAgentRegistryLifecycle } from "@/agent/native-agent-registry-lifecycle"
 import { ProviderAuth } from "../../provider/auth"
 import { ProviderRemovalReceipt, removeProvider } from "../../provider/removal"
-import { errors } from "../error"
+import { AuthReadUnavailableResponse, errors } from "../error"
 import { lazy } from "../../util/lazy"
 import { settleCanonicalProviderCatalogInvalidation, settleProviderRefreshInvalidation } from "../provider-refresh"
 import { ProviderAccountUsage } from "../../provider/account-usage"
@@ -121,6 +121,7 @@ export const ProviderRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(ProviderRemovalReceipt) } },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("param", z.object({ providerID: z.string().trim().min(1) })),
@@ -198,6 +199,7 @@ export const ProviderRoutes = lazy(() =>
               },
             },
           },
+          503: AuthReadUnavailableResponse,
         },
       }),
       async (c) => {
@@ -225,6 +227,7 @@ export const ProviderRoutes = lazy(() =>
               },
             },
           },
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("param", z.object({ providerID: z.string().trim().min(1) })),
@@ -254,6 +257,7 @@ export const ProviderRoutes = lazy(() =>
             },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(
@@ -299,6 +303,7 @@ export const ProviderRoutes = lazy(() =>
             },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(
@@ -377,6 +382,7 @@ export const ProviderRoutes = lazy(() =>
             },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(
@@ -461,6 +467,7 @@ export const ProviderRoutes = lazy(() =>
             },
           },
           ...errors(400),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator(

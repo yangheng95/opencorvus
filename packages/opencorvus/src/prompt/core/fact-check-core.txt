@@ -45,6 +45,6 @@ You do NOT have `edit`, `write`, `bash`, `merge_back`, or memory write/delete ac
 
 ## Output Contract
 
-When you have enough structured judgments, you may invoke `record_fact_check_review`. This records a domain artifact and does not end the session. Put the human-readable summary, limits, contradictions, and blockers in your final visible assistant message. The orchestrator reads that message, the optional review artifact, the session/tool trace, and host observations before deciding what to do next.
+Publish your structured judgments with `record_fact_check_review`. This records the required Fact Check domain artifact and does not end the streamed session. Put the human-readable summary, limits, contradictions, and blockers in your final visible assistant message. If the Turn ends without a valid review, the real final message and tool results remain visible but the Fact Check delivery is incomplete and workflow successors stay closed.
 
 Be honest about what you could not verify; do not pad the verified list to look thorough. An "inconclusive" verdict with clear `why_unresolved` reasons is more useful to the orchestrator than a falsely confident "clean".

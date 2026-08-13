@@ -213,12 +213,7 @@ export namespace Config {
     const canonicalProjectFile = !Flag.OPENCORVUS_DISABLE_PROJECT_CONFIG
       ? await ConfigPaths.assertCanonicalProject(directory, worktree)
       : undefined
-    const auth = await Auth.all().catch((error) => {
-      log.error("saved authentication unavailable while loading remote configuration", {
-        error: error instanceof Error ? error.message : String(error),
-      })
-      return {}
-    })
+    const auth = await Auth.all()
     const loadStateFile = (filepath: string, fileOptions?: ConfigLoadOptions) => {
       if (
         options.globalFileOverride &&

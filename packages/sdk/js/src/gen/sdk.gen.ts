@@ -46,6 +46,7 @@ import type {
   ChatCapabilityUpdateResponses,
   CodingChatSessionAbortErrors,
   CodingChatSessionAbortResponses,
+  CodingChatSessionCreateErrors,
   CodingChatSessionCreateResponses,
   CodingChatSessionDeleteErrors,
   CodingChatSessionDeleteResponses,
@@ -65,6 +66,7 @@ import type {
   CodingCliProfilesResponses,
   CodingWorkSessionAbortErrors,
   CodingWorkSessionAbortResponses,
+  CodingWorkSessionCreateErrors,
   CodingWorkSessionCreateResponses,
   CodingWorkSessionDeleteErrors,
   CodingWorkSessionDeleteResponses,
@@ -88,7 +90,9 @@ import type {
   ComputerTakeoverResponses,
   ConfigGetErrors,
   ConfigGetResponses,
+  ConfigPromptErrors,
   ConfigPromptResponses,
+  ConfigProvidersErrors,
   ConfigProvidersResponses,
   ConfigProxyTestErrors,
   ConfigProxyTestResponses,
@@ -236,6 +240,7 @@ import type {
   GlobalProjectsAnonymousResponses,
   GlobalProjectsDiscoverErrors,
   GlobalProjectsDiscoverResponses,
+  GlobalProvidersAccountUsageErrors,
   GlobalProvidersAccountUsageResponses,
   GlobalProvidersAuthExecuteErrors,
   GlobalProvidersAuthExecuteResponses,
@@ -245,6 +250,7 @@ import type {
   GlobalProvidersDiscoverModelsErrors,
   GlobalProvidersDiscoverModelsResponses,
   GlobalProvidersListResponses,
+  GlobalProvidersModelsRefreshErrors,
   GlobalProvidersModelsRefreshResponses,
   GlobalProvidersOauthAuthorizeErrors,
   GlobalProvidersOauthAuthorizeResponses,
@@ -388,6 +394,7 @@ import type {
   ProjectListResponses,
   ProjectUpdateErrors,
   ProjectUpdateResponses,
+  ProviderAccountUsageErrors,
   ProviderAccountUsageResponses,
   ProviderAuthExecuteErrors,
   ProviderAuthExecuteResponses,
@@ -397,6 +404,7 @@ import type {
   ProviderDiscoverModelsErrors,
   ProviderDiscoverModelsResponses,
   ProviderListResponses,
+  ProviderModelsRefreshErrors,
   ProviderModelsRefreshResponses,
   ProviderOauthAuthorizeErrors,
   ProviderOauthAuthorizeResponses,
@@ -1294,7 +1302,11 @@ export class Session extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).post<CodingChatSessionCreateResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).post<
+      CodingChatSessionCreateResponses,
+      CodingChatSessionCreateErrors,
+      ThrowOnError
+    >({
       url: "/coding/chat/session",
       ...options,
       ...params,
@@ -1677,7 +1689,11 @@ export class Session2 extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).post<CodingWorkSessionCreateResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).post<
+      CodingWorkSessionCreateResponses,
+      CodingWorkSessionCreateErrors,
+      ThrowOnError
+    >({
       url: "/coding/work/session",
       ...options,
       ...params,
@@ -2207,7 +2223,7 @@ export class Config extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<ConfigPromptResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).get<ConfigPromptResponses, ConfigPromptErrors, ThrowOnError>({
       url: "/config/prompt",
       ...options,
       ...params,
@@ -2226,7 +2242,7 @@ export class Config extends HeyApiClient {
     options?: Options<never, ThrowOnError>,
   ) {
     const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
-    return (options?.client ?? this.client).get<ConfigProvidersResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).get<ConfigProvidersResponses, ConfigProvidersErrors, ThrowOnError>({
       url: "/config/providers",
       ...options,
       ...params,
@@ -5945,10 +5961,11 @@ export class Models extends HeyApiClient {
    * Refresh live model identities from saved global provider credentials without requiring an active project or refreshing the provider registry declaration.
    */
   public refresh<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
-    return (options?.client ?? this.client).post<GlobalProvidersModelsRefreshResponses, unknown, ThrowOnError>({
-      url: "/global/providers/models/refresh",
-      ...options,
-    })
+    return (options?.client ?? this.client).post<
+      GlobalProvidersModelsRefreshResponses,
+      GlobalProvidersModelsRefreshErrors,
+      ThrowOnError
+    >({ url: "/global/providers/models/refresh", ...options })
   }
 }
 
@@ -5965,7 +5982,11 @@ export class Account extends HeyApiClient {
     options?: Options<never, ThrowOnError>,
   ) {
     const params = buildClientParams([parameters], [{ args: [{ in: "path", key: "providerID" }] }])
-    return (options?.client ?? this.client).get<GlobalProvidersAccountUsageResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).get<
+      GlobalProvidersAccountUsageResponses,
+      GlobalProvidersAccountUsageErrors,
+      ThrowOnError
+    >({
       url: "/global/providers/{providerID}/account-usage",
       ...options,
       ...params,
@@ -10429,7 +10450,11 @@ export class Models2 extends HeyApiClient {
     options?: Options<never, ThrowOnError>,
   ) {
     const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
-    return (options?.client ?? this.client).post<ProviderModelsRefreshResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).post<
+      ProviderModelsRefreshResponses,
+      ProviderModelsRefreshErrors,
+      ThrowOnError
+    >({
       url: "/provider/models/refresh",
       ...options,
       ...params,
@@ -10461,7 +10486,11 @@ export class Account2 extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<ProviderAccountUsageResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).get<
+      ProviderAccountUsageResponses,
+      ProviderAccountUsageErrors,
+      ThrowOnError
+    >({
       url: "/provider/{providerID}/account-usage",
       ...options,
       ...params,

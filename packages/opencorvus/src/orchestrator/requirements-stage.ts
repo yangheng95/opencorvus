@@ -4,7 +4,6 @@ import { createDecisionLog } from "@/decision-log"
 import { Event as EngineEvent } from "@/engine/model"
 import { EngineProtocol } from "@/engine/protocol"
 import { listRequirementSetArtifacts, type TaskRow } from "@/engine/store"
-import { artifactProvenanceForAgentTurn } from "@/agent/artifact-read-facts"
 import { touchEngineTask } from "@/engine/task"
 import { updateTask } from "@/engine/state"
 import { deriveTaskStatus } from "@/engine/task-status"
@@ -20,6 +19,7 @@ type RequirementsStageDependencies = {
   taskID: string
   parentSessionID: string
   signal?: AbortSignal
+  runRequirements?: typeof RequirementsAgent.run
 }
 
 type RequirementsStageDispatch = {
@@ -39,6 +39,7 @@ type RequirementsStageDispatch = {
 }
 
 export function createRequirementsStageDispatcher(dependencies: RequirementsStageDependencies) {
+  const runRequirements = dependencies.runRequirements ?? RequirementsAgent.run
   return async function dispatchRequirementsStage(
     dispatch: RequirementsStageDispatch,
   ): Promise<DispatchOutcomeResult> {
@@ -53,7 +54,7 @@ export function createRequirementsStageDispatcher(dependencies: RequirementsStag
       `Projected agent "${dispatch.agentID}" started via the requirements adapter`,
     )
     try {
-      const result = await RequirementsAgent.run({
+      const result = await runRequirements({
         agentID: dispatch.agentID,
         packageRevision: dispatch.packageRevision,
         workScope: dispatch.workScope,
@@ -82,19 +83,19 @@ export function createRequirementsStageDispatcher(dependencies: RequirementsStag
       const now = Date.now()
       try {
         const { persistRequirementSet } = await import("@/engine/persist")
-        const provenance = artifactProvenanceForAgentTurn(
-          result.sessionID,
-          result.finalMessageID,
-        )
-        Database.transaction((db) => {
-          persistRequirementSet(db, {
+        const publication = Database.transaction((db) => {
+          const persisted = persistRequirementSet(db, {
             taskID: dependencies.taskID,
+            sessionID: result.sessionID,
+            finalMessageID: result.finalMessageID,
+            dispatchID: dispatch.dispatchTurn?.current_dispatch_id ?? (() => {
+              throw new Error("Requirements persistence requires the current dispatch occurrence identity.")
+            })(),
             requirementSet: {
               requirements: result.requirements,
               decisions: result.decisions,
             },
-            observedArtifactLocators: provenance.observedArtifactLocators,
-            sourceArtifactLocators: provenance.sourceArtifactLocators,
+            finalization: result.finalization,
             now,
           })
           touchEngineTask(db, { taskID: dependencies.taskID, timeUpdated: now })
@@ -109,7 +110,16 @@ export function createRequirementsStageDispatcher(dependencies: RequirementsStag
               { source: "orchestrator.requirements" },
             ),
           )
+          return persisted
         })
+        if (publication.deliveryStatus === "incomplete") {
+          return DispatchOutcome.domainIncomplete({
+            sessionID: result.sessionID,
+            finalMessageID: result.finalMessageID,
+            domain: "requirements",
+            domainArtifact: publication.locator,
+          })
+        }
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error)
         log.error("requirements: failed to persist to DB", {

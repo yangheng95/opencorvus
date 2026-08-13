@@ -22,7 +22,7 @@ import {
   setRightSidebarConversationSelectedTask,
   type ConversationExperience,
 } from "@/chat/session"
-import { errors } from "../error"
+import { AuthReadUnavailableResponse, errors } from "../error"
 
 const ConversationSessionQuery = z
   .object({
@@ -144,6 +144,7 @@ export function RightSidebarConversationRoutes(experience: ConversationExperienc
               },
             },
           },
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("json", ConversationSessionCreateInput.optional()),

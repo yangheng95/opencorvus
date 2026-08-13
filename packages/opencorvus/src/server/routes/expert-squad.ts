@@ -30,7 +30,8 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import { Hono } from "hono"
 import { describeRoute, resolver, validator } from "hono-openapi"
 import z from "zod"
-import { errors, namedErrorResponse } from "../error"
+import { AuthReadUnavailableResponse, errors, namedErrorResponse } from "../error"
+import { Auth } from "@/auth"
 import {
   ExpertSquadCatalogInspectionQuerySchema,
   ExpertSquadCatalogInspectionSchema,
@@ -319,6 +320,7 @@ async function packageRoute<T>(run: () => Promise<T>): Promise<T> {
   try {
     return await run()
   } catch (error) {
+    if (Auth.findReadError(error)) throw error
     if (
       error instanceof ExpertSquadPackageError ||
       error instanceof EvolutionHistoryAuthorityError ||
@@ -461,6 +463,7 @@ export function ExpertSquadRoutes() {
             },
           },
           ...errors(400, 500),
+          503: AuthReadUnavailableResponse,
           404: namedErrorResponse("Expert Squad not found", "NotFoundError"),
         },
       }),
@@ -995,6 +998,7 @@ export function ExpertSquadRoutes() {
             content: { "application/json": { schema: resolver(UninstallResult) } },
           },
           400: namedErrorResponse("Expert squad uninstall rejected", "ExpertSquadPackageError"),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("json", UninstallInput),

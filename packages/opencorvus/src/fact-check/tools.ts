@@ -14,7 +14,7 @@ export function createFactCheckOutputTools() {
   const tools = {
     record_fact_check_review: tool({
       description:
-        "Record a FactCheckReview domain artifact after inspecting claims. This tool is optional and does not end the session. " +
+        "Record the FactCheckReview required for Fact Check domain completion after inspecting claims. This tool does not end the streamed session. " +
         "The review classifies inspected claims as verified, corrected, or unresolved.",
       inputSchema: FactCheckReviewSchema,
       execute: async (review) => {

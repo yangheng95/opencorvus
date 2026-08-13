@@ -22,7 +22,31 @@ Latest repository code-smell remediation program: [`2026-08-12-code-smell-remedi
 
 Current storage-registry remediation: [`CS-028` explicit Storage table registry](records/2026-08/2026-08-13-cs028-explicit-storage-table-registry.md).
 
+Current Project identity remediation: [`CS-002` explicit identity convergence](records/2026-08/2026-08-13-cs002-explicit-project-identity-convergence.md).
+
+Current Mission Session identity remediation: [`CS-003` atomic identity commit](records/2026-08/2026-08-13-cs003-atomic-mission-session-identity.md).
+
+Current Provider model remediation: [`CS-021` live model refresh](records/2026-08/2026-08-13-cs021-provider-live-model-refresh.md).
+
 Current Conversation ownership remediation: [`CS-033` projector ownership](records/2026-08/2026-08-13-cs033-conversation-projector-ownership.md).
+
+Current saved-auth/config remediation: [`CS-035` read authority](records/2026-08/2026-08-13-cs035-auth-config-read-authority.md).
+
+Current Overlay projection remediation: [`CS-037` prerequisite protocol](records/2026-08/2026-08-13-cs037-overlay-projection-prerequisite-protocol.md).
+
+Current Fact Check settlement remediation: [`CS-075` domain-incomplete review authority](records/2026-08/2026-08-13-cs075-fact-check-domain-incomplete-settlement.md).
+
+Current Requirements settlement remediation: [`CS-077` typed coverage authority](records/2026-08/2026-08-13-cs077-requirements-domain-incomplete-settlement.md).
+
+Current Build terminal publication remediation: [`CS-001` durable terminal fact and cleanup owner](records/2026-08/2026-08-13-cs001-build-terminal-fact-publication.md).
+
+Current public-home delivery: [locale preference and Security / Control / Customization hero priorities](records/2026-08/2026-08-13-public-home-locale-and-hero-priorities.md).
+
+Current Workload coverage settlement remediation: [`CS-078` immutable per-dispatch coverage authority](records/2026-08/2026-08-13-cs078-workload-coverage-settlement.md).
+
+Current Tool-result control remediation: [`CS-005` single typed turn-control protocol](records/2026-08/2026-08-13-cs005-single-tool-result-control-protocol.md).
+
+Current native Agent registry remediation: [`CS-006` shared canonical cache authority](records/2026-08/2026-08-13-cs006-native-agent-registry-cache.md).
 
 Focused code-smell remediation records: [`CS-015` Plugin publication](records/2026-08/2026-08-12-cs015-plugin-publication-source-mutation.md), [`CS-025` Artifact cursor authenticity](records/2026-08/2026-08-12-cs025-artifact-cursor-authenticity.md), [`CS-027` Skill market authority](records/2026-08/2026-08-13-cs027-delete-unconfigurable-skill-registries.md), [`CS-029` Skill source trust identity](records/2026-08/2026-08-12-cs029-skill-source-trust-identity.md), [`CS-030` dead JSON storage removal](records/2026-08/2026-08-12-cs030-delete-dead-json-storage.md), [`CS-031` Provider cache identity](records/2026-08/2026-08-12-cs031-provider-cache-identity.md), [`CS-032` SDK server observer lifecycle](records/2026-08/2026-08-13-cs032-sdk-server-startup-observer-lifecycle.md), [`CS-040` local MCP diagnostics](records/2026-08/2026-08-12-cs040-mcp-diagnostic-redaction.md), [`CS-041` Channel adapter start settlement](records/2026-08/2026-08-12-cs041-channel-adapter-start-settlement.md), [`CS-046` Project sandbox discovery authority](records/2026-08/2026-08-12-cs046-project-sandbox-discovery-authority.md), [`CS-047` Frontend Design domain-incomplete settlement](records/2026-08/2026-08-12-cs047-frontend-design-domain-incomplete-settlement.md), [`CS-053` remote Skill cache publication](records/2026-08/2026-08-12-cs053-remote-skill-cache-publication.md), [`CS-054` Research domain-incomplete settlement](records/2026-08/2026-08-12-cs054-research-domain-incomplete-settlement.md), [`CS-055` Intent blocker settlement](records/2026-08/2026-08-12-cs055-intent-blocker-question-settlement.md), and [`CS-076` native upgrade verification](records/2026-08/2026-08-12-cs076-upgrade-version-verification.md).
 

@@ -28,6 +28,7 @@ import { MissionRecord, missionRecord, missionStatusRecord } from "@/mission/pro
 import { listMissionTasks } from "@/engine/store"
 import { deriveTaskStatus } from "@/engine/task-status"
 import { Config } from "@/config/config"
+import { Auth } from "@/auth"
 import { validateConfigModelReferences } from "@/config/model-reference-validation"
 import { MissionStatusSnapshot } from "@/status/task-status-snapshot"
 import { Session } from "@/session"
@@ -43,7 +44,13 @@ import { UserUploadInput, UserUploadList } from "@/engine/model"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { awaitSessionPromptFinishedInScope, cancelSessionPromptInScope } from "@/engine/cancellation-scope"
 import { createTaskCancellationIncomplete } from "@/engine/cancellation-error"
-import { badRequestBody, badRequestOrNamedErrorResponse, errors, namedErrorResponse } from "../error"
+import {
+  AuthReadUnavailableResponse,
+  badRequestBody,
+  badRequestOrNamedErrorResponse,
+  errors,
+  namedErrorResponse,
+} from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import type { TaskCancellationOrigin } from "@/engine/cancellation-origin"
@@ -582,6 +589,7 @@ export function MissionRoutes() {
             "Mission execution is still completing its durable close operation",
             "MissionExecutionClosingError",
           ),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("param", MissionParam),
@@ -603,6 +611,7 @@ export function MissionRoutes() {
           const preview = Config.previewOverlayUpdate(await Config.get(), storedOverlay, configPatch)
           await validateConfigModelReferences(preview.effective, "mission.configOverlay")
         } catch (error) {
+          if (Auth.findReadError(error)) throw error
           const message = error instanceof Error ? error.message : String(error)
           return c.json(badRequestBody(message), 400)
         }
@@ -668,6 +677,7 @@ export function MissionRoutes() {
             "Mission execution is still completing its durable close operation",
             "MissionExecutionClosingError",
           ),
+          503: AuthReadUnavailableResponse,
         },
       }),
       validator("json", MissionWakeInput),
@@ -706,6 +716,7 @@ export function MissionRoutes() {
           }
         } catch (error) {
           if (error instanceof MissionExpertSquadSnapshotMismatchError) return c.json(error.toObject(), 400)
+          if (Auth.findReadError(error)) throw error
           const message = error instanceof Error ? error.message : String(error)
           return c.json(badRequestBody(message), 400)
         }
@@ -713,6 +724,7 @@ export function MissionRoutes() {
           const preview = Config.previewOverlayUpdate(await Config.get(), storedOverlay, configPatch)
           await validateConfigModelReferences(preview.effective, "mission.configOverlay")
         } catch (error) {
+          if (Auth.findReadError(error)) throw error
           const message = error instanceof Error ? error.message : String(error)
           return c.json(badRequestBody(message), 400)
         }

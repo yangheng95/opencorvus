@@ -1,5 +1,4 @@
 import { Config } from "@/config/config"
-import { createInstanceState } from "@/project/instance-state"
 import { AgentRoleContract, type AgentRoleID } from "@/agent/role-contract"
 import { AgentToolPool } from "@/agent/tool-pool-contract"
 import { nativeAgentPermissionProfiles } from "@/agent/native-agent-permissions"
@@ -12,6 +11,7 @@ import { CHAT_INTERACTIVE_ARTIFACT_GUIDANCE } from "@/prompt/fragments/interacti
 import { TASK_REQUEST_SCOPE_GUIDANCE } from "@/prompt/fragments/task-request-scope"
 import PROMPT_SYSTEM from "@/session/prompt/system.txt"
 import { WORK_RUNTIME_PROMPT } from "@/work/harness"
+import { NativeAgentRegistryCache } from "@/agent/native-agent-registry-cache"
 
 export type PrimaryAssistantID = Extract<AgentRoleID, "coding" | "chat" | "work" | "control" | "mission">
 
@@ -152,22 +152,7 @@ async function buildState(config: Config.Info): Promise<PrimaryAssistantState> {
   return Object.fromEntries(primaryIDs().flatMap((id) => (materialized[id] ? [[id, materialized[id]]] : [])))
 }
 
-const state = createInstanceState(async () => buildState(await Config.get()), undefined, "primary-assistant-registry")
-const scopedStates = new Map<string, Promise<PrimaryAssistantState>>()
-
-function configStateKey(config: Config.Info): string {
-  return String(Bun.hash.xxHash64(JSON.stringify(config)))
-}
-
-function stateFor(config?: Config.Info): Promise<PrimaryAssistantState> {
-  if (!config) return state()
-  const key = configStateKey(config)
-  const existing = scopedStates.get(key)
-  if (existing) return existing
-  const next = buildState(config)
-  scopedStates.set(key, next)
-  return next
-}
+const cache = new NativeAgentRegistryCache({ label: "primary-assistant-registry", build: buildState })
 
 export namespace PrimaryAssistantRegistry {
   export const ids: readonly PrimaryAssistantID[] = primaryIDs()
@@ -178,13 +163,13 @@ export namespace PrimaryAssistantRegistry {
 
   export async function get(id: PrimaryAssistantID, options?: { config?: Config.Info }): Promise<NativeAgentInfo> {
     if (!isID(id)) throw new Error(`Unknown primary assistant: ${id}`)
-    const primary = (await stateFor(options?.config))[id]
+    const primary = (await cache.get(options?.config))[id]
     if (!primary) throw new Error(`Primary assistant ${id} is unavailable`)
     return primary
   }
 
   export async function list(options?: { config?: Config.Info }): Promise<NativeAgentInfo[]> {
-    const primaries = await stateFor(options?.config)
+    const primaries = await cache.get(options?.config)
     return ids.flatMap((id) => (primaries[id] ? [primaries[id]] : []))
   }
 
@@ -201,13 +186,11 @@ export namespace PrimaryAssistantRegistry {
     return definitions[id].prompt ?? ""
   }
 
-  export async function reset(): Promise<void> {
-    scopedStates.clear()
-    await state.reset()
+  export function reset() {
+    return cache.reset()
   }
 
-  export async function resetAll(): Promise<void> {
-    scopedStates.clear()
-    await state.resetAll()
+  export function resetAll() {
+    return cache.resetAll()
   }
 }

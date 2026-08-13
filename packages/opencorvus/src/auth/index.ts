@@ -3,6 +3,7 @@ import { Global } from "../global"
 import z from "zod"
 import { Filesystem } from "../util/filesystem"
 import { withKeyedLock } from "../util/lock"
+import { NamedError } from "@opencorvus-ai/util/error"
 
 function isEnoent(error: unknown): boolean {
   return (
@@ -16,21 +17,23 @@ function isEnoent(error: unknown): boolean {
 export const OAUTH_DUMMY_KEY = "opencorvus-oauth-dummy-key"
 
 export namespace Auth {
-  export class ReadError extends Error {
-    readonly filepath?: string
-
-    constructor(message: string, options?: ErrorOptions & { filepath?: string }) {
-      super(message, options)
-      this.name = "AuthReadError"
-      this.filepath = options?.filepath
-    }
-  }
+  export const ReadError = NamedError.create(
+    "AuthReadError",
+    z
+      .object({
+        operation: z.literal("read_saved_credentials"),
+        reason: z.enum(["io", "malformed_json", "invalid_credential"]),
+        message: z.string(),
+      })
+      .strict(),
+  )
+  export type ReadError = InstanceType<typeof ReadError>
 
   export function findReadError(error: unknown): ReadError | undefined {
     const seen = new Set<unknown>()
     let current = error
     while (current && typeof current === "object" && !seen.has(current)) {
-      if (current instanceof ReadError) return current
+      if (ReadError.isInstance(current)) return current
       seen.add(current)
       current = "cause" in current ? (current as { cause?: unknown }).cause : undefined
     }
@@ -67,6 +70,8 @@ export namespace Auth {
   export const Info = z.discriminatedUnion("type", [Oauth, Api, WellKnown]).meta({ ref: "Auth" })
   export type Info = z.infer<typeof Info>
 
+  const File = z.record(z.string(), z.unknown())
+
   const filepath = path.join(Global.Path.data, "auth.json")
   const mutationLocks = new Map<string, Promise<unknown>>()
 
@@ -82,20 +87,42 @@ export namespace Auth {
     } catch (error) {
       if (isEnoent(error)) data = {}
       else {
+        const malformed = error instanceof SyntaxError
         throw new ReadError(
-          `Failed to read saved Provider credentials: ${error instanceof Error ? error.message : String(error)}`,
           {
-            cause: error,
-            filepath,
+            operation: "read_saved_credentials",
+            reason: malformed ? "malformed_json" : "io",
+            message: malformed
+              ? "Saved Provider credentials contain malformed JSON"
+              : "Saved Provider credentials could not be read",
           },
+          { cause: error },
         )
       }
     }
-    return Object.entries(data).reduce(
+    const file = File.safeParse(data)
+    if (!file.success) {
+      throw new ReadError(
+        {
+          operation: "read_saved_credentials",
+          reason: "invalid_credential",
+          message: "Saved Provider credentials do not satisfy the credential schema",
+        },
+        { cause: file.error },
+      )
+    }
+    return Object.entries(file.data).reduce(
       (acc, [key, value]) => {
         const parsed = Info.safeParse(value)
         if (!parsed.success) {
-          throw new ReadError(`Invalid saved Provider credential "${key}": ${parsed.error.message}`, { filepath })
+          throw new ReadError(
+            {
+              operation: "read_saved_credentials",
+              reason: "invalid_credential",
+              message: "Saved Provider credentials do not satisfy the credential schema",
+            },
+            { cause: parsed.error },
+          )
         }
         acc[key] = parsed.data
         return acc

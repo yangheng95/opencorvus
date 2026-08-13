@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { Provider } from "@/provider/provider"
-import { CanonicalCache } from "@/provider/canonical-cache"
+import { CanonicalCache } from "@/util/canonical-cache"
 import {
   CanonicalDigestContractError,
   canonicalDigestSource,

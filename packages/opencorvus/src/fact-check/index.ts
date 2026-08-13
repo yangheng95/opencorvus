@@ -5,7 +5,7 @@
  * Per fact-check agent contract §4 / §5:
  *   - Read-only retrieval surface (web / code / memory; NO edit / bash /
  *     memory_write / git).
- *   - Optional domain tool `record_fact_check_review`.
+ *   - Domain-completion tool `record_fact_check_review`; it does not end the streamed Turn.
  *   - fact-check-core.txt does NOT receive the registration fragment
  *     (anti-recursion).
  *   - The active expert-squad scheduler may dispatch the `fact_check`
@@ -79,8 +79,8 @@ function buildFactCheckUserPrompt(
   if (contextSection) sections.push(contextSection)
   sections.push(
     "# Output contract\n\n" +
-      "Inspect the registered items using your tools. When you have a structured review, call " +
-      "`record_fact_check_review`; the tool is optional and does not end the session. Its `scope` must match the " +
+      "Inspect the registered items using your tools. Publish the required structured review with " +
+      "`record_fact_check_review`; the tool does not end the streamed session. Its `scope` must match the " +
       `snapshot above verbatim: target_session_id=\`${input.targetSessionID}\`, ` +
       `target_agent=\`${input.targetAgent}\`, target_message_id=\`${input.targetMessageID}\`, ` +
       `target_message_content_hash=\`${input.targetMessageContentHash}\`. ` +
@@ -178,7 +178,7 @@ export namespace FactCheckAgent {
   export interface RunOutput {
     sessionID: string
     finalMessageID: string
-    /** Optional domain artifact. Its absence does not change the physical session result. */
+    /** Required for Fact Check domain success; absence remains a physical Turn with incomplete domain delivery. */
     review?: FactCheckReview
   }
 

@@ -20,7 +20,31 @@
 
 - [CS-028 explicit Storage table registry](2026-08-13-cs028-explicit-storage-table-registry.md) makes one typed application-table registry the shared ORM, DDL, schema-fingerprint, and MySQL-transfer authority while preserving the existing transfer fingerprint.
 
+- [CS-002 explicit Project identity convergence](2026-08-13-cs002-explicit-project-identity-convergence.md) removes hidden schema-discovered Project migrations from ordinary lookup and gives physical duplicate repair one explicit, runtime-owned, domain-mapped transaction with preservation blockers for immutable facts.
+
+- [CS-003 atomic Mission Session identity](2026-08-13-cs003-atomic-mission-session-identity.md) commits the complete Mission launch identity and its Created occurrence together, enforces physical uniqueness and immutability, and retries derived runtime-directory creation across independent processes.
+
+- [CS-021 Provider live model refresh](2026-08-13-cs021-provider-live-model-refresh.md) replaces two public no-op successes with one scoped, strict live identity/metadata observation and one atomic canonical catalog transaction, including upgrade migration and typed saved-auth failure.
+
 - [CS-033 Conversation projector ownership](2026-08-13-cs033-conversation-projector-ownership.md) removes the false lifecycle input from the base Conversation projector and leaves execution lifecycle projection with the Agent view authority.
+
+- [CS-035 saved-auth/Config read authority](2026-08-13-cs035-auth-config-read-authority.md) distinguishes missing saved credentials from corrupt or unobservable authority, preserves the Provider catalog's explicit partial-success issue contract, and exposes safe typed errors to direct Config/Auth consumers.
+
+- [CS-037 Overlay projection prerequisite protocol](2026-08-13-cs037-overlay-projection-prerequisite-protocol.md) replaces recovery-by-English-error-prefix with one structured Tree Writer prerequisite outcome and verifies real selected-Task recovery restores the target Part.
+
+- [CS-075 Fact Check domain-incomplete settlement](2026-08-13-cs075-fact-check-domain-incomplete-settlement.md) makes the canonical FactCheckReview the only Fact Check success authority and preserves natural missing or invalid review output as exact durable incomplete evidence that closes workflow successors.
+
+- [CS-077 Requirements domain-incomplete settlement](2026-08-13-cs077-requirements-domain-incomplete-settlement.md) makes the canonical RequirementSet publisher recompute typed coverage from the exact Task request and completed worker Turn, preserving incomplete output as durable evidence without opening Architect.
+
+- [CS-001 Build terminal fact publication](2026-08-13-cs001-build-terminal-fact-publication.md) gives each physical Build occurrence one exact durable terminal fact and one restart-safe cleanup owner for its private Git observation refs.
+
+- [Public homepage locale and hero priorities](2026-08-13-public-home-locale-and-hero-priorities.md) makes initial language choice follow browser locale, remembers explicit switches, and gives Security, Control, and Customization one aligned first-viewport hierarchy.
+
+- [CS-078 Workload coverage settlement](2026-08-13-cs078-workload-coverage-settlement.md) binds ordered Workload submissions to exact dispatch subjects and the publication-time GoalGraph tip, then keeps immutable recovery settlements distinct from continuation remediation.
+
+- [CS-005 single Tool-result turn-control protocol](2026-08-13-cs005-single-tool-result-control-protocol.md) replaces legacy park metadata with one strict typed disposition, preserves it across hooks and permission recovery, and makes turn-control Tools exclusive within an assistant occurrence.
+
+- [CS-006 Native Agent registry cache authority](2026-08-13-cs006-native-agent-registry-cache.md) replaces three Bun-specific snapshot maps with one canonical-byte cache, project-scoped default lifecycle, runtime-capability contract, and exact reset receipts.
 
 - Focused code-smell remediation records: [CS-015 Plugin publication](2026-08-12-cs015-plugin-publication-source-mutation.md), [CS-025 Artifact cursor authenticity](2026-08-12-cs025-artifact-cursor-authenticity.md), [CS-027 Skill market authority](2026-08-13-cs027-delete-unconfigurable-skill-registries.md), [CS-029 Skill source trust identity](2026-08-12-cs029-skill-source-trust-identity.md), [CS-030 dead JSON storage removal](2026-08-12-cs030-delete-dead-json-storage.md), [CS-031 Provider cache identity](2026-08-12-cs031-provider-cache-identity.md), [CS-032 SDK server observer lifecycle](2026-08-13-cs032-sdk-server-startup-observer-lifecycle.md), [CS-040 MCP diagnostic redaction](2026-08-12-cs040-mcp-diagnostic-redaction.md), [CS-041 Channel adapter start settlement](2026-08-12-cs041-channel-adapter-start-settlement.md), [CS-046 Project sandbox discovery authority](2026-08-12-cs046-project-sandbox-discovery-authority.md), [CS-047 Frontend Design domain-incomplete settlement](2026-08-12-cs047-frontend-design-domain-incomplete-settlement.md), [CS-053 remote Skill cache publication](2026-08-12-cs053-remote-skill-cache-publication.md), [CS-054 Research domain-incomplete settlement](2026-08-12-cs054-research-domain-incomplete-settlement.md), [CS-055 Intent blocker settlement](2026-08-12-cs055-intent-blocker-question-settlement.md), and [CS-076 native upgrade verification](2026-08-12-cs076-upgrade-version-verification.md).
 

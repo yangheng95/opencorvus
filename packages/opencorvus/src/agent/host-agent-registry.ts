@@ -1,9 +1,9 @@
 import { Config } from "@/config/config"
-import { createInstanceState } from "@/project/instance-state"
 import { AgentRoleContract, type AgentRoleID } from "@/agent/role-contract"
 import { nativeAgentPermissionProfiles } from "@/agent/native-agent-permissions"
 import { materializeNativeAgentDefinitions } from "@/agent/native-agent-materializer"
 import type { NativeAgentInfo } from "@/agent/native-agent-info"
+import { NativeAgentRegistryCache } from "@/agent/native-agent-registry-cache"
 
 export type HostAgentID = Extract<AgentRoleID, "orchestrator">
 
@@ -47,22 +47,7 @@ async function buildState(config: Config.Info): Promise<HostAgentState> {
   return Object.fromEntries(hostIDs().flatMap((id) => (materialized[id] ? [[id, materialized[id]]] : [])))
 }
 
-const state = createInstanceState(async () => buildState(await Config.get()), undefined, "host-agent-registry")
-const scopedStates = new Map<string, Promise<HostAgentState>>()
-
-function configStateKey(config: Config.Info): string {
-  return String(Bun.hash.xxHash64(JSON.stringify(config)))
-}
-
-function stateFor(config?: Config.Info): Promise<HostAgentState> {
-  if (!config) return state()
-  const key = configStateKey(config)
-  const existing = scopedStates.get(key)
-  if (existing) return existing
-  const next = buildState(config)
-  scopedStates.set(key, next)
-  return next
-}
+const cache = new NativeAgentRegistryCache({ label: "host-agent-registry", build: buildState })
 
 export namespace HostAgentRegistry {
   export const ids: readonly HostAgentID[] = hostIDs()
@@ -73,23 +58,21 @@ export namespace HostAgentRegistry {
 
   export async function get(id: HostAgentID, options?: { config?: Config.Info }): Promise<NativeAgentInfo> {
     if (!isID(id)) throw new Error(`Unknown host agent: ${id}`)
-    const host = (await stateFor(options?.config))[id]
+    const host = (await cache.get(options?.config))[id]
     if (!host) throw new Error(`Host agent ${id} is unavailable`)
     return host
   }
 
   export async function list(options?: { config?: Config.Info }): Promise<NativeAgentInfo[]> {
-    const hosts = await stateFor(options?.config)
+    const hosts = await cache.get(options?.config)
     return ids.flatMap((id) => (hosts[id] ? [hosts[id]] : []))
   }
 
-  export async function reset(): Promise<void> {
-    scopedStates.clear()
-    await state.reset()
+  export function reset() {
+    return cache.reset()
   }
 
-  export async function resetAll(): Promise<void> {
-    scopedStates.clear()
-    await state.resetAll()
+  export function resetAll() {
+    return cache.resetAll()
   }
 }

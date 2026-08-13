@@ -190,7 +190,19 @@ describe("durable Bus publication outbox", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await Session.create({ kind: "mission", title: "Durable outbox source" })
+        const session = await Session.create({
+          kind: "mission",
+          title: "Durable outbox source",
+          metadata: {
+            mission: {
+              id: "durable-outbox-source",
+              channelKey: "mission:durable-outbox-source",
+              cwd: project.path,
+              productPillar: "code",
+              visibleExpertSquadIDs: ["base"],
+            },
+          },
+        })
         await waitFor(() => Bus.TestHooks.outbox().length === 0)
         using _interruption = Bus.TestHooks.suppressAutomaticDurableDrain()
         messageID = Identifier.ascending("message")

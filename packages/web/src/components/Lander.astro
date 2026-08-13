@@ -1,13 +1,11 @@
 ---
 import { Image } from "astro:assets"
-import ConceptFlowEn from "../assets/lander/opencorvus-concept-flow-en.gif"
-import ConceptFlowMobileEn from "../assets/lander/opencorvus-concept-flow-mobile-en.gif"
-import ConceptFlowMobileZh from "../assets/lander/opencorvus-concept-flow-mobile-zh.gif"
-import ConceptFlowZh from "../assets/lander/opencorvus-concept-flow-zh.gif"
-import ConceptMap from "../assets/lander/opencorvus-concept-map.png"
-import ConceptMobile from "../assets/lander/opencorvus-concept-mobile.png"
 import ExpertSquadCatalog from "../assets/lander/expert-squad-catalog.png"
 import ExpertSquadInstalled from "../assets/lander/expert-squad-installed.png"
+import CodeHarness from "../assets/lander/harness-gallery/code-harness.png"
+import ExpertSquadsHarness from "../assets/lander/harness-gallery/expert-squads.png"
+import MissionHarness from "../assets/lander/harness-gallery/mission-composer.png"
+import WorkHarness from "../assets/lander/harness-gallery/work-harness.png"
 import RuntimeDesktopContinuity from "../assets/lander/runtime-desktop-continuity-agent-v2.png"
 import PublicSiteLayout from "./PublicSiteLayout.astro"
 import { landingContent, type LandingLocale } from "../content/landing"
@@ -21,8 +19,12 @@ type Props = {
 const { locale } = Astro.props
 const content = landingContent[locale]
 const languageHref = publicPath(locale === "zh-cn" ? "root" : "zh-cn")
-const conceptAnimation = locale === "zh-cn" ? ConceptFlowZh.src : ConceptFlowEn.src
-const conceptMobileAnimation = locale === "zh-cn" ? ConceptFlowMobileZh.src : ConceptFlowMobileEn.src
+const galleryImages = {
+  work: WorkHarness,
+  code: CodeHarness,
+  mission: MissionHarness,
+  squads: ExpertSquadsHarness,
+} as const
 const metadata =
   locale === "zh-cn"
     ? {
@@ -56,44 +58,71 @@ const metadata =
           <a class="primary-action" href={publicPath(locale, "/start/quickstart/")}>{content.hero.primary}</a>
           <a class="secondary-action" href={publicPath(locale, "/market/")}>{content.hero.secondary}</a>
         </div>
-        <p class="hero-boundary">{content.hero.boundary}</p>
       </div>
 
-      <figure
-        class="concept-flow"
-        data-concept-flow
-        data-static-src={ConceptMap.src}
-        data-animation-src={conceptAnimation}
-        data-mobile-static-src={ConceptMobile.src}
-        data-mobile-animation-src={conceptMobileAnimation}
-        data-play-label={content.hero.playAnimation}
-        data-stop-label={content.hero.stopAnimation}
-      >
-        <div class="concept-flow-frame">
-          <picture>
-            <source data-concept-flow-source media="(max-width: 720px)" srcset={ConceptMobile.src} />
-            <img
-              src={ConceptMap.src}
-              width="960"
-              height="540"
-              alt={content.hero.mediaAlt}
-              loading="eager"
-              decoding="async"
-              fetchpriority="high"
-            />
-          </picture>
+      <aside class="hero-principles" aria-label={content.proof.label}>
+        <p class="eyebrow">{content.proof.eyebrow}</p>
+        <div class="hero-principle-list">
+          {content.proof.items.map(([title, description], index) => (
+            <article>
+              <span>0{index + 1}</span>
+              <div><h2>{title}</h2><p>{description}</p></div>
+            </article>
+          ))}
         </div>
-        <div class="concept-flow-meta">
-          <figcaption>{content.hero.mediaCaption}</figcaption>
-          <button type="button" class="concept-flow-toggle" aria-pressed="false">{content.hero.playAnimation}</button>
-        </div>
-      </figure>
+      </aside>
+
+      <p class="hero-boundary">{content.hero.boundary}</p>
     </section>
 
-    <section class="proof-strip" aria-label={locale === "zh-cn" ? "产品原则" : "Product principles"}>
-      {content.proof.map(([title, description]) => (
-        <article><strong>{title}</strong><p>{description}</p></article>
-      ))}
+    <section class="harness-showcase" aria-labelledby="harness-showcase-title">
+      <div class="harness-showcase-intro">
+        <p class="eyebrow">{content.hero.gallery.label}</p>
+        <h2 id="harness-showcase-title">{content.hero.harness.label}</h2>
+        <p>{content.hero.harness.description}</p>
+      </div>
+      <figure class="harness-gallery" data-harness-gallery>
+        <div class="harness-gallery-heading">
+          <span>{content.hero.gallery.label}</span>
+          <span aria-hidden="true">UI / INTERACTION</span>
+        </div>
+        <div class="harness-gallery-tabs" role="tablist" aria-label={content.hero.gallery.ariaLabel}>
+          {content.hero.gallery.items.map((item, index) => (
+            <button
+              type="button"
+              role="tab"
+              id={`harness-tab-${item.id}`}
+              aria-controls={`harness-panel-${item.id}`}
+              aria-selected={index === 0 ? "true" : "false"}
+              tabindex={index === 0 ? "0" : "-1"}
+              data-gallery-tab={item.id}
+            >
+              <span>0{index + 1}</span>{item.label}
+            </button>
+          ))}
+        </div>
+        {content.hero.gallery.items.map((item, index) => (
+          <div
+            class="harness-gallery-panel"
+            role="tabpanel"
+            id={`harness-panel-${item.id}`}
+            aria-labelledby={`harness-tab-${item.id}`}
+            data-gallery-panel={item.id}
+            data-media-kind={item.kind}
+            hidden={index !== 0}
+          >
+            <Image
+              src={galleryImages[item.id]}
+              width={1280}
+              alt={item.alt}
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              fetchpriority={index === 0 ? "high" : "auto"}
+            />
+            <div class="harness-gallery-caption"><strong>{item.title}</strong><span>{item.description}</span></div>
+          </div>
+        ))}
+      </figure>
     </section>
 
     <section class="landing-band" aria-labelledby="workbench-title">
@@ -194,26 +223,32 @@ const metadata =
 </PublicSiteLayout>
 
 <script>
-  for (const figure of document.querySelectorAll<HTMLElement>("[data-concept-flow]")) {
-    const image = figure.querySelector<HTMLImageElement>("img")
-    const mobileSource = figure.querySelector<HTMLSourceElement>("[data-concept-flow-source]")
-    const button = figure.querySelector<HTMLButtonElement>("button")
-    const staticSrc = figure.dataset.staticSrc
-    const animationSrc = figure.dataset.animationSrc
-    const mobileStaticSrc = figure.dataset.mobileStaticSrc
-    const mobileAnimationSrc = figure.dataset.mobileAnimationSrc
-    const playLabel = figure.dataset.playLabel
-    const stopLabel = figure.dataset.stopLabel
-
-    if (!image || !mobileSource || !button || !staticSrc || !animationSrc || !mobileStaticSrc || !mobileAnimationSrc || !playLabel || !stopLabel) continue
-
-    button.addEventListener("click", () => {
-      const playing = button.getAttribute("aria-pressed") === "true"
-      image.src = playing ? staticSrc : animationSrc
-      mobileSource.srcset = playing ? mobileStaticSrc : mobileAnimationSrc
-      button.setAttribute("aria-pressed", String(!playing))
-      button.textContent = playing ? playLabel : stopLabel
-    })
+  for (const gallery of document.querySelectorAll<HTMLElement>("[data-harness-gallery]")) {
+    const tabs = [...gallery.querySelectorAll<HTMLButtonElement>("[data-gallery-tab]")]
+    const panels = [...gallery.querySelectorAll<HTMLElement>("[data-gallery-panel]")]
+    const select = (next: HTMLButtonElement) => {
+      for (const tab of tabs) {
+        const selected = tab === next
+        tab.setAttribute("aria-selected", String(selected))
+        tab.tabIndex = selected ? 0 : -1
+      }
+      for (const panel of panels) panel.hidden = panel.dataset.galleryPanel !== next.dataset.galleryTab
+    }
+    for (const [index, tab] of tabs.entries()) {
+      tab.addEventListener("click", () => select(tab))
+      tab.addEventListener("keydown", (event) => {
+        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return
+        event.preventDefault()
+        const nextIndex = event.key === "Home"
+          ? 0
+          : event.key === "End"
+            ? tabs.length - 1
+            : (index + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length
+        const next = tabs[nextIndex]
+        select(next)
+        next.focus()
+      })
+    }
   }
 </script>
 
@@ -224,7 +259,8 @@ const metadata =
   }
 
   .landing-hero {
-    align-items: center;
+    grid-template-rows: auto auto;
+    align-items: stretch;
   }
 
   .hero-title-line {
@@ -232,7 +268,106 @@ const metadata =
     white-space: nowrap;
   }
 
-  .concept-flow {
+  .hero-copy {
+    align-self: center;
+  }
+
+  .hero-principles {
+    align-self: stretch;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding: 28px 30px 30px;
+    border: 2px solid var(--ink);
+    border-top: 10px solid var(--cobalt);
+    background: var(--paper-raised);
+  }
+
+  .hero-principles > .eyebrow {
+    margin-bottom: 18px;
+  }
+
+  .hero-principle-list {
+    display: grid;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--ink);
+  }
+
+  .hero-principle-list article {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 16px;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .hero-principle-list article > span {
+    align-self: start;
+    color: var(--cobalt);
+    font: 500 10px/1.4 var(--mono);
+  }
+
+  .public-landing .hero-principle-list h2 {
+    margin: 0 0 5px;
+    color: var(--ink) !important;
+    font-family: var(--display);
+    font-size: 29px !important;
+    font-weight: 760 !important;
+    line-height: 1 !important;
+    letter-spacing: -0.045em;
+  }
+
+  .hero-principle-list p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .hero-boundary {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 18px 22px;
+    border: 0;
+    border-left: 8px solid var(--cobalt);
+    background: var(--cobalt-wash);
+    color: #353b56;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .harness-showcase {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.48fr) minmax(0, 1.52fr);
+    gap: 56px;
+    align-items: start;
+    padding: 72px 0;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .harness-showcase-intro {
+    position: sticky;
+    top: 28px;
+  }
+
+  .public-landing .harness-showcase-intro h2 {
+    margin: 0;
+    color: var(--ink) !important;
+    font-family: var(--display);
+    font-size: clamp(42px, 4vw, 60px) !important;
+    font-weight: 760 !important;
+    line-height: 0.95 !important;
+    letter-spacing: -0.06em;
+  }
+
+  .harness-showcase-intro > p:last-child {
+    margin: 24px 0 0;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .harness-gallery {
     margin: 0;
     border: 2px solid var(--ink);
     background: var(--ink);
@@ -240,18 +375,68 @@ const metadata =
     overflow: hidden;
   }
 
-  .concept-flow-frame {
-    aspect-ratio: 16 / 9;
-    background: var(--paper);
+  .harness-gallery-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 10px 14px;
+    color: #d9d9d2;
+    font: 700 10px/1.2 var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
-  .concept-flow-frame picture {
-    display: block;
-    width: 100%;
-    height: 100%;
+  .harness-gallery-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid #393a3f;
+    border-bottom: 1px solid #393a3f;
   }
 
-  .concept-flow img,
+  .harness-gallery-tabs button {
+    min-height: 44px;
+    padding: 10px 8px;
+    border: 0;
+    border-right: 1px solid #393a3f;
+    background: transparent;
+    color: #d9d9d2;
+    font: 700 11px/1.2 var(--mono);
+    cursor: pointer;
+  }
+
+  .harness-gallery-tabs button:last-child {
+    border-right: 0;
+  }
+
+  .harness-gallery-tabs button span {
+    margin-right: 7px;
+    color: #788cff;
+    font-size: 9px;
+  }
+
+  .harness-gallery-tabs button:hover {
+    background: #20243a;
+    color: white;
+  }
+
+  .harness-gallery-tabs button[aria-selected="true"] {
+    background: var(--cobalt);
+    color: white;
+  }
+
+  .harness-gallery-tabs button[aria-selected="true"] span {
+    color: white;
+  }
+
+  .harness-gallery-panel {
+    background: #0d0e12;
+  }
+
+  .harness-gallery-panel[hidden] {
+    display: none;
+  }
+
+  .harness-gallery-panel img,
   .runtime-image img,
   .squad-image-stack img {
     display: block;
@@ -259,35 +444,25 @@ const metadata =
     height: auto;
   }
 
-  .concept-flow-meta {
+  .harness-gallery-caption {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 16px;
-    padding: 10px 12px 10px 16px;
+    grid-template-columns: minmax(150px, 0.7fr) minmax(0, 1.3fr);
+    gap: 18px;
+    min-height: 72px;
+    padding: 13px 16px;
     border-top: 1px solid #393a3f;
-  }
-
-  .concept-flow figcaption,
-  .squad-image-stack figcaption {
     color: #d9d9d2;
-    font-family: var(--mono);
-    font-size: 11px;
   }
 
-  .concept-flow-toggle {
-    min-height: 36px;
-    padding: 8px 12px;
-    border: 1px solid #d9d9d2;
-    background: transparent;
+  .harness-gallery-caption strong {
     color: white;
-    font: 700 11px/1.2 var(--mono);
-    cursor: pointer;
+    font: 700 11px/1.4 var(--mono);
   }
 
-  .concept-flow-toggle:hover,
-  .concept-flow-toggle[aria-pressed="true"] {
-    background: var(--cobalt);
+  .harness-gallery-caption span,
+  .squad-image-stack figcaption {
+    color: #b9b9b2;
+    font: 400 11px/1.45 var(--mono);
   }
 
   .work-mode-grid {
@@ -473,6 +648,7 @@ const metadata =
     }
 
     .public-landing .landing-hero,
+    .public-landing .harness-showcase,
     .public-landing .squad-story-grid,
     .public-landing .squad-image-stack,
     .public-landing .runtime-boundary,
@@ -484,6 +660,15 @@ const metadata =
       gap: 40px;
       min-height: 0;
       padding: 48px 0 56px;
+    }
+
+    .public-landing .harness-showcase {
+      gap: 32px;
+      padding: 54px 0;
+    }
+
+    .harness-showcase-intro {
+      position: static;
     }
 
     .hero-title-line {
@@ -544,30 +729,12 @@ const metadata =
   }
 
   @media (max-width: 720px) {
-    .public-landing .concept-flow-frame {
-      aspect-ratio: 9 / 16;
-    }
-
-    .public-landing .concept-flow-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .public-landing .concept-flow-meta,
     .public-landing .hero-actions {
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .public-landing .concept-flow-meta {
-      display: grid;
-      align-items: stretch;
-      padding: 14px;
-    }
-
-    .concept-flow-toggle {
-      min-width: 44px;
-      min-height: 44px;
+    .harness-gallery-caption {
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .public-landing .hero-actions {

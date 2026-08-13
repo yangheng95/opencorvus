@@ -258,13 +258,13 @@ API key，仍显示 `requires_configuration` 以说明账户、项目或订阅�
 
 ## 刷新语义
 
-- 启动和普通模型解析只读取 `OPENCORVUS_MODELS_PATH` 指向的 JSON；未配置时读取 durable data 目录下的 canonical `models.json`，该文件不属于版本化 cache 清理范围。
+- 启动和普通模型解析只读取 `OPENCORVUS_MODELS_PATH` 指向的 JSON；未配置时读取 durable data 目录下的 canonical `models.json`，该文件不属于版本化 cache 清理范围。默认 durable catalog 从旧版（曾主动移除 OpenCorvus declaration）升级时，由 catalog owner 在同一文件锁内一次性原子补入 bundled OpenCorvus declaration；显式 `OPENCORVUS_MODELS_PATH` 是用户完整 authority，缺少 required local provider 时仍严格失败，不自动迁移。
 - fresh install 缺少默认 canonical 文件时，runtime 从编译进 executable 的唯一 bootstrap asset 离线校验并原子创建该文件；这是安装 provisioning，不是 lookup fallback。已有默认文件永不被 bootstrap 覆盖，普通启动不隐式访问 models.dev 或 Hexin `/v1/models`。
 - 显式 override、已有默认 catalog 的 JSON 无效、schema 无效或缺少必需本地 provider 时立即报错；不存在 snapshot read、空 catalog 或其他来源的回退链。
 - Provider 目录与已配置 Provider 的实时模型身份是两个独立显式刷新入口：`Provider.refreshCatalog()` 只由设置面板 `/provider/refresh` 和 CLI `models --refresh` 刷新 registry declaration；`Provider.refreshModels()` 只由 `/provider/models/refresh` 刷新 live model identities。两者都写入同一个 canonical catalog，但不得彼此调用。任一 writer 提交后由同一个 canonical invalidation owner 清除 global、全部 project Provider projection 与全部 native-agent registry projection；发起刷新的 project scope 不得限制共享 catalog revision 的可见范围。
-- `ModelsDev.refresh()` 合并远端 registry 与必需本地 provider（Hexin / OpenCorvus / Kilo），校验后原子替换同一个 catalog 文件。
-- 当当前配置可解析出 Hexin API key 时，`Provider.refreshModels()` 拉取 Hexin `/v1/models` 与 `/v1/model/info`，写回统一 `models.json`，并由 route owner reset provider/agent 缓存，使设置面板和 agent 模型下拉立即看到 live 模型数。`/models` 是身份准源；`/model/info` 缺少某个 identity 的 enrichment row 时使用 canonical default limits，不中止刷新。畸形 response、非法 limit 和冲突 duplicate 仍严格失败。
-- Hexin 的模型刷新、budget 和流式请求共享 `hexin-endpoint.ts` 的唯一 endpoint declaration 与 Bun-compatible `node:https` transport。socket lookup 固定连接当前可达的私网地址，URL、HTTP Host、TLS SNI 和证书验证仍使用 `aimemodeldev.myhexin.com`；incoming response 直接转换为 Web `ReadableStream`，不得缓冲 LLM 流；显式配置的 `network.proxy.llmProvider` 优先拥有流式 transport。禁止在 Bun executable 中用 Node Undici dispatcher 实现这条固定地址路径。
+- `ModelsDev.refresh()` 合并远端 registry 与必需本地 provider（OpenCorvus / Kilo），校验后原子替换同一个 catalog 文件。
+- 当当前配置可解析出 OpenCorvus API key 时，`Provider.refreshModels()` 使用 `config.provider.opencorvus.api`（未覆盖时为 canonical OpenCorvus declaration 的 top-level `api`）作为唯一 discovery endpoint；`/models` 是 identity authority，`/model/info` 提供完整严格 metadata。已知 identity 缺少新 metadata 时可保留同一 canonical declaration 中已有 metadata；新 identity 缺少完整 metadata 必须失败，禁止伪造 capability、release date 或 token limits。全部 response 校验完成后一次原子写回统一 `models.json`，再由 route owner reset provider/agent 缓存。畸形 response、空 identity 集或冲突 duplicate 严格失败且不改写旧 catalog。
+- live model refresh 使用该 top-level Provider endpoint、saved credential 与 `network.proxy.llmProvider` transport 配置；不得从 per-model inference endpoint 反推 discovery endpoint，也不得另建 refresh-only credential 或 transport authority。
 - 打开 Providers 配置页时只按当前 project/global scope 读取稳定的 Provider catalog、Auth method 和 config owner；不得隐式执行网络刷新。Provider 目录刷新和实时模型刷新只由两个显式按钮分别触发，各自完成后重读 Provider owner，各自拥有独立错误面。
 - 没有活动项目目录的桌面首次启动使用 `/global/providers`、`/global/providers/refresh`、`/global/providers/models/refresh`、`/global/providers/discover-models` 和 `/global/providers/:providerID/test`；这些路由把 `Config.getGlobal()` 显式传入与项目路由共用的 Provider 实现。`/auth/:providerID` 仍是唯一 API credential 写入面，项目目录不是新增 Provider、保存 API key、发现模型、测试连接或使用内置 Provider OAuth 的前置条件。`Plugin.listGlobalProviderHooks()` 是唯一 project-independent built-in hook catalog，同时投影 auth method、OAuth loader 和 Provider model projection；installed project plugins 仍只由真实 Project `Instance` 的 `Plugin.list()` 拥有。
 
@@ -272,7 +272,7 @@ API key，仍显示 `requires_configuration` 以说明账户、项目或订阅�
 
 - Provider/config 管理与修复路由只需要 project identity，不得先运行完整 `InstanceBootstrap`。失效模型或其他 runtime bootstrap 输入不能阻塞读取 catalog/Auth/config、保存 key、刷新模型或修复 config；Task/runtime 路由仍严格执行完整 bootstrap。
 - Provider state 是同一个 canonical catalog/config/Auth 的部分成功投影，并携带结构化 issues。catalog 读取、插件 catalog、单个 Provider model projection、Auth store、plugin auth loader 和 custom loader 各自拥有错误边界；单个 Provider 阶段失败只移除该 connected projection，不得清空其他 Provider 或吞掉错误。
-- Auth 持久化读取失败使用 typed `Auth.ReadError`。Config 读取 Auth 只服务于可选的 well-known remote-config layer；该层失败不得阻塞本地/global config。Provider 投影只报告一次共享 `auth.read` 根因，插件阶段因同一 typed cause 失败时不得重复放大；服务端日志可保留精确文件路径，客户端错误不得泄露凭据路径或原始 API URL。
+- Auth 持久化读取以 typed `Auth.ReadError` 区分合法缺失与 `io`、`malformed_json`、`invalid_credential`。只有缺失的 `auth.json` 表示空 authority；已经存在但不可观察或损坏的 authority 必须让 project-effective Config fail closed，不能把 declared well-known organization layer静默替换为合法本地配置。直接 Config/Auth consumers收到严格的安全 503，不公开凭据路径、credential key、原始 API URL、parser input 或 token。Provider catalog 的现有结构化 `issues` 是唯一允许的部分成功投影：它只报告一次共享 `auth.read` 根因，插件阶段因同一 typed cause 失败时不得重复放大。Global Config 本身不枚举 Auth，仍可独立读取；需要 saved Auth 的 global Provider 操作遵守同一 typed failure。
 - 显式刷新 durable writer 的成功与后续 cache invalidation 分开报告。cache invalidation 的问题必须作为 issue 返回，不能把已经成功的 catalog/model 写入改写成不相关的顶层 HTTP 400。
 - Auth 写入/删除的 durable commit 与后续 Provider/Agent cache invalidation 分开报告；cache issue 不能把已成功保存或删除的 key 改写成失败。
 - Overlay 的 catalog、Auth method 和 global config 请求独立 settle、独立校验、独立提交；失败 owner 保留旧值并显示 resource-tagged 错误，成功 sibling 必须立即可用。禁止 `Promise.all` 让单个请求拒绝阻止全部 Provider 数据落库。

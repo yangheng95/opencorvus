@@ -4,11 +4,13 @@ import { Identifier } from "@/id/id"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { recordEngineArtifact } from "@/engine/artifact"
 import {
+  FactCheckIncompleteArtifactSchema,
   FactCheckReviewArtifactSchema,
   type FactCheckReview,
   type FactCheckReviewArtifact,
 } from "./schema"
-import type { ArtifactReadLocator } from "@opencorvus-ai/plugin/artifact-catalog"
+import type { ArtifactReadLocator, EngineArtifactLocator } from "@opencorvus-ai/plugin/artifact-catalog"
+import { exactEngineArtifactLocator } from "@/artifact-catalog"
 
 export interface FactCheckReviewRow {
   artifactID: string
@@ -54,6 +56,44 @@ export function recordFactCheckReview(input: RecordFactCheckReviewInput): string
     timeCreated: now,
   })
   return id
+}
+
+export interface RecordFactCheckIncompleteInput {
+  taskID: string
+  targetSessionID: string
+  targetAgent: string
+  targetMessageID: string
+  targetMessageContentHash: string
+  invokedByOrchestratorSessionID: string
+  factCheckSessionID: string
+  finalMessageID: string
+  observedArtifactLocators: ArtifactReadLocator[]
+  sourceArtifactLocators: ArtifactReadLocator[]
+  reason: "review_not_published" | "review_scope_mismatch"
+  now?: number
+}
+
+export function recordFactCheckIncomplete(input: RecordFactCheckIncompleteInput): EngineArtifactLocator {
+  const payload = FactCheckIncompleteArtifactSchema.parse({
+    target_session_id: input.targetSessionID,
+    target_agent: input.targetAgent,
+    target_message_id: input.targetMessageID,
+    target_message_content_hash: input.targetMessageContentHash,
+    invoked_by_orchestrator_session_id: input.invokedByOrchestratorSessionID,
+    fact_check_session_id: input.factCheckSessionID,
+    final_message_id: input.finalMessageID,
+    reason: input.reason,
+    observed_artifact_locators: input.observedArtifactLocators,
+    source_artifact_locators: input.sourceArtifactLocators,
+  })
+  const artifactID = recordEngineArtifact({
+    taskID: input.taskID,
+    kind: "fact_check_incomplete",
+    label: "fact-check-incomplete",
+    payload: payload as unknown as Record<string, unknown>,
+    timeCreated: input.now,
+  })
+  return exactEngineArtifactLocator({ taskID: input.taskID, artifactID })
 }
 
 export function listFactCheckReviews(taskID: string): FactCheckReviewRow[] {
