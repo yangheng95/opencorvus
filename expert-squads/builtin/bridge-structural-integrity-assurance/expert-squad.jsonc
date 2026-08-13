@@ -5,22 +5,30 @@
   "name": "Bridge Structural Integrity Assurance",
   "label": "Bridge Structural Integrity Assurance",
   "description": "Bridge asset configuration, element inspection, defect, load-rating, scour, fatigue, maintenance-action and independent QC/QA evidence assurance without posting, closure or engineering-release authority.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for controlled bridge inspection and structural-integrity evidence prepared for qualified owner review.",
     "selection_guidance": "Select for bridge identity/configuration, element condition, inspection findings, load-rating inputs/results, scour, fatigue/fracture evidence, maintenance actions or independent QC/QA. Do not select to rate, post, close, reopen, permit loads, control traffic or approve repair.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["bridge-structural-integrity-assurance/shared/method"],
+      "package_skill_refs": [
+        "bridge-structural-integrity-assurance/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "bridge-asset-configuration-authority-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["bridge-structural-integrity-assurance/shared/method"],
+        "package_skill_refs": [
+          "bridge-structural-integrity-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "bridge-inspection-condition-defect-analyst": {
         "label": "Bridge Inspection Condition Defect Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["bridge-structural-integrity-assurance/shared/method"],
+        "package_skill_refs": [
+          "bridge-structural-integrity-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +83,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "bridge-load-rating-scour-fatigue-analyst": {
         "label": "Bridge Load Rating Scour and Fatigue Analyst",
@@ -81,7 +93,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["bridge-structural-integrity-assurance/shared/method"],
+        "package_skill_refs": [
+          "bridge-structural-integrity-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "bridge-maintenance-action-qcqa-analyst": {
         "label": "Bridge Maintenance Action QC QA Analyst",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["bridge-structural-integrity-assurance/shared/method"],
+        "package_skill_refs": [
+          "bridge-structural-integrity-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,7 +127,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "bridge-structural-integrity-review-owner": {
         "label": "Bridge Structural Integrity Review Owner",
@@ -121,7 +137,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["bridge-structural-integrity-assurance/shared/method"],
+        "package_skill_refs": [
+          "bridge-structural-integrity-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -131,8 +149,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "qualified-review": {
@@ -142,22 +160,22 @@
           "bridge-asset-configuration-authority-analyst": {
             "agent_id": "bridge-asset-configuration-authority-analyst",
             "description": "Freezes bridge/span/element identity, records, modifications, inspection program and professional authority.",
-            "depends_on": [],
+            "depends_on": []
           },
           "bridge-inspection-condition-defect-analyst": {
             "agent_id": "bridge-inspection-condition-defect-analyst",
             "description": "Maps material and element observations to reproducible locations, dimensions, evidence and limitations.",
-            "depends_on": [],
+            "depends_on": []
           },
           "bridge-load-rating-scour-fatigue-analyst": {
             "agent_id": "bridge-load-rating-scour-fatigue-analyst",
             "description": "Traces supplied analysis models, loads, scour, fatigue/fracture and controlling evidence without engineering decisions.",
-            "depends_on": [],
+            "depends_on": []
           },
           "bridge-maintenance-action-qcqa-analyst": {
             "agent_id": "bridge-maintenance-action-qcqa-analyst",
             "description": "Traces findings, owner actions, restrictions as supplied, repair evidence, verification and independent QC/QA.",
-            "depends_on": [],
+            "depends_on": []
           },
           "bridge-structural-integrity-review-owner": {
             "agent_id": "bridge-structural-integrity-review-owner",
@@ -166,11 +184,11 @@
               "bridge-asset-configuration-authority-analyst",
               "bridge-inspection-condition-defect-analyst",
               "bridge-load-rating-scour-fatigue-analyst",
-              "bridge-maintenance-action-qcqa-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "bridge-maintenance-action-qcqa-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

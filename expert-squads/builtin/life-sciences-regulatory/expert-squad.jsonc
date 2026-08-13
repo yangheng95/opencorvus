@@ -5,22 +5,30 @@
   "name": "Life Sciences Regulatory Readiness",
   "label": "Life Sciences Regulatory Readiness",
   "description": "Product, evidence, pathway, market, quality, and risk inputs joined into a draft regulatory readiness register for qualified review.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for bounded life-sciences regulatory readiness analysis.",
     "selection_guidance": "Select for medical-device or life-sciences product evidence, intended-use traceability, pathway questions, market requirements, quality documentation, risk files, or submission-readiness gaps without clinical, classification, conformity, filing, or approval authority.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["life-sciences-regulatory/shared/method"],
+      "package_skill_refs": [
+        "life-sciences-regulatory/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "regulatory-product-evidence-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["life-sciences-regulatory/shared/method"],
+        "package_skill_refs": [
+          "life-sciences-regulatory/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "regulatory-pathway-market-analyst": {
         "label": "Pathway and Market Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["life-sciences-regulatory/shared/method"],
+        "package_skill_refs": [
+          "life-sciences-regulatory/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,17 +83,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "regulatory-quality-risk-analyst": {
         "label": "Quality and Risk Analyst",
         "description": "Maps quality-system, risk-file, traceability, post-market, and control evidence.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/regulatory-quality-risk-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["life-sciences-regulatory/shared/method"],
+        "package_skill_refs": [
+          "life-sciences-regulatory/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "regulatory-readiness-owner": {
         "label": "Regulatory Readiness Owner",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["life-sciences-regulatory/shared/method"],
+        "package_skill_refs": [
+          "life-sciences-regulatory/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "regulatory-readiness-pack": {
@@ -122,17 +138,17 @@
           "regulatory-product-evidence-analyst": {
             "agent_id": "regulatory-product-evidence-analyst",
             "description": "Maps intended use, product claims, evidence, versions, and unresolved clinical or technical gaps.",
-            "depends_on": [],
+            "depends_on": []
           },
           "regulatory-pathway-market-analyst": {
             "agent_id": "regulatory-pathway-market-analyst",
             "description": "Maps candidate jurisdictions, pathways, classifications, requirements, and authority questions.",
-            "depends_on": [],
+            "depends_on": []
           },
           "regulatory-quality-risk-analyst": {
             "agent_id": "regulatory-quality-risk-analyst",
             "description": "Maps quality-system, risk-file, traceability, post-market, and control evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "regulatory-readiness-owner": {
             "agent_id": "regulatory-readiness-owner",
@@ -140,11 +156,11 @@
             "depends_on": [
               "regulatory-pathway-market-analyst",
               "regulatory-product-evidence-analyst",
-              "regulatory-quality-risk-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "regulatory-quality-risk-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

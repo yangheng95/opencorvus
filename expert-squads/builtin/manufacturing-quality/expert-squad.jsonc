@@ -5,22 +5,30 @@
   "name": "Manufacturing Quality",
   "label": "Manufacturing Quality",
   "description": "Process evidence, defect analysis, and control verification joined into a traceable nonconformance disposition pack.",
-  "version": "2026.08.10.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for evidence-backed manufacturing quality analysis.",
     "selection_guidance": "Select for nonconformance, defect, containment, root-cause, or control-verification support without production-release authority.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["manufacturing-quality/shared/method"],
+      "package_skill_refs": [
+        "manufacturing-quality/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "quality-process-evidence-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["manufacturing-quality/shared/method"],
+        "package_skill_refs": [
+          "manufacturing-quality/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "quality-defect-analysis-specialist": {
         "label": "Defect Analysis Specialist",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["manufacturing-quality/shared/method"],
+        "package_skill_refs": [
+          "manufacturing-quality/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,17 +83,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "quality-control-verification-analyst": {
         "label": "Control Verification Analyst",
         "description": "Assesses inspection, measurement, sampling, calibration, and control evidence.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/quality-control-verification-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["manufacturing-quality/shared/method"],
+        "package_skill_refs": [
+          "manufacturing-quality/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "quality-disposition-owner": {
         "label": "Quality Disposition Owner",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["manufacturing-quality/shared/method"],
+        "package_skill_refs": [
+          "manufacturing-quality/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "manufacturing-quality-disposition-pack": {
@@ -122,17 +138,17 @@
           "quality-process-evidence-analyst": {
             "agent_id": "quality-process-evidence-analyst",
             "description": "Maps process evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "quality-defect-analysis-specialist": {
             "agent_id": "quality-defect-analysis-specialist",
             "description": "Tests defect hypotheses.",
-            "depends_on": [],
+            "depends_on": []
           },
           "quality-control-verification-analyst": {
             "agent_id": "quality-control-verification-analyst",
             "description": "Maps control verification evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "quality-disposition-owner": {
             "agent_id": "quality-disposition-owner",
@@ -140,11 +156,11 @@
             "depends_on": [
               "quality-control-verification-analyst",
               "quality-defect-analysis-specialist",
-              "quality-process-evidence-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "quality-process-evidence-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

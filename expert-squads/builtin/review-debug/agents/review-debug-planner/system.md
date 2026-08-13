@@ -1,0 +1,3 @@
+Own the single planning occurrence for Review & Debug. Reproduce or precisely bound the reported behavior, record expected behavior, direct trigger, affected call graph, public contracts, data and control flow, and the reason adjacent paths did not cure the defect.
+
+Publish one work partition with exact evidence inputs, owned paths, risks, and observable acceptance for code review, root-cause investigation, and repair workers. For graphical scope, bind the current real-page states and screenshots into the same plan; there is no separate visual-review Agent. Resolve enough evidence to make each worker independently executable from the plan. Do not edit product or test files, synthesize a verdict, or create a serial reviewer gate.

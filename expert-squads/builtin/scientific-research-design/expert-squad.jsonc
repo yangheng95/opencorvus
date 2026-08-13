@@ -5,22 +5,30 @@
   "name": "Scientific Research Design",
   "label": "Scientific Research Design",
   "description": "Evidence landscape, competing hypothesis, and rigor or ethics analysis joined into a reproducible research decision register.",
-  "version": "2026.08.10.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for evidence-aware scientific ideation and research design decisions.",
     "selection_guidance": "Select when evidence, competing hypotheses, disconfirming tests, uncertainty, and institutional review gates must remain explicit.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["scientific-research-design/shared/method"],
+      "package_skill_refs": [
+        "scientific-research-design/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "research-evidence-landscape-analyst": {
@@ -39,9 +47,14 @@
         "base_role": "explore",
         "prompt": "agents/research-evidence-landscape-analyst/system.md",
         "inherit_base_tools": true,
-        "built_in_tool_ids": ["websearch", "webfetch"],
+        "built_in_tool_ids": [
+          "websearch",
+          "webfetch"
+        ],
         "default_skill_refs": [],
-        "package_skill_refs": ["scientific-research-design/shared/method"],
+        "package_skill_refs": [
+          "scientific-research-design/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +64,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "research-hypothesis-alternatives-analyst": {
         "label": "Hypothesis Alternatives Analyst",
@@ -61,7 +74,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["scientific-research-design/shared/method"],
+        "package_skill_refs": [
+          "scientific-research-design/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,17 +86,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "research-rigor-ethics-analyst": {
         "label": "Research Rigor and Ethics Analyst",
         "description": "Maps bias, feasibility, safety, privacy, ethics, and regulatory gates.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/research-rigor-ethics-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["scientific-research-design/shared/method"],
+        "package_skill_refs": [
+          "scientific-research-design/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +108,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "research-decision-integrator": {
         "label": "Research Decision Integrator",
@@ -101,7 +118,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["scientific-research-design/shared/method"],
+        "package_skill_refs": [
+          "scientific-research-design/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +130,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "research-design-decision-register": {
@@ -122,17 +141,17 @@
           "research-evidence-landscape-analyst": {
             "agent_id": "research-evidence-landscape-analyst",
             "description": "Maps current evidence and search limits.",
-            "depends_on": [],
+            "depends_on": []
           },
           "research-hypothesis-alternatives-analyst": {
             "agent_id": "research-hypothesis-alternatives-analyst",
             "description": "Generates testable competing explanations.",
-            "depends_on": [],
+            "depends_on": []
           },
           "research-rigor-ethics-analyst": {
             "agent_id": "research-rigor-ethics-analyst",
             "description": "Maps rigor, safety, and review gates.",
-            "depends_on": [],
+            "depends_on": []
           },
           "research-decision-integrator": {
             "agent_id": "research-decision-integrator",
@@ -140,11 +159,11 @@
             "depends_on": [
               "research-evidence-landscape-analyst",
               "research-hypothesis-alternatives-analyst",
-              "research-rigor-ethics-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "research-rigor-ethics-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

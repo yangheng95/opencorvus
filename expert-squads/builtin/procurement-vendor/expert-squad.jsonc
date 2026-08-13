@@ -5,22 +5,30 @@
   "name": "Procurement & Vendor Decision",
   "label": "Procurement & Vendor Decision",
   "description": "Parallel commercial comparison, source-grounded vendor diligence, approval-evidence review, and a human-owned procurement decision pack.",
-  "version": "2026.08.10.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use to compare vendors, investigate supplier risk, and prepare a reviewable approval record without purchasing or approving.",
     "selection_guidance": "Select for multi-vendor sourcing and diligence decisions. Use legal review for contract redlines and keep final purchase and approval authority with named humans.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["procurement-vendor/shared/method"],
+      "package_skill_refs": [
+        "procurement-vendor/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "procurement-commercial-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["procurement-vendor/shared/method"],
+        "package_skill_refs": [
+          "procurement-vendor/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "procurement-diligence-analyst": {
         "label": "Vendor Diligence Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["procurement-vendor/shared/method"],
+        "package_skill_refs": [
+          "procurement-vendor/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +83,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "procurement-governance-reviewer": {
         "label": "Procurement Governance Reviewer",
@@ -81,7 +93,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["procurement-vendor/shared/method"],
+        "package_skill_refs": [
+          "procurement-vendor/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "procurement-decision-integrator": {
         "label": "Procurement Decision Integrator",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["procurement-vendor/shared/method"],
+        "package_skill_refs": [
+          "procurement-vendor/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "vendor-decision-pack": {
@@ -122,17 +138,17 @@
           "procurement-commercial-analyst": {
             "agent_id": "procurement-commercial-analyst",
             "description": "Publishes the normalized commercial and capability comparison.",
-            "depends_on": [],
+            "depends_on": []
           },
           "procurement-diligence-analyst": {
             "agent_id": "procurement-diligence-analyst",
             "description": "Publishes the source-grounded vendor diligence dossier.",
-            "depends_on": [],
+            "depends_on": []
           },
           "procurement-governance-reviewer": {
             "agent_id": "procurement-governance-reviewer",
             "description": "Publishes the approval-evidence and authority matrix.",
-            "depends_on": [],
+            "depends_on": []
           },
           "procurement-decision-integrator": {
             "agent_id": "procurement-decision-integrator",
@@ -140,11 +156,11 @@
             "depends_on": [
               "procurement-commercial-analyst",
               "procurement-diligence-analyst",
-              "procurement-governance-reviewer",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "procurement-governance-reviewer"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

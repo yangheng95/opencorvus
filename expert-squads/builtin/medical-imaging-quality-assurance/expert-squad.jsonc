@@ -5,22 +5,30 @@
   "name": "Medical Imaging Quality Assurance",
   "label": "Medical Imaging Quality Assurance",
   "description": "Evidence-bounded imaging equipment, protocol, phantom QC, DICOM workflow, display, dose-index, and nonconformance review without clinical or system-operation authority.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for source-bound medical-imaging QA evidence and qualified review preparation.",
     "selection_guidance": "Select for equipment/configuration baselines, phantom technical QC, DICOM transfer/display integrity, dose-index context, or imaging CAPA trends. Do not select for diagnosis, clinical image acceptance, patient-dose decisions, system operation, or accreditation decisions.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["medical-imaging-quality-assurance/shared/method"],
+      "package_skill_refs": [
+        "medical-imaging-quality-assurance/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "imaging-equipment-protocol-configuration-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["medical-imaging-quality-assurance/shared/method"],
+        "package_skill_refs": [
+          "medical-imaging-quality-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "imaging-phantom-technical-qc-analyst": {
         "label": "Imaging Phantom Technical QC Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["medical-imaging-quality-assurance/shared/method"],
+        "package_skill_refs": [
+          "medical-imaging-quality-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,17 +83,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "dicom-data-display-workflow-integrity-analyst": {
         "label": "DICOM Data Display Workflow Integrity Analyst",
         "description": "Reconciles minimized DICOM identity, transfer, storage, derived-output, and display-chain evidence.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/dicom-data-display-workflow-integrity-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["medical-imaging-quality-assurance/shared/method"],
+        "package_skill_refs": [
+          "medical-imaging-quality-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "imaging-dose-nonconformance-trend-analyst": {
         "label": "Imaging Dose Nonconformance Trend Analyst",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["medical-imaging-quality-assurance/shared/method"],
+        "package_skill_refs": [
+          "medical-imaging-quality-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,7 +127,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "medical-imaging-quality-assurance-review-owner": {
         "label": "Medical Imaging Quality Assurance Review Owner",
@@ -121,7 +137,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["medical-imaging-quality-assurance/shared/method"],
+        "package_skill_refs": [
+          "medical-imaging-quality-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -131,8 +149,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "medical-imaging-quality-assurance-review": {
@@ -142,22 +160,22 @@
           "imaging-equipment-protocol-configuration-analyst": {
             "agent_id": "imaging-equipment-protocol-configuration-analyst",
             "description": "Reconciles equipment, protocol, and configuration baselines.",
-            "depends_on": [],
+            "depends_on": []
           },
           "imaging-phantom-technical-qc-analyst": {
             "agent_id": "imaging-phantom-technical-qc-analyst",
             "description": "Traces phantom QC measurements and uncertainty.",
-            "depends_on": [],
+            "depends_on": []
           },
           "dicom-data-display-workflow-integrity-analyst": {
             "agent_id": "dicom-data-display-workflow-integrity-analyst",
             "description": "Reconciles DICOM and display-chain integrity evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "imaging-dose-nonconformance-trend-analyst": {
             "agent_id": "imaging-dose-nonconformance-trend-analyst",
             "description": "Traces dose-index, nonconformance, service, CAPA, and trends.",
-            "depends_on": [],
+            "depends_on": []
           },
           "medical-imaging-quality-assurance-review-owner": {
             "agent_id": "medical-imaging-quality-assurance-review-owner",
@@ -166,11 +184,11 @@
               "dicom-data-display-workflow-integrity-analyst",
               "imaging-dose-nonconformance-trend-analyst",
               "imaging-equipment-protocol-configuration-analyst",
-              "imaging-phantom-technical-qc-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "imaging-phantom-technical-qc-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

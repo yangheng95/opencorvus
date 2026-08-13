@@ -1,6 +1,6 @@
 ---
 name: browser-evidence-acceptance
-description: Plan and execute bounded real-browser research and UI acceptance with current page evidence, safe interaction boundaries, parallel observation and interaction branches, and an explicit criterion-level join. Use when rendered state, navigation, or visible interaction behavior must be verified rather than inferred from code or fixtures.
+description: Plan and execute bounded real-browser research and UI acceptance with current page evidence, safe interaction boundaries, and independent parallel observation and criterion-checking workers. Use when rendered state, navigation, or visible interaction behavior must be verified rather than inferred from code or fixtures.
 ---
 
 # Browser Evidence Acceptance
@@ -31,9 +31,9 @@ Turn a browser-dependent request into observable criteria, collect evidence on t
 - Do not brute-force challenges, harvest secrets, or broaden access to finish a criterion.
 - Stop immediately when the observable goal is satisfied.
 
-## Join the branches
+## Judge independent evidence
 
-Read both complete branch outputs. Decide every criterion as pass, fail, blocked, or unverified. A pass requires evidence from the declared page and state. Preserve disagreement, stale evidence, and coverage gaps instead of converting them into confidence.
+Each worker decides only its allocated criteria from evidence it personally observed. The Orchestrator compares both complete outputs. A pass requires evidence from the declared page and state; disagreement, stale evidence, and coverage gaps remain explicit.
 
 ## Provenance
 

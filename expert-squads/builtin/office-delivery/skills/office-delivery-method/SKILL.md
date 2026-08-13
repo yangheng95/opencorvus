@@ -1,17 +1,17 @@
 ---
 name: office-delivery-method
-description: Produce evidence-backed editable office deliverables through independent source analysis and format design, an explicit assembly join, and rendered quality review. Use for documents, spreadsheets, presentations, PDFs, or coordinated office packs where content traceability and visual usability both matter.
+description: Produce evidence-backed editable office deliverables through one bounded plan followed by parallel source validation and delivery-building workers, with builder-owned rendered inspection. Use for documents, spreadsheets, presentations, PDFs, or coordinated office packs where content traceability and visual usability both matter.
 ---
 
 # Office Delivery Method
 
-Build an office deliverable from one canonical evidence model while keeping source correctness, format design, assembly, and review separately accountable.
+Build an office deliverable from one Planner-owned source and format contract while keeping source validation and delivery construction independently accountable.
 
 ## Establish the delivery contract
 
 Record the audience, decision or action supported, required formats, editable-source requirement, canonical export, language, accessibility needs, source-of-truth inputs, deadline, and acceptance criteria. Mark unavailable inputs and unsupported output formats before work begins.
 
-## Run independent analysis branches
+## Allocate independent worker branches
 
 ### Source and data branch
 
@@ -20,16 +20,17 @@ Record the audience, decision or action supported, required formats, editable-so
 - Keep observed values, formulas, assumptions, and narrative interpretation distinguishable.
 - Define update-sensitive values that require refresh before delivery.
 
-### Format and experience branch
+### Delivery Builder branch
 
+- Read original sources named by the plan; do not wait for a future analyst report.
 - Map the audience journey and information hierarchy without rewriting source facts.
 - Define page, slide, or sheet structure; navigation; table and chart semantics; density; and accessibility.
 - Specify how editable sources and canonical exports remain synchronized.
 - Define render checks for each requested format.
 
-## Join through assembly
+## Build from the bounded plan
 
-Read both complete branches. Resolve every content slot against the source model and every presentation choice against the format plan. Preserve formulas as formulas where the format supports them. Keep links, citations, chart source ranges, and cross-references traceable. Produce the editable deliverable first and derive canonical exports from that source.
+Build directly from the Planner contract and original sources. Resolve every content slot to traceable evidence and every presentation choice to the format allocation. Preserve formulas as formulas where supported. Keep links, citations, chart source ranges, and cross-references traceable. Produce the editable deliverable first and derive canonical exports from that source.
 
 ## Review the actual deliverables
 

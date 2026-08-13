@@ -11,6 +11,7 @@ import {
 } from "@opencorvus-ai/plugin"
 import {
   DataAnalysisArtifactLabels,
+  DataAnalysisPublishableArtifactInputSchema,
   DataAnalysisArtifactTypeSchema,
   DATAANALYSIS_TERMINAL_ARTIFACT_TYPE,
   parseDataAnalysisArtifact,
@@ -40,16 +41,16 @@ const producerByType: Readonly<Record<DataAnalysisArtifactType, string>> = {
 export default tool({
   description: "Validate and publish one complete data-analysis Artifact ABI value with exact sources and immutable resources.",
   args: {
-    artifact_type: DataAnalysisArtifactTypeSchema,
-    payload: tool.schema.unknown(),
+    artifact: DataAnalysisPublishableArtifactInputSchema,
     resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),
     source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema),
   },
   async execute(args, context) {
-    const payload = parseDataAnalysisArtifact(args.artifact_type, args.payload)
-    const expected = expectedSources[args.artifact_type]
+    const artifactType = args.artifact.artifact_type
+    const payload = parseDataAnalysisArtifact(artifactType, args.artifact.payload)
+    const expected = expectedSources[artifactType]
     if (args.source_artifact_locators.length !== expected.length) {
-      throw new Error(args.artifact_type + " requires " + expected.length + " exact source Artifact locator(s)")
+      throw new Error(artifactType + " requires " + expected.length + " exact source Artifact locator(s)")
     }
     const batch = await readExactArtifactsSettled(context.host.engineArtifacts, args.source_artifact_locators)
     if (batch.diagnostics.length > 0) {
@@ -60,7 +61,7 @@ export default tool({
       const envelope = inspectEngineArtifactEnvelope(read, { schemaVersion: 1 })
       const sourceType = DataAnalysisArtifactTypeSchema.parse(envelope.artifact_type)
       if (!expected.includes(sourceType) || observedTypes.has(sourceType)) {
-        throw new Error(args.artifact_type + " received an unexpected or duplicate source " + sourceType)
+        throw new Error(artifactType + " received an unexpected or duplicate source " + sourceType)
       }
       inspectEngineArtifactEnvelope(read, {
         artifactType: sourceType,
@@ -75,28 +76,28 @@ export default tool({
       observedTypes.add(sourceType)
     }
     if (expected.some((sourceType) => !observedTypes.has(sourceType))) {
-      throw new Error(args.artifact_type + " is missing a required typed predecessor")
+      throw new Error(artifactType + " is missing a required typed predecessor")
     }
-    const isTerminal = args.artifact_type === DATAANALYSIS_TERMINAL_ARTIFACT_TYPE
+    const isTerminal = artifactType === DATAANALYSIS_TERMINAL_ARTIFACT_TYPE
     if (isTerminal !== (args.resource_set !== null)) {
       throw new Error(
         isTerminal
           ? "data-analysis/report requires the exact canonical report resource set"
-          : args.artifact_type + " must not attach a terminal report resource set",
+          : artifactType + " must not attach a terminal report resource set",
       )
     }
-    await selectExactArtifactSources(context.host.engineArtifacts, batch.reads, "Typed predecessors for " + args.artifact_type)
+    await selectExactArtifactSources(context.host.engineArtifacts, batch.reads, "Typed predecessors for " + artifactType)
     const resources = args.resource_set ? await context.host.taskArtifacts.resources(args.resource_set) : []
     const publication = await context.host.engineArtifacts.publish({
-      artifact_type: args.artifact_type,
+      artifact_type: artifactType,
       schema_version: 1,
-      label: DataAnalysisArtifactLabels[args.artifact_type],
+      label: DataAnalysisArtifactLabels[artifactType],
       payload,
       resources,
       source_artifact_locators: batch.reads.map((read) => read.locator),
     })
     return JSON.stringify({
-      artifact_type: args.artifact_type,
+      artifact_type: artifactType,
       schema_version: 1,
       locator: publication.locator,
       artifact_sha256: publication.sha256,

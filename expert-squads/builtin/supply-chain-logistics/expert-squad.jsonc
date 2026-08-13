@@ -5,22 +5,30 @@
   "name": "Supply Chain Logistics",
   "label": "Supply Chain Logistics",
   "description": "Demand, inventory, transport, and disruption evidence joined into an accountable logistics control-tower plan.",
-  "version": "2026.08.10.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for evidence-backed logistics scenario planning.",
     "selection_guidance": "Select for inventory, transport, service, and disruption decision support without transaction or shipment authority.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["supply-chain-logistics/shared/method"],
+      "package_skill_refs": [
+        "supply-chain-logistics/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "logistics-demand-inventory-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["supply-chain-logistics/shared/method"],
+        "package_skill_refs": [
+          "supply-chain-logistics/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "logistics-transport-constraints-analyst": {
         "label": "Transport Constraints Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["supply-chain-logistics/shared/method"],
+        "package_skill_refs": [
+          "supply-chain-logistics/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,17 +83,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "logistics-disruption-risk-analyst": {
         "label": "Disruption Risk Analyst",
         "description": "Builds evidence-backed disruption scenarios, triggers, and contingencies.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/logistics-disruption-risk-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["supply-chain-logistics/shared/method"],
+        "package_skill_refs": [
+          "supply-chain-logistics/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "logistics-plan-owner": {
         "label": "Logistics Plan Owner",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["supply-chain-logistics/shared/method"],
+        "package_skill_refs": [
+          "supply-chain-logistics/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "logistics-control-tower-plan": {
@@ -122,17 +138,17 @@
           "logistics-demand-inventory-analyst": {
             "agent_id": "logistics-demand-inventory-analyst",
             "description": "Maps demand and inventory evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "logistics-transport-constraints-analyst": {
             "agent_id": "logistics-transport-constraints-analyst",
             "description": "Maps transport constraints.",
-            "depends_on": [],
+            "depends_on": []
           },
           "logistics-disruption-risk-analyst": {
             "agent_id": "logistics-disruption-risk-analyst",
             "description": "Maps disruption scenarios.",
-            "depends_on": [],
+            "depends_on": []
           },
           "logistics-plan-owner": {
             "agent_id": "logistics-plan-owner",
@@ -140,11 +156,11 @@
             "depends_on": [
               "logistics-demand-inventory-analyst",
               "logistics-disruption-risk-analyst",
-              "logistics-transport-constraints-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "logistics-transport-constraints-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

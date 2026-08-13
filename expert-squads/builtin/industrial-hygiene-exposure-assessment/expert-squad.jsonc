@@ -5,22 +5,30 @@
   "name": "Industrial Hygiene Exposure Assessment",
   "label": "Industrial Hygiene Exposure Assessment",
   "description": "Worker, agent, similar-exposure-group, sampling, analytical-quality, exposure-limit, and control evidence joined for qualified industrial-hygiene review.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for bounded workplace exposure-assessment evidence without site, medical, PPE-selection, compliance, or reporting authority.",
     "selection_guidance": "Select for workplace agent/task/route scoping, similar exposure groups, occupational exposure-limit authority, sampling and analytical QA, time-weighted exposure calculations, control and respiratory-program evidence, and uncertainty review. Do not select for major-process-hazard analysis, clinical diagnosis, laboratory accreditation, product-quality disposition, site entry, live sampling, worker assignment, PPE or respirator selection, overexposure/compliance determinations, or employee-health reporting.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["industrial-hygiene-exposure-assessment/shared/method"],
+      "package_skill_refs": [
+        "industrial-hygiene-exposure-assessment/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "industrial-hygiene-scope-exposure-group-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["industrial-hygiene-exposure-assessment/shared/method"],
+        "package_skill_refs": [
+          "industrial-hygiene-exposure-assessment/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,17 +61,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "industrial-hygiene-sampling-analytical-qa-analyst": {
         "label": "Industrial Hygiene Sampling and Analytical QA Analyst",
         "description": "Reconciles sample identity, method, calibration, blanks, laboratory results, units, censoring, and uncertainty.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/industrial-hygiene-sampling-analytical-qa-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["industrial-hygiene-exposure-assessment/shared/method"],
+        "package_skill_refs": [
+          "industrial-hygiene-exposure-assessment/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +83,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "industrial-hygiene-exposure-control-evidence-analyst": {
         "label": "Industrial Hygiene Exposure and Control Evidence Analyst",
@@ -81,7 +93,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["industrial-hygiene-exposure-assessment/shared/method"],
+        "package_skill_refs": [
+          "industrial-hygiene-exposure-assessment/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "industrial-hygiene-exposure-assessment-review-owner": {
         "label": "Industrial Hygiene Exposure Assessment Review Owner",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["industrial-hygiene-exposure-assessment/shared/method"],
+        "package_skill_refs": [
+          "industrial-hygiene-exposure-assessment/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "industrial-hygiene-exposure-assessment-review": {
@@ -122,17 +138,17 @@
           "industrial-hygiene-scope-exposure-group-analyst": {
             "agent_id": "industrial-hygiene-scope-exposure-group-analyst",
             "description": "Builds the agent, task, worker, route, shift, and similar-exposure-group evidence spine.",
-            "depends_on": [],
+            "depends_on": []
           },
           "industrial-hygiene-sampling-analytical-qa-analyst": {
             "agent_id": "industrial-hygiene-sampling-analytical-qa-analyst",
             "description": "Reconciles sampling design, custody, calibration, laboratory QA, units, detection limits, and uncertainty.",
-            "depends_on": [],
+            "depends_on": []
           },
           "industrial-hygiene-exposure-control-evidence-analyst": {
             "agent_id": "industrial-hygiene-exposure-control-evidence-analyst",
             "description": "Calculates only compatible exposure measures and maps supplied control and respiratory-program evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "industrial-hygiene-exposure-assessment-review-owner": {
             "agent_id": "industrial-hygiene-exposure-assessment-review-owner",
@@ -140,11 +156,11 @@
             "depends_on": [
               "industrial-hygiene-exposure-control-evidence-analyst",
               "industrial-hygiene-sampling-analytical-qa-analyst",
-              "industrial-hygiene-scope-exposure-group-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "industrial-hygiene-scope-exposure-group-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

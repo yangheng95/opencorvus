@@ -5,22 +5,31 @@
   "name": "Forestry Wildfire Resource Management",
   "label": "Forestry Wildfire Resource Management",
   "description": "Forest inventory, fuels and wildfire risk, treatment scenarios and post-fire resource evidence joined for qualified review.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["code", "work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for bounded forestry and wildfire resource-management evidence.",
     "selection_guidance": "Select for forest inventory/condition, fuel/hazard/exposure, supplied treatment scenarios and non-tactical post-fire monitoring.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["forestry-wildfire-resource-management/shared/method"],
+      "package_skill_refs": [
+        "forestry-wildfire-resource-management/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +39,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "forest-inventory-condition-trend-analyst": {
@@ -41,7 +50,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["forestry-wildfire-resource-management/shared/method"],
+        "package_skill_refs": [
+          "forestry-wildfire-resource-management/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +62,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "wildfire-hazard-exposure-fuels-analyst": {
         "label": "Wildfire Hazard, Fuel and Exposure Analyst",
@@ -61,7 +72,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["forestry-wildfire-resource-management/shared/method"],
+        "package_skill_refs": [
+          "forestry-wildfire-resource-management/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +84,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "forest-treatment-scenario-tradeoff-analyst": {
         "label": "Forest Treatment Scenario and Tradeoff Analyst",
@@ -81,7 +94,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["forestry-wildfire-resource-management/shared/method"],
+        "package_skill_refs": [
+          "forestry-wildfire-resource-management/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,17 +106,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "wildfire-monitoring-burn-severity-recovery-analyst": {
         "label": "Wildfire Monitoring, Burn Severity and Recovery Analyst",
         "description": "Organizes non-tactical fire observations, perimeter/burn-severity products and post-fire resource monitoring.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/wildfire-monitoring-burn-severity-recovery-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["forestry-wildfire-resource-management/shared/method"],
+        "package_skill_refs": [
+          "forestry-wildfire-resource-management/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,7 +128,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "forestry-wildfire-resource-management-review-owner": {
         "label": "Forestry Wildfire Resource Management Review Owner",
@@ -121,7 +138,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["forestry-wildfire-resource-management/shared/method"],
+        "package_skill_refs": [
+          "forestry-wildfire-resource-management/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -131,8 +150,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "forestry-wildfire-resource-management-review": {
@@ -142,22 +161,22 @@
           "forest-inventory-condition-trend-analyst": {
             "agent_id": "forest-inventory-condition-trend-analyst",
             "description": "Reconciles forest planning-unit, plot/stand, species, structure, health and change evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "wildfire-hazard-exposure-fuels-analyst": {
             "agent_id": "wildfire-hazard-exposure-fuels-analyst",
             "description": "Traces supplied vegetation, fuel, topography, weather/climate and exposure datasets to bounded hazard evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "forest-treatment-scenario-tradeoff-analyst": {
             "agent_id": "forest-treatment-scenario-tradeoff-analyst",
             "description": "Compares supplied forest/fuel treatment scenarios across ecological, social, operational and cost objectives.",
-            "depends_on": [],
+            "depends_on": []
           },
           "wildfire-monitoring-burn-severity-recovery-analyst": {
             "agent_id": "wildfire-monitoring-burn-severity-recovery-analyst",
             "description": "Organizes non-tactical fire observations, perimeter/burn-severity products and post-fire resource monitoring.",
-            "depends_on": [],
+            "depends_on": []
           },
           "forestry-wildfire-resource-management-review-owner": {
             "agent_id": "forestry-wildfire-resource-management-review-owner",
@@ -166,11 +185,11 @@
               "forest-inventory-condition-trend-analyst",
               "forest-treatment-scenario-tradeoff-analyst",
               "wildfire-hazard-exposure-fuels-analyst",
-              "wildfire-monitoring-burn-severity-recovery-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "wildfire-monitoring-burn-severity-recovery-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

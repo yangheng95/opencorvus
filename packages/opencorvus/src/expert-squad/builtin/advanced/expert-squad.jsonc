@@ -5,22 +5,32 @@
   "name": "Advanced",
   "label": "Advanced",
   "description": "Built-in advanced software delivery team with retained Requirements-to-Architect traceability and parallel investigation, implementation, testing, interface, and independent-review frontiers.",
-  "version": "2026.08.12.1",
-  "product_pillars": ["code", "work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for advanced software delivery that requires Requirements-to-Architect traceability, parallel investigation and implementation evidence, and independent review without a narrower installed expert contract.",
     "selection_guidance": "Select advanced when the delivery materially requires the full Requirements, architecture, implementation, testing, interface, investigation, and independent-review contract.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task"],
-      "default_skill_refs": ["default/skill/grill-me"],
-      "package_skill_refs": ["advanced/shared/method"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task"
+      ],
+      "default_skill_refs": [
+        "default/skill/grill-me"
+      ],
+      "package_skill_refs": [
+        "advanced/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +40,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "request-interpreter": {
@@ -41,7 +51,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advanced/shared/method"],
+        "package_skill_refs": [
+          "advanced/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +63,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "requirement-engineer": {
         "label": "Requirement Engineer",
@@ -60,8 +72,12 @@
         "prompt": "agents/requirement-engineer/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
-        "default_skill_refs": ["default/skill/grill-me"],
-        "package_skill_refs": ["advanced/shared/method"],
+        "default_skill_refs": [
+          "default/skill/grill-me"
+        ],
+        "package_skill_refs": [
+          "advanced/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +87,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "solution-architect": {
         "label": "Solution Architect",
@@ -81,7 +97,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advanced/shared/method"],
+        "package_skill_refs": [
+          "advanced/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +109,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "workload-reviewer": {
         "label": "Workload Reviewer",
@@ -101,7 +119,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advanced/shared/method"],
+        "package_skill_refs": [
+          "advanced/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,7 +131,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "source-investigator": {
         "label": "Source Investigator",
@@ -121,7 +141,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advanced/shared/method"],
+        "package_skill_refs": [
+          "advanced/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -131,7 +153,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "research-investigator": {
         "label": "Research Investigator",
@@ -141,7 +163,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advanced/shared/method"],
+        "package_skill_refs": [
+          "advanced/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -151,7 +175,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "interface-investigator": {
         "label": "Interface Investigator",
@@ -161,7 +185,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advanced/shared/method"],
+        "package_skill_refs": [
+          "advanced/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -183,13 +209,13 @@
           "default/mcp/browser/tool/uncheck",
           "default/mcp/browser/tool/scroll",
           "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load",
+          "default/mcp/browser/tool/wait_for_load"
         ],
         "package_mcp_tool_refs": [],
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "interface-designer": {
         "label": "Interface Designer",
@@ -199,7 +225,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advanced/shared/method"],
+        "package_skill_refs": [
+          "advanced/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -209,7 +237,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "implementation-engineer": {
         "label": "Implementation Engineer",
@@ -219,7 +247,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advanced/shared/method"],
+        "package_skill_refs": [
+          "advanced/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -229,7 +259,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "test-engineer": {
         "label": "Test Engineer",
@@ -239,7 +269,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advanced/shared/method"],
+        "package_skill_refs": [
+          "advanced/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -249,7 +281,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "visual-reviewer": {
         "label": "Visual Reviewer",
@@ -259,7 +291,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advanced/shared/method"],
+        "package_skill_refs": [
+          "advanced/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -281,23 +315,26 @@
           "default/mcp/browser/tool/uncheck",
           "default/mcp/browser/tool/scroll",
           "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load",
+          "default/mcp/browser/tool/wait_for_load"
         ],
         "package_mcp_tool_refs": [],
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "system-integrity-reviewer": {
         "label": "System Integrity Reviewer",
         "description": "Produces non-transferable independent system review across requirements, contracts, implementation, and evidence once implementation proof is ready.",
         "base_role": "integrity",
+        "execution_contract": "platform_integrity_review",
         "prompt": "agents/system-integrity-reviewer/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advanced/shared/method"],
+        "package_skill_refs": [
+          "advanced/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -307,7 +344,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "interface-integrity-reviewer": {
         "label": "Interface Integrity Reviewer",
@@ -317,7 +354,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advanced/shared/method"],
+        "package_skill_refs": [
+          "advanced/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -327,7 +366,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "claim-verifier": {
         "label": "Claim Verifier",
@@ -337,7 +376,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["advanced/shared/method"],
+        "package_skill_refs": [
+          "advanced/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -347,8 +388,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "planned-delivery": {
@@ -358,44 +399,57 @@
           "request-interpreter": {
             "agent_id": "request-interpreter",
             "description": "Confirms intent, inputs, and scope, explicitly recording when no clarification gap remains.",
-            "depends_on": [],
+            "depends_on": []
           },
           "requirement-engineer": {
             "agent_id": "requirement-engineer",
             "description": "Registers falsifiable requirements and foundational decisions from current evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "source-investigator": {
             "agent_id": "source-investigator",
             "description": "Investigates repository structure, callers, tests, and ownership boundaries in parallel with intent and Requirements work.",
-            "depends_on": [],
+            "depends_on": []
           },
           "solution-architect": {
             "agent_id": "solution-architect",
             "description": "Joins exact intent, RequirementSet, and repository evidence into traceable contracts, immutable Delivery Slice revisions, and assembly ownership.",
-            "depends_on": ["request-interpreter", "requirement-engineer", "source-investigator"],
+            "depends_on": [
+              "request-interpreter",
+              "requirement-engineer",
+              "source-investigator"
+            ]
           },
           "workload-reviewer": {
             "agent_id": "workload-reviewer",
             "description": "Assesses Slice size, coupling, omitted work, acceptance coverage, and verification cost without architecture authority.",
-            "depends_on": ["solution-architect"],
+            "depends_on": [
+              "solution-architect"
+            ]
           },
           "implementation-engineer": {
             "agent_id": "implementation-engineer",
             "description": "Implements the exact Architect contract in parallel with workload review and records concrete repository and verification evidence.",
-            "depends_on": ["solution-architect"],
+            "depends_on": [
+              "solution-architect"
+            ]
           },
           "test-engineer": {
             "agent_id": "test-engineer",
             "description": "Executes applicable non-UI tests and runtime checks independently after implementation evidence exists.",
-            "depends_on": ["implementation-engineer"],
+            "depends_on": [
+              "implementation-engineer"
+            ]
           },
           "system-integrity-reviewer": {
             "agent_id": "system-integrity-reviewer",
             "description": "Performs independent adversarial review after implementation and workload evidence exist, in parallel with test execution.",
-            "depends_on": ["implementation-engineer", "workload-reviewer"],
-          },
-        },
+            "depends_on": [
+              "implementation-engineer",
+              "workload-reviewer"
+            ]
+          }
+        }
       },
       "evidence-investigation": {
         "label": "Evidence Investigation",
@@ -404,19 +458,22 @@
           "source-investigator": {
             "agent_id": "source-investigator",
             "description": "Performs read-oriented repository investigation and records source-grounded evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "research-investigator": {
             "agent_id": "research-investigator",
             "description": "Collects durable multi-source external evidence and separates fact from inference.",
-            "depends_on": [],
+            "depends_on": []
           },
           "claim-verifier": {
             "agent_id": "claim-verifier",
             "description": "Verifies material factual claims against the collected evidence and reports uncertainty.",
-            "depends_on": ["research-investigator", "source-investigator"],
-          },
-        },
+            "depends_on": [
+              "research-investigator",
+              "source-investigator"
+            ]
+          }
+        }
       },
       "greenfield-interface-delivery": {
         "label": "Greenfield Interface Delivery",
@@ -425,54 +482,71 @@
           "request-interpreter": {
             "agent_id": "request-interpreter",
             "description": "Confirms the greenfield interface intent, inputs, and scope without inventing a source-interface dependency.",
-            "depends_on": [],
+            "depends_on": []
           },
           "requirement-engineer": {
             "agent_id": "requirement-engineer",
             "description": "Registers falsifiable product, data, interaction, and visual requirements for the original interface.",
-            "depends_on": [],
+            "depends_on": []
           },
           "source-investigator": {
             "agent_id": "source-investigator",
             "description": "Investigates the target repository, design-system implementation surface, and ownership boundaries in parallel with intent and Requirements work.",
-            "depends_on": [],
+            "depends_on": []
           },
           "solution-architect": {
             "agent_id": "solution-architect",
             "description": "Joins exact intent, RequirementSet, and repository evidence into traceable interface contracts, immutable Delivery Slice revisions, and assembly ownership.",
-            "depends_on": ["request-interpreter", "requirement-engineer", "source-investigator"],
+            "depends_on": [
+              "request-interpreter",
+              "requirement-engineer",
+              "source-investigator"
+            ]
           },
           "interface-designer": {
             "agent_id": "interface-designer",
             "description": "Produces an original, traceable interface design and implementation contract from the approved requirements and architecture evidence.",
-            "depends_on": ["solution-architect"],
+            "depends_on": [
+              "solution-architect"
+            ]
           },
           "workload-reviewer": {
             "agent_id": "workload-reviewer",
             "description": "Challenges Slice size, ownership, and verification workload in parallel with interface design after the Architect contract exists.",
-            "depends_on": ["solution-architect"],
+            "depends_on": [
+              "solution-architect"
+            ]
           },
           "implementation-engineer": {
             "agent_id": "implementation-engineer",
             "description": "Implements the approved interface contract after design evidence exists while preserving the Architect ownership boundaries.",
-            "depends_on": ["interface-designer"],
+            "depends_on": [
+              "interface-designer"
+            ]
           },
           "test-engineer": {
             "agent_id": "test-engineer",
             "description": "Executes applicable non-UI tests and runtime checks independently after implementation evidence exists.",
-            "depends_on": ["implementation-engineer"],
+            "depends_on": [
+              "implementation-engineer"
+            ]
           },
           "interface-integrity-reviewer": {
             "agent_id": "interface-integrity-reviewer",
             "description": "Independently reviews implemented interface behavior and rendered evidence.",
-            "depends_on": ["implementation-engineer"],
+            "depends_on": [
+              "implementation-engineer"
+            ]
           },
           "system-integrity-reviewer": {
             "agent_id": "system-integrity-reviewer",
             "description": "Reviews requirement, contract, implementation, and workload evidence independently of testing and visual review.",
-            "depends_on": ["implementation-engineer", "workload-reviewer"],
-          },
-        },
+            "depends_on": [
+              "implementation-engineer",
+              "workload-reviewer"
+            ]
+          }
+        }
       },
       "greenfield-interface-visual-delivery": {
         "label": "Greenfield Interface Delivery With Independent Visual Review",
@@ -481,59 +555,78 @@
           "request-interpreter": {
             "agent_id": "request-interpreter",
             "description": "Confirms the greenfield interface intent, inputs, and scope without inventing a source-interface dependency.",
-            "depends_on": [],
+            "depends_on": []
           },
           "requirement-engineer": {
             "agent_id": "requirement-engineer",
             "description": "Registers falsifiable product, data, interaction, and visual requirements for the original interface.",
-            "depends_on": [],
+            "depends_on": []
           },
           "source-investigator": {
             "agent_id": "source-investigator",
             "description": "Investigates the target repository, design-system implementation surface, and ownership boundaries in parallel with intent and Requirements work.",
-            "depends_on": [],
+            "depends_on": []
           },
           "solution-architect": {
             "agent_id": "solution-architect",
             "description": "Joins exact intent, RequirementSet, and repository evidence into traceable interface contracts, immutable Delivery Slice revisions, and assembly ownership.",
-            "depends_on": ["request-interpreter", "requirement-engineer", "source-investigator"],
+            "depends_on": [
+              "request-interpreter",
+              "requirement-engineer",
+              "source-investigator"
+            ]
           },
           "interface-designer": {
             "agent_id": "interface-designer",
             "description": "Produces an original, traceable interface design and implementation contract from the approved requirements and architecture evidence.",
-            "depends_on": ["solution-architect"],
+            "depends_on": [
+              "solution-architect"
+            ]
           },
           "workload-reviewer": {
             "agent_id": "workload-reviewer",
             "description": "Challenges Slice size, ownership, and verification workload in parallel with interface design after the Architect contract exists.",
-            "depends_on": ["solution-architect"],
+            "depends_on": [
+              "solution-architect"
+            ]
           },
           "implementation-engineer": {
             "agent_id": "implementation-engineer",
             "description": "Implements the approved interface contract after design evidence exists while preserving the Architect ownership boundaries.",
-            "depends_on": ["interface-designer"],
+            "depends_on": [
+              "interface-designer"
+            ]
           },
           "test-engineer": {
             "agent_id": "test-engineer",
             "description": "Executes applicable non-UI tests and runtime checks independently after implementation evidence exists.",
-            "depends_on": ["implementation-engineer"],
+            "depends_on": [
+              "implementation-engineer"
+            ]
           },
           "visual-reviewer": {
             "agent_id": "visual-reviewer",
             "description": "Reviews the real rendered implementation and interaction states in parallel with testing and independent integrity review.",
-            "depends_on": ["implementation-engineer"],
+            "depends_on": [
+              "implementation-engineer"
+            ]
           },
           "interface-integrity-reviewer": {
             "agent_id": "interface-integrity-reviewer",
             "description": "Independently reviews implemented interface behavior and rendered evidence without consuming the Visual Reviewer's verdict.",
-            "depends_on": ["implementation-engineer"],
+            "depends_on": [
+              "implementation-engineer"
+            ]
           },
           "system-integrity-reviewer": {
             "agent_id": "system-integrity-reviewer",
             "description": "Reviews requirement, contract, implementation, and workload evidence independently of testing and visual review.",
-            "depends_on": ["implementation-engineer", "workload-reviewer"],
-          },
-        },
+            "depends_on": [
+              "implementation-engineer",
+              "workload-reviewer"
+            ]
+          }
+        }
       },
       "reference-interface-delivery": {
         "label": "Supplied-Reference Interface Delivery",
@@ -542,22 +635,22 @@
           "interface-investigator": {
             "agent_id": "interface-investigator",
             "description": "Captures structure, behavior, states, assets, and reference evidence from exactly one operator-supplied source interface URL.",
-            "depends_on": [],
+            "depends_on": []
           },
           "request-interpreter": {
             "agent_id": "request-interpreter",
             "description": "Confirms intent, inputs, and scope in parallel with Requirements and direct interface observation.",
-            "depends_on": [],
+            "depends_on": []
           },
           "requirement-engineer": {
             "agent_id": "requirement-engineer",
             "description": "Registers falsifiable product, interaction, fidelity, and acceptance requirements from the complete request.",
-            "depends_on": [],
+            "depends_on": []
           },
           "source-investigator": {
             "agent_id": "source-investigator",
             "description": "Investigates the target repository and ownership boundaries in parallel with source-interface observation and Requirements work.",
-            "depends_on": [],
+            "depends_on": []
           },
           "solution-architect": {
             "agent_id": "solution-architect",
@@ -566,46 +659,61 @@
               "interface-investigator",
               "request-interpreter",
               "requirement-engineer",
-              "source-investigator",
-            ],
+              "source-investigator"
+            ]
           },
           "interface-designer": {
             "agent_id": "interface-designer",
             "description": "Produces a traceable interface design and implementation contract from the supplied-reference and Architect evidence.",
-            "depends_on": ["solution-architect"],
+            "depends_on": [
+              "solution-architect"
+            ]
           },
           "workload-reviewer": {
             "agent_id": "workload-reviewer",
             "description": "Challenges Slice size, ownership, and visual verification workload in parallel with interface design.",
-            "depends_on": ["solution-architect"],
+            "depends_on": [
+              "solution-architect"
+            ]
           },
           "implementation-engineer": {
             "agent_id": "implementation-engineer",
             "description": "Implements the supplied-reference interface contract after design evidence exists.",
-            "depends_on": ["interface-designer"],
+            "depends_on": [
+              "interface-designer"
+            ]
           },
           "test-engineer": {
             "agent_id": "test-engineer",
             "description": "Executes applicable non-UI tests and runtime checks independently after implementation evidence exists.",
-            "depends_on": ["implementation-engineer"],
+            "depends_on": [
+              "implementation-engineer"
+            ]
           },
           "visual-reviewer": {
             "agent_id": "visual-reviewer",
             "description": "Reviews the real rendered result, interactions, and reference fidelity in parallel with testing and independent review.",
-            "depends_on": ["implementation-engineer"],
+            "depends_on": [
+              "implementation-engineer"
+            ]
           },
           "interface-integrity-reviewer": {
             "agent_id": "interface-integrity-reviewer",
             "description": "Independently reviews implemented interface behavior and rendered evidence without consuming the Visual Reviewer's verdict.",
-            "depends_on": ["implementation-engineer"],
+            "depends_on": [
+              "implementation-engineer"
+            ]
           },
           "system-integrity-reviewer": {
             "agent_id": "system-integrity-reviewer",
             "description": "Reviews requirement, contract, implementation, and workload evidence independently of testing and visual review.",
-            "depends_on": ["implementation-engineer", "workload-reviewer"],
-          },
-        },
-      },
-    },
-  },
+            "depends_on": [
+              "implementation-engineer",
+              "workload-reviewer"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

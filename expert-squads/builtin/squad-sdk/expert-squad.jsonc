@@ -5,14 +5,17 @@
   "name": "Generate Expert Squads",
   "label": "Generate Expert Squads",
   "description": "Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.",
-  "version": "2026.08.10.1",
-  "product_pillars": ["code", "work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
   "system_role": "expert_squad_generator",
   "readme": "README.md",
   "selector": {
     "summary": "Use to import an external heterogeneous agent algorithm or design, validate, and install a new OpenCorvus Expert Squad through the canonical SDK.",
     "selection_guidance": "Select Generate Expert Squads only when the requested deliverable is a project-owned Expert Squad package or a lossless import of an external agent team. Use the resulting domain Squad, not Generate Expert Squads, for subsequent domain work.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
@@ -26,10 +29,13 @@
         "expert_squad_author",
         "multica_catalog",
         "multica_preview",
-        "multica_import",
+        "multica_import"
       ],
       "default_skill_refs": [],
-      "package_skill_refs": ["squad-sdk/shared/authoring", "squad-sdk/shared/import"],
+      "package_skill_refs": [
+        "squad-sdk/shared/authoring",
+        "squad-sdk/shared/import"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -39,7 +45,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "squad-sdk-source-analyst": {
@@ -50,7 +56,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["squad-sdk/shared/authoring"],
+        "package_skill_refs": [
+          "squad-sdk/shared/authoring"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -60,27 +68,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
-      "squad-sdk-package-architect": {
-        "label": "Generate Expert Squads Package Architect",
-        "description": "Turns accepted source evidence into the smallest complete SDK blueprint and binding workflow topology.",
-        "base_role": "architect",
-        "prompt": "agents/squad-sdk-package-architect/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": ["squad-sdk/shared/authoring"],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "squad-sdk-import-analyst": {
         "label": "Generate Expert Squads Import Analyst",
@@ -90,7 +78,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["squad-sdk/shared/import"],
+        "package_skill_refs": [
+          "squad-sdk/shared/import"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -100,7 +90,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "squad-sdk-contract-reviewer": {
         "label": "Generate Expert Squads Contract Reviewer",
@@ -110,7 +100,10 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["squad-sdk/shared/authoring", "squad-sdk/shared/import"],
+        "package_skill_refs": [
+          "squad-sdk/shared/authoring",
+          "squad-sdk/shared/import"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -120,47 +113,82 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
+      "squad-sdk-planner": {
+        "label": "Generate Expert Squads Planner",
+        "description": "Publishes the package boundary, flat Planner/parallel-worker topology, resource closure, and acceptance allocation.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/squad-sdk-planner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "squad-sdk/shared/authoring"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "sdk-authoring": {
-        "label": "Generate Expert Squads Authoring",
-        "description": "Extract the domain algorithm, design one canonical package blueprint, independently validate it, and then materialize it through the SDK author tool.",
+        "label": "Planned Parallel Expert Squad Authoring",
+        "description": "One Planner fixes the canonical flat package blueprint before source and contract workers validate it in parallel and the scheduler invokes the single SDK writer.",
         "nodes": {
+          "squad-sdk-planner": {
+            "agent_id": "squad-sdk-planner",
+            "description": "Publishes the canonical package blueprint and flat Planner/parallel-worker topology.",
+            "depends_on": []
+          },
           "source-analysis": {
             "agent_id": "squad-sdk-source-analyst",
-            "description": "Publishes the source algorithm and package-boundary evidence.",
-            "depends_on": [],
-          },
-          "package-architecture": {
-            "agent_id": "squad-sdk-package-architect",
-            "description": "Publishes the complete SDK authoring blueprint.",
-            "depends_on": ["source-analysis"],
+            "description": "Validates source algorithm, actors, evidence flow, resources, and portability constraints.",
+            "depends_on": [
+              "squad-sdk-planner"
+            ]
           },
           "contract-review": {
             "agent_id": "squad-sdk-contract-reviewer",
-            "description": "Publishes the independent positive validation of the exact blueprint.",
-            "depends_on": ["package-architecture"],
-          },
-        },
+            "description": "Independently validates the exact blueprint and closure against SDK invariants.",
+            "depends_on": [
+              "squad-sdk-planner"
+            ]
+          }
+        }
       },
       "heterogeneous-import": {
-        "label": "Heterogeneous Squad Import",
-        "description": "Inspect the external Squad and preview evidence, repair the mapping, independently validate the exact digests, and then import once.",
+        "label": "Planned Parallel Heterogeneous Import",
+        "description": "One Planner fixes the import boundary before mapping and contract workers validate it in parallel and the scheduler invokes the single importer.",
         "nodes": {
+          "squad-sdk-planner": {
+            "agent_id": "squad-sdk-planner",
+            "description": "Publishes the import boundary, mapping responsibilities, and acceptance allocation.",
+            "depends_on": []
+          },
           "import-analysis": {
             "agent_id": "squad-sdk-import-analyst",
-            "description": "Publishes source, portability, and mapping analysis for the selected external Squad.",
-            "depends_on": [],
+            "description": "Validates source roster, instructions, Skill closure, MCP capabilities, and portability blockers.",
+            "depends_on": [
+              "squad-sdk-planner"
+            ]
           },
           "contract-review": {
             "agent_id": "squad-sdk-contract-reviewer",
-            "description": "Publishes independent positive validation of the blocker-free preview and exact mapping.",
-            "depends_on": ["import-analysis"],
-          },
-        },
-      },
-    },
-  },
+            "description": "Independently validates the exact preview, mapping, and source digests.",
+            "depends_on": [
+              "squad-sdk-planner"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

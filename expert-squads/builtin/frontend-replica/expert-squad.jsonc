@@ -5,22 +5,31 @@
   "name": "Frontend Replica",
   "label": "Frontend Replica",
   "description": "Source URL and reference-screenshot replica with a desktop surface ledger, rendered proof, durable catalog facts, and visible narrative Turn summaries.",
-  "version": "2026.08.07.1",
-  "product_pillars": ["code"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for source URL or reference-screenshot desktop replica work with evidence-backed parity.",
     "selection_guidance": "Select frontend-replica only when the requested outcome is source-bound interface parity.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "browser_preview", "bash"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "browser_preview",
+        "bash"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["frontend-replica/shared/acceptance"],
+      "package_skill_refs": [
+        "frontend-replica/shared/acceptance"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +39,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "frontend-replica-explorer": {
@@ -41,7 +50,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["frontend-replica/shared/acceptance"],
+        "package_skill_refs": [
+          "frontend-replica/shared/acceptance"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +62,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "frontend-replica-intent-analyst": {
         "label": "Frontend Replica Intent Analyst",
@@ -61,7 +72,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["frontend-replica/shared/acceptance"],
+        "package_skill_refs": [
+          "frontend-replica/shared/acceptance"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,47 +84,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
-      "frontend-replica-requirements-analyst": {
-        "label": "Frontend Replica Requirements Analyst",
-        "description": "Defines source-bound surface, interaction, content, asset, and rendered-parity requirements.",
-        "base_role": "requirements",
-        "prompt": "agents/frontend-replica-requirements-analyst/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": ["frontend-replica/shared/acceptance"],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
-      "frontend-replica-solution-architect": {
-        "label": "Frontend Replica Solution Architect",
-        "description": "Maps source evidence to target components, contracts, and verification regions.",
-        "base_role": "architect",
-        "prompt": "agents/frontend-replica-solution-architect/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": ["frontend-replica/shared/acceptance"],
-        "default_tool_refs": [],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "frontend-replica-interface-modeler": {
         "label": "Frontend Replica Interface Modeler",
@@ -121,12 +94,16 @@
         "inherit_base_tools": true,
         "default_tool_refs": [
           "default/tool/create_visual_region_coordinate_atlas",
-          "default/tool/create_visual_region_binding_package",
+          "default/tool/create_visual_region_binding_package"
         ],
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["frontend-replica/shared/acceptance"],
-        "package_tool_refs": ["frontend-replica/frontend-replica-interface-modeler/generate-source-project"],
+        "package_skill_refs": [
+          "frontend-replica/shared/acceptance"
+        ],
+        "package_tool_refs": [
+          "frontend-replica/frontend-replica-interface-modeler/generate-source-project"
+        ],
         "default_mcp_server_refs": [],
         "package_mcp_server_refs": [],
         "default_mcp_tool_refs": [],
@@ -134,7 +111,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "frontend-replica-source-researcher": {
         "label": "Frontend Replica Source Researcher",
@@ -144,13 +121,17 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["frontend-replica/shared/acceptance"],
+        "package_skill_refs": [
+          "frontend-replica/shared/acceptance"
+        ],
         "default_tool_refs": [
           "default/tool/webpage_extract",
           "default/tool/webpage_compile",
-          "default/tool/webpage_runtime_state",
+          "default/tool/webpage_runtime_state"
         ],
-        "package_tool_refs": ["frontend-replica/frontend-replica-source-researcher/prepare-source-context"],
+        "package_tool_refs": [
+          "frontend-replica/frontend-replica-source-researcher/prepare-source-context"
+        ],
         "default_mcp_server_refs": [],
         "package_mcp_server_refs": [],
         "default_mcp_tool_refs": [],
@@ -158,7 +139,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "frontend-replica-workload-analyst": {
         "label": "Frontend Replica Workload Analyst",
@@ -168,7 +149,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["frontend-replica/shared/acceptance"],
+        "package_skill_refs": [
+          "frontend-replica/shared/acceptance"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -178,7 +161,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "frontend-replica-implementer": {
         "label": "Frontend Replica Implementer",
@@ -188,7 +171,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["frontend-replica/shared/acceptance"],
+        "package_skill_refs": [
+          "frontend-replica/shared/acceptance"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -210,65 +195,25 @@
           "default/mcp/browser/tool/uncheck",
           "default/mcp/browser/tool/scroll",
           "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load",
+          "default/mcp/browser/tool/wait_for_load"
         ],
         "package_mcp_tool_refs": [],
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
-      "frontend-replica-visual-reviewer": {
-        "label": "Frontend Replica Visual Reviewer",
-        "description": "Compares rendered target evidence against source regions and interaction states.",
-        "base_role": "visual-qa",
-        "prompt": "agents/frontend-replica-visual-reviewer/system.md",
-        "inherit_base_tools": true,
-        "default_tool_refs": [
-          "default/tool/browser_preview_compare_reference_regions",
-          "default/tool/browser_preview_compare_scroll_slices",
-          "default/tool/browser_preview_layout_geometry",
-        ],
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": ["frontend-replica/shared/acceptance"],
-        "package_tool_refs": [],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [
-          "default/mcp/browser/tool/session_create",
-          "default/mcp/browser/tool/session_destroy",
-          "default/mcp/browser/tool/viewport_set",
-          "default/mcp/browser/tool/navigate",
-          "default/mcp/browser/tool/diagnostics_get",
-          "default/mcp/browser/tool/screenshot",
-          "default/mcp/browser/tool/observe",
-          "default/mcp/browser/tool/click",
-          "default/mcp/browser/tool/hover",
-          "default/mcp/browser/tool/type",
-          "default/mcp/browser/tool/press_key",
-          "default/mcp/browser/tool/select_option",
-          "default/mcp/browser/tool/check",
-          "default/mcp/browser/tool/uncheck",
-          "default/mcp/browser/tool/scroll",
-          "default/mcp/browser/tool/wait_for_selector",
-          "default/mcp/browser/tool/wait_for_load",
-        ],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
-      "frontend-replica-integrity-reviewer": {
-        "label": "Frontend Replica Integrity Reviewer",
-        "description": "Rejects missing regions, broken interactions, unsupported variance, and weak evidence.",
-        "base_role": "integrity",
-        "prompt": "agents/frontend-replica-integrity-reviewer/system.md",
+      "frontend-replica-planner": {
+        "label": "Frontend Replica Planner",
+        "description": "Publishes one source-bound replica plan, region ownership map, and acceptance allocation for parallel specialist execution.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/frontend-replica-planner/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["frontend-replica/shared/acceptance"],
+        "package_skill_refs": [
+          "frontend-replica/shared/acceptance"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -278,105 +223,95 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "interface-modeling": {
-        "label": "Explicit Interface Modeling",
-        "description": "Focused interface-modeling collaboration using the same unique source-project generator owner as source-replica delivery.",
+        "label": "Planned Parallel Interface Modeling",
+        "description": "One source-bound Planner partitions modeling work before intent, source, and interface-model workers execute in parallel.",
         "nodes": {
+          "frontend-replica-planner": {
+            "agent_id": "frontend-replica-planner",
+            "description": "Publishes source closure, region ownership, modeling contract, and acceptance allocation.",
+            "depends_on": []
+          },
           "frontend-replica-intent-analyst": {
             "agent_id": "frontend-replica-intent-analyst",
-            "description": "Classifies source, target, desktop scope, evidence gaps, and parity obligations.",
-            "depends_on": [],
+            "description": "Checks target intent and requested fidelity against the planned source closure.",
+            "depends_on": [
+              "frontend-replica-planner"
+            ]
           },
           "frontend-replica-source-researcher": {
             "agent_id": "frontend-replica-source-researcher",
-            "description": "Captures source-page structure, state, content, interaction, and screenshot evidence.",
-            "depends_on": [],
-          },
-          "frontend-replica-requirements-analyst": {
-            "agent_id": "frontend-replica-requirements-analyst",
-            "description": "Defines source-bound surface, interaction, content, asset, and rendered-parity requirements.",
-            "depends_on": ["frontend-replica-intent-analyst", "frontend-replica-source-researcher"],
-          },
-          "frontend-replica-solution-architect": {
-            "agent_id": "frontend-replica-solution-architect",
-            "description": "Maps source evidence to target components, contracts, and verification regions.",
-            "depends_on": ["frontend-replica-requirements-analyst"],
+            "description": "Captures source structure, behavior, states, and assets for its partition.",
+            "depends_on": [
+              "frontend-replica-planner"
+            ]
           },
           "frontend-replica-interface-modeler": {
             "agent_id": "frontend-replica-interface-modeler",
-            "description": "Generates the sole source-bound project model and implementation contract consumed by Delivery Slice subjects.",
-            "depends_on": ["frontend-replica-solution-architect"],
-          },
-        },
+            "description": "Produces the planned interface model and mapping evidence.",
+            "depends_on": [
+              "frontend-replica-planner"
+            ]
+          }
+        }
       },
       "source-replica": {
-        "label": "Source Replica Delivery",
-        "description": "Desktop source-replica collaboration whose nodes run once per Task from source evidence through Delivery Slice revision subjects and independent rendered review.",
+        "label": "Planned Parallel Source Replica",
+        "description": "One source-bound Planner partitions the complete replica before repository, source, modeling, workload, implementation, and intent workers execute in parallel.",
         "nodes": {
+          "frontend-replica-planner": {
+            "agent_id": "frontend-replica-planner",
+            "description": "Publishes source closure, target region ownership, implementation contract, and acceptance allocation.",
+            "depends_on": []
+          },
           "frontend-replica-explorer": {
             "agent_id": "frontend-replica-explorer",
-            "description": "Locates target implementation surfaces, assets, primitives, and integration constraints.",
-            "depends_on": [],
+            "description": "Investigates target repository primitives and owned implementation paths.",
+            "depends_on": [
+              "frontend-replica-planner"
+            ]
           },
           "frontend-replica-intent-analyst": {
             "agent_id": "frontend-replica-intent-analyst",
-            "description": "Classifies source, target, desktop scope, evidence gaps, and parity obligations.",
-            "depends_on": ["frontend-replica-source-researcher"],
+            "description": "Checks task intent and fidelity boundaries.",
+            "depends_on": [
+              "frontend-replica-planner"
+            ]
           },
           "frontend-replica-source-researcher": {
             "agent_id": "frontend-replica-source-researcher",
-            "description": "Captures source-page structure, state, content, interaction, and screenshot evidence.",
-            "depends_on": [],
-          },
-          "frontend-replica-requirements-analyst": {
-            "agent_id": "frontend-replica-requirements-analyst",
-            "description": "Defines source-bound surface, interaction, content, asset, and rendered-parity requirements.",
+            "description": "Captures exact source evidence for its assigned regions.",
             "depends_on": [
-              "frontend-replica-explorer",
-              "frontend-replica-intent-analyst",
-              "frontend-replica-source-researcher",
-            ],
-          },
-          "frontend-replica-solution-architect": {
-            "agent_id": "frontend-replica-solution-architect",
-            "description": "Maps source evidence to target components, contracts, and verification regions.",
-            "depends_on": ["frontend-replica-requirements-analyst"],
+              "frontend-replica-planner"
+            ]
           },
           "frontend-replica-interface-modeler": {
             "agent_id": "frontend-replica-interface-modeler",
-            "description": "Generates the sole source-bound project model and implementation contract consumed by Delivery Slice subjects.",
-            "depends_on": ["frontend-replica-solution-architect"],
+            "description": "Produces the planned interface mapping and component contract.",
+            "depends_on": [
+              "frontend-replica-planner"
+            ]
           },
           "frontend-replica-workload-analyst": {
             "agent_id": "frontend-replica-workload-analyst",
-            "description": "Sizes source evidence, surface implementation, interaction, and visual verification work.",
-            "depends_on": ["frontend-replica-solution-architect"],
+            "description": "Challenges region partition, ownership, and verification workload.",
+            "depends_on": [
+              "frontend-replica-planner"
+            ]
           },
           "frontend-replica-implementer": {
             "agent_id": "frontend-replica-implementer",
-            "description": "Implements the same source-bound surface in the target project.",
+            "description": "Implements assigned regions and captures its own real rendered comparison evidence.",
             "depends_on": [
-              "frontend-replica-interface-modeler",
-              "frontend-replica-solution-architect",
-              "frontend-replica-workload-analyst",
-            ],
-          },
-          "frontend-replica-integrity-reviewer": {
-            "agent_id": "frontend-replica-integrity-reviewer",
-            "description": "Rejects missing regions, broken interactions, unsupported variance, and weak evidence.",
-            "depends_on": ["frontend-replica-implementer"],
-          },
-          "frontend-replica-visual-reviewer": {
-            "agent_id": "frontend-replica-visual-reviewer",
-            "description": "Compares rendered target evidence against source regions and interaction states.",
-            "depends_on": ["frontend-replica-implementer"],
-          },
-        },
-      },
-    },
-  },
+              "frontend-replica-planner"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

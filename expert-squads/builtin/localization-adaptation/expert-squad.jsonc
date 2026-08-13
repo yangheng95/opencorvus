@@ -5,22 +5,30 @@
   "name": "Localization & Adaptation",
   "label": "Localization & Adaptation",
   "description": "Parallel terminology, locale adaptation, and linguistic quality work joined into a source-controlled locale release pack.",
-  "version": "2026.08.10.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for terminology-controlled adaptation to a named language-locale pair with explicit linguistic quality evidence.",
     "selection_guidance": "Select when a fixed source must be adapted for a locale and channel. Keep external publication and certified native approval outside the package unless evidenced.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["localization-adaptation/shared/method"],
+      "package_skill_refs": [
+        "localization-adaptation/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "localization-terminology-steward": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["localization-adaptation/shared/method"],
+        "package_skill_refs": [
+          "localization-adaptation/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "localization-locale-adapter": {
         "label": "Locale Adaptation Specialist",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["localization-adaptation/shared/method"],
+        "package_skill_refs": [
+          "localization-adaptation/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +83,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "localization-linguistic-qa": {
         "label": "Linguistic Quality Reviewer",
@@ -81,7 +93,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["localization-adaptation/shared/method"],
+        "package_skill_refs": [
+          "localization-adaptation/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "localization-release-integrator": {
         "label": "Localization Release Integrator",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["localization-adaptation/shared/method"],
+        "package_skill_refs": [
+          "localization-adaptation/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "locale-release-pack": {
@@ -122,17 +138,17 @@
           "localization-terminology-steward": {
             "agent_id": "localization-terminology-steward",
             "description": "Publishes the contextual terminology and protected-token register.",
-            "depends_on": [],
+            "depends_on": []
           },
           "localization-locale-adapter": {
             "agent_id": "localization-locale-adapter",
             "description": "Publishes the locale-adapted content and adaptation log.",
-            "depends_on": [],
+            "depends_on": []
           },
           "localization-linguistic-qa": {
             "agent_id": "localization-linguistic-qa",
             "description": "Publishes the independent linguistic quality review or preflight matrix.",
-            "depends_on": [],
+            "depends_on": []
           },
           "localization-release-integrator": {
             "agent_id": "localization-release-integrator",
@@ -140,11 +156,11 @@
             "depends_on": [
               "localization-linguistic-qa",
               "localization-locale-adapter",
-              "localization-terminology-steward",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "localization-terminology-steward"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

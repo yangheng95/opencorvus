@@ -5,22 +5,31 @@
   "name": "Actuarial Reserving",
   "label": "Actuarial Reserving",
   "description": "Unpaid-claim data, method, uncertainty, validation and governance evidence joined for qualified actuarial review.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["code", "work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for bounded property and casualty unpaid-claim reserving evidence.",
     "selection_guidance": "Select for source-to-triangle reconciliation, supplied method diagnostics, uncertainty, roll-forward and disclosure evidence without reserve-setting or opinion authority.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["actuarial-reserving/shared/method"],
+      "package_skill_refs": [
+        "actuarial-reserving/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +39,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "reserving-data-triangle-reconciliation-analyst": {
@@ -41,7 +50,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["actuarial-reserving/shared/method"],
+        "package_skill_refs": [
+          "actuarial-reserving/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +62,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "reserving-method-assumption-diagnostics-analyst": {
         "label": "Reserving Method, Assumption and Diagnostics Analyst",
@@ -61,7 +72,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["actuarial-reserving/shared/method"],
+        "package_skill_refs": [
+          "actuarial-reserving/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,17 +84,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "reserve-uncertainty-validation-analyst": {
         "label": "Reserve Uncertainty and Validation Analyst",
         "description": "Tests actual-versus-expected, backtest, scenario, range and assumption-sensitive evidence.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/reserve-uncertainty-validation-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["actuarial-reserving/shared/method"],
+        "package_skill_refs": [
+          "actuarial-reserving/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +106,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "reserve-governance-rollforward-disclosure-analyst": {
         "label": "Reserve Governance, Roll-forward and Disclosure Analyst",
@@ -101,7 +116,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["actuarial-reserving/shared/method"],
+        "package_skill_refs": [
+          "actuarial-reserving/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,7 +128,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "actuarial-reserving-evidence-owner": {
         "label": "Actuarial Reserving Evidence Owner",
@@ -121,7 +138,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["actuarial-reserving/shared/method"],
+        "package_skill_refs": [
+          "actuarial-reserving/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -131,8 +150,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "actuarial-reserving-review": {
@@ -142,22 +161,22 @@
           "reserving-data-triangle-reconciliation-analyst": {
             "agent_id": "reserving-data-triangle-reconciliation-analyst",
             "description": "Reconciles source and triangle evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "reserving-method-assumption-diagnostics-analyst": {
             "agent_id": "reserving-method-assumption-diagnostics-analyst",
             "description": "Traces methods and assumptions.",
-            "depends_on": [],
+            "depends_on": []
           },
           "reserve-uncertainty-validation-analyst": {
             "agent_id": "reserve-uncertainty-validation-analyst",
             "description": "Challenges uncertainty and validation.",
-            "depends_on": [],
+            "depends_on": []
           },
           "reserve-governance-rollforward-disclosure-analyst": {
             "agent_id": "reserve-governance-rollforward-disclosure-analyst",
             "description": "Traces governance and disclosure.",
-            "depends_on": [],
+            "depends_on": []
           },
           "actuarial-reserving-evidence-owner": {
             "agent_id": "actuarial-reserving-evidence-owner",
@@ -166,11 +185,11 @@
               "reserve-governance-rollforward-disclosure-analyst",
               "reserve-uncertainty-validation-analyst",
               "reserving-data-triangle-reconciliation-analyst",
-              "reserving-method-assumption-diagnostics-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "reserving-method-assumption-diagnostics-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

@@ -5,22 +5,31 @@
   "name": "Anti-Money Laundering Compliance",
   "label": "Anti-Money Laundering Compliance",
   "description": "Institution-specific AML program, customer risk, monitoring, alert/case and independent-testing evidence joined for qualified review.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["code", "work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for bounded AML/CFT compliance evidence.",
     "selection_guidance": "Select for institution-specific program risk, customer evidence, monitoring populations, alerts/cases and testing without suspicion or filing decisions.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["anti-money-laundering-compliance/shared/method"],
+      "package_skill_refs": [
+        "anti-money-laundering-compliance/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +39,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "aml-program-risk-assessment-control-analyst": {
@@ -41,7 +50,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["anti-money-laundering-compliance/shared/method"],
+        "package_skill_refs": [
+          "anti-money-laundering-compliance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +62,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "customer-beneficial-owner-risk-review-analyst": {
         "label": "Customer and Beneficial Owner Risk Review Analyst",
@@ -61,7 +72,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["anti-money-laundering-compliance/shared/method"],
+        "package_skill_refs": [
+          "anti-money-laundering-compliance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +84,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "transaction-monitoring-alert-case-analyst": {
         "label": "Transaction Monitoring, Alert and Case Analyst",
@@ -81,7 +94,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["anti-money-laundering-compliance/shared/method"],
+        "package_skill_refs": [
+          "anti-money-laundering-compliance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,17 +106,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "aml-quality-testing-governance-analyst": {
         "label": "AML Quality, Independent Testing and Governance Analyst",
         "description": "Examines monitoring quality, false-positive/negative evidence, backlog, overrides, training and independent testing.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/aml-quality-testing-governance-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["anti-money-laundering-compliance/shared/method"],
+        "package_skill_refs": [
+          "anti-money-laundering-compliance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,7 +128,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "anti-money-laundering-compliance-review-owner": {
         "label": "Anti-Money Laundering Compliance Review Owner",
@@ -121,7 +138,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["anti-money-laundering-compliance/shared/method"],
+        "package_skill_refs": [
+          "anti-money-laundering-compliance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -131,8 +150,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "anti-money-laundering-compliance-review": {
@@ -142,22 +161,22 @@
           "aml-program-risk-assessment-control-analyst": {
             "agent_id": "aml-program-risk-assessment-control-analyst",
             "description": "Maps institution-specific applicability, enterprise risk, governance and control evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "customer-beneficial-owner-risk-review-analyst": {
             "agent_id": "customer-beneficial-owner-risk-review-analyst",
             "description": "Traces authorized CDD, beneficial-owner, relationship and ongoing risk-review evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "transaction-monitoring-alert-case-analyst": {
             "agent_id": "transaction-monitoring-alert-case-analyst",
             "description": "Reconciles source populations, monitoring versions, alerts, cases, facts and human dispositions.",
-            "depends_on": [],
+            "depends_on": []
           },
           "aml-quality-testing-governance-analyst": {
             "agent_id": "aml-quality-testing-governance-analyst",
             "description": "Examines monitoring quality, false-positive/negative evidence, backlog, overrides, training and independent testing.",
-            "depends_on": [],
+            "depends_on": []
           },
           "anti-money-laundering-compliance-review-owner": {
             "agent_id": "anti-money-laundering-compliance-review-owner",
@@ -166,11 +185,11 @@
               "aml-program-risk-assessment-control-analyst",
               "aml-quality-testing-governance-analyst",
               "customer-beneficial-owner-risk-review-analyst",
-              "transaction-monitoring-alert-case-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "transaction-monitoring-alert-case-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

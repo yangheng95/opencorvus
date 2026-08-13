@@ -16,8 +16,9 @@ import {
 import {
   EvolutionArtifactIntegrityError,
   EvolutionArtifactSchemas,
+  EvolutionCampaignPublishInputSchema,
   EvolutionMetricReceiptSchema,
-  EvolutionPackagePublishableArtifactTypeSchema,
+  EvolutionPackagePublishableArtifactInputSchema,
   parseEvolutionArtifact,
 } from "../lib/evolution-lab/artifacts"
 import { compareCandidateIntegrity } from "../lib/evolution-lab/candidate-integrity"
@@ -86,60 +87,82 @@ function requireEvolutionWorkerProducer(
     )
 }
 
+export const evolutionArtifactOwner = {
+  "evolution-lab/opportunity": "evolution-observer",
+  "evolution-lab/failure-attribution": "evolution-failure-analyst",
+  "evolution-lab/campaign-spec": "evolution-experiment-planner",
+  "evolution-lab/candidate-revision": "evolution-candidate-author",
+  "evolution-lab/run-evidence-bundle": "evolution-evaluator",
+  "evolution-lab/evaluation-result": "evolution-safety-auditor",
+  "evolution-lab/comparison-recommendation": "evolution-recommendation-owner",
+} as const
+
 export default tool({
   description: "Validate and publish one strict evolution-lab Artifact ABI value with exact sources and resources.",
   args: {
-    artifact_type: EvolutionPackagePublishableArtifactTypeSchema,
-    payload: tool.schema.unknown(),
+    artifact: EvolutionPackagePublishableArtifactInputSchema.describe(
+      "One correlated Artifact type and its exact strict payload; use only the fields and enum values exposed by the selected type.",
+    ),
     resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),
     parent_resource_set: TaskArtifactResourceSetLocatorSchema.optional(),
     source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema),
   },
   async execute(args, context) {
-    const payload = parseEvolutionArtifact(args.artifact_type, args.payload)
+    const artifact_type = args.artifact.artifact_type
+    const expectedAgent = evolutionArtifactOwner[artifact_type]
+    if (context.agent !== expectedAgent) {
+      throw new EvolutionArtifactIntegrityError(`${artifact_type} must be published by Evolution Lab worker ${expectedAgent}`)
+    }
     if (
-      (args.artifact_type === "evolution-lab/campaign-spec" ||
-        args.artifact_type === "evolution-lab/candidate-revision" ||
-        args.artifact_type === "evolution-lab/evaluation-result") &&
+      (artifact_type === "evolution-lab/campaign-spec" ||
+        artifact_type === "evolution-lab/candidate-revision" ||
+        artifact_type === "evolution-lab/evaluation-result") &&
       !args.resource_set
     )
-      throw new EvolutionArtifactIntegrityError(`${args.artifact_type} requires its exact immutable resource set`)
-    if (args.artifact_type === "evolution-lab/run-evidence-bundle" && !args.resource_set) {
+      throw new EvolutionArtifactIntegrityError(`${artifact_type} requires its exact immutable resource set`)
+    if (artifact_type === "evolution-lab/run-evidence-bundle" && !args.resource_set) {
       throw new EvolutionArtifactIntegrityError(
         "run-evidence-bundle requires the exact immutable collector resource set",
       )
     }
     let resources = args.resource_set ? await context.host.taskArtifacts.resources(args.resource_set) : []
-    if (args.artifact_type === "evolution-lab/campaign-spec") {
-      const campaign = EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse(payload)
-      const frozen = campaign.frozen_inputs
-      const expectedResources = [
-        frozen.dataset,
-        ...frozen.cases.map((item) => item.resource),
-        frozen.model_configuration,
-        frozen.environment,
-        frozen.workspace_template,
-        frozen.permission_snapshot,
-        ...frozen.scorer_assets.map((item) => item.resource),
-      ]
-      if (!sameJSON(canonicalResourceIdentitySet(resources), canonicalResourceIdentitySet(expectedResources)))
-        throw new EvolutionArtifactIntegrityError(
-          "campaign-spec resource set must equal every exact frozen campaign input",
-        )
-      const workspaceResource = resources.find((resource) => sameResourceIdentity(resource, frozen.workspace_template))
-      if (!workspaceResource) throw new EvolutionArtifactIntegrityError("campaign workspace snapshot resource is missing")
-      const workspaceText = new TextDecoder("utf-8", { fatal: true }).decode(
-        await context.host.taskArtifacts.read(workspaceResource),
-      )
-      const workspaceSnapshot = WorkspaceTreeSnapshotSchema.parse(JSON.parse(workspaceText))
-      if (canonicalWorkspaceTreeJSON(workspaceSnapshot) !== workspaceText) {
-        throw new EvolutionArtifactIntegrityError("campaign workspace snapshot is not canonical JSON")
-      }
-      if (workspaceTreeDigest(workspaceSnapshot) !== campaign.workspace_digest) {
-        throw new EvolutionArtifactIntegrityError("campaign workspace digest does not equal its immutable snapshot")
-      }
-    }
-    if (args.artifact_type === "evolution-lab/candidate-revision") {
+    const payload =
+      artifact_type === "evolution-lab/campaign-spec"
+        ? await (async () => {
+            const campaignInput = EvolutionCampaignPublishInputSchema.parse(args.artifact.payload)
+            const frozen = campaignInput.frozen_inputs
+            const expectedResources = [
+              frozen.dataset,
+              ...frozen.cases.map((item) => item.resource),
+              frozen.model_configuration,
+              frozen.environment,
+              frozen.workspace_template,
+              frozen.permission_snapshot,
+              ...frozen.scorer_assets.map((item) => item.resource),
+            ]
+            if (!sameJSON(canonicalResourceIdentitySet(resources), canonicalResourceIdentitySet(expectedResources)))
+              throw new EvolutionArtifactIntegrityError(
+                "campaign-spec resource set must equal every exact frozen campaign input",
+              )
+            const workspaceResource = resources.find((resource) =>
+              sameResourceIdentity(resource, frozen.workspace_template),
+            )
+            if (!workspaceResource)
+              throw new EvolutionArtifactIntegrityError("campaign workspace snapshot resource is missing")
+            const workspaceText = new TextDecoder("utf-8", { fatal: true }).decode(
+              await context.host.taskArtifacts.read(workspaceResource),
+            )
+            const workspaceSnapshot = WorkspaceTreeSnapshotSchema.parse(JSON.parse(workspaceText))
+            if (canonicalWorkspaceTreeJSON(workspaceSnapshot) !== workspaceText) {
+              throw new EvolutionArtifactIntegrityError("campaign workspace snapshot is not canonical JSON")
+            }
+            return EvolutionArtifactSchemas["evolution-lab/campaign-spec"].parse({
+              ...campaignInput,
+              workspace_digest: workspaceTreeDigest(workspaceSnapshot),
+            })
+          })()
+        : parseEvolutionArtifact(artifact_type, args.artifact.payload)
+    if (artifact_type === "evolution-lab/candidate-revision") {
       const candidatePayload = EvolutionArtifactSchemas["evolution-lab/candidate-revision"].parse(payload)
       if (
         !args.source_artifact_locators.some((locator) =>
@@ -219,7 +242,7 @@ export default tool({
         )
       resources = [...parentResources, ...resources]
     }
-    if (args.artifact_type === "evolution-lab/evaluation-result") {
+    if (artifact_type === "evolution-lab/evaluation-result") {
       const evaluation = EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse(payload)
       const receiptResource = resources.find((resource) =>
         sameResourceIdentity(resource, evaluation.metric_receipt_resource),
@@ -272,7 +295,7 @@ export default tool({
         ),
       ]
     }
-    if (args.artifact_type === "evolution-lab/run-evidence-bundle") {
+    if (artifact_type === "evolution-lab/run-evidence-bundle") {
       const resourceIdentityClaim = (payload as { run_evidence_resource: ReturnType<typeof resourceIdentity> })
         .run_evidence_resource
       const resource = resources.find((candidate) => sameResourceIdentity(candidate, resourceIdentityClaim))
@@ -355,7 +378,7 @@ export default tool({
         )
       }
     }
-    if (args.artifact_type === "evolution-lab/comparison-recommendation") {
+    if (artifact_type === "evolution-lab/comparison-recommendation") {
       const claimed = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(payload)
       if (args.source_artifact_locators.some((locator) => locator.source !== "engine_artifact"))
         throw new EvolutionArtifactIntegrityError("comparison sources must all be exact Engine Artifact locators")
@@ -382,7 +405,7 @@ export default tool({
       requireEvolutionWorkerProducer(candidates[0]!.envelope, "evolution-candidate-author")
       for (const item of envelopes) {
         if (item.envelope.artifact_type === "evolution-lab/evaluation-result") {
-          requireEvolutionWorkerProducer(item.envelope, "evolution-security-integrity-reviewer")
+          requireEvolutionWorkerProducer(item.envelope, "evolution-safety-auditor")
           const evaluation = EvolutionArtifactSchemas["evolution-lab/evaluation-result"].parse(item.envelope.payload)
           const sourceKeys = new Set(item.envelope.source_artifact_locators.map((locator) => JSON.stringify(locator)))
           for (const finding of evaluation.integrity_review?.findings ?? [])
@@ -421,15 +444,15 @@ export default tool({
         )
     }
     const publication = await context.host.engineArtifacts.publish({
-      artifact_type: args.artifact_type,
+      artifact_type,
       schema_version: 1,
-      label: args.artifact_type,
+      label: artifact_type,
       payload,
       resources,
       source_artifact_locators: args.source_artifact_locators,
     })
     return JSON.stringify({
-      artifact_type: args.artifact_type,
+      artifact_type,
       schema_version: 1,
       locator: publication.locator,
       artifact_sha256: publication.sha256,

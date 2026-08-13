@@ -88,6 +88,16 @@ export const ViralContentArtifactSchemas = {
 export const ViralContentArtifactTypeSchema = tool.schema.enum(Object.keys(ViralContentArtifactSchemas) as [keyof typeof ViralContentArtifactSchemas, ...(keyof typeof ViralContentArtifactSchemas)[]])
 export type ViralContentArtifactType = tool.schema.infer<typeof ViralContentArtifactTypeSchema>
 
+export const ViralContentPublishableArtifactInputSchema = tool.schema.discriminatedUnion("artifact_type", [
+  tool.schema.object({ artifact_type: tool.schema.literal("viral-content/campaign-brief"), payload: ViralContentArtifactSchemas["viral-content/campaign-brief"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("viral-content/audience-dossier"), payload: ViralContentArtifactSchemas["viral-content/audience-dossier"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("viral-content/trend-dossier"), payload: ViralContentArtifactSchemas["viral-content/trend-dossier"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("viral-content/concept-set"), payload: ViralContentArtifactSchemas["viral-content/concept-set"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("viral-content/copy-pack"), payload: ViralContentArtifactSchemas["viral-content/copy-pack"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("viral-content/review"), payload: ViralContentArtifactSchemas["viral-content/review"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("viral-content/delivery"), payload: ViralContentArtifactSchemas["viral-content/delivery"] }).strict(),
+])
+
 export function parseViralContentArtifact(type: ViralContentArtifactType, payload: unknown) {
   return ViralContentArtifactSchemas[type].parse(payload)
 }

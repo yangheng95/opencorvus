@@ -154,6 +154,16 @@ export const CommercialLegalArtifactSchemas = {
 export type CommercialLegalArtifactType = keyof typeof CommercialLegalArtifactSchemas
 export const CommercialLegalArtifactTypeSchema = tool.schema.enum(Object.keys(CommercialLegalArtifactSchemas) as [CommercialLegalArtifactType, ...CommercialLegalArtifactType[]])
 
+export const CommercialLegalPublishableArtifactInputSchema = tool.schema.discriminatedUnion("artifact_type", [
+  tool.schema.object({ artifact_type: tool.schema.literal("commercial-legal/matter-charter"), payload: CommercialLegalArtifactSchemas["commercial-legal/matter-charter"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("commercial-legal/authority-dossier"), payload: CommercialLegalArtifactSchemas["commercial-legal/authority-dossier"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("commercial-legal/contract-analysis"), payload: CommercialLegalArtifactSchemas["commercial-legal/contract-analysis"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("commercial-legal/regulatory-analysis"), payload: CommercialLegalArtifactSchemas["commercial-legal/regulatory-analysis"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("commercial-legal/legal-strategy"), payload: CommercialLegalArtifactSchemas["commercial-legal/legal-strategy"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("commercial-legal/audit"), payload: CommercialLegalArtifactSchemas["commercial-legal/audit"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("commercial-legal/report"), payload: CommercialLegalArtifactSchemas["commercial-legal/report"] }).strict(),
+])
+
 export function parseCommercialLegalArtifact<T extends CommercialLegalArtifactType>(artifactType: T, payload: unknown): tool.schema.infer<(typeof CommercialLegalArtifactSchemas)[T]> {
   return CommercialLegalArtifactSchemas[artifactType].parse(payload) as tool.schema.infer<(typeof CommercialLegalArtifactSchemas)[T]>
 }

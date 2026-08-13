@@ -35,6 +35,13 @@
       "package_skill_refs": ["source-backed-briefing/shared/method"]
     },
     "agents": {
+      "briefing-planner": {
+        "label": "Briefing Planner",
+        "description": "Freezes the evidence boundary, briefing structure, worker partition, and acceptance allocation.",
+        "base_role": "delegated-worker",
+        "prompt": "# Briefing Planner\n\nPublish one bounded source and delivery plan. Partition public evidence collection, briefing construction, and independent claim checking into non-overlapping worker ownership. Do not write the final briefing.\n",
+        "package_skill_refs": ["source-backed-briefing/shared/method"]
+      },
       "evidence-researcher": {
         "label": "Evidence Researcher",
         "description": "Collects attributable public evidence and records unknowns.",
@@ -49,21 +56,38 @@
         "base_role": "build",
         "prompt": "# Briefing Writer\n\nLoad the package method Skill, read the accepted evidence, verify every load-bearing claim, and deliver one cited briefing.\n",
         "package_skill_refs": ["source-backed-briefing/shared/method"]
+      },
+      "claim-checker": {
+        "label": "Briefing Claim Checker",
+        "description": "Independently checks load-bearing claims and records uncertainty against the planned source boundary.",
+        "base_role": "fact-check",
+        "prompt": "# Briefing Claim Checker\n\nCheck the Planner's exact target message and evidence boundary, report unsupported claims and explicit unknowns, and do not rewrite the briefing.\n",
+        "package_skill_refs": ["source-backed-briefing/shared/method"]
       }
     },
     "virtual_workflows": {
       "verified-briefing": {
         "label": "Verified Briefing",
-        "description": "Collect attributable public evidence, verify the load-bearing claims, and deliver one briefing.",
+        "description": "Plan once, then collect evidence, build the briefing, and check claims in one parallel worker frontier.",
         "nodes": {
+          "briefing-planner": {
+            "agent_id": "briefing-planner",
+            "description": "Freeze the evidence boundary, briefing structure, and worker acceptance allocation."
+          },
           "briefing-writer": {
             "agent_id": "briefing-writer",
-            "description": "Verify the evidence and deliver the source-backed briefing.",
-            "depends_on": ["evidence-researcher"]
+            "description": "Build the source-backed briefing from the Planner contract.",
+            "depends_on": ["briefing-planner"]
           },
           "evidence-researcher": {
             "agent_id": "evidence-researcher",
-            "description": "Collect public evidence and record contradictions and unknowns."
+            "description": "Collect public evidence and record contradictions and unknowns.",
+            "depends_on": ["briefing-planner"]
+          },
+          "claim-checker": {
+            "agent_id": "claim-checker",
+            "description": "Independently check load-bearing claims and explicit unknowns.",
+            "depends_on": ["briefing-planner"]
           }
         }
       }

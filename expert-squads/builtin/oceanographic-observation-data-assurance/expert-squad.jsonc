@@ -5,22 +5,30 @@
   "name": "Oceanographic Observation Data Assurance",
   "label": "Oceanographic Observation Data Assurance",
   "description": "Source-bound ocean platform, instrument, calibration, profile, time-series, QC, coordinate, format, provenance, and cross-platform validation evidence without publication or marine-safety authority.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for bounded oceanographic observation data assurance evidence and qualified review preparation.",
     "selection_guidance": "Select for oceanographic observation data assurance involving cruise/platform/station/deployment identity, sensor calibration, casts or profiles, pressure/depth/time semantics, QARTOD test provenance, raw-adjusted-derived separation, NetCDF/HDF5/Zarr coordinates and metadata, or cross-platform collocation. Do not select for meteorological forecasting, hydrographic legal boundaries, cartographic publication, vessel survey, port operations, live platform control, QC flag overwrite, data release, navigation, warning, or marine-safety decisions.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["oceanographic-observation-data-assurance/shared/method"],
+      "package_skill_refs": [
+        "oceanographic-observation-data-assurance/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "ocean-observing-platform-instrument-metadata-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["oceanographic-observation-data-assurance/shared/method"],
+        "package_skill_refs": [
+          "oceanographic-observation-data-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,17 +61,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "oceanographic-profile-timeseries-quality-control-analyst": {
         "label": "Oceanographic Profile Timeseries Quality Control Analyst",
         "description": "Applies only source-defined QARTOD/project QC tests and preserves original, aggregate, and reviewed flag provenance.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/oceanographic-profile-timeseries-quality-control-analyst/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["oceanographic-observation-data-assurance/shared/method"],
+        "package_skill_refs": [
+          "oceanographic-observation-data-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +83,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "ocean-data-coordinate-format-provenance-analyst": {
         "label": "Ocean Data Coordinate Format Provenance Analyst",
@@ -81,7 +93,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["oceanographic-observation-data-assurance/shared/method"],
+        "package_skill_refs": [
+          "oceanographic-observation-data-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "oceanographic-cross-platform-validation-analyst": {
         "label": "Oceanographic Cross Platform Validation Analyst",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["oceanographic-observation-data-assurance/shared/method"],
+        "package_skill_refs": [
+          "oceanographic-observation-data-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,7 +127,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "oceanographic-observation-data-assurance-review-owner": {
         "label": "Oceanographic Observation Data Assurance Review Owner",
@@ -121,7 +137,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["oceanographic-observation-data-assurance/shared/method"],
+        "package_skill_refs": [
+          "oceanographic-observation-data-assurance/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -131,8 +149,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "oceanographic-observation-data-assurance-review": {
@@ -142,22 +160,22 @@
           "ocean-observing-platform-instrument-metadata-analyst": {
             "agent_id": "ocean-observing-platform-instrument-metadata-analyst",
             "description": "Freezes mission, platform, station, cruise, deployment, cast/profile, instrument, calibration, sampling, and measurand metadata.",
-            "depends_on": [],
+            "depends_on": []
           },
           "oceanographic-profile-timeseries-quality-control-analyst": {
             "agent_id": "oceanographic-profile-timeseries-quality-control-analyst",
             "description": "Applies only source-defined QARTOD/project QC tests and preserves original, aggregate, and reviewed flag provenance.",
-            "depends_on": [],
+            "depends_on": []
           },
           "ocean-data-coordinate-format-provenance-analyst": {
             "agent_id": "ocean-data-coordinate-format-provenance-analyst",
             "description": "Assures labeled dimensions, coordinates, attributes, encodings, formats, chunking, missing values, and transformation provenance.",
-            "depends_on": [],
+            "depends_on": []
           },
           "oceanographic-cross-platform-validation-analyst": {
             "agent_id": "oceanographic-cross-platform-validation-analyst",
             "description": "Builds source-defined spatial, vertical, temporal, variable, and method collocations with uncertainty and representativeness evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "oceanographic-observation-data-assurance-review-owner": {
             "agent_id": "oceanographic-observation-data-assurance-review-owner",
@@ -166,11 +184,11 @@
               "ocean-data-coordinate-format-provenance-analyst",
               "ocean-observing-platform-instrument-metadata-analyst",
               "oceanographic-cross-platform-validation-analyst",
-              "oceanographic-profile-timeseries-quality-control-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "oceanographic-profile-timeseries-quality-control-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

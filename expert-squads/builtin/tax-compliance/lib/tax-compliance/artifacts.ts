@@ -165,6 +165,16 @@ export const TaxComplianceArtifactSchemas = {
 export type TaxComplianceArtifactType = keyof typeof TaxComplianceArtifactSchemas
 export const TaxComplianceArtifactTypeSchema = tool.schema.enum(Object.keys(TaxComplianceArtifactSchemas) as [TaxComplianceArtifactType, ...TaxComplianceArtifactType[]])
 
+export const TaxCompliancePublishableArtifactInputSchema = tool.schema.discriminatedUnion("artifact_type", [
+  tool.schema.object({ artifact_type: tool.schema.literal("tax-compliance/engagement-charter"), payload: TaxComplianceArtifactSchemas["tax-compliance/engagement-charter"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("tax-compliance/evidence-dossier"), payload: TaxComplianceArtifactSchemas["tax-compliance/evidence-dossier"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("tax-compliance/accounting-controls-analysis"), payload: TaxComplianceArtifactSchemas["tax-compliance/accounting-controls-analysis"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("tax-compliance/tax-obligation-analysis"), payload: TaxComplianceArtifactSchemas["tax-compliance/tax-obligation-analysis"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("tax-compliance/compliance-plan"), payload: TaxComplianceArtifactSchemas["tax-compliance/compliance-plan"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("tax-compliance/audit"), payload: TaxComplianceArtifactSchemas["tax-compliance/audit"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("tax-compliance/report"), payload: TaxComplianceArtifactSchemas["tax-compliance/report"] }).strict(),
+])
+
 export function parseTaxComplianceArtifact<T extends TaxComplianceArtifactType>(artifactType: T, payload: unknown): tool.schema.infer<(typeof TaxComplianceArtifactSchemas)[T]> {
   return TaxComplianceArtifactSchemas[artifactType].parse(payload) as tool.schema.infer<(typeof TaxComplianceArtifactSchemas)[T]>
 }

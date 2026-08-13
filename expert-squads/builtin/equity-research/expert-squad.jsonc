@@ -5,8 +5,10 @@
   "name": "Equity Research",
   "label": "Equity Research",
   "description": "Primary-source equity research from a dated evidence dossier through fundamentals, valuation, balanced thesis, numerical audit, and an investor-ready report.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for public-company, industry, peer, valuation, catalyst, risk, and investment-thesis research that requires an auditable report.",
@@ -18,50 +20,188 @@
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["equity-research/shared/workflow", "equity-research/shared/method"],
-      "default_tool_refs": [], "package_tool_refs": [],
-      "default_mcp_server_refs": [], "package_mcp_server_refs": [],
-      "default_mcp_tool_refs": [], "package_mcp_tool_refs": [],
-      "default_mcp_prompt_refs": [], "package_mcp_prompt_refs": [],
-      "default_mcp_resource_refs": [], "package_mcp_resource_refs": []
+      "package_skill_refs": [
+        "equity-research/shared/workflow",
+        "equity-research/shared/method"
+      ],
+      "default_tool_refs": [],
+      "package_tool_refs": [],
+      "default_mcp_server_refs": [],
+      "package_mcp_server_refs": [],
+      "default_mcp_tool_refs": [],
+      "package_mcp_tool_refs": [],
+      "default_mcp_prompt_refs": [],
+      "package_mcp_prompt_refs": [],
+      "default_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "equity-research-planner": {
-        "label": "Equity Research Planner", "description": "Defines the dated research charter, investor question, peer boundary, source policy, and stopping conditions.",
-        "base_role": "delegated-worker", "prompt": "agents/equity-research-planner/system.md", "inherit_base_tools": true, "built_in_tool_ids": [],
-        "default_skill_refs": [], "package_skill_refs": ["equity-research/shared/workflow", "equity-research/shared/method"], "default_tool_refs": [], "package_tool_refs": [], "default_mcp_server_refs": [], "package_mcp_server_refs": [], "default_mcp_tool_refs": [], "package_mcp_tool_refs": [], "default_mcp_prompt_refs": [], "package_mcp_prompt_refs": [], "default_mcp_resource_refs": [], "package_mcp_resource_refs": []
+        "label": "Equity Research Planner",
+        "description": "Defines the dated research charter, investor question, peer boundary, source policy, and stopping conditions.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/equity-research-planner/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "equity-research/shared/workflow",
+          "equity-research/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "equity-source-analyst": {
-        "label": "Equity Source Analyst", "description": "Builds a dated primary-source dossier and normalized operating, financial, market, and peer evidence table.",
-        "base_role": "deep-research", "prompt": "agents/equity-source-analyst/system.md", "inherit_base_tools": true, "built_in_tool_ids": [],
-        "default_skill_refs": [], "package_skill_refs": ["equity-research/shared/workflow", "equity-research/shared/method"], "default_tool_refs": [], "package_tool_refs": [], "default_mcp_server_refs": [], "package_mcp_server_refs": [], "default_mcp_tool_refs": [], "package_mcp_tool_refs": [], "default_mcp_prompt_refs": [], "package_mcp_prompt_refs": [], "default_mcp_resource_refs": [], "package_mcp_resource_refs": []
+        "label": "Equity Source Analyst",
+        "description": "Builds a dated primary-source dossier and normalized operating, financial, market, and peer evidence table.",
+        "base_role": "deep-research",
+        "prompt": "agents/equity-source-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "equity-research/shared/workflow",
+          "equity-research/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "equity-fundamentals-analyst": {
-        "label": "Equity Fundamentals Analyst", "description": "Explains growth, margins, cash conversion, capital intensity, balance-sheet quality, and peer positioning from selected evidence.",
-        "base_role": "delegated-worker", "prompt": "agents/equity-fundamentals-analyst/system.md", "inherit_base_tools": true, "built_in_tool_ids": [],
-        "default_skill_refs": [], "package_skill_refs": ["equity-research/shared/workflow", "equity-research/shared/method"], "default_tool_refs": [], "package_tool_refs": [], "default_mcp_server_refs": [], "package_mcp_server_refs": [], "default_mcp_tool_refs": [], "package_mcp_tool_refs": [], "default_mcp_prompt_refs": [], "package_mcp_prompt_refs": [], "default_mcp_resource_refs": [], "package_mcp_resource_refs": []
+        "label": "Equity Fundamentals Analyst",
+        "description": "Explains growth, margins, cash conversion, capital intensity, balance-sheet quality, and peer positioning from selected evidence.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/equity-fundamentals-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "equity-research/shared/workflow",
+          "equity-research/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "equity-valuation-analyst": {
-        "label": "Equity Valuation Analyst", "description": "Produces transparent comparable-company and intrinsic valuation ranges with sensitivities and explicit assumptions.",
-        "base_role": "delegated-worker", "prompt": "agents/equity-valuation-analyst/system.md", "inherit_base_tools": true, "built_in_tool_ids": [],
-        "default_skill_refs": [], "package_skill_refs": ["equity-research/shared/workflow", "equity-research/shared/method"], "default_tool_refs": [], "package_tool_refs": [], "default_mcp_server_refs": [], "package_mcp_server_refs": [], "default_mcp_tool_refs": [], "package_mcp_tool_refs": [], "default_mcp_prompt_refs": [], "package_mcp_prompt_refs": [], "default_mcp_resource_refs": [], "package_mcp_resource_refs": []
+        "label": "Equity Valuation Analyst",
+        "description": "Produces transparent comparable-company and intrinsic valuation ranges with sensitivities and explicit assumptions.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/equity-valuation-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "equity-research/shared/workflow",
+          "equity-research/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "equity-thesis-analyst": {
-        "label": "Equity Thesis Analyst", "description": "Reconciles fundamentals and valuation into a balanced thesis, catalysts, risks, and bull/base/bear scenarios.",
-        "base_role": "delegated-worker", "prompt": "agents/equity-thesis-analyst/system.md", "inherit_base_tools": true, "built_in_tool_ids": [],
-        "default_skill_refs": [], "package_skill_refs": ["equity-research/shared/workflow", "equity-research/shared/method"], "default_tool_refs": [], "package_tool_refs": [], "default_mcp_server_refs": [], "package_mcp_server_refs": [], "default_mcp_tool_refs": [], "package_mcp_tool_refs": [], "default_mcp_prompt_refs": [], "package_mcp_prompt_refs": [], "default_mcp_resource_refs": [], "package_mcp_resource_refs": []
+        "label": "Equity Thesis Analyst",
+        "description": "Reconciles fundamentals and valuation into a balanced thesis, catalysts, risks, and bull/base/bear scenarios.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/equity-thesis-analyst/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "equity-research/shared/workflow",
+          "equity-research/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "equity-fact-checker": {
-        "label": "Equity Fact Checker", "description": "Independently audits numerical traceability, dates, valuation arithmetic, source quality, and thesis support.",
-        "base_role": "fact-check", "prompt": "agents/equity-fact-checker/system.md", "inherit_base_tools": true, "built_in_tool_ids": [],
-        "default_skill_refs": [], "package_skill_refs": ["equity-research/shared/workflow", "equity-research/shared/method"], "default_tool_refs": [], "package_tool_refs": [], "default_mcp_server_refs": [], "package_mcp_server_refs": [], "default_mcp_tool_refs": [], "package_mcp_tool_refs": [], "default_mcp_prompt_refs": [], "package_mcp_prompt_refs": [], "default_mcp_resource_refs": [], "package_mcp_resource_refs": []
+        "label": "Equity Fact Checker",
+        "description": "Independently audits numerical traceability, dates, valuation arithmetic, source quality, and thesis support.",
+        "base_role": "fact-check",
+        "prompt": "agents/equity-fact-checker/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "equity-research/shared/workflow",
+          "equity-research/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "equity-report-writer": {
-        "label": "Equity Report Writer", "description": "Turns audited evidence into canonical Markdown and a visible investor-ready report without changing the underlying analysis.",
-        "base_role": "build", "prompt": "agents/equity-report-writer/system.md", "inherit_base_tools": true, "built_in_tool_ids": [],
-        "default_skill_refs": [], "package_skill_refs": ["equity-research/shared/workflow", "equity-research/shared/method"], "default_tool_refs": [], "package_tool_refs": [], "default_mcp_server_refs": [], "package_mcp_server_refs": [], "default_mcp_tool_refs": [], "package_mcp_tool_refs": [], "default_mcp_prompt_refs": [], "package_mcp_prompt_refs": [], "default_mcp_resource_refs": [], "package_mcp_resource_refs": []
+        "label": "Equity Report Writer",
+        "description": "Turns audited evidence into canonical Markdown and a visible investor-ready report without changing the underlying analysis.",
+        "base_role": "build",
+        "prompt": "agents/equity-report-writer/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "equity-research/shared/workflow",
+          "equity-research/shared/method"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       }
     },
     "virtual_workflows": {
@@ -69,13 +209,54 @@
         "label": "Auditable Equity Research Report",
         "description": "Plan a dated public-equity study, curate sources, analyze fundamentals and valuation in parallel, form and audit the thesis, then publish the report.",
         "nodes": {
-          "equity-research-planner": { "agent_id": "equity-research-planner", "description": "Publishes the bounded research charter.", "depends_on": [] },
-          "equity-source-analyst": { "agent_id": "equity-source-analyst", "description": "Publishes the primary-source dossier and normalized evidence table.", "depends_on": ["equity-research-planner"] },
-          "equity-fundamentals-analyst": { "agent_id": "equity-fundamentals-analyst", "description": "Publishes operating, financial-quality, and peer analysis.", "depends_on": ["equity-source-analyst"] },
-          "equity-valuation-analyst": { "agent_id": "equity-valuation-analyst", "description": "Publishes valuation ranges, assumptions, and sensitivities.", "depends_on": ["equity-source-analyst"] },
-          "equity-thesis-analyst": { "agent_id": "equity-thesis-analyst", "description": "Publishes the reconciled investment thesis and scenarios.", "depends_on": ["equity-fundamentals-analyst", "equity-valuation-analyst"] },
-          "equity-fact-checker": { "agent_id": "equity-fact-checker", "description": "Publishes the independent factual and numerical audit.", "depends_on": ["equity-thesis-analyst"] },
-          "equity-report-writer": { "agent_id": "equity-report-writer", "description": "Publishes canonical Markdown and the visible final report.", "depends_on": ["equity-fact-checker"] }
+          "equity-research-planner": {
+            "agent_id": "equity-research-planner",
+            "description": "Publishes the bounded research charter.",
+            "depends_on": []
+          },
+          "equity-source-analyst": {
+            "agent_id": "equity-source-analyst",
+            "description": "Publishes the primary-source dossier and normalized evidence table.",
+            "depends_on": [
+              "equity-research-planner"
+            ]
+          },
+          "equity-fundamentals-analyst": {
+            "agent_id": "equity-fundamentals-analyst",
+            "description": "Publishes operating, financial-quality, and peer analysis.",
+            "depends_on": [
+              "equity-source-analyst"
+            ]
+          },
+          "equity-valuation-analyst": {
+            "agent_id": "equity-valuation-analyst",
+            "description": "Publishes valuation ranges, assumptions, and sensitivities.",
+            "depends_on": [
+              "equity-source-analyst"
+            ]
+          },
+          "equity-thesis-analyst": {
+            "agent_id": "equity-thesis-analyst",
+            "description": "Publishes the reconciled investment thesis and scenarios.",
+            "depends_on": [
+              "equity-fundamentals-analyst",
+              "equity-valuation-analyst"
+            ]
+          },
+          "equity-fact-checker": {
+            "agent_id": "equity-fact-checker",
+            "description": "Publishes the independent factual and numerical audit.",
+            "depends_on": [
+              "equity-thesis-analyst"
+            ]
+          },
+          "equity-report-writer": {
+            "agent_id": "equity-report-writer",
+            "description": "Publishes canonical Markdown and the visible final report.",
+            "depends_on": [
+              "equity-fact-checker"
+            ]
+          }
         }
       }
     }

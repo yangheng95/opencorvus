@@ -5,22 +5,31 @@
   "name": "Evolution Lab",
   "label": "Evolution Lab",
   "description": "Target-agnostic evidence, candidate, evaluation, integrity review, and recommendation package for explicit Expert Squad evolution campaigns.",
-  "version": "2026.08.06.3",
-  "product_pillars": ["code", "work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "code",
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use only for an explicit Expert Squad evolution investigation or campaign.",
     "selection_guidance": "Select Evolution Lab only when the user explicitly asks to investigate, construct, evaluate, compare, promote, or restore an Expert Squad revision. Promotion and restoration remain separate user-authorized operations.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["evolution-lab/shared/campaign"],
+      "package_skill_refs": [
+        "evolution-lab/shared/campaign"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +39,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "evolution-observer": {
@@ -41,11 +50,13 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["evolution-lab/shared/campaign"],
+        "package_skill_refs": [
+          "evolution-lab/shared/campaign"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [
           "evolution-lab/shared/publish-evolution-artifact",
-          "evolution-lab/shared/collect-run-evidence",
+          "evolution-lab/shared/collect-run-evidence"
         ],
         "default_mcp_server_refs": [],
         "package_mcp_server_refs": [],
@@ -54,7 +65,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "evolution-failure-analyst": {
         "label": "Evolution Failure Analyst",
@@ -64,9 +75,13 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["evolution-lab/shared/campaign"],
+        "package_skill_refs": [
+          "evolution-lab/shared/campaign"
+        ],
         "default_tool_refs": [],
-        "package_tool_refs": ["evolution-lab/shared/publish-evolution-artifact"],
+        "package_tool_refs": [
+          "evolution-lab/shared/publish-evolution-artifact"
+        ],
         "default_mcp_server_refs": [],
         "package_mcp_server_refs": [],
         "default_mcp_tool_refs": [],
@@ -74,7 +89,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "evolution-experiment-planner": {
         "label": "Evolution Experiment Planner",
@@ -84,12 +99,14 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["evolution-lab/shared/campaign"],
+        "package_skill_refs": [
+          "evolution-lab/shared/campaign"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [
           "evolution-lab/shared/publish-evolution-artifact",
           "evolution-lab/shared/expert-squad-package",
-          "evolution-lab/shared/rehydrate-evolution-resources",
+          "evolution-lab/shared/rehydrate-evolution-resources"
         ],
         "default_mcp_server_refs": [],
         "package_mcp_server_refs": [],
@@ -98,7 +115,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "evolution-candidate-author": {
         "label": "Evolution Candidate Author",
@@ -108,12 +125,14 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["evolution-lab/shared/campaign"],
+        "package_skill_refs": [
+          "evolution-lab/shared/campaign"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [
           "evolution-lab/shared/publish-evolution-artifact",
           "evolution-lab/shared/expert-squad-package",
-          "evolution-lab/shared/rehydrate-evolution-resources",
+          "evolution-lab/shared/rehydrate-evolution-resources"
         ],
         "default_mcp_server_refs": [],
         "package_mcp_server_refs": [],
@@ -122,7 +141,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "evolution-evaluator": {
         "label": "Evolution Evaluator",
@@ -132,13 +151,15 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["evolution-lab/shared/campaign"],
+        "package_skill_refs": [
+          "evolution-lab/shared/campaign"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [
           "evolution-lab/shared/publish-evolution-artifact",
           "evolution-lab/shared/collect-run-evidence",
           "evolution-lab/shared/execute-evolution-metrics",
-          "evolution-lab/shared/rehydrate-evolution-resources",
+          "evolution-lab/shared/rehydrate-evolution-resources"
         ],
         "default_mcp_server_refs": [],
         "package_mcp_server_refs": [],
@@ -147,31 +168,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
-      "evolution-security-integrity-reviewer": {
-        "label": "Evolution Security and Integrity Reviewer",
-        "description": "Independently audits permissions, leakage, reward hacking, evidence lineage, frozen files, and experiment drift.",
-        "base_role": "integrity",
-        "prompt": "agents/evolution-security-integrity-reviewer/system.md",
-        "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
-        "package_skill_refs": ["evolution-lab/shared/campaign"],
-        "default_tool_refs": [],
-        "package_tool_refs": [
-          "evolution-lab/shared/publish-evolution-artifact",
-          "evolution-lab/shared/expert-squad-package",
-          "evolution-lab/shared/rehydrate-evolution-resources",
-        ],
-        "default_mcp_server_refs": [],
-        "package_mcp_server_refs": [],
-        "default_mcp_tool_refs": [],
-        "package_mcp_tool_refs": [],
-        "default_mcp_prompt_refs": [],
-        "package_mcp_prompt_refs": [],
-        "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "evolution-recommendation-owner": {
         "label": "Evolution Recommendation Owner",
@@ -181,9 +178,13 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["evolution-lab/shared/campaign"],
+        "package_skill_refs": [
+          "evolution-lab/shared/campaign"
+        ],
         "default_tool_refs": [],
-        "package_tool_refs": ["evolution-lab/shared/publish-evolution-artifact"],
+        "package_tool_refs": [
+          "evolution-lab/shared/publish-evolution-artifact"
+        ],
         "default_mcp_server_refs": [],
         "package_mcp_server_refs": [],
         "default_mcp_tool_refs": [],
@@ -191,63 +192,112 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
+      "evolution-safety-auditor": {
+        "label": "Evolution Safety Auditor",
+        "description": "Audits permissions, leakage, reward hacking, evidence lineage, frozen inputs, and experiment drift as a domain evaluation worker.",
+        "base_role": "delegated-worker",
+        "prompt": "agents/evolution-safety-auditor/system.md",
+        "inherit_base_tools": true,
+        "built_in_tool_ids": [],
+        "default_skill_refs": [],
+        "package_skill_refs": [
+          "evolution-lab/shared/campaign"
+        ],
+        "default_tool_refs": [],
+        "package_tool_refs": [
+          "evolution-lab/shared/publish-evolution-artifact",
+          "evolution-lab/shared/expert-squad-package",
+          "evolution-lab/shared/rehydrate-evolution-resources"
+        ],
+        "default_mcp_server_refs": [],
+        "package_mcp_server_refs": [],
+        "default_mcp_tool_refs": [],
+        "package_mcp_tool_refs": [],
+        "default_mcp_prompt_refs": [],
+        "package_mcp_prompt_refs": [],
+        "default_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "evolution-opportunity-analysis": {
-        "label": "Evolution Opportunity and Cause Analysis",
-        "description": "Use for explicitly selected existing production evidence before any campaign is authorized; publish the bounded opportunity and proven causal attribution.",
+        "label": "Parallel Evolution Opportunity Analysis",
+        "description": "Opportunity observation consumes the frozen diagnostic boundary; causal analysis then consumes that exact typed opportunity. Campaign planning remains owned by candidate preparation.",
         "nodes": {
           "evolution-observer": {
             "agent_id": "evolution-observer",
-            "description": "Publishes the bounded evolution opportunity from explicitly selected evidence.",
-            "depends_on": [],
+            "description": "Measures incumbent topology, behavior, and evidence lineage.",
+            "depends_on": []
           },
           "evolution-failure-analyst": {
             "agent_id": "evolution-failure-analyst",
-            "description": "Publishes the causal failure attribution and explicit unknowns.",
-            "depends_on": ["evolution-observer"],
-          },
-        },
+            "description": "Builds causal attribution and bounded improvement hypotheses from the frozen diagnostic boundary.",
+            "depends_on": [
+              "evolution-observer"
+            ]
+          }
+        }
       },
       "evolution-candidate-preparation": {
-        "label": "Frozen Development Campaign and Candidate Preparation",
-        "description": "Use only in a Mission stage that imports accepted opportunity and attribution evidence; freeze one development Dataset partition before authoring one complete candidate. Holdout and certification Campaigns use the evaluation workflow and never this graph.",
+        "label": "Planned Parallel Evolution Candidate Preparation",
+        "description": "The Experiment Planner freezes the development campaign before candidate authoring and incumbent-closure validation execute in parallel.",
         "nodes": {
           "evolution-experiment-planner": {
             "agent_id": "evolution-experiment-planner",
-            "description": "Publishes the frozen campaign specification and exact parent revision without a not-yet-created candidate digest.",
-            "depends_on": [],
+            "description": "Publishes the frozen case, development campaign, mutation budget, and acceptance contract.",
+            "depends_on": []
           },
           "evolution-candidate-author": {
             "agent_id": "evolution-candidate-author",
-            "description": "Publishes one complete validated candidate revision.",
-            "depends_on": ["evolution-experiment-planner"],
+            "description": "Materializes, validates, and publishes one immutable uninstalled candidate revision.",
+            "depends_on": [
+              "evolution-experiment-planner"
+            ]
           },
-        },
+          "evolution-observer": {
+            "agent_id": "evolution-observer",
+            "description": "Independently validates the incumbent closure and frozen-case binding used by the campaign.",
+            "depends_on": [
+              "evolution-experiment-planner"
+            ]
+          }
+        }
       },
       "evolution-campaign-evaluation": {
-        "label": "Frozen Two-arm Evaluation and Recommendation",
-        "description": "Use only after a Mission has run independent exact-profile baseline and candidate Tasks and imports their terminal evidence with the campaign and candidate Artifacts.",
+        "label": "Evolution Campaign Evaluation",
+        "description": "The Experiment Planner freezes comparison inputs; metric and safety workers evaluate in parallel; the recommendation owner then publishes the deterministic comparison.",
         "nodes": {
+          "evolution-experiment-planner": {
+            "agent_id": "evolution-experiment-planner",
+            "description": "Freezes baseline/candidate run identities, Case identity, metrics, and recommendation rule.",
+            "depends_on": []
+          },
           "evolution-evaluator": {
             "agent_id": "evolution-evaluator",
-            "description": "Publishes exact run evidence and scorer results for the imported frozen baseline and candidate Tasks.",
-            "depends_on": [],
+            "description": "Computes the metric evidence for both frozen Trials.",
+            "depends_on": [
+              "evolution-experiment-planner"
+            ]
           },
-          "evolution-security-integrity-reviewer": {
-            "agent_id": "evolution-security-integrity-reviewer",
-            "description": "Audits candidate integrity, permissions, evidence, experiment drift, and reward hacking.",
-            "depends_on": ["evolution-evaluator"],
+          "evolution-safety-auditor": {
+            "agent_id": "evolution-safety-auditor",
+            "description": "Audits safety, permissions, leakage, lineage, and experiment drift independently.",
+            "depends_on": [
+              "evolution-experiment-planner"
+            ]
           },
           "evolution-recommendation-owner": {
             "agent_id": "evolution-recommendation-owner",
-            "description": "Publishes the scoped comparison and recommendation without promotion authority.",
-            "depends_on": ["evolution-security-integrity-reviewer"],
-          },
-        },
-      },
-    },
-  },
+            "description": "Publishes the deterministic recommendation only after metric and safety evidence are complete.",
+            "depends_on": [
+              "evolution-evaluator",
+              "evolution-safety-auditor"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

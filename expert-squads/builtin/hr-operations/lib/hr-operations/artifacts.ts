@@ -62,6 +62,15 @@ export const HrOperationsArtifactLabels = {
 
 export const HrOperationsArtifactTypeSchema = tool.schema.enum(["hr-operations/operating-charter", "hr-operations/evidence-dossier", "hr-operations/workforce-analysis", "hr-operations/process-analysis", "hr-operations/operating-plan-draft", "hr-operations/audit", "hr-operations/operating-plan"])
 export type HrOperationsArtifactType = tool.schema.infer<typeof HrOperationsArtifactTypeSchema>
+export const HrOperationsPublishableArtifactInputSchema = tool.schema.discriminatedUnion("artifact_type", [
+  tool.schema.object({ artifact_type: tool.schema.literal("hr-operations/operating-charter"), payload: HrOperationsArtifactSchemas["hr-operations/operating-charter"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("hr-operations/evidence-dossier"), payload: HrOperationsArtifactSchemas["hr-operations/evidence-dossier"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("hr-operations/workforce-analysis"), payload: HrOperationsArtifactSchemas["hr-operations/workforce-analysis"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("hr-operations/process-analysis"), payload: HrOperationsArtifactSchemas["hr-operations/process-analysis"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("hr-operations/operating-plan-draft"), payload: HrOperationsArtifactSchemas["hr-operations/operating-plan-draft"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("hr-operations/audit"), payload: HrOperationsArtifactSchemas["hr-operations/audit"] }).strict(),
+  tool.schema.object({ artifact_type: tool.schema.literal("hr-operations/operating-plan"), payload: HrOperationsArtifactSchemas["hr-operations/operating-plan"] }).strict(),
+])
 export const HROPERATIONS_TERMINAL_ARTIFACT_TYPE = "hr-operations/operating-plan"
 
 export function parseHrOperationsArtifact(type: HrOperationsArtifactType, payload: unknown) {

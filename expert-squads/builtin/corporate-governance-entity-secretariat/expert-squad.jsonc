@@ -5,22 +5,30 @@
   "name": "Corporate Governance Entity Secretariat",
   "label": "Corporate Governance Entity Secretariat",
   "description": "Source-bound corporate entity, governing-body, meeting, consent, resolution, minutes, action, filing-calendar and register evidence preparation without legal, signature or filing authority.",
-  "version": "2026.08.11.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for controlled corporate-governance and entity-secretariat evidence prepared for counsel and authorized secretary review.",
     "selection_guidance": "Select for entity/authority records, board or committee meeting preparation, agenda/material trace, minutes evidence, written-consent support, resolution/action registers, entity calendar or filing evidence. Do not select for legal advice, quorum/authority/validity decisions, signatures, filings or director/regulator communications.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["corporate-governance-entity-secretariat/shared/method"],
+      "package_skill_refs": [
+        "corporate-governance-entity-secretariat/shared/method"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "entity-authority-governing-record-analyst": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["corporate-governance-entity-secretariat/shared/method"],
+        "package_skill_refs": [
+          "corporate-governance-entity-secretariat/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "governing-body-meeting-materials-analyst": {
         "label": "Governing Body Meeting Materials Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["corporate-governance-entity-secretariat/shared/method"],
+        "package_skill_refs": [
+          "corporate-governance-entity-secretariat/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +83,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "resolution-minutes-consent-action-analyst": {
         "label": "Resolution Minutes Consent Action Analyst",
@@ -81,7 +93,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["corporate-governance-entity-secretariat/shared/method"],
+        "package_skill_refs": [
+          "corporate-governance-entity-secretariat/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,7 +105,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "entity-calendar-filing-register-analyst": {
         "label": "Entity Calendar Filing Register Analyst",
@@ -101,7 +115,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["corporate-governance-entity-secretariat/shared/method"],
+        "package_skill_refs": [
+          "corporate-governance-entity-secretariat/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,7 +127,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "corporate-governance-entity-secretariat-review-owner": {
         "label": "Corporate Governance Entity Secretariat Review Owner",
@@ -121,7 +137,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["corporate-governance-entity-secretariat/shared/method"],
+        "package_skill_refs": [
+          "corporate-governance-entity-secretariat/shared/method"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -131,8 +149,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "qualified-review": {
@@ -142,22 +160,22 @@
           "entity-authority-governing-record-analyst": {
             "agent_id": "entity-authority-governing-record-analyst",
             "description": "Freezes entity identity, jurisdiction, governing documents, body composition and delegated-authority evidence.",
-            "depends_on": [],
+            "depends_on": []
           },
           "governing-body-meeting-materials-analyst": {
             "agent_id": "governing-body-meeting-materials-analyst",
             "description": "Reconciles meeting purpose, notice, agenda, materials, attendance, conflicts and source chronology.",
-            "depends_on": [],
+            "depends_on": []
           },
           "resolution-minutes-consent-action-analyst": {
             "agent_id": "resolution-minutes-consent-action-analyst",
             "description": "Drafts evidence-bound minutes/consent/resolution records and traces actions without signature or effectiveness claims.",
-            "depends_on": [],
+            "depends_on": []
           },
           "entity-calendar-filing-register-analyst": {
             "agent_id": "entity-calendar-filing-register-analyst",
             "description": "Maps counsel-supplied obligations, dates, filings, registers and evidence of completion.",
-            "depends_on": [],
+            "depends_on": []
           },
           "corporate-governance-entity-secretariat-review-owner": {
             "agent_id": "corporate-governance-entity-secretariat-review-owner",
@@ -166,11 +184,11 @@
               "entity-authority-governing-record-analyst",
               "entity-calendar-filing-register-analyst",
               "governing-body-meeting-materials-analyst",
-              "resolution-minutes-consent-action-analyst",
-            ],
-          },
-        },
-      },
-    },
-  },
+              "resolution-minutes-consent-action-analyst"
+            ]
+          }
+        }
+      }
+    }
+  }
 }

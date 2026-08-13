@@ -5,22 +5,30 @@
   "name": "Product Management",
   "label": "Product Management",
   "description": "Frames product decisions, investigates customer evidence and solution options in parallel, and joins both into an owned, verifiable decision brief.",
-  "version": "2026.08.10.1",
-  "product_pillars": ["work"],
+  "version": "2026.08.13.1",
+  "product_pillars": [
+    "work"
+  ],
   "readme": "README.md",
   "selector": {
     "summary": "Use for product discovery, prioritization, requirements, roadmap choices, experiments, and decision briefs that need explicit evidence and verification.",
     "selection_guidance": "Select Product Management when the primary outcome is a bounded product decision with a target user, alternatives, scope, metrics, ownership, and a next verification step.",
-    "instructions": "selector.md",
+    "instructions": "selector.md"
   },
   "capability_projection": {
     "scheduler": {
       "base_role": "orchestrator",
       "prompt": "agents/orchestrator/system.md",
       "inherit_base_tools": true,
-      "built_in_tool_ids": ["dispatch_agent", "manage_task", "read"],
+      "built_in_tool_ids": [
+        "dispatch_agent",
+        "manage_task",
+        "read"
+      ],
       "default_skill_refs": [],
-      "package_skill_refs": ["product-management/shared/evidence-backed-product-planning"],
+      "package_skill_refs": [
+        "product-management/shared/evidence-backed-product-planning"
+      ],
       "default_tool_refs": [],
       "package_tool_refs": [],
       "default_mcp_server_refs": [],
@@ -30,7 +38,7 @@
       "default_mcp_prompt_refs": [],
       "package_mcp_prompt_refs": [],
       "default_mcp_resource_refs": [],
-      "package_mcp_resource_refs": [],
+      "package_mcp_resource_refs": []
     },
     "agents": {
       "product-problem-framer": {
@@ -41,7 +49,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["product-management/shared/evidence-backed-product-planning"],
+        "package_skill_refs": [
+          "product-management/shared/evidence-backed-product-planning"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -51,7 +61,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "product-customer-evidence-analyst": {
         "label": "Product Customer Evidence Analyst",
@@ -61,7 +71,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["product-management/shared/evidence-backed-product-planning"],
+        "package_skill_refs": [
+          "product-management/shared/evidence-backed-product-planning"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -71,7 +83,7 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "product-solution-strategist": {
         "label": "Product Solution Strategist",
@@ -81,7 +93,9 @@
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["product-management/shared/evidence-backed-product-planning"],
+        "package_skill_refs": [
+          "product-management/shared/evidence-backed-product-planning"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -91,17 +105,19 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
+        "package_mcp_resource_refs": []
       },
       "product-decision-owner": {
         "label": "Product Decision Owner",
         "description": "Joins customer evidence and solution analysis into a chosen, rejected, or deferred decision with execution and verification contracts.",
-        "base_role": "integrity",
+        "base_role": "delegated-worker",
         "prompt": "agents/product-decision-owner/system.md",
         "inherit_base_tools": true,
         "built_in_tool_ids": [],
         "default_skill_refs": [],
-        "package_skill_refs": ["product-management/shared/evidence-backed-product-planning"],
+        "package_skill_refs": [
+          "product-management/shared/evidence-backed-product-planning"
+        ],
         "default_tool_refs": [],
         "package_tool_refs": [],
         "default_mcp_server_refs": [],
@@ -111,8 +127,8 @@
         "default_mcp_prompt_refs": [],
         "package_mcp_prompt_refs": [],
         "default_mcp_resource_refs": [],
-        "package_mcp_resource_refs": [],
-      },
+        "package_mcp_resource_refs": []
+      }
     },
     "virtual_workflows": {
       "evidence-backed-product-decision": {
@@ -122,25 +138,32 @@
           "product-problem-framer": {
             "agent_id": "product-problem-framer",
             "description": "Publishes the bounded product decision charter.",
-            "depends_on": [],
+            "depends_on": []
           },
           "product-customer-evidence-analyst": {
             "agent_id": "product-customer-evidence-analyst",
             "description": "Publishes the dated customer evidence and gap map.",
-            "depends_on": ["product-problem-framer"],
+            "depends_on": [
+              "product-problem-framer"
+            ]
           },
           "product-solution-strategist": {
             "agent_id": "product-solution-strategist",
             "description": "Publishes distinct solution and delivery options with tradeoffs.",
-            "depends_on": ["product-problem-framer"],
+            "depends_on": [
+              "product-problem-framer"
+            ]
           },
           "product-decision-owner": {
             "agent_id": "product-decision-owner",
             "description": "Publishes the joined decision, scope, ownership, metrics, risks, and verification plan.",
-            "depends_on": ["product-customer-evidence-analyst", "product-solution-strategist"],
-          },
-        },
-      },
-    },
-  },
+            "depends_on": [
+              "product-customer-evidence-analyst",
+              "product-solution-strategist"
+            ]
+          }
+        }
+      }
+    }
+  }
 }
