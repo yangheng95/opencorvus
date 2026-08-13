@@ -57,12 +57,21 @@ test("SessionLoop binds each accepted user message to its streaming execution oc
         const session = await Session.create({ kind: "assistant", title: "SessionLoop occurrence owner" })
         const lifecycle: Array<{ inputMessageID: string; status: SessionStatus.Info }> = []
         const observedInsideProcessor: Array<{ inputMessageID: string; status: SessionStatus.Info }> = []
+        let awaitedIdleInputMessageID: string | undefined
+        let resolveFinalIdle!: () => void
+        const finalIdle = new Promise<void>((resolve) => (resolveFinalIdle = resolve))
         const stopLifecycle = Bus.subscribe(SessionStatus.Event.Status, (event) => {
           if (event.properties.sessionID !== session.id) return
           lifecycle.push({
             inputMessageID: event.properties.inputMessageID,
             status: event.properties.status,
           })
+          if (
+            event.properties.inputMessageID === awaitedIdleInputMessageID &&
+            event.properties.status.type === "idle"
+          ) {
+            resolveFinalIdle()
+          }
         })
         const providerSpy = spyOn(Provider, "getModel").mockResolvedValue(providerModel())
         const processorSpy = spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
@@ -139,6 +148,20 @@ test("SessionLoop binds each accepted user message to its streaming execution oc
           await SessionPrompt.waitForFinish(session.id, project.path)
           expect(SessionPrompt.promptOwner(session.id)).toBeUndefined()
           expect(SessionPrompt.hasGeneration(session.id)).toBe(false)
+          awaitedIdleInputMessageID = third.info.parentID
+          if (
+            lifecycle.some(
+              (event) => event.inputMessageID === awaitedIdleInputMessageID && event.status.type === "idle",
+            )
+          ) {
+            resolveFinalIdle()
+          }
+          await Promise.race([
+            finalIdle,
+            Bun.sleep(2_000).then(() => {
+              throw new Error(`Session ${session.id} final idle lifecycle did not arrive`)
+            }),
+          ])
 
           expect(observedInsideProcessor).toEqual([
             { inputMessageID: first.info.parentID, status: { type: "streaming" } },
@@ -147,8 +170,11 @@ test("SessionLoop binds each accepted user message to its streaming execution oc
           ])
           expect(lifecycle).toEqual([
             { inputMessageID: first.info.parentID!, status: { type: "streaming" } },
+            { inputMessageID: first.info.parentID!, status: { type: "idle" } },
             { inputMessageID: second.info.parentID!, status: { type: "streaming" } },
+            { inputMessageID: second.info.parentID!, status: { type: "idle" } },
             { inputMessageID: third.info.parentID!, status: { type: "streaming" } },
+            { inputMessageID: third.info.parentID!, status: { type: "idle" } },
           ])
           expect(first.info.parentID).not.toBe(second.info.parentID)
           expect(second.info.parentID).not.toBe(third.info.parentID)
