@@ -729,7 +729,6 @@ function configureSqlite(sqlite: BunDatabase) {
   sqlite.run("PRAGMA auto_vacuum = INCREMENTAL")
   sqlite.run("PRAGMA journal_mode = WAL")
   sqlite.run("PRAGMA synchronous = NORMAL")
-  sqlite.run("PRAGMA busy_timeout = 5000")
   sqlite.run("PRAGMA cache_size = -64000")
   sqlite.run("PRAGMA foreign_keys = ON")
   // Cap WAL file size on disk — anything above the limit is truncated at
@@ -965,6 +964,10 @@ export namespace Database {
     const sqlite = new BunDatabase(dbPath, { create: true })
     state.sqlite = sqlite
     state.rollbackRequired = false
+    // Install the connection's busy handler before even inspecting schema.
+    // Independent OpenCorvus processes can open the same database while
+    // another opener is confirming WAL, auto-vacuum, or schema state.
+    sqlite.run("PRAGMA busy_timeout = 5000")
     if (options.configure) configureSqlite(sqlite)
     return sqlite
   }
