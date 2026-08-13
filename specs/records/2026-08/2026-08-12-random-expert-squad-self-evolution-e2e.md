@@ -2923,6 +2923,15 @@ without rebase. The shared algorithm test retained this phase's removal of busin
 new per-identity compact logical clock and 24-character contract. The merged algorithm file exits with
 `22 pass / 77 assertions`; the dedicated compact-identity file exits with `3 pass / 473 assertions`.
 
+`origin/main` then advanced with Evolution package-publication correlation and was merged a second time without
+rebase. Its overlap with the atomic creation-ingress evidence remained semantic: the merged Evolution file now proves
+both the correlated package source and the current plus historical creation-ingress Artifacts, and exits with
+`8 pass / 72 assertions`. The affected native package-tool process authority exits with `1 pass / 10 assertions`.
+An independent rerun also exposed that one real Windows managed-worktree test inherited Bun's five-second default
+despite taking between five and six seconds in its production Git path. That test now has an explicit 60-second
+budget matching its real external work; no assertion or product behavior changed. The complete algorithm file exits
+cleanly with `22 pass / 77 assertions` under that bounded checker.
+
 Real acceptance used dev source on random port `54859`, random isolated project
 `.scratch/ui-queue-9cb5529ca75d/project`, and isolated SQLite runtime under the same scratch occurrence. Global
 `auth.json` and `models.json` were copied into the isolated runtime and separately verified by hash equality; the Web

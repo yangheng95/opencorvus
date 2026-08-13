@@ -419,7 +419,7 @@ describe("worktree ownership critical section", () => {
         ).toEqual([])
       },
     })
-  })
+  }, 60_000)
 
   test("returns an exact public receipt after explicit durable sandbox release", async () => {
     await using project = await memoryProject()
