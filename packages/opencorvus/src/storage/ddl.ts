@@ -1,7 +1,7 @@
 import { SQL } from "drizzle-orm"
-import { getTableConfig, SQLiteSyncDialect } from "drizzle-orm/sqlite-core"
+import { getTableConfig, SQLiteSyncDialect, type AnySQLiteTable } from "drizzle-orm/sqlite-core"
 import { ENGINE_ARTIFACT_CATALOG_LABEL_INDEX_CODE_POINTS } from "@/engine/artifact-catalog-constants"
-import * as schema from "./schema"
+import { ApplicationSchema } from "./schema"
 
 type Column = ReturnType<typeof getTableConfig>["columns"][number]
 type IndexColumn = ReturnType<typeof getTableConfig>["indexes"][number]["config"]["columns"][number]
@@ -112,17 +112,46 @@ function renderTable(table: unknown) {
   return [tableSql, ...indexSql].join("\n")
 }
 
-export function collectTables() {
-  const tables: unknown[] = []
-  const seen = new Set<string>()
+export class ApplicationSchemaRegistryError extends Error {
+  constructor(
+    readonly kind: "invalid_table" | "duplicate_table_name",
+    readonly registryKey: string,
+    readonly tableName?: string,
+    options?: ErrorOptions,
+  ) {
+    super(
+      kind === "invalid_table"
+        ? `Application schema entry is not a SQLite table: ${registryKey}`
+        : `Application schema contains duplicate physical table name ${tableName}: ${registryKey}`,
+      options,
+    )
+    this.name = "ApplicationSchemaRegistryError"
+  }
+}
 
-  for (const value of Object.values(schema)) {
+/**
+ * Module namespace exports were historically enumerated in code-unit key order.
+ * Keep that stable order as part of the MySQL transfer fingerprint contract.
+ */
+export function collectTables(
+  registry: Readonly<Record<string, AnySQLiteTable>> = ApplicationSchema,
+): AnySQLiteTable[] {
+  const tables: AnySQLiteTable[] = []
+  const seen = new Set<string>()
+  const entries = Object.entries(registry).sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0))
+
+  for (const [registryKey, table] of entries) {
+    let name: string
     try {
-      const name = tableName(value)
-      if (seen.has(name)) continue
-      seen.add(name)
-      tables.push(value)
-    } catch {}
+      name = tableName(table)
+    } catch (cause) {
+      throw new ApplicationSchemaRegistryError("invalid_table", registryKey, undefined, { cause })
+    }
+    if (seen.has(name)) {
+      throw new ApplicationSchemaRegistryError("duplicate_table_name", registryKey, name)
+    }
+    seen.add(name)
+    tables.push(table)
   }
 
   return tables

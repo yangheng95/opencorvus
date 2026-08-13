@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test"
 import { Database as BunDatabase } from "bun:sqlite"
-import { SCHEMA_DDL } from "../../src/storage/ddl"
+import { ApplicationSchemaRegistryError, collectTables, SCHEMA_DDL, tableName } from "../../src/storage/ddl"
+import { ApplicationSchema, ProjectTable } from "../../src/storage/schema"
 import {
   currentSchemaFingerprint,
   findSchemaDrift,
@@ -11,6 +12,7 @@ import { rebuildTestDatabase } from "../fixture/db"
 import {
   exportMysqlTransferSnapshot,
   importMysqlTransferSnapshot,
+  mysqlSchemaFingerprint,
   preflightMysqlTransferSnapshot,
 } from "../../src/storage/mysql-transfer"
 
@@ -125,6 +127,64 @@ test("creates the complete pre-0.1.0 schema directly from the canonical DDL", ()
   } finally {
     sqlite.close(true)
   }
+})
+
+test("uses one explicit application table registry for SQLite and transfer shapes", () => {
+  const registeredNames = Object.entries(ApplicationSchema)
+    .sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0))
+    .map(([key, table]) => ({ key, name: tableName(table) }))
+  expect(new Set(registeredNames.map((entry) => entry.key)).size).toBe(registeredNames.length)
+  expect(new Set(registeredNames.map((entry) => entry.name)).size).toBe(registeredNames.length)
+  expect(collectTables().map(tableName)).toEqual(registeredNames.map((entry) => entry.name))
+
+  const sqlite = new BunDatabase(":memory:")
+  try {
+    sqlite.exec(SCHEMA_DDL)
+    const physicalTableNames = sqlite
+      .query<{ name: string }, []>(
+        "SELECT name FROM sqlite_schema WHERE type = 'table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'memory_fts%' ORDER BY name",
+      )
+      .all()
+      .map((row) => row.name)
+    expect(physicalTableNames).toEqual(registeredNames.map((entry) => entry.name).sort())
+  } finally {
+    sqlite.close(true)
+  }
+
+  try {
+    rebuildTestDatabase()
+    const snapshot = exportMysqlTransferSnapshot()
+    expect(mysqlSchemaFingerprint()).toBe("c4ac1845b2fc787c3ce60b99594c6c0ba873adae05cc6334dccdcb0049ee4918")
+    expect(snapshot.tables.map((table) => table.name)).toEqual(
+      registeredNames.map((entry) => entry.name).filter((name) => name !== "database_authority"),
+    )
+    expect(snapshot.tables.map((table) => table.name).sort()).toEqual(
+      registeredNames
+        .map((entry) => entry.name)
+        .filter((name) => name !== "database_authority")
+        .sort(),
+    )
+  } finally {
+    rebuildTestDatabase()
+  }
+})
+
+test("reports invalid and duplicate application schema declarations", () => {
+  expect(() => collectTables({ BrokenTable: {} as never })).toThrow(
+    expect.objectContaining<ApplicationSchemaRegistryError>({
+      name: "ApplicationSchemaRegistryError",
+      kind: "invalid_table",
+      registryKey: "BrokenTable",
+    }),
+  )
+  expect(() => collectTables({ ProjectAliasTable: ProjectTable, ProjectTable })).toThrow(
+    expect.objectContaining<ApplicationSchemaRegistryError>({
+      name: "ApplicationSchemaRegistryError",
+      kind: "duplicate_table_name",
+      registryKey: "ProjectTable",
+      tableName: "project",
+    }),
+  )
 })
 
 test("returns the reset-required database contract for an older schema", async () => {

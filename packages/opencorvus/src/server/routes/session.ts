@@ -616,7 +616,7 @@ export const SessionRoutes = lazy(() =>
           sessionID,
           projectID: Instance.project.id,
         })
-        const view = projectConversationView(transcript, [], agentSessions)
+        const view = projectConversationView({ transcript, ledgerSessions: agentSessions })
         return c.json(await projectMissionTurnArtifacts({ transcript, view }))
       },
     )
@@ -701,7 +701,10 @@ export const SessionRoutes = lazy(() =>
               }
             : entry,
         )
-        const view = projectConversationView(historyWindow.transcript, [], hydratedAgentSessions)
+        const view = projectConversationView({
+          transcript: historyWindow.transcript,
+          ledgerSessions: hydratedAgentSessions,
+        })
         const turnArtifacts =
           session.kind === "mission"
             ? await projectMissionTurnArtifacts({

@@ -27,6 +27,7 @@ type ArchitectStageDependencies = {
   taskID: string
   parentSessionID: string
   signal?: AbortSignal
+  coordinateArchitect?: typeof ArchitectAgent.coordinate
 }
 
 export type ArchitectRequirementSetProvenance =
@@ -62,6 +63,7 @@ export function classifyArchitectRequirementSetProvenance(input: {
 export function createArchitectStageDispatcher(dependencies: ArchitectStageDependencies) {
   const taskID = dependencies.taskID
   const input = { agentSessionID: dependencies.parentSessionID, signal: dependencies.signal }
+  const coordinateArchitect = dependencies.coordinateArchitect ?? ArchitectAgent.coordinate
 
   return async function dispatchArchitectStage(dispatch: {
     task: TaskRow
@@ -281,9 +283,9 @@ export function createArchitectStageDispatcher(dependencies: ArchitectStageDepen
         ]
         try {
           if (candidateConflicts.length > 0) {
-            Database.transaction((db) => {
+            const candidateProjectionArtifactLocator = Database.transaction((db) => {
               const now = Date.now()
-              persistArchitectUnprojectableGoalGraphCandidate(db, {
+              const candidate = persistArchitectUnprojectableGoalGraphCandidate(db, {
                 taskID,
                 producer: {
                   kind: "architect_turn",
@@ -312,10 +314,13 @@ export function createArchitectStageDispatcher(dependencies: ArchitectStageDepen
                   { source: "orchestrator.architect" },
                 ),
               )
+              return candidate.candidateProjectionArtifactLocator
             })
-            return DispatchOutcome.terminal({
+            return DispatchOutcome.domainIncomplete({
               sessionID: result.sessionID,
               finalMessageID: result.finalMessageID,
+              domain: "architect_projection",
+              domainArtifact: candidateProjectionArtifactLocator,
             })
           }
 
@@ -354,8 +359,8 @@ export function createArchitectStageDispatcher(dependencies: ArchitectStageDepen
             })
           } catch (projectionError) {
             if (!(projectionError instanceof GoalGraphProjectionConflictError)) throw projectionError
-            Database.transaction((db) => {
-              persistArchitectUnprojectableGoalGraphCandidate(db, {
+            const candidateProjectionArtifactLocator = Database.transaction((db) => {
+              const candidate = persistArchitectUnprojectableGoalGraphCandidate(db, {
                 taskID,
                 producer: {
                   kind: "architect_turn",
@@ -373,6 +378,13 @@ export function createArchitectStageDispatcher(dependencies: ArchitectStageDepen
                 conflicts: [],
                 now: Date.now(),
               })
+              return candidate.candidateProjectionArtifactLocator
+            })
+            return DispatchOutcome.domainIncomplete({
+              sessionID: result.sessionID,
+              finalMessageID: result.finalMessageID,
+              domain: "architect_projection",
+              domainArtifact: candidateProjectionArtifactLocator,
             })
           }
         } catch (dbErr) {
@@ -390,7 +402,7 @@ export function createArchitectStageDispatcher(dependencies: ArchitectStageDepen
         })
       }
 
-      const result = await ArchitectAgent.coordinate({
+      const result = await coordinateArchitect({
         agentID: dispatch.agentID,
         packageRevision: dispatch.packageRevision,
         workScope: dispatch.workScope,

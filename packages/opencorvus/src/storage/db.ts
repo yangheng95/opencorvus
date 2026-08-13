@@ -13,7 +13,7 @@ import path from "path"
 import * as fsSync from "fs"
 import * as fsPromises from "fs/promises"
 import { randomUUID } from "crypto"
-import * as schema from "./schema"
+import { ApplicationSchema, DatabaseAuthorityTable } from "./schema"
 import { SCHEMA_DDL } from "./ddl"
 import {
   findSchemaDrift,
@@ -366,7 +366,7 @@ export namespace Database {
   export function Path() {
     return path.join(Global.Path.data, "opencorvus.db")
   }
-  type Schema = typeof schema
+  type Schema = typeof ApplicationSchema
   export type Transaction = SQLiteTransaction<"sync", void, Schema>
 
   type Client = SQLiteBunDatabase<Schema>
@@ -640,7 +640,7 @@ export namespace Database {
       }
       log.info("schema applied")
 
-      const db = drizzle({ client: sqlite, schema })
+      const db = drizzle({ client: sqlite, schema: ApplicationSchema })
 
       return db
     } catch (error) {
@@ -662,18 +662,18 @@ export namespace Database {
   export function Identity(): string {
     assertDatabaseAccess("Database.Identity")
     return Client().transaction((db) => {
-      db.insert(schema.DatabaseAuthorityTable)
+      db.insert(DatabaseAuthorityTable)
         .values({
           key: "primary",
           instance_id: randomUUID(),
           time_created: Date.now(),
         })
-        .onConflictDoNothing({ target: schema.DatabaseAuthorityTable.key })
+        .onConflictDoNothing({ target: DatabaseAuthorityTable.key })
         .run()
       const row = db
-        .select({ instanceID: schema.DatabaseAuthorityTable.instance_id })
-        .from(schema.DatabaseAuthorityTable)
-        .where(eq(schema.DatabaseAuthorityTable.key, "primary"))
+        .select({ instanceID: DatabaseAuthorityTable.instance_id })
+        .from(DatabaseAuthorityTable)
+        .where(eq(DatabaseAuthorityTable.key, "primary"))
         .get()
       if (!row?.instanceID) throw new Error("Database authority identity was not persisted")
       return row.instanceID

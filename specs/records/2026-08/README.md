@@ -6,11 +6,17 @@
 
 - [2026-08-13-scheduled-global-inactivity-config-ownership.md](2026-08-13-scheduled-global-inactivity-config-ownership.md) diagnoses the screenshot's backend transport failure and the isolated checker's project-context crash, then restores the process-wide scheduler's explicit global inactivity configuration owner.
 
+- [2026-08-13-homepage-harness-gallery-and-readme.md](2026-08-13-homepage-harness-gallery-and-readme.md) defines the restrained OpenCorvus Harness memory point, current-source first-viewport UI gallery, future video media boundary, reciprocal README update, and real bilingual visual acceptance.
+
 - [2026-08-12-startup-surface-visual-redesign.md](2026-08-12-startup-surface-visual-redesign.md) redesigns the real desktop startup surface around the existing OpenCorvus bird, a strong preparation hierarchy, truthful wide progress feedback, and preserved native failure/retry behavior, with production-page visual evidence and independent review.
 
 - [2026-08-12-overlay-ui-ux-continuous-audit.md](2026-08-12-overlay-ui-ux-continuous-audit.md) records the multi-agent Overlay UI/UX audit, root-cause repairs, real-page screenshots, positive non-UI checks, and independent delivery reviews.
 
 - [2026-08-12-code-smell-remediation-program.md](2026-08-12-code-smell-remediation-program.md) defines the independently reviewed, batch-by-batch remediation program for the final repository code-smell register and records each batch's implementation, verification, review, commit, and delivery status.
+
+- [CS-028 explicit Storage table registry](2026-08-13-cs028-explicit-storage-table-registry.md) makes one typed application-table registry the shared ORM, DDL, schema-fingerprint, and MySQL-transfer authority while preserving the existing transfer fingerprint.
+
+- [CS-033 Conversation projector ownership](2026-08-13-cs033-conversation-projector-ownership.md) removes the false lifecycle input from the base Conversation projector and leaves execution lifecycle projection with the Agent view authority.
 
 - Focused code-smell remediation records: [CS-015 Plugin publication](2026-08-12-cs015-plugin-publication-source-mutation.md), [CS-025 Artifact cursor authenticity](2026-08-12-cs025-artifact-cursor-authenticity.md), [CS-027 Skill market authority](2026-08-13-cs027-delete-unconfigurable-skill-registries.md), [CS-029 Skill source trust identity](2026-08-12-cs029-skill-source-trust-identity.md), [CS-030 dead JSON storage removal](2026-08-12-cs030-delete-dead-json-storage.md), [CS-031 Provider cache identity](2026-08-12-cs031-provider-cache-identity.md), [CS-032 SDK server observer lifecycle](2026-08-13-cs032-sdk-server-startup-observer-lifecycle.md), [CS-040 MCP diagnostic redaction](2026-08-12-cs040-mcp-diagnostic-redaction.md), [CS-041 Channel adapter start settlement](2026-08-12-cs041-channel-adapter-start-settlement.md), [CS-046 Project sandbox discovery authority](2026-08-12-cs046-project-sandbox-discovery-authority.md), [CS-047 Frontend Design domain-incomplete settlement](2026-08-12-cs047-frontend-design-domain-incomplete-settlement.md), [CS-053 remote Skill cache publication](2026-08-12-cs053-remote-skill-cache-publication.md), [CS-054 Research domain-incomplete settlement](2026-08-12-cs054-research-domain-incomplete-settlement.md), [CS-055 Intent blocker settlement](2026-08-12-cs055-intent-blocker-question-settlement.md), and [CS-076 native upgrade verification](2026-08-12-cs076-upgrade-version-verification.md).
 
