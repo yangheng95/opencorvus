@@ -18,6 +18,30 @@ export namespace BrowserMCP {
     })
   }
 
+  function monitorOrigin(port: number): string {
+    return `http://127.0.0.1:${port}`
+  }
+
+  async function listen(server: Server, port: number, host?: string): Promise<number> {
+    await new Promise<void>((resolve, reject) => {
+      const onError = (error: Error) => {
+        server.removeListener("error", onError)
+        reject(error)
+      }
+      server.once("error", onError)
+      server.listen(port, host, () => {
+        server.removeListener("error", onError)
+        resolve()
+      })
+    })
+    const address = server.address()
+    if (!address || typeof address === "string") {
+      await closeHttpServer(server)
+      throw new Error("Browser MCP HTTP server did not publish an internet socket")
+    }
+    return address.port
+  }
+
   export async function serveHttp(port = Number(process.env.PORT ?? 8931)): Promise<HttpServer> {
     const active = new Set<() => Promise<void>>()
     const handleRequest = async (req: IncomingMessage, res: ServerResponse) => {
@@ -34,7 +58,9 @@ export namespace BrowserMCP {
           return
         }
 
-        const server = createMcpServer()
+        const address = httpServer.address()
+        if (!address || typeof address === "string") throw new Error("Browser MCP HTTP server is not listening")
+        const server = createMcpServer({ liveViewOrigin: monitorOrigin(address.port) })
         const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined })
         let releaseOperation: Promise<void> | undefined
         const release = () => {
@@ -86,23 +112,8 @@ export namespace BrowserMCP {
       })
     })
 
-    await new Promise<void>((resolve, reject) => {
-      const onError = (error: Error) => {
-        httpServer.removeListener("error", onError)
-        reject(error)
-      }
-      httpServer.once("error", onError)
-      httpServer.listen(port, () => {
-        httpServer.removeListener("error", onError)
-        resolve()
-      })
-    })
-    const address = httpServer.address()
-    if (!address || typeof address === "string") {
-      await closeHttpServer(httpServer)
-      throw new Error("Browser MCP HTTP server did not publish an internet socket")
-    }
-    console.error(`[browser-mcp] HTTP server listening on :${address.port}`)
+    const listeningPort = await listen(httpServer, port, "127.0.0.1")
+    console.error(`[browser-mcp] HTTP server listening on :${listeningPort}`)
 
     let closing: Promise<void> | undefined
     const removeSignalListeners = () => {
@@ -155,27 +166,65 @@ export namespace BrowserMCP {
     process.once("SIGTERM", onSigterm)
 
     return {
-      port: address.port,
+      port: listeningPort,
       close,
     }
   }
 
   export async function serveStdio() {
-    const server = createMcpServer()
+    const monitorServer = createServer((req, res) => {
+      void handleMonitorRequest(req, res).then((handled) => {
+        if (handled) return
+        res.writeHead(404)
+        res.end()
+      }, (error) => {
+        if (!res.headersSent) {
+          res.writeHead(500, { "Content-Type": "application/json" })
+          res.end(JSON.stringify({ error: "browser_mcp_live_view_failed" }))
+        } else {
+          res.destroy()
+        }
+        console.error(`[browser-mcp] live view failed: ${error instanceof Error ? error.message : String(error)}`)
+      })
+    })
+    const monitorPort = await listen(monitorServer, 0, "127.0.0.1")
+    const liveViewOrigin = monitorOrigin(monitorPort)
+    console.error(`[browser-mcp] Live View available at ${liveViewOrigin}/monitor`)
+    const server = createMcpServer({ liveViewOrigin })
     const transport = new StdioServerTransport()
-    let closing = false
-    const close = async () => {
-      if (closing) return
-      closing = true
-      await shutdownBrowserSessions()
-      await Promise.resolve(server.close())
-      await Promise.resolve(transport.close())
+    let closing: Promise<void> | undefined
+    const close = () => {
+      if (closing) return closing
+      const operation = Promise.resolve().then(async () => {
+        transport.onclose = undefined
+        const results = await Promise.allSettled([
+          shutdownBrowserSessions(),
+          Promise.resolve(transport.close()),
+          Promise.resolve(server.close()),
+          closeHttpServer(monitorServer),
+        ])
+        const failures = results.flatMap((result) => (result.status === "rejected" ? [result.reason] : []))
+        if (failures.length === 1) throw failures[0]
+        if (failures.length > 1) throw new AggregateError(failures, "Browser MCP stdio shutdown failed")
+      })
+      closing = operation
+      return operation
     }
     transport.onclose = () => {
       void close().catch((error) => {
         console.error(`[browser-mcp] close failed: ${error instanceof Error ? error.message : String(error)}`)
       })
     }
-    await server.connect(transport)
+    try {
+      await server.connect(transport)
+    } catch (error) {
+      await Promise.allSettled([
+        shutdownBrowserSessions(),
+        server.close(),
+        transport.close(),
+        closeHttpServer(monitorServer),
+      ])
+      throw error
+    }
   }
 }

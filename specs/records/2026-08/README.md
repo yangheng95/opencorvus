@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-13-browser-mcp-live-view.md](2026-08-13-browser-mcp-live-view.md) makes the canonical Browser MCP visible by default and publishes one loopback, same-Playwright-session Live View from both stdio and HTTP transports without introducing a second browser runtime.
+
 - [2026-08-13-r17b-luna-tool-input-stream-stall.md](2026-08-13-r17b-luna-tool-input-stream-stall.md) freezes the isolated exact-Luna R17b failure, identifies pre-acceptance semantic heartbeat credit as the first focused reproduction candidate, and defines the staged repair and fresh-E2E boundary.
 
 - [2026-08-13-expert-squad-gui-zero-intervention-sampling.md](2026-08-13-expert-squad-gui-zero-intervention-sampling.md) defines the immutable-source, random-port, isolated-runtime real-GUI sampling matrix and three-way evidence required to prove Base, Data Analysis, and Office Delivery Expert Squads finish without post-submission operator intervention.

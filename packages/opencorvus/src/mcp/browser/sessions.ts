@@ -113,7 +113,17 @@ let browserShutdownGeneration = 0
 
 const log = (msg: string) => console.error(`[browser-mcp] ${new Date().toISOString()} ${msg}`)
 
-const HEADLESS = process.env.BROWSER_HEADLESS !== "false"
+export const resolveBrowserMcpHeadless = (
+  env: NodeJS.ProcessEnv = process.env,
+  platform: NodeJS.Platform = process.platform,
+): boolean => {
+  const configured = env.BROWSER_HEADLESS?.trim().toLowerCase()
+  if (configured === "true") return true
+  if (configured === "false") return false
+  return platform === "linux" && !env.DISPLAY?.trim() && !env.WAYLAND_DISPLAY?.trim()
+}
+
+const HEADLESS = resolveBrowserMcpHeadless()
 const SESSION_TIMEOUT_MS = Number(process.env.SESSION_TIMEOUT_MIN ?? 30) * 60 * 1000
 
 const acquireBrowser = async (): Promise<Browser> => {

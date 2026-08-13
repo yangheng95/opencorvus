@@ -446,7 +446,8 @@ const withBrowserMcpInactivity = async <T>(
 const detectOpenedPage = async <T>(
   session: ReturnType<typeof getSession>,
   action: () => Promise<T>,
-): Promise<{ result: T; openedPage?: Awaited<ReturnType<typeof getTabInfo>> }> => {
+  liveViewUrl: (sessionId: string) => string,
+): Promise<{ result: T; openedPage?: Awaited<ReturnType<typeof getTabInfo>> & { liveViewUrl: string } }> => {
   const before = new Set(session.page.context().pages())
   const pagePromise = session.page
     .context()
@@ -465,7 +466,13 @@ const detectOpenedPage = async <T>(
     virtualCursor: session.virtualCursor,
     perfMode: session.perfMode,
   })
-  return { result, openedPage: await getTabInfo(adopted.sessionId, adopted.sessionId) }
+  return {
+    result,
+    openedPage: {
+      ...(await getTabInfo(adopted.sessionId, adopted.sessionId)),
+      liveViewUrl: liveViewUrl(adopted.sessionId),
+    },
+  }
 }
 
 const safeDownloadFilename = (input: string) => {
@@ -499,7 +506,18 @@ const frameTarget = (page: ReturnType<typeof getSession>["page"], frameSelector:
 const frameLocator = (page: ReturnType<typeof getSession>["page"], frameSelector: string, selector: string) =>
   frameTarget(page, frameSelector).locator(selector)
 
-export const registerTools = (server: McpServer) => {
+export type BrowserMcpToolOptions = {
+  liveViewOrigin: string
+}
+
+export const browserMcpLiveViewUrl = (origin: string, sessionId: string): string => {
+  const url = new URL("/monitor", origin)
+  url.searchParams.set("session", sessionId)
+  return url.toString()
+}
+
+export const registerTools = (server: McpServer, options: BrowserMcpToolOptions) => {
+  const sessionLiveViewUrl = (sessionId: string) => browserMcpLiveViewUrl(options.liveViewOrigin, sessionId)
   // 拦截所有 registerTool 调用，自动注入 tracing
   const origRegister = server.registerTool.bind(server)
   ;(server as { registerTool: typeof server.registerTool }).registerTool = (
@@ -563,9 +581,13 @@ export const registerTools = (server: McpServer) => {
           .describe(
             "User Profile ID，代表当前用户环境。登录成功后应保留该值；后续 session_create 传入该值可复用登录态并打开同一用户环境中的新 tab。",
           ),
+        liveViewUrl: z.string().url().describe("在本机浏览器打开此地址，可实时旁观该 session 的页面和工具调用。"),
       },
     },
-    async (args) => ok(await createSession({ ...args, proxy: await resolveBrowserMcpSessionProxy(args.proxy) })),
+    async (args) => {
+      const created = await createSession({ ...args, proxy: await resolveBrowserMcpSessionProxy(args.proxy) })
+      return ok({ ...created, liveViewUrl: sessionLiveViewUrl(created.sessionId) })
+    },
   )
 
   server.registerTool(
@@ -622,6 +644,12 @@ export const registerTools = (server: McpServer) => {
     url: z.string(),
     title: z.string(),
     active: z.boolean(),
+    liveViewUrl: z.string().url().optional(),
+  })
+
+  const tabWithLiveView = <T extends { sessionId: string }>(tab: T) => ({
+    ...tab,
+    liveViewUrl: sessionLiveViewUrl(tab.sessionId),
   })
 
   server.registerTool(
@@ -644,7 +672,8 @@ export const registerTools = (server: McpServer) => {
       },
     },
     async ({ sessionId, action, index, url }) => {
-      if (action === "list") return ok({ ok: true, tabs: await listTabs(sessionId) })
+      if (action === "list")
+        return ok({ ok: true, tabs: (await listTabs(sessionId)).map((tab) => tabWithLiveView(tab)) })
       if (action === "new") {
         const tab = await createTab(sessionId)
         if (url) {
@@ -655,9 +684,9 @@ export const registerTools = (server: McpServer) => {
             BROWSER_MCP_DEFAULT_INACTIVITY_TIMEOUT_MS,
             () => created.page.goto(url, { waitUntil: "domcontentloaded", timeout: 0 }),
           )
-          return ok({ ok: true, tab: await getTabInfo(tab.sessionId, tab.sessionId) })
+          return ok({ ok: true, tab: tabWithLiveView(await getTabInfo(tab.sessionId, tab.sessionId)) })
         }
-        return ok({ ok: true, tab })
+        return ok({ ok: true, tab: tabWithLiveView(tab) })
       }
       if (action === "select") {
         if (index === undefined)
@@ -666,14 +695,21 @@ export const registerTools = (server: McpServer) => {
         return ok({
           ok: true,
           selectedSessionId,
-          tab: await getTabInfo(selectedSessionId, selectedSessionId),
-          tabs: await listTabs(selectedSessionId),
+          tab: tabWithLiveView(await getTabInfo(selectedSessionId, selectedSessionId)),
+          tabs: (await listTabs(selectedSessionId)).map((tab) => tabWithLiveView(tab)),
         })
       }
       const targetSessionId = index === undefined ? sessionId : getTabByIndex(sessionId, index)
       const closed = await getTabInfo(targetSessionId, sessionId)
       await destroySession(targetSessionId)
-      return ok({ ok: true, closed, tabs: targetSessionId === sessionId ? undefined : await listTabs(sessionId) })
+      return ok({
+        ok: true,
+        closed,
+        tabs:
+          targetSessionId === sessionId
+            ? undefined
+            : (await listTabs(sessionId)).map((tab) => tabWithLiveView(tab)),
+      })
     },
   )
 
@@ -830,9 +866,13 @@ export const registerTools = (server: McpServer) => {
       outputSchema: {
         sessionId: z.string(),
         profileId: z.string(),
+        liveViewUrl: z.string().url(),
       },
     },
-    async (args) => ok(await createSession(args)),
+    async (args) => {
+      const created = await createSession(args)
+      return ok({ ...created, liveViewUrl: sessionLiveViewUrl(created.sessionId) })
+    },
   )
 
   server.registerTool(
@@ -1164,7 +1204,11 @@ export const registerTools = (server: McpServer) => {
       const { page } = session
       try {
         if (selector) {
-          const action = await detectOpenedPage(session, async () => page.locator(selector).click())
+          const action = await detectOpenedPage(
+            session,
+            async () => page.locator(selector).click(),
+            sessionLiveViewUrl,
+          )
           return ok({
             ok: true,
             clicked: true,
@@ -1178,7 +1222,7 @@ export const registerTools = (server: McpServer) => {
           const guard = await runPointGuard(page, point, clickGuardProfile, force ?? false)
           if (guard.decision === "block") return guardBlocked("coord", point, guard)
           const info = await elementInfoAt(page, x, y).catch(() => null)
-          const action = await detectOpenedPage(session, async () => page.mouse.click(x, y))
+          const action = await detectOpenedPage(session, async () => page.mouse.click(x, y), sessionLiveViewUrl)
           return ok({
             ok: true,
             clicked: true,
@@ -1228,7 +1272,11 @@ export const registerTools = (server: McpServer) => {
       const { page } = session
       try {
         if (selector) {
-          const action = await detectOpenedPage(session, async () => page.locator(selector).dblclick())
+          const action = await detectOpenedPage(
+            session,
+            async () => page.locator(selector).dblclick(),
+            sessionLiveViewUrl,
+          )
           return ok({
             ok: true,
             clicked: true,
@@ -1241,7 +1289,7 @@ export const registerTools = (server: McpServer) => {
           await page.mouse.move(x, y)
           const guard = await runPointGuard(page, point, doubleClickGuardProfile, force ?? false)
           if (guard.decision === "block") return guardBlocked("coord", point, guard)
-          const action = await detectOpenedPage(session, async () => page.mouse.dblclick(x, y))
+          const action = await detectOpenedPage(session, async () => page.mouse.dblclick(x, y), sessionLiveViewUrl)
           return ok({
             ok: true,
             clicked: true,
@@ -1855,8 +1903,8 @@ export const registerTools = (server: McpServer) => {
   )
 }
 
-export const createMcpServer = () => {
+export const createMcpServer = (options: BrowserMcpToolOptions) => {
   const server = new McpServer({ name: "browser", version: "0.1.0" })
-  registerTools(server)
+  registerTools(server, options)
   return server
 }

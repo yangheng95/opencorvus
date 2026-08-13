@@ -466,7 +466,11 @@ fallback。项目与 user-global Mission Skill 继续通过同一严格 catalog 
 
 OpenCorvus 作为 client / host 接入外部或 package-scoped MCP server，并把 active projection
 授予的工具暴露给 Agent。`mcp browser` 是内置浏览器 MCP 的独立 stdio 入口，Task 调度只使用
-内部 projected-agent runtime。
+内部 projected-agent runtime。Browser MCP 的 Playwright Page 是浏览、截图、诊断和用户观看的唯一页面事实源：
+带图形显示的本地运行默认打开真实 headed Chromium 窗口；无图形显示的 Linux 自动使用 headless，部署者也可用
+`BROWSER_HEADLESS=true` 显式选择 headless。stdio 与 HTTP transport 都在 loopback monitor 上投影同一 Page 的
+只读 Live View，创建 session 的工具结果返回精确 session 的 `liveViewUrl`；Live View 不创建第二个 Browser、
+BrowserContext、Page 或可变状态，也不复用 Task Browser Preview WebView。
 
 ### Computer Use
 
