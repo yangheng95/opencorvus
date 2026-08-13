@@ -79,12 +79,3 @@ export function createMailboxRequestOwner(): MailboxRequestOwner {
     abortAll,
   }
 }
-
-export function mailboxStreamOwnsCurrent<T>(
-  handle: T,
-  generation: number,
-  currentHandle: T | undefined,
-  currentGeneration: number,
-): boolean {
-  return generation === currentGeneration && handle === currentHandle
-}

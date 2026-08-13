@@ -29,6 +29,7 @@ const LOG_LEVEL_ORDER: Record<LogLevel, number> = {
 }
 
 const entries: AppLogEntry[] = []
+const LOG_UPLOAD_BATCH_LIMIT = 50
 let filterLevel: LogLevel = "debug"
 let _flushQueue: AppLogEntry[] = []
 let _flushTimer: ReturnType<typeof setTimeout> | null = null
@@ -105,49 +106,39 @@ function flush(): void {
     recordFlushActivity()
     return
   }
-  const batch = _flushQueue.splice(0)
+  if (_flushInFlight > 0) return
+  const batch = _flushQueue.splice(0, LOG_UPLOAD_BATCH_LIMIT)
   if (batch.length === 0) return
   recordFlushActivity()
-  for (const entry of batch) {
+  const payload = batch.map((entry) => {
     const extraObj =
       entry.extra && typeof entry.extra === "object" ? (entry.extra as Record<string, unknown>) : undefined
     const msg = entry.extra && !extraObj ? `${entry.message} ${entry.extra}` : entry.message
-    _flushInFlight++
-    recordFlushActivity()
-    void apiJson("log", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        service: "overlay:" + entry.service,
-        level: entry.level,
-        message: msg,
-        extra: extraObj,
-      }),
+    return { service: `overlay:${entry.service}`, level: entry.level, message: msg, extra: extraObj }
+  })
+  _flushInFlight = 1
+  recordFlushActivity()
+  void apiJson("log", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ entries: payload }),
+  })
+    .then(() => {
+      _flushFailCount = 0
+      recordFlushActivity()
     })
-      .then(() => {
-        _flushFailCount = 0
-        if (_flushQueue.length === 0 && _flushInFlight === 0) {
-          _flushFailureReported = false
-        }
-        recordFlushActivity()
-      })
-      .catch((error) => {
-        _flushFailCount++
-        if (_flushFailCount <= MAX_FLUSH_FAILURES) {
-          _flushQueue.push(entry)
-          scheduleFlush()
-        }
-        reportFlushFailure(entry, error)
-        recordFlushActivity()
-      })
-      .finally(() => {
-        _flushInFlight--
-        if (_flushFailCount === 0 && _flushQueue.length === 0 && _flushInFlight === 0) {
-          _flushFailureReported = false
-        }
-        recordFlushActivity()
-      })
-  }
+    .catch((error) => {
+      _flushFailCount++
+      if (_flushFailCount <= MAX_FLUSH_FAILURES) _flushQueue.unshift(...batch)
+      reportFlushFailure(batch[0]!, error)
+      recordFlushActivity()
+    })
+    .finally(() => {
+      _flushInFlight = 0
+      if (_flushFailCount === 0 && _flushQueue.length === 0) _flushFailureReported = false
+      if (_flushQueue.length > 0) scheduleFlush()
+      recordFlushActivity()
+    })
 }
 
 function persist(entry: AppLogEntry): void {

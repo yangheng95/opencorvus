@@ -517,6 +517,27 @@ export function parseWorkLedgerStreamEvent(value: unknown): WorkLedgerStreamEven
 }
 
 let workLedgerChangeHandler: ((event: WorkLedgerStreamEvent) => void) | null = null
+const mailboxChangeHandlers = new Set<() => void>()
+
+function dispatchMailboxRefresh(): void {
+  for (const handler of mailboxChangeHandlers) {
+    try {
+      handler()
+    } catch (error) {
+      AppLog.error("sse", "mailbox notification handler failed", {
+        error: boundedErrorDetails(error),
+        diagnosticID: "work-ledger-sse:mailbox-dispatch-error",
+      })
+    }
+  }
+}
+
+export function subscribeMailboxChanges(
+  handler: () => void,
+): () => void {
+  mailboxChangeHandlers.add(handler)
+  return () => mailboxChangeHandlers.delete(handler)
+}
 
 export function setWorkLedgerChangeHandler(handler: ((event: WorkLedgerStreamEvent) => void) | null): void {
   workLedgerChangeHandler = handler
@@ -544,7 +565,15 @@ export function startWorkLedgerSSE() {
           logMalformedSsePayload({ stream: "work-ledger", data, error })
           return
         }
-        if (parsed.data.type === "work-ledger.heartbeat" || parsed.data.type === "work-ledger.connected") return
+        if (parsed.data.type === "mailbox.changed") {
+          dispatchMailboxRefresh()
+          return
+        }
+        if (parsed.data.type === "work-ledger.connected") {
+          dispatchMailboxRefresh()
+          return
+        }
+        if (parsed.data.type === "work-ledger.heartbeat") return
         const workLedgerEvent: WorkLedgerStreamEvent = parsed.data
         try {
           if (workLedgerEvent.type === "work-ledger.changed" && workLedgerEvent.taskID) {

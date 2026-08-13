@@ -12,14 +12,10 @@ import {
   acknowledgeAllMailboxItemsRead,
   acknowledgeMailboxItem,
   deleteMailboxItems,
-  isMailboxChangeEventType,
   listMailbox,
 } from "@/engine/mailbox"
-import { ProtocolStore, type ProtocolEventView } from "@/protocol/store"
 import { lazy } from "@/util/lazy"
 import { errors } from "../error"
-import { streamGlobalSSE } from "../sse"
-import { MailboxChangeStreamEvent } from "@opencorvus-ai/transport-protocol"
 
 const MailboxListQuery = z
   .object({
@@ -55,25 +51,6 @@ const MailboxDeleteItemResult = z.object({
   messageID: z.string().min(1),
   action: z.literal("delete"),
 })
-
-function mailboxChangeEvent(event: ProtocolEventView): MailboxChangeStreamEvent {
-  const payload = event.payload ?? {}
-  const acknowledgedMessageID = typeof payload.messageID === "string" ? payload.messageID : undefined
-  return {
-    type: "mailbox.changed",
-    sourceType: event.type,
-    messageID: acknowledgedMessageID ?? event.id,
-    taskID: event.taskID ?? null,
-    sequence: event.sequence,
-  }
-}
-
-function staticMailboxEvent(type: "mailbox.connected" | "mailbox.heartbeat"): MailboxChangeStreamEvent {
-  if (type === "mailbox.connected") {
-    return { type, sourceType: type, messageID: null, taskID: null, sequence: 0 }
-  }
-  return { type, sourceType: type, messageID: null, taskID: null, sequence: 0 }
-}
 
 export const MailboxRoutes = lazy(() =>
   new Hono()
@@ -209,66 +186,6 @@ export const MailboxRoutes = lazy(() =>
           if (error instanceof MailboxItemNotFoundError) throw new HTTPException(404, { message: error.message })
           throw error
         }
-      },
-    )
-    .get(
-      "/events",
-      describeRoute({
-        summary: "Subscribe to global mailbox changes",
-        description:
-          "Pure change-notification Server-Sent Events stream. Clients refetch /mailbox for the canonical projection.",
-        operationId: "mailbox.events",
-        responses: {
-          200: {
-            description: "Mailbox change stream",
-            content: { "text/event-stream": { schema: resolver(MailboxChangeStreamEvent) } },
-          },
-        },
-      }),
-      async (c) => {
-        c.header("X-Accel-Buffering", "no")
-        c.header("X-Content-Type-Options", "nosniff")
-        return streamGlobalSSE(c, async (stream, bind) => {
-          let heartbeat: ReturnType<typeof setInterval> | undefined
-          let stop = () => {}
-          let finishStream = () => {}
-          let closed = false
-          const cleanup = (closeStream = false) => {
-            if (closed) return
-            closed = true
-            if (heartbeat) clearInterval(heartbeat)
-            stop()
-            if (closeStream) stream.close()
-            finishStream()
-          }
-          const finished = new Promise<void>((resolve) => {
-            finishStream = resolve
-          })
-          let writes = Promise.resolve()
-          const writeEvent = (event: MailboxChangeStreamEvent) => {
-            writes = writes
-              .then(() => {
-                if (closed) return
-                return stream.writeSSE({ data: JSON.stringify(event) })
-              })
-              .catch(() => cleanup(true))
-          }
-          stop = ProtocolStore.subscribeEvents(
-            bind((event) => {
-              if (!isMailboxChangeEventType(event.type, event.payload)) return
-              writeEvent(mailboxChangeEvent(event))
-            }),
-            { aggregate: "task" },
-          )
-          writeEvent(staticMailboxEvent("mailbox.connected"))
-          heartbeat = setInterval(
-            bind(() => writeEvent(staticMailboxEvent("mailbox.heartbeat"))),
-            10_000,
-          )
-          stream.onAbort(() => cleanup())
-          await finished
-          await writes
-        })
       },
     ),
 )

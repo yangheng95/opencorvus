@@ -572,8 +572,8 @@ export function AppRoutes(root: Hono) {
     .post(
       "/log",
       describeRoute({
-        summary: "Write log",
-        description: "Write a log entry to the server logs with specified level and metadata.",
+        summary: "Write log batch",
+        description: "Write one bounded ordered batch of log entries to the server logs.",
         operationId: "app.log",
         responses: {
           200: {
@@ -589,33 +589,44 @@ export function AppRoutes(root: Hono) {
       }),
       validator(
         "json",
-        z.object({
-          service: z.string().meta({ description: "Service name for the log entry" }),
-          level: z.enum(["debug", "info", "error", "warn"]).meta({ description: "Log level" }),
-          message: z.string().meta({ description: "Log message" }),
-          extra: z
-            .record(z.string(), z.unknown())
-            .optional()
-            .meta({ description: "Additional metadata for the log entry" }),
-        }),
+        z
+          .object({
+            entries: z
+              .array(
+                z
+                  .object({
+                    service: z.string().meta({ description: "Service name for the log entry" }),
+                    level: z.enum(["debug", "info", "error", "warn"]).meta({ description: "Log level" }),
+                    message: z.string().meta({ description: "Log message" }),
+                    extra: z
+                      .record(z.string(), z.unknown())
+                      .optional()
+                      .meta({ description: "Additional metadata for the log entry" }),
+                  })
+                  .strict(),
+              )
+              .min(1)
+              .max(50),
+          })
+          .strict(),
       ),
       async (c) => {
-        const { service, level, message, extra } = c.req.valid("json")
-        const logger = Log.create({ service })
-
-        switch (level) {
-          case "debug":
-            logger.debug(message, extra)
-            break
-          case "info":
-            logger.info(message, extra)
-            break
-          case "error":
-            logger.error(message, extra)
-            break
-          case "warn":
-            logger.warn(message, extra)
-            break
+        for (const { service, level, message, extra } of c.req.valid("json").entries) {
+          const logger = Log.create({ service })
+          switch (level) {
+            case "debug":
+              logger.debug(message, extra)
+              break
+            case "info":
+              logger.info(message, extra)
+              break
+            case "error":
+              logger.error(message, extra)
+              break
+            case "warn":
+              logger.warn(message, extra)
+              break
+          }
         }
 
         return c.json(true)

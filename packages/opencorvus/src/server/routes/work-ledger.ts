@@ -15,9 +15,10 @@ import { isRightSidebarConversationSession } from "@/chat/session"
 import { ConversationHandoffEvent } from "@/chat/handoff"
 import { MissionHandoffEvent } from "@/mission/caller-receipt"
 import { Project } from "@/project/project"
-import { ProtocolStore } from "@/protocol/store"
+import { ProtocolStore, type ProtocolEventView } from "@/protocol/store"
 import { Session, SessionStatus } from "@/session"
 import { EngineService } from "@/task-api"
+import { isMailboxChangeEventType } from "@/engine/mailbox"
 import { TaskQueueEvent } from "@/scheduler/task-queue-service"
 import { ProjectMemory } from "@/memory/project-memory"
 import { listArchivedWorkLedger, listWorkLedger } from "@/work-ledger/projection"
@@ -95,6 +96,18 @@ function workLedgerProjectChangedEvent(
 
 function writeWorkLedgerEventData(writeData: (data: string) => void, event: WorkLedgerEventValue): void {
   writeData(JSON.stringify(WorkLedgerEvent.parse(event)))
+}
+
+function mailboxNotificationEvent(event: ProtocolEventView): WorkLedgerEventValue {
+  const payload = event.payload ?? {}
+  const acknowledgedMessageID = typeof payload.messageID === "string" ? payload.messageID : undefined
+  return {
+    type: "mailbox.changed",
+    sourceType: event.type,
+    messageID: acknowledgedMessageID ?? event.id,
+    taskID: event.taskID ?? null,
+    sequence: event.sequence,
+  }
 }
 
 function workLedgerGlobalBusEvent(input: { payload?: unknown }): { sourceType: string; info: Session.Info } | null {
@@ -391,6 +404,10 @@ export function WorkLedgerRoutes() {
           GlobalBus.on("event", globalBusListener)
           const protocolSubscription = ProtocolStore.subscribeEvents(
             bind((event) => {
+              if (isMailboxChangeEventType(event.type, event.payload)) {
+                writeWorkLedgerEventData(writeData, mailboxNotificationEvent(event))
+                return
+              }
               if (!isTaskListProjectionEventType(event.type)) return
               const taskEvent = taskListProtocolEvent(event)
               writeWorkLedgerEventData(writeData, {
