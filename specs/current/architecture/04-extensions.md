@@ -66,6 +66,8 @@ file/folder/ZIP import 和 MCP（Model Context Protocol，模型上下文协议�
 **代码**：`src/expert-squad/` · `src/expert-squad/prompt-profile-resolver.ts` ·
 `src/agent/runtime-template-registry.ts` · `src/skill/`
 
+Fixed native Host, Helper, and Primary Agent registries share one runtime-neutral materialization-cache authority. An explicit `Config.Info` snapshot is parsed once, canonicalized with a domain-separated SHA-256 source, and reused only after exact canonical-byte equality; SHA-256 is an index rather than identity. Recognized functions in schema-declared runtime option fields retain their exact references but disable cross-call reuse, while every other non-canonical value fails closed. Default materializations remain project-scoped, explicit snapshots are process-global because their complete config is the only build input, and one lifecycle owner returns exact detachment receipts for current-project or all-project reset.
+
 Expert squad 是 OpenCorvus 内部的 scenario / agent capability package，不是外部
 Codex skill。运行时内置 package 只保留默认便捷开发包 `base`、完整通用团队 `advanced`、研究交付团队 `research-studio` 与专家团生成包 `squad-sdk`；这四个 embedded package 是无需安装即可使用的完整默认集合。其他 squad 的分发形态是
 payload，只进入 Squad Market，不由项目 bootstrap 写入安装目录。分发 payload 由

@@ -2,7 +2,7 @@ import { NativeAgentRegistryLifecycle } from "@/agent/native-agent-registry-life
 import { Provider } from "@/provider/provider"
 
 export async function settleProviderRefreshInvalidation(
-  operations: ReadonlyArray<{ phase: string; run: () => Promise<void> }>,
+  operations: ReadonlyArray<{ phase: string; run: () => Promise<unknown> }>,
 ): Promise<Provider.LoadIssue[]> {
   const settled = await Promise.allSettled(operations.map((operation) => operation.run()))
   return settled.flatMap((result, index) => {

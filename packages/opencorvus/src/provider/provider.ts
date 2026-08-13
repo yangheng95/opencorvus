@@ -27,7 +27,7 @@ import { Plugin } from "../plugin"
 import { BUNDLED_PROVIDERS } from "./bundled"
 import { dashscopeKey } from "./dashscope"
 import { canonicalDigestSource, containsRuntimeCapability } from "@/util/canonical-digest"
-import { CanonicalCache } from "./canonical-cache"
+import { CanonicalCache } from "@/util/canonical-cache"
 
 export namespace Provider {
   const log = Log.create({ service: "provider" })

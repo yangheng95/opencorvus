@@ -9,6 +9,12 @@ type Entry<T> = {
 export class CanonicalCache<T> {
   private readonly buckets = new Map<string, Entry<T>[]>()
 
+  get size(): number {
+    let count = 0
+    for (const bucket of this.buckets.values()) count += bucket.length
+    return count
+  }
+
   get(source: CanonicalDigestSource): T | undefined {
     return this.buckets.get(source.sha256)?.find((entry) => entry.bytes === source.bytes)?.value
   }
@@ -29,7 +35,9 @@ export class CanonicalCache<T> {
     else this.buckets.set(source.sha256, retained)
   }
 
-  clear(): void {
+  clear(): number {
+    const detached = this.size
     this.buckets.clear()
+    return detached
   }
 }
