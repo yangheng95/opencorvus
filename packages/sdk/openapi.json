@@ -54835,9 +54835,18 @@
                         "const": "read_task_artifact",
                         "type": "string"
                       },
+                      "artifact_locator_ref": {
+                        "description": "Host-minted reference to one exact locator emitted earlier in this Session Turn.",
+                        "pattern": "^al_[A-Za-z0-9_-]{16}$",
+                        "type": "string"
+                      },
+                      "artifact_transport_version": {
+                        "const": 2,
+                        "type": "number"
+                      },
                       "byte_offset": {
                         "default": 0,
-                        "description": "Zero-based byte offset within the exact canonical payload or resource.",
+                        "description": "Zero-based byte offset within the exact locator identified by artifact_locator_ref.",
                         "maximum": 9007199254740991,
                         "minimum": 0,
                         "type": "integer"
@@ -54850,172 +54859,6 @@
                           "materialized_file"
                         ],
                         "type": "string"
-                      },
-                      "locator": {
-                        "description": "Exact typed locator returned by Artifact search, including its immutable digest.",
-                        "oneOf": [
-                          {
-                            "additionalProperties": false,
-                            "properties": {
-                              "artifact_id": {
-                                "maxLength": 512,
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              "catalog_revision": {
-                                "exclusiveMinimum": 0,
-                                "maximum": 9007199254740991,
-                                "type": "integer"
-                              },
-                              "expected_sha256": {
-                                "pattern": "^[a-f0-9]{64}$",
-                                "type": "string"
-                              },
-                              "source": {
-                                "const": "engine_artifact",
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "source",
-                              "artifact_id",
-                              "catalog_revision",
-                              "expected_sha256"
-                            ],
-                            "type": "object"
-                          },
-                          {
-                            "additionalProperties": false,
-                            "properties": {
-                              "snapshot": {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "manifest_sha256": {
-                                    "pattern": "^[a-f0-9]{64}$",
-                                    "type": "string"
-                                  },
-                                  "project_id": {
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "schema_version": {
-                                    "const": 2,
-                                    "type": "number"
-                                  },
-                                  "snapshot_id": {
-                                    "format": "uuid",
-                                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                    "type": "string"
-                                  },
-                                  "task_id": {
-                                    "minLength": 1,
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "schema_version",
-                                  "project_id",
-                                  "task_id",
-                                  "snapshot_id",
-                                  "manifest_sha256"
-                                ],
-                                "type": "object"
-                              },
-                              "source": {
-                                "const": "task_artifact_snapshot",
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "source",
-                              "snapshot"
-                            ],
-                            "type": "object"
-                          },
-                          {
-                            "additionalProperties": false,
-                            "properties": {
-                              "ref": {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "bytes": {
-                                    "maximum": 9007199254740991,
-                                    "minimum": 0,
-                                    "type": "integer"
-                                  },
-                                  "media_type": {
-                                    "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
-                                    "type": "string"
-                                  },
-                                  "path": {
-                                    "minLength": 1,
-                                    "type": "string"
-                                  },
-                                  "sha256": {
-                                    "pattern": "^[a-f0-9]{64}$",
-                                    "type": "string"
-                                  },
-                                  "snapshot": {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "manifest_sha256": {
-                                        "pattern": "^[a-f0-9]{64}$",
-                                        "type": "string"
-                                      },
-                                      "project_id": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "schema_version": {
-                                        "const": 2,
-                                        "type": "number"
-                                      },
-                                      "snapshot_id": {
-                                        "format": "uuid",
-                                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                        "type": "string"
-                                      },
-                                      "task_id": {
-                                        "minLength": 1,
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "schema_version",
-                                      "project_id",
-                                      "task_id",
-                                      "snapshot_id",
-                                      "manifest_sha256"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  "tree": {
-                                    "minLength": 1,
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "snapshot",
-                                  "tree",
-                                  "path",
-                                  "media_type",
-                                  "bytes",
-                                  "sha256"
-                                ],
-                                "type": "object"
-                              },
-                              "source": {
-                                "const": "task_artifact_resource",
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "source",
-                              "ref"
-                            ],
-                            "type": "object"
-                          }
-                        ]
                       },
                       "max_bytes": {
                         "default": 24576,
@@ -55033,7 +54876,8 @@
                     "required": [
                       "action",
                       "taskID",
-                      "locator"
+                      "artifact_transport_version",
+                      "artifact_locator_ref"
                     ],
                     "type": "object"
                   },
@@ -55055,172 +54899,12 @@
                         "items": {
                           "additionalProperties": false,
                           "properties": {
-                            "evidence_locators": {
-                              "description": "Exact Task Artifact locators completely read earlier in this Mission Turn.",
+                            "evidence_read_refs": {
+                              "description": "Host-minted references returned by complete Task Artifact reads earlier in this Mission Turn.",
                               "items": {
-                                "oneOf": [
-                                  {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "artifact_id": {
-                                        "maxLength": 512,
-                                        "minLength": 1,
-                                        "type": "string"
-                                      },
-                                      "catalog_revision": {
-                                        "exclusiveMinimum": 0,
-                                        "maximum": 9007199254740991,
-                                        "type": "integer"
-                                      },
-                                      "expected_sha256": {
-                                        "pattern": "^[a-f0-9]{64}$",
-                                        "type": "string"
-                                      },
-                                      "source": {
-                                        "const": "engine_artifact",
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "source",
-                                      "artifact_id",
-                                      "catalog_revision",
-                                      "expected_sha256"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "snapshot": {
-                                        "additionalProperties": false,
-                                        "properties": {
-                                          "manifest_sha256": {
-                                            "pattern": "^[a-f0-9]{64}$",
-                                            "type": "string"
-                                          },
-                                          "project_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          },
-                                          "schema_version": {
-                                            "const": 2,
-                                            "type": "number"
-                                          },
-                                          "snapshot_id": {
-                                            "format": "uuid",
-                                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                            "type": "string"
-                                          },
-                                          "task_id": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [
-                                          "schema_version",
-                                          "project_id",
-                                          "task_id",
-                                          "snapshot_id",
-                                          "manifest_sha256"
-                                        ],
-                                        "type": "object"
-                                      },
-                                      "source": {
-                                        "const": "task_artifact_snapshot",
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "source",
-                                      "snapshot"
-                                    ],
-                                    "type": "object"
-                                  },
-                                  {
-                                    "additionalProperties": false,
-                                    "properties": {
-                                      "ref": {
-                                        "additionalProperties": false,
-                                        "properties": {
-                                          "bytes": {
-                                            "maximum": 9007199254740991,
-                                            "minimum": 0,
-                                            "type": "integer"
-                                          },
-                                          "media_type": {
-                                            "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
-                                            "type": "string"
-                                          },
-                                          "path": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          },
-                                          "sha256": {
-                                            "pattern": "^[a-f0-9]{64}$",
-                                            "type": "string"
-                                          },
-                                          "snapshot": {
-                                            "additionalProperties": false,
-                                            "properties": {
-                                              "manifest_sha256": {
-                                                "pattern": "^[a-f0-9]{64}$",
-                                                "type": "string"
-                                              },
-                                              "project_id": {
-                                                "minLength": 1,
-                                                "type": "string"
-                                              },
-                                              "schema_version": {
-                                                "const": 2,
-                                                "type": "number"
-                                              },
-                                              "snapshot_id": {
-                                                "format": "uuid",
-                                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                                "type": "string"
-                                              },
-                                              "task_id": {
-                                                "minLength": 1,
-                                                "type": "string"
-                                              }
-                                            },
-                                            "required": [
-                                              "schema_version",
-                                              "project_id",
-                                              "task_id",
-                                              "snapshot_id",
-                                              "manifest_sha256"
-                                            ],
-                                            "type": "object"
-                                          },
-                                          "tree": {
-                                            "minLength": 1,
-                                            "type": "string"
-                                          }
-                                        },
-                                        "required": [
-                                          "snapshot",
-                                          "tree",
-                                          "path",
-                                          "media_type",
-                                          "bytes",
-                                          "sha256"
-                                        ],
-                                        "type": "object"
-                                      },
-                                      "source": {
-                                        "const": "task_artifact_resource",
-                                        "type": "string"
-                                      }
-                                    },
-                                    "required": [
-                                      "source",
-                                      "ref"
-                                    ],
-                                    "type": "object"
-                                  }
-                                ]
+                                "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                                "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                                "type": "string"
                               },
                               "maxItems": 64,
                               "minItems": 1,
@@ -55234,7 +54918,7 @@
                           },
                           "required": [
                             "task_id",
-                            "evidence_locators"
+                            "evidence_read_refs"
                           ],
                           "type": "object"
                         },
@@ -55936,172 +55620,12 @@
                         "const": "resume_task",
                         "type": "string"
                       },
-                      "evidence_locators": {
-                        "description": "Exact source Task locators completely read earlier in this same Mission Turn.",
+                      "evidence_read_refs": {
+                        "description": "Host-minted references returned by complete source Task reads earlier in this Mission Turn.",
                         "items": {
-                          "oneOf": [
-                            {
-                              "additionalProperties": false,
-                              "properties": {
-                                "artifact_id": {
-                                  "maxLength": 512,
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "catalog_revision": {
-                                  "exclusiveMinimum": 0,
-                                  "maximum": 9007199254740991,
-                                  "type": "integer"
-                                },
-                                "expected_sha256": {
-                                  "pattern": "^[a-f0-9]{64}$",
-                                  "type": "string"
-                                },
-                                "source": {
-                                  "const": "engine_artifact",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "source",
-                                "artifact_id",
-                                "catalog_revision",
-                                "expected_sha256"
-                              ],
-                              "type": "object"
-                            },
-                            {
-                              "additionalProperties": false,
-                              "properties": {
-                                "snapshot": {
-                                  "additionalProperties": false,
-                                  "properties": {
-                                    "manifest_sha256": {
-                                      "pattern": "^[a-f0-9]{64}$",
-                                      "type": "string"
-                                    },
-                                    "project_id": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    },
-                                    "schema_version": {
-                                      "const": 2,
-                                      "type": "number"
-                                    },
-                                    "snapshot_id": {
-                                      "format": "uuid",
-                                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                      "type": "string"
-                                    },
-                                    "task_id": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "schema_version",
-                                    "project_id",
-                                    "task_id",
-                                    "snapshot_id",
-                                    "manifest_sha256"
-                                  ],
-                                  "type": "object"
-                                },
-                                "source": {
-                                  "const": "task_artifact_snapshot",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "source",
-                                "snapshot"
-                              ],
-                              "type": "object"
-                            },
-                            {
-                              "additionalProperties": false,
-                              "properties": {
-                                "ref": {
-                                  "additionalProperties": false,
-                                  "properties": {
-                                    "bytes": {
-                                      "maximum": 9007199254740991,
-                                      "minimum": 0,
-                                      "type": "integer"
-                                    },
-                                    "media_type": {
-                                      "pattern": "^[a-z0-9][a-z0-9!#$&^_.+-]*\\/[a-z0-9][a-z0-9!#$&^_.+-]*$",
-                                      "type": "string"
-                                    },
-                                    "path": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    },
-                                    "sha256": {
-                                      "pattern": "^[a-f0-9]{64}$",
-                                      "type": "string"
-                                    },
-                                    "snapshot": {
-                                      "additionalProperties": false,
-                                      "properties": {
-                                        "manifest_sha256": {
-                                          "pattern": "^[a-f0-9]{64}$",
-                                          "type": "string"
-                                        },
-                                        "project_id": {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        },
-                                        "schema_version": {
-                                          "const": 2,
-                                          "type": "number"
-                                        },
-                                        "snapshot_id": {
-                                          "format": "uuid",
-                                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                                          "type": "string"
-                                        },
-                                        "task_id": {
-                                          "minLength": 1,
-                                          "type": "string"
-                                        }
-                                      },
-                                      "required": [
-                                        "schema_version",
-                                        "project_id",
-                                        "task_id",
-                                        "snapshot_id",
-                                        "manifest_sha256"
-                                      ],
-                                      "type": "object"
-                                    },
-                                    "tree": {
-                                      "minLength": 1,
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "snapshot",
-                                    "tree",
-                                    "path",
-                                    "media_type",
-                                    "bytes",
-                                    "sha256"
-                                  ],
-                                  "type": "object"
-                                },
-                                "source": {
-                                  "const": "task_artifact_resource",
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "source",
-                                "ref"
-                              ],
-                              "type": "object"
-                            }
-                          ]
+                          "description": "Host-minted reference to persisted complete-read facts for one exact locator in this Session Turn.",
+                          "pattern": "^ar_[A-Za-z0-9_-]{16}$",
+                          "type": "string"
                         },
                         "maxItems": 64,
                         "minItems": 1,
@@ -56123,7 +55647,7 @@
                       "action",
                       "taskID",
                       "text",
-                      "evidence_locators"
+                      "evidence_read_refs"
                     ],
                     "type": "object"
                   },

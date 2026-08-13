@@ -2745,3 +2745,34 @@ provider-input fact files. It includes paginated reads, duplicate valid receipts
 pre-v2 persisted-event decoding, a real `publishExpertArtifact` call and a stored Engine envelope whose Task resource
 manifest remains the complete 64-character canonical digest. Plugin and OpenCorvus typechecks, `docs:check`, generated
 payload regeneration and the staged whitespace check pass. No UI automation test was added, modified or run.
+
+#### Mission Panel reference convergence
+
+The second delivery phase applies the same transport ownership to the Mission Panel without changing its durable
+acceptance facts. `query_task_artifacts` now mints a short `artifact_locator_ref` for each catalog entry;
+`read_task_artifact` resolves that reference only from an earlier persisted page in the same Session and physical
+Turn, preserves the exact Task identity and byte window, and returns a short `artifact_read_ref`. `resume_task` and
+`complete_mission` accept only `evidence_read_refs`; the Host proves each referenced Artifact was completely read in
+that same Turn and exact terminal occurrence and then writes the existing canonical locator receipt. Both locator and
+read references carry the persisted terminal lifecycle binding; opening another Task occurrence makes them stale and
+the Panel returns the typed unresolved-reference contract instead of combining old evidence with a new review. The current provider surface is v2-only, while
+one bounded fact decoder keeps immutable pre-v2 Panel Parts readable for history and board projection. It is not an
+execution fallback and cannot admit a raw locator into a current Tool call.
+
+Focused positive acceptance executes the real Panel Tool over a terminal child catalog, pages the catalog, reads by
+the returned short locator reference, resumes and completes with the returned read reference, and verifies that the
+durable Mission receipt still contains the full canonical locator and terminal lifecycle authority. Provider-schema
+and persisted-input contracts cover the same v2 wire shape. The active Mission prompt and this delivery record now
+name the exact reference handoff so runtime schema and model guidance have one current source; local ignored
+architecture notes are not force-added as a parallel repository authority.
+
+The independent review rejected the first implementation because its short refs were Task-bound but not terminal-
+occurrence-bound, allowing an old read fact to be combined with a newer `query_task` receipt. The corrected real Panel
+Tool test executes catalog paging, short-reference reading and `complete_mission`, verifies the canonical locator in
+the Host receipt, reopens the source Task, produces a new terminal occurrence, and verifies both the old locator ref
+and old read ref resolve to the explicit stale-authority error contract.
+
+The final focused Panel acceptance is `9 pass / 43 assertions` across the strict Provider binding, persisted Panel
+read reconstruction and terminal-authority file. OpenCorvus and JavaScript SDK typechecks, `docs:check`,
+`api:routes-check`, generated OpenAPI/SDK output and the staged whitespace check pass. No UI automation test was
+added, modified or run.

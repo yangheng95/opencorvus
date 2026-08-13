@@ -110,3 +110,44 @@ The isolated database finished with `integrity_check=ok`, zero foreign-key viola
 gap remains: `result.json.outcome` is correctly `failed`, but its embedded `mission.latest_status` is the pre-abort
 `running/active` projection rather than the post-abort terminal state. That reporting issue is recorded but not mixed
 into the stream-stall repair phase.
+
+## Failure-result Mission observation phase
+
+### Recall
+
+- User requirement: continue the complete isolated exact-Luna Work-mode acceptance, preserve staged delivery, and
+  investigate result loss rather than presenting a partial run as complete.
+- Acceptance for this phase: a failed controller result must distinguish the last Mission status observed before the
+  abort request from a bounded observation made after that request settles and before runtime disposal. It must also
+  retain typed abort and observation settlement receipts. The controller must never synthesize `inactive`, overwrite
+  Task lifecycle facts, or label a pre-abort projection as the latest state.
+- Hard constraints: do not touch the concurrently owned Panel Artifact-reference files; do not extend cleanup
+  deadlines or let status refresh block runtime disposal; keep the existing real HTTP Mission status route as the
+  only runtime fact source; add no UI automation or compatibility result field.
+- Sources read: the failure `catch` path and status polling in
+  `packages/opencorvus/script/expert-squad-evolution-e2e.ts`, bounded abort/resource settlement in
+  `expert-squad-evolution-e2e-support.ts`, its focused controller contract tests, R17b `controller.ndjson`, SQLite and
+  `result.json`.
+- Repository search: `latestStatus` is local to the executable controller and the failure result has no repository
+  consumer. Mission abort returns before resource disposal; the current helper disposes resources immediately after
+  abort settlement, leaving no caller-visible window for an authoritative post-abort HTTP observation.
+- Independent agent: pending after implementation and focused verification; the reviewer must be read-only and must
+  not delegate.
+
+The first bad reporting transition is in the controller failure path: the main poll loop stores `latestStatus`; the
+catch block performs bounded Mission abort and runtime disposal, then serializes that old object under
+`mission.latest_status`. R17b therefore reports `outcome=failed` and a complete disposal receipt beside a seemingly
+current `running/active` Mission. Storage and lifecycle state are not lost; temporal ownership is lost in the report.
+
+The repair adds one bounded post-abort observation callback to the existing failure-settlement primitive. Its order is
+strictly abort attempt -> status observation -> resource settlement. The result records the abort settlement, the
+observation settlement, the pre-abort status under an explicit name, and the returned post-abort status only when the
+real route responds. Timeout or failure remains typed evidence and cannot delay cleanup beyond its own bound. No
+fallback reads SQLite after disposal and no terminal status is inferred from the abort request.
+
+The first independent review found one P2 coverage gap: the success observation path proved ordering, but a stalled
+observation did not directly prove that its typed deadline receipt precedes resource settlement. The focused test now
+covers both paths. The complete controller-support file reports 13 passes and 26 expectations; OpenCorvus typecheck
+and `git diff --check` pass. Repository `docs:check` is currently blocked only by the concurrently owned Panel
+Artifact-reference phase changing the generated gateway action fields without yet regenerating its API markdown; this
+phase neither owns nor modifies those generated files.

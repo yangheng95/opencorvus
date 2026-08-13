@@ -1,9 +1,12 @@
+import z from "zod"
 import {
+  ArtifactLocatorReferenceSchema,
   ArtifactReadInputSchema,
   ArtifactReadChunkSchema,
   ArtifactReadLocatorSchema,
   ArtifactReadReferenceChunkSchema,
   ArtifactReadReferenceInputSchema,
+  ArtifactReadReferenceSchema,
   ArtifactSelectInputSchema,
   ArtifactSelectOutputSchema,
   ArtifactSelectReferenceInputSchema,
@@ -19,9 +22,56 @@ import { Database, and, asc, desc, eq, gt, or, sql } from "@/storage/db"
 import { MessageTable, PartTable } from "@/session/session.sql"
 import { MissionPanelActionSchema } from "@/panel/capability"
 import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
+import {
+  sameTerminalLifecycleReference,
+  type TerminalLifecycleReference,
+} from "@/engine/terminal-lifecycle-reference"
+import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
 
 function locatorKey(locator: ArtifactReadLocator): string {
   return artifactReadLocatorKey(locator)
+}
+
+const PanelArtifactReferencePageFactSchema = z
+  .object({
+    taskID: z.string().min(1),
+    terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
+    entries: z.array(
+      z
+        .object({
+          locator: ArtifactReadLocatorSchema,
+          artifact_locator_ref: ArtifactLocatorReferenceSchema,
+        })
+        .passthrough(),
+    ),
+  })
+  .passthrough()
+
+const PanelArtifactReadReferenceFactSchema = ArtifactReadReferenceChunkSchema.extend({
+  taskID: z.string().min(1),
+  terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
+})
+
+const LegacyPanelArtifactReadInputSchema = z
+  .object({
+    action: z.literal("read_task_artifact"),
+    taskID: z.string().min(1),
+    ...ArtifactReadInputSchema.shape,
+  })
+  .strict()
+
+const PanelArtifactReadReferenceInputSchema = z
+  .object({
+    action: z.literal("read_task_artifact"),
+    taskID: z.string().min(1),
+    ...ArtifactReadReferenceInputSchema.shape,
+  })
+  .strict()
+
+function unwrapPersistedProviderOperation(input: unknown): unknown {
+  if (!input || typeof input !== "object" || Array.isArray(input)) return input
+  const entries = Object.entries(input as Record<string, unknown>)
+  return entries.length === 1 && entries[0]?.[0] === "operation" ? entries[0][1] : input
 }
 
 export class ArtifactReferenceResolutionError extends Error {
@@ -207,6 +257,94 @@ export function resolveArtifactLocatorReferenceBeforeRead(input: {
   return locator
 }
 
+export function resolvePanelArtifactLocatorReferenceBeforeRead(input: {
+  sessionID: string
+  assistantMessageID: string
+  taskID: string
+  reference: string
+}): { locator: ArtifactReadLocator; terminalLifecycleReference: TerminalLifecycleReference } {
+  const found = new Map<
+    string,
+    { locator: ArtifactReadLocator; terminalLifecycleReference: TerminalLifecycleReference }
+  >()
+  for (const value of completedToolOutputValuesBeforeAction({
+    sessionID: input.sessionID,
+    assistantMessageID: input.assistantMessageID,
+    toolNames: ["panel"],
+  })) {
+    const page = PanelArtifactReferencePageFactSchema.safeParse(value)
+    if (!page.success || page.data.taskID !== input.taskID) continue
+    for (const entry of page.data.entries) {
+      const candidate = {
+        locator: entry.locator,
+        terminalLifecycleReference: page.data.terminal_lifecycle_reference,
+      }
+      const prior = found.get(entry.artifact_locator_ref)
+      if (
+        prior &&
+        (locatorKey(prior.locator) !== locatorKey(candidate.locator) ||
+          !sameTerminalLifecycleReference(
+            prior.terminalLifecycleReference,
+            candidate.terminalLifecycleReference,
+          ))
+      ) {
+        throw new ArtifactReferenceAmbiguityError(
+          entry.artifact_locator_ref,
+          `Persisted panel Artifact locator reference is ambiguous for Task ${input.taskID}`,
+        )
+      }
+      found.set(entry.artifact_locator_ref, candidate)
+    }
+  }
+  const resolved = found.get(input.reference)
+  if (!resolved) {
+    throw new ArtifactReferenceResolutionError(
+      input.reference,
+      `Panel Artifact locator reference is not a prior persisted catalog fact for Task ${input.taskID}`,
+    )
+  }
+  return resolved
+}
+
+function panelArtifactReadReferenceLocatorsBeforeAction(input: {
+  sessionID: string
+  assistantMessageID: string
+  taskID: string
+}): Map<string, { locator: ArtifactReadLocator; terminalLifecycleReference: TerminalLifecycleReference }> {
+  const found = new Map<
+    string,
+    { locator: ArtifactReadLocator; terminalLifecycleReference: TerminalLifecycleReference }
+  >()
+  for (const value of completedToolOutputValuesBeforeAction({
+    sessionID: input.sessionID,
+    assistantMessageID: input.assistantMessageID,
+    toolNames: ["panel"],
+  })) {
+    const chunk = PanelArtifactReadReferenceFactSchema.safeParse(value)
+    if (!chunk.success || chunk.data.taskID !== input.taskID) continue
+    const candidate = {
+      locator: chunk.data.locator,
+      terminalLifecycleReference: chunk.data.terminal_lifecycle_reference,
+    }
+    const prior = found.get(chunk.data.artifact_read_ref)
+    if (
+      prior &&
+      (locatorKey(prior.locator) !== locatorKey(candidate.locator) ||
+        !sameTerminalLifecycleReference(
+          prior.terminalLifecycleReference,
+          candidate.terminalLifecycleReference,
+        ))
+    ) {
+      throw new ArtifactReferenceAmbiguityError(
+        chunk.data.artifact_read_ref,
+        `Persisted panel Artifact read reference is ambiguous for Task ${input.taskID}`,
+      )
+    }
+    found.set(chunk.data.artifact_read_ref, candidate)
+  }
+  return found
+}
+
 /**
  * Return only exact locators whose persisted completed `artifact_read` calls
  * prove contiguous byte coverage from zero through the canonical total.
@@ -262,15 +400,18 @@ export function completeArtifactReadLocatorsForSession(
     const rawInput = state?.input
     if (data.tool === "panel") {
       if (!rawInput || typeof rawInput !== "object" || Array.isArray(rawInput)) continue
-      const parsed = MissionPanelActionSchema.safeParse(
-        materializeToolExecutionInput(MissionPanelActionSchema, rawInput),
-      )
-      if (!parsed.success) continue
-      const panelInput = parsed.data
-      if (panelInput.action !== "read_task_artifact") continue
+      const unwrappedInput = unwrapPersistedProviderOperation(rawInput)
+      const materialized = materializeToolExecutionInput(MissionPanelActionSchema, rawInput)
+      const parsed = PanelArtifactReadReferenceInputSchema.safeParse(materialized)
+      const legacy = parsed.success ? undefined : LegacyPanelArtifactReadInputSchema.safeParse(unwrappedInput)
+      let panelInput:
+        | z.infer<typeof PanelArtifactReadReferenceInputSchema>
+        | z.infer<typeof LegacyPanelArtifactReadInputSchema>
+      if (parsed.success) panelInput = parsed.data
+      else if (legacy?.success) panelInput = legacy.data
+      else continue
       const { action: _action, taskID, ...read } = panelInput
       if (options?.panelTaskID !== undefined && taskID !== options.panelTaskID) continue
-      const request = ArtifactReadInputSchema.parse(read)
       if (typeof state?.output !== "string") {
         throw new Error(`Completed panel.read_task_artifact tool part ${row.id} has no canonical string output.`)
       }
@@ -280,7 +421,31 @@ export function completeArtifactReadLocatorsForSession(
       } catch (cause) {
         throw new Error(`Completed panel.read_task_artifact tool part ${row.id} output is not JSON.`, { cause })
       }
-      facts.push({ request, chunk: ArtifactReadChunkSchema.parse(decoded) })
+      if ("artifact_transport_version" in read && read.artifact_transport_version === 2) {
+        const transportInput = ArtifactReadReferenceInputSchema.parse(read)
+        const chunk = PanelArtifactReadReferenceFactSchema.parse(decoded)
+        if (chunk.taskID !== taskID || chunk.artifact_locator_ref !== transportInput.artifact_locator_ref) {
+          throw new Error(`Completed panel.read_task_artifact tool part ${row.id} input does not identify its output.`)
+        }
+        const request = ArtifactReadInputSchema.parse({
+          locator: chunk.locator,
+          byte_offset: transportInput.byte_offset,
+          max_bytes: transportInput.max_bytes,
+          delivery: transportInput.delivery,
+        })
+        const {
+          taskID: _taskID,
+          terminal_lifecycle_reference: _terminalLifecycleReference,
+          artifact_transport_version: _artifactTransportVersion,
+          artifact_locator_ref: _artifactLocatorReference,
+          artifact_read_ref: _artifactReadReference,
+          ...canonicalChunk
+        } = chunk
+        facts.push({ request, chunk: ArtifactReadChunkSchema.parse(canonicalChunk) })
+      } else {
+        // Immutable pre-v2 panel event decoding only.
+        facts.push({ request: ArtifactReadInputSchema.parse(read), chunk: ArtifactReadChunkSchema.parse(decoded) })
+      }
       continue
     }
     if (options?.panelTaskID !== undefined) continue
@@ -502,6 +667,38 @@ export function completeArtifactReadsBeforePanelAction(input: {
     beforeMessage: scope.message,
     panelTaskID: input.taskID,
   })
+}
+
+export function resolvePanelArtifactReadReferencesBeforeAction(input: {
+  sessionID: string
+  assistantMessageID: string
+  taskID: string
+  terminalLifecycleReference: TerminalLifecycleReference
+  references: readonly z.infer<typeof ArtifactReadReferenceSchema>[]
+}): ArtifactReadLocator[] {
+  const byReference = panelArtifactReadReferenceLocatorsBeforeAction(input)
+  const complete = new Set(
+    completeArtifactReadsBeforePanelAction(input).map((locator) => locatorKey(locator)),
+  )
+  const resolved = new Map<string, ArtifactReadLocator>()
+  for (const reference of input.references) {
+    const resolvedReference = byReference.get(reference)
+    if (
+      !resolvedReference ||
+      !sameTerminalLifecycleReference(
+        resolvedReference.terminalLifecycleReference,
+        input.terminalLifecycleReference,
+      ) ||
+      !complete.has(locatorKey(resolvedReference.locator))
+    ) {
+      throw new ArtifactReferenceResolutionError(
+        reference,
+        `Panel Artifact read reference is not backed by a complete persisted read for Task ${input.taskID}`,
+      )
+    }
+    resolved.set(locatorKey(resolvedReference.locator), resolvedReference.locator)
+  }
+  return [...resolved.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([, locator]) => locator)
 }
 
 export function selectedArtifactLocatorsBeforePublication(input: {

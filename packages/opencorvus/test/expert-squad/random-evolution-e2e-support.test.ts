@@ -68,7 +68,7 @@ describe("random Expert Squad evolution controller contracts", () => {
     })
   })
 
-  test("settles failure resources after a Mission abort stops making progress", async () => {
+  test("observes the post-abort Mission status before settling failure resources", async () => {
     const events: string[] = []
     const result = await settleFailureAfterBoundedAbort({
       abortMission: async (signal) => {
@@ -77,14 +77,52 @@ describe("random Expert Squad evolution controller contracts", () => {
         await new Promise<void>(() => {})
       },
       abortTimeoutMs: 10,
+      observeAfterAbort: async () => {
+        events.push("status-observed")
+        return { status: "inactive" as const, taskCount: 1 }
+      },
+      observationTimeoutMs: 10,
       settleResources: async () => {
         events.push("resources-settled")
       },
     })
 
     expect({ result, events }).toEqual({
-      result: { abortStatus: "timed_out" },
-      events: ["abort-started", "resources-settled"],
+      result: {
+        abortStatus: "timed_out",
+        observation: { status: "settled", value: { status: "inactive", taskCount: 1 } },
+      },
+      events: ["abort-started", "status-observed", "resources-settled"],
+    })
+  })
+
+  test("settles failure resources after the post-abort Mission observation reaches its deadline", async () => {
+    const events: string[] = []
+    const result = await settleFailureAfterBoundedAbort({
+      abortMission: async () => {
+        events.push("abort-settled")
+      },
+      abortTimeoutMs: 10,
+      observeAfterAbort: async () => {
+        events.push("status-observation-started")
+        await new Promise<void>(() => {})
+        return { status: "inactive" as const }
+      },
+      observationTimeoutMs: 10,
+      settleResources: async () => {
+        events.push("resources-settled")
+      },
+    })
+
+    expect({ result, events }).toEqual({
+      result: {
+        abortStatus: "settled",
+        observation: {
+          status: "timed_out",
+          error: "Evolution E2E post-abort Mission status observation did not settle within 10ms",
+        },
+      },
+      events: ["abort-settled", "status-observation-started", "resources-settled"],
     })
   })
 
