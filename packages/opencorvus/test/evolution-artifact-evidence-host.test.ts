@@ -43,6 +43,7 @@ import expertSquadPackageTool from "../../../expert-squads/builtin/evolution-lab
 import publishEvolutionArtifactTool, {
   assertEvolutionArtifactOwner,
   evolutionArtifactOwner,
+  requireEvolutionWorkerProducer,
 } from "../../../expert-squads/builtin/evolution-lab/tools/publish-evolution-artifact"
 import executeEvolutionMetricsTool from "../../../expert-squads/builtin/evolution-lab/tools/execute-evolution-metrics"
 import { withTaskScopedPluginToolHost } from "../src/tool/plugin-tool-host"
@@ -194,6 +195,63 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
     ).toThrow(
       new EvolutionArtifactIntegrityError(
         "evolution-lab/opportunity must be published by Evolution Lab worker evolution-observer",
+      ),
+    )
+  })
+
+  test("preserves the exact Evolution worker authority through one immutable cross-Task import", () => {
+    const workerProducer = {
+      owner_kind: "projected-worker" as const,
+      expert_squad_id: "evolution-lab",
+      package_revision: {
+        scope: "project" as const,
+        project_id: "project-1",
+        namespace: "builtin",
+        id: "evolution-lab",
+        version: "2026.08.13.1",
+        package_digest: "a".repeat(64),
+      },
+      agent_id: "evolution-observer",
+      projection_hash: "b".repeat(64),
+      session_id: "session-source",
+      message_id: "message-source",
+      tool_call_id: "call-source",
+    }
+    const importedEnvelope = EngineArtifactEnvelopeSchema.parse({
+      artifact_type: "evolution-lab/opportunity",
+      schema_version: 1,
+      producer: {
+        owner_kind: "mission",
+        mission_id: "mission-1",
+        session_id: "session-mission",
+        message_id: "message-import",
+        tool_call_id: "call-import",
+      },
+      payload: {},
+      resources: [],
+      observed_artifact_locators: [],
+      source_artifact_locators: [],
+      import_lineage: {
+        source_task_id: "task-source",
+        source_locator: {
+          source: "engine_artifact",
+          artifact_id: "artifact-source",
+          catalog_revision: 1,
+          expected_sha256: "c".repeat(64),
+        },
+        source_kind: "expert_output",
+        source_producer: workerProducer,
+        source_provenance: {
+          observed_artifact_locators: [],
+          source_artifact_locators: [],
+        },
+      },
+    })
+
+    expect(() => requireEvolutionWorkerProducer(importedEnvelope, "evolution-observer")).not.toThrow()
+    expect(() => requireEvolutionWorkerProducer(importedEnvelope, "evolution-failure-analyst")).toThrow(
+      new EvolutionArtifactIntegrityError(
+        "evolution-lab/opportunity must be produced by Evolution Lab worker evolution-failure-analyst",
       ),
     )
   })

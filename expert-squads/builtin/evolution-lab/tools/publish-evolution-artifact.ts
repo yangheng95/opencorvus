@@ -168,15 +168,17 @@ async function readEngineArtifactEnvelope(locator: EngineArtifactLocator, contex
   return EngineArtifactEnvelopeSchema.parse(JSON.parse(text))
 }
 
-function requireEvolutionWorkerProducer(
+export function requireEvolutionWorkerProducer(
   envelope: ReturnType<typeof EngineArtifactEnvelopeSchema.parse>,
   agentID: string,
 ) {
+  const producer =
+    envelope.producer.owner_kind === "mission" ? envelope.import_lineage?.source_producer : envelope.producer
   if (
-    envelope.producer.owner_kind !== "projected-worker" ||
-    envelope.producer.expert_squad_id !== "evolution-lab" ||
-    envelope.producer.package_revision.id !== "evolution-lab" ||
-    envelope.producer.agent_id !== agentID
+    producer?.owner_kind !== "projected-worker" ||
+    producer.expert_squad_id !== "evolution-lab" ||
+    producer.package_revision.id !== "evolution-lab" ||
+    producer.agent_id !== agentID
   )
     throw new EvolutionArtifactIntegrityError(
       `${envelope.artifact_type} must be produced by Evolution Lab worker ${agentID}`,
