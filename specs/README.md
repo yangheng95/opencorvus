@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest Expert Squad real-GUI zero-intervention sampling program: [`2026-08-13-expert-squad-gui-zero-intervention-sampling.md`](records/2026-08/2026-08-13-expert-squad-gui-zero-intervention-sampling.md).
+
 Latest Work capability incident diagnosis and route-authority hardening: [`2026-08-13-work-capability-unavailable-repair.md`](records/2026-08/2026-08-13-work-capability-unavailable-repair.md).
 
 Work capability connected-page first-screen evidence: [`2026-08-13-work-capability-connected.png`](artifacts/2026-08-13-work-capability-connected.png).

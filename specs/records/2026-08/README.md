@@ -1,5 +1,7 @@
 # August 2026 Records
 
+- [2026-08-13-expert-squad-gui-zero-intervention-sampling.md](2026-08-13-expert-squad-gui-zero-intervention-sampling.md) defines the immutable-source, random-port, isolated-runtime real-GUI sampling matrix and three-way evidence required to prove Base, Data Analysis, and Office Delivery Expert Squads finish without post-submission operator intervention.
+
 - [2026-08-13-work-capability-unavailable-repair.md](2026-08-13-work-capability-unavailable-repair.md) records the Work capability incident evidence boundary, marks the original request-level error unknown without contemporaneous logs, and hardens capability settings onto the identity route authority with production-route plus real-page acceptance.
 
 - [2026-08-13-scheduled-global-inactivity-config-ownership.md](2026-08-13-scheduled-global-inactivity-config-ownership.md) diagnoses the screenshot's backend transport failure and the isolated checker's project-context crash, then restores the process-wide scheduler's explicit global inactivity configuration owner.
