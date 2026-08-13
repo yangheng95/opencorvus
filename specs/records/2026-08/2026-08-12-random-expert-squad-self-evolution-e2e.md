@@ -2565,7 +2565,7 @@ worker. Focused positive tests cover both contracts; neither change retroactivel
 
 ### Post-R16 verification gate: queue completion lost executable project initialization
 
-The current acceptance target is the operator's explicit exact `openai/gpt-5.6-luna` model. Before a fresh R17,
+The current acceptance target is the operator's explicit exact `openai/gpt-5.6-terra` model. Before a fresh R17,
 the complete changed scheduler delivery test file was run through the repository's isolated runner. Sixteen cases
 passed, while the real Mission-to-Task materialization/FIFO case made no progress for 120 seconds. The initial
 aggregate Bun matcher and immediate `observedEvents[0]` read obscured the first transition; scalar probes proved the

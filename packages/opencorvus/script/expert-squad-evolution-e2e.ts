@@ -30,7 +30,7 @@ import {
   isolatedProviderHandoff,
 } from "./expert-squad-evolution-e2e-support"
 
-const MODEL = process.env.EXPERT_SQUAD_EVOLUTION_MODEL?.trim() || "openai/gpt-5.6-luna"
+const MODEL = process.env.EXPERT_SQUAD_EVOLUTION_MODEL?.trim() || "openai/gpt-5.6-terra"
 const [PROVIDER_ID, MODEL_ID] = MODEL.split("/", 2)
 if (!PROVIDER_ID || !MODEL_ID) throw new Error("EXPERT_SQUAD_EVOLUTION_MODEL must use provider/model format")
 const SCORER_CRITERIA = [
