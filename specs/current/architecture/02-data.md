@@ -51,6 +51,11 @@ user-input file/chunk 与 Project `MEMORY.MD` envelope file/chunk 分别使用 d
 deterministic `per_*` identity 与 ordered `per_*` occurrence identity，均不超过 24 字符；policy revision、
 provider digest、scope fingerprint 和 execution-result SHA-256 继续保持完整。Permission ledger/result 中
 任一 prior-epoch expanded identity 或关系镜像会在 bootstrap 返回 `DATA_RESET_REQUIRED`，不会进入恢复重放。
+Scheduler delivery 的 protocol event/inbox 与目标 Message/Part/Session-control 五个 occurrence identity 由同一
+invocation 分别 domain-separate 后确定性派生，全部不超过 24 字符。event/inbox 在 enqueue transaction 原子
+发行；目标 Message/Part/Session-control 在后续 materialization transaction 与 inbox settlement 原子提交。
+prior-epoch expanded scheduler occurrence graph 会在 bootstrap 返回 `DATA_RESET_REQUIRED`，不允许跨 epoch
+拼接 replay。
 
 所有表定义在 `src/engine/engine.sql.ts`，命名前缀 `engine_`（历史文档里的
 `orchestrator_*` 已全部重命名为 `engine_*`）。旧的多张过程表已合并为单一

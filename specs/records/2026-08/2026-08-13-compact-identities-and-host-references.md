@@ -97,6 +97,14 @@ recovery or replay; no dual lookup or in-place rewrite is retained. A compact de
 by different canonical invocation material returns a typed identity-collision error instead of reusing another Tool
 call's decision or execution.
 
+The sixth Phase 1B delivery owns the scheduler-delivery occurrence identity graph only. One canonical invocation
+derives one compact deterministic occurrence graph for the protocol event, protocol inbox, target Message, target text Part and Session control
+identity through five separately domain-separated `Identifier.deterministic` calls. The complete source-body SHA-256
+remains in the scheduler payload. Existing expanded `pev_scheduler_*`, `pib_scheduler_*`, `msg_scheduler_*`,
+`prt_scheduler_*` and `sctl_scheduler_*` rows belong to the prior pre-release epoch and cause
+`DATA_RESET_REQUIRED`; replay never mixes old and current members of one occurrence graph. Any compact event/inbox
+occupancy by different scheduler semantics returns the existing typed scheduler conflict instead of aliasing.
+
 ### Phase 2 — remaining model-facing digests
 
 Inventory each plugin/package tool field that currently asks the model to repeat a package, resource, workspace, scorer, Git or payload digest. Replace it with a short Host reference derived from a prior authoritative response, then delete the raw model-input field in the same change. This includes replacing `panel.create_task.expectedPackageDigest` with a Host reference that can bind both installed incumbents and uninstalled candidate revisions; removing the digest without that replacement would break candidate Trial creation. Regenerate schemas, SDKs and embedded package payload from canonical sources.

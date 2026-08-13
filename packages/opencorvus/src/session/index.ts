@@ -1294,6 +1294,7 @@ export namespace Session {
     input: PersistMessageInput,
     commit?: () => void,
     beforeVisibilityEffects?: () => void,
+    preflightBundle?: () => void,
   ) {
     for (const control of input.controls ?? []) {
       if (control.sessionID !== input.info.sessionID) {
@@ -1302,10 +1303,9 @@ export namespace Session {
         )
       }
     }
-    const existing = Database.use((db) =>
-      db.select({ id: MessageTable.id }).from(MessageTable).where(eq(MessageTable.id, input.info.id)).get(),
-    )
     Database.transaction((db) => {
+      preflightBundle?.()
+      const existing = db.select({ id: MessageTable.id }).from(MessageTable).where(eq(MessageTable.id, input.info.id)).get()
       upsertMessageRow(input.info, { publishCreated: false, publishUpdated: false })
       beforeVisibilityEffects?.()
       if (!existing) {
@@ -1361,17 +1361,21 @@ export namespace Session {
     input: PersistMessageInput,
     commit: () => void,
     beforeVisibilityEffects?: () => void,
+    preflightBundle?: () => void,
   ) {
-    return persistMessageBundle(PersistMessageInput.parse(input), commit, beforeVisibilityEffects)
+    const parsed = PersistMessageInput.parse(input)
+    const persisted = persistMessageWithCommitInTransaction(parsed, commit, beforeVisibilityEffects, preflightBundle)
+    return persisted.complete()
   }
 
   export function persistMessageWithCommitInTransaction(
     input: PersistMessageInput,
     commit: () => void,
     beforeVisibilityEffects?: () => void,
+    preflightBundle?: () => void,
   ) {
     const parsed = PersistMessageInput.parse(input)
-    persistMessageBundleRows(parsed, commit, beforeVisibilityEffects)
+    persistMessageBundleRows(parsed, commit, beforeVisibilityEffects, preflightBundle)
     return {
       complete: () => hydratePersistedMessageBundle(parsed),
     }

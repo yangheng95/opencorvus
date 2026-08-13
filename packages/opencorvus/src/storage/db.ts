@@ -344,6 +344,86 @@ function assertCurrentDataIntegrity(sqlite: BunDatabase, dbPath: string): void {
     })
   }
 
+  const legacySchedulerDeliveryIdentity = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT protocol_event.id AS id
+     FROM protocol_event
+     WHERE protocol_event.type = 'scheduler.message'
+       AND length(protocol_event.id) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT protocol_inbox.id AS id
+     FROM protocol_inbox
+     INNER JOIN protocol_event ON protocol_event.id = protocol_inbox.envelope_id
+     WHERE protocol_event.type = 'scheduler.message'
+       AND length(protocol_inbox.id) > ${Identifier.MAX_LENGTH}
+     UNION ALL
+     SELECT message.id AS id
+     FROM message
+     INNER JOIN protocol_event
+       ON protocol_event.id = COALESCE(
+         json_extract(message.data, '$.extra.wake_reason.eventID'),
+         json_extract(message.data, '$.extra.task_root_message.schedulerDelivery.eventID')
+       )
+     INNER JOIN protocol_inbox
+       ON protocol_inbox.id = COALESCE(
+         json_extract(message.data, '$.extra.wake_reason.inboxID'),
+         json_extract(message.data, '$.extra.task_root_message.schedulerDelivery.inboxID')
+       )
+      AND protocol_inbox.envelope_id = protocol_event.id
+     WHERE length(message.id) > ${Identifier.MAX_LENGTH}
+       AND protocol_event.type = 'scheduler.message'
+       AND (
+         json_extract(message.data, '$.extra.wake_reason.source') = 'scheduler.message'
+         OR json_type(message.data, '$.extra.task_root_message.schedulerDelivery.eventID') = 'text'
+       )
+     UNION ALL
+     SELECT part.id AS id
+     FROM part
+     INNER JOIN message ON message.id = part.message_id
+     INNER JOIN protocol_event
+       ON protocol_event.id = COALESCE(
+         json_extract(message.data, '$.extra.wake_reason.eventID'),
+         json_extract(message.data, '$.extra.task_root_message.schedulerDelivery.eventID')
+       )
+     INNER JOIN protocol_inbox
+       ON protocol_inbox.id = COALESCE(
+         json_extract(message.data, '$.extra.wake_reason.inboxID'),
+         json_extract(message.data, '$.extra.task_root_message.schedulerDelivery.inboxID')
+       )
+      AND protocol_inbox.envelope_id = protocol_event.id
+     WHERE length(part.id) > ${Identifier.MAX_LENGTH}
+       AND protocol_event.type = 'scheduler.message'
+       AND (
+         json_extract(message.data, '$.extra.wake_reason.source') = 'scheduler.message'
+         OR json_type(message.data, '$.extra.task_root_message.schedulerDelivery.eventID') = 'text'
+       )
+     UNION ALL
+     SELECT session_control_record.id AS id
+     FROM session_control_record
+     INNER JOIN protocol_event
+       ON protocol_event.id = json_extract(session_control_record.payload, '$.wake_reason.eventID')
+     INNER JOIN protocol_inbox
+       ON protocol_inbox.id = json_extract(session_control_record.payload, '$.wake_reason.inboxID')
+      AND protocol_inbox.envelope_id = protocol_event.id
+     WHERE length(session_control_record.id) > ${Identifier.MAX_LENGTH}
+       AND session_control_record.kind = 'wake_reason'
+       AND session_control_record.owner = 'scheduler.message'
+       AND protocol_event.type = 'scheduler.message'
+       AND json_extract(session_control_record.payload, '$.wake_reason.source') = 'scheduler.message'
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacySchedulerDeliveryIdentity) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains legacy expanded scheduler delivery identity ${legacySchedulerDeliveryIdentity.id} at ${dbPath}. ` +
+        "Its atomic protocol and conversation occurrence belongs to the prior identity epoch; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.compactSchedulerDeliveryIdentity",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
   const legacyRequirementSet = queryAllFinalized<{ id: string }>(
     sqlite,
     `SELECT id
@@ -376,6 +456,7 @@ function assertCurrentDataIntegrity(sqlite: BunDatabase, dbPath: string): void {
        AND CASE
          WHEN json_valid(payload) = 0 THEN 1
          WHEN json_extract(payload, '$.protocol') IS NOT 'scheduler-message-v2' THEN 1
+         WHEN json_type(payload, '$.invocation_id') IS NOT 'text' THEN 1
          WHEN json_type(payload, '$.source_task_occurrence_started_at') IS NULL THEN 1
          WHEN json_type(payload, '$.target_task_occurrence_started_at') IS NULL THEN 1
          ELSE 0

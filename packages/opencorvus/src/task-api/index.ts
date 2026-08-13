@@ -23,6 +23,7 @@ import { CapabilityRules } from "@/capability/rules"
 import { PermissionAuthority } from "@/permission/authority"
 import { ProtocolStore } from "@/protocol/store"
 import {
+  assertSchedulerTargetOccurrenceAvailableInTransaction,
   enqueueSchedulerMessageInTransaction,
   deadLetterSchedulerTaskDeliveriesInTransaction,
   deadLetterSchedulerSourceDeliveriesInTransaction,
@@ -1188,7 +1189,7 @@ async function buildTaskSessionMessageBundle(
   attachments: AttachmentStore.Reference[] = [],
   metadata?: Record<string, unknown>,
   schedulerDelivery?: SchedulerDeliveryReferenceValue,
-  identity?: { messageID: string; textPartID: string },
+  identity?: { messageID: string; textPartID: string; controlID?: string },
 ) {
   // Rule 7: no silent fallback. A task without a session_id or whose
   // session has lost its agent/model context cannot accept a message —
@@ -1260,6 +1261,27 @@ async function buildTaskSessionMessageBundle(
   return {
     info,
     parts,
+    ...(schedulerDelivery && identity?.controlID
+      ? {
+          controls: [
+            {
+              id: identity.controlID,
+              sessionID: task.session_id,
+              kind: "wake_reason" as const,
+              status: "consumed" as const,
+              owner: "scheduler.message",
+              payload: {
+                messageID: info.id,
+                wake_reason: {
+                  source: "scheduler.message",
+                  eventID: schedulerDelivery.eventID,
+                  inboxID: schedulerDelivery.inboxID,
+                },
+              },
+            },
+          ],
+        }
+      : {}),
     touchSessionID: task.session_id,
   }
 }
@@ -1507,7 +1529,11 @@ export namespace EngineService {
       [],
       undefined,
       deliveryReference,
-      { messageID: occurrenceIDs.messageID, textPartID: occurrenceIDs.textPartID },
+      {
+        messageID: occurrenceIDs.messageID,
+        textPartID: occurrenceIDs.textPartID,
+        controlID: occurrenceIDs.controlID,
+      },
     )
     let ingressID: string | undefined
     await Session.persistMessageWithCommit(bundle, () => {
@@ -1554,6 +1580,15 @@ export namespace EngineService {
           now,
         })
       })
+    }, undefined, () => {
+      Database.use((db) =>
+        assertSchedulerTargetOccurrenceAvailableInTransaction(db, {
+          inboxID: delivery.id,
+          messageID: occurrenceIDs.messageID,
+          textPartID: occurrenceIDs.textPartID,
+          controlID: occurrenceIDs.controlID,
+        }),
+      )
     })
     if (!ingressID) throw new Error(`Scheduler Task delivery ${delivery.id} did not commit its ingress.`)
     const dispatch = await dispatchPersistedTaskLoop(task.id, ingressID)
