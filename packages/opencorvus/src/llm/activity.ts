@@ -31,6 +31,7 @@ import { SessionStatus } from "@/session/status"
 import { withStreamActivity, type StreamActivityMonitor } from "@/util/stream-activity"
 import { APICallError } from "ai"
 import { ProviderError } from "@/provider/error"
+import { ProviderAuthRequiredError } from "@/provider/auth-required-error"
 
 /**
  * Mutually exclusive error categories. Priority (high → low) when multiple
@@ -54,6 +55,7 @@ export type ErrorClass =
   | "request_timeout"
   | "payload_too_large"
   | "context_overflow"
+  | "auth_required"
   | "unknown"
 
 /**
@@ -267,6 +269,7 @@ function classify(err: unknown, ctx: ClassifyContext): ErrorClass {
       return cause
     }
   }
+  if (ProviderAuthRequiredError.isInstance(err)) return "auth_required"
 
   // HTTP status — APICallError carries it directly; ctx.httpStatus is the
   // explicit override path for callers that already extracted it.
@@ -337,7 +340,8 @@ function isRetryable(cls: ErrorClass): boolean {
     cls === "client_4xx" ||
     cls === "request_timeout" ||
     cls === "payload_too_large" ||
-    cls === "context_overflow"
+    cls === "context_overflow" ||
+    cls === "auth_required"
   )
 }
 

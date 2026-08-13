@@ -24,6 +24,7 @@ import {
   rescheduleSchedulerDelivery,
   schedulerTargetOccurrenceIdentity,
   schedulerSourceBodyInTransaction,
+  settleUnansweredSchedulerMissionWakeForClosure,
   SchedulerTargetOccurrenceStaleError,
   settleSchedulerDeliveryInTransaction,
   type SchedulerDeliveryReceipt,
@@ -309,12 +310,26 @@ export async function drainSchedulerMessagesForCurrentProject(input?: {
   if (!current) return
   for (const wake of listUnansweredSchedulerSessionWakes(current.project.id)) {
     if (input?.excludeSessionIDs?.has(wake.sessionID)) continue
-    await SessionWake.resumePersistedWake({
-      sessionID: wake.sessionID,
-      messageID: wake.messageID,
-      directory: current.project.worktree,
-      retryFailedReply: true,
+    const receipt = await withMissionExecutionAdmission(wake.sessionID, async () => {
+      const closure = currentMissionExecutionClosure(wake.sessionID)
+      if (closure?.state === "closing" || closure?.state === "closed") {
+        settleUnansweredSchedulerMissionWakeForClosure({
+          inboxID: wake.inboxID,
+          messageID: wake.messageID,
+          closureEventID: closure.eventID,
+        })
+        return undefined
+      }
+      return {
+        completion: SessionWake.resumePersistedWake({
+          sessionID: wake.sessionID,
+          messageID: wake.messageID,
+          directory: current.project.worktree,
+          retryFailedReply: true,
+        }),
+      }
     })
+    if (receipt) await receipt.completion
   }
   const sessionIDs = listPendingSchedulerRecipientIDs({ actor: "session", projectID: current.project.id })
   for (const sessionID of sessionIDs) {

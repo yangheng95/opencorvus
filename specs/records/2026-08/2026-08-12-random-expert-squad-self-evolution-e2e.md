@@ -3118,6 +3118,23 @@ receipt remains truthful and must not wait indefinitely. Positive acceptance mus
 barrier, trigger bounded failure cleanup, and prove credential removal occurs after runtime disposal even when abort
 times out; a cleanup failure still records a typed partial receipt.
 
+The root repair now closes the three ownership boundaries that combined in that incident. Scheduler recovery handles
+an already delivered but unanswered Mission wake under the durable Mission execution admission: a `closing` or
+`closed` occurrence is settled as `mission_wake_closed` with the exact wake Message and closure event instead of being
+resumed. `Server.stop()` first closes runtime admission and requests cancellation, then quiesces the HTTP listener,
+waits for the same runtime settlement, disposes Instances, and releases ownership; a listener-stop failure waits for
+that settlement and rolls back its exact handoff before a retry is allowed. The isolated controller then disposes the
+runtime before removing its copied credential, recording each successful partial settlement immediately. Finally,
+the OpenAI Codex credential resolver emits a typed Provider-auth-required error; Language Model activity classifies it
+as terminal and performs one Provider attempt rather than retrying a missing credential.
+
+Focused positive evidence for this repair is: scheduler delivery `22` tests / `129` assertions, including the real
+delivered-wake closure disposition; runtime-server ownership `24` / `71`, including cancellation-before-listener-wait
+and listener-stop rollback/retry; controller settlement `14` / `33`, including credential-delete failure after a
+successful runtime disposal; Language Model activity `6` / `20`; and the OpenAI Codex auth resolver `1` / `2`.
+OpenCorvus typecheck passed. An uninvolved read-only reviewer found no remaining P0, P1 or P2 lifecycle issue. These
+contracts are shared by every Mission and Provider-backed run; they do not special-case Evolution Lab or R19.
+
 The same run produced two Project Memory GlobalBus warnings. Read-only reconstruction tied them to retained organizer
 listeners from earlier worker Instances, not Task ingress, scheduler delivery or Mission closure. Each listener read
 ambient publisher `Instance.directory/project.id` instead of the directory and project that registered it; a

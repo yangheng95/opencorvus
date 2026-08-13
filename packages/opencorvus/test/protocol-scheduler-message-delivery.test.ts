@@ -1372,7 +1372,11 @@ describe("durable scheduler.message delivery", () => {
           deliveries.push({ ...receipt, messageID: occurrence.messageID })
         }
         expect(listUnansweredSchedulerSessionWakes(Instance.project.id)).toEqual(
-          deliveries.map((delivery) => ({ sessionID: mission.id, messageID: delivery.messageID })),
+          deliveries.map((delivery) => ({
+            inboxID: delivery.inboxID,
+            sessionID: mission.id,
+            messageID: delivery.messageID,
+          })),
         )
         const resumed: string[] = []
         using _wakeLoop = SessionWake.TestHooks.installWakeLoopExecutor(async ({ messageID }) => {
@@ -1380,6 +1384,132 @@ describe("durable scheduler.message delivery", () => {
         })
         await drainSchedulerMessagesForCurrentProject()
         expect(resumed).toEqual(deliveries.map((delivery) => delivery.messageID))
+      },
+    })
+  })
+
+  test("settles an unanswered delivered Mission wake against its durable close occurrence", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-close-delivered-wake"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Close delivered wake Mission",
+          metadata: { mission: missionLaunchMetadata(missionID, project.path) },
+        })
+        const taskRoot = await Session.create({ kind: "orchestrator", title: "Close wake source Task" })
+        const taskID = Identifier.ascending("task")
+        const now = Date.now()
+        Database.use((db) =>
+          db
+            .insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: Instance.project.id,
+              session_id: taskRoot.id,
+              source: "mission",
+              product_pillar: "code",
+              title: "Close wake source Task",
+              request: "Settle the exact delivered wake during Mission close",
+              metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+              time_started: now,
+              time_created: now,
+              time_updated: now,
+            })
+            .run(),
+        )
+        const sourceMessageID = "msg_close_delivered_wake_source"
+        const sourcePartID = "prt_close_delivered_wake_source"
+        persistSourceOccurrence(taskRoot.id, sourceMessageID, sourcePartID, "Close this delivered Mission wake")
+        const receipt = Database.transaction((db) =>
+          enqueueSchedulerMessageInTransaction(db, {
+            invocationID: "close-delivered-wake",
+            kind: "notification",
+            source: {
+              kind: "task_scheduler",
+              project_id: Instance.project.id,
+              task_id: taskID,
+              root_session_id: taskRoot.id,
+            },
+            target: {
+              kind: "mission_scheduler",
+              project_id: Instance.project.id,
+              mission_id: missionID,
+              session_id: mission.id,
+            },
+            subject: "Close delivered wake",
+            sourceMessageID,
+            sourcePartID,
+          }),
+        )
+        const ownerID = "close-delivered-wake-owner"
+        claimNextSchedulerDelivery({
+          actor: "session",
+          actorID: mission.id,
+          ownerID,
+          leaseMilliseconds: 60_000,
+        })
+        const occurrence = schedulerTargetOccurrenceIdentity(receipt.inboxID)
+        Database.transaction((db) => {
+          db.insert(MessageTable)
+            .values({
+              id: occurrence.messageID,
+              session_id: mission.id,
+              data: {
+                role: "user",
+                author: "orchestrator",
+                extra: {
+                  wake_reason: {
+                    source: "scheduler.message",
+                    eventID: receipt.eventID,
+                    inboxID: receipt.inboxID,
+                  },
+                },
+              } as never,
+              time_created: now + 1,
+              time_updated: now + 1,
+            })
+            .run()
+          settleSchedulerDeliveryInTransaction(db, {
+            inboxID: receipt.inboxID,
+            ownerID,
+            result: { kind: "session_wake", message_id: occurrence.messageID },
+          })
+        })
+
+        const resumed: string[] = []
+        using _wakeLoop = SessionWake.TestHooks.installWakeLoopExecutor(async ({ messageID }) => {
+          resumed.push(messageID)
+        })
+        let closingEventID = ""
+        const closed = await closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.abort",
+          requestID: "request-close-delivered-wake",
+          close: async () => {
+            closingEventID = currentMissionExecutionClosure(mission.id)!.eventID
+            await drainSchedulerMessagesForCurrentProject()
+          },
+        })
+        expect(closed).toMatchObject({ missionID, sessionID: mission.id, state: "closed" })
+        expect(resumed).toEqual([])
+        expect(requireSchedulerDelivery(receipt.inboxID)).toMatchObject({
+          status: "delivered",
+          deliveryResult: {
+            kind: "mission_wake_closed",
+            message_id: occurrence.messageID,
+            closure_event_id: closingEventID,
+          },
+        })
+        expect(ProtocolStore.requireEvent(closingEventID)).toMatchObject({
+          type: "mission.execution.closure",
+          payload: { state: "closing", operationID: closed.operationID },
+        })
+        expect(listUnansweredSchedulerSessionWakes(Instance.project.id)).toEqual([])
+        expect(listPendingSchedulerProjectIDs()).toEqual([])
       },
     })
   })

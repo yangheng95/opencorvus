@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import { DefaultLLMActivityPolicy, chunkHeartbeatKind, withLLMActivity, type LLMActivityEvent } from "@/llm/activity"
 import { abortableIterable } from "@/util/stream-activity"
+import { ProviderAuthRequiredError } from "@/provider/auth-required-error"
 
 const policy = {
   ...DefaultLLMActivityPolicy,
@@ -20,6 +21,28 @@ function waitForAbort(signal: AbortSignal): Promise<never> {
 }
 
 describe("LLM semantic activity", () => {
+  test("terminates a typed missing Provider credential after one attempt", async () => {
+    const events: LLMActivityEvent[] = []
+    let attempts = 0
+    await expect(
+      withLLMActivity(
+        { sessionID: "session-auth-required", provider: "openai", model: "gpt-5.6-terra" },
+        policy,
+        new AbortController().signal,
+        async () => {
+          attempts += 1
+          throw new ProviderAuthRequiredError({
+            providerID: "openai",
+            message: "OpenAI Codex OAuth credential is required",
+          })
+        },
+        (event) => events.push(event),
+      ),
+    ).rejects.toMatchObject({ name: "LLMActivityError", cls: "auth_required", attempts: 0 })
+    expect(attempts).toBe(1)
+    expect(events.filter((event) => event.type === "retry")).toEqual([])
+    expect(events.at(-1)).toMatchObject({ type: "terminal", outcome: "failed", cls: "auth_required" })
+  })
   test("lets the idle authority preempt an immediately resolving no-op provider stream", async () => {
     const events: LLMActivityEvent[] = []
     let attempts = 0

@@ -92,6 +92,13 @@ export const ProtocolInboxDeliveryResult = z.discriminatedUnion("kind", [
     .strict(),
   z
     .object({
+      kind: z.literal("mission_wake_closed"),
+      message_id: Identifier.schema("message"),
+      closure_event_id: Identifier.schema("protocol_event"),
+    })
+    .strict(),
+  z
+    .object({
       kind: z.literal("dead_letter"),
       error_name: z.string().min(1),
       message: z.string().min(1),

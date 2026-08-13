@@ -13,6 +13,7 @@ import {
   missionAbortRequest,
   settleOperationWithinDeadline,
   settleFailureAfterBoundedAbort,
+  settleEvolutionRuntimeBeforeCredentials,
   selectRandomEvolutionTarget,
   summarizeEvolutionRequests,
   summarizeEvolutionEvidence,
@@ -440,39 +441,41 @@ async function settleRunResources() {
   resourceSettlementState.runtimeDisposed = disposeRuntime === undefined
   resourceSettlementState.isolatedAuthRemoved = !isolatedAuthCopied
   resourceSettlementOperation = (async () => {
-    const failures: unknown[] = []
-    const settle = async (operation: () => Promise<void>, completed: () => void) => {
-      try {
-        await operation()
-        completed()
-      } catch (error) {
-        failures.push(error)
+    const ownedDisposal = disposeRuntime
+    const result = await settleEvolutionRuntimeBeforeCredentials({
+      onRuntimeDisposed: () => {
+        resourceSettlementState.runtimeDisposed = true
+      },
+      onCredentialsRemoved: () => {
+        resourceSettlementState.isolatedAuthRemoved = true
+      },
+      ...(ownedDisposal
+        ? {
+            disposeRuntime: async () => {
+              await ownedDisposal()
+              if (disposeRuntime === ownedDisposal) disposeRuntime = undefined
+            },
+          }
+        : {}),
+      ...(isolatedAuthCopied
+        ? {
+            removeCredentials: async () => {
+              await fs.rm(isolatedAuthPath)
+              isolatedAuthCopied = false
+            },
+          }
+        : {}),
+    })
+    if (result.runtimeDisposed) {
+      if (ownedDisposal && disposeRuntime === ownedDisposal) disposeRuntime = undefined
+      resourceSettlementState.runtimeDisposed = true
+    }
+    if (result.credentialsRemoved) {
+      if (isolatedAuthCopied) {
+        isolatedAuthCopied = false
       }
+      resourceSettlementState.isolatedAuthRemoved = true
     }
-    const operations: Promise<void>[] = []
-    if (disposeRuntime) {
-      const ownedDisposal = disposeRuntime
-      operations.push(
-        settle(ownedDisposal, () => {
-          if (disposeRuntime === ownedDisposal) disposeRuntime = undefined
-          resourceSettlementState.runtimeDisposed = true
-        }),
-      )
-    }
-    if (isolatedAuthCopied) {
-      operations.push(
-        settle(
-          () => fs.rm(isolatedAuthPath),
-          () => {
-            isolatedAuthCopied = false
-            resourceSettlementState.isolatedAuthRemoved = true
-          },
-        ),
-      )
-    }
-    await Promise.all(operations)
-    if (failures.length === 1) throw failures[0]
-    if (failures.length > 1) throw new AggregateError(failures, "Evolution E2E resource settlement failed")
     return resourceSettlementState
   })()
   return resourceSettlementOperation

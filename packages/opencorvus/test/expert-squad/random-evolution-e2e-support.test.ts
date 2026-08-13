@@ -1,4 +1,3 @@
-
 import { describe, expect, test } from "bun:test"
 import { EngineArtifactEnvelopeSchema, EvolutionArtifactSchemas } from "@opencorvus-ai/plugin"
 import { deriveComparisonRecommendation } from "../../../../expert-squads/builtin/evolution-lab/lib/evolution-lab/comparison"
@@ -11,6 +10,7 @@ import {
   missionAbortRequest,
   settleOperationWithinDeadline,
   settleFailureAfterBoundedAbort,
+  settleEvolutionRuntimeBeforeCredentials,
   observeActivityDeadline,
   selectRandomEvolutionTarget,
   summarizeEvolutionRequests,
@@ -66,6 +66,58 @@ describe("random Expert Squad evolution controller contracts", () => {
       },
       events: ["cleanup-started"],
     })
+  })
+
+  test("settles runtime ownership before removing isolated Provider credentials", async () => {
+    const events: string[] = []
+    let releaseRuntime!: () => void
+    const runtimeBarrier = new Promise<void>((resolve) => (releaseRuntime = resolve))
+    const settlement = settleEvolutionRuntimeBeforeCredentials({
+      disposeRuntime: async () => {
+        events.push("runtime-started")
+        await runtimeBarrier
+        events.push("runtime-disposed")
+      },
+      removeCredentials: async () => {
+        events.push("credentials-removed")
+      },
+    })
+    await Promise.resolve()
+    expect(events).toEqual(["runtime-started"])
+    releaseRuntime()
+    await expect(settlement).resolves.toEqual({ runtimeDisposed: true, credentialsRemoved: true })
+    expect(events).toEqual(["runtime-started", "runtime-disposed", "credentials-removed"])
+
+    const failure = new Error("runtime remained active")
+    const failedEvents: string[] = []
+    await expect(
+      settleEvolutionRuntimeBeforeCredentials({
+        disposeRuntime: async () => {
+          throw failure
+        },
+        removeCredentials: async () => {
+          failedEvents.push("credentials-removed")
+        },
+      }),
+    ).rejects.toBe(failure)
+    expect(failedEvents).toEqual([])
+
+    const partialState = { runtimeDisposed: false, credentialsRemoved: false }
+    await expect(
+      settleEvolutionRuntimeBeforeCredentials({
+        disposeRuntime: async () => undefined,
+        removeCredentials: async () => {
+          throw new Error("credential removal failed")
+        },
+        onRuntimeDisposed: () => {
+          partialState.runtimeDisposed = true
+        },
+        onCredentialsRemoved: () => {
+          partialState.credentialsRemoved = true
+        },
+      }),
+    ).rejects.toThrow("credential removal failed")
+    expect(partialState).toEqual({ runtimeDisposed: true, credentialsRemoved: false })
   })
 
   test("observes the post-abort Mission status before settling failure resources", async () => {

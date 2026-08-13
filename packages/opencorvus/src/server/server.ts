@@ -46,6 +46,7 @@ export namespace Server {
   const DEFAULT_RUNTIME_SETTLEMENT_INACTIVITY_TIMEOUT_MILLISECONDS = 60_000
   let runtimeSettlementInactivityTimeoutMilliseconds = DEFAULT_RUNTIME_SETTLEMENT_INACTIVITY_TIMEOUT_MILLISECONDS
   let runtimeHandoffCommitFailuresForTest = 0
+  let listenerStopFailuresForTest = 0
   type PendingRuntimeRollbackReceipt = {
     label: string
     receipt: () => Promise<void>
@@ -55,6 +56,7 @@ export namespace Server {
   }
   const pendingRuntimeRollbackReceipts = new Set<PendingRuntimeRollbackReceipt>()
   let runtimeRollbackReceiptForTest: (() => Promise<void>) | undefined
+  let beforeRequestForTest: ((request: Request) => void | Promise<void>) | undefined
 
   export class RuntimeRollbackRecoveryInactivityError extends Error {
     override readonly name = "RuntimeRollbackRecoveryInactivityError"
@@ -146,7 +148,11 @@ export namespace Server {
 
   export async function settleCurrentProcessExecution(
     reason: string,
-    options: { disposeInstances: () => Promise<void>; runtimeInactivityTimeoutMilliseconds?: number },
+    options: {
+      disposeInstances: () => Promise<void>
+      runtimeInactivityTimeoutMilliseconds?: number
+      onRuntimeCancellationRequested?: () => void
+    },
   ) {
     const settlementInactivityTimeoutMilliseconds =
       options.runtimeInactivityTimeoutMilliseconds ?? runtimeSettlementInactivityTimeoutMilliseconds
@@ -277,6 +283,7 @@ export namespace Server {
         ],
         new Error(reason),
       )
+      options.onRuntimeCancellationRequested?.()
       const { Bus } = await import("../bus")
       busSettlementGate = Bus.acquireProcessSettlementGate()
       settlementGates.push(busSettlementGate)
@@ -489,6 +496,15 @@ export namespace Server {
   }
 
   export const TestHooks = {
+    installBeforeRequest(hook: (request: Request) => void | Promise<void>): Disposable {
+      if (beforeRequestForTest) throw new Error("Server request test hook is already installed")
+      beforeRequestForTest = hook
+      return {
+        [Symbol.dispose]() {
+          if (beforeRequestForTest === hook) beforeRequestForTest = undefined
+        },
+      }
+    },
     installRuntimeRollbackReceipt(receipt: () => Promise<void>): Disposable {
       if (runtimeRollbackReceiptForTest) throw new Error("Runtime rollback receipt test hook is already installed")
       runtimeRollbackReceiptForTest = receipt
@@ -504,6 +520,15 @@ export namespace Server {
       return {
         [Symbol.dispose]() {
           runtimeHandoffCommitFailuresForTest = previous
+        },
+      }
+    },
+    failNextListenerStop(attempts: number): Disposable {
+      const previous = listenerStopFailuresForTest
+      listenerStopFailuresForTest = attempts
+      return {
+        [Symbol.dispose]() {
+          listenerStopFailuresForTest = previous
         },
       }
     },
@@ -781,6 +806,7 @@ export namespace Server {
           return basicAuth({ username, password })(c, next)
         })
         .use(async (c, next) => {
+          await beforeRequestForTest?.(c.req.raw)
           const skipLogging = c.req.path === "/log" || c.req.path.startsWith("/log/")
           const id = requestID(c)
           c.header("x-opencorvus-request-id", id)
@@ -1018,6 +1044,10 @@ export namespace Server {
             }
           }
           try {
+            if (listenerStopFailuresForTest > 0) {
+              listenerStopFailuresForTest -= 1
+              throw new Error("injected server listener stop failure")
+            }
             await originalStop(closeActiveConnections)
             listenerStopped = true
           } catch (error) {
@@ -1051,10 +1081,33 @@ export namespace Server {
       server.stop = (closeActiveConnections?: boolean) => {
         if (stopOperation) return stopOperation
         const operation = (async () => {
-          await quiesce(closeActiveConnections)
-          const terminated = await settleCurrentProcessExecution("Server.stop graceful runtime shutdown", {
-            disposeInstances: () => Instance.disposeAll(),
+          let confirmRuntimeCancellation!: () => void
+          let failRuntimeCancellation!: (error: unknown) => void
+          const runtimeCancellationRequested = new Promise<void>((resolve, reject) => {
+            confirmRuntimeCancellation = resolve
+            failRuntimeCancellation = reject
           })
+          const termination = settleCurrentProcessExecution("Server.stop graceful runtime shutdown", {
+            disposeInstances: () => Instance.disposeAll(),
+            onRuntimeCancellationRequested: confirmRuntimeCancellation,
+          })
+          void termination.catch(failRuntimeCancellation)
+          await runtimeCancellationRequested
+          try {
+            await quiesce(closeActiveConnections)
+          } catch (quiesceError) {
+            const failures: unknown[] = [quiesceError]
+            try {
+              const terminated = await termination
+              await terminated.releaseHandoff(false)
+            } catch (settlementError) {
+              failures.push(settlementError)
+            }
+            throw failures.length === 1
+              ? failures[0]
+              : new AggregateError(failures, "Server listener quiesce and runtime settlement rollback failed")
+          }
+          const terminated = await termination
           try {
             await releaseOwnership(() => terminated.releaseHandoff(true))
           } catch (error) {

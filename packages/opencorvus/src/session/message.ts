@@ -9,6 +9,7 @@ import { Snapshot } from "@/snapshot"
 import { SnapshotEmptyTreeError, SnapshotIntegrityError } from "@/snapshot/errors"
 import { fn } from "@/util/fn"
 import { ProviderError } from "@/provider/error"
+import { ProviderAuthRequiredError } from "@/provider/auth-required-error"
 import { type SystemError } from "bun"
 import type { Provider } from "@/provider/provider"
 import { ProviderTransform } from "@/provider/transform"
@@ -612,9 +613,7 @@ export namespace Message {
 
   export function compactionContinuationTextParts(parts: readonly Part[]): TextPart[] {
     const finalStepStart = parts.findLastIndex((part) => part.type === "step-start")
-    return parts
-      .slice(finalStepStart + 1)
-      .filter((part): part is TextPart => part.type === "text")
+    return parts.slice(finalStepStart + 1).filter((part): part is TextPart => part.type === "text")
   }
 
   export const VisiblePart = z
@@ -1680,6 +1679,14 @@ export namespace Message {
           {
             providerID: ctx.providerID,
             message: e.message,
+          },
+          { cause: e },
+        ).toObject()
+      case ProviderAuthRequiredError.isInstance(e):
+        return new Message.AuthError(
+          {
+            providerID: e.data.providerID,
+            message: e.data.message,
           },
           { cause: e },
         ).toObject()

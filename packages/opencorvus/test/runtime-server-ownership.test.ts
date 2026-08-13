@@ -113,10 +113,7 @@ describe("runtime server database ownership", () => {
     const otherOwnership = RuntimeServerOwnership.acquire({ database: otherDatabase })
     try {
       expect(() =>
-        Server.listenWithOwnedRuntime(
-          { hostname: "127.0.0.1", port: 0, randomPort: true },
-          otherOwnership,
-        ),
+        Server.listenWithOwnedRuntime({ hostname: "127.0.0.1", port: 0, randomPort: true }, otherOwnership),
       ).toThrow(RuntimeServerOwnershipDatabaseMismatchError)
       await RuntimeServerOwnership.releaseWithRetry(otherOwnership)
       const reusableOtherOwnership = RuntimeServerOwnership.acquire({ database: otherDatabase })
@@ -161,7 +158,9 @@ describe("runtime server database ownership", () => {
       const handoff: string[] = []
       using _failure = RuntimeServerOwnership.TestHooks.failNextRelease({ [failure]: 1 })
 
-      await expect(RuntimeServerOwnership.releaseWithRetry(owner, () => handoff.push("committed"), { attempts: 1 })).rejects.toThrow(
+      await expect(
+        RuntimeServerOwnership.releaseWithRetry(owner, () => handoff.push("committed"), { attempts: 1 }),
+      ).rejects.toThrow(
         failure === "filesystemLock"
           ? "injected runtime filesystem lock release failure"
           : "injected runtime owner record move failure",
@@ -226,7 +225,11 @@ describe("runtime server database ownership", () => {
     })
 
     const successor = RuntimeServerOwnership.acquire({ database: otherDatabase })
-    expect({ rollbackCalls, commitAttempts, current: RuntimeServerOwnership.currentOccurrenceID(otherDatabase) }).toEqual({
+    expect({
+      rollbackCalls,
+      commitAttempts,
+      current: RuntimeServerOwnership.currentOccurrenceID(otherDatabase),
+    }).toEqual({
       rollbackCalls: 0,
       commitAttempts: 2,
       current: successor.owner.occurrenceID,
@@ -545,6 +548,67 @@ describe("runtime server database ownership", () => {
     }
   }, 90_000)
 
+  test("requests runtime cancellation before waiting for an active HTTP handler to settle", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-stop-cancellation-order-"))
+    temporaryDirectories.push(root)
+    const home = path.join(root, "home")
+    await import("node:fs/promises").then((fs) => fs.mkdir(home))
+    const previousHome = process.env.OPENCORVUS_TEST_HOME
+    process.env.OPENCORVUS_TEST_HOME = home
+    const events: string[] = []
+    let requestStarted!: () => void
+    const started = new Promise<void>((resolve) => (requestStarted = resolve))
+    using _requestBarrier = Server.TestHooks.installBeforeRequest(async () => {
+      const reservation = RuntimeExecutionSettlement.reserve("session_wake_loop", "active-http-handler")
+      requestStarted()
+      await new Promise<void>((resolve) => {
+        reservation.onCancel(() => {
+          events.push("cancellation_requested")
+          resolve()
+        })
+      })
+      reservation.settle()
+      events.push("request_settled")
+    })
+    const server = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
+    try {
+      const request = fetch(new URL("/global/health", server.url))
+      await started
+      await server.stop(true)
+      await request.catch(() => undefined)
+      events.push("stop_completed")
+      expect(events).toEqual(["cancellation_requested", "request_settled", "stop_completed"])
+    } finally {
+      await server.stop(true).catch(() => undefined)
+      if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
+      else process.env.OPENCORVUS_TEST_HOME = previousHome
+    }
+  }, 60_000)
+
+  test("rolls back the exact runtime settlement after listener quiesce fails and then retries", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-stop-listener-retry-"))
+    temporaryDirectories.push(root)
+    const home = path.join(root, "home")
+    await import("node:fs/promises").then((fs) => fs.mkdir(home))
+    const previousHome = process.env.OPENCORVUS_TEST_HOME
+    process.env.OPENCORVUS_TEST_HOME = home
+    const failure = Server.TestHooks.failNextListenerStop(1)
+    const server = Server.listen({ hostname: "127.0.0.1", port: 0, randomPort: true })
+    try {
+      await expect(server.stop(true)).rejects.toThrow("injected server listener stop failure")
+      failure[Symbol.dispose]()
+      RuntimeExecutionSettlement.reserve("session_wake_loop", "listener-stop-rollback-admission").settle()
+      await server.stop(true)
+      const successor = RuntimeServerOwnership.acquire({ database: Database.Path() })
+      successor.release()
+    } finally {
+      failure[Symbol.dispose]()
+      await server.stop(true).catch(() => undefined)
+      if (previousHome === undefined) delete process.env.OPENCORVUS_TEST_HOME
+      else process.env.OPENCORVUS_TEST_HOME = previousHome
+    }
+  }, 60_000)
+
   test("restores a quiesced listener under the retained owner after persistent release failure", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "opencorvus-runtime-release-rollback-"))
     temporaryDirectories.push(root)
@@ -652,10 +716,7 @@ describe("runtime server database ownership", () => {
     try {
       await expect(bootstrap(project, async () => "first-result")).rejects.toMatchObject({
         name: "AggregateError",
-        errors: [
-          expect.objectContaining({ message: "injected runtime owner record move failure" }),
-          rollbackError,
-        ],
+        errors: [expect.objectContaining({ message: "injected runtime owner record move failure" }), rollbackError],
       })
       const retainedOccurrence = RuntimeServerOwnership.currentOccurrenceID(Database.Path())
       expect(retainedOccurrence).toEqual(expect.any(String))
@@ -867,5 +928,4 @@ describe("runtime server database ownership", () => {
       else process.env.OPENCORVUS_TEST_HOME = previousHome
     }
   }, 60_000)
-
 })

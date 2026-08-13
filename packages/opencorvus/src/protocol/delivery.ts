@@ -573,7 +573,7 @@ function requireDeliveryResultOccurrence(
   result: z.infer<typeof ProtocolInboxDeliveryResult>,
 ) {
   if (result.kind === "dead_letter") return
-  if (result.kind === "mission_closed") {
+  if (result.kind === "mission_closed" || result.kind === "mission_wake_closed") {
     const closure = requireMissionExecutionClosureEvent(result.closure_event_id)
     if (
       inbox.actor !== "session" ||
@@ -584,6 +584,19 @@ function requireDeliveryResultOccurrence(
         message: `Scheduler inbox ${inbox.id} mission_closed result does not name an active closure for its recipient Mission Session.`,
         eventID: inbox.envelope_id,
       })
+    }
+    if (result.kind === "mission_wake_closed") {
+      const previous = ProtocolInboxDeliveryResult.safeParse(inbox.delivery_result)
+      if (
+        !previous.success ||
+        previous.data.kind !== "session_wake" ||
+        previous.data.message_id !== result.message_id
+      ) {
+        throw new SchedulerMessageConflictError({
+          message: `Scheduler inbox ${inbox.id} mission_wake_closed result does not preserve its exact delivered Mission wake Message.`,
+          eventID: inbox.envelope_id,
+        })
+      }
     }
     return
   }
@@ -951,6 +964,38 @@ export function settleSchedulerDeliveryInTransaction(
   return parseDeliveryRow(updated)
 }
 
+export function settleUnansweredSchedulerMissionWakeForClosure(input: {
+  inboxID: string
+  messageID: string
+  closureEventID: string
+  now?: number
+}) {
+  const now = input.now ?? Date.now()
+  return Database.immediateTransaction((db) => {
+    const current = db.select().from(ProtocolInboxTable).where(eq(ProtocolInboxTable.id, input.inboxID)).get()
+    if (!current) throw new Error(`Scheduler delivery not found: ${input.inboxID}`)
+    const result = ProtocolInboxDeliveryResult.parse({
+      kind: "mission_wake_closed",
+      message_id: input.messageID,
+      closure_event_id: input.closureEventID,
+    })
+    requireDeliveryResultOccurrence(db, current, result)
+    const updated = db
+      .update(ProtocolInboxTable)
+      .set({
+        delivery_result: result,
+        time_completed: now,
+        last_error: null,
+        time_updated: now,
+      })
+      .where(and(eq(ProtocolInboxTable.id, input.inboxID), eq(ProtocolInboxTable.status, "delivered")))
+      .returning()
+      .get()
+    if (!updated) throw new Error(`Scheduler Mission wake ${input.inboxID} is not delivered`)
+    return parseDeliveryRow(updated)
+  })
+}
+
 export function renewSchedulerDeliveryLease(input: {
   inboxID: string
   ownerID: string
@@ -1291,12 +1336,14 @@ export function nextSchedulerDeliveryDueAt(projectID: string): number | undefine
 }
 
 export function listUnansweredSchedulerSessionWakes(projectID: string): Array<{
+  inboxID: string
   sessionID: string
   messageID: string
 }> {
   return Database.use((db) =>
     db
       .select({
+        inboxID: ProtocolInboxTable.id,
         sessionID: ProtocolInboxTable.actor_id,
         deliveryResult: ProtocolInboxTable.delivery_result,
         sequence: ProtocolEventTable.seq,
@@ -1327,7 +1374,7 @@ export function listUnansweredSchedulerSessionWakes(projectID: string): Array<{
       .flatMap((row) => {
         const result = row.deliveryResult ? ProtocolInboxDeliveryResult.safeParse(row.deliveryResult) : undefined
         return result?.success && result.data.kind === "session_wake"
-          ? [{ sessionID: row.sessionID, messageID: result.data.message_id }]
+          ? [{ inboxID: row.inboxID, sessionID: row.sessionID, messageID: result.data.message_id }]
           : []
       }),
   )

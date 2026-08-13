@@ -73,14 +73,45 @@ export type IsolatedProviderHandoff = Readonly<{
   models: boolean
 }>
 
-export function isolatedProviderHandoff(input: {
-  copyAuth: boolean
-  copyModels: boolean
-}): IsolatedProviderHandoff {
+export function isolatedProviderHandoff(input: { copyAuth: boolean; copyModels: boolean }): IsolatedProviderHandoff {
   return Object.freeze({
     auth: input.copyAuth,
     models: input.copyModels,
   })
+}
+
+export async function settleEvolutionRuntimeBeforeCredentials(input: {
+  disposeRuntime?: () => Promise<void>
+  removeCredentials?: () => Promise<void>
+  onRuntimeDisposed?: () => void
+  onCredentialsRemoved?: () => void
+}) {
+  const state = {
+    runtimeDisposed: input.disposeRuntime === undefined,
+    credentialsRemoved: input.removeCredentials === undefined,
+  }
+  const failures: unknown[] = []
+  if (input.disposeRuntime) {
+    try {
+      await input.disposeRuntime()
+      state.runtimeDisposed = true
+      input.onRuntimeDisposed?.()
+    } catch (error) {
+      failures.push(error)
+    }
+  }
+  if (input.removeCredentials && state.runtimeDisposed) {
+    try {
+      await input.removeCredentials()
+      state.credentialsRemoved = true
+      input.onCredentialsRemoved?.()
+    } catch (error) {
+      failures.push(error)
+    }
+  }
+  if (failures.length === 1) throw failures[0]
+  if (failures.length > 1) throw new AggregateError(failures, "Evolution E2E resource settlement failed")
+  return state
 }
 
 export function evolutionTargetLineageInstructions(): readonly string[] {
@@ -117,11 +148,7 @@ export function summarizeConversationFailureTransitions(rows: readonly Conversat
       raw_sha256: createHash("sha256").update(raw).digest("hex"),
       message_finish: typeof message.finish === "string" ? message.finish : undefined,
       failure_name:
-        typeof failure.name === "string"
-          ? failure.name
-          : typeof error.name === "string"
-            ? error.name
-            : undefined,
+        typeof failure.name === "string" ? failure.name : typeof error.name === "string" ? error.name : undefined,
       failure_message:
         typeof failure.message === "string"
           ? failure.message.slice(0, 1_000)
@@ -155,7 +182,10 @@ export function summarizeArtifactFailureTransitions(
         payload.status === "failed"
       )
     })
-    .sort((left, right) => left.catalog_revision - right.catalog_revision || left.artifact_id.localeCompare(right.artifact_id))
+    .sort(
+      (left, right) =>
+        left.catalog_revision - right.catalog_revision || left.artifact_id.localeCompare(right.artifact_id),
+    )
     .map((row): ArtifactFailureTransition => {
       const payload = recordValue(row.payload)
       const delivery = recordValue(payload.delivery_result)
@@ -220,7 +250,10 @@ export function summarizeEvolutionRequests(facts: readonly EvolutionRequestFact[
   }
 }
 
-export function taskRoute(taskID: string, operation?: "artifact-read" | "interactions" | "transcript" | "turn-artifacts") {
+export function taskRoute(
+  taskID: string,
+  operation?: "artifact-read" | "interactions" | "transcript" | "turn-artifacts",
+) {
   const base = `/task/${encodeURIComponent(taskID)}`
   return operation ? `${base}/${operation}` : base
 }
