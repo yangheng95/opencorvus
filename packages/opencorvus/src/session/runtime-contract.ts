@@ -18,6 +18,7 @@ import {
 } from "@/agent/projected-agent-work-scope"
 import type { MCP } from "@/mcp"
 import type { HarnessProjection } from "@/capability/harness-projection"
+import { bindToolExecutionMode, toolExecutionModeOf } from "@/tool/execution-mode"
 
 export type SessionRuntimeContractKind = "stage-attempt" | "orchestrator-wake"
 
@@ -736,6 +737,7 @@ function snapshotToolRecord(tools: Readonly<Record<string, AITool>>): Readonly<R
   const entries = Object.entries(tools).map(([toolID, tool]) => {
     if (!tool || typeof tool !== "object") throw new Error(`Runtime tool ${JSON.stringify(toolID)} must be an object`)
     const snapshot = Object.create(Object.getPrototypeOf(tool), Object.getOwnPropertyDescriptors(tool)) as AITool
+    bindToolExecutionMode(snapshot as object, toolExecutionModeOf(tool as object))
     return [toolID, Object.freeze(snapshot)] as const
   })
   return Object.freeze(Object.fromEntries(entries))

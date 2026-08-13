@@ -284,6 +284,35 @@ function assertCurrentDataIntegrity(
   db: SQLiteBunDatabase<typeof ApplicationSchema>,
   dbPath: string,
 ): void {
+  const legacyRecoverableToolControl = queryAllFinalized<{ attempt_id: string }>(
+    sqlite,
+    `SELECT result.attempt_id
+     FROM permission_execution_result AS result
+     INNER JOIN part
+       ON part.id = result.tool_part_id
+      AND part.session_id = result.session_id
+     WHERE CASE
+       WHEN json_valid(part.data) = 0 OR json_valid(result.result) = 0 THEN 0
+       WHEN json_extract(part.data, '$.type') <> 'tool' THEN 0
+       WHEN json_extract(part.data, '$.state.status') NOT IN ('pending', 'running') THEN 0
+       WHEN json_extract(result.result, '$.value.metadata.opencorvusParkAfterToolResult') IS NOT 1 THEN 0
+       WHEN json_type(result.result, '$.value.metadata.opencorvusToolResultControl') IS NOT NULL THEN 0
+       ELSE 1
+     END = 1
+     ORDER BY result.attempt_id
+     LIMIT 1`,
+  )[0]
+  if (legacyRecoverableToolControl) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains a pre-protocol recoverable Tool result ${legacyRecoverableToolControl.attempt_id} at ${dbPath}. ` +
+        "Its immutable turn-control result cannot be reconstructed; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.toolResultControl",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
   const legacyRequirementSet = queryAllFinalized<{ id: string }>(
     sqlite,
     `SELECT id

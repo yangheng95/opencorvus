@@ -120,6 +120,20 @@ import { computerRuntimeScopeIdentity } from "@/mcp/computer/runtime-scope"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contract"
 import { coordinationHandoffPrompt } from "@/prompt/fragments/coordination-handoff"
+import { resolvePinnedTaskSchedulerTurnProjection } from "@/engine/task-package-projection"
+import { requireTask } from "@/engine/store"
+import { createOrchestratorTools } from "@/orchestrator/tools"
+import {
+  assertToolResultControlPreserved,
+  toolResultControl,
+  toolResultDisposition,
+} from "./tool-result-control"
+import {
+  bindToolExecutionMode,
+  ToolTurnExecutionCoordinator,
+  toolExecutionModeOf,
+  type ToolExecutionMode,
+} from "@/tool/execution-mode"
 import {
   materializeBoundStageTool,
   internalStageToolBindingOf,
@@ -175,6 +189,13 @@ export namespace SessionLoop {
     Record<string, AITool>,
     (availableToolNames: Iterable<string>) => Promise<ResolvedSkillSurface | undefined>
   >()
+  const resolvedToolExecutionSurfaces = new WeakMap<
+    Record<string, AITool>,
+    {
+      coordinator: ToolTurnExecutionCoordinator
+      coordinatedTools: WeakSet<object>
+    }
+  >()
 
   function strictTool(input: AITool): AITool {
     return { ...(input as StrictAITool), strict: true } as AITool
@@ -191,6 +212,32 @@ export namespace SessionLoop {
 
   export function skillSurfaceForResolvedTools(tools: Record<string, AITool>) {
     return resolvedToolSkillSurfaces.get(tools)
+  }
+
+  /**
+   * Bind every executable on the final provider-visible Tool surface to the
+   * one assistant-occurrence coordinator created by resolveTools(). The
+   * surface is mutable while StructuredOutput and Skill tools are finalized,
+   * so callers repeat this idempotent operation after each finalization step.
+   */
+  export function coordinateResolvedToolExecutionSurface(tools: Record<string, AITool>): void {
+    const surface = resolvedToolExecutionSurfaces.get(tools)
+    if (!surface) throw new Error("Resolved Tool surface is missing its execution coordinator")
+    for (const [name, current] of Object.entries(tools)) {
+      if (surface.coordinatedTools.has(current as object)) continue
+      const execute = current.execute
+      if (!execute) continue
+      const mode = toolExecutionModeOf(current as object)
+      const coordinated = {
+        ...current,
+        execute(args: unknown, options: ToolExecutionOptions) {
+          return surface.coordinator.run(mode, () => execute(args, options))
+        },
+      } as AITool
+      bindToolExecutionMode(coordinated as object, mode)
+      surface.coordinatedTools.add(coordinated as object)
+      tools[name] = coordinated
+    }
   }
 
   export type SessionRuntimeContractKind = RuntimeContractKind
@@ -745,6 +792,7 @@ export namespace SessionLoop {
             toModelOutput: (args: unknown) => Message.toolResultToModelOutput(args, input.model),
           }),
     } as AITool
+    bindToolExecutionMode(prepared as object, toolExecutionModeOf(input.tool as object))
     if (log.enabled("DEBUG")) {
       const schemaPayload = asSchema((prepared as { inputSchema?: unknown }).inputSchema as never).jsonSchema
       const rootType =
@@ -1274,8 +1322,8 @@ export namespace SessionLoop {
       messages: input.msgs,
       config,
     })
-    if (input.lastUser.format?.type === "json_schema") {
-      tools["StructuredOutput"] = prepareProviderTool({
+    const structuredOutputTool = input.lastUser.format?.type === "json_schema"
+      ? prepareProviderTool({
         name: "StructuredOutput",
         source: "structured",
         model: input.model,
@@ -1286,8 +1334,16 @@ export namespace SessionLoop {
           },
         }),
       })
-    }
-    const skillSurface = await finalizeResolvedToolSkillSurface(tools, Object.keys(tools))
+      : undefined
+    const skillSurface = await finalizeResolvedToolSkillSurface(
+      tools,
+      structuredOutputTool ? [...Object.keys(tools), "StructuredOutput"] : Object.keys(tools),
+    )
+    coordinateResolvedToolExecutionSurface(tools)
+    // StructuredOutput encodes the assistant response. It is not an executable
+    // effect, permission occurrence, or turn-control producer, so it is added
+    // only after the final executable Tool surface has been coordinated.
+    if (structuredOutputTool) tools.StructuredOutput = structuredOutputTool
     if (input.step === 1) {
       await SessionSummary.summarize({
         sessionID: input.sessionID,
@@ -2328,6 +2384,10 @@ export namespace SessionLoop {
   }) {
     using _ = log.time("resolveTools")
     const tools: Record<string, AITool> = {}
+    resolvedToolExecutionSurfaces.set(tools, {
+      coordinator: new ToolTurnExecutionCoordinator(),
+      coordinatedTools: new WeakSet<object>(),
+    })
     const toolSources = new Map<string, ProviderToolSource>()
     const executionPermission = CapabilityRules.merge(input.agent.permission, input.session.permission)
     const runtimeContract = getSessionRuntimeContract(input.session.id)
@@ -2417,6 +2477,7 @@ export namespace SessionLoop {
           ? Execute
           : never
         : never
+      executionMode?: ToolExecutionMode
     }) => {
       const registryTool = tool({
         id: item.id as any,
@@ -2490,6 +2551,7 @@ export namespace SessionLoop {
               projectID: invocationIdentity.projectID,
               value: rawResult,
             })
+            const hostControl = toolResultControl(result.metadata)
             const materializedAttachments = await materializeToolResultAttachments(result.attachments)
             const output = {
               ...result,
@@ -2520,6 +2582,7 @@ export namespace SessionLoop {
               },
               output,
             )
+            assertToolResultControlPreserved(hostControl, output.metadata)
             return materializeToolResultInlineAttachments({
               projectID: invocationIdentity.projectID,
               value: output,
@@ -2527,12 +2590,14 @@ export namespace SessionLoop {
           })
         },
       })
-      tools[item.id] = prepareProviderTool({
+      const preparedRegistryTool = prepareProviderTool({
         name: item.id,
         source: "registry",
         model: input.model,
         tool: registryTool,
       })
+      bindToolExecutionMode(preparedRegistryTool as object, item.executionMode ?? "ordinary")
+      tools[item.id] = preparedRegistryTool
       toolSources.set(item.id, "registry")
     }
 
@@ -2974,6 +3039,15 @@ export namespace SessionLoop {
       })
     }
 
+    coordinateResolvedToolExecutionSurface(tools)
+    const finalizeWithCoordination = resolvedToolSkillFinalizers.get(tools)
+    if (finalizeWithCoordination) {
+      resolvedToolSkillFinalizers.set(tools, async (availableToolNames) => {
+        const surface = await finalizeWithCoordination(availableToolNames)
+        coordinateResolvedToolExecutionSurface(tools)
+        return surface
+      })
+    }
     return tools
   }
 
@@ -3002,24 +3076,52 @@ export namespace SessionLoop {
     if (toolPart.tool !== request.toolName) {
       throw new Error(`Permission continuation ${request.id} Tool changed from ${request.toolName} to ${toolPart.tool}`)
     }
-    if (toolPart.state.status === "completed") return
+    const completedToolControl =
+      toolPart.state.status === "completed" ? toolResultControl(toolPart.state.metadata) : undefined
+    const assistantWasCompleted = assistant.time.completed !== undefined
     if (toolPart.state.status === "error") {
       throw new Error(`Permission continuation ${request.id} ToolPart is already terminal with an error`)
     }
     if (!assistant.parentID) {
       throw new Error(`Permission continuation ${request.id} assistant has no parent user message`)
     }
+    if (
+      toolPart.state.status === "completed" &&
+      toolResultDisposition(completedToolControl) !== "continue"
+    ) {
+      if (!assistantWasCompleted) {
+        assistant.finish = "tool-calls"
+        assistant.time.completed = Date.now()
+        await Session.updateMessage(assistant)
+      }
+      return
+    }
     const persistedUser = await MessageStore.get({ sessionID: request.sessionID, messageID: assistant.parentID })
     if (persistedUser.info.role !== "user") {
       throw new Error(`Permission continuation ${request.id} parent ${assistant.parentID} is not a user message`)
     }
     const config = await EffectiveConfig.effective({ sessionID: request.sessionID })
-    const model = await Provider.getModel(assistant.providerID, assistant.modelID, { config })
     const installedRuntimeContract = SessionRuntimeContractStore.get(request.sessionID)
     const recoveredRuntimeContract = installedRuntimeContract
       ? undefined
-      : await reconstructProjectedWorkerPermissionRuntime({ session, request, assistant, config })
+      : await reconstructProjectedPermissionRuntime({ session, request, assistant, config })
     await using _recoveredRuntime = recoveredRuntimeContract
+    if (toolPart.state.status === "completed") {
+      if (!assistantWasCompleted) {
+        assistant.finish = "tool-calls"
+        assistant.time.completed = Date.now()
+        await Session.updateMessage(assistant)
+      }
+      if (
+        !assistantWasCompleted &&
+        !recoveredRuntimeContract &&
+        toolResultDisposition(completedToolControl) === "continue"
+      ) {
+        await loop({ sessionID: request.sessionID })
+      }
+      return
+    }
+    const model = await Provider.getModel(assistant.providerID, assistant.modelID, { config })
     const messageIdentity = await resolveSessionMessageIdentity({
       session,
       requestedAgentID: assistant.agent,
@@ -3086,7 +3188,7 @@ export namespace SessionLoop {
     // failure must leave the ToolPart open so startup recovery can replay the
     // durable result; it must not rewrite the completed effect as a Tool error.
     const output = normalizeToolResult(raw)
-    await processor.completeRecoveredToolPart({
+    const recoveredControl = await processor.completeRecoveredToolPart({
       toolCallID: request.toolCallID,
       toolInput: toolPart.state.input,
       output: {
@@ -3103,15 +3205,20 @@ export namespace SessionLoop {
     assistant.finish = "tool-calls"
     assistant.time.completed = Date.now()
     await Session.updateMessage(assistant)
-    if (!recoveredRuntimeContract) await loop({ sessionID: request.sessionID })
+    if (!recoveredRuntimeContract && toolResultDisposition(recoveredControl) === "continue") {
+      await loop({ sessionID: request.sessionID })
+    }
   }
 
-  async function reconstructProjectedWorkerPermissionRuntime(input: {
+  async function reconstructProjectedPermissionRuntime(input: {
     session: Session.Info
     request: PermissionAuthority.Request
     assistant: Message.Assistant
     config: Config.Info
   }): Promise<AsyncDisposable | undefined> {
+    if (input.session.kind === "orchestrator" && input.assistant.agent === "orchestrator") {
+      return reconstructProjectedSchedulerPermissionRuntime(input)
+    }
     if (!RuntimeTemplateRegistry.isWorkerSessionKind(input.session.kind)) return undefined
     const descriptor = WorkerTurnDescriptor.latestForSession(input.session.id)
     if (!descriptor) {
@@ -3283,6 +3390,107 @@ export namespace SessionLoop {
     }
   }
 
+  async function reconstructProjectedSchedulerPermissionRuntime(input: {
+    session: Session.Info
+    request: PermissionAuthority.Request
+    assistant: Message.Assistant
+    config: Config.Info
+  }): Promise<AsyncDisposable> {
+    const taskID = taskIDForSession(input.session.id)
+    if (!taskID) {
+      throw new PermissionAuthority.StaleContinuationError(
+        input.request.id,
+        "The Orchestrator Session is no longer bound to a Task",
+      )
+    }
+    const task = requireTask(taskID)
+    if (task.project_id !== input.session.projectID) {
+      throw new PermissionAuthority.StaleContinuationError(
+        input.request.id,
+        "The Orchestrator Session project changed after restart",
+      )
+    }
+    const projectDirectory = await EffectiveConfig.directory({ sessionID: input.session.id })
+    const capabilityProjectDirectory = await EffectiveConfig.capabilityProjectDirectory({ sessionID: input.session.id })
+    const { schedulerCapability, skillProjection } = await resolvePinnedTaskSchedulerTurnProjection({
+      taskID,
+      projectDirectory: capabilityProjectDirectory,
+      config: input.config,
+    })
+    if (
+      schedulerCapability.identity.agentID !== input.assistant.agent ||
+      schedulerCapability.identity.sessionKind !== input.session.kind
+    ) {
+      throw new PermissionAuthority.StaleContinuationError(
+        input.request.id,
+        "The projected scheduler identity changed after restart",
+      )
+    }
+    const selectedModel = await resolveAgentModel("orchestrator", { sessionID: task.session_id ?? undefined })
+    if (
+      selectedModel.providerID !== input.assistant.providerID ||
+      selectedModel.id !== input.assistant.modelID
+    ) {
+      throw new PermissionAuthority.StaleContinuationError(
+        input.request.id,
+        "The projected scheduler model changed after restart",
+      )
+    }
+    const owner = McpRuntime.createScopedConnectionOwner(
+      computerRuntimeScopeIdentity({ ownerKind: "orchestrator", taskID, sessionID: input.session.id }),
+    )
+    try {
+      const rawTools = createOrchestratorTools({
+        taskID,
+        agentSessionID: input.session.id,
+        dispatchAgents: [...skillProjection.schedulerOnlyAgents, ...skillProjection.projectedAgents],
+      }).tools as Record<string, AITool>
+      const projectedTools = await PromptProfileResolver.projectOrchestratorTools(rawTools, schedulerCapability, {
+        taskID,
+        projectDirectory,
+        connectionOwner: owner,
+      })
+      if (!Object.hasOwn(projectedTools, input.request.toolName)) {
+        throw new PermissionAuthority.StaleContinuationError(
+          input.request.id,
+          `The projected scheduler Tool ${input.request.toolName} changed after restart`,
+        )
+      }
+      SessionRuntimeContractStore.set(input.session.id, {
+        identity: {
+          identityKind: "projected-scheduler",
+          sessionID: input.session.id,
+          ...schedulerCapability.identity,
+          expertSquadID: schedulerCapability.expertSquadID,
+          packageRevision: schedulerCapability.packageRevision,
+          taskID,
+          contractKind: "orchestrator-wake",
+          installedAt: Date.now(),
+        },
+        projectedTools,
+        projectedRegistryToolIDs: schedulerCapability.builtInToolIDs,
+        skillProjection,
+        harnessProjection: PromptProfileResolver.schedulerHarnessProjection({
+          taskID,
+          capability: schedulerCapability,
+        }),
+        projectDirectory,
+        includeMcpTools: false,
+        system: [],
+        systemMode: "complete",
+        resources: { mcp: owner },
+      })
+      return {
+        async [Symbol.asyncDispose]() {
+          await SessionRuntimeContractStore.dispose(input.session.id)
+        },
+      }
+    } catch (error) {
+      await owner.close()
+      throw error
+    }
+  }
+
   export function usesExactRuntimeContractTools(contract: SessionRuntimeContract | undefined): boolean {
     if (!contract) return false
     if (contract.identity.agentID === "orchestrator" && contract.identity.contractKind === "orchestrator-wake") {
@@ -3421,7 +3629,7 @@ export namespace SessionLoop {
         messageID: ctx.messageID,
       }))
     }
-    return {
+    const wrappedTool = {
       ...(raw as any),
       async execute(args: unknown, options: unknown) {
         const toolCallID = typeof (options as any)?.toolCallId === "string" ? (options as any).toolCallId : undefined
@@ -3497,6 +3705,8 @@ export namespace SessionLoop {
         }
       },
     } as AITool
+    bindToolExecutionMode(wrappedTool as object, toolExecutionModeOf(raw as object))
+    return wrappedTool
   }
 
   export function createStructuredOutputTool(input: {
