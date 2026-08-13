@@ -114669,6 +114669,9 @@
                                       ],
                                       "type": "string"
                                     },
+                                    "completed": {
+                                      "type": "number"
+                                    },
                                     "created": {
                                       "type": "number"
                                     },
@@ -115075,6 +115078,9 @@
                                       ],
                                       "type": "string"
                                     },
+                                    "completed": {
+                                      "type": "number"
+                                    },
                                     "created": {
                                       "type": "number"
                                     },
@@ -115216,6 +115222,9 @@
                                   "cancelled"
                                 ],
                                 "type": "string"
+                              },
+                              "completed": {
+                                "type": "number"
                               },
                               "created": {
                                 "type": "number"
