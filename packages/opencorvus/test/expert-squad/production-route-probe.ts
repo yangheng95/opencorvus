@@ -1,5 +1,7 @@
 import fs from "node:fs/promises"
+import path from "node:path"
 import { Hono } from "hono"
+import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
 import { Instance } from "../../src/project/instance"
 import { ExpertSquadRoutes } from "../../src/server/routes/expert-squad"
 
@@ -37,6 +39,19 @@ const REPAIRED_SQUADS = [
 
 const projectDirectory = process.argv[2]
 if (!projectDirectory) throw new Error("Production route probe requires an isolated project directory")
+
+const sourceRoot = (id: string) => path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", id)
+
+function projectedSkillCount(manifest: ExpertSquadRegistry.Manifest) {
+  const refs = new Set<string>()
+  for (const projection of [
+    manifest.capability_projection.scheduler,
+    ...Object.values(manifest.capability_projection.agents),
+  ]) {
+    for (const ref of [...projection.default_skill_refs, ...projection.package_skill_refs]) refs.add(ref)
+  }
+  return refs.size
+}
 
 await fs.mkdir(projectDirectory, { recursive: true })
 
@@ -102,13 +117,14 @@ const result = await Instance.provide({
       }
 
       for (const id of EXPERT_SQUAD_IDS) {
+        const source = await ExpertSquadRegistry.loadSourcePackage(sourceRoot(id))
         const market = await requestJson(`market?query=${encodeURIComponent(id)}&limit=20`)
         const marketEntries = market.entries as Array<Record<string, unknown>>
         if (!marketEntries.some((entry) => entry.id === id)) throw new Error(`Market route omitted ${id}`)
 
         const detail = await requestJson(`market/detail?id=${encodeURIComponent(id)}`)
-        if (detail.id !== id || detail.skill_count !== 1) {
-          throw new Error(`Market detail did not expose one saved Skill for ${id}`)
+        if (detail.id !== id || detail.skill_count !== projectedSkillCount(source.manifest)) {
+          throw new Error(`Market detail did not expose every projected Skill for ${id}`)
         }
 
         const installation = await requestJson("install-payload", {
@@ -130,13 +146,24 @@ const result = await Instance.provide({
         const workflows = capability.virtual_workflows as Record<string, Record<string, unknown>>
         const workflow = Object.values(workflows)[0]
         const nodes = (workflow?.nodes ?? {}) as Record<string, Record<string, unknown>>
+        const expectedAgents = source.manifest.capability_projection.agents
+        const expectedWorkflow = Object.values(source.manifest.capability_projection.virtual_workflows)[0]
+        const expectedNodes = expectedWorkflow?.nodes ?? {}
 
-        if (Object.keys(agents).length !== 4) throw new Error(`Production settings omitted workers for ${id}`)
-        if (
-          Object.keys(nodes).length !== 4 ||
-          !Object.values(nodes).some((node) => ((node.depends_on as string[]) ?? []).length >= 2)
-        ) {
-          throw new Error(`Production settings did not expose the parallel-to-join workflow for ${id}`)
+        if (JSON.stringify(Object.keys(agents).sort()) !== JSON.stringify(Object.keys(expectedAgents).sort())) {
+          throw new Error(`Production settings omitted declared workers for ${id}`)
+        }
+        if (JSON.stringify(Object.keys(nodes).sort()) !== JSON.stringify(Object.keys(expectedNodes).sort())) {
+          throw new Error(`Production settings omitted declared workflow nodes for ${id}`)
+        }
+        for (const [nodeID, expectedNode] of Object.entries(expectedNodes)) {
+          const node = nodes[nodeID]
+          if (
+            node?.agent_id !== expectedNode.agent_id ||
+            JSON.stringify(node?.depends_on) !== JSON.stringify(expectedNode.depends_on)
+          ) {
+            throw new Error(`Production settings changed declared workflow authority for ${id}/${nodeID}`)
+          }
         }
 
         projections.push({

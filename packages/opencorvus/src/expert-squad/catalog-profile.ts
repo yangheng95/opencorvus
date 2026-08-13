@@ -82,6 +82,7 @@ function declarationCapabilityProjection(
             label: projection.label,
             ...(projection.description ? { description: projection.description } : {}),
             base_role: projection.base_role,
+            ...(projection.execution_contract ? { execution_contract: projection.execution_contract } : {}),
             ...(projection.prompt ? { prompt: projection.prompt } : {}),
             ...declarationResources(projection),
           },

@@ -149,6 +149,20 @@ describe("Expert Squad catalog index", () => {
     })
   }, 0)
 
+  test("preserves the integrity review execution contract in selected catalog detail", async () => {
+    await using project = await catalogProject()
+    const detail = await PromptProfileResolver.settingsDetail({
+      projectDirectory: project.path,
+      id: "advanced",
+      installationScope: "built_in",
+    })
+
+    expect(detail?.capability_projection.agents["system-integrity-reviewer"]).toMatchObject({
+      base_role: "integrity",
+      execution_contract: "platform_integrity_review",
+    })
+  }, 0)
+
   test("reads full package bodies only for the exact selected installed identity", async () => {
     await using project = await catalogProject()
     const root = ExpertSquadPackageLocations.project(project.path).packagesRoot

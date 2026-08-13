@@ -28,6 +28,17 @@ afterAll(async () => {
 
 const sourceRoot = (id: string) => path.resolve(import.meta.dir, "../../../..", "expert-squads", "builtin", id)
 
+function projectedSkillCount(manifest: ExpertSquadRegistry.Manifest) {
+  const refs = new Set<string>()
+  for (const projection of [
+    manifest.capability_projection.scheduler,
+    ...Object.values(manifest.capability_projection.agents),
+  ]) {
+    for (const ref of [...projection.default_skill_refs, ...projection.package_skill_refs]) refs.add(ref)
+  }
+  return refs.size
+}
+
 describe("Ten-swimlane generated payload integration", () => {
   test("publishes every new Skill-complete package in the generated Market payload", async () => {
     await using project = await memoryProject()
@@ -37,10 +48,16 @@ describe("Ten-swimlane generated payload integration", () => {
       .map((entry) => ({ id: entry.id, skillCount: entry.skillCount }))
 
     expect(market).toHaveLength(payloadPackageSources.length)
-    expect(additions).toEqual([...newSquadIDs].sort().map((id) => ({ id, skillCount: 1 })))
+    const expected = await Promise.all(
+      [...newSquadIDs].sort().map(async (id) => {
+        const source = await ExpertSquadRegistry.loadSourcePackage(sourceRoot(id))
+        return { id, skillCount: projectedSkillCount(source.manifest) }
+      }),
+    )
+    expect(additions).toEqual(expected)
   })
 
-  test("installs every generated package revision and projects its Skill to scheduler and workers", async () => {
+  test("installs every generated package revision and projects its Skills to scheduler and workers", async () => {
     await using project = await memoryProject()
 
     await Instance.provide({
@@ -67,7 +84,7 @@ describe("Ten-swimlane generated payload integration", () => {
             id,
             version: source.version,
             packageDigest: source.packageDigest,
-            skillCount: source.packageSkills.size,
+            skillCount: projectedSkillCount(source.manifest),
             installations: [
               {
                 installationScope: "project",
@@ -97,7 +114,10 @@ describe("Ten-swimlane generated payload integration", () => {
             version: source.version,
             packageDigest: source.packageDigest,
           })
-          expect(scheduler.productionSkills.map((skill) => skill.ref)).toEqual(schedulerProjection.package_skill_refs)
+          expect(scheduler.productionSkills.map((skill) => skill.ref)).toEqual([
+            ...schedulerProjection.default_skill_refs,
+            ...schedulerProjection.package_skill_refs,
+          ])
           expect(Object.keys(scheduler.virtualWorkflows)).toEqual(workflowIDs)
 
           const topology = analyzeExpertSquadWorkflowTopology(source.manifest)
@@ -115,7 +135,10 @@ describe("Ten-swimlane generated payload integration", () => {
               packageRevision: revision,
               agentID,
             })
-            expect(worker.productionSkills.map((skill) => skill.ref)).toEqual(projection.package_skill_refs)
+            expect(worker.productionSkills.map((skill) => skill.ref)).toEqual([
+              ...projection.default_skill_refs,
+              ...projection.package_skill_refs,
+            ])
           }
         }
       },

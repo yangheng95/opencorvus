@@ -52,8 +52,10 @@ test("serves ten new and three repaired Skill-complete Squads through an isolate
     expect(result.projections).toHaveLength(10)
     expect(result.projections.every((projection) => /^[a-f0-9]{64}$/.test(projection.packageDigest))).toBe(true)
     expect(result.projections.every((projection) => projection.skillRef.length > 0)).toBe(true)
-    expect(result.projections.every((projection) => projection.agentCount === 4)).toBe(true)
-    expect(result.projections.every((projection) => projection.workflowNodeCount === 4)).toBe(true)
+    expect(result.projections.map((projection) => projection.agentCount)).toEqual([3, 3, 4, 4, 4, 4, 4, 4, 4, 4])
+    expect(result.projections.map((projection) => projection.workflowNodeCount)).toEqual([
+      3, 3, 4, 4, 4, 4, 4, 4, 4, 4,
+    ])
     expect(result.repairedProjections.map((projection) => projection.id)).toEqual([
       "base",
       "advanced",
