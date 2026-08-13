@@ -39,6 +39,7 @@ import { requireTask } from "@/engine/store"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { EffectiveConfig } from "@/config/effective"
 import { Identifier } from "@/id/id"
+import { taskWaitFireID } from "@/scheduler/task-wait-fire-identity"
 import { Orchestrator } from "@/orchestrator/agent"
 import { OrchestratorEventSchema } from "@/orchestrator/event"
 import { createTerminalConversationAuthority } from "@/orchestrator/terminal-conversation-authority"
@@ -360,7 +361,7 @@ async function dispatchTaskWaitWake(input: { taskID: string; jobID: string }) {
       taskID: input.taskID,
       projectID: Instance.project.id,
       jobID: input.jobID,
-      fireID: `cal_task_wait_${input.jobID}`,
+      fireID: taskWaitFireID(input.jobID),
       dueAt: Date.now() - 1,
       note: "Resume from the exact durable Task wait wake",
       now: Date.now(),

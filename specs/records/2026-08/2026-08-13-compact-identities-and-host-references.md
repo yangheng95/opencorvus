@@ -71,6 +71,13 @@ identifier. After the authorized DB reset, Project discovery treats any non-curr
 derives the compact ID from the absolute normalized path with Windows-only case folding, and rewrites the marker
 before inserting the new Project row. A second bootstrap must then accept the compact row and marker.
 
+The third Phase 1B delivery owns the delayed Task-wait fire identity only. A pending delay row has not yet issued a
+fire identity; execution derives one compact `call` identity from the complete Automation job identity, then transfers
+the delay row and queued Task ingress in one transaction. After that transfer the delay row no longer exists, so a
+restart consumes the already-persisted ingress rather than deriving a second identity. Session and recurring
+Automation identities remain in later Phase 1B commits because they own additional durable Message, Session and run
+rows and require their own epoch boundary.
+
 ### Phase 2 — remaining model-facing digests
 
 Inventory each plugin/package tool field that currently asks the model to repeat a package, resource, workspace, scorer, Git or payload digest. Replace it with a short Host reference derived from a prior authoritative response, then delete the raw model-input field in the same change. This includes replacing `panel.create_task.expectedPackageDigest` with a Host reference that can bind both installed incumbents and uninstalled candidate revisions; removing the digest without that replacement would break candidate Trial creation. Regenerate schemas, SDKs and embedded package payload from canonical sources.

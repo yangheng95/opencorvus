@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test"
 import path from "node:path"
 import { Identifier } from "../src/id/id"
 import { Project } from "../src/project/project"
+import { taskWaitFireID } from "../src/scheduler/task-wait-fire-identity"
 
 describe("compact OpenCorvus identifiers", () => {
   test("keeps every generated identity family within 24 characters and ordered across its sequence window", () => {
@@ -53,5 +54,15 @@ describe("compact OpenCorvus identifiers", () => {
     expect(equivalent).toBe(first)
     if (process.platform === "win32") expect(Project.directoryProjectID(root.toUpperCase())).toBe(first)
     expect(other).not.toBe(first)
+  })
+
+  test("derives one compact delayed Task-wait fire identity from its durable job", () => {
+    const jobID = Identifier.create("automation", false, 2_000_000_200_000)
+    const first = taskWaitFireID(jobID)
+
+    expect(first).toHaveLength(Identifier.MAX_LENGTH)
+    expect(Identifier.isCanonical("call", first)).toBe(true)
+    expect(taskWaitFireID(jobID)).toBe(first)
+    expect(taskWaitFireID(Identifier.create("automation", false, 2_000_000_200_001))).not.toBe(first)
   })
 })

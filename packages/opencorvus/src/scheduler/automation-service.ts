@@ -10,6 +10,7 @@ import { Scheduler } from "./index"
 import { Session } from "@/session"
 import { SessionWake } from "@/session/wake"
 import { createSchedulerExecutionInactivityFence } from "./execution-inactivity"
+import { taskWaitFireID } from "./task-wait-fire-identity"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { persistQueuedTaskWaitWakeInTransaction } from "@/engine/queue"
 import { Log } from "@/util/log"
@@ -1146,7 +1147,7 @@ export namespace AutomationService {
     const scheduledDue = reschedule ? job.next_run : now
     const fireID =
       job.kind === "delay" && job.task_id
-        ? `cal_task_wait_${job.id}`
+        ? taskWaitFireID(job.id)
         : deterministicAutomationID("cal", job.id, String(scheduledDue))
     log.info("executing automation", { jobId: job.id, fireID, name: job.name, prompt: job.prompt.slice(0, 100) })
 
