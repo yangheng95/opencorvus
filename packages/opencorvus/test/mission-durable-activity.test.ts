@@ -2,7 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test"
 import { eq } from "drizzle-orm"
 import { readMissionDurableActivity } from "../src/engine/durable-activity"
 import { EngineTaskTable } from "../src/engine/engine.sql"
-import { persistQueuedTask } from "../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { Identifier } from "../src/id/id"
 import { ensureMissionSession, MissionExpertSquadSnapshotMismatchError } from "../src/mission/session"
 import { Instance } from "../src/project/instance"
@@ -160,7 +160,7 @@ describe("Mission durable activity", () => {
         })
         const taskID = Identifier.ascending("task")
         const timeCreated = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: taskSession.id,
           now: timeCreated,
@@ -171,7 +171,6 @@ describe("Mission durable activity", () => {
           priority: "normal",
           metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",
@@ -325,9 +324,7 @@ describe("Mission durable activity", () => {
           directory: project.path,
           fetch: (request) => app.fetch(request),
         })
-        expect(
-          (await client.mission.activityCursor({ missionID }, { throwOnError: true })).data,
-        ).toEqual(
+        expect((await client.mission.activityCursor({ missionID }, { throwOnError: true })).data).toEqual(
           readMissionDurableActivity({
             projectID: Instance.project.id,
             missionID,

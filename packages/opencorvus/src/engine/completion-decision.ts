@@ -27,9 +27,7 @@ export class TaskCompletionEvidenceIncompleteError extends Error {
     readonly taskID: string,
     readonly missingArtifactLocators: readonly EngineArtifactLocator[],
   ) {
-    super(
-      `Task ${taskID} completion evidence omits ${missingArtifactLocators.length} terminal workflow Artifact(s)`,
-    )
+    super(`Task ${taskID} completion evidence omits ${missingArtifactLocators.length} terminal workflow Artifact(s)`)
   }
 }
 
@@ -69,10 +67,7 @@ export type PreparedTaskCompletionDecision = {
   payload: TaskCompletionDecisionPayload
 }
 
-function assertTerminalWorkflowArtifactCompleteness(input: {
-  taskID: string
-  payload: TaskCompletionDecisionPayload
-}) {
+function assertTerminalWorkflowArtifactCompleteness(input: { taskID: string; payload: TaskCompletionDecisionPayload }) {
   const binding = input.payload.workflow_binding
   if (binding.kind !== "virtual_workflow") return
   const dependencyNodeIDs = new Set(binding.nodes.flatMap((node) => node.depends_on))
@@ -190,7 +185,7 @@ export function insertPreparedTaskCompletionDecision(
   prepared: PreparedTaskCompletionDecision,
   terminalTask: {
     id: string
-    time_started: number | null
+    time_started: number
     time_completed: number | null
     error: string | null
     metadata: Record<string, unknown> | null

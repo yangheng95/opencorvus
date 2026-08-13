@@ -1,11 +1,9 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { EngineWorkflowNodeOccurrenceTable } from "@/engine/engine.sql"
 import { createDispatchLineageOrigin, listDispatchLineage, recordDispatchLineage } from "@/engine/dispatch-lineage"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
-import {
-  WorkflowNodeOccurrenceConflictError,
-} from "@/engine/workflow-node-occurrence"
+import { WorkflowNodeOccurrenceConflictError } from "@/engine/workflow-node-occurrence"
 import type { SelectedWorkflowBinding } from "@/engine/workflow-binding"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
@@ -61,7 +59,7 @@ async function createBoundTask() {
     title: "Workflow occurrence authority",
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
-  persistQueuedTask({
+  persistTask({
     taskID,
     sessionID: root.id,
     now,
@@ -72,7 +70,6 @@ async function createBoundTask() {
     priority: "normal",
     metadata: {},
     projectID: Instance.project.id,
-    queue: true,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",
@@ -106,9 +103,7 @@ function origin(input: {
     workflowBinding,
     workflowNodeID: input.nodeID,
     ...(input.workflowOccurrenceID ? { workflowOccurrenceID: input.workflowOccurrenceID } : {}),
-    ...(input.continuationOfDispatchID
-      ? { continuationOfDispatchID: input.continuationOfDispatchID }
-      : {}),
+    ...(input.continuationOfDispatchID ? { continuationOfDispatchID: input.continuationOfDispatchID } : {}),
     adapterInput: { reason: `Execute ${input.nodeID}` },
   })
 }

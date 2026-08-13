@@ -107,7 +107,6 @@ async function createBenchmarkTask(input: { title: string; request: string }) {
       productPillar: "code",
       model: MODEL,
       promptProfile: "advanced",
-      queue: false,
     }),
   })
 }
@@ -226,10 +225,7 @@ async function taskObservations(taskID: string) {
         messageID,
         callID: typeof part.callID === "string" ? part.callID : "",
         order: toolOrder++,
-        timeCompleted:
-          typeof part.state?.time?.end === "number"
-            ? part.state.time.end
-            : Number.POSITIVE_INFINITY,
+        timeCompleted: typeof part.state?.time?.end === "number" ? part.state.time.end : Number.POSITIVE_INFINITY,
         tool: String(part.tool),
         status: typeof part.state?.status === "string" ? part.state.status : undefined,
         input: part.state?.input,
@@ -475,7 +471,10 @@ function assertConcreteSemanticCoverage(payload: any) {
     .map((requirement) => `${requirement.description}\n${requirement.acceptance}`)
     .join("\n")
     .toLowerCase()
-  const nonGoalEvidence = payload.requirements.map((requirement) => requirement.non_goals).join("\n").toLowerCase()
+  const nonGoalEvidence = payload.requirements
+    .map((requirement) => requirement.non_goals)
+    .join("\n")
+    .toLowerCase()
   const checks: Array<[label: string, present: boolean]> = [
     [
       "compact_logs defaults to false",

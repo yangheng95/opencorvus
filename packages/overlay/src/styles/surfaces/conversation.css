@@ -126,27 +126,6 @@
   background: var(--chat-canvas);
 }
 
-.task-queue-notice {
-  display: flex;
-  align-items: center;
-  gap: calc(8px * var(--ui-scale));
-  width: min(100%, var(--conversation-message-content-width));
-  max-width: 100%;
-  margin: calc(16px * var(--ui-scale)) auto 0;
-  padding: calc(8px * var(--ui-scale)) calc(12px * var(--ui-scale));
-  box-sizing: border-box;
-  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 72%, transparent);
-  border-radius: var(--oc-radius-soft);
-  background: color-mix(in srgb, var(--surface-inset) 72%, transparent);
-  color: var(--text-soft);
-  font-size: var(--ui-font-meta);
-  line-height: 1.5;
-}
-
-.task-queue-notice + .chat-composer-stack {
-  margin-top: calc(6px * var(--ui-scale));
-}
-
 .chat[data-empty-chat-home="true"] .chat-home-composition {
   --chat-home-wide-content-width: calc(900px * var(--ui-scale));
   --chat-home-composition-width: min(100%, var(--chat-home-wide-content-width));

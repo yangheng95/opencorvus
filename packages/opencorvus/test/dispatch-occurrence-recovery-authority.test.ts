@@ -53,7 +53,6 @@ describe("dispatch occurrence recovery authority", () => {
             model: "firmware/gpt-5",
             promptProfile: "base",
             expectedPackageDigest: scheduler.packageRevision.packageDigest,
-            queue: true,
           },
           { actor: "user" },
         )

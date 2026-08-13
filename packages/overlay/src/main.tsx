@@ -75,7 +75,6 @@ import {
   renameTask,
   downloadTaskProjectArchive,
 } from "./services/task"
-import { startQueuedTaskNow } from "./services/task-queue"
 import { canComposeChat, stopChatRequest } from "./services/chat"
 import { isTaskInterruptable } from "./store/board"
 import { loadAllLocales, localeTag, setLocale } from "./utils/i18n"
@@ -113,10 +112,7 @@ import {
   type ExpertSquadOption,
 } from "./services/expert-squad"
 import { loadMissionSkillCatalog } from "./services/mission-skill"
-import {
-  loadGlobalComposerReferences,
-  searchGlobalComposerExpertSquads,
-} from "./services/global-composer-references"
+import { loadGlobalComposerReferences, searchGlobalComposerExpertSquads } from "./services/global-composer-references"
 import { resolveComposerSubmitRoute } from "./services/composer-submit-route"
 import {
   VisibleComposerReferences as VisibleComposerReferencesSchema,
@@ -907,9 +903,12 @@ async function deleteMissionBoardMission(mission: MissionRecord): Promise<boolea
   if (!deleted) throw new Error(t("mission_board.delete.failed"))
 
   if (boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === mission.sessionID) {
-    runPostCommitUiEffect({ id: `mission:delete-selection:${mission.missionID}`, title: "Mission deletion committed" }, () => {
-      void selectTask("").catch((error) => reportOverlayRuntimeError("mission-board.delete-selection", error))
-    })
+    runPostCommitUiEffect(
+      { id: `mission:delete-selection:${mission.missionID}`, title: "Mission deletion committed" },
+      () => {
+        void selectTask("").catch((error) => reportOverlayRuntimeError("mission-board.delete-selection", error))
+      },
+    )
   }
   setMissionSharedRefreshToken((value) => value + 1)
   reportSuccess({
@@ -1054,25 +1053,6 @@ async function retryTerminalTask(row: WorkLedgerTaskRow): Promise<void> {
 
 async function replanTerminalTask(row: WorkLedgerTaskRow): Promise<void> {
   return runTerminalTaskMutation(row, "replan")
-}
-
-async function startWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
-  const result = await startQueuedTaskNow({ taskID: row.id, directory: row.directory })
-  await loadTasks({ requireFresh: true })
-  if (result.started) {
-    reportSuccess({
-      id: `task:start-now:${row.id}`,
-      title: t("task.start_now_started_title"),
-      message: result.task?.title || row.title || row.id,
-    })
-  } else {
-    reportWarning({
-      id: `task:start-now:${row.id}`,
-      title: t("task.start_now_not_started_title"),
-      message: t("task.start_now_not_started"),
-    })
-  }
-  setMissionSharedRefreshToken((value) => value + 1)
 }
 
 async function downloadWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
@@ -1668,11 +1648,7 @@ document.addEventListener(
   listenerOpts,
 )
 
-window.addEventListener(
-  "acceptance:focus-changes",
-  requestReviewPanel,
-  listenerOpts,
-)
+window.addEventListener("acceptance:focus-changes", requestReviewPanel, listenerOpts)
 
 function installGlobalBridges(): void {
   ;(window as any).renderMarkdown = renderMarkdown
@@ -1781,7 +1757,10 @@ async function refreshExpertSquads(
   await promise
 }
 
-async function searchComposerExpertSquads(query: string, selectedExpertSquadIDs: readonly string[] = []): Promise<void> {
+async function searchComposerExpertSquads(
+  query: string,
+  selectedExpertSquadIDs: readonly string[] = [],
+): Promise<void> {
   const sequence = ++expertSquadSearchSequence
   const requestKey = composerReferenceCatalogRequestKey()
   const scope = composerReferenceCatalogScope()
@@ -2192,7 +2171,6 @@ function OverlayRoot() {
           onDownloadMission={downloadWorkLedgerMission}
           onRenameMission={renameWorkLedgerMission}
           onArchiveMission={archiveWorkLedgerMission}
-          onStartTask={startWorkLedgerTask}
           onCancelTask={cancelWorkLedgerTask}
           onDownloadTask={downloadWorkLedgerTask}
           onRenameTask={renameWorkLedgerTask}
@@ -2782,7 +2760,6 @@ window.addEventListener("beforeunload", () => {
 installSystemThemeListener(() => applyTheme(settingsStore.theme))
 
 // ── Init ──
-
 ;(window as any).__overlayInitSettled = false
 runMainAsync("initApp", async () => {
   try {

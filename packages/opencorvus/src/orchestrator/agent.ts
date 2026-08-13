@@ -233,7 +233,7 @@ async function settleOrchestratorStartupFailure(input: {
       {
         status: "failed",
         error: input.taskError,
-        time_started: task.time_started ?? Math.min(task.time_created, now - 1),
+        time_started: task.time_started,
         time_completed: now,
       },
       `Orchestrator startup failed: ${input.envelope.message}`,
@@ -272,7 +272,7 @@ async function settleOrchestratorExecutionFailure(input: {
       {
         status: "failed",
         error: input.taskError,
-        time_started: task.time_started ?? Math.min(task.time_created, now - 1),
+        time_started: task.time_started,
         time_completed: now,
       },
       `Orchestrator execution interrupted: ${input.envelope.message}`,

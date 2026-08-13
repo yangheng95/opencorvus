@@ -258,7 +258,7 @@ export type MailboxChangeStreamEvent = z.infer<typeof MailboxChangeStreamEvent>
 // ── Work Ledger projection and change stream ──
 
 export const WorkLedgerChatStatus = z.enum(["active", "idle", "terminal"])
-export const WorkLedgerTaskLifecycleStatus = z.enum(["queued", "active", "completed", "failed", "cancelled"])
+export const WorkLedgerTaskLifecycleStatus = z.enum(["active", "completed", "failed", "cancelled"])
 export const WorkLedgerActivityStatus = z.enum(["running", "inactive"])
 export const WorkLedgerTaskPriority = z.enum(["critical", "high", "normal", "low"])
 export const WorkLedgerMissionID = z
@@ -295,7 +295,7 @@ export const WorkLedgerTaskRow = z
     description: z.string(),
     directory: z.string(),
     created: z.number(),
-    started: z.number().nullable(),
+    started: z.number(),
     updated: z.number(),
     pinned: z.boolean(),
     lifecycleStatus: WorkLedgerTaskLifecycleStatus,
@@ -304,7 +304,6 @@ export const WorkLedgerTaskRow = z
     priority: WorkLedgerTaskPriority,
     source: z.string(),
     productPillar: ProductPillarSchema,
-    queueOrder: z.number(),
     pendingInteractions: z.number().int().nonnegative(),
     archived: z.number().optional(),
     missionID: WorkLedgerMissionID.optional(),

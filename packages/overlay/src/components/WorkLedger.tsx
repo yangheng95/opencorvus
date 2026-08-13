@@ -95,7 +95,6 @@ export interface WorkLedgerProps {
   onDownloadMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onRenameMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onArchiveMission: (row: WorkLedgerMissionRow) => void | Promise<void>
-  onStartTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onCancelTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onDownloadTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onRenameTask: (row: WorkLedgerTaskRow) => void | Promise<void>
@@ -229,7 +228,7 @@ function pendingInteractionCount(row: WorkLedgerItemRow): number {
 }
 
 function taskCanStop(row: WorkLedgerTaskRow): boolean {
-  return row.lifecycleStatus === "queued" || row.lifecycleStatus === "active"
+  return row.lifecycleStatus === "active"
 }
 
 function taskCancellationPending(row: WorkLedgerTaskRow): boolean {
@@ -334,7 +333,6 @@ function WorkLedgerRowView(props: {
   onDownloadMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onRenameMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onArchiveMission: (row: WorkLedgerMissionRow) => void | Promise<void>
-  onStartTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onCancelTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onDownloadTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onRenameTask: (row: WorkLedgerTaskRow) => void | Promise<void>
@@ -342,12 +340,6 @@ function WorkLedgerRowView(props: {
   onStopChat: (row: WorkLedgerChatRow) => void | Promise<void>
   onRenameChat: (row: WorkLedgerChatRow) => void | Promise<void>
   onArchiveChat: (row: WorkLedgerChatRow) => void | Promise<void>
-  draggable?: boolean
-  dragOver?: boolean
-  onDragStart?: (row: WorkLedgerTaskRow) => void
-  onDragEnd?: () => void
-  onDragOver?: (row: WorkLedgerTaskRow, event: DragEvent) => void
-  onDrop?: (row: WorkLedgerTaskRow, event: DragEvent) => void
 }) {
   const [busy, setBusy] = createSignal(false)
   const row = () => props.row
@@ -382,7 +374,6 @@ function WorkLedgerRowView(props: {
     if (current.kind === "task") return taskCanStop(current)
     return current.status === "active"
   }
-  const canStartNow = () => row().kind === "task" && (row() as WorkLedgerTaskRow).lifecycleStatus === "queued"
   const canDownload = () => row().kind !== "chat" && !!row().directory
   const showDownloadActions = getHostTransport().kind !== "tauri"
   const hasActions = () => true
@@ -390,7 +381,6 @@ function WorkLedgerRowView(props: {
   const actionCount = () => {
     let count = 2
     if (canStop()) count += 1
-    if (canStartNow()) count += 1
     if (showDownloadActions && canDownload()) count += 1
     return count
   }
@@ -440,13 +430,6 @@ function WorkLedgerRowView(props: {
       data-has-child-tasks={hasMissionTasks() ? "true" : undefined}
       data-pointer-within={hasMissionTasks() && pointerWithinMission() ? "true" : undefined}
       data-has-selected-child={hasSelectedMissionTask() ? "true" : undefined}
-      data-queue-drag-over={props.dragOver ? "true" : undefined}
-      draggable={props.draggable}
-      aria-grabbed={props.draggable ? "false" : undefined}
-      onDragStart={() => row().kind === "task" && props.onDragStart?.(row() as WorkLedgerTaskRow)}
-      onDragEnd={() => props.onDragEnd?.()}
-      onDragOver={(event) => row().kind === "task" && props.onDragOver?.(row() as WorkLedgerTaskRow, event)}
-      onDrop={(event) => row().kind === "task" && props.onDrop?.(row() as WorkLedgerTaskRow, event)}
       onPointerEnter={() => setPointerWithinMission(hasMissionTasks())}
       onPointerLeave={() => setPointerWithinMission(false)}
     >
@@ -568,26 +551,6 @@ function WorkLedgerRowView(props: {
             </span>
           </Show>
           <div class="task-row-actions work-row-actions" onKeyDown={rowActions.closeActionsFromKeyboardEvent}>
-            <Show when={canStartNow()}>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                tone="accent"
-                data-chrome="icon-action"
-                data-ui="task-row-start-now"
-                disabled={busy()}
-                tabIndex={rowActions.actionButtonTabIndex()}
-                title={t("task.start_now_button_title")}
-                aria-label={t("task.start_now_button_title")}
-                onClick={(event) => {
-                  event.stopPropagation()
-                  void runAction("start", () => props.onStartTask(row() as WorkLedgerTaskRow))
-                }}
-              >
-                <Icon name="send" />
-              </Button>
-            </Show>
             <Show when={canStop()}>
               <Button
                 type="button"
@@ -715,7 +678,6 @@ function WorkLedgerRowView(props: {
                   isSelected={props.isSelected}
                   onSelect={props.onSelect}
                   onAfterAction={props.onAfterAction}
-                  onStartTask={props.onStartTask}
                   onCancelTask={props.onCancelTask}
                   onDownloadTask={props.onDownloadTask}
                   onRenameTask={props.onRenameTask}
@@ -748,7 +710,6 @@ function WorkLedgerTaskChildRow(props: {
   onDownloadMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onRenameMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onArchiveMission: (row: WorkLedgerMissionRow) => void | Promise<void>
-  onStartTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onCancelTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onDownloadTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onRenameTask: (row: WorkLedgerTaskRow) => void | Promise<void>
@@ -776,7 +737,6 @@ function WorkLedgerTaskChildRow(props: {
         onDownloadMission={props.onDownloadMission}
         onRenameMission={props.onRenameMission}
         onArchiveMission={props.onArchiveMission}
-        onStartTask={props.onStartTask}
         onCancelTask={props.onCancelTask}
         onDownloadTask={props.onDownloadTask}
         onRenameTask={props.onRenameTask}
@@ -800,7 +760,6 @@ function WorkLedgerProjectGroupView(props: {
   onDownloadMission: WorkLedgerProps["onDownloadMission"]
   onRenameMission: WorkLedgerProps["onRenameMission"]
   onArchiveMission: WorkLedgerProps["onArchiveMission"]
-  onStartTask: WorkLedgerProps["onStartTask"]
   onCancelTask: WorkLedgerProps["onCancelTask"]
   onDownloadTask: WorkLedgerProps["onDownloadTask"]
   onRenameTask: WorkLedgerProps["onRenameTask"]
@@ -832,7 +791,6 @@ function WorkLedgerProjectGroupView(props: {
           onDownloadMission={props.onDownloadMission}
           onRenameMission={props.onRenameMission}
           onArchiveMission={props.onArchiveMission}
-          onStartTask={props.onStartTask}
           onCancelTask={props.onCancelTask}
           onDownloadTask={props.onDownloadTask}
           onRenameTask={props.onRenameTask}
@@ -1130,7 +1088,6 @@ export function WorkLedger(props: WorkLedgerProps) {
       onDownloadMission={props.onDownloadMission}
       onRenameMission={props.onRenameMission}
       onArchiveMission={props.onArchiveMission}
-      onStartTask={props.onStartTask}
       onCancelTask={props.onCancelTask}
       onDownloadTask={props.onDownloadTask}
       onRenameTask={props.onRenameTask}

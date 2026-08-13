@@ -52,7 +52,7 @@ import {
 } from "@/protocol/scheduler-message"
 import { SessionWake } from "@/session/wake"
 import { Scheduler } from "@/scheduler"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 import {
@@ -1964,7 +1964,7 @@ describe("durable scheduler.message delivery", () => {
             version: "2026.08.12.1",
             packageDigest: "a".repeat(64),
           }
-          persistQueuedTask({
+          persistTask({
             taskID,
             sessionID: root.id,
             now,
@@ -1975,7 +1975,6 @@ describe("durable scheduler.message delivery", () => {
             priority: "normal",
             metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
             projectID: Instance.project.id,
-            queue: false,
             packageRevision,
             executionCapsuleBinding: await prepareTaskProcessBinding({
               mode: "native",

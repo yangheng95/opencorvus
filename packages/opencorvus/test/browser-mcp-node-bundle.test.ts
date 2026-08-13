@@ -1,7 +1,7 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import path from "node:path"
 import { artifactBrowserMcpNodeRuntimeModules } from "../script/build-artifact"
-import { persistQueuedTask } from "../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../src/id/id"
 import { BrowserMCPBuiltin } from "../src/mcp/browser/builtin"
@@ -100,7 +100,7 @@ describe("Browser Model Context Protocol Node sidecar bundle", () => {
         const taskRoot = await Session.create({ kind: "root", title: "Scoped Browser Task authority" })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: taskRoot.id,
           now,
@@ -109,7 +109,6 @@ describe("Browser Model Context Protocol Node sidecar bundle", () => {
           productPillar: "work",
           metadata: {},
           projectID: Instance.project.id,
-          queue: false,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",

@@ -248,11 +248,7 @@ async function panelTaskArtifactPage(
     page_number: number
   },
 ): Promise<string> {
-  const {
-    terminal_lifecycle_reference: expectedTerminalReference,
-    page_number: requestedPageNumber,
-    ...search
-  } = input
+  const { terminal_lifecycle_reference: expectedTerminalReference, page_number: requestedPageNumber, ...search } = input
   const assertCurrentTerminalOccurrence = () => {
     const current = requireCurrentTerminalLifecycleReference(taskID)
     if (!sameTerminalLifecycleReference(current, expectedTerminalReference)) {
@@ -327,7 +323,7 @@ async function panelTaskSummaryRow(board: PanelTaskBoard): Promise<z.infer<typeo
     title: board.task.title,
     status: board.task.status,
     created: board.task.time?.created,
-    started: board.task.time?.started,
+    started: board.task.time.started,
     completed: board.task.time?.completed,
     error: board.task.error,
     result: panelTaskResult(board),
@@ -880,7 +876,6 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         }
         const panelUIRequest = panelUIRequestContext(ctx)
         const attachments = panelUIRequest ? [] : await callerUserAttachmentRefs(ctx)
-        const queue = params.queue ?? false
         if (actor === "mission") {
           requireMissionTaskSemanticTitle(params.title)
         }
@@ -938,7 +933,6 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               : {}),
             promptProfile: inheritedPromptProfile,
             expectedPackageDigest: params.expectedPackageDigest,
-            queue,
             checks: params.checks,
             source,
             ...(taskChannelBinding ? { channelBinding: taskChannelBinding } : {}),
@@ -1277,15 +1271,15 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
       case "retry_task":
         await EngineService.retryTask(params.taskID)
         return {
-          title: "Retry queued",
-          output: JSON.stringify({ kind: "message", task_id: params.taskID, message: "Retry queued." }),
+          title: "Retry accepted",
+          output: JSON.stringify({ kind: "message", task_id: params.taskID, message: "Retry accepted." }),
           metadata: {},
         }
       case "replan_task":
         await EngineService.replanTask(params.taskID)
         return {
-          title: "Replan queued",
-          output: JSON.stringify({ kind: "message", task_id: params.taskID, message: "Replan queued." }),
+          title: "Replan accepted",
+          output: JSON.stringify({ kind: "message", task_id: params.taskID, message: "Replan accepted." }),
           metadata: {},
         }
       case "cancel_task":

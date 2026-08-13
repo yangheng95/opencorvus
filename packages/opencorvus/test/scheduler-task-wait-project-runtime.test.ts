@@ -40,7 +40,6 @@ describe("scheduled Task wait project runtime", () => {
             model: "firmware/gpt-5",
             promptProfile: "base",
             expectedPackageDigest: capability.packageRevision.packageDigest,
-            queue: true,
           },
           { actor: "user" },
         )
@@ -95,7 +94,6 @@ describe("scheduled Task wait project runtime", () => {
             model: "firmware/gpt-5",
             promptProfile: "base",
             expectedPackageDigest: capability.packageRevision.packageDigest,
-            queue: true,
           },
           { actor: "user" },
         )

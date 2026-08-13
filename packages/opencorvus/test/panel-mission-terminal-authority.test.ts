@@ -2,8 +2,11 @@ import { afterEach, describe, expect, test } from "bun:test"
 import { reviewedTerminalLifecycleReferenceBeforePanelAction } from "@/agent/task-review-facts"
 import { ArtifactReferenceResolutionError } from "@/agent/artifact-read-facts"
 import { recordEngineArtifact } from "@/engine/artifact"
-import { requireCurrentTerminalLifecycleReference, sameTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
-import { persistQueuedTask } from "@/engine/pipeline"
+import {
+  requireCurrentTerminalLifecycleReference,
+  sameTerminalLifecycleReference,
+} from "@/engine/terminal-lifecycle-reference"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { requireTask } from "@/engine/store"
 import { terminalTask, updateTask } from "@/engine/state"
@@ -54,7 +57,7 @@ describe("Mission terminal Task authority", () => {
         const taskSession = await Session.create({ kind: "root", title: "Paged terminal child" })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: taskSession.id,
           now,
@@ -64,7 +67,6 @@ describe("Mission terminal Task authority", () => {
           source: "mission",
           metadata: { actor: "mission", mission: { id: mission.missionID, session_id: mission.id } },
           projectID: Instance.project.id,
-          queue: false,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",
@@ -290,7 +292,7 @@ describe("Mission terminal Task authority", () => {
         const taskSession = await Session.create({ kind: "root", title: "Terminal child" })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: taskSession.id,
           now,
@@ -300,7 +302,6 @@ describe("Mission terminal Task authority", () => {
           source: "mission",
           metadata: { actor: "mission", mission: { id: mission.missionID, session_id: mission.id } },
           projectID: Instance.project.id,
-          queue: false,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",

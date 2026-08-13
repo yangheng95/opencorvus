@@ -3,7 +3,7 @@ import z from "zod"
 import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dispatch-lineage"
 import { recordDispatchSettlement } from "@/engine/dispatch-settlement"
 import { describeTask } from "@/engine/describe"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { requireTask } from "@/engine/store"
 import type { SelectedWorkflowBinding } from "@/engine/workflow-binding"
@@ -76,7 +76,7 @@ async function createTask(input: { title: string }) {
     title: input.title,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
-  persistQueuedTask({
+  persistTask({
     taskID,
     sessionID: root.id,
     now,
@@ -87,7 +87,6 @@ async function createTask(input: { title: string }) {
     priority: "normal",
     metadata: {},
     projectID: Instance.project.id,
-    queue: true,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",
@@ -220,7 +219,10 @@ async function workerTurn(input: { rootSessionID: string; taskID: string; outcom
   }
 }
 
-function executionContext(taskID: string, dispatchID = Identifier.ascending("artifact")): DispatchAdapterExecutionContext {
+function executionContext(
+  taskID: string,
+  dispatchID = Identifier.ascending("artifact"),
+): DispatchAdapterExecutionContext {
   return {
     agentID: projectedFrontendDesigner.identity.agentID,
     projectedAgent: projectedFrontendDesigner as never,
@@ -427,10 +429,22 @@ describe("Frontend Design domain-incomplete settlement", () => {
           childSessionID: analysis.sessionID,
         })
         const outcome = await executeFrontendDesign({ ...task, analyze: async () => analysis, context })
-        recordDispatchSettlement({ taskID: task.taskID, dispatchID: context.dispatch.dispatchID, outcome: outcome as never })
+        recordDispatchSettlement({
+          taskID: task.taskID,
+          dispatchID: context.dispatch.dispatchID,
+          outcome: outcome as never,
+        })
         const projection = await describeTask(task.taskID)
-        expect({ outcome, artifacts: listFrontendDesignArtifacts(task.taskID), workflow: projection.workflow_execution }).toMatchObject({
-          outcome: { kind: "terminal_success", session_id: analysis.sessionID, final_message_id: analysis.finalMessageID },
+        expect({
+          outcome,
+          artifacts: listFrontendDesignArtifacts(task.taskID),
+          workflow: projection.workflow_execution,
+        }).toMatchObject({
+          outcome: {
+            kind: "terminal_success",
+            session_id: analysis.sessionID,
+            final_message_id: analysis.finalMessageID,
+          },
           artifacts: [{ payload: { status: "complete" } }],
           workflow: {
             nodes: [

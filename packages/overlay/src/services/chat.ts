@@ -253,9 +253,7 @@ export async function panelMessage(
   const meta = Array.isArray(attachmentsOrMeta) ? metadata : attachmentsOrMeta
   const promptProfile = typeof meta?.promptProfile === "string" ? meta.promptProfile : undefined
   const explicitTarget =
-    meta?.target &&
-    typeof meta.target.taskID === "string" &&
-    typeof meta.target.directory === "string"
+    meta?.target && typeof meta.target.taskID === "string" && typeof meta.target.directory === "string"
       ? {
           taskID: meta.target.taskID.trim(),
           directory: meta.target.directory.trim(),
@@ -291,7 +289,7 @@ export async function panelMessage(
     const directory = explicitTarget?.directory || taskOwningDirectory(taskID)
     request = { ...requestBase, target: { kind: "task", taskID, directory } }
     setChatRequest(request)
-    // Every status (active, queued, blocked, cancelled, completed, failed) →
+    // Every status (active, blocked, cancelled, completed, failed) →
     // send message directly to the task. Status is display/audit context, not
     // a routing gate; users sending a follow-up to any task expect the same
     // conversation to continue, not a brand-new task.

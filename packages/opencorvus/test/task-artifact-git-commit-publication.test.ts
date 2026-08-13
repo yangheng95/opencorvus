@@ -1,7 +1,7 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
-import { persistQueuedTask } from "../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
@@ -81,7 +81,7 @@ describe("Task Artifact immutable Git commit publication", () => {
         const rootSession = await Session.create({ kind: "root", title: "Scheduler snapshot contract" })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: rootSession.id,
           now,
@@ -90,7 +90,6 @@ describe("Task Artifact immutable Git commit publication", () => {
           productPillar: "work",
           metadata: { actor: "user" },
           projectID: Instance.project.id,
-          queue: false,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",
@@ -230,7 +229,7 @@ describe("Task Artifact immutable Git commit publication", () => {
         })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: rootSession.id,
           now,
@@ -239,7 +238,6 @@ describe("Task Artifact immutable Git commit publication", () => {
           productPillar: "work",
           metadata: { actor: "user" },
           projectID: Instance.project.id,
-          queue: false,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",

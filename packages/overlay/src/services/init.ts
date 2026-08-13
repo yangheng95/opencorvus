@@ -284,7 +284,7 @@ export function persistAndSyncSettings(): void {
 
 // ── Workspace restoration ──
 
-const RESTORABLE_RUNNING_TASK_STATUSES = new Set(["active", "queued"])
+const RESTORABLE_RUNNING_TASK_STATUSES = new Set(["active"])
 
 function taskIDFromItem(item: any): string {
   const id = item?.task?.id ?? item?.id

@@ -623,7 +623,6 @@ describe("Computer Use exact control contract", () => {
               model: "firmware/gpt-5",
               promptProfile: profileID,
               expectedPackageDigest: capability.packageRevision.packageDigest,
-              queue: true,
             },
             { actor: "user" },
           )

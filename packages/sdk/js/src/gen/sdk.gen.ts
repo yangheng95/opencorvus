@@ -541,10 +541,6 @@ import type {
   TaskProgressResponses,
   TaskProjectArchiveErrors,
   TaskProjectArchiveResponses,
-  TaskQueueReorderErrors,
-  TaskQueueReorderResponses,
-  TaskQueueStartNowErrors,
-  TaskQueueStartNowResponses,
   TaskReadConversationArtifactErrors,
   TaskReadConversationArtifactResponses,
   TaskReplanErrors,
@@ -4906,10 +4902,6 @@ export class Control extends HeyApiClient {
              */
             promptProfile?: string
             /**
-             * Whether to queue this task behind other work in the same directory.
-             */
-            queue?: boolean
-            /**
              * Full user request to execute in the new task.
              */
             request: string
@@ -5027,14 +5019,14 @@ export class Control extends HeyApiClient {
         | {
             action: "retry_task"
             /**
-             * Task ID to queue for retry.
+             * Task ID for the retry request.
              */
             taskID: string
           }
         | {
             action: "replan_task"
             /**
-             * Task ID to queue for replanning.
+             * Task ID for the replan request.
              */
             taskID: string
           }
@@ -6757,7 +6749,6 @@ export class Global2 extends HeyApiClient {
       productPillar: "code" | "work"
       project?: string
       promptProfile?: string
-      queue?: boolean
       request: string
       requestID?: string
       source?: string
@@ -6783,7 +6774,6 @@ export class Global2 extends HeyApiClient {
             { in: "body", key: "productPillar" },
             { in: "body", key: "project" },
             { in: "body", key: "promptProfile" },
-            { in: "body", key: "queue" },
             { in: "body", key: "request" },
             { in: "body", key: "requestID" },
             { in: "body", key: "source" },
@@ -6801,81 +6791,6 @@ export class Global2 extends HeyApiClient {
         ...options?.headers,
         ...params.headers,
       },
-    })
-  }
-}
-
-export class Queue extends HeyApiClient {
-  /**
-   * Reorder queued tasks in a directory
-   */
-  public reorder<ThrowOnError extends boolean = false>(
-    parameters: {
-      query_directory?: string
-      body_directory: string
-      orderedTaskIDs?: Array<string>
-      revision?: string
-    },
-    options?: Options<never, ThrowOnError>,
-  ) {
-    const params = buildClientParams(
-      [parameters],
-      [
-        {
-          args: [
-            {
-              in: "query",
-              key: "query_directory",
-              map: "directory",
-            },
-            {
-              in: "body",
-              key: "body_directory",
-              map: "directory",
-            },
-            { in: "body", key: "orderedTaskIDs" },
-            { in: "body", key: "revision" },
-          ],
-        },
-      ],
-    )
-    return (options?.client ?? this.client).patch<TaskQueueReorderResponses, TaskQueueReorderErrors, ThrowOnError>({
-      url: "/task-queue/reorder",
-      ...options,
-      ...params,
-      headers: {
-        "Content-Type": "application/json",
-        ...options?.headers,
-        ...params.headers,
-      },
-    })
-  }
-
-  /**
-   * Start a queued task immediately
-   */
-  public startNow<ThrowOnError extends boolean = false>(
-    parameters: {
-      taskID: string
-      directory?: string
-    },
-    options?: Options<never, ThrowOnError>,
-  ) {
-    const params = buildClientParams(
-      [parameters],
-      [
-        {
-          args: [
-            { in: "path", key: "taskID" },
-            { in: "query", key: "directory" },
-          ],
-        },
-      ],
-    )
-    return (options?.client ?? this.client).post<TaskQueueStartNowResponses, TaskQueueStartNowErrors, ThrowOnError>({
-      url: "/task/{taskID}/start-now",
-      ...options,
-      ...params,
     })
   }
 }
@@ -7281,7 +7196,6 @@ export class Task extends HeyApiClient {
       productPillar: "code" | "work"
       project?: string
       promptProfile?: string
-      queue?: boolean
       request: string
       requestID?: string
       source?: string
@@ -7317,7 +7231,6 @@ export class Task extends HeyApiClient {
             { in: "body", key: "productPillar" },
             { in: "body", key: "project" },
             { in: "body", key: "promptProfile" },
-            { in: "body", key: "queue" },
             { in: "body", key: "request" },
             { in: "body", key: "requestID" },
             { in: "body", key: "source" },
@@ -8075,7 +7988,7 @@ export class Task extends HeyApiClient {
   /**
    * Get task status
    *
-   * Collect current Task activity from the Task Board projection, including diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. The Task `status` field is normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw queued, active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.
+   * Collect current Task activity from the Task Board projection, including diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. The Task `status` field is normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.
    */
   public status<ThrowOnError extends boolean = false>(
     parameters: {
@@ -8234,11 +8147,6 @@ export class Task extends HeyApiClient {
   private _global?: Global2
   get global(): Global2 {
     return (this._global ??= new Global2({ client: this.client }))
-  }
-
-  private _queue?: Queue
-  get queue(): Queue {
-    return (this._queue ??= new Queue({ client: this.client }))
   }
 
   private _conversation?: Conversation
@@ -9339,7 +9247,7 @@ export class Mission extends HeyApiClient {
   /**
    * Get Mission status
    *
-   * Collect current Mission and Task activity with each Task's diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. Mission and Task `status` fields are normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw queued, active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.
+   * Collect current Mission and Task activity with each Task's diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. Mission and Task `status` fields are normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.
    */
   public status<ThrowOnError extends boolean = false>(
     parameters: {

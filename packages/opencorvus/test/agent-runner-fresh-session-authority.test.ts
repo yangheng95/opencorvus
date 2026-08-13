@@ -3,7 +3,7 @@ import { DelegatedWorkerAgent } from "@/delegated-worker/agent"
 import { DispatchAdapterContractRegistry, type AgentDispatchAdapterID } from "@/agent/dispatch-adapter-contract"
 import { createDispatchLineageOrigin, listDispatchLineage, recordDispatchLineage } from "@/engine/dispatch-lineage"
 import { EngineArtifactTable, EngineWorkflowNodeOccurrenceTable } from "@/engine/engine.sql"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { reconcileTerminalAgentLifecycleDelivery, waitForQueueCompletionHooksForTest } from "@/engine/queue"
 import { QueuedTaskIngressSchema } from "@/engine/queued-task-ingress"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
@@ -105,7 +105,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
         metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
       })
       const now = Date.now()
-      persistQueuedTask({
+      persistTask({
         taskID,
         sessionID: root.id,
         now,
@@ -116,7 +116,6 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
         priority: "normal",
         metadata: {},
         projectID: Instance.project.id,
-        queue: true,
         packageRevision,
         executionCapsuleBinding: await prepareTaskProcessBinding({
           mode: "native",
@@ -306,7 +305,7 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
         })
         const blockerTaskID = Identifier.ascending("task")
         const blockerRoot = await Session.create({ kind: "root", title: "Occupied root queue owner" })
-        persistQueuedTask({
+        persistTask({
           taskID: blockerTaskID,
           sessionID: blockerRoot.id,
           now: Date.now(),
@@ -317,7 +316,6 @@ test("fresh delegated worker commits Session, input authority, lineage, and occu
           priority: "normal",
           metadata: {},
           projectID: Instance.project.id,
-          queue: false,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",

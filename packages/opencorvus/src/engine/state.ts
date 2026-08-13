@@ -29,19 +29,17 @@ import { signalSchedulerMessageDrain } from "@/protocol/scheduler-drain-signal"
 const log = Log.create({ service: "engine-state" })
 
 /**
- * Caller-facing non-terminal task-update shape. `status` is a logical verb
- * (queued / active) that the writer maps to concrete fact fields; there is no
+ * Caller-facing non-terminal task-update shape. `status` is the logical
+ * `active` verb that the writer maps to concrete fact fields; there is no
  * `status` column anymore (6-f-2).
  *
  * Mapping:
- *   active → time_started defaults to now if unset
- *   queued → clears time_started / time_completed
- *
+ *   active → reopening a terminal occurrence refreshes time_started to now
  * Terminal task lifecycle is owned by `terminalTask` so completed / failed /
  * cancelled cannot be written through ordinary field updates.
  */
 export type TaskUpdateValues = Omit<Partial<typeof EngineTaskTable.$inferInsert>, "status"> & {
-  status?: "queued" | "active"
+  status?: "active"
 }
 export type TaskUpdateOptions = {
   projectDir?: string
@@ -364,12 +362,11 @@ function runSettlementOperation(artifactID: string, directory: string, run: Sett
   const operation = runWithIndependentProjectIdentity({
     directory,
     fn: () => run(claimed, leaseFence.signal),
+  }).finally(() => {
+    clearInterval(heartbeat)
+    if (settlementLeaseFences.get(artifactID) === leaseFence) settlementLeaseFences.delete(artifactID)
+    settlementOperations.delete(artifactID)
   })
-    .finally(() => {
-      clearInterval(heartbeat)
-      if (settlementLeaseFences.get(artifactID) === leaseFence) settlementLeaseFences.delete(artifactID)
-      settlementOperations.delete(artifactID)
-    })
   settlementOperations.set(artifactID, operation)
   void operation.catch((error) => {
     log.error("cancelled Task settlement operation crashed", {
@@ -460,8 +457,7 @@ export function acquireCancelledTaskSettlementGate(): CancelledTaskSettlementGat
         return
       }
       await waitForRuntimeSettlementIdle({
-        snapshot: () =>
-          [...settlementOperations].map(([artifactID, settled]) => ({ label: artifactID, settled })),
+        snapshot: () => [...settlementOperations].map(([artifactID, settled]) => ({ label: artifactID, settled })),
         inactivityTimeoutMilliseconds,
         inactivityError: (artifactIDs) =>
           new CancelledTaskSettlementInactivityError(artifactIDs, inactivityTimeoutMilliseconds),
@@ -704,7 +700,7 @@ function resolveTaskUpdateValues(
   switch (intent) {
     case "active":
       clearTerminalReasonFlags()
-      if (resolved.time_started === undefined && (current.time_started == null || current.time_completed != null)) {
+      if (resolved.time_started === undefined && current.time_completed != null) {
         resolved.time_started = now
       }
       if (resolved.time_completed === undefined && current.time_completed != null) {
@@ -729,11 +725,6 @@ function resolveTaskUpdateValues(
       if (resolved.time_completed === undefined) resolved.time_completed = now
       metaBase.cancelled = true
       metaMutated = true
-      break
-    case "queued":
-      clearTerminalReasonFlags()
-      resolved.time_started = null
-      resolved.time_completed = null
       break
     case undefined:
       break

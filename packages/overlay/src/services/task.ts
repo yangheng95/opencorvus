@@ -87,7 +87,6 @@ export interface CreateTaskOptions {
   text: string
   attachments?: Attachment[]
   metadata?: Record<string, unknown>
-  queue?: boolean
   /** Optional priority override; the server defaults to "normal". */
   priority?: "critical" | "high" | "normal" | "low"
   /** Optional OpenCorvus model override for this new task. */
@@ -786,12 +785,10 @@ async function offerInitGitAndRetry(): Promise<boolean> {
 export async function createTask(options: CreateTaskOptions): Promise<CreateTaskResult> {
   const { text, attachments = [], metadata = {}, signal, budget } = options
   if (!text) throw new Error("createTask: text is required")
-  const queue = options.queue ?? false
   const requestID = crypto.randomUUID()
   const body = JSON.stringify({
     request: text,
     requestID,
-    queue,
     metadata,
     source: "panel",
     ...(options.model ? { model: options.model } : {}),

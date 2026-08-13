@@ -16,7 +16,7 @@ import { MissionBoardLane, missionBoardProjection } from "./board"
 import { MissionCompletionFact } from "./completion"
 import { pendingTaskCancellationProjection } from "@/engine/cancellation-projection"
 
-export const MissionTaskStatus = z.enum(["queued", "active", "completed", "failed", "cancelled"])
+export const MissionTaskStatus = z.enum(["active", "completed", "failed", "cancelled"])
 
 export const MissionTaskProjection = z.object({
   id: z.string(),
@@ -32,8 +32,7 @@ export const MissionTaskProjection = z.object({
   created: z.number(),
   updated: z.number(),
   pinned: z.boolean(),
-  queueOrder: z.number(),
-  started: z.number().optional(),
+  started: z.number(),
   completed: z.number().optional(),
 })
 
@@ -115,8 +114,7 @@ export function projectMissionTasks(session: MissionSession): MissionTaskProject
       created: task.time_created,
       updated: task.time_updated,
       pinned: task.time_pinned !== null,
-      queueOrder: task.queue_order,
-      started: task.time_started ?? undefined,
+      started: task.time_started,
       completed: task.time_completed ?? undefined,
     })
   })

@@ -1,13 +1,9 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import path from "node:path"
-import {
-  EngineArtifactEnvelopeSchema,
-  readExactArtifact,
-  type EngineArtifactLocator,
-} from "@opencorvus-ai/plugin"
+import { EngineArtifactEnvelopeSchema, readExactArtifact, type EngineArtifactLocator } from "@opencorvus-ai/plugin"
 import { Config } from "../../src/config/config"
 import { ensureGitProjectMetadata } from "../../src/engine/git"
-import { persistQueuedTask } from "../../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "../fixture/engine-task"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
 import { ExpertSquadPackageManager } from "../../src/expert-squad/manager"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
@@ -168,7 +164,8 @@ const values: Record<TaxComplianceArtifactType, unknown> = {
   },
   "tax-compliance/compliance-plan": {
     workflow_id: workflowID,
-    executive_position: "Complete invoice reconciliation and cross-border evidence before finalizing amended positions.",
+    executive_position:
+      "Complete invoice reconciliation and cross-border evidence before finalizing amended positions.",
     priority_risks: [
       {
         id: "tax-risk-1",
@@ -348,7 +345,7 @@ describe("Tax Compliance Expert Squad", () => {
         })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started,
@@ -362,7 +359,6 @@ describe("Tax Compliance Expert Squad", () => {
             mission: { id: Identifier.ascending("mission"), session_id: Identifier.ascending("session") },
           },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "project",
             projectID: Instance.project.id,
@@ -447,31 +443,26 @@ describe("Tax Compliance Expert Squad", () => {
           charterLocator = receipt.locator
         })
 
-        await withTaskScopedPluginToolHost(
-          scope("tax-compliance-authority-researcher", "dossier"),
-          async (host) => {
-            const receipt = JSON.parse(
-              await publishTaxComplianceArtifact.execute(
-                {
-                  artifact: { artifact_type: "tax-compliance/evidence-dossier", payload: dossier },
-                  resource_set: null,
-                  source_artifact_locators: [charterLocator],
-                },
-                { host, metadata() {} } as never,
-              ),
-            ) as { locator: EngineArtifactLocator }
-            const exact = await readExactArtifact(host.engineArtifacts, receipt.locator)
-            const envelope = EngineArtifactEnvelopeSchema.parse(
-              JSON.parse(new TextDecoder().decode(exact.bytes)),
-            )
-            expect(envelope).toMatchObject({
-              artifact_type: "tax-compliance/evidence-dossier",
-              schema_version: 1,
-              payload: dossier,
-              source_artifact_locators: [charterLocator],
-            })
-          },
-        )
+        await withTaskScopedPluginToolHost(scope("tax-compliance-authority-researcher", "dossier"), async (host) => {
+          const receipt = JSON.parse(
+            await publishTaxComplianceArtifact.execute(
+              {
+                artifact: { artifact_type: "tax-compliance/evidence-dossier", payload: dossier },
+                resource_set: null,
+                source_artifact_locators: [charterLocator],
+              },
+              { host, metadata() {} } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
+          const exact = await readExactArtifact(host.engineArtifacts, receipt.locator)
+          const envelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(new TextDecoder().decode(exact.bytes)))
+          expect(envelope).toMatchObject({
+            artifact_type: "tax-compliance/evidence-dossier",
+            schema_version: 1,
+            payload: dossier,
+            source_artifact_locators: [charterLocator],
+          })
+        })
       },
     })
   }, 0)

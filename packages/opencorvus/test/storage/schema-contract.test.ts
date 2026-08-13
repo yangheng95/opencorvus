@@ -48,7 +48,10 @@ test("creates the complete pre-0.1.0 schema directly from the canonical DDL", ()
       .query<{ sql: string }, []>(`SELECT sql FROM sqlite_schema WHERE type = 'table' AND name = 'project'`)
       .get()?.sql
     const usageSql = sqlite
-      .query<{ sql: string }, []>(`SELECT sql FROM sqlite_schema WHERE type = 'table' AND name = 'provider_usage_event'`)
+      .query<
+        { sql: string },
+        []
+      >(`SELECT sql FROM sqlite_schema WHERE type = 'table' AND name = 'provider_usage_event'`)
       .get()?.sql
     expect(projectSql).toContain('"generation" text NOT NULL')
     expect(usageSql).toContain('"billing_status" text NOT NULL')
@@ -75,9 +78,7 @@ test("creates the complete pre-0.1.0 schema directly from the canonical DDL", ()
     )
     expect(
       sqlite
-        .query<{ generation: string }, []>(
-          `SELECT generation FROM project WHERE id = 'project-schema-contract'`,
-        )
+        .query<{ generation: string }, []>(`SELECT generation FROM project WHERE id = 'project-schema-contract'`)
         .get()?.generation,
     ).toBe("6d68d8c3-d9d2-40fb-bef1-a41d6fd58e7e")
     let invalidGeneration: unknown
@@ -154,7 +155,7 @@ test("uses one explicit application table registry for SQLite and transfer shape
   try {
     rebuildTestDatabase()
     const snapshot = exportMysqlTransferSnapshot()
-    expect(mysqlSchemaFingerprint()).toBe("c4ac1845b2fc787c3ce60b99594c6c0ba873adae05cc6334dccdcb0049ee4918")
+    expect(mysqlSchemaFingerprint()).toBe("25077eacfc0d36046aa8ba39016456c47edf04ba995ff436a0f1aaad25810895")
     expect(snapshot.tables.map((table) => table.name)).toEqual(
       registeredNames.map((entry) => entry.name).filter((name) => name !== "database_authority"),
     )

@@ -7,7 +7,7 @@ import { Instance } from "../src/project/instance"
 import { Session } from "../src/session"
 import { Database, eq } from "../src/storage/db"
 import { EngineArtifactTable, EngineInteractionRequestTable, EngineTaskTable } from "../src/engine/engine.sql"
-import { persistQueuedTask } from "../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { terminalTask } from "../src/engine/state"
 import { requireTask } from "../src/engine/store"
 import { requireCurrentTerminalLifecycleReference } from "../src/engine/terminal-lifecycle-reference"
@@ -187,12 +187,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
       "evolution-lab/evaluation-result": "evolution-safety-auditor",
       "evolution-lab/comparison-recommendation": "evolution-recommendation-owner",
     })
-    expect(() =>
-      assertEvolutionArtifactOwner("evolution-lab/opportunity", "evolution-observer"),
-    ).not.toThrow()
-    expect(() =>
-      assertEvolutionArtifactOwner("evolution-lab/opportunity", "evolution-failure-analyst"),
-    ).toThrow(
+    expect(() => assertEvolutionArtifactOwner("evolution-lab/opportunity", "evolution-observer")).not.toThrow()
+    expect(() => assertEvolutionArtifactOwner("evolution-lab/opportunity", "evolution-failure-analyst")).toThrow(
       new EvolutionArtifactIntegrityError(
         "evolution-lab/opportunity must be published by Evolution Lab worker evolution-observer",
       ),
@@ -700,7 +696,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         const started = Date.now()
         const missionID = Identifier.ascending("mission")
         const missionSessionID = Identifier.ascending("session")
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started,
@@ -711,7 +707,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "mission", mission: { id: missionID, session_id: missionSessionID } },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "project",
             projectID: Instance.project.id,
@@ -924,10 +919,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             ],
           ])
           for (const name of campaignInputNames)
-            await writeFile(
-              path.join(project.path, "campaign-inputs", name),
-              campaignInputContents.get(name)!,
-            )
+            await writeFile(path.join(project.path, "campaign-inputs", name), campaignInputContents.get(name)!)
           const campaignInputPublication = await publishTaskArtifactProjectFiles({
             scope,
             source: { kind: "current_task_project" },
@@ -1150,7 +1142,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
               const trialTaskID = Identifier.ascending("task")
               const trialStarted = started + 10
               const trialCompleted = trialStarted + 1
-              persistQueuedTask({
+              persistTask({
                 taskID: trialTaskID,
                 sessionID: trialSession.id,
                 now: trialStarted - 1,
@@ -1161,7 +1153,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
                 priority: "normal",
                 metadata: { actor: "user" },
                 projectID: Instance.project.id,
-                queue: true,
                 packageRevision: {
                   scope: "project",
                   projectID: Instance.project.id,
@@ -1666,7 +1657,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             toolCallID: "call-campaign-import",
           },
         })
-        persistQueuedTask({
+        persistTask({
           taskID: importedTaskID,
           sessionID: importedSession.id,
           now: sourceCompleted + 1,
@@ -1677,7 +1668,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "mission", mission: { id: missionID, session_id: missionSessionID } },
           projectID: Instance.project.id,
-          queue: true,
           artifactImports: preparedImports,
           packageRevision: {
             scope: "project",
@@ -1823,7 +1813,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         const missionID = Identifier.ascending("mission")
         const missionSessionID = Identifier.ascending("session")
         const timeCreated = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: timeCreated,
@@ -1834,7 +1824,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "mission", mission: { id: missionID, session_id: missionSessionID } },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "built_in",
             projectID: null,
@@ -2293,7 +2282,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
             toolCallID: "call-candidate-import",
           },
         })
-        persistQueuedTask({
+        persistTask({
           taskID: importedTaskID,
           sessionID: importedSession.id,
           now: sourceCompleted + 1,
@@ -2304,7 +2293,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "mission", mission: { id: missionID, session_id: missionSessionID } },
           projectID: Instance.project.id,
-          queue: true,
           artifactImports: preparedImports,
           packageRevision: {
             scope: "built_in",
@@ -2435,7 +2423,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         const session = await Session.create({ kind: "root", title: "Evolution evidence fixture" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started - 1,
@@ -2446,7 +2434,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "user" },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "built_in",
             projectID: null,
@@ -2656,7 +2643,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
 
         const evidenceOwnerSession = await Session.create({ kind: "root", title: "Evolution evidence owner" })
         const evidenceOwnerTaskID = Identifier.ascending("task")
-        persistQueuedTask({
+        persistTask({
           taskID: evidenceOwnerTaskID,
           sessionID: evidenceOwnerSession.id,
           now: completed + 1,
@@ -2667,7 +2654,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "user" },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "built_in",
             projectID: null,
@@ -2952,7 +2938,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         const session = await Session.create({ kind: "root", title: "Nonterminal Trial evidence fixture" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started,
@@ -2963,7 +2949,6 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
           priority: "normal",
           metadata: { actor: "user" },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "built_in",
             projectID: null,

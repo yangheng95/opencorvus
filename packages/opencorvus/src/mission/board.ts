@@ -46,7 +46,7 @@ export const MissionBoardProjection = z.object({
   completion: MissionCompletionFact.optional(),
 })
 
-type MissionTaskLifecycleStatus = "queued" | "active" | "completed" | "failed" | "cancelled"
+type MissionTaskLifecycleStatus = "active" | "completed" | "failed" | "cancelled"
 
 export type MissionBoardProjectionInput = {
   interruptible: boolean
@@ -68,8 +68,7 @@ export function deriveMissionBoardLane(input: MissionBoardProjectionInput): z.in
     },
     {
       lane: "running",
-      matches:
-        input.interruptible || input.taskLifecycleStatuses.some((status) => status === "queued" || status === "active"),
+      matches: input.interruptible || input.taskLifecycleStatuses.some((status) => status === "active"),
     },
     {
       lane: "review",
@@ -137,9 +136,7 @@ function currentMissionCompletion(session: MissionSession): MissionCompletionFac
     const legacyInput = currentInput.success
       ? undefined
       : LegacyMissionCompletionActionInput.safeParse(unwrapPersistedProviderOperation(part.data.state.input))
-    let input:
-      | z.infer<typeof MissionCompletionActionInput>
-      | z.infer<typeof LegacyMissionCompletionActionInput>
+    let input: z.infer<typeof MissionCompletionActionInput> | z.infer<typeof LegacyMissionCompletionActionInput>
     let currentCompletionInput: z.infer<typeof MissionCompletionActionInput> | undefined
     if (currentInput.success) {
       input = currentInput.data

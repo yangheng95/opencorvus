@@ -1,4 +1,4 @@
-import { persistQueuedTask } from "../../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./engine-task"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
@@ -20,7 +20,7 @@ export async function createEngineGitCheckpointTask(input: {
     version: "2026.08.06.1",
     packageDigest: (input.packageDigestCharacter ?? "a").repeat(64),
   }
-  persistQueuedTask({
+  persistTask({
     taskID,
     sessionID: session.id,
     now,
@@ -29,7 +29,6 @@ export async function createEngineGitCheckpointTask(input: {
     productPillar: "code",
     metadata: {},
     projectID: Instance.project.id,
-    queue: false,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",

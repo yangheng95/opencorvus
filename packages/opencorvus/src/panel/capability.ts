@@ -367,7 +367,6 @@ export const PanelCapabilityRegistry = list(
         .describe(
           "Optional compare-and-swap assertion for the exact immutable expert-squad package revision resolved at Task creation.",
         ),
-      queue: z.boolean().optional().describe("Whether to queue this task behind other work in the same directory."),
       checks: CheckConfig.optional().describe("Host verification check configuration for the new task."),
       channel: z.string().optional().describe("External channel identifier to bind to the new task."),
       thread: z.string().optional().describe("External thread identifier to bind to the new task."),
@@ -485,7 +484,7 @@ export const PanelCapabilityRegistry = list(
     kind: "mutation",
     surfaces: allProjectSurfaces,
     params: {
-      taskID: z.string().describe("Task ID to queue for retry."),
+      taskID: z.string().describe("Task ID for the retry request."),
     },
   }),
   item({
@@ -494,7 +493,7 @@ export const PanelCapabilityRegistry = list(
     kind: "mutation",
     surfaces: allProjectSurfaces,
     params: {
-      taskID: z.string().describe("Task ID to queue for replanning."),
+      taskID: z.string().describe("Task ID for the replan request."),
     },
   }),
   item({

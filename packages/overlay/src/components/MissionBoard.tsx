@@ -74,11 +74,7 @@ function MissionBoardCard(props: {
   onDelete: () => void
 }) {
   const terminalTasks = createMemo(() => props.mission.tasks.filter(taskIsTerminal).length)
-  const activeTasks = createMemo(
-    () =>
-      props.mission.tasks.filter((task) => task.lifecycleStatus === "queued" || task.lifecycleStatus === "active")
-        .length,
-  )
+  const activeTasks = createMemo(() => props.mission.tasks.filter((task) => task.lifecycleStatus === "active").length)
   const remainingTasks = createMemo(() => Math.max(0, props.mission.tasks.length - MISSION_TASK_PREVIEW_LIMIT))
 
   return (
@@ -383,7 +379,13 @@ export function MissionBoard(props: MissionBoardProps) {
               <Icon name="error-reason" size="large" />
               <strong>{t("mission_board.load_failed")}</strong>
               <span>{missionBoardStore.error || t("connection.banner_backend_offline")}</span>
-              <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void reloadMissionBoard()}>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                tone="neutral"
+                onClick={() => void reloadMissionBoard()}
+              >
                 {t("common.retry")}
               </Button>
             </div>

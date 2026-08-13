@@ -126,9 +126,9 @@ describe("worktree ownership critical section", () => {
       try {
         const snapshot = await Ownership.Worktree.snapshot(root)
         expect(snapshot.integrity).toEqual({ status: "complete" })
-        expect(snapshot.entries.flatMap((entry) => (entry.status === "valid" ? [entry.marker.sessionID] : []))).toEqual([
-          sessionID,
-        ])
+        expect(snapshot.entries.flatMap((entry) => (entry.status === "valid" ? [entry.marker.sessionID] : []))).toEqual(
+          [sessionID],
+        )
       } finally {
         readdir.mockRestore()
       }
@@ -250,9 +250,7 @@ describe("worktree ownership critical section", () => {
       WorktreeOwnershipCriticalSection.remove({
         directory,
         proveOwnerless: () =>
-          durableOwnerRecorded
-            ? WorktreeOwnershipCriticalSection.ownerless(ownerlessProof.evidence)
-            : ownerlessProof,
+          durableOwnerRecorded ? WorktreeOwnershipCriticalSection.ownerless(ownerlessProof.evidence) : ownerlessProof,
         remove: async () => {
           throw new Error("physical removal failed")
         },
@@ -283,9 +281,7 @@ describe("worktree ownership critical section", () => {
       await createLease.release()
       await removal
       expect(events).toEqual(["create-acquired", "durable-owner-published", "removal-proof"])
-      expect((await Ownership.Worktree.proveOwnerless({ primaryWorktreeDir: root, worktreeDir })).status).toBe(
-        "owned",
-      )
+      expect((await Ownership.Worktree.proveOwnerless({ primaryWorktreeDir: root, worktreeDir })).status).toBe("owned")
     } finally {
       await rm(root, { recursive: true, force: true })
     }
@@ -492,7 +488,6 @@ describe("worktree ownership critical section", () => {
               productPillar: "code",
               model: "firmware/gpt-5",
               promptProfile: "base",
-              queue: true,
             },
             { actor: "user" },
           )
@@ -516,7 +511,12 @@ describe("worktree ownership critical section", () => {
             releaseSandboxOwnership: true,
           })
 
-          expect({ taskKind: Identifier.schema("task").parse(taskID) === taskID, settledBeforeRelease, duringRegistration, afterBinding }).toEqual({
+          expect({
+            taskKind: Identifier.schema("task").parse(taskID) === taskID,
+            settledBeforeRelease,
+            duringRegistration,
+            afterBinding,
+          }).toEqual({
             taskKind: true,
             settledBeforeRelease: "pending",
             duringRegistration: { directory: worktree.directory, removed: false, proof: "owned" },
@@ -733,11 +733,15 @@ describe("prompt ownership termination", () => {
         const owner = SessionPromptState.start(session.id, session.directory)
         if (!owner) throw new Error("Expected a fresh prompt owner")
         SessionStatus.beginExecutionOccurrence(session.id, input.id, owner)
-        await SessionStatus.set(session.id, { type: "streaming" }, {
-          publish: false,
-          inputMessageID: input.id,
-          promptGenerationOwner: owner,
-        })
+        await SessionStatus.set(
+          session.id,
+          { type: "streaming" },
+          {
+            publish: false,
+            inputMessageID: input.id,
+            promptGenerationOwner: owner,
+          },
+        )
 
         const lock = await ProjectGitLock.acquire(
           ProjectRuntimePaths.projectGitLock(Instance.project.worktree),

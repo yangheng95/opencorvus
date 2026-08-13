@@ -1,7 +1,7 @@
 import z from "zod"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference"
 
-export const PanelTaskStatus = z.enum(["queued", "active", "completed", "failed", "cancelled"])
+export const PanelTaskStatus = z.enum(["active", "completed", "failed", "cancelled"])
 export const PanelTaskFailureResult = z.object({
   source: z.string().optional(),
   title: z.string().optional(),
@@ -21,7 +21,7 @@ export const PanelQueryTaskSummaryRow = z.object({
   title: z.string(),
   status: PanelTaskStatus,
   created: z.number().optional(),
-  started: z.number().optional(),
+  started: z.number(),
   completed: z.number().optional(),
   error: z.string().optional(),
   result: PanelTaskResult,

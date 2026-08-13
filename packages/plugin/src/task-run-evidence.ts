@@ -129,8 +129,8 @@ export const TaskRunEvidenceBundleSchema = z
         project_id: z.string().min(1),
         session_id: z.string().min(1),
         request_sha256: SHA256Schema,
-        status: z.enum(["queued", "active", "completed", "failed", "cancelled"]),
-        time_started: z.number().int().nonnegative().nullable(),
+        status: z.enum(["active", "completed", "failed", "cancelled"]),
+        time_started: z.number().int().nonnegative(),
         time_completed: z.number().int().nonnegative().nullable(),
         error: z.string().nullable(),
       })
@@ -179,39 +179,43 @@ export const TaskRunEvidenceBundleSchema = z
           })
           .strict(),
         result: z.discriminatedUnion("kind", [
-          z.object({
-            kind: z.literal("terminal_git"),
-            commit: z.string().regex(/^[a-f0-9]{40}([a-f0-9]{24})?$/),
-            tree: z.string().regex(/^[a-f0-9]{40}([a-f0-9]{24})?$/),
-            repositories: z.array(
-              z
-                .object({
-                  path: z.string().min(1),
-                  depth: z.number().int().nonnegative(),
-                  commit: z.string().regex(/^[a-f0-9]{40}([a-f0-9]{24})?$/),
-                  tree: z.string().regex(/^[a-f0-9]{40}([a-f0-9]{24})?$/),
-                  authority: z
-                    .object({
-                      workspace: z.string().min(1),
-                      git_marker_kind: z.enum(["directory", "file"]),
-                      git_marker_realpath: z.string().min(1),
-                      git_marker_sha256: SHA256Schema.optional(),
-                      git_dir: z.string().min(1),
-                      common_dir: z.string().min(1),
-                      index_path: z.string().min(1),
-                      object_format: z.enum(["sha1", "sha256"]),
-                      ref: z.string().min(1),
-                    })
-                    .strict(),
-                })
-                .strict(),
-            ),
-          }).strict(),
-          z.object({
-            kind: z.literal("live_observation"),
-            tree_sha256: SHA256Schema,
-            time_observed: z.number().int().nonnegative(),
-          }).strict(),
+          z
+            .object({
+              kind: z.literal("terminal_git"),
+              commit: z.string().regex(/^[a-f0-9]{40}([a-f0-9]{24})?$/),
+              tree: z.string().regex(/^[a-f0-9]{40}([a-f0-9]{24})?$/),
+              repositories: z.array(
+                z
+                  .object({
+                    path: z.string().min(1),
+                    depth: z.number().int().nonnegative(),
+                    commit: z.string().regex(/^[a-f0-9]{40}([a-f0-9]{24})?$/),
+                    tree: z.string().regex(/^[a-f0-9]{40}([a-f0-9]{24})?$/),
+                    authority: z
+                      .object({
+                        workspace: z.string().min(1),
+                        git_marker_kind: z.enum(["directory", "file"]),
+                        git_marker_realpath: z.string().min(1),
+                        git_marker_sha256: SHA256Schema.optional(),
+                        git_dir: z.string().min(1),
+                        common_dir: z.string().min(1),
+                        index_path: z.string().min(1),
+                        object_format: z.enum(["sha1", "sha256"]),
+                        ref: z.string().min(1),
+                      })
+                      .strict(),
+                  })
+                  .strict(),
+              ),
+            })
+            .strict(),
+          z
+            .object({
+              kind: z.literal("live_observation"),
+              tree_sha256: SHA256Schema,
+              time_observed: z.number().int().nonnegative(),
+            })
+            .strict(),
         ]),
       })
       .strict(),

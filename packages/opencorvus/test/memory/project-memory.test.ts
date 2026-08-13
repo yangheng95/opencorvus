@@ -14,7 +14,7 @@ import type { Message } from "../../src/session/message"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { MemoryTool } from "../../src/tool/memory"
 import { Server } from "../../src/server/server"
-import { persistQueuedTask } from "../../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "../fixture/engine-task"
 import { prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
 import { EngineService } from "../../src/task-api"
 import { Question } from "../../src/question"
@@ -75,7 +75,7 @@ async function taskFixture(
   const root = await Session.create({ kind: "root", title })
   const taskID = Identifier.ascending("task")
   const now = Date.now()
-  persistQueuedTask({
+  persistTask({
     taskID,
     sessionID: root.id,
     now,
@@ -87,7 +87,6 @@ async function taskFixture(
     metadata: { actor },
     channelBinding,
     projectID: Instance.project.id,
-    queue: false,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",
@@ -732,7 +731,10 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
             session.id,
             "Retain the exact shutdown settlement contract.",
             30_001,
-            ProjectMemory.userInputExtra({ surface: "test.organizer.shutdown", literalText: "Retain shutdown settlement" }),
+            ProjectMemory.userInputExtra({
+              surface: "test.organizer.shutdown",
+              literalText: "Retain shutdown settlement",
+            }),
           ),
         )
         const resolvedModel = organizerModel()
@@ -777,7 +779,9 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
             revision: 0,
             pendingCount: 1,
           })
-          expect(Bus.TestHooks.ownedPublications()).toEqual(expect.arrayContaining([expect.objectContaining({ pending: false })]))
+          expect(Bus.TestHooks.ownedPublications()).toEqual(
+            expect.arrayContaining([expect.objectContaining({ pending: false })]),
+          )
           busGate.commit()
           runtimeGate.commit()
           await Bun.sleep(25)

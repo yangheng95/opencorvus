@@ -3,7 +3,7 @@ import { EngineArtifactEnvelopeSchema } from "@opencorvus-ai/plugin"
 import { createHash } from "node:crypto"
 import { artifactCatalogAuthority, searchTaskArtifacts } from "../src/artifact-catalog"
 import { recordEngineArtifact } from "../src/engine/artifact"
-import { persistQueuedTask } from "../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../src/id/id"
 import { Instance } from "../src/project/instance"
@@ -29,7 +29,7 @@ async function createCatalogTask() {
   const taskID = Identifier.ascending("task")
   const now = Date.now()
   const packageDigest = "a".repeat(64)
-  persistQueuedTask({
+  persistTask({
     taskID,
     sessionID: session.id,
     now,
@@ -40,7 +40,6 @@ async function createCatalogTask() {
     priority: "normal",
     metadata: {},
     projectID: Instance.project.id,
-    queue: true,
     packageRevision: {
       scope: "built_in",
       projectID: null,
@@ -117,15 +116,12 @@ describe("Artifact catalog cursor", () => {
 
         const tool = createArtifactSearchAiTool(taskID)
         if (!tool.execute) throw new Error("artifact_search AI Tool is missing its execution boundary")
-        const transported = await tool.execute(
-          { ...search, limit: 100 },
-          {
-            toolCallId: "artifact-search-cursor-contract",
-            messages: [],
-            abortSignal: new AbortController().signal,
-            opencorvus: { sessionID: session.id },
-          } as never,
-        )
+        const transported = await tool.execute({ ...search, limit: 100 }, {
+          toolCallId: "artifact-search-cursor-contract",
+          messages: [],
+          abortSignal: new AbortController().signal,
+          opencorvus: { sessionID: session.id },
+        } as never)
         const transportedPage = JSON.parse(transported.output) as typeof first
         expect(transported.metadata).toMatchObject({ filteredTotal: 50, hasMore: true })
         expect(transportedPage.entries).toHaveLength(25)
@@ -134,15 +130,12 @@ describe("Artifact catalog cursor", () => {
         expect(transportedPage.next_cursor!.length).toBeLessThan(600)
 
         publishCursorArtifact(taskID, 50)
-        const transportedSecond = await tool.execute(
-          { ...search, limit: 100, cursor: transportedPage.next_cursor! },
-          {
-            toolCallId: "artifact-search-cursor-contract-next",
-            messages: [],
-            abortSignal: new AbortController().signal,
-            opencorvus: { sessionID: session.id },
-          } as never,
-        )
+        const transportedSecond = await tool.execute({ ...search, limit: 100, cursor: transportedPage.next_cursor! }, {
+          toolCallId: "artifact-search-cursor-contract-next",
+          messages: [],
+          abortSignal: new AbortController().signal,
+          opencorvus: { sessionID: session.id },
+        } as never)
         const second = JSON.parse(transportedSecond.output) as typeof first
         const frozenIDs = [...transportedPage.entries, ...second.entries].map((entry) => entry.locator)
 

@@ -223,7 +223,7 @@ async function closeMissionExecution(
         sessionID: session.id,
       }).filter((task) => {
         const status = deriveTaskStatus(task)
-        return status === "queued" || status === "active"
+        return status === "active"
       })
       for (const task of childTasks) {
         try {
@@ -347,7 +347,7 @@ export function MissionRoutes() {
         summary: "Get Mission status",
         description:
           "Collect current Mission and Task activity with each Task's diagnostic lifecycle, Requirement acceptance, and per-Slice fact facets. " +
-          'Mission and Task `status` fields are normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw queued, active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.',
+          'Mission and Task `status` fields are normalized to "running" or "inactive"; each Goal detail independently exposes exact activity associations, review associations, and Completion Decision acceptance. Raw active, completed, failed, and cancelled lifecycle facts remain available only as lifecycleStatus.',
         operationId: "mission.status",
         responses: {
           200: {

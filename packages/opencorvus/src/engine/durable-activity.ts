@@ -2,10 +2,7 @@ import { asc, Database, eq, inArray } from "@/storage/db"
 import { EngineArtifactTable, EngineInteractionRequestTable, EngineTaskTable } from "./engine.sql"
 import { listAllMissionTasks } from "./store"
 import { MessageTable, PartTable, SessionTable } from "@/session/session.sql"
-import {
-  DurableActivityCursorSchema,
-  type DurableActivityCursor,
-} from "@opencorvus-ai/plugin"
+import { DurableActivityCursorSchema, type DurableActivityCursor } from "@opencorvus-ai/plugin"
 import z from "zod"
 import { createHash } from "node:crypto"
 
@@ -17,7 +14,7 @@ function revisionDigest(value: unknown) {
 }
 
 function taskExecutionActivityTime(task: TaskRow) {
-  return Math.max(task.time_created, task.time_started ?? 0, task.time_completed ?? 0)
+  return Math.max(task.time_created, task.time_started, task.time_completed ?? 0)
 }
 
 function latestActivity(rows: readonly ActivityRow[]): DurableActivityCursor {
@@ -43,10 +40,7 @@ function activityDigest(rows: readonly ActivityRow[]) {
         left.source.localeCompare(right.source) ||
         left.id.localeCompare(right.id),
     )
-    .map(
-      (row) =>
-        `${row.time_updated}:${row.source.length}:${row.source}:${row.id.length}:${row.id}:${row.revision}`,
-    )
+    .map((row) => `${row.time_updated}:${row.source.length}:${row.source}:${row.id.length}:${row.id}:${row.revision}`)
     .join("\n")
   return createHash("sha256").update(canonical, "utf8").digest("hex")
 }

@@ -3,7 +3,7 @@ import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dis
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { recordDispatchSettlement } from "@/engine/dispatch-settlement"
 import { describeTask } from "@/engine/describe"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { persistArchitectGoalProjection } from "@/engine/persist"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { listGoalGraphProjectionArtifacts, requireTask } from "@/engine/store"
@@ -74,7 +74,7 @@ async function createTask(title: string) {
     title,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
-  persistQueuedTask({
+  persistTask({
     taskID,
     sessionID: root.id,
     now,
@@ -85,7 +85,6 @@ async function createTask(title: string) {
     priority: "normal",
     metadata: {},
     projectID: Instance.project.id,
-    queue: true,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",
@@ -172,7 +171,9 @@ function emptyArchitectResult(input: {
 }) {
   return {
     inputFacts: {
-      ...(input.requirementSetArtifactLocator ? { requirementSetArtifactLocator: input.requirementSetArtifactLocator } : {}),
+      ...(input.requirementSetArtifactLocator
+        ? { requirementSetArtifactLocator: input.requirementSetArtifactLocator }
+        : {}),
       ...(input.priorGoalGraphProjectionArtifactLocator
         ? { priorGoalGraphProjectionArtifactLocator: input.priorGoalGraphProjectionArtifactLocator }
         : {}),
@@ -342,7 +343,11 @@ describe("Architect domain-incomplete settlement", () => {
           },
         })
         const candidate = listGoalGraphProjectionArtifacts(fixture.taskID).at(-1)
-        expect({ outcome: settled.outcome, candidate: candidate?.payload, workflow: settled.projection.workflow_execution }).toMatchObject({
+        expect({
+          outcome: settled.outcome,
+          candidate: candidate?.payload,
+          workflow: settled.projection.workflow_execution,
+        }).toMatchObject({
           outcome: {
             kind: "domain_incomplete",
             domain_artifact: { artifact_id: candidate?.id },
@@ -380,7 +385,11 @@ describe("Architect domain-incomplete settlement", () => {
             sourceArtifactLocators: [requirement],
           }),
         })
-        expect({ outcome, candidates: listGoalGraphProjectionArtifacts(fixture.taskID), workflow: projection.workflow_execution }).toMatchObject({
+        expect({
+          outcome,
+          candidates: listGoalGraphProjectionArtifacts(fixture.taskID),
+          workflow: projection.workflow_execution,
+        }).toMatchObject({
           outcome: { kind: "terminal_success" },
           candidates: [{ payload: { projection: { goal_revision_ids: [] }, conflicts: [] } }],
           workflow: {

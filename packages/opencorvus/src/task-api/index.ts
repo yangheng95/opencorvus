@@ -116,17 +116,15 @@ import {
   drainQueuedTaskEvent,
   discardQueuedTaskEvent,
   terminalizeQueuedTaskEventsForCancellationInTransaction,
-  directoryQueueSnapshot,
   dispatchPersistedTaskLoop,
   dispatchTaskLoop,
   persistQueuedTaskIntentInTransaction,
   persistQueuedRootMessageWakeInTransaction,
   persistQueuedMissionAcceptanceResumeInTransaction,
+  requireTaskCreationIngressID,
   queuedTaskEventStats,
   retirePendingQueuedTaskEventsForOperatorIntentInTransaction,
   type DispatchTaskLoopResult,
-  reorderQueuedTasksForCwd,
-  startQueuedTaskInCwd,
   taskCwd,
 } from "@/engine/queue"
 import { openTaskForContinuationInTransaction, openTaskForOperatorIntentInTransaction } from "@/engine/task-intent-open"
@@ -150,10 +148,9 @@ import {
   isTaskCancelled,
   isTaskCompleted,
   isTaskFailed,
-  isTaskQueued,
   isTaskTerminal,
 } from "@/engine/task-status"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistTask } from "@/engine/pipeline"
 import { SessionPromptState } from "@/session/prompt/state"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
 import { createExecutionCancellationOrigin, type ExecutionCancellationOrigin } from "@/session/prompt/cancellation"
@@ -291,7 +288,7 @@ export const TaskControlIntentLifecycleConflictError = NamedError.create(
     message: z.string(),
     taskID: z.string(),
     operation: z.enum(["retry", "replan"]),
-    lifecycle: z.enum(["queued", "active"]),
+    lifecycle: z.literal("active"),
   }),
 )
 
@@ -311,7 +308,7 @@ export const MissionTaskResumeLifecycleConflictError = NamedError.create(
     taskID: z.string(),
     reviewedTerminalLifecycleReference: TerminalLifecycleReferenceSchema,
     currentTerminalLifecycleReference: TerminalLifecycleReferenceSchema.optional(),
-    currentLifecycle: z.enum(["queued", "active", "completed", "failed", "cancelled"]),
+    currentLifecycle: z.enum(["active", "completed", "failed", "cancelled"]),
   }),
 )
 
@@ -1324,15 +1321,15 @@ async function prepareProject(project?: string) {
 
 function taskSummary(
   rows: Array<{
-    time_started: number | null
+    time_started: number
     time_completed: number | null
     error?: string | null
     metadata?: Record<string, unknown> | null
   }>,
 ) {
   const completed = rows
-    .filter((row) => typeof row.time_started === "number" && typeof row.time_completed === "number")
-    .map((row) => (row.time_completed ?? 0) - (row.time_started ?? 0))
+    .filter((row) => typeof row.time_completed === "number")
+    .map((row) => (row.time_completed ?? 0) - row.time_started)
     .filter((value) => value > 0)
     .sort((a, b) => a - b)
 
@@ -1349,38 +1346,11 @@ function taskSummary(
 }
 
 function taskItems(rows: TaskListRow[]) {
-  const queueRevisions = new Map<string, string>()
-  const groupedQueued = new Map<string, TaskRow[]>()
-  for (const item of rows) {
-    if (!item.directory) continue
-    if (!isTaskQueued(item.task)) continue
-    const list = groupedQueued.get(item.directory) ?? []
-    list.push(item.task)
-    groupedQueued.set(item.directory, list)
-  }
-  for (const [directory, tasks] of groupedQueued.entries()) {
-    const revision = tasks
-      .slice()
-      .sort((a, b) => {
-        const criticalDelta = (a.priority === "critical" ? 0 : 1) - (b.priority === "critical" ? 0 : 1)
-        if (criticalDelta !== 0) return criticalDelta
-        if (a.queue_order !== b.queue_order) return a.queue_order - b.queue_order
-        if (a.time_created !== b.time_created) return a.time_created - b.time_created
-        return a.id.localeCompare(b.id)
-      })
-      .map((task) => `${task.id}:${task.queue_order}:${task.time_updated}`)
-      .join("|")
-    queueRevisions.set(directory, revision)
-  }
-
   return rows.map((item) => {
     const task = item.task
     const pendingInteractions = listInteractions(task.id).filter((entry) => entry.status === "pending")
     return {
-      task: viewTaskListTask(task, {
-        directory: item.directory,
-        queueRevision: item.directory && isTaskQueued(task) ? queueRevisions.get(item.directory) : undefined,
-      }),
+      task: viewTaskListTask(task, { directory: item.directory }),
       project: item.project,
       owned_prompt_sessions: listOwnedPromptSessionsForTask(task.id),
       pending_interactions: pendingInteractions.length,
@@ -1429,16 +1399,6 @@ export class PlannerFailureError extends Error {
   constructor(message: string, options?: { cause?: unknown }) {
     super(message, options)
     this.name = "PlannerFailureError"
-  }
-}
-
-export class TaskQueueStartError extends Error {
-  constructor(
-    message: string,
-    readonly code: "not_queued",
-  ) {
-    super(message)
-    this.name = "TaskQueueStartError"
   }
 }
 
@@ -1503,13 +1463,11 @@ export namespace EngineService {
     inboxID: string
     ownerID: string
     message: string
-  }): Promise<
-    {
-      messageID: string
-      ingressID: string
-      wakeStatus: DispatchTaskLoopResult
-    }
-  > {
+  }): Promise<{
+    messageID: string
+    ingressID: string
+    wakeStatus: DispatchTaskLoopResult
+  }> {
     const delivery = requireSchedulerDelivery(input.inboxID)
     if (delivery.status !== "leased" || delivery.leaseOwner !== input.ownerID) {
       throw new Error(`Scheduler Task delivery ${input.inboxID} is not leased by ${input.ownerID}.`)
@@ -1694,6 +1652,7 @@ export namespace EngineService {
         selectedProfileID,
         expectedPackageDigest: input.expectedPackageDigest,
       })
+      await dispatchPersistedTaskLoop(existingBindingTask, requireTaskCreationIngressID(existingBindingTask))
       return existingBindingTask
     }
     const requestID = input.requestID?.trim() || undefined
@@ -1720,6 +1679,7 @@ export namespace EngineService {
           selectedProfileID,
           expectedPackageDigest: input.expectedPackageDigest,
         })
+        await dispatchPersistedTaskLoop(existing.id, requireTaskCreationIngressID(existing.id))
         return existing.id
       }
     }
@@ -1788,14 +1748,15 @@ export namespace EngineService {
     // once, then carry only neutral references through task persistence. The
     // overlay reads task.attachments directly; domain adapters assign semantics
     // through explicit contracts.
-    // Materialize the intent bundle on disk BEFORE the queue picks the task
-    // up, so when the orchestrator / planner / architect wake their stage
+    // Materialize the intent bundle on disk before the creation ingress can
+    // wake the Task, so when the orchestrator / planner / architect wake their stage
     // prompts (which reference the task-scoped intent bundle path) resolve to
     // a real file. Without this, architect-generated goal objectives like
     // "see the intent bundle §3" point at nothing — the
     // executor either misses the reference or hallucinates a body. See
     // `src/intent/bundle.ts` header for the full rationale.
     let session!: Awaited<ReturnType<typeof Session.create>>
+    let initialIngressID: string | undefined
     try {
       const preparedArtifactSources =
         resolvedArtifactSources.authorities.length > 0
@@ -1837,6 +1798,7 @@ export namespace EngineService {
       session = await Session.create({
         kind: "root",
         title,
+        permission: overrides.length > 0 ? overrides : undefined,
         metadata: {
           [EffectiveConfig.TASK_SNAPSHOT_KEY]: taskConfigSnapshot,
           configOverlay: initialSessionConfigOverlay,
@@ -1845,7 +1807,7 @@ export namespace EngineService {
 
       // Task row, target-owned imports, and initial Engine facts commit together
       // only after every imported resource snapshot is durable.
-      persistQueuedTask({
+      initialIngressID = persistTask({
         taskID,
         sessionID: session.id,
         now,
@@ -1860,7 +1822,6 @@ export namespace EngineService {
         metadata,
         channelBinding: input.channelBinding,
         projectID: Instance.project.id,
-        queue: input.queue,
         artifactImports: preparedArtifactSources.imports,
         artifactImportAuthorities: preparedArtifactSources.authorities,
         packageRevision,
@@ -1891,14 +1852,13 @@ export namespace EngineService {
           selectedProfileID,
           expectedPackageDigest: input.expectedPackageDigest,
         })
+        await dispatchPersistedTaskLoop(existing, requireTaskCreationIngressID(existing))
         return existing
       }
       throw error
     }
-    if (overrides.length > 0) {
-      await Session.setPermission({ sessionID: session.id, permission: overrides })
-    }
-    await dispatchTaskLoop({ taskID })
+    if (!initialIngressID) throw new Error(`Task ${taskID} committed without its durable creation ingress`)
+    await dispatchPersistedTaskLoop(taskID, initialIngressID)
     return taskID
   }
 
@@ -2151,54 +2111,6 @@ export namespace EngineService {
     return {
       summary: taskSummary(rows.map((item) => item.task)),
       tasks: taskItems(rows),
-    }
-  }
-
-  export async function reorderTaskQueue(input: { directory: string; orderedTaskIDs: string[]; revision?: string }) {
-    const result = reorderQueuedTasksForCwd({
-      cwd: input.directory,
-      projectID: Instance.project.id,
-      orderedTaskIDs: input.orderedTaskIDs,
-      revision: input.revision,
-    })
-    await Promise.all(
-      result.queuedTaskIDs.map((taskID) =>
-        EngineProtocol.emit(
-          Event.TaskUpdated,
-          {
-            taskID,
-            status: "queued",
-            summary: "Task queue reordered",
-          },
-          { source: "task.queue.reorder" },
-        ),
-      ),
-    )
-    return result
-  }
-
-  export async function startQueuedTaskNow(taskID: string) {
-    const task = requireTaskInCurrentProject(taskID)
-    if (!isTaskQueued(task)) {
-      throw new TaskQueueStartError(`Task ${taskID} is not queued`, "not_queued")
-    }
-    const cwd = taskCwd(taskID)
-
-    const before = directoryQueueSnapshot(cwd)
-    if (!before.queuedTaskIDs.includes(taskID)) {
-      throw new TaskQueueStartError(`Task ${taskID} is not in the directory queue`, "not_queued")
-    }
-    await startQueuedTaskInCwd(taskID, cwd)
-
-    const updated = requireTaskInCurrentProject(taskID)
-    const status = deriveTaskStatus(updated) as string
-    const after = directoryQueueSnapshot(cwd)
-    return {
-      task: viewTask(updated, { directory: cwd }),
-      directory: cwd,
-      status,
-      started: status === "active",
-      queuedTaskIDs: after.queuedTaskIDs,
     }
   }
 
@@ -3556,7 +3468,7 @@ export namespace EngineService {
           const current = db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, taskID)).get()
           if (!current) throw new NotFoundError({ message: `Task not found: ${taskID}` })
           if (!isTaskTerminal(current)) {
-            const lifecycle = isTaskQueued(current) ? "queued" : "active"
+            const lifecycle = "active"
             throw new TaskControlIntentLifecycleConflictError({
               message: `Task ${taskID} is already ${lifecycle}; ${intent} accepts only a terminal Task.`,
               taskID,

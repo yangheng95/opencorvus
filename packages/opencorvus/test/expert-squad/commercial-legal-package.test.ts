@@ -1,12 +1,8 @@
 import { afterAll, describe, expect, test } from "bun:test"
 import path from "node:path"
-import {
-  EngineArtifactEnvelopeSchema,
-  readExactArtifact,
-  type EngineArtifactLocator,
-} from "@opencorvus-ai/plugin"
+import { EngineArtifactEnvelopeSchema, readExactArtifact, type EngineArtifactLocator } from "@opencorvus-ai/plugin"
 import { Config } from "../../src/config/config"
-import { persistQueuedTask } from "../../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "../fixture/engine-task"
 import { ExpertSquadPackageManager } from "../../src/expert-squad/manager"
 import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-resolver"
 import { ExpertSquadRegistry } from "../../src/expert-squad/registry"
@@ -44,10 +40,7 @@ const dependencies = {
   "commercial-legal-authority-researcher": ["commercial-legal-matter-planner"],
   "commercial-legal-contract-analyst": ["commercial-legal-authority-researcher"],
   "commercial-legal-regulatory-analyst": ["commercial-legal-authority-researcher"],
-  "commercial-legal-strategy-counsel": [
-    "commercial-legal-contract-analyst",
-    "commercial-legal-regulatory-analyst",
-  ],
+  "commercial-legal-strategy-counsel": ["commercial-legal-contract-analyst", "commercial-legal-regulatory-analyst"],
   "commercial-legal-fact-checker": ["commercial-legal-strategy-counsel"],
   "commercial-legal-report-writer": ["commercial-legal-fact-checker"],
 } as const
@@ -319,7 +312,7 @@ describe("Commercial Legal Expert Squad", () => {
         })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now: started,
@@ -333,7 +326,6 @@ describe("Commercial Legal Expert Squad", () => {
             mission: { id: Identifier.ascending("mission"), session_id: Identifier.ascending("session") },
           },
           projectID: Instance.project.id,
-          queue: true,
           packageRevision: {
             scope: "project",
             projectID: Instance.project.id,
@@ -418,31 +410,26 @@ describe("Commercial Legal Expert Squad", () => {
           charterLocator = receipt.locator
         })
 
-        await withTaskScopedPluginToolHost(
-          scope("commercial-legal-authority-researcher", "dossier"),
-          async (host) => {
-            const receipt = JSON.parse(
-              await publishCommercialLegalArtifact.execute(
-                {
-                  artifact: { artifact_type: "commercial-legal/authority-dossier", payload: dossier },
-                  resource_set: null,
-                  source_artifact_locators: [charterLocator],
-                },
-                { host, metadata() {} } as never,
-              ),
-            ) as { locator: EngineArtifactLocator }
-            const exact = await readExactArtifact(host.engineArtifacts, receipt.locator)
-            const envelope = EngineArtifactEnvelopeSchema.parse(
-              JSON.parse(new TextDecoder().decode(exact.bytes)),
-            )
-            expect(envelope).toMatchObject({
-              artifact_type: "commercial-legal/authority-dossier",
-              schema_version: 1,
-              payload: dossier,
-              source_artifact_locators: [charterLocator],
-            })
-          },
-        )
+        await withTaskScopedPluginToolHost(scope("commercial-legal-authority-researcher", "dossier"), async (host) => {
+          const receipt = JSON.parse(
+            await publishCommercialLegalArtifact.execute(
+              {
+                artifact: { artifact_type: "commercial-legal/authority-dossier", payload: dossier },
+                resource_set: null,
+                source_artifact_locators: [charterLocator],
+              },
+              { host, metadata() {} } as never,
+            ),
+          ) as { locator: EngineArtifactLocator }
+          const exact = await readExactArtifact(host.engineArtifacts, receipt.locator)
+          const envelope = EngineArtifactEnvelopeSchema.parse(JSON.parse(new TextDecoder().decode(exact.bytes)))
+          expect(envelope).toMatchObject({
+            artifact_type: "commercial-legal/authority-dossier",
+            schema_version: 1,
+            payload: dossier,
+            source_artifact_locators: [charterLocator],
+          })
+        })
       },
     })
   }, 0)

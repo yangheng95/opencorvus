@@ -852,7 +852,7 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
   // the next user-driven wake and decide retry / restart / fail. Runtime
   // restart must not auto-wake active tasks: the overlay restores the task
   // view and waits for a real operator message.
-  const streamErrorFloor = task.time_started ?? task.time_created
+  const streamErrorFloor = task.time_started
   const infrastructureErrorRows = listTaskInfrastructureErrorArtifacts(
     task.id,
     streamErrorFloor,
@@ -920,7 +920,7 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
     }
   })
 
-  const agentFailureFloor = task.time_started ?? task.time_created
+  const agentFailureFloor = task.time_started
   const recentAgentFailures: AgentFailureDesc[] = createDecisionLog(task.id)
     .readByPhase("agent_error")
     .filter((entry) => entry.timeCreated >= agentFailureFloor)
@@ -964,7 +964,7 @@ async function describeTaskFromRow(task: TaskRow): Promise<TaskDesc> {
   const openToolCallsWithoutCurrentOwner = listOpenToolCallsWithoutCurrentOwner(task)
   const completedToolCallRefs = listCompletedToolCallRefs(task)
   const agentMessageRefs = listAgentMessageRefs(task)
-  const taskScheduledWaits = describeTaskScheduledWaits(task.id, task.time_started ?? task.time_created)
+  const taskScheduledWaits = describeTaskScheduledWaits(task.id, task.time_started)
 
   return {
     id: task.id,

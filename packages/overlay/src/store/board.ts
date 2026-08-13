@@ -959,7 +959,7 @@ function visibleTaskIndex(): Map<string, any> {
 
 // ── Task state classifiers ──
 
-const INTERRUPTABLE_STATUSES = new Set(["queued", "active"])
+const INTERRUPTABLE_STATUSES = new Set(["active"])
 
 const TERMINAL_STATUSES = new Set(["completed", "failed", "cancelled"])
 

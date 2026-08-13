@@ -388,7 +388,7 @@ work_artifact_deliver` typed tools，不拥有第二套 serializer。profile reg
   `question` 的 `multiple: true` 交互展示全部 Squad；每个 option 以精确 Squad 名称作为人类可读
   `label`、以精确 Squad UUID 作为稳定 `value`，已安装项通过通用 Question option 的
   `disabled: true` 保持可见但不可选择，再为每个选中的未安装项创建一个
-  `promptProfile: "squad-sdk"`、`queue: false` 的独立 Task，并固定选择 `heterogeneous-import` workflow。Mission 独占选择与并行分发职责；
+  `promptProfile: "squad-sdk"` 的独立 Task，并固定选择 `heterogeneous-import` workflow。Mission 独占选择与并行分发职责；
   每个 Task 只对请求中固定的一个 UUID 执行 catalog 证据校验、mapping、preview、修复和 import，
   不再向用户选择 Squad。项目级 `prompt_profile.active` 不因此改变，导入结果仍保持 inactive；
 - `PromptProfileResolver` 是 production `skill` tool surface 的唯一投影者；SkillTool 只能从当前

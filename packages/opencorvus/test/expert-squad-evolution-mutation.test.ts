@@ -7,7 +7,7 @@ import { Config } from "../src/config/config"
 import { EffectiveConfig } from "../src/config/effective"
 import { exactEngineArtifactLocator, requireEngineArtifactByLocator } from "../src/artifact-catalog"
 import { recordEngineArtifact, updateEngineArtifact } from "../src/engine/artifact"
-import { persistQueuedTask } from "../src/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "../src/engine/task-execution-capsule-binding"
 import { requireTaskPackageRevisionBinding } from "../src/engine/task-package-revision-binding"
 import {
@@ -108,7 +108,7 @@ async function createTask(input: {
   })
   const taskID = Identifier.ascending("task")
   const now = Date.now()
-  persistQueuedTask({
+  persistTask({
     taskID,
     sessionID: session.id,
     now,
@@ -119,7 +119,6 @@ async function createTask(input: {
     priority: "normal",
     metadata: {},
     projectID: Instance.project.id,
-    queue: true,
     packageRevision: {
       scope: "project",
       projectID: Instance.project.id,
@@ -373,8 +372,7 @@ describe("authorized expert squad evolution mutation", () => {
           })
           expect({
             candidates: candidateDevelopmentHistory.records[0]!.candidates.length,
-            candidateDigest:
-              candidateDevelopmentHistory.records[0]!.candidates[0]!.candidate_revision.package_digest,
+            candidateDigest: candidateDevelopmentHistory.records[0]!.candidates[0]!.candidate_revision.package_digest,
             comparisons: candidateDevelopmentHistory.records[0]!.candidates[0]!.comparisons.length,
           }).toEqual({
             candidates: 1,
@@ -460,8 +458,7 @@ describe("authorized expert squad evolution mutation", () => {
           expect({
             runs: trialEvidenceHistory.records[0]!.candidates[0]!.runs.length,
             evaluations: trialEvidenceHistory.records[0]!.candidates[0]!.evaluations.length,
-            candidateDigest:
-              trialEvidenceHistory.records[0]!.candidates[0]!.candidate_revision.package_digest,
+            candidateDigest: trialEvidenceHistory.records[0]!.candidates[0]!.candidate_revision.package_digest,
           }).toEqual({
             runs: 2,
             evaluations: 2,
@@ -565,9 +562,7 @@ describe("authorized expert squad evolution mutation", () => {
           } finally {
             restoreInterruption()
           }
-          expect(interruption).toBeInstanceOf(
-            ExpertSquadPackageManager.EvolutionMutationAbruptTerminationForTest,
-          )
+          expect(interruption).toBeInstanceOf(ExpertSquadPackageManager.EvolutionMutationAbruptTerminationForTest)
           const recoveryTaskID = await EngineService.createTask(
             {
               requestID: `post-crash-recovery-${Identifier.ascending("artifact")}`,
@@ -575,13 +570,10 @@ describe("authorized expert squad evolution mutation", () => {
               productPillar: "code",
               model: "firmware/gpt-5",
               promptProfile: candidate.id,
-              queue: false,
             },
             { actor: "user" },
           )
-          expect(requireTaskPackageRevisionBinding(recoveryTaskID).package_digest).toBe(
-            baselineRevision.package_digest,
-          )
+          expect(requireTaskPackageRevisionBinding(recoveryTaskID).package_digest).toBe(baselineRevision.package_digest)
           const receiptReadFailure = ExpertSquadPackageManager.TestHooks.failFirstReceiptReadAfterCommit()
           let promotion!: Awaited<ReturnType<typeof executeEvolutionPackageMutation>>
           try {
@@ -744,7 +736,6 @@ describe("authorized expert squad evolution mutation", () => {
               model: "firmware/gpt-5",
               promptProfile: candidate.id,
               expectedPackageDigest: candidateRevision.package_digest,
-              queue: false,
             },
             { actor: "user" },
           )

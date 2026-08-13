@@ -13,7 +13,7 @@ import { EngineArtifactTable, EngineTaskCancellationAuthorityTable, EngineTaskTa
 import { Event } from "@/engine/model"
 import { EngineProtocol } from "@/engine/protocol"
 import { recordTaskInfrastructureError } from "@/engine/persist"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { QueuedTaskIngressSchema } from "@/engine/queued-task-ingress"
 import {
   dispatchTaskLoop,
@@ -112,7 +112,7 @@ test("projects durable Task cancellation as the dispatch_agent preparation resul
       })
       const taskID = Identifier.ascending("task")
       const now = Date.now()
-      persistQueuedTask({
+      persistTask({
         taskID,
         sessionID: root.id,
         now,
@@ -123,7 +123,6 @@ test("projects durable Task cancellation as the dispatch_agent preparation resul
         priority: "normal",
         metadata: { actor: "user" },
         projectID: Instance.project.id,
-        queue: false,
         packageRevision,
         executionCapsuleBinding: await prepareTaskProcessBinding({
           mode: "native",
@@ -454,7 +453,7 @@ async function verifyDetachedDispatchLifecycle(input: {
           metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
         })
         const now = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: root.id,
           now,
@@ -465,7 +464,6 @@ async function verifyDetachedDispatchLifecycle(input: {
           priority: "normal",
           metadata: { actor: "user" },
           projectID,
-          queue: true,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",
@@ -1272,7 +1270,7 @@ test("startup reconstructs and delivers an accepted infrastructure fact for a te
         metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
       })
       const now = Date.now()
-      persistQueuedTask({
+      persistTask({
         taskID,
         sessionID: root.id,
         now,
@@ -1283,7 +1281,6 @@ test("startup reconstructs and delivers an accepted infrastructure fact for a te
         priority: "normal",
         metadata: { actor: "user" },
         projectID: Instance.project.id,
-        queue: false,
         packageRevision,
         executionCapsuleBinding: await prepareTaskProcessBinding({
           mode: "native",

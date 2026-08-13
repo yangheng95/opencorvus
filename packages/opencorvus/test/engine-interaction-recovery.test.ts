@@ -4,7 +4,7 @@ import { Config } from "@/config/config"
 import { insertEngineArtifact } from "@/engine/artifact"
 import { agentCoordinationQuestionID } from "@/engine/agent-coordination"
 import { EngineInteraction } from "@/engine/interaction"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { findInteractionByExternal, listInteractions, pendingInteractionCounts, requireTask } from "@/engine/store"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { Identifier } from "@/id/id"
@@ -39,7 +39,7 @@ async function createTaskFixture(title: string) {
   const root = await Session.create({ kind: "root", title })
   const taskID = Identifier.ascending("task")
   const now = Date.now()
-  persistQueuedTask({
+  persistTask({
     taskID,
     sessionID: root.id,
     now,
@@ -50,7 +50,6 @@ async function createTaskFixture(title: string) {
     priority: "normal",
     metadata: {},
     projectID: Instance.project.id,
-    queue: false,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",

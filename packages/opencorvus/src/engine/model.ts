@@ -258,7 +258,7 @@ export const UserUploadList = UserUploadInput.array()
 /**
  * Persisted attachment reference. Once the bytes live in AttachmentStore
  * (`<projectDir>/.opencorvus/.r/project/attachments/<sha>.<ext>`), every downstream layer
- * — queue table row, task loop, orchestrator, frontend-design, requirements — only
+ * — Provider execution row, task loop, orchestrator, frontend-design, requirements — only
  * carries this small, URL-addressable reference. Agents that need the raw
  * bytes for multimodal LLM input read them back through AttachmentStore.
  *
@@ -307,17 +307,9 @@ export const CreateTaskInput = z
      *  callers may still submit raw base64, which is materialized once at this
      *  boundary; every downstream layer uses references. */
     attachments: UserUploadList.optional(),
-    // Priority levels (highest first):
-    //  - "critical": repair-shaped follow-ups proposed by the Orchestrator —
-    //                jump the queued serial queue ahead of normal/high. Never
-    //                preempts an already-active task in the same project; only
-    //                takes the next queued slot.
-    //  - "high"/"normal"/"low": user-facing levels; also used by iteration /
-    //                recommendation follow-ups from the Orchestrator.
+    // User-facing priority metadata. It affects Work Ledger presentation; it
+    // does not grant Host scheduling authority over Task execution.
     priority: z.enum(["critical", "high", "normal", "low"]).optional(),
-    /** Queue preference. false starts immediately; true leaves the task queued
-     *  until a later queue advance. */
-    queue: z.boolean().default(false),
     promptProfile: z.string().min(1).optional(),
     expectedPackageDigest: z
       .string()
@@ -341,17 +333,11 @@ export const Task = z.object({
   productPillar: ProductPillarSchema,
   title: z.string(),
   request: z.string(),
-  status: z.enum(["queued", "active", "completed", "failed", "cancelled"]),
+  status: z.enum(["active", "completed", "failed", "cancelled"]),
   terminalReason: z.enum(["completed", "failed", "cancelled", "interrupted"]).optional(),
   cancellation: TaskCancellationProjection.optional(),
   priority: z.enum(["critical", "high", "normal", "low"]),
   packageRevisionBinding: ExpertSquadPackageRevisionBindingSchema,
-  queue: z
-    .object({
-      order: z.number(),
-      revision: z.string().optional(),
-    })
-    .optional(),
   blockingReason: z.string().optional(),
   error: z.string().optional(),
   completionDecision: z
@@ -375,7 +361,7 @@ export const Task = z.object({
   time: z.object({
     created: z.number(),
     updated: z.number(),
-    started: z.number().optional(),
+    started: z.number(),
     completed: z.number().optional(),
     archived: z.number().optional(),
   }),
@@ -395,7 +381,6 @@ export const TaskListTask = Task.pick({
   terminalReason: true,
   priority: true,
   packageRevisionBinding: true,
-  queue: true,
   time: true,
 })
 

@@ -2776,3 +2776,128 @@ The final focused Panel acceptance is `9 pass / 43 assertions` across the strict
 read reconstruction and terminal-authority file. OpenCorvus and JavaScript SDK typechecks, `docs:check`,
 `api:routes-check`, generated OpenAPI/SDK output and the staged whitespace check pass. No UI automation test was
 added, modified or run.
+
+### Exact-Terra R17: Host Task serialization contradicts model-owned scheduling
+
+#### Recall
+
+- User requirement: diagnose the visibly stuck R17 run to its real control-flow root, remove Host ownership of Task
+  serial-versus-parallel scheduling, preserve random project/home/database/port isolation and exact
+  `openai/gpt-5.6-terra`, use an uninvolved independent reviewer, deliver the repair as its own phase commit, and
+  obtain three later clean real-page evolution successes. R17 is a failed diagnostic run and never counts toward
+  those successes.
+- Acceptance for this phase: every created or reopened Task is immediately active. Mission and Orchestrator decide
+  ordering by creating independent Tasks together for parallel work and by creating a dependent Task only when its
+  predecessor evidence is ready for serial work. Core neither accepts nor projects a Task queue policy, queue order,
+  manual start, reorder operation, or directory-level active-Task admission gate.
+- Hard constraints: retain `queued_operator_wake` as the exact durable first-in-first-out ingress for one root Session;
+  retain the scheduler's physical provider execution queue and projected-worker per-Session Turn exclusion. These are
+  execution integrity mechanisms, not Task scheduling policy. Do not add a replacement Host gate, hidden workflow
+  state, synthesized messages, concurrent execution of two Turns in the same Session, or UI automation tests.
+- Sources read: R17 controller receipts and isolated SQLite facts; Engine Task schema/status/pipeline/queue/store and
+  every create/resume/retry/replan caller; Panel and Server route schemas; Overlay Work Ledger queue interactions;
+  generated OpenAPI/JavaScript SDK surfaces; root Session ingress/recovery; scheduler physical queue; current Task
+  control-plane, data, Panel, extension and communication architecture.
+- Repository search: every `queue` Task input, `queue_order`, queued Task claim/advance/launch, directory snapshot,
+  manual start/reorder API, Work Ledger drag/start affordance, Mission projection, prompt/example and generated SDK
+  occurrence was classified separately from root-wake FIFO, worker Turn exclusion, provider execution capacity and
+  generic utility queues.
+- Independent agent: one uninvolved read-only reviewer reconstructed R17 and found the logical-active admission cycle,
+  terminal-only capability overexposure and cancelled-before-start projection defect. A second uninvolved read-only
+  reviewer is auditing the complete Task queue deletion boundary and generated/public closure before implementation.
+
+R17 was not waiting on an OpenAI stream when progress stopped. Candidate Task
+`tsk_g00VSA1ZRz0001wF1po5` remained logically active on a pending coordination request and depended on a repaired
+Opportunity Task. Mission durably wrote the Opportunity resume wake
+`art_g019ffa1e0647000000000000cb8brvaWiTXqH6`, but the Engine queue rejected it solely because Candidate was active
+in the same directory. Candidate could not continue until Opportunity ran, while Opportunity could not run until
+Candidate became terminal. Later Candidate wakes drained successfully, excluding wake loss and Session prompt
+starvation. Cancellation correctly settled the stranded wake as `terminal_inapplicable`; it could not repair the
+admission cycle.
+
+The database gives the decisive policy evidence: both Opportunity and Candidate were created with `queue:false`.
+They were intended as independent Tasks and had already run concurrently. `resume_task` nevertheless reopened every
+terminal Task as queued, silently replacing its earlier execution semantics; the same unconditional rewrite exists
+for operator Retry/Replan. A persisted `queue_mode` would preserve that boolean but still leave Host as scheduling
+authority, contrary to the user's explicit architecture. A directory lease, priority bypass or worker-wide serial
+queue would likewise preserve the wrong owner and would reduce valid parallel Expert Squad execution.
+
+The replacement has no Host Task queue state. Task creation and every continuation open set the Task active and
+durably enqueue only the real root Session ingress that caused execution. The existing root-wake first-in-first-out
+owner continues to prevent one Session's visible messages from overwriting each other; it does not order different
+Tasks. `task_loop_launch` remains a claim-to-local-loop recovery receipt only if still required after removal, and
+must be deleted if it has no non-queue caller. The scheduler `a2a_task_queue` remains the physical Provider execution
+capacity and crash-recovery owner; it is not exposed as Mission Task scheduling policy.
+
+The direct incident also exposed a contextual capability defect. Ordinary active Turns advertised
+`respond_agent_coordination(decision="acknowledge_terminal")`, Terra selected it, and the execution guard correctly
+rejected it because no exact terminal-conversation authority existed. The Tool schema now includes that decision only
+when the Host has supplied the exact terminal authority; the execution-time occurrence check remains the
+time-of-check/time-of-use integrity boundary.
+
+Focused positive acceptance must prove independently created Tasks start without directory admission, a Mission or
+operator continuation becomes active and consumes its exact persisted wake while another Task remains active, root
+Session ingress still preserves causal FIFO, and the terminal conversation schema admits exact acknowledgement while
+ordinary coordination exposes only executable decisions. All removed route/schema/UI/generated/spec references and
+tests must converge on the current contract. Non-UI focused tests, typecheck, docs/API generation and checks, real UI
+manual review for the Work Ledger change, and a fresh uninvolved read-only review are mandatory before a phase commit.
+
+#### Delivery and real-page acceptance
+
+The implementation removes `queue`, `queue_order`, queued Task lifecycle, same-directory claim/advance, manual start
+and reorder routes, `task_loop_launch`, and the corresponding Overlay controls. Task priority remains user-facing Work
+Ledger metadata. The scheduler's `a2a_task_queue`, root Session `queued_operator_wake` FIFO, and projected-worker
+single-Turn authority remain intact. Task creation now commits the active Task, non-null `time_started`, package and
+process bindings, imports, progress fact, and one identity-bound `task_creation` ingress in a single SQLite
+transaction. Request and channel replay dispatch that exact persisted ingress. Root Session capability permission is
+frozen at Session creation before the Task transaction, removing a post-commit crash window.
+
+The first independent delivery review found that the authorized worktree's temporary dependency junctions still
+resolved internal packages from the main checkout. That made the first generated SDK/OpenAPI and Overlay bundle stale
+and invalidated their evidence. The dependency overlay was rebuilt so every `@opencorvus-ai/*` workspace import
+resolves to this worktree, then the complete payload/OpenAPI/JavaScript SDK/API-doc closure and Overlay were rebuilt.
+The same review found and closed a strict transport fixture, current plugin evidence, bilingual guide, canonical
+Artifact-fixture settlement, Session permission atomicity, and retired UI text/test closure. No touched UI automation
+test was retained or run; five obsolete touched Overlay test files were deleted under the repository UI-test policy.
+
+Correct-dependency positive verification is `34 pass / 1233 assertions` across Task package binding and idempotent
+creation replay, Artifact cursor, interrupted Session recovery, terminal coordination schema, current SQLite schema
+reset, and transport contracts. OpenCorvus, Overlay, plugin, transport-protocol and JavaScript SDK package typechecks
+pass. `docs:check` reports 334 operations in 25 groups, `api:routes-check` reports 6 clean rules across 34 route files,
+the generated closure completes, `git diff --check` passes, and the final Overlay build transforms 7106 modules.
+The aggregate root typecheck was also attempted under unrelated sustained machine load and exceeded its 240-second
+outer command deadline without an error; the five directly affected package typechecks are the bounded authoritative
+result for this phase.
+
+The final review rejected relying on the historical monolithic active-operator test because that file hangs after its
+fourteenth case. The current durable FIFO contract was therefore moved into a self-contained non-UI focused test:
+the first exact operator ingress is advanced to `running`, a second exact root message is persisted through the
+production writer, and the canonical head remains the first occurrence while the second remains `pending`. It exits
+cleanly with `1 pass / 4 assertions`. The DDL-level non-null `time_started` invariant is also reflected in derived Task
+types and projections; impossible null fallbacks were removed while the unrelated scheduler provider queue retains
+its nullable physical-start field.
+
+The final invariant review found that several public Task projections still described `started` as optional or
+nullable after the database and current writers made it mandatory. Task board, status snapshot, Mission, Work Ledger
+and Panel schemas now expose one required numeric start fact; the Work Ledger no longer synthesizes null, and the
+OpenAPI/JavaScript SDK closure was regenerated. The same review reproduced a focused-suite cleanup failure: its empty
+test runner intentionally returned no assistant settlement for the newly real creation ingress, leaving detached
+recovery work to reopen the isolated database during teardown. The test runner now persists an exact assistant
+settlement and waits for completion only after releasing the project Instance lease. The complete package-revision
+file exits cleanly with `6 pass / 52 assertions`; waiting inside the Instance lease is intentionally forbidden because
+the completion owner must reacquire that same project identity. Post-regeneration checks pass for OpenCorvus,
+transport-protocol, JavaScript SDK and Overlay typechecks, the transport contract (`19 pass / 1121 assertions`), SDK
+imports, 334-operation API docs and the 34-file route inventory.
+
+Real acceptance used dev source on random port `54859`, random isolated project
+`.scratch/ui-queue-9cb5529ca75d/project`, and isolated SQLite runtime under the same scratch occurrence. Global
+`auth.json` and `models.json` were copied into the isolated runtime and separately verified by hash equality; the Web
+UI model catalog visibly exposed and selected exact `openai/gpt-5.6-terra`. Through the real Mission composer, the
+operator required two independent Tasks in one round. Terra created alpha Task `tsk_g00VSAniAr00FsZ03x1b` and beta
+Task `tsk_g00VSAniKZ007QCVYQJB`; both were visible as Running concurrently and SQLite recorded non-null start times
+`1786618633640` and `1786618634243`, only 603 milliseconds apart. They completed at `1786619057734` and
+`1786619112255` with no error. The Mission then completely read and independently accepted `alpha.txt = ALPHA_OK`
+and `beta.txt = BETA_OK`; direct filesystem reads agreed exactly. The final real page showed both terminal Task IDs,
+start/completion facts, immutable read references and the completed Mission. This proves model-owned parallel creation
+without recreating Host directory admission. It is a control-plane acceptance run, not one of the three still-required
+Expert Squad evolution successes.

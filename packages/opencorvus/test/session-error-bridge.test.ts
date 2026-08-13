@@ -4,7 +4,7 @@ import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { Bus } from "@/bus"
 import { Config } from "@/config/config"
 import { EffectiveConfig } from "@/config/effective"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
 import { Identifier } from "@/id/id"
@@ -49,7 +49,7 @@ test("persists a session-scoped provider error without execution input-message a
         metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
       })
       const now = Date.now()
-      persistQueuedTask({
+      persistTask({
         taskID,
         sessionID: root.id,
         now,
@@ -60,7 +60,6 @@ test("persists a session-scoped provider error without execution input-message a
         priority: "normal",
         metadata: {},
         projectID: Instance.project.id,
-        queue: true,
         packageRevision,
         executionCapsuleBinding: await prepareTaskProcessBinding({
           mode: "native",
@@ -114,7 +113,7 @@ test("persists terminal lifecycle after the publishing caller lease is released"
       })
       rootSessionID = root.id
       const now = Date.now()
-      persistQueuedTask({
+      persistTask({
         taskID,
         sessionID: root.id,
         now,
@@ -125,7 +124,6 @@ test("persists terminal lifecycle after the publishing caller lease is released"
         priority: "normal",
         metadata: {},
         projectID: Instance.project.id,
-        queue: true,
         packageRevision,
         executionCapsuleBinding: await prepareTaskProcessBinding({
           mode: "native",
@@ -213,7 +211,7 @@ test("persists one projected worker error from its managed worktree with exact r
         const root = await Session.create({ kind: "root", title: "Managed worker error root" })
         rootSessionID = root.id
         const now = Date.now()
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: root.id,
           now,
@@ -224,7 +222,6 @@ test("persists one projected worker error from its managed worktree with exact r
           priority: "normal",
           metadata: {},
           projectID,
-          queue: true,
           packageRevision: resolvedPackageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",

@@ -134,14 +134,6 @@
   flex-direction: column;
 }
 
-.work-row-shell[draggable="true"] {
-  cursor: grab;
-}
-
-.work-row-shell[data-queue-drag-over="true"] {
-  box-shadow: inset 0 calc(2px * var(--ui-scale)) 0 var(--accent);
-}
-
 .work-row {
   --work-row-font-size: var(--ui-font-navigation);
   --work-row-line-height: var(--ui-line-height-tight);
@@ -562,7 +554,6 @@
 .work-row-actions .oc-button[data-chrome="icon-action"][data-ui="mission-row-pin"],
 .work-row-actions .oc-button[data-chrome="icon-action"][data-ui="chat-row-pin"],
 .work-row-actions .oc-button[data-chrome="icon-action"][data-ui="mission-row-download"],
-.work-row-actions .oc-button[data-chrome="icon-action"][data-ui="task-row-start-now"],
 .work-row-actions .oc-button[data-chrome="icon-action"][data-ui="task-row-cancel"],
 .work-row-actions .oc-button[data-chrome="icon-action"][data-ui="task-row-download"],
 .work-row-actions .oc-button[data-chrome="icon-action"][data-ui="task-row-pin"],
@@ -604,8 +595,6 @@
 .work-row[data-actions-keyboard-open="true"] .work-row-actions .oc-button[data-ui="mission-row-pin"],
 .work-row:hover .work-row-actions .oc-button[data-ui="chat-row-pin"],
 .work-row[data-actions-keyboard-open="true"] .work-row-actions .oc-button[data-ui="chat-row-pin"],
-.work-row:hover .work-row-actions .oc-button[data-ui="task-row-start-now"],
-.work-row[data-actions-keyboard-open="true"] .work-row-actions .oc-button[data-ui="task-row-start-now"],
 .work-row:hover .work-row-actions .oc-button[data-ui="task-row-cancel"],
 .work-row[data-actions-keyboard-open="true"] .work-row-actions .oc-button[data-ui="task-row-cancel"],
 .work-row:hover .work-row-actions .oc-button[data-ui="mission-row-download"],

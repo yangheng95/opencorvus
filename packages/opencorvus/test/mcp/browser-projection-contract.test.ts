@@ -74,7 +74,6 @@ describe("Browser MCP projection contract", () => {
               model: "firmware/gpt-5",
               promptProfile: profileID,
               expectedPackageDigest: capability.packageRevision.packageDigest,
-              queue: true,
             },
             { actor: "user" },
           )

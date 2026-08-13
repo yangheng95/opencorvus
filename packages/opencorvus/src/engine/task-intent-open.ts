@@ -32,7 +32,7 @@ export function openTaskForContinuationInTransaction(input: {
   return writeTaskUpdateInTransaction({
     db: input.db,
     taskID: input.taskID,
-    values: { status: "queued", error: null, metadata },
+    values: { status: "active", error: null, metadata },
     summary: input.summary,
     now: input.now,
   }).task

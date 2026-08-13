@@ -2,10 +2,7 @@ import { afterAll, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { EngineTaskTable } from "../../src/engine/engine.sql"
-import {
-  insertTaskProcessBinding,
-  prepareTaskProcessBinding,
-} from "../../src/engine/task-execution-capsule-binding"
+import { insertTaskProcessBinding, prepareTaskProcessBinding } from "../../src/engine/task-execution-capsule-binding"
 import { Identifier } from "../../src/id/id"
 import { Instance } from "../../src/project/instance"
 import { ProjectRuntimePaths } from "../../src/project/runtime-paths"
@@ -53,21 +50,9 @@ test("Task and conversation Work Artifact workspaces map to their project-scoped
     conversationRelative: path.relative(projectRoot, conversationRoot),
   }).toEqual({
     taskRoot: ProjectRuntimePaths.taskWorkArtifactRuntimeRoot(projectRoot, taskID),
-    taskRelative: path.join(
-      ".opencorvus",
-      ".r",
-      "tasks",
-      taskID,
-      "work-artifacts",
-    ),
+    taskRelative: path.join(".opencorvus", ".r", "tasks", taskID, "work-artifacts"),
     conversationRoot: ProjectRuntimePaths.rootSessionWorkArtifactRuntimeRoot(projectRoot, conversationSessionID),
-    conversationRelative: path.join(
-      ".opencorvus",
-      ".r",
-      "conversations",
-      conversationSessionID,
-      "work-artifacts",
-    ),
+    conversationRelative: path.join(".opencorvus", ".r", "conversations", conversationSessionID, "work-artifacts"),
   })
 })
 
@@ -98,6 +83,7 @@ test("Task Work Artifact runtime workspace is admitted by the immutable native p
             title: "Work Artifact process authority",
             request: "Run the Office runtime inside the Task-owned workspace",
             priority: "normal",
+            time_started: now,
             time_created: now,
             time_updated: now,
           })

@@ -289,7 +289,7 @@ export type Config = {
    */
   assistant?: {
     /**
-     * Chunk-driven inactivity thresholds for session LLM streams and task queue work.
+     * Chunk-driven inactivity thresholds for session LLM streams and provider execution work.
      */
     activity?: {
       /**
@@ -887,7 +887,6 @@ export type EventArtifactPersisted = {
       | "operator_message_wake"
       | "mission_acceptance_resume_receipt"
       | "queued_operator_wake"
-      | "task_loop_launch"
       | "task_checkpoint_settlement"
       | "task_auxiliary_settlement"
       | "exploration"
@@ -1623,7 +1622,7 @@ export type EventTaskCompleted = {
 
 export type EventTaskCreated = {
   properties: {
-    status: "queued" | "active" | "completed" | "failed" | "cancelled"
+    status: "active" | "completed" | "failed" | "cancelled"
     summary: string
     taskID: string
   }
@@ -1736,7 +1735,7 @@ export type EventTaskRewound = {
 
 export type EventTaskUpdated = {
   properties: {
-    status: "queued" | "active" | "completed" | "failed" | "cancelled"
+    status: "active" | "completed" | "failed" | "cancelled"
     summary: string
     taskID: string
   }
@@ -15536,10 +15535,6 @@ export type GatewayControlActionData = {
          */
         promptProfile?: string
         /**
-         * Whether to queue this task behind other work in the same directory.
-         */
-        queue?: boolean
-        /**
          * Full user request to execute in the new task.
          */
         request: string
@@ -15657,14 +15652,14 @@ export type GatewayControlActionData = {
     | {
         action: "retry_task"
         /**
-         * Task ID to queue for retry.
+         * Task ID for the retry request.
          */
         taskID: string
       }
     | {
         action: "replan_task"
         /**
-         * Task ID to queue for replanning.
+         * Task ID for the replan request.
          */
         taskID: string
       }
@@ -17530,20 +17525,16 @@ export type TaskGlobalListResponses = {
         priority: "critical" | "high" | "normal" | "low"
         productPillar: "code" | "work"
         projectID: string
-        queue?: {
-          order: number
-          revision?: string
-        }
         requestID?: string
         sessionID?: string | null
         source: string
-        status: "queued" | "active" | "completed" | "failed" | "cancelled"
+        status: "active" | "completed" | "failed" | "cancelled"
         terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
         time: {
           archived?: number
           completed?: number
           created: number
-          started?: number
+          started: number
           updated: number
         }
         title: string
@@ -17757,7 +17748,6 @@ export type TaskGlobalCreateData = {
     productPillar: "code" | "work"
     project?: string
     promptProfile?: string
-    queue?: boolean
     request: string
     requestID?: string
     source?: string
@@ -19212,13 +19202,12 @@ export type MissionListResponses = {
       description: string
       directory: string
       id: string
-      lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+      lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
       pinned: boolean
       priority: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
-      queueOrder: number
       source: string
-      started?: number
+      started: number
       title: string
       updated: number
     }>
@@ -19488,13 +19477,12 @@ export type MissionCreateDraftResponses = {
       description: string
       directory: string
       id: string
-      lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+      lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
       pinned: boolean
       priority: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
-      queueOrder: number
       source: string
-      started?: number
+      started: number
       title: string
       updated: number
     }>
@@ -19865,13 +19853,12 @@ export type MissionSetArchivedResponses = {
       description: string
       directory: string
       id: string
-      lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+      lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
       pinned: boolean
       priority: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
-      queueOrder: number
       source: string
-      started?: number
+      started: number
       title: string
       updated: number
     }>
@@ -20132,7 +20119,7 @@ export type MissionStatusResponses = {
         revision: number
         title: string
       }>
-      lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+      lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
       priority: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
       requirements?: Array<{
@@ -20195,7 +20182,7 @@ export type MissionStatusResponses = {
       time: {
         completed?: number
         created: number
-        started?: number
+        started: number
         updated: number
       }
       title: string
@@ -20280,13 +20267,12 @@ export type MissionRenameResponses = {
       description: string
       directory: string
       id: string
-      lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+      lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
       pinned: boolean
       priority: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
-      queueOrder: number
       source: string
-      started?: number
+      started: number
       title: string
       updated: number
     }>
@@ -26490,7 +26476,6 @@ export type TaskCreateData = {
     productPillar: "code" | "work"
     project?: string
     promptProfile?: string
-    queue?: boolean
     request: string
     requestID?: string
     source?: string
@@ -26588,46 +26573,6 @@ export type TaskCreateResponses = {
 }
 
 export type TaskCreateResponse = TaskCreateResponses[keyof TaskCreateResponses]
-
-export type TaskQueueReorderData = {
-  body: {
-    directory: string
-    orderedTaskIDs?: Array<string>
-    revision?: string
-  }
-  path?: never
-  query?: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-  }
-  url: "/task-queue/reorder"
-}
-
-export type TaskQueueReorderErrors = {
-  /**
-   * Queue revision conflict
-   */
-  409: unknown
-  /**
-   * Invalid queued task ordering
-   */
-  422: unknown
-}
-
-export type TaskQueueReorderResponses = {
-  /**
-   * Updated directory queue order
-   */
-  200: {
-    directory: string
-    queuedTaskIDs: Array<string>
-    revision: string
-  }
-}
-
-export type TaskQueueReorderResponse = TaskQueueReorderResponses[keyof TaskQueueReorderResponses]
 
 export type TaskDeleteData = {
   body: {
@@ -27041,21 +26986,17 @@ export type TaskGetResponses = {
     priority: "critical" | "high" | "normal" | "low"
     productPillar: "code" | "work"
     projectID: string
-    queue?: {
-      order: number
-      revision?: string
-    }
     request: string
     requestID?: string
     sessionID?: string | null
     source: string
-    status: "queued" | "active" | "completed" | "failed" | "cancelled"
+    status: "active" | "completed" | "failed" | "cancelled"
     terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
     time: {
       archived?: number
       completed?: number
       created: number
-      started?: number
+      started: number
       updated: number
     }
     title: string
@@ -27338,7 +27279,6 @@ export type TaskBoardResponses = {
         | "operator_message_wake"
         | "mission_acceptance_resume_receipt"
         | "queued_operator_wake"
-        | "task_loop_launch"
         | "task_checkpoint_settlement"
         | "task_auxiliary_settlement"
         | "exploration"
@@ -28022,21 +27962,17 @@ export type TaskBoardResponses = {
       priority: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
       projectID: string
-      queue?: {
-        order: number
-        revision?: string
-      }
       request: string
       requestID?: string
       sessionID?: string | null
       source: string
-      status: "queued" | "active" | "completed" | "failed" | "cancelled"
+      status: "active" | "completed" | "failed" | "cancelled"
       terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
       time: {
         archived?: number
         completed?: number
         created: number
-        started?: number
+        started: number
         updated: number
       }
       title: string
@@ -29371,7 +29307,6 @@ export type TaskConversationResponses = {
           | "operator_message_wake"
           | "mission_acceptance_resume_receipt"
           | "queued_operator_wake"
-          | "task_loop_launch"
           | "task_checkpoint_settlement"
           | "task_auxiliary_settlement"
           | "exploration"
@@ -30055,21 +29990,17 @@ export type TaskConversationResponses = {
         priority: "critical" | "high" | "normal" | "low"
         productPillar: "code" | "work"
         projectID: string
-        queue?: {
-          order: number
-          revision?: string
-        }
         request: string
         requestID?: string
         sessionID?: string | null
         source: string
-        status: "queued" | "active" | "completed" | "failed" | "cancelled"
+        status: "active" | "completed" | "failed" | "cancelled"
         terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
         time: {
           archived?: number
           completed?: number
           created: number
-          started?: number
+          started: number
           updated: number
         }
         title: string
@@ -31843,21 +31774,17 @@ export type TaskProgressResponses = {
       priority: "critical" | "high" | "normal" | "low"
       productPillar: "code" | "work"
       projectID: string
-      queue?: {
-        order: number
-        revision?: string
-      }
       request: string
       requestID?: string
       sessionID?: string | null
       source: string
-      status: "queued" | "active" | "completed" | "failed" | "cancelled"
+      status: "active" | "completed" | "failed" | "cancelled"
       terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
       time: {
         archived?: number
         completed?: number
         created: number
-        started?: number
+        started: number
         updated: number
       }
       title: string
@@ -31963,7 +31890,7 @@ export type TaskReplanError = TaskReplanErrors[keyof TaskReplanErrors]
 
 export type TaskReplanResponses = {
   /**
-   * Task replan queued
+   * Task replan accepted
    */
   200: {
     attachments?: Array<{
@@ -32262,21 +32189,17 @@ export type TaskReplanResponses = {
     priority: "critical" | "high" | "normal" | "low"
     productPillar: "code" | "work"
     projectID: string
-    queue?: {
-      order: number
-      revision?: string
-    }
     request: string
     requestID?: string
     sessionID?: string | null
     source: string
-    status: "queued" | "active" | "completed" | "failed" | "cancelled"
+    status: "active" | "completed" | "failed" | "cancelled"
     terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
     time: {
       archived?: number
       completed?: number
       created: number
-      started?: number
+      started: number
       updated: number
     }
     title: string
@@ -32331,7 +32254,7 @@ export type TaskRetryError = TaskRetryErrors[keyof TaskRetryErrors]
 
 export type TaskRetryResponses = {
   /**
-   * Task retry queued
+   * Task retry accepted
    */
   200: {
     attachments?: Array<{
@@ -32630,21 +32553,17 @@ export type TaskRetryResponses = {
     priority: "critical" | "high" | "normal" | "low"
     productPillar: "code" | "work"
     projectID: string
-    queue?: {
-      order: number
-      revision?: string
-    }
     request: string
     requestID?: string
     sessionID?: string | null
     source: string
-    status: "queued" | "active" | "completed" | "failed" | "cancelled"
+    status: "active" | "completed" | "failed" | "cancelled"
     terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
     time: {
       archived?: number
       completed?: number
       created: number
-      started?: number
+      started: number
       updated: number
     }
     title: string
@@ -32895,379 +32814,6 @@ export type TaskSessionOperatorSteerResponses = {
 export type TaskSessionOperatorSteerResponse =
   TaskSessionOperatorSteerResponses[keyof TaskSessionOperatorSteerResponses]
 
-export type TaskQueueStartNowData = {
-  body?: never
-  path: {
-    taskID: string
-  }
-  query?: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-  }
-  url: "/task/{taskID}/start-now"
-}
-
-export type TaskQueueStartNowErrors = {
-  /**
-   * Not found
-   */
-  404:
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "NotFoundError"
-      }
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "LogFileNotFoundError"
-      }
-  /**
-   * Task is not queued
-   */
-  409: unknown
-  /**
-   * Task has no working directory
-   */
-  422: unknown
-}
-
-export type TaskQueueStartNowError = TaskQueueStartNowErrors[keyof TaskQueueStartNowErrors]
-
-export type TaskQueueStartNowResponses = {
-  /**
-   * Queued task started and scheduler invoked
-   */
-  200: {
-    directory: string
-    queuedTaskIDs: Array<string>
-    started: boolean
-    status: string
-    task: {
-      attachments?: Array<{
-        filename?: string
-        intent: "task_input"
-        mime: string
-        sha: string
-        size: number
-        source: "user-upload"
-        url: string
-      }>
-      blockingReason?: string
-      budget?: {
-        maxExecutorGroups?: number
-      }
-      cancellation?:
-        | {
-            actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-            messageID?: string
-            missionID?: string
-            reason: string
-            requestEventID: string
-            requestID: string
-            requestedAt: number
-            sessionID?: string
-            source:
-              | "task.cancel"
-              | "task.delete"
-              | "task.archive"
-              | "mission.abort"
-              | "mission.archive"
-              | "mission.delete"
-              | "panel.cancel_task"
-              | "orchestrator.cancel_task"
-              | "session.delete"
-              | "project.delete"
-            status: "cancelling"
-            surface:
-              | "api"
-              | "overlay.work_ledger"
-              | "overlay.selected_task"
-              | "overlay.composer_stop"
-              | "overlay.chat_request_stop"
-              | "overlay.interrupt_task"
-              | "overlay.archive_panel"
-              | "panel"
-              | "gateway"
-              | "slack"
-              | "telegram"
-              | "discord"
-              | "feishu"
-              | "whatsapp"
-              | "googlechat"
-              | "msteams"
-              | "line"
-              | "matrix"
-              | "mattermost"
-              | "signal"
-              | "wecom"
-              | "dingtalk"
-              | "clickclack"
-              | "imessage"
-              | "irc"
-              | "nextcloud-talk"
-              | "nostr"
-              | "qqbot"
-              | "raft"
-              | "reef"
-              | "sms"
-              | "synology-chat"
-              | "tlon"
-              | "twitch"
-              | "zalo"
-              | "zalouser"
-              | "right-sidebar"
-              | "orchestrator"
-            toolCallID?: string
-            toolPartID?: string
-          }
-        | {
-            actor: "user" | "control_agent" | "mission" | "right_sidebar_conversation" | "orchestrator"
-            messageID?: string
-            missionID?: string
-            reason: string
-            requestEventID: string
-            requestID: string
-            requestedAt: number
-            sessionID?: string
-            source:
-              | "task.cancel"
-              | "task.delete"
-              | "task.archive"
-              | "mission.abort"
-              | "mission.archive"
-              | "mission.delete"
-              | "panel.cancel_task"
-              | "orchestrator.cancel_task"
-              | "session.delete"
-              | "project.delete"
-            status: "cancelled"
-            surface:
-              | "api"
-              | "overlay.work_ledger"
-              | "overlay.selected_task"
-              | "overlay.composer_stop"
-              | "overlay.chat_request_stop"
-              | "overlay.interrupt_task"
-              | "overlay.archive_panel"
-              | "panel"
-              | "gateway"
-              | "slack"
-              | "telegram"
-              | "discord"
-              | "feishu"
-              | "whatsapp"
-              | "googlechat"
-              | "msteams"
-              | "line"
-              | "matrix"
-              | "mattermost"
-              | "signal"
-              | "wecom"
-              | "dingtalk"
-              | "clickclack"
-              | "imessage"
-              | "irc"
-              | "nextcloud-talk"
-              | "nostr"
-              | "qqbot"
-              | "raft"
-              | "reef"
-              | "sms"
-              | "synology-chat"
-              | "tlon"
-              | "twitch"
-              | "zalo"
-              | "zalouser"
-              | "right-sidebar"
-              | "orchestrator"
-            terminalAt: number
-            terminalEventID: string
-            toolCallID?: string
-            toolPartID?: string
-          }
-      completionDecision?: {
-        acceptedDeliverySliceRevisionIDs: Array<string>
-        artifactLocator: {
-          artifact_id: string
-          catalog_revision: number
-          expected_sha256: string
-          source: "engine_artifact"
-        }
-        deliverableArtifactLocators: Array<
-          | {
-              artifact_id: string
-              catalog_revision: number
-              expected_sha256: string
-              source: "engine_artifact"
-            }
-          | {
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              source: "task_artifact_snapshot"
-            }
-          | {
-              ref: {
-                bytes: number
-                media_type: string
-                path: string
-                sha256: string
-                snapshot: {
-                  manifest_sha256: string
-                  project_id: string
-                  schema_version: 2
-                  snapshot_id: string
-                  task_id: string
-                }
-                tree: string
-              }
-              source: "task_artifact_resource"
-            }
-        >
-        evidenceLocators: Array<
-          | {
-              artifact_id: string
-              catalog_revision: number
-              expected_sha256: string
-              source: "engine_artifact"
-            }
-          | {
-              snapshot: {
-                manifest_sha256: string
-                project_id: string
-                schema_version: 2
-                snapshot_id: string
-                task_id: string
-              }
-              source: "task_artifact_snapshot"
-            }
-          | {
-              ref: {
-                bytes: number
-                media_type: string
-                path: string
-                sha256: string
-                snapshot: {
-                  manifest_sha256: string
-                  project_id: string
-                  schema_version: 2
-                  snapshot_id: string
-                  task_id: string
-                }
-                tree: string
-              }
-              source: "task_artifact_resource"
-            }
-          | {
-              session_id: string
-              source: "session"
-            }
-          | {
-              /**
-               * Exact Message ID stored in the paired session_id.
-               */
-              message_id: string
-              /**
-               * Exact producing Session ID for message_id; do not substitute the current caller Session unless it produced that Message.
-               */
-              session_id: string
-              source: "session_message"
-            }
-          | {
-              goal_id: string
-              source: "goal_revision"
-            }
-          | {
-              request_id: string
-              source: "coordination_request"
-            }
-        >
-        orchestratorMessageID: string
-        orchestratorSessionID: string
-        timeRecorded: number
-        toolCallID: string
-        toolPartID: string
-        workflowBinding:
-          | {
-              kind: "direct"
-              package_revision: {
-                id: string
-                namespace: string
-                package_digest: string
-                project_id: string | null
-                scope: "built_in" | "project" | "global"
-                version: string
-              }
-            }
-          | {
-              kind: "virtual_workflow"
-              nodes: Array<{
-                agent_id: string
-                depends_on: Array<string>
-                node_id: string
-              }>
-              package_revision: {
-                id: string
-                namespace: string
-                package_digest: string
-                project_id: string | null
-                scope: "built_in" | "project" | "global"
-                version: string
-              }
-              workflow_id: string
-            }
-      }
-      directory?: string
-      error?: string
-      id: string
-      metadata?: {
-        [key: string]: unknown
-      }
-      orderKey: string
-      packageRevisionBinding: {
-        id: string
-        namespace: string
-        package_digest: string
-        project_id: string | null
-        scope: "built_in" | "project" | "global"
-        version: string
-      }
-      priority: "critical" | "high" | "normal" | "low"
-      productPillar: "code" | "work"
-      projectID: string
-      queue?: {
-        order: number
-        revision?: string
-      }
-      request: string
-      requestID?: string
-      sessionID?: string | null
-      source: string
-      status: "queued" | "active" | "completed" | "failed" | "cancelled"
-      terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
-      time: {
-        archived?: number
-        completed?: number
-        created: number
-        started?: number
-        updated: number
-      }
-      title: string
-    }
-  }
-}
-
-export type TaskQueueStartNowResponse = TaskQueueStartNowResponses[keyof TaskQueueStartNowResponses]
-
 export type TaskStatusData = {
   body?: never
   path: {
@@ -33382,7 +32928,7 @@ export type TaskStatusResponses = {
       revision: number
       title: string
     }>
-    lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+    lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
     priority: "critical" | "high" | "normal" | "low"
     productPillar: "code" | "work"
     requirements?: Array<{
@@ -33445,7 +32991,7 @@ export type TaskStatusResponses = {
     time: {
       completed?: number
       created: number
-      started?: number
+      started: number
       updated: number
     }
     title: string
@@ -33936,20 +33482,16 @@ export type TaskListResponses = {
         priority: "critical" | "high" | "normal" | "low"
         productPillar: "code" | "work"
         projectID: string
-        queue?: {
-          order: number
-          revision?: string
-        }
         requestID?: string
         sessionID?: string | null
         source: string
-        status: "queued" | "active" | "completed" | "failed" | "cancelled"
+        status: "active" | "completed" | "failed" | "cancelled"
         terminalReason?: "completed" | "failed" | "cancelled" | "interrupted"
         time: {
           archived?: number
           completed?: number
           created: number
-          started?: number
+          started: number
           updated: number
         }
         title: string
@@ -34367,16 +33909,15 @@ export type WorkLedgerListResponses = {
             directory: string
             id: string
             kind: "task"
-            lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+            lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
             missionID: string
             missionSessionID: string
             pendingInteractions: number
             pinned: boolean
             priority: "critical" | "high" | "normal" | "low"
             productPillar: "code" | "work"
-            queueOrder: number
             source: string
-            started: number | null
+            started: number
             title: string
             updated: number
           }>
@@ -34464,16 +34005,15 @@ export type WorkLedgerListArchivedResponses = {
             directory: string
             id: string
             kind: "task"
-            lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+            lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
             missionID: string
             missionSessionID: string
             pendingInteractions: number
             pinned: boolean
             priority: "critical" | "high" | "normal" | "low"
             productPillar: "code" | "work"
-            queueOrder: number
             source: string
-            started: number | null
+            started: number
             title: string
             updated: number
           }>
@@ -34489,16 +34029,15 @@ export type WorkLedgerListArchivedResponses = {
           directory: string
           id: string
           kind: "task"
-          lifecycleStatus: "queued" | "active" | "completed" | "failed" | "cancelled"
+          lifecycleStatus: "active" | "completed" | "failed" | "cancelled"
           missionID?: string
           missionSessionID?: string
           pendingInteractions: number
           pinned: boolean
           priority: "critical" | "high" | "normal" | "low"
           productPillar: "code" | "work"
-          queueOrder: number
           source: string
-          started: number | null
+          started: number
           title: string
           updated: number
         }

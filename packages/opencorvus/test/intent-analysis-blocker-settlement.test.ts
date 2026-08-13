@@ -4,7 +4,7 @@ import type { IntentAnalysisAgent } from "@/intent-analysis/agent"
 import { createDispatchLineageOrigin, recordDispatchLineage } from "@/engine/dispatch-lineage"
 import { recordDispatchSettlement } from "@/engine/dispatch-settlement"
 import { describeTask } from "@/engine/describe"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { findArtifact, listInteractions, requireTask } from "@/engine/store"
 import { EngineArtifactTable } from "@/engine/engine.sql"
@@ -78,7 +78,7 @@ async function createFixture(title: string) {
     title,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
-  persistQueuedTask({
+  persistTask({
     taskID,
     sessionID: root.id,
     now,
@@ -89,7 +89,6 @@ async function createFixture(title: string) {
     priority: "normal",
     metadata: {},
     projectID: Instance.project.id,
-    queue: true,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",
@@ -132,7 +131,11 @@ async function createFixture(title: string) {
     type: "tool",
     callID,
     tool: "dispatch_agent",
-    state: { status: "running", input: { dispatch: { target: projectedIntentAnalyst.identity.agentID } }, time: { start: now + 1 } },
+    state: {
+      status: "running",
+      input: { dispatch: { target: projectedIntentAnalyst.identity.agentID } },
+      time: { start: now + 1 },
+    },
   })
 
   const worker = await Session.create({ kind: "intent-analysis", parentID: root.id, title: `${title} worker` })
@@ -210,7 +213,9 @@ async function createFixture(title: string) {
         },
       },
       observeSession() {},
-      commitSession() { return { artifactID: Identifier.ascending("artifact") } },
+      commitSession() {
+        return { artifactID: Identifier.ascending("artifact") }
+      },
     },
     toolOptions: {
       toolCallId: callID,
@@ -251,15 +256,17 @@ function analysisResult(fixture: Awaited<ReturnType<typeof createFixture>>, prio
       judgment: null,
       slots: [],
       missing: ["scope"],
-      clarifications: [{
-        header: "Scope",
-        question: "Which scope should the implementation use?",
-        options: [{ value: "bounded", label: "Bounded", description: "Use the bounded scope." }],
-        multiple: false,
-        custom: false,
-        why_needed: "The implementation boundary must be explicit.",
-        priority,
-      }],
+      clarifications: [
+        {
+          header: "Scope",
+          question: "Which scope should the implementation use?",
+          options: [{ value: "bounded", label: "Bounded", description: "Use the bounded scope." }],
+          multiple: false,
+          custom: false,
+          why_needed: "The implementation boundary must be explicit.",
+          priority,
+        },
+      ],
     },
   } as Awaited<ReturnType<typeof IntentAnalysisAgent.analyze>>
 }
@@ -294,128 +301,158 @@ describe("Intent blocker Question settlement", () => {
   for (const status of ["rejected", "expired"] as const) {
     test(`${status} blocker persists exact correlation and keeps the workflow frontier closed`, async () => {
       await using project = await memoryProject()
-      await Instance.provide({ directory: project.path, fn: async () => {
-        EngineService.init()
-        const fixture = await createFixture(`${status} Intent blocker`)
-        const previousTimeout = process.env.OPENCORVUS_QUESTION_TIMEOUT_MS
-        if (status === "expired") process.env.OPENCORVUS_QUESTION_TIMEOUT_MS = "1000"
-        try {
-          const pending = execute(fixture, "blocker")
-          const interaction = await waitForInteraction(fixture.taskID)
-          if (status === "rejected") {
-            await EngineService.rejectInteraction(interaction.id, { autoReply: false })
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          EngineService.init()
+          const fixture = await createFixture(`${status} Intent blocker`)
+          const previousTimeout = process.env.OPENCORVUS_QUESTION_TIMEOUT_MS
+          if (status === "expired") process.env.OPENCORVUS_QUESTION_TIMEOUT_MS = "1000"
+          try {
+            const pending = execute(fixture, "blocker")
+            const interaction = await waitForInteraction(fixture.taskID)
+            if (status === "rejected") {
+              await EngineService.rejectInteraction(interaction.id, { autoReply: false })
+            }
+            const outcome = await pending
+            if (outcome.kind !== "domain_blocked") {
+              throw new Error(`Expected domain_blocked, received ${outcome.kind}`)
+            }
+            const artifactID = outcome.domain_artifact.artifact_id
+            expect({
+              kind: outcome.kind,
+              domain: outcome.domain,
+              sessionID: outcome.session_id,
+              finalMessageID: outcome.final_message_id,
+              blockingQuestion: outcome.blocking_question,
+              domainArtifact: outcome.domain_artifact,
+            }).toEqual({
+              kind: "domain_blocked",
+              domain: "intent_analysis",
+              sessionID: fixture.worker.id,
+              finalMessageID: fixture.workerFinal.id,
+              blockingQuestion: { request_id: interaction.external_id, status },
+              domainArtifact: {
+                source: "engine_artifact",
+                artifact_id: artifactID,
+                catalog_revision: expect.any(Number),
+                expected_sha256: expect.stringMatching(/^[a-f0-9]{64}$/),
+              },
+            })
+            const artifact = findArtifact({ taskID: fixture.taskID, artifactID })
+            expect(artifact?.payload).toMatchObject({
+              clarification_outcome: { status, answers: [], clarified_user_request: null },
+            })
+            recordDispatchSettlement({
+              taskID: fixture.taskID,
+              dispatchID: fixture.context.dispatch.dispatchID,
+              outcome: outcome as never,
+            })
+            expect((await describeTask(fixture.taskID)).workflow_execution).toMatchObject({
+              nodes: [
+                { node_id: "intent", terminal_success: false },
+                { node_id: "requirements", terminal_success: false, dispatches: [] },
+              ],
+              frontier_node_ids: [],
+            })
+          } finally {
+            if (previousTimeout === undefined) delete process.env.OPENCORVUS_QUESTION_TIMEOUT_MS
+            else process.env.OPENCORVUS_QUESTION_TIMEOUT_MS = previousTimeout
           }
-          const outcome = await pending
-          if (outcome.kind !== "domain_blocked") {
-            throw new Error(`Expected domain_blocked, received ${outcome.kind}`)
-          }
-          const artifactID = outcome.domain_artifact.artifact_id
-          expect({
-            kind: outcome.kind,
-            domain: outcome.domain,
-            sessionID: outcome.session_id,
-            finalMessageID: outcome.final_message_id,
-            blockingQuestion: outcome.blocking_question,
-            domainArtifact: outcome.domain_artifact,
-          }).toEqual({
-            kind: "domain_blocked",
-            domain: "intent_analysis",
-            sessionID: fixture.worker.id,
-            finalMessageID: fixture.workerFinal.id,
-            blockingQuestion: { request_id: interaction.external_id, status },
-            domainArtifact: {
-              source: "engine_artifact",
-              artifact_id: artifactID,
-              catalog_revision: expect.any(Number),
-              expected_sha256: expect.stringMatching(/^[a-f0-9]{64}$/),
-            },
-          })
-          const artifact = findArtifact({ taskID: fixture.taskID, artifactID })
-          expect(artifact?.payload).toMatchObject({
-            clarification_outcome: { status, answers: [], clarified_user_request: null },
-          })
-          recordDispatchSettlement({ taskID: fixture.taskID, dispatchID: fixture.context.dispatch.dispatchID, outcome: outcome as never })
-          expect((await describeTask(fixture.taskID)).workflow_execution).toMatchObject({
-            nodes: [
-              { node_id: "intent", terminal_success: false },
-              { node_id: "requirements", terminal_success: false, dispatches: [] },
-            ],
-            frontier_node_ids: [],
-          })
-        } finally {
-          if (previousTimeout === undefined) delete process.env.OPENCORVUS_QUESTION_TIMEOUT_MS
-          else process.env.OPENCORVUS_QUESTION_TIMEOUT_MS = previousTimeout
-        }
-      } })
+        },
+      })
     }, 30_000)
   }
 
   test("answered blocker persists clarified intent and opens the dependent frontier", async () => {
     await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
-      EngineService.init()
-      const fixture = await createFixture("Answered Intent blocker")
-      const pending = execute(fixture, "blocker")
-      const interaction = await waitForInteraction(fixture.taskID)
-      await EngineService.replyInteraction(interaction.id, { answers: [["bounded"]], autoReply: false })
-      const outcome = await pending
-      recordDispatchSettlement({ taskID: fixture.taskID, dispatchID: fixture.context.dispatch.dispatchID, outcome: outcome as never })
-      expect({ outcome, workflow: (await describeTask(fixture.taskID)).workflow_execution }).toMatchObject({
-        outcome: { kind: "terminal_success", session_id: fixture.worker.id, final_message_id: fixture.workerFinal.id },
-        workflow: {
-          nodes: [
-            { node_id: "intent", terminal_success: true },
-            { node_id: "requirements", terminal_success: false, dispatches: [] },
-          ],
-          frontier_node_ids: ["requirements"],
-        },
-      })
-    } })
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        EngineService.init()
+        const fixture = await createFixture("Answered Intent blocker")
+        const pending = execute(fixture, "blocker")
+        const interaction = await waitForInteraction(fixture.taskID)
+        await EngineService.replyInteraction(interaction.id, { answers: [["bounded"]], autoReply: false })
+        const outcome = await pending
+        recordDispatchSettlement({
+          taskID: fixture.taskID,
+          dispatchID: fixture.context.dispatch.dispatchID,
+          outcome: outcome as never,
+        })
+        expect({ outcome, workflow: (await describeTask(fixture.taskID)).workflow_execution }).toMatchObject({
+          outcome: {
+            kind: "terminal_success",
+            session_id: fixture.worker.id,
+            final_message_id: fixture.workerFinal.id,
+          },
+          workflow: {
+            nodes: [
+              { node_id: "intent", terminal_success: true },
+              { node_id: "requirements", terminal_success: false, dispatches: [] },
+            ],
+            frontier_node_ids: ["requirements"],
+          },
+        })
+      },
+    })
   }, 30_000)
 
   test("non-blocker clarification retains the current terminal domain contract", async () => {
     await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
-      EngineService.init()
-      const fixture = await createFixture("Optional Intent clarification")
-      const outcome = await execute(fixture, "nice")
-      expect({ outcome, interactions: listInteractions(fixture.taskID) }).toEqual({
-        outcome: { kind: "terminal_success", session_id: fixture.worker.id, final_message_id: fixture.workerFinal.id },
-        interactions: [],
-      })
-    } })
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        EngineService.init()
+        const fixture = await createFixture("Optional Intent clarification")
+        const outcome = await execute(fixture, "nice")
+        expect({ outcome, interactions: listInteractions(fixture.taskID) }).toEqual({
+          outcome: {
+            kind: "terminal_success",
+            session_id: fixture.worker.id,
+            final_message_id: fixture.workerFinal.id,
+          },
+          interactions: [],
+        })
+      },
+    })
   }, 30_000)
 
   test("canonical Intent writer failure returns post-Turn partial without an Intent Artifact", async () => {
     await using project = await memoryProject()
-    await Instance.provide({ directory: project.path, fn: async () => {
-      EngineService.init()
-      const fixture = await createFixture("Intent Artifact persistence failure")
-      const outcome = await execute(fixture, "nice", () => {
-        throw new Error("intent artifact database unavailable")
-      })
-      const intentArtifacts = Database.use((db) =>
-        db
-          .select({ id: EngineArtifactTable.id })
-          .from(EngineArtifactTable)
-          .where(and(eq(EngineArtifactTable.task_id, fixture.taskID), eq(EngineArtifactTable.kind, "intent_analysis")))
-          .all(),
-      )
-      expect({ outcome, intentArtifacts }).toEqual({
-        outcome: {
-          kind: "partial",
-          session_id: fixture.worker.id,
-          final_message_id: fixture.workerFinal.id,
-          failed_operation: "persist-intent-analysis-artifact",
-          infrastructure_error: expect.objectContaining({
-            source: "engine_artifact",
-            artifact_id: expect.any(String),
-            catalog_revision: expect.any(Number),
-            expected_sha256: expect.stringMatching(/^[a-f0-9]{64}$/),
-          }),
-        },
-        intentArtifacts: [],
-      })
-    } })
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        EngineService.init()
+        const fixture = await createFixture("Intent Artifact persistence failure")
+        const outcome = await execute(fixture, "nice", () => {
+          throw new Error("intent artifact database unavailable")
+        })
+        const intentArtifacts = Database.use((db) =>
+          db
+            .select({ id: EngineArtifactTable.id })
+            .from(EngineArtifactTable)
+            .where(
+              and(eq(EngineArtifactTable.task_id, fixture.taskID), eq(EngineArtifactTable.kind, "intent_analysis")),
+            )
+            .all(),
+        )
+        expect({ outcome, intentArtifacts }).toEqual({
+          outcome: {
+            kind: "partial",
+            session_id: fixture.worker.id,
+            final_message_id: fixture.workerFinal.id,
+            failed_operation: "persist-intent-analysis-artifact",
+            infrastructure_error: expect.objectContaining({
+              source: "engine_artifact",
+              artifact_id: expect.any(String),
+              catalog_revision: expect.any(Number),
+              expected_sha256: expect.stringMatching(/^[a-f0-9]{64}$/),
+            }),
+          },
+          intentArtifacts: [],
+        })
+      },
+    })
   }, 30_000)
 })

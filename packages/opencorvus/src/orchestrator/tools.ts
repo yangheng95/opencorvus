@@ -47,6 +47,7 @@ import {
   resolveAgentCoordinationSessionLineage,
   AgentCoordinationRedispatchBindingSchema,
   type AgentCoordinationRedispatchBinding,
+  type AgentCoordinationDecision,
   type AgentCoordinationRequestRow,
   type AgentCoordinationSessionLineageSource,
 } from "@/engine/agent-coordination"
@@ -1491,11 +1492,14 @@ export function createOrchestratorTools(input: {
       inputSchema: z
         .object({
           request_id: z.string().min(1).describe("Pending agent_coordination_request artifact id."),
-          decision: z
-            .enum(["cancel_worker", "redispatch", "fail_task", "ask_user", "acknowledge_terminal"])
-            .describe(
-              "redispatch records the only continuation authority and must be followed by dispatch_agent using turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome. acknowledge_terminal is valid only in the host-authorized terminal conversation for this exact request and terminal occurrence.",
-            ),
+          decision: (input.terminalConversationAuthority
+            ? z.enum(["cancel_worker", "redispatch", "fail_task", "ask_user", "acknowledge_terminal"])
+            : z.enum(["cancel_worker", "redispatch", "fail_task", "ask_user"])
+          ).describe(
+            input.terminalConversationAuthority
+              ? "redispatch records the only continuation authority and must be followed by dispatch_agent using turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome. acknowledge_terminal is valid only for the exact host-authorized terminal conversation."
+              : "redispatch records the only continuation authority and must be followed by dispatch_agent using turn.kind=continuation and the returned coordination action authority; cancel_worker aborts a real requesting worker Runtime; ask_user opens a real task interaction; fail_task is an exceptional force-majeure stop that makes the Task inactive and is never a normal business outcome.",
+          ) as z.ZodType<AgentCoordinationDecision>,
           message: z
             .string()
             .optional()

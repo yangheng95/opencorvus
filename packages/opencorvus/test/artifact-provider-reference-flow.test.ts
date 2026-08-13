@@ -8,7 +8,7 @@ import {
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import { publishExpertArtifact } from "@/artifact-catalog"
 import { EngineArtifactTable } from "@/engine/engine.sql"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import {
   ArtifactReferenceAmbiguityError,
@@ -32,12 +32,7 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-async function assistantMessage(input: {
-  sessionID: string
-  parentID: string
-  created: number
-  projectPath: string
-}) {
+async function assistantMessage(input: { sessionID: string; parentID: string; created: number; projectPath: string }) {
   return Session.updateMessage({
     id: Identifier.ascending("message"),
     sessionID: input.sessionID,
@@ -109,11 +104,7 @@ describe("provider Artifact references", () => {
     const publishTool = await ArtifactPublishTool.init()
 
     expect([locatorRef, readRef, selectionRef].map((reference) => reference.length)).toEqual([19, 19, 19])
-    expect([locatorRef.slice(0, 3), readRef.slice(0, 3), selectionRef.slice(0, 3)]).toEqual([
-      "al_",
-      "ar_",
-      "as_",
-    ])
+    expect([locatorRef.slice(0, 3), readRef.slice(0, 3), selectionRef.slice(0, 3)]).toEqual(["al_", "ar_", "as_"])
 
     expect(
       readTool.parameters.parse({
@@ -123,8 +114,20 @@ describe("provider Artifact references", () => {
         max_bytes: 4,
         delivery: "inline",
       }),
-    ).toEqual({ artifact_transport_version: 2, artifact_locator_ref: locatorRef, byte_offset: 0, max_bytes: 4, delivery: "inline" })
-    expect(selectTool.parameters.parse({ artifact_transport_version: 2, artifact_read_ref: readRef, purpose: selection.purpose })).toEqual({
+    ).toEqual({
+      artifact_transport_version: 2,
+      artifact_locator_ref: locatorRef,
+      byte_offset: 0,
+      max_bytes: 4,
+      delivery: "inline",
+    })
+    expect(
+      selectTool.parameters.parse({
+        artifact_transport_version: 2,
+        artifact_read_ref: readRef,
+        purpose: selection.purpose,
+      }),
+    ).toEqual({
       artifact_transport_version: 2,
       artifact_read_ref: readRef,
       purpose: selection.purpose,
@@ -164,7 +167,7 @@ describe("provider Artifact references", () => {
           version: "2026.08.13.1",
           packageDigest: "f".repeat(64),
         }
-        persistQueuedTask({
+        persistTask({
           taskID,
           sessionID: session.id,
           now,
@@ -175,7 +178,6 @@ describe("provider Artifact references", () => {
           priority: "normal",
           metadata: {},
           projectID: Instance.project.id,
-          queue: true,
           packageRevision,
           executionCapsuleBinding: await prepareTaskProcessBinding({
             mode: "native",
@@ -251,7 +253,13 @@ describe("provider Artifact references", () => {
           messageID: firstReadMessage.id,
           created: now + 3,
           tool: "artifact_read",
-          toolInput: { artifact_transport_version: 2, artifact_locator_ref: locatorRef, byte_offset: 0, max_bytes: 4, delivery: "inline" },
+          toolInput: {
+            artifact_transport_version: 2,
+            artifact_locator_ref: locatorRef,
+            byte_offset: 0,
+            max_bytes: 4,
+            delivery: "inline",
+          },
           output: {
             locator,
             artifact_transport_version: 2,
@@ -280,7 +288,13 @@ describe("provider Artifact references", () => {
           messageID: finalReadMessage.id,
           created: now + 5,
           tool: "artifact_read",
-          toolInput: { artifact_transport_version: 2, artifact_locator_ref: locatorRef, byte_offset: 4, max_bytes: 4, delivery: "inline" },
+          toolInput: {
+            artifact_transport_version: 2,
+            artifact_locator_ref: locatorRef,
+            byte_offset: 4,
+            max_bytes: 4,
+            delivery: "inline",
+          },
           output: {
             locator,
             artifact_transport_version: 2,
@@ -393,7 +407,11 @@ describe("provider Artifact references", () => {
           selectedArtifactLocators: sourceLocators,
         })
         const stored = Database.use((db) =>
-          db.select({ payload: EngineArtifactTable.payload }).from(EngineArtifactTable).where(eq(EngineArtifactTable.id, published.locator.artifact_id)).get(),
+          db
+            .select({ payload: EngineArtifactTable.payload })
+            .from(EngineArtifactTable)
+            .where(eq(EngineArtifactTable.id, published.locator.artifact_id))
+            .get(),
         )
         const envelope = EngineArtifactEnvelopeSchema.parse(stored?.payload)
         expect(envelope.source_artifact_locators).toEqual([locator])
