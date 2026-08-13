@@ -169,7 +169,7 @@ export async function removeIsolatedTestRuntime(runtime: IsolatedTestRuntime): P
   if (!authority || !isStrictDescendant(authority.osTempRoot, authority.target)) {
     throw new Error("Isolated test runtime cleanup target has no current OS-temporary-directory authority")
   }
-  const deadline = Date.now() + 5_000
+  const deadline = Date.now() + (process.platform === "win32" ? 30_000 : 5_000)
   while (true) {
     try {
       await fsPromises.rm(authority.target, { recursive: true, force: true })
