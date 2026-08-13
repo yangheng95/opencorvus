@@ -19,6 +19,13 @@ describe("Artifact read facts from provider Tool input", () => {
         const session = await Session.create({ kind: "mission", title: "Provider read facts" })
         const now = Date.now()
         const taskID = "task-provider-read-facts"
+        const locatorRef = "al_1234567890abcdef"
+        const readRef = "ar_1234567890abcdef"
+        const terminalReference = {
+          terminalEventID: "evt_provider_read_fact",
+          terminalStatus: "completed" as const,
+          timeCompleted: now + 1,
+        }
         const locator = {
           source: "engine_artifact" as const,
           artifact_id: "art_provider_read_fact",
@@ -78,13 +85,19 @@ describe("Artifact read facts from provider Tool input", () => {
               operation: {
                 action: "read_task_artifact",
                 taskID,
-                locator,
+                artifact_transport_version: 2,
+                artifact_locator_ref: locatorRef,
                 byte_offset: 0,
                 max_bytes: 65_536,
                 delivery: "inline",
               },
             },
             output: JSON.stringify({
+              taskID,
+              terminal_lifecycle_reference: terminalReference,
+              artifact_transport_version: 2,
+              artifact_locator_ref: locatorRef,
+              artifact_read_ref: readRef,
               locator,
               media_type: "application/json",
               byte_start: 0,

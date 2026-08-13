@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { reviewedTerminalLifecycleReferenceBeforePanelAction } from "@/agent/task-review-facts"
+import { ArtifactReferenceResolutionError } from "@/agent/artifact-read-facts"
 import { recordEngineArtifact } from "@/engine/artifact"
 import { requireCurrentTerminalLifecycleReference, sameTerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
 import { persistQueuedTask } from "@/engine/pipeline"
@@ -60,6 +61,7 @@ describe("Mission terminal Task authority", () => {
           title: "Paged terminal child",
           request: "Publish a multi-page evidence catalog",
           productPillar: "work",
+          source: "mission",
           metadata: { actor: "mission", mission: { id: mission.missionID, session_id: mission.id } },
           projectID: Instance.project.id,
           queue: false,
@@ -123,7 +125,7 @@ describe("Mission terminal Task authority", () => {
           metadata() {},
           async ask() {},
         }
-        const entries: Array<{ locator: unknown }> = []
+        const entries: Array<{ locator: unknown; artifact_locator_ref: string }> = []
         const visitedPageNumbers: number[] = []
         let pageNumber: number | null = 1
         while (pageNumber !== null) {
@@ -146,7 +148,7 @@ describe("Mission terminal Task authority", () => {
             terminal_lifecycle_reference: typeof terminalReference
             page_number: number
             next_page_number: number | null
-            entries: Array<{ locator: unknown }>
+            entries: Array<{ locator: unknown; artifact_locator_ref: string }>
             filtered_total: number
             catalog_complete: boolean
           }
@@ -159,6 +161,31 @@ describe("Mission terminal Task authority", () => {
               catalog_complete: true,
             }),
           )
+          if (page.page_number === 1) {
+            await Session.updatePart({
+              id: Identifier.ascending("part"),
+              sessionID: mission.id,
+              messageID: caller.id,
+              type: "tool",
+              callID: "query-terminal-artifact-page-one",
+              tool: "panel",
+              state: {
+                status: "completed",
+                input: {
+                  action: "query_task_artifacts",
+                  taskID,
+                  terminal_lifecycle_reference: terminalReference,
+                  page_number: 1,
+                  kinds: ["expert_output"],
+                  sort: "oldest",
+                },
+                output: result.output,
+                title: result.title,
+                metadata: result.metadata,
+                time: { start: now + 36, end: now + 37 },
+              },
+            })
+          }
           visitedPageNumbers.push(page.page_number)
           entries.push(...page.entries)
           pageNumber = page.next_page_number
@@ -166,6 +193,86 @@ describe("Mission terminal Task authority", () => {
         expect(visitedPageNumbers).toEqual([1, 2, 3])
         expect(entries).toHaveLength(33)
         expect(new Set(entries.map((entry) => JSON.stringify(entry.locator))).size).toBe(33)
+        expect(new Set(entries.map((entry) => entry.artifact_locator_ref)).size).toBe(33)
+        const readMessage = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "assistant",
+          author: "mission",
+          parentID: user.id,
+          time: { created: now + 37 },
+          agent: "mission",
+          providerID: "openai",
+          modelID: "gpt-5.6-terra",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        const read = await panel.execute(
+          {
+            action: "read_task_artifact",
+            taskID,
+            artifact_transport_version: 2,
+            artifact_locator_ref: entries[0]!.artifact_locator_ref,
+            byte_offset: 0,
+            max_bytes: 65_536,
+            delivery: "inline",
+          },
+          { ...context, messageID: readMessage.id },
+        )
+        expect(JSON.parse(read.output)).toEqual(
+          expect.objectContaining({
+            taskID,
+            terminal_lifecycle_reference: terminalReference,
+            artifact_transport_version: 2,
+            artifact_locator_ref: entries[0]!.artifact_locator_ref,
+            artifact_read_ref: expect.stringMatching(/^ar_[A-Za-z0-9_-]{16}$/),
+            locator: entries[0]!.locator,
+            complete: true,
+          }),
+        )
+        await updateTask(requireTask(taskID), { status: "active" }, "Task reopened after catalog read")
+        await terminalTask(
+          requireTask(taskID),
+          { status: "completed", time_completed: now + 39 },
+          "Replacement terminal occurrence",
+        )
+        const staleReadMessage = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "assistant",
+          author: "mission",
+          parentID: user.id,
+          time: { created: now + 40 },
+          agent: "mission",
+          providerID: "openai",
+          modelID: "gpt-5.6-terra",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        let staleReadError: unknown
+        try {
+          await panel.execute(
+            {
+              action: "read_task_artifact",
+              taskID,
+              artifact_transport_version: 2,
+              artifact_locator_ref: entries[0]!.artifact_locator_ref,
+              byte_offset: 0,
+              max_bytes: 65_536,
+              delivery: "inline",
+            },
+            { ...context, messageID: staleReadMessage.id },
+          )
+        } catch (error) {
+          staleReadError = error
+        }
+        expect(staleReadError).toEqual(
+          expect.objectContaining({
+            message: expect.stringContaining(`terminal occurrence changed for Task ${taskID}`),
+          }),
+        )
       },
     })
   }, 30_000)
@@ -190,6 +297,7 @@ describe("Mission terminal Task authority", () => {
           title: "Terminal child",
           request: "Publish accepted evidence",
           productPillar: "work",
+          source: "mission",
           metadata: { actor: "mission", mission: { id: mission.missionID, session_id: mission.id } },
           projectID: Instance.project.id,
           queue: false,
@@ -217,7 +325,7 @@ describe("Mission terminal Task authority", () => {
           author: "user",
           time: { created: now + 2 },
           agent: "mission",
-          model: { providerID: "openai", modelID: "gpt-5.6-sol" },
+          model: { providerID: "openai", modelID: "gpt-5.6-terra" },
         })
         const queryMessage = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -228,7 +336,7 @@ describe("Mission terminal Task authority", () => {
           time: { created: now + 3, completed: now + 4 },
           agent: "mission",
           providerID: "openai",
-          modelID: "gpt-5.6-sol",
+          modelID: "gpt-5.6-terra",
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
@@ -275,6 +383,50 @@ describe("Mission terminal Task authority", () => {
           },
         })
         expect(queryPart.type).toBe("tool")
+        const locatorRef = "al_1234567890abcdef"
+        const readRef = "ar_1234567890abcdef"
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: queryMessage.id,
+          type: "tool",
+          callID: "read-terminal-evidence",
+          tool: "panel",
+          state: {
+            status: "completed",
+            input: {
+              operation: {
+                action: "read_task_artifact",
+                taskID,
+                artifact_transport_version: 2,
+                artifact_locator_ref: locatorRef,
+                byte_offset: 0,
+                max_bytes: 65_536,
+                delivery: "inline",
+              },
+            },
+            output: JSON.stringify({
+              taskID,
+              terminal_lifecycle_reference: initialReference,
+              artifact_transport_version: 2,
+              artifact_locator_ref: locatorRef,
+              artifact_read_ref: readRef,
+              locator,
+              media_type: "application/json",
+              byte_start: 0,
+              byte_end: 1,
+              next_offset: null,
+              total_bytes: 1,
+              complete: true,
+              sha256: locator.expected_sha256,
+              text: "x",
+              attachment: false,
+            }),
+            title: "Task Artifact",
+            metadata: { truncated: false },
+            time: { start: now + 4, end: now + 5 },
+          },
+        })
 
         const mutationMessage = await Session.updateMessage({
           id: Identifier.ascending("message"),
@@ -285,7 +437,7 @@ describe("Mission terminal Task authority", () => {
           time: { created: now + 5, completed: now + 6 },
           agent: "mission",
           providerID: "openai",
-          modelID: "gpt-5.6-sol",
+          modelID: "gpt-5.6-terra",
           path: { cwd: project.path, root: project.path },
           cost: 0,
           tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
@@ -305,49 +457,77 @@ describe("Mission terminal Task authority", () => {
             action: "resume_task",
             taskID,
             text: "Publish the corrected audit receipt.",
-            evidence_locators: [locator],
+            evidence_read_refs: [readRef],
           }),
         ).toEqual({
           action: "resume_task",
           taskID,
           text: "Publish the corrected audit receipt.",
-          evidence_locators: [locator],
+          evidence_read_refs: [readRef],
         })
         expect(
           missionSchema.parse({
             action: "complete_mission",
             summary: "Accepted terminal evidence",
-            task_acceptances: [{ task_id: taskID, evidence_locators: [locator] }],
+            task_acceptances: [{ task_id: taskID, evidence_read_refs: [readRef] }],
           }),
         ).toEqual({
           action: "complete_mission",
           summary: "Accepted terminal evidence",
-          task_acceptances: [{ task_id: taskID, evidence_locators: [locator] }],
+          task_acceptances: [{ task_id: taskID, evidence_read_refs: [readRef] }],
         })
         const completionInput = MissionCompletionActionInput.parse({
           action: "complete_mission",
           summary: "Accepted terminal evidence",
-          task_acceptances: [{ task_id: taskID, evidence_locators: [locator] }],
+          task_acceptances: [{ task_id: taskID, evidence_read_refs: [readRef] }],
         })
 
         const completionCallID = "complete-terminal-mission"
         const completionPartID = Identifier.ascending("part")
-        const receipt = MissionCompletionReceipt.parse({
-          kind: "mission_completed",
-          mission_id: mission.missionID,
-          mission_session_id: mission.id,
-          summary: completionInput.summary,
-          task_acceptances: [
-            {
-              ...completionInput.task_acceptances[0],
-              terminal_lifecycle_reference: initialReference,
-            },
-          ],
-          assistant_message_id: mutationMessage.id,
-          tool_call_id: completionCallID,
-          tool_part_id: completionPartID,
-          time_recorded: now + 6,
+        await Session.updatePart({
+          id: completionPartID,
+          sessionID: mission.id,
+          messageID: mutationMessage.id,
+          type: "tool",
+          callID: completionCallID,
+          tool: "panel",
+          state: {
+            status: "running",
+            input: completionInput,
+            time: { start: now + 5 },
+          },
         })
+        const completion = await panel.execute(completionInput, {
+          sessionID: mission.id,
+          messageID: mutationMessage.id,
+          callID: completionCallID,
+          agent: "mission",
+          abort: new AbortController().signal,
+          messages: [],
+          executionSurface: Tool.executionSurface(["panel"], []),
+          extra: { surface: "panel" },
+          metadata() {},
+          async ask() {},
+        })
+        const receipt = MissionCompletionReceipt.parse(JSON.parse(completion.output))
+        expect(receipt).toEqual(
+          expect.objectContaining({
+            kind: "mission_completed",
+            mission_id: mission.missionID,
+            mission_session_id: mission.id,
+            summary: completionInput.summary,
+            task_acceptances: [
+              {
+                task_id: taskID,
+                evidence_locators: [locator],
+                terminal_lifecycle_reference: initialReference,
+              },
+            ],
+            assistant_message_id: mutationMessage.id,
+            tool_call_id: completionCallID,
+            tool_part_id: completionPartID,
+          }),
+        )
         await Session.updatePart({
           id: completionPartID,
           sessionID: mission.id,
@@ -357,10 +537,10 @@ describe("Mission terminal Task authority", () => {
           tool: "panel",
           state: {
             status: "completed",
-            input: { ...completionInput, model: "openai/gpt-5.6-luna" },
-            output: JSON.stringify(receipt),
-            title: "Mission completed",
-            metadata: { truncated: false },
+            input: completionInput,
+            output: completion.output,
+            title: completion.title,
+            metadata: completion.metadata,
             time: { start: now + 5, end: now + 6 },
           },
         })
@@ -388,6 +568,99 @@ describe("Mission terminal Task authority", () => {
           current: currentReference,
           sameOccurrence: sameTerminalLifecycleReference(initialReference, currentReference),
         }).toEqual({ reviewed: initialReference, current: currentReference, sameOccurrence: false })
+
+        const currentQueryMessage = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "assistant",
+          author: "mission",
+          parentID: user.id,
+          time: { created: now + 9 },
+          agent: "mission",
+          providerID: "openai",
+          modelID: "gpt-5.6-terra",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        const currentQuery = await panel.execute(
+          { action: "query_task", taskIDs: [taskID] },
+          {
+            sessionID: mission.id,
+            messageID: currentQueryMessage.id,
+            agent: "mission",
+            abort: new AbortController().signal,
+            messages: [],
+            executionSurface: Tool.executionSurface(["panel"], []),
+            extra: { surface: "panel" },
+            metadata() {},
+            async ask() {},
+          },
+        )
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: currentQueryMessage.id,
+          type: "tool",
+          callID: "query-replacement-terminal-task",
+          tool: "panel",
+          state: {
+            status: "completed",
+            input: { action: "query_task", taskIDs: [taskID] },
+            output: currentQuery.output,
+            title: currentQuery.title,
+            metadata: currentQuery.metadata,
+            time: { start: now + 9, end: now + 10 },
+          },
+        })
+        const staleCompletionMessage = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "assistant",
+          author: "mission",
+          parentID: user.id,
+          time: { created: now + 11 },
+          agent: "mission",
+          providerID: "openai",
+          modelID: "gpt-5.6-terra",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        const staleCompletionCallID = "complete-with-prior-terminal-read"
+        await Session.updatePart({
+          id: Identifier.ascending("part"),
+          sessionID: mission.id,
+          messageID: staleCompletionMessage.id,
+          type: "tool",
+          callID: staleCompletionCallID,
+          tool: "panel",
+          state: { status: "running", input: completionInput, time: { start: now + 11 } },
+        })
+        let staleCompletionError: unknown
+        try {
+          await panel.execute(completionInput, {
+            sessionID: mission.id,
+            messageID: staleCompletionMessage.id,
+            callID: staleCompletionCallID,
+            agent: "mission",
+            abort: new AbortController().signal,
+            messages: [],
+            executionSurface: Tool.executionSurface(["panel"], []),
+            extra: { surface: "panel" },
+            metadata() {},
+            async ask() {},
+          })
+        } catch (error) {
+          staleCompletionError = error
+        }
+        expect(staleCompletionError).toBeInstanceOf(ArtifactReferenceResolutionError)
+        expect(staleCompletionError).toEqual(
+          expect.objectContaining({
+            code: "ARTIFACT_REFERENCE_UNRESOLVED",
+            reference: readRef,
+          }),
+        )
       },
     })
   }, 30_000)

@@ -4668,50 +4668,18 @@ export class Control extends HeyApiClient {
         | {
             action: "read_task_artifact"
             /**
-             * Zero-based byte offset within the exact canonical payload or resource.
+             * Host-minted reference to one exact locator emitted earlier in this Session Turn.
+             */
+            artifact_locator_ref: string
+            artifact_transport_version: 2
+            /**
+             * Zero-based byte offset within the exact locator identified by artifact_locator_ref.
              */
             byte_offset?: number
             /**
              * inline returns one bounded content chunk. materialized_file verifies one complete text resource and returns an immutable local cache path for bounded command-line inspection.
              */
             delivery?: "inline" | "materialized_file"
-            /**
-             * Exact typed locator returned by Artifact search, including its immutable digest.
-             */
-            locator:
-              | {
-                  artifact_id: string
-                  catalog_revision: number
-                  expected_sha256: string
-                  source: "engine_artifact"
-                }
-              | {
-                  snapshot: {
-                    manifest_sha256: string
-                    project_id: string
-                    schema_version: 2
-                    snapshot_id: string
-                    task_id: string
-                  }
-                  source: "task_artifact_snapshot"
-                }
-              | {
-                  ref: {
-                    bytes: number
-                    media_type: string
-                    path: string
-                    sha256: string
-                    snapshot: {
-                      manifest_sha256: string
-                      project_id: string
-                      schema_version: 2
-                      snapshot_id: string
-                      task_id: string
-                    }
-                    tree: string
-                  }
-                  source: "task_artifact_resource"
-                }
             /**
              * Maximum UTF-8 text bytes to return in this exact-read chunk. Binary resources use one complete attachment and ignore text pagination.
              */
@@ -4732,43 +4700,9 @@ export class Control extends HeyApiClient {
              */
             task_acceptances: Array<{
               /**
-               * Exact Task Artifact locators completely read earlier in this Mission Turn.
+               * Host-minted references returned by complete Task Artifact reads earlier in this Mission Turn.
                */
-              evidence_locators: Array<
-                | {
-                    artifact_id: string
-                    catalog_revision: number
-                    expected_sha256: string
-                    source: "engine_artifact"
-                  }
-                | {
-                    snapshot: {
-                      manifest_sha256: string
-                      project_id: string
-                      schema_version: 2
-                      snapshot_id: string
-                      task_id: string
-                    }
-                    source: "task_artifact_snapshot"
-                  }
-                | {
-                    ref: {
-                      bytes: number
-                      media_type: string
-                      path: string
-                      sha256: string
-                      snapshot: {
-                        manifest_sha256: string
-                        project_id: string
-                        schema_version: 2
-                        snapshot_id: string
-                        task_id: string
-                      }
-                      tree: string
-                    }
-                    source: "task_artifact_resource"
-                  }
-              >
+              evidence_read_refs: Array<string>
               /**
                * Current child Task accepted by this Mission decision.
                */
@@ -5052,43 +4986,9 @@ export class Control extends HeyApiClient {
         | {
             action: "resume_task"
             /**
-             * Exact source Task locators completely read earlier in this same Mission Turn.
+             * Host-minted references returned by complete source Task reads earlier in this Mission Turn.
              */
-            evidence_locators: Array<
-              | {
-                  artifact_id: string
-                  catalog_revision: number
-                  expected_sha256: string
-                  source: "engine_artifact"
-                }
-              | {
-                  snapshot: {
-                    manifest_sha256: string
-                    project_id: string
-                    schema_version: 2
-                    snapshot_id: string
-                    task_id: string
-                  }
-                  source: "task_artifact_snapshot"
-                }
-              | {
-                  ref: {
-                    bytes: number
-                    media_type: string
-                    path: string
-                    sha256: string
-                    snapshot: {
-                      manifest_sha256: string
-                      project_id: string
-                      schema_version: 2
-                      snapshot_id: string
-                      task_id: string
-                    }
-                    tree: string
-                  }
-                  source: "task_artifact_resource"
-                }
-            >
+            evidence_read_refs: Array<string>
             /**
              * Completed or failed source Task in the current Mission lineage.
              */

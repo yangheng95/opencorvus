@@ -43,12 +43,20 @@ import { ChannelId } from "@/channel/catalog"
 import { ControlPromptContext } from "@/control/prompt"
 import {
   ArtifactReadInputSchema,
+  ArtifactReadReferenceChunkSchema,
+  ArtifactReadReferenceInputSchema,
   ArtifactSchemaLimits,
   ArtifactSearchInputSchema,
-  ArtifactSearchTransportPageSchema,
+  ArtifactSearchReferenceTransportPageSchema,
   artifactReadLocatorKey,
+  mintArtifactLocatorReference,
+  mintArtifactReadReference,
 } from "@opencorvus-ai/plugin/artifact-catalog"
-import { completeArtifactReadsBeforePanelAction } from "@/agent/artifact-read-facts"
+import {
+  completeArtifactReadsBeforePanelAction,
+  resolvePanelArtifactLocatorReferenceBeforeRead,
+  resolvePanelArtifactReadReferencesBeforeAction,
+} from "@/agent/artifact-read-facts"
 import { reviewedTerminalLifecycleReferenceBeforePanelAction } from "@/agent/task-review-facts"
 import { listMissionTasks } from "@/engine/store"
 import { MissionCompletionReceipt, MissionCompletionTaskAcceptance } from "@/mission/completion"
@@ -72,7 +80,7 @@ const localOnly = (ctx: Tool.Context) => {
   return surface === "panel" || surface === "right-sidebar"
 }
 
-const PanelTaskArtifactPage = ArtifactSearchTransportPageSchema.omit({ next_cursor: true }).extend({
+const PanelTaskArtifactPage = ArtifactSearchReferenceTransportPageSchema.omit({ next_cursor: true }).extend({
   taskID: z.string().min(1),
   terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
   page_number: z.number().int().min(1),
@@ -272,7 +280,10 @@ async function panelTaskArtifactPage(
         terminal_lifecycle_reference: terminalReference,
         page_number: pageNumber,
         next_page_number: page.next_cursor ? pageNumber + 1 : null,
-        entries: page.entries,
+        entries: page.entries.map((entry) => ({
+          ...entry,
+          artifact_locator_ref: mintArtifactLocatorReference(),
+        })),
         catalog_total: page.catalog_total,
         filtered_total: page.filtered_total,
         catalog_complete: page.catalog_complete,
@@ -708,14 +719,49 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         }
         const mission = await requireMissionSession(ctx.sessionID)
         const { action: _action, taskID, ...rawRead } = params
+        const transport = ArtifactReadReferenceInputSchema.parse(rawRead)
+        const resolvedReference = resolvePanelArtifactLocatorReferenceBeforeRead({
+          sessionID: ctx.sessionID,
+          assistantMessageID: ctx.messageID,
+          taskID,
+          reference: transport.artifact_locator_ref,
+        })
+        const currentReference = requireCurrentTerminalLifecycleReference(taskID)
+        if (!sameTerminalLifecycleReference(currentReference, resolvedReference.terminalLifecycleReference)) {
+          throw new Error(
+            `panel.read_task_artifact terminal occurrence changed for Task ${taskID}; query the current Task and Artifact catalog before reading`,
+          )
+        }
         const result = await EngineService.readMissionTaskArtifact({
           taskID,
           importer: { missionID: mission.missionID, sessionID: mission.id },
-          read: ArtifactReadInputSchema.parse(rawRead),
+          read: ArtifactReadInputSchema.parse({
+            locator: resolvedReference.locator,
+            byte_offset: transport.byte_offset,
+            max_bytes: transport.max_bytes,
+            delivery: transport.delivery,
+          }),
+        })
+        const settledReference = requireCurrentTerminalLifecycleReference(taskID)
+        if (!sameTerminalLifecycleReference(settledReference, resolvedReference.terminalLifecycleReference)) {
+          throw new Error(
+            `panel.read_task_artifact terminal occurrence changed while reading Task ${taskID}; query the current Task and Artifact catalog again`,
+          )
+        }
+        const transportChunk = ArtifactReadReferenceChunkSchema.extend({
+          taskID: z.string().min(1),
+          terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
+        }).parse({
+          ...result.chunk,
+          taskID,
+          terminal_lifecycle_reference: settledReference,
+          artifact_transport_version: 2,
+          artifact_locator_ref: transport.artifact_locator_ref,
+          artifact_read_ref: mintArtifactReadReference(),
         })
         return {
           title: "Task Artifact",
-          output: JSON.stringify(result.chunk),
+          output: JSON.stringify(transportChunk),
           metadata: { truncated: false },
           ...(result.attachment
             ? {
@@ -774,24 +820,16 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               `panel.complete_mission Task ${acceptance.task_id} must cite its exact current completed occurrence.`,
             )
           }
-          const completeLocatorKeys = new Set(
-            completeArtifactReadsBeforePanelAction({
-              sessionID: ctx.sessionID,
-              assistantMessageID: ctx.messageID,
-              taskID: acceptance.task_id,
-            }).map(artifactReadLocatorKey),
-          )
-          const acceptedLocatorKeys = acceptance.evidence_locators.map(artifactReadLocatorKey)
-          if (
-            new Set(acceptedLocatorKeys).size !== acceptedLocatorKeys.length ||
-            acceptedLocatorKeys.some((key) => !completeLocatorKeys.has(key))
-          ) {
-            throw new Error(
-              `panel.complete_mission Task ${acceptance.task_id} evidence must be completely read in this Mission Turn.`,
-            )
-          }
+          const evidenceLocators = resolvePanelArtifactReadReferencesBeforeAction({
+            sessionID: ctx.sessionID,
+            assistantMessageID: ctx.messageID,
+            taskID: acceptance.task_id,
+            terminalLifecycleReference: reviewedReference,
+            references: acceptance.evidence_read_refs,
+          })
           authoritativeAcceptances.push({
-            ...acceptance,
+            task_id: acceptance.task_id,
+            evidence_locators: evidenceLocators,
             terminal_lifecycle_reference: reviewedReference,
           })
         }
@@ -1165,10 +1203,17 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
         }
         const mission = await requireMissionSession(ctx.sessionID)
         const identity = await requirePanelMutationToolIdentity(ctx, "resume_task")
-        const completeEvidenceLocators = completeArtifactReadsBeforePanelAction({
+        const reviewedTerminalLifecycleReference = reviewedTerminalLifecycleReferenceBeforePanelAction({
           sessionID: ctx.sessionID,
           assistantMessageID: ctx.messageID,
           taskID: params.taskID,
+        })
+        const evidenceLocators = resolvePanelArtifactReadReferencesBeforeAction({
+          sessionID: ctx.sessionID,
+          assistantMessageID: ctx.messageID,
+          taskID: params.taskID,
+          terminalLifecycleReference: reviewedTerminalLifecycleReference,
+          references: params.evidence_read_refs,
         })
         const result = await EngineService.resumeMissionTask({
           taskID: params.taskID,
@@ -1178,14 +1223,10 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
             messageID: identity.messageID,
             toolCallID: identity.toolCallID,
           },
-          reviewedTerminalLifecycleReference: reviewedTerminalLifecycleReferenceBeforePanelAction({
-            sessionID: ctx.sessionID,
-            assistantMessageID: ctx.messageID,
-            taskID: params.taskID,
-          }),
+          reviewedTerminalLifecycleReference,
           text: params.text,
-          evidenceLocators: params.evidence_locators,
-          completeEvidenceLocators,
+          evidenceLocators,
+          completeEvidenceLocators: evidenceLocators,
           toolPartID: identity.toolPartID,
         })
         return {

@@ -7,8 +7,8 @@ import { ExpertSquadIDSchema } from "@/expert-squad/id"
 import { isModelReference } from "@/provider/model-ref"
 import { TaskCallerMetadata } from "@/task-api/task-caller-metadata"
 import {
-  ArtifactReadInputSchema,
-  ArtifactReadLocatorSchema,
+  ArtifactReadReferenceInputSchema,
+  ArtifactReadReferenceSchema,
   ArtifactSearchWithoutLimitSchema,
   CrossTaskArtifactSourceListSchema,
   refineArtifactSearchInput,
@@ -289,7 +289,7 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "query_task_artifacts",
     description:
-      "Enumerate one terminal Task occurrence's canonical Artifact catalog through a bounded numbered page. Start with page_number 1 and repeat with next_page_number until null; the Host retains and authenticates opaque catalog cursors internally. Empty entries are a valid result. The response returns exact ArtifactReadLocator values and never writes oversized output to a path side channel.",
+      "Enumerate one terminal Task occurrence's canonical Artifact catalog through a bounded numbered page. Start with page_number 1 and repeat with next_page_number until null; the Host retains and authenticates opaque catalog cursors internally. Empty entries are a valid result. Each entry returns a short Host-minted artifact_locator_ref for read_task_artifact; the model never reconstructs its canonical locator.",
     kind: "query",
     surfaces: allProjectSurfaces,
     params: {
@@ -310,12 +310,12 @@ export const PanelCapabilityRegistry = list(
   item({
     action: "read_task_artifact",
     description:
-      "Read one exact canonical Artifact locator from a terminal Task in this Mission lineage. Continue through every next_offset until complete before making an acceptance or resume decision.",
+      "Read one exact Artifact selected by a Host-minted catalog reference from one terminal Task occurrence in this Mission lineage. Continue through every next_offset until complete, then use the returned occurrence-bound artifact_read_ref for acceptance or resume.",
     kind: "query",
     surfaces: ["panel"],
     params: {
       taskID: z.string().min(1).describe("Terminal source Task in the current Mission lineage."),
-      ...ArtifactReadInputSchema.shape,
+      ...ArtifactReadReferenceInputSchema.shape,
     },
   }),
   item({
@@ -451,11 +451,11 @@ export const PanelCapabilityRegistry = list(
         .min(1)
         .max(32_000)
         .describe("Visible Mission-authored repair request describing the observed acceptance gap."),
-      evidence_locators: z
-        .array(ArtifactReadLocatorSchema)
+      evidence_read_refs: z
+        .array(ArtifactReadReferenceSchema)
         .min(1)
         .max(64)
-        .describe("Exact source Task locators completely read earlier in this same Mission Turn."),
+        .describe("Host-minted references returned by complete source Task reads earlier in this Mission Turn."),
     },
   }),
   item({

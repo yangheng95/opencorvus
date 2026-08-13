@@ -60,6 +60,7 @@ describe("SessionLoop provider Tool execution input", () => {
     expect(provider.required).toEqual(["operation"])
     expect(Object.keys(provider.properties)).toEqual(["operation"])
     expect(read.required).toContain("taskID")
+    expect(read.required).toContain("artifact_locator_ref")
     expect(read.properties.taskID).toEqual(expect.objectContaining({ type: "string", minLength: 1 }))
     expect(artifactPage.required).toEqual(
       expect.arrayContaining(["taskID", "terminal_lifecycle_reference", "page_number"]),
@@ -75,12 +76,8 @@ describe("SessionLoop provider Tool execution input", () => {
       operation: {
         action: "read_task_artifact",
         taskID: "task-provider-union",
-        locator: {
-          source: "engine_artifact",
-          artifact_id: "art_provider_union",
-          catalog_revision: 1,
-          expected_sha256: "b".repeat(64),
-        },
+        artifact_transport_version: 2,
+        artifact_locator_ref: "al_1234567890abcdef",
         byte_offset: null,
         max_bytes: null,
         delivery: null,
@@ -91,12 +88,8 @@ describe("SessionLoop provider Tool execution input", () => {
       value: {
         action: "read_task_artifact",
         taskID: "task-provider-union",
-        locator: {
-          source: "engine_artifact",
-          artifact_id: "art_provider_union",
-          catalog_revision: 1,
-          expected_sha256: "b".repeat(64),
-        },
+        artifact_transport_version: 2,
+        artifact_locator_ref: "al_1234567890abcdef",
         byte_offset: 0,
         max_bytes: 24_576,
         delivery: "inline",
@@ -128,14 +121,7 @@ describe("SessionLoop provider Tool execution input", () => {
           action: "resume_task",
           taskID: "task-provider-union",
           text: "Apply the reviewed correction.",
-          evidence_locators: [
-            {
-              source: "engine_artifact",
-              artifact_id: "art_reviewed_correction",
-              catalog_revision: 1,
-              expected_sha256: "a".repeat(64),
-            },
-          ],
+          evidence_read_refs: ["ar_1234567890abcdef"],
           model: null,
           summary: null,
           task_acceptances: null,
@@ -148,14 +134,7 @@ describe("SessionLoop provider Tool execution input", () => {
       action: "resume_task",
       taskID: "task-provider-union",
       text: "Apply the reviewed correction.",
-      evidence_locators: [
-        {
-          source: "engine_artifact",
-          artifact_id: "art_reviewed_correction",
-          catalog_revision: 1,
-          expected_sha256: "a".repeat(64),
-        },
-      ],
+      evidence_read_refs: ["ar_1234567890abcdef"],
     })
   })
 
@@ -198,14 +177,7 @@ describe("SessionLoop provider Tool execution input", () => {
         action: "resume_task",
         taskID: "task-provider-union",
         text: "Apply the reviewed correction.",
-        evidence_locators: [
-          {
-            source: "engine_artifact",
-            artifact_id: "art_reviewed_correction",
-            catalog_revision: 1,
-            expected_sha256: "a".repeat(64),
-          },
-        ],
+        evidence_read_refs: ["ar_1234567890abcdef"],
         invented_provider_field: "must remain invalid",
       },
       executionOptions,
@@ -226,12 +198,8 @@ describe("SessionLoop provider Tool execution input", () => {
         operation: {
           action: "read_task_artifact",
           taskID: null,
-          locator: {
-            source: "engine_artifact",
-            artifact_id: "art_null_task_id",
-            catalog_revision: 1,
-            expected_sha256: "c".repeat(64),
-          },
+          artifact_transport_version: 2,
+          artifact_locator_ref: "al_1234567890abcdef",
           byte_offset: null,
           max_bytes: null,
           delivery: null,
