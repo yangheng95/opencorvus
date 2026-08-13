@@ -280,6 +280,35 @@ function assertCurrentDataIntegrity(sqlite: BunDatabase, dbPath: string): void {
     })
   }
 
+  const legacyProjectMemory = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id
+     FROM memory_file
+     WHERE length(id) > ${Identifier.MAX_LENGTH}
+       AND (kind = 'user_message' OR (kind = 'project_context' AND key = 'project-memory-document'))
+     UNION ALL
+     SELECT memory_chunk.id
+     FROM memory_chunk
+     INNER JOIN memory_file ON memory_file.id = memory_chunk.file_id
+     WHERE length(memory_chunk.id) > ${Identifier.MAX_LENGTH}
+       AND (
+         memory_file.kind = 'user_message'
+         OR (memory_file.kind = 'project_context' AND memory_file.key = 'project-memory-document')
+       )
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyProjectMemory) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains legacy expanded Project Memory identity ${legacyProjectMemory.id} at ${dbPath}. ` +
+        "Its file and chunk references belong to the prior identity epoch; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.compactProjectMemoryIdentity",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
   const legacyRequirementSet = queryAllFinalized<{ id: string }>(
     sqlite,
     `SELECT id

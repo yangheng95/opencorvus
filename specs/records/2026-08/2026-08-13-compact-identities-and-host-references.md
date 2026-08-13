@@ -78,6 +78,14 @@ restart consumes the already-persisted ingress rather than deriving a second ide
 Automation identities remain in later Phase 1B commits because they own additional durable Message, Session and run
 rows and require their own epoch boundary.
 
+The fourth Phase 1B delivery owns Project Memory file and chunk identities only. Pending user-input files derive a
+compact `memory` identity from Project, occurrence kind and occurrence identity; their single content chunks derive a
+compact `memchunk` identity from that file identity. The Project `MEMORY.MD` envelope uses separate domain-separated
+Project-context material for its compact file and chunk identities. Existing expanded memory primary/foreign keys
+belong to the prior pre-release epoch and cause `DATA_RESET_REQUIRED` before any memory read; no dual lookup or
+in-place rewrite is retained. Memory content, occurrence provenance and Project ownership remain complete persisted
+facts rather than being encoded into the business identifier.
+
 ### Phase 2 — remaining model-facing digests
 
 Inventory each plugin/package tool field that currently asks the model to repeat a package, resource, workspace, scorer, Git or payload digest. Replace it with a short Host reference derived from a prior authoritative response, then delete the raw model-input field in the same change. This includes replacing `panel.create_task.expectedPackageDigest` with a Host reference that can bind both installed incumbents and uninstalled candidate revisions; removing the digest without that replacement would break candidate Trial creation. Regenerate schemas, SDKs and embedded package payload from canonical sources.

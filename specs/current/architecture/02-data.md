@@ -43,7 +43,11 @@ normalized repository identity material 经 `Identifier.deterministic("project",
 返回 `DATA_RESET_REQUIRED`，不创建第二个 Project。延迟 Task wait 的 fire identity 由完整 Automation
 job identity 确定性派生为不超过 24 字符的 `cal_*`；pending delay 尚未签发 fire identity，而签发与
 queued ingress 持久化、delay 消费处于同一事务，因此 restart 只重放一个 durable ingress。其他手工或
-caller-supplied 新落盘身份尚未迁入该默认签发面，属于后续迁移契约。
+caller-supplied 新落盘身份尚未迁入该默认签发面，属于后续迁移契约。Project Memory 的 pending
+user-input file/chunk 与 Project `MEMORY.MD` envelope file/chunk 分别使用 domain-separated 的 compact
+`memory` / `memchunk` identity；完整 Project、occurrence、content 和 provenance 仍在关系与 payload 中。
+包含 expanded Project Memory file 或 chunk primary key 的 pre-release Database 返回 `DATA_RESET_REQUIRED`，不
+双读或原位改写其外键图。
 
 所有表定义在 `src/engine/engine.sql.ts`，命名前缀 `engine_`（历史文档里的
 `orchestrator_*` 已全部重命名为 `engine_*`）。旧的多张过程表已合并为单一

@@ -8,8 +8,8 @@ import {
   ProtectedProjectMemoryError,
 } from "../../src/memory/project-memory"
 import { Memory } from "../../src/memory"
-import { MemoryChunkTable } from "../../src/memory/memory.sql"
-import { Database, eq } from "../../src/storage/db"
+import { MemoryChunkTable, MemoryFileTable } from "../../src/memory/memory.sql"
+import { Database, DatabaseUnavailableError, eq } from "../../src/storage/db"
 import type { Message } from "../../src/session/message"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { MemoryTool } from "../../src/tool/memory"
@@ -259,12 +259,19 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
 
         const ledgerRows = Database.use((db) =>
           db
-            .select()
+            .select({
+              id: MemoryChunkTable.id,
+              file_id: MemoryChunkTable.file_id,
+              kind: MemoryFileTable.kind,
+            })
             .from(MemoryChunkTable)
+            .innerJoin(MemoryFileTable, eq(MemoryFileTable.id, MemoryChunkTable.file_id))
             .all()
-            .filter((row) => row.id.startsWith("mck_user_")),
+            .filter((row) => row.kind === "user_message"),
         )
         expect(ledgerRows).toHaveLength(2)
+        expect(ledgerRows.every((row) => row.id.length <= Identifier.MAX_LENGTH)).toBe(true)
+        expect(ledgerRows.every((row) => row.file_id.length <= Identifier.MAX_LENGTH)).toBe(true)
         const fileID = ledgerRows[0]!.file_id
         expect(Memory.getFileInProject({ fileId: fileID, projectId: Instance.project.id })).toBeNull()
         expect(() => Memory.deleteFileInProject({ fileId: fileID, projectId: Instance.project.id })).toThrow(
@@ -348,6 +355,162 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         Database.close()
         Database.Client()
         expect(ProjectMemory.read(Instance.project.id).content).toContain("initial request")
+      },
+    })
+  })
+
+  for (const legacyKind of ["file", "chunk"] as const) test(`requires a pre-release reset for an expanded Project Memory ${legacyKind} identity`, async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const now = Date.now()
+        const legacyFileID = legacyKind === "file" ? `mem_user_${"a".repeat(64)}` : Identifier.ascending("memory")
+        const legacyChunkID = `mck_user_${"b".repeat(64)}`
+        Database.use((db) => {
+          db.insert(MemoryFileTable)
+            .values({
+              id: legacyFileID,
+              project_id: Instance.project.id,
+              title: "Legacy Project Memory",
+              source: "user",
+              kind: "user_message",
+              importance: 100,
+              confidence: 100,
+              time_created: now,
+              time_updated: now,
+            })
+            .run()
+          if (legacyKind === "chunk") {
+            db.insert(MemoryChunkTable)
+              .values({
+                id: legacyChunkID,
+                file_id: legacyFileID,
+                project_id: Instance.project.id,
+                content: "{}",
+                token_count: 1,
+                time_created: now,
+                time_updated: now,
+              })
+              .run()
+          }
+        })
+        await Database.awaitEffectIdle(30_000)
+        Database.close()
+
+        let observed: unknown
+        try {
+          Database.Client()
+        } catch (error) {
+          observed = error
+        }
+        expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
+          code: "DATA_RESET_REQUIRED",
+          operation: "Database.Client.dataIntegrity.compactProjectMemoryIdentity",
+        })
+        await Database.resetFiles(Database.Path())
+        Database.Client()
+      },
+    })
+  }, 60_000)
+
+  test("keeps general Memory outside the Project Memory reset epoch", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        Database.use((db) =>
+          db.insert(MemoryFileTable)
+            .values({
+              id: `mem_general_${"c".repeat(64)}`,
+              project_id: Instance.project.id,
+              title: "General memory",
+              source: "agent",
+              kind: "note",
+              importance: 60,
+              confidence: 75,
+            })
+            .run(),
+        )
+        await Database.awaitEffectIdle(30_000)
+        Database.close()
+        expect(() => Database.Client()).not.toThrow()
+      },
+    })
+  }, 60_000)
+
+  test("rejects compact pending-input and document identity occupancy with typed invariants", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "assistant", title: "Collision owner" })
+        const occurrenceID = "project-memory-collision"
+        const pendingFileID = ProjectMemory.TestHooks.userFile(Instance.project.id, "interaction_reply", occurrenceID)
+        const documentFileID = ProjectMemory.TestHooks.documentFile(Instance.project.id)
+        const documentChunkID = ProjectMemory.TestHooks.documentChunk(Instance.project.id)
+        const foreignFileID = Identifier.ascending("memory")
+        Database.use((db) => {
+          db.insert(MemoryFileTable)
+            .values({
+              id: pendingFileID,
+              project_id: Instance.project.id,
+              title: "Foreign memory",
+              source: "agent",
+              kind: "fact",
+              key: "foreign-memory",
+              importance: 75,
+              confidence: 75,
+            })
+            .run()
+          db.insert(MemoryFileTable)
+            .values({
+              id: documentFileID,
+              project_id: Instance.project.id,
+              title: "Project MEMORY.MD",
+              source: "reflection",
+              kind: "project_context",
+              key: "project-memory-document",
+              importance: 100,
+              confidence: 100,
+            })
+            .run()
+          db.insert(MemoryFileTable)
+            .values({
+              id: foreignFileID,
+              project_id: Instance.project.id,
+              title: "Foreign chunk owner",
+              source: "agent",
+              kind: "fact",
+              importance: 75,
+              confidence: 75,
+            })
+            .run()
+          db.insert(MemoryChunkTable)
+            .values({
+              id: documentChunkID,
+              file_id: foreignFileID,
+              project_id: Instance.project.id,
+              content: "{}",
+              token_count: 1,
+            })
+            .run()
+        })
+
+        expect(() =>
+          Database.transaction((db) =>
+            ProjectMemory.captureOccurrenceInTransaction(db, {
+              occurrenceKind: "interaction_reply",
+              occurrenceID,
+              projectID: Instance.project.id,
+              sessionID: session.id,
+              surface: "test.collision",
+              timeCreated: Date.now(),
+              text: "Collision must fail closed",
+            }),
+          ),
+        ).toThrow(ProjectMemoryInvariantError)
+        expect(() => ProjectMemory.read(Instance.project.id)).toThrow(ProjectMemoryInvariantError)
       },
     })
   })
