@@ -7,6 +7,9 @@ import { Session } from "@/session"
 import { SessionControl } from "@/session/control"
 import type { SessionWake } from "@/session/wake"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { closeMissionExecutionOperation, currentMissionExecutionClosure } from "@/mission/execution-closure"
+import { Database, eq } from "@/storage/db"
+import { SessionControlRecordTable } from "@/session/session.sql"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -14,6 +17,111 @@ afterEach(async () => {
 })
 
 describe("standalone Mission process recovery", () => {
+  test("settles a pending recovery occurrence against the active Mission closing event", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "process-recovery-closure"
+        const mission = await ensureMissionSession({
+          missionID,
+          defaultCwd: project.path,
+          productPillar: "code",
+          heldExpertSquadIDs: ["base"],
+        })
+        const now = Date.now()
+        const user = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "user",
+          author: "operator",
+          time: { created: now },
+          agent: "mission",
+          model: { providerID: "test", modelID: "test-model" },
+        })
+        await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "assistant",
+          author: "mission",
+          parentID: user.id,
+          time: { created: now + 1 },
+          agent: "mission",
+          providerID: "test",
+          modelID: "test-model",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        const first = await recoverMissionProcessSession(mission.id, {
+          wake: async (input) => ({ sessionID: mission.id, messageID: input.messageID! }),
+        })
+        expect(first).toMatchObject({ status: "woken", sessionID: mission.id })
+        if (first.status !== "woken") throw new Error("expected Mission recovery wake")
+        const interruptedRecovery = await Session.updateMessage({
+          id: Identifier.ascending("message"),
+          sessionID: mission.id,
+          role: "assistant",
+          author: "mission",
+          parentID: first.wakeMessageID,
+          time: { created: now + 2 },
+          agent: "mission",
+          providerID: "test",
+          modelID: "test-model",
+          path: { cwd: project.path, root: project.path },
+          cost: 0,
+          tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+        })
+        let settled: Awaited<ReturnType<typeof recoverMissionProcessSession>> | undefined
+        let closingEventID: string | undefined
+        await closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.abort",
+          requestID: "request-process-recovery-close",
+          close: async () => {
+            const closing = currentMissionExecutionClosure(mission.id)!
+            expect(closing.state).toBe("closing")
+            closingEventID = closing.eventID
+            settled = await recoverMissionProcessSession(mission.id, {
+              wake: async (input) => ({ sessionID: mission.id, messageID: input.messageID! }),
+            })
+          },
+        })
+        const closure = currentMissionExecutionClosure(mission.id)!
+        expect({ settled, closingEventID, closedState: closure.state }).toEqual({
+          settled: {
+            status: "closure_settled",
+            sessionID: mission.id,
+            closureEventID: closingEventID,
+            occurrenceID: first.occurrenceID,
+          },
+          closingEventID: expect.any(String),
+          closedState: "closed",
+        })
+        expect(
+          (await Session.messages({ sessionID: mission.id })).find(
+            (message) => message.info.id === interruptedRecovery.id,
+          )?.info,
+        ).toMatchObject({ finish: "error" })
+        const marker = Database.use((db) =>
+          db
+            .select({ status: SessionControlRecordTable.status, payload: SessionControlRecordTable.payload })
+            .from(SessionControlRecordTable)
+            .where(eq(SessionControlRecordTable.id, first.occurrenceID))
+            .get(),
+        )
+        expect(marker).toMatchObject({
+          status: "failed",
+          payload: {
+            terminal: { kind: "mission_closed", closureEventID: closingEventID },
+            error: expect.stringContaining(closingEventID!),
+          },
+        })
+      },
+    })
+  }, 30_000)
+
   test("terminalizes interrupted tools, reuses a reply-free attempt, and rotates interrupted or failed replies", async () => {
     await using project = await memoryProject()
     await Instance.provide({

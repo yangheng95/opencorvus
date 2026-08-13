@@ -8,6 +8,7 @@ import { SessionWake } from "@/session/wake"
 import { Log } from "@/util/log"
 import z from "zod"
 import { requireMissionSession } from "./session"
+import { currentMissionExecutionClosure, withMissionExecutionAdmission } from "./execution-closure"
 
 const log = Log.create({ service: "mission.process-recovery" })
 const RECOVERY_CONTROL_KIND = "mission_process_recovery" as const
@@ -110,6 +111,7 @@ function recoveryPrompt(interruptedCount: number, attempt: number): string {
 export type MissionProcessRecoveryResult =
   | { status: "not_needed"; sessionID: string }
   | { status: "already_completed"; sessionID: string; occurrenceID: string }
+  | { status: "closure_settled"; sessionID: string; closureEventID: string; occurrenceID?: string }
   | { status: "woken"; sessionID: string; occurrenceID: string; attempt: number; wakeMessageID: string }
 
 export async function recoverMissionProcessSession(
@@ -117,78 +119,105 @@ export async function recoverMissionProcessSession(
   dependencies: { wake?: WakeRecovery } = {},
 ): Promise<MissionProcessRecoveryResult> {
   const mission = await requireMissionSession(sessionID)
-  const messages = await Session.messages({ sessionID })
-  const incompleteAssistantMessageIDs = trailingIncompleteAssistantMessageIDs(messages)
-  let previous = pendingMarker(sessionID)
-  if (!previous && incompleteAssistantMessageIDs.length === 0) return { status: "not_needed", sessionID }
-  if (previous && successfulReplyExists(messages, previous.wakeMessageID)) {
-    clearMarkerIfCurrent(sessionID, previous.occurrenceID)
-    if (incompleteAssistantMessageIDs.length === 0) {
-      return { status: "already_completed", sessionID, occurrenceID: previous.occurrenceID }
+  return withMissionExecutionAdmission(sessionID, async () => {
+    const messages = await Session.messages({ sessionID })
+    const incompleteAssistantMessageIDs = trailingIncompleteAssistantMessageIDs(messages)
+    let previous = pendingMarker(sessionID)
+    if (!previous && incompleteAssistantMessageIDs.length === 0) return { status: "not_needed", sessionID }
+    if (previous && successfulReplyExists(messages, previous.wakeMessageID)) {
+      clearMarkerIfCurrent(sessionID, previous.occurrenceID)
+      if (incompleteAssistantMessageIDs.length === 0) {
+        return { status: "already_completed", sessionID, occurrenceID: previous.occurrenceID }
+      }
+      previous = undefined
     }
-    previous = undefined
-  }
 
-  const interruptedAssistantMessageIDs = [
-    ...new Set([...(previous?.interruptedAssistantMessageIDs ?? []), ...incompleteAssistantMessageIDs]),
-  ]
-  if (interruptedAssistantMessageIDs.length === 0) {
-    throw new Error(`Mission process recovery ${previous?.occurrenceID ?? "<missing>"} has no interrupted assistant`)
-  }
-  const rotateAttempt = previous ? repliesTo(messages, previous.wakeMessageID).length > 0 : false
-  const occurrenceID = previous?.occurrenceID ?? Identifier.ascending("session_control")
-  const marker = MissionProcessRecoveryMarker.parse({
-    version: 1,
-    occurrenceID,
-    attempt: previous ? previous.attempt + (rotateAttempt ? 1 : 0) : 1,
-    interruptedAssistantMessageIDs,
-    wakeMessageID: previous && !rotateAttempt ? previous.wakeMessageID : Identifier.ascending("message"),
-    wakeTextPartID: previous && !rotateAttempt ? previous.wakeTextPartID : Identifier.ascending("part"),
-    wakeControlID: previous && !rotateAttempt ? previous.wakeControlID : Identifier.ascending("session_control"),
-    interruptedAt: previous?.interruptedAt ?? Date.now(),
-  })
-  persistMarker(sessionID, marker, previous !== undefined)
-  await SessionLoop.terminalizeRecoveredIncompleteAssistant(sessionID)
+    const closure = currentMissionExecutionClosure(sessionID)
+    if (closure?.state === "closing" || closure?.state === "closed") {
+      await SessionLoop.terminalizeRecoveredIncompleteAssistant(sessionID)
+      if (previous) {
+        const settled = SessionControl.fail({
+          id: previous.occurrenceID,
+          sessionID,
+          error: `Mission execution closed by ${closure.eventID}`,
+          payload: {
+            ...previous,
+            terminal: { kind: "mission_closed", closureEventID: closure.eventID },
+          },
+        })
+        if (!settled) {
+          throw new Error(`Mission process-recovery occurrence ${previous.occurrenceID} is no longer pending`)
+        }
+      }
+      return {
+        status: "closure_settled",
+        sessionID,
+        closureEventID: closure.eventID,
+        ...(previous ? { occurrenceID: previous.occurrenceID } : {}),
+      }
+    }
 
-  const wake = dependencies.wake ?? SessionWake.wakeWithReceipt
-  const receipt = await wake({
-    sessionID,
-    messageID: marker.wakeMessageID,
-    textPartID: marker.wakeTextPartID,
-    controlID: marker.wakeControlID,
-    prompt: recoveryPrompt(marker.interruptedAssistantMessageIDs.length, marker.attempt),
-    author: "OpenCorvus runtime recovery",
-    reason: {
-      source: "mission.process_recovery",
-      missionID: mission.missionID,
-      occurrenceID: marker.occurrenceID,
-      interruptedAssistantMessageIDs: marker.interruptedAssistantMessageIDs,
-    },
-    agent: "mission",
-    surface: "panel",
-  })
-  if (receipt.messageID !== marker.wakeMessageID) {
-    throw new Error(`Mission process recovery wake identity changed for ${sessionID}`)
-  }
-  if (receipt.completion) {
-    void receipt.completion.then((outcome) => {
-      if (!outcome.ok) return
-      return runWithInitializedIndependentProject({
-        directory: mission.directory,
-        fn: async () => {
-          const currentMessages = await Session.messages({ sessionID })
-          if (successfulReplyExists(currentMessages, marker.wakeMessageID)) {
-            clearMarkerIfCurrent(sessionID, marker.occurrenceID)
-          }
-        },
-      }).catch((error) => log.error("failed to clear completed Mission recovery marker", { sessionID, error }))
+    const interruptedAssistantMessageIDs = [
+      ...new Set([...(previous?.interruptedAssistantMessageIDs ?? []), ...incompleteAssistantMessageIDs]),
+    ]
+    if (interruptedAssistantMessageIDs.length === 0) {
+      throw new Error(`Mission process recovery ${previous?.occurrenceID ?? "<missing>"} has no interrupted assistant`)
+    }
+    const rotateAttempt = previous ? repliesTo(messages, previous.wakeMessageID).length > 0 : false
+    const occurrenceID = previous?.occurrenceID ?? Identifier.ascending("session_control")
+    const marker = MissionProcessRecoveryMarker.parse({
+      version: 1,
+      occurrenceID,
+      attempt: previous ? previous.attempt + (rotateAttempt ? 1 : 0) : 1,
+      interruptedAssistantMessageIDs,
+      wakeMessageID: previous && !rotateAttempt ? previous.wakeMessageID : Identifier.ascending("message"),
+      wakeTextPartID: previous && !rotateAttempt ? previous.wakeTextPartID : Identifier.ascending("part"),
+      wakeControlID: previous && !rotateAttempt ? previous.wakeControlID : Identifier.ascending("session_control"),
+      interruptedAt: previous?.interruptedAt ?? Date.now(),
     })
-  }
-  return {
-    status: "woken",
-    sessionID,
-    occurrenceID: marker.occurrenceID,
-    attempt: marker.attempt,
-    wakeMessageID: marker.wakeMessageID,
-  }
+    persistMarker(sessionID, marker, previous !== undefined)
+    await SessionLoop.terminalizeRecoveredIncompleteAssistant(sessionID)
+
+    const wake = dependencies.wake ?? SessionWake.wakeWithReceipt
+    const receipt = await wake({
+      sessionID,
+      messageID: marker.wakeMessageID,
+      textPartID: marker.wakeTextPartID,
+      controlID: marker.wakeControlID,
+      prompt: recoveryPrompt(marker.interruptedAssistantMessageIDs.length, marker.attempt),
+      author: "OpenCorvus runtime recovery",
+      reason: {
+        source: "mission.process_recovery",
+        missionID: mission.missionID,
+        occurrenceID: marker.occurrenceID,
+        interruptedAssistantMessageIDs: marker.interruptedAssistantMessageIDs,
+      },
+      agent: "mission",
+      surface: "panel",
+    })
+    if (receipt.messageID !== marker.wakeMessageID) {
+      throw new Error(`Mission process recovery wake identity changed for ${sessionID}`)
+    }
+    if (receipt.completion) {
+      void receipt.completion.then((outcome) => {
+        if (!outcome.ok) return
+        return runWithInitializedIndependentProject({
+          directory: mission.directory,
+          fn: async () => {
+            const currentMessages = await Session.messages({ sessionID })
+            if (successfulReplyExists(currentMessages, marker.wakeMessageID)) {
+              clearMarkerIfCurrent(sessionID, marker.occurrenceID)
+            }
+          },
+        }).catch((error) => log.error("failed to clear completed Mission recovery marker", { sessionID, error }))
+      })
+    }
+    return {
+      status: "woken",
+      sessionID,
+      occurrenceID: marker.occurrenceID,
+      attempt: marker.attempt,
+      wakeMessageID: marker.wakeMessageID,
+    }
+  })
 }

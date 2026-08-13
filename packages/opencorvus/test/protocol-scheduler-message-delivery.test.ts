@@ -1995,7 +1995,11 @@ describe("durable scheduler.message delivery", () => {
           deliveries.push({ ...receipt, messageID: occurrence.messageID })
         }
         expect(listUnansweredSchedulerSessionWakes(Instance.project.id)).toEqual(
-          deliveries.map((delivery) => ({ sessionID: mission.id, messageID: delivery.messageID })),
+          deliveries.map((delivery) => ({
+            inboxID: delivery.inboxID,
+            sessionID: mission.id,
+            messageID: delivery.messageID,
+          })),
         )
         const resumed: string[] = []
         using _wakeLoop = SessionWake.TestHooks.installWakeLoopExecutor(async ({ messageID }) => {
@@ -2743,6 +2747,155 @@ describe("durable scheduler.message delivery", () => {
         expect({ opened, current: currentMissionExecutionClosure(mission.id) }).toEqual({
           opened: expect.objectContaining({ missionID, sessionID: mission.id, state: "opened" }),
           current: opened,
+        })
+      },
+    })
+  })
+
+  test("atomically closes materialized unanswered Mission wakes before physical cancellation", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-materialized-wake-close"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Materialized wake close Mission",
+          metadata: { mission: missionLaunchMetadata(missionID, project.path) },
+        })
+        const taskRoot = await Session.create({ kind: "orchestrator", title: "Materialized wake source Task" })
+        const taskID = Identifier.ascending("task")
+        const now = Date.now()
+        Database.use((db) =>
+          db
+            .insert(EngineTaskTable)
+            .values({
+              id: taskID,
+              project_id: Instance.project.id,
+              session_id: taskRoot.id,
+              source: "mission",
+              product_pillar: "work",
+              title: "Close materialized Mission wakes",
+              request: "Verify closure settlement",
+              metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+              time_started: now,
+              time_created: now,
+              time_updated: now,
+            })
+            .run(),
+        )
+        const source = {
+          kind: "task_scheduler" as const,
+          project_id: Instance.project.id,
+          task_id: taskID,
+          root_session_id: taskRoot.id,
+        }
+        const target = {
+          kind: "mission_scheduler" as const,
+          project_id: Instance.project.id,
+          mission_id: missionID,
+          session_id: mission.id,
+        }
+        const materialize = async (suffix: string, answered: boolean) => {
+          const sourceMessageID = `msg_close_source_${suffix}`
+          const sourcePartID = `prt_close_source_${suffix}`
+          persistSourceOccurrence(taskRoot.id, sourceMessageID, sourcePartID, `Closure message ${suffix}`)
+          const delivery = Database.transaction((db) =>
+            enqueueSchedulerMessageInTransaction(db, {
+              invocationID: `closure-message-${suffix}`,
+              kind: "notification",
+              source,
+              target,
+              subject: `Closure ${suffix}`,
+              sourceMessageID,
+              sourcePartID,
+            }),
+          )
+          const ownerID = `closure-owner-${suffix}`
+          expect(
+            claimNextSchedulerDelivery({
+              actor: "session",
+              actorID: mission.id,
+              ownerID,
+              leaseMilliseconds: 60_000,
+            })?.id,
+          ).toBe(delivery.inboxID)
+          const occurrence = schedulerTargetOccurrenceIdentity(delivery.inboxID)
+          Database.transaction((db) => {
+            db.insert(MessageTable)
+              .values({
+                id: occurrence.messageID,
+                session_id: mission.id,
+                data: {
+                  role: "user",
+                  author: "orchestrator",
+                  extra: {
+                    wake_reason: {
+                      source: "scheduler.message",
+                      eventID: delivery.eventID,
+                      inboxID: delivery.inboxID,
+                    },
+                  },
+                } as never,
+                time_created: Date.now(),
+                time_updated: Date.now(),
+              })
+              .run()
+            settleSchedulerDeliveryInTransaction(db, {
+              inboxID: delivery.inboxID,
+              ownerID,
+              result: { kind: "session_wake", message_id: occurrence.messageID },
+            })
+          })
+          if (answered) {
+            await Session.updateMessage({
+              id: Identifier.ascending("message"),
+              sessionID: mission.id,
+              role: "assistant",
+              author: "mission",
+              parentID: occurrence.messageID,
+              time: { created: Date.now(), completed: Date.now() },
+              agent: "mission",
+              providerID: "test",
+              modelID: "test-model",
+              path: { cwd: project.path, root: project.path },
+              cost: 0,
+              tokens: { input: 0, output: 0, reasoning: 0, total: 0, cache: { read: 0, write: 0 } },
+              finish: "stop",
+            })
+          }
+          return { ...delivery, messageID: occurrence.messageID }
+        }
+
+        const answered = await materialize("answered", true)
+        const unanswered = await materialize("unanswered", false)
+        let callbackObserved = false
+        const closed = await closeMissionExecutionOperation({
+          missionID,
+          sessionID: mission.id,
+          source: "mission.abort",
+          requestID: "request-materialized-wake-close",
+          close: async () => {
+            callbackObserved = true
+            const closing = currentMissionExecutionClosure(mission.id)!
+            expect(closing.state).toBe("closing")
+            expect(requireSchedulerDelivery(answered.inboxID)).toMatchObject({
+              status: "delivered",
+              deliveryResult: { kind: "session_wake", message_id: answered.messageID },
+            })
+            expect(requireSchedulerDelivery(unanswered.inboxID)).toMatchObject({
+              status: "delivered",
+              deliveryResult: {
+                kind: "mission_wake_closed",
+                message_id: unanswered.messageID,
+                closure_event_id: closing.eventID,
+              },
+            })
+          },
+        })
+        expect({ callbackObserved, closed }).toEqual({
+          callbackObserved: true,
+          closed: expect.objectContaining({ missionID, sessionID: mission.id, state: "closed" }),
         })
       },
     })
