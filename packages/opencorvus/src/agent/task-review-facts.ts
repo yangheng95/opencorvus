@@ -3,6 +3,8 @@ import { MessageTable, PartTable } from "@/session/session.sql"
 import type { TerminalLifecycleReference } from "@/engine/terminal-lifecycle-reference"
 import { PanelQueryTaskOutput } from "@/panel/task-query"
 import { assistantTurnFactScope } from "./artifact-read-facts"
+import { MissionPanelActionSchema } from "@/panel/capability"
+import { materializeToolExecutionInput } from "@/provider/tool-execution-input"
 
 export function reviewedTerminalLifecycleReferenceBeforePanelAction(input: {
   sessionID: string
@@ -29,7 +31,6 @@ export function reviewedTerminalLifecycleReferenceBeforePanelAction(input: {
           sql`json_extract(${PartTable.data}, '$.type') = 'tool'`,
           sql`json_extract(${PartTable.data}, '$.tool') = 'panel'`,
           sql`json_extract(${PartTable.data}, '$.state.status') = 'completed'`,
-          sql`json_extract(${PartTable.data}, '$.state.input.action') = 'query_task'`,
         ),
       )
       .orderBy(asc(PartTable.time_created), asc(PartTable.id))
@@ -37,7 +38,11 @@ export function reviewedTerminalLifecycleReferenceBeforePanelAction(input: {
   )
   let reviewed: TerminalLifecycleReference | undefined
   for (const row of rows) {
-    const state = (row.data as { state?: { output?: unknown } }).state
+    const state = (row.data as { state?: { input?: unknown; output?: unknown } }).state
+    const panelInput = MissionPanelActionSchema.safeParse(
+      materializeToolExecutionInput(MissionPanelActionSchema, state?.input),
+    )
+    if (!panelInput.success || panelInput.data.action !== "query_task") continue
     if (typeof state?.output !== "string") {
       throw new Error(`Completed panel.query_task tool part ${row.id} has no canonical string output.`)
     }

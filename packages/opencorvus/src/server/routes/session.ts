@@ -777,7 +777,7 @@ export const SessionRoutes = lazy(() =>
         return c.json({
           transcript: historyWindow.transcript,
           events: [],
-          view: projectConversationView(historyWindow.transcript, [], agentSessions),
+          view: projectConversationView({ transcript: historyWindow.transcript, ledgerSessions: agentSessions }),
           history,
         })
       },
