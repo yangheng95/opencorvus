@@ -2065,3 +2065,489 @@ Focused positive tests must prove every provider-visible publisher has one branc
 branch exposes the matching literal type and a strict object payload, and valid representative branch inputs still
 publish through the real Task-scoped Host. Fresh isolated Terra campaigns after this repair, not R9's recoverable
 guessing path, are the three countable successes.
+
+### Exact-Terra R10: shared Overlay build directory invalidated the live page
+
+R10b compiled the real Overlay before starting a same-origin isolated development backend on operating-system
+allocated port `62817`. The controller recorded `ui.compiled`, `ui.started`, `backend.started`, and an exact
+`openai/gpt-5.6-terra` provider connection. Its independent project, `OPENCORVUS_HOME`, SQLite database and copied
+OpenAI Auth were rooted at
+`C:\Users\hengu\AppData\Local\Temp\opencorvus-live-evolution-terra-r10b-20260813083955`. The unbiased Market
+selection used seed `065b9fac91e6889db86ab83ef2f7f9ac9cfb9cb9d4f63b9becbd9bd9171a5655`, pool digest
+`2fc09fb98b021b7621cb52024c9dbf6296892c94543fe8284ee69602d71d040c`, pool size 114 and index 57 to select
+`builtin/laboratory-quality-assurance@2026.08.13.1`. The real page installed that target and Evolution Lab at
+project scope while Base remained active. No Mission or Task was created, so R10 is not a success.
+
+The observable failure occurred when the installed catalog had to be reread. A real-page navigation briefly
+returned `Overlay UI not found`; the same backend still returned HTTP 200 from `/global/health`, and the shared UI
+directory later returned to HTTP 200. The workspace `build:vite` target is `packages/overlay/dist-vite` with
+`emptyOutDir: true`. The source Server resolved that same shared directory inside every `/ui/*` request. A concurrent
+Overlay build therefore cleared the directory while R10 was serving it, creating a real window in which `index.html`
+was absent and a longer window in which old HTML could refer to deleted hashed assets. Backend health and isolated
+database correctness do not prove that a page's static bundle is complete or internally consistent.
+
+The data/control chain is:
+
+`E2E builds into shared dist-vite -> Server starts but retains no immutable UI source -> another build empties and`
+`rewrites dist-vite -> each /ui request re-resolves that mutable directory -> index or hashed asset requests observe`
+`different build generations -> the real page becomes missing or mixed while /global/health remains healthy`.
+
+Build locks, `emptyOutDir: false`, copying after a shared build, retrying the page, or falling back to embedded bytes
+would retain the split source and cannot prove one self-consistent bundle. The root repair is one run-owned build and
+one frozen serving source: Vite writes directly to `<runRoot>/overlay-ui`, emits a manifest, and the controller
+validates the index, complete manifest graph, local resource containment and required static directories before the
+Server binds. `Server.listen` receives that frozen source before its singleton App is materialized. Runtime transfer
+and listener restore retain the same source identity; `/ui` never probes another directory or embedded fallback.
+Packaged startup still selects its embedded or adjacent packaged source once at App construction and freezes it.
+
+The controller also needs an explicit cancellation lifecycle for `awaiting_install`,
+`awaiting_mission_submission`, `mission_running`, and `awaiting_render_review`. A controller-owned AbortSignal must
+interrupt user-action polling. Before a Mission ID exists, cancellation performs no fake Mission call and settles the
+listener, Instances, SQLite and copied Auth. After a Mission is observed, it uses the public bounded Mission abort
+route before the same resource settlement. Cancelled runs are durable `outcome=cancelled` evidence and never count as
+one of the three successes.
+
+Independent exact-Terra read-only review confirmed the shared-directory race and this injection boundary, including
+the `Server.App()` singleton, in-process client, route-inventory and runtime-transfer call surfaces. A second
+independent exact-Terra review split the dirty-tree merge overlap into bounded-history, atomic-message-move and
+project-event closures. Those positive tests passed before protection commits `f3cffed3c` and `b9f92ccf6`; current
+`origin/main` was then semantically merged as `a33304a1d`. The merge retained remote object-form Conversation
+projector ownership and local bounded history, retained all local and remote spec indexes, and passed 17 focused
+tests plus `docs:check`. No stash, reset, rebase, force push or unrelated worktree deletion was used.
+
+The implemented serving boundary now builds Vite directly into `<runRoot>/overlay-ui` with a build manifest. Before
+binding the listener, `freezeOverlayUiDirectory` resolves the real root, validates index resources, every manifest
+entry and dependency key, `i18n` and `licenses`, and records SHA-256 identities for the index, manifest and complete
+regular-file closure. `Server.listen` accepts that frozen source before constructing the singleton App and rejects
+an attempt to rebind the process to a different identity. The `/ui` route captures the source once and emits that
+identity on HTML and asset responses. A real random-port HTTP test serves the same first-run asset after a separate
+second bundle has been frozen; both focused tests, the bounded-history/projector tests and the full OpenCorvus
+TypeScript check pass on this tree.
+
+### Exact-Terra R11: run-owned bundle succeeded; four shared contracts failed and the run was rejected
+
+R11 uses fresh run root
+`C:\Users\hengu\AppData\Local\Temp\opencorvus-live-evolution-terra-r11-20260813094327-2a5e23aae9`,
+an independent project, `OPENCORVUS_HOME`, SQLite database and operating-system allocated port `62069`. Vite wrote
+291 validated files directly into that run root. The frozen source identity and closure digest are both
+`directory:50c07535fb7c7b03498f3f0b7bf0fcb2d8acb82b897415fff402481ae87afcf6`; index digest is
+`4a5e51aa94ec531bd1a1df68e92d089679252b8e755ab3c5d826ded9f4e23b1a` and manifest digest is
+`cbbb0ead8956f1f9f91434bc451343569ba5f04d43b3f50dd1eaf387ebb9a88e`. The real same-origin page became Online on
+that port and remained Online through installation and Mission submission.
+
+The copied canonical Auth and model catalog connected exact `openai/gpt-5.6-terra`. Unbiased
+`sha256-rejection-v1` selection used seed
+`ecfb91e96ca57c13aa14537648e4400befa6b2a5ebbd0bec10fdfd59d1fe8226`, the unchanged 114-entry pool digest
+`2fc09fb98b021b7621cb52024c9dbf6296892c94543fe8284ee69602d71d040c`, and index 78 to select
+`builtin/one-person-company-operating-system@2026.08.13.1`. In the real Mission Create page, the operator searched
+the live Market recommendations and clicked `Install to project` for that target and Evolution Lab. The page
+reported both installations and the controller reread exact digests
+`7d1f75e9b00c7fd297594f330a108766bc2f2b7b74a93cdb25bf1c4c548960b5` and
+`9637ac1d34fa8f84e1113d0ecfa1c96d1e2604a2218a3b8e80935ba3a874420a`, with Base still active. This proves the
+supported web-awakened project installation path; neither ZIP nor direct driver installation was used.
+
+The same page selected exactly the target and Evolution Lab, entered all 8,314 characters of the frozen request,
+and submitted Mission `3673c8495a2910df`. The controller reread the Mission and confirmed that exact two-Squad
+binding, project commit `f52734ac4b4981ac9a588cce6054f87bf1ab434b` and tree
+`65938b112e1ca89f44c5669f9bcd8f530ff50e7b`. The diagnostic Task completed, but R11 was rejected and never counted.
+
+The first diagnostic Task correctly published, fully read and selected the two exact Case snapshots before any
+worker dispatch. Its first parallel dispatch batch then exposed another provider-guidance defect: two
+`delegated-worker` calls supplied `goal_ids` and `reason` but omitted their required `instruction`, producing two
+typed `AI_InvalidToolInputError` transitions before corrected calls succeeded. The provider-visible adapter schema
+was accurate. The contradictory dynamic Orchestrator guidance was not: after listing each target's complete
+`target_fields`, it specifically told the model to put the complete bounded worker instruction in `reason` whenever
+that field existed. A delegated-worker lists both `instruction` and `reason`, so the emphasized sentence made the
+rationale sound like the instruction authority and failed to describe the required separation. Deep Research and
+Fact Check use heterogeneous schemas, explaining why only the two delegated-worker branches failed.
+
+The single shared dynamic guidance now requires every selected target-schema field, states that `instruction` owns
+the bounded work whenever listed, and states that `reason` is a separate scheduling rationale which never
+substitutes for `instruction`. It does not add a Host fallback, retry, or target special case. The focused positive
+contract test passes. R11 remains discovery evidence because its persisted conversation contains those two rejected
+tool calls.
+
+Three more failures occurred after that first repair. A delegated worker tried to pass the primary repository HEAD
+as `artifact_snapshot.source_commit`. Its frozen descriptor was `delegated_worker`, with no private stage tool, but
+the global model-facing snapshot schema advertised the same optional `source_commit` field and managed-Build
+instructions to every scheduler and worker. The Host correctly rejected the claim because commit publication is
+authorized only after an exact Build `merge_back`; the worker then retried the current-project snapshot and
+published its domain Artifact. The shared ABI, however, had encouraged the non-Build worker to make a commit in the
+primary project and then claim merge authority. With parallel workers this can create primary-project mutation
+races. Snapshot input projection is now derived from the frozen runtime contract: scheduler and ordinary worker
+surfaces contain only `files`; an exact Build surface whose sole private stage tool is `merge_back` requires both
+`source_commit` and `files`. The original Host authority check remains mandatory.
+
+When Mission reviewed the terminal diagnostic evidence, three `panel.read_task_artifact` calls carried complete
+locators but `taskID: null`. The exact Task ID was already present in the scheduler ingress and in successful
+`query_task` and two-page `query_task_artifacts` calls. The direct defect was the provider ABI: every root object
+union was flattened into one object, action-specific required fields were reduced to the intersection, and OpenAI
+strict normalization then made all 49 Panel fields required but nullable. The provider therefore truthfully told
+Terra that a read Task ID could be null while the canonical Zod branch correctly rejected it. This affects Panel,
+Analytics, Planner, Memory, Mission State and Schedule rather than this Mission alone. Strict providers now receive
+a root object with one required `operation` property whose nested `anyOf` preserves each original action branch.
+The single ProviderSchema materializer decodes that wire envelope back to the canonical flat input for live
+execution and persisted ToolPart fact replay. No Task ID is inferred from a locator and no invalid input is retried
+by the Host.
+
+Mission correctly found a real diagnostic acceptance gap and called `panel.resume_task` on the same Task. The
+continuation owner cleared the Task's Git metadata before requeueing, while the immutable creation capsule still
+held the original tree and the primary workspace already contained the first completed result. `EngineGit.prepare`
+therefore compared a post-result workspace with the creation tree as if this were the first execution and failed
+with `workspace changed between creation and first execution`. Mission acceptance repair, operator retry and replan
+share this continuation primitive. The continuation now retains the Task's original Git baseline and prior result;
+`EngineGit.complete` already moves prior results into `result_history` at the next terminal checkpoint. A positive
+integration test reopens a terminal Task and runs the real prepare path without a false mutation failure.
+
+R11 was aborted through the public Mission route after the Task failure. Its controller evidence records listener,
+Instances, database and copied Auth settlement; port `62069` closed and PID `20452` exited. Its result contains two
+dispatch input failures, one snapshot authority failure, three Panel input failures, the Engine Git infrastructure
+failure and queued wake settlement failure. Consequently the clean-success count remained zero.
+
+Two independent `openai/gpt-5.6-terra` read-only reviewers reproduced the Panel and snapshot ABI defects from the
+R11 database, traced the model-visible schemas through execution and fact replay, and rejected prompt-only,
+host-inference and permission-relaxation fixes. The repaired tree passes the package TypeScript check and 17 focused
+positive tests with 66 assertions covering strict root-union projection, a second production union tool,
+provider-wire persistence replay, same-Turn Mission terminal authority, runtime-derived snapshot schemas, exact
+merged commit bytes, continuation Git baseline, dispatch guidance and frozen random-port Overlay serving.
+
+R12 used another fresh compiled 291-file bundle, random port `64863`, isolated database and exact Terra. Random seed
+`5b01aaeb6e68262a7350895f2836d09ceb6b7a61cf468c2a8c690027453daa93` selected
+`builtin/browser-research-acceptance@2026.08.13.1`; the real page installed it and Evolution Lab while Base remained
+active. It was deliberately held before Mission submission because its process had loaded the pre-repair runtime.
+It is not a success and cannot be promoted into one by later source changes.
+
+R13 and R14 were launch-boundary failures, not evolution attempts that can be counted. R13 omitted the global Auth
+and model-catalog copy flags, so the fresh runtime could not satisfy the exact-provider precondition. R14 supplied
+obsolete Linux-shaped global paths on Windows; the resulting refresh request returned `401`. Both runtimes were
+disposed without a Mission. The canonical Windows sources are `%LOCALAPPDATA%\opencorvus\data\auth.json` and
+`%LOCALAPPDATA%\opencorvus\data\models.json`; the controller now resolves those same OpenCorvus-owned locations and
+records source class, byte count and model-catalog SHA-256 without logging credential bytes.
+
+R15 used random port `52013`, a fresh project/home/SQLite database, exact Terra, and a per-run compiled 291-file
+Overlay closure. Random seed `fe8784...` selected
+`builtin/ai-model-governance-evaluation@2026.08.13.1`. The real Mission page searched the Market and clicked
+`Install to project` for the target and Evolution Lab; it then selected exactly those two Squads while Base remained
+the project's active default. The controller reread target digest
+`fa7f...` and Evolution Lab digest `9637...` before accepting Mission `e82ca9c63b876365`.
+
+The diagnostic Task `tsk_g00VS8q7U600csEEDazZ` exercised four parallel target workers and a closing owner on exact
+Terra. It completed without the R11 dispatch, snapshot, root-union or continuation failures. Mission completely read
+its terminal evidence, but its first opportunity-Task call attempted seven cross-Task Artifact imports: four were
+the Completion Decision's declared deliverables and three were merely visible worker outputs. The Host correctly
+rejected the undeclared imports; Mission recognized the authority boundary and immediately succeeded using the four
+declared locators. Because the persisted first call is still a real tool error, R15 was rejected rather than allowed
+to continue or count.
+
+The first bad transition was the controller's stage wording: it required importing the accepted evidence but did
+not define the Completion Decision's `deliverable_artifact_locators` as the sole cross-Task import authority. The
+model reasonably treated every visible Task Artifact as importable and learned the stricter rule only from a Host
+error. The controller request now requires a complete read of the current terminal Completion Decision and import of
+only those exact declared locators at the diagnostic, opportunity, candidate and Trial handoffs. Visible undeclared
+worker outputs remain source-Task evidence and are never added speculatively. This preserves the existing Host
+validator rather than adding retry, inference or a permissive fallback. R15 was aborted through the public Mission
+route; its opportunity Task was cancelled and the controller recorded listener, Instances, database, copied Auth and
+run-owned UI settlement. Port `52013` and PID `11920` were gone. The clean-success count therefore remained zero.
+
+### Exact-Terra R16: authentic cursor corruption and cancellation settlement failure
+
+R16 used random port `59653`, a fresh project/home/SQLite database, exact `openai/gpt-5.6-terra`, copied canonical
+OpenCorvus Auth and a per-run compiled 291-file Overlay closure. Random seed
+`c4bf343f615db37abfce69cbe28f1e4ad954aed76d94f030c7dc87aaee397301`, pool digest
+`2fc09fb98b021b7621cb52024c9dbf6296892c94543fe8284ee69602d71d040c` and index `78` selected
+`builtin/one-person-company-operating-system@2026.08.13.1`. The real Mission page installed that Squad and Evolution
+Lab project-scoped, explicitly showed that installation did not activate either package, and then bound Mission
+`b7675da480252af7` to exactly those two Squads while Base remained the project default.
+
+Diagnostic Task `tsk_g00VS8xTCe00QyohwMXE` completed through four parallel domain workers and its closing owner.
+Mission successfully queried the terminal Task, enumerated its first canonical Artifact page and received a
+547-character opaque `next_cursor`. Its next real Tool input changed exactly one decoded byte at offset 320, from
+ASCII `c` to `#` inside a membership digest. The Artifact Catalog HMAC correctly rejected the forged value with
+`artifact_search cursor authenticity check failed`. Mission later created the opportunity Task using only declared
+Completion Decision locators, proving the R15 authority repair, but the persisted cursor Tool error disqualifies R16.
+
+The first bad transition is the Mission Panel's model-facing pagination ABI. It exposes a long authenticated Host
+continuation token and requires the language model to reproduce it byte-for-byte even though the model has no
+semantic use for, or authority over, its contents. The generic Artifact Catalog cursor remains the correct stable
+membership and tamper-evident Host contract; weakening its HMAC, accepting near matches, retrying, or instructing the
+model to copy more carefully would destroy that boundary or hide the same defect. The repair is confined to the
+Mission Panel projection: the model supplies a one-based page number, while the Host starts at the canonical first
+page and consumes every exact opaque cursor internally to reach the requested page. The Panel response exposes only
+the next page number. The underlying catalog engine, cursor schema and authenticity checks remain unchanged.
+
+The failure path also exposed a separate settlement defect. A public Mission abort and the controller's concurrent
+failure observer both initiated abort, Task cancellation reached its terminal stages, and Mission projection became
+inactive, yet one Mission Session wake briefly re-entered provider execution before receiving
+`ExecutionCancellationError`. `Server.stop(true)` later reported `scheduler-message-delivery.poll` inactivity and the
+controller's 120-second settlement deadline expired. PID `24708` ultimately exited and port `59653` closed, but the
+missing clean disposal receipt is itself a failed acceptance condition.
+
+Independent review reconstructed the exact race: the first abort had already failed before the second request could
+explain it. `closeMissionExecution` cancelled child Tasks before publishing any Mission-level close authority. Their
+terminal lifecycle event created a persisted scheduler inbox which the global drain legally claimed and materialized
+as a new Mission wake while abort was still running. The late prompt cancellation then raced that physical wake;
+the scheduler disposal timeout was a downstream witness, not the first cause. The second controller request only
+joined the same unsettled state and amplified the symptom.
+
+Mission close is now one persisted, joinable operation for the current execution occurrence. Abort, archive and
+delete publish `closing` before prompt or child cancellation; scheduler admission and close publication share one
+keyed boundary. A claimed delivery observes that durable authority and settles to an exact `mission_closed`
+closure-event disposition instead of starting `SessionWake`. Concurrent close callers receive the same terminal
+operation, and only a later explicit operator dispatch/wake publishes `opened`. Prompt cancellation is requested
+before child cancellation, but success still waits for both physical settlements. No SessionStatus gate, pending
+inbox exclusion, timeout increase, retry or shutdown bypass was added. Focused protocol tests prove a claimed inbox
+reaches the auditable closure disposition, the project queue becomes empty, concurrent closes join one operation,
+and the existing Mission wake, recovery, coalesced drain, global polling and source-race paths remain successful.
+
+Focused positive acceptance for the pagination repair must execute the real Panel Tool against a terminal
+same-Mission child with more than one bounded page, follow returned page numbers to completion, and prove the exact
+canonical Artifact locators are complete and non-duplicated. A Provider-schema check must show Terra receives the
+page-number branch, and current architecture/prompt wording must describe the same ABI. R16 remains rejected and the
+clean-success count remains zero.
+
+### Exact-Luna R6b: diagnostic and opportunity closure passed; Campaign and multi-page rendering failed
+
+#### Recall
+
+- The user requires an open-ended Work-mode Artifact rendering E2E on an isolated random project, random ports and
+  isolated development database, using copied OpenCorvus Auth and exact `openai/gpt-5.6-luna`.
+- A random available Expert Squad must be installed project-scoped alongside Evolution Lab while Base remains the
+  active Squad. The run must cover installation, execution, evaluation, evolution, real rendered screenshots, and
+  independent database, Artifact, document and resource review.
+- Rendering failure, result loss, drawing errors, visual quality and every discovered control/data failure must be
+  traced from observable symptom through first bad transition, shared contract and impact. A local strict validator
+  that rejects malformed model input is positive evidence, not the defect to bypass.
+- UI acceptance remains manual on real pages. No UI automation tests may be created, modified or run. Non-UI fixes
+  require focused positive tests through the real contract boundary, then a fresh isolated Luna run and a new
+  independent read-only review.
+- Current architecture and immutable Artifact guidance require one authority from declaration/selection through
+  exact locator, projection and presentation. Prompts, retries, inferred locators and permissive parsing are not
+  replacement authorities.
+- Independent feedback for this phase consists of the live R6b database/page reviewer, the Task Artifact locator
+  contract reviewer, and separate read-only Campaign and SSE contract reviews now in progress.
+
+R6b used
+`C:\Users\hengu\AppData\Local\Temp\opencorvus-luna-evolution-r6b-dbaec048b15940dab5d8985c6a8b7db8`,
+backend port `51803`, project `dac97e1347dabd6925581c0dadeca8af67338e58`, random pool size `114`, seed
+`54637eb1527ab1408bcb4b4cf51a2ebdee1d3a86d9839c1806fa4f4ff17d6721`, pool digest
+`2fc09fb98b021b7621cb52024c9dbf6296892c94543fe8284ee69602d71d040c`, and index `66`. The selected target was
+`builtin/medical-device-human-factors-usability-assurance@2026.08.13.1`, installed project-scoped with digest
+`e8e2fd6f...1972cb`; Evolution Lab was installed project-scoped with digest `9637ac...7420a`. Mission
+`7f72e0d44c6dd95d` held exactly those two Squads and all provider usage was exact
+`openai/gpt-5.6-luna`.
+
+The diagnostic Task `tsk_g00VS8Ui2v00gPfNy2l9` completed successfully. Its scheduler published snapshot
+`8ccb6441...`, then fully read and selected both frozen Case resources before any worker dispatch. Four root outputs
+at catalog revisions 10/14/20/24 closed into qualified-review-pack revision 31, SHA-256 `892158ec...`, and a
+CompletionDecision at revision 35. Stage O Task `tsk_g00VS8ZDLq00NIea2LE5` imported that exact authority, published
+opportunity revision 45 and failure-attribution revision 51, and completed with revision 56. SQLite integrity and
+foreign-key checks passed; snapshot manifests, resource bytes and SHA-256 identities matched physical files.
+
+The candidate-preparation Task `tsk_g00VS8cFJc00XnOV1FFS` failed before any Campaign, Candidate, Trial, metric,
+comparison, `document@1` or `chart@1` Artifact was materialized. The controller recorded `run.failed`, then a complete
+runtime-disposal receipt: listener, Instances, database, renderer and isolated Auth all settled. R6b therefore proves
+the repaired diagnostic/opportunity path and fail-closed persistence, but it is not an evolution or rendering pass.
+
+#### Task Artifact resource locator first bad transition
+
+The scheduler received canonical resource locators directly from `artifact_snapshot` and used them successfully.
+Every downstream worker instead saw only a parent `task_artifact_snapshot` search entry. Reading that entry returned
+the immutable manifest file metadata, but not a catalog entry whose locator could be used verbatim. Four workers then
+had to reconstruct `task_artifact_resource` locators; all four failed their first read and accumulated ten typed
+input or exact-ref failures before recovering. Strict schema and manifest validation correctly prevented any false
+read or selected evidence.
+
+The first bad transition is the verified `TaskArtifactSnapshotRecord` to Artifact Catalog projection. The store can
+uniquely derive every full resource ref, while the catalog folds those refs into parent search text, count and media
+facets and publishes only the snapshot locator. The public catalog-entry locator schema also excludes the existing
+resource-read locator union. Snapshot manifest mutation is excluded because a full resource locator contains the
+manifest's own SHA-256 and would make the content-addressed manifest self-referential. Prompt examples, tolerant
+parsing, scheduler message copies and per-worker replacement snapshots are also excluded as parallel authorities.
+
+The repair is to derive one independently paginated `task_artifact_resource` catalog candidate for every verified
+resource ref while retaining the parent snapshot candidate. Search returns the canonical full locator; read,
+select and cross-Task import consume it unchanged. The search ABI and frozen cursor membership must include the new
+candidates, and conversation turn Artifact identity must include the complete resource identity rather than collapse
+siblings to their parent snapshot. OpenAPI/generated SDK closure and current architecture documentation must be
+updated from the same schema. Focused positive tests must cover real store-to-search-to-read/select, bounded cursor
+pagination with frozen membership, and exact resource conversation projection.
+
+#### Campaign scope and correlated-input first bad transitions
+
+The Mission froze the target as `scope: "project"` and required exactly two executable Trials. The Evolution schema
+correctly requires `trial_execution={status:"available", installation_scope:"project"}` for that scope; only
+`target.scope === "built_in"` permits `product_release_required`. Planner and Orchestrator prompts instead used
+ambiguous prose about a "built-in target" and repeatedly confused the package namespace `builtin` with the target
+scope `built_in`. Coordination advice successively asked the planner to omit the required field and then to use the
+schema-invalid product-release state.
+
+Eleven large Campaign publish calls were rejected atomically over about 6.04 minutes. Direct inspection of the stored tool inputs also disproved
+the model's claim that a canonical 64-character digest had been rejected: actual inputs contained a 63-character
+permission digest, a scorer revision replaced by an unrelated dispatch SHA, omitted rubric-pass entries and other
+correlated-field drift. No Campaign row was lost; no malformed Campaign was persisted. The first bad transitions are
+therefore ambiguous scope guidance and repeated model reconstruction of duplicated correlated identities, not the
+publisher validator.
+
+The repair must use the exact `target.scope` enum wording throughout planner and Orchestrator coordination and carry
+the original schema error as a coordination fact. More importantly, the trusted publisher boundary must derive or
+canonicalize duplicated identity fields from the already selected seven-role immutable resource set rather than ask
+the model to copy the same digests into multiple distant fields. Strict semantic fields and the exact resource set
+remain required; no digest guessing, permissive alias or retry fallback is allowed. Positive tests must prove project,
+global and built-in target mappings, exact seven-role derivation, two-Trial availability, and representative valid
+Campaign publication through the real Task-scoped Host.
+
+#### Multi-page SSE connection-pool first bad transition
+
+With the main acceptance page and an independent fresh review page open, each Overlay page maintained three persistent
+same-origin event streams: selected Task events, Work Ledger events and mailbox events. Chrome showed exactly six
+established connections to the backend, matching the HTTP/1.1 per-origin slot boundary. Ordinary health, Task refresh
+and log requests then timed out in the pages while direct PowerShell requests to the same backend remained fast and
+SQLite continued advancing. The real pages showed `signal timed out`, `后端尚未响应` and transient stale loading,
+then sometimes caught up. A point-in-time socket sample also showed client `FIN_WAIT_2` / server `CLOSE_WAIT` pairs,
+but isolated Bun/Hono fetch-abort and raw-FIN probes settled in 200 ms and 20 ms respectively; this snapshot is not
+enough to claim a persistent server-close defect without a real-route bounded-lifecycle regression.
+
+The repair boundary is one shared per-page notification stream for Work Ledger and Mailbox plus at most one
+selected-source stream. Overlay log delivery must use bounded batching/concurrency so it
+cannot consume all remaining connection slots. Raising timeouts or adding a polling fallback would retain the split
+authority and connection starvation. A real OpenCorvus route raw-FIN positive test must first determine whether the
+shared server abort path needs further repair. Non-UI transport tests must prove multiplexed protocol and subscriber lifecycle; final visual acceptance must open two authenticated fresh real pages simultaneously, verify
+both remain Online and current, and capture the resulting document and chart detail pages after the complete evolution
+closure.
+
+#### R6b root repairs implemented and focused acceptance
+
+The Task Artifact catalog now projects each verified snapshot resource as its own pageable
+`task_artifact_resource` entry while retaining the parent snapshot entry. The public entry schema accepts the same
+read-locator union consumed by `artifact_read`; cursor membership uses search ABI version 2; conversation Artifact
+identity uses the full resource identity. A real Task store publication test searches by path, receives the exact
+publication locator, reads it unchanged and verifies bytes, SHA-256 and text. Plugin contract and frozen-cursor
+tests cover the public locator union and versioned membership.
+
+Campaign publication now has one minimal semantic draft and one complete persisted ABI. The planner supplies
+candidate semantics, resource-role paths, partition, repetitions, statistics, budget and mutable paths. The trusted
+publisher reads the selected opportunity and failure attribution, resolves the complete seven-resource set, parses
+the canonical model/scorer assets, and derives target, baseline revision, all resource identities and digests,
+workspace digest, scorer revisions/configuration, model and Trial availability. Trial availability branches only on
+the literal target scope. The persisted Campaign is still parsed by the complete strict schema. A real Host test
+proves project-scoped namespace-builtin publication becomes `available/project`, literal `built_in` becomes
+`product_release_required`, and a mismatched resource role returns the typed integrity error without persistence.
+
+The independent Mailbox network stream and route were removed. The existing app-lifetime Work Ledger stream now
+also carries the strict `mailbox.changed` notification; Work Ledger and Mailbox consumers subscribe in memory while
+the selected Task/Session stream remains the only second physical stream. A transport test proves both consumer
+events traverse one physical handle and Mailbox unsubscription does not close it. The retired Mailbox connected and
+heartbeat protocol branches were deleted. Overlay log delivery now drains ordered batches of at most 50 entries
+through exactly one in-flight request; the server accepts only that bounded batch ABI. A 100-entry positive test
+proves two ordered 50-entry requests and maximum concurrency one, while the existing failure test proves the exact
+batch is retried without recursive upload.
+
+The full generator rebuilt embedded Expert Squad packages, the portable template, OpenAPI, JavaScript SDK and both
+API reference languages. Generation initially exposed an unrelated-but-in-scope closure defect: the portable
+template's generated definition omitted the newly required `platform_integrity_review` execution contract even
+though its checked-in output contained it. The source generator now declares and renders that contract; the second
+full generation completed. These focused checks are source acceptance only. They do not turn failed R6b into a pass;
+a fresh isolated exact-Luna run, two-page real visual acceptance, DB/resource/document/chart audit and a new
+independent read-only review remain required.
+
+### R7c Recall and final cross-Task delivery repair
+
+#### Recall
+
+- The original acceptance remains unchanged: one random isolated project/backend/database run, exact
+  `openai/gpt-5.6-luna`, project-scoped random Expert Squad plus Evolution Lab, complete diagnostic through
+  opportunity, Campaign, candidate, two Trials, evaluation and comparison closure, then real `document@1` and
+  `chart@1` page screenshots plus SQLite/resource/document review.
+- The final run must use one current implementation and one authority. It may not repair model-copied Artifact IDs
+  with fuzzy search, tolerant locator parsing, prompt retries, a Host fallback or an independently selected latest
+  Artifact.
+- Relevant current facts read before this repair are the Completion Decision writer and terminal epoch contract,
+  cross-Task prepare-to-persist source compare-and-swap, Mission panel capability, Task creation idempotency, Mission
+  prompt, Evolution controller request, focused terminal-closure tests and `specs/current/architecture/02-data.md`.
+- Independent R7c review found the same exact transition in SQLite and the real page. It recommended replacing the
+  model-copied completed-Task locator list with Host expansion of the current Completion Decision's declared delivery
+  set. No independent agent participated in the implementation of this repair.
+
+#### R7c first bad transition and impact
+
+The random veterinary diagnostic Task completed successfully. Its current Completion Decision revision 51 was read
+completely and declared five exact deliverables. The fifth ID in that trusted read result was
+`art_idempotent_d3e24278ab4b465c20fdb8114ddf657c1ae617939d43ebcab456a2b991a72902`; the referenced revision 49 existed
+with the exact stored SHA-256. The immediately following Mission `panel.create_task` input changed only that ID by
+appending `e3`. The Host correctly raised `CrossTaskArtifactDeliveryAuthorityError`, created no opportunity Task and
+preserved every source Artifact. The Mission then searched the invented ID and reopened the already completed source
+Task to repair a mismatch that did not exist. The real UI consequently showed a running Task with zero running and
+five completed workers plus the previous successful completion summary. Opportunity, Campaign, Trials, metrics,
+document and chart were never reached.
+
+The trigger is model reconstruction of a long immutable locator between a complete trusted read and the next tool
+call. The data-integrity guard is correct; asking the model to copy every declared locator is not a reliable delivery
+protocol. Prompt emphasis or another retry retains the same failure mode. The repair is one discriminated
+`artifact_sources` input on `panel.create_task`: a completed source supplies only `{authority:
+"completion_decision", source_task_id}` and the Host atomically expands the current decision's complete
+`deliverable_artifact_locators`; failed/cancelled recovery supplies `{authority:"terminal_lifecycle",
+source_task_id, locator}` and remains fenced by the current typed terminal lifecycle. The old model-facing
+`artifact_imports` input is removed rather than retained as a parallel path. Existing exact import publication,
+target-owned resource copying and prepare-to-persist source epoch compare-and-swap remain the single persistence
+implementation.
+
+Positive acceptance for this repair must prove that a completed source with multiple long locator IDs can create a
+target Task from the source Task ID alone, that the committed import mappings equal the decision-declared set byte for
+byte, and that a source reopen between prepare and persist still fails the existing terminal-epoch compare-and-swap.
+It must also preserve a real failed/cancelled terminal-evidence import through the explicit union branch. After
+focused typecheck/tests, a new uninvolved agent must review the full repair; only then may one fresh isolated Luna run
+be used for final visual and database acceptance.
+
+The first independent implementation review found two authority gaps and one generated-closure gap. The initial
+Host expansion and later prepare step could observe different Completion Decisions; additionally, a valid completed
+source with an empty deliverable list lost its source authority because there was no per-Artifact import row to carry
+the compare-and-swap. The repair now freezes one source-level authority receipt during expansion, validates it during
+prepare, carries it through the queued Task pipeline and validates it again inside the target Task persistence
+transaction. This source receipt exists even for an empty deliverable set. The same review found stale package and
+generated guidance that still instructed the model to copy completed-source locators; the source READMEs, authoring
+Skill, portable-template generator, SDK docs and regenerated payload now use only `artifact_sources`.
+
+The second independent review found no implementation P0 or P1. It requested direct positive coverage of the empty
+set at the final persistence boundary and an explicit Recall of both review passes. The focused regression now
+prepares an empty completed-source receipt, reopens the source before persistence and proves that the target
+transaction rejects the stale authority with the typed `CrossTaskArtifactDeliveryAuthorityError`. The same suite also
+proves non-empty exact-set commit, non-empty reopen rejection and failed-Task terminal-evidence import. The current
+focused evidence is `5 pass / 28 assertions` for terminal closure, `26 pass / 192 assertions` for the Plugin schema,
+`6 pass / 19 assertions` for provider Tool input, clean OpenCorvus/Plugin/SDK typechecks, `docs:check`, API route check
+and `git diff --check`. A final review after this test/Recall repair and one fresh isolated exact-Luna live run remain
+required.
+
+### Final isolated exact-Luna run: terminal evidence authority remained incomplete
+
+The final bounded run used
+`C:\Users\hengu\AppData\Local\Temp\opencorvus-luna-final-ccec08dde9b94db499cbe8c139e1f836`,
+backend port `56129`, run ID `random-evolution-20260813042716-0d31b23998`, and exact
+`openai/gpt-5.6-luna`. SHA-256 rejection sampling selected
+`builtin/semiconductor-yield-engineering@2026.08.13.1` from 114 eligible packages. The project-scoped target digest
+was `3585082f23416a944ce176753afc125f35b41bdcb3e6e6f1bcbc855973964877`; Evolution Lab digest was
+`03d21246fb70ecf9eddbceee86c4ff6c2293a04377da3d10131a45770203213d`. Mission `9cf022bf61650bd2`
+held exactly the target and Evolution Lab Squads.
+
+The diagnostic Task completed, but its Completion Decision revision 39 did not match its own summary. The summary
+claimed five canonical semantic assets. After repeated model-side SHA copying errors, the accepted deliverable set
+omitted the excursion register at revision 33 and the decisive yield-review pack at revision 34, even though both
+Artifacts existed with valid stored 64-character SHA-256 identities. The Host correctly rejected malformed locator
+inputs, but the model then reduced the declared deliverable set and `complete_task` accepted that internally
+consistent yet semantically incomplete declaration. The new cross-Task authority correctly imported only the six
+declared snapshot/resource/semantic locators; it did not invent or recover omitted deliverables. This proves the
+single authority implementation is fail-closed, while also exposing that Completion Decision acceptance still lacks
+a positive completeness contract tying the declared summary/workflow outputs to its locator set.
+
+The opportunity Task completed, but the candidate-preparation Task then found no Evolution Lab worker-owned
+`evolution-lab/opportunity@1` or `evolution-lab/failure-attribution@1`; only Mission-produced import wrappers were
+present. It failed rather than fabricating provenance. The run therefore ended before Campaign, candidate, two
+Trials, evaluation, comparison, metrics, `document@1` or `chart@1`. Read-only SQLite verification returned
+`integrity_check=ok`, zero foreign-key violations, and zero rows for interactive Artifacts, iterations, metric specs
+and metric results. The controller recorded the exact failure and then a complete disposal receipt:
+listener stopped, Instances settled, database closed, renderer stopped and isolated Auth removed.
+
+Real-page evidence exists at `screenshots/main-final-running.png`, `screenshots/main-final-diagnostic.png`,
+`independent-audit/01-live-running.png` and `independent-audit/02-mission-running.png` under the run root. Those
+screenshots prove the real Work/Mission surface, random installed Squad, exact Luna model and running diagnostic
+projection. No document or chart detail screenshot exists because those Artifacts were never created. This run is a
+terminal **FAIL**, not a rendering pass; it closes the bounded acceptance attempt without starting another run.
