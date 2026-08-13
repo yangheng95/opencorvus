@@ -80,6 +80,30 @@ validator, longer inactivity timeout or provider-specific fallback is excluded b
 
 R17b is a failed diagnostic run and cannot count as a rendering or evolution pass.
 
+## Processor repair phase evidence
+
+The focused reproduction used a valid `tool-input-start` for one call ID followed for 600 ms by repeated
+`tool-input-end` chunks for that draft, nonempty deltas carrying a different call ID and text deltas carrying a
+different provider text-stream ID. Before the repair it finished with `attempts=1`, zero usage and no recovered output:
+chunks that caused no Processor mutation kept the 250 ms semantic idle monitor alive. The recovered attempt also
+emits a wrong-ID text end before its correct delta/end pair. After semantic heartbeat publication moved behind the
+Processor's corresponding accepted state transition and current text became bound to its provider stream ID, the same
+test reached canonical idle retry, removed the abandoned draft, ignored the foreign text end and persisted only the
+second attempt's completed text and usage.
+
+The repair preserves physical `first-byte` observation before dispatch while admitting reasoning, Tool, step and text
+semantic heartbeats only after their live Processor state is present and the associated mutation succeeds. A Tool
+execution still pauses the activity owner at its validated `tool-call` boundary; its accepted result/error resumes
+and refreshes the same monitor. No Provider, timeout, Artifact publisher, Host schema or workflow prompt is changed.
+
+Current focused evidence:
+
+- `bun test --timeout 30000 test/session/processor-llm-activity-retry.test.ts` — 3 pass, 7 expectations.
+- `bun run typecheck` in `packages/opencorvus` — pass.
+- `git diff --check` — pass.
+
+An uninvolved read-only review of the implementation, complete focused diff and evidence remains the commit gate.
+
 The isolated database finished with `integrity_check=ok`, zero foreign-key violations, 27 current Engine Artifacts,
 18 historical versions and zero payload/resource hash mismatch. All 80 usage events use exact
 `openai/gpt-5.6-luna`. The controller removed the listener, instances, database owner and isolated Auth. One reporting
