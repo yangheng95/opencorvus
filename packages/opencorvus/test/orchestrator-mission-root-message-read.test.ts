@@ -487,6 +487,28 @@ test("idempotent Task-root Message delivery validates every target-owned Part", 
     fn: async () => {
       const taskID = Identifier.ascending("task")
       const root = await Session.create({ kind: "root", title: "Validate delivered Task-root Message" })
+      const now = Date.now()
+      persistTask({
+        taskID,
+        sessionID: root.id,
+        now,
+        title: "Validate delivered Task-root Message",
+        request: "Validate every Part in an idempotently delivered Task-root Message",
+        productPillar: "work",
+        source: "test",
+        priority: "normal",
+        metadata: {},
+        projectID: Instance.project.id,
+        packageRevision,
+        executionCapsuleBinding: await prepareTaskProcessBinding({
+          mode: "native",
+          taskID,
+          projectID: Instance.project.id,
+          rootDirectory: Instance.directory,
+          packageRevisionSHA256: packageRevision.packageDigest,
+          timeCreated: now,
+        }),
+      })
       const orchestrator = await Session.create({
         kind: "orchestrator",
         parentID: root.id,
@@ -494,7 +516,6 @@ test("idempotent Task-root Message delivery validates every target-owned Part", 
       })
       const messageID = Identifier.ascending("message")
       const partID = Identifier.ascending("part")
-      const now = Date.now()
       await Session.updateMessage({
         id: messageID,
         sessionID: orchestrator.id,
