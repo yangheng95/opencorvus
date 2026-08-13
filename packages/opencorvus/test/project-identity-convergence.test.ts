@@ -297,6 +297,7 @@ describe("explicit Project identity convergence", () => {
           product_pillar: "code",
           title: "immutable process authority",
           request: "preserve binding",
+          time_started: now,
           time_created: now,
           time_updated: now,
         })
@@ -386,6 +387,7 @@ describe("explicit Project identity convergence", () => {
               source: "user-upload",
             },
           ],
+          time_started: now,
           time_created: now,
           time_updated: now,
         })

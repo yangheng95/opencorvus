@@ -73,7 +73,7 @@ test("projects terminal acknowledgement into the exact host-authorized coordinat
           ingressKind: "coordination_request",
           coordinationRequestID: requestID,
           terminalLifecycleReference: {
-            terminalEventID: Identifier.ascending("event"),
+            terminalEventID: Identifier.ascending("protocol_event"),
             terminalStatus: "cancelled",
             timeCompleted: now,
           },

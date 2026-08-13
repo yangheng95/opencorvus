@@ -483,7 +483,7 @@ describe("Project directory integrity", () => {
         .run()
       db.insert(DecisionLogTable)
         .values({
-          id: Identifier.ascending("decision"),
+          id: Identifier.ascending("decision_log"),
           task_id: taskID,
           phase: "delete",
           key: "preexisting_authority",

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+Latest `v0.0.43-beta` application and website release: [`2026-08-14-v0.0.43-beta-release.md`](records/2026-08/2026-08-14-v0.0.43-beta-release.md).
+
 Latest Browser MCP visible-browser and same-session Live View delivery: [`2026-08-13-browser-mcp-live-view.md`](records/2026-08/2026-08-13-browser-mcp-live-view.md).
 
 Browser MCP same-session Live View visual evidence: [`2026-08-13-browser-mcp-live-view.png`](artifacts/2026-08-13-browser-mcp-live-view.png).
