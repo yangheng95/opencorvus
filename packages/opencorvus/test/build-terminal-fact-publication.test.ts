@@ -13,7 +13,7 @@ import { Identifier } from "@/id/id"
 import { Session } from "@/session"
 import { Instance } from "@/project/instance"
 import { InstanceBootstrap } from "@/project/bootstrap"
-import { persistQueuedTask } from "@/engine/pipeline"
+import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import { prepareTaskProcessBinding } from "@/engine/task-execution-capsule-binding"
 import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
 import { createBuildTool, type BuildToolDependencies } from "@/orchestrator/build-tool"
@@ -90,24 +90,25 @@ async function createProductionFixture(projectPath: string, title: string) {
     packageRevision,
   })
   const projectedAgent = skillProjection.projectedAgents.find(
-    (candidate) => candidate.identity.agentID === "base-developer",
+    (candidate) => candidate.identity.agentID === "base-planner",
   )
-  if (!projectedAgent) throw new Error("Base package did not project base-developer")
+  if (!projectedAgent) throw new Error("Base package did not project base-planner")
   const workflow = selectedWorkflowBinding({
     projection: { packageRevision, virtualWorkflows: projectedAgent.virtualWorkflows },
-    workflowID: "composite-delivery",
+    workflowID: "planner-parallel-delivery",
   })
-  if (workflow.kind !== "virtual_workflow") throw new Error("Expected Base composite-delivery workflow")
+  if (workflow.kind !== "virtual_workflow") throw new Error("Expected Base planner-parallel-delivery workflow")
   const taskID = Identifier.ascending("task")
   const root = await Session.create({
     kind: "root",
     title,
     metadata: { configOverlay: { prompt_profile: { active: packageRevision.id } } },
   })
-  persistQueuedTask({
+  const now = Date.now()
+  persistTask({
     taskID,
     sessionID: root.id,
-    now: Date.now(),
+    now,
     title,
     request: "Produce one durable Build terminal fact",
     productPillar: "code",
@@ -115,7 +116,6 @@ async function createProductionFixture(projectPath: string, title: string) {
     priority: "normal",
     metadata: {},
     projectID: Instance.project.id,
-    queue: true,
     packageRevision,
     executionCapsuleBinding: await prepareTaskProcessBinding({
       mode: "native",
@@ -123,7 +123,7 @@ async function createProductionFixture(projectPath: string, title: string) {
       projectID: Instance.project.id,
       rootDirectory: projectPath,
       packageRevisionSHA256: packageRevision.packageDigest,
-      timeCreated: Date.now(),
+      timeCreated: now,
     }),
   })
   const dispatchID = Identifier.ascending("artifact")
@@ -131,7 +131,7 @@ async function createProductionFixture(projectPath: string, title: string) {
     kind: "initial" as const,
     current_dispatch_id: dispatchID,
     workflow_binding: workflow,
-    workflow_node_id: "base-developer",
+    workflow_node_id: "base-planner",
     workflow_occurrence_id: dispatchID,
     delivery_slice_revision_ids: [],
     evidence_locators: [],
@@ -165,7 +165,7 @@ async function createProductionFixture(projectPath: string, title: string) {
             projectedWorkerIdentity: projectedAgent.identity,
             workScope: { kind: "task" },
             workflowBinding: workflow,
-            workflowNodeID: "base-developer",
+            workflowNodeID: "base-planner",
             adapterInput: { goal_ids: [], reason: "Publish terminal fact" },
           }),
           childSessionID: sessionID,

@@ -43,6 +43,7 @@ import { createExecutionCancellationOrigin, isExecutionCancellationError } from 
 import { TaskQueueError, taskRootDirectory } from "./task-directory"
 import { isAgentInvocationSession, listTaskConversationAgentSessions } from "@/orchestrator/task-event"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
+import { hasProjectedWorkerTurnOwnership } from "@/agent/projected-worker-turn-queue"
 import { RuntimeTemplateRegistry } from "@/agent/runtime-template-registry"
 import { recordTaskInfrastructureError, recordTaskInfrastructureErrorInTransaction } from "./persist"
 import { Session } from "@/session"
@@ -2526,6 +2527,7 @@ export function listInterruptedSessionEvidence(input: {
     if (
       session.sessionID === input.rootSessionID ||
       input.ownedSessionIDs.has(session.sessionID) ||
+      hasProjectedWorkerTurnOwnership(session.sessionID) ||
       !isAgentInvocationSession(session) ||
       (session.latestStatus !== undefined &&
         session.latestStatus.type !== "streaming" &&
@@ -2629,6 +2631,7 @@ export function listInterruptedSessionEvidence(input: {
       row.id === input.rootSessionID ||
       projectedIDs.has(row.id) ||
       input.ownedSessionIDs.has(row.id) ||
+      hasProjectedWorkerTurnOwnership(row.id) ||
       !belongsToTaskRoot(row.id) ||
       !RuntimeTemplateRegistry.isWorkerSessionKind(row.kind) ||
       latestSessionStatusEvent(row.id) ||

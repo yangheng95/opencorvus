@@ -6,6 +6,16 @@ type QueueEntry = {
 
 const entries = new Map<string, QueueEntry>()
 
+/**
+ * True while this process owns or is waiting to own a complete projected
+ * worker Turn. This covers the durable-descriptor-to-prompt and
+ * prompt-to-terminal-publication boundaries where no prompt controller may
+ * exist yet, but process-recovery must not claim the Turn as interrupted.
+ */
+export function hasProjectedWorkerTurnOwnership(sessionID: string): boolean {
+  return entries.has(sessionID.trim())
+}
+
 function waitForPriorTurn(prior: Promise<void>, sessionID: string, signal?: AbortSignal): Promise<void> {
   if (!signal) return prior
   if (signal.aborted) {
@@ -71,7 +81,11 @@ export async function runProjectedWorkerTurnExclusive<T>(input: {
   })
 
   try {
-    await waitForPriorTurn(prior.catch(() => undefined), sessionID, input.signal)
+    await waitForPriorTurn(
+      prior.catch(() => undefined),
+      sessionID,
+      input.signal,
+    )
     return await input.run()
   } finally {
     release()

@@ -2889,6 +2889,35 @@ the completion owner must reacquire that same project identity. Post-regeneratio
 transport-protocol, JavaScript SDK and Overlay typechecks, the transport contract (`19 pass / 1121 assertions`), SDK
 imports, 334-operation API docs and the 34-file route inventory.
 
+Before delivery, `origin/main` advanced by 20 commits covering Project/Mission identity, Provider model refresh, build
+and requirements settlement, Artifact visibility and Evolution attribution. The phase commit was made first, then the
+remote tip was merged without rebasing or choosing either side wholesale. Regeneration from the merged canonical
+sources produced no additional diff. Several semantic intersections were nevertheless found by focused verification:
+the combined DDL needed its own transfer fingerprint, and complete Evolution run evidence now includes both current
+and historical versions of the atomic creation-ingress Artifact. The combined fingerprint and positive evidence
+expectation were updated. Post-merge focused acceptance is clean for root FIFO (`1 / 4`), Task package and replay
+(`6 / 52`), terminal capability (`1 / 1`), schema/reset/transfer (`6 / 35`), Mission atomic identity (`3 / 30`),
+Evolution evidence (`8 / 67`) and Architect settlement (`4 / 4`).
+
+The merged remote also added Build, Fact Check and Requirements domain-settlement tests whose setup still called the
+deleted queued-Task fixture. They now use the canonical established-Task fixture, which retires the atomic creation
+ingress through the production Artifact writer instead of deleting or bypassing it. Build setup was aligned to the
+current `planner-parallel-delivery` workflow and one exact creation timestamp. That test exposed a production recovery
+race rather than harmless fixture noise: a projected worker owns its Session from persisted descriptor admission
+until terminal publication, but interruption reconciliation previously recognized only the shorter prompt-owner
+interval. It could therefore publish false prior-process recovery evidence before prompt acquisition or after prompt
+return. The projected-worker Turn queue now exposes its existing full-lifetime ownership fact, and both interruption
+enumeration paths exclude only Sessions owned by that current process. The map is empty after restart, so actual
+interrupted prepared Turns remain recoverable. Positive acceptance is Build `8 pass / 23 assertions` plus the
+independent prepared-Turn recovery file `1 pass / 5 assertions`.
+
+The Requirements test also revealed that its old evidence helper bypassed the current provider transport by passing a
+raw locator directly to `artifact_read` and `artifact_select`. Its positive path now executes and persists the real
+`artifact_search` result, reads with that earlier `al_` reference, persists the returned `ar_` reference, and selects
+with that reference before the final Requirements message. There is no minted test reference or raw-locator fallback.
+The Requirements file exits cleanly with `9 pass / 13 assertions`; the companion Fact Check file exits with
+`5 pass / 5 assertions`.
+
 Real acceptance used dev source on random port `54859`, random isolated project
 `.scratch/ui-queue-9cb5529ca75d/project`, and isolated SQLite runtime under the same scratch occurrence. Global
 `auth.json` and `models.json` were copied into the isolated runtime and separately verified by hash equality; the Web

@@ -2651,6 +2651,8 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         expect(evidence.engine_artifacts.map((artifact) => artifact.kind)).toEqual([
           "task_package_revision_binding",
           "task_execution_capsule_binding",
+          "queued_operator_wake",
+          "queued_operator_wake",
           "dispatch_lineage",
         ])
         expect(evidence.revision_facts).toEqual({
