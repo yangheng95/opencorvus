@@ -39,6 +39,7 @@ import {
 import { createInstanceState } from "@/project/instance-state"
 import { requireTaskWakeRuntime } from "@/scheduler/task-wake-runtime"
 import { SessionPromptState } from "@/session/prompt/state"
+import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 import { createExecutionCancellationOrigin, isExecutionCancellationError } from "@/session/prompt/cancellation"
 import { TaskQueueError, taskRootDirectory } from "./task-directory"
 import { isAgentInvocationSession, listTaskConversationAgentSessions } from "@/orchestrator/task-event"
@@ -1133,7 +1134,7 @@ function reconcileHistoricalNonTailFailedIngress(taskID: string, wakeID: string)
   ) {
     return false
   }
-  const controlMessageID = `msg_orchestrator_control_${wakeID}`
+  const controlMessageID = orchestratorControlOccurrenceIdentity(wakeID).messageID
   const control = Database.use((db) =>
     db
       .select({ sessionID: MessageTable.session_id })
@@ -1613,11 +1614,11 @@ async function assistantMessagesForWakeSettlement(input: {
   }
   if (
     ["agent_lifecycle_delivery", "dispatch_infrastructure_failure"].includes(wake.ingress.source_kind) &&
-    row.parentID !== `msg_orchestrator_control_${input.wakeID}`
+    row.parentID !== orchestratorControlOccurrenceIdentity(input.wakeID).messageID
   ) {
     throw new QueuedWakeSettlementError(
       `Task ${input.taskID} wake ${input.wakeID} final message ${input.finalMessageID} parent ${row.parentID} ` +
-        `does not match exact control Message msg_orchestrator_control_${input.wakeID}`,
+        `does not match exact control Message ${orchestratorControlOccurrenceIdentity(input.wakeID).messageID}`,
     )
   }
   const messageIDs = Database.use((db) =>

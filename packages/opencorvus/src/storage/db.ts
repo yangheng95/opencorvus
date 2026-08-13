@@ -424,6 +424,36 @@ function assertCurrentDataIntegrity(sqlite: BunDatabase, dbPath: string): void {
     })
   }
 
+  const legacyOrchestratorControlIdentity = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT message.id AS id
+     FROM message
+     WHERE length(message.id) > ${Identifier.MAX_LENGTH}
+       AND message.id GLOB 'msg_orchestrator_control_*'
+       AND json_type(message.data, '$.extra.orchestrator_control_ingress.wake_id') = 'text'
+     UNION ALL
+     SELECT part.id AS id
+     FROM part
+     INNER JOIN message ON message.id = part.message_id
+     WHERE length(part.id) > ${Identifier.MAX_LENGTH}
+       AND part.id GLOB 'prt_orchestrator_control_*'
+       AND json_type(message.data, '$.extra.orchestrator_control_ingress.wake_id') = 'text'
+       AND json_extract(part.data, '$.metadata.wake_id') =
+         json_extract(message.data, '$.extra.orchestrator_control_ingress.wake_id')
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyOrchestratorControlIdentity) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains legacy expanded Orchestrator control identity ${legacyOrchestratorControlIdentity.id} at ${dbPath}. ` +
+        "Its terminal wake conversation occurrence belongs to the prior identity epoch; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.compactOrchestratorControlIdentity",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
   const legacyRequirementSet = queryAllFinalized<{ id: string }>(
     sqlite,
     `SELECT id

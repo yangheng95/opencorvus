@@ -19,6 +19,7 @@ import {
   EngineChannelBindingTable,
   EngineProgressSnapshotTable,
   EngineTaskCancellationAuthorityTable,
+  EngineTaskTable,
 } from "@/engine/engine.sql"
 import { recordEngineArtifact, updateEngineArtifact } from "@/engine/artifact"
 import { QueuedTaskIngressSchema } from "@/engine/queued-task-ingress"
@@ -41,6 +42,7 @@ import { EffectiveConfig } from "@/config/effective"
 import { Identifier } from "@/id/id"
 import { taskWaitFireID } from "@/scheduler/task-wait-fire-identity"
 import { Orchestrator } from "@/orchestrator/agent"
+import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 import { OrchestratorEventSchema } from "@/orchestrator/event"
 import { createTerminalConversationAuthority } from "@/orchestrator/terminal-conversation-authority"
 import { createOrchestratorTools } from "@/orchestrator/tools"
@@ -224,7 +226,7 @@ async function persistFinalAssistantMessage(input: {
   const exactControlParent =
     input.taskIngress &&
     ["agent_lifecycle_delivery", "dispatch_infrastructure_failure"].includes(input.taskIngress.kind)
-      ? `msg_orchestrator_control_${input.taskIngress.id}`
+      ? orchestratorControlOccurrenceIdentity(input.taskIngress.id).messageID
       : undefined
   if (exactControlParent) {
     await Session.persistMessage({
@@ -2097,8 +2099,8 @@ describe.serial("active operator wake settlement", () => {
           title: "Orchestrator history",
         })
         const wakeID = "art_historical_non_tail_wake"
-        const controlMessageID = `msg_orchestrator_control_${wakeID}`
-        const newerMessageID = "msg_orchestrator_control_art_younger_wake"
+        const controlMessageID = orchestratorControlOccurrenceIdentity(wakeID).messageID
+        const newerMessageID = Identifier.ascending("message")
         for (const [messageID, text] of [
           [controlMessageID, "Historical exact control"],
           [newerMessageID, "Younger exact control"],
@@ -3560,7 +3562,7 @@ describe.serial("active operator wake settlement", () => {
             promptOwner: SessionPromptState.hasOwnedPromptInAnyDirectory(orchestratorSession.id),
             status: SessionStatus.get(orchestratorSession.id).type,
           }).toEqual({ promptOwner: true, status: "idle" })
-          const controlMessageID = `msg_orchestrator_control_${wakeID}`
+          const controlMessageID = orchestratorControlOccurrenceIdentity(wakeID).messageID
           const messages = await Session.messages({ sessionID: orchestratorSession.id })
           expect(
             messages

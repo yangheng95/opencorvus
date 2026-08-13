@@ -7,6 +7,7 @@ import {
 import { OrchestratorEventSchema } from "@/orchestrator/event"
 import { authorizedTaskRootMessagesForWake } from "@/orchestrator/interaction-tools"
 import { ProtocolStore } from "@/protocol/store"
+import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 
 afterEach(() => {
   ;(ProtocolStore.requireEvent as { mockRestore?: () => void }).mockRestore?.()
@@ -127,8 +128,7 @@ test("agent lifecycle delivery projects its exact current occurrence", () => {
     "art_lifecycle_delivery_wake",
   )!
   expect(control).toMatchObject({
-    messageID: "msg_orchestrator_control_art_lifecycle_delivery_wake",
-    partID: "prt_orchestrator_control_art_lifecycle_delivery_wake",
+    ...orchestratorControlOccurrenceIdentity("art_lifecycle_delivery_wake"),
     extra: {
       orchestrator_control_ingress: {
         wake_id: "art_lifecycle_delivery_wake",

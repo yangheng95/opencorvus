@@ -42,6 +42,7 @@
  * ───────────────────────────────────────────────────────────────────────────
  */
 import ORCHESTRATOR_CORE from "@/prompt/core/orchestrator-core.txt"
+import z from "zod"
 import { withObservableWorkNarrative } from "@/prompt/fragments/observable-work-narrative"
 import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contract"
 import { Provider } from "@/provider/provider"
@@ -76,7 +77,8 @@ import { attachmentPromptSection } from "@/agent/prompt-projection"
 import { renderUserRequestSection } from "@/intent/request-prompt"
 import { readIterationHistory as readHistForPrompt } from "@/metrics/store"
 import { requireTask, terminalTask } from "@/engine"
-import { Database, NotFoundError } from "@/storage/db"
+import { Database, NotFoundError, eq } from "@/storage/db"
+import { MessageTable, PartTable } from "@/session/session.sql"
 import { recordTaskInfrastructureError } from "@/engine/persist"
 import { queuedTaskIngressSourceKind } from "@/engine/queued-task-ingress"
 import { describeProcessRecoveryFact, describeTask, renderTaskDescription, type TaskDesc } from "@/engine/describe"
@@ -93,12 +95,19 @@ import { AgentTrace } from "@/trace"
 import { ProtocolStore } from "@/protocol/store"
 import { SchedulerMessagePayload } from "@/protocol/schema"
 import { NamedError } from "@opencorvus-ai/util/error"
+import { isDeepStrictEqual } from "node:util"
 import type { OrchestratorEvent } from "./event"
 import type { TerminalConversationAuthority } from "./terminal-conversation-authority"
 import { ORCHESTRATOR_TASK_ERROR_ENVELOPE_MARKER, type OrchestratorTaskErrorEnvelope } from "./error-envelope"
 import { assertTaskRootSessionLineage, taskOrchestratorSession } from "./task-session"
+import { orchestratorControlOccurrenceIdentity } from "./control-message-identity"
 
 const log = Log.create({ service: "orchestrator" })
+
+export const OrchestratorControlIdentityConflictError = NamedError.create(
+  "OrchestratorControlIdentityConflictError",
+  z.object({ message: z.string().min(1), wakeID: z.string().min(1) }),
+)
 // The scheduler step budget lives on HostAgentRegistry's orchestrator record;
 // SessionLoop consumes that exact host runtime through the composed native surface.
 
@@ -1339,9 +1348,9 @@ export function currentOrchestratorControlMessage(
     source_kind: sourceKind,
     fact_id: factID,
   }
+  const occurrence = orchestratorControlOccurrenceIdentity(exactWakeID)
   return {
-    messageID: `msg_orchestrator_control_${exactWakeID}`,
-    partID: `prt_orchestrator_control_${exactWakeID}`,
+    ...occurrence,
     text: ["## Orchestrator Control Occurrence", renderWakeProvenanceNotice(event, taskID, exactWakeID)].join("\n\n"),
     extra: { orchestrator_control_ingress: identity },
     partMetadata: identity,
@@ -1354,6 +1363,29 @@ export async function materializeOrReuseCurrentOrchestratorControlMessage(input:
   control: CurrentOrchestratorControlMessage
   beforeVisibilityEffects?: () => void
 }): Promise<"created" | "reused"> {
+  const assertExact = (existing: Message.WithParts) => {
+    const part = existing.parts[0]
+    const valid =
+      existing.info.role === "user" &&
+      existing.info.author === "orchestrator" &&
+      existing.info.agent === "orchestrator" &&
+      isDeepStrictEqual(existing.info.extra, input.control.extra) &&
+      existing.parts.length === 1 &&
+      part?.id === input.control.partID &&
+      part.type === "text" &&
+      part.text === input.control.text &&
+      part.kind === "control" &&
+      part.source === "system" &&
+      isDeepStrictEqual(part.metadata, input.control.partMetadata)
+    if (!valid) {
+      throw new OrchestratorControlIdentityConflictError({
+        message:
+          `Orchestrator control Message ${input.control.messageID} does not match exact wake ` +
+          `${input.control.partMetadata.wake_id}`,
+        wakeID: input.control.partMetadata.wake_id,
+      })
+    }
+  }
   let existing: Message.WithParts | undefined
   let disposition: "created" | "reused" = "reused"
   try {
@@ -1362,6 +1394,23 @@ export async function materializeOrReuseCurrentOrchestratorControlMessage(input:
     if (!NotFoundError.isInstance(error as Error)) throw error
   }
   if (!existing) {
+    const assertUnoccupied = () => {
+      const messageRow = Database.use((db) =>
+        db.select().from(MessageTable).where(eq(MessageTable.id, input.control.messageID)).get(),
+      )
+      const partRow = Database.use((db) =>
+        db.select().from(PartTable).where(eq(PartTable.id, input.control.partID)).get(),
+      )
+      if (!messageRow && !partRow) return
+      throw new OrchestratorControlIdentityConflictError({
+        message: `Orchestrator control occurrence for wake ${input.control.partMetadata.wake_id} is already occupied.`,
+        wakeID: input.control.partMetadata.wake_id,
+      })
+    }
+    // Reject a known compact-ID occupant before prompt preparation. The same
+    // check runs again in the persistence transaction to fence a concurrent
+    // occupant created after this read.
+    assertUnoccupied()
     disposition = "created"
     await SessionPrompt.prompt(
       {
@@ -1384,28 +1433,14 @@ export async function materializeOrReuseCurrentOrchestratorControlMessage(input:
           },
         ],
       },
-      { beforeVisibilityEffects: input.beforeVisibilityEffects },
+      {
+        beforeVisibilityEffects: input.beforeVisibilityEffects,
+        preflightBundle: assertUnoccupied,
+      },
     )
     existing = await MessageStore.get({ sessionID: input.session.id, messageID: input.control.messageID })
   }
-  const part = existing.parts[0]
-  const valid =
-    existing.info.role === "user" &&
-    existing.info.author === "orchestrator" &&
-    existing.info.agent === "orchestrator" &&
-    JSON.stringify(existing.info.extra) === JSON.stringify(input.control.extra) &&
-    existing.parts.length === 1 &&
-    part?.id === input.control.partID &&
-    part.type === "text" &&
-    part.text === input.control.text &&
-    part.kind === "control" &&
-    part.source === "system" &&
-    JSON.stringify(part.metadata) === JSON.stringify(input.control.partMetadata)
-  if (!valid) {
-    throw new Error(
-      `Orchestrator control Message ${input.control.messageID} does not match exact wake ${input.control.partMetadata.wake_id}`,
-    )
-  }
+  assertExact(existing)
   return disposition
 }
 

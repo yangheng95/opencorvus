@@ -37,6 +37,7 @@ import {
   type DispatchAdapterExecutors,
 } from "@/orchestrator/dispatch-agent-tool"
 import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
+import { orchestratorControlOccurrenceIdentity } from "@/orchestrator/control-message-identity"
 import { Instance } from "@/project/instance"
 import {
   runWithIndependentProjectIdentity,
@@ -499,7 +500,7 @@ async function verifyDetachedDispatchLifecycle(input: {
             title: "Managed lifecycle root delivery",
           })
           const now = Date.now()
-          const controlMessageID = `msg_orchestrator_control_${loopInput.wakeID}`
+          const controlMessageID = orchestratorControlOccurrenceIdentity(loopInput.wakeID).messageID
           await Session.persistMessage({
             info: {
               id: controlMessageID,

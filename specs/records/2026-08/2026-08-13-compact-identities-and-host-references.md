@@ -105,6 +105,13 @@ remains in the scheduler payload. Existing expanded `pev_scheduler_*`, `pib_sche
 `DATA_RESET_REQUIRED`; replay never mixes old and current members of one occurrence graph. Any compact event/inbox
 occupancy by different scheduler semantics returns the existing typed scheduler conflict instead of aliasing.
 
+The seventh Phase 1B delivery owns the Orchestrator terminal-control Message/Part occurrence only. An exact lifecycle
+or infrastructure wake derives separate compact deterministic Message and Part identities while the complete wake,
+source kind and fact identities remain in the visible provenance payload. The same material replays one exact bundle;
+different compact-ID occupancy returns a typed control identity conflict before generic Session upsert. Existing
+expanded `msg_orchestrator_control_*` and `prt_orchestrator_control_*` rows with matching control provenance belong to
+the prior pre-release epoch and cause `DATA_RESET_REQUIRED` rather than dual lookup or in-place rewrite.
+
 ### Phase 2 — remaining model-facing digests
 
 Inventory each plugin/package tool field that currently asks the model to repeat a package, resource, workspace, scorer, Git or payload digest. Replace it with a short Host reference derived from a prior authoritative response, then delete the raw model-input field in the same change. This includes replacing `panel.create_task.expectedPackageDigest` with a Host reference that can bind both installed incumbents and uninstalled candidate revisions; removing the digest without that replacement would break candidate Trial creation. Regenerate schemas, SDKs and embedded package payload from canonical sources.
