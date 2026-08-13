@@ -40,10 +40,8 @@ Git template、子进程和第三方临时写入均在该树内嵌套，结束�
 列中，作为字节相等和防冲突事实；紧凑业务 ID 不是截断后冒充的密码学摘要。Project ID 由完整
 normalized repository identity material 经 `Identifier.deterministic("project", material)` 生成不超过
 24 字符的 `prj_*` 身份；包含旧 expanded Project primary key 的 pre-release Database 在 bootstrap
-返回 `DATA_RESET_REQUIRED`，不创建第二个 Project。延迟 Task wait 的 fire identity 由完整 Automation
-job identity 确定性派生为不超过 24 字符的 `cal_*`；pending delay 尚未签发 fire identity，而签发与
-queued ingress 持久化、delay 消费处于同一事务，因此 restart 只重放一个 durable ingress。其他手工或
-caller-supplied 新落盘身份尚未迁入该默认签发面，属于后续迁移契约。
+返回 `DATA_RESET_REQUIRED`，不创建第二个 Project。延迟 Task wait、其他手工或 caller-supplied
+新落盘身份尚未迁入该默认签发面，属于后续迁移契约。
 
 所有表定义在 `src/engine/engine.sql.ts`，命名前缀 `engine_`（历史文档里的
 `orchestrator_*` 已全部重命名为 `engine_*`）。旧的多张过程表已合并为单一
