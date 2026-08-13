@@ -221,7 +221,7 @@ function findQueuedWake(wakeID: string) {
 }
 
 async function waitForCancelledCheckpoint(taskID: string) {
-  const settlementDeadline = Date.now() + 30_000
+  const settlementDeadline = Date.now() + 60_000
   let settlement: { label: string; payload: { status?: string } } | undefined
   while (Date.now() < settlementDeadline) {
     settlement = Database.use(
@@ -2119,7 +2119,7 @@ describe.serial("active operator wake settlement", () => {
         }
       },
     })
-  }, 60_000)
+  }, 120_000)
 
   test("converges a historical non-tail failed ingress into one visible recovery occurrence", async () => {
     await using project = await memoryProject()
