@@ -144,6 +144,44 @@ function isProcessAlive(pid: number): boolean {
   }
 }
 
+function windowsProcessInstanceID(pid: number): string | undefined {
+  const { dlopen, FFIType, ptr } = require("bun:ffi") as typeof import("bun:ffi")
+  const kernel32 = dlopen("kernel32.dll", {
+    OpenProcess: { args: [FFIType.u32, FFIType.u32, FFIType.u32], returns: FFIType.ptr },
+    GetProcessTimes: {
+      args: [FFIType.ptr, FFIType.ptr, FFIType.ptr, FFIType.ptr, FFIType.ptr],
+      returns: FFIType.u32,
+    },
+    CloseHandle: { args: [FFIType.ptr], returns: FFIType.u32 },
+  })
+  const processHandle = kernel32.symbols.OpenProcess(0x1000, 0, pid)
+  if (!processHandle) {
+    kernel32.close()
+    return undefined
+  }
+  try {
+    const creationTime = Buffer.alloc(8)
+    const exitTime = Buffer.alloc(8)
+    const kernelTime = Buffer.alloc(8)
+    const userTime = Buffer.alloc(8)
+    const succeeded = kernel32.symbols.GetProcessTimes(
+      processHandle,
+      ptr(creationTime),
+      ptr(exitTime),
+      ptr(kernelTime),
+      ptr(userTime),
+    )
+    // FILETIME starts at 1601-01-01, while the established persisted identity
+    // uses .NET DateTime ticks from 0001-01-01. Preserve that wire value so a
+    // live owner created by an earlier runtime remains exactly observable.
+    const dotNetEpochOffset = 504_911_232_000_000_000n
+    return succeeded ? `win32:${creationTime.readBigUInt64LE() + dotNetEpochOffset}` : undefined
+  } finally {
+    kernel32.symbols.CloseHandle(processHandle)
+    kernel32.close()
+  }
+}
+
 function processInstanceID(pid: number): string | undefined {
   try {
     if (process.platform === "linux") {
@@ -156,25 +194,7 @@ function processInstanceID(pid: number): string | undefined {
       return startTicks ? `linux:${startTicks}` : undefined
     }
     if (process.platform === "win32") {
-      const executable = path.join(
-        process.env.SystemRoot || process.env.WINDIR || "C:\\Windows",
-        "System32",
-        "WindowsPowerShell",
-        "v1.0",
-        "powershell.exe",
-      )
-      const value = execFileSync(
-        executable,
-        [
-          "-NoLogo",
-          "-NoProfile",
-          "-NonInteractive",
-          "-Command",
-          `(Get-Process -Id ${pid} -ErrorAction Stop).StartTime.ToUniversalTime().Ticks`,
-        ],
-        { encoding: "utf8", windowsHide: true, stdio: ["ignore", "pipe", "ignore"] },
-      ).trim()
-      return value ? `win32:${value}` : undefined
+      return windowsProcessInstanceID(pid)
     }
     const value = execFileSync("ps", ["-o", "lstart=", "-p", String(pid)], {
       encoding: "utf8",

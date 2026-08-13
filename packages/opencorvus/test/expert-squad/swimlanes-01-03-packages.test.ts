@@ -35,7 +35,7 @@ const packages = [
   },
   {
     id: "office-delivery",
-    version: "2026.08.13.3",
+    version: "2026.08.13.4",
     name: "Office Delivery",
     productPillars: ["work"],
     skillName: "office-delivery-method",
