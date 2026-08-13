@@ -544,4 +544,5 @@ test("idempotent Task-root Message delivery validates every target-owned Part", 
       ).rejects.toThrow(`Task-root Message ${messageID} is delivered but Part ${partID} remains on Session ${root.id}.`)
     },
   })
+  await Bus.TestHooks.disposeOwnedState()
 })
