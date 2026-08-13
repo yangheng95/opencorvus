@@ -108,6 +108,9 @@ export type UserMessagePersistenceHooks = {
     pendingSession?: Readonly<Pick<Session.Info, "id" | "projectID" | "parentID" | "directory">>
   }
   commitBundle?: (message: Message.User, parts: Message.Part[]) => void
+  /** Fail-closed identity/ownership check executed inside the persistence
+   * transaction before any Message, Part, or control row is written. */
+  preflightBundle?: (message: Message.User, parts: Message.Part[]) => void
   /** Register post-commit ownership effects before Message visibility effects. */
   beforeVisibilityEffects?: (message: Message.User, parts: Message.Part[]) => void
 }
@@ -767,14 +770,20 @@ export async function persistMaterializedUserMessage(
         bundle,
         () => persistence.commitBundle!(info, parts),
         persistence.beforeVisibilityEffects ? () => persistence.beforeVisibilityEffects!(info, parts) : undefined,
+        persistence.preflightBundle ? () => persistence.preflightBundle!(info, parts) : undefined,
       )
     : persistence.beforeVisibilityEffects
       ? await Session.persistMessageWithCommit(
           bundle,
           () => undefined,
           () => persistence.beforeVisibilityEffects!(info, parts),
+          persistence.preflightBundle ? () => persistence.preflightBundle!(info, parts) : undefined,
         )
-      : await Session.persistMessage(bundle)
+      : persistence.preflightBundle
+        ? await Session.persistMessageWithCommit(bundle, () => undefined, undefined, () =>
+            persistence.preflightBundle!(info, parts),
+          )
+        : await Session.persistMessage(bundle)
   return persistedUserMessageReceipt(materialized, persisted)
 }
 
@@ -812,6 +821,7 @@ export function persistMaterializedUserMessageInTransaction(
     bundle,
     () => persistence.commitBundle(info, parts),
     persistence.beforeVisibilityEffects ? () => persistence.beforeVisibilityEffects!(info, parts) : undefined,
+    persistence.preflightBundle ? () => persistence.preflightBundle!(info, parts) : undefined,
   )
   return {
     complete: async () => persistedUserMessageReceipt(materialized, await persisted.complete()),

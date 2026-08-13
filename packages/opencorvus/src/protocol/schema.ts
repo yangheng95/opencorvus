@@ -36,6 +36,10 @@ export type SchedulerMessageKind = z.infer<typeof SchedulerMessageKind>
 export const SchedulerMessagePayload = z
   .object({
     protocol: z.literal("scheduler-message-v2"),
+    /** Exact caller-owned invocation atom used to derive the compact
+     * scheduler delivery identity. Persisting it makes truncated-identity
+     * collisions distinguishable from same-material replay. */
+    invocation_id: z.string().min(1),
     message_kind: SchedulerMessageKind,
     thread_id: z.string().min(1),
     source_message_id: Identifier.schema("message").optional(),

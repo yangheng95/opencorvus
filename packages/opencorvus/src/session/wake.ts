@@ -113,6 +113,8 @@ export namespace SessionWake {
     signal?: AbortSignal
     /** Durable owner fence committed atomically with the exact Message/Part bundle. */
     commitBundle?: UserMessagePersistenceHooks["commitBundle"]
+    /** Scheduler-owned compact occurrence check performed before bundle rows. */
+    preflightBundle?: UserMessagePersistenceHooks["preflightBundle"]
     /** The prompt to append as the next session message. */
     prompt: string
     /** Real participant that authored this wake payload. */
@@ -265,6 +267,7 @@ export namespace SessionWake {
         prepared,
         signal: input.signal,
         commitBundle: input.commitBundle,
+        preflightBundle: input.preflightBundle,
         controls: (info) => [
           {
             id: input.controlID,
