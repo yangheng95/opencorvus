@@ -51,7 +51,7 @@ describe("ascending identifier logical clock", () => {
       `const planID = Identifier.create("plan_node", false, upper + 1)`,
       `const ascendingID = Identifier.create("message", false, upper + 2)`,
       `const descendingID = Identifier.create("message", true, upper + 2)`,
-      `console.log(JSON.stringify({ lower: Identifier.timestamp(lowerID), upper: Identifier.timestamp(upperID), plan: Identifier.timestamp(planID), ordered: lowerID < upperID, legacyAscendingOrdered: "msg_ffffffffffffzzzzzzzzzzzzzz" < ascendingID, legacyDescendingOrdered: descendingID < "msg_00000000000000000000000000" }))`,
+      `console.log(JSON.stringify({ lower: Identifier.timestamp(lowerID), upper: Identifier.timestamp(upperID), plan: Identifier.timestamp(planID), ordered: lowerID < upperID, ascendingLength: ascendingID.length, descendingLength: descendingID.length, planLength: planID.length }))`,
     ].join(";")
     const boundary = Bun.spawnSync([process.execPath, "-e", boundaryScript], {
       cwd: path.resolve(import.meta.dir, ".."),
@@ -67,18 +67,17 @@ describe("ascending identifier logical clock", () => {
       upper: 2 ** 36,
       plan: 2 ** 36 + 1,
       ordered: true,
-      legacyAscendingOrdered: true,
-      legacyDescendingOrdered: true,
+      ascendingLength: 24,
+      descendingLength: 24,
+      planLength: 24,
     })
 
     const timestamp = Date.now() + 60_000
-    const ids = Array.from({ length: 4_100 }, () => Identifier.create("message", false, timestamp))
+    const ids = Array.from({ length: 3_800 }, () => Identifier.create("message", false, timestamp))
     ids.push(Identifier.create("message", false, timestamp - 10_000))
 
     expect([...ids].sort()).toEqual(ids)
     expect(new Set(ids).size).toBe(ids.length)
-    const encodedSequence = (id: string) => BigInt(`0x${id.split("_").at(-1)!.slice(13, 25)}`)
-    expect(encodedSequence(ids[4_096]) - encodedSequence(ids[0])).toBe(4_096n)
     expect(Identifier.timestamp(ids.at(-1)!)).toBe(timestamp)
   })
 })

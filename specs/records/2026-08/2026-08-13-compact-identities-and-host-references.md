@@ -25,7 +25,7 @@ Blindly truncating SHA-256 to 24 characters would weaken collision resistance, b
 
 - `Identifier.create("task", ...)` emits 24 characters, but the general generator uses a direction marker, two 48-bit hexadecimal fields and fourteen random Base62 characters.
 - Artifact locator/read/selection references already use Host-minted 19-character values (`al_*`, `ar_*`, `as_*`) and resolve to complete persisted locators without model reconstruction.
-- Exact Task package revision binding already resolves the selected prompt profile in the Host. `panel.create_task.expectedPackageDigest` is therefore a redundant model-provided compare-and-swap token for Mission creation, not the package identity owner.
+- Exact Task package revision binding already resolves an installed incumbent selected through the Mission's held prompt profile. For that installed-incumbent path, `panel.create_task.expectedPackageDigest` is a redundant model-provided compare-and-swap token rather than the package identity owner. Candidate Trials are the explicit exception until Phase 2 provides a short Host revision reference for their not-yet-installed candidate package.
 - Engine Artifact rows already store complete payload SHA-256 independently from `id`, so deterministic compact Artifact IDs do not need to contain printable full SHA text.
 - Existing databases contain expanded identifiers and JSON payload references. Rewriting those identifiers is a storage migration, not a parser tweak, and cannot be silently combined with new issuance.
 
@@ -43,22 +43,25 @@ Deterministic Artifact identity uses a domain-separated compact encoding derived
 
 ### Model and UI references
 
-Model-facing APIs do not accept raw digest assertions where the Host already owns the selected authority. Mission Task creation supplies the held Expert Squad ID; the Host resolves and pins its exact installed revision. Artifact operations continue to use the existing short locator/read/selection references. Later digest-bearing tool surfaces receive equivalent Host-issued references from the same authoritative read/inspect response rather than a new alias store.
+Model-facing APIs do not accept raw digest assertions where the Host already owns the selected authority. Installed-incumbent Mission Task creation can supply the held Expert Squad ID and let the Host resolve and pin its exact installed revision. Candidate Trial creation still needs a Phase 2 short Host revision reference before its raw digest field can be removed. Artifact operations continue to use the existing short locator/read/selection references. Later digest-bearing tool surfaces receive equivalent Host-issued references from the same authoritative read/inspect response rather than a new alias store.
 
 The default UI renders compact IDs/references of at most 24 characters. A privileged audit detail may show the complete internal digest as evidence, but it is not a copyable workflow control token.
 
 ## Staged delivery
 
-### Phase 1 — issuance and Task creation
+### Phase 1A — canonical issuance
 
-1. Generalize the canonical compact identifier generator to every OpenCorvus-owned identifier family and retain timestamp/order/uniqueness guarantees.
-2. Replace `art_idempotent_<full SHA-256>` with a deterministic, domain-separated compact Artifact ID while retaining full SHA columns and collision checks.
-3. Remove `expectedPackageDigest` from the model-facing `panel.create_task` ABI. Mission creation resolves the exact held package revision in the Host; internal services may still carry the full digest after resolution.
-4. Add positive contracts for all prefix families, high-volume same-timestamp issuance, deterministic Artifact replay/collision behavior and Mission Task creation from held package authority.
+1. Generalize the canonical default generator to every `Identifier` family and retain timestamp/order/uniqueness guarantees without rewriting caller-supplied legacy identities.
+2. Add a domain-separated compact derivation primitive for later migrations, but do not switch an existing durable replay key until its owning migration or epoch boundary lands.
+3. Add positive contracts for every canonical prefix family, the complete same-timestamp sequence window, deterministic derivation and timestamp recovery.
+
+### Phase 1B — handcrafted identity closure
+
+Inventory and migrate caller-supplied and handcrafted business identities that bypass default `Identifier` issuance, including Session/request/workspace inputs, delayed Task waits, Project IDs, memory file/chunk, permission request/attempt and durable bus occurrence identities. Each owner moves atomically with its persistence and replay tests. Existing deterministic Artifact, Build, scheduler, Mission receipt and coordination keys remain unchanged until this boundary supplies their explicit migration or reset epoch; permanent dual-read is not allowed.
 
 ### Phase 2 — remaining model-facing digests
 
-Inventory each plugin/package tool field that currently asks the model to repeat a package, resource, workspace, scorer, Git or payload digest. Replace it with a short Host reference derived from a prior authoritative response, then delete the raw model-input field in the same change. Regenerate schemas, SDKs and embedded package payload from canonical sources.
+Inventory each plugin/package tool field that currently asks the model to repeat a package, resource, workspace, scorer, Git or payload digest. Replace it with a short Host reference derived from a prior authoritative response, then delete the raw model-input field in the same change. This includes replacing `panel.create_task.expectedPackageDigest` with a Host reference that can bind both installed incumbents and uninstalled candidate revisions; removing the digest without that replacement would break candidate Trial creation. Regenerate schemas, SDKs and embedded package payload from canonical sources.
 
 ### Phase 3 — persistence migration and UI
 
@@ -66,9 +69,9 @@ Define an explicit current-schema migration for expanded stored IDs and every re
 
 ## Positive verification
 
-- Generate at least 4,100 ascending identifiers at one timestamp for every prefix family; prove length at most 24, uniqueness, lexical order, canonical schema acceptance and timestamp recovery. Prove descending order separately.
-- Publish the same canonical expert output twice and prove the same compact Artifact ID plus the same complete payload SHA; attempt a controlled compact-ID collision fixture and prove a typed integrity failure rather than aliasing.
-- Create a real Mission-owned Task using only a held prompt profile and prove the persisted package revision binding equals the installed package digest without any digest in model tool input.
+- Generate the complete 3,844-value same-millisecond sequence window for every prefix family; prove length at most 24, uniqueness, lexical order, canonical schema acceptance and timestamp recovery. Prove descending order separately.
+- When a durable deterministic key is migrated, publish the same canonical fact twice and prove replay of one compact identity plus the same complete payload SHA; attempt a controlled compact-ID collision fixture and prove a typed integrity failure rather than aliasing.
+- When Phase 2 introduces the package-revision reference, create real incumbent and candidate Trial Tasks and prove each persisted package revision binding resolves from that short Host reference without a model-supplied digest.
 - Run focused identifier, Artifact publication and Task package binding tests, relevant typechecks, docs check and diff check.
 - Obtain independent read-only review after each implementation phase, fix every valid finding, then commit, merge upstream, verify the outgoing set and push before the next phase.
 - Final acceptance requires a fresh exact-Luna random evolution run in which no model tool input contains a raw identifier/digest longer than 24 characters, followed by real `document@1` and `chart@1` page screenshots and database/resource integrity closure.
