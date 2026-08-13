@@ -2145,8 +2145,17 @@ function idempotentExpertPublicationIdentity(input: {
   }
   const canonical = stableJSON(semantic)
   return {
-    artifactID: `art_idempotent_${sha256(canonical)}`,
+    artifactID: Identifier.deterministic("artifact", canonical),
     canonical,
+  }
+}
+
+export class EngineArtifactIdentityCollisionError extends Error {
+  override readonly name = "EngineArtifactIdentityCollisionError"
+  readonly code = "ENGINE_ARTIFACT_IDENTITY_COLLISION"
+
+  constructor(readonly artifactID: string) {
+    super(`Compact Engine Artifact identity ${artifactID} is already bound to different canonical material`)
   }
 }
 
@@ -2251,17 +2260,22 @@ export async function publishExpertArtifact(input: {
         .where(eq(EngineArtifactTable.id, identity.artifactID))
         .get()
       if (existing) {
-        if (existing.task_id !== input.scope.taskID || existing.kind !== "expert_output") {
-          throw new Error("idempotent Engine Artifact identity resolved to a foreign partition")
+        let exactReplay = false
+        if (existing.task_id === input.scope.taskID && existing.kind === "expert_output") {
+          try {
+            const existingEnvelope = EngineArtifactEnvelopeSchema.parse(existing.payload)
+            const existingIdentity = idempotentExpertPublicationIdentity({
+              taskID: existing.task_id,
+              label: existing.label,
+              envelope: existingEnvelope,
+            })
+            exactReplay = existingIdentity.canonical === identity.canonical
+          } catch {
+            exactReplay = false
+          }
         }
-        const existingEnvelope = EngineArtifactEnvelopeSchema.parse(existing.payload)
-        const existingIdentity = idempotentExpertPublicationIdentity({
-          taskID: existing.task_id,
-          label: existing.label,
-          envelope: existingEnvelope,
-        })
-        if (existingIdentity.canonical !== identity.canonical) {
-          throw new Error("idempotent Engine Artifact identity collision")
+        if (!exactReplay) {
+          throw new EngineArtifactIdentityCollisionError(identity.artifactID)
         }
         return existing.id
       }

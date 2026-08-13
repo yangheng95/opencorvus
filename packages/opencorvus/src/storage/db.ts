@@ -244,6 +244,26 @@ function cancellationEventView(
  * database becomes available to any route.
  */
 function assertCurrentDataIntegrity(sqlite: BunDatabase, dbPath: string): void {
+  const legacyIdempotentArtifact = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id
+     FROM engine_artifact
+     WHERE kind = 'expert_output'
+       AND id GLOB 'art_idempotent_*'
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyIdempotentArtifact) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains legacy expanded idempotent Artifact ${legacyIdempotentArtifact.id} at ${dbPath}. ` +
+        "Its immutable locator provenance belongs to the prior identity epoch; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.compactArtifactIdentity",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
   const legacyRequirementSet = queryAllFinalized<{ id: string }>(
     sqlite,
     `SELECT id

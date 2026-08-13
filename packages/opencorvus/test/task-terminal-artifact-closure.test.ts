@@ -3,13 +3,14 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import {
   artifactCatalogAuthority,
+  EngineArtifactIdentityCollisionError,
   publishExpertArtifact,
   readTaskArtifact,
   searchTaskArtifacts,
   TaskArtifactPublicationClosedError,
 } from "@/artifact-catalog"
 import { DispatchOutcome } from "@/agent/dispatch-outcome"
-import { updateEngineArtifact } from "@/engine/artifact"
+import { recordEngineArtifact, updateEngineArtifact } from "@/engine/artifact"
 import { createDispatchLineageOrigin, listDispatchLineage, recordDispatchLineage } from "@/engine/dispatch-lineage"
 import { assertTaskDispatchesSettledInTransaction, recordDispatchSettlement } from "@/engine/dispatch-settlement"
 import { EngineArtifactTable, EngineTaskTable } from "@/engine/engine.sql"
@@ -39,7 +40,7 @@ import { ensureMissionSession } from "@/mission/session"
 import { Instance } from "@/project/instance"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Session } from "@/session"
-import { Database, and, eq } from "@/storage/db"
+import { Database, DatabaseUnavailableError, and, eq } from "@/storage/db"
 import { createToolExecutionSurface } from "@/tool/execution-surface"
 import type { TaskToolExecutionScope } from "@/tool/task-tool-execution-scope"
 import { createTaskLifecycleTools } from "@/orchestrator/task-lifecycle-tools"
@@ -276,6 +277,8 @@ test("keeps the exact terminal expert Artifact immutable while preserving an ide
         idempotent: true as const,
       }
       const accepted = await publishExpertArtifact({ scope: task.scope, artifact: publication })
+      expect(accepted.locator.artifact_id).toHaveLength(Identifier.MAX_LENGTH)
+      expect(accepted.locator.expected_sha256).toHaveLength(64)
       const completedAt = Date.now()
       Database.use((db) =>
         db
@@ -310,6 +313,101 @@ test("keeps the exact terminal expert Artifact immutable while preserving an ide
             .all(),
         ),
       ).toEqual([{ id: accepted.locator.artifact_id }])
+    },
+  })
+}, 60_000)
+
+test("returns the typed compact Artifact identity collision contract", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const task = await taskFixture(project.path)
+      const publication = {
+        artifact_type: "base/terminal-result",
+        schema_version: 1,
+        label: "Canonical terminal result",
+        payload: { result: "accepted" },
+        resources: [],
+        source_artifact_locators: [],
+        idempotent: true as const,
+      }
+      const accepted = await publishExpertArtifact({ scope: task.scope, artifact: publication })
+      const row = Database.use((db) =>
+        db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, accepted.locator.artifact_id)).get(),
+      )
+      if (!row || !row.payload || typeof row.payload !== "object") throw new Error("Published Artifact fixture is absent")
+      Database.use((db) =>
+        db.delete(EngineArtifactTable).where(eq(EngineArtifactTable.id, accepted.locator.artifact_id)).run(),
+      )
+      recordEngineArtifact({
+        id: accepted.locator.artifact_id,
+        taskID: task.taskID,
+        kind: "log",
+        label: "Foreign compact identity partition",
+        payload: { occupied: true },
+      })
+
+      let observed: unknown
+      try {
+        await publishExpertArtifact({ scope: task.scope, artifact: publication })
+      } catch (error) {
+        observed = error
+      }
+      expect(observed).toMatchObject({
+        name: EngineArtifactIdentityCollisionError.name,
+        code: "ENGINE_ARTIFACT_IDENTITY_COLLISION",
+        artifactID: accepted.locator.artifact_id,
+      })
+    },
+  })
+}, 60_000)
+
+test("requires a pre-release reset for the legacy expanded idempotent Artifact epoch", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const task = await taskFixture(project.path)
+      const legacyID = `art_idempotent_${"a".repeat(64)}`
+      const accepted = await publishExpertArtifact({
+        scope: task.scope,
+        artifact: {
+          artifact_type: "base/legacy-terminal-result",
+          schema_version: 1,
+          label: "Legacy deterministic Artifact",
+          payload: { result: "legacy" },
+          resources: [],
+          source_artifact_locators: [],
+          idempotent: true,
+        },
+      })
+      const current = Database.use((db) =>
+        db.select().from(EngineArtifactTable).where(eq(EngineArtifactTable.id, accepted.locator.artifact_id)).get(),
+      )
+      if (!current) throw new Error("Compact Artifact fixture is absent")
+      recordEngineArtifact({
+        id: legacyID,
+        taskID: task.taskID,
+        kind: "expert_output",
+        label: "Legacy deterministic Artifact",
+        payload: current.payload,
+      })
+      await Database.awaitEffectIdle(30_000)
+      Database.close()
+
+      let observed: unknown
+      try {
+        Database.Client()
+      } catch (error) {
+        observed = error
+      }
+      expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
+        code: "DATA_RESET_REQUIRED",
+        operation: "Database.Client.dataIntegrity.compactArtifactIdentity",
+      })
+      await Database.resetFiles(Database.Path())
+      Database.Client()
     },
   })
 }, 60_000)

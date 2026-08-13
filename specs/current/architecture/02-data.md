@@ -114,7 +114,13 @@ Completion Decision 的 evidence 或 deliverable 集合；缺少任一项时返�
 替代不可变 `TaskCompletionDecision`。
 
 Expert output publication 在同一个 Artifact 写事务中读取 Task terminal 状态；终态之后只允许内容和
-identity 完全相同的 idempotent replay，拒绝新的不同产物。Mission 创建下游 Task 时只提交一个
+identity 完全相同的 idempotent replay，拒绝新的不同产物。
+idempotent expert output 的业务 ID 由 canonical publication material 经统一 deterministic Identifier
+生成且总长不超过 24；完整 payload SHA-256 继续独立存储并进入 exact locator。若短 ID 已被不同
+canonical material 占用，writer 返回 typed identity-collision error，不得 alias。包含旧
+`art_idempotent_<64hex>` 身份的 pre-release Database 属于不兼容持久化 epoch，bootstrap 在业务读取前
+返回 `DATA_RESET_REQUIRED`；不得同时发行旧、新两套确定性身份或猜测重写 immutable provenance。
+Mission 创建下游 Task 时只提交一个
 discriminated `artifact_sources` 权威集合：completed source 只携带 source Task ID，由 Host 读取当前
 `TaskCompletionDecision` 并原子展开其完整 `deliverable_artifact_locators`；模型不再复制任何 completed
 source locator。failed/cancelled source 没有 CompletionDecision，继续由当前 typed terminal lifecycle
