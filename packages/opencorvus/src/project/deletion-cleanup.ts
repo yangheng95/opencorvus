@@ -166,7 +166,15 @@ export async function cleanupCommittedProjectDeletion(
   for (const target of plan.manifest.targets) {
     try {
       await fs.rm(target.quarantine, { recursive: true, force: true })
-      await Filesystem.syncDirectoryMetadata(path.dirname(target.quarantine))
+      const parent = path.dirname(target.quarantine)
+      try {
+        await Filesystem.syncDirectoryMetadata(parent)
+      } catch (error) {
+        const code = typeof error === "object" && error && "code" in error ? String(error.code) : ""
+        if ((code !== "ENOENT" && code !== "ENOTDIR") || (await pathState(target.quarantine)) !== "absent") {
+          throw error
+        }
+      }
     } catch (error) {
       residue.push({
         path: target.quarantine,
