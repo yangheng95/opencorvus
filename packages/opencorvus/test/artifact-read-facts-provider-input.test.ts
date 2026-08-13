@@ -16,7 +16,19 @@ describe("Artifact read facts from provider Tool input", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const session = await Session.create({ kind: "mission", title: "Provider read facts" })
+        const session = await Session.create({
+          kind: "mission",
+          title: "Provider read facts",
+          metadata: {
+            mission: {
+              id: "provider-read-facts",
+              channelKey: "mission:provider-read-facts",
+              cwd: project.path,
+              productPillar: "code",
+              visibleExpertSquadIDs: ["base"],
+            },
+          },
+        })
         const now = Date.now()
         const taskID = "task-provider-read-facts"
         const locator = {

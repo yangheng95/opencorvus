@@ -54,6 +54,16 @@ import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
 afterEach(resetMemoryDatabase)
 
+function missionLaunchMetadata(missionID: string, directory: string) {
+  return {
+    id: missionID,
+    channelKey: `mission:${missionID}`,
+    cwd: directory,
+    productPillar: "code" as const,
+    visibleExpertSquadIDs: ["base"],
+  }
+}
+
 function persistSourceOccurrence(sessionID: string, messageID: string, partID: string, text: string) {
   const newestMessageTime = Database.use((db) =>
     db
@@ -278,7 +288,7 @@ describe("durable scheduler.message delivery", () => {
         const mission = await Session.create({
           kind: "mission",
           title: "Scheduler Mission",
-          metadata: { mission: { id: missionID } },
+          metadata: { mission: missionLaunchMetadata(missionID, project.path) },
         })
         const taskSession = await Session.create({ kind: "orchestrator", title: "Scheduler Task" })
         const workerSession = await Session.create({
@@ -290,7 +300,7 @@ describe("durable scheduler.message delivery", () => {
         const foreignMission = await Session.create({
           kind: "mission",
           title: "Foreign Mission",
-          metadata: { mission: { id: "mission-foreign" } },
+          metadata: { mission: missionLaunchMetadata("mission-foreign", project.path) },
         })
         const taskID = Identifier.ascending("task")
         const siblingTaskID = Identifier.ascending("task")
@@ -788,7 +798,7 @@ describe("durable scheduler.message delivery", () => {
           kind: "mission",
           title: "Terminal Mission",
           metadata: {
-            mission: { id: "mission-terminal" },
+            mission: missionLaunchMetadata("mission-terminal", project.path),
             configOverlay: { model: "openai/gpt-5.6-sol" },
           },
         })
@@ -914,7 +924,7 @@ describe("durable scheduler.message delivery", () => {
         const mission = await Session.create({
           kind: "mission",
           title: "Recovery order Mission",
-          metadata: { mission: { id: missionID } },
+          metadata: { mission: missionLaunchMetadata(missionID, project.path) },
         })
         const taskRoot = await Session.create({ kind: "orchestrator", title: "Recovery source Task" })
         const taskID = Identifier.ascending("task")
@@ -1025,7 +1035,7 @@ describe("durable scheduler.message delivery", () => {
         const mission = await Session.create({
           kind: "mission",
           title: "Signaled delivery Mission",
-          metadata: { mission: { id: missionID } },
+          metadata: { mission: missionLaunchMetadata(missionID, project.path) },
         })
         const taskRoot = await Session.create({ kind: "orchestrator", title: "Signaled delivery source Task" })
         const taskID = Identifier.ascending("task")
@@ -1090,7 +1100,7 @@ describe("durable scheduler.message delivery", () => {
         const mission = await Session.create({
           kind: "mission",
           title: "Single drain owner Mission",
-          metadata: { mission: { id: missionID } },
+          metadata: { mission: missionLaunchMetadata(missionID, project.path) },
         })
         const taskRoot = await Session.create({ kind: "orchestrator", title: "Single owner source Task" })
         const taskID = Identifier.ascending("task")
@@ -1209,7 +1219,7 @@ describe("durable scheduler.message delivery", () => {
             kind: "mission",
             title: `Concurrent poll Mission ${suffix}`,
             metadata: {
-              mission: { id: missionID },
+              mission: missionLaunchMetadata(missionID, directory),
               configOverlay: { model: "openai/gpt-5.6-sol" },
             },
           })
@@ -1303,7 +1313,7 @@ describe("durable scheduler.message delivery", () => {
           kind: "mission",
           title: "Global delivery recovery Mission",
           metadata: {
-            mission: { id: missionID },
+            mission: missionLaunchMetadata(missionID, project.path),
             configOverlay: { model: "openai/gpt-5.6-sol" },
           },
         })
@@ -1394,7 +1404,7 @@ describe("durable scheduler.message delivery", () => {
             kind: "mission",
             title: `Polling ${suffix} Mission`,
             metadata: {
-              mission: { id: missionID },
+              mission: missionLaunchMetadata(missionID, project.path),
               configOverlay: { model: "openai/gpt-5.6-sol" },
             },
           })
@@ -1548,7 +1558,7 @@ describe("durable scheduler.message delivery", () => {
           kind: "mission",
           title: "Source race Mission",
           metadata: {
-            mission: { id: missionID },
+            mission: missionLaunchMetadata(missionID, project.path),
             configOverlay: { model: "openai/gpt-5.6-sol" },
           },
         })
@@ -1630,7 +1640,7 @@ describe("durable scheduler.message delivery", () => {
         const mission = await Session.create({
           kind: "mission",
           title: "Deleted source Mission",
-          metadata: { mission: { id: missionID } },
+          metadata: { mission: missionLaunchMetadata(missionID, project.path) },
         })
         const taskRoot = await Session.create({ kind: "orchestrator", title: "Surviving recipient Task" })
         const taskID = Identifier.ascending("task")
@@ -1700,7 +1710,7 @@ describe("durable scheduler.message delivery", () => {
         const mission = await Session.create({
           kind: "mission",
           title: "Materialization Mission",
-          metadata: { mission: { id: missionID } },
+          metadata: { mission: missionLaunchMetadata(missionID, project.path) },
         })
         const root = await Session.create({
           kind: "root",

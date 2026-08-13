@@ -205,6 +205,12 @@ transport，不实现第二套 runtime schema、writer、loader 或安装路径�
 Mission launch 把当时授权的精确 ID 集合固定为整个 Mission 的 held-Squad authority。Mission 通过
 每次最多二十项的 `capability_search` 检索该 frozen set，再用 `panel.expert_squad_inspect` 读取一个
 精确 held Squad 的一页 planning guidance；完整 held catalog 从不写入 tool result 或 Session frontier。
+Mission Session 的首次数据库提交就是唯一身份提交：`kind="mission"` 的 Session row 与同事务
+`session.created` occurrence 已携带 canonical `metadata.mission.id`、channel key、cwd、product pillar
+和 immutable held-Squad snapshot。SQLite 对同一 project、directory、Mission ID 只允许一个 row，
+并拒绝缺失或事后改写 Mission ID；进程内锁不是唯一性 authority。`missions/<mission-id>/` runtime
+directory 只是可重试的 derived state，若文件系统创建在 Session 提交后失败，重启会复用同一完整
+Session 再创建目录，不新增或推断 orphan Session。
 Search diagnostics expose only the held count, pillar-filtered visible count, Mission product pillar, catalog revision,
 and bounded result count. A zero result therefore distinguishes held authority, pillar/catalog visibility, and query
 matching without enumerating the held identifiers or broadening the immutable snapshot.
