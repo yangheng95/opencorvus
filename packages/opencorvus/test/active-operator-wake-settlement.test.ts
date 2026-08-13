@@ -2,7 +2,7 @@ import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import { unlink } from "node:fs/promises"
 import { persistEstablishedTask as persistTask } from "./fixture/engine-task"
 import {
-  configureTaskLoopRunner,
+  configureTaskLoopRunner as configureEngineTaskLoopRunner,
   dispatchTaskLoop,
   dispatchPersistedTaskLoop,
   persistQueuedCoordinationWakeInTransaction,
@@ -47,6 +47,7 @@ import { OrchestratorEventSchema } from "@/orchestrator/event"
 import { createTerminalConversationAuthority } from "@/orchestrator/terminal-conversation-authority"
 import { createOrchestratorTools } from "@/orchestrator/tools"
 import { Instance } from "@/project/instance"
+import { InstanceBootstrap } from "@/project/bootstrap"
 import { ProtocolStore } from "@/protocol/store"
 import { Session } from "@/session"
 import { SessionStatus } from "@/session/status"
@@ -73,6 +74,35 @@ const packageRevision = {
   id: "base",
   version: "2026.08.09.1",
   packageDigest: "a".repeat(64),
+}
+
+type TestTaskLoopRunner = Parameters<typeof configureEngineTaskLoopRunner>[0]
+const testTaskLoopRunners = new Map<string, TestTaskLoopRunner>()
+
+function testInstanceKey(directory: string): string {
+  return process.platform === "win32" ? directory.toLowerCase() : directory
+}
+
+function configureTaskLoopRunner(runner: TestTaskLoopRunner): void {
+  testTaskLoopRunners.set(testInstanceKey(Instance.directory), runner)
+  configureEngineTaskLoopRunner(runner)
+}
+
+async function provideTestInstance<R>(input: { directory: string; fn: () => R }): Promise<Awaited<R>> {
+  const key = testInstanceKey(input.directory)
+  using runnerOverride = QueueTestHooks.replaceTaskLoopRunner({
+    directory: input.directory,
+    runner: async (args) => {
+      const runner = testTaskLoopRunners.get(key)
+      if (!runner) throw new Error(`Active operator wake test runner is not configured for ${input.directory}`)
+      return runner(args)
+    },
+  })
+  try {
+    return await Instance.provide({ directory: input.directory, init: InstanceBootstrap, fn: input.fn })
+  } finally {
+    testTaskLoopRunners.delete(key)
+  }
 }
 
 function orchestratorProviderModel(): ProviderType.Model {
@@ -408,7 +438,7 @@ describe.serial("active operator wake settlement", () => {
   })
   test("joins duplicate cancellation calls and commits one terminal cancellation before checkpoint settlement", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -641,7 +671,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("reuses a durable pending cancellation occurrence after process-local ownership is absent", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID } = await createActiveTask({
@@ -749,7 +779,7 @@ describe.serial("active operator wake settlement", () => {
   for (const failureMode of ["zero-row", "exception"] as const) {
     test(`fences cancellation convergence after a ${failureMode} heartbeat failure and resumes its durable request`, async () => {
       await using project = await memoryProject()
-      await Instance.provide({
+      await provideTestInstance({
         directory: project.path,
         fn: async () => {
           const { taskID } = await createActiveTask({
@@ -805,7 +835,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("aborts a late cancellation wait when its convergence heartbeat loses the lease", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID } = await createActiveTask({
@@ -864,7 +894,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("converges existing and later infrastructure wakes under one durable cancellation authority", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID } = await createActiveTask({
@@ -1002,7 +1032,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("preserves a cancelled Task terminal conversation through an idempotent cancellation call", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -1069,12 +1099,12 @@ describe.serial("active operator wake settlement", () => {
 
   test("commits channel binding release with cancellation and routes the same thread to a new Task", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const route = {
           platform: "test",
-          channel: `cancel-route-${Identifier.ascending("channel")}`,
+          channel: `cancel-route-${Identifier.uuid4First8()}`,
           thread: "root",
         }
         const first = await createActiveTask({
@@ -1129,7 +1159,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("retries the same post-terminal auxiliary settlement after a runtime gate rollback", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID } = await createActiveTask({
@@ -1306,7 +1336,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("fences displaced cancellation settlement owners before successor cleanup", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         for (const failureMode of ["owner-steal", "renew-throw"] as const) {
@@ -1453,7 +1483,7 @@ describe.serial("active operator wake settlement", () => {
     await using projectB = await memoryProject()
     let taskB = ""
 
-    await Instance.provide({
+    await provideTestInstance({
       directory: projectB.path,
       fn: async () => {
         taskB = (
@@ -1483,7 +1513,7 @@ describe.serial("active operator wake settlement", () => {
       },
     })
 
-    await Instance.provide({
+    await provideTestInstance({
       directory: projectA.path,
       fn: async () => {
         expect(reconcilePendingCancelledTaskSettlements()).toBe(0)
@@ -1508,7 +1538,7 @@ describe.serial("active operator wake settlement", () => {
       },
     })
 
-    await Instance.provide({
+    await provideTestInstance({
       directory: projectB.path,
       fn: async () => {
         expect(reconcilePendingCancelledTaskSettlements()).toBe(2)
@@ -1546,7 +1576,7 @@ describe.serial("active operator wake settlement", () => {
     let taskID = ""
     let gate!: ReturnType<typeof acquireCancelledTaskSettlementGate>
     let resume!: () => Promise<void>
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         taskID = (
@@ -1585,7 +1615,7 @@ describe.serial("active operator wake settlement", () => {
     settledGate.commit()
     settledGate[Symbol.dispose]()
 
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const settlementOwners = Database.use((db) =>
@@ -1614,7 +1644,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("holds runtime shutdown admission until an in-flight mandatory spawn is tracked and stopped", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID } = await createActiveTask({
@@ -1676,7 +1706,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("delivers one lifecycle occurrence once when the same event is accepted concurrently", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -1723,13 +1753,14 @@ describe.serial("active operator wake settlement", () => {
             .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
             .all(),
         )
+        const lifecycleRows = rows.filter(
+          (row) =>
+            QueuedTaskIngressSchema.parse(row.payload).lifecycle_event_id === event.agentLifecycleDelivery.eventID,
+        )
         expect({
           invocations,
-          occurrences: rows.filter(
-            (row) =>
-              QueuedTaskIngressSchema.parse(row.payload).lifecycle_event_id === event.agentLifecycleDelivery.eventID,
-          ).length,
-          label: rows[0]?.label,
+          occurrences: lifecycleRows.length,
+          label: lifecycleRows[0]?.label,
         }).toEqual({ invocations: 1, occurrences: 1, label: "drained" })
       },
     })
@@ -1737,7 +1768,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("records a typed delivery failure when lifecycle ingress has no assistant settlement", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID } = await createActiveTask({
@@ -1764,7 +1795,13 @@ describe.serial("active operator wake settlement", () => {
           db
             .select({ label: EngineArtifactTable.label, payload: EngineArtifactTable.payload })
             .from(EngineArtifactTable)
-            .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
+            .where(
+              and(
+                eq(EngineArtifactTable.task_id, taskID),
+                eq(EngineArtifactTable.kind, "queued_operator_wake"),
+                sql`json_extract(${EngineArtifactTable.payload}, '$.lifecycle_event_id') = ${event.agentLifecycleDelivery.eventID}`,
+              ),
+            )
             .get(),
         )!
 
@@ -1787,7 +1824,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("settles the owning lifecycle wake before evaluating its terminal delivery phase", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -1863,7 +1900,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("requeues a prior-process running ingress and drains its original occurrence", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -1929,7 +1966,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("retries the exact exhausted terminal Task ingress in the same runtime", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -2086,7 +2123,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("converges a historical non-tail failed ingress into one visible recovery occurrence", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -2198,7 +2235,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("requeues a prior-process running ingress for an ordinary terminal Task and drains its original occurrence", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID } = await createActiveTask({
@@ -2262,7 +2299,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("restores the prior runtime FIFO head before interrupted execution recovery appends new wakes", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -2337,7 +2374,7 @@ describe.serial("active operator wake settlement", () => {
               .where(and(eq(EngineArtifactTable.task_id, taskID), eq(EngineArtifactTable.kind, "queued_operator_wake")))
               .orderBy(EngineArtifactTable.time_created, EngineArtifactTable.id)
               .all(),
-          ).slice(0, 2),
+          ).filter((row) => row.id === firstWakeID || row.id === secondWakeID),
         ).toEqual([
           { id: firstWakeID, label: "drained" },
           { id: secondWakeID, label: "drained" },
@@ -2348,7 +2385,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("settles a delivery-failed root Turn through its pending cancellation occurrence", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -2405,7 +2442,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("terminal conversation reads the exact operator message and persisted Task evidence", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -2517,7 +2554,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("requeues a valid durable ingress while reporting a malformed peer item", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const malformedTask = await createActiveTask({
@@ -2580,7 +2617,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("reconciles a committed active assistant result before requeueing its running ingress", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -2623,7 +2660,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("settles an ownerless running head before admitting a younger active wake", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -2680,27 +2717,28 @@ describe.serial("active operator wake settlement", () => {
             .orderBy(EngineArtifactTable.time_created, EngineArtifactTable.id)
             .all(),
         )
-        expect(wakes).toHaveLength(2)
-        expect(wakes[0]).toMatchObject({
+        const relevantWakes = wakes.filter((wake) => wake.id === oldWakeID || deliveredWakeIDs.includes(wake.id))
+        expect(relevantWakes).toHaveLength(2)
+        expect(relevantWakes[0]).toMatchObject({
           id: oldWakeID,
           label: "drained",
           payload: {
             delivery_result: { status: "completed", assistant_message_id: oldAssistantMessageID },
           },
         })
-        expect(wakes[1]).toMatchObject({
+        expect(relevantWakes[1]).toMatchObject({
           id: deliveredWakeIDs[0],
           label: "drained",
           payload: { delivery_result: { status: "completed" } },
         })
-        expect(deliveredWakeIDs).toEqual([wakes[1]?.id])
+        expect(deliveredWakeIDs).toEqual([relevantWakes[1]?.id])
       },
     })
   })
 
   test("returns an exact persisted running wake after its durable assistant settles the sole head", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -2735,7 +2773,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("reattaches an older ownerless running wake before a younger persisted dispatch", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -2783,7 +2821,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("advances a younger persisted head after exact replay settles an older running wake", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -2842,7 +2880,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("reuses one coordination ingress identity after a typed delivery failure", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -2905,7 +2943,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("persists a historical terminal occurrence without replacing the live Session occurrence", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -2954,7 +2992,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("drains a status response after reading the exact active operator message", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -3004,7 +3042,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("drains an active operator wake after reading the exact message and making a scheduler decision", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -3075,7 +3113,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("drains an operator response that reads the exact message in the same assistant turn", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -3136,7 +3174,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("drains an active operator wake when settlement tools span assistant turns", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -3209,7 +3247,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("drains a current status response without borrowing or requiring a prior scheduler decision", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -3294,7 +3332,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("drains the exact operator intent from its assistant receipt without requiring a named retrieval tool", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -3335,7 +3373,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("drains an operator intent wake after reading superseded messages and making a scheduler decision", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -3408,7 +3446,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("drains a task wait wake with a scheduler decision and no root-message read", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const { taskID, rootSessionID } = await createActiveTask({
@@ -3454,7 +3492,7 @@ describe.serial("active operator wake settlement", () => {
 
   test("settles an armed control Turn after post-commit housekeeping fails without joining its standby owner", async () => {
     await using project = await memoryProject()
-    await Instance.provide({
+    await provideTestInstance({
       directory: project.path,
       fn: async () => {
         const activePackageRevision = await PromptProfileResolver.resolveActivePackageRevision({

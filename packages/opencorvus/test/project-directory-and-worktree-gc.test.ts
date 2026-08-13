@@ -483,7 +483,7 @@ describe("Project directory integrity", () => {
         .run()
       db.insert(DecisionLogTable)
         .values({
-          id: Identifier.ascending("decision"),
+          id: Identifier.ascending("decision_log"),
           task_id: taskID,
           phase: "delete",
           key: "preexisting_authority",
@@ -926,6 +926,41 @@ describe("Project directory integrity", () => {
       manifests: [],
       completed: [path.basename(plan.manifestPath)],
     })
+  }, 90_000)
+
+  test("commits cleanup after the quarantined root parent is already absent", async () => {
+    await using project = await memoryProject()
+    const registered = await Project.fromDirectory(project.path)
+    const source = ProjectRuntimePaths.projectConfigRoot(project.path)
+    await fs.mkdir(source, { recursive: true })
+    const plan = await createProjectDeletionCleanupPlan({
+      projectID: registered.project.id,
+      directory: project.path,
+      sources: [source],
+    })
+    await fs.rename(source, plan.manifest.targets[0]!.quarantine)
+    await fs.rm(project.path, { recursive: true, force: true })
+    Database.use((db) => db.delete(ProjectTable).where(eq(ProjectTable.id, registered.project.id)).run())
+
+    const actualSyncDirectoryMetadata = Filesystem.syncDirectoryMetadata.bind(Filesystem)
+    const syncDirectoryMetadata = spyOn(Filesystem, "syncDirectoryMetadata").mockImplementation(async (directory) => {
+      if (path.resolve(directory) === path.resolve(project.path)) {
+        throw Object.assign(new Error(`missing cleanup parent: ${directory}`), { code: "ENOENT" })
+      }
+      return actualSyncDirectoryMetadata(directory)
+    })
+    try {
+      await withRuntimeOwnership((ownership) => recoverProjectDeletionCleanup(ownership))
+    } finally {
+      syncDirectoryMetadata.mockRestore()
+    }
+
+    expect({
+      active: await fs
+        .readdir(ProjectDeletionCleanupTestHooks.root())
+        .catch((error: NodeJS.ErrnoException) => (error.code === "ENOENT" ? [] : Promise.reject(error))),
+      completed: await fs.readdir(ProjectDeletionCleanupTestHooks.completedRoot()),
+    }).toEqual({ active: [], completed: [path.basename(plan.manifestPath)] })
   }, 90_000)
 
   test("recovers a completed cleanup ledger after the canonical database identity changes", async () => {
