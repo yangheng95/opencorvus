@@ -20,7 +20,7 @@ import { AppDocumentation } from "./routes/documentation"
 import { GlobalRoutes } from "./routes/global"
 import { MDNS } from "./mdns"
 import { muteAISdkWarnings } from "@/runtime/shims"
-import { OverlayUI } from "./overlay-ui"
+import { OverlayUI, freezeDefaultOverlayUiSource, type FrozenOverlayUiSource } from "./overlay-ui"
 import { DEFAULT_SERVER_PORT } from "./defaults"
 import { requestID, serverErrorResponse } from "./error-handler"
 import { RuntimeServerOwnership, RuntimeServerOwnershipHandoffPendingError } from "./runtime-server-ownership"
@@ -76,6 +76,34 @@ export namespace Server {
     mdnsDomain?: string
     cors?: string[]
     randomPort?: boolean
+    overlayUiSource?: FrozenOverlayUiSource
+  }
+
+  export class OverlayUiSourceConflictError extends Error {
+    override readonly name = "OverlayUiSourceConflictError"
+
+    constructor(
+      public readonly configuredIdentity: string,
+      public readonly requestedIdentity: string,
+    ) {
+      super(
+        `The process already bound Overlay UI source ${configuredIdentity}; ` +
+          `it cannot be rebound to ${requestedIdentity}`,
+      )
+    }
+  }
+
+  let configuredOverlayUiSource: FrozenOverlayUiSource | undefined
+
+  function bindOverlayUiSource(requested?: FrozenOverlayUiSource): FrozenOverlayUiSource {
+    if (!configuredOverlayUiSource) {
+      configuredOverlayUiSource = requested ?? freezeDefaultOverlayUiSource()
+      return configuredOverlayUiSource
+    }
+    if (requested && requested.identity !== configuredOverlayUiSource.identity) {
+      throw new OverlayUiSourceConflictError(configuredOverlayUiSource.identity, requested.identity)
+    }
+    return configuredOverlayUiSource
   }
 
   const runtimeTransfers = new WeakMap<
@@ -122,9 +150,7 @@ export namespace Server {
   ) {
     const settlementInactivityTimeoutMilliseconds =
       options.runtimeInactivityTimeoutMilliseconds ?? runtimeSettlementInactivityTimeoutMilliseconds
-    const { RuntimeExecutionSettlement, waitForRuntimeSettlementIdle } = await import(
-      "../runtime/execution-settlement"
-    )
+    const { RuntimeExecutionSettlement, waitForRuntimeSettlementIdle } = await import("../runtime/execution-settlement")
     const startRollbackReceipt = (pending: PendingRuntimeRollbackReceipt): void => {
       if (pending.settled || pending.succeeded) return
       pending.failure = undefined
@@ -211,13 +237,13 @@ export namespace Server {
           waitForIdle(inactivityTimeoutMilliseconds?: number): Promise<void>
           commit(): void
           rollback(): () => Promise<void>
-      })
+        })
       | undefined
     let eventFireSettlementGate:
       | (Disposable & {
           commit(): void
           rollback(): () => Promise<void>
-      })
+        })
       | undefined
     let taskQueueSettlementGate:
       | (Disposable & {
@@ -290,7 +316,10 @@ export namespace Server {
         rollbackFailures.push(rollbackError)
       }
       if (rollbackFailures.length > 0) {
-        throw new AggregateError([error, ...rollbackFailures], "Runtime settlement gate acquisition and rollback failed")
+        throw new AggregateError(
+          [error, ...rollbackFailures],
+          "Runtime settlement gate acquisition and rollback failed",
+        )
       }
       throw error
     }
@@ -313,22 +342,22 @@ export namespace Server {
       runtimeExecutionGate.closeAdmission(["protocol_publication"])
       await schedulerSettlement
       runtimeExecutionGate.requestCancellation(["protocol_publication"], new Error(reason))
-      await runtimeExecutionGate.waitForIdle([
-        "scheduler_event_fire",
-        "scheduler_automation_fire",
-        "session_wake_loop",
-        "task_queue",
-        "task_cancellation",
-        "protocol_publication",
-        "detached_dispatch_pipeline",
-      ], settlementInactivityTimeoutMilliseconds)
+      await runtimeExecutionGate.waitForIdle(
+        [
+          "scheduler_event_fire",
+          "scheduler_automation_fire",
+          "session_wake_loop",
+          "task_queue",
+          "task_cancellation",
+          "protocol_publication",
+          "detached_dispatch_pipeline",
+        ],
+        settlementInactivityTimeoutMilliseconds,
+      )
       await detachedDispatchGate!.waitForIdle()
       runtimeExecutionGate.closeAdmission(["engine_queue_completion"])
       runtimeExecutionGate.requestCancellation(["engine_queue_completion"], new Error(reason))
-      await runtimeExecutionGate.waitForIdle(
-        ["engine_queue_completion"],
-        settlementInactivityTimeoutMilliseconds,
-      )
+      await runtimeExecutionGate.waitForIdle(["engine_queue_completion"], settlementInactivityTimeoutMilliseconds)
       await cancelledTaskSettlementGate!.waitForIdle(settlementInactivityTimeoutMilliseconds)
       const { awaitTaskMessageProtocolBridgeIdle } = await import("../orchestrator/protocol/message-bridge")
       await Database.awaitEffectIdle(settlementInactivityTimeoutMilliseconds)
@@ -336,9 +365,7 @@ export namespace Server {
       instanceSettlementGate = Instance.acquireProcessSettlementGate()
       await instanceSettlementGate.waitForIdle(settlementInactivityTimeoutMilliseconds)
       await options.disposeInstances()
-      const databaseEffectGate = await Database.acquireEffectSettlementGate(
-        settlementInactivityTimeoutMilliseconds,
-      )
+      const databaseEffectGate = await Database.acquireEffectSettlementGate(settlementInactivityTimeoutMilliseconds)
       settlementGates.push(databaseEffectGate)
       await awaitTaskMessageProtocolBridgeIdle()
       const { ProjectGitLock } = await import("../worktree/git-lock")
@@ -571,7 +598,7 @@ export namespace Server {
     const documented = AppRoutes(new Hono())
       .route("/global", GlobalRoutes())
       .route("/auth", AuthRoutes())
-      .route("/ui", OverlayUI.routes())
+      .route("/ui", OverlayUI.routes(Object.freeze({ kind: "missing", identity: "missing" })))
     const routed = documented as unknown as Hono & {
       routes: Array<{ method: string }>
     }
@@ -813,7 +840,7 @@ export namespace Server {
         )
         .route("/global", GlobalRoutes())
         .route("/auth", AuthRoutes())
-        .route("/ui", OverlayUI.routes())
+        .route("/ui", OverlayUI.routes(bindOverlayUiSource()))
         .use(async (c, next) => {
           // Control-plane routes must stay available even if project bootstrap is broken.
           // /favicon.ico is browser-issued before the overlay UI sets the
@@ -864,6 +891,7 @@ export namespace Server {
 
   export function App(): Hono {
     installInProcessClient()
+    bindOverlayUiSource()
     return createApp()
   }
 
@@ -881,21 +909,18 @@ export namespace Server {
     }
   }
 
-  function bindWithRuntimeOwnership(
-    opts: ListenOptions,
-    retainedRuntimeOwnership?: RuntimeServerOwnership.Handle,
-  ) {
+  function bindWithRuntimeOwnership(opts: ListenOptions, retainedRuntimeOwnership?: RuntimeServerOwnership.Handle) {
     /**
      * When true, port=0 maps directly to OS-assigned random port without
      * first attempting DEFAULT_SERVER_PORT. Required by independently
      * managed server instances so they never collide on the default port.
      */
-    const runtimeOwnership =
-      retainedRuntimeOwnership ?? RuntimeServerOwnership.acquire({ database: Database.Path() })
+    const runtimeOwnership = retainedRuntimeOwnership ?? RuntimeServerOwnership.acquire({ database: Database.Path() })
     RuntimeServerOwnership.assertHandleForDatabase(runtimeOwnership, Database.Path())
     let boundServer: ReturnType<typeof Bun.serve> | undefined
     let runtimeStopInstalled = false
     try {
+      bindOverlayUiSource(opts.overlayUiSource)
       configureCorsOrigins(opts.cors)
       if (!retainedRuntimeOwnership) {
         AutomationService.initGlobal()
@@ -1102,10 +1127,7 @@ export namespace Server {
     return RuntimeServerOwnership.acquire({ database: Database.Path() })
   }
 
-  export function listenWithOwnedRuntime(
-    opts: ListenOptions,
-    ownership: RuntimeServerOwnership.Handle,
-  ) {
+  export function listenWithOwnedRuntime(opts: ListenOptions, ownership: RuntimeServerOwnership.Handle) {
     return bindWithRuntimeOwnership(opts, ownership)
   }
 }
