@@ -4,15 +4,15 @@
   "id": "office-delivery",
   "name": "Office Delivery",
   "label": "Office Delivery",
-  "description": "Develops source-backed office artifacts through parallel content and format planning, explicit assembly, and rendered quality review.",
-  "version": "2026.08.13.1",
+  "description": "Develops new source-backed PPTX presentations through parallel content and format planning plus the qualified Work Artifact lifecycle.",
+  "version": "2026.08.13.4",
   "product_pillars": [
     "work"
   ],
   "readme": "README.md",
   "selector": {
-    "summary": "Use for editable documents, spreadsheets, presentations, PDFs, or coordinated office packs that require traceable content and visual acceptance.",
-    "selection_guidance": "Select Office Delivery when the requested outcome is a decision-ready office artifact rather than analysis alone, and both source correctness and rendered usability must be verified.",
+    "summary": "Use for a new editable PPTX presentation that requires traceable content, a real chart, fresh renders, and canonical validation.",
+    "selection_guidance": "Select Office Delivery only for a new PPTX presentation supported by the current office.presentation@1 profile. Do not select it for DOCX, XLSX, PDF, existing-presentation editing, or coordinated multi-format packs until those profiles are qualified.",
     "instructions": "selector.md"
   },
   "capability_projection": {
@@ -69,8 +69,15 @@
         "base_role": "build",
         "prompt": "agents/office-delivery-builder/system.md",
         "inherit_base_tools": true,
-        "built_in_tool_ids": [],
-        "default_skill_refs": [],
+        "built_in_tool_ids": [
+          "work_artifact_inspect",
+          "work_artifact_author",
+          "work_artifact_validate",
+          "work_artifact_deliver"
+        ],
+        "default_skill_refs": [
+          "default/skill/work-artifacts"
+        ],
         "package_skill_refs": [
           "office-delivery/shared/office-delivery-method"
         ],
