@@ -1,4 +1,5 @@
 import { Identifier } from "@/id/id"
+import { isDeepStrictEqual } from "node:util"
 import { Database, and, desc, eq, inArray, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { Event } from "./model"
@@ -44,7 +45,14 @@ import {
 } from "@/research/schema"
 import { ResearchPartialDraftSchema, type ResearchPartialDraft } from "@/research/output-tools"
 import { renderSpecsAsText } from "@/acceptance/types"
-import type { RequirementSet } from "@/requirements/types"
+import {
+  RequirementCoverageDeclarationSchema,
+  RequirementCoverageReceiptSchema,
+  RequirementSetArtifactPayloadSchema,
+  RequirementSetSchema,
+  type RequirementCoverageIssue,
+  type RequirementSet,
+} from "@/requirements/types"
 import { IntentAnalysisArtifactPayloadSchema, type IntentAnalysisArtifactPayload } from "@/intent-analysis/artifact"
 import { assertTaskAssistantProducerMessage } from "./producer-turn"
 import {
@@ -68,6 +76,10 @@ import { researchEvidenceRefsForArtifactLocators } from "@/research/evidence-ref
 import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod"
 import { classifyArchitectReferenceIntegrity } from "@/architect/reference-integrity"
+import { artifactProvenanceForAgentTurn } from "@/agent/artifact-read-facts"
+import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
+import { findDispatchLineageByDispatchID } from "./dispatch-lineage"
+import { taskRequestSHA256 } from "@/orchestrator/dispatch-turn-projection"
 
 type EngineDatabaseConnection = Parameters<Parameters<typeof Database.transaction>[0]>[0]
 
@@ -139,26 +151,128 @@ export function persistRequirementSet(
   db: Database.TxOrDb,
   input: {
     taskID: string
+    sessionID: string
+    finalMessageID: string
+    dispatchID: string
     requirementSet: RequirementSet
-    observedArtifactLocators?: ArtifactReadLocator[]
-    sourceArtifactLocators?: ArtifactReadLocator[]
+    finalization?: unknown
     now: number
   },
-) {
+): {
+  locator: EngineArtifactLocator
+  deliveryStatus: "complete" | "incomplete"
+} {
+  const descriptor = WorkerTurnDescriptor.findForDispatch({
+    sessionID: input.sessionID,
+    dispatchID: input.dispatchID,
+  })
+  if (!descriptor) {
+    throw new Error(
+      `Requirements dispatch ${input.dispatchID} has no Worker Turn descriptor in Session ${input.sessionID}.`,
+    )
+  }
+  if (descriptor.payload.lifecycle.taskID !== input.taskID) {
+    throw new Error(
+      `Requirements Worker Turn ${descriptor.id} belongs to Task ${descriptor.payload.lifecycle.taskID}, not ${input.taskID}.`,
+    )
+  }
+  const lineage = findDispatchLineageByDispatchID({ taskID: input.taskID, dispatchID: input.dispatchID })
+  if (!lineage || lineage.payload.child_session_id !== input.sessionID) {
+    throw new Error(`Requirements dispatch ${input.dispatchID} has no exact child Session lineage for ${input.sessionID}.`)
+  }
+  const producer = assertTaskAssistantProducerMessage({
+    taskID: input.taskID,
+    sessionID: input.sessionID,
+    messageID: input.finalMessageID,
+    expectedSessionKind: "requirements",
+    requireCompleted: true,
+  })
+  if (producer.parentID !== descriptor.payload.messageAuthority.user_message_id) {
+    throw new Error(
+      `Requirements final Message ${input.finalMessageID} is not the completed Turn for dispatch ${input.dispatchID}.`,
+    )
+  }
+  const task = db
+    .select({ request: EngineTaskTable.request })
+    .from(EngineTaskTable)
+    .where(eq(EngineTaskTable.id, input.taskID))
+    .get()
+  if (!task) throw new Error(`Requirements Task not found: ${input.taskID}`)
+  const requirementSet = RequirementSetSchema.parse(input.requirementSet)
+  const provenance = artifactProvenanceForAgentTurn(input.sessionID, input.finalMessageID)
+  const declaration = input.finalization === undefined
+    ? null
+    : RequirementCoverageDeclarationSchema.parse(input.finalization)
+  const requestSHA256 = taskRequestSHA256(task.request)
+  const requirementIDs = requirementSet.requirements.map((requirement) => requirement.id).sort()
+  const sourceLocators = [...provenance.sourceArtifactLocators].sort((left, right) =>
+    JSON.stringify(left).localeCompare(JSON.stringify(right)),
+  )
+  const declaredRequirementIDs = [...(declaration?.requirement_ids ?? [])].sort()
+  const declaredSourceLocators = [...(declaration?.source_artifact_locators ?? [])].sort((left, right) =>
+    JSON.stringify(left).localeCompare(JSON.stringify(right)),
+  )
+  const durableSourceIdentities = new Set(sourceLocators.map((locator) => JSON.stringify(locator)))
+  const requirementEvidenceMatchesTurn = requirementSet.requirements.every((requirement) =>
+    requirement.evidence_refs.every((locator) => durableSourceIdentities.has(JSON.stringify(locator))),
+  )
+  const issues: RequirementCoverageIssue[] = []
+  if (!declaration) issues.push("finalization_missing")
+  if (declaration?.status === "incomplete") issues.push("declared_incomplete")
+  if (requirementIDs.length === 0) issues.push("no_requirements_registered")
+  if (declaration && declaration.request_sha256 !== requestSHA256) issues.push("request_identity_mismatch")
+  if (declaration && !isDeepStrictEqual(declaredRequirementIDs, requirementIDs)) {
+    issues.push("requirement_identity_mismatch")
+  }
+  if (declaration && !isDeepStrictEqual(declaredSourceLocators, sourceLocators)) {
+    issues.push("source_identity_mismatch")
+  }
+  if (!requirementEvidenceMatchesTurn) issues.push("requirement_evidence_identity_mismatch")
+  if ((declaration?.unresolved.length ?? 0) > 0) issues.push("unresolved_items")
+  const deliveryStatus = issues.length === 0 ? "complete" : "incomplete"
+  const coverageReceipt = RequirementCoverageReceiptSchema.parse({
+    status: deliveryStatus,
+    request_sha256: requestSHA256,
+    requirement_ids: requirementIDs,
+    source_artifact_locators: sourceLocators,
+    unresolved: declaration?.unresolved ?? [],
+    issues,
+    declaration,
+  })
   const id = Identifier.ascending("artifact")
-  const provenance = artifactConsumptionProvenance(input)
   insertEngineArtifact(db, {
     id,
     taskID: input.taskID,
     kind: "requirement_set",
     label: "RequirementSet",
-    payload: {
-      ...input.requirementSet,
-      ...provenance,
-    },
+    payload: RequirementSetArtifactPayloadSchema.parse({
+      schema_version: 2,
+      ...requirementSet,
+      producer: {
+        session_id: input.sessionID,
+        final_message_id: input.finalMessageID,
+      },
+      coverage_receipt: coverageReceipt,
+      observed_artifact_locators: provenance.observedArtifactLocators,
+      source_artifact_locators: provenance.sourceArtifactLocators,
+    }),
     timeCreated: input.now,
   })
-  return id
+  const row = db
+    .select({ revision: EngineArtifactTable.catalog_revision, sha256: EngineArtifactTable.payload_sha256 })
+    .from(EngineArtifactTable)
+    .where(eq(EngineArtifactTable.id, id))
+    .get()
+  if (!row) throw new Error(`RequirementSet Artifact ${id} was not persisted`)
+  return {
+    locator: {
+      source: "engine_artifact",
+      artifact_id: id,
+      catalog_revision: row.revision,
+      expected_sha256: row.sha256,
+    },
+    deliveryStatus,
+  }
 }
 
 export function persistIntentAnalysisArtifact(

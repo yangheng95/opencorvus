@@ -12,9 +12,15 @@
  */
 import { tool } from "ai"
 import z from "zod"
-import { ArtifactReadLocatorSchema } from "@opencorvus-ai/plugin/artifact-catalog"
 import type { DecisionLog } from "@/decision-log"
-import { RequirementDeclaredIDSchema } from "./types"
+import {
+  RequirementCoverageDeclarationSchema,
+  RequirementSchema,
+  RequirementsDecisionSchema,
+  type ParsedRequirement,
+  type RequirementCoverageDeclaration,
+  type RequirementsDecision,
+} from "./types"
 import { bindStageToolMaterializer } from "@/agent/stage-tool-materializer"
 import { createDecisionLog } from "@/decision-log/index"
 
@@ -25,22 +31,11 @@ import { createDecisionLog } from "@/decision-log/index"
 export interface RequirementsCollector {
   requirements: RegisteredRequirement[]
   decisions: RegisteredDecision[]
+  finalization?: RequirementCoverageDeclaration
 }
 
-export interface RegisteredRequirement {
-  id: string
-  type: "explicit" | "implicit"
-  description: string
-  acceptance: string
-  non_goals: string
-  evidence_refs: Array<z.infer<typeof ArtifactReadLocatorSchema>>
-}
-
-export interface RegisteredDecision {
-  key: string
-  value: string
-  reason: string
-}
+export type RegisteredRequirement = ParsedRequirement
+export type RegisteredDecision = RequirementsDecision
 
 export interface RequirementsOutputToolOptions {
   taskID?: string
@@ -71,12 +66,12 @@ export function materializeRequirementsRegisterDecisionTool(
 
 export const RequirementRegistrationSchema = z
   .object({
-    id: RequirementDeclaredIDSchema.describe("Requirement ID in REQ-N format, e.g. REQ-1"),
-    type: z.enum(["explicit", "implicit"]).describe("explicit = directly stated, implicit = logically required"),
-    description: z.string().trim().min(5).describe("What the requirement asks for"),
-    acceptance: z.string().trim().min(1).describe("One observable success condition for this REQ-N"),
-    non_goals: z.string().trim().min(1).describe("One nearby behavior this REQ-N does not cover"),
-    evidence_refs: z.array(ArtifactReadLocatorSchema).default([]).describe(
+    id: RequirementSchema.shape.id.describe("Requirement ID in REQ-N format, e.g. REQ-1"),
+    type: RequirementSchema.shape.type.describe("explicit = directly stated, implicit = logically required"),
+    description: RequirementSchema.shape.description.describe("What the requirement asks for"),
+    acceptance: RequirementSchema.shape.acceptance.describe("One observable success condition for this REQ-N"),
+    non_goals: RequirementSchema.shape.non_goals.describe("One nearby behavior this REQ-N does not cover"),
+    evidence_refs: RequirementSchema.shape.evidence_refs.default([]).describe(
       "Exact Task Artifact locators that support this requirement. Include only locators this Requirements Agent discovered with artifact_search, read completely with artifact_read, and declared with artifact_select. Empty when the requirement does not depend on another durable Artifact.",
     ),
   })
@@ -84,15 +79,13 @@ export const RequirementRegistrationSchema = z
 
 export const DecisionRegistrationSchema = z
   .object({
-    key: z
-      .string()
-      .min(1)
-      .describe("Decision key, e.g. runtime, backend_framework, test_framework, user_workflows, visual_surfaces"),
-    value: z
-      .string()
-      .min(1)
-      .describe("Decision value, e.g. Bun, Hono, bun:test, or a concise comma/semicolon-separated inventory"),
-    reason: z.string().describe("Why this decision was made (based on codebase evidence)"),
+    key: RequirementsDecisionSchema.shape.key.describe(
+      "Decision key, e.g. runtime, backend_framework, test_framework, user_workflows, visual_surfaces",
+    ),
+    value: RequirementsDecisionSchema.shape.value.describe(
+      "Decision value, e.g. Bun, Hono, bun:test, or a concise comma/semicolon-separated inventory",
+    ),
+    reason: RequirementsDecisionSchema.shape.reason.describe("Why this decision was made (based on codebase evidence)"),
   })
   .strict()
 
@@ -136,6 +129,18 @@ export function createRequirementsOutputTools(options: RequirementsOutputToolOpt
             return `OK: decision "${key}=${value}" registered`
           },
         }),
+    finalize_requirements: tool({
+      description:
+        "Finalize the typed Requirements coverage declaration exactly once after registering every requirement and decision. " +
+        "Bind the current request SHA-256, exact registered REQ-N identities, exact selected source Artifact locators, and every unresolved item. " +
+        "Declare complete only when no unresolved coverage remains.",
+      inputSchema: RequirementCoverageDeclarationSchema,
+      execute: async (raw) => {
+        if (collector.finalization) return "Error: Requirements coverage was already finalized for this Turn"
+        collector.finalization = RequirementCoverageDeclarationSchema.parse(raw)
+        return `OK: Requirements coverage declared ${collector.finalization.status}`
+      },
+    }),
   }
 
   return {

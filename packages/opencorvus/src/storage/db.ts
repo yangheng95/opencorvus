@@ -244,6 +244,30 @@ function cancellationEventView(
  * database becomes available to any route.
  */
 function assertCurrentDataIntegrity(sqlite: BunDatabase, dbPath: string): void {
+  const legacyRequirementSet = queryAllFinalized<{ id: string }>(
+    sqlite,
+    `SELECT id
+     FROM engine_artifact
+     WHERE kind = 'requirement_set'
+       AND CASE
+         WHEN json_valid(payload) = 0 THEN 1
+         WHEN json_extract(payload, '$.schema_version') IS NOT 2 THEN 1
+         ELSE 0
+       END = 1
+     ORDER BY id
+     LIMIT 1`,
+  )[0]
+  if (legacyRequirementSet) {
+    throw new DatabaseUnavailableError({
+      message:
+        `OpenCorvus database contains pre-coverage RequirementSet Artifact ${legacyRequirementSet.id} at ${dbPath}. ` +
+        "Its immutable producer and coverage receipt cannot be reconstructed; reset this pre-release database.",
+      path: dbPath,
+      operation: "Database.Client.dataIntegrity.requirementSetCoverage",
+      code: "DATA_RESET_REQUIRED",
+    })
+  }
+
   const tasks = queryAllFinalized<{ id: string }>(
     sqlite,
     `SELECT id
