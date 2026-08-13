@@ -6,7 +6,7 @@ import { EngineArtifactTable } from "@/engine/engine.sql"
 import { deriveTaskStatus, isTaskActive } from "@/engine/task-status"
 import { QueuedTaskIngressSchema } from "@/engine/queued-task-ingress"
 import { Identifier } from "@/id/id"
-import { MessageTable, PartTable, SessionTable } from "@/session/session.sql"
+import { MessageTable, PartTable, SessionControlRecordTable, SessionTable } from "@/session/session.sql"
 import { and, asc, Database, eq, inArray, lte, or, sql } from "@/storage/db"
 import { TaskCreatorMetadata } from "@/task-api/task-creator"
 import { ProtocolEventTable, ProtocolInboxTable } from "./protocol.sql"
@@ -73,11 +73,6 @@ function requireTaskTargetActive(
   return task
 }
 
-function digestID(prefix: "protocol_event" | "protocol_inbox", material: string): string {
-  const marker = prefix === "protocol_event" ? "pev_scheduler_" : "pib_scheduler_"
-  return `${marker}${createHash("sha256").update(material).digest("hex")}`
-}
-
 export function schedulerDeliveryIdentity(input: {
   invocationID: string
   kind: z.input<typeof SchedulerMessageKind>
@@ -88,16 +83,38 @@ export function schedulerDeliveryIdentity(input: {
   const target = SchedulerEndpoint.parse(input.target)
   const kind = SchedulerMessageKind.parse(input.kind)
   const identityMaterial = JSON.stringify({ source, target, invocationID: input.invocationID, kind })
-  const eventID = digestID("protocol_event", identityMaterial)
-  return { eventID, inboxID: digestID("protocol_inbox", eventID) }
+  const eventID = Identifier.deterministic("protocol_event", `scheduler-delivery\0${identityMaterial}`)
+  return {
+    eventID,
+    inboxID: Identifier.deterministic("protocol_inbox", `scheduler-delivery\0${eventID}`),
+  }
 }
 
 export function schedulerTargetOccurrenceIdentity(inboxID: string) {
-  const digest = createHash("sha256").update(inboxID).digest("hex")
   return {
-    messageID: `msg_scheduler_${digest}`,
-    textPartID: `prt_scheduler_${digest}`,
-    controlID: `sctl_scheduler_${digest}`,
+    messageID: Identifier.deterministic("message", `scheduler-delivery\0${inboxID}`),
+    textPartID: Identifier.deterministic("part", `scheduler-delivery\0${inboxID}`),
+    controlID: Identifier.deterministic("session_control", `scheduler-delivery\0${inboxID}`),
+  }
+}
+
+/** Fail closed before generic Session upserts can alias a different compact occurrence. */
+export function assertSchedulerTargetOccurrenceAvailableInTransaction(
+  db: Database.TxOrDb,
+  input: { inboxID: string; messageID: string; textPartID: string; controlID: string },
+) {
+  Database.requireActiveTransaction("assertSchedulerTargetOccurrenceAvailableInTransaction")
+  const message = db.select().from(MessageTable).where(eq(MessageTable.id, input.messageID)).get()
+  const part = db.select().from(PartTable).where(eq(PartTable.id, input.textPartID)).get()
+  const control = db
+    .select()
+    .from(SessionControlRecordTable)
+    .where(eq(SessionControlRecordTable.id, input.controlID))
+    .get()
+  if (message || part || control) {
+    throw new SchedulerMessageConflictError({
+      message: `Scheduler inbox ${input.inboxID} target occurrence identity is already occupied.`,
+    })
   }
 }
 
@@ -724,14 +741,29 @@ export function enqueueSchedulerMessageInTransaction(
     source,
     target,
   })
+  const recipient = endpointRecipient(target)
+  const expectedEventKind = kind === "request" ? "command" : kind === "reply" ? "reply" : "event"
+  const expectedSessionID = target.kind === "mission_scheduler" ? target.session_id : target.root_session_id
+  const expectedCausationID = input.replyTo ?? input.sourceTerminalEventID ?? null
   const existingInbox = db.select().from(ProtocolInboxTable).where(eq(ProtocolInboxTable.id, inboxID)).get()
-  if (existingInbox) {
-    const existingEvent = db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.id, eventID)).get()
+  const existingEvent = db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.id, eventID)).get()
+  if (existingInbox || existingEvent) {
     if (
+      !existingInbox ||
       !existingEvent ||
+      existingInbox.envelope_id !== eventID ||
+      existingInbox.actor !== recipient.actor ||
+      existingInbox.actor_id !== recipient.actorID ||
+      existingEvent.kind !== expectedEventKind ||
+      existingEvent.type !== SCHEDULER_MESSAGE_EVENT_TYPE ||
+      existingEvent.aggregate_type !== recipient.aggregate ||
+      existingEvent.aggregate_id !== recipient.aggregateID ||
+      existingEvent.task_id !== null ||
+      existingEvent.session_id !== expectedSessionID ||
       existingEvent.source !== encodeSchedulerEndpoint(source) ||
       existingEvent.target !== encodeSchedulerEndpoint(target) ||
       existingEvent.correlation_id !== correlationID ||
+      existingEvent.causation_id !== expectedCausationID ||
       existingEvent.reply_to !== (input.replyTo ?? null)
     ) {
       throw new SchedulerMessageConflictError({
@@ -739,8 +771,16 @@ export function enqueueSchedulerMessageInTransaction(
         eventID,
       })
     }
-    const payload = SchedulerMessagePayload.parse(existingEvent.payload)
+    const parsedPayload = SchedulerMessagePayload.safeParse(existingEvent.payload)
+    if (!parsedPayload.success) {
+      throw new SchedulerMessageConflictError({
+        message: `Scheduler invocation ${input.invocationID} conflicts with its persisted delivery.`,
+        eventID,
+      })
+    }
+    const payload = parsedPayload.data
     if (
+      payload.invocation_id !== input.invocationID ||
       payload.message_kind !== kind ||
       payload.thread_id !== threadID ||
       payload.subject !== input.subject ||
@@ -795,10 +835,10 @@ export function enqueueSchedulerMessageInTransaction(
     targetTaskOccurrenceStartedAt,
   })
 
-  const recipient = endpointRecipient(target)
   const now = input.now ?? Date.now()
   const payload = SchedulerMessagePayload.parse({
     protocol: "scheduler-message-v2",
+    invocation_id: input.invocationID,
     message_kind: kind,
     thread_id: threadID,
     source_message_id: input.sourceMessageID,
@@ -811,7 +851,7 @@ export function enqueueSchedulerMessageInTransaction(
   })
   ProtocolStore.appendEventInTransaction({
     id: eventID,
-    kind: kind === "request" ? "command" : kind === "reply" ? "reply" : "event",
+    kind: expectedEventKind,
     type: SCHEDULER_MESSAGE_EVENT_TYPE,
     aggregate: recipient.aggregate,
     aggregate_id: recipient.aggregateID,
@@ -819,11 +859,11 @@ export function enqueueSchedulerMessageInTransaction(
     // optional projection null prevents physical Task deletion from cascading
     // away the scheduler audit event and its typed inbox disposition.
     task_id: null,
-    session_id: target.kind === "mission_scheduler" ? target.session_id : target.root_session_id,
+    session_id: expectedSessionID,
     source: encodeSchedulerEndpoint(source),
     target: encodeSchedulerEndpoint(target),
     correlation_id: correlationID,
-    causation_id: input.replyTo ?? input.sourceTerminalEventID ?? null,
+    causation_id: expectedCausationID,
     reply_to: input.replyTo ?? null,
     emitted_at: now,
     payload,

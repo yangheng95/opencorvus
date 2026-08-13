@@ -9,6 +9,7 @@ import { SessionWake } from "@/session/wake"
 import { EngineService } from "@/task-api"
 import { ProtocolStore } from "./store"
 import {
+  assertSchedulerTargetOccurrenceAvailableInTransaction,
   claimNextSchedulerDelivery,
   deadLetterSchedulerDelivery,
   decodeSchedulerEndpoint,
@@ -25,6 +26,7 @@ import {
   schedulerTargetOccurrenceIdentity,
   schedulerSourceBodyInTransaction,
   settleUnansweredSchedulerMissionWakeForClosure,
+  SchedulerMessageConflictError,
   SchedulerTargetOccurrenceStaleError,
   settleSchedulerDeliveryInTransaction,
   type SchedulerDeliveryReceipt,
@@ -233,6 +235,23 @@ async function drainMissionRecipient(sessionID: string): Promise<void> {
                 result: { kind: "session_wake", message_id: userMessage.id },
               })
             })
+          },
+          preflightBundle: (userMessage, parts) => {
+            const textPart = parts.find((part) => part.id === ids.textPartID)
+            if (!textPart) {
+              throw new SchedulerMessageConflictError({
+                message: `Scheduler inbox ${delivery.id} did not materialize its exact text Part.`,
+                eventID: delivery.event.id,
+              })
+            }
+            Database.use((db) =>
+              assertSchedulerTargetOccurrenceAvailableInTransaction(db, {
+                inboxID: delivery.id,
+                messageID: userMessage.id,
+                textPartID: textPart.id,
+                controlID: ids.controlID,
+              }),
+            )
           },
         })
       })

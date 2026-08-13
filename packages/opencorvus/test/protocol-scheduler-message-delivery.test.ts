@@ -26,7 +26,7 @@ import { ProtocolEventTable, ProtocolInboxTable } from "@/protocol/protocol.sql"
 import { SchedulerMessagePayload } from "@/protocol/schema"
 import { ProtocolStore } from "@/protocol/store"
 import { Session } from "@/session"
-import { MessageTable, PartTable, SessionTable } from "@/session/session.sql"
+import { MessageTable, PartTable, SessionControlRecordTable, SessionTable } from "@/session/session.sql"
 import { Database, DatabaseEffectAdmissionClosedError, DatabaseUnavailableError, asc, eq } from "@/storage/db"
 import { RuntimeExecutionAdmissionClosedError } from "@/runtime/execution-settlement"
 import { writeTaskUpdateInTransaction } from "@/engine/state"
@@ -200,6 +200,354 @@ async function persistRunnerReply(input: {
 }
 
 describe("durable scheduler.message delivery", () => {
+  test("derives one compact domain-separated scheduler delivery occurrence graph", () => {
+    const input = {
+      invocationID: "compact-scheduler-delivery",
+      kind: "request" as const,
+      source: {
+        kind: "mission_scheduler" as const,
+        project_id: "prj_compact-source",
+        mission_id: "mission-compact-source",
+        session_id: "ses_compact-source",
+      },
+      target: {
+        kind: "task_scheduler" as const,
+        project_id: "prj_compact-source",
+        task_id: "tsk_compact-target",
+        root_session_id: "ses_compact-target",
+      },
+    }
+    const first = schedulerDeliveryIdentity(input)
+    const replay = schedulerDeliveryIdentity(input)
+    const target = schedulerTargetOccurrenceIdentity(first.inboxID)
+    const identities = [first.eventID, first.inboxID, target.messageID, target.textPartID, target.controlID]
+    expect(replay).toEqual(first)
+    expect(new Set(identities)).toHaveLength(5)
+    expect(identities.every((identity) => identity.length <= Identifier.MAX_LENGTH)).toBe(true)
+    expect({
+      event: Identifier.isCanonical("protocol_event", first.eventID),
+      inbox: Identifier.isCanonical("protocol_inbox", first.inboxID),
+      message: Identifier.isCanonical("message", target.messageID),
+      part: Identifier.isCanonical("part", target.textPartID),
+      control: Identifier.isCanonical("session_control", target.controlID),
+    }).toEqual({ event: true, inbox: true, message: true, part: true, control: true })
+  })
+
+  for (const legacyFamily of ["event", "inbox", "message", "part", "control"] as const)
+    test(`requires a pre-release reset for an expanded scheduler delivery ${legacyFamily} identity`, async () => {
+      await using project = await memoryProject()
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const session = await Session.create({ kind: "assistant", title: "Legacy scheduler identity" })
+          const now = Date.now()
+          const eventID =
+            legacyFamily === "event" ? `pev_scheduler_${"a".repeat(64)}` : Identifier.ascending("protocol_event")
+          const inboxID =
+            legacyFamily === "inbox" ? `pib_scheduler_${"b".repeat(64)}` : Identifier.ascending("protocol_inbox")
+          const messageID = Identifier.ascending("message")
+          const expanded =
+            legacyFamily === "event"
+              ? eventID
+              : legacyFamily === "inbox"
+                ? `pib_scheduler_${"b".repeat(64)}`
+                : legacyFamily === "message"
+                  ? `msg_scheduler_${"c".repeat(64)}`
+                  : legacyFamily === "part"
+                    ? `prt_scheduler_${"d".repeat(64)}`
+                    : `sctl_scheduler_${"e".repeat(64)}`
+          Database.transaction((db) => {
+            ProtocolStore.appendEventInTransaction({
+              id: eventID,
+              kind: "event",
+              type: "scheduler.message",
+              aggregate: "session",
+              aggregate_id: session.id,
+              task_id: null,
+              session_id: session.id,
+              source: "scheduler-endpoint:{}",
+              target: "scheduler-endpoint:{}",
+              correlation_id: "legacy-scheduler-delivery",
+              payload: {
+                protocol: "scheduler-message-v2",
+                invocation_id: "legacy-scheduler-delivery",
+                message_kind: "notification",
+                thread_id: "legacy-scheduler-delivery",
+                source_message_id: Identifier.ascending("message"),
+                source_part_id: Identifier.ascending("part"),
+                source_task_occurrence_started_at: null,
+                target_task_occurrence_started_at: null,
+                source_body_sha256: "f".repeat(64),
+                subject: "Legacy scheduler occurrence",
+              },
+            })
+            if (legacyFamily === "event") return
+            db.insert(ProtocolInboxTable)
+              .values({
+                id: inboxID,
+                envelope_id: eventID,
+                actor: "session",
+                actor_id: session.id,
+                visible_at: now,
+                time_created: now,
+                time_updated: now,
+              })
+              .run()
+            if (legacyFamily === "inbox") return
+            if (legacyFamily === "message") {
+              db.insert(MessageTable)
+                .values({
+                  id: expanded,
+                  session_id: session.id,
+                  data: {
+                    role: "user",
+                    author: "mission",
+                    extra: {
+                      wake_reason: { source: "scheduler.message", eventID, inboxID },
+                    },
+                  } as never,
+                  time_created: now,
+                  time_updated: now,
+                })
+                .run()
+              return
+            }
+            db.insert(MessageTable)
+              .values({
+                id: messageID,
+                session_id: session.id,
+                data: {
+                  role: "user",
+                  author: "mission",
+                  extra: {
+                    wake_reason: { source: "scheduler.message", eventID, inboxID },
+                  },
+                } as never,
+                time_created: now,
+                time_updated: now,
+              })
+              .run()
+            if (legacyFamily === "part") {
+              db.insert(PartTable)
+                .values({
+                  id: expanded,
+                  message_id: messageID,
+                  session_id: session.id,
+                  data: { type: "text", text: "legacy scheduler occurrence" } as never,
+                  time_created: now,
+                  time_updated: now,
+                })
+                .run()
+              return
+            }
+            db.insert(SessionControlRecordTable)
+              .values({
+                id: expanded,
+                session_id: session.id,
+                kind: "wake_reason",
+                status: "consumed",
+                owner: "scheduler.message",
+                payload: { messageID, wake_reason: { source: "scheduler.message", eventID, inboxID } },
+                time_created: now,
+                time_updated: now,
+                time_consumed: now,
+              })
+              .run()
+          })
+          await Database.awaitEffectIdle(30_000)
+          Database.close()
+          let observed: unknown
+          try {
+            Database.Client()
+          } catch (error) {
+            observed = error
+          }
+          expect(DatabaseUnavailableError.isInstance(observed) ? observed.data : undefined).toMatchObject({
+            code: "DATA_RESET_REQUIRED",
+            operation: "Database.Client.dataIntegrity.compactSchedulerDeliveryIdentity",
+            message: expect.stringContaining(expanded),
+          })
+          await Database.resetFiles(Database.Path())
+          Database.Client()
+        },
+      })
+    }, 60_000)
+
+  test("keeps caller-supplied expanded scheduler-like identities outside the scheduler occurrence graph", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const session = await Session.create({ kind: "assistant", title: "Foreign scheduler-like identities" })
+        const now = Date.now()
+        const messageID = `msg_scheduler_${"c".repeat(64)}`
+        Database.transaction((db) => {
+          const event = ProtocolStore.appendEventInTransaction({
+            id: `pev_scheduler_${"a".repeat(64)}`,
+            kind: "event",
+            type: "foreign.scheduler.identity",
+            aggregate: "session",
+            aggregate_id: session.id,
+            session_id: session.id,
+            source: "foreign-caller",
+          })
+          db.insert(ProtocolInboxTable)
+            .values({
+              id: `pib_scheduler_${"b".repeat(64)}`,
+              envelope_id: event.id,
+              actor: "session",
+              actor_id: session.id,
+              visible_at: now,
+              time_created: now,
+              time_updated: now,
+            })
+            .run()
+          db.insert(MessageTable)
+            .values({
+              id: messageID,
+              session_id: session.id,
+              data: { role: "user", author: "external" } as never,
+              time_created: now,
+              time_updated: now,
+            })
+            .run()
+          db.insert(PartTable)
+            .values({
+              id: `prt_scheduler_${"d".repeat(64)}`,
+              message_id: messageID,
+              session_id: session.id,
+              data: { type: "text", text: "foreign caller material" } as never,
+              time_created: now,
+              time_updated: now,
+            })
+            .run()
+          db.insert(SessionControlRecordTable)
+            .values({
+              id: `sctl_scheduler_${"e".repeat(64)}`,
+              session_id: session.id,
+              kind: "wake_reason",
+              status: "consumed",
+              owner: "external",
+              payload: { messageID },
+              time_created: now,
+              time_updated: now,
+              time_consumed: now,
+            })
+            .run()
+        })
+        await Database.awaitEffectIdle(30_000)
+        Database.close()
+        expect(Database.Client()).toBeDefined()
+      },
+    })
+  }, 60_000)
+
+  for (const occupied of ["event", "inbox"] as const)
+    test(`rejects compact scheduler delivery ${occupied} occupancy with a typed conflict`, async () => {
+      await using project = await memoryProject()
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const missionID = "mission-scheduler-identity-collision"
+          const mission = await Session.create({
+            kind: "mission",
+            title: "Scheduler collision Mission",
+            metadata: { mission: missionLaunchMetadata(missionID, project.path) },
+          })
+          const target = await Session.create({ kind: "orchestrator", title: "Scheduler collision Task" })
+          const taskID = Identifier.ascending("task")
+          const now = Date.now()
+          Database.use((db) =>
+            db
+              .insert(EngineTaskTable)
+              .values({
+                id: taskID,
+                project_id: Instance.project.id,
+                session_id: target.id,
+                source: "mission",
+                product_pillar: "code",
+                title: "Scheduler collision Task",
+                request: "Reject compact scheduler delivery identity occupancy",
+                metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+                time_started: now,
+                time_created: now,
+                time_updated: now,
+              })
+              .run(),
+          )
+          const sourceMessageID = Identifier.ascending("message")
+          const sourcePartID = Identifier.ascending("part")
+          persistSourceOccurrence(mission.id, sourceMessageID, sourcePartID, "Scheduler collision source")
+          const input = {
+            invocationID: `scheduler-${occupied}-collision`,
+            kind: "request" as const,
+            source: {
+              kind: "mission_scheduler" as const,
+              project_id: Instance.project.id,
+              mission_id: missionID,
+              session_id: mission.id,
+            },
+            target: {
+              kind: "task_scheduler" as const,
+              project_id: Instance.project.id,
+              task_id: taskID,
+              root_session_id: target.id,
+            },
+            subject: "Scheduler collision",
+            sourceMessageID,
+            sourcePartID,
+          }
+          const identity = schedulerDeliveryIdentity(input)
+          Database.transaction((db) => {
+            if (occupied === "event") {
+              ProtocolStore.appendEventInTransaction({
+                id: identity.eventID,
+                kind: "event",
+                type: "foreign.scheduler.identity",
+                aggregate: "session",
+                aggregate_id: mission.id,
+                session_id: mission.id,
+                source: "foreign-scheduler-owner",
+              })
+              return
+            }
+            const foreignEvent = ProtocolStore.appendEventInTransaction({
+              kind: "event",
+              type: "foreign.scheduler.identity",
+              aggregate: "session",
+              aggregate_id: mission.id,
+              session_id: mission.id,
+              source: "foreign-scheduler-owner",
+            })
+            db.insert(ProtocolInboxTable)
+              .values({
+                id: identity.inboxID,
+                envelope_id: foreignEvent.id,
+                actor: "session",
+                actor_id: mission.id,
+                visible_at: now,
+                time_created: now,
+                time_updated: now,
+              })
+              .run()
+          })
+          const before = Database.use((db) => ({
+            events: db.select().from(ProtocolEventTable).all().length,
+            inbox: db.select().from(ProtocolInboxTable).all().length,
+          }))
+          expect(() =>
+            Database.transaction((db) => enqueueSchedulerMessageInTransaction(db, input)),
+          ).toThrow(SchedulerMessageConflictError)
+          expect(
+            Database.use((db) => ({
+              events: db.select().from(ProtocolEventTable).all().length,
+              inbox: db.select().from(ProtocolInboxTable).all().length,
+            })),
+          ).toEqual(before)
+        },
+      })
+    })
+
   test("classifies typed shutdown admission errors and reports a colliding application failure", () => {
     const reported: unknown[] = []
     using _reported = SchedulerMessageTestHooks.installSignalDrainFailureReport((error) => reported.push(error))
@@ -223,6 +571,7 @@ describe("durable scheduler.message delivery", () => {
   test("parses exactly one canonical source occurrence", () => {
     const base = {
       protocol: "scheduler-message-v2" as const,
+      invocation_id: "source-contract",
       message_kind: "request" as const,
       thread_id: "thread-source-contract",
       source_task_occurrence_started_at: null,
@@ -303,6 +652,280 @@ describe("durable scheduler.message delivery", () => {
         })
         await Database.resetFiles(Database.Path())
         Database.Client()
+      },
+    })
+    }, 60_000)
+
+  test("rejects a compact scheduler event whose persisted invocation atom differs", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-invocation-collision"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Invocation collision Mission",
+          metadata: { mission: missionLaunchMetadata(missionID, project.path) },
+        })
+        const target = await Session.create({ kind: "orchestrator", title: "Invocation collision Task" })
+        const taskID = Identifier.ascending("task")
+        const now = Date.now()
+        Database.use((db) =>
+          db.insert(EngineTaskTable).values({
+            id: taskID,
+            project_id: Instance.project.id,
+            session_id: target.id,
+            source: "mission",
+            product_pillar: "code",
+            title: "Invocation collision Task",
+            request: "Reject mismatched invocation ownership",
+            metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+            time_started: now,
+            time_created: now,
+            time_updated: now,
+          }).run(),
+        )
+        const sourceMessageID = Identifier.ascending("message")
+        const sourcePartID = Identifier.ascending("part")
+        persistSourceOccurrence(mission.id, sourceMessageID, sourcePartID, "Invocation collision source")
+        const input = {
+          invocationID: "canonical-invocation",
+          correlationID: "shared-correlation",
+          threadID: "shared-thread",
+          kind: "request" as const,
+          source: {
+            kind: "mission_scheduler" as const,
+            project_id: Instance.project.id,
+            mission_id: missionID,
+            session_id: mission.id,
+          },
+          target: {
+            kind: "task_scheduler" as const,
+            project_id: Instance.project.id,
+            task_id: taskID,
+            root_session_id: target.id,
+          },
+          subject: "Invocation collision",
+          sourceMessageID,
+          sourcePartID,
+        }
+        const receipt = Database.transaction((db) => enqueueSchedulerMessageInTransaction(db, input))
+        Database.use((db) => {
+          const row = db.select().from(ProtocolEventTable).where(eq(ProtocolEventTable.id, receipt.eventID)).get()!
+          db.update(ProtocolEventTable)
+            .set({ payload: { ...row.payload, invocation_id: "foreign-invocation" } })
+            .where(eq(ProtocolEventTable.id, receipt.eventID))
+            .run()
+        })
+        expect(() => Database.transaction((db) => enqueueSchedulerMessageInTransaction(db, input))).toThrow(
+          SchedulerMessageConflictError,
+        )
+      },
+    })
+  }, 60_000)
+
+  test("dead-letters a Mission delivery instead of overwriting an occupied compact Message", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-target-message-collision"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Target Message collision Mission",
+          metadata: {
+            mission: missionLaunchMetadata(missionID, project.path),
+            configOverlay: { model: "openai/gpt-5.6-sol" },
+          },
+        })
+        const sourceRoot = await Session.create({ kind: "orchestrator", title: "Message collision source Task" })
+        const sourceTaskID = Identifier.ascending("task")
+        const now = Date.now()
+        Database.use((db) =>
+          db.insert(EngineTaskTable).values({
+            id: sourceTaskID,
+            project_id: Instance.project.id,
+            session_id: sourceRoot.id,
+            source: "mission",
+            product_pillar: "code",
+            title: "Message collision source Task",
+            request: "Reject target Message occupancy",
+            metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+            time_started: now,
+            time_created: now,
+            time_updated: now,
+          }).run(),
+        )
+        const sourceMessageID = Identifier.ascending("message")
+        const sourcePartID = Identifier.ascending("part")
+        persistSourceOccurrence(sourceRoot.id, sourceMessageID, sourcePartID, "Target Message collision source")
+        const queued = Database.transaction((db) =>
+          enqueueSchedulerMessageInTransaction(db, {
+            invocationID: "target-message-collision",
+            kind: "notification",
+            source: {
+              kind: "task_scheduler",
+              project_id: Instance.project.id,
+              task_id: sourceTaskID,
+              root_session_id: sourceRoot.id,
+            },
+            target: {
+              kind: "mission_scheduler",
+              project_id: Instance.project.id,
+              mission_id: missionID,
+              session_id: mission.id,
+            },
+            subject: "Target Message collision",
+            sourceMessageID,
+            sourcePartID,
+          }),
+        )
+        const occurrence = schedulerTargetOccurrenceIdentity(queued.inboxID)
+        const foreignData = { role: "user", author: "foreign-compact-owner" }
+        Database.use((db) => {
+          db.insert(MessageTable).values({
+            id: occurrence.messageID,
+            session_id: mission.id,
+            data: foreignData as never,
+            time_created: now,
+            time_updated: now,
+          }).run()
+          db.update(ProtocolInboxTable).set({ attempt: 4 }).where(eq(ProtocolInboxTable.id, queued.inboxID)).run()
+        })
+        using _wakeLoop = SessionWake.TestHooks.installWakeLoopExecutor(async () => undefined)
+        await drainSchedulerMessagesForCurrentProject()
+        expect(requireSchedulerDelivery(queued.inboxID)).toMatchObject({
+          status: "dead_letter",
+          deliveryResult: { kind: "dead_letter", error_name: "SchedulerMessageConflictError" },
+        })
+        expect(
+          Database.use((db) => ({
+            message: db.select().from(MessageTable).where(eq(MessageTable.id, occurrence.messageID)).get()?.data,
+            part: db.select().from(PartTable).where(eq(PartTable.id, occurrence.textPartID)).get(),
+            control: db
+              .select()
+              .from(SessionControlRecordTable)
+              .where(eq(SessionControlRecordTable.id, occurrence.controlID))
+              .get(),
+          })),
+        ).toEqual({ message: foreignData, part: undefined, control: undefined })
+      },
+    })
+  }, 60_000)
+
+  test("rejects a Task delivery instead of overwriting an occupied compact Part", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const missionID = "mission-target-part-collision"
+        const mission = await Session.create({
+          kind: "mission",
+          title: "Target Part collision Mission",
+          metadata: { mission: missionLaunchMetadata(missionID, project.path) },
+        })
+        const root = await Session.create({
+          kind: "root",
+          title: "Target Part collision Task",
+          metadata: { configOverlay: { model: "openai/gpt-5.6-sol" } },
+        })
+        const taskID = Identifier.ascending("task")
+        const now = Date.now()
+        const packageRevision = {
+          scope: "built_in" as const,
+          projectID: null,
+          namespace: "builtin",
+          id: "base",
+          version: "2026.08.12.1",
+          packageDigest: "a".repeat(64),
+        }
+        persistTask({
+          taskID,
+          sessionID: root.id,
+          now,
+          title: "Target Part collision Task",
+          request: "Reject target Part occupancy",
+          productPillar: "code",
+          source: "mission",
+          priority: "normal",
+          metadata: { actor: "mission", mission: { id: missionID, session_id: mission.id } },
+          projectID: Instance.project.id,
+          packageRevision,
+          executionCapsuleBinding: await prepareTaskProcessBinding({
+            mode: "native",
+            taskID,
+            projectID: Instance.project.id,
+            rootDirectory: Instance.directory,
+            packageRevisionSHA256: packageRevision.packageDigest,
+            timeCreated: now,
+          }),
+        })
+        const sourceMessageID = Identifier.ascending("message")
+        const sourcePartID = Identifier.ascending("part")
+        persistSourceOccurrence(mission.id, sourceMessageID, sourcePartID, "Target Part collision source")
+        const queued = Database.transaction((db) =>
+          enqueueSchedulerMessageInTransaction(db, {
+            invocationID: "target-part-collision",
+            kind: "request",
+            source: {
+              kind: "mission_scheduler",
+              project_id: Instance.project.id,
+              mission_id: missionID,
+              session_id: mission.id,
+            },
+            target: {
+              kind: "task_scheduler",
+              project_id: Instance.project.id,
+              task_id: taskID,
+              root_session_id: root.id,
+            },
+            subject: "Target Part collision",
+            sourceMessageID,
+            sourcePartID,
+          }),
+        )
+        const ownerID = "target-part-collision-owner"
+        expect(
+          claimNextSchedulerDelivery({ actor: "task", actorID: taskID, ownerID, leaseMilliseconds: 60_000 }),
+        ).toMatchObject({ id: queued.inboxID, status: "leased" })
+        const occurrence = schedulerTargetOccurrenceIdentity(queued.inboxID)
+        const foreignMessageID = Identifier.ascending("message")
+        const foreignPartData = { type: "text", text: "foreign compact Part owner" }
+        Database.transaction((db) => {
+          db.insert(MessageTable).values({
+            id: foreignMessageID,
+            session_id: root.id,
+            data: { role: "user", author: "foreign" } as never,
+            time_created: now,
+            time_updated: now,
+          }).run()
+          db.insert(PartTable).values({
+            id: occurrence.textPartID,
+            message_id: foreignMessageID,
+            session_id: root.id,
+            data: foreignPartData as never,
+            time_created: now,
+            time_updated: now,
+          }).run()
+        })
+        await expect(
+          EngineService.materializeClaimedSchedulerMessageToTask({
+            inboxID: queued.inboxID,
+            ownerID,
+            message: "Target Part collision source",
+          }),
+        ).rejects.toBeInstanceOf(SchedulerMessageConflictError)
+        expect(
+          Database.use((db) => ({
+            message: db.select().from(MessageTable).where(eq(MessageTable.id, occurrence.messageID)).get(),
+            part: db.select().from(PartTable).where(eq(PartTable.id, occurrence.textPartID)).get()?.data,
+            control: db
+              .select()
+              .from(SessionControlRecordTable)
+              .where(eq(SessionControlRecordTable.id, occurrence.controlID))
+              .get(),
+          })),
+        ).toEqual({ message: undefined, part: foreignPartData, control: undefined })
       },
     })
   }, 60_000)
