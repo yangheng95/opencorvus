@@ -1581,7 +1581,7 @@ describe("single Tool-result turn-control protocol", () => {
           },
         })
         const request = PermissionAuthority.Request.parse({
-          id: "prm_completed_park",
+          id: Identifier.ascending("permission"),
           projectID: Instance.project.id,
           sessionID: session.id,
           messageID: assistant.id,
@@ -1742,11 +1742,12 @@ describe("single Tool-result turn-control protocol", () => {
             time: { start: toolStart, end: toolStart + 1 },
           },
         })
+        const permissionID = Identifier.ascending("permission")
         Database.transaction((db) =>
           db
             .insert(PermissionExecutionResultTable)
             .values({
-              attempt_id: "pat_historical_tool_control",
+              attempt_id: permissionID,
               session_id: session.id,
               tool_part_id: part.id,
               result: {
@@ -1765,7 +1766,7 @@ describe("single Tool-result turn-control protocol", () => {
         Database.close()
         const reopened = Database.Client()
         expect(reopened.select().from(PermissionExecutionResultTable).get()).toMatchObject({
-          attempt_id: "pat_historical_tool_control",
+          attempt_id: permissionID,
           tool_part_id: part.id,
         })
       },

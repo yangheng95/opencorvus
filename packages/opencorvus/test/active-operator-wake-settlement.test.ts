@@ -1132,6 +1132,7 @@ describe.serial("active operator wake settlement", () => {
             .where(eq(EngineChannelBindingTable.task_id, first.taskID))
             .all(),
         )
+        await waitForCancelledCheckpoint(first.taskID)
 
         const successor = await createActiveTask({
           title: "Channel route successor",
@@ -1152,7 +1153,6 @@ describe.serial("active operator wake settlement", () => {
             payload: { ingress: "successor" },
           }),
         })
-        await waitForCancelledCheckpoint(first.taskID)
       },
     })
   }, 0)

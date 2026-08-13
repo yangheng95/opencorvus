@@ -1300,6 +1300,7 @@ describe("Project directory integrity", () => {
         name: "claimed-project",
         beforeMove: () => Instance.disposeAll(),
       }).catch((cause) => cause)
+      expect(error).toMatchObject({ name: "ProjectRegisteredDirectoryConflictError" })
       const sourceState = await fs
         .stat(carrying.directory)
         .then((info) => (info.isDirectory() ? "restored" : "invalid"))
