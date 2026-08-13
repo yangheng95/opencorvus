@@ -11,7 +11,6 @@ import {
   ProjectWorktreeList,
   PtyOutputStreamEvent,
   WorkLedgerActionEvent,
-  WorkLedgerArchiveList,
   WorkLedgerEvent,
   WorkLedgerList,
   base64ToUint8,
@@ -159,87 +158,6 @@ describe("canonical Work Ledger and Project Worktree response contracts", () => 
     }
     const value = { rows: [mission], nextCursor: { pinned: false, updated: 2, rowKey: "mission:mission-1" } }
     expect(WorkLedgerList.parse(value)).toEqual(value)
-  })
-
-  test("preserves terminal Task timing in one Work Ledger snapshot", () => {
-    const task = {
-      kind: "task",
-      id: "task-terminal",
-      title: "Terminal Task",
-      description: "Completed Task timing",
-      directory: "/repo",
-      created: 1,
-      started: 2,
-      completed: 2,
-      updated: 2,
-      pinned: false,
-      lifecycleStatus: "completed" as const,
-      activityStatus: "inactive",
-      cancellationStatus: "none",
-      priority: "normal",
-      source: "operator",
-      productPillar: "code",
-      pendingInteractions: 0,
-      missionID: "mission-1",
-      missionSessionID: "session-1",
-    }
-    for (const lifecycleStatus of ["completed", "failed", "cancelled"] as const) {
-      const terminalTask = { ...task, lifecycleStatus }
-      const mission = {
-        kind: "mission",
-        id: "mission-1",
-        missionID: "mission-1",
-        sessionID: "session-1",
-        title: "Mission",
-        directory: "/repo",
-        created: 1,
-        started: 1,
-        updated: 2,
-        pinned: false,
-        interruptible: false,
-        productPillar: "code",
-        taskStats: { total: 1, running: 0, inactive: 1 },
-        pendingInteractions: 0,
-        tasks: [terminalTask],
-      }
-      expect(WorkLedgerList.parse({ rows: [mission], nextCursor: null }).rows[0]).toMatchObject({
-        tasks: [{ id: "task-terminal", lifecycleStatus, started: 2, completed: 2 }],
-      })
-    }
-  })
-
-  test("maps malformed archived terminal Task timing to the canonical completed-field error", () => {
-    const parsed = WorkLedgerArchiveList.safeParse({
-      rows: [
-        {
-          kind: "task",
-          id: "task-archived-terminal",
-          title: "Archived terminal Task",
-          description: "Missing terminal completion time",
-          directory: "/repo",
-          created: 1,
-          started: 2,
-          updated: 3,
-          pinned: false,
-          archived: 3,
-          lifecycleStatus: "failed",
-          activityStatus: "inactive",
-          cancellationStatus: "none",
-          priority: "normal",
-          source: "operator",
-          productPillar: "code",
-          pendingInteractions: 0,
-        },
-      ],
-      nextCursor: null,
-    })
-    expect(parsed.success).toBe(false)
-    if (parsed.success) throw new Error("Expected archived terminal timing validation error")
-    expect(parsed.error.issues[0]).toMatchObject({
-      code: "custom",
-      path: ["rows", 0, "completed"],
-      message: "Terminal Work Ledger Task lifecycle failed requires completed >= started",
-    })
   })
 
   test("accepts the Task-and-Session-owned worktree list and deletion receipt", () => {

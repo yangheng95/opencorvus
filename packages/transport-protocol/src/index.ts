@@ -287,7 +287,7 @@ export const WorkLedgerProjectRow = z
   })
   .strict()
 
-const WorkLedgerTaskRowObject = z
+export const WorkLedgerTaskRow = z
   .object({
     kind: z.literal("task"),
     id: z.string(),
@@ -296,7 +296,6 @@ const WorkLedgerTaskRowObject = z
     directory: z.string(),
     created: z.number(),
     started: z.number(),
-    completed: z.number().optional(),
     updated: z.number(),
     pinned: z.boolean(),
     lifecycleStatus: WorkLedgerTaskLifecycleStatus,
@@ -312,28 +311,10 @@ const WorkLedgerTaskRowObject = z
   })
   .strict()
 
-function validateWorkLedgerTaskTiming(
-  task: { started: number; completed?: number; lifecycleStatus: z.infer<typeof WorkLedgerTaskLifecycleStatus> },
-  context: z.RefinementCtx,
-) {
-  if (task.lifecycleStatus === "active") return
-  if (!(task.completed !== undefined && task.completed >= task.started)) {
-    context.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ["completed"],
-      message: `Terminal Work Ledger Task lifecycle ${task.lifecycleStatus} requires completed >= started`,
-    })
-  }
-}
-
-export const WorkLedgerTaskRow = WorkLedgerTaskRowObject.superRefine(validateWorkLedgerTaskTiming)
-
-export const WorkLedgerMissionTaskRow = WorkLedgerTaskRowObject.extend({
+export const WorkLedgerMissionTaskRow = WorkLedgerTaskRow.extend({
   missionID: WorkLedgerMissionID,
   missionSessionID: z.string(),
-})
-  .strict()
-  .superRefine(validateWorkLedgerTaskTiming)
+}).strict()
 
 export const WorkLedgerMissionRow = z
   .object({
@@ -379,15 +360,11 @@ export const WorkLedgerRow = z.discriminatedUnion("kind", [
   WorkLedgerChatRow,
 ])
 
-const WorkLedgerArchiveRowObject = z.discriminatedUnion("kind", [
+export const WorkLedgerArchiveRow = z.discriminatedUnion("kind", [
   WorkLedgerMissionRow,
-  WorkLedgerTaskRowObject,
+  WorkLedgerTaskRow,
   WorkLedgerChatRow,
 ])
-
-export const WorkLedgerArchiveRow = WorkLedgerArchiveRowObject.superRefine((row, context) => {
-  if (row.kind === "task") validateWorkLedgerTaskTiming(row, context)
-})
 
 export const WorkLedgerCursor = z
   .object({
