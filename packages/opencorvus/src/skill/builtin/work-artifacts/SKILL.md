@@ -11,6 +11,7 @@ required_tools:
   - work_artifact_inspect
   - work_artifact_author
   - work_artifact_validate
+  - work_artifact_deliver
 metadata:
   opencorvus.profile-set: work-artifacts@1
 ---
@@ -34,8 +35,8 @@ collection, or semantic Interactive Artifact for the requested source file.
    full lifecycle when a render is incomplete or visually weak.
 7. Read `references/review.md` and resolve confirmed review findings.
 8. Give `work_artifact_deliver` the exact final validation receipt. Delivery
-   revalidates and rerenders the candidate; only the parent Work conversation
-   publishes it.
+   revalidates and rerenders the candidate; only the current authorized Work
+   conversation or Expert Squad delivery owner publishes it.
 
 Read `references/security.md` before using user-supplied images or handling a
 request involving external links, macros, embedded objects, media, templates,

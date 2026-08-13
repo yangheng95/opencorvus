@@ -15,3 +15,10 @@ export const WorkArtifactLifecycleCommand = cmd({
     process.stdout.write(`OPENCORVUS_WORK_ARTIFACT_ACCEPTANCE=${JSON.stringify(result)}${EOL}`)
   },
 })
+
+export const WorkArtifactAcceptanceDebugCommand = cmd({
+  command: "debug",
+  describe: false,
+  builder: (yargs) => yargs.command(WorkArtifactLifecycleCommand).demandCommand(),
+  async handler() {},
+})

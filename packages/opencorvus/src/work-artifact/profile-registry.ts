@@ -18,7 +18,7 @@ export const OFFICE_PRESENTATION_PROFILE_LIMITS = Object.freeze({
   outputBytes: 80 * 1024 * 1024,
   pagesOrFrames: 40,
   wallClockMs: 120_000,
-  parserWallClockMs: 10_000,
+  parserWallClockMs: 30_000,
 })
 export type WorkArtifactProfile = Readonly<{
   id: WorkArtifactProfileID

@@ -22,6 +22,7 @@ import {
   inspectPptxPackage,
   parseWorkArtifactRuntimeJson,
   prepareWorkArtifactRuntimeEnvironment,
+  renderWorkArtifactSvgToPng,
 } from "../src/work-artifact/presentation"
 import { createWorkArtifactTools } from "../src/tool/work-artifact"
 import {
@@ -70,8 +71,10 @@ async function checkCatalog(profileID: WorkArtifactProfileID): Promise<{
   const skillPath = path.join(skillRoot, "SKILL.md")
   const parsed = parseFrontmatter(await fs.readFile(skillPath, "utf8"))
   const definition = Skill.parseDefinition(parsed.data, skillPath)
-  const workerTools = WORK_ARTIFACT_TOOL_IDS.filter((tool) => tool !== "work_artifact_deliver")
-  if (definition.name !== profile.skillName || JSON.stringify(definition.required_tools) !== JSON.stringify(workerTools)) {
+  if (
+    definition.name !== profile.skillName ||
+    JSON.stringify(definition.required_tools) !== JSON.stringify(WORK_ARTIFACT_TOOL_IDS)
+  ) {
     throw new Error("Work Artifact Skill/tool schema linkage mismatch")
   }
   if (definition.metadata?.["opencorvus.profile-set"] !== "work-artifacts@1") {
@@ -207,28 +210,16 @@ async function checkPackagedLifecycle(packageRoot: string, pptx?: string) {
       `${runtime.id} issues`,
     )
     for (let slide = 1; slide <= inspection.slideCount; slide++) {
-      const render = path.join(workspace, `slide-${slide}.png`)
-      await runRuntime(
+      const renderedSvg = await runRuntime(
         executable,
-        [
-          "view",
-          source,
-          "screenshot",
-          "--out",
-          render,
-          "--page",
-          String(slide),
-          "--render",
-          "html",
-          "--screenshot-width",
-          "1280",
-          "--screenshot-height",
-          "720",
-        ],
+        ["view", source, "svg", "--start", String(slide), "--end", String(slide)],
         workspace,
         lock,
       )
-      const rendered = await fs.readFile(render)
+      const rendered = await renderWorkArtifactSvgToPng({
+        svg: Buffer.from(renderedSvg.stdout),
+        timeoutMs: WorkArtifactProfileRegistry.require("office.presentation@1").limits.wallClockMs,
+      })
       await assertWorkArtifactRenderPng(rendered, `${runtime.id} rendered slide ${slide}`)
     }
     return { target: manifest.target, runtime: runtime.id, slides: inspection.slideCount }

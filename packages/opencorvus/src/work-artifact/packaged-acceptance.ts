@@ -1,11 +1,13 @@
 import { createHash } from "node:crypto"
-import sharp from "sharp"
 import { Identifier } from "../id/id"
 import { Instance } from "../project/instance"
+import { requireRuntimePackage } from "../runtime/package-require"
 import { Session } from "../session"
 import { AttachmentStore } from "../storage/attachment-store"
 import { Tool } from "../tool/tool"
 import { createWorkArtifactTools } from "../tool/work-artifact"
+
+const sharp = requireRuntimePackage<typeof import("sharp")>("sharp")
 
 export async function runPackagedWorkArtifactAcceptance(): Promise<{
   source_sha: string
