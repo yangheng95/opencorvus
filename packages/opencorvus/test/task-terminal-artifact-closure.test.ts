@@ -15,6 +15,7 @@ import {
   sameCrossTaskArtifactImportSet,
 } from "@/engine/cross-task-artifact-import"
 import { findTaskCompletionDecisionForTerminalTime } from "@/engine/completion-decision"
+import { TaskCompletionEvidenceIncompleteError } from "@/engine/completion-decision"
 import { EngineGit } from "@/engine/git"
 import {
   acquireTaskCompletionClosureInTransaction,
@@ -127,6 +128,10 @@ async function completeFixtureTask(
   projectPath: string,
   deliverables: readonly { source: "engine_artifact"; artifact_id: string; catalog_revision: number; expected_sha256: string }[],
   suffix: string,
+  workflow: {
+    id: string
+    nodes: Record<string, { agent_id: string; description: string; depends_on: string[] }>
+  } | null = null,
 ) {
   const user = await Session.updateMessage({
     id: Identifier.ascending("message"),
@@ -163,7 +168,12 @@ async function completeFixtureTask(
   })
   const tools = createTaskLifecycleTools({
     taskID: task.taskID,
-    workflowProjection: { packageRevision: task.packageRevision, virtualWorkflows: {} },
+    workflowProjection: {
+      packageRevision: task.packageRevision,
+      virtualWorkflows: workflow
+        ? { [workflow.id]: { label: "Terminal evidence fixture", description: "Terminal evidence fixture", nodes: workflow.nodes } }
+        : {},
+    },
     requireExecutionContext: async () => ({
       orchestratorSessionID: task.sessionID,
       orchestratorMessageID: assistant.id,
@@ -178,11 +188,63 @@ async function completeFixtureTask(
       evidence_locators: deliverables,
       deliverable_artifact_locators: deliverables,
       accepted_delivery_slice_revision_ids: [],
-      workflow_id: null,
+      workflow_id: workflow?.id ?? null,
     },
     { toolCallId: callID, messages: [] },
   )
 }
+
+test("requires every terminal workflow worker Artifact in the completion evidence closure", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const task = await taskFixture(project.path)
+      const first = await publishExpertArtifact({
+        scope: task.scope,
+        artifact: {
+          artifact_type: "base/terminal-result-one",
+          schema_version: 1,
+          label: "Terminal result one",
+          payload: { result: "one" },
+          resources: [],
+          source_artifact_locators: [],
+          idempotent: true,
+        },
+      })
+      const second = await publishExpertArtifact({
+        scope: task.scope,
+        artifact: {
+          artifact_type: "base/terminal-result-two",
+          schema_version: 1,
+          label: "Terminal result two",
+          payload: { result: "two" },
+          resources: [],
+          source_artifact_locators: [],
+          idempotent: true,
+        },
+      })
+      const workflow = {
+        id: "terminal-evidence-fixture",
+        nodes: {
+          planner: { agent_id: "base-planner", description: "Plan", depends_on: [] },
+          owner: { agent_id: "base-developer", description: "Deliver", depends_on: ["planner"] },
+        },
+      }
+
+      await expect(completeFixtureTask(task, project.path, [first.locator], "incomplete", workflow)).rejects.toMatchObject({
+        name: TaskCompletionEvidenceIncompleteError.name,
+        code: "TASK_COMPLETION_EVIDENCE_INCOMPLETE",
+        taskID: task.taskID,
+        missingArtifactLocators: [second.locator],
+      })
+      expect(requireTask(task.taskID).time_completed).toBeNull()
+      expect(
+        await completeFixtureTask(task, project.path, [first.locator, second.locator], "complete", workflow),
+      ).toMatchObject({ title: "Task Completed" })
+    },
+  })
+}, 60_000)
 
 test("keeps the exact terminal expert Artifact immutable while preserving an idempotent replay", async () => {
   await using project = await memoryProject()
