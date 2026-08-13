@@ -228,7 +228,8 @@ test("requires every terminal workflow worker Artifact in the completion evidenc
         id: "terminal-evidence-fixture",
         nodes: {
           planner: { agent_id: "base-planner", description: "Plan", depends_on: [] },
-          owner: { agent_id: "base-developer", description: "Deliver", depends_on: ["planner"] },
+          intermediate: { agent_id: "base-developer", description: "Build", depends_on: ["planner"] },
+          owner: { agent_id: "base-developer", description: "Deliver", depends_on: ["intermediate"] },
         },
       }
 

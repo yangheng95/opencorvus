@@ -75,13 +75,9 @@ function assertTerminalWorkflowArtifactCompleteness(input: {
 }) {
   const binding = input.payload.workflow_binding
   if (binding.kind !== "virtual_workflow") return
-  const dependencyAgents = new Set(
-    binding.nodes.flatMap((node) =>
-      node.depends_on.map((dependencyID) => binding.nodes.find((candidate) => candidate.node_id === dependencyID)?.agent_id),
-    ).filter((agentID): agentID is string => agentID !== undefined),
-  )
+  const dependencyNodeIDs = new Set(binding.nodes.flatMap((node) => node.depends_on))
   const terminalAgents = new Set(
-    binding.nodes.filter((node) => !dependencyAgents.has(node.agent_id)).map((node) => node.agent_id),
+    binding.nodes.filter((node) => !dependencyNodeIDs.has(node.node_id)).map((node) => node.agent_id),
   )
   const declared = new Set(
     [...input.payload.evidence_locators, ...input.payload.deliverable_artifact_locators].map((locator) =>
