@@ -37,6 +37,7 @@ import {
   EvolutionArtifactIntegrityError,
   EvolutionMetricIdentityError,
   EvolutionArtifactSchemas,
+  EvolutionPackagePublishableArtifactInputSchema,
 } from "../../../expert-squads/builtin/evolution-lab/lib/evolution-lab/artifacts"
 import collectRunEvidenceTool from "../../../expert-squads/builtin/evolution-lab/tools/collect-run-evidence"
 import expertSquadPackageTool from "../../../expert-squads/builtin/evolution-lab/tools/expert-squad-package"
@@ -74,7 +75,7 @@ function executePublishEvolutionArtifact(
     "evolution-lab/comparison-recommendation": "evolution-recommendation-owner",
   } as const
   return publishEvolutionArtifactTool.execute(
-    { ...publication, artifact: { artifact_type, payload } } as Parameters<
+    { artifact: { artifact_type, payload, ...publication } } as Parameters<
       typeof publishEvolutionArtifactTool.execute
     >[0],
     { ...context, agent: artifactOwner[artifact_type as keyof typeof artifactOwner] },
@@ -691,10 +692,35 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
         const loaded = await ExpertSquadRegistry.loadSourcePackage(
           path.resolve(import.meta.dir, "../../../expert-squads/builtin/evolution-lab"),
         )
+        const publisherSchema = publishEvolutionArtifactTool.introspect().inputSchema as {
+          required?: string[]
+          properties?: Record<string, {
+            oneOf?: Array<{ properties?: Record<string, { const?: string }>; required?: string[] }>
+          }>
+        }
+        expect(Object.keys(publisherSchema.properties ?? {})).toEqual(["artifact"])
+        expect(publisherSchema.required).toEqual(["artifact"])
+        const publicationBranches = publisherSchema.properties?.artifact?.oneOf ?? []
+        expect(publicationBranches.map((branch) => branch.properties?.artifact_type?.const)).toEqual(
+          EvolutionPackagePublishableArtifactInputSchema.options.map(
+            (branch) => branch.shape.artifact_type.value,
+          ),
+        )
+        expect(publicationBranches.every((branch) => branch.required?.join("|") ===
+          "artifact_type|payload|resource_set|source_artifact_locators")).toBe(true)
+        const attributionBranch = publicationBranches.find(
+          (branch) => branch.properties?.artifact_type?.const === "evolution-lab/failure-attribution",
+        )
+        expect(attributionBranch?.required).toEqual([
+          "artifact_type",
+          "payload",
+          "resource_set",
+          "source_artifact_locators",
+        ])
         const session = await Session.create({ kind: "root", title: "Evolution typed ABI chain" })
         const taskID = Identifier.ascending("task")
         const started = Date.now()
-        const missionID = Identifier.ascending("mission")
+        const missionID = "evolution-abi-chain"
         const missionSessionID = Identifier.ascending("session")
         persistTask({
           taskID,
@@ -1853,7 +1879,7 @@ describe.serial("Evolution Artifact and exact evidence Host", () => {
       fn: async () => {
         const session = await Session.create({ kind: "root", title: "Evolution package fixture" })
         const taskID = Identifier.ascending("task")
-        const missionID = Identifier.ascending("mission")
+        const missionID = "evolution-candidate-chain"
         const missionSessionID = Identifier.ascending("session")
         const timeCreated = Date.now()
         persistTask({

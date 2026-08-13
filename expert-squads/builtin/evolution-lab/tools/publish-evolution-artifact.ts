@@ -210,46 +210,59 @@ export function assertEvolutionArtifactOwner(
     )
 }
 
+const evolutionPublicationControls = {
+  resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),
+  parent_resource_set: TaskArtifactResourceSetLocatorSchema.optional(),
+  source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema),
+}
+
+const EvolutionPackagePublicationArtifactInputSchema = tool.schema.discriminatedUnion("artifact_type", [
+  ...EvolutionPackagePublishableArtifactInputSchema.options.map((branch) =>
+    branch.extend(evolutionPublicationControls),
+  ),
+])
+
 export default tool({
-  description: "Validate and publish one strict evolution-lab Artifact ABI value with exact sources and resources.",
+  description:
+    "Validate and publish one strict evolution-lab Artifact ABI value. Pass exactly one top-level artifact object; its selected branch contains the correlated payload, resource set, optional parent resource set, and exact source locators.",
   args: {
-    artifact: EvolutionPackagePublishableArtifactInputSchema.describe(
-      "One correlated Artifact type and its exact strict payload; use only the fields and enum values exposed by the selected type.",
+    artifact: EvolutionPackagePublicationArtifactInputSchema.describe(
+      "One correlated publication: select one artifact_type branch and provide that branch's exact payload, resource_set, optional parent_resource_set, and source_artifact_locators inside this object.",
     ),
-    resource_set: TaskArtifactResourceSetLocatorSchema.nullable(),
-    parent_resource_set: TaskArtifactResourceSetLocatorSchema.optional(),
-    source_artifact_locators: tool.schema.array(ArtifactReadLocatorSchema),
   },
   async execute(args, context) {
-    const artifact_type = args.artifact.artifact_type
+    const publication = args.artifact
+    const artifact_type = publication.artifact_type
     assertEvolutionArtifactOwner(artifact_type, context.agent)
     if (
       (artifact_type === "evolution-lab/campaign-spec" ||
         artifact_type === "evolution-lab/candidate-revision" ||
         artifact_type === "evolution-lab/evaluation-result") &&
-      !args.resource_set
+      !publication.resource_set
     )
       throw new EvolutionArtifactIntegrityError(`${artifact_type} requires its exact immutable resource set`)
-    if (artifact_type === "evolution-lab/run-evidence-bundle" && !args.resource_set) {
+    if (artifact_type === "evolution-lab/run-evidence-bundle" && !publication.resource_set) {
       throw new EvolutionArtifactIntegrityError(
         "run-evidence-bundle requires the exact immutable collector resource set",
       )
     }
-    let resources = args.resource_set ? await context.host.taskArtifacts.resources(args.resource_set) : []
+    let resources = publication.resource_set
+      ? await context.host.taskArtifacts.resources(publication.resource_set)
+      : []
     const payload =
       artifact_type === "evolution-lab/failure-attribution"
         ? await (async () => {
             const attribution = EvolutionArtifactSchemas["evolution-lab/failure-attribution"].parse(
-              args.artifact.payload,
+              publication.payload,
             )
             if (
-              args.source_artifact_locators.length !== 1 ||
-              args.source_artifact_locators[0]?.source !== "engine_artifact"
+              publication.source_artifact_locators.length !== 1 ||
+              publication.source_artifact_locators[0]?.source !== "engine_artifact"
             )
               throw new EvolutionArtifactIntegrityError(
                 "failure-attribution requires exactly one opportunity Engine Artifact source",
               )
-            const opportunityLocator = args.source_artifact_locators[0]
+            const opportunityLocator = publication.source_artifact_locators[0]
             const opportunityEnvelope = await readEngineArtifactEnvelope(
               opportunityLocator,
               context,
@@ -269,13 +282,13 @@ export default tool({
           })()
         : artifact_type === "evolution-lab/campaign-spec"
         ? await (async () => {
-            const campaignInput = EvolutionCampaignPublishInputSchema.parse(args.artifact.payload)
-            if (args.source_artifact_locators.some((locator) => locator.source !== "engine_artifact"))
+            const campaignInput = EvolutionCampaignPublishInputSchema.parse(publication.payload)
+            if (publication.source_artifact_locators.some((locator) => locator.source !== "engine_artifact"))
               throw new EvolutionArtifactIntegrityError(
                 "campaign-spec sources must be exact Engine Artifact locators",
               )
             const sources = await Promise.all(
-              args.source_artifact_locators
+              publication.source_artifact_locators
                 .filter((locator): locator is EngineArtifactLocator => locator.source === "engine_artifact")
                 .map(async (locator) => ({ locator, envelope: await readEngineArtifactEnvelope(locator, context) })),
             )
@@ -444,11 +457,11 @@ export default tool({
               trial_execution: trialExecution,
             })
           })()
-        : parseEvolutionArtifact(artifact_type, args.artifact.payload)
+        : parseEvolutionArtifact(artifact_type, publication.payload)
     if (artifact_type === "evolution-lab/candidate-revision") {
       const candidatePayload = EvolutionArtifactSchemas["evolution-lab/candidate-revision"].parse(payload)
       if (
-        !args.source_artifact_locators.some((locator) =>
+        !publication.source_artifact_locators.some((locator) =>
           sameJSON(locator, candidatePayload.development_campaign_locator),
         )
       )
@@ -473,14 +486,14 @@ export default tool({
         throw new EvolutionArtifactIntegrityError(
           "candidate parent revision must equal its exact development campaign target and baseline",
         )
-      if (!args.parent_resource_set)
+      if (!publication.parent_resource_set)
         throw new EvolutionArtifactIntegrityError("candidate publication requires the exact parent resource set")
       const parent = await context.host.expertSquadPackages.validateResourceSet({
-        resource_set: args.parent_resource_set,
+        resource_set: publication.parent_resource_set,
       })
-      const parentResources = await context.host.taskArtifacts.resources(args.parent_resource_set)
+      const parentResources = await context.host.taskArtifacts.resources(publication.parent_resource_set)
       const candidate = await context.host.expertSquadPackages.validateResourceSet({
-        resource_set: args.resource_set!,
+        resource_set: publication.resource_set!,
       })
       const comparison = compareCandidateIntegrity(parent, candidate)
       const exactCandidateFacts = {
@@ -663,10 +676,10 @@ export default tool({
     }
     if (artifact_type === "evolution-lab/comparison-recommendation") {
       const claimed = EvolutionArtifactSchemas["evolution-lab/comparison-recommendation"].parse(payload)
-      if (args.source_artifact_locators.some((locator) => locator.source !== "engine_artifact"))
+      if (publication.source_artifact_locators.some((locator) => locator.source !== "engine_artifact"))
         throw new EvolutionArtifactIntegrityError("comparison sources must all be exact Engine Artifact locators")
       const envelopes = await Promise.all(
-        args.source_artifact_locators
+        publication.source_artifact_locators
           .filter((locator): locator is EngineArtifactLocator => locator.source === "engine_artifact")
           .map(async (locator) => ({ locator, envelope: await readEngineArtifactEnvelope(locator, context) })),
       )
@@ -726,19 +739,19 @@ export default tool({
           "comparison-recommendation must equal the deterministic Campaign, Candidate, run, and evaluation matrix",
         )
     }
-    const publication = await context.host.engineArtifacts.publish({
+    const receipt = await context.host.engineArtifacts.publish({
       artifact_type,
       schema_version: 1,
       label: artifact_type,
       payload,
       resources,
-      source_artifact_locators: args.source_artifact_locators,
+      source_artifact_locators: publication.source_artifact_locators,
     })
     return JSON.stringify({
       artifact_type,
       schema_version: 1,
-      locator: publication.locator,
-      artifact_sha256: publication.sha256,
+      locator: receipt.locator,
+      artifact_sha256: receipt.sha256,
     })
   },
 })

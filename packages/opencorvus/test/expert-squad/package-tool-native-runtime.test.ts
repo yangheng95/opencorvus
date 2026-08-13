@@ -177,6 +177,35 @@ describe("native Task package-tool process authority", () => {
             abort: new AbortController().signal,
           }),
         ).rejects.toThrow(/workflow_id/)
+
+        await expect(
+          executePackageToolInCapsule({
+            prepared,
+            taskID,
+            cwd: project.path,
+            host,
+            context: { ...context, messageID: Identifier.ascending("message") },
+            args: {
+              artifact: {
+                artifact_type: "viral-content/campaign-brief",
+                payload: {
+                  workflow_id: "evidence-backed-content-campaign",
+                  campaign_name: "Malformed publication boundary",
+                  goal: "Prove schema validation precedes package execution",
+                  audience_hypotheses: ["Maintainers need exact input validation"],
+                  offer: "One typed package-tool error",
+                  channels: ["repository test"],
+                  constraints: ["No external side effects"],
+                  evidence_questions: ["Was the frozen input schema applied?"],
+                  success_hypotheses: ["Malformed sibling controls are rejected before execution"],
+                },
+                resource_set: null,
+                source_artifact_locators: [],
+              },
+            },
+            abort: new AbortController().signal,
+          }),
+        ).rejects.toThrow(/resource_set|Unrecognized key/)
       },
     })
   }, 0)
