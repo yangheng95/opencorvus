@@ -2590,3 +2590,78 @@ cache-reconstruction-safe test override, prove all three FIFO root occurrences e
 and prove replay/terminal receipts after the completion hook settles. All temporary probes must be absent before
 commit. The independent reviewer initially classified the hang as a Bun matcher issue; the subsequent per-boundary
 runtime trace disproved that narrow conclusion and established the executable-owner defect above.
+
+### Exact-Terra R17 in progress: recovered transport failures exposed stale Provider fetch ownership
+
+#### Recall
+
+- User requirement: continue with exact `openai/gpt-5.6-terra`, copied canonical OpenCorvus Auth, a fresh random
+  project/home/SQLite database and random same-origin development-backend port; install the randomly selected target
+  and Evolution Lab through the real webpage, let the product execute the complete evolution, investigate every
+  problem across its impact surface, use an independent agent, and commit each repair as a separate phase.
+- Acceptance: a run counts only after the real page completes install and Mission submission, every Task is terminal,
+  the baseline/candidate evidence closure and document/chart renderings pass, Base remains active, the target install
+  remains unchanged, no interaction or production side effect occurs, and all run-owned resources settle. R17 itself
+  cannot become one of the three required clean successes if a product defect found during it requires a fresh runtime.
+- Hard constraints: do not alter or restart PID `4068` while R17 is active; do not read or log credential bytes; do not
+  add, modify or run UI automation tests; preserve the one streaming Provider chain and the existing semantic activity
+  authority; do not weaken inactivity, add a fallback transport or repeat an already executed Tool.
+- Sources read: `specs/current/architecture/06-provider.md`, `task-control-plane.md`, `99-principles.md`,
+  `src/provider/provider.ts`, `src/llm/activity.ts`, `src/session/processor.ts`, `src/util/stream-activity.ts`, the
+  focused stream/activity tests, R17 controller evidence and its isolated SQLite facts.
+- Repository search: searched every Provider fetch/inactivity implementation, every `withStreamActivity` caller,
+  abortable iterator cleanup, retry-attempt persistence cleanup, stream-error classification, fetch test hooks and
+  current architecture ownership. The Provider wrapper is the only response-body byte timer; the Session activity
+  runner is the only semantic retry authority.
+- Independent agent: a new uninvolved exact-Terra read-only reviewer inspected the running R17 evidence and the full
+  fetch/activity/retry chain. It confirmed one local P1 cancellation-settlement defect, one P2 transport
+  classification defect, genuine external OpenAI socket/503 instability, and no R17 duplicate Tool or persisted fact
+  pollution.
+
+R17 uses run root
+`C:\Users\hengu\AppData\Local\Temp\opencorvus-r17-2260328061404059a931546eaa845232`, random port `58665`, an
+isolated project/home/database, a per-run 291-file compiled UI closure, and copied canonical Auth/model catalog.
+SHA-256 rejection sampling selected `builtin/equity-research@2026.08.13.1` from the unchanged 114-entry pool. The
+real Mission Market page installed the target and Evolution Lab at project scope, left Base active, selected exactly
+those two held Squads and submitted exact Terra. The target workflow has already proved its intended execution shape:
+planner, source analysis, then parallel fundamentals and valuation workers. Planner completion also produced a real
+queued root wake and resumed the Task Orchestrator, positively exercising the preceding queue-initialization repair.
+
+The external transport is genuinely unstable. OpenAI `/v1/responses` returned an unexpectedly closed socket and a
+typed HTTP 503 connection termination, and several attempts produced no semantic chunk for 180 seconds after their
+first event. Session retry correctly removed only the failed attempt's unexecuted drafts, restored the assistant
+message snapshot and refused unsafe retry once Tool execution had begun. R17 SQLite evidence currently has no
+pending/error Tool Parts or duplicate equal-input Tool executions. These external failures remain part of the run's
+stability evidence; they are not attributed to the UI and are not hidden by the eventual worker outcome.
+
+A separate local P1 exists in the physical fetch wrapper. Its 300-second timer is cleared only by normal body EOF,
+non-streaming return or fetch error. Semantic activity abort exits `abortableIterable` immediately and requests
+untrusted iterator cleanup without awaiting it. If cancellation does not run `TransformStream.flush`, the old timer
+survives: the planner finished at `06:35:51` but its cancelled prior fetch logged inactivity at `06:39:10`; identical
+late warnings occurred for Mission and Orchestrator attempts. This warning is not a new model request. It proves the
+cancelled response-body owner did not settle its timer and may retain a stale reader/socket closure chain for up to
+five minutes.
+
+The root repair will reuse the canonical `withStreamActivity` primitive for raw response bytes and add one
+activity-tracked ReadableStream adapter whose EOF, read error, consumer cancellation and external abort all converge
+on the same idempotent settlement. Abort must request underlying-reader cancellation without awaiting an untrusted
+parked read, while ordinary consumer cancellation must await its cleanup. Provider must log its inactivity only when
+that physical byte monitor itself timed out and dispose the monitor on every other exit. The semantic 180-second
+Session activity owner and its conservative Tool retry boundary remain unchanged. The observed OpenAI
+`socket connection was closed unexpectedly` error is also classified as the existing retryable `network` class in
+the central activity classifier rather than `unknown`.
+
+Focused positive acceptance must prove a first response chunk resets raw-byte activity, external abort produces the
+exact abort outcome and requests reader cancellation, consumer cancellation completes underlying cleanup, EOF and
+read error settle the monitor, and no inactivity callback can fire after settlement. A second contract maps the
+observed OpenAI transport error shape to `network` and recovers on the next attempt. Typecheck and the complete
+focused files must pass, then a new uninvolved read-only agent must review the implementation and tests. The repair
+is committed separately; R17 continues against its original loaded runtime and does not count toward the three fresh
+post-repair successes.
+
+The implementation review found no P0 or P1. It requested direct proof that an already-settled response cannot later
+trip the raw-byte timeout and that an external composed signal uses the same abort settlement. The final positive
+test now aborts through an external signal, observes the exact downstream error and upstream cancellation, waits
+twice the 20-millisecond physical window, and still observes the explicit `aborted` settlement with
+`physicalTimeout=false`. The independent reviewer re-ran both complete focused files: `10 pass / 28 assertions`.
+OpenCorvus typecheck, `docs:check` and `git diff --check` also pass. No review finding remains in this Provider phase.

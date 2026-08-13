@@ -28,6 +28,7 @@ import { BUNDLED_PROVIDERS } from "./bundled"
 import { dashscopeKey } from "./dashscope"
 import { canonicalDigestSource, containsRuntimeCapability } from "@/util/canonical-digest"
 import { CanonicalCache } from "./canonical-cache"
+import { activityTrackedReadableStream, withStreamActivity } from "@/util/stream-activity"
 
 export namespace Provider {
   const log = Log.create({ service: "provider" })
@@ -809,35 +810,31 @@ export namespace Provider {
         // on every streaming chunk. This handles both:
         // - Server hangs before sending any response (initial connect timeout)
         // - Server stops sending data mid-stream (stream stall timeout)
-        const inactivityController = inactivityMs > 0 ? new AbortController() : undefined
-        let inactivityTimer: ReturnType<typeof setTimeout> | undefined
-        const resetInactivityTimer = inactivityController
-          ? () => {
-              if (inactivityTimer) clearTimeout(inactivityTimer)
-              inactivityTimer = setTimeout(() => {
+        const fetchActivity =
+          inactivityMs > 0
+            ? withStreamActivity({
+                idleMs: inactivityMs,
+                signal: opts.signal ?? undefined,
+                label: `provider:${model.providerID}`,
+              })
+            : undefined
+
+        if (fetchActivity) {
+          fetchActivity.signal.addEventListener(
+            "abort",
+            () => {
+              if (fetchActivity.timedOut()) {
                 log.warn("fetch inactivity timeout — no data for configured period, aborting", {
                   providerID: model.providerID,
                   inactivityMs,
                 })
-                inactivityController!.abort()
-              }, inactivityMs)
-            }
-          : undefined
-        const clearInactivityTimer = () => {
-          if (!inactivityTimer) return
-          clearTimeout(inactivityTimer)
-          inactivityTimer = undefined
+              }
+              fetchActivity.dispose()
+            },
+            { once: true },
+          )
+          opts.signal = fetchActivity.signal
         }
-
-        if (inactivityController) {
-          const signals: AbortSignal[] = []
-          if (opts.signal) signals.push(opts.signal)
-          signals.push(inactivityController.signal)
-          opts.signal = signals.length > 1 ? AbortSignal.any(signals) : signals[0]
-        }
-
-        // Start the inactivity timer BEFORE fetch — covers initial connection hang
-        resetInactivityTimer?.()
 
         try {
           // Strip openai itemId metadata following what codex does
@@ -860,8 +857,8 @@ export namespace Provider {
 
           const response = await fetchFn(input, providerFetchInit(opts, proxyUrl))
 
-          // Response received — reset timer (server is alive)
-          resetInactivityTimer?.()
+          // Response headers are physical upstream activity.
+          fetchActivity?.observe()
 
           // Some SDKs (e.g. @ai-sdk/openai-compatible) do not surface HTTP
           // errors from streaming responses — they silently consume the body
@@ -881,7 +878,7 @@ export namespace Provider {
           //      orchestrator into an "unknown session error" wake loop —
           //      see _session-20260428-130617.out incident.
           if (!response.ok) {
-            clearInactivityTimer()
+            fetchActivity?.dispose()
             const text = ProviderError.redactSensitiveProviderText(await response.text().catch(() => ""))
             let detail = ""
             try {
@@ -917,19 +914,11 @@ export namespace Provider {
           }
 
           // For streaming responses, wrap the body so each chunk resets the timer.
-          if (inactivityController && response.body) {
-            const original = response.body
-            const wrapped = original.pipeThrough(
-              new TransformStream({
-                transform(chunk, controller) {
-                  resetInactivityTimer!()
-                  controller.enqueue(chunk)
-                },
-                flush() {
-                  clearInactivityTimer()
-                },
-              }),
-            )
+          if (fetchActivity && response.body) {
+            const wrapped = activityTrackedReadableStream({
+              source: response.body,
+              activity: fetchActivity,
+            })
 
             // Return a new Response with the wrapped body, preserving headers/status
             return new Response(wrapped, {
@@ -940,10 +929,10 @@ export namespace Provider {
           }
 
           // Non-streaming response — clear the inactivity timer
-          clearInactivityTimer()
+          fetchActivity?.dispose()
           return response
         } catch (error) {
-          clearInactivityTimer()
+          fetchActivity?.dispose()
           throw error
         }
       }

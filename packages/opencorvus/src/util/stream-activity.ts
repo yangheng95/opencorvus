@@ -68,6 +68,81 @@ export interface StreamActivityOptions {
   label?: string
 }
 
+export type ReadableStreamActivitySettlement = "eof" | "error" | "cancelled" | "aborted"
+
+export interface ActivityTrackedReadableStreamOptions<T> {
+  source: ReadableStream<T>
+  activity: StreamActivityMonitor
+  onSettlement?: (settlement: ReadableStreamActivitySettlement) => void
+}
+
+/**
+ * Project one physical ReadableStream through the shared activity monitor.
+ *
+ * The returned stream owns both the upstream reader and the monitor. Every
+ * terminal edge converges on one settlement: ordinary EOF, read error,
+ * consumer cancellation, or activity/external abort. Abort requests upstream
+ * cancellation without awaiting an untrusted parked reader; an ordinary
+ * consumer cancel still awaits the upstream cleanup contract.
+ */
+export function activityTrackedReadableStream<T>(options: ActivityTrackedReadableStreamOptions<T>): ReadableStream<T> {
+  const reader = options.source.getReader()
+  let controller: ReadableStreamDefaultController<T> | undefined
+  let settled = false
+  let cancelPromise: Promise<void> | undefined
+
+  const cancelUnderlying = (reason: unknown) => {
+    cancelPromise ??= reader.cancel(reason)
+    return cancelPromise
+  }
+  const settle = (settlement: ReadableStreamActivitySettlement) => {
+    if (settled) return false
+    settled = true
+    options.activity.signal.removeEventListener("abort", onAbort)
+    options.activity.dispose()
+    options.onSettlement?.(settlement)
+    return true
+  }
+  const onAbort = () => {
+    if (!settle("aborted")) return
+    const reason = options.activity.signal.reason ?? new DOMException("stream activity aborted", "AbortError")
+    try {
+      controller?.error(reason)
+    } catch {
+      // The consumer may already have closed its side of the stream.
+    }
+    void cancelUnderlying(reason).catch(() => undefined)
+  }
+
+  return new ReadableStream<T>({
+    start(streamController) {
+      controller = streamController
+      if (options.activity.signal.aborted) onAbort()
+      else options.activity.signal.addEventListener("abort", onAbort, { once: true })
+    },
+    async pull(streamController) {
+      try {
+        const result = await reader.read()
+        if (settled) return
+        if (result.done) {
+          settle("eof")
+          streamController.close()
+          return
+        }
+        options.activity.observe()
+        streamController.enqueue(result.value)
+      } catch (error) {
+        if (!settle("error")) return
+        streamController.error(error)
+      }
+    },
+    async cancel(reason) {
+      if (!settle("cancelled")) return
+      await cancelUnderlying(reason)
+    },
+  })
+}
+
 /**
  * Race every `next()` of an async iterable against an `AbortSignal` so the
  * iterator throws as soon as the signal aborts — even when the underlying
